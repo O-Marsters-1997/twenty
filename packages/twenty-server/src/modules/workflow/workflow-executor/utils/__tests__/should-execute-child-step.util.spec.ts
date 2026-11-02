@@ -10,7 +10,7 @@ describe('shouldExecuteChildStep', () => {
   const parentSteps = [
     {
       id: 'parent-1',
-      type: WorkflowActionType.CODE,
+      type: WorkflowActionType.EMPTY,
       settings: {
         errorHandlingOptions: {
           continueOnFailure: { value: false },
@@ -105,7 +105,7 @@ describe('shouldExecuteChildStep', () => {
     const multiParentSteps = [
       {
         id: 'parent-1',
-        type: WorkflowActionType.CODE,
+        type: WorkflowActionType.EMPTY,
         settings: {
           errorHandlingOptions: {
             continueOnFailure: { value: false },
@@ -129,7 +129,7 @@ describe('shouldExecuteChildStep', () => {
       } as unknown as WorkflowAction,
       {
         id: 'parent-3',
-        type: WorkflowActionType.CODE,
+        type: WorkflowActionType.EMPTY,
         settings: {
           errorHandlingOptions: {
             continueOnFailure: { value: false },
@@ -318,7 +318,7 @@ describe('shouldExecuteChildStep', () => {
     const singleParent = [
       {
         id: 'parent-1',
-        type: WorkflowActionType.CODE,
+        type: WorkflowActionType.EMPTY,
         settings: {
           errorHandlingOptions: {
             continueOnFailure: { value: false },
@@ -349,7 +349,7 @@ describe('shouldExecuteChildStep', () => {
     const singleParent = [
       {
         id: 'parent-1',
-        type: WorkflowActionType.CODE,
+        type: WorkflowActionType.EMPTY,
         settings: {
           errorHandlingOptions: {
             continueOnFailure: { value: false },
@@ -396,7 +396,7 @@ describe('shouldExecuteChildStep', () => {
     const multiParentSteps = [
       {
         id: 'parent-1',
-        type: WorkflowActionType.CODE,
+        type: WorkflowActionType.EMPTY,
         settings: {
           errorHandlingOptions: {
             continueOnFailure: { value: false },
@@ -420,7 +420,7 @@ describe('shouldExecuteChildStep', () => {
       } as unknown as WorkflowAction,
       {
         id: 'parent-3',
-        type: WorkflowActionType.CODE,
+        type: WorkflowActionType.EMPTY,
         settings: {
           errorHandlingOptions: {
             continueOnFailure: { value: false },
@@ -450,7 +450,7 @@ describe('shouldExecuteChildStep', () => {
   it('should return false with large number of parents when none succeeded', () => {
     const manyParentSteps = Array.from({ length: 25 }, (_, i) => ({
       id: `parent-${i + 1}`,
-      type: WorkflowActionType.CODE,
+      type: WorkflowActionType.EMPTY,
       settings: {
         errorHandlingOptions: {
           continueOnFailure: { value: false },
@@ -500,7 +500,7 @@ describe('shouldExecuteChildStep', () => {
     const singleParent = [
       {
         id: 'parent-1',
-        type: WorkflowActionType.CODE,
+        type: WorkflowActionType.EMPTY,
         settings: {
           errorHandlingOptions: {
             continueOnFailure: { value: false },
@@ -530,7 +530,7 @@ describe('shouldExecuteChildStep', () => {
   it('should return false with large number of parents when not all completed', () => {
     const manyParentSteps = Array.from({ length: 25 }, (_, i) => ({
       id: `parent-${i + 1}`,
-      type: WorkflowActionType.CODE,
+      type: WorkflowActionType.EMPTY,
       settings: {
         errorHandlingOptions: {
           continueOnFailure: { value: false },

@@ -1,5 +1,3 @@
-import { AppChip } from '@/applications/components/AppChip';
-import { useLogicFunctionThirdPartyApplicationInformation } from '@/logic-functions/hooks/useLogicFunctionThirdPartyApplicationInformation';
 import { useUpdateSidePanelPageInfo } from '@/side-panel/hooks/useUpdateSidePanelPageInfo';
 import { useSidePanelWorkflowIdOrThrow } from '@/side-panel/pages/workflow/hooks/useSidePanelWorkflowIdOrThrow';
 import { sidePanelWorkflowStepIdComponentState } from '@/side-panel/pages/workflow/states/sidePanelWorkflowStepIdComponentState';
@@ -89,15 +87,6 @@ export const SidePanelWorkflowStepInfo = ({
 
   const isTrigger = stepDefinition?.type === 'trigger';
 
-  const logicFunctionId =
-    stepDefinition?.type === 'action' &&
-    stepDefinition.definition.type === 'LOGIC_FUNCTION'
-      ? stepDefinition.definition.settings.input.logicFunctionId
-      : undefined;
-
-  const thirdPartyApplicationInformation =
-    useLogicFunctionThirdPartyApplicationInformation(logicFunctionId);
-
   const agentId = getAgentIdFromStep(stepDefinition);
   const { updateAgentLabel } = useUpdateAgentLabel(agentId);
   const stepName =
@@ -141,10 +130,6 @@ export const SidePanelWorkflowStepInfo = ({
     ? t`Trigger`
     : t(getActionHeaderTypeOrThrow(stepDefinition.definition.type));
 
-  const label = isDefined(thirdPartyApplicationInformation)
-    ? thirdPartyApplicationInformation.name
-    : headerType;
-
   const Icon = getIcon(headerIcon ?? 'IconDefault');
 
   const saveTitle = async () => {
@@ -182,21 +167,11 @@ export const SidePanelWorkflowStepInfo = ({
   return (
     <HeaderIdentifier
       icon={
-        isDefined(thirdPartyApplicationInformation) ? (
-          <AppChip
-            applicationId={thirdPartyApplicationInformation.applicationId}
-            size="md"
-            chipOnly
-          />
-        ) : headerIcon ? (
+        headerIcon ? (
           <Icon size={theme.icon.size.md} stroke={theme.icon.stroke.sm} />
         ) : undefined
       }
-      iconColor={
-        isDefined(thirdPartyApplicationInformation)
-          ? undefined
-          : headerIconColor
-      }
+      iconColor={headerIconColor}
       title={
         <TitleInput
           instanceId={`workflow-step-title-${sidePanelPageInstanceId}`}
@@ -212,7 +187,7 @@ export const SidePanelWorkflowStepInfo = ({
           onShiftTab={saveTitle}
         />
       }
-      label={label}
+      label={headerType}
     />
   );
 };

@@ -23,14 +23,11 @@ describe('getIsDescendantOfIterator', () => {
   const codeStep2: WorkflowStep = {
     id: 'step2',
     name: 'Second Step',
-    type: 'CODE',
+    type: 'HTTP_REQUEST',
     valid: true,
     nextStepIds: ['iterator1'],
     settings: {
-      input: {
-        logicFunctionId: 'func2',
-        logicFunctionInput: {},
-      },
+      input: { method: 'GET', url: 'https://example.com' },
       outputSchema: {},
       errorHandlingOptions: {
         retryOnFailure: { value: 3 },
@@ -42,14 +39,11 @@ describe('getIsDescendantOfIterator', () => {
   const codeStep3: WorkflowStep = {
     id: 'step3',
     name: 'Third Step',
-    type: 'CODE',
+    type: 'HTTP_REQUEST',
     valid: true,
     nextStepIds: [],
     settings: {
-      input: {
-        logicFunctionId: 'func3',
-        logicFunctionInput: {},
-      },
+      input: { method: 'GET', url: 'https://example.com' },
       outputSchema: {},
       errorHandlingOptions: {
         retryOnFailure: { value: 3 },
@@ -82,14 +76,11 @@ describe('getIsDescendantOfIterator', () => {
     const unrelatedStep: WorkflowStep = {
       id: 'step4',
       name: 'Unrelated Step',
-      type: 'CODE',
+      type: 'HTTP_REQUEST',
       valid: true,
       nextStepIds: [],
       settings: {
-        input: {
-          logicFunctionId: 'func4',
-          logicFunctionInput: {},
-        },
+        input: { method: 'GET', url: 'https://example.com' },
         outputSchema: {},
         errorHandlingOptions: {
           retryOnFailure: { value: 3 },

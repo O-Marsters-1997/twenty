@@ -13,7 +13,7 @@ describe('shouldExecuteStep', () => {
   const steps = [
     {
       id: 'step-1',
-      type: WorkflowActionType.CODE,
+      type: WorkflowActionType.EMPTY,
       settings: {
         errorHandlingOptions: {
           continueOnFailure: { value: false },
@@ -241,12 +241,9 @@ describe('shouldExecuteStep', () => {
       {
         id: 'step-1',
         name: 'Mock Step',
-        type: WorkflowActionType.CODE,
+        type: WorkflowActionType.EMPTY,
         settings: {
-          input: {
-            logicFunctionId: 'mock-function-id',
-            logicFunctionInput: {},
-          },
+          input: {},
           errorHandlingOptions: {
             continueOnFailure: { value: false },
             retryOnFailure: { value: 0 },
@@ -299,7 +296,7 @@ describe('shouldExecuteStep', () => {
     const stepsWithUndefined = [
       {
         id: 'step-1',
-        type: WorkflowActionType.CODE,
+        type: WorkflowActionType.EMPTY,
         settings: {
           errorHandlingOptions: {
             continueOnFailure: { value: false },
@@ -366,7 +363,7 @@ describe('shouldExecuteStep', () => {
     const multiParentSteps = [
       {
         id: 'step-1',
-        type: WorkflowActionType.CODE,
+        type: WorkflowActionType.EMPTY,
         settings: {
           errorHandlingOptions: {
             continueOnFailure: { value: false },
@@ -388,7 +385,7 @@ describe('shouldExecuteStep', () => {
       },
       {
         id: 'step-3',
-        type: WorkflowActionType.CODE,
+        type: WorkflowActionType.EMPTY,
         settings: {
           errorHandlingOptions: {
             continueOnFailure: { value: false },

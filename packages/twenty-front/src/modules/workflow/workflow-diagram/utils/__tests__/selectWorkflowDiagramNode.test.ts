@@ -12,7 +12,7 @@ describe('selectWorkflowDiagramNode', () => {
           data: {
             name: 'Node 1',
             nodeType: 'action',
-            actionType: 'CODE',
+            actionType: 'HTTP_REQUEST',
             hasNextStepIds: false,
             position: { x: 0, y: 0 },
             stepId: '1',
@@ -25,7 +25,7 @@ describe('selectWorkflowDiagramNode', () => {
           data: {
             name: 'Node 2',
             nodeType: 'action',
-            actionType: 'CODE',
+            actionType: 'HTTP_REQUEST',
             hasNextStepIds: false,
             position: { x: 0, y: 150 },
             stepId: '2',
@@ -54,7 +54,7 @@ describe('selectWorkflowDiagramNode', () => {
           data: {
             name: 'Node 1',
             nodeType: 'action',
-            actionType: 'CODE',
+            actionType: 'HTTP_REQUEST',
             hasNextStepIds: false,
             position: { x: 0, y: 0 },
             stepId: '1',
@@ -82,7 +82,7 @@ describe('selectWorkflowDiagramNode', () => {
           data: {
             name: 'Node 1',
             nodeType: 'action',
-            actionType: 'CODE',
+            actionType: 'HTTP_REQUEST',
             hasNextStepIds: false,
             position: { x: 0, y: 0 },
             stepId: '1',

@@ -48,7 +48,6 @@ const record = {
 };
 const filters = { stepFilterGroups: [], stepFilters: [] };
 const inputs = {
-  LOGIC_FUNCTION: { value: 'Hello' },
   CREATE_RECORD: record,
   UPDATE_RECORD: {
     ...record,
@@ -127,9 +126,6 @@ const stepFor = (type: WorkflowStepManifest['type']) =>
     type,
     input: inputs[type],
     nextStepIds: [],
-    ...(type === 'LOGIC_FUNCTION'
-      ? { logicFunctionUniversalIdentifier: REFERENCE_ID }
-      : {}),
   });
 
 const convert = (type: WorkflowStepManifest['type']) =>
@@ -140,8 +136,8 @@ const convert = (type: WorkflowStepManifest['type']) =>
   });
 
 describe('application workflow actions', () => {
-  it('derives a nested function output schema from an expected result', () => {
-    const step = stepFor(WorkflowActionType.LOGIC_FUNCTION);
+  it('derives a nested output schema from an expected result', () => {
+    const step = stepFor(WorkflowActionType.HTTP_REQUEST);
     step.expectedOutputSchema = { company: { name: 'Example' }, count: 2 };
     const result = fromWorkflowStepManifestToActionOrThrow({
       step,
@@ -154,33 +150,9 @@ describe('application workflow actions', () => {
     });
   });
 
-  it('uses the declared function output schema without running the function', () => {
-    const outputSchema = {
-      greeting: {
-        isLeaf: true as const,
-        type: 'string' as const,
-        label: 'Greeting',
-        value: null,
-      },
-    };
-    const result = fromWorkflowStepManifestToActionOrThrow({
-      step: stepFor(WorkflowActionType.LOGIC_FUNCTION),
-      index: 0,
-      references: {
-        ...references,
-        logicFunctionOutputSchemaByUniversalIdentifier: new Map([
-          [REFERENCE_ID, outputSchema],
-        ]),
-      },
-    });
-    expect(result.settings.outputSchema).toEqual(outputSchema);
-    expect(result.settings.outputSchema).not.toBe(outputSchema);
-  });
-
   it.each(
     Object.values(WorkflowActionType).filter(
       (type) =>
-        type !== WorkflowActionType.CODE &&
         type !== WorkflowActionType.SEND_EMAIL &&
         type !== WorkflowActionType.DRAFT_EMAIL &&
         type !== WorkflowActionType.CREATE_CALENDAR_EVENT &&
@@ -190,11 +162,7 @@ describe('application workflow actions', () => {
     expect(convert(type)).toMatchObject({ id: STEP_ID, type, valid: true });
   });
 
-  it('resolves functions, agents, objects and filter fields', () => {
-    expect(convert(WorkflowActionType.LOGIC_FUNCTION).settings.input).toEqual({
-      logicFunctionId: LOCAL_ID,
-      logicFunctionInput: inputs.LOGIC_FUNCTION,
-    });
+  it('resolves agents, objects and filter fields', () => {
     expect(convert(WorkflowActionType.AI_AGENT).settings.input).toEqual({
       agentId: LOCAL_ID,
       prompt: inputs.AI_AGENT.prompt,

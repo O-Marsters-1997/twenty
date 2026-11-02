@@ -104,7 +104,7 @@ describe('useUpdateWorkflowVersionStep', () => {
     await act(async () => {
       await result.current.updateWorkflowVersionStep({
         workflowVersionId: 'version-1',
-        step: { id: 'step-1', name: 'Step', type: 'CODE' },
+        step: { id: 'step-1', name: 'Step', type: 'HTTP_REQUEST' },
       });
     });
 
@@ -163,7 +163,7 @@ describe('useUpdateWorkflowVersionStep', () => {
     await act(() =>
       result.current.updateWorkflowVersionStep({
         workflowVersionId: 'core-draft-id',
-        step: { id: 'step-1', type: 'CODE' },
+        step: { id: 'step-1', type: 'HTTP_REQUEST' },
       }),
     );
     expect(mockEnqueueToast).toHaveBeenCalledWith(

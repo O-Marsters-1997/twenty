@@ -1,10 +1,5 @@
 import { aiEvaluationModelsState } from '@/client-config/states/aiEvaluationModelsState';
-import { isWorkspaceCustomApplication } from '@/applications/utils/isWorkspaceCustomApplication';
-import { currentWorkspaceState } from '@/auth/states/currentWorkspaceState';
-import { logicFunctionsSelector } from '@/logic-functions/states/logicFunctionsSelector';
-import { ToolMenuItem } from '@/side-panel/pages/workflow/action/components/ToolMenuItem';
 import { WorkflowActionMenuItems } from '@/side-panel/pages/workflow/action/components/WorkflowActionMenuItems';
-import { sortWorkflowActionLogicFunctions } from '@/side-panel/pages/workflow/action/utils/sortWorkflowActionLogicFunctions';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useWorkspaceFeatureFlagsMap } from '@/workspace/hooks/useWorkspaceFeatureFlagsMap';
 import { type WorkflowActionType } from '@/workflow/types/Workflow';
@@ -61,33 +56,8 @@ export const SidePanelWorkflowSelectAction = ({
     return !isDefined(featureFlag) || featureFlagsMap[featureFlag] === true;
   };
 
-  const logicFunctions = useAtomStateValue(logicFunctionsSelector);
-  const currentWorkspace = useAtomStateValue(currentWorkspaceState);
-
-  const toolFunctions = sortWorkflowActionLogicFunctions({
-    logicFunctions: logicFunctions.filter(
-      (fn) =>
-        isDefined(fn.workflowActionTriggerSettings) &&
-        isDefined(fn.applicationId) &&
-        !isWorkspaceCustomApplication(
-          { id: fn.applicationId },
-          currentWorkspace,
-        ),
-    ),
-    installedApplications: currentWorkspace?.installedApplications ?? [],
-  });
-
   const handleActionClick = (actionType: WorkflowActionType) => {
     onActionSelected({ type: actionType });
-  };
-
-  const handleFunctionClick = (logicFunctionId: string) => {
-    onActionSelected({
-      type: 'LOGIC_FUNCTION',
-      defaultSettings: {
-        input: { logicFunctionId, logicFunctionInput: {} },
-      },
-    });
   };
 
   return (
@@ -131,21 +101,6 @@ export const SidePanelWorkflowSelectAction = ({
         actions={HUMAN_INPUT_ACTIONS.filter(isActionEnabled)}
         onClick={handleActionClick}
       />
-
-      {toolFunctions.length > 0 && (
-        <>
-          <SidePanelWorkflowSelectStepTitle>
-            {t`Other`}
-          </SidePanelWorkflowSelectStepTitle>
-          {toolFunctions.map((fn) => (
-            <ToolMenuItem
-              key={fn.id}
-              logicFunction={fn}
-              onClick={() => handleFunctionClick(fn.id)}
-            />
-          ))}
-        </>
-      )}
     </SidePanelStepListContainer>
   );
 };

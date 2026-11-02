@@ -10,7 +10,7 @@ import {
 const buildStep = (step: Partial<WorkflowAction> & { id: string }) =>
   ({
     name: 'Step',
-    type: WorkflowActionType.CODE,
+    type: WorkflowActionType.EMPTY,
     valid: true,
     settings: { input: {} },
     position: { x: 0, y: 0 },

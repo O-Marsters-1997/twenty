@@ -12,14 +12,11 @@ const mockFlow = {
     {
       id: 'step1',
       name: 'Step 1',
-      type: 'CODE',
+      type: 'HTTP_REQUEST',
       nextStepIds: ['step2'],
       valid: true,
       settings: {
-        input: {
-          logicFunctionId: '',
-          logicFunctionInput: {},
-        },
+        input: { method: 'GET', url: 'https://example.com' },
         outputSchema: {},
         errorHandlingOptions: {
           retryOnFailure: { value: 0 },
@@ -30,14 +27,11 @@ const mockFlow = {
     {
       id: 'step2',
       name: 'Step 2',
-      type: 'CODE',
+      type: 'HTTP_REQUEST',
       nextStepIds: [],
       valid: true,
       settings: {
-        input: {
-          logicFunctionId: '',
-          logicFunctionInput: {},
-        },
+        input: { method: 'GET', url: 'https://example.com' },
         outputSchema: {},
         errorHandlingOptions: {
           retryOnFailure: { value: 0 },
@@ -132,14 +126,11 @@ describe('getWorkflowRunStepContext', () => {
         {
           id: 'step1',
           name: 'Step 1',
-          type: 'CODE',
+          type: 'HTTP_REQUEST',
           nextStepIds: ['iterator1'],
           valid: true,
           settings: {
-            input: {
-              logicFunctionId: '',
-              logicFunctionInput: {},
-            },
+            input: { method: 'GET', url: 'https://example.com' },
             outputSchema: {},
             errorHandlingOptions: {
               retryOnFailure: { value: 0 },
@@ -168,14 +159,11 @@ describe('getWorkflowRunStepContext', () => {
         {
           id: 'step2',
           name: 'Step 2',
-          type: 'CODE',
+          type: 'HTTP_REQUEST',
           nextStepIds: ['iterator1'],
           valid: true,
           settings: {
-            input: {
-              logicFunctionId: '',
-              logicFunctionInput: {},
-            },
+            input: { method: 'GET', url: 'https://example.com' },
             outputSchema: {},
             errorHandlingOptions: {
               retryOnFailure: { value: 0 },

@@ -49,12 +49,12 @@ describe('validateWorkflowStructure', () => {
   it('should accept a step whose retryOnFailure value is a legacy boolean', () => {
     const legacyBooleanStep = {
       id: '11111111-1111-4111-8111-111111111111',
-      name: 'Code step',
-      type: 'CODE',
+      name: 'HTTP request step',
+      type: 'HTTP_REQUEST',
       valid: true,
       nextStepIds: [],
       settings: {
-        input: { logicFunctionId: 'fn-1', logicFunctionInput: {} },
+        input: { method: 'GET', url: 'https://example.com' },
         outputSchema: {},
         errorHandlingOptions: {
           retryOnFailure: { value: true },

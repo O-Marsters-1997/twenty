@@ -16,7 +16,6 @@ import { type FlatWorkflowVersion } from 'src/engine/metadata-modules/flat-workf
 const WORKFLOW_ID = '11111111-1111-4111-8111-111111111111';
 const TRIGGER_ID = '33333333-3333-4333-8333-333333333333';
 const STEP_ID = '44444444-4444-4444-8444-444444444444';
-const FUNCTION_ID = '55555555-5555-4555-8555-555555555555';
 const APPLICATION_ID = '66666666-6666-4666-8666-666666666666';
 const manifest: WorkflowManifest = {
   universalIdentifier: WORKFLOW_ID,
@@ -31,9 +30,8 @@ const manifest: WorkflowManifest = {
       {
         universalIdentifier: STEP_ID,
         name: 'Greet',
-        type: 'LOGIC_FUNCTION',
-        logicFunctionUniversalIdentifier: FUNCTION_ID,
-        input: { greeting: 'Before' },
+        type: 'HTTP_REQUEST',
+        input: { method: 'GET', url: 'https://example.com/before' },
         nextStepIds: [],
       },
     ],
@@ -43,9 +41,7 @@ const options = {
   manifest,
   applicationUniversalIdentifier: APPLICATION_ID,
   now: '2026-09-25T10:00:00.000Z',
-  logicFunctionIdByUniversalIdentifier: new Map([
-    [FUNCTION_ID, '77777777-7777-4777-8777-777777777777'],
-  ]),
+  logicFunctionIdByUniversalIdentifier: new Map<string, string>(),
 };
 
 const convert = (
@@ -71,10 +67,8 @@ describe('application workflow definitions', () => {
     expect(workflow.flatUniversalCommandMenuItem).toBeUndefined();
     expect(version.workspaceWorkflowVersionId).toBeNull();
     expect(version.status).toBe('ACTIVE');
-    expect(version.steps?.[0].settings.input).toEqual({
-      logicFunctionId:
-        options.logicFunctionIdByUniversalIdentifier.get(FUNCTION_ID),
-      logicFunctionInput: { greeting: 'Before' },
+    expect(version.steps?.[0].settings.input).toMatchObject({
+      url: 'https://example.com/before',
     });
   });
 
@@ -92,10 +86,10 @@ describe('application workflow definitions', () => {
     };
     const changed = structuredClone(manifest);
     const changedStep = changed.version.steps[0];
-    if (changedStep.type !== 'LOGIC_FUNCTION') {
-      throw new Error('Expected a function step');
+    if (changedStep.type !== 'HTTP_REQUEST') {
+      throw new Error('Expected an HTTP request step');
     }
-    changedStep.input.greeting = 'After';
+    changedStep.input.url = 'https://example.com/after';
     const after = convert({
       ...options,
       manifest: changed,
@@ -106,43 +100,20 @@ describe('application workflow definitions', () => {
     expect(after.version.id).toBe(before.version.id);
     expect(after.version.steps?.[0].id).toBe(before.version.steps?.[0].id);
     expect(after.version.steps?.[0].settings.input).toMatchObject({
-      logicFunctionInput: { greeting: 'After' },
+      url: 'https://example.com/after',
     });
     expect(before.version.steps?.[0].settings.input).toMatchObject({
-      logicFunctionInput: { greeting: 'Before' },
+      url: 'https://example.com/before',
     });
   });
 
-  it('resolves the same definition to different workspace function IDs', () => {
-    const first = convert(options);
-    const second = convert({
-      ...options,
-      logicFunctionIdByUniversalIdentifier: new Map([
-        [FUNCTION_ID, '88888888-8888-4888-8888-888888888888'],
-      ]),
-    });
-    expect(first.version.steps?.[0].settings.input).not.toEqual(
-      second.version.steps?.[0].settings.input,
-    );
-    expect(first.version.universalIdentifier).toBe(
+  it('derives the version universal identifier from the workflow', () => {
+    expect(convert(options).version.universalIdentifier).toBe(
       getWorkflowVersionUniversalIdentifier({
         applicationUniversalIdentifier: APPLICATION_ID,
         workflowUniversalIdentifier: WORKFLOW_ID,
       }),
     );
-    expect(second.version.universalIdentifier).toBe(
-      first.version.universalIdentifier,
-    );
-    expect(first.version.id).not.toBe(second.version.id);
-  });
-
-  it('refuses missing or non-exposed application functions', () => {
-    expect(() =>
-      convert({
-        ...options,
-        logicFunctionIdByUniversalIdentifier: new Map(),
-      }),
-    ).toThrow('missing application workflow action');
   });
 
   it('resolves the manual trigger availability object to its name', () => {

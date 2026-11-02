@@ -27,9 +27,5 @@ export const getActionHeaderTypeOrThrow = (actionType: WorkflowActionType) => {
     return msg`AI`;
   }
 
-  if (actionType === 'LOGIC_FUNCTION') {
-    return msg`Application`;
-  }
-
   return msg`Action`;
 };

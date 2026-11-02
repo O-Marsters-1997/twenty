@@ -96,12 +96,9 @@ describe('computeWorkflowVersionStepChanges', () => {
       {
         id: 'step-3',
         name: 'Code Step',
-        type: WorkflowActionType.CODE,
+        type: WorkflowActionType.EMPTY,
         settings: {
-          input: {
-            logicFunctionId: '',
-            logicFunctionInput: {},
-          },
+          input: {},
           errorHandlingOptions: {
             continueOnFailure: { value: false },
             retryOnFailure: { value: 0 },

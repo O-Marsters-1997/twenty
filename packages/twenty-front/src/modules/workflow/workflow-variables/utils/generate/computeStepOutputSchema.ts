@@ -24,9 +24,7 @@ import { DatabaseEventAction } from '~/generated-metadata/graphql';
 
 const PERSISTED_OUTPUT_SCHEMA_TYPES = [
   'AI_AGENT',
-  'CODE',
   'HTTP_REQUEST',
-  'LOGIC_FUNCTION',
   'WEBHOOK',
   'ITERATOR',
 ];

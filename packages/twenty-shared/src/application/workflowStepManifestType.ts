@@ -49,12 +49,6 @@ export const workflowStepFilterManifestSchema = stepFilterSchema
 const recordObjectShape = { objectUniversalIdentifier: z.uuid() };
 
 export const workflowStepManifestSchema = z.discriminatedUnion('type', [
-  z.strictObject({
-    ...baseStepShape,
-    type: z.literal('LOGIC_FUNCTION'),
-    logicFunctionUniversalIdentifier: z.uuid(),
-    input: z.record(z.string(), z.unknown()),
-  }),
   stepSchema(
     'HTTP_REQUEST',
     workflowHttpRequestActionSettingsSchema.shape.input,

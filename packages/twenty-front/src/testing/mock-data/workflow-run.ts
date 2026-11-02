@@ -17,12 +17,13 @@ export const oneSucceededWorkflowRunQueryResult = {
           {
             id: '212a171a-f887-4213-8892-e39c2a3ecc30',
             name: 'Code - Logic Function',
-            type: 'CODE',
+            type: 'HTTP_REQUEST',
             valid: false,
             settings: {
               input: {
-                logicFunctionId: 'e031ae6a-5b9e-496b-9a98-ba015f7b5508',
-                logicFunctionInput: {
+                method: 'POST',
+                url: 'https://example.com',
+                body: {
                   userId: '{{trigger.userId}}',
                 },
               },
@@ -48,13 +49,10 @@ export const oneSucceededWorkflowRunQueryResult = {
           {
             id: 'a01b2953-9aa7-4d9a-aded-8e9bafbd6c30',
             name: 'Code - Logic Function',
-            type: 'CODE',
+            type: 'HTTP_REQUEST',
             valid: false,
             settings: {
-              input: {
-                logicFunctionId: '605efcda-6689-43b3-b24c-2eb76948f523',
-                logicFunctionInput: {},
-              },
+              input: { method: 'GET', url: 'https://example.com' },
               outputSchema: {
                 link: {
                   tab: 'test',
@@ -4484,12 +4482,13 @@ export const oneSucceededWorkflowRunQueryResult = {
         {
           id: '212a171a-f887-4213-8892-e39c2a3ecc30',
           name: 'Code - Logic Function',
-          type: 'CODE',
+          type: 'HTTP_REQUEST',
           valid: false,
           settings: {
             input: {
-              logicFunctionId: 'e031ae6a-5b9e-496b-9a98-ba015f7b5508',
-              logicFunctionInput: {
+              method: 'POST',
+              url: 'https://example.com',
+              body: {
                 userId: '{{trigger.userId}}',
               },
             },
@@ -4515,13 +4514,10 @@ export const oneSucceededWorkflowRunQueryResult = {
         {
           id: 'a01b2953-9aa7-4d9a-aded-8e9bafbd6c30',
           name: 'Code - Logic Function',
-          type: 'CODE',
+          type: 'HTTP_REQUEST',
           valid: false,
           settings: {
-            input: {
-              logicFunctionId: '605efcda-6689-43b3-b24c-2eb76948f523',
-              logicFunctionInput: {},
-            },
+            input: { method: 'GET', url: 'https://example.com' },
             outputSchema: {
               link: {
                 tab: 'test',

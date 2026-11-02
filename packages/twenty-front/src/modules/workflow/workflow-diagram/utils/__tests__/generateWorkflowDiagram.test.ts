@@ -47,17 +47,14 @@ describe('generateWorkflowDiagram', () => {
       {
         id: 'step1',
         name: 'Step 1',
-        type: 'CODE',
+        type: 'HTTP_REQUEST',
         valid: true,
         settings: {
           errorHandlingOptions: {
             retryOnFailure: { value: 3 },
             continueOnFailure: { value: false },
           },
-          input: {
-            logicFunctionId: 'a5434be2-c10b-465c-acec-46492782a997',
-            logicFunctionInput: {},
-          },
+          input: { method: 'GET', url: 'https://example.com' },
           outputSchema: {},
         },
         nextStepIds: ['step2'],
@@ -65,17 +62,14 @@ describe('generateWorkflowDiagram', () => {
       {
         id: 'step2',
         name: 'Step 2',
-        type: 'CODE',
+        type: 'HTTP_REQUEST',
         valid: true,
         settings: {
           errorHandlingOptions: {
             retryOnFailure: { value: 3 },
             continueOnFailure: { value: false },
           },
-          input: {
-            logicFunctionId: 'a5434be2-c10b-465c-acec-46492782a997',
-            logicFunctionInput: {},
-          },
+          input: { method: 'GET', url: 'https://example.com' },
           outputSchema: {},
         },
         nextStepIds: undefined,
@@ -98,7 +92,7 @@ describe('generateWorkflowDiagram', () => {
     for (const [index, step] of steps.entries()) {
       expect(stepNodes[index].data).toEqual({
         nodeType: 'action',
-        actionType: 'CODE',
+        actionType: 'HTTP_REQUEST',
         name: step.name,
         hasNextStepIds: step.id !== 'step2',
         stepId: step.id,
@@ -124,17 +118,14 @@ describe('generateWorkflowDiagram', () => {
       {
         id: 'step1',
         name: 'Step 1',
-        type: 'CODE',
+        type: 'HTTP_REQUEST',
         valid: true,
         settings: {
           errorHandlingOptions: {
             retryOnFailure: { value: 3 },
             continueOnFailure: { value: false },
           },
-          input: {
-            logicFunctionId: 'a5434be2-c10b-465c-acec-46492782a997',
-            logicFunctionInput: {},
-          },
+          input: { method: 'GET', url: 'https://example.com' },
           outputSchema: {},
         },
         nextStepIds: ['step2'],
@@ -142,17 +133,14 @@ describe('generateWorkflowDiagram', () => {
       {
         id: 'step2',
         name: 'Step 2',
-        type: 'CODE',
+        type: 'HTTP_REQUEST',
         valid: true,
         settings: {
           errorHandlingOptions: {
             retryOnFailure: { value: 3 },
             continueOnFailure: { value: false },
           },
-          input: {
-            logicFunctionId: 'a5434be2-c10b-465c-acec-46492782a997',
-            logicFunctionInput: {},
-          },
+          input: { method: 'GET', url: 'https://example.com' },
           outputSchema: {},
         },
         nextStepIds: undefined,
@@ -189,17 +177,14 @@ describe('generateWorkflowDiagram', () => {
       {
         id: 'step1',
         name: 'Step 1',
-        type: 'CODE',
+        type: 'HTTP_REQUEST',
         valid: true,
         settings: {
           errorHandlingOptions: {
             retryOnFailure: { value: 3 },
             continueOnFailure: { value: false },
           },
-          input: {
-            logicFunctionId: 'a5434be2-c10b-465c-acec-46492782a997',
-            logicFunctionInput: {},
-          },
+          input: { method: 'GET', url: 'https://example.com' },
           outputSchema: {},
         },
         nextStepIds: undefined,
@@ -207,17 +192,14 @@ describe('generateWorkflowDiagram', () => {
       {
         id: 'step2',
         name: 'Step 2',
-        type: 'CODE',
+        type: 'HTTP_REQUEST',
         valid: true,
         settings: {
           errorHandlingOptions: {
             retryOnFailure: { value: 3 },
             continueOnFailure: { value: false },
           },
-          input: {
-            logicFunctionId: 'a5434be2-c10b-465c-acec-46492782a997',
-            logicFunctionInput: {},
-          },
+          input: { method: 'GET', url: 'https://example.com' },
           outputSchema: {},
         },
         nextStepIds: ['step1'],
@@ -254,17 +236,14 @@ describe('generateWorkflowDiagram', () => {
       {
         id: 'step1',
         name: 'Step 1',
-        type: 'CODE',
+        type: 'HTTP_REQUEST',
         valid: true,
         settings: {
           errorHandlingOptions: {
             retryOnFailure: { value: 3 },
             continueOnFailure: { value: false },
           },
-          input: {
-            logicFunctionId: 'a5434be2-c10b-465c-acec-46492782a997',
-            logicFunctionInput: {},
-          },
+          input: { method: 'GET', url: 'https://example.com' },
           outputSchema: {},
         },
         nextStepIds: undefined,
@@ -272,17 +251,14 @@ describe('generateWorkflowDiagram', () => {
       {
         id: 'step2',
         name: 'Step 2',
-        type: 'CODE',
+        type: 'HTTP_REQUEST',
         valid: true,
         settings: {
           errorHandlingOptions: {
             retryOnFailure: { value: 3 },
             continueOnFailure: { value: false },
           },
-          input: {
-            logicFunctionId: 'a5434be2-c10b-465c-acec-46492782a997',
-            logicFunctionInput: {},
-          },
+          input: { method: 'GET', url: 'https://example.com' },
           outputSchema: {},
         },
         nextStepIds: ['step1'],
@@ -290,17 +266,14 @@ describe('generateWorkflowDiagram', () => {
       {
         id: 'step3',
         name: 'Step 3',
-        type: 'CODE',
+        type: 'HTTP_REQUEST',
         valid: true,
         settings: {
           errorHandlingOptions: {
             retryOnFailure: { value: 3 },
             continueOnFailure: { value: false },
           },
-          input: {
-            logicFunctionId: 'a5434be2-c10b-465c-acec-46492782a997',
-            logicFunctionInput: {},
-          },
+          input: { method: 'GET', url: 'https://example.com' },
           outputSchema: {},
         },
         nextStepIds: ['step1'],

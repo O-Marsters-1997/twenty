@@ -9,7 +9,6 @@ import {
   createCompanyStep,
   findTestWorkflowVersionId,
   formStep,
-  logicFunctionStep,
   runCoreWorkflowVersion,
   type TestApplicationWorkflow,
   waitForTestWorkflowRun,
@@ -512,7 +511,7 @@ describe('workflow deletion cleanup', () => {
       createCompanyStep(`${PREFIX} form company`),
     ]);
     const SLOW_WORKFLOW = buildTestApplicationWorkflow(`${PREFIX} slow`, [
-      logicFunctionStep(FUNCTION_ID),
+      formStep(),
       createCompanyStep(SLOW_COMPANY),
     ]);
     const OTHER_APP_WORKFLOW = buildTestApplicationWorkflow(

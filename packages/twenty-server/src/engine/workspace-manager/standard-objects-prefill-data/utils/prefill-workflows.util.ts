@@ -1,19 +1,14 @@
 import { isDefined } from 'twenty-shared/utils';
-import { IF_ELSE_BRANCH_POSITION_OFFSETS } from 'twenty-shared/workflow';
 import { type EntityManager } from 'typeorm';
 import { v5 } from 'uuid';
 
-import { DatabaseEventAction } from 'src/engine/api/graphql/graphql-query-runner/enums/database-event-action';
 import { WorkflowEntity } from 'src/engine/core-modules/workflow/entities/workflow.entity';
 import { type FlatEntityMaps } from 'src/engine/metadata-modules/flat-entity/types/flat-entity-maps.type';
 import { findFlatEntityByIdInFlatEntityMaps } from 'src/engine/metadata-modules/flat-entity/utils/find-flat-entity-by-id-in-flat-entity-maps.util';
 import { type FlatFieldMetadata } from 'src/engine/metadata-modules/flat-field-metadata/types/flat-field-metadata.type';
 import { type FlatObjectMetadata } from 'src/engine/metadata-modules/flat-object-metadata/types/flat-object-metadata.type';
 import { buildObjectIdByNameMaps } from 'src/engine/metadata-modules/flat-object-metadata/utils/build-object-id-by-name-maps.util';
-import { buildPersonSyncSourceFilter } from 'src/engine/workspace-manager/standard-objects-prefill-data/utils/build-person-sync-source-filter.util';
-import { generateFakeObjectRecordEvent } from 'src/modules/workflow/workflow-builder/workflow-schema/utils/generate-fake-object-record-event';
 import { generateObjectRecordFields } from 'src/modules/workflow/workflow-builder/workflow-schema/utils/generate-object-record-fields';
-import { getCreateCompanyWhenAddingNewPersonCodeStepLogicFunctionIds } from 'src/engine/workspace-manager/standard-objects-prefill-data/utils/prefill-workflow-code-step-logic-functions.util';
 
 const WORKFLOW_PREFILL_ID_NAMESPACE = '8b213cac-a68b-4ffe-817a-3ec994e9932d';
 
@@ -22,32 +17,16 @@ export const getWorkflowPrefillIds = (workspaceId: string) => ({
     `coreQuickLeadWorkflow:${workspaceId}`,
     WORKFLOW_PREFILL_ID_NAMESPACE,
   ),
-  coreCreateCompanyWorkflowId: v5(
-    `coreCreateCompanyWorkflow:${workspaceId}`,
-    WORKFLOW_PREFILL_ID_NAMESPACE,
-  ),
   coreQuickLeadWorkflowVersionId: v5(
     `coreQuickLeadWorkflowVersion:${workspaceId}`,
-    WORKFLOW_PREFILL_ID_NAMESPACE,
-  ),
-  coreCreateCompanyWorkflowVersionId: v5(
-    `coreCreateCompanyWorkflowVersion:${workspaceId}`,
     WORKFLOW_PREFILL_ID_NAMESPACE,
   ),
   quickLeadWorkflowUniversalIdentifier: v5(
     `quickLeadWorkflowUniversalIdentifier:${workspaceId}`,
     WORKFLOW_PREFILL_ID_NAMESPACE,
   ),
-  createCompanyWorkflowUniversalIdentifier: v5(
-    `createCompanyWorkflowUniversalIdentifier:${workspaceId}`,
-    WORKFLOW_PREFILL_ID_NAMESPACE,
-  ),
   quickLeadWorkflowVersionUniversalIdentifier: v5(
     `quickLeadWorkflowVersionUniversalIdentifier:${workspaceId}`,
-    WORKFLOW_PREFILL_ID_NAMESPACE,
-  ),
-  createCompanyWorkflowVersionUniversalIdentifier: v5(
-    `createCompanyWorkflowVersionUniversalIdentifier:${workspaceId}`,
     WORKFLOW_PREFILL_ID_NAMESPACE,
   ),
 });
@@ -61,13 +40,9 @@ export const prefillWorkflows = async (
 ) => {
   const {
     coreQuickLeadWorkflowId,
-    coreCreateCompanyWorkflowId,
     coreQuickLeadWorkflowVersionId,
-    coreCreateCompanyWorkflowVersionId,
     quickLeadWorkflowUniversalIdentifier,
-    createCompanyWorkflowUniversalIdentifier,
     quickLeadWorkflowVersionUniversalIdentifier,
-    createCompanyWorkflowVersionUniversalIdentifier,
   } = getWorkflowPrefillIds(workspaceId);
 
   let applicationId = applicationIdParam;
@@ -86,12 +61,6 @@ export const prefillWorkflows = async (
       `Workspace custom application not found for workspace ${workspaceId}`,
     );
   }
-
-  const {
-    extractDomainLogicFunctionId,
-    findMatchingCompanyByDomainLogicFunctionId,
-    isPersonalEmailLogicFunctionId,
-  } = getCreateCompanyWhenAddingNewPersonCodeStepLogicFunctionIds(workspaceId);
 
   const { idByNameSingular: objectIdByNameSingular } = buildObjectIdByNameMaps(
     flatObjectMetadataMaps,
@@ -121,34 +90,6 @@ export const prefillWorkflows = async (
     throw new Error('Company or person object metadata not found');
   }
 
-  const companyDomainNameFieldMetadata = Object.values(
-    flatFieldMetadataMaps.byUniversalIdentifier,
-  ).find(
-    (fieldMetadata) =>
-      fieldMetadata?.objectMetadataId === companyObjectMetadataId &&
-      fieldMetadata?.name === 'domainName',
-  );
-
-  if (!isDefined(companyDomainNameFieldMetadata)) {
-    throw new Error('Company domainName field metadata not found');
-  }
-
-  const personCreatedByFieldMetadata = Object.values(
-    flatFieldMetadataMaps.byUniversalIdentifier,
-  ).find(
-    (fieldMetadata) =>
-      fieldMetadata?.objectMetadataId === personObjectMetadataId &&
-      fieldMetadata?.name === 'createdBy',
-  );
-
-  if (!isDefined(personCreatedByFieldMetadata)) {
-    throw new Error('Person createdBy field metadata not found');
-  }
-
-  const personSyncSourceFilter = buildPersonSyncSourceFilter({
-    createdByFieldMetadataId: personCreatedByFieldMetadata.id,
-  });
-
   await entityManager
     .createQueryBuilder()
     .insert()
@@ -163,14 +104,6 @@ export const prefillWorkflows = async (
         name: 'Quick Lead',
         lastPublishedCoreWorkflowVersionId: coreQuickLeadWorkflowVersionId,
       },
-      {
-        id: coreCreateCompanyWorkflowId,
-        workspaceId,
-        universalIdentifier: createCompanyWorkflowUniversalIdentifier,
-        applicationId,
-        name: 'Create company when adding a new person',
-        lastPublishedCoreWorkflowVersionId: coreCreateCompanyWorkflowVersionId,
-      },
     ])
     .execute();
 
@@ -183,25 +116,6 @@ export const prefillWorkflows = async (
       availability: { type: 'GLOBAL', locations: undefined },
     },
     nextStepIds: ['6e089bc9-aabd-435f-865f-f31c01c8f4a7'],
-  };
-
-  const createCompanyTrigger = {
-    name: 'Record is created or updated',
-    type: 'DATABASE_EVENT',
-    settings: {
-      eventName: 'person.upserted',
-      fields: ['emails'],
-      outputSchema: generateFakeObjectRecordEvent(
-        {
-          flatObjectMetadata: personObjectMetadata,
-          flatObjectMetadataMaps,
-          flatFieldMetadataMaps,
-        },
-        DatabaseEventAction.UPSERTED,
-      ),
-      filter: personSyncSourceFilter,
-    },
-    nextStepIds: ['c30d7cbe-00e0-4966-bc1a-99b0a11a2cca'],
   };
 
   const quickLeadSteps = JSON.stringify([
@@ -384,372 +298,6 @@ export const prefillWorkflows = async (
     },
   ]);
 
-  const createCompanySteps = JSON.stringify([
-    {
-      id: 'c30d7cbe-00e0-4966-bc1a-99b0a11a2cca',
-      name: 'Is this a personal email?',
-      type: 'CODE',
-      valid: false,
-      position: {
-        x: 0,
-        y: 130,
-      },
-      settings: {
-        input: {
-          logicFunctionId: isPersonalEmailLogicFunctionId,
-          logicFunctionInput: {
-            primaryEmail: '{{trigger.properties.after.emails.primaryEmail}}',
-          },
-        },
-        outputSchema: {
-          isPersonal: {
-            type: 'boolean',
-            label: 'isPersonal',
-            value: true,
-            isLeaf: true,
-          },
-        },
-        errorHandlingOptions: {
-          retryOnFailure: {
-            value: 0,
-          },
-          continueOnFailure: {
-            value: false,
-          },
-        },
-      },
-      __typename: 'WorkflowAction',
-      nextStepIds: ['01f3db05-aae5-4e4b-b361-96684f09c704'],
-    },
-    {
-      id: '01f3db05-aae5-4e4b-b361-96684f09c704',
-      name: 'If business email',
-      type: 'FILTER',
-      valid: false,
-      position: {
-        x: 0,
-        y: 260,
-      },
-      settings: {
-        input: {
-          stepFilters: [
-            {
-              id: '0e595385-9e18-4869-abfd-cf72952b124c',
-              type: 'boolean',
-              value: 'false',
-              operand: 'IS',
-              isFullRecord: false,
-              stepOutputKey:
-                '{{c30d7cbe-00e0-4966-bc1a-99b0a11a2cca.isPersonal}}',
-              stepFilterGroupId: '5204d5f5-7b23-428c-9f84-c37971d497d3',
-              positionInStepFilterGroup: 0,
-            },
-          ],
-          stepFilterGroups: [
-            {
-              id: '5204d5f5-7b23-428c-9f84-c37971d497d3',
-              logicalOperator: 'AND',
-            },
-          ],
-        },
-        outputSchema: {},
-        errorHandlingOptions: {
-          retryOnFailure: {
-            value: 0,
-          },
-          continueOnFailure: {
-            value: false,
-          },
-        },
-      },
-      __typename: 'WorkflowAction',
-      nextStepIds: ['1b01193b-8300-4d79-940b-44464bf45505'],
-    },
-    {
-      id: '1b01193b-8300-4d79-940b-44464bf45505',
-      name: 'Extract domain from email',
-      type: 'CODE',
-      valid: false,
-      position: {
-        x: 0,
-        y: 390,
-      },
-      settings: {
-        input: {
-          logicFunctionId: extractDomainLogicFunctionId,
-          logicFunctionInput: {
-            email: '{{trigger.properties.after.emails.primaryEmail}}',
-          },
-        },
-        outputSchema: {
-          url: {
-            icon: 'IconVariable',
-            type: 'string',
-            label: 'url',
-            value: 'https://twenty.com',
-            isLeaf: true,
-          },
-          domain: {
-            icon: 'IconVariable',
-            type: 'string',
-            label: 'domain',
-            value: 'twenty.com',
-            isLeaf: true,
-          },
-        },
-        errorHandlingOptions: {
-          retryOnFailure: {
-            value: 0,
-          },
-          continueOnFailure: {
-            value: false,
-          },
-        },
-      },
-      __typename: 'WorkflowAction',
-      nextStepIds: ['becb3acf-79bb-4672-8a42-3696e94957b5'],
-    },
-    {
-      id: 'becb3acf-79bb-4672-8a42-3696e94957b5',
-      name: 'Search Company',
-      type: 'FIND_RECORDS',
-      valid: false,
-      position: {
-        x: 0,
-        y: 520,
-      },
-      settings: {
-        input: {
-          limit: 25,
-          filter: {
-            recordFilters: [
-              {
-                id: 'a9b917a0-5c4c-4e8f-bf91-160d0b888693',
-                type: 'LINKS',
-                label: 'Domain Name',
-                value: '{{1b01193b-8300-4d79-940b-44464bf45505.domain}}',
-                operand: 'CONTAINS',
-                displayValue: '{{1b01193b-8300-4d79-940b-44464bf45505.domain}}',
-                subFieldName: 'primaryLinkUrl',
-                fieldMetadataId: companyDomainNameFieldMetadata.id,
-                recordFilterGroupId: '194e151c-cf46-4e8f-a48b-649c36082dfa',
-              },
-            ],
-            recordFilterGroups: [
-              {
-                id: '194e151c-cf46-4e8f-a48b-649c36082dfa',
-                logicalOperator: 'AND',
-              },
-            ],
-          },
-          objectName: 'company',
-        },
-        outputSchema: {},
-        errorHandlingOptions: {
-          retryOnFailure: {
-            value: 0,
-          },
-          continueOnFailure: {
-            value: false,
-          },
-        },
-      },
-      __typename: 'WorkflowAction',
-      nextStepIds: ['9d0b6ef2-aad2-4853-92e1-95f2abf10d5b'],
-    },
-    {
-      id: '9d0b6ef2-aad2-4853-92e1-95f2abf10d5b',
-      name: 'Find exact company match',
-      type: 'CODE',
-      valid: false,
-      position: {
-        x: 0,
-        y: 650,
-      },
-      settings: {
-        input: {
-          logicFunctionId: findMatchingCompanyByDomainLogicFunctionId,
-          logicFunctionInput: {
-            companies: '{{becb3acf-79bb-4672-8a42-3696e94957b5.all}}',
-            domain: '{{1b01193b-8300-4d79-940b-44464bf45505.domain}}',
-          },
-        },
-        outputSchema: {
-          companyId: {
-            type: 'string',
-            label: 'companyId',
-            value: '00000000-0000-0000-0000-000000000000',
-            isLeaf: true,
-          },
-          hasMatch: {
-            type: 'boolean',
-            label: 'hasMatch',
-            value: true,
-            isLeaf: true,
-          },
-        },
-        errorHandlingOptions: {
-          retryOnFailure: {
-            value: 0,
-          },
-          continueOnFailure: {
-            value: false,
-          },
-        },
-      },
-      __typename: 'WorkflowAction',
-      nextStepIds: ['0c99a900-656a-40e8-977e-5a7357be33b9'],
-    },
-    {
-      id: '0c99a900-656a-40e8-977e-5a7357be33b9',
-      name: 'If a company already exists',
-      type: 'IF_ELSE',
-      valid: false,
-      position: {
-        x: 0,
-        y: 780,
-      },
-      settings: {
-        input: {
-          branches: [
-            {
-              id: '1344c151-15ff-40e2-a1a3-925fabaf5b1c',
-              nextStepIds: ['ffdd4271-75d4-4805-b1f8-2167a113c3b2'],
-              filterGroupId: 'f5c41047-2a6e-49fb-968a-fa7789a90ee5',
-            },
-            {
-              id: 'fe6dd152-1103-4324-af51-3ff994d1f8a7',
-              nextStepIds: ['ddafb9db-a94f-40b9-a5c9-becce857edf7'],
-            },
-          ],
-          stepFilters: [
-            {
-              id: '290cc6a3-08fd-4be5-b42e-966d0bb90ff7',
-              type: 'boolean',
-              value: 'true',
-              operand: 'IS',
-              isFullRecord: false,
-              stepOutputKey:
-                '{{9d0b6ef2-aad2-4853-92e1-95f2abf10d5b.hasMatch}}',
-              stepFilterGroupId: 'f5c41047-2a6e-49fb-968a-fa7789a90ee5',
-              positionInStepFilterGroup: 0,
-            },
-          ],
-          stepFilterGroups: [
-            {
-              id: 'f5c41047-2a6e-49fb-968a-fa7789a90ee5',
-              logicalOperator: 'AND',
-            },
-          ],
-        },
-        outputSchema: {},
-        errorHandlingOptions: {
-          retryOnFailure: {
-            value: 0,
-          },
-          continueOnFailure: {
-            value: false,
-          },
-        },
-      },
-      __typename: 'WorkflowAction',
-    },
-    {
-      id: 'ffdd4271-75d4-4805-b1f8-2167a113c3b2',
-      name: 'Attach person to existing company',
-      type: 'UPDATE_RECORD',
-      valid: false,
-      position: {
-        x: IF_ELSE_BRANCH_POSITION_OFFSETS.IF.x,
-        y: 910,
-      },
-      settings: {
-        input: {
-          objectName: 'person',
-          objectRecord: {
-            companyId: '{{9d0b6ef2-aad2-4853-92e1-95f2abf10d5b.companyId}}',
-          },
-          fieldsToUpdate: ['companyId'],
-          objectRecordId: '{{trigger.properties.after.id}}',
-        },
-        outputSchema: {},
-        errorHandlingOptions: {
-          retryOnFailure: {
-            value: 0,
-          },
-          continueOnFailure: {
-            value: false,
-          },
-        },
-      },
-      __typename: 'WorkflowAction',
-    },
-    {
-      id: 'ddafb9db-a94f-40b9-a5c9-becce857edf7',
-      name: 'Create a new company',
-      type: 'CREATE_RECORD',
-      valid: false,
-      position: {
-        x: IF_ELSE_BRANCH_POSITION_OFFSETS.ELSE.x,
-        y: 910,
-      },
-      settings: {
-        input: {
-          objectName: 'company',
-          objectRecord: {
-            name: '{{1b01193b-8300-4d79-940b-44464bf45505.domain}}',
-            domainName: {
-              primaryLinkUrl: '{{1b01193b-8300-4d79-940b-44464bf45505.url}}',
-              primaryLinkLabel:
-                '{{1b01193b-8300-4d79-940b-44464bf45505.domain}}',
-            },
-          },
-        },
-        outputSchema: {},
-        errorHandlingOptions: {
-          retryOnFailure: {
-            value: 0,
-          },
-          continueOnFailure: {
-            value: false,
-          },
-        },
-      },
-      __typename: 'WorkflowAction',
-      nextStepIds: ['d5d5d6e1-391f-4142-83c1-670f7087f079'],
-    },
-    {
-      id: 'd5d5d6e1-391f-4142-83c1-670f7087f079',
-      name: 'Attach person to this company',
-      type: 'UPDATE_RECORD',
-      valid: false,
-      position: {
-        x: IF_ELSE_BRANCH_POSITION_OFFSETS.ELSE.x,
-        y: 1040,
-      },
-      settings: {
-        input: {
-          objectName: 'person',
-          objectRecord: {
-            companyId: '{{ddafb9db-a94f-40b9-a5c9-becce857edf7.id}}',
-          },
-          fieldsToUpdate: ['companyId'],
-          objectRecordId: '{{trigger.properties.after.id}}',
-        },
-        outputSchema: {},
-        errorHandlingOptions: {
-          retryOnFailure: {
-            value: 0,
-          },
-          continueOnFailure: {
-            value: false,
-          },
-        },
-      },
-      __typename: 'WorkflowAction',
-    },
-  ]);
-
   await entityManager
     .createQueryBuilder()
     .insert()
@@ -774,16 +322,6 @@ export const prefillWorkflows = async (
         steps: JSON.parse(quickLeadSteps),
         status: 'ACTIVE',
         coreWorkflowId: coreQuickLeadWorkflowId,
-      },
-      {
-        id: coreCreateCompanyWorkflowVersionId,
-        workspaceId,
-        universalIdentifier: createCompanyWorkflowVersionUniversalIdentifier,
-        applicationId,
-        triggers: [createCompanyTrigger],
-        steps: JSON.parse(createCompanySteps),
-        status: 'ACTIVE',
-        coreWorkflowId: coreCreateCompanyWorkflowId,
       },
     ])
     .execute();

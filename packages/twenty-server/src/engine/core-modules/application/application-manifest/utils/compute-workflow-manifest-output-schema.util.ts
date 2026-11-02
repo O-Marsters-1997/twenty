@@ -19,20 +19,6 @@ export const computeWorkflowManifestOutputSchema = ({
     return step.outputSchema;
   }
 
-  if (step.type === 'LOGIC_FUNCTION') {
-    const declaredOutputSchema =
-      references.logicFunctionOutputSchemaByUniversalIdentifier?.get(
-        step.logicFunctionUniversalIdentifier,
-      );
-
-    if (
-      isDefined(declaredOutputSchema) &&
-      Object.keys(declaredOutputSchema).length > 0
-    ) {
-      return declaredOutputSchema;
-    }
-  }
-
   if (step.type === 'AI_AGENT') {
     return isDefined(step.input.agentUniversalIdentifier)
       ? (references.agentOutputSchemaByUniversalIdentifier?.get(
