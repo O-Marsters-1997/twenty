@@ -78,7 +78,6 @@
       "packages/twenty-emails",
       "packages/twenty-ui",
       "packages/twenty-utils",
-      "packages/twenty-zapier",
       "packages/twenty-website",
       "packages/twenty-docs",
       "packages/twenty-e2e-testing",
@@ -90,8 +89,7 @@
       "packages/create-twenty-app",
       "packages/twenty-agent-skills",
       "packages/twenty-oxlint-rules",
-      "packages/twenty-claude-skills",
-      "packages/twenty-companion"
+      "packages/twenty-claude-skills"
     ]
   },
   "prettier": {
