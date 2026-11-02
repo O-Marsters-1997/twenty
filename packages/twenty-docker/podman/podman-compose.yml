@@ -37,7 +37,7 @@ services:
   worker:
     container_name: twenty-worker
     image: twentycrm/twenty:latest
-    command: yarn worker:prod
+    command: node dist/queue-worker/queue-worker
     environment:
       SERVER_URL: ${SERVER_URL}
       PG_DATABASE_URL: "postgresql://twenty:${PG_DATABASE_PASSWORD}@twenty-db:5432/twenty"

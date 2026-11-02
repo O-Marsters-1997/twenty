@@ -144,7 +144,7 @@ worker:
   enabled: true
   replicaCount: 1
   image: {}
-  command: ["yarn", "worker:prod"]
+  command: ["node", "dist/queue-worker/queue-worker"]
 
   resources:
     requests:
