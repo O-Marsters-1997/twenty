@@ -1,4 +1,0 @@
-export const APP_APPLY = {
-  UPLOAD_CONCURRENCY: 4,
-  UPLOAD_TIMEOUT_MILLISECONDS: 300_000,
-} as const;

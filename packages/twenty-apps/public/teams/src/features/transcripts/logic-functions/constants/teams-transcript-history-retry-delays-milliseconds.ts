@@ -1,5 +1,0 @@
-export const TEAMS_TRANSCRIPT_HISTORY_RETRY_DELAYS_MILLISECONDS = [
-  60 * 1_000,
-  5 * 60 * 1_000,
-  10 * 60 * 1_000,
-];
