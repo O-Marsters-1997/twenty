@@ -51,7 +51,7 @@ podman run -d --pod twenty-pod --name twenty-worker \
   -e LOG_LEVEL=info \
   -v twenty-server-data:/app/docker-data:Z \
   docker.io/twentycrm/twenty:latest \
-  yarn worker:prod
+  node dist/queue-worker/queue-worker
 
 # wait some time, check status
 sleep 30

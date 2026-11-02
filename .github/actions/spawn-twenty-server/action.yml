@@ -107,7 +107,7 @@ runs:
       if: inputs.source == 'local'
       shell: bash
       working-directory: packages/twenty-server
-      run: nohup yarn worker:prod > /tmp/twenty-worker.log 2>&1 &
+      run: nohup node dist/queue-worker/queue-worker > /tmp/twenty-worker.log 2>&1 &
 
     - name: Resolve server url and api key
       id: resolve
