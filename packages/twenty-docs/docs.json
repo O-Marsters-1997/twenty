@@ -54,7 +54,6 @@
                   "getting-started/core-concepts/workflows",
                   "getting-started/core-concepts/calendar-and-email",
                   "getting-started/core-concepts/ai",
-                  "getting-started/core-concepts/apps",
                   "getting-started/core-concepts/dashboards",
                   "getting-started/core-concepts/glossary"
                 ]
@@ -216,12 +215,6 @@
                           "user-guide/workflows/how-tos/connect-to-other-tools/bring-product-data-in-twenty",
                           "user-guide/workflows/how-tos/connect-to-other-tools/generate-quote-or-invoice-from-twenty",
                           "user-guide/workflows/how-tos/connect-to-other-tools/generate-pdf-from-twenty"
-                        ]
-                      },
-                      {
-                        "group": "Advanced Configurations",
-                        "pages": [
-                          "user-guide/workflows/how-tos/advanced-configurations/handle-arrays-in-code-actions"
                         ]
                       },
                       {
@@ -403,91 +396,6 @@
                 "group": "Overview",
                 "pages": [
                   "developers/introduction"
-                ]
-              },
-              {
-                "group": "Apps",
-                "pages": [
-                  {
-                    "group": "Getting Started",
-                    "pages": [
-                      "developers/extend/apps/getting-started/quick-start",
-                      "developers/extend/apps/getting-started/concepts",
-                      "developers/extend/apps/getting-started/project-structure",
-                      "developers/extend/apps/getting-started/local-server",
-                      "developers/extend/apps/getting-started/scaffolding",
-                      "developers/extend/apps/getting-started/good-practices",
-                      "developers/extend/apps/getting-started/troubleshooting"
-                    ]
-                  },
-                  {
-                    "group": "Tutorial",
-                    "pages": [
-                      "developers/extend/apps/tutorials/document-generator/overview",
-                      "developers/extend/apps/tutorials/document-generator/data-model",
-                      "developers/extend/apps/tutorials/document-generator/generating-documents",
-                      "developers/extend/apps/tutorials/document-generator/http-routes",
-                      "developers/extend/apps/tutorials/document-generator/building-the-ui",
-                      "developers/extend/apps/tutorials/document-generator/ai-agent",
-                      "developers/extend/apps/tutorials/document-generator/publishing"
-                    ]
-                  },
-                  {
-                    "group": "Config",
-                    "pages": [
-                      "developers/extend/apps/config/overview",
-                      "developers/extend/apps/config/application",
-                      "developers/extend/apps/config/roles",
-                      "developers/extend/apps/config/install-hooks",
-                      "developers/extend/apps/config/public-assets"
-                    ]
-                  },
-                  {
-                    "group": "Data",
-                    "pages": [
-                      "developers/extend/apps/data/overview",
-                      "developers/extend/apps/data/objects",
-                      "developers/extend/apps/data/extending-objects",
-                      "developers/extend/apps/data/system-fields",
-                      "developers/extend/apps/data/relations",
-                      "developers/extend/apps/data/timeline-activity-types"
-                    ]
-                  },
-                  {
-                    "group": "Logic",
-                    "pages": [
-                      "developers/extend/apps/logic/overview",
-                      "developers/extend/apps/logic/logic-functions",
-                      "developers/extend/apps/logic/key-value-store",
-                      "developers/extend/apps/logic/background-jobs",
-                      "developers/extend/apps/logic/skills-and-agents",
-                      "developers/extend/apps/logic/connections",
-                      "developers/extend/apps/logic/messaging-channels",
-                      "developers/extend/apps/logic/credits"
-                    ]
-                  },
-                  {
-                    "group": "Layout",
-                    "pages": [
-                      "developers/extend/apps/layout/overview",
-                      "developers/extend/apps/layout/views",
-                      "developers/extend/apps/layout/navigation-menu-items",
-                      "developers/extend/apps/layout/page-layouts",
-                      "developers/extend/apps/layout/front-components",
-                      "developers/extend/apps/layout/command-menu-items"
-                    ]
-                  },
-                  {
-                    "group": "Operations",
-                    "pages": [
-                      "developers/extend/apps/operations/overview",
-                      "developers/extend/apps/operations/cli",
-                      "developers/extend/apps/operations/sync-and-recovery",
-                      "developers/extend/apps/operations/testing",
-                      "developers/extend/apps/operations/translations",
-                      "developers/extend/apps/operations/publishing"
-                    ]
-                  }
                 ]
               },
               {
@@ -718,7 +626,6 @@
                   "fr/getting-started/core-concepts/workflows",
                   "fr/getting-started/core-concepts/calendar-and-email",
                   "fr/getting-started/core-concepts/ai",
-                  "fr/getting-started/core-concepts/apps",
                   "fr/getting-started/core-concepts/dashboards",
                   "fr/getting-started/core-concepts/glossary"
                 ]
@@ -860,12 +767,6 @@
                           "fr/user-guide/workflows/how-tos/connect-to-other-tools/bring-product-data-in-twenty",
                           "fr/user-guide/workflows/how-tos/connect-to-other-tools/generate-quote-or-invoice-from-twenty",
                           "fr/user-guide/workflows/how-tos/connect-to-other-tools/generate-pdf-from-twenty"
-                        ]
-                      },
-                      {
-                        "group": "Configurations avancées",
-                        "pages": [
-                          "fr/user-guide/workflows/how-tos/advanced-configurations/handle-arrays-in-code-actions"
                         ]
                       },
                       {
@@ -1049,88 +950,6 @@
                 ]
               },
               {
-                "group": "Applications",
-                "pages": [
-                  {
-                    "group": "Prise en main",
-                    "pages": [
-                      "fr/developers/extend/apps/getting-started/quick-start",
-                      "fr/developers/extend/apps/getting-started/concepts",
-                      "fr/developers/extend/apps/getting-started/project-structure",
-                      "fr/developers/extend/apps/getting-started/local-server",
-                      "fr/developers/extend/apps/getting-started/scaffolding",
-                      "fr/developers/extend/apps/getting-started/troubleshooting"
-                    ]
-                  },
-                  {
-                    "group": "Tutoriel",
-                    "pages": [
-                      "fr/developers/extend/apps/tutorials/document-generator/overview",
-                      "fr/developers/extend/apps/tutorials/document-generator/data-model",
-                      "fr/developers/extend/apps/tutorials/document-generator/generating-documents",
-                      "fr/developers/extend/apps/tutorials/document-generator/http-routes",
-                      "fr/developers/extend/apps/tutorials/document-generator/building-the-ui",
-                      "fr/developers/extend/apps/tutorials/document-generator/ai-agent",
-                      "fr/developers/extend/apps/tutorials/document-generator/publishing"
-                    ]
-                  },
-                  {
-                    "group": "Configuration",
-                    "pages": [
-                      "fr/developers/extend/apps/config/overview",
-                      "fr/developers/extend/apps/config/application",
-                      "fr/developers/extend/apps/config/roles",
-                      "fr/developers/extend/apps/config/install-hooks",
-                      "fr/developers/extend/apps/config/public-assets"
-                    ]
-                  },
-                  {
-                    "group": "Données",
-                    "pages": [
-                      "fr/developers/extend/apps/data/overview",
-                      "fr/developers/extend/apps/data/objects",
-                      "fr/developers/extend/apps/data/extending-objects",
-                      "fr/developers/extend/apps/data/system-fields",
-                      "fr/developers/extend/apps/data/relations",
-                      "fr/developers/extend/apps/data/timeline-activity-types"
-                    ]
-                  },
-                  {
-                    "group": "Logique",
-                    "pages": [
-                      "fr/developers/extend/apps/logic/overview",
-                      "fr/developers/extend/apps/logic/logic-functions",
-                      "fr/developers/extend/apps/logic/key-value-store",
-                      "fr/developers/extend/apps/logic/background-jobs",
-                      "fr/developers/extend/apps/logic/skills-and-agents",
-                      "fr/developers/extend/apps/logic/connections"
-                    ]
-                  },
-                  {
-                    "group": "Disposition",
-                    "pages": [
-                      "fr/developers/extend/apps/layout/overview",
-                      "fr/developers/extend/apps/layout/views",
-                      "fr/developers/extend/apps/layout/navigation-menu-items",
-                      "fr/developers/extend/apps/layout/page-layouts",
-                      "fr/developers/extend/apps/layout/front-components",
-                      "fr/developers/extend/apps/layout/command-menu-items"
-                    ]
-                  },
-                  {
-                    "group": "Opérations",
-                    "pages": [
-                      "fr/developers/extend/apps/operations/overview",
-                      "fr/developers/extend/apps/operations/cli",
-                      "fr/developers/extend/apps/operations/sync-and-recovery",
-                      "fr/developers/extend/apps/operations/testing",
-                      "fr/developers/extend/apps/operations/translations",
-                      "fr/developers/extend/apps/operations/publishing"
-                    ]
-                  }
-                ]
-              },
-              {
                 "group": "API",
                 "pages": [
                   "fr/developers/extend/api",
@@ -1181,7 +1000,6 @@
                   "ar/getting-started/core-concepts/workflows",
                   "ar/getting-started/core-concepts/calendar-and-email",
                   "ar/getting-started/core-concepts/ai",
-                  "ar/getting-started/core-concepts/apps",
                   "ar/getting-started/core-concepts/dashboards",
                   "ar/getting-started/core-concepts/glossary"
                 ]
@@ -1323,12 +1141,6 @@
                           "ar/user-guide/workflows/how-tos/connect-to-other-tools/bring-product-data-in-twenty",
                           "ar/user-guide/workflows/how-tos/connect-to-other-tools/generate-quote-or-invoice-from-twenty",
                           "ar/user-guide/workflows/how-tos/connect-to-other-tools/generate-pdf-from-twenty"
-                        ]
-                      },
-                      {
-                        "group": "التكوينات المتقدمة",
-                        "pages": [
-                          "ar/user-guide/workflows/how-tos/advanced-configurations/handle-arrays-in-code-actions"
                         ]
                       },
                       {
@@ -1512,88 +1324,6 @@
                 ]
               },
               {
-                "group": "التطبيقات",
-                "pages": [
-                  {
-                    "group": "البدء",
-                    "pages": [
-                      "ar/developers/extend/apps/getting-started/quick-start",
-                      "ar/developers/extend/apps/getting-started/concepts",
-                      "ar/developers/extend/apps/getting-started/project-structure",
-                      "ar/developers/extend/apps/getting-started/local-server",
-                      "ar/developers/extend/apps/getting-started/scaffolding",
-                      "ar/developers/extend/apps/getting-started/troubleshooting"
-                    ]
-                  },
-                  {
-                    "group": "البرنامج التعليمي",
-                    "pages": [
-                      "ar/developers/extend/apps/tutorials/document-generator/overview",
-                      "ar/developers/extend/apps/tutorials/document-generator/data-model",
-                      "ar/developers/extend/apps/tutorials/document-generator/generating-documents",
-                      "ar/developers/extend/apps/tutorials/document-generator/http-routes",
-                      "ar/developers/extend/apps/tutorials/document-generator/building-the-ui",
-                      "ar/developers/extend/apps/tutorials/document-generator/ai-agent",
-                      "ar/developers/extend/apps/tutorials/document-generator/publishing"
-                    ]
-                  },
-                  {
-                    "group": "التهيئة",
-                    "pages": [
-                      "ar/developers/extend/apps/config/overview",
-                      "ar/developers/extend/apps/config/application",
-                      "ar/developers/extend/apps/config/roles",
-                      "ar/developers/extend/apps/config/install-hooks",
-                      "ar/developers/extend/apps/config/public-assets"
-                    ]
-                  },
-                  {
-                    "group": "بيانات",
-                    "pages": [
-                      "ar/developers/extend/apps/data/overview",
-                      "ar/developers/extend/apps/data/objects",
-                      "ar/developers/extend/apps/data/extending-objects",
-                      "ar/developers/extend/apps/data/system-fields",
-                      "ar/developers/extend/apps/data/relations",
-                      "ar/developers/extend/apps/data/timeline-activity-types"
-                    ]
-                  },
-                  {
-                    "group": "المنطق",
-                    "pages": [
-                      "ar/developers/extend/apps/logic/overview",
-                      "ar/developers/extend/apps/logic/logic-functions",
-                      "ar/developers/extend/apps/logic/key-value-store",
-                      "ar/developers/extend/apps/logic/background-jobs",
-                      "ar/developers/extend/apps/logic/skills-and-agents",
-                      "ar/developers/extend/apps/logic/connections"
-                    ]
-                  },
-                  {
-                    "group": "التخطيط",
-                    "pages": [
-                      "ar/developers/extend/apps/layout/overview",
-                      "ar/developers/extend/apps/layout/views",
-                      "ar/developers/extend/apps/layout/navigation-menu-items",
-                      "ar/developers/extend/apps/layout/page-layouts",
-                      "ar/developers/extend/apps/layout/front-components",
-                      "ar/developers/extend/apps/layout/command-menu-items"
-                    ]
-                  },
-                  {
-                    "group": "العمليات",
-                    "pages": [
-                      "ar/developers/extend/apps/operations/overview",
-                      "ar/developers/extend/apps/operations/cli",
-                      "ar/developers/extend/apps/operations/sync-and-recovery",
-                      "ar/developers/extend/apps/operations/testing",
-                      "ar/developers/extend/apps/operations/translations",
-                      "ar/developers/extend/apps/operations/publishing"
-                    ]
-                  }
-                ]
-              },
-              {
                 "group": "واجهة برمجة التطبيقات",
                 "pages": [
                   "ar/developers/extend/api",
@@ -1644,7 +1374,6 @@
                   "cs/getting-started/core-concepts/workflows",
                   "cs/getting-started/core-concepts/calendar-and-email",
                   "cs/getting-started/core-concepts/ai",
-                  "cs/getting-started/core-concepts/apps",
                   "cs/getting-started/core-concepts/dashboards",
                   "cs/getting-started/core-concepts/glossary"
                 ]
@@ -1786,12 +1515,6 @@
                           "cs/user-guide/workflows/how-tos/connect-to-other-tools/bring-product-data-in-twenty",
                           "cs/user-guide/workflows/how-tos/connect-to-other-tools/generate-quote-or-invoice-from-twenty",
                           "cs/user-guide/workflows/how-tos/connect-to-other-tools/generate-pdf-from-twenty"
-                        ]
-                      },
-                      {
-                        "group": "Pokročilá nastavení",
-                        "pages": [
-                          "cs/user-guide/workflows/how-tos/advanced-configurations/handle-arrays-in-code-actions"
                         ]
                       },
                       {
@@ -1975,88 +1698,6 @@
                 ]
               },
               {
-                "group": "Aplikace",
-                "pages": [
-                  {
-                    "group": "Začínáme",
-                    "pages": [
-                      "cs/developers/extend/apps/getting-started/quick-start",
-                      "cs/developers/extend/apps/getting-started/concepts",
-                      "cs/developers/extend/apps/getting-started/project-structure",
-                      "cs/developers/extend/apps/getting-started/local-server",
-                      "cs/developers/extend/apps/getting-started/scaffolding",
-                      "cs/developers/extend/apps/getting-started/troubleshooting"
-                    ]
-                  },
-                  {
-                    "group": "Návod",
-                    "pages": [
-                      "cs/developers/extend/apps/tutorials/document-generator/overview",
-                      "cs/developers/extend/apps/tutorials/document-generator/data-model",
-                      "cs/developers/extend/apps/tutorials/document-generator/generating-documents",
-                      "cs/developers/extend/apps/tutorials/document-generator/http-routes",
-                      "cs/developers/extend/apps/tutorials/document-generator/building-the-ui",
-                      "cs/developers/extend/apps/tutorials/document-generator/ai-agent",
-                      "cs/developers/extend/apps/tutorials/document-generator/publishing"
-                    ]
-                  },
-                  {
-                    "group": "Konfigurace",
-                    "pages": [
-                      "cs/developers/extend/apps/config/overview",
-                      "cs/developers/extend/apps/config/application",
-                      "cs/developers/extend/apps/config/roles",
-                      "cs/developers/extend/apps/config/install-hooks",
-                      "cs/developers/extend/apps/config/public-assets"
-                    ]
-                  },
-                  {
-                    "group": "Data",
-                    "pages": [
-                      "cs/developers/extend/apps/data/overview",
-                      "cs/developers/extend/apps/data/objects",
-                      "cs/developers/extend/apps/data/extending-objects",
-                      "cs/developers/extend/apps/data/system-fields",
-                      "cs/developers/extend/apps/data/relations",
-                      "cs/developers/extend/apps/data/timeline-activity-types"
-                    ]
-                  },
-                  {
-                    "group": "Logika",
-                    "pages": [
-                      "cs/developers/extend/apps/logic/overview",
-                      "cs/developers/extend/apps/logic/logic-functions",
-                      "cs/developers/extend/apps/logic/key-value-store",
-                      "cs/developers/extend/apps/logic/background-jobs",
-                      "cs/developers/extend/apps/logic/skills-and-agents",
-                      "cs/developers/extend/apps/logic/connections"
-                    ]
-                  },
-                  {
-                    "group": "Rozvržení",
-                    "pages": [
-                      "cs/developers/extend/apps/layout/overview",
-                      "cs/developers/extend/apps/layout/views",
-                      "cs/developers/extend/apps/layout/navigation-menu-items",
-                      "cs/developers/extend/apps/layout/page-layouts",
-                      "cs/developers/extend/apps/layout/front-components",
-                      "cs/developers/extend/apps/layout/command-menu-items"
-                    ]
-                  },
-                  {
-                    "group": "Operace",
-                    "pages": [
-                      "cs/developers/extend/apps/operations/overview",
-                      "cs/developers/extend/apps/operations/cli",
-                      "cs/developers/extend/apps/operations/sync-and-recovery",
-                      "cs/developers/extend/apps/operations/testing",
-                      "cs/developers/extend/apps/operations/translations",
-                      "cs/developers/extend/apps/operations/publishing"
-                    ]
-                  }
-                ]
-              },
-              {
                 "group": "API",
                 "pages": [
                   "cs/developers/extend/api",
@@ -2107,7 +1748,6 @@
                   "de/getting-started/core-concepts/workflows",
                   "de/getting-started/core-concepts/calendar-and-email",
                   "de/getting-started/core-concepts/ai",
-                  "de/getting-started/core-concepts/apps",
                   "de/getting-started/core-concepts/dashboards",
                   "de/getting-started/core-concepts/glossary"
                 ]
@@ -2249,12 +1889,6 @@
                           "de/user-guide/workflows/how-tos/connect-to-other-tools/bring-product-data-in-twenty",
                           "de/user-guide/workflows/how-tos/connect-to-other-tools/generate-quote-or-invoice-from-twenty",
                           "de/user-guide/workflows/how-tos/connect-to-other-tools/generate-pdf-from-twenty"
-                        ]
-                      },
-                      {
-                        "group": "Erweiterte Konfigurationen",
-                        "pages": [
-                          "de/user-guide/workflows/how-tos/advanced-configurations/handle-arrays-in-code-actions"
                         ]
                       },
                       {
@@ -2438,88 +2072,6 @@
                 ]
               },
               {
-                "group": "Apps",
-                "pages": [
-                  {
-                    "group": "Erste Schritte",
-                    "pages": [
-                      "de/developers/extend/apps/getting-started/quick-start",
-                      "de/developers/extend/apps/getting-started/concepts",
-                      "de/developers/extend/apps/getting-started/project-structure",
-                      "de/developers/extend/apps/getting-started/local-server",
-                      "de/developers/extend/apps/getting-started/scaffolding",
-                      "de/developers/extend/apps/getting-started/troubleshooting"
-                    ]
-                  },
-                  {
-                    "group": "Tutorial",
-                    "pages": [
-                      "de/developers/extend/apps/tutorials/document-generator/overview",
-                      "de/developers/extend/apps/tutorials/document-generator/data-model",
-                      "de/developers/extend/apps/tutorials/document-generator/generating-documents",
-                      "de/developers/extend/apps/tutorials/document-generator/http-routes",
-                      "de/developers/extend/apps/tutorials/document-generator/building-the-ui",
-                      "de/developers/extend/apps/tutorials/document-generator/ai-agent",
-                      "de/developers/extend/apps/tutorials/document-generator/publishing"
-                    ]
-                  },
-                  {
-                    "group": "Konfiguration",
-                    "pages": [
-                      "de/developers/extend/apps/config/overview",
-                      "de/developers/extend/apps/config/application",
-                      "de/developers/extend/apps/config/roles",
-                      "de/developers/extend/apps/config/install-hooks",
-                      "de/developers/extend/apps/config/public-assets"
-                    ]
-                  },
-                  {
-                    "group": "Daten",
-                    "pages": [
-                      "de/developers/extend/apps/data/overview",
-                      "de/developers/extend/apps/data/objects",
-                      "de/developers/extend/apps/data/extending-objects",
-                      "de/developers/extend/apps/data/system-fields",
-                      "de/developers/extend/apps/data/relations",
-                      "de/developers/extend/apps/data/timeline-activity-types"
-                    ]
-                  },
-                  {
-                    "group": "Logik",
-                    "pages": [
-                      "de/developers/extend/apps/logic/overview",
-                      "de/developers/extend/apps/logic/logic-functions",
-                      "de/developers/extend/apps/logic/key-value-store",
-                      "de/developers/extend/apps/logic/background-jobs",
-                      "de/developers/extend/apps/logic/skills-and-agents",
-                      "de/developers/extend/apps/logic/connections"
-                    ]
-                  },
-                  {
-                    "group": "Layout",
-                    "pages": [
-                      "de/developers/extend/apps/layout/overview",
-                      "de/developers/extend/apps/layout/views",
-                      "de/developers/extend/apps/layout/navigation-menu-items",
-                      "de/developers/extend/apps/layout/page-layouts",
-                      "de/developers/extend/apps/layout/front-components",
-                      "de/developers/extend/apps/layout/command-menu-items"
-                    ]
-                  },
-                  {
-                    "group": "Operationen",
-                    "pages": [
-                      "de/developers/extend/apps/operations/overview",
-                      "de/developers/extend/apps/operations/cli",
-                      "de/developers/extend/apps/operations/sync-and-recovery",
-                      "de/developers/extend/apps/operations/testing",
-                      "de/developers/extend/apps/operations/translations",
-                      "de/developers/extend/apps/operations/publishing"
-                    ]
-                  }
-                ]
-              },
-              {
                 "group": "API",
                 "pages": [
                   "de/developers/extend/api",
@@ -2570,7 +2122,6 @@
                   "es/getting-started/core-concepts/workflows",
                   "es/getting-started/core-concepts/calendar-and-email",
                   "es/getting-started/core-concepts/ai",
-                  "es/getting-started/core-concepts/apps",
                   "es/getting-started/core-concepts/dashboards",
                   "es/getting-started/core-concepts/glossary"
                 ]
@@ -2712,12 +2263,6 @@
                           "es/user-guide/workflows/how-tos/connect-to-other-tools/bring-product-data-in-twenty",
                           "es/user-guide/workflows/how-tos/connect-to-other-tools/generate-quote-or-invoice-from-twenty",
                           "es/user-guide/workflows/how-tos/connect-to-other-tools/generate-pdf-from-twenty"
-                        ]
-                      },
-                      {
-                        "group": "Configuraciones avanzadas",
-                        "pages": [
-                          "es/user-guide/workflows/how-tos/advanced-configurations/handle-arrays-in-code-actions"
                         ]
                       },
                       {
@@ -2901,88 +2446,6 @@
                 ]
               },
               {
-                "group": "Aplicaciones",
-                "pages": [
-                  {
-                    "group": "Primeros pasos",
-                    "pages": [
-                      "es/developers/extend/apps/getting-started/quick-start",
-                      "es/developers/extend/apps/getting-started/concepts",
-                      "es/developers/extend/apps/getting-started/project-structure",
-                      "es/developers/extend/apps/getting-started/local-server",
-                      "es/developers/extend/apps/getting-started/scaffolding",
-                      "es/developers/extend/apps/getting-started/troubleshooting"
-                    ]
-                  },
-                  {
-                    "group": "Tutorial",
-                    "pages": [
-                      "es/developers/extend/apps/tutorials/document-generator/overview",
-                      "es/developers/extend/apps/tutorials/document-generator/data-model",
-                      "es/developers/extend/apps/tutorials/document-generator/generating-documents",
-                      "es/developers/extend/apps/tutorials/document-generator/http-routes",
-                      "es/developers/extend/apps/tutorials/document-generator/building-the-ui",
-                      "es/developers/extend/apps/tutorials/document-generator/ai-agent",
-                      "es/developers/extend/apps/tutorials/document-generator/publishing"
-                    ]
-                  },
-                  {
-                    "group": "Configuración",
-                    "pages": [
-                      "es/developers/extend/apps/config/overview",
-                      "es/developers/extend/apps/config/application",
-                      "es/developers/extend/apps/config/roles",
-                      "es/developers/extend/apps/config/install-hooks",
-                      "es/developers/extend/apps/config/public-assets"
-                    ]
-                  },
-                  {
-                    "group": "Datos",
-                    "pages": [
-                      "es/developers/extend/apps/data/overview",
-                      "es/developers/extend/apps/data/objects",
-                      "es/developers/extend/apps/data/extending-objects",
-                      "es/developers/extend/apps/data/system-fields",
-                      "es/developers/extend/apps/data/relations",
-                      "es/developers/extend/apps/data/timeline-activity-types"
-                    ]
-                  },
-                  {
-                    "group": "Lógica",
-                    "pages": [
-                      "es/developers/extend/apps/logic/overview",
-                      "es/developers/extend/apps/logic/logic-functions",
-                      "es/developers/extend/apps/logic/key-value-store",
-                      "es/developers/extend/apps/logic/background-jobs",
-                      "es/developers/extend/apps/logic/skills-and-agents",
-                      "es/developers/extend/apps/logic/connections"
-                    ]
-                  },
-                  {
-                    "group": "Diseño",
-                    "pages": [
-                      "es/developers/extend/apps/layout/overview",
-                      "es/developers/extend/apps/layout/views",
-                      "es/developers/extend/apps/layout/navigation-menu-items",
-                      "es/developers/extend/apps/layout/page-layouts",
-                      "es/developers/extend/apps/layout/front-components",
-                      "es/developers/extend/apps/layout/command-menu-items"
-                    ]
-                  },
-                  {
-                    "group": "Operaciones",
-                    "pages": [
-                      "es/developers/extend/apps/operations/overview",
-                      "es/developers/extend/apps/operations/cli",
-                      "es/developers/extend/apps/operations/sync-and-recovery",
-                      "es/developers/extend/apps/operations/testing",
-                      "es/developers/extend/apps/operations/translations",
-                      "es/developers/extend/apps/operations/publishing"
-                    ]
-                  }
-                ]
-              },
-              {
                 "group": "API",
                 "pages": [
                   "es/developers/extend/api",
@@ -3033,7 +2496,6 @@
                   "it/getting-started/core-concepts/workflows",
                   "it/getting-started/core-concepts/calendar-and-email",
                   "it/getting-started/core-concepts/ai",
-                  "it/getting-started/core-concepts/apps",
                   "it/getting-started/core-concepts/dashboards",
                   "it/getting-started/core-concepts/glossary"
                 ]
@@ -3175,12 +2637,6 @@
                           "it/user-guide/workflows/how-tos/connect-to-other-tools/bring-product-data-in-twenty",
                           "it/user-guide/workflows/how-tos/connect-to-other-tools/generate-quote-or-invoice-from-twenty",
                           "it/user-guide/workflows/how-tos/connect-to-other-tools/generate-pdf-from-twenty"
-                        ]
-                      },
-                      {
-                        "group": "Configurazioni avanzate",
-                        "pages": [
-                          "it/user-guide/workflows/how-tos/advanced-configurations/handle-arrays-in-code-actions"
                         ]
                       },
                       {
@@ -3364,88 +2820,6 @@
                 ]
               },
               {
-                "group": "App",
-                "pages": [
-                  {
-                    "group": "Per iniziare",
-                    "pages": [
-                      "it/developers/extend/apps/getting-started/quick-start",
-                      "it/developers/extend/apps/getting-started/concepts",
-                      "it/developers/extend/apps/getting-started/project-structure",
-                      "it/developers/extend/apps/getting-started/local-server",
-                      "it/developers/extend/apps/getting-started/scaffolding",
-                      "it/developers/extend/apps/getting-started/troubleshooting"
-                    ]
-                  },
-                  {
-                    "group": "Tutorial",
-                    "pages": [
-                      "it/developers/extend/apps/tutorials/document-generator/overview",
-                      "it/developers/extend/apps/tutorials/document-generator/data-model",
-                      "it/developers/extend/apps/tutorials/document-generator/generating-documents",
-                      "it/developers/extend/apps/tutorials/document-generator/http-routes",
-                      "it/developers/extend/apps/tutorials/document-generator/building-the-ui",
-                      "it/developers/extend/apps/tutorials/document-generator/ai-agent",
-                      "it/developers/extend/apps/tutorials/document-generator/publishing"
-                    ]
-                  },
-                  {
-                    "group": "Configurazione",
-                    "pages": [
-                      "it/developers/extend/apps/config/overview",
-                      "it/developers/extend/apps/config/application",
-                      "it/developers/extend/apps/config/roles",
-                      "it/developers/extend/apps/config/install-hooks",
-                      "it/developers/extend/apps/config/public-assets"
-                    ]
-                  },
-                  {
-                    "group": "Dati",
-                    "pages": [
-                      "it/developers/extend/apps/data/overview",
-                      "it/developers/extend/apps/data/objects",
-                      "it/developers/extend/apps/data/extending-objects",
-                      "it/developers/extend/apps/data/system-fields",
-                      "it/developers/extend/apps/data/relations",
-                      "it/developers/extend/apps/data/timeline-activity-types"
-                    ]
-                  },
-                  {
-                    "group": "Logica",
-                    "pages": [
-                      "it/developers/extend/apps/logic/overview",
-                      "it/developers/extend/apps/logic/logic-functions",
-                      "it/developers/extend/apps/logic/key-value-store",
-                      "it/developers/extend/apps/logic/background-jobs",
-                      "it/developers/extend/apps/logic/skills-and-agents",
-                      "it/developers/extend/apps/logic/connections"
-                    ]
-                  },
-                  {
-                    "group": "Layout",
-                    "pages": [
-                      "it/developers/extend/apps/layout/overview",
-                      "it/developers/extend/apps/layout/views",
-                      "it/developers/extend/apps/layout/navigation-menu-items",
-                      "it/developers/extend/apps/layout/page-layouts",
-                      "it/developers/extend/apps/layout/front-components",
-                      "it/developers/extend/apps/layout/command-menu-items"
-                    ]
-                  },
-                  {
-                    "group": "Operazioni",
-                    "pages": [
-                      "it/developers/extend/apps/operations/overview",
-                      "it/developers/extend/apps/operations/cli",
-                      "it/developers/extend/apps/operations/sync-and-recovery",
-                      "it/developers/extend/apps/operations/testing",
-                      "it/developers/extend/apps/operations/translations",
-                      "it/developers/extend/apps/operations/publishing"
-                    ]
-                  }
-                ]
-              },
-              {
                 "group": "API",
                 "pages": [
                   "it/developers/extend/api",
@@ -3496,7 +2870,6 @@
                   "ja/getting-started/core-concepts/workflows",
                   "ja/getting-started/core-concepts/calendar-and-email",
                   "ja/getting-started/core-concepts/ai",
-                  "ja/getting-started/core-concepts/apps",
                   "ja/getting-started/core-concepts/dashboards",
                   "ja/getting-started/core-concepts/glossary"
                 ]
@@ -3638,12 +3011,6 @@
                           "ja/user-guide/workflows/how-tos/connect-to-other-tools/bring-product-data-in-twenty",
                           "ja/user-guide/workflows/how-tos/connect-to-other-tools/generate-quote-or-invoice-from-twenty",
                           "ja/user-guide/workflows/how-tos/connect-to-other-tools/generate-pdf-from-twenty"
-                        ]
-                      },
-                      {
-                        "group": "高度な設定",
-                        "pages": [
-                          "ja/user-guide/workflows/how-tos/advanced-configurations/handle-arrays-in-code-actions"
                         ]
                       },
                       {
@@ -3827,88 +3194,6 @@
                 ]
               },
               {
-                "group": "アプリ",
-                "pages": [
-                  {
-                    "group": "始めに",
-                    "pages": [
-                      "ja/developers/extend/apps/getting-started/quick-start",
-                      "ja/developers/extend/apps/getting-started/concepts",
-                      "ja/developers/extend/apps/getting-started/project-structure",
-                      "ja/developers/extend/apps/getting-started/local-server",
-                      "ja/developers/extend/apps/getting-started/scaffolding",
-                      "ja/developers/extend/apps/getting-started/troubleshooting"
-                    ]
-                  },
-                  {
-                    "group": "チュートリアル",
-                    "pages": [
-                      "ja/developers/extend/apps/tutorials/document-generator/overview",
-                      "ja/developers/extend/apps/tutorials/document-generator/data-model",
-                      "ja/developers/extend/apps/tutorials/document-generator/generating-documents",
-                      "ja/developers/extend/apps/tutorials/document-generator/http-routes",
-                      "ja/developers/extend/apps/tutorials/document-generator/building-the-ui",
-                      "ja/developers/extend/apps/tutorials/document-generator/ai-agent",
-                      "ja/developers/extend/apps/tutorials/document-generator/publishing"
-                    ]
-                  },
-                  {
-                    "group": "設定",
-                    "pages": [
-                      "ja/developers/extend/apps/config/overview",
-                      "ja/developers/extend/apps/config/application",
-                      "ja/developers/extend/apps/config/roles",
-                      "ja/developers/extend/apps/config/install-hooks",
-                      "ja/developers/extend/apps/config/public-assets"
-                    ]
-                  },
-                  {
-                    "group": "データ",
-                    "pages": [
-                      "ja/developers/extend/apps/data/overview",
-                      "ja/developers/extend/apps/data/objects",
-                      "ja/developers/extend/apps/data/extending-objects",
-                      "ja/developers/extend/apps/data/system-fields",
-                      "ja/developers/extend/apps/data/relations",
-                      "ja/developers/extend/apps/data/timeline-activity-types"
-                    ]
-                  },
-                  {
-                    "group": "ロジック",
-                    "pages": [
-                      "ja/developers/extend/apps/logic/overview",
-                      "ja/developers/extend/apps/logic/logic-functions",
-                      "ja/developers/extend/apps/logic/key-value-store",
-                      "ja/developers/extend/apps/logic/background-jobs",
-                      "ja/developers/extend/apps/logic/skills-and-agents",
-                      "ja/developers/extend/apps/logic/connections"
-                    ]
-                  },
-                  {
-                    "group": "レイアウト",
-                    "pages": [
-                      "ja/developers/extend/apps/layout/overview",
-                      "ja/developers/extend/apps/layout/views",
-                      "ja/developers/extend/apps/layout/navigation-menu-items",
-                      "ja/developers/extend/apps/layout/page-layouts",
-                      "ja/developers/extend/apps/layout/front-components",
-                      "ja/developers/extend/apps/layout/command-menu-items"
-                    ]
-                  },
-                  {
-                    "group": "オペレーション",
-                    "pages": [
-                      "ja/developers/extend/apps/operations/overview",
-                      "ja/developers/extend/apps/operations/cli",
-                      "ja/developers/extend/apps/operations/sync-and-recovery",
-                      "ja/developers/extend/apps/operations/testing",
-                      "ja/developers/extend/apps/operations/translations",
-                      "ja/developers/extend/apps/operations/publishing"
-                    ]
-                  }
-                ]
-              },
-              {
                 "group": "API",
                 "pages": [
                   "ja/developers/extend/api",
@@ -3959,7 +3244,6 @@
                   "ko/getting-started/core-concepts/workflows",
                   "ko/getting-started/core-concepts/calendar-and-email",
                   "ko/getting-started/core-concepts/ai",
-                  "ko/getting-started/core-concepts/apps",
                   "ko/getting-started/core-concepts/dashboards",
                   "ko/getting-started/core-concepts/glossary"
                 ]
@@ -4101,12 +3385,6 @@
                           "ko/user-guide/workflows/how-tos/connect-to-other-tools/bring-product-data-in-twenty",
                           "ko/user-guide/workflows/how-tos/connect-to-other-tools/generate-quote-or-invoice-from-twenty",
                           "ko/user-guide/workflows/how-tos/connect-to-other-tools/generate-pdf-from-twenty"
-                        ]
-                      },
-                      {
-                        "group": "고급 설정",
-                        "pages": [
-                          "ko/user-guide/workflows/how-tos/advanced-configurations/handle-arrays-in-code-actions"
                         ]
                       },
                       {
@@ -4290,88 +3568,6 @@
                 ]
               },
               {
-                "group": "앱",
-                "pages": [
-                  {
-                    "group": "시작하기",
-                    "pages": [
-                      "ko/developers/extend/apps/getting-started/quick-start",
-                      "ko/developers/extend/apps/getting-started/concepts",
-                      "ko/developers/extend/apps/getting-started/project-structure",
-                      "ko/developers/extend/apps/getting-started/local-server",
-                      "ko/developers/extend/apps/getting-started/scaffolding",
-                      "ko/developers/extend/apps/getting-started/troubleshooting"
-                    ]
-                  },
-                  {
-                    "group": "튜토리얼",
-                    "pages": [
-                      "ko/developers/extend/apps/tutorials/document-generator/overview",
-                      "ko/developers/extend/apps/tutorials/document-generator/data-model",
-                      "ko/developers/extend/apps/tutorials/document-generator/generating-documents",
-                      "ko/developers/extend/apps/tutorials/document-generator/http-routes",
-                      "ko/developers/extend/apps/tutorials/document-generator/building-the-ui",
-                      "ko/developers/extend/apps/tutorials/document-generator/ai-agent",
-                      "ko/developers/extend/apps/tutorials/document-generator/publishing"
-                    ]
-                  },
-                  {
-                    "group": "설정",
-                    "pages": [
-                      "ko/developers/extend/apps/config/overview",
-                      "ko/developers/extend/apps/config/application",
-                      "ko/developers/extend/apps/config/roles",
-                      "ko/developers/extend/apps/config/install-hooks",
-                      "ko/developers/extend/apps/config/public-assets"
-                    ]
-                  },
-                  {
-                    "group": "데이터",
-                    "pages": [
-                      "ko/developers/extend/apps/data/overview",
-                      "ko/developers/extend/apps/data/objects",
-                      "ko/developers/extend/apps/data/extending-objects",
-                      "ko/developers/extend/apps/data/system-fields",
-                      "ko/developers/extend/apps/data/relations",
-                      "ko/developers/extend/apps/data/timeline-activity-types"
-                    ]
-                  },
-                  {
-                    "group": "로직",
-                    "pages": [
-                      "ko/developers/extend/apps/logic/overview",
-                      "ko/developers/extend/apps/logic/logic-functions",
-                      "ko/developers/extend/apps/logic/key-value-store",
-                      "ko/developers/extend/apps/logic/background-jobs",
-                      "ko/developers/extend/apps/logic/skills-and-agents",
-                      "ko/developers/extend/apps/logic/connections"
-                    ]
-                  },
-                  {
-                    "group": "레이아웃",
-                    "pages": [
-                      "ko/developers/extend/apps/layout/overview",
-                      "ko/developers/extend/apps/layout/views",
-                      "ko/developers/extend/apps/layout/navigation-menu-items",
-                      "ko/developers/extend/apps/layout/page-layouts",
-                      "ko/developers/extend/apps/layout/front-components",
-                      "ko/developers/extend/apps/layout/command-menu-items"
-                    ]
-                  },
-                  {
-                    "group": "작업",
-                    "pages": [
-                      "ko/developers/extend/apps/operations/overview",
-                      "ko/developers/extend/apps/operations/cli",
-                      "ko/developers/extend/apps/operations/sync-and-recovery",
-                      "ko/developers/extend/apps/operations/testing",
-                      "ko/developers/extend/apps/operations/translations",
-                      "ko/developers/extend/apps/operations/publishing"
-                    ]
-                  }
-                ]
-              },
-              {
                 "group": "API",
                 "pages": [
                   "ko/developers/extend/api",
@@ -4422,7 +3618,6 @@
                   "pt/getting-started/core-concepts/workflows",
                   "pt/getting-started/core-concepts/calendar-and-email",
                   "pt/getting-started/core-concepts/ai",
-                  "pt/getting-started/core-concepts/apps",
                   "pt/getting-started/core-concepts/dashboards",
                   "pt/getting-started/core-concepts/glossary"
                 ]
@@ -4564,12 +3759,6 @@
                           "pt/user-guide/workflows/how-tos/connect-to-other-tools/bring-product-data-in-twenty",
                           "pt/user-guide/workflows/how-tos/connect-to-other-tools/generate-quote-or-invoice-from-twenty",
                           "pt/user-guide/workflows/how-tos/connect-to-other-tools/generate-pdf-from-twenty"
-                        ]
-                      },
-                      {
-                        "group": "Configurações avançadas",
-                        "pages": [
-                          "pt/user-guide/workflows/how-tos/advanced-configurations/handle-arrays-in-code-actions"
                         ]
                       },
                       {
@@ -4753,88 +3942,6 @@
                 ]
               },
               {
-                "group": "Aplicativos",
-                "pages": [
-                  {
-                    "group": "Primeiros passos",
-                    "pages": [
-                      "pt/developers/extend/apps/getting-started/quick-start",
-                      "pt/developers/extend/apps/getting-started/concepts",
-                      "pt/developers/extend/apps/getting-started/project-structure",
-                      "pt/developers/extend/apps/getting-started/local-server",
-                      "pt/developers/extend/apps/getting-started/scaffolding",
-                      "pt/developers/extend/apps/getting-started/troubleshooting"
-                    ]
-                  },
-                  {
-                    "group": "Tutorial",
-                    "pages": [
-                      "pt/developers/extend/apps/tutorials/document-generator/overview",
-                      "pt/developers/extend/apps/tutorials/document-generator/data-model",
-                      "pt/developers/extend/apps/tutorials/document-generator/generating-documents",
-                      "pt/developers/extend/apps/tutorials/document-generator/http-routes",
-                      "pt/developers/extend/apps/tutorials/document-generator/building-the-ui",
-                      "pt/developers/extend/apps/tutorials/document-generator/ai-agent",
-                      "pt/developers/extend/apps/tutorials/document-generator/publishing"
-                    ]
-                  },
-                  {
-                    "group": "Configuração",
-                    "pages": [
-                      "pt/developers/extend/apps/config/overview",
-                      "pt/developers/extend/apps/config/application",
-                      "pt/developers/extend/apps/config/roles",
-                      "pt/developers/extend/apps/config/install-hooks",
-                      "pt/developers/extend/apps/config/public-assets"
-                    ]
-                  },
-                  {
-                    "group": "Dados",
-                    "pages": [
-                      "pt/developers/extend/apps/data/overview",
-                      "pt/developers/extend/apps/data/objects",
-                      "pt/developers/extend/apps/data/extending-objects",
-                      "pt/developers/extend/apps/data/system-fields",
-                      "pt/developers/extend/apps/data/relations",
-                      "pt/developers/extend/apps/data/timeline-activity-types"
-                    ]
-                  },
-                  {
-                    "group": "Lógica",
-                    "pages": [
-                      "pt/developers/extend/apps/logic/overview",
-                      "pt/developers/extend/apps/logic/logic-functions",
-                      "pt/developers/extend/apps/logic/key-value-store",
-                      "pt/developers/extend/apps/logic/background-jobs",
-                      "pt/developers/extend/apps/logic/skills-and-agents",
-                      "pt/developers/extend/apps/logic/connections"
-                    ]
-                  },
-                  {
-                    "group": "Layout",
-                    "pages": [
-                      "pt/developers/extend/apps/layout/overview",
-                      "pt/developers/extend/apps/layout/views",
-                      "pt/developers/extend/apps/layout/navigation-menu-items",
-                      "pt/developers/extend/apps/layout/page-layouts",
-                      "pt/developers/extend/apps/layout/front-components",
-                      "pt/developers/extend/apps/layout/command-menu-items"
-                    ]
-                  },
-                  {
-                    "group": "Operações",
-                    "pages": [
-                      "pt/developers/extend/apps/operations/overview",
-                      "pt/developers/extend/apps/operations/cli",
-                      "pt/developers/extend/apps/operations/sync-and-recovery",
-                      "pt/developers/extend/apps/operations/testing",
-                      "pt/developers/extend/apps/operations/translations",
-                      "pt/developers/extend/apps/operations/publishing"
-                    ]
-                  }
-                ]
-              },
-              {
                 "group": "API",
                 "pages": [
                   "pt/developers/extend/api",
@@ -4885,7 +3992,6 @@
                   "ro/getting-started/core-concepts/workflows",
                   "ro/getting-started/core-concepts/calendar-and-email",
                   "ro/getting-started/core-concepts/ai",
-                  "ro/getting-started/core-concepts/apps",
                   "ro/getting-started/core-concepts/dashboards",
                   "ro/getting-started/core-concepts/glossary"
                 ]
@@ -5027,12 +4133,6 @@
                           "ro/user-guide/workflows/how-tos/connect-to-other-tools/bring-product-data-in-twenty",
                           "ro/user-guide/workflows/how-tos/connect-to-other-tools/generate-quote-or-invoice-from-twenty",
                           "ro/user-guide/workflows/how-tos/connect-to-other-tools/generate-pdf-from-twenty"
-                        ]
-                      },
-                      {
-                        "group": "Configurații avansate",
-                        "pages": [
-                          "ro/user-guide/workflows/how-tos/advanced-configurations/handle-arrays-in-code-actions"
                         ]
                       },
                       {
@@ -5216,88 +4316,6 @@
                 ]
               },
               {
-                "group": "Aplicații",
-                "pages": [
-                  {
-                    "group": "Începeți",
-                    "pages": [
-                      "ro/developers/extend/apps/getting-started/quick-start",
-                      "ro/developers/extend/apps/getting-started/concepts",
-                      "ro/developers/extend/apps/getting-started/project-structure",
-                      "ro/developers/extend/apps/getting-started/local-server",
-                      "ro/developers/extend/apps/getting-started/scaffolding",
-                      "ro/developers/extend/apps/getting-started/troubleshooting"
-                    ]
-                  },
-                  {
-                    "group": "Tutorial",
-                    "pages": [
-                      "ro/developers/extend/apps/tutorials/document-generator/overview",
-                      "ro/developers/extend/apps/tutorials/document-generator/data-model",
-                      "ro/developers/extend/apps/tutorials/document-generator/generating-documents",
-                      "ro/developers/extend/apps/tutorials/document-generator/http-routes",
-                      "ro/developers/extend/apps/tutorials/document-generator/building-the-ui",
-                      "ro/developers/extend/apps/tutorials/document-generator/ai-agent",
-                      "ro/developers/extend/apps/tutorials/document-generator/publishing"
-                    ]
-                  },
-                  {
-                    "group": "Configurare",
-                    "pages": [
-                      "ro/developers/extend/apps/config/overview",
-                      "ro/developers/extend/apps/config/application",
-                      "ro/developers/extend/apps/config/roles",
-                      "ro/developers/extend/apps/config/install-hooks",
-                      "ro/developers/extend/apps/config/public-assets"
-                    ]
-                  },
-                  {
-                    "group": "Date",
-                    "pages": [
-                      "ro/developers/extend/apps/data/overview",
-                      "ro/developers/extend/apps/data/objects",
-                      "ro/developers/extend/apps/data/extending-objects",
-                      "ro/developers/extend/apps/data/system-fields",
-                      "ro/developers/extend/apps/data/relations",
-                      "ro/developers/extend/apps/data/timeline-activity-types"
-                    ]
-                  },
-                  {
-                    "group": "Logică",
-                    "pages": [
-                      "ro/developers/extend/apps/logic/overview",
-                      "ro/developers/extend/apps/logic/logic-functions",
-                      "ro/developers/extend/apps/logic/key-value-store",
-                      "ro/developers/extend/apps/logic/background-jobs",
-                      "ro/developers/extend/apps/logic/skills-and-agents",
-                      "ro/developers/extend/apps/logic/connections"
-                    ]
-                  },
-                  {
-                    "group": "Aspect",
-                    "pages": [
-                      "ro/developers/extend/apps/layout/overview",
-                      "ro/developers/extend/apps/layout/views",
-                      "ro/developers/extend/apps/layout/navigation-menu-items",
-                      "ro/developers/extend/apps/layout/page-layouts",
-                      "ro/developers/extend/apps/layout/front-components",
-                      "ro/developers/extend/apps/layout/command-menu-items"
-                    ]
-                  },
-                  {
-                    "group": "Operațiuni",
-                    "pages": [
-                      "ro/developers/extend/apps/operations/overview",
-                      "ro/developers/extend/apps/operations/cli",
-                      "ro/developers/extend/apps/operations/sync-and-recovery",
-                      "ro/developers/extend/apps/operations/testing",
-                      "ro/developers/extend/apps/operations/translations",
-                      "ro/developers/extend/apps/operations/publishing"
-                    ]
-                  }
-                ]
-              },
-              {
                 "group": "API",
                 "pages": [
                   "ro/developers/extend/api",
@@ -5348,7 +4366,6 @@
                   "ru/getting-started/core-concepts/workflows",
                   "ru/getting-started/core-concepts/calendar-and-email",
                   "ru/getting-started/core-concepts/ai",
-                  "ru/getting-started/core-concepts/apps",
                   "ru/getting-started/core-concepts/dashboards",
                   "ru/getting-started/core-concepts/glossary"
                 ]
@@ -5490,12 +4507,6 @@
                           "ru/user-guide/workflows/how-tos/connect-to-other-tools/bring-product-data-in-twenty",
                           "ru/user-guide/workflows/how-tos/connect-to-other-tools/generate-quote-or-invoice-from-twenty",
                           "ru/user-guide/workflows/how-tos/connect-to-other-tools/generate-pdf-from-twenty"
-                        ]
-                      },
-                      {
-                        "group": "Расширенные настройки",
-                        "pages": [
-                          "ru/user-guide/workflows/how-tos/advanced-configurations/handle-arrays-in-code-actions"
                         ]
                       },
                       {
@@ -5679,88 +4690,6 @@
                 ]
               },
               {
-                "group": "Приложения",
-                "pages": [
-                  {
-                    "group": "Начало работы",
-                    "pages": [
-                      "ru/developers/extend/apps/getting-started/quick-start",
-                      "ru/developers/extend/apps/getting-started/concepts",
-                      "ru/developers/extend/apps/getting-started/project-structure",
-                      "ru/developers/extend/apps/getting-started/local-server",
-                      "ru/developers/extend/apps/getting-started/scaffolding",
-                      "ru/developers/extend/apps/getting-started/troubleshooting"
-                    ]
-                  },
-                  {
-                    "group": "Обучение",
-                    "pages": [
-                      "ru/developers/extend/apps/tutorials/document-generator/overview",
-                      "ru/developers/extend/apps/tutorials/document-generator/data-model",
-                      "ru/developers/extend/apps/tutorials/document-generator/generating-documents",
-                      "ru/developers/extend/apps/tutorials/document-generator/http-routes",
-                      "ru/developers/extend/apps/tutorials/document-generator/building-the-ui",
-                      "ru/developers/extend/apps/tutorials/document-generator/ai-agent",
-                      "ru/developers/extend/apps/tutorials/document-generator/publishing"
-                    ]
-                  },
-                  {
-                    "group": "Конфигурация",
-                    "pages": [
-                      "ru/developers/extend/apps/config/overview",
-                      "ru/developers/extend/apps/config/application",
-                      "ru/developers/extend/apps/config/roles",
-                      "ru/developers/extend/apps/config/install-hooks",
-                      "ru/developers/extend/apps/config/public-assets"
-                    ]
-                  },
-                  {
-                    "group": "Данные",
-                    "pages": [
-                      "ru/developers/extend/apps/data/overview",
-                      "ru/developers/extend/apps/data/objects",
-                      "ru/developers/extend/apps/data/extending-objects",
-                      "ru/developers/extend/apps/data/system-fields",
-                      "ru/developers/extend/apps/data/relations",
-                      "ru/developers/extend/apps/data/timeline-activity-types"
-                    ]
-                  },
-                  {
-                    "group": "Логика",
-                    "pages": [
-                      "ru/developers/extend/apps/logic/overview",
-                      "ru/developers/extend/apps/logic/logic-functions",
-                      "ru/developers/extend/apps/logic/key-value-store",
-                      "ru/developers/extend/apps/logic/background-jobs",
-                      "ru/developers/extend/apps/logic/skills-and-agents",
-                      "ru/developers/extend/apps/logic/connections"
-                    ]
-                  },
-                  {
-                    "group": "Макет",
-                    "pages": [
-                      "ru/developers/extend/apps/layout/overview",
-                      "ru/developers/extend/apps/layout/views",
-                      "ru/developers/extend/apps/layout/navigation-menu-items",
-                      "ru/developers/extend/apps/layout/page-layouts",
-                      "ru/developers/extend/apps/layout/front-components",
-                      "ru/developers/extend/apps/layout/command-menu-items"
-                    ]
-                  },
-                  {
-                    "group": "Операции",
-                    "pages": [
-                      "ru/developers/extend/apps/operations/overview",
-                      "ru/developers/extend/apps/operations/cli",
-                      "ru/developers/extend/apps/operations/sync-and-recovery",
-                      "ru/developers/extend/apps/operations/testing",
-                      "ru/developers/extend/apps/operations/translations",
-                      "ru/developers/extend/apps/operations/publishing"
-                    ]
-                  }
-                ]
-              },
-              {
                 "group": "API",
                 "pages": [
                   "ru/developers/extend/api",
@@ -5811,7 +4740,6 @@
                   "tr/getting-started/core-concepts/workflows",
                   "tr/getting-started/core-concepts/calendar-and-email",
                   "tr/getting-started/core-concepts/ai",
-                  "tr/getting-started/core-concepts/apps",
                   "tr/getting-started/core-concepts/dashboards",
                   "tr/getting-started/core-concepts/glossary"
                 ]
@@ -5953,12 +4881,6 @@
                           "tr/user-guide/workflows/how-tos/connect-to-other-tools/bring-product-data-in-twenty",
                           "tr/user-guide/workflows/how-tos/connect-to-other-tools/generate-quote-or-invoice-from-twenty",
                           "tr/user-guide/workflows/how-tos/connect-to-other-tools/generate-pdf-from-twenty"
-                        ]
-                      },
-                      {
-                        "group": "Gelişmiş Yapılandırmalar",
-                        "pages": [
-                          "tr/user-guide/workflows/how-tos/advanced-configurations/handle-arrays-in-code-actions"
                         ]
                       },
                       {
@@ -6142,88 +5064,6 @@
                 ]
               },
               {
-                "group": "Uygulamalar",
-                "pages": [
-                  {
-                    "group": "Başlarken",
-                    "pages": [
-                      "tr/developers/extend/apps/getting-started/quick-start",
-                      "tr/developers/extend/apps/getting-started/concepts",
-                      "tr/developers/extend/apps/getting-started/project-structure",
-                      "tr/developers/extend/apps/getting-started/local-server",
-                      "tr/developers/extend/apps/getting-started/scaffolding",
-                      "tr/developers/extend/apps/getting-started/troubleshooting"
-                    ]
-                  },
-                  {
-                    "group": "Öğretici",
-                    "pages": [
-                      "tr/developers/extend/apps/tutorials/document-generator/overview",
-                      "tr/developers/extend/apps/tutorials/document-generator/data-model",
-                      "tr/developers/extend/apps/tutorials/document-generator/generating-documents",
-                      "tr/developers/extend/apps/tutorials/document-generator/http-routes",
-                      "tr/developers/extend/apps/tutorials/document-generator/building-the-ui",
-                      "tr/developers/extend/apps/tutorials/document-generator/ai-agent",
-                      "tr/developers/extend/apps/tutorials/document-generator/publishing"
-                    ]
-                  },
-                  {
-                    "group": "Yapılandırma",
-                    "pages": [
-                      "tr/developers/extend/apps/config/overview",
-                      "tr/developers/extend/apps/config/application",
-                      "tr/developers/extend/apps/config/roles",
-                      "tr/developers/extend/apps/config/install-hooks",
-                      "tr/developers/extend/apps/config/public-assets"
-                    ]
-                  },
-                  {
-                    "group": "Veri",
-                    "pages": [
-                      "tr/developers/extend/apps/data/overview",
-                      "tr/developers/extend/apps/data/objects",
-                      "tr/developers/extend/apps/data/extending-objects",
-                      "tr/developers/extend/apps/data/system-fields",
-                      "tr/developers/extend/apps/data/relations",
-                      "tr/developers/extend/apps/data/timeline-activity-types"
-                    ]
-                  },
-                  {
-                    "group": "Mantık",
-                    "pages": [
-                      "tr/developers/extend/apps/logic/overview",
-                      "tr/developers/extend/apps/logic/logic-functions",
-                      "tr/developers/extend/apps/logic/key-value-store",
-                      "tr/developers/extend/apps/logic/background-jobs",
-                      "tr/developers/extend/apps/logic/skills-and-agents",
-                      "tr/developers/extend/apps/logic/connections"
-                    ]
-                  },
-                  {
-                    "group": "Düzen",
-                    "pages": [
-                      "tr/developers/extend/apps/layout/overview",
-                      "tr/developers/extend/apps/layout/views",
-                      "tr/developers/extend/apps/layout/navigation-menu-items",
-                      "tr/developers/extend/apps/layout/page-layouts",
-                      "tr/developers/extend/apps/layout/front-components",
-                      "tr/developers/extend/apps/layout/command-menu-items"
-                    ]
-                  },
-                  {
-                    "group": "İşlemler",
-                    "pages": [
-                      "tr/developers/extend/apps/operations/overview",
-                      "tr/developers/extend/apps/operations/cli",
-                      "tr/developers/extend/apps/operations/sync-and-recovery",
-                      "tr/developers/extend/apps/operations/testing",
-                      "tr/developers/extend/apps/operations/translations",
-                      "tr/developers/extend/apps/operations/publishing"
-                    ]
-                  }
-                ]
-              },
-              {
                 "group": "API",
                 "pages": [
                   "tr/developers/extend/api",
@@ -6274,7 +5114,6 @@
                   "zh/getting-started/core-concepts/workflows",
                   "zh/getting-started/core-concepts/calendar-and-email",
                   "zh/getting-started/core-concepts/ai",
-                  "zh/getting-started/core-concepts/apps",
                   "zh/getting-started/core-concepts/dashboards",
                   "zh/getting-started/core-concepts/glossary"
                 ]
@@ -6416,12 +5255,6 @@
                           "zh/user-guide/workflows/how-tos/connect-to-other-tools/bring-product-data-in-twenty",
                           "zh/user-guide/workflows/how-tos/connect-to-other-tools/generate-quote-or-invoice-from-twenty",
                           "zh/user-guide/workflows/how-tos/connect-to-other-tools/generate-pdf-from-twenty"
-                        ]
-                      },
-                      {
-                        "group": "高级配置",
-                        "pages": [
-                          "zh/user-guide/workflows/how-tos/advanced-configurations/handle-arrays-in-code-actions"
                         ]
                       },
                       {
@@ -6602,88 +5435,6 @@
                 "group": "概览",
                 "pages": [
                   "zh/developers/introduction"
-                ]
-              },
-              {
-                "group": "应用",
-                "pages": [
-                  {
-                    "group": "开始使用",
-                    "pages": [
-                      "zh/developers/extend/apps/getting-started/quick-start",
-                      "zh/developers/extend/apps/getting-started/concepts",
-                      "zh/developers/extend/apps/getting-started/project-structure",
-                      "zh/developers/extend/apps/getting-started/local-server",
-                      "zh/developers/extend/apps/getting-started/scaffolding",
-                      "zh/developers/extend/apps/getting-started/troubleshooting"
-                    ]
-                  },
-                  {
-                    "group": "教程",
-                    "pages": [
-                      "zh/developers/extend/apps/tutorials/document-generator/overview",
-                      "zh/developers/extend/apps/tutorials/document-generator/data-model",
-                      "zh/developers/extend/apps/tutorials/document-generator/generating-documents",
-                      "zh/developers/extend/apps/tutorials/document-generator/http-routes",
-                      "zh/developers/extend/apps/tutorials/document-generator/building-the-ui",
-                      "zh/developers/extend/apps/tutorials/document-generator/ai-agent",
-                      "zh/developers/extend/apps/tutorials/document-generator/publishing"
-                    ]
-                  },
-                  {
-                    "group": "配置",
-                    "pages": [
-                      "zh/developers/extend/apps/config/overview",
-                      "zh/developers/extend/apps/config/application",
-                      "zh/developers/extend/apps/config/roles",
-                      "zh/developers/extend/apps/config/install-hooks",
-                      "zh/developers/extend/apps/config/public-assets"
-                    ]
-                  },
-                  {
-                    "group": "数据",
-                    "pages": [
-                      "zh/developers/extend/apps/data/overview",
-                      "zh/developers/extend/apps/data/objects",
-                      "zh/developers/extend/apps/data/extending-objects",
-                      "zh/developers/extend/apps/data/system-fields",
-                      "zh/developers/extend/apps/data/relations",
-                      "zh/developers/extend/apps/data/timeline-activity-types"
-                    ]
-                  },
-                  {
-                    "group": "逻辑",
-                    "pages": [
-                      "zh/developers/extend/apps/logic/overview",
-                      "zh/developers/extend/apps/logic/logic-functions",
-                      "zh/developers/extend/apps/logic/key-value-store",
-                      "zh/developers/extend/apps/logic/background-jobs",
-                      "zh/developers/extend/apps/logic/skills-and-agents",
-                      "zh/developers/extend/apps/logic/connections"
-                    ]
-                  },
-                  {
-                    "group": "布局",
-                    "pages": [
-                      "zh/developers/extend/apps/layout/overview",
-                      "zh/developers/extend/apps/layout/views",
-                      "zh/developers/extend/apps/layout/navigation-menu-items",
-                      "zh/developers/extend/apps/layout/page-layouts",
-                      "zh/developers/extend/apps/layout/front-components",
-                      "zh/developers/extend/apps/layout/command-menu-items"
-                    ]
-                  },
-                  {
-                    "group": "操作",
-                    "pages": [
-                      "zh/developers/extend/apps/operations/overview",
-                      "zh/developers/extend/apps/operations/cli",
-                      "zh/developers/extend/apps/operations/sync-and-recovery",
-                      "zh/developers/extend/apps/operations/testing",
-                      "zh/developers/extend/apps/operations/translations",
-                      "zh/developers/extend/apps/operations/publishing"
-                    ]
-                  }
                 ]
               },
               {
@@ -6874,118 +5625,6 @@
       "destination": "/zh/:slug*"
     },
     {
-      "source": "/developers/extend/apps/getting-started",
-      "destination": "/developers/extend/apps/getting-started/quick-start"
-    },
-    {
-      "source": "/developers/extend/apps/building",
-      "destination": "/developers/extend/apps/getting-started/concepts"
-    },
-    {
-      "source": "/developers/extend/apps/data-model",
-      "destination": "/developers/extend/apps/data/overview"
-    },
-    {
-      "source": "/developers/extend/apps/data/data-model",
-      "destination": "/developers/extend/apps/data/overview"
-    },
-    {
-      "source": "/developers/extend/apps/data/application",
-      "destination": "/developers/extend/apps/config/application"
-    },
-    {
-      "source": "/developers/extend/apps/data/roles",
-      "destination": "/developers/extend/apps/config/roles"
-    },
-    {
-      "source": "/developers/extend/apps/cli-and-testing",
-      "destination": "/developers/extend/apps/operations/overview"
-    },
-    {
-      "source": "/developers/extend/apps/publishing",
-      "destination": "/developers/extend/apps/operations/publishing"
-    },
-    {
-      "source": "/developers/extend/apps/logic-functions",
-      "destination": "/developers/extend/apps/logic/logic-functions"
-    },
-    {
-      "source": "/developers/extend/apps/skills-and-agents",
-      "destination": "/developers/extend/apps/logic/skills-and-agents"
-    },
-    {
-      "source": "/developers/extend/apps/front-components",
-      "destination": "/developers/extend/apps/layout/front-components"
-    },
-    {
-      "source": "/developers/extend/apps/layout",
-      "destination": "/developers/extend/apps/layout/overview"
-    },
-    {
-      "source": "/developers/extend/apps/layout/views-and-pages",
-      "destination": "/developers/extend/apps/layout/overview"
-    },
-    {
-      "source": "/developers/extend/apps/translations/overview",
-      "destination": "/developers/extend/apps/operations/translations"
-    },
-    {
-      "source": "/fr/developers/extend/apps/translations/overview",
-      "destination": "/fr/developers/extend/apps/operations/translations"
-    },
-    {
-      "source": "/ar/developers/extend/apps/translations/overview",
-      "destination": "/ar/developers/extend/apps/operations/translations"
-    },
-    {
-      "source": "/cs/developers/extend/apps/translations/overview",
-      "destination": "/cs/developers/extend/apps/operations/translations"
-    },
-    {
-      "source": "/de/developers/extend/apps/translations/overview",
-      "destination": "/de/developers/extend/apps/operations/translations"
-    },
-    {
-      "source": "/es/developers/extend/apps/translations/overview",
-      "destination": "/es/developers/extend/apps/operations/translations"
-    },
-    {
-      "source": "/it/developers/extend/apps/translations/overview",
-      "destination": "/it/developers/extend/apps/operations/translations"
-    },
-    {
-      "source": "/ja/developers/extend/apps/translations/overview",
-      "destination": "/ja/developers/extend/apps/operations/translations"
-    },
-    {
-      "source": "/ko/developers/extend/apps/translations/overview",
-      "destination": "/ko/developers/extend/apps/operations/translations"
-    },
-    {
-      "source": "/pt/developers/extend/apps/translations/overview",
-      "destination": "/pt/developers/extend/apps/operations/translations"
-    },
-    {
-      "source": "/ro/developers/extend/apps/translations/overview",
-      "destination": "/ro/developers/extend/apps/operations/translations"
-    },
-    {
-      "source": "/ru/developers/extend/apps/translations/overview",
-      "destination": "/ru/developers/extend/apps/operations/translations"
-    },
-    {
-      "source": "/tr/developers/extend/apps/translations/overview",
-      "destination": "/tr/developers/extend/apps/operations/translations"
-    },
-    {
-      "source": "/zh/developers/extend/apps/translations/overview",
-      "destination": "/zh/developers/extend/apps/operations/translations"
-    },
-    {
-      "source": "/developers/extend/apps/logic/good-practices",
-      "destination": "/developers/extend/apps/getting-started/good-practices"
-    },
-    {
       "source": "/developers/extend/capabilities/api",
       "destination": "/developers/extend/api"
     },
@@ -6996,10 +5635,6 @@
     {
       "source": "/developers/extend/capabilities/webhooks",
       "destination": "/developers/extend/webhooks"
-    },
-    {
-      "source": "/developers/extend/capabilities/apps",
-      "destination": "/developers/extend/apps/getting-started/quick-start"
     },
     {
       "source": "/developers/extend/mcp",

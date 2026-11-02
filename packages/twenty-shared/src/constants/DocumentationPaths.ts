@@ -17,91 +17,6 @@ export const DOCUMENTATION_PATHS = {
   DEVELOPERS_CONTRIBUTE_COMMANDS: '/developers/contribute/commands',
   DEVELOPERS_CONTRIBUTE_STYLE_GUIDE: '/developers/contribute/style-guide',
   DEVELOPERS_EXTEND_API: '/developers/extend/api',
-  DEVELOPERS_EXTEND_APPS_CONFIG_APPLICATION:
-    '/developers/extend/apps/config/application',
-  DEVELOPERS_EXTEND_APPS_CONFIG_INSTALL_HOOKS:
-    '/developers/extend/apps/config/install-hooks',
-  DEVELOPERS_EXTEND_APPS_CONFIG_OVERVIEW:
-    '/developers/extend/apps/config/overview',
-  DEVELOPERS_EXTEND_APPS_CONFIG_PUBLIC_ASSETS:
-    '/developers/extend/apps/config/public-assets',
-  DEVELOPERS_EXTEND_APPS_CONFIG_ROLES: '/developers/extend/apps/config/roles',
-  DEVELOPERS_EXTEND_APPS_DATA_EXTENDING_OBJECTS:
-    '/developers/extend/apps/data/extending-objects',
-  DEVELOPERS_EXTEND_APPS_DATA_OBJECTS: '/developers/extend/apps/data/objects',
-  DEVELOPERS_EXTEND_APPS_DATA_OVERVIEW: '/developers/extend/apps/data/overview',
-  DEVELOPERS_EXTEND_APPS_DATA_RELATIONS:
-    '/developers/extend/apps/data/relations',
-  DEVELOPERS_EXTEND_APPS_DATA_SYSTEM_FIELDS:
-    '/developers/extend/apps/data/system-fields',
-  DEVELOPERS_EXTEND_APPS_DATA_TIMELINE_ACTIVITY_TYPES:
-    '/developers/extend/apps/data/timeline-activity-types',
-  DEVELOPERS_EXTEND_APPS_GETTING_STARTED_CONCEPTS:
-    '/developers/extend/apps/getting-started/concepts',
-  DEVELOPERS_EXTEND_APPS_GETTING_STARTED_GOOD_PRACTICES:
-    '/developers/extend/apps/getting-started/good-practices',
-  DEVELOPERS_EXTEND_APPS_GETTING_STARTED_LOCAL_SERVER:
-    '/developers/extend/apps/getting-started/local-server',
-  DEVELOPERS_EXTEND_APPS_GETTING_STARTED_PROJECT_STRUCTURE:
-    '/developers/extend/apps/getting-started/project-structure',
-  DEVELOPERS_EXTEND_APPS_GETTING_STARTED_QUICK_START:
-    '/developers/extend/apps/getting-started/quick-start',
-  DEVELOPERS_EXTEND_APPS_GETTING_STARTED_SCAFFOLDING:
-    '/developers/extend/apps/getting-started/scaffolding',
-  DEVELOPERS_EXTEND_APPS_GETTING_STARTED_TROUBLESHOOTING:
-    '/developers/extend/apps/getting-started/troubleshooting',
-  DEVELOPERS_EXTEND_APPS_LAYOUT_COMMAND_MENU_ITEMS:
-    '/developers/extend/apps/layout/command-menu-items',
-  DEVELOPERS_EXTEND_APPS_LAYOUT_FRONT_COMPONENTS:
-    '/developers/extend/apps/layout/front-components',
-  DEVELOPERS_EXTEND_APPS_LAYOUT_NAVIGATION_MENU_ITEMS:
-    '/developers/extend/apps/layout/navigation-menu-items',
-  DEVELOPERS_EXTEND_APPS_LAYOUT_OVERVIEW:
-    '/developers/extend/apps/layout/overview',
-  DEVELOPERS_EXTEND_APPS_LAYOUT_PAGE_LAYOUTS:
-    '/developers/extend/apps/layout/page-layouts',
-  DEVELOPERS_EXTEND_APPS_LAYOUT_VIEWS: '/developers/extend/apps/layout/views',
-  DEVELOPERS_EXTEND_APPS_LOGIC_BACKGROUND_JOBS:
-    '/developers/extend/apps/logic/background-jobs',
-  DEVELOPERS_EXTEND_APPS_LOGIC_CONNECTIONS:
-    '/developers/extend/apps/logic/connections',
-  DEVELOPERS_EXTEND_APPS_LOGIC_CREDITS: '/developers/extend/apps/logic/credits',
-  DEVELOPERS_EXTEND_APPS_LOGIC_KEY_VALUE_STORE:
-    '/developers/extend/apps/logic/key-value-store',
-  DEVELOPERS_EXTEND_APPS_LOGIC_LOGIC_FUNCTIONS:
-    '/developers/extend/apps/logic/logic-functions',
-  DEVELOPERS_EXTEND_APPS_LOGIC_MESSAGING_CHANNELS:
-    '/developers/extend/apps/logic/messaging-channels',
-  DEVELOPERS_EXTEND_APPS_LOGIC_OVERVIEW:
-    '/developers/extend/apps/logic/overview',
-  DEVELOPERS_EXTEND_APPS_LOGIC_SKILLS_AND_AGENTS:
-    '/developers/extend/apps/logic/skills-and-agents',
-  DEVELOPERS_EXTEND_APPS_OPERATIONS_CLI:
-    '/developers/extend/apps/operations/cli',
-  DEVELOPERS_EXTEND_APPS_OPERATIONS_OVERVIEW:
-    '/developers/extend/apps/operations/overview',
-  DEVELOPERS_EXTEND_APPS_OPERATIONS_PUBLISHING:
-    '/developers/extend/apps/operations/publishing',
-  DEVELOPERS_EXTEND_APPS_OPERATIONS_SYNC_AND_RECOVERY:
-    '/developers/extend/apps/operations/sync-and-recovery',
-  DEVELOPERS_EXTEND_APPS_OPERATIONS_TESTING:
-    '/developers/extend/apps/operations/testing',
-  DEVELOPERS_EXTEND_APPS_OPERATIONS_TRANSLATIONS:
-    '/developers/extend/apps/operations/translations',
-  DEVELOPERS_EXTEND_APPS_TUTORIALS_DOCUMENT_GENERATOR_AI_AGENT:
-    '/developers/extend/apps/tutorials/document-generator/ai-agent',
-  DEVELOPERS_EXTEND_APPS_TUTORIALS_DOCUMENT_GENERATOR_BUILDING_THE_UI:
-    '/developers/extend/apps/tutorials/document-generator/building-the-ui',
-  DEVELOPERS_EXTEND_APPS_TUTORIALS_DOCUMENT_GENERATOR_DATA_MODEL:
-    '/developers/extend/apps/tutorials/document-generator/data-model',
-  DEVELOPERS_EXTEND_APPS_TUTORIALS_DOCUMENT_GENERATOR_GENERATING_DOCUMENTS:
-    '/developers/extend/apps/tutorials/document-generator/generating-documents',
-  DEVELOPERS_EXTEND_APPS_TUTORIALS_DOCUMENT_GENERATOR_HTTP_ROUTES:
-    '/developers/extend/apps/tutorials/document-generator/http-routes',
-  DEVELOPERS_EXTEND_APPS_TUTORIALS_DOCUMENT_GENERATOR_OVERVIEW:
-    '/developers/extend/apps/tutorials/document-generator/overview',
-  DEVELOPERS_EXTEND_APPS_TUTORIALS_DOCUMENT_GENERATOR_PUBLISHING:
-    '/developers/extend/apps/tutorials/document-generator/publishing',
   DEVELOPERS_EXTEND_OAUTH: '/developers/extend/oauth',
   DEVELOPERS_EXTEND_WEBHOOKS: '/developers/extend/webhooks',
   DEVELOPERS_INTRODUCTION: '/developers/introduction',
@@ -114,7 +29,6 @@ export const DOCUMENTATION_PATHS = {
   DEVELOPERS_SELF_HOST_CAPABILITIES_UPGRADE_GUIDE:
     '/developers/self-host/capabilities/upgrade-guide',
   GETTING_STARTED_CORE_CONCEPTS_AI: '/getting-started/core-concepts/ai',
-  GETTING_STARTED_CORE_CONCEPTS_APPS: '/getting-started/core-concepts/apps',
   GETTING_STARTED_CORE_CONCEPTS_CALENDAR_AND_EMAIL:
     '/getting-started/core-concepts/calendar-and-email',
   GETTING_STARTED_CORE_CONCEPTS_DASHBOARDS:
@@ -413,8 +327,6 @@ export const DOCUMENTATION_PATHS = {
     '/user-guide/workflows/capabilities/workflow-triggers',
   USER_GUIDE_WORKFLOWS_CAPABILITIES_WORKFLOW_VERSIONS:
     '/user-guide/workflows/capabilities/workflow-versions',
-  USER_GUIDE_WORKFLOWS_HOW_TOS_ADVANCED_CONFIGURATIONS_HANDLE_ARRAYS_IN_CODE_ACTIONS:
-    '/user-guide/workflows/how-tos/advanced-configurations/handle-arrays-in-code-actions',
   USER_GUIDE_WORKFLOWS_HOW_TOS_CONNECT_TO_OTHER_TOOLS_BRING_PRODUCT_DATA_IN_TWENTY:
     '/user-guide/workflows/how-tos/connect-to-other-tools/bring-product-data-in-twenty',
   USER_GUIDE_WORKFLOWS_HOW_TOS_CONNECT_TO_OTHER_TOOLS_BRING_TYPEFORM_SUBMISSIONS_IN_TWENTY:

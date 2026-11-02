@@ -39,8 +39,6 @@ Logic function pricing mirrors AWS Lambda: a flat charge per invocation plus a d
 
 A typical function that finishes in under a second costs at most double the flat invocation charge. Long-running functions pay for the compute they use: a function running for a full minute adds \$0.006, and one hitting the 15-minute timeout adds \$0.09. A function that times out is billed for its full elapsed time, just like on AWS.
 
-For apps with [server routes](/developers/extend/apps/operations/publishing#owner-workspace-costs-and-availability), the resolver runs against the app owner's workspace balance. A target function dispatched to another workspace is billed separately to that workspace.
-
 ## How AI usage is metered
 
 When an action calls an AI model, we measure the exact tokens used and price them at **the model provider's published rates**, then convert that dollar amount straight into credits — so what you spend tracks the real cost of the work, not a marked-up internal rate. A short chat message costs a fraction of a cent. A large agent task — say, configuring 10 workspace objects — makes many model calls over a growing context, so it can add up to a dollar or more. You're billed for what you actually use, down to the token.
