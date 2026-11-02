@@ -172,13 +172,6 @@
                                     ]
                                 },
                                 {
-                                    "key": "advancedConfigurations",
-                                    "label": "Advanced Configurations",
-                                    "pages": [
-                                        "user-guide/workflows/how-tos/advanced-configurations/handle-arrays-in-code-actions"
-                                    ]
-                                },
-                                {
                                     "key": "needMoreHelp",
                                     "label": "Need More Help",
                                     "pages": [
@@ -380,16 +373,7 @@
                     "icon": "plug",
                     "pages": [
                         "developers/extend/api",
-                        "developers/extend/webhooks",
-                        {
-                            "key": "apps",
-                            "label": "Apps",
-                            "pages": [
-                                "developers/extend/apps/getting-started",
-                                "developers/extend/apps/building",
-                                "developers/extend/apps/publishing"
-                            ]
-                        }
+                        "developers/extend/webhooks"
                     ]
                 },
                 {
