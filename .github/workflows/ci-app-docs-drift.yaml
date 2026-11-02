@@ -1,6 +1,6 @@
 name: CI App Docs Drift
 
-# When a PR changes the app-development surface (twenty-sdk, create-twenty-app,
+# When a PR changes the app-development surface (twenty-sdk,
 # twenty-client-sdk, or the shared manifest types), an agent checks whether the
 # app documentation under packages/twenty-docs/developers/extend/apps is
 # impacted and, only when it is, posts a single sticky comment with its findings.
@@ -22,7 +22,6 @@ jobs:
     with:
       files: |
         packages/twenty-sdk/**
-        packages/create-twenty-app/**
         packages/twenty-client-sdk/**
         packages/twenty-shared/src/application/**
         packages/twenty-shared/src/types/**
@@ -79,9 +78,6 @@ jobs:
               `twenty-client-sdk` package.json, or in their public entry points
             - Front-component runtime hooks and host API
               (`packages/twenty-sdk/src/sdk/front-component/**`)
-            - The scaffold template (`packages/create-twenty-app/src/constants/template/**`)
-              and scaffolder flags/prompts (`packages/create-twenty-app/src/cli.ts`,
-              `create-app.command.ts`)
             - Environment variables injected into logic functions or front components
             - Error codes surfaced to app developers
 

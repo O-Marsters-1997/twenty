@@ -12,7 +12,6 @@ const PACKAGE_TAG_MAP: Record<string, string[]> = {
   'twenty-oxlint-rules': ['scope:shared'],
   'twenty-docs': ['scope:docs'],
   'twenty-e2e-testing': ['scope:testing'],
-  'create-twenty-app': ['scope:create-app'],
 };
 
 const WORKSPACE_PACKAGES = Object.keys(PACKAGE_TAG_MAP);

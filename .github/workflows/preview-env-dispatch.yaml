@@ -9,9 +9,6 @@ on:
       - packages/twenty-docker/**
       - packages/twenty-server/**
       - packages/twenty-front/**
-      - packages/twenty-apps/examples/**
-      - packages/twenty-apps/internal/**
-      - packages/twenty-apps/public/**
       - .github/workflows/preview-env-dispatch.yaml
 
 concurrency:

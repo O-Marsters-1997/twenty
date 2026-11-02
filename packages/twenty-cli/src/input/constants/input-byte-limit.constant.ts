@@ -1,1 +1,0 @@
-export const INPUT_BYTE_LIMIT = 16 * 1024 * 1024;
