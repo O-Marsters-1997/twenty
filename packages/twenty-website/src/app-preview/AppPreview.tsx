@@ -10,12 +10,6 @@ import { useAppPreviewExperience } from './shell/use-app-preview-experience';
 import { AppWindow } from './stage/AppWindow';
 import { ProductFrame } from './stage/ProductFrame';
 import { WindowOrderProvider } from './stage/WindowOrderProvider';
-import { Terminal } from './terminal/Terminal';
-
-// The product mockup: navigable sidebar + the object pages, presented
-// as a draggable/resizable desktop window (the old hero's identity), with
-// the AI Terminal floating beside it. The chat's object-creation beats
-// drive the sidebar reveals and page jumps.
 export function AppPreview({
   mode = 'windowed',
 }: {
@@ -33,9 +27,6 @@ export function AppPreview({
     activeItem,
     activeItemId,
     activePage,
-    handleChatReset,
-    handleJumpToConversationEnd,
-    handleObjectCreated,
     highlightedItemId,
     revealedObjectIds,
     sidebarEntries,
@@ -63,11 +54,6 @@ export function AppPreview({
   return (
     <WindowOrderProvider>
       <AppWindow>{appShell}</AppWindow>
-      <Terminal
-        onChatReset={handleChatReset}
-        onJumpToConversationEnd={handleJumpToConversationEnd}
-        onObjectCreated={handleObjectCreated}
-      />
     </WindowOrderProvider>
   );
 }

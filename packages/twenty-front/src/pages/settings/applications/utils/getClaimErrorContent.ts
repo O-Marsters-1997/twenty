@@ -2,9 +2,8 @@ import { type MessageDescriptor } from '@lingui/core';
 import { msg } from '@lingui/core/macro';
 import { DOCUMENTATION_PATHS } from 'twenty-shared/constants';
 
-const PUBLISHING_PATH =
-  DOCUMENTATION_PATHS.DEVELOPERS_EXTEND_APPS_OPERATIONS_PUBLISHING;
-const CI_PUBLISHING_PATH = `${PUBLISHING_PATH}#ci-publishing`;
+const PUBLISHING_PATH = DOCUMENTATION_PATHS.DEVELOPERS_INTRODUCTION;
+const CI_PUBLISHING_PATH = PUBLISHING_PATH;
 
 type ClaimErrorContent = {
   message: MessageDescriptor;
