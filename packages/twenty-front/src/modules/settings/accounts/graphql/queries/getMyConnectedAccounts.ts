@@ -13,7 +13,6 @@ export const GET_MY_CONNECTED_ACCOUNTS = gql`
       handleAliases
       lastSignedInAt
       userWorkspaceId
-      connectionProviderId
       applicationId
       name
       visibility

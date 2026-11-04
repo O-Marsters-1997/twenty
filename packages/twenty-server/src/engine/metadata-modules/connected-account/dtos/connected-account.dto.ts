@@ -86,11 +86,6 @@ export class ConnectedAccountDTO {
   @IsUUID()
   @IsOptional()
   @Field(() => UUIDScalarType, { nullable: true })
-  connectionProviderId: string | null;
-
-  @IsUUID()
-  @IsOptional()
-  @Field(() => UUIDScalarType, { nullable: true })
   applicationId: string | null;
 
   @IsString()

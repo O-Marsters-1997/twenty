@@ -15,7 +15,6 @@ import { isDefined } from 'twenty-shared/utils';
 import { In, Repository } from 'typeorm';
 
 import { MESSAGE_CHANNEL_DELETED_EVENT } from 'src/engine/metadata-modules/message-channel/constants/message-channel-deleted.constant';
-import { isConnectionHiddenFromRequestUser } from 'src/engine/core-modules/application/connection-provider/connections/utils/is-connection-hidden-from-request-user.util';
 import { ConnectedAccountEntity } from 'src/engine/metadata-modules/connected-account/entities/connected-account.entity';
 import { type MessageChannelDTO } from 'src/engine/metadata-modules/message-channel/dtos/message-channel.dto';
 import { MessageChannelEntity } from 'src/engine/metadata-modules/message-channel/entities/message-channel.entity';
@@ -64,6 +63,17 @@ const normalizeDisplayName = (displayName?: string | null): string | null => {
 
   return isNonEmptyString(trimmedDisplayName) ? trimmedDisplayName : null;
 };
+
+const isConnectionHiddenFromRequestUser = ({
+  account,
+  requestUserWorkspaceId,
+}: {
+  account: Pick<ConnectedAccountEntity, 'visibility' | 'userWorkspaceId'>;
+  requestUserWorkspaceId: string | null;
+}): boolean =>
+  isDefined(requestUserWorkspaceId) &&
+  account.visibility === 'user' &&
+  account.userWorkspaceId !== requestUserWorkspaceId;
 
 @Injectable()
 export class ApplicationMessageChannelsService {

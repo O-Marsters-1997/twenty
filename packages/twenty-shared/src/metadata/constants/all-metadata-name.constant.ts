@@ -27,7 +27,6 @@ export const ALL_METADATA_NAME = {
   fieldPermission: 'fieldPermission',
   frontComponent: 'frontComponent',
   webhook: 'webhook',
-  connectionProvider: 'connectionProvider',
   searchFieldMetadata: 'searchFieldMetadata',
   timelineActivityType: 'timelineActivityType',
   settingsMenuItem: 'settingsMenuItem',

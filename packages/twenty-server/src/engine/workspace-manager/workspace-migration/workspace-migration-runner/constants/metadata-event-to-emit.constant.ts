@@ -29,7 +29,6 @@ export const METADATA_EVENTS_TO_EMIT = {
   logicFunction: true,
   viewSort: true,
   webhook: false,
-  connectionProvider: true,
   timelineActivityType: true,
   validationRule: true,
   searchFieldMetadata: true,

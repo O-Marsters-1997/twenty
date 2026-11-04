@@ -15,7 +15,6 @@ import {
 import { type ConnectedAccountProvider } from 'twenty-shared/types';
 
 import { ApplicationEntity } from 'src/engine/core-modules/application/application.entity';
-import { ConnectionProviderEntity } from 'src/engine/core-modules/application/connection-provider/connection-provider.entity';
 import { type EncryptedImapSmtpCaldavParams } from 'src/engine/core-modules/imap-smtp-caldav-connection/types/imap-smtp-caldav-connection.type';
 import { type EncryptedString } from 'src/engine/core-modules/secret-encryption/branded-strings/encrypted-string.type';
 import { WasIntroducedInUpgrade } from 'src/engine/core-modules/upgrade/decorators/was-introduced-in-upgrade.decorator';
@@ -26,7 +25,6 @@ import { WorkspaceRelatedEntity } from 'src/engine/workspace-manager/types/works
 export type ConnectedAccountVisibility = 'user' | 'workspace';
 
 @Entity({ name: 'connectedAccount', schema: 'core' })
-@Index('IDX_CONNECTED_ACCOUNT_CONNECTION_PROVIDER_ID', ['connectionProviderId'])
 @Index('IDX_CONNECTED_ACCOUNT_APPLICATION_ID', ['applicationId'])
 @Index('IDX_CONNECTED_ACCOUNT_HANDLE_PROVIDER', ['handle', 'provider'])
 @Check(
@@ -94,16 +92,6 @@ export class ConnectedAccountEntity extends WorkspaceRelatedEntity {
 
   @Column({ type: 'uuid', nullable: false })
   userWorkspaceId: string;
-
-  @Column({ type: 'uuid', nullable: true })
-  connectionProviderId: string | null;
-
-  @ManyToOne(() => ConnectionProviderEntity, {
-    onDelete: 'CASCADE',
-    nullable: true,
-  })
-  @JoinColumn({ name: 'connectionProviderId' })
-  connectionProvider: Relation<ConnectionProviderEntity> | null;
 
   @Column({ type: 'uuid', nullable: true })
   applicationId: string | null;

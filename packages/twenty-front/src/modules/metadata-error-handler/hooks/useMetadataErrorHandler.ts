@@ -50,7 +50,6 @@ export const useMetadataErrorHandler = () => {
     navigationMenuItem: t`navigation menu item`,
     webhook: t`webhook`,
     viewSort: t`view sort`,
-    connectionProvider: t`connection provider`,
     searchFieldMetadata: t`search field metadata`,
     timelineActivityType: t`timeline activity type`,
     settingsMenuItem: t`settings menu item`,

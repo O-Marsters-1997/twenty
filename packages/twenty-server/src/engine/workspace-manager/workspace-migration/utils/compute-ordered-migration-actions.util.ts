@@ -140,9 +140,6 @@ export const computeOrderedMigrationActions = (
     ...aggregatedOrchestratorActionsReport.webhook.create,
     ...aggregatedOrchestratorActionsReport.webhook.update,
 
-    ...aggregatedOrchestratorActionsReport.connectionProvider.delete,
-    ...aggregatedOrchestratorActionsReport.connectionProvider.create,
-    ...aggregatedOrchestratorActionsReport.connectionProvider.update,
     ...aggregatedOrchestratorActionsReport.timelineActivityType.delete,
     ...aggregatedOrchestratorActionsReport.timelineActivityType.create,
     ...aggregatedOrchestratorActionsReport.timelineActivityType.update,
