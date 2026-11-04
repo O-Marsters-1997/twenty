@@ -19,15 +19,15 @@ const buildMetadataEventWidget = (
     isSystemSideEffect: false,
     pageLayoutTabId: 'tab-id',
     title: 'Widget',
-    type: WidgetType.FRONT_COMPONENT,
+    type: WidgetType.IFRAME,
     isActive: true,
     objectMetadataId: null,
     createdAt: '2026-01-01T00:00:00.000Z',
     updatedAt: '2026-01-01T00:00:00.000Z',
     deletedAt: null,
     configuration: {
-      configurationType: WidgetConfigurationType.FRONT_COMPONENT,
-      frontComponentId: 'front-component-id',
+      configurationType: WidgetConfigurationType.IFRAME,
+      url: 'https://example.com',
     },
     position: {
       layoutMode: PageLayoutTabLayoutMode.VERTICAL_LIST,
@@ -37,7 +37,7 @@ const buildMetadataEventWidget = (
   }) as FlatPageLayoutWidget;
 
 describe('addTypenamesToFlatPageLayoutWidget', () => {
-  it('should let a front component widget from a metadata event be read as one', () => {
+  it('should let an iframe widget from a metadata event be read as one', () => {
     const widget = addTypenamesToFlatPageLayoutWidget(
       buildMetadataEventWidget({}),
     );
@@ -45,13 +45,13 @@ describe('addTypenamesToFlatPageLayoutWidget', () => {
     expect(
       isWidgetConfigurationOfType(
         widget.configuration,
-        'FrontComponentConfiguration',
+        'IframeConfiguration',
       ),
     ).toBe(true);
     expect(widget.configuration).toEqual({
-      __typename: 'FrontComponentConfiguration',
-      configurationType: WidgetConfigurationType.FRONT_COMPONENT,
-      frontComponentId: 'front-component-id',
+      __typename: 'IframeConfiguration',
+      configurationType: WidgetConfigurationType.IFRAME,
+      url: 'https://example.com',
     });
   });
 
@@ -93,7 +93,7 @@ describe('addTypenamesToFlatPageLayoutWidget', () => {
     );
 
     expect(widget.position).toBeNull();
-    expect(widget.configuration.__typename).toBe('FrontComponentConfiguration');
+    expect(widget.configuration.__typename).toBe('IframeConfiguration');
   });
 
   it('should return the same widget when it already comes from GraphQL', () => {

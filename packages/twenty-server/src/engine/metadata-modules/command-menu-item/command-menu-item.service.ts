@@ -102,17 +102,12 @@ export class CommandMenuItemService {
     input: CreateCommandMenuItemInput,
     workspaceId: string,
   ): Promise<CommandMenuItemDTO> {
-    const {
-      flatObjectMetadataMaps,
-      flatFrontComponentMaps,
-      flatPageLayoutMaps,
-    } =
+    const { flatObjectMetadataMaps, flatPageLayoutMaps } =
       await this.workspaceManyOrAllFlatEntityMapsCacheService.getOrRecomputeManyOrAllFlatEntityMaps(
         {
           workspaceId,
           flatMapsKeys: [
             'flatObjectMetadataMaps',
-            'flatFrontComponentMaps',
             'flatPageLayoutMaps',
           ],
         },
@@ -129,7 +124,6 @@ export class CommandMenuItemService {
         workspaceId,
         flatApplication: workspaceCustomFlatApplication,
         flatObjectMetadataMaps,
-        flatFrontComponentMaps,
         flatPageLayoutMaps,
       });
 

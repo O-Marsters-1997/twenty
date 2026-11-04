@@ -8,12 +8,6 @@ const FIND_MANY_COMMAND_MENU_ITEMS_QUERY = `
       id
       applicationId
       workflowVersionId
-      frontComponentId
-      frontComponent {
-        id
-        name
-        isHeadless
-      }
       engineComponentKey
       label
       icon

@@ -28,11 +28,6 @@ export type HeadlessEngineCommandContextApi = {
   isInSidePanel?: boolean;
 };
 
-export type HeadlessFrontComponentCommandContextApi =
-  HeadlessEngineCommandContextApi & {
-    frontComponentId: string;
-  };
-
 export type HeadlessTriggerWorkflowVersionCommandContextApi =
   HeadlessEngineCommandContextApi & {
     workflowId: string;
@@ -46,5 +41,4 @@ export type HeadlessTriggerWorkflowVersionCommandContextApi =
 
 export type HeadlessCommandContextApi =
   | HeadlessEngineCommandContextApi
-  | HeadlessFrontComponentCommandContextApi
   | HeadlessTriggerWorkflowVersionCommandContextApi;

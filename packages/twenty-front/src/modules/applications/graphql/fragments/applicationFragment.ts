@@ -18,25 +18,10 @@ export const APPLICATION_FRAGMENT = gql`
     autoUpgrade
     createdAt
     defaultRoleId
-    settingsCustomTabFrontComponentId
     healthCheckLogicFunctionId
     availablePackages
     agents {
       ...AgentFields
-    }
-    frontComponents {
-      id
-      name
-      description
-      applicationId
-      componentName
-      builtComponentChecksum
-      universalIdentifier
-      isHeadless
-      usesSdkClient
-      frontComponentSharedDependenciesChecksum
-      createdAt
-      updatedAt
     }
     commandMenuItems {
       id
@@ -46,21 +31,10 @@ export const APPLICATION_FRAGMENT = gql`
       isPinned
       availabilityType
       conditionalAvailabilityExpression
-      frontComponentId
       universalIdentifier
       applicationId
       createdAt
       updatedAt
-    }
-    settingsMenuItems {
-      id
-      universalIdentifier
-      applicationId
-      frontComponentId
-      title
-      icon
-      position
-      scope
     }
     objects {
       ...ObjectMetadataFields

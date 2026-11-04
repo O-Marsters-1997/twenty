@@ -8,11 +8,4 @@ export type StandardTimelineActivityRendererProps = {
 };
 
 export type TimelineActivityRenderer =
-  | {
-      type: 'standard';
-      Component: ComponentType<StandardTimelineActivityRendererProps>;
-    }
-  | {
-      type: 'frontComponent';
-      frontComponentId: string;
-    };
+  ComponentType<StandardTimelineActivityRendererProps>;

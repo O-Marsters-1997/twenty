@@ -216,16 +216,16 @@ describe('PageLayoutVerticalList', () => {
     render(
       <PageLayoutVerticalList
         isInEditMode={false}
-        widgets={[makeWidget('front-component', WidgetType.FRONT_COMPONENT)]}
+        widgets={[makeWidget('iframe', WidgetType.IFRAME)]}
       />,
     );
 
     expect(
       screen
-        .getByTestId('front-component')
+        .getByTestId('iframe')
         .closest('.page-layout-viewport-filling-widget-slot'),
     ).not.toBeNull();
-    expect(screen.getByTestId('front-component-sortable-cell')).toHaveAttribute(
+    expect(screen.getByTestId('iframe-sortable-cell')).toHaveAttribute(
       'data-fill',
       'true',
     );
@@ -243,12 +243,12 @@ describe('PageLayoutVerticalList', () => {
       render(
         <PageLayoutVerticalList
           isInEditMode={isInEditMode}
-          widgets={[makeWidget('front-component', WidgetType.FRONT_COMPONENT)]}
+          widgets={[makeWidget('iframe', WidgetType.IFRAME)]}
         />,
       );
 
       expect(
-        screen.getByTestId('front-component-sortable-cell'),
+        screen.getByTestId('iframe-sortable-cell'),
       ).toHaveAttribute('data-fill', 'false');
     },
   );
@@ -297,35 +297,35 @@ describe('PageLayoutVerticalList', () => {
     );
   });
 
-  it('gives an explicit TAB_VIEWPORT front component viewport-filling sizing in edit mode', () => {
+  it('gives an explicit TAB_VIEWPORT iframe viewport-filling sizing in edit mode', () => {
     render(
       <PageLayoutVerticalList
         isInEditMode
         widgets={[
-          makeTabViewportWidget('front-component', WidgetType.FRONT_COMPONENT),
+          makeTabViewportWidget('iframe', WidgetType.IFRAME),
         ]}
       />,
     );
 
-    expect(screen.getByTestId('front-component-sortable-cell')).toHaveAttribute(
+    expect(screen.getByTestId('iframe-sortable-cell')).toHaveAttribute(
       'data-fill',
       'true',
     );
   });
 
-  it('keeps an explicit TAB_VIEWPORT front component viewport-filling in a side panel', () => {
+  it('keeps an explicit TAB_VIEWPORT iframe viewport-filling in a side panel', () => {
     mockIsSideColumnContext = true;
 
     render(
       <PageLayoutVerticalList
         isInEditMode={false}
         widgets={[
-          makeTabViewportWidget('front-component', WidgetType.FRONT_COMPONENT),
+          makeTabViewportWidget('iframe', WidgetType.IFRAME),
         ]}
       />,
     );
 
-    expect(screen.getByTestId('front-component-sortable-cell')).toHaveAttribute(
+    expect(screen.getByTestId('iframe-sortable-cell')).toHaveAttribute(
       'data-fill',
       'true',
     );
@@ -338,12 +338,12 @@ describe('PageLayoutVerticalList', () => {
       <PageLayoutVerticalList
         isInEditMode={false}
         widgets={[
-          makeTabViewportWidget('front-component', WidgetType.FRONT_COMPONENT),
+          makeTabViewportWidget('iframe', WidgetType.IFRAME),
         ]}
       />,
     );
 
-    expect(screen.getByTestId('front-component-sortable-cell')).toHaveAttribute(
+    expect(screen.getByTestId('iframe-sortable-cell')).toHaveAttribute(
       'data-fill',
       'true',
     );
@@ -374,15 +374,15 @@ describe('PageLayoutVerticalList', () => {
     );
   });
 
-  it('keeps front components fit-content in vertical lists', () => {
+  it('keeps iframes fit-content in vertical lists', () => {
     render(
       <PageLayoutVerticalList
         isInEditMode={false}
-        widgets={[makeWidget('front-component', WidgetType.FRONT_COMPONENT)]}
+        widgets={[makeWidget('iframe', WidgetType.IFRAME)]}
       />,
     );
 
-    expect(screen.getByTestId('front-component-sortable-cell')).toHaveAttribute(
+    expect(screen.getByTestId('iframe-sortable-cell')).toHaveAttribute(
       'data-fill',
       'false',
     );

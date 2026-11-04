@@ -42,14 +42,14 @@ describe('usePageLayoutHeaderInfo', () => {
 
   it('keeps the generic label for a fit-content widget', () => {
     expect(
-      getWidgetSettingsHeaderInfo(WidgetType.FRONT_COMPONENT)?.headerType,
+      getWidgetSettingsHeaderInfo(WidgetType.IFRAME)?.headerType,
     ).toBe('Widget');
   });
 
-  it('identifies an explicit TAB_VIEWPORT front component in the side-panel header', () => {
+  it('identifies an explicit TAB_VIEWPORT iframe in the side-panel header', () => {
     const widget = {
       ...makeWidget('widget-id', 0),
-      type: WidgetType.FRONT_COMPONENT,
+      type: WidgetType.IFRAME,
       position: {
         __typename: 'PageLayoutWidgetVerticalListPosition' as const,
         layoutMode: PageLayoutTabLayoutMode.VERTICAL_LIST,
@@ -73,7 +73,7 @@ describe('usePageLayoutHeaderInfo', () => {
 
   it('keeps the generic widget icon', () => {
     expect(
-      getWidgetSettingsHeaderInfo(WidgetType.FRONT_COMPONENT)?.headerIcon,
+      getWidgetSettingsHeaderInfo(WidgetType.IFRAME)?.headerIcon,
     ).toBe(IconLayoutDashboard);
   });
 

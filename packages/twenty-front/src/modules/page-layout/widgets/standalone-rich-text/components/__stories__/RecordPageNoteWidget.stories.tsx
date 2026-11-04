@@ -26,7 +26,6 @@ import { sidePanelPageInfoSelector } from '@/side-panel/states/sidePanelPageInfo
 import { LayoutRenderingProvider } from '@/ui/layout/contexts/LayoutRenderingContext';
 import { jotaiStore } from '@/ui/utilities/state/jotai/jotaiStore';
 import { type Meta, type StoryObj } from '@storybook/react-vite';
-import { HttpResponse, graphql } from 'msw';
 import { MemoryRouter } from 'react-router-dom';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { SidePanelPages } from 'twenty-shared/types';
@@ -114,15 +113,6 @@ const meta: Meta<typeof RecordPageNoteWidgetStory> = {
     isEditable: true,
     layoutType: PageLayoutType.RECORD_PAGE,
     surface: 'widget',
-  },
-  parameters: {
-    msw: {
-      handlers: [
-        graphql.query('FindManyFrontComponents', () =>
-          HttpResponse.json({ data: { frontComponents: [] } }),
-        ),
-      ],
-    },
   },
   beforeEach: ({ args }) => {
     setTestObjectMetadataItemsInMetadataStore(

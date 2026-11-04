@@ -15,7 +15,6 @@ import {
   FindAllRecordFormPageLayoutsDocument,
   FindFieldsWidgetViewsDocument,
   FindTableWidgetViewsDocument,
-  FindManyFrontComponentsDocument,
   FindManyLogicFunctionsDocument,
   FindManyNavigationMenuItemsDocument,
   type ObjectMetadataItemsQuery,
@@ -234,22 +233,6 @@ export const useLoadStaleMetadataEntities = () => {
         );
       }
 
-      if (staleEntityKeys.includes('frontComponents')) {
-        fetchPromises.push(
-          client
-            .query({
-              query: FindManyFrontComponentsDocument,
-              fetchPolicy: 'network-only',
-            })
-            .then((result) => {
-              if (!isDefined(result.data?.frontComponents)) {
-                return;
-              }
-
-              replaceDraft('frontComponents', result.data.frontComponents);
-            }),
-        );
-      }
 
       await Promise.all(fetchPromises);
       applyChanges();

@@ -55,7 +55,6 @@ const updateWidget = ({
     },
     flatObjectMetadataMaps: EMPTY_FLAT_ENTITY_MAPS,
     flatFieldMetadataMaps: EMPTY_FLAT_ENTITY_MAPS,
-    flatFrontComponentMaps: EMPTY_FLAT_ENTITY_MAPS,
     flatViewFieldGroupMaps: EMPTY_FLAT_ENTITY_MAPS,
     flatViewMaps: EMPTY_FLAT_ENTITY_MAPS,
     flatPageLayoutTabMaps: EMPTY_FLAT_ENTITY_MAPS,

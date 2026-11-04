@@ -107,7 +107,7 @@ describe('computeSettingsNavigationDisplayFieldRestore', () => {
         buildFlatCommandMenuItem({
           id: 'command-1',
           universalIdentifier: GO_TO_SETTINGS.universalIdentifier,
-          engineComponentKey: EngineComponentKey.FRONT_COMPONENT_RENDERER,
+          engineComponentKey: 'FRONT_COMPONENT_RENDERER' as EngineComponentKey,
         }),
       ]),
       now: NOW,

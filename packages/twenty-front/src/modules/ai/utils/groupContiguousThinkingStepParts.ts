@@ -7,9 +7,7 @@ import { type ThinkingStepPart } from '@/ai/types/ThinkingStepPart';
 
 export const groupContiguousThinkingStepParts = (
   parts: ExtendedUIMessagePart[],
-  shouldRenderStandalone: (part: ExtendedUIMessagePart) => boolean = () =>
-    false,
-): AssistantMessageRenderItem[] => {
+):AssistantMessageRenderItem[] => {
   const renderItems: AssistantMessageRenderItem[] = [];
   let currentThinkingParts: ThinkingStepPart[] = [];
 
@@ -28,11 +26,7 @@ export const groupContiguousThinkingStepParts = (
       continue;
     }
 
-    if (
-      isThinkingStepPart(part) &&
-      !isPausingToolPart(part) &&
-      !shouldRenderStandalone(part)
-    ) {
+    if (isThinkingStepPart(part) && !isPausingToolPart(part)) {
       currentThinkingParts.push(part);
       continue;
     }

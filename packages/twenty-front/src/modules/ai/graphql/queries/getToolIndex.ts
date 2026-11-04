@@ -10,7 +10,6 @@ export const GET_TOOL_INDEX = gql`
       objectName
       icon
       widgetName
-      frontComponentId
     }
   }
 `;

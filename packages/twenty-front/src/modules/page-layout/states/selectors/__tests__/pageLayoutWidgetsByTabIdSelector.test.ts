@@ -10,20 +10,20 @@ import {
 } from '~/generated-metadata/graphql';
 
 describe('pageLayoutWidgetsByTabIdSelector', () => {
-  it('should read a front component widget cached from a metadata event as one', () => {
+  it('should read an iframe widget cached from a metadata event as one', () => {
     const store = createStore();
 
     store.set(metadataStoreState.atomFamily('pageLayoutWidgets'), {
       current: [
         {
-          id: 'front-component-widget',
+          id: 'iframe-widget',
           pageLayoutTabId: 'app-tab',
           title: 'App widget',
-          type: WidgetType.FRONT_COMPONENT,
+          type: WidgetType.IFRAME,
           isActive: true,
           configuration: {
-            configurationType: WidgetConfigurationType.FRONT_COMPONENT,
-            frontComponentId: 'front-component-id',
+            configurationType: WidgetConfigurationType.IFRAME,
+            url: 'https://example.com',
           },
           position: {
             layoutMode: PageLayoutTabLayoutMode.VERTICAL_LIST,
@@ -42,7 +42,7 @@ describe('pageLayoutWidgetsByTabIdSelector', () => {
     expect(
       isWidgetConfigurationOfType(
         widget?.configuration,
-        'FrontComponentConfiguration',
+        'IframeConfiguration',
       ),
     ).toBe(true);
     expect(widget?.position?.__typename).toBe(

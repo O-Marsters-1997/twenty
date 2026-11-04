@@ -5,7 +5,6 @@ exports[`getMetadataRelatedMetadataNames should return related metadata names fo
 exports[`getMetadataRelatedMetadataNames should return related metadata names for commandMenuItem 1`] = `
 [
   "objectMetadata",
-  "frontComponent",
   "pageLayout",
 ]
 `;
@@ -32,8 +31,6 @@ exports[`getMetadataRelatedMetadataNames should return related metadata names fo
   "fieldMetadata",
 ]
 `;
-
-exports[`getMetadataRelatedMetadataNames should return related metadata names for frontComponent 1`] = `[]`;
 
 exports[`getMetadataRelatedMetadataNames should return related metadata names for index 1`] = `
 [
@@ -148,12 +145,6 @@ exports[`getMetadataRelatedMetadataNames should return related metadata names fo
 [
   "objectMetadata",
   "fieldMetadata",
-]
-`;
-
-exports[`getMetadataRelatedMetadataNames should return related metadata names for settingsMenuItem 1`] = `
-[
-  "frontComponent",
 ]
 `;
 

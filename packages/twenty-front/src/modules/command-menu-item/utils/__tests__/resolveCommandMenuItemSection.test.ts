@@ -71,22 +71,6 @@ describe('resolveCommandMenuItemSection', () => {
     ).toBe('WORKSPACE');
   });
 
-  it('lands an app command where its availability says', () => {
-    expect(
-      resolveCommandMenuItemSection({
-        engineComponentKey: EngineComponentKey.FRONT_COMPONENT_RENDERER,
-        availabilityType: CommandMenuItemAvailabilityType.GLOBAL,
-      }),
-    ).toBe('WORKSPACE');
-
-    expect(
-      resolveCommandMenuItemSection({
-        engineComponentKey: EngineComponentKey.FRONT_COMPONENT_RENDERER,
-        availabilityType: CommandMenuItemAvailabilityType.RECORD_SELECTION,
-      }),
-    ).toBe('SELECTION');
-  });
-
   it('tells a per-object creation command from the view own create', () => {
     expect(
       resolveCommandMenuItemSection({

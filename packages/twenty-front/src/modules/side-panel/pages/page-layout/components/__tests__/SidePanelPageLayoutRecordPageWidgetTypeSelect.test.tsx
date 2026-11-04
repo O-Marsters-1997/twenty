@@ -24,10 +24,6 @@ jest.mock('twenty-ui/icon', () => ({
   IconListSearch: () => <svg role="img" aria-label="Field icon" />,
 }));
 
-jest.mock('@apollo/client/react', () => ({
-  useQuery: () => ({ data: { frontComponents: [] } }),
-}));
-
 jest.mock('@/object-metadata/hooks/useObjectMetadataItem', () => ({
   useObjectMetadataItem: () => ({ objectMetadataItem: { id: 'company' } }),
 }));

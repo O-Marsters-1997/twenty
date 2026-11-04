@@ -19,7 +19,7 @@ const buildWidget = ({
   universalIdentifier,
   index,
   heightBehavior,
-  type = WidgetType.FRONT_COMPONENT,
+  type = WidgetType.IFRAME,
 }: {
   universalIdentifier: string;
   index: number;

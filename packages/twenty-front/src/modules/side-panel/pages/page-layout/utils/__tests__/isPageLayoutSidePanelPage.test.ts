@@ -27,7 +27,6 @@ describe('isPageLayoutSidePanelPage', () => {
     SidePanelPages.ComposeCalendarEvent,
     SidePanelPages.ComposeEmail,
     SidePanelPages.SearchRecords,
-    SidePanelPages.ViewFrontComponent,
   ];
 
   it.each(nonPageLayoutPages)(

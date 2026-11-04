@@ -129,7 +129,6 @@ const deriveAllMetadataEventsFromUpdateAction = ({
     case 'pageLayoutWidget':
     case 'pageLayoutTab':
     case 'commandMenuItem':
-    case 'frontComponent':
     case 'navigationMenuItem':
     case 'rolePermissionFlag':
     case 'permissionFlag':
@@ -141,7 +140,6 @@ const deriveAllMetadataEventsFromUpdateAction = ({
     case 'workflowVersion':
     case 'connectionProvider':
     case 'timelineActivityType':
-    case 'settingsMenuItem':
     case 'validationRule':
     case 'searchFieldMetadata': {
       const flatEntityMapsKey = getMetadataFlatEntityMapsKey(

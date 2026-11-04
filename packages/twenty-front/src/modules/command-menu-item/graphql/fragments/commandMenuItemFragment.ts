@@ -7,12 +7,6 @@ export const COMMAND_MENU_ITEM_FRAGMENT = gql`
     applicationId
     coreWorkflowVersionId
     workflowVersionId
-    frontComponentId
-    frontComponent {
-      id
-      name
-      isHeadless
-    }
     engineComponentKey
     label
     icon

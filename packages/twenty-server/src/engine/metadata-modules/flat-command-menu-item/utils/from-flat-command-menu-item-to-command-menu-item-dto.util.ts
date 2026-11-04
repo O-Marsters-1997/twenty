@@ -17,8 +17,6 @@ export const fromFlatCommandMenuItemToCommandMenuItemDto = (
       effectiveFlatCommandMenuItem.workflowVersionId ?? undefined,
     coreWorkflowVersionId:
       effectiveFlatCommandMenuItem.coreWorkflowVersionId ?? undefined,
-    frontComponentId:
-      effectiveFlatCommandMenuItem.frontComponentId ?? undefined,
     engineComponentKey: effectiveFlatCommandMenuItem.engineComponentKey,
     label: effectiveFlatCommandMenuItem.label,
     icon: effectiveFlatCommandMenuItem.icon ?? undefined,

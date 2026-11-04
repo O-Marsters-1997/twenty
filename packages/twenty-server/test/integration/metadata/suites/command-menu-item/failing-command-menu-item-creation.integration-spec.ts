@@ -72,51 +72,10 @@ const failingCommandMenuItemCreationTestCases: EachTestingContext<TestContext>[]
       },
     },
     {
-      title: 'when creating TRIGGER_WORKFLOW_VERSION with frontComponentId',
-      context: {
-        input: {
-          workflowVersionId: faker.string.uuid(),
-          frontComponentId: faker.string.uuid(),
-          engineComponentKey: EngineComponentKey.TRIGGER_WORKFLOW_VERSION,
-          label: 'Test Label',
-        },
-      },
-    },
-    {
-      title: 'when creating FRONT_COMPONENT_RENDERER without frontComponentId',
-      context: {
-        input: {
-          engineComponentKey: EngineComponentKey.FRONT_COMPONENT_RENDERER,
-          label: 'Test Label',
-        },
-      },
-    },
-    {
-      title: 'when creating FRONT_COMPONENT_RENDERER with workflowVersionId',
-      context: {
-        input: {
-          frontComponentId: faker.string.uuid(),
-          workflowVersionId: faker.string.uuid(),
-          engineComponentKey: EngineComponentKey.FRONT_COMPONENT_RENDERER,
-          label: 'Test Label',
-        },
-      },
-    },
-    {
       title: 'when creating standard key with workflowVersionId',
       context: {
         input: {
           workflowVersionId: faker.string.uuid(),
-          engineComponentKey: EngineComponentKey.GO_TO_PEOPLE,
-          label: 'Test Label',
-        },
-      },
-    },
-    {
-      title: 'when creating standard key with frontComponentId',
-      context: {
-        input: {
-          frontComponentId: faker.string.uuid(),
           engineComponentKey: EngineComponentKey.GO_TO_PEOPLE,
           label: 'Test Label',
         },

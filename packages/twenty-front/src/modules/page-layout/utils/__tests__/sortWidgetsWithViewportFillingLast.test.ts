@@ -70,9 +70,9 @@ describe('sortWidgetsWithViewportFillingLast', () => {
     ).toEqual(['fields', 'field']);
   });
 
-  it('normalizes an explicit TAB_VIEWPORT front component after fit-content widgets', () => {
-    const frontComponentWidget = {
-      ...makeWidgetWithType('front-component', 0, WidgetType.FRONT_COMPONENT),
+  it('normalizes an explicit TAB_VIEWPORT iframe after fit-content widgets', () => {
+    const iframeWidget = {
+      ...makeWidgetWithType('iframe', 0, WidgetType.IFRAME),
       position: {
         __typename: 'PageLayoutWidgetVerticalListPosition' as const,
         layoutMode: PageLayoutTabLayoutMode.VERTICAL_LIST,
@@ -84,9 +84,9 @@ describe('sortWidgetsWithViewportFillingLast', () => {
 
     expect(
       sortWidgetsWithViewportFillingLast([
-        frontComponentWidget,
+        iframeWidget,
         fieldsWidget,
       ]).map(({ id }) => id),
-    ).toEqual(['fields', 'front-component']);
+    ).toEqual(['fields', 'iframe']);
   });
 });

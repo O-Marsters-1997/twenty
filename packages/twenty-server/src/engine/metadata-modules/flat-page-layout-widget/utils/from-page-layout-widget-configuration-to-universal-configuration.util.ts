@@ -83,7 +83,6 @@ const convertChartFilterToUniversalFilter = ({
 export const fromPageLayoutWidgetConfigurationToUniversalConfiguration = ({
   configuration,
   fieldMetadataUniversalIdentifierById,
-  frontComponentUniversalIdentifierById = {},
   viewFieldGroupUniversalIdentifierById:
     _viewFieldGroupUniversalIdentifierById = {},
   viewUniversalIdentifierById = {},
@@ -91,7 +90,6 @@ export const fromPageLayoutWidgetConfigurationToUniversalConfiguration = ({
 }: {
   configuration: PageLayoutWidgetConfiguration;
   fieldMetadataUniversalIdentifierById: Partial<Record<string, string>>;
-  frontComponentUniversalIdentifierById?: Partial<Record<string, string>>;
   viewFieldGroupUniversalIdentifierById?: Partial<Record<string, string>>;
   viewUniversalIdentifierById?: Partial<Record<string, string>>;
   shouldThrowOnMissingIdentifier?: boolean;
@@ -310,33 +308,6 @@ export const fromPageLayoutWidgetConfigurationToUniversalConfiguration = ({
       return {
         ...rest,
         viewUniversalIdentifier,
-      };
-    }
-
-    case WidgetConfigurationType.FRONT_COMPONENT: {
-      const {
-        frontComponentId,
-        configurationType,
-        headerCommandMenuItemUniversalIdentifiers,
-      } = configuration;
-
-      const frontComponentUniversalIdentifier: string | null =
-        frontComponentUniversalIdentifierById[frontComponentId] ?? null;
-
-      if (
-        !isDefined(frontComponentUniversalIdentifier) &&
-        shouldThrowOnMissingIdentifier
-      ) {
-        throw new FlatEntityMapsException(
-          `Front component universal identifier not found for id: ${frontComponentId}`,
-          FlatEntityMapsExceptionCode.RELATION_UNIVERSAL_IDENTIFIER_NOT_FOUND,
-        );
-      }
-
-      return {
-        configurationType,
-        frontComponentUniversalIdentifier,
-        headerCommandMenuItemUniversalIdentifiers,
       };
     }
 
