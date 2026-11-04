@@ -67,7 +67,6 @@ export const optimisticallyApplyUpdateActionOnAllFlatEntityMaps = ({
     case 'webhook':
     case 'workflow':
     case 'workflowVersion':
-    case 'connectionProvider':
     case 'timelineActivityType':
     case 'validationRule':
     case 'searchFieldMetadata': {

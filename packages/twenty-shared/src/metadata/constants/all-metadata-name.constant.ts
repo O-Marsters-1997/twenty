@@ -26,7 +26,6 @@ export const ALL_METADATA_NAME = {
   objectPermission: 'objectPermission',
   fieldPermission: 'fieldPermission',
   webhook: 'webhook',
-  connectionProvider: 'connectionProvider',
   searchFieldMetadata: 'searchFieldMetadata',
   timelineActivityType: 'timelineActivityType',
   validationRule: 'validationRule',

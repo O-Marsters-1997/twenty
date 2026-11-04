@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { ConnectionProviderModule } from 'src/engine/core-modules/application/connection-provider/connection-provider.module';
-import { AppOAuthRefreshModule } from 'src/engine/core-modules/application/connection-provider/refresh/app-oauth-refresh.module';
 import { CalendarChannelEntity } from 'src/engine/metadata-modules/calendar-channel/entities/calendar-channel.entity';
 import { ConnectedAccountMetadataService } from 'src/engine/metadata-modules/connected-account/connected-account-metadata.service';
 import { ConnectedAccountEntity } from 'src/engine/metadata-modules/connected-account/entities/connected-account.entity';
@@ -23,8 +21,6 @@ import { ApplicationLookupModule } from 'src/engine/core-modules/application/app
       CalendarChannelEntity,
       MessageChannelEntity,
     ]),
-    AppOAuthRefreshModule,
-    ConnectionProviderModule,
     WebhookSubscriptionModule,
     PermissionsModule,
     UserRoleModule,

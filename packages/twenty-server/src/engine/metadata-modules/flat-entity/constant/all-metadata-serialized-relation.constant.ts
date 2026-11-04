@@ -49,7 +49,6 @@ export const ALL_METADATA_SERIALIZED_RELATION = {
   viewFilterGroup: {},
   viewSort: {},
   webhook: {},
-  connectionProvider: {},
   timelineActivityType: {},
   validationRule: {},
   searchFieldMetadata: {},

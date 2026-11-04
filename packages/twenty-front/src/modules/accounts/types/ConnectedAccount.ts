@@ -15,7 +15,6 @@ export type ConnectedAccount = {
   handleAliases: string[] | null;
   lastSignedInAt: string | null;
   userWorkspaceId: string;
-  connectionProviderId: string | null;
   applicationId: string | null;
   name: string | null;
   // Connection-row visibility — distinct from the `scopes` array above

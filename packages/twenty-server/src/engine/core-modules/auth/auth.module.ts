@@ -4,9 +4,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ApiKeyModule } from 'src/engine/core-modules/api-key/api-key.module';
 import { AppTokenEntity } from 'src/engine/core-modules/app-token/app-token.entity';
 import { ApplicationModule } from 'src/engine/core-modules/application/application.module';
-import { ConnectionProviderOAuthController } from 'src/engine/core-modules/application/connection-provider/connection-provider-oauth.controller';
-import { ConnectionProviderModule } from 'src/engine/core-modules/application/connection-provider/connection-provider.module';
-import { ApplicationConnectionsModule } from 'src/engine/core-modules/application/connection-provider/connections/application-connections.module';
 import { GoogleAPIsAuthController } from 'src/engine/core-modules/auth/controllers/google-apis-auth.controller';
 import { GoogleAuthController } from 'src/engine/core-modules/auth/controllers/google-auth.controller';
 import { MicrosoftAPIsAuthController } from 'src/engine/core-modules/auth/controllers/microsoft-apis-auth.controller';
@@ -110,8 +107,6 @@ import { AuthService } from './services/auth.service';
     SubdomainManagerModule,
     DomainServerConfigModule,
     ApplicationModule,
-    ConnectionProviderModule,
-    ApplicationConnectionsModule,
     WorkspaceCacheModule,
     SecureHttpClientModule,
     EnterpriseModule,
@@ -128,7 +123,6 @@ import { AuthService } from './services/auth.service';
     MicrosoftAPIsAuthController,
     OAuthPropagatorController,
     SsoAuthController,
-    ConnectionProviderOAuthController,
   ],
   providers: [
     SignInUpService,
