@@ -53,7 +53,6 @@ export const ALL_METADATA_SERIALIZED_RELATION = {
     objectMetadata: true,
   },
   webhook: {},
-  connectionProvider: {},
   timelineActivityType: {},
   validationRule: {},
   searchFieldMetadata: {},

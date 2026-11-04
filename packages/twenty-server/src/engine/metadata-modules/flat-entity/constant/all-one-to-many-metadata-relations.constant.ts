@@ -301,7 +301,6 @@ export const ALL_ONE_TO_MANY_METADATA_RELATIONS = {
   frontComponent: {},
   webhook: {},
   viewSort: {},
-  connectionProvider: {},
   searchFieldMetadata: {},
   timelineActivityType: {},
   settingsMenuItem: {},

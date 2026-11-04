@@ -86,7 +86,6 @@ export const optimisticallyApplyCreateActionOnAllFlatEntityMaps = ({
     case 'webhook':
     case 'workflow':
     case 'workflowVersion':
-    case 'connectionProvider':
     case 'timelineActivityType':
     case 'settingsMenuItem':
     case 'validationRule': {

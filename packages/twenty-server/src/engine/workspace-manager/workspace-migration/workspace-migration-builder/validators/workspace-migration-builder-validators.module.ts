@@ -29,7 +29,6 @@ import { FlatViewFilterGroupValidatorService } from 'src/engine/workspace-manage
 import { FlatViewGroupValidatorService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-group-validator.service';
 import { FlatViewSortValidatorService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-sort-validator.service';
 import { FlatWebhookValidatorService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-webhook-validator.service';
-import { FlatConnectionProviderValidatorService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-connection-provider-validator.service';
 import { FlatTimelineActivityTypeValidatorService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-timeline-activity-type-validator.service';
 import { FlatSettingsMenuItemValidatorService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-settings-menu-item-validator.service';
 import { FlatValidationRuleValidatorService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-validation-rule-validator.service';
@@ -66,7 +65,6 @@ import { FlatSearchFieldMetadataValidatorService } from 'src/engine/workspace-ma
     FlatRowLevelPermissionPredicateGroupValidatorService,
     FlatFrontComponentValidatorService,
     FlatWebhookValidatorService,
-    FlatConnectionProviderValidatorService,
     FlatTimelineActivityTypeValidatorService,
     FlatSettingsMenuItemValidatorService,
     FlatValidationRuleValidatorService,
@@ -100,7 +98,6 @@ import { FlatSearchFieldMetadataValidatorService } from 'src/engine/workspace-ma
     FlatRowLevelPermissionPredicateGroupValidatorService,
     FlatFrontComponentValidatorService,
     FlatWebhookValidatorService,
-    FlatConnectionProviderValidatorService,
     FlatTimelineActivityTypeValidatorService,
     FlatSettingsMenuItemValidatorService,
     FlatValidationRuleValidatorService,
