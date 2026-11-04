@@ -11,8 +11,7 @@ export const TWENTY_STANDARD_APPLICATION = {
   name: TWENTY_STANDARD_APPLICATION_NAME,
   description: null,
   version: '1.0.1',
-  sourcePath: 'cli-sync',
 } as const satisfies Pick<
   ApplicationEntity,
-  'universalIdentifier' | 'name' | 'description' | 'version' | 'sourcePath'
+  'universalIdentifier' | 'name' | 'description' | 'version'
 >;

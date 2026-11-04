@@ -1,14 +1,12 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
 import {
-  IsBoolean,
   IsDateString,
   IsNotEmpty,
   IsOptional,
   IsString,
   IsUUID,
 } from 'class-validator';
-import GraphQLJSON from 'graphql-type-json';
 
 import { UUIDScalarType } from 'src/engine/api/graphql/workspace-schema-builder/graphql-types/scalars';
 import { AgentDTO } from 'src/engine/metadata-modules/ai/ai-agent/dtos/agent.dto';
@@ -52,37 +50,6 @@ export class ApplicationDTO {
   @Field()
   universalIdentifier: string;
 
-  @IsOptional()
-  @IsString()
-  @Field({ nullable: true })
-  packageJsonChecksum?: string;
-
-  @IsOptional()
-  @IsUUID()
-  @Field(() => UUIDScalarType, { nullable: true })
-  packageJsonFileId?: string;
-
-  @IsOptional()
-  @IsString()
-  @Field({ nullable: true })
-  yarnLockChecksum?: string;
-
-  @IsOptional()
-  @IsUUID()
-  @Field(() => UUIDScalarType, { nullable: true })
-  yarnLockFileId?: string;
-
-  @Field(() => GraphQLJSON)
-  availablePackages: Record<string, string>;
-
-  @Field(() => Boolean)
-  @IsBoolean()
-  canBeUninstalled: boolean;
-
-  @Field(() => Boolean)
-  @IsBoolean()
-  autoUpgrade: boolean;
-
   @IsDateString()
   @Field()
   createdAt: Date;
@@ -93,16 +60,6 @@ export class ApplicationDTO {
   defaultRoleId?: string;
 
   @IsOptional()
-  @IsUUID()
-  @Field(() => UUIDScalarType, { nullable: true })
-  settingsCustomTabFrontComponentId?: string;
-
-  @IsOptional()
-  @IsUUID()
-  @Field(() => UUIDScalarType, { nullable: true })
-  healthCheckLogicFunctionId?: string;
-
-  @IsOptional()
   @Field(() => RoleDTO, { nullable: true })
   defaultLogicFunctionRole?: RoleDTO;
 
@@ -111,7 +68,6 @@ export class ApplicationDTO {
 
   @Field(() => [CommandMenuItemDTO])
   commandMenuItems?: CommandMenuItemDTO[];
-
 
   @Field(() => [ObjectMetadataDTO])
   objects?: ObjectMetadataDTO[];

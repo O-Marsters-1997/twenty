@@ -5,8 +5,6 @@ export const APPLICATION_ENTITY_RELATION_PROPERTIES = [
   'agents',
   'commandMenuItems',
   'objects',
-  'packageJsonFile',
-  'yarnLockFile',
   'logoFile',
   'primaryPublicDomain',
   'publicDomains',

@@ -7,8 +7,6 @@ import { WorkspaceCacheModule } from 'src/engine/workspace-cache/workspace-cache
 import { AuthModule } from 'src/engine/core-modules/auth/auth.module';
 import { BillingModule } from 'src/engine/core-modules/billing/billing.module';
 import { UpdateSubscriptionQuantityJob } from 'src/engine/core-modules/billing/jobs/update-subscription-quantity.job';
-import { ApplicationRecurringChargeModule } from 'src/engine/core-modules/billing/app-billing/application-recurring-charge.module';
-import { ApplicationRecurringChargeCronJob } from 'src/engine/core-modules/billing/app-billing/crons/jobs/application-recurring-charge.cron.job';
 import { BillingReminderModule } from 'src/engine/core-modules/billing/reminders/billing-reminder.module';
 import { BillingReminderCronJob } from 'src/engine/core-modules/billing/reminders/crons/billing-reminder.cron.job';
 import { StripeModule } from 'src/engine/core-modules/billing/stripe/stripe.module';
@@ -90,11 +88,9 @@ import { WorkflowModule } from 'src/modules/workflow/workflow.module';
     EmailingModule,
     PendingWakeUpModule,
     BillingReminderModule,
-    ApplicationRecurringChargeModule,
     WorkspaceMigrationRunnerModule,
   ],
   providers: [
-    ApplicationRecurringChargeCronJob,
     BillingReminderCronJob,
     CleanSuspendedWorkspacesJob,
     CleanOnboardingWorkspacesJob,

@@ -67,9 +67,6 @@ type GroupByField = (typeof ALLOWED_GROUP_BY_FIELDS)[number];
 
 const BREAKDOWN_QUERY_LIMIT = 50;
 
-// Scopes a declared operation to its application; both sides of the comparison use it so they cannot spell the pair differently.
-const DECLARED_OPERATION_KEY_SEPARATOR = ':';
-
 @Injectable()
 export class UsageAnalyticsService {
   constructor(private readonly clickHouseService: ClickHouseService) {}
@@ -250,44 +247,21 @@ export class UsageAnalyticsService {
     });
   }
 
-  // Apps share a closed operation-type enum, so grouping on the app and its declared operation shows what each app charged.
-  // Undeclared contexts collapse here rather than in the resolver, so the limit truncates displayed slices.
   async getUsageByApplication({
     workspaceId,
     periodStart,
     periodEnd,
     operationTypes,
     userWorkspaceId,
-    declaredOperationsByApplicationId,
   }: PeriodParams & {
     userWorkspaceId?: string;
-    declaredOperationsByApplicationId: Record<string, string[]>;
   }): Promise<UsageApplicationBreakdownItem[]> {
     const hasOperationTypes = isNonEmptyArray(operationTypes);
-    const declaredOperationKeys = Object.entries(
-      declaredOperationsByApplicationId,
-    ).flatMap(([applicationId, operations]) =>
-      operations.map(
-        (operation) =>
-          `${applicationId}${DECLARED_OPERATION_KEY_SEPARATOR}${operation}`,
-      ),
-    );
 
     const query = `
       SELECT
         resourceId,
-        if(
-          has(
-            {declaredOperationKeys:Array(String)},
-            concat(
-              resourceId,
-              {declaredOperationKeySeparator:String},
-              resourceContext
-            )
-          ),
-          resourceContext,
-          ''
-        ) AS operation,
+        '' AS operation,
         sum(creditsUsedMicro) AS creditsUsedMicro
       FROM usageEvent
       WHERE workspaceId = {workspaceId:String}
@@ -309,8 +283,6 @@ export class UsageAnalyticsService {
       periodStart: formatDateTimeForClickHouse(periodStart),
       periodEnd: formatDateTimeForClickHouse(periodEnd),
       appResourceType: UsageResourceType.APP,
-      declaredOperationKeys,
-      declaredOperationKeySeparator: DECLARED_OPERATION_KEY_SEPARATOR,
       ...(hasOperationTypes ? { operationTypes } : {}),
       ...(isNonEmptyString(userWorkspaceId) ? { userWorkspaceId } : {}),
     });

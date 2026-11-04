@@ -76,19 +76,6 @@ export class UsageResolver {
         'flatApplicationMaps',
       ]);
 
-    // Per application: two apps may declare the same operation name.
-    const declaredOperationsByApplicationId = Object.fromEntries(
-      Object.entries(flatApplicationMaps.byId).map(
-        ([applicationId, application]) => [
-          applicationId,
-          [
-            ...Object.keys(application?.billing?.recurring ?? {}),
-            ...Object.keys(application?.billing?.operations ?? {}),
-          ],
-        ],
-      ),
-    );
-
     const [
       usageByUser,
       usageByOperationType,
@@ -104,7 +91,6 @@ export class UsageResolver {
       this.usageAnalyticsService.getUsageByApplication({
         ...periodParams,
         userWorkspaceId: input?.userWorkspaceId ?? undefined,
-        declaredOperationsByApplicationId,
       }),
       this.usageAnalyticsService.getUsageByModel(periodParams),
       this.usageAnalyticsService.getUsageTimeSeries(periodParams),

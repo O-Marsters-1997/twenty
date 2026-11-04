@@ -45,7 +45,6 @@ jobs:
         run: |
           npx nx build twenty-shared
           npx nx build twenty-ui
-          npx nx build twenty-front-component-renderer
       - name: Resolve Playwright version
         id: playwright-version
         run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"

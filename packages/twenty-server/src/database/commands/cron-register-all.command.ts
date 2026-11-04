@@ -3,7 +3,6 @@ import { Logger } from '@nestjs/common';
 import { Command, CommandRunner } from 'nest-commander';
 import { isDefined } from 'twenty-shared/utils';
 
-import { ApplicationRecurringChargeCronCommand } from 'src/engine/core-modules/billing/app-billing/crons/commands/application-recurring-charge.cron.command';
 import { BillingReminderCronCommand } from 'src/engine/core-modules/billing/reminders/crons/commands/billing-reminder.cron.command';
 import { CheckEmailingDomainVerificationCronCommand } from 'src/engine/core-modules/emailing-domain/crons/commands/check-emailing-domain-verification.cron.command';
 import { EnterpriseKeyValidationCronCommand } from 'src/engine/core-modules/enterprise/cron/command/organization-key-validation.cron.command';
@@ -78,7 +77,6 @@ export class CronRegisterAllCommand extends CommandRunner {
     private readonly pendingFileCleanupCronCommand: PendingFileCleanupCronCommand,
     private readonly deferredWorkspaceMigrationActionRecoveryCronCommand: DeferredWorkspaceMigrationActionRecoveryCronCommand,
     private readonly billingReminderCronCommand: BillingReminderCronCommand,
-    private readonly applicationRecurringChargeCronCommand: ApplicationRecurringChargeCronCommand,
     private readonly userSessionCleanupCronCommand: UserSessionCleanupCronCommand,
     private readonly twentyConfigService: TwentyConfigService,
   ) {
@@ -211,11 +209,6 @@ export class CronRegisterAllCommand extends CommandRunner {
       {
         name: 'BillingReminder',
         command: this.billingReminderCronCommand,
-        isEnabled: isBillingEnabled,
-      },
-      {
-        name: 'ApplicationRecurringCharge',
-        command: this.applicationRecurringChargeCronCommand,
         isEnabled: isBillingEnabled,
       },
       {

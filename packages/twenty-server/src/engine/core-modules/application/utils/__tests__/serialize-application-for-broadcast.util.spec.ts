@@ -12,7 +12,6 @@ const buildApplication = (
   name: 'Test application',
   description: 'A test application',
   version: '1.0.0',
-  sdkClientCoreChecksum: 'checksum',
   ...overrides,
 });
 
@@ -24,7 +23,6 @@ describe('serializeApplicationForBroadcast', () => {
       name: 'Test application',
       description: 'A test application',
       version: '1.0.0',
-      sdkClientCoreChecksum: 'checksum',
     });
   });
 
@@ -35,7 +33,6 @@ describe('serializeApplicationForBroadcast', () => {
         buildApplication({
           description: unsetValue,
           version: unsetValue,
-          sdkClientCoreChecksum: unsetValue,
         }),
       );
 
@@ -43,7 +40,6 @@ describe('serializeApplicationForBroadcast', () => {
         expect.objectContaining({
           description: null,
           version: null,
-          sdkClientCoreChecksum: null,
         }),
       );
     },

@@ -227,7 +227,6 @@
     "testcontainers": "12.1.0",
     "ts-jest": "^29.1.1",
     "ts-node": "10.9.1",
-    "twenty-client-sdk": "workspace:*",
     "twenty-emails": "workspace:*",
     "twenty-oxlint-rules": "workspace:*",
     "twenty-shared": "workspace:*"

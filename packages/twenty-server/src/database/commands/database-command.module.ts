@@ -10,14 +10,12 @@ import { GenerateInstanceCommandCommand } from 'src/database/commands/generate-i
 import { InstanceCommandGenerationService } from 'src/database/commands/instance-command-generation.service';
 import { ListOrphanedWorkspaceEntitiesCommand } from 'src/database/commands/list-and-delete-orphaned-workspace-entities.command';
 import { ConfirmationQuestion } from 'src/database/commands/questions/confirmation.question';
-import { RebuildApplicationDefaultDepsCommand } from 'src/database/commands/rebuild-application-default-deps.command';
 import { RunInstanceCommandsCommand } from 'src/database/commands/run-instance-commands.command';
 import { UpgradeVersionCommandModule } from 'src/database/commands/upgrade-version-command/upgrade-version-command.module';
 import { WorkspaceExportModule } from 'src/database/commands/workspace-export/workspace-export.module';
 import { TypeORMModule } from 'src/database/typeorm/typeorm.module';
 import { ApiKeyModule } from 'src/engine/core-modules/api-key/api-key.module';
 import { ApplicationModule } from 'src/engine/core-modules/application/application.module';
-import { ApplicationRecurringChargeModule } from 'src/engine/core-modules/billing/app-billing/application-recurring-charge.module';
 import { BillingReminderModule } from 'src/engine/core-modules/billing/reminders/billing-reminder.module';
 import { EnterpriseKeyValidationCronCommand } from 'src/engine/core-modules/enterprise/cron/command/organization-key-validation.cron.command';
 import { EnterpriseModule } from 'src/engine/core-modules/enterprise/enterprise.module';
@@ -85,7 +83,6 @@ import { AutomatedTriggerModule } from 'src/modules/workflow/workflow-trigger/au
     WorkspaceMigrationRunnerModule,
     TrashCleanupModule,
     BillingReminderModule,
-    ApplicationRecurringChargeModule,
     CodeInterpreterSessionCleanupModule,
     PublicDomainModule,
     EventLogCleanupModule,
@@ -111,7 +108,6 @@ import { AutomatedTriggerModule } from 'src/modules/workflow/workflow-trigger/au
     EnterpriseKeyValidationCronCommand,
     RotateSigningKeysCronCommand,
     UpgradeStatusCommand,
-    RebuildApplicationDefaultDepsCommand,
     provideWorkspaceScopedRepository(RoleEntity),
   ],
 })

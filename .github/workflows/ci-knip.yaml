@@ -26,7 +26,6 @@ jobs:
         package.json
         yarn.lock
         packages/twenty-front/**
-        packages/twenty-front-component-renderer/**
         packages/twenty-server/**
         packages/twenty-shared/**
         packages/twenty-ui/**

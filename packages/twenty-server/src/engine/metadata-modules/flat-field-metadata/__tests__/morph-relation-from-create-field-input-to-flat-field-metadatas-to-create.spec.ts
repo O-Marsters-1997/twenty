@@ -5,7 +5,6 @@ import { FieldMetadataType } from 'twenty-shared/types';
 
 import { RelationType } from 'src/engine/metadata-modules/field-metadata/interfaces/relation-type.interface';
 
-import { ApplicationState } from 'src/engine/core-modules/application/enums/application-state.enum';
 import { type FlatApplication } from 'src/engine/core-modules/application/types/flat-application.type';
 import { createEmptyFlatEntityMaps } from 'src/engine/metadata-modules/flat-entity/constant/create-empty-flat-entity-maps.constant';
 import { type FlatEntityMaps } from 'src/engine/metadata-modules/flat-entity/types/flat-entity-maps.type';
@@ -29,32 +28,12 @@ const MOCK_FLAT_APPLICATION: FlatApplication = {
   logoFileId: null,
   workspaceId: 'workspace-id',
   version: null,
-  state: ApplicationState.INSTALLED,
-  sourcePath: '',
-  packageJsonChecksum: null,
-  packageJsonFileId: null,
-  yarnLockChecksum: null,
-  yarnLockFileId: null,
-  availablePackages: {},
-  billing: {},
-  grantedCapabilities: [],
-  logicFunctionLayerId: null,
   defaultRoleId: null,
   defaultRole: null,
-  settingsCustomTabFrontComponentId: null,
-  healthCheckLogicFunctionId: null,
-  uninstallLogicFunctionId: null,
-  uninstallHookCompletedForRequestedAt: null,
-  canBeUninstalled: false,
-  autoUpgrade: false,
   primaryPublicDomainId: null,
   createdAt: new Date(),
   updatedAt: new Date(),
   deletedAt: null,
-  isSdkLayerStale: true,
-  sdkClientCoreChecksum: null,
-  frontComponentSharedDependenciesChecksum: null,
-  frontComponentSharedDependenciesBuiltPath: null,
 };
 
 const flatObjectMetadataMaps = [

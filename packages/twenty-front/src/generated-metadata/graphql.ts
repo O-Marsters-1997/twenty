@@ -375,30 +375,21 @@ export type Application = {
   applicationRegistration?: Maybe<ApplicationRegistrationSummary>;
   applicationRegistrationId?: Maybe<Scalars['UUID']['output']>;
   applicationVariables: Array<ApplicationVariable>;
-  autoUpgrade: Scalars['Boolean']['output'];
-  availablePackages: Scalars['JSON']['output'];
-  canBeUninstalled: Scalars['Boolean']['output'];
   commandMenuItems: Array<CommandMenuItem>;
   createdAt: Scalars['DateTime']['output'];
   defaultLogicFunctionRole?: Maybe<Role>;
   defaultRoleId?: Maybe<Scalars['String']['output']>;
   description?: Maybe<Scalars['String']['output']>;
   frontComponents: Array<FrontComponent>;
-  healthCheckLogicFunctionId?: Maybe<Scalars['UUID']['output']>;
   id: Scalars['UUID']['output'];
   isUninstallBlockedByOtherWorkspaceInstallations: Scalars['Boolean']['output'];
   logoFileId?: Maybe<Scalars['UUID']['output']>;
   logoUrl?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
   objects: Array<Object>;
-  packageJsonChecksum?: Maybe<Scalars['String']['output']>;
-  packageJsonFileId?: Maybe<Scalars['UUID']['output']>;
-  settingsCustomTabFrontComponentId?: Maybe<Scalars['UUID']['output']>;
   settingsMenuItems?: Maybe<Array<SettingsMenuItem>>;
   universalIdentifier: Scalars['String']['output'];
   version?: Maybe<Scalars['String']['output']>;
-  yarnLockChecksum?: Maybe<Scalars['String']['output']>;
-  yarnLockFileId?: Maybe<Scalars['UUID']['output']>;
 };
 
 export type ApplicationAuthorization = {
