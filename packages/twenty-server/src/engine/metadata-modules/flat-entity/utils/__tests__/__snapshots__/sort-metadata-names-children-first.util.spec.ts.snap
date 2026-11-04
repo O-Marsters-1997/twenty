@@ -20,7 +20,6 @@ exports[`sortMetadataNamesChildrenFirst should return metadata names sorted with
   "settingsMenuItem",
   "viewGroup",
   "agent",
-  "connectionProvider",
   "frontComponent",
   "pageLayout",
   "pageLayoutTab",

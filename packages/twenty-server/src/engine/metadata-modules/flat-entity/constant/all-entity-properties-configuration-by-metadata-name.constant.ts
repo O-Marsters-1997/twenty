@@ -1743,41 +1743,6 @@ export const ALL_ENTITY_PROPERTIES_CONFIGURATION_BY_METADATA_NAME = {
       universalProperty: undefined,
     },
   },
-  connectionProvider: {
-    name: { toCompare: true, toStringify: false, universalProperty: undefined },
-    displayName: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    logo: { toCompare: true, toStringify: false, universalProperty: undefined },
-    type: { toCompare: true, toStringify: false, universalProperty: undefined },
-    oauthConfig: {
-      toCompare: true,
-      toStringify: true,
-      universalProperty: undefined,
-    },
-    onConnectLogicFunctionUniversalIdentifier: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    onDisconnectLogicFunctionUniversalIdentifier: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    createdAt: {
-      toCompare: false,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    updatedAt: {
-      toCompare: false,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-  },
   searchFieldMetadata: {
     isSystemSideEffect: {
       toCompare: false,

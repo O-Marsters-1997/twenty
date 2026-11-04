@@ -15,7 +15,6 @@ import {
   isDefined,
 } from 'twenty-shared/utils';
 
-import { AppOAuthRevokeService } from 'src/engine/core-modules/application/connection-provider/refresh/services/app-oauth-revoke.service';
 import { CALENDAR_CHANNEL_DELETED_EVENT } from 'src/engine/metadata-modules/calendar-channel/constants/calendar-channel-deleted.constant';
 import { CalendarChannelEntity } from 'src/engine/metadata-modules/calendar-channel/entities/calendar-channel.entity';
 import { type CalendarChannelDeletedEvent } from 'src/engine/metadata-modules/calendar-channel/types/calendar-channel-deleted.type';
@@ -49,7 +48,6 @@ export class ConnectedAccountMetadataService {
     private readonly calendarChannelRepository: Repository<CalendarChannelEntity>,
     @InjectRepository(MessageChannelEntity)
     private readonly messageChannelRepository: Repository<MessageChannelEntity>,
-    private readonly appOAuthRevokeService: AppOAuthRevokeService,
     private readonly permissionsService: PermissionsService,
     private readonly workspaceEventEmitter: WorkspaceEventEmitter,
     private readonly calendarWebhookSubscriptionService: CalendarWebhookSubscriptionService,
@@ -161,7 +159,6 @@ export class ConnectedAccountMetadataService {
         scopes: true,
         lastSignedInAt: true,
         userWorkspaceId: true,
-        connectionProviderId: true,
         applicationId: true,
         workspaceId: true,
         name: true,
@@ -454,10 +451,6 @@ export class ConnectedAccountMetadataService {
         { webhookSubscriptionStatus: WebhookSubscriptionStatus.EXPIRED },
       );
     });
-
-    for (const connectedAccount of connectedAccounts) {
-      await this.appOAuthRevokeService.revokeIfApp(connectedAccount);
-    }
   }
 
   async disconnect({
@@ -467,11 +460,7 @@ export class ConnectedAccountMetadataService {
     id: string;
     workspaceId: string;
   }): Promise<ConnectedAccountEntity> {
-    const connectedAccount = await this.repository.findOneOrFail({
-      where: { id, workspaceId },
-    });
-
-    await this.appOAuthRevokeService.revokeIfApp(connectedAccount);
+    await this.repository.findOneOrFail({ where: { id, workspaceId } });
 
     const [messageChannels, calendarChannels] = await Promise.all([
       this.messageChannelRepository.find({
@@ -581,16 +570,6 @@ export class ConnectedAccountMetadataService {
       calendarChannels,
       workspaceId,
     });
-
-    // The hook may have refreshed the tokens through getConnection, and an
-    // overlapping delete may already have removed the row.
-    const latestConnectedAccount = await this.repository.findOne({
-      where: { id, workspaceId },
-    });
-
-    if (isDefined(latestConnectedAccount)) {
-      await this.appOAuthRevokeService.revokeIfApp(latestConnectedAccount);
-    }
 
     await this.repository.delete({ id, workspaceId });
 

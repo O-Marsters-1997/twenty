@@ -24,8 +24,6 @@ import { type FieldMetadataEntity } from 'src/engine/metadata-modules/field-meta
 import { type FlatAgentMaps } from 'src/engine/metadata-modules/flat-agent/types/flat-agent-maps.type';
 import { type FlatAgent } from 'src/engine/metadata-modules/flat-agent/types/flat-agent.type';
 import { type FlatCommandMenuItemMaps } from 'src/engine/metadata-modules/flat-command-menu-item/types/flat-command-menu-item-maps.type';
-import { type FlatConnectionProviderMaps } from 'src/engine/metadata-modules/flat-connection-provider/types/flat-connection-provider-maps.type';
-import { type FlatConnectionProvider } from 'src/engine/metadata-modules/flat-connection-provider/types/flat-connection-provider.type';
 import { type FlatTimelineActivityTypeMaps } from 'src/engine/metadata-modules/flat-timeline-activity-type/types/flat-timeline-activity-type-maps.type';
 import { type FlatTimelineActivityType } from 'src/engine/metadata-modules/flat-timeline-activity-type/types/flat-timeline-activity-type.type';
 import { type FlatValidationRuleMaps } from 'src/engine/metadata-modules/flat-validation-rule/types/flat-validation-rule-maps.type';
@@ -87,7 +85,6 @@ import { type FlatRowLevelPermissionPredicateMaps } from 'src/engine/metadata-mo
 import { type FlatRowLevelPermissionPredicate } from 'src/engine/metadata-modules/row-level-permission-predicate/types/flat-row-level-permission-predicate.type';
 import { type UniversalFlatAgent } from 'src/engine/workspace-manager/workspace-migration/universal-flat-entity/types/universal-flat-agent.type';
 import { type UniversalFlatCommandMenuItem } from 'src/engine/workspace-manager/workspace-migration/universal-flat-entity/types/universal-flat-command-menu-item.type';
-import { type UniversalFlatConnectionProvider } from 'src/engine/workspace-manager/workspace-migration/universal-flat-entity/types/universal-flat-connection-provider.type';
 import { type UniversalFlatTimelineActivityType } from 'src/engine/workspace-manager/workspace-migration/universal-flat-entity/types/universal-flat-timeline-activity-type.type';
 import { type UniversalFlatValidationRule } from 'src/engine/workspace-manager/workspace-migration/universal-flat-entity/types/universal-flat-validation-rule.type';
 import { type UniversalFlatEntityFrom } from 'src/engine/workspace-manager/workspace-migration/universal-flat-entity/types/universal-flat-entity-from.type';
@@ -132,14 +129,6 @@ import {
   type UniversalDeleteCommandMenuItemAction,
   type UniversalUpdateCommandMenuItemAction,
 } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-builder/builders/command-menu-item/types/workspace-migration-command-menu-item-action.type';
-import {
-  type FlatCreateConnectionProviderAction,
-  type FlatDeleteConnectionProviderAction,
-  type FlatUpdateConnectionProviderAction,
-  type UniversalCreateConnectionProviderAction,
-  type UniversalDeleteConnectionProviderAction,
-  type UniversalUpdateConnectionProviderAction,
-} from 'src/engine/workspace-manager/workspace-migration/workspace-migration-builder/builders/connection-provider/types/workspace-migration-connection-provider-action.type';
 import {
   type FlatCreateTimelineActivityTypeAction,
   type FlatDeleteTimelineActivityTypeAction,
@@ -811,22 +800,6 @@ export type AllFlatEntityTypesByMetadataName = {
     flatEntity: FlatWebhook;
     universalFlatEntity: UniversalFlatWebhook;
     entity: MetadataEntity<'webhook'>;
-  };
-  connectionProvider: {
-    flatEntityMaps: FlatConnectionProviderMaps;
-    universalActions: {
-      create: UniversalCreateConnectionProviderAction;
-      update: UniversalUpdateConnectionProviderAction;
-      delete: UniversalDeleteConnectionProviderAction;
-    };
-    flatActions: {
-      create: FlatCreateConnectionProviderAction;
-      update: FlatUpdateConnectionProviderAction;
-      delete: FlatDeleteConnectionProviderAction;
-    };
-    flatEntity: FlatConnectionProvider;
-    universalFlatEntity: UniversalFlatConnectionProvider;
-    entity: MetadataEntity<'connectionProvider'>;
   };
   searchFieldMetadata: {
     flatEntityMaps: FlatSearchFieldMetadataMaps;
