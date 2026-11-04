@@ -24,8 +24,6 @@ import { AgentConversationWriterService } from 'src/engine/metadata-modules/ai/a
 import { type AgentChatThreadWorkspaceEntity } from 'src/engine/metadata-modules/ai/ai-history/standard-objects/agent-chat-thread.workspace-entity';
 import { type AgentMessagePartWorkspaceEntity } from 'src/engine/metadata-modules/ai/ai-history/standard-objects/agent-message-part.workspace-entity';
 import { type AgentMessageWorkspaceEntity } from 'src/engine/metadata-modules/ai/ai-history/standard-objects/agent-message.workspace-entity';
-import { type FlatLogicFunction } from 'src/engine/metadata-modules/logic-function/types/flat-logic-function.type';
-import { WorkspaceCacheService } from 'src/engine/workspace-cache/services/workspace-cache.service';
 import { AgentTurnStatus } from 'src/engine/metadata-modules/ai/ai-history/enums/agent-turn-status.enum';
 
 const findNewWorkspaceMemberIds = (
@@ -50,7 +48,6 @@ export class AgentInboxService {
     private readonly threadService: AgentChatThreadService,
     private readonly sharingService: AgentChatSharingService,
     private readonly conversationWriterService: AgentConversationWriterService,
-    private readonly workspaceCacheService: WorkspaceCacheService,
   ) {}
 
   // Every record has an id derived from the keys: the thread key picks the
@@ -135,12 +132,6 @@ export class AgentInboxService {
             toolCall: input.toolCall,
             toolCallId,
             resolveProposal,
-            findApplicationTool: (logicFunctionUniversalIdentifier) =>
-              this.findApplicationTool({
-                workspaceId,
-                applicationId: senderDetails.applicationId,
-                logicFunctionUniversalIdentifier,
-              }),
           })
         : undefined;
 
@@ -452,33 +443,5 @@ export class AgentInboxService {
         select: ['id'],
       }),
     );
-  }
-
-  private async findApplicationTool({
-    workspaceId,
-    applicationId,
-    logicFunctionUniversalIdentifier,
-  }: {
-    workspaceId: string;
-    applicationId: string | null;
-    logicFunctionUniversalIdentifier: string;
-  }): Promise<FlatLogicFunction | undefined> {
-    if (!isDefined(applicationId)) {
-      return undefined;
-    }
-
-    const { flatLogicFunctionMaps } =
-      await this.workspaceCacheService.getOrRecompute(workspaceId, [
-        'flatLogicFunctionMaps',
-      ]);
-    const logicFunction =
-      flatLogicFunctionMaps.byUniversalIdentifier[
-        logicFunctionUniversalIdentifier
-      ];
-
-    return logicFunction?.applicationId === applicationId &&
-      !isDefined(logicFunction.deletedAt)
-      ? logicFunction
-      : undefined;
   }
 }
