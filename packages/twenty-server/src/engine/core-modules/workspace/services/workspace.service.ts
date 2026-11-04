@@ -36,7 +36,6 @@ import { type FlatApplication } from 'src/engine/core-modules/application/types/
 import { getScopedCallingApplication } from 'src/engine/core-modules/application/utils/get-scoped-calling-application.util';
 import { ApplicationService } from 'src/engine/core-modules/application/application.service';
 import { ApplicationUninstallService } from 'src/engine/core-modules/application/application-manifest/services/application-uninstall.service';
-import { PreInstalledAppsService } from 'src/engine/core-modules/application/pre-installed-apps/pre-installed-apps.service';
 import { type AuthContextUser } from 'src/engine/core-modules/auth/types/auth-context.type';
 import { BillingSubscriptionService } from 'src/engine/core-modules/billing/services/billing-subscription.service';
 import { BillingService } from 'src/engine/core-modules/billing/services/billing.service';
@@ -171,7 +170,6 @@ export class WorkspaceService {
     private readonly dnsManagerService: DnsManagerService,
     private readonly flatEntityMapsCacheService: WorkspaceManyOrAllFlatEntityMapsCacheService,
     private readonly applicationService: ApplicationService,
-    private readonly preInstalledAppsService: PreInstalledAppsService,
     private readonly workspaceMigrationValidateBuildAndRunService: WorkspaceMigrationValidateBuildAndRunService,
     private readonly workspaceCacheStorageService: WorkspaceCacheStorageService,
     private readonly subdomainManagerService: SubdomainManagerService,
@@ -554,8 +552,6 @@ export class WorkspaceService {
       await this.activateAndInitializeUpgradeState({
         workspaceId: workspace.id,
       });
-
-      await this.enqueuePreInstalledAppsInstallation(workspace.id);
     } catch (error) {
       await this.workspaceRepository.update(workspace.id, {
         activationStatus: WorkspaceActivationStatus.PENDING_CREATION,
@@ -1223,20 +1219,6 @@ export class WorkspaceService {
     } catch (error) {
       this.logger.error(
         `Non-critical: failed to prefill workflow command menu items for workspace ${workspaceId}`,
-        error,
-      );
-      this.exceptionHandlerService.captureExceptions([error as Error]);
-    }
-  }
-
-  private async enqueuePreInstalledAppsInstallation(
-    workspaceId: string,
-  ): Promise<void> {
-    try {
-      await this.preInstalledAppsService.enqueueInstallOnWorkspace(workspaceId);
-    } catch (error) {
-      this.logger.error(
-        `Non-critical: failed to enqueue pre-installed apps installation for workspace ${workspaceId}`,
         error,
       );
       this.exceptionHandlerService.captureExceptions([error as Error]);

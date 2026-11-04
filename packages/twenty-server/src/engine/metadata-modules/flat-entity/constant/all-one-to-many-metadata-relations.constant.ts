@@ -300,7 +300,6 @@ export const ALL_ONE_TO_MANY_METADATA_RELATIONS = {
   },
   frontComponent: {},
   webhook: {},
-  applicationVariable: {},
   viewSort: {},
   connectionProvider: {},
   searchFieldMetadata: {},

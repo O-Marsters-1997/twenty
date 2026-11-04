@@ -14,8 +14,6 @@ import {
 } from 'typeorm';
 
 import { ADD_STATUS_TO_FILE_UPGRADE_COMMAND_NAME } from 'src/database/commands/upgrade-version-command/2-19/add-status-to-file-upgrade-command-name.constant';
-import { ALLOW_SERVER_SCOPED_FILE_UPGRADE_COMMAND_NAME } from 'src/database/commands/upgrade-version-command/2-20/allow-server-scoped-file-upgrade-command-name.constant';
-import { type ApplicationRegistrationEntity } from 'src/engine/core-modules/application/application-registration/application-registration.entity';
 import { ApplicationEntity } from 'src/engine/core-modules/application/application.entity';
 import { FileSettings } from 'src/engine/core-modules/file/types/file-settings.type';
 import {
@@ -31,23 +29,11 @@ import { nullableBigintColumnTransformer } from 'src/engine/twenty-orm/utils/nul
   'CHK_FILE_PENDING_MIME_OCTET_STREAM',
   `"status" != 'PENDING' OR "mimeType" = 'application/octet-stream'`,
 )
-@Check(
-  'CHK_FILE_WORKSPACE_ID_OR_APPLICATION_REGISTRATION_ID',
-  `"workspaceId" IS NOT NULL OR "applicationRegistrationId" IS NOT NULL`,
-)
-@Check(
-  'CHK_FILE_WORKSPACE_ID_XOR_APPLICATION_REGISTRATION_ID',
-  `"workspaceId" IS NULL OR "applicationRegistrationId" IS NULL`,
-)
 @Index('IDX_FILE_WORKSPACE_ID', ['workspaceId'])
 @Index('IDX_FILE_STATUS', ['status'])
 @Unique('IDX_FILE_APPLICATION_ID_WORKSPACE_ID_PATH_UNIQUE', [
   'applicationId',
   'workspaceId',
-  'path',
-])
-@Unique('IDX_FILE_APPLICATION_REGISTRATION_ID_PATH_UNIQUE', [
-  'applicationRegistrationId',
   'path',
 ])
 export class FileEntity {
@@ -72,19 +58,6 @@ export class FileEntity {
   })
   @JoinColumn({ name: 'applicationId' })
   application: Relation<ApplicationEntity>;
-
-  @WasIntroducedInUpgrade({
-    upgradeCommandName: ALLOW_SERVER_SCOPED_FILE_UPGRADE_COMMAND_NAME,
-  })
-  @Column({ nullable: true, type: 'uuid' })
-  applicationRegistrationId: string | null;
-
-  @ManyToOne('ApplicationRegistrationEntity', {
-    onDelete: 'CASCADE',
-    nullable: true,
-  })
-  @JoinColumn({ name: 'applicationRegistrationId' })
-  applicationRegistration: Relation<ApplicationRegistrationEntity> | null;
 
   @Column({ nullable: false })
   path: string;

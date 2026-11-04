@@ -18,8 +18,6 @@ import { MetadataResolver } from 'src/engine/api/graphql/graphql-config/decorato
 import { UUIDScalarType } from 'src/engine/api/graphql/workspace-schema-builder/graphql-types/scalars';
 import { ApplicationExceptionFilter } from 'src/engine/core-modules/application/application-exception-filter';
 import { ApplicationTokenPairDTO } from 'src/engine/core-modules/application/application-oauth/dtos/application-token-pair.dto';
-import { UserApplicationVariableValueService } from 'src/engine/core-modules/application/application-variable/user-application-variable-value.service';
-import { ApplicationVariableEntityService } from 'src/engine/core-modules/application/application-variable/application-variable.service';
 import { type FlatApplication } from 'src/engine/core-modules/application/types/flat-application.type';
 import { canCallerReachApplication } from 'src/engine/core-modules/application/utils/can-caller-reach-application.util';
 import { ApplicationTokenService } from 'src/engine/core-modules/auth/token/services/application-token.service';
@@ -68,8 +66,6 @@ export class FrontComponentResolver {
     private readonly frontComponentService: FrontComponentService,
     @Inject(ApplicationTokenService)
     private readonly applicationTokenService: ApplicationTokenService,
-    private readonly applicationVariableService: ApplicationVariableEntityService,
-    private readonly userApplicationVariableValueService: UserApplicationVariableValueService,
     private readonly workspaceCacheService: WorkspaceCacheService,
   ) {}
 
@@ -168,28 +164,18 @@ export class FrontComponentResolver {
 
     const selectedFields = graphqlFields(info);
 
-    const [applicationTokenPair, applicationVariables] = await Promise.all([
-      isDefined(selectedFields.applicationTokenPair)
-        ? this.applicationTokenService.generateApplicationTokenPair({
-            applicationId: dto.applicationId,
-            workspaceId: workspace.id,
-            userWorkspaceId,
-            userId: user.id,
-          })
-        : undefined,
-      isDefined(selectedFields.applicationVariables)
-        ? this.getPublicApplicationVariables({
-            workspaceId: workspace.id,
-            applicationId: dto.applicationId,
-            userWorkspaceId,
-          })
-        : undefined,
-    ]);
+    const applicationTokenPair = isDefined(selectedFields.applicationTokenPair)
+      ? await this.applicationTokenService.generateApplicationTokenPair({
+          applicationId: dto.applicationId,
+          workspaceId: workspace.id,
+          userWorkspaceId,
+          userId: user.id,
+        })
+      : undefined;
 
     return {
       ...dto,
       applicationTokenPair,
-      applicationVariables,
     };
   }
 
@@ -304,29 +290,5 @@ export class FrontComponentResolver {
     });
 
     return fromFlatFrontComponentToFrontComponentDto(flatFrontComponent);
-  }
-
-  private async getPublicApplicationVariables({
-    workspaceId,
-    applicationId,
-    userWorkspaceId,
-  }: {
-    workspaceId: string;
-    applicationId: string;
-    userWorkspaceId: string;
-  }): Promise<Record<string, string>> {
-    const [workspaceVariables, userVariables] = await Promise.all([
-      this.applicationVariableService.getPublicEnvVariables({
-        workspaceId,
-        applicationId,
-      }),
-      this.userApplicationVariableValueService.getPublicEnvVariables({
-        workspaceId,
-        applicationId,
-        userWorkspaceId,
-      }),
-    ]);
-
-    return { ...workspaceVariables, ...userVariables };
   }
 }

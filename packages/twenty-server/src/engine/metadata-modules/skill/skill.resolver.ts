@@ -71,7 +71,6 @@ export class SkillResolver {
       {
         kind: 'applicationOwnedEntity',
         metadataName: 'skill',
-        requireApplicationRegistrationOwnership: false,
       },
       { type: () => UUIDScalarType },
     )

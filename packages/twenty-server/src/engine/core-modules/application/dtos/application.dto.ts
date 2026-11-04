@@ -11,8 +11,6 @@ import {
 import GraphQLJSON from 'graphql-type-json';
 
 import { UUIDScalarType } from 'src/engine/api/graphql/workspace-schema-builder/graphql-types/scalars';
-import { ApplicationRegistrationSummaryDTO } from 'src/engine/core-modules/application/application-registration/dtos/application-registration-summary.dto';
-import { ApplicationVariableEntityDTO } from 'src/engine/core-modules/application/application-variable/dtos/application-variable.dto';
 import { AgentDTO } from 'src/engine/metadata-modules/ai/ai-agent/dtos/agent.dto';
 import { CommandMenuItemDTO } from 'src/engine/metadata-modules/command-menu-item/dtos/command-menu-item.dto';
 import { SettingsMenuItemDTO } from 'src/engine/metadata-modules/settings-menu-item/dtos/settings-menu-item.dto';
@@ -80,11 +78,6 @@ export class ApplicationDTO {
   @Field(() => GraphQLJSON)
   availablePackages: Record<string, string>;
 
-  @IsOptional()
-  @IsUUID()
-  @Field(() => UUIDScalarType, { nullable: true })
-  applicationRegistrationId?: string;
-
   @Field(() => Boolean)
   @IsBoolean()
   canBeUninstalled: boolean;
@@ -133,11 +126,4 @@ export class ApplicationDTO {
 
   @Field(() => [ObjectMetadataDTO])
   objects?: ObjectMetadataDTO[];
-
-  @Field(() => [ApplicationVariableEntityDTO])
-  applicationVariables?: ApplicationVariableEntityDTO[];
-
-  @IsOptional()
-  @Field(() => ApplicationRegistrationSummaryDTO, { nullable: true })
-  applicationRegistration?: ApplicationRegistrationSummaryDTO;
 }

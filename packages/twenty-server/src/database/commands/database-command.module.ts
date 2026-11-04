@@ -7,7 +7,6 @@ import { CronRegisterAllCommand } from 'src/database/commands/cron-register-all.
 import { DataSeedWorkspaceCommand } from 'src/database/commands/data-seed-dev-workspace.command';
 import { SecretEncryptionRotationModule } from 'src/database/commands/secret-encryption-rotation/secret-encryption-rotation.module';
 import { GenerateInstanceCommandCommand } from 'src/database/commands/generate-instance-command.command';
-import { InstallPreInstalledAppsCommand } from 'src/database/commands/install-pre-installed-apps.command';
 import { InstanceCommandGenerationService } from 'src/database/commands/instance-command-generation.service';
 import { ListOrphanedWorkspaceEntitiesCommand } from 'src/database/commands/list-and-delete-orphaned-workspace-entities.command';
 import { ConfirmationQuestion } from 'src/database/commands/questions/confirmation.question';
@@ -17,12 +16,7 @@ import { UpgradeVersionCommandModule } from 'src/database/commands/upgrade-versi
 import { WorkspaceExportModule } from 'src/database/commands/workspace-export/workspace-export.module';
 import { TypeORMModule } from 'src/database/typeorm/typeorm.module';
 import { ApiKeyModule } from 'src/engine/core-modules/api-key/api-key.module';
-import { ApplicationInstallModule } from 'src/engine/core-modules/application/application-install/application-install.module';
-import { MarketplaceModule } from 'src/engine/core-modules/application/application-marketplace/marketplace.module';
-import { StaleRegistrationCleanupModule } from 'src/engine/core-modules/application/application-oauth/stale-registration-cleanup/stale-registration-cleanup.module';
-import { ApplicationUpgradeModule } from 'src/engine/core-modules/application/application-upgrade/application-upgrade.module';
 import { ApplicationModule } from 'src/engine/core-modules/application/application.module';
-import { PreInstalledAppsModule } from 'src/engine/core-modules/application/pre-installed-apps/pre-installed-apps.module';
 import { ApplicationRecurringChargeModule } from 'src/engine/core-modules/billing/app-billing/application-recurring-charge.module';
 import { BillingReminderModule } from 'src/engine/core-modules/billing/reminders/billing-reminder.module';
 import { EnterpriseKeyValidationCronCommand } from 'src/engine/core-modules/enterprise/cron/command/organization-key-validation.cron.command';
@@ -97,11 +91,6 @@ import { AutomatedTriggerModule } from 'src/modules/workflow/workflow-trigger/au
     EventLogCleanupModule,
     EnterpriseModule,
     TwentyConfigModule,
-    MarketplaceModule,
-    ApplicationInstallModule,
-    ApplicationUpgradeModule,
-    StaleRegistrationCleanupModule,
-    PreInstalledAppsModule,
     WorkspaceIteratorModule,
     ApplicationModule,
     WorkspaceCacheModule,
@@ -123,7 +112,6 @@ import { AutomatedTriggerModule } from 'src/modules/workflow/workflow-trigger/au
     RotateSigningKeysCronCommand,
     UpgradeStatusCommand,
     RebuildApplicationDefaultDepsCommand,
-    InstallPreInstalledAppsCommand,
     provideWorkspaceScopedRepository(RoleEntity),
   ],
 })

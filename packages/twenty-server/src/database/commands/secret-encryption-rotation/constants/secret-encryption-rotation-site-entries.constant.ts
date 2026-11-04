@@ -3,9 +3,6 @@ import { type Type } from '@nestjs/common';
 import { ConnectionParametersRotationHandler } from 'src/database/commands/secret-encryption-rotation/handlers/connection-parameters-rotation.handler';
 import { SensitiveConfigStorageRotationHandler } from 'src/database/commands/secret-encryption-rotation/handlers/sensitive-config-storage-rotation.handler';
 import { type SecretEncryptionRotationHandler } from 'src/database/commands/secret-encryption-rotation/interfaces/secret-encryption-rotation-handler.interface';
-import { ApplicationRegistrationVariableEntity } from 'src/engine/core-modules/application/application-registration-variable/application-registration-variable.entity';
-import { ApplicationVariableEntity } from 'src/engine/core-modules/application/application-variable/application-variable.entity';
-import { UserApplicationVariableValueEntity } from 'src/engine/core-modules/application/application-variable/user-application-variable-value.entity';
 import { SigningKeyEntity } from 'src/engine/core-modules/jwt/entities/signing-key.entity';
 import { type ExtractEncryptedColumns } from 'src/engine/core-modules/secret-encryption/branded-strings/extract-encrypted-columns.type';
 import { TwoFactorAuthenticationMethodEntity } from 'src/engine/core-modules/two-factor-authentication/entities/two-factor-authentication-method.entity';
@@ -42,30 +39,6 @@ const defineRotationRegistry = <
 ) => registry;
 
 export const SECRET_ENCRYPTION_ROTATION_SITE_ENTRIES = defineRotationRegistry({
-  ApplicationRegistrationVariableEntity: {
-    entity: ApplicationRegistrationVariableEntity,
-    columnSiteNames: {
-      encryptedValue: {
-        siteName: 'application-registration-variable',
-        customHandler: undefined,
-        isWorkspaceScoped: false,
-        extraWhere: undefined,
-        workspaceCacheKeyNames: [],
-      },
-    },
-  },
-  ApplicationVariableEntity: {
-    entity: ApplicationVariableEntity,
-    columnSiteNames: {
-      value: {
-        siteName: 'application-variable',
-        customHandler: undefined,
-        isWorkspaceScoped: true,
-        extraWhere: undefined,
-        workspaceCacheKeyNames: ['flatApplicationVariableMaps'],
-      },
-    },
-  },
   ConnectedAccountEntity: {
     entity: ConnectedAccountEntity,
     columnSiteNames: {
@@ -113,18 +86,6 @@ export const SECRET_ENCRYPTION_ROTATION_SITE_ENTRIES = defineRotationRegistry({
         isWorkspaceScoped: true,
         extraWhere: undefined,
         workspaceCacheKeyNames: [],
-      },
-    },
-  },
-  UserApplicationVariableValueEntity: {
-    entity: UserApplicationVariableValueEntity,
-    columnSiteNames: {
-      value: {
-        siteName: 'user-application-variable-value',
-        customHandler: undefined,
-        isWorkspaceScoped: true,
-        extraWhere: undefined,
-        workspaceCacheKeyNames: ['userApplicationVariableValueMaps'],
       },
     },
   },

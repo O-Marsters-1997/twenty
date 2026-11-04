@@ -5,13 +5,10 @@ import { type IndexMetadataConnectionLoaderPayload } from 'src/engine/dataloader
 import {
   type AgentsByRoleIdLoaderPayload,
   type ApiKeysByRoleIdLoaderPayload,
-  type ApplicationRegistrationInstallCountLoaderPayload,
-  type ApplicationTranslationCatalogLoaderPayload,
   type FieldMetadataLoaderPayload,
   type IndexFieldMetadataLoaderPayload,
   type IndexMetadataLoaderPayload,
   type SearchFieldMetadataLoaderPayload,
-  type IsConfiguredLoaderPayload,
   type MorphRelationLoaderPayload,
   type ApplicationAuthorIdentifiersLoaderPayload,
   type ObjectMetadataLoaderPayload,
@@ -125,21 +122,9 @@ export interface IDataloaders {
     ViewFilterGroupDTO[]
   >;
 
-  isConfiguredLoader: DataLoader<IsConfiguredLoaderPayload, boolean>;
-
-  applicationRegistrationInstallCountLoader: DataLoader<
-    ApplicationRegistrationInstallCountLoaderPayload,
-    number
-  >;
-
   applicationAuthorIdentifiersLoader: DataLoader<
     ApplicationAuthorIdentifiersLoaderPayload,
     ApplicationAuthorIdentifiers
-  >;
-
-  applicationTranslationCatalogLoader: DataLoader<
-    ApplicationTranslationCatalogLoaderPayload,
-    Record<string, string> | undefined
   >;
 
   workspaceMembersByRoleIdLoader: DataLoader<

@@ -1,12 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import crypto, { randomUUID } from 'node:crypto';
+import { randomUUID } from 'node:crypto';
 
 import { msg } from '@lingui/core/macro';
 import { isNonEmptyString } from '@sniptt/guards';
-import { addMilliseconds } from 'date-fns';
-import ms from 'ms';
 import { PasswordUpdateNotifyEmail, renderEmail } from 'twenty-emails';
 import { PermissionFlagType } from 'twenty-shared/constants';
 import { AppPath, ConnectedAccountProvider } from 'twenty-shared/types';
@@ -17,7 +15,6 @@ import {
   AppTokenEntity,
   AppTokenType,
 } from 'src/engine/core-modules/app-token/app-token.entity';
-import { ApplicationRegistrationService } from 'src/engine/core-modules/application/application-registration/application-registration.service';
 import { isEmailInApprovedAccessDomains } from 'src/engine/core-modules/approved-access-domain/utils/is-email-in-approved-access-domains.util';
 import {
   AuthException,
@@ -28,8 +25,6 @@ import {
   hashPassword,
 } from 'src/engine/core-modules/auth/auth.util';
 import { type AuthTokens } from 'src/engine/core-modules/auth/dto/auth-tokens.dto';
-import { type AuthorizeAppDTO } from 'src/engine/core-modules/auth/dto/authorize-app.dto';
-import { type AuthorizeAppInput } from 'src/engine/core-modules/auth/dto/authorize-app.input';
 import { type UpdatePasswordDTO } from 'src/engine/core-modules/auth/dto/update-password.dto';
 import { type UserCredentialsInput } from 'src/engine/core-modules/auth/dto/user-credentials.input';
 import { type CheckUserExistDTO } from 'src/engine/core-modules/auth/dto/user-exists.dto';
@@ -43,7 +38,6 @@ import { AccessTokenService } from 'src/engine/core-modules/auth/token/services/
 import { LoginTokenService } from 'src/engine/core-modules/auth/token/services/login-token.service';
 import { RefreshTokenService } from 'src/engine/core-modules/auth/token/services/refresh-token.service';
 import { SsoExchangeTokenService } from 'src/engine/core-modules/auth/token/services/sso-exchange-token.service';
-import { AuthContextUser } from 'src/engine/core-modules/auth/types/auth-context.type';
 import { JwtTokenTypeEnum } from 'src/engine/core-modules/auth/types/jwt-token-type.enum';
 import {
   type AuthProviderWithPasswordType,
@@ -51,9 +45,7 @@ import {
   type SignInUpBaseParams,
   type SignInUpNewUserPayload,
 } from 'src/engine/core-modules/auth/types/sign-in-up.type';
-import { assertIssuerIsPublishedOrThrow } from 'src/engine/core-modules/auth/utils/assert-issuer-is-published.util';
 import { assertUserPasswordIsValidOrThrow } from 'src/engine/core-modules/auth/utils/assert-user-password-is-valid-or-throw.util';
-import { validateRedirectUri } from 'src/engine/core-modules/auth/utils/validate-redirect-uri.util';
 import { DomainServerConfigService } from 'src/engine/core-modules/domain/domain-server-config/services/domain-server-config.service';
 import { WorkspaceDomainsService } from 'src/engine/core-modules/domain/workspace-domains/services/workspace-domains.service';
 import { WorkspaceDomainConfig } from 'src/engine/core-modules/domain/workspace-domains/types/workspace-domain-config.type';
@@ -105,7 +97,6 @@ export class AuthService {
     private readonly appTokenRepository: Repository<AppTokenEntity>,
     private readonly i18nService: I18nService,
     private readonly eventLogEmitterService: EventLogEmitterService,
-    private readonly applicationRegistrationService: ApplicationRegistrationService,
     private readonly featureFlagService: FeatureFlagService,
     private readonly createSsoConnectedAccountService: CreateSsoConnectedAccountService,
     private readonly userSessionService: UserSessionService,
@@ -514,165 +505,6 @@ export class AuthService {
     });
 
     return { isValid: !!workspace };
-  }
-
-  async generateAuthorizationCode({
-    authorizeAppInput,
-    user,
-    workspace,
-    requestBaseUrl,
-  }: {
-    authorizeAppInput: AuthorizeAppInput;
-    user: AuthContextUser;
-    workspace: WorkspaceEntity;
-    requestBaseUrl: string;
-  }): Promise<AuthorizeAppDTO> {
-    const { clientId, codeChallenge } = authorizeAppInput;
-
-    const applicationRegistration =
-      await this.applicationRegistrationService.findOneByClientId(clientId);
-
-    if (!applicationRegistration) {
-      throw new AuthException(
-        `Client not found for '${clientId}'`,
-        AuthExceptionCode.CLIENT_NOT_FOUND,
-      );
-    }
-
-    if (!authorizeAppInput.redirectUrl) {
-      throw new AuthException(
-        `redirectUrl not provided for '${clientId}'`,
-        AuthExceptionCode.FORBIDDEN_EXCEPTION,
-      );
-    }
-
-    // OAuth 2.1 / MCP auth spec: PKCE is mandatory for public clients (no client secret)
-    const isPublicClient = !applicationRegistration.oAuthClientSecretHash;
-
-    if (isPublicClient && !codeChallenge) {
-      throw new AuthException(
-        `code_challenge is required for public clients (PKCE S256, per OAuth 2.1)`,
-        AuthExceptionCode.FORBIDDEN_EXCEPTION,
-      );
-    }
-
-    // RFC 8252 §7.3: native apps may use any loopback port, so a registration without redirect URIs
-    // (e.g. the seeded CLI one) accepts any loopback redirect URI
-    const hasRegisteredRedirectUris =
-      applicationRegistration.oAuthRedirectUris.length > 0;
-
-    if (hasRegisteredRedirectUris) {
-      if (
-        !applicationRegistration.oAuthRedirectUris.includes(
-          authorizeAppInput.redirectUrl,
-        )
-      ) {
-        throw new AuthException(
-          `redirectUrl mismatch for '${clientId}'`,
-          AuthExceptionCode.FORBIDDEN_EXCEPTION,
-        );
-      }
-    } else {
-      let redirectUrl: URL;
-
-      try {
-        redirectUrl = new URL(authorizeAppInput.redirectUrl);
-      } catch {
-        throw new AuthException(
-          `Invalid redirectUrl for '${clientId}'`,
-          AuthExceptionCode.FORBIDDEN_EXCEPTION,
-        );
-      }
-
-      const isLoopback =
-        redirectUrl.hostname === 'localhost' ||
-        redirectUrl.hostname === '127.0.0.1';
-
-      if (!isLoopback) {
-        throw new AuthException(
-          `redirectUrl mismatch for '${clientId}'`,
-          AuthExceptionCode.FORBIDDEN_EXCEPTION,
-        );
-      }
-    }
-
-    const parsedScopes = authorizeAppInput.scope
-      ? authorizeAppInput.scope.split(' ').filter(Boolean)
-      : [];
-
-    const requestedScopes =
-      parsedScopes.length > 0
-        ? parsedScopes
-        : applicationRegistration.oAuthScopes;
-
-    const invalidScopes = requestedScopes.filter(
-      (scope) => !applicationRegistration.oAuthScopes.includes(scope),
-    );
-
-    if (invalidScopes.length > 0) {
-      throw new AuthException(
-        `Invalid scopes: ${invalidScopes.join(', ')}`,
-        AuthExceptionCode.FORBIDDEN_EXCEPTION,
-      );
-    }
-
-    const redirectUriValidation = validateRedirectUri(
-      authorizeAppInput.redirectUrl,
-    );
-
-    if (!redirectUriValidation.valid) {
-      throw new AuthException(
-        redirectUriValidation.reason,
-        AuthExceptionCode.FORBIDDEN_EXCEPTION,
-      );
-    }
-
-    const authorizationCode = crypto.randomBytes(42).toString('hex');
-    const hashedAuthorizationCode = crypto
-      .createHash('sha256')
-      .update(authorizationCode)
-      .digest('hex');
-
-    const expiresAt = addMilliseconds(new Date().getTime(), ms('5m'));
-
-    const authCodeContext = {
-      redirectUri: authorizeAppInput.redirectUrl,
-      clientId: applicationRegistration.oAuthClientId,
-      scope: requestedScopes.join(' '),
-      ...(codeChallenge ? { codeChallenge } : {}),
-    };
-
-    const token = this.appTokenRepository.create({
-      value: hashedAuthorizationCode,
-      type: AppTokenType.AuthorizationCode,
-      userId: user.id,
-      workspaceId: workspace.id,
-      expiresAt,
-      context: authCodeContext,
-    });
-
-    await this.appTokenRepository.save(token);
-
-    redirectUriValidation.parsed.searchParams.set('code', authorizationCode);
-
-    const issuer = authorizeAppInput.issuer ?? requestBaseUrl;
-
-    assertIssuerIsPublishedOrThrow({
-      issuer,
-      requestBaseUrl,
-      serverUrl: this.twentyConfigService.get('SERVER_URL'),
-    });
-
-    redirectUriValidation.parsed.searchParams.set('iss', issuer);
-
-    if (authorizeAppInput.state) {
-      redirectUriValidation.parsed.searchParams.set(
-        'state',
-        authorizeAppInput.state,
-      );
-    }
-
-    return { redirectUrl: redirectUriValidation.parsed.toString() };
   }
 
   async updatePassword(

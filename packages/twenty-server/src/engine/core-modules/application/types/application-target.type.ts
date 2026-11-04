@@ -3,7 +3,6 @@ import { type AllMetadataName } from 'twenty-shared/metadata';
 export type ApplicationTargetKind =
   | { kind: 'applicationId' }
   | { kind: 'applicationUniversalIdentifier' }
-  | { kind: 'applicationRegistrationId' }
   | {
       kind: 'applicationOwnedEntity';
       metadataName: AllMetadataName;
@@ -31,4 +30,4 @@ export type ApplicationTarget = ApplicationTargetKind &
     | { source: 'graphqlArg'; argName: string; idKey?: string }
     | { source: 'graphqlArgs'; idKey: string }
     | { source: 'routeParam'; argName: string }
-  ) & { requireApplicationRegistrationOwnership: boolean };
+  );

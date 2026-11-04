@@ -1,1 +1,0 @@
-export const STALE_REGISTRATION_CLEANUP_CRON_PATTERN = '30 2 * * *';

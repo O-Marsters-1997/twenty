@@ -19,11 +19,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { ApplicationRegistrationEntity } from 'src/engine/core-modules/application/application-registration/application-registration.entity';
-import { ApplicationRegistrationSourceType } from 'src/engine/core-modules/application/application-registration/enums/application-registration-source-type.enum';
 import { ApplicationState } from 'src/engine/core-modules/application/enums/application-state.enum';
 import { FileEntity } from 'src/engine/core-modules/file/entities/file.entity';
-import { ApplicationVariableEntity } from 'src/engine/core-modules/application/application-variable/application-variable.entity';
 import { PublicDomainEntity } from 'src/engine/core-modules/public-domain/public-domain.entity';
 import { ADD_HEALTH_CHECK_TO_APPLICATION_UPGRADE_COMMAND_NAME } from 'src/database/commands/upgrade-version-command/2-42/add-health-check-to-application-upgrade-command-name.constant';
 import { WasIntroducedInUpgrade } from 'src/engine/core-modules/upgrade/decorators/was-introduced-in-upgrade.decorator';
@@ -81,9 +78,6 @@ export class ApplicationEntity extends WorkspaceRelatedEntity {
   // TODO should not be nullable
   @Column({ nullable: true, type: 'text' })
   version: string | null;
-
-  @Column({ type: 'text', default: ApplicationRegistrationSourceType.LOCAL })
-  sourceType: ApplicationRegistrationSourceType;
 
   @Column({
     nullable: false,
@@ -203,16 +197,6 @@ export class ApplicationEntity extends WorkspaceRelatedEntity {
   frontComponentSharedDependenciesBuiltPath: string | null;
 
   @Column({ nullable: true, type: 'uuid' })
-  applicationRegistrationId: string | null;
-
-  @ManyToOne(() => ApplicationRegistrationEntity, {
-    onDelete: 'SET NULL',
-    nullable: true,
-  })
-  @JoinColumn({ name: 'applicationRegistrationId' })
-  applicationRegistration: Relation<ApplicationRegistrationEntity> | null;
-
-  @Column({ nullable: true, type: 'uuid' })
   @WasIntroducedInUpgrade({
     upgradeCommandName:
       '2.16.0_AddPrimaryPublicDomainToApplicationFastInstanceCommand_1782281874768',
@@ -280,15 +264,6 @@ export class ApplicationEntity extends WorkspaceRelatedEntity {
     },
   )
   settingsMenuItems: Relation<SettingsMenuItemEntity[]>;
-
-  @OneToMany(
-    () => ApplicationVariableEntity,
-    (applicationVariable) => applicationVariable.application,
-    {
-      onDelete: 'CASCADE',
-    },
-  )
-  applicationVariables: Relation<ApplicationVariableEntity[]>;
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;

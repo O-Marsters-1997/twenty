@@ -66,7 +66,6 @@ export const optimisticallyApplyUpdateActionOnAllFlatEntityMaps = ({
     case 'objectPermission':
     case 'fieldPermission':
     case 'webhook':
-    case 'applicationVariable':
     case 'workflow':
     case 'workflowVersion':
     case 'connectionProvider':
