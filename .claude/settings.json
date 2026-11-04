@@ -5,6 +5,10 @@
     "pr": "",
     "sessionUrl": false
   },
+  "env": {
+    "NX_DAEMON": "false",
+    "NODE_OPTIONS": "--max-old-space-size=3072"
+  },
   "hooks": {
     "SessionStart": [
       {
