@@ -45,18 +45,6 @@
       "path": "../packages/twenty-docs"
     },
     {
-      "name": "packages/twenty-client-sdk",
-      "path": "../packages/twenty-client-sdk"
-    },
-    {
-      "name": "packages/twenty-front-component-renderer",
-      "path": "../packages/twenty-front-component-renderer"
-    },
-    {
-      "name": "packages/twenty-sdk",
-      "path": "../packages/twenty-sdk"
-    },
-    {
       "name": "packages/twenty-website",
       "path": "../packages/twenty-website"
     }
