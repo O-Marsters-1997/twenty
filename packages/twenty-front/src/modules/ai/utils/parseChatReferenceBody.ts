@@ -36,8 +36,6 @@ const getChatReferenceIdentity = ({
       return { kind, viewId: firstSegment };
     case 'role':
       return { kind, roleId: firstSegment };
-    case 'app':
-      return { kind, applicationId: firstSegment };
     case 'skill':
       return { kind, skillId: firstSegment };
     default:

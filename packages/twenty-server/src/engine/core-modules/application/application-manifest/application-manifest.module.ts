@@ -1,49 +1,22 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { ApplicationLookupModule } from 'src/engine/core-modules/application/application-lookup/application-lookup.module';
-import { ApplicationModule } from 'src/engine/core-modules/application/application.module';
 import { ApplicationEntity } from 'src/engine/core-modules/application/application.entity';
-import { ApplicationManifestApplyService } from 'src/engine/core-modules/application/application-manifest/application-manifest-apply.service';
-import { ApplicationManifestMigrationService } from 'src/engine/core-modules/application/application-manifest/application-manifest-migration.service';
-import { ApplicationManifestExportService } from 'src/engine/core-modules/application/application-manifest/services/application-manifest-export.service';
+import { ApplicationModule } from 'src/engine/core-modules/application/application.module';
 import { ApplicationUninstallService } from 'src/engine/core-modules/application/application-manifest/services/application-uninstall.service';
-import { ComputeApplicationManifestAllUniversalFlatEntityMapsService } from 'src/engine/core-modules/application/application-manifest/services/compute-application-manifest-all-universal-flat-entity-maps.service';
-import { ApplicationSyncService } from 'src/engine/core-modules/application/application-manifest/application-sync.service';
-import { SecretEncryptionModule } from 'src/engine/core-modules/secret-encryption/secret-encryption.module';
-import { SdkClientModule } from 'src/engine/core-modules/sdk-client/sdk-client.module';
-import { FrontComponentEntity } from 'src/engine/metadata-modules/front-component/entities/front-component.entity';
-import { WorkflowVersionCoreModule } from 'src/engine/core-modules/workflow/workflow-version-core.module';
-import { WorkspaceCacheModule } from 'src/engine/workspace-cache/workspace-cache.module';
-import { WorkspaceMigrationModule } from 'src/engine/workspace-manager/workspace-migration/workspace-migration.module';
+import { LogicFunctionExecutorModule } from 'src/engine/core-modules/logic-function/logic-function-executor/logic-function-executor.module';
 import { provideWorkspaceScopedRepository } from 'src/engine/twenty-orm/workspace-scoped-repository/provide-workspace-scoped-repository';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([ApplicationEntity, FrontComponentEntity]),
-    ApplicationLookupModule,
+    TypeOrmModule.forFeature([ApplicationEntity]),
     ApplicationModule,
-    SecretEncryptionModule,
-    SdkClientModule,
-    WorkflowVersionCoreModule,
-    WorkspaceCacheModule,
-    WorkspaceMigrationModule,
+    LogicFunctionExecutorModule,
   ],
   providers: [
-    provideWorkspaceScopedRepository(FrontComponentEntity),
-    ApplicationManifestApplyService,
-    ApplicationManifestMigrationService,
-    ApplicationSyncService,
     ApplicationUninstallService,
-    ComputeApplicationManifestAllUniversalFlatEntityMapsService,
-    ApplicationManifestExportService,
     provideWorkspaceScopedRepository(ApplicationEntity),
   ],
-  exports: [
-    ApplicationManifestApplyService,
-    ApplicationSyncService,
-    ApplicationUninstallService,
-    ApplicationManifestExportService,
-  ],
+  exports: [ApplicationUninstallService],
 })
 export class ApplicationManifestModule {}

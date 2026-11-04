@@ -1,12 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 
 import { join } from 'path';
 
 import { isDefined } from 'twenty-shared/utils';
-import { Repository } from 'typeorm';
 
-import { ApplicationRegistrationEntity } from 'src/engine/core-modules/application/application-registration/application-registration.entity';
 import { ApplicationService } from 'src/engine/core-modules/application/application.service';
 import { type FlatApplication } from 'src/engine/core-modules/application/types/flat-application.type';
 import { WorkspaceManyOrAllFlatEntityMapsCacheService } from 'src/engine/metadata-modules/flat-entity/services/workspace-many-or-all-flat-entity-maps-cache.service';
@@ -32,8 +29,6 @@ export class LogicFunctionFromSourceHelperService {
     private readonly applicationService: ApplicationService,
     private readonly flatEntityMapsCacheService: WorkspaceManyOrAllFlatEntityMapsCacheService,
     private readonly workspaceMigrationValidateBuildAndRunService: WorkspaceMigrationValidateBuildAndRunService,
-    @InjectRepository(ApplicationRegistrationEntity)
-    private readonly applicationRegistrationRepository: Repository<ApplicationRegistrationEntity>,
   ) {}
 
   async findLogicFunctionAndApplicationOrThrow({
@@ -114,11 +109,10 @@ export class LogicFunctionFromSourceHelperService {
       workspaceCustomFlatApplication,
     } = await this.findLogicFunctionAndApplicationOrThrow({ id, workspaceId });
 
-    const isRunnableOnDemand = await this.isRunnableOnDemand({
+    const isRunnableOnDemand = this.isRunnableOnDemand({
       flatLogicFunction,
       ownerFlatApplication,
       workspaceCustomFlatApplication,
-      workspaceId,
     });
 
     if (!isRunnableOnDemand) {
@@ -148,38 +142,22 @@ export class LogicFunctionFromSourceHelperService {
       flatLogicFunction,
       ownerFlatApplication,
       workspaceCustomFlatApplication,
-      workspaceId,
     });
   }
 
-  private async isRunnableOnDemand({
+  private isRunnableOnDemand({
     flatLogicFunction,
     ownerFlatApplication,
     workspaceCustomFlatApplication,
-    workspaceId,
   }: {
     flatLogicFunction: FlatLogicFunction;
     ownerFlatApplication: FlatApplication;
     workspaceCustomFlatApplication: FlatApplication;
-    workspaceId: string;
-  }): Promise<boolean> {
-    if (
+  }): boolean {
+    return (
       ownerFlatApplication.id === workspaceCustomFlatApplication.id ||
       isDefined(flatLogicFunction.workflowActionTriggerSettings)
-    ) {
-      return true;
-    }
-
-    if (!isDefined(ownerFlatApplication.applicationRegistrationId)) {
-      return false;
-    }
-
-    return this.applicationRegistrationRepository.exists({
-      where: {
-        id: ownerFlatApplication.applicationRegistrationId,
-        ownerWorkspaceId: workspaceId,
-      },
-    });
+    );
   }
 
   buildHandlerPaths(logicFunctionId: string) {

@@ -19,11 +19,9 @@ export class ApplicationJobEnqueueThrottlerService {
 
   async throttleOrThrow({
     applicationId,
-    applicationRegistrationId,
     jobCount = 1,
   }: {
     applicationId: string;
-    applicationRegistrationId: string;
     jobCount?: number;
   }): Promise<void> {
     const timeWindow = this.twentyConfigService.get(
@@ -32,22 +30,13 @@ export class ApplicationJobEnqueueThrottlerService {
     const applicationLimit = this.twentyConfigService.get(
       'APPLICATION_JOB_ENQUEUE_RATE_LIMITING_LIMIT',
     );
-    const registrationLimit = this.twentyConfigService.get(
-      'APPLICATION_REGISTRATION_JOB_ENQUEUE_RATE_LIMITING_LIMIT',
-    );
 
     const [admittedCount] = await this.throttlerService.tryConsumeTokenBuckets({
       buckets: [
         {
-          key: `enqueue:throttler:{${applicationRegistrationId}}:application:${applicationId}`,
+          key: `enqueue:throttler:{${applicationId}}:application:${applicationId}`,
           burst: applicationLimit,
           refillPerWindow: applicationLimit,
-          windowMs: timeWindow,
-        },
-        {
-          key: `enqueue:throttler:{${applicationRegistrationId}}:application-registration`,
-          burst: registrationLimit,
-          refillPerWindow: registrationLimit,
           windowMs: timeWindow,
         },
       ],
@@ -61,7 +50,6 @@ export class ApplicationJobEnqueueThrottlerService {
         shouldStoreInCache: false,
         attributes: {
           application_id: applicationId,
-          application_registration_id: applicationRegistrationId,
         },
       });
 

@@ -9,10 +9,7 @@ export const canCallerReachApplication = ({
   callingApplication,
   applicationId,
 }: {
-  callingApplication:
-    | Pick<FlatApplication, 'id' | 'sourceType'>
-    | null
-    | undefined;
+  callingApplication: Pick<FlatApplication, 'id'> | null | undefined;
   applicationId: string | null | undefined;
 }): boolean => {
   const scopedCallingApplication =

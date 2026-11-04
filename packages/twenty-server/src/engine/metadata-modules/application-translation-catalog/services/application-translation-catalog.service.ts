@@ -154,9 +154,6 @@ export class ApplicationTranslationCatalogService {
     workspaceId: string;
   }): Promise<TEntity[]> {
     const getI18nContext = await this.getI18nContextByApplicationId({
-      applicationIds: entities.map(
-        (entity) => entity.applicationId ?? undefined,
-      ),
       locale,
       workspaceId,
     });

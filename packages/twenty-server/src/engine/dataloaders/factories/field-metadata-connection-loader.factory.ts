@@ -86,9 +86,6 @@ export class FieldMetadataConnectionLoaderFactory {
       const getI18nContext =
         await this.applicationTranslationCatalogService.getI18nContextByApplicationId(
           {
-            applicationIds: selectedFlatFieldMetadatas.map(
-              (flatFieldMetadata) => flatFieldMetadata.applicationId,
-            ),
             locale,
             workspaceId,
           },

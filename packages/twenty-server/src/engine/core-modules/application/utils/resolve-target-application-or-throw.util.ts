@@ -23,7 +23,7 @@ export const resolveTargetApplicationOrThrow = ({
   applicationUniversalIdentifier,
 }: {
   callingApplication:
-    | Pick<FlatApplication, 'id' | 'universalIdentifier' | 'sourceType'>
+    | Pick<FlatApplication, 'id' | 'universalIdentifier'>
     | null
     | undefined;
   applicationId?: string | null;

@@ -45,11 +45,6 @@ export const SettingsLogicFunctionDetail = () => {
 
   const applicationName = data?.findOneApplication?.name;
 
-  const applicationVariableKeys =
-    data?.findOneApplication?.applicationVariables?.map(
-      (variable) => variable.key,
-    ) ?? [];
-
   const workspaceCustomApplicationId =
     currentWorkspace?.workspaceCustomApplication?.id;
 
@@ -105,40 +100,18 @@ export const SettingsLogicFunctionDetail = () => {
   const isSettingsTab = activeTabId === 'settings';
   const isTestTab = activeTabId === 'test' && canTestFunction;
 
-  const breadcrumbLinks = isDefined(applicationId)
-    ? (() => {
-        const applicationContentHref = getSettingsPath(
-          SettingsPath.ApplicationDetail,
-          { applicationId },
-          undefined,
-          'content',
-        );
-        return [
-          {
-            children: t`Workspace`,
-            href: getSettingsPath(SettingsPath.General),
-          },
-          {
-            children: t`Applications`,
-            href: getSettingsPath(SettingsPath.Applications),
-          },
-          { children: applicationName ?? '', href: applicationContentHref },
-          { children: t`Logic functions`, href: applicationContentHref },
-          { children: logicFunction?.name ?? '' },
-        ];
-      })()
-    : [
-        {
-          children: t`Workspace`,
-          href: getSettingsPath(SettingsPath.General),
-        },
-        {
-          children: t`AI`,
-          href: getSettingsPath(SettingsPath.AI),
-        },
-        { children: t`Logic functions` },
-        { children: logicFunction?.name ?? '' },
-      ];
+  const breadcrumbLinks = [
+    {
+      children: t`Workspace`,
+      href: getSettingsPath(SettingsPath.General),
+    },
+    {
+      children: t`AI`,
+      href: getSettingsPath(SettingsPath.AI),
+    },
+    { children: t`Logic functions` },
+    { children: logicFunction?.name ?? '' },
+  ];
 
   const files = [
     {
@@ -176,7 +149,6 @@ export const SettingsLogicFunctionDetail = () => {
               handleExecute={handleTestFunction}
               onChange={onChange('sourceHandlerCode')}
               isTesting={isExecuting}
-              applicationVariableKeys={applicationVariableKeys}
             />
           )}
           {isTriggersTab && (

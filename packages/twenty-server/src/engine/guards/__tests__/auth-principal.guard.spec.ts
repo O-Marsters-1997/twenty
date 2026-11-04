@@ -1,6 +1,5 @@
 import { type ExecutionContext, ForbiddenException } from '@nestjs/common';
 
-import { ApplicationRegistrationSourceType } from 'src/engine/core-modules/application/application-registration/enums/application-registration-source-type.enum';
 import { JwtTokenTypeEnum } from 'src/engine/core-modules/auth/types/jwt-token-type.enum';
 import { ErrorCode } from 'src/engine/core-modules/graphql/utils/graphql-errors.util';
 import {
@@ -13,13 +12,8 @@ import { type AuthPrincipalGuardConfig } from 'src/engine/guards/types/auth-prin
 
 const user = { id: 'user-id' };
 const workspace = { id: 'workspace-id' };
-const oauthClient = {
-  id: 'oauth-client-id',
-  sourceType: ApplicationRegistrationSourceType.OAUTH_ONLY,
-};
 const installedApplication = {
   id: 'application-id',
-  sourceType: ApplicationRegistrationSourceType.NPM,
 };
 const apiKey = { id: 'api-key-id' };
 const impersonationContext = {
@@ -52,17 +46,6 @@ const REQUEST_BY_PRINCIPAL_VARIANT = {
     apiKey,
     workspace,
     tokenType: JwtTokenTypeEnum.API_KEY,
-  },
-  'oauthClient.withUser': {
-    application: oauthClient,
-    user,
-    workspace,
-    tokenType: JwtTokenTypeEnum.APPLICATION_ACCESS,
-  },
-  'oauthClient.withoutUser': {
-    application: oauthClient,
-    workspace,
-    tokenType: JwtTokenTypeEnum.APPLICATION_ACCESS,
   },
   'application.withUser': {
     application: installedApplication,
@@ -127,8 +110,6 @@ const CONFIG_CASES: {
     authPrincipalGuardConfig: { ...ACCEPT_EVERY_PRINCIPAL, userSession: false },
     acceptedPrincipalVariantNames: [
       'apiKey',
-      'oauthClient.withUser',
-      'oauthClient.withoutUser',
       'application.withUser',
       'application.withoutUser',
     ],
@@ -198,37 +179,6 @@ const CONFIG_CASES: {
     ),
   },
   {
-    name: 'oauthClient: true',
-    authPrincipalGuardConfig: { ...REFUSE_EVERY_PRINCIPAL, oauthClient: true },
-    acceptedPrincipalVariantNames: [
-      'oauthClient.withUser',
-      'oauthClient.withoutUser',
-    ],
-  },
-  {
-    name: 'oauthClient: false',
-    authPrincipalGuardConfig: { ...ACCEPT_EVERY_PRINCIPAL, oauthClient: false },
-    acceptedPrincipalVariantNames: ALL_PRINCIPAL_VARIANT_NAMES.filter(
-      (principalVariantName) => !principalVariantName.startsWith('oauthClient'),
-    ),
-  },
-  {
-    name: 'oauthClient withUser only',
-    authPrincipalGuardConfig: {
-      ...REFUSE_EVERY_PRINCIPAL,
-      oauthClient: { withUser: true, withoutUser: false },
-    },
-    acceptedPrincipalVariantNames: ['oauthClient.withUser'],
-  },
-  {
-    name: 'oauthClient withoutUser only',
-    authPrincipalGuardConfig: {
-      ...REFUSE_EVERY_PRINCIPAL,
-      oauthClient: { withUser: false, withoutUser: true },
-    },
-    acceptedPrincipalVariantNames: ['oauthClient.withoutUser'],
-  },
-  {
     name: 'application: true',
     authPrincipalGuardConfig: { ...REFUSE_EVERY_PRINCIPAL, application: true },
     acceptedPrincipalVariantNames: [
@@ -272,7 +222,6 @@ const CONFIG_CASES: {
       'userSession.impersonated',
       'userSession.playground',
       'userSession.workspaceAgnostic',
-      'oauthClient.withUser',
       'application.withUser',
     ],
   },
@@ -438,7 +387,7 @@ describe('AuthPrincipalGuard', () => {
       name: 'a playground token that also carries an application',
       request: {
         user,
-        application: oauthClient,
+        application: installedApplication,
         workspace,
         tokenType: JwtTokenTypeEnum.PLAYGROUND,
       },

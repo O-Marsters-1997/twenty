@@ -6,7 +6,6 @@ import {
   RelationType,
 } from 'twenty-shared/types';
 
-import { ApplicationRegistrationSourceType } from 'src/engine/core-modules/application/application-registration/enums/application-registration-source-type.enum';
 import { ApplicationState } from 'src/engine/core-modules/application/enums/application-state.enum';
 import { type FlatApplication } from 'src/engine/core-modules/application/types/flat-application.type';
 import {
@@ -25,7 +24,6 @@ const MOCK_FLAT_APPLICATION: FlatApplication = {
   logoFileId: null,
   version: null,
   workspaceId: 'workspace-id',
-  sourceType: ApplicationRegistrationSourceType.LOCAL,
   state: ApplicationState.INSTALLED,
   sourcePath: '',
   packageJsonChecksum: null,
@@ -44,7 +42,6 @@ const MOCK_FLAT_APPLICATION: FlatApplication = {
   uninstallHookCompletedForRequestedAt: null,
   canBeUninstalled: false,
   autoUpgrade: false,
-  applicationRegistrationId: null,
   primaryPublicDomainId: null,
   createdAt: new Date(),
   updatedAt: new Date(),

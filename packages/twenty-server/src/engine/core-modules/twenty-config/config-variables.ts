@@ -1846,15 +1846,6 @@ export class ConfigVariables {
   @CastToPositiveNumber()
   APPLICATION_JOB_ENQUEUE_RATE_LIMITING_LIMIT = 500;
 
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.RATE_LIMITING,
-    description:
-      'Maximum number of jobs enqueued per application registration across all workspaces in the rate limiting window',
-    type: ConfigVariableType.NUMBER,
-  })
-  @CastToPositiveNumber()
-  APPLICATION_REGISTRATION_JOB_ENQUEUE_RATE_LIMITING_LIMIT = 2000;
-
   @CastToPositiveNumber()
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.RATE_LIMITING,

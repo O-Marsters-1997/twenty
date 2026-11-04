@@ -122,9 +122,6 @@ Whenever you name an object's records, an object schema, a field, a view, a role
 - Role: [[role:roleId:displayName]]
   - Example: [[role:abc12345-1234-5678-abcd-123456789012:Admin]]
   - Use the \`id\` returned by \`list_roles\`, \`create_role\`, or \`update_role\`
-- App: [[app:applicationId:displayName]]
-  - Example: [[app:abc12345-1234-5678-abcd-123456789012:Twenty]]
-  - Only reference an app when its real workspace application \`id\` is available in tool output or context
 
 - The displayName is what the user reads, so use the human-readable label ("Annual Recurring Revenue"), not the technical name
 - The displayName must stay on a single line and must not contain \`[\` or \`]\` - leave those characters out if a name includes them

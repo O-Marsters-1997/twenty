@@ -140,11 +140,8 @@ describe('Successful user and workspace creation', () => {
     );
 
     jestExpectToBeDefined(twentyStandardApp);
-    const {
-      sourcePath: _sourcePath,
-      sourceType: _sourceType,
-      ...expectedStandardTwentyApplication
-    } = TWENTY_STANDARD_APPLICATION;
+    const { sourcePath: _sourcePath, ...expectedStandardTwentyApplication } =
+      TWENTY_STANDARD_APPLICATION;
 
     expect(twentyStandardApp).toMatchObject(expectedStandardTwentyApplication);
 

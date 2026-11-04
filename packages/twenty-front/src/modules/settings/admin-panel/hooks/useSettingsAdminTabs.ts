@@ -28,12 +28,6 @@ export const useSettingsAdminTabs = () => {
       disabled: !canAccessFullAdminPanel && !canImpersonate,
     },
     {
-      id: SETTINGS_ADMIN_TABS.APPS,
-      title: t`Apps`,
-      Icon: IconApps,
-      disabled: !canAccessFullAdminPanel,
-    },
-    {
       id: SETTINGS_ADMIN_TABS.AI,
       title: t`AI`,
       Icon: IconSparkles,

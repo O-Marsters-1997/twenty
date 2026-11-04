@@ -422,9 +422,6 @@ export class DataloaderService {
         const getI18nContext =
           await this.applicationTranslationCatalogService.getI18nContextByApplicationId(
             {
-              applicationIds: objectFlatFieldMetadatasList
-                .flat()
-                .map((flatFieldMetadata) => flatFieldMetadata.applicationId),
               locale,
               workspaceId,
             },

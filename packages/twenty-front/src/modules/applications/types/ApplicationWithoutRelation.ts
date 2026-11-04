@@ -8,7 +8,5 @@ export type ApplicationWithoutRelation = Pick<
   | 'logoUrl'
   | 'version'
   | 'universalIdentifier'
-  | 'applicationRegistrationId'
-  | 'applicationRegistration'
   | 'defaultRoleId'
 >;

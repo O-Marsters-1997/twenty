@@ -55,7 +55,6 @@ describe('seedAgents', () => {
         schemaName: SCHEMA_NAME,
         workspaceId,
         chatReferenceIds: {
-          applicationId: 'application-id',
           objectMetadataId: 'object-id',
           roleId: 'role-id',
           viewId: 'view-id',
