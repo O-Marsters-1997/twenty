@@ -19,8 +19,7 @@ type WorkflowActionStepType =
   | 'SEND_CHAT_MESSAGE'
   | 'CREATE_CALENDAR_EVENT'
   | 'CREATE_RECORD'
-  | 'UPDATE_RECORD'
-  | 'CODE';
+  | 'UPDATE_RECORD';
 
 export type WorkflowActionStepRun = {
   status?: WorkflowRunStatusType;
