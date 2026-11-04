@@ -77,7 +77,6 @@ export const optimisticallyApplyCreateActionOnAllFlatEntityMaps = ({
     case 'pageLayoutWidget':
     case 'pageLayoutTab':
     case 'commandMenuItem':
-    case 'frontComponent':
     case 'navigationMenuItem':
     case 'rolePermissionFlag':
     case 'permissionFlag':
@@ -87,7 +86,6 @@ export const optimisticallyApplyCreateActionOnAllFlatEntityMaps = ({
     case 'workflow':
     case 'workflowVersion':
     case 'timelineActivityType':
-    case 'settingsMenuItem':
     case 'validationRule': {
       addFlatEntityToFlatEntityAndRelatedEntityMapsThroughMutationOrThrow({
         flatEntity: flatAction.flatEntity,

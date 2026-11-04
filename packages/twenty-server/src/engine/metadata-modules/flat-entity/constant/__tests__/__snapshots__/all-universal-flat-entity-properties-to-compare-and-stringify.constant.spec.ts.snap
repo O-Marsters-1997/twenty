@@ -81,22 +81,6 @@ exports[`ALL_UNIVERSAL_FLAT_ENTITY_PROPERTIES_TO_COMPARE_AND_STRINGIFY should ma
     ],
     "propertiesToStringify": [],
   },
-  "frontComponent": {
-    "propertiesToCompare": [
-      "name",
-      "description",
-      "builtComponentChecksum",
-      "sourceComponentPath",
-      "builtComponentPath",
-      "componentName",
-      "isHeadless",
-      "universalWidgetAvailability",
-      "usesSdkClient",
-    ],
-    "propertiesToStringify": [
-      "universalWidgetAvailability",
-    ],
-  },
   "index": {
     "propertiesToCompare": [
       "indexType",
@@ -305,16 +289,6 @@ exports[`ALL_UNIVERSAL_FLAT_ENTITY_PROPERTIES_TO_COMPARE_AND_STRINGIFY should ma
   "searchFieldMetadata": {
     "propertiesToCompare": [
       "position",
-    ],
-    "propertiesToStringify": [],
-  },
-  "settingsMenuItem": {
-    "propertiesToCompare": [
-      "frontComponentUniversalIdentifier",
-      "title",
-      "icon",
-      "position",
-      "scope",
     ],
     "propertiesToStringify": [],
   },

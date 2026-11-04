@@ -38,14 +38,14 @@ const timelineTab = {
   layoutMode: PageLayoutTabLayoutMode.VERTICAL_LIST,
 };
 
-const frontComponentTab = {
+const iframeTab = {
   ...homeTab,
-  id: 'front-component-tab-id',
+  id: 'iframe-tab-id',
   title: 'App',
   position: 2,
   icon: 'IconApps',
   layoutMode: PageLayoutTabLayoutMode.VERTICAL_LIST,
-  widgets: [{ id: 'front-component-widget', type: WidgetType.FRONT_COMPONENT }],
+  widgets: [{ id: 'iframe-widget', type: WidgetType.IFRAME }],
 };
 
 jest.mock('@/page-layout/components/dnd/PageLayoutWidgetDndProvider', () => ({
@@ -87,7 +87,7 @@ jest.mock('@/page-layout/hooks/usePageLayoutAddTabStrategy', () => ({
 
 jest.mock('@/page-layout/hooks/usePageLayoutRenderableTabs', () => ({
   usePageLayoutRenderableTabs: () => ({
-    tabsToRenderInTabList: [homeTab, timelineTab, frontComponentTab],
+    tabsToRenderInTabList: [homeTab, timelineTab, iframeTab],
     pinnedLeftTab: undefined,
   }),
 }));
@@ -196,16 +196,14 @@ describe('PageLayoutTabsRenderer', () => {
 
   it('mounts prerendered application widget tabs offscreen alongside the active tab', () => {
     mockActiveTabId = 'timeline-tab-id';
-    mockPrerenderedTabIds = ['front-component-tab-id'];
+    mockPrerenderedTabIds = ['iframe-tab-id'];
 
     render(<PageLayoutTabsRenderer />, { wrapper: TestWrapper });
 
     expect(
       screen.getByText('Rendered tab: timeline-tab-id'),
     ).toBeInTheDocument();
-    expect(
-      screen.getByText('Rendered tab: front-component-tab-id'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Rendered tab: iframe-tab-id')).toBeInTheDocument();
   });
 
   it('reveals a prerendered side-panel tab without remounting its content', () => {

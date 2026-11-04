@@ -9,7 +9,6 @@ export enum ApplicationExceptionCode {
   OBJECT_NOT_FOUND = 'OBJECT_NOT_FOUND',
   FIELD_NOT_FOUND = 'FIELD_NOT_FOUND',
   LOGIC_FUNCTION_NOT_FOUND = 'LOGIC_FUNCTION_NOT_FOUND',
-  FRONT_COMPONENT_NOT_FOUND = 'FRONT_COMPONENT_NOT_FOUND',
   ENTITY_NOT_FOUND = 'ENTITY_NOT_FOUND',
   APPLICATION_NOT_FOUND = 'APPLICATION_NOT_FOUND',
   APP_NOT_INSTALLED = 'APP_NOT_INSTALLED',
@@ -45,8 +44,6 @@ const getApplicationExceptionUserFriendlyMessage = (
       return msg`Field not found.`;
     case ApplicationExceptionCode.LOGIC_FUNCTION_NOT_FOUND:
       return msg`Logic function not found.`;
-    case ApplicationExceptionCode.FRONT_COMPONENT_NOT_FOUND:
-      return msg`Front component not found.`;
     case ApplicationExceptionCode.ENTITY_NOT_FOUND:
       return msg`Entity not found.`;
     case ApplicationExceptionCode.APPLICATION_NOT_FOUND:

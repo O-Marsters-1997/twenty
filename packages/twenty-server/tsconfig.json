@@ -35,7 +35,6 @@
   },
   "exclude": [
     "node_modules",
-    "dist",
-    "src/engine/metadata-modules/front-component/constants/seed-project"
+    "dist"
   ]
 }

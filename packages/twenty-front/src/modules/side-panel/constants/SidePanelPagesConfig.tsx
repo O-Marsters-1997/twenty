@@ -19,7 +19,6 @@ import { SidePanelAddToMessageListPage } from '@/side-panel/pages/add-to-message
 import { SidePanelShareRecordPage } from '@/side-panel/pages/share-record/components/SidePanelShareRecordPage';
 import { SidePanelSnoozeAiChatPage } from '@/side-panel/pages/snooze-ai-chat/components/SidePanelSnoozeAiChatPage';
 import { SidePanelAssignAiChatPage } from '@/side-panel/pages/assign-ai-chat/components/SidePanelAssignAiChatPage';
-import { SidePanelFrontComponentPage } from '@/side-panel/pages/front-component/components/SidePanelFrontComponentPage';
 import { SidePanelDashboardChartSettings } from '@/side-panel/pages/page-layout/components/dashboard/SidePanelDashboardChartSettings';
 import { SidePanelDashboardIframeSettings } from '@/side-panel/pages/page-layout/components/dashboard/SidePanelDashboardIframeSettings';
 import { SidePanelDashboardRecordTableSettings } from '@/side-panel/pages/page-layout/components/dashboard/SidePanelDashboardRecordTableSettings';
@@ -89,7 +88,6 @@ export const SIDE_PANEL_PAGES_CONFIG = new Map<
     SidePanelPages.RecordPageFieldSettings,
     <SidePanelRecordPageFieldSettings />,
   ],
-  [SidePanelPages.ViewFrontComponent, <SidePanelFrontComponentPage />],
   [
     SidePanelPages.PageLayoutRecordPageWidgetTypeSelect,
     <SidePanelPageLayoutRecordPageWidgetTypeSelect />,

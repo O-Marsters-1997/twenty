@@ -21,7 +21,6 @@ import { WorkspaceFlatViewFilterMapCacheService } from 'src/engine/metadata-modu
 import { WorkspaceFlatViewGroupMapCacheService } from 'src/engine/metadata-modules/flat-view-group/services/workspace-flat-view-group-map-cache.service';
 import { WorkspaceFlatSearchFieldMetadataMapCacheService } from 'src/engine/metadata-modules/flat-search-field-metadata/services/workspace-flat-search-field-metadata-map-cache.service';
 import { WorkspaceFlatTimelineActivityTypeMapCacheService } from 'src/engine/metadata-modules/flat-timeline-activity-type/services/workspace-flat-timeline-activity-type-map-cache.service';
-import { WorkspaceFlatSettingsMenuItemMapCacheService } from 'src/engine/metadata-modules/flat-settings-menu-item/services/workspace-flat-settings-menu-item-map-cache.service';
 import { WorkspaceFlatValidationRuleMapCacheService } from 'src/engine/metadata-modules/flat-validation-rule/services/workspace-flat-validation-rule-map-cache.service';
 import { WorkspaceFlatViewSortMapCacheService } from 'src/engine/metadata-modules/flat-view-sort/services/workspace-flat-view-sort-map-cache.service';
 import { WorkspaceFlatViewMapCacheService } from 'src/engine/metadata-modules/flat-view/services/workspace-flat-view-map-cache.service';
@@ -53,7 +52,6 @@ import { WorkspaceCacheModule } from 'src/engine/workspace-cache/workspace-cache
     WorkspaceFlatRowLevelPermissionPredicateMapCacheService,
     WorkspaceFlatRowLevelPermissionPredicateGroupMapCacheService,
     WorkspaceFlatTimelineActivityTypeMapCacheService,
-    WorkspaceFlatSettingsMenuItemMapCacheService,
     WorkspaceFlatValidationRuleMapCacheService,
   ],
   exports: [WorkspaceManyOrAllFlatEntityMapsCacheService],

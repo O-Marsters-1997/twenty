@@ -124,7 +124,6 @@ import {
   WORKSPACE_MEMBER_DATA_SEED_COLUMNS,
 } from 'src/engine/workspace-manager/dev-seeder/data/constants/workspace-member-data-seeds.constant';
 import { TimelineActivitySeederService } from 'src/engine/workspace-manager/dev-seeder/data/services/timeline-activity-seeder.service';
-import { prefillFrontComponentCommandMenuItems } from 'src/engine/workspace-manager/standard-objects-prefill-data/utils/prefill-front-component-command-menu-items.util';
 import { prefillWorkflowCommandMenuItems } from 'src/engine/workspace-manager/standard-objects-prefill-data/utils/prefill-workflow-command-menu-items.util';
 import { prefillWorkflows } from 'src/engine/workspace-manager/standard-objects-prefill-data/utils/prefill-workflows.util';
 import { TWENTY_STANDARD_APPLICATION } from 'src/engine/workspace-manager/twenty-standard-application/constants/twenty-standard-applications';
@@ -384,14 +383,6 @@ export class DevSeederDataService {
     );
 
     await prefillWorkflowCommandMenuItems({
-      workspaceId,
-      applicationService: this.applicationService,
-      flatEntityMapsCacheService: this.flatEntityMapsCacheService,
-      workspaceMigrationValidateBuildAndRunService:
-        this.workspaceMigrationValidateBuildAndRunService,
-    });
-
-    await prefillFrontComponentCommandMenuItems({
       workspaceId,
       applicationService: this.applicationService,
       flatEntityMapsCacheService: this.flatEntityMapsCacheService,

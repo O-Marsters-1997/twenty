@@ -8,11 +8,6 @@ export type CreateCommandMenuItemFactoryInput = CreateCommandMenuItemInput;
 const DEFAULT_COMMAND_MENU_ITEM_GQL_FIELDS = `
   id
   workflowVersionId
-  frontComponentId
-  frontComponent {
-    id
-    name
-  }
   engineComponentKey
   label
   icon

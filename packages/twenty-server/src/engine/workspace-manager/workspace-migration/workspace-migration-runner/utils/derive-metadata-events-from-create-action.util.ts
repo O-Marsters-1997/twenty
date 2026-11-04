@@ -87,7 +87,6 @@ const deriveAllMetadataEventsFromCreateAction = (
     case 'pageLayoutWidget':
     case 'pageLayoutTab':
     case 'commandMenuItem':
-    case 'frontComponent':
     case 'navigationMenuItem':
     case 'rolePermissionFlag':
     case 'permissionFlag':
@@ -98,7 +97,6 @@ const deriveAllMetadataEventsFromCreateAction = (
     case 'workflow':
     case 'workflowVersion':
     case 'timelineActivityType':
-    case 'settingsMenuItem':
     case 'validationRule':
     case 'searchFieldMetadata': {
       return [

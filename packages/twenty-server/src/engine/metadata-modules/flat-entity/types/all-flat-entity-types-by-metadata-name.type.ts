@@ -33,8 +33,6 @@ import { type MetadataEntity } from 'src/engine/metadata-modules/flat-entity/typ
 import { type FlatFieldMetadata } from 'src/engine/metadata-modules/flat-field-metadata/types/flat-field-metadata.type';
 import { type FlatFieldPermissionMaps } from 'src/engine/metadata-modules/flat-field-permission/types/flat-field-permission-maps.type';
 import { type FlatFieldPermission } from 'src/engine/metadata-modules/flat-field-permission/types/flat-field-permission.type';
-import { type FlatFrontComponentMaps } from 'src/engine/metadata-modules/flat-front-component/types/flat-front-component-maps.type';
-import { type FlatFrontComponent } from 'src/engine/metadata-modules/flat-front-component/types/flat-front-component.type';
 import { type FlatIndexMetadata } from 'src/engine/metadata-modules/flat-index-metadata/types/flat-index-metadata.type';
 import { type FlatNavigationMenuItemMaps } from 'src/engine/metadata-modules/flat-navigation-menu-item/types/flat-navigation-menu-item-maps.type';
 import { type FlatNavigationMenuItem } from 'src/engine/metadata-modules/flat-navigation-menu-item/types/flat-navigation-menu-item.type';
@@ -91,7 +89,6 @@ import { type UniversalFlatTimelineActivityType } from 'src/engine/workspace-man
 import { type UniversalFlatValidationRule } from 'src/engine/workspace-manager/workspace-migration/universal-flat-entity/types/universal-flat-validation-rule.type';
 import { type UniversalFlatEntityFrom } from 'src/engine/workspace-manager/workspace-migration/universal-flat-entity/types/universal-flat-entity-from.type';
 import { type UniversalFlatFieldPermission } from 'src/engine/workspace-manager/workspace-migration/universal-flat-entity/types/universal-flat-field-permission.type';
-import { type UniversalFlatFrontComponent } from 'src/engine/workspace-manager/workspace-migration/universal-flat-entity/types/universal-flat-front-component.type';
 import { type UniversalFlatIndexMetadata } from 'src/engine/workspace-manager/workspace-migration/universal-flat-entity/types/universal-flat-index-metadata.type';
 import { type UniversalFlatLogicFunction } from 'src/engine/workspace-manager/workspace-migration/universal-flat-entity/types/universal-flat-logic-function.type';
 import { type UniversalFlatNavigationMenuItem } from 'src/engine/workspace-manager/workspace-migration/universal-flat-entity/types/universal-flat-navigation-menu-item.type';
@@ -164,14 +161,6 @@ import {
   type UniversalDeleteFieldAction,
   type UniversalUpdateFieldAction,
 } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-builder/builders/field/types/workspace-migration-field-action.type';
-import {
-  type FlatCreateFrontComponentAction,
-  type FlatDeleteFrontComponentAction,
-  type FlatUpdateFrontComponentAction,
-  type UniversalCreateFrontComponentAction,
-  type UniversalDeleteFrontComponentAction,
-  type UniversalUpdateFrontComponentAction,
-} from 'src/engine/workspace-manager/workspace-migration/workspace-migration-builder/builders/front-component/types/workspace-migration-front-component-action.type';
 import {
   type FlatCreateIndexAction,
   type FlatDeleteIndexAction,
@@ -364,17 +353,6 @@ import {
   type UniversalDeleteSearchFieldMetadataAction,
   type UniversalUpdateSearchFieldMetadataAction,
 } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-builder/builders/search-field-metadata/types/workspace-migration-search-field-metadata-action.type';
-import { type FlatSettingsMenuItemMaps } from 'src/engine/metadata-modules/flat-settings-menu-item/types/flat-settings-menu-item-maps.type';
-import { type FlatSettingsMenuItem } from 'src/engine/metadata-modules/flat-settings-menu-item/types/flat-settings-menu-item.type';
-import { type UniversalFlatSettingsMenuItem } from 'src/engine/workspace-manager/workspace-migration/universal-flat-entity/types/universal-flat-settings-menu-item.type';
-import {
-  type FlatCreateSettingsMenuItemAction,
-  type FlatDeleteSettingsMenuItemAction,
-  type FlatUpdateSettingsMenuItemAction,
-  type UniversalCreateSettingsMenuItemAction,
-  type UniversalDeleteSettingsMenuItemAction,
-  type UniversalUpdateSettingsMenuItemAction,
-} from 'src/engine/workspace-manager/workspace-migration/workspace-migration-builder/builders/settings-menu-item/types/workspace-migration-settings-menu-item-action.type';
 
 export type AllFlatEntityTypesByMetadataName = {
   fieldMetadata: {
@@ -796,22 +774,6 @@ export type AllFlatEntityTypesByMetadataName = {
     universalFlatEntity: UniversalFlatPageLayoutTab;
     entity: MetadataEntity<'pageLayoutTab'>;
   };
-  frontComponent: {
-    flatEntityMaps: FlatFrontComponentMaps;
-    universalActions: {
-      create: UniversalCreateFrontComponentAction;
-      update: UniversalUpdateFrontComponentAction;
-      delete: UniversalDeleteFrontComponentAction;
-    };
-    flatActions: {
-      create: FlatCreateFrontComponentAction;
-      update: FlatUpdateFrontComponentAction;
-      delete: FlatDeleteFrontComponentAction;
-    };
-    flatEntity: FlatFrontComponent;
-    universalFlatEntity: UniversalFlatFrontComponent;
-    entity: MetadataEntity<'frontComponent'>;
-  };
   webhook: {
     flatEntityMaps: FlatWebhookMaps;
     universalActions: {
@@ -859,22 +821,6 @@ export type AllFlatEntityTypesByMetadataName = {
     flatEntity: FlatTimelineActivityType;
     universalFlatEntity: UniversalFlatTimelineActivityType;
     entity: MetadataEntity<'timelineActivityType'>;
-  };
-  settingsMenuItem: {
-    flatEntityMaps: FlatSettingsMenuItemMaps;
-    universalActions: {
-      create: UniversalCreateSettingsMenuItemAction;
-      update: UniversalUpdateSettingsMenuItemAction;
-      delete: UniversalDeleteSettingsMenuItemAction;
-    };
-    flatActions: {
-      create: FlatCreateSettingsMenuItemAction;
-      update: FlatUpdateSettingsMenuItemAction;
-      delete: FlatDeleteSettingsMenuItemAction;
-    };
-    flatEntity: FlatSettingsMenuItem;
-    universalFlatEntity: UniversalFlatSettingsMenuItem;
-    entity: MetadataEntity<'settingsMenuItem'>;
   };
   validationRule: {
     flatEntityMaps: FlatValidationRuleMaps;

@@ -15,7 +15,6 @@ type MountCommandParams = {
   engineCommandId: string;
   contextStoreInstanceId: string;
   engineComponentKey: EngineComponentKey;
-  frontComponentId?: string;
   workflowVersionId?: string;
   coreWorkflowVersionId?: string;
   availabilityType?: CommandMenuItemAvailabilityType;
@@ -38,7 +37,6 @@ export const useMountCommand = () => {
       engineCommandId,
       contextStoreInstanceId,
       engineComponentKey,
-      frontComponentId,
       workflowVersionId,
       coreWorkflowVersionId,
       availabilityType,
@@ -58,10 +56,9 @@ export const useMountCommand = () => {
         isInSidePanel,
       });
 
-      const commandState = isDefined(frontComponentId)
-        ? { ...headlessEngineCommandContextApi, frontComponentId }
-        : (isDefined(workflowVersionId) || isDefined(coreWorkflowVersionId)) &&
-            isDefined(availabilityType)
+      const commandState =
+        (isDefined(workflowVersionId) || isDefined(coreWorkflowVersionId)) &&
+        isDefined(availabilityType)
           ? await enrichHeadlessCommandContextApiWithWorkflowVersionTriggerInformation(
               {
                 headlessEngineCommandContextApi,

@@ -20,10 +20,6 @@ import { PAGE_LAYOUT_WIDGET_SEEDS } from 'src/engine/workspace-manager/dev-seede
 import { type SeederFlatPageLayoutWidget } from 'src/engine/workspace-manager/dev-seeder/core/types/seeder-flat-page-layout-widget.type';
 import { generateSeedId } from 'src/engine/workspace-manager/dev-seeder/core/utils/generate-seed-id.util';
 import { getPageLayoutWidgetDataSeedsV2 } from 'src/engine/workspace-manager/dev-seeder/core/utils/get-page-layout-widget-data-seeds-v2.util';
-import {
-  getSeedFrontComponentDefinitions,
-  getSeedFrontComponentIds,
-} from 'src/engine/workspace-manager/standard-objects-prefill-data/utils/prefill-front-component-definitions.util';
 
 export const getPageLayoutWidgetFlatEntitySeeds = ({
   workspaceId,
@@ -49,13 +45,6 @@ export const getPageLayoutWidgetFlatEntitySeeds = ({
     }
   }
 
-  const frontComponentUniversalIdentifierById: Record<string, string> = {};
-
-  for (const definition of getSeedFrontComponentDefinitions(workspaceId)) {
-    frontComponentUniversalIdentifierById[definition.id] =
-      definition.universalIdentifier;
-  }
-
   return seeds.map((seed) => {
     const objectMetadata = isDefined(seed.objectMetadataId)
       ? objectMetadataItems.find(
@@ -68,7 +57,6 @@ export const getPageLayoutWidgetFlatEntitySeeds = ({
       fromPageLayoutWidgetConfigurationToUniversalConfiguration({
         configuration: seed.configuration,
         fieldMetadataUniversalIdentifierById,
-        frontComponentUniversalIdentifierById,
       });
 
     return {
@@ -471,29 +459,6 @@ export const getPageLayoutWidgetDataSeeds = (
           overrides: null,
         } satisfies SeederFlatPageLayoutWidget)
       : null,
-
-    {
-      id: generateSeedId(workspaceId, PAGE_LAYOUT_WIDGET_SEEDS.FRONT_COMPONENT),
-      pageLayoutTabId: generateSeedId(
-        workspaceId,
-        PAGE_LAYOUT_TAB_SEEDS.SALES_OVERVIEW,
-      ),
-      title: 'Front Component',
-      type: WidgetType.FRONT_COMPONENT,
-      position: {
-        layoutMode: PageLayoutTabLayoutMode.GRID,
-        row: 2,
-        column: 7,
-        rowSpan: 2,
-        columnSpan: 5,
-      },
-      configuration: {
-        configurationType: WidgetConfigurationType.FRONT_COMPONENT,
-        frontComponentId: getSeedFrontComponentIds(workspaceId).helloWorldId,
-      } as const,
-      objectMetadataId: null,
-      overrides: null,
-    } satisfies SeederFlatPageLayoutWidget,
 
     {
       id: generateSeedId(

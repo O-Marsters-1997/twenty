@@ -68,7 +68,6 @@ export const ALL_METADATA_REQUIRED_METADATA_FOR_VALIDATION = {
   skill: {},
   commandMenuItem: {
     objectMetadata: true,
-    frontComponent: true,
     pageLayout: true,
   },
   navigationMenuItem: {
@@ -102,7 +101,6 @@ export const ALL_METADATA_REQUIRED_METADATA_FOR_VALIDATION = {
   pageLayoutWidget: {
     objectMetadata: true,
     pageLayoutTab: true,
-    frontComponent: true,
     fieldMetadata: true,
     commandMenuItem: true,
   },
@@ -116,9 +114,6 @@ export const ALL_METADATA_REQUIRED_METADATA_FOR_VALIDATION = {
     role: true,
     objectMetadata: true,
   },
-  frontComponent: {
-    objectMetadata: true,
-  },
   webhook: {},
   searchFieldMetadata: {
     objectMetadata: true,
@@ -127,10 +122,6 @@ export const ALL_METADATA_REQUIRED_METADATA_FOR_VALIDATION = {
   timelineActivityType: {
     objectMetadata: true,
     fieldMetadata: true,
-    frontComponent: true,
-  },
-  settingsMenuItem: {
-    frontComponent: true,
   },
   validationRule: {
     objectMetadata: true,

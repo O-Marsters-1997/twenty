@@ -23,7 +23,6 @@ export const ALL_METADATA_ENTITY_KEYS = [
   'logicFunctions',
   'navigationMenuItems',
   'commandMenuItems',
-  'frontComponents',
   'webhooks',
   'roles',
   'roleTargets',

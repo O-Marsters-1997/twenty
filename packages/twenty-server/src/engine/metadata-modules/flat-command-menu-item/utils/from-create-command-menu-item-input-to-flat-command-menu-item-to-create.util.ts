@@ -15,7 +15,6 @@ export const fromCreateCommandMenuItemInputToFlatCommandMenuItemToCreate = ({
   workspaceId,
   flatApplication,
   flatObjectMetadataMaps,
-  flatFrontComponentMaps,
   flatPageLayoutMaps,
 }: {
   createCommandMenuItemInput: CreateCommandMenuItemInput;
@@ -23,7 +22,7 @@ export const fromCreateCommandMenuItemInputToFlatCommandMenuItemToCreate = ({
   flatApplication: FlatApplication;
 } & Pick<
   AllFlatEntityMaps,
-  'flatObjectMetadataMaps' | 'flatFrontComponentMaps' | 'flatPageLayoutMaps'
+  'flatObjectMetadataMaps' | 'flatPageLayoutMaps'
 >): FlatCommandMenuItem => {
   const id = uuidv4();
   const now = new Date().toISOString();
@@ -48,7 +47,6 @@ export const fromCreateCommandMenuItemInputToFlatCommandMenuItemToCreate = ({
 
   const {
     availabilityObjectMetadataUniversalIdentifier,
-    frontComponentUniversalIdentifier,
     pageLayoutUniversalIdentifier,
     navigationTargetObjectMetadataUniversalIdentifier,
   } = resolveEntityRelationUniversalIdentifiers({
@@ -56,14 +54,12 @@ export const fromCreateCommandMenuItemInputToFlatCommandMenuItemToCreate = ({
     foreignKeyValues: {
       availabilityObjectMetadataId:
         createCommandMenuItemInput.availabilityObjectMetadataId,
-      frontComponentId: createCommandMenuItemInput.frontComponentId,
       pageLayoutId: createCommandMenuItemInput.pageLayoutId,
       navigationTargetObjectMetadataId,
     },
     flatEntityMaps: {
       flatObjectMetadataMaps,
-      flatFrontComponentMaps,
-      flatPageLayoutMaps,
+          flatPageLayoutMaps,
     },
   });
 
@@ -73,8 +69,6 @@ export const fromCreateCommandMenuItemInputToFlatCommandMenuItemToCreate = ({
     workflowVersionId: createCommandMenuItemInput.workflowVersionId ?? null,
     coreWorkflowVersionId:
       createCommandMenuItemInput.coreWorkflowVersionId ?? null,
-    frontComponentId: createCommandMenuItemInput.frontComponentId ?? null,
-    frontComponentUniversalIdentifier,
     engineComponentKey: createCommandMenuItemInput.engineComponentKey,
     label: createCommandMenuItemInput.label,
     icon: createCommandMenuItemInput.icon ?? null,

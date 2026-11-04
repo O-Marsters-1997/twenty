@@ -6,7 +6,6 @@ import { type EntityTarget, type ObjectLiteral } from 'typeorm';
 import { AgentEntity } from 'src/engine/metadata-modules/ai/ai-agent/entities/agent.entity';
 import { CommandMenuItemEntity } from 'src/engine/metadata-modules/command-menu-item/entities/command-menu-item.entity';
 import { FieldMetadataEntity } from 'src/engine/metadata-modules/field-metadata/field-metadata.entity';
-import { FrontComponentEntity } from 'src/engine/metadata-modules/front-component/entities/front-component.entity';
 import { IndexMetadataEntity } from 'src/engine/metadata-modules/index-metadata/index-metadata.entity';
 import { WebhookEntity } from 'src/engine/metadata-modules/webhook/entities/webhook.entity';
 import { NavigationMenuItemEntity } from 'src/engine/metadata-modules/navigation-menu-item/entities/navigation-menu-item.entity';
@@ -34,7 +33,6 @@ import { ViewSortEntity } from 'src/engine/metadata-modules/view-sort/entities/v
 import { SearchFieldMetadataEntity } from 'src/engine/metadata-modules/search-field-metadata/search-field-metadata.entity';
 import { ValidationRuleEntity } from 'src/engine/metadata-modules/validation-rule/entities/validation-rule.entity';
 import { TimelineActivityTypeEntity } from 'src/engine/metadata-modules/timeline-activity-type/entities/timeline-activity-type.entity';
-import { SettingsMenuItemEntity } from 'src/engine/metadata-modules/settings-menu-item/entities/settings-menu-item.entity';
 
 export const ALL_METADATA_ENTITY_BY_METADATA_NAME = {
   viewField: ViewFieldEntity,
@@ -49,7 +47,6 @@ export const ALL_METADATA_ENTITY_BY_METADATA_NAME = {
   view: ViewEntity,
   index: IndexMetadataEntity,
   pageLayoutTab: PageLayoutTabEntity,
-  frontComponent: FrontComponentEntity,
   fieldMetadata: FieldMetadataEntity,
   pageLayout: PageLayoutEntity,
   skill: SkillEntity,
@@ -67,7 +64,6 @@ export const ALL_METADATA_ENTITY_BY_METADATA_NAME = {
   viewSort: ViewSortEntity,
   searchFieldMetadata: SearchFieldMetadataEntity,
   timelineActivityType: TimelineActivityTypeEntity,
-  settingsMenuItem: SettingsMenuItemEntity,
   validationRule: ValidationRuleEntity,
   workflow: WorkflowEntity,
   workflowVersion: WorkflowVersionEntity,

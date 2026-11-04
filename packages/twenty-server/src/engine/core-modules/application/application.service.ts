@@ -20,11 +20,9 @@ import { WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.ent
 import { AgentEntity } from 'src/engine/metadata-modules/ai/ai-agent/entities/agent.entity';
 import { CommandMenuItemEntity } from 'src/engine/metadata-modules/command-menu-item/entities/command-menu-item.entity';
 import { ALL_FLAT_ENTITY_MAPS_PROPERTIES } from 'src/engine/metadata-modules/flat-entity/constant/all-flat-entity-maps-properties.constant';
-import { FrontComponentEntity } from 'src/engine/metadata-modules/front-component/entities/front-component.entity';
 import { LogicFunctionEntity } from 'src/engine/metadata-modules/logic-function/logic-function.entity';
 import { logicFunctionCreateHash } from 'src/engine/metadata-modules/logic-function/utils/logic-function-create-hash.utils';
 import { ObjectMetadataEntity } from 'src/engine/metadata-modules/object-metadata/object-metadata.entity';
-import { SettingsMenuItemEntity } from 'src/engine/metadata-modules/settings-menu-item/entities/settings-menu-item.entity';
 import { serializeApplicationForBroadcast } from 'src/engine/core-modules/application/utils/serialize-application-for-broadcast.util';
 import { WorkspaceEventBroadcaster } from 'src/engine/subscriptions/workspace-event-broadcaster/workspace-event-broadcaster.service';
 import { InjectWorkspaceScopedRepository } from 'src/engine/twenty-orm/workspace-scoped-repository/inject-workspace-scoped-repository.decorator';
@@ -50,12 +48,8 @@ export class ApplicationService {
     private readonly logicFunctionRepository: WorkspaceScopedRepository<LogicFunctionEntity>,
     @InjectWorkspaceScopedRepository(AgentEntity)
     private readonly agentRepository: WorkspaceScopedRepository<AgentEntity>,
-    @InjectWorkspaceScopedRepository(FrontComponentEntity)
-    private readonly frontComponentRepository: WorkspaceScopedRepository<FrontComponentEntity>,
     @InjectWorkspaceScopedRepository(CommandMenuItemEntity)
     private readonly commandMenuItemRepository: WorkspaceScopedRepository<CommandMenuItemEntity>,
-    @InjectWorkspaceScopedRepository(SettingsMenuItemEntity)
-    private readonly settingsMenuItemRepository: WorkspaceScopedRepository<SettingsMenuItemEntity>,
     @InjectWorkspaceScopedRepository(ObjectMetadataEntity)
     private readonly objectMetadataRepository: WorkspaceScopedRepository<ObjectMetadataEntity>,
     private readonly workspaceEventBroadcaster: WorkspaceEventBroadcaster,
@@ -195,9 +189,7 @@ export class ApplicationService {
     const [
       logicFunctions,
       agents,
-      frontComponents,
       commandMenuItems,
-      settingsMenuItems,
       objects,
     ] = await Promise.all([
       this.logicFunctionRepository.find(workspaceId, {
@@ -206,13 +198,7 @@ export class ApplicationService {
       this.agentRepository.find(workspaceId, {
         where: { applicationId: application.id },
       }),
-      this.frontComponentRepository.find(workspaceId, {
-        where: { applicationId: application.id },
-      }),
       this.commandMenuItemRepository.find(workspaceId, {
-        where: { applicationId: application.id },
-      }),
-      this.settingsMenuItemRepository.find(workspaceId, {
         where: { applicationId: application.id },
       }),
       this.objectMetadataRepository.find(workspaceId, {
@@ -222,9 +208,7 @@ export class ApplicationService {
 
     application.logicFunctions = logicFunctions;
     application.agents = agents;
-    application.frontComponents = frontComponents;
     application.commandMenuItems = commandMenuItems;
-    application.settingsMenuItems = settingsMenuItems;
     application.objects = objects;
 
     return application;

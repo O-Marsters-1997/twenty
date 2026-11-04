@@ -4,4 +4,5 @@ import { type AllMetadataName } from '@/metadata/types/AllMetadataName';
 export type DeterministicEntityNamespace =
   | AllMetadataName
   | 'selectOption'
+  | 'settingsMenuItem'
   | 'indexField';

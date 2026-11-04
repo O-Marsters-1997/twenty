@@ -24,7 +24,6 @@ import { type CommandMenuItemOverrides } from 'src/engine/metadata-modules/comma
 import { CommandMenuItemPayloadUnion } from 'src/engine/metadata-modules/command-menu-item/dtos/command-menu-item-payload.union';
 import { type PathCommandMenuItemPayload } from 'src/engine/metadata-modules/command-menu-item/dtos/types/path-command-menu-item-payload.type';
 import { EngineComponentKey } from 'src/engine/metadata-modules/command-menu-item/enums/engine-component-key.enum';
-import { FrontComponentDTO } from 'src/engine/metadata-modules/front-component/dtos/front-component.dto';
 
 registerEnumType(CommandMenuItemAvailabilityType, {
   name: 'CommandMenuItemAvailabilityType',
@@ -46,14 +45,6 @@ export class CommandMenuItemDTO {
   @IsOptional()
   @Field(() => UUIDScalarType, { nullable: true })
   coreWorkflowVersionId?: string;
-
-  @IsUUID()
-  @IsOptional()
-  @Field(() => UUIDScalarType, { nullable: true })
-  frontComponentId?: string;
-
-  @Field(() => FrontComponentDTO, { nullable: true })
-  frontComponent?: FrontComponentDTO | null;
 
   @IsEnum(EngineComponentKey)
   @IsNotEmpty()

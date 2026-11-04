@@ -1,17 +1,14 @@
 import { act, renderHook } from '@testing-library/react';
 import { type ReactNode } from 'react';
 import { createStore, Provider as JotaiProvider } from 'jotai';
-import { type CommandMenuContextApi } from 'twenty-shared/types';
-import { IconApps } from 'twenty-ui/icon';
 
 import { EMPTY_COMMAND_MENU_CONTEXT_API } from '@/command-menu-item/constants/EmptyCommandMenuContextApi';
 import { CommandMenuContext } from '@/command-menu-item/contexts/CommandMenuContext';
 import { useCommandMenuItemClick } from '@/command-menu-item/hooks/useCommandMenuItemClick';
 import { CommandMenuItemContainerType } from '@/command-menu-item/types/CommandMenuItemContainerType';
-import { contextStoreTargetedRecordsRuleComponentState } from '@/context-store/states/contextStoreTargetedRecordsRuleComponentState';
 import { type CommandMenuItemDefinition } from '@/command-menu-item/types/CommandMenuItemDefinition';
+import { EngineComponentKey } from '~/generated-metadata/graphql';
 
-const mockOpenFrontComponentInSidePanel = jest.fn();
 const mockMountCommand = jest.fn();
 
 jest.mock(
@@ -33,12 +30,6 @@ jest.mock('@/command-menu-item/hooks/useCloseCommandMenu', () => ({
   useCloseCommandMenu: () => ({ closeCommandMenu: jest.fn() }),
 }));
 
-jest.mock('@/side-panel/hooks/useOpenFrontComponentInSidePanel', () => ({
-  useOpenFrontComponentInSidePanel: () => ({
-    openFrontComponentInSidePanel: mockOpenFrontComponentInSidePanel,
-  }),
-}));
-
 jest.mock(
   '@/command-menu-item/engine-command/constants/EngineComponentKeyHeadlessComponentMap',
   () => ({ ENGINE_COMPONENT_KEY_COMPONENT_MAP: {} }),
@@ -49,139 +40,48 @@ jest.mock(
   () => ({ ExportRecordsCommand: () => null }),
 );
 
-const FRONT_COMPONENT_COMMAND_MENU_ITEM = {
+const ENGINE_COMMAND_MENU_ITEM = {
   id: 'command-menu-item-id',
-  frontComponentId: 'front-component-id',
-  frontComponent: {
-    id: 'front-component-id',
-    name: 'front-component',
-    isHeadless: false,
-  },
+  engineComponentKey: EngineComponentKey.NEW_AI_CHAT,
 } as CommandMenuItemDefinition;
 
-const getWrapper = (
-  commandMenuContextApi: CommandMenuContextApi,
-  selectedRecordIds: string[],
-) => {
-  const store = createStore();
-  store.set(
-    contextStoreTargetedRecordsRuleComponentState.atomFamily({
-      instanceId: 'context-store-instance-id',
-    }),
-    { mode: 'selection', selectedRecordIds },
-  );
-
-  return ({ children }: { children: ReactNode }) => (
-    <JotaiProvider store={store}>
-      <CommandMenuContext.Provider
-        value={{
-          containerType: CommandMenuItemContainerType.CommandMenuList,
-          displayType: 'listItem',
-          commandMenuItems: [],
-          commandMenuContextApi,
-          isInPreviewMode: false,
-        }}
-      >
-        {children}
-      </CommandMenuContext.Provider>
-    </JotaiProvider>
-  );
-};
+const wrapper = ({ children }: { children: ReactNode }) => (
+  <JotaiProvider store={createStore()}>
+    <CommandMenuContext.Provider
+      value={{
+        containerType: CommandMenuItemContainerType.CommandMenuList,
+        displayType: 'listItem',
+        commandMenuItems: [],
+        commandMenuContextApi: EMPTY_COMMAND_MENU_CONTEXT_API,
+        isInPreviewMode: false,
+      }}
+    >
+      {children}
+    </CommandMenuContext.Provider>
+  </JotaiProvider>
+);
 
 describe('useCommandMenuItemClick', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it.each([
-    {
-      description: 'the object and the record when one record is selected',
-      objectMetadataItem: { nameSingular: 'company' },
-      selectedRecordIds: ['record-1'],
-      storedRecordIds: ['record-1'],
-      expectedRecordContext: {
-        objectNameSingular: 'company',
-        selectedRecordIds: ['record-1'],
-      },
-    },
-    {
-      description: 'the object when several records are selected',
-      objectMetadataItem: { nameSingular: 'company' },
-      selectedRecordIds: ['record-1', 'record-2'],
-      storedRecordIds: ['record-1', 'record-2'],
-      expectedRecordContext: {
-        objectNameSingular: 'company',
-        selectedRecordIds: ['record-1', 'record-2'],
-      },
-    },
-    {
-      description: 'selected records missing from the record store',
-      objectMetadataItem: { nameSingular: 'company' },
-      selectedRecordIds: ['record-1', 'record-2'],
-      storedRecordIds: ['record-1'],
-      expectedRecordContext: {
-        objectNameSingular: 'company',
-        selectedRecordIds: ['record-1', 'record-2'],
-      },
-    },
-    {
-      description: 'the object when no record is selected',
-      objectMetadataItem: { nameSingular: 'company' },
-      selectedRecordIds: [],
-      storedRecordIds: [],
-      expectedRecordContext: {
-        objectNameSingular: 'company',
-        selectedRecordIds: [],
-      },
-    },
-    {
-      description: 'no record context outside an object',
-      objectMetadataItem: {},
-      selectedRecordIds: ['record-1'],
-      storedRecordIds: ['record-1'],
-      expectedRecordContext: undefined,
-    },
-  ])(
-    'opens a side panel front component with $description',
-    async ({
-      objectMetadataItem,
-      selectedRecordIds,
-      storedRecordIds,
-      expectedRecordContext,
-    }) => {
-      const { result } = renderHook(
-        () =>
-          useCommandMenuItemClick({
-            item: FRONT_COMPONENT_COMMAND_MENU_ITEM,
-            Icon: IconApps,
-            label: 'Open front component',
-          }),
-        {
-          wrapper: getWrapper(
-            {
-              ...EMPTY_COMMAND_MENU_CONTEXT_API,
-              objectMetadataItem,
-              selectedRecords: storedRecordIds.map((id) => ({
-                id,
-                __typename: 'Company',
-              })),
-            },
-            selectedRecordIds,
-          ),
-        },
-      );
+  it('mounts the engine command of the clicked item', async () => {
+    const { result } = renderHook(
+      () => useCommandMenuItemClick({ item: ENGINE_COMMAND_MENU_ITEM }),
+      { wrapper },
+    );
 
-      await act(async () => {
-        await result.current.handleClick();
-      });
+    await act(async () => {
+      await result.current.handleClick();
+    });
 
-      expect(mockMountCommand).not.toHaveBeenCalled();
-      expect(mockOpenFrontComponentInSidePanel).toHaveBeenCalledWith({
-        frontComponentId: 'front-component-id',
-        pageTitle: 'Open front component',
-        pageIcon: IconApps,
-        recordContext: expectedRecordContext,
-      });
-    },
-  );
+    expect(mockMountCommand).toHaveBeenCalledWith(
+      expect.objectContaining({
+        engineCommandId: 'command-menu-item-id',
+        contextStoreInstanceId: 'context-store-instance-id',
+        engineComponentKey: EngineComponentKey.NEW_AI_CHAT,
+      }),
+    );
+  });
 });

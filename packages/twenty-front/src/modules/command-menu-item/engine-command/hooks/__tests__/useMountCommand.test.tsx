@@ -53,30 +53,6 @@ describe('useMountCommand', () => {
     jest.clearAllMocks();
   });
 
-  it('should mount with frontComponentId when provided', async () => {
-    const store = createStore();
-    const wrapper = getWrapper(store);
-
-    const { result } = renderHook(() => useMountCommand(), { wrapper });
-
-    await act(async () => {
-      await result.current({
-        engineCommandId: 'cmd-1',
-        contextStoreInstanceId: 'ctx-1',
-        engineComponentKey: EngineComponentKey.CREATE_NEW_RECORD,
-        frontComponentId: 'front-comp-1',
-      });
-    });
-
-    const map = store.get(headlessCommandContextApisState.atom);
-
-    expect(map.get('cmd-1')).toEqual({
-      ...baseContextApi,
-      frontComponentId: 'front-comp-1',
-    });
-    expect(mockEnrichFn).not.toHaveBeenCalled();
-  });
-
   it('should mount with workflow enrichment when workflowVersionId and availabilityType are provided', async () => {
     const store = createStore();
     const wrapper = getWrapper(store);
@@ -113,7 +89,7 @@ describe('useMountCommand', () => {
     });
   });
 
-  it('should mount with base headless context API when neither frontComponentId nor workflow params are provided', async () => {
+  it('should mount with base headless context API when no workflow params are provided', async () => {
     const store = createStore();
     const wrapper = getWrapper(store);
 

@@ -14,14 +14,12 @@ import { CommandMenuItemModule } from 'src/engine/metadata-modules/command-menu-
 import { FieldMetadataModule } from 'src/engine/metadata-modules/field-metadata/field-metadata.module';
 import { FlatEntityMapsGraphqlApiExceptionFilter } from 'src/engine/metadata-modules/flat-entity/filters/flat-entity-maps-graphql-api-exception.filter';
 import { PermissionsGraphqlApiExceptionFilter } from 'src/engine/metadata-modules/permissions/utils/permissions-graphql-api-exception.filter';
-import { FrontComponentModule } from 'src/engine/metadata-modules/front-component/front-component.module';
 import { LogicFunctionLayerModule } from 'src/engine/metadata-modules/logic-function-layer/logic-function-layer.module';
 import { LogicFunctionModule } from 'src/engine/metadata-modules/logic-function/logic-function.module';
 import { MessageChannelMetadataModule } from 'src/engine/metadata-modules/message-channel/message-channel-metadata.module';
 import { MessageFolderMetadataModule } from 'src/engine/metadata-modules/message-folder/message-folder-metadata.module';
 import { MetadataTranslationModule } from 'src/engine/metadata-modules/metadata-translation/metadata-translation.module';
 import { NavigationMenuItemModule } from 'src/engine/metadata-modules/navigation-menu-item/navigation-menu-item.module';
-import { SettingsMenuItemModule } from 'src/engine/metadata-modules/settings-menu-item/settings-menu-item.module';
 import { TimelineActivityTypeModule } from 'src/engine/metadata-modules/timeline-activity-type/timeline-activity-type.module';
 import { ValidationRuleModule } from 'src/engine/metadata-modules/validation-rule/validation-rule.module';
 import { ObjectMetadataModule } from 'src/engine/metadata-modules/object-metadata/object-metadata.module';
@@ -40,7 +38,6 @@ import { WorkspaceMetadataVersionModule } from 'src/engine/metadata-modules/work
   imports: [
     RecordPermissionsModule,
     FieldMetadataModule,
-    FrontComponentModule,
     ObjectMetadataModule,
     SearchFieldMetadataModule,
     LogicFunctionModule,
@@ -49,7 +46,6 @@ import { WorkspaceMetadataVersionModule } from 'src/engine/metadata-modules/work
     CommandMenuItemModule,
     MetadataTranslationModule,
     NavigationMenuItemModule,
-    SettingsMenuItemModule,
     TimelineActivityTypeModule,
     ValidationRuleModule,
     AiAgentModule,

@@ -1,5 +1,4 @@
 import { commandMenuItemsSelector } from '@/command-menu-item/states/commandMenuItemsSelector';
-import { frontComponentsSelector } from '@/front-components/states/frontComponentsSelector';
 import { navigationMenuItemsSelector } from '@/navigation-menu-item/common/states/navigationMenuItemsSelector';
 import { pageLayoutsWithRelationsSelector } from '@/page-layout/states/pageLayoutsWithRelationsSelector';
 import { SettingsStatsGrid } from '@/settings/components/SettingsStatsGrid';
@@ -9,7 +8,6 @@ import { useLingui } from '@lingui/react/macro';
 import {
   IconCommand,
   IconCompass,
-  IconLayoutGridAdd,
   IconPerspective,
   IconTable,
 } from 'twenty-ui/icon';
@@ -23,7 +21,6 @@ export const SettingsLayoutItemsStats = () => {
   const pageLayoutsWithRelations = useAtomStateValue(
     pageLayoutsWithRelationsSelector,
   );
-  const frontComponents = useAtomStateValue(frontComponentsSelector);
 
   return (
     <SettingsStatsGrid
@@ -50,13 +47,6 @@ export const SettingsLayoutItemsStats = () => {
             Icon: IconPerspective,
             label: t`Pages`,
             value: pageLayoutsWithRelations.length.toString(),
-          },
-        ],
-        [
-          {
-            Icon: IconLayoutGridAdd,
-            label: t`Widgets`,
-            value: frontComponents.length.toString(),
           },
         ],
       ]}

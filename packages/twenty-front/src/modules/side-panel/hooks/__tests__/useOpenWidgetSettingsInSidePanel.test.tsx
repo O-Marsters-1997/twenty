@@ -137,18 +137,15 @@ describe('useOpenWidgetSettingsInSidePanel', () => {
 
   it('opens widget settings for a fit-content widget in a multi-widget tab', () => {
     const store = createStore();
-    const frontComponentWidget = {
-      ...makeWidget('front-component-widget', 1),
-      type: WidgetType.FRONT_COMPONENT,
+    const iframeWidget = {
+      ...makeWidget('iframe-widget', 1),
+      type: WidgetType.IFRAME,
     };
 
     store.set(
       getDraftAtom(),
       makeDraft([
-        makeTab('tab-1', [
-          makeWidget('fields-widget', 0),
-          frontComponentWidget,
-        ]),
+        makeTab('tab-1', [makeWidget('fields-widget', 0), iframeWidget]),
       ]),
     );
 
@@ -156,12 +153,12 @@ describe('useOpenWidgetSettingsInSidePanel', () => {
 
     act(() => {
       result.current.openWidgetSettingsInSidePanel({
-        widgetId: frontComponentWidget.id,
-        widgetType: frontComponentWidget.type,
+        widgetId: iframeWidget.id,
+        widgetType: iframeWidget.type,
       });
     });
 
-    expect(store.get(getEditingWidgetIdAtom())).toBe(frontComponentWidget.id);
+    expect(store.get(getEditingWidgetIdAtom())).toBe(iframeWidget.id);
     expect(mockNavigatePageLayoutSidePanel).toHaveBeenCalledWith({
       sidePanelPage: SidePanelPages.PageLayoutWidgetSettings,
       resetNavigationStack: true,
@@ -169,11 +166,11 @@ describe('useOpenWidgetSettingsInSidePanel', () => {
     expect(mockCloseSidePanelMenu).not.toHaveBeenCalled();
   });
 
-  it('opens widget settings for a single TAB_VIEWPORT front component', () => {
+  it('opens widget settings for a single TAB_VIEWPORT iframe', () => {
     const store = createStore();
-    const frontComponentWidget = {
-      ...makeWidget('front-component-widget', 0),
-      type: WidgetType.FRONT_COMPONENT,
+    const iframeWidget = {
+      ...makeWidget('iframe-widget', 0),
+      type: WidgetType.IFRAME,
       position: {
         __typename: 'PageLayoutWidgetVerticalListPosition' as const,
         layoutMode: PageLayoutTabLayoutMode.VERTICAL_LIST,
@@ -182,21 +179,18 @@ describe('useOpenWidgetSettingsInSidePanel', () => {
       },
     };
 
-    store.set(
-      getDraftAtom(),
-      makeDraft([makeTab('tab-1', [frontComponentWidget])]),
-    );
+    store.set(getDraftAtom(), makeDraft([makeTab('tab-1', [iframeWidget])]));
 
     const { result } = renderOpenWidgetSettingsHook(store);
 
     act(() => {
       result.current.openWidgetSettingsInSidePanel({
-        widgetId: frontComponentWidget.id,
-        widgetType: frontComponentWidget.type,
+        widgetId: iframeWidget.id,
+        widgetType: iframeWidget.type,
       });
     });
 
-    expect(store.get(getEditingWidgetIdAtom())).toBe(frontComponentWidget.id);
+    expect(store.get(getEditingWidgetIdAtom())).toBe(iframeWidget.id);
     expect(mockNavigatePageLayoutSidePanel).toHaveBeenCalledWith({
       sidePanelPage: SidePanelPages.PageLayoutWidgetSettings,
       resetNavigationStack: true,
@@ -266,7 +260,7 @@ describe('useOpenWidgetSettingsInSidePanel', () => {
       sidePanelPage: SidePanelPages.PageLayoutWidgetSettings,
     },
     {
-      widgetType: WidgetType.FRONT_COMPONENT,
+      widgetType: WidgetType.IFRAME,
       sidePanelPage: SidePanelPages.PageLayoutTabSettings,
     },
   ])(

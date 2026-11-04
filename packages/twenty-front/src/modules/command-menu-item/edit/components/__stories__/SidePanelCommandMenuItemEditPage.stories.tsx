@@ -30,8 +30,6 @@ const PINNED_COMMAND_MENU_ITEM: CommandMenuItemFieldsFragment = {
   isActive: true,
   id: '5f1c1d8e-0c4a-4a51-9b8e-6f3f5b8f1a01',
   workflowVersionId: null,
-  frontComponentId: null,
-  frontComponent: null,
   engineComponentKey: EngineComponentKey.GO_TO_PEOPLE,
   label: 'Go to People',
   icon: 'IconUser',

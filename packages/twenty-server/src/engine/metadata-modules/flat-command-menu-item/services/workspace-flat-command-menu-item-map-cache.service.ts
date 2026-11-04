@@ -14,7 +14,6 @@ const FLAT_COMMAND_MENU_ITEM_ROWS_REQUIREMENT = {
   commandMenuItem: true,
   application: ['id', 'universalIdentifier'],
   objectMetadata: ['id', 'universalIdentifier'],
-  frontComponent: ['id', 'universalIdentifier'],
   pageLayout: ['id', 'universalIdentifier'],
 } as const;
 
@@ -32,7 +31,6 @@ export class WorkspaceFlatCommandMenuItemMapCacheService extends MetadataFlatEnt
       commandMenuItem: commandMenuItems,
       application: applications,
       objectMetadata: objectMetadatas,
-      frontComponent: frontComponents,
       pageLayout: pageLayouts,
     } = rows;
 
@@ -40,8 +38,6 @@ export class WorkspaceFlatCommandMenuItemMapCacheService extends MetadataFlatEnt
       createIdToUniversalIdentifierMap(applications);
     const objectMetadataIdToUniversalIdentifierMap =
       createIdToUniversalIdentifierMap(objectMetadatas);
-    const frontComponentIdToUniversalIdentifierMap =
-      createIdToUniversalIdentifierMap(frontComponents);
     const pageLayoutIdToUniversalIdentifierMap =
       createIdToUniversalIdentifierMap(pageLayouts);
     const objectMetadataUniversalIdentifierById = Object.fromEntries(
@@ -59,7 +55,6 @@ export class WorkspaceFlatCommandMenuItemMapCacheService extends MetadataFlatEnt
           entity: commandMenuItemEntity,
           applicationIdToUniversalIdentifierMap,
           objectMetadataIdToUniversalIdentifierMap,
-          frontComponentIdToUniversalIdentifierMap,
           pageLayoutIdToUniversalIdentifierMap,
           objectMetadataUniversalIdentifierById,
           pageLayoutUniversalIdentifierById,

@@ -59,7 +59,6 @@ export const optimisticallyApplyUpdateActionOnAllFlatEntityMaps = ({
     case 'pageLayoutWidget':
     case 'pageLayoutTab':
     case 'commandMenuItem':
-    case 'frontComponent':
     case 'navigationMenuItem':
     case 'rolePermissionFlag':
     case 'permissionFlag':
@@ -69,7 +68,6 @@ export const optimisticallyApplyUpdateActionOnAllFlatEntityMaps = ({
     case 'workflow':
     case 'workflowVersion':
     case 'timelineActivityType':
-    case 'settingsMenuItem':
     case 'validationRule':
     case 'searchFieldMetadata': {
       const flatEntityMapsKey = getMetadataFlatEntityMapsKey(

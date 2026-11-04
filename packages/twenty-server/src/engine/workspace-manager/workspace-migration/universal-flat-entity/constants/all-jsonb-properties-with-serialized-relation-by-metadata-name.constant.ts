@@ -43,13 +43,9 @@ export const ALL_JSONB_PROPERTIES_WITH_SERIALIZED_RELATION_BY_METADATA_NAME = {
   permissionFlag: {},
   objectPermission: {},
   fieldPermission: {},
-  frontComponent: {
-    widgetAvailability: 'widgetAvailability',
-  },
   timelineActivityType: {},
   validationRule: {},
   searchFieldMetadata: {},
-  settingsMenuItem: {},
   workflow: {},
   workflowVersion: {},
 } as const satisfies {

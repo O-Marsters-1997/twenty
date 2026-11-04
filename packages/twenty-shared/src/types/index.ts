@@ -225,7 +225,6 @@ export type {
   FieldRichTextConfiguration,
   StandaloneRichTextConfiguration,
   IframeConfiguration,
-  FrontComponentConfiguration,
   TimelineConfiguration,
   TasksConfiguration,
   NotesConfiguration,

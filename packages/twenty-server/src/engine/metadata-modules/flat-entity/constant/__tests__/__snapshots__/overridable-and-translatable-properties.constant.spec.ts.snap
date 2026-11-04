@@ -23,7 +23,6 @@ exports[`registry-derived override property maps derives the overridable propert
     "label",
   ],
   "fieldPermission": [],
-  "frontComponent": [],
   "index": [],
   "logicFunction": [],
   "navigationMenuItem": [],
@@ -60,7 +59,6 @@ exports[`registry-derived override property maps derives the overridable propert
   "rowLevelPermissionPredicate": [],
   "rowLevelPermissionPredicateGroup": [],
   "searchFieldMetadata": [],
-  "settingsMenuItem": [],
   "skill": [],
   "timelineActivityType": [
     "label",
@@ -137,9 +135,6 @@ exports[`registry-derived override property maps derives the translatable proper
     "title",
   ],
   "pageLayoutWidget": [
-    "title",
-  ],
-  "settingsMenuItem": [
     "title",
   ],
   "timelineActivityType": [

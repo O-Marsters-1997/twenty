@@ -231,8 +231,6 @@ export class RefactorNavigationCommandsCommand extends ProvisionedWorkspaceComma
         conditionalAvailabilityExpression:
           commandMenuItem.conditionalAvailabilityExpression ?? null,
         conditionalPinnedExpression: null,
-        frontComponentId: null,
-        frontComponentUniversalIdentifier: null,
         engineComponentKey: EngineComponentKey.NAVIGATION,
         payload: { ...commandMenuItem.payload },
         hotKeys: commandMenuItem.hotKeys ? [...commandMenuItem.hotKeys] : null,
