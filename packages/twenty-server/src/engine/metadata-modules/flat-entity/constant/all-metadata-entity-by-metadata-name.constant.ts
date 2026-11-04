@@ -23,7 +23,6 @@ import { RoleTargetEntity } from 'src/engine/metadata-modules/role-target/role-t
 import { RoleEntity } from 'src/engine/metadata-modules/role/role.entity';
 import { RowLevelPermissionPredicateGroupEntity } from 'src/engine/metadata-modules/row-level-permission-predicate/entities/row-level-permission-predicate-group.entity';
 import { RowLevelPermissionPredicateEntity } from 'src/engine/metadata-modules/row-level-permission-predicate/entities/row-level-permission-predicate.entity';
-import { LogicFunctionEntity } from 'src/engine/metadata-modules/logic-function/logic-function.entity';
 import { SkillEntity } from 'src/engine/metadata-modules/skill/entities/skill.entity';
 import { ViewFieldGroupEntity } from 'src/engine/metadata-modules/view-field-group/entities/view-field-group.entity';
 import { ViewFieldEntity } from 'src/engine/metadata-modules/view-field/entities/view-field.entity';
@@ -54,7 +53,6 @@ export const ALL_METADATA_ENTITY_BY_METADATA_NAME = {
   fieldMetadata: FieldMetadataEntity,
   pageLayout: PageLayoutEntity,
   skill: SkillEntity,
-  logicFunction: LogicFunctionEntity,
   objectMetadata: ObjectMetadataEntity,
   objectPermission: ObjectPermissionEntity,
   fieldPermission: FieldPermissionEntity,

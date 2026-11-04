@@ -209,24 +209,6 @@ export const MESSAGE_QUEUE_WORKER_CONFIG: Record<
       boundedShutdownDrain: false,
     },
   },
-  [MessageQueue.logicFunctionQueue]: {
-    priority: 4,
-    workerOptions: {
-      concurrency: 20,
-      lockDuration: 30_000,
-      maxStalledCount: 1,
-      boundedShutdownDrain: false,
-    },
-  },
-  [MessageQueue.applicationLifecycleHookQueue]: {
-    priority: 4,
-    workerOptions: {
-      concurrency: 1,
-      lockDuration: 30_000,
-      maxStalledCount: 1,
-      boundedShutdownDrain: false,
-    },
-  },
   [MessageQueue.applicationUpgradeQueue]: {
     priority: 6,
     workerOptions: {

@@ -15,7 +15,6 @@ import {
   isDefined,
 } from 'twenty-shared/utils';
 
-import { ConnectionProviderLifecycleHookService } from 'src/engine/core-modules/application/connection-provider/connection-provider-lifecycle-hook.service';
 import { AppOAuthRevokeService } from 'src/engine/core-modules/application/connection-provider/refresh/services/app-oauth-revoke.service';
 import { CALENDAR_CHANNEL_DELETED_EVENT } from 'src/engine/metadata-modules/calendar-channel/constants/calendar-channel-deleted.constant';
 import { CalendarChannelEntity } from 'src/engine/metadata-modules/calendar-channel/entities/calendar-channel.entity';
@@ -51,7 +50,6 @@ export class ConnectedAccountMetadataService {
     @InjectRepository(MessageChannelEntity)
     private readonly messageChannelRepository: Repository<MessageChannelEntity>,
     private readonly appOAuthRevokeService: AppOAuthRevokeService,
-    private readonly connectionProviderLifecycleHookService: ConnectionProviderLifecycleHookService,
     private readonly permissionsService: PermissionsService,
     private readonly workspaceEventEmitter: WorkspaceEventEmitter,
     private readonly calendarWebhookSubscriptionService: CalendarWebhookSubscriptionService,
@@ -473,14 +471,6 @@ export class ConnectedAccountMetadataService {
       where: { id, workspaceId },
     });
 
-    if (isDefined(connectedAccount.connectionProviderId)) {
-      await this.connectionProviderLifecycleHookService.runOnDisconnect({
-        connectionProviderId: connectedAccount.connectionProviderId,
-        workspaceId,
-        connectedAccountId: id,
-      });
-    }
-
     await this.appOAuthRevokeService.revokeIfApp(connectedAccount);
 
     const [messageChannels, calendarChannels] = await Promise.all([
@@ -585,14 +575,6 @@ export class ConnectedAccountMetadataService {
     this.logger.log(
       `WorkspaceId: ${workspaceId} Deleting connected account ${id} with ${messageChannels.length} message channel(s) and ${calendarChannels.length} calendar channel(s)`,
     );
-
-    if (isDefined(connectedAccount.connectionProviderId)) {
-      await this.connectionProviderLifecycleHookService.runOnDisconnect({
-        connectionProviderId: connectedAccount.connectionProviderId,
-        workspaceId,
-        connectedAccountId: id,
-      });
-    }
 
     await this.stopWebhookSubscriptions({
       messageChannels,

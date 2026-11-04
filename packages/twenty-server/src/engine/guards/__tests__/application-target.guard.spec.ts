@@ -63,7 +63,7 @@ class TestResolver {
   executeLogicFunction(
     @ApplicationTargetArg<LogicFunctionInput>('input', {
       kind: 'applicationOwnedEntity',
-      metadataName: 'logicFunction',
+      metadataName: 'agent',
       idKey: 'id',
     })
     _input: LogicFunctionInput,
@@ -156,7 +156,7 @@ describe('ApplicationTargetGuard', () => {
 
     guard = new ApplicationTargetGuard(new Reflector(), {
       getOrRecomputeManyOrAllFlatEntityMaps: jest.fn().mockResolvedValue({
-        flatLogicFunctionMaps: buildFlatLogicFunctionMaps(),
+        flatAgentMaps: buildFlatLogicFunctionMaps(),
       }),
     } as unknown as WorkspaceManyOrAllFlatEntityMapsCacheService);
   });
@@ -169,7 +169,7 @@ describe('ApplicationTargetGuard', () => {
       ),
     ).toMatchObject({
       kind: 'applicationOwnedEntity',
-      metadataName: 'logicFunction',
+      metadataName: 'agent',
     });
     expect(
       Reflect.getMetadata(

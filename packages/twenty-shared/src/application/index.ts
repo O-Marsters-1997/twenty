@@ -115,7 +115,6 @@ export { getFrontComponentUniversalIdentifier } from './deterministic-identifier
 export { getIndexFieldUniversalIdentifier } from './deterministic-identifier/get-index-field-universal-identifier.util';
 export { getIndexUniversalIdentifier } from './deterministic-identifier/get-index-universal-identifier.util';
 export { getLegacySettingsMenuItemUniversalIdentifier } from './deterministic-identifier/get-legacy-settings-menu-item-universal-identifier.util';
-export { getLogicFunctionUniversalIdentifier } from './deterministic-identifier/get-logic-function-universal-identifier.util';
 export {
   getFolderNavigationMenuItemUniversalIdentifier,
   getObjectNavigationMenuItemUniversalIdentifier,

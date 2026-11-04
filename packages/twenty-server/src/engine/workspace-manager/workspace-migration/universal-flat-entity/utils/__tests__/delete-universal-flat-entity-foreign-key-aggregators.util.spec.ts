@@ -28,7 +28,7 @@ describe('deleteUniversalFlatEntityForeignKeyAggregators', () => {
 
     const result = deleteUniversalFlatEntityForeignKeyAggregators({
       universalFlatEntity: entity,
-      metadataName: 'logicFunction' as any,
+      metadataName: 'fieldPermission',
     });
 
     expect(result).toBe(entity);

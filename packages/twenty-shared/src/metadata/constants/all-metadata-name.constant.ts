@@ -10,7 +10,6 @@ export const ALL_METADATA_NAME = {
   rowLevelPermissionPredicateGroup: 'rowLevelPermissionPredicateGroup',
   viewFilterGroup: 'viewFilterGroup',
   index: 'index',
-  logicFunction: 'logicFunction',
   viewFilter: 'viewFilter',
   role: 'role',
   roleTarget: 'roleTarget',

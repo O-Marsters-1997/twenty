@@ -4,7 +4,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppConnectionAccessService } from 'src/engine/core-modules/application/connection-provider/app-connection-access.service';
 import { ApplicationConnectionProviderResolver } from 'src/engine/core-modules/application/connection-provider/application-connection-provider.resolver';
 import { ConnectionProviderEntity } from 'src/engine/core-modules/application/connection-provider/connection-provider.entity';
-import { ConnectionProviderLifecycleHookService } from 'src/engine/core-modules/application/connection-provider/connection-provider-lifecycle-hook.service';
 import { ConnectionProviderOAuthFlowService } from 'src/engine/core-modules/application/connection-provider/connection-provider-oauth-flow.service';
 import { ConnectionProviderService } from 'src/engine/core-modules/application/connection-provider/connection-provider.service';
 import { ApplicationEntity } from 'src/engine/core-modules/application/application.entity';
@@ -44,14 +43,12 @@ import { ApplicationLookupModule } from 'src/engine/core-modules/application/app
     AppConnectionAccessService,
     ConnectionProviderService,
     ConnectionProviderOAuthFlowService,
-    ConnectionProviderLifecycleHookService,
     ApplicationConnectionProviderResolver,
     provideWorkspaceScopedRepository(ApplicationEntity),
   ],
   exports: [
     ConnectionProviderService,
     ConnectionProviderOAuthFlowService,
-    ConnectionProviderLifecycleHookService,
   ],
 })
 export class ConnectionProviderModule {}

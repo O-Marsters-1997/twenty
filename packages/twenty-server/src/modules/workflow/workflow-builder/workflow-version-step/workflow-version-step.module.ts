@@ -6,7 +6,6 @@ import { WorkflowVersionCoreModule } from 'src/engine/core-modules/workflow/work
 import { AiAgentRoleModule } from 'src/engine/metadata-modules/ai/ai-agent-role/ai-agent-role.module';
 import { AiAgentModule } from 'src/engine/metadata-modules/ai/ai-agent/ai-agent.module';
 import { WorkspaceManyOrAllFlatEntityMapsCacheModule } from 'src/engine/metadata-modules/flat-entity/services/workspace-many-or-all-flat-entity-maps-cache.module';
-import { LogicFunctionModule } from 'src/engine/metadata-modules/logic-function/logic-function.module';
 import { ObjectMetadataEntity } from 'src/engine/metadata-modules/object-metadata/object-metadata.entity';
 import { RoleTargetEntity } from 'src/engine/metadata-modules/role-target/role-target.entity';
 import { provideWorkspaceScopedRepository } from 'src/engine/twenty-orm/workspace-scoped-repository/provide-workspace-scoped-repository';
@@ -19,7 +18,6 @@ import { RecordCrudModule } from 'src/engine/core-modules/record-crud/record-cru
 @Module({
   imports: [
     WorkflowSchemaModule,
-    LogicFunctionModule,
     WorkflowCommonModule,
     FeatureFlagModule,
     AiAgentRoleModule,

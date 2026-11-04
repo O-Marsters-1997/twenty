@@ -28,7 +28,6 @@ import { AgentEntity } from 'src/engine/metadata-modules/ai/ai-agent/entities/ag
 import { CommandMenuItemEntity } from 'src/engine/metadata-modules/command-menu-item/entities/command-menu-item.entity';
 import { SettingsMenuItemEntity } from 'src/engine/metadata-modules/settings-menu-item/entities/settings-menu-item.entity';
 import { FrontComponentEntity } from 'src/engine/metadata-modules/front-component/entities/front-component.entity';
-import { LogicFunctionEntity } from 'src/engine/metadata-modules/logic-function/logic-function.entity';
 import { ObjectMetadataEntity } from 'src/engine/metadata-modules/object-metadata/object-metadata.entity';
 import { RoleDTO } from 'src/engine/metadata-modules/role/dtos/role.dto';
 import { WorkspaceRelatedEntity } from 'src/engine/workspace-manager/types/workspace-related-entity.type';
@@ -223,15 +222,6 @@ export class ApplicationEntity extends WorkspaceRelatedEntity {
     onDelete: 'CASCADE',
   })
   agents: Relation<AgentEntity[]>;
-
-  @OneToMany(
-    () => LogicFunctionEntity,
-    (logicFunction) => logicFunction.application,
-    {
-      onDelete: 'CASCADE',
-    },
-  )
-  logicFunctions: Relation<LogicFunctionEntity[]>;
 
   @OneToMany(() => ObjectMetadataEntity, (object) => object.application, {
     onDelete: 'CASCADE',

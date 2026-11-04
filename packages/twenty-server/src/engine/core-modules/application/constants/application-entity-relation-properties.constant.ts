@@ -6,7 +6,6 @@ export const APPLICATION_ENTITY_RELATION_PROPERTIES = [
   'frontComponents',
   'commandMenuItems',
   'settingsMenuItems',
-  'logicFunctions',
   'objects',
   'packageJsonFile',
   'yarnLockFile',

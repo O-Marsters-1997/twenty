@@ -1,8 +1,6 @@
 import { createOneOperation } from 'test/integration/graphql/utils/create-one-operation.util';
 import { findManyOperationFactory } from 'test/integration/graphql/utils/find-many-operation-factory.util';
 import { makeGraphqlApiRequest } from 'test/integration/graphql/utils/make-graphql-api-request.util';
-import { createOneLogicFunction } from 'test/integration/metadata/suites/logic-function/utils/create-logic-function.util';
-import { deleteLogicFunction } from 'test/integration/metadata/suites/logic-function/utils/delete-logic-function.util';
 import { createOneObjectMetadata } from 'test/integration/metadata/suites/object-metadata/utils/create-one-object-metadata.util';
 import { deleteOneObjectMetadata } from 'test/integration/metadata/suites/object-metadata/utils/delete-one-object-metadata.util';
 import { findManyObjectMetadataWithIndexes } from 'test/integration/metadata/suites/object-metadata/utils/find-many-object-metadata-with-indexes.util';
@@ -137,22 +135,5 @@ describe('Deferred workspace migration actions', () => {
         response.body.data.timelineActivities.edges.length,
       ).toBeGreaterThan(0);
     });
-  });
-
-  it('should delete a logic function', async () => {
-    const { data: createData } = await createOneLogicFunction({
-      input: { name: 'Deferred cleanup function' },
-      expectToFail: false,
-    });
-
-    const logicFunctionId = createData.createOneLogicFunction.id;
-
-    const { data: deleteData, errors } = await deleteLogicFunction({
-      input: { id: logicFunctionId },
-      expectToFail: false,
-    });
-
-    expect(errors).toBeUndefined();
-    expect(deleteData.deleteOneLogicFunction.id).toBe(logicFunctionId);
   });
 });

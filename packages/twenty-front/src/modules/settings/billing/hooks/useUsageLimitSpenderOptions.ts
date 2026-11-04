@@ -8,7 +8,6 @@ import { getWorkspaceMemberNameOrEmail } from '@/workspace-member/utils/getWorks
 import {
   FindManyAgentsDocument,
   FindManyApplicationsDocument,
-  FindManyLogicFunctionsDocument,
   GetApiKeysDocument,
 } from '~/generated-metadata/graphql';
 
@@ -43,10 +42,6 @@ export const useUsageLimitSpenderOptions = (
   const { data: agentsData, loading: agentsLoading } = useQuery(
     FindManyAgentsDocument,
     { skip: !spenderTypes.includes('agent') },
-  );
-  const { data: logicFunctionsData, loading: logicFunctionsLoading } = useQuery(
-    FindManyLogicFunctionsDocument,
-    { skip: !spenderTypes.includes('logicFunction') },
   );
   const buildOptions = (
     spenderType: UsageLimitSpenderType,
@@ -84,12 +79,6 @@ export const useUsageLimitSpenderOptions = (
       case 'workflow':
         return [];
       case 'logicFunction':
-        return (logicFunctionsData?.findManyLogicFunctions ?? []).map(
-          (logicFunction) => ({
-            id: logicFunction.id,
-            label: logicFunction.name,
-          }),
-        );
       case 'workspace':
         return [];
     }
@@ -102,10 +91,6 @@ export const useUsageLimitSpenderOptions = (
         buildOptions(spenderType),
       ]),
     ),
-    loading:
-      apiKeysLoading ||
-      applicationsLoading ||
-      agentsLoading ||
-      logicFunctionsLoading,
+    loading: apiKeysLoading || applicationsLoading || agentsLoading,
   };
 };

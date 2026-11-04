@@ -1,3 +1,5 @@
+import { createHash } from 'crypto';
+
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 
@@ -21,8 +23,6 @@ import { AgentEntity } from 'src/engine/metadata-modules/ai/ai-agent/entities/ag
 import { CommandMenuItemEntity } from 'src/engine/metadata-modules/command-menu-item/entities/command-menu-item.entity';
 import { ALL_FLAT_ENTITY_MAPS_PROPERTIES } from 'src/engine/metadata-modules/flat-entity/constant/all-flat-entity-maps-properties.constant';
 import { FrontComponentEntity } from 'src/engine/metadata-modules/front-component/entities/front-component.entity';
-import { LogicFunctionEntity } from 'src/engine/metadata-modules/logic-function/logic-function.entity';
-import { logicFunctionCreateHash } from 'src/engine/metadata-modules/logic-function/utils/logic-function-create-hash.utils';
 import { ObjectMetadataEntity } from 'src/engine/metadata-modules/object-metadata/object-metadata.entity';
 import { SettingsMenuItemEntity } from 'src/engine/metadata-modules/settings-menu-item/entities/settings-menu-item.entity';
 import { serializeApplicationForBroadcast } from 'src/engine/core-modules/application/utils/serialize-application-for-broadcast.util';
@@ -32,6 +32,9 @@ import { WorkspaceScopedRepository } from 'src/engine/twenty-orm/workspace-scope
 import { WorkspaceCacheService } from 'src/engine/workspace-cache/services/workspace-cache.service';
 import { TWENTY_STANDARD_APPLICATION } from 'src/engine/workspace-manager/twenty-standard-application/constants/twenty-standard-applications';
 import { type QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+
+const createChecksum = (fileContent: string) =>
+  createHash('sha512').update(fileContent).digest('hex').substring(0, 32);
 
 @Injectable()
 export class ApplicationService {
@@ -46,8 +49,6 @@ export class ApplicationService {
     private readonly fileStorageService: FileStorageService,
     @InjectRepository(WorkspaceEntity)
     private readonly workspaceRepository: Repository<WorkspaceEntity>,
-    @InjectWorkspaceScopedRepository(LogicFunctionEntity)
-    private readonly logicFunctionRepository: WorkspaceScopedRepository<LogicFunctionEntity>,
     @InjectWorkspaceScopedRepository(AgentEntity)
     private readonly agentRepository: WorkspaceScopedRepository<AgentEntity>,
     @InjectWorkspaceScopedRepository(FrontComponentEntity)
@@ -193,16 +194,12 @@ export class ApplicationService {
     }
 
     const [
-      logicFunctions,
       agents,
       frontComponents,
       commandMenuItems,
       settingsMenuItems,
       objects,
     ] = await Promise.all([
-      this.logicFunctionRepository.find(workspaceId, {
-        where: { applicationId: application.id },
-      }),
       this.agentRepository.find(workspaceId, {
         where: { applicationId: application.id },
       }),
@@ -220,7 +217,6 @@ export class ApplicationService {
       }),
     ]);
 
-    application.logicFunctions = logicFunctions;
     application.agents = agents;
     application.frontComponents = frontComponents;
     application.commandMenuItems = commandMenuItems;
@@ -406,12 +402,10 @@ export class ApplicationService {
   ): Promise<void> {
     const defaultPackageFields = await getDefaultApplicationPackageFields();
 
-    const packageJsonChecksum = logicFunctionCreateHash(
+    const packageJsonChecksum = createChecksum(
       JSON.stringify(JSON.parse(defaultPackageFields.packageJsonContent)),
     );
-    const yarnLockChecksum = logicFunctionCreateHash(
-      defaultPackageFields.yarnLockContent,
-    );
+    const yarnLockChecksum = createChecksum(defaultPackageFields.yarnLockContent);
     const availablePackages = parseAvailablePackagesFromPackageJsonAndYarnLock(
       defaultPackageFields.packageJsonContent,
       defaultPackageFields.yarnLockContent,

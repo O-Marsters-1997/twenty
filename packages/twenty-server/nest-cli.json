@@ -17,35 +17,11 @@
     "watchAssets": true,
     "assets": [
       {
-        "include": "engine/core-modules/logic-function/logic-function-resource/constants/seed-project/**",
-        "outDir": "dist/assets"
-      },
-      {
         "include": "engine/metadata-modules/front-component/constants/seed-project/**",
         "outDir": "dist/assets"
       },
       {
         "include": "engine/core-modules/application/application-package/constants/seed-dependencies/**",
-        "outDir": "dist/assets"
-      },
-      {
-        "include": "engine/core-modules/application/application-package/constants/yarn-engine/**",
-        "outDir": "dist/assets"
-      },
-      {
-        "include": "engine/core-modules/logic-function/logic-function-drivers/constants/executor/index.mjs",
-        "outDir": "dist/assets"
-      },
-      {
-        "include": "engine/core-modules/logic-function/logic-function-drivers/constants/yarn-install/index.mjs",
-        "outDir": "dist/assets"
-      },
-      {
-        "include": "engine/core-modules/logic-function/logic-function-drivers/constants/builder/index.mjs",
-        "outDir": "dist/assets"
-      },
-      {
-        "include": "engine/core-modules/logic-function/logic-function-drivers/constants/common-layer-dependencies/**",
         "outDir": "dist/assets"
       },
       {

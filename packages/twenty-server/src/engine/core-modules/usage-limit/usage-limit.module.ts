@@ -13,7 +13,6 @@ import { UsageModule } from 'src/engine/core-modules/usage/usage.module';
 import { ApplicationEntity } from 'src/engine/core-modules/application/application.entity';
 import { UserWorkspaceEntity } from 'src/engine/core-modules/user-workspace/user-workspace.entity';
 import { AgentEntity } from 'src/engine/metadata-modules/ai/ai-agent/entities/agent.entity';
-import { LogicFunctionEntity } from 'src/engine/metadata-modules/logic-function/logic-function.entity';
 import { UsageQuotaAdmissionService } from 'src/engine/core-modules/usage-limit/services/usage-quota-admission.service';
 import { UsageQuotaConsumptionService } from 'src/engine/core-modules/usage-limit/services/usage-quota-consumption.service';
 import { UsageQuotaDefinitionService } from 'src/engine/core-modules/usage-limit/services/usage-quota-definition.service';
@@ -38,7 +37,6 @@ import { WorkspaceCacheModule } from 'src/engine/workspace-cache/workspace-cache
       ApplicationEntity,
       UserWorkspaceEntity,
       AgentEntity,
-      LogicFunctionEntity,
     ]),
     WorkspaceCacheModule,
     PermissionsModule,
@@ -68,7 +66,6 @@ import { WorkspaceCacheModule } from 'src/engine/workspace-cache/workspace-cache
     provideWorkspaceScopedRepository(ApplicationEntity),
     provideWorkspaceScopedRepository(UserWorkspaceEntity),
     provideWorkspaceScopedRepository(AgentEntity),
-    provideWorkspaceScopedRepository(LogicFunctionEntity),
   ],
   exports: [
     UsageLimitEntitlementService,

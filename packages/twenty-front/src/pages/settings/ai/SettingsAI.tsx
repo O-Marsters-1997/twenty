@@ -19,7 +19,6 @@ import {
   IconSparkle2,
   IconTool,
 } from 'twenty-ui/icon';
-import { Button } from 'twenty-ui/primitives/input';
 import { SettingsAgentSkillsTab } from '~/pages/settings/ai/components/SettingsAgentSkillsTab';
 import { SettingsAgentToolsTab } from '~/pages/settings/ai/components/SettingsAgentToolsTab';
 import { SettingsAiSystemPromptsSection } from '~/pages/settings/ai/components/SettingsAiSystemPromptsSection';
@@ -27,7 +26,6 @@ import { SettingsAiModelsTab } from '~/pages/settings/ai/components/SettingsAiMo
 import { SettingsAiOverviewTab } from '~/pages/settings/ai/components/SettingsAiOverviewTab';
 import { SettingsAiUsageTab } from '~/pages/settings/ai/components/SettingsAiUsageTab';
 import { SETTINGS_AI_TABS } from '@/settings/ai/constants/SettingsAiTabs';
-import { useCreateTool } from '~/pages/settings/ai/hooks/useCreateTool';
 
 const AI_HERO_LIGHT = '/images/ai/ai-tools-cover-light.png';
 const AI_HERO_DARK = '/images/ai/ai-tools-cover-dark.png';
@@ -35,7 +33,6 @@ const AI_HERO_DARK = '/images/ai/ai-tools-cover-dark.png';
 const SETTINGS_AI_HERO_INSTANCE_ID_PREFIX = 'settings-ai-hero';
 
 export const SettingsAI = () => {
-  const { handleCreateTool, isCreatingTool } = useCreateTool();
 
   const tabs = [
     {
@@ -95,15 +92,6 @@ export const SettingsAI = () => {
             variant="solid"
             color="accent"
           >{t`New Skill`}</NavigationButton>
-        ) : isToolsTab ? (
-          <Button
-            startIcon={<IconPlus />}
-            size="sm"
-            onClick={handleCreateTool}
-            disabled={isCreatingTool}
-            variant="solid"
-            color="accent"
-          >{t`New Tool`}</Button>
         ) : undefined
       }
       links={[

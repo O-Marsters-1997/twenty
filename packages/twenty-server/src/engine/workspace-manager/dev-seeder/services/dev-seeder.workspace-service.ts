@@ -14,7 +14,6 @@ import { ApplicationService } from 'src/engine/core-modules/application/applicat
 import { EmailingDomainDriver } from 'src/engine/core-modules/emailing-domain/drivers/types/emailing-domain-driver.type';
 import { type PlaintextString } from 'src/engine/core-modules/secret-encryption/branded-strings/plaintext-string.type';
 import { SecretEncryptionService } from 'src/engine/core-modules/secret-encryption/secret-encryption.service';
-import { SdkClientGenerationService } from 'src/engine/core-modules/sdk-client/sdk-client-generation.service';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { UpgradeMigrationService } from 'src/engine/core-modules/upgrade/services/upgrade-migration.service';
 import { UpgradeSequenceReaderService } from 'src/engine/core-modules/upgrade/services/upgrade-sequence-reader.service';
@@ -73,7 +72,6 @@ export class DevSeederWorkspaceService {
     private readonly devSeederAgentChatPendingInputService: DevSeederAgentChatPendingInputWorkspaceService,
     private readonly applicationService: ApplicationService,
     private readonly workspaceCacheService: WorkspaceCacheService,
-    private readonly sdkClientGenerationService: SdkClientGenerationService,
     private readonly upgradeMigrationService: UpgradeMigrationService,
     private readonly upgradeSequenceReaderService: UpgradeSequenceReaderService,
     private readonly workspaceMigrationValidateBuildAndRunService: WorkspaceMigrationValidateBuildAndRunService,
@@ -132,25 +130,9 @@ export class DevSeederWorkspaceService {
       },
     );
 
-    await this.sdkClientGenerationService.generateSdkClientForApplication({
-      workspaceId,
-      applicationId: twentyStandardFlatApplication.id,
-      applicationUniversalIdentifier:
-        twentyStandardFlatApplication.universalIdentifier,
-      trigger: 'dev-seeder',
-    });
-
     await this.devSeederMetadataService.seed({
       workspaceId,
       light,
-    });
-
-    await this.sdkClientGenerationService.generateSdkClientForApplication({
-      workspaceId,
-      applicationId: workspaceCustomFlatApplication.id,
-      applicationUniversalIdentifier:
-        workspaceCustomFlatApplication.universalIdentifier,
-      trigger: 'dev-seeder',
     });
 
     await this.devSeederMetadataService.seedRelations({

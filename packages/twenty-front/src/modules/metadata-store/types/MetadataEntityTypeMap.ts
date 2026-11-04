@@ -4,7 +4,6 @@ import { type FlatCommandMenuItem } from '@/metadata-store/types/FlatCommandMenu
 import { type FlatFieldMetadataItem } from '@/metadata-store/types/FlatFieldMetadataItem';
 import { type FlatFrontComponent } from '@/metadata-store/types/FlatFrontComponent';
 import { type FlatIndexMetadataItem } from '@/metadata-store/types/FlatIndexMetadataItem';
-import { type FlatLogicFunction } from '@/metadata-store/types/FlatLogicFunction';
 import { type FlatNavigationMenuItem } from '@/metadata-store/types/FlatNavigationMenuItem';
 import { type FlatObjectMetadataItem } from '@/metadata-store/types/FlatObjectMetadataItem';
 import { type FlatPageLayout } from '@/metadata-store/types/FlatPageLayout';
@@ -38,7 +37,6 @@ export type MetadataEntityTypeMap = {
   pageLayouts: FlatPageLayout;
   pageLayoutTabs: FlatPageLayoutTab;
   pageLayoutWidgets: FlatPageLayoutWidget;
-  logicFunctions: FlatLogicFunction;
   navigationMenuItems: FlatNavigationMenuItem;
   commandMenuItems: FlatCommandMenuItem;
   frontComponents: FlatFrontComponent;

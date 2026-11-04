@@ -40,7 +40,6 @@ export const ALL_METADATA_REQUIRED_METADATA_FOR_VALIDATION = {
     objectMetadata: true,
     fieldMetadata: true,
   },
-  logicFunction: {},
   viewFilter: {
     view: true,
     fieldMetadata: true,

@@ -16,7 +16,6 @@ import {
   FindFieldsWidgetViewsDocument,
   FindTableWidgetViewsDocument,
   FindManyFrontComponentsDocument,
-  FindManyLogicFunctionsDocument,
   FindManyNavigationMenuItemsDocument,
   type ObjectMetadataItemsQuery,
   ViewType,
@@ -174,26 +173,6 @@ export const useLoadStaleMetadataEntities = () => {
             replaceDraft('pageLayoutTabs', flatPageLayoutTabs);
             replaceDraft('pageLayoutWidgets', flatPageLayoutWidgets);
           }),
-        );
-      }
-
-      if (staleEntityKeys.includes('logicFunctions')) {
-        fetchPromises.push(
-          client
-            .query({
-              query: FindManyLogicFunctionsDocument,
-              fetchPolicy: 'network-only',
-            })
-            .then((result) => {
-              if (!isDefined(result.data?.findManyLogicFunctions)) {
-                return;
-              }
-
-              replaceDraft(
-                'logicFunctions',
-                result.data.findManyLogicFunctions,
-              );
-            }),
         );
       }
 

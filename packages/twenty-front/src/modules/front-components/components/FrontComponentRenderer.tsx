@@ -2,18 +2,15 @@ import { FrontComponentApplicationTokenPairEffect } from '@/front-components/com
 import { FrontComponentLoadErrorToastEffect } from '@/front-components/components/FrontComponentLoadErrorToastEffect';
 import { FrontComponentRendererProvider } from '@/front-components/components/FrontComponentRendererProvider';
 import { useFrontComponentExecutionContext } from '@/front-components/hooks/useFrontComponentExecutionContext';
-import { useOnApplicationSdkClientChecksumsUpdated } from '@/front-components/hooks/useOnApplicationSdkClientChecksumsUpdated';
 import { useOnFrontComponentUpdated } from '@/front-components/hooks/useOnFrontComponentUpdated';
 import { type FrontComponentApplicationTokenPair } from '@/front-components/types/FrontComponentApplicationTokenPair';
 import { FrontComponentMediaSessionRegistrationEffect } from '@/front-components/media-session/components/FrontComponentMediaSessionRegistrationEffect';
 import { FrontComponentMediaPermissionModal } from '@/front-components/media-session/components/FrontComponentMediaPermissionModal';
 import { useFrontComponentMediaSession } from '@/front-components/media-session/hooks/useFrontComponentMediaSession';
 import { getFingerprintedRestUrl } from '@/front-components/utils/getFingerprintedRestUrl';
-import { getSdkClientUrls } from '@/front-components/utils/getSdkClientUrls';
-import { useGetLogicFunctionHttpUrl } from '@/logic-functions/hooks/useGetLogicFunctionHttpUrl';
 import { useQuery } from '@apollo/client/react';
 import { t } from '@lingui/core/macro';
-import { type ReactNode, useCallback, useMemo, useState } from 'react';
+import { type ReactNode, useCallback, useState } from 'react';
 import { FrontComponentRenderer as SharedFrontComponentRenderer } from 'twenty-front-component-renderer';
 import { type FrontComponentToolCall } from 'twenty-sdk/front-component';
 import { type RecordGqlOperationFilter } from 'twenty-shared/types';
@@ -24,7 +21,6 @@ import { REACT_APP_SERVER_BASE_URL } from '~/config';
 import {
   FindOneFrontComponentDocument,
   type FindOneFrontComponentQuery,
-  GetApplicationSdkClientChecksumsDocument,
 } from '~/generated-metadata/graphql';
 
 type FrontComponentRendererProps = {
@@ -114,13 +110,11 @@ const FrontComponentRendererContent = ({
 }: FrontComponentRendererContentProps) => {
   const colorScheme = useThemeColorScheme();
   const { enqueueToast } = useToast();
-  const { functionsBaseUrl } = useGetLogicFunctionHttpUrl();
 
   const {
     id: frontComponentId,
     applicationId,
     applicationName,
-    usesSdkClient,
     frontComponentSharedDependenciesChecksum,
   } = frontComponent;
 
@@ -181,25 +175,6 @@ const FrontComponentRendererContent = ({
     [],
   );
 
-  const { data: sdkClientChecksumsData, loading: sdkClientChecksumsLoading } =
-    useQuery(GetApplicationSdkClientChecksumsDocument, {
-      variables: { applicationId },
-      skip: !usesSdkClient,
-    });
-
-  useOnApplicationSdkClientChecksumsUpdated({
-    applicationId,
-    skip: !usesSdkClient,
-  });
-
-  const sdkClientChecksums =
-    sdkClientChecksumsData?.applicationSdkClientChecksums;
-
-  const sdkClientUrls = useMemo(
-    () => getSdkClientUrls(applicationId, sdkClientChecksums),
-    [applicationId, sdkClientChecksums],
-  );
-
   const sharedDependenciesUrl = getFingerprintedRestUrl({
     resource: 'front-component-shared-dependencies',
     id: applicationId,
@@ -212,9 +187,7 @@ const FrontComponentRendererContent = ({
     checksum: frontComponent.builtComponentChecksum,
   });
 
-  const isSdkClientReady = !usesSdkClient || !sdkClientChecksumsLoading;
-  const isReadyToRender =
-    isDefined(initialApplicationTokenPair) && isSdkClientReady;
+  const isReadyToRender = isDefined(initialApplicationTokenPair);
 
   return (
     <>
@@ -254,8 +227,6 @@ const FrontComponentRendererContent = ({
               initialApplicationTokenPair.applicationAccessToken.token
             }
             apiUrl={REACT_APP_SERVER_BASE_URL}
-            functionsBaseUrl={functionsBaseUrl}
-            sdkClientUrls={sdkClientUrls}
             sharedDependenciesUrl={sharedDependenciesUrl}
             executionContext={executionContext}
             frontComponentHostCommunicationApi={

@@ -2,7 +2,6 @@ import { Logger } from '@nestjs/common';
 
 import { plainToClass } from 'class-transformer';
 import {
-  IsDateString,
   IsDefined,
   IsEnum,
   IsIn,
@@ -23,7 +22,6 @@ import {
 import { isDefined } from 'twenty-shared/utils';
 import { type LoggerOptions } from 'typeorm/logger/LoggerOptions';
 
-import { LogicFunctionDriverType } from 'src/engine/core-modules/logic-function/logic-function-drivers/interfaces/logic-function-driver.interface';
 import { type AwsRegion } from 'src/engine/core-modules/twenty-config/interfaces/aws-region.interface';
 import { NodeEnvironment } from 'src/engine/core-modules/twenty-config/interfaces/node-environment.interface';
 import { SupportDriver } from 'src/engine/core-modules/twenty-config/interfaces/support.interface';
@@ -728,116 +726,6 @@ export class ConfigVariables {
   @CastToPositiveNumber()
   @IsOptional()
   WORKSPACE_RECORD_LIMIT?: number;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.LOGIC_FUNCTION_CONFIG,
-    description: 'Type of function execution (local or Lambda)',
-    type: ConfigVariableType.ENUM,
-    options: Object.values(LogicFunctionDriverType),
-  })
-  @IsOptional()
-  @CastToUpperSnakeCase()
-  LOGIC_FUNCTION_TYPE: LogicFunctionDriverType =
-    process.env.NODE_ENV === NodeEnvironment.DEVELOPMENT
-      ? LogicFunctionDriverType.LOCAL
-      : LogicFunctionDriverType.DISABLED;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.LOGIC_FUNCTION_CONFIG,
-    description: 'Throttle limit for logic function execution',
-    type: ConfigVariableType.NUMBER,
-  })
-  @CastToPositiveNumber()
-  LOGIC_FUNCTION_EXEC_THROTTLE_LIMIT = 1000;
-
-  // milliseconds
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.LOGIC_FUNCTION_CONFIG,
-    description: 'Time-to-live for logic function execution throttle',
-    type: ConfigVariableType.NUMBER,
-  })
-  @CastToPositiveNumber()
-  LOGIC_FUNCTION_EXEC_THROTTLE_TTL = 60_000;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.LOGIC_FUNCTION_CONFIG,
-    description: 'Region for AWS Lambda functions',
-    type: ConfigVariableType.STRING,
-  })
-  @ValidateIf(
-    (env) => env.LOGIC_FUNCTION_TYPE === LogicFunctionDriverType.LAMBDA,
-  )
-  @IsAWSRegion()
-  LOGIC_FUNCTION_LAMBDA_REGION: AwsRegion;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.LOGIC_FUNCTION_CONFIG,
-    description: 'IAM role for AWS Lambda functions',
-    type: ConfigVariableType.STRING,
-  })
-  @ValidateIf(
-    (env) => env.LOGIC_FUNCTION_TYPE === LogicFunctionDriverType.LAMBDA,
-  )
-  LOGIC_FUNCTION_LAMBDA_ROLE: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.LOGIC_FUNCTION_CONFIG,
-    description: 'Role to assume when hosting lambdas in dedicated AWS account',
-    type: ConfigVariableType.STRING,
-  })
-  @ValidateIf(
-    (env) => env.LOGIC_FUNCTION_TYPE === LogicFunctionDriverType.LAMBDA,
-  )
-  @IsOptional()
-  LOGIC_FUNCTION_LAMBDA_SUBHOSTING_ROLE?: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.LOGIC_FUNCTION_CONFIG,
-    isSensitive: true,
-    description: 'Access key ID for AWS Lambda functions',
-    type: ConfigVariableType.STRING,
-  })
-  @ValidateIf(
-    (env) => env.LOGIC_FUNCTION_TYPE === LogicFunctionDriverType.LAMBDA,
-  )
-  @IsOptional()
-  LOGIC_FUNCTION_LAMBDA_ACCESS_KEY_ID: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.LOGIC_FUNCTION_CONFIG,
-    isSensitive: true,
-    description: 'Secret access key for AWS Lambda functions',
-    type: ConfigVariableType.STRING,
-  })
-  @ValidateIf(
-    (env) => env.LOGIC_FUNCTION_TYPE === LogicFunctionDriverType.LAMBDA,
-  )
-  @IsOptional()
-  LOGIC_FUNCTION_LAMBDA_SECRET_ACCESS_KEY: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.LOGIC_FUNCTION_CONFIG,
-    description: 'S3 bucket for uploading Lambda layer zip files',
-    type: ConfigVariableType.STRING,
-  })
-  @ValidateIf(
-    (env) => env.LOGIC_FUNCTION_TYPE === LogicFunctionDriverType.LAMBDA,
-  )
-  @IsOptional()
-  LOGIC_FUNCTION_LAMBDA_LAYER_BUCKET?: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.LOGIC_FUNCTION_CONFIG,
-    description:
-      'AWS region of the S3 bucket for Lambda layer uploads (defaults to LOGIC_FUNCTION_LAMBDA_REGION)',
-    type: ConfigVariableType.STRING,
-  })
-  @ValidateIf(
-    (env) => env.LOGIC_FUNCTION_TYPE === LogicFunctionDriverType.LAMBDA,
-  )
-  @IsOptional()
-  @IsAWSRegion()
-  LOGIC_FUNCTION_LAMBDA_LAYER_BUCKET_REGION?: AwsRegion;
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.CODE_INTERPRETER_CONFIG,
@@ -1651,17 +1539,6 @@ export class ConfigVariables {
   @IsUrl({ require_tld: false, require_protocol: true })
   @IsOptional()
   PUBLIC_DOMAIN_URL: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.SERVER_CONFIG,
-    description:
-      'ISO date from which HTTP logic functions are no longer served on the legacy /s/ route. Functions created on or after this date are only reachable on the isolated public domain (*.withtwenty.com). Only enforced when PUBLIC_DOMAIN_URL is set; leave empty to keep serving every function on /s/ (default for self-hosting).',
-    isHiddenInAdminPanel: true,
-    type: ConfigVariableType.STRING,
-  })
-  @IsDateString()
-  @IsOptional()
-  LOGIC_FUNCTION_LEGACY_ROUTE_CUTOFF: string;
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.SERVER_CONFIG,

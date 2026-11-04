@@ -49,9 +49,6 @@ export const computeOrderedMigrationActions = (
     ...aggregatedOrchestratorActionsReport.workflowVersion.create,
     ...aggregatedOrchestratorActionsReport.workflowVersion.update,
 
-    ...aggregatedOrchestratorActionsReport.logicFunction.delete,
-    ...aggregatedOrchestratorActionsReport.logicFunction.create,
-    ...aggregatedOrchestratorActionsReport.logicFunction.update,
 
     ...aggregatedOrchestratorActionsReport.role.delete,
     ...aggregatedOrchestratorActionsReport.role.create,

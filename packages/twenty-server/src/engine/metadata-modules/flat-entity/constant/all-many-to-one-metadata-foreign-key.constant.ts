@@ -163,10 +163,6 @@ export const ALL_MANY_TO_ONE_METADATA_FOREIGN_KEY = {
     workspace: null,
     application: null,
   },
-  logicFunction: {
-    workspace: null,
-    application: null,
-  },
   role: {
     workspace: null,
     application: null,

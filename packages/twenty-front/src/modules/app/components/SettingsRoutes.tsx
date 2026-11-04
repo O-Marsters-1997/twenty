@@ -160,14 +160,6 @@ const SettingsDevelopersApiKeysNew = lazy(() =>
   ),
 );
 
-const SettingsLogicFunctionDetail = lazy(() =>
-  import('~/pages/settings/logic-functions/SettingsLogicFunctionDetail').then(
-    (module) => ({
-      default: module.SettingsLogicFunctionDetail,
-    }),
-  ),
-);
-
 const SettingsGeneral = lazy(() =>
   import('~/pages/settings/general/SettingsGeneral').then((module) => ({
     default: module.SettingsGeneral,
@@ -790,10 +782,6 @@ const createSettingsRouteElements = ({
         path={SettingsPath.AiToolDetail}
         element={<SettingsToolDetail />}
       />
-      <Route
-        path={SettingsPath.LogicFunctionDetail}
-        element={<SettingsLogicFunctionDetail />}
-      />
     </Route>
     <Route
       element={
@@ -978,20 +966,6 @@ const createSettingsRouteElements = ({
         element={<SettingsDevelopersWebhookDetail />}
       />
     </Route>
-
-    <Route
-      element={
-        <SettingsProtectedRouteWrapper
-          settingsPermission={PermissionFlagType.APPLICATIONS}
-        />
-      }
-    >
-      <Route
-        path={SettingsPath.ApplicationLogicFunctionDetail}
-        element={<SettingsLogicFunctionDetail />}
-      />
-    </Route>
-
     <Route
       path="security"
       element={<Navigate to={getSettingsPath(SettingsPath.Security)} replace />}

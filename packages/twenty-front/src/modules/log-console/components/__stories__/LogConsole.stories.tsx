@@ -52,7 +52,6 @@ import { mockedClientConfig } from '~/testing/mock-data/config';
 import {
   mockedEventLogApplications,
   mockedEventLogLiveApplicationLogs,
-  mockedEventLogLogicFunctions,
   mockedEventLogRecordsByTable,
   mockedEventLogWorkspaceMembers,
 } from '~/testing/mock-data/event-logs';
@@ -134,11 +133,6 @@ const meta: Meta<PageDecoratorArgs> = {
   decorators: [
     (Story) => {
       useEffect(() => {
-        jotaiStore.set(metadataStoreState.atomFamily('logicFunctions'), {
-          current: mockedEventLogLogicFunctions,
-          draft: [],
-          status: 'up-to-date',
-        });
         jotaiStore.set(metadataStoreState.atomFamily('applications'), {
           current: mockedEventLogApplications,
           draft: [],

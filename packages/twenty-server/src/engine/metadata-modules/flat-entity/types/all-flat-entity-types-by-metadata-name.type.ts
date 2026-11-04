@@ -74,14 +74,12 @@ import { type FlatSearchFieldMetadataMaps } from 'src/engine/metadata-modules/fl
 import { type FlatSearchFieldMetadata } from 'src/engine/metadata-modules/flat-search-field-metadata/types/flat-search-field-metadata.type';
 import { type FlatFieldMetadataMaps } from 'src/engine/metadata-modules/flat-field-metadata/types/flat-field-metadata-maps.type';
 import { type FlatIndexMetadataMaps } from 'src/engine/metadata-modules/flat-index-metadata/types/flat-index-metadata-maps.type';
-import { type FlatLogicFunctionMaps } from 'src/engine/metadata-modules/logic-function/types/flat-logic-function-maps.type';
 import { type FlatObjectMetadataMaps } from 'src/engine/metadata-modules/flat-object-metadata/types/flat-object-metadata-maps.type';
 import { type FlatRoleMaps } from 'src/engine/metadata-modules/flat-role/types/flat-role-maps.type';
 import { type FlatViewMaps } from 'src/engine/metadata-modules/flat-view/types/flat-view-maps.type';
 import { type FlatView } from 'src/engine/metadata-modules/flat-view/types/flat-view.type';
 import { type FlatWebhookMaps } from 'src/engine/metadata-modules/flat-webhook/types/flat-webhook-maps.type';
 import { type FlatWebhook } from 'src/engine/metadata-modules/flat-webhook/types/flat-webhook.type';
-import { type FlatLogicFunction } from 'src/engine/metadata-modules/logic-function/types/flat-logic-function.type';
 import { type NavigationMenuItemEntity } from 'src/engine/metadata-modules/navigation-menu-item/entities/navigation-menu-item.entity';
 import { type FlatRowLevelPermissionPredicateGroupMaps } from 'src/engine/metadata-modules/row-level-permission-predicate/types/flat-row-level-permission-predicate-group-maps.type';
 import { type FlatRowLevelPermissionPredicateGroup } from 'src/engine/metadata-modules/row-level-permission-predicate/types/flat-row-level-permission-predicate-group.type';
@@ -96,7 +94,6 @@ import { type UniversalFlatEntityFrom } from 'src/engine/workspace-manager/works
 import { type UniversalFlatFieldPermission } from 'src/engine/workspace-manager/workspace-migration/universal-flat-entity/types/universal-flat-field-permission.type';
 import { type UniversalFlatFrontComponent } from 'src/engine/workspace-manager/workspace-migration/universal-flat-entity/types/universal-flat-front-component.type';
 import { type UniversalFlatIndexMetadata } from 'src/engine/workspace-manager/workspace-migration/universal-flat-entity/types/universal-flat-index-metadata.type';
-import { type UniversalFlatLogicFunction } from 'src/engine/workspace-manager/workspace-migration/universal-flat-entity/types/universal-flat-logic-function.type';
 import { type UniversalFlatNavigationMenuItem } from 'src/engine/workspace-manager/workspace-migration/universal-flat-entity/types/universal-flat-navigation-menu-item.type';
 import { type UniversalFlatObjectMetadata } from 'src/engine/workspace-manager/workspace-migration/universal-flat-entity/types/universal-flat-object-metadata.type';
 import { type UniversalFlatObjectPermission } from 'src/engine/workspace-manager/workspace-migration/universal-flat-entity/types/universal-flat-object-permission.type';
@@ -191,14 +188,6 @@ import {
   type UniversalDeleteIndexAction,
   type UniversalUpdateIndexAction,
 } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-builder/builders/index/types/workspace-migration-index-action.type';
-import {
-  type FlatCreateLogicFunctionAction,
-  type FlatDeleteLogicFunctionAction,
-  type FlatUpdateLogicFunctionAction,
-  type UniversalCreateLogicFunctionAction,
-  type UniversalDeleteLogicFunctionAction,
-  type UniversalUpdateLogicFunctionAction,
-} from 'src/engine/workspace-manager/workspace-migration/workspace-migration-builder/builders/logic-function/types/workspace-migration-logic-function-action.type';
 import {
   type FlatCreateNavigationMenuItemAction,
   type FlatDeleteNavigationMenuItemAction,
@@ -566,22 +555,6 @@ export type AllFlatEntityTypesByMetadataName = {
     flatEntity: FlatIndexMetadata;
     universalFlatEntity: UniversalFlatIndexMetadata;
     entity: MetadataEntity<'index'>;
-  };
-  logicFunction: {
-    flatEntityMaps: FlatLogicFunctionMaps;
-    universalActions: {
-      create: UniversalCreateLogicFunctionAction;
-      update: UniversalUpdateLogicFunctionAction;
-      delete: UniversalDeleteLogicFunctionAction;
-    };
-    flatActions: {
-      create: FlatCreateLogicFunctionAction;
-      update: FlatUpdateLogicFunctionAction;
-      delete: FlatDeleteLogicFunctionAction;
-    };
-    flatEntity: FlatLogicFunction;
-    universalFlatEntity: UniversalFlatLogicFunction;
-    entity: MetadataEntity<'logicFunction'>;
   };
   viewFilter: {
     flatEntityMaps: FlatViewFilterMaps;

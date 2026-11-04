@@ -214,11 +214,6 @@ export const graphqlMocks = {
         data: { getPageLayouts: [] },
       });
     }),
-    metadataGraphql.query('FindManyLogicFunctions', () => {
-      return HttpResponse.json({
-        data: { findManyLogicFunctions: [] },
-      });
-    }),
     metadataGraphql.query('FindManyNavigationMenuItems', () => {
       return HttpResponse.json({
         data: { navigationMenuItems: mockedNavigationMenuItems },
