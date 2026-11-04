@@ -460,6 +460,8 @@ export class ConnectedAccountMetadataService {
     id: string;
     workspaceId: string;
   }): Promise<ConnectedAccountEntity> {
+    await this.repository.findOneOrFail({ where: { id, workspaceId } });
+
     const [messageChannels, calendarChannels] = await Promise.all([
       this.messageChannelRepository.find({
         where: { connectedAccountId: id, workspaceId },
