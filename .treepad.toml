@@ -35,4 +35,4 @@ content = """
 command = ["open", "{{.ArtifactPath}}"]
 
 [[hooks.post_new]]
-command = "cd {{.WorktreePath}} && npx nx build twenty-shared twenty-emails"
+command = "cd {{.WorktreePath}} && export PATH=$HOME/.nvm/versions/node/v$(cat .nvmrc)/bin:$PATH && yarn install --immutable && yarn nx run-many -t build -p twenty-shared twenty-emails"
