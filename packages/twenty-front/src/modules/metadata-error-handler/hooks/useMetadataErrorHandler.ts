@@ -30,7 +30,6 @@ export const useMetadataErrorHandler = () => {
     viewGroup: t`view group`,
     viewFilter: t`view filter`,
     index: t`index`,
-    logicFunction: t`logic function`,
     rolePermissionFlag: t`role permission flag`,
     permissionFlag: t`permission flag`,
     objectPermission: t`object permission`,

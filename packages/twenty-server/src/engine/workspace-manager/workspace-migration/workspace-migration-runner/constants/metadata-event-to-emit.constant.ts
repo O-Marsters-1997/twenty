@@ -25,7 +25,6 @@ export const METADATA_EVENTS_TO_EMIT = {
   rowLevelPermissionPredicate: true,
   rowLevelPermissionPredicateGroup: true,
   index: true,
-  logicFunction: true,
   viewSort: true,
   webhook: false,
   timelineActivityType: true,

@@ -26,7 +26,6 @@ import { ADD_HEALTH_CHECK_TO_APPLICATION_UPGRADE_COMMAND_NAME } from 'src/databa
 import { WasIntroducedInUpgrade } from 'src/engine/core-modules/upgrade/decorators/was-introduced-in-upgrade.decorator';
 import { AgentEntity } from 'src/engine/metadata-modules/ai/ai-agent/entities/agent.entity';
 import { CommandMenuItemEntity } from 'src/engine/metadata-modules/command-menu-item/entities/command-menu-item.entity';
-import { LogicFunctionEntity } from 'src/engine/metadata-modules/logic-function/logic-function.entity';
 import { ObjectMetadataEntity } from 'src/engine/metadata-modules/object-metadata/object-metadata.entity';
 import { RoleDTO } from 'src/engine/metadata-modules/role/dtos/role.dto';
 import { WorkspaceRelatedEntity } from 'src/engine/workspace-manager/types/workspace-related-entity.type';
@@ -221,15 +220,6 @@ export class ApplicationEntity extends WorkspaceRelatedEntity {
     onDelete: 'CASCADE',
   })
   agents: Relation<AgentEntity[]>;
-
-  @OneToMany(
-    () => LogicFunctionEntity,
-    (logicFunction) => logicFunction.application,
-    {
-      onDelete: 'CASCADE',
-    },
-  )
-  logicFunctions: Relation<LogicFunctionEntity[]>;
 
   @OneToMany(() => ObjectMetadataEntity, (object) => object.application, {
     onDelete: 'CASCADE',

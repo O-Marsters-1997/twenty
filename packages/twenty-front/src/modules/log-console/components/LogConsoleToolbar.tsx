@@ -22,7 +22,6 @@ import { currentWorkspaceMembersState } from '@/auth/states/currentWorkspaceMemb
 import { type LogConsoleFilter } from '@/log-console/types/LogConsoleFilter';
 import { type LogConsoleFilterField } from '@/log-console/types/LogConsoleFilterField';
 import { type LogConsoleFilterOption } from '@/log-console/types/LogConsoleFilterOption';
-import { logicFunctionsSelector } from '@/logic-functions/states/logicFunctionsSelector';
 import { useFilteredObjectMetadataItems } from '@/object-metadata/hooks/useFilteredObjectMetadataItems';
 import {
   getOperandLabel,
@@ -115,7 +114,6 @@ export const LogConsoleToolbar = ({
     currentWorkspaceMembersState,
   );
   const { activeObjectMetadataItems } = useFilteredObjectMetadataItems();
-  const logicFunctions = useAtomStateValue(logicFunctionsSelector);
   const applications = useAtomStateValue(applicationsSelector);
   const [selectedFilterFieldId, setSelectedFilterFieldId] = useState<
     string | null
@@ -138,7 +136,6 @@ export const LogConsoleToolbar = ({
     filterField.getOptions({
       workspaceMembers: currentWorkspaceMembers,
       activeObjectMetadataItems,
-      logicFunctions,
       applications,
     });
 

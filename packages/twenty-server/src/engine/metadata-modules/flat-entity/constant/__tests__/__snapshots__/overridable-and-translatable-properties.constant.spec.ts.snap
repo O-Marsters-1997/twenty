@@ -24,7 +24,6 @@ exports[`registry-derived override property maps derives the overridable propert
   ],
   "fieldPermission": [],
   "index": [],
-  "logicFunction": [],
   "navigationMenuItem": [],
   "objectMetadata": [
     "openRecordIn",

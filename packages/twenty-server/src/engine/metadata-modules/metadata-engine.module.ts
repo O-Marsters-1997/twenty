@@ -14,8 +14,6 @@ import { CommandMenuItemModule } from 'src/engine/metadata-modules/command-menu-
 import { FieldMetadataModule } from 'src/engine/metadata-modules/field-metadata/field-metadata.module';
 import { FlatEntityMapsGraphqlApiExceptionFilter } from 'src/engine/metadata-modules/flat-entity/filters/flat-entity-maps-graphql-api-exception.filter';
 import { PermissionsGraphqlApiExceptionFilter } from 'src/engine/metadata-modules/permissions/utils/permissions-graphql-api-exception.filter';
-import { LogicFunctionLayerModule } from 'src/engine/metadata-modules/logic-function-layer/logic-function-layer.module';
-import { LogicFunctionModule } from 'src/engine/metadata-modules/logic-function/logic-function.module';
 import { MessageChannelMetadataModule } from 'src/engine/metadata-modules/message-channel/message-channel-metadata.module';
 import { MessageFolderMetadataModule } from 'src/engine/metadata-modules/message-folder/message-folder-metadata.module';
 import { MetadataTranslationModule } from 'src/engine/metadata-modules/metadata-translation/metadata-translation.module';
@@ -27,7 +25,6 @@ import { PermissionFlagModule } from 'src/engine/metadata-modules/permission-fla
 import { PermissionsModule } from 'src/engine/metadata-modules/permissions/permissions.module';
 import { MinimalMetadataModule } from 'src/engine/metadata-modules/minimal-metadata/minimal-metadata.module';
 import { RoleModule } from 'src/engine/metadata-modules/role/role.module';
-import { RouteTriggerModule } from 'src/engine/metadata-modules/route-trigger/route-trigger.module';
 import { SearchFieldMetadataModule } from 'src/engine/metadata-modules/search-field-metadata/search-field-metadata.module';
 import { SkillModule } from 'src/engine/metadata-modules/skill/skill.module';
 import { ViewModule } from 'src/engine/metadata-modules/view/view.module';
@@ -40,8 +37,6 @@ import { WorkspaceMetadataVersionModule } from 'src/engine/metadata-modules/work
     FieldMetadataModule,
     ObjectMetadataModule,
     SearchFieldMetadataModule,
-    LogicFunctionModule,
-    LogicFunctionLayerModule,
     SkillModule,
     CommandMenuItemModule,
     MetadataTranslationModule,
@@ -60,7 +55,6 @@ import { WorkspaceMetadataVersionModule } from 'src/engine/metadata-modules/work
     RoleModule,
     PermissionsModule,
     PermissionFlagModule,
-    RouteTriggerModule,
     WebhookModule,
     ConnectedAccountMetadataModule,
     MessageChannelMetadataModule,

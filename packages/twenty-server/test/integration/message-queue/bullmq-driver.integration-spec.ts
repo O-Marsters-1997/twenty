@@ -14,13 +14,13 @@ const RETRY_BACKOFF_TEST_JOB_NAME = 'RetryBackoffTestJob';
 const TEST_JOB_DELAY_MILLISECONDS = 60_000;
 
 describe('BullMQDriver retry backoff (integration)', () => {
-  let logicFunctionQueue: MessageQueueService;
+  let testQueue: MessageQueueService;
   let bullMQInspectionQueue: Queue<RetryBackoffTestJobData>;
   let redisConnection: IORedis;
 
   beforeAll(() => {
-    logicFunctionQueue = global.app.get<MessageQueueService>(
-      getQueueToken(MessageQueue.logicFunctionQueue),
+    testQueue = global.app.get<MessageQueueService>(
+      getQueueToken(MessageQueue.deleteCascadeQueue),
       { strict: false },
     );
 
@@ -32,7 +32,7 @@ describe('BullMQDriver retry backoff (integration)', () => {
     );
 
     bullMQInspectionQueue = new Queue<RetryBackoffTestJobData>(
-      MessageQueue.logicFunctionQueue,
+      MessageQueue.deleteCascadeQueue,
       { connection: redisConnection },
     );
   });
@@ -47,7 +47,7 @@ describe('BullMQDriver retry backoff (integration)', () => {
     let enqueuedTestJob: Job<RetryBackoffTestJobData> | undefined;
 
     try {
-      await logicFunctionQueue.add(
+      await testQueue.add(
         RETRY_BACKOFF_TEST_JOB_NAME,
         { marker: testJobMarker },
         {

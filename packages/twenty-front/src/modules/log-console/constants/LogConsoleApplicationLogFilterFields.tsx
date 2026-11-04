@@ -3,7 +3,6 @@ import { isDefined } from 'twenty-shared/utils';
 import {
   IconAlertTriangle,
   IconApps,
-  IconBrandTypescript,
 } from 'twenty-ui/icon';
 import { Tag } from 'twenty-ui/primitives/data-display';
 
@@ -29,18 +28,6 @@ export const LOG_CONSOLE_APPLICATION_LOG_FILTER_FIELDS: LogConsoleFilterField[] 
               ]
             : [],
         ),
-    },
-    {
-      id: 'function',
-      label: msg`Function`,
-      Icon: IconBrandTypescript,
-      serverField: 'logicFunctionId',
-      getOptions: ({ logicFunctions }) =>
-        logicFunctions.map((logicFunction) => ({
-          label: logicFunction.name,
-          values: [logicFunction.id],
-          startIcon: <IconBrandTypescript />,
-        })),
     },
     {
       id: 'app',

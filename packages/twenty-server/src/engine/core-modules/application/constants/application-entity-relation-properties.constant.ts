@@ -4,7 +4,6 @@ export const APPLICATION_ENTITY_RELATION_PROPERTIES = [
   'workspace',
   'agents',
   'commandMenuItems',
-  'logicFunctions',
   'objects',
   'packageJsonFile',
   'yarnLockFile',

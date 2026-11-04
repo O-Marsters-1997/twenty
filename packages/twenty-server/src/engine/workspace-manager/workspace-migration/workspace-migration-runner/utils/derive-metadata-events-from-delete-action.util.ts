@@ -41,7 +41,6 @@ const deriveAllMetadataEventsFromDeleteAction = ({
     case 'rowLevelPermissionPredicateGroup':
     case 'viewFilterGroup':
     case 'index':
-    case 'logicFunction':
     case 'viewFilter':
     case 'role':
     case 'roleTarget':

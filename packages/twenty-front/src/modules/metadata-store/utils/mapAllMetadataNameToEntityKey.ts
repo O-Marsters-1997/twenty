@@ -13,7 +13,6 @@ const METADATA_NAME_TO_ENTITY_KEY: Record<string, MetadataEntityKey> = {
   viewFilterGroup: 'viewFilterGroups',
   rowLevelPermissionPredicate: 'rowLevelPermissionPredicates',
   rowLevelPermissionPredicateGroup: 'rowLevelPermissionPredicateGroups',
-  logicFunction: 'logicFunctions',
   role: 'roles',
   roleTarget: 'roleTargets',
   agent: 'agents',

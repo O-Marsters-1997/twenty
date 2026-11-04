@@ -198,7 +198,6 @@ export const ALL_ONE_TO_MANY_METADATA_RELATIONS = {
   index: {
     indexFieldMetadatas: null,
   },
-  logicFunction: {},
   role: {
     roleTargets: {
       metadataName: 'roleTarget',

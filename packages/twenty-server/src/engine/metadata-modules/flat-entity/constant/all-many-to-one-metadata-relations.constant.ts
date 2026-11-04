@@ -289,10 +289,6 @@ export const ALL_MANY_TO_ONE_METADATA_RELATIONS = {
     workspace: null,
     application: null,
   },
-  logicFunction: {
-    workspace: null,
-    application: null,
-  },
   role: {
     workspace: null,
     application: null,

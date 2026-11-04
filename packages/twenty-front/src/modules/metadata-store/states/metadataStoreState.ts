@@ -20,7 +20,6 @@ export const ALL_METADATA_ENTITY_KEYS = [
   'pageLayouts',
   'pageLayoutTabs',
   'pageLayoutWidgets',
-  'logicFunctions',
   'navigationMenuItems',
   'commandMenuItems',
   'webhooks',

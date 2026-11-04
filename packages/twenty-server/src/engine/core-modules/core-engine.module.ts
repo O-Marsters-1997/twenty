@@ -37,7 +37,6 @@ import { ImpersonationModule } from 'src/engine/core-modules/impersonation/imper
 import { LabModule } from 'src/engine/core-modules/lab/lab.module';
 import { LoggerModule } from 'src/engine/core-modules/logger/logger.module';
 import { loggerModuleFactory } from 'src/engine/core-modules/logger/logger.module-factory';
-import { LogicFunctionModule } from 'src/engine/core-modules/logic-function/logic-function.module';
 import { MessageQueueModule } from 'src/engine/core-modules/message-queue/message-queue.module';
 import { messageQueueModuleFactory } from 'src/engine/core-modules/message-queue/message-queue.module-factory';
 import { TimelineMessagingModule } from 'src/engine/core-modules/messaging/timeline-messaging.module';
@@ -143,7 +142,6 @@ import { FileApiModule } from './file/file-api.module';
     I18nModule,
     AiModelsModule,
     AiBillingModule,
-    LogicFunctionModule.forRoot(),
     CodeInterpreterModule.forRoot(),
     SearchModule,
     ApiKeyModule,
