@@ -3,7 +3,6 @@
 exports[`registry-derived override property maps derives the overridable properties for every metadata entity 1`] = `
 {
   "agent": [],
-  "applicationVariable": [],
   "commandMenuItem": [
     "label",
     "icon",

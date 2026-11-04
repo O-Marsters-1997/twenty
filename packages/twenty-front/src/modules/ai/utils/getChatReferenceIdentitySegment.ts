@@ -17,8 +17,6 @@ export const getChatReferenceIdentitySegment = (
       return identity.viewId;
     case 'role':
       return identity.roleId;
-    case 'app':
-      return identity.applicationId;
     case 'skill':
       return identity.skillId;
     default:

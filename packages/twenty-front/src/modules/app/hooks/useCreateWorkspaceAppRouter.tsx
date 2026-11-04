@@ -34,12 +34,6 @@ const PasswordReset = lazy(() =>
   })),
 );
 
-const Authorize = lazy(() =>
-  import('~/pages/auth/Authorize').then((module) => ({
-    default: module.Authorize,
-  })),
-);
-
 const WorkspaceActivation = lazyWithPreload(() =>
   import('~/pages/onboarding/WorkspaceActivation').then((module) => ({
     default: module.WorkspaceActivation,
@@ -238,14 +232,6 @@ const createWorkspaceAppRouter = ({
                       ),
                     },
                   ],
-                },
-                {
-                  path: AppPath.Authorize,
-                  element: (
-                    <LazyRoute>
-                      <Authorize />
-                    </LazyRoute>
-                  ),
                 },
               ],
             },

@@ -4,7 +4,6 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { ApiKeyModule } from 'src/engine/core-modules/api-key/api-key.module';
-import { ApplicationRegistrationModule } from 'src/engine/core-modules/application/application-registration/application-registration.module';
 import { ApplicationModule } from 'src/engine/core-modules/application/application.module';
 import { SdkClientModule } from 'src/engine/core-modules/sdk-client/sdk-client.module';
 import { SecretEncryptionModule } from 'src/engine/core-modules/secret-encryption/secret-encryption.module';
@@ -56,7 +55,6 @@ import { WorkflowRunModule } from 'src/modules/workflow/workflow-runner/workflow
     UserRoleModule,
     ApiKeyModule,
     ApplicationModule,
-    ApplicationRegistrationModule,
     TypeOrmModule.forFeature([
       WorkspaceEntity,
       ObjectMetadataEntity,

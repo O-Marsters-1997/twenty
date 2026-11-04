@@ -41,7 +41,7 @@ export class ApplicationConnectionProviderResolver {
   async applicationConnectionProviders(
     @ApplicationTargetArg(
       'applicationId',
-      { kind: 'applicationId', requireApplicationRegistrationOwnership: false },
+      { kind: 'applicationId' },
       { type: () => UUIDScalarType },
     )
     applicationId: string,

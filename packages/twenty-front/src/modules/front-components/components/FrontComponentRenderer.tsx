@@ -166,9 +166,6 @@ const FrontComponentRendererContent = ({
     [enqueueToast],
   );
 
-  const [initialApplicationVariables] = useState(
-    () => frontComponent.applicationVariables ?? undefined,
-  );
   const [initialApplicationTokenPair, setInitialApplicationTokenPair] =
     useState<FrontComponentApplicationTokenPair | null>(null);
   const [applicationTokenPairLoadError, setApplicationTokenPairLoadError] =
@@ -265,7 +262,6 @@ const FrontComponentRendererContent = ({
               frontComponentHostCommunicationApi
             }
             mediaSessionHost={mediaSessionHost}
-            applicationVariables={initialApplicationVariables}
             storageNamespace={storageNamespace}
             onError={handleError}
             loadingFallback={loadingFallback}

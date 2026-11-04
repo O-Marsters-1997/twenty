@@ -12,17 +12,7 @@ import { ApplicationRecurringChargeCronJob } from 'src/engine/core-modules/billi
 import { BillingReminderModule } from 'src/engine/core-modules/billing/reminders/billing-reminder.module';
 import { BillingReminderCronJob } from 'src/engine/core-modules/billing/reminders/crons/billing-reminder.cron.job';
 import { StripeModule } from 'src/engine/core-modules/billing/stripe/stripe.module';
-import { ApplicationInstallModule } from 'src/engine/core-modules/application/application-install/application-install.module';
-import { TriggerInstallApplicationJob } from 'src/engine/core-modules/application/application-install/jobs/trigger-install-application.job';
-import { TriggerUninstallApplicationJob } from 'src/engine/core-modules/application/application-install/jobs/trigger-uninstall-application.job';
 import { ApplicationManifestModule } from 'src/engine/core-modules/application/application-manifest/application-manifest.module';
-import { ApplicationRegistrationModule } from 'src/engine/core-modules/application/application-registration/application-registration.module';
-import { ApplicationUpgradeModule } from 'src/engine/core-modules/application/application-upgrade/application-upgrade.module';
-import { TriggerUpgradeApplicationJob } from 'src/engine/core-modules/application/application-upgrade/jobs/trigger-upgrade-application.job';
-import { UpgradeApplicationsJob } from 'src/engine/core-modules/application/jobs/upgrade-applications.job';
-import { UpgradeWorkspaceApplicationJob } from 'src/engine/core-modules/application/jobs/upgrade-workspace-application.job';
-import { InstallPreInstalledAppsJob } from 'src/engine/core-modules/application/pre-installed-apps/jobs/install-pre-installed-apps.job';
-import { PreInstalledAppsModule } from 'src/engine/core-modules/application/pre-installed-apps/pre-installed-apps.module';
 import { PendingWakeUpModule } from 'src/engine/core-modules/pending-wake-up/pending-wake-up.module';
 import { EmailSenderJob } from 'src/engine/core-modules/email/email-sender.job';
 import { EmailModule } from 'src/engine/core-modules/email/email.module';
@@ -108,11 +98,7 @@ import { WorkflowModule } from 'src/modules/workflow/workflow.module';
     LogicFunctionPrebuiltWarmUpModule,
     EnterpriseModule,
     EmailingModule,
-    ApplicationInstallModule,
     ApplicationManifestModule,
-    ApplicationRegistrationModule,
-    ApplicationUpgradeModule,
-    PreInstalledAppsModule,
     PendingWakeUpModule,
     BillingReminderModule,
     ApplicationRecurringChargeModule,
@@ -138,12 +124,6 @@ import { WorkflowModule } from 'src/modules/workflow/workflow.module';
     CleanWorkspaceDeletionWarningUserVarsJob,
     UpdateWorkspaceMemberEmailJob,
     GenerateSdkClientJob,
-    UpgradeApplicationsJob,
-    UpgradeWorkspaceApplicationJob,
-    InstallPreInstalledAppsJob,
-    TriggerInstallApplicationJob,
-    TriggerUninstallApplicationJob,
-    TriggerUpgradeApplicationJob,
     WarmUpApplicationLogicFunctionsJob,
     RunDeferredWorkspaceMigrationActionsJob,
     DeferredWorkspaceMigrationActionRecoveryCronJob,

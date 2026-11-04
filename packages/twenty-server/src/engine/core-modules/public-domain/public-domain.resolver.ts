@@ -86,7 +86,6 @@ export class PublicDomainResolver {
     @ApplicationTargetArgs<CreatePublicDomainInput>({
       kind: 'applicationId',
       idKey: 'applicationId',
-      requireApplicationRegistrationOwnership: false,
     })
     { domain, applicationId }: CreatePublicDomainInput,
     @AuthWorkspace() currentWorkspace: WorkspaceEntity,

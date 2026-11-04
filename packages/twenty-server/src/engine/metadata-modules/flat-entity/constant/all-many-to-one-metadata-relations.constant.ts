@@ -528,10 +528,6 @@ export const ALL_MANY_TO_ONE_METADATA_RELATIONS = {
     workspace: null,
     application: null,
   },
-  applicationVariable: {
-    workspace: null,
-    application: null,
-  },
   viewSort: {
     application: null,
     workspace: null,

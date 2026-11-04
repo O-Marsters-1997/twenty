@@ -94,16 +94,13 @@ export class CronTriggerCronJob {
             flatApplicationMaps,
             logicFunction.applicationId,
           );
-          const applicationRegistrationId =
-            application?.applicationRegistrationId;
 
-          if (!isDefined(applicationRegistrationId)) {
+          if (!isDefined(application)) {
             continue;
           }
 
           await this.applicationJobEnqueueThrottlerService.throttleOrThrow({
             applicationId: logicFunction.applicationId,
-            applicationRegistrationId,
           });
 
           await this.messageQueueService.add<LogicFunctionTriggerJobData>(

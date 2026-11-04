@@ -3,8 +3,6 @@ import { Logger } from '@nestjs/common';
 import { Command, CommandRunner } from 'nest-commander';
 import { isDefined } from 'twenty-shared/utils';
 
-import { MarketplaceCatalogSyncCronCommand } from 'src/engine/core-modules/application/application-marketplace/crons/commands/marketplace-catalog-sync.cron.command';
-import { StaleRegistrationCleanupCronCommand } from 'src/engine/core-modules/application/application-oauth/stale-registration-cleanup/commands/stale-registration-cleanup.cron.command';
 import { ApplicationRecurringChargeCronCommand } from 'src/engine/core-modules/billing/app-billing/crons/commands/application-recurring-charge.cron.command';
 import { BillingReminderCronCommand } from 'src/engine/core-modules/billing/reminders/crons/commands/billing-reminder.cron.command';
 import { CheckEmailingDomainVerificationCronCommand } from 'src/engine/core-modules/emailing-domain/crons/commands/check-emailing-domain-verification.cron.command';
@@ -79,8 +77,6 @@ export class CronRegisterAllCommand extends CommandRunner {
     private readonly eventLogCleanupCronCommand: EventLogCleanupCronCommand,
     private readonly enterpriseKeyValidationCronCommand: EnterpriseKeyValidationCronCommand,
     private readonly rotateSigningKeysCronCommand: RotateSigningKeysCronCommand,
-    private readonly marketplaceCatalogSyncCronCommand: MarketplaceCatalogSyncCronCommand,
-    private readonly staleRegistrationCleanupCronCommand: StaleRegistrationCleanupCronCommand,
     private readonly pendingFileCleanupCronCommand: PendingFileCleanupCronCommand,
     private readonly deferredWorkspaceMigrationActionRecoveryCronCommand: DeferredWorkspaceMigrationActionRecoveryCronCommand,
     private readonly billingReminderCronCommand: BillingReminderCronCommand,
@@ -96,10 +92,6 @@ export class CronRegisterAllCommand extends CommandRunner {
 
     const isSigningKeyAutoRotationEnabled = isDefined(
       this.twentyConfigService.get('SIGNING_KEY_ROTATION_DAYS'),
-    );
-
-    const isMarketplaceCatalogSyncEnabled = this.twentyConfigService.get(
-      'MARKETPLACE_CATALOG_SYNC_CRON_ENABLED',
     );
 
     const isBillingEnabled = this.twentyConfigService.get('IS_BILLING_ENABLED');
@@ -206,11 +198,6 @@ export class CronRegisterAllCommand extends CommandRunner {
         command: this.eventLogCleanupCronCommand,
       },
       {
-        name: 'MarketplaceCatalogSync',
-        command: this.marketplaceCatalogSyncCronCommand,
-        isEnabled: isMarketplaceCatalogSyncEnabled,
-      },
-      {
         name: 'EnterpriseKeyValidation',
         command: this.enterpriseKeyValidationCronCommand,
       },
@@ -218,10 +205,6 @@ export class CronRegisterAllCommand extends CommandRunner {
         name: 'RotateSigningKeys',
         command: this.rotateSigningKeysCronCommand,
         isEnabled: isSigningKeyAutoRotationEnabled,
-      },
-      {
-        name: 'StaleRegistrationCleanup',
-        command: this.staleRegistrationCleanupCronCommand,
       },
       {
         name: 'PendingFileCleanup',

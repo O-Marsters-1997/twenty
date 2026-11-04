@@ -14,12 +14,10 @@ import { PermissionsModule } from 'src/engine/metadata-modules/permissions/permi
 import { UserRoleModule } from 'src/engine/metadata-modules/user-role/user-role.module';
 import { WebhookSubscriptionModule } from 'src/modules/connected-account/webhook-subscription-manager/webhook-subscription.module';
 import { ApplicationLookupModule } from 'src/engine/core-modules/application/application-lookup/application-lookup.module';
-import { ApplicationRegistrationLookupModule } from 'src/engine/core-modules/application/application-registration/application-registration-lookup/application-registration-lookup.module';
 
 @Module({
   imports: [
     ApplicationLookupModule,
-    ApplicationRegistrationLookupModule,
     TypeOrmModule.forFeature([
       ConnectedAccountEntity,
       CalendarChannelEntity,

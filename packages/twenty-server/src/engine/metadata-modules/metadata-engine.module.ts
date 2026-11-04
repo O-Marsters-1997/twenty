@@ -8,7 +8,6 @@ import { AiChatModule } from 'src/engine/metadata-modules/ai/ai-chat/ai-chat.mod
 import { AiGenerateTextModule } from 'src/engine/metadata-modules/ai/ai-generate-text/ai-generate-text.module';
 import { AiWorkspaceStatsModule } from 'src/engine/metadata-modules/ai/ai-workspace-stats/ai-workspace-stats.module';
 import { ApplicationConnectionsModule } from 'src/engine/core-modules/application/connection-provider/connections/application-connections.module';
-import { ApplicationJobModule } from 'src/engine/core-modules/application/application-job/application-job.module';
 import { ApplicationKeyValueModule } from 'src/engine/core-modules/application/application-key-value/application-key-value.module';
 import { CalendarChannelMetadataModule } from 'src/engine/metadata-modules/calendar-channel/calendar-channel-metadata.module';
 import { ConnectedAccountMetadataModule } from 'src/engine/metadata-modules/connected-account/connected-account-metadata.module';
@@ -30,7 +29,6 @@ import { ObjectMetadataModule } from 'src/engine/metadata-modules/object-metadat
 import { PermissionFlagModule } from 'src/engine/metadata-modules/permission-flag/permission-flag.module';
 import { PermissionsModule } from 'src/engine/metadata-modules/permissions/permissions.module';
 import { MinimalMetadataModule } from 'src/engine/metadata-modules/minimal-metadata/minimal-metadata.module';
-import { ServerRouteTriggerModule } from 'src/engine/core-modules/server-route-trigger/server-route-trigger.module';
 import { RoleModule } from 'src/engine/metadata-modules/role/role.module';
 import { RouteTriggerModule } from 'src/engine/metadata-modules/route-trigger/route-trigger.module';
 import { SearchFieldMetadataModule } from 'src/engine/metadata-modules/search-field-metadata/search-field-metadata.module';
@@ -61,7 +59,6 @@ import { WorkspaceMetadataVersionModule } from 'src/engine/metadata-modules/work
     AiGenerateTextModule,
     AiWorkspaceStatsModule,
     ApplicationConnectionsModule,
-    ApplicationJobModule,
     ApplicationKeyValueModule,
     MinimalMetadataModule,
     ViewModule,
@@ -70,7 +67,6 @@ import { WorkspaceMetadataVersionModule } from 'src/engine/metadata-modules/work
     PermissionsModule,
     PermissionFlagModule,
     RouteTriggerModule,
-    ServerRouteTriggerModule,
     WebhookModule,
     ConnectedAccountMetadataModule,
     MessageChannelMetadataModule,

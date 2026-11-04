@@ -7,9 +7,7 @@ import { attachApplicationTarget } from 'src/engine/core-modules/application/uti
 export const ApplicationTargetParam =
   (
     paramName: string,
-    target: ApplicationTargetKind & {
-      requireApplicationRegistrationOwnership: boolean;
-    },
+    target: ApplicationTargetKind,
   ): ParameterDecorator =>
   (prototype, propertyKey, parameterIndex) => {
     attachApplicationTarget({

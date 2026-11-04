@@ -7,17 +7,18 @@ import { type UsageSpenders } from 'src/engine/core-modules/usage/types/usage-sp
 
 export const buildLogicFunctionExecutionUsage = ({
   durationMs,
-  isBillingExempt,
   resourceId,
   spenders,
 }: {
   durationMs: number;
-  isBillingExempt: boolean;
   resourceId: string;
   spenders: UsageSpenders;
 }): RecordUsageInput[] => {
   const { invocationCreditsMicro, durationCreditsMicro, billedDurationMs } =
-    computeLogicFunctionExecutionCreditsMicro({ durationMs, isBillingExempt });
+    computeLogicFunctionExecutionCreditsMicro({
+      durationMs,
+      isBillingExempt: false,
+    });
 
   return [
     {

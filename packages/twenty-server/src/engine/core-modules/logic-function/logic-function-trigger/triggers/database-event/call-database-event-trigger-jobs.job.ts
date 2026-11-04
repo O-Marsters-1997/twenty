@@ -97,9 +97,8 @@ export class CallDatabaseEventTriggerJobsJob {
         flatApplicationMaps,
         applicationId,
       );
-      const applicationRegistrationId = application?.applicationRegistrationId;
 
-      if (!isDefined(application) || !isDefined(applicationRegistrationId)) {
+      if (!isDefined(application)) {
         continue;
       }
 
@@ -129,13 +128,12 @@ export class CallDatabaseEventTriggerJobsJob {
       try {
         await this.applicationJobEnqueueThrottlerService.throttleOrThrow({
           applicationId,
-          applicationRegistrationId,
           jobCount: logicFunctionPayloads.length,
         });
       } catch (error) {
         if (error instanceof ThrottlerException) {
           this.logger.warn(
-            `Enqueue throttled for application ${applicationId} (registration ${applicationRegistrationId}) in workspace ${workspaceEventBatch.workspaceId}: skipping ${logicFunctionPayloads.length} logic function trigger(s)`,
+            `Enqueue throttled for application ${applicationId} in workspace ${workspaceEventBatch.workspaceId}: skipping ${logicFunctionPayloads.length} logic function trigger(s)`,
           );
 
           continue;

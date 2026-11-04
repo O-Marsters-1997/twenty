@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { WorkspaceIteratorModule } from 'src/database/commands/command-runners/workspace-iterator.module';
-import { BackfillWorkspaceCustomApplicationRegistrationCommand } from 'src/database/commands/upgrade-version-command/2-19/2-19-workspace-command-1782853718000-backfill-workspace-custom-application-registration.command';
 import { BackfillSystemUniqueIndexUniversalIdentifierCommand } from 'src/database/commands/upgrade-version-command/2-19/2-19-workspace-command-1783093620000-backfill-system-unique-index-universal-identifier.command';
 import { BackfillDeterministicFieldUniversalIdentifiersCommand } from 'src/database/commands/upgrade-version-command/2-19/2-19-workspace-command-1783100000000-backfill-deterministic-field-universal-identifiers.command';
 import { ApplicationEntity } from 'src/engine/core-modules/application/application.entity';
@@ -31,7 +30,6 @@ import { WorkspaceMigrationRunnerModule } from 'src/engine/workspace-manager/wor
     WorkspaceMigrationRunnerModule,
   ],
   providers: [
-    BackfillWorkspaceCustomApplicationRegistrationCommand,
     BackfillSystemUniqueIndexUniversalIdentifierCommand,
     BackfillDeterministicFieldUniversalIdentifiersCommand,
   ],

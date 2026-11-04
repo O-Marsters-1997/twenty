@@ -77,7 +77,6 @@ export class SdkClientController {
     @Res() res: Response,
     @ApplicationTargetParam('applicationId', {
       kind: 'applicationId',
-      requireApplicationRegistrationOwnership: false,
     })
     applicationId: string,
     @Param('moduleName') moduleName: SdkModuleName,

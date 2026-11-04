@@ -14,14 +14,13 @@ import { Request, Response } from 'express';
 import { pipeline } from 'node:stream/promises';
 import { join } from 'path';
 import { type Readable } from 'stream';
-import { ApiPath, FileFolder, ServerFileFolder } from 'twenty-shared/types';
+import { ApiPath, FileFolder } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 
 import {
   FileStorageException,
   FileStorageExceptionCode,
 } from 'src/engine/core-modules/file-storage/interfaces/file-storage-exception';
-import { ServerFileStorageService } from 'src/engine/core-modules/file-storage/services/server-file-storage.service';
 import { validateFilePath } from 'src/engine/core-modules/file-storage/utils/validate-file-path.util';
 import {
   FileException,
@@ -54,71 +53,7 @@ export class FileController {
   constructor(
     private readonly recordExportWorkspaceService: RecordExportWorkspaceService,
     private readonly fileService: FileService,
-    private readonly serverFileStorageService: ServerFileStorageService,
   ) {}
-
-  // Instance-global marketplace assets, also shown on the public OAuth authorize page, hence no auth.
-  @Get(
-    `${ApiPath.Files}/application-registrations/:applicationRegistrationId/*path`,
-  )
-  @UseGuards(PublicEndpointGuard, NoPermissionGuard)
-  async getApplicationRegistrationAsset(
-    @Res() res: Response,
-    @Req() req: Request,
-    @Param('applicationRegistrationId') applicationRegistrationId: string,
-  ) {
-    const filepath = join(...req.params.path);
-
-    let fileResponse: { stream: Readable; mimeType: string };
-
-    try {
-      fileResponse = await this.serverFileStorageService.readServerFile({
-        fileFolder: ServerFileFolder.ApplicationRegistration,
-        applicationRegistrationId,
-        resourcePath: filepath,
-      });
-    } catch (error) {
-      if (
-        error instanceof FileStorageException &&
-        (error.code === FileStorageExceptionCode.FILE_NOT_FOUND ||
-          error.code === FileStorageExceptionCode.ACCESS_DENIED)
-      ) {
-        throw new FileException(
-          'File not found',
-          FileExceptionCode.FILE_NOT_FOUND,
-        );
-      }
-
-      this.logger.error('readServerFile failed unexpectedly', { error });
-
-      throw new FileException(
-        'Error retrieving file',
-        FileExceptionCode.INTERNAL_SERVER_ERROR,
-      );
-    }
-
-    setFileResponseHeaders(res, fileResponse.mimeType);
-    res.setHeader('Cache-Control', PUBLIC_ASSET_CACHE_CONTROL);
-
-    try {
-      await pipeline(fileResponse.stream, res);
-    } catch (error) {
-      fileResponse.stream.destroy();
-      this.logger.error(
-        'Application registration file stream failed mid-transfer',
-        { error },
-      );
-
-      if (!res.headersSent) {
-        throw new FileException(
-          'Error streaming file from storage',
-          FileExceptionCode.INTERNAL_SERVER_ERROR,
-        );
-      }
-
-      res.destroy();
-    }
-  }
 
   @Get(`${ApiPath.PublicAssets}/:workspaceId/:applicationId/*path`)
   @UseGuards(PublicEndpointGuard, NoPermissionGuard)

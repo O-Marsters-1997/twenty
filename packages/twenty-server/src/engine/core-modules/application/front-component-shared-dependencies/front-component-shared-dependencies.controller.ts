@@ -66,7 +66,6 @@ export class FrontComponentSharedDependenciesController {
     @Res() res: Response,
     @ApplicationTargetParam('applicationId', {
       kind: 'applicationId',
-      requireApplicationRegistrationOwnership: false,
     })
     applicationId: string,
     @AuthWorkspace() workspace: WorkspaceEntity,

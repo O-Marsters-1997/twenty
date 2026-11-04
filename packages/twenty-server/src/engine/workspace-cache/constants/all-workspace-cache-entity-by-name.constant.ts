@@ -1,6 +1,5 @@
 import { ApiKeyEntity } from 'src/engine/core-modules/api-key/api-key.entity';
 import { ApplicationEntity } from 'src/engine/core-modules/application/application.entity';
-import { UserApplicationVariableValueEntity } from 'src/engine/core-modules/application/application-variable/user-application-variable-value.entity';
 import { BillingEntitlementEntity } from 'src/engine/core-modules/billing/entities/billing-entitlement.entity';
 import { FeatureFlagEntity } from 'src/engine/core-modules/feature-flag/feature-flag.entity';
 import { UsageLimitEntity } from 'src/engine/core-modules/usage-limit/usage-limit.entity';
@@ -11,7 +10,6 @@ import { IndexFieldMetadataEntity } from 'src/engine/metadata-modules/index-meta
 export const ALL_WORKSPACE_CACHE_ENTITY_BY_NAME = {
   ...ALL_METADATA_ENTITY_BY_METADATA_NAME,
   application: ApplicationEntity,
-  userApplicationVariableValue: UserApplicationVariableValueEntity,
   indexFieldMetadata: IndexFieldMetadataEntity,
   apiKey: ApiKeyEntity,
   featureFlag: FeatureFlagEntity,

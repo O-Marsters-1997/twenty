@@ -615,7 +615,6 @@ export class RecordExportWorkspaceService {
     const getI18nContext =
       await this.applicationTranslationCatalogService.getI18nContextByApplicationId(
         {
-          applicationIds: rawFields.map((field) => field.applicationId),
           locale: getRecordExportLocale(authContext),
           workspaceId: authContext.workspace.id,
         },

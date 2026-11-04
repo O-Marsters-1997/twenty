@@ -7,7 +7,7 @@ import {
   getSettingsPath,
   isDefined,
 } from 'twenty-shared/utils';
-import { IconApps, IconLock, useIcons } from 'twenty-ui/icon';
+import { IconLock, useIcons } from 'twenty-ui/icon';
 import { Avatar } from 'twenty-ui/primitives/data-display';
 import { useTheme } from 'twenty-ui/theme';
 
@@ -193,13 +193,6 @@ export const useChatReferenceTarget = (
           }),
           leftComponent: <IconLock size={iconSize} stroke={iconStroke} />,
         };
-      case 'app':
-        return {
-          path: getSettingsPath(SettingsPath.ApplicationDetail, {
-            applicationId: reference.applicationId,
-          }),
-          leftComponent: <IconApps size={iconSize} stroke={iconStroke} />,
-        };
       case 'skill': {
         const SkillIcon = getIcon(skillIcon ?? DEFAULT_SKILL_ICON);
 
@@ -223,9 +216,6 @@ export const useChatReferenceTarget = (
             recordId: reference.recordId,
             objectNameSingular: reference.objectNameSingular,
           });
-      // Application settings aren't routed in the side panel, so the chip navigates like a plain link.
-      case 'app':
-        return undefined;
       default:
         return () => openRoutedPageInSidePanel({ path });
     }

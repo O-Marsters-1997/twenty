@@ -29,8 +29,6 @@ import {
 } from 'src/engine/core-modules/auth/auth.exception';
 import { ApiKeyTokenInput } from 'src/engine/core-modules/auth/dto/api-key-token.input';
 import { AppTokenInput } from 'src/engine/core-modules/auth/dto/app-token.input';
-import { AuthorizeAppDTO } from 'src/engine/core-modules/auth/dto/authorize-app.dto';
-import { AuthorizeAppInput } from 'src/engine/core-modules/auth/dto/authorize-app.input';
 import { AvailableWorkspacesAndAccessTokensDTO } from 'src/engine/core-modules/auth/dto/available-workspaces-and-access-tokens.dto';
 import { EmailPasswordResetLinkDTO } from 'src/engine/core-modules/auth/dto/email-password-reset-link.dto';
 import { EmailPasswordResetLinkInput } from 'src/engine/core-modules/auth/dto/email-password-reset-link.input';
@@ -106,7 +104,6 @@ import { PublicEndpointGuard } from 'src/engine/guards/public-endpoint.guard';
 import { AuthPrincipalGuard } from 'src/engine/guards/auth-principal.guard';
 import { SettingsPermissionGuard } from 'src/engine/guards/settings-permission.guard';
 import { PermissionsGraphqlApiExceptionFilter } from 'src/engine/metadata-modules/permissions/utils/permissions-graphql-api-exception.filter';
-import { getRequestBaseUrl } from 'src/utils/get-request-base-url.util';
 import { streamToBuffer } from 'src/utils/stream-to-buffer';
 
 import { ApiKeyToken } from './dto/api-key-token.dto';
@@ -1132,30 +1129,6 @@ export class AuthResolver {
       impersonatorUserId: impersonatorUserWorkspace.user.id,
       impersonatedUserId: toImpersonateUserWorkspace.user.id,
     };
-  }
-
-  @Mutation(() => AuthorizeAppDTO)
-  @UseGuards(
-    AuthPrincipalGuard({
-      userSession: true,
-      apiKey: false,
-      oauthClient: false,
-      application: false,
-    }),
-    NoPermissionGuard,
-  )
-  async authorizeApp(
-    @Args() authorizeAppInput: AuthorizeAppInput,
-    @AuthUser() user: AuthContextUser,
-    @AuthWorkspace() workspace: WorkspaceEntity,
-    @Context() context: { req: Request },
-  ): Promise<AuthorizeAppDTO> {
-    return await this.authService.generateAuthorizationCode({
-      authorizeAppInput,
-      user,
-      workspace,
-      requestBaseUrl: getRequestBaseUrl(context.req),
-    });
   }
 
   @Mutation(() => AuthTokens)

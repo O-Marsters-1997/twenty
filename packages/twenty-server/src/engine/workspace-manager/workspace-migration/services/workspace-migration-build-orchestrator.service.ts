@@ -28,7 +28,6 @@ import { computeSearchVectorRebuildTargetUniversalIdentifiers } from 'src/engine
 import { crossEntityTransversalValidation } from 'src/engine/workspace-manager/workspace-migration/utils/cross-entity-transversal-validation.util';
 import { mergeOrchestratorFailureReports } from 'src/engine/workspace-manager/workspace-migration/utils/merge-orchestrator-failure-reports.util';
 import { WorkspaceMigrationAgentActionsBuilderService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-builder/builders/agent/workspace-migration-agent-actions-builder.service';
-import { WorkspaceMigrationApplicationVariableActionsBuilderService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-builder/builders/application-variable/workspace-migration-application-variable-actions-builder.service';
 import { WorkspaceMigrationCommandMenuItemActionsBuilderService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-builder/builders/command-menu-item/workspace-migration-command-menu-item-actions-builder.service';
 import { WorkspaceMigrationConnectionProviderActionsBuilderService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-builder/builders/connection-provider/workspace-migration-connection-provider-actions-builder.service';
 import { WorkspaceMigrationTimelineActivityTypeActionsBuilderService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-builder/builders/timeline-activity-type/workspace-migration-timeline-activity-type-actions-builder.service';
@@ -157,7 +156,6 @@ export class WorkspaceMigrationBuildOrchestratorService {
     workspaceMigrationRowLevelPermissionPredicateGroupActionsBuilderService: WorkspaceMigrationRowLevelPermissionPredicateGroupActionsBuilderService,
     workspaceMigrationFrontComponentActionsBuilderService: WorkspaceMigrationFrontComponentActionsBuilderService,
     workspaceMigrationWebhookActionsBuilderService: WorkspaceMigrationWebhookActionsBuilderService,
-    workspaceMigrationApplicationVariableActionsBuilderService: WorkspaceMigrationApplicationVariableActionsBuilderService,
     workspaceMigrationConnectionProviderActionsBuilderService: WorkspaceMigrationConnectionProviderActionsBuilderService,
     workspaceMigrationTimelineActivityTypeActionsBuilderService: WorkspaceMigrationTimelineActivityTypeActionsBuilderService,
     workspaceMigrationValidationRuleActionsBuilderService: WorkspaceMigrationValidationRuleActionsBuilderService,
@@ -283,10 +281,6 @@ export class WorkspaceMigrationBuildOrchestratorService {
       createEntityActionsBuilderTask(
         ALL_METADATA_NAME.webhook,
         workspaceMigrationWebhookActionsBuilderService,
-      ),
-      createEntityActionsBuilderTask(
-        ALL_METADATA_NAME.applicationVariable,
-        workspaceMigrationApplicationVariableActionsBuilderService,
       ),
       createEntityActionsBuilderTask(
         ALL_METADATA_NAME.connectionProvider,

@@ -7,7 +7,6 @@ import {
 
 import { type Request, type Response } from 'express';
 
-import { ALL_OAUTH_SCOPES } from 'src/engine/core-modules/application/application-oauth/constants/oauth-scopes';
 import { JwtAuthGuard } from 'src/engine/guards/jwt-auth.guard';
 
 // RFC 9728 / MCP authorization spec: when the MCP endpoint returns 401,
@@ -25,7 +24,6 @@ export class McpAuthGuard implements CanActivate {
       const request = context.switchToHttp().getRequest<Request>();
       const baseUrl = `${request.protocol}://${request.get('host')}`;
       const resourceMetadataUrl = `${baseUrl}/.well-known/oauth-protected-resource/mcp`;
-      const scope = ALL_OAUTH_SCOPES.join(' ');
 
       // Set the header on the response before throwing, because exception
       // filters may not preserve custom headers from the exception payload.
@@ -33,7 +31,7 @@ export class McpAuthGuard implements CanActivate {
 
       response.setHeader(
         'WWW-Authenticate',
-        `Bearer resource_metadata="${resourceMetadataUrl}", scope="${scope}"`,
+        `Bearer resource_metadata="${resourceMetadataUrl}"`,
       );
 
       throw new UnauthorizedException();

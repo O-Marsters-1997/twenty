@@ -1705,15 +1705,6 @@ export class ConfigVariables {
   SIGNING_KEY_ROTATION_DAYS?: number;
 
   @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.ADVANCED_SETTINGS,
-    description:
-      'Register the cron job that syncs the marketplace catalog from the npm registry. Disable to stop the automatic catalog import.',
-    type: ConfigVariableType.BOOLEAN,
-  })
-  @IsOptional()
-  MARKETPLACE_CATALOG_SYNC_CRON_ENABLED = true;
-
-  @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.RATE_LIMITING,
     description: 'Maximum number of records affected by mutations',
     type: ConfigVariableType.NUMBER,
@@ -1854,15 +1845,6 @@ export class ConfigVariables {
   })
   @CastToPositiveNumber()
   APPLICATION_JOB_ENQUEUE_RATE_LIMITING_LIMIT = 500;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.RATE_LIMITING,
-    description:
-      'Maximum number of jobs enqueued per application registration across all workspaces in the rate limiting window',
-    type: ConfigVariableType.NUMBER,
-  })
-  @CastToPositiveNumber()
-  APPLICATION_REGISTRATION_JOB_ENQUEUE_RATE_LIMITING_LIMIT = 2000;
 
   @CastToPositiveNumber()
   @ConfigVariablesMetadata({

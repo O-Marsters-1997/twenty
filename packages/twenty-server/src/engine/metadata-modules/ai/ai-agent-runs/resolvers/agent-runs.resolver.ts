@@ -49,7 +49,6 @@ export class AgentRunsResolver {
       {
         kind: 'applicationOwnedEntity',
         metadataName: 'agent',
-        requireApplicationRegistrationOwnership: false,
       },
       { type: () => UUIDScalarType },
     )

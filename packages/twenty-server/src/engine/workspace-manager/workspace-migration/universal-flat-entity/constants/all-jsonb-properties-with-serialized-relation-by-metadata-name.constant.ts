@@ -46,7 +46,6 @@ export const ALL_JSONB_PROPERTIES_WITH_SERIALIZED_RELATION_BY_METADATA_NAME = {
   frontComponent: {
     widgetAvailability: 'widgetAvailability',
   },
-  applicationVariable: {},
   connectionProvider: {},
   timelineActivityType: {},
   validationRule: {},

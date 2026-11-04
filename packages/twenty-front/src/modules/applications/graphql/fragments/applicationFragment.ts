@@ -14,13 +14,6 @@ export const APPLICATION_FRAGMENT = gql`
     logoUrl
     version
     universalIdentifier
-    applicationRegistrationId
-    applicationRegistration {
-      id
-      latestAvailableVersion
-      sourceType
-      logoUrl
-    }
     canBeUninstalled
     autoUpgrade
     createdAt
@@ -28,19 +21,6 @@ export const APPLICATION_FRAGMENT = gql`
     settingsCustomTabFrontComponentId
     healthCheckLogicFunctionId
     availablePackages
-    applicationVariables {
-      id
-      key
-      value
-      description
-      label
-      isSecret
-      isDeprecated
-      isRequired
-      type
-      options
-      scope
-    }
     agents {
       ...AgentFields
     }

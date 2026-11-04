@@ -140,15 +140,6 @@ const referenceCases: Array<{
   },
   {
     reference: asMatch({
-      kind: 'app',
-      applicationId: APPLICATION_ID,
-      displayName: 'Twenty',
-    }),
-    href: `/settings/applications/${APPLICATION_ID}`,
-    permissionFlag: PermissionFlagType.APPLICATIONS,
-  },
-  {
-    reference: asMatch({
       kind: 'skill',
       skillId: SKILL_ID,
       displayName: 'Workflow building',
@@ -255,10 +246,7 @@ describe('ChatReferenceChip', () => {
   );
 
   it.each(
-    referenceCases.filter(
-      ({ reference }) =>
-        reference.kind !== 'record' && reference.kind !== 'app',
-    ),
+    referenceCases.filter(({ reference }) => reference.kind !== 'record'),
   )(
     'should open a $reference.kind reference beside the chat instead of navigating',
     ({ reference, href }) => {
@@ -306,20 +294,6 @@ describe('ChatReferenceChip', () => {
     });
     expect(screen.getByTestId('location-probe')).toHaveTextContent(
       '/inbox/99999999-9999-4999-8999-999999999999',
-    );
-  });
-
-  it('should navigate to the application settings from the chat page since they have no side panel route', () => {
-    renderWithReferences(
-      <ChatReferenceChip reference={findCase('app').reference} />,
-      { initialPath: '/chat' },
-    );
-
-    clickChip('Twenty');
-
-    expect(openRoutedPageInSidePanelMock).not.toHaveBeenCalled();
-    expect(screen.getByTestId('location-probe')).toHaveTextContent(
-      `/settings/applications/${APPLICATION_ID}`,
     );
   });
 

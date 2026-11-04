@@ -10,7 +10,6 @@ import { ViewKey } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 import { v4 } from 'uuid';
 
-import { ApplicationRegistrationService } from 'src/engine/core-modules/application/application-registration/application-registration.service';
 import { ApplicationService } from 'src/engine/core-modules/application/application.service';
 import { EmailingDomainDriver } from 'src/engine/core-modules/emailing-domain/drivers/types/emailing-domain-driver.type';
 import { type PlaintextString } from 'src/engine/core-modules/secret-encryption/branded-strings/plaintext-string.type';
@@ -73,7 +72,6 @@ export class DevSeederWorkspaceService {
     private readonly devSeederWorkflowPendingInputService: DevSeederWorkflowPendingInputWorkspaceService,
     private readonly devSeederAgentChatPendingInputService: DevSeederAgentChatPendingInputWorkspaceService,
     private readonly applicationService: ApplicationService,
-    private readonly applicationRegistrationService: ApplicationRegistrationService,
     private readonly workspaceCacheService: WorkspaceCacheService,
     private readonly sdkClientGenerationService: SdkClientGenerationService,
     private readonly upgradeMigrationService: UpgradeMigrationService,
@@ -108,8 +106,6 @@ export class DevSeederWorkspaceService {
       appVersion,
       initialCursor,
     });
-
-    await this.applicationRegistrationService.findOrCreateCliRegistration();
 
     const schemaName =
       await this.workspaceSchemaService.createWorkspaceDBSchema(workspaceId);
@@ -222,7 +218,6 @@ export class DevSeederWorkspaceService {
     await this.seedAgentChat({
       workspaceId,
       chatReferenceIds: {
-        applicationId: twentyStandardFlatApplication.id,
         objectMetadataId: companyObjectMetadataItem.id,
         roleId: adminRole.id,
         viewId: allCompaniesView.id,

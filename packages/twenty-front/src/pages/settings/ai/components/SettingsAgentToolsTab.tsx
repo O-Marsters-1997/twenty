@@ -22,13 +22,8 @@ const StyledSearchContainer = styled.div`
 
 export const SettingsAgentToolsTab = () => {
   const { t } = useLingui();
-  const {
-    allTools,
-    applicationById,
-    marketplaceAppByUniversalIdentifier,
-    currentWorkspace,
-    isLoading,
-  } = useSettingsAgentToolsTable();
+  const { allTools, applicationById, currentWorkspace, isLoading } =
+    useSettingsAgentToolsTable();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [showCustomTools, setShowCustomTools] = useState(true);
@@ -122,9 +117,6 @@ export const SettingsAgentToolsTab = () => {
         tools={filteredTools}
         isLoading={isLoading}
         applicationById={applicationById}
-        marketplaceAppByUniversalIdentifier={
-          marketplaceAppByUniversalIdentifier
-        }
         currentWorkspace={currentWorkspace}
       />
     </Section.Root>

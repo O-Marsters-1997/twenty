@@ -178,7 +178,7 @@ export class ConnectionProviderOAuthController {
     }
 
     try {
-      const { workspaceId, applicationId, redirectLocation } =
+      const { workspaceId, redirectLocation } =
         await this.oauthProviderFlowService.completeAuthorizationFlow({
           code,
           state,
@@ -196,8 +196,7 @@ export class ConnectionProviderOAuthController {
       }
 
       const { pathname, searchParams, hash } = parseRelativeUrl(
-        redirectLocation ||
-          getSettingsPath(SettingsPath.ApplicationDetail, { applicationId }),
+        redirectLocation || getSettingsPath(SettingsPath.Accounts),
       );
 
       const url = this.workspaceDomainsService.buildWorkspaceURL({

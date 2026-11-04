@@ -89,9 +89,6 @@ import { UpdateViewSortActionHandlerService } from 'src/engine/workspace-manager
 import { CreateViewActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/view/services/create-view-action-handler.service';
 import { DeleteViewActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/view/services/delete-view-action-handler.service';
 import { UpdateViewActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/view/services/update-view-action-handler.service';
-import { CreateApplicationVariableActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/application-variable/services/create-application-variable-action-handler.service';
-import { DeleteApplicationVariableActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/application-variable/services/delete-application-variable-action-handler.service';
-import { UpdateApplicationVariableActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/application-variable/services/update-application-variable-action-handler.service';
 import { CreateWebhookActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/webhook/services/create-webhook-action-handler.service';
 import { DeleteWebhookActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/webhook/services/delete-webhook-action-handler.service';
 import { UpdateWebhookActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/webhook/services/update-webhook-action-handler.service';
@@ -244,9 +241,6 @@ import { WorkflowDeletionModule } from 'src/modules/workflow/workflow-deletion/w
     UpdateWebhookActionHandlerService,
     DeleteWebhookActionHandlerService,
 
-    CreateApplicationVariableActionHandlerService,
-    UpdateApplicationVariableActionHandlerService,
-    DeleteApplicationVariableActionHandlerService,
 
     CreateConnectionProviderActionHandlerService,
     UpdateConnectionProviderActionHandlerService,
