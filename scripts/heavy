@@ -1,0 +1,2 @@
+#!/bin/sh
+exec lockf -t 900 "$HOME/.heavy.lock" "$@"
