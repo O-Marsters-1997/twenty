@@ -10,7 +10,6 @@ import { type ObjectRecordGroupBy } from 'src/engine/api/graphql/workspace-query
 import { type ToolProviderContext } from 'src/engine/core-modules/tool-provider/interfaces/tool-provider-context.type';
 
 import { ExceptionHandlerService } from 'src/engine/core-modules/exception-handler/exception-handler.service';
-import { LogicFunctionExecutorService } from 'src/engine/core-modules/logic-function/logic-function-executor/logic-function-executor.service';
 import { CreateManyRecordsService } from 'src/engine/core-modules/record-crud/services/create-many-records.service';
 import { CreateRecordService } from 'src/engine/core-modules/record-crud/services/create-record.service';
 import { DeleteManyRecordsService } from 'src/engine/core-modules/record-crud/services/delete-many-records.service';
@@ -48,7 +47,6 @@ export class ToolExecutorService {
     private readonly upsertManyRecordsService: UpsertManyRecordsService,
     private readonly deleteRecordService: DeleteRecordService,
     private readonly deleteManyRecordsService: DeleteManyRecordsService,
-    private readonly logicFunctionExecutorService: LogicFunctionExecutorService,
     private readonly recordFilesResolverService: RecordFilesResolverService,
     private readonly workspaceCacheService: WorkspaceCacheService,
     @InjectRepository(UserEntity)
@@ -104,12 +102,6 @@ export class ToolExecutorService {
         );
       case 'static':
         return this.dispatchStaticTool(descriptor, args, context);
-      case 'logic_function':
-        return this.dispatchLogicFunction(
-          descriptor.executionRef,
-          args,
-          context,
-        );
     }
   }
 
@@ -343,33 +335,5 @@ export class ToolExecutorService {
       args,
       context,
     );
-  }
-
-  private async dispatchLogicFunction(
-    ref: Extract<ToolExecutionRef, { kind: 'logic_function' }>,
-    args: Record<string, unknown>,
-    context: ToolProviderContext,
-  ): Promise<ToolOutput> {
-    const result = await this.logicFunctionExecutorService.execute({
-      logicFunctionId: ref.logicFunctionId,
-      workspaceId: context.workspaceId,
-      payload: args,
-      userId: context.userId,
-      userWorkspaceId: context.userWorkspaceId,
-    });
-
-    if (result.error) {
-      return {
-        success: false,
-        message: 'Logic function execution failed',
-        error: result.error.errorMessage,
-      };
-    }
-
-    return {
-      success: true,
-      message: 'Logic function executed successfully',
-      result: result.data ?? undefined,
-    };
   }
 }

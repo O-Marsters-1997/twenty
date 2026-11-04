@@ -41,12 +41,6 @@ describe('getMcpRegistryToolAnnotations', () => {
 
   it.each<[ToolExecutionRef]>([
     [{ kind: 'static', toolId: 'get_view_fields' }],
-    [
-      {
-        kind: 'logic_function',
-        logicFunctionId: '20202020-0000-4000-8000-000000000001',
-      },
-    ],
   ])('should return execute annotations for %p', (executionRef) => {
     expect(getMcpRegistryToolAnnotations(executionRef)).toEqual(
       MCP_EXECUTE_TOOL_ANNOTATIONS,

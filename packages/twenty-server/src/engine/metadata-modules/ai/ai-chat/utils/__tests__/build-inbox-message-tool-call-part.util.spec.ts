@@ -1,25 +1,13 @@
 import { resolveEmailToolCallProposal } from 'src/engine/metadata-modules/ai/ai-agent-execution/pausing-tools/utils/resolve-email-tool-call-proposal.util';
 import { buildInboxMessageToolCallPart } from 'src/engine/metadata-modules/ai/ai-chat/utils/build-inbox-message-tool-call-part.util';
 import { AiExceptionCode } from 'src/engine/metadata-modules/ai/ai.exception';
-import { type FlatLogicFunction } from 'src/engine/metadata-modules/logic-function/types/flat-logic-function.type';
 
 const TOOL_CALL_ID = 'call_inbox';
-
-const SHARE_RECORDING_TOOL = {
-  universalIdentifier: 'share-recording-tool',
-  name: 'share-recording',
-  toolTriggerSettings: { frontComponentUniversalIdentifier: 'component-id' },
-} as FlatLogicFunction;
 
 const build = (toolCall: unknown) =>
   buildInboxMessageToolCallPart({
     toolCall,
     toolCallId: TOOL_CALL_ID,
-    findApplicationTool: async (logicFunctionUniversalIdentifier) =>
-      logicFunctionUniversalIdentifier ===
-      SHARE_RECORDING_TOOL.universalIdentifier
-        ? SHARE_RECORDING_TOOL
-        : undefined,
     resolveProposal: async (input) => resolveEmailToolCallProposal(input),
   });
 
@@ -114,7 +102,6 @@ describe('buildInboxMessageToolCallPart', () => {
       buildInboxMessageToolCallPart({
         toolCall: { toolName: 'propose_tool_call', input: updateCall },
         toolCallId: TOOL_CALL_ID,
-        findApplicationTool: async () => undefined,
         resolveProposal: async () => ({ proposal }),
       }),
     ).resolves.toEqual({
@@ -124,24 +111,6 @@ describe('buildInboxMessageToolCallPart', () => {
           result: { status: 'pending', proposal },
         }),
       }),
-    });
-  });
-
-  it('renders an application tool with its front component without pausing', async () => {
-    await expect(
-      build({
-        logicFunctionUniversalIdentifier: 'share-recording-tool',
-        input: { callRecordingId: 'call-recording-1' },
-      }),
-    ).resolves.toEqual({
-      isAwaitingAnswer: false,
-      part: {
-        type: 'tool-app_share_recording',
-        toolCallId: TOOL_CALL_ID,
-        state: 'output-available',
-        input: { callRecordingId: 'call-recording-1' },
-        output: {},
-      },
     });
   });
 
@@ -170,29 +139,8 @@ describe('buildInboxMessageToolCallPart', () => {
       },
     ],
     ['invalid input', { toolName: 'ask_question', input: { options: [] } }],
-    [
-      'a tool of another application',
-      { logicFunctionUniversalIdentifier: 'other-tool' },
-    ],
+    ['an application tool call', { logicFunctionUniversalIdentifier: 'tool' }],
     ['a non-object tool call', 'ask_question'],
-    [
-      'an application tool with a non-object input',
-      { logicFunctionUniversalIdentifier: 'share-recording-tool', input: [] },
-    ],
-    [
-      'an application tool with a non-object output',
-      {
-        logicFunctionUniversalIdentifier: 'share-recording-tool',
-        output: 'done',
-      },
-    ],
-    [
-      'a tool call naming both a tool and an application tool',
-      {
-        toolName: 'ask_question',
-        logicFunctionUniversalIdentifier: 'share-recording-tool',
-      },
-    ],
   ])('rejects %s', async (_, toolCall) => {
     await expect(build(toolCall)).rejects.toMatchObject({
       code: AiExceptionCode.INVALID_AGENT_INPUT,
