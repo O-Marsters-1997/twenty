@@ -1,4 +1,3 @@
-import { NavigationButton } from '@/ui/input/components/NavigationButton';
 
 import { SettingsEmptyPlaceholder } from '@/settings/components/SettingsEmptyPlaceholder';
 import { styled } from '@linaria/react';
@@ -13,7 +12,6 @@ import { TableRow } from '@/ui/layout/table/components/TableRow';
 import { TooltipDelay } from '@/ui/layout/tooltip/constants/TooltipDelay';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
 import {
-  IconArrowUpRight,
   IconInfoCircle,
   IllustrationIconArray,
   IllustrationIconCalendarEvent,
@@ -36,7 +34,6 @@ type SchemaProperty = {
 export type SettingsToolParameterTableProps = {
   schemaProperties: Record<string, SchemaProperty>;
   requiredFields?: string[];
-  functionLink?: string;
 };
 
 const PARAMETER_TABLE_GRID = '140px 1fr 80px 24px';
@@ -59,12 +56,6 @@ const StyledTableHeaderRow = styled.div`
 const StyledFieldsContainer = styled.div`
   border-bottom: 1px solid ${themeCssVariables.border.color.light};
   padding-bottom: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledFooter = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  padding: ${themeCssVariables.spacing[2]} 0;
 `;
 
 const StyledInfoIconContainer = styled.div`
@@ -93,12 +84,11 @@ const getTypeIconKey = (property: SchemaProperty): string =>
 export const SettingsToolParameterTable = ({
   schemaProperties,
   requiredFields,
-  functionLink,
 }: SettingsToolParameterTableProps) => {
   const theme = useTheme();
   const entries = Object.entries(schemaProperties);
 
-  if (entries.length === 0 && !functionLink) {
+  if (entries.length === 0) {
     return (
       <SettingsEmptyPlaceholder>{t`No parameters`}</SettingsEmptyPlaceholder>
     );
@@ -169,16 +159,6 @@ export const SettingsToolParameterTable = ({
             })}
           </StyledFieldsContainer>
         </>
-      )}
-      {functionLink && (
-        <StyledFooter>
-          <NavigationButton
-            to={functionLink}
-            startIcon={<IconArrowUpRight />}
-            size="sm"
-            variant="outline"
-          >{t`See function`}</NavigationButton>
-        </StyledFooter>
       )}
     </Table>
   );

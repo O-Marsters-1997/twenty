@@ -405,7 +405,9 @@ export class ApplicationService {
     const packageJsonChecksum = createChecksum(
       JSON.stringify(JSON.parse(defaultPackageFields.packageJsonContent)),
     );
-    const yarnLockChecksum = createChecksum(defaultPackageFields.yarnLockContent);
+    const yarnLockChecksum = createChecksum(
+      defaultPackageFields.yarnLockContent,
+    );
     const availablePackages = parseAvailablePackagesFromPackageJsonAndYarnLock(
       defaultPackageFields.packageJsonContent,
       defaultPackageFields.yarnLockContent,

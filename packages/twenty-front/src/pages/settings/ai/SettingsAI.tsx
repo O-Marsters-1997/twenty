@@ -33,7 +33,6 @@ const AI_HERO_DARK = '/images/ai/ai-tools-cover-dark.png';
 const SETTINGS_AI_HERO_INSTANCE_ID_PREFIX = 'settings-ai-hero';
 
 export const SettingsAI = () => {
-
   const tabs = [
     {
       id: SETTINGS_AI_TABS.TABS_IDS.OVERVIEW,
