@@ -46,7 +46,6 @@ const parseInput = <TInput>(schema: z.ZodType<TInput>, input: unknown) => {
     : throwInvalidToolCall(parseResult.error.message);
 };
 
-
 const buildPausingToolPart = async ({
   toolName,
   toolCallId,
