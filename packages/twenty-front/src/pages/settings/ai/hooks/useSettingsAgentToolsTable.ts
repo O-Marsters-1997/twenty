@@ -7,12 +7,8 @@ import { logicFunctionsSelector } from '@/logic-functions/states/logicFunctionsS
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { ToolCategory } from 'twenty-shared/ai';
 import { isDefined } from 'twenty-shared/utils';
-import {
-  type FindManyApplicationsForToolTableQuery,
-  type FindManyMarketplaceAppsForToolTableQuery,
-} from '~/generated-metadata/graphql';
+import { type FindManyApplicationsForToolTableQuery } from '~/generated-metadata/graphql';
 import { FIND_MANY_APPLICATIONS_FOR_TOOL_TABLE } from '~/pages/settings/ai/graphql/queries/findManyApplicationsForToolTable';
-import { FIND_MANY_MARKETPLACE_APPS_FOR_TOOL_TABLE } from '~/pages/settings/ai/graphql/queries/findManyMarketplaceAppsForToolTable';
 import { type SettingsAgentToolItem } from '~/pages/settings/ai/types/SettingsAgentToolItem';
 
 export const useSettingsAgentToolsTable = () => {
@@ -27,11 +23,6 @@ export const useSettingsAgentToolsTable = () => {
   const { data: applicationsData } =
     useQuery<FindManyApplicationsForToolTableQuery>(
       FIND_MANY_APPLICATIONS_FOR_TOOL_TABLE,
-    );
-
-  const { data: marketplaceAppsData } =
-    useQuery<FindManyMarketplaceAppsForToolTableQuery>(
-      FIND_MANY_MARKETPLACE_APPS_FOR_TOOL_TABLE,
     );
 
   const allTools: SettingsAgentToolItem[] = useMemo(
@@ -66,18 +57,11 @@ export const useSettingsAgentToolsTable = () => {
     ]),
   );
 
-  const marketplaceAppByUniversalIdentifier = new Map(
-    (marketplaceAppsData?.findManyMarketplaceApps ?? []).map(
-      (marketplaceApp) => [marketplaceApp.id, marketplaceApp],
-    ),
-  );
-
   const isLoading = toolIndexLoading && !toolIndexError;
 
   return {
     allTools,
     applicationById,
-    marketplaceAppByUniversalIdentifier,
     currentWorkspace,
     isLoading,
   };
