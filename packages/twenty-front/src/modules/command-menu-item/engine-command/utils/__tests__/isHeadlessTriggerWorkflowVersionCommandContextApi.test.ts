@@ -38,15 +38,4 @@ describe('isHeadlessTriggerWorkflowVersionCommandContextApi', () => {
       isHeadlessTriggerWorkflowVersionCommandContextApi(baseContextApi),
     ).toBe(false);
   });
-
-  it('should return false for HeadlessFrontComponentCommandContextApi', () => {
-    const frontComponentContext: HeadlessCommandContextApi = {
-      ...baseContextApi,
-      frontComponentId: 'fc-1',
-    };
-
-    expect(
-      isHeadlessTriggerWorkflowVersionCommandContextApi(frontComponentContext),
-    ).toBe(false);
-  });
 });

@@ -11,7 +11,6 @@ type FromPageLayoutWidgetEntityToFlatPageLayoutWidgetArgs =
   FromEntityToFlatEntityArgs<'pageLayoutWidget'> & {
     fieldMetadataUniversalIdentifierById: Partial<Record<string, string>>;
     pageLayoutTabUniversalIdentifierById: Partial<Record<string, string>>;
-    frontComponentUniversalIdentifierById?: Partial<Record<string, string>>;
     viewFieldGroupUniversalIdentifierById?: Partial<Record<string, string>>;
     viewUniversalIdentifierById?: Partial<Record<string, string>>;
   };
@@ -23,7 +22,6 @@ export const fromPageLayoutWidgetEntityToFlatPageLayoutWidget = (
     entity: pageLayoutWidgetEntity,
     fieldMetadataUniversalIdentifierById,
     pageLayoutTabUniversalIdentifierById,
-    frontComponentUniversalIdentifierById,
     viewFieldGroupUniversalIdentifierById,
     viewUniversalIdentifierById,
   } = args;
@@ -43,7 +41,6 @@ export const fromPageLayoutWidgetEntityToFlatPageLayoutWidget = (
     fromPageLayoutWidgetConfigurationToUniversalConfiguration({
       configuration: pageLayoutWidgetScalarEntity.configuration,
       fieldMetadataUniversalIdentifierById,
-      frontComponentUniversalIdentifierById,
       viewFieldGroupUniversalIdentifierById,
       viewUniversalIdentifierById,
     });

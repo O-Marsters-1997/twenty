@@ -26,7 +26,6 @@ export enum SidePanelPages {
   DashboardRecordTableSettings = 'dashboard-record-table-settings',
   RecordPageFieldsSettings = 'record-page-fields-settings',
   RecordPageFieldSettings = 'record-page-field-settings',
-  ViewFrontComponent = 'view-front-component',
   CommandMenuEdit = 'command-menu-edit',
   PageLayoutRecordPageWidgetTypeSelect = 'page-layout-record-page-widget-type-select',
   ComposeEmail = 'compose-email',

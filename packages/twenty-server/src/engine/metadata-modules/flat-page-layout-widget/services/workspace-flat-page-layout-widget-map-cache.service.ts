@@ -16,7 +16,6 @@ const FLAT_PAGE_LAYOUT_WIDGET_ROWS_REQUIREMENT = {
   pageLayoutTab: ['id', 'universalIdentifier'],
   objectMetadata: ['id', 'universalIdentifier'],
   fieldMetadata: ['id', 'universalIdentifier'],
-  frontComponent: ['id', 'universalIdentifier'],
   view: ['id', 'universalIdentifier'],
 } as const;
 
@@ -36,7 +35,6 @@ export class WorkspaceFlatPageLayoutWidgetMapCacheService extends MetadataFlatEn
       pageLayoutTab: pageLayoutTabs,
       objectMetadata: objectMetadatas,
       fieldMetadata: fieldMetadatas,
-      frontComponent: frontComponents,
       view: views,
     } = rows;
 
@@ -51,9 +49,6 @@ export class WorkspaceFlatPageLayoutWidgetMapCacheService extends MetadataFlatEn
       createIdToUniversalIdentifierMap(objectMetadatas);
     const fieldMetadataUniversalIdentifierById = Object.fromEntries(
       createIdToUniversalIdentifierMap(fieldMetadatas),
-    );
-    const frontComponentUniversalIdentifierById = Object.fromEntries(
-      createIdToUniversalIdentifierMap(frontComponents),
     );
     const viewUniversalIdentifierById = Object.fromEntries(
       createIdToUniversalIdentifierMap(views),
@@ -70,7 +65,6 @@ export class WorkspaceFlatPageLayoutWidgetMapCacheService extends MetadataFlatEn
           objectMetadataIdToUniversalIdentifierMap,
           fieldMetadataUniversalIdentifierById,
           pageLayoutTabUniversalIdentifierById,
-          frontComponentUniversalIdentifierById,
           viewUniversalIdentifierById,
         });
 

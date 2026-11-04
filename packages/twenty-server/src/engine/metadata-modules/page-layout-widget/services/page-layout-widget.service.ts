@@ -240,7 +240,6 @@ export class PageLayoutWidgetService {
       flatPageLayoutTabMaps,
       flatObjectMetadataMaps,
       flatFieldMetadataMaps,
-      flatFrontComponentMaps,
       flatViewFieldGroupMaps,
       flatViewMaps,
     } =
@@ -251,7 +250,6 @@ export class PageLayoutWidgetService {
             'flatPageLayoutTabMaps',
             'flatObjectMetadataMaps',
             'flatFieldMetadataMaps',
-            'flatFrontComponentMaps',
             'flatViewFieldGroupMaps',
             'flatViewMaps',
           ],
@@ -266,7 +264,6 @@ export class PageLayoutWidgetService {
         flatPageLayoutTabMaps,
         flatObjectMetadataMaps,
         flatFieldMetadataMaps,
-        flatFrontComponentMaps,
         flatViewFieldGroupMaps,
         flatViewMaps,
       });
@@ -328,7 +325,6 @@ export class PageLayoutWidgetService {
       {
         flatObjectMetadataMaps: existingFlatObjectMetadataMaps,
         flatFieldMetadataMaps: existingFlatFieldMetadataMaps,
-        flatFrontComponentMaps: existingFlatFrontComponentMaps,
         flatViewFieldGroupMaps: existingFlatViewFieldGroupMaps,
         flatViewMaps: existingFlatViewMaps,
         flatPageLayoutTabMaps: existingFlatPageLayoutTabMaps,
@@ -341,7 +337,6 @@ export class PageLayoutWidgetService {
           flatMapsKeys: [
             'flatObjectMetadataMaps',
             'flatFieldMetadataMaps',
-            'flatFrontComponentMaps',
             'flatViewFieldGroupMaps',
             'flatViewMaps',
             'flatPageLayoutTabMaps',
@@ -381,7 +376,6 @@ export class PageLayoutWidgetService {
         flatPageLayoutWidgetMaps: existingFlatPageLayoutWidgetMaps,
         flatObjectMetadataMaps: existingFlatObjectMetadataMaps,
         flatFieldMetadataMaps: existingFlatFieldMetadataMaps,
-        flatFrontComponentMaps: existingFlatFrontComponentMaps,
         flatViewFieldGroupMaps: existingFlatViewFieldGroupMaps,
         flatViewMaps: existingFlatViewMaps,
         flatPageLayoutTabMaps: existingFlatPageLayoutTabMaps,

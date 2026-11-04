@@ -34,7 +34,6 @@ export const fromUpdatePageLayoutWidgetInputToFlatPageLayoutWidgetToUpdateOrThro
     flatPageLayoutWidgetMaps,
     flatObjectMetadataMaps,
     flatFieldMetadataMaps,
-    flatFrontComponentMaps,
     flatViewFieldGroupMaps,
     flatViewMaps,
     flatPageLayoutTabMaps,
@@ -49,7 +48,6 @@ export const fromUpdatePageLayoutWidgetInputToFlatPageLayoutWidgetToUpdateOrThro
     AllFlatEntityMaps,
     | 'flatObjectMetadataMaps'
     | 'flatFieldMetadataMaps'
-    | 'flatFrontComponentMaps'
     | 'flatViewFieldGroupMaps'
     | 'flatViewMaps'
     | 'flatPageLayoutTabMaps'
@@ -147,8 +145,6 @@ export const fromUpdatePageLayoutWidgetInputToFlatPageLayoutWidgetToUpdateOrThro
           configuration: flatPageLayoutWidgetToUpdate.configuration,
           fieldMetadataUniversalIdentifierById:
             flatFieldMetadataMaps.universalIdentifierById,
-          frontComponentUniversalIdentifierById:
-            flatFrontComponentMaps.universalIdentifierById,
           viewFieldGroupUniversalIdentifierById:
             flatViewFieldGroupMaps.universalIdentifierById,
           viewUniversalIdentifierById: flatViewMaps.universalIdentifierById,

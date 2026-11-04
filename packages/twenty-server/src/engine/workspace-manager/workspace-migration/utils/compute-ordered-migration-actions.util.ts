@@ -83,24 +83,13 @@ export const computeOrderedMigrationActions = (
     ...aggregatedOrchestratorActionsReport.skill.create,
     ...aggregatedOrchestratorActionsReport.skill.update,
 
-    // Menu items CASCADE on frontComponentId, so a repointed item would be lost if its old component were deleted first:
-    // dropped items go first, then new components, then item repoints, and unreferenced components last
     ...aggregatedOrchestratorActionsReport.commandMenuItem.delete,
-    ...aggregatedOrchestratorActionsReport.settingsMenuItem.delete,
-
-    ...aggregatedOrchestratorActionsReport.frontComponent.create,
-    ...aggregatedOrchestratorActionsReport.frontComponent.update,
 
     // commandMenuItem.pageLayoutId is a non-deferrable FK
     ...aggregatedOrchestratorActionsReport.pageLayout.create,
 
     ...aggregatedOrchestratorActionsReport.commandMenuItem.create,
     ...aggregatedOrchestratorActionsReport.commandMenuItem.update,
-
-    ...aggregatedOrchestratorActionsReport.settingsMenuItem.create,
-    ...aggregatedOrchestratorActionsReport.settingsMenuItem.update,
-
-    ...aggregatedOrchestratorActionsReport.frontComponent.delete,
 
     ...aggregatedOrchestratorActionsReport.pageLayoutTab.create,
     ...aggregatedOrchestratorActionsReport.pageLayoutTab.update,

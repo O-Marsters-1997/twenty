@@ -106,7 +106,7 @@ describe('computeObjectNavigationTargetBackfill', () => {
       flatCommandMenuItemMaps: buildFlatCommandMenuItemMaps([
         buildFlatCommandMenuItem({
           id: 'command-1',
-          engineComponentKey: EngineComponentKey.FRONT_COMPONENT_RENDERER,
+          engineComponentKey: 'FRONT_COMPONENT_RENDERER' as EngineComponentKey,
         }),
       ]),
       flatObjectMetadataMaps,

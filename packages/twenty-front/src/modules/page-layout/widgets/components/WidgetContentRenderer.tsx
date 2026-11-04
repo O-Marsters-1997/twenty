@@ -9,7 +9,6 @@ import { FieldRichTextWidgetRenderer } from '@/page-layout/widgets/field-rich-te
 import { FieldWidget } from '@/page-layout/widgets/field/components/FieldWidget';
 import { FieldsWidget } from '@/page-layout/widgets/fields/components/FieldsWidget';
 import { FileWidget } from '@/page-layout/widgets/files/components/FileWidget';
-import { FrontComponentWidgetRenderer } from '@/page-layout/widgets/front-component/components/FrontComponentWidgetRenderer';
 import { GraphWidgetRenderer } from '@/page-layout/widgets/graph/components/GraphWidgetRenderer';
 import { IframeWidget } from '@/page-layout/widgets/iframe/components/IframeWidget';
 import { MessageCampaignBodyWidget } from '@/page-layout/widgets/message-campaign/components/MessageCampaignBodyWidget';
@@ -81,9 +80,6 @@ export const WidgetContentRenderer = ({
 
     case WidgetType.STANDALONE_RICH_TEXT:
       return <StandaloneRichTextWidgetRenderer widget={widget} />;
-
-    case WidgetType.FRONT_COMPONENT:
-      return <FrontComponentWidgetRenderer widget={widget} />;
 
     case WidgetType.RECORD_TABLE:
       return <RecordTableWidgetRenderer widget={widget} />;

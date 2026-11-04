@@ -16,7 +16,6 @@ const EXPECTED_IS_VIEWPORT_FILLING_BY_WIDGET_TYPE = {
   [WidgetType.FIELDS]: false,
   [WidgetType.FIELD_RICH_TEXT]: false,
   [WidgetType.FILES]: true,
-  [WidgetType.FRONT_COMPONENT]: false,
   [WidgetType.GRAPH]: false,
   [WidgetType.IFRAME]: false,
   [WidgetType.MESSAGE_CAMPAIGN_BODY]: false,
@@ -52,14 +51,6 @@ describe('getPageLayoutWidgetHeightBehavior', () => {
     ],
     [
       WidgetType.TIMELINE,
-      PageLayoutWidgetVerticalListHeightBehavior.TAB_VIEWPORT,
-    ],
-    [
-      WidgetType.FRONT_COMPONENT,
-      PageLayoutWidgetVerticalListHeightBehavior.FIT_CONTENT,
-    ],
-    [
-      WidgetType.FRONT_COMPONENT,
       PageLayoutWidgetVerticalListHeightBehavior.TAB_VIEWPORT,
     ],
   ])('uses the explicit height %s / %s', (widgetType, heightBehavior) => {

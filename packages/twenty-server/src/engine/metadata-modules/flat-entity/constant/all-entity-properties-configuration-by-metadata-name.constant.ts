@@ -1216,11 +1216,6 @@ export const ALL_ENTITY_PROPERTIES_CONFIGURATION_BY_METADATA_NAME = {
       toStringify: false,
       universalProperty: undefined,
     },
-    frontComponentId: {
-      toCompare: false,
-      toStringify: false,
-      universalProperty: 'frontComponentUniversalIdentifier',
-    },
     engineComponentKey: {
       toCompare: true,
       toStringify: false,
@@ -1653,59 +1648,6 @@ export const ALL_ENTITY_PROPERTIES_CONFIGURATION_BY_METADATA_NAME = {
       universalProperty: undefined,
     },
   },
-  frontComponent: {
-    name: { toCompare: true, toStringify: false, universalProperty: undefined },
-    description: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    builtComponentChecksum: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    sourceComponentPath: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    builtComponentPath: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    componentName: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    isHeadless: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    widgetAvailability: {
-      toCompare: true,
-      toStringify: true,
-      universalProperty: 'universalWidgetAvailability',
-    },
-    usesSdkClient: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    createdAt: {
-      toCompare: false,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    updatedAt: {
-      toCompare: false,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-  },
   webhook: {
     targetUrl: {
       toCompare: true,
@@ -1838,43 +1780,6 @@ export const ALL_ENTITY_PROPERTIES_CONFIGURATION_BY_METADATA_NAME = {
     overrides: {
       toCompare: true,
       toStringify: true,
-      universalProperty: undefined,
-    },
-    createdAt: {
-      toCompare: false,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    updatedAt: {
-      toCompare: false,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-  },
-  settingsMenuItem: {
-    frontComponentId: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: 'frontComponentUniversalIdentifier',
-    },
-    title: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    icon: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    position: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    scope: {
-      toCompare: true,
-      toStringify: false,
       universalProperty: undefined,
     },
     createdAt: {

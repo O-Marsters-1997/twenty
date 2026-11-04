@@ -165,8 +165,6 @@ describe('buildObjectNavigationFlatCommandMenuItem', () => {
   it('should set null fields correctly', () => {
     const result = buildObjectNavigationFlatCommandMenuItem(baseArgs);
 
-    expect(result.frontComponentId).toBeNull();
-    expect(result.frontComponentUniversalIdentifier).toBeNull();
     expect(result.workflowVersionId).toBeNull();
     expect(result.availabilityObjectMetadataId).toBeNull();
     expect(result.availabilityObjectMetadataUniversalIdentifier).toBeNull();

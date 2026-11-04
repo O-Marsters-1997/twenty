@@ -2,7 +2,6 @@ import { type FlatAgent } from '@/metadata-store/types/FlatAgent';
 import { type FlatApplication } from '@/metadata-store/types/FlatApplication';
 import { type FlatCommandMenuItem } from '@/metadata-store/types/FlatCommandMenuItem';
 import { type FlatFieldMetadataItem } from '@/metadata-store/types/FlatFieldMetadataItem';
-import { type FlatFrontComponent } from '@/metadata-store/types/FlatFrontComponent';
 import { type FlatIndexMetadataItem } from '@/metadata-store/types/FlatIndexMetadataItem';
 import { type FlatNavigationMenuItem } from '@/metadata-store/types/FlatNavigationMenuItem';
 import { type FlatObjectMetadataItem } from '@/metadata-store/types/FlatObjectMetadataItem';
@@ -39,7 +38,6 @@ export type MetadataEntityTypeMap = {
   pageLayoutWidgets: FlatPageLayoutWidget;
   navigationMenuItems: FlatNavigationMenuItem;
   commandMenuItems: FlatCommandMenuItem;
-  frontComponents: FlatFrontComponent;
   webhooks: FlatWebhook;
   roles: FlatRole;
   roleTargets: FlatRoleTarget;

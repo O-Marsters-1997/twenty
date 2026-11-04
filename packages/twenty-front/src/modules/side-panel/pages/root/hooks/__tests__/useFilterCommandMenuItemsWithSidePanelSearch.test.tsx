@@ -21,8 +21,6 @@ const buildMockItem = (
   __typename: 'CommandMenuItem',
   id: 'default-id',
   workflowVersionId: null,
-  frontComponentId: null,
-  frontComponent: null,
   engineComponentKey: EngineComponentKey.ADD_TO_FAVORITES,
   label: 'Default',
   icon: null,

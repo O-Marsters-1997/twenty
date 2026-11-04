@@ -11,8 +11,8 @@ const makeWidgetWithType = (id: string, type: WidgetType, tabId = 'tab-1') => ({
   type,
 });
 
-const makeTabViewportFrontComponent = (id: string, tabId = 'tab-1') => ({
-  ...makeWidgetWithType(id, WidgetType.FRONT_COMPONENT, tabId),
+const makeTabViewportIframe = (id: string, tabId = 'tab-1') => ({
+  ...makeWidgetWithType(id, WidgetType.IFRAME, tabId),
   position: {
     __typename: 'PageLayoutWidgetVerticalListPosition' as const,
     layoutMode: PageLayoutTabLayoutMode.VERTICAL_LIST,
@@ -80,12 +80,10 @@ describe('canVerticalListAcceptWidget', () => {
     ).toBe(true);
   });
 
-  it('treats an explicit TAB_VIEWPORT front component like a viewport-filling widget', () => {
+  it('treats an explicit TAB_VIEWPORT iframe like a viewport-filling widget', () => {
     expect(
       canVerticalListAcceptWidget({
-        destinationWidgets: [
-          makeTabViewportFrontComponent('front-component', 'tab-2'),
-        ],
+        destinationWidgets: [makeTabViewportIframe('iframe', 'tab-2')],
         widget: makeWidgetWithType('notes', WidgetType.NOTES),
       }),
     ).toBe(false);
@@ -95,7 +93,7 @@ describe('canVerticalListAcceptWidget', () => {
         destinationWidgets: [
           makeWidgetWithType('emails', WidgetType.EMAILS, 'tab-2'),
         ],
-        widget: makeTabViewportFrontComponent('front-component'),
+        widget: makeTabViewportIframe('iframe'),
       }),
     ).toBe(false);
   });

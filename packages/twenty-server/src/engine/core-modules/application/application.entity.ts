@@ -26,8 +26,6 @@ import { ADD_HEALTH_CHECK_TO_APPLICATION_UPGRADE_COMMAND_NAME } from 'src/databa
 import { WasIntroducedInUpgrade } from 'src/engine/core-modules/upgrade/decorators/was-introduced-in-upgrade.decorator';
 import { AgentEntity } from 'src/engine/metadata-modules/ai/ai-agent/entities/agent.entity';
 import { CommandMenuItemEntity } from 'src/engine/metadata-modules/command-menu-item/entities/command-menu-item.entity';
-import { SettingsMenuItemEntity } from 'src/engine/metadata-modules/settings-menu-item/entities/settings-menu-item.entity';
-import { FrontComponentEntity } from 'src/engine/metadata-modules/front-component/entities/front-component.entity';
 import { ObjectMetadataEntity } from 'src/engine/metadata-modules/object-metadata/object-metadata.entity';
 import { RoleDTO } from 'src/engine/metadata-modules/role/dtos/role.dto';
 import { WorkspaceRelatedEntity } from 'src/engine/workspace-manager/types/workspace-related-entity.type';
@@ -229,15 +227,6 @@ export class ApplicationEntity extends WorkspaceRelatedEntity {
   objects: Relation<ObjectMetadataEntity[]>;
 
   @OneToMany(
-    () => FrontComponentEntity,
-    (frontComponent) => frontComponent.application,
-    {
-      onDelete: 'CASCADE',
-    },
-  )
-  frontComponents: Relation<FrontComponentEntity[]>;
-
-  @OneToMany(
     () => CommandMenuItemEntity,
     (commandMenuItem) => commandMenuItem.application,
     {
@@ -245,15 +234,6 @@ export class ApplicationEntity extends WorkspaceRelatedEntity {
     },
   )
   commandMenuItems: Relation<CommandMenuItemEntity[]>;
-
-  @OneToMany(
-    () => SettingsMenuItemEntity,
-    (settingsMenuItem) => settingsMenuItem.application,
-    {
-      onDelete: 'CASCADE',
-    },
-  )
-  settingsMenuItems: Relation<SettingsMenuItemEntity[]>;
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;

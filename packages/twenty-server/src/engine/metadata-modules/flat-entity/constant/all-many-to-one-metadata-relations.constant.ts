@@ -88,13 +88,6 @@ export const ALL_MANY_TO_ONE_METADATA_RELATIONS = {
       isNullable: true,
       universalForeignKey: 'navigationTargetObjectMetadataUniversalIdentifier',
     },
-    frontComponent: {
-      metadataName: 'frontComponent',
-      foreignKey: 'frontComponentId',
-      inverseOneToManyProperty: null,
-      isNullable: true,
-      universalForeignKey: 'frontComponentUniversalIdentifier',
-    },
     pageLayout: {
       metadataName: 'pageLayout',
       foreignKey: 'pageLayoutId',
@@ -516,10 +509,6 @@ export const ALL_MANY_TO_ONE_METADATA_RELATIONS = {
     },
     workspace: null,
   },
-  frontComponent: {
-    workspace: null,
-    application: null,
-  },
   webhook: {
     workspace: null,
     application: null,
@@ -545,17 +534,6 @@ export const ALL_MANY_TO_ONE_METADATA_RELATIONS = {
   timelineActivityType: {
     workspace: null,
     application: null,
-  },
-  settingsMenuItem: {
-    workspace: null,
-    application: null,
-    frontComponent: {
-      metadataName: 'frontComponent',
-      foreignKey: 'frontComponentId',
-      inverseOneToManyProperty: null,
-      isNullable: false,
-      universalForeignKey: 'frontComponentUniversalIdentifier',
-    },
   },
   searchFieldMetadata: {
     workspace: null,

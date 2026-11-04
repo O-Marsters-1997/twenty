@@ -66,8 +66,6 @@ export const createStandardCommandMenuItemFlatMetadata = ({
       'conditionalPinnedExpression' in definition
         ? definition.conditionalPinnedExpression
         : null,
-    frontComponentId: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: definition.engineComponentKey,
     payload:
       'payload' in definition && isDefined(definition.payload)

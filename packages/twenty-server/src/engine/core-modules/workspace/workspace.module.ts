@@ -36,7 +36,6 @@ import { WorkspaceCacheStorageModule } from 'src/engine/workspace-cache-storage/
 import { WorkspaceDataSourceModule } from 'src/engine/workspace-datasource/workspace-datasource.module';
 import { WorkspaceManagerModule } from 'src/engine/workspace-manager/workspace-manager.module';
 import { WorkspaceMigrationModule } from 'src/engine/workspace-manager/workspace-migration/workspace-migration.module';
-import { StandardObjectsPrefillModule } from 'src/engine/workspace-manager/standard-objects-prefill-data/standard-objects-prefill.module';
 
 @Module({
   imports: [
@@ -47,7 +46,6 @@ import { StandardObjectsPrefillModule } from 'src/engine/workspace-manager/stand
       UserWorkspaceEntity,
     ]),
     MetricsModule,
-    StandardObjectsPrefillModule,
     BillingModule,
     EventLogRetentionModule,
     FileModule,

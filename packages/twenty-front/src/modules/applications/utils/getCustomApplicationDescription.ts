@@ -8,7 +8,7 @@ Every extension you create on top of the standard app is grouped under Custom. I
 
 - Custom objects and fields for your own data model
 - Views, navigation items, and record layouts that shape how your team works
-- Logic functions, front components, and agents that automate or extend the workspace
+- Logic functions and agents that automate or extend the workspace
 
 #### Why it exists
 Use this app for workspace-specific customization that should stay local to this workspace.

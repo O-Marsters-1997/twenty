@@ -54,8 +54,6 @@ export class FlatCommandMenuItemValidatorService {
       engineComponentKey: flatCommandMenuItem.engineComponentKey,
       workflowVersionId: flatCommandMenuItem.workflowVersionId,
       coreWorkflowVersionId: flatCommandMenuItem.coreWorkflowVersionId,
-      frontComponentUniversalIdentifier:
-        flatCommandMenuItem.frontComponentUniversalIdentifier,
       payload: flatCommandMenuItem.payload,
       navigationTargetObjectMetadataUniversalIdentifier:
         flatCommandMenuItem.navigationTargetObjectMetadataUniversalIdentifier,
@@ -181,8 +179,6 @@ export class FlatCommandMenuItemValidatorService {
       engineComponentKey,
       workflowVersionId: fromFlatCommandMenuItem.workflowVersionId,
       coreWorkflowVersionId: fromFlatCommandMenuItem.coreWorkflowVersionId,
-      frontComponentUniversalIdentifier:
-        fromFlatCommandMenuItem.frontComponentUniversalIdentifier,
       payload,
       navigationTargetObjectMetadataUniversalIdentifier,
       validationResult,
@@ -234,7 +230,6 @@ export class FlatCommandMenuItemValidatorService {
     engineComponentKey,
     workflowVersionId,
     coreWorkflowVersionId,
-    frontComponentUniversalIdentifier,
     payload,
     navigationTargetObjectMetadataUniversalIdentifier,
     validationResult,
@@ -242,7 +237,6 @@ export class FlatCommandMenuItemValidatorService {
     engineComponentKey: EngineComponentKey | null;
     workflowVersionId: string | null;
     coreWorkflowVersionId: string | null;
-    frontComponentUniversalIdentifier: string | null;
     payload: PathCommandMenuItemPayload | null;
     navigationTargetObjectMetadataUniversalIdentifier: string | null;
     validationResult: FailedFlatEntityValidation<
@@ -267,36 +261,6 @@ export class FlatCommandMenuItemValidatorService {
           });
         }
 
-        if (isNonEmptyString(frontComponentUniversalIdentifier)) {
-          validationResult.errors.push({
-            code: CommandMenuItemExceptionCode.INVALID_COMMAND_MENU_ITEM_INPUT,
-            message: t`frontComponentId must not be set when engineComponentKey is TRIGGER_WORKFLOW_VERSION`,
-            userFriendlyMessage: msg`Front component must not be set for workflow trigger items`,
-          });
-        }
-
-        break;
-      }
-      case EngineComponentKey.FRONT_COMPONENT_RENDERER: {
-        if (!isNonEmptyString(frontComponentUniversalIdentifier)) {
-          validationResult.errors.push({
-            code: CommandMenuItemExceptionCode.INVALID_COMMAND_MENU_ITEM_INPUT,
-            message: t`frontComponentId is required when engineComponentKey is FRONT_COMPONENT_RENDERER`,
-            userFriendlyMessage: msg`Front component is required for front component renderer items`,
-          });
-        }
-
-        if (
-          isNonEmptyString(workflowVersionId) ||
-          isNonEmptyString(coreWorkflowVersionId)
-        ) {
-          validationResult.errors.push({
-            code: CommandMenuItemExceptionCode.INVALID_COMMAND_MENU_ITEM_INPUT,
-            message: t`workflowVersionId must not be set when engineComponentKey is FRONT_COMPONENT_RENDERER`,
-            userFriendlyMessage: msg`Workflow version must not be set for front component renderer items`,
-          });
-        }
-
         break;
       }
       case EngineComponentKey.NAVIGATION: {
@@ -317,14 +281,6 @@ export class FlatCommandMenuItemValidatorService {
           });
         }
 
-        if (isNonEmptyString(frontComponentUniversalIdentifier)) {
-          validationResult.errors.push({
-            code: CommandMenuItemExceptionCode.INVALID_COMMAND_MENU_ITEM_INPUT,
-            message: t`frontComponentId must not be set for engine component key ${engineComponentKey}`,
-            userFriendlyMessage: msg`Front component must not be set for this item type`,
-          });
-        }
-
         break;
       }
       default: {
@@ -336,14 +292,6 @@ export class FlatCommandMenuItemValidatorService {
             code: CommandMenuItemExceptionCode.INVALID_COMMAND_MENU_ITEM_INPUT,
             message: t`workflowVersionId must not be set for engine component key ${engineComponentKey}`,
             userFriendlyMessage: msg`Workflow version must not be set for this item type`,
-          });
-        }
-
-        if (isNonEmptyString(frontComponentUniversalIdentifier)) {
-          validationResult.errors.push({
-            code: CommandMenuItemExceptionCode.INVALID_COMMAND_MENU_ITEM_INPUT,
-            message: t`frontComponentId must not be set for engine component key ${engineComponentKey}`,
-            userFriendlyMessage: msg`Front component must not be set for this item type`,
           });
         }
 

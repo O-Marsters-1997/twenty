@@ -61,8 +61,6 @@ const createCommandMenuItem = (
   __typename: 'CommandMenuItem',
   isActive: true,
   workflowVersionId: null,
-  frontComponentId: null,
-  frontComponent: null,
   engineComponentKey: EngineComponentKey.GO_TO_PEOPLE,
   icon: 'IconUser',
   shortLabel: overrides.label,

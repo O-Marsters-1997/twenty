@@ -136,12 +136,6 @@ export type IframeConfiguration = {
   url?: string;
 };
 
-export type FrontComponentConfiguration = {
-  configurationType: 'FRONT_COMPONENT';
-  frontComponentId: SerializedRelation;
-  headerCommandMenuItemUniversalIdentifiers?: string[];
-};
-
 export type TimelineConfiguration = {
   configurationType: 'TIMELINE';
 };
@@ -219,7 +213,6 @@ export type PageLayoutWidgetConfiguration =
   | FieldRichTextConfiguration
   | StandaloneRichTextConfiguration
   | IframeConfiguration
-  | FrontComponentConfiguration
   | TimelineConfiguration
   | TasksConfiguration
   | NotesConfiguration
