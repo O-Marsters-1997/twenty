@@ -25,14 +25,14 @@ The `ubuntu-latest` front jobs do run in the fork: in the same run `front-task` 
 | `nx test`, `typecheck`, `lint`, `lingui:*` twenty-front | `ci-front` / `front-task` (test in 3 shards) | ubuntu-latest | covered, ran, passed (run 41530999293) |
 | `nx build twenty-front` | `ci-front` / `front-build` | **ubuntu-latest-8-cores** | **gap: never got a runner** |
 | `nx storybook:build twenty-front` | `ci-front` / `front-sb-build` | **ubuntu-latest-8-cores** | **gap: never got a runner** |
-| `nx storybook:test twenty-front` | `ci-front-storybook-test` (modules x8, pages x4, performance x4) | ubuntu-latest | ran, **all failed**; they restore the cache `front-sb-build` saves, which never exists. Failure cause not checked in logs |
-| `nx test`, `typecheck`, `lint` twenty-server | `ci-server` / `server-test` (4 shards), `server-lint-typecheck` | ubuntu-latest | ran; `server-lint-typecheck` and `server-test (1)` failed on the `issue-2` run (not examined) |
+| `nx storybook:test twenty-front` | `ci-front-storybook-test` (modules x8, pages x4, performance x4) | ubuntu-latest | ran, **all failed**; they restore the cache `front-sb-build` saves, which never exists (inference; failure cause not checked in logs) |
+| `nx test`, `typecheck`, `lint` twenty-server | `ci-server` / `server-test` (4 shards), `server-lint-typecheck` | ubuntu-latest | ran; `server-lint-typecheck` and `server-test (1)` failed on the latest `issue-2` run, 41533848325 (not examined) |
 | `nx build twenty-server` | `ci-server` / `server-build` | ubuntu-latest | ran, succeeded |
 | `nx run twenty-server:test:integration*` | `ci-server` / `server-integration-test` (16 shards, Postgres) | ubuntu-latest | ran, all 16 succeeded on the `issue-2` run |
-| twenty-ui `lint`, `typecheck`, `test`, `size`, `pack-size` | `ci-ui` / `ui-task` | ubuntu-latest | defined; per-task result not checked |
+| twenty-ui `lint`, `typecheck`, `test`, `size`, `pack-size` | `ci-ui` / `ui-task` | ubuntu-latest | ran, all five tasks succeeded on the latest `issue-2` run |
 | `nx storybook:build twenty-ui` and tests | `ci-ui` / `ui-sb-build`, `ui-sb-test` | ubuntu-latest | `ui-sb-test` failed on the `issue-2` run (not examined) |
-| twenty-shared `lint`, `typecheck`, `test` | `ci-shared` / `shared-test` | ubuntu-latest | ran, succeeded |
-| twenty-sdk build, test, e2e | `ci-sdk` | ubuntu-latest | ran, succeeded |
+| twenty-shared `lint`, `typecheck`, `test` | `ci-shared` / `shared-test` | ubuntu-latest | defined; skipped on the latest `issue-2` run (change filter), so no run evidence |
+| twenty-sdk build, test, e2e | `ci-sdk` / `sdk-test`, `sdk-e2e-test` | ubuntu-latest | defined; skipped on the latest `issue-2` run (change filter), so no run evidence |
 | twenty-e2e-testing (Playwright) | `ci-e2e-main` | ubuntu-latest-8-cores | not run on ordinary PRs: push to `main`, or a PR labelled `qa-scout` or `run-merge-queue`; 8-core, so would not get a runner |
 
 Not audited: `twenty-front-component-renderer`, Knip and CLI workflows. Front jobs use `nx affected` with `--exclude="*,!tag:scope:frontend"`.
@@ -47,7 +47,7 @@ Not audited: `twenty-front-component-renderer`, Knip and CLI workflows. Front jo
 2. `nx storybook:build twenty-front` and `nx storybook:test twenty-front`
 3. Playwright / `twenty-e2e-testing` on ordinary PRs
 
-Front test, typecheck and lint, all server commands, shared and sdk are safe to ban from agents once PRs into `feat/agent-ram` are shown to trigger CI.
+Front test, typecheck and lint, server commands and twenty-ui tasks have run evidence. Shared and sdk are defined but unproven. Ban nothing until PRs into `feat/agent-ram` are shown to trigger CI.
 
 ## Recommended follow-up (not done here)
 
