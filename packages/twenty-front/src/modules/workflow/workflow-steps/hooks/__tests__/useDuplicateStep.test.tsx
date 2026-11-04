@@ -10,7 +10,7 @@ const mockDuplicateWorkflowVersionStep = jest.fn().mockResolvedValue({
         {
           type: 'CREATE',
           path: ['steps', 0],
-          value: { id: '2', type: 'CODE' },
+          value: { id: '2', type: 'HTTP_REQUEST' },
         },
       ],
     },

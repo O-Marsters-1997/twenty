@@ -5,7 +5,7 @@ describe('searchVariableThroughOutputSchemaV2', () => {
   const stepOutputSchema: StepOutputSchemaV2 = {
     id: 'step-1',
     name: 'HTTP Request',
-    type: 'CODE',
+    type: 'HTTP_REQUEST',
     outputSchema: {
       message: {
         isLeaf: true,
@@ -19,7 +19,7 @@ describe('searchVariableThroughOutputSchemaV2', () => {
   it('should resolve a variable through the shared dispatcher', () => {
     const result = searchVariableThroughOutputSchemaV2({
       stepOutputSchema,
-      stepType: 'CODE',
+      stepType: 'HTTP_REQUEST',
       rawVariableName: '{{step-1.message}}',
       isFullRecord: false,
     });
@@ -34,7 +34,7 @@ describe('searchVariableThroughOutputSchemaV2', () => {
   it('should return an empty result for an unknown variable path', () => {
     const result = searchVariableThroughOutputSchemaV2({
       stepOutputSchema,
-      stepType: 'CODE',
+      stepType: 'HTTP_REQUEST',
       rawVariableName: '{{step-1.unknownField}}',
       isFullRecord: false,
     });

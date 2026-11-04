@@ -22,14 +22,11 @@ describe('getStepInfoHistoryItem', () => {
   const codeStep: WorkflowStep = {
     id: 'step2',
     name: 'Step 2',
-    type: 'CODE',
+    type: 'HTTP_REQUEST',
     valid: true,
     nextStepIds: [],
     settings: {
-      input: {
-        logicFunctionId: 'func',
-        logicFunctionInput: {},
-      },
+      input: { method: 'GET', url: 'https://example.com' },
       outputSchema: {},
       errorHandlingOptions: {
         retryOnFailure: { value: 0 },

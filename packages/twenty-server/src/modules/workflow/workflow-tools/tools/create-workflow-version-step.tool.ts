@@ -33,37 +33,14 @@ const baseStepFields = {
     .describe('Optional ID of the step this new step should connect to'),
 };
 
-const nonLogicFunctionStepTypes = Object.values(WorkflowActionType).filter(
-  (type) => type !== WorkflowActionType.LOGIC_FUNCTION,
-) as [string, ...string[]];
-
-const createWorkflowVersionStepSchema = z.discriminatedUnion('stepType', [
-  z.object({
-    ...baseStepFields,
-    stepType: z.literal(WorkflowActionType.LOGIC_FUNCTION),
-    defaultSettings: z
-      .object({
-        input: z.object({
-          logicFunctionId: z
-            .string()
-            .describe(
-              'The ID of the logic function. Use list_logic_function_tools to discover available IDs.',
-            ),
-        }),
-      })
-      .describe(
-        'Settings for the LOGIC_FUNCTION step. Must include input.logicFunctionId.',
-      ),
-  }),
-  z.object({
-    ...baseStepFields,
-    stepType: z.enum(nonLogicFunctionStepTypes),
-    defaultSettings: z
-      .record(z.string(), z.unknown())
-      .optional()
-      .describe('Optional default settings for the step.'),
-  }),
-]);
+const createWorkflowVersionStepSchema = z.object({
+  ...baseStepFields,
+  stepType: z.enum(Object.values(WorkflowActionType) as [string, ...string[]]),
+  defaultSettings: z
+    .record(z.string(), z.unknown())
+    .optional()
+    .describe('Optional default settings for the step.'),
+});
 
 const enrichResultWithNextStep = ({
   result,
@@ -73,12 +50,6 @@ const enrichResultWithNextStep = ({
   stepType: WorkflowActionType;
 }) => {
   switch (stepType) {
-    case WorkflowActionType.CODE:
-      return {
-        ...result,
-        nextStep:
-          'This CODE step was created with a default placeholder function. You MUST now call update_logic_function_source with the logicFunctionId from this step to define the actual code. IMPORTANT: Also provide outputSchema (an example return value, e.g. { datePlus7: "2026-06-16" }) so downstream steps can reference this step\'s output variables via {{stepId.fieldName}}.',
-      };
     case WorkflowActionType.AI_AGENT:
       return {
         ...result,

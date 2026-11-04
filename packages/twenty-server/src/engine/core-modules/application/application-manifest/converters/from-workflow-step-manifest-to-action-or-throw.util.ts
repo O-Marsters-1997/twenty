@@ -29,16 +29,6 @@ export const fromWorkflowStepManifestToActionOrThrow = ({
     });
   let input: unknown;
   switch (step.type) {
-    case 'LOGIC_FUNCTION':
-      input = {
-        logicFunctionId: resolve(
-          references.logicFunctionIdByUniversalIdentifier,
-          step.logicFunctionUniversalIdentifier,
-          'application workflow action',
-        ),
-        logicFunctionInput: step.input,
-      };
-      break;
     case 'AI_AGENT': {
       const { agentUniversalIdentifier, ...rest } = step.input;
       input = {

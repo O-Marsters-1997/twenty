@@ -30,12 +30,9 @@ describe('useUpdateStep', () => {
       id: '1',
       name: 'name',
       valid: true,
-      type: 'CODE' as const,
+      type: 'HTTP_REQUEST' as const,
       settings: {
-        input: {
-          logicFunctionId: 'id',
-          logicFunctionInput: {},
-        },
+        input: { method: 'GET' as const, url: 'https://example.com' },
         outputSchema: {},
         errorHandlingOptions: {
           retryOnFailure: {

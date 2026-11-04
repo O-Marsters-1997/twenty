@@ -83,16 +83,6 @@ export const formStep = (): WorkflowStepManifestWithoutEdges =>
     input: [{ id: randomUUID(), name: 'note', label: 'Note', type: 'TEXT' }],
   }) as WorkflowStepManifestWithoutEdges;
 
-export const logicFunctionStep = (
-  logicFunctionUniversalIdentifier: string,
-): WorkflowStepManifestWithoutEdges =>
-  ({
-    name: 'Call the application function',
-    type: 'LOGIC_FUNCTION',
-    logicFunctionUniversalIdentifier,
-    input: {},
-  }) as WorkflowStepManifestWithoutEdges;
-
 export const buildTestApplicationManifest = ({
   applicationUniversalIdentifier,
   roleUniversalIdentifier,

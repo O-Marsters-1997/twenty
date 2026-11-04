@@ -10,7 +10,6 @@ import {
   findTestWorkflowRun,
   findTestWorkflowVersionId,
   formStep,
-  logicFunctionStep,
   runCoreWorkflowVersion,
   type TestApplicationWorkflow,
   waitForTestWorkflowRun,
@@ -46,7 +45,6 @@ const SECOND_FORM_WORKFLOW = buildTestApplicationWorkflow(
   `${PREFIX} second form`,
   [
     formStep(),
-    logicFunctionStep(FUNCTION_ID),
     createCompanyStep(`${PREFIX} second form company`),
   ],
 );

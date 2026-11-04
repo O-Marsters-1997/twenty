@@ -3,9 +3,9 @@ import { WorkflowActionType } from 'twenty-shared/workflow';
 
 import {
   type WorkflowAction,
-  type WorkflowCodeAction,
   type WorkflowCreateRecordAction,
   type WorkflowDeleteRecordAction,
+  type WorkflowEmptyAction,
   type WorkflowFormAction,
 } from 'src/modules/workflow/workflow-executor/workflow-actions/types/workflow-action.type';
 import { canUpdateWorkflowRunStep } from 'src/modules/workflow/workflow-runner/utils/can-update-workflow-run-step.util';
@@ -111,12 +111,12 @@ describe('canUpdateWorkflowRunStep', () => {
     ).toBe(false);
   });
 
-  const codeStepReplacingForm: WorkflowCodeAction = {
+  const codeStepReplacingForm: WorkflowEmptyAction = {
     ...FORM_STEP,
-    type: WorkflowActionType.CODE,
+    type: WorkflowActionType.EMPTY,
     settings: {
       ...FORM_STEP.settings,
-      input: { logicFunctionId: 'function-id', logicFunctionInput: {} },
+      input: {},
     },
   };
   const formStepReplacingRecord: WorkflowFormAction = {

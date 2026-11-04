@@ -26,7 +26,7 @@ const meta = {
     step: {
       id: 'code',
       name: 'Run code',
-      type: 'CODE',
+      type: 'HTTP_REQUEST',
       outputSchema: {
         result: {
           isLeaf: false,

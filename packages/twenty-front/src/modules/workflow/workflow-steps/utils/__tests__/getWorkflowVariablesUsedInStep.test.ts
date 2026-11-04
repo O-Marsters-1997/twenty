@@ -6,12 +6,13 @@ describe('getWorkflowVariablesUsedInStep', () => {
     const step: WorkflowStep = {
       id: '42e8b60e-dd44-417a-875f-823d63f16819',
       name: 'Code - Logic Function',
-      type: 'CODE',
+      type: 'HTTP_REQUEST',
       valid: false,
       settings: {
         input: {
-          logicFunctionId: '5f7b9b44-bb07-41ba-aef8-ec0eaa5eea2d',
-          logicFunctionInput: {
+          method: 'POST',
+          url: 'https://example.com',
+          body: {
             a: '{{5f7b9b44-bb07-41ba-aef8-ec0eaa5eea2c.a.b.c.d}}',
           },
         },
@@ -97,12 +98,13 @@ Set {
     const step: WorkflowStep = {
       id: '42e8b60e-dd44-417a-875f-823d63f16819',
       name: 'Code - Logic Function',
-      type: 'CODE',
+      type: 'HTTP_REQUEST',
       valid: false,
       settings: {
         input: {
-          logicFunctionId: '5f7b9b44-bb07-41ba-aef8-ec0eaa5eea2d',
-          logicFunctionInput: {
+          method: 'POST',
+          url: 'https://example.com',
+          body: {
             a: '{{5f7b9b44-bb07-41ba-aef8-ec0eaa5eea2c.a}} {{5f7b9b44-bb07-41ba-aef8-ec0eaa5eea2c.b}} {{5f7b9b44-bb07-41ba-aef8-ec0eaa5eea2c.c}} {{5f7b9b44-bb07-41ba-aef8-ec0eaa5eea2c.d}}',
           },
         },
@@ -136,12 +138,13 @@ Set {
     const step: WorkflowStep = {
       id: '42e8b60e-dd44-417a-875f-823d63f16819',
       name: 'Code - Logic Function',
-      type: 'CODE',
+      type: 'HTTP_REQUEST',
       valid: false,
       settings: {
         input: {
-          logicFunctionId: '5f7b9b44-bb07-41ba-aef8-ec0eaa5eea2d',
-          logicFunctionInput: {
+          method: 'POST',
+          url: 'https://example.com',
+          body: {
             a: '{{5f7b9b44-bb07-41ba-aef8-ec0eaa5eea2c.a}} {{5f7b9b44-bb07-41ba-aef8-ec0eaa5eea2c.a}} {{5f7b9b44-bb07-41ba-aef8-ec0eaa5eea2c.a}} {{5f7b9b44-bb07-41ba-aef8-ec0eaa5eea2c.a}}',
           },
         },

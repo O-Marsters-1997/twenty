@@ -5,7 +5,6 @@ import { WorkspaceManyOrAllFlatEntityMapsCacheModule } from 'src/engine/metadata
 import { FrontComponentModule } from 'src/engine/metadata-modules/front-component/front-component.module';
 import { LogicFunctionModule } from 'src/engine/metadata-modules/logic-function/logic-function.module';
 import { PrefillFrontComponentService } from 'src/engine/workspace-manager/standard-objects-prefill-data/services/prefill-front-component.service';
-import { PrefillLogicFunctionService } from 'src/engine/workspace-manager/standard-objects-prefill-data/services/prefill-logic-function.service';
 
 @Module({
   imports: [
@@ -14,7 +13,7 @@ import { PrefillLogicFunctionService } from 'src/engine/workspace-manager/standa
     ApplicationModule,
     WorkspaceManyOrAllFlatEntityMapsCacheModule,
   ],
-  providers: [PrefillLogicFunctionService, PrefillFrontComponentService],
-  exports: [PrefillLogicFunctionService, PrefillFrontComponentService],
+  providers: [PrefillFrontComponentService],
+  exports: [PrefillFrontComponentService],
 })
 export class StandardObjectsPrefillModule {}

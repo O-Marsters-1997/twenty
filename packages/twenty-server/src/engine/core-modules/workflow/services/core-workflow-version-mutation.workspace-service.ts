@@ -725,18 +725,7 @@ export class CoreWorkflowVersionMutationWorkspaceService {
       );
     }
 
-    const copiedSteps: WorkflowAction[] = [];
-
-    for (const step of versionToCopy.steps ?? []) {
-      copiedSteps.push(
-        await this.workflowVersionStepOperationsWorkspaceService.createDraftStep(
-          {
-            step,
-            workspaceId,
-          },
-        ),
-      );
-    }
+    const copiedSteps: WorkflowAction[] = versionToCopy.steps ?? [];
 
     const existingDraft = await this.coreWorkflowVersionRepository.findOne(
       workspaceId,

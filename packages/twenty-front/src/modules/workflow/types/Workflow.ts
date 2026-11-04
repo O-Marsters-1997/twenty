@@ -4,7 +4,6 @@ import {
   type SingleRecordAvailability,
   type workflowAiAgentActionSchema,
   type workflowClassifyActionSchema,
-  type workflowCodeActionSchema,
   type workflowCreateCalendarEventActionSchema,
   type workflowCreateRecordActionSchema,
   type workflowCronTriggerSchema,
@@ -20,7 +19,6 @@ import {
   type workflowHttpRequestActionSchema,
   type workflowIfElseActionSchema,
   type workflowIteratorActionSchema,
-  type workflowLogicFunctionActionSchema,
   type workflowManualTriggerSchema,
   type workflowPickRecordActionSchema,
   type workflowRunSchema,
@@ -36,10 +34,6 @@ import {
 } from 'twenty-shared/workflow';
 import { type z } from 'zod';
 
-export type WorkflowCodeAction = z.infer<typeof workflowCodeActionSchema>;
-export type WorkflowLogicFunctionAction = z.infer<
-  typeof workflowLogicFunctionActionSchema
->;
 export type WorkflowSendEmailAction = z.infer<
   typeof workflowSendEmailActionSchema
 >;
@@ -90,8 +84,6 @@ export type WorkflowClassifyAction = z.infer<
 export type WorkflowEmptyAction = z.infer<typeof workflowEmptyActionSchema>;
 
 export type WorkflowAction =
-  | WorkflowCodeAction
-  | WorkflowLogicFunctionAction
   | WorkflowSendEmailAction
   | WorkflowDraftEmailAction
   | WorkflowSendChatMessageAction

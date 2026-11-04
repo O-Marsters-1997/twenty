@@ -2,8 +2,6 @@ import { getActionIconStrokeOrThrow } from '@/workflow/workflow-steps/workflow-a
 
 describe('getActionIconStrokeOrThrow', () => {
   it.each([
-    'CODE',
-    'LOGIC_FUNCTION',
     'HTTP_REQUEST',
     'SEND_EMAIL',
     'DRAFT_EMAIL',

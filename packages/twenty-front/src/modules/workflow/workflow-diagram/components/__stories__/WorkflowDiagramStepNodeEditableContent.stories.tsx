@@ -122,7 +122,7 @@ const ALL_STEPS = [
   },
   {
     nodeType: 'action',
-    actionType: 'CODE',
+    actionType: 'HTTP_REQUEST',
     name: 'Code',
     hasNextStepIds: true,
     stepId: 'step6',

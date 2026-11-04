@@ -5,8 +5,6 @@ export const getActionIconStrokeOrThrow = (
   actionType: WorkflowActionType,
 ): 'sm' | undefined => {
   switch (actionType) {
-    case 'CODE':
-    case 'LOGIC_FUNCTION':
     case 'HTTP_REQUEST':
     case 'SEND_EMAIL':
     case 'DRAFT_EMAIL':

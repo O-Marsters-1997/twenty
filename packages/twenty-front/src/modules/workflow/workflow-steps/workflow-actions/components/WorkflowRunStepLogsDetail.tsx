@@ -13,7 +13,6 @@ import { useWorkflowRunStepLog } from '@/workflow/hooks/useWorkflowRunStepLog';
 import { getIsDescendantOfIterator } from '@/workflow/workflow-steps/utils/getIsDescendantOfIterator';
 import { WorkflowRunStepAiAgentConversationButton } from '@/workflow/workflow-steps/workflow-actions/ai-agent-action/components/WorkflowRunStepAiAgentConversationButton';
 import { WorkflowRunStepLogsAiAgentDetail } from '@/workflow/workflow-steps/workflow-actions/ai-agent-action/components/WorkflowRunStepLogsAiAgentDetail';
-import { WorkflowRunStepLogsCodeDetail } from '@/workflow/workflow-steps/workflow-actions/code-action/components/WorkflowRunStepLogsCodeDetail';
 import { WorkflowRunStepLogsEmailDetail } from '@/workflow/workflow-steps/workflow-actions/components/WorkflowRunStepLogsEmailDetail';
 import { WorkflowRunStepLogsEntries } from '@/workflow/workflow-steps/workflow-actions/components/WorkflowRunStepLogsEntries';
 import { WorkflowRunStepLogsHttpRequestDetail } from '@/workflow/workflow-steps/workflow-actions/http-request-action/components/WorkflowRunStepLogsHttpRequestDetail';
@@ -104,8 +103,6 @@ export const WorkflowRunStepLogsDetail = ({ stepId }: { stepId: string }) => {
             <WorkflowRunStepLogsAiAgentDetail details={stepLog.details} />
           </>
         );
-      case 'CODE':
-        return <WorkflowRunStepLogsCodeDetail details={stepLog.details} />;
       case 'HTTP_REQUEST':
         return (
           <WorkflowRunStepLogsHttpRequestDetail details={stepLog.details} />

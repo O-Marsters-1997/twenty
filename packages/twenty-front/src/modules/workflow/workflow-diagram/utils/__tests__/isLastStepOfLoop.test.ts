@@ -26,7 +26,7 @@ describe('isLastStepOfLoop', () => {
   const makeStep = (id: string, nextStepIds: string[] = []): WorkflowStep =>
     ({
       id,
-      type: 'CODE',
+      type: 'HTTP_REQUEST',
       nextStepIds,
       name: id,
       valid: true,

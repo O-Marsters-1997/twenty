@@ -8,7 +8,7 @@ it('Preserves the properties defined in the previous version but not in the next
         data: {
           nodeType: 'action',
           name: '',
-          actionType: 'CODE',
+          actionType: 'HTTP_REQUEST',
           hasNextStepIds: false,
           position: { x: 0, y: 0 },
           stepId: '',
@@ -26,7 +26,7 @@ it('Preserves the properties defined in the previous version but not in the next
         data: {
           nodeType: 'action',
           name: '',
-          actionType: 'CODE',
+          actionType: 'HTTP_REQUEST',
           hasNextStepIds: false,
           position: { x: 0, y: 0 },
           stepId: '',
@@ -45,7 +45,7 @@ it('Preserves the properties defined in the previous version but not in the next
   "nodes": [
     {
       "data": {
-        "actionType": "CODE",
+        "actionType": "HTTP_REQUEST",
         "hasNextStepIds": false,
         "name": "",
         "nodeType": "action",
@@ -74,7 +74,7 @@ it('Replaces duplicated properties with the next value', () => {
         data: {
           nodeType: 'action',
           name: '',
-          actionType: 'CODE',
+          actionType: 'HTTP_REQUEST',
           hasNextStepIds: false,
           position: { x: 0, y: 0 },
           stepId: '',
@@ -91,7 +91,7 @@ it('Replaces duplicated properties with the next value', () => {
         data: {
           nodeType: 'action',
           name: '2',
-          actionType: 'CODE',
+          actionType: 'HTTP_REQUEST',
           hasNextStepIds: false,
           position: { x: 0, y: 0 },
           stepId: '',
@@ -110,7 +110,7 @@ it('Replaces duplicated properties with the next value', () => {
   "nodes": [
     {
       "data": {
-        "actionType": "CODE",
+        "actionType": "HTTP_REQUEST",
         "hasNextStepIds": false,
         "name": "2",
         "nodeType": "action",

@@ -69,15 +69,6 @@ describe('computeStepOutputSchema', () => {
   });
 
   describe('PERSISTED_OUTPUT_SCHEMA_TYPES', () => {
-    it('should return undefined for CODE step type', () => {
-      const result = computeStepOutputSchema({
-        step: { type: 'CODE', settings: {} } as any,
-        objectMetadataItems: [],
-      });
-
-      expect(result).toBeUndefined();
-    });
-
     it('should return undefined for HTTP_REQUEST step type', () => {
       const result = computeStepOutputSchema({
         step: { type: 'HTTP_REQUEST', settings: {} } as any,
@@ -105,14 +96,6 @@ describe('computeStepOutputSchema', () => {
       expect(result).toBeUndefined();
     });
 
-    it('should return undefined for LOGIC_FUNCTION step type', () => {
-      const result = computeStepOutputSchema({
-        step: { type: 'LOGIC_FUNCTION', settings: {} } as any,
-        objectMetadataItems: [],
-      });
-
-      expect(result).toBeUndefined();
-    });
   });
 
   describe('DATABASE_EVENT trigger', () => {
@@ -608,10 +591,6 @@ describe('computeStepOutputSchema', () => {
 });
 
 describe('shouldComputeOutputSchemaOnFrontend', () => {
-  it('should return false for CODE', () => {
-    expect(shouldComputeOutputSchemaOnFrontend('CODE')).toBe(false);
-  });
-
   it('should return false for HTTP_REQUEST', () => {
     expect(shouldComputeOutputSchemaOnFrontend('HTTP_REQUEST')).toBe(false);
   });
@@ -626,10 +605,6 @@ describe('shouldComputeOutputSchemaOnFrontend', () => {
 
   it('should return false for ITERATOR', () => {
     expect(shouldComputeOutputSchemaOnFrontend('ITERATOR')).toBe(false);
-  });
-
-  it('should return false for LOGIC_FUNCTION', () => {
-    expect(shouldComputeOutputSchemaOnFrontend('LOGIC_FUNCTION')).toBe(false);
   });
 
   it('should return true for DATABASE_EVENT', () => {

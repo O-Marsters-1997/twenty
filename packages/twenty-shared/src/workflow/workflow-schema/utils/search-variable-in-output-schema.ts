@@ -16,7 +16,6 @@ import {
   type RecordOutputSchemaV2,
   type VariableSearchResult,
 } from '../types/OutputSchema';
-import { isFlattenedArrayOutputSchema } from './flattened-array-output-schema';
 
 const EMPTY_RESULT: VariableSearchResult = {
   variableLabel: undefined,
@@ -464,47 +463,6 @@ const searchThroughFormOutputSchema = ({
   return EMPTY_RESULT;
 };
 
-const searchThroughCodeOutputSchema = ({
-  stepName,
-  codeOutputSchema,
-  rawVariableName,
-}: {
-  stepName: string;
-  codeOutputSchema: unknown;
-  rawVariableName: string;
-}): VariableSearchResult => {
-  if (!isDefined(codeOutputSchema)) {
-    return EMPTY_RESULT;
-  }
-
-  if (
-    isObject(codeOutputSchema) &&
-    '_outputSchemaType' in codeOutputSchema &&
-    codeOutputSchema._outputSchemaType === 'LINK'
-  ) {
-    return EMPTY_RESULT;
-  }
-
-  const parts = parseVariablePath(stripBrackets(rawVariableName));
-
-  if (
-    parts.length === 1 &&
-    isFlattenedArrayOutputSchema(codeOutputSchema as BaseOutputSchemaV2)
-  ) {
-    return {
-      variableLabel: stepName,
-      variablePathLabel: stepName,
-      variableType: FieldMetadataType.ARRAY,
-    };
-  }
-
-  return searchThroughBaseOutputSchema({
-    stepName,
-    baseOutputSchema: codeOutputSchema as BaseOutputSchemaV2,
-    rawVariableName,
-  });
-};
-
 const searchThroughIteratorOutputSchema = ({
   stepName,
   iteratorOutputSchema,
@@ -715,14 +673,6 @@ export const searchVariableInOutputSchema = ({
       formOutputSchema: schema as FormOutputSchema,
       rawVariableName,
       isFullRecord,
-    });
-  }
-
-  if (stepType === 'CODE') {
-    return searchThroughCodeOutputSchema({
-      stepName,
-      codeOutputSchema: schema,
-      rawVariableName,
     });
   }
 

@@ -10,7 +10,6 @@ import { setupApplicationForSync } from 'test/integration/metadata/suites/applic
 import { syncApplication } from 'test/integration/metadata/suites/application/utils/sync-application.util';
 import { updateFeatureFlag } from 'test/integration/metadata/suites/utils/update-feature-flag.util';
 import { generateApplicationTokenPair } from 'test/integration/utils/generate-application-token-pair.util';
-import { getAppProviderByClassName } from 'test/integration/utils/get-app-provider-by-class-name.util';
 import {
   getWorkflowVersionUniversalIdentifier,
   type Manifest,
@@ -19,8 +18,6 @@ import { SystemPermissionFlag } from 'twenty-shared/constants';
 import { STANDARD_OBJECTS } from 'twenty-shared/metadata';
 import { FeatureFlagKey } from 'twenty-shared/types';
 
-import { type LogicFunctionExecutorService } from 'src/engine/core-modules/logic-function/logic-function-executor/logic-function-executor.service';
-import { LogicFunctionExecutionStatus } from 'src/engine/metadata-modules/logic-function/dtos/logic-function-execution-result.dto';
 import { getWorkspaceSchemaName } from 'src/engine/workspace-datasource/utils/get-workspace-schema-name.util';
 import { USER_WORKSPACE_DATA_SEED_IDS } from 'src/engine/workspace-manager/dev-seeder/core/utils/seed-user-workspaces.util';
 import { USER_DATA_SEED_IDS } from 'src/engine/workspace-manager/dev-seeder/core/utils/seed-users.util';
@@ -98,14 +95,6 @@ const CREATE_OPPORTUNITY_WORKFLOW = buildTestWorkflow([
   } as WorkflowStepManifestWithoutEdges,
 ]);
 
-const LOGIC_FUNCTION_WORKFLOW = buildTestWorkflow([
-  {
-    name: 'Call the application function',
-    type: 'LOGIC_FUNCTION',
-    logicFunctionUniversalIdentifier: FUNCTION_ID,
-    input: { greeting: 'Hello' },
-  } as WorkflowStepManifestWithoutEdges,
-]);
 
 const DELAYED_CREATE_COMPANY_WORKFLOW = buildTestWorkflow([
   {
@@ -155,7 +144,6 @@ const FORM_WORKFLOW = buildTestWorkflow([
 const TEST_WORKFLOWS = [
   CREATE_COMPANY_WORKFLOW,
   CREATE_OPPORTUNITY_WORKFLOW,
-  LOGIC_FUNCTION_WORKFLOW,
   DELAYED_CREATE_COMPANY_WORKFLOW,
   FORM_WORKFLOW,
 ];
@@ -470,40 +458,6 @@ describe('application workflow execution permissions', () => {
     expect(
       await countRecordsByName('opportunity', WORKSPACE_OPPORTUNITY_NAME),
     ).toBe(1);
-  }, 120000);
-
-  it('runs the application function for the member who started the run', async () => {
-    const executeSpy = jest
-      .spyOn(
-        getAppProviderByClassName<LogicFunctionExecutorService>(
-          'LogicFunctionExecutorService',
-        ),
-        'execute',
-      )
-      .mockResolvedValue({
-        data: { greeted: true },
-        duration: 1,
-        billedDurationMs: 1,
-        logs: '',
-        status: LogicFunctionExecutionStatus.SUCCESS,
-      });
-
-    try {
-      const workflowRun = await waitForRunToEnd(
-        await runWorkflow(LOGIC_FUNCTION_WORKFLOW),
-      );
-
-      expect(workflowRun.status).toBe('COMPLETED');
-      expect(executeSpy).toHaveBeenCalledTimes(1);
-      expect(executeSpy).toHaveBeenCalledWith(
-        expect.objectContaining({
-          workspaceId: SEED_APPLE_WORKSPACE_ID,
-          userWorkspaceId: USER_WORKSPACE_DATA_SEED_IDS.JANE,
-        }),
-      );
-    } finally {
-      executeSpy.mockRestore();
-    }
   }, 120000);
 
   it('only lets an application token start that application workflows', async () => {

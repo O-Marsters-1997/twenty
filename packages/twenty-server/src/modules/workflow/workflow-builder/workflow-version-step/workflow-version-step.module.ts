@@ -13,7 +13,6 @@ import { provideWorkspaceScopedRepository } from 'src/engine/twenty-orm/workspac
 import { WorkspaceCacheModule } from 'src/engine/workspace-cache/workspace-cache.module';
 import { WorkflowCommonModule } from 'src/modules/workflow/common/workflow-common.module';
 import { WorkflowSchemaModule } from 'src/modules/workflow/workflow-builder/workflow-schema/workflow-schema.module';
-import { CodeStepBuildModule } from 'src/modules/workflow/workflow-builder/workflow-version-step/code-step/code-step-build.module';
 import { WorkflowVersionStepOperationsWorkspaceService } from 'src/modules/workflow/workflow-builder/workflow-version-step/workflow-version-step-operations.workspace-service';
 import { RecordCrudModule } from 'src/engine/core-modules/record-crud/record-crud.module';
 
@@ -22,7 +21,6 @@ import { RecordCrudModule } from 'src/engine/core-modules/record-crud/record-cru
     WorkflowSchemaModule,
     LogicFunctionModule,
     WorkflowCommonModule,
-    CodeStepBuildModule,
     FeatureFlagModule,
     AiAgentRoleModule,
     AiAgentModule,

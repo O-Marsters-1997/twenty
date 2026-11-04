@@ -61,9 +61,8 @@ const MANIFEST: Manifest = buildBaseManifest({
             {
               universalIdentifier: STEP_ID,
               name: 'Greet',
-              type: 'LOGIC_FUNCTION',
-              logicFunctionUniversalIdentifier: FUNCTION_ID,
-              input: { greeting: 'Before' },
+              type: 'HTTP_REQUEST',
+              input: { method: 'GET', url: 'https://example.com/before' },
               nextStepIds: [RECORD_STEP_ID],
             },
             {
@@ -253,9 +252,8 @@ describe('application-owned core workflows', () => {
       workspaceWorkflowVersionId: null,
       lastPublishedCoreWorkflowVersionId: installed.versionId,
     });
-    expect(installed.steps[0].settings.input).toEqual({
-      logicFunctionId: installed.functionId,
-      logicFunctionInput: { greeting: 'Before' },
+    expect(installed.steps[0].settings.input).toMatchObject({
+      url: 'https://example.com/before',
     });
     expect(installed.steps[1].settings.input).toEqual({
       objectName: 'company',
@@ -315,10 +313,10 @@ describe('application-owned core workflows', () => {
 
     const changed = structuredClone(MANIFEST);
     const changedStep = changed.workflows![0].version.steps[0];
-    if (changedStep.type !== 'LOGIC_FUNCTION') {
-      throw new Error('Expected a function step');
+    if (changedStep.type !== 'HTTP_REQUEST') {
+      throw new Error('Expected an HTTP request step');
     }
-    changedStep.input.greeting = 'After';
+    changedStep.input.url = 'https://example.com/after';
     const upgrade = await syncApplication({ manifest: changed });
     expect(upgrade.errors).toBeUndefined();
     const updatedDefinitions = await findDefinitions();
@@ -329,9 +327,9 @@ describe('application-owned core workflows', () => {
     expect(updated.versionDefinitionHash).not.toBe(
       installed.versionDefinitionHash,
     );
-    expect(updated.steps[0].settings.input.logicFunctionInput).toEqual({
-      greeting: 'After',
-    });
+    expect(updated.steps[0].settings.input.url).toBe(
+      'https://example.com/after',
+    );
     expect((await findRun(oldRunId)).state?.flow).toEqual(oldRun.state?.flow);
     const newRunId = await runVersion(updated.versionId);
     expect((await findRun(newRunId)).state?.flow?.steps).toEqual(updated.steps);

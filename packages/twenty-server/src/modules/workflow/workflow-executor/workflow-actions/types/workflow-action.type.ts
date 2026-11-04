@@ -2,7 +2,6 @@ import { WorkflowActionType } from 'twenty-shared/workflow';
 
 import { type WorkflowAiAgentActionSettings } from 'src/modules/workflow/workflow-executor/workflow-actions/ai-agent/types/workflow-ai-agent-action-settings.type';
 import { type WorkflowClassifyActionSettings } from 'src/modules/workflow/workflow-executor/workflow-actions/classify/types/workflow-classify-action-settings.type';
-import { type WorkflowCodeActionSettings } from 'src/modules/workflow/workflow-executor/workflow-actions/code/types/workflow-code-action-settings.type';
 import { type WorkflowCreateCalendarEventActionSettings } from 'src/modules/workflow/workflow-executor/workflow-actions/create-calendar-event/types/workflow-create-calendar-event-action-settings.type';
 import { type WorkflowDelayActionSettings } from 'src/modules/workflow/workflow-executor/workflow-actions/delay/types/workflow-delay-action-settings.type';
 import { type WorkflowWaitForEventActionSettings } from 'src/modules/workflow/workflow-executor/workflow-actions/wait-for-event/types/workflow-wait-for-event-action-settings.type';
@@ -11,7 +10,6 @@ import { type WorkflowFormActionSettings } from 'src/modules/workflow/workflow-e
 import { type WorkflowHttpRequestActionSettings } from 'src/modules/workflow/workflow-executor/workflow-actions/http-request/types/workflow-http-request-action-settings.type';
 import { type WorkflowIfElseActionSettings } from 'src/modules/workflow/workflow-executor/workflow-actions/if-else/types/workflow-if-else-action-settings.type';
 import { type WorkflowIteratorActionSettings } from 'src/modules/workflow/workflow-executor/workflow-actions/iterator/types/workflow-iterator-action-settings.type';
-import { type WorkflowLogicFunctionActionSettings } from 'src/modules/workflow/workflow-executor/workflow-actions/logic-function/types/workflow-logic-function-action-settings.type';
 import { type WorkflowSendEmailActionSettings } from 'src/modules/workflow/workflow-executor/workflow-actions/mail-sender/types/workflow-send-email-action-settings.type';
 import { type WorkflowSendChatMessageActionSettings } from 'src/modules/workflow/workflow-executor/workflow-actions/send-chat-message/types/workflow-send-chat-message-action-settings.type';
 import {
@@ -35,16 +33,6 @@ type BaseWorkflowAction = {
   };
   valid: boolean;
   nextStepIds?: string[];
-};
-
-export type WorkflowCodeAction = BaseWorkflowAction & {
-  type: WorkflowActionType.CODE;
-  settings: WorkflowCodeActionSettings;
-};
-
-export type WorkflowLogicFunctionAction = BaseWorkflowAction & {
-  type: WorkflowActionType.LOGIC_FUNCTION;
-  settings: WorkflowLogicFunctionActionSettings;
 };
 
 export type WorkflowSendEmailAction = BaseWorkflowAction & {
@@ -147,8 +135,6 @@ export type WorkflowWaitForEventAction = BaseWorkflowAction & {
 };
 
 export type WorkflowAction =
-  | WorkflowCodeAction
-  | WorkflowLogicFunctionAction
   | WorkflowSendEmailAction
   | WorkflowDraftEmailAction
   | WorkflowSendChatMessageAction
