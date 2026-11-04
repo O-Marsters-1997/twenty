@@ -145,10 +145,7 @@ describe('useOpenWidgetSettingsInSidePanel', () => {
     store.set(
       getDraftAtom(),
       makeDraft([
-        makeTab('tab-1', [
-          makeWidget('fields-widget', 0),
-          iframeWidget,
-        ]),
+        makeTab('tab-1', [makeWidget('fields-widget', 0), iframeWidget]),
       ]),
     );
 
@@ -182,10 +179,7 @@ describe('useOpenWidgetSettingsInSidePanel', () => {
       },
     };
 
-    store.set(
-      getDraftAtom(),
-      makeDraft([makeTab('tab-1', [iframeWidget])]),
-    );
+    store.set(getDraftAtom(), makeDraft([makeTab('tab-1', [iframeWidget])]));
 
     const { result } = renderOpenWidgetSettingsHook(store);
 

@@ -118,9 +118,7 @@ export const NavigationDrawerHeader = () => {
         )}
       </StyledHeaderRow>
       {!isExpanded && !isMobile && (
-        <StyledCollapsedSearch>
-          {searchButton}
-        </StyledCollapsedSearch>
+        <StyledCollapsedSearch>{searchButton}</StyledCollapsedSearch>
       )}
     </StyledContainer>
   );

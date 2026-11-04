@@ -247,9 +247,10 @@ describe('PageLayoutVerticalList', () => {
         />,
       );
 
-      expect(
-        screen.getByTestId('iframe-sortable-cell'),
-      ).toHaveAttribute('data-fill', 'false');
+      expect(screen.getByTestId('iframe-sortable-cell')).toHaveAttribute(
+        'data-fill',
+        'false',
+      );
     },
   );
 
@@ -301,9 +302,7 @@ describe('PageLayoutVerticalList', () => {
     render(
       <PageLayoutVerticalList
         isInEditMode
-        widgets={[
-          makeTabViewportWidget('iframe', WidgetType.IFRAME),
-        ]}
+        widgets={[makeTabViewportWidget('iframe', WidgetType.IFRAME)]}
       />,
     );
 
@@ -319,9 +318,7 @@ describe('PageLayoutVerticalList', () => {
     render(
       <PageLayoutVerticalList
         isInEditMode={false}
-        widgets={[
-          makeTabViewportWidget('iframe', WidgetType.IFRAME),
-        ]}
+        widgets={[makeTabViewportWidget('iframe', WidgetType.IFRAME)]}
       />,
     );
 
@@ -337,9 +334,7 @@ describe('PageLayoutVerticalList', () => {
     render(
       <PageLayoutVerticalList
         isInEditMode={false}
-        widgets={[
-          makeTabViewportWidget('iframe', WidgetType.IFRAME),
-        ]}
+        widgets={[makeTabViewportWidget('iframe', WidgetType.IFRAME)]}
       />,
     );
 

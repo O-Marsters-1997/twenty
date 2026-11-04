@@ -83,10 +83,9 @@ describe('sortWidgetsWithViewportFillingLast', () => {
     const fieldsWidget = makeWidgetWithType('fields', 1, WidgetType.FIELDS);
 
     expect(
-      sortWidgetsWithViewportFillingLast([
-        iframeWidget,
-        fieldsWidget,
-      ]).map(({ id }) => id),
+      sortWidgetsWithViewportFillingLast([iframeWidget, fieldsWidget]).map(
+        ({ id }) => id,
+      ),
     ).toEqual(['fields', 'iframe']);
   });
 });

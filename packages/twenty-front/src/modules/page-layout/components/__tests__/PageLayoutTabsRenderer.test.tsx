@@ -203,9 +203,7 @@ describe('PageLayoutTabsRenderer', () => {
     expect(
       screen.getByText('Rendered tab: timeline-tab-id'),
     ).toBeInTheDocument();
-    expect(
-      screen.getByText('Rendered tab: iframe-tab-id'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Rendered tab: iframe-tab-id')).toBeInTheDocument();
   });
 
   it('reveals a prerendered side-panel tab without remounting its content', () => {

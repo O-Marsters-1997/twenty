@@ -83,9 +83,7 @@ describe('canVerticalListAcceptWidget', () => {
   it('treats an explicit TAB_VIEWPORT iframe like a viewport-filling widget', () => {
     expect(
       canVerticalListAcceptWidget({
-        destinationWidgets: [
-          makeTabViewportIframe('iframe', 'tab-2'),
-        ],
+        destinationWidgets: [makeTabViewportIframe('iframe', 'tab-2')],
         widget: makeWidgetWithType('notes', WidgetType.NOTES),
       }),
     ).toBe(false);

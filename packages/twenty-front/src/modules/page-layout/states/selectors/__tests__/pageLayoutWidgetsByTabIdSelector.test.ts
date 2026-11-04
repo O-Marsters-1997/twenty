@@ -40,10 +40,7 @@ describe('pageLayoutWidgetsByTabIdSelector', () => {
       store.get(pageLayoutWidgetsByTabIdSelector.atom).get('app-tab') ?? [];
 
     expect(
-      isWidgetConfigurationOfType(
-        widget?.configuration,
-        'IframeConfiguration',
-      ),
+      isWidgetConfigurationOfType(widget?.configuration, 'IframeConfiguration'),
     ).toBe(true);
     expect(widget?.position?.__typename).toBe(
       'PageLayoutWidgetVerticalListPosition',

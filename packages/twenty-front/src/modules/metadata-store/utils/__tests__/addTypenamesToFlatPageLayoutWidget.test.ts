@@ -43,10 +43,7 @@ describe('addTypenamesToFlatPageLayoutWidget', () => {
     );
 
     expect(
-      isWidgetConfigurationOfType(
-        widget.configuration,
-        'IframeConfiguration',
-      ),
+      isWidgetConfigurationOfType(widget.configuration, 'IframeConfiguration'),
     ).toBe(true);
     expect(widget.configuration).toEqual({
       __typename: 'IframeConfiguration',

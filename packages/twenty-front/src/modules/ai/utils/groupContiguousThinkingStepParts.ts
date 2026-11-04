@@ -7,7 +7,7 @@ import { type ThinkingStepPart } from '@/ai/types/ThinkingStepPart';
 
 export const groupContiguousThinkingStepParts = (
   parts: ExtendedUIMessagePart[],
-):AssistantMessageRenderItem[] => {
+): AssistantMessageRenderItem[] => {
   const renderItems: AssistantMessageRenderItem[] = [];
   let currentThinkingParts: ThinkingStepPart[] = [];
 

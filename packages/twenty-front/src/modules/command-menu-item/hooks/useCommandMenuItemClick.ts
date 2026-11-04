@@ -86,10 +86,7 @@ export const useCommandMenuItemClick = ({
         creationTargetObjectMetadataId: item.creationTargetObjectMetadataId,
         isInSidePanel: commandMenuContextApi.isInSidePanel,
       });
-
-      return;
     }
-
   };
 
   return {

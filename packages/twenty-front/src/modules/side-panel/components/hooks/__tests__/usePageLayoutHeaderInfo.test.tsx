@@ -41,9 +41,9 @@ describe('usePageLayoutHeaderInfo', () => {
   });
 
   it('keeps the generic label for a fit-content widget', () => {
-    expect(
-      getWidgetSettingsHeaderInfo(WidgetType.IFRAME)?.headerType,
-    ).toBe('Widget');
+    expect(getWidgetSettingsHeaderInfo(WidgetType.IFRAME)?.headerType).toBe(
+      'Widget',
+    );
   });
 
   it('identifies an explicit TAB_VIEWPORT iframe in the side-panel header', () => {
@@ -72,9 +72,9 @@ describe('usePageLayoutHeaderInfo', () => {
   });
 
   it('keeps the generic widget icon', () => {
-    expect(
-      getWidgetSettingsHeaderInfo(WidgetType.IFRAME)?.headerIcon,
-    ).toBe(IconLayoutDashboard);
+    expect(getWidgetSettingsHeaderInfo(WidgetType.IFRAME)?.headerIcon).toBe(
+      IconLayoutDashboard,
+    );
   });
 
   it.each([

@@ -233,7 +233,6 @@ export const useLoadStaleMetadataEntities = () => {
         );
       }
 
-
       await Promise.all(fetchPromises);
       applyChanges();
     },

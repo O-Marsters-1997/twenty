@@ -85,7 +85,6 @@ const MessagePartRenderer = ({
             />
           );
         }
-
       }
       return null;
   }
