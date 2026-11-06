@@ -14,7 +14,6 @@ For ANY non-trivial task, follow this order:
 
 Examples:
 - User asks to create a workflow → \`load_skills(["workflow-building"])\` then learn and execute workflow tools
-- User asks to export data to Excel → \`load_skills(["xlsx", "code-interpreter"])\` then \`learn_tools({toolNames: ["code_interpreter"]})\` then \`execute_tool({toolName: "code_interpreter", arguments: {...}})\`
 
 For simple CRUD operations (find/create/update/delete a record), you do NOT need a skill — but you still MUST call \`learn_tools\` first to learn the tool schema, then \`execute_tool\` to run it.
 

@@ -22,27 +22,9 @@ describe('replaceUnsupportedFileParts', () => {
   it('keeps file parts whose MIME type is in the native set', () => {
     const messages = [buildUserMessage([buildFilePart('image/png')])];
 
-    const result = replaceUnsupportedFileParts(messages, ['image'], false);
+    const result = replaceUnsupportedFileParts(messages, ['image']);
 
     expect(result[0].parts[0]).toEqual(buildFilePart('image/png'));
-  });
-
-  it('keeps code-interpreter file parts when the interpreter is enabled', () => {
-    const messages = [buildUserMessage([buildFilePart('text/csv')])];
-
-    const result = replaceUnsupportedFileParts(messages, [], true);
-
-    expect(result[0].parts[0]).toMatchObject({ type: 'file' });
-  });
-
-  it('downgrades code-interpreter file parts when the interpreter is disabled', () => {
-    const messages = [
-      buildUserMessage([buildFilePart('text/csv', 'data.csv')]),
-    ];
-
-    const result = replaceUnsupportedFileParts(messages, [], false);
-
-    expect(result[0].parts[0]).toMatchObject({ type: 'text' });
   });
 
   it('replaces unsupported file parts with a text note', () => {
@@ -50,7 +32,7 @@ describe('replaceUnsupportedFileParts', () => {
       buildUserMessage([buildFilePart('video/mp4', 'clip.mp4')]),
     ];
 
-    const result = replaceUnsupportedFileParts(messages, [], true);
+    const result = replaceUnsupportedFileParts(messages, []);
 
     expect(result[0].parts[0]).toEqual({
       type: 'text',
@@ -61,7 +43,7 @@ describe('replaceUnsupportedFileParts', () => {
   it('downgrades native-only files when the model declares no modalities', () => {
     const messages = [buildUserMessage([buildFilePart('image/png')])];
 
-    const result = replaceUnsupportedFileParts(messages, [], true);
+    const result = replaceUnsupportedFileParts(messages, []);
 
     expect(result[0].parts[0]).toMatchObject({ type: 'text' });
   });
@@ -73,7 +55,7 @@ describe('replaceUnsupportedFileParts', () => {
       parts: [{ type: 'text', text: 'hello' }],
     };
 
-    const result = replaceUnsupportedFileParts([assistantMessage], [], true);
+    const result = replaceUnsupportedFileParts([assistantMessage], []);
 
     expect(result[0]).toBe(assistantMessage);
   });

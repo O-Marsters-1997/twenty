@@ -29,7 +29,6 @@ import { UsageOperationType } from 'src/engine/core-modules/usage/enums/usage-op
 
 import { type CodeExecutionStreamEmitter } from 'src/engine/core-modules/tool-provider/interfaces/code-execution-stream-emitter.type';
 
-import { CodeInterpreterService } from 'src/engine/core-modules/code-interpreter/code-interpreter.service';
 import { WorkspaceDomainsService } from 'src/engine/core-modules/domain/workspace-domains/services/workspace-domains.service';
 import { ExceptionHandlerService } from 'src/engine/core-modules/exception-handler/exception-handler.service';
 import { FeatureFlagService } from 'src/engine/core-modules/feature-flag/services/feature-flag.service';
@@ -58,9 +57,7 @@ import { repairToolCall } from 'src/engine/metadata-modules/ai/ai-agent/utils/re
 import { AiBillingService } from 'src/engine/metadata-modules/ai/ai-billing/services/ai-billing.service';
 import { convertDollarsToCreditsMicro } from 'src/engine/metadata-modules/ai/ai-billing/utils/convert-dollars-to-credits-micro.util';
 import { countNativeWebSearchCallsFromSteps } from 'src/engine/metadata-modules/ai/ai-billing/utils/count-native-web-search-calls-from-steps.util';
-import {
-  extractCacheCreationTokens,
-} from 'src/engine/metadata-modules/ai/ai-billing/utils/extract-cache-creation-tokens.util';
+import { extractCacheCreationTokens } from 'src/engine/metadata-modules/ai/ai-billing/utils/extract-cache-creation-tokens.util';
 import { AI_CHAT_EXCLUDED_TOOL_NAMES } from 'src/engine/metadata-modules/ai/ai-chat/constants/ai-chat-excluded-tool-names.const';
 import { AI_CHAT_STREAM_FUNCTION_ID } from 'src/engine/metadata-modules/ai/ai-chat/constants/ai-chat-stream-function-id.constant';
 import { AI_CHAT_TOOL_NAMES_TO_PRELOAD } from 'src/engine/metadata-modules/ai/ai-chat/constants/ai-chat-tool-names-to-preload.const';
@@ -73,7 +70,6 @@ import { createProposeToolCallTool } from 'src/engine/metadata-modules/ai/ai-age
 import { createRequestFormTool } from 'src/engine/metadata-modules/ai/ai-chat/tools/request-form.tool';
 import { createCompleteWorkspaceSetupTool } from 'src/engine/metadata-modules/ai/ai-chat/tools/complete-workspace-setup.tool';
 import { type AgentChatSender } from 'src/engine/metadata-modules/ai/ai-chat/types/agent-chat-sender.type';
-import { type UploadedFileReference } from 'src/engine/metadata-modules/ai/ai-chat/types/uploaded-file-reference.type';
 import { formatErrorWithCause } from 'src/engine/metadata-modules/ai/ai-chat/utils/format-error-with-cause.util';
 import { buildWorkspaceSetupChatThreadId } from 'src/engine/metadata-modules/ai/ai-chat/utils/build-workspace-setup-chat-thread-id.util';
 import { buildFullSystemPrompt } from 'src/engine/metadata-modules/ai/ai-chat/utils/build-full-system-prompt.util';
@@ -81,7 +77,6 @@ import { hasNoAssistantMessage } from 'src/engine/metadata-modules/ai/ai-chat/ut
 import { hasSucceededWorkspaceSetupCompletion } from 'src/engine/metadata-modules/ai/ai-chat/utils/has-succeeded-workspace-setup-completion.util';
 import { collectReferencedSkillIds } from 'src/engine/metadata-modules/ai/ai-chat/utils/collect-referenced-skill-ids.util';
 import { collectUploadedFileReferences } from 'src/engine/metadata-modules/ai/ai-chat/utils/collect-uploaded-file-references.util';
-import { extractCodeInterpreterFiles } from 'src/engine/metadata-modules/ai/ai-chat/utils/extract-code-interpreter-files.util';
 import { injectMessageTimestamps } from 'src/engine/metadata-modules/ai/ai-chat/utils/inject-message-timestamps.util';
 import {
   getCacheProviderOptions,
@@ -139,7 +134,6 @@ export class ChatExecutionService {
     private readonly aiBillingService: AiBillingService,
     private readonly agentActorContextService: AgentActorContextService,
     private readonly workspaceDomainsService: WorkspaceDomainsService,
-    private readonly codeInterpreterService: CodeInterpreterService,
     private readonly exceptionHandlerService: ExceptionHandlerService,
     private readonly messagePruningService: MessagePruningService,
     private readonly chatActorService: AgentChatActorService,
@@ -344,8 +338,6 @@ export class ChatExecutionService {
       ),
     };
 
-    const isCodeInterpreterEnabled = this.codeInterpreterService.isEnabled();
-
     const uploadedFiles = collectUploadedFileReferences(messages);
 
     // inline tagged skills to save the model a load_skills round trip
@@ -357,19 +349,7 @@ export class ChatExecutionService {
     let processedMessages: ExtendedUIMessage[] = replaceUnsupportedFileParts(
       messages,
       modelConfig.modalities,
-      isCodeInterpreterEnabled,
     );
-
-    let codeInterpreterFiles: UploadedFileReference[] = [];
-
-    if (isCodeInterpreterEnabled) {
-      const extracted = extractCodeInterpreterFiles(processedMessages);
-
-      processedMessages = extracted.processedMessages;
-      codeInterpreterFiles = extracted.extractedFiles.map(
-        ({ filename, fileId }) => ({ filename, fileId }),
-      );
-    }
 
     if (isDefined(browsingContext)) {
       const contextString = this.buildContextFromBrowsingContext(
@@ -397,7 +377,7 @@ export class ChatExecutionService {
       skillCatalog,
       referencedSkills,
       preloadedTools: Object.keys(preloadedToolSet),
-      uploadedFilesContext: { uploadedFiles, codeInterpreterFiles },
+      uploadedFilesContext: { uploadedFiles },
       workspaceInstructions: workspace.aiAdditionalInstructions ?? undefined,
       userContext,
       userWorkspaceId,

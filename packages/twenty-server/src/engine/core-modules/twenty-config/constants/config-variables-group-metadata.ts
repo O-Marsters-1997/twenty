@@ -73,12 +73,6 @@ export const CONFIG_VARIABLES_GROUP_METADATA: Record<
       'Configure the LLM provider and model to use for the app. We recommend editing these settings through the AI tab in the admin panel instead.',
     isHiddenOnLoad: true,
   },
-  [ConfigVariablesGroup.CODE_INTERPRETER_CONFIG]: {
-    position: 1550,
-    description:
-      'Configure the code interpreter for AI data analysis. Use LOCAL for development (unsafe) or E2B for sandboxed execution.',
-    isHiddenOnLoad: true,
-  },
   [ConfigVariablesGroup.SSL]: {
     position: 1600,
     description:
