@@ -43,7 +43,6 @@ describe('AgentChatStreamingService.startOpeningTurn', () => {
       isAlive: jest.fn().mockResolvedValue(true),
       clear: jest.fn().mockResolvedValue(undefined),
     };
-    const metricsService = { incrementCounterBy: jest.fn() };
     const eventPublisherService = {
       publish: jest.fn(),
       resetStreamState: jest.fn(),
@@ -58,12 +57,10 @@ describe('AgentChatStreamingService.startOpeningTurn', () => {
       eventPublisherService as never,
       { signFileByIdUrl: jest.fn() } as never,
       streamHeartbeatService as never,
-      metricsService as never,
       new AgentChatStreamRecoveryService(
         threadRepository as never,
         streamHeartbeatService as never,
         eventPublisherService as never,
-        metricsService as never,
       ),
       {} as never,
       {} as never,
@@ -80,7 +77,6 @@ describe('AgentChatStreamingService.startOpeningTurn', () => {
       agentChatService,
       threadService,
       streamHeartbeatService,
-      metricsService,
     };
   };
 
@@ -182,7 +178,6 @@ describe('AgentChatStreamingService.startOpeningTurn', () => {
       releaseQuery,
       messageQueueService,
       streamHeartbeatService,
-      metricsService,
     } = buildService();
 
     messageQueueService.add.mockRejectedValue(new Error('redis down'));
@@ -201,10 +196,5 @@ describe('AgentChatStreamingService.startOpeningTurn', () => {
       ],
     );
     expect(streamHeartbeatService.clear).toHaveBeenCalled();
-    expect(metricsService.incrementCounterBy).toHaveBeenCalledWith(
-      expect.objectContaining({
-        attributes: expect.objectContaining({ failure_phase: 'enqueue' }),
-      }),
-    );
   });
 });

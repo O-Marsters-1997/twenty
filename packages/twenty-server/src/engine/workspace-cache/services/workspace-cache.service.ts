@@ -7,7 +7,6 @@ import {
 import { DiscoveryService, Reflector } from '@nestjs/core';
 import { InjectDataSource } from '@nestjs/typeorm';
 
-import * as Sentry from '@sentry/node';
 import crypto from 'crypto';
 
 import { DataSource } from 'typeorm';
@@ -33,7 +32,6 @@ import {
   WorkspaceCacheException,
   WorkspaceCacheExceptionCode,
 } from 'src/engine/workspace-cache/exceptions/workspace-cache.exception';
-import { WorkspaceCacheMetricsService } from 'src/engine/workspace-cache/services/workspace-cache-metrics.service';
 import { WorkspaceCacheRowsBatchLoader } from 'src/engine/workspace-cache/services/workspace-cache-rows-batch-loader';
 import {
   WorkspaceCacheKeyName,
@@ -133,7 +131,6 @@ export class WorkspaceCacheService implements OnModuleInit, OnModuleDestroy {
     private readonly coreDataSource: DataSource,
     private readonly discoveryService: DiscoveryService,
     private readonly reflector: Reflector,
-    private readonly cacheMetricsService: WorkspaceCacheMetricsService,
     private readonly twentyConfigService: TwentyConfigService,
   ) {}
 
@@ -193,7 +190,6 @@ export class WorkspaceCacheService implements OnModuleInit, OnModuleDestroy {
       }
     }
 
-    this.cacheMetricsService.start(this.localCache);
     this.startMaintenanceTimers();
   }
 
@@ -204,7 +200,6 @@ export class WorkspaceCacheService implements OnModuleInit, OnModuleDestroy {
     if (isDefined(this.packingTimer)) {
       clearInterval(this.packingTimer);
     }
-    this.cacheMetricsService.stop();
   }
 
   private startMaintenanceTimers(): void {
@@ -421,23 +416,10 @@ export class WorkspaceCacheService implements OnModuleInit, OnModuleDestroy {
     workspaceId: string,
     cacheKeyNames: WorkspaceCacheKeyName[],
   ): Promise<void> {
-    return Sentry.startSpan(
-      {
-        name: 'invalidate and recompute workspace metadata cache',
-        op: 'cache.invalidate',
-        onlyIfParent: true,
-        attributes: { 'cache.key_count': cacheKeyNames.length },
-      },
-      async () => {
-        const keysToRecompute = await this.invalidate(
-          workspaceId,
-          cacheKeyNames,
-        );
+    const keysToRecompute = await this.invalidate(workspaceId, cacheKeyNames);
 
-        await this.recomputeDataFromProvider({ workspaceId, keysToRecompute });
-        await this.memoizer.clearKeys(`${workspaceId}-`);
-      },
-    );
+    await this.recomputeDataFromProvider({ workspaceId, keysToRecompute });
+    await this.memoizer.clearKeys(`${workspaceId}-`);
   }
 
   public async getCacheHashes(
@@ -696,39 +678,18 @@ export class WorkspaceCacheService implements OnModuleInit, OnModuleDestroy {
     const computePromises = keysToRecompute.map(async (keyToRecompute) => {
       const { keyName, expectedHash } = keyToRecompute;
       const provider = this.getProviderOrThrow(keyName);
-      const isLocalDataOnly = this.localDataOnlyKeys.has(keyName);
-      const computeStartedAt = performance.now();
 
-      try {
-        const data = await Sentry.startSpan(
-          {
-            name: 'compute workspace metadata cache entry from provider',
-            op: 'cache.recompute',
-            onlyIfParent: true,
-            attributes: {
-              'cache.key_name': keyName,
-              'cache.local_data_only': isLocalDataOnly,
-            },
-          },
-          () =>
-            provider.computeForCache({
-              workspaceId,
-              rows: rowsBatchLoader.readRows(provider.rowsRequirement),
-            }),
-        );
+      const data = await provider.computeForCache({
+        workspaceId,
+        rows: rowsBatchLoader.readRows(provider.rowsRequirement),
+      });
 
-        return {
-          keyName,
-          data,
-          expectedHash,
-          hashToPublish: expectedHash ?? crypto.randomUUID(),
-        };
-      } finally {
-        this.cacheMetricsService.recordRecompute(
-          (performance.now() - computeStartedAt) / 1000,
-          keyName,
-        );
-      }
+      return {
+        keyName,
+        data,
+        expectedHash,
+        hashToPublish: expectedHash ?? crypto.randomUUID(),
+      };
     });
 
     const settledComputes = await Promise.allSettled(computePromises);
@@ -752,7 +713,6 @@ export class WorkspaceCacheService implements OnModuleInit, OnModuleDestroy {
     );
 
     if (computed.length > 0) {
-      const redisWriteStartedAt = performance.now();
       const cacheTtlMs =
         this.twentyConfigService.get('CACHE_STORAGE_TTL') * 1000;
       const publishArgumentsByEntry = computed.map(
@@ -774,22 +734,14 @@ export class WorkspaceCacheService implements OnModuleInit, OnModuleDestroy {
           ];
         },
       );
-      let published: number[];
-
-      try {
-        published = await this.cacheStorage.runScript<number[]>({
-          script: PUBLISH_WORKSPACE_CACHE_SCRIPT,
-          keys: this.buildCacheEntryKeys(
-            workspaceId,
-            computed.map(({ keyName }) => keyName),
-          ),
-          args: [String(cacheTtlMs), ...publishArgumentsByEntry.flat()],
-        });
-      } finally {
-        this.cacheMetricsService.recordRedisWrite(
-          (performance.now() - redisWriteStartedAt) / 1000,
-        );
-      }
+      const published = await this.cacheStorage.runScript<number[]>({
+        script: PUBLISH_WORKSPACE_CACHE_SCRIPT,
+        keys: this.buildCacheEntryKeys(
+          workspaceId,
+          computed.map(({ keyName }) => keyName),
+        ),
+        args: [String(cacheTtlMs), ...publishArgumentsByEntry.flat()],
+      });
 
       for (const [
         index,
@@ -895,22 +847,16 @@ export class WorkspaceCacheService implements OnModuleInit, OnModuleDestroy {
   private sweepLocalCache(): void {
     const now = Date.now();
 
-    const evicted = sweepLocalCache(this.localCache, now, {
+    sweepLocalCache(this.localCache, now, {
       ttlMs: LOCAL_ENTRY_TTL_MS,
       maxEntriesByKeyName: MAX_LOCAL_ENTRIES_BY_KEY_NAME,
       globalMaxEntries: MAX_LOCAL_CACHE_ENTRIES,
       minEvict: MIN_EVICT_KEYS,
     });
-
-    if (evicted > 0) {
-      this.cacheMetricsService.recordEviction(evicted);
-    }
   }
 
   private runPacking(): void {
-    const startedAt = performance.now();
-
-    const { packed, pending } = packIdleVersions({
+    packIdleVersions({
       localCache: this.localCache,
       minIdleMs: MIN_IDLE_BEFORE_PACKING_MS,
       ponderationBudget: PACKING_PONDERATION_BUDGET,
@@ -932,12 +878,6 @@ export class WorkspaceCacheService implements OnModuleInit, OnModuleDestroy {
         );
       },
     });
-
-    this.cacheMetricsService.recordPackingRun({
-      durationSeconds: (performance.now() - startedAt) / 1000,
-      packed,
-      pending,
-    });
   }
 
   private readVersion({
@@ -957,7 +897,6 @@ export class WorkspaceCacheService implements OnModuleInit, OnModuleDestroy {
       return version.data;
     }
 
-    const unpackStartedAt = performance.now();
     const data = this.getProviderOrThrow(keyName).expandFromStorage(
       deserializeCacheBlob(version.blob),
     );
@@ -967,11 +906,6 @@ export class WorkspaceCacheService implements OnModuleInit, OnModuleDestroy {
       data,
       lastReadAt: Date.now(),
     });
-
-    this.cacheMetricsService.recordUnpacking(
-      (performance.now() - unpackStartedAt) / 1000,
-      keyName,
-    );
 
     return data;
   }

@@ -77,12 +77,6 @@ describe('ClientConfigController', () => {
           supportDriver: SupportDriver.NONE,
           supportFrontChatId: undefined,
         },
-        sentry: {
-          environment: 'development',
-          release: '1.0.0',
-          dsn: undefined,
-          tracesSampleRate: 0.1,
-        },
         captcha: {
           provider: undefined,
           siteKey: undefined,
@@ -98,7 +92,6 @@ describe('ClientConfigController', () => {
           inviteTeamMaxInvites: 10,
         },
         isAttachmentPreviewEnabled: true,
-        analyticsEnabled: false,
         canManageFeatureFlags: true,
         publicFeatureFlags: [],
         isCookieSessionEnabled: true,

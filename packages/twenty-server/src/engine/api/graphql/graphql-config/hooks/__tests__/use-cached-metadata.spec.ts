@@ -1,34 +1,8 @@
-import * as Sentry from '@sentry/node';
 import { type Request } from 'express';
 
 import { useCachedMetadata } from 'src/engine/api/graphql/graphql-config/hooks/use-cached-metadata';
 
-jest.mock('@sentry/node', () => ({
-  captureException: jest.fn(),
-  getCurrentScope: jest.fn(),
-  setTags: jest.fn(),
-  startSpan: jest.fn(),
-}));
-
 describe('useCachedMetadata', () => {
-  const mockScope = {
-    setTransactionName: jest.fn(),
-  };
-  const mockSpan = {
-    setAttribute: jest.fn(),
-  };
-
-  const expectedSpanOptions = (phase: 'request' | 'response') => ({
-    name: 'metadata GraphQL cache lookup',
-    op: 'cache.get',
-    onlyIfParent: true,
-    attributes: {
-      'cache.phase': phase,
-      'graphql.operation.name': 'FindAllViews',
-      'graphql.operation.type': 'query',
-    },
-  });
-
   const createRequest = (
     overrides: Partial<
       Pick<Request, 'body' | 'locale' | 'userWorkspaceId' | 'workspace'>
@@ -64,10 +38,6 @@ describe('useCachedMetadata', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    jest.mocked(Sentry.getCurrentScope).mockReturnValue(mockScope as never);
-    jest
-      .mocked(Sentry.startSpan)
-      .mockImplementation((_options, callback) => callback(mockSpan as never));
   });
 
   it('reads the cache once when returning a cached response', async () => {
@@ -88,17 +58,6 @@ describe('useCachedMetadata', () => {
     expect(cacheGetter).toHaveBeenCalledTimes(1);
     expect(cacheSetter).not.toHaveBeenCalled();
     expect(await response.json()).toEqual(cachedResponse);
-    expect(Sentry.setTags).toHaveBeenCalledWith({
-      operationName: 'FindAllViews',
-      operation: 'query',
-    });
-    expect(mockScope.setTransactionName).toHaveBeenCalledWith('FindAllViews');
-    expect(Sentry.startSpan).toHaveBeenCalledTimes(1);
-    expect(Sentry.startSpan).toHaveBeenCalledWith(
-      expectedSpanOptions('request'),
-      expect.any(Function),
-    );
-    expect(mockSpan.setAttribute).toHaveBeenCalledWith('cache.hit', true);
   });
 
   it('preserves a value populated after the request cache miss', async () => {
@@ -123,22 +82,6 @@ describe('useCachedMetadata', () => {
 
     expect(cacheGetter).toHaveBeenCalledTimes(2);
     expect(cacheSetter).not.toHaveBeenCalled();
-    expect(Sentry.startSpan).toHaveBeenNthCalledWith(
-      1,
-      expectedSpanOptions('request'),
-      expect.any(Function),
-    );
-    expect(Sentry.startSpan).toHaveBeenNthCalledWith(
-      2,
-      expectedSpanOptions('response'),
-      expect.any(Function),
-    );
-    expect(mockSpan.setAttribute).toHaveBeenNthCalledWith(
-      1,
-      'cache.hit',
-      false,
-    );
-    expect(mockSpan.setAttribute).toHaveBeenNthCalledWith(2, 'cache.hit', true);
   });
 
   it('resolves dependency hashes once per request and caches the response under that key', async () => {
@@ -224,10 +167,9 @@ describe('useCachedMetadata', () => {
 
     expect(cacheGetter).not.toHaveBeenCalled();
     expect(cacheSetter).not.toHaveBeenCalled();
-    expect(Sentry.captureException).toHaveBeenCalledTimes(1);
   });
 
-  it('does not trace client-controlled operations outside the cache allowlist', async () => {
+  it('does not cache client-controlled operations outside the cache allowlist', async () => {
     const cacheGetter = jest.fn();
     const plugin = createPlugin({ cacheGetter });
     const request = createRequest({
@@ -248,8 +190,6 @@ describe('useCachedMetadata', () => {
     } as never);
 
     expect(cacheGetter).not.toHaveBeenCalled();
-    expect(Sentry.setTags).not.toHaveBeenCalled();
-    expect(Sentry.startSpan).not.toHaveBeenCalled();
   });
 
   it('ignores operation names inherited from Object.prototype', async () => {

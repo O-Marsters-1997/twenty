@@ -4,7 +4,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { WorkspaceIteratorModule } from 'src/database/commands/command-runners/workspace-iterator.module';
 import { FeatureFlagModule } from 'src/engine/core-modules/feature-flag/feature-flag.module';
-import { MetricsModule } from 'src/engine/core-modules/metrics/metrics.module';
 import { DeferredWorkspaceMigrationActionEntity } from 'src/engine/metadata-modules/deferred-workspace-migration-action/deferred-workspace-migration-action.entity';
 import { WorkspaceManyOrAllFlatEntityMapsCacheModule } from 'src/engine/metadata-modules/flat-entity/services/workspace-many-or-all-flat-entity-maps-cache.module';
 import { WorkspaceMetadataVersionModule } from 'src/engine/metadata-modules/workspace-metadata-version/workspace-metadata-version.module';
@@ -16,7 +15,6 @@ import { DeferredWorkspaceMigrationActionRecoveryCronCommand } from 'src/engine/
 import { DeferredWorkspaceMigrationActionHandlerRegistryService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/registry/deferred-workspace-migration-action-handler-registry.service';
 import { WorkspaceMigrationRunnerActionHandlerRegistryService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/registry/workspace-migration-runner-action-handler-registry.service';
 import { DeferredWorkspaceMigrationActionRecoveryService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/services/deferred-workspace-migration-action-recovery.service';
-import { DeferredWorkspaceMigrationActionGaugeService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/services/deferred-workspace-migration-action-gauge.service';
 import { DeferredWorkspaceMigrationActionRunnerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/services/deferred-workspace-migration-action-runner.service';
 import { InFlightDeferredWorkspaceMigrationActionsService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/services/in-flight-deferred-workspace-migration-actions.service';
 import { WorkspaceMigrationRunnerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/services/workspace-migration-runner.service';
@@ -30,7 +28,6 @@ import { WorkspaceMigrationRunnerService } from 'src/engine/workspace-manager/wo
     WorkspaceCacheModule,
     TypeOrmModule.forFeature([DeferredWorkspaceMigrationActionEntity]),
     WorkspaceIteratorModule,
-    MetricsModule,
   ],
   providers: [
     WorkspaceMigrationRunnerService,
@@ -40,7 +37,6 @@ import { WorkspaceMigrationRunnerService } from 'src/engine/workspace-manager/wo
     DeferredWorkspaceMigrationActionRecoveryService,
     InFlightDeferredWorkspaceMigrationActionsService,
     provideWorkspaceScopedRepository(DeferredWorkspaceMigrationActionEntity),
-    DeferredWorkspaceMigrationActionGaugeService,
     FlatCacheInvalidateCommand,
     RetryFailedDeferredWorkspaceMigrationActionsCommand,
     DeferredWorkspaceMigrationActionRecoveryCronCommand,

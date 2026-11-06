@@ -6,7 +6,6 @@ import {
   type YogaDriverConfig,
   type YogaDriverServerContext,
 } from '@graphql-yoga/nestjs';
-import * as Sentry from '@sentry/node';
 import GraphQLJSON from 'graphql-type-json';
 import { ApiPath } from 'twenty-shared/types';
 
@@ -17,12 +16,10 @@ import { useDirectExecution } from 'src/engine/api/graphql/direct-execution/hook
 import { type FlatAuthContextUser } from 'src/engine/core-modules/auth/types/flat-auth-context-user.type';
 import { CoreEngineModule } from 'src/engine/core-modules/core-engine.module';
 import { ExceptionHandlerService } from 'src/engine/core-modules/exception-handler/exception-handler.service';
-import { useSentryTracing } from 'src/engine/core-modules/exception-handler/hooks/use-sentry-tracing';
 import { FeatureFlagService } from 'src/engine/core-modules/feature-flag/services/feature-flag.service';
 import { useGraphQLErrorHandlerHook } from 'src/engine/core-modules/graphql/hooks/use-graphql-error-handler.hook';
 import { useValidateGraphqlQueryComplexity } from 'src/engine/core-modules/graphql/hooks/use-validate-graphql-query-complexity.hook';
 import { I18nService } from 'src/engine/core-modules/i18n/i18n.service';
-import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { type FlatWorkspace } from 'src/engine/core-modules/workspace/types/flat-workspace.type';
 import { DataloaderService } from 'src/engine/dataloaders/dataloader.service';
@@ -42,7 +39,6 @@ export class GraphQLConfigService implements GqlOptionsFactory<
     private readonly exceptionHandlerService: ExceptionHandlerService,
     private readonly twentyConfigService: TwentyConfigService,
     private readonly moduleRef: ModuleRef,
-    private readonly metricsService: MetricsService,
     private readonly dataloaderService: DataloaderService,
     private readonly i18nService: I18nService,
     private readonly directExecutionService: DirectExecutionService,
@@ -61,7 +57,6 @@ export class GraphQLConfigService implements GqlOptionsFactory<
           NodeEnvironment.PRODUCTION,
       }),
       useGraphQLErrorHandlerHook({
-        metricsService: this.metricsService,
         exceptionHandlerService: this.exceptionHandlerService,
         i18nService: this.i18nService,
         twentyConfigService: this.twentyConfigService,
@@ -75,10 +70,6 @@ export class GraphQLConfigService implements GqlOptionsFactory<
         checkDuplicateRootResolvers: true,
       }),
     ];
-
-    if (Sentry.isInitialized()) {
-      plugins.push(useSentryTracing());
-    }
 
     const config: YogaDriverConfig = {
       autoSchemaFile: true,

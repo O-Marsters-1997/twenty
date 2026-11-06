@@ -686,8 +686,6 @@ export class EnterprisePlanService implements OnModuleInit {
       serverUrl: this.twentyConfigService.get('SERVER_URL') ?? null,
       appVersion: this.twentyConfigService.get('APP_VERSION') ?? null,
       nodeEnv: this.twentyConfigService.get('NODE_ENV') ?? null,
-      telemetryEnabled:
-        this.twentyConfigService.get('TELEMETRY_ENABLED') ?? null,
       workspaceCount: await this.safeCount(() =>
         this.workspaceRepository.count(),
       ),

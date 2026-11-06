@@ -7,7 +7,6 @@ import {
   IconDatabase,
   IconServer2,
   IconTool,
-  IconUserCircle,
 } from 'twenty-ui/icon';
 import { useTheme } from 'twenty-ui/theme';
 import {
@@ -21,7 +20,6 @@ const HealthStatusIcons: { [k in HealthIndicatorId]: IconComponent } = {
   [HealthIndicatorId.database]: IconDatabase,
   [HealthIndicatorId.redis]: IconServer2,
   [HealthIndicatorId.worker]: IconTool,
-  [HealthIndicatorId.connectedAccount]: IconUserCircle,
   [HealthIndicatorId.app]: IconAppWindow,
 };
 

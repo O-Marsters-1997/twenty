@@ -6,13 +6,11 @@ import { useToast } from 'twenty-ui/components/feedback';
 
 type CommandMenuItemErrorBoundaryProps = {
   children: ReactNode;
-  shouldReportToSentry?: boolean;
   onError?: () => void;
 };
 
 export const CommandMenuItemErrorBoundary = ({
   children,
-  shouldReportToSentry = false,
   onError,
 }: CommandMenuItemErrorBoundaryProps) => {
   const { enqueueToast } = useToast();
@@ -21,22 +19,8 @@ export const CommandMenuItemErrorBoundary = ({
     CommandComponentInstanceContext,
   );
 
-  const handleError = async (error: Error) => {
+  const handleError = (error: Error) => {
     enqueueToast({ status: 'error', children: error.message });
-
-    if (shouldReportToSentry) {
-      try {
-        const { captureException } = await import('@sentry/react');
-        captureException(error, (scope) => {
-          scope.setTag('component', 'CommandMenuItem');
-
-          return scope;
-        });
-      } catch {
-        // oxlint-disable-next-line no-console
-        console.error('Failed to capture exception with Sentry:', error);
-      }
-    }
 
     onError?.();
   };

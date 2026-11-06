@@ -3,7 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { ApiKeyEntity } from 'src/engine/core-modules/api-key/api-key.entity';
 import { BillingModule } from 'src/engine/core-modules/billing/billing.module';
-import { MetricsModule } from 'src/engine/core-modules/metrics/metrics.module';
 import { ThrottlerModule } from 'src/engine/core-modules/throttler/throttler.module';
 import { BillingSubscriptionItemCapResolver } from 'src/engine/core-modules/usage-limit/billing-subscription-item-cap.resolver';
 import { UsageLimitQuotaService } from 'src/engine/core-modules/usage-limit/services/usage-limit-quota.service';
@@ -41,7 +40,6 @@ import { WorkspaceCacheModule } from 'src/engine/workspace-cache/workspace-cache
     WorkspaceCacheModule,
     PermissionsModule,
     BillingModule,
-    MetricsModule,
     ThrottlerModule,
     UsageAnalyticsModule,
     UsageModule,

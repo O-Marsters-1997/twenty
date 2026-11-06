@@ -6,7 +6,6 @@ import { ApplicationLookupModule } from 'src/engine/core-modules/application/app
 import { CacheLockModule } from 'src/engine/core-modules/cache-lock/cache-lock.module';
 import { FileEntity } from 'src/engine/core-modules/file/entities/file.entity';
 import { FileUrlModule } from 'src/engine/core-modules/file/file-url/file-url.module';
-import { MetricsModule } from 'src/engine/core-modules/metrics/metrics.module';
 import { PendingWakeUpEntity } from 'src/engine/core-modules/pending-wake-up/entities/pending-wake-up.entity';
 import { PendingWakeUpModule } from 'src/engine/core-modules/pending-wake-up/pending-wake-up.module';
 import { ToolProviderModule } from 'src/engine/core-modules/tool-provider/tool-provider.module';
@@ -49,7 +48,6 @@ import { provideWorkspaceScopedRepository } from 'src/engine/twenty-orm/workspac
     ApplicationLookupModule,
     CacheLockModule,
     FileUrlModule,
-    MetricsModule,
     PendingWakeUpModule,
     UserWorkspaceModule,
     UserRoleModule,

@@ -236,7 +236,6 @@ export class WorkflowWaitingStepWorkspaceService
         workspaceId,
         status: WorkflowRunStatus.FAILED,
         error: `A waiting step could not resume: ${error instanceof Error ? error.message : String(error)}`,
-        isSystemError: true,
       });
 
       throw error;
