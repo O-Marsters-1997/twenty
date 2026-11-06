@@ -24,6 +24,7 @@ const DROPPED_APPLICATION_COLUMNS = [
   'sdkClientCoreChecksum',
   'frontComponentSharedDependenciesChecksum',
   'frontComponentSharedDependenciesBuiltPath',
+  'applicationRegistrationId',
 ];
 
 const SYNCABLE_COLUMNS = `"workspaceId" uuid NOT NULL, "universalIdentifier" uuid NOT NULL, "applicationId" uuid NOT NULL`;
@@ -93,7 +94,8 @@ const RECREATE_DROPPED_TABLES = [
 ];
 
 const RESTORE_DROPPED_COLUMNS = [
-  `ALTER TABLE "core"."application" ADD "state" text NOT NULL DEFAULT 'INSTALLED', ADD "sourcePath" text NOT NULL DEFAULT '', ADD "packageJsonChecksum" text, ADD "packageJsonFileId" uuid, ADD "yarnLockChecksum" text, ADD "yarnLockFileId" uuid, ADD "availablePackages" jsonb NOT NULL DEFAULT '{}', ADD "billing" jsonb NOT NULL DEFAULT '{}', ADD "grantedCapabilities" character varying array NOT NULL DEFAULT '{}', ADD "logicFunctionLayerId" uuid, ADD "settingsCustomTabFrontComponentId" uuid, ADD "uninstallLogicFunctionId" uuid, ADD "uninstallHookCompletedForRequestedAt" TIMESTAMP WITH TIME ZONE, ADD "healthCheckLogicFunctionId" uuid, ADD "canBeUninstalled" boolean NOT NULL DEFAULT true, ADD "autoUpgrade" boolean NOT NULL DEFAULT false, ADD "isSdkLayerStale" boolean NOT NULL DEFAULT false, ADD "sdkClientCoreChecksum" text, ADD "frontComponentSharedDependenciesChecksum" text, ADD "frontComponentSharedDependenciesBuiltPath" text`,
+  `ALTER TABLE "core"."application" ADD "state" text NOT NULL DEFAULT 'INSTALLED', ADD "sourcePath" text NOT NULL DEFAULT '', ADD "packageJsonChecksum" text, ADD "packageJsonFileId" uuid, ADD "yarnLockChecksum" text, ADD "yarnLockFileId" uuid, ADD "availablePackages" jsonb NOT NULL DEFAULT '{}', ADD "billing" jsonb NOT NULL DEFAULT '{}', ADD "grantedCapabilities" character varying array NOT NULL DEFAULT '{}', ADD "logicFunctionLayerId" uuid, ADD "settingsCustomTabFrontComponentId" uuid, ADD "uninstallLogicFunctionId" uuid, ADD "uninstallHookCompletedForRequestedAt" TIMESTAMP WITH TIME ZONE, ADD "healthCheckLogicFunctionId" uuid, ADD "canBeUninstalled" boolean NOT NULL DEFAULT true, ADD "autoUpgrade" boolean NOT NULL DEFAULT false, ADD "isSdkLayerStale" boolean NOT NULL DEFAULT false, ADD "sdkClientCoreChecksum" text, ADD "frontComponentSharedDependenciesChecksum" text, ADD "frontComponentSharedDependenciesBuiltPath" text, ADD "applicationRegistrationId" uuid`,
+  `ALTER TABLE "core"."application" ADD CONSTRAINT "FK_ca635da088fa8d5379ed268b55e" FOREIGN KEY ("applicationRegistrationId") REFERENCES "core"."applicationRegistration"("id") ON DELETE SET NULL`,
   `ALTER TABLE "core"."application" ADD CONSTRAINT "FK_application_packageJsonFileId" FOREIGN KEY ("packageJsonFileId") REFERENCES "core"."file"("id") ON DELETE RESTRICT`,
   `ALTER TABLE "core"."application" ADD CONSTRAINT "FK_application_yarnLockFileId" FOREIGN KEY ("yarnLockFileId") REFERENCES "core"."file"("id") ON DELETE RESTRICT`,
   `ALTER TABLE "core"."commandMenuItem" ADD "frontComponentId" uuid`,
