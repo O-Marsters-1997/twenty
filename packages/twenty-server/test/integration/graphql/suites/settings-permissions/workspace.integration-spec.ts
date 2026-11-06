@@ -298,7 +298,6 @@ describe('workspace permissions', () => {
       });
     });
 
-
     describe('logo update', () => {
       beforeAll(() => {
         jest.useRealTimers();

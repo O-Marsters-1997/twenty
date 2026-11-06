@@ -59,8 +59,7 @@ describe('OidcAuthGuard', () => {
         {
           provide: WorkspaceDomainsService,
           useValue: {
-            getSubdomainFromWorkspaceFallbackOnDefaultSubdomain:
-              jest.fn(),
+            getSubdomainFromWorkspaceFallbackOnDefaultSubdomain: jest.fn(),
           },
         },
       ],

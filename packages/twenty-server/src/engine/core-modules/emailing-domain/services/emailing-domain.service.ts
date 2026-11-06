@@ -42,9 +42,7 @@ export class EmailingDomainService {
   private async withDnsRecords(
     emailingDomain: EmailingDomainEntity,
   ): Promise<EmailingDomainEntity> {
-    return this.dmarcRecordService.withDnsRecord(
-      emailingDomain,
-    );
+    return this.dmarcRecordService.withDnsRecord(emailingDomain);
   }
 
   async createEmailingDomain(

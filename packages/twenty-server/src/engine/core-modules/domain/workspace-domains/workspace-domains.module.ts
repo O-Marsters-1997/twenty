@@ -6,7 +6,10 @@ import { WorkspaceDomainsService } from 'src/engine/core-modules/domain/workspac
 import { WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
 
 @Module({
-  imports: [DomainServerConfigModule, TypeOrmModule.forFeature([WorkspaceEntity])],
+  imports: [
+    DomainServerConfigModule,
+    TypeOrmModule.forFeature([WorkspaceEntity]),
+  ],
   providers: [WorkspaceDomainsService],
   exports: [WorkspaceDomainsService],
 })

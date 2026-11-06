@@ -35,9 +35,7 @@ export class GoogleProviderEnabledGuard implements CanActivate {
       this.guardRedirectService.dispatchErrorFromGuard(
         context,
         err,
-        this.guardRedirectService.getSubdomainFromContext(
-          context,
-        ),
+        this.guardRedirectService.getSubdomainFromContext(context),
       );
 
       return false;

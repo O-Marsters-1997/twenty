@@ -55,7 +55,8 @@ export class GuardRedirectService {
 
     return {
       subdomain:
-        subdomainFromReferer ?? this.twentyConfigService.get("DEFAULT_SUBDOMAIN"),
+        subdomainFromReferer ??
+        this.twentyConfigService.get('DEFAULT_SUBDOMAIN'),
     };
   }
 

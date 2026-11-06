@@ -93,7 +93,8 @@ export class WorkspaceDomainsService {
       return this.getDefaultWorkspace();
     }
 
-    const subdomain = this.domainServerConfigService.getSubdomainFromUrl(origin);
+    const subdomain =
+      this.domainServerConfigService.getSubdomainFromUrl(origin);
 
     if (!isDefined(subdomain)) {
       return undefined;

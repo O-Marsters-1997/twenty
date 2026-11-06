@@ -178,11 +178,7 @@ export class ApplicationService {
       return null;
     }
 
-    const [
-      agents,
-      commandMenuItems,
-      objects,
-    ] = await Promise.all([
+    const [agents, commandMenuItems, objects] = await Promise.all([
       this.agentRepository.find(workspaceId, {
         where: { applicationId: application.id },
       }),

@@ -585,7 +585,6 @@ describe('Security permissions', () => {
       });
     });
 
-
     describe('logo update', () => {
       beforeAll(() => {
         jest.useRealTimers();
