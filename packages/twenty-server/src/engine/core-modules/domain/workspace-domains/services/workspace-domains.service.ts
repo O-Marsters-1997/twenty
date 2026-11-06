@@ -69,7 +69,6 @@ export class WorkspaceDomainsService {
       order: {
         createdAt: 'DESC',
       },
-      relations: ['workspaceSsoIdentityProviders'],
     });
 
     if (workspaces.length > 1) {
@@ -103,7 +102,6 @@ export class WorkspaceDomainsService {
     return (
       (await this.workspaceRepository.findOne({
         where: { subdomain },
-        relations: ['workspaceSsoIdentityProviders'],
       })) ?? undefined
     );
   }

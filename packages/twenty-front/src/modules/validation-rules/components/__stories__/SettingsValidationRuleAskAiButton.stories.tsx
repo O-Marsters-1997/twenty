@@ -21,7 +21,6 @@ const AskAiButtonStory = ({
     jotaiStore.set(currentUserWorkspaceState.atom, {
       permissionFlags: hasAiPermission ? [PermissionFlagType.AI] : [],
       objectsPermissions: [],
-      isImpersonating: false,
       twoFactorAuthenticationMethodSummary: null,
     });
   }, [hasAiPermission]);

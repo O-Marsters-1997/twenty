@@ -7,7 +7,7 @@ import { MessageSuppressionReason } from 'src/engine/core-modules/emailing-domai
 import { SEED_APPLE_WORKSPACE_ID } from 'src/engine/workspace-manager/dev-seeder/core/constants/seeder-workspaces.constant';
 import { getWorkspaceSchemaName } from 'src/engine/workspace-datasource/utils/get-workspace-schema-name.util';
 
-import { updateConfigVariable } from 'test/integration/twenty-config/utils/update-config-variable.util';
+import { updateConfigVariable } from 'test/integration/twenty-config/utils/database-config-variable.util';
 import { getAppProviderByClassName } from 'test/integration/utils/get-app-provider-by-class-name.util';
 
 const SECRET_BYTES = Buffer.from('resend-integration-signing-secret');

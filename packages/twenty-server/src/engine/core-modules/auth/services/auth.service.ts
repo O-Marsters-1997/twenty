@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { randomUUID } from 'node:crypto';
-
 import { msg } from '@lingui/core/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { PasswordUpdateNotifyEmail, renderEmail } from 'twenty-emails';
@@ -29,7 +27,6 @@ import { type UpdatePasswordDTO } from 'src/engine/core-modules/auth/dto/update-
 import { type UserCredentialsInput } from 'src/engine/core-modules/auth/dto/user-credentials.input';
 import { type CheckUserExistDTO } from 'src/engine/core-modules/auth/dto/user-exists.dto';
 import { type WorkspaceInviteHashValidDTO } from 'src/engine/core-modules/auth/dto/workspace-invite-hash-valid.dto';
-import { AuthSsoService } from 'src/engine/core-modules/auth/services/auth-sso.service';
 import { CreateSsoConnectedAccountService } from 'src/engine/core-modules/auth/services/create-sso-connected-account.service';
 import { SignInUpService } from 'src/engine/core-modules/auth/services/sign-in-up.service';
 import { type GoogleRequest } from 'src/engine/core-modules/auth/strategies/google.auth.strategy';
@@ -37,7 +34,6 @@ import { type MicrosoftRequest } from 'src/engine/core-modules/auth/strategies/m
 import { AccessTokenService } from 'src/engine/core-modules/auth/token/services/access-token.service';
 import { LoginTokenService } from 'src/engine/core-modules/auth/token/services/login-token.service';
 import { RefreshTokenService } from 'src/engine/core-modules/auth/token/services/refresh-token.service';
-import { SsoExchangeTokenService } from 'src/engine/core-modules/auth/token/services/sso-exchange-token.service';
 import { JwtTokenTypeEnum } from 'src/engine/core-modules/auth/types/jwt-token-type.enum';
 import {
   type AuthProviderWithPasswordType,
@@ -50,8 +46,6 @@ import { DomainServerConfigService } from 'src/engine/core-modules/domain/domain
 import { WorkspaceDomainsService } from 'src/engine/core-modules/domain/workspace-domains/services/workspace-domains.service';
 import { WorkspaceDomainConfig } from 'src/engine/core-modules/domain/workspace-domains/types/workspace-domain-config.type';
 import { EmailService } from 'src/engine/core-modules/email/email.service';
-import { EventLogEmitterService } from 'src/engine/core-modules/event-logs/emit/event-log-emitter.service';
-import { IMPERSONATION_EVENT } from 'src/engine/core-modules/event-logs/emit/events/workspace-event/impersonation/impersonation';
 import { FeatureFlagService } from 'src/engine/core-modules/feature-flag/services/feature-flag.service';
 import { GuardRedirectService } from 'src/engine/core-modules/guard-redirect/services/guard-redirect.service';
 import { I18nService } from 'src/engine/core-modules/i18n/i18n.service';
@@ -75,7 +69,6 @@ import { PermissionsService } from 'src/engine/metadata-modules/permissions/perm
 export class AuthService {
   constructor(
     private readonly accessTokenService: AccessTokenService,
-    private readonly ssoExchangeTokenService: SsoExchangeTokenService,
     private readonly workspaceDomainsService: WorkspaceDomainsService,
     private readonly domainServerConfigService: DomainServerConfigService,
     private readonly refreshTokenService: RefreshTokenService,
@@ -83,7 +76,6 @@ export class AuthService {
     private readonly guardRedirectService: GuardRedirectService,
     private readonly userWorkspaceService: UserWorkspaceService,
     private readonly workspaceInvitationService: WorkspaceInvitationService,
-    private readonly authSsoService: AuthSsoService,
     private readonly userService: UserService,
     private readonly signInUpService: SignInUpService,
     private readonly permissionsService: PermissionsService,
@@ -96,7 +88,6 @@ export class AuthService {
     @InjectRepository(AppTokenEntity)
     private readonly appTokenRepository: Repository<AppTokenEntity>,
     private readonly i18nService: I18nService,
-    private readonly eventLogEmitterService: EventLogEmitterService,
     private readonly featureFlagService: FeatureFlagService,
     private readonly createSsoConnectedAccountService: CreateSsoConnectedAccountService,
     private readonly userSessionService: UserSessionService,
@@ -417,67 +408,6 @@ export class AuthService {
     };
   }
 
-  async generateImpersonationAccessTokenAndRefreshToken({
-    workspaceId,
-    impersonatorUserWorkspaceId,
-    impersonatedUserWorkspaceId,
-    _impersonatorUserId,
-    impersonatedUserId,
-  }: {
-    workspaceId: string;
-    impersonatorUserWorkspaceId: string;
-    impersonatedUserWorkspaceId: string;
-    _impersonatorUserId: string;
-    impersonatedUserId: string;
-  }): Promise<AuthTokens> {
-    const correlationId = randomUUID();
-
-    const eventLogContext = this.eventLogEmitterService.createContext({
-      workspaceId,
-      userId: _impersonatorUserId,
-    });
-
-    void eventLogContext.insertWorkspaceEvent(IMPERSONATION_EVENT, {
-      level: 'workspace',
-      action: 'attempted',
-      message: `correlationId=${correlationId}; impersonatorUserWorkspaceId=${impersonatorUserWorkspaceId}; targetUserWorkspaceId=${impersonatedUserWorkspaceId}; workspaceId=${workspaceId}`,
-    });
-
-    const accessToken = await this.accessTokenService.generateAccessToken({
-      userId: impersonatedUserId,
-      workspaceId,
-      authProvider: AuthProviderEnum.Impersonation,
-      isImpersonating: true,
-      impersonatorUserWorkspaceId,
-      impersonatedUserWorkspaceId,
-    });
-    const refreshToken = await this.refreshTokenService.generateRefreshToken(
-      {
-        userId: impersonatedUserId,
-        workspaceId,
-        authProvider: AuthProviderEnum.Impersonation,
-        targetedTokenType: JwtTokenTypeEnum.ACCESS,
-        isImpersonating: true,
-        impersonatorUserWorkspaceId,
-        impersonatedUserWorkspaceId,
-      },
-      true,
-    );
-
-    void eventLogContext.insertWorkspaceEvent(IMPERSONATION_EVENT, {
-      level: 'workspace',
-      action: 'issued',
-      message: `correlationId=${correlationId}; impersonatorUserWorkspaceId=${impersonatorUserWorkspaceId}; targetUserWorkspaceId=${impersonatedUserWorkspaceId}; workspaceId=${workspaceId}`,
-    });
-
-    return {
-      tokens: {
-        accessOrWorkspaceAgnosticToken: accessToken,
-        refreshToken,
-      },
-    };
-  }
-
   async countAvailableWorkspacesByEmail(email: string): Promise<number> {
     return Object.values(
       await this.userWorkspaceService.findAvailableWorkspacesByEmail(email),
@@ -702,18 +632,6 @@ export class AuthService {
       );
     }
 
-    if (params.authProvider !== AuthProviderEnum.Password) {
-      return (
-        (await this.authSsoService.findWorkspaceFromWorkspaceIdOrAuthProvider(
-          {
-            email: params.email,
-            authProvider: params.authProvider,
-          },
-          params.workspaceId,
-        )) ?? undefined
-      );
-    }
-
     return params.workspaceId
       ? await this.workspaceRepository.findOne({
           where: {
@@ -828,43 +746,6 @@ export class AuthService {
     const existingUser =
       await this.userService.findUserByEmailWithWorkspaces(email);
 
-    if (!workspaceId && !workspaceInviteHash) {
-      const user =
-        existingUser ??
-        (await this.signInUpService.signUpWithoutWorkspace(
-          {
-            firstName,
-            lastName,
-            email,
-            picture,
-            locale,
-            isEmailAlreadyVerified: true,
-          },
-          {
-            provider: authProvider,
-          },
-        ));
-
-      const ssoExchangeToken =
-        await this.ssoExchangeTokenService.generateSsoExchangeToken({
-          userId: user.id,
-          authProvider,
-        });
-
-      // The fragment keeps the token out of access logs, proxies and Referer headers
-      const url = this.domainServerConfigService.buildBaseUrl({
-        pathname: AppPath.SignInUp,
-        searchParams: {
-          ...(isNonEmptyString(returnToPath) && returnToPath.startsWith('/')
-            ? { returnToPath }
-            : {}),
-        },
-        hash: `ssoExchangeToken=${ssoExchangeToken.token}`,
-      });
-
-      return url.toString();
-    }
-
     const currentWorkspace = await this.findWorkspaceForSignInUp({
       workspaceId,
       workspaceInviteHash,
@@ -947,14 +828,11 @@ export class AuthService {
     handle: string;
     authProvider:
       | AuthProviderEnum.Google
-      | AuthProviderEnum.Microsoft
-      | AuthProviderEnum.SSO;
-    oidcTokenClaims?: Record<string, unknown>;
-    connectedAccountProvider?: ConnectedAccountProvider;
+      | AuthProviderEnum.Microsoft;
   }): Promise<void> {
-    const provider =
-      input.connectedAccountProvider ??
-      this.mapAuthProviderToConnectedAccountProvider(input.authProvider);
+    const provider = this.mapAuthProviderToConnectedAccountProvider(
+      input.authProvider,
+    );
 
     const scopes = this.getSsoScopes(provider);
 
@@ -965,7 +843,6 @@ export class AuthService {
         handle: input.handle,
         provider,
         scopes,
-        oidcTokenClaims: input.oidcTokenClaims,
       },
     );
   }
@@ -973,16 +850,13 @@ export class AuthService {
   private mapAuthProviderToConnectedAccountProvider(
     authProvider:
       | AuthProviderEnum.Google
-      | AuthProviderEnum.Microsoft
-      | AuthProviderEnum.SSO,
+      | AuthProviderEnum.Microsoft,
   ): ConnectedAccountProvider {
     switch (authProvider) {
       case AuthProviderEnum.Google:
         return ConnectedAccountProvider.GOOGLE;
       case AuthProviderEnum.Microsoft:
         return ConnectedAccountProvider.MICROSOFT;
-      case AuthProviderEnum.SSO:
-        return ConnectedAccountProvider.OIDC;
       default:
         throw new Error(
           `Unsupported auth provider: ${authProvider satisfies never}`,
@@ -996,12 +870,6 @@ export class AuthService {
         return ['email', 'profile'];
       case ConnectedAccountProvider.MICROSOFT:
         return ['User.Read'];
-      case ConnectedAccountProvider.OIDC:
-        return ['openid', 'email', 'profile'];
-      case ConnectedAccountProvider.SAML:
-        return [];
-      case ConnectedAccountProvider.IMAP_SMTP_CALDAV:
-        return [];
       case ConnectedAccountProvider.EMAIL_GROUP:
       case ConnectedAccountProvider.APP:
         return [];

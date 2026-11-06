@@ -13,7 +13,6 @@ import { type ObjectRecord } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 
 import { getWorkspaceAuthContext } from 'src/engine/core-modules/auth/storage/workspace-auth-context.storage';
-import { EnterprisePlanService } from 'src/engine/core-modules/enterprise/services/enterprise-plan.service';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { type WorkspaceAuthContext } from 'src/engine/core-modules/auth/types/workspace-auth-context.type';
 import { buildObjectIdByNameMaps } from 'src/engine/metadata-modules/flat-object-metadata/utils/build-object-id-by-name-maps.util';
@@ -35,7 +34,6 @@ export class WorkspaceOrmManager {
   constructor(
     private readonly workspaceCacheService: WorkspaceCacheService,
     private readonly workspaceDataSourceService: WorkspaceDataSourceService,
-    private readonly enterprisePlanService: EnterprisePlanService,
     private readonly twentyConfigService: TwentyConfigService,
   ) {}
 
@@ -170,7 +168,6 @@ export class WorkspaceOrmManager {
     const flatValidationRuleMaps = isValidationRuleEnforcementEnabled({
       featureFlagsMap,
       billingEntitlements,
-      hasValidEnterprisePlan: this.enterprisePlanService.isValid(),
       isBillingEnabled: this.twentyConfigService.get('IS_BILLING_ENABLED'),
     })
       ? (

@@ -1,7 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useDebouncedCallback } from 'use-debounce';
 
-import { useImpersonationSession } from '@/auth/hooks/useImpersonationSession';
 import { useFindOneRecord } from '@/object-record/hooks/useFindOneRecord';
 import { SettingsPageContainer } from '@/settings/components/SettingsPageContainer';
 import { SettingsPageLayout } from '@/settings/components/layout/SettingsPageLayout';
@@ -21,8 +20,6 @@ import { IconInfoCircle, IconLock } from 'twenty-ui/icon';
 import { useNavigateSettings } from '~/hooks/useNavigateSettings';
 
 import { currentUserState } from '@/auth/states/currentUserState';
-import { currentWorkspaceState } from '@/auth/states/currentWorkspaceState';
-import { isImpersonatingState } from '@/auth/states/isImpersonatingState';
 import { useUpdateOneRecord } from '@/object-record/hooks/useUpdateOneRecord';
 import { MemberInfosTab } from '@/settings/members/components/MemberInfosTab';
 import { MemberPermissionsTab } from '@/settings/members/components/MemberPermissionsTab';
@@ -31,7 +28,6 @@ import { type WorkspaceMember } from '@/workspace-member/types/WorkspaceMember';
 import { useMutation } from '@apollo/client/react';
 import {
   DeleteUserWorkspaceDocument,
-  ImpersonateDocument,
   PermissionFlagType,
 } from '~/generated-metadata/graphql';
 
@@ -51,14 +47,9 @@ export const SettingsWorkspaceMember = () => {
   const { enqueueToast } = useToast();
   const { openDialog, closeDialog } = useDialog();
   const currentUser = useAtomStateValue(currentUserState);
-  const currentWorkspace = useAtomStateValue(currentWorkspaceState);
-  const { startImpersonating } = useImpersonationSession();
-  const [impersonate] = useMutation(ImpersonateDocument);
-  const isImpersonating = useAtomStateValue(isImpersonatingState);
-  const canImpersonate =
-    useHasPermissionFlag(PermissionFlagType.IMPERSONATE) && !isImpersonating;
-  const canManageTwoFactorAuthenticationRecovery =
-    useHasPermissionFlag(PermissionFlagType.SECURITY) && !isImpersonating;
+  const canManageTwoFactorAuthenticationRecovery = useHasPermissionFlag(
+    PermissionFlagType.SECURITY,
+  );
 
   const {
     roles,
@@ -143,46 +134,6 @@ export const SettingsWorkspaceMember = () => {
     }
   };
 
-  const handleImpersonate = async () => {
-    if (!member?.userId || !currentWorkspace?.id) {
-      enqueueToast({
-        status: 'error',
-        children: t`Cannot impersonate selected user`,
-        duration: 2000,
-      });
-      return;
-    }
-
-    if (!isDefined(currentUser?.id) || member.userId === currentUser.id) {
-      enqueueToast({
-        status: 'error',
-        children: t`You cannot impersonate your own account`,
-        duration: 2000,
-      });
-
-      return;
-    }
-
-    await impersonate({
-      variables: {
-        userId: member.userId,
-        workspaceId: currentWorkspace.id,
-      },
-      onCompleted: async (data) => {
-        const { loginToken } = data.impersonate;
-
-        await startImpersonating(loginToken.token);
-      },
-      onError: () => {
-        enqueueToast({
-          status: 'error',
-          children: t`Cannot impersonate selected user`,
-          duration: 2000,
-        });
-      },
-    });
-  };
-
   const isLoading = loading || rolesLoading || !member;
 
   return (
@@ -227,14 +178,6 @@ export const SettingsWorkspaceMember = () => {
             {activeTabId === SETTINGS_WORKSPACE_MEMBER_TABS.TABS_IDS.INFOS && (
               <MemberInfosTab
                 member={member}
-                onImpersonate={
-                  canImpersonate &&
-                  isDefined(member.userId) &&
-                  isDefined(currentUser?.id) &&
-                  member.userId !== currentUser.id
-                    ? handleImpersonate
-                    : undefined
-                }
                 onNameChange={debouncedUpdateName}
                 onDelete={() => openDialog(DELETE_MEMBER_MODAL_ID)}
                 twoFactorAuthenticationRecoveryUserId={

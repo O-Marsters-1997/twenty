@@ -104,22 +104,6 @@ const SettingsNewObject = lazy(() =>
   })),
 );
 
-const SettingsNewImapSmtpCaldavConnection = lazy(() =>
-  import('~/pages/settings/accounts/SettingsAccountsNewImapSmtpCaldavConnection').then(
-    (module) => ({
-      default: module.SettingsAccountsNewImapSmtpCaldavConnection,
-    }),
-  ),
-);
-
-const SettingsEditImapSmtpCaldavConnection = lazy(() =>
-  import('~/pages/settings/accounts/SettingsAccountsEditImapSmtpCaldavConnection').then(
-    (module) => ({
-      default: module.SettingsAccountsEditImapSmtpCaldavConnection,
-    }),
-  ),
-);
-
 const SettingsNewEmailGroupChannel = lazy(() =>
   import('~/pages/settings/accounts/SettingsAccountsNewEmailGroupChannel').then(
     (module) => ({
@@ -452,120 +436,10 @@ const SettingsObjectTranslations = lazy(() =>
   ),
 );
 
-const SettingsSecuritySsoIdentifyProvider = lazy(() =>
-  import('~/pages/settings/security/SettingsSecuritySsoIdentifyProvider').then(
-    (module) => ({
-      default: module.SettingsSecuritySsoIdentifyProvider,
-    }),
-  ),
-);
-
 const SettingsSecurityApprovedAccessDomain = lazy(() =>
   import('~/pages/settings/security/SettingsSecurityApprovedAccessDomain').then(
     (module) => ({
       default: module.SettingsSecurityApprovedAccessDomain,
-    }),
-  ),
-);
-
-const SettingsAdmin = lazy(() =>
-  import('~/pages/settings/admin-panel/SettingsAdmin').then((module) => ({
-    default: module.SettingsAdmin,
-  })),
-);
-
-const SettingsAdminIndicatorHealthStatus = lazy(() =>
-  import('~/pages/settings/admin-panel/SettingsAdminIndicatorHealthStatus').then(
-    (module) => ({
-      default: module.SettingsAdminIndicatorHealthStatus,
-    }),
-  ),
-);
-
-const SettingsAdminInferredVersion = lazy(() =>
-  import('~/pages/settings/admin-panel/SettingsAdminInferredVersion').then(
-    (module) => ({
-      default: module.SettingsAdminInferredVersion,
-    }),
-  ),
-);
-
-const SettingsAdminInstanceStatus = lazy(() =>
-  import('~/pages/settings/admin-panel/SettingsAdminInstanceStatus').then(
-    (module) => ({
-      default: module.SettingsAdminInstanceStatus,
-    }),
-  ),
-);
-
-const SettingsAdminWorkspacesStatus = lazy(() =>
-  import('~/pages/settings/admin-panel/SettingsAdminWorkspacesStatus').then(
-    (module) => ({
-      default: module.SettingsAdminWorkspacesStatus,
-    }),
-  ),
-);
-
-const SettingsAdminQueueDetail = lazy(() =>
-  import('~/pages/settings/admin-panel/SettingsAdminQueueDetail').then(
-    (module) => ({
-      default: module.SettingsAdminQueueDetail,
-    }),
-  ),
-);
-
-const SettingsAdminConfigVariableDetails = lazy(() =>
-  import('~/pages/settings/admin-panel/SettingsAdminConfigVariableDetails').then(
-    (module) => ({
-      default: module.SettingsAdminConfigVariableDetails,
-    }),
-  ),
-);
-
-const SettingsAdminNewAiProvider = lazy(() =>
-  import('~/pages/settings/admin-panel/SettingsAdminNewAiProvider').then(
-    (module) => ({
-      default: module.SettingsAdminNewAiProvider,
-    }),
-  ),
-);
-
-const SettingsAdminAiProviderDetail = lazy(() =>
-  import('~/pages/settings/admin-panel/SettingsAdminAiProviderDetail').then(
-    (module) => ({
-      default: module.SettingsAdminAiProviderDetail,
-    }),
-  ),
-);
-
-const SettingsAdminNewAiModel = lazy(() =>
-  import('~/pages/settings/admin-panel/SettingsAdminNewAiModel').then(
-    (module) => ({
-      default: module.SettingsAdminNewAiModel,
-    }),
-  ),
-);
-
-const SettingsAdminUserDetail = lazy(() =>
-  import('~/pages/settings/admin-panel/SettingsAdminUserDetail').then(
-    (module) => ({
-      default: module.SettingsAdminUserDetail,
-    }),
-  ),
-);
-
-const SettingsAdminWorkspaceDetail = lazy(() =>
-  import('~/pages/settings/admin-panel/SettingsAdminWorkspaceDetail').then(
-    (module) => ({
-      default: module.SettingsAdminWorkspaceDetail,
-    }),
-  ),
-);
-
-const SettingsAdminWorkspaceChatThread = lazy(() =>
-  import('~/pages/settings/admin-panel/SettingsAdminWorkspaceChatThread').then(
-    (module) => ({
-      default: module.SettingsAdminWorkspaceChatThread,
     }),
   ),
 );
@@ -606,10 +480,6 @@ const SettingsRoleAddObjectLevel = lazy(() =>
   ),
 );
 
-type CreateSettingsRouteObjectsArgs = {
-  isAdminPageEnabled?: boolean;
-};
-
 type SettingsRouteHandle = WorkspaceRouteHandle;
 
 const MAIN_AND_SIDE_PANEL_SETTINGS_ROUTE_HANDLE: SettingsRouteHandle = {
@@ -633,9 +503,7 @@ const MEMBERS_LIST_SETTINGS_ROUTE_HANDLE: SettingsRouteHandle = {
   },
 };
 
-const createSettingsRouteElements = ({
-  isAdminPageEnabled,
-}: CreateSettingsRouteObjectsArgs) => (
+const createSettingsRouteElements = () => (
   <>
     <Route path={SettingsPath.ProfilePage} element={<SettingsProfile />} />
     <Route
@@ -671,14 +539,6 @@ const createSettingsRouteElements = ({
       <Route
         path={SettingsPath.AccountsConfiguration}
         element={<SettingsAccountsConfiguration />}
-      />
-      <Route
-        path={SettingsPath.NewImapSmtpCaldavConnection}
-        element={<SettingsNewImapSmtpCaldavConnection />}
-      />
-      <Route
-        path={SettingsPath.EditImapSmtpCaldavConnection}
-        element={<SettingsEditImapSmtpCaldavConnection />}
       />
     </Route>
     <Route
@@ -967,78 +827,10 @@ const createSettingsRouteElements = ({
       }
     >
       <Route
-        path={SettingsPath.NewSsoIdentityProvider}
-        element={<SettingsSecuritySsoIdentifyProvider />}
-      />
-      <Route
         path={SettingsPath.NewApprovedAccessDomain}
         element={<SettingsSecurityApprovedAccessDomain />}
       />
     </Route>
-
-    {isAdminPageEnabled && (
-      <>
-        <Route path={SettingsPath.AdminPanel} element={<SettingsAdmin />} />
-        <Route
-          path={SettingsPath.Enterprise}
-          element={
-            <Navigate
-              to={getSettingsPath(SettingsPath.AdminPanelOrganization)}
-              replace
-            />
-          }
-        />
-        <Route
-          path={SettingsPath.AdminPanelInferredVersion}
-          element={<SettingsAdminInferredVersion />}
-        />
-        <Route
-          path={SettingsPath.AdminPanelInstanceStatus}
-          element={<SettingsAdminInstanceStatus />}
-        />
-        <Route
-          path={SettingsPath.AdminPanelWorkspacesStatus}
-          element={<SettingsAdminWorkspacesStatus />}
-        />
-        <Route
-          path={SettingsPath.AdminPanelIndicatorHealthStatus}
-          element={<SettingsAdminIndicatorHealthStatus />}
-        />
-        <Route
-          path={SettingsPath.AdminPanelQueueDetail}
-          element={<SettingsAdminQueueDetail />}
-        />
-
-        <Route
-          path={SettingsPath.AdminPanelConfigVariableDetails}
-          element={<SettingsAdminConfigVariableDetails />}
-        />
-        <Route
-          path={SettingsPath.AdminPanelNewAiProvider}
-          element={<SettingsAdminNewAiProvider />}
-        />
-        <Route
-          path={SettingsPath.AdminPanelNewAiModel}
-          element={<SettingsAdminNewAiModel />}
-        />
-        <Route
-          path={SettingsPath.AdminPanelAiProviderDetail}
-          element={<SettingsAdminAiProviderDetail />}
-        />
-        <Route
-          path={SettingsPath.AdminPanelUserDetail}
-          element={<SettingsAdminUserDetail />}
-        />
-        <Route
-          path={SettingsPath.AdminPanelWorkspaceDetail}
-          element={<SettingsAdminWorkspaceDetail />}
-        />
-        <Route
-          path={SettingsPath.AdminPanelWorkspaceChatThread}
-          element={<SettingsAdminWorkspaceChatThread />}
-        />
-      </>
-    )}
 
     <Route
       element={
@@ -1060,12 +852,10 @@ const removeGeneratedRouteIds = (
     children: children && removeGeneratedRouteIds(children),
   }));
 
-export const createSettingsRouteObjects = (
-  args: CreateSettingsRouteObjectsArgs,
-): WorkspaceRouteObject[] =>
+export const createSettingsRouteObjects = (): WorkspaceRouteObject[] =>
   removeGeneratedRouteIds(
     createRoutesFromElements(
-      createSettingsRouteElements(args),
+      createSettingsRouteElements(),
     ) as WorkspaceRouteObject[],
   );
 

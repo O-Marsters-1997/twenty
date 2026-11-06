@@ -36,7 +36,6 @@ import { EmailingDomainEntity } from 'src/engine/core-modules/emailing-domain/em
 import { FeatureFlagEntity } from 'src/engine/core-modules/feature-flag/feature-flag.entity';
 import { FileEntity } from 'src/engine/core-modules/file/entities/file.entity';
 import { KeyValuePairEntity } from 'src/engine/core-modules/key-value-pair/key-value-pair.entity';
-import { WorkspaceSsoIdentityProviderEntity } from 'src/engine/core-modules/sso/workspace-sso-identity-provider.entity';
 import { WasIntroducedInUpgrade } from 'src/engine/core-modules/upgrade/decorators/was-introduced-in-upgrade.decorator';
 import { UserWorkspaceEntity } from 'src/engine/core-modules/user-workspace/user-workspace.entity';
 import { WorkspaceDiscoverability } from 'src/engine/core-modules/workspace/types/workspace-discoverability.type';
@@ -211,12 +210,6 @@ export class WorkspaceEntity {
 
   @Column({ type: 'timestamptz', nullable: true })
   suspendedAt: Date | null;
-
-  @OneToMany(
-    () => WorkspaceSsoIdentityProviderEntity,
-    (workspaceSsoIdentityProviders) => workspaceSsoIdentityProviders.workspace,
-  )
-  workspaceSsoIdentityProviders: Relation<WorkspaceSsoIdentityProviderEntity[]>;
 
   @OneToMany(() => AgentEntity, (agent) => agent.workspace, {
     onDelete: 'CASCADE',

@@ -31,7 +31,6 @@ import { acquireUserAuthenticationLock } from 'src/engine/core-modules/auth/util
 import { type AuthContextUser } from 'src/engine/core-modules/auth/types/auth-context.type';
 import { EmailService } from 'src/engine/core-modules/email/email.service';
 import { I18nService } from 'src/engine/core-modules/i18n/i18n.service';
-import { userHasAdminPrivileges } from 'src/engine/core-modules/impersonation/utils/user-has-admin-privileges.util';
 import { ThrottlerService } from 'src/engine/core-modules/throttler/throttler.service';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import {
@@ -62,12 +61,7 @@ import { WorkspaceScopedRepository } from 'src/engine/twenty-orm/workspace-scope
 
 type RecoveryCodeActor = Pick<
   AuthContextUser,
-  | 'id'
-  | 'email'
-  | 'firstName'
-  | 'lastName'
-  | 'canImpersonate'
-  | 'canAccessFullAdminPanel'
+  'id' | 'email' | 'firstName' | 'lastName'
 >;
 
 @Injectable()
@@ -134,8 +128,7 @@ export class TwoFactorAuthenticationRecoveryService {
     );
 
     const targetUserWorkspace =
-      await this.getManageableTargetUserWorkspaceOrThrow({
-        actor,
+      await this.getTargetUserWorkspaceOrThrow({
         targetUserId,
         targetWorkspaceId,
       });
@@ -213,8 +206,7 @@ export class TwoFactorAuthenticationRecoveryService {
     targetWorkspaceId: WorkspaceEntity['id'];
   }): Promise<boolean> {
     const targetUserWorkspace =
-      await this.getManageableTargetUserWorkspaceOrThrow({
-        actor,
+      await this.getTargetUserWorkspaceOrThrow({
         targetUserId,
         targetWorkspaceId,
       });
@@ -242,8 +234,7 @@ export class TwoFactorAuthenticationRecoveryService {
     pendingRecoveryCodeExpiresAt: Date | null;
   }> {
     const targetUserWorkspace =
-      await this.getManageableTargetUserWorkspaceOrThrow({
-        actor,
+      await this.getTargetUserWorkspaceOrThrow({
         targetUserId,
         targetWorkspaceId,
       });
@@ -478,28 +469,6 @@ export class TwoFactorAuthenticationRecoveryService {
     return userWorkspace;
   }
 
-  private async getManageableTargetUserWorkspaceOrThrow({
-    actor,
-    targetUserId,
-    targetWorkspaceId,
-  }: {
-    actor: RecoveryCodeActor;
-    targetUserId: UserEntity['id'];
-    targetWorkspaceId: WorkspaceEntity['id'];
-  }): Promise<UserWorkspaceEntity> {
-    const targetUserWorkspace = await this.getTargetUserWorkspaceOrThrow({
-      targetUserId,
-      targetWorkspaceId,
-    });
-
-    this.assertActorCanManageRecoveryCodesForTargetOrThrow({
-      actor,
-      targetUserWorkspace,
-    });
-
-    return targetUserWorkspace;
-  }
-
   private hasVerifiedTwoFactorAuthenticationMethod(
     userWorkspace: Pick<UserWorkspaceEntity, 'id' | 'workspaceId'>,
   ): Promise<boolean> {
@@ -512,27 +481,6 @@ export class TwoFactorAuthenticationRecoveryService {
         },
       },
     );
-  }
-
-  private assertActorCanManageRecoveryCodesForTargetOrThrow({
-    actor,
-    targetUserWorkspace,
-  }: {
-    actor: RecoveryCodeActor;
-    targetUserWorkspace: UserWorkspaceEntity;
-  }): void {
-    if (
-      userHasAdminPrivileges(targetUserWorkspace.user) &&
-      !userHasAdminPrivileges(actor)
-    ) {
-      throw new TwoFactorAuthenticationException(
-        'Only a server administrator can manage recovery codes for a server administrator',
-        TwoFactorAuthenticationExceptionCode.RECOVERY_CODE_TARGET_NOT_ALLOWED,
-        {
-          userFriendlyMessage: msg`Only a server administrator can manage recovery codes for this member.`,
-        },
-      );
-    }
   }
 
   private async sendRecoveryCodeIssuedEmail({

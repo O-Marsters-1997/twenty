@@ -1,9 +1,4 @@
-import {
-  Field,
-  GraphQLISODateTime,
-  ObjectType,
-  registerEnumType,
-} from '@nestjs/graphql';
+import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 
 import { type AiModelTier, type AiSdkPackage } from 'twenty-shared/ai';
 import { FeatureFlagKey } from 'twenty-shared/types';
@@ -301,18 +296,6 @@ export class PublicFeatureFlag {
 }
 
 @ObjectType()
-export class ClientConfigMaintenanceMode {
-  @Field(() => GraphQLISODateTime)
-  startAt: Date;
-
-  @Field(() => GraphQLISODateTime)
-  endAt: Date;
-
-  @Field(() => String, { nullable: true })
-  link?: string;
-}
-
-@ObjectType()
 export class ClientConfig {
   @Field(() => String, { nullable: true })
   appVersion?: string;
@@ -390,9 +373,6 @@ export class ClientConfig {
   isConfigVariablesInDbEnabled: boolean;
 
   @Field(() => Boolean)
-  isImapSmtpCaldavEnabled: boolean;
-
-  @Field(() => Boolean)
   isEmailingDomainInDemoMode: boolean;
 
   @Field(() => Boolean)
@@ -416,9 +396,4 @@ export class ClientConfig {
   @Field(() => Boolean)
   isOnboardingAiChatEnabled: boolean;
 
-  @Field(() => String)
-  enterpriseInstanceType: string;
-
-  @Field(() => ClientConfigMaintenanceMode, { nullable: true })
-  maintenance?: ClientConfigMaintenanceMode;
 }

@@ -11,14 +11,12 @@ type UseLogConsoleMemberArgs = {
   userId?: string | null;
   userWorkspaceId?: string | null;
   actor?: Partial<FieldActorValue>;
-  isImpersonator?: boolean;
 };
 
 export const useLogConsoleMember = ({
   userId,
   userWorkspaceId,
   actor,
-  isImpersonator = false,
 }: UseLogConsoleMemberArgs): LogConsoleMember | undefined => {
   const { t } = useLingui();
   const currentWorkspaceMembers = useAtomStateValue(
@@ -54,7 +52,5 @@ export const useLogConsoleMember = ({
     return undefined;
   }
 
-  return isImpersonator
-    ? { name: t`Support team`, isSupportTeam: true }
-    : { name: t`Unknown user` };
+  return { name: t`Unknown user` };
 };

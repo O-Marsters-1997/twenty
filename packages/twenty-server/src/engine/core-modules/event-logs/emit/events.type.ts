@@ -31,14 +31,6 @@ import {
   type AuthSessionTrackEvent,
 } from 'src/engine/core-modules/event-logs/emit/events/workspace-event/auth-session/auth-session';
 import {
-  type IMPERSONATION_EVENT,
-  type ImpersonationTrackEvent,
-} from 'src/engine/core-modules/event-logs/emit/events/workspace-event/impersonation/impersonation';
-import {
-  type SERVER_ADMIN_ACCESS_CHANGED_EVENT,
-  type ServerAdminAccessChangedTrackEvent,
-} from 'src/engine/core-modules/event-logs/emit/events/workspace-event/server-admin/server-admin-access-changed';
-import {
   type USER_SIGNUP_EVENT,
   type UserSignupTrackEvent,
 } from 'src/engine/core-modules/event-logs/emit/events/workspace-event/user/user-signup';
@@ -59,7 +51,6 @@ export type TrackEventName =
   | typeof AUTH_SESSION_EVENT
   | typeof LOGIC_FUNCTION_EXECUTED_EVENT
   | typeof WEBHOOK_RESPONSE_EVENT
-  | typeof IMPERSONATION_EVENT
   | typeof OBJECT_RECORD_CREATED_EVENT
   | typeof OBJECT_RECORD_UPDATED_EVENT
   | typeof OBJECT_RECORD_DELETED_EVENT
@@ -68,15 +59,13 @@ export type TrackEventName =
   | typeof OBJECT_RECORD_DESTROYED_EVENT
   | typeof USER_SIGNUP_EVENT
   | typeof WORKSPACE_CREATED_EVENT
-  | typeof PAYMENT_RECEIVED_EVENT
-  | typeof SERVER_ADMIN_ACCESS_CHANGED_EVENT;
+  | typeof PAYMENT_RECEIVED_EVENT;
 
 export interface TrackEvents {
   [AUTH_SESSION_EVENT]: AuthSessionTrackEvent;
   [LOGIC_FUNCTION_EXECUTED_EVENT]: LogicFunctionExecutedTrackEvent;
   [WEBHOOK_RESPONSE_EVENT]: WebhookResponseTrackEvent;
   [USER_SIGNUP_EVENT]: UserSignupTrackEvent;
-  [IMPERSONATION_EVENT]: ImpersonationTrackEvent;
   [OBJECT_RECORD_DELETED_EVENT]: ObjectRecordDeletedTrackEvent;
   [OBJECT_RECORD_CREATED_EVENT]: ObjectRecordCreatedTrackEvent;
   [OBJECT_RECORD_UPDATED_EVENT]: ObjectRecordUpdatedTrackEvent;
@@ -85,7 +74,6 @@ export interface TrackEvents {
   [OBJECT_RECORD_DESTROYED_EVENT]: ObjectRecordDestroyedTrackEvent;
   [WORKSPACE_CREATED_EVENT]: WorkspaceCreatedTrackEvent;
   [PAYMENT_RECEIVED_EVENT]: PaymentReceivedTrackEvent;
-  [SERVER_ADMIN_ACCESS_CHANGED_EVENT]: ServerAdminAccessChangedTrackEvent;
 }
 
 export type TrackEventProperties<T extends TrackEventName> =

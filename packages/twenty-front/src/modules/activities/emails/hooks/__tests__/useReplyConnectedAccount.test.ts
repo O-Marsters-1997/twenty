@@ -43,7 +43,7 @@ describe('useReplyConnectedAccount', () => {
     stubQueries(
       [
         { id: 'channel-google', connectedAccountId: 'account-google' },
-        { id: 'channel-imap', connectedAccountId: 'account-imap' },
+        { id: 'channel-second', connectedAccountId: 'account-second' },
       ],
       [
         {
@@ -52,21 +52,21 @@ describe('useReplyConnectedAccount', () => {
           provider: ConnectedAccountProvider.GOOGLE,
         },
         {
-          id: 'account-imap',
-          handle: 'imap@example.com',
-          provider: ConnectedAccountProvider.IMAP_SMTP_CALDAV,
+          id: 'account-second',
+          handle: 'second@example.com',
+          provider: ConnectedAccountProvider.EMAIL_GROUP,
         },
       ],
     );
 
     const { result } = renderHook(() =>
-      useReplyConnectedAccount('channel-imap'),
+      useReplyConnectedAccount('channel-second'),
     );
 
     expect(result.current).toEqual({
-      connectedAccountId: 'account-imap',
-      connectedAccountHandle: 'imap@example.com',
-      connectedAccountProvider: ConnectedAccountProvider.IMAP_SMTP_CALDAV,
+      connectedAccountId: 'account-second',
+      connectedAccountHandle: 'second@example.com',
+      connectedAccountProvider: ConnectedAccountProvider.EMAIL_GROUP,
       loading: false,
     });
   });

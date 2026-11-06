@@ -15,7 +15,6 @@ export class SettingsPage {
   private readonly securityLink: Locator;
   private readonly apisLink: Locator;
   private readonly webhooksLink: Locator;
-  private readonly adminPanelLink: Locator;
   private readonly labLink: Locator;
   private readonly releasesLink: Locator;
   private readonly advancedToggle: Locator;
@@ -36,7 +35,6 @@ export class SettingsPage {
     this.securityLink = page.getByRole('link', { name: 'Security' });
     this.apisLink = page.getByRole('link', { name: 'APIs' });
     this.webhooksLink = page.getByRole('link', { name: 'Webhooks' });
-    this.adminPanelLink = page.getByRole('link', { name: 'Admin Panel' });
     this.labLink = page.getByRole('link', { name: 'Lab' });
     this.releasesLink = page.getByRole('link', { name: 'Releases' });
     this.advancedToggle = page.locator('input[type="checkbox"]').first();
@@ -96,10 +94,6 @@ export class SettingsPage {
 
   async goToWebhooksSection() {
     await this.webhooksLink.click();
-  }
-
-  async goToAdminPanelSection() {
-    await this.adminPanelLink.click();
   }
 
   async goToLabSection() {

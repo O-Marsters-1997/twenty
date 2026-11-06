@@ -18,7 +18,6 @@ import { WorkspaceOrmManager } from 'src/engine/twenty-orm/workspace-orm.manager
 import { buildSystemAuthContext } from 'src/engine/twenty-orm/utils/build-system-auth-context.util';
 import { ConnectedAccountEntity } from 'src/engine/metadata-modules/connected-account/entities/connected-account.entity';
 import { GmailGetAllFoldersService } from 'src/modules/messaging/message-folder-manager/drivers/gmail/services/gmail-get-all-folders.service';
-import { ImapGetAllFoldersService } from 'src/modules/messaging/message-folder-manager/drivers/imap/services/imap-get-all-folders.service';
 import { MicrosoftGetAllFoldersService } from 'src/modules/messaging/message-folder-manager/drivers/microsoft/services/microsoft-get-all-folders.service';
 import { computeFolderIdsToDelete } from 'src/modules/messaging/message-folder-manager/utils/compute-folder-ids-to-delete.util';
 import { computeFoldersToCreate } from 'src/modules/messaging/message-folder-manager/utils/compute-folders-to-create.util';
@@ -36,7 +35,6 @@ export class SyncMessageFoldersService {
     private readonly messageFolderRepository: WorkspaceScopedRepository<MessageFolderEntity>,
     private readonly gmailGetAllFoldersService: GmailGetAllFoldersService,
     private readonly microsoftGetAllFoldersService: MicrosoftGetAllFoldersService,
-    private readonly imapGetAllFoldersService: ImapGetAllFoldersService,
   ) {}
 
   async syncMessageFolders({
@@ -102,12 +100,6 @@ export class SyncMessageFoldersService {
         return this.microsoftGetAllFoldersService.getAllMessageFolders(
           connectedAccount,
           messageChannel,
-        );
-      case ConnectedAccountProvider.IMAP_SMTP_CALDAV:
-        return this.imapGetAllFoldersService.getAllMessageFolders(
-          connectedAccount,
-          messageChannel,
-          existingFolders,
         );
       default:
         throw new Error(

@@ -6,11 +6,9 @@ import {
   type ClientAiEvaluationModelConfig,
   type ClientAiModelConfig,
   type ClientAiModelTierConfig,
-  type ClientConfigMaintenanceMode,
   type PublicFeatureFlag,
   type Support,
 } from '~/generated-metadata/graphql';
-import { type EnterpriseInstanceType } from 'twenty-shared/constants';
 import { type OnboardingConfig } from '@/client-config/types/OnboardingConfig';
 
 export type ClientConfig = {
@@ -37,7 +35,6 @@ export type ClientConfig = {
   isMicrosoftCalendarEnabled: boolean;
   isMicrosoftMessagingEnabled: boolean;
   isMultiWorkspaceEnabled: boolean;
-  isImapSmtpCaldavEnabled: boolean;
   isEmailingDomainInDemoMode: boolean;
   isClickHouseConfigured: boolean;
   isWorkspaceSchemaDDLLocked: boolean;
@@ -48,6 +45,4 @@ export type ClientConfig = {
   support: Support;
   isTwoFactorAuthenticationEnabled: boolean;
   allowRequestsToTwentyIcons: boolean;
-  maintenance?: ClientConfigMaintenanceMode;
-  enterpriseInstanceType?: EnterpriseInstanceType;
 };

@@ -67,8 +67,6 @@ const getWrapper =
           permissionFlags: {},
           targetObjectReadPermissions: {},
           targetObjectWritePermissions: {},
-          canImpersonate: false,
-          canAccessFullAdminPanel: false,
           objectMetadataItem: {},
           objectMetadataLabel: '',
         },

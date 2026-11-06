@@ -29,8 +29,6 @@ export type CurrentWorkspace = Pick<
   | 'isMicrosoftAuthBypassEnabled'
   | 'isPasswordAuthEnabled'
   | 'isPasswordAuthBypassEnabled'
-  | 'hasValidSignedEnterpriseKey'
-  | 'hasValidEnterpriseValidityToken'
   | 'subdomain'
   | 'workspaceUrls'
   | 'isTwoFactorAuthenticationEnforced'

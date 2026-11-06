@@ -105,20 +105,14 @@ export class RefreshTokenService {
       token,
       authProvider: jwtPayload.authProvider,
       targetedTokenType: jwtPayload.targetedTokenType,
-      isImpersonating: jwtPayload.isImpersonating,
-      impersonatorUserWorkspaceId: jwtPayload.impersonatorUserWorkspaceId,
-      impersonatedUserWorkspaceId: jwtPayload.impersonatedUserWorkspaceId,
     };
   }
 
   async generateRefreshToken(
     payload: Omit<RefreshTokenJwtPayload, 'type' | 'sub' | 'jti'>,
-    isImpersonationToken: boolean = false,
     entityManager?: EntityManager,
   ): Promise<AuthToken> {
-    const expiresIn = isImpersonationToken
-      ? '1d'
-      : this.twentyConfigService.get('REFRESH_TOKEN_EXPIRES_IN');
+    const expiresIn = this.twentyConfigService.get('REFRESH_TOKEN_EXPIRES_IN');
 
     if (!expiresIn) {
       throw new AuthException(

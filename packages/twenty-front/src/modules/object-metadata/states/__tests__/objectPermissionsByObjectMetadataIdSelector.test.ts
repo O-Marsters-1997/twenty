@@ -36,7 +36,6 @@ const buildCurrentUserWorkspace = (
   permissionFlags: [],
   twoFactorAuthenticationMethodSummary: [],
   objectsPermissions,
-  isImpersonating: false,
 });
 
 describe('objectPermissionsByObjectMetadataIdSelector', () => {

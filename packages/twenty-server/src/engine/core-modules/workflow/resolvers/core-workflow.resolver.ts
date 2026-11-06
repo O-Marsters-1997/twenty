@@ -55,7 +55,6 @@ import { PermissionsGraphqlApiExceptionFilter } from 'src/engine/metadata-module
   AuthPrincipalGuard({
     userSession: {
       standard: true,
-      impersonated: true,
       playground: true,
       workspaceAgnostic: false,
     },
@@ -129,9 +128,8 @@ export class CoreWorkflowResolver {
   @Mutation(() => CoreWorkflowDTO)
   async duplicateCoreWorkflow(
     @AuthWorkspace() { id: workspaceId }: WorkspaceEntity,
-    @AuthWorkspaceMember() workspaceMember:
-      | WorkspaceMemberWorkspaceEntity
-      | undefined,
+    @AuthWorkspaceMember()
+    workspaceMember: WorkspaceMemberWorkspaceEntity | undefined,
     @AuthApplication({ allowUndefined: true })
     application: FlatApplication | undefined,
     @AuthUserWorkspaceId({ allowUndefined: true })
@@ -155,9 +153,8 @@ export class CoreWorkflowResolver {
   @Mutation(() => CoreWorkflowDTO)
   async createCoreWorkflow(
     @AuthWorkspace() { id: workspaceId }: WorkspaceEntity,
-    @AuthWorkspaceMember() workspaceMember:
-      | WorkspaceMemberWorkspaceEntity
-      | undefined,
+    @AuthWorkspaceMember()
+    workspaceMember: WorkspaceMemberWorkspaceEntity | undefined,
     @AuthApplication({ allowUndefined: true })
     application: FlatApplication | undefined,
     @AuthUserWorkspaceId({ allowUndefined: true })

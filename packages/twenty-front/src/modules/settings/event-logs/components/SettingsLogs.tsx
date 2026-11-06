@@ -94,16 +94,7 @@ export const SettingsLogs = () => {
   const { t } = useLingui();
   const { formatNumber } = useNumberFormat();
 
-  const currentWorkspace = useAtomStateValue(currentWorkspaceState);
   const isClickHouseConfigured = useAtomStateValue(isClickHouseConfiguredState);
-  const billing = useAtomStateValue(billingState);
-  const navigateSettings = useNavigateSettings();
-
-  const isBillingEnabled = billing?.isBillingEnabled ?? false;
-  const hasAuditLogsEntitlement = checkIfBillingEntitlementIsEnabledOnWorkspace(
-    BillingEntitlementKey.AUDIT_LOGS,
-    currentWorkspace,
-  );
 
   const [selectedTable, setSelectedTable] = useState<EventLogTable>(
     EventLogTable.PAGEVIEW,
@@ -111,12 +102,7 @@ export const SettingsLogs = () => {
   const [filters, setFilters] = useState<EventLogFiltersState>({});
   const [isPaused, setIsPaused] = useState(false);
 
-  const isAvailableOnEveryPlan =
-    selectedTable === EventLogTable.APPLICATION_LOG ||
-    selectedTable === EventLogTable.OBJECT_EVENT;
-  const canQuery =
-    isClickHouseConfigured &&
-    (isAvailableOnEveryPlan || hasAuditLogsEntitlement);
+  const canQuery = isClickHouseConfigured;
 
   const { records, totalCount, hasNextPage, loading, error, loadMore } =
     useEventLogs(
@@ -166,36 +152,7 @@ export const SettingsLogs = () => {
     setFilters(newFilters);
   };
 
-  const renderUpgradeCard = () => (
-    <Card.Root rounded backgroundColor={themeCssVariables.background.secondary}>
-      <SettingsOptionCardContentButton
-        Icon={IconLock}
-        title={t`Upgrade to access audit logs`}
-        description={t`Record changes and app logs are available on your current plan. Other log types require an Organization subscription.`}
-        Button={
-          <Button
-            size="sm"
-            startIcon={<IconArrowUp />}
-            onClick={() =>
-              navigateSettings(
-                isBillingEnabled
-                  ? SettingsPath.BillingPlans
-                  : SettingsPath.AdminPanelOrganization,
-              )
-            }
-            variant="solid"
-            color="accent"
-          >{t`Upgrade`}</Button>
-        }
-      />
-    </Card.Root>
-  );
-
   const renderResults = () => {
-    if (!isAvailableOnEveryPlan && !hasAuditLogsEntitlement) {
-      return renderUpgradeCard();
-    }
-
     if (!isClickHouseConfigured) {
       return (
         <SettingsEmptyPlaceholder>
@@ -205,10 +162,6 @@ export const SettingsLogs = () => {
     }
 
     if (isDefined(error)) {
-      if (isGraphqlErrorOfType(error, 'NO_ENTITLEMENT')) {
-        return renderUpgradeCard();
-      }
-
       return (
         <SettingsEmptyPlaceholder>
           {t`Something went wrong while loading logs. Please try again.`}

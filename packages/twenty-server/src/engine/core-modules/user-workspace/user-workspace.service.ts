@@ -17,7 +17,6 @@ import {
   AuthException,
   AuthExceptionCode,
 } from 'src/engine/core-modules/auth/auth.exception';
-import { type AvailableWorkspace } from 'src/engine/core-modules/auth/dto/available-workspaces.dto';
 import { LoginTokenService } from 'src/engine/core-modules/auth/token/services/login-token.service';
 import { WorkspaceDomainsService } from 'src/engine/core-modules/domain/workspace-domains/services/workspace-domains.service';
 import { FileCorePictureService } from 'src/engine/core-modules/file/file-core-picture/services/file-core-picture.service';
@@ -396,7 +395,6 @@ export class UserWorkspaceService {
       relations: {
         userWorkspaces: {
           workspace: {
-            workspaceSsoIdentityProviders: true,
             approvedAccessDomains: true,
           },
         },
@@ -424,7 +422,7 @@ export class UserWorkspaceService {
     )
       ? getJoinableWorkspacesFromApprovedAccessDomains({
           approvedAccessDomains:
-            await this.approvedAccessDomainService.findValidatedApprovedAccessDomainWithWorkspacesAndSsoIdentityProvidersDomain(
+            await this.approvedAccessDomainService.findValidatedApprovedAccessDomainWithWorkspaces(
               getDomainFromEmailOrThrow(email),
             ),
           alreadyMemberWorkspaceIds: alreadyMemberWorkspacesIds,
@@ -647,24 +645,6 @@ export class UserWorkspaceService {
             fileFolder: FileFolder.CorePicture,
           })
         : '',
-      sso:
-        workspace.workspaceSsoIdentityProviders?.reduce(
-          (acc, identityProvider) =>
-            acc.concat(
-              identityProvider.status === 'Inactive'
-                ? []
-                : [
-                    {
-                      id: identityProvider.id,
-                      name: identityProvider.name,
-                      issuer: identityProvider.issuer,
-                      type: identityProvider.type,
-                      status: identityProvider.status,
-                    },
-                  ],
-            ),
-          [] as AvailableWorkspace['sso'],
-        ) ?? [],
     };
   }
 

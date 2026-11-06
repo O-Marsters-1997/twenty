@@ -1,6 +1,5 @@
 import { type Type } from '@nestjs/common';
 
-import { ConnectionParametersRotationHandler } from 'src/database/commands/secret-encryption-rotation/handlers/connection-parameters-rotation.handler';
 import { SensitiveConfigStorageRotationHandler } from 'src/database/commands/secret-encryption-rotation/handlers/sensitive-config-storage-rotation.handler';
 import { type SecretEncryptionRotationHandler } from 'src/database/commands/secret-encryption-rotation/interfaces/secret-encryption-rotation-handler.interface';
 import { SigningKeyEntity } from 'src/engine/core-modules/jwt/entities/signing-key.entity';
@@ -53,13 +52,6 @@ export const SECRET_ENCRYPTION_ROTATION_SITE_ENTRIES = defineRotationRegistry({
         siteName: 'connected-account-refresh-token',
         customHandler: undefined,
         isWorkspaceScoped: true,
-        extraWhere: undefined,
-        workspaceCacheKeyNames: [],
-      },
-      connectionParameters: {
-        siteName: 'connected-account-connection-parameters',
-        customHandler: ConnectionParametersRotationHandler,
-        isWorkspaceScoped: false,
         extraWhere: undefined,
         workspaceCacheKeyNames: [],
       },

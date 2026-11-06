@@ -17,7 +17,6 @@ import { BarChartDataService } from 'src/modules/dashboard/chart-data/services/b
   AuthPrincipalGuard({
     userSession: {
       standard: true,
-      impersonated: true,
       playground: true,
       workspaceAgnostic: false,
     },

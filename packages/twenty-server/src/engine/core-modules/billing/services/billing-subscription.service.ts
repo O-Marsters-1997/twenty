@@ -35,7 +35,6 @@ import { StripeSubscriptionService } from 'src/engine/core-modules/billing/strip
 import { isEntitlementActive } from 'src/engine/core-modules/billing/utils/is-entitlement-active.util';
 import { isSendInvoiceSubscription } from 'src/engine/core-modules/billing/utils/is-send-invoice-subscription.util';
 import { resolveBillingPeriodBoundaryUpdate } from 'src/engine/core-modules/billing/utils/resolve-billing-period-boundary-update.util';
-import { EnterprisePlanService } from 'src/engine/core-modules/enterprise/services/enterprise-plan.service';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
 import { InjectWorkspaceScopedRepository } from 'src/engine/twenty-orm/workspace-scoped-repository/inject-workspace-scoped-repository.decorator';
@@ -65,7 +64,6 @@ export class BillingSubscriptionService {
     private readonly stripeSubscriptionScheduleService: StripeSubscriptionScheduleService,
     @InjectWorkspaceScopedRepository(BillingCustomerEntity)
     private readonly billingCustomerRepository: WorkspaceScopedRepository<BillingCustomerEntity>,
-    private readonly enterprisePlanService: EnterprisePlanService,
     private readonly workspaceCacheService: WorkspaceCacheService,
   ) {}
 
@@ -227,7 +225,6 @@ export class BillingSubscriptionService {
     workspaceId: string,
   ): Promise<BillingEntitlementDTO[]> {
     const isBillingEnabled = this.twentyConfigService.get('IS_BILLING_ENABLED');
-    const hasValidEnterprisePlan = this.enterprisePlanService.isValid();
 
     const { billingEntitlements } = isBillingEnabled
       ? await this.workspaceCacheService.getOrRecompute(workspaceId, [
@@ -238,7 +235,6 @@ export class BillingSubscriptionService {
     return Object.values(BillingEntitlementKey).map((key) => ({
       key,
       value: isEntitlementActive({
-        hasValidEnterprisePlan,
         isBillingEnabled,
         stripeEntitlementValue: billingEntitlements[key] ?? false,
       }),
@@ -261,16 +257,13 @@ export class BillingSubscriptionService {
     workspaceId: string,
     key: BillingEntitlementKey,
   ): Promise<boolean> {
-    const hasValidEnterprisePlan = this.enterprisePlanService.isValid();
     const isBillingEnabled = this.twentyConfigService.get('IS_BILLING_ENABLED');
 
-    const stripeEntitlementValue =
-      hasValidEnterprisePlan && isBillingEnabled
-        ? await this.getWorkspaceEntitlementByKey(workspaceId, key)
-        : false;
+    const stripeEntitlementValue = isBillingEnabled
+      ? await this.getWorkspaceEntitlementByKey(workspaceId, key)
+      : false;
 
     return isEntitlementActive({
-      hasValidEnterprisePlan,
       isBillingEnabled,
       stripeEntitlementValue,
     });

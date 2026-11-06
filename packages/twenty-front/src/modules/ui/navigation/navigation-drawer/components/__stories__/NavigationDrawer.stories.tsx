@@ -174,15 +174,6 @@ export const Settings: Story = {
           />
         </NavigationDrawerSection>
 
-        <NavigationDrawerSection>
-          <NavigationDrawerSectionTitle label="Other" />
-          <NavigationDrawerItem
-            label="Admin Panel"
-            to={getSettingsPath(SettingsPath.AdminPanel)}
-            Icon={IconServer}
-          />
-        </NavigationDrawerSection>
-
         <NavigationDrawerFixedContent>
           <AdvancedSettingsSwitch
             isAdvancedModeEnabled={false}

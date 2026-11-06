@@ -18,7 +18,6 @@ import { DashboardDuplicationService } from 'src/modules/dashboard/services/dash
   AuthPrincipalGuard({
     userSession: {
       standard: true,
-      impersonated: true,
       playground: true,
       workspaceAgnostic: false,
     },

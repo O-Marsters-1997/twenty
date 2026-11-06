@@ -4,7 +4,10 @@ import {
   createWebhookReceiver,
   deleteWebhook,
 } from 'test/integration/metadata/suites/utils/webhook-test.util';
-import { makeAdminPanelApiRequest } from 'test/integration/twenty-config/utils/make-admin-panel-api-request.util';
+import {
+  createConfigVariable,
+  deleteConfigVariable,
+} from 'test/integration/twenty-config/utils/database-config-variable.util';
 import { expectEventually } from 'test/integration/utils/expect-eventually.util';
 import { getCoreRepository } from 'test/integration/utils/get-core-repository.util';
 
@@ -23,18 +26,6 @@ const WEBHOOK_RECEIVER_PORT = 4318;
 const WINDOW_SECONDS = 60;
 const LIMIT_VALUE = 2;
 const PERSON_COUNT = 5;
-
-const CREATE_CONFIG_VARIABLE_MUTATION = gql`
-  mutation CreateDatabaseConfigVariable($key: String!, $value: JSON!) {
-    createDatabaseConfigVariable(key: $key, value: $value)
-  }
-`;
-
-const DELETE_CONFIG_VARIABLE_MUTATION = gql`
-  mutation DeleteDatabaseConfigVariable($key: String!) {
-    deleteDatabaseConfigVariable(key: $key)
-  }
-`;
 
 const CREATE_PERSON_MUTATION = gql`
   mutation CreatePerson($data: PersonCreateInput!) {
@@ -88,9 +79,8 @@ describe('Webhook rate limiting', () => {
       getCoreRepository<UsageLimitEntity>(UsageLimitEntity);
     redis = await createClient({ url: process.env.REDIS_URL }).connect();
 
-    await makeAdminPanelApiRequest({
-      query: CREATE_CONFIG_VARIABLE_MUTATION,
-      variables: { key: 'OUTBOUND_HTTP_ALLOWED_INTERNAL_HOSTS', value: ['*'] },
+    await createConfigVariable({
+      input: { key: 'OUTBOUND_HTTP_ALLOWED_INTERNAL_HOSTS', value: ['*'] },
     });
 
     const [usageLimit] = await usageLimitRepository.save([
@@ -138,9 +128,8 @@ describe('Webhook rate limiting', () => {
     }
 
     await usageLimitRepository.delete({ id: usageLimitId });
-    await makeAdminPanelApiRequest({
-      query: DELETE_CONFIG_VARIABLE_MUTATION,
-      variables: { key: 'OUTBOUND_HTTP_ALLOWED_INTERNAL_HOSTS' },
+    await deleteConfigVariable({
+      input: { key: 'OUTBOUND_HTTP_ALLOWED_INTERNAL_HOSTS' },
     }).catch(() => {});
 
     await invalidateWorkspaceCaches();

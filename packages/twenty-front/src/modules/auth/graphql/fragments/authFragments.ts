@@ -29,13 +29,6 @@ export const AVAILABLE_WORKSPACE_FOR_AUTH_FRAGMENT = gql`
       subdomainUrl
     }
     logo
-    sso {
-      type
-      id
-      issuer
-      name
-      status
-    }
   }
 `;
 

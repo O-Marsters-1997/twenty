@@ -40,7 +40,6 @@ import { ApplicationTranslationCatalogService } from 'src/engine/metadata-module
   AuthPrincipalGuard({
     userSession: {
       standard: true,
-      impersonated: true,
       playground: true,
       workspaceAgnostic: false,
     },

@@ -1,7 +1,3 @@
-import { makeAdminPanelApiRequest } from 'test/integration/twenty-config/utils/make-admin-panel-api-request.util';
-import { updateFeatureFlagFactory } from 'test/integration/graphql/utils/update-feature-flag-factory.util';
-import { warnIfErrorButNotExpectedToFail } from 'test/integration/metadata/utils/warn-if-error-but-not-expected-to-fail.util';
-import { warnIfNoErrorButExpectedToFail } from 'test/integration/metadata/utils/warn-if-no-error-but-expected-to-fail.util';
 import { type FeatureFlagKey } from 'twenty-shared/types';
 
 import { SEED_APPLE_WORKSPACE_ID } from 'src/engine/workspace-manager/dev-seeder/core/constants/seeder-workspaces.constant';
@@ -10,32 +6,15 @@ export const updateFeatureFlag = async ({
   featureFlag,
   value,
   workspaceId = SEED_APPLE_WORKSPACE_ID,
-  expectToFail,
 }: {
   featureFlag: FeatureFlagKey;
   value: boolean;
   workspaceId?: string;
-  expectToFail: boolean;
+  expectToFail?: boolean;
 }) => {
-  const enablePermissionsQuery = updateFeatureFlagFactory(
-    workspaceId,
-    featureFlag,
-    value,
+  await testDataSource.query(
+    `INSERT INTO core."featureFlag" ("key", "workspaceId", "value") VALUES ($1, $2, $3)
+     ON CONFLICT ("key", "workspaceId") DO UPDATE SET "value" = EXCLUDED."value"`,
+    [featureFlag, workspaceId, value],
   );
-
-  const response = await makeAdminPanelApiRequest(enablePermissionsQuery);
-
-  if (expectToFail === false) {
-    warnIfErrorButNotExpectedToFail({
-      errorMessage: 'Update feature flag should not have failed',
-      response,
-    });
-  }
-
-  if (expectToFail === true) {
-    warnIfNoErrorButExpectedToFail({
-      errorMessage: 'Update feature flag should have failed',
-      response,
-    });
-  }
 };

@@ -2,12 +2,6 @@ import { Injectable } from '@nestjs/common';
 
 import { isDefined } from 'twenty-shared/utils';
 
-import {
-  type EncryptedConnectionParameters,
-  type EncryptedImapSmtpCaldavParams,
-  type PlaintextConnectionParameters,
-  type PlaintextImapSmtpCaldavParams,
-} from 'src/engine/core-modules/imap-smtp-caldav-connection/types/imap-smtp-caldav-connection.type';
 import { type EncryptedString } from 'src/engine/core-modules/secret-encryption/branded-strings/encrypted-string.type';
 import { type PlaintextString } from 'src/engine/core-modules/secret-encryption/branded-strings/plaintext-string.type';
 import { SECRET_ENCRYPTION_ENVELOPE_PREFIX } from 'src/engine/core-modules/secret-encryption/constants/secret-encryption.constant';
@@ -16,7 +10,6 @@ import {
   SecretEncryptionExceptionCode,
 } from 'src/engine/core-modules/secret-encryption/exceptions/secret-encryption.exception';
 import { SecretEncryptionService } from 'src/engine/core-modules/secret-encryption/secret-encryption.service';
-import { ACCOUNT_TYPES } from 'twenty-shared/constants';
 
 @Injectable()
 export class ConnectedAccountTokenEncryptionService {
@@ -116,75 +109,5 @@ export class ConnectedAccountTokenEncryptionService {
 
   private looksLikeCiphertext(value: string): boolean {
     return value.startsWith(SECRET_ENCRYPTION_ENVELOPE_PREFIX);
-  }
-
-  encryptConnectionParameters({
-    connectionParameters,
-    workspaceId,
-  }: {
-    connectionParameters: PlaintextImapSmtpCaldavParams;
-    workspaceId: string;
-  }): EncryptedImapSmtpCaldavParams {
-    const result: EncryptedImapSmtpCaldavParams = {
-      name: connectionParameters.name ?? null,
-    };
-
-    for (const protocol of ACCOUNT_TYPES) {
-      const params = connectionParameters[protocol];
-
-      if (!isDefined(params)) {
-        continue;
-      }
-
-      result[protocol] = {
-        ...params,
-        password: this.encrypt({ plaintext: params.password, workspaceId }),
-      };
-    }
-
-    return result;
-  }
-
-  decryptConnectionParameters({
-    connectionParameters,
-    workspaceId,
-  }: {
-    connectionParameters: EncryptedImapSmtpCaldavParams;
-    workspaceId: string;
-  }): PlaintextImapSmtpCaldavParams {
-    const result: PlaintextImapSmtpCaldavParams = {
-      name: connectionParameters.name ?? null,
-    };
-
-    for (const protocol of ACCOUNT_TYPES) {
-      const params = connectionParameters[protocol];
-
-      if (!isDefined(params)) {
-        continue;
-      }
-
-      result[protocol] = this.decryptProtocolPassword({
-        protocolParams: params,
-        workspaceId,
-      });
-    }
-
-    return result;
-  }
-
-  decryptProtocolPassword({
-    protocolParams,
-    workspaceId,
-  }: {
-    protocolParams: EncryptedConnectionParameters;
-    workspaceId: string;
-  }): PlaintextConnectionParameters {
-    return {
-      ...protocolParams,
-      password: this.decrypt({
-        ciphertext: protocolParams.password,
-        workspaceId,
-      }),
-    };
   }
 }

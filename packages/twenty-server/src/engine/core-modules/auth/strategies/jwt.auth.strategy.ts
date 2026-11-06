@@ -19,12 +19,9 @@ import { type JwtPayload } from 'src/engine/core-modules/auth/types/jwt-payload.
 import { JwtTokenTypeEnum } from 'src/engine/core-modules/auth/types/jwt-token-type.enum';
 import { type PlaygroundTokenJwtPayload } from 'src/engine/core-modules/auth/types/playground-token-jwt-payload.type';
 import { type WorkspaceAgnosticTokenJwtPayload } from 'src/engine/core-modules/auth/types/workspace-agnostic-token-jwt-payload.type';
-import { IMPERSONATION_DENIAL_BY_REASON } from 'src/engine/core-modules/impersonation/constants/impersonation-denial-by-reason.constant';
-import { ImpersonationAuthorizationService } from 'src/engine/core-modules/impersonation/services/impersonation-authorization.service';
 import { JWT_SUPPORTED_VERIFY_ALGORITHMS } from 'src/engine/core-modules/jwt/constants/jwt-algorithm.constant';
 import { JwtWrapperService } from 'src/engine/core-modules/jwt/services/jwt-wrapper.service';
 import { type FlatUserWorkspace } from 'src/engine/core-modules/user-workspace/types/flat-user-workspace.type';
-import { UserWorkspaceEntity } from 'src/engine/core-modules/user-workspace/user-workspace.entity';
 import { type FlatWorkspace } from 'src/engine/core-modules/workspace/types/flat-workspace.type';
 import { fromWorkspaceEntityToFlat } from 'src/engine/core-modules/workspace/utils/from-workspace-entity-to-flat.util';
 import { isWorkspaceDeletionRequestPending } from 'src/engine/core-modules/workspace/utils/is-workspace-deletion-request-pending.util';
@@ -38,11 +35,8 @@ import { Repository } from 'typeorm';
 export class JwtAuthStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(
     private readonly jwtWrapperService: JwtWrapperService,
-    @InjectRepository(UserWorkspaceEntity)
-    private readonly userWorkspaceRepository: Repository<UserWorkspaceEntity>,
     private readonly workspaceCacheService: WorkspaceCacheService,
     private readonly coreEntityCacheService: CoreEntityCacheService,
-    private readonly impersonationAuthorizationService: ImpersonationAuthorizationService,
     @InjectRepository(WorkspaceEntity)
     private readonly workspaceRepository: Repository<WorkspaceEntity>,
   ) {
@@ -121,14 +115,6 @@ export class JwtAuthStrategy extends PassportStrategy(Strategy, 'jwt') {
         'Workspace not found',
         AuthExceptionCode.WORKSPACE_NOT_FOUND,
       );
-    }
-
-    // Only ACCESS tokens can carry impersonation; PLAYGROUND is always first-person.
-    if (
-      payload.type === JwtTokenTypeEnum.ACCESS &&
-      payload.isImpersonating === true
-    ) {
-      context.impersonationContext = await this.validateImpersonation(payload);
     }
 
     const userId = payload.sub ?? payload.userId;
@@ -243,76 +229,6 @@ export class JwtAuthStrategy extends PassportStrategy(Strategy, 'jwt') {
     }
 
     return { user, userWorkspace };
-  }
-
-  private async validateImpersonation(payload: AccessTokenJwtPayload) {
-    if (
-      !payload.impersonatorUserWorkspaceId ||
-      !payload.impersonatedUserWorkspaceId
-    ) {
-      throw new AuthException(
-        'Invalid or missing user workspace ID in impersonation token',
-        AuthExceptionCode.FORBIDDEN_EXCEPTION,
-      );
-    }
-
-    if (payload.impersonatedUserWorkspaceId !== payload.userWorkspaceId) {
-      throw new AuthException(
-        'Token user workspace ID does not match impersonated user workspace ID',
-        AuthExceptionCode.FORBIDDEN_EXCEPTION,
-      );
-    }
-
-    if (
-      payload.impersonatedUserWorkspaceId ===
-      payload.impersonatorUserWorkspaceId
-    ) {
-      throw new AuthException(
-        'User cannot impersonate themselves',
-        AuthExceptionCode.FORBIDDEN_EXCEPTION,
-      );
-    }
-
-    // Impersonation validation requires relations -- not cached
-    const impersonatorUserWorkspace =
-      await this.userWorkspaceRepository.findOne({
-        where: { id: payload.impersonatorUserWorkspaceId },
-        relations: ['user', 'workspace', 'twoFactorAuthenticationMethods'],
-      });
-
-    const impersonatedUserWorkspace =
-      await this.userWorkspaceRepository.findOne({
-        where: { id: payload.impersonatedUserWorkspaceId },
-        relations: ['user', 'workspace'],
-      });
-
-    if (
-      !isDefined(impersonatorUserWorkspace) ||
-      !isDefined(impersonatedUserWorkspace)
-    ) {
-      throw new AuthException(
-        'Invalid impersonation token, cannot find impersonator or impersonated user workspace',
-        AuthExceptionCode.USER_WORKSPACE_NOT_FOUND,
-      );
-    }
-
-    const authorizationResult =
-      await this.impersonationAuthorizationService.checkImpersonationAuthorization(
-        impersonatorUserWorkspace,
-        impersonatedUserWorkspace,
-      );
-
-    if (!authorizationResult.allowed) {
-      const { message, exceptionCode, userFriendlyMessage } =
-        IMPERSONATION_DENIAL_BY_REASON[authorizationResult.reason];
-
-      throw new AuthException(message, exceptionCode, { userFriendlyMessage });
-    }
-
-    return {
-      impersonatorUserWorkspaceId: payload.impersonatorUserWorkspaceId,
-      impersonatedUserWorkspaceId: payload.impersonatedUserWorkspaceId,
-    };
   }
 
   private async validateWorkspaceAgnosticToken(

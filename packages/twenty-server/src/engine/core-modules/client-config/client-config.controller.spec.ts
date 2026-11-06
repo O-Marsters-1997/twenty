@@ -5,7 +5,6 @@ import { SupportDriver } from 'src/engine/core-modules/twenty-config/interfaces/
 import { ClientConfigService } from 'src/engine/core-modules/client-config/services/client-config.service';
 import { ModelFamily } from 'src/engine/metadata-modules/ai/ai-models/types/model-family.enum';
 import { type ModelId } from 'src/engine/metadata-modules/ai/ai-models/types/model-id.type';
-import { ENTERPRISE_INSTANCE_TYPE } from 'twenty-shared/constants';
 
 import { ClientConfigController } from './client-config.controller';
 
@@ -64,7 +63,6 @@ describe('ClientConfigController', () => {
           magicLink: false,
           password: true,
           microsoft: false,
-          sso: [],
         },
         signInPrefilled: false,
         isMultiWorkspaceEnabled: true,
@@ -99,7 +97,6 @@ describe('ClientConfigController', () => {
         isGoogleMessagingEnabled: false,
         isGoogleCalendarEnabled: false,
         isConfigVariablesInDbEnabled: false,
-        isImapSmtpCaldavEnabled: false,
         isEmailingDomainInDemoMode: false,
         calendarBookingPageId: undefined,
         isBookCallOnboardingStepEnabled: false,
@@ -109,7 +106,6 @@ describe('ClientConfigController', () => {
         isClickHouseConfigured: false,
         isWorkspaceSchemaDDLLocked: false,
         isOnboardingAiChatEnabled: false,
-        enterpriseInstanceType: ENTERPRISE_INSTANCE_TYPE.PRODUCTION,
       };
 
       jest

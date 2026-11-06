@@ -21,33 +21,6 @@ export const getLogConsoleSecurityEvent = (
       return { label: msg`Logged out`, color: 'gray' };
     case 'session_revoked':
       return { label: msg`Session revoked`, color: 'orange' };
-    case 'attempt':
-    case 'attempted':
-    case 'login_token_attempt':
-    case 'login_token_generated':
-    case 'token_exchange_attempt':
-      return {
-        label: msg`Impersonation requested`,
-        color: 'orange',
-      };
-    case 'token_exchange_success':
-    case 'issued':
-      return {
-        label: msg`Impersonation started`,
-        color: 'orange',
-      };
-    case 'ended':
-      return {
-        label: msg`Impersonation ended`,
-        color: 'orange',
-      };
-    case 'login_token_failed':
-    case 'token_exchange_failed':
-      return {
-        label: msg`Impersonation failed`,
-        color: 'red',
-        severity: 'error',
-      };
     case 'User Signup':
       return { label: msg`Signed up`, color: 'green' };
     case 'Custom Domain Activated':

@@ -233,12 +233,6 @@ export const SETTINGS_BILLING_PLAN_COMPARISON_ROWS = [
     type: 'feature',
   },
   {
-    featureLabel: msg`Impersonate users`,
-    plans: {
-      [BillingPlanKey.ENTERPRISE]: { kind: 'included' },
-      [BillingPlanKey.PRO]: { kind: 'included' },
-    },
-    type: 'feature',
   },
   { title: msg`Support`, type: 'category' },
   {
