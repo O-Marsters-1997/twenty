@@ -104,22 +104,6 @@ const SettingsNewObject = lazy(() =>
   })),
 );
 
-const SettingsNewImapSmtpCaldavConnection = lazy(() =>
-  import('~/pages/settings/accounts/SettingsAccountsNewImapSmtpCaldavConnection').then(
-    (module) => ({
-      default: module.SettingsAccountsNewImapSmtpCaldavConnection,
-    }),
-  ),
-);
-
-const SettingsEditImapSmtpCaldavConnection = lazy(() =>
-  import('~/pages/settings/accounts/SettingsAccountsEditImapSmtpCaldavConnection').then(
-    (module) => ({
-      default: module.SettingsAccountsEditImapSmtpCaldavConnection,
-    }),
-  ),
-);
-
 const SettingsNewEmailGroupChannel = lazy(() =>
   import('~/pages/settings/accounts/SettingsAccountsNewEmailGroupChannel').then(
     (module) => ({
@@ -571,14 +555,6 @@ const createSettingsRouteElements = () => (
       <Route
         path={SettingsPath.AccountsConfiguration}
         element={<SettingsAccountsConfiguration />}
-      />
-      <Route
-        path={SettingsPath.NewImapSmtpCaldavConnection}
-        element={<SettingsNewImapSmtpCaldavConnection />}
-      />
-      <Route
-        path={SettingsPath.EditImapSmtpCaldavConnection}
-        element={<SettingsEditImapSmtpCaldavConnection />}
       />
     </Route>
     <Route

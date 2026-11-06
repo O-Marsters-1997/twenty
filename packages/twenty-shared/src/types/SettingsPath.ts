@@ -9,8 +9,6 @@ export enum SettingsPath {
   AccountsConfiguration = 'accounts/configuration/:connectedAccountId',
   AccountsCalendars = 'accounts/calendars',
   AccountsEmails = 'accounts/emails',
-  NewImapSmtpCaldavConnection = 'accounts/new-imap-smtp-caldav-connection',
-  EditImapSmtpCaldavConnection = 'accounts/edit-imap-smtp-caldav-connection/:connectedAccountId',
   Billing = 'billing',
   BillingPlans = 'billing/plans',
   Usage = 'billing/usage',

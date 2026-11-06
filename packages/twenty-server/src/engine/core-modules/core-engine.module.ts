@@ -29,7 +29,6 @@ import { FileStorageModule } from 'src/engine/core-modules/file-storage/file-sto
 import { GeoMapModule } from 'src/engine/core-modules/geo-map/geo-map-module';
 import { HealthModule } from 'src/engine/core-modules/health/health.module';
 import { I18nModule } from 'src/engine/core-modules/i18n/i18n.module';
-import { ImapSmtpCaldavModule } from 'src/engine/core-modules/imap-smtp-caldav-connection/imap-smtp-caldav-connection.module';
 import { LabModule } from 'src/engine/core-modules/lab/lab.module';
 import { LoggerModule } from 'src/engine/core-modules/logger/logger.module';
 import { loggerModuleFactory } from 'src/engine/core-modules/logger/logger.module-factory';
@@ -104,7 +103,6 @@ import { FileApiModule } from './file/file-api.module';
     WorkspaceResolverNameMapCacheModule,
     GeoMapModule,
     SubscriptionsModule,
-    ImapSmtpCaldavModule,
     FileStorageModule.forRoot(),
     LoggerModule.forRootAsync({
       useFactory: loggerModuleFactory,
@@ -151,7 +149,6 @@ import { FileApiModule } from './file/file-api.module';
     WorkspaceModule,
     WorkspaceInvitationModule,
     WorkspaceSsoModule,
-    ImapSmtpCaldavModule,
   ],
 })
 export class CoreEngineModule {}

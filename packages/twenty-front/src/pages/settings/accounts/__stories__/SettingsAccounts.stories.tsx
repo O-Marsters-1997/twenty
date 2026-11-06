@@ -138,7 +138,6 @@ export const AppPreferencesListEnabledApps: Story = {
 
     expect(canvas.getByRole('link', { name: 'Gmail' })).toBeVisible();
     expect(canvas.getByRole('link', { name: 'Google Calendar' })).toBeVisible();
-    expect(canvas.queryByText('IMAP')).not.toBeInTheDocument();
     expect(canvas.queryByText('Missing account')).not.toBeInTheDocument();
     expect(canvas.queryByText('Blocklist')).not.toBeInTheDocument();
 

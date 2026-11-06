@@ -249,8 +249,6 @@ exports[`endpoint permission declarations should match the AuthPrincipalGuard an
   "GoogleAuthController.googleAuth {"applicationTarget":null,"authPrincipalGuards":[]}",
   "GoogleAuthController.googleAuthRedirect {"applicationTarget":null,"authPrincipalGuards":[]}",
   "HealthController.check {"applicationTarget":null,"authPrincipalGuards":[]}",
-  "ImapSmtpCaldavResolver.getConnectedImapSmtpCaldavAccount {"applicationTarget":null,"authPrincipalGuards":[{"apiKey":true,"application":true,"oauthClient":true,"userSession":{"playground":true,"standard":true,"workspaceAgnostic":false}}]}",
-  "ImapSmtpCaldavResolver.saveImapSmtpCaldavAccount {"applicationTarget":null,"authPrincipalGuards":[{"apiKey":true,"application":true,"oauthClient":true,"userSession":{"playground":true,"standard":true,"workspaceAgnostic":false}}]}",
   "IndexMetadataResolver.createOneIndex {"applicationTarget":null,"authPrincipalGuards":[{"apiKey":true,"application":true,"oauthClient":true,"userSession":{"playground":true,"standard":true,"workspaceAgnostic":false}}]}",
   "IndexMetadataResolver.deleteOneIndex {"applicationTarget":null,"authPrincipalGuards":[{"apiKey":true,"application":true,"oauthClient":true,"userSession":{"playground":true,"standard":true,"workspaceAgnostic":false}}]}",
   "LabResolver.updateLabPublicFeatureFlag {"applicationTarget":null,"authPrincipalGuards":[{"apiKey":true,"application":false,"oauthClient":true,"userSession":{"playground":true,"standard":true,"workspaceAgnostic":false}}]}",

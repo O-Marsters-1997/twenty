@@ -1,6 +1,5 @@
 import { isGoogleCalendarEnabledState } from '@/client-config/states/isGoogleCalendarEnabledState';
 import { isGoogleMessagingEnabledState } from '@/client-config/states/isGoogleMessagingEnabledState';
-import { isImapSmtpCaldavEnabledState } from '@/client-config/states/isImapSmtpCaldavEnabledState';
 import { isMicrosoftCalendarEnabledState } from '@/client-config/states/isMicrosoftCalendarEnabledState';
 import { isMicrosoftMessagingEnabledState } from '@/client-config/states/isMicrosoftMessagingEnabledState';
 import { NATIVE_ACCOUNT_APPS } from '@/settings/app-preferences/constants/NativeAccountApps';
@@ -20,15 +19,11 @@ export const useEnabledNativeAccountApps = () => {
   const isMicrosoftCalendarEnabled = useAtomStateValue(
     isMicrosoftCalendarEnabledState,
   );
-  const isImapSmtpCaldavEnabled = useAtomStateValue(
-    isImapSmtpCaldavEnabledState,
-  );
 
   const isAppEnabled: Record<NativeAccountApp['id'], boolean> = {
     gmail: isGoogleMessagingEnabled,
     'google-calendar': isGoogleCalendarEnabled,
     outlook: isMicrosoftMessagingEnabled || isMicrosoftCalendarEnabled,
-    imap: isImapSmtpCaldavEnabled,
   };
 
   return {

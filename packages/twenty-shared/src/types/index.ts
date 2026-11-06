@@ -75,7 +75,6 @@ export { ContextStorePageType } from './ContextStorePageType';
 export { CoreObjectNameSingular } from './CoreObjectNameSingular';
 export { CrudOperationType } from './CrudOperationType';
 export type { EmailAttachment } from './EmailAttachment';
-export type { EmailConnectionParameters } from './EmailConnectionParameters';
 export { EmailOperation } from './EmailOperation';
 export type { EmptyObject } from './EmptyObject';
 export type {
