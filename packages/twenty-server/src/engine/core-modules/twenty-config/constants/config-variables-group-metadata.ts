@@ -78,12 +78,6 @@ export const CONFIG_VARIABLES_GROUP_METADATA: Record<
     isHiddenOnLoad: true,
     isHiddenInAdminPanel: false,
   },
-  [ConfigVariablesGroup.CLOUDFLARE_CONFIG]: {
-    position: 1300,
-    description: '',
-    isHiddenOnLoad: true,
-    isHiddenInAdminPanel: true,
-  },
   [ConfigVariablesGroup.LLM]: {
     position: 1400,
     description:

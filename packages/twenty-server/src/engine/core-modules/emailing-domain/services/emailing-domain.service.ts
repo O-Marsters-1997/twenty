@@ -43,7 +43,7 @@ export class EmailingDomainService {
     emailingDomain: EmailingDomainEntity,
   ): Promise<EmailingDomainEntity> {
     return this.dmarcRecordService.withDnsRecord(
-      await this.unsubscribeHostnameService.withDnsRecords(emailingDomain),
+      emailingDomain,
     );
   }
 
@@ -94,9 +94,7 @@ export class EmailingDomainService {
         verifiedAt: isVerifiedOnCreation ? new Date() : null,
       });
 
-    await this.unsubscribeHostnameService.sync(workspaceId, emailingDomain.id, {
-      provision: true,
-    });
+    await this.unsubscribeHostnameService.sync(workspaceId, emailingDomain.id);
 
     return this.withDnsRecords(
       await this.emailingDomainRepository.findOneOrFail(workspaceId, {
@@ -134,7 +132,6 @@ export class EmailingDomainService {
       return;
     }
 
-    await this.unsubscribeHostnameService.deprovision(emailingDomain);
     await this.deleteRemoteEmailingDomain(emailingDomain);
     await this.emailingDomainRepository.delete(workspaceId, {
       id: emailingDomain.id,
@@ -150,7 +147,6 @@ export class EmailingDomainService {
       emailingDomainId,
     );
 
-    await this.unsubscribeHostnameService.deprovision(emailingDomain);
     await this.deleteRemoteEmailingDomain(emailingDomain);
     await this.emailingDomainRepository.delete(workspace.id, {
       id: emailingDomain.id,
@@ -234,9 +230,7 @@ export class EmailingDomainService {
       },
     );
 
-    await this.unsubscribeHostnameService.sync(workspaceId, emailingDomain.id, {
-      provision: true,
-    });
+    await this.unsubscribeHostnameService.sync(workspaceId, emailingDomain.id);
 
     return this.withDnsRecords(
       await this.emailingDomainRepository.findOneOrFail(workspaceId, {

@@ -55,7 +55,7 @@ export class MicrosoftOAuthGuard extends AuthGuard('microsoft') {
       this.guardRedirectService.dispatchErrorFromGuard(
         context,
         err,
-        this.workspaceDomainsService.getSubdomainAndCustomDomainFromWorkspaceFallbackOnDefaultSubdomain(
+        this.workspaceDomainsService.getSubdomainFromWorkspaceFallbackOnDefaultSubdomain(
           workspace,
         ),
       );

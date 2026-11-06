@@ -8,7 +8,6 @@ export const WORKSPACE_ENTITY_NON_CACHED_PROPERTIES = [
   'featureFlags',
   'approvedAccessDomains',
   'emailingDomains',
-  'publicDomains',
   'workspaceMembersCount',
   'workspaceSsoIdentityProviders',
   'agents',

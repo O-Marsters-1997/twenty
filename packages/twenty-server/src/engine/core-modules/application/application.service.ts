@@ -226,21 +226,6 @@ export class ApplicationService {
     return application;
   }
 
-  async findPrimaryPublicDomainName({
-    applicationId,
-    workspaceId,
-  }: {
-    applicationId: string;
-    workspaceId: string;
-  }): Promise<string | null> {
-    const application = await this.applicationRepository.findOne(workspaceId, {
-      where: { id: applicationId },
-      relations: ['primaryPublicDomain'],
-    });
-
-    return application?.primaryPublicDomain?.domain ?? null;
-  }
-
   async findTwentyStandardApplicationOrThrow(workspaceId: string): Promise<{
     application: ApplicationEntity;
     workspace: WorkspaceEntity;

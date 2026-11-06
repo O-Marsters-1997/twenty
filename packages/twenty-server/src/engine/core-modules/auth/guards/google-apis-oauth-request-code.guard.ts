@@ -81,7 +81,7 @@ export class GoogleAPIsOauthRequestCodeGuard extends AuthGuard('google-apis') {
       this.guardRedirectService.dispatchErrorFromGuard(
         context,
         err,
-        this.workspaceDomainsService.getSubdomainAndCustomDomainFromWorkspaceFallbackOnDefaultSubdomain(
+        this.workspaceDomainsService.getSubdomainFromWorkspaceFallbackOnDefaultSubdomain(
           workspace,
         ),
       );

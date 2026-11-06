@@ -32,7 +32,6 @@ export const impersonate = async ({
           id
           workspaceUrls {
             subdomainUrl
-            customUrl
           }
         }
       }

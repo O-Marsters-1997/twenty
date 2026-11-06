@@ -127,8 +127,6 @@ describe('ApprovedAccessDomainService', () => {
       const domain = 'custom-domain.com';
       const inWorkspace = {
         id: 'workspace-id',
-        customDomain: null,
-        isCustomDomainEnabled: false,
       } as WorkspaceEntity;
       const fromUser = {
         userEmail: 'user@custom-domain.com',

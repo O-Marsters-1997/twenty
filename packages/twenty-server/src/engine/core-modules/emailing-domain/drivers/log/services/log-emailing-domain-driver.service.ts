@@ -102,7 +102,7 @@ export class LogEmailingDomainDriver implements EmailingDomainDriverInterface {
       {
         type: 'CNAME',
         key: `_acme-challenge.${UNSUBSCRIBE_HOSTNAME_PREFIX}.${domain}`,
-        value: `${domain}.dcv.cloudflare.example`,
+        value: `${domain}.dcv.example`,
         status: 'error',
       },
     ];

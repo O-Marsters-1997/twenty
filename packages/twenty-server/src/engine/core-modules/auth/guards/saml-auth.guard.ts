@@ -51,7 +51,7 @@ export class SamlAuthGuard extends AuthGuard('saml') {
       this.guardRedirectService.dispatchErrorFromGuard(
         context,
         err,
-        this.workspaceDomainsService.getSubdomainAndCustomDomainFromWorkspaceFallbackOnDefaultSubdomain(
+        this.workspaceDomainsService.getSubdomainFromWorkspaceFallbackOnDefaultSubdomain(
           identityProvider?.workspace,
         ),
       );

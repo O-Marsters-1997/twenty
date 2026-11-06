@@ -16,7 +16,6 @@ import { isAttachmentPreviewEnabledState } from '@/client-config/states/isAttach
 import { isConfigVariablesInDbEnabledState } from '@/client-config/states/isConfigVariablesInDbEnabledState';
 import { isDeveloperDefaultSignInPrefilledState } from '@/client-config/states/isDeveloperDefaultSignInPrefilledState';
 import { isClickHouseConfiguredState } from '@/client-config/states/isClickHouseConfiguredState';
-import { isCloudflareIntegrationEnabledState } from '@/client-config/states/isCloudflareIntegrationEnabledState';
 import { isDDLLockedState } from '@/client-config/states/isDDLLockedState';
 import { enterpriseInstanceTypeState } from '@/client-config/states/enterpriseInstanceTypeState';
 import { isEmailingDomainInDemoModeState } from '@/client-config/states/isEmailingDomainInDemoModeState';
@@ -132,10 +131,6 @@ export const useClientConfig = (): UseClientConfigResult => {
     allowRequestsToTwentyIconsState,
   );
 
-  const setIsCloudflareIntegrationEnabled = useSetAtomState(
-    isCloudflareIntegrationEnabledState,
-  );
-
   const setIsClickHouseConfigured = useSetAtomState(
     isClickHouseConfiguredState,
   );
@@ -213,7 +208,6 @@ export const useClientConfig = (): UseClientConfigResult => {
         setDomainConfiguration({
           defaultSubdomain: clientConfig?.defaultSubdomain,
           frontDomain: clientConfig?.frontDomain,
-          publicFunctionDomain: clientConfig?.publicFunctionDomain,
           serverUrl: clientConfig?.serverUrl,
         });
         setCanManageFeatureFlags(clientConfig?.canManageFeatureFlags);
@@ -245,9 +239,6 @@ export const useClientConfig = (): UseClientConfigResult => {
           clientConfig?.isEmailingDomainInDemoMode ?? false,
         );
         setAllowRequestsToTwentyIcons(clientConfig?.allowRequestsToTwentyIcons);
-        setIsCloudflareIntegrationEnabled(
-          clientConfig?.isCloudflareIntegrationEnabled,
-        );
         setIsClickHouseConfigured(
           clientConfig?.isClickHouseConfigured ?? false,
         );
@@ -301,7 +292,6 @@ export const useClientConfig = (): UseClientConfigResult => {
       setIsMultiWorkspaceEnabled,
       setIsEmailingDomainInDemoMode,
       setIsClickHouseConfigured,
-      setIsCloudflareIntegrationEnabled,
       setIsDDLLocked,
       setIsOnboardingAiChatEnabled,
       setLabPublicFeatureFlags,

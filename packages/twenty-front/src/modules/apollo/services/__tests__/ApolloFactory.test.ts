@@ -66,7 +66,6 @@ const mockWorkspace = {
   isGoogleAuthEnabled: false,
   isMicrosoftAuthEnabled: false,
   isPasswordAuthEnabled: false,
-  isCustomDomainEnabled: false,
   isGoogleAuthBypassEnabled: false,
   isPasswordAuthBypassEnabled: false,
   isMicrosoftAuthBypassEnabled: false,
@@ -74,10 +73,8 @@ const mockWorkspace = {
   hasValidSignedEnterpriseKey: false,
   hasValidEnterpriseValidityToken: false,
   subdomain: 'test',
-  customDomain: 'test.com',
   workspaceUrls: {
     subdomainUrl: 'test.com',
-    customUrl: 'test.com',
   },
   isTwoFactorAuthenticationEnforced: false,
   trashRetentionDays: 14,

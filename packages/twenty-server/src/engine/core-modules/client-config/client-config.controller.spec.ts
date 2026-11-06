@@ -72,7 +72,6 @@ describe('ClientConfigController', () => {
         defaultSubdomain: 'app',
         frontDomain: 'localhost',
         serverUrl: 'http://localhost:3000',
-        publicFunctionDomain: null,
         support: {
           supportDriver: SupportDriver.NONE,
           supportFrontChatId: undefined,
@@ -114,7 +113,6 @@ describe('ClientConfigController', () => {
         isCompanyEnrichmentEnabled: false,
         isTwoFactorAuthenticationEnabled: false,
         allowRequestsToTwentyIcons: true,
-        isCloudflareIntegrationEnabled: false,
         isClickHouseConfigured: false,
         isWorkspaceSchemaDDLLocked: false,
         isOnboardingAiChatEnabled: false,

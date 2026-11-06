@@ -23,14 +23,6 @@ import {
   type ObjectRecordDestroyedTrackEvent,
 } from 'src/engine/core-modules/event-logs/emit/events/object-event/object-record-destroyed';
 import {
-  type CUSTOM_DOMAIN_ACTIVATED_EVENT,
-  type CustomDomainActivatedTrackEvent,
-} from 'src/engine/core-modules/event-logs/emit/events/workspace-event/custom-domain/custom-domain-activated';
-import {
-  type CUSTOM_DOMAIN_DEACTIVATED_EVENT,
-  type CustomDomainDeactivatedTrackEvent,
-} from 'src/engine/core-modules/event-logs/emit/events/workspace-event/custom-domain/custom-domain-deactivated';
-import {
   type LOGIC_FUNCTION_EXECUTED_EVENT,
   type LogicFunctionExecutedTrackEvent,
 } from 'src/engine/core-modules/event-logs/emit/events/workspace-event/logic-function/logic-function-executed';
@@ -65,8 +57,6 @@ import {
 
 export type TrackEventName =
   | typeof AUTH_SESSION_EVENT
-  | typeof CUSTOM_DOMAIN_ACTIVATED_EVENT
-  | typeof CUSTOM_DOMAIN_DEACTIVATED_EVENT
   | typeof LOGIC_FUNCTION_EXECUTED_EVENT
   | typeof WEBHOOK_RESPONSE_EVENT
   | typeof IMPERSONATION_EVENT
@@ -83,8 +73,6 @@ export type TrackEventName =
 
 export interface TrackEvents {
   [AUTH_SESSION_EVENT]: AuthSessionTrackEvent;
-  [CUSTOM_DOMAIN_ACTIVATED_EVENT]: CustomDomainActivatedTrackEvent;
-  [CUSTOM_DOMAIN_DEACTIVATED_EVENT]: CustomDomainDeactivatedTrackEvent;
   [LOGIC_FUNCTION_EXECUTED_EVENT]: LogicFunctionExecutedTrackEvent;
   [WEBHOOK_RESPONSE_EVENT]: WebhookResponseTrackEvent;
   [USER_SIGNUP_EVENT]: UserSignupTrackEvent;

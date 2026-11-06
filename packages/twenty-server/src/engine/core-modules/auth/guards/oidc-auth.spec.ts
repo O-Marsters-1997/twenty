@@ -54,13 +54,12 @@ describe('OidcAuthGuard', () => {
           provide: GuardRedirectService,
           useValue: {
             dispatchErrorFromGuard: jest.fn(),
-            getSubdomainAndCustomDomainFromWorkspace: jest.fn(),
           },
         },
         {
           provide: WorkspaceDomainsService,
           useValue: {
-            getSubdomainAndCustomDomainFromWorkspaceFallbackOnDefaultSubdomain:
+            getSubdomainFromWorkspaceFallbackOnDefaultSubdomain:
               jest.fn(),
           },
         },

@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { BillingModule } from 'src/engine/core-modules/billing/billing.module';
-import { DnsManagerModule } from 'src/engine/core-modules/dns-manager/dns-manager.module';
 import { CheckEmailingDomainVerificationCronCommand } from 'src/engine/core-modules/emailing-domain/crons/commands/check-emailing-domain-verification.cron.command';
 import { CheckEmailingDomainVerificationCronJob } from 'src/engine/core-modules/emailing-domain/crons/jobs/check-emailing-domain-verification.cron.job';
 import { AwsSesClientProvider } from 'src/engine/core-modules/emailing-domain/drivers/aws-ses/providers/aws-ses-client.provider';
@@ -35,7 +34,6 @@ import { provideWorkspaceScopedRepository } from 'src/engine/twenty-orm/workspac
   imports: [
     TypeOrmModule.forFeature([WorkspaceEntity, EmailingDomainEntity]),
     PermissionsModule,
-    DnsManagerModule,
     SecretEncryptionModule,
     BillingModule,
     EnterpriseModule,

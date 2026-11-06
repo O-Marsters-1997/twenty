@@ -34,7 +34,7 @@ export class EnterpriseFeaturesEnabledGuard implements CanActivate {
       this.guardRedirectService.dispatchErrorFromGuard(
         context,
         err,
-        this.guardRedirectService.getSubdomainAndCustomDomainFromContext(
+        this.guardRedirectService.getSubdomainFromContext(
           context,
         ),
       );

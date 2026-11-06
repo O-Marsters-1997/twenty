@@ -18,7 +18,6 @@ export const WORKSPACE_LOOKUP_ADMIN_PANEL = gql`
         activationStatus
         createdAt
         workspaceUrls {
-          customUrl
           subdomainUrl
         }
         users {

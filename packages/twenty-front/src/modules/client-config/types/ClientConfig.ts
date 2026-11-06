@@ -31,7 +31,6 @@ export type ClientConfig = {
   defaultSubdomain?: string;
   frontDomain: string;
   serverUrl: string;
-  publicFunctionDomain?: string | null;
   isAttachmentPreviewEnabled: boolean;
   isConfigVariablesInDbEnabled: boolean;
   isEmailVerificationRequired: boolean;
@@ -42,7 +41,6 @@ export type ClientConfig = {
   isMultiWorkspaceEnabled: boolean;
   isImapSmtpCaldavEnabled: boolean;
   isEmailingDomainInDemoMode: boolean;
-  isCloudflareIntegrationEnabled: boolean;
   isClickHouseConfigured: boolean;
   isWorkspaceSchemaDDLLocked: boolean;
   isOnboardingAiChatEnabled: boolean;

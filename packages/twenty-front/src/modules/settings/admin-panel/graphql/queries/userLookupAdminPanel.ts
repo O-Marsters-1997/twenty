@@ -18,7 +18,6 @@ export const USER_LOOKUP_ADMIN_PANEL = gql`
         createdAt
         allowImpersonation
         workspaceUrls {
-          customUrl
           subdomainUrl
         }
         users {

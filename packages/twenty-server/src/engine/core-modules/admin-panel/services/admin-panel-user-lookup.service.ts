@@ -106,9 +106,6 @@ export class AdminPanelUserLookupService {
           allowImpersonation: userWorkspace.workspace.allowImpersonation,
           workspaceUrls: this.workspaceDomainsService.getWorkspaceUrls({
             subdomain: userWorkspace.workspace.subdomain,
-            customDomain: userWorkspace.workspace.customDomain,
-            isCustomDomainEnabled:
-              userWorkspace.workspace.isCustomDomainEnabled,
           }),
           users: workspaceUsers.map((workspaceUser) => ({
             id: workspaceUser.user.id,
@@ -188,8 +185,6 @@ export class AdminPanelUserLookupService {
       allowImpersonation: workspace.allowImpersonation,
       workspaceUrls: this.workspaceDomainsService.getWorkspaceUrls({
         subdomain: workspace.subdomain,
-        customDomain: workspace.customDomain,
-        isCustomDomainEnabled: workspace.isCustomDomainEnabled,
       }),
       users: definedWorkspaceUsers.map((wu) => ({
         id: wu.user.id,

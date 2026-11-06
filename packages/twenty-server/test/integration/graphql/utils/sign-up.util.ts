@@ -41,7 +41,6 @@ export const signUp = async ({
             displayName
             logo
             workspaceUrls {
-              customUrl
               subdomainUrl
             }
           }
@@ -50,7 +49,6 @@ export const signUp = async ({
             displayName
             logo
             workspaceUrls {
-              customUrl
               subdomainUrl
             }
           }

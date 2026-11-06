@@ -91,7 +91,7 @@ export class OidcAuthGuard extends AuthGuard('openidconnect') {
       this.guardRedirectService.dispatchErrorFromGuard(
         context,
         err,
-        this.workspaceDomainsService.getSubdomainAndCustomDomainFromWorkspaceFallbackOnDefaultSubdomain(
+        this.workspaceDomainsService.getSubdomainFromWorkspaceFallbackOnDefaultSubdomain(
           identityProvider?.workspace,
         ),
       );

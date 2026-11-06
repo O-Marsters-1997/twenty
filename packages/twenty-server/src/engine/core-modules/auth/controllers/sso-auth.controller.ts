@@ -206,7 +206,7 @@ export class SsoAuthController {
         this.guardRedirectService.getRedirectErrorUrlAndCaptureExceptions({
           error,
           workspace:
-            this.workspaceDomainsService.getSubdomainAndCustomDomainFromWorkspaceFallbackOnDefaultSubdomain(
+            this.workspaceDomainsService.getSubdomainFromWorkspaceFallbackOnDefaultSubdomain(
               workspaceIdentityProvider?.workspace,
             ),
           pathname: AppPath.Verify,
