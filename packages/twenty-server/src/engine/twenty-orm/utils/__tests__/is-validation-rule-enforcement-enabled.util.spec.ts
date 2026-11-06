@@ -8,23 +8,21 @@ import { isValidationRuleEnforcementEnabled } from 'src/engine/twenty-orm/utils/
 const FLAG_ON = { [FeatureFlagKey.IS_VALIDATION_RULES_ENABLED]: true };
 
 describe('isValidationRuleEnforcementEnabled', () => {
-  it('enforces rules on an Organization plan workspace', () => {
+  it('enforces rules on a workspace whose plan includes them', () => {
     expect(
       isValidationRuleEnforcementEnabled({
         featureFlagsMap: FLAG_ON,
         billingEntitlements: { [BillingEntitlementKey.VALIDATION_RULES]: true },
-        hasValidEnterprisePlan: true,
         isBillingEnabled: true,
       }),
     ).toBe(true);
   });
 
-  it('enforces rules on a self-hosted instance with a valid Organization key', () => {
+  it('enforces rules on a self-hosted instance with billing disabled', () => {
     expect(
       isValidationRuleEnforcementEnabled({
         featureFlagsMap: FLAG_ON,
         billingEntitlements: {},
-        hasValidEnterprisePlan: true,
         isBillingEnabled: false,
       }),
     ).toBe(true);
@@ -38,17 +36,7 @@ describe('isValidationRuleEnforcementEnabled', () => {
         billingEntitlements: {
           [BillingEntitlementKey.VALIDATION_RULES]: false,
         },
-        hasValidEnterprisePlan: true,
         isBillingEnabled: true,
-      },
-    ],
-    [
-      'the Organization key is not valid',
-      {
-        featureFlagsMap: FLAG_ON,
-        billingEntitlements: {},
-        hasValidEnterprisePlan: false,
-        isBillingEnabled: false,
       },
     ],
     [
@@ -56,7 +44,6 @@ describe('isValidationRuleEnforcementEnabled', () => {
       {
         featureFlagsMap: {},
         billingEntitlements: { [BillingEntitlementKey.VALIDATION_RULES]: true },
-        hasValidEnterprisePlan: true,
         isBillingEnabled: true,
       },
     ],

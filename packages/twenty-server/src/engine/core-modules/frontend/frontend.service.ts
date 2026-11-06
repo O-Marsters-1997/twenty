@@ -113,21 +113,15 @@ export class FrontendService {
     );
 
     try {
-      const { workspace, isPublicDomain } = await this.workspaceDomainsService
-        .resolveWorkspaceAndPublicDomain(getRequestBaseUrl(request))
+      const workspace = await this.workspaceDomainsService
+        .getWorkspaceByOriginOrDefaultWorkspace(getRequestBaseUrl(request))
         .catch((error: unknown) => {
           if (error === WorkspaceNotFoundDefaultError) {
-            return { workspace: undefined, isPublicDomain: false };
+            return undefined;
           }
 
           throw error;
         });
-
-      if (isPublicDomain) {
-        response.status(404).end();
-
-        return;
-      }
 
       const [template, clientConfig] = await Promise.all([
         this.getTemplate(),

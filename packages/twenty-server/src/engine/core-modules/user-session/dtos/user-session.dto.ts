@@ -13,9 +13,6 @@ export class UserSessionDTO {
   @Field(() => String)
   authProvider: string;
 
-  @Field(() => Boolean)
-  isImpersonating: boolean;
-
   @Field(() => String, { nullable: true })
   userAgent: string | null;
 

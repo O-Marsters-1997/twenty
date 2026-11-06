@@ -53,7 +53,6 @@ const AiNavigationContent = () => {
     initialStore.set(currentUserWorkspaceState.atom, {
       permissionFlags: [PermissionFlagType.AI],
       objectsPermissions: [],
-      isImpersonating: false,
       twoFactorAuthenticationMethodSummary: null,
     });
     setAgentChatThreadList(initialStore, [THREAD]);

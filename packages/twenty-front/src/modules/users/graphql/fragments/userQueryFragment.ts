@@ -21,8 +21,6 @@ export const USER_QUERY_FRAGMENT = gql`
     lastName
     email
     hasPassword
-    canAccessFullAdminPanel
-    canImpersonate
     supportUserHash
     onboardingStatus
     previousOnboardingStatus
@@ -39,7 +37,6 @@ export const USER_QUERY_FRAGMENT = gql`
     currentUserWorkspace {
       id
       permissionFlags
-      isImpersonating
       objectsPermissions {
         ...ObjectPermissionFragment
         rowLevelPermissionPredicates {
@@ -73,9 +70,6 @@ export const USER_QUERY_FRAGMENT = gql`
       isMicrosoftAuthBypassEnabled
       isPasswordAuthBypassEnabled
       subdomain
-      customDomain
-      hasValidSignedEnterpriseKey
-      hasValidEnterpriseValidityToken
       workspaceCustomApplication {
         id
       }
@@ -86,7 +80,6 @@ export const USER_QUERY_FRAGMENT = gql`
         logoUrl
         createdAt
       }
-      isCustomDomainEnabled
       workspaceUrls {
         ...WorkspaceUrlsFragment
       }

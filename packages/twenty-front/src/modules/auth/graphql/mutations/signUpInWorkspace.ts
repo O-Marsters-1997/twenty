@@ -28,7 +28,6 @@ export const SIGN_UP_IN_WORKSPACE = gql`
         id
         workspaceUrls {
           subdomainUrl
-          customUrl
         }
       }
     }

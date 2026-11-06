@@ -57,11 +57,8 @@ describe('getMissingDraftEmailScopes', () => {
 
   describe('non-OAuth providers', () => {
     it.each([
-      ConnectedAccountProvider.IMAP_SMTP_CALDAV,
       ConnectedAccountProvider.EMAIL_GROUP,
       ConnectedAccountProvider.APP,
-      ConnectedAccountProvider.OIDC,
-      ConnectedAccountProvider.SAML,
     ])('never requires scopes for %s accounts', (provider) => {
       expect(getMissingDraftEmailScopes({ provider, scopes: null })).toEqual(
         [],

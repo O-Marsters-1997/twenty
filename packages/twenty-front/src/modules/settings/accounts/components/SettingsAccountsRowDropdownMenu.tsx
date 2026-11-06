@@ -4,7 +4,6 @@ import { type ConnectedAccount } from '@/accounts/types/ConnectedAccount';
 import { useApolloClient, useMutation } from '@apollo/client/react';
 import {
   CalendarChannelSyncStage,
-  ConnectedAccountProvider,
   MessageChannelSyncStage,
   SettingsPath,
 } from 'twenty-shared/types';
@@ -15,7 +14,6 @@ import { ConfirmationDialog } from '@/ui/layout/dialog/components/ConfirmationDi
 import { useDialog } from '@/ui/layout/dialog/hooks/useDialog';
 import { Trans, useLingui } from '@lingui/react/macro';
 import {
-  IconAt,
   IconCalendarEvent,
   IconDotsVertical,
   IconMail,
@@ -105,21 +103,6 @@ export const SettingsAccountsRowDropdownMenu = ({
                   />
                 }
               >{t`Complete setup`}</Dropdown.ActionItem>
-            )}
-            {account.provider === ConnectedAccountProvider.IMAP_SMTP_CALDAV && (
-              <Dropdown.ActionItem
-                startIcon={<IconAt />}
-                render={
-                  <Link
-                    to={getSettingsPath(
-                      SettingsPath.EditImapSmtpCaldavConnection,
-                      {
-                        connectedAccountId: account.id,
-                      },
-                    )}
-                  />
-                }
-              >{t`Connection settings`}</Dropdown.ActionItem>
             )}
             <Dropdown.ActionItem
               startIcon={<IconMail />}

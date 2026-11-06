@@ -1,4 +1,3 @@
-import { currentWorkspaceState } from '@/auth/states/currentWorkspaceState';
 import { domainConfigurationState } from '@/domain-manager/states/domainConfigurationState';
 import { SaveAndCancelButtons } from '@/settings/components/SaveAndCancelButtons/SaveAndCancelButtons';
 import { SettingsPageContainer } from '@/settings/components/SettingsPageContainer';
@@ -26,7 +25,6 @@ export const SettingsSubdomain = () => {
   const navigate = useNavigateSettings();
   const { t } = useLingui();
   const domainConfiguration = useAtomStateValue(domainConfigurationState);
-  const currentWorkspace = useAtomStateValue(currentWorkspaceState);
 
   const {
     subdomain,
@@ -74,7 +72,6 @@ export const SettingsSubdomain = () => {
                 type="text"
                 onChange={handleChange}
                 error={error}
-                disabled={!!currentWorkspace?.customDomain}
                 rightAdornment={
                   isDefined(domainConfiguration.frontDomain)
                     ? `.${domainConfiguration.frontDomain}`

@@ -24,11 +24,8 @@ export const getMissingDraftEmailScopes = (connectedAccount: {
       return hasScope ? [] : [MICROSOFT_SEND_SCOPE];
     }
     // Non-OAuth providers do not rely on OAuth scopes to draft emails.
-    case ConnectedAccountProvider.IMAP_SMTP_CALDAV:
     case ConnectedAccountProvider.EMAIL_GROUP:
     case ConnectedAccountProvider.APP:
-    case ConnectedAccountProvider.OIDC:
-    case ConnectedAccountProvider.SAML:
       return [];
     default:
       return assertUnreachable(

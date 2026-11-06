@@ -14,10 +14,6 @@ import {
   type ValidationError,
   validateSync,
 } from 'class-validator';
-import {
-  ENTERPRISE_INSTANCE_TYPE,
-  type EnterpriseInstanceType,
-} from 'twenty-shared/constants';
 import { isDefined } from 'twenty-shared/utils';
 import { type LoggerOptions } from 'typeorm/logger/LoggerOptions';
 
@@ -235,22 +231,6 @@ export class ConfigVariables {
     type: ConfigVariableType.BOOLEAN,
   })
   IS_CONNECTED_ACCOUNT_WEBHOOK_SUBSCRIPTION_ENABLED = false;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.ADVANCED_SETTINGS,
-    description: 'Enable or disable the IMAP messaging integration',
-    type: ConfigVariableType.BOOLEAN,
-  })
-  IS_IMAP_SMTP_CALDAV_ENABLED = true;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.ADVANCED_SETTINGS,
-    description:
-      'Enable or disable the connection test when saving IMAP/SMTP/CALDAV accounts',
-    type: ConfigVariableType.BOOLEAN,
-  })
-  @IsOptional()
-  IS_IMAP_SMTP_CALDAV_CONNECTION_TEST_ENABLED = true;
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.ADVANCED_SETTINGS,
@@ -581,7 +561,6 @@ export class ConfigVariables {
     group: ConfigVariablesGroup.SERVER_CONFIG,
     description:
       'Deployment region that determines the DPA hosting location shown to customers. The Processor entity (Twenty.com PBC) and governing law (Delaware, USA) are the same for all regions. EU (default) = Frankfurt, Germany; US = United States. Must match where Customer Personal Data actually lives.',
-    isHiddenInAdminPanel: true,
     type: ConfigVariableType.ENUM,
     options: Object.values(DpaRegion),
     // Env-only: a runtime override could advertise a hosting location that does not match where data lives.
@@ -815,7 +794,6 @@ export class ConfigVariables {
     group: ConfigVariablesGroup.BILLING_CONFIG,
     description:
       'Quota and stock usage limit default values per billing plan, keyed by plan key then by the default\'s config variable, as {"PRO":{"WORKSPACE_RECORD_LIMIT":1000000},"ENTERPRISE":{"WORKSPACE_RECORD_LIMIT":null}}. null means no limit, and a variable left out keeps its own value',
-    isHiddenInAdminPanel: true,
     type: ConfigVariableType.JSON,
   })
   @IsOptional()
@@ -948,7 +926,6 @@ export class ConfigVariables {
     group: ConfigVariablesGroup.BILLING_CONFIG,
     description:
       'Credit reward tiers for workspaces enrichment matched to a real company, keyed by tier name, as {"midMarket":{"minEmployeeCount":20,"amountMicro":5000000}} (amounts in microCredits). The most generous matching tier wins; no tiers disables the reward. Independent of ONBOARDING_BOOK_CALL_MIN_EMPLOYEE_COUNT, so credits and the book-a-call offer can target different companies.',
-    isHiddenInAdminPanel: true,
     type: ConfigVariableType.JSON,
   })
   @IsOptional()
@@ -972,7 +949,6 @@ export class ConfigVariables {
       'Direct HTTPS origin URL for deployments that publish frontend HTML separately. Leave unset for standard self-hosted installations to use bundled HTML.',
     type: ConfigVariableType.STRING,
     isEnvOnly: true,
-    isHiddenInAdminPanel: true,
   })
   @IsUrl({
     protocols: ['https'],
@@ -994,7 +970,6 @@ export class ConfigVariables {
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.ADVANCED_SETTINGS,
     description: 'Page ID for Cal.com booking integration',
-    isHiddenInAdminPanel: true,
     type: ConfigVariableType.STRING,
   })
   @IsOptional()
@@ -1004,7 +979,6 @@ export class ConfigVariables {
     group: ConfigVariablesGroup.ADVANCED_SETTINGS,
     description:
       'Minimum enriched company employee count required to show the book-a-call onboarding step. Leave unset or set to 0 to disable the step. The step also requires CALENDAR_BOOKING_PAGE_ID.',
-    isHiddenInAdminPanel: true,
     type: ConfigVariableType.NUMBER,
   })
   @CastToPositiveNumber()
@@ -1333,27 +1307,6 @@ export class ConfigVariables {
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.SERVER_CONFIG,
-    description:
-      "Declares whether this instance is a 'production' (billable per seat) or 'development' (included at no additional cost) enterprise instance. A subscription can register a single free development instance in addition to its production one.",
-    type: ConfigVariableType.ENUM,
-    options: Object.values(ENTERPRISE_INSTANCE_TYPE),
-  })
-  @IsOptional()
-  @IsIn(Object.values(ENTERPRISE_INSTANCE_TYPE))
-  ENTERPRISE_INSTANCE_TYPE: EnterpriseInstanceType =
-    ENTERPRISE_INSTANCE_TYPE.PRODUCTION;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.SERVER_CONFIG,
-    description: 'Base URL for public domains',
-    type: ConfigVariableType.STRING,
-  })
-  @IsUrl({ require_tld: false, require_protocol: true })
-  @IsOptional()
-  PUBLIC_DOMAIN_URL: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.SERVER_CONFIG,
     isSensitive: true,
     description: 'Secret key for the application',
     isEnvOnly: true,
@@ -1613,49 +1566,6 @@ export class ConfigVariables {
   })
   @IsOptional()
   SSL_CERT_PATH: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.CLOUDFLARE_CONFIG,
-    isSensitive: true,
-    description: 'API key for Cloudflare integration',
-    type: ConfigVariableType.STRING,
-  })
-  @ValidateIf((env) => env.CLOUDFLARE_ZONE_ID)
-  CLOUDFLARE_API_KEY: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.CLOUDFLARE_CONFIG,
-    description: 'Zone ID for Cloudflare integration',
-    type: ConfigVariableType.STRING,
-  })
-  @ValidateIf((env) => env.CLOUDFLARE_API_KEY)
-  CLOUDFLARE_ZONE_ID: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.CLOUDFLARE_CONFIG,
-    description: 'Zone ID for public domain Cloudflare integration',
-    type: ConfigVariableType.STRING,
-  })
-  @ValidateIf((env) => env.PUBLIC_DOMAIN_URL)
-  CLOUDFLARE_PUBLIC_DOMAIN_ZONE_ID: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.CLOUDFLARE_CONFIG,
-    description: 'Random string to validate queries from Cloudflare',
-    type: ConfigVariableType.STRING,
-    isSensitive: true,
-  })
-  @IsOptional()
-  CLOUDFLARE_WEBHOOK_SECRET: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.CLOUDFLARE_CONFIG,
-    description:
-      'Id to generate value for CNAME record to validate ownership and manage ssl for custom hostname with Cloudflare',
-    type: ConfigVariableType.STRING,
-  })
-  @IsOptional()
-  CLOUDFLARE_DCV_DELEGATION_ID: string;
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.LLM,
@@ -1918,34 +1828,6 @@ export class ConfigVariables {
   CAPTCHA_SECRET_KEY?: string;
 
   @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.SERVER_CONFIG,
-    isSensitive: true,
-    description: 'License key for the Enterprise version',
-    type: ConfigVariableType.STRING,
-  })
-  @IsOptional()
-  ENTERPRISE_KEY: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.ADVANCED_SETTINGS,
-    isSensitive: true,
-    description:
-      'Signed enterprise validity token (JWT). Used as fallback when no token is stored in the database.',
-    type: ConfigVariableType.STRING,
-  })
-  @IsOptional()
-  ENTERPRISE_VALIDITY_TOKEN: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.SERVER_CONFIG,
-    description: 'Base URL for the Enterprise API on twenty.com',
-    isHiddenInAdminPanel: true,
-    type: ConfigVariableType.STRING,
-  })
-  @IsOptional()
-  ENTERPRISE_API_URL: string = 'https://twenty.com/api/enterprise';
-
-  @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.ADVANCED_SETTINGS,
     description: 'Health monitoring time window in minutes',
     type: ConfigVariableType.NUMBER,
@@ -1967,7 +1849,6 @@ export class ConfigVariables {
     description: 'Twenty server version',
     type: ConfigVariableType.STRING,
     isEnvOnly: true,
-    isHiddenInAdminPanel: true,
   })
   @IsOptionalOrEmptyString()
   @IsTwentySemVer()
@@ -2033,7 +1914,6 @@ export class ConfigVariables {
     isSensitive: true,
     description: 'Mintlify API key for documentation search',
     isEnvOnly: true,
-    isHiddenInAdminPanel: true,
     type: ConfigVariableType.STRING,
   })
   @IsOptional()
@@ -2044,7 +1924,6 @@ export class ConfigVariables {
     isSensitive: true,
     description: 'Mintlify subdomain for documentation search',
     isEnvOnly: true,
-    isHiddenInAdminPanel: true,
     type: ConfigVariableType.STRING,
   })
   @IsOptional()
@@ -2243,7 +2122,6 @@ export class ConfigVariables {
     group: ConfigVariablesGroup.ADVANCED_SETTINGS,
     description:
       'Client ID of the GitHub OAuth app used to verify app ownership when claiming a marketplace application',
-    isHiddenInAdminPanel: true,
     type: ConfigVariableType.STRING,
   })
   @IsString()
@@ -2255,7 +2133,6 @@ export class ConfigVariables {
     isSensitive: true,
     description:
       'Client secret of the GitHub OAuth app used to verify app ownership when claiming a marketplace application',
-    isHiddenInAdminPanel: true,
     type: ConfigVariableType.STRING,
   })
   @IsString()

@@ -15,7 +15,6 @@ import { AuthPrincipalGuard } from 'src/engine/guards/auth-principal.guard';
   AuthPrincipalGuard({
     userSession: {
       standard: true,
-      impersonated: true,
       playground: true,
       workspaceAgnostic: false,
     },
@@ -28,9 +27,7 @@ import { AuthPrincipalGuard } from 'src/engine/guards/auth-principal.guard';
 @MetadataResolver(() => ApplicationDTO)
 @UseFilters(ApplicationExceptionFilter)
 export class ApplicationResolver {
-  constructor(
-    private readonly twentyConfigService: TwentyConfigService,
-  ) {}
+  constructor(private readonly twentyConfigService: TwentyConfigService) {}
 
   // Resolves the display url of the logo bundled in the installed
   // application's public assets, so clients never build file urls themselves.
@@ -46,5 +43,4 @@ export class ApplicationResolver {
       applicationId: application.id,
     });
   }
-
 }

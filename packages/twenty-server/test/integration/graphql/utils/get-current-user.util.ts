@@ -26,8 +26,6 @@ export const getCurrentUser = async ({
         lastName
         isEmailVerified
         disabled
-        canImpersonate
-        canAccessFullAdminPanel
         locale
         createdAt
         updatedAt

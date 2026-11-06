@@ -38,7 +38,6 @@ import { AuthRestApiExceptionFilter } from 'src/engine/core-modules/auth/filters
   AuthPrincipalGuard({
     userSession: {
       standard: true,
-      impersonated: true,
       playground: true,
       workspaceAgnostic: false,
     },
@@ -84,7 +83,6 @@ export class ApiKeyController {
     AuthPrincipalGuard({
       userSession: {
         standard: true,
-        impersonated: true,
         playground: false,
         workspaceAgnostic: false,
       },
@@ -114,7 +112,6 @@ export class ApiKeyController {
     AuthPrincipalGuard({
       userSession: {
         standard: true,
-        impersonated: true,
         playground: false,
         workspaceAgnostic: false,
       },
@@ -148,7 +145,6 @@ export class ApiKeyController {
     AuthPrincipalGuard({
       userSession: {
         standard: true,
-        impersonated: true,
         playground: false,
         workspaceAgnostic: false,
       },

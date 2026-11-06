@@ -9,9 +9,7 @@ import { ApplicationTokenService } from 'src/engine/core-modules/auth/token/serv
 import { LoginTokenService } from 'src/engine/core-modules/auth/token/services/login-token.service';
 import { RefreshTokenService } from 'src/engine/core-modules/auth/token/services/refresh-token.service';
 import { RenewTokenService } from 'src/engine/core-modules/auth/token/services/renew-token.service';
-import { SsoExchangeTokenService } from 'src/engine/core-modules/auth/token/services/sso-exchange-token.service';
 import { WorkspaceAgnosticTokenService } from 'src/engine/core-modules/auth/token/services/workspace-agnostic-token.service';
-import { ImpersonationAuthorizationModule } from 'src/engine/core-modules/impersonation/impersonation-authorization.module';
 import { JwtModule } from 'src/engine/core-modules/jwt/jwt.module';
 import { UserSessionModule } from 'src/engine/core-modules/user-session/user-session.module';
 import { UserWorkspaceEntity } from 'src/engine/core-modules/user-workspace/user-workspace.entity';
@@ -33,7 +31,6 @@ import { provideWorkspaceScopedRepository } from 'src/engine/twenty-orm/workspac
     ]),
     WorkspaceCacheModule,
     CoreEntityCacheModule,
-    ImpersonationAuthorizationModule,
     UserSessionModule,
   ],
   providers: [
@@ -44,7 +41,6 @@ import { provideWorkspaceScopedRepository } from 'src/engine/twenty-orm/workspac
     RefreshTokenService,
     WorkspaceAgnosticTokenService,
     ApplicationTokenService,
-    SsoExchangeTokenService,
     provideWorkspaceScopedRepository(ApplicationEntity),
   ],
   exports: [
@@ -54,7 +50,6 @@ import { provideWorkspaceScopedRepository } from 'src/engine/twenty-orm/workspac
     RefreshTokenService,
     WorkspaceAgnosticTokenService,
     ApplicationTokenService,
-    SsoExchangeTokenService,
   ],
 })
 export class TokenModule {}

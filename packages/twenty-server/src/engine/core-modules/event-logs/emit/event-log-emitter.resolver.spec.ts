@@ -80,7 +80,7 @@ describe('EventLogEmitterResolver', () => {
 
     const input = {
       type: 'track' as const,
-      event: 'Custom Domain Activated' as const,
+      event: 'Workspace Created' as const,
       properties: {},
     };
     const result = await resolver.trackAnalytics(
@@ -94,7 +94,7 @@ describe('EventLogEmitterResolver', () => {
       userId: 'user-2',
     });
     expect(mockInsertWorkspaceEvent).toHaveBeenCalledWith(
-      'Custom Domain Activated',
+      'Workspace Created',
       {},
     );
     expect(result).toBe('Track created');

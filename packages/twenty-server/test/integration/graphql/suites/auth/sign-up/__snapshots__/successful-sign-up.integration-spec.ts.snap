@@ -2,8 +2,6 @@
 
 exports[`Successful User Sign Up (integration) should sign up, delete and signup same new user successfully 1`] = `
 {
-  "canAccessFullAdminPanel": false,
-  "canImpersonate": false,
   "createdAt": Any<String>,
   "currentUserWorkspace": null,
   "currentWorkspace": null,
@@ -35,8 +33,6 @@ exports[`Successful User Sign Up (integration) should sign up, delete and signup
 
 exports[`Successful User Sign Up (integration) should sign up, delete and signup same new user successfully 3`] = `
 {
-  "canAccessFullAdminPanel": false,
-  "canImpersonate": false,
   "createdAt": Any<String>,
   "currentUserWorkspace": null,
   "currentWorkspace": null,

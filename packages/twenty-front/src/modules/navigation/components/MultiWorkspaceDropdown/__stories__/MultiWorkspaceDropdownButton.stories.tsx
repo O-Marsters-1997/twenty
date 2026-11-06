@@ -23,25 +23,21 @@ const AVAILABLE_WORKSPACES: AvailableWorkspace[] = [
   {
     id: mockCurrentWorkspace.id,
     displayName: 'Twenty',
-    sso: [],
     workspaceUrls: { subdomainUrl: 'https://twenty.example.com' },
   },
   {
     id: 'acme',
     displayName: 'Acme',
-    sso: [],
     workspaceUrls: { subdomainUrl: 'https://acme.example.com' },
   },
   {
     id: 'venture',
     displayName: 'Venture',
-    sso: [],
     workspaceUrls: { subdomainUrl: 'https://venture.example.com' },
   },
   {
     id: 'studio',
     displayName: 'Studio',
-    sso: [],
     workspaceUrls: { subdomainUrl: 'https://studio.example.com' },
   },
 ];
@@ -50,7 +46,6 @@ const INVITED_WORKSPACE: AvailableWorkspace = {
   displayName: 'Invited workspace',
   inviteHash: 'workspace-invite',
   personalInviteToken: 'personal-invite',
-  sso: [],
   workspaceUrls: { subdomainUrl: 'https://invited.example.com' },
 };
 
@@ -70,7 +65,6 @@ const meta: Meta<typeof MultiWorkspaceDropdownButton> = {
     jotaiStore.set(domainConfigurationState.atom, {
       frontDomain: 'example.com',
       defaultSubdomain: 'app',
-      publicFunctionDomain: undefined,
       serverUrl: 'https://api.example.com',
     });
     jotaiStore.set(availableWorkspacesState.atom, {

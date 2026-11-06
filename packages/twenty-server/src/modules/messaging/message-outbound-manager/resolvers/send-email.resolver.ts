@@ -34,7 +34,6 @@ import { isNonEmptyString } from '@sniptt/guards';
   AuthPrincipalGuard({
     userSession: {
       standard: true,
-      impersonated: true,
       playground: true,
       workspaceAgnostic: false,
     },

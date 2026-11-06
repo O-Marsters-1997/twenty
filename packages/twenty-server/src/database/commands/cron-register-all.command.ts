@@ -5,16 +5,13 @@ import { isDefined } from 'twenty-shared/utils';
 
 import { BillingReminderCronCommand } from 'src/engine/core-modules/billing/reminders/crons/commands/billing-reminder.cron.command';
 import { CheckEmailingDomainVerificationCronCommand } from 'src/engine/core-modules/emailing-domain/crons/commands/check-emailing-domain-verification.cron.command';
-import { EnterpriseKeyValidationCronCommand } from 'src/engine/core-modules/enterprise/cron/command/organization-key-validation.cron.command';
 import { EventLogCleanupCronCommand } from 'src/engine/core-modules/event-logs/cleanup/commands/event-log-cleanup.cron.command';
 import { PendingFileCleanupCronCommand } from 'src/engine/core-modules/file/file-upload/crons/commands/pending-file-cleanup.cron.command';
 import { RotateSigningKeysCronCommand } from 'src/engine/core-modules/jwt/crons/commands/rotate-signing-keys.cron.command';
 import { PendingWakeUpSweepCronCommand } from 'src/engine/core-modules/pending-wake-up/crons/commands/pending-wake-up-sweep.cron.command';
 import { AgentCronTriggerCronCommand } from 'src/engine/metadata-modules/ai/ai-agent-trigger/crons/agent-cron-trigger.cron.command';
-import { CheckPublicDomainsValidRecordsCronCommand } from 'src/engine/core-modules/public-domain/crons/commands/check-public-domains-valid-records.cron.command';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { UserSessionCleanupCronCommand } from 'src/engine/core-modules/user-session/crons/commands/user-session-cleanup.cron.command';
-import { CheckCustomDomainValidRecordsCronCommand } from 'src/engine/core-modules/workspace/crons/commands/check-custom-domain-valid-records.cron.command';
 import { WebhookSubscriptionRenewalCronCommand } from 'src/modules/connected-account/webhook-subscription-manager/crons/commands/webhook-subscription-renewal.cron.command';
 import { EmailingOngoingStaleCronCommand } from 'src/modules/emailing/crons/commands/emailing-ongoing-stale.cron.command';
 import { ReconcileCampaignStatsCronCommand } from 'src/modules/emailing/crons/commands/reconcile-campaign-stats.cron.command';
@@ -64,15 +61,12 @@ export class CronRegisterAllCommand extends CommandRunner {
     private readonly workflowCleanWorkflowRunsCronCommand: WorkflowCleanWorkflowRunsCronCommand,
     private readonly pendingWakeUpSweepCronCommand: PendingWakeUpSweepCronCommand,
 
-    private readonly checkCustomDomainValidRecordsCronCommand: CheckCustomDomainValidRecordsCronCommand,
-    private readonly checkPublicDomainsValidRecordsCronCommand: CheckPublicDomainsValidRecordsCronCommand,
     private readonly checkEmailingDomainVerificationCronCommand: CheckEmailingDomainVerificationCronCommand,
     private readonly agentCronTriggerCronCommand: AgentCronTriggerCronCommand,
     private readonly cleanSuspendedWorkspacesCronCommand: CleanSuspendedWorkspacesCronCommand,
     private readonly cleanOnboardingWorkspacesCronCommand: CleanOnboardingWorkspacesCronCommand,
     private readonly trashCleanupCronCommand: TrashCleanupCronCommand,
     private readonly eventLogCleanupCronCommand: EventLogCleanupCronCommand,
-    private readonly enterpriseKeyValidationCronCommand: EnterpriseKeyValidationCronCommand,
     private readonly rotateSigningKeysCronCommand: RotateSigningKeysCronCommand,
     private readonly pendingFileCleanupCronCommand: PendingFileCleanupCronCommand,
     private readonly deferredWorkspaceMigrationActionRecoveryCronCommand: DeferredWorkspaceMigrationActionRecoveryCronCommand,
@@ -138,14 +132,6 @@ export class CronRegisterAllCommand extends CommandRunner {
         command: this.reconcileCampaignStatsCronCommand,
       },
       {
-        name: 'CheckCustomDomainValidRecords',
-        command: this.checkCustomDomainValidRecordsCronCommand,
-      },
-      {
-        name: 'CheckPublicDomainsValidRecords',
-        command: this.checkPublicDomainsValidRecordsCronCommand,
-      },
-      {
         name: 'CheckEmailingDomainVerification',
         command: this.checkEmailingDomainVerificationCronCommand,
       },
@@ -188,10 +174,6 @@ export class CronRegisterAllCommand extends CommandRunner {
       {
         name: 'EventLogCleanup',
         command: this.eventLogCleanupCronCommand,
-      },
-      {
-        name: 'EnterpriseKeyValidation',
-        command: this.enterpriseKeyValidationCronCommand,
       },
       {
         name: 'RotateSigningKeys',

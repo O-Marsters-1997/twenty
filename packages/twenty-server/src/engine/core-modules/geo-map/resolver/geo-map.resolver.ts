@@ -13,7 +13,6 @@ import { AuthPrincipalGuard } from 'src/engine/guards/auth-principal.guard';
   AuthPrincipalGuard({
     userSession: {
       standard: true,
-      impersonated: true,
       playground: true,
       workspaceAgnostic: false,
     },

@@ -19,7 +19,6 @@ export const bindDataToRequestObject = (
   request.workspaceMember = data.workspaceMember;
   request.userWorkspaceId = data.userWorkspaceId;
   request.authProvider = data.authProvider;
-  request.impersonationContext = data.impersonationContext;
   request.tokenType = data.tokenType;
   request.authenticatedAt = data.authenticatedAt;
 

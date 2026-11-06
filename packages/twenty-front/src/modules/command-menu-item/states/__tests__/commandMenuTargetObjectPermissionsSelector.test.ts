@@ -42,7 +42,6 @@ describe('commandMenuTargetObjectPermissionsSelector', () => {
           rowLevelPermissionPredicateGroups: [],
         },
       ],
-      isImpersonating: false,
     });
 
     const { targetObjectReadPermissions, targetObjectWritePermissions } =
@@ -62,7 +61,6 @@ describe('commandMenuTargetObjectPermissionsSelector', () => {
       permissionFlags: [],
       twoFactorAuthenticationMethodSummary: [],
       objectsPermissions: [],
-      isImpersonating: false,
     });
 
     const { targetObjectReadPermissions, targetObjectWritePermissions } =

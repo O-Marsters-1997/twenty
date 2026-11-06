@@ -44,9 +44,8 @@ export class UserSessionResolver {
   @Query(() => [UserSessionDTO])
   async currentUserSessions(
     @AuthUser() user: AuthContextUser,
-    @AuthWorkspace({ allowUndefined: true }) workspace:
-      | WorkspaceEntity
-      | undefined,
+    @AuthWorkspace({ allowUndefined: true })
+    workspace: WorkspaceEntity | undefined,
     @Context() context: { req: Request },
   ): Promise<UserSessionDTO[]> {
     // Workspace-agnostic sessions have no workspace to scope to: nothing is in scope rather than everything.
@@ -74,9 +73,8 @@ export class UserSessionResolver {
   @Mutation(() => Boolean)
   async revokeUserSession(
     @AuthUser() user: AuthContextUser,
-    @AuthWorkspace({ allowUndefined: true }) workspace:
-      | WorkspaceEntity
-      | undefined,
+    @AuthWorkspace({ allowUndefined: true })
+    workspace: WorkspaceEntity | undefined,
     @Args('userSessionId', { type: () => UUIDScalarType })
     userSessionId: string,
     @Context() context: { req: Request },
@@ -143,9 +141,8 @@ export class UserSessionResolver {
   @Mutation(() => Int)
   async revokeAllOtherUserSessions(
     @AuthUser() user: AuthContextUser,
-    @AuthWorkspace({ allowUndefined: true }) workspace:
-      | WorkspaceEntity
-      | undefined,
+    @AuthWorkspace({ allowUndefined: true })
+    workspace: WorkspaceEntity | undefined,
     @Context() context: { req: Request },
   ): Promise<number> {
     if (!isDefined(workspace)) {
@@ -174,7 +171,6 @@ export class UserSessionResolver {
       id: session.id,
       workspaceId: session.workspaceId,
       authProvider: session.authProvider,
-      isImpersonating: session.isImpersonating,
       userAgent: session.userAgent,
       ipAddress: session.ipAddress,
       createdAt: session.createdAt,

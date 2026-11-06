@@ -33,8 +33,6 @@ describe('useColumnDefinitionsFromObjectMetadata', () => {
       allowImpersonation: false,
       subdomain: 'test',
       activationStatus: WorkspaceActivationStatus.ACTIVE,
-      hasValidSignedEnterpriseKey: false,
-      hasValidEnterpriseValidityToken: false,
       metadataVersion: 1,
       isPublicInviteLinkEnabled: false,
       isCampaignClickTrackingEnabled: false,
@@ -43,14 +41,11 @@ describe('useColumnDefinitionsFromObjectMetadata', () => {
       isGoogleAuthEnabled: true,
       isMicrosoftAuthEnabled: false,
       isPasswordAuthEnabled: true,
-      isCustomDomainEnabled: false,
       isGoogleAuthBypassEnabled: false,
       isMicrosoftAuthBypassEnabled: false,
       isPasswordAuthBypassEnabled: false,
-      customDomain: 'my-custom-domain.com',
       workspaceUrls: {
         subdomainUrl: 'https://twenty.twenty.com',
-        customUrl: 'https://my-custom-domain.com',
       },
       currentBillingSubscription: {
         id: '1',

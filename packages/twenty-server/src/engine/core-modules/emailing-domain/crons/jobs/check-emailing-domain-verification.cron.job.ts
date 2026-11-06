@@ -95,7 +95,6 @@ export class CheckEmailingDomainVerificationCronJob {
       await this.unsubscribeHostnameService.sync(
         emailingDomain.workspaceId,
         emailingDomain.id,
-        { provision: false },
       );
     }
   }

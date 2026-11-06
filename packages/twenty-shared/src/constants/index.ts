@@ -7,8 +7,6 @@
  *                              |___/
  */
 
-export type { AccountType } from './AccountTypes';
-export { ACCOUNT_TYPES } from './AccountTypes';
 export { ALLOWED_FULL_NAME_SORT_SUBFIELDS } from './AllowedFullNameSortSubfields';
 export { BACKEND_BATCH_REQUEST_MAX_COUNT } from './BackendBatchRequestMaxCount';
 export { CalendarStartDay } from './CalendarStartDay';
@@ -39,8 +37,6 @@ export { DOCUMENTATION_SUPPORTED_LANGUAGES } from './DocumentationSupportedLangu
 export { EMAIL_DRAFTING_PROVIDERS } from './EmailDraftingProviders';
 export { EMAIL_IMAGE_MIME_TYPES } from './EmailImageMimeTypes';
 export { EMAIL_SENDING_PROVIDERS } from './EmailSendingProviders';
-export type { EnterpriseInstanceType } from './EnterpriseInstanceType';
-export { ENTERPRISE_INSTANCE_TYPE } from './EnterpriseInstanceType';
 export { EVENT_LOG_RETENTION } from './EventLogRetention';
 export { EVERYONE_PRINCIPAL_ID } from './EveryonePrincipalId';
 export { EXCLUDED_FIELD_NAMES_FROM_AGENT_TOOL_SCHEMA } from './ExcludedFieldNamesFromAgentToolSchema';

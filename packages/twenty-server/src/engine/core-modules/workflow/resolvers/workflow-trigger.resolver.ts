@@ -24,7 +24,6 @@ import { WorkflowRunnerWorkspaceService } from 'src/modules/workflow/workflow-ru
   AuthPrincipalGuard({
     userSession: {
       standard: true,
-      impersonated: true,
       playground: true,
       workspaceAgnostic: false,
     },

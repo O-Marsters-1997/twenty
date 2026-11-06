@@ -7,8 +7,8 @@ import {
 } from '@clickhouse/client';
 import request from 'supertest';
 
-import { CUSTOM_DOMAIN_ACTIVATED_EVENT } from 'src/engine/core-modules/event-logs/emit/events/workspace-event/custom-domain/custom-domain-activated';
 import { type GenericTrackEvent } from 'src/engine/core-modules/event-logs/emit/events/workspace-event/track';
+import { WORKSPACE_CREATED_EVENT } from 'src/engine/core-modules/event-logs/emit/events/workspace-event/workspace/workspace-created';
 
 describe('ClickHouse Event Registration (integration)', () => {
   let clickHouseClient: ClickHouseClient;
@@ -44,7 +44,7 @@ describe('ClickHouse Event Registration (integration)', () => {
 
     const variables = {
       type: 'TRACK',
-      event: CUSTOM_DOMAIN_ACTIVATED_EVENT,
+      event: WORKSPACE_CREATED_EVENT,
       properties: {},
     };
 
@@ -62,7 +62,7 @@ describe('ClickHouse Event Registration (integration)', () => {
       query: `
         SELECT *
         FROM workspaceEvent
-        WHERE event = '${CUSTOM_DOMAIN_ACTIVATED_EVENT}' AND timestamp >= now() - INTERVAL 1 SECOND
+        WHERE event = '${WORKSPACE_CREATED_EVENT}' AND timestamp >= now() - INTERVAL 1 SECOND
 
       `,
       format: 'JSONEachRow',

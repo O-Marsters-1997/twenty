@@ -25,7 +25,6 @@ const MOCK_FLAT_APPLICATION: FlatApplication = {
   workspaceId: 'workspace-id',
   defaultRoleId: null,
   defaultRole: null,
-  primaryPublicDomainId: null,
   createdAt: new Date(),
   updatedAt: new Date(),
   deletedAt: null,

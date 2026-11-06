@@ -1565,28 +1565,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     hotKeys: null,
     payload: { path: '/settings/security' },
   },
-  goToSettingsAdminPanel: {
-    universalIdentifier: 'dd22798b-fca6-42af-ba3b-0d48f263afbd',
-    label: i18nLabel(
-      msg({
-        message: `Go to Admin Panel Settings`,
-        context: 'commandMenuItem.label',
-      }),
-    ),
-    icon: 'IconServer',
-    isPinned: false,
-    position: 62,
-    shortLabel: i18nLabel(
-      msg({ message: `Admin Panel`, context: 'commandMenuItem.shortLabel' }),
-    ),
-    availabilityType: CommandMenuItemAvailabilityType.GLOBAL,
-    conditionalAvailabilityExpression:
-      'canImpersonate or canAccessFullAdminPanel',
-    availabilityObjectMetadataUniversalIdentifier: null,
-    engineComponentKey: EngineComponentKey.NAVIGATION,
-    hotKeys: null,
-    payload: { path: '/settings/admin-panel' },
-  },
   goToSettingsUpdates: {
     universalIdentifier: '5d1ba354-0090-4a42-9a43-601461b26068',
     label: i18nLabel(

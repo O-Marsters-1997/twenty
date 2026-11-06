@@ -6,18 +6,13 @@ import { ApplicationModule } from 'src/engine/core-modules/application/applicati
 import { BillingModule } from 'src/engine/core-modules/billing/billing.module';
 import { EventLogRetentionModule } from 'src/engine/core-modules/event-logs/retention/event-log-retention.module';
 import { CompanyEnrichmentModule } from 'src/engine/core-modules/company-enrichment/company-enrichment.module';
-import { DnsManagerModule } from 'src/engine/core-modules/dns-manager/dns-manager.module';
-import { CustomDomainManagerModule } from 'src/engine/core-modules/domain/custom-domain-manager/custom-domain-manager.module';
 import { SubdomainManagerModule } from 'src/engine/core-modules/domain/subdomain-manager/subdomain-manager.module';
 import { WorkspaceDomainsModule } from 'src/engine/core-modules/domain/workspace-domains/workspace-domains.module';
-import { EnterpriseModule } from 'src/engine/core-modules/enterprise/enterprise.module';
 import { FeatureFlagModule } from 'src/engine/core-modules/feature-flag/feature-flag.module';
 import { FileModule } from 'src/engine/core-modules/file/file.module';
 import { UserWorkspaceEntity } from 'src/engine/core-modules/user-workspace/user-workspace.entity';
 import { UserWorkspaceModule } from 'src/engine/core-modules/user-workspace/user-workspace.module';
 import { UserEntity } from 'src/engine/core-modules/user/user.entity';
-import { CheckCustomDomainValidRecordsCronCommand } from 'src/engine/core-modules/workspace/crons/commands/check-custom-domain-valid-records.cron.command';
-import { CheckCustomDomainValidRecordsCronJob } from 'src/engine/core-modules/workspace/crons/jobs/check-custom-domain-valid-records.cron.job';
 import { UpgradeModule } from 'src/engine/core-modules/upgrade/upgrade.module';
 import { CoreEntityCacheModule } from 'src/engine/core-entity-cache/core-entity-cache.module';
 import { WorkspaceEntityCacheProviderService } from 'src/engine/core-modules/workspace/services/workspace-entity-cache-provider.service';
@@ -54,27 +49,22 @@ import { WorkspaceMigrationModule } from 'src/engine/workspace-manager/workspace
     WorkspaceCacheStorageModule,
     RoleModule,
     AiAgentModule,
-    DnsManagerModule,
     WorkspaceDomainsModule,
     SubdomainManagerModule,
-    CustomDomainManagerModule,
     ViewModule,
     WorkspaceManyOrAllFlatEntityMapsCacheModule,
     ApplicationModule,
-    EnterpriseModule,
     WorkspaceMigrationModule,
     CoreEntityCacheModule,
     UpgradeModule,
     CompanyEnrichmentModule,
   ],
-  exports: [WorkspaceService, CheckCustomDomainValidRecordsCronCommand],
+  exports: [WorkspaceService],
   providers: [
     WorkspaceResolver,
     WorkspaceService,
     WorkspaceEntityCacheProviderService,
     BillingDisabledGuard,
-    CheckCustomDomainValidRecordsCronCommand,
-    CheckCustomDomainValidRecordsCronJob,
   ],
 })
 export class WorkspaceModule {}

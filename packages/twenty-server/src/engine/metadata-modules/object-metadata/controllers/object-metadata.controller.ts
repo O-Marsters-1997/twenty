@@ -67,7 +67,6 @@ import { WorkspaceScopedRepository } from 'src/engine/twenty-orm/workspace-scope
   AuthPrincipalGuard({
     userSession: {
       standard: true,
-      impersonated: true,
       playground: true,
       workspaceAgnostic: false,
     },

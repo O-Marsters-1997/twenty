@@ -14,7 +14,6 @@ const mockClientConfig = {
     magicLink: false,
     password: true,
     microsoft: false,
-    sso: [],
   },
   signInPrefilled: false,
   isMultiWorkspaceEnabled: true,

@@ -52,7 +52,6 @@ import { CoreWorkflowRunnerService } from 'src/modules/workflow/workflow-runner/
   AuthPrincipalGuard({
     userSession: {
       standard: true,
-      impersonated: true,
       playground: true,
       workspaceAgnostic: false,
     },
@@ -121,7 +120,6 @@ export class CoreWorkflowVersionMutationResolver {
     AuthPrincipalGuard({
       userSession: {
         standard: true,
-        impersonated: true,
         playground: true,
         workspaceAgnostic: false,
       },

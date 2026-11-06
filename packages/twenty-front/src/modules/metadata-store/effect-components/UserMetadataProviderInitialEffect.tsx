@@ -114,9 +114,6 @@ export const UserMetadataProviderInitialEffect = () => {
           (userQueryData.currentUser.currentUserWorkspace
             .objectsPermissions as CurrentUserWorkspaceObjectPermissions[]) ??
           [],
-        isImpersonating:
-          userQueryData.currentUser.currentUserWorkspace.isImpersonating ??
-          false,
       });
     }
 

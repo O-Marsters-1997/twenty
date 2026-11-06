@@ -8,7 +8,6 @@ import { readBookCallStepMinEmployeeCount } from 'src/engine/core-modules/onboar
 import { NodeEnvironment } from 'src/engine/core-modules/twenty-config/interfaces/node-environment.interface';
 import { SupportDriver } from 'src/engine/core-modules/twenty-config/interfaces/support.interface';
 
-import { MaintenanceModeService } from 'src/engine/core-modules/admin-panel/maintenance-mode.service';
 import {
   type ClientAiEvaluationModelConfig,
   type ClientAiModelConfig,
@@ -20,7 +19,6 @@ import { PUBLIC_FEATURE_FLAGS } from 'src/engine/core-modules/feature-flag/const
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { toDisplayCredits } from 'src/engine/core-modules/usage/utils/to-display-credits.util';
 import { AI_MODEL_TIERS, parseAiModelVariantId } from 'twenty-shared/ai';
-import { ENTERPRISE_INSTANCE_TYPE } from 'twenty-shared/constants';
 import { MODEL_FAMILY_LABELS } from 'src/engine/metadata-modules/ai/ai-models/constants/model-family-labels.const';
 import { getAvailableEfforts } from 'src/engine/metadata-modules/ai/ai-models/utils/get-available-efforts.util';
 import { getNativeModelCapabilities } from 'src/engine/metadata-modules/ai/ai-models/utils/get-native-model-capabilities.util';
@@ -34,7 +32,6 @@ export class ClientConfigService {
     private twentyConfigService: TwentyConfigService,
     private domainServerConfigService: DomainServerConfigService,
     private aiModelRegistryService: AiModelRegistryService,
-    private maintenanceModeService: MaintenanceModeService,
   ) {}
 
   private resolveBenchmark(modelConfig: AiModelConfig | undefined): {
@@ -53,13 +50,6 @@ export class ClientConfigService {
       : undefined;
 
     return { benchmark: baseBenchmark, isInherited: isDefined(baseBenchmark) };
-  }
-
-  private isCloudflareIntegrationEnabled(): boolean {
-    return (
-      !!this.twentyConfigService.get('CLOUDFLARE_API_KEY') &&
-      !!this.twentyConfigService.get('CLOUDFLARE_ZONE_ID')
-    );
   }
 
   async getClientConfig(): Promise<ClientConfig> {
@@ -193,7 +183,6 @@ export class ClientConfigService {
         magicLink: false,
         password: this.twentyConfigService.get('AUTH_PASSWORD_ENABLED'),
         microsoft: this.twentyConfigService.get('AUTH_MICROSOFT_ENABLED'),
-        sso: [],
       },
       signInPrefilled: this.twentyConfigService.get('SIGN_IN_PREFILLED'),
       isMultiWorkspaceEnabled: this.twentyConfigService.get(
@@ -205,9 +194,6 @@ export class ClientConfigService {
       defaultSubdomain: this.twentyConfigService.get('DEFAULT_SUBDOMAIN'),
       frontDomain: this.domainServerConfigService.getFrontUrl().hostname,
       serverUrl: this.twentyConfigService.get('SERVER_URL'),
-      publicFunctionDomain:
-        this.domainServerConfigService.getPublicBaseHostnameOrUndefined() ??
-        null,
       support: {
         supportDriver: supportDriver ? supportDriver : SupportDriver.NONE,
         supportFrontChatId: this.twentyConfigService.get(
@@ -281,9 +267,6 @@ export class ClientConfigService {
       isConfigVariablesInDbEnabled: this.twentyConfigService.get(
         'IS_CONFIG_VARIABLES_IN_DB_ENABLED',
       ),
-      isImapSmtpCaldavEnabled: this.twentyConfigService.get(
-        'IS_IMAP_SMTP_CALDAV_ENABLED',
-      ),
       isEmailingDomainInDemoMode,
       allowRequestsToTwentyIcons: this.twentyConfigService.get(
         'ALLOW_REQUESTS_TO_TWENTY_ICONS',
@@ -293,7 +276,6 @@ export class ClientConfigService {
         : undefined,
       isBookCallOnboardingStepEnabled,
       isCompanyEnrichmentEnabled,
-      isCloudflareIntegrationEnabled: this.isCloudflareIntegrationEnabled(),
       isClickHouseConfigured: !!this.twentyConfigService.get('CLICKHOUSE_URL'),
       isWorkspaceSchemaDDLLocked: this.twentyConfigService.get(
         'WORKSPACE_SCHEMA_DDL_LOCKED',
@@ -301,21 +283,7 @@ export class ClientConfigService {
       isOnboardingAiChatEnabled: this.twentyConfigService.get(
         'IS_ONBOARDING_AI_CHAT_ENABLED',
       ),
-      enterpriseInstanceType:
-        this.twentyConfigService.get('ENTERPRISE_INSTANCE_TYPE') ??
-        ENTERPRISE_INSTANCE_TYPE.PRODUCTION,
     };
-
-    const maintenanceMode =
-      await this.maintenanceModeService.getMaintenanceMode();
-
-    if (isDefined(maintenanceMode)) {
-      clientConfig.maintenance = {
-        startAt: new Date(maintenanceMode.startAt),
-        endAt: new Date(maintenanceMode.endAt),
-        link: maintenanceMode.link,
-      };
-    }
 
     return clientConfig;
   }
