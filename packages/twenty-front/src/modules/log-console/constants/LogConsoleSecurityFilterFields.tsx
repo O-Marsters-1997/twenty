@@ -5,7 +5,6 @@ import {
   IconSpy,
   IconTimelineEvent,
   IconUserPlus,
-  IconWorld,
 } from 'twenty-ui/icon';
 
 import { LOG_CONSOLE_ACTOR_FILTER_FIELD } from '@/log-console/constants/LogConsoleActorFilterField';
@@ -32,11 +31,6 @@ export const LOG_CONSOLE_SECURITY_FILTER_FIELDS: LogConsoleFilterField[] = [
         label: t`Signed up`,
         values: ['User Signup'],
         startIcon: <IconUserPlus />,
-      },
-      {
-        label: t`Custom domain`,
-        values: ['Custom Domain Activated', 'Custom Domain Deactivated'],
-        startIcon: <IconWorld />,
       },
       {
         label: t`Server administrator access updated`,
