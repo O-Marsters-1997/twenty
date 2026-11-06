@@ -65,10 +65,6 @@ export const KeyboardNavigation: Story = {
         label: 'Complete setup',
         destination: 'configuration/connected-account',
       },
-      {
-        label: 'Connection settings',
-        destination: 'edit-imap-smtp-caldav-connection/connected-account',
-      },
       { label: 'Emails settings', destination: 'emails' },
       { label: 'Calendar settings', destination: 'calendars' },
     ]) {

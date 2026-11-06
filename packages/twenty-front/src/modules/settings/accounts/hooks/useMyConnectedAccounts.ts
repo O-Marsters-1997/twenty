@@ -15,7 +15,6 @@ const EMAIL_AND_CALENDAR_PROVIDERS: ReadonlySet<ConnectedAccountProvider> =
   new Set([
     ConnectedAccountProvider.GOOGLE,
     ConnectedAccountProvider.MICROSOFT,
-    ConnectedAccountProvider.IMAP_SMTP_CALDAV,
   ]);
 
 // The personal accounts page is for email/calendar credentials only. App-managed

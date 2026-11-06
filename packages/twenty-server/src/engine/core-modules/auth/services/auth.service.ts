@@ -936,8 +936,6 @@ export class AuthService {
         return ['email', 'profile'];
       case ConnectedAccountProvider.MICROSOFT:
         return ['User.Read'];
-      case ConnectedAccountProvider.IMAP_SMTP_CALDAV:
-        return [];
       case ConnectedAccountProvider.EMAIL_GROUP:
       case ConnectedAccountProvider.APP:
         return [];

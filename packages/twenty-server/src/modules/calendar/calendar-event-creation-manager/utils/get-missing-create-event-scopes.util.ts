@@ -26,7 +26,6 @@ export const getMissingCreateEventScopes = (connectedAccount: {
       return hasScope ? [] : [MICROSOFT_CALENDARS_READ_WRITE_SCOPE];
     }
     // Non-OAuth providers do not rely on OAuth scopes to create events.
-    case ConnectedAccountProvider.IMAP_SMTP_CALDAV:
     case ConnectedAccountProvider.EMAIL_GROUP:
     case ConnectedAccountProvider.APP:
       return [];
