@@ -8,7 +8,6 @@ import { WorkspaceActivationStatus } from 'twenty-shared/workspace';
 import { In, IsNull, Repository } from 'typeorm';
 
 import { MessageChannelSyncStage } from 'twenty-shared/types';
-import { SentryCronMonitor } from 'src/engine/core-modules/cron/sentry-cron-monitor.decorator';
 import { ExceptionHandlerService } from 'src/engine/core-modules/exception-handler/exception-handler.service';
 import { InjectMessageQueue } from 'src/engine/core-modules/message-queue/decorators/message-queue.decorator';
 import { Process } from 'src/engine/core-modules/message-queue/decorators/process.decorator';
@@ -41,10 +40,6 @@ export class MessagingMessagesImportCronJob {
   ) {}
 
   @Process(MessagingMessagesImportCronJob.name)
-  @SentryCronMonitor(
-    MessagingMessagesImportCronJob.name,
-    MESSAGING_MESSAGES_IMPORT_CRON_PATTERN,
-  )
   async handle(): Promise<void> {
     const pendingMessageChannelsAcrossWorkspaces =
       await this.messageChannelRepository.find({

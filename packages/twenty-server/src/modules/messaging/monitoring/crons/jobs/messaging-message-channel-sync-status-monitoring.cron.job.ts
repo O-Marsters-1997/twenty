@@ -4,7 +4,6 @@ import snakeCase from 'lodash.snakecase';
 import { WorkspaceActivationStatus } from 'twenty-shared/workspace';
 import { Repository } from 'typeorm';
 
-import { SentryCronMonitor } from 'src/engine/core-modules/cron/sentry-cron-monitor.decorator';
 import { ExceptionHandlerService } from 'src/engine/core-modules/exception-handler/exception-handler.service';
 import { Process } from 'src/engine/core-modules/message-queue/decorators/process.decorator';
 import { Processor } from 'src/engine/core-modules/message-queue/decorators/processor.decorator';
@@ -31,10 +30,6 @@ export class MessagingMessageChannelSyncStatusMonitoringCronJob {
   ) {}
 
   @Process(MessagingMessageChannelSyncStatusMonitoringCronJob.name)
-  @SentryCronMonitor(
-    MessagingMessageChannelSyncStatusMonitoringCronJob.name,
-    MESSAGING_MESSAGE_CHANNEL_SYNC_STATUS_MONITORING_CRON_PATTERN,
-  )
   async handle(): Promise<void> {
     await this.messagingMonitoringService.track({
       eventName: 'message_channel.monitoring.sync_status.start',

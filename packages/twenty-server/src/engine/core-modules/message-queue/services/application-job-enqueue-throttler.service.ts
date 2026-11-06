@@ -1,7 +1,4 @@
 import { Injectable } from '@nestjs/common';
-
-import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
-import { MetricsKeys } from 'src/engine/core-modules/metrics/types/metrics-keys.type';
 import {
   ThrottlerException,
   ThrottlerExceptionCode,
@@ -14,7 +11,6 @@ export class ApplicationJobEnqueueThrottlerService {
   constructor(
     private readonly throttlerService: ThrottlerService,
     private readonly twentyConfigService: TwentyConfigService,
-    private readonly metricsService: MetricsService,
   ) {}
 
   async throttleOrThrow({
@@ -45,14 +41,6 @@ export class ApplicationJobEnqueueThrottlerService {
     });
 
     if (admittedCount !== jobCount) {
-      await this.metricsService.incrementCounterForEvent({
-        key: MetricsKeys.JobEnqueueApplicationRateLimited,
-        shouldStoreInCache: false,
-        attributes: {
-          application_id: applicationId,
-        },
-      });
-
       throw new ThrottlerException(
         'Application job enqueue limit reached',
         ThrottlerExceptionCode.LIMIT_REACHED,

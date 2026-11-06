@@ -93,14 +93,13 @@ export const SettingsAdminIndicatorHealthStatus = () => {
             </StyledTitleContainer>
           </Section.Root>
           <Section.Root>
-            {data?.getIndicatorHealthStatus?.id !== HealthIndicatorId.worker &&
-              data?.getIndicatorHealthStatus?.id !==
-                HealthIndicatorId.connectedAccount && (
-                <Section.Header
-                  title={t`Status`}
-                  description={data?.getIndicatorHealthStatus?.description}
-                />
-              )}
+            {data?.getIndicatorHealthStatus?.id !==
+              HealthIndicatorId.worker && (
+              <Section.Header
+                title={t`Status`}
+                description={data?.getIndicatorHealthStatus?.description}
+              />
+            )}
             <SettingsAdminIndicatorHealthStatusContent />
           </Section.Root>
         </SettingsAdminIndicatorHealthContext.Provider>

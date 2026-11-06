@@ -5,7 +5,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { WorkspaceActivationStatus } from 'twenty-shared/workspace';
 
-import { SentryCronMonitor } from 'src/engine/core-modules/cron/sentry-cron-monitor.decorator';
 import { Process } from 'src/engine/core-modules/message-queue/decorators/process.decorator';
 import { Processor } from 'src/engine/core-modules/message-queue/decorators/processor.decorator';
 import { MessageQueue } from 'src/engine/core-modules/message-queue/message-queue.constants';
@@ -23,10 +22,6 @@ export class EmailingOngoingStaleCronJob {
   ) {}
 
   @Process(EmailingOngoingStaleCronJob.name)
-  @SentryCronMonitor(
-    EmailingOngoingStaleCronJob.name,
-    EMAILING_ONGOING_STALE_CRON_PATTERN,
-  )
   async handle(): Promise<void> {
     const workspaces = await this.workspaceRepository.find({
       where: { activationStatus: WorkspaceActivationStatus.ACTIVE },

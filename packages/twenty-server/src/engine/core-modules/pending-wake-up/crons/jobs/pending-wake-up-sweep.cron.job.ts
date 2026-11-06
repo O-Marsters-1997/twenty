@@ -3,7 +3,6 @@ import { InjectDataSource } from '@nestjs/typeorm';
 
 import { DataSource } from 'typeorm';
 
-import { SentryCronMonitor } from 'src/engine/core-modules/cron/sentry-cron-monitor.decorator';
 import { Process } from 'src/engine/core-modules/message-queue/decorators/process.decorator';
 import { Processor } from 'src/engine/core-modules/message-queue/decorators/processor.decorator';
 import { MessageQueue } from 'src/engine/core-modules/message-queue/message-queue.constants';
@@ -33,10 +32,6 @@ export class PendingWakeUpSweepCronJob {
   ) {}
 
   @Process(PendingWakeUpSweepCronJob.name)
-  @SentryCronMonitor(
-    PendingWakeUpSweepCronJob.name,
-    PENDING_WAKE_UP_SWEEP_CRON_PATTERN,
-  )
   async handle() {
     const overdueWakeUps: OverdueWakeUpRow[] = await this.coreDataSource.query(
       `SELECT "id", "workspaceId", "ownerType", "ownerId" FROM "core"."pendingWakeUp"

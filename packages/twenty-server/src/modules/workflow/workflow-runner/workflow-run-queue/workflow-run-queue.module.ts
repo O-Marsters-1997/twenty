@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-
-import { MetricsModule } from 'src/engine/core-modules/metrics/metrics.module';
 import { WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
 import { WorkflowRunModule } from 'src/modules/workflow/workflow-runner/workflow-run/workflow-run.module';
 import { WorkflowHandleStaledRunsCommand } from 'src/modules/workflow/workflow-runner/workflow-run-queue/command/workflow-handle-staled-runs.command';
@@ -21,7 +19,6 @@ import { WorkflowThrottlingModule } from 'src/modules/workflow/workflow-runner/w
 @Module({
   imports: [
     TypeOrmModule.forFeature([WorkspaceEntity]),
-    MetricsModule,
     WorkflowRunModule,
     WorkflowThrottlingModule,
   ],

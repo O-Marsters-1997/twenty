@@ -12,15 +12,10 @@ import {
   CaptchaExceptionCode,
 } from 'src/engine/core-modules/captcha/captcha.exception';
 import { CaptchaService } from 'src/engine/core-modules/captcha/captcha.service';
-import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
-import { MetricsKeys } from 'src/engine/core-modules/metrics/types/metrics-keys.type';
 
 @Injectable()
 export class CaptchaGuard implements CanActivate {
-  constructor(
-    private captchaService: CaptchaService,
-    private metricsService: MetricsService,
-  ) {}
+  constructor(private captchaService: CaptchaService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const ctx = GqlExecutionContext.create(context);
@@ -32,12 +27,6 @@ export class CaptchaGuard implements CanActivate {
     if (result.success) {
       return true;
     } else {
-      await this.metricsService.incrementCounterForEvent({
-        key: MetricsKeys.InvalidCaptcha,
-        eventId: token || '',
-        ...(result.error ? { attributes: { error: result.error } } : {}),
-      });
-
       throw new CaptchaException(
         'Invalid Captcha, please try another device',
         CaptchaExceptionCode.INVALID_CAPTCHA,

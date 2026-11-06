@@ -25,12 +25,6 @@ import {
 import { type APP_LOCALES } from 'twenty-shared/translations';
 import { AppPath, FeatureFlagKey } from 'twenty-shared/types';
 import { getAppPath, isDefined, sortKeysDeeply } from 'twenty-shared/utils';
-
-import { AI_LATENCY_MS_BUCKET_BOUNDARIES } from 'src/engine/core-modules/metrics/constants/ai-latency-ms-bucket-boundaries.constant';
-import { TOOL_EXECUTION_DURATION_MS_BUCKET_BOUNDARIES } from 'src/engine/core-modules/metrics/constants/tool-execution-duration-ms-bucket-boundaries.constant';
-import { TOOL_OUTPUT_TOKENS_BUCKET_BOUNDARIES } from 'src/engine/core-modules/metrics/constants/tool-output-tokens-bucket-boundaries.constant';
-import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
-import { MetricsKeys } from 'src/engine/core-modules/metrics/types/metrics-keys.type';
 import { UsageOperationType } from 'src/engine/core-modules/usage/enums/usage-operation-type.enum';
 
 import { type CodeExecutionStreamEmitter } from 'src/engine/core-modules/tool-provider/interfaces/code-execution-stream-emitter.type';
@@ -65,7 +59,6 @@ import { convertDollarsToCreditsMicro } from 'src/engine/metadata-modules/ai/ai-
 import { countNativeWebSearchCallsFromSteps } from 'src/engine/metadata-modules/ai/ai-billing/utils/count-native-web-search-calls-from-steps.util';
 import {
   extractCacheCreationTokens,
-  extractCacheCreationTokensFromSteps,
 } from 'src/engine/metadata-modules/ai/ai-billing/utils/extract-cache-creation-tokens.util';
 import { AI_CHAT_EXCLUDED_TOOL_NAMES } from 'src/engine/metadata-modules/ai/ai-chat/constants/ai-chat-excluded-tool-names.const';
 import { AI_CHAT_STREAM_FUNCTION_ID } from 'src/engine/metadata-modules/ai/ai-chat/constants/ai-chat-stream-function-id.constant';
@@ -93,7 +86,6 @@ import {
   injectCacheBreakpoint,
 } from 'src/engine/metadata-modules/ai/ai-agent-execution/utils/provider-options.util';
 import { replaceUnsupportedFileParts } from 'src/engine/metadata-modules/ai/ai-agent-execution/utils/replace-unsupported-file-parts.util';
-import { tagAiChatExecutionScope } from 'src/engine/metadata-modules/ai/ai-chat/utils/tag-ai-chat-execution-scope.util';
 import { buildAiTelemetry } from 'src/engine/metadata-modules/ai/ai-models/utils/build-ai-telemetry.util';
 import { AiModelConfigService } from 'src/engine/metadata-modules/ai/ai-models/services/ai-model-config.service';
 import { AiModelRegistryService } from 'src/engine/metadata-modules/ai/ai-models/services/ai-model-registry.service';
@@ -146,7 +138,6 @@ export class ChatExecutionService {
     private readonly workspaceDomainsService: WorkspaceDomainsService,
     private readonly exceptionHandlerService: ExceptionHandlerService,
     private readonly messagePruningService: MessagePruningService,
-    private readonly metricsService: MetricsService,
     private readonly chatActorService: AgentChatActorService,
     private readonly agentChatThreadTargetService: AgentChatThreadTargetService,
     private readonly featureFlagService: FeatureFlagService,
@@ -270,12 +261,6 @@ export class ChatExecutionService {
 
     const isWorkspaceSetupKickoffTurn =
       isWorkspaceSetupThread && hasNoAssistantMessage(messages);
-
-    tagAiChatExecutionScope({
-      isWorkspaceSetupThread,
-      modelId: registeredModel.modelId,
-    });
-
     // judged on the conversation, not setup status: onboarding continues here after setup completes
     const canAttachConversationToRecords =
       !isWorkspaceSetupConversation &&
@@ -443,9 +428,6 @@ export class ChatExecutionService {
     const modelMessages = pruningResult.messages;
 
     let hasNoMoreAvailableCredits = false;
-    const streamStartedAt = performance.now();
-    let stepStartedAt = streamStartedAt;
-    let ttftRecorded = false;
     let stepIndex = 0;
     let lastUnderlyingStreamError: unknown;
 
@@ -461,7 +443,6 @@ export class ChatExecutionService {
         { inputTokens: 0, outputTokens: 0, cacheReadTokens: 0 },
       );
 
-      const cacheCreationTokens = extractCacheCreationTokensFromSteps(steps);
       const totalTokens = usage.inputTokens + usage.outputTokens;
 
       const costInDollars = this.aiBillingService.calculateStepsCost(
@@ -485,36 +466,6 @@ export class ChatExecutionService {
         workspace.id,
         userWorkspaceId,
       );
-
-      const modelAttr = { model: registeredModel.modelId };
-
-      this.metricsService.incrementCounterBy({
-        key: MetricsKeys.AiChatInputTokens,
-        amount: usage.inputTokens,
-        attributes: modelAttr,
-      });
-      this.metricsService.incrementCounterBy({
-        key: MetricsKeys.AiChatOutputTokens,
-        amount: usage.outputTokens,
-        attributes: modelAttr,
-      });
-      this.metricsService.incrementCounterBy({
-        key: MetricsKeys.AiChatCacheReadTokens,
-        amount: usage.cacheReadTokens,
-        attributes: modelAttr,
-      });
-      this.metricsService.incrementCounterBy({
-        key: MetricsKeys.AiChatCacheWriteTokens,
-        amount: cacheCreationTokens,
-        attributes: modelAttr,
-      });
-      this.metricsService.recordHistogram({
-        key: MetricsKeys.AiChatTurnLatencyMs,
-        value: performance.now() - streamStartedAt,
-        unit: 'ms',
-        attributes: modelAttr,
-        bucketBoundaries: AI_LATENCY_MS_BUCKET_BOUNDARIES,
-      });
     };
 
     const stream = streamText({
@@ -550,7 +501,6 @@ export class ChatExecutionService {
       }),
       prepareStep: async ({ messages }) => {
         await getAuthorization();
-        stepStartedAt = performance.now();
 
         return {
           messages: injectCacheBreakpoint(
@@ -559,48 +509,13 @@ export class ChatExecutionService {
           ),
         };
       },
-      onChunk: ({ chunk }) => {
-        if (
-          !ttftRecorded &&
-          (chunk.type === 'text-delta' || chunk.type === 'tool-call')
-        ) {
-          ttftRecorded = true;
-          this.metricsService.recordHistogram({
-            key: MetricsKeys.AiChatTtftMs,
-            value: performance.now() - streamStartedAt,
-            unit: 'ms',
-            attributes: { model: registeredModel.modelId },
-            bucketBoundaries: AI_LATENCY_MS_BUCKET_BOUNDARIES,
-          });
-        }
-      },
       onError: ({ error }) => {
         lastUnderlyingStreamError = error;
         this.logger.error(
           `Stream ${streamId} emitted an error: ${formatErrorWithCause(error)}`,
         );
       },
-      onToolExecutionEnd: (event) => {
-        this.metricsService.recordHistogram({
-          key: MetricsKeys.AiChatToolExecutionDurationMs,
-          value: event.toolExecutionMs,
-          unit: 'ms',
-          attributes: {
-            model: registeredModel.modelId,
-            tool: getToolMetricName(event.toolCall.toolName),
-          },
-          bucketBoundaries: TOOL_EXECUTION_DURATION_MS_BUCKET_BOUNDARIES,
-        });
-      },
       onStepEnd: async (step) => {
-        this.metricsService.recordHistogram({
-          key: MetricsKeys.AiChatStepLatencyMs,
-          value: performance.now() - stepStartedAt,
-          unit: 'ms',
-          attributes: { model: registeredModel.modelId },
-          bucketBoundaries: AI_LATENCY_MS_BUCKET_BOUNDARIES,
-        });
-
         const { hasNoMoreAvailableCredits: stepHasNoMoreAvailableCredits } =
           await this.aiBillingService.decrementAndCheckAvailableCredits({
             modelId: registeredModel.modelId,
@@ -647,22 +562,6 @@ export class ChatExecutionService {
             model: registeredModel.modelId,
             tool: getToolMetricName(resolveToolName(part)),
           };
-
-          this.metricsService.incrementCounterBy({
-            key: succeeded
-              ? MetricsKeys.AiChatToolExecutionSucceeded
-              : MetricsKeys.AiChatToolExecutionFailed,
-            amount: 1,
-            attributes: executionAttributes,
-          });
-
-          this.metricsService.recordHistogram({
-            key: MetricsKeys.AiChatToolOutputTokens,
-            value: outputTokens,
-            unit: 'token',
-            attributes: executionAttributes,
-            bucketBoundaries: TOOL_OUTPUT_TOKENS_BUCKET_BOUNDARIES,
-          });
         }
       },
       onAbort: async ({ steps }) => {

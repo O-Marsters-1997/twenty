@@ -10,7 +10,6 @@ import { AdminPanelHealthService } from 'src/engine/core-modules/admin-panel/adm
 import { AdminPanelQueueService } from 'src/engine/core-modules/admin-panel/admin-panel-queue.service';
 import { AdminPanelResolver } from 'src/engine/core-modules/admin-panel/admin-panel.resolver';
 import { AppHealthIndicator } from 'src/engine/core-modules/admin-panel/indicators/app.health';
-import { ConnectedAccountHealth } from 'src/engine/core-modules/admin-panel/indicators/connected-account.health';
 import { DatabaseHealthIndicator } from 'src/engine/core-modules/admin-panel/indicators/database.health';
 import { RedisHealthIndicator } from 'src/engine/core-modules/admin-panel/indicators/redis.health';
 import { WorkerHealthIndicator } from 'src/engine/core-modules/admin-panel/indicators/worker.health';
@@ -36,7 +35,6 @@ import { FeatureFlagModule } from 'src/engine/core-modules/feature-flag/feature-
 import { FileModule } from 'src/engine/core-modules/file/file.module';
 import { JwtModule } from 'src/engine/core-modules/jwt/jwt.module';
 import { KeyValuePairModule } from 'src/engine/core-modules/key-value-pair/key-value-pair.module';
-import { MetricsModule } from 'src/engine/core-modules/metrics/metrics.module';
 import { SecureHttpClientModule } from 'src/engine/core-modules/secure-http-client/secure-http-client.module';
 import { TwoFactorAuthenticationModule } from 'src/engine/core-modules/two-factor-authentication/two-factor-authentication.module';
 import { UpgradeModule } from 'src/engine/core-modules/upgrade/upgrade.module';
@@ -64,7 +62,6 @@ import { provideWorkspaceScopedRepository } from 'src/engine/twenty-orm/workspac
     FileModule,
     WorkspaceDomainsModule,
     TerminusModule,
-    MetricsModule,
     FeatureFlagModule,
     PermissionsModule,
     SecureHttpClientModule,
@@ -100,7 +97,6 @@ import { provideWorkspaceScopedRepository } from 'src/engine/twenty-orm/workspac
     DatabaseHealthIndicator,
     RedisHealthIndicator,
     WorkerHealthIndicator,
-    ConnectedAccountHealth,
     AppHealthIndicator,
     provideWorkspaceScopedRepository(FeatureFlagEntity),
     provideWorkspaceScopedRepository(BillingCustomerEntity),

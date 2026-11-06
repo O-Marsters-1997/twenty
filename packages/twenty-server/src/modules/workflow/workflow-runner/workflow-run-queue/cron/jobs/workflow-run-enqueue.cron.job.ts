@@ -7,7 +7,6 @@ import { DataSource, Repository } from 'typeorm';
 import { InjectCacheStorage } from 'src/engine/core-modules/cache-storage/decorators/cache-storage.decorator';
 import { CacheStorageService } from 'src/engine/core-modules/cache-storage/services/cache-storage.service';
 import { CacheStorageNamespace } from 'src/engine/core-modules/cache-storage/types/cache-storage-namespace.enum';
-import { SentryCronMonitor } from 'src/engine/core-modules/cron/sentry-cron-monitor.decorator';
 import { ExceptionHandlerService } from 'src/engine/core-modules/exception-handler/exception-handler.service';
 import { InjectMessageQueue } from 'src/engine/core-modules/message-queue/decorators/message-queue.decorator';
 import { Process } from 'src/engine/core-modules/message-queue/decorators/process.decorator';
@@ -44,10 +43,6 @@ export class WorkflowRunEnqueueCronJob {
   ) {}
 
   @Process(WorkflowRunEnqueueCronJob.name)
-  @SentryCronMonitor(
-    WorkflowRunEnqueueCronJob.name,
-    WORKFLOW_RUN_ENQUEUE_CRON_PATTERN,
-  )
   async handle() {
     this.logger.log('Starting WorkflowRunEnqueueCronJob cron');
 

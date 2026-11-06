@@ -8,7 +8,6 @@ import { CommonResultGettersService } from 'src/engine/api/common/common-result-
 import { GroupByWithRecordsService } from 'src/engine/api/graphql/graphql-query-runner/group-by/services/group-by-with-records.service';
 import { WorkspaceQueryHookModule } from 'src/engine/api/graphql/workspace-query-runner/workspace-query-hook/workspace-query-hook.module';
 import { FileModule } from 'src/engine/core-modules/file/file.module';
-import { MetricsModule } from 'src/engine/core-modules/metrics/metrics.module';
 import { RecordPositionModule } from 'src/engine/core-modules/record-position/record-position.module';
 import { RecordTransformerModule } from 'src/engine/core-modules/record-transformer/record-transformer.module';
 import { UsageLimitModule } from 'src/engine/core-modules/usage-limit/usage-limit.module';
@@ -28,7 +27,6 @@ import { WorkspaceCacheModule } from 'src/engine/workspace-cache/workspace-cache
     ViewFilterGroupModule,
     UsageLimitModule,
     UsageModule,
-    MetricsModule,
     RecordPositionModule,
     RecordShareModule,
     RecordTransformerModule,
