@@ -14,12 +14,7 @@ import { useLingui } from '@lingui/react/macro';
 import { ConnectedAccountProvider } from 'twenty-shared/types';
 import { capitalize } from 'twenty-shared/utils';
 import { useToast } from 'twenty-ui/components/feedback';
-import {
-  IconGoogle,
-  IconLink,
-  IconList,
-  IconPassword,
-} from 'twenty-ui/icon';
+import { IconGoogle, IconLink, IconList, IconPassword } from 'twenty-ui/icon';
 import { Card } from 'twenty-ui/primitives/surfaces';
 import { themeCssVariables } from 'twenty-ui/theme';
 import {

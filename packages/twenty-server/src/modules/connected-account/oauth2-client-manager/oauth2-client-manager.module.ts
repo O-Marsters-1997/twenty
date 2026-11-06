@@ -12,10 +12,7 @@ import { RefreshTokensManagerModule } from 'src/modules/connected-account/refres
     RefreshTokensManagerModule,
     TypeOrmModule.forFeature([ConnectedAccountEntity]),
   ],
-  providers: [
-    GoogleOAuth2ClientProvider,
-    Logger,
-  ],
+  providers: [GoogleOAuth2ClientProvider, Logger],
   exports: [GoogleOAuth2ClientProvider],
 })
 export class OAuth2ClientManagerModule {}

@@ -1,11 +1,7 @@
 import { type NativeAccountApp } from '@/settings/app-preferences/types/NativeAccountApp';
 import { msg } from '@lingui/core/macro';
 import { ConnectedAccountProvider } from 'twenty-shared/types';
-import {
-  IconAt,
-  IconGmail,
-  IconGoogleCalendar,
-} from 'twenty-ui/icon';
+import { IconAt, IconGmail, IconGoogleCalendar } from 'twenty-ui/icon';
 
 export const NATIVE_ACCOUNT_APPS: NativeAccountApp[] = [
   {
