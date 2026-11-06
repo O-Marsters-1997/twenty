@@ -1,6 +1,5 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
-  "ignoreWorkspaces": ["packages/twenty-docs"],
   "rules": {
     "binaries": "warn",
     "dependencies": "error",

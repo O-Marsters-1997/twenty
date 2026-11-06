@@ -6,8 +6,6 @@ import { isDefined } from 'twenty-shared/utils';
 import { InjectMessageQueue } from 'src/engine/core-modules/message-queue/decorators/message-queue.decorator';
 import { MessageQueue } from 'src/engine/core-modules/message-queue/message-queue.constants';
 import { MessageQueueService } from 'src/engine/core-modules/message-queue/services/message-queue.service';
-import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
-import { MetricsKeys } from 'src/engine/core-modules/metrics/types/metrics-keys.type';
 import { WorkspaceOrmManager } from 'src/engine/twenty-orm/workspace-orm.manager';
 import { buildSystemAuthContext } from 'src/engine/twenty-orm/utils/build-system-auth-context.util';
 import {
@@ -28,7 +26,6 @@ export class WorkflowRunEnqueueWorkspaceService {
     private readonly workspaceOrmManager: WorkspaceOrmManager,
     @InjectMessageQueue(MessageQueue.workflowQueue)
     private readonly messageQueueService: MessageQueueService,
-    private readonly metricsService: MetricsService,
   ) {}
 
   async enqueueRunsForWorkspace({
@@ -150,10 +147,6 @@ export class WorkflowRunEnqueueWorkspaceService {
       }, authContext);
     } catch (error) {
       try {
-        await this.metricsService.incrementCounterForEvent({
-          key: MetricsKeys.WorkflowRunFailedToEnqueue,
-          eventId: workspaceId,
-        });
       } catch {
         // Metrics may fail if Redis is shutting down — safe to ignore
       }

@@ -26,8 +26,6 @@ import { FileUrlService } from 'src/engine/core-modules/file/file-url/file-url.s
 import { InjectMessageQueue } from 'src/engine/core-modules/message-queue/decorators/message-queue.decorator';
 import { MessageQueue } from 'src/engine/core-modules/message-queue/message-queue.constants';
 import { MessageQueueService } from 'src/engine/core-modules/message-queue/services/message-queue.service';
-import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
-import { MetricsKeys } from 'src/engine/core-modules/metrics/types/metrics-keys.type';
 import { type WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
 import { AgentMessageRole } from 'src/engine/metadata-modules/ai/ai-history/enums/agent-message-role.enum';
 import { AgentMessageStatus } from 'src/engine/metadata-modules/ai/ai-history/enums/agent-message-status.enum';
@@ -88,7 +86,6 @@ export class AgentChatStreamingService {
     private readonly eventPublisherService: AgentChatEventPublisherService,
     private readonly fileUrlService: FileUrlService,
     private readonly streamHeartbeatService: AgentChatStreamHeartbeatService,
-    private readonly metricsService: MetricsService,
     private readonly streamRecoveryService: AgentChatStreamRecoveryService,
     private readonly actorService: AgentChatActorService,
     private readonly turnRecorderService: AgentTurnRecorderService,
@@ -696,17 +693,6 @@ export class AgentChatStreamingService {
       });
 
       const model = modelId ?? 'unknown';
-
-      this.metricsService.incrementCounterBy({
-        key: MetricsKeys.AiChatTurnFailed,
-        amount: 1,
-        attributes: {
-          model,
-          failure_phase: 'enqueue',
-          error_code: mapErrorToStreamError(error).code,
-        },
-      });
-
       this.logger.error(
         `[AI_CHAT_TURN_FAILED] failurePhase=enqueue, model=${model}, threadId=${claim.threadId}, workspaceId=${claim.workspaceId}: ${formatErrorWithCause(error)}`,
       );
@@ -775,11 +761,13 @@ export class AgentChatStreamingService {
 
     // contexts open their thread, and Google and Bedrock only take system messages ahead of the conversation
     return [
-      ...contexts.map((context, index): ExtendedUIMessage => ({
-        id: `context-${index}`,
-        role: 'system',
-        parts: [{ type: 'text', text: context }],
-      })),
+      ...contexts.map(
+        (context, index): ExtendedUIMessage => ({
+          id: `context-${index}`,
+          role: 'system',
+          parts: [{ type: 'text', text: context }],
+        }),
+      ),
       ...uiMessages,
     ];
   }

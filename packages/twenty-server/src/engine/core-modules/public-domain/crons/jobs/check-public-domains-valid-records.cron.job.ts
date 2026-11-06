@@ -6,7 +6,6 @@ import { Process } from 'src/engine/core-modules/message-queue/decorators/proces
 import { Processor } from 'src/engine/core-modules/message-queue/decorators/processor.decorator';
 import { MessageQueue } from 'src/engine/core-modules/message-queue/message-queue.constants';
 import { PublicDomainService } from 'src/engine/core-modules/public-domain/public-domain.service';
-import { SentryCronMonitor } from 'src/engine/core-modules/cron/sentry-cron-monitor.decorator';
 import { PublicDomainEntity } from 'src/engine/core-modules/public-domain/public-domain.entity';
 
 export const CHECK_PUBLIC_DOMAINS_VALID_RECORDS_CRON_PATTERN = '0 * * * *';
@@ -22,10 +21,6 @@ export class CheckPublicDomainsValidRecordsCronJob {
   ) {}
 
   @Process(CheckPublicDomainsValidRecordsCronJob.name)
-  @SentryCronMonitor(
-    CheckPublicDomainsValidRecordsCronJob.name,
-    CHECK_PUBLIC_DOMAINS_VALID_RECORDS_CRON_PATTERN,
-  )
   async handle(): Promise<void> {
     const publicDomains = await this.publicDomainRepository.find({
       where: {

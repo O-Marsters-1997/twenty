@@ -35,7 +35,6 @@ import { FileModule } from 'src/engine/core-modules/file/file.module';
 import { GuardRedirectModule } from 'src/engine/core-modules/guard-redirect/guard-redirect.module';
 import { ImpersonationAuthorizationModule } from 'src/engine/core-modules/impersonation/impersonation-authorization.module';
 import { JwtModule } from 'src/engine/core-modules/jwt/jwt.module';
-import { MetricsModule } from 'src/engine/core-modules/metrics/metrics.module';
 import { OnboardingModule } from 'src/engine/core-modules/onboarding/onboarding.module';
 import { SecureHttpClientModule } from 'src/engine/core-modules/secure-http-client/secure-http-client.module';
 import { WorkspaceSsoModule } from 'src/engine/core-modules/sso/sso.module';
@@ -96,7 +95,6 @@ import { AuthService } from './services/auth.service';
     EmailVerificationModule,
     GuardRedirectModule,
     ImpersonationAuthorizationModule,
-    MetricsModule,
     PermissionsModule,
     TwoFactorAuthenticationModule,
     ApiKeyModule,

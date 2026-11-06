@@ -213,14 +213,6 @@ export class ClientConfigService {
           'SUPPORT_FRONT_CHAT_ID',
         ),
       },
-      sentry: {
-        environment: this.twentyConfigService.get('SENTRY_ENVIRONMENT'),
-        release: this.twentyConfigService.get('APP_VERSION'),
-        dsn: this.twentyConfigService.get('SENTRY_FRONT_DSN'),
-        tracesSampleRate: this.twentyConfigService.get(
-          'SENTRY_FRONT_TRACES_SAMPLE_RATE',
-        ),
-      },
       captcha: {
         provider: captchaProvider ? captchaProvider : undefined,
         siteKey: this.twentyConfigService.get('CAPTCHA_SITE_KEY'),
@@ -266,7 +258,6 @@ export class ClientConfigService {
       isAttachmentPreviewEnabled: this.twentyConfigService.get(
         'IS_ATTACHMENT_PREVIEW_ENABLED',
       ),
-      analyticsEnabled: this.twentyConfigService.get('ANALYTICS_ENABLED'),
       canManageFeatureFlags:
         this.twentyConfigService.get('NODE_ENV') ===
           NodeEnvironment.DEVELOPMENT ||

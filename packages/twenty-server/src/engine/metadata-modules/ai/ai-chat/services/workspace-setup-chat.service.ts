@@ -22,7 +22,6 @@ import { AgentChatService } from 'src/engine/metadata-modules/ai/ai-chat/service
 import { buildWorkspaceSetupChatThreadId } from 'src/engine/metadata-modules/ai/ai-chat/utils/build-workspace-setup-chat-thread-id.util';
 import { isUniqueViolationError } from 'src/engine/metadata-modules/ai/ai-chat/utils/is-unique-violation-error.util';
 import { buildWorkspaceSetupKickoffMessageText } from 'src/engine/metadata-modules/ai/ai-chat/utils/build-workspace-setup-kickoff-message-text.util';
-import { tagAiChatStreamScope } from 'src/engine/metadata-modules/ai/ai-chat/utils/tag-ai-chat-stream-scope.util';
 import { AiModelRegistryService } from 'src/engine/metadata-modules/ai/ai-models/services/ai-model-registry.service';
 import { WorkspaceOrmManager } from 'src/engine/twenty-orm/workspace-orm.manager';
 import { buildSystemAuthContext } from 'src/engine/twenty-orm/utils/build-system-auth-context.util';
@@ -185,14 +184,6 @@ export class WorkspaceSetupChatService {
     if (!isDefined(openingTurn)) {
       return { outcome: WorkspaceSetupChatOutcome.ALREADY_STARTED, thread };
     }
-
-    tagAiChatStreamScope({
-      streamId: openingTurn.streamId,
-      turnId: openingTurn.turnId,
-      threadId,
-      workspaceId: workspace.id,
-    });
-
     return { outcome: WorkspaceSetupChatOutcome.STARTED, thread };
   }
 

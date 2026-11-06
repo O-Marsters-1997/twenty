@@ -2,7 +2,6 @@
 
 import { Injectable, Logger } from '@nestjs/common';
 
-import { SentryCronMonitor } from 'src/engine/core-modules/cron/sentry-cron-monitor.decorator';
 import { ENTERPRISE_KEY_VALIDATION_CRON_PATTERN } from 'src/engine/core-modules/enterprise/constants/organization-key-validation-cron-pattern.constant';
 import { EnterprisePlanService } from 'src/engine/core-modules/enterprise/services/enterprise-plan.service';
 import { Process } from 'src/engine/core-modules/message-queue/decorators/process.decorator';
@@ -17,10 +16,6 @@ export class EnterpriseKeyValidationCronJob {
   constructor(private readonly enterprisePlanService: EnterprisePlanService) {}
 
   @Process(EnterpriseKeyValidationCronJob.name)
-  @SentryCronMonitor(
-    EnterpriseKeyValidationCronJob.name,
-    ENTERPRISE_KEY_VALIDATION_CRON_PATTERN,
-  )
   async handle(): Promise<void> {
     this.logger.log(
       'Starting enterprise validity token refresh and seat report...',

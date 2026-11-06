@@ -12,7 +12,6 @@ COPY ./package.json ./bun.lock ./bunfig.toml ./tsconfig.base.json ./nx.json /app
 COPY ./patches /app/patches
 
 # bun validates every workspace listed in package.json, even under --filter
-COPY ./packages/twenty-docs/package.json /app/packages/twenty-docs/
 COPY ./packages/twenty-e2e-testing/package.json /app/packages/twenty-e2e-testing/
 COPY ./packages/twenty-emails/package.json /app/packages/twenty-emails/
 COPY ./packages/twenty-front/package.json /app/packages/twenty-front/
@@ -21,7 +20,6 @@ COPY ./packages/twenty-server/package.json /app/packages/twenty-server/
 COPY ./packages/twenty-shared/package.json /app/packages/twenty-shared/
 COPY ./packages/twenty-ui/package.json /app/packages/twenty-ui/
 COPY ./packages/twenty-utils/package.json /app/packages/twenty-utils/
-COPY ./packages/twenty-website/package.json /app/packages/twenty-website/
 
 
 RUN bun install --frozen-lockfile --filter . --filter twenty-front --filter twenty-ui --filter twenty-shared && bun pm cache rm && npx nx reset
@@ -37,7 +35,6 @@ COPY ./package.json ./bun.lock ./bunfig.toml ./tsconfig.base.json ./nx.json /app
 COPY ./patches /app/patches
 
 # bun validates every workspace listed in package.json, even under --filter
-COPY ./packages/twenty-docs/package.json /app/packages/twenty-docs/
 COPY ./packages/twenty-e2e-testing/package.json /app/packages/twenty-e2e-testing/
 COPY ./packages/twenty-emails/package.json /app/packages/twenty-emails/
 COPY ./packages/twenty-front/package.json /app/packages/twenty-front/
@@ -46,7 +43,6 @@ COPY ./packages/twenty-server/package.json /app/packages/twenty-server/
 COPY ./packages/twenty-shared/package.json /app/packages/twenty-shared/
 COPY ./packages/twenty-ui/package.json /app/packages/twenty-ui/
 COPY ./packages/twenty-utils/package.json /app/packages/twenty-utils/
-COPY ./packages/twenty-website/package.json /app/packages/twenty-website/
 
 
 RUN bun install --frozen-lockfile --filter . --filter twenty-server --filter twenty-emails --filter twenty-shared && bun pm cache rm && npx nx reset

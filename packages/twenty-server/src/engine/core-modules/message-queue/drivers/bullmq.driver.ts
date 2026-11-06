@@ -1,15 +1,9 @@
-import {
-  Logger,
-  type OnModuleDestroy,
-  type OnModuleInit,
-} from '@nestjs/common';
+import { Logger, type OnModuleDestroy } from '@nestjs/common';
 
 import { type EventEmitter2 } from '@nestjs/event-emitter';
-import * as Sentry from '@sentry/node';
 import {
   type Job,
   type JobsOptions,
-  type JobType,
   MetricsTime,
   Queue,
   type QueueOptions,
@@ -43,12 +37,7 @@ import { type MessageQueue } from 'src/engine/core-modules/message-queue/message
 import { type QueueJobChangedEvent } from 'src/engine/core-modules/message-queue/types/queue-job-changed-event.type';
 import { getJobKey } from 'src/engine/core-modules/message-queue/utils/get-job-key.util';
 import { buildQueueJobIdWithSuffix } from 'src/engine/core-modules/message-queue/utils/build-queue-job-id-with-suffix.util';
-import { computeJobQueueWaitMs } from 'src/engine/core-modules/message-queue/utils/compute-job-queue-wait-ms.util';
 import { isQueueJobIdAlreadyWaiting } from 'src/engine/core-modules/message-queue/utils/is-queue-job-id-already-waiting.util';
-import { JOB_LATENCY_MS_BUCKET_BOUNDARIES } from 'src/engine/core-modules/metrics/constants/job-latency-ms-bucket-boundaries.constant';
-import { type MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
-import { MetricsKeys } from 'src/engine/core-modules/metrics/types/metrics-keys.type';
-import { applyWorkspaceSentryContextFromJobData } from 'src/engine/core-modules/sentry/utils/apply-workspace-sentry-context-from-job-data.util';
 import { type TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 
 export type BullMQDriverOptions = QueueOptions;
@@ -57,9 +46,7 @@ type BullMQJobsOptions = JobsOptions & {
   broadcastTo?: QueueJobRecipient;
 };
 
-export class BullMQDriver
-  implements MessageQueueDriver, OnModuleDestroy, OnModuleInit
-{
+export class BullMQDriver implements MessageQueueDriver, OnModuleDestroy {
   private logger = new Logger(BullMQDriver.name);
   private queueMap: Record<MessageQueue, Queue> = {} as Record<
     MessageQueue,
@@ -75,61 +62,9 @@ export class BullMQDriver
 
   constructor(
     private options: BullMQDriverOptions,
-    private metricsService: MetricsService,
     private twentyConfigService: TwentyConfigService,
     private eventEmitter: EventEmitter2,
   ) {}
-
-  onModuleInit() {
-    this.metricsService.createMultiObservableGauge({
-      metricName: 'twenty_queue_jobs_waiting_total',
-      options: {
-        description:
-          'Current number of jobs waiting in queue, scheduled (delayed) jobs excluded',
-      },
-      callback: () =>
-        this.collectJobCountsByQueue([
-          'waiting',
-          'prioritized',
-          'paused',
-          'waiting-children',
-        ]),
-    });
-
-    this.metricsService.createMultiObservableGauge({
-      metricName: 'twenty_queue_jobs_delayed_total',
-      options: {
-        description:
-          'Current number of jobs waiting for their scheduled time (delay or retry backoff)',
-      },
-      callback: () => this.collectJobCountsByQueue(['delayed']),
-    });
-  }
-
-  private async collectJobCountsByQueue(
-    jobTypes: JobType[],
-  ): Promise<Array<{ value: number; attributes: { queue: string } }>> {
-    const observations: Array<{
-      value: number;
-      attributes: { queue: string };
-    }> = [];
-
-    for (const [queueName, queue] of Object.entries(this.queueMap)) {
-      try {
-        observations.push({
-          value: await queue.getJobCountByTypes(...jobTypes),
-          attributes: { queue: queueName },
-        });
-      } catch (error) {
-        this.logger.error(
-          `Failed to collect ${jobTypes.join('/')} jobs metrics for queue ${queueName}`,
-          error,
-        );
-      }
-    }
-
-    return observations;
-  }
 
   register(queueName: MessageQueue): void {
     this.queueMap[queueName] = new Queue(queueName, this.options);
@@ -247,48 +182,33 @@ export class BullMQDriver
 
     this.workerMap[queueName] = new Worker(
       queueName,
-      async (job, _token, abortSignal) =>
-        Sentry.withIsolationScope(async () => {
-          applyWorkspaceSentryContextFromJobData(job.data);
+      async (job, _token, abortSignal) => {
+        // TODO: Correctly support for job.id
+        const timeStart = performance.now();
+        const workspaceId = job.data?.workspaceId;
+        const workspaceSuffix = workspaceId
+          ? ` [workspace=${workspaceId}]`
+          : '';
 
-          const queueWaitMs = computeJobQueueWaitMs({ job, now: Date.now() });
+        this.logger.log(
+          `Processing job ${job.id} with name ${job.name} on queue ${queueName}${workspaceSuffix}`,
+        );
+        await handler({
+          data: job.data,
+          id: job.id ?? '',
+          name: job.name,
+          retryLimit: Math.max(0, (job.opts.attempts ?? 1) - 1),
+          updateData: (data) => job.updateData(data),
+          updateProgress: (progress) => job.updateProgress(progress),
+          abortSignal,
+        });
+        const timeEnd = performance.now();
+        const executionTime = timeEnd - timeStart;
 
-          if (isDefined(queueWaitMs)) {
-            this.metricsService.recordHistogram({
-              key: MetricsKeys.JobLatencyMs,
-              value: queueWaitMs,
-              unit: 'ms',
-              attributes: { queue: queueName, job_name: job.name },
-              bucketBoundaries: JOB_LATENCY_MS_BUCKET_BOUNDARIES,
-            });
-          }
-
-          // TODO: Correctly support for job.id
-          const timeStart = performance.now();
-          const workspaceId = job.data?.workspaceId;
-          const workspaceSuffix = workspaceId
-            ? ` [workspace=${workspaceId}]`
-            : '';
-
-          this.logger.log(
-            `Processing job ${job.id} with name ${job.name} on queue ${queueName}${workspaceSuffix}`,
-          );
-          await handler({
-            data: job.data,
-            id: job.id ?? '',
-            name: job.name,
-            retryLimit: Math.max(0, (job.opts.attempts ?? 1) - 1),
-            updateData: (data) => job.updateData(data),
-            updateProgress: (progress) => job.updateProgress(progress),
-            abortSignal,
-          });
-          const timeEnd = performance.now();
-          const executionTime = timeEnd - timeStart;
-
-          this.logger.log(
-            `Job ${job.id} with name ${job.name} processed on queue ${queueName} in ${executionTime.toFixed(2)}ms${workspaceSuffix}`,
-          );
-        }),
+        this.logger.log(
+          `Job ${job.id} with name ${job.name} processed on queue ${queueName} in ${executionTime.toFixed(2)}ms${workspaceSuffix}`,
+        );
+      },
       workerOptions,
     );
 
@@ -305,40 +225,10 @@ export class BullMQDriver
       this.emitJobChange({ queueName, job, state: 'failed' }),
     );
 
-    this.workerMap[queueName].on('completed', (job) => {
-      void this.metricsService.incrementCounterForEvent({
-        key: MetricsKeys.JobCompleted,
-        attributes: { queue: queueName, job_name: job?.name ?? '' },
-        shouldStoreInCache: false,
-      });
-    });
-
-    this.workerMap[queueName].on('failed', (job, error) => {
-      if (!isDefined(job) || !isDefined(error)) {
-        return;
-      }
-
-      void this.metricsService.incrementCounterForEvent({
-        key: MetricsKeys.JobFailed,
-        attributes: {
-          queue: queueName,
-          job_name: job.name,
-          error_type: error.name,
-        },
-        shouldStoreInCache: false,
-      });
-    });
-
     this.workerMap[queueName].on('stalled', (jobId) => {
       this.logger.warn(
         `Job ${jobId} stalled on queue ${queueName}: its worker stopped processing it without completing or failing it`,
       );
-
-      void this.metricsService.incrementCounterForEvent({
-        key: MetricsKeys.JobStalled,
-        attributes: { queue: queueName },
-        shouldStoreInCache: false,
-      });
     });
   }
 

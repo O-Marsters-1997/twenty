@@ -17,15 +17,9 @@ export const mockedClientConfig: ClientConfig = {
   frontDomain: 'localhost',
   serverUrl: 'http://localhost:3000',
   defaultSubdomain: 'app',
-  analyticsEnabled: true,
   support: {
     supportDriver: SupportDriver.FRONT,
     supportFrontChatId: null,
-  },
-  sentry: {
-    dsn: 'MOCKED_DSN',
-    release: 'MOCKED_RELEASE',
-    environment: 'MOCKED_ENVIRONMENT',
   },
   billing: {
     isBillingEnabled: true,

@@ -15,7 +15,7 @@ import { sseEventStreamIdState } from '@/sse-db-event/states/sseEventStreamIdSta
 import { sseEventStreamReadyState } from '@/sse-db-event/states/sseEventStreamReadyState';
 import { isGracefullyHandledEventStreamError } from '@/sse-db-event/utils/isGracefullyHandledEventStreamError';
 import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomState';
-import { captureException } from '@sentry/react';
+import { logError } from '~/utils/logError';
 import { isNonEmptyString } from '@sniptt/guards';
 import { print, type ExecutionResult } from 'graphql';
 
@@ -115,7 +115,7 @@ export const useTriggerEventStreamCreation = () => {
                 code: extensions?.code,
               })
             ) {
-              captureException(
+              logError(
                 new Error(
                   `SSE subscription error: ${value.errors[0]?.message}`,
                 ),
@@ -160,11 +160,11 @@ export const useTriggerEventStreamCreation = () => {
               { cause: error instanceof Error ? error : undefined },
             );
 
-            captureException(errorProcessingSSEMessage);
+            logError(errorProcessingSSEMessage);
           }
         },
         error: (error) => {
-          captureException(error);
+          logError(error);
           store.set(shouldDestroyEventStreamState.atom, true);
         },
         complete: () => {

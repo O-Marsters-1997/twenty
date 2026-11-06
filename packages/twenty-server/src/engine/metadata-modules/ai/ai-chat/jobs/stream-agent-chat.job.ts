@@ -29,8 +29,6 @@ import { type MessageQueueJobContext } from 'src/engine/core-modules/message-que
 import { Process } from 'src/engine/core-modules/message-queue/decorators/process.decorator';
 import { Processor } from 'src/engine/core-modules/message-queue/decorators/processor.decorator';
 import { MessageQueue } from 'src/engine/core-modules/message-queue/message-queue.constants';
-import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
-import { MetricsKeys } from 'src/engine/core-modules/metrics/types/metrics-keys.type';
 import { toDisplayCredits } from 'src/engine/core-modules/usage/utils/to-display-credits.util';
 import { WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
 import { addStepToAgentTurnUsage } from 'src/engine/metadata-modules/ai/ai-billing/utils/compute-agent-turn-usage-from-steps.util';
@@ -60,7 +58,6 @@ import { AGENT_CHAT_CHECKPOINT_INTERVAL_MS } from 'src/engine/metadata-modules/a
 import { formatErrorWithCause } from 'src/engine/metadata-modules/ai/ai-chat/utils/format-error-with-cause.util';
 import { getCancelChannel } from 'src/engine/metadata-modules/ai/ai-chat/utils/get-cancel-channel.util';
 import { mapErrorToStreamError } from 'src/engine/metadata-modules/ai/ai-history/utils/map-error-to-stream-error.util';
-import { tagAiChatStreamScope } from 'src/engine/metadata-modules/ai/ai-chat/utils/tag-ai-chat-stream-scope.util';
 import { AiModelRegistryService } from 'src/engine/metadata-modules/ai/ai-models/services/ai-model-registry.service';
 import type { AiModelConfig } from 'src/engine/metadata-modules/ai/ai-models/types/ai-model-config.type';
 
@@ -104,7 +101,6 @@ export class StreamAgentChatJob {
     private readonly streamHeartbeatService: AgentChatStreamHeartbeatService,
     private readonly streamRecoveryService: AgentChatStreamRecoveryService,
     private readonly threadService: AgentChatThreadService,
-    private readonly metricsService: MetricsService,
     private readonly aiModelRegistryService: AiModelRegistryService,
     private readonly actorService: AgentChatActorService,
     private readonly turnRecorderService: AgentTurnRecorderService,
@@ -115,13 +111,6 @@ export class StreamAgentChatJob {
     data: StreamAgentChatJobData,
     context?: MessageQueueJobContext,
   ): Promise<void> {
-    tagAiChatStreamScope({
-      streamId: data.streamId,
-      turnId: data.existingTurnId,
-      threadId: data.threadId,
-      workspaceId: data.workspaceId,
-    });
-
     const thread = await this.threadRepository.findOne(data.workspaceId, {
       where: { id: data.threadId },
       select: ['id', 'activeStreamId'],
@@ -140,13 +129,6 @@ export class StreamAgentChatJob {
     });
 
     const turnModelId = this.resolveTurnModelId(data.modelId, workspace);
-
-    this.metricsService.incrementCounterBy({
-      key: MetricsKeys.AiChatTurnStarted,
-      amount: 1,
-      attributes: { model: turnModelId },
-    });
-
     await this.eventPublisherService.resetStreamState(data.threadId);
 
     const abortController = new AbortController();
@@ -321,34 +303,10 @@ export class StreamAgentChatJob {
 
     switch (outcome.kind) {
       case 'completed':
-        this.metricsService.incrementCounterBy({
-          key: MetricsKeys.AiChatTurnCompleted,
-          amount: 1,
-          attributes: { model: turnModelId, outcome: outcome.outcome },
-        });
-
         return;
       case 'cancelled':
-        this.metricsService.incrementCounterBy({
-          key: MetricsKeys.AiChatTurnCancelled,
-          amount: 1,
-          attributes: { model: turnModelId, reason: outcome.reason },
-        });
-
         return;
       case 'failed':
-        this.metricsService.incrementCounterBy({
-          key: MetricsKeys.AiChatTurnFailed,
-          amount: 1,
-          attributes: {
-            model: turnModelId,
-            failure_phase: outcome.failurePhase,
-            ...(isDefined(outcome.errorCode) && {
-              error_code: outcome.errorCode,
-            }),
-          },
-        });
-
         return;
       default:
         return assertUnreachable(outcome);

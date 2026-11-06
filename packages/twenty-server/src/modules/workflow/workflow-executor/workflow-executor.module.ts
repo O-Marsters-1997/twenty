@@ -3,7 +3,6 @@ import { Module } from '@nestjs/common';
 
 import { BillingModule } from 'src/engine/core-modules/billing/billing.module';
 import { FeatureFlagModule } from 'src/engine/core-modules/feature-flag/feature-flag.module';
-import { MetricsModule } from 'src/engine/core-modules/metrics/metrics.module';
 import { UsageLimitModule } from 'src/engine/core-modules/usage-limit/usage-limit.module';
 import { WorkflowActionFactory } from 'src/modules/workflow/workflow-executor/factories/workflow-action.factory';
 import { AiAgentActionModule } from 'src/modules/workflow/workflow-executor/workflow-actions/ai-agent/ai-agent-action.module';
@@ -44,7 +43,6 @@ import { WorkflowStepWaitModule } from 'src/modules/workflow/workflow-wait/workf
     MailSenderActionModule,
     SendChatMessageActionModule,
     CreateCalendarEventActionModule,
-    MetricsModule,
     UsageLimitModule,
     WorkflowStepWaitModule,
   ],

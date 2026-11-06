@@ -8,7 +8,6 @@ import {
   type ClientAiModelTierConfig,
   type ClientConfigMaintenanceMode,
   type PublicFeatureFlag,
-  type Sentry,
   type Support,
 } from '~/generated-metadata/graphql';
 import { type EnterpriseInstanceType } from 'twenty-shared/constants';
@@ -19,7 +18,6 @@ export type ClientConfig = {
   aiModels: Array<ClientAiModelConfig>;
   aiEvaluationModels: Array<ClientAiEvaluationModelConfig>;
   aiModelTiers: Array<ClientAiModelTierConfig>;
-  analyticsEnabled: boolean;
   api: ApiConfig;
   authProviders: AuthProviders;
   billing: Billing;
@@ -46,7 +44,6 @@ export type ClientConfig = {
   isOnboardingAiChatEnabled: boolean;
   onboarding: OnboardingConfig | null;
   publicFeatureFlags: Array<PublicFeatureFlag>;
-  sentry: Sentry;
   signInPrefilled: boolean;
   support: Support;
   isTwoFactorAuthenticationEnabled: boolean;

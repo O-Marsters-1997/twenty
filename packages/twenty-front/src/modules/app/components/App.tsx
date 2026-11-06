@@ -4,7 +4,6 @@ import { LocaleDirectionProvider } from '@/app/components/LocaleDirectionProvide
 import { ApolloDevLogEffect } from '@/apollo/components/ApolloDevLogEffect';
 import { AppErrorBoundary } from '@/error-handler/components/AppErrorBoundary';
 import { AppRootErrorFallback } from '@/error-handler/components/AppRootErrorFallback';
-import { ExceptionHandlerProvider } from '@/error-handler/components/ExceptionHandlerProvider';
 import { ClickOutsideListenerContext } from '@/ui/utilities/pointer-event/contexts/ClickOutsideListenerContext';
 import { jotaiStore } from '@/ui/utilities/state/jotai/jotaiStore';
 import { HelmetProvider } from '@dr.pogodin/react-helmet';
@@ -30,15 +29,13 @@ export const App = () => {
               <ApolloDevLogEffect />
               <ToastProvider>
                 <IconsProvider>
-                  <ExceptionHandlerProvider>
-                    <HelmetProvider>
-                      <ClickOutsideListenerContext.Provider
-                        value={{ excludedClickOutsideId: undefined }}
-                      >
-                        <DomainShell />
-                      </ClickOutsideListenerContext.Provider>
-                    </HelmetProvider>
-                  </ExceptionHandlerProvider>
+                  <HelmetProvider>
+                    <ClickOutsideListenerContext.Provider
+                      value={{ excludedClickOutsideId: undefined }}
+                    >
+                      <DomainShell />
+                    </ClickOutsideListenerContext.Provider>
+                  </HelmetProvider>
                 </IconsProvider>
               </ToastProvider>
             </LocaleDirectionProvider>

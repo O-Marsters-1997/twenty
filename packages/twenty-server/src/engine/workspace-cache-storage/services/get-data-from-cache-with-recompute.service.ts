@@ -1,6 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
 
-import { logger } from '@sentry/node';
 import { isDefined } from 'twenty-shared/utils';
 
 import {
@@ -52,7 +51,7 @@ export class GetDataFromCacheWithRecomputeService<T, U> {
     cachedData = await getCacheData(workspaceId);
 
     if (!isDefined(cachedData) || !isDefined(cachedVersion)) {
-      logger.warn(
+      this.logger.warn(
         `Triggering cache recompute for ${cachedEntityName} (workspace ${workspaceId})`,
         {
           cachedVersion,
@@ -65,7 +64,7 @@ export class GetDataFromCacheWithRecomputeService<T, U> {
       cachedVersion = await getCacheVersion(workspaceId);
 
       if (!isDefined(cachedData) || !isDefined(cachedVersion)) {
-        logger.warn(
+        this.logger.warn(
           `Data still missing after recompute for ${cachedEntityName} (workspace ${workspaceId})`,
           {
             cachedVersion,
