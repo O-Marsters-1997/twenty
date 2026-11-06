@@ -22,7 +22,6 @@ import { AiGraphqlApiExceptionInterceptor } from 'src/engine/metadata-modules/ai
   AuthPrincipalGuard({
     userSession: {
       standard: true,
-      impersonated: true,
       playground: true,
       workspaceAgnostic: false,
     },

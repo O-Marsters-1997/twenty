@@ -24,8 +24,6 @@ export const getMissingCreateCalendarEventScopes = (
 
       return hasScope ? [] : [MICROSOFT_CALENDARS_READ_WRITE_SCOPE];
     }
-    case ConnectedAccountProvider.OIDC:
-    case ConnectedAccountProvider.SAML:
     case ConnectedAccountProvider.EMAIL_GROUP:
     case ConnectedAccountProvider.APP:
       return [];

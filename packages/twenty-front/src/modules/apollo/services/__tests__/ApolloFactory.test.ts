@@ -70,9 +70,6 @@ const mockWorkspace = {
   isGoogleAuthBypassEnabled: false,
   isPasswordAuthBypassEnabled: false,
   isMicrosoftAuthBypassEnabled: false,
-  hasActivatedAndValidEnterpriseKey: false,
-  hasValidSignedEnterpriseKey: false,
-  hasValidEnterpriseValidityToken: false,
   subdomain: 'test',
   customDomain: 'test.com',
   workspaceUrls: {

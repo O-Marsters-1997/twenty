@@ -20,8 +20,6 @@ const PROVIDERS_ICON_MAPPING = {
   EMAIL: {
     [ConnectedAccountProvider.MICROSOFT]: IconMicrosoftOutlook,
     [ConnectedAccountProvider.GOOGLE]: IconGmail,
-    [ConnectedAccountProvider.OIDC]: IconMail,
-    [ConnectedAccountProvider.SAML]: IconMail,
     [ConnectedAccountProvider.EMAIL_GROUP]: IconMail,
     // App-managed connections aren't email accounts; this case is unreachable
     // for the EMAIL source but the lookup type still requires every provider.

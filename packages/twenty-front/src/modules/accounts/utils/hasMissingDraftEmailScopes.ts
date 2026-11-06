@@ -24,8 +24,6 @@ export const getMissingDraftEmailScopes = (
 
       return hasScope ? [] : [MICROSOFT_SEND_SCOPE];
     }
-    case ConnectedAccountProvider.OIDC:
-    case ConnectedAccountProvider.SAML:
     case ConnectedAccountProvider.EMAIL_GROUP:
     case ConnectedAccountProvider.APP:
       return [];

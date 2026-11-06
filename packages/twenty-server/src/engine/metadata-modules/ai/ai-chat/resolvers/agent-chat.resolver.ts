@@ -53,7 +53,6 @@ import { WorkspaceCacheService } from 'src/engine/workspace-cache/services/works
   AuthPrincipalGuard({
     userSession: {
       standard: true,
-      impersonated: true,
       playground: true,
       workspaceAgnostic: false,
     },

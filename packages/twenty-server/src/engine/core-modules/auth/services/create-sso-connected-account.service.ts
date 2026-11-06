@@ -13,7 +13,6 @@ type CreateSsoConnectedAccountParams = {
   handle: string;
   provider: ConnectedAccountProvider;
   scopes: string[];
-  oidcTokenClaims?: Record<string, unknown>;
 };
 
 @Injectable()
@@ -30,8 +29,7 @@ export class CreateSsoConnectedAccountService {
   async createOrUpdateSsoConnectedAccount(
     params: CreateSsoConnectedAccountParams,
   ): Promise<void> {
-    const { workspaceId, userId, handle, provider, scopes, oidcTokenClaims } =
-      params;
+    const { workspaceId, userId, handle, provider, scopes } = params;
 
     const userWorkspace = await this.userWorkspaceRepository.findOneBy({
       userId,
@@ -62,9 +60,6 @@ export class CreateSsoConnectedAccountService {
         lastSignedInAt: new Date(),
         provider,
         scopes: mergedScopes,
-        ...(oidcTokenClaims !== undefined
-          ? { oidcTokenClaims: oidcTokenClaims as object }
-          : {}),
       });
 
       return;
@@ -79,7 +74,6 @@ export class CreateSsoConnectedAccountService {
       lastSignedInAt: new Date(),
       userWorkspaceId: userWorkspace.id,
       workspaceId,
-      ...(oidcTokenClaims ? { oidcTokenClaims } : {}),
     });
   }
 }

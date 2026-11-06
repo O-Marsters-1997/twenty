@@ -20,7 +20,6 @@ import { Dropdown } from 'twenty-ui/components/navigation';
 import { IconArrowUp } from 'twenty-ui/icon';
 import { Avatar } from 'twenty-ui/primitives/data-display';
 import { ListItem } from 'twenty-ui/primitives/navigation';
-import { OrganizationAdornment } from '@/settings/enterprise/components/OrganizationAdornment';
 import { getAbsoluteImageUrl } from '~/utils/image/getAbsoluteImageUrl';
 
 const SPENDER_DROPDOWN_ID = 'usage-limit-spender';
@@ -179,7 +178,6 @@ export const SettingsBillingLimitSpenderSelect = ({
               <ListItem
                 key={group.id}
                 startIcon={<SelectOptionIcon Icon={group.Icon} />}
-                endIcon={<OrganizationAdornment iconOnly />}
               >
                 {t(group.label)}
               </ListItem>

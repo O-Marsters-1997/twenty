@@ -23,7 +23,6 @@ import { RefreshCampaignStatsJob } from 'src/modules/emailing/jobs/refresh-campa
 import { SendCampaignEmailBatchJob } from 'src/modules/emailing/jobs/send-campaign-email-batch.job';
 import { SendCampaignEmailJob } from 'src/modules/emailing/jobs/send-campaign-email.job';
 import { SendScheduledCampaignJob } from 'src/modules/emailing/jobs/send-scheduled-campaign.job';
-import { EnterpriseModule } from 'src/engine/core-modules/enterprise/enterprise.module';
 import { EventLogIngestionModule } from 'src/engine/core-modules/event-logs/ingest/event-log-ingestion.module';
 import { FeatureFlagModule } from 'src/engine/core-modules/feature-flag/feature-flag.module';
 import { UserWorkspaceModule } from 'src/engine/core-modules/user-workspace/user-workspace.module';
@@ -84,7 +83,6 @@ import { WorkflowModule } from 'src/modules/workflow/workflow.module';
     EventLogIngestionModule,
     AiAgentTriggerModule,
     AiChatModule,
-    EnterpriseModule,
     EmailingModule,
     PendingWakeUpModule,
     BillingReminderModule,

@@ -10,7 +10,6 @@ export const WORKSPACE_ENTITY_NON_CACHED_PROPERTIES = [
   'emailingDomains',
   'publicDomains',
   'workspaceMembersCount',
-  'workspaceSsoIdentityProviders',
   'agents',
   'webhooks',
   'apiKeys',

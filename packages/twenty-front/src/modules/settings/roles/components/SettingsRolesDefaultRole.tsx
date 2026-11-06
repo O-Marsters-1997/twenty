@@ -73,7 +73,7 @@ export const SettingsRoleDefaultRole = ({
     <Section.Root>
       <Section.Header
         title={t`Default Role`}
-        description={t`Assigned to users who join via invite link, approved domain, or SSO, and used as fallback when an assigned role is deleted`}
+        description={t`Assigned to users who join via invite link or approved domain, and used as fallback when an assigned role is deleted`}
       />
       <Card.Root rounded>
         <SettingsOptionCardContentSelect

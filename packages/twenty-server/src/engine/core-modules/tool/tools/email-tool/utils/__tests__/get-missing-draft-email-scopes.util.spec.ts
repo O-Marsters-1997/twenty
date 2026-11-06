@@ -59,8 +59,6 @@ describe('getMissingDraftEmailScopes', () => {
     it.each([
       ConnectedAccountProvider.EMAIL_GROUP,
       ConnectedAccountProvider.APP,
-      ConnectedAccountProvider.OIDC,
-      ConnectedAccountProvider.SAML,
     ])('never requires scopes for %s accounts', (provider) => {
       expect(getMissingDraftEmailScopes({ provider, scopes: null })).toEqual(
         [],

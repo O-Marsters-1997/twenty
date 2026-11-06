@@ -30,8 +30,6 @@ export type CurrentWorkspace = Pick<
   | 'isPasswordAuthEnabled'
   | 'isPasswordAuthBypassEnabled'
   | 'isCustomDomainEnabled'
-  | 'hasValidSignedEnterpriseKey'
-  | 'hasValidEnterpriseValidityToken'
   | 'subdomain'
   | 'customDomain'
   | 'workspaceUrls'

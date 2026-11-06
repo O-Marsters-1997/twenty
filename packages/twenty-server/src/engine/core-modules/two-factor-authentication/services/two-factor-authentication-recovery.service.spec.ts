@@ -48,17 +48,9 @@ const ACTOR = {
   email: 'admin@example.com',
   firstName: 'Jane',
   lastName: 'Admin',
-  canImpersonate: false,
-  canAccessFullAdminPanel: false,
 };
 
-const buildTargetUserWorkspace = ({
-  canImpersonate = false,
-  canAccessFullAdminPanel = false,
-}: {
-  canImpersonate?: boolean;
-  canAccessFullAdminPanel?: boolean;
-} = {}) => ({
+const buildTargetUserWorkspace = () => ({
   id: TARGET_USER_WORKSPACE_ID,
   userId: TARGET_USER_ID,
   workspaceId: WORKSPACE_ID,
@@ -67,8 +59,6 @@ const buildTargetUserWorkspace = ({
   user: {
     id: TARGET_USER_ID,
     email: 'target@example.com',
-    canImpersonate,
-    canAccessFullAdminPanel,
   },
   workspace: { id: WORKSPACE_ID, displayName: 'Apple' },
 });
@@ -281,33 +271,6 @@ describe('TwoFactorAuthenticationRecoveryService', () => {
       expect(
         JSON.stringify((renderEmail as jest.Mock).mock.calls[0][0].props),
       ).toContain('admin@example.com');
-    });
-
-    it('refuses a target with server admin privileges the actor lacks', async () => {
-      userWorkspaceService.getUserWorkspaceForUser.mockResolvedValue(
-        buildTargetUserWorkspace({ canAccessFullAdminPanel: true }),
-      );
-
-      await expect(generate()).rejects.toMatchObject({
-        code: TwoFactorAuthenticationExceptionCode.RECOVERY_CODE_TARGET_NOT_ALLOWED,
-      });
-      expect(appTokenRepository.insert).not.toHaveBeenCalled();
-    });
-
-    it('lets a server admin generate a code for another server admin', async () => {
-      userWorkspaceService.getUserWorkspaceForUser.mockResolvedValue(
-        buildTargetUserWorkspace({ canImpersonate: true }),
-      );
-
-      await service.generateRecoveryCode({
-        actor: { ...ACTOR, canAccessFullAdminPanel: true },
-        actorWorkspaceId: WORKSPACE_ID,
-        otp: '123456',
-        targetUserId: TARGET_USER_ID,
-        targetWorkspaceId: WORKSPACE_ID,
-      });
-
-      expect(appTokenRepository.insert).toHaveBeenCalled();
     });
 
     it('refuses a member with no authenticator to recover', async () => {
@@ -527,43 +490,4 @@ describe('TwoFactorAuthenticationRecoveryService', () => {
     });
   });
 
-  describe('revokeRecoveryCode', () => {
-    it('refuses to revoke a server administrator code for an actor without those privileges', async () => {
-      userWorkspaceService.getUserWorkspaceForUser.mockResolvedValue(
-        buildTargetUserWorkspace({ canImpersonate: true }),
-      );
-
-      await expect(
-        service.revokeRecoveryCode({
-          actor: ACTOR,
-          targetUserId: TARGET_USER_ID,
-          targetWorkspaceId: WORKSPACE_ID,
-        }),
-      ).rejects.toMatchObject({
-        code: TwoFactorAuthenticationExceptionCode.RECOVERY_CODE_TARGET_NOT_ALLOWED,
-      });
-      expect(
-        twoFactorAuthenticationService.revokeRecoveryCodes,
-      ).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('getRecoveryStatus', () => {
-    it('hides a server administrator status from an actor without those privileges', async () => {
-      userWorkspaceService.getUserWorkspaceForUser.mockResolvedValue(
-        buildTargetUserWorkspace({ canImpersonate: true }),
-      );
-
-      await expect(
-        service.getRecoveryStatus({
-          actor: ACTOR,
-          targetUserId: TARGET_USER_ID,
-          targetWorkspaceId: WORKSPACE_ID,
-        }),
-      ).rejects.toMatchObject({
-        code: TwoFactorAuthenticationExceptionCode.RECOVERY_CODE_TARGET_NOT_ALLOWED,
-      });
-      expect(appTokenRepository.findOne).not.toHaveBeenCalled();
-    });
-  });
 });

@@ -1,11 +1,10 @@
 import { Module } from '@nestjs/common';
-import { APP_FILTER, HttpAdapterHost } from '@nestjs/core';
+import { APP_FILTER } from '@nestjs/core';
 import { EventEmitter2, EventEmitterModule } from '@nestjs/event-emitter';
 
 import { WorkspaceResolverNameMapCacheModule } from 'src/engine/api/graphql/direct-execution/workspace-resolver-name-map-cache.module';
 import { WorkspaceQueryRunnerModule } from 'src/engine/api/graphql/workspace-query-runner/workspace-query-runner.module';
 import { ActorModule } from 'src/engine/core-modules/actor/actor.module';
-import { AdminPanelModule } from 'src/engine/core-modules/admin-panel/admin-panel.module';
 import { ApiKeyModule } from 'src/engine/core-modules/api-key/api-key.module';
 import { ApplicationModule } from 'src/engine/core-modules/application/application.module';
 import { ApprovedAccessDomainModule } from 'src/engine/core-modules/approved-access-domain/approved-access-domain.module';
@@ -30,7 +29,6 @@ import { FileStorageModule } from 'src/engine/core-modules/file-storage/file-sto
 import { GeoMapModule } from 'src/engine/core-modules/geo-map/geo-map-module';
 import { HealthModule } from 'src/engine/core-modules/health/health.module';
 import { I18nModule } from 'src/engine/core-modules/i18n/i18n.module';
-import { ImpersonationModule } from 'src/engine/core-modules/impersonation/impersonation.module';
 import { LabModule } from 'src/engine/core-modules/lab/lab.module';
 import { LoggerModule } from 'src/engine/core-modules/logger/logger.module';
 import { loggerModuleFactory } from 'src/engine/core-modules/logger/logger.module-factory';
@@ -42,7 +40,6 @@ import { PublicDomainModule } from 'src/engine/core-modules/public-domain/public
 import { RedisClientModule } from 'src/engine/core-modules/redis-client/redis-client.module';
 import { RedisClientService } from 'src/engine/core-modules/redis-client/redis-client.service';
 import { SearchModule } from 'src/engine/core-modules/search/search.module';
-import { WorkspaceSsoModule } from 'src/engine/core-modules/sso/sso.module';
 import { WellKnownModule } from 'src/engine/core-modules/well-known/well-known.module';
 import { TwentyConfigModule } from 'src/engine/core-modules/twenty-config/twenty-config.module';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
@@ -88,7 +85,6 @@ import { FileApiModule } from './file/file-api.module';
     UserModule,
     WorkspaceModule,
     WorkspaceInvitationModule,
-    WorkspaceSsoModule,
     ApprovedAccessDomainModule,
     EmailingDomainModule,
     PublicDomainModule,
@@ -98,7 +94,6 @@ import { FileApiModule } from './file/file-api.module';
     AiToolCallAnswerModule,
     WorkspaceEventEmitterModule,
     ActorModule,
-    AdminPanelModule,
     LabModule,
     RoleModule,
     RedisClientModule,
@@ -130,7 +125,6 @@ import { FileApiModule } from './file/file-api.module';
     ApiKeyModule,
     DpaModule,
     PageLayoutModule,
-    ImpersonationModule,
     TrashCleanupModule,
     CodeInterpreterSessionCleanupModule,
     EventLogsViewerModule,
@@ -152,7 +146,6 @@ import { FileApiModule } from './file/file-api.module';
     UserModule,
     WorkspaceModule,
     WorkspaceInvitationModule,
-    WorkspaceSsoModule,
   ],
 })
 export class CoreEngineModule {}

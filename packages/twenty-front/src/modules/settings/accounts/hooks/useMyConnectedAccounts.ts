@@ -17,10 +17,9 @@ const EMAIL_AND_CALENDAR_PROVIDERS: ReadonlySet<ConnectedAccountProvider> =
     ConnectedAccountProvider.MICROSOFT,
   ]);
 
-// The personal accounts page is for email/calendar credentials only. SSO
-// providers (OIDC, SAML) and app-managed OAuth (APP) also live in
-// connectedAccount, but they're surfaced elsewhere — keep them off this
-// page by filtering to the email/calendar provider set.
+// The personal accounts page is for email/calendar credentials only. App-managed
+// OAuth (APP) also lives in connectedAccount, but it's surfaced elsewhere — keep
+// it off this page by filtering to the email/calendar provider set.
 export const useMyConnectedAccounts = ({
   providers = EMAIL_AND_CALENDAR_PROVIDERS,
 }: {

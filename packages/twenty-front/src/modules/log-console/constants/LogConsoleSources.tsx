@@ -70,7 +70,6 @@ export const LOG_CONSOLE_SOURCES: LogConsoleSource[] = [
     Icon: IconAddressBook,
     table: EventLogTable.OBJECT_EVENT,
     filterFields: LOG_CONSOLE_RECORD_CHANGE_FILTER_FIELDS,
-    requiresAuditLogs: false,
     columns: LOG_CONSOLE_RECORD_CHANGE_COLUMNS,
     detailFields: [
       {
@@ -124,7 +123,6 @@ export const LOG_CONSOLE_SOURCES: LogConsoleSource[] = [
         operand: EventLogFilterOperand.IS,
         values: [
           'AuthSession',
-          'Impersonation',
           'ServerAdminAccessChanged',
           'User Signup',
           'Custom Domain Activated',
@@ -133,7 +131,6 @@ export const LOG_CONSOLE_SOURCES: LogConsoleSource[] = [
       },
     ],
     filterFields: LOG_CONSOLE_SECURITY_FILTER_FIELDS,
-    requiresAuditLogs: true,
     columns: LOG_CONSOLE_SECURITY_COLUMNS,
     detailFields: [
       {
@@ -151,12 +148,7 @@ export const LOG_CONSOLE_SOURCES: LogConsoleSource[] = [
       {
         label: msg`Actor`,
         Icon: IconUsers,
-        renderValue: (entry) => (
-          <LogConsoleMemberChip
-            userId={entry.userId}
-            isImpersonator={entry.event === 'Impersonation'}
-          />
-        ),
+        renderValue: (entry) => <LogConsoleMemberChip userId={entry.userId} />,
       },
     ],
     idFields: [{ label: msg`User ID`, getId: (entry) => entry.userId }],
@@ -174,7 +166,6 @@ export const LOG_CONSOLE_SOURCES: LogConsoleSource[] = [
     DetailIcon: IconBrandTypescript,
     table: EventLogTable.APPLICATION_LOG,
     filterFields: LOG_CONSOLE_APPLICATION_LOG_FILTER_FIELDS,
-    requiresAuditLogs: false,
     columns: LOG_CONSOLE_APPLICATION_LOG_COLUMNS,
     detailFields: [
       {
@@ -213,7 +204,6 @@ export const LOG_CONSOLE_SOURCES: LogConsoleSource[] = [
         values: ['Webhook Response'],
       },
     ],
-    requiresAuditLogs: true,
     columns: LOG_CONSOLE_WEBHOOK_COLUMNS,
     detailFields: [
       {
@@ -268,7 +258,6 @@ export const LOG_CONSOLE_SOURCES: LogConsoleSource[] = [
     Icon: IconEye,
     table: EventLogTable.PAGEVIEW,
     filterFields: [{ ...LOG_CONSOLE_ACTOR_FILTER_FIELD, label: msg`Member` }],
-    requiresAuditLogs: true,
     columns: LOG_CONSOLE_PAGE_VIEW_COLUMNS,
     detailFields: [
       TIME_DETAIL_FIELD,
@@ -297,7 +286,6 @@ export const LOG_CONSOLE_SOURCES: LogConsoleSource[] = [
     label: msg`Usage`,
     Icon: IconGauge,
     table: EventLogTable.USAGE_EVENT,
-    requiresAuditLogs: true,
     columns: LOG_CONSOLE_USAGE_EVENT_COLUMNS,
     detailFields: [
       TIME_DETAIL_FIELD,

@@ -75,8 +75,6 @@ describe('TwoFactorAuthenticationResolver', () => {
     email: 'test@example.com',
     isEmailVerified: true,
     disabled: false,
-    canImpersonate: false,
-    canAccessFullAdminPanel: false,
     createdAt: MOCK_USER_ISO,
     updatedAt: MOCK_USER_ISO,
     deletedAt: null,

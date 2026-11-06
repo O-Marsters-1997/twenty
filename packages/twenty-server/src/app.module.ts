@@ -5,7 +5,6 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { YogaDriver, type YogaDriverConfig } from '@graphql-yoga/nestjs';
 import { ApiPath } from 'twenty-shared/types';
 
-import { AdminPanelGraphQLApiModule } from 'src/engine/api/graphql/admin-panel-graphql-api.module';
 import { CoreGraphQLApiModule } from 'src/engine/api/graphql/core-graphql-api.module';
 import { GraphQLConfigModule } from 'src/engine/api/graphql/graphql-config/graphql-config.module';
 import { GraphQLConfigService } from 'src/engine/api/graphql/graphql-config/graphql-config.service';
@@ -59,7 +58,6 @@ const MIGRATED_REST_METHODS = [
     WorkspaceCacheStorageModule,
     CoreGraphQLApiModule,
     MetadataGraphQLApiModule,
-    AdminPanelGraphQLApiModule,
     RestApiModule,
     McpModule,
     MiddlewareModule,
@@ -95,11 +93,6 @@ export class AppModule {
     // Before any middleware that authenticates from the session cookie.
     consumer
       .apply(CookieSessionCsrfMiddleware)
-      // A cross-origin form post from the identity provider, authenticated on the assertion, not the cookie
-      .exclude({
-        path: `${ApiPath.Auth}/saml/callback/:identityProviderId`,
-        method: RequestMethod.POST,
-      })
       .forRoutes({ path: '*path', method: RequestMethod.ALL });
 
     consumer
@@ -117,13 +110,6 @@ export class AppModule {
         WorkspaceAuthContextMiddleware,
       )
       .forRoutes({ path: ApiPath.Metadata, method: RequestMethod.ALL });
-
-    consumer
-      .apply(
-        GraphQLHydrateRequestFromTokenMiddleware,
-        WorkspaceAuthContextMiddleware,
-      )
-      .forRoutes({ path: ApiPath.AdminPanel, method: RequestMethod.ALL });
 
     consumer
       .apply(ApiRequestContextMiddleware, McpMethodGuardMiddleware)

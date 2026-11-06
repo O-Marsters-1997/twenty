@@ -29,7 +29,6 @@ import { ApiKeyService } from './services/api-key.service';
   AuthPrincipalGuard({
     userSession: {
       standard: true,
-      impersonated: true,
       playground: true,
       workspaceAgnostic: false,
     },
@@ -85,7 +84,6 @@ export class ApiKeyResolver {
     AuthPrincipalGuard({
       userSession: {
         standard: true,
-        impersonated: true,
         playground: false,
         workspaceAgnostic: false,
       },
@@ -113,7 +111,6 @@ export class ApiKeyResolver {
     AuthPrincipalGuard({
       userSession: {
         standard: true,
-        impersonated: true,
         playground: false,
         workspaceAgnostic: false,
       },
@@ -152,7 +149,6 @@ export class ApiKeyResolver {
     AuthPrincipalGuard({
       userSession: {
         standard: true,
-        impersonated: true,
         playground: false,
         workspaceAgnostic: false,
       },
@@ -174,7 +170,6 @@ export class ApiKeyResolver {
     AuthPrincipalGuard({
       userSession: {
         standard: true,
-        impersonated: true,
         playground: false,
         workspaceAgnostic: false,
       },

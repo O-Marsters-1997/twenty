@@ -38,8 +38,6 @@ describe('canConnectedAccountPerformEmailOperation', () => {
 
   it('refuses a provider absent from both allowlists', () => {
     for (const provider of [
-      ConnectedAccountProvider.OIDC,
-      ConnectedAccountProvider.SAML,
       ConnectedAccountProvider.APP,
     ]) {
       expect(

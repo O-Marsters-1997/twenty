@@ -1,7 +1,6 @@
 import { SettingsPath } from 'twenty-shared/types';
 
 import { useAuth } from '@/auth/hooks/useAuth';
-import { currentUserState } from '@/auth/states/currentUserState';
 import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMemberState';
 import { billingState } from '@/client-config/states/billingState';
 import { supportChatState } from '@/client-config/states/supportChatState';
@@ -28,7 +27,6 @@ import {
   IconMessage,
   IconMessageCircle,
   IconPlug,
-  IconServer,
   IconSettings2,
   IconSparkles,
   IconUserCircle,
@@ -66,10 +64,6 @@ const useSettingsNavigationItems = (): SettingsNavigationSection[] => {
   const currentWorkspaceMember = useAtomStateValue(currentWorkspaceMemberState);
 
   const isBillingEnabled = billing?.isBillingEnabled ?? false;
-  const currentUser = useAtomStateValue(currentUserState);
-  const isAdminEnabled =
-    (currentUser?.canImpersonate || currentUser?.canAccessFullAdminPanel) ??
-    false;
   const isSupportChatConfigured =
     supportChat?.supportDriver === 'FRONT' &&
     isNonEmptyString(supportChat.supportFrontChatId);
@@ -187,12 +181,6 @@ const useSettingsNavigationItems = (): SettingsNavigationSection[] => {
     {
       label: t`Other`,
       items: [
-        {
-          label: t`Admin Panel`,
-          path: SettingsPath.AdminPanel,
-          Icon: IconServer,
-          isHidden: !isAdminEnabled,
-        },
         {
           label: t`Community`,
           path: SettingsPath.Community,
