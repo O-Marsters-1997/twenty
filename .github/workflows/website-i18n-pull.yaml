@@ -43,7 +43,7 @@ jobs:
           git checkout -B i18n-website origin/i18n-website || git checkout -b i18n-website
 
       - name: Install dependencies
-        uses: ./.github/actions/yarn-install
+        uses: ./.github/actions/bun-install
 
       - name: Build twenty-shared
         run: npx nx build twenty-shared

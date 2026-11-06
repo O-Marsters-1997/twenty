@@ -53,7 +53,7 @@ export default defineConfig({
             configDir: path.join(dirname, '.storybook'),
             ...(process.env.STORYBOOK_URL
               ? { storybookUrl: process.env.STORYBOOK_URL }
-              : { storybookScript: 'yarn storybook --no-open --port 6008' }),
+              : { storybookScript: 'bun run storybook --no-open --port 6008' }),
           }),
           argosVitestPlugin({
             uploadToArgos: !!process.env.ARGOS_TOKEN,

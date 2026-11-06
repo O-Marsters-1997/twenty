@@ -19,7 +19,7 @@ jobs:
     with:
       files: |
         package.json
-        yarn.lock
+        bun.lock
         packages/twenty-ui/**
         packages/twenty-shared/**
   ui-task:
@@ -36,7 +36,7 @@ jobs:
         with:
           fetch-depth: 10
       - name: Install dependencies
-        uses: ./.github/actions/yarn-install
+        uses: ./.github/actions/bun-install
       - name: Run ${{ matrix.task }}
         run: npx nx ${{ matrix.task }} twenty-ui
       - name: Check generated theme artifacts are up to date
@@ -59,7 +59,7 @@ jobs:
         with:
           fetch-depth: 10
       - name: Install dependencies
-        uses: ./.github/actions/yarn-install
+        uses: ./.github/actions/bun-install
       - name: Build storybook
         run: npx nx storybook:build twenty-ui
       - name: Upload storybook build
@@ -82,7 +82,7 @@ jobs:
         with:
           fetch-depth: 10
       - name: Install dependencies
-        uses: ./.github/actions/yarn-install
+        uses: ./.github/actions/bun-install
       - name: Build dependencies
         run: npx nx build twenty-shared
       - name: Resolve Playwright version

@@ -34,7 +34,7 @@ jobs:
         with:
           fetch-depth: 10
       - name: Install dependencies
-        uses: ./.github/actions/yarn-install
+        uses: ./.github/actions/bun-install
       - name: Restore storybook build cache
         uses: ./.github/actions/restore-cache
         with:

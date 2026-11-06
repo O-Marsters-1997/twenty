@@ -44,7 +44,7 @@ jobs:
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
 
       - name: Install dependencies
-        uses: ./.github/actions/yarn-install
+        uses: ./.github/actions/bun-install
 
       - name: Setup i18n-docs branch
         if: github.event_name != 'pull_request'
@@ -125,20 +125,20 @@ jobs:
         run: sudo chown -R runner:docker . || true
 
       - name: Fix translated documentation links
-        run: yarn docs:fix-links
+        run: bun run docs:fix-links
       - name: Prune orphan localized translations
         if: github.event_name != 'pull_request' && (inputs.force_pull == true || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
-        run: yarn docs:prune-orphans --apply
+        run: bun run docs:prune-orphans --apply
 
       - name: Regenerate navigation template
         if: github.event_name == 'pull_request'
-        run: yarn docs:generate-navigation-template
+        run: bun run docs:generate-navigation-template
 
       - name: Regenerate docs.json
-        run: yarn docs:generate
+        run: bun run docs:generate
 
       - name: Regenerate documentation paths constants
-        run: yarn docs:generate-paths
+        run: bun run docs:generate-paths
 
       - name: Commit artifacts to pull request branch
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository

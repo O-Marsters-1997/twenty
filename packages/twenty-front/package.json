@@ -9,9 +9,7 @@
     "tsup": "npx tsup"
   },
   "engines": {
-    "node": "^24.5.0",
-    "npm": "please-use-yarn",
-    "yarn": "^4.0.2"
+    "node": "^24.5.0"
   },
   "browserslist": {
     "production": [
@@ -131,7 +129,7 @@
     "react-imask": "^7.6.0",
     "react-intersection-observer": "^9.15.1",
     "react-markdown": "^10.1.0",
-    "react-phone-number-input": "patch:react-phone-number-input@npm%3A3.4.5#../../.yarn/patches/react-phone-number-input-npm-3.4.5-dc2895c306.patch",
+    "react-phone-number-input": "3.4.5",
     "react-qr-code": "^2.0.18",
     "react-router-dom": "^7.18.4",
     "react-textarea-autosize": "^8.4.1",

@@ -275,7 +275,7 @@ fi
 echo ""
 echo "Dev environment ready."
 echo ""
-echo "  yarn start                         # start everything"
+echo "  bun run start                        # start everything"
 echo "  npx nx start twenty-front          # frontend  -> http://localhost:3001"
 echo "  npx nx start twenty-server         # backend   -> http://localhost:3000"
 echo ""

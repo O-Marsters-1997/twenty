@@ -149,7 +149,7 @@ unfinished file, because a checkpoint no scenario has failed in is silence.
 
 ## Running locally
 
-Start the stack (`yarn start` or the e2e recipe), then from the repo root run
+Start the stack (`bun run start` or the e2e recipe), then from the repo root run
 Claude Code with the Playwright MCP configured and ask for `/qa-scout`, giving
 it a PR number plus paths for context and output. Same contract applies; use
 `packages/twenty-e2e-testing/.env.example` for the local URLs and credentials.

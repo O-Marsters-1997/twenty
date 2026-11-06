@@ -20,7 +20,7 @@ is_running() {
 }
 
 detach_hint() {
-  echo "Ctrl+C detaches the stream only. Use 'yarn command:prod:background:stop' to stop the run."
+  echo "Ctrl+C detaches the stream only. Use 'bun run command:prod:background:stop' to stop the run."
 }
 
 show_tail() {
@@ -43,12 +43,12 @@ last_run() {
 
 start() {
   [ $# -ge 1 ] || {
-    echo "usage: yarn command:prod:background <command> [args]" >&2; exit 1
+    echo "usage: bun run command:prod:background <command> [args]" >&2; exit 1
   }
 
   command -v setsid > /dev/null || {
     echo "Failed to start: setsid not found, cannot detach the run from this terminal" >&2
-    echo "Use 'yarn command:prod $1' to run it in the foreground instead." >&2
+    echo "Use 'bun run command:prod $1' to run it in the foreground instead." >&2
     exit 1
   }
 
@@ -113,7 +113,7 @@ stop() {
       echo "SIGTERM sent to $pid, a command that handles it stops at its next boundary (exit 143)" >&2
       sleep 1
       show_tail
-      echo "Follow with 'yarn command:prod:background:logs'. Still stuck: 'stop --now'. Last resort: 'stop --force'." >&2
+      echo "Follow with 'bun run command:prod:background:logs'. Still stuck: 'stop --now'. Last resort: 'stop --force'." >&2
       ;;
     --now)
       kill -TERM "$pid"; sleep 2; kill -TERM "$pid" 2>/dev/null || true

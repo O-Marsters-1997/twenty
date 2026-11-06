@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Twenty is an open-source CRM — an Nx / Yarn 4 monorepo. Main packages: `twenty-front` (React 18, Jotai, Linaria, Vite), `twenty-server` (NestJS, TypeORM, PostgreSQL, Redis, GraphQL), `twenty-shared` (isomorphic types/utils), `twenty-ui`, `twenty-e2e-testing` (Playwright).
+Twenty is an open-source CRM — an Nx / Bun monorepo. Main packages: `twenty-front` (React 18, Jotai, Linaria, Vite), `twenty-server` (NestJS, TypeORM, PostgreSQL, Redis, GraphQL), `twenty-shared` (isomorphic types/utils), `twenty-ui`, `twenty-e2e-testing` (Playwright).
 
 Match the surrounding code — the adjacent files in the directory you are editing beat any written rule, including for file naming, which varies by area.
 
@@ -23,7 +23,7 @@ Where this repo differs from your defaults:
 
 ```bash
 bash packages/twenty-utils/setup-dev-env.sh   # Postgres/Redis + DB init; only for tasks needing a running app
-yarn start                                    # front + server + worker
+bun run start                                 # front + server + worker
 
 npx jest path/to/file.spec.ts --config=packages/<pkg>/jest.config.mjs   # single test file (preferred)
 npx vitest run --root packages/twenty-ui --project unit <file>          # twenty-ui runs on vitest, not jest
