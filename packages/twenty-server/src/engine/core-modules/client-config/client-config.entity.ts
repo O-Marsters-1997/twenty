@@ -245,21 +245,6 @@ export class Support {
 }
 
 @ObjectType()
-export class Sentry {
-  @Field(() => String, { nullable: true })
-  environment?: string;
-
-  @Field(() => String, { nullable: true })
-  release?: string;
-
-  @Field(() => String, { nullable: true })
-  dsn?: string;
-
-  @Field(() => Number, { nullable: true })
-  tracesSampleRate?: number;
-}
-
-@ObjectType()
 export class Captcha {
   @Field(() => CaptchaDriverType, { nullable: true })
   provider: CaptchaDriverType | undefined;
@@ -351,17 +336,11 @@ export class ClientConfig {
   @Field(() => String, { nullable: true })
   publicFunctionDomain: string | null;
 
-  @Field(() => Boolean)
-  analyticsEnabled: boolean;
-
   @Field(() => Support)
   support: Support;
 
   @Field(() => Boolean)
   isAttachmentPreviewEnabled: boolean;
-
-  @Field(() => Sentry)
-  sentry: Sentry;
 
   @Field(() => Captcha)
   captcha: Captcha;

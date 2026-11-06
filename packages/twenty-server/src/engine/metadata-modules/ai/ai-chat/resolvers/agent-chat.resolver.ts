@@ -38,7 +38,6 @@ import { AgentChatTurnPreflightService } from 'src/engine/metadata-modules/ai/ai
 import { AgentChatService } from 'src/engine/metadata-modules/ai/ai-chat/services/agent-chat.service';
 import { AgentChatThreadService } from 'src/engine/metadata-modules/ai/ai-chat/services/agent-chat-thread.service';
 import { SystemPromptBuilderService } from 'src/engine/metadata-modules/ai/ai-chat/services/system-prompt-builder.service';
-import { tagAiChatStreamScope } from 'src/engine/metadata-modules/ai/ai-chat/utils/tag-ai-chat-stream-scope.util';
 import {
   AiException,
   AiExceptionCode,
@@ -309,14 +308,6 @@ export class AgentChatResolver {
 
       return { messageId: result.messageId, queued: true };
     }
-
-    tagAiChatStreamScope({
-      streamId: result.streamId,
-      turnId: result.turnId,
-      threadId,
-      workspaceId: workspace.id,
-    });
-
     return {
       messageId: result.messageId,
       queued: false,
@@ -348,14 +339,6 @@ export class AgentChatResolver {
       workspace,
       modelId,
     });
-
-    tagAiChatStreamScope({
-      streamId: result.streamId,
-      turnId: result.turnId,
-      threadId,
-      workspaceId: workspace.id,
-    });
-
     return {
       messageId: result.messageId,
       queued: false,

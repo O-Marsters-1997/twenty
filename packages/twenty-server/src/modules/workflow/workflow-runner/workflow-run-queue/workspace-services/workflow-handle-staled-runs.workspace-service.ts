@@ -11,8 +11,6 @@ import { CacheStorageNamespace } from 'src/engine/core-modules/cache-storage/typ
 import { InjectMessageQueue } from 'src/engine/core-modules/message-queue/decorators/message-queue.decorator';
 import { MessageQueue } from 'src/engine/core-modules/message-queue/message-queue.constants';
 import { MessageQueueService } from 'src/engine/core-modules/message-queue/services/message-queue.service';
-import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
-import { MetricsKeys } from 'src/engine/core-modules/metrics/types/metrics-keys.type';
 import { WorkspaceOrmManager } from 'src/engine/twenty-orm/workspace-orm.manager';
 import { buildSystemAuthContext } from 'src/engine/twenty-orm/utils/build-system-auth-context.util';
 import {
@@ -41,7 +39,6 @@ export class WorkflowHandleStaledRunsWorkspaceService {
     private readonly workflowRunWorkspaceService: WorkflowRunWorkspaceService,
     @InjectMessageQueue(MessageQueue.workflowQueue)
     private readonly messageQueueService: MessageQueueService,
-    private readonly metricsService: MetricsService,
     @InjectCacheStorage(CacheStorageNamespace.ModuleWorkflow)
     private readonly cacheStorageService: CacheStorageService,
   ) {}
@@ -170,11 +167,6 @@ export class WorkflowHandleStaledRunsWorkspaceService {
           this.logger.warn(
             `Stuck running workflow run ${workflowRunId} in workspace ${workspaceId} was a false positive: flagged at ${detectedAt}, now in status ${workflowRun.status}`,
           );
-
-          await this.metricsService.incrementCounterForEvent({
-            key: MetricsKeys.WorkflowRunStuckRunningFalsePositive,
-            eventId: workflowRunId,
-          });
         } else {
           stillFlaggedRuns[workflowRunId] = detectedAt;
         }
@@ -210,11 +202,6 @@ export class WorkflowHandleStaledRunsWorkspaceService {
         this.logger.warn(
           `Workflow run ${workflowRunId} in workspace ${workspaceId} is stuck in RUNNING without a queue job and would have been finalized as ${expectedOutcome}`,
         );
-
-        await this.metricsService.incrementCounterForEvent({
-          key: MetricsKeys.WorkflowRunStuckRunningDetected,
-          eventId: workflowRunId,
-        });
       } catch (error) {
         this.logger.error(
           `Failed to check stuck running workflow run ${workflowRunId} for workspace ${workspaceId}`,

@@ -3,16 +3,10 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { AppErrorBoundary } from '@/error-handler/components/AppErrorBoundary';
 import { STALE_CHUNK_RELOAD_TIMESTAMP_KEY } from '@/error-handler/constants/StaleChunkReloadTimestampKey';
 
-jest.mock('@sentry/react', () => ({
-  captureException: jest.fn(),
-  flush: jest.fn().mockResolvedValue(true),
-}));
-
 jest.mock('~/utils/reloadWindow', () => ({
   reloadWindow: jest.fn(),
 }));
 
-const { captureException, flush } = jest.requireMock('@sentry/react');
 const { reloadWindow } = jest.requireMock('~/utils/reloadWindow');
 
 const STALE_CHUNK_ERROR_MESSAGE =
@@ -53,7 +47,7 @@ describe('AppErrorBoundary', () => {
     jest.useRealTimers();
   });
 
-  it('should capture with Sentry then reload on a stale chunk error when no reload happened recently', async () => {
+  it('should reload on a stale chunk error when no reload happened recently', async () => {
     renderWithBoundary(new Error(STALE_CHUNK_ERROR_MESSAGE));
 
     expect(
@@ -63,27 +57,6 @@ describe('AppErrorBoundary', () => {
     await waitFor(() => {
       expect(reloadWindow).toHaveBeenCalledTimes(1);
     });
-
-    expect(captureException).toHaveBeenCalledTimes(1);
-    expect(captureException.mock.invocationCallOrder[0]).toBeLessThan(
-      reloadWindow.mock.invocationCallOrder[0],
-    );
-  });
-
-  it('should still reload after the flush timeout when the Sentry flush hangs', async () => {
-    jest.useFakeTimers();
-    flush.mockImplementationOnce(() => new Promise(() => {}));
-
-    renderWithBoundary(new Error(STALE_CHUNK_ERROR_MESSAGE));
-
-    await jest.advanceTimersByTimeAsync(0);
-
-    expect(captureException).toHaveBeenCalledTimes(1);
-    expect(reloadWindow).not.toHaveBeenCalled();
-
-    await jest.advanceTimersByTimeAsync(2_000);
-
-    expect(reloadWindow).toHaveBeenCalledTimes(1);
   });
 
   it('should not reload on a stale chunk error within the reload cooldown', async () => {
@@ -95,10 +68,6 @@ describe('AppErrorBoundary', () => {
     renderWithBoundary(new Error(STALE_CHUNK_ERROR_MESSAGE));
 
     expect(screen.getByText('fallback content')).toBeInTheDocument();
-
-    await waitFor(() => {
-      expect(captureException).toHaveBeenCalledTimes(1);
-    });
 
     expect(reloadWindow).not.toHaveBeenCalled();
   });
@@ -112,21 +81,13 @@ describe('AppErrorBoundary', () => {
 
     expect(screen.getByText('fallback content')).toBeInTheDocument();
 
-    await waitFor(() => {
-      expect(captureException).toHaveBeenCalledTimes(1);
-    });
-
     expect(reloadWindow).not.toHaveBeenCalled();
   });
 
-  it('should not reload on other errors and still capture them', async () => {
+  it('should not reload on other errors', async () => {
     renderWithBoundary(new Error('Some unrelated error'));
 
     expect(screen.getByText('fallback content')).toBeInTheDocument();
-
-    await waitFor(() => {
-      expect(captureException).toHaveBeenCalledTimes(1);
-    });
 
     expect(reloadWindow).not.toHaveBeenCalled();
   });

@@ -5,7 +5,6 @@ import { Repository } from 'typeorm';
 import { WorkspaceActivationStatus } from 'twenty-shared/workspace';
 
 import { PostgresAdvisoryLockService } from 'src/database/typeorm/postgres-advisory-lock.service';
-import { SentryCronMonitor } from 'src/engine/core-modules/cron/sentry-cron-monitor.decorator';
 import { Process } from 'src/engine/core-modules/message-queue/decorators/process.decorator';
 import { Processor } from 'src/engine/core-modules/message-queue/decorators/processor.decorator';
 import { MessageQueue } from 'src/engine/core-modules/message-queue/message-queue.constants';
@@ -27,10 +26,6 @@ export class CleanSuspendedWorkspacesJob {
   ) {}
 
   @Process(CleanSuspendedWorkspacesJob.name)
-  @SentryCronMonitor(
-    CleanSuspendedWorkspacesJob.name,
-    cleanSuspendedWorkspaceCronPattern,
-  )
   async handle(): Promise<void> {
     const advisoryLockResult =
       await this.postgresAdvisoryLockService.tryWithLock(

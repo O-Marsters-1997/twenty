@@ -10,7 +10,6 @@ import {
   MessageChannelSyncStage,
   WebhookSubscriptionStatus,
 } from 'twenty-shared/types';
-import { SentryCronMonitor } from 'src/engine/core-modules/cron/sentry-cron-monitor.decorator';
 import { ExceptionHandlerService } from 'src/engine/core-modules/exception-handler/exception-handler.service';
 import { InjectMessageQueue } from 'src/engine/core-modules/message-queue/decorators/message-queue.decorator';
 import { Process } from 'src/engine/core-modules/message-queue/decorators/process.decorator';
@@ -43,10 +42,6 @@ export class MessagingMessageListFetchCronJob {
   ) {}
 
   @Process(MessagingMessageListFetchCronJob.name)
-  @SentryCronMonitor(
-    MessagingMessageListFetchCronJob.name,
-    MESSAGING_MESSAGE_LIST_FETCH_CRON_PATTERN,
-  )
   async handle(): Promise<void> {
     const pendingMessageChannelsAcrossWorkspaces =
       await this.messageChannelRepository.find({

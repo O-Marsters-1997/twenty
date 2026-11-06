@@ -10,8 +10,6 @@ import { ExceptionHandlerService } from 'src/engine/core-modules/exception-handl
 import { FeatureFlagService } from 'src/engine/core-modules/feature-flag/services/feature-flag.service';
 import { I18nModule } from 'src/engine/core-modules/i18n/i18n.module';
 import { I18nService } from 'src/engine/core-modules/i18n/i18n.service';
-import { MetricsModule } from 'src/engine/core-modules/metrics/metrics.module';
-import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { DataloaderModule } from 'src/engine/dataloaders/dataloader.module';
 import { DataloaderService } from 'src/engine/dataloaders/dataloader.service';
@@ -27,7 +25,6 @@ import { WorkspaceCacheModule } from 'src/engine/workspace-cache/workspace-cache
       imports: [
         GraphQLConfigModule,
         DataloaderModule,
-        MetricsModule,
         I18nModule,
         WorkspaceCacheModule,
       ],
@@ -36,7 +33,6 @@ import { WorkspaceCacheModule } from 'src/engine/workspace-cache/workspace-cache
         ExceptionHandlerService,
         DataloaderService,
         CacheStorageNamespace.EngineWorkspace,
-        MetricsService,
         I18nService,
         FeatureFlagService,
         WorkspaceCacheService,

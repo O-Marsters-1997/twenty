@@ -4,7 +4,6 @@ import { type NextFunction, type Request, type Response } from 'express';
 
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { buildApiAccessLogLine } from 'src/engine/middlewares/utils/build-api-access-log-line.util';
-import { computeRequestTraceContext } from 'src/engine/utils/compute-request-trace-context.util';
 
 @Injectable()
 export class ApiAccessLogMiddleware implements NestMiddleware {
@@ -20,7 +19,6 @@ export class ApiAccessLogMiddleware implements NestMiddleware {
     }
 
     const startedAtMs = Date.now();
-    const traceContext = computeRequestTraceContext();
 
     let logged = false;
     const log = () => {
@@ -36,7 +34,6 @@ export class ApiAccessLogMiddleware implements NestMiddleware {
             request,
             response,
             durationMs: Date.now() - startedAtMs,
-            traceContext,
           }),
         );
       } catch (error) {
