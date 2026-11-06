@@ -22,7 +22,7 @@ jobs:
           ref: main
 
       - name: Install dependencies
-        uses: ./.github/actions/yarn-install
+        uses: ./.github/actions/bun-install
 
       - name: Build dependencies
         run: npx nx build twenty-shared

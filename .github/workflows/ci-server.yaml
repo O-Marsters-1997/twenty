@@ -22,7 +22,7 @@ jobs:
     with:
       files: |
         package.json
-        yarn.lock
+        bun.lock
         packages/twenty-server/**
         packages/twenty-front/src/generated/**
         packages/twenty-front/src/generated-metadata/**
@@ -49,7 +49,7 @@ jobs:
         with:
           fetch-depth: 10
       - name: Install dependencies
-        uses: ./.github/actions/yarn-install
+        uses: ./.github/actions/bun-install
       - name: Restore server build cache
         id: restore-server-build-cache
         uses: ./.github/actions/restore-cache
@@ -77,7 +77,7 @@ jobs:
         with:
           fetch-depth: 10
       - name: Install dependencies
-        uses: ./.github/actions/yarn-install
+        uses: ./.github/actions/bun-install
       - name: Build twenty-shared
         run: npx nx build twenty-shared
       - name: Server / Run lint, typecheck & lingui extract
@@ -148,7 +148,7 @@ jobs:
         with:
           fetch-depth: 10
       - name: Install dependencies
-        uses: ./.github/actions/yarn-install
+        uses: ./.github/actions/bun-install
       - name: Restore server build cache
         uses: ./.github/actions/restore-cache
         with:
@@ -239,7 +239,7 @@ jobs:
         with:
           fetch-depth: 10
       - name: Install dependencies
-        uses: ./.github/actions/yarn-install
+        uses: ./.github/actions/bun-install
       - name: Restore server build cache
         uses: ./.github/actions/restore-cache
         with:
@@ -314,7 +314,7 @@ jobs:
         with:
           fetch-depth: 10
       - name: Install dependencies
-        uses: ./.github/actions/yarn-install
+        uses: ./.github/actions/bun-install
       - name: Update .env.test for integrations tests
         run: |
           echo "" >> .env.test

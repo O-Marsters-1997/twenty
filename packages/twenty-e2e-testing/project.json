@@ -8,7 +8,7 @@
       "options": {
         "cwd": "packages/twenty-e2e-testing",
         "commands": [
-          "yarn playwright install",
+          "bunx playwright install",
           "cp .env.example .env"
         ]
       }
@@ -18,7 +18,7 @@
       "options": {
         "cwd": "packages/twenty-e2e-testing",
         "commands": [
-          "yarn playwright test"
+          "bunx playwright test"
         ]
       }
     },
@@ -27,7 +27,7 @@
       "options": {
         "cwd": "packages/twenty-e2e-testing",
         "commands": [
-          "yarn playwright test --ui"
+          "bunx playwright test --ui"
         ]
       }
     },
@@ -36,7 +36,7 @@
       "options": {
         "cwd": "packages/twenty-e2e-testing",
         "commands": [
-          "yarn playwright test --debug"
+          "bunx playwright test --debug"
         ]
       }
     },
@@ -45,7 +45,7 @@
       "options": {
         "cwd": "packages/twenty-e2e-testing",
         "commands": [
-          "yarn playwright show-report"
+          "bunx playwright show-report"
         ]
       }
     }

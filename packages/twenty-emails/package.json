@@ -25,7 +25,7 @@
     "@tiptap/core": "^3.4.2",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
-    "@typescript/native-preview": "^7.0.0-dev.20260116.1",
+    "@typescript/native-preview": "7.0.0-dev.20260116.1",
     "@vitejs/plugin-react-swc": "^4.3.1",
     "react-email": "^6.9.0",
     "tsc-alias": "^1.8.16",
@@ -39,8 +39,6 @@
     }
   },
   "engines": {
-    "node": "^24.5.0",
-    "npm": "please-use-yarn",
-    "yarn": "^4.0.2"
+    "node": "^24.5.0"
   }
 }

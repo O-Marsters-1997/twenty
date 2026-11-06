@@ -32,7 +32,7 @@ jobs:
         with:
           fetch-depth: 10
       - name: Install dependencies
-        uses: ./.github/actions/yarn-install
+        uses: ./.github/actions/bun-install
       - name: Build twenty-emails
         run: npx nx build twenty-emails
       - name: Extract translations (lingui)

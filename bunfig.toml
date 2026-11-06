@@ -1,0 +1,4 @@
+[install]
+linker = "hoisted"
+minimumReleaseAge = 259200
+minimumReleaseAgeExcludes = ["twenty-ui", "esbuild@0.28.1"]

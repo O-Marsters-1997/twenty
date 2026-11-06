@@ -78,7 +78,7 @@
       "inputs": [
         "{projectRoot}/src/locales/*.po",
         "{projectRoot}/.eloqnt/config.ts",
-        "{workspaceRoot}/yarn.lock"
+        "{workspaceRoot}/bun.lock"
       ],
       "options": {
         "cwd": "{projectRoot}",

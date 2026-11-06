@@ -20,7 +20,7 @@ jobs:
     with:
       files: |
         package.json
-        yarn.lock
+        bun.lock
         packages/twenty-ui/**
         packages/twenty-shared/**
         .github/workflows/ci-docs.yaml
@@ -38,7 +38,7 @@ jobs:
           fetch-depth: 10
 
       - name: Install dependencies
-        uses: ./.github/actions/yarn-install
+        uses: ./.github/actions/bun-install
 
       - name: Docs / Lint
         run: npx nx lint twenty-docs
