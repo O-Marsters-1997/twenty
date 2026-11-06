@@ -65,7 +65,6 @@ export class EmailAliasManagerService {
         return this.googleEmailAliasManagerService.getHandleAliases(
           connectedAccount,
         );
-      case ConnectedAccountProvider.IMAP_SMTP_CALDAV:
       case ConnectedAccountProvider.OIDC:
       case ConnectedAccountProvider.SAML:
       case ConnectedAccountProvider.EMAIL_GROUP:

@@ -15,7 +15,6 @@ import {
 import { type ConnectedAccountProvider } from 'twenty-shared/types';
 
 import { ApplicationEntity } from 'src/engine/core-modules/application/application.entity';
-import { type EncryptedImapSmtpCaldavParams } from 'src/engine/core-modules/imap-smtp-caldav-connection/types/imap-smtp-caldav-connection.type';
 import { type EncryptedString } from 'src/engine/core-modules/secret-encryption/branded-strings/encrypted-string.type';
 import { WasIntroducedInUpgrade } from 'src/engine/core-modules/upgrade/decorators/was-introduced-in-upgrade.decorator';
 import { type CalendarChannelEntity } from 'src/engine/metadata-modules/calendar-channel/entities/calendar-channel.entity';
@@ -34,14 +33,6 @@ export type ConnectedAccountVisibility = 'user' | 'workspace';
 @Check(
   'CHK_connectedAccount_refreshToken_encrypted',
   `"refreshToken" IS NULL OR "refreshToken" LIKE 'enc:v2:%'`,
-)
-@Check(
-  'CHK_connectedAccount_connectionParameters_encrypted',
-  `"connectionParameters" IS NULL OR (` +
-    `(("connectionParameters"->'IMAP'->>'password') IS NULL OR ("connectionParameters"->'IMAP'->>'password') LIKE 'enc:v2:%') ` +
-    `AND (("connectionParameters"->'SMTP'->>'password') IS NULL OR ("connectionParameters"->'SMTP'->>'password') LIKE 'enc:v2:%') ` +
-    `AND (("connectionParameters"->'CALDAV'->>'password') IS NULL OR ("connectionParameters"->'CALDAV'->>'password') LIKE 'enc:v2:%')` +
-    `)`,
 )
 export class ConnectedAccountEntity extends WorkspaceRelatedEntity {
   @PrimaryGeneratedColumn('uuid')
@@ -82,7 +73,7 @@ export class ConnectedAccountEntity extends WorkspaceRelatedEntity {
   scopes: string[] | null;
 
   @Column({ type: 'jsonb', nullable: true })
-  connectionParameters: EncryptedImapSmtpCaldavParams | null;
+  connectionParameters: Record<string, unknown> | null;
 
   @Column({ type: 'timestamptz', nullable: true })
   lastSignedInAt: Date | null;

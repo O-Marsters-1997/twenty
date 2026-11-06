@@ -43,7 +43,6 @@ const storyConnectedAccounts = [
     name: 'Tim Apple',
     visibility: 'SHARE_EVERYTHING',
     lastCredentialsRefreshedAt: '2026-08-24T08:00:00.000Z',
-    connectionParameters: null,
     createdAt: '2026-02-27T01:17:25.392Z',
     updatedAt: '2026-08-24T08:00:00.000Z',
   },
@@ -62,7 +61,6 @@ const storyConnectedAccounts = [
     name: 'Tim Apple',
     visibility: 'SHARE_EVERYTHING',
     lastCredentialsRefreshedAt: '2026-08-23T08:00:00.000Z',
-    connectionParameters: null,
     createdAt: '2026-03-12T01:17:25.392Z',
     updatedAt: '2026-08-23T08:00:00.000Z',
   },
@@ -302,7 +300,7 @@ export const CalendarEventWithoutAccounts: Story = {
     ).toBeVisible();
     expect(
       canvas.getByText(
-        'Connect Google, Microsoft or CalDAV and enable calendar sync before creating an event.',
+        'Connect Google or Microsoft and enable calendar sync before creating an event.',
       ),
     ).toBeVisible();
   },

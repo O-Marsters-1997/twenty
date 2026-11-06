@@ -70,15 +70,4 @@ describe('getMissingDraftEmailScopes', () => {
       expect(getMissingDraftEmailScopes(account)).toEqual([]);
     });
   });
-
-  describe('IMAP/SMTP provider', () => {
-    it('should always return empty array', () => {
-      const account = buildConnectedAccount({
-        provider: ConnectedAccountProvider.IMAP_SMTP_CALDAV,
-        connectionParameters: undefined,
-      });
-
-      expect(getMissingDraftEmailScopes(account)).toEqual([]);
-    });
-  });
 });

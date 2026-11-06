@@ -314,8 +314,6 @@ exports[`endpoint permission declarations should match the AuthPrincipalGuard an
   "GoogleAuthController.googleAuth {"applicationTarget":null,"authPrincipalGuards":[]}",
   "GoogleAuthController.googleAuthRedirect {"applicationTarget":null,"authPrincipalGuards":[]}",
   "HealthController.check {"applicationTarget":null,"authPrincipalGuards":[]}",
-  "ImapSmtpCaldavResolver.getConnectedImapSmtpCaldavAccount {"applicationTarget":null,"authPrincipalGuards":[{"apiKey":true,"application":true,"oauthClient":true,"userSession":{"impersonated":true,"playground":true,"standard":true,"workspaceAgnostic":false}}]}",
-  "ImapSmtpCaldavResolver.saveImapSmtpCaldavAccount {"applicationTarget":null,"authPrincipalGuards":[{"apiKey":true,"application":true,"oauthClient":true,"userSession":{"impersonated":true,"playground":true,"standard":true,"workspaceAgnostic":false}}]}",
   "ImpersonationResolver.impersonate {"applicationTarget":null,"authPrincipalGuards":[{"apiKey":false,"application":false,"oauthClient":false,"userSession":{"impersonated":false,"playground":true,"standard":true,"workspaceAgnostic":false}}]}",
   "ImpersonationResolver.stopImpersonation {"applicationTarget":null,"authPrincipalGuards":[{"apiKey":false,"application":false,"oauthClient":false,"userSession":{"impersonated":true,"playground":true,"standard":true,"workspaceAgnostic":false}}]}",
   "IndexMetadataResolver.createOneIndex {"applicationTarget":null,"authPrincipalGuards":[{"apiKey":true,"application":true,"oauthClient":true,"userSession":{"impersonated":true,"playground":true,"standard":true,"workspaceAgnostic":false}}]}",

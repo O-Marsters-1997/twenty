@@ -1,6 +1,6 @@
 import { act, renderHook } from '@testing-library/react';
 
-import { ConnectedAccountProvider, SettingsPath } from 'twenty-shared/types';
+import { ConnectedAccountProvider } from 'twenty-shared/types';
 import { useTriggerProviderReconnect } from '@/settings/accounts/hooks/useTriggerProviderReconnect';
 import {
   CalendarChannelVisibility,
@@ -8,7 +8,6 @@ import {
 } from '~/generated-metadata/graphql';
 
 const mockTriggerApisOAuth = jest.fn();
-const mockNavigate = jest.fn();
 
 jest.mock('@/settings/accounts/hooks/useTriggerApiOAuth', () => ({
   useTriggerApisOAuth: jest.fn().mockImplementation(() => ({
@@ -16,77 +15,9 @@ jest.mock('@/settings/accounts/hooks/useTriggerApiOAuth', () => ({
   })),
 }));
 
-jest.mock('~/hooks/useNavigateSettings', () => ({
-  useNavigateSettings: jest.fn().mockImplementation(() => mockNavigate),
-}));
-
 describe('useTriggerProviderReconnect', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-  });
-
-  describe('IMAP_SMTP_CALDAV provider', () => {
-    it('should navigate to new connection when no accountId is provided', async () => {
-      const { result } = renderHook(() => useTriggerProviderReconnect());
-
-      await act(async () => {
-        await result.current.triggerProviderReconnect(
-          ConnectedAccountProvider.IMAP_SMTP_CALDAV,
-        );
-      });
-
-      expect(mockNavigate).toHaveBeenCalledWith(
-        SettingsPath.NewImapSmtpCaldavConnection,
-      );
-      expect(mockTriggerApisOAuth).not.toHaveBeenCalled();
-    });
-
-    it('should navigate to edit connection when accountId is provided', async () => {
-      const { result } = renderHook(() => useTriggerProviderReconnect());
-
-      const accountId = 'test-account-id-123';
-
-      await act(async () => {
-        await result.current.triggerProviderReconnect(
-          ConnectedAccountProvider.IMAP_SMTP_CALDAV,
-          accountId,
-        );
-      });
-
-      expect(mockNavigate).toHaveBeenCalledWith(
-        SettingsPath.EditImapSmtpCaldavConnection,
-        {
-          connectedAccountId: accountId,
-        },
-      );
-      expect(mockTriggerApisOAuth).not.toHaveBeenCalled();
-    });
-
-    it('should ignore options parameter for IMAP_SMTP_CALDAV provider', async () => {
-      const { result } = renderHook(() => useTriggerProviderReconnect());
-
-      const accountId = 'test-account-id-123';
-      const options = {
-        redirectLocation: '/some-path',
-        calendarVisibility: CalendarChannelVisibility.SHARE_EVERYTHING,
-      };
-
-      await act(async () => {
-        await result.current.triggerProviderReconnect(
-          ConnectedAccountProvider.IMAP_SMTP_CALDAV,
-          accountId,
-          options,
-        );
-      });
-
-      expect(mockNavigate).toHaveBeenCalledWith(
-        SettingsPath.EditImapSmtpCaldavConnection,
-        {
-          connectedAccountId: accountId,
-        },
-      );
-      expect(mockTriggerApisOAuth).not.toHaveBeenCalled();
-    });
   });
 
   describe('OAuth providers', () => {
@@ -105,7 +36,6 @@ describe('useTriggerProviderReconnect', () => {
           redirectLocation: '/settings/accounts',
         },
       );
-      expect(mockNavigate).not.toHaveBeenCalled();
     });
 
     it('should trigger OAuth for Microsoft provider without options', async () => {
@@ -123,7 +53,6 @@ describe('useTriggerProviderReconnect', () => {
           redirectLocation: '/settings/accounts',
         },
       );
-      expect(mockNavigate).not.toHaveBeenCalled();
     });
 
     it('should trigger OAuth for Google provider with options', async () => {
@@ -151,7 +80,6 @@ describe('useTriggerProviderReconnect', () => {
           redirectLocation: '/settings/accounts',
         },
       );
-      expect(mockNavigate).not.toHaveBeenCalled();
     });
 
     it('should trigger OAuth for Microsoft provider with options', async () => {
@@ -178,7 +106,6 @@ describe('useTriggerProviderReconnect', () => {
           redirectLocation: '/settings/accounts',
         },
       );
-      expect(mockNavigate).not.toHaveBeenCalled();
     });
 
     it('should ignore accountId parameter for OAuth providers', async () => {
@@ -197,7 +124,6 @@ describe('useTriggerProviderReconnect', () => {
           redirectLocation: '/settings/accounts',
         },
       );
-      expect(mockNavigate).not.toHaveBeenCalled();
     });
 
     it('should pass skipMessageChannelConfiguration option to OAuth providers', async () => {
@@ -223,7 +149,6 @@ describe('useTriggerProviderReconnect', () => {
           redirectLocation: '/settings/accounts',
         },
       );
-      expect(mockNavigate).not.toHaveBeenCalled();
     });
   });
 
