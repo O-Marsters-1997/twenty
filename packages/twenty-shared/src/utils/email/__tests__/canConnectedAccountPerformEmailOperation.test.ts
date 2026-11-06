@@ -152,8 +152,6 @@ describe('canConnectedAccountPerformEmailOperation', () => {
 
     it('refuses a provider absent from both allowlists even with SMTP configured', () => {
       for (const provider of [
-        ConnectedAccountProvider.OIDC,
-        ConnectedAccountProvider.SAML,
         ConnectedAccountProvider.APP,
       ]) {
         expect(

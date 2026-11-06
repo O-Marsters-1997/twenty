@@ -5,7 +5,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import bytes from 'bytes';
 import { type Request } from 'express';
 import GraphQLUpload from 'graphql-upload/GraphQLUpload.mjs';
-import omit from 'lodash.omit';
 import { PermissionFlagType } from 'twenty-shared/constants';
 import { SOURCE_LOCALE } from 'twenty-shared/translations';
 import {
@@ -33,8 +32,6 @@ import { AvailableWorkspacesAndAccessTokensDTO } from 'src/engine/core-modules/a
 import { EmailPasswordResetLinkDTO } from 'src/engine/core-modules/auth/dto/email-password-reset-link.dto';
 import { EmailPasswordResetLinkInput } from 'src/engine/core-modules/auth/dto/email-password-reset-link.input';
 import { GetAuthTokenFromEmailVerificationTokenInput } from 'src/engine/core-modules/auth/dto/get-auth-token-from-email-verification-token.input';
-import { GetAuthorizationUrlForSsoDTO } from 'src/engine/core-modules/auth/dto/get-authorization-url-for-sso.dto';
-import { GetAuthorizationUrlForSsoInput } from 'src/engine/core-modules/auth/dto/get-authorization-url-for-sso.input';
 import { InvalidatePasswordDTO } from 'src/engine/core-modules/auth/dto/invalidate-password.dto';
 import { SignUpDTO } from 'src/engine/core-modules/auth/dto/sign-up.dto';
 import { TransientTokenDTO } from 'src/engine/core-modules/auth/dto/transient-token.dto';
@@ -53,7 +50,6 @@ import { LoginTokenService } from 'src/engine/core-modules/auth/token/services/l
 import { assertLoginTokenIsNotForImpersonation } from 'src/engine/core-modules/auth/utils/assert-login-token-is-not-for-impersonation.util';
 import { RefreshTokenService } from 'src/engine/core-modules/auth/token/services/refresh-token.service';
 import { RenewTokenService } from 'src/engine/core-modules/auth/token/services/renew-token.service';
-import { SsoExchangeTokenService } from 'src/engine/core-modules/auth/token/services/sso-exchange-token.service';
 import { TransientTokenService } from 'src/engine/core-modules/auth/token/services/transient-token.service';
 import { WorkspaceAgnosticTokenService } from 'src/engine/core-modules/auth/token/services/workspace-agnostic-token.service';
 import { AuthContextUser } from 'src/engine/core-modules/auth/types/auth-context.type';
@@ -79,7 +75,6 @@ import { I18nContext } from 'src/engine/core-modules/i18n/types/i18n-context.typ
 import { IMPERSONATION_DENIAL_BY_REASON } from 'src/engine/core-modules/impersonation/constants/impersonation-denial-by-reason.constant';
 import { IMPERSONATION_DENIAL_LOG_MESSAGE_BY_REASON } from 'src/engine/core-modules/impersonation/constants/impersonation-denial-log-message-by-reason.constant';
 import { ImpersonationAuthorizationService } from 'src/engine/core-modules/impersonation/services/impersonation-authorization.service';
-import { SsoService } from 'src/engine/core-modules/sso/services/sso.service';
 import { TwoFactorAuthenticationRecoveryCodeRedemptionDTO } from 'src/engine/core-modules/two-factor-authentication/dto/two-factor-authentication-recovery-code-redemption.dto';
 import { TwoFactorAuthenticationRecoveryCodeVerificationInput } from 'src/engine/core-modules/two-factor-authentication/dto/two-factor-authentication-recovery-code-verification.input';
 import { TwoFactorAuthenticationVerificationInput } from 'src/engine/core-modules/two-factor-authentication/dto/two-factor-authentication-verification.input';
@@ -110,7 +105,6 @@ import { ApiKeyToken } from './dto/api-key-token.dto';
 import { AuthToken } from './dto/auth-token.dto';
 import { AuthTokens } from './dto/auth-tokens.dto';
 import { GetAuthTokensFromLoginTokenInput } from './dto/get-auth-tokens-from-login-token.input';
-import { GetAuthTokensFromSsoExchangeTokenInput } from './dto/get-auth-tokens-from-sso-exchange-token.input';
 import { LoginTokenDTO } from './dto/login-token.dto';
 import { SignUpInNewWorkspaceInput } from './dto/sign-up-in-new-workspace.input';
 import { SignUpInput } from './dto/sign-up.input';
@@ -156,7 +150,6 @@ export class AuthResolver {
     private resetPasswordService: ResetPasswordService,
     private loginTokenService: LoginTokenService,
     private workspaceAgnosticTokenService: WorkspaceAgnosticTokenService,
-    private ssoExchangeTokenService: SsoExchangeTokenService,
     private refreshTokenService: RefreshTokenService,
     private signInUpService: SignInUpService,
     private transientTokenService: TransientTokenService,
@@ -164,7 +157,6 @@ export class AuthResolver {
     private workspaceDomainsService: WorkspaceDomainsService,
     private userWorkspaceService: UserWorkspaceService,
     private emailVerificationTokenService: EmailVerificationTokenService,
-    private ssoService: SsoService,
     private readonly eventLogEmitterService: EventLogEmitterService,
     private readonly impersonationAuthorizationService: ImpersonationAuthorizationService,
     private readonly subdomainManagerService: SubdomainManagerService,
@@ -181,18 +173,6 @@ export class AuthResolver {
   ): Promise<CheckUserExistDTO> {
     return await this.authService.checkUserExists(
       checkUserExistsInput.email.toLowerCase(),
-    );
-  }
-
-  @Mutation(() => GetAuthorizationUrlForSsoDTO)
-  @UseGuards(PublicEndpointGuard, NoPermissionGuard)
-  @AllowSuspendedWorkspace()
-  async getAuthorizationUrlForSSO(
-    @Args('input') params: GetAuthorizationUrlForSsoInput,
-  ) {
-    return await this.ssoService.getAuthorizationUrlForSSO(
-      params.identityProviderId,
-      omit(params, ['identityProviderId']),
     );
   }
 
@@ -925,45 +905,6 @@ export class AuthResolver {
         tokenPayload.authProvider,
       );
     }
-
-    await this.userSessionService.issueSessionForTokenPair({
-      tokenPair: authTokens.tokens,
-      request: context.req,
-      origin: 'sign_in',
-    });
-
-    return authTokens;
-  }
-
-  @Mutation(() => AuthTokens)
-  @UseGuards(PublicEndpointGuard, NoPermissionGuard)
-  @AllowSuspendedWorkspace()
-  async getAuthTokensFromSSOExchangeToken(
-    @Args()
-    { ssoExchangeToken }: GetAuthTokensFromSsoExchangeTokenInput,
-    @Context() context: { req: Request },
-  ): Promise<AuthTokens> {
-    const { userId, authProvider } =
-      await this.ssoExchangeTokenService.validateAndConsumeSsoExchangeTokenOrThrow(
-        ssoExchangeToken,
-      );
-
-    const authTokens = {
-      tokens: {
-        accessOrWorkspaceAgnosticToken:
-          await this.workspaceAgnosticTokenService.generateWorkspaceAgnosticToken(
-            {
-              userId,
-              authProvider,
-            },
-          ),
-        refreshToken: await this.refreshTokenService.generateRefreshToken({
-          userId,
-          authProvider,
-          targetedTokenType: JwtTokenTypeEnum.WORKSPACE_AGNOSTIC,
-        }),
-      },
-    };
 
     await this.userSessionService.issueSessionForTokenPair({
       tokenPair: authTokens.tokens,

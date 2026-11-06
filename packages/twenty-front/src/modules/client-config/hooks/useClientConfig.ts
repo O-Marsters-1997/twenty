@@ -182,7 +182,6 @@ export const useClientConfig = (): UseClientConfigResult => {
           microsoft: clientConfig.authProviders.microsoft,
           password: clientConfig.authProviders.password,
           magicLink: false,
-          sso: clientConfig.authProviders.sso,
         });
         setAiModels(clientConfig.aiModels ?? []);
         setAiEvaluationModels(clientConfig.aiEvaluationModels ?? []);

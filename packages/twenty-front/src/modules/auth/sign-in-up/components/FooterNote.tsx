@@ -1,7 +1,6 @@
 import { styled } from '@linaria/react';
 import { Trans, useLingui } from '@lingui/react/macro';
 
-import { useWorkspaceBypass } from '@/auth/sign-in-up/hooks/useWorkspaceBypass';
 import { getTwentyWebsiteUrl } from '@/auth/utils/getTwentyWebsiteUrl';
 import { useIsCurrentLocationOnAWorkspace } from '@/domain-manager/hooks/useIsCurrentLocationOnAWorkspace';
 import { ONBOARDING_CONTENT_BLOCK_WIDTH } from '@/onboarding/constants/OnboardingContentBlockWidth';
@@ -67,9 +66,6 @@ export const FooterNote = ({
   const { isOnAWorkspace } = useIsCurrentLocationOnAWorkspace();
   const { i18n } = useLingui();
 
-  const { shouldOfferBypass, shouldUseBypass, enableBypass } =
-    useWorkspaceBypass();
-
   if (!isOnAWorkspace) {
     return (
       <StyledCopyContainer>
@@ -106,14 +102,6 @@ export const FooterNote = ({
 
   return (
     <StyledLinksContainer>
-      {shouldOfferBypass && !shouldUseBypass && (
-        <>
-          <button type="button" onClick={enableBypass}>
-            <Trans>Bypass SSO</Trans>
-          </button>
-          <StyledSeparator>•</StyledSeparator>
-        </>
-      )}
       <a
         href={getTwentyWebsiteUrl(i18n.locale, 'privacy-policy')}
         target="_blank"

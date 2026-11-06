@@ -75,7 +75,6 @@ export class WorkspaceDomainsService {
       order: {
         createdAt: 'DESC',
       },
-      relations: ['workspaceSsoIdentityProviders'],
     });
 
     if (workspaces.length > 1) {
@@ -128,7 +127,7 @@ export class WorkspaceDomainsService {
 
       const registeredPublicDomain = await this.publicDomainRepository.findOne({
         where: { domain: hostname },
-        relations: ['workspace', 'workspace.workspaceSsoIdentityProviders'],
+        relations: ['workspace'],
       });
 
       if (isDefined(registeredPublicDomain)) {
@@ -142,7 +141,6 @@ export class WorkspaceDomainsService {
       const workspaceFromSubdomain = isDefined(subdomain)
         ? ((await this.workspaceRepository.findOne({
             where: { subdomain },
-            relations: ['workspaceSsoIdentityProviders'],
           })) ?? undefined)
         : undefined;
 
@@ -166,7 +164,6 @@ export class WorkspaceDomainsService {
     const workspaceFromCustomDomainOrSubdomain =
       (await this.workspaceRepository.findOne({
         where,
-        relations: ['workspaceSsoIdentityProviders'],
       })) ?? undefined;
 
     if (
@@ -182,7 +179,7 @@ export class WorkspaceDomainsService {
 
     const publicDomain = await this.publicDomainRepository.findOne({
       where: { domain: customDomain },
-      relations: ['workspace', 'workspace.workspaceSsoIdentityProviders'],
+      relations: ['workspace'],
     });
 
     return {

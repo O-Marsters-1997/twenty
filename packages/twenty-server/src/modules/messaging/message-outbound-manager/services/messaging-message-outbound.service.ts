@@ -45,8 +45,6 @@ export class MessagingMessageOutboundService {
           sendMessageInput,
           connectedAccount,
         );
-      case ConnectedAccountProvider.OIDC:
-      case ConnectedAccountProvider.SAML:
       case ConnectedAccountProvider.APP:
         throw new Error(
           `Provider ${connectedAccount.provider} does not support sending messages`,
@@ -80,8 +78,6 @@ export class MessagingMessageOutboundService {
           connectedAccount,
         );
       case ConnectedAccountProvider.EMAIL_GROUP:
-      case ConnectedAccountProvider.OIDC:
-      case ConnectedAccountProvider.SAML:
       case ConnectedAccountProvider.APP:
         throw new Error(
           `Provider ${connectedAccount.provider} does not support creating drafts`,
@@ -119,8 +115,6 @@ export class MessagingMessageOutboundService {
           connectedAccount,
         );
       case ConnectedAccountProvider.EMAIL_GROUP:
-      case ConnectedAccountProvider.OIDC:
-      case ConnectedAccountProvider.SAML:
       case ConnectedAccountProvider.APP:
         throw new Error(
           `Provider ${connectedAccount.provider} does not support sending drafts`,

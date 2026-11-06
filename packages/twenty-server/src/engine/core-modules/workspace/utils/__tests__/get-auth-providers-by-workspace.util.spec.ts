@@ -1,8 +1,3 @@
-import {
-  type WorkspaceSsoIdentityProviderEntity,
-  IdentityProviderType,
-  SsoIdentityProviderStatus,
-} from 'src/engine/core-modules/sso/workspace-sso-identity-provider.entity';
 import { getAuthProvidersByWorkspace } from 'src/engine/core-modules/workspace/utils/get-auth-providers-by-workspace.util';
 import { type WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
 
@@ -11,28 +6,19 @@ describe('getAuthProvidersByWorkspace', () => {
     isGoogleAuthEnabled: true,
     isPasswordAuthEnabled: true,
     isMicrosoftAuthEnabled: false,
-    workspaceSsoIdentityProviders: [
-      {
-        id: 'sso1',
-        name: 'SSO Provider 1',
-        type: IdentityProviderType.SAML,
-
-        status: SsoIdentityProviderStatus.Active,
-        issuer: 'sso1.example.com',
-      },
-    ],
   } as unknown as WorkspaceEntity;
+
+  const systemEnabledProviders = {
+    google: true,
+    magicLink: false,
+    password: true,
+    microsoft: true,
+  };
 
   it('should return correct auth providers for given workspace', () => {
     const result = getAuthProvidersByWorkspace({
       workspace: mockWorkspace,
-      systemEnabledProviders: {
-        google: true,
-        magicLink: false,
-        password: true,
-        microsoft: true,
-        sso: [],
-      },
+      systemEnabledProviders,
     });
 
     expect(result).toEqual({
@@ -40,98 +26,15 @@ describe('getAuthProvidersByWorkspace', () => {
       magicLink: false,
       password: true,
       microsoft: false,
-      sso: [
-        {
-          id: 'sso1',
-          name: 'SSO Provider 1',
-          type: IdentityProviderType.SAML,
-
-          status: SsoIdentityProviderStatus.Active,
-          issuer: 'sso1.example.com',
-        },
-      ],
     });
   });
 
-  it('should handle workspace with no SSO providers', () => {
+  it('should disable Google auth if the system has it disabled', () => {
     const result = getAuthProvidersByWorkspace({
-      workspace: { ...mockWorkspace, workspaceSsoIdentityProviders: [] },
-      systemEnabledProviders: {
-        google: true,
-        magicLink: false,
-        password: true,
-        microsoft: true,
-        sso: [],
-      },
+      workspace: mockWorkspace,
+      systemEnabledProviders: { ...systemEnabledProviders, google: false },
     });
 
-    expect(result).toEqual({
-      google: true,
-      magicLink: false,
-      password: true,
-      microsoft: false,
-      sso: [],
-    });
-  });
-  it('should handle workspace with SSO providers inactive', () => {
-    const result = getAuthProvidersByWorkspace({
-      workspace: {
-        ...mockWorkspace,
-        workspaceSsoIdentityProviders: [
-          {
-            id: 'sso1',
-            name: 'SSO Provider 1',
-            type: IdentityProviderType.SAML,
-            status: SsoIdentityProviderStatus.Inactive,
-            issuer: 'sso1.example.com',
-          } as WorkspaceSsoIdentityProviderEntity,
-        ],
-      },
-      systemEnabledProviders: {
-        google: true,
-        magicLink: false,
-        password: true,
-        microsoft: true,
-        sso: [],
-      },
-    });
-
-    expect(result).toEqual({
-      google: true,
-      magicLink: false,
-      password: true,
-      microsoft: false,
-      sso: [],
-    });
-  });
-
-  it('should disable Microsoft auth if isMicrosoftAuthEnabled is false', () => {
-    const result = getAuthProvidersByWorkspace({
-      workspace: { ...mockWorkspace, isMicrosoftAuthEnabled: false },
-      systemEnabledProviders: {
-        google: true,
-        magicLink: false,
-        password: true,
-        microsoft: true,
-        sso: [],
-      },
-    });
-
-    expect(result).toEqual({
-      google: true,
-      magicLink: false,
-      password: true,
-      microsoft: false,
-      sso: [
-        {
-          id: 'sso1',
-          name: 'SSO Provider 1',
-          type: IdentityProviderType.SAML,
-
-          status: SsoIdentityProviderStatus.Active,
-          issuer: 'sso1.example.com',
-        },
-      ],
-    });
+    expect(result.google).toBe(false);
   });
 });

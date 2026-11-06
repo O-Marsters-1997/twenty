@@ -13,7 +13,6 @@ export const mockedPublicWorkspaceDataBySubdomain: GetPublicWorkspaceDataByDomai
     },
     authProviders: {
       __typename: 'AuthProviders',
-      sso: [],
       google: true,
       magicLink: false,
       password: true,

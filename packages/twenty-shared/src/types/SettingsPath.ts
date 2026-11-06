@@ -60,7 +60,6 @@ export enum SettingsPath {
   Integrations = 'integrations',
   Security = 'general#security',
   Logs = 'general#logs',
-  NewSsoIdentityProvider = 'security/sso/new',
 
   AdminPanel = 'admin-panel',
   AdminPanelOrganization = 'admin-panel#organization',

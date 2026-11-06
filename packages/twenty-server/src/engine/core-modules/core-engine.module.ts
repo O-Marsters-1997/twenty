@@ -46,7 +46,6 @@ import { PublicDomainModule } from 'src/engine/core-modules/public-domain/public
 import { RedisClientModule } from 'src/engine/core-modules/redis-client/redis-client.module';
 import { RedisClientService } from 'src/engine/core-modules/redis-client/redis-client.service';
 import { SearchModule } from 'src/engine/core-modules/search/search.module';
-import { WorkspaceSsoModule } from 'src/engine/core-modules/sso/sso.module';
 import { WellKnownModule } from 'src/engine/core-modules/well-known/well-known.module';
 import { TelemetryModule } from 'src/engine/core-modules/telemetry/telemetry.module';
 import { TwentyConfigModule } from 'src/engine/core-modules/twenty-config/twenty-config.module';
@@ -93,7 +92,6 @@ import { FileApiModule } from './file/file-api.module';
     UserModule,
     WorkspaceModule,
     WorkspaceInvitationModule,
-    WorkspaceSsoModule,
     ApprovedAccessDomainModule,
     EmailingDomainModule,
     PublicDomainModule,
@@ -168,7 +166,6 @@ import { FileApiModule } from './file/file-api.module';
     UserModule,
     WorkspaceModule,
     WorkspaceInvitationModule,
-    WorkspaceSsoModule,
     ImapSmtpCaldavModule,
   ],
 })

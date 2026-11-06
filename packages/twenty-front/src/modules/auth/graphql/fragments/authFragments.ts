@@ -30,13 +30,6 @@ export const AVAILABLE_WORKSPACE_FOR_AUTH_FRAGMENT = gql`
       customUrl
     }
     logo
-    sso {
-      type
-      id
-      issuer
-      name
-      status
-    }
   }
 `;
 

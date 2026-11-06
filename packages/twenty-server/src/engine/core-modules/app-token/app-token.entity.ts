@@ -27,7 +27,6 @@ export enum AppTokenType {
   OnboardingInvitationToken = 'ONBOARDING_INVITATION_TOKEN',
   EmailVerificationToken = 'EMAIL_VERIFICATION_TOKEN',
   EnterpriseValidityToken = 'ENTERPRISE_VALIDITY_TOKEN',
-  SsoExchangeToken = 'SSO_EXCHANGE_TOKEN',
   TwoFactorAuthenticationRecoveryCode = 'TWO_FACTOR_AUTHENTICATION_RECOVERY_CODE',
 }
 
@@ -35,10 +34,6 @@ export enum AppTokenType {
 @Index('IDX_APP_TOKEN_USER_ID', ['userId'], { where: '"userId" IS NOT NULL' })
 @Index('IDX_APP_TOKEN_WORKSPACE_ID', ['workspaceId'], {
   where: '"workspaceId" IS NOT NULL',
-})
-@Index('IDX_APP_TOKEN_TYPE_VALUE_SSO_EXCHANGE_UNIQUE', ['type', 'value'], {
-  unique: true,
-  where: `"type" = 'SSO_EXCHANGE_TOKEN' AND "deletedAt" IS NULL AND "revokedAt" IS NULL`,
 })
 @Index(
   'IDX_APP_TOKEN_RECOVERY_CODE_PENDING_UNIQUE',

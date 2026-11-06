@@ -22,8 +22,6 @@ export const authGraphqlApiExceptionHandler = (exception: AuthException) => {
     case AuthExceptionCode.WORKSPACE_SUSPENDED:
     case AuthExceptionCode.INSUFFICIENT_SCOPES:
     case AuthExceptionCode.OAUTH_ACCESS_DENIED:
-    case AuthExceptionCode.SSO_AUTH_FAILED:
-    case AuthExceptionCode.USE_SSO_AUTH:
     case AuthExceptionCode.SIGNUP_DISABLED:
     case AuthExceptionCode.MISSING_ENVIRONMENT_VARIABLE:
     case AuthExceptionCode.INVALID_JWT_TOKEN_TYPE:

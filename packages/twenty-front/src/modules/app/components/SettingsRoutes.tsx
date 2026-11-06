@@ -460,14 +460,6 @@ const SettingsObjectTranslations = lazy(() =>
   ),
 );
 
-const SettingsSecuritySsoIdentifyProvider = lazy(() =>
-  import('~/pages/settings/security/SettingsSecuritySsoIdentifyProvider').then(
-    (module) => ({
-      default: module.SettingsSecuritySsoIdentifyProvider,
-    }),
-  ),
-);
-
 const SettingsSecurityApprovedAccessDomain = lazy(() =>
   import('~/pages/settings/security/SettingsSecurityApprovedAccessDomain').then(
     (module) => ({
@@ -978,10 +970,6 @@ const createSettingsRouteElements = ({
         />
       }
     >
-      <Route
-        path={SettingsPath.NewSsoIdentityProvider}
-        element={<SettingsSecuritySsoIdentifyProvider />}
-      />
       <Route
         path={SettingsPath.NewApprovedAccessDomain}
         element={<SettingsSecurityApprovedAccessDomain />}

@@ -63,7 +63,7 @@ export const SettingsSecurityAuthProvidersOptionsList = () => {
   };
 
   const toggleAuthMethod = async (
-    authProvider: keyof Omit<AuthProviders, '__typename' | 'magicLink' | 'sso'>,
+    authProvider: keyof Omit<AuthProviders, '__typename' | 'magicLink'>,
   ) => {
     if (!currentWorkspace?.id) {
       throw new Error(t`User is not logged in`);

@@ -10,7 +10,6 @@ import { ImpersonationAuthorizationService } from 'src/engine/core-modules/imper
 import { SignInUpService } from 'src/engine/core-modules/auth/services/sign-in-up.service';
 import { AccessTokenService } from 'src/engine/core-modules/auth/token/services/access-token.service';
 import { RefreshTokenService } from 'src/engine/core-modules/auth/token/services/refresh-token.service';
-import { SsoExchangeTokenService } from 'src/engine/core-modules/auth/token/services/sso-exchange-token.service';
 import { WorkspaceAgnosticTokenService } from 'src/engine/core-modules/auth/token/services/workspace-agnostic-token.service';
 import { CaptchaGuard } from 'src/engine/core-modules/captcha/captcha.guard';
 import { EmailPasswordResetLinkInput } from 'src/engine/core-modules/auth/dto/email-password-reset-link.input';
@@ -28,7 +27,6 @@ import { FileCorePictureService } from 'src/engine/core-modules/file/file-core-p
 import { FileUploadService } from 'src/engine/core-modules/file/file-upload/services/file-upload.service';
 import { UserSessionCookieService } from 'src/engine/core-modules/user-session/services/user-session-cookie.service';
 import { UserSessionService } from 'src/engine/core-modules/user-session/services/user-session.service';
-import { SsoService } from 'src/engine/core-modules/sso/services/sso.service';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { TwoFactorAuthenticationService } from 'src/engine/core-modules/two-factor-authentication/two-factor-authentication.service';
 import { TwoFactorAuthenticationRecoveryService } from 'src/engine/core-modules/two-factor-authentication/services/two-factor-authentication-recovery.service';
@@ -201,10 +199,6 @@ describe('AuthResolver', () => {
           },
         },
         {
-          provide: SsoExchangeTokenService,
-          useValue: {},
-        },
-        {
           provide: TransientTokenService,
           useValue: {},
         },
@@ -230,10 +224,6 @@ describe('AuthResolver', () => {
         },
         {
           provide: FeatureFlagService,
-          useValue: {},
-        },
-        {
-          provide: SsoService,
           useValue: {},
         },
         {

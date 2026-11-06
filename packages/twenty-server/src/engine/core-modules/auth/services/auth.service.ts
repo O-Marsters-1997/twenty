@@ -29,7 +29,6 @@ import { type UpdatePasswordDTO } from 'src/engine/core-modules/auth/dto/update-
 import { type UserCredentialsInput } from 'src/engine/core-modules/auth/dto/user-credentials.input';
 import { type CheckUserExistDTO } from 'src/engine/core-modules/auth/dto/user-exists.dto';
 import { type WorkspaceInviteHashValidDTO } from 'src/engine/core-modules/auth/dto/workspace-invite-hash-valid.dto';
-import { AuthSsoService } from 'src/engine/core-modules/auth/services/auth-sso.service';
 import { CreateSsoConnectedAccountService } from 'src/engine/core-modules/auth/services/create-sso-connected-account.service';
 import { SignInUpService } from 'src/engine/core-modules/auth/services/sign-in-up.service';
 import { type GoogleRequest } from 'src/engine/core-modules/auth/strategies/google.auth.strategy';
@@ -37,7 +36,6 @@ import { type MicrosoftRequest } from 'src/engine/core-modules/auth/strategies/m
 import { AccessTokenService } from 'src/engine/core-modules/auth/token/services/access-token.service';
 import { LoginTokenService } from 'src/engine/core-modules/auth/token/services/login-token.service';
 import { RefreshTokenService } from 'src/engine/core-modules/auth/token/services/refresh-token.service';
-import { SsoExchangeTokenService } from 'src/engine/core-modules/auth/token/services/sso-exchange-token.service';
 import { JwtTokenTypeEnum } from 'src/engine/core-modules/auth/types/jwt-token-type.enum';
 import {
   type AuthProviderWithPasswordType,
@@ -75,7 +73,6 @@ import { PermissionsService } from 'src/engine/metadata-modules/permissions/perm
 export class AuthService {
   constructor(
     private readonly accessTokenService: AccessTokenService,
-    private readonly ssoExchangeTokenService: SsoExchangeTokenService,
     private readonly workspaceDomainsService: WorkspaceDomainsService,
     private readonly domainServerConfigService: DomainServerConfigService,
     private readonly refreshTokenService: RefreshTokenService,
@@ -83,7 +80,6 @@ export class AuthService {
     private readonly guardRedirectService: GuardRedirectService,
     private readonly userWorkspaceService: UserWorkspaceService,
     private readonly workspaceInvitationService: WorkspaceInvitationService,
-    private readonly authSsoService: AuthSsoService,
     private readonly userService: UserService,
     private readonly signInUpService: SignInUpService,
     private readonly permissionsService: PermissionsService,
@@ -702,18 +698,6 @@ export class AuthService {
       );
     }
 
-    if (params.authProvider !== AuthProviderEnum.Password) {
-      return (
-        (await this.authSsoService.findWorkspaceFromWorkspaceIdOrAuthProvider(
-          {
-            email: params.email,
-            authProvider: params.authProvider,
-          },
-          params.workspaceId,
-        )) ?? undefined
-      );
-    }
-
     return params.workspaceId
       ? await this.workspaceRepository.findOne({
           where: {
@@ -828,43 +812,6 @@ export class AuthService {
     const existingUser =
       await this.userService.findUserByEmailWithWorkspaces(email);
 
-    if (!workspaceId && !workspaceInviteHash) {
-      const user =
-        existingUser ??
-        (await this.signInUpService.signUpWithoutWorkspace(
-          {
-            firstName,
-            lastName,
-            email,
-            picture,
-            locale,
-            isEmailAlreadyVerified: true,
-          },
-          {
-            provider: authProvider,
-          },
-        ));
-
-      const ssoExchangeToken =
-        await this.ssoExchangeTokenService.generateSsoExchangeToken({
-          userId: user.id,
-          authProvider,
-        });
-
-      // The fragment keeps the token out of access logs, proxies and Referer headers
-      const url = this.domainServerConfigService.buildBaseUrl({
-        pathname: AppPath.SignInUp,
-        searchParams: {
-          ...(isNonEmptyString(returnToPath) && returnToPath.startsWith('/')
-            ? { returnToPath }
-            : {}),
-        },
-        hash: `ssoExchangeToken=${ssoExchangeToken.token}`,
-      });
-
-      return url.toString();
-    }
-
     const currentWorkspace = await this.findWorkspaceForSignInUp({
       workspaceId,
       workspaceInviteHash,
@@ -947,14 +894,11 @@ export class AuthService {
     handle: string;
     authProvider:
       | AuthProviderEnum.Google
-      | AuthProviderEnum.Microsoft
-      | AuthProviderEnum.SSO;
-    oidcTokenClaims?: Record<string, unknown>;
-    connectedAccountProvider?: ConnectedAccountProvider;
+      | AuthProviderEnum.Microsoft;
   }): Promise<void> {
-    const provider =
-      input.connectedAccountProvider ??
-      this.mapAuthProviderToConnectedAccountProvider(input.authProvider);
+    const provider = this.mapAuthProviderToConnectedAccountProvider(
+      input.authProvider,
+    );
 
     const scopes = this.getSsoScopes(provider);
 
@@ -965,7 +909,6 @@ export class AuthService {
         handle: input.handle,
         provider,
         scopes,
-        oidcTokenClaims: input.oidcTokenClaims,
       },
     );
   }
@@ -973,16 +916,13 @@ export class AuthService {
   private mapAuthProviderToConnectedAccountProvider(
     authProvider:
       | AuthProviderEnum.Google
-      | AuthProviderEnum.Microsoft
-      | AuthProviderEnum.SSO,
+      | AuthProviderEnum.Microsoft,
   ): ConnectedAccountProvider {
     switch (authProvider) {
       case AuthProviderEnum.Google:
         return ConnectedAccountProvider.GOOGLE;
       case AuthProviderEnum.Microsoft:
         return ConnectedAccountProvider.MICROSOFT;
-      case AuthProviderEnum.SSO:
-        return ConnectedAccountProvider.OIDC;
       default:
         throw new Error(
           `Unsupported auth provider: ${authProvider satisfies never}`,
@@ -996,10 +936,6 @@ export class AuthService {
         return ['email', 'profile'];
       case ConnectedAccountProvider.MICROSOFT:
         return ['User.Read'];
-      case ConnectedAccountProvider.OIDC:
-        return ['openid', 'email', 'profile'];
-      case ConnectedAccountProvider.SAML:
-        return [];
       case ConnectedAccountProvider.IMAP_SMTP_CALDAV:
         return [];
       case ConnectedAccountProvider.EMAIL_GROUP:
