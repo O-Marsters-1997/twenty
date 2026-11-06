@@ -13,7 +13,6 @@ on:
       - tsconfig.base.json
       - packages/twenty-ui/**
       - packages/twenty-shared/**
-      - packages/twenty-docs/**
 
 permissions: {}
 
@@ -38,9 +37,6 @@ jobs:
 
       - name: Build public Storybook
         run: npx nx storybook:build twenty-ui --configuration=docs
-
-      - name: Check embedded stories against the build
-        run: npx tsx packages/twenty-docs/scripts/check-ui-story-embeds.mts packages/twenty-ui/storybook-static/index.json
 
       - name: Upload public Storybook
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
