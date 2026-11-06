@@ -305,10 +305,7 @@ describe('MCP tool catalog (integration)', () => {
       ).map((tool) => tool.name);
 
       expect(toolNames).toEqual(
-        expect.arrayContaining([
-          'find_many_companies',
-          'load_skills',
-        ]),
+        expect.arrayContaining(['find_many_companies', 'load_skills']),
       );
 
       for (const hiddenToolName of [
