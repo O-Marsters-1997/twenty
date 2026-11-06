@@ -32,8 +32,6 @@ describe('buildRequiredToolAuthContext', () => {
         email: 'jane@example.com',
         isEmailVerified: true,
         disabled: false,
-        canImpersonate: false,
-        canAccessFullAdminPanel: false,
         locale: 'en',
         createdAt: new Date('2024-01-01T00:00:00Z'),
         updatedAt: new Date('2024-01-01T00:00:00Z'),

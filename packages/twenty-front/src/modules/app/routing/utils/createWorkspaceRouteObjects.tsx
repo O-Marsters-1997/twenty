@@ -69,19 +69,11 @@ const NotFound = lazy(() =>
   })),
 );
 
-type CreateWorkspaceRouteObjectsArgs = {
-  isAdminPageEnabled?: boolean;
-};
-
 const MAIN_AND_SIDE_PANEL = ['main', 'side-panel'] as const;
 const SETTINGS_ROOT_PATH = AppPath.SettingsCatchAll.replace('/*', '');
 
-export const createWorkspaceRouteObjects = ({
-  isAdminPageEnabled,
-}: CreateWorkspaceRouteObjectsArgs): WorkspaceRouteObject[] => {
-  const settingsRouteObjects = createSettingsRouteObjects({
-    isAdminPageEnabled,
-  });
+export const createWorkspaceRouteObjects = (): WorkspaceRouteObject[] => {
+  const settingsRouteObjects = createSettingsRouteObjects();
 
   return [
     {

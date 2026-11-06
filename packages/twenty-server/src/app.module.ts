@@ -6,7 +6,6 @@ import { YogaDriver, type YogaDriverConfig } from '@graphql-yoga/nestjs';
 import { SentryModule } from '@sentry/nestjs/setup';
 import { ApiPath } from 'twenty-shared/types';
 
-import { AdminPanelGraphQLApiModule } from 'src/engine/api/graphql/admin-panel-graphql-api.module';
 import { CoreGraphQLApiModule } from 'src/engine/api/graphql/core-graphql-api.module';
 import { GraphQLConfigModule } from 'src/engine/api/graphql/graphql-config/graphql-config.module';
 import { GraphQLConfigService } from 'src/engine/api/graphql/graphql-config/graphql-config.service';
@@ -62,7 +61,6 @@ const MIGRATED_REST_METHODS = [
     WorkspaceCacheStorageModule,
     CoreGraphQLApiModule,
     MetadataGraphQLApiModule,
-    AdminPanelGraphQLApiModule,
     RestApiModule,
     McpModule,
     MiddlewareModule,
@@ -120,13 +118,6 @@ export class AppModule {
         WorkspaceAuthContextMiddleware,
       )
       .forRoutes({ path: ApiPath.Metadata, method: RequestMethod.ALL });
-
-    consumer
-      .apply(
-        GraphQLHydrateRequestFromTokenMiddleware,
-        WorkspaceAuthContextMiddleware,
-      )
-      .forRoutes({ path: ApiPath.AdminPanel, method: RequestMethod.ALL });
 
     consumer
       .apply(ApiRequestContextMiddleware, McpMethodGuardMiddleware)

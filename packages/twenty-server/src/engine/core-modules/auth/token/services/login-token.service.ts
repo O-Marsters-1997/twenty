@@ -34,7 +34,6 @@ export class LoginTokenService {
     email: string,
     workspaceId: string,
     authProvider: AuthProviderEnum,
-    options?: { impersonatorUserWorkspaceId?: string },
   ): Promise<AuthToken> {
     if (!Object.values(AuthProviderEnum).includes(authProvider)) {
       throw new AuthException(
@@ -48,7 +47,6 @@ export class LoginTokenService {
       sub: email,
       workspaceId,
       authProvider,
-      impersonatorUserWorkspaceId: options?.impersonatorUserWorkspaceId,
       jti: crypto.randomUUID(),
     };
 

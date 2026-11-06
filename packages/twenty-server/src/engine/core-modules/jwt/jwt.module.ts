@@ -3,7 +3,6 @@ import { JwtModule as NestJwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { CoreEntityCacheModule } from 'src/engine/core-entity-cache/core-entity-cache.module';
-import { EnterpriseModule } from 'src/engine/core-modules/enterprise/enterprise.module';
 import {
   JWT_LEGACY_ALGORITHM,
   JWT_SUPPORTED_VERIFY_ALGORITHMS,
@@ -40,7 +39,6 @@ const InternalJwtModule = NestJwtModule.registerAsync({
     TypeOrmModule.forFeature([SigningKeyEntity]),
     CoreEntityCacheModule,
     SecretEncryptionModule,
-    EnterpriseModule,
   ],
   controllers: [],
   providers: [

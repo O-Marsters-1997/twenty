@@ -9,17 +9,14 @@ import { isEntitlementActive } from 'src/engine/core-modules/billing/utils/is-en
 export const isValidationRuleEnforcementEnabled = ({
   featureFlagsMap,
   billingEntitlements,
-  hasValidEnterprisePlan,
   isBillingEnabled,
 }: {
   featureFlagsMap: Partial<Record<FeatureFlagKey, boolean>>;
   billingEntitlements: BillingEntitlements;
-  hasValidEnterprisePlan: boolean;
   isBillingEnabled: boolean;
 }): boolean =>
   featureFlagsMap[FeatureFlagKey.IS_VALIDATION_RULES_ENABLED] === true &&
   isEntitlementActive({
-    hasValidEnterprisePlan,
     isBillingEnabled,
     stripeEntitlementValue:
       billingEntitlements[BillingEntitlementKey.VALIDATION_RULES] ?? false,

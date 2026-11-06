@@ -31,7 +31,6 @@ import { DomainValidRecords } from 'src/engine/core-modules/dns-manager/dtos/dom
 import { DnsManagerService } from 'src/engine/core-modules/dns-manager/services/dns-manager.service';
 import { CustomDomainManagerService } from 'src/engine/core-modules/domain/custom-domain-manager/services/custom-domain-manager.service';
 import { WorkspaceDomainsService } from 'src/engine/core-modules/domain/workspace-domains/services/workspace-domains.service';
-import { EnterprisePlanService } from 'src/engine/core-modules/enterprise/services/enterprise-plan.service';
 import { FeatureFlagDTO } from 'src/engine/core-modules/feature-flag/dtos/feature-flag.dto';
 import { FeatureFlagService } from 'src/engine/core-modules/feature-flag/services/feature-flag.service';
 import { FileUrlService } from 'src/engine/core-modules/file/file-url/file-url.service';
@@ -104,7 +103,6 @@ export class WorkspaceResolver {
     private readonly dnsManagerService: DnsManagerService,
     private readonly customDomainManagerService: CustomDomainManagerService,
     private readonly applicationService: ApplicationService,
-    private readonly enterprisePlanService: EnterprisePlanService,
   ) {}
 
   @Query(() => WorkspaceEntity)
@@ -378,16 +376,6 @@ export class WorkspaceResolver {
     return this.billingSubscriptionService.getWorkspaceEntitlements(
       workspace.id,
     );
-  }
-
-  @ResolveField(() => Boolean)
-  hasValidSignedEnterpriseKey(): boolean {
-    return this.enterprisePlanService.hasValidSignedEnterpriseKey();
-  }
-
-  @ResolveField(() => Boolean)
-  hasValidEnterpriseValidityToken(): boolean {
-    return this.enterprisePlanService.hasValidEnterpriseValidityToken();
   }
 
   @ResolveField(() => WorkspaceUrlsDTO)

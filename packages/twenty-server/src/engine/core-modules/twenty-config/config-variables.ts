@@ -15,10 +15,6 @@ import {
   type ValidationError,
   validateSync,
 } from 'class-validator';
-import {
-  ENTERPRISE_INSTANCE_TYPE,
-  type EnterpriseInstanceType,
-} from 'twenty-shared/constants';
 import { isDefined } from 'twenty-shared/utils';
 import { type LoggerOptions } from 'typeorm/logger/LoggerOptions';
 
@@ -1521,18 +1517,6 @@ export class ConfigVariables {
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.SERVER_CONFIG,
-    description:
-      "Declares whether this instance is a 'production' (billable per seat) or 'development' (included at no additional cost) enterprise instance. A subscription can register a single free development instance in addition to its production one.",
-    type: ConfigVariableType.ENUM,
-    options: Object.values(ENTERPRISE_INSTANCE_TYPE),
-  })
-  @IsOptional()
-  @IsIn(Object.values(ENTERPRISE_INSTANCE_TYPE))
-  ENTERPRISE_INSTANCE_TYPE: EnterpriseInstanceType =
-    ENTERPRISE_INSTANCE_TYPE.PRODUCTION;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.SERVER_CONFIG,
     description: 'Base URL for public domains',
     type: ConfigVariableType.STRING,
   })
@@ -2104,34 +2088,6 @@ export class ConfigVariables {
   })
   @IsOptional()
   CAPTCHA_SECRET_KEY?: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.SERVER_CONFIG,
-    isSensitive: true,
-    description: 'License key for the Enterprise version',
-    type: ConfigVariableType.STRING,
-  })
-  @IsOptional()
-  ENTERPRISE_KEY: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.ADVANCED_SETTINGS,
-    isSensitive: true,
-    description:
-      'Signed enterprise validity token (JWT). Used as fallback when no token is stored in the database.',
-    type: ConfigVariableType.STRING,
-  })
-  @IsOptional()
-  ENTERPRISE_VALIDITY_TOKEN: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.SERVER_CONFIG,
-    description: 'Base URL for the Enterprise API on twenty.com',
-    isHiddenInAdminPanel: true,
-    type: ConfigVariableType.STRING,
-  })
-  @IsOptional()
-  ENTERPRISE_API_URL: string = 'https://twenty.com/api/enterprise';
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.ADVANCED_SETTINGS,

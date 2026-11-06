@@ -5,7 +5,6 @@ import { EventEmitter2, EventEmitterModule } from '@nestjs/event-emitter';
 import { WorkspaceResolverNameMapCacheModule } from 'src/engine/api/graphql/direct-execution/workspace-resolver-name-map-cache.module';
 import { WorkspaceQueryRunnerModule } from 'src/engine/api/graphql/workspace-query-runner/workspace-query-runner.module';
 import { ActorModule } from 'src/engine/core-modules/actor/actor.module';
-import { AdminPanelModule } from 'src/engine/core-modules/admin-panel/admin-panel.module';
 import { ApiKeyModule } from 'src/engine/core-modules/api-key/api-key.module';
 import { ApplicationModule } from 'src/engine/core-modules/application/application.module';
 import { ApprovedAccessDomainModule } from 'src/engine/core-modules/approved-access-domain/approved-access-domain.module';
@@ -32,7 +31,6 @@ import { GeoMapModule } from 'src/engine/core-modules/geo-map/geo-map-module';
 import { HealthModule } from 'src/engine/core-modules/health/health.module';
 import { I18nModule } from 'src/engine/core-modules/i18n/i18n.module';
 import { ImapSmtpCaldavModule } from 'src/engine/core-modules/imap-smtp-caldav-connection/imap-smtp-caldav-connection.module';
-import { ImpersonationModule } from 'src/engine/core-modules/impersonation/impersonation.module';
 import { LabModule } from 'src/engine/core-modules/lab/lab.module';
 import { LoggerModule } from 'src/engine/core-modules/logger/logger.module';
 import { loggerModuleFactory } from 'src/engine/core-modules/logger/logger.module-factory';
@@ -104,7 +102,6 @@ import { FileApiModule } from './file/file-api.module';
     WorkspaceEventEmitterModule,
     ActorModule,
     TelemetryModule,
-    AdminPanelModule,
     LabModule,
     RoleModule,
     RedisClientModule,
@@ -146,7 +143,6 @@ import { FileApiModule } from './file/file-api.module';
     ApiKeyModule,
     DpaModule,
     PageLayoutModule,
-    ImpersonationModule,
     TrashCleanupModule,
     CodeInterpreterSessionCleanupModule,
     EventLogsViewerModule,
