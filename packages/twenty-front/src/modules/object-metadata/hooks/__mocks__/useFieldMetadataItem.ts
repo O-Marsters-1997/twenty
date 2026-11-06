@@ -160,9 +160,7 @@ export const responseData = {
         isMicrosoftAuthEnabled: false,
         isPasswordAuthEnabled: true,
         subdomain: 'test',
-        customDomain: null,
         workspaceUrls: {
-          customUrl: undefined,
           subdomainUrl: 'https://test.twenty.com/',
         },
         featureFlags: [],

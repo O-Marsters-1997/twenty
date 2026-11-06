@@ -1362,15 +1362,6 @@ export class ConfigVariables {
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.SERVER_CONFIG,
-    description: 'Base URL for public domains',
-    type: ConfigVariableType.STRING,
-  })
-  @IsUrl({ require_tld: false, require_protocol: true })
-  @IsOptional()
-  PUBLIC_DOMAIN_URL: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.SERVER_CONFIG,
     isSensitive: true,
     description: 'Secret key for the application',
     isEnvOnly: true,
@@ -1630,49 +1621,6 @@ export class ConfigVariables {
   })
   @IsOptional()
   SSL_CERT_PATH: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.CLOUDFLARE_CONFIG,
-    isSensitive: true,
-    description: 'API key for Cloudflare integration',
-    type: ConfigVariableType.STRING,
-  })
-  @ValidateIf((env) => env.CLOUDFLARE_ZONE_ID)
-  CLOUDFLARE_API_KEY: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.CLOUDFLARE_CONFIG,
-    description: 'Zone ID for Cloudflare integration',
-    type: ConfigVariableType.STRING,
-  })
-  @ValidateIf((env) => env.CLOUDFLARE_API_KEY)
-  CLOUDFLARE_ZONE_ID: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.CLOUDFLARE_CONFIG,
-    description: 'Zone ID for public domain Cloudflare integration',
-    type: ConfigVariableType.STRING,
-  })
-  @ValidateIf((env) => env.PUBLIC_DOMAIN_URL)
-  CLOUDFLARE_PUBLIC_DOMAIN_ZONE_ID: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.CLOUDFLARE_CONFIG,
-    description: 'Random string to validate queries from Cloudflare',
-    type: ConfigVariableType.STRING,
-    isSensitive: true,
-  })
-  @IsOptional()
-  CLOUDFLARE_WEBHOOK_SECRET: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.CLOUDFLARE_CONFIG,
-    description:
-      'Id to generate value for CNAME record to validate ownership and manage ssl for custom hostname with Cloudflare',
-    type: ConfigVariableType.STRING,
-  })
-  @IsOptional()
-  CLOUDFLARE_DCV_DELEGATION_ID: string;
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.LLM,

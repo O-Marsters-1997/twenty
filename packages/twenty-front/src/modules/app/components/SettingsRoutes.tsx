@@ -208,14 +208,6 @@ const SettingsSubdomainPage = lazy(() =>
   })),
 );
 
-const SettingsCustomDomainPage = lazy(() =>
-  import('~/pages/settings/domains/SettingsCustomDomainPage').then(
-    (module) => ({
-      default: module.SettingsCustomDomainPage,
-    }),
-  ),
-);
-
 const SettingsApiWebhooks = lazy(() =>
   import('~/pages/settings/api-webhooks/SettingsApiWebhooks').then(
     (module) => ({
@@ -606,10 +598,6 @@ const createSettingsRouteElements = () => (
       <Route
         path={SettingsPath.Subdomain}
         element={<SettingsSubdomainPage />}
-      />
-      <Route
-        path={SettingsPath.CustomDomain}
-        element={<SettingsCustomDomainPage />}
       />
       <Route path={SettingsPath.LegalDpa} element={<SettingsLegalDpa />} />
       <Route

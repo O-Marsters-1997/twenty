@@ -67,11 +67,6 @@ export const CONFIG_VARIABLES_GROUP_METADATA: Record<
       'This protects critical endpoints like login and signup with a captcha to prevent bot attacks. Likely unnecessary for self-hosting scenarios.',
     isHiddenOnLoad: true,
   },
-  [ConfigVariablesGroup.CLOUDFLARE_CONFIG]: {
-    position: 1300,
-    description: '',
-    isHiddenOnLoad: true,
-  },
   [ConfigVariablesGroup.LLM]: {
     position: 1400,
     description:

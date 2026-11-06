@@ -814,7 +814,7 @@ export class AuthService {
       return this.guardRedirectService.getRedirectErrorUrlAndCaptureExceptions({
         error,
         workspace:
-          this.workspaceDomainsService.getSubdomainAndCustomDomainFromWorkspaceFallbackOnDefaultSubdomain(
+          this.workspaceDomainsService.getSubdomainFromWorkspaceFallbackOnDefaultSubdomain(
             currentWorkspace,
           ),
         pathname: AppPath.Verify,

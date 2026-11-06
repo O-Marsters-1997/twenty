@@ -53,7 +53,7 @@ export class GoogleOauthGuard extends AuthGuard('google') {
       this.guardRedirectService.dispatchErrorFromGuard(
         context,
         err,
-        this.workspaceDomainsService.getSubdomainAndCustomDomainFromWorkspaceFallbackOnDefaultSubdomain(
+        this.workspaceDomainsService.getSubdomainFromWorkspaceFallbackOnDefaultSubdomain(
           workspace,
         ),
       );

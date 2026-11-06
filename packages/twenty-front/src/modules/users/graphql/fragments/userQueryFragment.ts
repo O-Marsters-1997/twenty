@@ -70,7 +70,6 @@ export const USER_QUERY_FRAGMENT = gql`
       isMicrosoftAuthBypassEnabled
       isPasswordAuthBypassEnabled
       subdomain
-      customDomain
       workspaceCustomApplication {
         id
       }
@@ -81,7 +80,6 @@ export const USER_QUERY_FRAGMENT = gql`
         logoUrl
         createdAt
       }
-      isCustomDomainEnabled
       workspaceUrls {
         ...WorkspaceUrlsFragment
       }

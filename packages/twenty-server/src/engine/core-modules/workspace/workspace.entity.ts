@@ -1,6 +1,5 @@
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 
-import { type Application } from 'cloudflare/resources/zero-trust/access/applications/applications';
 import GraphQLJSON from 'graphql-type-json';
 import {
   DEFAULT_AI_AGENT_MODEL_TIER,
@@ -37,7 +36,6 @@ import { EmailingDomainEntity } from 'src/engine/core-modules/emailing-domain/em
 import { FeatureFlagEntity } from 'src/engine/core-modules/feature-flag/feature-flag.entity';
 import { FileEntity } from 'src/engine/core-modules/file/entities/file.entity';
 import { KeyValuePairEntity } from 'src/engine/core-modules/key-value-pair/key-value-pair.entity';
-import { PublicDomainEntity } from 'src/engine/core-modules/public-domain/public-domain.entity';
 import { WasIntroducedInUpgrade } from 'src/engine/core-modules/upgrade/decorators/was-introduced-in-upgrade.decorator';
 import { UserWorkspaceEntity } from 'src/engine/core-modules/user-workspace/user-workspace.entity';
 import { WorkspaceDiscoverability } from 'src/engine/core-modules/workspace/types/workspace-discoverability.type';
@@ -197,9 +195,6 @@ export class WorkspaceEntity {
   )
   emailingDomains: Relation<EmailingDomainEntity[]>;
 
-  @OneToMany(() => PublicDomainEntity, (publicDomain) => publicDomain.workspace)
-  publicDomains: Relation<PublicDomainEntity[]>;
-
   @Field({ nullable: true })
   workspaceMembersCount: number;
 
@@ -269,10 +264,6 @@ export class WorkspaceEntity {
   @Column({ unique: true })
   subdomain: string;
 
-  @Field(() => String, { nullable: true })
-  @Column({ type: 'varchar', unique: true, nullable: true })
-  customDomain: string | null;
-
   @Field()
   @Column({ default: true })
   isGoogleAuthEnabled: boolean;
@@ -300,10 +291,6 @@ export class WorkspaceEntity {
   @Field()
   @Column({ default: false })
   isMicrosoftAuthBypassEnabled: boolean;
-
-  @Field()
-  @Column({ default: false })
-  isCustomDomainEnabled: boolean;
 
   @Field()
   @Column({ default: false })
@@ -382,5 +369,5 @@ export class WorkspaceEntity {
   @OneToMany(() => ApplicationEntity, (application) => application.workspace, {
     onDelete: 'CASCADE',
   })
-  applications: Relation<Application[]>;
+  applications: Relation<ApplicationEntity[]>;
 }

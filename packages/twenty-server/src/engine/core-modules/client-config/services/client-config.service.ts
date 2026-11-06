@@ -52,13 +52,6 @@ export class ClientConfigService {
     return { benchmark: baseBenchmark, isInherited: isDefined(baseBenchmark) };
   }
 
-  private isCloudflareIntegrationEnabled(): boolean {
-    return (
-      !!this.twentyConfigService.get('CLOUDFLARE_API_KEY') &&
-      !!this.twentyConfigService.get('CLOUDFLARE_ZONE_ID')
-    );
-  }
-
   async getClientConfig(): Promise<ClientConfig> {
     const captchaProvider = this.twentyConfigService.get('CAPTCHA_DRIVER');
     const supportDriver = this.twentyConfigService.get('SUPPORT_DRIVER');
@@ -201,9 +194,6 @@ export class ClientConfigService {
       defaultSubdomain: this.twentyConfigService.get('DEFAULT_SUBDOMAIN'),
       frontDomain: this.domainServerConfigService.getFrontUrl().hostname,
       serverUrl: this.twentyConfigService.get('SERVER_URL'),
-      publicFunctionDomain:
-        this.domainServerConfigService.getPublicBaseHostnameOrUndefined() ??
-        null,
       support: {
         supportDriver: supportDriver ? supportDriver : SupportDriver.NONE,
         supportFrontChatId: this.twentyConfigService.get(
@@ -286,7 +276,6 @@ export class ClientConfigService {
         : undefined,
       isBookCallOnboardingStepEnabled,
       isCompanyEnrichmentEnabled,
-      isCloudflareIntegrationEnabled: this.isCloudflareIntegrationEnabled(),
       isClickHouseConfigured: !!this.twentyConfigService.get('CLICKHOUSE_URL'),
       isWorkspaceSchemaDDLLocked: this.twentyConfigService.get(
         'WORKSPACE_SCHEMA_DDL_LOCKED',

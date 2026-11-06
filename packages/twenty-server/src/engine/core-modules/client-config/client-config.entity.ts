@@ -333,9 +333,6 @@ export class ClientConfig {
   @Field(() => String)
   serverUrl: string;
 
-  @Field(() => String, { nullable: true })
-  publicFunctionDomain: string | null;
-
   @Field(() => Support)
   support: Support;
 
@@ -389,9 +386,6 @@ export class ClientConfig {
 
   @Field(() => Boolean)
   isCompanyEnrichmentEnabled: boolean;
-
-  @Field(() => Boolean)
-  isCloudflareIntegrationEnabled: boolean;
 
   @Field(() => Boolean)
   isClickHouseConfigured: boolean;

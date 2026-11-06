@@ -35,9 +35,7 @@ export class MicrosoftProviderEnabledGuard implements CanActivate {
       this.guardRedirectService.dispatchErrorFromGuard(
         context,
         err,
-        this.guardRedirectService.getSubdomainAndCustomDomainFromContext(
-          context,
-        ),
+        this.guardRedirectService.getSubdomainFromContext(context),
       );
 
       return false;

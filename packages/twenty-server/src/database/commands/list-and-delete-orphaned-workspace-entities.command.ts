@@ -17,7 +17,6 @@ import { BillingSubscriptionEntity } from 'src/engine/core-modules/billing/entit
 import { EmailingDomainEntity } from 'src/engine/core-modules/emailing-domain/emailing-domain.entity';
 import { FeatureFlagEntity } from 'src/engine/core-modules/feature-flag/feature-flag.entity';
 import { FileEntity } from 'src/engine/core-modules/file/entities/file.entity';
-import { PublicDomainEntity } from 'src/engine/core-modules/public-domain/public-domain.entity';
 import { UserWorkspaceEntity } from 'src/engine/core-modules/user-workspace/user-workspace.entity';
 import { WebhookEntity } from 'src/engine/metadata-modules/webhook/entities/webhook.entity';
 import { WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
@@ -93,7 +92,6 @@ const WORKSPACE_RELATED_ENTITIES: EntityTarget<ObjectLiteral>[] = [
   EmailingDomainEntity,
   FeatureFlagEntity,
   FileEntity,
-  PublicDomainEntity,
   WebhookEntity,
 ];
 
