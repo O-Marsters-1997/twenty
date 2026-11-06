@@ -1,7 +1,6 @@
 import { type AllMetadataName } from 'twenty-shared/metadata';
 
 export const METADATA_EVENTS_TO_EMIT = {
-  frontComponent: true,
   objectMetadata: true,
   fieldMetadata: true,
   view: true,
@@ -26,15 +25,11 @@ export const METADATA_EVENTS_TO_EMIT = {
   rowLevelPermissionPredicate: true,
   rowLevelPermissionPredicateGroup: true,
   index: true,
-  logicFunction: true,
   viewSort: true,
   webhook: false,
-  applicationVariable: false,
-  connectionProvider: true,
   timelineActivityType: true,
   validationRule: true,
   searchFieldMetadata: true,
-  settingsMenuItem: true,
   workflow: true,
   workflowVersion: true,
 } as const satisfies { [P in AllMetadataName]: boolean };

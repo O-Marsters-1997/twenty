@@ -60,8 +60,6 @@ export const buildLegacyNavigationFlatCommandMenuItem = ({
     availabilityType: CommandMenuItemAvailabilityType.GLOBAL,
     conditionalAvailabilityExpression,
     conditionalPinnedExpression: null,
-    frontComponentId: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.NAVIGATION,
     payload: {
       objectMetadataItemId: objectMetadata.id,

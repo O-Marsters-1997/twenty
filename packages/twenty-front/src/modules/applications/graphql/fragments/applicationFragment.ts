@@ -1,11 +1,9 @@
 import { AGENT_FRAGMENT } from '@/ai/graphql/fragments/agentFragment';
 import { OBJECT_METADATA_FRAGMENT } from '@/object-metadata/graphql/fragment';
-import { LOGIC_FUNCTION_FRAGMENT } from '@/logic-functions/graphql/fragments/logicFunctionFragment';
 import { gql } from '@apollo/client';
 
 export const APPLICATION_FRAGMENT = gql`
   ${AGENT_FRAGMENT}
-  ${LOGIC_FUNCTION_FRAGMENT}
   ${OBJECT_METADATA_FRAGMENT}
   fragment ApplicationFields on Application {
     id
@@ -14,49 +12,10 @@ export const APPLICATION_FRAGMENT = gql`
     logoUrl
     version
     universalIdentifier
-    applicationRegistrationId
-    applicationRegistration {
-      id
-      latestAvailableVersion
-      sourceType
-      logoUrl
-    }
-    canBeUninstalled
-    autoUpgrade
     createdAt
     defaultRoleId
-    settingsCustomTabFrontComponentId
-    healthCheckLogicFunctionId
-    availablePackages
-    applicationVariables {
-      id
-      key
-      value
-      description
-      label
-      isSecret
-      isDeprecated
-      isRequired
-      type
-      options
-      scope
-    }
     agents {
       ...AgentFields
-    }
-    frontComponents {
-      id
-      name
-      description
-      applicationId
-      componentName
-      builtComponentChecksum
-      universalIdentifier
-      isHeadless
-      usesSdkClient
-      frontComponentSharedDependenciesChecksum
-      createdAt
-      updatedAt
     }
     commandMenuItems {
       id
@@ -66,27 +25,13 @@ export const APPLICATION_FRAGMENT = gql`
       isPinned
       availabilityType
       conditionalAvailabilityExpression
-      frontComponentId
       universalIdentifier
       applicationId
       createdAt
       updatedAt
     }
-    settingsMenuItems {
-      id
-      universalIdentifier
-      applicationId
-      frontComponentId
-      title
-      icon
-      position
-      scope
-    }
     objects {
       ...ObjectMetadataFields
-    }
-    logicFunctions {
-      ...LogicFunctionFields
     }
   }
 `;

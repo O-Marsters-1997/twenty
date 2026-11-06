@@ -9,7 +9,6 @@ import { TOOL_PROVIDERS } from 'src/engine/core-modules/tool-provider/constants/
 import { ActionToolProvider } from 'src/engine/core-modules/tool-provider/providers/action-tool.provider';
 import { DashboardToolProvider } from 'src/engine/core-modules/tool-provider/providers/dashboard-tool.provider';
 import { DatabaseToolProvider } from 'src/engine/core-modules/tool-provider/providers/database-tool.provider';
-import { LogicFunctionToolProvider } from 'src/engine/core-modules/tool-provider/providers/logic-function-tool.provider';
 import { MetadataToolProvider } from 'src/engine/core-modules/tool-provider/providers/metadata-tool.provider';
 import { NavigationMenuItemToolProvider } from 'src/engine/core-modules/tool-provider/providers/navigation-menu-item-tool.provider';
 import { RoleToolProvider } from 'src/engine/core-modules/tool-provider/providers/role-tool.provider';
@@ -78,7 +77,6 @@ import { ToolRegistryService } from './services/tool-registry.service';
     DatabaseToolProvider,
     MetadataToolProvider,
     NavigationMenuItemToolProvider,
-    LogicFunctionToolProvider,
     RoleToolProvider,
     ViewToolProvider,
     WebhookToolProvider,
@@ -89,7 +87,6 @@ import { ToolRegistryService } from './services/tool-registry.service';
         actionProvider: ActionToolProvider,
         databaseProvider: DatabaseToolProvider,
         metadataProvider: MetadataToolProvider,
-        logicFunctionProvider: LogicFunctionToolProvider,
         navigationMenuItemProvider: NavigationMenuItemToolProvider,
         roleProvider: RoleToolProvider,
         viewProvider: ViewToolProvider,
@@ -100,7 +97,6 @@ import { ToolRegistryService } from './services/tool-registry.service';
         actionProvider,
         databaseProvider,
         metadataProvider,
-        logicFunctionProvider,
         navigationMenuItemProvider,
         roleProvider,
         viewProvider,
@@ -112,7 +108,6 @@ import { ToolRegistryService } from './services/tool-registry.service';
         ActionToolProvider,
         DatabaseToolProvider,
         MetadataToolProvider,
-        LogicFunctionToolProvider,
         NavigationMenuItemToolProvider,
         RoleToolProvider,
         ViewToolProvider,

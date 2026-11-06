@@ -69,9 +69,6 @@ const deriveAllMetadataEventsFromCreateAction = (
 
       return [objectEvent, ...fieldEvents];
     }
-    case 'applicationVariable': {
-      return [];
-    }
     case 'view':
     case 'viewField':
     case 'viewGroup':
@@ -80,7 +77,6 @@ const deriveAllMetadataEventsFromCreateAction = (
     case 'rowLevelPermissionPredicateGroup':
     case 'viewFilterGroup':
     case 'index':
-    case 'logicFunction':
     case 'viewFilter':
     case 'role':
     case 'roleTarget':
@@ -90,7 +86,6 @@ const deriveAllMetadataEventsFromCreateAction = (
     case 'pageLayoutWidget':
     case 'pageLayoutTab':
     case 'commandMenuItem':
-    case 'frontComponent':
     case 'navigationMenuItem':
     case 'rolePermissionFlag':
     case 'permissionFlag':
@@ -100,9 +95,7 @@ const deriveAllMetadataEventsFromCreateAction = (
     case 'webhook':
     case 'workflow':
     case 'workflowVersion':
-    case 'connectionProvider':
     case 'timelineActivityType':
-    case 'settingsMenuItem':
     case 'validationRule':
     case 'searchFieldMetadata': {
       return [

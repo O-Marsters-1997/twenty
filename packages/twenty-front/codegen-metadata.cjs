@@ -23,7 +23,6 @@ module.exports = {
     // DPA operations are served by the core (/graphql) schema via @CoreResolver,
     // not the metadata schema, so they must not be validated against /metadata.
     '!./src/modules/settings/legal/**/graphql/**/*.{ts,tsx}',
-    './src/modules/logic-functions/graphql/**/*.{ts,tsx}',
 
     './src/modules/analytics/graphql/**/*.{ts,tsx}',
     './src/modules/object-metadata/graphql/**/*.{ts,tsx}',
@@ -32,7 +31,6 @@ module.exports = {
     './src/modules/command-menu-item/graphql/**/*.{ts,tsx}',
     './src/modules/file/graphql/**/*.{ts,tsx}',
     './src/modules/onboarding/graphql/**/*.{ts,tsx}',
-    './src/modules/front-components/graphql/**/*.{ts,tsx}',
 
     './src/modules/page-layout/widgets/**/graphql/**/*.{ts,tsx}',
     './src/modules/activities/calendar/graphql/mutations/**/*.{ts,tsx}',
@@ -42,7 +40,6 @@ module.exports = {
 
     './src/modules/dashboards/graphql/**/*.{ts,tsx}',
     './src/modules/page-layout/graphql/**/*.{ts,tsx}',
-    './src/modules/marketplace/graphql/**/*.{ts,tsx}',
     './src/modules/record-export/graphql/**/*.{ts,tsx}',
     './src/modules/metadata-store/graphql/**/*.{ts,tsx}',
     './src/modules/sse-db-event/graphql/**/*.{ts,tsx}',

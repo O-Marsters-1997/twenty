@@ -73,9 +73,6 @@
                 "connectToOtherTools": {
                   "label": "Connect to Other Tools"
                 },
-                "advancedConfigurations": {
-                  "label": "Advanced Configurations"
-                },
                 "needMoreHelp": {
                   "label": "Need More Help"
                 }
@@ -169,32 +166,6 @@
       "groups": {
         "developersOverview": {
           "label": "Overview"
-        },
-        "apps": {
-          "label": "Apps",
-          "groups": {
-            "appsGettingStarted": {
-              "label": "Getting Started"
-            },
-            "appsTutorial": {
-              "label": "Tutorial"
-            },
-            "appsConfig": {
-              "label": "Config"
-            },
-            "appsData": {
-              "label": "Data"
-            },
-            "appsLogic": {
-              "label": "Logic"
-            },
-            "appsLayout": {
-              "label": "Layout"
-            },
-            "appsOperations": {
-              "label": "Operations"
-            }
-          }
         },
         "api": {
           "label": "API"

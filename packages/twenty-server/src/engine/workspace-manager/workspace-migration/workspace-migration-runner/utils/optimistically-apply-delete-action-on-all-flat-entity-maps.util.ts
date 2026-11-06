@@ -28,7 +28,6 @@ export const optimisticallyApplyDeleteActionOnAllFlatEntityMaps = ({
     case 'rowLevelPermissionPredicateGroup':
     case 'viewFilterGroup':
     case 'index':
-    case 'logicFunction':
     case 'viewFilter':
     case 'role':
     case 'roleTarget':
@@ -38,19 +37,15 @@ export const optimisticallyApplyDeleteActionOnAllFlatEntityMaps = ({
     case 'pageLayoutWidget':
     case 'pageLayoutTab':
     case 'commandMenuItem':
-    case 'frontComponent':
     case 'navigationMenuItem':
     case 'rolePermissionFlag':
     case 'permissionFlag':
     case 'objectPermission':
     case 'fieldPermission':
     case 'webhook':
-    case 'applicationVariable':
     case 'workflow':
     case 'workflowVersion':
-    case 'connectionProvider':
     case 'timelineActivityType':
-    case 'settingsMenuItem':
     case 'validationRule':
     case 'searchFieldMetadata': {
       const flatEntityToDelete = findFlatEntityByIdInFlatEntityMapsOrThrow<

@@ -20,15 +20,9 @@ import { UpdateFieldPermissionActionHandlerService } from 'src/engine/workspace-
 import { CreateFieldActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/field/services/create-field-action-handler.service';
 import { DeleteFieldActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/field/services/delete-field-action-handler.service';
 import { UpdateFieldActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/field/services/update-field-action-handler.service';
-import { CreateFrontComponentActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/front-component/services/create-front-component-action-handler.service';
-import { DeleteFrontComponentActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/front-component/services/delete-front-component-action-handler.service';
-import { UpdateFrontComponentActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/front-component/services/update-front-component-action-handler.service';
 import { CreateIndexActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/index/services/create-index-action-handler.service';
 import { DeleteIndexActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/index/services/delete-index-action-handler.service';
 import { UpdateIndexActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/index/services/update-index-action-handler.service';
-import { CreateLogicFunctionActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/logic-function/services/create-logic-function-action-handler.service';
-import { DeleteLogicFunctionActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/logic-function/services/delete-logic-function-action-handler.service';
-import { UpdateLogicFunctionActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/logic-function/services/update-logic-function-action-handler.service';
 import { CreateNavigationMenuItemActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/navigation-menu-item/services/create-navigation-menu-item-action-handler.service';
 import { DeleteNavigationMenuItemActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/navigation-menu-item/services/delete-navigation-menu-item-action-handler.service';
 import { UpdateNavigationMenuItemActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/navigation-menu-item/services/update-navigation-menu-item-action-handler.service';
@@ -89,21 +83,12 @@ import { UpdateViewSortActionHandlerService } from 'src/engine/workspace-manager
 import { CreateViewActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/view/services/create-view-action-handler.service';
 import { DeleteViewActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/view/services/delete-view-action-handler.service';
 import { UpdateViewActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/view/services/update-view-action-handler.service';
-import { CreateApplicationVariableActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/application-variable/services/create-application-variable-action-handler.service';
-import { DeleteApplicationVariableActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/application-variable/services/delete-application-variable-action-handler.service';
-import { UpdateApplicationVariableActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/application-variable/services/update-application-variable-action-handler.service';
 import { CreateWebhookActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/webhook/services/create-webhook-action-handler.service';
 import { DeleteWebhookActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/webhook/services/delete-webhook-action-handler.service';
 import { UpdateWebhookActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/webhook/services/update-webhook-action-handler.service';
-import { CreateConnectionProviderActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/connection-provider/services/create-connection-provider-action-handler.service';
-import { DeleteConnectionProviderActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/connection-provider/services/delete-connection-provider-action-handler.service';
-import { UpdateConnectionProviderActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/connection-provider/services/update-connection-provider-action-handler.service';
 import { CreateTimelineActivityTypeActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/timeline-activity-type/services/create-timeline-activity-type-action-handler.service';
 import { DeleteTimelineActivityTypeActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/timeline-activity-type/services/delete-timeline-activity-type-action-handler.service';
 import { UpdateTimelineActivityTypeActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/timeline-activity-type/services/update-timeline-activity-type-action-handler.service';
-import { CreateSettingsMenuItemActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/settings-menu-item/services/create-settings-menu-item-action-handler.service';
-import { DeleteSettingsMenuItemActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/settings-menu-item/services/delete-settings-menu-item-action-handler.service';
-import { UpdateSettingsMenuItemActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/settings-menu-item/services/update-settings-menu-item-action-handler.service';
 import { CreateValidationRuleActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/validation-rule/services/create-validation-rule-action-handler.service';
 import { DeleteValidationRuleActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/validation-rule/services/delete-validation-rule-action-handler.service';
 import { UpdateValidationRuleActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/validation-rule/services/update-validation-rule-action-handler.service';
@@ -112,7 +97,6 @@ import { DeleteSearchFieldMetadataActionHandlerService } from 'src/engine/worksp
 import { UpdateSearchFieldMetadataActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/search-field-metadata/services/update-search-field-metadata-action-handler.service';
 
 import { BuildIndexDeferredActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/deferred-action-handlers/services/build-index-deferred-action-handler.service';
-import { DeleteLogicFunctionResourcesDeferredActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/deferred-action-handlers/services/delete-logic-function-resources-deferred-action-handler.service';
 import { DeleteWorkflowRunsDeferredActionHandlerWorkspaceService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/deferred-action-handlers/services/delete-workflow-runs-deferred-action-handler.workspace-service';
 import { ValidateForeignKeyDeferredActionHandlerService } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/deferred-action-handlers/services/validate-foreign-key-deferred-action-handler.service';
 import { WorkflowDeletionModule } from 'src/modules/workflow/workflow-deletion/workflow-deletion.module';
@@ -172,9 +156,6 @@ import { WorkflowDeletionModule } from 'src/modules/workflow/workflow-deletion/w
     UpdateViewFieldGroupActionHandlerService,
     DeleteViewFieldGroupActionHandlerService,
 
-    CreateLogicFunctionActionHandlerService,
-    DeleteLogicFunctionActionHandlerService,
-    UpdateLogicFunctionActionHandlerService,
 
     CreateRoleActionHandlerService,
     UpdateRoleActionHandlerService,
@@ -236,27 +217,15 @@ import { WorkflowDeletionModule } from 'src/modules/workflow/workflow-deletion/w
     UpdateRowLevelPermissionPredicateGroupActionHandlerService,
     DeleteRowLevelPermissionPredicateGroupActionHandlerService,
 
-    CreateFrontComponentActionHandlerService,
-    UpdateFrontComponentActionHandlerService,
-    DeleteFrontComponentActionHandlerService,
 
     CreateWebhookActionHandlerService,
     UpdateWebhookActionHandlerService,
     DeleteWebhookActionHandlerService,
 
-    CreateApplicationVariableActionHandlerService,
-    UpdateApplicationVariableActionHandlerService,
-    DeleteApplicationVariableActionHandlerService,
 
-    CreateConnectionProviderActionHandlerService,
-    UpdateConnectionProviderActionHandlerService,
-    DeleteConnectionProviderActionHandlerService,
     CreateTimelineActivityTypeActionHandlerService,
     UpdateTimelineActivityTypeActionHandlerService,
     DeleteTimelineActivityTypeActionHandlerService,
-    CreateSettingsMenuItemActionHandlerService,
-    UpdateSettingsMenuItemActionHandlerService,
-    DeleteSettingsMenuItemActionHandlerService,
     CreateValidationRuleActionHandlerService,
     UpdateValidationRuleActionHandlerService,
     DeleteValidationRuleActionHandlerService,
@@ -267,9 +236,7 @@ import { WorkflowDeletionModule } from 'src/modules/workflow/workflow-deletion/w
 
     BuildIndexDeferredActionHandlerService,
     ValidateForeignKeyDeferredActionHandlerService,
-    DeleteLogicFunctionResourcesDeferredActionHandlerService,
     DeleteWorkflowRunsDeferredActionHandlerWorkspaceService,
   ],
-  exports: [UpdateLogicFunctionActionHandlerService],
 })
 export class WorkspaceSchemaMigrationRunnerActionHandlersModule {}

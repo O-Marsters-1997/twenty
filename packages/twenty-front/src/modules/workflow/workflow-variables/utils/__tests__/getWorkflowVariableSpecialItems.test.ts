@@ -20,7 +20,7 @@ const ITERATOR_STEP_WITH_OBJECT_CURRENT_ITEM: StepOutputSchemaV2 = {
 const CODE_STEP_WITH_FLATTENED_ARRAY: StepOutputSchemaV2 = {
   id: 'step-2',
   name: 'Run code',
-  type: 'CODE',
+  type: 'HTTP_REQUEST',
   outputSchema: {
     '0': { isLeaf: true, type: 'string', label: '0', value: 'a' },
     '1': { isLeaf: true, type: 'string', label: '1', value: 'b' },
@@ -30,7 +30,7 @@ const CODE_STEP_WITH_FLATTENED_ARRAY: StepOutputSchemaV2 = {
 const CODE_STEP_WITH_OBJECT_OUTPUT: StepOutputSchemaV2 = {
   id: 'step-3',
   name: 'Run code',
-  type: 'CODE',
+  type: 'HTTP_REQUEST',
   outputSchema: {
     message: { isLeaf: true, type: 'string', label: 'message', value: 'hi' },
   },

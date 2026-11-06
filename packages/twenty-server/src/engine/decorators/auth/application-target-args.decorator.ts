@@ -11,7 +11,6 @@ export const ApplicationTargetArgs =
   <TArgs = never>(
     target: ApplicationTargetKind & {
       idKey: StringPathOf<TArgs>;
-      requireApplicationRegistrationOwnership: boolean;
     },
   ): ParameterDecorator =>
   (prototype, propertyKey, parameterIndex) => {

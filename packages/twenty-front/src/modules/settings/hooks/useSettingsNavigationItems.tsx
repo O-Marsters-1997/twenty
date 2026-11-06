@@ -171,12 +171,6 @@ const useSettingsNavigationItems = (): SettingsNavigationSection[] => {
         //   isHidden: !permissionFlagMap[PermissionFlagType.API_KEYS_AND_WEBHOOKS],
         // },
         {
-          label: t`Apps`,
-          path: SettingsPath.Applications,
-          Icon: IconApps,
-          isHidden: !permissionFlagMap[PermissionFlagType.APPLICATIONS],
-        },
-        {
           label: t`AI`,
           path: SettingsPath.AI,
           Icon: IconSparkles,

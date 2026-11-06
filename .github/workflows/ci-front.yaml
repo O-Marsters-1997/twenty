@@ -26,13 +26,10 @@ jobs:
     with:
       files: |
         package.json
-        yarn.lock
+        bun.lock
         packages/twenty-front/**
-        packages/twenty-front-component-renderer/**
         packages/twenty-ui/**
         packages/twenty-shared/**
-        packages/twenty-sdk/**
-        !packages/twenty-sdk/package.json
   front-sb-build:
     needs: changed-files-check
     if: >-
@@ -49,7 +46,7 @@ jobs:
         with:
           fetch-depth: 10
       - name: Install dependencies
-        uses: ./.github/actions/yarn-install
+        uses: ./.github/actions/bun-install
       - name: Restore storybook build cache
         uses: ./.github/actions/restore-cache
         with:
@@ -159,7 +156,7 @@ jobs:
         with:
           fetch-depth: 10
       - name: Install dependencies
-        uses: ./.github/actions/yarn-install
+        uses: ./.github/actions/bun-install
       - name: Restore ${{ matrix.name }} cache
         id: restore-task-cache
         uses: ./.github/actions/restore-cache
@@ -195,7 +192,7 @@ jobs:
         with:
           fetch-depth: 10
       - name: Install dependencies
-        uses: ./.github/actions/yarn-install
+        uses: ./.github/actions/bun-install
       - name: Front / Write .env
         run: npx nx reset:env twenty-front
       - name: Build frontend

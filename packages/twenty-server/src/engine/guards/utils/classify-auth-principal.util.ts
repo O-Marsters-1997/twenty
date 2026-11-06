@@ -1,8 +1,6 @@
 import { isNonEmptyString } from '@sniptt/guards';
 import { isDefined } from 'twenty-shared/utils';
 
-import { type FlatApplication } from 'src/engine/core-modules/application/types/flat-application.type';
-import { isOAuthOnlyApplication } from 'src/engine/core-modules/application/utils/is-oauth-only-application.util';
 import { type RawAuthContext } from 'src/engine/core-modules/auth/types/raw-auth-context.type';
 import { JwtTokenTypeEnum } from 'src/engine/core-modules/auth/types/jwt-token-type.enum';
 import { type AuthPrincipalVariant } from 'src/engine/guards/types/auth-principal-variant.type';
@@ -10,7 +8,7 @@ import { type AuthPrincipalVariant } from 'src/engine/guards/types/auth-principa
 type AuthPrincipalRequest = {
   user?: unknown;
   apiKey?: unknown;
-  application?: Pick<FlatApplication, 'sourceType'> | null;
+  application?: unknown;
   tokenType?: JwtTokenTypeEnum;
   impersonationContext?: RawAuthContext['impersonationContext'];
 };
@@ -49,9 +47,7 @@ export const classifyAuthPrincipal = (
       }
 
       return {
-        kind: isOAuthOnlyApplication(request.application)
-          ? 'oauthClient'
-          : 'application',
+        kind: 'application',
         variant: isDefined(request.user) ? 'withUser' : 'withoutUser',
       };
     case JwtTokenTypeEnum.ACCESS:

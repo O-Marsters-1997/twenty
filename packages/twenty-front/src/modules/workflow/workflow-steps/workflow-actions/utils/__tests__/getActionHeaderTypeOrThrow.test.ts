@@ -1,8 +1,8 @@
 import { getActionHeaderTypeOrThrow } from '@/workflow/workflow-steps/workflow-actions/utils/getActionHeaderTypeOrThrow';
 
 describe('getActionHeaderTypeOrThrow', () => {
-  it('should return "Core" for CODE action type', () => {
-    expect(getActionHeaderTypeOrThrow('CODE').message).toBe('Core');
+  it('should return "Core" for HTTP_REQUEST action type', () => {
+    expect(getActionHeaderTypeOrThrow('HTTP_REQUEST').message).toBe('Core');
   });
 
   it('should return "Data" for record-related action types', () => {

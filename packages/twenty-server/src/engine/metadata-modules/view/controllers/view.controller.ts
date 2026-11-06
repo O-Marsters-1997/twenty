@@ -227,7 +227,6 @@ export class ViewController {
     const getI18nContext =
       await this.applicationTranslationCatalogService.getI18nContextByApplicationId(
         {
-          applicationIds: views.map((view) => view.applicationId),
           locale,
           workspaceId,
         },

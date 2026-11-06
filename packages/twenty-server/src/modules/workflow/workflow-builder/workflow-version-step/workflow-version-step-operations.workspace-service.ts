@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 
 import { msg } from '@lingui/core/macro';
 import { AUTO_SELECT_WORKSPACE_DEFAULT_MODEL_ID } from 'twenty-shared/ai';
-import { inputSchemaToOutputSchema } from 'twenty-shared/logic-function';
 import {
   FieldMetadataType,
   StepLogicalOperator,
@@ -13,7 +12,6 @@ import {
   IF_ELSE_BRANCH_POSITION_OFFSETS,
   WORKFLOW_ACTION_FEATURE_FLAGS,
   WorkflowActionType,
-  getFunctionInputFromInputSchema,
   type StepIfElseBranch,
 } from 'twenty-shared/workflow';
 import { v4 } from 'uuid';
@@ -25,13 +23,6 @@ import { type WorkflowStepPositionInput } from 'src/engine/core-modules/workflow
 import { WorkflowVersionCoreSyncService } from 'src/engine/core-modules/workflow/services/workflow-version-core-sync.service';
 import { AiAgentRoleService } from 'src/engine/metadata-modules/ai/ai-agent-role/ai-agent-role.service';
 import { AgentService } from 'src/engine/metadata-modules/ai/ai-agent/agent.service';
-import { WorkspaceManyOrAllFlatEntityMapsCacheService } from 'src/engine/metadata-modules/flat-entity/services/workspace-many-or-all-flat-entity-maps-cache.service';
-import {
-  LogicFunctionException,
-  LogicFunctionExceptionCode,
-} from 'src/engine/metadata-modules/logic-function/logic-function.exception';
-import { LogicFunctionFromSourceService } from 'src/engine/metadata-modules/logic-function/services/logic-function-from-source.service';
-import { findFlatLogicFunctionOrThrow } from 'src/engine/metadata-modules/logic-function/utils/find-flat-logic-function-or-throw.util';
 import { ObjectMetadataEntity } from 'src/engine/metadata-modules/object-metadata/object-metadata.entity';
 import { RoleTargetEntity } from 'src/engine/metadata-modules/role-target/role-target.entity';
 import { WorkspaceOrmManager } from 'src/engine/twenty-orm/workspace-orm.manager';
@@ -44,8 +35,6 @@ import {
   WorkflowVersionStepExceptionCode,
 } from 'src/modules/workflow/common/exceptions/workflow-version-step.exception';
 import { WorkflowCommonWorkspaceService } from 'src/modules/workflow/common/workspace-services/workflow-common.workspace-service';
-import { type OutputSchema } from 'src/modules/workflow/workflow-builder/workflow-schema/types/output-schema.type';
-import { CodeStepBuildService } from 'src/modules/workflow/workflow-builder/workflow-version-step/code-step/services/code-step-build.service';
 import { type WorkflowExecutionContext } from 'src/modules/workflow/workflow-executor/types/workflow-execution-context.type';
 import { type BaseWorkflowActionSettings } from 'src/modules/workflow/workflow-executor/workflow-actions/types/workflow-action-settings.type';
 import {
@@ -76,8 +65,6 @@ const ITERATOR_EMPTY_STEP_POSITION_OFFSET = {
 export class WorkflowVersionStepOperationsWorkspaceService {
   constructor(
     private readonly workspaceOrmManager: WorkspaceOrmManager,
-    private readonly logicFunctionFromSourceService: LogicFunctionFromSourceService,
-    private readonly codeStepBuildService: CodeStepBuildService,
     private readonly agentService: AgentService,
     @InjectWorkspaceScopedRepository(RoleTargetEntity)
     private readonly roleTargetRepository: WorkspaceScopedRepository<RoleTargetEntity>,
@@ -86,7 +73,6 @@ export class WorkflowVersionStepOperationsWorkspaceService {
     private readonly workflowCommonWorkspaceService: WorkflowCommonWorkspaceService,
     private readonly aiAgentRoleService: AiAgentRoleService,
     private readonly workspaceCacheService: WorkspaceCacheService,
-    private readonly flatEntityMapsCacheService: WorkspaceManyOrAllFlatEntityMapsCacheService,
     private readonly workflowVersionCoreSyncService: WorkflowVersionCoreSyncService,
     private readonly findRecordsService: FindRecordsService,
     private readonly featureFlagService: FeatureFlagService,
@@ -100,28 +86,6 @@ export class WorkflowVersionStepOperationsWorkspaceService {
     workspaceId: string;
   }) {
     switch (step.type) {
-      case WorkflowActionType.CODE: {
-        if (!isValidUuid(step.settings.input.logicFunctionId)) {
-          break;
-        }
-
-        await this.logicFunctionFromSourceService
-          .deleteOneWithSource({
-            id: step.settings.input.logicFunctionId,
-            workspaceId,
-          })
-          .catch((error) => {
-            if (
-              error instanceof LogicFunctionException &&
-              error.code === LogicFunctionExceptionCode.LOGIC_FUNCTION_NOT_FOUND
-            ) {
-              return;
-            }
-
-            throw error;
-          });
-        break;
-      }
       case WorkflowActionType.AI_AGENT: {
         if (!isDefined(step.settings.input.agentId)) {
           break;
@@ -185,139 +149,6 @@ export class WorkflowVersionStepOperationsWorkspaceService {
     await this.assertActionTypeEnabled({ type, workspaceId });
 
     switch (type) {
-      case WorkflowActionType.CODE: {
-        // Step ids are shared across versions of a workflow and kept on a type
-        // change, so a logic function keyed on the step id could collide
-        const logicFunctionId = v4();
-
-        const newLogicFunction =
-          await this.codeStepBuildService.createCodeStepLogicFunction({
-            logicFunctionId,
-            workspaceId,
-          });
-
-        if (!isDefined(newLogicFunction)) {
-          throw new WorkflowVersionStepException(
-            'Fail to create Code Step',
-            WorkflowVersionStepExceptionCode.CODE_STEP_FAILURE,
-          );
-        }
-
-        const defaultLogicFunctionInput = (
-          defaultSettings?.input as
-            | { logicFunctionInput?: Record<string, unknown> }
-            | undefined
-        )?.logicFunctionInput;
-
-        return {
-          builtStep: {
-            ...baseStep,
-            name: 'Code - Logic Function',
-            type: WorkflowActionType.CODE,
-            settings: {
-              ...BASE_STEP_DEFINITION,
-              outputSchema: {
-                link: {
-                  isLeaf: true,
-                  icon: 'IconVariable',
-                  tab: 'test',
-                  label: 'Generate Function Output',
-                },
-                _outputSchemaType: 'LINK',
-              },
-              expectedOutputSchema: {},
-              input: {
-                logicFunctionId: newLogicFunction.id,
-                logicFunctionInput:
-                  defaultLogicFunctionInput ??
-                  (isDefined(
-                    newLogicFunction.workflowActionTriggerSettings?.inputSchema,
-                  )
-                    ? (getFunctionInputFromInputSchema(
-                        newLogicFunction.workflowActionTriggerSettings
-                          .inputSchema,
-                      )[0] ?? {})
-                    : {}),
-              },
-            },
-          },
-        };
-      }
-      case WorkflowActionType.LOGIC_FUNCTION: {
-        const defaultInput = defaultSettings?.input as
-          | {
-              logicFunctionId?: string;
-              logicFunctionInput?: Record<string, unknown>;
-            }
-          | undefined;
-        const logicFunctionId = defaultInput?.logicFunctionId;
-
-        if (!isDefined(logicFunctionId)) {
-          throw new WorkflowVersionStepException(
-            'Logic function ID is required for LOGIC_FUNCTION step',
-            WorkflowVersionStepExceptionCode.INVALID_REQUEST,
-          );
-        }
-
-        const { flatLogicFunctionMaps } =
-          await this.flatEntityMapsCacheService.getOrRecomputeManyOrAllFlatEntityMaps(
-            {
-              workspaceId,
-              flatMapsKeys: ['flatLogicFunctionMaps'],
-            },
-          );
-
-        const flatLogicFunction = findFlatLogicFunctionOrThrow({
-          id: logicFunctionId,
-          flatLogicFunctionMaps,
-        });
-
-        const declaredOutputSchema =
-          flatLogicFunction.workflowActionTriggerSettings?.outputSchema;
-
-        const initialOutputSchema: OutputSchema = isDefined(
-          declaredOutputSchema,
-        )
-          ? inputSchemaToOutputSchema(declaredOutputSchema)
-          : {
-              link: {
-                isLeaf: true,
-                icon: 'IconVariable',
-                tab: 'test',
-                label: 'Generate Function Output',
-              },
-              _outputSchemaType: 'LINK',
-            };
-
-        return {
-          builtStep: {
-            ...baseStep,
-            name:
-              flatLogicFunction.workflowActionTriggerSettings?.label ??
-              flatLogicFunction.name,
-            type: WorkflowActionType.LOGIC_FUNCTION,
-            settings: {
-              ...BASE_STEP_DEFINITION,
-              outputSchema: initialOutputSchema,
-              expectedOutputSchema: {},
-              input: {
-                logicFunctionId,
-                logicFunctionInput:
-                  defaultInput?.logicFunctionInput ??
-                  (isDefined(
-                    flatLogicFunction.workflowActionTriggerSettings
-                      ?.inputSchema,
-                  )
-                    ? (getFunctionInputFromInputSchema(
-                        flatLogicFunction.workflowActionTriggerSettings
-                          .inputSchema,
-                      )[0] ?? {})
-                    : {}),
-              },
-            },
-          },
-        };
-      }
       case WorkflowActionType.SEND_EMAIL: {
         return {
           builtStep: {
@@ -921,27 +752,6 @@ export class WorkflowVersionStepOperationsWorkspaceService {
     await this.assertActionTypeEnabled({ type: step.type, workspaceId });
 
     switch (step.type) {
-      case WorkflowActionType.CODE: {
-        const newLogicFunction =
-          await this.codeStepBuildService.duplicateCodeStepLogicFunction({
-            existingLogicFunctionId: step.settings.input.logicFunctionId,
-            workspaceId,
-          });
-
-        return {
-          ...step,
-          id: v4(),
-          nextStepIds: [],
-          position: duplicatedStepPosition,
-          settings: {
-            ...step.settings,
-            input: {
-              ...step.settings.input,
-              logicFunctionId: newLogicFunction.id,
-            },
-          },
-        };
-      }
       case WorkflowActionType.AI_AGENT: {
         const agentId = step.settings.input.agentId;
 
@@ -1110,37 +920,5 @@ export class WorkflowVersionStepOperationsWorkspaceService {
       ifFilterGroupId,
       branches,
     };
-  }
-
-  async createDraftStep({
-    step,
-    workspaceId,
-  }: {
-    step: WorkflowAction;
-    workspaceId: string;
-  }): Promise<WorkflowAction> {
-    switch (step.type) {
-      case WorkflowActionType.CODE: {
-        const newLogicFunction =
-          await this.codeStepBuildService.duplicateCodeStepLogicFunction({
-            existingLogicFunctionId: step.settings.input.logicFunctionId,
-            workspaceId,
-          });
-
-        return {
-          ...step,
-          settings: {
-            ...step.settings,
-            input: {
-              ...step.settings.input,
-              logicFunctionId: newLogicFunction.id,
-            },
-          },
-        };
-      }
-      default: {
-        return step;
-      }
-    }
   }
 }

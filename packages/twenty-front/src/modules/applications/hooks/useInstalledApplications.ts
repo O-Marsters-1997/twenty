@@ -1,5 +1,4 @@
 import { useRefetchOnApplicationOperation } from '@/applications/hooks/useRefetchOnApplicationOperation';
-import { useRefetchOnApplicationRegistrationChange } from '@/applications/hooks/useRefetchOnApplicationRegistrationChange';
 import { applicationsSelector } from '@/applications/states/applicationsSelector';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useQuery } from '@apollo/client/react';
@@ -10,7 +9,6 @@ export const useInstalledApplications = (): ApplicationWithoutRelation[] => {
   const { data, refetch } = useQuery(FindManyApplicationsDocument);
 
   useRefetchOnApplicationOperation({ refetch });
-  useRefetchOnApplicationRegistrationChange({ refetch });
 
   const applications = useAtomStateValue(applicationsSelector);
 
@@ -27,7 +25,6 @@ export const useInstalledApplications = (): ApplicationWithoutRelation[] => {
     return {
       ...application,
       logoUrl: queriedApplication?.logoUrl,
-      applicationRegistration: queriedApplication?.applicationRegistration,
       defaultRoleId: queriedApplication?.defaultRoleId,
     };
   });

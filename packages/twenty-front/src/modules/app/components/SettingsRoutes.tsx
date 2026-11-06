@@ -16,7 +16,6 @@ import {
 } from '@/app/routing/types/WorkspaceRouteObject';
 import { SettingsProtectedRouteWrapper } from '@/settings/components/SettingsProtectedRouteWrapper';
 import { SettingsSkeletonLoader } from '@/settings/components/SettingsSkeletonLoader';
-import { SettingPublicDomain } from '@/settings/domains/components/SettingPublicDomain';
 import { SettingsPath } from 'twenty-shared/types';
 import { getSettingsPath } from 'twenty-shared/utils';
 import { PermissionFlagType } from '~/generated-metadata/graphql';
@@ -161,14 +160,6 @@ const SettingsDevelopersApiKeysNew = lazy(() =>
   ),
 );
 
-const SettingsLogicFunctionDetail = lazy(() =>
-  import('~/pages/settings/logic-functions/SettingsLogicFunctionDetail').then(
-    (module) => ({
-      default: module.SettingsLogicFunctionDetail,
-    }),
-  ),
-);
-
 const SettingsGeneral = lazy(() =>
   import('~/pages/settings/general/SettingsGeneral').then((module) => ({
     default: module.SettingsGeneral,
@@ -267,96 +258,10 @@ const SettingsToolDetail = lazy(() =>
   })),
 );
 
-const SettingsApplications = lazy(() =>
-  import('~/pages/settings/applications/SettingsApplications').then(
-    (module) => ({
-      default: module.SettingsApplications,
-    }),
-  ),
-);
-
-const SettingsApplicationDetails = lazy(() =>
-  import('~/pages/settings/applications/SettingsApplicationDetails').then(
-    (module) => ({
-      default: module.SettingsApplicationDetails,
-    }),
-  ),
-);
-
-const SettingsApplicationConnectionDetail = lazy(() =>
-  import('~/pages/settings/applications/SettingsApplicationConnectionDetail').then(
-    (module) => ({
-      default: module.SettingsApplicationConnectionDetail,
-    }),
-  ),
-);
-
-const SettingsApplicationFrontComponentDetail = lazy(() =>
-  import('~/pages/settings/applications/SettingsApplicationFrontComponentDetail').then(
-    (module) => ({
-      default: module.SettingsApplicationFrontComponentDetail,
-    }),
-  ),
-);
-
-const SettingsApplicationCommandMenuItemDetail = lazy(() =>
-  import('~/pages/settings/applications/SettingsApplicationCommandMenuItemDetail').then(
-    (module) => ({
-      default: module.SettingsApplicationCommandMenuItemDetail,
-    }),
-  ),
-);
-
-const SettingsApplicationTimelineActivityTypeDetail = lazy(() =>
-  import('~/pages/settings/applications/SettingsApplicationTimelineActivityTypeDetail').then(
-    (module) => ({
-      default: module.SettingsApplicationTimelineActivityTypeDetail,
-    }),
-  ),
-);
-
 const SettingsLayout = lazy(() =>
   import('~/pages/settings/layout/SettingsLayout').then((module) => ({
     default: module.SettingsLayout,
   })),
-);
-
-const SettingsLayoutViewDetail = lazy(() =>
-  import('~/pages/settings/layout/SettingsLayoutViewDetail').then((module) => ({
-    default: module.SettingsLayoutViewDetail,
-  })),
-);
-
-const SettingsLayoutPageLayoutDetail = lazy(() =>
-  import('~/pages/settings/layout/SettingsLayoutPageLayoutDetail').then(
-    (module) => ({
-      default: module.SettingsLayoutPageLayoutDetail,
-    }),
-  ),
-);
-
-const SettingsAdminApplicationRegistrationDetail = lazy(() =>
-  import('~/pages/settings/admin-panel/SettingsAdminApplicationRegistrationDetail').then(
-    (module) => ({
-      default: module.SettingsAdminApplicationRegistrationDetail,
-    }),
-  ),
-);
-
-const SettingsAvailableApplicationDetails = lazy(() =>
-  import('~/pages/settings/applications/SettingsAvailableApplicationDetails').then(
-    (module) => ({
-      default: module.SettingsAvailableApplicationDetails,
-    }),
-  ),
-);
-
-const SettingsApplicationRegistrationDetails = lazy(() =>
-  import('~/pages/settings/applications/SettingsApplicationRegistrationDetails').then(
-    (module) => ({
-      default: module.SettingsApplicationRegistrationDetails,
-    }),
-  ),
 );
 
 const SettingsSkillForm = lazy(() =>
@@ -846,14 +751,6 @@ const createSettingsRouteElements = ({
         path={SettingsPath.CustomDomain}
         element={<SettingsCustomDomainPage />}
       />
-      <Route
-        path={SettingsPath.ApplicationPublicDomainNew}
-        element={<SettingPublicDomain />}
-      />
-      <Route
-        path={SettingsPath.ApplicationPublicDomainDetail}
-        element={<SettingPublicDomain />}
-      />
       <Route path={SettingsPath.LegalDpa} element={<SettingsLegalDpa />} />
       <Route
         path={SettingsPath.LegalDpaNew}
@@ -884,10 +781,6 @@ const createSettingsRouteElements = ({
       <Route
         path={SettingsPath.AiToolDetail}
         element={<SettingsToolDetail />}
-      />
-      <Route
-        path={SettingsPath.LogicFunctionDetail}
-        element={<SettingsLogicFunctionDetail />}
       />
     </Route>
     <Route
@@ -1073,60 +966,6 @@ const createSettingsRouteElements = ({
         element={<SettingsDevelopersWebhookDetail />}
       />
     </Route>
-
-    <Route
-      element={
-        <SettingsProtectedRouteWrapper
-          settingsPermission={PermissionFlagType.APPLICATIONS}
-        />
-      }
-    >
-      <Route
-        path={SettingsPath.Applications}
-        element={<SettingsApplications />}
-      />
-      <Route
-        path={SettingsPath.ApplicationDetail}
-        element={<SettingsApplicationDetails />}
-      />
-      <Route
-        path={SettingsPath.ApplicationConnectionDetail}
-        element={<SettingsApplicationConnectionDetail />}
-      />
-      <Route
-        path={SettingsPath.AvailableApplicationDetail}
-        element={<SettingsAvailableApplicationDetails />}
-      />
-      <Route
-        path={SettingsPath.ApplicationRegistrationDetail}
-        element={<SettingsApplicationRegistrationDetails />}
-      />
-      <Route
-        path={SettingsPath.ApplicationLogicFunctionDetail}
-        element={<SettingsLogicFunctionDetail />}
-      />
-      <Route
-        path={SettingsPath.ApplicationFrontComponentDetail}
-        element={<SettingsApplicationFrontComponentDetail />}
-      />
-      <Route
-        path={SettingsPath.ApplicationCommandMenuItemDetail}
-        element={<SettingsApplicationCommandMenuItemDetail />}
-      />
-      <Route
-        path={SettingsPath.ApplicationTimelineActivityTypeDetail}
-        element={<SettingsApplicationTimelineActivityTypeDetail />}
-      />
-      <Route
-        path={SettingsPath.ApplicationViewDetail}
-        element={<SettingsLayoutViewDetail />}
-      />
-      <Route
-        path={SettingsPath.ApplicationPageLayoutDetail}
-        element={<SettingsLayoutPageLayoutDetail />}
-      />
-    </Route>
-
     <Route
       path="security"
       element={<Navigate to={getSettingsPath(SettingsPath.Security)} replace />}
@@ -1205,10 +1044,6 @@ const createSettingsRouteElements = ({
         <Route
           path={SettingsPath.AdminPanelWorkspaceDetail}
           element={<SettingsAdminWorkspaceDetail />}
-        />
-        <Route
-          path={SettingsPath.AdminPanelApplicationRegistrationDetail}
-          element={<SettingsAdminApplicationRegistrationDetail />}
         />
         <Route
           path={SettingsPath.AdminPanelWorkspaceChatThread}

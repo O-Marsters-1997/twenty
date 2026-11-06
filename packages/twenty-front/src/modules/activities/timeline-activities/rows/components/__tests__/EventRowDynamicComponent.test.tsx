@@ -11,52 +11,11 @@ jest.mock(
   () => ({ EventRowMainObject: () => <div>Native timeline row</div> }),
 );
 
-jest.mock('@/front-components/components/FrontComponentRenderer', () => ({
-  FrontComponentRenderer: ({
-    objectNameSingular,
-  }: {
-    objectNameSingular?: string;
-  }) => <div>Application timeline component for {objectNameSingular}</div>,
-}));
-
 const mainObjectMetadataItem = {
   nameSingular: 'company',
 } as EnrichedObjectMetadataItem;
 
 describe('EventRowDynamicComponent', () => {
-  it('mounts the front component for the main object only after the row is expanded', async () => {
-    const user = userEvent.setup();
-
-    render(
-      <I18nProvider i18n={i18n}>
-        <EventRowDynamicComponent
-          labelIdentifierValue="Acme"
-          event={{ id: 'activity-id', properties: {} } as TimelineActivity}
-          eventAction="created"
-          eventTypeLabel="was created"
-          renderer={{
-            type: 'frontComponent',
-            frontComponentId: 'front-component-id',
-          }}
-          mainObjectMetadataItem={mainObjectMetadataItem}
-          linkedObjectMetadataItem={null}
-          authorFullName="Ada Lovelace"
-        />
-      </I18nProvider>,
-    );
-
-    expect(screen.getByText('Native timeline row')).toBeInTheDocument();
-    expect(
-      screen.queryByText('Application timeline component for company'),
-    ).not.toBeInTheDocument();
-
-    await user.click(screen.getByRole('button', { name: 'Expand details' }));
-
-    expect(
-      await screen.findByText('Application timeline component for company'),
-    ).toBeInTheDocument();
-  });
-
   it('mounts a standard renderer only after the row is expanded', async () => {
     const user = userEvent.setup();
     const StandardRenderer = () => <div>Standard timeline component</div>;
@@ -68,7 +27,7 @@ describe('EventRowDynamicComponent', () => {
           event={{ id: 'activity-id', properties: {} } as TimelineActivity}
           eventAction="created"
           eventTypeLabel="was created"
-          renderer={{ type: 'standard', Component: StandardRenderer }}
+          renderer={StandardRenderer}
           mainObjectMetadataItem={mainObjectMetadataItem}
           linkedObjectMetadataItem={null}
           authorFullName="Ada Lovelace"

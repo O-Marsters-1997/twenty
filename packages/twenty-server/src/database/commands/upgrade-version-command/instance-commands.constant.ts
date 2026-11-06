@@ -145,7 +145,6 @@ import { CreateBillingCreditGrantTableFastInstanceCommand } from 'src/database/c
 import { BackfillCreditBalanceIntoGrantsSlowInstanceCommand } from 'src/database/commands/upgrade-version-command/2-31/2-31-instance-command-slow-1786532184001-backfill-credit-balance-into-grants';
 import { AddPreviousPeriodStartToBillingSubscriptionFastInstanceCommand } from 'src/database/commands/upgrade-version-command/2-31/2-31-instance-command-fast-1786532184002-add-previous-period-start-to-billing-subscription';
 import { AddIsDeprecatedToApplicationVariablesFastInstanceCommand } from 'src/database/commands/upgrade-version-command/2-31/2-31-instance-command-fast-1786533439000-add-is-deprecated-to-application-variables';
-import { EncryptEmptyApplicationVariablesSlowInstanceCommand } from 'src/database/commands/upgrade-version-command/2-31/2-31-instance-command-slow-1786533438000-encrypt-empty-application-variables';
 import { AddWritabilityToMetadataFastInstanceCommand } from 'src/database/commands/upgrade-version-command/2-32/2-32-instance-command-fast-1786713600000-add-writability-to-metadata';
 import { AddUninstallLogicFunctionIdToApplicationFastInstanceCommand } from 'src/database/commands/upgrade-version-command/2-32/2-32-instance-command-fast-1786959731000-add-uninstall-logic-function-id-to-application';
 import { BackfillUninstallLogicFunctionIdOnApplicationSlowInstanceCommand } from 'src/database/commands/upgrade-version-command/2-32/2-32-instance-command-slow-1786959731001-backfill-uninstall-logic-function-id-on-application';
@@ -241,6 +240,7 @@ import { RestoreUsageLimitMeterCompatibilityFastInstanceCommand } from 'src/data
 import { DropUsageLimitMeterFastInstanceCommand } from 'src/database/commands/upgrade-version-command/2-47/2-47-instance-command-fast-1791720497488-drop-usage-limit-meter';
 import { SetWorkspaceEventLogRetentionDefaultFastInstanceCommand } from 'src/database/commands/upgrade-version-command/2-47/2-47-instance-command-fast-1791790299002-set-workspace-event-log-retention-default';
 import { AddWidgetAvailabilityToFrontComponentFastInstanceCommand } from 'src/database/commands/upgrade-version-command/2-47/2-47-instance-command-fast-1791898075681-add-widget-availability-to-front-component';
+import { DropAppPlatformFastInstanceCommand } from 'src/database/commands/upgrade-version-command/2-48/2-48-instance-command-fast-1793824525473-drop-app-platform';
 
 export const INSTANCE_COMMANDS = [
   AddViewFieldGroupIdIndexOnViewFieldFastInstanceCommand,
@@ -387,7 +387,6 @@ export const INSTANCE_COMMANDS = [
   BackfillCreditBalanceIntoGrantsSlowInstanceCommand,
   AddPreviousPeriodStartToBillingSubscriptionFastInstanceCommand,
   AddIsDeprecatedToApplicationVariablesFastInstanceCommand,
-  EncryptEmptyApplicationVariablesSlowInstanceCommand,
   AddWritabilityToMetadataFastInstanceCommand,
   AddUninstallLogicFunctionIdToApplicationFastInstanceCommand,
   BackfillUninstallLogicFunctionIdOnApplicationSlowInstanceCommand,
@@ -484,4 +483,5 @@ export const INSTANCE_COMMANDS = [
   DropUsageLimitMeterFastInstanceCommand,
   SetWorkspaceEventLogRetentionDefaultFastInstanceCommand,
   AddWidgetAvailabilityToFrontComponentFastInstanceCommand,
+  DropAppPlatformFastInstanceCommand,
 ];

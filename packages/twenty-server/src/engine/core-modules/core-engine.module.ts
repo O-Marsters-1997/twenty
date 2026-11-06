@@ -7,20 +7,10 @@ import { WorkspaceQueryRunnerModule } from 'src/engine/api/graphql/workspace-que
 import { ActorModule } from 'src/engine/core-modules/actor/actor.module';
 import { AdminPanelModule } from 'src/engine/core-modules/admin-panel/admin-panel.module';
 import { ApiKeyModule } from 'src/engine/core-modules/api-key/api-key.module';
-import { ApplicationAuthorizationModule } from 'src/engine/core-modules/application/application-authorization/application-authorization.module';
-import { ApplicationDevelopmentModule } from 'src/engine/core-modules/application/application-development/application-development.module';
-import { FrontComponentSharedDependenciesModule } from 'src/engine/core-modules/application/front-component-shared-dependencies/front-component-shared-dependencies.module';
-import { ApplicationInstallModule } from 'src/engine/core-modules/application/application-install/application-install.module';
-import { MarketplaceModule } from 'src/engine/core-modules/application/application-marketplace/marketplace.module';
-import { ApplicationOAuthModule } from 'src/engine/core-modules/application/application-oauth/application-oauth.module';
-import { ApplicationRegistrationModule } from 'src/engine/core-modules/application/application-registration/application-registration.module';
-import { ApplicationUpgradeModule } from 'src/engine/core-modules/application/application-upgrade/application-upgrade.module';
 import { ApplicationModule } from 'src/engine/core-modules/application/application.module';
-import { PreInstalledAppsModule } from 'src/engine/core-modules/application/pre-installed-apps/pre-installed-apps.module';
 import { ApprovedAccessDomainModule } from 'src/engine/core-modules/approved-access-domain/approved-access-domain.module';
 import { AuthModule } from 'src/engine/core-modules/auth/auth.module';
 import { BillingWebhookModule } from 'src/engine/core-modules/billing-webhook/billing-webhook.module';
-import { AppBillingModule } from 'src/engine/core-modules/billing/app-billing/app-billing.module';
 import { BillingModule } from 'src/engine/core-modules/billing/billing.module';
 import { BillingGraphqlApiExceptionFilter } from 'src/engine/core-modules/billing/filters/billing-graphql-api-exception.filter';
 import { PermissionsGraphqlApiExceptionFilter } from 'src/engine/metadata-modules/permissions/utils/permissions-graphql-api-exception.filter';
@@ -46,7 +36,6 @@ import { ImpersonationModule } from 'src/engine/core-modules/impersonation/imper
 import { LabModule } from 'src/engine/core-modules/lab/lab.module';
 import { LoggerModule } from 'src/engine/core-modules/logger/logger.module';
 import { loggerModuleFactory } from 'src/engine/core-modules/logger/logger.module-factory';
-import { LogicFunctionModule } from 'src/engine/core-modules/logic-function/logic-function.module';
 import { MessageQueueModule } from 'src/engine/core-modules/message-queue/message-queue.module';
 import { messageQueueModuleFactory } from 'src/engine/core-modules/message-queue/message-queue.module-factory';
 import { TimelineMessagingModule } from 'src/engine/core-modules/messaging/timeline-messaging.module';
@@ -98,15 +87,7 @@ import { FileApiModule } from './file/file-api.module';
     RowLevelPermissionModule,
     OpenApiModule,
     WellKnownModule,
-    ApplicationRegistrationModule,
-    ApplicationOAuthModule,
-    ApplicationAuthorizationModule,
     ApplicationModule,
-    ApplicationInstallModule,
-    ApplicationUpgradeModule,
-    ApplicationDevelopmentModule,
-    FrontComponentSharedDependenciesModule,
-    MarketplaceModule,
     TimelineMessagingModule,
     TimelineCalendarEventModule,
     UserModule,
@@ -160,7 +141,6 @@ import { FileApiModule } from './file/file-api.module';
     I18nModule,
     AiModelsModule,
     AiBillingModule,
-    LogicFunctionModule.forRoot(),
     CodeInterpreterModule.forRoot(),
     SearchModule,
     ApiKeyModule,
@@ -170,8 +150,6 @@ import { FileApiModule } from './file/file-api.module';
     TrashCleanupModule,
     CodeInterpreterSessionCleanupModule,
     EventLogsViewerModule,
-    PreInstalledAppsModule,
-    AppBillingModule,
   ],
   providers: [
     {

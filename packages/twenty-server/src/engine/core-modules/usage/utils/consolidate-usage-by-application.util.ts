@@ -1,5 +1,3 @@
-import { isDefined } from 'twenty-shared/utils';
-
 import { type FlatApplicationCacheMaps } from 'src/engine/core-modules/application/types/flat-application-cache-maps.type';
 import {
   type UsageApplicationBreakdownItem,
@@ -21,17 +19,7 @@ export const consolidateUsageByApplication = ({
 
   for (const item of items) {
     const application = flatApplicationMaps.byId[item.applicationId];
-    // Undefined until the upgrade that adds the column has run.
-    const declaredCharges = {
-      ...(application?.billing?.recurring ?? {}),
-      ...(application?.billing?.operations ?? {}),
-    };
-    const declaredCharge = declaredCharges[item.operation];
-    const applicationName = application?.name ?? item.applicationId;
-
-    const key = isDefined(declaredCharge)
-      ? `${applicationName} · ${declaredCharge.label}`
-      : applicationName;
+    const key = application?.name ?? item.applicationId;
 
     creditsByKey.set(key, (creditsByKey.get(key) ?? 0) + item.creditsUsed);
   }

@@ -155,10 +155,10 @@ describe('convertPageLayoutToTabLayouts', () => {
               isActive: true,
               pageLayoutTabId: 'tab-1',
               title: 'No Grid Position',
-              type: WidgetType.FRONT_COMPONENT,
+              type: WidgetType.IFRAME,
               configuration: {
-                configurationType: WidgetConfigurationType.FRONT_COMPONENT,
-                frontComponentId: 'my-component',
+                configurationType: WidgetConfigurationType.IFRAME,
+                url: 'https://example.com',
               },
               position: {
                 __typename: 'PageLayoutWidgetCanvasPosition' as const,

@@ -13,7 +13,6 @@ import {
   type FieldsConfiguration,
   type FilesConfiguration,
   type FormFieldConfiguration,
-  type FrontComponentConfiguration,
   type IframeConfiguration,
   type LineChartConfiguration,
   type MessageCampaignBodyConfiguration,
@@ -44,12 +43,6 @@ type WidgetConfigurationTypenameMap = {
   };
   CalendarConfiguration: Omit<CalendarConfiguration, 'configurationType'> & {
     configurationType: WidgetConfigurationType.CALENDAR;
-  };
-  FrontComponentConfiguration: Omit<
-    FrontComponentConfiguration,
-    'configurationType'
-  > & {
-    configurationType: WidgetConfigurationType.FRONT_COMPONENT;
   };
   EmailThreadConfiguration: Omit<
     EmailThreadConfiguration,

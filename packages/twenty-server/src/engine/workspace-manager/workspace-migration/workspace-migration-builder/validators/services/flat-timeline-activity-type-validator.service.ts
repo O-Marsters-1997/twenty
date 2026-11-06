@@ -391,34 +391,18 @@ export class FlatTimelineActivityTypeValidatorService {
       return;
     }
 
-    const isStandardRenderer =
+    const usesStandardRenderer =
       isStandardTimelineActivityRendererUniversalIdentifier(
         frontComponentUniversalIdentifier,
-      );
-    const usesStandardRenderer =
-      isStandardRenderer &&
+      ) &&
       timelineActivityType.applicationUniversalIdentifier ===
         TWENTY_STANDARD_APPLICATION.universalIdentifier;
 
-    if (usesStandardRenderer) {
-      return;
-    }
-
-    const frontComponent =
-      validationMaps.flatFrontComponentMaps.byUniversalIdentifier[
-        frontComponentUniversalIdentifier
-      ];
-
-    if (
-      isStandardRenderer ||
-      !isDefined(frontComponent) ||
-      frontComponent.applicationUniversalIdentifier !==
-        timelineActivityType.applicationUniversalIdentifier
-    ) {
+    if (!usesStandardRenderer) {
       validationResult.errors.push({
         code: TimelineActivityTypeExceptionCode.INVALID_TIMELINE_ACTIVITY_TYPE_INPUT,
-        message: t`Timeline activity type references a front component that does not belong to its application`,
-        userFriendlyMessage: msg`The front component used by this timeline activity type is not available`,
+        message: t`Timeline activity type references a renderer that is not available`,
+        userFriendlyMessage: msg`The renderer used by this timeline activity type is not available`,
       });
     }
   }

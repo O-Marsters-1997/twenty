@@ -32,22 +32,6 @@ jest.mock('@/ai/components/CodeExecutionDisplay', () => ({
   CodeExecutionDisplay: () => <div data-testid="code-execution-display" />,
 }));
 
-jest.mock('@/ai/components/AiChatToolWidget', () => ({
-  AiChatToolWidget: ({ toolPart }: { toolPart: { type: string } }) => (
-    <div data-testid="tool-widget">{toolPart.type}</div>
-  ),
-}));
-
-const APP_FRONT_COMPONENT_ID = '20202020-0000-4000-8000-000000000001';
-
-const mockUseFrontComponentIdByToolName = jest.fn(
-  () => new Map<string, string>(),
-);
-
-jest.mock('@/ai/hooks/useFrontComponentIdByToolName', () => ({
-  useFrontComponentIdByToolName: () => mockUseFrontComponentIdByToolName(),
-}));
-
 const renderAssistantRenderer = (
   messageParts: ExtendedUIMessagePart[],
   {
@@ -73,10 +57,6 @@ const renderAssistantRenderer = (
 };
 
 describe('AiChatAssistantMessageRenderer', () => {
-  beforeEach(() => {
-    mockUseFrontComponentIdByToolName.mockReturnValue(new Map());
-  });
-
   it('should group reasoning and tool steps into ThinkingStepsDisplay', () => {
     const messageParts = [
       {
@@ -467,63 +447,6 @@ describe('AiChatAssistantMessageRenderer', () => {
     expect(screen.getByTestId('thinking-steps-display')).toHaveTextContent(
       'thinking-1-answer-started',
     );
-  });
-
-  it('should render a call that has an app widget on its own, not folded into the step group', () => {
-    mockUseFrontComponentIdByToolName.mockReturnValue(
-      new Map([['app_show_chart', APP_FRONT_COMPONENT_ID]]),
-    );
-
-    renderAssistantRenderer([
-      {
-        type: 'tool-app_show_chart',
-        toolCallId: 'call_1',
-        state: 'output-available',
-        input: {},
-        output: {},
-      },
-    ] as unknown as ExtendedUIMessagePart[]);
-
-    expect(screen.getByTestId('tool-widget')).toHaveTextContent(
-      'tool-app_show_chart',
-    );
-    expect(screen.queryByTestId('thinking-steps-display')).toBeNull();
-  });
-
-  it('should resolve the widget of a call dispatched through execute_tool', () => {
-    mockUseFrontComponentIdByToolName.mockReturnValue(
-      new Map([['app_show_chart', APP_FRONT_COMPONENT_ID]]),
-    );
-
-    renderAssistantRenderer([
-      {
-        type: 'tool-execute_tool',
-        toolCallId: 'call_1',
-        state: 'output-available',
-        input: { toolName: 'app_show_chart', arguments: {} },
-        output: {},
-      },
-    ] as unknown as ExtendedUIMessagePart[]);
-
-    expect(screen.getByTestId('tool-widget')).toBeInTheDocument();
-  });
-
-  it('should keep a call that has an app widget but is still streaming its input in the step group', () => {
-    mockUseFrontComponentIdByToolName.mockReturnValue(
-      new Map([['app_show_chart', APP_FRONT_COMPONENT_ID]]),
-    );
-
-    renderAssistantRenderer([
-      {
-        type: 'tool-app_show_chart',
-        toolCallId: 'call_1',
-        state: 'input-streaming',
-        input: {},
-      },
-    ] as unknown as ExtendedUIMessagePart[]);
-
-    expect(screen.getByTestId('thinking-steps-display')).toBeInTheDocument();
-    expect(screen.queryByTestId('tool-widget')).toBeNull();
   });
 
   it('should drop finished reasoning that has no text', () => {

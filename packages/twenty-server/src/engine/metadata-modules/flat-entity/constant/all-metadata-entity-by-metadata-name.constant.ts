@@ -3,12 +3,9 @@ import { WorkflowEntity } from 'src/engine/core-modules/workflow/entities/workfl
 import { type AllMetadataName } from 'twenty-shared/metadata';
 import { type EntityTarget, type ObjectLiteral } from 'typeorm';
 
-import { ConnectionProviderEntity } from 'src/engine/core-modules/application/connection-provider/connection-provider.entity';
 import { AgentEntity } from 'src/engine/metadata-modules/ai/ai-agent/entities/agent.entity';
-import { ApplicationVariableEntity } from 'src/engine/core-modules/application/application-variable/application-variable.entity';
 import { CommandMenuItemEntity } from 'src/engine/metadata-modules/command-menu-item/entities/command-menu-item.entity';
 import { FieldMetadataEntity } from 'src/engine/metadata-modules/field-metadata/field-metadata.entity';
-import { FrontComponentEntity } from 'src/engine/metadata-modules/front-component/entities/front-component.entity';
 import { IndexMetadataEntity } from 'src/engine/metadata-modules/index-metadata/index-metadata.entity';
 import { WebhookEntity } from 'src/engine/metadata-modules/webhook/entities/webhook.entity';
 import { NavigationMenuItemEntity } from 'src/engine/metadata-modules/navigation-menu-item/entities/navigation-menu-item.entity';
@@ -24,7 +21,6 @@ import { RoleTargetEntity } from 'src/engine/metadata-modules/role-target/role-t
 import { RoleEntity } from 'src/engine/metadata-modules/role/role.entity';
 import { RowLevelPermissionPredicateGroupEntity } from 'src/engine/metadata-modules/row-level-permission-predicate/entities/row-level-permission-predicate-group.entity';
 import { RowLevelPermissionPredicateEntity } from 'src/engine/metadata-modules/row-level-permission-predicate/entities/row-level-permission-predicate.entity';
-import { LogicFunctionEntity } from 'src/engine/metadata-modules/logic-function/logic-function.entity';
 import { SkillEntity } from 'src/engine/metadata-modules/skill/entities/skill.entity';
 import { ViewFieldGroupEntity } from 'src/engine/metadata-modules/view-field-group/entities/view-field-group.entity';
 import { ViewFieldEntity } from 'src/engine/metadata-modules/view-field/entities/view-field.entity';
@@ -36,7 +32,6 @@ import { ViewSortEntity } from 'src/engine/metadata-modules/view-sort/entities/v
 import { SearchFieldMetadataEntity } from 'src/engine/metadata-modules/search-field-metadata/search-field-metadata.entity';
 import { ValidationRuleEntity } from 'src/engine/metadata-modules/validation-rule/entities/validation-rule.entity';
 import { TimelineActivityTypeEntity } from 'src/engine/metadata-modules/timeline-activity-type/entities/timeline-activity-type.entity';
-import { SettingsMenuItemEntity } from 'src/engine/metadata-modules/settings-menu-item/entities/settings-menu-item.entity';
 
 export const ALL_METADATA_ENTITY_BY_METADATA_NAME = {
   viewField: ViewFieldEntity,
@@ -51,11 +46,9 @@ export const ALL_METADATA_ENTITY_BY_METADATA_NAME = {
   view: ViewEntity,
   index: IndexMetadataEntity,
   pageLayoutTab: PageLayoutTabEntity,
-  frontComponent: FrontComponentEntity,
   fieldMetadata: FieldMetadataEntity,
   pageLayout: PageLayoutEntity,
   skill: SkillEntity,
-  logicFunction: LogicFunctionEntity,
   objectMetadata: ObjectMetadataEntity,
   objectPermission: ObjectPermissionEntity,
   fieldPermission: FieldPermissionEntity,
@@ -66,12 +59,9 @@ export const ALL_METADATA_ENTITY_BY_METADATA_NAME = {
   rolePermissionFlag: RolePermissionFlagEntity,
   permissionFlag: PermissionFlagEntity,
   webhook: WebhookEntity,
-  applicationVariable: ApplicationVariableEntity,
   viewSort: ViewSortEntity,
-  connectionProvider: ConnectionProviderEntity,
   searchFieldMetadata: SearchFieldMetadataEntity,
   timelineActivityType: TimelineActivityTypeEntity,
-  settingsMenuItem: SettingsMenuItemEntity,
   validationRule: ValidationRuleEntity,
   workflow: WorkflowEntity,
   workflowVersion: WorkflowVersionEntity,

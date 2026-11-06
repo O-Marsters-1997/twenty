@@ -8,15 +8,11 @@ import { type AppKeyValue } from 'twenty-shared/application';
 import { isDefined } from 'twenty-shared/utils';
 
 import { AppKeyValueScope } from 'src/engine/core-modules/application/application-key-value/enums/app-key-value-scope.enum';
-import { ApplicationRegistrationEntity } from 'src/engine/core-modules/application/application-registration/application-registration.entity';
-import { ApplicationEntity } from 'src/engine/core-modules/application/application.entity';
 import {
   ApplicationException,
   ApplicationExceptionCode,
 } from 'src/engine/core-modules/application/application.exception';
 import { type FlatApplication } from 'src/engine/core-modules/application/types/flat-application.type';
-import { InjectWorkspaceScopedRepository } from 'src/engine/twenty-orm/workspace-scoped-repository/inject-workspace-scoped-repository.decorator';
-import { WorkspaceScopedRepository } from 'src/engine/twenty-orm/workspace-scoped-repository/workspace-scoped-repository';
 import {
   KeyValuePairEntity,
   KeyValuePairType,
@@ -27,10 +23,6 @@ export class ApplicationKeyValueService {
   constructor(
     @InjectRepository(KeyValuePairEntity)
     private readonly keyValuePairRepository: Repository<KeyValuePairEntity>,
-    @InjectWorkspaceScopedRepository(ApplicationEntity)
-    private readonly applicationRepository: WorkspaceScopedRepository<ApplicationEntity>,
-    @InjectRepository(ApplicationRegistrationEntity)
-    private readonly applicationRegistrationRepository: Repository<ApplicationRegistrationEntity>,
   ) {}
 
   async get({
@@ -47,7 +39,7 @@ export class ApplicationKeyValueService {
     const scopedWhere =
       scope === AppKeyValueScope.SERVER
         ? {
-            applicationId: await this.resolveServerApplicationId(application),
+            applicationId: application.id,
             workspaceId: IsNull(),
           }
         : {
@@ -123,7 +115,7 @@ export class ApplicationKeyValueService {
         .delete()
         .where('"key" = :key', { key })
         .andWhere('"applicationId" = :applicationId', {
-          applicationId: await this.resolveServerApplicationId(application),
+          applicationId: application.id,
         })
         .andWhere('"workspaceId" IS NULL')
         .andWhere('"type" = :type', {
@@ -158,8 +150,7 @@ export class ApplicationKeyValueService {
     workspaceId: string;
     key: string;
   }): Promise<AppKeyValue> {
-    const serverApplicationId =
-      await this.resolveServerApplicationId(application);
+    const serverApplicationId = application.id;
     const claimValue: unknown = workspaceId;
 
     await this.keyValuePairRepository
@@ -206,47 +197,5 @@ export class ApplicationKeyValueService {
     }
 
     return { key, value: entry.value, scope: AppKeyValueScope.SERVER };
-  }
-
-  // SERVER entries of a registered application all live under the registration owner workspace's install
-  private async resolveServerApplicationId(
-    application: FlatApplication,
-  ): Promise<string> {
-    if (!isDefined(application.applicationRegistrationId)) {
-      return application.id;
-    }
-
-    const registration = await this.applicationRegistrationRepository.findOne({
-      where: { id: application.applicationRegistrationId },
-    });
-
-    if (!isDefined(registration) || !isDefined(registration.ownerWorkspaceId)) {
-      return application.id;
-    }
-
-    if (registration.ownerWorkspaceId === application.workspaceId) {
-      return application.id;
-    }
-
-    const ownerInstall = await this.applicationRepository.findOne(
-      registration.ownerWorkspaceId,
-      {
-        where: {
-          applicationRegistrationId: registration.id,
-        },
-      },
-    );
-
-    if (!isDefined(ownerInstall)) {
-      throw new ApplicationException(
-        `Server keys are unavailable for application ${application.id}: the registration owner workspace has no install`,
-        ApplicationExceptionCode.APP_NOT_INSTALLED,
-        {
-          userFriendlyMessage: msg`Server keys require the application publisher workspace to have the application installed.`,
-        },
-      );
-    }
-
-    return ownerInstall.id;
   }
 }

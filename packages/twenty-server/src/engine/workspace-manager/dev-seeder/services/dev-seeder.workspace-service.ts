@@ -10,12 +10,10 @@ import { ViewKey } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 import { v4 } from 'uuid';
 
-import { ApplicationRegistrationService } from 'src/engine/core-modules/application/application-registration/application-registration.service';
 import { ApplicationService } from 'src/engine/core-modules/application/application.service';
 import { EmailingDomainDriver } from 'src/engine/core-modules/emailing-domain/drivers/types/emailing-domain-driver.type';
 import { type PlaintextString } from 'src/engine/core-modules/secret-encryption/branded-strings/plaintext-string.type';
 import { SecretEncryptionService } from 'src/engine/core-modules/secret-encryption/secret-encryption.service';
-import { SdkClientGenerationService } from 'src/engine/core-modules/sdk-client/sdk-client-generation.service';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { UpgradeMigrationService } from 'src/engine/core-modules/upgrade/services/upgrade-migration.service';
 import { UpgradeSequenceReaderService } from 'src/engine/core-modules/upgrade/services/upgrade-sequence-reader.service';
@@ -53,10 +51,6 @@ import { DevSeederAgentChatPendingInputWorkspaceService } from 'src/engine/works
 import { DevSeederDataService } from 'src/engine/workspace-manager/dev-seeder/data/services/dev-seeder-data.service';
 import { DevSeederWorkflowPendingInputWorkspaceService } from 'src/engine/workspace-manager/dev-seeder/data/services/dev-seeder-workflow-pending-input.workspace-service';
 import { DevSeederMetadataService } from 'src/engine/workspace-manager/dev-seeder/metadata/services/dev-seeder-metadata.service';
-import { PrefillFrontComponentService } from 'src/engine/workspace-manager/standard-objects-prefill-data/services/prefill-front-component.service';
-import { PrefillLogicFunctionService } from 'src/engine/workspace-manager/standard-objects-prefill-data/services/prefill-logic-function.service';
-import { getSeedFrontComponentDefinitions } from 'src/engine/workspace-manager/standard-objects-prefill-data/utils/prefill-front-component-definitions.util';
-import { getCreateCompanyWhenAddingNewPersonCodeStepLogicFunctionDefinitions } from 'src/engine/workspace-manager/standard-objects-prefill-data/utils/prefill-workflow-code-step-logic-functions.util';
 import { STANDARD_ROLE } from 'src/engine/workspace-manager/twenty-standard-application/constants/standard-role.constant';
 import { TwentyStandardApplicationService } from 'src/engine/workspace-manager/twenty-standard-application/services/twenty-standard-application.service';
 import { WorkspaceMigrationValidateBuildAndRunService } from 'src/engine/workspace-manager/workspace-migration/services/workspace-migration-validate-build-and-run-service';
@@ -75,14 +69,10 @@ export class DevSeederWorkspaceService {
     private readonly devSeederWorkflowPendingInputService: DevSeederWorkflowPendingInputWorkspaceService,
     private readonly devSeederAgentChatPendingInputService: DevSeederAgentChatPendingInputWorkspaceService,
     private readonly applicationService: ApplicationService,
-    private readonly applicationRegistrationService: ApplicationRegistrationService,
     private readonly workspaceCacheService: WorkspaceCacheService,
-    private readonly sdkClientGenerationService: SdkClientGenerationService,
     private readonly upgradeMigrationService: UpgradeMigrationService,
     private readonly upgradeSequenceReaderService: UpgradeSequenceReaderService,
     private readonly workspaceMigrationValidateBuildAndRunService: WorkspaceMigrationValidateBuildAndRunService,
-    private readonly prefillFrontComponentService: PrefillFrontComponentService,
-    private readonly prefillLogicFunctionService: PrefillLogicFunctionService,
     private readonly secretEncryptionService: SecretEncryptionService,
     @InjectDataSource()
     private readonly coreDataSource: DataSource,
@@ -112,8 +102,6 @@ export class DevSeederWorkspaceService {
       initialCursor,
     });
 
-    await this.applicationRegistrationService.findOrCreateCliRegistration();
-
     const schemaName =
       await this.workspaceSchemaService.createWorkspaceDBSchema(workspaceId);
 
@@ -139,25 +127,9 @@ export class DevSeederWorkspaceService {
       },
     );
 
-    await this.sdkClientGenerationService.generateSdkClientForApplication({
-      workspaceId,
-      applicationId: twentyStandardFlatApplication.id,
-      applicationUniversalIdentifier:
-        twentyStandardFlatApplication.universalIdentifier,
-      trigger: 'dev-seeder',
-    });
-
     await this.devSeederMetadataService.seed({
       workspaceId,
       light,
-    });
-
-    await this.sdkClientGenerationService.generateSdkClientForApplication({
-      workspaceId,
-      applicationId: workspaceCustomFlatApplication.id,
-      applicationUniversalIdentifier:
-        workspaceCustomFlatApplication.universalIdentifier,
-      trigger: 'dev-seeder',
     });
 
     await this.devSeederMetadataService.seedRelations({
@@ -199,19 +171,6 @@ export class DevSeederWorkspaceService {
       }),
     ]);
 
-    await this.prefillLogicFunctionService.ensureSeeded({
-      workspaceId,
-      definitions:
-        getCreateCompanyWhenAddingNewPersonCodeStepLogicFunctionDefinitions(
-          workspaceId,
-        ),
-    });
-
-    await this.prefillFrontComponentService.ensureSeeded({
-      workspaceId,
-      definitions: getSeedFrontComponentDefinitions(workspaceId),
-    });
-
     await seedPageLayouts({
       workspaceId,
       flatApplication: twentyStandardFlatApplication,
@@ -233,7 +192,6 @@ export class DevSeederWorkspaceService {
     await this.seedAgentChat({
       workspaceId,
       chatReferenceIds: {
-        applicationId: twentyStandardFlatApplication.id,
         objectMetadataId: companyObjectMetadataItem.id,
         roleId: adminRole.id,
         viewId: allCompaniesView.id,

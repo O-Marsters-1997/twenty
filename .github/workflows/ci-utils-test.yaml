@@ -31,7 +31,7 @@ jobs:
         with:
           fetch-depth: 10
       - name: Install dependencies
-        uses: ./.github/actions/yarn-install
+        uses: ./.github/actions/bun-install
       - name: Run utils tests
         run: npx nx test twenty-utils
   ci-utils-test-status-check:

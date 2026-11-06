@@ -166,12 +166,12 @@ Expect the first Ctrl+C to look like it did nothing while a long step is running
 A foreground command dies with the shell that started it, so a dropped `kubectl exec` tunnel, a closed laptop or an expired VPN kills the run. `scripts/command-background.sh` wraps any nest command in its own session with no controlling terminal and streams the output from a log file instead. Use it for long runs (typically `upgrade`) over `kubectl exec` or SSH; foreground is still right locally and in CI.
 
 ```bash
-yarn command:prod:background <command> [args]   # start detached, then stream the log
-yarn command:prod:background:logs               # re-attach from another shell
-yarn command:prod:background:stop               # graceful stop; --now immediate, --force SIGKILL
+bun run command:prod:background <command> [args]   # start detached, then stream the log
+bun run command:prod:background:logs               # re-attach from another shell
+bun run command:prod:background:stop               # graceful stop; --now immediate, --force SIGKILL
 ```
 
-`<command> [args]` is forwarded verbatim to `node dist/command/command`, so `yarn command:prod:background upgrade -w <id>` is the detached form of `yarn command:prod upgrade -w <id>`. For `upgrade` the accepted args are `-d/--dry-run`, `-v/--verbose`, `-w/--workspace-id <id>` (repeatable), `--start-from-workspace-id <id>`, `--workspace-count-limit <n>`. The two workspace selectors are mutually exclusive. `--include-slow` is not among them, it belongs to `run-instance-commands`.
+`<command> [args]` is forwarded verbatim to `node dist/command/command`, so `bun run command:prod:background upgrade -w <id>` is the detached form of `bun run command:prod upgrade -w <id>`. For `upgrade` the accepted args are `-d/--dry-run`, `-v/--verbose`, `-w/--workspace-id <id>` (repeatable), `--start-from-workspace-id <id>`, `--workspace-count-limit <n>`. The two workspace selectors are mutually exclusive. `--include-slow` is not among them, it belongs to `run-instance-commands`.
 
 Ctrl+C detaches the stream only, and `logs` takes any number of concurrent readers. `logs` reports whether a run is alive before streaming, and on a finished one prints the verdict and the log tail rather than following a log that will never grow again: a segment can run for minutes without printing, so a silent log alone cannot tell a slow step from a dead process.
 

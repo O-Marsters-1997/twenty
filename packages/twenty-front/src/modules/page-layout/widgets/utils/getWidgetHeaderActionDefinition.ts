@@ -9,24 +9,17 @@ import { WidgetActionFileAttach } from '@/page-layout/widgets/files/components/W
 import { WidgetActionNoteCreate } from '@/page-layout/widgets/notes/components/WidgetActionNoteCreate';
 import { WidgetActionTaskCreate } from '@/page-layout/widgets/tasks/components/WidgetActionTaskCreate';
 import { WidgetActionTimeline } from '@/page-layout/widgets/timeline/components/WidgetActionTimeline';
-import { isWidgetConfigurationOfType } from '@/side-panel/pages/page-layout/utils/isWidgetConfigurationOfType';
 import { type ComponentType } from 'react';
-import { isDefined, isNonEmptyArray } from 'twenty-shared/utils';
+import { isDefined } from 'twenty-shared/utils';
 import { WidgetType } from '~/generated-metadata/graphql';
 
 type WidgetHeaderActionComponentProps = {
   widget: PageLayoutWidget;
 };
 
-type WidgetHeaderActionDefinition =
-  | {
-      kind: 'component';
-      Component: ComponentType<WidgetHeaderActionComponentProps>;
-    }
-  | {
-      kind: 'command-menu-items';
-      commandMenuItemUniversalIdentifiers: string[];
-    };
+type WidgetHeaderActionDefinition = {
+  Component: ComponentType<WidgetHeaderActionComponentProps>;
+};
 
 const widgetHeaderActionComponentByWidgetType: Partial<
   Record<WidgetType, ComponentType<WidgetHeaderActionComponentProps>>
@@ -46,28 +39,7 @@ const widgetHeaderActionComponentByWidgetType: Partial<
 export const getWidgetHeaderActionDefinition = (
   widget: Pick<PageLayoutWidget, 'configuration' | 'type'>,
 ): WidgetHeaderActionDefinition | undefined => {
-  if (
-    isWidgetConfigurationOfType(
-      widget.configuration,
-      'FrontComponentConfiguration',
-    ) &&
-    isNonEmptyArray(
-      widget.configuration.headerCommandMenuItemUniversalIdentifiers,
-    )
-  ) {
-    return {
-      kind: 'command-menu-items',
-      commandMenuItemUniversalIdentifiers:
-        widget.configuration.headerCommandMenuItemUniversalIdentifiers,
-    };
-  }
-
   const Component = widgetHeaderActionComponentByWidgetType[widget.type];
 
-  return isDefined(Component)
-    ? {
-        kind: 'component',
-        Component,
-      }
-    : undefined;
+  return isDefined(Component) ? { Component } : undefined;
 };

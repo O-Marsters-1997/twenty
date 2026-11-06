@@ -51,8 +51,6 @@ const THIRD_PARTY_COMMAND_MENU_ITEM: CommandMenuItemFieldsFragment = {
   id: 'mock-sync-with-acme',
   applicationId: THIRD_PARTY_APPLICATION.id,
   workflowVersionId: null,
-  frontComponentId: null,
-  frontComponent: null,
   engineComponentKey: EngineComponentKey.ADD_TO_FAVORITES,
   label: 'Sync with Acme',
   icon: 'IconRefresh',

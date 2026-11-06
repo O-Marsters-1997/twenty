@@ -99,7 +99,7 @@ jobs:
           fi
 
       - name: Install dependencies
-        uses: ./.github/actions/yarn-install
+        uses: ./.github/actions/bun-install
 
       - name: Build shared dependencies
         run: |
@@ -285,7 +285,7 @@ jobs:
           rm -rf node_modules packages/*/node_modules packages/*/dist dist .nx/cache
 
       - name: Install dependencies for main branch
-        uses: ./.github/actions/yarn-install
+        uses: ./.github/actions/bun-install
 
       - name: Build main branch dependencies
         run: |

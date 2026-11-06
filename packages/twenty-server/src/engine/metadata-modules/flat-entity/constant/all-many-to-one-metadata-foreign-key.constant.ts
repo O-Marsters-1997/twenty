@@ -52,9 +52,6 @@ export const ALL_MANY_TO_ONE_METADATA_FOREIGN_KEY = {
     navigationTargetObjectMetadata: {
       foreignKey: 'navigationTargetObjectMetadataId',
     },
-    frontComponent: {
-      foreignKey: 'frontComponentId',
-    },
     pageLayout: {
       foreignKey: 'pageLayoutId',
     },
@@ -160,10 +157,6 @@ export const ALL_MANY_TO_ONE_METADATA_FOREIGN_KEY = {
     objectMetadata: {
       foreignKey: 'objectMetadataId',
     },
-    workspace: null,
-    application: null,
-  },
-  logicFunction: {
     workspace: null,
     application: null,
   },
@@ -288,15 +281,7 @@ export const ALL_MANY_TO_ONE_METADATA_FOREIGN_KEY = {
     },
     workspace: null,
   },
-  frontComponent: {
-    workspace: null,
-    application: null,
-  },
   webhook: {
-    workspace: null,
-    application: null,
-  },
-  applicationVariable: {
     workspace: null,
     application: null,
   },
@@ -310,20 +295,9 @@ export const ALL_MANY_TO_ONE_METADATA_FOREIGN_KEY = {
       foreignKey: 'viewId',
     },
   },
-  connectionProvider: {
-    workspace: null,
-    application: null,
-  },
   timelineActivityType: {
     workspace: null,
     application: null,
-  },
-  settingsMenuItem: {
-    workspace: null,
-    application: null,
-    frontComponent: {
-      foreignKey: 'frontComponentId',
-    },
   },
   searchFieldMetadata: {
     workspace: null,

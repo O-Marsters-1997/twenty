@@ -20,7 +20,6 @@ export const WIDGET_CONFIGURATION_TYPENAME_BY_CONFIGURATION_TYPE = {
   [WidgetConfigurationType.FIELD_RICH_TEXT]: 'FieldRichTextConfiguration',
   [WidgetConfigurationType.FILES]: 'FilesConfiguration',
   [WidgetConfigurationType.FORM_FIELD]: 'FormFieldConfiguration',
-  [WidgetConfigurationType.FRONT_COMPONENT]: 'FrontComponentConfiguration',
   [WidgetConfigurationType.IFRAME]: 'IframeConfiguration',
   [WidgetConfigurationType.LINE_CHART]: 'LineChartConfiguration',
   [WidgetConfigurationType.MESSAGE_CAMPAIGN_BODY]:

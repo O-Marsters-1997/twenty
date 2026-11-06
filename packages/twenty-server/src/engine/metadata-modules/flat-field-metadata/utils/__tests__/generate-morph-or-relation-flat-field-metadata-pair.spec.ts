@@ -6,8 +6,6 @@ import {
   RelationType,
 } from 'twenty-shared/types';
 
-import { ApplicationRegistrationSourceType } from 'src/engine/core-modules/application/application-registration/enums/application-registration-source-type.enum';
-import { ApplicationState } from 'src/engine/core-modules/application/enums/application-state.enum';
 import { type FlatApplication } from 'src/engine/core-modules/application/types/flat-application.type';
 import {
   generateMorphOrRelationFlatFieldMetadataPair,
@@ -25,34 +23,12 @@ const MOCK_FLAT_APPLICATION: FlatApplication = {
   logoFileId: null,
   version: null,
   workspaceId: 'workspace-id',
-  sourceType: ApplicationRegistrationSourceType.LOCAL,
-  state: ApplicationState.INSTALLED,
-  sourcePath: '',
-  packageJsonChecksum: null,
-  packageJsonFileId: null,
-  yarnLockChecksum: null,
-  yarnLockFileId: null,
-  availablePackages: {},
-  billing: {},
-  grantedCapabilities: [],
-  logicFunctionLayerId: null,
   defaultRoleId: null,
   defaultRole: null,
-  settingsCustomTabFrontComponentId: null,
-  healthCheckLogicFunctionId: null,
-  uninstallLogicFunctionId: null,
-  uninstallHookCompletedForRequestedAt: null,
-  canBeUninstalled: false,
-  autoUpgrade: false,
-  applicationRegistrationId: null,
   primaryPublicDomainId: null,
   createdAt: new Date(),
   updatedAt: new Date(),
   deletedAt: null,
-  isSdkLayerStale: true,
-  sdkClientCoreChecksum: null,
-  frontComponentSharedDependenciesChecksum: null,
-  frontComponentSharedDependenciesBuiltPath: null,
 };
 
 type GenerateMorphOrRelationFlatFieldMetadataPairTestInput = Parameters<

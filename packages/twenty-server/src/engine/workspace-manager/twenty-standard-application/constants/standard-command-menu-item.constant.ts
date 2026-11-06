@@ -22,7 +22,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     conditionalAvailabilityExpression:
       'pageType == "RECORD_PAGE" and not isInSidePanel and objectMetadataItem.nameSingular != "messageCampaign" and objectMetadataItem.nameSingular != "agentChatThread"',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.NAVIGATE_TO_NEXT_RECORD,
     hotKeys: null,
   },
@@ -42,7 +41,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     conditionalAvailabilityExpression:
       'pageType == "RECORD_PAGE" and not isInSidePanel and objectMetadataItem.nameSingular != "messageCampaign" and objectMetadataItem.nameSingular != "agentChatThread"',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.NAVIGATE_TO_PREVIOUS_RECORD,
     hotKeys: null,
   },
@@ -68,7 +66,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'pageType == "INDEX_PAGE" and objectPermissions.canUpdateObjectRecords and not hasAnySoftDeleteFilterOnView and objectMetadataItem.isUICreatable and objectMetadataItem.isUIEditable and not objectMetadataItem.isRemote',
     conditionalPinnedExpression: 'numberOfSelectedRecords == 0',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.CREATE_NEW_RECORD,
     hotKeys: null,
   },
@@ -90,7 +87,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     conditionalAvailabilityExpression:
       'numberOfSelectedRecords >= 1 and not hasAnySoftDeleteFilterOnView and objectPermissions.canSoftDeleteObjectRecords and (isSelectAll or noneDefined(selectedRecords, "deletedAt")) and (isSelectAll or noneEquals(selectedRecords, "recordPermissions.canSoftDelete", false))',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.DELETE_RECORDS,
     hotKeys: null,
   },
@@ -112,7 +108,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     conditionalAvailabilityExpression:
       'numberOfSelectedRecords >= 1 and (isSelectAll or everyDefined(selectedRecords, "deletedAt")) and objectPermissions.canSoftDeleteObjectRecords and (pageType == "RECORD_PAGE" or hasAnySoftDeleteFilterOnView) and (isSelectAll or noneEquals(selectedRecords, "recordPermissions.canSoftDelete", false))',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.RESTORE_RECORDS,
     hotKeys: null,
   },
@@ -134,7 +129,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     conditionalAvailabilityExpression:
       'numberOfSelectedRecords >= 1 and objectPermissions.canDestroyObjectRecords and (isSelectAll or everyDefined(selectedRecords, "deletedAt")) and (pageType == "RECORD_PAGE" or hasAnySoftDeleteFilterOnView) and (isSelectAll or noneEquals(selectedRecords, "recordPermissions.canDelete", false))',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.DESTROY_RECORDS,
     hotKeys: null,
   },
@@ -151,7 +145,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     conditionalAvailabilityExpression:
       'arrayLength(favoriteRecordIds) < numberOfSelectedRecords and noneDefined(selectedRecords, "deletedAt") and not hasAnySoftDeleteFilterOnView and objectMetadataItem.nameSingular != "messageCampaign" and objectMetadataItem.nameSingular != "workflow"',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.ADD_TO_FAVORITES,
     hotKeys: null,
   },
@@ -171,7 +164,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     conditionalAvailabilityExpression:
       'arrayLength(favoriteRecordIds) == numberOfSelectedRecords and noneDefined(selectedRecords, "deletedAt") and not hasAnySoftDeleteFilterOnView and objectMetadataItem.nameSingular != "messageCampaign" and objectMetadataItem.nameSingular != "workflow"',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.REMOVE_FROM_FAVORITES,
     hotKeys: null,
   },
@@ -190,7 +182,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     conditionalAvailabilityExpression:
       'pageType == "RECORD_PAGE" and (objectMetadataItem.nameSingular == "note" or objectMetadataItem.nameSingular == "task") and someNonEmptyString(selectedRecords, "bodyV2.blocknote")',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.EXPORT_NOTE_TO_PDF,
     hotKeys: null,
   },
@@ -212,7 +203,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     conditionalAvailabilityExpression:
       'pageType == "INDEX_PAGE" and permissionFlags.EXPORT_CSV',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.EXPORT_RECORDS,
     hotKeys: null,
   },
@@ -234,7 +224,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     conditionalAvailabilityExpression:
       'numberOfSelectedRecords >= 2 and objectPermissions.canUpdateObjectRecords',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.UPDATE_MULTIPLE_RECORDS,
     hotKeys: null,
   },
@@ -256,7 +245,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     conditionalAvailabilityExpression:
       'not isSelectAll and numberOfSelectedRecords >= 2 and isDefined(objectMetadataItem.duplicateCriteria) and objectPermissions.canUpdateObjectRecords and objectPermissions.canDestroyObjectRecords and numberOfSelectedRecords <= 9',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.MERGE_MULTIPLE_RECORDS,
     hotKeys: null,
   },
@@ -278,7 +266,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     conditionalAvailabilityExpression:
       'pageType == "INDEX_PAGE" and not hasAnySoftDeleteFilterOnView and permissionFlags.IMPORT_CSV',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.IMPORT_RECORDS,
     hotKeys: null,
   },
@@ -297,7 +284,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     conditionalAvailabilityExpression:
       'pageType == "INDEX_PAGE" and permissionFlags.EXPORT_CSV',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.EXPORT_VIEW,
     hotKeys: null,
   },
@@ -322,7 +308,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     conditionalAvailabilityExpression:
       'pageType == "INDEX_PAGE" and not hasAnySoftDeleteFilterOnView',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.SEE_DELETED_RECORDS,
     hotKeys: null,
   },
@@ -341,7 +326,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     conditionalAvailabilityExpression:
       'pageType == "INDEX_PAGE" and not hasAnySoftDeleteFilterOnView',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.CREATE_NEW_VIEW,
     hotKeys: null,
   },
@@ -363,7 +347,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     conditionalAvailabilityExpression:
       'pageType == "INDEX_PAGE" and hasAnySoftDeleteFilterOnView',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.HIDE_DELETED_RECORDS,
     hotKeys: null,
   },
@@ -382,7 +365,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     conditionalAvailabilityExpression:
       'pageType != "SETTINGS_PAGE" and not isLayoutCustomizationModeEnabled and permissionFlags.LAYOUTS',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.EDIT_RECORD_PAGE_LAYOUT,
     hotKeys: null,
   },
@@ -402,7 +384,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'pageType == "RECORD_PAGE" and not isDashboardPageLayoutInEditMode and not isLayoutCustomizationModeEnabled and noneDefined(selectedRecords, "deletedAt") and everyDefined(selectedRecords, "pageLayoutId") and objectPermissions.canUpdateObjectRecords',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.dashboard.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.EDIT_DASHBOARD_LAYOUT,
     hotKeys: null,
   },
@@ -422,7 +403,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'pageType == "RECORD_PAGE" and isDashboardPageLayoutInEditMode and noneDefined(selectedRecords, "deletedAt") and everyDefined(selectedRecords, "pageLayoutId") and objectPermissions.canUpdateObjectRecords',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.dashboard.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.SAVE_DASHBOARD_LAYOUT,
     hotKeys: null,
   },
@@ -442,7 +422,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'pageType == "RECORD_PAGE" and isDashboardPageLayoutInEditMode and noneDefined(selectedRecords, "deletedAt") and everyDefined(selectedRecords, "pageLayoutId") and objectPermissions.canUpdateObjectRecords',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.dashboard.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.CANCEL_DASHBOARD_LAYOUT,
     hotKeys: null,
   },
@@ -462,7 +441,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'noneDefined(selectedRecords, "deletedAt") and objectPermissions.canUpdateObjectRecords',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.dashboard.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.DUPLICATE_DASHBOARD,
     hotKeys: null,
   },
@@ -482,7 +460,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'numberOfSelectedRecords == 1 and everyDefined(selectedRecords, "currentVersion.trigger") and everyDefined(selectedRecords, "currentVersion.steps") and every(selectedRecords, "currentVersion.steps.length") and (everyEquals(selectedRecords, "currentVersion.status", "DRAFT") or includesNone(selectedRecords, "statuses", "ACTIVE")) and noneDefined(selectedRecords, "deletedAt")',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.workflow.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.ACTIVATE_WORKFLOW,
     hotKeys: null,
   },
@@ -502,7 +479,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'numberOfSelectedRecords == 1 and (everyEquals(selectedRecords, "currentVersion.status", "ACTIVE") or includesEvery(selectedRecords, "statuses", "ACTIVE")) and noneDefined(selectedRecords, "deletedAt") and noneEquals(selectedRecords, "recordPermissions.canUpdate", false)',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.workflow.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.DEACTIVATE_WORKFLOW,
     hotKeys: null,
   },
@@ -522,7 +498,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'every(selectedRecords, "lastPublishedVersionId") and everyEquals(selectedRecords, "currentVersion.status", "DRAFT") and noneDefined(selectedRecords, "deletedAt")',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.workflow.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.DISCARD_DRAFT_WORKFLOW,
     hotKeys: null,
   },
@@ -542,7 +517,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'numberOfSelectedRecords == 1 and everyDefined(selectedRecords, "currentVersion.trigger") and everyDefined(selectedRecords, "currentVersion.steps") and every(selectedRecords, "currentVersion.steps.length") and ((everyEquals(selectedRecords, "currentVersion.trigger.type", "MANUAL") and noneDefined(selectedRecords, "currentVersion.trigger.settings.objectType")) or everyEquals(selectedRecords, "currentVersion.trigger.type", "WEBHOOK") or everyEquals(selectedRecords, "currentVersion.trigger.type", "CRON")) and noneDefined(selectedRecords, "deletedAt")',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.workflow.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.TEST_WORKFLOW,
     hotKeys: null,
   },
@@ -562,7 +536,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'numberOfSelectedRecords == 1 and noneDefined(selectedRecords, "deletedAt")',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.workflow.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.SEE_RUNS_WORKFLOW,
     hotKeys: null,
   },
@@ -585,7 +558,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'numberOfSelectedRecords == 1 and noneDefined(selectedRecords, "deletedAt")',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.workflow.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.SEE_VERSIONS_WORKFLOW,
     hotKeys: null,
   },
@@ -605,7 +577,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'pageType == "RECORD_PAGE" and everyDefined(selectedRecords, "currentVersion.trigger") and everyDefined(selectedRecords, "currentVersion.steps") and every(selectedRecords, "currentVersion.steps.length") and noneDefined(selectedRecords, "deletedAt") and noneEquals(selectedRecords, "recordPermissions.canUpdate", false)',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.workflow.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.TIDY_UP_WORKFLOW,
     hotKeys: null,
   },
@@ -625,7 +596,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'everyDefined(selectedRecords, "currentVersion") and noneDefined(selectedRecords, "deletedAt") and noneEquals(selectedRecords, "recordPermissions.canUpdate", false)',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.workflow.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.DUPLICATE_WORKFLOW,
     hotKeys: null,
   },
@@ -648,7 +618,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'numberOfSelectedRecords == 1 and everyEquals(selectedRecords, "visibility", "WORKSPACE") and every(selectedRecords, "canChangeVisibility") and noneDefined(selectedRecords, "deletedAt") and noneEquals(selectedRecords, "recordPermissions.canUpdate", false)',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.workflow.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.TOGGLE_WORKFLOW_VISIBILITY,
     hotKeys: null,
   },
@@ -674,7 +643,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'numberOfSelectedRecords == 1 and everyEquals(selectedRecords, "visibility", "PRIVATE") and every(selectedRecords, "canChangeVisibility") and noneDefined(selectedRecords, "deletedAt")',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.workflow.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.TOGGLE_WORKFLOW_VISIBILITY,
     hotKeys: null,
   },
@@ -693,7 +661,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     conditionalAvailabilityExpression: null,
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.workflowRun.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.SEE_WORKFLOW_WORKFLOW_RUN,
     hotKeys: null,
   },
@@ -713,7 +680,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'isSelectAll or someEquals(selectedRecords, "status", "NOT_STARTED") or someEquals(selectedRecords, "status", "ENQUEUED") or someEquals(selectedRecords, "status", "RUNNING")',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.workflowRun.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.STOP_WORKFLOW_RUN,
     hotKeys: null,
   },
@@ -733,7 +699,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'someEquals(selectedRecords, "status", "FAILED")',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.workflowRun.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.RETRY_WORKFLOW_RUN,
     hotKeys: null,
   },
@@ -753,7 +718,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'everyDefined(selectedRecords, "workflow")',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.workflowVersion.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.SEE_RUNS_WORKFLOW_VERSION,
     hotKeys: null,
   },
@@ -773,7 +737,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'everyDefined(selectedRecords, "workflow.id")',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.workflowVersion.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.SEE_WORKFLOW_WORKFLOW_VERSION,
     hotKeys: null,
   },
@@ -793,7 +756,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'noneEquals(selectedRecords, "status", "DRAFT")',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.workflowVersion.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.USE_AS_DRAFT_WORKFLOW_VERSION,
     hotKeys: null,
   },
@@ -816,7 +778,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'everyDefined(selectedRecords, "workflow")',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.workflowVersion.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.SEE_VERSIONS_WORKFLOW_VERSION,
     hotKeys: null,
   },
@@ -834,7 +795,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     availabilityType: CommandMenuItemAvailabilityType.GLOBAL,
     conditionalAvailabilityExpression: null,
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.SEARCH_RECORDS,
     hotKeys: ['/'],
   },
@@ -852,7 +812,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     availabilityType: CommandMenuItemAvailabilityType.FALLBACK,
     conditionalAvailabilityExpression: null,
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.SEARCH_RECORDS_FALLBACK,
     hotKeys: ['/'],
   },
@@ -869,7 +828,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     conditionalAvailabilityExpression:
       'permissionFlags.AI and not isInSidePanel and objectMetadataItem.nameSingular != "agentChatThread"',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.ASK_AI,
     hotKeys: ['@'],
   },
@@ -893,7 +851,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     availabilityType: CommandMenuItemAvailabilityType.GLOBAL,
     conditionalAvailabilityExpression: 'permissionFlags.AI',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.VIEW_PREVIOUS_AI_CHATS,
     hotKeys: null,
   },
@@ -913,7 +870,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'numberOfSelectedRecords == 1 and pageType == "RECORD_PAGE" and not isInSidePanel and permissionFlags.AI',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.agentChatThread.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.NEW_AI_CHAT,
     hotKeys: null,
   },
@@ -936,7 +892,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'numberOfSelectedRecords == 1 and noneDefined(selectedRecords, "deletedAt")',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.agentChatThread.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.SHARE_RECORD,
     hotKeys: null,
   },
@@ -956,7 +911,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'numberOfSelectedRecords >= 1 and permissionFlags.AI and featureFlags.IS_AI_CHAT_INBOX_ENABLED and noneDefined(selectedRecords, "deletedAt") and every(selectedRecords, "inboxStatus.isUnread")',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.agentChatThread.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.MARK_AI_CHAT_AS_READ,
     hotKeys: null,
   },
@@ -976,7 +930,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'numberOfSelectedRecords >= 1 and permissionFlags.AI and featureFlags.IS_AI_CHAT_INBOX_ENABLED and noneDefined(selectedRecords, "deletedAt") and everyEquals(selectedRecords, "inboxStatus.isUnread", false)',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.agentChatThread.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.MARK_AI_CHAT_AS_UNREAD,
     hotKeys: null,
   },
@@ -996,7 +949,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'numberOfSelectedRecords >= 1 and permissionFlags.AI and featureFlags.IS_AI_CHAT_INBOX_ENABLED and noneDefined(selectedRecords, "deletedAt") and everyEquals(selectedRecords, "inboxStatus.scope", "INBOX")',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.agentChatThread.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.MARK_AI_CHAT_AS_DONE,
     hotKeys: ['E'],
   },
@@ -1016,7 +968,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'numberOfSelectedRecords >= 1 and permissionFlags.AI and featureFlags.IS_AI_CHAT_INBOX_ENABLED and noneDefined(selectedRecords, "deletedAt") and everyEquals(selectedRecords, "inboxStatus.scope", "ARCHIVED")',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.agentChatThread.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.REOPEN_AI_CHAT,
     hotKeys: ['E'],
   },
@@ -1036,7 +987,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'numberOfSelectedRecords >= 1 and permissionFlags.AI and featureFlags.IS_AI_CHAT_INBOX_ENABLED and noneDefined(selectedRecords, "deletedAt") and everyEquals(selectedRecords, "inboxStatus.scope", "SNOOZED")',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.agentChatThread.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.REOPEN_AI_CHAT,
     hotKeys: ['E'],
   },
@@ -1056,7 +1006,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'numberOfSelectedRecords >= 1 and permissionFlags.AI and featureFlags.IS_AI_CHAT_INBOX_ENABLED and noneDefined(selectedRecords, "deletedAt") and everyDefined(selectedRecords, "inboxStatus") and noneEquals(selectedRecords, "inboxStatus.scope", "SNOOZED")',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.agentChatThread.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.SNOOZE_AI_CHAT,
     hotKeys: ['H'],
   },
@@ -1076,7 +1025,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'numberOfSelectedRecords >= 1 and permissionFlags.AI and featureFlags.IS_AI_CHAT_INBOX_ENABLED and noneDefined(selectedRecords, "deletedAt") and everyEquals(selectedRecords, "inboxStatus.isSubscribed", false)',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.agentChatThread.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.SUBSCRIBE_TO_AI_CHAT,
     hotKeys: null,
   },
@@ -1096,7 +1044,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'numberOfSelectedRecords >= 1 and permissionFlags.AI and featureFlags.IS_AI_CHAT_INBOX_ENABLED and noneDefined(selectedRecords, "deletedAt") and everyEquals(selectedRecords, "inboxStatus.isSubscribed", true) and noneEquals(selectedRecords, "inboxStatus.isAssignedToMe", true)',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.agentChatThread.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.UNSUBSCRIBE_FROM_AI_CHAT,
     hotKeys: null,
   },
@@ -1116,7 +1063,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'numberOfSelectedRecords >= 1 and permissionFlags.AI and featureFlags.IS_AI_CHAT_INBOX_ENABLED and noneDefined(selectedRecords, "deletedAt") and noneEquals(selectedRecords, "recordPermissions.canUpdate", false)',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.agentChatThread.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.ASSIGN_AI_CHAT,
     hotKeys: ['A'],
   },
@@ -1139,7 +1085,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     conditionalAvailabilityExpression:
       'numberOfSelectedRecords == 1 and featureFlags.IS_RECORD_LEVEL_SHARING_ENABLED and not objectMetadataItem.isSystem and objectMetadataItem.readability != "APPLICATION" and objectMetadataItem.readability != "SYSTEM" and noneDefined(selectedRecords, "deletedAt")',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.SHARE_RECORD,
     hotKeys: null,
   },
@@ -1158,7 +1103,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     conditionalAvailabilityExpression: 'numberOfSelectedRecords == 1',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.messageThread.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.REPLY_TO_EMAIL_THREAD,
     hotKeys: null,
   },
@@ -1176,7 +1120,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     availabilityType: CommandMenuItemAvailabilityType.GLOBAL,
     conditionalAvailabilityExpression: 'permissionFlags.SEND_EMAIL_TOOL',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.COMPOSE_EMAIL,
     hotKeys: null,
   },
@@ -1195,7 +1138,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     conditionalAvailabilityExpression:
       'featureFlags.IS_MESSAGE_CAMPAIGN_ENABLED',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.COMPOSE_CAMPAIGN,
     hotKeys: null,
   },
@@ -1216,7 +1158,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     conditionalPinnedExpression: 'numberOfSelectedRecords == 0',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.messageCampaign.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.COMPOSE_CAMPAIGN,
     hotKeys: null,
   },
@@ -1236,7 +1177,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'numberOfSelectedRecords == 1 and (everyEquals(selectedRecords, "status", "DRAFT") or everyEquals(selectedRecords, "status", "SCHEDULED")) and noneDefined(selectedRecords, "deletedAt") and featureFlags.IS_MESSAGE_CAMPAIGN_ENABLED',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.messageCampaign.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.SEND_MESSAGE_CAMPAIGN,
     hotKeys: null,
   },
@@ -1256,7 +1196,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'numberOfSelectedRecords == 1 and (everyEquals(selectedRecords, "status", "DRAFT") or everyEquals(selectedRecords, "status", "SCHEDULED")) and noneDefined(selectedRecords, "deletedAt") and featureFlags.IS_MESSAGE_CAMPAIGN_ENABLED',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.messageCampaign.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.SEND_MESSAGE_CAMPAIGN_TEST,
     hotKeys: null,
   },
@@ -1276,7 +1215,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'numberOfSelectedRecords == 1 and (everyEquals(selectedRecords, "status", "SCHEDULED") or everyEquals(selectedRecords, "status", "SENDING")) and noneDefined(selectedRecords, "deletedAt") and featureFlags.IS_MESSAGE_CAMPAIGN_ENABLED',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.messageCampaign.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.CANCEL_MESSAGE_CAMPAIGN,
     hotKeys: null,
   },
@@ -1299,7 +1237,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'everyEquals(selectedRecords, "status", "SENT")',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.messageCampaign.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.DUPLICATE_MESSAGE_CAMPAIGN,
     hotKeys: null,
   },
@@ -1319,7 +1256,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'pageType == "RECORD_PAGE" and numberOfSelectedRecords == 1 and everyEquals(selectedRecords, "status", "DRAFT") and noneDefined(selectedRecords, "deletedAt")',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.messageCampaign.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.EMAIL_BLOCK_SETTINGS,
     hotKeys: null,
   },
@@ -1337,7 +1273,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     availabilityType: CommandMenuItemAvailabilityType.GLOBAL,
     conditionalAvailabilityExpression: null,
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.NAVIGATION,
     hotKeys: ['G', 'S'],
     payload: { path: '/settings/profile' },
@@ -1359,7 +1294,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     availabilityType: CommandMenuItemAvailabilityType.GLOBAL,
     conditionalAvailabilityExpression: null,
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.NAVIGATION,
     hotKeys: null,
     payload: { path: '/settings/experience' },
@@ -1381,7 +1315,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     availabilityType: CommandMenuItemAvailabilityType.GLOBAL,
     conditionalAvailabilityExpression: 'permissionFlags.CONNECTED_ACCOUNTS',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.NAVIGATION,
     hotKeys: null,
     payload: { path: '/settings/accounts' },
@@ -1403,7 +1336,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     availabilityType: CommandMenuItemAvailabilityType.GLOBAL,
     conditionalAvailabilityExpression: 'permissionFlags.CONNECTED_ACCOUNTS',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.NAVIGATION,
     hotKeys: null,
     payload: { path: '/settings/accounts/emails' },
@@ -1425,7 +1357,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     availabilityType: CommandMenuItemAvailabilityType.GLOBAL,
     conditionalAvailabilityExpression: 'permissionFlags.CONNECTED_ACCOUNTS',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.NAVIGATION,
     hotKeys: null,
     payload: { path: '/settings/accounts/calendars' },
@@ -1447,7 +1378,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     availabilityType: CommandMenuItemAvailabilityType.GLOBAL,
     conditionalAvailabilityExpression: 'permissionFlags.WORKSPACE',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.NAVIGATION,
     hotKeys: null,
     payload: { path: '/settings/general' },
@@ -1469,7 +1399,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     availabilityType: CommandMenuItemAvailabilityType.GLOBAL,
     conditionalAvailabilityExpression: 'permissionFlags.DATA_MODEL',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.NAVIGATION,
     hotKeys: null,
     payload: { path: '/settings/objects' },
@@ -1491,7 +1420,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     availabilityType: CommandMenuItemAvailabilityType.GLOBAL,
     conditionalAvailabilityExpression: 'permissionFlags.WORKSPACE_MEMBERS',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.NAVIGATION,
     hotKeys: null,
     payload: { path: '/settings/members' },
@@ -1513,7 +1441,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     availabilityType: CommandMenuItemAvailabilityType.GLOBAL,
     conditionalAvailabilityExpression: 'permissionFlags.WORKSPACE_MEMBERS',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.NAVIGATION,
     hotKeys: null,
     payload: { path: '/settings/members#roles' },
@@ -1535,7 +1462,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     availabilityType: CommandMenuItemAvailabilityType.GLOBAL,
     conditionalAvailabilityExpression: 'permissionFlags.WORKSPACE',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.NAVIGATION,
     hotKeys: null,
     payload: { path: '/settings/domains' },
@@ -1557,7 +1483,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     availabilityType: CommandMenuItemAvailabilityType.GLOBAL,
     conditionalAvailabilityExpression: 'permissionFlags.WORKSPACE',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.NAVIGATION,
     hotKeys: null,
     payload: { path: '/settings/billing' },
@@ -1579,7 +1504,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     availabilityType: CommandMenuItemAvailabilityType.GLOBAL,
     conditionalAvailabilityExpression: 'permissionFlags.API_KEYS_AND_WEBHOOKS',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.NAVIGATION,
     hotKeys: null,
     payload: { path: '/settings/api-webhooks' },
@@ -1598,7 +1522,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     availabilityType: CommandMenuItemAvailabilityType.GLOBAL,
     conditionalAvailabilityExpression: 'permissionFlags.APPLICATIONS',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.NAVIGATION,
     hotKeys: null,
     payload: { path: '/settings/applications' },
@@ -1617,7 +1540,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     availabilityType: CommandMenuItemAvailabilityType.GLOBAL,
     conditionalAvailabilityExpression: 'permissionFlags.WORKSPACE',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.NAVIGATION,
     hotKeys: null,
     payload: { path: '/settings/ai' },
@@ -1639,7 +1561,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     availabilityType: CommandMenuItemAvailabilityType.GLOBAL,
     conditionalAvailabilityExpression: 'permissionFlags.SECURITY',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.NAVIGATION,
     hotKeys: null,
     payload: { path: '/settings/security' },
@@ -1662,7 +1583,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     conditionalAvailabilityExpression:
       'canImpersonate or canAccessFullAdminPanel',
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.NAVIGATION,
     hotKeys: null,
     payload: { path: '/settings/admin-panel' },
@@ -1684,7 +1604,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     availabilityType: CommandMenuItemAvailabilityType.GLOBAL,
     conditionalAvailabilityExpression: null,
     availabilityObjectMetadataUniversalIdentifier: null,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.NAVIGATION,
     hotKeys: null,
     payload: { path: '/settings/community' },
@@ -1705,7 +1624,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'numberOfSelectedRecords >= 1 and permissionFlags.SEND_EMAIL_TOOL',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.person.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.COMPOSE_EMAIL,
     hotKeys: null,
   },
@@ -1725,7 +1643,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'numberOfSelectedRecords == 1 and permissionFlags.SEND_EMAIL_TOOL',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.company.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.COMPOSE_EMAIL,
     hotKeys: null,
   },
@@ -1745,7 +1662,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'numberOfSelectedRecords == 1 and permissionFlags.SEND_EMAIL_TOOL',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.opportunity.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.COMPOSE_EMAIL,
     hotKeys: null,
   },
@@ -1765,7 +1681,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'featureFlags.IS_MESSAGE_CAMPAIGN_ENABLED and numberOfSelectedRecords == 1 and noneDefined(selectedRecords, "deletedAt") and objectPermissions.canUpdateObjectRecords',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.messageList.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.DUPLICATE_MESSAGE_LIST,
     hotKeys: null,
   },
@@ -1785,7 +1700,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'featureFlags.IS_MESSAGE_CAMPAIGN_ENABLED and targetObjectWritePermissions.messageListMember and numberOfSelectedRecords >= 1 and not hasAnySoftDeleteFilterOnView and (isSelectAll or noneDefined(selectedRecords, "deletedAt"))',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.person.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.ADD_TO_MESSAGE_LIST,
     hotKeys: null,
   },
@@ -1805,7 +1719,6 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
       'featureFlags.IS_MESSAGE_CAMPAIGN_ENABLED and targetObjectWritePermissions.messageListMember and pageType == "INDEX_PAGE" and not hasAnySoftDeleteFilterOnView',
     availabilityObjectMetadataUniversalIdentifier:
       STANDARD_OBJECTS.person.universalIdentifier,
-    frontComponentUniversalIdentifier: null,
     engineComponentKey: EngineComponentKey.ADD_VIEW_TO_MESSAGE_LIST,
     hotKeys: null,
   },

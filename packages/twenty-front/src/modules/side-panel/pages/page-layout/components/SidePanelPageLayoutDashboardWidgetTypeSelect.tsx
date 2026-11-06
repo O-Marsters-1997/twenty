@@ -1,5 +1,4 @@
 import { CommandMenuItem } from '@/command-menu/components/CommandMenuItem';
-import { FIND_MANY_FRONT_COMPONENTS } from '@/front-components/graphql/queries/findManyFrontComponents';
 import { useReadableObjectMetadataItems } from '@/object-metadata/hooks/useReadableObjectMetadataItems';
 import { useCreatePageLayoutGraphWidget } from '@/page-layout/hooks/useCreatePageLayoutGraphWidget';
 import { useCreatePageLayoutWidget } from '@/page-layout/hooks/useCreatePageLayoutWidget';
@@ -14,25 +13,20 @@ import { SidePanelList } from '@/side-panel/components/SidePanelList';
 import { useSidePanelMenu } from '@/side-panel/hooks/useSidePanelMenu';
 import { useNavigatePageLayoutSidePanel } from '@/side-panel/pages/page-layout/hooks/useNavigatePageLayoutSidePanel';
 import { usePageLayoutSidePanelTarget } from '@/side-panel/pages/page-layout/hooks/usePageLayoutSidePanelTarget';
-import { getFrontComponentWidgetTypeSelectItemId } from '@/side-panel/pages/page-layout/utils/getFrontComponentWidgetTypeSelectItemId';
 import { isExistingWidgetMissingOrDifferentType } from '@/side-panel/pages/page-layout/utils/isExistingWidgetMissingOrDifferentType';
-import { isFrontComponentAvailableInWidgetPicker } from '@/side-panel/pages/page-layout/utils/isFrontComponentAvailableInWidgetPicker';
 import { SelectableListItem } from '@/ui/layout/selectable-list/components/SelectableListItem';
 import { useAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useAtomComponentState';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { useQuery } from '@apollo/client/react';
 import { t } from '@lingui/core/macro';
 import { CoreObjectNameSingular, SidePanelPages } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 import {
   IconAlignBoxLeftTop,
-  IconApps,
   IconChartPie,
   IconFrame,
   IconTable,
 } from 'twenty-ui/icon';
 import {
-  type FrontComponent,
   PageLayoutType,
   WidgetConfigurationType,
   WidgetType,
@@ -84,25 +78,6 @@ export const SidePanelPageLayoutDashboardWidgetTypeSelect = () => {
     [...readableObjectMetadataItems].sort((first, second) =>
       first.labelPlural.localeCompare(second.labelPlural),
     )[0];
-
-  const { data: frontComponentsData } = useQuery<{
-    frontComponents: FrontComponent[];
-  }>(FIND_MANY_FRONT_COMPONENTS);
-
-  const frontComponents = (frontComponentsData?.frontComponents ?? []).filter(
-    (frontComponent) =>
-      isFrontComponentAvailableInWidgetPicker({
-        frontComponent,
-        pageLayoutType: PageLayoutType.DASHBOARD,
-      }),
-  );
-
-  const frontComponentsWithSelectItemId = frontComponents.map(
-    (frontComponent) => ({
-      frontComponent,
-      selectItemId: getFrontComponentWidgetTypeSelectItemId(frontComponent.id),
-    }),
-  );
 
   const [pageLayoutEditingWidgetId, setPageLayoutEditingWidgetId] =
     useAtomComponentState(
@@ -226,39 +201,7 @@ export const SidePanelPageLayoutDashboardWidgetTypeSelect = () => {
     });
   };
 
-  const handleCreateFrontComponentWidget = (frontComponent: FrontComponent) => {
-    if (
-      isExistingWidgetMissingOrDifferentType(
-        existingWidget?.type,
-        WidgetType.FRONT_COMPONENT,
-      )
-    ) {
-      if (isDefined(pageLayoutEditingWidgetId)) {
-        removePageLayoutWidgetAndPreservePosition(pageLayoutEditingWidgetId);
-      }
-
-      const newWidget = createPageLayoutWidget({
-        type: WidgetType.FRONT_COMPONENT,
-        title: frontComponent.name,
-        configuration: {
-          __typename: 'FrontComponentConfiguration',
-          configurationType: WidgetConfigurationType.FRONT_COMPONENT,
-          frontComponentId: frontComponent.id,
-        },
-      });
-      setPageLayoutEditingWidgetId(newWidget.id);
-    }
-
-    closeSidePanelMenu();
-  };
-
-  const selectableItemIds = [
-    'chart',
-    'record-table',
-    'iframe',
-    'rich-text',
-    ...frontComponentsWithSelectItemId.map(({ selectItemId }) => selectItemId),
-  ];
+  const selectableItemIds = ['chart', 'record-table', 'iframe', 'rich-text'];
 
   return (
     <SidePanelList selectableItemIds={selectableItemIds}>
@@ -309,29 +252,6 @@ export const SidePanelPageLayoutDashboardWidgetTypeSelect = () => {
           />
         </SelectableListItem>
       </SidePanelGroup>
-
-      {frontComponentsWithSelectItemId.length > 0 && (
-        <SidePanelGroup heading={t`Front Components`}>
-          {frontComponentsWithSelectItemId.map(
-            ({ frontComponent, selectItemId }) => (
-              <SelectableListItem
-                key={frontComponent.id}
-                itemId={selectItemId}
-                onEnter={() => handleCreateFrontComponentWidget(frontComponent)}
-              >
-                <CommandMenuItem
-                  Icon={IconApps}
-                  label={frontComponent.name}
-                  id={selectItemId}
-                  onClick={() =>
-                    handleCreateFrontComponentWidget(frontComponent)
-                  }
-                />
-              </SelectableListItem>
-            ),
-          )}
-        </SidePanelGroup>
-      )}
     </SidePanelList>
   );
 };

@@ -49,7 +49,6 @@ import { type CoreWorkflowVersionWriteService } from 'src/engine/core-modules/wo
 import { type WorkspaceMigrationValidateBuildAndRunService } from 'src/engine/workspace-manager/workspace-migration/services/workspace-migration-validate-build-and-run-service';
 import { WORKFLOW_CRON_TRIGGER_CACHE_KEY } from 'src/modules/workflow/workflow-trigger/automated-trigger/crons/constants/workflow-cron-trigger-cache-key.constant';
 
-import { type CodeStepBuildService } from 'src/modules/workflow/workflow-builder/workflow-version-step/code-step/services/code-step-build.service';
 import { type AgentAsyncExecutorService } from 'src/engine/metadata-modules/ai/ai-agent-execution/services/agent-async-executor.service';
 import { type AgentExecutionResult } from 'src/engine/metadata-modules/ai/ai-agent-execution/types/agent-execution-result.type';
 import { type WorkflowActionFactory } from 'src/modules/workflow/workflow-executor/factories/workflow-action.factory';
@@ -326,9 +325,7 @@ describe('core workflow execution and queue compatibility (e2e)', () => {
               ? { branches: [] }
               : actionType === WorkflowActionType.ITERATOR
                 ? { initialLoopStepIds: [] }
-                : actionType === WorkflowActionType.CODE
-                  ? { logicFunctionId: randomUUID() }
-                  : {},
+                : {},
         },
         nextStepIds: [],
       } as WorkflowAction;
@@ -2101,55 +2098,6 @@ describe('core workflow execution and queue compatibility (e2e)', () => {
         { id: draft.id, status: 'ACTIVE' },
       ]),
     );
-  });
-
-  it('rejects a draft edited while activation is being prepared', async () => {
-    const fixture = await createFixture();
-    await markFixtureVersionAsDraft(fixture);
-    const codeBuild = getAppProviderByClassName<CodeStepBuildService>(
-      'CodeStepBuildService',
-    );
-    let notifyPreparing: () => void = () => {};
-    let releasePreparation: () => void = () => {};
-    const preparing = new Promise<void>((resolve) => {
-      notifyPreparing = resolve;
-    });
-    const prepared = new Promise<void>((resolve) => {
-      releasePreparation = resolve;
-    });
-    const buildSpy = jest
-      .spyOn(codeBuild, 'switchCodeStepLogicFunctionsToPrebuilt')
-      .mockImplementationOnce(async () => {
-        notifyPreparing();
-        await prepared;
-      });
-    const activation = workflowGraphqlRequest(
-      'mutation Activate($id: UUID!) { activateCoreWorkflowVersion(coreWorkflowVersionId: $id) }',
-      { id: fixture.coreWorkflowVersionId },
-    ).then((response) => response);
-    try {
-      await preparing;
-      const edit = await workflowGraphqlRequest(
-        'mutation Edit($input: UpdateCoreWorkflowVersionTriggerInput!) { updateCoreWorkflowVersionTrigger(input: $input) { trigger } }',
-        {
-          input: {
-            coreWorkflowVersionId: fixture.coreWorkflowVersionId,
-            trigger: { ...fixture.trigger, name: 'Edited during activation' },
-          },
-        },
-      );
-      expect(edit.body.errors).toBeUndefined();
-    } finally {
-      releasePreparation();
-      buildSpy.mockRestore();
-    }
-    expect(JSON.stringify((await activation).body.errors)).toContain('changed');
-    const [core] = await global.testDataSource.query(
-      'SELECT status, triggers FROM core."workflowVersion" WHERE id = $1',
-      [fixture.coreWorkflowVersionId],
-    );
-    expect(core.status).toBe('DRAFT');
-    expect(core.triggers[0].name).toBe('Edited during activation');
   });
 
   it('rebuilds cron dispatch after a cache publication failure', async () => {

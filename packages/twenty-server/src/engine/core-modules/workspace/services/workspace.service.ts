@@ -35,8 +35,6 @@ import { ApiKeyEntity } from 'src/engine/core-modules/api-key/api-key.entity';
 import { type FlatApplication } from 'src/engine/core-modules/application/types/flat-application.type';
 import { getScopedCallingApplication } from 'src/engine/core-modules/application/utils/get-scoped-calling-application.util';
 import { ApplicationService } from 'src/engine/core-modules/application/application.service';
-import { ApplicationUninstallService } from 'src/engine/core-modules/application/application-manifest/services/application-uninstall.service';
-import { PreInstalledAppsService } from 'src/engine/core-modules/application/pre-installed-apps/pre-installed-apps.service';
 import { type AuthContextUser } from 'src/engine/core-modules/auth/types/auth-context.type';
 import { BillingSubscriptionService } from 'src/engine/core-modules/billing/services/billing-subscription.service';
 import { BillingService } from 'src/engine/core-modules/billing/services/billing.service';
@@ -56,11 +54,9 @@ import {
   FileWorkspaceFolderDeletionJob,
   type FileWorkspaceFolderDeletionJobData,
 } from 'src/engine/core-modules/file/jobs/file-workspace-folder-deletion.job';
-import { LOGIC_FUNCTION_QUEUE_RETRY_BACKOFF } from 'src/engine/core-modules/logic-function/logic-function-trigger/constants/logic-function-queue-retry-backoff.constant';
 import { InjectMessageQueue } from 'src/engine/core-modules/message-queue/decorators/message-queue.decorator';
 import { MessageQueue } from 'src/engine/core-modules/message-queue/message-queue.constants';
 import { MessageQueueService } from 'src/engine/core-modules/message-queue/services/message-queue.service';
-import { SdkClientGenerationService } from 'src/engine/core-modules/sdk-client/sdk-client-generation.service';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { UpgradeMigrationService } from 'src/engine/core-modules/upgrade/services/upgrade-migration.service';
 import { UpgradeSequenceReaderService } from 'src/engine/core-modules/upgrade/services/upgrade-sequence-reader.service';
@@ -71,10 +67,6 @@ import { type UpdateWorkspaceInput } from 'src/engine/core-modules/workspace/dto
 import { type UpdateWorkspaceAllowedIframeOriginsInput } from 'src/engine/core-modules/workspace/dtos/update-workspace-allowed-iframe-origins.input';
 import { WORKSPACE_FIELDS_NOT_UPDATABLE_BY_APPLICATIONS } from 'src/engine/core-modules/workspace/constants/workspace-fields-not-updatable-by-applications.constant';
 import { WORKSPACE_FIELDS_UPDATABLE_BEFORE_ACTIVATION } from 'src/engine/core-modules/workspace/constants/workspace-fields-updatable-before-activation.constant';
-import {
-  WorkspaceDeletionApplicationUninstallJob,
-  type WorkspaceDeletionApplicationUninstallJobData,
-} from 'src/engine/core-modules/workspace/jobs/workspace-deletion-application-uninstall.job';
 import { getWorkspaceApplicationUninstallLockName } from 'src/engine/core-modules/workspace/utils/get-workspace-application-uninstall-lock-name.util';
 import { WORKSPACE_REACTIVATED_EVENT } from 'src/engine/core-modules/workspace/constants/workspace-reactivated-event.constant';
 import { WORKSPACE_SOFT_DELETED_EVENT } from 'src/engine/core-modules/workspace/constants/workspace-soft-deleted-event.constant';
@@ -102,12 +94,10 @@ import { PermissionsService } from 'src/engine/metadata-modules/permissions/perm
 import { WorkspaceCacheStorageService } from 'src/engine/workspace-cache-storage/workspace-cache-storage.service';
 import { getWorkspaceSchemaName } from 'src/engine/workspace-datasource/utils/get-workspace-schema-name.util';
 import { WorkspaceSchemaService } from 'src/engine/workspace-datasource/workspace-schema.service';
-import { PrefillLogicFunctionService } from 'src/engine/workspace-manager/standard-objects-prefill-data/services/prefill-logic-function.service';
 import { prefillCompanies } from 'src/engine/workspace-manager/standard-objects-prefill-data/utils/prefill-companies.util';
 import { prefillDashboards } from 'src/engine/workspace-manager/standard-objects-prefill-data/utils/prefill-dashboards.util';
 import { prefillOpportunities } from 'src/engine/workspace-manager/standard-objects-prefill-data/utils/prefill-opportunities.util';
 import { prefillPeople } from 'src/engine/workspace-manager/standard-objects-prefill-data/utils/prefill-people.util';
-import { getCreateCompanyWhenAddingNewPersonCodeStepLogicFunctionDefinitions } from 'src/engine/workspace-manager/standard-objects-prefill-data/utils/prefill-workflow-code-step-logic-functions.util';
 import { prefillWorkflowCommandMenuItems } from 'src/engine/workspace-manager/standard-objects-prefill-data/utils/prefill-workflow-command-menu-items.util';
 import { prefillWorkflows } from 'src/engine/workspace-manager/standard-objects-prefill-data/utils/prefill-workflows.util';
 import { WorkspaceManagerService } from 'src/engine/workspace-manager/workspace-manager.service';
@@ -116,7 +106,6 @@ import { WorkspaceMigrationValidateBuildAndRunService } from 'src/engine/workspa
 
 // far longer than a real activation, so an older ONGOING_CREATION is a crashed attempt that may be reclaimed
 const WORKSPACE_ACTIVATION_STALE_LOCK_TIMEOUT_MS = 5 * 60 * 1000;
-const WORKSPACE_APPLICATION_UNINSTALL_RETRY_LIMIT = 3;
 
 @Injectable()
 // oxlint-disable-next-line twenty/inject-workspace-repository
@@ -172,9 +161,7 @@ export class WorkspaceService {
     private readonly permissionsService: PermissionsService,
     private readonly dnsManagerService: DnsManagerService,
     private readonly flatEntityMapsCacheService: WorkspaceManyOrAllFlatEntityMapsCacheService,
-    private readonly prefillLogicFunctionService: PrefillLogicFunctionService,
     private readonly applicationService: ApplicationService,
-    private readonly preInstalledAppsService: PreInstalledAppsService,
     private readonly workspaceMigrationValidateBuildAndRunService: WorkspaceMigrationValidateBuildAndRunService,
     private readonly workspaceCacheStorageService: WorkspaceCacheStorageService,
     private readonly subdomainManagerService: SubdomainManagerService,
@@ -184,16 +171,12 @@ export class WorkspaceService {
     private readonly aiModelRegistryService: AiModelRegistryService,
     @InjectMessageQueue(MessageQueue.deleteCascadeQueue)
     private readonly deleteCascadeMessageQueueService: MessageQueueService,
-    @InjectMessageQueue(MessageQueue.applicationLifecycleHookQueue)
-    private readonly applicationLifecycleHookMessageQueueService: MessageQueueService,
     @InjectDataSource()
     private readonly coreDataSource: DataSource,
     private readonly coreEntityCacheService: CoreEntityCacheService,
     private readonly upgradeMigrationService: UpgradeMigrationService,
     private readonly upgradeSequenceReaderService: UpgradeSequenceReaderService,
-    private readonly sdkClientGenerationService: SdkClientGenerationService,
     private readonly postgresAdvisoryLockService: PostgresAdvisoryLockService,
-    private readonly applicationUninstallService: ApplicationUninstallService,
     private readonly eventLogRetentionService: EventLogRetentionService,
   ) {}
 
@@ -557,8 +540,6 @@ export class WorkspaceService {
       await this.activateAndInitializeUpgradeState({
         workspaceId: workspace.id,
       });
-
-      await this.enqueuePreInstalledAppsInstallation(workspace.id);
     } catch (error) {
       await this.workspaceRepository.update(workspace.id, {
         activationStatus: WorkspaceActivationStatus.PENDING_CREATION,
@@ -569,18 +550,6 @@ export class WorkspaceService {
       );
 
       throw error;
-    }
-
-    try {
-      await this.sdkClientGenerationService.enqueueSdkClientGenerationForWorkspace(
-        workspace.id,
-      );
-    } catch (error) {
-      this.logger.error(
-        `failed to enqueue SDK client generation jobs for workspace ${workspace.id}`,
-        error,
-      );
-      this.exceptionHandlerService.captureExceptions([error as Error]);
     }
 
     await this.coreEntityCacheService.invalidate(
@@ -734,8 +703,6 @@ export class WorkspaceService {
       workspaceId: id,
     } satisfies WorkspaceSoftDeletedEvent);
 
-    await this.enqueueWorkspaceDeletionApplicationUninstall(id);
-
     this.logger.log(`workspace ${id} soft deleted`);
 
     return workspace;
@@ -771,10 +738,6 @@ export class WorkspaceService {
               workspace.id,
             );
           }
-
-          await this.runPendingApplicationUninstallHooksBeforeHardDelete(
-            workspace,
-          );
 
           await this.deleteWorkspaceSyncableMetadataEntities(workspace);
 
@@ -833,35 +796,6 @@ export class WorkspaceService {
     }
 
     return advisoryLockResult.value;
-  }
-
-  async enqueueWorkspaceDeletionApplicationUninstall(
-    workspaceId: string,
-  ): Promise<void> {
-    await this.applicationLifecycleHookMessageQueueService.add<WorkspaceDeletionApplicationUninstallJobData>(
-      WorkspaceDeletionApplicationUninstallJob.name,
-      { workspaceId },
-      {
-        id: `${WorkspaceDeletionApplicationUninstallJob.name}-${workspaceId}`,
-        retryLimit: WORKSPACE_APPLICATION_UNINSTALL_RETRY_LIMIT,
-        backoff: LOGIC_FUNCTION_QUEUE_RETRY_BACKOFF,
-      },
-    );
-  }
-
-  private async runPendingApplicationUninstallHooksBeforeHardDelete(
-    workspace: WorkspaceEntity,
-  ): Promise<void> {
-    if (!isDefined(workspace.deletedAt)) {
-      return;
-    }
-
-    await this.applicationUninstallService.runUninstallHooksForWorkspaceDeletionBestEffort(
-      {
-        workspaceId: workspace.id,
-        workspaceDeletedAt: workspace.deletedAt,
-      },
-    );
   }
 
   private async deleteWorkspaceSyncableMetadataEntities(
@@ -1178,14 +1112,6 @@ export class WorkspaceService {
         },
       );
 
-    await this.prefillLogicFunctionService.ensureSeeded({
-      workspaceId,
-      definitions:
-        getCreateCompanyWhenAddingNewPersonCodeStepLogicFunctionDefinitions(
-          workspaceId,
-        ),
-    });
-
     const queryRunner = this.coreDataSource.createQueryRunner();
 
     await queryRunner.connect();
@@ -1234,20 +1160,6 @@ export class WorkspaceService {
     } catch (error) {
       this.logger.error(
         `Non-critical: failed to prefill workflow command menu items for workspace ${workspaceId}`,
-        error,
-      );
-      this.exceptionHandlerService.captureExceptions([error as Error]);
-    }
-  }
-
-  private async enqueuePreInstalledAppsInstallation(
-    workspaceId: string,
-  ): Promise<void> {
-    try {
-      await this.preInstalledAppsService.enqueueInstallOnWorkspace(workspaceId);
-    } catch (error) {
-      this.logger.error(
-        `Non-critical: failed to enqueue pre-installed apps installation for workspace ${workspaceId}`,
         error,
       );
       this.exceptionHandlerService.captureExceptions([error as Error]);

@@ -31,9 +31,6 @@ const deriveAllMetadataEventsFromDeleteAction = ({
   allFlatEntityMaps,
 }: DeriveMetadataEventsFromDeleteActionArgs): MetadataEvent[] => {
   switch (flatAction.metadataName) {
-    case 'applicationVariable': {
-      return [];
-    }
     case 'fieldMetadata':
     case 'objectMetadata':
     case 'view':
@@ -44,7 +41,6 @@ const deriveAllMetadataEventsFromDeleteAction = ({
     case 'rowLevelPermissionPredicateGroup':
     case 'viewFilterGroup':
     case 'index':
-    case 'logicFunction':
     case 'viewFilter':
     case 'role':
     case 'roleTarget':
@@ -54,7 +50,6 @@ const deriveAllMetadataEventsFromDeleteAction = ({
     case 'pageLayoutWidget':
     case 'pageLayoutTab':
     case 'commandMenuItem':
-    case 'frontComponent':
     case 'navigationMenuItem':
     case 'rolePermissionFlag':
     case 'permissionFlag':
@@ -64,9 +59,7 @@ const deriveAllMetadataEventsFromDeleteAction = ({
     case 'webhook':
     case 'workflow':
     case 'workflowVersion':
-    case 'connectionProvider':
     case 'timelineActivityType':
-    case 'settingsMenuItem':
     case 'validationRule':
     case 'searchFieldMetadata': {
       const flatEntityToDelete = findFlatEntityByIdInFlatEntityMapsOrThrow<

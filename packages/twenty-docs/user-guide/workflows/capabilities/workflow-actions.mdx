@@ -266,30 +266,7 @@ If you need to use external API keys in your code, you must input them directly 
 </Note>
 
 <Tip>
-**Working with arrays?** Arrays from external systems or previous steps may come as strings. See [How to handle arrays in Code actions](/user-guide/workflows/how-tos/advanced-configurations/handle-arrays-in-code-actions) for the solution.
-</Tip>
-
-<Tip>
 Click the square icon at the top right of the code editor to display it in full screen — helpful since the default editor width is limited.
-</Tip>
-
-#### Reusing a logic function across workflows
-
-The inline Code action is great for one-off logic, but the code it holds belongs to that single step. When you want to share the same logic across several workflows — or maintain it as versioned source in an app — define a **reusable logic function** instead of copy-pasting code into each Code action.
-
-A logic function is defined once in an app (using the SDK's `defineLogicFunction`) and exposed to the workflow builder by adding `workflowActionTriggerSettings`. Once your app is installed, that function appears as its own action in the workflow builder, alongside the built-in actions. Selecting it renders the input fields you declared (with variable pickers, just like other actions) and runs your shared code — no inline JavaScript required.
-
-| | Code action | Reusable logic function |
-|---|---|---|
-| **Where the code lives** | Inline editor, tied to one workflow step | Defined in an app, versioned in source control |
-| **Reuse** | Copy-pasted per step | Added as an action in any workflow |
-| **Inputs** | Variables wired in the editor | Fields rendered from your declared input schema |
-| **Best for** | Quick, workflow-specific logic | Shared logic used across multiple workflows |
-
-Both run on the same logic function runtime, so a Code action you've prototyped inline can later be promoted into a reusable logic function with minimal changes.
-
-<Tip>
-For the developer-facing reference on defining logic functions and exposing them to the workflow builder, see [Logic Functions](/developers/extend/apps/logic/logic-functions) — in particular the **Exposing a function as an AI tool or workflow action** section and `workflowActionTriggerSettings`.
 </Tip>
 
 ### HTTP Request

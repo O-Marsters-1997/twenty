@@ -8,7 +8,6 @@ import { findFlatEntityByIdInFlatEntityMaps } from 'src/engine/metadata-modules/
 import { type FlatFieldMetadata } from 'src/engine/metadata-modules/flat-field-metadata/types/flat-field-metadata.type';
 import { type FlatObjectMetadata } from 'src/engine/metadata-modules/flat-object-metadata/types/flat-object-metadata.type';
 import { buildObjectIdByNameMaps } from 'src/engine/metadata-modules/flat-object-metadata/utils/build-object-id-by-name-maps.util';
-import { type FlatLogicFunction } from 'src/engine/metadata-modules/logic-function/types/flat-logic-function.type';
 import {
   WorkflowCommonException,
   WorkflowCommonExceptionCode,
@@ -48,27 +47,6 @@ export class WorkflowMetadataReadService {
       flatFieldMetadataMaps,
       objectIdByNameSingular: idByNameSingular,
     };
-  }
-
-  async getLogicFunctionById({
-    logicFunctionId,
-    workspaceId,
-  }: {
-    logicFunctionId: string;
-    workspaceId: string;
-  }): Promise<FlatLogicFunction | undefined> {
-    const { flatLogicFunctionMaps } =
-      await this.workspaceManyOrAllFlatEntityMapsCacheService.getOrRecomputeManyOrAllFlatEntityMaps(
-        {
-          workspaceId,
-          flatMapsKeys: ['flatLogicFunctionMaps'],
-        },
-      );
-
-    return findFlatEntityByIdInFlatEntityMaps({
-      flatEntityId: logicFunctionId,
-      flatEntityMaps: flatLogicFunctionMaps,
-    });
   }
 
   async getObjectMetadataInfo(

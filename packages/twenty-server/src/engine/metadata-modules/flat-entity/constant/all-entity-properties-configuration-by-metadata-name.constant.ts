@@ -697,99 +697,6 @@ export const ALL_ENTITY_PROPERTIES_CONFIGURATION_BY_METADATA_NAME = {
       universalProperty: undefined,
     },
   },
-  logicFunction: {
-    name: { toCompare: true, toStringify: false, universalProperty: undefined },
-    description: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    timeoutSeconds: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    checksum: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    sourceHandlerPath: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    handlerName: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    isBuildUpToDate: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    executionMode: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    deletedAt: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    cronTriggerSettings: {
-      toCompare: true,
-      toStringify: true,
-      universalProperty: undefined,
-    },
-    databaseEventTriggerSettings: {
-      toCompare: true,
-      toStringify: true,
-      universalProperty: undefined,
-    },
-    httpRouteTriggerSettings: {
-      toCompare: true,
-      toStringify: true,
-      universalProperty: undefined,
-    },
-    serverRouteTriggerSettings: {
-      toCompare: true,
-      toStringify: true,
-      universalProperty: undefined,
-    },
-    toolTriggerSettings: {
-      toCompare: true,
-      toStringify: true,
-      universalProperty: undefined,
-    },
-    workflowActionTriggerSettings: {
-      toCompare: true,
-      toStringify: true,
-      universalProperty: undefined,
-    },
-    createdAt: {
-      toCompare: false,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    updatedAt: {
-      toCompare: false,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    builtHandlerPath: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    runtime: {
-      toCompare: false,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-  },
   viewFilter: {
     viewId: {
       toCompare: true,
@@ -1309,11 +1216,6 @@ export const ALL_ENTITY_PROPERTIES_CONFIGURATION_BY_METADATA_NAME = {
       toStringify: false,
       universalProperty: undefined,
     },
-    frontComponentId: {
-      toCompare: false,
-      toStringify: false,
-      universalProperty: 'frontComponentUniversalIdentifier',
-    },
     engineComponentKey: {
       toCompare: true,
       toStringify: false,
@@ -1746,59 +1648,6 @@ export const ALL_ENTITY_PROPERTIES_CONFIGURATION_BY_METADATA_NAME = {
       universalProperty: undefined,
     },
   },
-  frontComponent: {
-    name: { toCompare: true, toStringify: false, universalProperty: undefined },
-    description: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    builtComponentChecksum: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    sourceComponentPath: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    builtComponentPath: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    componentName: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    isHeadless: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    widgetAvailability: {
-      toCompare: true,
-      toStringify: true,
-      universalProperty: 'universalWidgetAvailability',
-    },
-    usesSdkClient: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    createdAt: {
-      toCompare: false,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    updatedAt: {
-      toCompare: false,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-  },
   webhook: {
     targetUrl: {
       toCompare: true,
@@ -1831,108 +1680,6 @@ export const ALL_ENTITY_PROPERTIES_CONFIGURATION_BY_METADATA_NAME = {
       universalProperty: undefined,
     },
     deletedAt: {
-      toCompare: false,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-  },
-  applicationVariable: {
-    key: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    value: {
-      toCompare: false,
-      toStringify: true,
-      universalProperty: undefined,
-    },
-    description: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    label: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    isSecret: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    isDeprecated: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    isRequired: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    type: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    options: {
-      toCompare: true,
-      toStringify: true,
-      universalProperty: undefined,
-    },
-    scope: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    defaultValue: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    createdAt: {
-      toCompare: false,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    updatedAt: {
-      toCompare: false,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-  },
-  connectionProvider: {
-    name: { toCompare: true, toStringify: false, universalProperty: undefined },
-    displayName: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    logo: { toCompare: true, toStringify: false, universalProperty: undefined },
-    type: { toCompare: true, toStringify: false, universalProperty: undefined },
-    oauthConfig: {
-      toCompare: true,
-      toStringify: true,
-      universalProperty: undefined,
-    },
-    onConnectLogicFunctionUniversalIdentifier: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    onDisconnectLogicFunctionUniversalIdentifier: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    createdAt: {
-      toCompare: false,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    updatedAt: {
       toCompare: false,
       toStringify: false,
       universalProperty: undefined,
@@ -2033,43 +1780,6 @@ export const ALL_ENTITY_PROPERTIES_CONFIGURATION_BY_METADATA_NAME = {
     overrides: {
       toCompare: true,
       toStringify: true,
-      universalProperty: undefined,
-    },
-    createdAt: {
-      toCompare: false,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    updatedAt: {
-      toCompare: false,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-  },
-  settingsMenuItem: {
-    frontComponentId: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: 'frontComponentUniversalIdentifier',
-    },
-    title: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    icon: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    position: {
-      toCompare: true,
-      toStringify: false,
-      universalProperty: undefined,
-    },
-    scope: {
-      toCompare: true,
-      toStringify: false,
       universalProperty: undefined,
     },
     createdAt: {

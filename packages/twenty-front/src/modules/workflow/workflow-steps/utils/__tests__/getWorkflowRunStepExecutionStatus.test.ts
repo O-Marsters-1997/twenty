@@ -22,16 +22,10 @@ describe('getWorkflowRunStepExecutionStatus', () => {
               {
                 id: stepId,
                 name: 'Code - Logic Function',
-                type: 'CODE',
+                type: 'HTTP_REQUEST',
                 valid: false,
                 settings: {
-                  input: {
-                    logicFunctionId: '5f7b9b44-bb07-41ba-aef8-ec0eaa5eea2c',
-                    logicFunctionInput: {
-                      a: null,
-                      b: null,
-                    },
-                  },
+                  input: { method: 'GET', url: 'https://example.com' },
                   outputSchema: {
                     link: {
                       tab: 'test',
@@ -86,16 +80,10 @@ describe('getWorkflowRunStepExecutionStatus', () => {
               {
                 id: stepId,
                 name: 'Code - Logic Function',
-                type: 'CODE',
+                type: 'HTTP_REQUEST',
                 valid: false,
                 settings: {
-                  input: {
-                    logicFunctionId: '5f7b9b44-bb07-41ba-aef8-ec0eaa5eea2c',
-                    logicFunctionInput: {
-                      a: null,
-                      b: null,
-                    },
-                  },
+                  input: { method: 'GET', url: 'https://example.com' },
                   outputSchema: {
                     link: {
                       tab: 'test',
@@ -151,16 +139,10 @@ describe('getWorkflowRunStepExecutionStatus', () => {
               {
                 id: stepId,
                 name: 'Code - Logic Function',
-                type: 'CODE',
+                type: 'HTTP_REQUEST',
                 valid: false,
                 settings: {
-                  input: {
-                    logicFunctionId: '5f7b9b44-bb07-41ba-aef8-ec0eaa5eea2c',
-                    logicFunctionInput: {
-                      a: null,
-                      b: null,
-                    },
-                  },
+                  input: { method: 'GET', url: 'https://example.com' },
                   outputSchema: {
                     link: {
                       tab: 'test',
@@ -183,16 +165,10 @@ describe('getWorkflowRunStepExecutionStatus', () => {
               {
                 id: secondStepId,
                 name: 'Code - Logic Function',
-                type: 'CODE',
+                type: 'HTTP_REQUEST',
                 valid: false,
                 settings: {
-                  input: {
-                    logicFunctionId: '5f7b9b44-bb07-41ba-aef8-ec0eaa5eea2c',
-                    logicFunctionInput: {
-                      a: null,
-                      b: null,
-                    },
-                  },
+                  input: { method: 'GET', url: 'https://example.com' },
                   outputSchema: {
                     link: {
                       tab: 'test',

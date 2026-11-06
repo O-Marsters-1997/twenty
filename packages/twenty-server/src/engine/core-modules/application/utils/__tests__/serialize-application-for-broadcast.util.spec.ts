@@ -12,8 +12,6 @@ const buildApplication = (
   name: 'Test application',
   description: 'A test application',
   version: '1.0.0',
-  applicationRegistrationId: 'ce4b7b8e-9e5b-4b7c-bd7a-5f2f61f0a9d2',
-  sdkClientCoreChecksum: 'checksum',
   ...overrides,
 });
 
@@ -25,8 +23,6 @@ describe('serializeApplicationForBroadcast', () => {
       name: 'Test application',
       description: 'A test application',
       version: '1.0.0',
-      applicationRegistrationId: 'ce4b7b8e-9e5b-4b7c-bd7a-5f2f61f0a9d2',
-      sdkClientCoreChecksum: 'checksum',
     });
   });
 
@@ -37,8 +33,6 @@ describe('serializeApplicationForBroadcast', () => {
         buildApplication({
           description: unsetValue,
           version: unsetValue,
-          applicationRegistrationId: unsetValue,
-          sdkClientCoreChecksum: unsetValue,
         }),
       );
 
@@ -46,8 +40,6 @@ describe('serializeApplicationForBroadcast', () => {
         expect.objectContaining({
           description: null,
           version: null,
-          applicationRegistrationId: null,
-          sdkClientCoreChecksum: null,
         }),
       );
     },

@@ -99,7 +99,6 @@ export const seedEmptyWorkspaces = async (dataSource: DataSource) => {
           id: applicationId,
           universalIdentifier: applicationId,
           name: 'upgrade-test-fixture',
-          sourcePath: '',
           workspaceId,
         })
         .orIgnore()

@@ -49,7 +49,6 @@ export const optimisticallyApplyUpdateActionOnAllFlatEntityMaps = ({
     case 'rowLevelPermissionPredicate':
     case 'rowLevelPermissionPredicateGroup':
     case 'viewFilterGroup':
-    case 'logicFunction':
     case 'viewFilter':
     case 'role':
     case 'roleTarget':
@@ -59,19 +58,15 @@ export const optimisticallyApplyUpdateActionOnAllFlatEntityMaps = ({
     case 'pageLayoutWidget':
     case 'pageLayoutTab':
     case 'commandMenuItem':
-    case 'frontComponent':
     case 'navigationMenuItem':
     case 'rolePermissionFlag':
     case 'permissionFlag':
     case 'objectPermission':
     case 'fieldPermission':
     case 'webhook':
-    case 'applicationVariable':
     case 'workflow':
     case 'workflowVersion':
-    case 'connectionProvider':
     case 'timelineActivityType':
-    case 'settingsMenuItem':
     case 'validationRule':
     case 'searchFieldMetadata': {
       const flatEntityMapsKey = getMetadataFlatEntityMapsKey(

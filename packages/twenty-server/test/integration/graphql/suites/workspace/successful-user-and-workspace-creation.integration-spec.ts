@@ -9,7 +9,6 @@ import { getOnboardingStatus } from 'test/integration/graphql/utils/get-onboardi
 import { signUpInNewWorkspace } from 'test/integration/graphql/utils/sign-up-in-new-workspace.util';
 import { skipSyncEmailOnboardingStep } from 'test/integration/graphql/utils/skip-sync-email-onboarding-step.util';
 import { signUp } from 'test/integration/graphql/utils/sign-up.util';
-import { createOneLogicFunction } from 'test/integration/metadata/suites/logic-function/utils/create-logic-function.util';
 import { createOneObjectMetadata } from 'test/integration/metadata/suites/object-metadata/utils/create-one-object-metadata.util';
 import { jestExpectToBeDefined } from 'test/utils/jest-expect-to-be-defined.util.test';
 import { isDefined } from 'twenty-shared/utils';
@@ -140,13 +139,8 @@ describe('Successful user and workspace creation', () => {
     );
 
     jestExpectToBeDefined(twentyStandardApp);
-    const {
-      sourcePath: _sourcePath,
-      sourceType: _sourceType,
-      ...expectedStandardTwentyApplication
-    } = TWENTY_STANDARD_APPLICATION;
 
-    expect(twentyStandardApp).toMatchObject(expectedStandardTwentyApplication);
+    expect(twentyStandardApp).toMatchObject(TWENTY_STANDARD_APPLICATION);
 
     const workpsaceCustomApplication = findManyApplicationsData.find(
       (application) =>
@@ -391,15 +385,6 @@ describe('Successful user and workspace creation', () => {
       expectToFail: false,
     });
 
-    await createOneLogicFunction({
-      input: {
-        name: 'test-function-for-deletion',
-        description: 'A test logic function for workspace deletion test',
-      },
-      token: newWorkspaceAccessToken,
-      expectToFail: false,
-    });
-
     const workspaceBeforeDeletion = await testDataSource.query(
       'SELECT * FROM core.workspace WHERE id = $1',
       [workspaceId],
@@ -419,7 +404,6 @@ describe('Successful user and workspace creation', () => {
       'fieldPermission',
       'permissionFlag',
       'rolePermissionFlag',
-      'logicFunction',
       'agent',
       'view',
       'viewField',

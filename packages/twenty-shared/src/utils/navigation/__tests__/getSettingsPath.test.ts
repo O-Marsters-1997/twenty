@@ -23,23 +23,16 @@ describe('getSettingsPath', () => {
     ).toBe('/settings/objects/companies/name');
 
     expect(
-      getSettingsPath(SettingsPath.LogicFunctionDetail, {
-        logicFunctionId: 'func123',
+      getSettingsPath(SettingsPath.AiToolDetail, {
+        toolIdentifier: 'tool123',
       }),
-    ).toBe('/settings/functions/func123');
+    ).toBe('/settings/ai/tools/tool123');
 
     expect(
       getSettingsPath(SettingsPath.EditImapSmtpCaldavConnection, {
         connectedAccountId: 'account123',
       }),
     ).toBe('/settings/accounts/edit-imap-smtp-caldav-connection/account123');
-
-    expect(
-      getSettingsPath(SettingsPath.ApplicationConnectionDetail, {
-        applicationId: 'app123',
-        connectedAccountId: 'account123',
-      }),
-    ).toBe('/settings/applications/app123/connections/account123');
   });
 
   it('should append query params when provided', () => {
@@ -95,12 +88,12 @@ describe('getSettingsPath', () => {
 
     expect(
       getSettingsPath(
-        SettingsPath.LogicFunctionDetail,
-        { logicFunctionId: 'func123' },
+        SettingsPath.AiToolDetail,
+        { toolIdentifier: 'tool123' },
         { mode: 'edit' },
         'code',
       ),
-    ).toBe('/settings/functions/func123?mode=edit#code');
+    ).toBe('/settings/ai/tools/tool123?mode=edit#code');
   });
 
   it('should filter out null and undefined values from query params', () => {

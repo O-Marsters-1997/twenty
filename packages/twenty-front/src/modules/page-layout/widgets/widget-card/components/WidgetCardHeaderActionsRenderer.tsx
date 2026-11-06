@@ -1,7 +1,6 @@
 import { useIsPageLayoutInEditMode } from '@/page-layout/hooks/useIsPageLayoutInEditMode';
 import { useCurrentWidgetOrNull } from '@/page-layout/widgets/hooks/useCurrentWidgetOrNull';
 import { getWidgetHeaderActionDefinition } from '@/page-layout/widgets/utils/getWidgetHeaderActionDefinition';
-import { WidgetHeaderCommandMenuItems } from '@/page-layout/widgets/widget-card/components/WidgetHeaderCommandMenuItems';
 import { useLayoutRenderingContext } from '@/ui/layout/contexts/LayoutRenderingContext';
 import { styled } from '@linaria/react';
 import { isDefined } from 'twenty-shared/utils';
@@ -32,19 +31,6 @@ export const WidgetCardHeaderActionsRenderer = () => {
 
   if (!isDefined(headerActionDefinition)) {
     return null;
-  }
-
-  if (headerActionDefinition.kind === 'command-menu-items') {
-    return (
-      <StyledActionsContainer>
-        <WidgetHeaderCommandMenuItems
-          applicationId={widget.applicationId}
-          commandMenuItemUniversalIdentifiers={
-            headerActionDefinition.commandMenuItemUniversalIdentifiers
-          }
-        />
-      </StyledActionsContainer>
-    );
   }
 
   const HeaderActionComponent = headerActionDefinition.Component;

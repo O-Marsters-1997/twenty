@@ -93,12 +93,12 @@ describe('shouldPrerenderPageLayoutTab', () => {
     ).toBe(false);
   });
 
-  it('allows tabs holding workspace application widgets', () => {
+  it('allows tabs holding iframe widgets', () => {
     expect(
       shouldPrerenderPageLayoutTab({
         tab: createMockTab({
           layoutMode: PageLayoutTabLayoutMode.VERTICAL_LIST,
-          widgetTypes: [WidgetType.FRONT_COMPONENT, WidgetType.IFRAME],
+          widgetTypes: [WidgetType.IFRAME],
         }),
         pageLayoutType: PageLayoutType.RECORD_PAGE,
       }),

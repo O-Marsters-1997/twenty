@@ -1,7 +1,5 @@
 import { type Equal, type Expect } from 'twenty-shared/testing';
 
-import { type ApplicationRegistrationEntity } from 'src/engine/core-modules/application/application-registration/application-registration.entity';
-import { type ApplicationRegistrationVariableEntity } from 'src/engine/core-modules/application/application-registration-variable/application-registration-variable.entity';
 import { type BillingMeterEntity } from 'src/engine/core-modules/billing/entities/billing-meter.entity';
 import { type BillingPriceEntity } from 'src/engine/core-modules/billing/entities/billing-price.entity';
 import { type BillingProductEntity } from 'src/engine/core-modules/billing/entities/billing-product.entity';
@@ -19,8 +17,6 @@ import { type SyncableEntity } from 'src/engine/workspace-manager/types/syncable
 // not a "has no workspaceId" predicate and must not be used as one.
 export type AllNonWorkspaceRelatedEntity =
   | IndexFieldMetadataEntity
-  | ApplicationRegistrationEntity
-  | ApplicationRegistrationVariableEntity
   | BillingMeterEntity
   | BillingPriceEntity
   | BillingProductEntity

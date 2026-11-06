@@ -8,7 +8,6 @@ import { UsageLimitModule } from 'src/engine/core-modules/usage-limit/usage-limi
 import { WorkflowActionFactory } from 'src/modules/workflow/workflow-executor/factories/workflow-action.factory';
 import { AiAgentActionModule } from 'src/modules/workflow/workflow-executor/workflow-actions/ai-agent/ai-agent-action.module';
 import { ClassifyActionModule } from 'src/modules/workflow/workflow-executor/workflow-actions/classify/classify-action.module';
-import { CodeActionModule } from 'src/modules/workflow/workflow-executor/workflow-actions/code/code-action.module';
 import { CreateCalendarEventActionModule } from 'src/modules/workflow/workflow-executor/workflow-actions/create-calendar-event/create-calendar-event-action.module';
 import { DelayActionModule } from 'src/modules/workflow/workflow-executor/workflow-actions/delay/delay-action.module';
 import { EmptyActionModule } from 'src/modules/workflow/workflow-executor/workflow-actions/empty/empty-action.module';
@@ -17,7 +16,6 @@ import { FormActionModule } from 'src/modules/workflow/workflow-executor/workflo
 import { HttpRequestActionModule } from 'src/modules/workflow/workflow-executor/workflow-actions/http-request/http-request-action.module';
 import { IfElseActionModule } from 'src/modules/workflow/workflow-executor/workflow-actions/if-else/if-else-action.module';
 import { IteratorActionModule } from 'src/modules/workflow/workflow-executor/workflow-actions/iterator/iterator-action.module';
-import { LogicFunctionActionModule } from 'src/modules/workflow/workflow-executor/workflow-actions/logic-function/logic-function-action.module';
 import { MailSenderActionModule } from 'src/modules/workflow/workflow-executor/workflow-actions/mail-sender/mail-sender-action.module';
 import { SendChatMessageActionModule } from 'src/modules/workflow/workflow-executor/workflow-actions/send-chat-message/send-chat-message-action.module';
 import { WaitForEventActionModule } from 'src/modules/workflow/workflow-executor/workflow-actions/wait-for-event/wait-for-event-action.module';
@@ -30,8 +28,6 @@ import { WorkflowStepWaitModule } from 'src/modules/workflow/workflow-wait/workf
   imports: [
     WorkflowCoreModule,
     WorkflowRunModule,
-    CodeActionModule,
-    LogicFunctionActionModule,
     DelayActionModule,
     WaitForEventActionModule,
     RecordCRUDActionModule,

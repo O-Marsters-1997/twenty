@@ -110,9 +110,6 @@ const deriveAllMetadataEventsFromUpdateAction = ({
 
       return [deleteIndexMetadataEvent, createIndexMetadataEvent];
     }
-    case 'applicationVariable': {
-      return [];
-    }
     case 'fieldMetadata':
     case 'objectMetadata':
     case 'view':
@@ -122,7 +119,6 @@ const deriveAllMetadataEventsFromUpdateAction = ({
     case 'rowLevelPermissionPredicate':
     case 'rowLevelPermissionPredicateGroup':
     case 'viewFilterGroup':
-    case 'logicFunction':
     case 'viewFilter':
     case 'role':
     case 'roleTarget':
@@ -132,7 +128,6 @@ const deriveAllMetadataEventsFromUpdateAction = ({
     case 'pageLayoutWidget':
     case 'pageLayoutTab':
     case 'commandMenuItem':
-    case 'frontComponent':
     case 'navigationMenuItem':
     case 'rolePermissionFlag':
     case 'permissionFlag':
@@ -142,9 +137,7 @@ const deriveAllMetadataEventsFromUpdateAction = ({
     case 'webhook':
     case 'workflow':
     case 'workflowVersion':
-    case 'connectionProvider':
     case 'timelineActivityType':
-    case 'settingsMenuItem':
     case 'validationRule':
     case 'searchFieldMetadata': {
       const flatEntityMapsKey = getMetadataFlatEntityMapsKey(

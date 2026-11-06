@@ -15,8 +15,6 @@ const APPLICATION_TOKEN_TYPE_NAME = 'ApplicationTokenPair';
 // reach here; what guards it is the client secret, and the permissions on
 // rotating one.
 const METADATA_FIELDS_RETURNING_AN_APPLICATION_TOKEN = [
-  'FrontComponent.applicationTokenPair',
-  'Mutation.generateFrontComponentApplicationTokenPair',
   'Mutation.renewApplicationToken',
 ];
 

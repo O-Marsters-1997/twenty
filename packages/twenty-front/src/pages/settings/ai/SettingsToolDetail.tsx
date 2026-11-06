@@ -1,26 +1,14 @@
 import { SkeletonLine } from '@/ui/feedback/skeleton/components/SkeletonLine';
-import { currentWorkspaceState } from '@/auth/states/currentWorkspaceState';
-import { useGetOneLogicFunction } from '@/logic-functions/hooks/useGetOneLogicFunction';
-import { usePersistLogicFunction } from '@/logic-functions/hooks/usePersistLogicFunction';
 import { SettingsPageContainer } from '@/settings/components/SettingsPageContainer';
 import { SettingsPageLayout } from '@/settings/components/layout/SettingsPageLayout';
-import { SettingsLogicFunctionLabelContainer } from '@/settings/logic-functions/components/SettingsLogicFunctionLabelContainer';
 import { TextArea } from '@/ui/input/components/TextArea';
-import { ConfirmationDialog } from '@/ui/layout/dialog/components/ConfirmationDialog';
-import { useDialog } from '@/ui/layout/dialog/hooks/useDialog';
-import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useQuery } from '@apollo/client/react';
 import { t } from '@lingui/core/macro';
-import { useState } from 'react';
 
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { SettingsPath } from 'twenty-shared/types';
-import { getSettingsPath, isDefined, isValidUuid } from 'twenty-shared/utils';
-import { useToast } from 'twenty-ui/components/feedback';
+import { getSettingsPath, isDefined } from 'twenty-shared/utils';
 import { Section } from 'twenty-ui/components/layout';
-import { IconTrash } from 'twenty-ui/icon';
-import { Button } from 'twenty-ui/primitives/input';
-import { useDebouncedCallback } from 'use-debounce';
 import {
   GetToolIndexDocument,
   GetToolInputSchemaDocument,
@@ -28,34 +16,11 @@ import {
 import { SettingsToolIcon } from '~/pages/settings/ai/components/SettingsToolIcon';
 import { SettingsToolParameterTable } from '@/settings/ai/components/SettingsToolParameterTable';
 
-const DELETE_TOOL_MODAL_ID = 'delete-tool-modal';
-
 export const SettingsToolDetail = () => {
   const { toolIdentifier } = useParams();
-  const navigate = useNavigate();
-  const { enqueueToast } = useToast();
-  const { updateLogicFunction, deleteLogicFunction } =
-    usePersistLogicFunction();
-  const { openDialog } = useDialog();
-  const currentWorkspace = useAtomStateValue(currentWorkspaceState);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [editedName, setEditedName] = useState<string | null>(null);
-  const [editedDescription, setEditedDescription] = useState<string | null>(
-    null,
-  );
 
-  const isCustomTool = isDefined(toolIdentifier) && isValidUuid(toolIdentifier);
-
-  const { logicFunction, loading: logicFunctionLoading } =
-    useGetOneLogicFunction({
-      id: toolIdentifier ?? '',
-      skip: !isCustomTool,
-    });
-
-  const { data: toolIndexData, loading: toolIndexLoading } = useQuery(
-    GetToolIndexDocument,
-    { skip: isCustomTool },
-  );
+  const { data: toolIndexData, loading: toolIndexLoading } =
+    useQuery(GetToolIndexDocument);
 
   const systemTool = toolIndexData?.getToolIndex.find(
     (entry) => entry.name === toolIdentifier,
@@ -65,124 +30,22 @@ export const SettingsToolDetail = () => {
     GetToolInputSchemaDocument,
     {
       variables: { toolName: toolIdentifier ?? '' },
-      skip: isCustomTool || !isDefined(systemTool),
+      skip: !isDefined(systemTool),
     },
   );
 
-  const loading = isCustomTool
-    ? logicFunctionLoading
-    : toolIndexLoading || schemaLoading;
+  const loading = toolIndexLoading || schemaLoading;
 
-  const workspaceCustomApplicationId =
-    currentWorkspace?.workspaceCustomApplication?.id;
-
-  const isManaged =
-    isCustomTool &&
-    isDefined(logicFunction?.applicationId) &&
-    logicFunction.applicationId !== workspaceCustomApplicationId;
-
-  const isReadOnly = !isCustomTool || isManaged;
-
-  const displayName = isCustomTool
-    ? logicFunction?.name
-    : (systemTool?.label ?? toolIdentifier);
-  const description = isCustomTool
-    ? logicFunction?.description
-    : systemTool?.description;
-
-  const inputSchema = isCustomTool
-    ? logicFunction?.toolTriggerSettings?.inputSchema
-    : schemaData?.getToolInputSchema;
-
-  const functionLink = isCustomTool
-    ? isDefined(logicFunction?.applicationId)
-      ? getSettingsPath(SettingsPath.ApplicationLogicFunctionDetail, {
-          applicationId: logicFunction.applicationId,
-          logicFunctionId: logicFunction?.id ?? '',
-        })
-      : getSettingsPath(SettingsPath.LogicFunctionDetail, {
-          logicFunctionId: logicFunction?.id ?? '',
-        })
-    : undefined;
-
-  const debouncedSaveName = useDebouncedCallback(async (value: string) => {
-    if (!isCustomTool || !isDefined(logicFunction)) return;
-
-    const result = await updateLogicFunction({
-      input: {
-        id: logicFunction.id,
-        update: { name: value },
-      },
-    });
-
-    if (result.status === 'failed') {
-      setEditedName(logicFunction.name);
-    }
-  }, 1_000);
-
-  const handleNameChange = (newName: string) => {
-    setEditedName(newName);
-    debouncedSaveName(newName);
-  };
-
-  const debouncedSaveDescription = useDebouncedCallback(
-    async (value: string) => {
-      if (!isCustomTool || !isDefined(logicFunction)) return;
-
-      const result = await updateLogicFunction({
-        input: {
-          id: logicFunction.id,
-          update: { description: value },
-        },
-      });
-
-      if (result.status === 'failed') {
-        setEditedDescription(logicFunction.description ?? null);
-      }
-    },
-    1_000,
-  );
-
-  const handleDescriptionChange = (value: string) => {
-    setEditedDescription(value);
-    debouncedSaveDescription(value);
-  };
-
-  const handleDelete = async () => {
-    if (!isCustomTool || !isDefined(logicFunction)) return;
-
-    setIsDeleting(true);
-
-    const result = await deleteLogicFunction({
-      input: { id: logicFunction.id },
-    });
-
-    if (result.status === 'successful') {
-      enqueueToast({ status: 'success', children: t`Tool deleted` });
-      navigate(getSettingsPath(SettingsPath.AI, undefined, undefined, 'tools'));
-    } else {
-      enqueueToast({ status: 'error', children: t`Failed to delete tool` });
-    }
-
-    setIsDeleting(false);
-  };
+  const displayName = systemTool?.label ?? toolIdentifier;
+  const inputSchema = schemaData?.getToolInputSchema;
 
   return (
     <SettingsPageLayout
-      title={
-        isCustomTool ? (
-          <SettingsLogicFunctionLabelContainer
-            value={editedName ?? displayName ?? ''}
-            onChange={handleNameChange}
-          />
-        ) : (
-          (displayName ?? '')
-        )
-      }
+      title={displayName ?? ''}
       icon={
         <SettingsToolIcon
           icon={systemTool?.icon}
-          toolName={isCustomTool ? logicFunction?.name : systemTool?.name}
+          toolName={systemTool?.name}
           objectName={systemTool?.objectName ?? undefined}
         />
       }
@@ -195,7 +58,7 @@ export const SettingsToolDetail = () => {
           children: t`AI`,
           href: getSettingsPath(SettingsPath.AI, undefined, undefined, 'tools'),
         },
-        { children: editedName ?? displayName ?? '' },
+        { children: displayName ?? '' },
       ]}
     >
       <SettingsPageContainer>
@@ -216,7 +79,6 @@ export const SettingsToolDetail = () => {
               <SettingsToolParameterTable
                 schemaProperties={inputSchema?.properties ?? {}}
                 requiredFields={inputSchema?.required}
-                functionLink={functionLink}
               />
             </Section.Root>
 
@@ -230,38 +92,14 @@ export const SettingsToolDetail = () => {
                 placeholder={t`Write a description`}
                 minRows={3}
                 maxRows={5}
-                value={editedDescription ?? description ?? ''}
-                onChange={handleDescriptionChange}
-                disabled={isReadOnly}
+                value={systemTool?.description ?? ''}
+                onChange={() => {}}
+                disabled
               />
             </Section.Root>
-
-            {isCustomTool && !isManaged && (
-              <Section.Root>
-                <Section.Header
-                  title={t`Danger zone`}
-                  description={t`Delete this tool`}
-                />
-                <Button
-                  startIcon={<IconTrash />}
-                  size="sm"
-                  onClick={() => openDialog(DELETE_TOOL_MODAL_ID)}
-                  variant="outline"
-                  color="danger"
-                >{t`Delete`}</Button>
-              </Section.Root>
-            )}
           </>
         )}
       </SettingsPageContainer>
-      <ConfirmationDialog
-        dialogId={DELETE_TOOL_MODAL_ID}
-        title={t`Delete Tool`}
-        subtitle={t`Are you sure you want to delete this tool? This action cannot be undone.`}
-        onConfirmClick={handleDelete}
-        confirmButtonText={t`Delete`}
-        loading={isDeleting}
-      />
     </SettingsPageLayout>
   );
 };

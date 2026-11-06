@@ -28,7 +28,7 @@ const STEPS: StepOutputSchemaV2[] = [
   {
     id: 'code',
     name: 'Run code',
-    type: 'CODE',
+    type: 'HTTP_REQUEST',
     outputSchema: {
       result: {
         isLeaf: false,

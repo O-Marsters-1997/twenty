@@ -91,13 +91,6 @@ export const CONFIG_VARIABLES_GROUP_METADATA: Record<
     isHiddenOnLoad: true,
     isHiddenInAdminPanel: false,
   },
-  [ConfigVariablesGroup.LOGIC_FUNCTION_CONFIG]: {
-    position: 1500,
-    description:
-      'In our multi-tenant cloud app, we offload untrusted custom code from workflows to a function execution system (Lambda) for enhanced security and scalability. Self-hosters with a single tenant can typically ignore this configuration.',
-    isHiddenOnLoad: true,
-    isHiddenInAdminPanel: false,
-  },
   [ConfigVariablesGroup.CODE_INTERPRETER_CONFIG]: {
     position: 1550,
     description:

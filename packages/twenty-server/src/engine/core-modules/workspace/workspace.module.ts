@@ -3,8 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { TypeORMModule } from 'src/database/typeorm/typeorm.module';
 import { ApplicationModule } from 'src/engine/core-modules/application/application.module';
-import { ApplicationManifestModule } from 'src/engine/core-modules/application/application-manifest/application-manifest.module';
-import { PreInstalledAppsModule } from 'src/engine/core-modules/application/pre-installed-apps/pre-installed-apps.module';
 import { BillingModule } from 'src/engine/core-modules/billing/billing.module';
 import { EventLogRetentionModule } from 'src/engine/core-modules/event-logs/retention/event-log-retention.module';
 import { CompanyEnrichmentModule } from 'src/engine/core-modules/company-enrichment/company-enrichment.module';
@@ -16,7 +14,6 @@ import { EnterpriseModule } from 'src/engine/core-modules/enterprise/enterprise.
 import { FeatureFlagModule } from 'src/engine/core-modules/feature-flag/feature-flag.module';
 import { FileModule } from 'src/engine/core-modules/file/file.module';
 import { MetricsModule } from 'src/engine/core-modules/metrics/metrics.module';
-import { SdkClientModule } from 'src/engine/core-modules/sdk-client/sdk-client.module';
 import { UserWorkspaceEntity } from 'src/engine/core-modules/user-workspace/user-workspace.entity';
 import { UserWorkspaceModule } from 'src/engine/core-modules/user-workspace/user-workspace.module';
 import { UserEntity } from 'src/engine/core-modules/user/user.entity';
@@ -39,7 +36,6 @@ import { WorkspaceCacheStorageModule } from 'src/engine/workspace-cache-storage/
 import { WorkspaceDataSourceModule } from 'src/engine/workspace-datasource/workspace-datasource.module';
 import { WorkspaceManagerModule } from 'src/engine/workspace-manager/workspace-manager.module';
 import { WorkspaceMigrationModule } from 'src/engine/workspace-manager/workspace-migration/workspace-migration.module';
-import { StandardObjectsPrefillModule } from 'src/engine/workspace-manager/standard-objects-prefill-data/standard-objects-prefill.module';
 
 @Module({
   imports: [
@@ -50,7 +46,6 @@ import { StandardObjectsPrefillModule } from 'src/engine/workspace-manager/stand
       UserWorkspaceEntity,
     ]),
     MetricsModule,
-    StandardObjectsPrefillModule,
     BillingModule,
     EventLogRetentionModule,
     FileModule,
@@ -69,13 +64,10 @@ import { StandardObjectsPrefillModule } from 'src/engine/workspace-manager/stand
     ViewModule,
     WorkspaceManyOrAllFlatEntityMapsCacheModule,
     ApplicationModule,
-    ApplicationManifestModule,
-    PreInstalledAppsModule,
     EnterpriseModule,
     WorkspaceMigrationModule,
     CoreEntityCacheModule,
     UpgradeModule,
-    SdkClientModule,
     CompanyEnrichmentModule,
   ],
   exports: [WorkspaceService, CheckCustomDomainValidRecordsCronCommand],

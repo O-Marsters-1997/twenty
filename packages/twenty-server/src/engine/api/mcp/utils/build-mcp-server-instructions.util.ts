@@ -63,11 +63,8 @@ export const buildMcpServerInstructions = ({
     `  WEBHOOK:          list/create/update/delete_webhook`,
     `  NAVIGATION:       list/create/update/delete_navigation_menu_item`,
     ...(isDirectMode
-      ? [
-          `  LOGIC_FUNCTION:   app_{function_name} — workspace-specific; listed with the other tools`,
-        ]
+      ? []
       : [
-          `  LOGIC_FUNCTION:   app_{function_name} — workspace-specific; use list_logic_function_tools to discover`,
           `  Don't know which tool exists at all? get_tool_catalog with ONE category from the list above, then learn_tools, then execute_tool.`,
         ]),
     ``,

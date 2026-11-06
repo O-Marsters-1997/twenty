@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { ConnectionProviderModule } from 'src/engine/core-modules/application/connection-provider/connection-provider.module';
-import { AppOAuthRefreshModule } from 'src/engine/core-modules/application/connection-provider/refresh/app-oauth-refresh.module';
 import { CalendarChannelEntity } from 'src/engine/metadata-modules/calendar-channel/entities/calendar-channel.entity';
 import { ConnectedAccountMetadataService } from 'src/engine/metadata-modules/connected-account/connected-account-metadata.service';
 import { ConnectedAccountEntity } from 'src/engine/metadata-modules/connected-account/entities/connected-account.entity';
@@ -14,19 +12,15 @@ import { PermissionsModule } from 'src/engine/metadata-modules/permissions/permi
 import { UserRoleModule } from 'src/engine/metadata-modules/user-role/user-role.module';
 import { WebhookSubscriptionModule } from 'src/modules/connected-account/webhook-subscription-manager/webhook-subscription.module';
 import { ApplicationLookupModule } from 'src/engine/core-modules/application/application-lookup/application-lookup.module';
-import { ApplicationRegistrationLookupModule } from 'src/engine/core-modules/application/application-registration/application-registration-lookup/application-registration-lookup.module';
 
 @Module({
   imports: [
     ApplicationLookupModule,
-    ApplicationRegistrationLookupModule,
     TypeOrmModule.forFeature([
       ConnectedAccountEntity,
       CalendarChannelEntity,
       MessageChannelEntity,
     ]),
-    AppOAuthRefreshModule,
-    ConnectionProviderModule,
     WebhookSubscriptionModule,
     PermissionsModule,
     UserRoleModule,

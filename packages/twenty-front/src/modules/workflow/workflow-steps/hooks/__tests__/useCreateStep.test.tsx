@@ -10,7 +10,7 @@ const mockCreateWorkflowVersionStep = jest.fn().mockResolvedValue({
         {
           type: 'CREATE',
           path: ['steps', 0],
-          value: { id: 'step-id', type: 'CODE' },
+          value: { id: 'step-id', type: 'HTTP_REQUEST' },
         },
       ],
     },
@@ -67,7 +67,7 @@ describe('useCreateStep', () => {
 
     await act(async () => {
       await result.current.createStep({
-        newStepType: 'CODE',
+        newStepType: 'HTTP_REQUEST',
         parentStepId: 'parent-step-id',
         nextStepId: undefined,
       });
@@ -77,7 +77,7 @@ describe('useCreateStep', () => {
     expect(mockCreateWorkflowVersionStep).toHaveBeenCalledWith({
       id: 'step-id',
       workflowVersionId: mockWorkflowVersionId,
-      stepType: 'CODE',
+      stepType: 'HTTP_REQUEST',
       parentStepId: 'parent-step-id',
       nextStepId: undefined,
       parentStepConnectionOptions: undefined,

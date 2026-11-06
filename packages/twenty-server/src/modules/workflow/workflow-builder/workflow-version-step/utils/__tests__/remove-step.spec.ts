@@ -25,12 +25,9 @@ describe('removeStep', () => {
   ): WorkflowAction => ({
     id,
     name: `Action ${id}`,
-    type: WorkflowActionType.CODE,
+    type: WorkflowActionType.HTTP_REQUEST,
     settings: {
-      input: {
-        logicFunctionId: 'test',
-        logicFunctionInput: {},
-      },
+      input: { method: 'GET', url: 'https://example.com' },
       outputSchema: {},
       errorHandlingOptions: {
         retryOnFailure: { value: 0 },

@@ -195,7 +195,7 @@ jobs:
           fetch-depth: 10
 
       - name: Install dependencies
-        uses: ./.github/actions/yarn-install
+        uses: ./.github/actions/bun-install
 
       - name: Restore server build cache
         # Best-effort: a hit skips the cold rebuild; a miss simply builds from scratch below.

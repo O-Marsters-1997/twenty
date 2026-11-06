@@ -16,10 +16,6 @@ import {
   FlatEntityMapsExceptionCode,
 } from 'src/engine/metadata-modules/flat-entity/exceptions/flat-entity-maps.exception';
 import {
-  LogicFunctionException,
-  LogicFunctionExceptionCode,
-} from 'src/engine/metadata-modules/logic-function/logic-function.exception';
-import {
   ObjectMetadataException,
   ObjectMetadataExceptionCode,
 } from 'src/engine/metadata-modules/object-metadata/object-metadata.exception';
@@ -43,13 +39,6 @@ const USER_FACING_WORKSPACE_MIGRATION_RUNNER_EXCEPTION_CODES: (keyof typeof Work
     WorkspaceMigrationRunnerExceptionCode.DEFERRED_WORKSPACE_MIGRATION_ACTIONS_IN_PROGRESS,
     WorkspaceMigrationRunnerExceptionCode.DDL_LOCKED,
   ];
-
-const USER_FACING_LOGIC_FUNCTION_EXCEPTION_CODES = [
-  LogicFunctionExceptionCode.LOGIC_FUNCTION_DISABLED,
-  LogicFunctionExceptionCode.LOGIC_FUNCTION_COMPILATION_FAILED,
-  LogicFunctionExceptionCode.LOGIC_FUNCTION_DEPENDENCIES_SIZE_EXCEEDED,
-  LogicFunctionExceptionCode.INVALID_LOGIC_FUNCTION_INPUT,
-];
 
 const USER_FACING_OBJECT_METADATA_EXCEPTION_CODES = [
   ObjectMetadataExceptionCode.OBJECT_METADATA_NOT_FOUND,
@@ -89,10 +78,6 @@ export const isUserFacingToolExecutionError = (error: unknown): boolean => {
 
   if (error instanceof TwentyOrmException) {
     return isTwentyOrmUserInputError(error);
-  }
-
-  if (error instanceof LogicFunctionException) {
-    return USER_FACING_LOGIC_FUNCTION_EXCEPTION_CODES.includes(error.code);
   }
 
   if (error instanceof ObjectMetadataException) {

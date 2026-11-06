@@ -49,9 +49,6 @@ export const computeOrderedMigrationActions = (
     ...aggregatedOrchestratorActionsReport.workflowVersion.create,
     ...aggregatedOrchestratorActionsReport.workflowVersion.update,
 
-    ...aggregatedOrchestratorActionsReport.logicFunction.delete,
-    ...aggregatedOrchestratorActionsReport.logicFunction.create,
-    ...aggregatedOrchestratorActionsReport.logicFunction.update,
 
     ...aggregatedOrchestratorActionsReport.role.delete,
     ...aggregatedOrchestratorActionsReport.role.create,
@@ -86,24 +83,13 @@ export const computeOrderedMigrationActions = (
     ...aggregatedOrchestratorActionsReport.skill.create,
     ...aggregatedOrchestratorActionsReport.skill.update,
 
-    // Menu items CASCADE on frontComponentId, so a repointed item would be lost if its old component were deleted first:
-    // dropped items go first, then new components, then item repoints, and unreferenced components last
     ...aggregatedOrchestratorActionsReport.commandMenuItem.delete,
-    ...aggregatedOrchestratorActionsReport.settingsMenuItem.delete,
-
-    ...aggregatedOrchestratorActionsReport.frontComponent.create,
-    ...aggregatedOrchestratorActionsReport.frontComponent.update,
 
     // commandMenuItem.pageLayoutId is a non-deferrable FK
     ...aggregatedOrchestratorActionsReport.pageLayout.create,
 
     ...aggregatedOrchestratorActionsReport.commandMenuItem.create,
     ...aggregatedOrchestratorActionsReport.commandMenuItem.update,
-
-    ...aggregatedOrchestratorActionsReport.settingsMenuItem.create,
-    ...aggregatedOrchestratorActionsReport.settingsMenuItem.update,
-
-    ...aggregatedOrchestratorActionsReport.frontComponent.delete,
 
     ...aggregatedOrchestratorActionsReport.pageLayoutTab.create,
     ...aggregatedOrchestratorActionsReport.pageLayoutTab.update,
@@ -140,13 +126,6 @@ export const computeOrderedMigrationActions = (
     ...aggregatedOrchestratorActionsReport.webhook.create,
     ...aggregatedOrchestratorActionsReport.webhook.update,
 
-    ...aggregatedOrchestratorActionsReport.applicationVariable.delete,
-    ...aggregatedOrchestratorActionsReport.applicationVariable.create,
-    ...aggregatedOrchestratorActionsReport.applicationVariable.update,
-
-    ...aggregatedOrchestratorActionsReport.connectionProvider.delete,
-    ...aggregatedOrchestratorActionsReport.connectionProvider.create,
-    ...aggregatedOrchestratorActionsReport.connectionProvider.update,
     ...aggregatedOrchestratorActionsReport.timelineActivityType.delete,
     ...aggregatedOrchestratorActionsReport.timelineActivityType.create,
     ...aggregatedOrchestratorActionsReport.timelineActivityType.update,

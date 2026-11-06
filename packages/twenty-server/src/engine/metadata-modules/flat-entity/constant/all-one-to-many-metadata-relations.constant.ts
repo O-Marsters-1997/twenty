@@ -198,7 +198,6 @@ export const ALL_ONE_TO_MANY_METADATA_RELATIONS = {
   index: {
     indexFieldMetadatas: null,
   },
-  logicFunction: {},
   role: {
     roleTargets: {
       metadataName: 'roleTarget',
@@ -298,14 +297,10 @@ export const ALL_ONE_TO_MANY_METADATA_RELATIONS = {
       universalFlatEntityForeignKeyAggregator: 'viewFilterUniversalIdentifiers',
     },
   },
-  frontComponent: {},
   webhook: {},
-  applicationVariable: {},
   viewSort: {},
-  connectionProvider: {},
   searchFieldMetadata: {},
   timelineActivityType: {},
-  settingsMenuItem: {},
   validationRule: {},
   workflow: {},
   workflowVersion: {},

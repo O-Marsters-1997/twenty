@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { WorkspaceIteratorModule } from 'src/database/commands/command-runners/workspace-iterator.module';
-import { ConvertLogicFunctionsToPrebuiltCommand } from 'src/database/commands/upgrade-version-command/2-39/2-39-workspace-command-1788338950836-convert-logic-functions-to-prebuilt.command';
 import { BackfillRecordFormCommand } from 'src/database/commands/upgrade-version-command/2-39/2-39-workspace-command-1788524477000-backfill-record-form.command';
 import { BackfillMessageListJunctionTargetsCommand } from 'src/database/commands/upgrade-version-command/2-39/2-39-workspace-command-1788616074386-backfill-message-list-junction-targets.command';
 import { CreateMessageListMemberViewCommand } from 'src/database/commands/upgrade-version-command/2-39/2-39-workspace-command-1788616075386-create-message-list-member-view.command';
@@ -35,7 +34,6 @@ import { WorkspaceSchemaMigrationRunnerActionHandlersModule } from 'src/engine/w
     WorkspaceSchemaMigrationRunnerActionHandlersModule,
   ],
   providers: [
-    ConvertLogicFunctionsToPrebuiltCommand,
     BackfillRecordFormCommand,
     BackfillMessageListJunctionTargetsCommand,
     CreateMessageListMemberViewCommand,

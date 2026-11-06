@@ -9,7 +9,6 @@ import { ChatThreadsConfigurationDTO } from 'src/engine/metadata-modules/page-la
 import { EmailThreadConfigurationDTO } from 'src/engine/metadata-modules/page-layout-widget/dtos/email-thread-configuration.dto';
 import { FormFieldConfigurationDTO } from 'src/engine/metadata-modules/page-layout-widget/dtos/form-field-configuration.dto';
 import { FieldConfigurationDTO } from 'src/engine/metadata-modules/page-layout-widget/dtos/field-configuration.dto';
-import { FrontComponentConfigurationDTO } from 'src/engine/metadata-modules/page-layout-widget/dtos/front-component-configuration.dto';
 import { IframeConfigurationDTO } from 'src/engine/metadata-modules/page-layout-widget/dtos/iframe-configuration.dto';
 import { LineChartConfigurationDTO } from 'src/engine/metadata-modules/page-layout-widget/dtos/line-chart-configuration.dto';
 import { MessageCampaignBodyConfigurationDTO } from 'src/engine/metadata-modules/page-layout-widget/dtos/message-campaign-body-configuration.dto';
@@ -114,12 +113,6 @@ export const validateWidgetConfigurationInput = ({
     case WidgetConfigurationType.STANDALONE_RICH_TEXT:
       errors = validateWidgetConfigurationByDto(
         StandaloneRichTextConfigurationDTO,
-        configuration,
-      );
-      break;
-    case WidgetConfigurationType.FRONT_COMPONENT:
-      errors = validateWidgetConfigurationByDto(
-        FrontComponentConfigurationDTO,
         configuration,
       );
       break;

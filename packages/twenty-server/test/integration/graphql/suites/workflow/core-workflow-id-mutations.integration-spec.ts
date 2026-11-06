@@ -144,7 +144,7 @@ describe('core workflow id mutations (e2e)', () => {
       {
         input: {
           coreWorkflowVersionId,
-          stepType: 'CODE',
+          stepType: 'DELAY',
           parentStepId: 'trigger',
           position: { x: 200, y: 0 },
         },
@@ -326,7 +326,7 @@ describe('core workflow id mutations (e2e)', () => {
       {
         input: {
           coreWorkflowVersionId: firstVersion.id,
-          stepType: 'CODE',
+          stepType: 'DELAY',
           parentStepId: 'trigger',
           position: { x: 200, y: 0 },
         },

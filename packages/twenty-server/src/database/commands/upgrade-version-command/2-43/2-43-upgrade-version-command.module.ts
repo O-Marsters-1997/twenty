@@ -10,11 +10,9 @@ import { SyncAttachmentRecordPageCommand } from 'src/database/commands/upgrade-v
 import { DeleteSystemReadableObjectNavigationCommandMenuItemsCommand } from 'src/database/commands/upgrade-version-command/2-43/2-43-workspace-command-1790180964414-delete-system-readable-object-navigation-command-menu-items.command';
 import { MoveCampaignSendingTablesToWorkspaceCommand } from 'src/database/commands/upgrade-version-command/2-43/2-43-workspace-command-1790203235337-move-campaign-sending-tables-to-workspace.command';
 import { EnableCommonRecordSharingCommand } from 'src/database/commands/upgrade-version-command/2-43/2-43-workspace-command-1790312694997-enable-common-record-sharing.command';
-import { BackfillLogicFunctionFileRowsCommand } from 'src/database/commands/upgrade-version-command/2-43/2-43-workspace-command-1790262034322-backfill-logic-function-file-rows.command';
 import { RepairInitialCompanyTargetsCommand } from 'src/database/commands/upgrade-version-command/2-43/2-43-workspace-command-1790339692474-repair-initial-company-targets.command';
 import { ProvisionAgentChatThreadTargetCommand } from 'src/database/commands/upgrade-version-command/2-43/2-43-workspace-command-1790317893308-provision-agent-chat-thread-target.command';
 import { LinkChatThreadsToWorkspaceMembersCommand } from 'src/database/commands/upgrade-version-command/2-43/2-43-workspace-command-1790360612188-link-chat-threads-to-workspace-members.command';
-import { BackfillOAuthOnlyApplicationSourceTypeCommand } from 'src/database/commands/upgrade-version-command/2-43/2-43-workspace-command-1790352791059-backfill-oauth-only-application-source-type.command';
 import { ApplicationEntity } from 'src/engine/core-modules/application/application.entity';
 import { AddWorkflowVisibilityCommandMenuItemsCommand } from 'src/database/commands/upgrade-version-command/2-43/2-43-workspace-command-1790358777596-add-workflow-visibility-command-menu-items.command';
 import { ApplicationModule } from 'src/engine/core-modules/application/application.module';
@@ -50,12 +48,10 @@ import { WorkspaceMigrationModule } from 'src/engine/workspace-manager/workspace
     EnableCommonRecordSharingCommand,
     DeleteSystemReadableObjectNavigationCommandMenuItemsCommand,
     MoveCampaignSendingTablesToWorkspaceCommand,
-    BackfillLogicFunctionFileRowsCommand,
     SyncAttachmentRecordPageCommand,
     RelabelAttachmentTargetFieldsCommand,
     ProvisionAgentChatThreadTargetCommand,
     LinkChatThreadsToWorkspaceMembersCommand,
-    BackfillOAuthOnlyApplicationSourceTypeCommand,
     provideWorkspaceScopedRepository(ApplicationEntity),
     AddWorkflowVisibilityCommandMenuItemsCommand,
     provideWorkspaceScopedRepository(FieldMetadataEntity),

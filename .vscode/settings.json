@@ -49,7 +49,6 @@
   ],
   "typescript.preferences.importModuleSpecifier": "non-relative",
   "search.exclude": {
-    "**/.yarn": true
   },
   "oxc.lint.enable": true,
   "jestrunner.codeLensSelector": "**/*.{test,spec,integration-spec}.{js,jsx,ts,tsx}",

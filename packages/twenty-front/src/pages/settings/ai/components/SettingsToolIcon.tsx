@@ -16,20 +16,15 @@ import {
 import { Avatar } from 'twenty-ui/primitives/data-display';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 import { type SettingsAgentToolApplication } from '~/pages/settings/ai/types/SettingsAgentToolApplication';
-import { type SettingsAgentToolMarketplaceApp } from '~/pages/settings/ai/types/SettingsAgentToolMarketplaceApp';
-import { getAbsoluteImageUrl } from '~/utils/image/getAbsoluteImageUrl';
 
 type SettingsToolIconProps = {
   icon?: string | null;
   toolName?: string;
   objectName?: string;
   application?: ApplicationInfo;
-  marketplaceApp?: MarketplaceAppInfo;
 };
 
 type ApplicationInfo = Pick<SettingsAgentToolApplication, 'name'>;
-
-type MarketplaceAppInfo = Pick<SettingsAgentToolMarketplaceApp, 'logoUrl'>;
 
 const getOperationIcon = (toolName: string): IconComponent | null => {
   if (toolName.startsWith('create_')) return IconPlus;
@@ -87,23 +82,10 @@ export const SettingsToolIcon = ({
   toolName,
   objectName,
   application,
-  marketplaceApp,
 }: SettingsToolIconProps) => {
   const { getIcon } = useIcons();
   const theme = useTheme();
   const { objectMetadataItems } = useObjectMetadataItems();
-
-  if (isDefined(application) && isDefined(marketplaceApp?.logoUrl)) {
-    return (
-      <Avatar
-        src={getAbsoluteImageUrl(marketplaceApp.logoUrl)}
-        name={application.name}
-        colorSeed={application.name}
-        shape="square"
-        size="xs"
-      />
-    );
-  }
 
   if (isDefined(application)) {
     return (

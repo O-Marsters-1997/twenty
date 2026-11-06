@@ -9,11 +9,11 @@ const packageChanged = danger.git.modified_files.find((x) =>
   x.includes('package.json'),
 );
 const lockfileChanged = danger.git.modified_files.find((x) =>
-  x.includes('yarn.lock'),
+  x.includes('bun.lock'),
 );
 if (packageChanged && !lockfileChanged) {
-  const message = 'Changes were made to package.json, but not to yarn.lock';
-  const idea = 'Perhaps you need to run `yarn install`?';
+  const message = 'Changes were made to package.json, but not to bun.lock';
+  const idea = 'Perhaps you need to run `bun install`?';
   warn(`${message} - <i>${idea}</i>`);
 }
 

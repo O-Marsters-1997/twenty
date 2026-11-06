@@ -228,11 +228,6 @@ export const PAGE_LAYOUT_WIDGET_FRAGMENT = gql`
       ... on WorkflowVersionConfiguration {
         configurationType
       }
-      ... on FrontComponentConfiguration {
-        configurationType
-        frontComponentId
-        headerCommandMenuItemUniversalIdentifiers
-      }
     }
     pageLayoutTabId
   }

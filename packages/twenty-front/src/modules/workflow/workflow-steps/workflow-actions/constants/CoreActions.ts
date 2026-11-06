@@ -1,5 +1,4 @@
 import { type WorkflowActionType } from '@/workflow/types/Workflow';
-import { CODE_ACTION } from '@/workflow/workflow-steps/workflow-actions/constants/actions/CodeAction';
 import { CREATE_CALENDAR_EVENT_ACTION } from '@/workflow/workflow-steps/workflow-actions/constants/actions/CreateCalendarEventAction';
 import { DRAFT_EMAIL_ACTION } from '@/workflow/workflow-steps/workflow-actions/constants/actions/DraftEmailAction';
 import { HTTP_REQUEST_ACTION } from '@/workflow/workflow-steps/workflow-actions/constants/actions/HttpRequestAction';
@@ -9,7 +8,6 @@ export const CORE_ACTIONS: Array<{
   defaultLabel: string;
   type: Extract<
     WorkflowActionType,
-    | 'CODE'
     | 'SEND_EMAIL'
     | 'DRAFT_EMAIL'
     | 'HTTP_REQUEST'
@@ -21,5 +19,4 @@ export const CORE_ACTIONS: Array<{
   DRAFT_EMAIL_ACTION,
   CREATE_CALENDAR_EVENT_ACTION,
   HTTP_REQUEST_ACTION,
-  CODE_ACTION,
 ];

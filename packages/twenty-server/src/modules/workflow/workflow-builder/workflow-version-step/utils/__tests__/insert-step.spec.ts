@@ -37,12 +37,9 @@ describe('insertStep', () => {
   ): WorkflowAction => ({
     id,
     name: `Action ${id}`,
-    type: WorkflowActionType.CODE,
+    type: WorkflowActionType.EMPTY,
     settings: {
-      input: {
-        logicFunctionId: 'test',
-        logicFunctionInput: {},
-      },
+      input: {},
       outputSchema: {},
       errorHandlingOptions: {
         retryOnFailure: { value: 0 },

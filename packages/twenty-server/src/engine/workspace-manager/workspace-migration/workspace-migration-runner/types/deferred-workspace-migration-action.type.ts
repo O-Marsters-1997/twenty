@@ -1,9 +1,6 @@
-import { type FlatLogicFunction } from 'src/engine/metadata-modules/logic-function/types/flat-logic-function.type';
-
 type DeferredWorkspaceMigrationActionPayloadByName = {
   build_index: { indexMetadataId: string };
   validate_foreignKey: { fieldMetadataId: string };
-  delete_logicFunctionResources: { flatLogicFunction: FlatLogicFunction };
   delete_workflowRuns: {
     coreWorkflowId: string;
     coreWorkflowVersionId?: string;

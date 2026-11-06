@@ -584,7 +584,6 @@ export abstract class CommonBaseQueryRunnerService<
         attributes: {
           universal_identifier: authContext.application.universalIdentifier,
           app_name: authContext.application.name,
-          source_type: authContext.application.sourceType,
         },
       });
 

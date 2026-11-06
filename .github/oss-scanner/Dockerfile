@@ -1,5 +1,5 @@
 # Builds Twenty for Anthropic's OSS Scanner (https://github.com/anthropics/oss-scanner).
-# Mirrors .github/workflows/ci-server.yaml: Yarn 4 install, twenty-shared/twenty-emails/twenty-server builds,
+# Mirrors .github/workflows/ci-server.yaml: Bun install, twenty-shared/twenty-emails/twenty-server builds,
 # then a local Postgres + Redis initialized and seeded so the server and integration tests run offline.
 FROM node:24-bookworm
 ENV DEBIAN_FRONTEND=noninteractive \
@@ -7,8 +7,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
     NX_NO_CLOUD=true \
     NX_DAEMON=false \
     NX_TUI=false \
-    YARN_ENABLE_TELEMETRY=0 \
-    COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+    DO_NOT_TRACK=1
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
       ca-certificates curl gnupg lsb-release git python3 build-essential redis-server \
@@ -18,13 +17,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get update && apt-get install -y --no-install-recommends postgresql-18 \
     && rm -rf /var/lib/apt/lists/*
 
-RUN corepack enable
+RUN npm install -g bun@1.3.11
 
 # scanner contract: the checkout lives inside the image, at /src
 COPY . /src
 WORKDIR /src
 
-RUN yarn install --immutable
+RUN bun install --frozen-lockfile
 
 RUN npx nx build twenty-shared \
     && npx nx build twenty-emails \

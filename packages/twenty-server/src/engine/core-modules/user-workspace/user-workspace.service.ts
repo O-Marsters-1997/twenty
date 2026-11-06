@@ -379,7 +379,6 @@ export class UserWorkspaceService {
       await this.userWorkspaceRepository.delete({ id: userWorkspaceId });
       await this.workspaceCacheService.invalidateAndRecompute(workspaceId, [
         'flatRoleTargetMaps',
-        'userApplicationVariableValueMaps',
       ]);
 
       await this.workflowRunRecordShareService.syncRunsOfCoreWorkflows({

@@ -99,10 +99,10 @@ Import responsive hooks and media-query constants from `twenty-ui/utilities`, `M
 
 ## Development
 
-Use the Node.js version in the repository's `.nvmrc` and the Yarn version in its root `package.json`. Run the following commands from the repository root:
+Use the Node.js version in the repository's `.nvmrc` and the Bun version in its root `package.json`. Run the following commands from the repository root:
 
 ```bash
-yarn install
+bun install
 npx nx generateBarrels twenty-ui
 npx nx storybook:serve:dev twenty-ui
 ```

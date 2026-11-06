@@ -10,7 +10,6 @@ emails and calendar events, files, and credentials for connected Google, Microso
   from per-workspace metadata (custom objects and fields).
 - `packages/twenty-front`: React app.
 - `packages/twenty-shared`: types and utils shared by front and server.
-- `packages/twenty-sdk`, `packages/twenty-front-component-renderer`: the third-party application platform (see below).
 
 Paths below are relative to `packages/twenty-server/src/` unless stated otherwise.
 
@@ -86,7 +85,7 @@ Paths below are relative to `packages/twenty-server/src/` unless stated otherwis
 
 ## Out of scope / known false positives
 - `packages/twenty-website`, `packages/twenty-docs`, `packages/twenty-e2e-testing`, `packages/twenty-apps` (example and
-  internal apps), `packages/twenty-zapier`, `packages/twenty-utils`, `packages/twenty-docker`, storybook, tests and
+  internal apps), `packages/twenty-utils`, `packages/twenty-docker`, storybook, tests and
   test helpers (`packages/twenty-server/test/`), dev seed data (`engine/workspace-manager/dev-seeder`), and their
   placeholder secrets.
 - The `LOCAL` logic-function driver and the `LOCAL` code-interpreter driver run code on the server host. They are

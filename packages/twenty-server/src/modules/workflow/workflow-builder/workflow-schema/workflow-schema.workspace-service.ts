@@ -3,10 +3,7 @@ import { WAIT_FOR_EVENT_NAME_PATTERN } from 'src/modules/workflow/workflow-execu
 import { Injectable, Logger } from '@nestjs/common';
 
 import { isString } from '@sniptt/guards';
-import {
-  getOutputSchemaFromValue,
-  inputSchemaToOutputSchema,
-} from 'twenty-shared/logic-function';
+import { getOutputSchemaFromValue } from 'twenty-shared/logic-function';
 import { isDefined, isValidVariable } from 'twenty-shared/utils';
 import {
   BaseOutputSchemaV2,
@@ -156,7 +153,6 @@ export class WorkflowSchemaWorkspaceService {
         });
       }
       case WorkflowTriggerType.WEBHOOK:
-      case WorkflowActionType.CODE:
       case WorkflowActionType.HTTP_REQUEST: {
         const expectedOutputSchema =
           'expectedOutputSchema' in step.settings
@@ -164,13 +160,6 @@ export class WorkflowSchemaWorkspaceService {
             : undefined;
 
         return this.computeOutputSchemaFromExpectedSample(expectedOutputSchema);
-      }
-      case WorkflowActionType.LOGIC_FUNCTION: {
-        return this.computeLogicFunctionOutputSchema({
-          logicFunctionId: step.settings.input.logicFunctionId,
-          expectedOutputSchema: step.settings.expectedOutputSchema,
-          workspaceId,
-        });
       }
       default:
         return {};
@@ -242,67 +231,6 @@ export class WorkflowSchemaWorkspaceService {
       : {};
   }
 
-  private async computeLogicFunctionOutputSchema({
-    logicFunctionId,
-    expectedOutputSchema,
-    workspaceId,
-  }: {
-    logicFunctionId: string;
-    expectedOutputSchema: object | undefined;
-    workspaceId: string;
-  }): Promise<OutputSchema> {
-    const declaredOutputSchema =
-      await this.getLogicFunctionDeclaredOutputSchema({
-        logicFunctionId,
-        workspaceId,
-      });
-
-    if (isDefined(declaredOutputSchema)) {
-      return declaredOutputSchema;
-    }
-
-    return this.computeOutputSchemaFromExpectedSample(expectedOutputSchema);
-  }
-
-  private async getLogicFunctionDeclaredOutputSchema({
-    logicFunctionId,
-    workspaceId,
-  }: {
-    logicFunctionId: string;
-    workspaceId: string;
-  }): Promise<BaseOutputSchemaV2 | undefined> {
-    if (!isDefined(logicFunctionId)) {
-      return undefined;
-    }
-
-    const { flatLogicFunctionMaps } =
-      await this.flatEntityMapsCacheService.getOrRecomputeManyOrAllFlatEntityMaps(
-        {
-          workspaceId,
-          flatMapsKeys: ['flatLogicFunctionMaps'],
-        },
-      );
-
-    const flatLogicFunction = findFlatEntityByIdInFlatEntityMaps({
-      flatEntityId: logicFunctionId,
-      flatEntityMaps: flatLogicFunctionMaps,
-    });
-
-    const declaredInputSchema =
-      flatLogicFunction?.workflowActionTriggerSettings?.outputSchema;
-
-    if (!isDefined(declaredInputSchema)) {
-      return undefined;
-    }
-
-    const declaredOutputSchema = inputSchemaToOutputSchema(declaredInputSchema);
-
-    if (Object.keys(declaredOutputSchema).length === 0) {
-      return undefined;
-    }
-
-    return declaredOutputSchema;
-  }
 
   private async computeDatabaseEventTriggerOutputSchema({
     eventName,
@@ -727,9 +655,7 @@ export class WorkflowSchemaWorkspaceService {
           }),
         };
       }
-      case WorkflowActionType.CODE:
-      case WorkflowActionType.HTTP_REQUEST:
-      case WorkflowActionType.LOGIC_FUNCTION: {
+      case WorkflowActionType.HTTP_REQUEST: {
         const propertyPath = extractPropertyPathFromVariable(items);
         const outputSchema = this.getOutputSchemaWithExpectedFallback(
           step.settings,

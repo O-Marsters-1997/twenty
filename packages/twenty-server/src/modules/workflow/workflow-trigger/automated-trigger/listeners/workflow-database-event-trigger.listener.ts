@@ -30,7 +30,6 @@ import { omitInheritedReadabilityChildRecords } from 'src/engine/core-modules/re
 import { WorkspaceOrmManager } from 'src/engine/twenty-orm/workspace-orm.manager';
 import { buildSystemAuthContext } from 'src/engine/twenty-orm/utils/build-system-auth-context.util';
 import { type FlatApplication } from 'src/engine/core-modules/application/types/flat-application.type';
-import { findActiveFlatApplicationById } from 'src/engine/core-modules/application/utils/find-active-flat-application-by-id.util';
 import { isApplicationInstallPending } from 'src/engine/core-modules/application/utils/is-application-install-pending.util';
 import { isCachedDatabaseEventTrigger } from 'src/engine/core-modules/workflow/utils/cached-workflow-automated-trigger.util';
 import { WorkspaceCacheService } from 'src/engine/workspace-cache/services/workspace-cache.service';
@@ -448,19 +447,7 @@ export class WorkflowDatabaseEventTriggerListener {
         return [];
       }
 
-      const application = findActiveFlatApplicationById(
-        flatApplicationMaps,
-        workflow.applicationId,
-      );
-
-      return [
-        {
-          ...trigger,
-          installedApplication: application?.canBeUninstalled
-            ? application
-            : undefined,
-        },
-      ];
+      return [trigger];
     });
   }
 

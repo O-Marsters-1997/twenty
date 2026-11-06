@@ -28,8 +28,6 @@ import { CommandMenuItemDTO } from 'src/engine/metadata-modules/command-menu-ite
 import { CreateCommandMenuItemInput } from 'src/engine/metadata-modules/command-menu-item/dtos/create-command-menu-item.input';
 import { UpdateCommandMenuItemInput } from 'src/engine/metadata-modules/command-menu-item/dtos/update-command-menu-item.input';
 import { CommandMenuItemGraphqlApiExceptionInterceptor } from 'src/engine/metadata-modules/command-menu-item/interceptors/command-menu-item-graphql-api-exception.interceptor';
-import { FrontComponentDTO } from 'src/engine/metadata-modules/front-component/dtos/front-component.dto';
-import { FrontComponentService } from 'src/engine/metadata-modules/front-component/front-component.service';
 import { WorkspaceMigrationGraphqlApiExceptionInterceptor } from 'src/engine/workspace-manager/workspace-migration/interceptors/workspace-migration-graphql-api-exception.interceptor';
 import { AuthGraphqlApiExceptionFilter } from 'src/engine/core-modules/auth/filters/auth-graphql-api-exception.filter';
 
@@ -55,7 +53,6 @@ import { AuthGraphqlApiExceptionFilter } from 'src/engine/core-modules/auth/filt
 export class CommandMenuItemResolver {
   constructor(
     private readonly commandMenuItemService: CommandMenuItemService,
-    private readonly frontComponentService: FrontComponentService,
     private readonly coreWorkflowAccessService: CoreWorkflowAccessService,
   ) {}
 
@@ -107,21 +104,6 @@ export class CommandMenuItemResolver {
       workspaceId: workspace.id,
       locale: context.req.locale,
     });
-  }
-
-  @ResolveField(() => FrontComponentDTO, { nullable: true })
-  async frontComponent(
-    @Parent() commandMenuItem: CommandMenuItemDTO,
-    @AuthWorkspace() workspace: WorkspaceEntity,
-  ) {
-    if (!isDefined(commandMenuItem.frontComponentId)) {
-      return null;
-    }
-
-    return this.frontComponentService.findById(
-      commandMenuItem.frontComponentId,
-      workspace.id,
-    );
   }
 
   @Query(() => [CommandMenuItemDTO])

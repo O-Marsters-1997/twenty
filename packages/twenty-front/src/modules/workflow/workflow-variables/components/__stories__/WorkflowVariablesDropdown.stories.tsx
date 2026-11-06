@@ -2,8 +2,8 @@ import { jotaiStore } from '@/ui/utilities/state/jotai/jotaiStore';
 import { flowComponentState } from '@/workflow/states/flowComponentState';
 import { workflowVisualizerWorkflowIdComponentState } from '@/workflow/states/workflowVisualizerWorkflowIdComponentState';
 import {
-  type WorkflowCodeAction,
   type WorkflowEmptyAction,
+  type WorkflowHttpRequestAction,
 } from '@/workflow/types/Workflow';
 import { getStepOutputSchemaFamilyStateKey } from '@/workflow/utils/getStepOutputSchemaFamilyStateKey';
 import { WorkflowVisualizerComponentInstanceContext } from '@/workflow/workflow-diagram/states/contexts/WorkflowVisualizerComponentInstanceContext';
@@ -59,18 +59,15 @@ const CURRENT_STEP: WorkflowEmptyAction = {
   settings: STEP_SETTINGS,
 };
 
-const PREVIOUS_STEP: WorkflowCodeAction = {
+const PREVIOUS_STEP: WorkflowHttpRequestAction = {
   id: PREVIOUS_STEP_ID,
   name: 'Run code',
-  type: 'CODE',
+  type: 'HTTP_REQUEST',
   valid: true,
   nextStepIds: [CURRENT_STEP_ID],
   settings: {
     ...STEP_SETTINGS,
-    input: {
-      logicFunctionId: 'd0eab6eb-8517-4db5-94e9-8bde5b95fb64',
-      logicFunctionInput: {},
-    },
+    input: { method: 'GET', url: 'https://example.com' },
     outputSchema: OUTPUT_SCHEMA,
   },
 };

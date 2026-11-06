@@ -3,20 +3,13 @@ import { useMemo } from 'react';
 
 import { useGetToolIndex } from '@/ai/hooks/useGetToolIndex';
 import { currentWorkspaceState } from '@/auth/states/currentWorkspaceState';
-import { logicFunctionsSelector } from '@/logic-functions/states/logicFunctionsSelector';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { ToolCategory } from 'twenty-shared/ai';
-import { isDefined } from 'twenty-shared/utils';
-import {
-  type FindManyApplicationsForToolTableQuery,
-  type FindManyMarketplaceAppsForToolTableQuery,
-} from '~/generated-metadata/graphql';
+import { type FindManyApplicationsForToolTableQuery } from '~/generated-metadata/graphql';
 import { FIND_MANY_APPLICATIONS_FOR_TOOL_TABLE } from '~/pages/settings/ai/graphql/queries/findManyApplicationsForToolTable';
-import { FIND_MANY_MARKETPLACE_APPS_FOR_TOOL_TABLE } from '~/pages/settings/ai/graphql/queries/findManyMarketplaceAppsForToolTable';
 import { type SettingsAgentToolItem } from '~/pages/settings/ai/types/SettingsAgentToolItem';
 
 export const useSettingsAgentToolsTable = () => {
-  const logicFunctions = useAtomStateValue(logicFunctionsSelector);
   const currentWorkspace = useAtomStateValue(currentWorkspaceState);
   const {
     toolIndex,
@@ -29,21 +22,8 @@ export const useSettingsAgentToolsTable = () => {
       FIND_MANY_APPLICATIONS_FOR_TOOL_TABLE,
     );
 
-  const { data: marketplaceAppsData } =
-    useQuery<FindManyMarketplaceAppsForToolTableQuery>(
-      FIND_MANY_MARKETPLACE_APPS_FOR_TOOL_TABLE,
-    );
-
   const allTools: SettingsAgentToolItem[] = useMemo(
     () => [
-      ...logicFunctions
-        .filter((fn) => isDefined(fn.toolTriggerSettings))
-        .map((fn) => ({
-          identifier: fn.id,
-          name: fn.name,
-          description: fn.description,
-          applicationId: fn.applicationId,
-        })),
       ...toolIndex
         .filter((tool) => tool.category !== ToolCategory.LOGIC_FUNCTION)
         .map((tool) => ({
@@ -56,7 +36,7 @@ export const useSettingsAgentToolsTable = () => {
           icon: tool.icon,
         })),
     ],
-    [logicFunctions, toolIndex],
+    [toolIndex],
   );
 
   const applicationById = new Map(
@@ -66,18 +46,11 @@ export const useSettingsAgentToolsTable = () => {
     ]),
   );
 
-  const marketplaceAppByUniversalIdentifier = new Map(
-    (marketplaceAppsData?.findManyMarketplaceApps ?? []).map(
-      (marketplaceApp) => [marketplaceApp.id, marketplaceApp],
-    ),
-  );
-
   const isLoading = toolIndexLoading && !toolIndexError;
 
   return {
     allTools,
     applicationById,
-    marketplaceAppByUniversalIdentifier,
     currentWorkspace,
     isLoading,
   };

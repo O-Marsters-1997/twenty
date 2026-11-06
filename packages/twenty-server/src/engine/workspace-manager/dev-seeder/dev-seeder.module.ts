@@ -4,9 +4,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { ApiKeyModule } from 'src/engine/core-modules/api-key/api-key.module';
-import { ApplicationRegistrationModule } from 'src/engine/core-modules/application/application-registration/application-registration.module';
 import { ApplicationModule } from 'src/engine/core-modules/application/application.module';
-import { SdkClientModule } from 'src/engine/core-modules/sdk-client/sdk-client.module';
 import { SecretEncryptionModule } from 'src/engine/core-modules/secret-encryption/secret-encryption.module';
 import { RecordShareStorageModule } from 'src/engine/core-modules/record-share/record-share-storage.module';
 import { WorkflowVersionEntity } from 'src/engine/core-modules/workflow/entities/workflow-version.entity';
@@ -35,7 +33,6 @@ import { TimelineActivitySeederService } from 'src/engine/workspace-manager/dev-
 import { TimelineActivityModule } from 'src/modules/timeline/timeline-activity.module';
 import { DevSeederMetadataService } from 'src/engine/workspace-manager/dev-seeder/metadata/services/dev-seeder-metadata.service';
 import { DevSeederWorkspaceService } from 'src/engine/workspace-manager/dev-seeder/services/dev-seeder.workspace-service';
-import { StandardObjectsPrefillModule } from 'src/engine/workspace-manager/standard-objects-prefill-data/standard-objects-prefill.module';
 import { TwentyStandardApplicationModule } from 'src/engine/workspace-manager/twenty-standard-application/twenty-standard-application.module';
 import { WorkspaceMigrationModule } from 'src/engine/workspace-manager/workspace-migration/workspace-migration.module';
 import { WorkflowAgentConversationModule } from 'src/modules/workflow/workflow-executor/workflow-actions/ai-agent/workflow-agent-conversation.module';
@@ -56,7 +53,6 @@ import { WorkflowRunModule } from 'src/modules/workflow/workflow-runner/workflow
     UserRoleModule,
     ApiKeyModule,
     ApplicationModule,
-    ApplicationRegistrationModule,
     TypeOrmModule.forFeature([
       WorkspaceEntity,
       ObjectMetadataEntity,
@@ -65,11 +61,9 @@ import { WorkflowRunModule } from 'src/modules/workflow/workflow-runner/workflow
     ]),
     ObjectPermissionModule,
     WorkspaceManyOrAllFlatEntityMapsCacheModule,
-    StandardObjectsPrefillModule,
     WorkspaceCacheModule,
     WorkspaceMigrationModule,
     TwentyStandardApplicationModule,
-    SdkClientModule,
     SecretEncryptionModule,
     UpgradeModule,
     WorkflowRunModule,

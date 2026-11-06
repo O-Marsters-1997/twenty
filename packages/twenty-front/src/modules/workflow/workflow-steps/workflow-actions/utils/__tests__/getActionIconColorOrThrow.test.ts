@@ -3,13 +3,11 @@ import { getActionIconColorOrThrow } from '@/workflow/workflow-steps/workflow-ac
 import { themeCssVariables } from 'twenty-ui/theme';
 
 describe('getActionIconColorOrThrow', () => {
-  it('returns red9 for CODE, HTTP_REQUEST, SEND_EMAIL, DRAFT_EMAIL, LOGIC_FUNCTION', () => {
+  it('returns red9 for HTTP_REQUEST, SEND_EMAIL, DRAFT_EMAIL', () => {
     const redActions: WorkflowActionType[] = [
-      'CODE',
       'HTTP_REQUEST',
       'SEND_EMAIL',
       'DRAFT_EMAIL',
-      'LOGIC_FUNCTION',
       'CREATE_CALENDAR_EVENT',
     ];
     redActions.forEach((actionType) => {
@@ -69,8 +67,8 @@ describe('getActionIconColorOrThrow', () => {
   );
 
   it('returns consistent values for repeated calls', () => {
-    expect(getActionIconColorOrThrow('CODE')).toBe(
-      getActionIconColorOrThrow('CODE'),
+    expect(getActionIconColorOrThrow('HTTP_REQUEST')).toBe(
+      getActionIconColorOrThrow('HTTP_REQUEST'),
     );
   });
 });

@@ -80,7 +80,6 @@ export class AgentResolver {
       kind: 'applicationOwnedEntity',
       metadataName: 'agent',
       idKey: 'id',
-      requireApplicationRegistrationOwnership: false,
     })
     { id }: AgentIdInput,
     @AuthWorkspace() { id: workspaceId }: WorkspaceEntity,
@@ -121,7 +120,6 @@ export class AgentResolver {
       kind: 'applicationOwnedEntity',
       metadataName: 'agent',
       idKey: 'id',
-      requireApplicationRegistrationOwnership: false,
     })
     input: UpdateAgentInput,
     @AuthWorkspace() workspace: WorkspaceEntity,

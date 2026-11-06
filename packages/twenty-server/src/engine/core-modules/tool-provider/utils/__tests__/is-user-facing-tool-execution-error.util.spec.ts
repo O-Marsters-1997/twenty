@@ -18,10 +18,6 @@ import {
   FlatEntityMapsExceptionCode,
 } from 'src/engine/metadata-modules/flat-entity/exceptions/flat-entity-maps.exception';
 import {
-  LogicFunctionException,
-  LogicFunctionExceptionCode,
-} from 'src/engine/metadata-modules/logic-function/logic-function.exception';
-import {
   ObjectMetadataException,
   ObjectMetadataExceptionCode,
 } from 'src/engine/metadata-modules/object-metadata/object-metadata.exception';
@@ -89,22 +85,6 @@ describe('isUserFacingToolExecutionError', () => {
       new TwentyOrmException(
         'Query read timeout',
         TwentyOrmExceptionCode.QUERY_READ_TIMEOUT,
-      ),
-      false,
-    ],
-    [
-      'a disabled logic function',
-      new LogicFunctionException(
-        'Disabled',
-        LogicFunctionExceptionCode.LOGIC_FUNCTION_DISABLED,
-      ),
-      true,
-    ],
-    [
-      'a logic function build timing out on the platform',
-      new LogicFunctionException(
-        'Lambda timed out during BUILD',
-        LogicFunctionExceptionCode.LOGIC_FUNCTION_EXECUTION_TIMEOUT,
       ),
       false,
     ],

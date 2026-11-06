@@ -14,20 +14,6 @@ const aiAgentStepLogDetailsSchema = agentRunSummarySchema.extend({
   threadId: z.string().optional(),
 });
 
-const codeStepLogDetailsSchema = z.object({
-  type: z.literal('CODE'),
-  durationMs: z.number(),
-  status: z.enum(['SUCCESS', 'ERROR']),
-  error: z
-    .object({
-      type: z.string(),
-      message: z.string(),
-      stackTrace: z.string().optional(),
-    })
-    .nullable()
-    .optional(),
-});
-
 const httpRequestStepLogDetailsSchema = z.object({
   type: z.literal('HTTP_REQUEST'),
   request: z.object({
@@ -89,7 +75,6 @@ const createCalendarEventStepLogDetailsSchema = z.object({
 
 const stepLogDetailsSchema = z.discriminatedUnion('type', [
   aiAgentStepLogDetailsSchema,
-  codeStepLogDetailsSchema,
   httpRequestStepLogDetailsSchema,
   emailStepLogDetailsSchema,
   createCalendarEventStepLogDetailsSchema,

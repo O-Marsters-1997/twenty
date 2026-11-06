@@ -54,11 +54,6 @@ export class MetadataEventResolutionService {
     const buildI18nContext =
       await this.applicationTranslationCatalogService.getI18nContextByApplicationId(
         {
-          applicationIds: translatableEvents.flatMap((metadataEvent) =>
-            RECORD_KEYS.map((key) =>
-              readRecordApplicationId(metadataEvent.properties[key]),
-            ),
-          ),
           locale,
           workspaceId,
         },

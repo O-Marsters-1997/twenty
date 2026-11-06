@@ -57,7 +57,7 @@ describe('Database event trigger filter (e2e)', () => {
 
     await createCoreWorkflowVersionStep({
       coreWorkflowVersionId,
-      stepType: 'CODE',
+      stepType: 'DELAY',
     });
 
     await activateCoreWorkflowVersion({ coreWorkflowVersionId });

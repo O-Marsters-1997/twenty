@@ -49,7 +49,6 @@ const buildConnectedAccount = (account: {
   scopes: null,
   handleAliases: null,
   lastSignedInAt: null,
-  connectionProviderId: null,
   applicationId: null,
   name: null,
   visibility: 'user',

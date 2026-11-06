@@ -39,8 +39,6 @@ import { RoleEntity } from 'src/engine/metadata-modules/role/role.entity';
 import { RowLevelPermissionPredicateGroupEntity } from 'src/engine/metadata-modules/row-level-permission-predicate/entities/row-level-permission-predicate-group.entity';
 import { RowLevelPermissionPredicateEntity } from 'src/engine/metadata-modules/row-level-permission-predicate/entities/row-level-permission-predicate.entity';
 import { SearchFieldMetadataEntity } from 'src/engine/metadata-modules/search-field-metadata/search-field-metadata.entity';
-import { LogicFunctionLayerEntity } from 'src/engine/metadata-modules/logic-function-layer/logic-function-layer.entity';
-import { LogicFunctionEntity } from 'src/engine/metadata-modules/logic-function/logic-function.entity';
 import { SkillEntity } from 'src/engine/metadata-modules/skill/entities/skill.entity';
 import { ViewFieldEntity } from 'src/engine/metadata-modules/view-field/entities/view-field.entity';
 import { ViewFilterGroupEntity } from 'src/engine/metadata-modules/view-filter-group/entities/view-filter-group.entity';
@@ -80,14 +78,12 @@ const WORKSPACE_RELATED_ENTITIES: EntityTarget<ObjectLiteral>[] = [
   PageLayoutEntity,
   PermissionFlagEntity,
   SkillEntity,
-  LogicFunctionEntity,
 
   ObjectMetadataEntity,
   RoleEntity,
   AgentEntity,
   UserWorkspaceEntity,
   ApiKeyEntity,
-  LogicFunctionLayerEntity,
 
   ApplicationEntity,
   ApprovedAccessDomainEntity,

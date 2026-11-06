@@ -8,7 +8,6 @@ import { useWorkspaceAiModelTiers } from '@/ai/hooks/useWorkspaceAiModelTiers';
 import { agentChatUserSelectedModelTierState } from '@/ai/states/agentChatUserSelectedModelTierState';
 import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomState';
 
-// Kept coarse because it is part of the front component SDK surface.
 export type AgentChatModelPreselection = 'FAST' | 'SMART';
 
 const TIER_BY_PRESELECTION: Record<AgentChatModelPreselection, AiModelTier> = {

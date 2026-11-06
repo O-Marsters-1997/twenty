@@ -6,43 +6,56 @@ FROM node:24.19.0-alpine3.23@sha256:244cc2b53f46f9e876304391d17682b0ddae9ac33491
 
 WORKDIR /app
 
-COPY ./package.json ./yarn.lock ./.yarnrc.yml ./tsconfig.base.json ./nx.json /app/
-COPY ./.yarn/releases /app/.yarn/releases
-COPY ./.yarn/patches /app/.yarn/patches
+RUN npm install --global bun@1.3.11
 
-COPY ./packages/twenty-ui/package.json /app/packages/twenty-ui/
-COPY ./packages/twenty-shared/package.json /app/packages/twenty-shared/
+COPY ./package.json ./bun.lock ./bunfig.toml ./tsconfig.base.json ./nx.json /app/
+COPY ./patches /app/patches
+
+# bun validates every workspace listed in package.json, even under --filter
+COPY ./packages/twenty-docs/package.json /app/packages/twenty-docs/
+COPY ./packages/twenty-e2e-testing/package.json /app/packages/twenty-e2e-testing/
+COPY ./packages/twenty-emails/package.json /app/packages/twenty-emails/
 COPY ./packages/twenty-front/package.json /app/packages/twenty-front/
-COPY ./packages/twenty-front-component-renderer/package.json /app/packages/twenty-front-component-renderer/
-COPY ./packages/twenty-sdk/package.json /app/packages/twenty-sdk/
-COPY ./packages/twenty-client-sdk/package.json /app/packages/twenty-client-sdk/
+COPY ./packages/twenty-oxlint-rules/package.json /app/packages/twenty-oxlint-rules/
+COPY ./packages/twenty-server/package.json /app/packages/twenty-server/
+COPY ./packages/twenty-shared/package.json /app/packages/twenty-shared/
+COPY ./packages/twenty-ui/package.json /app/packages/twenty-ui/
+COPY ./packages/twenty-utils/package.json /app/packages/twenty-utils/
+COPY ./packages/twenty-website/package.json /app/packages/twenty-website/
 
-RUN yarn workspaces focus twenty-monorepo twenty-front twenty-front-component-renderer twenty-ui twenty-shared twenty-sdk twenty-client-sdk && yarn cache clean && npx nx reset
+
+RUN bun install --frozen-lockfile --filter . --filter twenty-front --filter twenty-ui --filter twenty-shared && bun pm cache rm && npx nx reset
 
 
 FROM node:24.19.0-alpine3.23@sha256:244cc2b53f46f9e876304391d17682b0ddae9ac33491f4857e25e35a36ba7995 AS server-deps
 
 WORKDIR /app
 
-COPY ./package.json ./yarn.lock ./.yarnrc.yml ./tsconfig.base.json ./nx.json /app/
-COPY ./.yarn/releases /app/.yarn/releases
-COPY ./.yarn/patches /app/.yarn/patches
+RUN npm install --global bun@1.3.11
 
+COPY ./package.json ./bun.lock ./bunfig.toml ./tsconfig.base.json ./nx.json /app/
+COPY ./patches /app/patches
+
+# bun validates every workspace listed in package.json, even under --filter
+COPY ./packages/twenty-docs/package.json /app/packages/twenty-docs/
+COPY ./packages/twenty-e2e-testing/package.json /app/packages/twenty-e2e-testing/
 COPY ./packages/twenty-emails/package.json /app/packages/twenty-emails/
-COPY ./packages/twenty-server/package.json /app/packages/twenty-server/
-COPY ./packages/twenty-server/patches /app/packages/twenty-server/patches
-COPY ./packages/twenty-shared/package.json /app/packages/twenty-shared/
-COPY ./packages/twenty-client-sdk/package.json /app/packages/twenty-client-sdk/
+COPY ./packages/twenty-front/package.json /app/packages/twenty-front/
 COPY ./packages/twenty-oxlint-rules/package.json /app/packages/twenty-oxlint-rules/
+COPY ./packages/twenty-server/package.json /app/packages/twenty-server/
+COPY ./packages/twenty-shared/package.json /app/packages/twenty-shared/
+COPY ./packages/twenty-ui/package.json /app/packages/twenty-ui/
+COPY ./packages/twenty-utils/package.json /app/packages/twenty-utils/
+COPY ./packages/twenty-website/package.json /app/packages/twenty-website/
 
-RUN yarn workspaces focus twenty-monorepo twenty-server twenty-emails twenty-shared twenty-client-sdk && yarn cache clean && npx nx reset
+
+RUN bun install --frozen-lockfile --filter . --filter twenty-server --filter twenty-emails --filter twenty-shared && bun pm cache rm && npx nx reset
 
 
 FROM server-deps AS twenty-server-build
 
 COPY ./packages/twenty-emails /app/packages/twenty-emails
 COPY ./packages/twenty-shared /app/packages/twenty-shared
-COPY ./packages/twenty-client-sdk /app/packages/twenty-client-sdk
 COPY ./packages/twenty-server /app/packages/twenty-server
 
 RUN npx nx run twenty-server:lingui:extract && \
@@ -57,17 +70,14 @@ RUN npx nx run twenty-server:build
 RUN find /app/packages/twenty-server/dist -name '*.d.ts' -delete \
  && rm -rf /app/packages/twenty-server/dist/packages/twenty-server/test
 
-RUN yarn workspaces focus --production twenty-emails twenty-shared twenty-client-sdk twenty-server
+RUN bun install --frozen-lockfile --production --filter twenty-emails --filter twenty-shared --filter twenty-server
 
 
 FROM front-deps AS twenty-front-build
 
 COPY ./packages/twenty-front /app/packages/twenty-front
-COPY ./packages/twenty-front-component-renderer /app/packages/twenty-front-component-renderer
 COPY ./packages/twenty-ui /app/packages/twenty-ui
 COPY ./packages/twenty-shared /app/packages/twenty-shared
-COPY ./packages/twenty-sdk /app/packages/twenty-sdk
-COPY ./packages/twenty-client-sdk /app/packages/twenty-client-sdk
 RUN npx nx run twenty-front:lingui:extract && \
     npx nx run twenty-front:lingui:compile
 # To skip the memory-intensive frontend build, pre-build on the host:
@@ -109,19 +119,17 @@ ENV APP_VERSION=$APP_VERSION
 ENV NODE_ENV=production
 
 # Workspace root config
-COPY --chown=1000 --from=twenty-server-build /app/package.json /app/yarn.lock /app/.yarnrc.yml /app/
+COPY --chown=1000 --from=twenty-server-build /app/package.json /app/
 COPY --chown=1000 --from=twenty-server-build /app/tsconfig.base.json /app/nx.json /app/
-COPY --chown=1000 --from=twenty-server-build /app/.yarn /app/.yarn
 COPY --chown=1000 --from=twenty-server-build /app/node_modules /app/node_modules
 
 # Server package (compiled dist + package.json only, no src/)
 COPY --chown=1000 --from=twenty-server-build /app/packages/twenty-server/package.json /app/packages/twenty-server/
 COPY --chown=1000 --from=twenty-server-build /app/packages/twenty-server/dist /app/packages/twenty-server/dist
-COPY --chown=1000 --from=twenty-server-build /app/packages/twenty-server/patches /app/packages/twenty-server/patches
 # Shell entrypoints referenced by package.json scripts (command:prod:background*)
 COPY --chown=1000 --from=twenty-server-build /app/packages/twenty-server/scripts /app/packages/twenty-server/scripts
 # COPY preserves the committed mode, but the scripts are also invoked directly
-# and not only through yarn, so do not let a dropped exec bit reach the pod
+# and not only through the package.json scripts, so do not let a dropped exec bit reach the pod
 RUN chmod +x /app/packages/twenty-server/scripts/command-background.sh
 
 # Workspace packages (dist + package.json; node_modules symlinks resolve to these)
@@ -129,16 +137,14 @@ COPY --chown=1000 --from=twenty-server-build /app/packages/twenty-shared/package
 COPY --chown=1000 --from=twenty-server-build /app/packages/twenty-shared/dist /app/packages/twenty-shared/dist
 COPY --chown=1000 --from=twenty-server-build /app/packages/twenty-emails/package.json /app/packages/twenty-emails/
 COPY --chown=1000 --from=twenty-server-build /app/packages/twenty-emails/dist /app/packages/twenty-emails/dist
-COPY --chown=1000 --from=twenty-server-build /app/packages/twenty-client-sdk/package.json /app/packages/twenty-client-sdk/
-COPY --chown=1000 --from=twenty-server-build /app/packages/twenty-client-sdk/dist /app/packages/twenty-client-sdk/dist
 
 LABEL org.opencontainers.image.source=https://github.com/twentyhq/twenty
 LABEL org.opencontainers.image.description="Twenty server image (no frontend)."
 
 # Remove unused, unpatchable components the scanner flags (none are executed at
 # runtime, and none can be fixed by upgrading our deps or Node):
-#  - the bundled npm CLI: the app uses yarn via corepack and never invokes npm,
-#    and npm's bundled ip-address has no patched release;
+#  - the bundled npm CLI and the yarn classic the base image ships: the app
+#    invokes neither, and npm's bundled ip-address has no patched release;
 #  - example/ apps vendored inside dependencies, e.g. passport-microsoft's
 #    example/login ships a package-lock.json for an old Express demo
 #    (body-parser, ejs, express, ...) that is never installed or run.
@@ -153,6 +159,7 @@ LABEL org.opencontainers.image.description="Twenty server image (no frontend)."
 # Keep the base current when Node ships 24.x security releases — the scanner
 # flags the statically-linked node binary itself.
 RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx \
+      /usr/local/bin/yarn /usr/local/bin/yarnpkg /opt/yarn-* \
       /usr/local/include/node && \
     find /app/node_modules -type d -name example -prune -exec rm -rf {} +
 
@@ -263,23 +270,19 @@ RUN if [ "$TARGETARCH" = "arm64" ]; then ln -s /lib/ld-2.35.so /lib/ld-linux-aar
  && adduser -S -D -H -h /data/clickhouse -G clickhouse clickhouse
 
 # Workspace root config
-COPY --from=twenty-server-build /app/package.json /app/yarn.lock /app/.yarnrc.yml /app/
+COPY --from=twenty-server-build /app/package.json /app/
 COPY --from=twenty-server-build /app/tsconfig.base.json /app/nx.json /app/
-COPY --from=twenty-server-build /app/.yarn /app/.yarn
 COPY --from=twenty-server-build /app/node_modules /app/node_modules
 
 # Server package (compiled dist + package.json only, no src/)
 COPY --from=twenty-server-build /app/packages/twenty-server/package.json /app/packages/twenty-server/
 COPY --from=twenty-server-build /app/packages/twenty-server/dist /app/packages/twenty-server/dist
-COPY --from=twenty-server-build /app/packages/twenty-server/patches /app/packages/twenty-server/patches
 
 # Workspace packages (dist + package.json; node_modules symlinks resolve to these)
 COPY --from=twenty-server-build /app/packages/twenty-shared/package.json /app/packages/twenty-shared/
 COPY --from=twenty-server-build /app/packages/twenty-shared/dist /app/packages/twenty-shared/dist
 COPY --from=twenty-server-build /app/packages/twenty-emails/package.json /app/packages/twenty-emails/
 COPY --from=twenty-server-build /app/packages/twenty-emails/dist /app/packages/twenty-emails/dist
-COPY --from=twenty-server-build /app/packages/twenty-client-sdk/package.json /app/packages/twenty-client-sdk/
-COPY --from=twenty-server-build /app/packages/twenty-client-sdk/dist /app/packages/twenty-client-sdk/dist
 
 # Frontend static build
 COPY --from=twenty-front-build /app/packages/twenty-front/build /app/packages/twenty-server/dist/front

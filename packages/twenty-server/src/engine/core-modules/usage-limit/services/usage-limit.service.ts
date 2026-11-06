@@ -29,7 +29,6 @@ import { validateUsageLimitAgainstDefinition } from 'src/engine/core-modules/usa
 import { validateUsageLimitAgainstKindRule } from 'src/engine/core-modules/usage-limit/utils/validate-usage-limit-against-kind-rule.util';
 import { UserWorkspaceEntity } from 'src/engine/core-modules/user-workspace/user-workspace.entity';
 import { AgentEntity } from 'src/engine/metadata-modules/ai/ai-agent/entities/agent.entity';
-import { LogicFunctionEntity } from 'src/engine/metadata-modules/logic-function/logic-function.entity';
 import { InjectWorkspaceScopedRepository } from 'src/engine/twenty-orm/workspace-scoped-repository/inject-workspace-scoped-repository.decorator';
 import { WorkspaceScopedRepository } from 'src/engine/twenty-orm/workspace-scoped-repository/workspace-scoped-repository';
 import { WorkspaceCacheService } from 'src/engine/workspace-cache/services/workspace-cache.service';
@@ -47,8 +46,6 @@ export class UsageLimitService {
     private readonly userWorkspaceRepository: WorkspaceScopedRepository<UserWorkspaceEntity>,
     @InjectWorkspaceScopedRepository(AgentEntity)
     private readonly agentRepository: WorkspaceScopedRepository<AgentEntity>,
-    @InjectWorkspaceScopedRepository(LogicFunctionEntity)
-    private readonly logicFunctionRepository: WorkspaceScopedRepository<LogicFunctionEntity>,
     private readonly workspaceCacheService: WorkspaceCacheService,
     private readonly usageLimitQuotaService: UsageLimitQuotaService,
     private readonly usageLimitStockService: UsageLimitStockService,
@@ -356,10 +353,6 @@ export class UsageLimitService {
         });
       case 'agent':
         return this.agentRepository.existsBy(workspaceId, { id: spenderId });
-      case 'logicFunction':
-        return this.logicFunctionRepository.existsBy(workspaceId, {
-          id: spenderId,
-        });
       default:
         throw new UsageLimitException(
           `A ${spenderType} spender id cannot be checked against the workspace`,

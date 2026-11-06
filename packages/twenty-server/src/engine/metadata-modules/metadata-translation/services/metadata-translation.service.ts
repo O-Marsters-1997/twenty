@@ -97,7 +97,6 @@ export class MetadataTranslationService {
       const getI18nContext =
         await this.applicationTranslationCatalogService.getI18nContextByApplicationId(
           {
-            applicationIds: [applicationId],
             locale,
             workspaceId,
           },

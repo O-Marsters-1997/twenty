@@ -2,7 +2,6 @@ import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { type ReactNode } from 'react';
 
-import { FrontComponentMediaSessionIndicator } from '@/front-components/media-session/components/FrontComponentMediaSessionIndicator';
 import { NavigationDrawerCollapseButton } from '@/ui/navigation/navigation-drawer/components/NavigationDrawerCollapseButton';
 
 import { useIsSettingsPage } from '@/navigation/hooks/useIsSettingsPage';
@@ -143,7 +142,6 @@ export const PageHeader = ({
           data-click-outside-id={PAGE_ACTION_CONTAINER_CLICK_OUTSIDE_ID}
         >
           {children}
-          {isMobile && <FrontComponentMediaSessionIndicator />}
         </StyledPageActionContainer>
       </StyledTopBarContainer>
     </AnimatePresence>

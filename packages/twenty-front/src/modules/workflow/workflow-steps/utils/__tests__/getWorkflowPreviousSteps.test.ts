@@ -7,14 +7,11 @@ describe('getWorkflowPreviousSteps', () => {
       {
         id: 'step1',
         name: 'First Step',
-        type: 'CODE',
+        type: 'HTTP_REQUEST',
         valid: true,
         nextStepIds: ['step2', 'step3'],
         settings: {
-          input: {
-            logicFunctionId: 'func1',
-            logicFunctionInput: {},
-          },
+          input: { method: 'GET', url: 'https://example.com' },
           outputSchema: {},
           errorHandlingOptions: {
             retryOnFailure: { value: 3 },
@@ -25,14 +22,11 @@ describe('getWorkflowPreviousSteps', () => {
       {
         id: 'step2',
         name: 'Second Step',
-        type: 'CODE',
+        type: 'HTTP_REQUEST',
         valid: true,
         nextStepIds: ['step4'],
         settings: {
-          input: {
-            logicFunctionId: 'func2',
-            logicFunctionInput: {},
-          },
+          input: { method: 'GET', url: 'https://example.com' },
           outputSchema: {},
           errorHandlingOptions: {
             retryOnFailure: { value: 3 },
@@ -43,14 +37,11 @@ describe('getWorkflowPreviousSteps', () => {
       {
         id: 'step3',
         name: 'Third Step',
-        type: 'CODE',
+        type: 'HTTP_REQUEST',
         valid: true,
         nextStepIds: ['step4'],
         settings: {
-          input: {
-            logicFunctionId: 'func3',
-            logicFunctionInput: {},
-          },
+          input: { method: 'GET', url: 'https://example.com' },
           outputSchema: {},
           errorHandlingOptions: {
             retryOnFailure: { value: 3 },
@@ -61,14 +52,11 @@ describe('getWorkflowPreviousSteps', () => {
       {
         id: 'step4',
         name: 'Fourth Step',
-        type: 'CODE',
+        type: 'HTTP_REQUEST',
         valid: true,
         nextStepIds: [],
         settings: {
-          input: {
-            logicFunctionId: 'func4',
-            logicFunctionInput: {},
-          },
+          input: { method: 'GET', url: 'https://example.com' },
           outputSchema: {},
           errorHandlingOptions: {
             retryOnFailure: { value: 3 },
@@ -139,7 +127,7 @@ describe('getWorkflowPreviousSteps', () => {
       {
         id: 'step2',
         name: 'Second Step',
-        type: 'CODE',
+        type: 'HTTP_REQUEST',
         valid: true,
         nextStepIds: ['iterator1'],
         settings: {},
@@ -147,7 +135,7 @@ describe('getWorkflowPreviousSteps', () => {
       {
         id: 'step3',
         name: 'Third Step',
-        type: 'CODE',
+        type: 'HTTP_REQUEST',
         valid: true,
         nextStepIds: [],
         settings: {},

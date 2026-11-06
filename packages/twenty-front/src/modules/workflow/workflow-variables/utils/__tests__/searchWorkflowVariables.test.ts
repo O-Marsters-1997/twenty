@@ -237,7 +237,7 @@ describe('searchWorkflowVariables', () => {
           {
             id: 'code',
             name: 'Run code',
-            type: 'CODE',
+            type: 'HTTP_REQUEST',
             outputSchema: {
               _outputSchemaType: 'LINK',
               link: { isLeaf: true, label: 'Test code', tab: 'test' },
@@ -260,7 +260,7 @@ describe('searchWorkflowVariables', () => {
     const step: StepOutputSchemaV2 = {
       id: 'code',
       name: 'Run code',
-      type: 'CODE',
+      type: 'HTTP_REQUEST',
       outputSchema: {
         '0': { isLeaf: true, type: 'string', label: '0', value: 'Acme' },
       },

@@ -42,8 +42,8 @@ spec:
                   name: tokens
                   key: accessToken
           command:
-            - yarn
-            - worker:prod
+            - node
+            - dist/queue-worker/queue-worker
           resources:
             requests:
               memory: "1024Mi"

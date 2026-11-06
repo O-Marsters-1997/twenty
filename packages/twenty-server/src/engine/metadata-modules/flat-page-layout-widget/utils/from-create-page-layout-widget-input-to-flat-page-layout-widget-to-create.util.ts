@@ -19,7 +19,6 @@ export type FromCreatePageLayoutWidgetInputToFlatPageLayoutWidgetToCreateArgs =
     | 'flatPageLayoutTabMaps'
     | 'flatObjectMetadataMaps'
     | 'flatFieldMetadataMaps'
-    | 'flatFrontComponentMaps'
     | 'flatViewFieldGroupMaps'
     | 'flatViewMaps'
   >;
@@ -31,7 +30,6 @@ export const fromCreatePageLayoutWidgetInputToFlatPageLayoutWidgetToCreate = ({
   flatPageLayoutTabMaps,
   flatObjectMetadataMaps,
   flatFieldMetadataMaps,
-  flatFrontComponentMaps,
   flatViewFieldGroupMaps,
   flatViewMaps,
 }: FromCreatePageLayoutWidgetInputToFlatPageLayoutWidgetToCreateArgs): FlatPageLayoutWidget => {
@@ -82,8 +80,6 @@ export const fromCreatePageLayoutWidgetInputToFlatPageLayoutWidgetToCreate = ({
         configuration: createPageLayoutWidgetInput.configuration,
         fieldMetadataUniversalIdentifierById:
           flatFieldMetadataMaps.universalIdentifierById,
-        frontComponentUniversalIdentifierById:
-          flatFrontComponentMaps.universalIdentifierById,
         viewFieldGroupUniversalIdentifierById:
           flatViewFieldGroupMaps.universalIdentifierById,
         viewUniversalIdentifierById: flatViewMaps.universalIdentifierById,

@@ -7,8 +7,6 @@ import { isDefined } from 'twenty-shared/utils';
 
 import { type IndexMetadataInterface } from 'src/engine/metadata-modules/index-metadata/interfaces/index-metadata.interface';
 
-import { ApplicationRegistrationVariableService } from 'src/engine/core-modules/application/application-registration-variable/application-registration-variable.service';
-import { ApplicationRegistrationService } from 'src/engine/core-modules/application/application-registration/application-registration.service';
 import { ApplicationTranslationCatalogService } from 'src/engine/metadata-modules/application-translation-catalog/services/application-translation-catalog.service';
 import { type FlatWorkspaceMember } from 'src/engine/core-modules/user/types/flat-workspace-member.type';
 import { type IDataloaders } from 'src/engine/dataloaders/dataloader.interface';
@@ -154,30 +152,14 @@ export type RowLevelPermissionsByRoleIdLoaderPayload = {
   roleId: string;
 };
 
-export type IsConfiguredLoaderPayload = {
-  applicationRegistrationId: string;
-};
-
-export type ApplicationRegistrationInstallCountLoaderPayload = {
-  applicationRegistrationId: string;
-};
-
 export type ApplicationAuthorIdentifiersLoaderPayload = {
   workspaceId: string;
-};
-
-export type ApplicationTranslationCatalogLoaderPayload = {
-  applicationId: string;
-  workspaceId: string;
-  locale: keyof typeof APP_LOCALES;
 };
 
 @Injectable()
 export class DataloaderService {
   constructor(
     private readonly flatEntityMapsCacheService: WorkspaceManyOrAllFlatEntityMapsCacheService,
-    private readonly applicationRegistrationVariableService: ApplicationRegistrationVariableService,
-    private readonly applicationRegistrationService: ApplicationRegistrationService,
     private readonly applicationTranslationCatalogService: ApplicationTranslationCatalogService,
     private readonly fieldMetadataConnectionLoaderFactory: FieldMetadataConnectionLoaderFactory,
     private readonly indexMetadataConnectionLoaderFactory: IndexMetadataConnectionLoaderFactory,
@@ -207,13 +189,8 @@ export class DataloaderService {
     const viewGroupsByViewIdLoader = this.createViewGroupsByViewIdLoader();
     const viewFilterGroupsByViewIdLoader =
       this.createViewFilterGroupsByViewIdLoader();
-    const isConfiguredLoader = this.createIsConfiguredLoader();
-    const applicationRegistrationInstallCountLoader =
-      this.createApplicationRegistrationInstallCountLoader();
     const applicationAuthorIdentifiersLoader =
       this.createApplicationAuthorIdentifiersLoader();
-    const applicationTranslationCatalogLoader =
-      this.createApplicationTranslationCatalogLoader();
     const workspaceMembersByRoleIdLoader =
       this.createWorkspaceMembersByRoleIdLoader();
     const agentsByRoleIdLoader = this.createAgentsByRoleIdLoader();
@@ -238,10 +215,7 @@ export class DataloaderService {
       viewSortsByViewIdLoader,
       viewGroupsByViewIdLoader,
       viewFilterGroupsByViewIdLoader,
-      isConfiguredLoader,
-      applicationRegistrationInstallCountLoader,
       applicationAuthorIdentifiersLoader,
-      applicationTranslationCatalogLoader,
       workspaceMembersByRoleIdLoader,
       agentsByRoleIdLoader,
       apiKeysByRoleIdLoader,
@@ -448,9 +422,6 @@ export class DataloaderService {
         const getI18nContext =
           await this.applicationTranslationCatalogService.getI18nContextByApplicationId(
             {
-              applicationIds: objectFlatFieldMetadatasList
-                .flat()
-                .map((flatFieldMetadata) => flatFieldMetadata.applicationId),
               locale,
               workspaceId,
             },
@@ -883,41 +854,6 @@ export class DataloaderService {
     });
   }
 
-  private createIsConfiguredLoader() {
-    return new DataLoader<IsConfiguredLoaderPayload, boolean>(
-      async (params: IsConfiguredLoaderPayload[]) => {
-        const ids = params.map((p) => p.applicationRegistrationId);
-
-        const resultMap =
-          await this.applicationRegistrationVariableService.isConfiguredBatch(
-            ids,
-          );
-
-        return params.map(
-          (p) => resultMap.get(p.applicationRegistrationId) ?? true,
-        );
-      },
-    );
-  }
-
-  private createApplicationRegistrationInstallCountLoader() {
-    return new DataLoader<
-      ApplicationRegistrationInstallCountLoaderPayload,
-      number
-    >(async (params: ApplicationRegistrationInstallCountLoaderPayload[]) => {
-      const installCountByRegistrationId =
-        await this.applicationRegistrationService.countInstalledWorkspacesByApplicationRegistrationIds(
-          params.map((param) => param.applicationRegistrationId),
-        );
-
-      return params.map(
-        (param) =>
-          installCountByRegistrationId.get(param.applicationRegistrationId) ??
-          0,
-      );
-    });
-  }
-
   private createApplicationAuthorIdentifiersLoader() {
     return new DataLoader<
       ApplicationAuthorIdentifiersLoaderPayload,
@@ -929,24 +865,6 @@ export class DataloaderService {
         );
 
       return params.map(() => applicationAuthorIdentifiers);
-    });
-  }
-
-  private createApplicationTranslationCatalogLoader() {
-    return new DataLoader<
-      ApplicationTranslationCatalogLoaderPayload,
-      Record<string, string> | undefined
-    >(async (params: ApplicationTranslationCatalogLoaderPayload[]) => {
-      const { catalogByApplicationId } =
-        await this.applicationTranslationCatalogService.getCatalogs({
-          applicationIds: params.map((param) => param.applicationId),
-          locale: params[0].locale,
-          workspaceId: params[0].workspaceId,
-        });
-
-      return params.map((param) =>
-        catalogByApplicationId.get(param.applicationId),
-      );
     });
   }
 

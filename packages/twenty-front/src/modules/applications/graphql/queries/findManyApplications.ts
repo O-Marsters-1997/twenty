@@ -9,12 +9,6 @@ export const FIND_MANY_APPLICATIONS = gql`
       logoUrl
       version
       universalIdentifier
-      applicationRegistrationId
-      applicationRegistration {
-        id
-        latestAvailableVersion
-        sourceType
-      }
       defaultRoleId
     }
   }

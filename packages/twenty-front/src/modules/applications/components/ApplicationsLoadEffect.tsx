@@ -94,7 +94,6 @@ export const ApplicationsLoadEffect = () => {
           name: application.name,
           description: application.description,
           version: application.version,
-          applicationRegistrationId: application.applicationRegistrationId,
         }));
 
       replaceDraft('applications', applications);
