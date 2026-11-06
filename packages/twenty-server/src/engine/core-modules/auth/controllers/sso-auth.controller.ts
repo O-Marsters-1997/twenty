@@ -27,7 +27,6 @@ import {
   AuthExceptionCode,
 } from 'src/engine/core-modules/auth/auth.exception';
 import { AuthRestApiExceptionFilter } from 'src/engine/core-modules/auth/filters/auth-rest-api-exception.filter';
-import { EnterpriseFeaturesEnabledGuard } from 'src/engine/core-modules/auth/guards/enterprise-features-enabled.guard';
 import { OidcAuthGuard } from 'src/engine/core-modules/auth/guards/oidc-auth.guard';
 import { SamlAuthGuard } from 'src/engine/core-modules/auth/guards/saml-auth.guard';
 import { AuthService } from 'src/engine/core-modules/auth/services/auth.service';
@@ -63,11 +62,7 @@ export class SsoAuthController {
   ) {}
 
   @Get('saml/metadata/:identityProviderId')
-  @UseGuards(
-    EnterpriseFeaturesEnabledGuard,
-    PublicEndpointGuard,
-    NoPermissionGuard,
-  )
+  @UseGuards(PublicEndpointGuard, NoPermissionGuard)
   // oxlint-disable-next-line typescript/no-explicit-any
   async generateMetadata(@Req() req: any): Promise<string | void> {
     return generateServiceProviderMetadata({
@@ -84,45 +79,25 @@ export class SsoAuthController {
   }
 
   @Get('oidc/login/:identityProviderId')
-  @UseGuards(
-    EnterpriseFeaturesEnabledGuard,
-    OidcAuthGuard,
-    PublicEndpointGuard,
-    NoPermissionGuard,
-  )
+  @UseGuards(OidcAuthGuard, PublicEndpointGuard, NoPermissionGuard)
   async oidcAuth() {
     return;
   }
 
   @Get('saml/login/:identityProviderId')
-  @UseGuards(
-    EnterpriseFeaturesEnabledGuard,
-    SamlAuthGuard,
-    PublicEndpointGuard,
-    NoPermissionGuard,
-  )
+  @UseGuards(SamlAuthGuard, PublicEndpointGuard, NoPermissionGuard)
   async samlAuth() {
     return;
   }
 
   @Get('oidc/callback')
-  @UseGuards(
-    EnterpriseFeaturesEnabledGuard,
-    OidcAuthGuard,
-    PublicEndpointGuard,
-    NoPermissionGuard,
-  )
+  @UseGuards(OidcAuthGuard, PublicEndpointGuard, NoPermissionGuard)
   async oidcAuthCallback(@Req() req: OidcRequest, @Res() res: Response) {
     return await this.authCallback(req, res);
   }
 
   @Post('saml/callback/:identityProviderId')
-  @UseGuards(
-    EnterpriseFeaturesEnabledGuard,
-    SamlAuthGuard,
-    PublicEndpointGuard,
-    NoPermissionGuard,
-  )
+  @UseGuards(SamlAuthGuard, PublicEndpointGuard, NoPermissionGuard)
   async samlAuthCallback(@Req() req: SamlRequest, @Res() res: Response) {
     try {
       return await this.authCallback(req, res);

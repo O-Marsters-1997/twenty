@@ -2,7 +2,7 @@ import { EmailConnectionSecurity } from 'src/engine/core-modules/imap-smtp-calda
 import { MessageChannelEntity } from 'src/engine/metadata-modules/message-channel/entities/message-channel.entity';
 
 import { saveImapSmtpCaldavAccount } from 'test/integration/metadata/suites/connected-account/utils/save-imap-smtp-caldav-account.util';
-import { updateConfigVariable } from 'test/integration/twenty-config/utils/update-config-variable.util';
+import { updateConfigVariable } from 'test/integration/twenty-config/utils/database-config-variable.util';
 import {
   type DovecotServer,
   startDovecotContainer,

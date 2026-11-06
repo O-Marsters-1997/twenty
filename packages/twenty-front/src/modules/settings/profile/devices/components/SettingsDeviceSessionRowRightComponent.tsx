@@ -16,9 +16,6 @@ export const SettingsDeviceSessionRowRightComponent = ({
 
   return (
     <>
-      {session.isImpersonating && (
-        <Status color="orange">{t`Impersonation`}</Status>
-      )}
       {session.isCurrent ? (
         <Status color="turquoise">{t`This device`}</Status>
       ) : (

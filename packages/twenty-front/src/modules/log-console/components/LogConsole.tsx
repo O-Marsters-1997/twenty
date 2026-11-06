@@ -10,13 +10,11 @@ import { ResizeHandle } from 'twenty-ui/primitives/layout';
 import {
   IconChevronDown,
   IconChevronUp,
-  IconLock,
   IconMaximize,
   IconMinimize,
 } from 'twenty-ui/icon';
 import { themeCssVariables, useTheme } from 'twenty-ui/theme';
 
-import { currentWorkspaceState } from '@/auth/states/currentWorkspaceState';
 import { isClickHouseConfiguredState } from '@/client-config/states/isClickHouseConfiguredState';
 import { LogConsoleDetailPanel } from '@/log-console/components/LogConsoleDetailPanel';
 import { LogConsoleToggleHotkeyEffect } from '@/log-console/components/LogConsoleToggleHotkeyEffect';
@@ -35,7 +33,6 @@ import { logConsoleHeightState } from '@/log-console/states/logConsoleHeightStat
 import { logConsoleSelectedLogState } from '@/log-console/states/logConsoleSelectedLogState';
 import { type LogConsoleSource } from '@/log-console/types/LogConsoleSource';
 import { SettingsEmptyPlaceholder } from '@/settings/components/SettingsEmptyPlaceholder';
-import { SettingsEnterpriseFeatureGateCard } from '@/settings/components/SettingsEnterpriseFeatureGateCard';
 import { SETTINGS_CONTENT_MAX_WIDTH } from '@/settings/constants/SettingsContentMaxWidth';
 import { APP_HEADER_HEIGHT } from '@/ui/layout/constants/AppHeaderHeight';
 import { RootStackingContextZIndices } from '@/ui/layout/constants/RootStackingContextZIndices';
@@ -50,8 +47,6 @@ import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/use
 import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomState';
-import { checkIfBillingEntitlementIsEnabledOnWorkspace } from '@/workspace/utils/checkIfBillingEntitlementIsEnabledOnWorkspace';
-import { BillingEntitlementKey } from '~/generated-metadata/graphql';
 
 const LOG_CONSOLE_HEIGHT_CSS_VARIABLE = '--log-console-height';
 
@@ -225,14 +220,6 @@ const subscribeToWindowResize = (onWindowResize: () => void) => {
 
 const getWindowHeight = () => window.innerHeight;
 
-const StyledUpgradeCardContainer = styled.div`
-  box-sizing: border-box;
-  margin: auto;
-  max-width: ${SETTINGS_CONTENT_MAX_WIDTH}px;
-  padding: 0 ${themeCssVariables.spacing[8]};
-  width: 100%;
-`;
-
 const StyledDetailPanelWrapper = styled.div<{
   detailPanelWidth: number;
   isOpen: boolean;
@@ -262,7 +249,6 @@ export const LogConsole = () => {
 
   const isLogConsoleAllowed = useIsLogConsoleAllowed();
   const isAdvancedModeEnabled = useAtomStateValue(isAdvancedModeEnabledState);
-  const currentWorkspace = useAtomStateValue(currentWorkspaceState);
   const isClickHouseConfigured = useAtomStateValue(isClickHouseConfiguredState);
 
   const [logConsoleDisplayMode, setLogConsoleDisplayMode] = useAtomState(

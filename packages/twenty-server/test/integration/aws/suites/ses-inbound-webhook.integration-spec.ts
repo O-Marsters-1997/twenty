@@ -13,7 +13,7 @@ import {
   snsSigningCertHandler,
   snsSubscriptionConfirmation,
 } from 'test/integration/aws/mocks/sns-payload.util';
-import { updateConfigVariable } from 'test/integration/twenty-config/utils/update-config-variable.util';
+import { updateConfigVariable } from 'test/integration/twenty-config/utils/database-config-variable.util';
 import { getAppProviderByClassName } from 'test/integration/utils/get-app-provider-by-class-name.util';
 import { setupHttpMock } from 'test/integration/utils/http-mock.util';
 

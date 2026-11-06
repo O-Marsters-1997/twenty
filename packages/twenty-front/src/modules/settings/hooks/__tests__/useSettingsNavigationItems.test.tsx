@@ -74,7 +74,6 @@ const setPermissionFlags = (permissionFlags: PermissionFlagType[]) => {
     permissionFlags,
     twoFactorAuthenticationMethodSummary: [],
     objectsPermissions: [],
-    isImpersonating: false,
   });
 };
 

@@ -8,32 +8,14 @@ import {
   getWebhooks,
   updateWebhook,
 } from 'test/integration/metadata/suites/utils/webhook-test.util';
-import { makeAdminPanelApiRequest } from 'test/integration/twenty-config/utils/make-admin-panel-api-request.util';
+import {
+  createConfigVariable,
+  deleteConfigVariable,
+} from 'test/integration/twenty-config/utils/database-config-variable.util';
 import { expectEventually } from 'test/integration/utils/expect-eventually.util';
 import { v4 as uuidv4 } from 'uuid';
 
 import { type UpdateWebhookInput } from 'src/engine/metadata-modules/webhook/dtos/update-webhook.input';
-
-const CREATE_CONFIG_VARIABLE_MUTATION = gql`
-  mutation CreateDatabaseConfigVariable($key: String!, $value: JSON!) {
-    createDatabaseConfigVariable(key: $key, value: $value)
-  }
-`;
-
-const GET_CONFIG_VARIABLE_QUERY = gql`
-  query GetDatabaseConfigVariable($key: String!) {
-    getDatabaseConfigVariable(key: $key) {
-      value
-      source
-    }
-  }
-`;
-
-const DELETE_CONFIG_VARIABLE_MUTATION = gql`
-  mutation DeleteDatabaseConfigVariable($key: String!) {
-    deleteDatabaseConfigVariable(key: $key)
-  }
-`;
 
 const DESTROY_PERSON_MUTATION = gql`
   mutation DestroyPerson($id: ID!) {
@@ -278,30 +260,56 @@ describe('webhooksResolver (e2e)', () => {
       const receiver = await createWebhookReceiver(WEBHOOK_RECEIVER_PORT);
 
       try {
-        const createConfigResponse = await makeAdminPanelApiRequest({
-          query: CREATE_CONFIG_VARIABLE_MUTATION,
+        await createConfigVariable({
+          input: { key: 'OUTBOUND_HTTP_ALLOWED_INTERNAL_HOSTS', value: ['*'] },
+        });
+
+        const createWebhookResponse = await createWebhook({
+          targetUrl: `http://127.0.0.1:${WEBHOOK_RECEIVER_PORT}/webhook`,
+          operations: ['person.created'],
+          description: 'SSRF test webhook',
+          secret: 'test-secret',
+        });
+
+        expect(createWebhookResponse.body.errors).toBeUndefined();
+        createdWebhookId = createWebhookResponse.body.data.createWebhook.id;
+
+        const testId = uuidv4().slice(0, 8);
+        const createPersonResponse = await makeGraphqlApiRequest({
+          query: CREATE_PERSON_MUTATION,
           variables: {
-            key: 'OUTBOUND_HTTP_ALLOWED_INTERNAL_HOSTS',
-            value: ['*'],
+            data: {
+              name: {
+                firstName: 'SSRFTest',
+                lastName: `User-${testId}`,
+              },
+            },
           },
         });
 
-        expect(createConfigResponse.body.errors).toBeUndefined();
-        expect(
-          createConfigResponse.body.data.createDatabaseConfigVariable,
-        ).toBe(true);
+        expect(createPersonResponse.status).toBe(200);
+        expect(createPersonResponse.body.errors).toBeUndefined();
+        createdPersonId = createPersonResponse.body.data.createPerson.id;
 
-        const verifyConfig = await makeAdminPanelApiRequest({
-          query: GET_CONFIG_VARIABLE_QUERY,
-          variables: { key: 'OUTBOUND_HTTP_ALLOWED_INTERNAL_HOSTS' },
+        jest.useRealTimers();
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        jest.useFakeTimers();
+
+        expect(receiver.receivedPayloads.length).toBe(0);
+      } finally {
+        await receiver.close();
+      }
+    });
+
+    it('should deliver webhook successfully when internal hosts are allowed', async () => {
+      jest.useRealTimers();
+
+      const receiver = await createWebhookReceiver(WEBHOOK_RECEIVER_PORT);
+
+      try {
+        await createConfigVariable({
+          input: { key: 'OUTBOUND_HTTP_ALLOWED_INTERNAL_HOSTS', value: ['*'] },
         });
-
-        expect(verifyConfig.body.data.getDatabaseConfigVariable.value).toEqual([
-          '*',
-        ]);
-        expect(verifyConfig.body.data.getDatabaseConfigVariable.source).toBe(
-          'DATABASE',
-        );
 
         const createWebhookResponse = await createWebhook({
           targetUrl: `http://127.0.0.1:${WEBHOOK_RECEIVER_PORT}/webhook`,
@@ -343,9 +351,8 @@ describe('webhooksResolver (e2e)', () => {
         );
       } finally {
         await receiver.close();
-        await makeAdminPanelApiRequest({
-          query: DELETE_CONFIG_VARIABLE_MUTATION,
-          variables: { key: 'OUTBOUND_HTTP_ALLOWED_INTERNAL_HOSTS' },
+        await deleteConfigVariable({
+          input: { key: 'OUTBOUND_HTTP_ALLOWED_INTERNAL_HOSTS' },
         }).catch(() => {});
         jest.useFakeTimers();
       }

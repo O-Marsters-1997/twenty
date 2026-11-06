@@ -1,7 +1,7 @@
 export type AuthPrincipalVariant =
   | {
       kind: 'userSession';
-      variant: 'standard' | 'impersonated' | 'playground' | 'workspaceAgnostic';
+      variant: 'standard' | 'playground' | 'workspaceAgnostic';
     }
   | { kind: 'apiKey' }
   | {

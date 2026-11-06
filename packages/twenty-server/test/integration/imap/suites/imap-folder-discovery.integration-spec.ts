@@ -3,7 +3,7 @@ import { randomUUID } from 'node:crypto';
 import { isNonEmptyString } from '@sniptt/guards';
 
 import { deleteConnectedAccount } from 'test/integration/metadata/suites/connected-account/utils/delete-connected-account.util';
-import { updateConfigVariable } from 'test/integration/twenty-config/utils/update-config-variable.util';
+import { updateConfigVariable } from 'test/integration/twenty-config/utils/database-config-variable.util';
 import { connectDovecotImapAccount } from 'test/integration/utils/connect-dovecot-imap-account.util';
 import { queryMessageFolders } from 'test/integration/utils/query-messaging.util';
 import { runMessageChannelSync } from 'test/integration/utils/run-message-channel-sync.util';

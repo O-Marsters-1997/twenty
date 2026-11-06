@@ -10,7 +10,6 @@ type LogConsoleMemberChipProps = {
   userId?: string | null;
   userWorkspaceId?: string | null;
   actor?: Partial<FieldActorValue>;
-  isImpersonator?: boolean;
 };
 
 export const LogConsoleMemberChip = (props: LogConsoleMemberChipProps) => {

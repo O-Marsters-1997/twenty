@@ -17,7 +17,6 @@ import { MinimalMetadataService } from 'src/engine/metadata-modules/minimal-meta
   AuthPrincipalGuard({
     userSession: {
       standard: true,
-      impersonated: true,
       playground: true,
       workspaceAgnostic: false,
     },

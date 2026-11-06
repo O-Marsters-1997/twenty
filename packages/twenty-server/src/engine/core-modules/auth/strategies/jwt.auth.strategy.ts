@@ -117,16 +117,6 @@ export class JwtAuthStrategy extends PassportStrategy(Strategy, 'jwt') {
       );
     }
 
-    if (
-      payload.type === JwtTokenTypeEnum.ACCESS &&
-      payload.isImpersonating === true
-    ) {
-      throw new AuthException(
-        'Impersonation tokens are no longer accepted',
-        AuthExceptionCode.FORBIDDEN_EXCEPTION,
-      );
-    }
-
     const userId = payload.sub ?? payload.userId;
 
     if (!userId) {

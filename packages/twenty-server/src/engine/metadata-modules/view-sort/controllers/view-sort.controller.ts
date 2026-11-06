@@ -43,7 +43,6 @@ import { AuthRestApiExceptionFilter } from 'src/engine/core-modules/auth/filters
   AuthPrincipalGuard({
     userSession: {
       standard: true,
-      impersonated: true,
       playground: true,
       workspaceAgnostic: false,
     },

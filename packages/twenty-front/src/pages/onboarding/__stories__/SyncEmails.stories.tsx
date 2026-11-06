@@ -215,7 +215,6 @@ export const PermissionsLoading: Story = {
       permissionFlags: [],
       objectsPermissions: [],
       twoFactorAuthenticationMethodSummary: [],
-      isImpersonating: false,
     });
   },
   play: async ({ canvasElement }) => {

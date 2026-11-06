@@ -1045,7 +1045,6 @@ export class AuthResolver {
     AuthPrincipalGuard({
       userSession: {
         standard: true,
-        impersonated: true,
         playground: false,
         workspaceAgnostic: false,
       },
@@ -1071,7 +1070,6 @@ export class AuthResolver {
     AuthPrincipalGuard({
       userSession: {
         standard: true,
-        impersonated: true,
         playground: false,
         workspaceAgnostic: false,
       },

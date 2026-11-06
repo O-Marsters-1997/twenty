@@ -32,7 +32,6 @@ import { ImapSmtpCalDavApiService } from 'src/modules/connected-account/services
   AuthPrincipalGuard({
     userSession: {
       standard: true,
-      impersonated: true,
       playground: true,
       workspaceAgnostic: false,
     },
