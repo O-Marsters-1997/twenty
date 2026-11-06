@@ -21,7 +21,6 @@ import {
 } from 'src/engine/core-modules/auth/auth.exception';
 import { AvailableWorkspaces } from 'src/engine/core-modules/auth/dto/available-workspaces.dto';
 import { type AuthContextUser } from 'src/engine/core-modules/auth/types/auth-context.type';
-import { type RawAuthContext } from 'src/engine/core-modules/auth/types/raw-auth-context.type';
 import { OnboardingStatus } from 'src/engine/core-modules/onboarding/enums/onboarding-status.enum';
 import {
   OnboardingService,
@@ -52,7 +51,6 @@ import { AuthApiKey } from 'src/engine/decorators/auth/auth-api-key.decorator';
 import { AuthApplication } from 'src/engine/decorators/auth/auth-application.decorator';
 import { AuthAuthenticatedAt } from 'src/engine/decorators/auth/auth-authenticated-at.decorator';
 import { AuthProvider } from 'src/engine/decorators/auth/auth-provider.decorator';
-import { AuthImpersonationContext } from 'src/engine/decorators/auth/auth-impersonation-context.decorator';
 import { canCredentialAutoLoginIntoWorkspaces } from 'src/engine/core-modules/auth/utils/can-credential-auto-login-into-workspaces.util';
 import { AuthGraphqlApiExceptionFilter } from 'src/engine/core-modules/auth/filters/auth-graphql-api-exception.filter';
 import { AuthUserWorkspaceId } from 'src/engine/decorators/auth/auth-user-workspace-id.decorator';
@@ -144,8 +142,6 @@ export class UserResolver {
   async currentUser(
     @AuthUser() { id: userId }: AuthContextUser,
     @AuthWorkspace({ allowUndefined: true }) workspace: WorkspaceEntity,
-    @AuthImpersonationContext()
-    impersonationContext: RawAuthContext['impersonationContext'],
     @AuthIsUserSession() isUserSession: boolean,
   ): Promise<UserEntity> {
     const user = await this.userRepository.findOne({
@@ -205,7 +201,6 @@ export class UserResolver {
         ...currentUserWorkspace,
         ...userWorkspacePermissions,
         twoFactorAuthenticationMethodSummary,
-        isImpersonating: isDefined(impersonationContext),
       },
       currentWorkspace: refreshedWorkspace,
     };
@@ -507,7 +502,6 @@ export class UserResolver {
     AuthPrincipalGuard({
       userSession: {
         standard: true,
-        impersonated: true,
         playground: true,
         workspaceAgnostic: false,
       },
@@ -758,7 +752,6 @@ export class UserResolver {
     AuthPrincipalGuard({
       userSession: {
         standard: true,
-        impersonated: true,
         playground: true,
         workspaceAgnostic: false,
       },

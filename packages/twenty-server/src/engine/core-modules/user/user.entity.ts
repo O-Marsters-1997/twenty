@@ -69,14 +69,6 @@ export class UserEntity {
   passwordHash: string;
 
   @Field()
-  @Column({ default: false })
-  canImpersonate: boolean;
-
-  @Field()
-  @Column({ default: false })
-  canAccessFullAdminPanel: boolean;
-
-  @Field()
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;
 

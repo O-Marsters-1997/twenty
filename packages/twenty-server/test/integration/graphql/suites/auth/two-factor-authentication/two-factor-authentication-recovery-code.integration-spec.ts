@@ -13,7 +13,6 @@ import { initiateOtpProvisioningForAuthenticatedUser } from 'test/integration/gr
 import { renewToken } from 'test/integration/graphql/utils/renew-token.util';
 import { verifyTwoFactorAuthenticationMethod } from 'test/integration/graphql/utils/verify-two-factor-authentication-method.util';
 import { makeMetadataApiRequest } from 'test/integration/metadata/suites/utils/make-metadata-api-request.util';
-import { makeAdminPanelApiRequest } from 'test/integration/twenty-config/utils/make-admin-panel-api-request.util';
 
 import { AppTokenType } from 'src/engine/core-modules/app-token/app-token.entity';
 import { acquireUserAuthenticationLock } from 'src/engine/core-modules/auth/utils/acquire-user-authentication-lock.util';
@@ -896,58 +895,6 @@ describe('Two-factor authentication recovery codes (integration)', () => {
         ).fill('INVALID_RECOVERY_CODE'),
       );
       expect(subCodes[subCodes.length - 1]).toBe('LIMIT_REACHED');
-    });
-  });
-
-  describe('server admin panel', () => {
-    const generateAsServerAdmin = async (workspaceId: string) => {
-      const response = await makeAdminPanelApiRequest({
-        query: gql`
-          mutation GenerateTwoFactorAuthenticationRecoveryCodeAsServerAdmin(
-            $userId: UUID!
-            $workspaceId: UUID!
-            $otp: String
-          ) {
-            generateTwoFactorAuthenticationRecoveryCodeAsServerAdmin(
-              userId: $userId
-              workspaceId: $workspaceId
-              otp: $otp
-            ) {
-              recoveryCode
-              expiresAt
-            }
-          }
-        `,
-        variables: {
-          userId: USER_DATA_SEED_IDS.JONY,
-          workspaceId,
-          otp: await generateOtp(janeSecret),
-        },
-      });
-
-      return response.body;
-    };
-
-    it('issues a code for a member of the given workspace', async () => {
-      const { data, errors } = await generateAsServerAdmin(
-        SEED_APPLE_WORKSPACE_ID,
-      );
-
-      expect(errors).toBeUndefined();
-      expect(
-        data.generateTwoFactorAuthenticationRecoveryCodeAsServerAdmin
-          .recoveryCode,
-      ).toMatch(/^[0-9A-Z]{5}(-[0-9A-Z]{5}){3}$/);
-    });
-
-    it('reaches members of other workspaces but still requires an authenticator to recover', async () => {
-      const { errors } = await generateAsServerAdmin(
-        SEED_YCOMBINATOR_WORKSPACE_ID,
-      );
-
-      expect(errors?.[0]?.extensions?.subCode).toBe(
-        'RECOVERY_CODE_TARGET_NOT_ALLOWED',
-      );
     });
   });
 });

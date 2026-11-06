@@ -1,7 +1,5 @@
-import { isNonEmptyString } from '@sniptt/guards';
 import { isDefined } from 'twenty-shared/utils';
 
-import { type RawAuthContext } from 'src/engine/core-modules/auth/types/raw-auth-context.type';
 import { JwtTokenTypeEnum } from 'src/engine/core-modules/auth/types/jwt-token-type.enum';
 import { type AuthPrincipalVariant } from 'src/engine/guards/types/auth-principal-variant.type';
 
@@ -10,14 +8,7 @@ type AuthPrincipalRequest = {
   apiKey?: unknown;
   application?: unknown;
   tokenType?: JwtTokenTypeEnum;
-  impersonationContext?: RawAuthContext['impersonationContext'];
 };
-
-const isImpersonating = (
-  impersonationContext: AuthPrincipalRequest['impersonationContext'],
-): boolean =>
-  isNonEmptyString(impersonationContext?.impersonatorUserWorkspaceId) &&
-  isNonEmptyString(impersonationContext?.impersonatedUserWorkspaceId);
 
 const carriesUserWithoutOtherPrincipal = (
   request: AuthPrincipalRequest,
@@ -33,16 +24,11 @@ export const classifyAuthPrincipal = (
     case JwtTokenTypeEnum.API_KEY:
       return isDefined(request.apiKey) &&
         !isDefined(request.user) &&
-        !isDefined(request.application) &&
-        !isDefined(request.impersonationContext)
+        !isDefined(request.application)
         ? { kind: 'apiKey' }
         : undefined;
     case JwtTokenTypeEnum.APPLICATION_ACCESS:
-      if (
-        !isDefined(request.application) ||
-        isDefined(request.apiKey) ||
-        isDefined(request.impersonationContext)
-      ) {
+      if (!isDefined(request.application) || isDefined(request.apiKey)) {
         return undefined;
       }
 
@@ -54,19 +40,15 @@ export const classifyAuthPrincipal = (
       return carriesUserWithoutOtherPrincipal(request)
         ? {
             kind: 'userSession',
-            variant: isImpersonating(request.impersonationContext)
-              ? 'impersonated'
-              : 'standard',
+            variant: 'standard',
           }
         : undefined;
     case JwtTokenTypeEnum.PLAYGROUND:
-      return carriesUserWithoutOtherPrincipal(request) &&
-        !isDefined(request.impersonationContext)
+      return carriesUserWithoutOtherPrincipal(request)
         ? { kind: 'userSession', variant: 'playground' }
         : undefined;
     case JwtTokenTypeEnum.WORKSPACE_AGNOSTIC:
-      return carriesUserWithoutOtherPrincipal(request) &&
-        !isDefined(request.impersonationContext)
+      return carriesUserWithoutOtherPrincipal(request)
         ? { kind: 'userSession', variant: 'workspaceAgnostic' }
         : undefined;
     default:

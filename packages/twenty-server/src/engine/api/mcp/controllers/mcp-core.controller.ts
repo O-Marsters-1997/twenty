@@ -44,7 +44,6 @@ import { WorkspaceNotSuspendedGuard } from 'src/engine/guards/workspace-not-susp
   AuthPrincipalGuard({
     userSession: {
       standard: true,
-      impersonated: true,
       playground: true,
       workspaceAgnostic: false,
     },

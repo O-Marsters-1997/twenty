@@ -14,7 +14,7 @@ import { type MessageThreadWorkspaceEntity } from 'src/modules/messaging/common/
 import { type MessageWorkspaceEntity } from 'src/modules/messaging/common/standard-objects/message.workspace-entity';
 import { type InboundEmailImportService } from 'src/modules/messaging/message-import-manager/drivers/inbound-email/services/inbound-email-import.service';
 
-import { updateConfigVariable } from 'test/integration/twenty-config/utils/update-config-variable.util';
+import { updateConfigVariable } from 'test/integration/twenty-config/utils/database-config-variable.util';
 import { getAppProviderByClassName } from 'test/integration/utils/get-app-provider-by-class-name.util';
 import { getCoreRepository } from 'test/integration/utils/get-core-repository.util';
 import { setupHttpMock } from 'test/integration/utils/http-mock.util';

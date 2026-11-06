@@ -42,7 +42,6 @@ export const currentUserSessionsQueryFactory = () => {
           id
           workspaceId
           authProvider
-          isImpersonating
           isCurrent
           lastActiveAt
           expiresAt

@@ -72,8 +72,6 @@ export const results = {
       firstName: 'firstName',
       lastName: 'lastName',
       email: 'email',
-      canAccessFullAdminPanel: false,
-      canImpersonate: 'canImpersonate',
       supportUserHash: 'supportUserHash',
       workspaceMember: {
         id: 'id',

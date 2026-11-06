@@ -2,7 +2,6 @@ import { msg, t } from '@lingui/core/macro';
 import {
   IconLogin2,
   IconServer,
-  IconSpy,
   IconTimelineEvent,
   IconUserPlus,
   IconWorld,
@@ -22,11 +21,6 @@ export const LOG_CONSOLE_SECURITY_FILTER_FIELDS: LogConsoleFilterField[] = [
         label: t`Sessions`,
         values: ['AuthSession'],
         startIcon: <IconLogin2 />,
-      },
-      {
-        label: t`Impersonation`,
-        values: ['Impersonation'],
-        startIcon: <IconSpy />,
       },
       {
         label: t`Signed up`,

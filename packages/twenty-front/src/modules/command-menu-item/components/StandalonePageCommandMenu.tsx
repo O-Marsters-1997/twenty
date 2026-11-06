@@ -61,16 +61,12 @@ export const StandalonePageCommandMenu = () => {
       permissionFlags: permissionFlagMap,
       targetObjectReadPermissions,
       targetObjectWritePermissions,
-      canImpersonate: currentUser?.canImpersonate === true,
-      canAccessFullAdminPanel: currentUser?.canAccessFullAdminPanel === true,
       objectMetadataItem: {},
       objectMetadataLabel: '',
     };
   }, [
     currentWorkspace?.featureFlags,
     permissionFlagMap,
-    currentUser?.canImpersonate,
-    currentUser?.canAccessFullAdminPanel,
     isLayoutCustomizationModeEnabled,
     targetObjectReadPermissions,
     targetObjectWritePermissions,

@@ -26,7 +26,6 @@ export enum AppTokenType {
   InvitationToken = 'INVITATION_TOKEN',
   OnboardingInvitationToken = 'ONBOARDING_INVITATION_TOKEN',
   EmailVerificationToken = 'EMAIL_VERIFICATION_TOKEN',
-  EnterpriseValidityToken = 'ENTERPRISE_VALIDITY_TOKEN',
   TwoFactorAuthenticationRecoveryCode = 'TWO_FACTOR_AUTHENTICATION_RECOVERY_CODE',
 }
 

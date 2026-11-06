@@ -5,8 +5,6 @@ import { isNonEmptyString } from '@sniptt/guards';
 import { type CookieOptions, type Request, type Response } from 'express';
 
 import { USER_SESSION_COOKIE_NAME } from 'src/engine/core-modules/user-session/constants/user-session-cookie-name.constant';
-import { USER_SESSION_IMPERSONATOR_COOKIE_NAME } from 'src/engine/core-modules/user-session/constants/user-session-impersonator-cookie-name.constant';
-import { USER_SESSION_IMPERSONATOR_SECURE_COOKIE_NAME } from 'src/engine/core-modules/user-session/constants/user-session-impersonator-secure-cookie-name.constant';
 import { USER_SESSION_SECURE_COOKIE_NAME } from 'src/engine/core-modules/user-session/constants/user-session-secure-cookie-name.constant';
 import { extractUserSessionTokenFromRequestCookie } from 'src/engine/core-modules/user-session/utils/extract-user-session-token-from-request.util';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
@@ -43,16 +41,6 @@ export class UserSessionCookieService {
     });
   }
 
-  extractImpersonatorSessionTokenFromRequest(
-    request: Request,
-  ): string | undefined {
-    return extractUserSessionTokenFromRequestCookie(request, {
-      secureCookieName: USER_SESSION_IMPERSONATOR_SECURE_COOKIE_NAME,
-      insecureCookieName: USER_SESSION_IMPERSONATOR_COOKIE_NAME,
-      allowInsecureCookieName: !this.isSecureDeployment(),
-    });
-  }
-
   private resolveCookieOptions(): CookieOptions {
     return {
       httpOnly: true,
@@ -85,26 +73,6 @@ export class UserSessionCookieService {
       ...options,
       expires: expiresAt,
     });
-  }
-
-  attachImpersonatorSessionTokenToResponse(
-    response: Response,
-    sessionToken: string,
-  ): void {
-    response.cookie(
-      this.isSecureDeployment()
-        ? USER_SESSION_IMPERSONATOR_SECURE_COOKIE_NAME
-        : USER_SESSION_IMPERSONATOR_COOKIE_NAME,
-      sessionToken,
-      this.resolveCookieOptions(),
-    );
-  }
-
-  clearImpersonatorSessionCookie(response: Response): void {
-    const options = this.resolveCookieOptions();
-
-    response.clearCookie(USER_SESSION_IMPERSONATOR_SECURE_COOKIE_NAME, options);
-    response.clearCookie(USER_SESSION_IMPERSONATOR_COOKIE_NAME, options);
   }
 
   hasSessionCookie(request: Request): boolean {

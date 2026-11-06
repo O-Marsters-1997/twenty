@@ -23,7 +23,6 @@ import { ChannelSyncService } from 'src/modules/connected-account/channel-sync/s
   AuthPrincipalGuard({
     userSession: {
       standard: true,
-      impersonated: true,
       playground: true,
       workspaceAgnostic: false,
     },

@@ -10,7 +10,6 @@ import { DnsManagerModule } from 'src/engine/core-modules/dns-manager/dns-manage
 import { CustomDomainManagerModule } from 'src/engine/core-modules/domain/custom-domain-manager/custom-domain-manager.module';
 import { SubdomainManagerModule } from 'src/engine/core-modules/domain/subdomain-manager/subdomain-manager.module';
 import { WorkspaceDomainsModule } from 'src/engine/core-modules/domain/workspace-domains/workspace-domains.module';
-import { EnterpriseModule } from 'src/engine/core-modules/enterprise/enterprise.module';
 import { FeatureFlagModule } from 'src/engine/core-modules/feature-flag/feature-flag.module';
 import { FileModule } from 'src/engine/core-modules/file/file.module';
 import { UserWorkspaceEntity } from 'src/engine/core-modules/user-workspace/user-workspace.entity';
@@ -61,7 +60,6 @@ import { WorkspaceMigrationModule } from 'src/engine/workspace-manager/workspace
     ViewModule,
     WorkspaceManyOrAllFlatEntityMapsCacheModule,
     ApplicationModule,
-    EnterpriseModule,
     WorkspaceMigrationModule,
     CoreEntityCacheModule,
     UpgradeModule,

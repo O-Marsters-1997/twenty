@@ -28,12 +28,10 @@ import { DomainServerConfigModule } from 'src/engine/core-modules/domain/domain-
 import { SubdomainManagerModule } from 'src/engine/core-modules/domain/subdomain-manager/subdomain-manager.module';
 import { WorkspaceDomainsModule } from 'src/engine/core-modules/domain/workspace-domains/workspace-domains.module';
 import { EmailVerificationModule } from 'src/engine/core-modules/email-verification/email-verification.module';
-import { EnterpriseModule } from 'src/engine/core-modules/enterprise/enterprise.module';
 import { EventLogEmitterModule } from 'src/engine/core-modules/event-logs/emit/event-log-emitter.module';
 import { FeatureFlagModule } from 'src/engine/core-modules/feature-flag/feature-flag.module';
 import { FileModule } from 'src/engine/core-modules/file/file.module';
 import { GuardRedirectModule } from 'src/engine/core-modules/guard-redirect/guard-redirect.module';
-import { ImpersonationAuthorizationModule } from 'src/engine/core-modules/impersonation/impersonation-authorization.module';
 import { JwtModule } from 'src/engine/core-modules/jwt/jwt.module';
 import { OnboardingModule } from 'src/engine/core-modules/onboarding/onboarding.module';
 import { SecureHttpClientModule } from 'src/engine/core-modules/secure-http-client/secure-http-client.module';
@@ -90,7 +88,6 @@ import { AuthService } from './services/auth.service';
     WorkspaceInvitationModule,
     EmailVerificationModule,
     GuardRedirectModule,
-    ImpersonationAuthorizationModule,
     PermissionsModule,
     TwoFactorAuthenticationModule,
     ApiKeyModule,
@@ -100,7 +97,6 @@ import { AuthService } from './services/auth.service';
     ApplicationModule,
     WorkspaceCacheModule,
     SecureHttpClientModule,
-    EnterpriseModule,
     BillingModule,
     FileModule,
     ConnectedAccountTokenEncryptionModule,

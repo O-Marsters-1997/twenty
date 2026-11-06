@@ -103,12 +103,11 @@ describe('workspace route objects', () => {
     '/settings/profile',
     '/settings/billing',
     '/settings/api-webhooks/graphql',
-    '/settings/admin-panel',
     '/settings/not-a-real-page',
   ])('keeps the unsupported settings leaf %s on main', (path) => {
     expect(
       isWorkspaceLocationAvailableOnSurface(
-        createWorkspaceRouteObjects({ isAdminPageEnabled: true }),
+        createWorkspaceRouteObjects(),
         'side-panel',
         path,
       ),

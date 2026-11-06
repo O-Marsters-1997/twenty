@@ -2,5 +2,4 @@ import { type FieldActorValue } from '@/object-record/record-field/ui/types/Fiel
 
 export type LogConsoleMember = Partial<FieldActorValue> & {
   avatarUrl?: string | null;
-  isSupportTeam?: boolean;
 };

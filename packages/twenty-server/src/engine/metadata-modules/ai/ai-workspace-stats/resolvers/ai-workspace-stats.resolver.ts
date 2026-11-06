@@ -17,7 +17,6 @@ import { UserRoleService } from 'src/engine/metadata-modules/user-role/user-role
   AuthPrincipalGuard({
     userSession: {
       standard: true,
-      impersonated: true,
       playground: true,
       workspaceAgnostic: false,
     },

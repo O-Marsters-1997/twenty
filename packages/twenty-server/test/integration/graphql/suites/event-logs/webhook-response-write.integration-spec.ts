@@ -17,23 +17,14 @@ import {
   createWebhookReceiver,
   deleteWebhook,
 } from 'test/integration/metadata/suites/utils/webhook-test.util';
-import { makeAdminPanelApiRequest } from 'test/integration/twenty-config/utils/make-admin-panel-api-request.util';
+import {
+  createConfigVariable,
+  deleteConfigVariable,
+} from 'test/integration/twenty-config/utils/database-config-variable.util';
 import { expectEventually } from 'test/integration/utils/expect-eventually.util';
 
 const WEBHOOK_RECEIVER_PORT = 4319;
 const UNREACHABLE_WEBHOOK_PORT = 4321;
-
-const CREATE_CONFIG_VARIABLE_MUTATION = gql`
-  mutation CreateDatabaseConfigVariable($key: String!, $value: JSON!) {
-    createDatabaseConfigVariable(key: $key, value: $value)
-  }
-`;
-
-const DELETE_CONFIG_VARIABLE_MUTATION = gql`
-  mutation DeleteDatabaseConfigVariable($key: String!) {
-    deleteDatabaseConfigVariable(key: $key)
-  }
-`;
 
 const CREATE_PERSON_MUTATION = gql`
   mutation CreatePerson($data: PersonCreateInput!) {
@@ -92,9 +83,8 @@ describe('Webhook response event write (integration)', () => {
       log: { level: ClickHouseLogLevel.OFF },
     });
 
-    await makeAdminPanelApiRequest({
-      query: CREATE_CONFIG_VARIABLE_MUTATION,
-      variables: { key: 'OUTBOUND_HTTP_ALLOWED_INTERNAL_HOSTS', value: ['*'] },
+    await createConfigVariable({
+      input: { key: 'OUTBOUND_HTTP_ALLOWED_INTERNAL_HOSTS', value: ['*'] },
     });
 
     receiver = await createWebhookReceiver(WEBHOOK_RECEIVER_PORT);
@@ -131,9 +121,8 @@ describe('Webhook response event write (integration)', () => {
       }).catch(() => {});
     }
 
-    await makeAdminPanelApiRequest({
-      query: DELETE_CONFIG_VARIABLE_MUTATION,
-      variables: { key: 'OUTBOUND_HTTP_ALLOWED_INTERNAL_HOSTS' },
+    await deleteConfigVariable({
+      input: { key: 'OUTBOUND_HTTP_ALLOWED_INTERNAL_HOSTS' },
     }).catch(() => {});
 
     await clickHouseClient.command({

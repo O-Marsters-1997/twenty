@@ -25,7 +25,6 @@ import { UsageLimitGraphqlApiExceptionFilter } from 'src/engine/core-modules/usa
   AuthPrincipalGuard({
     userSession: {
       standard: true,
-      impersonated: true,
       playground: true,
       workspaceAgnostic: false,
     },

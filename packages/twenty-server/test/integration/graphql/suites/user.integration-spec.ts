@@ -7,8 +7,7 @@ import { signUpOperationFactory } from 'test/integration/graphql/utils/sign-up-o
 import { signUpInWorkspaceAndGetAccessToken } from 'test/integration/graphql/utils/sign-up-in-workspace-and-get-access-token.util';
 import { deleteUser } from 'test/integration/graphql/utils/delete-user.util';
 import { makeMetadataApiRequest } from 'test/integration/metadata/suites/utils/make-metadata-api-request.util';
-import { updateConfigVariable } from 'test/integration/twenty-config/utils/update-config-variable.util';
-
+import { updateConfigVariable } from 'test/integration/twenty-config/utils/database-config-variable.util';
 import { ErrorCode } from 'src/engine/core-modules/graphql/utils/graphql-errors.util';
 import { PermissionsExceptionMessage } from 'src/engine/metadata-modules/permissions/permissions.exception';
 import { WORKSPACE_MEMBER_DATA_SEED_IDS } from 'src/engine/workspace-manager/dev-seeder/data/constants/workspace-member-data-seeds.constant';

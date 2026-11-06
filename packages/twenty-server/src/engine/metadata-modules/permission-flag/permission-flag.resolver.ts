@@ -17,7 +17,6 @@ import { PermissionFlagService } from 'src/engine/metadata-modules/permission-fl
   AuthPrincipalGuard({
     userSession: {
       standard: true,
-      impersonated: true,
       playground: true,
       workspaceAgnostic: false,
     },
