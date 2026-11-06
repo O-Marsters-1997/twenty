@@ -107,7 +107,6 @@ const META_MODE_TOOL_NAMES = [
   'list_object_metadata_names',
   'list_skills',
   'load_skills',
-  'search_help_center',
 ];
 
 const DIRECT_MODE_PATH = '/mcp?mode=direct';
@@ -308,7 +307,6 @@ describe('MCP tool catalog (integration)', () => {
       expect(toolNames).toEqual(
         expect.arrayContaining([
           'find_many_companies',
-          'search_help_center',
           'load_skills',
         ]),
       );

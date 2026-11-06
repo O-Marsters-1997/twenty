@@ -11,9 +11,6 @@ export const STANDARD_SKILL = {
   'metadata-building': {
     universalIdentifier: '20202020-7b80-4a14-8fb9-d1512b89c078',
   },
-  'code-interpreter': {
-    universalIdentifier: '20202020-a97a-4069-8e44-fc18faea7b97',
-  },
   xlsx: {
     universalIdentifier: '20202020-b1ac-484f-bf27-82c2114f5707',
   },

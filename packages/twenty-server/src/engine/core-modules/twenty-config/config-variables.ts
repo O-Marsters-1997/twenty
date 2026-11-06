@@ -23,11 +23,9 @@ import { isDefined } from 'twenty-shared/utils';
 import { type LoggerOptions } from 'typeorm/logger/LoggerOptions';
 
 import { type AwsRegion } from 'src/engine/core-modules/twenty-config/interfaces/aws-region.interface';
-import { NodeEnvironment } from 'src/engine/core-modules/twenty-config/interfaces/node-environment.interface';
 import { SupportDriver } from 'src/engine/core-modules/twenty-config/interfaces/support.interface';
 
 import { CaptchaDriverType } from 'src/engine/core-modules/captcha/interfaces';
-import { CodeInterpreterDriverType } from 'src/engine/core-modules/code-interpreter/code-interpreter.interface';
 import { DpaRegion } from 'src/engine/core-modules/dpa/enums/dpa-region.enum';
 import { EmailDriver } from 'src/engine/core-modules/email/enums/email-driver.enum';
 import { EmailingDomainDriver } from 'src/engine/core-modules/emailing-domain/drivers/types/emailing-domain-driver.type';
@@ -45,7 +43,6 @@ import { CastToLogLevelArray } from 'src/engine/core-modules/twenty-config/decor
 import { CastToMeterDriverArray } from 'src/engine/core-modules/twenty-config/decorators/cast-to-meter-driver.decorator';
 import { CastToPositiveNumber } from 'src/engine/core-modules/twenty-config/decorators/cast-to-positive-number.decorator';
 import { CastToTypeORMLogLevelArray } from 'src/engine/core-modules/twenty-config/decorators/cast-to-typeorm-log-level-array.decorator';
-import { CastToUpperSnakeCase } from 'src/engine/core-modules/twenty-config/decorators/cast-to-upper-snake-case.decorator';
 import { ConfigVariablesMetadata } from 'src/engine/core-modules/twenty-config/decorators/config-variables-metadata.decorator';
 import { IsAWSRegion } from 'src/engine/core-modules/twenty-config/decorators/is-aws-region.decorator';
 import { DEFAULT_WORKSPACE_AUTO_LOGIN_WINDOW } from 'src/engine/core-modules/auth/constants/default-workspace-auto-login-window.constant';
@@ -726,60 +723,6 @@ export class ConfigVariables {
   @CastToPositiveNumber()
   @IsOptional()
   WORKSPACE_RECORD_LIMIT?: number;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.CODE_INTERPRETER_CONFIG,
-    description:
-      'Code interpreter driver type - LOCAL for development (unsafe), E2B for sandboxed execution',
-    type: ConfigVariableType.STRING,
-    options: Object.values(CodeInterpreterDriverType),
-  })
-  @IsOptional()
-  @CastToUpperSnakeCase()
-  CODE_INTERPRETER_TYPE: CodeInterpreterDriverType =
-    process.env.NODE_ENV === NodeEnvironment.DEVELOPMENT
-      ? CodeInterpreterDriverType.LOCAL
-      : CodeInterpreterDriverType.DISABLED;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.CODE_INTERPRETER_CONFIG,
-    description: 'E2B API key for sandboxed code execution',
-    type: ConfigVariableType.STRING,
-    isSensitive: true,
-  })
-  @ValidateIf(
-    (env) => env.CODE_INTERPRETER_TYPE === CodeInterpreterDriverType.E_2_B,
-  )
-  E2B_API_KEY?: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.CODE_INTERPRETER_CONFIG,
-    description: 'Timeout in milliseconds for code execution (default: 300000)',
-    type: ConfigVariableType.NUMBER,
-  })
-  @IsOptional()
-  @CastToPositiveNumber()
-  CODE_INTERPRETER_TIMEOUT_MS = 300_000;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.CODE_INTERPRETER_CONFIG,
-    description:
-      'Idle lifetime in milliseconds for a reused code interpreter sandbox; refreshed on each execution and reclaimed after this period of inactivity (default: 300000)',
-    type: ConfigVariableType.NUMBER,
-  })
-  @IsOptional()
-  @CastToPositiveNumber()
-  CODE_INTERPRETER_IDLE_TIMEOUT_MS = 300_000;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.CODE_INTERPRETER_CONFIG,
-    description:
-      'Maximum age in milliseconds a reused code interpreter sandbox is kept before garbage collection reclaims it; abandoned conversations are reclaimed after this period (default: 86400000)',
-    type: ConfigVariableType.NUMBER,
-  })
-  @IsOptional()
-  @CastToPositiveNumber()
-  CODE_INTERPRETER_SESSION_MAX_AGE_MS = 86_400_000;
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.ANALYTICS_CONFIG,

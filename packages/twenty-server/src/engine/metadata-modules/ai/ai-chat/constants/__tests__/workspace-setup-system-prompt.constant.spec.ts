@@ -111,18 +111,9 @@ describe('WORKSPACE_SETUP_SYSTEM_PROMPT', () => {
     expect(prompt).toContain('continue as if they had chosen to start fresh');
   });
 
-  it('should inspect uploaded exports through code_interpreter before proposing the model', () => {
-    expect(prompt).toContain('code_interpreter');
-    expect(prompt).toContain('read them right away');
-    expect(prompt).toContain('headers and a few sample rows');
+  it('should ask for sample rows before proposing the model', () => {
+    expect(prompt).toContain('header row and a few sample rows');
     expect(prompt).toContain('grounded in what they actually have');
-  });
-
-  it('should import migrated rows with the Bulk Import recipe right after the model is built', () => {
-    expect(prompt).toContain('data-manipulation');
-    expect(prompt).toContain('Bulk Import recipe');
-    expect(prompt).toContain('as soon as the model is built');
-    expect(prompt).toContain('so one approval covers both');
   });
 
   it('should anchor the proposal on admission tests instead of numeric bands', () => {

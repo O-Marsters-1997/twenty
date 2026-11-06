@@ -91,13 +91,6 @@ export const CONFIG_VARIABLES_GROUP_METADATA: Record<
     isHiddenOnLoad: true,
     isHiddenInAdminPanel: false,
   },
-  [ConfigVariablesGroup.CODE_INTERPRETER_CONFIG]: {
-    position: 1550,
-    description:
-      'Configure the code interpreter for AI data analysis. Use LOCAL for development (unsafe) or E2B for sandboxed execution.',
-    isHiddenOnLoad: true,
-    isHiddenInAdminPanel: false,
-  },
   [ConfigVariablesGroup.SSL]: {
     position: 1600,
     description:

@@ -4,7 +4,6 @@ import { isNonEmptyString } from '@sniptt/guards';
 import { isNonEmptyArray } from 'twenty-shared/utils';
 import { In, IsNull, Not } from 'typeorm';
 
-import { CodeInterpreterService } from 'src/engine/core-modules/code-interpreter/code-interpreter.service';
 import { RedisClientService } from 'src/engine/core-modules/redis-client/redis-client.service';
 import { closeOpenToolParts } from 'src/engine/metadata-modules/ai/ai-agent-execution/pausing-tools/utils/close-open-tool-parts.util';
 import { AgentChatThreadRecordEventService } from 'src/engine/metadata-modules/ai/ai-chat/services/agent-chat-thread-record-event.service';
@@ -24,7 +23,6 @@ export class AgentChatThreadLifecycleService {
     @InjectAgentHistoryRepository('agentChatThread')
     private readonly threadRepository: AgentHistoryRepository<AgentChatThreadWorkspaceEntity>,
     private readonly redisClientService: RedisClientService,
-    private readonly codeInterpreterService: CodeInterpreterService,
     private readonly threadRecordEventService: AgentChatThreadRecordEventService,
     private readonly turnRecorderService: AgentTurnRecorderService,
     @InjectAgentHistoryRepository('agentMessagePart')
@@ -41,24 +39,6 @@ export class AgentChatThreadLifecycleService {
     await this.redisClientService
       .getClient()
       .publish(getCancelChannel(threadId, streamId), 'cancel');
-  }
-
-  releaseThreadSandboxBestEffort({
-    workspaceId,
-    threadId,
-  }: {
-    workspaceId: string;
-    threadId: string;
-  }): void {
-    void this.codeInterpreterService
-      .releaseThreadSandbox(workspaceId, threadId)
-      .catch((error) =>
-        this.logger.warn(
-          `Failed to release code interpreter sandbox for thread ${threadId}: ${
-            error instanceof Error ? error.message : String(error)
-          }`,
-        ),
-      );
   }
 
   // awaited so the stream stops before the soft delete responds
@@ -79,11 +59,6 @@ export class AgentChatThreadLifecycleService {
 
     for (const deletedThread of deletedThreads) {
       await this.stopStreamIfAny({ workspaceId, thread: deletedThread });
-
-      this.releaseThreadSandboxBestEffort({
-        workspaceId,
-        threadId: deletedThread.id,
-      });
     }
   }
 

@@ -3,11 +3,10 @@ import { AI_INSTRUCTIONS_EDITOR_PROFILE } from '@/ai/constants/AiInstructionsEdi
 import { currentWorkspaceState } from '@/auth/states/currentWorkspaceState';
 import { getToastOptionsFromError } from '@/error-handler/utils/getToastOptionsFromError';
 import { SettingsCard } from '@/settings/components/SettingsCard';
-import { SettingsStatsGrid } from '@/settings/components/SettingsStatsGrid';
 import { UndecoratedLink } from '@/ui/navigation/link/components/UndecoratedLink/UndecoratedLink';
 import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
 import { CombinedGraphQLErrors } from '@apollo/client';
-import { useMutation, useQuery } from '@apollo/client/react';
+import { useMutation } from '@apollo/client/react';
 import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { Fragment, useState } from 'react';
@@ -15,13 +14,10 @@ import { SettingsPath } from 'twenty-shared/types';
 import { getSettingsPath } from 'twenty-shared/utils';
 import { useToast } from 'twenty-ui/components/feedback';
 import { Section } from 'twenty-ui/components/layout';
-import { IconBook, IconMessage, IconSparkles, IconTool } from 'twenty-ui/icon';
+import { IconSparkles } from 'twenty-ui/icon';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 import { useDebouncedCallback } from 'use-debounce';
-import {
-  FindWorkspaceAiStatsDocument,
-  UpdateWorkspaceDocument,
-} from '~/generated-metadata/graphql';
+import { UpdateWorkspaceDocument } from '~/generated-metadata/graphql';
 
 const StyledInstructionsContainer = styled.div`
   display: flex;
@@ -38,9 +34,6 @@ export const SettingsAiOverviewTab = () => {
     currentWorkspaceState,
   );
   const [updateWorkspace] = useMutation(UpdateWorkspaceDocument);
-
-  const { data: aiStatsData } = useQuery(FindWorkspaceAiStatsDocument);
-  const stats = aiStatsData?.findWorkspaceAiStats;
 
   const initialInstructions = currentWorkspace?.aiAdditionalInstructions ?? '';
   const [workspaceInstructions, setWorkspaceInstructions] =
@@ -79,38 +72,6 @@ export const SettingsAiOverviewTab = () => {
 
   return (
     <Fragment>
-      <Section.Root>
-        <Section.Header
-          title={t`At a glance`}
-          description={t`What's installed and being used in your workspace`}
-        />
-        <SettingsStatsGrid
-          columns={[
-            [
-              {
-                Icon: IconMessage,
-                label: t`Conversations`,
-                value: stats ? stats.conversationsCount.toString() : '—',
-              },
-            ],
-            [
-              {
-                Icon: IconBook,
-                label: t`Skills`,
-                value: stats ? stats.skillsCount.toString() : '—',
-              },
-            ],
-            [
-              {
-                Icon: IconTool,
-                label: t`Tools`,
-                value: stats ? stats.toolsCount.toString() : '—',
-              },
-            ],
-          ]}
-        />
-      </Section.Root>
-
       <Section.Root>
         <Section.Header
           title={t`MCP Server`}

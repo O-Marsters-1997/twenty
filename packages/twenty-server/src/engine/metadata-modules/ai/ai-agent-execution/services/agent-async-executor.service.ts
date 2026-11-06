@@ -476,7 +476,7 @@ export class AgentAsyncExecutorService {
       )?.modalities;
 
       const priorModelMessages = await convertToModelMessages(
-        replaceUnsupportedFileParts(priorMessages, modalities, false),
+        replaceUnsupportedFileParts(priorMessages, modalities),
       );
 
       const modelMessages =

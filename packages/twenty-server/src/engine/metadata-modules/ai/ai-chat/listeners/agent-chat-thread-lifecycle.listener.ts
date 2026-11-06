@@ -32,10 +32,6 @@ export class AgentChatThreadLifecycleListener {
           streamId: activeStreamId,
         });
       }
-      this.threadLifecycleService.releaseThreadSandboxBestEffort({
-        workspaceId: payload.workspaceId,
-        threadId: id,
-      });
     }
   }
 }
