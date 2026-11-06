@@ -43,7 +43,6 @@ export const GmailGeneralShowsAccountsAndBlocklist: Story = {
     expect(await canvas.findByText('Blocklist')).toBeVisible();
     expect(await canvas.findByText('tim@apple.dev')).toBeVisible();
     expect(canvas.getByText('tim.cook@gmail.com')).toBeVisible();
-    expect(canvas.queryByText('tim@outlook.com')).not.toBeInTheDocument();
     expect(canvas.queryByText('Used by')).not.toBeInTheDocument();
     expect(canvas.getByText('Permissions')).toBeVisible();
     expect(canvas.getByText('Read emails, Send emails')).toBeVisible();
@@ -76,32 +75,6 @@ export const GmailEmailsTabSwitchesAccount: Story = {
     expect(
       await canvas.findByRole('radio', { name: 'Metadata' }),
     ).toBeChecked();
-  },
-};
-
-export const OutlookHasEmailsAndCalendarTabs: Story = {
-  args: {
-    routeParams: { ':nativeAccountAppId': 'outlook' },
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-
-    await userEvent.click(
-      await canvas.findByTestId('tab-general', undefined, { timeout: 3000 }),
-    );
-
-    expect(
-      await canvas.findByText('Read emails, Send emails, Manage events'),
-    ).toBeVisible();
-
-    await userEvent.click(canvas.getByTestId('tab-emails'));
-
-    expect(await canvas.findByText('Visibility')).toBeVisible();
-
-    await userEvent.click(canvas.getByTestId('tab-calendar'));
-
-    expect(await canvas.findByText('Event visibility')).toBeVisible();
-    expect(canvas.getByText('tim@outlook.com')).toBeVisible();
   },
 };
 

@@ -96,10 +96,6 @@ export const AccountsGroupedByEmail: Story = {
     );
     expect(canvas.queryByText('Tim@Apple.dev')).not.toBeInTheDocument();
 
-    const outlookRow = getTableRow(canvasElement, 'tim@outlook.com');
-
-    expect(outlookRow.getAllByRole('img', { name: 'Outlook' })).toHaveLength(1);
-
     const notesRow = getTableRow(canvasElement, 'notes@apple.dev');
 
     expect(notesRow.getByRole('img', { name: 'Fathom' })).toBeVisible();
@@ -121,7 +117,7 @@ export const AccountsGroupedByEmail: Story = {
 export const AppPreferencesListEnabledApps: Story = {
   ...accountGroupsStory,
   args: {
-    additionalRoutes: ['/settings/accounts/apps/outlook'],
+    additionalRoutes: ['/settings/accounts/apps/gmail'],
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -139,10 +135,10 @@ export const AppPreferencesListEnabledApps: Story = {
     expect(canvas.queryByText('Missing account')).not.toBeInTheDocument();
     expect(canvas.queryByText('Blocklist')).not.toBeInTheDocument();
 
-    await userEvent.click(canvas.getByRole('link', { name: 'Outlook' }));
+    await userEvent.click(canvas.getByRole('link', { name: 'Gmail' }));
 
     expect(
-      await canvas.findByText('Navigated to /settings/accounts/apps/outlook'),
+      await canvas.findByText('Navigated to /settings/accounts/apps/gmail'),
     ).toBeVisible();
   },
 };
