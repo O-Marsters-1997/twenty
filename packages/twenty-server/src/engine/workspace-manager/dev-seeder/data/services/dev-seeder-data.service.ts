@@ -456,12 +456,27 @@ export class DevSeederDataService {
     pgColumns: string[];
     recordSeeds: Record<string, unknown>[];
   }) {
+    const needsActorNames = tableName.startsWith('_');
+
     await entityManager
       .createQueryBuilder()
       .insert()
-      .into(`${schemaName}.${tableName}`, pgColumns)
+      .into(
+        `${schemaName}.${tableName}`,
+        needsActorNames
+          ? [...pgColumns, 'createdByName', 'updatedByName']
+          : pgColumns,
+      )
       .orIgnore()
-      .values(recordSeeds)
+      .values(
+        needsActorNames
+          ? recordSeeds.map((recordSeed) => ({
+              ...recordSeed,
+              createdByName: 'System',
+              updatedByName: 'System',
+            }))
+          : recordSeeds,
+      )
       .execute();
   }
 
