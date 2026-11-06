@@ -1,14 +1,9 @@
-import { createHash } from 'crypto';
-
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 
-import { FileFolder } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 import { type DataSource, type QueryRunner, type Repository } from 'typeorm';
 
-import { getDefaultApplicationPackageFields } from 'src/engine/core-modules/application/application-package/utils/get-default-application-package-fields.util';
-import { parseAvailablePackagesFromPackageJsonAndYarnLock } from 'src/engine/core-modules/application/application-package/utils/parse-available-packages-from-package-json-and-yarn-lock.util';
 import { ApplicationEntity } from 'src/engine/core-modules/application/application.entity';
 import { ApplicationLookupService } from 'src/engine/core-modules/application/application-lookup/application-lookup.service';
 import {
@@ -30,9 +25,6 @@ import { WorkspaceScopedRepository } from 'src/engine/twenty-orm/workspace-scope
 import { WorkspaceCacheService } from 'src/engine/workspace-cache/services/workspace-cache.service';
 import { TWENTY_STANDARD_APPLICATION } from 'src/engine/workspace-manager/twenty-standard-application/constants/twenty-standard-applications';
 import { type QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
-
-const createChecksum = (fileContent: string) =>
-  createHash('sha512').update(fileContent).digest('hex').substring(0, 32);
 
 @Injectable()
 export class ApplicationService {
@@ -180,7 +172,6 @@ export class ApplicationService {
 
     const application = await this.applicationRepository.findOne(workspaceId, {
       where: isDefined(id) ? { id } : { universalIdentifier },
-      relations: ['packageJsonFile', 'yarnLockFile'],
     });
 
     if (!isDefined(application)) {
@@ -306,25 +297,11 @@ export class ApplicationService {
       return existingApplication;
     }
 
-    const defaultPackageFields = await getDefaultApplicationPackageFields();
-
     const twentyStandardApplication = await this.create(
       {
         ...TWENTY_STANDARD_APPLICATION,
-        logicFunctionLayerId: null,
         workspaceId,
-        canBeUninstalled: false,
-        packageJsonChecksum: defaultPackageFields.packageJsonChecksum,
-        packageJsonFileId: null,
-        yarnLockChecksum: defaultPackageFields.yarnLockChecksum,
-        yarnLockFileId: null,
-        availablePackages: defaultPackageFields.availablePackages,
       },
-      queryRunner,
-    );
-
-    await this.uploadDefaultPackageFilesAndSetFileIds(
-      twentyStandardApplication,
       queryRunner,
     );
 
@@ -347,100 +324,17 @@ export class ApplicationService {
     },
     queryRunner?: QueryRunner,
   ) {
-    const defaultPackageFields = await getDefaultApplicationPackageFields();
-
-    const workspaceCustomApplication = await this.create(
+    return this.create(
       {
         description: null,
         name: WORKSPACE_CUSTOM_APPLICATION_NAME,
-        sourcePath: 'workspace-custom',
         version: '1.0.1',
         universalIdentifier: applicationId,
         workspaceId,
         id: applicationId,
-        logicFunctionLayerId: null,
-        canBeUninstalled: false,
-        packageJsonChecksum: defaultPackageFields.packageJsonChecksum,
-        packageJsonFileId: null,
-        yarnLockChecksum: defaultPackageFields.yarnLockChecksum,
-        yarnLockFileId: null,
-        availablePackages: defaultPackageFields.availablePackages,
       },
       queryRunner,
     );
-
-    await this.uploadDefaultPackageFilesAndSetFileIds(
-      workspaceCustomApplication,
-      queryRunner,
-    );
-
-    return workspaceCustomApplication;
-  }
-
-  async uploadDefaultPackageFilesAndSetFileIds(
-    application: Pick<
-      ApplicationEntity,
-      'id' | 'universalIdentifier' | 'workspaceId'
-    >,
-    queryRunner?: QueryRunner,
-  ): Promise<void> {
-    const defaultPackageFields = await getDefaultApplicationPackageFields();
-
-    const packageJsonChecksum = createChecksum(
-      JSON.stringify(JSON.parse(defaultPackageFields.packageJsonContent)),
-    );
-    const yarnLockChecksum = createChecksum(
-      defaultPackageFields.yarnLockContent,
-    );
-    const availablePackages = parseAvailablePackagesFromPackageJsonAndYarnLock(
-      defaultPackageFields.packageJsonContent,
-      defaultPackageFields.yarnLockContent,
-    );
-
-    const packageJsonFile = await this.fileStorageService.writeFile({
-      sourceFile: defaultPackageFields.packageJsonContent,
-      fileFolder: FileFolder.Dependencies,
-      applicationUniversalIdentifier: application.universalIdentifier,
-      applicationId: application.id,
-      workspaceId: application.workspaceId,
-      resourcePath: 'package.json',
-      settings: { isTemporaryFile: false, toDelete: false },
-      queryRunner,
-    });
-
-    const yarnLockFile = await this.fileStorageService.writeFile({
-      sourceFile: defaultPackageFields.yarnLockContent,
-      fileFolder: FileFolder.Dependencies,
-      applicationUniversalIdentifier: application.universalIdentifier,
-      applicationId: application.id,
-      workspaceId: application.workspaceId,
-      resourcePath: 'yarn.lock',
-      settings: { isTemporaryFile: false, toDelete: false },
-      queryRunner,
-    });
-
-    if (queryRunner) {
-      await queryRunner.manager.update(
-        ApplicationEntity,
-        { id: application.id },
-        {
-          packageJsonFileId: packageJsonFile.id,
-          yarnLockFileId: yarnLockFile.id,
-          packageJsonChecksum,
-          yarnLockChecksum,
-          availablePackages,
-        },
-      );
-    } else {
-      await this.update(application.id, {
-        packageJsonFileId: packageJsonFile.id,
-        yarnLockFileId: yarnLockFile.id,
-        packageJsonChecksum,
-        yarnLockChecksum,
-        availablePackages,
-        workspaceId: application.workspaceId,
-      });
-    }
   }
 
   private async broadcastApplicationEvent({
@@ -562,12 +456,6 @@ export class ApplicationService {
     await queryRunner.startTransaction();
 
     try {
-      await queryRunner.manager.update(
-        ApplicationEntity,
-        { id: application.id },
-        { packageJsonFileId: null, yarnLockFileId: null },
-      );
-
       await this.fileStorageService.deleteApplicationFileRows({
         applicationId: application.id,
         workspaceId,

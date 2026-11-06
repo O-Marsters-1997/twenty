@@ -12,12 +12,8 @@ export const APPLICATION_FRAGMENT = gql`
     logoUrl
     version
     universalIdentifier
-    canBeUninstalled
-    autoUpgrade
     createdAt
     defaultRoleId
-    healthCheckLogicFunctionId
-    availablePackages
     agents {
       ...AgentFields
     }

@@ -274,34 +274,6 @@ describe('WorkflowDatabaseEventTriggerListener', () => {
       expect(messageQueueService.add).not.toHaveBeenCalled();
     });
 
-    it('should trigger an application workflow on records its application role reads', async () => {
-      setTriggerMap(mockEventListeners, {
-        installedApplicationRole: { canReadObjectRecords: true },
-      });
-
-      await listener.handleObjectRecordUpdateEvent(mockPayload);
-
-      expect(messageQueueService.add).toHaveBeenCalledTimes(1);
-    });
-
-    it('should not trigger an application workflow on records its application role cannot read', async () => {
-      setTriggerMap(mockEventListeners, {
-        installedApplicationRole: { canReadObjectRecords: false },
-      });
-
-      await listener.handleObjectRecordUpdateEvent(mockPayload);
-
-      expect(messageQueueService.add).not.toHaveBeenCalled();
-    });
-
-    it('should not trigger an application workflow whose application has no role', async () => {
-      setTriggerMap(mockEventListeners, { installedApplicationRole: null });
-
-      await listener.handleObjectRecordUpdateEvent(mockPayload);
-
-      expect(messageQueueService.add).not.toHaveBeenCalled();
-    });
-
     it('should trigger workflow missing from the workflow cache', async () => {
       setTriggerMap(mockEventListeners, {
         applicationVersion: null,

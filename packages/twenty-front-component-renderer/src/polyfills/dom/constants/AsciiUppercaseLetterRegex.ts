@@ -1,1 +1,0 @@
-export const ASCII_UPPERCASE_LETTER_REGEX = /[A-Z]/;

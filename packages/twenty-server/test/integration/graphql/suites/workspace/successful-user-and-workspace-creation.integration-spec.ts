@@ -139,10 +139,8 @@ describe('Successful user and workspace creation', () => {
     );
 
     jestExpectToBeDefined(twentyStandardApp);
-    const { sourcePath: _sourcePath, ...expectedStandardTwentyApplication } =
-      TWENTY_STANDARD_APPLICATION;
 
-    expect(twentyStandardApp).toMatchObject(expectedStandardTwentyApplication);
+    expect(twentyStandardApp).toMatchObject(TWENTY_STANDARD_APPLICATION);
 
     const workpsaceCustomApplication = findManyApplicationsData.find(
       (application) =>

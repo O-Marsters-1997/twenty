@@ -11,7 +11,6 @@ import { ApplicationModule } from 'src/engine/core-modules/application/applicati
 import { ApprovedAccessDomainModule } from 'src/engine/core-modules/approved-access-domain/approved-access-domain.module';
 import { AuthModule } from 'src/engine/core-modules/auth/auth.module';
 import { BillingWebhookModule } from 'src/engine/core-modules/billing-webhook/billing-webhook.module';
-import { AppBillingModule } from 'src/engine/core-modules/billing/app-billing/app-billing.module';
 import { BillingModule } from 'src/engine/core-modules/billing/billing.module';
 import { BillingGraphqlApiExceptionFilter } from 'src/engine/core-modules/billing/filters/billing-graphql-api-exception.filter';
 import { PermissionsGraphqlApiExceptionFilter } from 'src/engine/metadata-modules/permissions/utils/permissions-graphql-api-exception.filter';
@@ -151,7 +150,6 @@ import { FileApiModule } from './file/file-api.module';
     TrashCleanupModule,
     CodeInterpreterSessionCleanupModule,
     EventLogsViewerModule,
-    AppBillingModule,
   ],
   providers: [
     {

@@ -2,12 +2,7 @@ import { type ApplicationEntity } from 'src/engine/core-modules/application/appl
 
 type SerializableApplication = Pick<
   ApplicationEntity,
-  | 'id'
-  | 'universalIdentifier'
-  | 'name'
-  | 'description'
-  | 'version'
-  | 'sdkClientCoreChecksum'
+  'id' | 'universalIdentifier' | 'name' | 'description' | 'version'
 >;
 
 export const serializeApplicationForBroadcast = (
@@ -17,6 +12,4 @@ export const serializeApplicationForBroadcast = (
   universalIdentifier: application.universalIdentifier,
   name: application.name,
   description: application.description ?? null,
-  version: application.version ?? null,
-  sdkClientCoreChecksum: application.sdkClientCoreChecksum ?? null,
-});
+  version: application.version ?? null,});

@@ -10,7 +10,6 @@ emails and calendar events, files, and credentials for connected Google, Microso
   from per-workspace metadata (custom objects and fields).
 - `packages/twenty-front`: React app.
 - `packages/twenty-shared`: types and utils shared by front and server.
-- `packages/twenty-sdk`, `packages/twenty-front-component-renderer`: the third-party application platform (see below).
 
 Paths below are relative to `packages/twenty-server/src/` unless stated otherwise.
 

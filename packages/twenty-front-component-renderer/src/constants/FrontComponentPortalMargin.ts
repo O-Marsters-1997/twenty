@@ -1,1 +1,0 @@
-export const FRONT_COMPONENT_PORTAL_MARGIN = 200;
