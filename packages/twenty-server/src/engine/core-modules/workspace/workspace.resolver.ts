@@ -446,7 +446,6 @@ export class WorkspaceResolver {
         magicLink: false,
         password: this.twentyConfigService.get('AUTH_PASSWORD_ENABLED'),
         microsoft: this.twentyConfigService.get('AUTH_MICROSOFT_ENABLED'),
-        sso: [],
       };
 
       if (!origin) {
