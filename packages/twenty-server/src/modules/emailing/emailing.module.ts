@@ -13,7 +13,6 @@ import { EmailingDomainModule } from 'src/engine/core-modules/emailing-domain/em
 import { EmailingDomainEntity } from 'src/engine/core-modules/emailing-domain/emailing-domain.entity';
 import { ShortLinkModule } from 'src/engine/core-modules/short-link/short-link.module';
 import { ClickHouseModule } from 'src/database/clickhouse/clickhouse.module';
-import { MetricsModule } from 'src/engine/core-modules/metrics/metrics.module';
 import { UnsubscribeTopicEntity } from 'src/engine/core-modules/emailing-domain/unsubscribe-topic.entity';
 import { FeatureFlagModule } from 'src/engine/core-modules/feature-flag/feature-flag.module';
 import { MessageChannelEntity } from 'src/engine/metadata-modules/message-channel/entities/message-channel.entity';
@@ -79,7 +78,6 @@ import { SaveCampaignTool } from 'src/modules/emailing/tools/save-campaign-tool'
     WorkspaceManyOrAllFlatEntityMapsCacheModule,
     UsageLimitModule,
     ClickHouseModule,
-    MetricsModule,
     ShortLinkModule,
     TypeOrmModule.forFeature([
       MessageChannelEntity,

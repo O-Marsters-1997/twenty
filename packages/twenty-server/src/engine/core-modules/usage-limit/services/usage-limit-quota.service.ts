@@ -7,8 +7,6 @@ import { BillingCreditAllowanceService } from 'src/engine/core-modules/billing/s
 import { InjectCacheStorage } from 'src/engine/core-modules/cache-storage/decorators/cache-storage.decorator';
 import { CacheStorageService } from 'src/engine/core-modules/cache-storage/services/cache-storage.service';
 import { CacheStorageNamespace } from 'src/engine/core-modules/cache-storage/types/cache-storage-namespace.enum';
-import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
-import { MetricsKeys } from 'src/engine/core-modules/metrics/types/metrics-keys.type';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { WARM_AND_CONSUME_COUNTERS_SCRIPT } from 'src/engine/core-modules/usage-limit/constants/warm-and-consume-counters-script.constant';
 import { UsageLimitException } from 'src/engine/core-modules/usage-limit/exceptions/usage-limit.exception';
@@ -85,7 +83,6 @@ export class UsageLimitQuotaService {
     private readonly billingCreditAllowanceService: BillingCreditAllowanceService,
     private readonly usageLimitEntitlementService: UsageLimitEntitlementService,
     private readonly usageLimitDefaultValueService: UsageLimitDefaultValueService,
-    private readonly metricsService: MetricsService,
     private readonly twentyConfigService: TwentyConfigService,
   ) {}
 
@@ -524,19 +521,7 @@ export class UsageLimitQuotaService {
     creditsUsedMicro,
   }: QuotaEnforcement): void {
     const attributes = { operation, resourceType };
-
-    this.metricsService.incrementCounterBy({
-      key: MetricsKeys.UsageLimitQuotaAdmittedOnFailure,
-      amount: 1,
-      attributes,
-    });
-
     if (isDefined(creditsUsedMicro) && creditsUsedMicro > 0) {
-      this.metricsService.incrementCounterBy({
-        key: MetricsKeys.UsageLimitQuotaAdmittedOnFailureCreditsMicro,
-        amount: creditsUsedMicro,
-        attributes,
-      });
     }
   }
 

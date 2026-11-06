@@ -12,8 +12,6 @@ import {
 import { InjectCacheStorage } from 'src/engine/core-modules/cache-storage/decorators/cache-storage.decorator';
 import { CacheStorageService } from 'src/engine/core-modules/cache-storage/services/cache-storage.service';
 import { CacheStorageNamespace } from 'src/engine/core-modules/cache-storage/types/cache-storage-namespace.enum';
-import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
-import { MetricsKeys } from 'src/engine/core-modules/metrics/types/metrics-keys.type';
 import { UserWorkspaceEntity } from 'src/engine/core-modules/user-workspace/user-workspace.entity';
 import { ConnectedAccountEntity } from 'src/engine/metadata-modules/connected-account/entities/connected-account.entity';
 import { MessageChannelEntity } from 'src/engine/metadata-modules/message-channel/entities/message-channel.entity';
@@ -43,7 +41,6 @@ export class MessageChannelSyncStatusService {
     @InjectRepository(UserWorkspaceEntity)
     private readonly userWorkspaceRepository: Repository<UserWorkspaceEntity>,
     private readonly accountsToReconnectService: AccountsToReconnectService,
-    private readonly metricsService: MetricsService,
   ) {}
 
   public async markAsMessagesListFetchPending(
@@ -276,11 +273,6 @@ export class MessageChannelSyncStatusService {
       authContext,
       { lite: true },
     );
-
-    await this.metricsService.incrementCounterForEvents({
-      key: MetricsKeys.MessageChannelSyncJobActive,
-      eventIds: messageChannelIds,
-    });
   }
 
   public async markAsMessagesImportScheduled(
@@ -360,17 +352,6 @@ export class MessageChannelSyncStatusService {
             throttleRetryAfter: null,
           },
         );
-
-        const metricsKey =
-          syncStatus ===
-          MessageChannelSyncStatus.FAILED_INSUFFICIENT_PERMISSIONS
-            ? MetricsKeys.MessageChannelSyncJobFailedInsufficientPermissions
-            : MetricsKeys.MessageChannelSyncJobFailedUnknown;
-
-        await this.metricsService.incrementCounterForEvents({
-          key: metricsKey,
-          eventIds: messageChannelIds,
-        });
 
         if (
           syncStatus ===

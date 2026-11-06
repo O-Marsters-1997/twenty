@@ -7,9 +7,6 @@ import { isNonEmptyString } from '@sniptt/guards';
 import { WebhookSubscriptionStatus } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 import { Repository } from 'typeorm';
-
-import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
-import { MetricsKeys } from 'src/engine/core-modules/metrics/types/metrics-keys.type';
 import { CalendarChannelEntity } from 'src/engine/metadata-modules/calendar-channel/entities/calendar-channel.entity';
 import { WebhookSyncTriggerService } from 'src/modules/connected-account/webhook-subscription-manager/services/webhook-sync-trigger.service';
 import {
@@ -29,15 +26,9 @@ export class GoogleCalendarNotificationHandler implements WebhookNotificationHan
     @InjectRepository(CalendarChannelEntity)
     private readonly calendarChannelRepository: Repository<CalendarChannelEntity>,
     private readonly webhookSyncTriggerService: WebhookSyncTriggerService,
-    private readonly metricsService: MetricsService,
   ) {}
 
   async handle(request: GoogleCalendarChannelNotification): Promise<void> {
-    this.metricsService.incrementCounterBy({
-      key: MetricsKeys.ConnectedAccountSyncWebhookReceivedCalendar,
-      amount: 1,
-    });
-
     if (request.resourceState === GOOGLE_CALENDAR_SYNC_RESOURCE_STATE) {
       return;
     }

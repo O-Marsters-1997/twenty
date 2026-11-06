@@ -14,8 +14,6 @@ import { WEBHOOK_RESPONSE_EVENT } from 'src/engine/core-modules/event-logs/emit/
 import { Process } from 'src/engine/core-modules/message-queue/decorators/process.decorator';
 import { Processor } from 'src/engine/core-modules/message-queue/decorators/processor.decorator';
 import { MessageQueue } from 'src/engine/core-modules/message-queue/message-queue.constants';
-import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
-import { MetricsKeys } from 'src/engine/core-modules/metrics/types/metrics-keys.type';
 import { SecureHttpClientService } from 'src/engine/core-modules/secure-http-client/secure-http-client.service';
 import { type WebhookJobData } from 'src/engine/metadata-modules/webhook/types/webhook-job-data.type';
 
@@ -31,7 +29,6 @@ export class CallWebhookJob {
 
   constructor(
     private readonly eventLogEmitterService: EventLogEmitterService,
-    private readonly metricsService: MetricsService,
     private readonly secureHttpClientService: SecureHttpClientService,
   ) {}
 
@@ -123,12 +120,6 @@ export class CallWebhookJob {
       response.request.destroy();
 
       const success = response.status >= 200 && response.status < 300;
-
-      void this.metricsService.incrementCounterForEvent({
-        key: MetricsKeys.JobWebhookCallCompleted,
-        shouldStoreInCache: false,
-      });
-
       return {
         workspaceId: data.workspaceId,
         respondedAt: new Date(),

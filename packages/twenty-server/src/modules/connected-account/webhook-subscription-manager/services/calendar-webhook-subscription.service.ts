@@ -7,9 +7,6 @@ import {
 } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 import { Repository } from 'typeorm';
-
-import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
-import { MetricsKeys } from 'src/engine/core-modules/metrics/types/metrics-keys.type';
 import { CalendarChannelEntity } from 'src/engine/metadata-modules/calendar-channel/entities/calendar-channel.entity';
 import { ConnectedAccountEntity } from 'src/engine/metadata-modules/connected-account/entities/connected-account.entity';
 import {
@@ -34,7 +31,6 @@ export class CalendarWebhookSubscriptionService {
     private readonly calendarChannelRepository: Repository<CalendarChannelEntity>,
     private readonly workspaceActivationService: WorkspaceActivationService,
     private readonly webhookSubscriptionDriverFactory: WebhookSubscriptionDriverFactory,
-    private readonly metricsService: MetricsService,
     private readonly webhookSubscriptionStatusService: WebhookSubscriptionStatusService,
     private readonly webhookSubscriptionExceptionHandlerService: WebhookSubscriptionExceptionHandlerService,
   ) {}
@@ -111,13 +107,6 @@ export class CalendarWebhookSubscriptionService {
         WebhookSubscriptionChannelType.CALENDAR,
         calendarChannel.id,
       );
-
-      this.metricsService.incrementCounterBy({
-        key: MetricsKeys.ConnectedAccountWebhookSubscriptionCreationFailed,
-        amount: 1,
-        attributes: this.buildMetricAttributes(connectedAccount.provider),
-      });
-
       await this.webhookSubscriptionExceptionHandlerService.handleDriverException(
         error,
         'CREATE',
@@ -151,13 +140,6 @@ export class CalendarWebhookSubscriptionService {
 
       return;
     }
-
-    this.metricsService.incrementCounterBy({
-      key: MetricsKeys.ConnectedAccountWebhookSubscriptionCreated,
-      amount: 1,
-      attributes: this.buildMetricAttributes(connectedAccount.provider),
-    });
-
     if (isDefined(previousSubscription)) {
       await driver
         .deleteSubscription(previousSubscription)
@@ -249,19 +231,7 @@ export class CalendarWebhookSubscriptionService {
         calendarChannel.id,
         result,
       );
-
-      this.metricsService.incrementCounterBy({
-        key: MetricsKeys.ConnectedAccountWebhookSubscriptionRenewed,
-        amount: 1,
-        attributes: this.buildMetricAttributes(connectedAccount.provider),
-      });
     } catch (error) {
-      this.metricsService.incrementCounterBy({
-        key: MetricsKeys.ConnectedAccountWebhookSubscriptionRenewalFailed,
-        amount: 1,
-        attributes: this.buildMetricAttributes(connectedAccount.provider),
-      });
-
       const recoveryAction =
         await this.webhookSubscriptionExceptionHandlerService.handleDriverException(
           error,
@@ -326,12 +296,6 @@ export class CalendarWebhookSubscriptionService {
         WebhookSubscriptionChannelType.CALENDAR,
         calendarChannelId,
       );
-
-      this.metricsService.incrementCounterBy({
-        key: MetricsKeys.ConnectedAccountWebhookSubscriptionDeleted,
-        amount: 1,
-        attributes: this.buildMetricAttributes(connectedAccount.provider),
-      });
     } catch (error) {
       if (
         error instanceof WebhookSubscriptionDriverException &&
@@ -339,13 +303,6 @@ export class CalendarWebhookSubscriptionService {
       ) {
         return;
       }
-
-      this.metricsService.incrementCounterBy({
-        key: MetricsKeys.ConnectedAccountWebhookSubscriptionDeletionFailed,
-        amount: 1,
-        attributes: this.buildMetricAttributes(connectedAccount.provider),
-      });
-
       throw error;
     }
   }

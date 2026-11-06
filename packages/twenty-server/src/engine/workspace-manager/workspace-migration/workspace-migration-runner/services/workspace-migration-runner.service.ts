@@ -8,9 +8,6 @@ import { DataSource } from 'typeorm';
 
 import { FeatureFlagService } from 'src/engine/core-modules/feature-flag/services/feature-flag.service';
 import { LoggerService } from 'src/engine/core-modules/logger/logger.service';
-import { WORKSPACE_MIGRATION_DURATION_MS_BUCKET_BOUNDARIES } from 'src/engine/core-modules/metrics/constants/workspace-migration-duration-ms-bucket-boundaries.constant';
-import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
-import { MetricsKeys } from 'src/engine/core-modules/metrics/types/metrics-keys.type';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { WorkspaceManyOrAllFlatEntityMapsCacheService } from 'src/engine/metadata-modules/flat-entity/services/workspace-many-or-all-flat-entity-maps-cache.service';
 import { AllFlatEntityMaps } from 'src/engine/metadata-modules/flat-entity/types/all-flat-entity-maps.type';
@@ -45,7 +42,6 @@ export class WorkspaceMigrationRunnerService {
     private readonly workspaceMigrationRunnerActionHandlerRegistry: WorkspaceMigrationRunnerActionHandlerRegistryService,
     private readonly workspaceMetadataVersionService: WorkspaceMetadataVersionService,
     private readonly workspaceCacheService: WorkspaceCacheService,
-    private readonly metricsService: MetricsService,
     private readonly logger: LoggerService,
     private readonly twentyConfigService: TwentyConfigService,
     private readonly featureFlagService: FeatureFlagService,
@@ -125,15 +121,7 @@ export class WorkspaceMigrationRunnerService {
       | 'cache-invalidation';
     status: 'success' | 'fail';
     value: number;
-  }): void {
-    this.metricsService.recordHistogram({
-      key: MetricsKeys.WorkspaceMigrationRunPhaseDurationMs,
-      value,
-      unit: 'ms',
-      attributes: { phase, status },
-      bucketBoundaries: WORKSPACE_MIGRATION_DURATION_MS_BUCKET_BOUNDARIES,
-    });
-  }
+  }): void {}
 
   private async logBlockingDbActivity(): Promise<void> {
     try {
@@ -178,25 +166,8 @@ export class WorkspaceMigrationRunnerService {
 
     try {
       const result = await this.executeRun(args);
-
-      this.metricsService.recordHistogram({
-        key: MetricsKeys.WorkspaceMigrationRunDurationMs,
-        value: performance.now() - runStart,
-        unit: 'ms',
-        attributes: { status: 'success' },
-        bucketBoundaries: WORKSPACE_MIGRATION_DURATION_MS_BUCKET_BOUNDARIES,
-      });
-
       return result;
     } catch (error) {
-      this.metricsService.recordHistogram({
-        key: MetricsKeys.WorkspaceMigrationRunDurationMs,
-        value: performance.now() - runStart,
-        unit: 'ms',
-        attributes: { status: 'fail' },
-        bucketBoundaries: WORKSPACE_MIGRATION_DURATION_MS_BUCKET_BOUNDARIES,
-      });
-
       throw error;
     }
   };

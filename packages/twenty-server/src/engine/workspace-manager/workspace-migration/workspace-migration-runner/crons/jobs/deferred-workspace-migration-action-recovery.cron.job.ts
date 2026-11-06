@@ -1,6 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
 
-import { SentryCronMonitor } from 'src/engine/core-modules/cron/sentry-cron-monitor.decorator';
 import { ExceptionHandlerService } from 'src/engine/core-modules/exception-handler/exception-handler.service';
 import { Process } from 'src/engine/core-modules/message-queue/decorators/process.decorator';
 import { Processor } from 'src/engine/core-modules/message-queue/decorators/processor.decorator';
@@ -21,10 +20,6 @@ export class DeferredWorkspaceMigrationActionRecoveryCronJob {
   ) {}
 
   @Process(DeferredWorkspaceMigrationActionRecoveryCronJob.name)
-  @SentryCronMonitor(
-    DeferredWorkspaceMigrationActionRecoveryCronJob.name,
-    DEFERRED_WORKSPACE_MIGRATION_ACTION_RECOVERY_CRON_PATTERN,
-  )
   async handle(): Promise<void> {
     try {
       const resetActionCount =

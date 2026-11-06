@@ -9,9 +9,6 @@ import { type FromTo } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 
 import { LoggerService } from 'src/engine/core-modules/logger/logger.service';
-import { WORKSPACE_MIGRATION_DURATION_MS_BUCKET_BOUNDARIES } from 'src/engine/core-modules/metrics/constants/workspace-migration-duration-ms-bucket-boundaries.constant';
-import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
-import { MetricsKeys } from 'src/engine/core-modules/metrics/types/metrics-keys.type';
 import {
   FlatEntityMapsException,
   FlatEntityMapsExceptionCode,
@@ -63,9 +60,6 @@ export abstract class WorkspaceEntityMigrationBuilderService<
 > {
   @Inject(LoggerService)
   protected readonly logger: LoggerService;
-
-  @Inject(MetricsService)
-  protected readonly metricsService: MetricsService;
 
   private metadataName: T;
 
@@ -446,15 +440,7 @@ export abstract class WorkspaceEntityMigrationBuilderService<
   }: {
     status: 'success' | 'fail';
     startedAt: number;
-  }): void {
-    this.metricsService.recordHistogram({
-      key: MetricsKeys.WorkspaceMigrationBuildEntityDurationMs,
-      value: performance.now() - startedAt,
-      unit: 'ms',
-      attributes: { metadataName: this.metadataName, status },
-      bucketBoundaries: WORKSPACE_MIGRATION_DURATION_MS_BUCKET_BOUNDARIES,
-    });
-  }
+  }): void {}
 
   private recordBuildEntityPhaseMetric({
     phase,
@@ -466,15 +452,7 @@ export abstract class WorkspaceEntityMigrationBuilderService<
       | 'creation-validation'
       | 'update-validation';
     startedAt: number;
-  }): void {
-    this.metricsService.recordHistogram({
-      key: MetricsKeys.WorkspaceMigrationBuildEntityPhaseDurationMs,
-      value: performance.now() - startedAt,
-      unit: 'ms',
-      attributes: { metadataName: this.metadataName, phase },
-      bucketBoundaries: WORKSPACE_MIGRATION_DURATION_MS_BUCKET_BOUNDARIES,
-    });
-  }
+  }): void {}
 
   private validateUniversalIdentifier({
     flatEntityToValidate: { universalIdentifier },

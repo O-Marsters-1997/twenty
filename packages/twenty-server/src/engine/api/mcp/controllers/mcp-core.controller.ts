@@ -14,7 +14,6 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 
-import * as Sentry from '@sentry/node';
 import { type Request, type Response } from 'express';
 import { ApiPath } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
@@ -88,11 +87,6 @@ export class McpCoreController {
 
     request.mcpMethod = mcpMethod;
     request.mcpToolName = mcpToolName;
-
-    Sentry.getActiveSpan()?.setAttributes({
-      ...(isDefined(mcpMethod) && { 'mcp.method': mcpMethod }),
-      ...(isDefined(mcpToolName) && { 'mcp.tool_name': mcpToolName }),
-    });
 
     const authContext = {
       workspace,

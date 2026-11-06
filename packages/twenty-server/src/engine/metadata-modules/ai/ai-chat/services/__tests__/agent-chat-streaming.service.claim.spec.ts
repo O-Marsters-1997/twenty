@@ -102,12 +102,10 @@ describe('AgentChatStreamingService claim & reap', () => {
       clear: jest.fn().mockResolvedValue(undefined),
     };
 
-    const metricsService = { incrementCounterBy: jest.fn() };
     const streamRecoveryService = new AgentChatStreamRecoveryService(
       threadRepository as never,
       streamHeartbeatService as never,
       eventPublisherService as never,
-      metricsService as never,
     );
 
     const service = new AgentChatStreamingService(
@@ -121,7 +119,6 @@ describe('AgentChatStreamingService claim & reap', () => {
       eventPublisherService as never,
       { signFileByIdUrl: jest.fn() } as never,
       streamHeartbeatService as never,
-      metricsService as never,
       streamRecoveryService,
       {
         authorizeRetry: jest.fn().mockResolvedValue(undefined),

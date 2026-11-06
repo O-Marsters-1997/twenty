@@ -5,7 +5,6 @@ import { McpInstructionBuilderService } from 'src/engine/api/mcp/services/mcp-in
 import { McpProtocolService } from 'src/engine/api/mcp/services/mcp-protocol.service';
 import { McpToolExecutorService } from 'src/engine/api/mcp/services/mcp-tool-executor.service';
 import { ApiKeyModule } from 'src/engine/core-modules/api-key/api-key.module';
-import { MetricsModule } from 'src/engine/core-modules/metrics/metrics.module';
 import { TokenModule } from 'src/engine/core-modules/auth/token/token.module';
 import { ToolProviderModule } from 'src/engine/core-modules/tool-provider/tool-provider.module';
 import { JwtAuthGuard } from 'src/engine/guards/jwt-auth.guard';
@@ -19,7 +18,6 @@ import { WorkspaceCacheModule } from 'src/engine/workspace-cache/workspace-cache
 @Module({
   imports: [
     ApiKeyModule,
-    MetricsModule,
     TokenModule,
     WorkspaceCacheStorageModule,
     WorkspaceManyOrAllFlatEntityMapsCacheModule,

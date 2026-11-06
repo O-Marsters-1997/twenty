@@ -1,4 +1,4 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 
 import { isDefined } from 'twenty-shared/utils';
 
@@ -7,7 +7,6 @@ import { WithLock } from 'src/engine/core-modules/cache-lock/with-lock.decorator
 import { InjectCacheStorage } from 'src/engine/core-modules/cache-storage/decorators/cache-storage.decorator';
 import { CacheStorageService } from 'src/engine/core-modules/cache-storage/services/cache-storage.service';
 import { CacheStorageNamespace } from 'src/engine/core-modules/cache-storage/types/cache-storage-namespace.enum';
-import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
 import { EVENT_STREAM_TTL_MS } from 'src/engine/subscriptions/constants/event-stream-ttl.constant';
 import {
   EventStreamException,
@@ -18,49 +17,16 @@ import {
   type RecordOrMetadataGqlOperationSignature,
 } from 'src/engine/subscriptions/types/event-stream-data.type';
 
-const ACTIVE_STREAM_COUNT_REFRESH_MS = 5 * 60 * 1_000;
 const ACTIVE_STREAM_EXPIRATIONS_KEY = 'activeStreamExpirations';
 
 @Injectable()
-export class EventStreamService implements OnModuleInit {
+export class EventStreamService {
   private readonly logger = new Logger(EventStreamService.name);
-  private activeStreamCount = 0;
-  private activeStreamCountRefreshedAt = 0;
 
   constructor(
     @InjectCacheStorage(CacheStorageNamespace.EngineSubscriptions)
     private readonly cacheStorageService: CacheStorageService,
-    private readonly metricsService: MetricsService,
   ) {}
-
-  onModuleInit() {
-    this.metricsService.createObservableGauge({
-      metricName: 'twenty_event_streams_live_total',
-      options: { description: 'Current number of live event streams' },
-      callback: async () => {
-        return this.getTotalActiveStreamCount();
-      },
-      cacheValue: true,
-    });
-  }
-
-  async getTotalActiveStreamCount(): Promise<number> {
-    const now = Date.now();
-    const isStale =
-      now - this.activeStreamCountRefreshedAt >= ACTIVE_STREAM_COUNT_REFRESH_MS;
-
-    if (isStale) {
-      this.activeStreamCount =
-        await this.cacheStorageService.sortedSetRemoveByScoreAndCount(
-          ACTIVE_STREAM_EXPIRATIONS_KEY,
-          0,
-          now,
-        );
-      this.activeStreamCountRefreshedAt = now;
-    }
-
-    return this.activeStreamCount;
-  }
 
   async createEventStream({
     workspaceId,

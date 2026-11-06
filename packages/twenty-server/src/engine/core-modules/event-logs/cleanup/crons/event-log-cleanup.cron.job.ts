@@ -6,7 +6,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { WorkspaceActivationStatus } from 'twenty-shared/workspace';
 import { Repository } from 'typeorm';
 
-import { SentryCronMonitor } from 'src/engine/core-modules/cron/sentry-cron-monitor.decorator';
 import { EVENT_LOG_CLEANUP_CRON_PATTERN } from 'src/engine/core-modules/event-logs/cleanup/constants/event-log-cleanup-cron-pattern.constant';
 import {
   EventLogCleanupService,
@@ -29,10 +28,6 @@ export class EventLogCleanupCronJob {
   ) {}
 
   @Process(EventLogCleanupCronJob.name)
-  @SentryCronMonitor(
-    EventLogCleanupCronJob.name,
-    EVENT_LOG_CLEANUP_CRON_PATTERN,
-  )
   async handle(): Promise<void> {
     const workspaces = await this.getActiveWorkspaces();
 

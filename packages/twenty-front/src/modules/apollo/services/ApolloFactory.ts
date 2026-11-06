@@ -28,8 +28,7 @@ import {
   type GraphQLFormattedError,
   type SelectionNode,
 } from 'graphql';
-import isEmpty from 'lodash.isempty';
-import { getGenericOperationName, isDefined } from 'twenty-shared/utils';
+import { isDefined } from 'twenty-shared/utils';
 
 const logger = loggerLink(() => 'Twenty');
 
@@ -136,12 +135,10 @@ export class ApolloFactory implements ApolloManager {
         },
       });
 
-      const sendToSentry = ({
+      const logGraphQLError = ({
         graphQLError,
-        operation,
       }: {
         graphQLError: GraphQLFormattedError;
-        operation: ApolloLink.Operation;
       }) => {
         if (isDebugMode === true) {
           logDebug(
@@ -152,46 +149,6 @@ export class ApolloFactory implements ApolloManager {
             }, Path: ${graphQLError.path}`,
           );
         }
-        import('@sentry/react')
-          .then(({ captureException, withScope }) => {
-            withScope((scope) => {
-              const error = new Error(graphQLError.message);
-
-              error.name = graphQLError.message;
-
-              const fingerPrint: string[] = [];
-              if (isDefined(graphQLError.extensions)) {
-                scope.setExtra('extensions', graphQLError.extensions);
-                if (isDefined(graphQLError.extensions.subCode)) {
-                  fingerPrint.push(graphQLError.extensions.subCode as string);
-                }
-              }
-
-              if (isDefined(operation.operationName)) {
-                scope.setExtra('operation', operation.operationName);
-                const genericOperationName = getGenericOperationName(
-                  operation.operationName,
-                );
-
-                if (isDefined(genericOperationName)) {
-                  fingerPrint.push(genericOperationName);
-                }
-              }
-
-              if (!isEmpty(fingerPrint)) {
-                scope.setFingerprint(fingerPrint);
-              }
-
-              captureException(error); // Sentry expects a JS error
-            });
-          })
-          .catch((sentryError) => {
-            // oxlint-disable-next-line no-console
-            console.error(
-              'Failed to capture GraphQL error with Sentry:',
-              sentryError,
-            );
-          });
       };
 
       const errorLink = new ErrorLink(({ error, operation }) => {
@@ -234,14 +191,14 @@ export class ApolloFactory implements ApolloManager {
                 if (graphQLError.extensions?.isExpected === true) {
                   return;
                 }
-                sendToSentry({ graphQLError, operation });
+                logGraphQLError({ graphQLError });
                 return;
               }
               case 'INTERNAL_SERVER_ERROR': {
                 return; // already caught in BE
               }
               default:
-                sendToSentry({ graphQLError, operation });
+                logGraphQLError({ graphQLError });
             }
           }
         } else if (ServerError.is(error)) {

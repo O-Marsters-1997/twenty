@@ -7,7 +7,7 @@ import { sseEventStreamIdState } from '@/sse-db-event/states/sseEventStreamIdSta
 import { sseEventStreamReadyState } from '@/sse-db-event/states/sseEventStreamReadyState';
 import { isGracefullyHandledEventStreamError } from '@/sse-db-event/utils/isGracefullyHandledEventStreamError';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { captureException } from '@sentry/react';
+import { logError } from '~/utils/logError';
 import { useMutation } from '@apollo/client/react';
 import { isNonEmptyString } from '@sniptt/guards';
 import { useStore } from 'jotai';
@@ -51,7 +51,7 @@ export const SSEQuerySubscribeEffect = () => {
           code: extensions?.code,
         })
       ) {
-        captureException(
+        logError(
           new Error(
             `Unhandled error for event stream: ${
               error instanceof Error ? error.message : String(error)

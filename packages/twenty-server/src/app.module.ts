@@ -3,7 +3,6 @@ import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { GraphQLModule } from '@nestjs/graphql';
 
 import { YogaDriver, type YogaDriverConfig } from '@graphql-yoga/nestjs';
-import { SentryModule } from '@sentry/nestjs/setup';
 import { ApiPath } from 'twenty-shared/types';
 
 import { AdminPanelGraphQLApiModule } from 'src/engine/api/graphql/admin-panel-graphql-api.module';
@@ -16,7 +15,6 @@ import { McpModule } from 'src/engine/api/mcp/mcp.module';
 import { RestApiModule } from 'src/engine/api/rest/rest-api.module';
 import { WorkspaceAuthContextMiddleware } from 'src/engine/core-modules/auth/middlewares/workspace-auth-context.middleware';
 import { FrontendModule } from 'src/engine/core-modules/frontend/frontend.module';
-import { MetricsModule } from 'src/engine/core-modules/metrics/metrics.module';
 import { DataloaderModule } from 'src/engine/dataloaders/dataloader.module';
 import { WorkspaceMetadataVersionModule } from 'src/engine/metadata-modules/workspace-metadata-version/workspace-metadata-version.module';
 import { ApiRequestContextMiddleware } from 'src/engine/core-modules/usage/middlewares/api-request-context.middleware';
@@ -48,10 +46,9 @@ const MIGRATED_REST_METHODS = [
 
 @Module({
   imports: [
-    SentryModule.forRoot(),
     GraphQLModule.forRootAsync<YogaDriverConfig>({
       driver: YogaDriver,
-      imports: [GraphQLConfigModule, MetricsModule, DataloaderModule],
+      imports: [GraphQLConfigModule, DataloaderModule],
       useClass: GraphQLConfigService,
     }),
     TwentyOrmModule,
