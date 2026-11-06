@@ -24,7 +24,6 @@ export const CommandRunner = () => {
               value={{ instanceId: commandMenuItemId }}
             >
               <CommandMenuItemErrorBoundary
-                shouldReportToSentry
                 onError={() => unmountCommand(commandMenuItemId)}
               >
                 {ENGINE_COMPONENT_KEY_COMPONENT_MAP[context.engineComponentKey]}

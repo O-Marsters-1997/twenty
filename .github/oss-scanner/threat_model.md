@@ -84,7 +84,7 @@ Paths below are relative to `packages/twenty-server/src/` unless stated otherwis
     set of folders. Path traversal, cross-workspace file access, and file tokens usable beyond their file are in scope.
 
 ## Out of scope / known false positives
-- `packages/twenty-website`, `packages/twenty-docs`, `packages/twenty-e2e-testing`, `packages/twenty-apps` (example and
+- `packages/twenty-e2e-testing`, `packages/twenty-apps` (example and
   internal apps), `packages/twenty-utils`, `packages/twenty-docker`, storybook, tests and
   test helpers (`packages/twenty-server/test/`), dev seed data (`engine/workspace-manager/dev-seeder`), and their
   placeholder secrets.

@@ -297,7 +297,6 @@ describe('StreamAgentChatJob', () => {
       markClaimed: jest.fn().mockResolvedValue(undefined),
       clear: jest.fn().mockResolvedValue(undefined),
     };
-    const metricsService = { incrementCounterBy: jest.fn() };
     const aiModelRegistryService = {
       getEffectiveModelConfig: jest
         .fn()
@@ -349,19 +348,12 @@ describe('StreamAgentChatJob', () => {
         threadRepository as never,
         streamHeartbeatService as never,
         eventPublisherService as never,
-        metricsService as never,
       ),
       threadService as never,
-      metricsService as never,
       aiModelRegistryService as never,
       actorService as never,
       turnRecorderService as never,
     );
-
-    const turnCounts = (key: string) =>
-      metricsService.incrementCounterBy.mock.calls
-        .map(([call]) => call)
-        .filter((call: { key: string }) => call.key === key);
 
     return {
       job,
@@ -377,9 +369,7 @@ describe('StreamAgentChatJob', () => {
       eventPublisherService,
       agentChatStreamingService,
       cancelCallbacks,
-      metricsService,
       aiModelRegistryService,
-      turnCounts,
     };
   };
 
@@ -885,7 +875,7 @@ describe('StreamAgentChatJob', () => {
     expect(agentChatService.notifyThreadUsageUpdated).toHaveBeenCalled();
   });
   it('labels turn-started with the resolved model, not the auto-select id', async () => {
-    const { job, aiModelRegistryService, turnCounts } = buildJob();
+    const { job, aiModelRegistryService } = buildJob();
 
     await job.handle({ ...jobData, modelId: 'default-fast-model' });
 
@@ -893,11 +883,6 @@ describe('StreamAgentChatJob', () => {
       'default-fast-model',
       workspace,
     );
-    expect(turnCounts('ai-chat/turn-started')).toEqual([
-      expect.objectContaining({
-        attributes: { model: 'openai/gpt-5.6-luna' },
-      }),
-    ]);
   });
 
   it('falls back to the workspace chat tier when the turn did not pick one', async () => {
@@ -910,38 +895,6 @@ describe('StreamAgentChatJob', () => {
       workspace,
     );
   });
-
-  it('counts a text reply once, as an answered completion', async () => {
-    const { job, turnCounts } = buildJob();
-
-    await job.handle(jobData);
-
-    expect(turnCounts('ai-chat/turn-completed')).toEqual([
-      expect.objectContaining({
-        attributes: { model: 'openai/gpt-5.6-luna', outcome: 'answered' },
-      }),
-    ]);
-    expect(turnCounts('ai-chat/turn-failed')).toEqual([]);
-    expect(turnCounts('ai-chat/turn-cancelled')).toEqual([]);
-  });
-
-  it('counts a turn that ended on a question as completed and awaiting the user', async () => {
-    const { job, turnCounts } = buildJob({
-      chatStream: createFakeChatStream({
-        parts: PENDING_QUESTION_PARTS,
-      }),
-    });
-
-    await job.handle(jobData);
-
-    expect(turnCounts('ai-chat/turn-completed')).toEqual([
-      expect.objectContaining({
-        attributes: { model: 'openai/gpt-5.6-luna', outcome: 'awaiting_user' },
-      }),
-    ]);
-    expect(turnCounts('ai-chat/turn-failed')).toEqual([]);
-  });
-
   const pendingQuestionMessageIdOf = (threadUsageQuery: jest.Mock) =>
     (threadUsageQuery.mock.calls[0] as unknown as [string, unknown[]])[1][4];
 
@@ -969,7 +922,7 @@ describe('StreamAgentChatJob', () => {
   });
 
   it('fails the turn, leaving it retryable, when a paused call cannot be read', async () => {
-    const { job, threadUsageQuery, publishedEvents, turnCounts } = buildJob({
+    const { job, threadUsageQuery, publishedEvents } = buildJob({
       chatStream: createFakeChatStream({
         parts: PENDING_QUESTION_PARTS.map((part) =>
           part.type === 'tool-call' || part.type === 'tool-result'
@@ -987,50 +940,20 @@ describe('StreamAgentChatJob', () => {
     expect(publishedEvents.map((event) => event.type)).toContain(
       'stream-error',
     );
-    expect(turnCounts('ai-chat/turn-completed')).toEqual([]);
   });
 
   it('counts a reply as answered when the model recovers from a failed tool call', async () => {
-    const { job, publishedEvents, turnCounts } = buildJob({
+    const { job, publishedEvents } = buildJob({
       chatStream: createFakeChatStream({
         parts: RECOVERED_TOOL_CALL_PARTS,
       }),
     });
 
     await job.handle(jobData);
-
-    expect(turnCounts('ai-chat/turn-completed')).toEqual([
-      expect.objectContaining({
-        attributes: { model: 'openai/gpt-5.6-luna', outcome: 'answered' },
-      }),
-    ]);
-    expect(turnCounts('ai-chat/turn-failed')).toEqual([]);
     expect(publishedEvents.map((event) => event.type)).not.toContain(
       'stream-error',
     );
   });
-
-  it('counts an aborted turn as cancelled rather than leaving it unaccounted', async () => {
-    const { job, turnCounts } = buildJob({
-      chatStream: createFakeChatStream({
-        parts: START_PARTS,
-        isAborted: true,
-      }),
-    });
-
-    await job.handle(jobData);
-
-    expect(turnCounts('ai-chat/turn-cancelled')).toEqual([
-      expect.objectContaining({
-        attributes: {
-          model: 'openai/gpt-5.6-luna',
-          reason: 'user_cancelled',
-        },
-      }),
-    ]);
-    expect(turnCounts('ai-chat/turn-completed')).toEqual([]);
-  });
-
   it('adds the steps an aborted turn completed to the thread totals', async () => {
     const { job, turnRecorderService } = buildJob({
       chatStream: createFakeChatStream({
@@ -1059,7 +982,7 @@ describe('StreamAgentChatJob', () => {
   });
 
   it('counts a turn whose claim moved on as superseded', async () => {
-    const { job, turnCounts, threadService } = buildJob({
+    const { job, threadService } = buildJob({
       totalsUpdateAffected: 0,
     });
 
@@ -1070,16 +993,10 @@ describe('StreamAgentChatJob', () => {
       threadId: jobData.threadId,
       text: 'Hello',
     });
-    expect(turnCounts('ai-chat/turn-cancelled')).toEqual([
-      expect.objectContaining({
-        attributes: { model: 'openai/gpt-5.6-luna', reason: 'superseded' },
-      }),
-    ]);
-    expect(turnCounts('ai-chat/turn-completed')).toEqual([]);
   });
 
   it('keeps a superseded reply when recording its activity fails', async () => {
-    const { job, turnCounts, threadService } = buildJob({
+    const { job, threadService } = buildJob({
       totalsUpdateAffected: 0,
     });
 
@@ -1094,92 +1011,5 @@ describe('StreamAgentChatJob', () => {
       threadId: jobData.threadId,
       text: 'Hello',
     });
-
-    expect(turnCounts('ai-chat/turn-cancelled')).toEqual([
-      expect.objectContaining({
-        attributes: { model: 'openai/gpt-5.6-luna', reason: 'superseded' },
-      }),
-    ]);
-    expect(turnCounts('ai-chat/turn-failed')).toEqual([]);
-  });
-
-  it('counts an empty reply as a no_text failure exactly once', async () => {
-    const { job, turnCounts } = buildJob({
-      chatStream: createFakeChatStream({
-        parts: EMPTY_REPLY_PARTS,
-      }),
-    });
-
-    await job.handle(jobData);
-
-    expect(turnCounts('ai-chat/turn-failed')).toEqual([
-      expect.objectContaining({
-        attributes: { model: 'openai/gpt-5.6-luna', failure_phase: 'no_text' },
-      }),
-    ]);
-  });
-
-  it('leaves a stream error to the execution counter so it is not counted twice', async () => {
-    const { job, turnCounts } = buildJob({
-      streamChatRejection: new Error('provider exploded'),
-    });
-
-    await job.handle(jobData).catch(() => {});
-
-    expect(turnCounts('ai-chat/turn-failed')).toEqual([
-      expect.objectContaining({
-        attributes: expect.objectContaining({
-          model: 'openai/gpt-5.6-luna',
-          failure_phase: 'execution',
-        }),
-      }),
-    ]);
-    expect(turnCounts('ai-chat/turn-completed')).toEqual([]);
-  });
-
-  it('records exactly one outcome for every started turn', async () => {
-    const scenarios = [
-      buildJob(),
-      buildJob({ totalsUpdateAffected: 0 }),
-      buildJob({
-        chatStream: createFakeChatStream({
-          parts: PENDING_QUESTION_PARTS,
-        }),
-      }),
-      buildJob({
-        chatStream: createFakeChatStream({
-          parts: START_PARTS,
-          isAborted: true,
-        }),
-      }),
-      buildJob({ streamChatRejection: new Error('provider exploded') }),
-    ];
-
-    for (const scenario of scenarios) {
-      await scenario.job.handle(jobData).catch(() => {});
-
-      const started = scenario.turnCounts('ai-chat/turn-started').length;
-      const terminal =
-        scenario.turnCounts('ai-chat/turn-completed').length +
-        scenario.turnCounts('ai-chat/turn-cancelled').length +
-        scenario.turnCounts('ai-chat/turn-failed').length;
-
-      expect({ started, terminal }).toEqual({ started: 1, terminal: 1 });
-    }
-  });
-  it('does not count a turn twice when the final publish fails after the outcome was recorded', async () => {
-    const { job, turnCounts } = buildJob({
-      finalPublishRejection: new Error('redis is down'),
-    });
-
-    await job.handle(jobData).catch(() => {});
-
-    expect(turnCounts('ai-chat/turn-completed')).toEqual([
-      expect.objectContaining({
-        attributes: { model: 'openai/gpt-5.6-luna', outcome: 'answered' },
-      }),
-    ]);
-    expect(turnCounts('ai-chat/turn-failed')).toEqual([]);
-    expect(turnCounts('ai-chat/turn-started')).toHaveLength(1);
   });
 });

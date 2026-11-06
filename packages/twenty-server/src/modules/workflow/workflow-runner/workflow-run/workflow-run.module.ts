@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 
 import { WorkspaceIteratorModule } from 'src/database/commands/command-runners/workspace-iterator.module';
 import { CacheLockModule } from 'src/engine/core-modules/cache-lock/cache-lock.module';
-import { MetricsModule } from 'src/engine/core-modules/metrics/metrics.module';
 import { RecordPositionModule } from 'src/engine/core-modules/record-position/record-position.module';
 import { AiAgentExecutionModule } from 'src/engine/metadata-modules/ai/ai-agent-execution/ai-agent-execution.module';
 import { WorkflowRunRecordShareModule } from 'src/engine/core-modules/workflow/workflow-run-record-share.module';
@@ -15,7 +14,6 @@ import { WorkflowStepWaitModule } from 'src/modules/workflow/workflow-wait/workf
   imports: [
     RecordPositionModule,
     CacheLockModule,
-    MetricsModule,
     WorkspaceIteratorModule,
     WorkflowRunRecordShareModule,
     AiAgentExecutionModule,

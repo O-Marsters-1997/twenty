@@ -220,8 +220,6 @@ export { parseJson } from './parseJson';
 export { removePropertiesFromRecord } from './removePropertiesFromRecord';
 export { removeUndefinedFields } from './removeUndefinedFields';
 export { safeParseRelativeDateFilterJsonStringified } from './safeParseRelativeDateFilterJsonStringified';
-export { getGenericOperationName } from './sentry/getGenericOperationName';
-export { getHumanReadableNameFromCode } from './sentry/getHumanReadableNameFromCode';
 export { getEnabledAddressSubFields } from './sort/getEnabledAddressSubFields';
 export type { OrderByFieldMetadata } from './sort/getOrderByForFieldMetadataType';
 export { getOrderByForFieldMetadataType } from './sort/getOrderByForFieldMetadataType';

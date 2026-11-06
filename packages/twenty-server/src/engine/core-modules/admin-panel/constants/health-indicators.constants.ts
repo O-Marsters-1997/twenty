@@ -23,11 +23,6 @@ export const HEALTH_INDICATORS: Record<HealthIndicatorId, HealthIndicatorInfo> =
       label: 'Worker',
       description: 'Background job worker health status',
     },
-    [HealthIndicatorId.connectedAccount]: {
-      id: HealthIndicatorId.connectedAccount,
-      label: 'Connected Accounts',
-      description: 'Connected accounts health status',
-    },
     [HealthIndicatorId.app]: {
       id: HealthIndicatorId.app,
       label: 'App',

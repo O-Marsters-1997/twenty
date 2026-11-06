@@ -3,7 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { WorkspaceIteratorModule } from 'src/database/commands/command-runners/workspace-iterator.module';
 import { CoreEntityCacheModule } from 'src/engine/core-entity-cache/core-entity-cache.module';
-import { MetricsModule } from 'src/engine/core-modules/metrics/metrics.module';
 import { WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
 import { ConnectedAccountEntity } from 'src/engine/metadata-modules/connected-account/entities/connected-account.entity';
 import { CalendarChannelEntity } from 'src/engine/metadata-modules/calendar-channel/entities/calendar-channel.entity';
@@ -29,7 +28,6 @@ import { WebhookSubscriptionManagerModule } from 'src/modules/connected-account/
   imports: [
     WebhookSubscriptionManagerModule,
     CoreEntityCacheModule,
-    MetricsModule,
     WorkspaceIteratorModule,
     TypeOrmModule.forFeature([
       WorkspaceEntity,

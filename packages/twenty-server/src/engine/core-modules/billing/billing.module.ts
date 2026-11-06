@@ -6,7 +6,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ClickHouseModule } from 'src/database/clickhouse/clickhouse.module';
 import { WorkspaceIteratorModule } from 'src/database/commands/command-runners/workspace-iterator.module';
 import { CoreEntityCacheModule } from 'src/engine/core-entity-cache/core-entity-cache.module';
-import { BillingGaugeService } from 'src/engine/core-modules/billing/billing-gauge.service';
 import { BillingSubscriptionItemResolver } from 'src/engine/core-modules/billing/billing-subscription-item.resolver';
 import { BillingResolver } from 'src/engine/core-modules/billing/billing.resolver';
 import { BillingSyncCustomerDataCommand } from 'src/engine/core-modules/billing/commands/billing-sync-customer-data.command';
@@ -41,7 +40,6 @@ import { StripeModule } from 'src/engine/core-modules/billing/stripe/stripe.modu
 import { CacheLockModule } from 'src/engine/core-modules/cache-lock/cache-lock.module';
 import { WorkspaceDomainsModule } from 'src/engine/core-modules/domain/workspace-domains/workspace-domains.module';
 import { EnterpriseModule } from 'src/engine/core-modules/enterprise/enterprise.module';
-import { MetricsModule } from 'src/engine/core-modules/metrics/metrics.module';
 import { UserWorkspaceEntity } from 'src/engine/core-modules/user-workspace/user-workspace.entity';
 import { WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
 import { PermissionsModule } from 'src/engine/metadata-modules/permissions/permissions.module';
@@ -69,7 +67,6 @@ import { WorkspaceCacheModule } from 'src/engine/workspace-cache/workspace-cache
       WorkspaceEntity,
       UserWorkspaceEntity,
     ]),
-    MetricsModule,
     EnterpriseModule,
     UsageAnalyticsModule,
     WorkspaceIteratorModule,
@@ -97,7 +94,6 @@ import { WorkspaceCacheModule } from 'src/engine/workspace-cache/workspace-cache
     BillingCreditService,
     BillingCreditOneTimeTopUpService,
     ResourceCreditService,
-    BillingGaugeService,
     WorkspaceCurrentBillingSubscriptionCacheService,
     provideWorkspaceScopedRepository(BillingCreditGrantEntity),
     provideWorkspaceScopedRepository(BillingCustomerEntity),

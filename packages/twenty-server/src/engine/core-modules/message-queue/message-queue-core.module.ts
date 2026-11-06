@@ -23,7 +23,6 @@ import {
 import { ApplicationJobEnqueueThrottlerService } from 'src/engine/core-modules/message-queue/services/application-job-enqueue-throttler.service';
 import { MessageQueueService } from 'src/engine/core-modules/message-queue/services/message-queue.service';
 import { getQueueToken } from 'src/engine/core-modules/message-queue/utils/get-queue-token.util';
-import { MetricsModule } from 'src/engine/core-modules/metrics/metrics.module';
 import { ThrottlerModule } from 'src/engine/core-modules/throttler/throttler.module';
 
 @Global()
@@ -45,11 +44,7 @@ export class MessageQueueCoreModule extends ConfigurableModuleClass {
 
     return {
       ...dynamicModule,
-      imports: [
-        ...(dynamicModule.imports ?? []),
-        MetricsModule,
-        ThrottlerModule,
-      ],
+      imports: [...(dynamicModule.imports ?? []), ThrottlerModule],
       providers: [
         ...(dynamicModule.providers ?? []),
         ApplicationJobEnqueueThrottlerService,
@@ -87,11 +82,7 @@ export class MessageQueueCoreModule extends ConfigurableModuleClass {
 
     return {
       ...dynamicModule,
-      imports: [
-        ...(dynamicModule.imports ?? []),
-        MetricsModule,
-        ThrottlerModule,
-      ],
+      imports: [...(dynamicModule.imports ?? []), ThrottlerModule],
       providers: [
         ...(dynamicModule.providers ?? []),
         ApplicationJobEnqueueThrottlerService,
@@ -113,7 +104,6 @@ export class MessageQueueCoreModule extends ConfigurableModuleClass {
       case MessageQueueDriverType.BullMQ: {
         return new BullMQDriver(
           config.options,
-          config.metricsService,
           config.twentyConfigService,
           config.eventEmitter,
         );

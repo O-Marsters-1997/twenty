@@ -76,8 +76,6 @@ describe('AgentChatStreamingService.retryLastFailedTurn', () => {
       clear: jest.fn().mockResolvedValue(undefined),
     };
 
-    const metricsService = { incrementCounterBy: jest.fn() };
-
     const eventPublisherService = {
       publish: jest.fn(),
       resetStreamState: jest.fn(),
@@ -92,12 +90,10 @@ describe('AgentChatStreamingService.retryLastFailedTurn', () => {
       eventPublisherService as never,
       { signFileByIdUrl: jest.fn() } as never,
       streamHeartbeatService as never,
-      metricsService as never,
       new AgentChatStreamRecoveryService(
         threadRepository as never,
         streamHeartbeatService as never,
         eventPublisherService as never,
-        metricsService as never,
       ),
       {
         authorizeRetry: jest

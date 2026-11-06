@@ -18,7 +18,6 @@ import { ToolProviderModule } from 'src/engine/core-modules/tool-provider/tool-p
 import { UserWorkspaceModule } from 'src/engine/core-modules/user-workspace/user-workspace.module';
 import { WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
 import { AiAgentExecutionModule } from 'src/engine/metadata-modules/ai/ai-agent-execution/ai-agent-execution.module';
-import { MetricsModule } from 'src/engine/core-modules/metrics/metrics.module';
 import { AiBillingModule } from 'src/engine/metadata-modules/ai/ai-billing/ai-billing.module';
 import { PermissionsModule } from 'src/engine/metadata-modules/permissions/permissions.module';
 import { SkillModule } from 'src/engine/metadata-modules/skill/skill.module';
@@ -62,7 +61,6 @@ import { SystemPromptBuilderService } from 'src/engine/metadata-modules/ai/ai-ch
     WorkspaceDomainsModule,
     UserWorkspaceModule,
     AiBillingModule,
-    MetricsModule,
     ToolProviderModule,
     DashboardToolsModule,
   ],

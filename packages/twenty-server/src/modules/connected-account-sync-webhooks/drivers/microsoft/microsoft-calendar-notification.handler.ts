@@ -10,8 +10,6 @@ import { isDefined } from 'twenty-shared/utils';
 import { In, Repository } from 'typeorm';
 
 import { ExceptionHandlerService } from 'src/engine/core-modules/exception-handler/exception-handler.service';
-import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
-import { MetricsKeys } from 'src/engine/core-modules/metrics/types/metrics-keys.type';
 import { CalendarChannelEntity } from 'src/engine/metadata-modules/calendar-channel/entities/calendar-channel.entity';
 import { CalendarWebhookSubscriptionService } from 'src/modules/connected-account/webhook-subscription-manager/services/calendar-webhook-subscription.service';
 import { WebhookSyncTriggerService } from 'src/modules/connected-account/webhook-subscription-manager/services/webhook-sync-trigger.service';
@@ -31,16 +29,11 @@ export class MicrosoftCalendarNotificationHandler implements WebhookNotification
     private readonly calendarChannelRepository: Repository<CalendarChannelEntity>,
     private readonly calendarWebhookSubscriptionService: CalendarWebhookSubscriptionService,
     private readonly webhookSyncTriggerService: WebhookSyncTriggerService,
-    private readonly metricsService: MetricsService,
     private readonly exceptionHandlerService: ExceptionHandlerService,
   ) {}
 
   async handle(notifications: MicrosoftGraphNotification[]): Promise<void> {
     if (notifications.length > 0) {
-      this.metricsService.incrementCounterBy({
-        key: MetricsKeys.ConnectedAccountSyncWebhookReceivedCalendar,
-        amount: notifications.length,
-      });
     }
 
     const subscriptionIds = notifications

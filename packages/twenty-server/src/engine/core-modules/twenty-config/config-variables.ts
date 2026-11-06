@@ -10,7 +10,6 @@ import {
   IsOptional,
   IsString,
   IsUrl,
-  Max,
   ValidateIf,
   type ValidationError,
   validateSync,
@@ -31,7 +30,6 @@ import { CodeInterpreterDriverType } from 'src/engine/core-modules/code-interpre
 import { DpaRegion } from 'src/engine/core-modules/dpa/enums/dpa-region.enum';
 import { EmailDriver } from 'src/engine/core-modules/email/enums/email-driver.enum';
 import { EmailingDomainDriver } from 'src/engine/core-modules/emailing-domain/drivers/types/emailing-domain-driver.type';
-import { ExceptionHandlerDriver } from 'src/engine/core-modules/exception-handler/interfaces';
 import { StorageDriverType } from 'src/engine/core-modules/file-storage/interfaces';
 import { ADDRESS_AUTOCOMPLETE_DRIVER_TYPE } from 'src/engine/core-modules/geo-map/constants/address-autocomplete-driver-type.constant';
 import { type AddressAutocompleteDriverType } from 'src/engine/core-modules/geo-map/types/address-autocomplete-driver-type.type';
@@ -39,10 +37,7 @@ import {
   LoggerDriverType,
   type TwentyLogLevel,
 } from 'src/engine/core-modules/logger/interfaces';
-import { type MeterDriver } from 'src/engine/core-modules/metrics/types/meter-driver.type';
-import { MeterTemporality } from 'src/engine/core-modules/metrics/types/meter-temporality.type';
 import { CastToLogLevelArray } from 'src/engine/core-modules/twenty-config/decorators/cast-to-log-level-array.decorator';
-import { CastToMeterDriverArray } from 'src/engine/core-modules/twenty-config/decorators/cast-to-meter-driver.decorator';
 import { CastToPositiveNumber } from 'src/engine/core-modules/twenty-config/decorators/cast-to-positive-number.decorator';
 import { CastToTypeORMLogLevelArray } from 'src/engine/core-modules/twenty-config/decorators/cast-to-typeorm-log-level-array.decorator';
 import { CastToUpperSnakeCase } from 'src/engine/core-modules/twenty-config/decorators/cast-to-upper-snake-case.decorator';
@@ -783,14 +778,6 @@ export class ConfigVariables {
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.ANALYTICS_CONFIG,
-    description: 'Enable or disable analytics for telemetry',
-    type: ConfigVariableType.BOOLEAN,
-  })
-  @IsOptional()
-  ANALYTICS_ENABLED = false;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.ANALYTICS_CONFIG,
     description: 'Clickhouse host for analytics',
     type: ConfigVariableType.STRING,
     isSensitive: true,
@@ -800,7 +787,6 @@ export class ConfigVariables {
     require_tld: false,
     allow_underscores: true,
   })
-  @ValidateIf((env) => env.ANALYTICS_ENABLED === true)
   CLICKHOUSE_URL: string;
 
   @ConfigVariablesMetadata({
@@ -812,14 +798,6 @@ export class ConfigVariables {
   @IsOptional()
   @CastToPositiveNumber()
   USAGE_ROLLUP_FLUSH_INTERVAL_MS = 60_000;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.LOGGING,
-    description: 'Enable or disable telemetry logging',
-    type: ConfigVariableType.BOOLEAN,
-  })
-  @IsOptional()
-  TELEMETRY_ENABLED = true;
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.LOGGING,
@@ -1109,18 +1087,6 @@ export class ConfigVariables {
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.LOGGING,
-    description: 'Driver used for handling exceptions (Console or Sentry)',
-    type: ConfigVariableType.ENUM,
-    options: Object.values(ExceptionHandlerDriver),
-    isEnvOnly: true,
-  })
-  @IsOptional()
-  @CastToUpperSnakeCase()
-  EXCEPTION_HANDLER_DRIVER: ExceptionHandlerDriver =
-    ExceptionHandlerDriver.CONSOLE;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.LOGGING,
     description:
       'Levels of logging to be captured. The "performance" level emits LoggerService perf / perfTime / perfTimeEnd instrumentation.',
     type: ConfigVariableType.ARRAY,
@@ -1133,40 +1099,6 @@ export class ConfigVariables {
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.LOGGING,
-    description: 'Driver used for collect metrics (OpenTelemetry or Console)',
-    type: ConfigVariableType.ARRAY,
-    options: ['OpenTelemetry', 'Console'],
-    isEnvOnly: true,
-  })
-  @CastToMeterDriverArray()
-  @IsOptional()
-  METER_DRIVER: MeterDriver[] = [];
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.LOGGING,
-    description:
-      'Interval in milliseconds between two metric exports, for the drivers that push them: opentelemetry and console. The prometheus driver is scraped, so it is unaffected. Read before the config store is available, so it cannot be overridden from the database.',
-    type: ConfigVariableType.NUMBER,
-    isEnvOnly: true,
-  })
-  @CastToPositiveNumber()
-  @IsOptional()
-  METER_EXPORT_INTERVAL_MS = 30_000;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.LOGGING,
-    description:
-      'Temporality of the metrics pushed by the opentelemetry driver: delta sends what changed since the previous export, cumulative sends running totals on every export. Read before the config store is available, so it cannot be overridden from the database.',
-    type: ConfigVariableType.ENUM,
-    options: Object.values(MeterTemporality),
-    isEnvOnly: true,
-  })
-  @IsOptional()
-  @IsEnum(MeterTemporality)
-  METER_TEMPORALITY: MeterTemporality = MeterTemporality.Delta;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.LOGGING,
     description: 'Driver used for logging (only console for now)',
     type: ConfigVariableType.ENUM,
     options: Object.values(LoggerDriverType),
@@ -1175,71 +1107,6 @@ export class ConfigVariables {
   @IsOptional()
   @CastToUpperSnakeCase()
   LOGGER_DRIVER: LoggerDriverType = LoggerDriverType.CONSOLE;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.LOGGING,
-    description: 'Data Source Name (DSN) for Sentry logging',
-    type: ConfigVariableType.STRING,
-    isSensitive: true,
-  })
-  @ValidateIf(
-    (env) => env.EXCEPTION_HANDLER_DRIVER === ExceptionHandlerDriver.SENTRY,
-  )
-  SENTRY_DSN: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.LOGGING,
-    description: 'Front-end DSN for Sentry logging',
-    type: ConfigVariableType.STRING,
-    isSensitive: true,
-  })
-  @ValidateIf(
-    (env) => env.EXCEPTION_HANDLER_DRIVER === ExceptionHandlerDriver.SENTRY,
-  )
-  SENTRY_FRONT_DSN: string;
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.LOGGING,
-    description: 'Environment name for Sentry logging',
-    type: ConfigVariableType.STRING,
-  })
-  @ValidateIf(
-    (env) => env.EXCEPTION_HANDLER_DRIVER === ExceptionHandlerDriver.SENTRY,
-  )
-  @IsOptional()
-  SENTRY_ENVIRONMENT: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.LOGGING,
-    description:
-      'Share of front-end traces sent to Sentry, between 0 and 1. Front-end traces propagate their sampling decision to the server, so this also drives the rate for browser-originated server traces.',
-    type: ConfigVariableType.NUMBER,
-  })
-  @CastToPositiveNumber()
-  @Max(1)
-  @IsOptional()
-  SENTRY_FRONT_TRACES_SAMPLE_RATE = 0.1;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.LOGGING,
-    description:
-      'Share of server traces sent to Sentry, between 0 and 1. Browser-originated traces inherit the front-end decision instead, and AI traces are always sampled at 1. Read before the config store is available, so it cannot be overridden from the database.',
-    type: ConfigVariableType.NUMBER,
-    isEnvOnly: true,
-  })
-  @CastToPositiveNumber()
-  @IsOptional()
-  SENTRY_TRACES_SAMPLE_RATE = 0.1;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.LOGGING,
-    description:
-      'Share of sampled server traces that are also profiled, between 0 and 1. Read before the config store is available, so it cannot be overridden from the database.',
-    type: ConfigVariableType.NUMBER,
-    isEnvOnly: true,
-  })
-  @CastToPositiveNumber()
-  @IsOptional()
-  SENTRY_PROFILES_SAMPLE_RATE = 0.01;
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.LOGGING,

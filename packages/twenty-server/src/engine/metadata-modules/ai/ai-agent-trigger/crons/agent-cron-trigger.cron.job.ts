@@ -5,7 +5,6 @@ import { WorkspaceActivationStatus } from 'twenty-shared/workspace';
 import { Repository } from 'typeorm';
 
 import { CronTriggerDeduplicationService } from 'src/engine/core-modules/cron/services/cron-trigger-deduplication.service';
-import { SentryCronMonitor } from 'src/engine/core-modules/cron/sentry-cron-monitor.decorator';
 import { ExceptionHandlerService } from 'src/engine/core-modules/exception-handler/exception-handler.service';
 import { InjectMessageQueue } from 'src/engine/core-modules/message-queue/decorators/message-queue.decorator';
 import { Process } from 'src/engine/core-modules/message-queue/decorators/process.decorator';
@@ -37,10 +36,6 @@ export class AgentCronTriggerCronJob {
   ) {}
 
   @Process(AgentCronTriggerCronJob.name)
-  @SentryCronMonitor(
-    AgentCronTriggerCronJob.name,
-    AGENT_CRON_TRIGGER_CRON_PATTERN,
-  )
   async handle() {
     const activeWorkspaces = await this.workspaceRepository.find({
       where: {
