@@ -61,10 +61,7 @@ export const SidePanelComposeCalendarEventPage = () => {
   const handleReauthorize = async () => {
     const selectedAccount = composerState.selectedAccount;
 
-    if (
-      !isDefined(selectedAccount) ||
-      selectedAccount.provider === ConnectedAccountProvider.IMAP_SMTP_CALDAV
-    ) {
+    if (!isDefined(selectedAccount)) {
       return;
     }
 

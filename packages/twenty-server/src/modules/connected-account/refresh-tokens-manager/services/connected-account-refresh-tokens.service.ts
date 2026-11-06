@@ -159,7 +159,6 @@ export class ConnectedAccountRefreshTokensService {
         );
       }
       case ConnectedAccountProvider.APP:
-      case ConnectedAccountProvider.IMAP_SMTP_CALDAV:
       case ConnectedAccountProvider.OIDC:
       case ConnectedAccountProvider.SAML:
       case ConnectedAccountProvider.EMAIL_GROUP:
@@ -188,7 +187,6 @@ export class ConnectedAccountRefreshTokensService {
             refreshToken,
           );
         case ConnectedAccountProvider.APP:
-        case ConnectedAccountProvider.IMAP_SMTP_CALDAV:
         case ConnectedAccountProvider.OIDC:
         case ConnectedAccountProvider.SAML:
         case ConnectedAccountProvider.EMAIL_GROUP:

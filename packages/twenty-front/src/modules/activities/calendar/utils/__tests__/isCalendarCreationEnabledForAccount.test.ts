@@ -10,7 +10,6 @@ const makeAccount = (
     archivedAt: null,
     provider: ConnectedAccountProvider.GOOGLE,
     calendarChannels: [{ isSyncEnabled: true }],
-    connectionParameters: null,
     ...overrides,
   }) satisfies Parameters<typeof isCalendarCreationEnabledForAccount>[0];
 
@@ -30,28 +29,5 @@ describe('isCalendarCreationEnabledForAccount', () => {
         makeAccount({ calendarChannels: [{ isSyncEnabled: false }] }),
       ),
     ).toBe(false);
-  });
-
-  it('requires CalDAV connection parameters for a CalDAV account', () => {
-    const calDavAccount = makeAccount({
-      provider: ConnectedAccountProvider.IMAP_SMTP_CALDAV,
-    });
-
-    expect(isCalendarCreationEnabledForAccount(calDavAccount)).toBe(false);
-    expect(
-      isCalendarCreationEnabledForAccount(
-        makeAccount({
-          provider: ConnectedAccountProvider.IMAP_SMTP_CALDAV,
-          connectionParameters: {
-            CALDAV: {
-              host: 'https://calendar.example.com',
-              port: 443,
-              username: 'calendar@example.com',
-              password: 'secret',
-            },
-          },
-        }),
-      ),
-    ).toBe(true);
   });
 });

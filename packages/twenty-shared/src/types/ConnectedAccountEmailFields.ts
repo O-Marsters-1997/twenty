@@ -1,9 +1,5 @@
-import {
-  type ConnectedAccountProvider,
-  type EmailConnectionParameters,
-} from '@/types';
+import { type ConnectedAccountProvider } from '@/types';
 
 export type ConnectedAccountEmailFields = {
   provider: ConnectedAccountProvider;
-  connectionParameters?: EmailConnectionParameters | null;
 };

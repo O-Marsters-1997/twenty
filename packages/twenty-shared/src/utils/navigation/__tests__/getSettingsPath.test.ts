@@ -27,12 +27,6 @@ describe('getSettingsPath', () => {
         toolIdentifier: 'tool123',
       }),
     ).toBe('/settings/ai/tools/tool123');
-
-    expect(
-      getSettingsPath(SettingsPath.EditImapSmtpCaldavConnection, {
-        connectedAccountId: 'account123',
-      }),
-    ).toBe('/settings/accounts/edit-imap-smtp-caldav-connection/account123');
   });
 
   it('should append query params when provided', () => {

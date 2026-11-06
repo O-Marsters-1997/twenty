@@ -427,11 +427,7 @@ export class EmailComposerService {
             (channel) => channel.handle === connectedAccount.handle,
           );
 
-    const isSmtpOnlyAccount =
-      connectedAccount.provider === ConnectedAccountProvider.IMAP_SMTP_CALDAV &&
-      !isDefined(connectedAccount.connectionParameters?.IMAP);
-
-    if (!isSmtpOnlyAccount && !isDefined(messageChannel)) {
+    if (!isDefined(messageChannel)) {
       throw new EmailToolException(
         `No message channel found for connected account '${connectedAccountId}'`,
         EmailToolExceptionCode.CONNECTED_ACCOUNT_NOT_FOUND,

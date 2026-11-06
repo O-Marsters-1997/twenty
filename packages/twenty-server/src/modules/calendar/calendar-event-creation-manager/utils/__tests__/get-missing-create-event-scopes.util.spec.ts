@@ -54,7 +54,7 @@ describe('getMissingCreateEventScopes', () => {
   it('does not require OAuth scopes for non-OAuth providers', () => {
     expect(
       getMissingCreateEventScopes({
-        provider: ConnectedAccountProvider.IMAP_SMTP_CALDAV,
+        provider: ConnectedAccountProvider.APP,
         scopes: null,
       }),
     ).toEqual([]);

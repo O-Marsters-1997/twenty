@@ -2,7 +2,6 @@ import { type NativeAccountApp } from '@/settings/app-preferences/types/NativeAc
 import { msg } from '@lingui/core/macro';
 import { ConnectedAccountProvider } from 'twenty-shared/types';
 import {
-  IconAt,
   IconGmail,
   IconGoogleCalendar,
   IconMicrosoftOutlook,
@@ -56,14 +55,5 @@ export const NATIVE_ACCOUNT_APPS: NativeAccountApp[] = [
       { label: msg`Send emails`, scopes: ['Mail.Send'] },
       { label: msg`Manage events`, scopes: ['Calendars.ReadWrite'] },
     ],
-  },
-  {
-    id: 'imap',
-    name: msg`IMAP`,
-    Icon: IconAt,
-    provider: ConnectedAccountProvider.IMAP_SMTP_CALDAV,
-    hasEmails: true,
-    hasCalendar: true,
-    permissions: [],
   },
 ];

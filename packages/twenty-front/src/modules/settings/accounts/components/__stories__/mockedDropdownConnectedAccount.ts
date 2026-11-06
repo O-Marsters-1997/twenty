@@ -10,7 +10,7 @@ import { CalendarChannelVisibility } from '~/generated-metadata/graphql';
 export const mockedDropdownConnectedAccount: ConnectedAccount = {
   id: 'connected-account',
   handle: 'account@example.com',
-  provider: ConnectedAccountProvider.IMAP_SMTP_CALDAV,
+  provider: ConnectedAccountProvider.GOOGLE,
   authFailedAt: null,
   archivedAt: null,
   scopes: null,
@@ -21,7 +21,6 @@ export const mockedDropdownConnectedAccount: ConnectedAccount = {
   name: null,
   visibility: 'user',
   lastCredentialsRefreshedAt: null,
-  connectionParameters: null,
   createdAt: '2026-09-23T00:00:00.000Z',
   updatedAt: '2026-09-23T00:00:00.000Z',
   messageChannels: [],

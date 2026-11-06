@@ -281,9 +281,6 @@ export class ClientConfigService {
       isConfigVariablesInDbEnabled: this.twentyConfigService.get(
         'IS_CONFIG_VARIABLES_IN_DB_ENABLED',
       ),
-      isImapSmtpCaldavEnabled: this.twentyConfigService.get(
-        'IS_IMAP_SMTP_CALDAV_ENABLED',
-      ),
       isEmailingDomainInDemoMode,
       allowRequestsToTwentyIcons: this.twentyConfigService.get(
         'ALLOW_REQUESTS_TO_TWENTY_ICONS',

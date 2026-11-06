@@ -1,19 +1,63 @@
 import { isDefined } from 'twenty-shared/utils';
 import { DataSource, QueryRunner } from 'typeorm';
 
-import {
-  type EncryptedImapSmtpCaldavParams,
-  type ImapSmtpCaldavParams,
-  type PlaintextImapSmtpCaldavParams,
-} from 'src/engine/core-modules/imap-smtp-caldav-connection/types/imap-smtp-caldav-connection.type';
+import { type EncryptedString } from 'src/engine/core-modules/secret-encryption/branded-strings/encrypted-string.type';
 import { type PlaintextString } from 'src/engine/core-modules/secret-encryption/branded-strings/plaintext-string.type';
 import { SECRET_ENCRYPTION_ENVELOPE_V2_PREFIX } from 'src/engine/core-modules/secret-encryption/constants/secret-encryption.constant';
 import { RegisteredInstanceCommand } from 'src/engine/core-modules/upgrade/decorators/registered-instance-command.decorator';
 import { SlowInstanceCommand } from 'src/engine/core-modules/upgrade/interfaces/slow-instance-command.interface';
 import { ConnectedAccountTokenEncryptionService } from 'src/engine/metadata-modules/connected-account/services/connected-account-token-encryption.service';
-import { ACCOUNT_TYPES } from 'twenty-shared/constants';
 
 const BACKFILL_BATCH_SIZE = 500;
+
+const ACCOUNT_TYPES = ['IMAP', 'SMTP', 'CALDAV'] as const;
+
+type ProtocolParams<Password extends string> = {
+  password: Password;
+  [key: string]: unknown;
+};
+
+type ImapSmtpCaldavParams<Password extends string = string> = {
+  name?: string | null;
+  IMAP?: ProtocolParams<Password>;
+  SMTP?: ProtocolParams<Password>;
+  CALDAV?: ProtocolParams<Password>;
+};
+
+type EncryptedImapSmtpCaldavParams = ImapSmtpCaldavParams<EncryptedString>;
+type PlaintextImapSmtpCaldavParams = ImapSmtpCaldavParams<PlaintextString>;
+
+const encryptConnectionParameters = ({
+  encryptionService,
+  connectionParameters,
+  workspaceId,
+}: {
+  encryptionService: ConnectedAccountTokenEncryptionService;
+  connectionParameters: PlaintextImapSmtpCaldavParams;
+  workspaceId: string;
+}): EncryptedImapSmtpCaldavParams => {
+  const result: EncryptedImapSmtpCaldavParams = {
+    name: connectionParameters.name ?? null,
+  };
+
+  for (const protocol of ACCOUNT_TYPES) {
+    const params = connectionParameters[protocol];
+
+    if (!isDefined(params)) {
+      continue;
+    }
+
+    result[protocol] = {
+      ...params,
+      password: encryptionService.encrypt({
+        plaintext: params.password,
+        workspaceId,
+      }),
+    };
+  }
+
+  return result;
+};
 
 const CHECK_CONSTRAINT_NAME =
   'CHK_connectedAccount_connectionParameters_encrypted';
@@ -96,13 +140,11 @@ export class EncryptConnectionParametersSlowInstanceCommand implements SlowInsta
           }
         }
 
-        const encrypted =
-          this.connectedAccountTokenEncryptionService.encryptConnectionParameters(
-            {
-              connectionParameters: plaintextOnly,
-              workspaceId: row.workspaceId,
-            },
-          );
+        const encrypted = encryptConnectionParameters({
+          encryptionService: this.connectedAccountTokenEncryptionService,
+          connectionParameters: plaintextOnly,
+          workspaceId: row.workspaceId,
+        });
 
         // Pre-backfill row may already contain a mix of plaintext and
         // already-encrypted protocols; we trust the entity-level brand on

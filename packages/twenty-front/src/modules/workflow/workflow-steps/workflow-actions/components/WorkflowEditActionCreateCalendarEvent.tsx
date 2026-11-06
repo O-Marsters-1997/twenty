@@ -109,7 +109,7 @@ export const WorkflowEditActionCreateCalendarEvent = ({
         <FormSelectFieldInput
           key={`connected-account-${formData.connectedAccountId || 'none'}`}
           label={t`Account`}
-          hint={t`Google, Microsoft or CalDAV account to create the event on. Leave empty to use the default calendar account.`}
+          hint={t`Google or Microsoft account to create the event on. Leave empty to use the default calendar account.`}
           defaultValue={formData.connectedAccountId}
           options={connectedAccountOptions}
           onChange={(value) =>

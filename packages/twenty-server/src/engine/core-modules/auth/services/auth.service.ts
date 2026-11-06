@@ -1000,8 +1000,6 @@ export class AuthService {
         return ['openid', 'email', 'profile'];
       case ConnectedAccountProvider.SAML:
         return [];
-      case ConnectedAccountProvider.IMAP_SMTP_CALDAV:
-        return [];
       case ConnectedAccountProvider.EMAIL_GROUP:
       case ConnectedAccountProvider.APP:
         return [];

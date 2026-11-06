@@ -393,9 +393,6 @@ export class ClientConfig {
   isConfigVariablesInDbEnabled: boolean;
 
   @Field(() => Boolean)
-  isImapSmtpCaldavEnabled: boolean;
-
-  @Field(() => Boolean)
   isEmailingDomainInDemoMode: boolean;
 
   @Field(() => Boolean)
