@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { WorkspaceActivationStatus } from 'twenty-shared/workspace';
 import { In, IsNull, LessThan, Or, Repository } from 'typeorm';
 
-import { SentryCronMonitor } from 'src/engine/core-modules/cron/sentry-cron-monitor.decorator';
 import { ExceptionHandlerService } from 'src/engine/core-modules/exception-handler/exception-handler.service';
 import { InjectMessageQueue } from 'src/engine/core-modules/message-queue/decorators/message-queue.decorator';
 import { Process } from 'src/engine/core-modules/message-queue/decorators/process.decorator';
@@ -31,10 +30,6 @@ export class MessagingOngoingStaleCronJob {
   ) {}
 
   @Process(MessagingOngoingStaleCronJob.name)
-  @SentryCronMonitor(
-    MessagingOngoingStaleCronJob.name,
-    MESSAGING_ONGOING_STALE_CRON_PATTERN,
-  )
   async handle(): Promise<void> {
     const staleWorkspaceIds = await this.findStaleWorkspaceIds();
 

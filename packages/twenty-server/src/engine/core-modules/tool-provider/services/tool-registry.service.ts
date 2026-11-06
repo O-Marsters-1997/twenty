@@ -1,6 +1,5 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 
-import * as Sentry from '@sentry/node';
 import { type ToolSet, jsonSchema } from 'ai';
 import { type ToolCategory } from 'twenty-shared/ai';
 import { type APP_LOCALES } from 'twenty-shared/translations';
@@ -469,30 +468,7 @@ export class ToolRegistryService {
     context: ToolProviderContext,
     options: GenerateDescriptorOptions,
   ): Promise<(ToolIndexEntry | ToolDescriptor)[]> {
-    return Sentry.startSpan(
-      {
-        name: `tool provider ${provider.category} descriptors`,
-        op: 'tool.descriptors',
-        onlyIfParent: true,
-        attributes: {
-          'tool.category': provider.category,
-          'tool.include_schemas': options.includeSchemas ?? false,
-          ...(isDefined(options.toolNames) && {
-            'tool.requested_count': options.toolNames.size,
-          }),
-        },
-      },
-      async (span) => {
-        const descriptors = await provider.generateDescriptors(
-          context,
-          options,
-        );
-
-        span.setAttribute('tool.descriptor_count', descriptors.length);
-
-        return descriptors;
-      },
-    );
+    return provider.generateDescriptors(context, options);
   }
 
   private buildContextFromToolContext(

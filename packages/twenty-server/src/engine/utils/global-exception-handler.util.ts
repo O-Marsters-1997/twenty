@@ -111,19 +111,14 @@ export const handleException = <
   user,
   workspace,
   statusCode,
-  shouldBeCapturedBySentry = true,
 }: {
   exception: T;
   exceptionHandlerService: Pick<ExceptionHandlerService, 'captureExceptions'>;
   user?: ExceptionHandlerUser;
   workspace?: ExceptionHandlerWorkspace;
   statusCode?: number;
-  shouldBeCapturedBySentry?: boolean;
 }): T => {
-  if (
-    shouldBeCapturedBySentry &&
-    shouldCaptureException(exception, statusCode)
-  ) {
+  if (shouldCaptureException(exception, statusCode)) {
     exceptionHandlerService.captureExceptions([exception], { user, workspace });
   }
 

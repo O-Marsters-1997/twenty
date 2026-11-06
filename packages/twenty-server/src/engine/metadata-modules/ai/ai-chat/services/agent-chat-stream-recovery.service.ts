@@ -1,8 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { isDefined, isNonEmptyString } from 'twenty-shared/utils';
-
-import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
-import { MetricsKeys } from 'src/engine/core-modules/metrics/types/metrics-keys.type';
 import { AgentChatThreadWorkspaceEntity } from 'src/engine/metadata-modules/ai/ai-history/standard-objects/agent-chat-thread.workspace-entity';
 import { AgentChatEventPublisherService } from 'src/engine/metadata-modules/ai/ai-chat/services/agent-chat-event-publisher.service';
 import { AgentChatStreamHeartbeatService } from 'src/engine/metadata-modules/ai/ai-chat/services/agent-chat-stream-heartbeat.service';
@@ -33,7 +30,6 @@ export class AgentChatStreamRecoveryService {
     private readonly threadRepository: AgentHistoryRepository<AgentChatThreadWorkspaceEntity>,
     private readonly streamHeartbeatService: AgentChatStreamHeartbeatService,
     private readonly eventPublisherService: AgentChatEventPublisherService,
-    private readonly metricsService: MetricsService,
   ) {}
 
   async releaseStreamClaim({
@@ -140,16 +136,6 @@ export class AgentChatStreamRecoveryService {
     if (!hasReaped) {
       return null;
     }
-
-    this.metricsService.incrementCounterBy({
-      key: MetricsKeys.AiChatTurnFailed,
-      amount: 1,
-      attributes: {
-        failure_phase: 'interrupted',
-        error_code: interruptedError.code,
-      },
-    });
-
     this.logger.error(
       `[AI_CHAT_TURN_FAILED] failurePhase=interrupted, threadId=${thread.id}, workspaceId=${workspaceId}: stream ${thread.activeStreamId} stopped sending heartbeats`,
     );

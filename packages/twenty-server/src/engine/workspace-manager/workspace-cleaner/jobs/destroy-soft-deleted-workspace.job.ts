@@ -2,9 +2,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { Repository } from 'typeorm';
-
-import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
-import { MetricsKeys } from 'src/engine/core-modules/metrics/types/metrics-keys.type';
 import { Process } from 'src/engine/core-modules/message-queue/decorators/process.decorator';
 import { Processor } from 'src/engine/core-modules/message-queue/decorators/processor.decorator';
 import { MessageQueue } from 'src/engine/core-modules/message-queue/message-queue.constants';
@@ -24,7 +21,6 @@ export class DestroySoftDeletedWorkspaceJob {
     @InjectRepository(WorkspaceEntity)
     private readonly workspaceRepository: Repository<WorkspaceEntity>,
     private readonly workspaceService: WorkspaceService,
-    private readonly metricsService: MetricsService,
   ) {}
 
   @Process(DestroySoftDeletedWorkspaceJob.name)
@@ -45,10 +41,5 @@ export class DestroySoftDeletedWorkspaceJob {
     this.logger.log(`Destroying workspace ${workspaceId}`);
 
     await this.workspaceService.deleteWorkspace(workspaceId);
-
-    void this.metricsService.incrementCounterForEvent({
-      key: MetricsKeys.CronJobDeletedWorkspace,
-      shouldStoreInCache: false,
-    });
   }
 }

@@ -8,8 +8,6 @@ import { BillingUsageService } from 'src/engine/core-modules/billing/services/bi
 import { InjectMessageQueue } from 'src/engine/core-modules/message-queue/decorators/message-queue.decorator';
 import { MessageQueue } from 'src/engine/core-modules/message-queue/message-queue.constants';
 import { MessageQueueService } from 'src/engine/core-modules/message-queue/services/message-queue.service';
-import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
-import { MetricsKeys } from 'src/engine/core-modules/metrics/types/metrics-keys.type';
 import { WorkflowCoreSyncService } from 'src/engine/core-modules/workflow/services/workflow-core-sync.service';
 import { WorkflowVersionCoreSyncService } from 'src/engine/core-modules/workflow/services/workflow-version-core-sync.service';
 import { WorkflowRunStatus } from 'src/modules/workflow/common/standard-objects/workflow-run.workspace-entity';
@@ -39,7 +37,6 @@ export class CoreWorkflowRunnerService {
     private readonly workflowRunWorkspaceService: WorkflowRunWorkspaceService,
     private readonly billingUsageService: BillingUsageService,
     private readonly workflowThrottlingWorkspaceService: WorkflowThrottlingWorkspaceService,
-    private readonly metricsService: MetricsService,
     private readonly applicationService: ApplicationService,
     @InjectMessageQueue(MessageQueue.workflowQueue)
     private readonly messageQueueService: MessageQueueService,
@@ -174,11 +171,6 @@ export class CoreWorkflowRunnerService {
 
       return false;
     } catch {
-      void this.metricsService.incrementCounterForEvent({
-        key: MetricsKeys.WorkflowRunThrottled,
-        eventId: workspaceId,
-      });
-
       return true;
     }
   }

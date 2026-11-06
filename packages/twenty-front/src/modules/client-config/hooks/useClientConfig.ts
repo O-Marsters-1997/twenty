@@ -11,7 +11,6 @@ import { canManageFeatureFlagsState } from '@/client-config/states/canManageFeat
 import { captchaState } from '@/client-config/states/captchaState';
 import { isBookCallOnboardingStepEnabledState } from '@/client-config/states/isBookCallOnboardingStepEnabledState';
 import { isCompanyEnrichmentEnabledState } from '@/client-config/states/isCompanyEnrichmentEnabledState';
-import { isAnalyticsEnabledState } from '@/client-config/states/isAnalyticsEnabledState';
 import { isAttachmentPreviewEnabledState } from '@/client-config/states/isAttachmentPreviewEnabledState';
 import { isConfigVariablesInDbEnabledState } from '@/client-config/states/isConfigVariablesInDbEnabledState';
 import { isDeveloperDefaultSignInPrefilledState } from '@/client-config/states/isDeveloperDefaultSignInPrefilledState';
@@ -30,7 +29,6 @@ import { isMicrosoftMessagingEnabledState } from '@/client-config/states/isMicro
 import { isMultiWorkspaceEnabledState } from '@/client-config/states/isMultiWorkspaceEnabledState';
 import { isOnboardingAiChatEnabledState } from '@/client-config/states/isOnboardingAiChatEnabledState';
 import { labPublicFeatureFlagsState } from '@/client-config/states/labPublicFeatureFlagsState';
-import { sentryConfigState } from '@/client-config/states/sentryConfigState';
 import { supportChatState } from '@/client-config/states/supportChatState';
 import { type ClientConfig } from '@/client-config/types/ClientConfig';
 import { domainConfigurationState } from '@/domain-manager/states/domainConfigurationState';
@@ -52,7 +50,6 @@ type UseClientConfigResult = {
 };
 
 export const useClientConfig = (): UseClientConfigResult => {
-  const setIsAnalyticsEnabled = useSetAtomState(isAnalyticsEnabledState);
   const setDomainConfiguration = useSetAtomState(domainConfigurationState);
   const setAuthProviders = useSetAtomState(authProvidersState);
   const setAiModels = useSetAtomState(aiModelsState);
@@ -72,7 +69,6 @@ export const useClientConfig = (): UseClientConfigResult => {
   const setBilling = useSetAtomState(billingState);
   const setSupportChat = useSetAtomState(supportChatState);
 
-  const setSentryConfig = useSetAtomState(sentryConfigState);
   const [clientConfigApiStatus, setClientConfigApiStatus] = useAtomState(
     clientConfigApiStatusState,
   );
@@ -186,7 +182,6 @@ export const useClientConfig = (): UseClientConfigResult => {
         setAiModels(clientConfig.aiModels ?? []);
         setAiEvaluationModels(clientConfig.aiEvaluationModels ?? []);
         setAiModelTiers(clientConfig.aiModelTiers ?? []);
-        setIsAnalyticsEnabled(clientConfig.analyticsEnabled);
         setIsDeveloperDefaultSignInPrefilled(clientConfig.signInPrefilled);
         setIsMultiWorkspaceEnabled(clientConfig.isMultiWorkspaceEnabled);
         setIsEmailVerificationRequired(
@@ -194,13 +189,6 @@ export const useClientConfig = (): UseClientConfigResult => {
         );
         setBilling(clientConfig.billing);
         setSupportChat(clientConfig.support);
-
-        setSentryConfig({
-          dsn: clientConfig?.sentry?.dsn,
-          release: clientConfig?.sentry?.release,
-          environment: clientConfig?.sentry?.environment,
-          tracesSampleRate: clientConfig?.sentry?.tracesSampleRate,
-        });
 
         setCaptcha({
           provider: clientConfig?.captcha?.provider,
@@ -289,7 +277,6 @@ export const useClientConfig = (): UseClientConfigResult => {
       setDomainConfiguration,
       setIsGoogleCalendarEnabled,
       setIsGoogleMessagingEnabled,
-      setIsAnalyticsEnabled,
       setIsAttachmentPreviewEnabled,
       setIsBookCallOnboardingStepEnabled,
       setIsCompanyEnrichmentEnabled,
@@ -308,7 +295,6 @@ export const useClientConfig = (): UseClientConfigResult => {
       setEnterpriseInstanceType,
       setIsMicrosoftCalendarEnabled,
       setIsMicrosoftMessagingEnabled,
-      setSentryConfig,
       setSupportChat,
       setAllowRequestsToTwentyIcons,
     ],

@@ -8,8 +8,6 @@ import { getAgentHistoryTable } from 'src/database/commands/agent-history/utils/
 import { ProvisionedWorkspaceCommandRunner } from 'src/database/commands/command-runners/provisioned-workspace.command-runner';
 import { WorkspaceIteratorService } from 'src/database/commands/command-runners/workspace-iterator.service';
 import { type RunOnWorkspaceArgs } from 'src/database/commands/command-runners/workspace.command-runner';
-import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
-import { MetricsKeys } from 'src/engine/core-modules/metrics/types/metrics-keys.type';
 import { RegisteredWorkspaceCommand } from 'src/engine/core-modules/upgrade/decorators/registered-workspace-command.decorator';
 import { AgentChatEventPublisherService } from 'src/engine/metadata-modules/ai/ai-chat/services/agent-chat-event-publisher.service';
 import { AgentChatStreamHeartbeatService } from 'src/engine/metadata-modules/ai/ai-chat/services/agent-chat-stream-heartbeat.service';
@@ -34,7 +32,6 @@ export class MigrateAgentHistoryToWorkspaceCommand extends ProvisionedWorkspaceC
     private readonly storage: AgentHistoryMigrationStateService,
     private readonly streamHeartbeatService: AgentChatStreamHeartbeatService,
     private readonly eventPublisherService: AgentChatEventPublisherService,
-    private readonly metricsService: MetricsService,
   ) {
     super(workspaceIteratorService);
   }
@@ -189,16 +186,6 @@ export class MigrateAgentHistoryToWorkspaceCommand extends ProvisionedWorkspaceC
     if (!isNonEmptyArray(reaped)) {
       return;
     }
-
-    this.metricsService.incrementCounterBy({
-      key: MetricsKeys.AiChatTurnFailed,
-      amount: 1,
-      attributes: {
-        failure_phase: 'interrupted',
-        error_code: interruptedError.code,
-      },
-    });
-
     await this.eventPublisherService.resetStreamState(thread.id);
     await this.eventPublisherService
       .publish({

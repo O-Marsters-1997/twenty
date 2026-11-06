@@ -44,8 +44,6 @@ import { WorkspacePreQueryHookPayload } from 'src/engine/api/graphql/workspace-q
 import { WorkspaceQueryHookService } from 'src/engine/api/graphql/workspace-query-runner/workspace-query-hook/workspace-query-hook.service';
 import { isApplicationAuthContext } from 'src/engine/core-modules/auth/guards/is-application-auth-context.guard';
 import { WorkspaceAuthContext } from 'src/engine/core-modules/auth/types/workspace-auth-context.type';
-import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
-import { MetricsKeys } from 'src/engine/core-modules/metrics/types/metrics-keys.type';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { UsageLimitException } from 'src/engine/core-modules/usage-limit/exceptions/usage-limit.exception';
 import { UsageLimitSpeedService } from 'src/engine/core-modules/usage-limit/services/usage-limit-speed.service';
@@ -104,8 +102,6 @@ export abstract class CommonBaseQueryRunnerService<
   protected readonly usageRecorderService: UsageRecorderService;
   @Inject()
   protected readonly twentyConfigService: TwentyConfigService;
-  @Inject()
-  protected readonly metricsService: MetricsService;
 
   protected abstract readonly operationName: CommonQueryNames;
 
@@ -369,12 +365,6 @@ export abstract class CommonBaseQueryRunnerService<
     CommonExtendedQueryRunnerContext,
     'repository'
   >): WorkspaceRepository {
-    this.metricsService.incrementCounterBy({
-      key: MetricsKeys.OrmV2ReadPathUsed,
-      amount: 1,
-      attributes: { operation: this.operationName },
-    });
-
     return repository;
   }
 
@@ -384,12 +374,6 @@ export abstract class CommonBaseQueryRunnerService<
     CommonExtendedQueryRunnerContext,
     'repository'
   >): WorkspaceRepository {
-    this.metricsService.incrementCounterBy({
-      key: MetricsKeys.OrmV2WritePathUsed,
-      amount: 1,
-      attributes: { operation: this.operationName },
-    });
-
     return repository;
   }
 
@@ -568,25 +552,12 @@ export abstract class CommonBaseQueryRunnerService<
     exhaustedScope: ExhaustedScope;
   }) {
     if (exhaustedScope.spenderType === 'apiKey') {
-      await this.metricsService.incrementCounterForEvent({
-        key: MetricsKeys.CommonApiQueryRateLimited,
-        shouldStoreInCache: false,
-      });
     }
 
     if (
       exhaustedScope.spenderType === 'application' &&
       isApplicationAuthContext(authContext)
     ) {
-      await this.metricsService.incrementCounterForEvent({
-        key: MetricsKeys.CommonApiApplicationQueryRateLimited,
-        shouldStoreInCache: false,
-        attributes: {
-          universal_identifier: authContext.application.universalIdentifier,
-          app_name: authContext.application.name,
-        },
-      });
-
       this.logger.warn(
         buildApplicationApiRateLimitedLogLine({ authContext, exhaustedScope }),
       );

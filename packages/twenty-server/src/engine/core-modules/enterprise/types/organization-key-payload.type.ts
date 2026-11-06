@@ -26,7 +26,6 @@ export type EnterpriseInstanceMetadata = {
   serverUrl: string | null;
   appVersion: string | null;
   nodeEnv: string | null;
-  telemetryEnabled: boolean | null;
   workspaceCount: number | null;
   activeUserWorkspaceCount: number | null;
   distinctUserCount: number | null;

@@ -1,6 +1,5 @@
 import { createHash } from 'crypto';
 
-import * as Sentry from '@sentry/node';
 import { type Request } from 'express';
 import { type Plugin } from 'graphql-yoga';
 import { isDefined } from 'twenty-shared/utils';
@@ -90,8 +89,7 @@ export function useCachedMetadata(config: CacheMetadataPluginConfig): Plugin {
         workspaceId,
         request,
       });
-    } catch (error) {
-      Sentry.captureException(error);
+    } catch {
       cacheKey = null;
     }
 
@@ -99,35 +97,6 @@ export function useCachedMetadata(config: CacheMetadataPluginConfig): Plugin {
 
     return cacheKey;
   };
-
-  const getCachedResponse = ({
-    cacheKey,
-    operationName,
-    phase,
-  }: {
-    cacheKey: string;
-    operationName: string;
-    phase: 'request' | 'response';
-  }) =>
-    Sentry.startSpan(
-      {
-        name: 'metadata GraphQL cache lookup',
-        op: 'cache.get',
-        onlyIfParent: true,
-        attributes: {
-          'cache.phase': phase,
-          'graphql.operation.name': operationName,
-          'graphql.operation.type': 'query',
-        },
-      },
-      async (span) => {
-        const cachedResponse = await config.cacheGetter(cacheKey);
-
-        span.setAttribute('cache.hit', Boolean(cachedResponse));
-
-        return cachedResponse;
-      },
-    );
 
   return {
     onRequest: async ({ endResponse, serverContext }) => {
@@ -146,9 +115,6 @@ export function useCachedMetadata(config: CacheMetadataPluginConfig): Plugin {
         return;
       }
 
-      Sentry.setTags({ operationName, operation: 'query' });
-      Sentry.getCurrentScope().setTransactionName(operationName);
-
       const cacheKey = await resolveCacheKey({
         operationName,
         operationConfig,
@@ -160,11 +126,7 @@ export function useCachedMetadata(config: CacheMetadataPluginConfig): Plugin {
         return;
       }
 
-      const cachedResponse = await getCachedResponse({
-        cacheKey,
-        operationName,
-        phase: 'request',
-      });
+      const cachedResponse = await config.cacheGetter(cacheKey);
 
       if (cachedResponse) {
         cacheHitRequests.add(request);
@@ -197,11 +159,7 @@ export function useCachedMetadata(config: CacheMetadataPluginConfig): Plugin {
         return;
       }
 
-      const cachedResponse = await getCachedResponse({
-        cacheKey,
-        operationName,
-        phase: 'response',
-      });
+      const cachedResponse = await config.cacheGetter(cacheKey);
 
       if (!cachedResponse) {
         const responseBody = await response.json();

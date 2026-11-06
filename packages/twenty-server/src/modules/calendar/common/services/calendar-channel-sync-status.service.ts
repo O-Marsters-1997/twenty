@@ -10,8 +10,6 @@ import {
 import { InjectCacheStorage } from 'src/engine/core-modules/cache-storage/decorators/cache-storage.decorator';
 import { CacheStorageService } from 'src/engine/core-modules/cache-storage/services/cache-storage.service';
 import { CacheStorageNamespace } from 'src/engine/core-modules/cache-storage/types/cache-storage-namespace.enum';
-import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
-import { MetricsKeys } from 'src/engine/core-modules/metrics/types/metrics-keys.type';
 import { UserWorkspaceEntity } from 'src/engine/core-modules/user-workspace/user-workspace.entity';
 import { CalendarChannelEntity } from 'src/engine/metadata-modules/calendar-channel/entities/calendar-channel.entity';
 import { ConnectedAccountEntity } from 'src/engine/metadata-modules/connected-account/entities/connected-account.entity';
@@ -34,7 +32,6 @@ export class CalendarChannelSyncStatusService {
     @InjectRepository(UserWorkspaceEntity)
     private readonly userWorkspaceRepository: Repository<UserWorkspaceEntity>,
     private readonly accountsToReconnectService: AccountsToReconnectService,
-    private readonly metricsService: MetricsService,
   ) {}
 
   public async markAsCalendarEventListFetchPending(
@@ -240,11 +237,6 @@ export class CalendarChannelSyncStatusService {
       calendarChannelIds,
       workspaceId,
     );
-
-    await this.metricsService.incrementCounterForEvents({
-      key: MetricsKeys.CalendarEventSyncJobActive,
-      eventIds: calendarChannelIds,
-    });
   }
 
   public async markAsFailedUnknownAndFlushCalendarEventsToImport(
@@ -280,11 +272,6 @@ export class CalendarChannelSyncStatusService {
       authContext,
       { lite: true },
     );
-
-    await this.metricsService.incrementCounterForEvents({
-      key: MetricsKeys.CalendarEventSyncJobFailedUnknown,
-      eventIds: calendarChannelIds,
-    });
   }
 
   public async markAsFailedInsufficientPermissionsAndFlushCalendarEventsToImport(
@@ -342,11 +329,6 @@ export class CalendarChannelSyncStatusService {
       authContext,
       { lite: true },
     );
-
-    await this.metricsService.incrementCounterForEvents({
-      key: MetricsKeys.CalendarEventSyncJobFailedInsufficientPermissions,
-      eventIds: calendarChannelIds,
-    });
   }
 
   private async addToAccountsToReconnect(

@@ -20,7 +20,6 @@ import { AuthWorkspaceMemberId } from 'src/engine/decorators/auth/auth-workspace
 import { AuthWorkspace } from 'src/engine/decorators/auth/auth-workspace.decorator';
 import { AuthPrincipalGuard } from 'src/engine/guards/auth-principal.guard';
 import { CustomPermissionGuard } from 'src/engine/guards/custom-permission.guard';
-import { tagAiChatStreamScope } from 'src/engine/metadata-modules/ai/ai-chat/utils/tag-ai-chat-stream-scope.util';
 import { AiGraphqlApiExceptionInterceptor } from 'src/engine/metadata-modules/ai/interceptors/ai-graphql-api-exception.interceptor';
 import { AnswerToolCallResultDTO } from 'src/engine/metadata-modules/ai/ai-tool-call-answer/dtos/answer-tool-call-result.dto';
 import { AnswerToolCallInput } from 'src/engine/metadata-modules/ai/ai-tool-call-answer/dtos/answer-tool-call.input';
@@ -74,12 +73,6 @@ export class ToolCallAnswerResolver {
     });
 
     if (isDefined(streamId)) {
-      tagAiChatStreamScope({
-        streamId,
-        turnId,
-        threadId,
-        workspaceId: workspace.id,
-      });
     }
 
     return { streamId };

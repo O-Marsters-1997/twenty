@@ -9,9 +9,6 @@ import {
 } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 import { In, Repository } from 'typeorm';
-
-import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
-import { MetricsKeys } from 'src/engine/core-modules/metrics/types/metrics-keys.type';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { ConnectedAccountEntity } from 'src/engine/metadata-modules/connected-account/entities/connected-account.entity';
 import { MessageChannelEntity } from 'src/engine/metadata-modules/message-channel/entities/message-channel.entity';
@@ -38,7 +35,6 @@ export class GoogleMessagingNotificationHandler implements WebhookNotificationHa
 
   constructor(
     private readonly twentyConfigService: TwentyConfigService,
-    private readonly metricsService: MetricsService,
     @InjectRepository(ConnectedAccountEntity)
     private readonly connectedAccountRepository: Repository<ConnectedAccountEntity>,
     @InjectRepository(MessageChannelEntity)
@@ -48,12 +44,6 @@ export class GoogleMessagingNotificationHandler implements WebhookNotificationHa
 
   async handle(request: GoogleMessagingNotificationRequest): Promise<void> {
     await this.verify(request.authorizationHeader);
-
-    this.metricsService.incrementCounterBy({
-      key: MetricsKeys.ConnectedAccountSyncWebhookReceivedMessaging,
-      amount: 1,
-    });
-
     const decodedData = this.decodeMessageData(request.body);
 
     if (!isDefined(decodedData)) {

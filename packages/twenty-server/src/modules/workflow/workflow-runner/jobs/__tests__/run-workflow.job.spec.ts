@@ -1,6 +1,5 @@
 import { StepStatus } from 'twenty-shared/workflow';
 
-import { type MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
 import { type WorkflowVersionCoreSyncService } from 'src/engine/core-modules/workflow/services/workflow-version-core-sync.service';
 import { type WorkspaceOrmManager } from 'src/engine/twenty-orm/workspace-orm.manager';
 import { WorkflowRunStatus } from 'src/modules/workflow/common/standard-objects/workflow-run.workspace-entity';
@@ -37,7 +36,6 @@ describe('RunWorkflowJob', () => {
     {} as WorkflowVersionCoreSyncService,
     workflowExecutorWorkspaceService as unknown as WorkflowExecutorWorkspaceService,
     workflowRunWorkspaceService as unknown as WorkflowRunWorkspaceService,
-    {} as MetricsService,
     workspaceOrmManager as unknown as WorkspaceOrmManager,
   );
 
