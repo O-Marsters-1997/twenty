@@ -7,7 +7,6 @@ export const authProvidersState = createAtomState<AuthProviders>({
     google: true,
     magicLink: false,
     password: true,
-    microsoft: false,
     sso: [],
   },
 });

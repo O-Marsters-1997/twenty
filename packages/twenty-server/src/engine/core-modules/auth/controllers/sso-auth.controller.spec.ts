@@ -67,9 +67,6 @@ describe('SsoAuthController', () => {
             })),
             checkAccessForSignIn: jest.fn().mockResolvedValue(undefined),
             signInUp: jest.fn(),
-            createSsoConnectedAccountIfFeatureFlagIsOn: jest
-              .fn()
-              .mockResolvedValue(undefined),
             computeRedirectURI: jest.fn().mockReturnValue('https://redirect'),
           },
         },

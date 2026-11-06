@@ -31,7 +31,6 @@ export const authGraphqlApiExceptionHandler = (exception: AuthException) => {
     case AuthExceptionCode.ENTERPRISE_VALIDITY_TOKEN_NOT_VALID:
       throw new ForbiddenError(exception);
     case AuthExceptionCode.GOOGLE_API_AUTH_DISABLED:
-    case AuthExceptionCode.MICROSOFT_API_AUTH_DISABLED:
       throw new ForbiddenError(exception.message, {
         userFriendlyMessage: msg`Authentication is not enabled with this provider.`,
         subCode: exception.code,

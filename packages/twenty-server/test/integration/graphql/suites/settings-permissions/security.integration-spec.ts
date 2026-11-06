@@ -60,7 +60,6 @@ describe('Security permissions', () => {
         currentWorkspace {
           displayName
           isGoogleAuthEnabled
-          isMicrosoftAuthEnabled
           isPasswordAuthEnabled
           logo
           isPublicInviteLinkEnabled
@@ -84,7 +83,6 @@ describe('Security permissions', () => {
             subdomain: "${originalWorkspaceState.subdomain}",
             logo: "${originalWorkspaceState.logo}",
             isGoogleAuthEnabled: ${originalWorkspaceState.isGoogleAuthEnabled},
-            isMicrosoftAuthEnabled: ${originalWorkspaceState.isMicrosoftAuthEnabled},
             isPasswordAuthEnabled: ${originalWorkspaceState.isPasswordAuthEnabled}
             isPublicInviteLinkEnabled: ${originalWorkspaceState.isPublicInviteLinkEnabled}
           }) {
@@ -192,66 +190,6 @@ describe('Security permissions', () => {
         expect(response.body.errors[0].extensions.code).toBe(
           ErrorCode.FORBIDDEN,
         );
-      });
-    });
-
-    describe('microsoft auth', () => {
-      it('should update workspace when user has permission (admin role)', async () => {
-        const queryData = {
-          query: `
-          mutation updateWorkspace {
-            updateWorkspace(data: { isMicrosoftAuthEnabled: false }) {
-              id
-              isMicrosoftAuthEnabled
-            }
-          }
-        `,
-        };
-
-        return client
-          .post('/metadata')
-          .set('Authorization', `Bearer ${APPLE_JANE_ADMIN_ACCESS_TOKEN}`)
-          .send(queryData)
-          .expect(200)
-          .expect((res) => {
-            expect(res.body.data).toBeDefined();
-            expect(res.body.errors).toBeUndefined();
-          })
-          .expect((res) => {
-            const data = res.body.data.updateWorkspace;
-
-            expect(data).toBeDefined();
-            expect(data.isMicrosoftAuthEnabled).toBe(false);
-          });
-      });
-
-      it('should throw a permission error when user does not have permission (member role)', async () => {
-        const queryData = {
-          query: `
-          mutation updateWorkspace {
-            updateWorkspace(data: { isMicrosoftAuthEnabled: true }) {
-              id
-              isMicrosoftAuthEnabled
-            }
-          }
-        `,
-        };
-
-        await client
-          .post('/metadata')
-          .set('Authorization', `Bearer ${APPLE_JONY_MEMBER_ACCESS_TOKEN}`)
-          .send(queryData)
-          .expect(200)
-          .expect((res) => {
-            expect(res.body.data).toBeNull();
-            expect(res.body.errors).toBeDefined();
-            expect(res.body.errors[0].message).toBe(
-              PermissionsExceptionMessage.PERMISSION_DENIED,
-            );
-            expect(res.body.errors[0].extensions.code).toBe(
-              ErrorCode.FORBIDDEN,
-            );
-          });
       });
     });
 

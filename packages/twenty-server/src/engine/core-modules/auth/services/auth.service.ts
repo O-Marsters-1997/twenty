@@ -33,7 +33,6 @@ import { AuthSsoService } from 'src/engine/core-modules/auth/services/auth-sso.s
 import { CreateSsoConnectedAccountService } from 'src/engine/core-modules/auth/services/create-sso-connected-account.service';
 import { SignInUpService } from 'src/engine/core-modules/auth/services/sign-in-up.service';
 import { type GoogleRequest } from 'src/engine/core-modules/auth/strategies/google.auth.strategy';
-import { type MicrosoftRequest } from 'src/engine/core-modules/auth/strategies/microsoft.auth.strategy';
 import { AccessTokenService } from 'src/engine/core-modules/auth/token/services/access-token.service';
 import { LoginTokenService } from 'src/engine/core-modules/auth/token/services/login-token.service';
 import { RefreshTokenService } from 'src/engine/core-modules/auth/token/services/refresh-token.service';
@@ -310,8 +309,6 @@ export class AuthService {
           return workspace.isPasswordAuthBypassEnabled;
         case AuthProviderEnum.Google:
           return workspace.isGoogleAuthBypassEnabled;
-        case AuthProviderEnum.Microsoft:
-          return workspace.isMicrosoftAuthBypassEnabled;
         default:
           return false;
       }
@@ -820,8 +817,8 @@ export class AuthService {
       billingCheckoutSessionState,
       locale,
       returnToPath,
-    }: MicrosoftRequest['user'] | GoogleRequest['user'],
-    authProvider: AuthProviderEnum.Google | AuthProviderEnum.Microsoft,
+    }: GoogleRequest['user'],
+    authProvider: AuthProviderEnum.Google,
   ): Promise<string> {
     const email = rawEmail.toLowerCase();
 
@@ -914,7 +911,6 @@ export class AuthService {
         workspaceId: workspace.id,
         userId: user.id,
         handle: email,
-        authProvider,
       });
 
       const loginToken = await this.loginTokenService.generateLoginToken(
@@ -945,70 +941,15 @@ export class AuthService {
     workspaceId: string;
     userId: string;
     handle: string;
-    authProvider:
-      | AuthProviderEnum.Google
-      | AuthProviderEnum.Microsoft
-      | AuthProviderEnum.SSO;
-    oidcTokenClaims?: Record<string, unknown>;
-    connectedAccountProvider?: ConnectedAccountProvider;
   }): Promise<void> {
-    const provider =
-      input.connectedAccountProvider ??
-      this.mapAuthProviderToConnectedAccountProvider(input.authProvider);
-
-    const scopes = this.getSsoScopes(provider);
-
     await this.createSsoConnectedAccountService.createOrUpdateSsoConnectedAccount(
       {
         workspaceId: input.workspaceId,
         userId: input.userId,
         handle: input.handle,
-        provider,
-        scopes,
-        oidcTokenClaims: input.oidcTokenClaims,
+        provider: ConnectedAccountProvider.GOOGLE,
+        scopes: ['email', 'profile'],
       },
     );
-  }
-
-  private mapAuthProviderToConnectedAccountProvider(
-    authProvider:
-      | AuthProviderEnum.Google
-      | AuthProviderEnum.Microsoft
-      | AuthProviderEnum.SSO,
-  ): ConnectedAccountProvider {
-    switch (authProvider) {
-      case AuthProviderEnum.Google:
-        return ConnectedAccountProvider.GOOGLE;
-      case AuthProviderEnum.Microsoft:
-        return ConnectedAccountProvider.MICROSOFT;
-      case AuthProviderEnum.SSO:
-        return ConnectedAccountProvider.OIDC;
-      default:
-        throw new Error(
-          `Unsupported auth provider: ${authProvider satisfies never}`,
-        );
-    }
-  }
-
-  private getSsoScopes(provider: ConnectedAccountProvider): string[] {
-    switch (provider) {
-      case ConnectedAccountProvider.GOOGLE:
-        return ['email', 'profile'];
-      case ConnectedAccountProvider.MICROSOFT:
-        return ['User.Read'];
-      case ConnectedAccountProvider.OIDC:
-        return ['openid', 'email', 'profile'];
-      case ConnectedAccountProvider.SAML:
-        return [];
-      case ConnectedAccountProvider.IMAP_SMTP_CALDAV:
-        return [];
-      case ConnectedAccountProvider.EMAIL_GROUP:
-      case ConnectedAccountProvider.APP:
-        return [];
-      default:
-        throw new Error(
-          `Unsupported connected account provider: ${provider satisfies never}`,
-        );
-    }
   }
 }

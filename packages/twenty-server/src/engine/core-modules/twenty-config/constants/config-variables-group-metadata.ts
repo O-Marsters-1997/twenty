@@ -37,12 +37,6 @@ export const CONFIG_VARIABLES_GROUP_METADATA: Record<
     isHiddenOnLoad: false,
     isHiddenInAdminPanel: false,
   },
-  [ConfigVariablesGroup.MICROSOFT_AUTH]: {
-    position: 500,
-    description: 'Configure Microsoft integration (login, calendar, email)',
-    isHiddenOnLoad: false,
-    isHiddenInAdminPanel: false,
-  },
   [ConfigVariablesGroup.EMAIL_SETTINGS]: {
     position: 600,
     description:

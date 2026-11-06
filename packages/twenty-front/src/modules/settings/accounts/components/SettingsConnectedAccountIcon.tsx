@@ -8,7 +8,6 @@ import {
   type IconComponentProps,
   IconGoogle,
   IconMail,
-  IconMicrosoft,
   IconSend,
 } from 'twenty-ui/icon';
 import { useTheme } from 'twenty-ui/theme';
@@ -67,8 +66,6 @@ const getIconForProvider = (account: ConnectedAccount): IconComponent => {
       );
     case ConnectedAccountProvider.GOOGLE:
       return IconGoogle;
-    case ConnectedAccountProvider.MICROSOFT:
-      return IconMicrosoft;
     default:
       return IconMail;
   }

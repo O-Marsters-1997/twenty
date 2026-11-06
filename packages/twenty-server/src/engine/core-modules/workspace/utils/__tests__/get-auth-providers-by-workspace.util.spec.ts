@@ -10,7 +10,6 @@ describe('getAuthProvidersByWorkspace', () => {
   const mockWorkspace = {
     isGoogleAuthEnabled: true,
     isPasswordAuthEnabled: true,
-    isMicrosoftAuthEnabled: false,
     workspaceSsoIdentityProviders: [
       {
         id: 'sso1',
@@ -30,7 +29,6 @@ describe('getAuthProvidersByWorkspace', () => {
         google: true,
         magicLink: false,
         password: true,
-        microsoft: true,
         sso: [],
       },
     });
@@ -39,7 +37,6 @@ describe('getAuthProvidersByWorkspace', () => {
       google: true,
       magicLink: false,
       password: true,
-      microsoft: false,
       sso: [
         {
           id: 'sso1',
@@ -60,7 +57,6 @@ describe('getAuthProvidersByWorkspace', () => {
         google: true,
         magicLink: false,
         password: true,
-        microsoft: true,
         sso: [],
       },
     });
@@ -69,7 +65,6 @@ describe('getAuthProvidersByWorkspace', () => {
       google: true,
       magicLink: false,
       password: true,
-      microsoft: false,
       sso: [],
     });
   });
@@ -91,7 +86,6 @@ describe('getAuthProvidersByWorkspace', () => {
         google: true,
         magicLink: false,
         password: true,
-        microsoft: true,
         sso: [],
       },
     });
@@ -100,38 +94,7 @@ describe('getAuthProvidersByWorkspace', () => {
       google: true,
       magicLink: false,
       password: true,
-      microsoft: false,
       sso: [],
-    });
-  });
-
-  it('should disable Microsoft auth if isMicrosoftAuthEnabled is false', () => {
-    const result = getAuthProvidersByWorkspace({
-      workspace: { ...mockWorkspace, isMicrosoftAuthEnabled: false },
-      systemEnabledProviders: {
-        google: true,
-        magicLink: false,
-        password: true,
-        microsoft: true,
-        sso: [],
-      },
-    });
-
-    expect(result).toEqual({
-      google: true,
-      magicLink: false,
-      password: true,
-      microsoft: false,
-      sso: [
-        {
-          id: 'sso1',
-          name: 'SSO Provider 1',
-          type: IdentityProviderType.SAML,
-
-          status: SsoIdentityProviderStatus.Active,
-          issuer: 'sso1.example.com',
-        },
-      ],
     });
   });
 });

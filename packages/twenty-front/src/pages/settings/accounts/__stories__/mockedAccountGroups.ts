@@ -7,8 +7,6 @@ import { getEmptyPageInfo } from '@/object-record/cache/utils/getEmptyPageInfo';
 import { isGoogleCalendarEnabledState } from '@/client-config/states/isGoogleCalendarEnabledState';
 import { isGoogleMessagingEnabledState } from '@/client-config/states/isGoogleMessagingEnabledState';
 import { isImapSmtpCaldavEnabledState } from '@/client-config/states/isImapSmtpCaldavEnabledState';
-import { isMicrosoftCalendarEnabledState } from '@/client-config/states/isMicrosoftCalendarEnabledState';
-import { isMicrosoftMessagingEnabledState } from '@/client-config/states/isMicrosoftMessagingEnabledState';
 import { jotaiStore } from '@/ui/utilities/state/jotai/jotaiStore';
 import { FeatureFlagKey } from '~/generated-metadata/graphql';
 import { graphqlMocks } from '~/testing/graphqlMocks';
@@ -25,7 +23,6 @@ const GRANOLA_APPLICATION_ID = '20202020-1a2b-4c3d-8e4f-000000000022';
 const CREATED_AT = '2026-09-01T00:00:00.000Z';
 
 export const GOOGLE_ACCOUNT_ID = '20202020-1a2b-4c3d-8e4f-000000000011';
-export const MICROSOFT_ACCOUNT_ID = '20202020-1a2b-4c3d-8e4f-000000000014';
 export const FATHOM_ONLY_ACCOUNT_ID = '20202020-1a2b-4c3d-8e4f-000000000013';
 const FATHOM_ACCOUNT_ID = '20202020-1a2b-4c3d-8e4f-000000000012';
 const MY_SHARED_ACCOUNT_ID = '20202020-1a2b-4c3d-8e4f-000000000015';
@@ -135,20 +132,6 @@ export const CONNECTED_ACCOUNTS = [
     applicationId: FATHOM_APPLICATION_ID,
   }),
   buildConnectedAccount({
-    id: MICROSOFT_ACCOUNT_ID,
-    handle: 'tim@outlook.com',
-    provider: 'microsoft',
-    userWorkspaceId: MY_USER_WORKSPACE_ID,
-    scopes: [
-      'openid',
-      'email',
-      'Mail.ReadWrite',
-      'Mail.Send',
-      'Calendars.ReadWrite',
-      'User.Read',
-    ],
-  }),
-  buildConnectedAccount({
     id: MY_SHARED_ACCOUNT_ID,
     handle: 'sales@apple.dev',
     provider: 'app',
@@ -190,10 +173,6 @@ const MESSAGE_CHANNELS = [
     FATHOM_ONLY_ACCOUNT_ID,
   ),
   buildMessageChannel(
-    '20202020-1a2b-4c3d-8e4f-000000000033',
-    MICROSOFT_ACCOUNT_ID,
-  ),
-  buildMessageChannel(
     '20202020-1a2b-4c3d-8e4f-000000000034',
     SECOND_GOOGLE_ACCOUNT_ID,
     'METADATA',
@@ -204,10 +183,6 @@ const CALENDAR_CHANNELS = [
   buildCalendarChannel(
     '20202020-1a2b-4c3d-8e4f-000000000041',
     GOOGLE_ACCOUNT_ID,
-  ),
-  buildCalendarChannel(
-    '20202020-1a2b-4c3d-8e4f-000000000042',
-    MICROSOFT_ACCOUNT_ID,
   ),
 ];
 
@@ -278,8 +253,6 @@ export const seedAccountGroupsStory = async () => {
 
   jotaiStore.set(isGoogleMessagingEnabledState.atom, true);
   jotaiStore.set(isGoogleCalendarEnabledState.atom, true);
-  jotaiStore.set(isMicrosoftMessagingEnabledState.atom, true);
-  jotaiStore.set(isMicrosoftCalendarEnabledState.atom, true);
   jotaiStore.set(isImapSmtpCaldavEnabledState.atom, false);
 
   jotaiStore.set(currentWorkspaceState.atom, {

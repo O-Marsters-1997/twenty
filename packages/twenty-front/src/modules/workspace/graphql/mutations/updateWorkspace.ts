@@ -16,7 +16,6 @@ export const UPDATE_WORKSPACE = gql`
       isCampaignOpenTrackingEnabled
       workspaceDiscoverability
       isGoogleAuthEnabled
-      isMicrosoftAuthEnabled
       isPasswordAuthEnabled
       isTwoFactorAuthenticationEnforced
       isInternalMessagesImportEnabled

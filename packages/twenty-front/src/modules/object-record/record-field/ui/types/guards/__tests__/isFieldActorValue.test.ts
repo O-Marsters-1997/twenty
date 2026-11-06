@@ -19,7 +19,7 @@ describe('isFieldActorValue', () => {
         source: 'CALENDAR',
         workspaceMemberId: 'member-id',
         name: 'Dani S',
-        context: { provider: ConnectedAccountProvider.MICROSOFT },
+        context: { provider: ConnectedAccountProvider.GOOGLE },
       }),
     ).toBe(true);
   });

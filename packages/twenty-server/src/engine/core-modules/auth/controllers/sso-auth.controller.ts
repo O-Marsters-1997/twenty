@@ -14,11 +14,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { generateServiceProviderMetadata } from '@node-saml/node-saml';
 import { isNonEmptyString } from '@sniptt/guards';
 import { Response } from 'express';
-import {
-  ApiPath,
-  AppPath,
-  ConnectedAccountProvider,
-} from 'twenty-shared/types';
+import { ApiPath, AppPath } from 'twenty-shared/types';
 import { assertIsDefinedOrThrow } from 'twenty-shared/utils';
 import { Repository } from 'typeorm';
 
@@ -181,18 +177,9 @@ export class SsoAuthController {
         );
       }
 
-      const oidcTokenClaims =
-        'oidcTokenClaims' in req.user ? req.user.oidcTokenClaims : undefined;
-
-      const connectedAccountProvider =
-        workspaceIdentityProvider.type === IdentityProviderType.SAML
-          ? ConnectedAccountProvider.SAML
-          : ConnectedAccountProvider.OIDC;
-
       const { loginToken } = await this.generateLoginToken(
         req.user,
         currentWorkspace,
-        { oidcTokenClaims, connectedAccountProvider },
       );
 
       return res.redirect(
@@ -218,10 +205,6 @@ export class SsoAuthController {
   private async generateLoginToken(
     payload: { email: string; workspaceInviteHash?: string },
     currentWorkspace: WorkspaceEntity,
-    ssoContext?: {
-      oidcTokenClaims?: Record<string, unknown>;
-      connectedAccountProvider: ConnectedAccountProvider;
-    },
   ) {
     const invitation = payload.email
       ? await this.authService.findInvitationForSignInUp({
@@ -255,17 +238,6 @@ export class SsoAuthController {
 
     if (!user.isEmailVerified && !isNonEmptyString(user.passwordHash)) {
       await this.userService.markEmailAsVerified(user.id);
-    }
-
-    if (ssoContext) {
-      await this.authService.createSsoConnectedAccountIfFeatureFlagIsOn({
-        workspaceId: workspace.id,
-        userId: user.id,
-        handle: payload.email.toLowerCase(),
-        authProvider: AuthProviderEnum.SSO,
-        oidcTokenClaims: ssoContext.oidcTokenClaims,
-        connectedAccountProvider: ssoContext.connectedAccountProvider,
-      });
     }
 
     return {

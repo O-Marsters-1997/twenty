@@ -109,7 +109,7 @@ export const WorkflowEditActionCreateCalendarEvent = ({
         <FormSelectFieldInput
           key={`connected-account-${formData.connectedAccountId || 'none'}`}
           label={t`Account`}
-          hint={t`Google, Microsoft or CalDAV account to create the event on. Leave empty to use the default calendar account.`}
+          hint={t`Google or CalDAV account to create the event on. Leave empty to use the default calendar account.`}
           defaultValue={formData.connectedAccountId}
           options={connectedAccountOptions}
           onChange={(value) =>
@@ -225,7 +225,7 @@ export const WorkflowEditActionCreateCalendarEvent = ({
         <FormBooleanFieldSwitchInput
           label={t`Add conferencing`}
           description={t`Add a video conferencing link`}
-          hint={t`Generates a Google Meet or Microsoft Teams link depending on the account.`}
+          hint={t`Generates a Google Meet link.`}
           value={formData.addConferencing}
           onChange={(value) => handleFieldChange('addConferencing', value)}
           disabled={actionOptions.readonly}

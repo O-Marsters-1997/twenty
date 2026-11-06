@@ -1,5 +1,4 @@
 import { type Meta, type StoryObj } from '@storybook/react-vite';
-import { HttpResponse, graphql } from 'msw';
 import { expect, userEvent, within } from 'storybook/test';
 
 import {
@@ -10,8 +9,6 @@ import {
 import { SettingsNativeAccountApp } from '~/pages/settings/accounts/SettingsNativeAccountApp';
 import {
   ACCOUNT_GROUPS_GRAPHQL_HANDLERS,
-  CONNECTED_ACCOUNTS,
-  MICROSOFT_ACCOUNT_ID,
   seedAccountGroupsStory,
 } from '~/pages/settings/accounts/__stories__/mockedAccountGroups';
 
@@ -120,38 +117,5 @@ export const DisabledAppGoesBackToAccounts: Story = {
         timeout: 3000,
       }),
     ).toBeVisible();
-  },
-};
-
-export const OutlookWithoutAccountOffersMicrosoftOnly: Story = {
-  args: {
-    routeParams: { ':nativeAccountAppId': 'outlook' },
-  },
-  parameters: {
-    msw: {
-      handlers: [
-        graphql.query('MyConnectedAccounts', () =>
-          HttpResponse.json({
-            data: {
-              myConnectedAccounts: CONNECTED_ACCOUNTS.filter(
-                (account) => account.id !== MICROSOFT_ACCOUNT_ID,
-              ),
-            },
-          }),
-        ),
-        ...ACCOUNT_GROUPS_GRAPHQL_HANDLERS,
-      ],
-    },
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-
-    expect(
-      await canvas.findByText('Connect with Microsoft', undefined, {
-        timeout: 3000,
-      }),
-    ).toBeVisible();
-    expect(canvas.queryByText('Connect with Google')).not.toBeInTheDocument();
-    expect(canvas.getByText('Blocklist')).toBeVisible();
   },
 };

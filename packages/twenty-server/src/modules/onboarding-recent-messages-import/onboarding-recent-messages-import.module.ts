@@ -8,7 +8,6 @@ import { MessagingIMAPDriverModule } from 'src/modules/messaging/message-import-
 import { MessagingImportManagerModule } from 'src/modules/messaging/message-import-manager/messaging-import-manager.module';
 import { GmailRecentMessagesService } from 'src/modules/onboarding-recent-messages-import/services/gmail-recent-messages.service';
 import { ImapRecentMessagesService } from 'src/modules/onboarding-recent-messages-import/services/imap-recent-messages.service';
-import { MicrosoftRecentMessagesService } from 'src/modules/onboarding-recent-messages-import/services/microsoft-recent-messages.service';
 import { OnboardingRecentMessagesImportService } from 'src/modules/onboarding-recent-messages-import/services/onboarding-recent-messages-import.service';
 import { RecentMessagesService } from 'src/modules/onboarding-recent-messages-import/services/recent-messages.service';
 
@@ -22,7 +21,6 @@ import { RecentMessagesService } from 'src/modules/onboarding-recent-messages-im
   ],
   providers: [
     GmailRecentMessagesService,
-    MicrosoftRecentMessagesService,
     ImapRecentMessagesService,
     RecentMessagesService,
     OnboardingRecentMessagesImportService,

@@ -47,9 +47,7 @@ export const SignInUpWorkspaceScopeFormEffect = () => {
     }
 
     const hasOnlySsoProvidersEnabled =
-      !workspaceAuthProviders.google &&
-      !workspaceAuthProviders.microsoft &&
-      !workspaceAuthProviders.password;
+      !workspaceAuthProviders.google && !workspaceAuthProviders.password;
 
     if (hasOnlySsoProvidersEnabled && workspaceAuthProviders.sso.length > 1) {
       return setSignInUpStep(SignInUpStep.SsoIdentityProviderSelection);
@@ -84,7 +82,6 @@ export const SignInUpWorkspaceScopeFormEffect = () => {
     if (
       signInUpStep === SignInUpStep.Init &&
       !workspaceAuthProviders.google &&
-      !workspaceAuthProviders.microsoft &&
       workspaceAuthProviders.sso.length === 0
     ) {
       continueWithEmail();

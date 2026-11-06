@@ -133,12 +133,9 @@ export const SettingsSecuritySettings = () => {
   const hasSsoIdentityProviders = ssoIdentitiesProviders.length > 0;
   const hasDirectAuthEnabled =
     currentWorkspace?.isGoogleAuthEnabled ||
-    currentWorkspace?.isMicrosoftAuthEnabled ||
     currentWorkspace?.isPasswordAuthEnabled;
   const hasBypassProviderAvailable =
-    authProviders?.google ||
-    authProviders?.microsoft ||
-    authProviders?.password;
+    authProviders?.google || authProviders?.password;
   const shouldShowBypassSection =
     hasSsoIdentityProviders &&
     !hasDirectAuthEnabled &&

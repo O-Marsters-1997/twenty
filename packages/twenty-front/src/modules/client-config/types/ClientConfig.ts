@@ -37,8 +37,6 @@ export type ClientConfig = {
   isEmailVerificationRequired: boolean;
   isGoogleCalendarEnabled: boolean;
   isGoogleMessagingEnabled: boolean;
-  isMicrosoftCalendarEnabled: boolean;
-  isMicrosoftMessagingEnabled: boolean;
   isMultiWorkspaceEnabled: boolean;
   isImapSmtpCaldavEnabled: boolean;
   isEmailingDomainInDemoMode: boolean;

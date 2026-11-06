@@ -18,7 +18,6 @@ import {
   IconGoogle,
   IconLink,
   IconList,
-  IconMicrosoft,
   IconPassword,
 } from 'twenty-ui/icon';
 import { Card } from 'twenty-ui/primitives/surfaces';
@@ -77,7 +76,6 @@ export const SettingsSecurityAuthProvidersOptionsList = () => {
 
     const allAuthProvidersEnabled = [
       currentWorkspace.isGoogleAuthEnabled,
-      currentWorkspace.isMicrosoftAuthEnabled,
       currentWorkspace.isPasswordAuthEnabled,
       (ssoIdentitiesProviders?.length ?? 0) > 0,
     ];
@@ -208,19 +206,6 @@ export const SettingsSecurityAuthProvidersOptionsList = () => {
                 divider
                 onChange={() =>
                   toggleAuthMethod(ConnectedAccountProvider.GOOGLE)
-                }
-              />
-            )}
-            {authProviders.microsoft === true && (
-              <SettingsOptionCardContentSwitch
-                Icon={IconMicrosoft}
-                title={t`Microsoft`}
-                description={t`Allow logins through Microsoft's single sign-on functionality.`}
-                checked={currentWorkspace.isMicrosoftAuthEnabled}
-                advancedMode
-                divider
-                onChange={() =>
-                  toggleAuthMethod(ConnectedAccountProvider.MICROSOFT)
                 }
               />
             )}

@@ -10,7 +10,7 @@ import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { capitalize } from 'twenty-shared/utils';
 import { useToast } from 'twenty-ui/components/feedback';
-import { IconGoogle, IconMicrosoft, IconPassword } from 'twenty-ui/icon';
+import { IconGoogle, IconPassword } from 'twenty-ui/icon';
 import { Card } from 'twenty-ui/primitives/surfaces';
 import { themeCssVariables } from 'twenty-ui/theme';
 import {
@@ -92,17 +92,6 @@ export const SettingsSecurityAuthBypassOptionsList = () => {
             advancedMode
             divider
             onChange={() => toggleAuthBypassMethod('google')}
-          />
-        )}
-        {authProviders.microsoft === true && (
-          <SettingsOptionCardContentSwitch
-            Icon={IconMicrosoft}
-            title={t`Microsoft`}
-            description={t`Allow Microsoft-based login for users with SSO bypass permissions.`}
-            checked={currentWorkspace.isMicrosoftAuthBypassEnabled}
-            advancedMode
-            divider
-            onChange={() => toggleAuthBypassMethod('microsoft')}
           />
         )}
         {authProviders.password && (

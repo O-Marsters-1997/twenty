@@ -26,8 +26,6 @@ export const fromWorkspaceEntityToFlat = (
   isTwoFactorAuthenticationEnforced: entity.isTwoFactorAuthenticationEnforced,
   isPasswordAuthEnabled: entity.isPasswordAuthEnabled,
   isPasswordAuthBypassEnabled: entity.isPasswordAuthBypassEnabled,
-  isMicrosoftAuthEnabled: entity.isMicrosoftAuthEnabled,
-  isMicrosoftAuthBypassEnabled: entity.isMicrosoftAuthBypassEnabled,
   isCustomDomainEnabled: entity.isCustomDomainEnabled,
   allowedIframeOrigins: entity.allowedIframeOrigins,
   editableProfileFields: entity.editableProfileFields,

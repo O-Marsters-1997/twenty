@@ -5,7 +5,6 @@ import { CalendarChannelEntity } from 'src/engine/metadata-modules/calendar-chan
 import { ConnectedAccountEntity } from 'src/engine/metadata-modules/connected-account/entities/connected-account.entity';
 import { CalDavCreateEventService } from 'src/modules/calendar/calendar-event-creation-manager/drivers/caldav/services/caldav-create-event.service';
 import { GoogleCalendarCreateEventService } from 'src/modules/calendar/calendar-event-creation-manager/drivers/google-calendar/services/google-calendar-create-event.service';
-import { MicrosoftCalendarCreateEventService } from 'src/modules/calendar/calendar-event-creation-manager/drivers/microsoft-calendar/services/microsoft-calendar-create-event.service';
 import { CalendarEventComposerService } from 'src/modules/calendar/calendar-event-creation-manager/services/calendar-event-composer.service';
 import { CreateCalendarEventService } from 'src/modules/calendar/calendar-event-creation-manager/services/create-calendar-event.service';
 import { CalDavDriverModule } from 'src/modules/calendar/calendar-event-import-manager/drivers/caldav/caldav-driver.module';
@@ -23,7 +22,6 @@ import { OAuth2ClientManagerModule } from 'src/modules/connected-account/oauth2-
     CalendarEventComposerService,
     CreateCalendarEventService,
     GoogleCalendarCreateEventService,
-    MicrosoftCalendarCreateEventService,
     CalDavCreateEventService,
   ],
   exports: [CalendarEventComposerService, CreateCalendarEventService],

@@ -23,7 +23,6 @@ import { MessagingGmailDriverModule } from 'src/modules/messaging/message-import
 import { MessagingIMAPDriverModule } from 'src/modules/messaging/message-import-manager/drivers/imap/messaging-imap-driver.module';
 import { MessagingInboundEmailDriverModule } from 'src/modules/messaging/message-import-manager/drivers/inbound-email/messaging-inbound-email-driver.module';
 import { InboundEmailImportService } from 'src/modules/messaging/message-import-manager/drivers/inbound-email/services/inbound-email-import.service';
-import { MessagingMicrosoftDriverModule } from 'src/modules/messaging/message-import-manager/drivers/microsoft/messaging-microsoft-driver.module';
 import { MessagingCleanCacheJob } from 'src/modules/messaging/message-import-manager/jobs/messaging-clean-cache';
 import { MessagingInboundEmailImportJob } from 'src/modules/messaging/message-import-manager/jobs/messaging-inbound-email-import.job';
 import { MessagingMessageListFetchJob } from 'src/modules/messaging/message-import-manager/jobs/messaging-message-list-fetch.job';
@@ -51,7 +50,6 @@ import { BlocklistRepository } from 'src/modules/blocklist/repositories/blocklis
 @Module({
   imports: [
     MessagingGmailDriverModule,
-    MessagingMicrosoftDriverModule,
     MessagingIMAPDriverModule,
     MessagingInboundEmailDriverModule,
     MessagingCommonModule,

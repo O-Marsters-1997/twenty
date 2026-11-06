@@ -20,10 +20,6 @@ export class AuthSsoService {
       return 'isGoogleAuthEnabled';
     }
 
-    if (authProvider === AuthProviderEnum.Microsoft) {
-      return 'isMicrosoftAuthEnabled';
-    }
-
     if (authProvider === AuthProviderEnum.Password) {
       return 'isPasswordAuthEnabled';
     }

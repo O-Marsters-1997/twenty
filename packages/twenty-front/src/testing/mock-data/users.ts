@@ -74,11 +74,9 @@ export const mockCurrentWorkspace = {
   hasValidEnterpriseValidityToken: false,
   isGoogleAuthEnabled: true,
   isPasswordAuthEnabled: true,
-  isMicrosoftAuthEnabled: false,
   isCustomDomainEnabled: false,
   isPasswordAuthBypassEnabled: false,
   isGoogleAuthBypassEnabled: false,
-  isMicrosoftAuthBypassEnabled: false,
   workspaceUrls: {
     customUrl: undefined,
     subdomainUrl: 'twenty.twenty.com',

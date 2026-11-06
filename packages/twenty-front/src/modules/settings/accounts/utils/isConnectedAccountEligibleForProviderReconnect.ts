@@ -5,6 +5,5 @@ import { isDefined } from 'twenty-shared/utils';
 export const isConnectedAccountEligibleForProviderReconnect = (
   account: ConnectedAccount,
 ): boolean =>
-  (account.provider === ConnectedAccountProvider.GOOGLE ||
-    account.provider === ConnectedAccountProvider.MICROSOFT) &&
+  account.provider === ConnectedAccountProvider.GOOGLE &&
   (isDefined(account.authFailedAt) || isDefined(account.archivedAt));

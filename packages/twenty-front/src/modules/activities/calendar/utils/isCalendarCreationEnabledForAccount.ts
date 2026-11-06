@@ -5,7 +5,6 @@ import { isDefined } from 'twenty-shared/utils';
 
 const CALENDAR_CREATION_PROVIDERS = new Set([
   ConnectedAccountProvider.GOOGLE,
-  ConnectedAccountProvider.MICROSOFT,
   ConnectedAccountProvider.IMAP_SMTP_CALDAV,
 ]);
 

@@ -11,15 +11,12 @@ import { graphqlMocks } from '~/testing/graphqlMocks';
 
 import { isGoogleCalendarEnabledState } from '@/client-config/states/isGoogleCalendarEnabledState';
 import { isGoogleMessagingEnabledState } from '@/client-config/states/isGoogleMessagingEnabledState';
-import { isMicrosoftCalendarEnabledState } from '@/client-config/states/isMicrosoftCalendarEnabledState';
-import { isMicrosoftMessagingEnabledState } from '@/client-config/states/isMicrosoftMessagingEnabledState';
 import { jotaiStore } from '@/ui/utilities/state/jotai/jotaiStore';
 import { SettingsAccounts } from '~/pages/settings/accounts/SettingsAccounts';
 import {
   ACCOUNT_GROUPS_GRAPHQL_HANDLERS,
   CONNECTED_ACCOUNTS,
   GOOGLE_ACCOUNT_ID,
-  MICROSOFT_ACCOUNT_ID,
   deleteConnectedAccount,
   seedAccountGroupsStory,
 } from '~/pages/settings/accounts/__stories__/mockedAccountGroups';
@@ -223,9 +220,7 @@ export const AppsWithoutAccountShowMissingAccount: Story = {
           HttpResponse.json({
             data: {
               myConnectedAccounts: CONNECTED_ACCOUNTS.filter(
-                (account) =>
-                  account.id !== GOOGLE_ACCOUNT_ID &&
-                  account.id !== MICROSOFT_ACCOUNT_ID,
+                (account) => account.id !== GOOGLE_ACCOUNT_ID,
               ),
             },
           }),
@@ -244,10 +239,7 @@ export const AppsWithoutAccountShowMissingAccount: Story = {
     );
 
     expect(
-      await getTableRow(canvasElement, 'Outlook').findByText('Missing account'),
-    ).toBeVisible();
-    expect(
-      getTableRow(canvasElement, 'Google Calendar').getByText(
+      await getTableRow(canvasElement, 'Google Calendar').findByText(
         'Missing account',
       ),
     ).toBeVisible();
@@ -263,8 +255,6 @@ export const BlocklistStaysWhenNoAppIsEnabled: Story = {
     await seedAccountGroupsStory();
     jotaiStore.set(isGoogleMessagingEnabledState.atom, false);
     jotaiStore.set(isGoogleCalendarEnabledState.atom, false);
-    jotaiStore.set(isMicrosoftMessagingEnabledState.atom, false);
-    jotaiStore.set(isMicrosoftCalendarEnabledState.atom, false);
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

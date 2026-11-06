@@ -1,4 +1,4 @@
-// Detects permission/scope errors from email provider APIs (Google, Microsoft).
+// Detects permission/scope errors from email provider APIs (Google).
 // These typically occur when the OAuth consent didn't include the required
 // scope for the operation (e.g., gmail.compose for drafts).
 export const isInsufficientPermissionsError = (error: unknown): boolean => {

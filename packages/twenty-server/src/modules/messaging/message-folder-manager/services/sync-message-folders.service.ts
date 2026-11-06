@@ -19,7 +19,6 @@ import { buildSystemAuthContext } from 'src/engine/twenty-orm/utils/build-system
 import { ConnectedAccountEntity } from 'src/engine/metadata-modules/connected-account/entities/connected-account.entity';
 import { GmailGetAllFoldersService } from 'src/modules/messaging/message-folder-manager/drivers/gmail/services/gmail-get-all-folders.service';
 import { ImapGetAllFoldersService } from 'src/modules/messaging/message-folder-manager/drivers/imap/services/imap-get-all-folders.service';
-import { MicrosoftGetAllFoldersService } from 'src/modules/messaging/message-folder-manager/drivers/microsoft/services/microsoft-get-all-folders.service';
 import { computeFolderIdsToDelete } from 'src/modules/messaging/message-folder-manager/utils/compute-folder-ids-to-delete.util';
 import { computeFoldersToCreate } from 'src/modules/messaging/message-folder-manager/utils/compute-folders-to-create.util';
 import { computeFoldersToUpdate } from 'src/modules/messaging/message-folder-manager/utils/compute-folders-to-update.util';
@@ -35,7 +34,6 @@ export class SyncMessageFoldersService {
     @InjectWorkspaceScopedRepository(MessageFolderEntity)
     private readonly messageFolderRepository: WorkspaceScopedRepository<MessageFolderEntity>,
     private readonly gmailGetAllFoldersService: GmailGetAllFoldersService,
-    private readonly microsoftGetAllFoldersService: MicrosoftGetAllFoldersService,
     private readonly imapGetAllFoldersService: ImapGetAllFoldersService,
   ) {}
 
@@ -95,11 +93,6 @@ export class SyncMessageFoldersService {
     switch (connectedAccount.provider) {
       case ConnectedAccountProvider.GOOGLE:
         return this.gmailGetAllFoldersService.getAllMessageFolders(
-          connectedAccount,
-          messageChannel,
-        );
-      case ConnectedAccountProvider.MICROSOFT:
-        return this.microsoftGetAllFoldersService.getAllMessageFolders(
           connectedAccount,
           messageChannel,
         );

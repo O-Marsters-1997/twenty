@@ -39,9 +39,6 @@ export class AuthProvidersDTO {
 
   @Field(() => Boolean)
   password: boolean;
-
-  @Field(() => Boolean)
-  microsoft: boolean;
 }
 
 @ObjectType('AuthBypassProviders')
@@ -51,9 +48,6 @@ export class AuthBypassProvidersDTO {
 
   @Field(() => Boolean)
   password: boolean;
-
-  @Field(() => Boolean)
-  microsoft: boolean;
 }
 
 @ObjectType('PublicWorkspaceData')

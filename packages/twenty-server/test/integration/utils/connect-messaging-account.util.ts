@@ -30,7 +30,6 @@ type ConnectMessagingAccountResult = {
 
 const OAUTH_CALLBACK_PATH: Partial<Record<ConnectedAccountProvider, string>> = {
   [ConnectedAccountProvider.GOOGLE]: '/auth/google-apis/get-access-token',
-  [ConnectedAccountProvider.MICROSOFT]: '/auth/microsoft-apis/get-access-token',
 };
 
 export const connectMessagingAccount = async ({

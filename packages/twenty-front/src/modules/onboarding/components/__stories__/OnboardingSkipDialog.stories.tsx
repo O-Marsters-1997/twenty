@@ -1,7 +1,7 @@
 import { type Meta, type StoryObj } from '@storybook/react-vite';
 import { type ComponentProps } from 'react';
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
-import { IconGoogle, IconMicrosoft } from 'twenty-ui/icon';
+import { IconGoogle } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
 import { ComponentDecorator } from 'twenty-ui/testing';
 
@@ -60,12 +60,6 @@ const meta: Meta<typeof OnboardingSkipDialogExample> = {
     description:
       'Twenty adds the people you email and meet, and keeps them up to date without manual data entry.',
     actions: [
-      {
-        label: 'Continue with Microsoft',
-        Icon: IconMicrosoft,
-        creditsReward: 2,
-        onClick: fn(),
-      },
       {
         label: 'Continue with Google',
         Icon: IconGoogle,

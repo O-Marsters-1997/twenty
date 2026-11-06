@@ -161,7 +161,6 @@ export const responseData = {
         hasValidSignedEnterpriseKey: false,
         hasValidEnterpriseValidityToken: false,
         isGoogleAuthEnabled: true,
-        isMicrosoftAuthEnabled: false,
         isPasswordAuthEnabled: true,
         subdomain: 'test',
         customDomain: null,

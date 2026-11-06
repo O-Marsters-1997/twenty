@@ -266,52 +266,6 @@ export class ConfigVariables {
   })
   ALLOW_REQUESTS_TO_TWENTY_ICONS = true;
 
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.MICROSOFT_AUTH,
-    description: 'Enable or disable Microsoft authentication',
-    type: ConfigVariableType.BOOLEAN,
-  })
-  @IsOptional()
-  AUTH_MICROSOFT_ENABLED = false;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.MICROSOFT_AUTH,
-    isSensitive: false,
-    description: 'Client ID for Microsoft authentication',
-    type: ConfigVariableType.STRING,
-  })
-  @ValidateIf((env) => env.AUTH_MICROSOFT_ENABLED)
-  AUTH_MICROSOFT_CLIENT_ID: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.MICROSOFT_AUTH,
-    isSensitive: true,
-    description: 'Client secret for Microsoft authentication',
-    type: ConfigVariableType.STRING,
-  })
-  @ValidateIf((env) => env.AUTH_MICROSOFT_ENABLED)
-  AUTH_MICROSOFT_CLIENT_SECRET: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.MICROSOFT_AUTH,
-    isSensitive: false,
-    description: 'Callback URL for Microsoft authentication',
-    type: ConfigVariableType.STRING,
-  })
-  @IsUrl({ require_tld: false, require_protocol: true })
-  @ValidateIf((env) => env.AUTH_MICROSOFT_ENABLED)
-  AUTH_MICROSOFT_CALLBACK_URL: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.MICROSOFT_AUTH,
-    isSensitive: false,
-    description: 'Callback URL for Microsoft APIs',
-    type: ConfigVariableType.STRING,
-  })
-  @IsUrl({ require_tld: false, require_protocol: true })
-  @ValidateIf((env) => env.AUTH_MICROSOFT_ENABLED)
-  AUTH_MICROSOFT_APIS_CALLBACK_URL: string;
-
   /**
    * @deprecated Use is now GA - record page layouts are always seeded
    */
@@ -324,13 +278,6 @@ export class ConfigVariables {
   SHOULD_SEED_STANDARD_RECORD_PAGE_LAYOUTS = true;
 
   @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.MICROSOFT_AUTH,
-    description: 'Enable or disable the Microsoft messaging integration',
-    type: ConfigVariableType.BOOLEAN,
-  })
-  MESSAGING_PROVIDER_MICROSOFT_ENABLED = false;
-
-  @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.ADVANCED_SETTINGS,
     description:
       'Number of messages fetched per batch during message import, adjust incase of rate limiting caused by Gmail, Outlook or IMAP',
@@ -339,13 +286,6 @@ export class ConfigVariables {
   @CastToPositiveNumber()
   @IsOptional()
   MESSAGING_MESSAGES_GET_BATCH_SIZE = 400;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.MICROSOFT_AUTH,
-    description: 'Enable or disable the Microsoft Calendar integration',
-    type: ConfigVariableType.BOOLEAN,
-  })
-  CALENDAR_PROVIDER_MICROSOFT_ENABLED = false;
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.TOKENS_DURATION,

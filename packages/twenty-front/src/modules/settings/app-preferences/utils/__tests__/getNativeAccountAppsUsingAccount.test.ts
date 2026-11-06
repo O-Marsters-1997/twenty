@@ -67,26 +67,6 @@ describe('getNativeAccountAppsUsingAccount', () => {
     ).toEqual([]);
   });
 
-  it('lists Outlook once for a Microsoft account with mail and calendar', () => {
-    expect(
-      getAppIds({
-        provider: ConnectedAccountProvider.MICROSOFT,
-        messageChannels: [mailbox],
-        calendarChannels: [calendar],
-      }),
-    ).toEqual(['outlook']);
-  });
-
-  it('lists Outlook for a Microsoft account with only mail', () => {
-    expect(
-      getAppIds({
-        provider: ConnectedAccountProvider.MICROSOFT,
-        messageChannels: [mailbox],
-        calendarChannels: [],
-      }),
-    ).toEqual(['outlook']);
-  });
-
   it('lists IMAP once for an IMAP account with mail and calendar', () => {
     expect(
       getAppIds({

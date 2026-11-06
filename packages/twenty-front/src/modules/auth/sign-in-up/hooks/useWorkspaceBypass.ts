@@ -21,9 +21,9 @@ export const useWorkspaceBypass = () => {
       return false;
     }
 
-    const { sso, google, microsoft, password } = workspaceAuthProviders;
+    const { sso, google, password } = workspaceAuthProviders;
 
-    return sso.length > 0 && !google && !microsoft && !password;
+    return sso.length > 0 && !google && !password;
   })();
 
   const hasBypassProvidersAvailable = (() => {
@@ -31,9 +31,9 @@ export const useWorkspaceBypass = () => {
       return false;
     }
 
-    const { google, microsoft, password } = workspaceAuthBypassProviders;
+    const { google, password } = workspaceAuthBypassProviders;
 
-    return google || microsoft || password;
+    return google || password;
   })();
 
   const shouldOfferBypass =

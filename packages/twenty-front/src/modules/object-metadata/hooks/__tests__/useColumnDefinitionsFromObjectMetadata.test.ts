@@ -41,11 +41,9 @@ describe('useColumnDefinitionsFromObjectMetadata', () => {
       isCampaignOpenTrackingEnabled: false,
       workspaceDiscoverability: WorkspaceDiscoverability.PUBLIC,
       isGoogleAuthEnabled: true,
-      isMicrosoftAuthEnabled: false,
       isPasswordAuthEnabled: true,
       isCustomDomainEnabled: false,
       isGoogleAuthBypassEnabled: false,
-      isMicrosoftAuthBypassEnabled: false,
       isPasswordAuthBypassEnabled: false,
       customDomain: 'my-custom-domain.com',
       workspaceUrls: {

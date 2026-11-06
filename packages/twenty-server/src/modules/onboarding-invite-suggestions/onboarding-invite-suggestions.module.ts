@@ -5,7 +5,6 @@ import { ConnectedAccountEntity } from 'src/engine/metadata-modules/connected-ac
 import { OAuth2ClientManagerModule } from 'src/modules/connected-account/oauth2-client-manager/oauth2-client-manager.module';
 import { CalendarAttendeesService } from 'src/modules/onboarding-invite-suggestions/services/calendar-attendees.service';
 import { GoogleCalendarAttendeesService } from 'src/modules/onboarding-invite-suggestions/services/google-calendar-attendees.service';
-import { MicrosoftCalendarAttendeesService } from 'src/modules/onboarding-invite-suggestions/services/microsoft-calendar-attendees.service';
 import { OnboardingInviteSuggestionsService } from 'src/modules/onboarding-invite-suggestions/services/onboarding-invite-suggestions.service';
 
 @Module({
@@ -15,7 +14,6 @@ import { OnboardingInviteSuggestionsService } from 'src/modules/onboarding-invit
   ],
   providers: [
     GoogleCalendarAttendeesService,
-    MicrosoftCalendarAttendeesService,
     CalendarAttendeesService,
     OnboardingInviteSuggestionsService,
   ],

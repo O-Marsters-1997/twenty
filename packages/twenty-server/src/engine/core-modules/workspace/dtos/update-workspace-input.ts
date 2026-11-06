@@ -85,22 +85,12 @@ export class UpdateWorkspaceInput {
   @Field({ nullable: true })
   @IsBoolean()
   @IsOptional()
-  isMicrosoftAuthEnabled?: boolean;
-
-  @Field({ nullable: true })
-  @IsBoolean()
-  @IsOptional()
   isPasswordAuthEnabled?: boolean;
 
   @Field({ nullable: true })
   @IsBoolean()
   @IsOptional()
   isGoogleAuthBypassEnabled?: boolean;
-
-  @Field({ nullable: true })
-  @IsBoolean()
-  @IsOptional()
-  isMicrosoftAuthBypassEnabled?: boolean;
 
   @Field({ nullable: true })
   @IsBoolean()

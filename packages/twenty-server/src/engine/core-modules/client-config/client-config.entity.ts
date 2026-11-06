@@ -399,12 +399,6 @@ export class ClientConfig {
   isCookieSessionEnabled: boolean;
 
   @Field(() => Boolean)
-  isMicrosoftMessagingEnabled: boolean;
-
-  @Field(() => Boolean)
-  isMicrosoftCalendarEnabled: boolean;
-
-  @Field(() => Boolean)
   isGoogleMessagingEnabled: boolean;
 
   @Field(() => Boolean)
