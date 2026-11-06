@@ -1,7 +1,4 @@
 import { Injectable, Logger } from '@nestjs/common';
-
-import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
-import { MetricsKeys } from 'src/engine/core-modules/metrics/types/metrics-keys.type';
 import { UsageLimitSpeedService } from 'src/engine/core-modules/usage-limit/services/usage-limit-speed.service';
 import { type SpeedBucketRequest } from 'src/engine/core-modules/usage-limit/types/speed-bucket-request.type';
 import { UsageOperationType } from 'src/engine/core-modules/usage/enums/usage-operation-type.enum';
@@ -15,7 +12,6 @@ export class WebhookRateLimitService {
 
   constructor(
     private readonly usageLimitSpeedService: UsageLimitSpeedService,
-    private readonly metricsService: MetricsService,
   ) {}
 
   async admitWebhookEventsWithinRateLimit<
@@ -61,10 +57,5 @@ export class WebhookRateLimitService {
     this.logger.warn(
       `Dropped ${droppedCallCount} webhook calls for workspace ${workspaceId}, which exceeded ${exhaustedBucket.refillPerWindow} webhook calls per ${exhaustedBucket.windowMs / 1000}s`,
     );
-
-    this.metricsService.incrementCounterBy({
-      key: MetricsKeys.JobWebhookCallThrottled,
-      amount: droppedCallCount,
-    });
   }
 }

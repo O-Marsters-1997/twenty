@@ -25,7 +25,6 @@ import { EmailModule } from 'src/engine/core-modules/email/email.module';
 import { EmailingDomainModule } from 'src/engine/core-modules/emailing-domain/emailing-domain.module';
 import { EnvironmentModule } from 'src/engine/core-modules/environment/environment.module';
 import { ExceptionHandlerModule } from 'src/engine/core-modules/exception-handler/exception-handler.module';
-import { exceptionHandlerModuleFactory } from 'src/engine/core-modules/exception-handler/exception-handler.module-factory';
 import { FeatureFlagModule } from 'src/engine/core-modules/feature-flag/feature-flag.module';
 import { FileStorageModule } from 'src/engine/core-modules/file-storage/file-storage.module';
 import { GeoMapModule } from 'src/engine/core-modules/geo-map/geo-map-module';
@@ -39,8 +38,6 @@ import { loggerModuleFactory } from 'src/engine/core-modules/logger/logger.modul
 import { MessageQueueModule } from 'src/engine/core-modules/message-queue/message-queue.module';
 import { messageQueueModuleFactory } from 'src/engine/core-modules/message-queue/message-queue.module-factory';
 import { TimelineMessagingModule } from 'src/engine/core-modules/messaging/timeline-messaging.module';
-import { MetricsModule } from 'src/engine/core-modules/metrics/metrics.module';
-import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
 import { OpenApiModule } from 'src/engine/core-modules/open-api/open-api.module';
 import { PublicDomainModule } from 'src/engine/core-modules/public-domain/public-domain.module';
 import { RedisClientModule } from 'src/engine/core-modules/redis-client/redis-client.module';
@@ -48,7 +45,6 @@ import { RedisClientService } from 'src/engine/core-modules/redis-client/redis-c
 import { SearchModule } from 'src/engine/core-modules/search/search.module';
 import { WorkspaceSsoModule } from 'src/engine/core-modules/sso/sso.module';
 import { WellKnownModule } from 'src/engine/core-modules/well-known/well-known.module';
-import { TelemetryModule } from 'src/engine/core-modules/telemetry/telemetry.module';
 import { TwentyConfigModule } from 'src/engine/core-modules/twenty-config/twenty-config.module';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { UsageModule } from 'src/engine/core-modules/usage/usage.module';
@@ -103,7 +99,6 @@ import { FileApiModule } from './file/file-api.module';
     AiToolCallAnswerModule,
     WorkspaceEventEmitterModule,
     ActorModule,
-    TelemetryModule,
     AdminPanelModule,
     LabModule,
     RoleModule,
@@ -118,20 +113,11 @@ import { FileApiModule } from './file/file-api.module';
       useFactory: loggerModuleFactory,
       inject: [TwentyConfigService],
     }),
-    MetricsModule,
     MessageQueueModule.registerAsync({
       useFactory: messageQueueModuleFactory,
-      inject: [
-        TwentyConfigService,
-        RedisClientService,
-        MetricsService,
-        EventEmitter2,
-      ],
+      inject: [TwentyConfigService, RedisClientService, EventEmitter2],
     }),
-    ExceptionHandlerModule.forRootAsync({
-      useFactory: exceptionHandlerModuleFactory,
-      inject: [TwentyConfigService, HttpAdapterHost],
-    }),
+    ExceptionHandlerModule,
     EmailModule.forRoot(),
     CaptchaModule.forRoot(),
     EventEmitterModule.forRoot({

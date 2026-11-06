@@ -375,7 +375,6 @@ export enum FeatureFlagKey {
 
 export enum HealthIndicatorId {
   app = 'app',
-  connectedAccount = 'connectedAccount',
   database = 'database',
   redis = 'redis',
   worker = 'worker'

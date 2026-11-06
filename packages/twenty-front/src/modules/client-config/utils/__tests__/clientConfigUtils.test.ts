@@ -26,12 +26,6 @@ const mockClientConfig = {
     supportDriver: 'none',
     supportFrontChatId: undefined,
   },
-  sentry: {
-    environment: 'development',
-    release: '1.0.0',
-    dsn: undefined,
-    tracesSampleRate: 0.1,
-  },
   captcha: {
     provider: undefined,
     siteKey: undefined,
@@ -40,7 +34,6 @@ const mockClientConfig = {
     mutationMaximumAffectedRecords: 100,
   },
   isAttachmentPreviewEnabled: true,
-  analyticsEnabled: false,
   canManageFeatureFlags: true,
   publicFeatureFlags: [],
   isMicrosoftMessagingEnabled: false,

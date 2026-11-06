@@ -4,7 +4,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { AppTokenEntity } from 'src/engine/core-modules/app-token/app-token.entity';
-import { SentryCronMonitor } from 'src/engine/core-modules/cron/sentry-cron-monitor.decorator';
 import { Process } from 'src/engine/core-modules/message-queue/decorators/process.decorator';
 import { Processor } from 'src/engine/core-modules/message-queue/decorators/processor.decorator';
 import { MessageQueue } from 'src/engine/core-modules/message-queue/message-queue.constants';
@@ -29,10 +28,6 @@ export class UserSessionCleanupCronJob {
   ) {}
 
   @Process(UserSessionCleanupCronJob.name)
-  @SentryCronMonitor(
-    UserSessionCleanupCronJob.name,
-    USER_SESSION_CLEANUP_CRON_PATTERN,
-  )
   async handle(): Promise<void> {
     const threshold = new Date(Date.now() - ENDED_SESSION_RETENTION_MS);
 

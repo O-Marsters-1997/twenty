@@ -1,7 +1,6 @@
 import { StrictMode } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 
-import { TrackPageViewEffect } from '@/analytics/components/TrackPageViewEffect';
 import { SharedAppProviders } from '@/app/components/SharedAppProviders';
 import { InitializeQueryParamStateEffect } from '@/app/effect-components/InitializeQueryParamStateEffect';
 import { AuthProvider } from '@/auth/components/AuthProvider';
@@ -41,7 +40,6 @@ export const RootAppProviders = () => {
                 <PageFavicon />
                 <Outlet />
                 <InitializeQueryParamStateEffect />
-                <TrackPageViewEffect />
                 <RequestFreshCaptchaTokenEffect />
                 <SignOutOnOtherTabSignOutEffect />
               </StrictMode>

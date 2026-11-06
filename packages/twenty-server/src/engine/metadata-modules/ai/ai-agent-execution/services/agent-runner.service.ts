@@ -23,7 +23,6 @@ import { buildAgentRunSummary } from 'src/engine/metadata-modules/ai/ai-agent-ex
 import { sumAgentRunSummaries } from 'src/engine/metadata-modules/ai/ai-agent-execution/utils/sum-agent-run-summaries.util';
 import { AgentEntity } from 'src/engine/metadata-modules/ai/ai-agent/entities/agent.entity';
 import { AgentConversationReaderService } from 'src/engine/metadata-modules/ai/ai-history/services/agent-conversation-reader.service';
-import { withDedicatedAiTrace } from 'src/engine/metadata-modules/ai/ai-models/utils/with-dedicated-ai-trace.util';
 import {
   AiException,
   AiExceptionCode,
@@ -249,26 +248,24 @@ export class AgentRunnerService {
 
     try {
       // the toolset and prompt come from the spec alone, so a continued run gets those it paused with
-      execution = await withDedicatedAiTrace(() =>
-        this.agentAsyncExecutorService.executeAgent({
-          agent,
-          messages: prompt?.messages ?? [],
-          priorMessages,
-          // every run here goes on in the background, unlike a chat, so it can wait. The wait tools are
-          // the engine's, so it explains them; the caller's own instructions come last
-          baseSystemPrompt: [
-            spec.baseSystemPrompt,
-            AGENT_WAIT_PROMPT,
-            ...(isNonEmptyString(spec.instructions) ? [spec.instructions] : []),
-          ].join('\n\n'),
-          pausingTools: createAgentWaitTools(),
-          canAskHumans: spec.capabilities.canAskHumans,
-          workspaceId,
-          executionContext,
-          additionalExcludedToolNames: spec.additionalExcludedToolNames,
-          toolLoadingStrategy: spec.toolLoadingStrategy,
-        }),
-      );
+      execution = await this.agentAsyncExecutorService.executeAgent({
+        agent,
+        messages: prompt?.messages ?? [],
+        priorMessages,
+        // every run here goes on in the background, unlike a chat, so it can wait. The wait tools are
+        // the engine's, so it explains them; the caller's own instructions come last
+        baseSystemPrompt: [
+          spec.baseSystemPrompt,
+          AGENT_WAIT_PROMPT,
+          ...(isNonEmptyString(spec.instructions) ? [spec.instructions] : []),
+        ].join('\n\n'),
+        pausingTools: createAgentWaitTools(),
+        canAskHumans: spec.capabilities.canAskHumans,
+        workspaceId,
+        executionContext,
+        additionalExcludedToolNames: spec.additionalExcludedToolNames,
+        toolLoadingStrategy: spec.toolLoadingStrategy,
+      });
     } catch (error) {
       if (isDefined(turnId)) {
         await this.tryRecording(

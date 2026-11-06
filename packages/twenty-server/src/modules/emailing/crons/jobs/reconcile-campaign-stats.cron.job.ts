@@ -7,7 +7,6 @@ import chunk from 'lodash.chunk';
 import { WorkspaceActivationStatus } from 'twenty-shared/workspace';
 import { IsNull, Repository } from 'typeorm';
 
-import { SentryCronMonitor } from 'src/engine/core-modules/cron/sentry-cron-monitor.decorator';
 import { EmailingDomainEntity } from 'src/engine/core-modules/emailing-domain/emailing-domain.entity';
 import { type ReconcileWorkspaceCampaignStatsJobData } from 'src/engine/core-modules/emailing-domain/types/reconcile-workspace-campaign-stats-job-data.type';
 import { ExceptionHandlerService } from 'src/engine/core-modules/exception-handler/exception-handler.service';
@@ -33,10 +32,6 @@ export class ReconcileCampaignStatsCronJob {
   ) {}
 
   @Process(ReconcileCampaignStatsCronJob.name)
-  @SentryCronMonitor(
-    ReconcileCampaignStatsCronJob.name,
-    RECONCILE_CAMPAIGN_STATS_CRON_PATTERN,
-  )
   async handle(): Promise<void> {
     const workspaceIds = await this.findSendingWorkspaceIds();
 

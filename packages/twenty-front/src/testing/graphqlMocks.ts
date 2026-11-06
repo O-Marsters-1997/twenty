@@ -2,7 +2,6 @@ import { parse, type FieldNode } from 'graphql';
 import { graphql, http, HttpResponse, type GraphQLQuery } from 'msw';
 import { getOperationName } from '~/utils/getOperationName';
 
-import { TRACK_ANALYTICS } from '@/analytics/graphql/queries/track';
 import { FIND_MANY_OBJECT_METADATA_ITEMS } from '@/object-metadata/graphql/queries';
 import { GET_CURRENT_USER } from '@/users/graphql/queries/getCurrentUser';
 import { REACT_APP_SERVER_BASE_URL } from '~/config';
@@ -162,13 +161,6 @@ export const graphqlMocks = {
         });
       },
     ),
-    graphql.mutation(getOperationName(TRACK_ANALYTICS) ?? '', () => {
-      return HttpResponse.json({
-        data: {
-          track: { success: 1, __typename: 'TRACK_ANALYTICS' },
-        },
-      });
-    }),
     http.get(`${REACT_APP_SERVER_BASE_URL}/client-config`, () => {
       return HttpResponse.json(mockedClientConfig);
     }),

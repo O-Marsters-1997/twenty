@@ -19,14 +19,11 @@ import { type GraphQLContext } from 'src/engine/api/graphql/graphql-config/inter
 
 import { type ExceptionHandlerService } from 'src/engine/core-modules/exception-handler/exception-handler.service';
 import { generateGraphQLErrorFromError } from 'src/engine/core-modules/graphql/utils/generate-graphql-error-from-error.util';
-import { getGraphqlOperationMetricKeyFromErrorCode } from 'src/engine/core-modules/graphql/utils/get-graphql-operation-metric-key-from-error-code.util';
 import {
   BaseGraphQLError,
   convertGraphQLErrorToBaseGraphQLError,
 } from 'src/engine/core-modules/graphql/utils/graphql-errors.util';
 import { type I18nService } from 'src/engine/core-modules/i18n/i18n.service';
-import { type MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
-import { MetricsKeys } from 'src/engine/core-modules/metrics/types/metrics-keys.type';
 import { type TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { shouldCaptureException } from 'src/engine/utils/global-exception-handler.util';
 import { translateUserFriendlyMessageDescriptors } from 'src/engine/core-modules/i18n/utils/translate-user-friendly-message-descriptors.util';
@@ -39,8 +36,6 @@ const APP_VERSION_MISMATCH_ERROR = 'App version mismatch.';
 const APP_VERSION_MISMATCH_CODE = 'APP_VERSION_MISMATCH';
 
 type GraphQLErrorHandlerHookOptions = {
-  metricsService: MetricsService;
-
   exceptionHandlerService: ExceptionHandlerService;
 
   i18nService: I18nService;
@@ -107,10 +102,6 @@ export const useGraphQLErrorHandlerHook = <
             setResult,
           }) => {
             if (!result.errors || result.errors.length === 0) {
-              void options.metricsService.incrementCounterForEvent({
-                key: MetricsKeys.GraphqlOperation200,
-              });
-
               return;
             }
 
@@ -132,38 +123,6 @@ export const useGraphQLErrorHandlerHook = <
               }
 
               return originalError;
-            });
-
-            const statusToMetricKey: Record<number, MetricsKeys> = {
-              400: MetricsKeys.GraphqlOperation400,
-              401: MetricsKeys.GraphqlOperation401,
-              403: MetricsKeys.GraphqlOperation403,
-              404: MetricsKeys.GraphqlOperation404,
-              500: MetricsKeys.GraphqlOperation500,
-            };
-
-            processedErrors.forEach((error) => {
-              let metricKey: MetricsKeys | undefined;
-
-              if (error instanceof BaseGraphQLError) {
-                metricKey = getGraphqlOperationMetricKeyFromErrorCode(
-                  error.extensions?.code,
-                );
-              } else if (error instanceof GraphQLError) {
-                const status = error.extensions?.http?.status as number;
-
-                metricKey = statusToMetricKey[status];
-              }
-
-              if (metricKey) {
-                void options.metricsService.incrementCounterForEvent({
-                  key: metricKey,
-                });
-              } else {
-                void options.metricsService.incrementCounterForEvent({
-                  key: MetricsKeys.GraphqlOperationUnknown,
-                });
-              }
             });
 
             const errorsToCapture = processedErrors.filter(
@@ -258,10 +217,6 @@ export const useGraphQLErrorHandlerHook = <
           isDefined(currentMetadataVersion) &&
           requestMetadataVersion !== `${currentMetadataVersion}`
         ) {
-          void options.metricsService.incrementCounterForEvent({
-            key: MetricsKeys.SchemaVersionMismatch,
-          });
-
           throw new GraphQLError(SCHEMA_MISMATCH_ERROR, {
             extensions: {
               userFriendlyMessage: i18n._(
@@ -281,9 +236,6 @@ export const useGraphQLErrorHandlerHook = <
         }
 
         if (semver.lt(frontEndAppVersion, backendAppVersion)) {
-          void options.metricsService.incrementCounterForEvent({
-            key: MetricsKeys.AppVersionMismatch,
-          });
           throw new GraphQLError(APP_VERSION_MISMATCH_ERROR, {
             extensions: {
               code: APP_VERSION_MISMATCH_CODE,

@@ -6,8 +6,6 @@ import { RECORD_CAMPAIGN_ENGAGEMENT_JOB } from 'src/engine/core-modules/emailing
 import { InjectMessageQueue } from 'src/engine/core-modules/message-queue/decorators/message-queue.decorator';
 import { MessageQueue } from 'src/engine/core-modules/message-queue/message-queue.constants';
 import { MessageQueueService } from 'src/engine/core-modules/message-queue/services/message-queue.service';
-import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
-import { MetricsKeys } from 'src/engine/core-modules/metrics/types/metrics-keys.type';
 import { ThrottlerException } from 'src/engine/core-modules/throttler/throttler.exception';
 import { ThrottlerService } from 'src/engine/core-modules/throttler/throttler.service';
 import { CampaignEngagementEventService } from 'src/modules/emailing/services/campaign-engagement-event.service';
@@ -25,7 +23,6 @@ export class CampaignEngagementCaptureService {
     @InjectMessageQueue(MessageQueue.campaignEngagementQueue)
     private readonly messageQueueService: MessageQueueService,
     private readonly throttlerService: ThrottlerService,
-    private readonly metricsService: MetricsService,
     private readonly campaignEngagementEventService: CampaignEngagementEventService,
   ) {}
 
@@ -88,14 +85,6 @@ export class CampaignEngagementCaptureService {
       );
     } catch (error) {
       const isThrottled = error instanceof ThrottlerException;
-
-      this.metricsService.incrementCounterBy({
-        key: isThrottled
-          ? MetricsKeys.CampaignEngagementCaptureThrottled
-          : MetricsKeys.CampaignEngagementCaptureFailed,
-        amount: 1,
-      });
-
       if (isThrottled) {
         return;
       }

@@ -2,7 +2,6 @@
 
 import { Injectable, Logger } from '@nestjs/common';
 
-import { SentryCronMonitor } from 'src/engine/core-modules/cron/sentry-cron-monitor.decorator';
 import { EnterprisePlanService } from 'src/engine/core-modules/enterprise/services/enterprise-plan.service';
 import { ROTATE_SIGNING_KEYS_CRON_PATTERN } from 'src/engine/core-modules/jwt/constants/rotate-signing-keys-cron-pattern.constant';
 import { SigningKeyRotationService } from 'src/engine/core-modules/jwt/services/signing-key-rotation.service';
@@ -21,10 +20,6 @@ export class RotateSigningKeysCronJob {
   ) {}
 
   @Process(RotateSigningKeysCronJob.name)
-  @SentryCronMonitor(
-    RotateSigningKeysCronJob.name,
-    ROTATE_SIGNING_KEYS_CRON_PATTERN,
-  )
   async handle(): Promise<void> {
     if (!this.enterprisePlanService.isValid()) {
       this.logger.log(

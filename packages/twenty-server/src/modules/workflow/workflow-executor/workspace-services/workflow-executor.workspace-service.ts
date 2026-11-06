@@ -22,8 +22,6 @@ import { FeatureFlagService } from 'src/engine/core-modules/feature-flag/service
 import { InjectMessageQueue } from 'src/engine/core-modules/message-queue/decorators/message-queue.decorator';
 import { MessageQueue } from 'src/engine/core-modules/message-queue/message-queue.constants';
 import { MessageQueueService } from 'src/engine/core-modules/message-queue/services/message-queue.service';
-import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
-import { MetricsKeys } from 'src/engine/core-modules/metrics/types/metrics-keys.type';
 import { UsageOperationType } from 'src/engine/core-modules/usage/enums/usage-operation-type.enum';
 import { UsageResourceType } from 'src/engine/core-modules/usage/enums/usage-resource-type.enum';
 import { UsageUnit } from 'src/engine/core-modules/usage/enums/usage-unit.enum';
@@ -75,7 +73,6 @@ export class WorkflowExecutorWorkspaceService {
     private readonly usageLimitQuotaService: UsageLimitQuotaService,
     private readonly featureFlagService: FeatureFlagService,
     private readonly exceptionHandlerService: ExceptionHandlerService,
-    private readonly metricsService: MetricsService,
     private readonly workflowStepWaitWorkspaceService: WorkflowStepWaitWorkspaceService,
     @InjectMessageQueue(MessageQueue.workflowQueue)
     private readonly messageQueueService: MessageQueueService,
@@ -134,7 +131,6 @@ export class WorkflowExecutorWorkspaceService {
         workspaceId,
         status: WorkflowRunStatus.FAILED,
         error: 'Step not found',
-        isSystemError: true,
       });
 
       return;
@@ -630,12 +626,6 @@ export class WorkflowExecutorWorkspaceService {
       if (!isUserError && shouldCaptureException(error)) {
         this.exceptionHandlerService.captureExceptions([error], {
           workspace: { id: workspaceId },
-        });
-
-        await this.metricsService.incrementCounterForEvent({
-          key: MetricsKeys.WorkflowRunSystemError,
-          eventId: workflowRunId,
-          debugLog: `[Workflow Run System Error] Workflow run ${workflowRunId} in workspace ${workspaceId} ended with system error`,
         });
       }
 

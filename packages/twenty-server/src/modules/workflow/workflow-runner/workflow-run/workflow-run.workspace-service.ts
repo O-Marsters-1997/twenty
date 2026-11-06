@@ -6,8 +6,6 @@ import { StepStatus, type WorkflowRunStepInfo } from 'twenty-shared/workflow';
 import { v4 } from 'uuid';
 
 import { WithLock } from 'src/engine/core-modules/cache-lock/with-lock.decorator';
-import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
-import { MetricsKeys } from 'src/engine/core-modules/metrics/types/metrics-keys.type';
 import { RecordPositionService } from 'src/engine/core-modules/record-position/services/record-position.service';
 import { WorkflowRunRecordShareService } from 'src/engine/core-modules/workflow/services/workflow-run-record-share.service';
 import { AgentRunSuspensionService } from 'src/engine/metadata-modules/ai/ai-agent-execution/services/agent-run-suspension.service';
@@ -37,7 +35,6 @@ export class WorkflowRunWorkspaceService {
   constructor(
     private readonly workspaceOrmManager: WorkspaceOrmManager,
     private readonly recordPositionService: RecordPositionService,
-    private readonly metricsService: MetricsService,
     private readonly workflowRunRecordShareService: WorkflowRunRecordShareService,
     private readonly workflowStepWaitWorkspaceService: WorkflowStepWaitWorkspaceService,
     private readonly agentRunSuspensionService: AgentRunSuspensionService,
@@ -170,13 +167,11 @@ export class WorkflowRunWorkspaceService {
     workspaceId,
     status,
     error,
-    isSystemError,
   }: {
     workflowRunId: string;
     workspaceId: string;
     status: Extract<WorkflowRunStatus, 'COMPLETED' | 'FAILED' | 'STOPPED'>;
     error?: string;
-    isSystemError?: boolean;
   }) {
     const workflowRunToUpdate = await this.getWorkflowRunOrFail({
       workflowRunId,
@@ -222,26 +217,6 @@ export class WorkflowRunWorkspaceService {
           `Failed to close the conversations of workflow run ${workflowRunId} in workspace ${workspaceId}: ${error instanceof Error ? error.message : String(error)}`,
         );
       });
-
-    const metricKey =
-      status === WorkflowRunStatus.COMPLETED
-        ? MetricsKeys.WorkflowRunCompleted
-        : status === WorkflowRunStatus.STOPPED
-          ? MetricsKeys.WorkflowRunStopped
-          : MetricsKeys.WorkflowRunFailed;
-
-    await this.metricsService.incrementCounterForEvent({
-      key: metricKey,
-      eventId: workflowRunId,
-    });
-
-    if (isSystemError) {
-      await this.metricsService.incrementCounterForEvent({
-        key: MetricsKeys.WorkflowRunSystemError,
-        eventId: workflowRunId,
-        debugLog: `[Workflow Run System Error] Workflow run ${workflowRunId} in workspace ${workspaceId} ended with system error`,
-      });
-    }
   }
 
   @WithLock('workflowRunId')
