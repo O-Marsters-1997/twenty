@@ -388,18 +388,7 @@ export const LogConsole = () => {
   const panelHeight =
     !isExiting && displayedLayout.isFullScreen ? '100%' : spacerHeight;
 
-  const hasAuditLogsEntitlement = checkIfBillingEntitlementIsEnabledOnWorkspace(
-    BillingEntitlementKey.AUDIT_LOGS,
-    currentWorkspace,
-  );
-
-  const isSourceLocked = (source: LogConsoleSource) =>
-    source.requiresAuditLogs && !hasAuditLogsEntitlement;
-
-  const sources = [
-    ...LOG_CONSOLE_SOURCES.filter((source) => !isSourceLocked(source)),
-    ...LOG_CONSOLE_SOURCES.filter(isSourceLocked),
-  ];
+  const sources = LOG_CONSOLE_SOURCES;
 
   const activeSource =
     sources.find(
@@ -410,13 +399,6 @@ export const LogConsole = () => {
     id: source.id,
     title: t(source.label),
     Icon: source.Icon,
-    pill: isSourceLocked(source) ? (
-      <IconLock
-        size={theme.icon.size.sm}
-        stroke={theme.icon.stroke.sm}
-        color={theme.font.color.tertiary}
-      />
-    ) : undefined,
   }));
 
   const openLogConsole = () => {
@@ -568,18 +550,6 @@ export const LogConsole = () => {
         <SettingsEmptyPlaceholder>
           {t`Logs require ClickHouse to be configured. Please contact your administrator.`}
         </SettingsEmptyPlaceholder>
-      );
-    }
-
-    if (isSourceLocked(activeSource)) {
-      return (
-        <StyledUpgradeCardContainer>
-          <SettingsEnterpriseFeatureGateCard
-            title={t`Upgrade to access audit logs`}
-            description={t`Record changes and app logs are available on your current plan. Other log types require an Organization subscription.`}
-            buttonTitle={t`Upgrade`}
-          />
-        </StyledUpgradeCardContainer>
       );
     }
 

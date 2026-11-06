@@ -18,13 +18,11 @@ import { isDeveloperDefaultSignInPrefilledState } from '@/client-config/states/i
 import { isClickHouseConfiguredState } from '@/client-config/states/isClickHouseConfiguredState';
 import { isCloudflareIntegrationEnabledState } from '@/client-config/states/isCloudflareIntegrationEnabledState';
 import { isDDLLockedState } from '@/client-config/states/isDDLLockedState';
-import { enterpriseInstanceTypeState } from '@/client-config/states/enterpriseInstanceTypeState';
 import { isEmailingDomainInDemoModeState } from '@/client-config/states/isEmailingDomainInDemoModeState';
 import { isEmailVerificationRequiredState } from '@/client-config/states/isEmailVerificationRequiredState';
 import { isGoogleCalendarEnabledState } from '@/client-config/states/isGoogleCalendarEnabledState';
 import { isGoogleMessagingEnabledState } from '@/client-config/states/isGoogleMessagingEnabledState';
 import { isImapSmtpCaldavEnabledState } from '@/client-config/states/isImapSmtpCaldavEnabledState';
-import { maintenanceModeState } from '@/client-config/states/maintenanceModeState';
 import { isMicrosoftCalendarEnabledState } from '@/client-config/states/isMicrosoftCalendarEnabledState';
 import { isMicrosoftMessagingEnabledState } from '@/client-config/states/isMicrosoftMessagingEnabledState';
 import { isMultiWorkspaceEnabledState } from '@/client-config/states/isMultiWorkspaceEnabledState';
@@ -41,7 +39,6 @@ import { getInitialClientConfig } from '@/client-config/utils/getInitialClientCo
 import { allowRequestsToTwentyIconsState } from '@/client-config/states/allowRequestsToTwentyIcons';
 import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomState';
 import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
-import { ENTERPRISE_INSTANCE_TYPE } from 'twenty-shared/constants';
 
 type UseClientConfigResult = {
   data: { clientConfig: ClientConfig } | undefined;
@@ -144,12 +141,6 @@ export const useClientConfig = (): UseClientConfigResult => {
 
   const setIsOnboardingAiChatEnabled = useSetAtomState(
     isOnboardingAiChatEnabledState,
-  );
-
-  const setMaintenanceMode = useSetAtomState(maintenanceModeState);
-
-  const setEnterpriseInstanceType = useSetAtomState(
-    enterpriseInstanceTypeState,
   );
 
   const setAppVersion = useSetAtomState(appVersionState);
@@ -255,11 +246,6 @@ export const useClientConfig = (): UseClientConfigResult => {
         setIsOnboardingAiChatEnabled(
           clientConfig?.isOnboardingAiChatEnabled ?? false,
         );
-        setMaintenanceMode(clientConfig?.maintenance ?? null);
-        setEnterpriseInstanceType(
-          clientConfig?.enterpriseInstanceType ??
-            ENTERPRISE_INSTANCE_TYPE.PRODUCTION,
-        );
       } catch (err) {
         const error =
           err instanceof Error
@@ -305,8 +291,6 @@ export const useClientConfig = (): UseClientConfigResult => {
       setIsDDLLocked,
       setIsOnboardingAiChatEnabled,
       setLabPublicFeatureFlags,
-      setMaintenanceMode,
-      setEnterpriseInstanceType,
       setIsMicrosoftCalendarEnabled,
       setIsMicrosoftMessagingEnabled,
       setSentryConfig,
