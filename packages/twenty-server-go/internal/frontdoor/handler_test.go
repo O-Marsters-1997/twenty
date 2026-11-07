@@ -2,6 +2,7 @@ package frontdoor_test
 
 import (
 	"bytes"
+	"context"
 	"io"
 	"log/slog"
 	"net/http"
@@ -11,8 +12,18 @@ import (
 	"sync/atomic"
 	"testing"
 
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/frontdoor"
 )
+
+type fakeVerifier struct{}
+
+func (fakeVerifier) Verify(_ context.Context, bearer string) (auth.Principal, error) {
+	if bearer == "valid" {
+		return auth.Principal{UserID: "user-1"}, nil
+	}
+	return auth.Principal{}, auth.ErrUnauthenticated
+}
 
 type fixture struct {
 	front *httptest.Server
@@ -39,7 +50,9 @@ func newFixture(t *testing.T) fixture {
 		t.Fatal(err)
 	}
 	logs := &bytes.Buffer{}
-	handler := frontdoor.NewHandler(frontdoor.DefaultTable(), upstream, slog.New(slog.NewTextHandler(logs, nil)))
+	table := frontdoor.DefaultTable()
+	table[frontdoor.EndpointWorkspace] = map[string]frontdoor.Route{"GoOnly": frontdoor.RouteGo}
+	handler := frontdoor.NewHandler(table, upstream, fakeVerifier{}, slog.New(slog.NewTextHandler(logs, nil)))
 	front := httptest.NewServer(handler)
 	t.Cleanup(front.Close)
 	return fixture{front: front, hits: hits, logs: logs}
@@ -92,6 +105,43 @@ func TestHandler_ServeHTTP(t *testing.T) {
 		}
 		if !strings.Contains(f.logs.String(), "route=blocked") {
 			t.Errorf("blocked route not logged: %s", f.logs)
+		}
+	})
+
+	t.Run("requires a valid access token for Go operations only", func(t *testing.T) {
+		f := newFixture(t)
+		body := `{"operationName":"GoOnly","query":"{ a }"}`
+		tests := []struct{ name, authorization, want string }{
+			{"missing", "", `"UNAUTHENTICATED"`},
+			{"invalid", "Bearer nope", `"UNAUTHENTICATED"`},
+			{"valid", "Bearer valid", "operation not implemented"},
+		}
+		for _, tt := range tests {
+			t.Run(tt.name, func(t *testing.T) {
+				req, err := http.NewRequestWithContext(t.Context(), http.MethodPost, f.front.URL+"/graphql", strings.NewReader(body))
+				if err != nil {
+					t.Fatal(err)
+				}
+				req.Header.Set("Content-Type", "application/json")
+				req.Header.Set("Authorization", tt.authorization)
+				resp, err := http.DefaultClient.Do(req)
+				if err != nil {
+					t.Fatal(err)
+				}
+				got, err := io.ReadAll(resp.Body)
+				if err != nil {
+					t.Fatal(err)
+				}
+				if err := resp.Body.Close(); err != nil {
+					t.Error(err)
+				}
+				if !strings.Contains(string(got), tt.want) {
+					t.Errorf("response = %s, want it to contain %s", got, tt.want)
+				}
+			})
+		}
+		if hits := f.hits.Load(); hits != 0 {
+			t.Errorf("node hits = %d, want 0", hits)
 		}
 	})
 
