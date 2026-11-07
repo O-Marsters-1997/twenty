@@ -304,7 +304,7 @@ func numberScalar(dataType string) string {
 	}
 }
 
-var scalarTypes =map[model.FieldType]string{
+var scalarTypes = map[model.FieldType]string{
 	model.TypeUUID:     "UUID",
 	model.TypeText:     "String",
 	model.TypeDateTime: "DateTime",
