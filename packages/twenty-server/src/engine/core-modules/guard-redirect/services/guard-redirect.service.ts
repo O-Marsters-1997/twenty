@@ -28,8 +28,6 @@ export class GuardRedirectService {
     workspace: {
       id?: string;
       subdomain: string;
-      customDomain: string | null;
-      isCustomDomainEnabled?: boolean;
     },
     pathname = AppPath.Verify,
   ) {
@@ -46,25 +44,20 @@ export class GuardRedirectService {
     );
   }
 
-  getSubdomainAndCustomDomainFromContext(context: ExecutionContext) {
+  getSubdomainFromContext(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest<Request>();
 
-    const subdomainAndCustomDomainFromReferer = request.headers.referer
-      ? this.domainsServerConfigService.getSubdomainAndCustomDomainFromUrl(
+    const subdomainFromReferer = request.headers.referer
+      ? this.domainsServerConfigService.getSubdomainFromUrl(
           request.headers.referer,
         )
-      : null;
+      : undefined;
 
-    return subdomainAndCustomDomainFromReferer &&
-      subdomainAndCustomDomainFromReferer.subdomain
-      ? {
-          subdomain: subdomainAndCustomDomainFromReferer.subdomain,
-          customDomain: subdomainAndCustomDomainFromReferer.customDomain,
-        }
-      : {
-          subdomain: this.twentyConfigService.get('DEFAULT_SUBDOMAIN'),
-          customDomain: null,
-        };
+    return {
+      subdomain:
+        subdomainFromReferer ??
+        this.twentyConfigService.get('DEFAULT_SUBDOMAIN'),
+    };
   }
 
   private captureException(err: Error | CustomException, workspaceId?: string) {
@@ -90,8 +83,6 @@ export class GuardRedirectService {
     workspace: {
       id?: string;
       subdomain: string;
-      customDomain: string | null;
-      isCustomDomainEnabled?: boolean;
     };
     pathname: string;
   }) {
@@ -106,8 +97,6 @@ export class GuardRedirectService {
       errorMessage,
       {
         subdomain: workspace.subdomain,
-        customDomain: workspace.customDomain,
-        isCustomDomainEnabled: workspace.isCustomDomainEnabled ?? false,
       },
       pathname,
     );

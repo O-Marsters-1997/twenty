@@ -48,7 +48,6 @@ import { wrapAsyncIteratorWithLifecycle } from 'src/engine/subscriptions/utils/w
   AuthPrincipalGuard({
     userSession: {
       standard: true,
-      impersonated: true,
       playground: true,
       workspaceAgnostic: false,
     },

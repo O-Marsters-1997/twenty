@@ -303,13 +303,12 @@ export class ApprovedAccessDomainService {
     return this.approvedAccessDomainRepository.find(workspace.id);
   }
 
-  async findValidatedApprovedAccessDomainWithWorkspacesAndSsoIdentityProvidersDomain(
+  async findValidatedApprovedAccessDomainWithWorkspaces(
     domain: string,
   ) {
     return this.approvedAccessDomainRepositoryUnscoped.find({
       relations: [
         'workspace',
-        'workspace.workspaceSsoIdentityProviders',
         'workspace.approvedAccessDomains',
       ],
       where: {

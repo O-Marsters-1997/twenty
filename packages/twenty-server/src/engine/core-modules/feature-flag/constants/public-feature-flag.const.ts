@@ -12,12 +12,4 @@ export type PublicFeatureFlag = {
   metadata: FeatureFlagMetadata;
 };
 
-export const PUBLIC_FEATURE_FLAGS: PublicFeatureFlag[] = [
-  ...(process.env.CLOUDFLARE_API_KEY
-    ? [
-        // {
-        // Here you can add cloud only feature flags
-        // },
-      ]
-    : []),
-];
+export const PUBLIC_FEATURE_FLAGS: PublicFeatureFlag[] = [];

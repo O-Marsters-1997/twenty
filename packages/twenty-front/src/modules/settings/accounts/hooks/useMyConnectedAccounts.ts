@@ -12,11 +12,11 @@ type CoreConnectedAccount = Omit<
 >;
 
 const EMAIL_AND_CALENDAR_PROVIDERS: ReadonlySet<ConnectedAccountProvider> =
-  new Set([
-    ConnectedAccountProvider.GOOGLE,
-    ConnectedAccountProvider.IMAP_SMTP_CALDAV,
-  ]);
+  new Set([ConnectedAccountProvider.GOOGLE]);
 
+// The personal accounts page is for email/calendar credentials only. App-managed
+// OAuth (APP) also lives in connectedAccount, but it's surfaced elsewhere — keep
+// it off this page by filtering to the email/calendar provider set.
 export const useMyConnectedAccounts = ({
   providers = EMAIL_AND_CALENDAR_PROVIDERS,
 }: {

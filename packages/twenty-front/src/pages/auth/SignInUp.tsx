@@ -16,7 +16,6 @@ import { EmailVerificationSent } from '@/auth/sign-in-up/components/EmailVerific
 import { SignInUpGlobalScopeForm } from '@/auth/sign-in-up/components/SignInUpGlobalScopeForm';
 import { SignInUpStandardContent } from '@/auth/sign-in-up/components/SignInUpStandardContent';
 import { SignInUpWorkspaceScopeForm } from '@/auth/sign-in-up/components/SignInUpWorkspaceScopeForm';
-import { SignInUpSsoIdentityProviderSelection } from '@/auth/sign-in-up/components/internal/SignInUpSsoIdentityProviderSelection';
 import { OnboardingLayout } from '@/onboarding/components/OnboardingLayout';
 import { StyledOnboardingStepPage } from '@/onboarding/components/StyledOnboardingStepPage';
 import { SignInUpWorkspaceCreationForm } from '@/auth/sign-in-up/components/internal/SignInUpWorkspaceCreationForm';
@@ -28,7 +27,6 @@ import { useIsCurrentLocationOnDefaultDomain } from '@/domain-manager/hooks/useI
 import { useMemo } from 'react';
 
 import { SignInUpGlobalScopeFormEffect } from '@/auth/sign-in-up/components/internal/SignInUpGlobalScopeFormEffect';
-import { SignInUpSsoExchangeTokenEffect } from '@/auth/sign-in-up/components/internal/SignInUpSsoExchangeTokenEffect';
 import { SignInUpTwoFactorAuthenticationProvision } from '@/auth/sign-in-up/components/internal/SignInUpTwoFactorAuthenticationProvision';
 import { SignInUpTwoFactorAuthenticationRecovery } from '@/auth/sign-in-up/components/internal/SignInUpTwoFactorAuthenticationRecovery';
 import { SignInUpTOTPVerification } from '@/auth/sign-in-up/components/internal/SignInUpTwoFactorAuthenticationVerification';
@@ -158,18 +156,10 @@ export const SignInUp = () => {
     if (isDefaultDomain && isMultiWorkspaceEnabled) {
       return (
         <>
-          <SignInUpSsoExchangeTokenEffect />
           <SignInUpGlobalScopeFormEffect />
           <SignInUpGlobalScopeForm />
         </>
       );
-    }
-
-    if (
-      isOnAWorkspace &&
-      signInUpStep === SignInUpStep.SsoIdentityProviderSelection
-    ) {
-      return <SignInUpSsoIdentityProviderSelection />;
     }
 
     if (signInUpStep === SignInUpStep.TwoFactorAuthenticationProvision) {
@@ -195,7 +185,6 @@ export const SignInUp = () => {
 
     return (
       <>
-        <SignInUpSsoExchangeTokenEffect />
         <SignInUpGlobalScopeFormEffect />
         <SignInUpGlobalScopeForm />
       </>

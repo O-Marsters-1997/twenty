@@ -1,11 +1,10 @@
 import { Module } from '@nestjs/common';
-import { APP_FILTER, HttpAdapterHost } from '@nestjs/core';
+import { APP_FILTER } from '@nestjs/core';
 import { EventEmitter2, EventEmitterModule } from '@nestjs/event-emitter';
 
 import { WorkspaceResolverNameMapCacheModule } from 'src/engine/api/graphql/direct-execution/workspace-resolver-name-map-cache.module';
 import { WorkspaceQueryRunnerModule } from 'src/engine/api/graphql/workspace-query-runner/workspace-query-runner.module';
 import { ActorModule } from 'src/engine/core-modules/actor/actor.module';
-import { AdminPanelModule } from 'src/engine/core-modules/admin-panel/admin-panel.module';
 import { ApiKeyModule } from 'src/engine/core-modules/api-key/api-key.module';
 import { ApplicationModule } from 'src/engine/core-modules/application/application.module';
 import { ApprovedAccessDomainModule } from 'src/engine/core-modules/approved-access-domain/approved-access-domain.module';
@@ -17,9 +16,6 @@ import { PermissionsGraphqlApiExceptionFilter } from 'src/engine/metadata-module
 import { CacheStorageModule } from 'src/engine/core-modules/cache-storage/cache-storage.module';
 import { TimelineCalendarEventModule } from 'src/engine/core-modules/calendar/timeline-calendar-event.module';
 import { CaptchaModule } from 'src/engine/core-modules/captcha/captcha.module';
-import { CloudflareModule } from 'src/engine/core-modules/cloudflare/cloudflare.module';
-import { CodeInterpreterModule } from 'src/engine/core-modules/code-interpreter/code-interpreter.module';
-import { DnsManagerModule } from 'src/engine/core-modules/dns-manager/dns-manager.module';
 import { DpaModule } from 'src/engine/core-modules/dpa/dpa.module';
 import { EmailModule } from 'src/engine/core-modules/email/email.module';
 import { EmailingDomainModule } from 'src/engine/core-modules/emailing-domain/emailing-domain.module';
@@ -30,8 +26,6 @@ import { FileStorageModule } from 'src/engine/core-modules/file-storage/file-sto
 import { GeoMapModule } from 'src/engine/core-modules/geo-map/geo-map-module';
 import { HealthModule } from 'src/engine/core-modules/health/health.module';
 import { I18nModule } from 'src/engine/core-modules/i18n/i18n.module';
-import { ImapSmtpCaldavModule } from 'src/engine/core-modules/imap-smtp-caldav-connection/imap-smtp-caldav-connection.module';
-import { ImpersonationModule } from 'src/engine/core-modules/impersonation/impersonation.module';
 import { LabModule } from 'src/engine/core-modules/lab/lab.module';
 import { LoggerModule } from 'src/engine/core-modules/logger/logger.module';
 import { loggerModuleFactory } from 'src/engine/core-modules/logger/logger.module-factory';
@@ -39,11 +33,9 @@ import { MessageQueueModule } from 'src/engine/core-modules/message-queue/messag
 import { messageQueueModuleFactory } from 'src/engine/core-modules/message-queue/message-queue.module-factory';
 import { TimelineMessagingModule } from 'src/engine/core-modules/messaging/timeline-messaging.module';
 import { OpenApiModule } from 'src/engine/core-modules/open-api/open-api.module';
-import { PublicDomainModule } from 'src/engine/core-modules/public-domain/public-domain.module';
 import { RedisClientModule } from 'src/engine/core-modules/redis-client/redis-client.module';
 import { RedisClientService } from 'src/engine/core-modules/redis-client/redis-client.service';
 import { SearchModule } from 'src/engine/core-modules/search/search.module';
-import { WorkspaceSsoModule } from 'src/engine/core-modules/sso/sso.module';
 import { WellKnownModule } from 'src/engine/core-modules/well-known/well-known.module';
 import { TwentyConfigModule } from 'src/engine/core-modules/twenty-config/twenty-config.module';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
@@ -59,7 +51,6 @@ import { RoleModule } from 'src/engine/metadata-modules/role/role.module';
 import { RowLevelPermissionModule } from 'src/engine/metadata-modules/row-level-permission-predicate/row-level-permission.module';
 import { RecordShareModule } from 'src/engine/core-modules/record-share/record-share.module';
 import { SubscriptionsModule } from 'src/engine/subscriptions/subscriptions.module';
-import { CodeInterpreterSessionCleanupModule } from 'src/engine/core-modules/code-interpreter/crons/code-interpreter-session-cleanup.module';
 import { TrashCleanupModule } from 'src/engine/trash-cleanup/trash-cleanup.module';
 import { WorkspaceEventEmitterModule } from 'src/engine/workspace-event-emitter/workspace-event-emitter.module';
 import { AiToolCallAnswerModule } from 'src/engine/metadata-modules/ai/ai-tool-call-answer/ai-tool-call-answer.module';
@@ -89,17 +80,12 @@ import { FileApiModule } from './file/file-api.module';
     UserModule,
     WorkspaceModule,
     WorkspaceInvitationModule,
-    WorkspaceSsoModule,
     ApprovedAccessDomainModule,
     EmailingDomainModule,
-    PublicDomainModule,
-    CloudflareModule,
-    DnsManagerModule,
     WorkflowApiModule,
     AiToolCallAnswerModule,
     WorkspaceEventEmitterModule,
     ActorModule,
-    AdminPanelModule,
     LabModule,
     RoleModule,
     RedisClientModule,
@@ -107,7 +93,6 @@ import { FileApiModule } from './file/file-api.module';
     WorkspaceResolverNameMapCacheModule,
     GeoMapModule,
     SubscriptionsModule,
-    ImapSmtpCaldavModule,
     FileStorageModule.forRoot(),
     LoggerModule.forRootAsync({
       useFactory: loggerModuleFactory,
@@ -127,14 +112,11 @@ import { FileApiModule } from './file/file-api.module';
     I18nModule,
     AiModelsModule,
     AiBillingModule,
-    CodeInterpreterModule.forRoot(),
     SearchModule,
     ApiKeyModule,
     DpaModule,
     PageLayoutModule,
-    ImpersonationModule,
     TrashCleanupModule,
-    CodeInterpreterSessionCleanupModule,
     EventLogsViewerModule,
   ],
   providers: [
@@ -154,8 +136,6 @@ import { FileApiModule } from './file/file-api.module';
     UserModule,
     WorkspaceModule,
     WorkspaceInvitationModule,
-    WorkspaceSsoModule,
-    ImapSmtpCaldavModule,
   ],
 })
 export class CoreEngineModule {}

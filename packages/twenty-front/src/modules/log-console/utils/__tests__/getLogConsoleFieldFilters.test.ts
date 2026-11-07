@@ -7,7 +7,7 @@ import { EventLogFilterOperand } from '~/generated-metadata/graphql';
 const SECURITY_SCOPE = {
   field: 'event',
   operand: EventLogFilterOperand.IS,
-  values: ['AuthSession', 'Impersonation'],
+  values: ['AuthSession', 'User Signup'],
 };
 
 const SECURITY_SOURCE = {
@@ -44,7 +44,7 @@ describe('getLogConsoleFieldFilters', () => {
           {
             filterFieldId: 'event',
             operand: EventLogFilterOperand.IS_NOT,
-            values: ['Impersonation'],
+            values: ['User Signup'],
           },
         ],
       }),
@@ -53,7 +53,7 @@ describe('getLogConsoleFieldFilters', () => {
       {
         field: 'event',
         operand: EventLogFilterOperand.IS_NOT,
-        values: ['Impersonation'],
+        values: ['User Signup'],
       },
       {
         field: 'userId',

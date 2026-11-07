@@ -54,7 +54,6 @@ export const TwoConnectedAccounts: Story = {
                   name: 'Test User',
                   visibility: 'SHARE_EVERYTHING',
                   lastCredentialsRefreshedAt: null,
-                  connectionParameters: null,
                   createdAt: '2024-07-03T20:03:35.064Z',
                   updatedAt: '2024-07-03T20:03:35.064Z',
                 },

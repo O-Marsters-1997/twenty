@@ -1,10 +1,8 @@
-import { type CodeInterpreterService } from 'src/engine/core-modules/code-interpreter/code-interpreter.service';
 import { type I18nService } from 'src/engine/core-modules/i18n/i18n.service';
 import { type UserWorkspaceAuthContext } from 'src/engine/core-modules/auth/types/workspace-auth-context.type';
 import { type ToolProviderContext } from 'src/engine/core-modules/tool-provider/interfaces/tool-provider-context.type';
 import { ActionToolProvider } from 'src/engine/core-modules/tool-provider/providers/action-tool.provider';
 import { type CreateCalendarEventTool } from 'src/engine/core-modules/tool/tools/calendar-tool/create-calendar-event-tool';
-import { type CodeInterpreterTool } from 'src/engine/core-modules/tool/tools/code-interpreter-tool/code-interpreter-tool';
 import { type DraftEmailTool } from 'src/engine/core-modules/tool/tools/email-tool/draft-email-tool';
 import { type FindConnectedAccountsTool } from 'src/engine/core-modules/tool/tools/email-tool/find-connected-accounts-tool';
 import { type SendEmailTool } from 'src/engine/core-modules/tool/tools/email-tool/send-email-tool';
@@ -13,7 +11,6 @@ import { type CreateFileUploadTool } from 'src/engine/core-modules/tool/tools/fi
 import { type HttpTool } from 'src/engine/core-modules/tool/tools/http-tool/http-tool';
 import { type ExtractJsonPathsTool } from 'src/engine/core-modules/tool/tools/output-navigation-tool/extract-json-paths-tool';
 import { type SearchOutputTool } from 'src/engine/core-modules/tool/tools/output-navigation-tool/search-output-tool';
-import { type SearchHelpCenterTool } from 'src/engine/core-modules/tool/tools/search-help-center-tool/search-help-center-tool';
 import { type ShareRecordTool } from 'src/engine/core-modules/tool/tools/share-record-tool/share-record-tool';
 import { type PermissionsService } from 'src/engine/metadata-modules/permissions/permissions.service';
 import { type SaveCampaignTool } from 'src/modules/emailing/tools/save-campaign-tool';
@@ -57,15 +54,12 @@ const buildProvider = ({
     buildTool<DraftEmailTool>(),
     buildTool<FindConnectedAccountsTool>(),
     buildTool<CreateCalendarEventTool>(),
-    buildTool<SearchHelpCenterTool>(),
     buildTool<CreateFileUploadTool>(),
     buildTool<CompleteFileUploadTool>(),
-    buildTool<CodeInterpreterTool>(),
     buildTool<ExtractJsonPathsTool>(),
     buildTool<SearchOutputTool>(),
     buildTool<SaveCampaignTool>(),
     shareRecordTool,
-    { isEnabled: () => false } as unknown as CodeInterpreterService,
     {
       checkRolesPermissions: jest.fn().mockResolvedValue(false),
     } as unknown as PermissionsService,

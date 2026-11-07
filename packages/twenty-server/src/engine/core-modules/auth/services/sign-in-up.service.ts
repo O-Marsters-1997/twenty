@@ -34,7 +34,6 @@ import {
   PASSWORD_REGEX,
   hashPassword,
 } from 'src/engine/core-modules/auth/auth.util';
-import { MAX_WORKSPACES_WITHOUT_ENTERPRISE_KEY } from 'src/engine/core-modules/auth/constants/max-workspaces-without-organization-key.constants';
 import { getSignUpWithoutWorkspaceDecision } from 'src/engine/core-modules/auth/utils/get-sign-up-without-workspace-decision.util';
 import { hasProvisionedSignUpDestination } from 'src/engine/core-modules/auth/utils/has-provisioned-sign-up-destination.util';
 import { DEFAULT_DPA_REGION } from 'src/engine/core-modules/dpa/config/dpa-region-config.constant';
@@ -49,7 +48,6 @@ import {
   type SignInUpNewUserPayload,
 } from 'src/engine/core-modules/auth/types/sign-in-up.type';
 import { SubdomainManagerService } from 'src/engine/core-modules/domain/subdomain-manager/services/subdomain-manager.service';
-import { EnterprisePlanService } from 'src/engine/core-modules/enterprise/services/enterprise-plan.service';
 import { ExceptionHandlerService } from 'src/engine/core-modules/exception-handler/exception-handler.service';
 import { FileCorePictureService } from 'src/engine/core-modules/file/file-core-picture/services/file-core-picture.service';
 import { OnboardingService } from 'src/engine/core-modules/onboarding/onboarding.service';
@@ -89,7 +87,6 @@ export class SignInUpService {
     private readonly fileCorePictureService: FileCorePictureService,
     private readonly fileStorageService: FileStorageService,
     private readonly exceptionHandlerService: ExceptionHandlerService,
-    private readonly enterprisePlanService: EnterprisePlanService,
     private readonly eventLogEmitterService: EventLogEmitterService,
     private readonly billingService: BillingService,
     @InjectDataSource()
@@ -291,10 +288,7 @@ export class SignInUpService {
         newUserWithPicture: PartialUserWithPicture;
       };
 
-      const user = await this.saveNewUser(userData.newUserWithPicture, {
-        canAccessFullAdminPanel: false,
-        canImpersonate: false,
-      });
+      const user = await this.saveNewUser(userData.newUserWithPicture);
 
       await this.activateOnboardingForUser({
         user,
@@ -362,20 +356,9 @@ export class SignInUpService {
 
   private async saveNewUser(
     newUserWithPicture: PartialUserWithPicture,
-    {
-      canImpersonate,
-      canAccessFullAdminPanel,
-    }: {
-      canImpersonate: boolean;
-      canAccessFullAdminPanel: boolean;
-    },
     queryRunner?: QueryRunner,
   ) {
-    const userCreated = this.userRepository.create({
-      ...newUserWithPicture,
-      canImpersonate,
-      canAccessFullAdminPanel,
-    });
+    const userCreated = this.userRepository.create(newUserWithPicture);
 
     const savedUser = queryRunner
       ? await queryRunner.manager.save(UserEntity, userCreated)
@@ -454,17 +437,7 @@ export class SignInUpService {
     return hasProvisionedSignUpDestination(availableWorkspacesForSignUp);
   }
 
-  private async hasServerAdmin(): Promise<boolean> {
-    const adminCount = await this.userRepository.count({
-      where: { canAccessFullAdminPanel: true },
-    });
-
-    return adminCount > 0;
-  }
-
-  private async assertWorkspaceCreationAllowed(
-    userData: ExistingUserOrPartialUserWithPicture['userData'],
-  ): Promise<void> {
+  private async assertWorkspaceCreationAllowed(): Promise<void> {
     await this.assertSignUpEnabled();
 
     const workspaceCount = await this.workspaceRepository.count();
@@ -472,8 +445,6 @@ export class SignInUpService {
     if (workspaceCount === 0) {
       return;
     }
-
-    await this.assertWorkspaceCountWithinLimit(workspaceCount);
 
     if (
       !this.twentyConfigService.get(
@@ -483,39 +454,11 @@ export class SignInUpService {
       return;
     }
 
-    const isExistingAdmin =
-      userData.type === 'existingUser' &&
-      userData.existingUser.canAccessFullAdminPanel;
-
-    if (isExistingAdmin) {
-      return;
-    }
-
     throw new AuthException(
       'Workspace creation is restricted to admins',
       AuthExceptionCode.FORBIDDEN_EXCEPTION,
       {
         userFriendlyMessage: msg`Workspace creation is restricted to admins`,
-      },
-    );
-  }
-
-  private async assertWorkspaceCountWithinLimit(
-    workspaceCount: number,
-  ): Promise<void> {
-    if (this.enterprisePlanService.isValid()) {
-      return;
-    }
-
-    if (workspaceCount < MAX_WORKSPACES_WITHOUT_ENTERPRISE_KEY) {
-      return;
-    }
-
-    throw new AuthException(
-      `Cannot create more than ${MAX_WORKSPACES_WITHOUT_ENTERPRISE_KEY} workspaces without a valid enterprise key`,
-      AuthExceptionCode.FORBIDDEN_EXCEPTION,
-      {
-        userFriendlyMessage: msg`Workspace limit reached. A valid Organization key is required to create more workspaces.`,
       },
     );
   }
@@ -625,7 +568,7 @@ export class SignInUpService {
       );
     }
 
-    await this.assertWorkspaceCreationAllowed(userData);
+    await this.assertWorkspaceCreationAllowed();
 
     const displayName = options?.displayName?.trim();
 
@@ -646,8 +589,6 @@ export class SignInUpService {
         requestedSubdomain,
       );
     }
-
-    const shouldGrantServerAdmin = !(await this.hasServerAdmin());
 
     const isWorkEmailFound = isWorkEmail(email);
 
@@ -689,14 +630,7 @@ export class SignInUpService {
           const isExistingUser = userData.type === 'existingUser';
           const user = isExistingUser
             ? userData.existingUser
-            : await this.saveNewUser(
-                userData.newUserWithPicture,
-                {
-                  canImpersonate: shouldGrantServerAdmin,
-                  canAccessFullAdminPanel: shouldGrantServerAdmin,
-                },
-                queryRunner,
-              );
+            : await this.saveNewUser(userData.newUserWithPicture, queryRunner);
 
           await this.userWorkspaceService.create(
             {
@@ -828,14 +762,8 @@ export class SignInUpService {
 
     await this.assertSignUpWithoutWorkspaceAllowed(newUserParams.email);
 
-    const shouldGrantServerAdmin = !(await this.hasServerAdmin());
-
     return this.saveNewUser(
       await this.computePartialUserFromUserPayload(newUserParams, authParams),
-      {
-        canImpersonate: shouldGrantServerAdmin,
-        canAccessFullAdminPanel: shouldGrantServerAdmin,
-      },
     );
   }
 }

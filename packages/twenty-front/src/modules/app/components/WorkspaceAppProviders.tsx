@@ -28,7 +28,6 @@ import { CoreRecordReferenceFieldsContext } from '@/object-record/record-field/u
 import { RecordCreationFormProvider } from '@/object-record/record-form/components/RecordCreationFormProvider';
 import { WelcomeOverlay } from '@/onboarding/components/WelcomeOverlay/WelcomeOverlay';
 import { CompanyEnrichmentOnboardingEffect } from '@/onboarding/effect-components/CompanyEnrichmentOnboardingEffect';
-import { ApolloAdminProvider } from '@/settings/admin-panel/apollo/components/ApolloAdminProvider';
 import { EndTrialAfterPaymentMethodGater } from '@/settings/billing/components/EndTrialAfterPaymentMethodGater';
 import { SSEProvider } from '@/sse-db-event/components/SSEProvider';
 import { SupportChatEffect } from '@/support/components/SupportChatEffect';
@@ -53,7 +52,6 @@ export const WorkspaceAppProviders = () => {
         <UserContextProvider>
           <AuthProvider>
             <ApolloCoreProvider>
-              <ApolloAdminProvider>
                 <SSEProvider>
                   <ApplicationsLoadEffect />
                   <MyConnectedAccountsLoadEffect />
@@ -98,7 +96,6 @@ export const WorkspaceAppProviders = () => {
                   <CompanyEnrichmentOnboardingEffect />
                   <SignOutOnOtherTabSignOutEffect />
                 </SSEProvider>
-              </ApolloAdminProvider>
             </ApolloCoreProvider>
           </AuthProvider>
         </UserContextProvider>

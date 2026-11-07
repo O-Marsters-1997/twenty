@@ -20,7 +20,6 @@ import { MessagingMessagesImportCronJob } from 'src/modules/messaging/message-im
 import { MessagingOngoingStaleCronJob } from 'src/modules/messaging/message-import-manager/crons/jobs/messaging-ongoing-stale.cron.job';
 import { MessagingRelaunchFailedMessageChannelsCronJob } from 'src/modules/messaging/message-import-manager/crons/jobs/messaging-relaunch-failed-message-channels.cron.job';
 import { MessagingGmailDriverModule } from 'src/modules/messaging/message-import-manager/drivers/gmail/messaging-gmail-driver.module';
-import { MessagingIMAPDriverModule } from 'src/modules/messaging/message-import-manager/drivers/imap/messaging-imap-driver.module';
 import { MessagingInboundEmailDriverModule } from 'src/modules/messaging/message-import-manager/drivers/inbound-email/messaging-inbound-email-driver.module';
 import { InboundEmailImportService } from 'src/modules/messaging/message-import-manager/drivers/inbound-email/services/inbound-email-import.service';
 import { MessagingCleanCacheJob } from 'src/modules/messaging/message-import-manager/jobs/messaging-clean-cache';
@@ -50,7 +49,6 @@ import { BlocklistRepository } from 'src/modules/blocklist/repositories/blocklis
 @Module({
   imports: [
     MessagingGmailDriverModule,
-    MessagingIMAPDriverModule,
     MessagingInboundEmailDriverModule,
     MessagingCommonModule,
     TypeOrmModule.forFeature([

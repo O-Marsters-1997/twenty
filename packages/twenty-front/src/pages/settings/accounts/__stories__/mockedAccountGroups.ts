@@ -6,7 +6,6 @@ import { currentWorkspaceState } from '@/auth/states/currentWorkspaceState';
 import { getEmptyPageInfo } from '@/object-record/cache/utils/getEmptyPageInfo';
 import { isGoogleCalendarEnabledState } from '@/client-config/states/isGoogleCalendarEnabledState';
 import { isGoogleMessagingEnabledState } from '@/client-config/states/isGoogleMessagingEnabledState';
-import { isImapSmtpCaldavEnabledState } from '@/client-config/states/isImapSmtpCaldavEnabledState';
 import { jotaiStore } from '@/ui/utilities/state/jotai/jotaiStore';
 import { FeatureFlagKey } from '~/generated-metadata/graphql';
 import { graphqlMocks } from '~/testing/graphqlMocks';
@@ -50,7 +49,6 @@ const buildConnectedAccount = (account: {
   name: null,
   visibility: 'user',
   lastCredentialsRefreshedAt: null,
-  connectionParameters: null,
   createdAt: CREATED_AT,
   updatedAt: CREATED_AT,
   ...account,
@@ -253,7 +251,6 @@ export const seedAccountGroupsStory = async () => {
 
   jotaiStore.set(isGoogleMessagingEnabledState.atom, true);
   jotaiStore.set(isGoogleCalendarEnabledState.atom, true);
-  jotaiStore.set(isImapSmtpCaldavEnabledState.atom, false);
 
   jotaiStore.set(currentWorkspaceState.atom, {
     ...mockCurrentWorkspace,

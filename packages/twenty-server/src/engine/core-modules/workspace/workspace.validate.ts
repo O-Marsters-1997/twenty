@@ -17,7 +17,6 @@ const isAuthEnabledOrThrow = (
     return true;
   if (provider === AuthProviderEnum.Password && workspace.isPasswordAuthEnabled)
     return true;
-  if (provider === AuthProviderEnum.SSO) return true;
 
   throw exceptionToThrowCustom;
 };

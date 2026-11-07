@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 
 import { ConnectedAccountProvider } from 'twenty-shared/types';
 
-import { CalDavGetEventsService } from 'src/modules/calendar/calendar-event-import-manager/drivers/caldav/services/caldav-get-events.service';
 import { GoogleCalendarGetEventsService } from 'src/modules/calendar/calendar-event-import-manager/drivers/google-calendar/services/google-calendar-get-events.service';
 import {
   CalendarEventImportException,
@@ -20,7 +19,6 @@ export type GetCalendarEventsResponse = {
 export class CalendarGetCalendarEventsService {
   constructor(
     private readonly googleCalendarGetEventsService: GoogleCalendarGetEventsService,
-    private readonly caldavCalendarGetEventsService: CalDavGetEventsService,
   ) {}
 
   public async getCalendarEvents(
@@ -40,11 +38,6 @@ export class CalendarGetCalendarEventsService {
       case ConnectedAccountProvider.GOOGLE:
         return this.googleCalendarGetEventsService.getCalendarEvents(
           connectedAccount,
-          syncCursor,
-        );
-      case ConnectedAccountProvider.IMAP_SMTP_CALDAV:
-        return this.caldavCalendarGetEventsService.getCalendarEvents(
-          connectedAccount.id,
           syncCursor,
         );
       default:

@@ -93,7 +93,6 @@ describe('successful user session creation on auth exchanges (integration)', () 
       userId: expect.any(String),
       workspaceId: SEED_APPLE_WORKSPACE_ID,
       userWorkspaceId: expect.any(String),
-      isImpersonating: false,
       revokedAt: null,
       revokedReason: null,
       // Not expect.any(Date): the entity's Date comes from the app's vm context.

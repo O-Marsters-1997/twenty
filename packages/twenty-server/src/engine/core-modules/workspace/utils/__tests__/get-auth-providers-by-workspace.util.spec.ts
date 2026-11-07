@@ -1,8 +1,3 @@
-import {
-  type WorkspaceSsoIdentityProviderEntity,
-  IdentityProviderType,
-  SsoIdentityProviderStatus,
-} from 'src/engine/core-modules/sso/workspace-sso-identity-provider.entity';
 import { getAuthProvidersByWorkspace } from 'src/engine/core-modules/workspace/utils/get-auth-providers-by-workspace.util';
 import { type WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
 
@@ -10,91 +5,33 @@ describe('getAuthProvidersByWorkspace', () => {
   const mockWorkspace = {
     isGoogleAuthEnabled: true,
     isPasswordAuthEnabled: true,
-    workspaceSsoIdentityProviders: [
-      {
-        id: 'sso1',
-        name: 'SSO Provider 1',
-        type: IdentityProviderType.SAML,
-
-        status: SsoIdentityProviderStatus.Active,
-        issuer: 'sso1.example.com',
-      },
-    ],
   } as unknown as WorkspaceEntity;
+
+  const systemEnabledProviders = {
+    google: true,
+    magicLink: false,
+    password: true,
+  };
 
   it('should return correct auth providers for given workspace', () => {
     const result = getAuthProvidersByWorkspace({
       workspace: mockWorkspace,
-      systemEnabledProviders: {
-        google: true,
-        magicLink: false,
-        password: true,
-        sso: [],
-      },
+      systemEnabledProviders,
     });
 
     expect(result).toEqual({
       google: true,
       magicLink: false,
       password: true,
-      sso: [
-        {
-          id: 'sso1',
-          name: 'SSO Provider 1',
-          type: IdentityProviderType.SAML,
-
-          status: SsoIdentityProviderStatus.Active,
-          issuer: 'sso1.example.com',
-        },
-      ],
     });
   });
 
-  it('should handle workspace with no SSO providers', () => {
+  it('should disable Google auth if the system has it disabled', () => {
     const result = getAuthProvidersByWorkspace({
-      workspace: { ...mockWorkspace, workspaceSsoIdentityProviders: [] },
-      systemEnabledProviders: {
-        google: true,
-        magicLink: false,
-        password: true,
-        sso: [],
-      },
+      workspace: mockWorkspace,
+      systemEnabledProviders: { ...systemEnabledProviders, google: false },
     });
 
-    expect(result).toEqual({
-      google: true,
-      magicLink: false,
-      password: true,
-      sso: [],
-    });
-  });
-  it('should handle workspace with SSO providers inactive', () => {
-    const result = getAuthProvidersByWorkspace({
-      workspace: {
-        ...mockWorkspace,
-        workspaceSsoIdentityProviders: [
-          {
-            id: 'sso1',
-            name: 'SSO Provider 1',
-            type: IdentityProviderType.SAML,
-            status: SsoIdentityProviderStatus.Inactive,
-            issuer: 'sso1.example.com',
-          } as WorkspaceSsoIdentityProviderEntity,
-        ],
-      },
-      systemEnabledProviders: {
-        google: true,
-        magicLink: false,
-        password: true,
-        sso: [],
-      },
-    });
-
-    expect(result).toEqual({
-      google: true,
-      magicLink: false,
-      password: true,
-      sso: [],
-    });
+    expect(result.google).toBe(false);
   });
 });

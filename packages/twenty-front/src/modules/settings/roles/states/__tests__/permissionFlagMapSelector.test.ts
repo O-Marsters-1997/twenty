@@ -26,7 +26,6 @@ const buildStore = ({
     permissionFlags,
     twoFactorAuthenticationMethodSummary: [],
     objectsPermissions: [],
-    isImpersonating: false,
   });
 
   return store;

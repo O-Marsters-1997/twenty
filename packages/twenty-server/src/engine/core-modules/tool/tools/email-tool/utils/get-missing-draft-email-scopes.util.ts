@@ -17,7 +17,6 @@ export const getMissingDraftEmailScopes = (connectedAccount: {
       return hasScope ? [] : [GMAIL_COMPOSE_SCOPE];
     }
     // Non-OAuth providers do not rely on OAuth scopes to draft emails.
-    case ConnectedAccountProvider.IMAP_SMTP_CALDAV:
     case ConnectedAccountProvider.EMAIL_GROUP:
     case ConnectedAccountProvider.APP:
       return [];

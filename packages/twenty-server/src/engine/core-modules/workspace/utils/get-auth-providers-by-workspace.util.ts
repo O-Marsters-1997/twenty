@@ -1,9 +1,3 @@
-import { isDefined } from 'twenty-shared/utils';
-
-import {
-  SsoIdentityProviderStatus,
-  type WorkspaceSsoIdentityProviderEntity,
-} from 'src/engine/core-modules/sso/workspace-sso-identity-provider.entity';
 import { type AuthProvidersDTO } from 'src/engine/core-modules/workspace/dtos/public-workspace-data.dto';
 import { type WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
 
@@ -13,9 +7,7 @@ export const getAuthProvidersByWorkspace = ({
 }: {
   workspace: Pick<
     WorkspaceEntity,
-    | 'isGoogleAuthEnabled'
-    | 'isPasswordAuthEnabled'
-    | 'workspaceSsoIdentityProviders'
+    'isGoogleAuthEnabled' | 'isPasswordAuthEnabled'
   >;
   systemEnabledProviders: AuthProvidersDTO;
 }) => {
@@ -24,18 +16,5 @@ export const getAuthProvidersByWorkspace = ({
     magicLink: false,
     password:
       workspace.isPasswordAuthEnabled && systemEnabledProviders.password,
-    sso: workspace.workspaceSsoIdentityProviders
-      .map((identityProvider: WorkspaceSsoIdentityProviderEntity) =>
-        identityProvider.status === SsoIdentityProviderStatus.Active
-          ? {
-              id: identityProvider.id,
-              name: identityProvider.name,
-              type: identityProvider.type,
-              status: identityProvider.status,
-              issuer: identityProvider.issuer,
-            }
-          : undefined,
-      )
-      .filter(isDefined),
   };
 };

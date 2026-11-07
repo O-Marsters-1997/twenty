@@ -15,7 +15,6 @@ export interface ConfigVariablesMetadataOptions {
   description: string;
   isSensitive?: boolean;
   isEnvOnly?: boolean;
-  isHiddenInAdminPanel?: boolean;
   type: ConfigVariableType;
   options?: ConfigVariableOptions;
 }

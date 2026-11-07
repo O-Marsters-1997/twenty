@@ -32,7 +32,6 @@ const UNIVERSAL_IDENTIFIERS_TO_FIX = new Set<string>([
   STANDARD_COMMAND_MENU_ITEMS.goToSettingsAI.universalIdentifier,
   STANDARD_COMMAND_MENU_ITEMS.goToSettingsSecurity.universalIdentifier,
   STANDARD_COMMAND_MENU_ITEMS.goToSettingsUpdates.universalIdentifier,
-  STANDARD_COMMAND_MENU_ITEMS.goToSettingsAdminPanel.universalIdentifier,
 ]);
 
 @RegisteredWorkspaceCommand('2.8.0', 1798100010000)

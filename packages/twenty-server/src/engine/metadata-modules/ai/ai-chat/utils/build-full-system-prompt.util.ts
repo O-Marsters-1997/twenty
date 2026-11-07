@@ -29,7 +29,6 @@ type BuildSystemPromptArgs = {
   preloadedTools: string[];
   uploadedFilesContext?: {
     uploadedFiles: UploadedFileReference[];
-    codeInterpreterFiles: UploadedFileReference[];
   };
   workspaceInstructions?: string;
   userContext?: UserContext;

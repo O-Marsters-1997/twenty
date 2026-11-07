@@ -7,7 +7,6 @@ import {
   Entity,
   Index,
   JoinColumn,
-  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -16,7 +15,6 @@ import {
 } from 'typeorm';
 
 import { FileEntity } from 'src/engine/core-modules/file/entities/file.entity';
-import { PublicDomainEntity } from 'src/engine/core-modules/public-domain/public-domain.entity';
 import { WasIntroducedInUpgrade } from 'src/engine/core-modules/upgrade/decorators/was-introduced-in-upgrade.decorator';
 import { AgentEntity } from 'src/engine/metadata-modules/ai/ai-agent/entities/agent.entity';
 import { CommandMenuItemEntity } from 'src/engine/metadata-modules/command-menu-item/entities/command-menu-item.entity';
@@ -75,29 +73,6 @@ export class ApplicationEntity extends WorkspaceRelatedEntity {
 
   @Field(() => RoleDTO, { nullable: true })
   defaultRole: RoleDTO | null;
-
-  @Column({ nullable: true, type: 'uuid' })
-  @WasIntroducedInUpgrade({
-    upgradeCommandName:
-      '2.16.0_AddPrimaryPublicDomainToApplicationFastInstanceCommand_1782281874768',
-  })
-  primaryPublicDomainId: string | null;
-
-  @ManyToOne(() => PublicDomainEntity, {
-    onDelete: 'SET NULL',
-    nullable: true,
-  })
-  @JoinColumn({ name: 'primaryPublicDomainId' })
-  primaryPublicDomain: Relation<PublicDomainEntity> | null;
-
-  @OneToMany(
-    () => PublicDomainEntity,
-    (publicDomain) => publicDomain.application,
-    {
-      onDelete: 'SET NULL',
-    },
-  )
-  publicDomains: Relation<PublicDomainEntity[]>;
 
   @OneToMany(() => AgentEntity, (agent) => agent.application, {
     onDelete: 'CASCADE',

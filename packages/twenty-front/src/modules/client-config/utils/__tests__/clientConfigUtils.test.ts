@@ -13,7 +13,6 @@ const mockClientConfig = {
     google: true,
     magicLink: false,
     password: true,
-    sso: [],
   },
   signInPrefilled: false,
   isMultiWorkspaceEnabled: true,

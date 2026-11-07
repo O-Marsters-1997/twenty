@@ -25,7 +25,6 @@ import { DashboardGraphqlApiExceptionFilter } from 'src/modules/dashboard/utils/
   AuthPrincipalGuard({
     userSession: {
       standard: true,
-      impersonated: true,
       playground: true,
       workspaceAgnostic: false,
     },

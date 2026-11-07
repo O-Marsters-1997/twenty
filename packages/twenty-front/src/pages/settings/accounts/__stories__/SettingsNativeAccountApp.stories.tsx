@@ -80,7 +80,7 @@ export const GmailEmailsTabSwitchesAccount: Story = {
 
 export const DisabledAppGoesBackToAccounts: Story = {
   args: {
-    routeParams: { ':nativeAccountAppId': 'imap' },
+    routeParams: { ':nativeAccountAppId': 'not-an-app' },
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

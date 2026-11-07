@@ -1,10 +1,11 @@
 import { type ConfigVariableValue } from 'twenty-shared/types';
 
-import { createConfigVariable } from 'test/integration/twenty-config/utils/create-config-variable.util';
-import { deleteConfigVariable } from 'test/integration/twenty-config/utils/delete-config-variable.util';
-import { getConfigVariable } from 'test/integration/twenty-config/utils/get-config-variable.util';
-import { updateConfigVariable } from 'test/integration/twenty-config/utils/update-config-variable.util';
-
+import {
+  createConfigVariable,
+  deleteConfigVariable,
+  getConfigVariable,
+  updateConfigVariable,
+} from 'test/integration/twenty-config/utils/database-config-variable.util';
 // Registers beforeAll/afterAll hooks that apply a database config override for
 // the suite and restore the previous state afterwards, rather than blindly
 // deleting: a suite must not erase an override another suite (or the

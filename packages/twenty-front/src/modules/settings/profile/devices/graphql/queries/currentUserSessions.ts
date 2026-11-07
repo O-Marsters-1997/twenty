@@ -6,7 +6,6 @@ export const CURRENT_USER_SESSIONS = gql`
       id
       workspaceId
       authProvider
-      isImpersonating
       userAgent
       ipAddress
       createdAt

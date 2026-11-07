@@ -10,7 +10,6 @@ import {
   SendApprovedAccessDomainValidation,
   SendEmailVerificationLinkEmail,
   SendInviteLinkEmail,
-  ServerAdminAccessChangedEmail,
   WarnSuspendedWorkspaceEmail,
   EmailRenderError,
   renderEmail,
@@ -119,18 +118,6 @@ const TEMPLATES = [
       locale: 'en',
     }),
     expectedContent: 'https://app.twenty.com/invite/token',
-  },
-  {
-    name: 'ServerAdminAccessChangedEmail',
-    element: ServerAdminAccessChangedEmail({
-      actorName: 'Tim',
-      targetName: 'Jony',
-      targetEmail: 'jony@twenty.com',
-      canAccessFullAdminPanel: true,
-      canImpersonate: false,
-      locale: 'en',
-    }),
-    expectedContent: 'jony@twenty.com',
   },
   {
     name: 'WarnSuspendedWorkspaceEmail',

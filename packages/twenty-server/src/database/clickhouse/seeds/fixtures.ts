@@ -1,9 +1,8 @@
 import { OBJECT_RECORD_CREATED_EVENT } from 'src/engine/core-modules/event-logs/emit/events/object-event/object-record-created';
 import { OBJECT_RECORD_DELETED_EVENT } from 'src/engine/core-modules/event-logs/emit/events/object-event/object-record-delete';
 import { OBJECT_RECORD_UPDATED_EVENT } from 'src/engine/core-modules/event-logs/emit/events/object-event/object-record-updated';
-import { CUSTOM_DOMAIN_ACTIVATED_EVENT } from 'src/engine/core-modules/event-logs/emit/events/workspace-event/custom-domain/custom-domain-activated';
-import { CUSTOM_DOMAIN_DEACTIVATED_EVENT } from 'src/engine/core-modules/event-logs/emit/events/workspace-event/custom-domain/custom-domain-deactivated';
 import { type GenericTrackEvent } from 'src/engine/core-modules/event-logs/emit/events/workspace-event/track';
+import { WORKSPACE_CREATED_EVENT } from 'src/engine/core-modules/event-logs/emit/events/workspace-event/workspace/workspace-created';
 import { formatDateTimeForClickHouse } from 'src/database/clickhouse/utils/format-date-time-for-clickhouse.util';
 import { SEED_APPLE_WORKSPACE_ID } from 'src/engine/workspace-manager/dev-seeder/core/constants/seeder-workspaces.constant';
 import { USER_WORKSPACE_DATA_SEED_IDS } from 'src/engine/workspace-manager/dev-seeder/core/utils/seed-user-workspaces.util';
@@ -32,16 +31,7 @@ export type UsageEventFixture = {
 export const workspaceEventFixtures: Array<GenericTrackEvent> = [
   {
     type: 'track',
-    event: CUSTOM_DOMAIN_ACTIVATED_EVENT,
-    timestamp: '2024-10-24T15:55:35.177',
-    version: '1',
-    userId: '20202020-3957-45c9-be39-337dc4d9100a',
-    workspaceId: SEED_APPLE_WORKSPACE_ID,
-    properties: {},
-  },
-  {
-    type: 'track',
-    event: CUSTOM_DOMAIN_DEACTIVATED_EVENT,
+    event: WORKSPACE_CREATED_EVENT,
     timestamp: '2024-10-24T15:55:35.177',
     version: '1',
     userId: '20202020-3957-45c9-be39-337dc4d9100a',

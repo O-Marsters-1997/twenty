@@ -87,7 +87,7 @@ export const SettingsGeneral = () => {
           <Section.Root>
             <Section.Header
               title={t`Workspace domain`}
-              description={t`Edit your subdomain name or set a custom domain.`}
+              description={t`Edit your subdomain name.`}
             />
             <SettingsWorkspaceDomainCard />
           </Section.Root>

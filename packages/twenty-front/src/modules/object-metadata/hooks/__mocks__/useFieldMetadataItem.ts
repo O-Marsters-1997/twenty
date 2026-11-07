@@ -129,8 +129,6 @@ export const responseData = {
       firstName: 'Test',
       lastName: 'User',
       email: 'test@example.com',
-      canAccessFullAdminPanel: false,
-      canImpersonate: false,
       supportUserHash: null,
       onboardingStatus: 'completed',
       workspaceMember: {
@@ -158,14 +156,10 @@ export const responseData = {
         allowImpersonation: false,
         activationStatus: 'active',
         isPublicInviteLinkEnabled: false,
-        hasValidSignedEnterpriseKey: false,
-        hasValidEnterpriseValidityToken: false,
         isGoogleAuthEnabled: true,
         isPasswordAuthEnabled: true,
         subdomain: 'test',
-        customDomain: null,
         workspaceUrls: {
-          customUrl: undefined,
           subdomainUrl: 'https://test.twenty.com/',
         },
         featureFlags: [],

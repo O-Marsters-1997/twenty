@@ -12,7 +12,6 @@ export const useHasMultipleAuthMethods = () => {
 
   if (workspaceAuthProviders.google) enabledMethodsCount++;
   if (workspaceAuthProviders.password) enabledMethodsCount++;
-  if (workspaceAuthProviders.sso.length > 0) enabledMethodsCount++;
 
   return enabledMethodsCount > 1;
 };

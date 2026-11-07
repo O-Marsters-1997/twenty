@@ -17,7 +17,6 @@ import {
 const PROVIDERS_ICON_MAPPING = {
   EMAIL: {
     [ConnectedAccountProvider.GOOGLE]: IconGmail,
-    [ConnectedAccountProvider.IMAP_SMTP_CALDAV]: IconMail,
     [ConnectedAccountProvider.EMAIL_GROUP]: IconMail,
     // App-managed connections aren't email accounts; this case is unreachable
     // for the EMAIL source but the lookup type still requires every provider.
@@ -34,8 +33,7 @@ export const getActorSourceIcon = ({
   source,
   context,
 }: Pick<Partial<FieldActorValue>, 'source' | 'context'>):
-  | IconComponent
-  | undefined => {
+  IconComponent | undefined => {
   switch (source) {
     case 'API':
       return IconApi;

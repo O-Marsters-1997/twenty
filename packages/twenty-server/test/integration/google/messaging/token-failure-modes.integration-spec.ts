@@ -107,7 +107,7 @@ describe('Gmail token failure modes (integration)', () => {
     await connectedAccountRepository.update(
       { id: channel.connectedAccountId },
       {
-        provider: ConnectedAccountProvider.IMAP_SMTP_CALDAV,
+        provider: ConnectedAccountProvider.APP,
         lastCredentialsRefreshedAt: STALE_CREDENTIALS_AT,
       },
     );

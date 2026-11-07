@@ -1,20 +1,13 @@
 import { currentWorkspaceState } from '@/auth/states/currentWorkspaceState';
-import { authProvidersState } from '@/client-config/states/authProvidersState';
 import { isClickHouseConfiguredState } from '@/client-config/states/isClickHouseConfiguredState';
-import { isMultiWorkspaceEnabledState } from '@/client-config/states/isMultiWorkspaceEnabledState';
-import { SettingsEnterpriseFeatureGateCard } from '@/settings/components/SettingsEnterpriseFeatureGateCard';
 import { SettingsOptionCardContentButton } from '@/settings/components/SettingsOptions/SettingsOptionCardContentButton';
 import { SettingsOptionCardContentCounter } from '@/settings/components/SettingsOptions/SettingsOptionCardContentCounter';
 import { SettingsRoleDefaultRole } from '@/settings/roles/components/SettingsRolesDefaultRole';
 import { SettingsRolesQueryEffect } from '@/settings/roles/components/SettingsRolesQueryEffect';
 import { useSettingsAllRoles } from '@/settings/roles/hooks/useSettingsAllRoles';
-import { SettingsSecurityAuthBypassOptionsList } from '@/settings/security/components/SettingsSecurityAuthBypassOptionsList';
 import { SettingsSecurityAuthProvidersOptionsList } from '@/settings/security/components/SettingsSecurityAuthProvidersOptionsList';
 import { SettingsSecurityEditableProfileFields } from '@/settings/security/components/SettingsSecurityEditableProfileFields';
 import { SettingsSecurityIframeOrigins } from '@/settings/security/components/SettingsSecurityIframeOrigins';
-import { SettingsSsoIdentitiesProvidersListCard } from '@/settings/security/components/sso/SettingsSsoIdentitiesProvidersListCard';
-import { ssoIdentitiesProvidersState } from '@/settings/security/states/ssoIdentitiesProvidersState';
-import { ImpersonationSwitch } from '@/settings/workspace/components/ImpersonationSwitch';
 import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useMutation } from '@apollo/client/react';
@@ -27,14 +20,9 @@ import { Card } from 'twenty-ui/primitives/surfaces';
 import { themeCssVariables } from 'twenty-ui/theme';
 import { useDebouncedCallback } from 'use-debounce';
 import { EVENT_LOG_RETENTION } from 'twenty-shared/constants';
-import {
-  BillingEntitlementKey,
-  UpdateWorkspaceDocument,
-} from '~/generated-metadata/graphql';
-import { OrganizationAdornment } from '@/settings/enterprise/components/OrganizationAdornment';
+import { UpdateWorkspaceDocument } from '~/generated-metadata/graphql';
 
 import { getToastOptionsFromError } from '@/error-handler/utils/getToastOptionsFromError';
-import { checkIfBillingEntitlementIsEnabledOnWorkspace } from '@/workspace/utils/checkIfBillingEntitlementIsEnabledOnWorkspace';
 
 const StyledContainer = styled.div`
   width: 100%;
@@ -47,20 +35,11 @@ const StyledMainContent = styled.div`
   min-height: 200px;
 `;
 
-const StyledSectionContainer = styled.div`
-  flex-shrink: 0;
-`;
-
 export const SettingsSecuritySettings = () => {
   const { t } = useLingui();
   const { enqueueToast } = useToast();
 
-  const isMultiWorkspaceEnabled = useAtomStateValue(
-    isMultiWorkspaceEnabledState,
-  );
   const isClickHouseConfigured = useAtomStateValue(isClickHouseConfiguredState);
-  const authProviders = useAtomStateValue(authProvidersState);
-  const ssoIdentitiesProviders = useAtomStateValue(ssoIdentitiesProvidersState);
   const [currentWorkspace, setCurrentWorkspace] = useAtomState(
     currentWorkspaceState,
   );
@@ -130,54 +109,13 @@ export const SettingsSecuritySettings = () => {
 
   const roles = useSettingsAllRoles();
 
-  const hasSsoIdentityProviders = ssoIdentitiesProviders.length > 0;
-  const hasDirectAuthEnabled =
-    currentWorkspace?.isGoogleAuthEnabled ||
-    currentWorkspace?.isPasswordAuthEnabled;
-  const hasBypassProviderAvailable =
-    authProviders?.google || authProviders?.password;
-  const shouldShowBypassSection =
-    hasSsoIdentityProviders &&
-    !hasDirectAuthEnabled &&
-    hasBypassProviderAvailable;
-
-  const hasAuditLogsEntitlement = checkIfBillingEntitlementIsEnabledOnWorkspace(
-    BillingEntitlementKey.AUDIT_LOGS,
-    currentWorkspace,
-  );
-  const isEventLogsEnabled = hasAuditLogsEntitlement && isClickHouseConfigured;
   const minEventLogRetentionInDays = EVENT_LOG_RETENTION.minInDays;
   const maxEventLogRetentionInDays = EVENT_LOG_RETENTION.maxInDays;
-  const proPlanEventLogRetentionInHours = EVENT_LOG_RETENTION.proPlanInHours;
-  const hasSsoEntitlement =
-    currentWorkspace?.billingEntitlements?.some(
-      (entitlement) =>
-        entitlement.key === BillingEntitlementKey.SSO && entitlement.value,
-    ) === true;
 
   return (
     <>
       <SettingsRolesQueryEffect />
       <StyledMainContent>
-        <StyledSectionContainer>
-          <Section.Root>
-            <Section.Header
-              title={t`SSO`}
-              description={t`Configure an SSO connection`}
-              actions={<OrganizationAdornment />}
-            />
-            {hasSsoEntitlement ? (
-              <SettingsSsoIdentitiesProvidersListCard />
-            ) : (
-              <SettingsEnterpriseFeatureGateCard
-                title={t`Organization feature`}
-                description={t`Upgrade to Organization to configure SSO.`}
-                buttonTitle={t`Activate`}
-              />
-            )}
-          </Section.Root>
-        </StyledSectionContainer>
-
         <Section.Root>
           <StyledContainer>
             <Section.Header
@@ -198,63 +136,34 @@ export const SettingsSecuritySettings = () => {
         </Section.Root>
         <SettingsRoleDefaultRole roles={roles} />
         <SettingsSecurityIframeOrigins />
-        {shouldShowBypassSection && (
-          <Section.Root>
-            <StyledContainer>
-              <Section.Header
-                title={t`SSO Bypass`}
-                description={t`Configure fallback login methods for users with SSO bypass permissions`}
-              />
-              <SettingsSecurityAuthBypassOptionsList />
-            </StyledContainer>
-          </Section.Root>
-        )}
-        {isMultiWorkspaceEnabled && (
-          <Section.Root>
-            <Section.Header
-              title={t`Support`}
-              description={t`Manage support access settings`}
-            />
-            <ImpersonationSwitch />
-          </Section.Root>
-        )}
         <Section.Root>
           <Section.Header
             title={t`Audit Logs`}
             description={t`Configure how long audit logs are retained`}
-            actions={<OrganizationAdornment />}
           />
-          {hasAuditLogsEntitlement ? (
-            <Card.Root rounded>
-              {isEventLogsEnabled ? (
-                <SettingsOptionCardContentCounter
-                  Icon={IconClockHour8}
-                  title={t`Log retention`}
-                  description={t`Number of days to retain logs (${minEventLogRetentionInDays}-${maxEventLogRetentionInDays} days)`}
-                  value={
-                    currentWorkspace?.eventLogRetentionDays ??
-                    EVENT_LOG_RETENTION.defaultInDays
-                  }
-                  onChange={handleEventLogRetentionDaysChange}
-                  minValue={minEventLogRetentionInDays}
-                  maxValue={maxEventLogRetentionInDays}
-                  showButtons={false}
-                />
-              ) : (
-                <SettingsOptionCardContentButton
-                  Icon={IconHistory}
-                  title={t`Audit Logs`}
-                  description={t`ClickHouse is required for audit logs. Contact your administrator.`}
-                />
-              )}
-            </Card.Root>
-          ) : (
-            <SettingsEnterpriseFeatureGateCard
-              title={t`Organization feature`}
-              description={t`Logs are kept ${proPlanEventLogRetentionInHours} hours on your plan. Upgrade to customize retention.`}
-              buttonTitle={t`Activate`}
-            />
-          )}
+          <Card.Root rounded>
+            {isClickHouseConfigured ? (
+              <SettingsOptionCardContentCounter
+                Icon={IconClockHour8}
+                title={t`Log retention`}
+                description={t`Number of days to retain logs (${minEventLogRetentionInDays}-${maxEventLogRetentionInDays} days)`}
+                value={
+                  currentWorkspace?.eventLogRetentionDays ??
+                  EVENT_LOG_RETENTION.defaultInDays
+                }
+                onChange={handleEventLogRetentionDaysChange}
+                minValue={minEventLogRetentionInDays}
+                maxValue={maxEventLogRetentionInDays}
+                showButtons={false}
+              />
+            ) : (
+              <SettingsOptionCardContentButton
+                Icon={IconHistory}
+                title={t`Audit Logs`}
+                description={t`ClickHouse is required for audit logs. Contact your administrator.`}
+              />
+            )}
+          </Card.Root>
         </Section.Root>
         <Section.Root>
           <Section.Header

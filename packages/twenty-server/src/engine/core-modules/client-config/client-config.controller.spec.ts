@@ -5,7 +5,6 @@ import { SupportDriver } from 'src/engine/core-modules/twenty-config/interfaces/
 import { ClientConfigService } from 'src/engine/core-modules/client-config/services/client-config.service';
 import { ModelFamily } from 'src/engine/metadata-modules/ai/ai-models/types/model-family.enum';
 import { type ModelId } from 'src/engine/metadata-modules/ai/ai-models/types/model-id.type';
-import { ENTERPRISE_INSTANCE_TYPE } from 'twenty-shared/constants';
 
 import { ClientConfigController } from './client-config.controller';
 
@@ -63,7 +62,6 @@ describe('ClientConfigController', () => {
           google: true,
           magicLink: false,
           password: true,
-          sso: [],
         },
         signInPrefilled: false,
         isMultiWorkspaceEnabled: true,
@@ -71,7 +69,6 @@ describe('ClientConfigController', () => {
         defaultSubdomain: 'app',
         frontDomain: 'localhost',
         serverUrl: 'http://localhost:3000',
-        publicFunctionDomain: null,
         support: {
           supportDriver: SupportDriver.NONE,
           supportFrontChatId: undefined,
@@ -97,18 +94,15 @@ describe('ClientConfigController', () => {
         isGoogleMessagingEnabled: false,
         isGoogleCalendarEnabled: false,
         isConfigVariablesInDbEnabled: false,
-        isImapSmtpCaldavEnabled: false,
         isEmailingDomainInDemoMode: false,
         calendarBookingPageId: undefined,
         isBookCallOnboardingStepEnabled: false,
         isCompanyEnrichmentEnabled: false,
         isTwoFactorAuthenticationEnabled: false,
         allowRequestsToTwentyIcons: true,
-        isCloudflareIntegrationEnabled: false,
         isClickHouseConfigured: false,
         isWorkspaceSchemaDDLLocked: false,
         isOnboardingAiChatEnabled: false,
-        enterpriseInstanceType: ENTERPRISE_INSTANCE_TYPE.PRODUCTION,
       };
 
       jest

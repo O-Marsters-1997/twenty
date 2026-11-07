@@ -6,7 +6,6 @@ import { ConnectedAccountProvider } from 'twenty-shared/types';
 
 const ACCOUNT_GROUP_PROVIDERS: ReadonlySet<ConnectedAccountProvider> = new Set([
   ConnectedAccountProvider.GOOGLE,
-  ConnectedAccountProvider.IMAP_SMTP_CALDAV,
   ConnectedAccountProvider.APP,
 ]);
 

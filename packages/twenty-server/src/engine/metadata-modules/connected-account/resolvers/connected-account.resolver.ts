@@ -30,7 +30,6 @@ import { ApplicationTargetGuard } from 'src/engine/guards/application-target.gua
   AuthPrincipalGuard({
     userSession: {
       standard: true,
-      impersonated: true,
       playground: true,
       workspaceAgnostic: false,
     },

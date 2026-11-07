@@ -9,7 +9,6 @@ type LogConsoleMemberCellProps = {
   userId?: string | null;
   userWorkspaceId?: string | null;
   actor?: Partial<FieldActorValue>;
-  isImpersonator?: boolean;
 };
 
 export const LogConsoleMemberCell = (props: LogConsoleMemberCellProps) => {

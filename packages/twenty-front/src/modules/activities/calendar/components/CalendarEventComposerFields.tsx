@@ -308,7 +308,7 @@ export const CalendarEventComposerFields = ({
               title={t`Connect a calendar account`}
               description={
                 isDefined(onAddAccount)
-                  ? t`Connect Google or CalDAV and enable calendar sync before creating an event.`
+                  ? t`Connect Google and enable calendar sync before creating an event.`
                   : t`Ask a workspace admin for the Sync Account permission to connect a calendar account.`
               }
               action={

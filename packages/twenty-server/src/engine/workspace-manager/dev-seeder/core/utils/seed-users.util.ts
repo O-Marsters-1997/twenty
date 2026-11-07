@@ -30,8 +30,6 @@ export const seedUsers = async ({ queryRunner, schemaName }: SeedUsersArgs) => {
       email: 'tim@apple.dev',
       passwordHash:
         '$2b$10$3LwXjJRtLsfx4hLuuXhxt.3mWgismTiZFCZSG3z9kDrSfsrBl0fT6', // tim@apple.dev
-      canImpersonate: true,
-      canAccessFullAdminPanel: true,
       isEmailVerified: true,
     },
     {
@@ -41,8 +39,6 @@ export const seedUsers = async ({ queryRunner, schemaName }: SeedUsersArgs) => {
       email: 'jony.ive@apple.dev',
       passwordHash:
         '$2b$10$3LwXjJRtLsfx4hLuuXhxt.3mWgismTiZFCZSG3z9kDrSfsrBl0fT6', // tim@apple.dev
-      canImpersonate: true,
-      canAccessFullAdminPanel: true,
       isEmailVerified: true,
     },
     {
@@ -52,8 +48,6 @@ export const seedUsers = async ({ queryRunner, schemaName }: SeedUsersArgs) => {
       email: 'phil.schiler@apple.dev',
       passwordHash:
         '$2b$10$3LwXjJRtLsfx4hLuuXhxt.3mWgismTiZFCZSG3z9kDrSfsrBl0fT6', // tim@apple.dev
-      canImpersonate: true,
-      canAccessFullAdminPanel: true,
       isEmailVerified: true,
     },
     {
@@ -63,8 +57,6 @@ export const seedUsers = async ({ queryRunner, schemaName }: SeedUsersArgs) => {
       email: 'jane.austen@apple.dev',
       passwordHash:
         '$2b$10$3LwXjJRtLsfx4hLuuXhxt.3mWgismTiZFCZSG3z9kDrSfsrBl0fT6', // tim@apple.dev
-      canImpersonate: true,
-      canAccessFullAdminPanel: true,
       isEmailVerified: true,
     },
     {
@@ -74,8 +66,6 @@ export const seedUsers = async ({ queryRunner, schemaName }: SeedUsersArgs) => {
       email: 'scott.forstall@apple.dev',
       passwordHash:
         '$2b$10$3LwXjJRtLsfx4hLuuXhxt.3mWgismTiZFCZSG3z9kDrSfsrBl0fT6', // tim@apple.dev
-      canImpersonate: false,
-      canAccessFullAdminPanel: false,
       isEmailVerified: true,
     },
   ];
@@ -91,8 +81,6 @@ export const seedUsers = async ({ queryRunner, schemaName }: SeedUsersArgs) => {
       'lastName',
       'email',
       'passwordHash',
-      'canImpersonate',
-      'canAccessFullAdminPanel',
       'isEmailVerified',
     ])
     .orIgnore()

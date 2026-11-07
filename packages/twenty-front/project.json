@@ -283,9 +283,6 @@
         },
         "metadata": {
           "config": "codegen-metadata.cjs"
-        },
-        "admin": {
-          "config": "codegen-admin.cjs"
         }
       }
     },

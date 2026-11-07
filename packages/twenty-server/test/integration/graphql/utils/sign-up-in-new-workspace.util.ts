@@ -29,7 +29,6 @@ export const signUpInNewWorkspace = async ({
         workspace {
           id
           workspaceUrls {
-            customUrl
             subdomainUrl
           }
         }

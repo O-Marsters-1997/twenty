@@ -9,7 +9,6 @@ import { JSON_RPC_ERROR_CODE } from 'src/engine/api/mcp/constants/json-rpc-error
 import { MCP_CLOSED_WORLD_READ_ONLY_TOOL_ANNOTATIONS } from 'src/engine/api/mcp/constants/mcp-closed-world-read-only-tool-annotations.const';
 import { MCP_EXCLUDED_TOOL_NAMES } from 'src/engine/api/mcp/constants/mcp-excluded-tool-names.const';
 import { MCP_EXECUTE_TOOL_ANNOTATIONS } from 'src/engine/api/mcp/constants/mcp-execute-tool-annotations.const';
-import { MCP_OPEN_WORLD_READ_ONLY_TOOL_ANNOTATIONS } from 'src/engine/api/mcp/constants/mcp-open-world-read-only-tool-annotations.const';
 import { MCP_PROTOCOL_VERSION } from 'src/engine/api/mcp/constants/mcp-protocol-version.const';
 import { MCP_SERVER_INFO } from 'src/engine/api/mcp/constants/mcp-server-info.const';
 import { JsonRpc } from 'src/engine/api/mcp/dtos/json-rpc';
@@ -68,9 +67,7 @@ type McpAnnotatedTool = ToolSet[string] & {
   annotations: McpToolAnnotations;
 };
 
-const MCP_PRELOADED_TOOL_ANNOTATIONS: Record<string, McpToolAnnotations> = {
-  search_help_center: MCP_OPEN_WORLD_READ_ONLY_TOOL_ANNOTATIONS,
-};
+const MCP_PRELOADED_TOOL_ANNOTATIONS: Record<string, McpToolAnnotations> = {};
 
 const annotatePreloadedMcpTools = (toolSet: ToolSet): ToolSet =>
   Object.fromEntries(

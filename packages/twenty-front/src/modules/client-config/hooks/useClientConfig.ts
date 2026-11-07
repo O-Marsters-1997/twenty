@@ -15,15 +15,11 @@ import { isAttachmentPreviewEnabledState } from '@/client-config/states/isAttach
 import { isConfigVariablesInDbEnabledState } from '@/client-config/states/isConfigVariablesInDbEnabledState';
 import { isDeveloperDefaultSignInPrefilledState } from '@/client-config/states/isDeveloperDefaultSignInPrefilledState';
 import { isClickHouseConfiguredState } from '@/client-config/states/isClickHouseConfiguredState';
-import { isCloudflareIntegrationEnabledState } from '@/client-config/states/isCloudflareIntegrationEnabledState';
 import { isDDLLockedState } from '@/client-config/states/isDDLLockedState';
-import { enterpriseInstanceTypeState } from '@/client-config/states/enterpriseInstanceTypeState';
 import { isEmailingDomainInDemoModeState } from '@/client-config/states/isEmailingDomainInDemoModeState';
 import { isEmailVerificationRequiredState } from '@/client-config/states/isEmailVerificationRequiredState';
 import { isGoogleCalendarEnabledState } from '@/client-config/states/isGoogleCalendarEnabledState';
 import { isGoogleMessagingEnabledState } from '@/client-config/states/isGoogleMessagingEnabledState';
-import { isImapSmtpCaldavEnabledState } from '@/client-config/states/isImapSmtpCaldavEnabledState';
-import { maintenanceModeState } from '@/client-config/states/maintenanceModeState';
 import { isMultiWorkspaceEnabledState } from '@/client-config/states/isMultiWorkspaceEnabledState';
 import { isOnboardingAiChatEnabledState } from '@/client-config/states/isOnboardingAiChatEnabledState';
 import { labPublicFeatureFlagsState } from '@/client-config/states/labPublicFeatureFlagsState';
@@ -37,7 +33,6 @@ import { getInitialClientConfig } from '@/client-config/utils/getInitialClientCo
 import { allowRequestsToTwentyIconsState } from '@/client-config/states/allowRequestsToTwentyIcons';
 import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomState';
 import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
-import { ENTERPRISE_INSTANCE_TYPE } from 'twenty-shared/constants';
 
 type UseClientConfigResult = {
   data: { clientConfig: ClientConfig } | undefined;
@@ -110,16 +105,8 @@ export const useClientConfig = (): UseClientConfigResult => {
     isEmailingDomainInDemoModeState,
   );
 
-  const setIsImapSmtpCaldavEnabled = useSetAtomState(
-    isImapSmtpCaldavEnabledState,
-  );
-
   const setAllowRequestsToTwentyIcons = useSetAtomState(
     allowRequestsToTwentyIconsState,
-  );
-
-  const setIsCloudflareIntegrationEnabled = useSetAtomState(
-    isCloudflareIntegrationEnabledState,
   );
 
   const setIsClickHouseConfigured = useSetAtomState(
@@ -130,12 +117,6 @@ export const useClientConfig = (): UseClientConfigResult => {
 
   const setIsOnboardingAiChatEnabled = useSetAtomState(
     isOnboardingAiChatEnabledState,
-  );
-
-  const setMaintenanceMode = useSetAtomState(maintenanceModeState);
-
-  const setEnterpriseInstanceType = useSetAtomState(
-    enterpriseInstanceTypeState,
   );
 
   const setAppVersion = useSetAtomState(appVersionState);
@@ -167,7 +148,6 @@ export const useClientConfig = (): UseClientConfigResult => {
           google: clientConfig.authProviders.google,
           password: clientConfig.authProviders.password,
           magicLink: false,
-          sso: clientConfig.authProviders.sso,
         });
         setAiModels(clientConfig.aiModels ?? []);
         setAiEvaluationModels(clientConfig.aiEvaluationModels ?? []);
@@ -190,7 +170,6 @@ export const useClientConfig = (): UseClientConfigResult => {
         setDomainConfiguration({
           defaultSubdomain: clientConfig?.defaultSubdomain,
           frontDomain: clientConfig?.frontDomain,
-          publicFunctionDomain: clientConfig?.publicFunctionDomain,
           serverUrl: clientConfig?.serverUrl,
         });
         setCanManageFeatureFlags(clientConfig?.canManageFeatureFlags);
@@ -213,25 +192,16 @@ export const useClientConfig = (): UseClientConfigResult => {
         setIsCompanyEnrichmentEnabled(
           clientConfig?.isCompanyEnrichmentEnabled ?? false,
         );
-        setIsImapSmtpCaldavEnabled(clientConfig?.isImapSmtpCaldavEnabled);
         setIsEmailingDomainInDemoMode(
           clientConfig?.isEmailingDomainInDemoMode ?? false,
         );
         setAllowRequestsToTwentyIcons(clientConfig?.allowRequestsToTwentyIcons);
-        setIsCloudflareIntegrationEnabled(
-          clientConfig?.isCloudflareIntegrationEnabled,
-        );
         setIsClickHouseConfigured(
           clientConfig?.isClickHouseConfigured ?? false,
         );
         setIsDDLLocked(clientConfig?.isWorkspaceSchemaDDLLocked ?? false);
         setIsOnboardingAiChatEnabled(
           clientConfig?.isOnboardingAiChatEnabled ?? false,
-        );
-        setMaintenanceMode(clientConfig?.maintenance ?? null);
-        setEnterpriseInstanceType(
-          clientConfig?.enterpriseInstanceType ??
-            ENTERPRISE_INSTANCE_TYPE.PRODUCTION,
         );
       } catch (err) {
         const error =
@@ -269,16 +239,12 @@ export const useClientConfig = (): UseClientConfigResult => {
       setIsConfigVariablesInDbEnabled,
       setIsDeveloperDefaultSignInPrefilled,
       setIsEmailVerificationRequired,
-      setIsImapSmtpCaldavEnabled,
       setIsMultiWorkspaceEnabled,
       setIsEmailingDomainInDemoMode,
       setIsClickHouseConfigured,
-      setIsCloudflareIntegrationEnabled,
       setIsDDLLocked,
       setIsOnboardingAiChatEnabled,
       setLabPublicFeatureFlags,
-      setMaintenanceMode,
-      setEnterpriseInstanceType,
       setSupportChat,
       setAllowRequestsToTwentyIcons,
     ],

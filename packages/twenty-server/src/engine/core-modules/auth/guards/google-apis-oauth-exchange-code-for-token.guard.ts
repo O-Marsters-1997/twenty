@@ -74,8 +74,6 @@ export class GoogleAPIsOauthExchangeCodeForTokenGuard extends AuthGuard(
             'We cannot connect to your Google account, please try again with more permissions, or a valid account',
             {
               subdomain: workspace.subdomain,
-              customDomain: workspace.customDomain,
-              isCustomDomainEnabled: workspace.isCustomDomainEnabled ?? false,
             },
             '/settings/accounts',
           );
@@ -88,9 +86,7 @@ export class GoogleAPIsOauthExchangeCodeForTokenGuard extends AuthGuard(
       this.guardRedirectService.dispatchErrorFromGuard(
         context,
         err,
-        this.guardRedirectService.getSubdomainAndCustomDomainFromContext(
-          context,
-        ),
+        this.guardRedirectService.getSubdomainFromContext(context),
       );
 
       return false;

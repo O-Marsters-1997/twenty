@@ -18,7 +18,6 @@ export const getMissingCreateEventScopes = (connectedAccount: {
       return hasScope ? [] : [GOOGLE_CALENDAR_EVENTS_SCOPE];
     }
     // Non-OAuth providers do not rely on OAuth scopes to create events.
-    case ConnectedAccountProvider.IMAP_SMTP_CALDAV:
     case ConnectedAccountProvider.EMAIL_GROUP:
     case ConnectedAccountProvider.APP:
       return [];

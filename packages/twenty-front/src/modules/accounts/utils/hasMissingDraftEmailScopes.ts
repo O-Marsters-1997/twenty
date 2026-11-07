@@ -16,7 +16,6 @@ export const getMissingDraftEmailScopes = (
 
       return hasScope ? [] : [GMAIL_COMPOSE_SCOPE];
     }
-    case ConnectedAccountProvider.IMAP_SMTP_CALDAV:
     case ConnectedAccountProvider.EMAIL_GROUP:
     case ConnectedAccountProvider.APP:
       return [];

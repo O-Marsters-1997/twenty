@@ -6,8 +6,6 @@ export type RandomUserData = {
   lastName: string;
   email: string;
   passwordHash: string;
-  canImpersonate: boolean;
-  canAccessFullAdminPanel: boolean;
   isEmailVerified: boolean;
 };
 
@@ -514,8 +512,6 @@ export function generateRandomUsers(): {
       lastName,
       email,
       passwordHash,
-      canImpersonate: false,
-      canAccessFullAdminPanel: false,
       isEmailVerified: true,
     });
 

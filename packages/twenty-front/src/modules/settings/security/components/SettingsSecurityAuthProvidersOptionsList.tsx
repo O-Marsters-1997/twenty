@@ -5,7 +5,6 @@ import { useReadDefaultDomainFromConfiguration } from '@/domain-manager/hooks/us
 import { getToastOptionsFromError } from '@/error-handler/utils/getToastOptionsFromError';
 import { SettingsOptionCardContentSelect } from '@/settings/components/SettingsOptions/SettingsOptionCardContentSelect';
 import { SettingsOptionCardContentSwitch } from '@/settings/components/SettingsOptions/SettingsOptionCardContentSwitch';
-import { ssoIdentitiesProvidersState } from '@/settings/security/states/ssoIdentitiesProvidersState';
 import { Select } from '@/ui/input/components/Select';
 import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
 import { useMutation } from '@apollo/client/react';
@@ -36,7 +35,6 @@ export const SettingsSecurityAuthProvidersOptionsList = () => {
   const { t } = useLingui();
 
   const { enqueueToast } = useToast();
-  const ssoIdentitiesProviders = useAtomStateValue(ssoIdentitiesProvidersState);
   const authProviders = useAtomStateValue(authProvidersState);
   const isMultiWorkspaceEnabled = useAtomStateValue(
     isMultiWorkspaceEnabledState,
@@ -57,7 +55,7 @@ export const SettingsSecurityAuthProvidersOptionsList = () => {
   };
 
   const toggleAuthMethod = async (
-    authProvider: keyof Omit<AuthProviders, '__typename' | 'magicLink' | 'sso'>,
+    authProvider: keyof Omit<AuthProviders, '__typename' | 'magicLink'>,
   ) => {
     if (!currentWorkspace?.id) {
       throw new Error(t`User is not logged in`);
@@ -72,7 +70,6 @@ export const SettingsSecurityAuthProvidersOptionsList = () => {
     const allAuthProvidersEnabled = [
       currentWorkspace.isGoogleAuthEnabled,
       currentWorkspace.isPasswordAuthEnabled,
-      (ssoIdentitiesProviders?.length ?? 0) > 0,
     ];
 
     if (

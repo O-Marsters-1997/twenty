@@ -26,7 +26,6 @@ const MAX_PERMISSION_TARGETS = 100;
   AuthPrincipalGuard({
     userSession: {
       standard: true,
-      impersonated: true,
       playground: true,
       workspaceAgnostic: false,
     },

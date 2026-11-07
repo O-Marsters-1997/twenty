@@ -20,7 +20,6 @@ import { ALLOWED_ORIGIN } from 'test/integration/graphql/suites/auth/user-sessio
 type UserSessionApiEntry = {
   id: string;
   isCurrent: boolean;
-  isImpersonating: boolean;
   authProvider: string;
 };
 
@@ -71,7 +70,6 @@ describe('successful user sessions API (integration)', () => {
 
     expect(currentSessions).toHaveLength(1);
     expect(currentSessions[0].authProvider).toBe('password');
-    expect(currentSessions[0].isImpersonating).toBe(false);
   });
 
   it('should revoke a targeted session by id', async () => {

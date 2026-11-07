@@ -35,7 +35,6 @@ const mockedConnectedAccounts = [
     name: 'Tim Apple',
     visibility: 'SHARE_EVERYTHING',
     lastCredentialsRefreshedAt: null,
-    connectionParameters: null,
     createdAt: '2026-02-27T01:17:25.392Z',
     updatedAt: '2026-02-27T01:17:25.392Z',
   },
