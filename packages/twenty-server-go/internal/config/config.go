@@ -10,6 +10,7 @@ import (
 type Config struct {
 	ListenAddr      string
 	DatabaseURL     string
+	AppSecret       string
 	NodeUpstreamURL *url.URL
 	LogLevel        slog.Level
 }
@@ -19,6 +20,7 @@ func Load(getenv func(string) string) (Config, error) {
 	cfg := Config{
 		ListenAddr:  valueOr(getenv("LISTEN_ADDR"), ":3000"),
 		DatabaseURL: getenv("PG_DATABASE_URL"),
+		AppSecret:   getenv("APP_SECRET"),
 	}
 
 	upstream := getenv("NODE_UPSTREAM_URL")

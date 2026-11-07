@@ -3,6 +3,7 @@ package frontdoor
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"io"
 	"log/slog"
 	"mime"
@@ -10,20 +11,23 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"strings"
+
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
 )
 
 const maxInspectedBodyBytes = 1 << 20
 
 type Handler struct {
-	table  OperationTable
-	proxy  *httputil.ReverseProxy
-	logger *slog.Logger
+	table    OperationTable
+	proxy    *httputil.ReverseProxy
+	verifier auth.Verifier
+	logger   *slog.Logger
 }
 
-func NewHandler(table OperationTable, upstream *url.URL, logger *slog.Logger) *Handler {
+func NewHandler(table OperationTable, upstream *url.URL, verifier auth.Verifier, logger *slog.Logger) *Handler {
 	proxy := httputil.NewSingleHostReverseProxy(upstream)
 	proxy.FlushInterval = -1 // SSE streams must not be buffered
-	return &Handler{table: table, proxy: proxy, logger: logger}
+	return &Handler{table: table, proxy: proxy, verifier: verifier, logger: logger}
 }
 
 type graphqlRequest struct {
@@ -67,10 +71,32 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case RouteBlocked:
 		h.writeGraphQLError(w, "this operation is disabled: the data model is frozen", "FORBIDDEN")
 	case RouteGo:
+		if _, ok := h.authenticate(w, r); !ok {
+			return
+		}
 		h.writeGraphQLError(w, "operation not implemented", "INTERNAL_SERVER_ERROR")
 	default:
 		h.proxy.ServeHTTP(w, r)
 	}
+}
+
+func (h *Handler) authenticate(w http.ResponseWriter, r *http.Request) (auth.Principal, bool) {
+	bearer, hasBearer := strings.CutPrefix(r.Header.Get("Authorization"), "Bearer ")
+	if !hasBearer {
+		h.writeGraphQLError(w, "Unauthorized", "UNAUTHENTICATED")
+		return auth.Principal{}, false
+	}
+	principal, err := h.verifier.Verify(r.Context(), bearer)
+	switch {
+	case errors.Is(err, auth.ErrUnauthenticated):
+		h.writeGraphQLError(w, "Unauthorized", "UNAUTHENTICATED")
+		return auth.Principal{}, false
+	case err != nil:
+		h.logger.Error("verify access token", "err", err)
+		h.writeGraphQLError(w, "Internal server error", "INTERNAL_SERVER_ERROR")
+		return auth.Principal{}, false
+	}
+	return principal, true
 }
 
 func (h *Handler) routeFor(endpoint Endpoint, request graphqlRequest) Route {

@@ -11,6 +11,9 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/jackc/pgx/v5/pgxpool"
+
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/config"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/frontdoor"
 )
@@ -29,9 +32,16 @@ func run() error {
 	}
 	logger := slog.New(slog.NewJSONHandler(os.Stderr, &slog.HandlerOptions{Level: cfg.LogLevel}))
 
+	pool, err := pgxpool.New(context.Background(), cfg.DatabaseURL)
+	if err != nil {
+		return fmt.Errorf("open database pool: %w", err)
+	}
+	defer pool.Close()
+	verifier := auth.NewJWTVerifier(pool, cfg.AppSecret)
+
 	server := &http.Server{
 		Addr:              cfg.ListenAddr,
-		Handler:           frontdoor.NewHandler(frontdoor.DefaultTable(), cfg.NodeUpstreamURL, logger),
+		Handler:           frontdoor.NewHandler(frontdoor.DefaultTable(), cfg.NodeUpstreamURL, verifier, logger),
 		ReadHeaderTimeout: 10 * time.Second,
 	}
 
