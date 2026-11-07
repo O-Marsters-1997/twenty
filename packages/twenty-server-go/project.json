@@ -22,6 +22,21 @@
         "command": "go test ./..."
       }
     },
+    "golden:record": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "go run ./cmd/golden-record"
+      }
+    },
+    "e2e": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/twenty-e2e-testing",
+        "command": "cp -n .env.example .env; bunx playwright test",
+        "env": { "FRONTEND_BASE_URL": "http://localhost:3000" }
+      }
+    },
     "lint": {
       "executor": "nx:run-commands",
       "options": {
