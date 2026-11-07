@@ -6,8 +6,6 @@ import { ApplicationService } from 'src/engine/core-modules/application/applicat
 import { UserWorkspaceService } from 'src/engine/core-modules/user-workspace/user-workspace.service';
 import { type INestApplication } from '@nestjs/common';
 
-import { BillingUsageService } from 'src/engine/core-modules/billing/services/billing-usage.service';
-import { UsageLimitQuotaService } from 'src/engine/core-modules/usage-limit/services/usage-limit-quota.service';
 import { WorkspaceCacheService } from 'src/engine/workspace-cache/services/workspace-cache.service';
 import { BackfillWorkflowExecutionCoreIdsCommand } from 'src/database/commands/upgrade-version-command/2-42/2-42-workspace-command-1789719131001-backfill-workflow-execution-core-ids.command';
 import { WorkflowTriggerJob } from 'src/modules/workflow/workflow-trigger/jobs/workflow-trigger.job';
@@ -17,8 +15,6 @@ import { WorkflowThrottlingWorkspaceService } from 'src/modules/workflow/workflo
 import { UpgradeAwareRepositoryState } from 'src/engine/twenty-orm/upgrade-aware/upgrade-aware-repository-state';
 
 export const createWorkflowTestServices = (app: INestApplication) => ({
-  billing: app.get(BillingUsageService),
-  quota: app.get(UsageLimitQuotaService),
   coreDataSource: app.get<DataSource>(getDataSourceToken()),
   workspace: app.get(WorkspaceService),
   application: app.get(ApplicationService),

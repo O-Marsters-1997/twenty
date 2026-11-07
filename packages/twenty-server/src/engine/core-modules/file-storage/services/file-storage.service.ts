@@ -24,8 +24,6 @@ import {
 } from 'src/engine/core-modules/file-storage/interfaces/file-storage-exception';
 import { type ByteRange } from 'src/engine/core-modules/file-storage/types/byte-range.type';
 import { type FileStorageMetadata } from 'src/engine/core-modules/file-storage/types/file-storage-metadata.type';
-import { buildReleasedStockByApplication } from 'src/engine/core-modules/file-storage/utils/build-released-stock-by-application.util';
-import { buildStockDelta } from 'src/engine/core-modules/file-storage/utils/build-stock-delta.util';
 import { prepareFileForStorageOrThrow } from 'src/engine/core-modules/file-storage/utils/prepare-file-for-storage-or-throw.util';
 import { validateFilePath } from 'src/engine/core-modules/file-storage/utils/validate-file-path.util';
 import { validateFolderPath } from 'src/engine/core-modules/file-storage/utils/validate-folder-path.util';
@@ -36,12 +34,6 @@ import { FileSettings } from 'src/engine/core-modules/file/types/file-settings.t
 import { FILE_STATUS } from 'src/engine/core-modules/file/types/file-status.type';
 import { extractFileInfoOrThrow } from 'src/engine/core-modules/file/utils/extract-file-info-or-throw.utils';
 import { removeFileFolderFromFileEntityPath } from 'src/engine/core-modules/file/utils/remove-file-folder-from-file-entity-path.utils';
-import { UsageLimitStockService } from 'src/engine/core-modules/usage-limit/services/usage-limit-stock.service';
-import { type StockCost } from 'src/engine/core-modules/usage-limit/types/stock-cost.type';
-import { type StockScope } from 'src/engine/core-modules/usage-limit/types/stock-scope.type';
-import { UsageOperationType } from 'src/engine/core-modules/usage/enums/usage-operation-type.enum';
-import { UsageResourceType } from 'src/engine/core-modules/usage/enums/usage-resource-type.enum';
-import { UsageUnit } from 'src/engine/core-modules/usage/enums/usage-unit.enum';
 import { InjectWorkspaceScopedRepository } from 'src/engine/twenty-orm/workspace-scoped-repository/inject-workspace-scoped-repository.decorator';
 import { WorkspaceScopedRepository } from 'src/engine/twenty-orm/workspace-scoped-repository/workspace-scoped-repository';
 import { WorkspaceCacheService } from 'src/engine/workspace-cache/services/workspace-cache.service';
@@ -59,93 +51,7 @@ export class FileStorageService {
     @InjectWorkspaceScopedRepository(FileEntity)
     private readonly fileRepository: WorkspaceScopedRepository<FileEntity>,
     private readonly workspaceCacheService: WorkspaceCacheService,
-    private readonly usageLimitStockService: UsageLimitStockService,
   ) {}
-
-  async releaseStorageStock({
-    workspaceId,
-    applicationId,
-    bytes,
-    quantity,
-  }: {
-    workspaceId: string;
-    applicationId: string;
-    bytes: number;
-    quantity: number;
-  }): Promise<void> {
-    await this.usageLimitStockService.releaseStock({
-      workspaceId,
-      resourceType: UsageResourceType.STORAGE,
-      operationType: UsageOperationType.STORAGE_FILE,
-      spenders: { applicationId },
-      cost: { [UsageUnit.BYTE]: bytes, [UsageUnit.FILE]: quantity },
-    });
-  }
-
-  async invalidateStorageStock({
-    workspaceId,
-    applicationId,
-  }: {
-    workspaceId: string;
-    applicationId?: string;
-  }): Promise<void> {
-    await this.usageLimitStockService.invalidateStock({
-      workspaceId,
-      resourceType: UsageResourceType.STORAGE,
-      operationType: UsageOperationType.STORAGE_FILE,
-      spenders: { applicationId },
-    });
-  }
-
-  private async assertStorageStockAvailable({
-    workspaceId,
-    applicationId,
-    delta,
-  }: {
-    workspaceId: string;
-    applicationId: string;
-    delta: StockCost;
-  }): Promise<void> {
-    if (Object.values(delta).every((amount) => (amount ?? 0) <= 0)) {
-      return;
-    }
-
-    await this.usageLimitStockService.assertStockAvailable({
-      workspaceId,
-      resourceType: UsageResourceType.STORAGE,
-      operationType: UsageOperationType.STORAGE_FILE,
-      spenders: { applicationId },
-      cost: delta,
-      computeUsedStock: (scope) =>
-        this.computeStorageUsedStock({ workspaceId, ...scope }),
-    });
-  }
-
-  private async computeStorageUsedStock({
-    workspaceId,
-    spenderType,
-    spenderId,
-  }: StockScope & { workspaceId: string }): Promise<StockCost> {
-    const query = this.fileRepository
-      .createQueryBuilder('file')
-      .select('COUNT(*)::bigint', 'quantity')
-      .addSelect('COALESCE(SUM(file.size), 0)::bigint', 'bytes')
-      .where('file.workspaceId = :workspaceId', { workspaceId })
-      .withDeleted();
-
-    if (spenderType === 'application') {
-      query.andWhere('file.applicationId = :applicationId', {
-        applicationId: spenderId,
-      });
-    }
-
-    const used = await query.getRawOne<{ quantity: string; bytes: string }>();
-
-    return {
-      [UsageUnit.FILE]: Number(used?.quantity ?? 0),
-      [UsageUnit.BYTE]: Number(used?.bytes ?? 0),
-    };
-  }
 
   private async deleteFileRows({
     workspaceId,
@@ -156,18 +62,7 @@ export class FileStorageService {
     where: FindOptionsWhere<FileEntity>;
     fileRepository: WorkspaceScopedRepository<FileEntity>;
   }): Promise<void> {
-    const deletedRows = await fileRepository.deleteAndReturn(
-      workspaceId,
-      where,
-    );
-
-    const releasedByApplication = buildReleasedStockByApplication(deletedRows);
-
-    await Promise.all(
-      [...releasedByApplication.entries()].map(([applicationId, released]) =>
-        this.releaseStorageStock({ workspaceId, applicationId, ...released }),
-      ),
-    );
+    await fileRepository.deleteAndReturn(workspaceId, where);
   }
 
   private findFileByPath({
@@ -219,7 +114,7 @@ export class FileStorageService {
       settings: { isTemporaryFile: false, toDelete: false },
     };
 
-    const insertResult = await this.fileRepository
+    await this.fileRepository
       .createQueryBuilder()
       .insert()
       .values({
@@ -233,43 +128,7 @@ export class FileStorageService {
       .returning('id')
       .execute();
 
-    if (isNonEmptyArray(insertResult.raw)) {
-      await this.applyStorageStockDelta({
-        workspaceId: resourceIdentifier.workspaceId,
-        applicationId,
-        delta: { [UsageUnit.BYTE]: metadata.size, [UsageUnit.FILE]: 1 },
-      });
-    }
-
     return fileRow;
-  }
-
-  private async applyStorageStockDelta({
-    workspaceId,
-    applicationId,
-    delta,
-  }: {
-    workspaceId: string;
-    applicationId: string;
-    delta: StockCost;
-  }): Promise<void> {
-    const scope = {
-      workspaceId,
-      resourceType: UsageResourceType.STORAGE,
-      operationType: UsageOperationType.STORAGE_FILE,
-      spenders: { applicationId },
-    };
-
-    if ((delta[UsageUnit.BYTE] ?? 0) < 0) {
-      return this.releaseStorageStock({
-        workspaceId,
-        applicationId,
-        bytes: -(delta[UsageUnit.BYTE] ?? 0),
-        quantity: 0,
-      });
-    }
-
-    return this.usageLimitStockService.acquireStock({ ...scope, cost: delta });
   }
 
   private async resolveApplicationIdOrThrow({
@@ -479,14 +338,6 @@ export class FileStorageService {
       applicationId: resolvedApplicationId,
     });
 
-    const delta = buildStockDelta({ existingFile, size });
-
-    await this.assertStorageStockAvailable({
-      workspaceId,
-      applicationId: resolvedApplicationId,
-      delta,
-    });
-
     await driver.writeFile({
       filePath: onStorageFilePath,
       mimeType,
@@ -505,12 +356,6 @@ export class FileStorageService {
       },
       ['path', 'workspaceId', 'applicationId'],
     );
-
-    await this.applyStorageStockDelta({
-      workspaceId,
-      applicationId: resolvedApplicationId,
-      delta,
-    });
 
     return file;
   }
@@ -554,14 +399,6 @@ export class FileStorageService {
       applicationId: resolvedApplicationId,
     });
 
-    const delta = buildStockDelta({ existingFile, size });
-
-    await this.assertStorageStockAvailable({
-      workspaceId,
-      applicationId: resolvedApplicationId,
-      delta,
-    });
-
     const file = await this.fileRepository.upsertAndReturnOne(
       workspaceId,
       {
@@ -576,47 +413,25 @@ export class FileStorageService {
       ['path', 'workspaceId', 'applicationId'],
     );
 
-    await this.applyStorageStockDelta({
-      workspaceId,
-      applicationId: resolvedApplicationId,
-      delta,
-    });
-
     return file;
   }
 
   async markFileUploaded({
     workspaceId,
-    applicationId,
     fileId,
-    chargedSize,
     size,
     mimeType,
   }: {
     workspaceId: string;
-    applicationId: string;
     fileId: string;
-    chargedSize: number;
     size: number;
     mimeType: string;
   }): Promise<UpdateResult> {
-    const updateResult = await this.fileRepository.update(
+    return this.fileRepository.update(
       workspaceId,
       { id: fileId },
       { status: FILE_STATUS.UPLOADED, mimeType, size },
     );
-
-    if (updateResult.affected === 0 || size === chargedSize) {
-      return updateResult;
-    }
-
-    await this.applyStorageStockDelta({
-      workspaceId,
-      applicationId,
-      delta: { [UsageUnit.BYTE]: size - chargedSize },
-    });
-
-    return updateResult;
   }
 
   async writeFileStream(
@@ -896,14 +711,6 @@ export class FileStorageService {
     settings: FileSettings | null;
   }): Promise<FileEntity> {
     const { filePath } = this.validateAndBuildFileStoragePathOrThrow(to);
-    const delta = { [UsageUnit.BYTE]: size, [UsageUnit.FILE]: 1 };
-
-    await this.assertStorageStockAvailable({
-      workspaceId: to.workspaceId,
-      applicationId,
-      delta,
-    });
-
     await this.copy({ from, to });
 
     const file = await this.fileRepository.insertAndReturnOne(to.workspaceId, {
@@ -914,12 +721,6 @@ export class FileStorageService {
       size,
       status: FILE_STATUS.UPLOADED,
       settings,
-    });
-
-    await this.applyStorageStockDelta({
-      workspaceId: to.workspaceId,
-      applicationId,
-      delta,
     });
 
     return file;

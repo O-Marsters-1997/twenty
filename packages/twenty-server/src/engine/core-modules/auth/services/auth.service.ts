@@ -550,12 +550,10 @@ export class AuthService {
   computeRedirectURI({
     loginToken,
     workspace,
-    billingCheckoutSessionState,
     returnToPath,
   }: {
     loginToken: string;
     workspace: WorkspaceDomainConfig;
-    billingCheckoutSessionState?: string;
     returnToPath?: string;
   }) {
     const url = this.workspaceDomainsService.buildWorkspaceURL({
@@ -563,7 +561,6 @@ export class AuthService {
       pathname: AppPath.Verify,
       searchParams: {
         loginToken,
-        ...(billingCheckoutSessionState ? { billingCheckoutSessionState } : {}),
         ...(isNonEmptyString(returnToPath) && returnToPath.startsWith('/')
           ? { returnToPath }
           : {}),
@@ -732,7 +729,6 @@ export class AuthService {
       picture,
       workspaceInviteHash,
       workspaceId,
-      billingCheckoutSessionState,
       locale,
       returnToPath,
     }: GoogleRequest['user'],
@@ -785,7 +781,6 @@ export class AuthService {
         authParams: {
           provider: authProvider,
         },
-        billingCheckoutSessionState,
       });
 
       await this.createSsoConnectedAccountIfFeatureFlagIsOn({
@@ -803,7 +798,6 @@ export class AuthService {
       return this.computeRedirectURI({
         loginToken: loginToken.token,
         workspace,
-        billingCheckoutSessionState,
         returnToPath,
       });
     } catch (error) {

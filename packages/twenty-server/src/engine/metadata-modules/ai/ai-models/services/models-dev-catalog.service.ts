@@ -10,10 +10,6 @@ export type ModelsDevModelSuggestion = {
   modelId: string;
   // Display name from the catalog (`model.name`), or the catalog key when absent.
   name: string;
-  inputCostPerMillionTokens: number;
-  outputCostPerMillionTokens: number;
-  cachedInputCostPerMillionTokens?: number;
-  cacheCreationCostPerMillionTokens?: number;
   contextWindowTokens: number;
   maxOutputTokens: number;
   modalities: string[];
@@ -89,10 +85,6 @@ export class ModelsDevCatalogService {
       .map(([modelId, model]) => ({
         modelId,
         name: model.name ?? modelId,
-        inputCostPerMillionTokens: model.cost?.input ?? 0,
-        outputCostPerMillionTokens: model.cost?.output ?? 0,
-        cachedInputCostPerMillionTokens: model.cost?.cache_read,
-        cacheCreationCostPerMillionTokens: model.cost?.cache_write,
         contextWindowTokens: model.limit?.context ?? 0,
         maxOutputTokens: model.limit?.output ?? 0,
         modalities: (model.modalities?.input ?? []).filter(

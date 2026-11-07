@@ -9,7 +9,6 @@ import { Repository } from 'typeorm';
 
 import { ClickHouseService } from 'src/database/clickhouse/clickhouse.service';
 import { formatDateTimeForClickHouse } from 'src/database/clickhouse/utils/format-date-time-for-clickhouse.util';
-import { BillingService } from 'src/engine/core-modules/billing/services/billing.service';
 import { EventLogRetentionService } from 'src/engine/core-modules/event-logs/retention/services/event-log-retention.service';
 import { UserWorkspaceEntity } from 'src/engine/core-modules/user-workspace/user-workspace.entity';
 import { type WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
@@ -36,7 +35,6 @@ const MAX_LIMIT = 10000;
 export class EventLogsService {
   constructor(
     private readonly clickHouseService: ClickHouseService,
-    private readonly billingService: BillingService,
     private readonly eventLogRetentionService: EventLogRetentionService,
     @InjectRepository(UserWorkspaceEntity)
     private readonly userWorkspaceRepository: Repository<UserWorkspaceEntity>,
@@ -192,24 +190,6 @@ export class EventLogsService {
       throw new EventLogsException(
         'Audit logs require ClickHouse to be configured. Please set the CLICKHOUSE_URL environment variable.',
         EventLogsExceptionCode.CLICKHOUSE_NOT_CONFIGURED,
-      );
-    }
-
-    const requiredEntitlement = EVENT_LOG_TYPES[table].requiresEntitlement;
-
-    if (requiredEntitlement === null) {
-      return;
-    }
-
-    const hasAccess = await this.billingService.hasEntitlement(
-      workspaceId,
-      requiredEntitlement,
-    );
-
-    if (!hasAccess) {
-      throw new EventLogsException(
-        'Audit logs require an Organization subscription.',
-        EventLogsExceptionCode.NO_ENTITLEMENT,
       );
     }
   }

@@ -44,22 +44,9 @@ export const captureAgentRunExecution = async ({
         },
         outputTokenDetails: { textTokens: 0, reasoningTokens: 0 },
       },
-      cacheCreationTokens: 0,
-      nativeWebSearchCallCount: 0,
-      hasNoMoreAvailableCredits: false,
       isPaused: false,
       steps,
       modelId: 'stub-model',
-      totalCostInDollars: 0,
-      creditsUsedMicro: 0,
-      turnUsage: {
-        inputTokens: 0,
-        outputTokens: 0,
-        cacheReadTokens: 0,
-        cacheCreationTokens: 0,
-        inputCredits: 0,
-        outputCredits: 0,
-      },
     });
 
   try {

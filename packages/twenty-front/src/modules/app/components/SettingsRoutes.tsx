@@ -222,12 +222,6 @@ const SettingsAI = lazy(() =>
   })),
 );
 
-const SettingsAiUsageUserDetail = lazy(() =>
-  import('~/pages/settings/ai/SettingsAiUsageUserDetail').then((module) => ({
-    default: module.SettingsAiUsageUserDetail,
-  })),
-);
-
 const SettingsToolDetail = lazy(() =>
   import('~/pages/settings/ai/SettingsToolDetail').then((module) => ({
     default: module.SettingsToolDetail,
@@ -320,50 +314,6 @@ const SettingsAccountsCalendars = lazy(() =>
       default: module.SettingsAccountsCalendars,
     }),
   ),
-);
-
-const SettingsBilling = lazy(() =>
-  import('~/pages/settings/billing/SettingsBilling').then((module) => ({
-    default: module.SettingsBilling,
-  })),
-);
-
-const SettingsBillingPlans = lazy(() =>
-  import('~/pages/settings/billing/SettingsBillingPlans').then((module) => ({
-    default: module.SettingsBillingPlans,
-  })),
-);
-
-const SettingsUsage = lazy(() =>
-  import('~/pages/settings/billing/SettingsUsage').then((module) => ({
-    default: module.SettingsUsage,
-  })),
-);
-
-const SettingsBillingLimits = lazy(() =>
-  import('~/pages/settings/billing/SettingsBillingLimits').then((module) => ({
-    default: module.SettingsBillingLimits,
-  })),
-);
-
-const SettingsBillingNewLimit = lazy(() =>
-  import('~/pages/settings/billing/SettingsBillingNewLimit').then((module) => ({
-    default: module.SettingsBillingNewLimit,
-  })),
-);
-
-const SettingsBillingLimitEdit = lazy(() =>
-  import('~/pages/settings/billing/SettingsBillingLimitEdit').then(
-    (module) => ({
-      default: module.SettingsBillingLimitEdit,
-    }),
-  ),
-);
-
-const SettingsUsageUserDetail = lazy(() =>
-  import('~/pages/settings/billing/SettingsUsageUserDetail').then((module) => ({
-    default: module.SettingsUsageUserDetail,
-  })),
 );
 
 const SettingsObjects = lazy(() =>
@@ -573,28 +523,6 @@ const createSettingsRouteElements = () => (
         path={SettingsPath.Unsubscribe}
         element={<SettingsWorkspaceUnsubscribe />}
       />
-      <Route path={SettingsPath.Billing} element={<SettingsBilling />} />
-      <Route
-        path={SettingsPath.BillingPlans}
-        element={<SettingsBillingPlans />}
-      />
-      <Route path={SettingsPath.Usage} element={<SettingsUsage />} />
-      <Route
-        path={SettingsPath.UsageUserDetail}
-        element={<SettingsUsageUserDetail />}
-      />
-      <Route
-        path={SettingsPath.BillingLimits}
-        element={<SettingsBillingLimits />}
-      />
-      <Route
-        path={SettingsPath.BillingNewLimit}
-        element={<SettingsBillingNewLimit />}
-      />
-      <Route
-        path={SettingsPath.BillingLimitEdit}
-        element={<SettingsBillingLimitEdit />}
-      />
       <Route
         path={SettingsPath.Subdomain}
         element={<SettingsSubdomainPage />}
@@ -621,10 +549,6 @@ const createSettingsRouteElements = () => (
       <Route
         path={SettingsPath.AiSkillDetail}
         element={<SettingsSkillForm mode="edit" />}
-      />
-      <Route
-        path={SettingsPath.AiUsageUserDetail}
-        element={<SettingsAiUsageUserDetail />}
       />
       <Route
         path={SettingsPath.AiToolDetail}

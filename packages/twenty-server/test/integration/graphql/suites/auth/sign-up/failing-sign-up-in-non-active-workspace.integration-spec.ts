@@ -20,7 +20,7 @@ describe('signUpInWorkspace into a non-active workspace (integration)', () => {
 
     await testDataSource.query(
       'UPDATE core.workspace SET "activationStatus" = $1 WHERE id = $2',
-      [WorkspaceActivationStatus.SUSPENDED, SEED_APPLE_WORKSPACE_ID],
+      [WorkspaceActivationStatus.INACTIVE, SEED_APPLE_WORKSPACE_ID],
     );
   });
 

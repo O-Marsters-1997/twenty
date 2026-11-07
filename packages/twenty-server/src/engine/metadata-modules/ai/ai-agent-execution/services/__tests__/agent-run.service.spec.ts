@@ -466,26 +466,6 @@ describe('AgentRunService', () => {
     expect(agentRunnerService.run).not.toHaveBeenCalled();
   });
 
-  it('reports a run that ran out of credits', async () => {
-    const { service, agentRunnerService } = buildService();
-
-    agentRunnerService.run.mockResolvedValue({
-      threadId: 'thread-id',
-      outcome: {
-        status: 'FAILED',
-        error: 'Agent stopped: no more available credits.',
-      },
-    });
-
-    await expect(
-      run(service, { input: userInput('Hello') }),
-    ).resolves.toMatchObject({
-      status: 'FAILED',
-      success: false,
-      error: 'Agent stopped: no more available credits.',
-    });
-  });
-
   it('reports a failed run without throwing', async () => {
     const { service, agentRunnerService } = buildService();
 

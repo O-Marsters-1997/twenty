@@ -191,7 +191,7 @@ describe('useAuth', () => {
     sessionStorage.setItem('lingering-key', 'should-be-cleared');
     getDefaultStore().set(currentWorkspaceState.atom, {
       id: 'workspace-id',
-      activationStatus: WorkspaceActivationStatus.SUSPENDED,
+      activationStatus: WorkspaceActivationStatus.INACTIVE,
     } as CurrentWorkspace);
     getDefaultStore().set(currentUserState.atom, {
       id: 'user-id',

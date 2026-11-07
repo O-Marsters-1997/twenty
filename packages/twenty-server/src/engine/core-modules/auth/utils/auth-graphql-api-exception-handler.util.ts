@@ -19,7 +19,6 @@ export const authGraphqlApiExceptionHandler = (exception: AuthException) => {
     case AuthExceptionCode.INVALID_INPUT:
       throw new UserInputError(exception);
     case AuthExceptionCode.FORBIDDEN_EXCEPTION:
-    case AuthExceptionCode.WORKSPACE_SUSPENDED:
     case AuthExceptionCode.INSUFFICIENT_SCOPES:
     case AuthExceptionCode.OAUTH_ACCESS_DENIED:
     case AuthExceptionCode.SIGNUP_DISABLED:

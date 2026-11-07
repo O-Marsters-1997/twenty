@@ -439,10 +439,6 @@ describe('Successful user and workspace creation', () => {
     );
 
     expect(workspaceAfterDeletion).toHaveLength(1);
-    expect(workspaceAfterDeletion[0].activationStatus).toBe(
-      WorkspaceActivationStatus.SUSPENDED,
-    );
-    expect(workspaceAfterDeletion[0].suspendedAt).not.toBeNull();
     expect(workspaceAfterDeletion[0].deletedAt).not.toBeNull();
   });
 });

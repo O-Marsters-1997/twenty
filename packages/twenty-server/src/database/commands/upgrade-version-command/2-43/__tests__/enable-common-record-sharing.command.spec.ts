@@ -56,9 +56,6 @@ const buildCommand = () => {
       .fn()
       .mockResolvedValue({ status: 'success' }),
   };
-  const billing = {
-    getWorkspaceEntitlementValue: jest.fn().mockResolvedValue(false),
-  };
   const command = new EnableCommonRecordSharingCommand(
     {} as never,
     {
@@ -67,36 +64,28 @@ const buildCommand = () => {
     } as never,
     storage as never,
     migrations as never,
-    billing as never,
     { manager: context.manager } as never,
   );
-  return { command, storage, migrations, context, maps, billing };
+  return { command, storage, migrations, context, maps };
 };
 
 describe('Common sharing upgrade', () => {
   beforeEach(() => jest.resetAllMocks());
 
   it.each([
-    [undefined, false, false],
-    [undefined, true, false],
-    [false, false, false],
-    [false, true, false],
-    [true, false, false],
-    [true, true, true],
+    [undefined, false],
+    [false, false],
+    [true, true],
   ])(
-    'preserves historical access for flag=%s entitlement=%s',
-    async (flag, entitlement, wasRecordSharingEnabled) => {
-      const { command, maps, billing } = buildCommand();
+    'preserves historical access for flag=%s',
+    async (flag, wasRecordSharingEnabled) => {
+      const { command, maps } = buildCommand();
       Object.assign(maps.featureFlagsMap, {
         IS_RECORD_SHARING_ENABLED: flag,
       });
-      billing.getWorkspaceEntitlementValue.mockResolvedValue(entitlement);
       await command.up(args);
       expect(preserveLegacyRecordAccess).toHaveBeenCalledWith(
         expect.objectContaining({ wasRecordSharingEnabled }),
-      );
-      expect(billing.getWorkspaceEntitlementValue).toHaveBeenCalledTimes(
-        flag === true ? 1 : 0,
       );
     },
   );

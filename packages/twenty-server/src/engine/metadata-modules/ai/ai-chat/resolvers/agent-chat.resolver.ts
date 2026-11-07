@@ -3,14 +3,7 @@ import { AuthPrincipalGuard } from 'src/engine/guards/auth-principal.guard';
 import { AgentChatThreadLifecycleService } from 'src/engine/metadata-modules/ai/ai-chat/services/agent-chat-thread-lifecycle.service';
 import { AgentChatSharingService } from 'src/engine/metadata-modules/ai/ai-chat/services/agent-chat-sharing.service';
 import { UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
-import {
-  Args,
-  Float,
-  Mutation,
-  Parent,
-  Query,
-  ResolveField,
-} from '@nestjs/graphql';
+import { Args, Mutation, Parent, Query, ResolveField } from '@nestjs/graphql';
 
 import GraphQLJSON from 'graphql-type-json';
 import { PermissionFlagType } from 'twenty-shared/constants';
@@ -18,7 +11,6 @@ import { isDefined, isNonEmptyString } from 'twenty-shared/utils';
 
 import { MetadataResolver } from 'src/engine/api/graphql/graphql-config/decorators/metadata-resolver.decorator';
 import { UUIDScalarType } from 'src/engine/api/graphql/workspace-schema-builder/graphql-types/scalars';
-import { toDisplayCredits } from 'src/engine/core-modules/usage/utils/to-display-credits.util';
 import { type WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
 import { AuthUserWorkspaceId } from 'src/engine/decorators/auth/auth-user-workspace-id.decorator';
 import { AuthWorkspace } from 'src/engine/decorators/auth/auth-workspace.decorator';
@@ -42,8 +34,6 @@ import {
   AiException,
   AiExceptionCode,
 } from 'src/engine/metadata-modules/ai/ai.exception';
-import { BillingGraphqlApiExceptionFilter } from 'src/engine/core-modules/billing/filters/billing-graphql-api-exception.filter';
-import { UsageLimitGraphqlApiExceptionFilter } from 'src/engine/core-modules/usage-limit/filters/usage-limit-graphql-api-exception.filter';
 import { AiGraphqlApiExceptionInterceptor } from 'src/engine/metadata-modules/ai/interceptors/ai-graphql-api-exception.interceptor';
 import { AuthGraphqlApiExceptionFilter } from 'src/engine/core-modules/auth/filters/auth-graphql-api-exception.filter';
 import { AgentTurnRecorderService } from 'src/engine/metadata-modules/ai/ai-history/services/agent-turn-recorder.service';
@@ -63,11 +53,7 @@ import { WorkspaceCacheService } from 'src/engine/workspace-cache/services/works
   SettingsPermissionGuard(PermissionFlagType.AI),
 )
 @UseInterceptors(AiGraphqlApiExceptionInterceptor)
-@UseFilters(
-  UsageLimitGraphqlApiExceptionFilter,
-  BillingGraphqlApiExceptionFilter,
-  AuthGraphqlApiExceptionFilter,
-)
+@UseFilters(AuthGraphqlApiExceptionFilter)
 @MetadataResolver(() => AgentChatThreadDTO)
 export class AgentChatResolver {
   constructor(
@@ -251,7 +237,6 @@ export class AgentChatResolver {
     const thread = await this.turnPreflightService.assertCanStartChatTurn({
       threadId,
       modelId,
-      userWorkspaceId,
       workspaceMemberId,
       workspace,
     });
@@ -326,7 +311,6 @@ export class AgentChatResolver {
     await this.turnPreflightService.assertCanStartChatTurn({
       threadId,
       modelId,
-      userWorkspaceId,
       workspaceMemberId,
       workspace,
     });
@@ -428,16 +412,6 @@ export class AgentChatResolver {
   @ResolveField(() => Date, { nullable: true })
   deletedAt(@Parent() thread: AgentChatThreadWorkspaceEntity): Date | null {
     return isDefined(thread.deletedAt) ? new Date(thread.deletedAt) : null;
-  }
-
-  @ResolveField(() => Float)
-  totalInputCredits(@Parent() thread: AgentChatThreadWorkspaceEntity): number {
-    return toDisplayCredits(Number(thread.totalInputCredits));
-  }
-
-  @ResolveField(() => Float)
-  totalOutputCredits(@Parent() thread: AgentChatThreadWorkspaceEntity): number {
-    return toDisplayCredits(Number(thread.totalOutputCredits));
   }
 
   // the caller reads the thread after this, so it sees the reaped stream as released

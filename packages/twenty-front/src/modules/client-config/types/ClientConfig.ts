@@ -1,7 +1,6 @@
 import {
   type ApiConfig,
   type AuthProviders,
-  type Billing,
   type Captcha,
   type ClientAiEvaluationModelConfig,
   type ClientAiModelConfig,
@@ -9,7 +8,6 @@ import {
   type PublicFeatureFlag,
   type Support,
 } from '~/generated-metadata/graphql';
-import { type OnboardingConfig } from '@/client-config/types/OnboardingConfig';
 
 export type ClientConfig = {
   appVersion?: string;
@@ -18,9 +16,6 @@ export type ClientConfig = {
   aiModelTiers: Array<ClientAiModelTierConfig>;
   api: ApiConfig;
   authProviders: AuthProviders;
-  billing: Billing;
-  calendarBookingPageId?: string;
-  isBookCallOnboardingStepEnabled: boolean;
   isCompanyEnrichmentEnabled: boolean;
   canManageFeatureFlags: boolean;
   captcha: Captcha;
@@ -37,7 +32,6 @@ export type ClientConfig = {
   isClickHouseConfigured: boolean;
   isWorkspaceSchemaDDLLocked: boolean;
   isOnboardingAiChatEnabled: boolean;
-  onboarding: OnboardingConfig | null;
   publicFeatureFlags: Array<PublicFeatureFlag>;
   signInPrefilled: boolean;
   support: Support;

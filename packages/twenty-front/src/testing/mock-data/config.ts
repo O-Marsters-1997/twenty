@@ -20,32 +20,11 @@ export const mockedClientConfig: ClientConfig = {
     supportDriver: SupportDriver.FRONT,
     supportFrontChatId: null,
   },
-  billing: {
-    isBillingEnabled: true,
-    billingUrl: '',
-    trialPeriods: [
-      {
-        duration: 30,
-        isCreditCardRequired: true,
-      },
-      {
-        duration: 7,
-        isCreditCardRequired: false,
-      },
-    ],
-  },
   captcha: {
     provider: CaptchaDriverType.GOOGLE_RECAPTCHA,
     siteKey: 'MOCKED_SITE_KEY',
   },
   api: { mutationMaximumAffectedRecords: 100 },
-  onboarding: {
-    importContactsCreditsReward: 2,
-    inviteTeamCreditsRewardPerUser: 3,
-    createProfileCreditsReward: 0.5,
-    upgradeCreditsReward: 2,
-    inviteTeamMaxInvites: 10,
-  },
   canManageFeatureFlags: true,
   publicFeatureFlags: [],
   isGoogleMessagingEnabled: true,
@@ -58,6 +37,5 @@ export const mockedClientConfig: ClientConfig = {
   isClickHouseConfigured: false,
   isWorkspaceSchemaDDLLocked: false,
   isOnboardingAiChatEnabled: false,
-  isBookCallOnboardingStepEnabled: false,
   isCompanyEnrichmentEnabled: false,
 };

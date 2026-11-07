@@ -67,7 +67,6 @@ export const CoreAgentRunsTab = ({ agentId }: CoreAgentRunsTabProps) => {
         <TableHeader>{t`Source`}</TableHeader>
         <TableHeader>{t`Input`}</TableHeader>
         <TableHeader align="right">{t`Tokens`}</TableHeader>
-        <TableHeader align="right">{t`Credits`}</TableHeader>
         <TableHeader align="right">{t`Duration`}</TableHeader>
       </TableRow>
     </StyledTableHeaderRowContainer>

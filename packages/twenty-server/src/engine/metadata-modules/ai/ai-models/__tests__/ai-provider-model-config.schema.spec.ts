@@ -98,14 +98,12 @@ describe('aiProviderModelConfigSchema', () => {
     ).toContain('benchmarkByEffort.turbo');
   });
 
-  it('accepts an evaluation model declaring its question types and both token costs', () => {
+  it('accepts an evaluation model declaring its question types', () => {
     expect(
       issuePaths({
         name: 'jev-latest',
         label: 'Jev',
         kind: 'evaluation',
-        inputCostPerMillionTokens: 0.042,
-        outputCostPerMillionTokens: 0,
         supportedQuestionTypes: ['choice', 'score', 'boolean'],
         maxCriteriaPerQuestion: 255,
       }),
@@ -118,23 +116,8 @@ describe('aiProviderModelConfigSchema', () => {
         name: 'jev-latest',
         label: 'Jev',
         kind: 'evaluation',
-        inputCostPerMillionTokens: 0.042,
-        outputCostPerMillionTokens: 0,
       }),
     ).toEqual(['supportedQuestionTypes']);
-  });
-
-  // free output needs an explicit 0: an omitted price bills nothing while the provider still charges
-  it('rejects an evaluation model that omits a token cost', () => {
-    expect(
-      issuePaths({
-        name: 'jev-latest',
-        label: 'Jev',
-        kind: 'evaluation',
-        inputCostPerMillionTokens: 0.042,
-        supportedQuestionTypes: ['choice'],
-      }),
-    ).toEqual(['inputCostPerMillionTokens']);
   });
 
   it('rejects question types declared on a model that is not an evaluation model', () => {

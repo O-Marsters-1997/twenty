@@ -7,8 +7,6 @@ import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/Enriche
 import { jotaiStore } from '@/ui/utilities/state/jotai/jotaiStore';
 import {
   AiModelTier,
-  SubscriptionInterval,
-  SubscriptionStatus,
   WorkspaceActivationStatus,
   WorkspaceDiscoverability,
 } from '~/generated-metadata/graphql';
@@ -45,22 +43,6 @@ describe('useColumnDefinitionsFromObjectMetadata', () => {
       workspaceUrls: {
         subdomainUrl: 'https://twenty.twenty.com',
       },
-      currentBillingSubscription: {
-        id: '1',
-        interval: SubscriptionInterval.Month,
-        status: SubscriptionStatus.Active,
-        metadata: {},
-        phases: [],
-      },
-      billingEntitlements: [],
-      billingSubscriptions: [
-        {
-          id: '1',
-          status: SubscriptionStatus.Active,
-          metadata: {},
-          phases: [],
-        },
-      ],
       isTwoFactorAuthenticationEnforced: false,
       trashRetentionDays: 14,
       eventLogRetentionDays: 365 * 3,

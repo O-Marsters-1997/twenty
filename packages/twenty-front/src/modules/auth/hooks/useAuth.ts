@@ -46,7 +46,6 @@ import {
   signInUpStepState,
 } from '@/auth/states/signInUpStepState';
 import { workspacePublicDataState } from '@/auth/states/workspacePublicDataState';
-import { type BillingCheckoutSession } from '@/auth/types/BillingCheckoutSession';
 import {
   countAvailableWorkspaces,
   getFirstAvailableWorkspaces,
@@ -542,7 +541,6 @@ export const useAuth = () => {
       params: {
         workspacePersonalInviteToken?: string;
         workspaceInviteHash?: string;
-        billingCheckoutSession?: BillingCheckoutSession;
         action?: string;
       },
     ) => {
@@ -556,13 +554,6 @@ export const useAuth = () => {
           params.workspacePersonalInviteToken,
         );
       }
-      if (isDefined(params.billingCheckoutSession)) {
-        url.searchParams.set(
-          'billingCheckoutSessionState',
-          JSON.stringify(params.billingCheckoutSession),
-        );
-      }
-
       if (isDefined(params.action)) {
         url.searchParams.set('action', params.action);
       }
@@ -586,7 +577,6 @@ export const useAuth = () => {
     (params: {
       workspacePersonalInviteToken?: string;
       workspaceInviteHash?: string;
-      billingCheckoutSession?: BillingCheckoutSession;
       action: string;
     }) => {
       redirect(buildRedirectUrl('/auth/google', params));

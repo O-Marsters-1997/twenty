@@ -1,5 +1,4 @@
 import { plural } from '@lingui/core/macro';
-import { isDefined } from 'twenty-shared/utils';
 import { IconChevronDown, IconChevronRight } from 'twenty-ui/icon';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
 import { themeCssVariables, useTheme } from 'twenty-ui/theme';
@@ -12,7 +11,6 @@ import { handleCoreAgentRunToggleKeyDown } from '@/object-core/agents/utils/hand
 import { TableCell } from '@/ui/layout/table/components/TableCell';
 import { TableRow } from '@/ui/layout/table/components/TableRow';
 import { beautifyPastDateRelativeToNow } from '~/utils/date-utils';
-import { formatNumber } from '@/localization/utils/formatNumber';
 
 type CoreAgentRunConversationProps = {
   title: string | null;
@@ -34,12 +32,6 @@ export const CoreAgentRunConversation = ({
   const theme = useTheme();
   const [latestRun] = runs;
   const ChevronIcon = isExpanded ? IconChevronDown : IconChevronRight;
-  // a total missing some runs' usage would read as the whole conversation's cost
-  const hasCreditsForEveryRun = runs.every((run) => isDefined(run.credits));
-  const totalCredits = runs.reduce(
-    (credits, run) => credits + (run.credits ?? 0),
-    0,
-  );
   const runCount = runs.length;
 
   return (
@@ -75,11 +67,6 @@ export const CoreAgentRunConversation = ({
           />
         </TableCell>
         <TableCell />
-        <TableCell align="right" color={themeCssVariables.font.color.secondary}>
-          {hasCreditsForEveryRun
-            ? formatNumber(totalCredits, { decimals: 2 })
-            : '-'}
-        </TableCell>
         <TableCell />
       </TableRow>
       {isExpanded &&

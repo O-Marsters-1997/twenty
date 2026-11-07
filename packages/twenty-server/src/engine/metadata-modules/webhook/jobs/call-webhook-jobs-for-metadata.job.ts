@@ -10,7 +10,6 @@ import { type MetadataEventBatch } from 'src/engine/subscriptions/metadata-event
 import { type FlatWebhook } from 'src/engine/metadata-modules/flat-webhook/types/flat-webhook.type';
 import { CallWebhookJob } from 'src/engine/metadata-modules/webhook/jobs/call-webhook.job';
 import { type CallMetadataWebhookJobData } from 'src/engine/metadata-modules/webhook/types/webhook-job-data.type';
-import { WebhookRateLimitService } from 'src/engine/metadata-modules/webhook/jobs/webhook-rate-limit.service';
 import { WorkspaceCacheService } from 'src/engine/workspace-cache/services/workspace-cache.service';
 
 const WEBHOOK_JOBS_CHUNK_SIZE = 20;
@@ -21,7 +20,6 @@ export class CallWebhookJobsForMetadataJob {
     @InjectMessageQueue(MessageQueue.webhookQueue)
     private readonly messageQueueService: MessageQueueService,
     private readonly workspaceCacheService: WorkspaceCacheService,
-    private readonly webhookRateLimitService: WebhookRateLimitService,
   ) {}
 
   @Process(CallWebhookJobsForMetadataJob.name)
@@ -60,14 +58,8 @@ export class CallWebhookJobsForMetadataJob {
       webhooks,
     });
 
-    const admittedWebhookEvents =
-      await this.webhookRateLimitService.admitWebhookEventsWithinRateLimit({
-        workspaceId: metadataEventBatch.workspaceId,
-        webhookEvents,
-      });
-
     const webhookEventsChunks = chunk(
-      admittedWebhookEvents,
+      webhookEvents,
       WEBHOOK_JOBS_CHUNK_SIZE,
     );
 

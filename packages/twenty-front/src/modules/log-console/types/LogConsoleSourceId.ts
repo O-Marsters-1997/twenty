@@ -3,5 +3,4 @@ export type LogConsoleSourceId =
   | 'security'
   | 'app-logs'
   | 'webhooks'
-  | 'page-views'
-  | 'usage';
+  | 'page-views';

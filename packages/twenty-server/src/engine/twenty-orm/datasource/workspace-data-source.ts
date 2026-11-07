@@ -87,20 +87,6 @@ export class WorkspaceDataSource {
             ),
           ),
       },
-      recordStock: {
-        assertRecordStockAvailable: (args) =>
-          this.internalContext.recordStock.assertRecordStockAvailable(args),
-        acquireRecordStock: async (args) => {
-          afterCommit(() =>
-            this.internalContext.recordStock.acquireRecordStock(args),
-          );
-        },
-        releaseRecordStock: async (args) => {
-          afterCommit(() =>
-            this.internalContext.recordStock.releaseRecordStock(args),
-          );
-        },
-      },
     };
     const result = await this.runInClientTransaction((executor) =>
       work({

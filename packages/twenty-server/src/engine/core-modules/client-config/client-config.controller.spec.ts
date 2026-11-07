@@ -36,16 +36,6 @@ describe('ClientConfigController', () => {
   describe('getClientConfig', () => {
     it('should return client config from service', async () => {
       const mockClientConfig = {
-        billing: {
-          isBillingEnabled: true,
-          billingUrl: 'https://billing.example.com',
-          trialPeriods: [
-            {
-              duration: 7,
-              isCreditCardRequired: false,
-            },
-          ],
-        },
         aiEvaluationModels: [],
         aiModelTiers: [],
         aiModels: [
@@ -81,10 +71,6 @@ describe('ClientConfigController', () => {
           mutationMaximumAffectedRecords: 100,
         },
         onboarding: {
-          importContactsCreditsReward: 2,
-          inviteTeamCreditsRewardPerUser: 3,
-          createProfileCreditsReward: 0.5,
-          upgradeCreditsReward: 0.5,
           inviteTeamMaxInvites: 10,
         },
         isAttachmentPreviewEnabled: true,
@@ -96,7 +82,6 @@ describe('ClientConfigController', () => {
         isConfigVariablesInDbEnabled: false,
         isEmailingDomainInDemoMode: false,
         calendarBookingPageId: undefined,
-        isBookCallOnboardingStepEnabled: false,
         isCompanyEnrichmentEnabled: false,
         isTwoFactorAuthenticationEnabled: false,
         allowRequestsToTwentyIcons: true,

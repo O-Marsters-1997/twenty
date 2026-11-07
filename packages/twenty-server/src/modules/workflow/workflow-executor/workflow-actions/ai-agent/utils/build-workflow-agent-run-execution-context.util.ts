@@ -1,7 +1,6 @@
 import { type ActorMetadata } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 
-import { UsageOperationType } from 'src/engine/core-modules/usage/enums/usage-operation-type.enum';
 import { type AgentRunExecutionContext } from 'src/engine/metadata-modules/ai/ai-agent-execution/types/agent-run-execution-context.type';
 import { type AgentRunRoleIds } from 'src/engine/metadata-modules/ai/ai-agent-execution/types/agent-run-role-ids.type';
 import { type RolePermissionConfig } from 'src/engine/twenty-orm/types/role-permission-config.type';
@@ -39,7 +38,6 @@ export const buildWorkflowAgentRunExecutionContext = ({
       ? executionContext.authContext.userWorkspaceId
       : null,
   rolePermissionConfig: executionContext.rolePermissionConfig,
-  usageOperationType: UsageOperationType.AI_WORKFLOW_TOKEN,
   agentRunRoleIds: getAgentRunRoleIdsFromRolePermissionConfig(
     executionContext.rolePermissionConfig,
   ),

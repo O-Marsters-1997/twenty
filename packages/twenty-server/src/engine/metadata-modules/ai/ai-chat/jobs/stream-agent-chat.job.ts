@@ -29,9 +29,7 @@ import { type MessageQueueJobContext } from 'src/engine/core-modules/message-que
 import { Process } from 'src/engine/core-modules/message-queue/decorators/process.decorator';
 import { Processor } from 'src/engine/core-modules/message-queue/decorators/processor.decorator';
 import { MessageQueue } from 'src/engine/core-modules/message-queue/message-queue.constants';
-import { toDisplayCredits } from 'src/engine/core-modules/usage/utils/to-display-credits.util';
 import { WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
-import { addStepToAgentTurnUsage } from 'src/engine/metadata-modules/ai/ai-billing/utils/compute-agent-turn-usage-from-steps.util';
 import {
   AiException,
   AiExceptionCode,
@@ -71,10 +69,7 @@ const ASSISTANT_MESSAGE_ID_NAMESPACE = '0b9c2a3d-4e5f-4a1b-8c2d-3e4f5a6b7c8d';
 type StreamUsageTotals = {
   inputTokens: number;
   outputTokens: number;
-  inputCredits: number;
-  outputCredits: number;
   cacheReadTokens: number;
-  cacheCreationTokens: number;
   conversationSize: number;
 };
 
@@ -226,7 +221,6 @@ export class StreamAgentChatJob {
           failurePhase: 'execution',
           errorCode: mapErrorToStreamError(error).code,
         },
-        turnModelId,
       );
 
       await this.streamRecoveryService.failStream({
@@ -293,7 +287,6 @@ export class StreamAgentChatJob {
 
   private recordTurnOutcome(
     outcome: AgentChatTurnOutcome,
-    turnModelId: string,
   ): void {
     if (this.hasRecordedTurnOutcome) {
       return;
@@ -341,15 +334,11 @@ export class StreamAgentChatJob {
       const usageTotals: StreamUsageTotals = {
         inputTokens: 0,
         outputTokens: 0,
-        inputCredits: 0,
-        outputCredits: 0,
         cacheReadTokens: 0,
-        cacheCreationTokens: 0,
         conversationSize: 0,
       };
       let streamError: unknown;
       let streamFinishError: unknown;
-      let checkHasNoMoreAvailableCredits: () => boolean = () => false;
 
       let persistChain: Promise<void> = Promise.resolve();
       let lastCheckpointAt = 0;
@@ -409,29 +398,23 @@ export class StreamAgentChatJob {
             });
           };
 
-          const {
-            stream,
-            modelConfig,
-            hasNoMoreAvailableCredits,
-            getStreamError,
-          } = await this.chatExecutionService.streamChat({
-            workspace,
-            userWorkspaceId: data.userWorkspaceId,
-            sender,
-            authorization,
-            threadId: data.threadId,
-            streamId: data.streamId,
-            turnId,
-            messages: data.messages,
-            browsingContext: data.browsingContext,
-            modelId: data.modelId,
-            onCodeExecutionUpdate,
-            onCompaction,
-            abortSignal,
-            conversationSizeTokens: data.conversationSizeTokens,
-          });
-
-          checkHasNoMoreAvailableCredits = hasNoMoreAvailableCredits;
+          const { stream, modelConfig, getStreamError } =
+            await this.chatExecutionService.streamChat({
+              workspace,
+              userWorkspaceId: data.userWorkspaceId,
+              sender,
+              authorization,
+              threadId: data.threadId,
+              streamId: data.streamId,
+              turnId,
+              messages: data.messages,
+              browsingContext: data.browsingContext,
+              modelId: data.modelId,
+              onCodeExecutionUpdate,
+              onCompaction,
+              abortSignal,
+              conversationSizeTokens: data.conversationSizeTokens,
+            });
 
           const titleWritePromise = titlePromise.then((generatedTitle) => {
             if (generatedTitle) {
@@ -463,7 +446,6 @@ export class StreamAgentChatJob {
                     responseMessage,
                     isAborted,
                     streamError,
-                    outOfCredits: checkHasNoMoreAvailableCredits(),
                     threadId: data.threadId,
                     workspaceId: data.workspaceId,
                     workspaceMemberId:
@@ -475,7 +457,7 @@ export class StreamAgentChatJob {
                   });
 
                   if (isDefined(outcome)) {
-                    this.recordTurnOutcome(outcome, turnModelId);
+                    this.recordTurnOutcome(outcome);
                   }
                   await titleWritePromise;
                 } catch (error) {
@@ -561,13 +543,6 @@ export class StreamAgentChatJob {
             reject(streamError);
           } else if (streamFinishError) {
             reject(streamFinishError);
-          } else if (checkHasNoMoreAvailableCredits()) {
-            await this.eventPublisherService.publish({
-              threadId: data.threadId,
-              workspaceId: data.workspaceId,
-              event: { type: 'credits-exhausted' },
-            });
-            resolve();
           } else {
             await this.eventPublisherService.publish({
               threadId: data.threadId,
@@ -605,10 +580,10 @@ export class StreamAgentChatJob {
     usageTotals: StreamUsageTotals;
   }) {
     if (part.type === 'finish-step') {
-      Object.assign(
-        usageTotals,
-        addStepToAgentTurnUsage(modelConfig, usageTotals, part),
-      );
+      usageTotals.inputTokens += part.usage?.inputTokens ?? 0;
+      usageTotals.outputTokens += part.usage?.outputTokens ?? 0;
+      usageTotals.cacheReadTokens +=
+        part.usage?.inputTokenDetails?.cacheReadTokens ?? 0;
       usageTotals.conversationSize = part.usage?.inputTokens ?? 0;
     }
 
@@ -626,8 +601,6 @@ export class StreamAgentChatJob {
           inputTokens: usageTotals.inputTokens,
           outputTokens: usageTotals.outputTokens,
           cachedInputTokens: usageTotals.cacheReadTokens,
-          inputCredits: toDisplayCredits(usageTotals.inputCredits),
-          outputCredits: toDisplayCredits(usageTotals.outputCredits),
           conversationSize: usageTotals.conversationSize,
         },
         model: {
@@ -646,7 +619,6 @@ export class StreamAgentChatJob {
     responseMessage,
     isAborted,
     streamError,
-    outOfCredits,
     threadId,
     workspaceId,
     workspaceMemberId,
@@ -660,7 +632,6 @@ export class StreamAgentChatJob {
     responseMessage: Omit<ExtendedUIMessage, 'id'>;
     isAborted: boolean;
     streamError: unknown;
-    outOfCredits: boolean;
     threadId: string;
     workspaceId: string;
     workspaceMemberId: string;
@@ -688,7 +659,6 @@ export class StreamAgentChatJob {
         responseMessage,
         isAborted,
         streamError,
-        outOfCredits,
         hasText,
         threadId,
         workspaceId,
@@ -707,7 +677,6 @@ export class StreamAgentChatJob {
       hasText,
       isAborted,
       isAwaitingUserAnswer: awaitingParts.length > 0,
-      outOfCredits,
     });
 
     if (responseMessage.parts.length === 0) {
@@ -814,9 +783,6 @@ export class StreamAgentChatJob {
           inputTokens: usageTotals.inputTokens,
           outputTokens: usageTotals.outputTokens,
           cacheReadTokens: usageTotals.cacheReadTokens,
-          cacheCreationTokens: usageTotals.cacheCreationTokens,
-          inputCredits: usageTotals.inputCredits,
-          outputCredits: usageTotals.outputCredits,
         },
       })
       .catch((error: unknown) =>
@@ -854,7 +820,6 @@ export class StreamAgentChatJob {
     responseMessage,
     isAborted,
     streamError,
-    outOfCredits,
     hasText,
     threadId,
     workspaceId,
@@ -864,7 +829,6 @@ export class StreamAgentChatJob {
     responseMessage: Omit<ExtendedUIMessage, 'id'>;
     isAborted: boolean;
     streamError: unknown;
-    outOfCredits: boolean;
     hasText: boolean;
     threadId: string;
     workspaceId: string;
@@ -875,9 +839,7 @@ export class StreamAgentChatJob {
       ? 'user-cancelled'
       : streamError
         ? 'stream-error'
-        : outOfCredits
-          ? 'credits-exhausted'
-          : 'empty-completion';
+        : 'empty-completion';
 
     const errorDetail = isDefined(streamError)
       ? formatErrorWithCause(streamError)
@@ -887,7 +849,7 @@ export class StreamAgentChatJob {
       `[AI_CHAT_NO_TEXT] Assistant turn ended without a text reply — ` +
         `reason=${reason}, model=${modelId}, ` +
         `threadId=${threadId}, workspaceId=${workspaceId}, ` +
-        `isAborted=${isAborted}, outOfCredits=${outOfCredits}, hasText=${hasText}, ` +
+        `isAborted=${isAborted}, hasText=${hasText}, ` +
         `streamError=${errorDetail}, ` +
         `inputTokens=${inputTokens},` +
         `responseMessage.parts=${JSON.stringify(responseMessage.parts)}`,

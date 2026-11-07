@@ -38,11 +38,9 @@ import { createMidStreamAdapter } from '@/ai/utils/createMidStreamAdapter';
 import { createStreamChunkSequencer } from '@/ai/utils/createStreamChunkSequencer';
 import { getAgentChatMessageThreadTitle } from '@/ai/utils/getAgentChatMessageThreadTitle';
 import { upsertAgentChatMessage } from '@/ai/utils/upsertAgentChatMessage';
-import { currentWorkspaceState } from '@/auth/states/currentWorkspaceState';
 import { dispatchBrowserEvent } from '@/browser-event/utils/dispatchBrowserEvent';
 import { sseClientState } from '@/sse-db-event/states/sseClientState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { markWorkspaceCreditsExhausted } from '@/workspace/utils/updateWorkspaceResourceCreditCap';
 import {
   OnAgentChatEventDocument,
   type OnAgentChatEventSubscription,
@@ -285,25 +283,6 @@ export const useAgentChatSubscription = (threadId: string | null) => {
           );
 
           resetStreamProcessing();
-          store.set(isStreamingAtom, false);
-          break;
-        }
-
-        case 'credits-exhausted': {
-          //TODO : add real time on currentUser
-          store.set(currentWorkspaceState.atom, markWorkspaceCreditsExhausted);
-
-          store.set(
-            errorAtom,
-            createAiChatCodedError(
-              t`Chat stopped: no more available credits.`,
-              AiChatErrorCode.CREDITS_EXHAUSTED,
-            ),
-          );
-
-          resetStreamProcessing();
-          store.set(isAwaitingPersistedRefetchAtom, true);
-          dispatchBrowserEvent(AGENT_CHAT_REFETCH_MESSAGES_EVENT_NAME);
           store.set(isStreamingAtom, false);
           break;
         }

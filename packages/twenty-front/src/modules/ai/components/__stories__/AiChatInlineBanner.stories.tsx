@@ -7,7 +7,6 @@ import { ComponentDecorator } from 'twenty-ui/testing';
 import { AiChatInlineBanner } from '@/ai/components/AiChatInlineBanner';
 
 const onConfigureModels = fn();
-const onUpgrade = fn();
 const onViewDocs = fn();
 
 const meta: Meta<typeof AiChatInlineBanner> = {
@@ -51,63 +50,6 @@ export const NoSettingsPermission: Story = {
 
     await expect(
       canvas.getByText('Ask your workspace admin to enable an AI model.'),
-    ).toBeVisible();
-    await expect(canvas.queryByRole('button')).not.toBeInTheDocument();
-  },
-};
-
-export const UsageLimit: Story = {
-  args: {
-    children: 'You’ve reached your AI usage limit.',
-    action: (
-      <InlineBanner.Action onClick={onUpgrade}>Upgrade</InlineBanner.Action>
-    ),
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    const message = canvas.getByText('You’ve reached your AI usage limit.');
-    const button = canvas.getByRole('button', { name: 'Upgrade' });
-
-    await expect(message).toBeVisible();
-    await userEvent.tab();
-    await expect(message).toHaveFocus();
-    await userEvent.tab();
-    await expect(button).toHaveFocus();
-    await userEvent.keyboard('{Enter}');
-    await expect(onUpgrade).toHaveBeenCalledTimes(1);
-  },
-};
-
-export const UsageLimitLoading: Story = {
-  args: {
-    children: 'You’ve reached your AI usage limit.',
-    action: (
-      <InlineBanner.Action onClick={onUpgrade} disabled>
-        Upgrade
-      </InlineBanner.Action>
-    ),
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    const button = canvas.getByRole('button', { name: 'Upgrade' });
-
-    await expect(button).toBeDisabled();
-    await userEvent.click(button);
-    await expect(onUpgrade).not.toHaveBeenCalled();
-  },
-};
-
-export const NoBillingPermission: Story = {
-  args: {
-    children: 'AI usage limit reached. Ask an admin to upgrade the plan.',
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-
-    await expect(
-      canvas.getByText(
-        'AI usage limit reached. Ask an admin to upgrade the plan.',
-      ),
     ).toBeVisible();
     await expect(canvas.queryByRole('button')).not.toBeInTheDocument();
   },

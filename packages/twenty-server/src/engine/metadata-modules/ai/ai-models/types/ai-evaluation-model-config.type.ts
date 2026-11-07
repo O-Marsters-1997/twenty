@@ -4,7 +4,6 @@ import {
   type DataResidency,
 } from 'twenty-shared/ai';
 
-// billed on tokens like a language model, hence the matching cost fields
 export type AiEvaluationModelConfig = {
   modelId: string;
   providerName: string;
@@ -12,8 +11,6 @@ export type AiEvaluationModelConfig = {
   sdkPackage: AiSdkPackage;
   label: string;
   description: string;
-  inputCostPerMillionTokens: number;
-  outputCostPerMillionTokens: number;
   supportedQuestionTypes: AiEvaluationQuestionType[];
   maxCriteriaPerQuestion?: number;
   maxScoreLevels?: number;

@@ -7,9 +7,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import {
   convertToModelMessages,
   hasToolCall,
-  NoOutputGeneratedError,
   isStepCount,
-  type StepResult,
   streamText,
   type SystemModelMessage,
   type ToolSet,
@@ -25,12 +23,10 @@ import {
 import { type APP_LOCALES } from 'twenty-shared/translations';
 import { AppPath, FeatureFlagKey } from 'twenty-shared/types';
 import { getAppPath, isDefined, sortKeysDeeply } from 'twenty-shared/utils';
-import { UsageOperationType } from 'src/engine/core-modules/usage/enums/usage-operation-type.enum';
 
 import { type CodeExecutionStreamEmitter } from 'src/engine/core-modules/tool-provider/interfaces/code-execution-stream-emitter.type';
 
 import { WorkspaceDomainsService } from 'src/engine/core-modules/domain/workspace-domains/services/workspace-domains.service';
-import { ExceptionHandlerService } from 'src/engine/core-modules/exception-handler/exception-handler.service';
 import { FeatureFlagService } from 'src/engine/core-modules/feature-flag/services/feature-flag.service';
 import { ToolRegistryService } from 'src/engine/core-modules/tool-provider/services/tool-registry.service';
 import {
@@ -41,10 +37,6 @@ import {
   LEARN_TOOLS_TOOL_NAME,
   LOAD_SKILL_TOOL_NAME,
 } from 'src/engine/core-modules/tool-provider/tools';
-import { estimateToolOutputTokens } from 'src/engine/core-modules/tool-provider/utils/estimate-tool-output-tokens.util';
-import { getToolMetricName } from 'src/engine/core-modules/tool-provider/utils/get-tool-metric-name.util';
-import { isToolOutputSuccessful } from 'src/engine/core-modules/tool-provider/utils/is-tool-output-successful.util';
-import { resolveToolName } from 'src/engine/core-modules/tool-provider/utils/resolve-tool-name.util';
 import { type WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
 import { AgentActorContextService } from 'src/engine/metadata-modules/ai/ai-agent-execution/services/agent-actor-context.service';
 import { resolveProposedToolCall } from 'src/engine/metadata-modules/ai/ai-agent-execution/pausing-tools/utils/resolve-proposed-tool-call.util';
@@ -54,10 +46,6 @@ import { guideUncallableToolCallsToMetaTool } from 'src/engine/metadata-modules/
 import { AGENT_CONFIG } from 'src/engine/metadata-modules/ai/ai-agent/constants/agent-config.const';
 import { BrowsingContextType } from 'src/engine/metadata-modules/ai/ai-agent/types/browsing-context.type';
 import { repairToolCall } from 'src/engine/metadata-modules/ai/ai-agent/utils/repair-tool-call.util';
-import { AiBillingService } from 'src/engine/metadata-modules/ai/ai-billing/services/ai-billing.service';
-import { convertDollarsToCreditsMicro } from 'src/engine/metadata-modules/ai/ai-billing/utils/convert-dollars-to-credits-micro.util';
-import { countNativeWebSearchCallsFromSteps } from 'src/engine/metadata-modules/ai/ai-billing/utils/count-native-web-search-calls-from-steps.util';
-import { extractCacheCreationTokens } from 'src/engine/metadata-modules/ai/ai-billing/utils/extract-cache-creation-tokens.util';
 import { AI_CHAT_EXCLUDED_TOOL_NAMES } from 'src/engine/metadata-modules/ai/ai-chat/constants/ai-chat-excluded-tool-names.const';
 import { AI_CHAT_STREAM_FUNCTION_ID } from 'src/engine/metadata-modules/ai/ai-chat/constants/ai-chat-stream-function-id.constant';
 import { AI_CHAT_TOOL_NAMES_TO_PRELOAD } from 'src/engine/metadata-modules/ai/ai-chat/constants/ai-chat-tool-names-to-preload.const';
@@ -118,7 +106,6 @@ export type ChatExecutionOptions = {
 export type ChatExecutionResult = {
   stream: ReturnType<typeof streamText>;
   modelConfig: AiModelConfig;
-  hasNoMoreAvailableCredits: () => boolean;
   getStreamError: () => unknown;
 };
 
@@ -131,10 +118,8 @@ export class ChatExecutionService {
     private readonly skillService: SkillService,
     private readonly aiModelRegistryService: AiModelRegistryService,
     private readonly aiModelConfigService: AiModelConfigService,
-    private readonly aiBillingService: AiBillingService,
     private readonly agentActorContextService: AgentActorContextService,
     private readonly workspaceDomainsService: WorkspaceDomainsService,
-    private readonly exceptionHandlerService: ExceptionHandlerService,
     private readonly messagePruningService: MessagePruningService,
     private readonly chatActorService: AgentChatActorService,
     private readonly agentChatThreadTargetService: AgentChatThreadTargetService,
@@ -425,46 +410,8 @@ export class ChatExecutionService {
 
     const modelMessages = pruningResult.messages;
 
-    let hasNoMoreAvailableCredits = false;
     let stepIndex = 0;
     let lastUnderlyingStreamError: unknown;
-
-    const emitTurnUsageEvent = async (steps: StepResult<ToolSet>[]) => {
-      const usage = steps.reduce(
-        (totals, step) => ({
-          inputTokens: totals.inputTokens + (step.usage.inputTokens ?? 0),
-          outputTokens: totals.outputTokens + (step.usage.outputTokens ?? 0),
-          cacheReadTokens:
-            totals.cacheReadTokens +
-            (step.usage.inputTokenDetails?.cacheReadTokens ?? 0),
-        }),
-        { inputTokens: 0, outputTokens: 0, cacheReadTokens: 0 },
-      );
-
-      const totalTokens = usage.inputTokens + usage.outputTokens;
-
-      const costInDollars = this.aiBillingService.calculateStepsCost(
-        registeredModel.modelId,
-        steps,
-      );
-      const creditsUsedMicro = convertDollarsToCreditsMicro(costInDollars);
-
-      await this.aiBillingService.emitAiTokenUsageEvent(
-        workspace.id,
-        creditsUsedMicro,
-        totalTokens,
-        registeredModel.modelId,
-        UsageOperationType.AI_CHAT_TOKEN,
-        null,
-        userWorkspaceId,
-      );
-
-      void this.aiBillingService.billNativeWebSearchUsage(
-        countNativeWebSearchCallsFromSteps(steps),
-        workspace.id,
-        userWorkspaceId,
-      );
-    };
 
     const stream = streamText({
       model: registeredModel.model,
@@ -477,8 +424,7 @@ export class ChatExecutionService {
       stopWhen: (step) =>
         isStepCount(AGENT_CONFIG.MAX_STEPS)(step) ||
         endsOnPausingToolCall({ steps: step.steps }) ||
-        hasToolCall(COMPLETE_WORKSPACE_SETUP_TOOL_NAME)(step) ||
-        hasNoMoreAvailableCredits,
+        hasToolCall(COMPLETE_WORKSPACE_SETUP_TOOL_NAME)(step),
       ...buildAiTelemetry({
         functionId: isWorkspaceSetupThread
           ? AI_CHAT_WORKSPACE_SETUP_STREAM_FUNCTION_ID
@@ -514,24 +460,6 @@ export class ChatExecutionService {
         );
       },
       onStepEnd: async (step) => {
-        const { hasNoMoreAvailableCredits: stepHasNoMoreAvailableCredits } =
-          await this.aiBillingService.decrementAndCheckAvailableCredits({
-            modelId: registeredModel.modelId,
-            billingInput: {
-              usage: step.usage,
-              cacheCreationTokens: extractCacheCreationTokens(
-                step.providerMetadata,
-              ),
-            },
-            workspaceId: workspace.id,
-            operationType: UsageOperationType.AI_CHAT_TOKEN,
-            spenders: { userWorkspaceId },
-          });
-
-        if (stepHasNoMoreAvailableCredits) {
-          hasNoMoreAvailableCredits = true;
-        }
-
         this.logger.log(
           `[AI_CHAT_TOKENS] step #${++stepIndex} — ` +
             `toolCallIds=[${step.toolCalls.map((toolCall) => toolCall.toolCallId).join(', ')}]: ` +
@@ -540,30 +468,8 @@ export class ChatExecutionService {
             `inputTokens(fullContext)=${step.usage.inputTokens ?? 0}, ` +
             `cacheReadTokens=${step.usage.inputTokenDetails?.cacheReadTokens ?? 0}, ` +
             `cacheWriteTokens=${step.usage.inputTokenDetails?.cacheWriteTokens ?? 0}, ` +
-            `cacheCreationTokens=${extractCacheCreationTokens(step.providerMetadata)}, ` +
             `totalTokens=${step.usage.totalTokens ?? 0}`,
         );
-
-        for (const part of step.content) {
-          if (part.type !== 'tool-result' && part.type !== 'tool-error') {
-            continue;
-          }
-
-          const succeeded =
-            part.type === 'tool-result' && isToolOutputSuccessful(part.output);
-
-          const outputTokens = estimateToolOutputTokens(
-            part.type === 'tool-result' ? part.output : part.error,
-          );
-
-          const executionAttributes = {
-            model: registeredModel.modelId,
-            tool: getToolMetricName(resolveToolName(part)),
-          };
-        }
-      },
-      onAbort: async ({ steps }) => {
-        await emitTurnUsageEvent(steps);
       },
       repairToolCall: async ({
         toolCall,
@@ -577,45 +483,15 @@ export class ChatExecutionService {
           inputSchema,
           error,
           model: registeredModel.model,
-          billingContext: {
-            aiBillingService: this.aiBillingService,
-            modelId: registeredModel.modelId,
-            workspaceId: workspace.id,
-            userWorkspaceId,
-            agentId: null,
-            operationType: UsageOperationType.AI_CHAT_TOKEN,
-          },
+          workspaceId: workspace.id,
+          userWorkspaceId,
         });
       },
     });
 
-    Promise.all([stream.usage, stream.steps])
-      .then(async ([, steps]) => {
-        await emitTurnUsageEvent(steps);
-      })
-      .catch((error) => {
-        if (error?.name === 'AbortError') {
-          return;
-        }
-
-        if (
-          error instanceof AiException &&
-          error.code === AiExceptionCode.STREAM_INTERRUPTED
-        ) {
-          return;
-        }
-
-        if (NoOutputGeneratedError.isInstance(error)) {
-          return;
-        }
-
-        this.exceptionHandlerService.captureExceptions([error]);
-      });
-
     return {
       stream,
       modelConfig,
-      hasNoMoreAvailableCredits: () => hasNoMoreAvailableCredits,
       getStreamError: () => lastUnderlyingStreamError,
     };
   }

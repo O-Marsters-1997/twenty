@@ -18,7 +18,6 @@ import { UserSessionCookieService } from 'src/engine/core-modules/user-session/s
 import { hashUserSessionToken } from 'src/engine/core-modules/user-session/utils/hash-user-session-token.util';
 import { AuthUser } from 'src/engine/decorators/auth/auth-user.decorator';
 import { AuthWorkspace } from 'src/engine/decorators/auth/auth-workspace.decorator';
-import { AllowSuspendedWorkspace } from 'src/engine/decorators/auth/allow-suspended-workspace.decorator';
 import { NoPermissionGuard } from 'src/engine/guards/no-permission.guard';
 import { AuthPrincipalGuard } from 'src/engine/guards/auth-principal.guard';
 
@@ -34,7 +33,6 @@ import { AuthPrincipalGuard } from 'src/engine/guards/auth-principal.guard';
   NoPermissionGuard,
 )
 @MetadataResolver()
-@AllowSuspendedWorkspace()
 export class UserSessionResolver {
   constructor(
     private readonly userSessionService: UserSessionService,

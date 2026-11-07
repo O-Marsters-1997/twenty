@@ -4,12 +4,10 @@ export const classifyAgentChatTurnOutcome = ({
   hasText,
   isAborted,
   isAwaitingUserAnswer,
-  outOfCredits,
 }: {
   hasText: boolean;
   isAborted: boolean;
   isAwaitingUserAnswer: boolean;
-  outOfCredits: boolean;
 }): AgentChatTurnOutcome => {
   // stopWhen ends the stream on a question, so this is a completed turn, not an abandoned one
   if (isAwaitingUserAnswer) {
@@ -24,14 +22,9 @@ export const classifyAgentChatTurnOutcome = ({
     return { kind: 'completed', outcome: 'answered' };
   }
 
-  return {
-    kind: 'failed',
-    failurePhase: outOfCredits ? 'credits_exhausted' : 'no_text',
-  };
+  return { kind: 'failed', failurePhase: 'no_text' };
 };
 
-// a lost stream claim overrides completion, but failures keep their phase so an out-of-credits turn
-// during a claim handover keeps its billing signal
 export const resolveSupersededTurnOutcome = (
   outcome: AgentChatTurnOutcome,
 ): AgentChatTurnOutcome =>

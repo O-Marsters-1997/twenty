@@ -1,5 +1,5 @@
 import { OnboardingInviteTeamSkipDialog } from '@/onboarding/components/OnboardingInviteTeamSkipDialog';
-import { OnboardingRewardMainButton } from '@/onboarding/components/OnboardingRewardMainButton';
+import { OnboardingMainButton } from '@/onboarding/components/OnboardingMainButton';
 import { OnboardingSkipButton } from '@/onboarding/components/OnboardingSkipButton';
 import { OnboardingStepAnimatedItem } from '@/onboarding/components/OnboardingStepAnimatedItem';
 import { StyledOnboardingStepHeading } from '@/onboarding/components/StyledOnboardingStepHeading';
@@ -10,9 +10,7 @@ import { ONBOARDING_CONTENT_BLOCK_WIDTH } from '@/onboarding/constants/Onboardin
 import { ONBOARDING_MOTION_SLIDE_OFFSET } from '@/onboarding/constants/OnboardingMotionSlideOffset';
 import { useInviteTeam } from '@/onboarding/hooks/useInviteTeam';
 import { useOnboardingMotionTransition } from '@/onboarding/hooks/useOnboardingMotionTransition';
-import { onboardingCreditsProgressSelector } from '@/onboarding/states/selectors/onboardingCreditsProgressSelector';
 import { TextInput } from '@/ui/input/components/TextInput';
-import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -53,9 +51,6 @@ export const InviteTeam = () => {
     isSubmitting,
     isNavigating,
   } = useInviteTeam();
-  const { inviteTeamButtonReward } = useAtomStateValue(
-    onboardingCreditsProgressSelector,
-  );
   const emailInputToFocusRef = useRef<HTMLInputElement>(null);
   const transition = useOnboardingMotionTransition();
 
@@ -123,10 +118,8 @@ export const InviteTeam = () => {
 
       <OnboardingStepAnimatedItem index={3}>
         <StyledFooter>
-          <OnboardingRewardMainButton
+          <OnboardingMainButton
             label={t`Invite`}
-            creditsReward={inviteTeamButtonReward.creditsReward}
-            isRewardPerItem={inviteTeamButtonReward.isRewardPerItem}
             disabled={!isValid}
             isLoading={isSubmitting || isNavigating}
             onClick={handleInvite}

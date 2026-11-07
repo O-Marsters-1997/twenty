@@ -14,7 +14,6 @@ const TABLE_LABELS: Record<EventLogTable, MessageDescriptor> = {
   [EventLogTable.PAGEVIEW]: msg`Page Views`,
   [EventLogTable.WORKSPACE_EVENT]: msg`Workspace Events`,
   [EventLogTable.OBJECT_EVENT]: msg`Object Events`,
-  [EventLogTable.USAGE_EVENT]: msg`Usage Events`,
   [EventLogTable.APPLICATION_LOG]: msg`Application Logs`,
 };
 

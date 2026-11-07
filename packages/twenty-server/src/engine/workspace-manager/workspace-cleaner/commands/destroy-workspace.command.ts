@@ -40,7 +40,7 @@ export class DestroyWorkspaceCommand extends MigrationCommandRunner {
       `${dryRun ? 'DRY RUN - ' : ''}Destroy ${this.workspaceIds.length} workspaces : ${this.workspaceIds.join(', ')}`,
     );
 
-    await this.cleanerWorkspaceService.destroyBillingDeactivatedAndSoftDeletedWorkspaces(
+    await this.cleanerWorkspaceService.destroySoftDeletedWorkspaces(
       this.workspaceIds,
       dryRun,
     );

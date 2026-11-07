@@ -201,10 +201,6 @@ export class TwentyConfigService {
     return this.get('TYPEORM_LOGGING');
   }
 
-  isBillingEnabled(): boolean {
-    return this.get('IS_BILLING_ENABLED') === true;
-  }
-
   private validateNotEnvOnly<T extends keyof ConfigVariables>(
     key: T,
     operation: string,

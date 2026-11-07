@@ -5,8 +5,6 @@ import { PermissionFlagType } from 'twenty-shared/constants';
 import { ApiPath } from 'twenty-shared/types';
 
 import { RestApiExceptionFilter } from 'src/engine/api/rest/rest-api-exception.filter';
-import { UsageLimitRestApiExceptionFilter } from 'src/engine/core-modules/usage-limit/filters/usage-limit-rest-api-exception.filter';
-import { UsageOperationType } from 'src/engine/core-modules/usage/enums/usage-operation-type.enum';
 import type { WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
 import { AuthUserWorkspaceId } from 'src/engine/decorators/auth/auth-user-workspace-id.decorator';
 import { AuthWorkspace } from 'src/engine/decorators/auth/auth-workspace.decorator';
@@ -17,9 +15,7 @@ import {
   AiException,
   AiExceptionCode,
 } from 'src/engine/metadata-modules/ai/ai.exception';
-import { AiBillingService } from 'src/engine/metadata-modules/ai/ai-billing/services/ai-billing.service';
 import { AiRestApiExceptionFilter } from 'src/engine/metadata-modules/ai/filters/ai-api-exception.filter';
-import { BillingRestApiExceptionFilter } from 'src/engine/core-modules/billing/filters/billing-api-exception.filter';
 import { GenerateTextInput } from 'src/engine/metadata-modules/ai/ai-generate-text/dtos/generate-text.input';
 import { AiModelRegistryService } from 'src/engine/metadata-modules/ai/ai-models/services/ai-model-registry.service';
 import { buildReasoningProviderOptions } from 'src/engine/metadata-modules/ai/ai-models/utils/build-reasoning-provider-options.util';
@@ -46,14 +42,11 @@ import { AUTO_SELECT_MODEL_ID_BY_TIER } from 'twenty-shared/ai';
   RestApiExceptionFilter,
   PermissionsRestApiExceptionFilter,
   AiRestApiExceptionFilter,
-  UsageLimitRestApiExceptionFilter,
-  BillingRestApiExceptionFilter,
   AuthRestApiExceptionFilter,
 )
 export class AiGenerateTextController {
   constructor(
     private readonly aiModelRegistryService: AiModelRegistryService,
-    private readonly aiBillingService: AiBillingService,
   ) {}
 
   @Post('generate-text')
@@ -70,12 +63,6 @@ export class AiGenerateTextController {
       );
     }
 
-    await this.aiBillingService.assertAiExecutionAllowed({
-      workspaceId: workspace.id,
-      operationType: UsageOperationType.AI_WORKFLOW_TOKEN,
-      spenders: { userWorkspaceId },
-    });
-
     const resolvedModelId = body.modelId ?? AUTO_SELECT_MODEL_ID_BY_TIER.fast;
 
     this.aiModelRegistryService.validateModelAvailability(resolvedModelId);
@@ -86,43 +73,24 @@ export class AiGenerateTextController {
         workspace,
       );
 
-    let result: Awaited<ReturnType<typeof generateText>> | undefined;
+    const result = await generateText({
+      model: registeredModel.model,
+      providerOptions: buildReasoningProviderOptions(registeredModel),
+      instructions: body.systemPrompt,
+      prompt: body.userPrompt,
+      ...buildAiTelemetry({
+        functionId: 'ai-generate-text',
+        workspaceId: workspace.id,
+        userWorkspaceId,
+      }),
+    });
 
-    try {
-      result = await generateText({
-        model: registeredModel.model,
-        providerOptions: buildReasoningProviderOptions(registeredModel),
-        instructions: body.systemPrompt,
-        prompt: body.userPrompt,
-        ...buildAiTelemetry({
-          functionId: 'ai-generate-text',
-          workspaceId: workspace.id,
-          userWorkspaceId,
-        }),
-      });
-
-      return {
-        text: result.text,
-        usage: {
-          inputTokens: result.usage?.inputTokens ?? 0,
-          outputTokens: result.usage?.outputTokens ?? 0,
-        },
-      };
-    } finally {
-      if (result) {
-        void this.aiBillingService.calculateAndBillUsage(
-          registeredModel.modelId,
-          {
-            usage: result.usage,
-            cacheCreationTokens:
-              result.usage.inputTokenDetails?.cacheWriteTokens ?? 0,
-          },
-          workspace.id,
-          UsageOperationType.AI_WORKFLOW_TOKEN,
-          null,
-          userWorkspaceId,
-        );
-      }
-    }
+    return {
+      text: result.text,
+      usage: {
+        inputTokens: result.usage?.inputTokens ?? 0,
+        outputTokens: result.usage?.outputTokens ?? 0,
+      },
+    };
   }
 }

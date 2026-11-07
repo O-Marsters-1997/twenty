@@ -3,7 +3,6 @@ import { OnboardingSkipDialog } from '@/onboarding/components/OnboardingSkipDial
 import { OnboardingSkipDialogAvatars } from '@/onboarding/components/OnboardingSkipDialogAvatars';
 import { ONBOARDING_INVITE_TEAM_EMPTY_SEATS_COUNT } from '@/onboarding/constants/OnboardingInviteTeamEmptySeatsCount';
 import { ONBOARDING_SKIP_DIALOG_IDS } from '@/onboarding/constants/OnboardingSkipDialogIds';
-import { onboardingCreditsProgressSelector } from '@/onboarding/states/selectors/onboardingCreditsProgressSelector';
 import { onboardingInviteTeamValidEmailsSelector } from '@/onboarding/states/selectors/onboardingInviteTeamValidEmailsSelector';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { plural } from '@lingui/core/macro';
@@ -34,9 +33,6 @@ export const OnboardingInviteTeamSkipDialog = ({
   const currentWorkspaceMember = useAtomStateValue(currentWorkspaceMemberState);
   const onboardingInviteTeamValidEmails = useAtomStateValue(
     onboardingInviteTeamValidEmailsSelector,
-  );
-  const { inviteTeamButtonReward } = useAtomStateValue(
-    onboardingCreditsProgressSelector,
   );
 
   const hasInviteEmails = isNonEmptyArray(onboardingInviteTeamValidEmails);
@@ -88,12 +84,10 @@ export const OnboardingInviteTeamSkipDialog = ({
                 one: 'Send invite',
                 other: 'Send # invites',
               }),
-              ...inviteTeamButtonReward,
               onClick: onInvite,
             }
           : {
               label: t`Add teammates`,
-              ...inviteTeamButtonReward,
               onClick: () => {},
             },
       ]}

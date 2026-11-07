@@ -1,16 +1,11 @@
 import { createElement } from 'react';
 
 import {
-  BillingSubscriptionRenewingEmail,
-  BillingTrialConvertingEmail,
-  BillingTrialEndingEmail,
-  CleanSuspendedWorkspaceEmail,
   PasswordResetLinkEmail,
   PasswordUpdateNotifyEmail,
   SendApprovedAccessDomainValidation,
   SendEmailVerificationLinkEmail,
   SendInviteLinkEmail,
-  WarnSuspendedWorkspaceEmail,
   EmailRenderError,
   renderEmail,
 } from 'twenty-emails';
@@ -23,51 +18,6 @@ const SENDER = {
 };
 
 const TEMPLATES = [
-  {
-    name: 'BillingSubscriptionRenewingEmail',
-    element: BillingSubscriptionRenewingEmail({
-      userName: 'Tim',
-      workspaceDisplayName: 'Acme Inc',
-      renewsAt: new Date('2026-01-01'),
-      link: 'https://app.twenty.com/settings/billing',
-      locale: 'en',
-    }),
-    expectedContent: 'https://app.twenty.com/settings/billing',
-  },
-  {
-    name: 'BillingTrialConvertingEmail',
-    element: BillingTrialConvertingEmail({
-      userName: 'Tim',
-      workspaceDisplayName: 'Acme Inc',
-      trialEndsAt: new Date('2026-01-01'),
-      interval: 'month',
-      link: 'https://app.twenty.com/settings/billing',
-      locale: 'en',
-    }),
-    expectedContent: 'https://app.twenty.com/settings/billing',
-  },
-  {
-    name: 'BillingTrialEndingEmail',
-    element: BillingTrialEndingEmail({
-      userName: 'Tim',
-      workspaceDisplayName: 'Acme Inc',
-      trialEndsAt: new Date('2026-01-01'),
-      dataRetentionDays: 30,
-      link: 'https://app.twenty.com/settings/billing',
-      locale: 'en',
-    }),
-    expectedContent: 'https://app.twenty.com/settings/billing',
-  },
-  {
-    name: 'CleanSuspendedWorkspaceEmail',
-    element: CleanSuspendedWorkspaceEmail({
-      daysSinceInactive: 30,
-      userName: 'Tim',
-      workspaceDisplayName: 'Acme Inc',
-      locale: 'en',
-    }),
-    expectedContent: 'Acme Inc',
-  },
   {
     name: 'PasswordResetLinkEmail',
     element: PasswordResetLinkEmail({
@@ -118,18 +68,6 @@ const TEMPLATES = [
       locale: 'en',
     }),
     expectedContent: 'https://app.twenty.com/invite/token',
-  },
-  {
-    name: 'WarnSuspendedWorkspaceEmail',
-    element: WarnSuspendedWorkspaceEmail({
-      daysSinceInactive: 30,
-      inactiveDaysBeforeDelete: 60,
-      userName: 'Tim',
-      workspaceDisplayName: 'Acme Inc',
-      link: 'https://app.twenty.com/settings/billing',
-      locale: 'en',
-    }),
-    expectedContent: 'https://app.twenty.com/settings/billing',
   },
 ];
 

@@ -31,8 +31,6 @@ const EXCLUDED_MODEL_PREFIXES = [
 
 const EXCLUDED_MODEL_SUFFIXES = ['-audio-preview', '-realtime-preview'];
 
-const LONG_CONTEXT_THRESHOLD_TOKENS = 200000;
-
 const isLanguageModel = (modelId: string): boolean => {
   const lowerId = modelId.toLowerCase();
 
@@ -49,40 +47,6 @@ const meetsInclusionCriteria = (modelData: ModelsDevModel): boolean =>
   isDefined(modelData.cost?.input) &&
   isDefined(modelData.limit?.context);
 
-const extractCost = ({
-  modelData,
-  model,
-}: {
-  modelData: ModelsDevModel;
-  model: GeneratedModel;
-}): void => {
-  const cost = modelData.cost;
-
-  if (!isDefined(cost)) {
-    return;
-  }
-
-  model.inputCostPerMillionTokens = cost.input;
-  model.outputCostPerMillionTokens = cost.output;
-  model.cachedInputCostPerMillionTokens = cost.cache_read;
-  model.cacheCreationCostPerMillionTokens = cost.cache_write;
-
-  const longContextCost = cost.context_over_200k;
-
-  if (!isDefined(longContextCost?.input)) {
-    return;
-  }
-
-  model.longContextCost = {
-    inputCostPerMillionTokens: longContextCost.input,
-    outputCostPerMillionTokens:
-      longContextCost.output ?? model.outputCostPerMillionTokens ?? 0,
-    thresholdTokens: LONG_CONTEXT_THRESHOLD_TOKENS,
-    cachedInputCostPerMillionTokens: longContextCost.cache_read,
-    cacheCreationCostPerMillionTokens: longContextCost.cache_write,
-  };
-};
-
 const buildModel = ({
   providerName,
   modelId,
@@ -97,8 +61,6 @@ const buildModel = ({
     label: modelData.name ?? modelId,
     modelFamily: inferModelFamily(providerName, modelId),
   };
-
-  extractCost({ modelData, model });
 
   model.contextWindowTokens = modelData.limit?.context;
   model.maxOutputTokens = modelData.limit?.output;

@@ -18,7 +18,7 @@ import { getLogConsoleRecordChangeFieldDiffs } from '@/log-console/utils/getLogC
 import { isLogConsoleFieldValueEmpty } from '@/log-console/utils/isLogConsoleFieldValueEmpty';
 import { objectMetadataItemsByIdMapSelector } from '@/object-metadata/states/objectMetadataItemsByIdMapSelector';
 import { type FieldMetadataItem } from '@/object-metadata/types/FieldMetadataItem';
-import { BillingFieldRow } from '@/settings/billing/components/internal/SettingsBillingCardField';
+import { LogConsoleFieldRow } from '@/log-console/components/LogConsoleFieldRow';
 import { useOpenRecordInSidePanel } from '@/side-panel/hooks/useOpenRecordInSidePanel';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { type EventLogRecord } from '~/generated-metadata/graphql';
@@ -133,7 +133,7 @@ export const LogConsoleRecordChangeDetail = ({
             {isNonEmptyArray(fieldDiffs) && (
               <StyledLogConsoleFieldsCard>
                 {fieldDiffs.map((fieldDiff) => (
-                  <BillingFieldRow
+                  <LogConsoleFieldRow
                     key={fieldDiff.key}
                     Icon={getIcon(fieldDiff.fieldMetadataItem.icon)}
                     label={fieldDiff.fieldMetadataItem.label}
@@ -144,7 +144,7 @@ export const LogConsoleRecordChangeDetail = ({
                         recordStoreId: `${diffId}-${fieldDiff.key}`,
                       })}
                     </ErrorBoundary>
-                  </BillingFieldRow>
+                  </LogConsoleFieldRow>
                 ))}
               </StyledLogConsoleFieldsCard>
             )}

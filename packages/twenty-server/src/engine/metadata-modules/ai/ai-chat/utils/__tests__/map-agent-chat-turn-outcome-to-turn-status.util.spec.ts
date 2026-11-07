@@ -29,18 +29,6 @@ describe('mapAgentChatTurnOutcomeToTurnStatus', () => {
     ).toEqual({ status: AgentTurnStatus.CANCELLED, error: null });
   });
 
-  it('fails a turn that ran out of credits with a readable error', () => {
-    expect(
-      mapAgentChatTurnOutcomeToTurnStatus({
-        kind: 'failed',
-        failurePhase: 'credits_exhausted',
-      }),
-    ).toEqual({
-      status: AgentTurnStatus.FAILED,
-      error: expect.objectContaining({ code: 'CREDITS_EXHAUSTED' }),
-    });
-  });
-
   it('keeps the error code of a turn that failed while running', () => {
     expect(
       mapAgentChatTurnOutcomeToTurnStatus({

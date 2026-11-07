@@ -14,7 +14,6 @@ import { WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.ent
 import { AuthUser } from 'src/engine/decorators/auth/auth-user.decorator';
 import { AuthUserWorkspaceId } from 'src/engine/decorators/auth/auth-user-workspace-id.decorator';
 import { AuthWorkspace } from 'src/engine/decorators/auth/auth-workspace.decorator';
-import { AllowSuspendedWorkspace } from 'src/engine/decorators/auth/allow-suspended-workspace.decorator';
 import { NoPermissionGuard } from 'src/engine/guards/no-permission.guard';
 import { AuthPrincipalGuard } from 'src/engine/guards/auth-principal.guard';
 
@@ -33,7 +32,6 @@ import { AuthPrincipalGuard } from 'src/engine/guards/auth-principal.guard';
 @UsePipes(ResolverValidationPipe)
 @UseFilters(PreventNestToAutoLogGraphqlErrorsFilter)
 @MetadataResolver()
-@AllowSuspendedWorkspace()
 export class OnboardingResolver {
   constructor(
     private readonly onboardingService: OnboardingService,
@@ -65,26 +63,6 @@ export class OnboardingResolver {
     await this.onboardingService.skipOnboardingConnectAccountStep({
       userId: user.id,
       workspaceId: workspace.id,
-      isAutoSkipped,
-    });
-
-    return { success: true };
-  }
-
-  @Mutation(() => OnboardingStepSuccessDTO)
-  @UseGuards(NoPermissionGuard)
-  async completeBookCallOnboardingStep(
-    @AuthUser() user: AuthContextUser,
-    @AuthWorkspace() workspace: WorkspaceEntity,
-    @Args({ name: 'hasBookedCall', type: () => Boolean, defaultValue: false })
-    hasBookedCall: boolean,
-    @Args({ name: 'isAutoSkipped', type: () => Boolean, defaultValue: false })
-    isAutoSkipped: boolean,
-  ): Promise<OnboardingStepSuccessDTO> {
-    await this.onboardingService.completeOnboardingBookCallStep({
-      userId: user.id,
-      workspaceId: workspace.id,
-      hasBookedCall,
       isAutoSkipped,
     });
 

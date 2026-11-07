@@ -33,13 +33,11 @@ describe('ai-providers.json integrity', () => {
     });
   });
 
-  it('should identify and price every model', () => {
+  it('should identify every model', () => {
     Object.values(PROVIDERS).forEach((config) => {
       (config.models ?? []).forEach((model) => {
         expect(model.name).toBeDefined();
         expect(model.label).toBeDefined();
-        expect(model.inputCostPerMillionTokens).toBeDefined();
-        expect(model.outputCostPerMillionTokens).toBeDefined();
       });
     });
   });

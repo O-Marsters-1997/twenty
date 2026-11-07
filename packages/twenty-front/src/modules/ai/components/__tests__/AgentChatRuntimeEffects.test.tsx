@@ -1,14 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import { Provider as JotaiProvider } from 'jotai';
 import { Temporal } from 'temporal-polyfill';
-import { WorkspaceActivationStatus } from 'twenty-shared/workspace';
 
 import { AgentChatRuntimeEffects } from '@/ai/components/AgentChatRuntimeEffects';
 import { agentChatUISessionStartTimeState } from '@/ai/states/agentChatUISessionStartTimeState';
-import {
-  currentWorkspaceState,
-  type CurrentWorkspace,
-} from '@/auth/states/currentWorkspaceState';
+import { currentWorkspaceState } from '@/auth/states/currentWorkspaceState';
 import { jotaiStore } from '@/ui/utilities/state/jotai/jotaiStore';
 
 jest.mock('@/ai/components/AgentChatMessagesFetchEffect', () => ({
@@ -43,15 +39,5 @@ describe('AgentChatRuntimeEffects', () => {
     renderRuntimeEffects();
 
     expect(screen.queryByTestId('stream-subscription')).not.toBeNull();
-  });
-
-  it('should not run the chat runtime for a suspended workspace', () => {
-    jotaiStore.set(currentWorkspaceState.atom, {
-      activationStatus: WorkspaceActivationStatus.SUSPENDED,
-    } as CurrentWorkspace);
-
-    renderRuntimeEffects();
-
-    expect(screen.queryByTestId('stream-subscription')).toBeNull();
   });
 });

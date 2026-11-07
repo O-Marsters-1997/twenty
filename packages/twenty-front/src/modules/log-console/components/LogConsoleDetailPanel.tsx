@@ -27,7 +27,7 @@ import { ObjectMetadataIcon } from '@/object-metadata/components/ObjectMetadataI
 import { objectMetadataItemsByIdMapSelector } from '@/object-metadata/states/objectMetadataItemsByIdMapSelector';
 import { getObjectRecordIdentifier } from '@/object-metadata/utils/getObjectRecordIdentifier';
 import { FieldWidgetShowMoreButton } from '@/page-layout/widgets/field/components/FieldWidgetShowMoreButton';
-import { BillingFieldRow } from '@/settings/billing/components/internal/SettingsBillingCardField';
+import { LogConsoleFieldRow } from '@/log-console/components/LogConsoleFieldRow';
 import { APP_HEADER_HEIGHT } from '@/ui/layout/constants/AppHeaderHeight';
 import { HeaderIdentifier } from '@/ui/layout/page/components/HeaderIdentifier';
 import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
@@ -285,9 +285,9 @@ export const LogConsoleDetailPanel = () => {
           <Section.Header title={t`Details`} />
           <StyledLogConsoleFieldsCard>
             {detailItems.map(({ Icon, label, value }) => (
-              <BillingFieldRow key={label} Icon={Icon} label={label}>
+              <LogConsoleFieldRow key={label} Icon={Icon} label={label}>
                 {value}
-              </BillingFieldRow>
+              </LogConsoleFieldRow>
             ))}
           </StyledLogConsoleFieldsCard>
         </Section.Root>

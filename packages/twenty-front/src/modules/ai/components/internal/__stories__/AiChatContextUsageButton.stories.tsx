@@ -1,4 +1,3 @@
-import { MockedProvider } from '@apollo/client/testing/react';
 import { type Meta, type StoryObj } from '@storybook/react-vite';
 import { createStore, Provider } from 'jotai';
 import { type ReactNode, useState } from 'react';
@@ -11,7 +10,6 @@ import {
   type AgentChatUsageState,
 } from '@/ai/states/agentChatUsageFamilyState';
 import { currentAiChatThreadState } from '@/ai/states/currentAiChatThreadState';
-import { GetAiChatUsageDocument } from '~/generated-metadata/graphql';
 
 const USAGE: AgentChatUsageState = {
   conversationSize: 200000,
@@ -19,30 +17,18 @@ const USAGE: AgentChatUsageState = {
   inputTokens: 200000,
   outputTokens: 40000,
   cachedInputTokens: 75000,
-  inputCredits: 80,
-  outputCredits: 20,
   lastMessage: {
     inputTokens: 100000,
     outputTokens: 20000,
     cachedInputTokens: 50000,
-    inputCredits: 40,
-    outputCredits: 10,
   },
 };
 
 const UsageStory = ({
   usage = null,
-  limit = 1000,
-  consumed = 800,
-  error = false,
-  loading = false,
   children,
 }: {
   usage?: AgentChatUsageState | null;
-  limit?: number | null;
-  consumed?: number | null;
-  error?: boolean;
-  loading?: boolean;
   children?: ReactNode;
 }) => {
   const [store] = useState(() => {
@@ -56,34 +42,7 @@ const UsageStory = ({
   });
   return (
     <Provider store={store}>
-      <MockedProvider
-        mocks={[
-          {
-            request: { query: GetAiChatUsageDocument },
-            maxUsageCount: Infinity,
-            delay: loading ? Infinity : 0,
-            ...(error
-              ? { error: new Error('Usage unavailable') }
-              : {
-                  result: {
-                    data: {
-                      aiChatUsage:
-                        limit === null
-                          ? null
-                          : {
-                              limitValue: limit,
-                              consumedValue: consumed,
-                              periodEnd: null,
-                              kind: 'allowance',
-                            },
-                    },
-                  },
-                }),
-          },
-        ]}
-      >
-        {children ?? <AiChatContextUsageButton />}
-      </MockedProvider>
+      {children ?? <AiChatContextUsageButton />}
     </Provider>
   );
 };
@@ -107,7 +66,7 @@ export const NewChat: Story = {
       'Context and usage, context window unavailable',
     );
     await userEvent.click(trigger);
-    await waitFor(() => expect(page.getByText('80%')).toBeVisible());
+    await waitFor(() => expect(page.getByRole('dialog')).toBeVisible());
     await expect(
       page.queryByRole('button', { name: /^More/ }),
     ).not.toBeInTheDocument();
@@ -145,15 +104,6 @@ export const Expanded: Story = {
 export const ReopenedConversation: Story = {
   render: () => <UsageStory usage={{ ...USAGE, lastMessage: null }} />,
 };
-export const NoLimit: Story = { render: () => <UsageStory limit={null} /> };
-export const UnknownConsumption: Story = {
-  render: () => <UsageStory consumed={null} />,
-};
-export const Exhausted: Story = {
-  render: () => <UsageStory limit={0} consumed={0} />,
-};
-export const Unavailable: Story = { render: () => <UsageStory error /> };
-export const Loading: Story = { render: () => <UsageStory loading /> };
 export const Details: Story = {
   render: () => (
     <UsageStory usage={USAGE}>

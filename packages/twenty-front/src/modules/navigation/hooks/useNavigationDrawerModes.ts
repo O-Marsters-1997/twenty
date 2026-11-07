@@ -1,5 +1,4 @@
 import { useLingui } from '@lingui/react/macro';
-import { WorkspaceActivationStatus } from 'twenty-shared/workspace';
 import {
   IconComment,
   type IconComponent,
@@ -15,7 +14,6 @@ import {
   NAVIGATION_DRAWER_TABS,
 } from '@/ui/navigation/states/navigationDrawerTabs';
 import { useIsFeatureEnabled } from '@/workspace/hooks/useIsFeatureEnabled';
-import { useIsWorkspaceActivationStatusEqualsTo } from '@/workspace/hooks/useIsWorkspaceActivationStatusEqualsTo';
 import {
   FeatureFlagKey,
   PermissionFlagType,
@@ -34,14 +32,6 @@ export const useNavigationDrawerModes = (): NavigationDrawerMode[] => {
   const isAiChatInboxEnabled = useIsFeatureEnabled(
     FeatureFlagKey.IS_AI_CHAT_INBOX_ENABLED,
   );
-  const isWorkspaceSuspended = useIsWorkspaceActivationStatusEqualsTo(
-    WorkspaceActivationStatus.SUSPENDED,
-  );
-
-  // The route guard holds a suspended workspace on billing settings, so other modes would bounce back.
-  if (isWorkspaceSuspended) {
-    return [];
-  }
 
   const navigationDrawerModeDisplays: Record<
     NavigationDrawerActiveTab,

@@ -35,9 +35,6 @@ const agentResult = (
   ({
     result: { response: '' },
     usage: { inputTokens: 1, outputTokens: 1, totalTokens: 2 },
-    cacheCreationTokens: 0,
-    nativeWebSearchCallCount: 0,
-    hasNoMoreAvailableCredits: false,
     modelId: 'test-model',
     ...overrides,
   }) as AgentExecutionResult;

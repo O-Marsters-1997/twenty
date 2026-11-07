@@ -30,7 +30,6 @@ import { isUserAuthContext } from 'src/engine/core-modules/auth/guards/is-user-a
 import { workspaceAuthContextStorage } from 'src/engine/core-modules/auth/storage/workspace-auth-context.storage';
 import { type ApplicationWorkspaceAuthContext } from 'src/engine/core-modules/auth/types/workspace-auth-context.type';
 import { buildApiKeyAuthContext } from 'src/engine/core-modules/auth/utils/build-api-key-auth-context.util';
-import { UsageOperationType } from 'src/engine/core-modules/usage/enums/usage-operation-type.enum';
 import { type FlatWorkspace } from 'src/engine/core-modules/workspace/types/flat-workspace.type';
 import { AgentActorContextService } from 'src/engine/metadata-modules/ai/ai-agent-execution/services/agent-actor-context.service';
 import { AgentRunCallerHandlerRegistryService } from 'src/engine/metadata-modules/ai/ai-agent-execution/services/agent-run-caller-handler-registry.service';
@@ -376,7 +375,6 @@ export class AgentRunService implements AgentRunCallerHandler, OnModuleInit {
       conversationActor: isDefined(memberWorkspaceMemberId)
         ? { type: 'user', workspaceMemberId: memberWorkspaceMemberId }
         : { type: 'application', applicationId: agentContext.application.id },
-      usageOperationType: UsageOperationType.AI_WORKFLOW_TOKEN,
     };
   }
 

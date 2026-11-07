@@ -2,10 +2,6 @@ import { useAuth } from '@/auth/hooks/useAuth';
 import { useSignInWithGoogle } from '@/auth/sign-in-up/hooks/useSignInWithGoogle';
 import { renderHook } from '@testing-library/react';
 import { useParams, useSearchParams } from 'react-router-dom';
-import {
-  BillingPlanKey,
-  SubscriptionInterval,
-} from '~/generated-metadata/graphql';
 import { getJestMetadataAndApolloMocksWrapper } from '~/testing/jest/getJestMetadataAndApolloMocksWrapper';
 
 jest.mock('react-router-dom', () => ({
@@ -19,12 +15,6 @@ jest.mock('@/auth/hooks/useAuth', () => ({
 }));
 
 describe('useSignInWithGoogle', () => {
-  const mockBillingCheckoutSession = {
-    plan: BillingPlanKey.PRO,
-    interval: SubscriptionInterval.Month,
-    requirePaymentMethod: true,
-  };
-
   const Wrapper = getJestMetadataAndApolloMocksWrapper({
     apolloMocks: [],
   });
@@ -33,9 +23,7 @@ describe('useSignInWithGoogle', () => {
     const signInWithGoogleMock = jest.fn();
     const mockUseParams = { workspaceInviteHash: 'testHash' };
 
-    const mockSearchParams = new URLSearchParams(
-      'inviteToken=testToken&billingCheckoutSessionState={"plan":"Pro","interval":"Month","requirePaymentMethod":true}',
-    );
+    const mockSearchParams = new URLSearchParams('inviteToken=testToken');
 
     (useParams as jest.Mock).mockReturnValue(mockUseParams);
     (useSearchParams as jest.Mock).mockReturnValue([mockSearchParams]);
@@ -54,7 +42,6 @@ describe('useSignInWithGoogle', () => {
       action: 'join-workspace',
       workspaceInviteHash: 'testHash',
       workspacePersonalInviteToken: 'testToken',
-      billingCheckoutSession: mockBillingCheckoutSession,
     });
   });
 
@@ -80,7 +67,6 @@ describe('useSignInWithGoogle', () => {
       action: 'join-workspace',
       workspaceInviteHash: 'testHash',
       workspacePersonalInviteToken: undefined,
-      billingCheckoutSession: mockBillingCheckoutSession,
     });
   });
 });

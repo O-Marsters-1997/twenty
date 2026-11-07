@@ -2,7 +2,6 @@ import { SettingsPath } from 'twenty-shared/types';
 
 import { useAuth } from '@/auth/hooks/useAuth';
 import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMemberState';
-import { billingState } from '@/client-config/states/billingState';
 import { supportChatState } from '@/client-config/states/supportChatState';
 import { permissionFlagMapSelector } from '@/settings/roles/states/permissionFlagMapSelector';
 import { getDocumentationUrl } from '@/support/utils/getDocumentationUrl';
@@ -19,7 +18,6 @@ import {
   IconCalendarEvent,
   IconColorSwatch,
   type IconComponent,
-  IconCreditCard,
   IconDoorEnter,
   IconHelpCircle,
   IconHierarchy,
@@ -58,12 +56,10 @@ export type SettingsNavigationItem = {
 };
 
 const useSettingsNavigationItems = (): SettingsNavigationSection[] => {
-  const billing = useAtomStateValue(billingState);
   const { signOut } = useAuth();
   const supportChat = useAtomStateValue(supportChatState);
   const currentWorkspaceMember = useAtomStateValue(currentWorkspaceMemberState);
 
-  const isBillingEnabled = billing?.isBillingEnabled ?? false;
   const isSupportChatConfigured =
     supportChat?.supportDriver === 'FRONT' &&
     isNonEmptyString(supportChat.supportFrontChatId);
@@ -141,14 +137,6 @@ const useSettingsNavigationItems = (): SettingsNavigationSection[] => {
           path: SettingsPath.WorkspaceMembersPage,
           Icon: IconUsers,
           isHidden: !permissionFlagMap[PermissionFlagType.WORKSPACE_MEMBERS],
-        },
-        {
-          label: t`Billing`,
-          path: SettingsPath.Billing,
-          Icon: IconCreditCard,
-          isHidden:
-            !isBillingEnabled ||
-            !permissionFlagMap[PermissionFlagType.WORKSPACE],
         },
         {
           label: t`MCP & APIs`,

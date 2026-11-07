@@ -164,7 +164,6 @@ export const responseData = {
         },
         featureFlags: [],
         metadataVersion: 1,
-        currentBillingSubscription: null,
         workspaceMembersCount: 1,
         defaultRole: {
           id: 'default-role-id',
@@ -178,8 +177,6 @@ export const responseData = {
           canDestroyAllObjectRecords: true,
         },
       },
-      currentBillingSubscription: null,
-      billingSubscriptions: [],
       workspaces: [],
       userVars: null,
     },

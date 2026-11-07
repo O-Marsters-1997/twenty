@@ -39,5 +39,4 @@ export const fromWorkspaceEntityToFlat = (
   createdAt: entity.createdAt.toISOString(),
   updatedAt: entity.updatedAt.toISOString(),
   deletedAt: entity.deletedAt?.toISOString(),
-  suspendedAt: entity.suspendedAt?.toISOString() ?? null,
 });

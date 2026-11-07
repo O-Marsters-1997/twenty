@@ -106,16 +106,10 @@ const SCHEMA = getWorkspaceSchemaName(WORKSPACE_ID);
           metadata.flatObjectMetadataMaps,
         ).idByNameSingular,
         featureFlagsMap: {} as Record<FeatureFlagKey, boolean>,
-        billingEntitlements: {},
         userWorkspaceRoleMap: {},
         apiKeyRoleMap: {},
         roleIdsWithAllRecordsAccess: [],
         eventEmitterService: { emitDatabaseBatchEvent },
-        recordStock: {
-          assertRecordStockAvailable: jest.fn().mockResolvedValue(undefined),
-          acquireRecordStock: jest.fn().mockResolvedValue(undefined),
-          releaseRecordStock: jest.fn().mockResolvedValue(undefined),
-        },
         coreDataSource: dataSource,
       },
     };

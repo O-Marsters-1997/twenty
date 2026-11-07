@@ -20,9 +20,6 @@ const useAiChatEditor = jest.fn();
 jest.mock('@/ai/hooks/useAiChatEditor', () => ({
   useAiChatEditor: () => useAiChatEditor(),
 }));
-jest.mock('@/ai/hooks/useHasReachedAiChatUsageLimit', () => ({
-  useHasReachedAiChatUsageLimit: () => false,
-}));
 jest.mock('@/ai/components/AiChatStandaloneError', () => ({
   AiChatStandaloneError: () => null,
 }));

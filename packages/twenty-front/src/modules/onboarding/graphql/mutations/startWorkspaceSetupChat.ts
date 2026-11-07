@@ -18,8 +18,6 @@ export const START_WORKSPACE_SETUP_CHAT = gql`
         totalOutputTokens
         contextWindowTokens
         conversationSize
-        totalInputCredits
-        totalOutputCredits
         deletedAt
         createdAt
         updatedAt

@@ -87,7 +87,6 @@ import { WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.ent
 import { AuthProvider } from 'src/engine/decorators/auth/auth-provider.decorator';
 import { AuthUser } from 'src/engine/decorators/auth/auth-user.decorator';
 import { AuthWorkspace } from 'src/engine/decorators/auth/auth-workspace.decorator';
-import { AllowSuspendedWorkspace } from 'src/engine/decorators/auth/allow-suspended-workspace.decorator';
 import { NoPermissionGuard } from 'src/engine/guards/no-permission.guard';
 import { PublicEndpointGuard } from 'src/engine/guards/public-endpoint.guard';
 import { AuthPrincipalGuard } from 'src/engine/guards/auth-principal.guard';
@@ -188,7 +187,6 @@ export class AuthResolver {
 
   @Mutation(() => LoginTokenDTO)
   @UseGuards(CaptchaGuard, PublicEndpointGuard, NoPermissionGuard)
-  @AllowSuspendedWorkspace()
   async getLoginTokenFromCredentials(
     @Args()
     getLoginTokenFromCredentialsInput: UserCredentialsInput,
@@ -225,7 +223,6 @@ export class AuthResolver {
 
   @Mutation(() => AvailableWorkspacesAndAccessTokensDTO)
   @UseGuards(CaptchaGuard, PublicEndpointGuard, NoPermissionGuard)
-  @AllowSuspendedWorkspace()
   async signIn(
     @Args()
     userCredentials: UserCredentialsInput,
@@ -273,7 +270,6 @@ export class AuthResolver {
 
   @Mutation(() => VerifyEmailAndGetLoginTokenDTO)
   @UseGuards(PublicEndpointGuard, NoPermissionGuard)
-  @AllowSuspendedWorkspace()
   async verifyEmailAndGetLoginToken(
     @Args()
     getAuthTokenFromEmailVerificationTokenInput: GetAuthTokenFromEmailVerificationTokenInput,
@@ -318,7 +314,6 @@ export class AuthResolver {
 
   @Mutation(() => AvailableWorkspacesAndAccessTokensDTO)
   @UseGuards(PublicEndpointGuard, NoPermissionGuard)
-  @AllowSuspendedWorkspace()
   async verifyEmailAndGetWorkspaceAgnosticToken(
     @Args()
     getAuthTokenFromEmailVerificationTokenInput: GetAuthTokenFromEmailVerificationTokenInput,
@@ -382,7 +377,6 @@ export class AuthResolver {
 
   @Mutation(() => AuthTokens)
   @UseGuards(CaptchaGuard, PublicEndpointGuard, NoPermissionGuard)
-  @AllowSuspendedWorkspace()
   async getAuthTokensFromOTP(
     @Args()
     twoFactorAuthenticationVerificationInput: TwoFactorAuthenticationVerificationInput,
@@ -425,7 +419,6 @@ export class AuthResolver {
 
   @Mutation(() => TwoFactorAuthenticationRecoveryCodeRedemptionDTO)
   @UseGuards(CaptchaGuard, PublicEndpointGuard, NoPermissionGuard)
-  @AllowSuspendedWorkspace()
   async getAuthTokensFromTwoFactorAuthenticationRecoveryCode(
     @Args()
     recoveryCodeVerificationInput: TwoFactorAuthenticationRecoveryCodeVerificationInput,
@@ -473,7 +466,6 @@ export class AuthResolver {
 
   @Mutation(() => AvailableWorkspacesAndAccessTokensDTO)
   @UseGuards(CaptchaGuard, PublicEndpointGuard, NoPermissionGuard)
-  @AllowSuspendedWorkspace()
   async signUp(
     @Args() signUpInput: UserCredentialsInput,
     @Context() context: { req: Request },
@@ -537,7 +529,6 @@ export class AuthResolver {
 
   @Mutation(() => SignUpDTO)
   @UseGuards(CaptchaGuard, PublicEndpointGuard, NoPermissionGuard)
-  @AllowSuspendedWorkspace()
   async signUpInWorkspace(
     @Args() signUpInput: SignUpInput,
   ): Promise<SignUpDTO> {
@@ -655,7 +646,6 @@ export class AuthResolver {
     }),
     NoPermissionGuard,
   )
-  @AllowSuspendedWorkspace()
   async signUpInNewWorkspace(
     @AuthUser() currentUser: AuthContextUser,
     @AuthProvider() authProvider: AuthProviderEnum,
@@ -708,7 +698,6 @@ export class AuthResolver {
     }),
     NoPermissionGuard,
   )
-  @AllowSuspendedWorkspace()
   async uploadNewWorkspaceLogo(
     @AuthUser() currentUser: AuthContextUser,
     @Args('workspaceId') workspaceId: string,
@@ -745,7 +734,6 @@ export class AuthResolver {
     }),
     NoPermissionGuard,
   )
-  @AllowSuspendedWorkspace()
   async createNewWorkspaceLogoUpload(
     @AuthUser() currentUser: AuthContextUser,
     @Args('workspaceId') workspaceId: string,
@@ -780,7 +768,6 @@ export class AuthResolver {
     }),
     NoPermissionGuard,
   )
-  @AllowSuspendedWorkspace()
   async completeNewWorkspaceLogoUpload(
     @AuthUser() currentUser: AuthContextUser,
     @Args('workspaceId') workspaceId: string,
@@ -835,7 +822,6 @@ export class AuthResolver {
 
   @Mutation(() => AuthTokens)
   @UseGuards(PublicEndpointGuard, NoPermissionGuard)
-  @AllowSuspendedWorkspace()
   async getAuthTokensFromLoginToken(
     @Args() getAuthTokensFromLoginTokenInput: GetAuthTokensFromLoginTokenInput,
     @Args('origin') origin: string,
@@ -936,7 +922,6 @@ export class AuthResolver {
 
   @Mutation(() => AuthTokens)
   @UseGuards(PublicEndpointGuard, NoPermissionGuard)
-  @AllowSuspendedWorkspace()
   async renewToken(
     @Args() args: AppTokenInput,
     @Context() context: { req: Request },
@@ -956,7 +941,6 @@ export class AuthResolver {
 
   @Mutation(() => Boolean)
   @UseGuards(PublicEndpointGuard, NoPermissionGuard)
-  @AllowSuspendedWorkspace()
   async signOut(
     @Context() context: { req: Request },
     @Args('refreshToken', { nullable: true }) refreshToken?: string,
@@ -1035,7 +1019,6 @@ export class AuthResolver {
 
   @Mutation(() => EmailPasswordResetLinkDTO)
   @UseGuards(CaptchaGuard, PublicEndpointGuard, NoPermissionGuard)
-  @AllowSuspendedWorkspace()
   async emailPasswordResetLink(
     @Args() emailPasswordResetInput: EmailPasswordResetLinkInput,
     @Context() context: I18nContext,
@@ -1064,7 +1047,6 @@ export class AuthResolver {
 
   @Mutation(() => InvalidatePasswordDTO)
   @UseGuards(PublicEndpointGuard, NoPermissionGuard)
-  @AllowSuspendedWorkspace()
   async updatePasswordViaResetToken(
     @Args()
     { passwordResetToken, newPassword }: UpdatePasswordViaResetTokenInput,

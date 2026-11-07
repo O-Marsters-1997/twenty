@@ -12,7 +12,6 @@ import { t } from '@lingui/core/macro';
 import { Section } from 'twenty-ui/components/layout';
 import {
   IconBook,
-  IconChartBar,
   IconCpu,
   IconLayoutDashboard,
   IconPlus,
@@ -24,7 +23,6 @@ import { SettingsAgentToolsTab } from '~/pages/settings/ai/components/SettingsAg
 import { SettingsAiSystemPromptsSection } from '~/pages/settings/ai/components/SettingsAiSystemPromptsSection';
 import { SettingsAiModelsTab } from '~/pages/settings/ai/components/SettingsAiModelsTab';
 import { SettingsAiOverviewTab } from '~/pages/settings/ai/components/SettingsAiOverviewTab';
-import { SettingsAiUsageTab } from '~/pages/settings/ai/components/SettingsAiUsageTab';
 import { SETTINGS_AI_TABS } from '@/settings/ai/constants/SettingsAiTabs';
 
 const AI_HERO_LIGHT = '/images/ai/ai-tools-cover-light.png';
@@ -54,11 +52,6 @@ export const SettingsAI = () => {
       title: t`Tools`,
       Icon: IconTool,
     },
-    {
-      id: SETTINGS_AI_TABS.TABS_IDS.USAGE,
-      title: t`Usage`,
-      Icon: IconChartBar,
-    },
   ];
 
   const resolvedTabId =
@@ -70,7 +63,6 @@ export const SettingsAI = () => {
   const isModelsTab = resolvedTabId === SETTINGS_AI_TABS.TABS_IDS.MODELS;
   const isSkillsTab = resolvedTabId === SETTINGS_AI_TABS.TABS_IDS.SKILLS;
   const isToolsTab = resolvedTabId === SETTINGS_AI_TABS.TABS_IDS.TOOLS;
-  const isUsageTab = resolvedTabId === SETTINGS_AI_TABS.TABS_IDS.USAGE;
 
   return (
     <SettingsPageLayout
@@ -130,7 +122,6 @@ export const SettingsAI = () => {
         {isModelsTab && <SettingsAiModelsTab />}
         {isSkillsTab && <SettingsAgentSkillsTab />}
         {isToolsTab && <SettingsAgentToolsTab />}
-        {isUsageTab && <SettingsAiUsageTab />}
       </SettingsPageContainer>
     </SettingsPageLayout>
   );

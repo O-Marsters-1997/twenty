@@ -77,8 +77,8 @@ describe('workspace route objects', () => {
     expect((settingsGuardMatch?.route.element as ReactElement).type).toBe(
       SettingsProtectedRouteWrapper,
     );
-    expect(matchRoutes(panelRoutes, '/settings/billing')).toBeNull();
-    expect(matchRoutes(mainRoutes, '/settings/billing')).not.toBeNull();
+    expect(matchRoutes(panelRoutes, '/settings/profile')).toBeNull();
+    expect(matchRoutes(mainRoutes, '/settings/profile')).not.toBeNull();
   });
 
   it.each([
@@ -101,7 +101,6 @@ describe('workspace route objects', () => {
     '/settings',
     '/settings/',
     '/settings/profile',
-    '/settings/billing',
     '/settings/api-webhooks/graphql',
     '/settings/not-a-real-page',
   ])('keeps the unsupported settings leaf %s on main', (path) => {

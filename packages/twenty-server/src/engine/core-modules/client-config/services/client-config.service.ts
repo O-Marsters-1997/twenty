@@ -4,7 +4,6 @@ import { isNonEmptyString } from '@sniptt/guards';
 import { isDefined } from 'twenty-shared/utils';
 
 import { readIsCompanyEnrichmentEnabled } from 'src/engine/core-modules/company-enrichment/utils/read-is-company-enrichment-enabled.util';
-import { readBookCallStepMinEmployeeCount } from 'src/engine/core-modules/onboarding/utils/read-book-call-step-min-employee-count.util';
 import { NodeEnvironment } from 'src/engine/core-modules/twenty-config/interfaces/node-environment.interface';
 import { SupportDriver } from 'src/engine/core-modules/twenty-config/interfaces/support.interface';
 
@@ -17,7 +16,6 @@ import { DomainServerConfigService } from 'src/engine/core-modules/domain/domain
 import { EmailingDomainDriver } from 'src/engine/core-modules/emailing-domain/drivers/types/emailing-domain-driver.type';
 import { PUBLIC_FEATURE_FLAGS } from 'src/engine/core-modules/feature-flag/constants/public-feature-flag.const';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
-import { toDisplayCredits } from 'src/engine/core-modules/usage/utils/to-display-credits.util';
 import { AI_MODEL_TIERS, parseAiModelVariantId } from 'twenty-shared/ai';
 import { MODEL_FAMILY_LABELS } from 'src/engine/metadata-modules/ai/ai-models/constants/model-family-labels.const';
 import { getAvailableEfforts } from 'src/engine/metadata-modules/ai/ai-models/utils/get-available-efforts.util';
@@ -58,9 +56,6 @@ export class ClientConfigService {
     const calendarBookingPageId = this.twentyConfigService.get(
       'CALENDAR_BOOKING_PAGE_ID',
     );
-    const isBookCallOnboardingStepEnabled = isDefined(
-      readBookCallStepMinEmployeeCount(this.twentyConfigService),
-    );
     const isCompanyEnrichmentEnabled = readIsCompanyEnrichmentEnabled(
       this.twentyConfigService,
     );
@@ -68,8 +63,6 @@ export class ClientConfigService {
     const isEmailingDomainInDemoMode =
       this.twentyConfigService.get('EMAILING_DOMAIN_DRIVER') ===
       EmailingDomainDriver.LOG;
-
-    const isBillingEnabled = this.twentyConfigService.get('IS_BILLING_ENABLED');
 
     const availableModels =
       this.aiModelRegistryService.getAdminFilteredModels();
@@ -104,8 +97,6 @@ export class ClientConfigService {
           nativeCapabilities: getNativeModelCapabilities(
             registeredModel.sdkPackage,
           ),
-          inputCostPerMillionTokens: modelConfig?.inputCostPerMillionTokens,
-          outputCostPerMillionTokens: modelConfig?.outputCostPerMillionTokens,
           contextWindowTokens: modelConfig?.contextWindowTokens,
           maxOutputTokens: modelConfig?.maxOutputTokens,
           isDeprecated: modelConfig?.isDeprecated,
@@ -141,8 +132,6 @@ export class ClientConfigService {
           maxCriteriaPerQuestion: modelConfig.maxCriteriaPerQuestion,
           maxScoreLevels: modelConfig.maxScoreLevels,
           medianLatencyMs: modelConfig.medianLatencyMs,
-          inputCostPerMillionTokens: modelConfig.inputCostPerMillionTokens,
-          outputCostPerMillionTokens: modelConfig.outputCostPerMillionTokens,
           isDeprecated: modelConfig.isDeprecated,
         }));
 
@@ -154,27 +143,6 @@ export class ClientConfigService {
 
     const clientConfig: ClientConfig = {
       appVersion: this.twentyConfigService.get('APP_VERSION'),
-      billing: {
-        isBillingEnabled,
-        billingUrl: this.twentyConfigService.get('BILLING_PLAN_REQUIRED_LINK'),
-        stripePublishableKey: this.twentyConfigService.get(
-          'BILLING_STRIPE_PUBLISHABLE_KEY',
-        ),
-        trialPeriods: [
-          {
-            duration: this.twentyConfigService.get(
-              'BILLING_FREE_TRIAL_WITH_CREDIT_CARD_DURATION_IN_DAYS',
-            ),
-            isCreditCardRequired: true,
-          },
-          {
-            duration: this.twentyConfigService.get(
-              'BILLING_FREE_TRIAL_WITHOUT_CREDIT_CARD_DURATION_IN_DAYS',
-            ),
-            isCreditCardRequired: false,
-          },
-        ],
-      },
       aiModels,
       aiEvaluationModels,
       aiModelTiers,
@@ -208,46 +176,17 @@ export class ClientConfigService {
           'MUTATION_MAXIMUM_AFFECTED_RECORDS',
         ),
       },
-      onboarding: isBillingEnabled
-        ? {
-            importContactsCreditsReward: toDisplayCredits(
-              this.twentyConfigService.get(
-                'ONBOARDING_IMPORT_CONTACTS_CREDITS_REWARD',
-              ),
-            ),
-            inviteTeamCreditsRewardPerUser: toDisplayCredits(
-              this.twentyConfigService.get(
-                'ONBOARDING_INVITE_TEAM_CREDITS_REWARD_PER_USER',
-              ),
-            ),
-            createProfileCreditsReward: toDisplayCredits(
-              this.twentyConfigService.get(
-                'BILLING_FREE_WORKFLOW_CREDITS_FOR_TRIAL_PERIOD_WITHOUT_CREDIT_CARD',
-              ),
-            ),
-            upgradeCreditsReward: toDisplayCredits(
-              Math.max(
-                0,
-                this.twentyConfigService.get(
-                  'BILLING_FREE_WORKFLOW_CREDITS_FOR_TRIAL_PERIOD_WITH_CREDIT_CARD',
-                ) -
-                  this.twentyConfigService.get(
-                    'BILLING_FREE_WORKFLOW_CREDITS_FOR_TRIAL_PERIOD_WITHOUT_CREDIT_CARD',
-                  ),
-              ),
-            ),
-            inviteTeamMaxInvites: this.twentyConfigService.get(
-              'ONBOARDING_INVITE_TEAM_MAX_INVITES',
-            ),
-          }
-        : null,
+      onboarding: {
+        inviteTeamMaxInvites: this.twentyConfigService.get(
+          'ONBOARDING_INVITE_TEAM_MAX_INVITES',
+        ),
+      },
       isAttachmentPreviewEnabled: this.twentyConfigService.get(
         'IS_ATTACHMENT_PREVIEW_ENABLED',
       ),
       canManageFeatureFlags:
         this.twentyConfigService.get('NODE_ENV') ===
           NodeEnvironment.DEVELOPMENT ||
-        isBillingEnabled ||
         this.twentyConfigService.get('IS_FEATURE_FLAG_MANAGEMENT_ENABLED'),
       publicFeatureFlags: PUBLIC_FEATURE_FLAGS,
       isCookieSessionEnabled: true,
@@ -267,7 +206,6 @@ export class ClientConfigService {
       calendarBookingPageId: isNonEmptyString(calendarBookingPageId)
         ? calendarBookingPageId
         : undefined,
-      isBookCallOnboardingStepEnabled,
       isCompanyEnrichmentEnabled,
       isClickHouseConfigured: !!this.twentyConfigService.get('CLICKHOUSE_URL'),
       isWorkspaceSchemaDDLLocked: this.twentyConfigService.get(

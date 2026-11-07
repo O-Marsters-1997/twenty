@@ -12,6 +12,4 @@ export type AiModelSummary = {
   providerLabel?: string | null;
   contextWindowTokens?: number | null;
   maxOutputTokens?: number | null;
-  inputCostPerMillionTokens?: number | null;
-  outputCostPerMillionTokens?: number | null;
 };

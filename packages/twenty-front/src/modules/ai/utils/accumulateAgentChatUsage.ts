@@ -7,15 +7,16 @@ import { type AgentChatUsageState } from '@/ai/states/agentChatUsageFamilyState'
 
 export const accumulateAgentChatUsage = (
   previousUsage: AgentChatUsageState | null,
-  messageUsage: AiChatUsageMetadata,
+  messageUsage: Pick<
+    AiChatUsageMetadata,
+    'inputTokens' | 'outputTokens' | 'cachedInputTokens' | 'conversationSize'
+  >,
   model: AiChatModelMetadata,
 ): AgentChatUsageState => ({
   lastMessage: {
     inputTokens: messageUsage.inputTokens,
     outputTokens: messageUsage.outputTokens,
     cachedInputTokens: messageUsage.cachedInputTokens,
-    inputCredits: messageUsage.inputCredits,
-    outputCredits: messageUsage.outputCredits,
   },
   cachedInputTokens:
     (previousUsage?.cachedInputTokens ?? 0) + messageUsage.cachedInputTokens,
@@ -23,7 +24,4 @@ export const accumulateAgentChatUsage = (
   contextWindowTokens: model.contextWindowTokens,
   inputTokens: (previousUsage?.inputTokens ?? 0) + messageUsage.inputTokens,
   outputTokens: (previousUsage?.outputTokens ?? 0) + messageUsage.outputTokens,
-  inputCredits: (previousUsage?.inputCredits ?? 0) + messageUsage.inputCredits,
-  outputCredits:
-    (previousUsage?.outputCredits ?? 0) + messageUsage.outputCredits,
 });

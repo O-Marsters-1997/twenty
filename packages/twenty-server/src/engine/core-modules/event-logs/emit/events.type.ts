@@ -39,10 +39,6 @@ import {
   type WebhookResponseTrackEvent,
 } from 'src/engine/core-modules/event-logs/emit/events/workspace-event/webhook/webhook-response';
 import {
-  type PAYMENT_RECEIVED_EVENT,
-  type PaymentReceivedTrackEvent,
-} from 'src/engine/core-modules/event-logs/emit/events/workspace-event/billing/payment-received';
-import {
   type WORKSPACE_CREATED_EVENT,
   type WorkspaceCreatedTrackEvent,
 } from 'src/engine/core-modules/event-logs/emit/events/workspace-event/workspace/workspace-created';
@@ -58,8 +54,7 @@ export type TrackEventName =
   | typeof OBJECT_RECORD_RESTORED_EVENT
   | typeof OBJECT_RECORD_DESTROYED_EVENT
   | typeof USER_SIGNUP_EVENT
-  | typeof WORKSPACE_CREATED_EVENT
-  | typeof PAYMENT_RECEIVED_EVENT;
+  | typeof WORKSPACE_CREATED_EVENT;
 
 export interface TrackEvents {
   [AUTH_SESSION_EVENT]: AuthSessionTrackEvent;
@@ -73,7 +68,6 @@ export interface TrackEvents {
   [OBJECT_RECORD_RESTORED_EVENT]: ObjectRecordRestoredTrackEvent;
   [OBJECT_RECORD_DESTROYED_EVENT]: ObjectRecordDestroyedTrackEvent;
   [WORKSPACE_CREATED_EVENT]: WorkspaceCreatedTrackEvent;
-  [PAYMENT_RECEIVED_EVENT]: PaymentReceivedTrackEvent;
 }
 
 export type TrackEventProperties<T extends TrackEventName> =

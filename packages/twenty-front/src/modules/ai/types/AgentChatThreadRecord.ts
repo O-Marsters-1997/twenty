@@ -17,6 +17,4 @@ export type AgentChatThreadRecord = ObjectRecord & {
   totalCacheReadTokens?: number;
   contextWindowTokens?: number | null;
   conversationSize?: number;
-  totalInputCredits?: number | string;
-  totalOutputCredits?: number | string;
 };

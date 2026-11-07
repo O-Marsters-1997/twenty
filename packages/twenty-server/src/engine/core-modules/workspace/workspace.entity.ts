@@ -208,9 +208,6 @@ export class WorkspaceEntity {
   @Index('IDX_WORKSPACE_ACTIVATION_STATUS')
   activationStatus: WorkspaceActivationStatus;
 
-  @Column({ type: 'timestamptz', nullable: true })
-  suspendedAt: Date | null;
-
   @OneToMany(() => AgentEntity, (agent) => agent.workspace, {
     onDelete: 'CASCADE',
   })

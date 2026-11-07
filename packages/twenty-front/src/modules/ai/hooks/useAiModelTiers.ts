@@ -9,35 +9,9 @@ import { hasCostPerTaskForEveryModel } from '@/ai/utils/hasCostPerTaskForEveryMo
 import { currentWorkspaceState } from '@/auth/states/currentWorkspaceState';
 import { aiModelTiersState } from '@/client-config/states/aiModelTiersState';
 import { aiModelsState } from '@/client-config/states/aiModelsState';
-import { getAiModelBlendedCostPerMillionTokens } from '@/ai/utils/getAiModelBlendedCostPerMillionTokens';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { type ClientAiModelConfig } from '~/generated-metadata/graphql';
 
 const REFERENCE_TIER: AiModelTier = 'balanced';
-
-// One basis for every tier: cost per task when all have one, catalog price otherwise.
-const getCostDeltaPercent = ({
-  model,
-  referenceModel,
-  hasCostPerTaskForEveryTier,
-}: {
-  model: ClientAiModelConfig | undefined;
-  referenceModel: ClientAiModelConfig | undefined;
-  hasCostPerTaskForEveryTier: boolean;
-}) => {
-  if (!isDefined(model) || !isDefined(referenceModel)) {
-    return undefined;
-  }
-
-  return getPercentDelta({
-    value: hasCostPerTaskForEveryTier
-      ? model.costPerTask
-      : getAiModelBlendedCostPerMillionTokens(model),
-    reference: hasCostPerTaskForEveryTier
-      ? referenceModel.costPerTask
-      : getAiModelBlendedCostPerMillionTokens(referenceModel),
-  });
-};
 
 // Mirrors the server: a pin counts only with auto-selection off and the model still served.
 export const useAiModelTiers = (): ResolvedAiModelTier[] => {
@@ -91,10 +65,9 @@ export const useAiModelTiers = (): ResolvedAiModelTier[] => {
         value: model?.intelligenceIndex,
         reference: referenceModel?.intelligenceIndex,
       }),
-      costDeltaPercent: getCostDeltaPercent({
-        model,
-        referenceModel,
-        hasCostPerTaskForEveryTier,
+      costDeltaPercent: getPercentDelta({
+        value: hasCostPerTaskForEveryTier ? model?.costPerTask : undefined,
+        reference: referenceModel?.costPerTask,
       }),
     }));
   }, [aiModels, aiModelTiers, isAutoModelSelectionEnabled, aiModelIdByTier]);

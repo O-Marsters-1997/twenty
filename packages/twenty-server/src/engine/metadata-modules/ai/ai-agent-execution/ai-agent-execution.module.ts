@@ -30,7 +30,6 @@ import { AiAgentRoleModule } from 'src/engine/metadata-modules/ai/ai-agent-role/
 import { AiAgentModule } from 'src/engine/metadata-modules/ai/ai-agent/ai-agent.module';
 import { AgentEntity } from 'src/engine/metadata-modules/ai/ai-agent/entities/agent.entity';
 import { AgentChatThreadLifecycleModule } from 'src/engine/metadata-modules/ai/ai-chat/agent-chat-thread-lifecycle.module';
-import { AiBillingModule } from 'src/engine/metadata-modules/ai/ai-billing/ai-billing.module';
 import { AgentHistoryModule } from 'src/engine/metadata-modules/ai/ai-history/ai-history.module';
 import { PermissionsModule } from 'src/engine/metadata-modules/permissions/permissions.module';
 import { UserRoleModule } from 'src/engine/metadata-modules/user-role/user-role.module';
@@ -41,7 +40,6 @@ import { provideWorkspaceScopedRepository } from 'src/engine/twenty-orm/workspac
     AgentChatThreadLifecycleModule,
     AgentChatThreadModule,
     AgentHistoryModule,
-    AiBillingModule,
     AiAgentModule,
     AiAgentRoleModule,
     ApiKeyModule,

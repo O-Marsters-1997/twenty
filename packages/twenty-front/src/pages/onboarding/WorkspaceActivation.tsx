@@ -5,8 +5,6 @@ import { Title } from '@/auth/components/Title';
 import { currentWorkspaceState } from '@/auth/states/currentWorkspaceState';
 import { isCreatingWorkspaceState } from '@/auth/states/isCreatingWorkspaceState';
 import { OnboardingStepAnimatedItem } from '@/onboarding/components/OnboardingStepAnimatedItem';
-import { ONBOARDING_FREE_CREDITS_DEFAULT_VALUE } from '@/onboarding/constants/OnboardingFreeCreditsDefaultValue';
-import { useSetCurrentWorkspaceOnboardingFreeCredits } from '@/onboarding/hooks/useSetCurrentWorkspaceOnboardingFreeCredits';
 import { useSetNextOnboardingStatus } from '@/onboarding/hooks/useSetNextOnboardingStatus';
 import { onboardingActivationFailedState } from '@/onboarding/states/onboardingActivationFailedState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
@@ -55,8 +53,6 @@ export const WorkspaceActivation = () => {
   );
   const currentWorkspace = useAtomStateValue(currentWorkspaceState);
   const setIsCreatingWorkspace = useSetAtomState(isCreatingWorkspaceState);
-  const setOnboardingFreeCredits =
-    useSetCurrentWorkspaceOnboardingFreeCredits();
   const setIsAppEffectRedirectEnabled = useSetAtomState(
     isAppEffectRedirectEnabledState,
   );
@@ -109,9 +105,8 @@ export const WorkspaceActivation = () => {
     }
 
     hasTriggeredRef.current = true;
-    setOnboardingFreeCredits(ONBOARDING_FREE_CREDITS_DEFAULT_VALUE);
     void activate();
-  }, [activate, currentWorkspace, setOnboardingFreeCredits]);
+  }, [activate, currentWorkspace]);
 
   if (!onboardingActivationFailed) {
     return null;
