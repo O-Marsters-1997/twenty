@@ -44,7 +44,11 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if len(body) > maxInspectedBodyBytes {
-		// Too large to inspect: restore the stream and let Node apply its own limits.
+		if endpoint == EndpointMetadata {
+			h.logger.Warn("metadata request too large to inspect", "route", RouteBlocked)
+			h.writeGraphQLError(w, "request too large", "BAD_USER_INPUT")
+			return
+		}
 		r.Body = io.NopCloser(io.MultiReader(bytes.NewReader(body), r.Body))
 		h.logger.Warn("graphql request not inspected", "route", RouteNode)
 		h.proxy.ServeHTTP(w, r)
@@ -93,8 +97,6 @@ func mostRestrictive(current, candidate Route) Route {
 	return RouteNode
 }
 
-// parseRequests accepts a single GraphQL request or a batch; unparseable
-// bodies yield none and fall through to Node, which reports the error.
 func parseRequests(body []byte) []graphqlRequest {
 	trimmed := bytes.TrimSpace(body)
 	if bytes.HasPrefix(trimmed, []byte("[")) {

@@ -31,8 +31,6 @@ func DefaultTable() OperationTable {
 	}
 }
 
-// blockedMetadataFields are matched against the query text as well, because
-// the operation name is chosen by the client.
 var blockedMetadataFields = []string{
 	"createOneObject", "updateOneObject", "deleteOneObject",
 	"createOneField", "updateOneField", "deleteOneField",
