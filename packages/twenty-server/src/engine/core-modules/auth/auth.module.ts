@@ -45,6 +45,7 @@ import { ConnectedAccountEntity } from 'src/engine/metadata-modules/connected-ac
 import { ConnectedAccountTokenEncryptionModule } from 'src/engine/metadata-modules/connected-account/services/connected-account-token-encryption.module';
 import { MessageChannelEntity } from 'src/engine/metadata-modules/message-channel/entities/message-channel.entity';
 import { PermissionsModule } from 'src/engine/metadata-modules/permissions/permissions.module';
+import { RoleEntity } from 'src/engine/metadata-modules/role/role.entity';
 import { WorkspaceCacheModule } from 'src/engine/workspace-cache/workspace-cache.module';
 import { CalendarCommonModule } from 'src/modules/calendar/common/calendar-common.module';
 import { ConnectedAccountModule } from 'src/modules/connected-account/connected-account.module';
@@ -72,6 +73,7 @@ import { AuthService } from './services/auth.service';
       ConnectedAccountEntity,
       MessageChannelEntity,
       CalendarChannelEntity,
+      RoleEntity,
     ]),
     UserWorkspaceModule,
     OnboardingModule,

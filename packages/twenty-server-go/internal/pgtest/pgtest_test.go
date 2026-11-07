@@ -61,7 +61,7 @@ func TestNewClonesTheMigratedTemplate(t *testing.T) {
 	conn := connect(t, pgtest.New(t))
 
 	var tables int
-	if err := conn.QueryRow(t.Context(), "SELECT count(*) FROM information_schema.tables WHERE table_schema = 'core'").Scan(&tables); err != nil {
+	if err := conn.QueryRow(t.Context(), "SELECT count(*) FROM information_schema.tables WHERE table_schema = 'public'").Scan(&tables); err != nil {
 		t.Fatalf("count tables: %v", err)
 	}
 	if tables == 0 {

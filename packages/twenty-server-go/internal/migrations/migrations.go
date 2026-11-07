@@ -2,37 +2,60 @@ package migrations
 
 import (
 	"context"
+	"database/sql"
 	"embed"
 	"fmt"
+	"io"
+	"io/fs"
 
-	"github.com/jackc/pgx/v5"
+	"github.com/pressly/goose/v3"
+
+	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
-//go:embed *.sql
-var FS embed.FS
+//go:embed sql/*.sql
+var embedded embed.FS
 
-func Up(ctx context.Context, dsn string) (err error) {
-	files, err := FS.ReadDir(".")
+var FS fs.FS = embedded
+
+func Up(ctx context.Context, dsn string) error {
+	return Run(ctx, dsn, "up", io.Discard)
+}
+
+func Run(ctx context.Context, dsn, command string, out io.Writer) error {
+	db, err := sql.Open("pgx", dsn)
 	if err != nil {
-		return fmt.Errorf("list migrations: %w", err)
+		return fmt.Errorf("open database: %w", err)
 	}
-	conn, err := pgx.Connect(ctx, dsn)
+	defer db.Close()
+
+	files, err := fs.Sub(FS, "sql")
 	if err != nil {
-		return fmt.Errorf("connect: %w", err)
+		return fmt.Errorf("open migration files: %w", err)
 	}
-	defer func() {
-		if closeErr := conn.Close(ctx); closeErr != nil && err == nil {
-			err = fmt.Errorf("close connection: %w", closeErr)
+	provider, err := goose.NewProvider(goose.DialectPostgres, db, files)
+	if err != nil {
+		return fmt.Errorf("create provider: %w", err)
+	}
+
+	switch command {
+	case "up":
+		_, err = provider.Up(ctx)
+	case "down":
+		_, err = provider.Down(ctx)
+	case "status":
+		var statuses []*goose.MigrationStatus
+		statuses, err = provider.Status(ctx)
+		if err == nil {
+			for _, status := range statuses {
+				fmt.Fprintf(out, "%s %s\n", status.State, status.Source.Path)
+			}
 		}
-	}()
-	for _, file := range files {
-		sql, readErr := FS.ReadFile(file.Name())
-		if readErr != nil {
-			return fmt.Errorf("read migration %s: %w", file.Name(), readErr)
-		}
-		if _, execErr := conn.Exec(ctx, string(sql)); execErr != nil {
-			return fmt.Errorf("apply migration %s: %w", file.Name(), execErr)
-		}
+	default:
+		return fmt.Errorf("unknown command %q, want up, down or status", command)
+	}
+	if err != nil {
+		return fmt.Errorf("migrate %s: %w", command, err)
 	}
 	return nil
 }
