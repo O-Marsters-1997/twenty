@@ -13,7 +13,7 @@ services:
 
   redis:
     container_name: twenty-redis
-    image: redis:latest
+    image: valkey/valkey:8
     command: ["--maxmemory-policy", "noeviction"]
     volumes:
       - twenty-redis-data:/data:Z

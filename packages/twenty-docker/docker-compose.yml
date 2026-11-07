@@ -116,11 +116,11 @@ services:
     restart: always
 
   redis:
-    image: redis
+    image: valkey/valkey:8
     restart: always
     command: ["--maxmemory-policy", "noeviction"]
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ["CMD", "valkey-cli", "ping"]
       interval: 5s
       timeout: 5s
       retries: 10
