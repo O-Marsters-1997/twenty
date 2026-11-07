@@ -8,6 +8,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/golden"
 )
@@ -44,7 +45,7 @@ func run(args []string, out io.Writer) error {
 	if err := json.Unmarshal([]byte(*variables), &c.Variables); err != nil {
 		return fmt.Errorf("decode variables: %w", err)
 	}
-	if c.Response, err = golden.Send(http.DefaultClient, *node, *token, c); err != nil {
+	if c.Response, err = golden.Send(&http.Client{Timeout: 30 * time.Second},*node, *token, c); err != nil {
 		return err
 	}
 	if !json.Valid(c.Response) {

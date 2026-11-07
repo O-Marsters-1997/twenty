@@ -33,7 +33,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "packages/twenty-e2e-testing",
-        "command": "bunx playwright test",
+        "command": "cp -n .env.example .env; bunx playwright test",
         "env": { "FRONTEND_BASE_URL": "http://localhost:3000" }
       }
     },

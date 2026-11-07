@@ -11,6 +11,7 @@ import (
 const recorded = `{"data":{"people":[{"id":"a","name":"Ann"},{"id":"b","name":"Bo"}]}}`
 
 func respondWith(t *testing.T, body string) http.Handler {
+	t.Helper()
 	return http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		if _, err := w.Write([]byte(body)); err != nil {
 			t.Error(err)
@@ -49,7 +50,10 @@ func TestDiff(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			if (diff == "") != (tt.wantDiff == "") || !strings.Contains(diff, tt.wantDiff) {
+			if tt.wantDiff == "" && diff != "" {
+				t.Errorf("Diff() = %q, want no diff", diff)
+			}
+			if !strings.Contains(diff, tt.wantDiff) {
 				t.Errorf("Diff() = %q, want it to contain %q", diff, tt.wantDiff)
 			}
 		})

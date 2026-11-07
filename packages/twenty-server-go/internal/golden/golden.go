@@ -75,6 +75,9 @@ func Send(client *http.Client, baseURL, token string, c Case) (json.RawMessage, 
 	if err != nil {
 		return nil, fmt.Errorf("read response: %w", err)
 	}
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("unexpected status %d: %s", resp.StatusCode, raw)
+	}
 	return raw, nil
 }
 
