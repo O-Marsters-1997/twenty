@@ -7,16 +7,14 @@ import { getValidInviteEmails } from '@/onboarding/utils/getValidInviteEmails';
 import { PageFocusId } from '@/types/PageFocusId';
 import { useDialog } from '@/ui/layout/dialog/hooks/useDialog';
 import { useCreateWorkspaceInvitation } from '@/workspace-invitation/hooks/useCreateWorkspaceInvitation';
-import { useQuery } from '@apollo/client/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLingui } from '@lingui/react/macro';
 import { useStore } from 'jotai';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { type SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { isDefined, isNonEmptyArray } from 'twenty-shared/utils';
 import { useToast } from 'twenty-ui/components/feedback';
 import { z } from 'zod';
-import { GetInviteSuggestionsDocument } from '~/generated-metadata/graphql';
 
 const validationSchema = z.object({
   emails: z.array(z.object({ email: z.union([z.literal(''), z.email()]) })),
@@ -42,11 +40,10 @@ export const useInviteTeam = () => {
     control,
     handleSubmit,
     watch,
-    reset,
     getValues,
     trigger,
     getFieldState,
-    formState: { isValid, isSubmitting, isDirty },
+    formState: { isValid, isSubmitting },
   } = useForm<InviteTeamFormInput>({
     mode: 'onChange',
     defaultValues: {
@@ -61,43 +58,6 @@ export const useInviteTeam = () => {
     control,
     name: 'emails',
   });
-
-  const [hasPrefilledSuggestions, setHasPrefilledSuggestions] = useState(
-    isDefined(initialEmailsDraft),
-  );
-
-  const { data: inviteSuggestionsData } = useQuery(
-    GetInviteSuggestionsDocument,
-    {
-      fetchPolicy: 'cache-first',
-    },
-  );
-
-  const inviteSuggestions = useMemo(
-    () => inviteSuggestionsData?.getInviteSuggestions ?? [],
-    [inviteSuggestionsData],
-  );
-  const hasInviteSuggestions = inviteSuggestions.length > 0;
-
-  useEffect(() => {
-    if (hasPrefilledSuggestions || !hasInviteSuggestions || isDirty) {
-      return;
-    }
-
-    setHasPrefilledSuggestions(true);
-    reset({
-      emails: [
-        ...inviteSuggestions.map((suggestion) => ({ email: suggestion.email })),
-        { email: '' },
-      ],
-    });
-  }, [
-    hasPrefilledSuggestions,
-    hasInviteSuggestions,
-    inviteSuggestions,
-    isDirty,
-    reset,
-  ]);
 
   useEffect(() => {
     const subscription = watch(({ emails }) => {

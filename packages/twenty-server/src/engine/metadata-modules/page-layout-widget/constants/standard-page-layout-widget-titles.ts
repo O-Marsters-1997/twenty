@@ -36,7 +36,6 @@ export const getStandardPageLayoutWidgetTitles = () => [
     message: `Deal value created this month`,
     context: 'pageLayoutWidget.title',
   }),
-  msg({ message: `Call Recordings`, context: 'pageLayoutWidget.title' }),
   msg({ message: `Email`, context: 'pageLayoutWidget.title' }),
   msg({ message: `Lists`, context: 'pageLayoutWidget.title' }),
   msg({ message: `Members`, context: 'pageLayoutWidget.title' }),

@@ -137,52 +137,6 @@ describe('getTabsRenderableForTargetObject', () => {
     ).toEqual(['chats-tab']);
   });
 
-  it('keeps both call recording widgets without a call recordings relation', () => {
-    const tabs = [
-      createMockTab('summary-tab', [
-        createMockWidget('summary-widget', WidgetType.CALL_RECORDING_SUMMARY),
-      ]),
-      createMockTab('transcript-tab', [
-        createMockWidget(
-          'transcript-widget',
-          WidgetType.CALL_RECORDING_TRANSCRIPT,
-        ),
-      ]),
-    ];
-
-    expect(
-      getTabsRenderableForTargetObject({
-        tabs,
-        targetObjectFields: [],
-      }).map((tab) => tab.id),
-    ).toEqual(['summary-tab', 'transcript-tab']);
-
-    expect(
-      getTabsRenderableForTargetObject({
-        tabs,
-        targetObjectFields: [createRelationField('callRecordings')],
-      }).map((tab) => tab.id),
-    ).toEqual(['summary-tab', 'transcript-tab']);
-  });
-
-  it('drops call recording widgets when the relation is deactivated', () => {
-    const tabs = [
-      createMockTab('transcript-tab', [
-        createMockWidget(
-          'transcript-widget',
-          WidgetType.CALL_RECORDING_TRANSCRIPT,
-        ),
-      ]),
-    ];
-
-    const result = getTabsRenderableForTargetObject({
-      tabs,
-      targetObjectFields: [createRelationField('callRecordings', false)],
-    });
-
-    expect(result).toHaveLength(0);
-  });
-
   it('should drop tabs whose relation field exists but is deactivated', () => {
     const tabs = [
       createMockTab('tab-1', [createMockWidget('widget-1', WidgetType.TASKS)]),

@@ -102,15 +102,6 @@ const CALENDAR_EVENT_PAGE_LAYOUT_WIDGET_UNIVERSAL_IDENTIFIERS = [
   ),
 ];
 
-const CALENDAR_EVENT_CALL_RECORDINGS_WIDGET_UNIVERSAL_IDENTIFIER =
-  toPre231RecordPageUniversalIdentifier(
-    STANDARD_PAGE_LAYOUT_UNIVERSAL_IDENTIFIERS.calendarEventRecordPage.tabs.home
-      .widgets.callRecordings.universalIdentifier,
-  );
-
-const CALENDAR_EVENT_CALL_RECORDINGS_FIELD_UNIVERSAL_IDENTIFIER =
-  STANDARD_OBJECTS.calendarEvent.fields.callRecordings.universalIdentifier;
-
 @RegisteredWorkspaceCommand('2.15.0', 1800000002000)
 @Command({
   name: 'upgrade:2-15:sync-calendar-event-record-page',
@@ -140,7 +131,6 @@ export class SyncCalendarEventRecordPageCommand extends ProvisionedWorkspaceComm
 
     const {
       flatObjectMetadataMaps,
-      flatFieldMetadataMaps,
       flatViewMaps,
       flatViewFieldMaps,
       flatViewFieldGroupMaps,
@@ -149,7 +139,6 @@ export class SyncCalendarEventRecordPageCommand extends ProvisionedWorkspaceComm
       flatPageLayoutWidgetMaps,
     } = await this.workspaceCacheService.getOrRecompute(workspaceId, [
       'flatObjectMetadataMaps',
-      'flatFieldMetadataMaps',
       'flatViewMaps',
       'flatViewFieldMaps',
       'flatViewFieldGroupMaps',
@@ -170,19 +159,6 @@ export class SyncCalendarEventRecordPageCommand extends ProvisionedWorkspaceComm
 
       return;
     }
-
-    const hasCallRecordingsField = isDefined(
-      flatFieldMetadataMaps.byUniversalIdentifier[
-        CALENDAR_EVENT_CALL_RECORDINGS_FIELD_UNIVERSAL_IDENTIFIER
-      ],
-    );
-
-    const pageLayoutWidgetUniversalIdentifiers = hasCallRecordingsField
-      ? [
-          ...CALENDAR_EVENT_PAGE_LAYOUT_WIDGET_UNIVERSAL_IDENTIFIERS,
-          CALENDAR_EVENT_CALL_RECORDINGS_WIDGET_UNIVERSAL_IDENTIFIER,
-        ]
-      : CALENDAR_EVENT_PAGE_LAYOUT_WIDGET_UNIVERSAL_IDENTIFIERS;
 
     const standardAllFlatEntityMaps =
       computeTwentyStandardApplicationAllFlatEntityMapsPre231({
@@ -230,7 +206,8 @@ export class SyncCalendarEventRecordPageCommand extends ProvisionedWorkspaceComm
         standardFlatEntityMaps:
           standardAllFlatEntityMaps.flatPageLayoutWidgetMaps,
         existingFlatEntityMaps: flatPageLayoutWidgetMaps,
-        universalIdentifiers: pageLayoutWidgetUniversalIdentifiers,
+        universalIdentifiers:
+          CALENDAR_EVENT_PAGE_LAYOUT_WIDGET_UNIVERSAL_IDENTIFIERS,
       });
 
     const totalOperationCount =

@@ -19,8 +19,6 @@ import { UserWorkspaceEntity } from 'src/engine/core-modules/user-workspace/user
 import { WorkspaceOrmManager } from 'src/engine/twenty-orm/workspace-orm.manager';
 import { buildSystemAuthContext } from 'src/engine/twenty-orm/utils/build-system-auth-context.util';
 import { type CalendarEventWorkspaceEntity } from 'src/modules/calendar/common/standard-objects/calendar-event.workspace-entity';
-import { type CallRecordingStatus } from 'src/modules/call-recording/common/enums/call-recording-status.enum';
-import { type CallRecordingWorkspaceEntity } from 'src/modules/call-recording/standard-objects/call-recording.workspace-entity';
 import { type WorkspaceMemberWorkspaceEntity } from 'src/modules/workspace-member/standard-objects/workspace-member.workspace-entity';
 
 @Injectable()
@@ -117,50 +115,6 @@ export class TimelineCalendarEventService {
           calendarChannelEventAssociations: true,
         },
       });
-
-      const callRecordingRepository =
-        this.workspaceOrmManager.getRepository<CallRecordingWorkspaceEntity>(
-          'callRecording',
-          { shouldBypassPermissionChecks: true },
-        );
-
-      const callRecordings = await callRecordingRepository.find({
-        where: {
-          calendarEventId: Any(ids),
-        },
-        select: {
-          id: true,
-          status: true,
-          applicationId: true,
-          calendarEventId: true,
-        },
-      });
-
-      const callRecordingsByCalendarEventId = callRecordings.reduce<
-        Map<
-          string,
-          {
-            id: string;
-            status: CallRecordingStatus;
-            applicationId: string | null;
-          }[]
-        >
-      >((acc, callRecording) => {
-        if (!isDefined(callRecording.calendarEventId)) {
-          return acc;
-        }
-
-        const existing = acc.get(callRecording.calendarEventId) ?? [];
-
-        existing.push({
-          id: callRecording.id,
-          status: callRecording.status,
-          applicationId: callRecording.applicationId ?? null,
-        });
-        acc.set(callRecording.calendarEventId, existing);
-
-        return acc;
-      }, new Map());
 
       const allCalendarChannelIds = [
         ...new Set(
@@ -310,7 +264,6 @@ export class TimelineCalendarEventService {
           startsAt: event.startsAt as unknown as Date,
           endsAt: event.endsAt as unknown as Date,
           participants,
-          callRecordings: callRecordingsByCalendarEventId.get(event.id) ?? [],
           visibility,
           location: event.location ?? '',
           conferenceSolution: event.conferenceSolution ?? '',

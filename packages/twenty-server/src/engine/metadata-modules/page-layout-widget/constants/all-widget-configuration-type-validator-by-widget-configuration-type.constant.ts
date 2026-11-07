@@ -1,6 +1,4 @@
 import { AggregateChartConfigurationDTO } from 'src/engine/metadata-modules/page-layout-widget/dtos/aggregate-chart-configuration.dto';
-import { CallRecordingSummaryConfigurationDTO } from 'src/engine/metadata-modules/page-layout-widget/dtos/call-recording-summary-configuration.dto';
-import { CallRecordingTranscriptConfigurationDTO } from 'src/engine/metadata-modules/page-layout-widget/dtos/call-recording-transcript-configuration.dto';
 import { ChatConfigurationDTO } from 'src/engine/metadata-modules/page-layout-widget/dtos/chat-configuration.dto';
 import { ChatThreadsConfigurationDTO } from 'src/engine/metadata-modules/page-layout-widget/dtos/chat-threads-configuration.dto';
 import { EmailThreadConfigurationDTO } from 'src/engine/metadata-modules/page-layout-widget/dtos/email-thread-configuration.dto';
@@ -40,8 +38,6 @@ export const ALL_WIDGET_CONFIGURATION_TYPE_VALIDATOR_BY_WIDGET_CONFIGURATION_TYP
     CALENDAR: CalendarConfigurationDTO,
     EMAILS: EmailsConfigurationDTO,
     EMAIL_THREAD: EmailThreadConfigurationDTO,
-    CALL_RECORDING_SUMMARY: CallRecordingSummaryConfigurationDTO,
-    CALL_RECORDING_TRANSCRIPT: CallRecordingTranscriptConfigurationDTO,
     CHAT_THREADS: ChatThreadsConfigurationDTO,
     CHAT: ChatConfigurationDTO,
     MESSAGE_CAMPAIGN_BODY: MessageCampaignBodyConfigurationDTO,

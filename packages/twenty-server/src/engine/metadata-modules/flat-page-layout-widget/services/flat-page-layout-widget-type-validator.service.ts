@@ -92,12 +92,6 @@ export class FlatPageLayoutWidgetTypeValidatorService {
       EMAIL_THREAD: validateSimpleRecordPageWidgetForCreation(
         WidgetConfigurationType.EMAIL_THREAD,
       ),
-      CALL_RECORDING_SUMMARY: validateSimpleRecordPageWidgetForCreation(
-        WidgetConfigurationType.CALL_RECORDING_SUMMARY,
-      ),
-      CALL_RECORDING_TRANSCRIPT: validateSimpleRecordPageWidgetForCreation(
-        WidgetConfigurationType.CALL_RECORDING_TRANSCRIPT,
-      ),
       CHAT_THREADS: validateSimpleRecordPageWidgetForCreation(
         WidgetConfigurationType.CHAT_THREADS,
       ),
@@ -165,12 +159,6 @@ export class FlatPageLayoutWidgetTypeValidatorService {
       ),
       EMAIL_THREAD: validateSimpleRecordPageWidgetForUpdate(
         WidgetConfigurationType.EMAIL_THREAD,
-      ),
-      CALL_RECORDING_SUMMARY: validateSimpleRecordPageWidgetForUpdate(
-        WidgetConfigurationType.CALL_RECORDING_SUMMARY,
-      ),
-      CALL_RECORDING_TRANSCRIPT: validateSimpleRecordPageWidgetForUpdate(
-        WidgetConfigurationType.CALL_RECORDING_TRANSCRIPT,
       ),
       CHAT_THREADS: validateSimpleRecordPageWidgetForUpdate(
         WidgetConfigurationType.CHAT_THREADS,

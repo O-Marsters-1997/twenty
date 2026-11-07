@@ -7,10 +7,6 @@ export const WIDGET_CONFIGURATION_TYPENAME_BY_CONFIGURATION_TYPE = {
   [WidgetConfigurationType.AGGREGATE_CHART]: 'AggregateChartConfiguration',
   [WidgetConfigurationType.BAR_CHART]: 'BarChartConfiguration',
   [WidgetConfigurationType.CALENDAR]: 'CalendarConfiguration',
-  [WidgetConfigurationType.CALL_RECORDING_SUMMARY]:
-    'CallRecordingSummaryConfiguration',
-  [WidgetConfigurationType.CALL_RECORDING_TRANSCRIPT]:
-    'CallRecordingTranscriptConfiguration',
   [WidgetConfigurationType.CHAT]: 'ChatConfiguration',
   [WidgetConfigurationType.CHAT_THREADS]: 'ChatThreadsConfiguration',
   [WidgetConfigurationType.EMAILS]: 'EmailsConfiguration',

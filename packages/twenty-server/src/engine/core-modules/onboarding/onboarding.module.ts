@@ -7,13 +7,11 @@ import { OnboardingService } from 'src/engine/core-modules/onboarding/onboarding
 import { UserVarsModule } from 'src/engine/core-modules/user/user-vars/user-vars.module';
 import { UserWorkspaceEntity } from 'src/engine/core-modules/user-workspace/user-workspace.entity';
 import { WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
-import { OnboardingInviteSuggestionsModule } from 'src/modules/onboarding-invite-suggestions/onboarding-invite-suggestions.module';
 
 @Module({
   imports: [
     CacheLockModule,
     UserVarsModule,
-    OnboardingInviteSuggestionsModule,
     TypeOrmModule.forFeature([WorkspaceEntity, UserWorkspaceEntity]),
   ],
   exports: [OnboardingService],

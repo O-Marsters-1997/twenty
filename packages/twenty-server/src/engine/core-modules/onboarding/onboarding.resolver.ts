@@ -1,18 +1,15 @@
 import { UseFilters, UseGuards, UsePipes } from '@nestjs/common';
-import { Args, Mutation, Query } from '@nestjs/graphql';
+import { Args, Mutation } from '@nestjs/graphql';
 
 import { MetadataResolver } from 'src/engine/api/graphql/graphql-config/decorators/metadata-resolver.decorator';
 import { PreventNestToAutoLogGraphqlErrorsFilter } from 'src/engine/core-modules/graphql/filters/prevent-nest-to-auto-log-graphql-errors.filter';
 import { ResolverValidationPipe } from 'src/engine/core-modules/graphql/pipes/resolver-validation.pipe';
-import { InviteSuggestionDTO } from 'src/engine/core-modules/onboarding/dtos/invite-suggestion.dto';
 import { OnboardingStepNavigationDTO } from 'src/engine/core-modules/onboarding/dtos/onboarding-step-navigation.dto';
 import { OnboardingStepSuccessDTO } from 'src/engine/core-modules/onboarding/dtos/onboarding-step-success.dto';
 import { OnboardingService } from 'src/engine/core-modules/onboarding/onboarding.service';
 import { type AuthContextUser } from 'src/engine/core-modules/auth/types/auth-context.type';
-import { OnboardingInviteSuggestionsService } from 'src/modules/onboarding-invite-suggestions/services/onboarding-invite-suggestions.service';
 import { WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
 import { AuthUser } from 'src/engine/decorators/auth/auth-user.decorator';
-import { AuthUserWorkspaceId } from 'src/engine/decorators/auth/auth-user-workspace-id.decorator';
 import { AuthWorkspace } from 'src/engine/decorators/auth/auth-workspace.decorator';
 import { NoPermissionGuard } from 'src/engine/guards/no-permission.guard';
 import { AuthPrincipalGuard } from 'src/engine/guards/auth-principal.guard';
@@ -33,24 +30,7 @@ import { AuthPrincipalGuard } from 'src/engine/guards/auth-principal.guard';
 @UseFilters(PreventNestToAutoLogGraphqlErrorsFilter)
 @MetadataResolver()
 export class OnboardingResolver {
-  constructor(
-    private readonly onboardingService: OnboardingService,
-    private readonly onboardingInviteSuggestionsService: OnboardingInviteSuggestionsService,
-  ) {}
-
-  @Query(() => [InviteSuggestionDTO])
-  @UseGuards(NoPermissionGuard)
-  async getInviteSuggestions(
-    @AuthUser() user: AuthContextUser,
-    @AuthWorkspace() workspace: WorkspaceEntity,
-    @AuthUserWorkspaceId() userWorkspaceId: string,
-  ): Promise<InviteSuggestionDTO[]> {
-    return this.onboardingInviteSuggestionsService.getOrComputeSuggestions({
-      workspaceId: workspace.id,
-      userId: user.id,
-      userWorkspaceId,
-    });
-  }
+  constructor(private readonly onboardingService: OnboardingService) {}
 
   @Mutation(() => OnboardingStepSuccessDTO)
   @UseGuards(NoPermissionGuard)

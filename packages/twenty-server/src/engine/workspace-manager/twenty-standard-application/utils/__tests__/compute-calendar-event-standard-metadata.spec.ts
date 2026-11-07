@@ -2,11 +2,9 @@ import {
   STANDARD_OBJECTS,
   STANDARD_PAGE_LAYOUT_UNIVERSAL_IDENTIFIERS,
 } from 'twenty-shared/metadata';
-import { PageLayoutTabLayoutMode, WidgetType } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 
 import { WidgetConfigurationType } from 'src/engine/metadata-modules/page-layout-widget/enums/widget-configuration-type.type';
-import { VERTICAL_LIST_LAYOUT_POSITIONS } from 'src/engine/workspace-manager/twenty-standard-application/constants/standard-page-layout-tabs.template';
 import { computeTwentyStandardApplicationAllFlatEntityMaps } from 'src/engine/workspace-manager/twenty-standard-application/utils/twenty-standard-application-all-flat-entity-maps.constant';
 
 const WORKSPACE_ID = '20202020-1111-4111-8111-111111111111';
@@ -170,100 +168,10 @@ describe('CalendarEvent standard metadata build', () => {
       Object.keys(
         STANDARD_PAGE_LAYOUT_UNIVERSAL_IDENTIFIERS.calendarEventRecordPage.tabs,
       ),
-    ).toEqual(['home', 'timeline', 'summary', 'callRecording']);
+    ).toEqual(['home', 'timeline']);
 
     expect(timelineWidget?.universalConfiguration).toMatchObject({
       configurationType: WidgetConfigurationType.TIMELINE,
-    });
-  });
-
-  it('configures the native summary tab on the calendar event record page', () => {
-    const summaryTabUniversalIdentifier =
-      STANDARD_PAGE_LAYOUT_UNIVERSAL_IDENTIFIERS.calendarEventRecordPage.tabs
-        .summary.universalIdentifier;
-    const summaryWidgetUniversalIdentifier =
-      STANDARD_PAGE_LAYOUT_UNIVERSAL_IDENTIFIERS.calendarEventRecordPage.tabs
-        .summary.widgets.summary.universalIdentifier;
-
-    const summaryTab =
-      allFlatEntityMaps.flatPageLayoutTabMaps.byUniversalIdentifier[
-        summaryTabUniversalIdentifier
-      ];
-    const summaryWidget =
-      allFlatEntityMaps.flatPageLayoutWidgetMaps.byUniversalIdentifier[
-        summaryWidgetUniversalIdentifier
-      ];
-
-    expect(summaryTab).toMatchObject({
-      title: 'Summary',
-      icon: 'IconFileText',
-      position: 30,
-      layoutMode: PageLayoutTabLayoutMode.VERTICAL_LIST,
-    });
-    expect(summaryWidget).toMatchObject({
-      title: 'Summary',
-      type: WidgetType.CALL_RECORDING_SUMMARY,
-      pageLayoutTabUniversalIdentifier: summaryTabUniversalIdentifier,
-      position: VERTICAL_LIST_LAYOUT_POSITIONS.FIRST,
-      universalConfiguration: {
-        configurationType: WidgetConfigurationType.CALL_RECORDING_SUMMARY,
-      },
-    });
-  });
-
-  it('configures the native transcript tab on the calendar event record page', () => {
-    const callRecordingTabUniversalIdentifier =
-      STANDARD_PAGE_LAYOUT_UNIVERSAL_IDENTIFIERS.calendarEventRecordPage.tabs
-        .callRecording.universalIdentifier;
-    const transcriptWidgetUniversalIdentifier =
-      STANDARD_PAGE_LAYOUT_UNIVERSAL_IDENTIFIERS.calendarEventRecordPage.tabs
-        .callRecording.widgets.transcript.universalIdentifier;
-
-    expect(callRecordingTabUniversalIdentifier).toBe(
-      '51243414-7c83-506d-a595-e5c50f85af17',
-    );
-    expect(transcriptWidgetUniversalIdentifier).toBe(
-      'e812ce13-5531-530a-a881-84a67315c9fe',
-    );
-
-    const callRecordingTab =
-      allFlatEntityMaps.flatPageLayoutTabMaps.byUniversalIdentifier[
-        callRecordingTabUniversalIdentifier
-      ];
-    const transcriptWidget =
-      allFlatEntityMaps.flatPageLayoutWidgetMaps.byUniversalIdentifier[
-        transcriptWidgetUniversalIdentifier
-      ];
-
-    expect(callRecordingTab).toMatchObject({
-      title: 'Transcript',
-      icon: 'IconBlockquote',
-      position: 40,
-      layoutMode: PageLayoutTabLayoutMode.VERTICAL_LIST,
-    });
-    expect(transcriptWidget).toMatchObject({
-      title: 'Transcript',
-      type: WidgetType.CALL_RECORDING_TRANSCRIPT,
-      pageLayoutTabUniversalIdentifier: callRecordingTabUniversalIdentifier,
-      position: VERTICAL_LIST_LAYOUT_POSITIONS.FIRST,
-      universalConfiguration: {
-        configurationType: WidgetConfigurationType.CALL_RECORDING_TRANSCRIPT,
-      },
-    });
-  });
-
-  it('renders call recordings through a standard relation field widget', () => {
-    const callRecordingsWidget =
-      allFlatEntityMaps.flatPageLayoutWidgetMaps.byUniversalIdentifier[
-        STANDARD_PAGE_LAYOUT_UNIVERSAL_IDENTIFIERS.calendarEventRecordPage.tabs
-          .home.widgets.callRecordings.universalIdentifier
-      ];
-
-    expect(callRecordingsWidget?.universalConfiguration).toMatchObject({
-      configurationType: WidgetConfigurationType.FIELD,
-      fieldMetadataId:
-        STANDARD_OBJECTS.calendarEvent.fields.callRecordings
-          .universalIdentifier,
     });
   });
 });
