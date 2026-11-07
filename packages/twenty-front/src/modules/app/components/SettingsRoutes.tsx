@@ -84,7 +84,7 @@ function LegacySettingsPathRedirect({ to }: LegacySettingsPathRedirectProps) {
   );
 }
 
-const ReadOnlyDataModelRedirect = () => {
+function ReadOnlyDataModelRedirect() {
   const { objectNamePlural } = useParams();
 
   return (
@@ -97,7 +97,7 @@ const ReadOnlyDataModelRedirect = () => {
       replace
     />
   );
-};
+}
 
 const SettingsAccountsConfiguration = lazy(() =>
   import('~/pages/settings/accounts/SettingsAccountsConfiguration').then(
