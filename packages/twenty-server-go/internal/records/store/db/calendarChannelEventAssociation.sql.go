@@ -150,16 +150,12 @@ func (q *Queries) SoftDeleteCalendarChannelEventAssociation(ctx context.Context,
 
 const updateCalendarChannelEventAssociation = `-- name: UpdateCalendarChannelEventAssociation :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."calendarChannelEventAssociation"
-SET "createdBySource" = $1, "createdByWorkspaceMemberId" = $2, "createdByName" = $3, "createdByContext" = $4, "updatedBySource" = $5, "updatedByWorkspaceMemberId" = $6, "updatedByName" = $7, "updatedByContext" = $8, "position" = $9, "eventExternalId" = $10, "recurringEventExternalId" = $11, "calendarChannelId" = $12, "calendarEventId" = $13, "updatedAt" = now()
-WHERE id = $14
+SET "updatedBySource" = $1, "updatedByWorkspaceMemberId" = $2, "updatedByName" = $3, "updatedByContext" = $4, "position" = $5, "eventExternalId" = $6, "recurringEventExternalId" = $7, "calendarChannelId" = $8, "calendarEventId" = $9, "updatedAt" = now()
+WHERE id = $10
 RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext", "position", "searchVector", "eventExternalId", "recurringEventExternalId", "calendarChannelId", "calendarEventId"
 `
 
 type UpdateCalendarChannelEventAssociationParams struct {
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfCalendarChannelEventAssociationCreatedBySourceEnum
-	CreatedByWorkspaceMemberId pgtype.UUID
-	CreatedByName              string
-	CreatedByContext           []byte
 	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfCalendarChannelEventAssociationUpdatedBySourceEnum
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
@@ -174,10 +170,6 @@ type UpdateCalendarChannelEventAssociationParams struct {
 
 func (q *Queries) UpdateCalendarChannelEventAssociation(ctx context.Context, arg UpdateCalendarChannelEventAssociationParams) (Workspace2abogkkt2zd45pa9aun09djpfCalendarChannelEventAssociation, error) {
 	row := q.db.QueryRow(ctx, updateCalendarChannelEventAssociation,
-		arg.CreatedBySource,
-		arg.CreatedByWorkspaceMemberId,
-		arg.CreatedByName,
-		arg.CreatedByContext,
 		arg.UpdatedBySource,
 		arg.UpdatedByWorkspaceMemberId,
 		arg.UpdatedByName,

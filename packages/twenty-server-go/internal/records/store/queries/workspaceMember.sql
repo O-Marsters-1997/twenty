@@ -12,8 +12,8 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "position", "nameFirstNam
 
 -- name: UpdateWorkspaceMember :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."workspaceMember"
-SET "position" = $1, "nameFirstName" = $2, "nameLastName" = $3, "colorScheme" = $4, "uiScale" = $5, "openRecordIn" = $6, "locale" = $7, "avatarUrl" = $8, "userEmail" = $9, "jobTitle" = $10, "calendarStartDay" = $11, "userId" = $12, "timeZone" = $13, "dateFormat" = $14, "timeFormat" = $15, "numberFormat" = $16, "createdBySource" = $17, "createdByWorkspaceMemberId" = $18, "createdByName" = $19, "createdByContext" = $20, "updatedBySource" = $21, "updatedByWorkspaceMemberId" = $22, "updatedByName" = $23, "updatedByContext" = $24, "updatedAt" = now()
-WHERE id = $25
+SET "position" = $1, "nameFirstName" = $2, "nameLastName" = $3, "colorScheme" = $4, "uiScale" = $5, "openRecordIn" = $6, "locale" = $7, "avatarUrl" = $8, "userEmail" = $9, "jobTitle" = $10, "calendarStartDay" = $11, "userId" = $12, "timeZone" = $13, "dateFormat" = $14, "timeFormat" = $15, "numberFormat" = $16, "updatedBySource" = $17, "updatedByWorkspaceMemberId" = $18, "updatedByName" = $19, "updatedByContext" = $20, "updatedAt" = now()
+WHERE id = $21
 RETURNING "id", "createdAt", "updatedAt", "deletedAt", "position", "nameFirstName", "nameLastName", "colorScheme", "uiScale", "openRecordIn", "locale", "avatarUrl", "userEmail", "jobTitle", "calendarStartDay", "userId", "timeZone", "dateFormat", "timeFormat", "numberFormat", "searchVector", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext";
 
 -- name: SoftDeleteWorkspaceMember :execrows

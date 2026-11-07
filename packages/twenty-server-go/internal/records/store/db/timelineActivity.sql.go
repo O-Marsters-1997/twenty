@@ -210,16 +210,12 @@ func (q *Queries) SoftDeleteTimelineActivity(ctx context.Context, id pgtype.UUID
 
 const updateTimelineActivity = `-- name: UpdateTimelineActivity :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."timelineActivity"
-SET "createdBySource" = $1, "createdByWorkspaceMemberId" = $2, "createdByName" = $3, "createdByContext" = $4, "updatedBySource" = $5, "updatedByWorkspaceMemberId" = $6, "updatedByName" = $7, "updatedByContext" = $8, "position" = $9, "happensAt" = $10, "timelineActivityTypeId" = $11, "timelineActivityTypeSnapshot" = $12, "properties" = $13, "linkedRecordCachedName" = $14, "linkedRecordId" = $15, "linkedObjectMetadataId" = $16, "targetCompanyId" = $17, "targetDashboardId" = $18, "targetMessageCampaignId" = $19, "targetMessageListId" = $20, "targetNoteId" = $21, "targetOpportunityId" = $22, "targetPersonId" = $23, "targetTaskId" = $24, "workspaceMemberId" = $25, "targetWorkflowId" = $26, "targetWorkflowVersionId" = $27, "targetWorkflowRunId" = $28, "updatedAt" = now()
-WHERE id = $29
+SET "updatedBySource" = $1, "updatedByWorkspaceMemberId" = $2, "updatedByName" = $3, "updatedByContext" = $4, "position" = $5, "happensAt" = $6, "timelineActivityTypeId" = $7, "timelineActivityTypeSnapshot" = $8, "properties" = $9, "linkedRecordCachedName" = $10, "linkedRecordId" = $11, "linkedObjectMetadataId" = $12, "targetCompanyId" = $13, "targetDashboardId" = $14, "targetMessageCampaignId" = $15, "targetMessageListId" = $16, "targetNoteId" = $17, "targetOpportunityId" = $18, "targetPersonId" = $19, "targetTaskId" = $20, "workspaceMemberId" = $21, "targetWorkflowId" = $22, "targetWorkflowVersionId" = $23, "targetWorkflowRunId" = $24, "updatedAt" = now()
+WHERE id = $25
 RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext", "position", "happensAt", "timelineActivityTypeId", "timelineActivityTypeSnapshot", "properties", "linkedRecordCachedName", "linkedRecordId", "linkedObjectMetadataId", "searchVector", "targetCompanyId", "targetDashboardId", "targetMessageCampaignId", "targetMessageListId", "targetNoteId", "targetOpportunityId", "targetPersonId", "targetTaskId", "workspaceMemberId", "targetWorkflowId", "targetWorkflowVersionId", "targetWorkflowRunId"
 `
 
 type UpdateTimelineActivityParams struct {
-	CreatedBySource              Workspace2abogkkt2zd45pa9aun09djpfTimelineActivityCreatedBySourceEnum
-	CreatedByWorkspaceMemberId   pgtype.UUID
-	CreatedByName                string
-	CreatedByContext             []byte
 	UpdatedBySource              Workspace2abogkkt2zd45pa9aun09djpfTimelineActivityUpdatedBySourceEnum
 	UpdatedByWorkspaceMemberId   pgtype.UUID
 	UpdatedByName                string
@@ -249,10 +245,6 @@ type UpdateTimelineActivityParams struct {
 
 func (q *Queries) UpdateTimelineActivity(ctx context.Context, arg UpdateTimelineActivityParams) (Workspace2abogkkt2zd45pa9aun09djpfTimelineActivity, error) {
 	row := q.db.QueryRow(ctx, updateTimelineActivity,
-		arg.CreatedBySource,
-		arg.CreatedByWorkspaceMemberId,
-		arg.CreatedByName,
-		arg.CreatedByContext,
 		arg.UpdatedBySource,
 		arg.UpdatedByWorkspaceMemberId,
 		arg.UpdatedByName,

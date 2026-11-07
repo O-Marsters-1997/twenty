@@ -138,16 +138,12 @@ func (q *Queries) SoftDeleteMessageThread(ctx context.Context, id pgtype.UUID) (
 
 const updateMessageThread = `-- name: UpdateMessageThread :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."messageThread"
-SET "createdBySource" = $1, "createdByWorkspaceMemberId" = $2, "createdByName" = $3, "createdByContext" = $4, "updatedBySource" = $5, "updatedByWorkspaceMemberId" = $6, "updatedByName" = $7, "updatedByContext" = $8, "position" = $9, "subject" = $10, "updatedAt" = now()
-WHERE id = $11
+SET "updatedBySource" = $1, "updatedByWorkspaceMemberId" = $2, "updatedByName" = $3, "updatedByContext" = $4, "position" = $5, "subject" = $6, "updatedAt" = now()
+WHERE id = $7
 RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext", "position", "searchVector", "subject"
 `
 
 type UpdateMessageThreadParams struct {
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfMessageThreadCreatedBySourceEnum
-	CreatedByWorkspaceMemberId pgtype.UUID
-	CreatedByName              string
-	CreatedByContext           []byte
 	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfMessageThreadUpdatedBySourceEnum
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
@@ -159,10 +155,6 @@ type UpdateMessageThreadParams struct {
 
 func (q *Queries) UpdateMessageThread(ctx context.Context, arg UpdateMessageThreadParams) (Workspace2abogkkt2zd45pa9aun09djpfMessageThread, error) {
 	row := q.db.QueryRow(ctx, updateMessageThread,
-		arg.CreatedBySource,
-		arg.CreatedByWorkspaceMemberId,
-		arg.CreatedByName,
-		arg.CreatedByContext,
 		arg.UpdatedBySource,
 		arg.UpdatedByWorkspaceMemberId,
 		arg.UpdatedByName,

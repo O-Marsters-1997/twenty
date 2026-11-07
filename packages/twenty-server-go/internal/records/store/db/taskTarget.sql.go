@@ -150,16 +150,12 @@ func (q *Queries) SoftDeleteTaskTarget(ctx context.Context, id pgtype.UUID) (int
 
 const updateTaskTarget = `-- name: UpdateTaskTarget :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."taskTarget"
-SET "createdBySource" = $1, "createdByWorkspaceMemberId" = $2, "createdByName" = $3, "createdByContext" = $4, "updatedBySource" = $5, "updatedByWorkspaceMemberId" = $6, "updatedByName" = $7, "updatedByContext" = $8, "position" = $9, "targetCompanyId" = $10, "targetOpportunityId" = $11, "targetPersonId" = $12, "taskId" = $13, "updatedAt" = now()
-WHERE id = $14
+SET "updatedBySource" = $1, "updatedByWorkspaceMemberId" = $2, "updatedByName" = $3, "updatedByContext" = $4, "position" = $5, "targetCompanyId" = $6, "targetOpportunityId" = $7, "targetPersonId" = $8, "taskId" = $9, "updatedAt" = now()
+WHERE id = $10
 RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext", "position", "searchVector", "targetCompanyId", "targetOpportunityId", "targetPersonId", "taskId"
 `
 
 type UpdateTaskTargetParams struct {
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfTaskTargetCreatedBySourceEnum
-	CreatedByWorkspaceMemberId pgtype.UUID
-	CreatedByName              string
-	CreatedByContext           []byte
 	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfTaskTargetUpdatedBySourceEnum
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
@@ -174,10 +170,6 @@ type UpdateTaskTargetParams struct {
 
 func (q *Queries) UpdateTaskTarget(ctx context.Context, arg UpdateTaskTargetParams) (Workspace2abogkkt2zd45pa9aun09djpfTaskTarget, error) {
 	row := q.db.QueryRow(ctx, updateTaskTarget,
-		arg.CreatedBySource,
-		arg.CreatedByWorkspaceMemberId,
-		arg.CreatedByName,
-		arg.CreatedByContext,
 		arg.UpdatedBySource,
 		arg.UpdatedByWorkspaceMemberId,
 		arg.UpdatedByName,

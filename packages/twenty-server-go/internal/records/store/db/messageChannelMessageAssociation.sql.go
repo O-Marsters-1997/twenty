@@ -158,16 +158,12 @@ func (q *Queries) SoftDeleteMessageChannelMessageAssociation(ctx context.Context
 
 const updateMessageChannelMessageAssociation = `-- name: UpdateMessageChannelMessageAssociation :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."messageChannelMessageAssociation"
-SET "createdBySource" = $1, "createdByWorkspaceMemberId" = $2, "createdByName" = $3, "createdByContext" = $4, "updatedBySource" = $5, "updatedByWorkspaceMemberId" = $6, "updatedByName" = $7, "updatedByContext" = $8, "position" = $9, "messageExternalId" = $10, "messageThreadExternalId" = $11, "direction" = $12, "messageChannelId" = $13, "messageId" = $14, "messageThreadId" = $15, "updatedAt" = now()
-WHERE id = $16
+SET "updatedBySource" = $1, "updatedByWorkspaceMemberId" = $2, "updatedByName" = $3, "updatedByContext" = $4, "position" = $5, "messageExternalId" = $6, "messageThreadExternalId" = $7, "direction" = $8, "messageChannelId" = $9, "messageId" = $10, "messageThreadId" = $11, "updatedAt" = now()
+WHERE id = $12
 RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext", "position", "searchVector", "messageExternalId", "messageThreadExternalId", "direction", "messageChannelId", "messageId", "messageThreadId"
 `
 
 type UpdateMessageChannelMessageAssociationParams struct {
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfMessageChannelMessageAssociationCreatedBySourceEnum
-	CreatedByWorkspaceMemberId pgtype.UUID
-	CreatedByName              string
-	CreatedByContext           []byte
 	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfMessageChannelMessageAssociationUpdatedBySourceEnum
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
@@ -184,10 +180,6 @@ type UpdateMessageChannelMessageAssociationParams struct {
 
 func (q *Queries) UpdateMessageChannelMessageAssociation(ctx context.Context, arg UpdateMessageChannelMessageAssociationParams) (Workspace2abogkkt2zd45pa9aun09djpfMessageChannelMessageAssociation, error) {
 	row := q.db.QueryRow(ctx, updateMessageChannelMessageAssociation,
-		arg.CreatedBySource,
-		arg.CreatedByWorkspaceMemberId,
-		arg.CreatedByName,
-		arg.CreatedByContext,
 		arg.UpdatedBySource,
 		arg.UpdatedByWorkspaceMemberId,
 		arg.UpdatedByName,

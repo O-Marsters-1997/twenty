@@ -12,8 +12,8 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "nameFirstName", "nameLas
 
 -- name: UpdatePerson :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."person"
-SET "nameFirstName" = $1, "nameLastName" = $2, "emailsPrimaryEmail" = $3, "emailsAdditionalEmails" = $4, "linkedinLinkPrimaryLinkLabel" = $5, "linkedinLinkPrimaryLinkUrl" = $6, "linkedinLinkSecondaryLinks" = $7, "jobTitle" = $8, "phonesPrimaryPhoneNumber" = $9, "phonesPrimaryPhoneCountryCode" = $10, "phonesPrimaryPhoneCallingCode" = $11, "phonesAdditionalPhones" = $12, "avatarUrl" = $13, "avatarFile" = $14, "position" = $15, "createdBySource" = $16, "createdByWorkspaceMemberId" = $17, "createdByName" = $18, "createdByContext" = $19, "updatedBySource" = $20, "updatedByWorkspaceMemberId" = $21, "updatedByName" = $22, "updatedByContext" = $23, "companyId" = $24, "updatedAt" = now()
-WHERE id = $25
+SET "nameFirstName" = $1, "nameLastName" = $2, "emailsPrimaryEmail" = $3, "emailsAdditionalEmails" = $4, "linkedinLinkPrimaryLinkLabel" = $5, "linkedinLinkPrimaryLinkUrl" = $6, "linkedinLinkSecondaryLinks" = $7, "jobTitle" = $8, "phonesPrimaryPhoneNumber" = $9, "phonesPrimaryPhoneCountryCode" = $10, "phonesPrimaryPhoneCallingCode" = $11, "phonesAdditionalPhones" = $12, "avatarUrl" = $13, "avatarFile" = $14, "position" = $15, "updatedBySource" = $16, "updatedByWorkspaceMemberId" = $17, "updatedByName" = $18, "updatedByContext" = $19, "companyId" = $20, "updatedAt" = now()
+WHERE id = $21
 RETURNING "id", "createdAt", "updatedAt", "deletedAt", "nameFirstName", "nameLastName", "emailsPrimaryEmail", "emailsAdditionalEmails", "linkedinLinkPrimaryLinkLabel", "linkedinLinkPrimaryLinkUrl", "linkedinLinkSecondaryLinks", "jobTitle", "phonesPrimaryPhoneNumber", "phonesPrimaryPhoneCountryCode", "phonesPrimaryPhoneCallingCode", "phonesAdditionalPhones", "avatarUrl", "avatarFile", "position", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext", "searchVector", "companyId";
 
 -- name: SoftDeletePerson :execrows

@@ -12,8 +12,8 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "position", "title", "bod
 
 -- name: UpdateTask :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."task"
-SET "position" = $1, "title" = $2, "bodyV2Blocknote" = $3, "bodyV2Markdown" = $4, "dueAt" = $5, "status" = $6, "createdBySource" = $7, "createdByWorkspaceMemberId" = $8, "createdByName" = $9, "createdByContext" = $10, "updatedBySource" = $11, "updatedByWorkspaceMemberId" = $12, "updatedByName" = $13, "updatedByContext" = $14, "assigneeId" = $15, "updatedAt" = now()
-WHERE id = $16
+SET "position" = $1, "title" = $2, "bodyV2Blocknote" = $3, "bodyV2Markdown" = $4, "dueAt" = $5, "status" = $6, "updatedBySource" = $7, "updatedByWorkspaceMemberId" = $8, "updatedByName" = $9, "updatedByContext" = $10, "assigneeId" = $11, "updatedAt" = now()
+WHERE id = $12
 RETURNING "id", "createdAt", "updatedAt", "deletedAt", "position", "title", "bodyV2Blocknote", "bodyV2Markdown", "dueAt", "status", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext", "searchVector", "assigneeId";
 
 -- name: SoftDeleteTask :execrows

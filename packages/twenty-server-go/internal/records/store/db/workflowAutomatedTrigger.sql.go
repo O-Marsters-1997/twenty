@@ -146,16 +146,12 @@ func (q *Queries) SoftDeleteWorkflowAutomatedTrigger(ctx context.Context, id pgt
 
 const updateWorkflowAutomatedTrigger = `-- name: UpdateWorkflowAutomatedTrigger :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."workflowAutomatedTrigger"
-SET "createdBySource" = $1, "createdByWorkspaceMemberId" = $2, "createdByName" = $3, "createdByContext" = $4, "updatedBySource" = $5, "updatedByWorkspaceMemberId" = $6, "updatedByName" = $7, "updatedByContext" = $8, "position" = $9, "type" = $10, "settings" = $11, "workflowId" = $12, "updatedAt" = now()
-WHERE id = $13
+SET "updatedBySource" = $1, "updatedByWorkspaceMemberId" = $2, "updatedByName" = $3, "updatedByContext" = $4, "position" = $5, "type" = $6, "settings" = $7, "workflowId" = $8, "updatedAt" = now()
+WHERE id = $9
 RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext", "position", "searchVector", "type", "settings", "workflowId"
 `
 
 type UpdateWorkflowAutomatedTriggerParams struct {
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfWorkflowAutomatedTriggerCreatedBySourceEnum
-	CreatedByWorkspaceMemberId pgtype.UUID
-	CreatedByName              string
-	CreatedByContext           []byte
 	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfWorkflowAutomatedTriggerUpdatedBySourceEnum
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
@@ -169,10 +165,6 @@ type UpdateWorkflowAutomatedTriggerParams struct {
 
 func (q *Queries) UpdateWorkflowAutomatedTrigger(ctx context.Context, arg UpdateWorkflowAutomatedTriggerParams) (Workspace2abogkkt2zd45pa9aun09djpfWorkflowAutomatedTrigger, error) {
 	row := q.db.QueryRow(ctx, updateWorkflowAutomatedTrigger,
-		arg.CreatedBySource,
-		arg.CreatedByWorkspaceMemberId,
-		arg.CreatedByName,
-		arg.CreatedByContext,
 		arg.UpdatedBySource,
 		arg.UpdatedByWorkspaceMemberId,
 		arg.UpdatedByName,

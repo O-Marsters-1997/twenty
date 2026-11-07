@@ -12,8 +12,8 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "creat
 
 -- name: UpdateCalendarEvent :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."calendarEvent"
-SET "createdBySource" = $1, "createdByWorkspaceMemberId" = $2, "createdByName" = $3, "createdByContext" = $4, "updatedBySource" = $5, "updatedByWorkspaceMemberId" = $6, "updatedByName" = $7, "updatedByContext" = $8, "position" = $9, "title" = $10, "isCanceled" = $11, "isFullDay" = $12, "startsAt" = $13, "endsAt" = $14, "externalCreatedAt" = $15, "externalUpdatedAt" = $16, "description" = $17, "location" = $18, "iCalUid" = $19, "conferenceSolution" = $20, "conferenceLinkPrimaryLinkLabel" = $21, "conferenceLinkPrimaryLinkUrl" = $22, "conferenceLinkSecondaryLinks" = $23, "updatedAt" = now()
-WHERE id = $24
+SET "updatedBySource" = $1, "updatedByWorkspaceMemberId" = $2, "updatedByName" = $3, "updatedByContext" = $4, "position" = $5, "title" = $6, "isCanceled" = $7, "isFullDay" = $8, "startsAt" = $9, "endsAt" = $10, "externalCreatedAt" = $11, "externalUpdatedAt" = $12, "description" = $13, "location" = $14, "iCalUid" = $15, "conferenceSolution" = $16, "conferenceLinkPrimaryLinkLabel" = $17, "conferenceLinkPrimaryLinkUrl" = $18, "conferenceLinkSecondaryLinks" = $19, "updatedAt" = now()
+WHERE id = $20
 RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext", "position", "searchVector", "title", "isCanceled", "isFullDay", "startsAt", "endsAt", "externalCreatedAt", "externalUpdatedAt", "description", "location", "iCalUid", "conferenceSolution", "conferenceLinkPrimaryLinkLabel", "conferenceLinkPrimaryLinkUrl", "conferenceLinkSecondaryLinks";
 
 -- name: SoftDeleteCalendarEvent :execrows

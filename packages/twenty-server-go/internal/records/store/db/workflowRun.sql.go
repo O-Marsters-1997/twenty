@@ -178,8 +178,8 @@ func (q *Queries) SoftDeleteWorkflowRun(ctx context.Context, id pgtype.UUID) (in
 
 const updateWorkflowRun = `-- name: UpdateWorkflowRun :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."workflowRun"
-SET "name" = $1, "enqueuedAt" = $2, "startedAt" = $3, "endedAt" = $4, "status" = $5, "createdBySource" = $6, "createdByWorkspaceMemberId" = $7, "createdByName" = $8, "createdByContext" = $9, "updatedBySource" = $10, "updatedByWorkspaceMemberId" = $11, "updatedByName" = $12, "updatedByContext" = $13, "state" = $14, "stepLogs" = $15, "coreWorkflowId" = $16, "coreWorkflowVersionId" = $17, "position" = $18, "workflowId" = $19, "workflowVersionId" = $20, "updatedAt" = now()
-WHERE id = $21
+SET "name" = $1, "enqueuedAt" = $2, "startedAt" = $3, "endedAt" = $4, "status" = $5, "updatedBySource" = $6, "updatedByWorkspaceMemberId" = $7, "updatedByName" = $8, "updatedByContext" = $9, "state" = $10, "stepLogs" = $11, "coreWorkflowId" = $12, "coreWorkflowVersionId" = $13, "position" = $14, "workflowId" = $15, "workflowVersionId" = $16, "updatedAt" = now()
+WHERE id = $17
 RETURNING "id", "createdAt", "updatedAt", "deletedAt", "name", "enqueuedAt", "startedAt", "endedAt", "status", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext", "state", "stepLogs", "coreWorkflowId", "coreWorkflowVersionId", "position", "searchVector", "workflowId", "workflowVersionId"
 `
 
@@ -189,10 +189,6 @@ type UpdateWorkflowRunParams struct {
 	StartedAt                  pgtype.Timestamptz
 	EndedAt                    pgtype.Timestamptz
 	Status                     Workspace2abogkkt2zd45pa9aun09djpfWorkflowRunStatusEnum
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfWorkflowRunCreatedBySourceEnum
-	CreatedByWorkspaceMemberId pgtype.UUID
-	CreatedByName              string
-	CreatedByContext           []byte
 	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfWorkflowRunUpdatedBySourceEnum
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
@@ -214,10 +210,6 @@ func (q *Queries) UpdateWorkflowRun(ctx context.Context, arg UpdateWorkflowRunPa
 		arg.StartedAt,
 		arg.EndedAt,
 		arg.Status,
-		arg.CreatedBySource,
-		arg.CreatedByWorkspaceMemberId,
-		arg.CreatedByName,
-		arg.CreatedByContext,
 		arg.UpdatedBySource,
 		arg.UpdatedByWorkspaceMemberId,
 		arg.UpdatedByName,

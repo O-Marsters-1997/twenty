@@ -12,8 +12,8 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "creat
 
 -- name: UpdateShortLink :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."shortLink"
-SET "createdBySource" = $1, "createdByWorkspaceMemberId" = $2, "createdByName" = $3, "createdByContext" = $4, "updatedBySource" = $5, "updatedByWorkspaceMemberId" = $6, "updatedByName" = $7, "updatedByContext" = $8, "position" = $9, "authoredTemplateUrl" = $10, "resolvedDestinationUrl" = $11, "templateAndResolvedUrlHash" = $12, "updatedAt" = now()
-WHERE id = $13
+SET "updatedBySource" = $1, "updatedByWorkspaceMemberId" = $2, "updatedByName" = $3, "updatedByContext" = $4, "position" = $5, "authoredTemplateUrl" = $6, "resolvedDestinationUrl" = $7, "templateAndResolvedUrlHash" = $8, "updatedAt" = now()
+WHERE id = $9
 RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext", "position", "searchVector", "authoredTemplateUrl", "resolvedDestinationUrl", "templateAndResolvedUrlHash";
 
 -- name: SoftDeleteShortLink :execrows

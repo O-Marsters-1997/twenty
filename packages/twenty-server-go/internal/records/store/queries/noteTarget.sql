@@ -12,8 +12,8 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "creat
 
 -- name: UpdateNoteTarget :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."noteTarget"
-SET "createdBySource" = $1, "createdByWorkspaceMemberId" = $2, "createdByName" = $3, "createdByContext" = $4, "updatedBySource" = $5, "updatedByWorkspaceMemberId" = $6, "updatedByName" = $7, "updatedByContext" = $8, "position" = $9, "targetCompanyId" = $10, "noteId" = $11, "targetPersonId" = $12, "targetOpportunityId" = $13, "updatedAt" = now()
-WHERE id = $14
+SET "updatedBySource" = $1, "updatedByWorkspaceMemberId" = $2, "updatedByName" = $3, "updatedByContext" = $4, "position" = $5, "targetCompanyId" = $6, "noteId" = $7, "targetPersonId" = $8, "targetOpportunityId" = $9, "updatedAt" = now()
+WHERE id = $10
 RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext", "position", "searchVector", "targetCompanyId", "noteId", "targetPersonId", "targetOpportunityId";
 
 -- name: SoftDeleteNoteTarget :execrows

@@ -146,16 +146,12 @@ func (q *Queries) SoftDeleteBlocklist(ctx context.Context, id pgtype.UUID) (int6
 
 const updateBlocklist = `-- name: UpdateBlocklist :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."blocklist"
-SET "createdBySource" = $1, "createdByWorkspaceMemberId" = $2, "createdByName" = $3, "createdByContext" = $4, "updatedBySource" = $5, "updatedByWorkspaceMemberId" = $6, "updatedByName" = $7, "updatedByContext" = $8, "position" = $9, "handle" = $10, "scope" = $11, "workspaceMemberId" = $12, "updatedAt" = now()
-WHERE id = $13
+SET "updatedBySource" = $1, "updatedByWorkspaceMemberId" = $2, "updatedByName" = $3, "updatedByContext" = $4, "position" = $5, "handle" = $6, "scope" = $7, "workspaceMemberId" = $8, "updatedAt" = now()
+WHERE id = $9
 RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext", "position", "searchVector", "handle", "scope", "workspaceMemberId"
 `
 
 type UpdateBlocklistParams struct {
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfBlocklistCreatedBySourceEnum
-	CreatedByWorkspaceMemberId pgtype.UUID
-	CreatedByName              string
-	CreatedByContext           []byte
 	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfBlocklistUpdatedBySourceEnum
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
@@ -169,10 +165,6 @@ type UpdateBlocklistParams struct {
 
 func (q *Queries) UpdateBlocklist(ctx context.Context, arg UpdateBlocklistParams) (Workspace2abogkkt2zd45pa9aun09djpfBlocklist, error) {
 	row := q.db.QueryRow(ctx, updateBlocklist,
-		arg.CreatedBySource,
-		arg.CreatedByWorkspaceMemberId,
-		arg.CreatedByName,
-		arg.CreatedByContext,
 		arg.UpdatedBySource,
 		arg.UpdatedByWorkspaceMemberId,
 		arg.UpdatedByName,

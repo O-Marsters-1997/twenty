@@ -12,8 +12,8 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "name", "amountAmountMicr
 
 -- name: UpdateOpportunity :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."opportunity"
-SET "name" = $1, "amountAmountMicros" = $2, "amountCurrencyCode" = $3, "closeDate" = $4, "stage" = $5, "position" = $6, "createdBySource" = $7, "createdByWorkspaceMemberId" = $8, "createdByName" = $9, "createdByContext" = $10, "updatedBySource" = $11, "updatedByWorkspaceMemberId" = $12, "updatedByName" = $13, "updatedByContext" = $14, "companyId" = $15, "pointOfContactId" = $16, "ownerId" = $17, "updatedAt" = now()
-WHERE id = $18
+SET "name" = $1, "amountAmountMicros" = $2, "amountCurrencyCode" = $3, "closeDate" = $4, "stage" = $5, "position" = $6, "updatedBySource" = $7, "updatedByWorkspaceMemberId" = $8, "updatedByName" = $9, "updatedByContext" = $10, "companyId" = $11, "pointOfContactId" = $12, "ownerId" = $13, "updatedAt" = now()
+WHERE id = $14
 RETURNING "id", "createdAt", "updatedAt", "deletedAt", "name", "amountAmountMicros", "amountCurrencyCode", "closeDate", "stage", "position", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext", "searchVector", "companyId", "pointOfContactId", "ownerId";
 
 -- name: SoftDeleteOpportunity :execrows

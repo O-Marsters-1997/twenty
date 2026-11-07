@@ -12,8 +12,8 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "creat
 
 -- name: UpdateCalendarChannelEventAssociation :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."calendarChannelEventAssociation"
-SET "createdBySource" = $1, "createdByWorkspaceMemberId" = $2, "createdByName" = $3, "createdByContext" = $4, "updatedBySource" = $5, "updatedByWorkspaceMemberId" = $6, "updatedByName" = $7, "updatedByContext" = $8, "position" = $9, "eventExternalId" = $10, "recurringEventExternalId" = $11, "calendarChannelId" = $12, "calendarEventId" = $13, "updatedAt" = now()
-WHERE id = $14
+SET "updatedBySource" = $1, "updatedByWorkspaceMemberId" = $2, "updatedByName" = $3, "updatedByContext" = $4, "position" = $5, "eventExternalId" = $6, "recurringEventExternalId" = $7, "calendarChannelId" = $8, "calendarEventId" = $9, "updatedAt" = now()
+WHERE id = $10
 RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext", "position", "searchVector", "eventExternalId", "recurringEventExternalId", "calendarChannelId", "calendarEventId";
 
 -- name: SoftDeleteCalendarChannelEventAssociation :execrows

@@ -12,8 +12,8 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "position", "title", "bod
 
 -- name: UpdateNote :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."note"
-SET "position" = $1, "title" = $2, "bodyV2Blocknote" = $3, "bodyV2Markdown" = $4, "createdBySource" = $5, "createdByWorkspaceMemberId" = $6, "createdByName" = $7, "createdByContext" = $8, "updatedBySource" = $9, "updatedByWorkspaceMemberId" = $10, "updatedByName" = $11, "updatedByContext" = $12, "updatedAt" = now()
-WHERE id = $13
+SET "position" = $1, "title" = $2, "bodyV2Blocknote" = $3, "bodyV2Markdown" = $4, "updatedBySource" = $5, "updatedByWorkspaceMemberId" = $6, "updatedByName" = $7, "updatedByContext" = $8, "updatedAt" = now()
+WHERE id = $9
 RETURNING "id", "createdAt", "updatedAt", "deletedAt", "position", "title", "bodyV2Blocknote", "bodyV2Markdown", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext", "searchVector";
 
 -- name: SoftDeleteNote :execrows

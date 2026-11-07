@@ -12,8 +12,8 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "creat
 
 -- name: UpdateMessageThreadTarget :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."messageThreadTarget"
-SET "createdBySource" = $1, "createdByWorkspaceMemberId" = $2, "createdByName" = $3, "createdByContext" = $4, "updatedBySource" = $5, "updatedByWorkspaceMemberId" = $6, "updatedByName" = $7, "updatedByContext" = $8, "position" = $9, "isAutomaticallyAssigned" = $10, "isManuallyAssigned" = $11, "targetCompanyId" = $12, "messageThreadId" = $13, "targetPersonId" = $14, "targetOpportunityId" = $15, "updatedAt" = now()
-WHERE id = $16
+SET "updatedBySource" = $1, "updatedByWorkspaceMemberId" = $2, "updatedByName" = $3, "updatedByContext" = $4, "position" = $5, "isAutomaticallyAssigned" = $6, "isManuallyAssigned" = $7, "targetCompanyId" = $8, "messageThreadId" = $9, "targetPersonId" = $10, "targetOpportunityId" = $11, "updatedAt" = now()
+WHERE id = $12
 RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext", "position", "searchVector", "isAutomaticallyAssigned", "isManuallyAssigned", "targetCompanyId", "messageThreadId", "targetPersonId", "targetOpportunityId";
 
 -- name: SoftDeleteMessageThreadTarget :execrows

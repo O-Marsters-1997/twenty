@@ -164,30 +164,26 @@ func (q *Queries) SoftDeleteAgentTurn(ctx context.Context, id pgtype.UUID) (int6
 
 const updateAgentTurn = `-- name: UpdateAgentTurn :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."agentTurn"
-SET "agentId" = $1, "status" = $2, "error" = $3, "startedAt" = $4, "endedAt" = $5, "modelId" = $6, "inputTokens" = $7, "outputTokens" = $8, "cacheReadTokens" = $9, "cacheCreationTokens" = $10, "inputCredits" = $11, "outputCredits" = $12, "createdBySource" = $13, "createdByWorkspaceMemberId" = $14, "createdByName" = $15, "createdByContext" = $16, "threadId" = $17, "updatedAt" = now()
-WHERE id = $18
+SET "agentId" = $1, "status" = $2, "error" = $3, "startedAt" = $4, "endedAt" = $5, "modelId" = $6, "inputTokens" = $7, "outputTokens" = $8, "cacheReadTokens" = $9, "cacheCreationTokens" = $10, "inputCredits" = $11, "outputCredits" = $12, "threadId" = $13, "updatedAt" = now()
+WHERE id = $14
 RETURNING "id", "agentId", "status", "error", "startedAt", "endedAt", "modelId", "inputTokens", "outputTokens", "cacheReadTokens", "cacheCreationTokens", "inputCredits", "outputCredits", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "createdAt", "updatedAt", "deletedAt", "threadId"
 `
 
 type UpdateAgentTurnParams struct {
-	AgentId                    pgtype.UUID
-	Status                     string
-	Error                      []byte
-	StartedAt                  pgtype.Timestamptz
-	EndedAt                    pgtype.Timestamptz
-	ModelId                    pgtype.Text
-	InputTokens                pgtype.Float8
-	OutputTokens               pgtype.Float8
-	CacheReadTokens            pgtype.Numeric
-	CacheCreationTokens        pgtype.Numeric
-	InputCredits               pgtype.Numeric
-	OutputCredits              pgtype.Numeric
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfAgentTurnCreatedBySourceEnum
-	CreatedByWorkspaceMemberId pgtype.UUID
-	CreatedByName              string
-	CreatedByContext           []byte
-	ThreadId                   pgtype.UUID
-	ID                         pgtype.UUID
+	AgentId             pgtype.UUID
+	Status              string
+	Error               []byte
+	StartedAt           pgtype.Timestamptz
+	EndedAt             pgtype.Timestamptz
+	ModelId             pgtype.Text
+	InputTokens         pgtype.Float8
+	OutputTokens        pgtype.Float8
+	CacheReadTokens     pgtype.Numeric
+	CacheCreationTokens pgtype.Numeric
+	InputCredits        pgtype.Numeric
+	OutputCredits       pgtype.Numeric
+	ThreadId            pgtype.UUID
+	ID                  pgtype.UUID
 }
 
 func (q *Queries) UpdateAgentTurn(ctx context.Context, arg UpdateAgentTurnParams) (Workspace2abogkkt2zd45pa9aun09djpfAgentTurn, error) {
@@ -204,10 +200,6 @@ func (q *Queries) UpdateAgentTurn(ctx context.Context, arg UpdateAgentTurnParams
 		arg.CacheCreationTokens,
 		arg.InputCredits,
 		arg.OutputCredits,
-		arg.CreatedBySource,
-		arg.CreatedByWorkspaceMemberId,
-		arg.CreatedByName,
-		arg.CreatedByContext,
 		arg.ThreadId,
 		arg.ID,
 	)

@@ -12,8 +12,8 @@ RETURNING "id", "agentId", "status", "error", "startedAt", "endedAt", "modelId",
 
 -- name: UpdateAgentTurn :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."agentTurn"
-SET "agentId" = $1, "status" = $2, "error" = $3, "startedAt" = $4, "endedAt" = $5, "modelId" = $6, "inputTokens" = $7, "outputTokens" = $8, "cacheReadTokens" = $9, "cacheCreationTokens" = $10, "inputCredits" = $11, "outputCredits" = $12, "createdBySource" = $13, "createdByWorkspaceMemberId" = $14, "createdByName" = $15, "createdByContext" = $16, "threadId" = $17, "updatedAt" = now()
-WHERE id = $18
+SET "agentId" = $1, "status" = $2, "error" = $3, "startedAt" = $4, "endedAt" = $5, "modelId" = $6, "inputTokens" = $7, "outputTokens" = $8, "cacheReadTokens" = $9, "cacheCreationTokens" = $10, "inputCredits" = $11, "outputCredits" = $12, "threadId" = $13, "updatedAt" = now()
+WHERE id = $14
 RETURNING "id", "agentId", "status", "error", "startedAt", "endedAt", "modelId", "inputTokens", "outputTokens", "cacheReadTokens", "cacheCreationTokens", "inputCredits", "outputCredits", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "createdAt", "updatedAt", "deletedAt", "threadId";
 
 -- name: SoftDeleteAgentTurn :execrows

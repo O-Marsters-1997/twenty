@@ -83,10 +83,12 @@ func querySQL(o *object, schema string) []byte {
 	list := strings.Join(all, ", ")
 
 	placeholders := make([]string, len(writable))
-	assignments := make([]string, len(writable))
+	var assignments []string
 	for i, column := range writable {
 		placeholders[i] = fmt.Sprintf("$%d", i+1)
-		assignments[i] = fmt.Sprintf("%s = $%d", column, i+1)
+		if !strings.HasPrefix(column, `"createdBy`) {
+			assignments = append(assignments, fmt.Sprintf("%s = $%d", column, len(assignments)+1))
+		}
 	}
 
 	var b strings.Builder
@@ -95,7 +97,7 @@ func querySQL(o *object, schema string) []byte {
 	fmt.Fprintf(&b, "-- name: Create%s :one\nINSERT INTO %s (%s)\nVALUES (%s)\nRETURNING %s;\n\n",
 		name, table, strings.Join(writable, ", "), strings.Join(placeholders, ", "), list)
 	fmt.Fprintf(&b, "-- name: Update%s :one\nUPDATE %s\nSET %s, \"updatedAt\" = now()\nWHERE id = $%d\nRETURNING %s;\n\n",
-		name, table, strings.Join(assignments, ", "), len(writable)+1, list)
+		name, table, strings.Join(assignments, ", "), len(assignments)+1, list)
 	fmt.Fprintf(&b, "-- name: SoftDelete%s :execrows\nUPDATE %s\nSET \"deletedAt\" = now(), \"updatedAt\" = now()\nWHERE id = $1 AND \"deletedAt\" IS NULL;\n\n", name, table)
 	fmt.Fprintf(&b, "-- name: Restore%s :execrows\nUPDATE %s\nSET \"deletedAt\" = NULL, \"updatedAt\" = now()\nWHERE id = $1 AND \"deletedAt\" IS NOT NULL;\n\n", name, table)
 	fmt.Fprintf(&b, "-- name: Destroy%s :execrows\nDELETE FROM %s\nWHERE id = $1;\n", name, table)

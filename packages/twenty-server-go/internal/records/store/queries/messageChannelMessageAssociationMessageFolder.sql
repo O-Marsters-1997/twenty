@@ -12,8 +12,8 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "creat
 
 -- name: UpdateMessageChannelMessageAssociationMessageFolder :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."messageChannelMessageAssociationMessageFolder"
-SET "createdBySource" = $1, "createdByWorkspaceMemberId" = $2, "createdByName" = $3, "createdByContext" = $4, "updatedBySource" = $5, "updatedByWorkspaceMemberId" = $6, "updatedByName" = $7, "updatedByContext" = $8, "position" = $9, "messageFolderId" = $10, "messageChannelMessageAssociationId" = $11, "updatedAt" = now()
-WHERE id = $12
+SET "updatedBySource" = $1, "updatedByWorkspaceMemberId" = $2, "updatedByName" = $3, "updatedByContext" = $4, "position" = $5, "messageFolderId" = $6, "messageChannelMessageAssociationId" = $7, "updatedAt" = now()
+WHERE id = $8
 RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext", "position", "searchVector", "messageFolderId", "messageChannelMessageAssociationId";
 
 -- name: SoftDeleteMessageChannelMessageAssociationMessageFolder :execrows

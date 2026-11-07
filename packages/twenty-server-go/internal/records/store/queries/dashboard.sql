@@ -12,8 +12,8 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "title", "position", "pag
 
 -- name: UpdateDashboard :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."dashboard"
-SET "title" = $1, "position" = $2, "pageLayoutId" = $3, "createdBySource" = $4, "createdByWorkspaceMemberId" = $5, "createdByName" = $6, "createdByContext" = $7, "updatedBySource" = $8, "updatedByWorkspaceMemberId" = $9, "updatedByName" = $10, "updatedByContext" = $11, "updatedAt" = now()
-WHERE id = $12
+SET "title" = $1, "position" = $2, "pageLayoutId" = $3, "updatedBySource" = $4, "updatedByWorkspaceMemberId" = $5, "updatedByName" = $6, "updatedByContext" = $7, "updatedAt" = now()
+WHERE id = $8
 RETURNING "id", "createdAt", "updatedAt", "deletedAt", "title", "position", "pageLayoutId", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext", "searchVector";
 
 -- name: SoftDeleteDashboard :execrows

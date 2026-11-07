@@ -12,8 +12,8 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "name", "file", "fullPath
 
 -- name: UpdateAttachment :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."attachment"
-SET "name" = $1, "file" = $2, "fullPath" = $3, "fileCategory" = $4, "createdBySource" = $5, "createdByWorkspaceMemberId" = $6, "createdByName" = $7, "createdByContext" = $8, "updatedBySource" = $9, "updatedByWorkspaceMemberId" = $10, "updatedByName" = $11, "updatedByContext" = $12, "position" = $13, "targetAgentChatThreadId" = $14, "targetTaskId" = $15, "targetNoteId" = $16, "targetPersonId" = $17, "targetCompanyId" = $18, "targetOpportunityId" = $19, "targetDashboardId" = $20, "targetWorkflowId" = $21, "updatedAt" = now()
-WHERE id = $22
+SET "name" = $1, "file" = $2, "fullPath" = $3, "fileCategory" = $4, "updatedBySource" = $5, "updatedByWorkspaceMemberId" = $6, "updatedByName" = $7, "updatedByContext" = $8, "position" = $9, "targetAgentChatThreadId" = $10, "targetTaskId" = $11, "targetNoteId" = $12, "targetPersonId" = $13, "targetCompanyId" = $14, "targetOpportunityId" = $15, "targetDashboardId" = $16, "targetWorkflowId" = $17, "updatedAt" = now()
+WHERE id = $18
 RETURNING "id", "createdAt", "updatedAt", "deletedAt", "name", "file", "fullPath", "fileCategory", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext", "position", "searchVector", "targetAgentChatThreadId", "targetTaskId", "targetNoteId", "targetPersonId", "targetCompanyId", "targetOpportunityId", "targetDashboardId", "targetWorkflowId";
 
 -- name: SoftDeleteAttachment :execrows

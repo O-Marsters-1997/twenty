@@ -146,16 +146,12 @@ func (q *Queries) SoftDeleteShortLink(ctx context.Context, id pgtype.UUID) (int6
 
 const updateShortLink = `-- name: UpdateShortLink :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."shortLink"
-SET "createdBySource" = $1, "createdByWorkspaceMemberId" = $2, "createdByName" = $3, "createdByContext" = $4, "updatedBySource" = $5, "updatedByWorkspaceMemberId" = $6, "updatedByName" = $7, "updatedByContext" = $8, "position" = $9, "authoredTemplateUrl" = $10, "resolvedDestinationUrl" = $11, "templateAndResolvedUrlHash" = $12, "updatedAt" = now()
-WHERE id = $13
+SET "updatedBySource" = $1, "updatedByWorkspaceMemberId" = $2, "updatedByName" = $3, "updatedByContext" = $4, "position" = $5, "authoredTemplateUrl" = $6, "resolvedDestinationUrl" = $7, "templateAndResolvedUrlHash" = $8, "updatedAt" = now()
+WHERE id = $9
 RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext", "position", "searchVector", "authoredTemplateUrl", "resolvedDestinationUrl", "templateAndResolvedUrlHash"
 `
 
 type UpdateShortLinkParams struct {
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfShortLinkCreatedBySourceEnum
-	CreatedByWorkspaceMemberId pgtype.UUID
-	CreatedByName              string
-	CreatedByContext           []byte
 	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfShortLinkUpdatedBySourceEnum
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
@@ -169,10 +165,6 @@ type UpdateShortLinkParams struct {
 
 func (q *Queries) UpdateShortLink(ctx context.Context, arg UpdateShortLinkParams) (Workspace2abogkkt2zd45pa9aun09djpfShortLink, error) {
 	row := q.db.QueryRow(ctx, updateShortLink,
-		arg.CreatedBySource,
-		arg.CreatedByWorkspaceMemberId,
-		arg.CreatedByName,
-		arg.CreatedByContext,
 		arg.UpdatedBySource,
 		arg.UpdatedByWorkspaceMemberId,
 		arg.UpdatedByName,

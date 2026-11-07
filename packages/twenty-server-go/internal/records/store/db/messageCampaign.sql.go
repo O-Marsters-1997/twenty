@@ -214,16 +214,12 @@ func (q *Queries) SoftDeleteMessageCampaign(ctx context.Context, id pgtype.UUID)
 
 const updateMessageCampaign = `-- name: UpdateMessageCampaign :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."messageCampaign"
-SET "createdBySource" = $1, "createdByWorkspaceMemberId" = $2, "createdByName" = $3, "createdByContext" = $4, "updatedBySource" = $5, "updatedByWorkspaceMemberId" = $6, "updatedByName" = $7, "updatedByContext" = $8, "position" = $9, "name" = $10, "subject" = $11, "bodyTemplate" = $12, "fromAddressPrimaryEmail" = $13, "fromAddressAdditionalEmails" = $14, "status" = $15, "scheduledAt" = $16, "sentAt" = $17, "sentCount" = $18, "deliveredCount" = $19, "failedCount" = $20, "bouncedCount" = $21, "complainedCount" = $22, "skippedCount" = $23, "uniqueClickCount" = $24, "clickRate" = $25, "uniqueOpenCount" = $26, "openRate" = $27, "unsubscribeTopicId" = $28, "listId" = $29, "updatedAt" = now()
-WHERE id = $30
+SET "updatedBySource" = $1, "updatedByWorkspaceMemberId" = $2, "updatedByName" = $3, "updatedByContext" = $4, "position" = $5, "name" = $6, "subject" = $7, "bodyTemplate" = $8, "fromAddressPrimaryEmail" = $9, "fromAddressAdditionalEmails" = $10, "status" = $11, "scheduledAt" = $12, "sentAt" = $13, "sentCount" = $14, "deliveredCount" = $15, "failedCount" = $16, "bouncedCount" = $17, "complainedCount" = $18, "skippedCount" = $19, "uniqueClickCount" = $20, "clickRate" = $21, "uniqueOpenCount" = $22, "openRate" = $23, "unsubscribeTopicId" = $24, "listId" = $25, "updatedAt" = now()
+WHERE id = $26
 RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext", "position", "searchVector", "name", "subject", "bodyTemplate", "fromAddressPrimaryEmail", "fromAddressAdditionalEmails", "status", "scheduledAt", "sentAt", "sentCount", "deliveredCount", "failedCount", "bouncedCount", "complainedCount", "skippedCount", "uniqueClickCount", "clickRate", "uniqueOpenCount", "openRate", "unsubscribeTopicId", "listId"
 `
 
 type UpdateMessageCampaignParams struct {
-	CreatedBySource             Workspace2abogkkt2zd45pa9aun09djpfMessageCampaignCreatedBySourceEnum
-	CreatedByWorkspaceMemberId  pgtype.UUID
-	CreatedByName               string
-	CreatedByContext            []byte
 	UpdatedBySource             Workspace2abogkkt2zd45pa9aun09djpfMessageCampaignUpdatedBySourceEnum
 	UpdatedByWorkspaceMemberId  pgtype.UUID
 	UpdatedByName               string
@@ -254,10 +250,6 @@ type UpdateMessageCampaignParams struct {
 
 func (q *Queries) UpdateMessageCampaign(ctx context.Context, arg UpdateMessageCampaignParams) (Workspace2abogkkt2zd45pa9aun09djpfMessageCampaign, error) {
 	row := q.db.QueryRow(ctx, updateMessageCampaign,
-		arg.CreatedBySource,
-		arg.CreatedByWorkspaceMemberId,
-		arg.CreatedByName,
-		arg.CreatedByContext,
 		arg.UpdatedBySource,
 		arg.UpdatedByWorkspaceMemberId,
 		arg.UpdatedByName,

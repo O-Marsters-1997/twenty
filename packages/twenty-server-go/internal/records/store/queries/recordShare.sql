@@ -12,8 +12,8 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "recordId", "objectMetada
 
 -- name: UpdateRecordShare :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."recordShare"
-SET "recordId" = $1, "objectMetadataId" = $2, "principalId" = $3, "principalType" = $4, "accessLevel" = $5, "rowCause" = $6, "sourceId" = $7, "createdBySource" = $8, "createdByWorkspaceMemberId" = $9, "createdByName" = $10, "createdByContext" = $11, "updatedBySource" = $12, "updatedByWorkspaceMemberId" = $13, "updatedByName" = $14, "updatedByContext" = $15, "position" = $16, "updatedAt" = now()
-WHERE id = $17
+SET "recordId" = $1, "objectMetadataId" = $2, "principalId" = $3, "principalType" = $4, "accessLevel" = $5, "rowCause" = $6, "sourceId" = $7, "updatedBySource" = $8, "updatedByWorkspaceMemberId" = $9, "updatedByName" = $10, "updatedByContext" = $11, "position" = $12, "updatedAt" = now()
+WHERE id = $13
 RETURNING "id", "createdAt", "updatedAt", "deletedAt", "recordId", "objectMetadataId", "principalId", "principalType", "accessLevel", "rowCause", "sourceId", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext", "position", "searchVector";
 
 -- name: SoftDeleteRecordShare :execrows

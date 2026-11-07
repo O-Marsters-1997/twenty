@@ -158,16 +158,12 @@ func (q *Queries) SoftDeleteWorkflowVersion(ctx context.Context, id pgtype.UUID)
 
 const updateWorkflowVersion = `-- name: UpdateWorkflowVersion :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."workflowVersion"
-SET "createdBySource" = $1, "createdByWorkspaceMemberId" = $2, "createdByName" = $3, "createdByContext" = $4, "updatedBySource" = $5, "updatedByWorkspaceMemberId" = $6, "updatedByName" = $7, "updatedByContext" = $8, "name" = $9, "trigger" = $10, "steps" = $11, "coreWorkflowVersionId" = $12, "status" = $13, "position" = $14, "workflowId" = $15, "updatedAt" = now()
-WHERE id = $16
+SET "updatedBySource" = $1, "updatedByWorkspaceMemberId" = $2, "updatedByName" = $3, "updatedByContext" = $4, "name" = $5, "trigger" = $6, "steps" = $7, "coreWorkflowVersionId" = $8, "status" = $9, "position" = $10, "workflowId" = $11, "updatedAt" = now()
+WHERE id = $12
 RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext", "name", "trigger", "steps", "coreWorkflowVersionId", "status", "position", "searchVector", "workflowId"
 `
 
 type UpdateWorkflowVersionParams struct {
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfWorkflowVersionCreatedBySourceEnum
-	CreatedByWorkspaceMemberId pgtype.UUID
-	CreatedByName              string
-	CreatedByContext           []byte
 	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfWorkflowVersionUpdatedBySourceEnum
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
@@ -184,10 +180,6 @@ type UpdateWorkflowVersionParams struct {
 
 func (q *Queries) UpdateWorkflowVersion(ctx context.Context, arg UpdateWorkflowVersionParams) (Workspace2abogkkt2zd45pa9aun09djpfWorkflowVersion, error) {
 	row := q.db.QueryRow(ctx, updateWorkflowVersion,
-		arg.CreatedBySource,
-		arg.CreatedByWorkspaceMemberId,
-		arg.CreatedByName,
-		arg.CreatedByContext,
 		arg.UpdatedBySource,
 		arg.UpdatedByWorkspaceMemberId,
 		arg.UpdatedByName,

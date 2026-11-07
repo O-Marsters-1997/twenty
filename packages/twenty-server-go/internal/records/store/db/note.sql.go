@@ -146,8 +146,8 @@ func (q *Queries) SoftDeleteNote(ctx context.Context, id pgtype.UUID) (int64, er
 
 const updateNote = `-- name: UpdateNote :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."note"
-SET "position" = $1, "title" = $2, "bodyV2Blocknote" = $3, "bodyV2Markdown" = $4, "createdBySource" = $5, "createdByWorkspaceMemberId" = $6, "createdByName" = $7, "createdByContext" = $8, "updatedBySource" = $9, "updatedByWorkspaceMemberId" = $10, "updatedByName" = $11, "updatedByContext" = $12, "updatedAt" = now()
-WHERE id = $13
+SET "position" = $1, "title" = $2, "bodyV2Blocknote" = $3, "bodyV2Markdown" = $4, "updatedBySource" = $5, "updatedByWorkspaceMemberId" = $6, "updatedByName" = $7, "updatedByContext" = $8, "updatedAt" = now()
+WHERE id = $9
 RETURNING "id", "createdAt", "updatedAt", "deletedAt", "position", "title", "bodyV2Blocknote", "bodyV2Markdown", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext", "searchVector"
 `
 
@@ -156,10 +156,6 @@ type UpdateNoteParams struct {
 	Title                      pgtype.Text
 	BodyV2Blocknote            pgtype.Text
 	BodyV2Markdown             pgtype.Text
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfNoteCreatedBySourceEnum
-	CreatedByWorkspaceMemberId pgtype.UUID
-	CreatedByName              string
-	CreatedByContext           []byte
 	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfNoteUpdatedBySourceEnum
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
@@ -173,10 +169,6 @@ func (q *Queries) UpdateNote(ctx context.Context, arg UpdateNoteParams) (Workspa
 		arg.Title,
 		arg.BodyV2Blocknote,
 		arg.BodyV2Markdown,
-		arg.CreatedBySource,
-		arg.CreatedByWorkspaceMemberId,
-		arg.CreatedByName,
-		arg.CreatedByContext,
 		arg.UpdatedBySource,
 		arg.UpdatedByWorkspaceMemberId,
 		arg.UpdatedByName,

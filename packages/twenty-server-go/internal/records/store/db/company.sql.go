@@ -206,8 +206,8 @@ func (q *Queries) SoftDeleteCompany(ctx context.Context, id pgtype.UUID) (int64,
 
 const updateCompany = `-- name: UpdateCompany :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."company"
-SET "name" = $1, "domainNamePrimaryLinkLabel" = $2, "domainNamePrimaryLinkUrl" = $3, "domainNameSecondaryLinks" = $4, "addressAddressStreet1" = $5, "addressAddressStreet2" = $6, "addressAddressCity" = $7, "addressAddressPostcode" = $8, "addressAddressState" = $9, "addressAddressCountry" = $10, "addressAddressLat" = $11, "addressAddressLng" = $12, "linkedinLinkPrimaryLinkLabel" = $13, "linkedinLinkPrimaryLinkUrl" = $14, "linkedinLinkSecondaryLinks" = $15, "annualRevenueAmountMicros" = $16, "annualRevenueCurrencyCode" = $17, "position" = $18, "createdBySource" = $19, "createdByWorkspaceMemberId" = $20, "createdByName" = $21, "createdByContext" = $22, "updatedBySource" = $23, "updatedByWorkspaceMemberId" = $24, "updatedByName" = $25, "updatedByContext" = $26, "accountOwnerId" = $27, "updatedAt" = now()
-WHERE id = $28
+SET "name" = $1, "domainNamePrimaryLinkLabel" = $2, "domainNamePrimaryLinkUrl" = $3, "domainNameSecondaryLinks" = $4, "addressAddressStreet1" = $5, "addressAddressStreet2" = $6, "addressAddressCity" = $7, "addressAddressPostcode" = $8, "addressAddressState" = $9, "addressAddressCountry" = $10, "addressAddressLat" = $11, "addressAddressLng" = $12, "linkedinLinkPrimaryLinkLabel" = $13, "linkedinLinkPrimaryLinkUrl" = $14, "linkedinLinkSecondaryLinks" = $15, "annualRevenueAmountMicros" = $16, "annualRevenueCurrencyCode" = $17, "position" = $18, "updatedBySource" = $19, "updatedByWorkspaceMemberId" = $20, "updatedByName" = $21, "updatedByContext" = $22, "accountOwnerId" = $23, "updatedAt" = now()
+WHERE id = $24
 RETURNING "id", "createdAt", "updatedAt", "deletedAt", "name", "domainNamePrimaryLinkLabel", "domainNamePrimaryLinkUrl", "domainNameSecondaryLinks", "addressAddressStreet1", "addressAddressStreet2", "addressAddressCity", "addressAddressPostcode", "addressAddressState", "addressAddressCountry", "addressAddressLat", "addressAddressLng", "linkedinLinkPrimaryLinkLabel", "linkedinLinkPrimaryLinkUrl", "linkedinLinkSecondaryLinks", "annualRevenueAmountMicros", "annualRevenueCurrencyCode", "position", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext", "searchVector", "accountOwnerId"
 `
 
@@ -230,10 +230,6 @@ type UpdateCompanyParams struct {
 	AnnualRevenueAmountMicros    pgtype.Numeric
 	AnnualRevenueCurrencyCode    pgtype.Text
 	Position                     float64
-	CreatedBySource              Workspace2abogkkt2zd45pa9aun09djpfCompanyCreatedBySourceEnum
-	CreatedByWorkspaceMemberId   pgtype.UUID
-	CreatedByName                string
-	CreatedByContext             []byte
 	UpdatedBySource              Workspace2abogkkt2zd45pa9aun09djpfCompanyUpdatedBySourceEnum
 	UpdatedByWorkspaceMemberId   pgtype.UUID
 	UpdatedByName                string
@@ -262,10 +258,6 @@ func (q *Queries) UpdateCompany(ctx context.Context, arg UpdateCompanyParams) (W
 		arg.AnnualRevenueAmountMicros,
 		arg.AnnualRevenueCurrencyCode,
 		arg.Position,
-		arg.CreatedBySource,
-		arg.CreatedByWorkspaceMemberId,
-		arg.CreatedByName,
-		arg.CreatedByContext,
 		arg.UpdatedBySource,
 		arg.UpdatedByWorkspaceMemberId,
 		arg.UpdatedByName,

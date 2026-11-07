@@ -12,8 +12,8 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "creat
 
 -- name: UpdateMessage :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."message"
-SET "createdBySource" = $1, "createdByWorkspaceMemberId" = $2, "createdByName" = $3, "createdByContext" = $4, "updatedBySource" = $5, "updatedByWorkspaceMemberId" = $6, "updatedByName" = $7, "updatedByContext" = $8, "position" = $9, "headerMessageId" = $10, "subject" = $11, "text" = $12, "receivedAt" = $13, "isDraft" = $14, "messageCampaignId" = $15, "messageThreadId" = $16, "updatedAt" = now()
-WHERE id = $17
+SET "updatedBySource" = $1, "updatedByWorkspaceMemberId" = $2, "updatedByName" = $3, "updatedByContext" = $4, "position" = $5, "headerMessageId" = $6, "subject" = $7, "text" = $8, "receivedAt" = $9, "isDraft" = $10, "messageCampaignId" = $11, "messageThreadId" = $12, "updatedAt" = now()
+WHERE id = $13
 RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext", "position", "searchVector", "headerMessageId", "subject", "text", "receivedAt", "isDraft", "messageCampaignId", "messageThreadId";
 
 -- name: SoftDeleteMessage :execrows

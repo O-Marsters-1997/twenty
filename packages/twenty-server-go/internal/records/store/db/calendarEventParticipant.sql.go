@@ -162,16 +162,12 @@ func (q *Queries) SoftDeleteCalendarEventParticipant(ctx context.Context, id pgt
 
 const updateCalendarEventParticipant = `-- name: UpdateCalendarEventParticipant :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."calendarEventParticipant"
-SET "createdBySource" = $1, "createdByWorkspaceMemberId" = $2, "createdByName" = $3, "createdByContext" = $4, "updatedBySource" = $5, "updatedByWorkspaceMemberId" = $6, "updatedByName" = $7, "updatedByContext" = $8, "position" = $9, "handle" = $10, "displayName" = $11, "isOrganizer" = $12, "responseStatus" = $13, "calendarEventId" = $14, "personId" = $15, "workspaceMemberId" = $16, "updatedAt" = now()
-WHERE id = $17
+SET "updatedBySource" = $1, "updatedByWorkspaceMemberId" = $2, "updatedByName" = $3, "updatedByContext" = $4, "position" = $5, "handle" = $6, "displayName" = $7, "isOrganizer" = $8, "responseStatus" = $9, "calendarEventId" = $10, "personId" = $11, "workspaceMemberId" = $12, "updatedAt" = now()
+WHERE id = $13
 RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext", "position", "searchVector", "handle", "displayName", "isOrganizer", "responseStatus", "calendarEventId", "personId", "workspaceMemberId"
 `
 
 type UpdateCalendarEventParticipantParams struct {
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfCalendarEventParticipantCreatedBySourceEnum
-	CreatedByWorkspaceMemberId pgtype.UUID
-	CreatedByName              string
-	CreatedByContext           []byte
 	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfCalendarEventParticipantUpdatedBySourceEnum
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
@@ -189,10 +185,6 @@ type UpdateCalendarEventParticipantParams struct {
 
 func (q *Queries) UpdateCalendarEventParticipant(ctx context.Context, arg UpdateCalendarEventParticipantParams) (Workspace2abogkkt2zd45pa9aun09djpfCalendarEventParticipant, error) {
 	row := q.db.QueryRow(ctx, updateCalendarEventParticipant,
-		arg.CreatedBySource,
-		arg.CreatedByWorkspaceMemberId,
-		arg.CreatedByName,
-		arg.CreatedByContext,
 		arg.UpdatedBySource,
 		arg.UpdatedByWorkspaceMemberId,
 		arg.UpdatedByName,

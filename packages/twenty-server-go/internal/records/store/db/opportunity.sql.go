@@ -166,8 +166,8 @@ func (q *Queries) SoftDeleteOpportunity(ctx context.Context, id pgtype.UUID) (in
 
 const updateOpportunity = `-- name: UpdateOpportunity :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."opportunity"
-SET "name" = $1, "amountAmountMicros" = $2, "amountCurrencyCode" = $3, "closeDate" = $4, "stage" = $5, "position" = $6, "createdBySource" = $7, "createdByWorkspaceMemberId" = $8, "createdByName" = $9, "createdByContext" = $10, "updatedBySource" = $11, "updatedByWorkspaceMemberId" = $12, "updatedByName" = $13, "updatedByContext" = $14, "companyId" = $15, "pointOfContactId" = $16, "ownerId" = $17, "updatedAt" = now()
-WHERE id = $18
+SET "name" = $1, "amountAmountMicros" = $2, "amountCurrencyCode" = $3, "closeDate" = $4, "stage" = $5, "position" = $6, "updatedBySource" = $7, "updatedByWorkspaceMemberId" = $8, "updatedByName" = $9, "updatedByContext" = $10, "companyId" = $11, "pointOfContactId" = $12, "ownerId" = $13, "updatedAt" = now()
+WHERE id = $14
 RETURNING "id", "createdAt", "updatedAt", "deletedAt", "name", "amountAmountMicros", "amountCurrencyCode", "closeDate", "stage", "position", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext", "searchVector", "companyId", "pointOfContactId", "ownerId"
 `
 
@@ -178,10 +178,6 @@ type UpdateOpportunityParams struct {
 	CloseDate                  pgtype.Timestamptz
 	Stage                      Workspace2abogkkt2zd45pa9aun09djpfOpportunityStageEnum
 	Position                   float64
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfOpportunityCreatedBySourceEnum
-	CreatedByWorkspaceMemberId pgtype.UUID
-	CreatedByName              string
-	CreatedByContext           []byte
 	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfOpportunityUpdatedBySourceEnum
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
@@ -200,10 +196,6 @@ func (q *Queries) UpdateOpportunity(ctx context.Context, arg UpdateOpportunityPa
 		arg.CloseDate,
 		arg.Stage,
 		arg.Position,
-		arg.CreatedBySource,
-		arg.CreatedByWorkspaceMemberId,
-		arg.CreatedByName,
-		arg.CreatedByContext,
 		arg.UpdatedBySource,
 		arg.UpdatedByWorkspaceMemberId,
 		arg.UpdatedByName,

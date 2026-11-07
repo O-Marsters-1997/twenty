@@ -150,8 +150,8 @@ func (q *Queries) SoftDeleteWorkflow(ctx context.Context, id pgtype.UUID) (int64
 
 const updateWorkflow = `-- name: UpdateWorkflow :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."workflow"
-SET "name" = $1, "lastPublishedVersionId" = $2, "coreWorkflowId" = $3, "statuses" = $4, "position" = $5, "createdBySource" = $6, "createdByWorkspaceMemberId" = $7, "createdByName" = $8, "createdByContext" = $9, "updatedBySource" = $10, "updatedByWorkspaceMemberId" = $11, "updatedByName" = $12, "updatedByContext" = $13, "updatedAt" = now()
-WHERE id = $14
+SET "name" = $1, "lastPublishedVersionId" = $2, "coreWorkflowId" = $3, "statuses" = $4, "position" = $5, "updatedBySource" = $6, "updatedByWorkspaceMemberId" = $7, "updatedByName" = $8, "updatedByContext" = $9, "updatedAt" = now()
+WHERE id = $10
 RETURNING "id", "createdAt", "updatedAt", "deletedAt", "name", "lastPublishedVersionId", "coreWorkflowId", "statuses", "position", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext", "searchVector"
 `
 
@@ -161,10 +161,6 @@ type UpdateWorkflowParams struct {
 	CoreWorkflowId             pgtype.UUID
 	Statuses                   []Workspace2abogkkt2zd45pa9aun09djpfWorkflowStatusesEnum
 	Position                   float64
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfWorkflowCreatedBySourceEnum
-	CreatedByWorkspaceMemberId pgtype.UUID
-	CreatedByName              string
-	CreatedByContext           []byte
 	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfWorkflowUpdatedBySourceEnum
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
@@ -179,10 +175,6 @@ func (q *Queries) UpdateWorkflow(ctx context.Context, arg UpdateWorkflowParams) 
 		arg.CoreWorkflowId,
 		arg.Statuses,
 		arg.Position,
-		arg.CreatedBySource,
-		arg.CreatedByWorkspaceMemberId,
-		arg.CreatedByName,
-		arg.CreatedByContext,
 		arg.UpdatedBySource,
 		arg.UpdatedByWorkspaceMemberId,
 		arg.UpdatedByName,

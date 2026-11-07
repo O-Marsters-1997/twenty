@@ -12,8 +12,8 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "creat
 
 -- name: UpdateCalendarEventTarget :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."calendarEventTarget"
-SET "createdBySource" = $1, "createdByWorkspaceMemberId" = $2, "createdByName" = $3, "createdByContext" = $4, "updatedBySource" = $5, "updatedByWorkspaceMemberId" = $6, "updatedByName" = $7, "updatedByContext" = $8, "position" = $9, "isAutomaticallyAssigned" = $10, "isManuallyAssigned" = $11, "calendarEventId" = $12, "targetPersonId" = $13, "targetCompanyId" = $14, "targetOpportunityId" = $15, "updatedAt" = now()
-WHERE id = $16
+SET "updatedBySource" = $1, "updatedByWorkspaceMemberId" = $2, "updatedByName" = $3, "updatedByContext" = $4, "position" = $5, "isAutomaticallyAssigned" = $6, "isManuallyAssigned" = $7, "calendarEventId" = $8, "targetPersonId" = $9, "targetCompanyId" = $10, "targetOpportunityId" = $11, "updatedAt" = now()
+WHERE id = $12
 RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext", "position", "searchVector", "isAutomaticallyAssigned", "isManuallyAssigned", "calendarEventId", "targetPersonId", "targetCompanyId", "targetOpportunityId";
 
 -- name: SoftDeleteCalendarEventTarget :execrows

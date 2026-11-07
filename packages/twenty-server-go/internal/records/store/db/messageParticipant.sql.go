@@ -162,16 +162,12 @@ func (q *Queries) SoftDeleteMessageParticipant(ctx context.Context, id pgtype.UU
 
 const updateMessageParticipant = `-- name: UpdateMessageParticipant :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."messageParticipant"
-SET "createdBySource" = $1, "createdByWorkspaceMemberId" = $2, "createdByName" = $3, "createdByContext" = $4, "updatedBySource" = $5, "updatedByWorkspaceMemberId" = $6, "updatedByName" = $7, "updatedByContext" = $8, "position" = $9, "role" = $10, "handle" = $11, "displayName" = $12, "messageCampaignId" = $13, "messageId" = $14, "personId" = $15, "workspaceMemberId" = $16, "updatedAt" = now()
-WHERE id = $17
+SET "updatedBySource" = $1, "updatedByWorkspaceMemberId" = $2, "updatedByName" = $3, "updatedByContext" = $4, "position" = $5, "role" = $6, "handle" = $7, "displayName" = $8, "messageCampaignId" = $9, "messageId" = $10, "personId" = $11, "workspaceMemberId" = $12, "updatedAt" = now()
+WHERE id = $13
 RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext", "position", "searchVector", "role", "handle", "displayName", "messageCampaignId", "messageId", "personId", "workspaceMemberId"
 `
 
 type UpdateMessageParticipantParams struct {
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfMessageParticipantCreatedBySourceEnum
-	CreatedByWorkspaceMemberId pgtype.UUID
-	CreatedByName              string
-	CreatedByContext           []byte
 	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfMessageParticipantUpdatedBySourceEnum
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
@@ -189,10 +185,6 @@ type UpdateMessageParticipantParams struct {
 
 func (q *Queries) UpdateMessageParticipant(ctx context.Context, arg UpdateMessageParticipantParams) (Workspace2abogkkt2zd45pa9aun09djpfMessageParticipant, error) {
 	row := q.db.QueryRow(ctx, updateMessageParticipant,
-		arg.CreatedBySource,
-		arg.CreatedByWorkspaceMemberId,
-		arg.CreatedByName,
-		arg.CreatedByContext,
 		arg.UpdatedBySource,
 		arg.UpdatedByWorkspaceMemberId,
 		arg.UpdatedByName,

@@ -142,16 +142,12 @@ func (q *Queries) SoftDeleteMessageList(ctx context.Context, id pgtype.UUID) (in
 
 const updateMessageList = `-- name: UpdateMessageList :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."messageList"
-SET "createdBySource" = $1, "createdByWorkspaceMemberId" = $2, "createdByName" = $3, "createdByContext" = $4, "updatedBySource" = $5, "updatedByWorkspaceMemberId" = $6, "updatedByName" = $7, "updatedByContext" = $8, "position" = $9, "name" = $10, "description" = $11, "updatedAt" = now()
-WHERE id = $12
+SET "updatedBySource" = $1, "updatedByWorkspaceMemberId" = $2, "updatedByName" = $3, "updatedByContext" = $4, "position" = $5, "name" = $6, "description" = $7, "updatedAt" = now()
+WHERE id = $8
 RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext", "position", "name", "description", "searchVector"
 `
 
 type UpdateMessageListParams struct {
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfMessageListCreatedBySourceEnum
-	CreatedByWorkspaceMemberId pgtype.UUID
-	CreatedByName              string
-	CreatedByContext           []byte
 	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfMessageListUpdatedBySourceEnum
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
@@ -164,10 +160,6 @@ type UpdateMessageListParams struct {
 
 func (q *Queries) UpdateMessageList(ctx context.Context, arg UpdateMessageListParams) (Workspace2abogkkt2zd45pa9aun09djpfMessageList, error) {
 	row := q.db.QueryRow(ctx, updateMessageList,
-		arg.CreatedBySource,
-		arg.CreatedByWorkspaceMemberId,
-		arg.CreatedByName,
-		arg.CreatedByContext,
 		arg.UpdatedBySource,
 		arg.UpdatedByWorkspaceMemberId,
 		arg.UpdatedByName,

@@ -19,6 +19,11 @@ type tableColumn struct {
 	generated bool
 }
 
+type fieldOption struct {
+	Value    string `json:"value"`
+	Position int    `json:"position"`
+}
+
 type settings struct {
 	RelationType   string `json:"relationType"`
 	JoinColumnName string `json:"joinColumnName"`
@@ -99,12 +104,12 @@ func loadColumns(ctx context.Context, pool *pgxpool.Pool, schema string, objects
 	if err != nil {
 		return fmt.Errorf("query table columns: %w", err)
 	}
+	defer rows.Close()
 	byTable := map[string][]tableColumn{}
 	for rows.Next() {
 		var table string
 		var column tableColumn
 		if err := rows.Scan(&table, &column.name, &column.generated); err != nil {
-			rows.Close()
 			return fmt.Errorf("scan table column: %w", err)
 		}
 		byTable[table] = append(byTable[table], column)
@@ -163,17 +168,11 @@ func decodeOptions(raw []byte) ([]string, error) {
 	if len(raw) == 0 {
 		return nil, nil
 	}
-	var options []struct {
-		Value    string `json:"value"`
-		Position int    `json:"position"`
-	}
+	var options []fieldOption
 	if err := json.Unmarshal(raw, &options); err != nil {
 		return nil, err
 	}
-	slices.SortStableFunc(options, func(a, b struct {
-		Value    string `json:"value"`
-		Position int    `json:"position"`
-	}) int {
+	slices.SortStableFunc(options, func(a, b fieldOption) int {
 		return a.Position - b.Position
 	})
 	values := make([]string, len(options))

@@ -158,8 +158,8 @@ func (q *Queries) SoftDeleteTask(ctx context.Context, id pgtype.UUID) (int64, er
 
 const updateTask = `-- name: UpdateTask :one
 UPDATE workspace_2abogkkt2zd45pa9aun09djpf."task"
-SET "position" = $1, "title" = $2, "bodyV2Blocknote" = $3, "bodyV2Markdown" = $4, "dueAt" = $5, "status" = $6, "createdBySource" = $7, "createdByWorkspaceMemberId" = $8, "createdByName" = $9, "createdByContext" = $10, "updatedBySource" = $11, "updatedByWorkspaceMemberId" = $12, "updatedByName" = $13, "updatedByContext" = $14, "assigneeId" = $15, "updatedAt" = now()
-WHERE id = $16
+SET "position" = $1, "title" = $2, "bodyV2Blocknote" = $3, "bodyV2Markdown" = $4, "dueAt" = $5, "status" = $6, "updatedBySource" = $7, "updatedByWorkspaceMemberId" = $8, "updatedByName" = $9, "updatedByContext" = $10, "assigneeId" = $11, "updatedAt" = now()
+WHERE id = $12
 RETURNING "id", "createdAt", "updatedAt", "deletedAt", "position", "title", "bodyV2Blocknote", "bodyV2Markdown", "dueAt", "status", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext", "searchVector", "assigneeId"
 `
 
@@ -170,10 +170,6 @@ type UpdateTaskParams struct {
 	BodyV2Markdown             pgtype.Text
 	DueAt                      pgtype.Timestamptz
 	Status                     NullWorkspace2abogkkt2zd45pa9aun09djpfTaskStatusEnum
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfTaskCreatedBySourceEnum
-	CreatedByWorkspaceMemberId pgtype.UUID
-	CreatedByName              string
-	CreatedByContext           []byte
 	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfTaskUpdatedBySourceEnum
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
@@ -190,10 +186,6 @@ func (q *Queries) UpdateTask(ctx context.Context, arg UpdateTaskParams) (Workspa
 		arg.BodyV2Markdown,
 		arg.DueAt,
 		arg.Status,
-		arg.CreatedBySource,
-		arg.CreatedByWorkspaceMemberId,
-		arg.CreatedByName,
-		arg.CreatedByContext,
 		arg.UpdatedBySource,
 		arg.UpdatedByWorkspaceMemberId,
 		arg.UpdatedByName,
