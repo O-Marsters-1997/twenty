@@ -1,0 +1,34 @@
+{
+  "name": "twenty-server-go",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/twenty-server-go",
+  "projectType": "application",
+  "tags": ["scope:backend"],
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": ["{projectRoot}/bin"],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "go build -o bin/api ./cmd/api"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "go test ./..."
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "commands": ["go vet ./...", "golangci-lint run"],
+        "parallel": false
+      }
+    }
+  }
+}
