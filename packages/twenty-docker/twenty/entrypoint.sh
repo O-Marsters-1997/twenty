@@ -9,24 +9,10 @@ setup_and_migrate_db() {
 
     echo "Running database setup and migrations..."
 
-    # Run setup and migration scripts
-    has_schema=$(psql -tAc "SELECT EXISTS (SELECT 1 FROM information_schema.schemata WHERE schema_name = 'core')" ${PG_DATABASE_URL})
-    if [ "$has_schema" = "f" ]; then
-        echo "Database appears to be empty, running migrations."
-        node dist/database/scripts/setup-db.js
-        node dist/command/command run-instance-commands --force --include-slow
-    fi
+    migrate up
 
     if ! node dist/command/command cache:flush; then
-        echo "Warning: Failed to flush cache before upgrade, but continuing startup..."
-    fi
-
-    if ! node dist/command/command upgrade; then
-        echo "Warning: Upgrade completed with errors. Some workspaces may not be fully migrated. Check logs for details."
-    fi
-
-    if ! node dist/command/command cache:flush; then
-        echo "Warning: Failed to flush cache after upgrade, but continuing startup..."
+        echo "Warning: Failed to flush cache after migrations, but continuing startup..."
     fi
 
     echo "Successfully migrated DB!"

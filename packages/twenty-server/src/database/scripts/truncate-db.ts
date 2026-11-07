@@ -32,6 +32,10 @@ async function dropSchemasSequentially() {
         ),
       );
     }
+    await performQuery(
+      'DROP TABLE IF EXISTS public.goose_db_version',
+      'Dropping goose version table...',
+    );
     // oxlint-disable-next-line no-console
     console.log('All schemas dropped successfully.');
   } catch (err) {
