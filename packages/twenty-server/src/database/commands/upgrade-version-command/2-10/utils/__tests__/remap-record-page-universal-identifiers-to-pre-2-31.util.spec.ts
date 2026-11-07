@@ -7,7 +7,7 @@ describe('remapRecordPageUniversalIdentifiersToPre231', () => {
   it('should remap derived record-page universal identifiers to their pre-2.31 literals', () => {
     const remapped = remapRecordPageUniversalIdentifiersToPre231({
       universalIdentifier:
-        STANDARD_OBJECTS.callRecording.views.callRecordingRecordPageFields
+        STANDARD_OBJECTS.messageCampaign.views.messageCampaignRecordPageFields
           .universalIdentifier,
       nested: {
         viewUniversalIdentifier:
@@ -17,7 +17,7 @@ describe('remapRecordPageUniversalIdentifiersToPre231', () => {
     });
 
     expect(remapped).toEqual({
-      universalIdentifier: '99fa8b47-3b11-4f9b-8fbc-e67a9e1da682',
+      universalIdentifier: '20202020-a009-4a09-8a09-fa9de11ca901',
       nested: {
         viewUniversalIdentifier: 'c73668d1-022d-4eaf-b825-4e2548180db6',
       },

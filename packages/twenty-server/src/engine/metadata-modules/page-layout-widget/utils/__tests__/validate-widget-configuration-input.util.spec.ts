@@ -60,31 +60,6 @@ describe('validateWidgetConfigurationInput', () => {
     });
   });
 
-  describe('CALL_RECORDING_SUMMARY widget', () => {
-    it('should not throw for valid call recording summary configuration', () => {
-      expect(() =>
-        validateWidgetConfigurationInput({
-          configuration: {
-            configurationType: WidgetConfigurationType.CALL_RECORDING_SUMMARY,
-          },
-        }),
-      ).not.toThrow();
-    });
-  });
-
-  describe('CALL_RECORDING_TRANSCRIPT widget', () => {
-    it('should not throw for valid call recording transcript configuration', () => {
-      expect(() =>
-        validateWidgetConfigurationInput({
-          configuration: {
-            configurationType:
-              WidgetConfigurationType.CALL_RECORDING_TRANSCRIPT,
-          },
-        }),
-      ).not.toThrow();
-    });
-  });
-
   describe('CHAT_THREADS widget', () => {
     it('should not throw for valid chat threads configuration', () => {
       expect(() =>

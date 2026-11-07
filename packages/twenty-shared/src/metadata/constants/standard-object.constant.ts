@@ -268,47 +268,6 @@ export const STANDARD_OBJECTS = {
     },
     views: {},
   },
-  callRecording: {
-    universalIdentifier: STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.callRecording,
-    fields: STANDARD_OBJECT_FIELDS.callRecording,
-    indexes: {
-      calendarEventIdIndex: {
-        universalIdentifier: '8be3cc47-9352-4a1b-ad19-bb186bc0865d',
-      },
-    },
-    views: {
-      allCallRecordings: buildStandardObjectIndexView({
-        objectUniversalIdentifier:
-          STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.callRecording,
-        fields: STANDARD_OBJECT_FIELDS.callRecording,
-        viewFieldNames: [
-          'status',
-          'recordingRequestStatus',
-          'title',
-          'startedAt',
-        ],
-      }),
-      callRecordingRecordPageFields: buildStandardObjectRecordPageFieldsView({
-        objectUniversalIdentifier:
-          STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.callRecording,
-        fields: STANDARD_OBJECT_FIELDS.callRecording,
-        viewFieldNames: [
-          'title',
-          'status',
-          'recordingRequestStatus',
-          'startedAt',
-          'endedAt',
-          'video',
-          'audio',
-          'transcript',
-          'summary',
-        ],
-        viewFieldGroupNames: {
-          general: 'General',
-        },
-      }),
-    },
-  },
   company: {
     universalIdentifier: STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.company,
     fields: STANDARD_OBJECT_FIELDS.company,

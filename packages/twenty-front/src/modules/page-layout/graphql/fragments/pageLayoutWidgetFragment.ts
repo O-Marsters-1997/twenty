@@ -159,12 +159,6 @@ export const PAGE_LAYOUT_WIDGET_FRAGMENT = gql`
       ... on EmailThreadConfiguration {
         configurationType
       }
-      ... on CallRecordingSummaryConfiguration {
-        configurationType
-      }
-      ... on CallRecordingTranscriptConfiguration {
-        configurationType
-      }
       ... on ChatThreadsConfiguration {
         configurationType
       }

@@ -45,17 +45,6 @@ const CALENDAR_EVENT_PAGE_TABS = {
           STANDARD_OBJECTS.calendarEvent.fields.calendarEventParticipants
             .universalIdentifier,
       },
-      callRecordings: {
-        universalIdentifier:
-          STANDARD_PAGE_LAYOUT_UNIVERSAL_IDENTIFIERS.calendarEventRecordPage
-            .tabs.home.widgets.callRecordings.universalIdentifier,
-        title: 'Call Recordings',
-        type: WidgetType.FIELD,
-        position: VERTICAL_LIST_LAYOUT_POSITIONS.THIRD,
-        fieldUniversalIdentifier:
-          STANDARD_OBJECTS.calendarEvent.fields.callRecordings
-            .universalIdentifier,
-      },
     },
   },
   timeline: {
@@ -69,46 +58,6 @@ const CALENDAR_EVENT_PAGE_TABS = {
           STANDARD_PAGE_LAYOUT_UNIVERSAL_IDENTIFIERS.calendarEventRecordPage
             .tabs.timeline.widgets.timeline.universalIdentifier,
         ...WIDGET_PROPS.timeline,
-      },
-    },
-  },
-  summary: {
-    universalIdentifier:
-      STANDARD_PAGE_LAYOUT_UNIVERSAL_IDENTIFIERS.calendarEventRecordPage.tabs
-        .summary.universalIdentifier,
-    title: 'Summary',
-    position: 30,
-    icon: 'IconFileText',
-    layoutMode: PageLayoutTabLayoutMode.VERTICAL_LIST,
-    widgets: {
-      summary: {
-        universalIdentifier:
-          STANDARD_PAGE_LAYOUT_UNIVERSAL_IDENTIFIERS.calendarEventRecordPage
-            .tabs.summary.widgets.summary.universalIdentifier,
-        title: 'Summary',
-        type: WidgetType.CALL_RECORDING_SUMMARY,
-        position: VERTICAL_LIST_LAYOUT_POSITIONS.FIRST,
-      },
-    },
-  },
-  callRecording: {
-    universalIdentifier:
-      STANDARD_PAGE_LAYOUT_UNIVERSAL_IDENTIFIERS.calendarEventRecordPage.tabs
-        .callRecording.universalIdentifier,
-    title: i18nLabel(
-      msg({ message: 'Transcript', context: 'pageLayoutTab.title' }),
-    ),
-    position: 40,
-    icon: 'IconBlockquote',
-    layoutMode: PageLayoutTabLayoutMode.VERTICAL_LIST,
-    widgets: {
-      transcript: {
-        universalIdentifier:
-          STANDARD_PAGE_LAYOUT_UNIVERSAL_IDENTIFIERS.calendarEventRecordPage
-            .tabs.callRecording.widgets.transcript.universalIdentifier,
-        title: 'Transcript',
-        type: WidgetType.CALL_RECORDING_TRANSCRIPT,
-        position: VERTICAL_LIST_LAYOUT_POSITIONS.FIRST,
       },
     },
   },

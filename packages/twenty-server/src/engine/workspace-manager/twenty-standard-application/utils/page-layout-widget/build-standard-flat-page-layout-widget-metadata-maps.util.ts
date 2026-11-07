@@ -41,8 +41,6 @@ const RECORD_PAGE_LAYOUT_WIDGET_TYPES = [
   WidgetType.WORKFLOW,
   WidgetType.WORKFLOW_VERSION,
   WidgetType.WORKFLOW_RUN,
-  WidgetType.CALL_RECORDING_SUMMARY,
-  WidgetType.CALL_RECORDING_TRANSCRIPT,
   WidgetType.MESSAGE_CAMPAIGN_BODY,
   WidgetType.MESSAGE_CAMPAIGN_DETAILS,
   WidgetType.CHAT_THREADS,
@@ -68,10 +66,6 @@ const WIDGET_TYPE_TO_CONFIGURATION_TYPE: Partial<
   [WidgetType.WORKFLOW_RUN]: WidgetConfigurationType.WORKFLOW_RUN,
   [WidgetType.RECORD_TABLE]: WidgetConfigurationType.RECORD_TABLE,
   [WidgetType.EMAIL_THREAD]: WidgetConfigurationType.EMAIL_THREAD,
-  [WidgetType.CALL_RECORDING_SUMMARY]:
-    WidgetConfigurationType.CALL_RECORDING_SUMMARY,
-  [WidgetType.CALL_RECORDING_TRANSCRIPT]:
-    WidgetConfigurationType.CALL_RECORDING_TRANSCRIPT,
   [WidgetType.MESSAGE_CAMPAIGN_BODY]:
     WidgetConfigurationType.MESSAGE_CAMPAIGN_BODY,
   [WidgetType.MESSAGE_CAMPAIGN_DETAILS]:
@@ -89,7 +83,6 @@ const RECORD_PAGE_FIELDS_VIEW_NAME_BY_OBJECT: Partial<
     'calendarChannelEventAssociationRecordPageFields',
   calendarEvent: 'calendarEventRecordPageFields',
   calendarEventParticipant: 'calendarEventParticipantRecordPageFields',
-  callRecording: 'callRecordingRecordPageFields',
   company: 'companyRecordPageFields',
   message: 'messageRecordPageFields',
   messageCampaign: 'messageCampaignRecordPageFields',

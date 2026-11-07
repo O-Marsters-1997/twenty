@@ -625,9 +625,6 @@ export const STANDARD_OBJECT_FIELDS = {
     calendarEventTargets: {
       universalIdentifier: '2b4a0785-3462-485f-b1a8-79ebb2078eab',
     },
-    callRecordings: {
-      universalIdentifier: '48d6d151-18e2-4111-b405-d85fb9d860d8',
-    },
   },
   calendarEventTarget: {
     ...buildStandardObjectSystemFields(
@@ -671,50 +668,6 @@ export const STANDARD_OBJECT_FIELDS = {
         relationTargetObjectUniversalIdentifier:
           STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.opportunity,
       }),
-    },
-  },
-  callRecording: {
-    ...buildStandardObjectSystemFields(
-      STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.callRecording,
-    ),
-    title: {
-      universalIdentifier: '4cff8863-a1d1-45fd-a370-4eb6aa1f2a5b',
-    },
-    status: {
-      universalIdentifier: '3e617680-d93e-4309-a54f-90f69528bfd7',
-    },
-    recordingRequestStatus: {
-      universalIdentifier: '7fd681c9-244c-4e98-8939-7b175d472638',
-    },
-    applicationId: {
-      universalIdentifier: '24ec1239-1240-42cb-8a2d-302632378e09',
-    },
-    externalBotId: {
-      universalIdentifier: '0a2da128-9bcc-488b-bc31-65318c41bdf9',
-    },
-    externalRecordingId: {
-      universalIdentifier: '6d17fb71-324b-4625-a5be-b3580607e2c7',
-    },
-    startedAt: {
-      universalIdentifier: '6c56c23f-1987-410a-860a-df3b2b3f9a33',
-    },
-    endedAt: {
-      universalIdentifier: '7a38a9cf-8424-4d6e-b80a-6883d3c662ef',
-    },
-    video: {
-      universalIdentifier: 'bb9523d3-457e-4f4b-8c79-27a77afb87da',
-    },
-    audio: {
-      universalIdentifier: '2eafc2d0-8fec-430c-a939-65ca5fbc0f08',
-    },
-    transcript: {
-      universalIdentifier: '27b86d68-57d1-4607-aca0-191896b1ad43',
-    },
-    summary: {
-      universalIdentifier: 'adb0f472-756b-4d3f-b21e-ea32bf73a5e4',
-    },
-    calendarEvent: {
-      universalIdentifier: '49e64b28-bd98-4775-80ea-4781bdd45e35',
     },
   },
   company: {

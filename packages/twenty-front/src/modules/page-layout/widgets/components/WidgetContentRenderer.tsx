@@ -1,6 +1,5 @@
 import { type PageLayoutWidget } from '@/page-layout/types/PageLayoutWidget';
 import { CalendarWidget } from '@/page-layout/widgets/calendar/components/CalendarWidget';
-import { CallRecordingWidget } from '@/page-layout/widgets/call-recording/components/CallRecordingWidget';
 import { ChatWidget } from '@/page-layout/widgets/chat/components/ChatWidget';
 import { ChatThreadsWidget } from '@/page-layout/widgets/chat-threads/components/ChatThreadsWidget';
 import { EmailThreadWidget } from '@/page-layout/widgets/email-thread/components/EmailThreadWidget';
@@ -89,12 +88,6 @@ export const WidgetContentRenderer = ({
 
     case WidgetType.MESSAGE_CAMPAIGN_BODY:
       return <MessageCampaignBodyWidget />;
-
-    case WidgetType.CALL_RECORDING_SUMMARY:
-      return <CallRecordingWidget kind="summary" />;
-
-    case WidgetType.CALL_RECORDING_TRANSCRIPT:
-      return <CallRecordingWidget kind="transcript" />;
 
     default:
       return null;
