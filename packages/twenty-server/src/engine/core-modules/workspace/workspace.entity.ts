@@ -285,14 +285,6 @@ export class WorkspaceEntity {
   isPasswordAuthBypassEnabled: boolean;
 
   @Field()
-  @Column({ default: true })
-  isMicrosoftAuthEnabled: boolean;
-
-  @Field()
-  @Column({ default: false })
-  isMicrosoftAuthBypassEnabled: boolean;
-
-  @Field()
   @Column({ default: false })
   isInternalMessagesImportEnabled: boolean;
 

@@ -6,8 +6,6 @@ import { AppTokenEntity } from 'src/engine/core-modules/app-token/app-token.enti
 import { ApplicationModule } from 'src/engine/core-modules/application/application.module';
 import { GoogleAPIsAuthController } from 'src/engine/core-modules/auth/controllers/google-apis-auth.controller';
 import { GoogleAuthController } from 'src/engine/core-modules/auth/controllers/google-auth.controller';
-import { MicrosoftAPIsAuthController } from 'src/engine/core-modules/auth/controllers/microsoft-apis-auth.controller';
-import { MicrosoftAuthController } from 'src/engine/core-modules/auth/controllers/microsoft-auth.controller';
 import { OAuthPropagatorController } from 'src/engine/core-modules/auth/controllers/oauth-propagator.controller';
 import { ConnectedAccountOAuthService } from 'src/engine/core-modules/auth/services/connected-account-oauth.service';
 import { CreateCalendarChannelService } from 'src/engine/core-modules/auth/services/create-calendar-channel.service';
@@ -17,7 +15,6 @@ import { CreateSsoConnectedAccountService } from 'src/engine/core-modules/auth/s
 import { GoogleApiScopesService } from 'src/engine/core-modules/auth/services/google-apis-scopes';
 import { GoogleApisServiceAvailabilityService } from 'src/engine/core-modules/auth/services/google-apis-service-availability.service';
 import { GoogleAPIsService } from 'src/engine/core-modules/auth/services/google-apis.service';
-import { MicrosoftAPIsService } from 'src/engine/core-modules/auth/services/microsoft-apis.service';
 import { ResetPasswordService } from 'src/engine/core-modules/auth/services/reset-password.service';
 import { SignInUpService } from 'src/engine/core-modules/auth/services/sign-in-up.service';
 import { UpdateConnectedAccountOnReconnectService } from 'src/engine/core-modules/auth/services/update-connected-account-on-reconnect.service';
@@ -105,9 +102,7 @@ import { AuthService } from './services/auth.service';
   ],
   controllers: [
     GoogleAuthController,
-    MicrosoftAuthController,
     GoogleAPIsAuthController,
-    MicrosoftAPIsAuthController,
     OAuthPropagatorController,
   ],
   providers: [
@@ -117,7 +112,6 @@ import { AuthService } from './services/auth.service';
     GoogleAPIsService,
     GoogleApiScopesService,
     GoogleApisServiceAvailabilityService,
-    MicrosoftAPIsService,
     ResetPasswordService,
     // TODO: move these calendar, message and connected account services to business modules once they can hold controllers
     CreateMessageChannelService,

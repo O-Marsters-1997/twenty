@@ -10,13 +10,11 @@ import {
 import { type MessageFolder } from 'src/modules/messaging/message-folder-manager/interfaces/message-folder-driver.interface';
 import { RECENT_MESSAGES_MAX_COUNT } from 'src/modules/onboarding-recent-messages-import/constants/recent-messages-max-count.constant';
 import { GmailRecentMessagesService } from 'src/modules/onboarding-recent-messages-import/services/gmail-recent-messages.service';
-import { MicrosoftRecentMessagesService } from 'src/modules/onboarding-recent-messages-import/services/microsoft-recent-messages.service';
 
 @Injectable()
 export class RecentMessagesService {
   constructor(
     private readonly gmailRecentMessagesService: GmailRecentMessagesService,
-    private readonly microsoftRecentMessagesService: MicrosoftRecentMessagesService,
   ) {}
 
   async getExternalIds({
@@ -46,11 +44,6 @@ export class RecentMessagesService {
     switch (connectedAccount.provider) {
       case ConnectedAccountProvider.GOOGLE:
         return this.gmailRecentMessagesService.getExternalIds({
-          connectedAccountId: connectedAccount.id,
-          maxCount,
-        });
-      case ConnectedAccountProvider.MICROSOFT:
-        return this.microsoftRecentMessagesService.getExternalIds({
           connectedAccountId: connectedAccount.id,
           maxCount,
         });

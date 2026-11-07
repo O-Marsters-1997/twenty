@@ -3,7 +3,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConnectedAccountProvider } from 'twenty-shared/types';
 
 import { GoogleCalendarCreateEventService } from 'src/modules/calendar/calendar-event-creation-manager/drivers/google-calendar/services/google-calendar-create-event.service';
-import { MicrosoftCalendarCreateEventService } from 'src/modules/calendar/calendar-event-creation-manager/drivers/microsoft-calendar/services/microsoft-calendar-create-event.service';
 import {
   CalendarEventCreationException,
   CalendarEventCreationExceptionCode,
@@ -18,7 +17,6 @@ export class CreateCalendarEventService {
 
   constructor(
     private readonly googleCalendarCreateEventService: GoogleCalendarCreateEventService,
-    private readonly microsoftCalendarCreateEventService: MicrosoftCalendarCreateEventService,
     private readonly calendarSaveEventsService: CalendarSaveEventsService,
   ) {}
 
@@ -28,11 +26,6 @@ export class CreateCalendarEventService {
     switch (data.connectedAccount.provider) {
       case ConnectedAccountProvider.GOOGLE:
         return this.googleCalendarCreateEventService.createCalendarEvent(
-          data.input,
-          data.connectedAccount,
-        );
-      case ConnectedAccountProvider.MICROSOFT:
-        return this.microsoftCalendarCreateEventService.createCalendarEvent(
           data.input,
           data.connectedAccount,
         );

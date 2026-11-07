@@ -38,23 +38,6 @@ describe('useTriggerProviderReconnect', () => {
       );
     });
 
-    it('should trigger OAuth for Microsoft provider without options', async () => {
-      const { result } = renderHook(() => useTriggerProviderReconnect());
-
-      await act(async () => {
-        await result.current.triggerProviderReconnect(
-          ConnectedAccountProvider.MICROSOFT,
-        );
-      });
-
-      expect(mockTriggerApisOAuth).toHaveBeenCalledWith(
-        ConnectedAccountProvider.MICROSOFT,
-        {
-          redirectLocation: '/settings/accounts',
-        },
-      );
-    });
-
     it('should trigger OAuth for Google provider with options', async () => {
       const { result } = renderHook(() => useTriggerProviderReconnect());
 
@@ -75,32 +58,6 @@ describe('useTriggerProviderReconnect', () => {
 
       expect(mockTriggerApisOAuth).toHaveBeenCalledWith(
         ConnectedAccountProvider.GOOGLE,
-        {
-          ...options,
-          redirectLocation: '/settings/accounts',
-        },
-      );
-    });
-
-    it('should trigger OAuth for Microsoft provider with options', async () => {
-      const { result } = renderHook(() => useTriggerProviderReconnect());
-
-      const options = {
-        redirectLocation: '/another-redirect',
-        calendarVisibility: CalendarChannelVisibility.SHARE_EVERYTHING,
-        messageVisibility: MessageChannelVisibility.SHARE_EVERYTHING,
-      };
-
-      await act(async () => {
-        await result.current.triggerProviderReconnect(
-          ConnectedAccountProvider.MICROSOFT,
-          'some-account-id',
-          options,
-        );
-      });
-
-      expect(mockTriggerApisOAuth).toHaveBeenCalledWith(
-        ConnectedAccountProvider.MICROSOFT,
         {
           ...options,
           redirectLocation: '/settings/accounts',

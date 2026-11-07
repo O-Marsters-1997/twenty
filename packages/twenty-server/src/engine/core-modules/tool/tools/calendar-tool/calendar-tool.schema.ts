@@ -47,7 +47,7 @@ export const CreateCalendarEventToolInputZodSchema = z.object({
   addConferencing: z
     .boolean()
     .describe(
-      'When true, a video conferencing link is generated (Google Meet for Google accounts, Microsoft Teams for Microsoft accounts).',
+      'When true, a video conferencing link is generated (Google Meet for Google accounts).',
     )
     .default(false),
   connectedAccountId: z

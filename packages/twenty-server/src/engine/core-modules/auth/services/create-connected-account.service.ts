@@ -88,7 +88,7 @@ export class CreateConnectedAccountService {
       const userWorkspaceId = userWorkspace.id;
 
       // Boundary: tokens entering here were just issued by the external
-      // OAuth provider (Google / Microsoft / app), so we brand them as
+      // OAuth provider (Google / app), so we brand them as
       // plaintext before handing them to the encryption service.
       const { encryptedAccessToken, encryptedRefreshToken } =
         this.connectedAccountTokenEncryptionService.encryptTokenPair({

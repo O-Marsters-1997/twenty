@@ -64,11 +64,9 @@ const mockWorkspace = {
   isCampaignOpenTrackingEnabled: false,
   workspaceDiscoverability: WorkspaceDiscoverability.PUBLIC,
   isGoogleAuthEnabled: false,
-  isMicrosoftAuthEnabled: false,
   isPasswordAuthEnabled: false,
   isGoogleAuthBypassEnabled: false,
   isPasswordAuthBypassEnabled: false,
-  isMicrosoftAuthBypassEnabled: false,
   subdomain: 'test',
   workspaceUrls: {
     subdomainUrl: 'test.com',

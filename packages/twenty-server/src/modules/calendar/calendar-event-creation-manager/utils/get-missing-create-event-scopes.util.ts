@@ -3,7 +3,6 @@ import { assertUnreachable, isDefined } from 'twenty-shared/utils';
 
 const GOOGLE_CALENDAR_EVENTS_SCOPE =
   'https://www.googleapis.com/auth/calendar.events';
-const MICROSOFT_CALENDARS_READ_WRITE_SCOPE = 'Calendars.ReadWrite';
 
 export const getMissingCreateEventScopes = (connectedAccount: {
   provider: ConnectedAccountProvider;
@@ -17,13 +16,6 @@ export const getMissingCreateEventScopes = (connectedAccount: {
         isDefined(scopes) && scopes.includes(GOOGLE_CALENDAR_EVENTS_SCOPE);
 
       return hasScope ? [] : [GOOGLE_CALENDAR_EVENTS_SCOPE];
-    }
-    case ConnectedAccountProvider.MICROSOFT: {
-      const hasScope =
-        isDefined(scopes) &&
-        scopes.includes(MICROSOFT_CALENDARS_READ_WRITE_SCOPE);
-
-      return hasScope ? [] : [MICROSOFT_CALENDARS_READ_WRITE_SCOPE];
     }
     // Non-OAuth providers do not rely on OAuth scopes to create events.
     case ConnectedAccountProvider.EMAIL_GROUP:

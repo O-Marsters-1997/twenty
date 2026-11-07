@@ -3,7 +3,6 @@ import { Injectable } from '@nestjs/common';
 import { ConnectedAccountProvider } from 'twenty-shared/types';
 
 import { GoogleCalendarImportEventsService } from 'src/modules/calendar/calendar-event-import-manager/drivers/google-calendar/services/google-calendar-import-events.service';
-import { MicrosoftCalendarImportEventsService } from 'src/modules/calendar/calendar-event-import-manager/drivers/microsoft-calendar/services/microsoft-calendar-import-events.service';
 import {
   CalendarEventImportException,
   CalendarEventImportExceptionCode,
@@ -15,7 +14,6 @@ import { type ConnectedAccountEntity } from 'src/engine/metadata-modules/connect
 export class CalendarImportEventsService {
   constructor(
     private readonly googleCalendarImportEventsService: GoogleCalendarImportEventsService,
-    private readonly microsoftCalendarImportEventsService: MicrosoftCalendarImportEventsService,
   ) {}
 
   public async getCalendarEvents(
@@ -25,11 +23,6 @@ export class CalendarImportEventsService {
     switch (connectedAccount.provider) {
       case ConnectedAccountProvider.GOOGLE:
         return this.googleCalendarImportEventsService.getCalendarEvents(
-          connectedAccount,
-          eventExternalIds,
-        );
-      case ConnectedAccountProvider.MICROSOFT:
-        return this.microsoftCalendarImportEventsService.getCalendarEvents(
           connectedAccount,
           eventExternalIds,
         );

@@ -32,11 +32,6 @@ export const CONFIG_VARIABLES_GROUP_METADATA: Record<
     description: 'Configure Google integration (login, calendar, email)',
     isHiddenOnLoad: false,
   },
-  [ConfigVariablesGroup.MICROSOFT_AUTH]: {
-    position: 500,
-    description: 'Configure Microsoft integration (login, calendar, email)',
-    isHiddenOnLoad: false,
-  },
   [ConfigVariablesGroup.EMAIL_SETTINGS]: {
     position: 600,
     description:

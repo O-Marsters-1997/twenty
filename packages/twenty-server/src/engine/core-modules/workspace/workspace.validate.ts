@@ -15,11 +15,6 @@ const isAuthEnabledOrThrow = (
 ) => {
   if (provider === AuthProviderEnum.Google && workspace.isGoogleAuthEnabled)
     return true;
-  if (
-    provider === AuthProviderEnum.Microsoft &&
-    workspace.isMicrosoftAuthEnabled
-  )
-    return true;
   if (provider === AuthProviderEnum.Password && workspace.isPasswordAuthEnabled)
     return true;
 
@@ -31,11 +26,6 @@ const isAuthEnabled = (
   workspace: WorkspaceEntity,
 ) => {
   if (provider === AuthProviderEnum.Google && workspace.isGoogleAuthEnabled)
-    return true;
-  if (
-    provider === AuthProviderEnum.Microsoft &&
-    workspace.isMicrosoftAuthEnabled
-  )
     return true;
   if (provider === AuthProviderEnum.Password && workspace.isPasswordAuthEnabled)
     return true;

@@ -182,7 +182,6 @@ export class ClientConfigService {
         google: this.twentyConfigService.get('AUTH_GOOGLE_ENABLED'),
         magicLink: false,
         password: this.twentyConfigService.get('AUTH_PASSWORD_ENABLED'),
-        microsoft: this.twentyConfigService.get('AUTH_MICROSOFT_ENABLED'),
       },
       signInPrefilled: this.twentyConfigService.get('SIGN_IN_PREFILLED'),
       isMultiWorkspaceEnabled: this.twentyConfigService.get(
@@ -252,12 +251,6 @@ export class ClientConfigService {
         this.twentyConfigService.get('IS_FEATURE_FLAG_MANAGEMENT_ENABLED'),
       publicFeatureFlags: PUBLIC_FEATURE_FLAGS,
       isCookieSessionEnabled: true,
-      isMicrosoftMessagingEnabled: this.twentyConfigService.get(
-        'MESSAGING_PROVIDER_MICROSOFT_ENABLED',
-      ),
-      isMicrosoftCalendarEnabled: this.twentyConfigService.get(
-        'CALENDAR_PROVIDER_MICROSOFT_ENABLED',
-      ),
       isGoogleMessagingEnabled: this.twentyConfigService.get(
         'MESSAGING_PROVIDER_GMAIL_ENABLED',
       ),

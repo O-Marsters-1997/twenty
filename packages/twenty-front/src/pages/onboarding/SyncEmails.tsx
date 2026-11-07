@@ -2,8 +2,6 @@ import { isCurrentUserLoadedState } from '@/auth/states/isCurrentUserLoadedState
 import { clientConfigApiStatusState } from '@/client-config/states/clientConfigApiStatusState';
 import { isGoogleCalendarEnabledState } from '@/client-config/states/isGoogleCalendarEnabledState';
 import { isGoogleMessagingEnabledState } from '@/client-config/states/isGoogleMessagingEnabledState';
-import { isMicrosoftCalendarEnabledState } from '@/client-config/states/isMicrosoftCalendarEnabledState';
-import { isMicrosoftMessagingEnabledState } from '@/client-config/states/isMicrosoftMessagingEnabledState';
 import { OnboardingSkipDialog } from '@/onboarding/components/OnboardingSkipDialog';
 import { OnboardingSkipDialogAvatars } from '@/onboarding/components/OnboardingSkipDialogAvatars';
 import { ONBOARDING_NETWORK_PREVIEW_PEOPLE } from '@/onboarding/constants/OnboardingNetworkPreviewPeople';
@@ -26,7 +24,7 @@ import {
   MessageChannelVisibility,
   PermissionFlagType,
 } from '~/generated-metadata/graphql';
-import { IconGoogle, IconMicrosoft } from 'twenty-ui/icon';
+import { IconGoogle } from 'twenty-ui/icon';
 import { ImportContacts } from '~/pages/onboarding/ImportContacts';
 
 export const SyncEmails = () => {
@@ -47,24 +45,14 @@ export const SyncEmails = () => {
   const isGoogleMessagingEnabled = useAtomStateValue(
     isGoogleMessagingEnabledState,
   );
-  const isMicrosoftMessagingEnabled = useAtomStateValue(
-    isMicrosoftMessagingEnabledState,
-  );
   const isGoogleCalendarEnabled = useAtomStateValue(
     isGoogleCalendarEnabledState,
-  );
-  const isMicrosoftCalendarEnabled = useAtomStateValue(
-    isMicrosoftCalendarEnabledState,
   );
 
   const isGoogleProviderEnabled =
     hasConnectedAccountsPermission &&
     (isGoogleMessagingEnabled || isGoogleCalendarEnabled);
-  const isMicrosoftProviderEnabled =
-    hasConnectedAccountsPermission &&
-    (isMicrosoftMessagingEnabled || isMicrosoftCalendarEnabled);
-  const hasProviderEnabled =
-    isGoogleProviderEnabled || isMicrosoftProviderEnabled;
+  const hasProviderEnabled = isGoogleProviderEnabled;
   const isClientConfigLoaded = useAtomStateValue(
     clientConfigApiStatusState,
   ).isLoadedOnce;
@@ -87,13 +75,6 @@ export const SyncEmails = () => {
   };
 
   const providerActions = [
-    {
-      isEnabled: isMicrosoftProviderEnabled,
-      label: t`Continue with Microsoft`,
-      Icon: IconMicrosoft,
-      creditsReward: importContactsCreditsReward,
-      onClick: () => connectWithProvider(ConnectedAccountProvider.MICROSOFT),
-    },
     {
       isEnabled: isGoogleProviderEnabled,
       label: t`Continue with Google`,

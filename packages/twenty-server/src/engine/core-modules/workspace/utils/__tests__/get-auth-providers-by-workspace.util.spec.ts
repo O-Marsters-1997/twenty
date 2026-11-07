@@ -5,14 +5,12 @@ describe('getAuthProvidersByWorkspace', () => {
   const mockWorkspace = {
     isGoogleAuthEnabled: true,
     isPasswordAuthEnabled: true,
-    isMicrosoftAuthEnabled: false,
   } as unknown as WorkspaceEntity;
 
   const systemEnabledProviders = {
     google: true,
     magicLink: false,
     password: true,
-    microsoft: true,
   };
 
   it('should return correct auth providers for given workspace', () => {
@@ -25,7 +23,6 @@ describe('getAuthProvidersByWorkspace', () => {
       google: true,
       magicLink: false,
       password: true,
-      microsoft: false,
     });
   });
 

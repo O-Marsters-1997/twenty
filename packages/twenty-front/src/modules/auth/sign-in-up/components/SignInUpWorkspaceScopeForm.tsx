@@ -1,7 +1,6 @@
 import { StyledOnboardingContentContainer } from '@/auth/components/StyledOnboardingContentContainer';
 import { SignInUpWithCredentials } from '@/auth/sign-in-up/components/internal/SignInUpWithCredentials';
 import { SignInUpWithGoogle } from '@/auth/sign-in-up/components/internal/SignInUpWithGoogle';
-import { SignInUpWithMicrosoft } from '@/auth/sign-in-up/components/internal/SignInUpWithMicrosoft';
 import { useHandleResetPassword } from '@/auth/sign-in-up/hooks/useHandleResetPassword';
 import { useSignInUp } from '@/auth/sign-in-up/hooks/useSignInUp';
 import { useSignInUpForm } from '@/auth/sign-in-up/hooks/useSignInUpForm';
@@ -34,11 +33,7 @@ export const SignInUpWorkspaceScopeForm = () => {
       <StyledOnboardingContentContainer>
         {providers.google && <SignInUpWithGoogle action="join-workspace" />}
 
-        {providers.microsoft && (
-          <SignInUpWithMicrosoft action="join-workspace" />
-        )}
-
-        {(providers.google || providers.microsoft) && providers.password ? (
+        {providers.google && providers.password ? (
           <Separator style={{ marginBlock: themeCssVariables.spacing[3] }} />
         ) : null}
         {providers.password && (

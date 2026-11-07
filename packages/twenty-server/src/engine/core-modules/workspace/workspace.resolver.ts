@@ -383,14 +383,6 @@ export class WorkspaceResolver {
   }
 
   @ResolveField(() => Boolean)
-  isMicrosoftAuthEnabled(@Parent() workspace: WorkspaceEntity) {
-    return (
-      workspace.isMicrosoftAuthEnabled &&
-      this.twentyConfigService.get('AUTH_MICROSOFT_ENABLED')
-    );
-  }
-
-  @ResolveField(() => Boolean)
   isPasswordAuthEnabled(@Parent() workspace: WorkspaceEntity) {
     return (
       workspace.isPasswordAuthEnabled &&
@@ -419,7 +411,6 @@ export class WorkspaceResolver {
         google: this.twentyConfigService.get('AUTH_GOOGLE_ENABLED'),
         magicLink: false,
         password: this.twentyConfigService.get('AUTH_PASSWORD_ENABLED'),
-        microsoft: this.twentyConfigService.get('AUTH_MICROSOFT_ENABLED'),
       };
 
       if (!origin) {

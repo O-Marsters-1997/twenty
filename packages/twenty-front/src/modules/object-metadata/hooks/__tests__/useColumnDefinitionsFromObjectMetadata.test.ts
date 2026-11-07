@@ -39,10 +39,8 @@ describe('useColumnDefinitionsFromObjectMetadata', () => {
       isCampaignOpenTrackingEnabled: false,
       workspaceDiscoverability: WorkspaceDiscoverability.PUBLIC,
       isGoogleAuthEnabled: true,
-      isMicrosoftAuthEnabled: false,
       isPasswordAuthEnabled: true,
       isGoogleAuthBypassEnabled: false,
-      isMicrosoftAuthBypassEnabled: false,
       isPasswordAuthBypassEnabled: false,
       workspaceUrls: {
         subdomainUrl: 'https://twenty.twenty.com',

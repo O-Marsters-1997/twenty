@@ -37,9 +37,7 @@ describe('canConnectedAccountPerformEmailOperation', () => {
   });
 
   it('refuses a provider absent from both allowlists', () => {
-    for (const provider of [
-      ConnectedAccountProvider.APP,
-    ]) {
+    for (const provider of [ConnectedAccountProvider.APP]) {
       expect(
         canConnectedAccountPerformEmailOperation({
           connectedAccount: { provider },

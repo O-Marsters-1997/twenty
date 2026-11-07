@@ -124,7 +124,6 @@ export class WorkspaceService {
     workspaceDiscoverability: PermissionFlagType.SECURITY,
     allowImpersonation: PermissionFlagType.SECURITY,
     isGoogleAuthEnabled: PermissionFlagType.SECURITY,
-    isMicrosoftAuthEnabled: PermissionFlagType.SECURITY,
     isPasswordAuthEnabled: PermissionFlagType.SECURITY,
     editableProfileFields: PermissionFlagType.SECURITY,
     isTwoFactorAuthenticationEnforced: PermissionFlagType.SECURITY,
@@ -348,18 +347,11 @@ export class WorkspaceService {
     const authProvidersBySystem = {
       google: this.twentyConfigService.get('AUTH_GOOGLE_ENABLED'),
       password: this.twentyConfigService.get('AUTH_PASSWORD_ENABLED'),
-      microsoft: this.twentyConfigService.get('AUTH_MICROSOFT_ENABLED'),
     };
 
     if (payload.isGoogleAuthEnabled && !authProvidersBySystem.google) {
       throw new WorkspaceException(
         'Google auth is not enabled in the system.',
-        WorkspaceExceptionCode.ENVIRONMENT_VAR_NOT_ENABLED,
-      );
-    }
-    if (payload.isMicrosoftAuthEnabled && !authProvidersBySystem.microsoft) {
-      throw new WorkspaceException(
-        'Microsoft auth is not enabled in the system.',
         WorkspaceExceptionCode.ENVIRONMENT_VAR_NOT_ENABLED,
       );
     }
@@ -372,15 +364,6 @@ export class WorkspaceService {
     if (payload.isGoogleAuthBypassEnabled && !authProvidersBySystem.google) {
       throw new WorkspaceException(
         'Google auth is not enabled in the system.',
-        WorkspaceExceptionCode.ENVIRONMENT_VAR_NOT_ENABLED,
-      );
-    }
-    if (
-      payload.isMicrosoftAuthBypassEnabled &&
-      !authProvidersBySystem.microsoft
-    ) {
-      throw new WorkspaceException(
-        'Microsoft auth is not enabled in the system.',
         WorkspaceExceptionCode.ENVIRONMENT_VAR_NOT_ENABLED,
       );
     }

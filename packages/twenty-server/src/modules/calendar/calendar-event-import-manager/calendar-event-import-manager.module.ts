@@ -19,7 +19,6 @@ import { CalendarEventsImportCronJob } from 'src/modules/calendar/calendar-event
 import { CalendarOngoingStaleCronJob } from 'src/modules/calendar/calendar-event-import-manager/crons/jobs/calendar-ongoing-stale.cron.job';
 import { CalendarRelaunchFailedCalendarChannelsCronJob } from 'src/modules/calendar/calendar-event-import-manager/crons/jobs/calendar-relaunch-failed-calendar-channels.cron.job';
 import { GoogleCalendarDriverModule } from 'src/modules/calendar/calendar-event-import-manager/drivers/google-calendar/google-calendar-driver.module';
-import { MicrosoftCalendarDriverModule } from 'src/modules/calendar/calendar-event-import-manager/drivers/microsoft-calendar/microsoft-calendar-driver.module';
 import { CalendarEventListFetchJob } from 'src/modules/calendar/calendar-event-import-manager/jobs/calendar-event-list-fetch.job';
 import { CalendarEventsImportJob } from 'src/modules/calendar/calendar-event-import-manager/jobs/calendar-events-import.job';
 import { CalendarOngoingStaleJob } from 'src/modules/calendar/calendar-event-import-manager/jobs/calendar-ongoing-stale.job';
@@ -46,7 +45,6 @@ import { BlocklistRepository } from 'src/modules/blocklist/repositories/blocklis
     CalendarEventCleanerModule,
     CalendarCommonModule,
     GoogleCalendarDriverModule,
-    MicrosoftCalendarDriverModule,
     EmailAliasManagerModule,
     FeatureFlagModule,
   ],

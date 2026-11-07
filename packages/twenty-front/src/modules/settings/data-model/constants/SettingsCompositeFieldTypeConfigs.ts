@@ -487,12 +487,6 @@ export const SETTINGS_COMPOSITE_FIELD_TYPE_CONFIGS = {
         context: { provider: ConnectedAccountProvider.GOOGLE },
       },
       {
-        source: 'MANUAL',
-        name: 'name',
-        workspaceMemberId: 'id',
-        context: { provider: ConnectedAccountProvider.MICROSOFT },
-      },
-      {
         source: 'WEBHOOK',
         name: 'name',
         workspaceMemberId: 'id',

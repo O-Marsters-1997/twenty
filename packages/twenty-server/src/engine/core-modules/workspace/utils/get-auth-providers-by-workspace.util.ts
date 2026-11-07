@@ -7,9 +7,7 @@ export const getAuthProvidersByWorkspace = ({
 }: {
   workspace: Pick<
     WorkspaceEntity,
-    | 'isGoogleAuthEnabled'
-    | 'isPasswordAuthEnabled'
-    | 'isMicrosoftAuthEnabled'
+    'isGoogleAuthEnabled' | 'isPasswordAuthEnabled'
   >;
   systemEnabledProviders: AuthProvidersDTO;
 }) => {
@@ -18,7 +16,5 @@ export const getAuthProvidersByWorkspace = ({
     magicLink: false,
     password:
       workspace.isPasswordAuthEnabled && systemEnabledProviders.password,
-    microsoft:
-      workspace.isMicrosoftAuthEnabled && systemEnabledProviders.microsoft,
   };
 };

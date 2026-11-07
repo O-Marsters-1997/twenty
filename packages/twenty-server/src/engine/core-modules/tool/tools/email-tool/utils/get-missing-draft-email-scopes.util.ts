@@ -2,7 +2,6 @@ import { ConnectedAccountProvider } from 'twenty-shared/types';
 import { assertUnreachable, isDefined } from 'twenty-shared/utils';
 
 const GMAIL_COMPOSE_SCOPE = 'https://www.googleapis.com/auth/gmail.compose';
-const MICROSOFT_SEND_SCOPE = 'Mail.Send';
 
 export const getMissingDraftEmailScopes = (connectedAccount: {
   provider: ConnectedAccountProvider;
@@ -16,12 +15,6 @@ export const getMissingDraftEmailScopes = (connectedAccount: {
         isDefined(scopes) && scopes.includes(GMAIL_COMPOSE_SCOPE);
 
       return hasScope ? [] : [GMAIL_COMPOSE_SCOPE];
-    }
-    case ConnectedAccountProvider.MICROSOFT: {
-      const hasScope =
-        isDefined(scopes) && scopes.includes(MICROSOFT_SEND_SCOPE);
-
-      return hasScope ? [] : [MICROSOFT_SEND_SCOPE];
     }
     // Non-OAuth providers do not rely on OAuth scopes to draft emails.
     case ConnectedAccountProvider.EMAIL_GROUP:

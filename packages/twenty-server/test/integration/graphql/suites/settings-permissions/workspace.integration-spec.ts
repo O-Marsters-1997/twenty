@@ -32,7 +32,6 @@ describe('workspace permissions', () => {
         currentWorkspace {
           displayName
           isGoogleAuthEnabled
-          isMicrosoftAuthEnabled
           isPasswordAuthEnabled
           logo
           isPublicInviteLinkEnabled
@@ -54,7 +53,6 @@ describe('workspace permissions', () => {
           subdomain: "${originalWorkspaceState.subdomain}",
           logo: "${originalWorkspaceState.logo}",
           isGoogleAuthEnabled: ${originalWorkspaceState.isGoogleAuthEnabled},
-          isMicrosoftAuthEnabled: ${originalWorkspaceState.isMicrosoftAuthEnabled},
           isPasswordAuthEnabled: ${originalWorkspaceState.isPasswordAuthEnabled}
           isPublicInviteLinkEnabled: ${originalWorkspaceState.isPublicInviteLinkEnabled}
         }) {

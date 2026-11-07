@@ -12,10 +12,7 @@ type CoreConnectedAccount = Omit<
 >;
 
 const EMAIL_AND_CALENDAR_PROVIDERS: ReadonlySet<ConnectedAccountProvider> =
-  new Set([
-    ConnectedAccountProvider.GOOGLE,
-    ConnectedAccountProvider.MICROSOFT,
-  ]);
+  new Set([ConnectedAccountProvider.GOOGLE]);
 
 // The personal accounts page is for email/calendar credentials only. App-managed
 // OAuth (APP) also lives in connectedAccount, but it's surfaced elsewhere — keep

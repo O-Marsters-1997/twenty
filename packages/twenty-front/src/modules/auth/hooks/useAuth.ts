@@ -594,18 +594,6 @@ export const useAuth = () => {
     [buildRedirectUrl, redirect],
   );
 
-  const handleMicrosoftLogin = useCallback(
-    (params: {
-      workspacePersonalInviteToken?: string;
-      workspaceInviteHash?: string;
-      billingCheckoutSession?: BillingCheckoutSession;
-      action: string;
-    }) => {
-      redirect(buildRedirectUrl('/auth/microsoft', params));
-    },
-    [buildRedirectUrl, redirect],
-  );
-
   const handleGetAuthTokensFromOTP = useCallback(
     async (otp: string, loginToken: string, captchaToken?: string) => {
       const getAuthTokensFromOtpResult = await getAuthTokensFromOtp({
@@ -689,7 +677,6 @@ export const useAuth = () => {
     signInWithCredentialsInWorkspace: handleCredentialsSignInInWorkspace,
     signInWithCredentials: handleCredentialsSignIn,
     signInWithGoogle: handleGoogleLogin,
-    signInWithMicrosoft: handleMicrosoftLogin,
     getAuthTokensFromOTP: handleGetAuthTokensFromOTP,
     getAuthTokensFromTwoFactorAuthenticationRecoveryCode:
       handleGetAuthTokensFromTwoFactorAuthenticationRecoveryCode,

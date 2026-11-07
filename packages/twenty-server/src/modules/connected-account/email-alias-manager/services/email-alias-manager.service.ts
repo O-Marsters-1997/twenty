@@ -10,13 +10,11 @@ import { MessageChannelEntity } from 'src/engine/metadata-modules/message-channe
 import { WorkspaceOrmManager } from 'src/engine/twenty-orm/workspace-orm.manager';
 import { buildSystemAuthContext } from 'src/engine/twenty-orm/utils/build-system-auth-context.util';
 import { GoogleEmailAliasManagerService } from 'src/modules/connected-account/email-alias-manager/drivers/google/services/google-email-alias-manager.service';
-import { MicrosoftEmailAliasManagerService } from 'src/modules/connected-account/email-alias-manager/drivers/microsoft/services/microsoft-email-alias-manager.service';
 
 @Injectable()
 export class EmailAliasManagerService {
   constructor(
     private readonly googleEmailAliasManagerService: GoogleEmailAliasManagerService,
-    private readonly microsoftEmailAliasManagerService: MicrosoftEmailAliasManagerService,
     private readonly workspaceOrmManager: WorkspaceOrmManager,
     @InjectRepository(ConnectedAccountEntity)
     private readonly connectedAccountRepository: Repository<ConnectedAccountEntity>,
@@ -57,10 +55,6 @@ export class EmailAliasManagerService {
     connectedAccount: ConnectedAccountEntity,
   ): Promise<string[]> {
     switch (connectedAccount.provider) {
-      case ConnectedAccountProvider.MICROSOFT:
-        return this.microsoftEmailAliasManagerService.getHandleAliases(
-          connectedAccount,
-        );
       case ConnectedAccountProvider.GOOGLE:
         return this.googleEmailAliasManagerService.getHandleAliases(
           connectedAccount,

@@ -64,10 +64,8 @@ export const USER_QUERY_FRAGMENT = gql`
       isCampaignOpenTrackingEnabled
       workspaceDiscoverability
       isGoogleAuthEnabled
-      isMicrosoftAuthEnabled
       isPasswordAuthEnabled
       isGoogleAuthBypassEnabled
-      isMicrosoftAuthBypassEnabled
       isPasswordAuthBypassEnabled
       subdomain
       workspaceCustomApplication {

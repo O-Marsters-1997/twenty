@@ -67,13 +67,6 @@ jest.mock('@/auth/sign-in-up/components/internal/SignInUpWithGoogle', () => ({
   SignInUpWithGoogle: () => null,
 }));
 
-jest.mock(
-  '@/auth/sign-in-up/components/internal/SignInUpWithMicrosoft',
-  () => ({
-    SignInUpWithMicrosoft: () => null,
-  }),
-);
-
 dynamicActivate(SOURCE_LOCALE);
 
 describe('SignInUpGlobalScopeForm', () => {
@@ -88,7 +81,6 @@ describe('SignInUpGlobalScopeForm', () => {
     jotaiStore.set(authProvidersState.atom, {
       google: false,
       magicLink: false,
-      microsoft: false,
       password: true,
     });
 

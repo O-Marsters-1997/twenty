@@ -10,14 +10,12 @@ import {
   MessageImportDriverExceptionCode,
 } from 'src/modules/messaging/message-import-manager/drivers/exceptions/message-import-driver.exception';
 import { GmailGetMessageListService } from 'src/modules/messaging/message-import-manager/drivers/gmail/services/gmail-get-message-list.service';
-import { MicrosoftGetMessageListService } from 'src/modules/messaging/message-import-manager/drivers/microsoft/services/microsoft-get-message-list.service';
 import { type GetMessageListsResponse } from 'src/modules/messaging/message-import-manager/types/get-message-lists-response.type';
 
 @Injectable()
 export class MessagingGetMessageListService {
   constructor(
     private readonly gmailGetMessageListService: GmailGetMessageListService,
-    private readonly microsoftGetMessageListService: MicrosoftGetMessageListService,
   ) {}
 
   public async getMessageLists(
@@ -27,12 +25,6 @@ export class MessagingGetMessageListService {
     switch (messageChannel.connectedAccount.provider) {
       case ConnectedAccountProvider.GOOGLE:
         return await this.gmailGetMessageListService.getMessageLists({
-          messageChannel,
-          connectedAccount: messageChannel.connectedAccount,
-          messageFolders,
-        });
-      case ConnectedAccountProvider.MICROSOFT:
-        return this.microsoftGetMessageListService.getMessageLists({
           messageChannel,
           connectedAccount: messageChannel.connectedAccount,
           messageFolders,

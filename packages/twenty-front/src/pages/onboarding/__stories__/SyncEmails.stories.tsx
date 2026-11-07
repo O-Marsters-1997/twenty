@@ -117,7 +117,7 @@ export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement.ownerDocument.body);
     await canvas.findByText('Import your contacts');
-    expect(await canvas.findAllByText('+2')).toHaveLength(2);
+    expect(await canvas.findAllByText('+2')).toHaveLength(1);
   },
 };
 
@@ -129,7 +129,6 @@ export const InvitedUser: Story = {
     const canvas = within(canvasElement.ownerDocument.body);
     await canvas.findByText('Import your contacts');
     await canvas.findByRole('button', { name: 'Continue with Google' });
-    await canvas.findByRole('button', { name: 'Continue with Microsoft' });
     expect(canvas.queryByText('+2')).not.toBeInTheDocument();
     expect(jotaiStore.get(currentUserState.atom)?.onboardingStatus).toBe(
       OnboardingStatus.SYNC_EMAIL,
@@ -158,9 +157,6 @@ export const WithoutConnectedAccountsPermission: Story = {
       canvas.queryByRole('button', { name: 'Continue with Google' }),
     ).not.toBeInTheDocument();
     expect(
-      canvas.queryByRole('button', { name: 'Continue with Microsoft' }),
-    ).not.toBeInTheDocument();
-    expect(
       jotaiStore.get(currentUserState.atom)?.previousOnboardingStatus,
     ).not.toBe(OnboardingStatus.SYNC_EMAIL);
     expect(skipSyncEmailRequest).toHaveBeenCalledWith({ isAutoSkipped: true });
@@ -183,9 +179,6 @@ export const AutoSkipFailed: Story = {
 
     expect(
       canvas.queryByRole('button', { name: 'Continue with Google' }),
-    ).not.toBeInTheDocument();
-    expect(
-      canvas.queryByRole('button', { name: 'Continue with Microsoft' }),
     ).not.toBeInTheDocument();
 
     await userEvent.click(skipButton);

@@ -6,8 +6,6 @@ import {
   IconGmail,
   IconGoogleCalendar,
   IconMail,
-  IconMicrosoftCalendar,
-  IconMicrosoftOutlook,
   IconPlug,
   IconRobot,
   IconSettingsAutomation,
@@ -18,7 +16,6 @@ import {
 
 const PROVIDERS_ICON_MAPPING = {
   EMAIL: {
-    [ConnectedAccountProvider.MICROSOFT]: IconMicrosoftOutlook,
     [ConnectedAccountProvider.GOOGLE]: IconGmail,
     [ConnectedAccountProvider.EMAIL_GROUP]: IconMail,
     // App-managed connections aren't email accounts; this case is unreachable
@@ -27,7 +24,6 @@ const PROVIDERS_ICON_MAPPING = {
     default: IconMail,
   },
   CALENDAR: {
-    [ConnectedAccountProvider.MICROSOFT]: IconMicrosoftCalendar,
     [ConnectedAccountProvider.GOOGLE]: IconGoogleCalendar,
     default: IconCalendar,
   },
@@ -37,8 +33,7 @@ export const getActorSourceIcon = ({
   source,
   context,
 }: Pick<Partial<FieldActorValue>, 'source' | 'context'>):
-  | IconComponent
-  | undefined => {
+  IconComponent | undefined => {
   switch (source) {
     case 'API':
       return IconApi;

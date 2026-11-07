@@ -25,8 +25,6 @@ export type CurrentWorkspace = Pick<
   | 'workspaceDiscoverability'
   | 'isGoogleAuthEnabled'
   | 'isGoogleAuthBypassEnabled'
-  | 'isMicrosoftAuthEnabled'
-  | 'isMicrosoftAuthBypassEnabled'
   | 'isPasswordAuthEnabled'
   | 'isPasswordAuthBypassEnabled'
   | 'subdomain'

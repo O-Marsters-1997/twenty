@@ -15,12 +15,10 @@ export const mockedPublicWorkspaceDataBySubdomain: GetPublicWorkspaceDataByDomai
       google: true,
       magicLink: false,
       password: true,
-      microsoft: false,
     },
     authBypassProviders: {
       __typename: 'AuthBypassProviders',
       google: false,
       password: false,
-      microsoft: false,
     },
   };

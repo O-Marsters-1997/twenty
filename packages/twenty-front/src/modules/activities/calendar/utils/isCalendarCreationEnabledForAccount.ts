@@ -3,10 +3,7 @@ import { type CalendarChannel } from '@/accounts/types/CalendarChannel';
 import { ConnectedAccountProvider } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 
-const CALENDAR_CREATION_PROVIDERS = new Set([
-  ConnectedAccountProvider.GOOGLE,
-  ConnectedAccountProvider.MICROSOFT,
-]);
+const CALENDAR_CREATION_PROVIDERS = new Set([ConnectedAccountProvider.GOOGLE]);
 
 export const isCalendarCreationEnabledForAccount = (
   account: Pick<ConnectedAccount, 'archivedAt' | 'provider'> & {

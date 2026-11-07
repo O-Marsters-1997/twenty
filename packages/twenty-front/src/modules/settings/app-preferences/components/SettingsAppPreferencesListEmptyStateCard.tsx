@@ -1,7 +1,5 @@
 import { isGoogleCalendarEnabledState } from '@/client-config/states/isGoogleCalendarEnabledState';
 import { isGoogleMessagingEnabledState } from '@/client-config/states/isGoogleMessagingEnabledState';
-import { isMicrosoftCalendarEnabledState } from '@/client-config/states/isMicrosoftCalendarEnabledState';
-import { isMicrosoftMessagingEnabledState } from '@/client-config/states/isMicrosoftMessagingEnabledState';
 import { useTriggerApisOAuth } from '@/settings/accounts/hooks/useTriggerApiOAuth';
 import { SettingsCard } from '@/settings/components/SettingsCard';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
@@ -9,7 +7,7 @@ import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { ConnectedAccountProvider } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
-import { IconGoogle, IconMicrosoft } from 'twenty-ui/icon';
+import { IconGoogle } from 'twenty-ui/icon';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 
 const StyledCardsContainer = styled.div`
@@ -33,16 +31,9 @@ export const SettingsAppPreferencesListEmptyStateCard = ({
   const isGoogleMessagingEnabled = useAtomStateValue(
     isGoogleMessagingEnabledState,
   );
-  const isMicrosoftMessagingEnabled = useAtomStateValue(
-    isMicrosoftMessagingEnabledState,
-  );
 
   const isGoogleCalendarEnabled = useAtomStateValue(
     isGoogleCalendarEnabledState,
-  );
-
-  const isMicrosoftCalendarEnabled = useAtomStateValue(
-    isMicrosoftCalendarEnabledState,
   );
 
   const isProviderShown = (shownProvider: ConnectedAccountProvider) =>
@@ -56,15 +47,6 @@ export const SettingsAppPreferencesListEmptyStateCard = ({
             Icon={<IconGoogle size={theme.icon.size.md} />}
             title={t`Connect with Google`}
             onClick={() => triggerApisOAuth(ConnectedAccountProvider.GOOGLE)}
-          />
-        )}
-
-      {isProviderShown(ConnectedAccountProvider.MICROSOFT) &&
-        (isMicrosoftMessagingEnabled || isMicrosoftCalendarEnabled) && (
-          <SettingsCard
-            Icon={<IconMicrosoft size={theme.icon.size.md} />}
-            title={t`Connect with Microsoft`}
-            onClick={() => triggerApisOAuth(ConnectedAccountProvider.MICROSOFT)}
           />
         )}
     </StyledCardsContainer>

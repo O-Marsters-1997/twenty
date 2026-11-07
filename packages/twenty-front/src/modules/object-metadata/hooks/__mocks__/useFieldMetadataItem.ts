@@ -157,7 +157,6 @@ export const responseData = {
         activationStatus: 'active',
         isPublicInviteLinkEnabled: false,
         isGoogleAuthEnabled: true,
-        isMicrosoftAuthEnabled: false,
         isPasswordAuthEnabled: true,
         subdomain: 'test',
         workspaceUrls: {

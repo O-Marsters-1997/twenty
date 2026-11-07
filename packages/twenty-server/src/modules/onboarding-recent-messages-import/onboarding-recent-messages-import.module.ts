@@ -6,7 +6,6 @@ import { OAuth2ClientManagerModule } from 'src/modules/connected-account/oauth2-
 import { MessagingCommonModule } from 'src/modules/messaging/common/messaging-common.module';
 import { MessagingImportManagerModule } from 'src/modules/messaging/message-import-manager/messaging-import-manager.module';
 import { GmailRecentMessagesService } from 'src/modules/onboarding-recent-messages-import/services/gmail-recent-messages.service';
-import { MicrosoftRecentMessagesService } from 'src/modules/onboarding-recent-messages-import/services/microsoft-recent-messages.service';
 import { OnboardingRecentMessagesImportService } from 'src/modules/onboarding-recent-messages-import/services/onboarding-recent-messages-import.service';
 import { RecentMessagesService } from 'src/modules/onboarding-recent-messages-import/services/recent-messages.service';
 
@@ -19,7 +18,6 @@ import { RecentMessagesService } from 'src/modules/onboarding-recent-messages-im
   ],
   providers: [
     GmailRecentMessagesService,
-    MicrosoftRecentMessagesService,
     RecentMessagesService,
     OnboardingRecentMessagesImportService,
   ],

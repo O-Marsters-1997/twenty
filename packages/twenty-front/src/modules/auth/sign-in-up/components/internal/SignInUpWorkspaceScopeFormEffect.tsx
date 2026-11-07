@@ -60,11 +60,7 @@ export const SignInUpWorkspaceScopeFormEffect = () => {
   useEffect(() => {
     if (!workspaceAuthProviders) return;
 
-    if (
-      signInUpStep === SignInUpStep.Init &&
-      !workspaceAuthProviders.google &&
-      !workspaceAuthProviders.microsoft
-    ) {
+    if (signInUpStep === SignInUpStep.Init && !workspaceAuthProviders.google) {
       continueWithEmail();
       return;
     }

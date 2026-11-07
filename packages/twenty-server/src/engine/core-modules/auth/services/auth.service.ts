@@ -30,7 +30,6 @@ import { type WorkspaceInviteHashValidDTO } from 'src/engine/core-modules/auth/d
 import { CreateSsoConnectedAccountService } from 'src/engine/core-modules/auth/services/create-sso-connected-account.service';
 import { SignInUpService } from 'src/engine/core-modules/auth/services/sign-in-up.service';
 import { type GoogleRequest } from 'src/engine/core-modules/auth/strategies/google.auth.strategy';
-import { type MicrosoftRequest } from 'src/engine/core-modules/auth/strategies/microsoft.auth.strategy';
 import { AccessTokenService } from 'src/engine/core-modules/auth/token/services/access-token.service';
 import { LoginTokenService } from 'src/engine/core-modules/auth/token/services/login-token.service';
 import { RefreshTokenService } from 'src/engine/core-modules/auth/token/services/refresh-token.service';
@@ -301,8 +300,6 @@ export class AuthService {
           return workspace.isPasswordAuthBypassEnabled;
         case AuthProviderEnum.Google:
           return workspace.isGoogleAuthBypassEnabled;
-        case AuthProviderEnum.Microsoft:
-          return workspace.isMicrosoftAuthBypassEnabled;
         default:
           return false;
       }
@@ -738,8 +735,8 @@ export class AuthService {
       billingCheckoutSessionState,
       locale,
       returnToPath,
-    }: MicrosoftRequest['user'] | GoogleRequest['user'],
-    authProvider: AuthProviderEnum.Google | AuthProviderEnum.Microsoft,
+    }: GoogleRequest['user'],
+    authProvider: AuthProviderEnum.Google,
   ): Promise<string> {
     const email = rawEmail.toLowerCase();
 
@@ -795,7 +792,6 @@ export class AuthService {
         workspaceId: workspace.id,
         userId: user.id,
         handle: email,
-        authProvider,
       });
 
       const loginToken = await this.loginTokenService.generateLoginToken(
@@ -826,57 +822,15 @@ export class AuthService {
     workspaceId: string;
     userId: string;
     handle: string;
-    authProvider:
-      | AuthProviderEnum.Google
-      | AuthProviderEnum.Microsoft;
   }): Promise<void> {
-    const provider = this.mapAuthProviderToConnectedAccountProvider(
-      input.authProvider,
-    );
-
-    const scopes = this.getSsoScopes(provider);
-
     await this.createSsoConnectedAccountService.createOrUpdateSsoConnectedAccount(
       {
         workspaceId: input.workspaceId,
         userId: input.userId,
         handle: input.handle,
-        provider,
-        scopes,
+        provider: ConnectedAccountProvider.GOOGLE,
+        scopes: ['email', 'profile'],
       },
     );
-  }
-
-  private mapAuthProviderToConnectedAccountProvider(
-    authProvider:
-      | AuthProviderEnum.Google
-      | AuthProviderEnum.Microsoft,
-  ): ConnectedAccountProvider {
-    switch (authProvider) {
-      case AuthProviderEnum.Google:
-        return ConnectedAccountProvider.GOOGLE;
-      case AuthProviderEnum.Microsoft:
-        return ConnectedAccountProvider.MICROSOFT;
-      default:
-        throw new Error(
-          `Unsupported auth provider: ${authProvider satisfies never}`,
-        );
-    }
-  }
-
-  private getSsoScopes(provider: ConnectedAccountProvider): string[] {
-    switch (provider) {
-      case ConnectedAccountProvider.GOOGLE:
-        return ['email', 'profile'];
-      case ConnectedAccountProvider.MICROSOFT:
-        return ['User.Read'];
-      case ConnectedAccountProvider.EMAIL_GROUP:
-      case ConnectedAccountProvider.APP:
-        return [];
-      default:
-        throw new Error(
-          `Unsupported connected account provider: ${provider satisfies never}`,
-        );
-    }
   }
 }

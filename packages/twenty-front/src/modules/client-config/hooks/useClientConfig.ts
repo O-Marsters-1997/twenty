@@ -20,8 +20,6 @@ import { isEmailingDomainInDemoModeState } from '@/client-config/states/isEmaili
 import { isEmailVerificationRequiredState } from '@/client-config/states/isEmailVerificationRequiredState';
 import { isGoogleCalendarEnabledState } from '@/client-config/states/isGoogleCalendarEnabledState';
 import { isGoogleMessagingEnabledState } from '@/client-config/states/isGoogleMessagingEnabledState';
-import { isMicrosoftCalendarEnabledState } from '@/client-config/states/isMicrosoftCalendarEnabledState';
-import { isMicrosoftMessagingEnabledState } from '@/client-config/states/isMicrosoftMessagingEnabledState';
 import { isMultiWorkspaceEnabledState } from '@/client-config/states/isMultiWorkspaceEnabledState';
 import { isOnboardingAiChatEnabledState } from '@/client-config/states/isOnboardingAiChatEnabledState';
 import { labPublicFeatureFlagsState } from '@/client-config/states/labPublicFeatureFlagsState';
@@ -76,14 +74,6 @@ export const useClientConfig = (): UseClientConfigResult => {
   const setCanManageFeatureFlags = useSetAtomState(canManageFeatureFlagsState);
 
   const setLabPublicFeatureFlags = useSetAtomState(labPublicFeatureFlagsState);
-
-  const setIsMicrosoftMessagingEnabled = useSetAtomState(
-    isMicrosoftMessagingEnabledState,
-  );
-
-  const setIsMicrosoftCalendarEnabled = useSetAtomState(
-    isMicrosoftCalendarEnabledState,
-  );
 
   const setIsGoogleMessagingEnabled = useSetAtomState(
     isGoogleMessagingEnabledState,
@@ -156,7 +146,6 @@ export const useClientConfig = (): UseClientConfigResult => {
         setAppVersion(clientConfig.appVersion);
         setAuthProviders({
           google: clientConfig.authProviders.google,
-          microsoft: clientConfig.authProviders.microsoft,
           password: clientConfig.authProviders.password,
           magicLink: false,
         });
@@ -185,10 +174,6 @@ export const useClientConfig = (): UseClientConfigResult => {
         });
         setCanManageFeatureFlags(clientConfig?.canManageFeatureFlags);
         setLabPublicFeatureFlags(clientConfig?.publicFeatureFlags);
-        setIsMicrosoftMessagingEnabled(
-          clientConfig?.isMicrosoftMessagingEnabled,
-        );
-        setIsMicrosoftCalendarEnabled(clientConfig?.isMicrosoftCalendarEnabled);
         setIsGoogleMessagingEnabled(clientConfig?.isGoogleMessagingEnabled);
         setIsGoogleCalendarEnabled(clientConfig?.isGoogleCalendarEnabled);
         setIsAttachmentPreviewEnabled(clientConfig?.isAttachmentPreviewEnabled);
@@ -260,8 +245,6 @@ export const useClientConfig = (): UseClientConfigResult => {
       setIsDDLLocked,
       setIsOnboardingAiChatEnabled,
       setLabPublicFeatureFlags,
-      setIsMicrosoftCalendarEnabled,
-      setIsMicrosoftMessagingEnabled,
       setSupportChat,
       setAllowRequestsToTwentyIcons,
     ],

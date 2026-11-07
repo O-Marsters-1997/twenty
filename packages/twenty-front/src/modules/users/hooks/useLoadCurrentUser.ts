@@ -118,8 +118,6 @@ export const useLoadCurrentUser = () => {
     if (isDefined(workspace)) {
       setWorkspaceAuthBypassProviders({
         google: authProviders.google && workspace.isGoogleAuthBypassEnabled,
-        microsoft:
-          authProviders.microsoft && workspace.isMicrosoftAuthBypassEnabled,
         password:
           authProviders.password && workspace.isPasswordAuthBypassEnabled,
       });

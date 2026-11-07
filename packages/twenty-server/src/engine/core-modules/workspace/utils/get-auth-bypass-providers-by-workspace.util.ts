@@ -7,9 +7,7 @@ export const getAuthBypassProvidersByWorkspace = ({
 }: {
   workspace: Pick<
     WorkspaceEntity,
-    | 'isGoogleAuthBypassEnabled'
-    | 'isPasswordAuthBypassEnabled'
-    | 'isMicrosoftAuthBypassEnabled'
+    'isGoogleAuthBypassEnabled' | 'isPasswordAuthBypassEnabled'
   >;
   systemEnabledProviders: AuthBypassProvidersDTO;
 }) => {
@@ -18,8 +16,5 @@ export const getAuthBypassProvidersByWorkspace = ({
       workspace.isGoogleAuthBypassEnabled && systemEnabledProviders.google,
     password:
       workspace.isPasswordAuthBypassEnabled && systemEnabledProviders.password,
-    microsoft:
-      workspace.isMicrosoftAuthBypassEnabled &&
-      systemEnabledProviders.microsoft,
   };
 };
