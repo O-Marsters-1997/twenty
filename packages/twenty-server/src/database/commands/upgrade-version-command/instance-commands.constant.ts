@@ -244,6 +244,7 @@ import { DropAppPlatformFastInstanceCommand } from 'src/database/commands/upgrad
 import { DropAppTokenSsoExchangeIndexFastInstanceCommand } from 'src/database/commands/upgrade-version-command/2-48/2-48-instance-command-fast-1793824525551-drop-app-token-sso-exchange-index';
 import { DropConnectionParametersCheckFastInstanceCommand } from 'src/database/commands/upgrade-version-command/2-48/2-48-instance-command-fast-1793998531000-drop-connection-parameters-check';
 import { DropMicrosoftAuthFastInstanceCommand } from 'src/database/commands/upgrade-version-command/2-48/2-48-instance-command-fast-1793998562000-drop-microsoft-auth';
+import { DropSaasLayerFastInstanceCommand } from 'src/database/commands/upgrade-version-command/2-48/2-48-instance-command-fast-1794066000000-drop-saas-layer';
 export const INSTANCE_COMMANDS = [
   AddViewFieldGroupIdIndexOnViewFieldFastInstanceCommand,
   MigrateMessagingCalendarToCoreFastInstanceCommand,
@@ -489,4 +490,5 @@ export const INSTANCE_COMMANDS = [
   DropAppTokenSsoExchangeIndexFastInstanceCommand,
   DropConnectionParametersCheckFastInstanceCommand,
   DropMicrosoftAuthFastInstanceCommand,
+  DropSaasLayerFastInstanceCommand,
 ];
