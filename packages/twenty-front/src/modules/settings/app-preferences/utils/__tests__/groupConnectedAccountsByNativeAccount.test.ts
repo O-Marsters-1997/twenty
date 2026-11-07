@@ -30,10 +30,10 @@ describe('groupConnectedAccountsByNativeAccount', () => {
       handle: 'tim@apple.dev',
       provider: ConnectedAccountProvider.GOOGLE,
     };
-    const imap = {
-      id: 'imap',
+    const secondGoogle = {
+      id: 'second-google',
       handle: 'tim@apple.dev',
-      provider: ConnectedAccountProvider.IMAP_SMTP_CALDAV,
+      provider: ConnectedAccountProvider.GOOGLE,
     };
     const fathom = {
       id: 'fathom',
@@ -42,7 +42,7 @@ describe('groupConnectedAccountsByNativeAccount', () => {
     };
 
     expect(
-      groupConnectedAccountsByNativeAccount([google, imap, fathom]),
+      groupConnectedAccountsByNativeAccount([google, secondGoogle, fathom]),
     ).toEqual([
       {
         id: 'google',
@@ -51,9 +51,9 @@ describe('groupConnectedAccountsByNativeAccount', () => {
         appAccounts: [fathom],
       },
       {
-        id: 'imap',
+        id: 'second-google',
         handle: 'tim@apple.dev',
-        nativeAccount: imap,
+        nativeAccount: secondGoogle,
         appAccounts: [],
       },
     ]);

@@ -6,7 +6,6 @@ import {
 } from 'twenty-shared/types';
 
 import { type WorkspaceAuthContext } from 'src/engine/core-modules/auth/types/workspace-auth-context.type';
-import { type BillingEntitlements } from 'src/engine/core-modules/billing/types/billing-entitlements.type';
 import { type FlatEntityMaps } from 'src/engine/metadata-modules/flat-entity/types/flat-entity-maps.type';
 import { type OrmFlatFieldMetadata } from 'src/engine/metadata-modules/flat-field-metadata/types/orm-flat-field-metadata.type';
 import { type FlatIndexMetadata } from 'src/engine/metadata-modules/flat-index-metadata/types/flat-index-metadata.type';
@@ -23,7 +22,6 @@ export type ORMWorkspaceContext = {
   flatIndexMaps: FlatEntityMaps<FlatIndexMetadata>;
   objectIdByNameSingular: Record<string, string>;
   featureFlagsMap: Record<FeatureFlagKey, boolean>;
-  billingEntitlements: BillingEntitlements;
   permissionsPerRoleId: ObjectsPermissionsByRoleId;
   roleIdsWithAllRecordsAccess: string[];
   userWorkspaceRoleMap: UserWorkspaceRoleMap;

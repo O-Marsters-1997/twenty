@@ -43,9 +43,6 @@ export class RenewTokenService {
       token: { id, workspaceId },
       authProvider,
       targetedTokenType: targetedTokenTypeFromPayload,
-      isImpersonating,
-      impersonatorUserWorkspaceId,
-      impersonatedUserWorkspaceId,
     } = await this.refreshTokenService.verifyRefreshToken(token);
 
     // Support legacy token when targetedTokenType is undefined.
@@ -97,11 +94,7 @@ export class RenewTokenService {
             workspaceId,
             authProvider: resolvedAuthProvider,
             targetedTokenType,
-            isImpersonating,
-            impersonatorUserWorkspaceId,
-            impersonatedUserWorkspaceId,
           },
-          false,
           entityManager,
         );
       },
@@ -121,9 +114,6 @@ export class RenewTokenService {
             userId: user.id,
             workspaceId: workspaceId as string,
             authProvider: resolvedAuthProvider,
-            isImpersonating,
-            impersonatorUserWorkspaceId,
-            impersonatedUserWorkspaceId,
           });
 
     return {

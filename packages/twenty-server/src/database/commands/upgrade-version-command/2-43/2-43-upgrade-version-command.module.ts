@@ -16,7 +16,6 @@ import { LinkChatThreadsToWorkspaceMembersCommand } from 'src/database/commands/
 import { ApplicationEntity } from 'src/engine/core-modules/application/application.entity';
 import { AddWorkflowVisibilityCommandMenuItemsCommand } from 'src/database/commands/upgrade-version-command/2-43/2-43-workspace-command-1790358777596-add-workflow-visibility-command-menu-items.command';
 import { ApplicationModule } from 'src/engine/core-modules/application/application.module';
-import { BillingModule } from 'src/engine/core-modules/billing/billing.module';
 import { FileEntity } from 'src/engine/core-modules/file/entities/file.entity';
 import { FieldMetadataEntity } from 'src/engine/metadata-modules/field-metadata/field-metadata.entity';
 import { AgentHistoryModule } from 'src/engine/metadata-modules/ai/ai-history/ai-history.module';
@@ -37,7 +36,6 @@ import { WorkspaceMigrationModule } from 'src/engine/workspace-manager/workspace
     ]),
     WorkspaceCacheModule,
     WorkspaceIteratorModule,
-    BillingModule,
     WorkspaceMigrationModule,
     WorkspaceMigrationRunnerModule,
   ],

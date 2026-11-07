@@ -223,7 +223,6 @@ describe('ObjectRecordEventPublisher', () => {
     overrides: PermissionsContextOverrides = {},
   ) => ({
     flatObjectMetadataMaps: { byUniversalIdentifier: {} },
-    billingEntitlements: {},
     flatRowLevelPermissionPredicateMaps: {
       byId: {},
       idByUniversalIdentifier: {},

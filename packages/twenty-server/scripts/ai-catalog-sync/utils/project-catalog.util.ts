@@ -25,19 +25,11 @@ const OVERRIDABLE_FIELDS = [
   'isDeprecated',
   'contextWindowTokens',
   'maxOutputTokens',
-  'inputCostPerMillionTokens',
-  'outputCostPerMillionTokens',
-  'cachedInputCostPerMillionTokens',
-  'cacheCreationCostPerMillionTokens',
 ] as const satisfies readonly (keyof CatalogSpecModelOverrides)[];
 
 const NUMERIC_FIELDS = [
   'contextWindowTokens',
   'maxOutputTokens',
-  'inputCostPerMillionTokens',
-  'outputCostPerMillionTokens',
-  'cachedInputCostPerMillionTokens',
-  'cacheCreationCostPerMillionTokens',
 ] as const satisfies readonly (keyof CatalogSpecModelOverrides)[];
 
 const PROVIDER_CREDENTIAL_FIELDS = [

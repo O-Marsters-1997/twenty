@@ -6,6 +6,4 @@ export const APPLICATION_ENTITY_RELATION_PROPERTIES = [
   'commandMenuItems',
   'objects',
   'logoFile',
-  'primaryPublicDomain',
-  'publicDomains',
 ] as const satisfies (keyof ApplicationEntity)[];

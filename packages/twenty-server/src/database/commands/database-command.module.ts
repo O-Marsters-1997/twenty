@@ -16,15 +16,11 @@ import { WorkspaceExportModule } from 'src/database/commands/workspace-export/wo
 import { TypeORMModule } from 'src/database/typeorm/typeorm.module';
 import { ApiKeyModule } from 'src/engine/core-modules/api-key/api-key.module';
 import { ApplicationModule } from 'src/engine/core-modules/application/application.module';
-import { BillingReminderModule } from 'src/engine/core-modules/billing/reminders/billing-reminder.module';
-import { EnterpriseKeyValidationCronCommand } from 'src/engine/core-modules/enterprise/cron/command/organization-key-validation.cron.command';
-import { EnterpriseModule } from 'src/engine/core-modules/enterprise/enterprise.module';
 import { EventLogCleanupModule } from 'src/engine/core-modules/event-logs/cleanup/event-log-cleanup.module';
 import { FeatureFlagModule } from 'src/engine/core-modules/feature-flag/feature-flag.module';
 import { RotateSigningKeysCronCommand } from 'src/engine/core-modules/jwt/crons/commands/rotate-signing-keys.cron.command';
 import { FileModule } from 'src/engine/core-modules/file/file.module';
 import { PendingWakeUpModule } from 'src/engine/core-modules/pending-wake-up/pending-wake-up.module';
-import { PublicDomainModule } from 'src/engine/core-modules/public-domain/public-domain.module';
 import { TwentyConfigModule } from 'src/engine/core-modules/twenty-config/twenty-config.module';
 import { UserSessionModule } from 'src/engine/core-modules/user-session/user-session.module';
 import { UpgradeStatusCommand } from 'src/engine/core-modules/upgrade/commands/upgrade-status.command';
@@ -37,7 +33,6 @@ import { FieldMetadataModule } from 'src/engine/metadata-modules/field-metadata/
 import { ObjectMetadataModule } from 'src/engine/metadata-modules/object-metadata/object-metadata.module';
 import { RoleEntity } from 'src/engine/metadata-modules/role/role.entity';
 import { provideWorkspaceScopedRepository } from 'src/engine/twenty-orm/workspace-scoped-repository/provide-workspace-scoped-repository';
-import { CodeInterpreterSessionCleanupModule } from 'src/engine/core-modules/code-interpreter/crons/code-interpreter-session-cleanup.module';
 import { TrashCleanupModule } from 'src/engine/trash-cleanup/trash-cleanup.module';
 import { WorkspaceCacheStorageModule } from 'src/engine/workspace-cache-storage/workspace-cache-storage.module';
 import { WorkspaceCacheModule } from 'src/engine/workspace-cache/workspace-cache.module';
@@ -82,11 +77,7 @@ import { AutomatedTriggerModule } from 'src/modules/workflow/workflow-trigger/au
     WorkspaceMigrationModule,
     WorkspaceMigrationRunnerModule,
     TrashCleanupModule,
-    BillingReminderModule,
-    CodeInterpreterSessionCleanupModule,
-    PublicDomainModule,
     EventLogCleanupModule,
-    EnterpriseModule,
     TwentyConfigModule,
     WorkspaceIteratorModule,
     ApplicationModule,
@@ -105,7 +96,6 @@ import { AutomatedTriggerModule } from 'src/modules/workflow/workflow-trigger/au
     InstanceCommandGenerationService,
     RunInstanceCommandsCommand,
     ListOrphanedWorkspaceEntitiesCommand,
-    EnterpriseKeyValidationCronCommand,
     RotateSigningKeysCronCommand,
     UpgradeStatusCommand,
     provideWorkspaceScopedRepository(RoleEntity),

@@ -1,4 +1,3 @@
-import { isUsageRefusedError } from 'src/engine/core-modules/billing/utils/is-usage-refused-error.util';
 import {
   AiException,
   AiExceptionCode,
@@ -29,10 +28,6 @@ const USER_FACING_AI_EXCEPTION_CODES = [
 export const isUserFacingWorkflowExecutorError = (error: unknown): boolean => {
   if (error instanceof WorkflowStepExecutorException) {
     return USER_FACING_STEP_EXECUTOR_EXCEPTION_CODES.includes(error.code);
-  }
-
-  if (isUsageRefusedError(error)) {
-    return true;
   }
 
   if (error instanceof AiException) {

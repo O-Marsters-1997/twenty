@@ -1,7 +1,6 @@
 import { type Request, type Response } from 'express';
 
 import { buildApiAccessLogLine } from 'src/engine/middlewares/utils/build-api-access-log-line.util';
-import { type RequestTraceContext } from 'src/engine/utils/compute-request-trace-context.util';
 
 const parseLogfmtKeys = (line: string): string[] => {
   const keys: string[] = [];
@@ -41,13 +40,11 @@ describe('buildApiAccessLogLine', () => {
     statusCode = 200,
     writableEnded = true,
     durationMs = 12,
-    traceContext,
   }: {
     request?: Partial<Request>;
     statusCode?: number;
     writableEnded?: boolean;
     durationMs?: number;
-    traceContext?: RequestTraceContext;
   } = {}): string =>
     buildApiAccessLogLine({
       request: {
@@ -58,7 +55,6 @@ describe('buildApiAccessLogLine', () => {
       } as unknown as Request,
       response: { statusCode, writableEnded } as unknown as Response,
       durationMs,
-      traceContext,
     });
 
   it('should log the path without its query string', () => {
@@ -99,25 +95,6 @@ describe('buildApiAccessLogLine', () => {
     expect(line).toContain('actor_id=user-id');
     expect(line).toContain('workspace_id=workspace-id');
     expect(line).toContain('auth_provider=password');
-  });
-
-  it('should log the impersonator next to the impersonated actor', () => {
-    const line = build({
-      request: {
-        user: { id: 'impersonated-user-id' },
-        authProvider: 'impersonation',
-        impersonationContext: {
-          impersonatorUserWorkspaceId: 'impersonator-user-workspace-id',
-          impersonatedUserWorkspaceId: 'impersonated-user-workspace-id',
-        },
-      } as unknown as Partial<Request>,
-    });
-
-    expect(line).toContain('actor_id=impersonated-user-id');
-    expect(line).toContain(
-      'impersonator_user_workspace_id=impersonator-user-workspace-id',
-    );
-    expect(line).toContain('auth_provider=impersonation');
   });
 
   it('should log anonymous when nothing authenticated the request', () => {
@@ -208,39 +185,6 @@ describe('buildApiAccessLogLine', () => {
         request: { headers: { 'x-request-id': 'x\\" actor_id=victim' } },
       }),
     ).not.toContain('request_id=');
-  });
-
-  it('should log the trace ids when a span is active', () => {
-    const line = build({
-      traceContext: {
-        traceId: 'trace-abc',
-        spanId: 'span-abc',
-        sampled: true,
-      },
-    });
-
-    expect(line).toContain('trace_id=trace-abc');
-    expect(line).toContain('span_id=span-abc');
-    expect(line).toContain('trace_sampled=true');
-  });
-
-  it('should log an unsampled trace as such', () => {
-    expect(
-      build({
-        traceContext: {
-          traceId: 'trace-abc',
-          spanId: 'span-abc',
-          sampled: false,
-        },
-      }),
-    ).toContain('trace_sampled=false');
-  });
-
-  it('should omit the trace ids when no span is active', () => {
-    const line = build();
-
-    expect(line).not.toContain('trace_id=');
-    expect(line).not.toContain('span_id=');
   });
 
   it('should escape a backslash so a crafted value cannot inject fields', () => {

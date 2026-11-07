@@ -14,7 +14,6 @@ export const AuthExceptionCode = appendCommonExceptionCode({
   EMAIL_NOT_VERIFIED: 'EMAIL_NOT_VERIFIED',
   CLIENT_NOT_FOUND: 'CLIENT_NOT_FOUND',
   WORKSPACE_NOT_FOUND: 'WORKSPACE_NOT_FOUND',
-  WORKSPACE_SUSPENDED: 'WORKSPACE_SUSPENDED',
   APPLICATION_NOT_FOUND: 'APPLICATION_NOT_FOUND',
   INVALID_INPUT: 'INVALID_INPUT',
   FORBIDDEN_EXCEPTION: 'FORBIDDEN_EXCEPTION',
@@ -24,13 +23,9 @@ export const AuthExceptionCode = appendCommonExceptionCode({
     'APPLICATION_REFRESH_TOKEN_INVALID_OR_EXPIRED',
   INVALID_DATA: 'INVALID_DATA',
   OAUTH_ACCESS_DENIED: 'OAUTH_ACCESS_DENIED',
-  SSO_AUTH_FAILED: 'SSO_AUTH_FAILED',
-  USE_SSO_AUTH: 'USE_SSO_AUTH',
   SIGNUP_DISABLED: 'SIGNUP_DISABLED',
   GOOGLE_API_AUTH_DISABLED: 'GOOGLE_API_AUTH_DISABLED',
-  MICROSOFT_API_AUTH_DISABLED: 'MICROSOFT_API_AUTH_DISABLED',
   MISSING_ENVIRONMENT_VARIABLE: 'MISSING_ENVIRONMENT_VARIABLE',
-  ENTERPRISE_VALIDITY_TOKEN_NOT_VALID: 'ENTERPRISE_VALIDITY_TOKEN_NOT_VALID',
   INVALID_JWT_TOKEN_TYPE: 'INVALID_JWT_TOKEN_TYPE',
   TWO_FACTOR_AUTHENTICATION_PROVISION_REQUIRED:
     'TWO_FACTOR_AUTHENTICATION_PROVISION_REQUIRED',
@@ -51,8 +46,6 @@ const getAuthExceptionUserFriendlyMessage = (
       return msg`Email is not verified.`;
     case AuthExceptionCode.WORKSPACE_NOT_FOUND:
       return msg`Workspace not found.`;
-    case AuthExceptionCode.WORKSPACE_SUSPENDED:
-      return msg`This workspace is suspended. Choose a plan to reactivate it.`;
     case AuthExceptionCode.APPLICATION_NOT_FOUND:
       return msg`Application not found.`;
     case AuthExceptionCode.INVALID_INPUT:
@@ -66,16 +59,10 @@ const getAuthExceptionUserFriendlyMessage = (
       return msg`You must be authenticated to perform this action.`;
     case AuthExceptionCode.OAUTH_ACCESS_DENIED:
       return msg`OAuth access was denied.`;
-    case AuthExceptionCode.SSO_AUTH_FAILED:
-      return msg`Single sign-on authentication failed.`;
-    case AuthExceptionCode.USE_SSO_AUTH:
-      return msg`Please use single sign-on to authenticate.`;
     case AuthExceptionCode.SIGNUP_DISABLED:
       return msg`Sign up is disabled.`;
     case AuthExceptionCode.GOOGLE_API_AUTH_DISABLED:
       return msg`Google API authentication is disabled.`;
-    case AuthExceptionCode.MICROSOFT_API_AUTH_DISABLED:
-      return msg`Microsoft API authentication is disabled.`;
     case AuthExceptionCode.MISSING_ENVIRONMENT_VARIABLE:
       return msg`A required configuration is missing.`;
     case AuthExceptionCode.TWO_FACTOR_AUTHENTICATION_PROVISION_REQUIRED:
@@ -84,8 +71,6 @@ const getAuthExceptionUserFriendlyMessage = (
       return msg`Two-factor authentication verification is required.`;
     case AuthExceptionCode.USER_ALREADY_EXISTS:
       return msg`A user with this email already exists.`;
-    case AuthExceptionCode.ENTERPRISE_VALIDITY_TOKEN_NOT_VALID:
-      return msg`Enterprise validity token is not valid.`;
     case AuthExceptionCode.INTERNAL_SERVER_ERROR:
     case AuthExceptionCode.INVALID_DATA:
     case AuthExceptionCode.CLIENT_NOT_FOUND:
@@ -105,19 +90,14 @@ const getAuthExceptionStatusCode = (
     case AuthExceptionCode.INVALID_INPUT:
       return 400;
     case AuthExceptionCode.FORBIDDEN_EXCEPTION:
-    case AuthExceptionCode.WORKSPACE_SUSPENDED:
     case AuthExceptionCode.INSUFFICIENT_SCOPES:
     case AuthExceptionCode.OAUTH_ACCESS_DENIED:
-    case AuthExceptionCode.SSO_AUTH_FAILED:
-    case AuthExceptionCode.USE_SSO_AUTH:
     case AuthExceptionCode.SIGNUP_DISABLED:
     case AuthExceptionCode.GOOGLE_API_AUTH_DISABLED:
-    case AuthExceptionCode.MICROSOFT_API_AUTH_DISABLED:
     case AuthExceptionCode.MISSING_ENVIRONMENT_VARIABLE:
     case AuthExceptionCode.EMAIL_NOT_VERIFIED:
     case AuthExceptionCode.INVALID_JWT_TOKEN_TYPE:
     case AuthExceptionCode.USER_ALREADY_EXISTS:
-    case AuthExceptionCode.ENTERPRISE_VALIDITY_TOKEN_NOT_VALID:
       return 403;
     case AuthExceptionCode.TWO_FACTOR_AUTHENTICATION_PROVISION_REQUIRED:
     case AuthExceptionCode.TWO_FACTOR_AUTHENTICATION_VERIFICATION_REQUIRED:

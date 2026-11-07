@@ -8,21 +8,17 @@ export const mockedPublicWorkspaceDataBySubdomain: GetPublicWorkspaceDataByDomai
     displayName: 'Twenty Eng',
     workspaceUrls: {
       __typename: 'WorkspaceUrls',
-      customUrl: 'https://twenty-eng.com',
       subdomainUrl: 'https://custom.twenty.com',
     },
     authProviders: {
       __typename: 'AuthProviders',
-      sso: [],
       google: true,
       magicLink: false,
       password: true,
-      microsoft: false,
     },
     authBypassProviders: {
       __typename: 'AuthBypassProviders',
       google: false,
       password: false,
-      microsoft: false,
     },
   };

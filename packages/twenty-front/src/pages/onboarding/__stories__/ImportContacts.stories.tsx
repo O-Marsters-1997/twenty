@@ -2,7 +2,7 @@ import { styled } from '@linaria/react';
 import { type Meta, type StoryObj } from '@storybook/react-vite';
 import { action } from 'storybook/actions';
 import { within } from 'storybook/test';
-import { IconGoogle, IconMicrosoft } from 'twenty-ui/icon';
+import { IconGoogle } from 'twenty-ui/icon';
 
 import { ImportContacts } from '~/pages/onboarding/ImportContacts';
 
@@ -20,15 +20,8 @@ const meta: Meta<typeof ImportContacts> = {
   args: {
     providerActions: [
       {
-        label: 'Continue with Microsoft',
-        Icon: IconMicrosoft,
-        creditsReward: 2,
-        onClick: action('continue-with-microsoft'),
-      },
-      {
         label: 'Continue with Google',
         Icon: IconGoogle,
-        creditsReward: 2,
         onClick: action('continue-with-google'),
       },
     ],

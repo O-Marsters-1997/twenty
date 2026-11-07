@@ -15,8 +15,6 @@ const getProviderUrl = (provider: ConnectedAccountProvider) => {
   switch (provider) {
     case ConnectedAccountProvider.GOOGLE:
       return 'google-apis';
-    case ConnectedAccountProvider.MICROSOFT:
-      return 'microsoft-apis';
     default:
       throw new CustomError(
         `Provider ${provider} is not supported`,

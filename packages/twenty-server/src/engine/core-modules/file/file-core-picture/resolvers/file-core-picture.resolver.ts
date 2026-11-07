@@ -15,7 +15,6 @@ import { FileCorePictureService } from 'src/engine/core-modules/file/file-core-p
 import { FileUploadGraphqlApiExceptionFilter } from 'src/engine/core-modules/file/file-upload/filters/file-upload-graphql-api-exception.filter';
 import { PreventNestToAutoLogGraphqlErrorsFilter } from 'src/engine/core-modules/graphql/filters/prevent-nest-to-auto-log-graphql-errors.filter';
 import { ResolverValidationPipe } from 'src/engine/core-modules/graphql/pipes/resolver-validation.pipe';
-import { UsageLimitGraphqlApiExceptionFilter } from 'src/engine/core-modules/usage-limit/filters/usage-limit-graphql-api-exception.filter';
 import { UploadProfilePicturePermissionGuard } from 'src/engine/core-modules/user-workspace/guards/upload-profile-picture-permission.guard';
 import { WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
 import { AuthWorkspace } from 'src/engine/decorators/auth/auth-workspace.decorator';
@@ -28,7 +27,6 @@ import { streamToBuffer } from 'src/utils/stream-to-buffer';
   AuthPrincipalGuard({
     userSession: {
       standard: true,
-      impersonated: true,
       playground: true,
       workspaceAgnostic: false,
     },
@@ -39,7 +37,6 @@ import { streamToBuffer } from 'src/utils/stream-to-buffer';
 )
 @UsePipes(ResolverValidationPipe)
 @UseFilters(
-  UsageLimitGraphqlApiExceptionFilter,
   PermissionsGraphqlApiExceptionFilter,
   FileUploadGraphqlApiExceptionFilter,
   PreventNestToAutoLogGraphqlErrorsFilter,
@@ -59,7 +56,6 @@ export class FileCorePictureResolver {
     AuthPrincipalGuard({
       userSession: {
         standard: true,
-        impersonated: true,
         playground: true,
         workspaceAgnostic: false,
       },
@@ -115,7 +111,6 @@ export class FileCorePictureResolver {
     AuthPrincipalGuard({
       userSession: {
         standard: true,
-        impersonated: true,
         playground: true,
         workspaceAgnostic: false,
       },

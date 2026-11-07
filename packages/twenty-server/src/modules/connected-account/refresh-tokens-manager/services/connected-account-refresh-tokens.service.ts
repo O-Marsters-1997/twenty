@@ -14,7 +14,6 @@ import {
 } from 'src/engine/metadata-modules/connected-account/exceptions/connected-account-refresh-tokens.exception';
 import { ConnectedAccountTokenEncryptionService } from 'src/engine/metadata-modules/connected-account/services/connected-account-token-encryption.service';
 import { GoogleApiRefreshAccessTokenService } from 'src/modules/connected-account/refresh-tokens-manager/drivers/google/services/google-api-refresh-tokens.service';
-import { MicrosoftApiRefreshAccessTokenService } from 'src/modules/connected-account/refresh-tokens-manager/drivers/microsoft/services/microsoft-api-refresh-tokens.service';
 
 // Encrypted and plaintext shapes are modeled separately so they cannot be mixed (#20819)
 export type ConnectedAccountPlaintextTokens = {
@@ -39,7 +38,6 @@ export class ConnectedAccountRefreshTokensService {
 
   constructor(
     private readonly googleApiRefreshAccessTokenService: GoogleApiRefreshAccessTokenService,
-    private readonly microsoftApiRefreshAccessTokenService: MicrosoftApiRefreshAccessTokenService,
     private readonly connectedAccountTokenEncryptionService: ConnectedAccountTokenEncryptionService,
     @InjectRepository(ConnectedAccountEntity)
     private readonly connectedAccountRepository: Repository<ConnectedAccountEntity>,
@@ -142,8 +140,7 @@ export class ConnectedAccountRefreshTokensService {
     connectedAccount: ConnectedAccountEntity,
   ): Promise<boolean> {
     switch (connectedAccount.provider) {
-      case ConnectedAccountProvider.GOOGLE:
-      case ConnectedAccountProvider.MICROSOFT: {
+      case ConnectedAccountProvider.GOOGLE: {
         if (!connectedAccount.lastCredentialsRefreshedAt) {
           return false;
         }
@@ -159,9 +156,6 @@ export class ConnectedAccountRefreshTokensService {
         );
       }
       case ConnectedAccountProvider.APP:
-      case ConnectedAccountProvider.IMAP_SMTP_CALDAV:
-      case ConnectedAccountProvider.OIDC:
-      case ConnectedAccountProvider.SAML:
       case ConnectedAccountProvider.EMAIL_GROUP:
         return true;
       default:
@@ -183,14 +177,7 @@ export class ConnectedAccountRefreshTokensService {
           return await this.googleApiRefreshAccessTokenService.refreshTokens(
             refreshToken,
           );
-        case ConnectedAccountProvider.MICROSOFT:
-          return await this.microsoftApiRefreshAccessTokenService.refreshTokens(
-            refreshToken,
-          );
         case ConnectedAccountProvider.APP:
-        case ConnectedAccountProvider.IMAP_SMTP_CALDAV:
-        case ConnectedAccountProvider.OIDC:
-        case ConnectedAccountProvider.SAML:
         case ConnectedAccountProvider.EMAIL_GROUP:
           throw new ConnectedAccountRefreshAccessTokenException(
             `Token refresh is not supported for ${connectedAccount.provider} provider for connected account ${connectedAccount.id} in workspace ${workspaceId}`,

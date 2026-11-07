@@ -16,14 +16,13 @@ export const buildAgentRunSummary = ({
     outputTokens: execution.usage.outputTokens ?? 0,
     reasoningTokens: execution.usage.outputTokenDetails?.reasoningTokens,
     cacheReadTokens: execution.usage.inputTokenDetails?.cacheReadTokens,
-    cacheCreationTokens: execution.cacheCreationTokens,
     totalTokens: execution.usage.totalTokens ?? 0,
   },
   cost: {
-    totalCostInDollars: execution.totalCostInDollars,
-    creditsUsedMicro: execution.creditsUsedMicro,
+    totalCostInDollars: 0,
+    creditsUsedMicro: 0,
   },
-  nativeWebSearchCallCount: execution.nativeWebSearchCallCount,
+  nativeWebSearchCallCount: 0,
   toolCalls: mapAgentStepsToToolCallLogs(execution.steps),
   durationMs,
 });

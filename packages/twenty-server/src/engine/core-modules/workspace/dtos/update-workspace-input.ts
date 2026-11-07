@@ -13,7 +13,6 @@ import {
   IsObject,
   IsString,
   IsUUID,
-  Matches,
   Max,
   Min,
 } from 'class-validator';
@@ -28,14 +27,6 @@ export class UpdateWorkspaceInput {
   @IsString()
   @IsOptional()
   subdomain?: string;
-
-  @Field({ nullable: true })
-  @IsString()
-  @IsOptional()
-  @Matches(
-    /^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9])$/,
-  )
-  customDomain?: string;
 
   @Field({ nullable: true })
   @IsString()
@@ -85,22 +76,12 @@ export class UpdateWorkspaceInput {
   @Field({ nullable: true })
   @IsBoolean()
   @IsOptional()
-  isMicrosoftAuthEnabled?: boolean;
-
-  @Field({ nullable: true })
-  @IsBoolean()
-  @IsOptional()
   isPasswordAuthEnabled?: boolean;
 
   @Field({ nullable: true })
   @IsBoolean()
   @IsOptional()
   isGoogleAuthBypassEnabled?: boolean;
-
-  @Field({ nullable: true })
-  @IsBoolean()
-  @IsOptional()
-  isMicrosoftAuthBypassEnabled?: boolean;
 
   @Field({ nullable: true })
   @IsBoolean()

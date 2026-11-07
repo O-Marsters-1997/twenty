@@ -1,9 +1,5 @@
 import { type Equal, type Expect } from 'twenty-shared/testing';
 
-import { type BillingMeterEntity } from 'src/engine/core-modules/billing/entities/billing-meter.entity';
-import { type BillingPriceEntity } from 'src/engine/core-modules/billing/entities/billing-price.entity';
-import { type BillingProductEntity } from 'src/engine/core-modules/billing/entities/billing-product.entity';
-import { type BillingSubscriptionItemEntity } from 'src/engine/core-modules/billing/entities/billing-subscription-item.entity';
 import { type SigningKeyEntity } from 'src/engine/core-modules/jwt/entities/signing-key.entity';
 import { type KeyValuePairEntity } from 'src/engine/core-modules/key-value-pair/key-value-pair.entity';
 import { type TwoFactorAuthenticationMethodEntity } from 'src/engine/core-modules/two-factor-authentication/entities/two-factor-authentication-method.entity';
@@ -17,10 +13,6 @@ import { type SyncableEntity } from 'src/engine/workspace-manager/types/syncable
 // not a "has no workspaceId" predicate and must not be used as one.
 export type AllNonWorkspaceRelatedEntity =
   | IndexFieldMetadataEntity
-  | BillingMeterEntity
-  | BillingPriceEntity
-  | BillingProductEntity
-  | BillingSubscriptionItemEntity
   | KeyValuePairEntity
   | SigningKeyEntity
   | TwoFactorAuthenticationMethodEntity

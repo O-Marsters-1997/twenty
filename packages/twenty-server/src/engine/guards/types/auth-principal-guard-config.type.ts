@@ -5,7 +5,6 @@ export type AuthPrincipalGuardConfig = {
     | boolean
     | {
         standard: boolean;
-        impersonated: boolean;
         playground: boolean;
         workspaceAgnostic: boolean;
       };

@@ -23,7 +23,6 @@ import { RecordTargetInput } from 'src/engine/metadata-modules/record-permission
   AuthPrincipalGuard({
     userSession: {
       standard: true,
-      impersonated: true,
       playground: true,
       workspaceAgnostic: false,
     },

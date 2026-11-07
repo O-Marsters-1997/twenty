@@ -1,7 +1,5 @@
 import { useCurrentAiChatThreadAccess } from '@/ai/hooks/useCurrentAiChatThreadAccess';
 import { StyledAiChatContentContainer } from '@/ai/components/StyledAiChatContentContainer';
-import { useState } from 'react';
-
 import { styled } from '@linaria/react';
 import { EditorContent } from '@tiptap/react';
 import { useLingui } from '@lingui/react/macro';
@@ -11,23 +9,15 @@ import { AiChatInlineBanner } from '@/ai/components/AiChatInlineBanner';
 import { AiChatEmptyState } from '@/ai/components/AiChatEmptyState';
 import { AiChatParticipantMentionBar } from '@/ai/components/AiChatParticipantMentionBar';
 import { AiChatPendingAskGate } from '@/ai/components/AiChatPendingAskGate';
-import { AiChatNoMoreBillingCreditsBanner } from '@/ai/components/AiChatNoMoreBillingCreditsBanner';
-import { AiChatUsageLimitReachedBanner } from '@/ai/components/AiChatUsageLimitReachedBanner';
 import { AiChatStandaloneError } from '@/ai/components/AiChatStandaloneError';
 import { AgentChatContextPreview } from '@/ai/components/internal/AgentChatContextPreview';
 import { AiChatAddMenu } from '@/ai/components/AiChatAddMenu';
-import { AiChatDictationButton } from '@/ai/dictation/components/AiChatDictationButton';
-import { AiChatDictationEffect } from '@/ai/dictation/components/AiChatDictationEffect';
-import { AiChatDictationHint } from '@/ai/dictation/components/AiChatDictationHint';
 import { AiChatComposerActionsRow } from '@/ai/components/internal/AiChatComposerActionsRow';
 import { AiChatEditorFocusEffect } from '@/ai/components/internal/AiChatEditorFocusEffect';
 import { AiChatSentMessageHandOffEffect } from '@/ai/components/internal/AiChatSentMessageHandOffEffect';
 import { SendMessageButton } from '@/ai/components/internal/SendMessageButton';
 import { useAiChatEditor } from '@/ai/hooks/useAiChatEditor';
-import { useInsertDictatedText } from '@/ai/dictation/hooks/useInsertDictatedText';
 import { useIsAiChatComposerCentered } from '@/ai/hooks/useIsAiChatComposerCentered';
-import { useHasReachedAiChatCreditsCap } from '@/ai/hooks/useHasReachedAiChatCreditsCap';
-import { useHasReachedAiChatUsageLimit } from '@/ai/hooks/useHasReachedAiChatUsageLimit';
 import { agentChatHasMessageSelector } from '@/ai/states/selectors/agentChatHasMessageSelector';
 import { aiModelsState } from '@/client-config/states/aiModelsState';
 import { useIsMobile } from 'twenty-ui/utilities';
@@ -135,31 +125,18 @@ const EditableAiChatEditorSection = () => {
   const { t } = useLingui();
   const isMobile = useIsMobile();
   const isComposerCentered = useIsAiChatComposerCentered();
-  const hasReachedAiChatCreditsCap = useHasReachedAiChatCreditsCap();
-  const hasReachedAiChatUsageLimit = useHasReachedAiChatUsageLimit();
-  const shouldShowUsageLimitBanner =
-    !hasReachedAiChatCreditsCap && hasReachedAiChatUsageLimit;
   const aiModels = useAtomStateValue(aiModelsState);
   const hasNoEnabledModels = aiModels.length === 0;
 
   const { editor, handleSendAndClear } = useAiChatEditor();
-
-  const insertDictatedText = useInsertDictatedText(editor);
-  const [dictationInterimText, setDictationInterimText] = useState('');
 
   const composer = (
     <StyledInputBox isMobile={isMobile}>
       <StyledEditorWrapper isMobile={isMobile}>
         <EditorContent editor={editor} />
       </StyledEditorWrapper>
-      <AiChatDictationHint interimText={dictationInterimText} />
       <AiChatComposerActionsRow
-        leftActions={
-          <>
-            <AiChatAddMenu editor={editor} />
-            <AiChatDictationButton />
-          </>
-        }
+        leftActions={<AiChatAddMenu editor={editor} />}
         modelTierDropdownId="ai-chat-model-tier-dropdown"
         sendButton={
           <SendMessageButton
@@ -179,10 +156,6 @@ const EditableAiChatEditorSection = () => {
         editor={editor}
         isComposerCentered={isComposerCentered}
       />
-      <AiChatDictationEffect
-        onInterimText={setDictationInterimText}
-        onFinalText={insertDictatedText}
-      />
       {!agentChatHasMessage && (
         <StyledMessageListPlaceholder>
           <AiChatEmptyState isCentered={isComposerCentered} />
@@ -195,8 +168,6 @@ const EditableAiChatEditorSection = () => {
         {hasNoEnabledModels && (
           <AiChatInlineBanner>{t`No AI provider is configured on this instance.`}</AiChatInlineBanner>
         )}
-        {hasReachedAiChatCreditsCap && <AiChatNoMoreBillingCreditsBanner />}
-        {shouldShowUsageLimitBanner && <AiChatUsageLimitReachedBanner />}
         <AiChatParticipantMentionBar editor={editor} />
         <AiChatPendingAskGate>{composer}</AiChatPendingAskGate>
       </StyledInputArea>

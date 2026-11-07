@@ -14,8 +14,6 @@ const baseTurn = {
   modelId: 'model-id',
   inputTokens: 1_200,
   outputTokens: 80,
-  inputCredits: '1500000',
-  outputCredits: '500000',
   createdBy: {
     source: FieldActorSource.WORKFLOW,
     name: 'Qualify inbound lead',
@@ -88,7 +86,6 @@ describe('mapAgentTurnToAgentRun', () => {
       creatorName: 'Qualify inbound lead',
       inputTokens: 1_200,
       outputTokens: 80,
-      credits: 2,
     });
     expect(run.endedAt).toEqual(new Date('2026-10-05T10:00:06.000Z'));
   });
@@ -167,14 +164,11 @@ describe('mapAgentTurnToAgentRun', () => {
       ...baseTurn,
       inputTokens: null,
       outputTokens: null,
-      inputCredits: null,
-      outputCredits: null,
       messages: [],
     });
 
     expect(run).toMatchObject({
       inputTokens: null,
-      credits: null,
       input: null,
       reply: null,
       toolNames: [],

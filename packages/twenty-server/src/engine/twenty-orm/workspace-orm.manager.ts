@@ -13,8 +13,6 @@ import { type ObjectRecord } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 
 import { getWorkspaceAuthContext } from 'src/engine/core-modules/auth/storage/workspace-auth-context.storage';
-import { EnterprisePlanService } from 'src/engine/core-modules/enterprise/services/enterprise-plan.service';
-import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { type WorkspaceAuthContext } from 'src/engine/core-modules/auth/types/workspace-auth-context.type';
 import { buildObjectIdByNameMaps } from 'src/engine/metadata-modules/flat-object-metadata/utils/build-object-id-by-name-maps.util';
 import { ExecuteInWorkspaceContextOptions } from 'src/engine/twenty-orm/types/execute-in-workspace-context-options.type';
@@ -35,8 +33,6 @@ export class WorkspaceOrmManager {
   constructor(
     private readonly workspaceCacheService: WorkspaceCacheService,
     private readonly workspaceDataSourceService: WorkspaceDataSourceService,
-    private readonly enterprisePlanService: EnterprisePlanService,
-    private readonly twentyConfigService: TwentyConfigService,
   ) {}
 
   getRepository<T extends ObjectLiteral = ObjectRecord>(
@@ -143,7 +139,6 @@ export class WorkspaceOrmManager {
       flatFieldMetadataMapsOrm,
       flatIndexMaps,
       featureFlagsMap,
-      billingEntitlements,
       rolesPermissions: permissionsPerRoleId,
       roleIdsWithAllRecordsAccess,
       userWorkspaceRoleMap,
@@ -155,7 +150,6 @@ export class WorkspaceOrmManager {
       'flatFieldMetadataMapsOrm',
       'flatIndexMaps',
       'featureFlagsMap',
-      'billingEntitlements',
       'rolesPermissions',
       'roleIdsWithAllRecordsAccess',
       'userWorkspaceRoleMap',
@@ -169,9 +163,6 @@ export class WorkspaceOrmManager {
 
     const flatValidationRuleMaps = isValidationRuleEnforcementEnabled({
       featureFlagsMap,
-      billingEntitlements,
-      hasValidEnterprisePlan: this.enterprisePlanService.isValid(),
-      isBillingEnabled: this.twentyConfigService.get('IS_BILLING_ENABLED'),
     })
       ? (
           await this.workspaceCacheService.getOrRecompute(workspaceId, [
@@ -190,7 +181,6 @@ export class WorkspaceOrmManager {
       flatValidationRuleMaps,
       objectIdByNameSingular,
       featureFlagsMap,
-      billingEntitlements,
       permissionsPerRoleId,
       roleIdsWithAllRecordsAccess,
       userWorkspaceRoleMap,
@@ -203,14 +193,9 @@ export class WorkspaceOrmManager {
   ): Promise<ORMWorkspaceContext> {
     const workspaceId = authContext.workspace.id;
 
-    const {
-      flatObjectMetadataMaps,
-      flatFieldMetadataMapsOrm,
-      billingEntitlements,
-    } = await this.workspaceCacheService.getOrRecompute(workspaceId, [
+    const { flatObjectMetadataMaps, flatFieldMetadataMapsOrm } = await this.workspaceCacheService.getOrRecompute(workspaceId, [
       'flatObjectMetadataMaps',
       'flatFieldMetadataMapsOrm',
-      'billingEntitlements',
     ]);
 
     const { idByNameSingular: objectIdByNameSingular } =
@@ -237,7 +222,6 @@ export class WorkspaceOrmManager {
       },
       objectIdByNameSingular,
       featureFlagsMap: {} as ORMWorkspaceContext['featureFlagsMap'],
-      billingEntitlements,
       permissionsPerRoleId: {},
       roleIdsWithAllRecordsAccess: [],
       userWorkspaceRoleMap: {},

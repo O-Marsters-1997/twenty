@@ -6,8 +6,6 @@ import { assertUnreachable } from 'twenty-shared/utils';
 import { type ConnectedAccountEntity } from 'src/engine/metadata-modules/connected-account/entities/connected-account.entity';
 import { EmailGroupMessageOutboundService } from 'src/modules/messaging/message-outbound-manager/drivers/email-group/services/email-group-message-outbound.service';
 import { GmailMessageOutboundService } from 'src/modules/messaging/message-outbound-manager/drivers/gmail/services/gmail-message-outbound.service';
-import { ImapSmtpMessageOutboundService } from 'src/modules/messaging/message-outbound-manager/drivers/imap/services/imap-smtp-message-outbound.service';
-import { MicrosoftMessageOutboundService } from 'src/modules/messaging/message-outbound-manager/drivers/microsoft/services/microsoft-message-outbound.service';
 import { SendMessageInput } from 'src/modules/messaging/message-outbound-manager/types/send-message-input.type';
 import { type SendMessageResult } from 'src/modules/messaging/message-outbound-manager/types/send-message-result.type';
 
@@ -15,8 +13,6 @@ import { type SendMessageResult } from 'src/modules/messaging/message-outbound-m
 export class MessagingMessageOutboundService {
   constructor(
     private readonly gmailMessageOutboundService: GmailMessageOutboundService,
-    private readonly microsoftMessageOutboundService: MicrosoftMessageOutboundService,
-    private readonly imapSmtpMessageOutboundService: ImapSmtpMessageOutboundService,
     private readonly emailGroupMessageOutboundService: EmailGroupMessageOutboundService,
   ) {}
 
@@ -30,23 +26,11 @@ export class MessagingMessageOutboundService {
           sendMessageInput,
           connectedAccount,
         );
-      case ConnectedAccountProvider.MICROSOFT:
-        return this.microsoftMessageOutboundService.sendMessage(
-          sendMessageInput,
-          connectedAccount,
-        );
-      case ConnectedAccountProvider.IMAP_SMTP_CALDAV:
-        return this.imapSmtpMessageOutboundService.sendMessage(
-          sendMessageInput,
-          connectedAccount,
-        );
       case ConnectedAccountProvider.EMAIL_GROUP:
         return this.emailGroupMessageOutboundService.sendMessage(
           sendMessageInput,
           connectedAccount,
         );
-      case ConnectedAccountProvider.OIDC:
-      case ConnectedAccountProvider.SAML:
       case ConnectedAccountProvider.APP:
         throw new Error(
           `Provider ${connectedAccount.provider} does not support sending messages`,
@@ -69,19 +53,7 @@ export class MessagingMessageOutboundService {
           sendMessageInput,
           connectedAccount,
         );
-      case ConnectedAccountProvider.MICROSOFT:
-        return this.microsoftMessageOutboundService.createDraft(
-          sendMessageInput,
-          connectedAccount,
-        );
-      case ConnectedAccountProvider.IMAP_SMTP_CALDAV:
-        return this.imapSmtpMessageOutboundService.createDraft(
-          sendMessageInput,
-          connectedAccount,
-        );
       case ConnectedAccountProvider.EMAIL_GROUP:
-      case ConnectedAccountProvider.OIDC:
-      case ConnectedAccountProvider.SAML:
       case ConnectedAccountProvider.APP:
         throw new Error(
           `Provider ${connectedAccount.provider} does not support creating drafts`,
@@ -106,21 +78,7 @@ export class MessagingMessageOutboundService {
           sendMessageInput,
           connectedAccount,
         );
-      case ConnectedAccountProvider.MICROSOFT:
-        return this.microsoftMessageOutboundService.sendDraft(
-          draftExternalId,
-          sendMessageInput,
-          connectedAccount,
-        );
-      case ConnectedAccountProvider.IMAP_SMTP_CALDAV:
-        return this.imapSmtpMessageOutboundService.sendDraft(
-          draftExternalId,
-          sendMessageInput,
-          connectedAccount,
-        );
       case ConnectedAccountProvider.EMAIL_GROUP:
-      case ConnectedAccountProvider.OIDC:
-      case ConnectedAccountProvider.SAML:
       case ConnectedAccountProvider.APP:
         throw new Error(
           `Provider ${connectedAccount.provider} does not support sending drafts`,

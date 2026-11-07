@@ -204,7 +204,6 @@ ruleTester.run(RULE_NAME, rule, {
             AuthPrincipalGuard({
               userSession: {
                 standard: true,
-                impersonated: true,
                 playground: false,
                 workspaceAgnostic: false,
               },
@@ -425,7 +424,6 @@ ruleTester.run(RULE_NAME, rule, {
           AuthPrincipalGuard({
             userSession: {
               standard: true,
-              impersonated: true,
               playground: true,
               workspaceAgnostic: false,
             },

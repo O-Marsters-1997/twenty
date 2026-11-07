@@ -17,16 +17,6 @@ describe('hasProvisionedSignUpDestination', () => {
     ).toBe(true);
   });
 
-  // Suspension is temporary and membership survives it
-  it('should find a destination in a suspended workspace', () => {
-    expect(
-      hasProvisionedSignUpDestination([
-        {
-          workspace: { activationStatus: WorkspaceActivationStatus.SUSPENDED },
-        },
-      ]),
-    ).toBe(true);
-  });
 
   it.each([
     WorkspaceActivationStatus.PENDING_CREATION,

@@ -11,8 +11,7 @@ import {
 } from 'test/integration/graphql/utils/seed-workspace-invitation.util';
 import { signUp } from 'test/integration/graphql/utils/sign-up.util';
 import { makeMetadataApiRequest } from 'test/integration/metadata/suites/utils/make-metadata-api-request.util';
-import { updateConfigVariable } from 'test/integration/twenty-config/utils/update-config-variable.util';
-
+import { updateConfigVariable } from 'test/integration/twenty-config/utils/database-config-variable.util';
 const PASSWORD = 'Login-with-invitation-1';
 
 const signUpUser = async (email: string): Promise<string> => {

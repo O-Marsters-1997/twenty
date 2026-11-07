@@ -16,22 +16,12 @@ const installedApplication = {
   id: 'application-id',
 };
 const apiKey = { id: 'api-key-id' };
-const impersonationContext = {
-  impersonatorUserWorkspaceId: 'impersonator-user-workspace-id',
-  impersonatedUserWorkspaceId: 'impersonated-user-workspace-id',
-};
 
 const REQUEST_BY_PRINCIPAL_VARIANT = {
   'userSession.standard': {
     user,
     workspace,
     tokenType: JwtTokenTypeEnum.ACCESS,
-  },
-  'userSession.impersonated': {
-    user,
-    workspace,
-    tokenType: JwtTokenTypeEnum.ACCESS,
-    impersonationContext,
   },
   'userSession.playground': {
     user,
@@ -100,7 +90,6 @@ const CONFIG_CASES: {
     authPrincipalGuardConfig: { ...REFUSE_EVERY_PRINCIPAL, userSession: true },
     acceptedPrincipalVariantNames: [
       'userSession.standard',
-      'userSession.impersonated',
       'userSession.playground',
       'userSession.workspaceAgnostic',
     ],
@@ -120,7 +109,6 @@ const CONFIG_CASES: {
       ...REFUSE_EVERY_PRINCIPAL,
       userSession: {
         standard: true,
-        impersonated: false,
         playground: false,
         workspaceAgnostic: false,
       },
@@ -128,25 +116,11 @@ const CONFIG_CASES: {
     acceptedPrincipalVariantNames: ['userSession.standard'],
   },
   {
-    name: 'userSession impersonated only',
-    authPrincipalGuardConfig: {
-      ...REFUSE_EVERY_PRINCIPAL,
-      userSession: {
-        standard: false,
-        impersonated: true,
-        playground: false,
-        workspaceAgnostic: false,
-      },
-    },
-    acceptedPrincipalVariantNames: ['userSession.impersonated'],
-  },
-  {
     name: 'userSession playground only',
     authPrincipalGuardConfig: {
       ...REFUSE_EVERY_PRINCIPAL,
       userSession: {
         standard: false,
-        impersonated: false,
         playground: true,
         workspaceAgnostic: false,
       },
@@ -159,7 +133,6 @@ const CONFIG_CASES: {
       ...REFUSE_EVERY_PRINCIPAL,
       userSession: {
         standard: false,
-        impersonated: false,
         playground: false,
         workspaceAgnostic: true,
       },
@@ -219,18 +192,16 @@ const CONFIG_CASES: {
     },
     acceptedPrincipalVariantNames: [
       'userSession.standard',
-      'userSession.impersonated',
       'userSession.playground',
       'userSession.workspaceAgnostic',
       'application.withUser',
     ],
   },
   {
-    name: 'workspace sessions that are not impersonated',
+    name: 'workspace sessions only',
     authPrincipalGuardConfig: {
       userSession: {
         standard: true,
-        impersonated: false,
         playground: true,
         workspaceAgnostic: false,
       },
@@ -349,16 +320,6 @@ describe('AuthPrincipalGuard', () => {
       },
     },
     {
-      name: 'an application token that carries an impersonation',
-      request: {
-        application: installedApplication,
-        user,
-        workspace,
-        tokenType: JwtTokenTypeEnum.APPLICATION_ACCESS,
-        impersonationContext,
-      },
-    },
-    {
       name: 'an application without a token type',
       request: {
         application: installedApplication,
@@ -393,52 +354,11 @@ describe('AuthPrincipalGuard', () => {
       },
     },
     {
-      name: 'a playground token that carries an impersonation',
-      request: {
-        user,
-        workspace,
-        tokenType: JwtTokenTypeEnum.PLAYGROUND,
-        impersonationContext,
-      },
-    },
-    {
       name: 'a workspace-agnostic token that also carries an API key',
       request: { user, apiKey, tokenType: JwtTokenTypeEnum.WORKSPACE_AGNOSTIC },
     },
-    {
-      name: 'a workspace-agnostic token that carries an impersonation',
-      request: {
-        user,
-        tokenType: JwtTokenTypeEnum.WORKSPACE_AGNOSTIC,
-        impersonationContext,
-      },
-    },
   ])('should refuse $name', ({ request }) => {
     expect(canActivateOverHttp(ACCEPT_EVERY_PRINCIPAL, request)).toBe(false);
-  });
-
-  it('should treat a session as impersonated only when both ids are set', () => {
-    expect(
-      canActivateOverHttp(
-        {
-          ...REFUSE_EVERY_PRINCIPAL,
-          userSession: {
-            standard: true,
-            impersonated: false,
-            playground: false,
-            workspaceAgnostic: false,
-          },
-        },
-        {
-          user,
-          workspace,
-          tokenType: JwtTokenTypeEnum.ACCESS,
-          impersonationContext: {
-            impersonatorUserWorkspaceId: 'impersonator-user-workspace-id',
-          },
-        },
-      ),
-    ).toBe(true);
   });
 
   it('should refuse when there is no request on the context', () => {

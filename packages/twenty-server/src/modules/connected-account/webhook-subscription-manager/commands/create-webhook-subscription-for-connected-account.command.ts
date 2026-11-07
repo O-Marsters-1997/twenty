@@ -27,7 +27,7 @@ const WEBHOOK_BACKFILL_SPACING_MS = 2000;
 @Command({
   name: 'connected-account:create-webhook-subscription',
   description:
-    'Enqueue webhook subscription creation for existing Google/Microsoft channels still on polling, staggered to avoid provider rate limiting',
+    'Enqueue webhook subscription creation for existing Google channels still on polling, staggered to avoid provider rate limiting',
 })
 export class CreateWebhookSubscriptionForConnectedAccountCommand extends ProvisionedWorkspaceCommandRunner {
   private enqueueCursorMs = 0;

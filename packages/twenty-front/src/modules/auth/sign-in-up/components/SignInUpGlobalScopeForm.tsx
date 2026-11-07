@@ -11,7 +11,6 @@ import { Button } from 'twenty-ui/primitives/input';
 import { StyledOnboardingContentContainer } from '@/auth/components/StyledOnboardingContentContainer';
 import { SignInUpWithCredentials } from '@/auth/sign-in-up/components/internal/SignInUpWithCredentials';
 import { SignInUpWithGoogle } from '@/auth/sign-in-up/components/internal/SignInUpWithGoogle';
-import { SignInUpWithMicrosoft } from '@/auth/sign-in-up/components/internal/SignInUpWithMicrosoft';
 import { useHandleResetPassword } from '@/auth/sign-in-up/hooks/useHandleResetPassword';
 import { useSignInUpForm } from '@/auth/sign-in-up/hooks/useSignInUpForm';
 import {
@@ -243,13 +242,7 @@ export const SignInUpGlobalScopeForm = () => {
               isGlobalScope
             />
           )}
-          {authProviders.microsoft && (
-            <SignInUpWithMicrosoft
-              action="list-available-workspaces"
-              isGlobalScope
-            />
-          )}
-          {(authProviders.google || authProviders.microsoft) && (
+          {authProviders.google && (
             <Separator
               style={{
                 backgroundColor: themeCssVariables.background.transparent.light,

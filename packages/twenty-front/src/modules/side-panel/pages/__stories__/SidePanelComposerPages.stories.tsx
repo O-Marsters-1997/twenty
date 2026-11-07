@@ -24,7 +24,6 @@ import { mockedApolloClient } from '~/testing/mockedApolloClient';
 
 const STORY_PAGE_INSTANCE_ID = 'side-panel-composer-story';
 const GOOGLE_ACCOUNT_ID = '20202020-9ac0-4390-9a1a-ab4d2c4e1bb7';
-const MICROSOFT_ACCOUNT_ID = '20202020-87f5-4c87-b32a-a5d34b1fbfc1';
 const KIMBERLY_PERSON_ID = '20202020-2f6b-4e2f-b024-3f4f6c2f9b24';
 
 const storyConnectedAccounts = [
@@ -43,28 +42,8 @@ const storyConnectedAccounts = [
     name: 'Tim Apple',
     visibility: 'SHARE_EVERYTHING',
     lastCredentialsRefreshedAt: '2026-08-24T08:00:00.000Z',
-    connectionParameters: null,
     createdAt: '2026-02-27T01:17:25.392Z',
     updatedAt: '2026-08-24T08:00:00.000Z',
-  },
-  {
-    id: MICROSOFT_ACCOUNT_ID,
-    handle: 'tim@twenty.com',
-    provider: 'microsoft',
-    authFailedAt: null,
-    authFailedReason: null,
-    archivedAt: null,
-    scopes: ['Calendars.ReadWrite'],
-    handleAliases: '',
-    lastSignedInAt: '2026-08-23T08:00:00.000Z',
-    userWorkspaceId: '20202020-0687-4c41-b707-ed1bfca972a7',
-    applicationId: null,
-    name: 'Tim Apple',
-    visibility: 'SHARE_EVERYTHING',
-    lastCredentialsRefreshedAt: '2026-08-23T08:00:00.000Z',
-    connectionParameters: null,
-    createdAt: '2026-03-12T01:17:25.392Z',
-    updatedAt: '2026-08-23T08:00:00.000Z',
   },
 ];
 
@@ -302,7 +281,7 @@ export const CalendarEventWithoutAccounts: Story = {
     ).toBeVisible();
     expect(
       canvas.getByText(
-        'Connect Google, Microsoft or CalDAV and enable calendar sync before creating an event.',
+        'Connect Google and enable calendar sync before creating an event.',
       ),
     ).toBeVisible();
   },

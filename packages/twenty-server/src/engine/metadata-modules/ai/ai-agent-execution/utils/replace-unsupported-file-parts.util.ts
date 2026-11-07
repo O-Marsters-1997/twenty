@@ -1,13 +1,11 @@
 import { type ExtendedUIMessage, isExtendedFileUIPart } from 'twenty-shared/ai';
 
-import { CODE_INTERPRETER_MIME_TYPES } from 'src/engine/metadata-modules/ai/ai-agent-execution/constants/code-interpreter-mime-types.constant';
 import { formatUnsupportedFilePlaceholder } from 'src/engine/metadata-modules/ai/ai-models/utils/format-unsupported-file-placeholder.util';
 import { getNativeMimeTypesForModalities } from 'src/engine/metadata-modules/ai/ai-models/utils/get-native-mime-types-for-modalities.util';
 
 export const replaceUnsupportedFileParts = (
   messages: ExtendedUIMessage[],
   modalities: string[] = [],
-  isCodeInterpreterEnabled: boolean,
 ): ExtendedUIMessage[] => {
   const nativeMimeTypes = getNativeMimeTypesForModalities(modalities);
 
@@ -22,10 +20,7 @@ export const replaceUnsupportedFileParts = (
       if (isExtendedFileUIPart(part)) {
         const mimeType = part.mediaType ?? '';
 
-        const isSupported =
-          (isCodeInterpreterEnabled &&
-            CODE_INTERPRETER_MIME_TYPES.has(mimeType)) ||
-          nativeMimeTypes.has(mimeType);
+        const isSupported = nativeMimeTypes.has(mimeType);
 
         if (isSupported) {
           newParts.push(part);

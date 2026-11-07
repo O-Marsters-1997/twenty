@@ -163,7 +163,6 @@ export const WorkflowEditActionEmailBase = ({
 
   const missingScopes =
     isDefined(ownAccount) &&
-    ownAccount.provider !== ConnectedAccountProvider.IMAP_SMTP_CALDAV &&
     missingDraftScopes.length > 0
       ? {
           provider: ownAccount.provider,

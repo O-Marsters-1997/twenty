@@ -1,7 +1,7 @@
 import { type Meta, type StoryObj } from '@storybook/react-vite';
 import { type ComponentProps } from 'react';
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
-import { IconGoogle, IconMicrosoft } from 'twenty-ui/icon';
+import { IconGoogle } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
 import { ComponentDecorator } from 'twenty-ui/testing';
 
@@ -61,15 +61,8 @@ const meta: Meta<typeof OnboardingSkipDialogExample> = {
       'Twenty adds the people you email and meet, and keeps them up to date without manual data entry.',
     actions: [
       {
-        label: 'Continue with Microsoft',
-        Icon: IconMicrosoft,
-        creditsReward: 2,
-        onClick: fn(),
-      },
-      {
         label: 'Continue with Google',
         Icon: IconGoogle,
-        creditsReward: 2,
         onClick: fn(),
       },
     ],
@@ -86,29 +79,9 @@ export const Default: Story = {
 
     await expect(
       within(dialog).getByRole('button', {
-        name: 'Continue with Google, earn 2 free credits',
+        name: 'Continue with Google',
       }),
-    ).toHaveTextContent('+2');
-  },
-};
-
-export const WithoutCreditsReward: Story = {
-  args: {
-    actions: [
-      {
-        label: 'Continue with Google',
-        Icon: IconGoogle,
-        creditsReward: 0,
-        onClick: fn(),
-      },
-    ],
-  },
-  play: async ({ canvasElement }) => {
-    const dialog = await openSkipDialog(canvasElement);
-
-    await expect(
-      within(dialog).getByRole('button', { name: 'Continue with Google' }),
-    ).toHaveTextContent(/^Continue with Google$/);
+    ).toBeInTheDocument();
   },
 };
 
@@ -122,27 +95,5 @@ export const SkipAnyway: Story = {
 
     await waitFor(() => expect(dialog).not.toBeInTheDocument());
     await expect(args.onSkip).toHaveBeenCalledTimes(1);
-  },
-};
-
-export const PerItemCreditsReward: Story = {
-  args: {
-    actions: [
-      {
-        label: 'Add teammates',
-        creditsReward: 0.5,
-        isRewardPerItem: true,
-        onClick: fn(),
-      },
-    ],
-  },
-  play: async ({ canvasElement }) => {
-    const dialog = await openSkipDialog(canvasElement);
-
-    await expect(
-      within(dialog).getByRole('button', {
-        name: 'Add teammates, earn 0.5 free credits each',
-      }),
-    ).toHaveTextContent('+0.5 each');
   },
 };

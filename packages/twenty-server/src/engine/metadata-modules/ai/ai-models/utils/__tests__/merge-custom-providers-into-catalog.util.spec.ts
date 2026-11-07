@@ -15,14 +15,10 @@ const catalog: AiProvidersConfig = {
         label: 'GPT-5.6 Luna',
         efforts: ['low', 'medium', 'high'],
         benchmark: { intelligenceIndex: 37.5 },
-        inputCostPerMillionTokens: 0.2,
-        outputCostPerMillionTokens: 1.2,
       },
       {
         name: 'gpt-5.6-sol',
         label: 'GPT-5.6 Sol',
-        inputCostPerMillionTokens: 4,
-        outputCostPerMillionTokens: 20,
       },
     ],
   },
@@ -41,8 +37,6 @@ describe('mergeCustomProvidersIntoCatalog', () => {
             {
               name: 'gpt-5.6-luna',
               label: 'Luna via gateway',
-              inputCostPerMillionTokens: 0.3,
-              outputCostPerMillionTokens: 1.5,
             },
           ],
         },
@@ -57,8 +51,6 @@ describe('mergeCustomProvidersIntoCatalog', () => {
       label: 'Luna via gateway',
       efforts: ['low', 'medium', 'high'],
       benchmark: { intelligenceIndex: 37.5 },
-      inputCostPerMillionTokens: 0.3,
-      outputCostPerMillionTokens: 1.5,
     });
   });
 
@@ -139,8 +131,6 @@ describe('mergeCustomProvidersIntoCatalog', () => {
             {
               name: 'eu.openai.gpt-5.6-luna-v1:0',
               label: 'Luna on Bedrock',
-              inputCostPerMillionTokens: 0.25,
-              outputCostPerMillionTokens: 1.5,
             },
             { name: 'eu.mistral.pixtral-large', label: 'Pixtral' },
           ],
@@ -151,8 +141,6 @@ describe('mergeCustomProvidersIntoCatalog', () => {
     expect(merged['amazon-bedrock'].models?.[0]).toEqual({
       name: 'eu.openai.gpt-5.6-luna-v1:0',
       label: 'Luna on Bedrock',
-      inputCostPerMillionTokens: 0.25,
-      outputCostPerMillionTokens: 1.5,
       efforts: ['low', 'medium', 'high'],
       benchmark: { intelligenceIndex: 37.5 },
       benchmarkByEffort: undefined,
@@ -212,8 +200,6 @@ describe('inheritCatalogReadings', () => {
             {
               name: 'gpt-5.6-luna',
               label: 'Luna on Azure',
-              inputCostPerMillionTokens: 0.25,
-              outputCostPerMillionTokens: 1.4,
             },
           ],
         },
@@ -225,7 +211,6 @@ describe('inheritCatalogReadings', () => {
       label: 'Luna on Azure',
       efforts: ['low', 'medium', 'high'],
       benchmark: { intelligenceIndex: 37.5 },
-      inputCostPerMillionTokens: 0.25,
     });
   });
 });

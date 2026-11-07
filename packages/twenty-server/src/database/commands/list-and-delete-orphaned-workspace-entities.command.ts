@@ -11,14 +11,9 @@ import {
 import { ApiKeyEntity } from 'src/engine/core-modules/api-key/api-key.entity';
 import { ApplicationEntity } from 'src/engine/core-modules/application/application.entity';
 import { ApprovedAccessDomainEntity } from 'src/engine/core-modules/approved-access-domain/approved-access-domain.entity';
-import { BillingCustomerEntity } from 'src/engine/core-modules/billing/entities/billing-customer.entity';
-import { BillingEntitlementEntity } from 'src/engine/core-modules/billing/entities/billing-entitlement.entity';
-import { BillingSubscriptionEntity } from 'src/engine/core-modules/billing/entities/billing-subscription.entity';
 import { EmailingDomainEntity } from 'src/engine/core-modules/emailing-domain/emailing-domain.entity';
 import { FeatureFlagEntity } from 'src/engine/core-modules/feature-flag/feature-flag.entity';
 import { FileEntity } from 'src/engine/core-modules/file/entities/file.entity';
-import { PublicDomainEntity } from 'src/engine/core-modules/public-domain/public-domain.entity';
-import { WorkspaceSsoIdentityProviderEntity } from 'src/engine/core-modules/sso/workspace-sso-identity-provider.entity';
 import { UserWorkspaceEntity } from 'src/engine/core-modules/user-workspace/user-workspace.entity';
 import { WebhookEntity } from 'src/engine/metadata-modules/webhook/entities/webhook.entity';
 import { WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
@@ -87,16 +82,11 @@ const WORKSPACE_RELATED_ENTITIES: EntityTarget<ObjectLiteral>[] = [
 
   ApplicationEntity,
   ApprovedAccessDomainEntity,
-  BillingCustomerEntity,
-  BillingEntitlementEntity,
-  BillingSubscriptionEntity,
   DataSourceEntity,
   EmailingDomainEntity,
   FeatureFlagEntity,
   FileEntity,
-  PublicDomainEntity,
   WebhookEntity,
-  WorkspaceSsoIdentityProviderEntity,
 ];
 
 type OrphanedRecord = {

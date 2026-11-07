@@ -1,5 +1,5 @@
 import { styled } from '@linaria/react';
-import { IconArrowRight, IconGoogle, IconMicrosoft } from 'twenty-ui/icon';
+import { IconArrowRight, IconGoogle } from 'twenty-ui/icon';
 import { themeCssVariables, useTheme } from 'twenty-ui/theme';
 
 const SYNC_BADGE_LOGO_SIZE = 16;
@@ -61,7 +61,6 @@ export const OnboardingImportPreviewSyncBadge = () => {
   return (
     <StyledBadge>
       <IconGoogle size={theme.icon.size.md} />
-      <IconMicrosoft size={theme.icon.size.md} />
       <StyledDivider />
       <StyledArrow>
         <IconArrowRight

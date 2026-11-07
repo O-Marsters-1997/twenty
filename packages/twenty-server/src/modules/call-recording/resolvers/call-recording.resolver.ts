@@ -13,7 +13,6 @@ import { CallRecordingService } from 'src/modules/call-recording/services/call-r
   AuthPrincipalGuard({
     userSession: {
       standard: true,
-      impersonated: true,
       playground: true,
       workspaceAgnostic: false,
     },

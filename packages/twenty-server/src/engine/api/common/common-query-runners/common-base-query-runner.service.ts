@@ -20,7 +20,6 @@ import {
   CommonQueryRunnerExceptionCode,
 } from 'src/engine/api/common/common-query-runners/errors/common-query-runner.exception';
 import { STANDARD_ERROR_MESSAGE } from 'src/engine/api/common/common-query-runners/errors/standard-error-message.constant';
-import { buildApplicationApiRateLimitedLogLine } from 'src/engine/api/common/common-query-runners/utils/build-application-api-rate-limited-log-line.util';
 import { buildMutationQueryBuilder } from 'src/engine/api/common/common-query-runners/utils/build-mutation-query-builder.util';
 import { computeMaxFieldCountPerRecord } from 'src/engine/api/common/common-query-runners/utils/compute-max-field-count-per-record.util';
 import { isRecordFilterEmpty } from 'src/engine/api/common/common-query-runners/utils/is-record-filter-empty.util';
@@ -42,20 +41,8 @@ import { type NestedRelationsReadPathOptions } from 'src/engine/api/common/types
 import { GraphqlQueryParser } from 'src/engine/api/graphql/graphql-query-runner/graphql-query-parsers/graphql-query.parser';
 import { WorkspacePreQueryHookPayload } from 'src/engine/api/graphql/workspace-query-runner/workspace-query-hook/types/workspace-query-hook.type';
 import { WorkspaceQueryHookService } from 'src/engine/api/graphql/workspace-query-runner/workspace-query-hook/workspace-query-hook.service';
-import { isApplicationAuthContext } from 'src/engine/core-modules/auth/guards/is-application-auth-context.guard';
 import { WorkspaceAuthContext } from 'src/engine/core-modules/auth/types/workspace-auth-context.type';
-import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
-import { MetricsKeys } from 'src/engine/core-modules/metrics/types/metrics-keys.type';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
-import { UsageLimitException } from 'src/engine/core-modules/usage-limit/exceptions/usage-limit.exception';
-import { UsageLimitSpeedService } from 'src/engine/core-modules/usage-limit/services/usage-limit-speed.service';
-import { type ExhaustedScope } from 'src/engine/core-modules/usage-limit/types/exhausted-scope.type';
-import { UsageOperationType } from 'src/engine/core-modules/usage/enums/usage-operation-type.enum';
-import { UsageResourceType } from 'src/engine/core-modules/usage/enums/usage-resource-type.enum';
-import { UsageUnit } from 'src/engine/core-modules/usage/enums/usage-unit.enum';
-import { UsageRecorderService } from 'src/engine/core-modules/usage/services/usage-recorder.service';
-import { getApiType } from 'src/engine/core-modules/usage/storage/api-request-context.storage';
-import { buildUsageSpendersFromAuthContext } from 'src/engine/core-modules/usage/utils/build-usage-spenders-from-auth-context.util';
 import { FlatEntityMaps } from 'src/engine/metadata-modules/flat-entity/types/flat-entity-maps.type';
 import { findFlatEntityByIdInFlatEntityMaps } from 'src/engine/metadata-modules/flat-entity/utils/find-flat-entity-by-id-in-flat-entity-maps.util';
 import { type OrmFlatFieldMetadata } from 'src/engine/metadata-modules/flat-field-metadata/types/orm-flat-field-metadata.type';
@@ -99,13 +86,7 @@ export abstract class CommonBaseQueryRunnerService<
   @Inject()
   protected readonly commonResultGettersService: CommonResultGettersService;
   @Inject()
-  protected readonly usageLimitSpeedService: UsageLimitSpeedService;
-  @Inject()
-  protected readonly usageRecorderService: UsageRecorderService;
-  @Inject()
   protected readonly twentyConfigService: TwentyConfigService;
-  @Inject()
-  protected readonly metricsService: MetricsService;
 
   protected abstract readonly operationName: CommonQueryNames;
 
@@ -121,13 +102,6 @@ export abstract class CommonBaseQueryRunnerService<
       flatObjectMetadataMaps,
       flatFieldMetadataMaps,
     } = queryRunnerContext;
-
-    const isRootOperation =
-      (queryRunnerContext.nestedOperationDepth ?? 0) === 0;
-
-    if (isRootOperation) {
-      await this.consumeApiSpeedLimit(authContext);
-    }
 
     await this.validate(args, queryRunnerContext);
 
@@ -151,16 +125,6 @@ export abstract class CommonBaseQueryRunnerService<
       processedArgs,
       queryRunnerContext,
     );
-
-    if (isRootOperation) {
-      this.recordApiComplexityUsage(authContext, () =>
-        this.computeQueryComplexityV2(
-          selectedFieldsResult,
-          processedArgs,
-          queryRunnerContext,
-        ),
-      );
-    }
 
     const results = await this.workspaceOrmManager.executeInWorkspaceContext(
       async () =>
@@ -369,12 +333,6 @@ export abstract class CommonBaseQueryRunnerService<
     CommonExtendedQueryRunnerContext,
     'repository'
   >): WorkspaceRepository {
-    this.metricsService.incrementCounterBy({
-      key: MetricsKeys.OrmV2ReadPathUsed,
-      amount: 1,
-      attributes: { operation: this.operationName },
-    });
-
     return repository;
   }
 
@@ -384,12 +342,6 @@ export abstract class CommonBaseQueryRunnerService<
     CommonExtendedQueryRunnerContext,
     'repository'
   >): WorkspaceRepository {
-    this.metricsService.incrementCounterBy({
-      key: MetricsKeys.OrmV2WritePathUsed,
-      amount: 1,
-      attributes: { operation: this.operationName },
-    });
-
     return repository;
   }
 
@@ -515,82 +467,6 @@ export abstract class CommonBaseQueryRunnerService<
     return {
       useReplica: this.isReadOnly,
     };
-  }
-
-  private recordApiComplexityUsage(
-    authContext: WorkspaceAuthContext,
-    computeQueryComplexity: () => number,
-  ) {
-    const apiType = getApiType();
-
-    if (!isDefined(apiType) || !this.usageRecorderService.isEnabled()) {
-      return;
-    }
-
-    this.usageRecorderService.accumulate(authContext.workspace.id, {
-      resourceType: UsageResourceType.API,
-      operationType: UsageOperationType.API_REQUEST,
-      quantity: computeQueryComplexity() || 1,
-      unit: UsageUnit.COMPLEXITY,
-      resourceContext: apiType,
-      spenders: buildUsageSpendersFromAuthContext(authContext),
-    });
-  }
-
-  private async consumeApiSpeedLimit(authContext: WorkspaceAuthContext) {
-    try {
-      await this.usageLimitSpeedService.consumeOrThrow({
-        resourceType: UsageResourceType.API,
-        authContext,
-        operationType: UsageOperationType.API_REQUEST,
-      });
-    } catch (error) {
-      if (
-        error instanceof UsageLimitException &&
-        isDefined(error.exhaustedScope) &&
-        error.exhaustedScope.isDefault
-      ) {
-        await this.reportApiSpeedCeilingHit({
-          authContext,
-          exhaustedScope: error.exhaustedScope,
-        });
-      }
-
-      throw error;
-    }
-  }
-
-  private async reportApiSpeedCeilingHit({
-    authContext,
-    exhaustedScope,
-  }: {
-    authContext: WorkspaceAuthContext;
-    exhaustedScope: ExhaustedScope;
-  }) {
-    if (exhaustedScope.spenderType === 'apiKey') {
-      await this.metricsService.incrementCounterForEvent({
-        key: MetricsKeys.CommonApiQueryRateLimited,
-        shouldStoreInCache: false,
-      });
-    }
-
-    if (
-      exhaustedScope.spenderType === 'application' &&
-      isApplicationAuthContext(authContext)
-    ) {
-      await this.metricsService.incrementCounterForEvent({
-        key: MetricsKeys.CommonApiApplicationQueryRateLimited,
-        shouldStoreInCache: false,
-        attributes: {
-          universal_identifier: authContext.application.universalIdentifier,
-          app_name: authContext.application.name,
-        },
-      });
-
-      this.logger.warn(
-        buildApplicationApiRateLimitedLogLine({ authContext, exhaustedScope }),
-      );
-    }
   }
 
   private validateQueryComplexity(

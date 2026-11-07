@@ -1,7 +1,6 @@
 import { isNonEmptyString } from '@sniptt/guards';
 import { isDefined } from 'twenty-shared/utils';
 
-import { toDisplayCredits } from 'src/engine/core-modules/usage/utils/to-display-credits.util';
 import { type AgentRunDTO } from 'src/engine/metadata-modules/ai/ai-agent-runs/dtos/agent-run.dto';
 import { AgentMessageRole } from 'src/engine/metadata-modules/ai/ai-history/enums/agent-message-role.enum';
 import { type AgentTurnWorkspaceEntity } from 'src/engine/metadata-modules/ai/ai-history/standard-objects/agent-turn.workspace-entity';
@@ -32,8 +31,6 @@ type AgentRunSourceTurn = Pick<
   | 'modelId'
   | 'inputTokens'
   | 'outputTokens'
-  | 'inputCredits'
-  | 'outputCredits'
   | 'createdBy'
 > & {
   thread?: { title: string | null } | null;
@@ -58,15 +55,6 @@ const joinText = (messages: AgentRunMessage[]): string | null => {
 
 const toDate = (value: string | null): Date | null =>
   isDefined(value) ? new Date(value) : null;
-
-// usage is empty on turns recorded before it was counted
-const toCredits = (
-  inputCredits: string | null,
-  outputCredits: string | null,
-): number | null =>
-  isDefined(inputCredits) || isDefined(outputCredits)
-    ? toDisplayCredits(Number(inputCredits ?? 0) + Number(outputCredits ?? 0))
-    : null;
 
 export const mapAgentTurnToAgentRun = (
   turn: AgentRunSourceTurn,
@@ -98,7 +86,6 @@ export const mapAgentTurnToAgentRun = (
     modelId: isNonEmptyString(turn.modelId) ? turn.modelId : null,
     inputTokens: turn.inputTokens,
     outputTokens: turn.outputTokens,
-    credits: toCredits(turn.inputCredits, turn.outputCredits),
     creatorSource: turn.createdBy.source,
     creatorName: turn.createdBy.name,
     input: joinText(inputMessages),

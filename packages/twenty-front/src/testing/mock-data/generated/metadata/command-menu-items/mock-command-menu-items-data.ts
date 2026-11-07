@@ -1214,31 +1214,6 @@ export const mockedCommandMenuItems: CommandMenuItemFieldsFragment[] =
   },
   {
     "__typename": "CommandMenuItem",
-    "id": "91468a95-3a90-4842-8c2a-ac30b31e03f2",
-    "applicationId": "0be210aa-685b-4c31-9a2a-010b44eacaf5",
-    "workflowVersionId": null,
-    "frontComponentId": null,
-    "engineComponentKey": "NAVIGATION",
-    "position": 57,
-    "isPinned": false,
-    "payload": {
-      "__typename": "PathCommandMenuItemPayload",
-      "path": "/settings/billing"
-    },
-    "hotKeys": null,
-    "conditionalAvailabilityExpression": "permissionFlags.WORKSPACE",
-    "availabilityType": "GLOBAL",
-    "availabilityObjectMetadataId": null,
-    "pageLayoutId": null,
-    "isActive": true,
-    "frontComponent": null,
-    "label": "Go to Billing Settings",
-    "icon": "IconCurrencyDollar",
-    "shortLabel": "Billing",
-    "navigationTargetObjectMetadataId": null
-  },
-  {
-    "__typename": "CommandMenuItem",
     "id": "4ae0ad57-7b1c-484e-bc3d-46215bf289b5",
     "applicationId": "0be210aa-685b-4c31-9a2a-010b44eacaf5",
     "workflowVersionId": null,

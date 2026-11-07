@@ -4,7 +4,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { In, Repository } from 'typeorm';
 
-import { SentryCronMonitor } from 'src/engine/core-modules/cron/sentry-cron-monitor.decorator';
 import { NON_TERMINAL_EMAILING_DOMAIN_STATUSES } from 'src/engine/core-modules/emailing-domain/constants/non-terminal-emailing-domain-statuses.constant';
 import { EmailingDomainDriverFactory } from 'src/engine/core-modules/emailing-domain/drivers/emailing-domain-driver.factory';
 import { EmailingDomainStatus } from 'src/engine/core-modules/emailing-domain/drivers/types/emailing-domain-status.type';
@@ -34,10 +33,6 @@ export class CheckEmailingDomainVerificationCronJob {
   ) {}
 
   @Process(CheckEmailingDomainVerificationCronJob.name)
-  @SentryCronMonitor(
-    CheckEmailingDomainVerificationCronJob.name,
-    CHECK_EMAILING_DOMAIN_VERIFICATION_CRON_PATTERN,
-  )
   async handle(): Promise<void> {
     await this.refreshUnverifiedDomains();
     await this.refreshPendingUnsubscribeHostnames();
@@ -100,7 +95,6 @@ export class CheckEmailingDomainVerificationCronJob {
       await this.unsubscribeHostnameService.sync(
         emailingDomain.workspaceId,
         emailingDomain.id,
-        { provision: false },
       );
     }
   }

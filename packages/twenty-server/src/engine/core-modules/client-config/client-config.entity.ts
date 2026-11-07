@@ -1,16 +1,10 @@
-import {
-  Field,
-  GraphQLISODateTime,
-  ObjectType,
-  registerEnumType,
-} from '@nestjs/graphql';
+import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 
 import { type AiModelTier, type AiSdkPackage } from 'twenty-shared/ai';
 import { FeatureFlagKey } from 'twenty-shared/types';
 
 import { SupportDriver } from 'src/engine/core-modules/twenty-config/interfaces/support.interface';
 
-import { BillingTrialPeriodDTO } from 'src/engine/core-modules/billing/dtos/billing-trial-period.dto';
 import { CaptchaDriverType } from 'src/engine/core-modules/captcha/interfaces';
 import { AuthProvidersDTO } from 'src/engine/core-modules/workspace/dtos/public-workspace-data.dto';
 import { type AiModelKind } from 'src/engine/metadata-modules/ai/ai-models/constants/ai-model-kinds.const';
@@ -51,12 +45,6 @@ export class ClientAiModelConfig {
 
   @Field(() => String, { nullable: true })
   sdkPackage: AiSdkPackage | null;
-
-  @Field(() => Number, { nullable: true })
-  inputCostPerMillionTokens?: number;
-
-  @Field(() => Number, { nullable: true })
-  outputCostPerMillionTokens?: number;
 
   @Field(() => NativeModelCapabilities, { nullable: true })
   nativeCapabilities?: NativeModelCapabilities;
@@ -129,12 +117,6 @@ export class ClientAiEvaluationModelConfig {
   @Field(() => Number, { nullable: true })
   medianLatencyMs?: number;
 
-  @Field(() => Number, { nullable: true })
-  inputCostPerMillionTokens?: number;
-
-  @Field(() => Number, { nullable: true })
-  outputCostPerMillionTokens?: number;
-
   @Field(() => Boolean, { nullable: true })
   isDeprecated?: boolean;
 }
@@ -184,12 +166,6 @@ export class AdminAiModelConfig {
   @Field(() => Number, { nullable: true })
   maxOutputTokens?: number;
 
-  @Field(() => Number, { nullable: true })
-  inputCostPerMillionTokens?: number;
-
-  @Field(() => Number, { nullable: true })
-  outputCostPerMillionTokens?: number;
-
   @Field(() => String, { nullable: true })
   providerName?: string;
 
@@ -226,42 +202,12 @@ export class AdminAiModelsDTO {
 }
 
 @ObjectType()
-export class Billing {
-  @Field(() => Boolean)
-  isBillingEnabled: boolean;
-
-  @Field(() => String, { nullable: true })
-  billingUrl?: string;
-
-  @Field(() => String, { nullable: true })
-  stripePublishableKey?: string;
-
-  @Field(() => [BillingTrialPeriodDTO])
-  trialPeriods: BillingTrialPeriodDTO[];
-}
-
-@ObjectType()
 export class Support {
   @Field(() => SupportDriver)
   supportDriver: SupportDriver;
 
   @Field(() => String, { nullable: true })
   supportFrontChatId?: string;
-}
-
-@ObjectType()
-export class Sentry {
-  @Field(() => String, { nullable: true })
-  environment?: string;
-
-  @Field(() => String, { nullable: true })
-  release?: string;
-
-  @Field(() => String, { nullable: true })
-  dsn?: string;
-
-  @Field(() => Number, { nullable: true })
-  tracesSampleRate?: number;
 }
 
 @ObjectType()
@@ -280,14 +226,6 @@ export class ApiConfig {
 }
 
 export class OnboardingConfig {
-  importContactsCreditsReward: number;
-
-  inviteTeamCreditsRewardPerUser: number;
-
-  createProfileCreditsReward: number;
-
-  upgradeCreditsReward: number;
-
   inviteTeamMaxInvites: number;
 }
 
@@ -316,27 +254,12 @@ export class PublicFeatureFlag {
 }
 
 @ObjectType()
-export class ClientConfigMaintenanceMode {
-  @Field(() => GraphQLISODateTime)
-  startAt: Date;
-
-  @Field(() => GraphQLISODateTime)
-  endAt: Date;
-
-  @Field(() => String, { nullable: true })
-  link?: string;
-}
-
-@ObjectType()
 export class ClientConfig {
   @Field(() => String, { nullable: true })
   appVersion?: string;
 
   @Field(() => AuthProvidersDTO, { nullable: false })
   authProviders: AuthProvidersDTO;
-
-  @Field(() => Billing, { nullable: false })
-  billing: Billing;
 
   @Field(() => [ClientAiModelConfig])
   aiModels: ClientAiModelConfig[];
@@ -365,20 +288,11 @@ export class ClientConfig {
   @Field(() => String)
   serverUrl: string;
 
-  @Field(() => String, { nullable: true })
-  publicFunctionDomain: string | null;
-
-  @Field(() => Boolean)
-  analyticsEnabled: boolean;
-
   @Field(() => Support)
   support: Support;
 
   @Field(() => Boolean)
   isAttachmentPreviewEnabled: boolean;
-
-  @Field(() => Sentry)
-  sentry: Sentry;
 
   @Field(() => Captcha)
   captcha: Captcha;
@@ -399,12 +313,6 @@ export class ClientConfig {
   isCookieSessionEnabled: boolean;
 
   @Field(() => Boolean)
-  isMicrosoftMessagingEnabled: boolean;
-
-  @Field(() => Boolean)
-  isMicrosoftCalendarEnabled: boolean;
-
-  @Field(() => Boolean)
   isGoogleMessagingEnabled: boolean;
 
   @Field(() => Boolean)
@@ -412,9 +320,6 @@ export class ClientConfig {
 
   @Field(() => Boolean)
   isConfigVariablesInDbEnabled: boolean;
-
-  @Field(() => Boolean)
-  isImapSmtpCaldavEnabled: boolean;
 
   @Field(() => Boolean)
   isEmailingDomainInDemoMode: boolean;
@@ -426,13 +331,7 @@ export class ClientConfig {
   calendarBookingPageId?: string;
 
   @Field(() => Boolean)
-  isBookCallOnboardingStepEnabled: boolean;
-
-  @Field(() => Boolean)
   isCompanyEnrichmentEnabled: boolean;
-
-  @Field(() => Boolean)
-  isCloudflareIntegrationEnabled: boolean;
 
   @Field(() => Boolean)
   isClickHouseConfigured: boolean;
@@ -443,9 +342,4 @@ export class ClientConfig {
   @Field(() => Boolean)
   isOnboardingAiChatEnabled: boolean;
 
-  @Field(() => String)
-  enterpriseInstanceType: string;
-
-  @Field(() => ClientConfigMaintenanceMode, { nullable: true })
-  maintenance?: ClientConfigMaintenanceMode;
 }

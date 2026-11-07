@@ -5,5 +5,4 @@ export type AgentChatSubscriptionEvent =
   | { type: 'queue-updated' }
   | { type: 'tool-call-resolved'; toolCallId: string }
   | { type: 'stream-error'; code: string; message: string }
-  | { type: 'credits-exhausted' }
   | { type: 'keepalive' };

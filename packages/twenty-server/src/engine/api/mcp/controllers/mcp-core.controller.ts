@@ -14,7 +14,6 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 
-import * as Sentry from '@sentry/node';
 import { type Request, type Response } from 'express';
 import { ApiPath } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
@@ -37,7 +36,6 @@ import { AuthUser } from 'src/engine/decorators/auth/auth-user.decorator';
 import { AuthWorkspace } from 'src/engine/decorators/auth/auth-workspace.decorator';
 import { NoPermissionGuard } from 'src/engine/guards/no-permission.guard';
 import { AuthPrincipalGuard } from 'src/engine/guards/auth-principal.guard';
-import { WorkspaceNotSuspendedGuard } from 'src/engine/guards/workspace-not-suspended.guard';
 
 @Controller(ApiPath.Mcp)
 @UseGuards(
@@ -45,7 +43,6 @@ import { WorkspaceNotSuspendedGuard } from 'src/engine/guards/workspace-not-susp
   AuthPrincipalGuard({
     userSession: {
       standard: true,
-      impersonated: true,
       playground: true,
       workspaceAgnostic: false,
     },
@@ -53,7 +50,6 @@ import { WorkspaceNotSuspendedGuard } from 'src/engine/guards/workspace-not-susp
     oauthClient: true,
     application: true,
   }),
-  WorkspaceNotSuspendedGuard,
   NoPermissionGuard,
 )
 @UseFilters(RestApiExceptionFilter, AuthRestApiExceptionFilter)
@@ -88,11 +84,6 @@ export class McpCoreController {
 
     request.mcpMethod = mcpMethod;
     request.mcpToolName = mcpToolName;
-
-    Sentry.getActiveSpan()?.setAttributes({
-      ...(isDefined(mcpMethod) && { 'mcp.method': mcpMethod }),
-      ...(isDefined(mcpToolName) && { 'mcp.tool_name': mcpToolName }),
-    });
 
     const authContext = {
       workspace,

@@ -1,13 +1,11 @@
 import { AiChatCompactionIndicator } from '@/ai/components/AiChatCompactionIndicator';
 import { AiChatInitialLoadingIndicator } from '@/ai/components/AiChatInitialLoadingIndicator';
-import { CodeExecutionDisplay } from '@/ai/components/CodeExecutionDisplay';
 import { ThinkingStepsDisplay } from '@/ai/components/ThinkingStepsDisplay';
 
 import { AiChatFormStatusRenderer } from '@/ai/components/AiChatFormStatusRenderer';
 import { AiChatQuestionStatusRenderer } from '@/ai/components/AiChatQuestionStatusRenderer';
 import { AiChatToolCallApprovalStatusRenderer } from '@/ai/components/AiChatToolCallApprovalStatusRenderer';
 import { LazyMarkdownContent } from '@/ai/components/LazyMarkdownRenderer';
-import { getEffectiveToolName } from '@/ai/utils/getEffectiveToolName';
 import { groupContiguousThinkingStepParts } from '@/ai/utils/groupContiguousThinkingStepParts';
 import { isEmptyReasoningPart } from '@/ai/utils/isEmptyReasoningPart';
 import { isHiddenCompleteWorkspaceSetupToolPart } from '@/ai/utils/isHiddenCompleteWorkspaceSetupToolPart';
@@ -41,19 +39,6 @@ const MessagePartRenderer = ({
       return <LazyMarkdownContent text={part.text} />;
     case 'data-compaction':
       return <AiChatCompactionIndicator />;
-    case 'data-code-execution':
-      return (
-        <CodeExecutionDisplay
-          code={part.data.code}
-          stdout={part.data.stdout}
-          stderr={part.data.stderr}
-          exitCode={part.data.exitCode}
-          files={part.data.files}
-          isRunning={
-            part.data.state === 'running' || part.data.state === 'pending'
-          }
-        />
-      );
     default:
       if (isToolUIPart(part)) {
         if (
@@ -103,9 +88,6 @@ export const AiChatAssistantMessageRenderer = ({
   shouldHideThinkingSteps?: boolean;
   workDurationMs?: number | null;
 }) => {
-  const hasCodeExecutionData = messageParts.some(
-    (part) => part.type === 'data-code-execution',
-  );
   const hasSucceededCompleteWorkspaceSetupToolPart = messageParts.some(
     isSucceededCompleteWorkspaceSetupToolPart,
   );
@@ -113,12 +95,7 @@ export const AiChatAssistantMessageRenderer = ({
     (part) =>
       part.type !== 'data-thread-title' &&
       !isEmptyReasoningPart(part) &&
-      !isHiddenCompleteWorkspaceSetupToolPart(part) &&
-      !(
-        hasCodeExecutionData &&
-        isToolUIPart(part) &&
-        getEffectiveToolName(part) === 'code_interpreter'
-      ),
+      !isHiddenCompleteWorkspaceSetupToolPart(part),
   );
   const groupedRenderItems = groupContiguousThinkingStepParts(filteredParts);
   const renderItemsWithoutThinkingSteps = groupedRenderItems.filter(

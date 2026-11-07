@@ -23,15 +23,7 @@ import { fromFlatApplicationToApplicationDto } from 'src/engine/core-modules/app
 import { getScopedCallingApplication } from 'src/engine/core-modules/application/utils/get-scoped-calling-application.util';
 import { type AuthContextUser } from 'src/engine/core-modules/auth/types/auth-context.type';
 import { AuthGraphqlApiExceptionFilter } from 'src/engine/core-modules/auth/filters/auth-graphql-api-exception.filter';
-import { BillingEntitlementDTO } from 'src/engine/core-modules/billing/dtos/billing-entitlement.dto';
-import { BillingCustomerEntity } from 'src/engine/core-modules/billing/entities/billing-customer.entity';
-import { BillingSubscriptionEntity } from 'src/engine/core-modules/billing/entities/billing-subscription.entity';
-import { BillingSubscriptionService } from 'src/engine/core-modules/billing/services/billing-subscription.service';
-import { DomainValidRecords } from 'src/engine/core-modules/dns-manager/dtos/domain-valid-records';
-import { DnsManagerService } from 'src/engine/core-modules/dns-manager/services/dns-manager.service';
-import { CustomDomainManagerService } from 'src/engine/core-modules/domain/custom-domain-manager/services/custom-domain-manager.service';
 import { WorkspaceDomainsService } from 'src/engine/core-modules/domain/workspace-domains/services/workspace-domains.service';
-import { EnterprisePlanService } from 'src/engine/core-modules/enterprise/services/enterprise-plan.service';
 import { FeatureFlagDTO } from 'src/engine/core-modules/feature-flag/dtos/feature-flag.dto';
 import { FeatureFlagService } from 'src/engine/core-modules/feature-flag/services/feature-flag.service';
 import { FileUrlService } from 'src/engine/core-modules/file/file-url/file-url.service';
@@ -53,17 +45,12 @@ import { getAuthBypassProvidersByWorkspace } from 'src/engine/core-modules/works
 import { getAuthProvidersByWorkspace } from 'src/engine/core-modules/workspace/utils/get-auth-providers-by-workspace.util';
 import { workspaceGraphqlApiExceptionHandler } from 'src/engine/core-modules/workspace/utils/workspace-graphql-api-exception-handler.util';
 import { WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
-import {
-  WorkspaceException,
-  WorkspaceExceptionCode,
-  WorkspaceNotFoundDefaultError,
-} from 'src/engine/core-modules/workspace/workspace.exception';
+import { WorkspaceNotFoundDefaultError } from 'src/engine/core-modules/workspace/workspace.exception';
 import { AuthApiKey } from 'src/engine/decorators/auth/auth-api-key.decorator';
 import { AuthApplication } from 'src/engine/decorators/auth/auth-application.decorator';
 import { AuthUserWorkspaceId } from 'src/engine/decorators/auth/auth-user-workspace-id.decorator';
 import { AuthUser } from 'src/engine/decorators/auth/auth-user.decorator';
 import { AuthWorkspace } from 'src/engine/decorators/auth/auth-workspace.decorator';
-import { AllowSuspendedWorkspace } from 'src/engine/decorators/auth/allow-suspended-workspace.decorator';
 import { CustomPermissionGuard } from 'src/engine/guards/custom-permission.guard';
 import { NoPermissionGuard } from 'src/engine/guards/no-permission.guard';
 import { AuthPrincipalGuard } from 'src/engine/guards/auth-principal.guard';
@@ -97,14 +84,10 @@ export class WorkspaceResolver {
     private readonly userWorkspaceService: UserWorkspaceService,
     private readonly twentyConfigService: TwentyConfigService,
     private readonly fileUrlService: FileUrlService,
-    private readonly billingSubscriptionService: BillingSubscriptionService,
     private readonly featureFlagService: FeatureFlagService,
     private readonly roleService: RoleService,
     private readonly viewService: ViewService,
-    private readonly dnsManagerService: DnsManagerService,
-    private readonly customDomainManagerService: CustomDomainManagerService,
     private readonly applicationService: ApplicationService,
-    private readonly enterprisePlanService: EnterprisePlanService,
   ) {}
 
   @Query(() => WorkspaceEntity)
@@ -112,7 +95,6 @@ export class WorkspaceResolver {
     AuthPrincipalGuard({
       userSession: {
         standard: true,
-        impersonated: true,
         playground: true,
         workspaceAgnostic: false,
       },
@@ -135,7 +117,6 @@ export class WorkspaceResolver {
     AuthPrincipalGuard({
       userSession: {
         standard: true,
-        impersonated: true,
         playground: true,
         workspaceAgnostic: false,
       },
@@ -159,7 +140,6 @@ export class WorkspaceResolver {
     AuthPrincipalGuard({
       userSession: {
         standard: true,
-        impersonated: true,
         playground: true,
         workspaceAgnostic: false,
       },
@@ -197,7 +177,6 @@ export class WorkspaceResolver {
     AuthPrincipalGuard({
       userSession: {
         standard: true,
-        impersonated: true,
         playground: true,
         workspaceAgnostic: false,
       },
@@ -239,7 +218,6 @@ export class WorkspaceResolver {
     AuthPrincipalGuard({
       userSession: {
         standard: true,
-        impersonated: true,
         playground: true,
         workspaceAgnostic: false,
       },
@@ -249,27 +227,8 @@ export class WorkspaceResolver {
     }),
     SettingsPermissionGuard(PermissionFlagType.WORKSPACE),
   )
-  @AllowSuspendedWorkspace()
   async deleteCurrentWorkspace(@AuthWorkspace() { id }: WorkspaceEntity) {
-    await this.workspaceService.suspendWorkspace(id);
     return this.workspaceService.deleteWorkspace(id, true);
-  }
-
-  @ResolveField(() => [BillingSubscriptionEntity])
-  async billingSubscriptions(
-    @Parent() workspace: WorkspaceEntity,
-  ): Promise<BillingSubscriptionEntity[] | undefined> {
-    if (!this.twentyConfigService.isBillingEnabled()) {
-      return [];
-    }
-
-    try {
-      return this.billingSubscriptionService.getBillingSubscriptions(
-        workspace.id,
-      );
-    } catch (error) {
-      workspaceGraphqlApiExceptionHandler(error);
-    }
   }
 
   @ResolveField(() => String, { nullable: true })
@@ -329,30 +288,6 @@ export class WorkspaceResolver {
     return flatApplications.map(fromFlatApplicationToApplicationDto);
   }
 
-  @ResolveField(() => BillingSubscriptionEntity, { nullable: true })
-  async currentBillingSubscription(
-    @Parent() workspace: WorkspaceEntity,
-  ): Promise<BillingSubscriptionEntity | undefined> {
-    if (!this.twentyConfigService.isBillingEnabled()) {
-      return;
-    }
-
-    return this.billingSubscriptionService.getCurrentBillingSubscription({
-      workspaceId: workspace.id,
-    });
-  }
-
-  @ResolveField(() => BillingCustomerEntity, { nullable: true })
-  async billingCustomer(
-    @Parent() workspace: WorkspaceEntity,
-  ): Promise<BillingCustomerEntity | null> {
-    if (!this.twentyConfigService.isBillingEnabled()) {
-      return null;
-    }
-
-    return this.billingSubscriptionService.getBillingCustomer(workspace.id);
-  }
-
   @ResolveField(() => Number)
   async workspaceMembersCount(
     @Parent() workspace: WorkspaceEntity,
@@ -371,23 +306,6 @@ export class WorkspaceResolver {
       workspaceId: workspace.id,
       fileFolder: FileFolder.CorePicture,
     });
-  }
-
-  @ResolveField(() => [BillingEntitlementDTO])
-  billingEntitlements(@Parent() workspace: WorkspaceEntity) {
-    return this.billingSubscriptionService.getWorkspaceEntitlements(
-      workspace.id,
-    );
-  }
-
-  @ResolveField(() => Boolean)
-  hasValidSignedEnterpriseKey(): boolean {
-    return this.enterprisePlanService.hasValidSignedEnterpriseKey();
-  }
-
-  @ResolveField(() => Boolean)
-  hasValidEnterpriseValidityToken(): boolean {
-    return this.enterprisePlanService.hasValidEnterpriseValidityToken();
   }
 
   @ResolveField(() => WorkspaceUrlsDTO)
@@ -409,14 +327,6 @@ export class WorkspaceResolver {
   }
 
   @ResolveField(() => Boolean)
-  isMicrosoftAuthEnabled(@Parent() workspace: WorkspaceEntity) {
-    return (
-      workspace.isMicrosoftAuthEnabled &&
-      this.twentyConfigService.get('AUTH_MICROSOFT_ENABLED')
-    );
-  }
-
-  @ResolveField(() => Boolean)
   isPasswordAuthEnabled(@Parent() workspace: WorkspaceEntity) {
     return (
       workspace.isPasswordAuthEnabled &&
@@ -435,7 +345,6 @@ export class WorkspaceResolver {
 
   @Query(() => PublicWorkspaceDataDTO)
   @UseGuards(PublicEndpointGuard, NoPermissionGuard)
-  @AllowSuspendedWorkspace()
   async getPublicWorkspaceDataByDomain(
     @OriginHeader() originHeader: string,
     @Args('origin', { nullable: true }) origin?: string,
@@ -445,8 +354,6 @@ export class WorkspaceResolver {
         google: this.twentyConfigService.get('AUTH_GOOGLE_ENABLED'),
         magicLink: false,
         password: this.twentyConfigService.get('AUTH_PASSWORD_ENABLED'),
-        microsoft: this.twentyConfigService.get('AUTH_MICROSOFT_ENABLED'),
-        sso: [],
       };
 
       if (!origin) {
@@ -456,7 +363,6 @@ export class WorkspaceResolver {
           displayName: 'Default Workspace',
           workspaceUrls: {
             subdomainUrl: originHeader,
-            customUrl: originHeader,
           },
           authProviders: systemEnabledProviders,
         };
@@ -529,41 +435,5 @@ export class WorkspaceResolver {
     } catch (err) {
       workspaceGraphqlApiExceptionHandler(err);
     }
-  }
-
-  @Mutation(() => DomainValidRecords, { nullable: true })
-  @UseGuards(
-    AuthPrincipalGuard({
-      userSession: {
-        standard: true,
-        impersonated: true,
-        playground: true,
-        workspaceAgnostic: false,
-      },
-      apiKey: true,
-      oauthClient: true,
-      application: true,
-    }),
-    SettingsPermissionGuard(PermissionFlagType.WORKSPACE),
-  )
-  async checkCustomDomainValidRecords(
-    @AuthWorkspace() workspace: WorkspaceEntity,
-  ): Promise<DomainValidRecords | undefined> {
-    assertIsDefinedOrThrow(
-      workspace.customDomain,
-      new WorkspaceException(
-        `Custom domain not found`,
-        WorkspaceExceptionCode.CUSTOM_DOMAIN_NOT_FOUND,
-      ),
-    );
-
-    const domainValidRecords = await this.dnsManagerService.refreshHostname(
-      workspace.customDomain,
-    );
-
-    return this.customDomainManagerService.checkCustomDomainValidRecords(
-      workspace,
-      domainValidRecords,
-    );
   }
 }

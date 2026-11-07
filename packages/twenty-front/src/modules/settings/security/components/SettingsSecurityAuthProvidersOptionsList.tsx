@@ -5,7 +5,6 @@ import { useReadDefaultDomainFromConfiguration } from '@/domain-manager/hooks/us
 import { getToastOptionsFromError } from '@/error-handler/utils/getToastOptionsFromError';
 import { SettingsOptionCardContentSelect } from '@/settings/components/SettingsOptions/SettingsOptionCardContentSelect';
 import { SettingsOptionCardContentSwitch } from '@/settings/components/SettingsOptions/SettingsOptionCardContentSwitch';
-import { ssoIdentitiesProvidersState } from '@/settings/security/states/ssoIdentitiesProvidersState';
 import { Select } from '@/ui/input/components/Select';
 import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
 import { useMutation } from '@apollo/client/react';
@@ -14,13 +13,7 @@ import { useLingui } from '@lingui/react/macro';
 import { ConnectedAccountProvider } from 'twenty-shared/types';
 import { capitalize } from 'twenty-shared/utils';
 import { useToast } from 'twenty-ui/components/feedback';
-import {
-  IconGoogle,
-  IconLink,
-  IconList,
-  IconMicrosoft,
-  IconPassword,
-} from 'twenty-ui/icon';
+import { IconGoogle, IconLink, IconList, IconPassword } from 'twenty-ui/icon';
 import { Card } from 'twenty-ui/primitives/surfaces';
 import { themeCssVariables } from 'twenty-ui/theme';
 import {
@@ -42,7 +35,6 @@ export const SettingsSecurityAuthProvidersOptionsList = () => {
   const { t } = useLingui();
 
   const { enqueueToast } = useToast();
-  const ssoIdentitiesProviders = useAtomStateValue(ssoIdentitiesProvidersState);
   const authProviders = useAtomStateValue(authProvidersState);
   const isMultiWorkspaceEnabled = useAtomStateValue(
     isMultiWorkspaceEnabledState,
@@ -63,7 +55,7 @@ export const SettingsSecurityAuthProvidersOptionsList = () => {
   };
 
   const toggleAuthMethod = async (
-    authProvider: keyof Omit<AuthProviders, '__typename' | 'magicLink' | 'sso'>,
+    authProvider: keyof Omit<AuthProviders, '__typename' | 'magicLink'>,
   ) => {
     if (!currentWorkspace?.id) {
       throw new Error(t`User is not logged in`);
@@ -77,9 +69,7 @@ export const SettingsSecurityAuthProvidersOptionsList = () => {
 
     const allAuthProvidersEnabled = [
       currentWorkspace.isGoogleAuthEnabled,
-      currentWorkspace.isMicrosoftAuthEnabled,
       currentWorkspace.isPasswordAuthEnabled,
-      (ssoIdentitiesProviders?.length ?? 0) > 0,
     ];
 
     if (
@@ -208,19 +198,6 @@ export const SettingsSecurityAuthProvidersOptionsList = () => {
                 divider
                 onChange={() =>
                   toggleAuthMethod(ConnectedAccountProvider.GOOGLE)
-                }
-              />
-            )}
-            {authProviders.microsoft === true && (
-              <SettingsOptionCardContentSwitch
-                Icon={IconMicrosoft}
-                title={t`Microsoft`}
-                description={t`Allow logins through Microsoft's single sign-on functionality.`}
-                checked={currentWorkspace.isMicrosoftAuthEnabled}
-                advancedMode
-                divider
-                onChange={() =>
-                  toggleAuthMethod(ConnectedAccountProvider.MICROSOFT)
                 }
               />
             )}

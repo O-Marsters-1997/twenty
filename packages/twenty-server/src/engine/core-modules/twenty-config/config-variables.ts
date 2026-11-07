@@ -10,15 +10,10 @@ import {
   IsOptional,
   IsString,
   IsUrl,
-  Max,
   ValidateIf,
   type ValidationError,
   validateSync,
 } from 'class-validator';
-import {
-  ENTERPRISE_INSTANCE_TYPE,
-  type EnterpriseInstanceType,
-} from 'twenty-shared/constants';
 import { isDefined } from 'twenty-shared/utils';
 import { type LoggerOptions } from 'typeorm/logger/LoggerOptions';
 
@@ -27,11 +22,9 @@ import { NodeEnvironment } from 'src/engine/core-modules/twenty-config/interface
 import { SupportDriver } from 'src/engine/core-modules/twenty-config/interfaces/support.interface';
 
 import { CaptchaDriverType } from 'src/engine/core-modules/captcha/interfaces';
-import { CodeInterpreterDriverType } from 'src/engine/core-modules/code-interpreter/code-interpreter.interface';
 import { DpaRegion } from 'src/engine/core-modules/dpa/enums/dpa-region.enum';
 import { EmailDriver } from 'src/engine/core-modules/email/enums/email-driver.enum';
 import { EmailingDomainDriver } from 'src/engine/core-modules/emailing-domain/drivers/types/emailing-domain-driver.type';
-import { ExceptionHandlerDriver } from 'src/engine/core-modules/exception-handler/interfaces';
 import { StorageDriverType } from 'src/engine/core-modules/file-storage/interfaces';
 import { ADDRESS_AUTOCOMPLETE_DRIVER_TYPE } from 'src/engine/core-modules/geo-map/constants/address-autocomplete-driver-type.constant';
 import { type AddressAutocompleteDriverType } from 'src/engine/core-modules/geo-map/types/address-autocomplete-driver-type.type';
@@ -39,10 +32,7 @@ import {
   LoggerDriverType,
   type TwentyLogLevel,
 } from 'src/engine/core-modules/logger/interfaces';
-import { type MeterDriver } from 'src/engine/core-modules/metrics/types/meter-driver.type';
-import { MeterTemporality } from 'src/engine/core-modules/metrics/types/meter-temporality.type';
 import { CastToLogLevelArray } from 'src/engine/core-modules/twenty-config/decorators/cast-to-log-level-array.decorator';
-import { CastToMeterDriverArray } from 'src/engine/core-modules/twenty-config/decorators/cast-to-meter-driver.decorator';
 import { CastToPositiveNumber } from 'src/engine/core-modules/twenty-config/decorators/cast-to-positive-number.decorator';
 import { CastToTypeORMLogLevelArray } from 'src/engine/core-modules/twenty-config/decorators/cast-to-typeorm-log-level-array.decorator';
 import { CastToUpperSnakeCase } from 'src/engine/core-modules/twenty-config/decorators/cast-to-upper-snake-case.decorator';
@@ -60,8 +50,6 @@ import {
   ConfigVariableException,
   ConfigVariableExceptionCode,
 } from 'src/engine/core-modules/twenty-config/twenty-config.exception';
-import { type OnboardingEnrichmentCreditRewardTier } from 'src/engine/core-modules/onboarding/types/onboarding-enrichment-credit-reward-tier.type';
-import { type PlanUsageLimitDefaults } from 'src/engine/core-modules/usage-limit/types/plan-usage-limit-defaults.type';
 import { type AiProvidersConfig } from 'src/engine/metadata-modules/ai/ai-models/types/ai-providers-config.type';
 import {
   DEFAULT_DISABLED_MODELS,
@@ -244,73 +232,11 @@ export class ConfigVariables {
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.ADVANCED_SETTINGS,
-    description: 'Enable or disable the IMAP messaging integration',
-    type: ConfigVariableType.BOOLEAN,
-  })
-  IS_IMAP_SMTP_CALDAV_ENABLED = true;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.ADVANCED_SETTINGS,
-    description:
-      'Enable or disable the connection test when saving IMAP/SMTP/CALDAV accounts',
-    type: ConfigVariableType.BOOLEAN,
-  })
-  @IsOptional()
-  IS_IMAP_SMTP_CALDAV_CONNECTION_TEST_ENABLED = true;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.ADVANCED_SETTINGS,
     description:
       "Enable or disable requests to twenty-icons to get companies' icons",
     type: ConfigVariableType.BOOLEAN,
   })
   ALLOW_REQUESTS_TO_TWENTY_ICONS = true;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.MICROSOFT_AUTH,
-    description: 'Enable or disable Microsoft authentication',
-    type: ConfigVariableType.BOOLEAN,
-  })
-  @IsOptional()
-  AUTH_MICROSOFT_ENABLED = false;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.MICROSOFT_AUTH,
-    isSensitive: false,
-    description: 'Client ID for Microsoft authentication',
-    type: ConfigVariableType.STRING,
-  })
-  @ValidateIf((env) => env.AUTH_MICROSOFT_ENABLED)
-  AUTH_MICROSOFT_CLIENT_ID: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.MICROSOFT_AUTH,
-    isSensitive: true,
-    description: 'Client secret for Microsoft authentication',
-    type: ConfigVariableType.STRING,
-  })
-  @ValidateIf((env) => env.AUTH_MICROSOFT_ENABLED)
-  AUTH_MICROSOFT_CLIENT_SECRET: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.MICROSOFT_AUTH,
-    isSensitive: false,
-    description: 'Callback URL for Microsoft authentication',
-    type: ConfigVariableType.STRING,
-  })
-  @IsUrl({ require_tld: false, require_protocol: true })
-  @ValidateIf((env) => env.AUTH_MICROSOFT_ENABLED)
-  AUTH_MICROSOFT_CALLBACK_URL: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.MICROSOFT_AUTH,
-    isSensitive: false,
-    description: 'Callback URL for Microsoft APIs',
-    type: ConfigVariableType.STRING,
-  })
-  @IsUrl({ require_tld: false, require_protocol: true })
-  @ValidateIf((env) => env.AUTH_MICROSOFT_ENABLED)
-  AUTH_MICROSOFT_APIS_CALLBACK_URL: string;
 
   /**
    * @deprecated Use is now GA - record page layouts are always seeded
@@ -324,13 +250,6 @@ export class ConfigVariables {
   SHOULD_SEED_STANDARD_RECORD_PAGE_LAYOUTS = true;
 
   @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.MICROSOFT_AUTH,
-    description: 'Enable or disable the Microsoft messaging integration',
-    type: ConfigVariableType.BOOLEAN,
-  })
-  MESSAGING_PROVIDER_MICROSOFT_ENABLED = false;
-
-  @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.ADVANCED_SETTINGS,
     description:
       'Number of messages fetched per batch during message import, adjust incase of rate limiting caused by Gmail, Outlook or IMAP',
@@ -339,13 +258,6 @@ export class ConfigVariables {
   @CastToPositiveNumber()
   @IsOptional()
   MESSAGING_MESSAGES_GET_BATCH_SIZE = 400;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.MICROSOFT_AUTH,
-    description: 'Enable or disable the Microsoft Calendar integration',
-    type: ConfigVariableType.BOOLEAN,
-  })
-  CALENDAR_PROVIDER_MICROSOFT_ENABLED = false;
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.TOKENS_DURATION,
@@ -587,7 +499,6 @@ export class ConfigVariables {
     group: ConfigVariablesGroup.SERVER_CONFIG,
     description:
       'Deployment region that determines the DPA hosting location shown to customers. The Processor entity (Twenty.com PBC) and governing law (Delaware, USA) are the same for all regions. EU (default) = Frankfurt, Germany; US = United States. Must match where Customer Personal Data actually lives.',
-    isHiddenInAdminPanel: true,
     type: ConfigVariableType.ENUM,
     options: Object.values(DpaRegion),
     // Env-only: a runtime override could advertise a hosting location that does not match where data lives.
@@ -708,88 +619,6 @@ export class ConfigVariables {
   MAX_TARBALL_UPLOAD_SIZE_BYTES: number = 100 * 1024 * 1024;
 
   @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.STORAGE_CONFIG,
-    description:
-      'Maximum bytes of file storage a single workspace may hold, all its files counted. No limit when unset. USAGE_LIMIT_DEFAULTS_BY_PLAN can set it per billing plan',
-    type: ConfigVariableType.NUMBER,
-  })
-  @CastToPositiveNumber()
-  @IsOptional()
-  WORKSPACE_STORAGE_LIMIT_BYTES?: number;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.STORAGE_CONFIG,
-    description:
-      'Maximum number of records a single workspace may hold across its objects, system objects other than messages and calendar events left out, soft-deleted records included. No limit when unset. USAGE_LIMIT_DEFAULTS_BY_PLAN can set it per billing plan',
-    type: ConfigVariableType.NUMBER,
-  })
-  @CastToPositiveNumber()
-  @IsOptional()
-  WORKSPACE_RECORD_LIMIT?: number;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.CODE_INTERPRETER_CONFIG,
-    description:
-      'Code interpreter driver type - LOCAL for development (unsafe), E2B for sandboxed execution',
-    type: ConfigVariableType.STRING,
-    options: Object.values(CodeInterpreterDriverType),
-  })
-  @IsOptional()
-  @CastToUpperSnakeCase()
-  CODE_INTERPRETER_TYPE: CodeInterpreterDriverType =
-    process.env.NODE_ENV === NodeEnvironment.DEVELOPMENT
-      ? CodeInterpreterDriverType.LOCAL
-      : CodeInterpreterDriverType.DISABLED;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.CODE_INTERPRETER_CONFIG,
-    description: 'E2B API key for sandboxed code execution',
-    type: ConfigVariableType.STRING,
-    isSensitive: true,
-  })
-  @ValidateIf(
-    (env) => env.CODE_INTERPRETER_TYPE === CodeInterpreterDriverType.E_2_B,
-  )
-  E2B_API_KEY?: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.CODE_INTERPRETER_CONFIG,
-    description: 'Timeout in milliseconds for code execution (default: 300000)',
-    type: ConfigVariableType.NUMBER,
-  })
-  @IsOptional()
-  @CastToPositiveNumber()
-  CODE_INTERPRETER_TIMEOUT_MS = 300_000;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.CODE_INTERPRETER_CONFIG,
-    description:
-      'Idle lifetime in milliseconds for a reused code interpreter sandbox; refreshed on each execution and reclaimed after this period of inactivity (default: 300000)',
-    type: ConfigVariableType.NUMBER,
-  })
-  @IsOptional()
-  @CastToPositiveNumber()
-  CODE_INTERPRETER_IDLE_TIMEOUT_MS = 300_000;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.CODE_INTERPRETER_CONFIG,
-    description:
-      'Maximum age in milliseconds a reused code interpreter sandbox is kept before garbage collection reclaims it; abandoned conversations are reclaimed after this period (default: 86400000)',
-    type: ConfigVariableType.NUMBER,
-  })
-  @IsOptional()
-  @CastToPositiveNumber()
-  CODE_INTERPRETER_SESSION_MAX_AGE_MS = 86_400_000;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.ANALYTICS_CONFIG,
-    description: 'Enable or disable analytics for telemetry',
-    type: ConfigVariableType.BOOLEAN,
-  })
-  @IsOptional()
-  ANALYTICS_ENABLED = false;
-
-  @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.ANALYTICS_CONFIG,
     description: 'Clickhouse host for analytics',
     type: ConfigVariableType.STRING,
@@ -800,7 +629,6 @@ export class ConfigVariables {
     require_tld: false,
     allow_underscores: true,
   })
-  @ValidateIf((env) => env.ANALYTICS_ENABLED === true)
   CLICKHOUSE_URL: string;
 
   @ConfigVariablesMetadata({
@@ -815,14 +643,6 @@ export class ConfigVariables {
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.LOGGING,
-    description: 'Enable or disable telemetry logging',
-    type: ConfigVariableType.BOOLEAN,
-  })
-  @IsOptional()
-  TELEMETRY_ENABLED = true;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.LOGGING,
     description:
       'TypeORM logging options for development mode. Accepts comma-separated values: query, schema, error, warn, info, log, migration',
     type: ConfigVariableType.ARRAY,
@@ -833,206 +653,14 @@ export class ConfigVariables {
   TYPEORM_LOGGING: LoggerOptions = ['error'];
 
   @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description: 'Enable or disable billing features',
-    type: ConfigVariableType.BOOLEAN,
-  })
-  @IsOptional()
-  IS_BILLING_ENABLED = false;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description: 'Link required for billing plan',
-    type: ConfigVariableType.STRING,
-  })
-  @ValidateIf((env) => env.IS_BILLING_ENABLED === true)
-  BILLING_PLAN_REQUIRED_LINK: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description: 'Duration of free trial with credit card in days',
-    type: ConfigVariableType.NUMBER,
-  })
-  @CastToPositiveNumber()
-  @IsOptional()
-  @ValidateIf((env) => env.IS_BILLING_ENABLED === true)
-  BILLING_FREE_TRIAL_WITH_CREDIT_CARD_DURATION_IN_DAYS = 30;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description: 'Duration of free trial without credit card in days',
-    type: ConfigVariableType.NUMBER,
-  })
-  @CastToPositiveNumber()
-  @IsOptional()
-  @ValidateIf((env) => env.IS_BILLING_ENABLED === true)
-  BILLING_FREE_TRIAL_WITHOUT_CREDIT_CARD_DURATION_IN_DAYS = 7;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description:
-      'Amount of credits for the free trial without credit card (in microCredits)',
-    type: ConfigVariableType.NUMBER,
-  })
-  @CastToPositiveNumber()
-  @ValidateIf((env) => env.IS_BILLING_ENABLED === true)
-  BILLING_FREE_WORKFLOW_CREDITS_FOR_TRIAL_PERIOD_WITHOUT_CREDIT_CARD = 500_000;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description:
-      'Amount of credits for the free trial with credit card (in microCredits)',
-    type: ConfigVariableType.NUMBER,
-  })
-  @CastToPositiveNumber()
-  @ValidateIf((env) => env.IS_BILLING_ENABLED === true)
-  BILLING_FREE_WORKFLOW_CREDITS_FOR_TRIAL_PERIOD_WITH_CREDIT_CARD = 2_500_000;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description:
-      'Quota and stock usage limit default values per billing plan, keyed by plan key then by the default\'s config variable, as {"PRO":{"WORKSPACE_RECORD_LIMIT":1000000},"ENTERPRISE":{"WORKSPACE_RECORD_LIMIT":null}}. null means no limit, and a variable left out keeps its own value',
-    isHiddenInAdminPanel: true,
-    type: ConfigVariableType.JSON,
-  })
-  @IsOptional()
-  USAGE_LIMIT_DEFAULTS_BY_PLAN: Record<string, PlanUsageLimitDefaults> = {};
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description:
-      'Number of days before a trial WITHOUT a credit card ends to send the reminder to add a payment method',
-    type: ConfigVariableType.NUMBER,
-  })
-  @CastToPositiveNumber()
-  @IsOptional()
-  @ValidateIf((env) => env.IS_BILLING_ENABLED === true)
-  BILLING_TRIAL_WITHOUT_CREDIT_CARD_REMINDER_DAYS_BEFORE = 1;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description:
-      'Number of days before a trial WITH a credit card ends to send the upcoming-charge reminder',
-    type: ConfigVariableType.NUMBER,
-  })
-  @CastToPositiveNumber()
-  @IsOptional()
-  @ValidateIf((env) => env.IS_BILLING_ENABLED === true)
-  BILLING_TRIAL_WITH_CREDIT_CARD_REMINDER_DAYS_BEFORE = 7;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description:
-      'Number of days before a yearly subscription renews to send the renewal reminder',
-    type: ConfigVariableType.NUMBER,
-  })
-  @CastToPositiveNumber()
-  @IsOptional()
-  @ValidateIf((env) => env.IS_BILLING_ENABLED === true)
-  BILLING_SUBSCRIPTION_RENEWAL_REMINDER_DAYS_BEFORE = 7;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    isSensitive: true,
-    description: 'Stripe API key for billing',
-    type: ConfigVariableType.STRING,
-  })
-  @ValidateIf((env) => env.IS_BILLING_ENABLED === true)
-  BILLING_STRIPE_API_KEY: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    isSensitive: true,
-    description: 'Stripe webhook secret for billing',
-    type: ConfigVariableType.STRING,
-  })
-  @ValidateIf((env) => env.IS_BILLING_ENABLED === true)
-  BILLING_STRIPE_WEBHOOK_SECRET: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description:
-      'Stripe publishable key for billing, exposed to the frontend to mount Stripe Elements',
-    type: ConfigVariableType.STRING,
-  })
-  @ValidateIf((env) => env.IS_BILLING_ENABLED === true)
-  BILLING_STRIPE_PUBLISHABLE_KEY: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description:
-      'Use the ClickHouse-backed poller (instead of Stripe billing alerts) as the source of truth for metered-credit cap enforcement',
-    type: ConfigVariableType.BOOLEAN,
-  })
-  @IsOptional()
-  BILLING_USAGE_CAP_CLICKHOUSE_ENABLED = false;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description:
-      'Cap on the credits available in a period, as a multiple of the plan allowance. 2 means a workspace can hold at most its allowance plus one full allowance rolled over',
-    type: ConfigVariableType.NUMBER,
-  })
-  @CastToPositiveNumber()
-  @IsOptional()
-  BILLING_ROLLOVER_TOTAL_CAP_MULTIPLIER = 2;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description:
-      'Largest credit amount a single admin panel grant can hand out (in microCredits)',
-    type: ConfigVariableType.NUMBER,
-  })
-  @CastToPositiveNumber()
-  @IsInt()
-  @IsOptional()
-  BILLING_MAX_ADMIN_CREDIT_GRANT_MICRO = 1_000_000_000;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description:
-      'Free credits granted for completing the import-contacts onboarding step (in microCredits)',
-    type: ConfigVariableType.NUMBER,
-  })
-  @CastToPositiveNumber()
-  @IsInt()
-  @IsOptional()
-  ONBOARDING_IMPORT_CONTACTS_CREDITS_REWARD = 1_000_000;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description:
-      'Maximum number of invitations that grant credits during the invite-team onboarding step',
+    group: ConfigVariablesGroup.ADVANCED_SETTINGS,
+    description: 'Maximum number of invitations during the invite-team onboarding step',
     type: ConfigVariableType.NUMBER,
   })
   @CastToPositiveNumber()
   @IsInt()
   @IsOptional()
   ONBOARDING_INVITE_TEAM_MAX_INVITES = 5;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description:
-      'Free credits granted per user invited during the invite-team onboarding step who signs up (in microCredits)',
-    type: ConfigVariableType.NUMBER,
-  })
-  @CastToPositiveNumber()
-  @IsInt()
-  @IsOptional()
-  ONBOARDING_INVITE_TEAM_CREDITS_REWARD_PER_USER = 500_000;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description:
-      'Credit reward tiers for workspaces enrichment matched to a real company, keyed by tier name, as {"midMarket":{"minEmployeeCount":20,"amountMicro":5000000}} (amounts in microCredits). The most generous matching tier wins; no tiers disables the reward. Independent of ONBOARDING_BOOK_CALL_MIN_EMPLOYEE_COUNT, so credits and the book-a-call offer can target different companies.',
-    isHiddenInAdminPanel: true,
-    type: ConfigVariableType.JSON,
-  })
-  @IsOptional()
-  ONBOARDING_ENRICHMENT_CREDIT_REWARD_TIERS: Record<
-    string,
-    OnboardingEnrichmentCreditRewardTier
-  > = {};
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.SERVER_CONFIG,
@@ -1049,7 +677,6 @@ export class ConfigVariables {
       'Direct HTTPS origin URL for deployments that publish frontend HTML separately. Leave unset for standard self-hosted installations to use bundled HTML.',
     type: ConfigVariableType.STRING,
     isEnvOnly: true,
-    isHiddenInAdminPanel: true,
   })
   @IsUrl({
     protocols: ['https'],
@@ -1071,23 +698,10 @@ export class ConfigVariables {
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.ADVANCED_SETTINGS,
     description: 'Page ID for Cal.com booking integration',
-    isHiddenInAdminPanel: true,
     type: ConfigVariableType.STRING,
   })
   @IsOptional()
   CALENDAR_BOOKING_PAGE_ID?: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.ADVANCED_SETTINGS,
-    description:
-      'Minimum enriched company employee count required to show the book-a-call onboarding step. Leave unset or set to 0 to disable the step. The step also requires CALENDAR_BOOKING_PAGE_ID.',
-    isHiddenInAdminPanel: true,
-    type: ConfigVariableType.NUMBER,
-  })
-  @CastToPositiveNumber()
-  @IsInt()
-  @IsOptional()
-  ONBOARDING_BOOK_CALL_MIN_EMPLOYEE_COUNT?: number;
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.LOGGING,
@@ -1109,18 +723,6 @@ export class ConfigVariables {
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.LOGGING,
-    description: 'Driver used for handling exceptions (Console or Sentry)',
-    type: ConfigVariableType.ENUM,
-    options: Object.values(ExceptionHandlerDriver),
-    isEnvOnly: true,
-  })
-  @IsOptional()
-  @CastToUpperSnakeCase()
-  EXCEPTION_HANDLER_DRIVER: ExceptionHandlerDriver =
-    ExceptionHandlerDriver.CONSOLE;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.LOGGING,
     description:
       'Levels of logging to be captured. The "performance" level emits LoggerService perf / perfTime / perfTimeEnd instrumentation.',
     type: ConfigVariableType.ARRAY,
@@ -1133,40 +735,6 @@ export class ConfigVariables {
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.LOGGING,
-    description: 'Driver used for collect metrics (OpenTelemetry or Console)',
-    type: ConfigVariableType.ARRAY,
-    options: ['OpenTelemetry', 'Console'],
-    isEnvOnly: true,
-  })
-  @CastToMeterDriverArray()
-  @IsOptional()
-  METER_DRIVER: MeterDriver[] = [];
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.LOGGING,
-    description:
-      'Interval in milliseconds between two metric exports, for the drivers that push them: opentelemetry and console. The prometheus driver is scraped, so it is unaffected. Read before the config store is available, so it cannot be overridden from the database.',
-    type: ConfigVariableType.NUMBER,
-    isEnvOnly: true,
-  })
-  @CastToPositiveNumber()
-  @IsOptional()
-  METER_EXPORT_INTERVAL_MS = 30_000;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.LOGGING,
-    description:
-      'Temporality of the metrics pushed by the opentelemetry driver: delta sends what changed since the previous export, cumulative sends running totals on every export. Read before the config store is available, so it cannot be overridden from the database.',
-    type: ConfigVariableType.ENUM,
-    options: Object.values(MeterTemporality),
-    isEnvOnly: true,
-  })
-  @IsOptional()
-  @IsEnum(MeterTemporality)
-  METER_TEMPORALITY: MeterTemporality = MeterTemporality.Delta;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.LOGGING,
     description: 'Driver used for logging (only console for now)',
     type: ConfigVariableType.ENUM,
     options: Object.values(LoggerDriverType),
@@ -1175,71 +743,6 @@ export class ConfigVariables {
   @IsOptional()
   @CastToUpperSnakeCase()
   LOGGER_DRIVER: LoggerDriverType = LoggerDriverType.CONSOLE;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.LOGGING,
-    description: 'Data Source Name (DSN) for Sentry logging',
-    type: ConfigVariableType.STRING,
-    isSensitive: true,
-  })
-  @ValidateIf(
-    (env) => env.EXCEPTION_HANDLER_DRIVER === ExceptionHandlerDriver.SENTRY,
-  )
-  SENTRY_DSN: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.LOGGING,
-    description: 'Front-end DSN for Sentry logging',
-    type: ConfigVariableType.STRING,
-    isSensitive: true,
-  })
-  @ValidateIf(
-    (env) => env.EXCEPTION_HANDLER_DRIVER === ExceptionHandlerDriver.SENTRY,
-  )
-  SENTRY_FRONT_DSN: string;
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.LOGGING,
-    description: 'Environment name for Sentry logging',
-    type: ConfigVariableType.STRING,
-  })
-  @ValidateIf(
-    (env) => env.EXCEPTION_HANDLER_DRIVER === ExceptionHandlerDriver.SENTRY,
-  )
-  @IsOptional()
-  SENTRY_ENVIRONMENT: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.LOGGING,
-    description:
-      'Share of front-end traces sent to Sentry, between 0 and 1. Front-end traces propagate their sampling decision to the server, so this also drives the rate for browser-originated server traces.',
-    type: ConfigVariableType.NUMBER,
-  })
-  @CastToPositiveNumber()
-  @Max(1)
-  @IsOptional()
-  SENTRY_FRONT_TRACES_SAMPLE_RATE = 0.1;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.LOGGING,
-    description:
-      'Share of server traces sent to Sentry, between 0 and 1. Browser-originated traces inherit the front-end decision instead, and AI traces are always sampled at 1. Read before the config store is available, so it cannot be overridden from the database.',
-    type: ConfigVariableType.NUMBER,
-    isEnvOnly: true,
-  })
-  @CastToPositiveNumber()
-  @IsOptional()
-  SENTRY_TRACES_SAMPLE_RATE = 0.1;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.LOGGING,
-    description:
-      'Share of sampled server traces that are also profiled, between 0 and 1. Read before the config store is available, so it cannot be overridden from the database.',
-    type: ConfigVariableType.NUMBER,
-    isEnvOnly: true,
-  })
-  @CastToPositiveNumber()
-  @IsOptional()
-  SENTRY_PROFILES_SAMPLE_RATE = 0.01;
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.LOGGING,
@@ -1521,27 +1024,6 @@ export class ConfigVariables {
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.SERVER_CONFIG,
-    description:
-      "Declares whether this instance is a 'production' (billable per seat) or 'development' (included at no additional cost) enterprise instance. A subscription can register a single free development instance in addition to its production one.",
-    type: ConfigVariableType.ENUM,
-    options: Object.values(ENTERPRISE_INSTANCE_TYPE),
-  })
-  @IsOptional()
-  @IsIn(Object.values(ENTERPRISE_INSTANCE_TYPE))
-  ENTERPRISE_INSTANCE_TYPE: EnterpriseInstanceType =
-    ENTERPRISE_INSTANCE_TYPE.PRODUCTION;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.SERVER_CONFIG,
-    description: 'Base URL for public domains',
-    type: ConfigVariableType.STRING,
-  })
-  @IsUrl({ require_tld: false, require_protocol: true })
-  @IsOptional()
-  PUBLIC_DOMAIN_URL: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.SERVER_CONFIG,
     isSensitive: true,
     description: 'Secret key for the application',
     isEnvOnly: true,
@@ -1801,49 +1283,6 @@ export class ConfigVariables {
   })
   @IsOptional()
   SSL_CERT_PATH: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.CLOUDFLARE_CONFIG,
-    isSensitive: true,
-    description: 'API key for Cloudflare integration',
-    type: ConfigVariableType.STRING,
-  })
-  @ValidateIf((env) => env.CLOUDFLARE_ZONE_ID)
-  CLOUDFLARE_API_KEY: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.CLOUDFLARE_CONFIG,
-    description: 'Zone ID for Cloudflare integration',
-    type: ConfigVariableType.STRING,
-  })
-  @ValidateIf((env) => env.CLOUDFLARE_API_KEY)
-  CLOUDFLARE_ZONE_ID: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.CLOUDFLARE_CONFIG,
-    description: 'Zone ID for public domain Cloudflare integration',
-    type: ConfigVariableType.STRING,
-  })
-  @ValidateIf((env) => env.PUBLIC_DOMAIN_URL)
-  CLOUDFLARE_PUBLIC_DOMAIN_ZONE_ID: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.CLOUDFLARE_CONFIG,
-    description: 'Random string to validate queries from Cloudflare',
-    type: ConfigVariableType.STRING,
-    isSensitive: true,
-  })
-  @IsOptional()
-  CLOUDFLARE_WEBHOOK_SECRET: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.CLOUDFLARE_CONFIG,
-    description:
-      'Id to generate value for CNAME record to validate ownership and manage ssl for custom hostname with Cloudflare',
-    type: ConfigVariableType.STRING,
-  })
-  @IsOptional()
-  CLOUDFLARE_DCV_DELEGATION_ID: string;
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.LLM,
@@ -2106,34 +1545,6 @@ export class ConfigVariables {
   CAPTCHA_SECRET_KEY?: string;
 
   @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.SERVER_CONFIG,
-    isSensitive: true,
-    description: 'License key for the Enterprise version',
-    type: ConfigVariableType.STRING,
-  })
-  @IsOptional()
-  ENTERPRISE_KEY: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.ADVANCED_SETTINGS,
-    isSensitive: true,
-    description:
-      'Signed enterprise validity token (JWT). Used as fallback when no token is stored in the database.',
-    type: ConfigVariableType.STRING,
-  })
-  @IsOptional()
-  ENTERPRISE_VALIDITY_TOKEN: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.SERVER_CONFIG,
-    description: 'Base URL for the Enterprise API on twenty.com',
-    isHiddenInAdminPanel: true,
-    type: ConfigVariableType.STRING,
-  })
-  @IsOptional()
-  ENTERPRISE_API_URL: string = 'https://twenty.com/api/enterprise';
-
-  @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.ADVANCED_SETTINGS,
     description: 'Health monitoring time window in minutes',
     type: ConfigVariableType.NUMBER,
@@ -2155,7 +1566,6 @@ export class ConfigVariables {
     description: 'Twenty server version',
     type: ConfigVariableType.STRING,
     isEnvOnly: true,
-    isHiddenInAdminPanel: true,
   })
   @IsOptionalOrEmptyString()
   @IsTwentySemVer()
@@ -2221,7 +1631,6 @@ export class ConfigVariables {
     isSensitive: true,
     description: 'Mintlify API key for documentation search',
     isEnvOnly: true,
-    isHiddenInAdminPanel: true,
     type: ConfigVariableType.STRING,
   })
   @IsOptional()
@@ -2232,7 +1641,6 @@ export class ConfigVariables {
     isSensitive: true,
     description: 'Mintlify subdomain for documentation search',
     isEnvOnly: true,
-    isHiddenInAdminPanel: true,
     type: ConfigVariableType.STRING,
   })
   @IsOptional()
@@ -2431,7 +1839,6 @@ export class ConfigVariables {
     group: ConfigVariablesGroup.ADVANCED_SETTINGS,
     description:
       'Client ID of the GitHub OAuth app used to verify app ownership when claiming a marketplace application',
-    isHiddenInAdminPanel: true,
     type: ConfigVariableType.STRING,
   })
   @IsString()
@@ -2443,7 +1850,6 @@ export class ConfigVariables {
     isSensitive: true,
     description:
       'Client secret of the GitHub OAuth app used to verify app ownership when claiming a marketplace application',
-    isHiddenInAdminPanel: true,
     type: ConfigVariableType.STRING,
   })
   @IsString()

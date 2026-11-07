@@ -18,7 +18,6 @@ describe('carryOverCommittedFields', () => {
         {
           name: 'gpt-x',
           label: 'Old label',
-          inputCostPerMillionTokens: 1,
           efforts: ['low', 'high'],
           dataResidency: 'us',
           zeroDataRetention: true,

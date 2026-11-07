@@ -11,8 +11,6 @@ const buildModelConfig = (
   sdkPackage: '@ai-sdk/typesafe-ai',
   label: 'Jev',
   description: 'Jev',
-  inputCostPerMillionTokens: 0.042,
-  outputCostPerMillionTokens: 0,
   supportedQuestionTypes: ['choice', 'score', 'boolean'],
   maxCriteriaPerQuestion: 255,
   maxScoreLevels: 10,

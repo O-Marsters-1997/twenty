@@ -3,7 +3,6 @@ import { type Request, type Response } from 'express';
 import { isDefined, isNonEmptyArray } from 'twenty-shared/utils';
 
 import { computeRequestActor } from 'src/engine/utils/compute-request-actor.util';
-import { type RequestTraceContext } from 'src/engine/utils/compute-request-trace-context.util';
 import { toLogfmt } from 'src/engine/utils/to-logfmt.util';
 
 const MAX_LOGGED_RESOLVERS_LENGTH = 512;
@@ -14,12 +13,10 @@ export const buildApiAccessLogLine = ({
   request,
   response,
   durationMs,
-  traceContext,
 }: {
   request: Request;
   response: Response;
   durationMs: number;
-  traceContext: RequestTraceContext | undefined;
 }): string => {
   const [urlPath] = (request.originalUrl ?? '').split('?');
   const completed = response.writableEnded;
@@ -34,15 +31,10 @@ export const buildApiAccessLogLine = ({
     aborted: completed ? undefined : true,
     duration_ms: durationMs,
     ...formatActor(request),
-    impersonator_user_workspace_id:
-      request.impersonationContext?.impersonatorUserWorkspaceId,
     workspace_id: request.workspaceId,
     auth_provider: request.authProvider ?? undefined,
     token_type: request.tokenType,
     request_id: formatRequestId(request.headers?.['x-request-id']),
-    trace_id: traceContext?.traceId,
-    span_id: traceContext?.spanId,
-    trace_sampled: traceContext?.sampled,
   });
 };
 

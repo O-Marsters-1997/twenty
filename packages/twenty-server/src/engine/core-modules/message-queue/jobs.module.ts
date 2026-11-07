@@ -5,11 +5,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeORMModule } from 'src/database/typeorm/typeorm.module';
 import { WorkspaceCacheModule } from 'src/engine/workspace-cache/workspace-cache.module';
 import { AuthModule } from 'src/engine/core-modules/auth/auth.module';
-import { BillingModule } from 'src/engine/core-modules/billing/billing.module';
-import { UpdateSubscriptionQuantityJob } from 'src/engine/core-modules/billing/jobs/update-subscription-quantity.job';
-import { BillingReminderModule } from 'src/engine/core-modules/billing/reminders/billing-reminder.module';
-import { BillingReminderCronJob } from 'src/engine/core-modules/billing/reminders/crons/billing-reminder.cron.job';
-import { StripeModule } from 'src/engine/core-modules/billing/stripe/stripe.module';
 import { PendingWakeUpModule } from 'src/engine/core-modules/pending-wake-up/pending-wake-up.module';
 import { EmailSenderJob } from 'src/engine/core-modules/email/email-sender.job';
 import { EmailModule } from 'src/engine/core-modules/email/email.module';
@@ -23,7 +18,6 @@ import { RefreshCampaignStatsJob } from 'src/modules/emailing/jobs/refresh-campa
 import { SendCampaignEmailBatchJob } from 'src/modules/emailing/jobs/send-campaign-email-batch.job';
 import { SendCampaignEmailJob } from 'src/modules/emailing/jobs/send-campaign-email.job';
 import { SendScheduledCampaignJob } from 'src/modules/emailing/jobs/send-scheduled-campaign.job';
-import { EnterpriseModule } from 'src/engine/core-modules/enterprise/enterprise.module';
 import { EventLogIngestionModule } from 'src/engine/core-modules/event-logs/ingest/event-log-ingestion.module';
 import { FeatureFlagModule } from 'src/engine/core-modules/feature-flag/feature-flag.module';
 import { UserWorkspaceModule } from 'src/engine/core-modules/user-workspace/user-workspace.module';
@@ -43,7 +37,6 @@ import { RunDeferredWorkspaceMigrationActionsJob } from 'src/engine/workspace-ma
 import { WorkspaceMigrationRunnerModule } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/workspace-migration-runner.module';
 import { SubscriptionsModule } from 'src/engine/subscriptions/subscriptions.module';
 import { CleanOnboardingWorkspacesJob } from 'src/engine/workspace-manager/workspace-cleaner/crons/clean-onboarding-workspaces.job';
-import { CleanSuspendedWorkspacesJob } from 'src/engine/workspace-manager/workspace-cleaner/crons/clean-suspended-workspaces.job';
 import { CleanWorkspaceDeletionWarningUserVarsJob } from 'src/engine/workspace-manager/workspace-cleaner/jobs/clean-workspace-deletion-warning-user-vars.job';
 import { WorkspaceCleanerModule } from 'src/engine/workspace-manager/workspace-cleaner/workspace-cleaner.module';
 import { CalendarEventParticipantManagerModule } from 'src/modules/calendar/calendar-event-participant-manager/calendar-event-participant-manager.module';
@@ -63,7 +56,6 @@ import { WorkflowModule } from 'src/modules/workflow/workflow.module';
     UserModule,
     UserVarsModule,
     EmailModule,
-    BillingModule,
     UserWorkspaceModule,
     WorkspaceModule,
     AuthModule,
@@ -71,7 +63,6 @@ import { WorkflowModule } from 'src/modules/workflow/workflow.module';
     CalendarModule,
     CalendarEventParticipantManagerModule,
     TimelineActivityModule,
-    StripeModule,
     FeatureFlagModule,
     AutoCompaniesAndContactsCreationJobModule,
     TimelineJobModule,
@@ -84,15 +75,11 @@ import { WorkflowModule } from 'src/modules/workflow/workflow.module';
     EventLogIngestionModule,
     AiAgentTriggerModule,
     AiChatModule,
-    EnterpriseModule,
     EmailingModule,
     PendingWakeUpModule,
-    BillingReminderModule,
     WorkspaceMigrationRunnerModule,
   ],
   providers: [
-    BillingReminderCronJob,
-    CleanSuspendedWorkspacesJob,
     CleanOnboardingWorkspacesJob,
     EmailSenderJob,
     SendCampaignEmailJob,
@@ -103,7 +90,6 @@ import { WorkflowModule } from 'src/modules/workflow/workflow.module';
     SendScheduledCampaignJob,
     RefreshCampaignStatsJob,
     ReconcileWorkspaceCampaignStatsJob,
-    UpdateSubscriptionQuantityJob,
     HandleWorkspaceMemberDeletedJob,
     CleanWorkspaceDeletionWarningUserVarsJob,
     UpdateWorkspaceMemberEmailJob,

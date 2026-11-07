@@ -1,7 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 
 import { type LanguageModel, type TranscriptionModel } from 'ai';
-import { isNonEmptyString } from '@sniptt/guards';
 import {
   AUTO_SELECT_WORKSPACE_DEFAULT_MODEL_ID,
   DEFAULT_AI_AGENT_MODEL_TIER,
@@ -13,8 +12,6 @@ import {
   parseAiModelVariantId,
 } from 'twenty-shared/ai';
 
-import { MAX_SEATS_WITHOUT_ENTERPRISE_KEY } from 'src/engine/core-modules/enterprise/constants/max-seats-without-organization-key.constant';
-import { CustomAiProviderAccessService } from 'src/engine/core-modules/enterprise/services/custom-ai-provider-access.service';
 import { ConfigVariablesGroup } from 'src/engine/core-modules/twenty-config/enums/config-variables-group.enum';
 import { ConfigGroupHashService } from 'src/engine/core-modules/twenty-config/services/config-group-hash.service';
 import {
@@ -79,7 +76,6 @@ export class AiModelRegistryService {
   private readonly logger = new Logger(AiModelRegistryService.name);
   private modelRegistry: Map<string, RegisteredAiModel> = new Map();
   private modelConfigCache: Map<string, AiModelConfig> = new Map();
-  // separate so transcription models never reach the chat picker or token costing
   private transcriptionRegistry: Map<string, RegisteredAiTranscriptionModel> =
     new Map();
   private transcriptionConfigCache: Map<string, AiTranscriptionModelConfig> =
@@ -94,38 +90,28 @@ export class AiModelRegistryService {
     { providerName: string; modelDef: AiProviderModelConfig }
   > = new Map();
   private currentConfigHash: string | null = null;
-  private areCustomProvidersRegistered = true;
 
   constructor(
     private readonly providerConfigService: ProviderConfigService,
     private readonly sdkProviderFactory: SdkProviderFactoryService,
     private readonly preferencesService: AiModelPreferencesService,
     private readonly configGroupHashService: ConfigGroupHashService,
-    private readonly customAiProviderAccessService: CustomAiProviderAccessService,
   ) {}
 
-  // rebuilt lazily when the LLM config hash changes; seats are not in that hash, so the custom-provider entitlement
-  // is compared too and an instance past the threshold loses its custom models on the next read
   private ensureFresh(): void {
     const configHash = this.configGroupHashService.computeHash(
       ConfigVariablesGroup.LLM,
     );
-    const areCustomProvidersAllowed =
-      this.customAiProviderAccessService.getCachedHasAccess();
 
-    if (
-      configHash === this.currentConfigHash &&
-      areCustomProvidersAllowed === this.areCustomProvidersRegistered
-    ) {
+    if (configHash === this.currentConfigHash) {
       return;
     }
 
-    this.buildModelRegistry(areCustomProvidersAllowed);
+    this.buildModelRegistry();
     this.currentConfigHash = configHash;
-    this.areCustomProvidersRegistered = areCustomProvidersAllowed;
   }
 
-  private buildModelRegistry(areCustomProvidersAllowed: boolean): void {
+  private buildModelRegistry(): void {
     this.modelRegistry.clear();
     this.sdkProviderFactory.clearCache();
     this.modelConfigCache.clear();
@@ -135,9 +121,7 @@ export class AiModelRegistryService {
     this.evaluationConfigCache.clear();
     this.providerModelDefCache.clear();
 
-    const providers = this.providerConfigService.getResolvedProviders({
-      includeCustomProviders: areCustomProvidersAllowed,
-    });
+    const providers = this.providerConfigService.getResolvedProviders();
 
     this.registerModelsFromProviders(providers);
     this.registerSupportedVariants();
@@ -298,15 +282,6 @@ export class AiModelRegistryService {
     modelDef: AiProviderModelConfig;
     sdkInstance: AiSdkProviderInstance | undefined;
   }): void {
-    // an omitted price would bill nothing while the provider charges; an explicit 0 is allowed
-    if (!isDefined(modelDef.costPerMinute)) {
-      this.logger.error(
-        `Skipping transcription model "${compositeId}": costPerMinute is required`,
-      );
-
-      return;
-    }
-
     this.transcriptionConfigCache.set(compositeId, {
       modelId: compositeId,
       sdkPackage: config.npm,
@@ -314,7 +289,6 @@ export class AiModelRegistryService {
       description: modelDef.description ?? compositeId,
       dataResidency: modelDef.dataResidency ?? config.dataResidency,
       zeroDataRetention: modelDef.zeroDataRetention,
-      costPerMinute: modelDef.costPerMinute,
       isDeprecated: modelDef.isDeprecated,
     });
 
@@ -399,17 +373,6 @@ export class AiModelRegistryService {
       return;
     }
 
-    if (
-      !isDefined(modelDef.inputCostPerMillionTokens) ||
-      !isDefined(modelDef.outputCostPerMillionTokens)
-    ) {
-      this.logger.error(
-        `Skipping evaluation model "${compositeId}": token costs are required`,
-      );
-
-      return;
-    }
-
     this.evaluationConfigCache.set(compositeId, {
       modelId: compositeId,
       providerName: providerKey,
@@ -417,8 +380,6 @@ export class AiModelRegistryService {
       sdkPackage: config.npm,
       label: modelDef.label,
       description: modelDef.description ?? compositeId,
-      inputCostPerMillionTokens: modelDef.inputCostPerMillionTokens,
-      outputCostPerMillionTokens: modelDef.outputCostPerMillionTokens,
       supportedQuestionTypes: [...supportedQuestionTypes],
       maxCriteriaPerQuestion: modelDef.maxCriteriaPerQuestion,
       maxScoreLevels: modelDef.maxScoreLevels,
@@ -478,12 +439,6 @@ export class AiModelRegistryService {
       // one Bedrock provider serves both eu.* and global.* models, so the model value wins
       dataResidency: modelDef.dataResidency ?? providerConfig.dataResidency,
       zeroDataRetention: modelDef.zeroDataRetention,
-      inputCostPerMillionTokens: modelDef.inputCostPerMillionTokens ?? 0,
-      outputCostPerMillionTokens: modelDef.outputCostPerMillionTokens ?? 0,
-      cachedInputCostPerMillionTokens: modelDef.cachedInputCostPerMillionTokens,
-      cacheCreationCostPerMillionTokens:
-        modelDef.cacheCreationCostPerMillionTokens,
-      longContextCost: modelDef.longContextCost,
       contextWindowTokens: getPositiveTokenLimitOrDefault(
         modelDef.contextWindowTokens,
         DEFAULT_CONTEXT_WINDOW_TOKENS,
@@ -638,29 +593,9 @@ export class AiModelRegistryService {
     }
 
     throw new AiException(
-      this.buildModelNotFoundMessage(modelId),
+      `Model with ID ${modelId} not found`,
       AiExceptionCode.AGENT_EXECUTION_FAILED,
     );
-  }
-
-  // a model dropped past the complimentary threshold would otherwise look like a typo
-  private buildModelNotFoundMessage(modelId: string): string {
-    const message = `Model with ID ${modelId} not found`;
-
-    if (this.areCustomProvidersRegistered) {
-      return message;
-    }
-
-    const [providerName] = modelId.split('/');
-    const isCustomProviderModel =
-      isNonEmptyString(providerName) &&
-      !this.providerConfigService.getCatalogProviderNames().has(providerName);
-
-    if (!isCustomProviderModel) {
-      return message;
-    }
-
-    return `${message}. Custom AI providers require a valid enterprise key above ${MAX_SEATS_WITHOUT_ENTERPRISE_KEY} seats.`;
   }
 
   private createDefaultConfigForCustomModel(
@@ -675,8 +610,6 @@ export class AiModelRegistryService {
         registeredModel.modelId,
       ),
       sdkPackage: registeredModel.sdkPackage,
-      inputCostPerMillionTokens: 0,
-      outputCostPerMillionTokens: 0,
       contextWindowTokens: DEFAULT_CONTEXT_WINDOW_TOKENS,
       maxOutputTokens: DEFAULT_MAX_OUTPUT_TOKENS,
     };
@@ -710,7 +643,7 @@ export class AiModelRegistryService {
       !isDefined(this.getModelConfig(modelId))
     ) {
       throw new AiException(
-        this.buildModelNotFoundMessage(modelId),
+        `Model with ID ${modelId} not found`,
         AiExceptionCode.AGENT_EXECUTION_FAILED,
       );
     }

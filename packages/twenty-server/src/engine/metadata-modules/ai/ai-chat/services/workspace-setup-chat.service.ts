@@ -10,7 +10,6 @@ import {
 
 import { I18nService } from 'src/engine/core-modules/i18n/i18n.service';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
-import { UsageQuotaAdmissionService } from 'src/engine/core-modules/usage-limit/services/usage-quota-admission.service';
 import { UserWorkspaceService } from 'src/engine/core-modules/user-workspace/user-workspace.service';
 import { type WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
 import { AgentChatThreadWorkspaceEntity } from 'src/engine/metadata-modules/ai/ai-history/standard-objects/agent-chat-thread.workspace-entity';
@@ -22,7 +21,6 @@ import { AgentChatService } from 'src/engine/metadata-modules/ai/ai-chat/service
 import { buildWorkspaceSetupChatThreadId } from 'src/engine/metadata-modules/ai/ai-chat/utils/build-workspace-setup-chat-thread-id.util';
 import { isUniqueViolationError } from 'src/engine/metadata-modules/ai/ai-chat/utils/is-unique-violation-error.util';
 import { buildWorkspaceSetupKickoffMessageText } from 'src/engine/metadata-modules/ai/ai-chat/utils/build-workspace-setup-kickoff-message-text.util';
-import { tagAiChatStreamScope } from 'src/engine/metadata-modules/ai/ai-chat/utils/tag-ai-chat-stream-scope.util';
 import { AiModelRegistryService } from 'src/engine/metadata-modules/ai/ai-models/services/ai-model-registry.service';
 import { WorkspaceOrmManager } from 'src/engine/twenty-orm/workspace-orm.manager';
 import { buildSystemAuthContext } from 'src/engine/twenty-orm/utils/build-system-auth-context.util';
@@ -49,7 +47,6 @@ export class WorkspaceSetupChatService {
 
   constructor(
     private readonly twentyConfigService: TwentyConfigService,
-    private readonly usageQuotaAdmissionService: UsageQuotaAdmissionService,
     private readonly aiModelRegistryService: AiModelRegistryService,
     private readonly userWorkspaceService: UserWorkspaceService,
     private readonly i18nService: I18nService,
@@ -148,13 +145,6 @@ export class WorkspaceSetupChatService {
       }
     }
 
-    const hasAvailableCredits =
-      await this.usageQuotaAdmissionService.hasAvailableCredits(workspace.id);
-
-    if (!hasAvailableCredits) {
-      return { outcome: WorkspaceSetupChatOutcome.UNAVAILABLE, thread: null };
-    }
-
     const locale = await localePromise;
 
     thread ??= await this.createThreadWithDeterministicId({
@@ -185,14 +175,6 @@ export class WorkspaceSetupChatService {
     if (!isDefined(openingTurn)) {
       return { outcome: WorkspaceSetupChatOutcome.ALREADY_STARTED, thread };
     }
-
-    tagAiChatStreamScope({
-      streamId: openingTurn.streamId,
-      turnId: openingTurn.turnId,
-      threadId,
-      workspaceId: workspace.id,
-    });
-
     return { outcome: WorkspaceSetupChatOutcome.STARTED, thread };
   }
 

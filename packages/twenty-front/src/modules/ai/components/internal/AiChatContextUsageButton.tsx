@@ -1,4 +1,3 @@
-import { getAiChatUsageLabel } from '@/ai/utils/getAiChatUsageLabel';
 import { formatAiChatTokens } from '@/ai/utils/formatAiChatTokens';
 import { FloatingPortal, useTransitionStyles } from '@floating-ui/react';
 import { styled } from '@linaria/react';
@@ -9,21 +8,19 @@ import { isDefined } from 'twenty-shared/utils';
 import { MetricRow } from 'twenty-ui/components/data-display';
 import { ProgressRing } from 'twenty-ui/primitives/feedback';
 import { Button } from 'twenty-ui/primitives/input';
-import { IconWindow, IconGauge } from 'twenty-ui/icon';
+import { IconWindow } from 'twenty-ui/icon';
 import { Separator } from 'twenty-ui/primitives/layout';
 import { themeCssVariables, useTheme } from 'twenty-ui/theme';
 
 import { AiChatContextUsageDetails } from '@/ai/components/internal/AiChatContextUsageDetails';
 import { useAiChatHoverCard } from '@/ai/hooks/useAiChatHoverCard';
-import { useAiChatUsage } from '@/ai/hooks/useAiChatUsage';
 import { useAiModelTiers } from '@/ai/hooks/useAiModelTiers';
 import { useWorkspaceAiModelTiers } from '@/ai/hooks/useWorkspaceAiModelTiers';
 import { useIsWorkspaceSetupChat } from '@/ai/hooks/useIsWorkspaceSetupChat';
 import { agentChatUsageFamilyState } from '@/ai/states/agentChatUsageFamilyState';
 import { agentChatUserSelectedModelTierState } from '@/ai/states/agentChatUserSelectedModelTierState';
 import { currentAiChatThreadState } from '@/ai/states/currentAiChatThreadState';
-import { getUsageLimitRingColor } from '@/settings/billing/utils/getUsageLimitRingColor';
-import { computeUsageLimitProgress } from '@/settings/billing/utils/computeUsageLimitProgress';
+import { getContextWindowRingColor } from '@/ai/utils/getContextWindowRingColor';
 import { StyledInformationCard } from '@/ui/layout/information-card/components/StyledInformationCard';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { formatNumber } from '@/localization/utils/formatNumber';
@@ -63,18 +60,12 @@ export const AiChatContextUsageButton = () => {
 
   const [showDetails, setShowDetails] = useState(false);
 
-  const {
-    isOpen,
-    context,
-    refs,
-    floatingStyles,
-    getReferenceProps,
-    getFloatingProps,
-  } = useAiChatHoverCard({
-    placement: 'top-start',
-    role: 'dialog',
-    onOpen: () => setShowDetails(false),
-  });
+  const { context, refs, floatingStyles, getReferenceProps, getFloatingProps } =
+    useAiChatHoverCard({
+      placement: 'top-start',
+      role: 'dialog',
+      onOpen: () => setShowDetails(false),
+    });
 
   const currentAiChatThread = useAtomStateValue(currentAiChatThreadState);
 
@@ -114,48 +105,7 @@ export const AiChatContextUsageButton = () => {
 
   const formattedContextWindow = formatAiChatTokens(contextWindow);
 
-  const contextWindowRingColor = getUsageLimitRingColor({
-    consumedPercentage: percentage,
-    isExhausted: percentage >= 100,
-  });
-
-  const {
-    usage: creditUsage,
-    loading,
-    error,
-  } = useAiChatUsage({
-    skip: !isOpen || isWorkspaceSetupChat,
-    fetchPolicy: 'network-only',
-  });
-
-  const limitValue = creditUsage?.limitValue ?? null;
-
-  const progress = isDefined(limitValue)
-    ? computeUsageLimitProgress({
-        limitValue,
-        consumedValue: creditUsage?.consumedValue ?? null,
-      })
-    : null;
-
-  const creditPercentage =
-    limitValue === 0 ? 100 : (progress?.consumedPercentage ?? null);
-
-  const daysUntilReset = isDefined(creditUsage?.periodEnd)
-    ? Math.max(
-        0,
-        Math.ceil(
-          (new Date(creditUsage.periodEnd).getTime() - Date.now()) / 86400000,
-        ),
-      )
-    : null;
-
-  const usageLabelInput = {
-    loading,
-    hasError: isDefined(error),
-    hasUsage: isDefined(creditUsage),
-    daysUntilReset,
-    creditPercentage,
-  };
+  const contextWindowRingColor = getContextWindowRingColor(percentage);
 
   const { isMounted, styles: transitionStyles } = useTransitionStyles(context, {
     duration: shouldReduceMotion ? 0 : { open: 150, close: 100 },
@@ -208,25 +158,6 @@ export const AiChatContextUsageButton = () => {
             >
               {t`Context window`}
             </MetricRow>
-            {!isWorkspaceSetupChat && (
-              <MetricRow
-                startIcon={<IconGauge size={theme.icon.size.sm} />}
-                progress={
-                  loading || isDefined(error) ? 0 : (creditPercentage ?? 0)
-                }
-                value={getAiChatUsageLabel(usageLabelInput)}
-                progressValueText={getAiChatUsageLabel({
-                  ...usageLabelInput,
-                  unavailableConsumptionLabel: t`Not available`,
-                })}
-                progressColor={getUsageLimitRingColor({
-                  consumedPercentage: creditPercentage ?? 0,
-                  isExhausted: creditPercentage === 100,
-                })}
-              >
-                {t`Usage`}
-              </MetricRow>
-            )}
             {showDetails && <AiChatContextUsageDetails />}
             {isDefined(agentChatUsage) && (
               <>

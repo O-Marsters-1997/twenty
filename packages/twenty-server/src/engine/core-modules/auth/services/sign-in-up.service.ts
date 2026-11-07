@@ -15,18 +15,13 @@ import {
 import { v4 } from 'uuid';
 
 import { POSTGRESQL_ERROR_CODES } from 'src/engine/api/graphql/workspace-query-runner/constants/postgres-error-codes.constants';
-import { USER_SIGNUP_EVENT_NAME } from 'src/engine/api/graphql/workspace-query-runner/constants/user-signup-event-name.constants';
 import { type QueryFailedErrorWithCode } from 'src/engine/api/graphql/workspace-query-runner/utils/workspace-query-runner-graphql-api-exception-handler.util';
 import { EventLogEmitterService } from 'src/engine/core-modules/event-logs/emit/event-log-emitter.service';
 import { USER_SIGNUP_EVENT } from 'src/engine/core-modules/event-logs/emit/events/workspace-event/user/user-signup';
 import { WORKSPACE_CREATED_EVENT } from 'src/engine/core-modules/event-logs/emit/events/workspace-event/workspace/workspace-created';
-import {
-  type AppTokenEntity,
-  AppTokenType,
-} from 'src/engine/core-modules/app-token/app-token.entity';
+import { type AppTokenEntity } from 'src/engine/core-modules/app-token/app-token.entity';
 import { ApplicationService } from 'src/engine/core-modules/application/application.service';
 import { FileStorageService } from 'src/engine/core-modules/file-storage/services/file-storage.service';
-import { BillingService } from 'src/engine/core-modules/billing/services/billing.service';
 import {
   AuthException,
   AuthExceptionCode,
@@ -35,7 +30,6 @@ import {
   PASSWORD_REGEX,
   hashPassword,
 } from 'src/engine/core-modules/auth/auth.util';
-import { MAX_WORKSPACES_WITHOUT_ENTERPRISE_KEY } from 'src/engine/core-modules/auth/constants/max-workspaces-without-organization-key.constants';
 import { getSignUpWithoutWorkspaceDecision } from 'src/engine/core-modules/auth/utils/get-sign-up-without-workspace-decision.util';
 import { hasProvisionedSignUpDestination } from 'src/engine/core-modules/auth/utils/has-provisioned-sign-up-destination.util';
 import { DEFAULT_DPA_REGION } from 'src/engine/core-modules/dpa/config/dpa-region-config.constant';
@@ -50,13 +44,9 @@ import {
   type SignInUpNewUserPayload,
 } from 'src/engine/core-modules/auth/types/sign-in-up.type';
 import { SubdomainManagerService } from 'src/engine/core-modules/domain/subdomain-manager/services/subdomain-manager.service';
-import { EnterprisePlanService } from 'src/engine/core-modules/enterprise/services/enterprise-plan.service';
 import { ExceptionHandlerService } from 'src/engine/core-modules/exception-handler/exception-handler.service';
 import { FileCorePictureService } from 'src/engine/core-modules/file/file-core-picture/services/file-core-picture.service';
-import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
-import { MetricsKeys } from 'src/engine/core-modules/metrics/types/metrics-keys.type';
 import { OnboardingService } from 'src/engine/core-modules/onboarding/onboarding.service';
-import { TelemetryEventType } from 'src/engine/core-modules/telemetry/telemetry-event.type';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { UserWorkspaceService } from 'src/engine/core-modules/user-workspace/user-workspace.service';
 import { UserService } from 'src/engine/core-modules/user/services/user.service';
@@ -69,7 +59,6 @@ import {
   WorkspaceExceptionCode,
 } from 'src/engine/core-modules/workspace/workspace.exception';
 import { WorkspaceCacheService } from 'src/engine/workspace-cache/services/workspace-cache.service';
-import { WorkspaceEventEmitter } from 'src/engine/workspace-event-emitter/workspace-event-emitter';
 import { getDomainFromEmailOrThrow } from 'src/utils/get-domain-from-email-or-throw';
 import { isWorkEmail } from 'src/utils/is-work-email';
 
@@ -86,19 +75,15 @@ export class SignInUpService {
     private readonly workspaceInvitationService: WorkspaceInvitationService,
     private readonly userWorkspaceService: UserWorkspaceService,
     private readonly onboardingService: OnboardingService,
-    private readonly workspaceEventEmitter: WorkspaceEventEmitter,
     private readonly twentyConfigService: TwentyConfigService,
     private readonly subdomainManagerService: SubdomainManagerService,
     private readonly userService: UserService,
-    private readonly metricsService: MetricsService,
     private readonly workspaceCacheService: WorkspaceCacheService,
     private readonly applicationService: ApplicationService,
     private readonly fileCorePictureService: FileCorePictureService,
     private readonly fileStorageService: FileStorageService,
     private readonly exceptionHandlerService: ExceptionHandlerService,
-    private readonly enterprisePlanService: EnterprisePlanService,
     private readonly eventLogEmitterService: EventLogEmitterService,
-    private readonly billingService: BillingService,
     @InjectDataSource()
     private readonly dataSource: DataSource,
   ) {}
@@ -224,16 +209,6 @@ export class SignInUpService {
       roleId: params.invitation.context?.roleId,
     });
 
-    if (
-      params.invitation.type === AppTokenType.OnboardingInvitationToken &&
-      params.userData.type === 'newUserWithPicture'
-    ) {
-      await this.onboardingService.creditInviteTeamReward({
-        workspaceId: invitationValidation.workspace.id,
-        userId: updatedUser.id,
-      });
-    }
-
     await this.workspaceInvitationService.invalidateWorkspaceInvitation(
       invitationValidation.workspace.id,
       email,
@@ -298,10 +273,7 @@ export class SignInUpService {
         newUserWithPicture: PartialUserWithPicture;
       };
 
-      const user = await this.saveNewUser(userData.newUserWithPicture, {
-        canAccessFullAdminPanel: false,
-        canImpersonate: false,
-      });
+      const user = await this.saveNewUser(userData.newUserWithPicture);
 
       await this.activateOnboardingForUser({
         user,
@@ -369,42 +341,13 @@ export class SignInUpService {
 
   private async saveNewUser(
     newUserWithPicture: PartialUserWithPicture,
-    {
-      canImpersonate,
-      canAccessFullAdminPanel,
-    }: {
-      canImpersonate: boolean;
-      canAccessFullAdminPanel: boolean;
-    },
     queryRunner?: QueryRunner,
   ) {
-    const userCreated = this.userRepository.create({
-      ...newUserWithPicture,
-      canImpersonate,
-      canAccessFullAdminPanel,
-    });
+    const userCreated = this.userRepository.create(newUserWithPicture);
 
     const savedUser = queryRunner
       ? await queryRunner.manager.save(UserEntity, userCreated)
       : await this.userRepository.save(userCreated);
-
-    this.workspaceEventEmitter.emitCustomBatchEvent<TelemetryEventType>(
-      USER_SIGNUP_EVENT_NAME,
-      [
-        {
-          workspaceId: savedUser.currentWorkspace?.id,
-          userWorkspaceId: savedUser.currentUserWorkspace?.id,
-          userId: savedUser.id,
-          userEmail: newUserWithPicture.email,
-          userFirstName: newUserWithPicture.firstName,
-          userLastName: newUserWithPicture.lastName,
-          locale: newUserWithPicture.locale,
-          serverUrl: this.twentyConfigService.get('SERVER_URL'),
-          serverId: this.twentyConfigService.get('SERVER_ID'),
-        },
-      ],
-      undefined,
-    );
 
     void this.eventLogEmitterService
       .createContext({
@@ -412,12 +355,6 @@ export class SignInUpService {
         userId: savedUser.id,
       })
       .insertWorkspaceEvent(USER_SIGNUP_EVENT, {});
-
-    void this.metricsService.incrementCounterForEvent({
-      key: MetricsKeys.SignUpSuccess,
-      shouldStoreInCache: false,
-    });
-
     return savedUser;
   }
 
@@ -485,17 +422,7 @@ export class SignInUpService {
     return hasProvisionedSignUpDestination(availableWorkspacesForSignUp);
   }
 
-  private async hasServerAdmin(): Promise<boolean> {
-    const adminCount = await this.userRepository.count({
-      where: { canAccessFullAdminPanel: true },
-    });
-
-    return adminCount > 0;
-  }
-
-  private async assertWorkspaceCreationAllowed(
-    userData: ExistingUserOrPartialUserWithPicture['userData'],
-  ): Promise<void> {
+  private async assertWorkspaceCreationAllowed(): Promise<void> {
     await this.assertSignUpEnabled();
 
     const workspaceCount = await this.workspaceRepository.count();
@@ -503,8 +430,6 @@ export class SignInUpService {
     if (workspaceCount === 0) {
       return;
     }
-
-    await this.assertWorkspaceCountWithinLimit(workspaceCount);
 
     if (
       !this.twentyConfigService.get(
@@ -514,39 +439,11 @@ export class SignInUpService {
       return;
     }
 
-    const isExistingAdmin =
-      userData.type === 'existingUser' &&
-      userData.existingUser.canAccessFullAdminPanel;
-
-    if (isExistingAdmin) {
-      return;
-    }
-
     throw new AuthException(
       'Workspace creation is restricted to admins',
       AuthExceptionCode.FORBIDDEN_EXCEPTION,
       {
         userFriendlyMessage: msg`Workspace creation is restricted to admins`,
-      },
-    );
-  }
-
-  private async assertWorkspaceCountWithinLimit(
-    workspaceCount: number,
-  ): Promise<void> {
-    if (this.enterprisePlanService.isValid()) {
-      return;
-    }
-
-    if (workspaceCount < MAX_WORKSPACES_WITHOUT_ENTERPRISE_KEY) {
-      return;
-    }
-
-    throw new AuthException(
-      `Cannot create more than ${MAX_WORKSPACES_WITHOUT_ENTERPRISE_KEY} workspaces without a valid enterprise key`,
-      AuthExceptionCode.FORBIDDEN_EXCEPTION,
-      {
-        userFriendlyMessage: msg`Workspace limit reached. A valid Organization key is required to create more workspaces.`,
       },
     );
   }
@@ -656,7 +553,7 @@ export class SignInUpService {
       );
     }
 
-    await this.assertWorkspaceCreationAllowed(userData);
+    await this.assertWorkspaceCreationAllowed();
 
     const displayName = options?.displayName?.trim();
 
@@ -677,8 +574,6 @@ export class SignInUpService {
         requestedSubdomain,
       );
     }
-
-    const shouldGrantServerAdmin = !(await this.hasServerAdmin());
 
     const isWorkEmailFound = isWorkEmail(email);
 
@@ -720,14 +615,7 @@ export class SignInUpService {
           const isExistingUser = userData.type === 'existingUser';
           const user = isExistingUser
             ? userData.existingUser
-            : await this.saveNewUser(
-                userData.newUserWithPicture,
-                {
-                  canImpersonate: shouldGrantServerAdmin,
-                  canAccessFullAdminPanel: shouldGrantServerAdmin,
-                },
-                queryRunner,
-              );
+            : await this.saveNewUser(userData.newUserWithPicture, queryRunner);
 
           await this.userWorkspaceService.create(
             {
@@ -805,22 +693,8 @@ export class SignInUpService {
         .createContext({ workspaceId })
         .insertWorkspaceEvent(WORKSPACE_CREATED_EVENT, {});
 
-      if (this.billingService.isBillingEnabled()) {
-        await this.billingService.ensureBillingCustomer({
-          userEmail: email,
-          workspaceId: workspace.id,
-          workspaceDisplayName: workspace.displayName,
-          partner: options?.partner,
-        });
-      }
-
       return { user, workspace };
     } catch (error) {
-      await this.fileStorageService.invalidateStorageStock({
-        workspaceId,
-        applicationId: workspaceCustomApplicationId,
-      });
-
       const isSubdomainConflict =
         error instanceof QueryFailedError &&
         (error as QueryFailedErrorWithCode).code ===
@@ -859,14 +733,8 @@ export class SignInUpService {
 
     await this.assertSignUpWithoutWorkspaceAllowed(newUserParams.email);
 
-    const shouldGrantServerAdmin = !(await this.hasServerAdmin());
-
     return this.saveNewUser(
       await this.computePartialUserFromUserPayload(newUserParams, authParams),
-      {
-        canImpersonate: shouldGrantServerAdmin,
-        canAccessFullAdminPanel: shouldGrantServerAdmin,
-      },
     );
   }
 }

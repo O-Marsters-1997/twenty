@@ -27,16 +27,8 @@ export const AVAILABLE_WORKSPACE_FOR_AUTH_FRAGMENT = gql`
     personalInviteToken
     workspaceUrls {
       subdomainUrl
-      customUrl
     }
     logo
-    sso {
-      type
-      id
-      issuer
-      name
-      status
-    }
   }
 `;
 

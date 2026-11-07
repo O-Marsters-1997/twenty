@@ -3,14 +3,13 @@ import { Injectable, Logger } from '@nestjs/common';
 import { type ActorMetadata, FieldActorSource } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 
-import { AGENT_TURN_CREDITS_EXHAUSTED_ERROR } from 'src/engine/metadata-modules/ai/ai-history/constants/agent-turn-credits-exhausted-error.constant';
 import { type StreamErrorPayload } from 'src/engine/metadata-modules/ai/ai-history/utils/map-error-to-stream-error.util';
 import { AgentTurnStatus } from 'src/engine/metadata-modules/ai/ai-history/enums/agent-turn-status.enum';
 import { type AgentHistoryStorageContext } from 'src/engine/metadata-modules/ai/ai-history/services/agent-history-workspace-storage.service';
 import { AgentHistoryRepository } from 'src/engine/metadata-modules/ai/ai-history/repositories/agent-history-repository';
 import { InjectAgentHistoryRepository } from 'src/engine/metadata-modules/ai/ai-history/repositories/inject-agent-history-repository.decorator';
 import { type AgentTurnWorkspaceEntity } from 'src/engine/metadata-modules/ai/ai-history/standard-objects/agent-turn.workspace-entity';
-import { type AgentTurnUsage } from 'src/engine/metadata-modules/ai/ai-billing/types/agent-turn-usage.type';
+import { type AgentTurnUsage } from 'src/engine/metadata-modules/ai/ai-history/types/agent-turn-usage.type';
 import { type RecordableAgentExecution } from 'src/engine/metadata-modules/ai/ai-history/types/recordable-agent-execution.type';
 import { buildEndWaitingAgentTurnQuery } from 'src/engine/metadata-modules/ai/ai-history/utils/build-end-waiting-agent-turn-query.util';
 import { buildReleaseStreamClaimQuery } from 'src/engine/metadata-modules/ai/ai-history/utils/build-release-stream-claim-query.util';
@@ -141,8 +140,6 @@ export class AgentTurnRecorderService {
     );
   }
 
-  // Ends a turn run outside chat. Its credits were spent even when its reply
-  // could not be saved, and a failed usage write must not leave it running
   async finishExecutedTurn({
     workspaceId,
     threadId,
@@ -158,12 +155,17 @@ export class AgentTurnRecorderService {
     isWaiting?: boolean;
     error?: StreamErrorPayload;
   }): Promise<void> {
-    if (isDefined(execution.turnUsage)) {
+    if (isDefined(execution.usage)) {
       await this.recordUsage({
         workspaceId,
         threadId,
         turnId,
-        usage: execution.turnUsage,
+        usage: {
+          inputTokens: execution.usage.inputTokens ?? 0,
+          outputTokens: execution.usage.outputTokens ?? 0,
+          cacheReadTokens:
+            execution.usage.inputTokenDetails?.cacheReadTokens ?? 0,
+        },
       }).catch((usageError: unknown) => {
         this.logger.error(
           `Failed to record the usage of agent turn ${turnId}: ${usageError instanceof Error ? usageError.message : String(usageError)}`,
@@ -171,18 +173,12 @@ export class AgentTurnRecorderService {
       });
     }
 
-    const failureError =
-      error ??
-      (execution.hasNoMoreAvailableCredits === true
-        ? AGENT_TURN_CREDITS_EXHAUSTED_ERROR
-        : undefined);
-
     await this.finish({
       workspaceId,
       turnId,
       modelId: execution.modelId,
-      ...(isDefined(failureError)
-        ? { status: AgentTurnStatus.FAILED, error: failureError }
+      ...(isDefined(error)
+        ? { status: AgentTurnStatus.FAILED, error }
         : {
             status: isWaiting
               ? AgentTurnStatus.WAITING_FOR_INPUT
@@ -191,7 +187,6 @@ export class AgentTurnRecorderService {
     });
   }
 
-  // Credits were spent whatever became of the turn, so usage is never guarded by a stream claim
   async recordUsage({
     workspaceId,
     turnId,
@@ -211,9 +206,6 @@ export class AgentTurnRecorderService {
              "inputTokens" = COALESCE("inputTokens", 0) + $3,
              "outputTokens" = COALESCE("outputTokens", 0) + $4,
              "cacheReadTokens" = COALESCE("cacheReadTokens", 0) + $5,
-             "cacheCreationTokens" = COALESCE("cacheCreationTokens", 0) + $6,
-             "inputCredits" = COALESCE("inputCredits", 0) + $7,
-             "outputCredits" = COALESCE("outputCredits", 0) + $8,
              "updatedAt" = now()
            WHERE id = $1
            RETURNING id
@@ -221,10 +213,7 @@ export class AgentTurnRecorderService {
          UPDATE ${table('agentChatThread')} SET
            "totalInputTokens" = "totalInputTokens" + $3,
            "totalOutputTokens" = "totalOutputTokens" + $4,
-           "totalCacheReadTokens" = "totalCacheReadTokens" + $5,
-           "totalCacheCreationTokens" = "totalCacheCreationTokens" + $6,
-           "totalInputCredits" = "totalInputCredits" + $7,
-           "totalOutputCredits" = "totalOutputCredits" + $8
+           "totalCacheReadTokens" = "totalCacheReadTokens" + $5
          WHERE id = $2`,
         [
           turnId,
@@ -232,9 +221,6 @@ export class AgentTurnRecorderService {
           usage.inputTokens,
           usage.outputTokens,
           usage.cacheReadTokens,
-          usage.cacheCreationTokens,
-          usage.inputCredits,
-          usage.outputCredits,
         ],
       );
     });

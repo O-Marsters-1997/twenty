@@ -135,9 +135,7 @@ export class FileUploadCompletionService {
 
     const { affected } = await this.fileStorageService.markFileUploaded({
       workspaceId,
-      applicationId: file.applicationId,
       fileId: file.id,
-      chargedSize: declaredSize,
       size,
       mimeType,
     });

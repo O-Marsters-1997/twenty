@@ -6,7 +6,6 @@ import { RecordAccessPolicyService } from 'src/engine/core-modules/record-share/
 import { RecordShareStorageService } from 'src/engine/core-modules/record-share/services/record-share-storage.service';
 import { COMPANY_FLAT_OBJECT_MOCK } from 'src/engine/metadata-modules/flat-object-metadata/__mocks__/company-flat-object.mock';
 import { CallWebhookJobsJob } from 'src/engine/metadata-modules/webhook/jobs/call-webhook-jobs.job';
-import { WebhookRateLimitService } from 'src/engine/metadata-modules/webhook/jobs/webhook-rate-limit.service';
 import { WorkspaceOrmManager } from 'src/engine/twenty-orm/workspace-orm.manager';
 import { WorkspaceCacheService } from 'src/engine/workspace-cache/services/workspace-cache.service';
 
@@ -35,16 +34,6 @@ describe('webhook mandatory visibility', () => {
         { provide: WorkspaceOrmManager, useValue: {} },
         { provide: RecordShareStorageService, useValue: {} },
 
-        {
-          provide: WebhookRateLimitService,
-          useValue: {
-            admitWebhookEventsWithinRateLimit: async ({
-              webhookEvents,
-            }: {
-              webhookEvents: unknown[];
-            }) => webhookEvents,
-          },
-        },
       ],
     }).compile();
     for (const flatObjectMetadataMaps of [

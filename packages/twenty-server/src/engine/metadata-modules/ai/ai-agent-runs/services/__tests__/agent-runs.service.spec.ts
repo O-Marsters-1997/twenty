@@ -15,8 +15,6 @@ const buildTurn = (id: string) => ({
   modelId: null,
   inputTokens: null,
   outputTokens: null,
-  inputCredits: null,
-  outputCredits: null,
   createdBy: {
     source: FieldActorSource.APPLICATION,
     name: 'App',

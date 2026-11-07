@@ -27,7 +27,6 @@ import { WorkspaceMemberWorkspaceEntity } from 'src/modules/workspace-member/sta
   AuthPrincipalGuard({
     userSession: {
       standard: true,
-      impersonated: true,
       playground: true,
       workspaceAgnostic: false,
     },
@@ -55,7 +54,6 @@ export class ApprovedAccessDomainResolver {
     AuthPrincipalGuard({
       userSession: {
         standard: true,
-        impersonated: true,
         playground: true,
         workspaceAgnostic: false,
       },
@@ -99,7 +97,6 @@ export class ApprovedAccessDomainResolver {
     AuthPrincipalGuard({
       userSession: {
         standard: true,
-        impersonated: true,
         playground: true,
         workspaceAgnostic: false,
       },
@@ -125,7 +122,6 @@ export class ApprovedAccessDomainResolver {
     AuthPrincipalGuard({
       userSession: {
         standard: true,
-        impersonated: true,
         playground: true,
         workspaceAgnostic: false,
       },

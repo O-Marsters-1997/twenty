@@ -10,12 +10,7 @@ import { Pool, type PoolConfig, types } from 'pg';
 import { DataSource } from 'typeorm';
 import { isDefined } from 'twenty-shared/utils';
 
-import {
-  DatabasePoolMetricsService,
-  DatabasePoolName,
-} from 'src/database/typeorm/database-pool-metrics.service';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
-import { WorkspaceRecordStockService } from 'src/engine/core-modules/usage-limit/services/workspace-record-stock.service';
 import { type WorkspaceInternalContext } from 'src/engine/twenty-orm/interfaces/workspace-internal-context.interface';
 import { getWorkspaceContext } from 'src/engine/twenty-orm/storage/orm-workspace-context.storage';
 import { WorkspaceDataSource } from 'src/engine/twenty-orm/datasource/workspace-data-source';
@@ -49,8 +44,6 @@ export class WorkspaceDataSourceService
     private readonly workspaceEventEmitter: WorkspaceEventEmitter,
     @InjectDataSource()
     private readonly coreDataSource: DataSource,
-    private readonly databasePoolMetricsService: DatabasePoolMetricsService,
-    private readonly workspaceRecordStockService: WorkspaceRecordStockService,
   ) {}
 
   onModuleInit(): void {
@@ -61,11 +54,6 @@ export class WorkspaceDataSourceService
       ),
     });
 
-    this.databasePoolMetricsService.registerPool({
-      poolName: DatabasePoolName.WorkspacePrimary,
-      pool: this.primaryPool,
-    });
-
     const replicaUrl = this.twentyConfigService.get('PG_DATABASE_REPLICA_URL');
 
     if (isDefined(replicaUrl)) {
@@ -74,11 +62,6 @@ export class WorkspaceDataSourceService
         queryTimeoutMs: this.twentyConfigService.get(
           'PG_DATABASE_REPLICA_TIMEOUT_MS',
         ),
-      });
-
-      this.databasePoolMetricsService.registerPool({
-        poolName: DatabasePoolName.WorkspaceReplica,
-        pool: this.replicaPool,
       });
     }
   }
@@ -120,12 +103,10 @@ export class WorkspaceDataSourceService
       flatValidationRuleMaps: workspaceContext.flatValidationRuleMaps,
       objectIdByNameSingular: workspaceContext.objectIdByNameSingular,
       featureFlagsMap: workspaceContext.featureFlagsMap,
-      billingEntitlements: workspaceContext.billingEntitlements,
       userWorkspaceRoleMap: workspaceContext.userWorkspaceRoleMap,
       roleIdsWithAllRecordsAccess: workspaceContext.roleIdsWithAllRecordsAccess,
       apiKeyRoleMap: workspaceContext.apiKeyRoleMap,
       eventEmitterService: this.workspaceEventEmitter,
-      recordStock: this.workspaceRecordStockService,
       coreDataSource: this.coreDataSource,
     };
   }
@@ -161,13 +142,6 @@ export class WorkspaceDataSourceService
   }
 
   async onApplicationShutdown(): Promise<void> {
-    this.databasePoolMetricsService.unregisterPool(
-      DatabasePoolName.WorkspacePrimary,
-    );
-    this.databasePoolMetricsService.unregisterPool(
-      DatabasePoolName.WorkspaceReplica,
-    );
-
     await this.primaryPool?.end();
     await this.replicaPool?.end();
     this.primaryPool = null;

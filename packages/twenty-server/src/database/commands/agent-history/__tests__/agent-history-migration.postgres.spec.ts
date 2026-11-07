@@ -17,12 +17,10 @@ import { AgentMessageWorkspaceEntity } from 'src/engine/metadata-modules/ai/ai-h
 import { AddChatMessageSenderFastInstanceCommand } from 'src/database/commands/upgrade-version-command/2-43/2-43-instance-command-fast-1790171503074-add-chat-message-sender';
 import { AgentHistoryMigrationDataService } from 'src/database/commands/agent-history/agent-history-migration-data.service';
 import { AgentHistoryMigrationValidationService } from 'src/database/commands/agent-history/agent-history-migration-validation.service';
-import { AdminPanelChatService } from 'src/engine/core-modules/admin-panel/services/admin-panel-chat.service';
 import { computeFlatIndexFieldColumnNames } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/index/utils/index-action-handler.utils';
 import { WorkspaceSchemaIndexManagerService } from 'src/engine/twenty-orm/workspace-schema-manager/services/workspace-schema-index-manager.service';
 import { updateAgentChatThreadUsage } from 'src/engine/metadata-modules/ai/ai-chat/utils/update-agent-chat-thread-usage.util';
 import { Logger } from '@nestjs/common';
-import { WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
 import { WorkspaceDataSource } from 'src/engine/twenty-orm/datasource/workspace-data-source';
 import { WorkspaceSchemaTableManagerService } from 'src/engine/twenty-orm/workspace-schema-manager/services/workspace-schema-table-manager.service';
 import { generateColumnDefinitions } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/utils/generate-column-definitions.util';
@@ -32,7 +30,7 @@ import { createEmptyFlatEntityMaps } from 'src/engine/metadata-modules/flat-enti
 import { buildSystemAuthContext } from 'src/engine/twenty-orm/utils/build-system-auth-context.util';
 import { AgentHistoryRepository } from 'src/engine/metadata-modules/ai/ai-history/repositories/agent-history-repository';
 import { AgentChatThreadWorkspaceEntity } from 'src/engine/metadata-modules/ai/ai-history/standard-objects/agent-chat-thread.workspace-entity';
-import { DataSource, IsNull, type Repository } from 'typeorm';
+import { DataSource, IsNull } from 'typeorm';
 import { Pool } from 'pg';
 import { type FeatureFlagKey } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
@@ -108,16 +106,10 @@ const SCHEMA = getWorkspaceSchemaName(WORKSPACE_ID);
           metadata.flatObjectMetadataMaps,
         ).idByNameSingular,
         featureFlagsMap: {} as Record<FeatureFlagKey, boolean>,
-        billingEntitlements: {},
         userWorkspaceRoleMap: {},
         apiKeyRoleMap: {},
         roleIdsWithAllRecordsAccess: [],
         eventEmitterService: { emitDatabaseBatchEvent },
-        recordStock: {
-          assertRecordStockAvailable: jest.fn().mockResolvedValue(undefined),
-          acquireRecordStock: jest.fn().mockResolvedValue(undefined),
-          releaseRecordStock: jest.fn().mockResolvedValue(undefined),
-        },
         coreDataSource: dataSource,
       },
     };
@@ -1250,46 +1242,6 @@ const SCHEMA = getWorkspaceSchemaName(WORKSPACE_ID);
         target: 'core',
         batchSize: 1,
       });
-    });
-
-    it('serves thread lookup from workspace storage', async () => {
-      await migration.migrate({
-        workspaceId: WORKSPACE_ID,
-        target: 'workspace',
-      });
-      const workspaceRepository = {
-        findOne: async ({ where }: { where: { id: string } }) =>
-          (
-            await dataSource.query(
-              `SELECT id, "allowImpersonation" FROM core.workspace WHERE id = $1`,
-              [where.id],
-            )
-          )[0],
-      } as unknown as Repository<WorkspaceEntity>;
-      const chat = new AdminPanelChatService(
-        workspaceRepository,
-        threads,
-        messages,
-      );
-      expect(
-        await chat.getChatThreadMessages({
-          workspaceId: WORKSPACE_ID,
-          threadId: THREAD_ID,
-        }),
-      ).toMatchObject({
-        thread: { id: THREAD_ID },
-        messages: [{ id: MESSAGE_ID }],
-      });
-      await dataSource.query(
-        `UPDATE core.workspace SET "allowImpersonation" = false WHERE id = $1`,
-        [WORKSPACE_ID],
-      );
-      await expect(
-        chat.getChatThreadMessages({
-          workspaceId: WORKSPACE_ID,
-          threadId: THREAD_ID,
-        }),
-      ).rejects.toThrow('This workspace has not enabled support access');
     });
 
     it('returns domain errors for missing history and invalid workspace scope', async () => {

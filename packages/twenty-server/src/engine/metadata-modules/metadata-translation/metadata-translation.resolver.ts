@@ -16,7 +16,6 @@ import { MetadataTranslationService } from 'src/engine/metadata-modules/metadata
   AuthPrincipalGuard({
     userSession: {
       standard: true,
-      impersonated: true,
       playground: true,
       workspaceAgnostic: false,
     },

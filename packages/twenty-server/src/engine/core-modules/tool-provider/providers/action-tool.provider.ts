@@ -21,9 +21,7 @@ import { type ToolApproval, ToolCategory } from 'twenty-shared/ai';
 import { toToolJsonSchema } from 'src/engine/core-modules/record-crud/utils/to-tool-json-schema.util';
 import { type ToolDescriptor } from 'src/engine/core-modules/tool-provider/types/tool-descriptor.type';
 import { type ToolIndexEntry } from 'src/engine/core-modules/tool-provider/types/tool-index-entry.type';
-import { CodeInterpreterService } from 'src/engine/core-modules/code-interpreter/code-interpreter.service';
 import { CreateCalendarEventTool } from 'src/engine/core-modules/tool/tools/calendar-tool/create-calendar-event-tool';
-import { CodeInterpreterTool } from 'src/engine/core-modules/tool/tools/code-interpreter-tool/code-interpreter-tool';
 import { DraftEmailTool } from 'src/engine/core-modules/tool/tools/email-tool/draft-email-tool';
 import { FindConnectedAccountsTool } from 'src/engine/core-modules/tool/tools/email-tool/find-connected-accounts-tool';
 import { SendEmailTool } from 'src/engine/core-modules/tool/tools/email-tool/send-email-tool';
@@ -32,7 +30,6 @@ import { CreateFileUploadTool } from 'src/engine/core-modules/tool/tools/file-up
 import { HttpTool } from 'src/engine/core-modules/tool/tools/http-tool/http-tool';
 import { ExtractJsonPathsTool } from 'src/engine/core-modules/tool/tools/output-navigation-tool/extract-json-paths-tool';
 import { SearchOutputTool } from 'src/engine/core-modules/tool/tools/output-navigation-tool/search-output-tool';
-import { SearchHelpCenterTool } from 'src/engine/core-modules/tool/tools/search-help-center-tool/search-help-center-tool';
 import { ShareRecordTool } from 'src/engine/core-modules/tool/tools/share-record-tool/share-record-tool';
 import { type ToolOutput } from 'src/engine/core-modules/tool/types/tool-output.type';
 import { type Tool } from 'src/engine/core-modules/tool/types/tool.type';
@@ -51,15 +48,12 @@ export class ActionToolProvider implements ToolProvider {
     private readonly draftEmailTool: DraftEmailTool,
     private readonly findConnectedAccountsTool: FindConnectedAccountsTool,
     private readonly createCalendarEventTool: CreateCalendarEventTool,
-    private readonly searchHelpCenterTool: SearchHelpCenterTool,
     private readonly createFileUploadTool: CreateFileUploadTool,
     private readonly completeFileUploadTool: CompleteFileUploadTool,
-    private readonly codeInterpreterTool: CodeInterpreterTool,
     private readonly extractJsonPathsTool: ExtractJsonPathsTool,
     private readonly searchOutputTool: SearchOutputTool,
     private readonly saveCampaignTool: SaveCampaignTool,
     private readonly shareRecordTool: ShareRecordTool,
-    private readonly codeInterpreterService: CodeInterpreterService,
     private readonly permissionsService: PermissionsService,
     private readonly i18nService: I18nService,
   ) {
@@ -69,10 +63,8 @@ export class ActionToolProvider implements ToolProvider {
       ['draft_email', this.draftEmailTool],
       ['find_connected_accounts', this.findConnectedAccountsTool],
       ['create_calendar_event', this.createCalendarEventTool],
-      ['search_help_center', this.searchHelpCenterTool],
       ['create_file_upload', this.createFileUploadTool],
       ['complete_file_upload', this.completeFileUploadTool],
-      ['code_interpreter', this.codeInterpreterTool],
       ['extract_json_paths', this.extractJsonPathsTool],
       ['search_output', this.searchOutputTool],
       ['save_campaign', this.saveCampaignTool],
@@ -191,15 +183,6 @@ export class ActionToolProvider implements ToolProvider {
 
     descriptors.push(
       this.buildDescriptor(
-        'search_help_center',
-        this.searchHelpCenterTool,
-        includeSchemas,
-        context.locale,
-      ),
-    );
-
-    descriptors.push(
-      this.buildDescriptor(
         'extract_json_paths',
         this.extractJsonPathsTool,
         includeSchemas,
@@ -228,25 +211,6 @@ export class ActionToolProvider implements ToolProvider {
         this.buildDescriptor(
           'share_record',
           this.shareRecordTool,
-          includeSchemas,
-          context.locale,
-        ),
-      );
-    }
-
-    const hasCodeInterpreterPermission =
-      this.codeInterpreterService.isEnabled() &&
-      (await this.permissionsService.checkRolesPermissions(
-        context.rolePermissionConfig,
-        context.workspaceId,
-        PermissionFlagType.CODE_INTERPRETER_TOOL,
-      ));
-
-    if (hasCodeInterpreterPermission) {
-      descriptors.push(
-        this.buildDescriptor(
-          'code_interpreter',
-          this.codeInterpreterTool,
           includeSchemas,
           context.locale,
         ),

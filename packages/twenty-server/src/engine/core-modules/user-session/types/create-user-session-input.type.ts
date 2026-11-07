@@ -6,9 +6,6 @@ export type CreateUserSessionInput = {
   workspaceId?: string | null;
   userWorkspaceId?: string | null;
   authProvider: AuthProviderEnum;
-  isImpersonating?: boolean;
-  impersonatorUserWorkspaceId?: string | null;
-  impersonatedUserWorkspaceId?: string | null;
   userAgent?: string | null;
   ipAddress?: string | null;
   origin: UserSessionCreationOrigin;

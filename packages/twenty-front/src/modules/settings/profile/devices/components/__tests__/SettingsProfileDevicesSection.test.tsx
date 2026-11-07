@@ -13,7 +13,6 @@ const buildSession = (id: string, isCurrent: boolean) => ({
   __typename: 'UserSession',
   id,
   isCurrent,
-  isImpersonating: false,
   userAgent: 'Mozilla/5.0 (Macintosh) Chrome/128.0',
   ipAddress: '127.0.0.1',
   lastActiveAt: new Date().toISOString(),

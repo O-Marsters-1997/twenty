@@ -21,7 +21,6 @@ import {
 } from 'src/engine/core-modules/auth/auth.exception';
 import { AvailableWorkspaces } from 'src/engine/core-modules/auth/dto/available-workspaces.dto';
 import { type AuthContextUser } from 'src/engine/core-modules/auth/types/auth-context.type';
-import { type RawAuthContext } from 'src/engine/core-modules/auth/types/raw-auth-context.type';
 import { OnboardingStatus } from 'src/engine/core-modules/onboarding/enums/onboarding-status.enum';
 import {
   OnboardingService,
@@ -52,7 +51,6 @@ import { AuthApiKey } from 'src/engine/decorators/auth/auth-api-key.decorator';
 import { AuthApplication } from 'src/engine/decorators/auth/auth-application.decorator';
 import { AuthAuthenticatedAt } from 'src/engine/decorators/auth/auth-authenticated-at.decorator';
 import { AuthProvider } from 'src/engine/decorators/auth/auth-provider.decorator';
-import { AuthImpersonationContext } from 'src/engine/decorators/auth/auth-impersonation-context.decorator';
 import { canCredentialAutoLoginIntoWorkspaces } from 'src/engine/core-modules/auth/utils/can-credential-auto-login-into-workspaces.util';
 import { AuthGraphqlApiExceptionFilter } from 'src/engine/core-modules/auth/filters/auth-graphql-api-exception.filter';
 import { AuthUserWorkspaceId } from 'src/engine/decorators/auth/auth-user-workspace-id.decorator';
@@ -60,7 +58,6 @@ import { AuthIsUserSession } from 'src/engine/decorators/auth/auth-is-user-sessi
 import { AuthUser } from 'src/engine/decorators/auth/auth-user.decorator';
 import { AuthWorkspaceMemberId } from 'src/engine/decorators/auth/auth-workspace-member-id.decorator';
 import { AuthWorkspace } from 'src/engine/decorators/auth/auth-workspace.decorator';
-import { AllowSuspendedWorkspace } from 'src/engine/decorators/auth/allow-suspended-workspace.decorator';
 import { CustomPermissionGuard } from 'src/engine/guards/custom-permission.guard';
 import { NoPermissionGuard } from 'src/engine/guards/no-permission.guard';
 import { AuthPrincipalGuard } from 'src/engine/guards/auth-principal.guard';
@@ -140,12 +137,9 @@ export class UserResolver {
     }),
     NoPermissionGuard,
   )
-  @AllowSuspendedWorkspace()
   async currentUser(
     @AuthUser() { id: userId }: AuthContextUser,
     @AuthWorkspace({ allowUndefined: true }) workspace: WorkspaceEntity,
-    @AuthImpersonationContext()
-    impersonationContext: RawAuthContext['impersonationContext'],
     @AuthIsUserSession() isUserSession: boolean,
   ): Promise<UserEntity> {
     const user = await this.userRepository.findOne({
@@ -205,7 +199,6 @@ export class UserResolver {
         ...currentUserWorkspace,
         ...userWorkspacePermissions,
         twoFactorAuthenticationMethodSummary,
-        isImpersonating: isDefined(impersonationContext),
       },
       currentWorkspace: refreshedWorkspace,
     };
@@ -227,7 +220,6 @@ export class UserResolver {
 
     const userVarAllowList: string[] = [
       OnboardingStepKeys.ONBOARDING_CONNECT_ACCOUNT_PENDING,
-      OnboardingStepKeys.ONBOARDING_BOOK_CALL_PENDING,
       AccountsToReconnectKeys.ACCOUNTS_TO_RECONNECT_INSUFFICIENT_PERMISSIONS,
       AccountsToReconnectKeys.ACCOUNTS_TO_RECONNECT_EMAIL_ALIASES,
     ];
@@ -410,7 +402,6 @@ export class UserResolver {
     }),
     NoPermissionGuard,
   )
-  @AllowSuspendedWorkspace()
   async deleteUser(@AuthUser() { id: userId }: AuthContextUser) {
     return this.userService.deleteUser(userId);
   }
@@ -425,7 +416,6 @@ export class UserResolver {
     }),
     CustomPermissionGuard,
   )
-  @AllowSuspendedWorkspace()
   async deleteUserFromWorkspace(
     @Args('workspaceMemberIdToDelete') workspaceMemberIdToDelete: string,
     @AuthUser() { id: userId }: AuthContextUser,
@@ -507,7 +497,6 @@ export class UserResolver {
     AuthPrincipalGuard({
       userSession: {
         standard: true,
-        impersonated: true,
         playground: true,
         workspaceAgnostic: false,
       },
@@ -517,7 +506,6 @@ export class UserResolver {
     }),
     CustomPermissionGuard,
   )
-  @AllowSuspendedWorkspace()
   async updateWorkspaceMemberSettings(
     @Args('input') input: UpdateWorkspaceMemberSettingsInput,
     @AuthWorkspace() workspace: WorkspaceEntity,
@@ -758,7 +746,6 @@ export class UserResolver {
     AuthPrincipalGuard({
       userSession: {
         standard: true,
-        impersonated: true,
         playground: true,
         workspaceAgnostic: false,
       },

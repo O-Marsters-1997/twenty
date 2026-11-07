@@ -8,13 +8,7 @@ import { useAgentChatModelId } from '@/ai/hooks/useAgentChatModelId';
 import { agentChatDisplayedThreadState } from '@/ai/states/agentChatDisplayedThreadState';
 import { agentChatErrorFamilyState } from '@/ai/states/agentChatErrorFamilyState';
 import { agentChatIsAwaitingFirstChunkFamilyState } from '@/ai/states/agentChatIsAwaitingFirstChunkFamilyState';
-import { isAiChatCreditsExhaustedError } from '@/ai/utils/isAiChatCreditsExhaustedError';
-import { currentWorkspaceState } from '@/auth/states/currentWorkspaceState';
 import { dispatchBrowserEvent } from '@/browser-event/utils/dispatchBrowserEvent';
-import {
-  markWorkspaceCreditsAvailable,
-  markWorkspaceCreditsExhausted,
-} from '@/workspace/utils/updateWorkspaceResourceCreditCap';
 import { RetryChatMessageDocument } from '~/generated-metadata/graphql';
 
 export const useRetryChatMessage = () => {
@@ -43,11 +37,6 @@ export const useRetryChatMessage = () => {
         variables: { threadId, modelId: modelIdForRequest },
       });
 
-      // Same guard as useAgentChat: the stream may already have set a newer credits-exhausted error.
-      if (!isAiChatCreditsExhaustedError(store.get(errorAtom))) {
-        store.set(currentWorkspaceState.atom, markWorkspaceCreditsAvailable);
-      }
-
       dispatchBrowserEvent(AGENT_CHAT_REFETCH_MESSAGES_EVENT_NAME);
     } catch (retryError) {
       store.set(isAwaitingFirstChunkAtom, false);
@@ -55,10 +44,6 @@ export const useRetryChatMessage = () => {
         errorAtom,
         retryError instanceof Error ? retryError : previousError,
       );
-
-      if (isAiChatCreditsExhaustedError(retryError)) {
-        store.set(currentWorkspaceState.atom, markWorkspaceCreditsExhausted);
-      }
     }
   }, [apolloClient, store, modelIdForRequest]);
 

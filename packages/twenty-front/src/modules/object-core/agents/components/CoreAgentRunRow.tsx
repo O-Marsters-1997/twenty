@@ -79,11 +79,6 @@ export const CoreAgentRunRow = ({
           {isDefined(tokens) ? formatNumber(tokens, { abbreviate: true }) : '-'}
         </TableCell>
         <TableCell align="right" color={themeCssVariables.font.color.secondary}>
-          {isDefined(run.credits)
-            ? formatNumber(run.credits, { decimals: 2 })
-            : '-'}
-        </TableCell>
-        <TableCell align="right" color={themeCssVariables.font.color.secondary}>
           {isDefined(durationMs) ? formatDuration(durationMs) : '-'}
         </TableCell>
       </TableRow>

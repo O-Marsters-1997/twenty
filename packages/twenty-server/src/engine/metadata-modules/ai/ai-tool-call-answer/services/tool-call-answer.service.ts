@@ -448,7 +448,6 @@ export class ToolCallAnswerService {
       await this.turnPreflightService.assertCanStartChatTurn({
         threadId,
         modelId,
-        userWorkspaceId,
         workspaceMemberId,
         workspace,
       });

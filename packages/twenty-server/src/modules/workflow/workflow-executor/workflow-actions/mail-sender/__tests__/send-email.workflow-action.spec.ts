@@ -409,32 +409,6 @@ describe('SendEmailWorkflowAction', () => {
       );
     });
 
-    it('skips an imap account with no SMTP configured', async () => {
-      workspaceMemberRepository.findOne.mockResolvedValue({ userId: 'user-1' });
-      userWorkspaceRepository.findOne.mockResolvedValue({
-        id: USER_WORKSPACE_ID,
-      });
-      connectedAccountRepository.find.mockResolvedValue([
-        {
-          id: 'imap-without-smtp-id',
-          provider: ConnectedAccountProvider.IMAP_SMTP_CALDAV,
-          connectionParameters: { IMAP: { host: 'imap.example.com' } },
-        },
-        {
-          id: MEMBER_ACCOUNT_ID,
-          provider: ConnectedAccountProvider.GOOGLE,
-          connectionParameters: null,
-        },
-      ]);
-
-      await executeWithSender(WORKSPACE_MEMBER_ID);
-
-      expect(mockSendEmailTool.execute).toHaveBeenCalledWith(
-        expect.objectContaining({ connectedAccountId: MEMBER_ACCOUNT_ID }),
-        expect.any(Object),
-      );
-    });
-
     it('passes the id through unchanged when it is not a workspace member', async () => {
       workspaceMemberRepository.findOne.mockResolvedValue(null);
 

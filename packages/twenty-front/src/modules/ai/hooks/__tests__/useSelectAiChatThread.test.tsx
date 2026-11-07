@@ -72,8 +72,6 @@ describe('useSelectAiChatThread', () => {
       totalInputTokens: 250,
       totalOutputTokens: 30,
       totalCacheReadTokens: 80,
-      totalInputCredits: 125000,
-      totalOutputCredits: 50000,
     };
     setAgentChatThreadList(jotaiStore, [thread]);
     const usageAtom = agentChatUsageFamilyState.atomFamily({

@@ -6,8 +6,6 @@ import { StepStatus } from 'twenty-shared/workflow';
 import { Process } from 'src/engine/core-modules/message-queue/decorators/process.decorator';
 import { Processor } from 'src/engine/core-modules/message-queue/decorators/processor.decorator';
 import { MessageQueue } from 'src/engine/core-modules/message-queue/message-queue.constants';
-import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
-import { MetricsKeys } from 'src/engine/core-modules/metrics/types/metrics-keys.type';
 import { WorkspaceOrmManager } from 'src/engine/twenty-orm/workspace-orm.manager';
 import { buildSystemAuthContext } from 'src/engine/twenty-orm/utils/build-system-auth-context.util';
 import { WorkflowRunStatus } from 'src/modules/workflow/common/standard-objects/workflow-run.workspace-entity';
@@ -33,7 +31,6 @@ export class RunWorkflowJob {
     private readonly workflowVersionCoreSyncService: WorkflowVersionCoreSyncService,
     private readonly workflowExecutorWorkspaceService: WorkflowExecutorWorkspaceService,
     private readonly workflowRunWorkspaceService: WorkflowRunWorkspaceService,
-    private readonly metricsService: MetricsService,
     private readonly workspaceOrmManager: WorkspaceOrmManager,
   ) {}
 
@@ -86,7 +83,6 @@ export class RunWorkflowJob {
           workflowRunId,
           status: WorkflowRunStatus.FAILED,
           error: error.message,
-          isSystemError: true,
         });
 
         throw error;
@@ -150,11 +146,6 @@ export class RunWorkflowJob {
     await this.workflowRunWorkspaceService.startWorkflowRun({
       workflowRunId,
       workspaceId,
-    });
-
-    await this.incrementTriggerMetrics({
-      workflowRunId,
-      triggerType: trigger.type,
     });
 
     const stepIds = trigger.nextStepIds ?? [];
@@ -340,37 +331,5 @@ export class RunWorkflowJob {
         workspaceId,
       });
     }
-  }
-
-  private async incrementTriggerMetrics({
-    workflowRunId,
-    triggerType,
-  }: {
-    workflowRunId: string;
-    triggerType: string;
-  }) {
-    let key: MetricsKeys;
-
-    switch (triggerType) {
-      case WorkflowTriggerType.DATABASE_EVENT:
-        key = MetricsKeys.WorkflowRunStartedDatabaseEventTrigger;
-        break;
-      case WorkflowTriggerType.CRON:
-        key = MetricsKeys.WorkflowRunStartedCronTrigger;
-        break;
-      case WorkflowTriggerType.WEBHOOK:
-        key = MetricsKeys.WorkflowRunStartedWebhookTrigger;
-        break;
-      case WorkflowTriggerType.MANUAL:
-        key = MetricsKeys.WorkflowRunStartedManualTrigger;
-        break;
-      default:
-        throw new Error('Invalid trigger type');
-    }
-
-    await this.metricsService.incrementCounterForEvent({
-      key,
-      eventId: workflowRunId,
-    });
   }
 }

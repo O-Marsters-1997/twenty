@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { BillingModule } from 'src/engine/core-modules/billing/billing.module';
 import { CacheLockModule } from 'src/engine/core-modules/cache-lock/cache-lock.module';
 import { OnboardingResolver } from 'src/engine/core-modules/onboarding/onboarding.resolver';
 import { OnboardingService } from 'src/engine/core-modules/onboarding/onboarding.service';
@@ -12,7 +11,6 @@ import { OnboardingInviteSuggestionsModule } from 'src/modules/onboarding-invite
 
 @Module({
   imports: [
-    BillingModule,
     CacheLockModule,
     UserVarsModule,
     OnboardingInviteSuggestionsModule,

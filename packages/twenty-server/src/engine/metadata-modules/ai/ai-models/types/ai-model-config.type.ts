@@ -4,7 +4,6 @@ import {
   type DataResidency,
 } from 'twenty-shared/ai';
 import { type AiModelBenchmark } from 'src/engine/metadata-modules/ai/ai-models/types/ai-model-benchmark.type';
-import { type LongContextCost } from 'src/engine/metadata-modules/ai/ai-models/types/long-context-cost.type';
 import { type ModelFamily } from 'src/engine/metadata-modules/ai/ai-models/types/model-family.enum';
 
 export type AiModelConfig = {
@@ -16,13 +15,8 @@ export type AiModelConfig = {
   modelFamily?: ModelFamily;
   dataResidency?: DataResidency;
   zeroDataRetention?: boolean;
-  inputCostPerMillionTokens: number;
-  outputCostPerMillionTokens: number;
   contextWindowTokens: number;
   maxOutputTokens: number;
-  cachedInputCostPerMillionTokens?: number;
-  cacheCreationCostPerMillionTokens?: number;
-  longContextCost?: LongContextCost;
   modalities?: string[];
   supportsReasoning?: boolean;
   efforts?: AiModelEffort[];

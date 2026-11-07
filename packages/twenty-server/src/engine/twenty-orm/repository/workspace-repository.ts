@@ -17,7 +17,6 @@ import {
 
 import { DatabaseEventAction } from 'src/engine/api/graphql/graphql-query-runner/enums/database-event-action';
 import { type WorkspaceAuthContext } from 'src/engine/core-modules/auth/types/workspace-auth-context.type';
-import { isRecordStockTrackedObject } from 'src/engine/core-modules/usage-limit/utils/is-record-stock-tracked-object.util';
 import { type FlatObjectMetadata } from 'src/engine/metadata-modules/flat-object-metadata/types/flat-object-metadata.type';
 import {
   PermissionsException,
@@ -1081,8 +1080,6 @@ export class WorkspaceRepository<TEntity extends ObjectLiteral = ObjectRecord> {
       affectedRecords: formattedRecords,
     });
 
-    await this.assertRecordStockAvailable(recordsToInsert.length);
-
     const sql = buildInsertStatement({
       tableShape: this.options.tableShape,
       columnNames,
@@ -1094,8 +1091,6 @@ export class WorkspaceRepository<TEntity extends ObjectLiteral = ObjectRecord> {
     const rawRows = await this.executeRaw<ObjectRecord>(sql, parameters);
 
     await validateWrittenRecords?.(rawRows);
-
-    await this.acquireRecordStock(rawRows.length);
 
     if (isDefined(filesFieldFileIds)) {
       await this.filesFieldSync.updateFileEntityRecords(filesFieldFileIds);
@@ -1355,41 +1350,6 @@ export class WorkspaceRepository<TEntity extends ObjectLiteral = ObjectRecord> {
       insertedColumns: columnNames,
       formattedRecords,
     };
-  }
-
-  private async assertRecordStockAvailable(quantity: number): Promise<void> {
-    if (!isRecordStockTrackedObject(this.options.flatObjectMetadata)) {
-      return;
-    }
-
-    await this.options.internalContext.recordStock.assertRecordStockAvailable({
-      workspaceId: this.options.internalContext.workspaceId,
-      quantity,
-      flatObjectMetadataMaps:
-        this.options.internalContext.flatObjectMetadataMaps,
-    });
-  }
-
-  private async acquireRecordStock(quantity: number): Promise<void> {
-    if (!isRecordStockTrackedObject(this.options.flatObjectMetadata)) {
-      return;
-    }
-
-    await this.options.internalContext.recordStock.acquireRecordStock({
-      workspaceId: this.options.internalContext.workspaceId,
-      quantity,
-    });
-  }
-
-  private async releaseRecordStock(quantity: number): Promise<void> {
-    if (!isRecordStockTrackedObject(this.options.flatObjectMetadata)) {
-      return;
-    }
-
-    await this.options.internalContext.recordStock.releaseRecordStock({
-      workspaceId: this.options.internalContext.workspaceId,
-      quantity,
-    });
   }
 
   private async emitCreateEvents(insertedIds: string[]): Promise<void> {
@@ -1764,10 +1724,6 @@ export class WorkspaceRepository<TEntity extends ObjectLiteral = ObjectRecord> {
           : columnsToReturn,
       setColumns,
     });
-
-    if (kind === 'delete') {
-      await this.releaseRecordStock(mutationResult.generatedMaps.length);
-    }
 
     await validateWrittenRecords?.(mutationResult.generatedMaps);
 

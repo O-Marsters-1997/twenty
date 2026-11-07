@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { EVENT_LOGS_LIVE_SUBSCRIPTION } from '@/settings/event-logs/graphql/subscriptions/EventLogsLiveSubscription';
 import { sseClientState } from '@/sse-db-event/states/sseClientState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { captureException } from '@sentry/react';
+import { logError } from '~/utils/logError';
 import { isDefined } from 'twenty-shared/utils';
 
 import {
@@ -61,7 +61,7 @@ export const useEventLogsLiveStream = ({
             setLiveRecords((previous) => [...incoming, ...previous]);
           }
         },
-        error: (error) => captureException(error),
+        error: (error) => logError(error),
         complete: () => {},
       },
     );

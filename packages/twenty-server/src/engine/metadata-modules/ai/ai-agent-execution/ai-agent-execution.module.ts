@@ -6,7 +6,6 @@ import { ApplicationLookupModule } from 'src/engine/core-modules/application/app
 import { CacheLockModule } from 'src/engine/core-modules/cache-lock/cache-lock.module';
 import { FileEntity } from 'src/engine/core-modules/file/entities/file.entity';
 import { FileUrlModule } from 'src/engine/core-modules/file/file-url/file-url.module';
-import { MetricsModule } from 'src/engine/core-modules/metrics/metrics.module';
 import { PendingWakeUpEntity } from 'src/engine/core-modules/pending-wake-up/entities/pending-wake-up.entity';
 import { PendingWakeUpModule } from 'src/engine/core-modules/pending-wake-up/pending-wake-up.module';
 import { ToolProviderModule } from 'src/engine/core-modules/tool-provider/tool-provider.module';
@@ -31,7 +30,6 @@ import { AiAgentRoleModule } from 'src/engine/metadata-modules/ai/ai-agent-role/
 import { AiAgentModule } from 'src/engine/metadata-modules/ai/ai-agent/ai-agent.module';
 import { AgentEntity } from 'src/engine/metadata-modules/ai/ai-agent/entities/agent.entity';
 import { AgentChatThreadLifecycleModule } from 'src/engine/metadata-modules/ai/ai-chat/agent-chat-thread-lifecycle.module';
-import { AiBillingModule } from 'src/engine/metadata-modules/ai/ai-billing/ai-billing.module';
 import { AgentHistoryModule } from 'src/engine/metadata-modules/ai/ai-history/ai-history.module';
 import { PermissionsModule } from 'src/engine/metadata-modules/permissions/permissions.module';
 import { UserRoleModule } from 'src/engine/metadata-modules/user-role/user-role.module';
@@ -42,14 +40,12 @@ import { provideWorkspaceScopedRepository } from 'src/engine/twenty-orm/workspac
     AgentChatThreadLifecycleModule,
     AgentChatThreadModule,
     AgentHistoryModule,
-    AiBillingModule,
     AiAgentModule,
     AiAgentRoleModule,
     ApiKeyModule,
     ApplicationLookupModule,
     CacheLockModule,
     FileUrlModule,
-    MetricsModule,
     PendingWakeUpModule,
     UserWorkspaceModule,
     UserRoleModule,

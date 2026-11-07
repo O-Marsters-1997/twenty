@@ -44,12 +44,3 @@ it('serializes native workspace timestamps through the existing GraphQL Date sca
     }),
   ).toBeNull();
 });
-
-it('converts exact stored credit strings to display credits only at the API boundary', () => {
-  const thread = {
-    totalInputCredits: '12345',
-    totalOutputCredits: '67890',
-  } as AgentChatThreadWorkspaceEntity;
-  expect(AgentChatResolver.prototype.totalInputCredits(thread)).toBe(0.012345);
-  expect(AgentChatResolver.prototype.totalOutputCredits(thread)).toBe(0.06789);
-});

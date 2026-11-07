@@ -23,7 +23,6 @@ import { buildAgentRunSummary } from 'src/engine/metadata-modules/ai/ai-agent-ex
 import { sumAgentRunSummaries } from 'src/engine/metadata-modules/ai/ai-agent-execution/utils/sum-agent-run-summaries.util';
 import { AgentEntity } from 'src/engine/metadata-modules/ai/ai-agent/entities/agent.entity';
 import { AgentConversationReaderService } from 'src/engine/metadata-modules/ai/ai-history/services/agent-conversation-reader.service';
-import { withDedicatedAiTrace } from 'src/engine/metadata-modules/ai/ai-models/utils/with-dedicated-ai-trace.util';
 import {
   AiException,
   AiExceptionCode,
@@ -249,26 +248,24 @@ export class AgentRunnerService {
 
     try {
       // the toolset and prompt come from the spec alone, so a continued run gets those it paused with
-      execution = await withDedicatedAiTrace(() =>
-        this.agentAsyncExecutorService.executeAgent({
-          agent,
-          messages: prompt?.messages ?? [],
-          priorMessages,
-          // every run here goes on in the background, unlike a chat, so it can wait. The wait tools are
-          // the engine's, so it explains them; the caller's own instructions come last
-          baseSystemPrompt: [
-            spec.baseSystemPrompt,
-            AGENT_WAIT_PROMPT,
-            ...(isNonEmptyString(spec.instructions) ? [spec.instructions] : []),
-          ].join('\n\n'),
-          pausingTools: createAgentWaitTools(),
-          canAskHumans: spec.capabilities.canAskHumans,
-          workspaceId,
-          executionContext,
-          additionalExcludedToolNames: spec.additionalExcludedToolNames,
-          toolLoadingStrategy: spec.toolLoadingStrategy,
-        }),
-      );
+      execution = await this.agentAsyncExecutorService.executeAgent({
+        agent,
+        messages: prompt?.messages ?? [],
+        priorMessages,
+        // every run here goes on in the background, unlike a chat, so it can wait. The wait tools are
+        // the engine's, so it explains them; the caller's own instructions come last
+        baseSystemPrompt: [
+          spec.baseSystemPrompt,
+          AGENT_WAIT_PROMPT,
+          ...(isNonEmptyString(spec.instructions) ? [spec.instructions] : []),
+        ].join('\n\n'),
+        pausingTools: createAgentWaitTools(),
+        canAskHumans: spec.capabilities.canAskHumans,
+        workspaceId,
+        executionContext,
+        additionalExcludedToolNames: spec.additionalExcludedToolNames,
+        toolLoadingStrategy: spec.toolLoadingStrategy,
+      });
     } catch (error) {
       if (isDefined(turnId)) {
         await this.tryRecording(
@@ -334,7 +331,7 @@ export class AgentRunnerService {
     summary: AgentRunSummary;
     suspension: AgentRunSuspension | null;
   }): Promise<AgentRunnerOutcome> {
-    if (!execution.hasNoMoreAvailableCredits && !execution.isPaused) {
+    if (!execution.isPaused) {
       return { status: 'COMPLETED', result: execution.result };
     }
 
@@ -355,7 +352,6 @@ export class AgentRunnerService {
     // continuing reads the conversation, so a pause it does not hold could never be continued.
     // A failure to suspend only fails the run, like a pause that could not be recorded
     const isSuspended =
-      !execution.hasNoMoreAvailableCredits &&
       !hasPausedTooOften &&
       isDefined(closedTurn) &&
       isDefined(condition) &&
@@ -400,13 +396,6 @@ export class AgentRunnerService {
       threadId,
       isAwaitingAnswer: closedTurn?.isAwaitingAnswer === true,
     });
-
-    if (execution.hasNoMoreAvailableCredits) {
-      return {
-        status: 'FAILED',
-        error: 'Agent stopped: no more available credits.',
-      };
-    }
 
     if (hasPausedTooOften) {
       return {

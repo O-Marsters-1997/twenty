@@ -20,7 +20,6 @@ import { I18nContext } from 'src/engine/core-modules/i18n/types/i18n-context.typ
 import { WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
 import { type IDataloaders } from 'src/engine/dataloaders/dataloader.interface';
 import { AuthWorkspace } from 'src/engine/decorators/auth/auth-workspace.decorator';
-import { AllowSuspendedWorkspace } from 'src/engine/decorators/auth/allow-suspended-workspace.decorator';
 import { NoPermissionGuard } from 'src/engine/guards/no-permission.guard';
 import { SettingsPermissionGuard } from 'src/engine/guards/settings-permission.guard';
 import { AuthPrincipalGuard } from 'src/engine/guards/auth-principal.guard';
@@ -66,7 +65,6 @@ import { WorkspaceScopedRepository } from 'src/engine/twenty-orm/workspace-scope
   AuthPrincipalGuard({
     userSession: {
       standard: true,
-      impersonated: true,
       playground: true,
       workspaceAgnostic: false,
     },
@@ -94,7 +92,6 @@ export class ObjectMetadataResolver {
 
   @UseGuards(NoPermissionGuard)
   @Query(() => ObjectConnectionDTO)
-  @AllowSuspendedWorkspace()
   async objects(
     @AuthWorkspace() { id: workspaceId }: WorkspaceEntity,
     @Args('paging', {

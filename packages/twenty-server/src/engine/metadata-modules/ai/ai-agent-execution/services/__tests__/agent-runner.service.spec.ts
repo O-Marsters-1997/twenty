@@ -1,6 +1,5 @@
 import { Logger } from '@nestjs/common';
 
-import { UsageOperationType } from 'src/engine/core-modules/usage/enums/usage-operation-type.enum';
 import { AgentRunnerService } from 'src/engine/metadata-modules/ai/ai-agent-execution/services/agent-runner.service';
 import { type AgentExecutionResult } from 'src/engine/metadata-modules/ai/ai-agent-execution/types/agent-execution-result.type';
 import { type AgentRunnerRunInput } from 'src/engine/metadata-modules/ai/ai-agent-execution/types/agent-runner-run-input.type';
@@ -25,22 +24,9 @@ const buildExecution = (
     outputTokens: 2,
     totalTokens: 3,
   } as AgentExecutionResult['usage'],
-  cacheCreationTokens: 0,
-  nativeWebSearchCallCount: 0,
-  hasNoMoreAvailableCredits: false,
   isPaused: false,
   steps: [],
   modelId: 'model-id',
-  totalCostInDollars: 0,
-  creditsUsedMicro: 0,
-  turnUsage: {
-    inputTokens: 1,
-    outputTokens: 2,
-    cacheReadTokens: 0,
-    cacheCreationTokens: 0,
-    inputCredits: 0,
-    outputCredits: 0,
-  },
   ...overrides,
 });
 
@@ -72,7 +58,6 @@ const RUN_INPUT: AgentRunnerRunInput = {
     rolePermissionConfig: { intersectionOf: {} },
     conversationActor: { type: 'application', applicationId: 'app-id' },
     turnCreatedBy: CREATED_BY,
-    usageOperationType: UsageOperationType.AI_WORKFLOW_TOKEN,
   },
 };
 
@@ -276,19 +261,6 @@ describe('AgentRunnerService', () => {
       error,
     });
     expect(agentRunConversationService.closeTurn).not.toHaveBeenCalled();
-  });
-
-  it('fails a run that ran out of credits', async () => {
-    const { service } = buildService(
-      buildExecution({ hasNoMoreAvailableCredits: true }),
-    );
-
-    await expect(service.run(RUN_INPUT)).resolves.toMatchObject({
-      outcome: {
-        status: 'FAILED',
-        error: 'Agent stopped: no more available credits.',
-      },
-    });
   });
 
   it('suspends a run that asked a question on an answer to it', async () => {

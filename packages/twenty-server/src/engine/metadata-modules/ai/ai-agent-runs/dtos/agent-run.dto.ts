@@ -1,4 +1,4 @@
-import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 
 import { UUIDScalarType } from 'src/engine/api/graphql/workspace-schema-builder/graphql-types/scalars';
 import { AgentTurnStatus } from 'src/engine/metadata-modules/ai/ai-history/enums/agent-turn-status.enum';
@@ -37,9 +37,6 @@ export class AgentRunDTO {
 
   @Field(() => Int, { nullable: true })
   outputTokens: number | null;
-
-  @Field(() => Float, { nullable: true })
-  credits: number | null;
 
   @Field(() => String)
   creatorSource: string;

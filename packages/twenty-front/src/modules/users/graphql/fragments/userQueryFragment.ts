@@ -6,8 +6,6 @@ import { OBJECT_PERMISSION_FRAGMENT } from '@/settings/roles/graphql/fragments/o
 import { ROLE_FRAGMENT } from '@/settings/roles/graphql/fragments/roleFragment';
 import { ROW_LEVEL_PERMISSION_PREDICATE_FRAGMENT } from '@/settings/roles/graphql/fragments/rowLevelPermissionPredicateFragment';
 import { ROW_LEVEL_PERMISSION_PREDICATE_GROUP_FRAGMENT } from '@/settings/roles/graphql/fragments/rowLevelPermissionPredicateGroupFragment';
-import { BILLING_SUBSCRIPTION_FRAGMENT } from '@/users/graphql/fragments/billingSubscriptionsFragment';
-import { CURRENT_BILLING_SUBSCRIPTION_FRAGMENT } from '@/users/graphql/fragments/currentBillingSubscriptionFragment';
 import { WORKSPACE_URLS_FRAGMENT } from '@/users/graphql/fragments/workspaceUrlsFragment';
 import { DELETED_WORKSPACE_MEMBER_QUERY_FRAGMENT } from '@/workspace-member/graphql/fragments/deletedWorkspaceMemberQueryFragment';
 import { PARTIAL_WORKSPACE_MEMBER_QUERY_FRAGMENT } from '@/workspace-member/graphql/fragments/partialWorkspaceMemberQueryFragment';
@@ -21,8 +19,6 @@ export const USER_QUERY_FRAGMENT = gql`
     lastName
     email
     hasPassword
-    canAccessFullAdminPanel
-    canImpersonate
     supportUserHash
     onboardingStatus
     previousOnboardingStatus
@@ -39,7 +35,6 @@ export const USER_QUERY_FRAGMENT = gql`
     currentUserWorkspace {
       id
       permissionFlags
-      isImpersonating
       objectsPermissions {
         ...ObjectPermissionFragment
         rowLevelPermissionPredicates {
@@ -67,15 +62,10 @@ export const USER_QUERY_FRAGMENT = gql`
       isCampaignOpenTrackingEnabled
       workspaceDiscoverability
       isGoogleAuthEnabled
-      isMicrosoftAuthEnabled
       isPasswordAuthEnabled
       isGoogleAuthBypassEnabled
-      isMicrosoftAuthBypassEnabled
       isPasswordAuthBypassEnabled
       subdomain
-      customDomain
-      hasValidSignedEnterpriseKey
-      hasValidEnterpriseValidityToken
       workspaceCustomApplication {
         id
       }
@@ -86,25 +76,10 @@ export const USER_QUERY_FRAGMENT = gql`
         logoUrl
         createdAt
       }
-      isCustomDomainEnabled
       workspaceUrls {
         ...WorkspaceUrlsFragment
       }
       featureFlags {
-        key
-        value
-      }
-      currentBillingSubscription {
-        ...CurrentBillingSubscriptionFragment
-      }
-      billingCustomer {
-        id
-        hasPaymentMethod
-      }
-      billingSubscriptions {
-        ...BillingSubscriptionFragment
-      }
-      billingEntitlements {
         key
         value
       }
@@ -139,6 +114,4 @@ export const USER_QUERY_FRAGMENT = gql`
   ${ROLE_FRAGMENT}
   ${AVAILABLE_WORKSPACES_FOR_AUTH_FRAGMENT}
   ${AVAILABLE_WORKSPACE_FOR_AUTH_FRAGMENT}
-  ${CURRENT_BILLING_SUBSCRIPTION_FRAGMENT}
-  ${BILLING_SUBSCRIPTION_FRAGMENT}
 `;

@@ -16,7 +16,6 @@ import { RelinkWorkflowVersionsToCoreWorkflowsCommand } from 'src/database/comma
 import { SyncMessageRecordPageCommand } from 'src/database/commands/upgrade-version-command/2-42/2-42-workspace-command-1789757500000-sync-message-record-page.command';
 import { SetMessageTextDisplayedMaxRowsCommand } from 'src/database/commands/upgrade-version-command/2-42/2-42-workspace-command-1789757500001-set-message-text-displayed-max-rows.command';
 import { ApplicationModule } from 'src/engine/core-modules/application/application.module';
-import { MetricsModule } from 'src/engine/core-modules/metrics/metrics.module';
 import { WorkspaceSchemaManagerModule } from 'src/engine/twenty-orm/workspace-schema-manager/workspace-schema-manager.module';
 import { WorkspaceCacheModule } from 'src/engine/workspace-cache/workspace-cache.module';
 import { WorkflowCoreModule } from 'src/engine/core-modules/workflow/workflow-core.module';
@@ -31,7 +30,6 @@ import { UpdateRecordCreationCommandLabelsCommand } from 'src/database/commands/
     AgentHistoryMigrationModule,
     AgentChatStreamStateModule,
     ApplicationModule,
-    MetricsModule,
     WorkflowCoreModule,
     WorkspaceCacheModule,
     WorkspaceIteratorModule,

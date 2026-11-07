@@ -4,18 +4,12 @@ import { useLingui } from '@lingui/react/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { MetricRow } from 'twenty-ui/components/data-display';
 import { Separator } from 'twenty-ui/primitives/layout';
-import {
-  IconArrowUp,
-  IconArrowDown,
-  IconCoins,
-  IconHistory,
-} from 'twenty-ui/icon';
+import { IconArrowUp, IconArrowDown, IconHistory } from 'twenty-ui/icon';
 import { themeCssVariables, useTheme } from 'twenty-ui/theme';
 
 import { agentChatUsageFamilyState } from '@/ai/states/agentChatUsageFamilyState';
 import { currentAiChatThreadState } from '@/ai/states/currentAiChatThreadState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { formatNumber } from '@/localization/utils/formatNumber';
 import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
 
 const StyledSection = styled.div`
@@ -71,15 +65,6 @@ export const AiChatContextUsageDetails = () => {
             >
               {t`Output tokens`}
             </MetricRow>
-            <MetricRow
-              startIcon={<IconCoins size={theme.icon.size.sm} />}
-              value={formatNumber(
-                lastMessage.inputCredits + lastMessage.outputCredits,
-                { decimals: 3 },
-              )}
-            >
-              {t`Credits`}
-            </MetricRow>
           </StyledSection>
         </>
       )}
@@ -103,15 +88,6 @@ export const AiChatContextUsageDetails = () => {
           value={formatAiChatTokens(agentChatUsage.outputTokens)}
         >
           {t`Output tokens`}
-        </MetricRow>
-        <MetricRow
-          startIcon={<IconCoins size={theme.icon.size.sm} />}
-          value={formatNumber(
-            agentChatUsage.inputCredits + agentChatUsage.outputCredits,
-            { decimals: 3 },
-          )}
-        >
-          {t`Credits`}
         </MetricRow>
       </StyledSection>
     </>

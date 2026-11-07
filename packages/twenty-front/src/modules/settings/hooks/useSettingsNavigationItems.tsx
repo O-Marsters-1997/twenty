@@ -1,9 +1,7 @@
 import { SettingsPath } from 'twenty-shared/types';
 
 import { useAuth } from '@/auth/hooks/useAuth';
-import { currentUserState } from '@/auth/states/currentUserState';
 import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMemberState';
-import { billingState } from '@/client-config/states/billingState';
 import { supportChatState } from '@/client-config/states/supportChatState';
 import { permissionFlagMapSelector } from '@/settings/roles/states/permissionFlagMapSelector';
 import { getDocumentationUrl } from '@/support/utils/getDocumentationUrl';
@@ -20,7 +18,6 @@ import {
   IconCalendarEvent,
   IconColorSwatch,
   type IconComponent,
-  IconCreditCard,
   IconDoorEnter,
   IconHelpCircle,
   IconHierarchy,
@@ -28,7 +25,6 @@ import {
   IconMessage,
   IconMessageCircle,
   IconPlug,
-  IconServer,
   IconSettings2,
   IconSparkles,
   IconUserCircle,
@@ -60,16 +56,10 @@ export type SettingsNavigationItem = {
 };
 
 const useSettingsNavigationItems = (): SettingsNavigationSection[] => {
-  const billing = useAtomStateValue(billingState);
   const { signOut } = useAuth();
   const supportChat = useAtomStateValue(supportChatState);
   const currentWorkspaceMember = useAtomStateValue(currentWorkspaceMemberState);
 
-  const isBillingEnabled = billing?.isBillingEnabled ?? false;
-  const currentUser = useAtomStateValue(currentUserState);
-  const isAdminEnabled =
-    (currentUser?.canImpersonate || currentUser?.canAccessFullAdminPanel) ??
-    false;
   const isSupportChatConfigured =
     supportChat?.supportDriver === 'FRONT' &&
     isNonEmptyString(supportChat.supportFrontChatId);
@@ -149,14 +139,6 @@ const useSettingsNavigationItems = (): SettingsNavigationSection[] => {
           isHidden: !permissionFlagMap[PermissionFlagType.WORKSPACE_MEMBERS],
         },
         {
-          label: t`Billing`,
-          path: SettingsPath.Billing,
-          Icon: IconCreditCard,
-          isHidden:
-            !isBillingEnabled ||
-            !permissionFlagMap[PermissionFlagType.WORKSPACE],
-        },
-        {
           label: t`MCP & APIs`,
           path: SettingsPath.ApiWebhooks,
           Icon: IconPlug,
@@ -187,12 +169,6 @@ const useSettingsNavigationItems = (): SettingsNavigationSection[] => {
     {
       label: t`Other`,
       items: [
-        {
-          label: t`Admin Panel`,
-          path: SettingsPath.AdminPanel,
-          Icon: IconServer,
-          isHidden: !isAdminEnabled,
-        },
         {
           label: t`Community`,
           path: SettingsPath.Community,

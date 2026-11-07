@@ -312,12 +312,11 @@ export class WorkspaceInvitationService {
     }
 
     const isOnboardingInviteReward =
-      this.twentyConfigService.get('IS_BILLING_ENABLED') &&
-      (isOnboardingInviteRewardOverride ??
-        (await this.onboardingService.isOnboardingInviteTeamPending({
-          userId: sender.userId,
-          workspaceId: workspace.id,
-        })));
+      isOnboardingInviteRewardOverride ??
+      (await this.onboardingService.isOnboardingInviteTeamPending({
+        userId: sender.userId,
+        workspaceId: workspace.id,
+      }));
 
     await this.throttleInvitationSending(workspace.id, emails);
 

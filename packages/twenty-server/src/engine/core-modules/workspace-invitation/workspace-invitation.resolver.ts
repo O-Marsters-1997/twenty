@@ -19,7 +19,6 @@ import { AuthApplication } from 'src/engine/decorators/auth/auth-application.dec
 import { AuthUserWorkspaceId } from 'src/engine/decorators/auth/auth-user-workspace-id.decorator';
 import { AuthUser } from 'src/engine/decorators/auth/auth-user.decorator';
 import { AuthWorkspace } from 'src/engine/decorators/auth/auth-workspace.decorator';
-import { AllowSuspendedWorkspace } from 'src/engine/decorators/auth/allow-suspended-workspace.decorator';
 import { SettingsPermissionGuard } from 'src/engine/guards/settings-permission.guard';
 import { AuthPrincipalGuard } from 'src/engine/guards/auth-principal.guard';
 import {
@@ -39,7 +38,6 @@ import { SendInvitationsInput } from './dtos/send-invitations.input';
   AuthPrincipalGuard({
     userSession: {
       standard: true,
-      impersonated: true,
       playground: true,
       workspaceAgnostic: false,
     },
@@ -68,7 +66,6 @@ export class WorkspaceInvitationResolver {
     AuthPrincipalGuard({
       userSession: {
         standard: true,
-        impersonated: true,
         playground: true,
         workspaceAgnostic: false,
       },
@@ -92,7 +89,6 @@ export class WorkspaceInvitationResolver {
     AuthPrincipalGuard({
       userSession: {
         standard: true,
-        impersonated: true,
         playground: true,
         workspaceAgnostic: false,
       },
@@ -140,7 +136,6 @@ export class WorkspaceInvitationResolver {
     AuthPrincipalGuard({
       userSession: {
         standard: true,
-        impersonated: true,
         playground: true,
         workspaceAgnostic: false,
       },
@@ -149,7 +144,6 @@ export class WorkspaceInvitationResolver {
       application: false,
     }),
   )
-  @AllowSuspendedWorkspace()
   async sendInvitations(
     @Args() sendInviteLinkInput: SendInvitationsInput,
     @AuthUser() user: AuthContextUser,

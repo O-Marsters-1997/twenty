@@ -2,9 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import { ConnectedAccountProvider } from 'twenty-shared/types';
 
-import { CalDavCreateEventService } from 'src/modules/calendar/calendar-event-creation-manager/drivers/caldav/services/caldav-create-event.service';
 import { GoogleCalendarCreateEventService } from 'src/modules/calendar/calendar-event-creation-manager/drivers/google-calendar/services/google-calendar-create-event.service';
-import { MicrosoftCalendarCreateEventService } from 'src/modules/calendar/calendar-event-creation-manager/drivers/microsoft-calendar/services/microsoft-calendar-create-event.service';
 import {
   CalendarEventCreationException,
   CalendarEventCreationExceptionCode,
@@ -19,8 +17,6 @@ export class CreateCalendarEventService {
 
   constructor(
     private readonly googleCalendarCreateEventService: GoogleCalendarCreateEventService,
-    private readonly microsoftCalendarCreateEventService: MicrosoftCalendarCreateEventService,
-    private readonly calDavCreateEventService: CalDavCreateEventService,
     private readonly calendarSaveEventsService: CalendarSaveEventsService,
   ) {}
 
@@ -30,16 +26,6 @@ export class CreateCalendarEventService {
     switch (data.connectedAccount.provider) {
       case ConnectedAccountProvider.GOOGLE:
         return this.googleCalendarCreateEventService.createCalendarEvent(
-          data.input,
-          data.connectedAccount,
-        );
-      case ConnectedAccountProvider.MICROSOFT:
-        return this.microsoftCalendarCreateEventService.createCalendarEvent(
-          data.input,
-          data.connectedAccount,
-        );
-      case ConnectedAccountProvider.IMAP_SMTP_CALDAV:
-        return this.calDavCreateEventService.createCalendarEvent(
           data.input,
           data.connectedAccount,
         );

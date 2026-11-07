@@ -11,22 +11,13 @@ export const GET_PUBLIC_WORKSPACE_DATA_BY_DOMAIN = gql`
         ...WorkspaceUrlsFragment
       }
       authProviders {
-        sso {
-          id
-          name
-          type
-          status
-          issuer
-        }
         google
         magicLink
         password
-        microsoft
       }
       authBypassProviders {
         google
         password
-        microsoft
       }
     }
   }

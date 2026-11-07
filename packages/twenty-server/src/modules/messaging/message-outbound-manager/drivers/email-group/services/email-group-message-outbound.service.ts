@@ -4,7 +4,6 @@ import { isNonEmptyString } from '@sniptt/guards';
 import { isDefined } from 'twenty-shared/utils';
 import { v4 } from 'uuid';
 
-import { BillingService } from 'src/engine/core-modules/billing/services/billing.service';
 import { InjectCacheStorage } from 'src/engine/core-modules/cache-storage/decorators/cache-storage.decorator';
 import { CacheStorageService } from 'src/engine/core-modules/cache-storage/services/cache-storage.service';
 import { CacheStorageNamespace } from 'src/engine/core-modules/cache-storage/types/cache-storage-namespace.enum';
@@ -14,16 +13,12 @@ import {
   ThrottlerException,
   ThrottlerExceptionCode,
 } from 'src/engine/core-modules/throttler/throttler.exception';
-import { UsageLimitSpeedService } from 'src/engine/core-modules/usage-limit/services/usage-limit-speed.service';
-import { UsageOperationType } from 'src/engine/core-modules/usage/enums/usage-operation-type.enum';
-import { UsageResourceType } from 'src/engine/core-modules/usage/enums/usage-resource-type.enum';
 import { EmailingDomainSenderService } from 'src/modules/emailing/services/emailing-domain-sender.service';
 import { type ConnectedAccountEntity } from 'src/engine/metadata-modules/connected-account/entities/connected-account.entity';
 import {
   MessageChannelException,
   MessageChannelExceptionCode,
 } from 'src/engine/metadata-modules/message-channel/message-channel.exception';
-import { buildSystemAuthContext } from 'src/engine/twenty-orm/utils/build-system-auth-context.util';
 import { InjectWorkspaceScopedRepository } from 'src/engine/twenty-orm/workspace-scoped-repository/inject-workspace-scoped-repository.decorator';
 import { WorkspaceScopedRepository } from 'src/engine/twenty-orm/workspace-scoped-repository/workspace-scoped-repository';
 import { EMAIL_GROUP_SEND_THROTTLE } from 'src/modules/messaging/message-outbound-manager/drivers/email-group/constants/email-group-send-throttle.constant';
@@ -39,8 +34,6 @@ export class EmailGroupMessageOutboundService implements MessageOutboundDriver {
     @InjectWorkspaceScopedRepository(EmailingDomainEntity)
     private readonly emailingDomainRepository: WorkspaceScopedRepository<EmailingDomainEntity>,
     private readonly emailingDomainSenderService: EmailingDomainSenderService,
-    private readonly usageLimitSpeedService: UsageLimitSpeedService,
-    private readonly billingService: BillingService,
     @InjectCacheStorage(CacheStorageNamespace.ModuleMessaging)
     private readonly cacheStorage: CacheStorageService,
   ) {}
@@ -49,17 +42,6 @@ export class EmailGroupMessageOutboundService implements MessageOutboundDriver {
     sendMessageInput: SendMessageInput,
     connectedAccount: ConnectedAccountEntity,
   ): Promise<SendMessageResult> {
-    const isPayingCustomer = await this.billingService.isPayingCustomer(
-      connectedAccount.workspaceId,
-    );
-
-    if (!isPayingCustomer) {
-      throw new MessageChannelException(
-        `Cannot send from ${connectedAccount.handle}: sending from an email group is available once your workspace is on a paid plan and has been billed.`,
-        MessageChannelExceptionCode.EMAIL_GROUP_SENDING_REQUIRES_PAID_PLAN,
-      );
-    }
-
     const emailingDomain = await this.resolveEmailingDomain(connectedAccount);
 
     if (emailingDomain.status !== EmailingDomainStatus.VERIFIED) {
@@ -73,13 +55,6 @@ export class EmailGroupMessageOutboundService implements MessageOutboundDriver {
       this.toRecipientArray(sendMessageInput.to).length +
       this.toRecipientArray(sendMessageInput.cc).length +
       this.toRecipientArray(sendMessageInput.bcc).length;
-
-    await this.usageLimitSpeedService.consumeOrThrow({
-      resourceType: UsageResourceType.EMAIL,
-      operationType: UsageOperationType.EMAIL_SEND,
-      authContext: buildSystemAuthContext(connectedAccount.workspaceId),
-      cost: recipientCount,
-    });
 
     const dailyRecipientCountKey = this.buildDailyRecipientCountKey(
       connectedAccount.workspaceId,

@@ -28,10 +28,6 @@ jest.mock('@/ai/components/LazyMarkdownRenderer', () => ({
   ),
 }));
 
-jest.mock('@/ai/components/CodeExecutionDisplay', () => ({
-  CodeExecutionDisplay: () => <div data-testid="code-execution-display" />,
-}));
-
 const renderAssistantRenderer = (
   messageParts: ExtendedUIMessagePart[],
   {
@@ -150,119 +146,6 @@ describe('AiChatAssistantMessageRenderer', () => {
     expect(screen.getByTestId('thinking-steps-display')).toHaveTextContent(
       'thinking-2-answer-pending',
     );
-  });
-
-  it('should show data-code-execution during streaming and hide the tool part to avoid duplicates', () => {
-    const messageParts = [
-      {
-        type: 'tool-code_interpreter',
-        toolCallId: 'tool-code-1',
-        input: { code: 'print(1)' },
-        output: { result: { stdout: '1' } },
-        state: 'output-available',
-      },
-      {
-        type: 'data-code-execution',
-        data: {
-          executionId: 'exec-1',
-          state: 'running',
-          code: 'print(1)',
-          language: 'python',
-          stdout: '',
-          stderr: '',
-          files: [],
-        },
-      },
-    ] as ExtendedUIMessagePart[];
-
-    renderAssistantRenderer(messageParts);
-
-    expect(screen.queryByTestId('thinking-steps-display')).toBeNull();
-    expect(screen.getByTestId('code-execution-display')).toBeInTheDocument();
-  });
-
-  it('should render tool-execute_tool wrapping code_interpreter via ThinkingStepsDisplay after refetch', () => {
-    const messageParts = [
-      {
-        type: 'tool-execute_tool',
-        toolCallId: 'tool-exec-1',
-        input: {
-          toolName: 'code_interpreter',
-          arguments: { code: 'print(42)' },
-        },
-        output: {
-          result: { stdout: '42', stderr: '', exitCode: 0, files: [] },
-        },
-        state: 'output-available',
-      },
-    ] as ExtendedUIMessagePart[];
-
-    renderAssistantRenderer(messageParts);
-
-    expect(screen.getByTestId('thinking-steps-display')).toHaveTextContent(
-      'thinking-1-answer-pending',
-    );
-  });
-
-  it('should hide execute_tool wrapping code_interpreter when data-code-execution parts exist', () => {
-    const messageParts = [
-      {
-        type: 'tool-execute_tool',
-        toolCallId: 'tool-exec-1',
-        input: {
-          toolName: 'code_interpreter',
-          arguments: { code: 'print(42)' },
-        },
-        output: null,
-        state: 'call',
-      },
-      {
-        type: 'data-code-execution',
-        data: {
-          executionId: 'exec-2',
-          state: 'running',
-          code: 'print(42)',
-          language: 'python',
-          stdout: '42',
-          stderr: '',
-          files: [],
-        },
-      },
-    ] as ExtendedUIMessagePart[];
-
-    renderAssistantRenderer(messageParts);
-
-    expect(screen.queryByTestId('thinking-steps-display')).toBeNull();
-    expect(screen.getByTestId('code-execution-display')).toBeInTheDocument();
-  });
-
-  it('should render non-thinking parts directly when there are no thinking steps', () => {
-    const messageParts = [
-      {
-        type: 'text',
-        text: 'Simple answer',
-      },
-      {
-        type: 'data-code-execution',
-        data: {
-          executionId: 'exec-2',
-          state: 'completed',
-          code: 'print(2)',
-          language: 'python',
-          stdout: '2',
-          stderr: '',
-          files: [],
-        },
-      },
-    ] as ExtendedUIMessagePart[];
-
-    renderAssistantRenderer(messageParts);
-
-    expect(screen.queryByTestId('thinking-steps-display')).toBeNull();
-    expect(screen.getByTestId('markdown-renderer')).toHaveTextContent(
-      'Simple answer',
-    );
-    expect(screen.getByTestId('code-execution-display')).toBeInTheDocument();
   });
 
   it('should hide the workspace setup completion tool part without splitting the thinking steps around it', () => {

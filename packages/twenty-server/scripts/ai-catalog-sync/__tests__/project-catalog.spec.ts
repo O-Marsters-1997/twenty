@@ -13,9 +13,6 @@ const canonicalCatalog: CanonicalCatalog = {
       {
         name: 'gpt-5.6-luna',
         label: 'GPT-5.6 Luna',
-        inputCostPerMillionTokens: 0.2,
-        outputCostPerMillionTokens: 1.2,
-        cachedInputCostPerMillionTokens: 0.02,
         modalities: ['image', 'pdf'],
         efforts: ['low', 'medium', 'high'],
         benchmark: { intelligenceIndex: 37.5, measuredAt: '2026-09-11' },
@@ -62,9 +59,6 @@ describe('projectCatalog', () => {
     expect(projected['azure-foundry'].models?.[0]).toEqual({
       name: 'gpt-5.6-luna',
       label: 'GPT-5.6 Luna (Azure)',
-      inputCostPerMillionTokens: 0.2,
-      outputCostPerMillionTokens: 1.2,
-      cachedInputCostPerMillionTokens: 0.02,
       modalities: ['image', 'pdf'],
       efforts: ['low', 'medium', 'high'],
       benchmark: { intelligenceIndex: 37.5, measuredAt: '2026-09-11' },
@@ -96,28 +90,6 @@ describe('projectCatalog', () => {
       label: 'Claude Opus 4.7',
     });
     expect(projected['amazon-bedrock'].region).toBe('eu-central-1');
-  });
-
-  it('takes a price the route negotiated and leaves the rest of the reading alone', () => {
-    const spec: CatalogSpec = {
-      providers: [
-        {
-          name: 'azure-foundry',
-          npm: '@ai-sdk/azure',
-          models: [
-            { model: 'gpt-5.6-luna', cachedInputCostPerMillionTokens: 0.5 },
-          ],
-        },
-      ],
-    };
-
-    const projected = projectCatalog({ canonicalCatalog, spec });
-
-    expect(projected['azure-foundry'].models?.[0]).toMatchObject({
-      cachedInputCostPerMillionTokens: 0.5,
-      inputCostPerMillionTokens: 0.2,
-      efforts: ['low', 'medium', 'high'],
-    });
   });
 
   it('takes a limit the route caps below the one the model allows', () => {
@@ -257,13 +229,13 @@ describe('projectCatalog', () => {
     ).toThrow('unsupported data residency');
   });
 
-  it('refuses a negotiated price that is not a usable number', () => {
+  it('refuses a negotiated limit that is not a usable number', () => {
     const spec: CatalogSpec = {
       providers: [
         {
           name: 'azure-foundry',
           npm: '@ai-sdk/azure',
-          models: [{ model: 'gpt-5.6-luna', inputCostPerMillionTokens: -1 }],
+          models: [{ model: 'gpt-5.6-luna', contextWindowTokens: -1 }],
         },
       ],
     };

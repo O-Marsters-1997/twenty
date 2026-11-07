@@ -11,7 +11,6 @@ import { CompanyEnrichmentService } from 'src/engine/core-modules/company-enrich
 import { PersonEnrichmentService } from 'src/engine/core-modules/company-enrichment/services/person-enrichment.service';
 import { PreventNestToAutoLogGraphqlErrorsFilter } from 'src/engine/core-modules/graphql/filters/prevent-nest-to-auto-log-graphql-errors.filter';
 import { ResolverValidationPipe } from 'src/engine/core-modules/graphql/pipes/resolver-validation.pipe';
-import { OnboardingService } from 'src/engine/core-modules/onboarding/onboarding.service';
 import { WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
 import { AuthUser } from 'src/engine/decorators/auth/auth-user.decorator';
 import { AuthWorkspace } from 'src/engine/decorators/auth/auth-workspace.decorator';
@@ -22,7 +21,6 @@ import { AuthPrincipalGuard } from 'src/engine/guards/auth-principal.guard';
   AuthPrincipalGuard({
     userSession: {
       standard: true,
-      impersonated: true,
       playground: true,
       workspaceAgnostic: false,
     },
@@ -41,7 +39,6 @@ export class CompanyEnrichmentResolver {
   constructor(
     private readonly companyEnrichmentService: CompanyEnrichmentService,
     private readonly personEnrichmentService: PersonEnrichmentService,
-    private readonly onboardingService: OnboardingService,
   ) {}
 
   @Mutation(() => WorkspaceCompanyEnrichmentResultDTO)
@@ -63,32 +60,12 @@ export class CompanyEnrichmentResolver {
       }),
     ]);
 
-    if (enrichmentResult.outcome === 'matched') {
-      await this.onboardingService.setOnboardingBookCallPendingIfQualified({
-        userId: user.id,
-        workspaceId: workspace.id,
-        employeeCount: enrichmentResult.enrichment.employeeCount,
-      });
-
-      await this.onboardingService.creditEnrichmentQualificationReward({
-        workspaceId: workspace.id,
-        employeeCount: enrichmentResult.enrichment.employeeCount,
-      });
-    }
-
-    const isBookCallOnboardingStepPending =
-      await this.onboardingService.isOnboardingBookCallPending({
-        userId: user.id,
-        workspaceId: workspace.id,
-      });
-
     return {
       ...enrichmentResult,
       outcome: WorkspaceCompanyEnrichmentOutcome[enrichmentResult.outcome],
       personOutcome:
         WorkspacePersonEnrichmentOutcome[personEnrichmentResult.outcome],
       personEnrichment: personEnrichmentResult.enrichment,
-      isBookCallOnboardingStepPending,
     };
   }
 }

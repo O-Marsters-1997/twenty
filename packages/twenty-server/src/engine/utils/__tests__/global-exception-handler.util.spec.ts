@@ -35,17 +35,6 @@ describe('shouldCaptureException', () => {
     ).toBe(false);
   });
 
-  it('does not capture a suspended workspace auth exception', () => {
-    expect(
-      shouldCaptureException(
-        new AuthException(
-          'Workspace is suspended',
-          AuthExceptionCode.WORKSPACE_SUSPENDED,
-        ),
-      ),
-    ).toBe(false);
-  });
-
   it('continues to capture an internal auth exception', () => {
     expect(
       shouldCaptureException(
@@ -64,7 +53,6 @@ describe('shouldCaptureException', () => {
 
 describe('handleException', () => {
   it.each([
-    { code: AuthExceptionCode.WORKSPACE_SUSPENDED, isCaptured: false },
     { code: AuthExceptionCode.INTERNAL_SERVER_ERROR, isCaptured: true },
   ])(
     'should capture a $code auth exception: $isCaptured',

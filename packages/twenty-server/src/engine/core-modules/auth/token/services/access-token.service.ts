@@ -114,9 +114,6 @@ export class AccessTokenService {
     userId,
     workspaceId,
     authProvider,
-    isImpersonating,
-    impersonatorUserWorkspaceId,
-    impersonatedUserWorkspaceId,
   }: Omit<
     AccessTokenJwtPayload,
     'type' | 'workspaceMemberId' | 'userWorkspaceId' | 'sub'
@@ -135,11 +132,6 @@ export class AccessTokenService {
       userWorkspaceId: userWorkspace.id,
       type: JwtTokenTypeEnum.ACCESS,
       authProvider,
-      isImpersonating: isImpersonating === true,
-      impersonatorUserWorkspaceId:
-        isImpersonating === true ? impersonatorUserWorkspaceId : undefined,
-      impersonatedUserWorkspaceId:
-        isImpersonating === true ? impersonatedUserWorkspaceId : undefined,
     };
 
     const token = await this.jwtWrapperService.signAsyncOrThrow(jwtPayload, {

@@ -14,21 +14,17 @@ import {
   IconBox,
   IconBrandTypescript,
   IconClock,
-  IconCoins,
   IconEye,
-  IconGauge,
   IconHistory,
   IconKey,
   IconLink,
   IconStatusChange,
-  IconSum,
   IconTerminal,
   IconUsers,
   IconWebhook,
 } from 'twenty-ui/icon';
 import { Status, Tag } from 'twenty-ui/primitives/data-display';
 
-import { LogConsoleCredits } from '@/log-console/components/LogConsoleCredits';
 import { LogConsoleMemberChip } from '@/log-console/components/LogConsoleMemberChip';
 import { LogConsoleRecordChangeDetail } from '@/log-console/components/LogConsoleRecordChangeDetail';
 import { LogConsoleWebhookEndpointLink } from '@/log-console/components/LogConsoleWebhookEndpointLink';
@@ -43,19 +39,16 @@ import { LOG_CONSOLE_RECORD_CHANGE_COLUMNS } from '@/log-console/constants/LogCo
 import { LOG_CONSOLE_RECORD_CHANGE_FILTER_FIELDS } from '@/log-console/constants/LogConsoleRecordChangeFilterFields';
 import { LOG_CONSOLE_SECURITY_COLUMNS } from '@/log-console/constants/LogConsoleSecurityColumns';
 import { LOG_CONSOLE_SECURITY_FILTER_FIELDS } from '@/log-console/constants/LogConsoleSecurityFilterFields';
-import { LOG_CONSOLE_USAGE_EVENT_COLUMNS } from '@/log-console/constants/LogConsoleUsageEventColumns';
 import { LOG_CONSOLE_WEBHOOK_COLUMNS } from '@/log-console/constants/LogConsoleWebhookColumns';
 import { type LogConsoleDetailField } from '@/log-console/types/LogConsoleDetailField';
 import { type LogConsoleSource } from '@/log-console/types/LogConsoleSource';
 import { getLogConsoleRecordLabel } from '@/log-console/utils/getLogConsoleRecordLabel';
 import { getLogConsoleSecurityEvent } from '@/log-console/utils/getLogConsoleSecurityEvent';
-import { getUsageOperationTypeLabel } from '@/settings/usage/utils/getUsageOperationTypeLabel';
 import { NavigationButton } from '@/ui/input/components/NavigationButton';
 import {
   EventLogFilterOperand,
   EventLogTable,
 } from '~/generated-metadata/graphql';
-import { formatNumber } from '@/localization/utils/formatNumber';
 
 const TIME_DETAIL_FIELD: LogConsoleDetailField = {
   label: msg`Time`,
@@ -70,7 +63,6 @@ export const LOG_CONSOLE_SOURCES: LogConsoleSource[] = [
     Icon: IconAddressBook,
     table: EventLogTable.OBJECT_EVENT,
     filterFields: LOG_CONSOLE_RECORD_CHANGE_FILTER_FIELDS,
-    requiresAuditLogs: false,
     columns: LOG_CONSOLE_RECORD_CHANGE_COLUMNS,
     detailFields: [
       {
@@ -124,7 +116,6 @@ export const LOG_CONSOLE_SOURCES: LogConsoleSource[] = [
         operand: EventLogFilterOperand.IS,
         values: [
           'AuthSession',
-          'Impersonation',
           'ServerAdminAccessChanged',
           'User Signup',
           'Custom Domain Activated',
@@ -133,7 +124,6 @@ export const LOG_CONSOLE_SOURCES: LogConsoleSource[] = [
       },
     ],
     filterFields: LOG_CONSOLE_SECURITY_FILTER_FIELDS,
-    requiresAuditLogs: true,
     columns: LOG_CONSOLE_SECURITY_COLUMNS,
     detailFields: [
       {
@@ -151,12 +141,7 @@ export const LOG_CONSOLE_SOURCES: LogConsoleSource[] = [
       {
         label: msg`Actor`,
         Icon: IconUsers,
-        renderValue: (entry) => (
-          <LogConsoleMemberChip
-            userId={entry.userId}
-            isImpersonator={entry.event === 'Impersonation'}
-          />
-        ),
+        renderValue: (entry) => <LogConsoleMemberChip userId={entry.userId} />,
       },
     ],
     idFields: [{ label: msg`User ID`, getId: (entry) => entry.userId }],
@@ -174,7 +159,6 @@ export const LOG_CONSOLE_SOURCES: LogConsoleSource[] = [
     DetailIcon: IconBrandTypescript,
     table: EventLogTable.APPLICATION_LOG,
     filterFields: LOG_CONSOLE_APPLICATION_LOG_FILTER_FIELDS,
-    requiresAuditLogs: false,
     columns: LOG_CONSOLE_APPLICATION_LOG_COLUMNS,
     detailFields: [
       {
@@ -213,7 +197,6 @@ export const LOG_CONSOLE_SOURCES: LogConsoleSource[] = [
         values: ['Webhook Response'],
       },
     ],
-    requiresAuditLogs: true,
     columns: LOG_CONSOLE_WEBHOOK_COLUMNS,
     detailFields: [
       {
@@ -268,7 +251,6 @@ export const LOG_CONSOLE_SOURCES: LogConsoleSource[] = [
     Icon: IconEye,
     table: EventLogTable.PAGEVIEW,
     filterFields: [{ ...LOG_CONSOLE_ACTOR_FILTER_FIELD, label: msg`Member` }],
-    requiresAuditLogs: true,
     columns: LOG_CONSOLE_PAGE_VIEW_COLUMNS,
     detailFields: [
       TIME_DETAIL_FIELD,
@@ -291,54 +273,5 @@ export const LOG_CONSOLE_SOURCES: LogConsoleSource[] = [
         other: `${formattedCount} page views`,
       }),
     getDetailTitle: (entry) => entry.properties?.pathname ?? entry.event,
-  },
-  {
-    id: 'usage',
-    label: msg`Usage`,
-    Icon: IconGauge,
-    table: EventLogTable.USAGE_EVENT,
-    requiresAuditLogs: true,
-    columns: LOG_CONSOLE_USAGE_EVENT_COLUMNS,
-    detailFields: [
-      TIME_DETAIL_FIELD,
-      {
-        label: msg`Spender`,
-        Icon: IconUsers,
-        renderValue: (entry) => (
-          <LogConsoleMemberChip userWorkspaceId={entry.userId} />
-        ),
-      },
-      {
-        label: msg`Quantity`,
-        Icon: IconSum,
-        renderValue: (entry) => formatNumber(entry.properties?.quantity),
-      },
-      {
-        label: msg`Usage`,
-        Icon: IconCoins,
-        renderValue: (entry) => (
-          <LogConsoleCredits
-            creditsUsedMicro={entry.properties?.creditsUsedMicro}
-          />
-        ),
-      },
-    ],
-    idFields: [
-      { label: msg`User workspace ID`, getId: (entry) => entry.userId },
-    ],
-    getCountLabel: ({ count, formattedCount }) =>
-      plural(count, {
-        one: `${formattedCount} usage event`,
-        other: `${formattedCount} usage events`,
-      }),
-    getDetailTitle: (entry) => {
-      const operationTypeLabel = getUsageOperationTypeLabel(
-        entry.properties?.operationType,
-      );
-
-      return isDefined(operationTypeLabel)
-        ? t(operationTypeLabel)
-        : (entry.properties?.operationType ?? entry.event);
-    },
   },
 ];

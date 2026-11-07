@@ -156,7 +156,7 @@ describe('UnhandledExceptionFilter global registration', () => {
   });
 });
 
-describe('UnhandledExceptionFilter Sentry capture', () => {
+describe('UnhandledExceptionFilter exception capture', () => {
   const captureExceptions = jest.fn();
 
   const filter = new UnhandledExceptionFilter({

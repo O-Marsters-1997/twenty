@@ -8,7 +8,6 @@ import { createOneRole } from 'test/integration/metadata/suites/role/utils/creat
 import { deleteOneRole } from 'test/integration/metadata/suites/role/utils/delete-one-role.util';
 import { findOneRoleByLabel } from 'test/integration/metadata/suites/role/utils/find-one-role-by-label.util';
 import { updateWorkspaceMemberRole } from 'test/integration/metadata/suites/role/utils/update-workspace-member-role.util';
-import { setupMicrosoftMock } from 'test/integration/microsoft/mocks/setup-microsoft-mock.util';
 import { generateTransientTokenResponse } from 'test/integration/utils/generate-transient-token.util';
 import { getAppProviderByClassName } from 'test/integration/utils/get-app-provider-by-class-name.util';
 import { getCoreRepository } from 'test/integration/utils/get-core-repository.util';
@@ -30,12 +29,6 @@ describe.each([
     path: '/auth/google-apis',
     authorizationHostname: 'accounts.google.com',
     setupProviderMock: setupGoogleMock,
-  },
-  {
-    provider: ConnectedAccountProvider.MICROSOFT,
-    path: '/auth/microsoft-apis',
-    authorizationHostname: 'login.microsoftonline.com',
-    setupProviderMock: setupMicrosoftMock,
   },
 ])(
   '$provider connected account OAuth permissions (integration)',

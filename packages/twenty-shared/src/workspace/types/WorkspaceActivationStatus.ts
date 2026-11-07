@@ -4,5 +4,4 @@ export enum WorkspaceActivationStatus {
   CREATED = 'CREATED',
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE',
-  SUSPENDED = 'SUSPENDED',
 }

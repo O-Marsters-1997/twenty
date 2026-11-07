@@ -14,7 +14,6 @@ import { UserEntity } from 'src/engine/core-modules/user/user.entity';
 import { WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
 import { AuthUser } from 'src/engine/decorators/auth/auth-user.decorator';
 import { AuthWorkspace } from 'src/engine/decorators/auth/auth-workspace.decorator';
-import { AllowSuspendedWorkspace } from 'src/engine/decorators/auth/allow-suspended-workspace.decorator';
 import { NoPermissionGuard } from 'src/engine/guards/no-permission.guard';
 import { PublicEndpointGuard } from 'src/engine/guards/public-endpoint.guard';
 import { AuthPrincipalGuard } from 'src/engine/guards/auth-principal.guard';
@@ -45,7 +44,6 @@ export class EventLogEmitterResolver {
     AuthPrincipalGuard({
       userSession: {
         standard: true,
-        impersonated: true,
         playground: true,
         workspaceAgnostic: false,
       },
@@ -83,7 +81,6 @@ export class EventLogEmitterResolver {
 
   @Mutation(() => Analytics)
   @UseGuards(PublicEndpointGuard, NoPermissionGuard)
-  @AllowSuspendedWorkspace()
   async trackAnalytics(
     @Args()
     createAnalyticsInput: CreateAnalyticsInputV2,

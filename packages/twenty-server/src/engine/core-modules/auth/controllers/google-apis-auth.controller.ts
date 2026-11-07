@@ -151,7 +151,6 @@ export class GoogleAPIsAuthController {
           error,
           workspace: workspace ?? {
             subdomain: this.twentyConfigService.get('DEFAULT_SUBDOMAIN'),
-            customDomain: null,
           },
           pathname: getSettingsPath(SettingsPath.Accounts),
         }),

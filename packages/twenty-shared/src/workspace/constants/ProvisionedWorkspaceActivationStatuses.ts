@@ -4,5 +4,4 @@ export const PROVISIONED_WORKSPACE_ACTIVATION_STATUSES: WorkspaceActivationStatu
   [
     WorkspaceActivationStatus.CREATED,
     WorkspaceActivationStatus.ACTIVE,
-    WorkspaceActivationStatus.SUSPENDED,
   ];
