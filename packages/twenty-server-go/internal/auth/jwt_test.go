@@ -121,13 +121,15 @@ func TestJWTVerifier_Verify(t *testing.T) {
 			{"legacy HS256", signHS256(t, legacySecret("workspace-1", "ACCESS"), accessClaims("ACCESS", time.Hour))},
 		}
 		for _, tt := range tests {
-			got, err := f.verifier.Verify(t.Context(), tt.token)
-			if err != nil {
-				t.Errorf("%s: Verify error = %v", tt.name, err)
-			}
-			if diff := cmp.Diff(want, got); diff != "" {
-				t.Errorf("%s: Verify principal (-want +got):\n%s", tt.name, diff)
-			}
+			t.Run(tt.name, func(t *testing.T) {
+				got, err := f.verifier.Verify(t.Context(), tt.token)
+				if err != nil {
+					t.Errorf("Verify() error = %v", err)
+				}
+				if diff := cmp.Diff(want, got); diff != "" {
+					t.Errorf("Verify() principal (-want +got):\n%s", diff)
+				}
+			})
 		}
 	})
 
@@ -156,9 +158,11 @@ func TestJWTVerifier_Verify(t *testing.T) {
 			}()},
 		}
 		for _, tt := range tests {
-			if _, err := f.verifier.Verify(t.Context(), tt.token); !errors.Is(err, auth.ErrUnauthenticated) {
-				t.Errorf("%s: Verify error = %v, want %v", tt.name, err, auth.ErrUnauthenticated)
-			}
+			t.Run(tt.name, func(t *testing.T) {
+				if _, err := f.verifier.Verify(t.Context(), tt.token); !errors.Is(err, auth.ErrUnauthenticated) {
+					t.Errorf("Verify() error = %v, want %v", err, auth.ErrUnauthenticated)
+				}
+			})
 		}
 	})
 }

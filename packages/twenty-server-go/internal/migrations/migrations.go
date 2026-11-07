@@ -26,12 +26,12 @@ func Up(ctx context.Context, dsn string) (err error) {
 		}
 	}()
 	for _, file := range files {
-		sql, err := FS.ReadFile(file.Name())
-		if err != nil {
-			return fmt.Errorf("read migration %s: %w", file.Name(), err)
+		sql, readErr := FS.ReadFile(file.Name())
+		if readErr != nil {
+			return fmt.Errorf("read migration %s: %w", file.Name(), readErr)
 		}
-		if _, err := conn.Exec(ctx, string(sql)); err != nil {
-			return fmt.Errorf("apply migration %s: %w", file.Name(), err)
+		if _, execErr := conn.Exec(ctx, string(sql)); execErr != nil {
+			return fmt.Errorf("apply migration %s: %w", file.Name(), execErr)
 		}
 	}
 	return nil
