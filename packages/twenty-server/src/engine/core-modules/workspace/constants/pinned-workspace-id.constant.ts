@@ -1,0 +1,1 @@
+export const PINNED_WORKSPACE_ID = '26a06a83-ad30-4547-9126-7f6339d43e03';
