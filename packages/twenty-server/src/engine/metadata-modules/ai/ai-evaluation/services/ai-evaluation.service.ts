@@ -3,8 +3,6 @@ import { Injectable } from '@nestjs/common';
 import { isDefined } from 'twenty-shared/utils';
 import { JEV_MODEL_ID } from 'twenty-shared/ai';
 
-import { UsageOperationType } from 'src/engine/core-modules/usage/enums/usage-operation-type.enum';
-import { AiBillingService } from 'src/engine/metadata-modules/ai/ai-billing/services/ai-billing.service';
 import { NativeEvaluationRunner } from 'src/engine/metadata-modules/ai/ai-evaluation/services/native-evaluation.runner';
 import { type AiEvaluationRequest } from 'src/engine/metadata-modules/ai/ai-evaluation/types/ai-evaluation-request.type';
 import { type AiEvaluationResult } from 'src/engine/metadata-modules/ai/ai-evaluation/types/ai-evaluation-result.type';
@@ -20,12 +18,9 @@ export class AiEvaluationService {
   constructor(
     private readonly aiModelRegistryService: AiModelRegistryService,
     private readonly nativeEvaluationRunner: NativeEvaluationRunner,
-    private readonly aiBillingService: AiBillingService,
   ) {}
 
   async evaluate({
-    workspaceId,
-    userWorkspaceId,
     state,
     questions,
     abortSignal,
@@ -45,27 +40,12 @@ export class AiEvaluationService {
 
     const modelId = JEV_MODEL_ID;
 
-    await this.aiBillingService.assertAiExecutionAllowed({
-      workspaceId,
-      operationType: UsageOperationType.AI_WORKFLOW_TOKEN,
-      spenders: { userWorkspaceId },
-    });
-
     const { answers, usage } = await this.nativeEvaluationRunner.run({
       modelId,
       state,
       questions,
       abortSignal,
     });
-
-    await this.aiBillingService.calculateAndBillUsage(
-      modelId,
-      { usage },
-      workspaceId,
-      UsageOperationType.AI_WORKFLOW_TOKEN,
-      null,
-      userWorkspaceId,
-    );
 
     return { modelId, answers, usage };
   }

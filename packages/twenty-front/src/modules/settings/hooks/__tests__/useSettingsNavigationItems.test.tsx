@@ -5,7 +5,6 @@ import { type ReactNode } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { SettingsPath } from 'twenty-shared/types';
 import {
-  type Billing,
   FeatureFlagKey,
   OnboardingStatus,
   PermissionFlagType,
@@ -14,7 +13,6 @@ import {
 import { currentUserState } from '@/auth/states/currentUserState';
 import { currentUserWorkspaceState } from '@/auth/states/currentUserWorkspaceState';
 import { currentWorkspaceState } from '@/auth/states/currentWorkspaceState';
-import { billingState } from '@/client-config/states/billingState';
 import {
   jotaiStore,
   resetJotaiStore,
@@ -42,13 +40,6 @@ const mockCurrentUser = {
   firstName: 'fake-first-name',
   lastName: 'fake-last-name',
   hasPassword: true,
-};
-
-const mockBilling: Billing = {
-  isBillingEnabled: false,
-  billingUrl: '',
-  trialPeriods: [],
-  __typename: 'Billing',
 };
 
 const Wrapper = ({ children }: { children: ReactNode }) => (
@@ -91,7 +82,6 @@ describe('useSettingsNavigationItems', () => {
   beforeEach(() => {
     resetJotaiStore();
     jotaiStore.set(currentUserState.atom, mockCurrentUser);
-    jotaiStore.set(billingState.atom, mockBilling);
   });
 
   it('should hide workspace settings when no permissions', () => {
@@ -128,59 +118,6 @@ describe('useSettingsNavigationItems', () => {
     );
 
     expect(workspaceSection?.items.some((item) => !item.isHidden)).toBe(true);
-  });
-
-  it('should hide billing navigation when billing is disabled', () => {
-    setPermissionFlags([
-      PermissionFlagType.WORKSPACE,
-      PermissionFlagType.WORKSPACE_MEMBERS,
-      PermissionFlagType.DATA_MODEL,
-      PermissionFlagType.API_KEYS_AND_WEBHOOKS,
-      PermissionFlagType.ROLES,
-      PermissionFlagType.SECURITY,
-      PermissionFlagType.CONNECTED_ACCOUNTS,
-    ]);
-
-    const { result } = renderHook(() => useSettingsNavigationItems(), {
-      wrapper: Wrapper,
-    });
-
-    const workspaceSection = result.current.find(
-      (section) => section.label === 'Workspace',
-    );
-    const billingItem = workspaceSection?.items.find(
-      (item) => item.label === 'Billing',
-    );
-
-    expect(billingItem?.isHidden).toBe(true);
-    expect(billingItem?.path).toBe(SettingsPath.Billing);
-  });
-
-  it('should hide billing navigation until billing config is loaded', () => {
-    jotaiStore.set(billingState.atom, null);
-
-    setPermissionFlags([
-      PermissionFlagType.WORKSPACE,
-      PermissionFlagType.WORKSPACE_MEMBERS,
-      PermissionFlagType.DATA_MODEL,
-      PermissionFlagType.API_KEYS_AND_WEBHOOKS,
-      PermissionFlagType.ROLES,
-      PermissionFlagType.SECURITY,
-      PermissionFlagType.CONNECTED_ACCOUNTS,
-    ]);
-
-    const { result } = renderHook(() => useSettingsNavigationItems(), {
-      wrapper: Wrapper,
-    });
-
-    const workspaceSection = result.current.find(
-      (section) => section.label === 'Workspace',
-    );
-    const billingItem = workspaceSection?.items.find(
-      (item) => item.label === 'Billing',
-    );
-
-    expect(billingItem?.isHidden).toBe(true);
   });
 
   it('should show user section items regardless of permissions', () => {

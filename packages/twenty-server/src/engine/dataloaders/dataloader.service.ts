@@ -1040,18 +1040,6 @@ export class DataloaderService {
     >(async (dataLoaderParams: RowLevelPermissionsByRoleIdLoaderPayload[]) => {
       const workspaceId = dataLoaderParams[0].workspaceId;
 
-      const hasRowLevelPermissionFeature =
-        await this.rowLevelPermissionPredicateService.hasRowLevelPermissionFeature(
-          workspaceId,
-        );
-
-      if (!hasRowLevelPermissionFeature) {
-        return dataLoaderParams.map(() => ({
-          rowLevelPermissionPredicates: [],
-          rowLevelPermissionPredicateGroups: [],
-        }));
-      }
-
       const {
         flatRoleMaps,
         flatRowLevelPermissionPredicateMaps,

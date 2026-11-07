@@ -11,7 +11,6 @@ import { DataSource } from 'typeorm';
 import { isDefined } from 'twenty-shared/utils';
 
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
-import { WorkspaceRecordStockService } from 'src/engine/core-modules/usage-limit/services/workspace-record-stock.service';
 import { type WorkspaceInternalContext } from 'src/engine/twenty-orm/interfaces/workspace-internal-context.interface';
 import { getWorkspaceContext } from 'src/engine/twenty-orm/storage/orm-workspace-context.storage';
 import { WorkspaceDataSource } from 'src/engine/twenty-orm/datasource/workspace-data-source';
@@ -45,7 +44,6 @@ export class WorkspaceDataSourceService
     private readonly workspaceEventEmitter: WorkspaceEventEmitter,
     @InjectDataSource()
     private readonly coreDataSource: DataSource,
-    private readonly workspaceRecordStockService: WorkspaceRecordStockService,
   ) {}
 
   onModuleInit(): void {
@@ -105,12 +103,10 @@ export class WorkspaceDataSourceService
       flatValidationRuleMaps: workspaceContext.flatValidationRuleMaps,
       objectIdByNameSingular: workspaceContext.objectIdByNameSingular,
       featureFlagsMap: workspaceContext.featureFlagsMap,
-      billingEntitlements: workspaceContext.billingEntitlements,
       userWorkspaceRoleMap: workspaceContext.userWorkspaceRoleMap,
       roleIdsWithAllRecordsAccess: workspaceContext.roleIdsWithAllRecordsAccess,
       apiKeyRoleMap: workspaceContext.apiKeyRoleMap,
       eventEmitterService: this.workspaceEventEmitter,
-      recordStock: this.workspaceRecordStockService,
       coreDataSource: this.coreDataSource,
     };
   }

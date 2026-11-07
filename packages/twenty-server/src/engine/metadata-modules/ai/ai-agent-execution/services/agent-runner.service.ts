@@ -331,7 +331,7 @@ export class AgentRunnerService {
     summary: AgentRunSummary;
     suspension: AgentRunSuspension | null;
   }): Promise<AgentRunnerOutcome> {
-    if (!execution.hasNoMoreAvailableCredits && !execution.isPaused) {
+    if (!execution.isPaused) {
       return { status: 'COMPLETED', result: execution.result };
     }
 
@@ -352,7 +352,6 @@ export class AgentRunnerService {
     // continuing reads the conversation, so a pause it does not hold could never be continued.
     // A failure to suspend only fails the run, like a pause that could not be recorded
     const isSuspended =
-      !execution.hasNoMoreAvailableCredits &&
       !hasPausedTooOften &&
       isDefined(closedTurn) &&
       isDefined(condition) &&
@@ -397,13 +396,6 @@ export class AgentRunnerService {
       threadId,
       isAwaitingAnswer: closedTurn?.isAwaitingAnswer === true,
     });
-
-    if (execution.hasNoMoreAvailableCredits) {
-      return {
-        status: 'FAILED',
-        error: 'Agent stopped: no more available credits.',
-      };
-    }
 
     if (hasPausedTooOften) {
       return {

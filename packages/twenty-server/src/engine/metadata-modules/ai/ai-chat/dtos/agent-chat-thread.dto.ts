@@ -1,4 +1,4 @@
-import { Field, Float, ID, Int, ObjectType } from '@nestjs/graphql';
+import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType('AgentChatThread')
 export class AgentChatThreadDTO {
@@ -22,13 +22,6 @@ export class AgentChatThreadDTO {
 
   @Field(() => Int)
   conversationSize: number;
-
-  // In display credits; the resolver converts from the stored internal credits
-  @Field(() => Float)
-  totalInputCredits: number;
-
-  @Field(() => Float)
-  totalOutputCredits: number;
 
   @Field()
   createdAt: Date;

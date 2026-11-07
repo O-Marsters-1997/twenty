@@ -32,7 +32,6 @@ import { isAdvancedModeEnabledState } from '@/ui/navigation/navigation-drawer/st
 import { jotaiStore } from '@/ui/utilities/state/jotai/jotaiStore';
 import { REACT_APP_SERVER_BASE_URL } from '~/config';
 import {
-  BillingEntitlementKey,
   EventLogFilterOperand,
   type EventLogRecord,
   type EventLogsLiveSubscription,
@@ -68,7 +67,6 @@ const WORKSPACE_WITH_LOGS_CONSOLE = {
   featureFlags: [
     { key: FeatureFlagKey.IS_LOGS_SETTINGS_SECTION_ENABLED, value: true },
   ],
-  billingEntitlements: [{ key: BillingEntitlementKey.AUDIT_LOGS, value: true }],
 };
 
 const [firstLiveApplicationLog, secondLiveApplicationLog] =
@@ -538,20 +536,6 @@ export const PageViewDetail: Story = {
   },
 };
 
-export const UsageOpen: Story = {
-  beforeEach: () => {
-    jotaiStore.set(logConsoleDisplayModeState.atom, 'open');
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-
-    await userEvent.click(await canvas.findByRole('tab', { name: 'Usage' }));
-    await canvas.findByText('Jonas Weber');
-    await canvas.findByText('Chats');
-    await canvas.findByText('0.0055 credits');
-  },
-};
-
 export const TimeRangeMenu: Story = {
   beforeEach: () => {
     jotaiStore.set(currentWorkspaceState.atom, {
@@ -758,22 +742,6 @@ export const FullScreen: Story = {
         document.elementFromPoint(x + width / 2, y + height / 2),
       ),
     ).toBe(true);
-  },
-};
-
-export const LockedTab: Story = {
-  beforeEach: () => {
-    jotaiStore.set(currentWorkspaceState.atom, {
-      ...WORKSPACE_WITH_LOGS_CONSOLE,
-      billingEntitlements: [],
-    });
-    jotaiStore.set(logConsoleDisplayModeState.atom, 'open');
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-
-    await userEvent.click(await canvas.findByRole('tab', { name: 'Security' }));
-    await canvas.findByText('Upgrade to access audit logs');
   },
 };
 

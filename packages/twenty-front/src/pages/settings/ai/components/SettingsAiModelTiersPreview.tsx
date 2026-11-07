@@ -17,7 +17,7 @@ import { TableRow } from '@/ui/layout/table/components/TableRow';
 import { TooltipDelay } from '@/ui/layout/tooltip/constants/TooltipDelay';
 import { formatNumber } from '@/localization/utils/formatNumber';
 
-const GRID_TEMPLATE_COLUMNS = '1fr 1fr 1fr 1fr';
+const GRID_TEMPLATE_COLUMNS = '1fr 1fr 1fr';
 const EMPTY_VALUE = '–';
 
 const StyledInheritedValue = styled.span`
@@ -52,12 +52,6 @@ const formatIntelligence = (tier: ResolvedAiModelTier) =>
     ? formatNumber(tier.model.intelligenceIndex, { decimals: 0 })
     : EMPTY_VALUE;
 
-const formatCost = (tier: ResolvedAiModelTier) =>
-  isDefined(tier.model?.outputCostPerMillionTokens) &&
-  tier.model.outputCostPerMillionTokens > 0
-    ? t`$${formatNumber(tier.model.outputCostPerMillionTokens, { decimals: 2 })} / 1M`
-    : EMPTY_VALUE;
-
 const StyledMode = styled.span`
   align-items: center;
   display: inline-flex;
@@ -83,7 +77,6 @@ export const SettingsAiModelTiersPreview = () => {
           <TableHeader>{t`Mode`}</TableHeader>
           <TableHeader align="right">{t`Speed`}</TableHeader>
           <TableHeader align="right">{t`Intelligence`}</TableHeader>
-          <TableHeader align="right">{t`Output cost`}</TableHeader>
         </TableRow>
         {tiers.map((tier) => {
           const ModelIcon = isDefined(tier.model)
@@ -124,7 +117,6 @@ export const SettingsAiModelTiersPreview = () => {
                   value: formatIntelligence(tier),
                 })}
               </TableCell>
-              <TableCell align="right">{formatCost(tier)}</TableCell>
             </TableRow>
           );
         })}

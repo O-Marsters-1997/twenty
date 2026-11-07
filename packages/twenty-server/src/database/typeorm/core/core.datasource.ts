@@ -42,16 +42,10 @@ export const typeORMCoreModuleOptions: TypeOrmModuleOptions = {
   type: 'postgres',
   logging: getLoggingConfig(),
   schema: 'core',
-  entities:
-    process.env.IS_BILLING_ENABLED === 'true'
-      ? [
-          `${isJest ? 'src/' : 'dist/'}engine/core-modules/**/*.entity{.ts,.js}`,
-          `${isJest ? 'src/' : 'dist/'}engine/metadata-modules/**/*.entity{.ts,.js}`,
-        ]
-      : [
-          `${isJest ? 'src/' : 'dist/'}engine/core-modules/**/!(billing-*).entity.{ts,js}`,
-          `${isJest ? 'src/' : 'dist/'}engine/metadata-modules/**/*.entity{.ts,.js}`,
-        ],
+  entities: [
+    `${isJest ? 'src/' : 'dist/'}engine/core-modules/**/*.entity{.ts,.js}`,
+    `${isJest ? 'src/' : 'dist/'}engine/metadata-modules/**/*.entity{.ts,.js}`,
+  ],
   synchronize: false,
   migrationsRun: false,
   poolSize: Number(process.env.PG_POOL_MAX_CONNECTIONS ?? 10),
@@ -62,15 +56,9 @@ export const typeORMCoreModuleOptions: TypeOrmModuleOptions = {
   // `_typeorm_migrations` table stays consistent for older deployments.
   // Do NOT add new files there: write a fast/slow instance command instead.
   // See `packages/twenty-server/docs/UPGRADE_COMMANDS.md`.
-  migrations:
-    process.env.IS_BILLING_ENABLED === 'true'
-      ? [
-          `${isJest ? 'src/' : 'dist/'}database/typeorm/core/legacy-typeorm-migrations-do-not-add/common/*{.ts,.js}`,
-          `${isJest ? 'src/' : 'dist/'}database/typeorm/core/legacy-typeorm-migrations-do-not-add/billing/*{.ts,.js}`,
-        ]
-      : [
-          `${isJest ? 'src/' : 'dist/'}database/typeorm/core/legacy-typeorm-migrations-do-not-add/common/*{.ts,.js}`,
-        ],
+  migrations: [
+    `${isJest ? 'src/' : 'dist/'}database/typeorm/core/legacy-typeorm-migrations-do-not-add/common/*{.ts,.js}`,
+  ],
   ssl:
     process.env.PG_SSL_ALLOW_SELF_SIGNED === 'true'
       ? {

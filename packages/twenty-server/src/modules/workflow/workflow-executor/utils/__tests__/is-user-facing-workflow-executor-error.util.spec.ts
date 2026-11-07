@@ -1,12 +1,4 @@
 import {
-  BillingException,
-  BillingExceptionCode,
-} from 'src/engine/core-modules/billing/billing.exception';
-import {
-  UsageLimitException,
-  UsageLimitExceptionCode,
-} from 'src/engine/core-modules/usage-limit/exceptions/usage-limit.exception';
-import {
   AiException,
   AiExceptionCode,
 } from 'src/engine/metadata-modules/ai/ai.exception';
@@ -17,33 +9,6 @@ import {
 import { isUserFacingWorkflowExecutorError } from 'src/modules/workflow/workflow-executor/utils/is-user-facing-workflow-executor-error.util';
 
 describe('isUserFacingWorkflowExecutorError', () => {
-  it('returns true for an inactive subscription', () => {
-    const error = new BillingException(
-      'No active subscription',
-      BillingExceptionCode.BILLING_SUBSCRIPTION_INACTIVE,
-    );
-
-    expect(isUserFacingWorkflowExecutorError(error)).toBe(true);
-  });
-
-  it('returns true for an exhausted usage quota', () => {
-    const error = new UsageLimitException(
-      'Quota exhausted',
-      UsageLimitExceptionCode.QUOTA_EXHAUSTED,
-    );
-
-    expect(isUserFacingWorkflowExecutorError(error)).toBe(true);
-  });
-
-  it('returns false for a platform-state billing error the user cannot resolve', () => {
-    const error = new BillingException(
-      'Subscription not found',
-      BillingExceptionCode.BILLING_SUBSCRIPTION_NOT_FOUND,
-    );
-
-    expect(isUserFacingWorkflowExecutorError(error)).toBe(false);
-  });
-
   it.each([
     WorkflowStepExecutorExceptionCode.INVALID_STEP_TYPE,
     WorkflowStepExecutorExceptionCode.INVALID_STEP_INPUT,

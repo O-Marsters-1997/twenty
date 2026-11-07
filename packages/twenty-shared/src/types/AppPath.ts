@@ -9,9 +9,6 @@ export enum AppPath {
   CreateProfile = '/create/profile',
   SyncEmails = '/sync/emails',
   InviteTeam = '/invite-team',
-  PlanRequired = '/plan-required',
-  PlanRequiredSuccess = '/plan-required/payment-success',
-  BookCall = '/book-call',
 
   AiChat = '/chat/:threadId?',
   AiChatInbox = '/inbox/:threadId?',

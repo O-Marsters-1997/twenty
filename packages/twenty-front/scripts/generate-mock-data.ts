@@ -1,6 +1,5 @@
 /* oxlint-disable no-console */
 import { generateApiKeys } from './mock-data/generate-api-keys.js';
-import { generateBillingPlans } from './mock-data/generate-billing-plans.js';
 import { generateCommandMenuItems } from './mock-data/generate-command-menu-items.js';
 import { generateObjectMetadata } from './mock-data/generate-object-metadata.js';
 import { generateMinimalMetadata } from './mock-data/generate-minimal-metadata.js';
@@ -20,15 +19,6 @@ const main = async () => {
   await generateViews(token);
   await generateNavigationMenuItems(token);
   await generateCommandMenuItems(token);
-
-  try {
-    await generateBillingPlans(token);
-  } catch (error) {
-    console.warn(
-      'Skipping billing plans generation (billing not available):',
-      (error as Error).message,
-    );
-  }
 
   try {
     await generateApiKeys(token);

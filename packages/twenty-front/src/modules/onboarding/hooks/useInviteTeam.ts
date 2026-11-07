@@ -1,18 +1,11 @@
-import { isBookCallOnboardingStepEnabledState } from '@/client-config/states/isBookCallOnboardingStepEnabledState';
-import { isCompanyEnrichmentEnabledState } from '@/client-config/states/isCompanyEnrichmentEnabledState';
-import { onboardingConfigState } from '@/client-config/states/onboardingConfigState';
 import { ONBOARDING_SKIP_DIALOG_IDS } from '@/onboarding/constants/OnboardingSkipDialogIds';
 import { useOnboardingStepEnterHotkey } from '@/onboarding/hooks/useOnboardingStepEnterHotkey';
 import { useSetNextOnboardingStatus } from '@/onboarding/hooks/useSetNextOnboardingStatus';
-import { useSetOnboardingStepFreeCredits } from '@/onboarding/hooks/useSetOnboardingStepFreeCredits';
 import { onboardingInviteTeamEmailsDraftState } from '@/onboarding/states/onboardingInviteTeamEmailsDraftState';
 import { onboardingInviteTeamValidEmailsSelector } from '@/onboarding/states/selectors/onboardingInviteTeamValidEmailsSelector';
-import { getInviteTeamCreditsReward } from '@/onboarding/utils/getInviteTeamCreditsReward';
 import { getValidInviteEmails } from '@/onboarding/utils/getValidInviteEmails';
-import { waitForCompanyEnrichmentSettlement } from '@/onboarding/utils/waitForCompanyEnrichmentSettlement';
 import { PageFocusId } from '@/types/PageFocusId';
 import { useDialog } from '@/ui/layout/dialog/hooks/useDialog';
-import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useCreateWorkspaceInvitation } from '@/workspace-invitation/hooks/useCreateWorkspaceInvitation';
 import { useQuery } from '@apollo/client/react';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -36,13 +29,6 @@ export const useInviteTeam = () => {
   const { enqueueToast } = useToast();
   const { sendInvitation } = useCreateWorkspaceInvitation();
   const setNextOnboardingStatus = useSetNextOnboardingStatus();
-  const setOnboardingStepFreeCredits = useSetOnboardingStepFreeCredits();
-  const isBookCallOnboardingStepEnabled = useAtomStateValue(
-    isBookCallOnboardingStepEnabledState,
-  );
-  const isCompanyEnrichmentEnabled = useAtomStateValue(
-    isCompanyEnrichmentEnabledState,
-  );
   const store = useStore();
   const { openDialog } = useDialog();
 
@@ -159,13 +145,6 @@ export const useInviteTeam = () => {
       setIsNavigating(true);
 
       try {
-        // Only wait when enrichment is actually going to run, otherwise the
-        // settlement never resolves and every submit burns the full timeout.
-        const companyEnrichmentSettlement =
-          isBookCallOnboardingStepEnabled && isCompanyEnrichmentEnabled
-            ? waitForCompanyEnrichmentSettlement({ store })
-            : Promise.resolve();
-
         const result = await sendInvitation({ emails });
 
         if (isDefined(result.error)) {
@@ -175,14 +154,6 @@ export const useInviteTeam = () => {
         const sentInvitationsCount =
           result.data?.sendInvitations.result.length ?? 0;
         const invitationErrors = result.data?.sendInvitations.errors ?? [];
-
-        setOnboardingStepFreeCredits(
-          'inviteTeam',
-          getInviteTeamCreditsReward({
-            invitedTeammatesCount: sentInvitationsCount,
-            onboardingConfig: store.get(onboardingConfigState.atom),
-          }),
-        );
 
         if (
           sentInvitationsCount === 0 &&
@@ -204,8 +175,6 @@ export const useInviteTeam = () => {
           });
         }
 
-        await companyEnrichmentSettlement;
-
         setNextOnboardingStatus({
           stepHistoryEffect:
             sentInvitationsCount > 0
@@ -218,16 +187,7 @@ export const useInviteTeam = () => {
         throw error;
       }
     },
-    [
-      enqueueToast,
-      isBookCallOnboardingStepEnabled,
-      isCompanyEnrichmentEnabled,
-      sendInvitation,
-      setNextOnboardingStatus,
-      setOnboardingStepFreeCredits,
-      store,
-      t,
-    ],
+    [enqueueToast, sendInvitation, setNextOnboardingStatus, t],
   );
 
   const handleSkip = async () => {

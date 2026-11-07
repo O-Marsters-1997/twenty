@@ -5,26 +5,16 @@ import { isDefined } from 'twenty-shared/utils';
 import { v4 } from 'uuid';
 
 import { CampaignDeliveryWorkspaceEntity } from 'src/modules/emailing/standard-objects/campaign-delivery.workspace-entity';
-import { SEND_CAMPAIGN_EMAIL_BATCH_JOB } from 'src/engine/core-modules/emailing-domain/constants/send-campaign-email-batch-job.constant';
 import { CAMPAIGN_DELIVERY_CLAIM_TTL_MS } from 'src/engine/core-modules/emailing-domain/constants/campaign-delivery-claim-ttl-ms.constant';
 import { CAMPAIGN_DELIVERY_STATE } from 'src/engine/core-modules/emailing-domain/constants/campaign-delivery-state.constant';
 import { CAMPAIGN_FAILURE_REASON } from 'src/engine/core-modules/emailing-domain/constants/campaign-failure-reason.constant';
-import { CAMPAIGN_SEND_RETRY_BACKOFF } from 'src/engine/core-modules/emailing-domain/constants/campaign-send-retry-backoff.constant';
-import { CAMPAIGN_SEND_RETRY_LIMIT } from 'src/engine/core-modules/emailing-domain/constants/campaign-send-retry-limit.constant';
 import { CAMPAIGN_SKIP_REASON } from 'src/engine/core-modules/emailing-domain/constants/campaign-skip-reason.constant';
 import { CLAIMABLE_CAMPAIGN_DELIVERY_STATES } from 'src/engine/core-modules/emailing-domain/constants/claimable-campaign-delivery-states.constant';
-import { SEND_SLOT_RETRY } from 'src/engine/core-modules/emailing-domain/constants/send-slot-retry.constant';
 import { type SendCampaignEmailBatchJobData } from 'src/engine/core-modules/emailing-domain/types/send-campaign-email-batch-job-data.type';
-import { type SendSlotRefusal } from 'src/engine/core-modules/emailing-domain/types/send-slot-refusal.type';
 import { applyReplacementTags } from 'src/engine/core-modules/emailing-domain/utils/apply-replacement-tags.util';
-import { InjectMessageQueue } from 'src/engine/core-modules/message-queue/decorators/message-queue.decorator';
-import { MessageQueue } from 'src/engine/core-modules/message-queue/message-queue.constants';
-import { MessageQueueService } from 'src/engine/core-modules/message-queue/services/message-queue.service';
 import { buildSystemAuthContext } from 'src/engine/twenty-orm/utils/build-system-auth-context.util';
 import { WorkspaceOrmManager } from 'src/engine/twenty-orm/workspace-orm.manager';
-import { CampaignSendSlotService } from 'src/modules/emailing/services/campaign-send-slot.service';
 import { CampaignVariableService } from 'src/modules/emailing/services/campaign-variable.service';
-import { EmailBillingService } from 'src/modules/emailing/services/email-billing.service';
 import { EmailingDomainSenderService } from 'src/modules/emailing/services/emailing-domain-sender.service';
 import { MessageCampaignLifecycleService } from 'src/modules/emailing/services/message-campaign-lifecycle.service';
 import { MessageCampaignStatisticsService } from 'src/modules/emailing/services/message-campaign-statistics.service';
@@ -38,8 +28,6 @@ import { buildCampaignThreadExternalId } from 'src/modules/emailing/utils/build-
 import { getCampaignDeliveryTableName } from 'src/modules/emailing/utils/get-campaign-delivery-table-name.util';
 import { buildCampaignDeliverySettleQuery } from 'src/modules/emailing/utils/build-campaign-delivery-settle-query.util';
 import { compileCampaignBatchTemplate } from 'src/modules/emailing/utils/compile-campaign-batch-template.util';
-import { chunkRecipientsToAdmissibleSize } from 'src/modules/emailing/utils/chunk-recipients-to-admissible-size.util';
-import { computeSendSlotBackoffMs } from 'src/modules/emailing/utils/compute-send-slot-backoff-ms.util';
 import { resolveCampaignBatchSettlements } from 'src/modules/emailing/utils/resolve-campaign-batch-settlements.util';
 import { resolveCampaignSendFailure } from 'src/modules/emailing/utils/resolve-campaign-send-failure.util';
 import { MessageChannelMessageAssociationWorkspaceEntity } from 'src/modules/messaging/common/standard-objects/message-channel-message-association.workspace-entity';
@@ -56,17 +44,13 @@ export class MessageCampaignBatchDeliveryService {
   );
 
   constructor(
-    @InjectMessageQueue(MessageQueue.campaignSendQueue)
-    private readonly messageQueueService: MessageQueueService,
     private readonly workspaceOrmManager: WorkspaceOrmManager,
     private readonly emailingDomainSenderService: EmailingDomainSenderService,
-    private readonly emailBillingService: EmailBillingService,
     private readonly campaignVariableService: CampaignVariableService,
     private readonly campaignTrackingContentService: CampaignTrackingContentService,
     private readonly exceptionHandlerService: ExceptionHandlerService,
     private readonly messageCampaignLifecycleService: MessageCampaignLifecycleService,
     private readonly messageCampaignStatisticsService: MessageCampaignStatisticsService,
-    private readonly campaignSendSlotService: CampaignSendSlotService,
   ) {}
 
   async processSendBatchJob(
@@ -148,65 +132,6 @@ export class MessageCampaignBatchDeliveryService {
       return;
     }
 
-    // Suppressed recipients are resolved before the slots are asked for, so a
-    // batch full of unsubscribed addresses does not spend send capacity that
-    // the recipients it actually has could have used. This only sizes the
-    // charge: the sender resolves suppression again at the handoff, and anyone
-    // who unsubscribes in between is dropped there. That leaves the batch
-    // having paid for a slot it did not use, which costs throughput rather than
-    // mailing someone who opted out.
-    const blockedAddresses =
-      await this.emailingDomainSenderService.findBlockedRecipientAddresses({
-        workspaceId,
-        sendKind: 'MARKETING',
-        emailAddresses: claimedRecipients.map((recipient) => recipient.email),
-        unsubscribeTopicId: campaign.unsubscribeTopicId ?? undefined,
-      });
-
-    const deliverableRecipientCount = claimedRecipients.filter(
-      (recipient) =>
-        !blockedAddresses.has(recipient.email.trim().toLowerCase()),
-    ).length;
-
-    const sendRefusal =
-      deliverableRecipientCount === 0
-        ? null
-        : await this.emailBillingService.findEmailSendRefusal({
-            workspaceId,
-            spenders: { userWorkspaceId: data.userWorkspaceId },
-            emailCount: deliverableRecipientCount,
-          });
-
-    if (isDefined(sendRefusal)) {
-      await this.settleWholeBatchAs({
-        claimToken,
-        recipients: claimedRecipients,
-        state: CAMPAIGN_DELIVERY_STATE.SKIPPED,
-        skipReason: CAMPAIGN_SKIP_REASON.OUT_OF_CREDITS,
-      });
-
-      return;
-    }
-
-    const sendSlotRefusal =
-      deliverableRecipientCount === 0
-        ? null
-        : await this.campaignSendSlotService.findSendSlotRefusal({
-            workspaceId,
-            requestedSlotCount: deliverableRecipientCount,
-          });
-
-    if (isDefined(sendSlotRefusal)) {
-      await this.deferRateLimitedBatch({
-        data,
-        claimToken,
-        claimedRecipients,
-        sendSlotRefusal,
-      });
-
-      return;
-    }
-
     const campaignStillRunning =
       await this.messageCampaignLifecycleService.findRunningCampaign(
         data.campaignId,
@@ -229,71 +154,6 @@ export class MessageCampaignBatchDeliveryService {
       claimToken,
       claimedRecipients,
     });
-  }
-
-  private async deferRateLimitedBatch({
-    data,
-    claimToken,
-    claimedRecipients,
-    sendSlotRefusal,
-  }: {
-    data: SendCampaignEmailBatchJobData;
-    claimToken: string;
-    claimedRecipients: BatchRecipient[];
-    sendSlotRefusal: SendSlotRefusal;
-  }): Promise<void> {
-    const attemptCount = (data.rateLimitedAttemptCount ?? 0) + 1;
-
-    if (attemptCount > SEND_SLOT_RETRY.attemptLimit) {
-      await this.settleWholeBatchAs({
-        claimToken,
-        recipients: claimedRecipients,
-        state: CAMPAIGN_DELIVERY_STATE.FAILED,
-        failureReason: CAMPAIGN_FAILURE_REASON.RATE_LIMITED,
-      });
-
-      return;
-    }
-
-    await this.settleWholeBatchAs({
-      claimToken,
-      recipients: claimedRecipients,
-      state: CAMPAIGN_DELIVERY_STATE.QUEUED,
-    });
-
-    // A workspace whose limit is below this batch can never admit it whole, so
-    // re-queueing the same size would defer until the attempt limit and fail
-    // recipients the provider would have taken. Split it to what fits instead.
-    const chunks = chunkRecipientsToAdmissibleSize({
-      recipients: claimedRecipients,
-      limitValue: sendSlotRefusal.limitValue,
-    });
-
-    const delay = computeSendSlotBackoffMs({
-      attemptCount,
-      retryDelayMs: sendSlotRefusal.retryDelayMs,
-      windowMs: sendSlotRefusal.windowMs,
-    });
-
-    // A split batch starts its own retry budget: it was never refused at this
-    // size, and inheriting the count would fail it early.
-    const requeuedAttemptCount = chunks.length > 1 ? 0 : attemptCount;
-
-    await this.messageQueueService.bulkAdd<SendCampaignEmailBatchJobData>(
-      SEND_CAMPAIGN_EMAIL_BATCH_JOB,
-      chunks.map((chunk) => ({
-        data: {
-          ...data,
-          recipients: chunk,
-          rateLimitedAttemptCount: requeuedAttemptCount,
-        },
-      })),
-      {
-        delay,
-        retryLimit: CAMPAIGN_SEND_RETRY_LIMIT,
-        backoff: CAMPAIGN_SEND_RETRY_BACKOFF,
-      },
-    );
   }
 
   private async deliverBatch({
@@ -461,7 +321,7 @@ export class MessageCampaignBatchDeliveryService {
     replacementsByDeliveryId: Map<string, Record<string, string>>;
     headerMessageIdByDeliveryId: Map<string, string>;
   }): Promise<void> {
-    const { workspaceId, campaignId, userWorkspaceId } = data;
+    const { workspaceId, campaignId } = data;
 
     const settledDeliveryIds = await this.settleClaimedBatch({
       workspaceId,
@@ -489,24 +349,6 @@ export class MessageCampaignBatchDeliveryService {
         replacements: replacementsByDeliveryId.get(settlement.deliveryId) ?? {},
       });
     }
-
-    const sentDeliveryIds = sentSettlements.map(
-      (settlement) => settlement.deliveryId,
-    );
-
-    await this.emailBillingService
-      .billSentEmails({
-        workspaceId,
-        sentEmailCount: sentDeliveryIds.length,
-        spenders: { userWorkspaceId },
-      })
-      .catch((error) => {
-        this.logger.error(
-          `Campaign ${campaignId} delivered ${sentDeliveryIds.length} message(s) but failed to bill them: ${
-            error instanceof Error ? error.message : String(error)
-          }`,
-        );
-      });
   }
 
   private async recordSentMessage({

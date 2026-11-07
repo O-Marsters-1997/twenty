@@ -76,7 +76,6 @@ export class AiModelRegistryService {
   private readonly logger = new Logger(AiModelRegistryService.name);
   private modelRegistry: Map<string, RegisteredAiModel> = new Map();
   private modelConfigCache: Map<string, AiModelConfig> = new Map();
-  // separate so transcription models never reach the chat picker or token costing
   private transcriptionRegistry: Map<string, RegisteredAiTranscriptionModel> =
     new Map();
   private transcriptionConfigCache: Map<string, AiTranscriptionModelConfig> =
@@ -283,15 +282,6 @@ export class AiModelRegistryService {
     modelDef: AiProviderModelConfig;
     sdkInstance: AiSdkProviderInstance | undefined;
   }): void {
-    // an omitted price would bill nothing while the provider charges; an explicit 0 is allowed
-    if (!isDefined(modelDef.costPerMinute)) {
-      this.logger.error(
-        `Skipping transcription model "${compositeId}": costPerMinute is required`,
-      );
-
-      return;
-    }
-
     this.transcriptionConfigCache.set(compositeId, {
       modelId: compositeId,
       sdkPackage: config.npm,
@@ -299,7 +289,6 @@ export class AiModelRegistryService {
       description: modelDef.description ?? compositeId,
       dataResidency: modelDef.dataResidency ?? config.dataResidency,
       zeroDataRetention: modelDef.zeroDataRetention,
-      costPerMinute: modelDef.costPerMinute,
       isDeprecated: modelDef.isDeprecated,
     });
 
@@ -384,17 +373,6 @@ export class AiModelRegistryService {
       return;
     }
 
-    if (
-      !isDefined(modelDef.inputCostPerMillionTokens) ||
-      !isDefined(modelDef.outputCostPerMillionTokens)
-    ) {
-      this.logger.error(
-        `Skipping evaluation model "${compositeId}": token costs are required`,
-      );
-
-      return;
-    }
-
     this.evaluationConfigCache.set(compositeId, {
       modelId: compositeId,
       providerName: providerKey,
@@ -402,8 +380,6 @@ export class AiModelRegistryService {
       sdkPackage: config.npm,
       label: modelDef.label,
       description: modelDef.description ?? compositeId,
-      inputCostPerMillionTokens: modelDef.inputCostPerMillionTokens,
-      outputCostPerMillionTokens: modelDef.outputCostPerMillionTokens,
       supportedQuestionTypes: [...supportedQuestionTypes],
       maxCriteriaPerQuestion: modelDef.maxCriteriaPerQuestion,
       maxScoreLevels: modelDef.maxScoreLevels,
@@ -463,12 +439,6 @@ export class AiModelRegistryService {
       // one Bedrock provider serves both eu.* and global.* models, so the model value wins
       dataResidency: modelDef.dataResidency ?? providerConfig.dataResidency,
       zeroDataRetention: modelDef.zeroDataRetention,
-      inputCostPerMillionTokens: modelDef.inputCostPerMillionTokens ?? 0,
-      outputCostPerMillionTokens: modelDef.outputCostPerMillionTokens ?? 0,
-      cachedInputCostPerMillionTokens: modelDef.cachedInputCostPerMillionTokens,
-      cacheCreationCostPerMillionTokens:
-        modelDef.cacheCreationCostPerMillionTokens,
-      longContextCost: modelDef.longContextCost,
       contextWindowTokens: getPositiveTokenLimitOrDefault(
         modelDef.contextWindowTokens,
         DEFAULT_CONTEXT_WINDOW_TOKENS,
@@ -640,8 +610,6 @@ export class AiModelRegistryService {
         registeredModel.modelId,
       ),
       sdkPackage: registeredModel.sdkPackage,
-      inputCostPerMillionTokens: 0,
-      outputCostPerMillionTokens: 0,
       contextWindowTokens: DEFAULT_CONTEXT_WINDOW_TOKENS,
       maxOutputTokens: DEFAULT_MAX_OUTPUT_TOKENS,
     };

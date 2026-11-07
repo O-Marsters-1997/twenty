@@ -27,8 +27,6 @@ import { WorkspaceOrmManager } from 'src/engine/twenty-orm/workspace-orm.manager
 import { InjectWorkspaceScopedRepository } from 'src/engine/twenty-orm/workspace-scoped-repository/inject-workspace-scoped-repository.decorator';
 import { WorkspaceScopedRepository } from 'src/engine/twenty-orm/workspace-scoped-repository/workspace-scoped-repository';
 import { CampaignVariableService } from 'src/modules/emailing/services/campaign-variable.service';
-import { EmailBillingService } from 'src/modules/emailing/services/email-billing.service';
-import { buildCampaignSendRefusalException } from 'src/modules/emailing/utils/build-campaign-send-refusal-exception.util';
 import { EmailingDomainSenderService } from 'src/modules/emailing/services/emailing-domain-sender.service';
 import { MessageCampaignAudienceService } from 'src/modules/emailing/services/message-campaign-audience.service';
 import { MessageCampaignLifecycleService } from 'src/modules/emailing/services/message-campaign-lifecycle.service';
@@ -60,7 +58,6 @@ export class MessageCampaignService {
     private readonly messageCampaignAudienceService: MessageCampaignAudienceService,
     private readonly messageCampaignLifecycleService: MessageCampaignLifecycleService,
     private readonly throttlerService: ThrottlerService,
-    private readonly emailBillingService: EmailBillingService,
   ) {}
 
   async send({
@@ -132,19 +129,6 @@ export class MessageCampaignService {
         roleId,
         unsubscribeTopicId: unsubscribeTopicId ?? undefined,
       });
-
-    const sendRefusal = await this.emailBillingService.findEmailSendRefusal({
-      workspaceId,
-      spenders: { userWorkspaceId },
-    });
-
-    if (sendableRecipients.length > 0 && isDefined(sendRefusal)) {
-      throw buildCampaignSendRefusalException({
-        campaignId,
-        recipientCount: sendableRecipients.length,
-        sendRefusal,
-      });
-    }
 
     const messageChannel =
       await this.messageChannelMetadataService.getOrCreateEmailGroupChannel({

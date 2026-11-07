@@ -346,7 +346,6 @@ export class UserService {
     const userWorkspaceId = userWorkspace.id;
 
     if (workspaceMembers.length === 1) {
-      await this.workspaceService.suspendWorkspace(workspaceId);
       await this.workspaceService.deleteWorkspace(workspaceId, true);
 
       return;

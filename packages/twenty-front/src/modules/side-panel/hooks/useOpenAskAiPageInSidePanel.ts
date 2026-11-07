@@ -1,5 +1,4 @@
 import { agentChatUISessionStartTimeState } from '@/ai/states/agentChatUISessionStartTimeState';
-import { useIsWorkspaceActivationStatusEqualsTo } from '@/workspace/hooks/useIsWorkspaceActivationStatusEqualsTo';
 import { useSidePanelMenu } from '@/side-panel/hooks/useSidePanelMenu';
 import { isSidePanelOpenedState } from '@/side-panel/states/isSidePanelOpenedState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
@@ -8,7 +7,6 @@ import { t } from '@lingui/core/macro';
 import { useCallback } from 'react';
 import { Temporal } from 'temporal-polyfill';
 import { SidePanelPages } from 'twenty-shared/types';
-import { WorkspaceActivationStatus } from 'twenty-shared/workspace';
 import { IconSparkles } from 'twenty-ui/icon';
 import { v4 } from 'uuid';
 import { isCurrentPathAiChatPage } from '~/utils/isCurrentPathAiChatPage';
@@ -19,9 +17,6 @@ export const useOpenAskAiPageInSidePanel = () => {
   const setAgentChatUISessionStartTime = useSetAtomState(
     agentChatUISessionStartTimeState,
   );
-  const isWorkspaceSuspended = useIsWorkspaceActivationStatusEqualsTo(
-    WorkspaceActivationStatus.SUSPENDED,
-  );
 
   const openAskAiPage = useCallback(
     ({
@@ -29,7 +24,7 @@ export const useOpenAskAiPageInSidePanel = () => {
     }: {
       resetNavigationStack?: boolean;
     } = {}) => {
-      if (isWorkspaceSuspended || isCurrentPathAiChatPage()) {
+      if (isCurrentPathAiChatPage()) {
         return;
       }
 
@@ -51,12 +46,7 @@ export const useOpenAskAiPageInSidePanel = () => {
         resetNavigationStack: shouldReset,
       });
     },
-    [
-      navigateSidePanelMenu,
-      isSidePanelOpened,
-      setAgentChatUISessionStartTime,
-      isWorkspaceSuspended,
-    ],
+    [navigateSidePanelMenu, isSidePanelOpened, setAgentChatUISessionStartTime],
   );
 
   return {

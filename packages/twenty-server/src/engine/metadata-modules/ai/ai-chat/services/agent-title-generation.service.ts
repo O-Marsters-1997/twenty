@@ -1,15 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 
-import {
-  type LanguageModelUsage,
-  type StepResult,
-  type ToolSet,
-  generateText,
-} from 'ai';
+import { generateText } from 'ai';
 
-import { UsageOperationType } from 'src/engine/core-modules/usage/enums/usage-operation-type.enum';
-import { AiBillingService } from 'src/engine/metadata-modules/ai/ai-billing/services/ai-billing.service';
-import { extractCacheCreationTokensFromSteps } from 'src/engine/metadata-modules/ai/ai-billing/utils/extract-cache-creation-tokens.util';
 import { buildAiTelemetry } from 'src/engine/metadata-modules/ai/ai-models/utils/build-ai-telemetry.util';
 import { AiModelRegistryService } from 'src/engine/metadata-modules/ai/ai-models/services/ai-model-registry.service';
 import { buildReasoningProviderOptions } from 'src/engine/metadata-modules/ai/ai-models/utils/build-reasoning-provider-options.util';
@@ -20,7 +12,6 @@ export class AgentTitleGenerationService {
 
   constructor(
     private readonly aiModelRegistryService: AiModelRegistryService,
-    private readonly aiBillingService: AiBillingService,
   ) {}
 
   async generateThreadTitle(
@@ -28,12 +19,6 @@ export class AgentTitleGenerationService {
     workspaceId: string,
     userWorkspaceId: string | null,
   ): Promise<string> {
-    await this.aiBillingService.assertAiExecutionAllowed({
-      workspaceId,
-      operationType: UsageOperationType.AI_CHAT_TOKEN,
-      spenders: { userWorkspaceId },
-    });
-
     const defaultModel =
       this.aiModelRegistryService.getDefaultModelForTier('fast');
 
@@ -42,9 +27,6 @@ export class AgentTitleGenerationService {
 
       return this.generateFallbackTitle(messageContent);
     }
-
-    let usage: LanguageModelUsage | undefined;
-    let steps: StepResult<ToolSet>[] | undefined;
 
     try {
       const result = await generateText({
@@ -58,29 +40,11 @@ export class AgentTitleGenerationService {
         }),
       });
 
-      usage = result.usage;
-      steps = result.steps;
-
       return this.cleanTitle(result.text);
     } catch (error) {
       this.logger.error('Failed to generate title with AI:', error);
 
       return this.generateFallbackTitle(messageContent);
-    } finally {
-      if (usage) {
-        const cacheCreationTokens = steps
-          ? extractCacheCreationTokensFromSteps(steps)
-          : 0;
-
-        void this.aiBillingService.calculateAndBillUsage(
-          defaultModel.modelId,
-          { usage, cacheCreationTokens },
-          workspaceId,
-          UsageOperationType.AI_CHAT_TOKEN,
-          null,
-          userWorkspaceId,
-        );
-      }
     }
   }
 

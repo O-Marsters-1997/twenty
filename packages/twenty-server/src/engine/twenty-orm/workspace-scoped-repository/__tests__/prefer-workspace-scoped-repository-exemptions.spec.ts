@@ -32,31 +32,22 @@ const toAbsolute = (entityGlob: string): string =>
 const buildCoreEntityMetadatas = async (): Promise<
   Map<string, EntityMetadata>
 > => {
-  const billingEnabled = process.env.IS_BILLING_ENABLED;
+  const { typeORMCoreModuleOptions } =
+    await import('src/database/typeorm/core/core.datasource');
 
-  process.env.IS_BILLING_ENABLED = 'true';
+  const dataSource = new DataSource({
+    ...typeORMCoreModuleOptions,
+    entities: (typeORMCoreModuleOptions.entities as string[]).map(toAbsolute),
+  } as DataSourceOptions) as DataSourceWithMetadataBuilder;
 
-  try {
-    // Read at module load from IS_BILLING_ENABLED, so it has to load after it.
-    const { typeORMCoreModuleOptions } =
-      await import('src/database/typeorm/core/core.datasource');
+  await dataSource.buildMetadatas();
 
-    const dataSource = new DataSource({
-      ...typeORMCoreModuleOptions,
-      entities: (typeORMCoreModuleOptions.entities as string[]).map(toAbsolute),
-    } as DataSourceOptions) as DataSourceWithMetadataBuilder;
-
-    await dataSource.buildMetadatas();
-
-    return new Map(
-      dataSource.entityMetadatas.map((entityMetadata) => [
-        entityMetadata.targetName,
-        entityMetadata,
-      ]),
-    );
-  } finally {
-    process.env.IS_BILLING_ENABLED = billingEnabled;
-  }
+  return new Map(
+    dataSource.entityMetadatas.map((entityMetadata) => [
+      entityMetadata.targetName,
+      entityMetadata,
+    ]),
+  );
 };
 
 describe('prefer-workspace-scoped-repository exemptions', () => {

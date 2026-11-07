@@ -46,18 +46,11 @@ describe('assertPayloadIsUsable', () => {
 });
 
 describe('buildCatalog', () => {
-  it('prices long context from the standard output rate when none is quoted', () => {
-    const data = payload();
+  it('emits limits but no token pricing', () => {
+    const model = buildCatalog({ data: payload(), vendors: VENDORS }).openai
+      .models[0];
 
-    data.openai.models['gpt-x'].cost = {
-      input: 2,
-      output: 6,
-      context_over_200k: { input: 4 },
-    };
-
-    const model = buildCatalog({ data, vendors: VENDORS }).openai.models[0];
-
-    // A missing long-context rate is unknown, not free.
-    expect(model.longContextCost?.outputCostPerMillionTokens).toBe(6);
+    expect(model.contextWindowTokens).toBe(128000);
+    expect(Object.keys(model).filter((key) => /cost/i.test(key))).toEqual([]);
   });
 });

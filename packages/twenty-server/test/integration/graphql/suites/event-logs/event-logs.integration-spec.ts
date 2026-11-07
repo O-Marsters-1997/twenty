@@ -8,9 +8,6 @@ import {
 import request from 'supertest';
 
 import { formatDateTimeForClickHouse } from 'src/database/clickhouse/utils/format-date-time-for-clickhouse.util';
-import { UsageOperationType } from 'src/engine/core-modules/usage/enums/usage-operation-type.enum';
-import { UsageResourceType } from 'src/engine/core-modules/usage/enums/usage-resource-type.enum';
-import { UsageUnit } from 'src/engine/core-modules/usage/enums/usage-unit.enum';
 
 const client = request(`http://localhost:${APP_PORT}`);
 
@@ -18,7 +15,6 @@ describe('Event Logs (integration)', () => {
   let clickHouseClient: ClickHouseClient;
   const testWorkspaceId = '20202020-1c25-4d02-bf25-6aeccf7ea419';
   const testUserWorkspaceId = '20202020-3957-45c9-be39-337dc4d9100a';
-  const otherUserWorkspaceId = '20202020-0000-4000-8000-0000000000ff';
 
   beforeAll(async () => {
     jest.useRealTimers();
@@ -83,22 +79,6 @@ describe('Event Logs (integration)', () => {
       isCustom: i % 4 === 0,
     }));
 
-    const usageEventRecords = Array.from({ length: 8 }, (_, i) => ({
-      workspaceId: testWorkspaceId,
-      userWorkspaceId: i < 5 ? testUserWorkspaceId : otherUserWorkspaceId,
-      resourceType: UsageResourceType.AI,
-      operationType: UsageOperationType.AI_CHAT_TOKEN,
-      quantity: (i + 1) * 100,
-      unit: UsageUnit.TOKEN,
-      creditsUsedMicro: (i + 1) * 500,
-      resourceId: `agent-${i}`,
-      resourceContext: 'gpt-4o',
-      metadata: {},
-      timestamp: formatDateTimeForClickHouse(
-        new Date(now.getTime() - i * 60000),
-      ),
-    }));
-
     const applicationLogRecords = Array.from({ length: 8 }, (_, i) => ({
       workspaceId: testWorkspaceId,
       applicationId: 'app-1',
@@ -131,12 +111,6 @@ describe('Event Logs (integration)', () => {
     });
 
     await clickHouseClient.insert({
-      table: 'usageEvent',
-      values: usageEventRecords,
-      format: 'JSONEachRow',
-    });
-
-    await clickHouseClient.insert({
       table: 'applicationLog',
       values: applicationLogRecords,
       format: 'JSONEachRow',
@@ -156,9 +130,6 @@ describe('Event Logs (integration)', () => {
       });
       await clickHouseClient.command({
         query: `ALTER TABLE objectEvent DELETE WHERE workspaceId = '${testWorkspaceId}'`,
-      });
-      await clickHouseClient.command({
-        query: `ALTER TABLE usageEvent DELETE WHERE workspaceId = '${testWorkspaceId}'`,
       });
       await clickHouseClient.command({
         query: `ALTER TABLE applicationLog DELETE WHERE workspaceId = '${testWorkspaceId}'`,
@@ -243,27 +214,6 @@ describe('Event Logs (integration)', () => {
 
       expect(record.recordId).toBeDefined();
       expect(record.objectMetadataId).toBeDefined();
-    });
-
-    it('should query USAGE_EVENT table and fold columns into properties', async () => {
-      const response = await makeEventLogsQuery({
-        table: 'USAGE_EVENT',
-        first: 10,
-      });
-
-      expect(response.status).toBe(200);
-      expect(response.body.errors).toBeUndefined();
-      expect(response.body.data.eventLogs.records.length).toBeGreaterThan(0);
-
-      const record = response.body.data.eventLogs.records[0];
-
-      expect(typeof record.event).toBe('string');
-      expect(record.event.length).toBeGreaterThan(0);
-      expect(record.userId).toBeDefined();
-      expect(record.properties.operationType).toBeDefined();
-      expect(record.properties.quantity).toBeDefined();
-      expect(record.properties.unit).toBeDefined();
-      expect(record.properties.creditsUsedMicro).toBeDefined();
     });
 
     it('should query APPLICATION_LOG table and fold level/message into properties', async () => {
@@ -512,27 +462,6 @@ describe('Event Logs (integration)', () => {
             },
           );
         }
-      });
-    });
-
-    describe('usage event specific filters', () => {
-      it('should filter usage events by userWorkspaceId', async () => {
-        const response = await makeEventLogsQuery({
-          table: 'USAGE_EVENT',
-          first: 50,
-          filters: {
-            userWorkspaceId: testUserWorkspaceId,
-          },
-        });
-
-        expect(response.status).toBe(200);
-        expect(response.body.data.eventLogs.records.length).toBeGreaterThan(0);
-
-        response.body.data.eventLogs.records.forEach(
-          (record: { userId: string }) => {
-            expect(record.userId).toBe(testUserWorkspaceId);
-          },
-        );
       });
     });
 

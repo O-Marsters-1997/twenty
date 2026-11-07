@@ -7,7 +7,6 @@ const baseTurn = {
   hasText: true,
   isAborted: false,
   isAwaitingUserAnswer: false,
-  outOfCredits: false,
 };
 
 describe('classifyAgentChatTurnOutcome', () => {
@@ -53,34 +52,9 @@ describe('classifyAgentChatTurnOutcome', () => {
       classifyAgentChatTurnOutcome({ ...baseTurn, hasText: false }),
     ).toEqual({ kind: 'failed', failurePhase: 'no_text' });
   });
-
-  it('separates running out of credits from an empty reply', () => {
-    expect(
-      classifyAgentChatTurnOutcome({
-        ...baseTurn,
-        hasText: false,
-        outOfCredits: true,
-      }),
-    ).toEqual({ kind: 'failed', failurePhase: 'credits_exhausted' });
-  });
-
-  it('still counts a turn that produced text before credits ran out as answered', () => {
-    expect(
-      classifyAgentChatTurnOutcome({ ...baseTurn, outOfCredits: true }),
-    ).toEqual({ kind: 'completed', outcome: 'answered' });
-  });
 });
 
 describe('resolveSupersededTurnOutcome', () => {
-  it('keeps a credits failure rather than filing it as a cancellation', () => {
-    expect(
-      resolveSupersededTurnOutcome({
-        kind: 'failed',
-        failurePhase: 'credits_exhausted',
-      }),
-    ).toEqual({ kind: 'failed', failurePhase: 'credits_exhausted' });
-  });
-
   it('keeps a no_text failure', () => {
     expect(
       resolveSupersededTurnOutcome({ kind: 'failed', failurePhase: 'no_text' }),

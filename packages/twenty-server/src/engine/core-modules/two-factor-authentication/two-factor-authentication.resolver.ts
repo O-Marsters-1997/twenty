@@ -20,7 +20,6 @@ import { type AuthContextUser } from 'src/engine/core-modules/auth/types/auth-co
 import { WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
 import { AuthUser } from 'src/engine/decorators/auth/auth-user.decorator';
 import { AuthWorkspace } from 'src/engine/decorators/auth/auth-workspace.decorator';
-import { AllowSuspendedWorkspace } from 'src/engine/decorators/auth/allow-suspended-workspace.decorator';
 import { CustomPermissionGuard } from 'src/engine/guards/custom-permission.guard';
 import { NoPermissionGuard } from 'src/engine/guards/no-permission.guard';
 import { AuthPrincipalGuard } from 'src/engine/guards/auth-principal.guard';
@@ -64,7 +63,6 @@ export class TwoFactorAuthenticationResolver {
 
   @Mutation(() => InitiateTwoFactorAuthenticationProvisioningDTO)
   @UseGuards(PublicEndpointGuard, NoPermissionGuard)
-  @AllowSuspendedWorkspace()
   async initiateOTPProvisioning(
     @Args()
     initiateTwoFactorAuthenticationProvisioningInput: InitiateTwoFactorAuthenticationProvisioningInput,

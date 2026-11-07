@@ -28,7 +28,6 @@ import { CoreRecordReferenceFieldsContext } from '@/object-record/record-field/u
 import { RecordCreationFormProvider } from '@/object-record/record-form/components/RecordCreationFormProvider';
 import { WelcomeOverlay } from '@/onboarding/components/WelcomeOverlay/WelcomeOverlay';
 import { CompanyEnrichmentOnboardingEffect } from '@/onboarding/effect-components/CompanyEnrichmentOnboardingEffect';
-import { EndTrialAfterPaymentMethodGater } from '@/settings/billing/components/EndTrialAfterPaymentMethodGater';
 import { SSEProvider } from '@/sse-db-event/components/SSEProvider';
 import { SupportChatEffect } from '@/support/components/SupportChatEffect';
 import { DialogManager } from '@/ui/feedback/dialog-manager/components/DialogManager';
@@ -52,50 +51,49 @@ export const WorkspaceAppProviders = () => {
         <UserContextProvider>
           <AuthProvider>
             <ApolloCoreProvider>
-                <SSEProvider>
-                  <ApplicationsLoadEffect />
-                  <MyConnectedAccountsLoadEffect />
-                  <UserThemeProviderEffect />
-                  <UserUiScaleProviderEffect />
-                  <ContextStoreComponentInstanceContext.Provider
-                    value={{ instanceId: MAIN_CONTEXT_STORE_INSTANCE_ID }}
-                  >
-                    <AppToaster />
-                    <ErrorMessageEffect />
-                    <AgentChatProvider>
-                      <DialogComponentInstanceContext.Provider
-                        value={{ instanceId: 'dialog-manager' }}
-                      >
-                        <DialogManager>
-                          <StrictMode>
-                            <PromiseRejectionEffect />
-                            <EndTrialAfterPaymentMethodGater />
-                            <GotoHotkeysEffectsProvider />
-                            <WorkspaceAppPageTitle />
-                            <PageFavicon />
-                            <CoreRecordReferenceFieldsContext.Provider
-                              value={WORKFLOW_RUN_CORE_RECORD_REFERENCE_FIELDS}
-                            >
-                              <RecordCreationFormProvider>
-                                <Outlet />
-                                <GlobalFilePreviewModal />
-                                <CommandMenuConfirmationModalManager />
-                                <CommandRunner />
-                              </RecordCreationFormProvider>
-                            </CoreRecordReferenceFieldsContext.Provider>
-                          </StrictMode>
-                        </DialogManager>
-                      </DialogComponentInstanceContext.Provider>
-                    </AgentChatProvider>
-                  </ContextStoreComponentInstanceContext.Provider>
-                  <SupportChatEffect />
-                  <InitializeQueryParamStateEffect />
-                  <RequestFreshCaptchaTokenEffect />
-                  <PageChangeEffect />
-                  <WelcomeOverlay />
-                  <CompanyEnrichmentOnboardingEffect />
-                  <SignOutOnOtherTabSignOutEffect />
-                </SSEProvider>
+              <SSEProvider>
+                <ApplicationsLoadEffect />
+                <MyConnectedAccountsLoadEffect />
+                <UserThemeProviderEffect />
+                <UserUiScaleProviderEffect />
+                <ContextStoreComponentInstanceContext.Provider
+                  value={{ instanceId: MAIN_CONTEXT_STORE_INSTANCE_ID }}
+                >
+                  <AppToaster />
+                  <ErrorMessageEffect />
+                  <AgentChatProvider>
+                    <DialogComponentInstanceContext.Provider
+                      value={{ instanceId: 'dialog-manager' }}
+                    >
+                      <DialogManager>
+                        <StrictMode>
+                          <PromiseRejectionEffect />
+                          <GotoHotkeysEffectsProvider />
+                          <WorkspaceAppPageTitle />
+                          <PageFavicon />
+                          <CoreRecordReferenceFieldsContext.Provider
+                            value={WORKFLOW_RUN_CORE_RECORD_REFERENCE_FIELDS}
+                          >
+                            <RecordCreationFormProvider>
+                              <Outlet />
+                              <GlobalFilePreviewModal />
+                              <CommandMenuConfirmationModalManager />
+                              <CommandRunner />
+                            </RecordCreationFormProvider>
+                          </CoreRecordReferenceFieldsContext.Provider>
+                        </StrictMode>
+                      </DialogManager>
+                    </DialogComponentInstanceContext.Provider>
+                  </AgentChatProvider>
+                </ContextStoreComponentInstanceContext.Provider>
+                <SupportChatEffect />
+                <InitializeQueryParamStateEffect />
+                <RequestFreshCaptchaTokenEffect />
+                <PageChangeEffect />
+                <WelcomeOverlay />
+                <CompanyEnrichmentOnboardingEffect />
+                <SignOutOnOtherTabSignOutEffect />
+              </SSEProvider>
             </ApolloCoreProvider>
           </AuthProvider>
         </UserContextProvider>

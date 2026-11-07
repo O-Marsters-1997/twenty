@@ -14,7 +14,6 @@ export const GET_AGENT_RUNS = gql`
       modelId
       inputTokens
       outputTokens
-      credits
       creatorSource
       creatorName
       input

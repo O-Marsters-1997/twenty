@@ -6,7 +6,6 @@ import { AgentMessageRole } from 'src/engine/metadata-modules/ai/ai-history/enum
 
 const execution = {
   modelId: 'model-id',
-  hasNoMoreAvailableCredits: false,
 } as AgentExecutionResult;
 
 const turn = {

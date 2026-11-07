@@ -3,7 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { TypeORMModule } from 'src/database/typeorm/typeorm.module';
 import { ApplicationModule } from 'src/engine/core-modules/application/application.module';
-import { BillingModule } from 'src/engine/core-modules/billing/billing.module';
 import { EventLogRetentionModule } from 'src/engine/core-modules/event-logs/retention/event-log-retention.module';
 import { CompanyEnrichmentModule } from 'src/engine/core-modules/company-enrichment/company-enrichment.module';
 import { SubdomainManagerModule } from 'src/engine/core-modules/domain/subdomain-manager/subdomain-manager.module';
@@ -19,7 +18,6 @@ import { WorkspaceEntityCacheProviderService } from 'src/engine/core-modules/wor
 import { WorkspaceService } from 'src/engine/core-modules/workspace/services/workspace.service';
 import { WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
 import { WorkspaceResolver } from 'src/engine/core-modules/workspace/workspace.resolver';
-import { BillingDisabledGuard } from 'src/engine/guards/billing-disabled.guard';
 import { AiAgentModule } from 'src/engine/metadata-modules/ai/ai-agent/ai-agent.module';
 import { WorkspaceManyOrAllFlatEntityMapsCacheModule } from 'src/engine/metadata-modules/flat-entity/services/workspace-many-or-all-flat-entity-maps-cache.module';
 import { PermissionsModule } from 'src/engine/metadata-modules/permissions/permissions.module';
@@ -38,7 +36,6 @@ import { WorkspaceMigrationModule } from 'src/engine/workspace-manager/workspace
       UserEntity,
       UserWorkspaceEntity,
     ]),
-    BillingModule,
     EventLogRetentionModule,
     FileModule,
     UserWorkspaceModule,
@@ -64,7 +61,6 @@ import { WorkspaceMigrationModule } from 'src/engine/workspace-manager/workspace
     WorkspaceResolver,
     WorkspaceService,
     WorkspaceEntityCacheProviderService,
-    BillingDisabledGuard,
   ],
 })
 export class WorkspaceModule {}

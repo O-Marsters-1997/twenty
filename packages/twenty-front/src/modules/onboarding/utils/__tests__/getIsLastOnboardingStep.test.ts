@@ -5,58 +5,22 @@ import {
   mockedUserData,
 } from '~/testing/mock-data/users';
 
-type BuildArgsOptions = {
-  onboardingStatus: OnboardingStatus;
-  isBillingEnabled?: boolean;
-  hasSubscription?: boolean;
-  workspaceMembersCount?: number;
-};
-
 const buildArgs = ({
   onboardingStatus,
-  isBillingEnabled = false,
-  hasSubscription = false,
   workspaceMembersCount = 1,
-}: BuildArgsOptions) => ({
+}: {
+  onboardingStatus: OnboardingStatus;
+  workspaceMembersCount?: number;
+}) => ({
   currentUser: { ...mockedUserData, onboardingStatus },
-  currentWorkspace: {
-    ...mockCurrentWorkspace,
-    workspaceMembersCount,
-    billingSubscriptions: hasSubscription
-      ? mockCurrentWorkspace.billingSubscriptions
-      : [],
-  },
-  isBillingEnabled,
-  isBookCallRequired: false,
+  currentWorkspace: { ...mockCurrentWorkspace, workspaceMembersCount },
 });
 
 describe('getIsLastOnboardingStep', () => {
-  it('should treat the invite step as the last one when no plan is required', () => {
+  it('should treat the invite step as the last one', () => {
     expect(
       getIsLastOnboardingStep(
         buildArgs({ onboardingStatus: OnboardingStatus.INVITE_TEAM }),
-      ),
-    ).toBe(true);
-  });
-
-  it('should not treat the invite step as the last one when a plan is still required', () => {
-    expect(
-      getIsLastOnboardingStep(
-        buildArgs({
-          onboardingStatus: OnboardingStatus.INVITE_TEAM,
-          isBillingEnabled: true,
-        }),
-      ),
-    ).toBe(false);
-  });
-
-  it('should always treat the plan step as the last one', () => {
-    expect(
-      getIsLastOnboardingStep(
-        buildArgs({
-          onboardingStatus: OnboardingStatus.PLAN_REQUIRED,
-          isBillingEnabled: true,
-        }),
       ),
     ).toBe(true);
   });
@@ -67,8 +31,6 @@ describe('getIsLastOnboardingStep', () => {
         buildArgs({
           onboardingStatus: OnboardingStatus.PROFILE_CREATION,
           workspaceMembersCount: 3,
-          isBillingEnabled: true,
-          hasSubscription: true,
         }),
       ),
     ).toBe(true);

@@ -58,7 +58,6 @@ import { AuthIsUserSession } from 'src/engine/decorators/auth/auth-is-user-sessi
 import { AuthUser } from 'src/engine/decorators/auth/auth-user.decorator';
 import { AuthWorkspaceMemberId } from 'src/engine/decorators/auth/auth-workspace-member-id.decorator';
 import { AuthWorkspace } from 'src/engine/decorators/auth/auth-workspace.decorator';
-import { AllowSuspendedWorkspace } from 'src/engine/decorators/auth/allow-suspended-workspace.decorator';
 import { CustomPermissionGuard } from 'src/engine/guards/custom-permission.guard';
 import { NoPermissionGuard } from 'src/engine/guards/no-permission.guard';
 import { AuthPrincipalGuard } from 'src/engine/guards/auth-principal.guard';
@@ -138,7 +137,6 @@ export class UserResolver {
     }),
     NoPermissionGuard,
   )
-  @AllowSuspendedWorkspace()
   async currentUser(
     @AuthUser() { id: userId }: AuthContextUser,
     @AuthWorkspace({ allowUndefined: true }) workspace: WorkspaceEntity,
@@ -222,7 +220,6 @@ export class UserResolver {
 
     const userVarAllowList: string[] = [
       OnboardingStepKeys.ONBOARDING_CONNECT_ACCOUNT_PENDING,
-      OnboardingStepKeys.ONBOARDING_BOOK_CALL_PENDING,
       AccountsToReconnectKeys.ACCOUNTS_TO_RECONNECT_INSUFFICIENT_PERMISSIONS,
       AccountsToReconnectKeys.ACCOUNTS_TO_RECONNECT_EMAIL_ALIASES,
     ];
@@ -405,7 +402,6 @@ export class UserResolver {
     }),
     NoPermissionGuard,
   )
-  @AllowSuspendedWorkspace()
   async deleteUser(@AuthUser() { id: userId }: AuthContextUser) {
     return this.userService.deleteUser(userId);
   }
@@ -420,7 +416,6 @@ export class UserResolver {
     }),
     CustomPermissionGuard,
   )
-  @AllowSuspendedWorkspace()
   async deleteUserFromWorkspace(
     @Args('workspaceMemberIdToDelete') workspaceMemberIdToDelete: string,
     @AuthUser() { id: userId }: AuthContextUser,
@@ -511,7 +506,6 @@ export class UserResolver {
     }),
     CustomPermissionGuard,
   )
-  @AllowSuspendedWorkspace()
   async updateWorkspaceMemberSettings(
     @Args('input') input: UpdateWorkspaceMemberSettingsInput,
     @AuthWorkspace() workspace: WorkspaceEntity,

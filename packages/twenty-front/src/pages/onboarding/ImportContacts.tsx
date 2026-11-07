@@ -1,5 +1,5 @@
-import { OnboardingRewardMainButton } from '@/onboarding/components/OnboardingRewardMainButton';
-import { type OnboardingRewardAction } from '@/onboarding/types/OnboardingRewardAction';
+import { OnboardingMainButton } from '@/onboarding/components/OnboardingMainButton';
+import { type OnboardingAction } from '@/onboarding/types/OnboardingAction';
 import { OnboardingSkipButton } from '@/onboarding/components/OnboardingSkipButton';
 import { OnboardingStepAnimatedItem } from '@/onboarding/components/OnboardingStepAnimatedItem';
 import { StyledOnboardingStepHeading } from '@/onboarding/components/StyledOnboardingStepHeading';
@@ -47,7 +47,7 @@ const StyledButtons = styled.div`
 `;
 
 type ImportContactsProps = {
-  providerActions: OnboardingRewardAction[];
+  providerActions: OnboardingAction[];
   onSkip?: () => void;
 };
 
@@ -81,12 +81,10 @@ export const ImportContacts = ({
         <StyledFooter>
           <StyledButtons>
             {providerActions.map((providerAction) => (
-              <OnboardingRewardMainButton
+              <OnboardingMainButton
                 key={providerAction.label}
                 label={providerAction.label}
                 Icon={providerAction.Icon}
-                creditsReward={providerAction.creditsReward}
-                isRewardPerItem={providerAction.isRewardPerItem}
                 onClick={providerAction.onClick}
               />
             ))}

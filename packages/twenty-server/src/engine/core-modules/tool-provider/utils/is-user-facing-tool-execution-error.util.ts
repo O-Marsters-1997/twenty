@@ -2,7 +2,6 @@ import {
   AuthException,
   AuthExceptionCode,
 } from 'src/engine/core-modules/auth/auth.exception';
-import { isUsageRefusedError } from 'src/engine/core-modules/billing/utils/is-usage-refused-error.util';
 import {
   AiException,
   AiExceptionCode,
@@ -60,8 +59,7 @@ export const isUserFacingToolExecutionError = (error: unknown): boolean => {
     error instanceof WorkspaceMigrationBuilderException ||
     error instanceof ViewFieldException ||
     error instanceof ViewFilterException ||
-    error instanceof ViewSortException ||
-    isUsageRefusedError(error)
+    error instanceof ViewSortException
   ) {
     return true;
   }

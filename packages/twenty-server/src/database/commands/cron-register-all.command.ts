@@ -3,7 +3,6 @@ import { Logger } from '@nestjs/common';
 import { Command, CommandRunner } from 'nest-commander';
 import { isDefined } from 'twenty-shared/utils';
 
-import { BillingReminderCronCommand } from 'src/engine/core-modules/billing/reminders/crons/commands/billing-reminder.cron.command';
 import { CheckEmailingDomainVerificationCronCommand } from 'src/engine/core-modules/emailing-domain/crons/commands/check-emailing-domain-verification.cron.command';
 import { EventLogCleanupCronCommand } from 'src/engine/core-modules/event-logs/cleanup/commands/event-log-cleanup.cron.command';
 import { PendingFileCleanupCronCommand } from 'src/engine/core-modules/file/file-upload/crons/commands/pending-file-cleanup.cron.command';
@@ -18,7 +17,6 @@ import { ReconcileCampaignStatsCronCommand } from 'src/modules/emailing/crons/co
 import { TrashCleanupCronCommand } from 'src/engine/trash-cleanup/commands/trash-cleanup.cron.command';
 import { DeferredWorkspaceMigrationActionRecoveryCronCommand } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/crons/commands/deferred-workspace-migration-action-recovery.cron.command';
 import { CleanOnboardingWorkspacesCronCommand } from 'src/engine/workspace-manager/workspace-cleaner/commands/clean-onboarding-workspaces.cron.command';
-import { CleanSuspendedWorkspacesCronCommand } from 'src/engine/workspace-manager/workspace-cleaner/commands/clean-suspended-workspaces.cron.command';
 import { CalendarEventListFetchCronCommand } from 'src/modules/calendar/calendar-event-import-manager/crons/commands/calendar-event-list-fetch.cron.command';
 import { CalendarEventsImportCronCommand } from 'src/modules/calendar/calendar-event-import-manager/crons/commands/calendar-import.cron.command';
 import { CalendarOngoingStaleCronCommand } from 'src/modules/calendar/calendar-event-import-manager/crons/commands/calendar-ongoing-stale.cron.command';
@@ -63,14 +61,12 @@ export class CronRegisterAllCommand extends CommandRunner {
 
     private readonly checkEmailingDomainVerificationCronCommand: CheckEmailingDomainVerificationCronCommand,
     private readonly agentCronTriggerCronCommand: AgentCronTriggerCronCommand,
-    private readonly cleanSuspendedWorkspacesCronCommand: CleanSuspendedWorkspacesCronCommand,
     private readonly cleanOnboardingWorkspacesCronCommand: CleanOnboardingWorkspacesCronCommand,
     private readonly trashCleanupCronCommand: TrashCleanupCronCommand,
     private readonly eventLogCleanupCronCommand: EventLogCleanupCronCommand,
     private readonly rotateSigningKeysCronCommand: RotateSigningKeysCronCommand,
     private readonly pendingFileCleanupCronCommand: PendingFileCleanupCronCommand,
     private readonly deferredWorkspaceMigrationActionRecoveryCronCommand: DeferredWorkspaceMigrationActionRecoveryCronCommand,
-    private readonly billingReminderCronCommand: BillingReminderCronCommand,
     private readonly userSessionCleanupCronCommand: UserSessionCleanupCronCommand,
     private readonly twentyConfigService: TwentyConfigService,
   ) {
@@ -83,8 +79,6 @@ export class CronRegisterAllCommand extends CommandRunner {
     const isSigningKeyAutoRotationEnabled = isDefined(
       this.twentyConfigService.get('SIGNING_KEY_ROTATION_DAYS'),
     );
-
-    const isBillingEnabled = this.twentyConfigService.get('IS_BILLING_ENABLED');
 
     const allCommands = [
       {
@@ -160,10 +154,6 @@ export class CronRegisterAllCommand extends CommandRunner {
         command: this.agentCronTriggerCronCommand,
       },
       {
-        name: 'CleanSuspendedWorkspaces',
-        command: this.cleanSuspendedWorkspacesCronCommand,
-      },
-      {
         name: 'CleanOnboardingWorkspaces',
         command: this.cleanOnboardingWorkspacesCronCommand,
       },
@@ -187,11 +177,6 @@ export class CronRegisterAllCommand extends CommandRunner {
       {
         name: 'DeferredWorkspaceMigrationActionRecovery',
         command: this.deferredWorkspaceMigrationActionRecoveryCronCommand,
-      },
-      {
-        name: 'BillingReminder',
-        command: this.billingReminderCronCommand,
-        isEnabled: isBillingEnabled,
       },
       {
         name: 'UserSessionCleanup',

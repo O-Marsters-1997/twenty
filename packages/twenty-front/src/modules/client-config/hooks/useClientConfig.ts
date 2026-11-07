@@ -2,14 +2,10 @@ import { aiModelTiersState } from '@/client-config/states/aiModelTiersState';
 import { aiEvaluationModelsState } from '@/client-config/states/aiEvaluationModelsState';
 import { aiModelsState } from '@/client-config/states/aiModelsState';
 import { apiConfigState } from '@/client-config/states/apiConfigState';
-import { onboardingConfigState } from '@/client-config/states/onboardingConfigState';
 import { appVersionState } from '@/client-config/states/appVersionState';
 import { authProvidersState } from '@/client-config/states/authProvidersState';
-import { billingState } from '@/client-config/states/billingState';
-import { calendarBookingPageIdState } from '@/client-config/states/calendarBookingPageIdState';
 import { canManageFeatureFlagsState } from '@/client-config/states/canManageFeatureFlagsState';
 import { captchaState } from '@/client-config/states/captchaState';
-import { isBookCallOnboardingStepEnabledState } from '@/client-config/states/isBookCallOnboardingStepEnabledState';
 import { isCompanyEnrichmentEnabledState } from '@/client-config/states/isCompanyEnrichmentEnabledState';
 import { isAttachmentPreviewEnabledState } from '@/client-config/states/isAttachmentPreviewEnabledState';
 import { isConfigVariablesInDbEnabledState } from '@/client-config/states/isConfigVariablesInDbEnabledState';
@@ -59,7 +55,6 @@ export const useClientConfig = (): UseClientConfigResult => {
     isEmailVerificationRequiredState,
   );
 
-  const setBilling = useSetAtomState(billingState);
   const setSupportChat = useSetAtomState(supportChatState);
 
   const [clientConfigApiStatus, setClientConfigApiStatus] = useAtomState(
@@ -69,7 +64,6 @@ export const useClientConfig = (): UseClientConfigResult => {
   const setCaptcha = useSetAtomState(captchaState);
 
   const setApiConfig = useSetAtomState(apiConfigState);
-  const setOnboardingConfig = useSetAtomState(onboardingConfigState);
 
   const setCanManageFeatureFlags = useSetAtomState(canManageFeatureFlagsState);
 
@@ -89,12 +83,6 @@ export const useClientConfig = (): UseClientConfigResult => {
 
   const setIsConfigVariablesInDbEnabled = useSetAtomState(
     isConfigVariablesInDbEnabledState,
-  );
-
-  const setCalendarBookingPageId = useSetAtomState(calendarBookingPageIdState);
-
-  const setIsBookCallOnboardingStepEnabled = useSetAtomState(
-    isBookCallOnboardingStepEnabledState,
   );
 
   const setIsCompanyEnrichmentEnabled = useSetAtomState(
@@ -157,7 +145,6 @@ export const useClientConfig = (): UseClientConfigResult => {
         setIsEmailVerificationRequired(
           clientConfig.isEmailVerificationRequired,
         );
-        setBilling(clientConfig.billing);
         setSupportChat(clientConfig.support);
 
         setCaptcha({
@@ -166,7 +153,6 @@ export const useClientConfig = (): UseClientConfigResult => {
         });
 
         setApiConfig(clientConfig?.api);
-        setOnboardingConfig(clientConfig?.onboarding ?? null);
         setDomainConfiguration({
           defaultSubdomain: clientConfig?.defaultSubdomain,
           frontDomain: clientConfig?.frontDomain,
@@ -185,10 +171,6 @@ export const useClientConfig = (): UseClientConfigResult => {
           isSaved: true,
         }));
 
-        setCalendarBookingPageId(clientConfig?.calendarBookingPageId ?? null);
-        setIsBookCallOnboardingStepEnabled(
-          clientConfig?.isBookCallOnboardingStepEnabled ?? false,
-        );
         setIsCompanyEnrichmentEnabled(
           clientConfig?.isCompanyEnrichmentEnabled ?? false,
         );
@@ -222,11 +204,8 @@ export const useClientConfig = (): UseClientConfigResult => {
       setAiEvaluationModels,
       setAiModelTiers,
       setApiConfig,
-      setOnboardingConfig,
       setAppVersion,
       setAuthProviders,
-      setBilling,
-      setCalendarBookingPageId,
       setCanManageFeatureFlags,
       setCaptcha,
       setClientConfigApiStatus,
@@ -234,7 +213,6 @@ export const useClientConfig = (): UseClientConfigResult => {
       setIsGoogleCalendarEnabled,
       setIsGoogleMessagingEnabled,
       setIsAttachmentPreviewEnabled,
-      setIsBookCallOnboardingStepEnabled,
       setIsCompanyEnrichmentEnabled,
       setIsConfigVariablesInDbEnabled,
       setIsDeveloperDefaultSignInPrefilled,

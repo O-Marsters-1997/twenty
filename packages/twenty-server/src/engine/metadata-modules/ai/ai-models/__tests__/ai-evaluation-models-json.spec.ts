@@ -26,16 +26,6 @@ describe('ai-evaluation-models.json integrity', () => {
     });
   });
 
-  it('should price every model, free output included', () => {
-    Object.values(vendors).forEach((vendor) => {
-      vendor.models.forEach((model) => {
-        // an omitted price bills nothing while the provider still charges
-        expect(model.inputCostPerMillionTokens).toBeDefined();
-        expect(model.outputCostPerMillionTokens).toBeDefined();
-      });
-    });
-  });
-
   it('should size no context window', () => {
     Object.values(vendors).forEach((vendor) => {
       vendor.models.forEach((model) => {

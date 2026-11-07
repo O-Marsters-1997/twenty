@@ -7,7 +7,6 @@ import {
   IconBuildingSkyscraper,
   IconFlag,
   IconTag,
-  IconUsers,
   IconWindow,
   type IconComponent,
 } from 'twenty-ui/icon';
@@ -38,27 +37,6 @@ const StyledValueText = styled.span`
   text-overflow: ellipsis;
   white-space: nowrap;
 `;
-
-const formatCost = (
-  inputCost?: number | null,
-  outputCost?: number | null,
-): string => {
-  if (!isDefined(inputCost) && !isDefined(outputCost)) {
-    return '—';
-  }
-
-  const parts: string[] = [];
-
-  if (isDefined(inputCost)) {
-    parts.push(`$${inputCost} in`);
-  }
-
-  if (isDefined(outputCost)) {
-    parts.push(`$${outputCost} out`);
-  }
-
-  return parts.join(' / ');
-};
 
 type SettingsAiModelHoverCardProps = {
   model: AiModelSummary;
@@ -106,23 +84,6 @@ export const SettingsAiModelHoverCard = ({
       label: t`Provider`,
       value: <StyledValueText>{providerLabel}</StyledValueText>,
     },
-    ...(isDefined(model.inputCostPerMillionTokens) ||
-    isDefined(model.outputCostPerMillionTokens)
-      ? [
-          {
-            Icon: IconUsers,
-            label: t`Cost per 1M tokens`,
-            value: (
-              <StyledValueText>
-                {formatCost(
-                  model.inputCostPerMillionTokens,
-                  model.outputCostPerMillionTokens,
-                )}
-              </StyledValueText>
-            ),
-          },
-        ]
-      : []),
     ...(isDefined(model.contextWindowTokens)
       ? [
           {

@@ -1,13 +1,18 @@
+import { type LanguageModelUsage } from 'ai';
+
 import { AgentTurnStatus } from 'src/engine/metadata-modules/ai/ai-history/enums/agent-turn-status.enum';
 import { AgentTurnRecorderService } from 'src/engine/metadata-modules/ai/ai-history/services/agent-turn-recorder.service';
 
-const TURN_USAGE = {
+const USAGE = {
+  inputTokens: 10,
+  outputTokens: 5,
+  inputTokenDetails: { cacheReadTokens: 0 },
+} as LanguageModelUsage;
+
+const RECORDED_USAGE = {
   inputTokens: 10,
   outputTokens: 5,
   cacheReadTokens: 0,
-  cacheCreationTokens: 0,
-  inputCredits: 100,
-  outputCredits: 50,
 };
 
 const buildService = () => {
@@ -32,10 +37,13 @@ describe('AgentTurnRecorderService.finishExecutedTurn', () => {
 
     await service.finishExecutedTurn({
       ...turn,
-      execution: { modelId: 'model-id', turnUsage: TURN_USAGE },
+      execution: { modelId: 'model-id', usage: USAGE },
     });
 
-    expect(recordUsage).toHaveBeenCalledWith({ ...turn, usage: TURN_USAGE });
+    expect(recordUsage).toHaveBeenCalledWith({
+      ...turn,
+      usage: RECORDED_USAGE,
+    });
     expect(finish).toHaveBeenCalledWith({
       workspaceId: 'workspace-id',
       turnId: 'turn-id',
@@ -49,29 +57,12 @@ describe('AgentTurnRecorderService.finishExecutedTurn', () => {
 
     await service.finishExecutedTurn({
       ...turn,
-      execution: { turnUsage: TURN_USAGE },
+      execution: { usage: USAGE },
       isWaiting: true,
     });
 
     expect(finish).toHaveBeenCalledWith(
       expect.objectContaining({ status: AgentTurnStatus.WAITING_FOR_INPUT }),
-    );
-  });
-
-  it('fails a turn that ran out of credits', async () => {
-    const { service, finish } = buildService();
-
-    await service.finishExecutedTurn({
-      ...turn,
-      execution: { turnUsage: TURN_USAGE, hasNoMoreAvailableCredits: true },
-      isWaiting: true,
-    });
-
-    expect(finish).toHaveBeenCalledWith(
-      expect.objectContaining({
-        status: AgentTurnStatus.FAILED,
-        error: expect.objectContaining({ code: 'CREDITS_EXHAUSTED' }),
-      }),
     );
   });
 
@@ -82,7 +73,7 @@ describe('AgentTurnRecorderService.finishExecutedTurn', () => {
 
     await service.finishExecutedTurn({
       ...turn,
-      execution: { turnUsage: TURN_USAGE },
+      execution: { usage: USAGE },
       error: { code: 'EXECUTION_FAILED', message: 'Reply not saved.' },
     });
 

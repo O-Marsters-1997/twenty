@@ -10,10 +10,8 @@ import { isDefined } from 'twenty-shared/utils';
 
 import { CoreResolver } from 'src/engine/api/graphql/graphql-config/decorators/core-resolver.decorator';
 import { AuthGraphqlApiExceptionFilter } from 'src/engine/core-modules/auth/filters/auth-graphql-api-exception.filter';
-import { BillingGraphqlApiExceptionFilter } from 'src/engine/core-modules/billing/filters/billing-graphql-api-exception.filter';
 import { PreventNestToAutoLogGraphqlErrorsFilter } from 'src/engine/core-modules/graphql/filters/prevent-nest-to-auto-log-graphql-errors.filter';
 import { ResolverValidationPipe } from 'src/engine/core-modules/graphql/pipes/resolver-validation.pipe';
-import { UsageLimitGraphqlApiExceptionFilter } from 'src/engine/core-modules/usage-limit/filters/usage-limit-graphql-api-exception.filter';
 import { type WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
 import { AuthUserWorkspaceId } from 'src/engine/decorators/auth/auth-user-workspace-id.decorator';
 import { AuthWorkspaceMemberId } from 'src/engine/decorators/auth/auth-workspace-member-id.decorator';
@@ -43,8 +41,6 @@ import { PermissionsGraphqlApiExceptionFilter } from 'src/engine/metadata-module
 )
 @UseInterceptors(AiGraphqlApiExceptionInterceptor)
 @UseFilters(
-  UsageLimitGraphqlApiExceptionFilter,
-  BillingGraphqlApiExceptionFilter,
   PermissionsGraphqlApiExceptionFilter,
   PreventNestToAutoLogGraphqlErrorsFilter,
   AuthGraphqlApiExceptionFilter,
@@ -61,7 +57,7 @@ export class ToolCallAnswerResolver {
     @AuthWorkspaceMemberId() workspaceMemberId: string,
     @AuthWorkspace() workspace: WorkspaceEntity,
   ): Promise<AnswerToolCallResultDTO> {
-    const { streamId, turnId } = await this.toolCallAnswerService.answer({
+    const { streamId } = await this.toolCallAnswerService.answer({
       threadId,
       toolCallId,
       response,

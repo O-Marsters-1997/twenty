@@ -18,14 +18,6 @@ describe('isWorkspaceProvisioned', () => {
     expect(isWorkspaceProvisioned(workspace)).toBe(true);
   });
 
-  it('should return true for Suspended workspace', () => {
-    const workspace = {
-      activationStatus: WorkspaceActivationStatus.SUSPENDED,
-    };
-
-    expect(isWorkspaceProvisioned(workspace)).toBe(true);
-  });
-
   it('should return false for Inactive workspace', () => {
     const workspace = {
       activationStatus: WorkspaceActivationStatus.INACTIVE,

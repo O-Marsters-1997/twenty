@@ -4,18 +4,12 @@ import { type AuthContextUser } from 'src/engine/core-modules/auth/types/auth-co
 import { CompanyEnrichmentResolver } from 'src/engine/core-modules/company-enrichment/resolvers/company-enrichment.resolver';
 import { CompanyEnrichmentService } from 'src/engine/core-modules/company-enrichment/services/company-enrichment.service';
 import { PersonEnrichmentService } from 'src/engine/core-modules/company-enrichment/services/person-enrichment.service';
-import { OnboardingService } from 'src/engine/core-modules/onboarding/onboarding.service';
 import { type WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
 
 describe('CompanyEnrichmentResolver', () => {
   let resolver: CompanyEnrichmentResolver;
   let companyEnrichmentService: { enrichCompanyForWorkspaceCreator: jest.Mock };
   let personEnrichmentService: { enrichPersonForWorkspaceCreator: jest.Mock };
-  let onboardingService: {
-    setOnboardingBookCallPendingIfQualified: jest.Mock;
-    creditEnrichmentQualificationReward: jest.Mock;
-    isOnboardingBookCallPending: jest.Mock;
-  };
 
   const user = { id: 'user-id', email: 'foo@acme.com' } as AuthContextUser;
   const workspace = { id: 'workspace-id' } as WorkspaceEntity;
@@ -29,12 +23,6 @@ describe('CompanyEnrichmentResolver', () => {
         .fn()
         .mockResolvedValue({ outcome: 'unavailable', enrichment: null }),
     };
-    onboardingService = {
-      setOnboardingBookCallPendingIfQualified: jest.fn(),
-      creditEnrichmentQualificationReward: jest.fn(),
-      isOnboardingBookCallPending: jest.fn().mockResolvedValue(false),
-    };
-
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         CompanyEnrichmentResolver,
@@ -46,10 +34,6 @@ describe('CompanyEnrichmentResolver', () => {
           provide: PersonEnrichmentService,
           useValue: personEnrichmentService,
         },
-        {
-          provide: OnboardingService,
-          useValue: onboardingService,
-        },
       ],
     }).compile();
 
@@ -58,89 +42,6 @@ describe('CompanyEnrichmentResolver', () => {
 
   afterEach(() => {
     jest.clearAllMocks();
-  });
-
-  it('should hand the enriched employee count to the book-call qualification on a match', async () => {
-    companyEnrichmentService.enrichCompanyForWorkspaceCreator.mockResolvedValue(
-      {
-        outcome: 'matched',
-        enrichment: { domain: 'acme.com', employeeCount: 320 },
-      },
-    );
-
-    const result = await resolver.enrichWorkspaceCompany(user, workspace);
-
-    expect(result.outcome).toBe('matched');
-    expect(
-      onboardingService.setOnboardingBookCallPendingIfQualified,
-    ).toHaveBeenCalledWith({
-      userId: user.id,
-      workspaceId: workspace.id,
-      employeeCount: 320,
-    });
-  });
-
-  it('should hand the enriched employee count to the credit reward on a match', async () => {
-    companyEnrichmentService.enrichCompanyForWorkspaceCreator.mockResolvedValue(
-      {
-        outcome: 'matched',
-        enrichment: { domain: 'acme.com', employeeCount: 320 },
-      },
-    );
-
-    await resolver.enrichWorkspaceCompany(user, workspace);
-
-    expect(
-      onboardingService.creditEnrichmentQualificationReward,
-    ).toHaveBeenCalledTimes(1);
-    expect(
-      onboardingService.creditEnrichmentQualificationReward,
-    ).toHaveBeenCalledWith({
-      workspaceId: workspace.id,
-      employeeCount: 320,
-    });
-  });
-
-  it.each(['unavailable', 'transientError'])(
-    'should not qualify for the book-call step on outcome %s',
-    async (outcome) => {
-      companyEnrichmentService.enrichCompanyForWorkspaceCreator.mockResolvedValue(
-        { outcome, enrichment: null },
-      );
-
-      await resolver.enrichWorkspaceCompany(user, workspace);
-
-      expect(
-        onboardingService.setOnboardingBookCallPendingIfQualified,
-      ).not.toHaveBeenCalled();
-      expect(
-        onboardingService.creditEnrichmentQualificationReward,
-      ).not.toHaveBeenCalled();
-    },
-  );
-
-  it('should report the stored pending flag rather than whether this call flagged it', async () => {
-    companyEnrichmentService.enrichCompanyForWorkspaceCreator.mockResolvedValue(
-      { outcome: 'transientError', enrichment: null },
-    );
-    onboardingService.isOnboardingBookCallPending.mockResolvedValue(true);
-
-    const result = await resolver.enrichWorkspaceCompany(user, workspace);
-
-    expect(result.isBookCallOnboardingStepPending).toBe(true);
-  });
-
-  it('should report no pending step when the user has none', async () => {
-    companyEnrichmentService.enrichCompanyForWorkspaceCreator.mockResolvedValue(
-      {
-        outcome: 'matched',
-        enrichment: { domain: 'acme.com', employeeCount: 2 },
-      },
-    );
-
-    const result = await resolver.enrichWorkspaceCompany(user, workspace);
-
-    expect(result.isBookCallOnboardingStepPending).toBe(false);
   });
 
   it('should enrich the person alongside the company with the signup email', async () => {
@@ -166,21 +67,5 @@ describe('CompanyEnrichmentResolver', () => {
       email: 'foo@acme.com',
       fullName: 'Ada Lovelace',
     });
-  });
-
-  it('should never qualify the book-call step from the person outcome', async () => {
-    companyEnrichmentService.enrichCompanyForWorkspaceCreator.mockResolvedValue(
-      { outcome: 'unavailable', enrichment: null },
-    );
-    personEnrichmentService.enrichPersonForWorkspaceCreator.mockResolvedValue({
-      outcome: 'matched',
-      enrichment: { email: 'foo@acme.com' },
-    });
-
-    await resolver.enrichWorkspaceCompany(user, workspace);
-
-    expect(
-      onboardingService.setOnboardingBookCallPendingIfQualified,
-    ).not.toHaveBeenCalled();
   });
 });

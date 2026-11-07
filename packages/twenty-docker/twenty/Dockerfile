@@ -310,7 +310,6 @@ ENV PG_DATABASE_URL=postgres://twenty:twenty@localhost:5432/default \
     NODE_PORT=2020 \
     DISABLE_DB_MIGRATIONS=true \
     DISABLE_CRON_JOBS_REGISTRATION=true \
-    IS_BILLING_ENABLED=false \
     SIGN_IN_PREFILLED=true \
     APPLICATION_LOG_DRIVER=CONSOLE
 

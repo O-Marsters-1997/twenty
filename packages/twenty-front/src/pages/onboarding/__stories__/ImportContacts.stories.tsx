@@ -22,7 +22,6 @@ const meta: Meta<typeof ImportContacts> = {
       {
         label: 'Continue with Google',
         Icon: IconGoogle,
-        creditsReward: 2,
         onClick: action('continue-with-google'),
       },
     ],

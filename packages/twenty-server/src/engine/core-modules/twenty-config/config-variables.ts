@@ -50,8 +50,6 @@ import {
   ConfigVariableException,
   ConfigVariableExceptionCode,
 } from 'src/engine/core-modules/twenty-config/twenty-config.exception';
-import { type OnboardingEnrichmentCreditRewardTier } from 'src/engine/core-modules/onboarding/types/onboarding-enrichment-credit-reward-tier.type';
-import { type PlanUsageLimitDefaults } from 'src/engine/core-modules/usage-limit/types/plan-usage-limit-defaults.type';
 import { type AiProvidersConfig } from 'src/engine/metadata-modules/ai/ai-models/types/ai-providers-config.type';
 import {
   DEFAULT_DISABLED_MODELS,
@@ -621,26 +619,6 @@ export class ConfigVariables {
   MAX_TARBALL_UPLOAD_SIZE_BYTES: number = 100 * 1024 * 1024;
 
   @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.STORAGE_CONFIG,
-    description:
-      'Maximum bytes of file storage a single workspace may hold, all its files counted. No limit when unset. USAGE_LIMIT_DEFAULTS_BY_PLAN can set it per billing plan',
-    type: ConfigVariableType.NUMBER,
-  })
-  @CastToPositiveNumber()
-  @IsOptional()
-  WORKSPACE_STORAGE_LIMIT_BYTES?: number;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.STORAGE_CONFIG,
-    description:
-      'Maximum number of records a single workspace may hold across its objects, system objects other than messages and calendar events left out, soft-deleted records included. No limit when unset. USAGE_LIMIT_DEFAULTS_BY_PLAN can set it per billing plan',
-    type: ConfigVariableType.NUMBER,
-  })
-  @CastToPositiveNumber()
-  @IsOptional()
-  WORKSPACE_RECORD_LIMIT?: number;
-
-  @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.ANALYTICS_CONFIG,
     description: 'Clickhouse host for analytics',
     type: ConfigVariableType.STRING,
@@ -675,204 +653,14 @@ export class ConfigVariables {
   TYPEORM_LOGGING: LoggerOptions = ['error'];
 
   @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description: 'Enable or disable billing features',
-    type: ConfigVariableType.BOOLEAN,
-  })
-  @IsOptional()
-  IS_BILLING_ENABLED = false;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description: 'Link required for billing plan',
-    type: ConfigVariableType.STRING,
-  })
-  @ValidateIf((env) => env.IS_BILLING_ENABLED === true)
-  BILLING_PLAN_REQUIRED_LINK: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description: 'Duration of free trial with credit card in days',
-    type: ConfigVariableType.NUMBER,
-  })
-  @CastToPositiveNumber()
-  @IsOptional()
-  @ValidateIf((env) => env.IS_BILLING_ENABLED === true)
-  BILLING_FREE_TRIAL_WITH_CREDIT_CARD_DURATION_IN_DAYS = 30;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description: 'Duration of free trial without credit card in days',
-    type: ConfigVariableType.NUMBER,
-  })
-  @CastToPositiveNumber()
-  @IsOptional()
-  @ValidateIf((env) => env.IS_BILLING_ENABLED === true)
-  BILLING_FREE_TRIAL_WITHOUT_CREDIT_CARD_DURATION_IN_DAYS = 7;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description:
-      'Amount of credits for the free trial without credit card (in microCredits)',
-    type: ConfigVariableType.NUMBER,
-  })
-  @CastToPositiveNumber()
-  @ValidateIf((env) => env.IS_BILLING_ENABLED === true)
-  BILLING_FREE_WORKFLOW_CREDITS_FOR_TRIAL_PERIOD_WITHOUT_CREDIT_CARD = 500_000;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description:
-      'Amount of credits for the free trial with credit card (in microCredits)',
-    type: ConfigVariableType.NUMBER,
-  })
-  @CastToPositiveNumber()
-  @ValidateIf((env) => env.IS_BILLING_ENABLED === true)
-  BILLING_FREE_WORKFLOW_CREDITS_FOR_TRIAL_PERIOD_WITH_CREDIT_CARD = 2_500_000;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description:
-      'Quota and stock usage limit default values per billing plan, keyed by plan key then by the default\'s config variable, as {"PRO":{"WORKSPACE_RECORD_LIMIT":1000000},"ENTERPRISE":{"WORKSPACE_RECORD_LIMIT":null}}. null means no limit, and a variable left out keeps its own value',
-    type: ConfigVariableType.JSON,
-  })
-  @IsOptional()
-  USAGE_LIMIT_DEFAULTS_BY_PLAN: Record<string, PlanUsageLimitDefaults> = {};
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description:
-      'Number of days before a trial WITHOUT a credit card ends to send the reminder to add a payment method',
-    type: ConfigVariableType.NUMBER,
-  })
-  @CastToPositiveNumber()
-  @IsOptional()
-  @ValidateIf((env) => env.IS_BILLING_ENABLED === true)
-  BILLING_TRIAL_WITHOUT_CREDIT_CARD_REMINDER_DAYS_BEFORE = 1;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description:
-      'Number of days before a trial WITH a credit card ends to send the upcoming-charge reminder',
-    type: ConfigVariableType.NUMBER,
-  })
-  @CastToPositiveNumber()
-  @IsOptional()
-  @ValidateIf((env) => env.IS_BILLING_ENABLED === true)
-  BILLING_TRIAL_WITH_CREDIT_CARD_REMINDER_DAYS_BEFORE = 7;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description:
-      'Number of days before a yearly subscription renews to send the renewal reminder',
-    type: ConfigVariableType.NUMBER,
-  })
-  @CastToPositiveNumber()
-  @IsOptional()
-  @ValidateIf((env) => env.IS_BILLING_ENABLED === true)
-  BILLING_SUBSCRIPTION_RENEWAL_REMINDER_DAYS_BEFORE = 7;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    isSensitive: true,
-    description: 'Stripe API key for billing',
-    type: ConfigVariableType.STRING,
-  })
-  @ValidateIf((env) => env.IS_BILLING_ENABLED === true)
-  BILLING_STRIPE_API_KEY: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    isSensitive: true,
-    description: 'Stripe webhook secret for billing',
-    type: ConfigVariableType.STRING,
-  })
-  @ValidateIf((env) => env.IS_BILLING_ENABLED === true)
-  BILLING_STRIPE_WEBHOOK_SECRET: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description:
-      'Stripe publishable key for billing, exposed to the frontend to mount Stripe Elements',
-    type: ConfigVariableType.STRING,
-  })
-  @ValidateIf((env) => env.IS_BILLING_ENABLED === true)
-  BILLING_STRIPE_PUBLISHABLE_KEY: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description:
-      'Use the ClickHouse-backed poller (instead of Stripe billing alerts) as the source of truth for metered-credit cap enforcement',
-    type: ConfigVariableType.BOOLEAN,
-  })
-  @IsOptional()
-  BILLING_USAGE_CAP_CLICKHOUSE_ENABLED = false;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description:
-      'Cap on the credits available in a period, as a multiple of the plan allowance. 2 means a workspace can hold at most its allowance plus one full allowance rolled over',
-    type: ConfigVariableType.NUMBER,
-  })
-  @CastToPositiveNumber()
-  @IsOptional()
-  BILLING_ROLLOVER_TOTAL_CAP_MULTIPLIER = 2;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description:
-      'Largest credit amount a single admin panel grant can hand out (in microCredits)',
-    type: ConfigVariableType.NUMBER,
-  })
-  @CastToPositiveNumber()
-  @IsInt()
-  @IsOptional()
-  BILLING_MAX_ADMIN_CREDIT_GRANT_MICRO = 1_000_000_000;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description:
-      'Free credits granted for completing the import-contacts onboarding step (in microCredits)',
-    type: ConfigVariableType.NUMBER,
-  })
-  @CastToPositiveNumber()
-  @IsInt()
-  @IsOptional()
-  ONBOARDING_IMPORT_CONTACTS_CREDITS_REWARD = 1_000_000;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description:
-      'Maximum number of invitations that grant credits during the invite-team onboarding step',
+    group: ConfigVariablesGroup.ADVANCED_SETTINGS,
+    description: 'Maximum number of invitations during the invite-team onboarding step',
     type: ConfigVariableType.NUMBER,
   })
   @CastToPositiveNumber()
   @IsInt()
   @IsOptional()
   ONBOARDING_INVITE_TEAM_MAX_INVITES = 5;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description:
-      'Free credits granted per user invited during the invite-team onboarding step who signs up (in microCredits)',
-    type: ConfigVariableType.NUMBER,
-  })
-  @CastToPositiveNumber()
-  @IsInt()
-  @IsOptional()
-  ONBOARDING_INVITE_TEAM_CREDITS_REWARD_PER_USER = 500_000;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.BILLING_CONFIG,
-    description:
-      'Credit reward tiers for workspaces enrichment matched to a real company, keyed by tier name, as {"midMarket":{"minEmployeeCount":20,"amountMicro":5000000}} (amounts in microCredits). The most generous matching tier wins; no tiers disables the reward. Independent of ONBOARDING_BOOK_CALL_MIN_EMPLOYEE_COUNT, so credits and the book-a-call offer can target different companies.',
-    type: ConfigVariableType.JSON,
-  })
-  @IsOptional()
-  ONBOARDING_ENRICHMENT_CREDIT_REWARD_TIERS: Record<
-    string,
-    OnboardingEnrichmentCreditRewardTier
-  > = {};
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.SERVER_CONFIG,
@@ -914,17 +702,6 @@ export class ConfigVariables {
   })
   @IsOptional()
   CALENDAR_BOOKING_PAGE_ID?: string;
-
-  @ConfigVariablesMetadata({
-    group: ConfigVariablesGroup.ADVANCED_SETTINGS,
-    description:
-      'Minimum enriched company employee count required to show the book-a-call onboarding step. Leave unset or set to 0 to disable the step. The step also requires CALENDAR_BOOKING_PAGE_ID.',
-    type: ConfigVariableType.NUMBER,
-  })
-  @CastToPositiveNumber()
-  @IsInt()
-  @IsOptional()
-  ONBOARDING_BOOK_CALL_MIN_EMPLOYEE_COUNT?: number;
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.LOGGING,

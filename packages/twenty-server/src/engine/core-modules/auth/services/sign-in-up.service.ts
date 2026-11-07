@@ -19,13 +19,9 @@ import { type QueryFailedErrorWithCode } from 'src/engine/api/graphql/workspace-
 import { EventLogEmitterService } from 'src/engine/core-modules/event-logs/emit/event-log-emitter.service';
 import { USER_SIGNUP_EVENT } from 'src/engine/core-modules/event-logs/emit/events/workspace-event/user/user-signup';
 import { WORKSPACE_CREATED_EVENT } from 'src/engine/core-modules/event-logs/emit/events/workspace-event/workspace/workspace-created';
-import {
-  type AppTokenEntity,
-  AppTokenType,
-} from 'src/engine/core-modules/app-token/app-token.entity';
+import { type AppTokenEntity } from 'src/engine/core-modules/app-token/app-token.entity';
 import { ApplicationService } from 'src/engine/core-modules/application/application.service';
 import { FileStorageService } from 'src/engine/core-modules/file-storage/services/file-storage.service';
-import { BillingService } from 'src/engine/core-modules/billing/services/billing.service';
 import {
   AuthException,
   AuthExceptionCode,
@@ -88,7 +84,6 @@ export class SignInUpService {
     private readonly fileStorageService: FileStorageService,
     private readonly exceptionHandlerService: ExceptionHandlerService,
     private readonly eventLogEmitterService: EventLogEmitterService,
-    private readonly billingService: BillingService,
     @InjectDataSource()
     private readonly dataSource: DataSource,
   ) {}
@@ -213,16 +208,6 @@ export class SignInUpService {
       userData: params.userData,
       roleId: params.invitation.context?.roleId,
     });
-
-    if (
-      params.invitation.type === AppTokenType.OnboardingInvitationToken &&
-      params.userData.type === 'newUserWithPicture'
-    ) {
-      await this.onboardingService.creditInviteTeamReward({
-        workspaceId: invitationValidation.workspace.id,
-        userId: updatedUser.id,
-      });
-    }
 
     await this.workspaceInvitationService.invalidateWorkspaceInvitation(
       invitationValidation.workspace.id,
@@ -708,22 +693,8 @@ export class SignInUpService {
         .createContext({ workspaceId })
         .insertWorkspaceEvent(WORKSPACE_CREATED_EVENT, {});
 
-      if (this.billingService.isBillingEnabled()) {
-        await this.billingService.ensureBillingCustomer({
-          userEmail: email,
-          workspaceId: workspace.id,
-          workspaceDisplayName: workspace.displayName,
-          partner: options?.partner,
-        });
-      }
-
       return { user, workspace };
     } catch (error) {
-      await this.fileStorageService.invalidateStorageStock({
-        workspaceId,
-        applicationId: workspaceCustomApplicationId,
-      });
-
       const isSubdomainConflict =
         error instanceof QueryFailedError &&
         (error as QueryFailedErrorWithCode).code ===

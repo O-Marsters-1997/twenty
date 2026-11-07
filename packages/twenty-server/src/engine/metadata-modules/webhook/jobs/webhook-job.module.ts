@@ -2,11 +2,9 @@ import { Module } from '@nestjs/common';
 
 import { EventLogEmitterModule } from 'src/engine/core-modules/event-logs/emit/event-log-emitter.module';
 import { SecureHttpClientModule } from 'src/engine/core-modules/secure-http-client/secure-http-client.module';
-import { UsageLimitModule } from 'src/engine/core-modules/usage-limit/usage-limit.module';
 import { CallWebhookJobsForMetadataJob } from 'src/engine/metadata-modules/webhook/jobs/call-webhook-jobs-for-metadata.job';
 import { CallWebhookJobsJob } from 'src/engine/metadata-modules/webhook/jobs/call-webhook-jobs.job';
 import { CallWebhookJob } from 'src/engine/metadata-modules/webhook/jobs/call-webhook.job';
-import { WebhookRateLimitService } from 'src/engine/metadata-modules/webhook/jobs/webhook-rate-limit.service';
 import { RecordShareModule } from 'src/engine/core-modules/record-share/record-share.module';
 import { WorkspaceCacheModule } from 'src/engine/workspace-cache/workspace-cache.module';
 
@@ -15,14 +13,12 @@ import { WorkspaceCacheModule } from 'src/engine/workspace-cache/workspace-cache
     EventLogEmitterModule,
     RecordShareModule,
     SecureHttpClientModule,
-    UsageLimitModule,
     WorkspaceCacheModule,
   ],
   providers: [
     CallWebhookJobsJob,
     CallWebhookJobsForMetadataJob,
     CallWebhookJob,
-    WebhookRateLimitService,
   ],
 })
 export class WebhookJobModule {}

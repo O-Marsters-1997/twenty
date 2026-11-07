@@ -23,10 +23,6 @@ import { fromFlatApplicationToApplicationDto } from 'src/engine/core-modules/app
 import { getScopedCallingApplication } from 'src/engine/core-modules/application/utils/get-scoped-calling-application.util';
 import { type AuthContextUser } from 'src/engine/core-modules/auth/types/auth-context.type';
 import { AuthGraphqlApiExceptionFilter } from 'src/engine/core-modules/auth/filters/auth-graphql-api-exception.filter';
-import { BillingEntitlementDTO } from 'src/engine/core-modules/billing/dtos/billing-entitlement.dto';
-import { BillingCustomerEntity } from 'src/engine/core-modules/billing/entities/billing-customer.entity';
-import { BillingSubscriptionEntity } from 'src/engine/core-modules/billing/entities/billing-subscription.entity';
-import { BillingSubscriptionService } from 'src/engine/core-modules/billing/services/billing-subscription.service';
 import { WorkspaceDomainsService } from 'src/engine/core-modules/domain/workspace-domains/services/workspace-domains.service';
 import { FeatureFlagDTO } from 'src/engine/core-modules/feature-flag/dtos/feature-flag.dto';
 import { FeatureFlagService } from 'src/engine/core-modules/feature-flag/services/feature-flag.service';
@@ -55,7 +51,6 @@ import { AuthApplication } from 'src/engine/decorators/auth/auth-application.dec
 import { AuthUserWorkspaceId } from 'src/engine/decorators/auth/auth-user-workspace-id.decorator';
 import { AuthUser } from 'src/engine/decorators/auth/auth-user.decorator';
 import { AuthWorkspace } from 'src/engine/decorators/auth/auth-workspace.decorator';
-import { AllowSuspendedWorkspace } from 'src/engine/decorators/auth/allow-suspended-workspace.decorator';
 import { CustomPermissionGuard } from 'src/engine/guards/custom-permission.guard';
 import { NoPermissionGuard } from 'src/engine/guards/no-permission.guard';
 import { AuthPrincipalGuard } from 'src/engine/guards/auth-principal.guard';
@@ -89,7 +84,6 @@ export class WorkspaceResolver {
     private readonly userWorkspaceService: UserWorkspaceService,
     private readonly twentyConfigService: TwentyConfigService,
     private readonly fileUrlService: FileUrlService,
-    private readonly billingSubscriptionService: BillingSubscriptionService,
     private readonly featureFlagService: FeatureFlagService,
     private readonly roleService: RoleService,
     private readonly viewService: ViewService,
@@ -233,27 +227,8 @@ export class WorkspaceResolver {
     }),
     SettingsPermissionGuard(PermissionFlagType.WORKSPACE),
   )
-  @AllowSuspendedWorkspace()
   async deleteCurrentWorkspace(@AuthWorkspace() { id }: WorkspaceEntity) {
-    await this.workspaceService.suspendWorkspace(id);
     return this.workspaceService.deleteWorkspace(id, true);
-  }
-
-  @ResolveField(() => [BillingSubscriptionEntity])
-  async billingSubscriptions(
-    @Parent() workspace: WorkspaceEntity,
-  ): Promise<BillingSubscriptionEntity[] | undefined> {
-    if (!this.twentyConfigService.isBillingEnabled()) {
-      return [];
-    }
-
-    try {
-      return this.billingSubscriptionService.getBillingSubscriptions(
-        workspace.id,
-      );
-    } catch (error) {
-      workspaceGraphqlApiExceptionHandler(error);
-    }
   }
 
   @ResolveField(() => String, { nullable: true })
@@ -313,30 +288,6 @@ export class WorkspaceResolver {
     return flatApplications.map(fromFlatApplicationToApplicationDto);
   }
 
-  @ResolveField(() => BillingSubscriptionEntity, { nullable: true })
-  async currentBillingSubscription(
-    @Parent() workspace: WorkspaceEntity,
-  ): Promise<BillingSubscriptionEntity | undefined> {
-    if (!this.twentyConfigService.isBillingEnabled()) {
-      return;
-    }
-
-    return this.billingSubscriptionService.getCurrentBillingSubscription({
-      workspaceId: workspace.id,
-    });
-  }
-
-  @ResolveField(() => BillingCustomerEntity, { nullable: true })
-  async billingCustomer(
-    @Parent() workspace: WorkspaceEntity,
-  ): Promise<BillingCustomerEntity | null> {
-    if (!this.twentyConfigService.isBillingEnabled()) {
-      return null;
-    }
-
-    return this.billingSubscriptionService.getBillingCustomer(workspace.id);
-  }
-
   @ResolveField(() => Number)
   async workspaceMembersCount(
     @Parent() workspace: WorkspaceEntity,
@@ -355,13 +306,6 @@ export class WorkspaceResolver {
       workspaceId: workspace.id,
       fileFolder: FileFolder.CorePicture,
     });
-  }
-
-  @ResolveField(() => [BillingEntitlementDTO])
-  billingEntitlements(@Parent() workspace: WorkspaceEntity) {
-    return this.billingSubscriptionService.getWorkspaceEntitlements(
-      workspace.id,
-    );
   }
 
   @ResolveField(() => WorkspaceUrlsDTO)
@@ -401,7 +345,6 @@ export class WorkspaceResolver {
 
   @Query(() => PublicWorkspaceDataDTO)
   @UseGuards(PublicEndpointGuard, NoPermissionGuard)
-  @AllowSuspendedWorkspace()
   async getPublicWorkspaceDataByDomain(
     @OriginHeader() originHeader: string,
     @Args('origin', { nullable: true }) origin?: string,

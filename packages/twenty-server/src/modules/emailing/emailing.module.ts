@@ -8,7 +8,6 @@ import { RecordCrudModule } from 'src/engine/core-modules/record-crud/record-cru
 import { UserWorkspaceModule } from 'src/engine/core-modules/user-workspace/user-workspace.module';
 import { AddPeopleToMessageListJobService } from 'src/modules/emailing/services/add-people-to-message-list-job.service';
 import { AddPeopleToMessageListService } from 'src/modules/emailing/services/add-people-to-message-list.service';
-import { BillingModule } from 'src/engine/core-modules/billing/billing.module';
 import { EmailingDomainModule } from 'src/engine/core-modules/emailing-domain/emailing-domain.module';
 import { EmailingDomainEntity } from 'src/engine/core-modules/emailing-domain/emailing-domain.entity';
 import { ShortLinkModule } from 'src/engine/core-modules/short-link/short-link.module';
@@ -23,7 +22,6 @@ import { UserRoleModule } from 'src/engine/metadata-modules/user-role/user-role.
 import { WorkspaceManyOrAllFlatEntityMapsCacheModule } from 'src/engine/metadata-modules/flat-entity/services/workspace-many-or-all-flat-entity-maps-cache.module';
 import { provideWorkspaceScopedRepository } from 'src/engine/twenty-orm/workspace-scoped-repository/provide-workspace-scoped-repository';
 import { WorkspaceCacheModule } from 'src/engine/workspace-cache/workspace-cache.module';
-import { UsageLimitModule } from 'src/engine/core-modules/usage-limit/usage-limit.module';
 import { CampaignTrackingController } from 'src/modules/emailing/controllers/campaign-tracking.controller';
 import { UnsubscribeController } from 'src/modules/emailing/controllers/unsubscribe.controller';
 import { RecordCampaignEngagementJob } from 'src/modules/emailing/jobs/record-campaign-engagement.job';
@@ -41,7 +39,6 @@ import { MessageSuppressionResolver } from 'src/modules/emailing/resolvers/messa
 import { UnsubscribeTopicResolver } from 'src/modules/emailing/resolvers/unsubscribe-topic.resolver';
 import { CampaignVariableService } from 'src/modules/emailing/services/campaign-variable.service';
 import { ThrottlerModule } from 'src/engine/core-modules/throttler/throttler.module';
-import { EmailBillingService } from 'src/modules/emailing/services/email-billing.service';
 import { EmailingDomainSenderService } from 'src/modules/emailing/services/emailing-domain-sender.service';
 import { MessageCampaignDraftService } from 'src/modules/emailing/services/message-campaign-draft.service';
 import { MessageCampaignRecoveryService } from 'src/modules/emailing/services/message-campaign-recovery.service';
@@ -49,7 +46,6 @@ import { MessageCampaignStatisticsService } from 'src/modules/emailing/services/
 import { MessageCampaignAudienceService } from 'src/modules/emailing/services/message-campaign-audience.service';
 import { MessageCampaignDeliveryFeedbackService } from 'src/modules/emailing/services/message-campaign-delivery-feedback.service';
 import { MessageCampaignBatchDeliveryService } from 'src/modules/emailing/services/message-campaign-batch-delivery.service';
-import { CampaignSendSlotService } from 'src/modules/emailing/services/campaign-send-slot.service';
 import { MessageCampaignDeliveryService } from 'src/modules/emailing/services/message-campaign-delivery.service';
 import { MessageCampaignLifecycleService } from 'src/modules/emailing/services/message-campaign-lifecycle.service';
 import { MessageCampaignMaterializationService } from 'src/modules/emailing/services/message-campaign-materialization.service';
@@ -73,10 +69,8 @@ import { SaveCampaignTool } from 'src/modules/emailing/tools/save-campaign-tool'
     FeatureFlagModule,
     PermissionsModule,
     UserRoleModule,
-    BillingModule,
     WorkspaceCacheModule,
     WorkspaceManyOrAllFlatEntityMapsCacheModule,
-    UsageLimitModule,
     ClickHouseModule,
     ShortLinkModule,
     TypeOrmModule.forFeature([
@@ -89,11 +83,9 @@ import { SaveCampaignTool } from 'src/modules/emailing/tools/save-campaign-tool'
   controllers: [UnsubscribeController, CampaignTrackingController],
   providers: [
     CampaignVariableService,
-    EmailBillingService,
     MessageCampaignService,
     MessageCampaignScheduleService,
     MessageCampaignAudienceService,
-    CampaignSendSlotService,
     MessageCampaignDeliveryService,
     MessageCampaignBatchDeliveryService,
     MessageCampaignDeliveryFeedbackService,

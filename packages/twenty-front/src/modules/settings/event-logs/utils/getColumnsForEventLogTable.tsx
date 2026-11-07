@@ -77,13 +77,6 @@ const OBJECT_EVENT_COLUMNS: ColumnConfig[] = [
   { ...PROPERTIES_COLUMN, minWidth: 150, defaultWidth: 300 },
 ];
 
-const USAGE_EVENT_COLUMNS: ColumnConfig[] = [
-  { ...EVENT_COLUMN, label: msg`Resource Type`, defaultWidth: 130 },
-  { ...TIMESTAMP_COLUMN, defaultWidth: 140 },
-  { ...USER_COLUMN, defaultWidth: 130 },
-  { ...PROPERTIES_COLUMN, label: msg`Details` },
-];
-
 const APPLICATION_LOG_COLUMNS: ColumnConfig[] = [
   { ...EVENT_COLUMN, label: msg`Function`, defaultWidth: 160 },
   { ...TIMESTAMP_COLUMN, defaultWidth: 140 },
@@ -112,7 +105,6 @@ const APPLICATION_LOG_COLUMNS: ColumnConfig[] = [
 
 const COLUMNS_BY_TABLE: Record<EventLogTable, ColumnConfig[]> = {
   [EventLogTable.OBJECT_EVENT]: OBJECT_EVENT_COLUMNS,
-  [EventLogTable.USAGE_EVENT]: USAGE_EVENT_COLUMNS,
   [EventLogTable.APPLICATION_LOG]: APPLICATION_LOG_COLUMNS,
   [EventLogTable.WORKSPACE_EVENT]: DEFAULT_COLUMNS,
   [EventLogTable.PAGEVIEW]: DEFAULT_COLUMNS,

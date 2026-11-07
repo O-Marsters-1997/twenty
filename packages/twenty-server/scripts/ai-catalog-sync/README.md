@@ -67,7 +67,7 @@ A spec looks like this:
       "labelSuffix": " (Azure)",
       "models": [
         "gpt-5.6-luna",
-        { "model": "gpt-5.6-sol", "cachedInputCostPerMillionTokens": 0.5 }
+        { "model": "gpt-5.6-sol", "contextWindowTokens": 200000 }
       ]
     },
     {

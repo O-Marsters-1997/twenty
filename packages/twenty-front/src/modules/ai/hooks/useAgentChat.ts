@@ -32,18 +32,12 @@ import { agentChatMessagesFamilyState } from '@/ai/states/agentChatMessagesFamil
 import { newAiChatThreadIdState } from '@/ai/states/newAiChatThreadIdState';
 import { getConversationTargetsFromSerializedDocument } from '@/ai/utils/getConversationTargetsFromSerializedDocument';
 import { getParticipantMentionsFromSerializedDocument } from '@/ai/utils/getParticipantMentionsFromSerializedDocument';
-import { isAiChatCreditsExhaustedError } from '@/ai/utils/isAiChatCreditsExhaustedError';
 import { toAiChatError } from '@/ai/utils/toAiChatError';
-import { currentWorkspaceState } from '@/auth/states/currentWorkspaceState';
 import { useListenToBrowserEvent } from '@/browser-event/hooks/useListenToBrowserEvent';
 import { dispatchBrowserEvent } from '@/browser-event/utils/dispatchBrowserEvent';
 import { aiModelsState } from '@/client-config/states/aiModelsState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomState';
-import {
-  markWorkspaceCreditsAvailable,
-  markWorkspaceCreditsExhausted,
-} from '@/workspace/utils/updateWorkspaceResourceCreditCap';
 import {
   SendChatMessageDocument,
   StopAgentChatStreamDocument,
@@ -205,11 +199,6 @@ export const useAgentChat = () => {
         },
       });
 
-      // The stream may already have set a newer credits-exhausted error; don't clear it.
-      if (!isAiChatCreditsExhaustedError(store.get(errorAtom))) {
-        store.set(currentWorkspaceState.atom, markWorkspaceCreditsAvailable);
-      }
-
       if (isBrowsingContextChanged) {
         store.set(lastSentBrowsingContextAtom, browsingContext);
       }
@@ -256,10 +245,6 @@ export const useAgentChat = () => {
 
       removeOptimisticUserMessage();
       store.set(errorAtom, toAiChatError(error));
-
-      if (isAiChatCreditsExhaustedError(error)) {
-        store.set(currentWorkspaceState.atom, markWorkspaceCreditsExhausted);
-      }
 
       dispatchBrowserEvent(AGENT_CHAT_RESTORE_EDITOR_CONTENT_EVENT_NAME, {
         content: serializedContentToSend,

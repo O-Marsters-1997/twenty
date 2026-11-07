@@ -4,10 +4,6 @@ export type CatalogSpecModelOverrides = {
   isDeprecated?: boolean;
   contextWindowTokens?: number;
   maxOutputTokens?: number;
-  inputCostPerMillionTokens?: number;
-  outputCostPerMillionTokens?: number;
-  cachedInputCostPerMillionTokens?: number;
-  cacheCreationCostPerMillionTokens?: number;
 };
 
 export type CatalogSpecModel = CatalogSpecModelOverrides & {

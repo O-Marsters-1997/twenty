@@ -21,10 +21,8 @@ import {
 import { WorkspaceActivationStatus } from 'twenty-shared/workspace';
 import {
   DataSource,
-  In,
   IsNull,
   LessThan,
-  Not,
   QueryRunner,
   Repository,
 } from 'typeorm';
@@ -36,8 +34,6 @@ import { type FlatApplication } from 'src/engine/core-modules/application/types/
 import { getScopedCallingApplication } from 'src/engine/core-modules/application/utils/get-scoped-calling-application.util';
 import { ApplicationService } from 'src/engine/core-modules/application/application.service';
 import { type AuthContextUser } from 'src/engine/core-modules/auth/types/auth-context.type';
-import { BillingSubscriptionService } from 'src/engine/core-modules/billing/services/billing-subscription.service';
-import { BillingService } from 'src/engine/core-modules/billing/services/billing.service';
 import { SubdomainManagerService } from 'src/engine/core-modules/domain/subdomain-manager/services/subdomain-manager.service';
 import { EmailingDomainEntity } from 'src/engine/core-modules/emailing-domain/emailing-domain.entity';
 import { EventLogRetentionService } from 'src/engine/core-modules/event-logs/retention/services/event-log-retention.service';
@@ -66,12 +62,8 @@ import { type UpdateWorkspaceAllowedIframeOriginsInput } from 'src/engine/core-m
 import { WORKSPACE_FIELDS_NOT_UPDATABLE_BY_APPLICATIONS } from 'src/engine/core-modules/workspace/constants/workspace-fields-not-updatable-by-applications.constant';
 import { WORKSPACE_FIELDS_UPDATABLE_BEFORE_ACTIVATION } from 'src/engine/core-modules/workspace/constants/workspace-fields-updatable-before-activation.constant';
 import { getWorkspaceApplicationUninstallLockName } from 'src/engine/core-modules/workspace/utils/get-workspace-application-uninstall-lock-name.util';
-import { WORKSPACE_REACTIVATED_EVENT } from 'src/engine/core-modules/workspace/constants/workspace-reactivated-event.constant';
 import { WORKSPACE_SOFT_DELETED_EVENT } from 'src/engine/core-modules/workspace/constants/workspace-soft-deleted-event.constant';
-import { WORKSPACE_SUSPENDED_EVENT } from 'src/engine/core-modules/workspace/constants/workspace-suspended-event.constant';
-import { type WorkspaceReactivatedEvent } from 'src/engine/core-modules/workspace/types/workspace-reactivated-event.type';
 import { type WorkspaceSoftDeletedEvent } from 'src/engine/core-modules/workspace/types/workspace-soft-deleted-event.type';
-import { type WorkspaceSuspendedEvent } from 'src/engine/core-modules/workspace/types/workspace-suspended-event.type';
 import { WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
 import {
   WorkspaceException,
@@ -149,8 +141,6 @@ export class WorkspaceService {
     private readonly userWorkspaceRepository: Repository<UserWorkspaceEntity>,
     private readonly workspaceManagerService: WorkspaceManagerService,
     private readonly featureFlagService: FeatureFlagService,
-    private readonly billingSubscriptionService: BillingSubscriptionService,
-    private readonly billingService: BillingService,
     private readonly userWorkspaceService: UserWorkspaceService,
     private readonly twentyConfigService: TwentyConfigService,
     private readonly exceptionHandlerService: ExceptionHandlerService,
@@ -335,15 +325,6 @@ export class WorkspaceService {
       );
     }
 
-    if (
-      isDefined(payload.eventLogRetentionDays) &&
-      workspace.eventLogRetentionDays !== payload.eventLogRetentionDays
-    ) {
-      await this.eventLogRetentionService.validateRetentionUpdateOrThrow(
-        workspace.id,
-      );
-    }
-
     const authProvidersBySystem = {
       google: this.twentyConfigService.get('AUTH_GOOGLE_ENABLED'),
       password: this.twentyConfigService.get('AUTH_PASSWORD_ENABLED'),
@@ -520,9 +501,6 @@ export class WorkspaceService {
     const executedByVersion =
       this.twentyConfigService.get('APP_VERSION') ?? 'unknown';
 
-    const hasWorkspaceAnySubscription =
-      await this.billingService.hasWorkspaceAnySubscription(workspaceId);
-
     const queryRunner = this.coreDataSource.createQueryRunner();
 
     await queryRunner.connect();
@@ -530,9 +508,7 @@ export class WorkspaceService {
 
     try {
       await queryRunner.manager.update(WorkspaceEntity, workspaceId, {
-        activationStatus: hasWorkspaceAnySubscription
-          ? WorkspaceActivationStatus.ACTIVE
-          : WorkspaceActivationStatus.CREATED,
+        activationStatus: WorkspaceActivationStatus.ACTIVE,
       });
 
       await this.upgradeMigrationService.markAsWorkspaceInitial({
@@ -550,62 +526,6 @@ export class WorkspaceService {
     } finally {
       await queryRunner.release();
     }
-  }
-
-  async suspendWorkspace(id: string): Promise<boolean> {
-    const workspaceSuspendedAt = new Date();
-    const { affected } = await this.workspaceRepository.update(
-      {
-        id,
-        activationStatus: Not(WorkspaceActivationStatus.SUSPENDED),
-        deletedAt: IsNull(),
-      },
-      {
-        activationStatus: WorkspaceActivationStatus.SUSPENDED,
-        suspendedAt: workspaceSuspendedAt,
-      },
-    );
-
-    const hasBeenSuspended = isDefined(affected) && affected > 0;
-
-    if (hasBeenSuspended) {
-      this.eventEmitter.emit(WORKSPACE_SUSPENDED_EVENT, {
-        workspaceId: id,
-      } satisfies WorkspaceSuspendedEvent);
-
-      await this.coreEntityCacheService.invalidate('workspaceEntity', id);
-    }
-
-    return hasBeenSuspended;
-  }
-
-  async reactivateWorkspace(id: string): Promise<boolean> {
-    const { affected } = await this.workspaceRepository.update(
-      {
-        id,
-        activationStatus: In([
-          WorkspaceActivationStatus.SUSPENDED,
-          WorkspaceActivationStatus.CREATED,
-        ]),
-        deletedAt: IsNull(),
-      },
-      {
-        activationStatus: WorkspaceActivationStatus.ACTIVE,
-        suspendedAt: null,
-      },
-    );
-
-    const hasBeenReactivated = isDefined(affected) && affected > 0;
-
-    if (hasBeenReactivated) {
-      this.eventEmitter.emit(WORKSPACE_REACTIVATED_EVENT, {
-        workspaceId: id,
-      } satisfies WorkspaceReactivatedEvent);
-
-      await this.coreEntityCacheService.invalidate('workspaceEntity', id);
-    }
-
-    return hasBeenReactivated;
   }
 
   async deleteWorkspace(id: string, softDelete = false) {
@@ -633,10 +553,6 @@ export class WorkspaceService {
     this.logger.log(`workspace ${id} user workspaces deleted`);
 
     this.logger.log(`workspace ${id} cache flushed`);
-
-    if (this.billingService.isBillingEnabled()) {
-      await this.billingSubscriptionService.cancelSubscription(workspace.id);
-    }
 
     await this.workspaceRepository.softDelete({ id, deletedAt: IsNull() });
     await this.coreEntityCacheService.invalidate('workspaceEntity', id);
@@ -674,12 +590,6 @@ export class WorkspaceService {
           this.logger.log(`workspace ${workspace.id} user workspaces deleted`);
 
           this.logger.log(`workspace ${workspace.id} cache flushed`);
-
-          if (this.billingService.isBillingEnabled()) {
-            await this.billingSubscriptionService.assertSubscriptionCanceledOrNone(
-              workspace.id,
-            );
-          }
 
           await this.deleteWorkspaceSyncableMetadataEntities(workspace);
 

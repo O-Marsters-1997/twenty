@@ -3,7 +3,6 @@ import { useLingui } from '@lingui/react/macro';
 import { useMemo, useState } from 'react';
 
 import { currentWorkspaceState } from '@/auth/states/currentWorkspaceState';
-import { billingState } from '@/client-config/states/billingState';
 import { isClickHouseConfiguredState } from '@/client-config/states/isClickHouseConfiguredState';
 import { useNumberFormat } from '@/localization/hooks/useNumberFormat';
 import { SettingsEmptyPlaceholder } from '@/settings/components/SettingsEmptyPlaceholder';
@@ -15,7 +14,6 @@ import { useEventLogsLiveStream } from '@/settings/event-logs/hooks/useEventLogs
 import { useEventLogs } from '@/settings/event-logs/hooks/useQueryEventLogs';
 import { type EventLogFiltersState } from '@/settings/event-logs/types/EventLogFiltersState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { checkIfBillingEntitlementIsEnabledOnWorkspace } from '@/workspace/utils/checkIfBillingEntitlementIsEnabledOnWorkspace';
 import { SettingsPath } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 import {
@@ -29,10 +27,7 @@ import { IconButton } from 'twenty-ui/components/input';
 import { Card } from 'twenty-ui/primitives/surfaces';
 import { themeCssVariables } from 'twenty-ui/theme';
 
-import {
-  BillingEntitlementKey,
-  EventLogTable,
-} from '~/generated-metadata/graphql';
+import { EventLogTable } from '~/generated-metadata/graphql';
 import { useNavigateSettings } from '~/hooks/useNavigateSettings';
 import { isGraphqlErrorOfType } from '~/utils/is-graphql-error-of-type.util';
 

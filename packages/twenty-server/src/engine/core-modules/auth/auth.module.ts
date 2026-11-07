@@ -20,7 +20,6 @@ import { SignInUpService } from 'src/engine/core-modules/auth/services/sign-in-u
 import { UpdateConnectedAccountOnReconnectService } from 'src/engine/core-modules/auth/services/update-connected-account-on-reconnect.service';
 import { TransientTokenService } from 'src/engine/core-modules/auth/token/services/transient-token.service';
 import { TokenModule } from 'src/engine/core-modules/auth/token/token.module';
-import { BillingModule } from 'src/engine/core-modules/billing/billing.module';
 import { DomainServerConfigModule } from 'src/engine/core-modules/domain/domain-server-config/domain-server-config.module';
 import { SubdomainManagerModule } from 'src/engine/core-modules/domain/subdomain-manager/subdomain-manager.module';
 import { WorkspaceDomainsModule } from 'src/engine/core-modules/domain/workspace-domains/workspace-domains.module';
@@ -94,7 +93,6 @@ import { AuthService } from './services/auth.service';
     ApplicationModule,
     WorkspaceCacheModule,
     SecureHttpClientModule,
-    BillingModule,
     FileModule,
     ConnectedAccountTokenEncryptionModule,
     EmailAliasManagerModule,

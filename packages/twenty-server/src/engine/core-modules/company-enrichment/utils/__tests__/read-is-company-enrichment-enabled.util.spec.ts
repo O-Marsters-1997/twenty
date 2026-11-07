@@ -18,19 +18,6 @@ describe('readIsCompanyEnrichmentEnabled', () => {
     ).toBe(true);
   });
 
-  it('should be enabled with the book-call consumer and an api key', () => {
-    expect(
-      readIsCompanyEnrichmentEnabled(
-        buildConfigService({
-          IS_ONBOARDING_AI_CHAT_ENABLED: false,
-          CALENDAR_BOOKING_PAGE_ID: 'team/twenty/talk-to-us',
-          ONBOARDING_BOOK_CALL_MIN_EMPLOYEE_COUNT: 20,
-          PEOPLE_DATA_LABS_API_KEY: 'pdl-key',
-        }),
-      ),
-    ).toBe(true);
-  });
-
   it('should be disabled without any consumer', () => {
     expect(
       readIsCompanyEnrichmentEnabled(
@@ -55,17 +42,5 @@ describe('readIsCompanyEnrichmentEnabled', () => {
 
   it('should be disabled with neither a consumer nor an api key', () => {
     expect(readIsCompanyEnrichmentEnabled(buildConfigService({}))).toBe(false);
-  });
-
-  it('should not treat an unconfigured book-call threshold as a consumer', () => {
-    expect(
-      readIsCompanyEnrichmentEnabled(
-        buildConfigService({
-          IS_ONBOARDING_AI_CHAT_ENABLED: false,
-          CALENDAR_BOOKING_PAGE_ID: 'team/twenty/talk-to-us',
-          PEOPLE_DATA_LABS_API_KEY: 'pdl-key',
-        }),
-      ),
-    ).toBe(false);
   });
 });

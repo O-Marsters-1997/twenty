@@ -36,7 +36,6 @@ import { AuthUser } from 'src/engine/decorators/auth/auth-user.decorator';
 import { AuthWorkspace } from 'src/engine/decorators/auth/auth-workspace.decorator';
 import { NoPermissionGuard } from 'src/engine/guards/no-permission.guard';
 import { AuthPrincipalGuard } from 'src/engine/guards/auth-principal.guard';
-import { WorkspaceNotSuspendedGuard } from 'src/engine/guards/workspace-not-suspended.guard';
 
 @Controller(ApiPath.Mcp)
 @UseGuards(
@@ -51,7 +50,6 @@ import { WorkspaceNotSuspendedGuard } from 'src/engine/guards/workspace-not-susp
     oauthClient: true,
     application: true,
   }),
-  WorkspaceNotSuspendedGuard,
   NoPermissionGuard,
 )
 @UseFilters(RestApiExceptionFilter, AuthRestApiExceptionFilter)

@@ -4,11 +4,6 @@ import { getClientConfig } from '@/client-config/utils/getClientConfig';
 global.fetch = jest.fn();
 
 const mockClientConfig = {
-  billing: {
-    isBillingEnabled: true,
-    billingUrl: 'https://billing.example.com',
-    trialPeriods: [],
-  },
   authProviders: {
     google: true,
     magicLink: false,

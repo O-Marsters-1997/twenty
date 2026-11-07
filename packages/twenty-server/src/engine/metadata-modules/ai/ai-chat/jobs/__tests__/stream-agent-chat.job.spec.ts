@@ -204,8 +204,6 @@ describe('StreamAgentChatJob', () => {
     finalPublishRejection,
     modelConfig = {
       contextWindowTokens: 100000,
-      inputCostPerMillionTokens: 1,
-      outputCostPerMillionTokens: 2,
     },
   }: {
     workspaceFound?: boolean;
@@ -257,7 +255,6 @@ describe('StreamAgentChatJob', () => {
         : jest.fn().mockResolvedValue({
             stream: chatStream,
             modelConfig,
-            hasNoMoreAvailableCredits: () => false,
             getStreamError: () => chatStream.streamError,
           }),
     };
@@ -556,7 +553,7 @@ describe('StreamAgentChatJob', () => {
     expect(agentChatService.notifyThreadUsageUpdated).not.toHaveBeenCalled();
   });
 
-  it('prices each step on its own, so steps under the long-context threshold never reach its rate together', async () => {
+  it('adds up the tokens of every step', async () => {
     const stepUsage: LanguageModelUsage = {
       inputTokens: 150_000,
       inputTokenDetails: {
@@ -594,13 +591,6 @@ describe('StreamAgentChatJob', () => {
       }),
       modelConfig: {
         contextWindowTokens: 1_000_000,
-        inputCostPerMillionTokens: 1,
-        outputCostPerMillionTokens: 2,
-        longContextCost: {
-          inputCostPerMillionTokens: 10,
-          outputCostPerMillionTokens: 20,
-          thresholdTokens: 200_000,
-        },
       },
     });
 
@@ -611,13 +601,11 @@ describe('StreamAgentChatJob', () => {
     const [{ usage }] = turnRecorderService.recordUsage.mock.calls[0] as [
       { usage: Record<string, number> },
     ];
-    const { inputTokens, outputTokens, inputCredits, outputCredits } = usage;
+    const { inputTokens, outputTokens } = usage;
 
-    expect({ inputTokens, outputTokens, inputCredits, outputCredits }).toEqual({
+    expect({ inputTokens, outputTokens }).toEqual({
       inputTokens: 300_000,
       outputTokens: 2_000,
-      inputCredits: 300_000,
-      outputCredits: 4_000,
     });
   });
 

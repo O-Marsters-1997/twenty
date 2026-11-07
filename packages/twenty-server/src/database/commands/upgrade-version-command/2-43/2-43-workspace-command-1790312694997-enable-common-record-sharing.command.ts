@@ -1,7 +1,5 @@
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { BillingSubscriptionService } from 'src/engine/core-modules/billing/services/billing-subscription.service';
-import { BillingEntitlementKey } from 'src/engine/core-modules/billing/enums/billing-entitlement-key.enum';
 import { preserveLegacyRecordAccess } from 'src/database/commands/upgrade-version-command/2-43/utils/preserve-legacy-record-access.util';
 import { isEmptyUnprovisionedAgentHistoryWorkspace } from 'src/database/commands/upgrade-version-command/2-43/utils/is-empty-unprovisioned-agent-history-workspace.util';
 import { backfillLegacyChatThreadOwnerGrants as backfillChatThreadOwnerGrants } from 'src/database/commands/agent-history/utils/backfill-legacy-chat-thread-owner-grants.util';
@@ -31,7 +29,6 @@ export class EnableCommonRecordSharingCommand extends ProvisionedWorkspaceComman
     private readonly workspaceCacheService: WorkspaceCacheService,
     private readonly storage: AgentHistoryUpgradeStorageService,
     private readonly migrations: WorkspaceMigrationValidateBuildAndRunService,
-    private readonly billingSubscriptionService: BillingSubscriptionService,
     @InjectDataSource() private readonly dataSource: DataSource,
   ) {
     super(workspaceIteratorService);
@@ -89,15 +86,9 @@ export class EnableCommonRecordSharingCommand extends ProvisionedWorkspaceComman
       );
       return;
     }
-    // This reads the former entitlement only to preserve historical access;
-    // neither the new sharing API nor record authorization depends on it.
     const historicalFlags: Partial<Record<string, boolean>> = featureFlagsMap;
     const wasRecordSharingEnabled =
-      historicalFlags['IS_RECORD_SHARING_ENABLED'] === true &&
-      (await this.billingSubscriptionService.getWorkspaceEntitlementValue(
-        workspaceId,
-        BillingEntitlementKey.RECORD_SHARING,
-      ));
+      historicalFlags['IS_RECORD_SHARING_ENABLED'] === true;
     await preserveLegacyRecordAccess({
       manager: this.dataSource.manager,
       workspaceId,
