@@ -1,5 +1,5 @@
 import { NavigationButton } from '@/ui/input/components/NavigationButton';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { WorkspaceRouteUnavailable } from '@/ui/layout/page/components/WorkspaceRouteUnavailable';
@@ -8,11 +8,9 @@ import { useFilteredObjectMetadataItems } from '@/object-metadata/hooks/useFilte
 import { SettingsPageContainer } from '@/settings/components/SettingsPageContainer';
 import { ObjectFields } from '@/settings/data-model/object-details/components/tabs/ObjectFields';
 import { ObjectLayout } from '@/settings/data-model/object-details/components/tabs/ObjectLayout';
-import { ObjectSettings } from '@/settings/data-model/object-details/components/tabs/ObjectSettings';
 import { SettingsPageLayout } from '@/settings/components/layout/SettingsPageLayout';
 import { SettingsTabBar } from '@/settings/components/layout/SettingsTabBar';
 import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
-import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { styled } from '@linaria/react';
 import {
   AppPath,
@@ -20,8 +18,6 @@ import {
   SettingsPath,
 } from 'twenty-shared/types';
 
-import { isDDLLockedState } from '@/client-config/states/isDDLLockedState';
-import { isObjectMetadataReadOnly } from '@/object-record/read-only/utils/isObjectMetadataReadOnly';
 import { activeTabIdComponentState } from '@/ui/layout/tab-list/states/activeTabIdComponentState';
 import { useWorkspaceSurface } from '@/ui/layout/hooks/useWorkspaceSurface';
 import { useWorkspaceSurfaceScopedComponentInstanceId } from '@/ui/layout/hooks/useWorkspaceSurfaceScopedComponentInstanceId';
@@ -32,8 +28,6 @@ import {
   IconArrowUpRight,
   IconAppWindow,
   IconListDetails,
-  IconPlus,
-  IconSettings,
 } from 'twenty-ui/icon';
 import { useNavigateApp } from '~/hooks/useNavigateApp';
 import { SETTINGS_OBJECT_DETAIL_TABS } from '~/pages/settings/data-model/constants/SettingsObjectDetailTabs';
@@ -61,13 +55,6 @@ export const SettingsObjectDetailPage = () => {
     findObjectMetadataItemByNamePlural(objectNamePlural) ??
     findObjectMetadataItemByNamePlural(updatedObjectNamePlural);
 
-  const isDDLLocked = useAtomStateValue(isDDLLockedState);
-
-  const readonly =
-    isObjectMetadataReadOnly({
-      objectMetadataItem,
-    }) || isDDLLocked;
-
   const tabsComponentInstanceId = useWorkspaceSurfaceScopedComponentInstanceId(
     SETTINGS_OBJECT_DETAIL_TABS.COMPONENT_INSTANCE_ID,
   );
@@ -78,16 +65,10 @@ export const SettingsObjectDetailPage = () => {
       tabsComponentInstanceId,
     ) ?? SETTINGS_OBJECT_DETAIL_TABS.TABS_IDS.FIELDS;
 
-  const [isDeleting, setIsDeleting] = useState(false);
-
   useEffect(() => {
     if (objectNamePlural === updatedObjectNamePlural)
       setUpdatedObjectNamePlural('');
-    if (
-      workspaceSurface.type === 'main' &&
-      !isDeleting &&
-      !isDefined(objectMetadataItem)
-    )
+    if (workspaceSurface.type === 'main' && !isDefined(objectMetadataItem))
       navigateApp(AppPath.NotFound);
   }, [
     objectMetadataItem,
@@ -95,7 +76,6 @@ export const SettingsObjectDetailPage = () => {
     objectNamePlural,
     updatedObjectNamePlural,
     setUpdatedObjectNamePlural,
-    isDeleting,
     workspaceSurface.type,
   ]);
 
@@ -113,12 +93,6 @@ export const SettingsObjectDetailPage = () => {
       hide: false,
     },
     {
-      id: SETTINGS_OBJECT_DETAIL_TABS.TABS_IDS.SETTINGS,
-      title: t`Settings`,
-      Icon: IconSettings,
-      hide: false,
-    },
-    {
       id: SETTINGS_OBJECT_DETAIL_TABS.TABS_IDS.LAYOUT,
       title: t`Layout`,
       Icon: IconAppWindow,
@@ -132,14 +106,6 @@ export const SettingsObjectDetailPage = () => {
     switch (activeTabId) {
       case SETTINGS_OBJECT_DETAIL_TABS.TABS_IDS.FIELDS:
         return <ObjectFields objectMetadataItem={objectMetadataItem} />;
-      case SETTINGS_OBJECT_DETAIL_TABS.TABS_IDS.SETTINGS:
-        return (
-          <ObjectSettings
-            objectMetadataItem={objectMetadataItem}
-            isDeleting={isDeleting}
-            setIsDeleting={setIsDeleting}
-          />
-        );
       case SETTINGS_OBJECT_DETAIL_TABS.TABS_IDS.LAYOUT:
         return <ObjectLayout objectMetadataItem={objectMetadataItem} />;
       default:
@@ -174,16 +140,6 @@ export const SettingsObjectDetailPage = () => {
             })}
             variant="ghost"
           >{t`See records`}</NavigationButton>
-          {!readonly &&
-            activeTabId === SETTINGS_OBJECT_DETAIL_TABS.TABS_IDS.FIELDS && (
-              <NavigationButton
-                to="./new-field/select"
-                size="sm"
-                startIcon={<IconPlus />}
-                variant="solid"
-                color="accent"
-              >{t`New Field`}</NavigationButton>
-            )}
         </>
       }
       secondaryBar={

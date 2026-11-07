@@ -1,8 +1,4 @@
 import { currentWorkspaceState } from '@/auth/states/currentWorkspaceState';
-import { isDDLLockedState } from '@/client-config/states/isDDLLockedState';
-import { useDeleteOneObjectMetadataItem } from '@/object-metadata/hooks/useDeleteOneObjectMetadataItem';
-import { useGetIsMetadataItemCustom } from '@/object-metadata/hooks/useGetIsMetadataItemCustom';
-import { useUpdateOneObjectMetadataItem } from '@/object-metadata/hooks/useUpdateOneObjectMetadataItem';
 import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/EnrichedObjectMetadataItem';
 import { isHiddenSystemField } from '@/object-metadata/utils/isHiddenSystemField';
 import { useCombinedGetTotalCount } from '@/object-record/multiple-objects/hooks/useCombinedGetTotalCount';
@@ -13,7 +9,6 @@ import {
   SETTINGS_OBJECT_TABLE_ROW_MOBILE_MIN_WIDTH,
   StyledStickyFirstCell,
 } from '@/settings/data-model/object-details/components/SettingsObjectItemTableRowStyledComponents';
-import { SettingsObjectInactiveMenuDropDown } from '@/settings/data-model/objects/components/SettingsObjectInactiveMenuDropDown';
 import { DropdownRoot } from '@/ui/layout/dropdown/components/DropdownRoot';
 import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent';
 import { SortableTableHeader } from '@/ui/layout/table/components/SortableTableHeader';
@@ -34,7 +29,6 @@ import { Dropdown } from 'twenty-ui/components/navigation';
 import { SettingsRow } from 'twenty-ui/components/settings';
 import { IconArchive, IconChevronRight, IconSettings } from 'twenty-ui/icon';
 import { MOBILE_VIEWPORT, useTheme, themeCssVariables } from 'twenty-ui/theme';
-import { useNavigateSettings } from '~/hooks/useNavigateSettings';
 import { GET_SETTINGS_OBJECT_TABLE_METADATA } from '~/pages/settings/data-model/constants/SettingsObjectTableMetadata';
 import type { SettingsObjectTableItem } from '~/pages/settings/data-model/types/SettingsObjectTableItem';
 import { normalizeSearchText } from 'twenty-ui/utilities';
@@ -69,20 +63,13 @@ export const SettingsObjectTable = ({
 }) => {
   const theme = useTheme();
   const { t } = useLingui();
-  const getIsMetadataItemCustom = useGetIsMetadataItemCustom();
-  const navigate = useNavigateSettings();
 
   const isAdvancedModeEnabled = useAtomStateValue(isAdvancedModeEnabledState);
-  const isDDLLocked = useAtomStateValue(isDDLLockedState);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [showDeactivated, setShowDeactivated] = useState(true);
   const [showSystemObjects, setShowSystemObjects] = useState(true);
   const shouldShowSystemObjects = isAdvancedModeEnabled && showSystemObjects;
-
-  const { deleteOneObjectMetadataItem } = useDeleteOneObjectMetadataItem();
-
-  const { updateOneObjectMetadataItem } = useUpdateOneObjectMetadataItem();
 
   const { totalCountByObjectMetadataItemNamePlural } =
     useCombinedGetTotalCount();
@@ -241,66 +228,25 @@ export const SettingsObjectTable = ({
             </TableRow>
             <StyledSettingsDataModelTableBodyContainer>
               <TableBody>
-                {filteredObjectSettingsItems.map((objectSettingsItem) => {
-                  const isActive =
-                    objectSettingsItem.objectMetadataItem.isActive;
-
-                  return (
-                    <SettingsObjectMetadataItemTableRow
-                      key={objectSettingsItem.objectMetadataItem.namePlural}
-                      objectMetadataItem={objectSettingsItem.objectMetadataItem}
-                      totalObjectCount={objectSettingsItem.totalObjectCount}
-                      action={
-                        isActive ? (
-                          <StyledIconChevronRightContainer>
-                            <IconChevronRight
-                              size={theme.icon.size.md}
-                              stroke={theme.icon.stroke.sm}
-                            />
-                          </StyledIconChevronRightContainer>
-                        ) : (
-                          <SettingsObjectInactiveMenuDropDown
-                            isCustomObject={getIsMetadataItemCustom(
-                              objectSettingsItem.objectMetadataItem,
-                            )}
-                            isReadOnly={isDDLLocked}
-                            objectMetadataItemNamePlural={
-                              objectSettingsItem.objectMetadataItem.namePlural
-                            }
-                            onEdit={() =>
-                              navigate(SettingsPath.ObjectDetail, {
-                                objectNamePlural:
-                                  objectSettingsItem.objectMetadataItem
-                                    .namePlural,
-                              })
-                            }
-                            onActivate={() =>
-                              updateOneObjectMetadataItem({
-                                idToUpdate:
-                                  objectSettingsItem.objectMetadataItem.id,
-                                updatePayload: { isActive: true },
-                              })
-                            }
-                            onDelete={() =>
-                              deleteOneObjectMetadataItem(
-                                objectSettingsItem.objectMetadataItem.id,
-                              )
-                            }
-                          />
-                        )
-                      }
-                      link={
-                        isActive
-                          ? getSettingsPath(SettingsPath.ObjectDetail, {
-                              objectNamePlural:
-                                objectSettingsItem.objectMetadataItem
-                                  .namePlural,
-                            })
-                          : undefined
-                      }
-                    />
-                  );
-                })}
+                {filteredObjectSettingsItems.map((objectSettingsItem) => (
+                  <SettingsObjectMetadataItemTableRow
+                    key={objectSettingsItem.objectMetadataItem.namePlural}
+                    objectMetadataItem={objectSettingsItem.objectMetadataItem}
+                    totalObjectCount={objectSettingsItem.totalObjectCount}
+                    action={
+                      <StyledIconChevronRightContainer>
+                        <IconChevronRight
+                          size={theme.icon.size.md}
+                          stroke={theme.icon.stroke.sm}
+                        />
+                      </StyledIconChevronRightContainer>
+                    }
+                    link={getSettingsPath(SettingsPath.ObjectDetail, {
+                      objectNamePlural:
+                        objectSettingsItem.objectMetadataItem.namePlural,
+                    })}
+                  />
+                ))}
               </TableBody>
             </StyledSettingsDataModelTableBodyContainer>
           </Table>
