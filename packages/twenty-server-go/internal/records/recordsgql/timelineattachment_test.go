@@ -22,15 +22,6 @@ const createTimelineActivity = `mutation Create($data: TimelineActivityCreateInp
 
 const aggregateTimelineActivities = `query AggregateTimelineActivities { timelineActivities { totalCount countNotEmptyLinkedRecordId minHappensAt } }`
 
-func data(t *testing.T, response map[string]any) map[string]any {
-	t.Helper()
-	payload, ok := response["data"].(map[string]any)
-	if !ok {
-		t.Fatalf("response = %v, want data", response)
-	}
-	return payload
-}
-
 func TestAttachmentOperations(t *testing.T) {
 	t.Parallel()
 	server := newServer(t)

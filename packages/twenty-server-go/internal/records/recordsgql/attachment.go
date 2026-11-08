@@ -6,10 +6,6 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records"
 )
 
-func newAttachmentOps(store records.Attachments) *objectOps[records.Attachment, records.AttachmentInput] {
-	return newObjectOps(store, "attachment", func(attachment records.Attachment) string { return attachment.ID })
-}
-
 func toAttachmentInput(in *AttachmentCreateInput) (records.AttachmentInput, error) {
 	if in == nil {
 		return records.AttachmentInput{}, nil
@@ -52,8 +48,12 @@ func toAttachment(attachment records.Attachment) *Attachment {
 	}
 }
 
-func newAttachmentEdge(attachment records.Attachment, cursor string) *AttachmentEdge {
-	return &AttachmentEdge{Node: toAttachment(attachment), Cursor: cursor}
+func attachmentEdge(attachment records.Attachment) *AttachmentEdge {
+	return &AttachmentEdge{Node: toAttachment(attachment), Cursor: records.Cursor(attachment.ID)}
+}
+
+func (r *Resolver) attachments() collection[records.Attachment, Attachment] {
+	return collection[records.Attachment, Attachment]{object: objectNamed("attachment"), store: r.Attachments, node: toAttachment, id: func(record records.Attachment) string { return record.ID }}
 }
 
 func (r *mutationResolver) CreateAttachment(ctx context.Context, data *AttachmentCreateInput) (*Attachment, error) {
@@ -61,20 +61,19 @@ func (r *mutationResolver) CreateAttachment(ctx context.Context, data *Attachmen
 	if err != nil {
 		return nil, err
 	}
-	created, err := r.attachments.create(ctx, input)
-	return convertOne(created, err, toAttachment)
+	actor, err := r.actor(ctx)
+	if err != nil {
+		return nil, err
+	}
+	created, err := r.Attachments.Create(ctx, actor, input)
+	if err != nil {
+		return nil, err
+	}
+	return toAttachment(created), nil
 }
 
 func (r *mutationResolver) CreateAttachments(ctx context.Context, data []*AttachmentCreateInput, _ *bool) ([]*Attachment, error) {
-	inputs := make([]records.AttachmentInput, len(data))
-	for i, item := range data {
-		var err error
-		if inputs[i], err = toAttachmentInput(item); err != nil {
-			return nil, err
-		}
-	}
-	created, err := r.attachments.createMany(ctx, inputs)
-	return convertAll(created, err, toAttachment)
+	return createEach(data, func(item *AttachmentCreateInput) (*Attachment, error) { return r.CreateAttachment(ctx, item) })
 }
 
 func (r *mutationResolver) UpdateAttachment(ctx context.Context, id string, data AttachmentUpdateInput) (*Attachment, error) {
@@ -82,74 +81,65 @@ func (r *mutationResolver) UpdateAttachment(ctx context.Context, id string, data
 	if err != nil {
 		return nil, err
 	}
-	updated, err := r.attachments.update(ctx, id, input)
-	return convertOne(updated, err, toAttachment)
-}
-
-func (r *mutationResolver) UpdateAttachments(ctx context.Context, filter map[string]any, data AttachmentUpdateInput) ([]*Attachment, error) {
-	input, err := toAttachmentUpdateInput(data)
+	actor, err := r.actor(ctx)
 	if err != nil {
 		return nil, err
 	}
-	updated, err := r.attachments.updateMatching(ctx, filter, input)
-	return convertAll(updated, err, toAttachment)
+	updated, err := r.Attachments.Update(ctx, actor, id, input)
+	if err != nil {
+		return nil, err
+	}
+	return toAttachment(updated), nil
+}
+
+func (r *mutationResolver) UpdateAttachments(ctx context.Context, filter map[string]any, data AttachmentUpdateInput) ([]*Attachment, error) {
+	return r.attachments().each(ctx, filter, func(id string) (*Attachment, error) { return r.UpdateAttachment(ctx, id, data) })
 }
 
 func (r *mutationResolver) DeleteAttachment(ctx context.Context, id string) (*Attachment, error) {
-	deleted, err := r.attachments.softDelete(ctx, id)
-	return convertOne(deleted, err, toAttachment)
+	return r.attachments().softDelete(ctx, id)
 }
 
 func (r *mutationResolver) DeleteAttachments(ctx context.Context, filter map[string]any) ([]*Attachment, error) {
-	deleted, err := r.attachments.each(ctx, filter, r.attachments.softDelete)
-	return convertAll(deleted, err, toAttachment)
+	return r.attachments().each(ctx, filter, func(id string) (*Attachment, error) { return r.attachments().softDelete(ctx, id) })
 }
 
 func (r *mutationResolver) DestroyAttachment(ctx context.Context, id string) (*Attachment, error) {
-	destroyed, err := r.attachments.destroy(ctx, id)
-	return convertOne(destroyed, err, toAttachment)
+	return r.attachments().destroy(ctx, id)
 }
 
 func (r *mutationResolver) DestroyAttachments(ctx context.Context, filter map[string]any) ([]*Attachment, error) {
-	destroyed, err := r.attachments.each(ctx, filter, r.attachments.destroy)
-	return convertAll(destroyed, err, toAttachment)
+	return r.attachments().each(ctx, filter, func(id string) (*Attachment, error) { return r.attachments().destroy(ctx, id) })
 }
 
 func (r *mutationResolver) RestoreAttachments(ctx context.Context, filter map[string]any) ([]*Attachment, error) {
-	restored, err := r.attachments.each(ctx, filter, r.attachments.restore)
-	return convertAll(restored, err, toAttachment)
+	return r.attachments().each(ctx, filter, func(id string) (*Attachment, error) { return r.attachments().restore(ctx, id) })
 }
 
 func (r *queryResolver) Attachments(ctx context.Context, filter map[string]any, orderBy []map[string]any, first, last *int, after, before *string, _ *int) (*AttachmentConnection, error) {
-	page, parsed, err := r.attachments.find(ctx, filter, orderBy, first, last, after, before)
+	page, aggregates, err := r.attachments().list(ctx, filter, orderBy, first, last, after, before)
 	if err != nil {
 		return nil, err
 	}
 	connection := &AttachmentConnection{TotalCount: &page.TotalCount}
-	connection.Edges, connection.PageInfo = edgesFor(page, newAttachmentEdge, r.attachments.recordID)
-	if err := r.attachments.fillConnectionAggregates(ctx, parsed, connection); err != nil {
-		return nil, err
-	}
+	connection.Edges, connection.PageInfo = pageEdges(page, attachmentEdge)
+	fillAggregates(connection, aggregates)
 	return connection, nil
 }
 
 func (r *queryResolver) Attachment(ctx context.Context, filter map[string]any) (*Attachment, error) {
-	found, err := r.attachments.findFirst(ctx, filter)
-	if err != nil || found == nil {
-		return nil, err
-	}
-	return toAttachment(*found), nil
+	return r.attachments().first(ctx, filter)
 }
 
 func (r *queryResolver) AttachmentsGroupBy(ctx context.Context, groupBy []map[string]any, filter map[string]any, orderBy []map[string]any, _ []map[string]any, _ *string, limit *int, _ *int) ([]*AttachmentGroupByConnection, error) {
-	groups, err := r.attachments.groupBy(ctx, groupBy, filter, orderBy, limit)
+	groups, err := r.attachments().groups(ctx, groupBy, filter, orderBy, limit)
 	if err != nil {
 		return nil, err
 	}
 	connections := make([]*AttachmentGroupByConnection, len(groups))
 	for i, group := range groups {
 		connection := &AttachmentGroupByConnection{GroupByDimensionValues: group.Key}
-		connection.Edges, connection.PageInfo = edgesFor(group.Records, newAttachmentEdge, r.attachments.recordID)
+		connection.Edges, connection.PageInfo = pageEdges(group.Records, attachmentEdge)
 		fillAggregates(connection, group.Aggregates)
 		connections[i] = connection
 	}

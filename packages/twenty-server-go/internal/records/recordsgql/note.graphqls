@@ -1,0 +1,155 @@
+type RichText {
+  blocknote: String
+  markdown: String
+}
+
+input RichTextFilter {
+  blocknote: StringFilter
+  markdown: StringFilter
+}
+
+input RichTextOrderByInput {
+  blocknote: OrderByDirection
+  markdown: OrderByDirection
+}
+
+input RichTextCreateInput {
+  blocknote: String
+  markdown: String
+}
+
+type Note {
+  title: String
+  bodyV2: RichText
+  id: UUID!
+  position: Position!
+  createdBy: Actor!
+  updatedBy: Actor!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
+
+type NoteEdge {
+  node: Note!
+  cursor: Cursor!
+}
+
+type NoteConnection {
+  totalCount: Int
+  edges: [NoteEdge!]!
+  pageInfo: PageInfo!
+}
+
+input NoteFilterInput {
+  title: StringFilter
+  bodyV2: RichTextFilter
+  id: UUIDFilter
+  position: FloatFilter
+  createdBy: ActorFilter
+  updatedBy: ActorFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  deletedAt: DateTimeFilter
+  and: [NoteFilterInput]
+  or: [NoteFilterInput]
+  not: NoteFilterInput
+}
+
+input NoteOrderByInput {
+  title: OrderByDirection
+  bodyV2: RichTextOrderByInput
+  id: OrderByDirection
+  position: OrderByDirection
+  createdBy: ActorOrderByInput
+  updatedBy: ActorOrderByInput
+  createdAt: OrderByDirection
+  updatedAt: OrderByDirection
+  deletedAt: OrderByDirection
+}
+
+input NoteCreateInput {
+  id: UUID
+  title: String
+  bodyV2: RichTextCreateInput
+  position: Float
+}
+
+input NoteUpdateInput {
+  title: String
+  bodyV2: RichTextCreateInput
+  position: Float
+}
+
+type NoteTarget {
+  noteId: ID
+  targetCompanyId: ID
+  targetOpportunityId: ID
+  targetPersonId: ID
+  id: UUID!
+  position: Position!
+  createdBy: Actor!
+  updatedBy: Actor!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
+
+type NoteTargetEdge {
+  node: NoteTarget!
+  cursor: Cursor!
+}
+
+type NoteTargetConnection {
+  totalCount: Int
+  edges: [NoteTargetEdge!]!
+  pageInfo: PageInfo!
+}
+
+input NoteTargetFilterInput {
+  noteId: UUIDFilter
+  targetCompanyId: UUIDFilter
+  targetOpportunityId: UUIDFilter
+  targetPersonId: UUIDFilter
+  id: UUIDFilter
+  position: FloatFilter
+  createdBy: ActorFilter
+  updatedBy: ActorFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  deletedAt: DateTimeFilter
+  and: [NoteTargetFilterInput]
+  or: [NoteTargetFilterInput]
+  not: NoteTargetFilterInput
+}
+
+input NoteTargetOrderByInput {
+  noteId: OrderByDirection
+  targetCompanyId: OrderByDirection
+  targetOpportunityId: OrderByDirection
+  targetPersonId: OrderByDirection
+  id: OrderByDirection
+  position: OrderByDirection
+  createdBy: ActorOrderByInput
+  updatedBy: ActorOrderByInput
+  createdAt: OrderByDirection
+  updatedAt: OrderByDirection
+  deletedAt: OrderByDirection
+}
+
+input NoteTargetCreateInput {
+  id: UUID
+  noteId: UUID
+  targetCompanyId: UUID
+  targetOpportunityId: UUID
+  targetPersonId: UUID
+  position: Float
+}
+
+input NoteTargetUpdateInput {
+  noteId: UUID
+  targetCompanyId: UUID
+  targetOpportunityId: UUID
+  targetPersonId: UUID
+  position: Float
+}

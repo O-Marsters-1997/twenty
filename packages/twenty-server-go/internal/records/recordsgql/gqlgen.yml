@@ -1,8 +1,15 @@
 schema:
   - person.graphqls
+  - company.graphqls
+  - opportunity.graphqls
   - aggregate.graphqls
   - timelineactivity.graphqls
   - attachment.graphqls
+  - workspaceMember.graphqls
+  - dashboard.graphqls
+  - note.graphqls
+  - task.graphqls
+  - noteTaskOperations.graphqls
 exec:
   filename: generated.go
   package: recordsgql
@@ -49,6 +56,70 @@ models:
   AttachmentOrderByWithGroupByInput:
     model: map[string]interface{}
   AttachmentGroupByInput:
+    model: map[string]interface{}
+  WorkspaceMemberFilterInput:
+    model: map[string]interface{}
+  WorkspaceMemberOrderByInput:
+    model: map[string]interface{}
+  WorkspaceMemberOrderByWithGroupByInput:
+    model: map[string]interface{}
+  WorkspaceMemberGroupByInput:
+    model: map[string]interface{}
+  DashboardFilterInput:
+    model: map[string]interface{}
+  DashboardOrderByInput:
+    model: map[string]interface{}
+  DashboardOrderByWithGroupByInput:
+    model: map[string]interface{}
+  DashboardGroupByInput:
+    model: map[string]interface{}
+  CompanyFilterInput:
+    model: map[string]interface{}
+  CompanyOrderByInput:
+    model: map[string]interface{}
+  CompanyOrderByWithGroupByInput:
+    model: map[string]interface{}
+  CompanyGroupByInput:
+    model: map[string]interface{}
+  OpportunityFilterInput:
+    model: map[string]interface{}
+  OpportunityOrderByInput:
+    model: map[string]interface{}
+  OpportunityOrderByWithGroupByInput:
+    model: map[string]interface{}
+  OpportunityGroupByInput:
+    model: map[string]interface{}
+  NoteFilterInput:
+    model: map[string]interface{}
+  NoteOrderByInput:
+    model: map[string]interface{}
+  NoteOrderByWithGroupByInput:
+    model: map[string]interface{}
+  NoteGroupByInput:
+    model: map[string]interface{}
+  NoteTargetFilterInput:
+    model: map[string]interface{}
+  NoteTargetOrderByInput:
+    model: map[string]interface{}
+  NoteTargetOrderByWithGroupByInput:
+    model: map[string]interface{}
+  NoteTargetGroupByInput:
+    model: map[string]interface{}
+  TaskFilterInput:
+    model: map[string]interface{}
+  TaskOrderByInput:
+    model: map[string]interface{}
+  TaskOrderByWithGroupByInput:
+    model: map[string]interface{}
+  TaskGroupByInput:
+    model: map[string]interface{}
+  TaskTargetFilterInput:
+    model: map[string]interface{}
+  TaskTargetOrderByInput:
+    model: map[string]interface{}
+  TaskTargetOrderByWithGroupByInput:
+    model: map[string]interface{}
+  TaskTargetGroupByInput:
     model: map[string]interface{}
   JSON:
     model: github.com/99designs/gqlgen/graphql.Any

@@ -10,19 +10,21 @@ import (
 
 const bulkPageSize = 200
 
-type Stores struct {
-	People             records.People
-	TimelineActivities records.TimelineActivities
-	Attachments        records.Attachments
-}
-
 type Resolver struct {
 	Store              records.People
-	timelineActivities *objectOps[records.TimelineActivity, records.TimelineActivityInput]
-	attachments        *objectOps[records.Attachment, records.AttachmentInput]
+	Companies          records.Companies
+	Opportunities      records.Opportunities
+	WorkspaceMembers   records.WorkspaceMembers
+	Dashboards         records.Dashboards
+	TimelineActivities records.TimelineActivities
+	Attachments        records.Attachments
+	Notes              records.Notes
+	NoteTargets        records.NoteTargets
+	Tasks              records.Tasks
+	TaskTargets        records.TaskTargets
 }
 
-func actorFrom(ctx context.Context) (records.Actor, error) {
+func (r *Resolver) actor(ctx context.Context) (records.Actor, error) {
 	principal, ok := auth.PrincipalFrom(ctx)
 	if !ok {
 		return records.Actor{}, auth.ErrUnauthenticated
@@ -54,7 +56,7 @@ func (r *mutationResolver) CreatePerson(ctx context.Context, data *PersonCreateI
 	if data == nil {
 		data = &PersonCreateInput{}
 	}
-	actor, err := actorFrom(ctx)
+	actor, err := r.actor(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +80,7 @@ func (r *mutationResolver) CreatePeople(ctx context.Context, data []*PersonCreat
 }
 
 func (r *mutationResolver) update(ctx context.Context, id string, data PersonUpdateInput) (*Person, error) {
-	actor, err := actorFrom(ctx)
+	actor, err := r.actor(ctx)
 	if err != nil {
 		return nil, err
 	}

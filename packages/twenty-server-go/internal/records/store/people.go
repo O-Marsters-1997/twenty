@@ -5,16 +5,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"slices"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/jackc/pgx/v5/pgxpool"
 
-	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/model"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records/store/db"
-	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/workspace"
 )
 
 const defaultPageSize = 60
@@ -24,30 +21,23 @@ const personColumns = `"id", "createdAt", "updatedAt", "deletedAt", "nameFirstNa
 type personRow = db.Workspace2abogkkt2zd45pa9aun09djpfPerson
 
 type People struct {
-	*rowset[records.Person]
+	*recordTable[records.Person]
 	queries *db.Queries
 }
 
 var _ records.People = (*People)(nil)
 
 func NewPeople(pool *pgxpool.Pool) *People {
-	index := slices.IndexFunc(model.Objects, func(object model.Object) bool { return object.NameSingular == "person" })
-	if index < 0 {
-		panic("object model has no person object")
+	scan := func(row pgx.Row) (records.Person, error) {
+		scanned, err := scanPerson(row)
+		if err != nil {
+			return records.Person{}, err
+		}
+		return toPerson(scanned)
 	}
 	return &People{
-		rowset: &rowset[records.Person]{
-			pool: pool, object: model.Objects[index], table: workspace.SchemaName() + `."person"`, columns: personColumns, label: "people",
-			scan: func(row pgx.Row) (records.Person, error) {
-				scanned, err := scanPerson(row)
-				if err != nil {
-					return records.Person{}, err
-				}
-				return toPerson(scanned)
-			},
-			id: func(person records.Person) string { return person.ID },
-		},
-		queries: db.New(pool),
+		recordTable: newRecordTable(pool, "person", personColumns, scan, func(person records.Person) string { return person.ID }),
+		queries:     db.New(pool),
 	}
 }
 
@@ -149,25 +139,25 @@ func (p *People) Update(ctx context.Context, actor records.Actor, id string, inp
 }
 
 func (p *People) SoftDelete(ctx context.Context, id string) error {
-	return p.affect(ctx, id, p.queries.SoftDeletePerson)
+	return affect(ctx, id, "person", p.queries.SoftDeletePerson)
 }
 
 func (p *People) Restore(ctx context.Context, id string) error {
-	return p.affect(ctx, id, p.queries.RestorePerson)
+	return affect(ctx, id, "person", p.queries.RestorePerson)
 }
 
 func (p *People) Destroy(ctx context.Context, id string) error {
-	return p.affect(ctx, id, p.queries.DestroyPerson)
+	return affect(ctx, id, "person", p.queries.DestroyPerson)
 }
 
-func (p *People) affect(ctx context.Context, id string, run func(context.Context, pgtype.UUID) (int64, error)) error {
+func affect(ctx context.Context, id, label string, run func(context.Context, pgtype.UUID) (int64, error)) error {
 	uuid, err := parseUUID(id)
 	if err != nil {
 		return err
 	}
 	affected, err := run(ctx, uuid)
 	if err != nil {
-		return fmt.Errorf("write person: %w", err)
+		return fmt.Errorf("write %s: %w", label, err)
 	}
 	if affected == 0 {
 		return records.ErrNotFound

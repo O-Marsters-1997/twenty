@@ -25,6 +25,8 @@ var aggregatableFields = []string{
 
 var dateAggregatableFields = []string{"createdAt", "deletedAt", "updatedAt"}
 
+var currencyAggregatableFields = []string{"amount", "annualRevenue"}
+
 var personAggregates = buildAggregatesByFieldName(aggregatableFields, dateAggregatableFields)
 
 func aggregatesOf(object model.Object) map[string]records.Aggregate {
@@ -50,6 +52,11 @@ func buildAggregatesByFieldName(fields, dateFields []string) map[string]records.
 		}
 		for _, operation := range operations {
 			lookup[string(operation)+strings.ToUpper(field[:1])+field[1:]] = records.Aggregate{Field: field, Operation: operation}
+		}
+		if slices.Contains(currencyAggregatableFields, field) {
+			for _, operation := range []records.AggregateOperation{"min", "max", "avg", "sum"} {
+				lookup[string(operation)+strings.ToUpper(field[:1])+field[1:]+"AmountMicros"] = records.Aggregate{Field: field, Operation: operation}
+			}
 		}
 	}
 	return lookup

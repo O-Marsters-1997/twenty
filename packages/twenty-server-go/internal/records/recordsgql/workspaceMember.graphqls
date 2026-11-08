@@ -1,0 +1,437 @@
+enum WorkspaceMemberDateFormatEnum {
+  SYSTEM
+  MONTH_FIRST
+  DAY_FIRST
+  YEAR_FIRST
+}
+
+enum WorkspaceMemberTimeFormatEnum {
+  SYSTEM
+  HOUR_24
+  HOUR_12
+}
+
+enum WorkspaceMemberNumberFormatEnum {
+  SYSTEM
+  COMMAS_AND_DOT
+  SPACES_AND_COMMA
+  DOTS_AND_COMMA
+  APOSTROPHE_AND_DOT
+}
+
+type WorkspaceMember {
+  id: UUID!
+  name: FullName
+  colorScheme: String!
+  uiScale: String!
+  openRecordIn: String!
+  locale: String!
+  avatarUrl: String
+  userEmail: String
+  jobTitle: String
+  calendarStartDay: Float!
+  userId: UUID!
+  timeZone: String!
+  dateFormat: WorkspaceMemberDateFormatEnum!
+  timeFormat: WorkspaceMemberTimeFormatEnum!
+  numberFormat: WorkspaceMemberNumberFormatEnum!
+  position: Position!
+  createdBy: Actor!
+  updatedBy: Actor!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
+
+type WorkspaceMemberEdge {
+  node: WorkspaceMember!
+  cursor: Cursor!
+}
+
+type WorkspaceMemberConnection {
+  totalCount: Int
+  edges: [WorkspaceMemberEdge!]!
+  pageInfo: PageInfo!
+  countUniqueValuesAvatarUrl: Int
+  countEmptyAvatarUrl: Int
+  countNotEmptyAvatarUrl: Int
+  percentageEmptyAvatarUrl: Float
+  percentageNotEmptyAvatarUrl: Float
+  countUniqueValuesCalendarStartDay: Int
+  countEmptyCalendarStartDay: Int
+  countNotEmptyCalendarStartDay: Int
+  percentageEmptyCalendarStartDay: Float
+  percentageNotEmptyCalendarStartDay: Float
+  countUniqueValuesColorScheme: Int
+  countEmptyColorScheme: Int
+  countNotEmptyColorScheme: Int
+  percentageEmptyColorScheme: Float
+  percentageNotEmptyColorScheme: Float
+  countUniqueValuesCreatedAt: Int
+  countEmptyCreatedAt: Int
+  countNotEmptyCreatedAt: Int
+  percentageEmptyCreatedAt: Float
+  percentageNotEmptyCreatedAt: Float
+  minCreatedAt: DateTime
+  maxCreatedAt: DateTime
+  countUniqueValuesCreatedBy: Int
+  countEmptyCreatedBy: Int
+  countNotEmptyCreatedBy: Int
+  percentageEmptyCreatedBy: Float
+  percentageNotEmptyCreatedBy: Float
+  countUniqueValuesDateFormat: Int
+  countEmptyDateFormat: Int
+  countNotEmptyDateFormat: Int
+  percentageEmptyDateFormat: Float
+  percentageNotEmptyDateFormat: Float
+  countUniqueValuesDeletedAt: Int
+  countEmptyDeletedAt: Int
+  countNotEmptyDeletedAt: Int
+  percentageEmptyDeletedAt: Float
+  percentageNotEmptyDeletedAt: Float
+  minDeletedAt: DateTime
+  maxDeletedAt: DateTime
+  countUniqueValuesId: Int
+  countEmptyId: Int
+  countNotEmptyId: Int
+  percentageEmptyId: Float
+  percentageNotEmptyId: Float
+  countUniqueValuesJobTitle: Int
+  countEmptyJobTitle: Int
+  countNotEmptyJobTitle: Int
+  percentageEmptyJobTitle: Float
+  percentageNotEmptyJobTitle: Float
+  countUniqueValuesLocale: Int
+  countEmptyLocale: Int
+  countNotEmptyLocale: Int
+  percentageEmptyLocale: Float
+  percentageNotEmptyLocale: Float
+  countUniqueValuesName: Int
+  countEmptyName: Int
+  countNotEmptyName: Int
+  percentageEmptyName: Float
+  percentageNotEmptyName: Float
+  countUniqueValuesNumberFormat: Int
+  countEmptyNumberFormat: Int
+  countNotEmptyNumberFormat: Int
+  percentageEmptyNumberFormat: Float
+  percentageNotEmptyNumberFormat: Float
+  countUniqueValuesOpenRecordIn: Int
+  countEmptyOpenRecordIn: Int
+  countNotEmptyOpenRecordIn: Int
+  percentageEmptyOpenRecordIn: Float
+  percentageNotEmptyOpenRecordIn: Float
+  countUniqueValuesPosition: Int
+  countEmptyPosition: Int
+  countNotEmptyPosition: Int
+  percentageEmptyPosition: Float
+  percentageNotEmptyPosition: Float
+  countUniqueValuesTimeFormat: Int
+  countEmptyTimeFormat: Int
+  countNotEmptyTimeFormat: Int
+  percentageEmptyTimeFormat: Float
+  percentageNotEmptyTimeFormat: Float
+  countUniqueValuesTimeZone: Int
+  countEmptyTimeZone: Int
+  countNotEmptyTimeZone: Int
+  percentageEmptyTimeZone: Float
+  percentageNotEmptyTimeZone: Float
+  countUniqueValuesUiScale: Int
+  countEmptyUiScale: Int
+  countNotEmptyUiScale: Int
+  percentageEmptyUiScale: Float
+  percentageNotEmptyUiScale: Float
+  countUniqueValuesUpdatedAt: Int
+  countEmptyUpdatedAt: Int
+  countNotEmptyUpdatedAt: Int
+  percentageEmptyUpdatedAt: Float
+  percentageNotEmptyUpdatedAt: Float
+  minUpdatedAt: DateTime
+  maxUpdatedAt: DateTime
+  countUniqueValuesUpdatedBy: Int
+  countEmptyUpdatedBy: Int
+  countNotEmptyUpdatedBy: Int
+  percentageEmptyUpdatedBy: Float
+  percentageNotEmptyUpdatedBy: Float
+  countUniqueValuesUserEmail: Int
+  countEmptyUserEmail: Int
+  countNotEmptyUserEmail: Int
+  percentageEmptyUserEmail: Float
+  percentageNotEmptyUserEmail: Float
+  countUniqueValuesUserId: Int
+  countEmptyUserId: Int
+  countNotEmptyUserId: Int
+  percentageEmptyUserId: Float
+  percentageNotEmptyUserId: Float
+}
+
+type WorkspaceMemberGroupByConnection {
+  totalCount: Int
+  edges: [WorkspaceMemberEdge!]!
+  pageInfo: PageInfo!
+  groupByDimensionValues: JSON!
+  countUniqueValuesAvatarUrl: Int
+  countEmptyAvatarUrl: Int
+  countNotEmptyAvatarUrl: Int
+  percentageEmptyAvatarUrl: Float
+  percentageNotEmptyAvatarUrl: Float
+  countUniqueValuesCalendarStartDay: Int
+  countEmptyCalendarStartDay: Int
+  countNotEmptyCalendarStartDay: Int
+  percentageEmptyCalendarStartDay: Float
+  percentageNotEmptyCalendarStartDay: Float
+  countUniqueValuesColorScheme: Int
+  countEmptyColorScheme: Int
+  countNotEmptyColorScheme: Int
+  percentageEmptyColorScheme: Float
+  percentageNotEmptyColorScheme: Float
+  countUniqueValuesCreatedAt: Int
+  countEmptyCreatedAt: Int
+  countNotEmptyCreatedAt: Int
+  percentageEmptyCreatedAt: Float
+  percentageNotEmptyCreatedAt: Float
+  minCreatedAt: DateTime
+  maxCreatedAt: DateTime
+  countUniqueValuesCreatedBy: Int
+  countEmptyCreatedBy: Int
+  countNotEmptyCreatedBy: Int
+  percentageEmptyCreatedBy: Float
+  percentageNotEmptyCreatedBy: Float
+  countUniqueValuesDateFormat: Int
+  countEmptyDateFormat: Int
+  countNotEmptyDateFormat: Int
+  percentageEmptyDateFormat: Float
+  percentageNotEmptyDateFormat: Float
+  countUniqueValuesDeletedAt: Int
+  countEmptyDeletedAt: Int
+  countNotEmptyDeletedAt: Int
+  percentageEmptyDeletedAt: Float
+  percentageNotEmptyDeletedAt: Float
+  minDeletedAt: DateTime
+  maxDeletedAt: DateTime
+  countUniqueValuesId: Int
+  countEmptyId: Int
+  countNotEmptyId: Int
+  percentageEmptyId: Float
+  percentageNotEmptyId: Float
+  countUniqueValuesJobTitle: Int
+  countEmptyJobTitle: Int
+  countNotEmptyJobTitle: Int
+  percentageEmptyJobTitle: Float
+  percentageNotEmptyJobTitle: Float
+  countUniqueValuesLocale: Int
+  countEmptyLocale: Int
+  countNotEmptyLocale: Int
+  percentageEmptyLocale: Float
+  percentageNotEmptyLocale: Float
+  countUniqueValuesName: Int
+  countEmptyName: Int
+  countNotEmptyName: Int
+  percentageEmptyName: Float
+  percentageNotEmptyName: Float
+  countUniqueValuesNumberFormat: Int
+  countEmptyNumberFormat: Int
+  countNotEmptyNumberFormat: Int
+  percentageEmptyNumberFormat: Float
+  percentageNotEmptyNumberFormat: Float
+  countUniqueValuesOpenRecordIn: Int
+  countEmptyOpenRecordIn: Int
+  countNotEmptyOpenRecordIn: Int
+  percentageEmptyOpenRecordIn: Float
+  percentageNotEmptyOpenRecordIn: Float
+  countUniqueValuesPosition: Int
+  countEmptyPosition: Int
+  countNotEmptyPosition: Int
+  percentageEmptyPosition: Float
+  percentageNotEmptyPosition: Float
+  countUniqueValuesTimeFormat: Int
+  countEmptyTimeFormat: Int
+  countNotEmptyTimeFormat: Int
+  percentageEmptyTimeFormat: Float
+  percentageNotEmptyTimeFormat: Float
+  countUniqueValuesTimeZone: Int
+  countEmptyTimeZone: Int
+  countNotEmptyTimeZone: Int
+  percentageEmptyTimeZone: Float
+  percentageNotEmptyTimeZone: Float
+  countUniqueValuesUiScale: Int
+  countEmptyUiScale: Int
+  countNotEmptyUiScale: Int
+  percentageEmptyUiScale: Float
+  percentageNotEmptyUiScale: Float
+  countUniqueValuesUpdatedAt: Int
+  countEmptyUpdatedAt: Int
+  countNotEmptyUpdatedAt: Int
+  percentageEmptyUpdatedAt: Float
+  percentageNotEmptyUpdatedAt: Float
+  minUpdatedAt: DateTime
+  maxUpdatedAt: DateTime
+  countUniqueValuesUpdatedBy: Int
+  countEmptyUpdatedBy: Int
+  countNotEmptyUpdatedBy: Int
+  percentageEmptyUpdatedBy: Float
+  percentageNotEmptyUpdatedBy: Float
+  countUniqueValuesUserEmail: Int
+  countEmptyUserEmail: Int
+  countNotEmptyUserEmail: Int
+  percentageEmptyUserEmail: Float
+  percentageNotEmptyUserEmail: Float
+  countUniqueValuesUserId: Int
+  countEmptyUserId: Int
+  countNotEmptyUserId: Int
+  percentageEmptyUserId: Float
+  percentageNotEmptyUserId: Float
+}
+
+input WorkspaceMemberDateFormatEnumFilter {
+  eq: WorkspaceMemberDateFormatEnum
+  neq: WorkspaceMemberDateFormatEnum
+  in: [WorkspaceMemberDateFormatEnum!]
+  is: FilterIs
+}
+
+input WorkspaceMemberTimeFormatEnumFilter {
+  eq: WorkspaceMemberTimeFormatEnum
+  neq: WorkspaceMemberTimeFormatEnum
+  in: [WorkspaceMemberTimeFormatEnum!]
+  is: FilterIs
+}
+
+input WorkspaceMemberNumberFormatEnumFilter {
+  eq: WorkspaceMemberNumberFormatEnum
+  neq: WorkspaceMemberNumberFormatEnum
+  in: [WorkspaceMemberNumberFormatEnum!]
+  is: FilterIs
+}
+
+input WorkspaceMemberFilterInput {
+  id: UUIDFilter
+  name: FullNameFilter
+  colorScheme: StringFilter
+  uiScale: StringFilter
+  openRecordIn: StringFilter
+  locale: StringFilter
+  avatarUrl: StringFilter
+  userEmail: StringFilter
+  jobTitle: StringFilter
+  calendarStartDay: FloatFilter
+  userId: UUIDFilter
+  timeZone: StringFilter
+  dateFormat: WorkspaceMemberDateFormatEnumFilter
+  timeFormat: WorkspaceMemberTimeFormatEnumFilter
+  numberFormat: WorkspaceMemberNumberFormatEnumFilter
+  position: FloatFilter
+  createdBy: ActorFilter
+  updatedBy: ActorFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  deletedAt: DateTimeFilter
+  and: [WorkspaceMemberFilterInput]
+  or: [WorkspaceMemberFilterInput]
+  not: WorkspaceMemberFilterInput
+}
+
+input WorkspaceMemberOrderByInput {
+  id: OrderByDirection
+  name: FullNameOrderByInput
+  colorScheme: OrderByDirection
+  uiScale: OrderByDirection
+  openRecordIn: OrderByDirection
+  locale: OrderByDirection
+  avatarUrl: OrderByDirection
+  userEmail: OrderByDirection
+  jobTitle: OrderByDirection
+  calendarStartDay: OrderByDirection
+  userId: OrderByDirection
+  timeZone: OrderByDirection
+  dateFormat: OrderByDirection
+  timeFormat: OrderByDirection
+  numberFormat: OrderByDirection
+  position: OrderByDirection
+  createdBy: ActorOrderByInput
+  updatedBy: ActorOrderByInput
+  createdAt: OrderByDirection
+  updatedAt: OrderByDirection
+  deletedAt: OrderByDirection
+}
+
+input WorkspaceMemberGroupByInput {
+  name: FullNameGroupByInput
+  colorScheme: Boolean
+  uiScale: Boolean
+  openRecordIn: Boolean
+  locale: Boolean
+  jobTitle: Boolean
+  timeZone: Boolean
+  dateFormat: Boolean
+  timeFormat: Boolean
+  numberFormat: Boolean
+}
+
+input WorkspaceMemberOrderByWithGroupByInput {
+  name: FullNameOrderByInput
+  colorScheme: OrderByDirection
+  uiScale: OrderByDirection
+  openRecordIn: OrderByDirection
+  locale: OrderByDirection
+  jobTitle: OrderByDirection
+  timeZone: OrderByDirection
+  dateFormat: OrderByDirection
+  timeFormat: OrderByDirection
+  numberFormat: OrderByDirection
+}
+
+input WorkspaceMemberCreateInput {
+  id: UUID
+  name: FullNameCreateInput
+  colorScheme: String
+  uiScale: String
+  openRecordIn: String
+  locale: String
+  avatarUrl: String
+  userEmail: String
+  jobTitle: String
+  calendarStartDay: Float
+  userId: UUID
+  timeZone: String
+  dateFormat: WorkspaceMemberDateFormatEnum
+  timeFormat: WorkspaceMemberTimeFormatEnum
+  numberFormat: WorkspaceMemberNumberFormatEnum
+  position: Float
+}
+
+input WorkspaceMemberUpdateInput {
+  name: FullNameCreateInput
+  colorScheme: String
+  uiScale: String
+  openRecordIn: String
+  locale: String
+  avatarUrl: String
+  userEmail: String
+  jobTitle: String
+  calendarStartDay: Float
+  userId: UUID
+  timeZone: String
+  dateFormat: WorkspaceMemberDateFormatEnum
+  timeFormat: WorkspaceMemberTimeFormatEnum
+  numberFormat: WorkspaceMemberNumberFormatEnum
+  position: Float
+}
+
+extend type Query {
+  workspaceMembers(filter: WorkspaceMemberFilterInput, orderBy: [WorkspaceMemberOrderByInput], first: Int, last: Int, after: String, before: String, offset: Int): WorkspaceMemberConnection!
+  workspaceMember(filter: WorkspaceMemberFilterInput): WorkspaceMember
+  workspaceMembersGroupBy(groupBy: [WorkspaceMemberGroupByInput!]!, filter: WorkspaceMemberFilterInput, orderBy: [WorkspaceMemberOrderByWithGroupByInput!], orderByForRecords: [WorkspaceMemberOrderByInput!], viewId: UUID, limit: Int, offsetForRecords: Int): [WorkspaceMemberGroupByConnection!]!
+}
+
+extend type Mutation {
+  createWorkspaceMember(data: WorkspaceMemberCreateInput): WorkspaceMember
+  createWorkspaceMembers(data: [WorkspaceMemberCreateInput!]!, upsert: Boolean): [WorkspaceMember!]
+  updateWorkspaceMember(id: UUID!, data: WorkspaceMemberUpdateInput!): WorkspaceMember
+  updateWorkspaceMembers(filter: WorkspaceMemberFilterInput!, data: WorkspaceMemberUpdateInput!): [WorkspaceMember!]
+  deleteWorkspaceMember(id: UUID!): WorkspaceMember
+  deleteWorkspaceMembers(filter: WorkspaceMemberFilterInput!): [WorkspaceMember!]
+  destroyWorkspaceMember(id: UUID!): WorkspaceMember
+  destroyWorkspaceMembers(filter: WorkspaceMemberFilterInput!): [WorkspaceMember!]
+  restoreWorkspaceMembers(filter: WorkspaceMemberFilterInput!): [WorkspaceMember!]
+}
