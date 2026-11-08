@@ -12,7 +12,7 @@ import (
 
 var objectOperations = []string{"ObjectMetadataItems", "GetToolIndex", "GetToolInputSchema"}
 
-func metadataHandler(objects, skills, views http.Handler) http.Handler {
+func metadataHandler(objects, chat, skills, views http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		body, err := io.ReadAll(r.Body)
 		if err != nil {
@@ -30,6 +30,8 @@ func metadataHandler(objects, skills, views http.Handler) http.Handler {
 		switch {
 		case slices.Contains(objectOperations, request.OperationName):
 			objects.ServeHTTP(w, r)
+		case slices.Contains(frontdoor.ChatOperations, request.OperationName):
+			chat.ServeHTTP(w, r)
 		case slices.Contains(frontdoor.SkillOperations, request.OperationName):
 			skills.ServeHTTP(w, r)
 		default:
