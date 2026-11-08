@@ -21,9 +21,10 @@ func NewHandler(pager Pager, logger *slog.Logger) http.Handler {
 	server.SetErrorPresenter(func(ctx context.Context, err error) *gqlerror.Error {
 		presented := graphql.DefaultErrorPresenter(ctx, err)
 		code := "INTERNAL_SERVER_ERROR"
-		if errors.Is(err, store.ErrInvalidPaging) {
+		switch {
+		case errors.Is(err, store.ErrInvalidPaging), presented.Path == nil:
 			code = "BAD_USER_INPUT"
-		} else {
+		default:
 			logger.Error("resolve graphql", "err", err)
 		}
 		presented.Extensions = map[string]any{"code": code}

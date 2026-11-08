@@ -151,8 +151,12 @@ func TestObjectMetadataItems(t *testing.T) {
 
 	t.Run("an invalid page size is a graphql error", func(t *testing.T) {
 		response := send(t, server, "ObjectMetadataItems", `query ObjectMetadataItems { objects(paging: { first: 5000 }) { edges { node { id } } } }`)
-		if errs, _ := response["errors"].([]any); len(errs) != 1 {
-			t.Errorf("response = %v, want one error", response)
+		errs, _ := response["errors"].([]any)
+		if len(errs) != 1 {
+			t.Fatalf("response = %v, want one error", response)
+		}
+		if code := errs[0].(map[string]any)["extensions"].(map[string]any)["code"]; code != "BAD_USER_INPUT" {
+			t.Errorf("error code = %v, want BAD_USER_INPUT", code)
 		}
 	})
 }
