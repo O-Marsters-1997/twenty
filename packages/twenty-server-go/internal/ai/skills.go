@@ -99,7 +99,7 @@ func (s *Skills) SetActive(ctx context.Context, id string, active bool) (SkillRe
 	return oneSkill(ctx, s.pool, `UPDATE core.skill AS s SET "isActive" = $2, "updatedAt" = now() WHERE s.id = $1::uuid RETURNING to_jsonb(s)`, id, active)
 }
 
-// Resolve returns the active skills among ids, which is how an agent's SkillIDs reach their content.
+// Resolve returns the active skills among ids.
 func (s *Skills) Resolve(ctx context.Context, ids []string) ([]Skill, error) {
 	if len(ids) == 0 {
 		return nil, nil
@@ -115,7 +115,6 @@ func (s *Skills) Resolve(ctx context.Context, ids []string) ([]Skill, error) {
 	return skills, nil
 }
 
-// explainMiss tells a standard skill from a missing one after a custom-only statement matched no row.
 func (s *Skills) explainMiss(ctx context.Context, id string, record SkillRecord, err error) (SkillRecord, error) {
 	if !errors.Is(err, metadata.ErrNotFound) {
 		return record, err
