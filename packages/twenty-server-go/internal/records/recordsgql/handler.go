@@ -14,9 +14,9 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records"
 )
 
-// NewHandler serves the Person operations over GraphQL; the caller supplies the principal in the request context.
-func NewHandler(people records.People, companies records.Companies, opportunities records.Opportunities, logger *slog.Logger) http.Handler {
-	server := handler.New(NewExecutableSchema(Config{Resolvers: &Resolver{Store: people, Companies: companies, Opportunities: opportunities}}))
+// NewHandler serves the record operations over GraphQL; the caller supplies the principal in the request context.
+func NewHandler(resolver *Resolver, logger *slog.Logger) http.Handler {
+	server := handler.New(NewExecutableSchema(Config{Resolvers: resolver}))
 	server.AddTransport(transport.POST{})
 	server.SetErrorPresenter(func(ctx context.Context, err error) *gqlerror.Error {
 		presented := graphql.DefaultErrorPresenter(ctx, err)

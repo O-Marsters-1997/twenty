@@ -18,11 +18,11 @@ const (
 )
 
 var aggregatableFields = []string{
-	"address", "amount", "annualRevenue", "avatarFile", "avatarUrl", "closeDate", "createdAt", "createdBy", "deletedAt", "domainName", "emails", "id", "jobTitle",
-	"linkedinLink", "name", "phones", "position", "stage", "updatedAt", "updatedBy",
+	"address", "amount", "annualRevenue", "avatarFile", "avatarUrl", "bodyV2", "closeDate", "createdAt", "createdBy", "deletedAt", "domainName", "dueAt", "emails", "id", "jobTitle",
+	"linkedinLink", "name", "phones", "position", "stage", "status", "title", "updatedAt", "updatedBy",
 }
 
-var dateAggregatableFields = []string{"closeDate", "createdAt", "deletedAt", "updatedAt"}
+var dateAggregatableFields = []string{"closeDate", "createdAt", "deletedAt", "dueAt", "updatedAt"}
 
 var currencyAggregatableFields = []string{"amount", "annualRevenue"}
 

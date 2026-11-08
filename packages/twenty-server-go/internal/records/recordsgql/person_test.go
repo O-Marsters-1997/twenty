@@ -41,7 +41,9 @@ func newServerWithPool(t *testing.T) (*httptest.Server, *pgxpool.Pool) {
 	}
 	t.Cleanup(pool.Close)
 	table := frontdoor.OperationTable{frontdoor.EndpointWorkspace: {}}
-	for _, name := range []string{"Create", "Find", "Update", "Delete", "Restore", "Destroy", "AggregatePeople", "PeopleGroupByAggregates", "PeopleGroupByRecords", "FindCompanies", "AggregateCompanies", "CompaniesGroupByAggregates", "CompaniesGroupByRecords", "FindOpportunities", "AggregateOpportunities", "OpportunitiesGroupByAggregates", "OpportunitiesGroupByRecords"} {
+	for _, name := range []string{"Create", "Find", "Update", "Delete", "Restore", "Destroy", "AggregatePeople", "PeopleGroupByAggregates", "PeopleGroupByRecords",
+		"FindCompanies", "AggregateCompanies", "CompaniesGroupByAggregates", "CompaniesGroupByRecords", "FindOpportunities", "AggregateOpportunities", "OpportunitiesGroupByAggregates", "OpportunitiesGroupByRecords",
+		"AggregateNotes", "TasksGroupByRecords", "NoteTargetsGroupByAggregates"} {
 		table[frontdoor.EndpointWorkspace][name] = frontdoor.RouteGo
 	}
 	logger := slog.New(slog.NewTextHandler(io.Discard, nil))
@@ -49,7 +51,15 @@ func newServerWithPool(t *testing.T) (*httptest.Server, *pgxpool.Pool) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	server := httptest.NewServer(frontdoor.NewHandler(table, upstream, verifier{}, recordsgql.NewHandler(store.NewPeople(pool), store.NewCompanies(pool), store.NewOpportunities(pool), logger), logger))
+	server := httptest.NewServer(frontdoor.NewHandler(table, upstream, verifier{}, recordsgql.NewHandler(&recordsgql.Resolver{
+		Store:         store.NewPeople(pool),
+		Companies:     store.NewCompanies(pool),
+		Opportunities: store.NewOpportunities(pool),
+		Notes:         store.NewNotes(pool),
+		NoteTargets:   store.NewNoteTargets(pool),
+		Tasks:         store.NewTasks(pool),
+		TaskTargets:   store.NewTaskTargets(pool),
+	}, logger), logger))
 	t.Cleanup(server.Close)
 	return server, pool
 }

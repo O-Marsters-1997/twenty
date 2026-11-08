@@ -57,18 +57,10 @@ func toOpportunity(opportunity records.Opportunity) *Opportunity {
 	}
 }
 
-func companyEdges(page records.Page[records.Company]) []*CompanyEdge {
-	edges := make([]*CompanyEdge, len(page.Records))
-	for i, company := range page.Records {
-		edges[i] = &CompanyEdge{Node: toCompany(company), Cursor: records.Cursor(company.ID)}
-	}
-	return edges
+func companyEdge(company records.Company) *CompanyEdge {
+	return &CompanyEdge{Node: toCompany(company), Cursor: records.Cursor(company.ID)}
 }
 
-func opportunityEdges(page records.Page[records.Opportunity]) []*OpportunityEdge {
-	edges := make([]*OpportunityEdge, len(page.Records))
-	for i, opportunity := range page.Records {
-		edges[i] = &OpportunityEdge{Node: toOpportunity(opportunity), Cursor: records.Cursor(opportunity.ID)}
-	}
-	return edges
+func opportunityEdge(opportunity records.Opportunity) *OpportunityEdge {
+	return &OpportunityEdge{Node: toOpportunity(opportunity), Cursor: records.Cursor(opportunity.ID)}
 }

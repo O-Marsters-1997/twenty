@@ -1,0 +1,551 @@
+extend type NoteConnection {
+  countUniqueValuesBodyV2: Int
+  countEmptyBodyV2: Int
+  countNotEmptyBodyV2: Int
+  percentageEmptyBodyV2: Float
+  percentageNotEmptyBodyV2: Float
+  countUniqueValuesCreatedAt: Int
+  countEmptyCreatedAt: Int
+  countNotEmptyCreatedAt: Int
+  percentageEmptyCreatedAt: Float
+  percentageNotEmptyCreatedAt: Float
+  minCreatedAt: DateTime
+  maxCreatedAt: DateTime
+  countUniqueValuesCreatedBy: Int
+  countEmptyCreatedBy: Int
+  countNotEmptyCreatedBy: Int
+  percentageEmptyCreatedBy: Float
+  percentageNotEmptyCreatedBy: Float
+  countUniqueValuesDeletedAt: Int
+  countEmptyDeletedAt: Int
+  countNotEmptyDeletedAt: Int
+  percentageEmptyDeletedAt: Float
+  percentageNotEmptyDeletedAt: Float
+  minDeletedAt: DateTime
+  maxDeletedAt: DateTime
+  countUniqueValuesId: Int
+  countEmptyId: Int
+  countNotEmptyId: Int
+  percentageEmptyId: Float
+  percentageNotEmptyId: Float
+  countUniqueValuesPosition: Int
+  countEmptyPosition: Int
+  countNotEmptyPosition: Int
+  percentageEmptyPosition: Float
+  percentageNotEmptyPosition: Float
+  countUniqueValuesTitle: Int
+  countEmptyTitle: Int
+  countNotEmptyTitle: Int
+  percentageEmptyTitle: Float
+  percentageNotEmptyTitle: Float
+  countUniqueValuesUpdatedAt: Int
+  countEmptyUpdatedAt: Int
+  countNotEmptyUpdatedAt: Int
+  percentageEmptyUpdatedAt: Float
+  percentageNotEmptyUpdatedAt: Float
+  minUpdatedAt: DateTime
+  maxUpdatedAt: DateTime
+  countUniqueValuesUpdatedBy: Int
+  countEmptyUpdatedBy: Int
+  countNotEmptyUpdatedBy: Int
+  percentageEmptyUpdatedBy: Float
+  percentageNotEmptyUpdatedBy: Float
+}
+
+type NoteGroupByConnection {
+  totalCount: Int
+  edges: [NoteEdge!]!
+  pageInfo: PageInfo!
+  groupByDimensionValues: JSON!
+  countUniqueValuesBodyV2: Int
+  countEmptyBodyV2: Int
+  countNotEmptyBodyV2: Int
+  percentageEmptyBodyV2: Float
+  percentageNotEmptyBodyV2: Float
+  countUniqueValuesCreatedAt: Int
+  countEmptyCreatedAt: Int
+  countNotEmptyCreatedAt: Int
+  percentageEmptyCreatedAt: Float
+  percentageNotEmptyCreatedAt: Float
+  minCreatedAt: DateTime
+  maxCreatedAt: DateTime
+  countUniqueValuesCreatedBy: Int
+  countEmptyCreatedBy: Int
+  countNotEmptyCreatedBy: Int
+  percentageEmptyCreatedBy: Float
+  percentageNotEmptyCreatedBy: Float
+  countUniqueValuesDeletedAt: Int
+  countEmptyDeletedAt: Int
+  countNotEmptyDeletedAt: Int
+  percentageEmptyDeletedAt: Float
+  percentageNotEmptyDeletedAt: Float
+  minDeletedAt: DateTime
+  maxDeletedAt: DateTime
+  countUniqueValuesId: Int
+  countEmptyId: Int
+  countNotEmptyId: Int
+  percentageEmptyId: Float
+  percentageNotEmptyId: Float
+  countUniqueValuesPosition: Int
+  countEmptyPosition: Int
+  countNotEmptyPosition: Int
+  percentageEmptyPosition: Float
+  percentageNotEmptyPosition: Float
+  countUniqueValuesTitle: Int
+  countEmptyTitle: Int
+  countNotEmptyTitle: Int
+  percentageEmptyTitle: Float
+  percentageNotEmptyTitle: Float
+  countUniqueValuesUpdatedAt: Int
+  countEmptyUpdatedAt: Int
+  countNotEmptyUpdatedAt: Int
+  percentageEmptyUpdatedAt: Float
+  percentageNotEmptyUpdatedAt: Float
+  minUpdatedAt: DateTime
+  maxUpdatedAt: DateTime
+  countUniqueValuesUpdatedBy: Int
+  countEmptyUpdatedBy: Int
+  countNotEmptyUpdatedBy: Int
+  percentageEmptyUpdatedBy: Float
+  percentageNotEmptyUpdatedBy: Float
+}
+
+input NoteGroupByInput {
+  title: Boolean
+}
+
+input NoteOrderByWithGroupByInput {
+  title: OrderByDirection
+}
+
+extend type Query {
+  notes(filter: NoteFilterInput, orderBy: [NoteOrderByInput], first: Int, last: Int, after: String, before: String, offset: Int): NoteConnection!
+  note(filter: NoteFilterInput): Note
+  notesGroupBy(groupBy: [NoteGroupByInput!]!, filter: NoteFilterInput, orderBy: [NoteOrderByWithGroupByInput!], orderByForRecords: [NoteOrderByInput!], viewId: UUID, limit: Int, offsetForRecords: Int): [NoteGroupByConnection!]!
+}
+
+extend type Mutation {
+  createNote(data: NoteCreateInput): Note
+  createNotes(data: [NoteCreateInput!]!, upsert: Boolean): [Note!]
+  updateNote(id: UUID!, data: NoteUpdateInput!): Note
+  updateNotes(filter: NoteFilterInput!, data: NoteUpdateInput!): [Note!]
+  deleteNote(id: UUID!): Note
+  deleteNotes(filter: NoteFilterInput!): [Note!]
+  destroyNote(id: UUID!): Note
+  destroyNotes(filter: NoteFilterInput!): [Note!]
+  restoreNotes(filter: NoteFilterInput!): [Note!]
+}
+
+extend type NoteTargetConnection {
+  countUniqueValuesCreatedAt: Int
+  countEmptyCreatedAt: Int
+  countNotEmptyCreatedAt: Int
+  percentageEmptyCreatedAt: Float
+  percentageNotEmptyCreatedAt: Float
+  minCreatedAt: DateTime
+  maxCreatedAt: DateTime
+  countUniqueValuesCreatedBy: Int
+  countEmptyCreatedBy: Int
+  countNotEmptyCreatedBy: Int
+  percentageEmptyCreatedBy: Float
+  percentageNotEmptyCreatedBy: Float
+  countUniqueValuesDeletedAt: Int
+  countEmptyDeletedAt: Int
+  countNotEmptyDeletedAt: Int
+  percentageEmptyDeletedAt: Float
+  percentageNotEmptyDeletedAt: Float
+  minDeletedAt: DateTime
+  maxDeletedAt: DateTime
+  countUniqueValuesId: Int
+  countEmptyId: Int
+  countNotEmptyId: Int
+  percentageEmptyId: Float
+  percentageNotEmptyId: Float
+  countUniqueValuesPosition: Int
+  countEmptyPosition: Int
+  countNotEmptyPosition: Int
+  percentageEmptyPosition: Float
+  percentageNotEmptyPosition: Float
+  countUniqueValuesUpdatedAt: Int
+  countEmptyUpdatedAt: Int
+  countNotEmptyUpdatedAt: Int
+  percentageEmptyUpdatedAt: Float
+  percentageNotEmptyUpdatedAt: Float
+  minUpdatedAt: DateTime
+  maxUpdatedAt: DateTime
+  countUniqueValuesUpdatedBy: Int
+  countEmptyUpdatedBy: Int
+  countNotEmptyUpdatedBy: Int
+  percentageEmptyUpdatedBy: Float
+  percentageNotEmptyUpdatedBy: Float
+}
+
+type NoteTargetGroupByConnection {
+  totalCount: Int
+  edges: [NoteTargetEdge!]!
+  pageInfo: PageInfo!
+  groupByDimensionValues: JSON!
+  countUniqueValuesCreatedAt: Int
+  countEmptyCreatedAt: Int
+  countNotEmptyCreatedAt: Int
+  percentageEmptyCreatedAt: Float
+  percentageNotEmptyCreatedAt: Float
+  minCreatedAt: DateTime
+  maxCreatedAt: DateTime
+  countUniqueValuesCreatedBy: Int
+  countEmptyCreatedBy: Int
+  countNotEmptyCreatedBy: Int
+  percentageEmptyCreatedBy: Float
+  percentageNotEmptyCreatedBy: Float
+  countUniqueValuesDeletedAt: Int
+  countEmptyDeletedAt: Int
+  countNotEmptyDeletedAt: Int
+  percentageEmptyDeletedAt: Float
+  percentageNotEmptyDeletedAt: Float
+  minDeletedAt: DateTime
+  maxDeletedAt: DateTime
+  countUniqueValuesId: Int
+  countEmptyId: Int
+  countNotEmptyId: Int
+  percentageEmptyId: Float
+  percentageNotEmptyId: Float
+  countUniqueValuesPosition: Int
+  countEmptyPosition: Int
+  countNotEmptyPosition: Int
+  percentageEmptyPosition: Float
+  percentageNotEmptyPosition: Float
+  countUniqueValuesUpdatedAt: Int
+  countEmptyUpdatedAt: Int
+  countNotEmptyUpdatedAt: Int
+  percentageEmptyUpdatedAt: Float
+  percentageNotEmptyUpdatedAt: Float
+  minUpdatedAt: DateTime
+  maxUpdatedAt: DateTime
+  countUniqueValuesUpdatedBy: Int
+  countEmptyUpdatedBy: Int
+  countNotEmptyUpdatedBy: Int
+  percentageEmptyUpdatedBy: Float
+  percentageNotEmptyUpdatedBy: Float
+}
+
+input NoteTargetGroupByInput {
+  note: Boolean
+  targetCompany: Boolean
+  targetOpportunity: Boolean
+  targetPerson: Boolean
+}
+
+input NoteTargetOrderByWithGroupByInput {
+  note: OrderByDirection
+  targetCompany: OrderByDirection
+  targetOpportunity: OrderByDirection
+  targetPerson: OrderByDirection
+}
+
+extend type Query {
+  noteTargets(filter: NoteTargetFilterInput, orderBy: [NoteTargetOrderByInput], first: Int, last: Int, after: String, before: String, offset: Int): NoteTargetConnection!
+  noteTarget(filter: NoteTargetFilterInput): NoteTarget
+  noteTargetsGroupBy(groupBy: [NoteTargetGroupByInput!]!, filter: NoteTargetFilterInput, orderBy: [NoteTargetOrderByWithGroupByInput!], orderByForRecords: [NoteTargetOrderByInput!], viewId: UUID, limit: Int, offsetForRecords: Int): [NoteTargetGroupByConnection!]!
+}
+
+extend type Mutation {
+  createNoteTarget(data: NoteTargetCreateInput): NoteTarget
+  createNoteTargets(data: [NoteTargetCreateInput!]!, upsert: Boolean): [NoteTarget!]
+  updateNoteTarget(id: UUID!, data: NoteTargetUpdateInput!): NoteTarget
+  updateNoteTargets(filter: NoteTargetFilterInput!, data: NoteTargetUpdateInput!): [NoteTarget!]
+  deleteNoteTarget(id: UUID!): NoteTarget
+  deleteNoteTargets(filter: NoteTargetFilterInput!): [NoteTarget!]
+  destroyNoteTarget(id: UUID!): NoteTarget
+  destroyNoteTargets(filter: NoteTargetFilterInput!): [NoteTarget!]
+  restoreNoteTargets(filter: NoteTargetFilterInput!): [NoteTarget!]
+}
+
+extend type TaskConnection {
+  countUniqueValuesBodyV2: Int
+  countEmptyBodyV2: Int
+  countNotEmptyBodyV2: Int
+  percentageEmptyBodyV2: Float
+  percentageNotEmptyBodyV2: Float
+  countUniqueValuesCreatedAt: Int
+  countEmptyCreatedAt: Int
+  countNotEmptyCreatedAt: Int
+  percentageEmptyCreatedAt: Float
+  percentageNotEmptyCreatedAt: Float
+  minCreatedAt: DateTime
+  maxCreatedAt: DateTime
+  countUniqueValuesCreatedBy: Int
+  countEmptyCreatedBy: Int
+  countNotEmptyCreatedBy: Int
+  percentageEmptyCreatedBy: Float
+  percentageNotEmptyCreatedBy: Float
+  countUniqueValuesDeletedAt: Int
+  countEmptyDeletedAt: Int
+  countNotEmptyDeletedAt: Int
+  percentageEmptyDeletedAt: Float
+  percentageNotEmptyDeletedAt: Float
+  minDeletedAt: DateTime
+  maxDeletedAt: DateTime
+  countUniqueValuesDueAt: Int
+  countEmptyDueAt: Int
+  countNotEmptyDueAt: Int
+  percentageEmptyDueAt: Float
+  percentageNotEmptyDueAt: Float
+  minDueAt: DateTime
+  maxDueAt: DateTime
+  countUniqueValuesId: Int
+  countEmptyId: Int
+  countNotEmptyId: Int
+  percentageEmptyId: Float
+  percentageNotEmptyId: Float
+  countUniqueValuesPosition: Int
+  countEmptyPosition: Int
+  countNotEmptyPosition: Int
+  percentageEmptyPosition: Float
+  percentageNotEmptyPosition: Float
+  countUniqueValuesStatus: Int
+  countEmptyStatus: Int
+  countNotEmptyStatus: Int
+  percentageEmptyStatus: Float
+  percentageNotEmptyStatus: Float
+  countUniqueValuesTitle: Int
+  countEmptyTitle: Int
+  countNotEmptyTitle: Int
+  percentageEmptyTitle: Float
+  percentageNotEmptyTitle: Float
+  countUniqueValuesUpdatedAt: Int
+  countEmptyUpdatedAt: Int
+  countNotEmptyUpdatedAt: Int
+  percentageEmptyUpdatedAt: Float
+  percentageNotEmptyUpdatedAt: Float
+  minUpdatedAt: DateTime
+  maxUpdatedAt: DateTime
+  countUniqueValuesUpdatedBy: Int
+  countEmptyUpdatedBy: Int
+  countNotEmptyUpdatedBy: Int
+  percentageEmptyUpdatedBy: Float
+  percentageNotEmptyUpdatedBy: Float
+}
+
+type TaskGroupByConnection {
+  totalCount: Int
+  edges: [TaskEdge!]!
+  pageInfo: PageInfo!
+  groupByDimensionValues: JSON!
+  countUniqueValuesBodyV2: Int
+  countEmptyBodyV2: Int
+  countNotEmptyBodyV2: Int
+  percentageEmptyBodyV2: Float
+  percentageNotEmptyBodyV2: Float
+  countUniqueValuesCreatedAt: Int
+  countEmptyCreatedAt: Int
+  countNotEmptyCreatedAt: Int
+  percentageEmptyCreatedAt: Float
+  percentageNotEmptyCreatedAt: Float
+  minCreatedAt: DateTime
+  maxCreatedAt: DateTime
+  countUniqueValuesCreatedBy: Int
+  countEmptyCreatedBy: Int
+  countNotEmptyCreatedBy: Int
+  percentageEmptyCreatedBy: Float
+  percentageNotEmptyCreatedBy: Float
+  countUniqueValuesDeletedAt: Int
+  countEmptyDeletedAt: Int
+  countNotEmptyDeletedAt: Int
+  percentageEmptyDeletedAt: Float
+  percentageNotEmptyDeletedAt: Float
+  minDeletedAt: DateTime
+  maxDeletedAt: DateTime
+  countUniqueValuesDueAt: Int
+  countEmptyDueAt: Int
+  countNotEmptyDueAt: Int
+  percentageEmptyDueAt: Float
+  percentageNotEmptyDueAt: Float
+  minDueAt: DateTime
+  maxDueAt: DateTime
+  countUniqueValuesId: Int
+  countEmptyId: Int
+  countNotEmptyId: Int
+  percentageEmptyId: Float
+  percentageNotEmptyId: Float
+  countUniqueValuesPosition: Int
+  countEmptyPosition: Int
+  countNotEmptyPosition: Int
+  percentageEmptyPosition: Float
+  percentageNotEmptyPosition: Float
+  countUniqueValuesStatus: Int
+  countEmptyStatus: Int
+  countNotEmptyStatus: Int
+  percentageEmptyStatus: Float
+  percentageNotEmptyStatus: Float
+  countUniqueValuesTitle: Int
+  countEmptyTitle: Int
+  countNotEmptyTitle: Int
+  percentageEmptyTitle: Float
+  percentageNotEmptyTitle: Float
+  countUniqueValuesUpdatedAt: Int
+  countEmptyUpdatedAt: Int
+  countNotEmptyUpdatedAt: Int
+  percentageEmptyUpdatedAt: Float
+  percentageNotEmptyUpdatedAt: Float
+  minUpdatedAt: DateTime
+  maxUpdatedAt: DateTime
+  countUniqueValuesUpdatedBy: Int
+  countEmptyUpdatedBy: Int
+  countNotEmptyUpdatedBy: Int
+  percentageEmptyUpdatedBy: Float
+  percentageNotEmptyUpdatedBy: Float
+}
+
+input TaskGroupByInput {
+  title: Boolean
+  status: Boolean
+  assignee: Boolean
+}
+
+input TaskOrderByWithGroupByInput {
+  title: OrderByDirection
+  status: OrderByDirection
+  assignee: OrderByDirection
+}
+
+extend type Query {
+  tasks(filter: TaskFilterInput, orderBy: [TaskOrderByInput], first: Int, last: Int, after: String, before: String, offset: Int): TaskConnection!
+  task(filter: TaskFilterInput): Task
+  tasksGroupBy(groupBy: [TaskGroupByInput!]!, filter: TaskFilterInput, orderBy: [TaskOrderByWithGroupByInput!], orderByForRecords: [TaskOrderByInput!], viewId: UUID, limit: Int, offsetForRecords: Int): [TaskGroupByConnection!]!
+}
+
+extend type Mutation {
+  createTask(data: TaskCreateInput): Task
+  createTasks(data: [TaskCreateInput!]!, upsert: Boolean): [Task!]
+  updateTask(id: UUID!, data: TaskUpdateInput!): Task
+  updateTasks(filter: TaskFilterInput!, data: TaskUpdateInput!): [Task!]
+  deleteTask(id: UUID!): Task
+  deleteTasks(filter: TaskFilterInput!): [Task!]
+  destroyTask(id: UUID!): Task
+  destroyTasks(filter: TaskFilterInput!): [Task!]
+  restoreTasks(filter: TaskFilterInput!): [Task!]
+}
+
+extend type TaskTargetConnection {
+  countUniqueValuesCreatedAt: Int
+  countEmptyCreatedAt: Int
+  countNotEmptyCreatedAt: Int
+  percentageEmptyCreatedAt: Float
+  percentageNotEmptyCreatedAt: Float
+  minCreatedAt: DateTime
+  maxCreatedAt: DateTime
+  countUniqueValuesCreatedBy: Int
+  countEmptyCreatedBy: Int
+  countNotEmptyCreatedBy: Int
+  percentageEmptyCreatedBy: Float
+  percentageNotEmptyCreatedBy: Float
+  countUniqueValuesDeletedAt: Int
+  countEmptyDeletedAt: Int
+  countNotEmptyDeletedAt: Int
+  percentageEmptyDeletedAt: Float
+  percentageNotEmptyDeletedAt: Float
+  minDeletedAt: DateTime
+  maxDeletedAt: DateTime
+  countUniqueValuesId: Int
+  countEmptyId: Int
+  countNotEmptyId: Int
+  percentageEmptyId: Float
+  percentageNotEmptyId: Float
+  countUniqueValuesPosition: Int
+  countEmptyPosition: Int
+  countNotEmptyPosition: Int
+  percentageEmptyPosition: Float
+  percentageNotEmptyPosition: Float
+  countUniqueValuesUpdatedAt: Int
+  countEmptyUpdatedAt: Int
+  countNotEmptyUpdatedAt: Int
+  percentageEmptyUpdatedAt: Float
+  percentageNotEmptyUpdatedAt: Float
+  minUpdatedAt: DateTime
+  maxUpdatedAt: DateTime
+  countUniqueValuesUpdatedBy: Int
+  countEmptyUpdatedBy: Int
+  countNotEmptyUpdatedBy: Int
+  percentageEmptyUpdatedBy: Float
+  percentageNotEmptyUpdatedBy: Float
+}
+
+type TaskTargetGroupByConnection {
+  totalCount: Int
+  edges: [TaskTargetEdge!]!
+  pageInfo: PageInfo!
+  groupByDimensionValues: JSON!
+  countUniqueValuesCreatedAt: Int
+  countEmptyCreatedAt: Int
+  countNotEmptyCreatedAt: Int
+  percentageEmptyCreatedAt: Float
+  percentageNotEmptyCreatedAt: Float
+  minCreatedAt: DateTime
+  maxCreatedAt: DateTime
+  countUniqueValuesCreatedBy: Int
+  countEmptyCreatedBy: Int
+  countNotEmptyCreatedBy: Int
+  percentageEmptyCreatedBy: Float
+  percentageNotEmptyCreatedBy: Float
+  countUniqueValuesDeletedAt: Int
+  countEmptyDeletedAt: Int
+  countNotEmptyDeletedAt: Int
+  percentageEmptyDeletedAt: Float
+  percentageNotEmptyDeletedAt: Float
+  minDeletedAt: DateTime
+  maxDeletedAt: DateTime
+  countUniqueValuesId: Int
+  countEmptyId: Int
+  countNotEmptyId: Int
+  percentageEmptyId: Float
+  percentageNotEmptyId: Float
+  countUniqueValuesPosition: Int
+  countEmptyPosition: Int
+  countNotEmptyPosition: Int
+  percentageEmptyPosition: Float
+  percentageNotEmptyPosition: Float
+  countUniqueValuesUpdatedAt: Int
+  countEmptyUpdatedAt: Int
+  countNotEmptyUpdatedAt: Int
+  percentageEmptyUpdatedAt: Float
+  percentageNotEmptyUpdatedAt: Float
+  minUpdatedAt: DateTime
+  maxUpdatedAt: DateTime
+  countUniqueValuesUpdatedBy: Int
+  countEmptyUpdatedBy: Int
+  countNotEmptyUpdatedBy: Int
+  percentageEmptyUpdatedBy: Float
+  percentageNotEmptyUpdatedBy: Float
+}
+
+input TaskTargetGroupByInput {
+  task: Boolean
+  targetCompany: Boolean
+  targetOpportunity: Boolean
+  targetPerson: Boolean
+}
+
+input TaskTargetOrderByWithGroupByInput {
+  task: OrderByDirection
+  targetCompany: OrderByDirection
+  targetOpportunity: OrderByDirection
+  targetPerson: OrderByDirection
+}
+
+extend type Query {
+  taskTargets(filter: TaskTargetFilterInput, orderBy: [TaskTargetOrderByInput], first: Int, last: Int, after: String, before: String, offset: Int): TaskTargetConnection!
+  taskTarget(filter: TaskTargetFilterInput): TaskTarget
+  taskTargetsGroupBy(groupBy: [TaskTargetGroupByInput!]!, filter: TaskTargetFilterInput, orderBy: [TaskTargetOrderByWithGroupByInput!], orderByForRecords: [TaskTargetOrderByInput!], viewId: UUID, limit: Int, offsetForRecords: Int): [TaskTargetGroupByConnection!]!
+}
+
+extend type Mutation {
+  createTaskTarget(data: TaskTargetCreateInput): TaskTarget
+  createTaskTargets(data: [TaskTargetCreateInput!]!, upsert: Boolean): [TaskTarget!]
+  updateTaskTarget(id: UUID!, data: TaskTargetUpdateInput!): TaskTarget
+  updateTaskTargets(filter: TaskTargetFilterInput!, data: TaskTargetUpdateInput!): [TaskTarget!]
+  deleteTaskTarget(id: UUID!): TaskTarget
+  deleteTaskTargets(filter: TaskTargetFilterInput!): [TaskTarget!]
+  destroyTaskTarget(id: UUID!): TaskTarget
+  destroyTaskTargets(filter: TaskTargetFilterInput!): [TaskTarget!]
+  restoreTaskTargets(filter: TaskTargetFilterInput!): [TaskTarget!]
+}

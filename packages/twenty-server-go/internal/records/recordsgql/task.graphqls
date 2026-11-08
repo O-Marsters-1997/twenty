@@ -1,0 +1,163 @@
+enum TaskStatusEnum {
+  TODO
+  IN_PROGRESS
+  DONE
+}
+
+input TaskStatusEnumFilter {
+  eq: TaskStatusEnum
+  neq: TaskStatusEnum
+  in: [TaskStatusEnum!]
+  is: FilterIs
+}
+
+type Task {
+  title: String
+  bodyV2: RichText
+  dueAt: DateTime
+  status: TaskStatusEnum
+  assigneeId: ID
+  id: UUID!
+  position: Position!
+  createdBy: Actor!
+  updatedBy: Actor!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
+
+type TaskEdge {
+  node: Task!
+  cursor: Cursor!
+}
+
+type TaskConnection {
+  totalCount: Int
+  edges: [TaskEdge!]!
+  pageInfo: PageInfo!
+}
+
+input TaskFilterInput {
+  title: StringFilter
+  bodyV2: RichTextFilter
+  dueAt: DateTimeFilter
+  status: TaskStatusEnumFilter
+  assigneeId: UUIDFilter
+  id: UUIDFilter
+  position: FloatFilter
+  createdBy: ActorFilter
+  updatedBy: ActorFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  deletedAt: DateTimeFilter
+  and: [TaskFilterInput]
+  or: [TaskFilterInput]
+  not: TaskFilterInput
+}
+
+input TaskOrderByInput {
+  title: OrderByDirection
+  bodyV2: RichTextOrderByInput
+  dueAt: OrderByDirection
+  status: OrderByDirection
+  assigneeId: OrderByDirection
+  id: OrderByDirection
+  position: OrderByDirection
+  createdBy: ActorOrderByInput
+  updatedBy: ActorOrderByInput
+  createdAt: OrderByDirection
+  updatedAt: OrderByDirection
+  deletedAt: OrderByDirection
+}
+
+input TaskCreateInput {
+  id: UUID
+  title: String
+  bodyV2: RichTextCreateInput
+  dueAt: DateTime
+  status: TaskStatusEnum
+  assigneeId: UUID
+  position: Float
+}
+
+input TaskUpdateInput {
+  title: String
+  bodyV2: RichTextCreateInput
+  dueAt: DateTime
+  status: TaskStatusEnum
+  assigneeId: UUID
+  position: Float
+}
+
+type TaskTarget {
+  taskId: ID
+  targetCompanyId: ID
+  targetOpportunityId: ID
+  targetPersonId: ID
+  id: UUID!
+  position: Position!
+  createdBy: Actor!
+  updatedBy: Actor!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
+
+type TaskTargetEdge {
+  node: TaskTarget!
+  cursor: Cursor!
+}
+
+type TaskTargetConnection {
+  totalCount: Int
+  edges: [TaskTargetEdge!]!
+  pageInfo: PageInfo!
+}
+
+input TaskTargetFilterInput {
+  taskId: UUIDFilter
+  targetCompanyId: UUIDFilter
+  targetOpportunityId: UUIDFilter
+  targetPersonId: UUIDFilter
+  id: UUIDFilter
+  position: FloatFilter
+  createdBy: ActorFilter
+  updatedBy: ActorFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  deletedAt: DateTimeFilter
+  and: [TaskTargetFilterInput]
+  or: [TaskTargetFilterInput]
+  not: TaskTargetFilterInput
+}
+
+input TaskTargetOrderByInput {
+  taskId: OrderByDirection
+  targetCompanyId: OrderByDirection
+  targetOpportunityId: OrderByDirection
+  targetPersonId: OrderByDirection
+  id: OrderByDirection
+  position: OrderByDirection
+  createdBy: ActorOrderByInput
+  updatedBy: ActorOrderByInput
+  createdAt: OrderByDirection
+  updatedAt: OrderByDirection
+  deletedAt: OrderByDirection
+}
+
+input TaskTargetCreateInput {
+  id: UUID
+  taskId: UUID
+  targetCompanyId: UUID
+  targetOpportunityId: UUID
+  targetPersonId: UUID
+  position: Float
+}
+
+input TaskTargetUpdateInput {
+  taskId: UUID
+  targetCompanyId: UUID
+  targetOpportunityId: UUID
+  targetPersonId: UUID
+  position: Float
+}
