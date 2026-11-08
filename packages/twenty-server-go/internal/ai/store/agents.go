@@ -54,7 +54,10 @@ func (a *Agents) Get(ctx context.Context, id string) (ai.AgentRecord, error) {
 
 // Create inserts a custom agent; label is required and name defaults to the camel-cased label.
 func (a *Agents) Create(ctx context.Context, input map[string]any) (ai.AgentRecord, error) {
-	values := normalise(input)
+	values, err := normalise(input)
+	if err != nil {
+		return ai.AgentRecord{}, err
+	}
 	label, _ := values["label"].(string)
 	if label == "" {
 		return ai.AgentRecord{}, fmt.Errorf("%w: label is required", metadata.ErrInvalidInput)
@@ -69,7 +72,7 @@ func (a *Agents) Create(ctx context.Context, input map[string]any) (ai.AgentReco
 		return ai.AgentRecord{}, fmt.Errorf("%w: prompt and modelId are required", metadata.ErrInvalidInput)
 	}
 	var created ai.AgentRecord
-	err := pgx.BeginFunc(ctx, a.pool, func(tx pgx.Tx) error {
+	err = pgx.BeginFunc(ctx, a.pool, func(tx pgx.Tx) error {
 		var id string
 		rows, err := tx.Query(ctx, `INSERT INTO core.agent (name, label, icon, description, prompt, "modelId", "responseFormat", "modelConfiguration", triggers, "isCustom", "universalIdentifier", "workspaceId", "applicationId")
 			VALUES ($1, $2, $3, $4, $5, $6, COALESCE($7::jsonb, '{"type": "text"}'), $8::jsonb, COALESCE($9::jsonb, '[]'), true, gen_random_uuid(), $10::uuid,
@@ -96,14 +99,20 @@ func (a *Agents) Create(ctx context.Context, input map[string]any) (ai.AgentReco
 
 // Update changes only the keys present in input; a null roleId removes the agent's role.
 func (a *Agents) Update(ctx context.Context, id string, input map[string]any) (ai.AgentRecord, error) {
-	values := normalise(input)
+	values, err := normalise(input)
+	if err != nil {
+		return ai.AgentRecord{}, err
+	}
 	var updated ai.AgentRecord
-	err := pgx.BeginFunc(ctx, a.pool, func(tx pgx.Tx) error {
+	err = pgx.BeginFunc(ctx, a.pool, func(tx pgx.Tx) error {
 		if _, err := getAgent(ctx, tx, id); err != nil {
 			return err
 		}
 		if label, ok := values["label"].(string); ok && values["name"] == nil {
 			values["name"] = nameFromLabel(label)
+		}
+		if name, ok := values["name"].(string); ok && name == "" {
+			return fmt.Errorf("%w: name must contain letters or digits", metadata.ErrInvalidInput)
 		}
 		sets, args := []string{`"updatedAt" = now()`}, []any{id, workspace.PinnedWorkspaceID}
 		for _, column := range append(append([]string(nil), textFields...), jsonFields...) {
@@ -243,11 +252,10 @@ func writeError(err error) error {
 	return fmt.Errorf("write agent: %w", err)
 }
 
-// normalise trims and collapses whitespace in text fields, as Node does, and JSON-encodes the jsonb fields.
-func normalise(input map[string]any) map[string]any {
+func normalise(input map[string]any) (map[string]any, error) {
 	values := make(map[string]any, len(input))
 	for key, value := range input {
-		if text, ok := value.(*string); ok { // gqlgen decodes nullable scalars to *string
+		if text, ok := value.(*string); ok {
 			if text == nil {
 				value = nil
 			} else {
@@ -263,11 +271,14 @@ func normalise(input map[string]any) map[string]any {
 	}
 	for _, field := range jsonFields {
 		if value, ok := values[field]; ok && value != nil {
-			encoded, _ := json.Marshal(value)
+			encoded, err := json.Marshal(value)
+			if err != nil {
+				return nil, fmt.Errorf("%w: encode %s: %w", metadata.ErrInvalidInput, field, err)
+			}
 			values[field] = string(encoded)
 		}
 	}
-	return values
+	return values, nil
 }
 
 func nameFromLabel(label string) string {
