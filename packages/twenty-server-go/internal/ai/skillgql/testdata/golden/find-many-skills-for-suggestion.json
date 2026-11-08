@@ -1,0 +1,9 @@
+{
+  "name": "find-many-skills-for-suggestion",
+  "operation": "FindManySkillsForSuggestion",
+  "fixture": "baseline-with-alpha-and-beta-skills",
+  "endpoint": "/metadata",
+  "query": "query FindManySkillsForSuggestion { skills { id name label description icon isActive isSystem } }",
+  "variables": {},
+  "response": {"data":{"skills":[{"id":"11111111-1111-4111-8111-111111111111","name":"alpha","label":"Alpha Skill","description":"First","icon":"IconA","isActive":true,"isSystem":false},{"id":"22222222-2222-4222-8222-222222222222","name":"beta","label":"Beta Skill","description":null,"icon":null,"isActive":true,"isSystem":false}]}}
+}

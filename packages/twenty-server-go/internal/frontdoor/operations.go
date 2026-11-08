@@ -56,12 +56,20 @@ func DefaultTable() OperationTable {
 	for _, operation := range viewOperations {
 		table[EndpointMetadata][operation] = RouteGo
 	}
+	for _, operation := range SkillOperations {
+		table[EndpointMetadata][operation] = RouteGo
+	}
 	for _, plural := range []string{"Notes", "NoteTargets", "Tasks", "TaskTargets"} {
 		for _, operation := range []string{"Aggregate" + plural, plural + "GroupByAggregates", plural + "GroupByRecords"} {
 			table[EndpointWorkspace][operation] = RouteGo
 		}
 	}
 	return table
+}
+
+var SkillOperations = []string{
+	"FindManySkills", "FindOneSkill", "FindManySkillsForSuggestion",
+	"CreateSkill", "UpdateSkill", "DeleteSkill", "ActivateSkill", "DeactivateSkill",
 }
 
 var viewOperations = []string{

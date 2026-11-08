@@ -13,6 +13,8 @@ import (
 
 	"github.com/jackc/pgx/v5/pgxpool"
 
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai/skillgql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/config"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/frontdoor"
@@ -60,6 +62,7 @@ func run() error {
 	}, logger))
 	goGraphQL.Handle(string(frontdoor.EndpointMetadata), metadataHandler(
 		metadatagql.NewHandler(metadatastore.New(pool), logger),
+		skillgql.NewHandler(ai.NewSkills(pool), logger),
 		metagql.NewHandler(metadatastore.NewViews(pool), logger),
 	))
 
