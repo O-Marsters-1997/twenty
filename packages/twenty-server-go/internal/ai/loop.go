@@ -33,7 +33,11 @@ func (l *Loop) Run(ctx context.Context, principal auth.Principal, agent Agent, m
 		emit(ChatEvent{Event: event})
 	}
 	conversation := append([]Message(nil), messages...)
+	stepOpen := false
 	fail := func(err error) ([]Message, error) {
+		if stepOpen {
+			send(map[string]any{"type": "finish-step"})
+		}
 		if ctx.Err() != nil {
 			send(map[string]any{"type": "abort"})
 			return conversation, ctx.Err()
@@ -54,11 +58,14 @@ func (l *Loop) Run(ctx context.Context, principal auth.Principal, agent Agent, m
 			return fail(ctx.Err())
 		}
 		send(map[string]any{"type": "start-step"})
+		stepOpen = true
 		assistant, err := l.streamStep(ctx, agent.Prompt, conversation, specs, send)
+		if err == nil {
+			err = ctx.Err()
+		}
 		if err != nil {
 			return fail(err)
 		}
-		conversation = append(conversation, assistant)
 
 		var results []Part
 		for _, part := range assistant.Parts {
@@ -71,6 +78,8 @@ func (l *Loop) Run(ctx context.Context, principal auth.Principal, agent Agent, m
 			results = append(results, l.callTool(ctx, principal, part, send))
 		}
 		send(map[string]any{"type": "finish-step"})
+		stepOpen = false
+		conversation = append(conversation, assistant)
 		if len(results) == 0 {
 			send(map[string]any{"type": "finish"})
 			return conversation, nil
@@ -98,13 +107,14 @@ func (l *Loop) streamStep(ctx context.Context, system string, conversation []Mes
 	}
 	for event, err := range l.model.Stream(ctx, system, conversation, specs) {
 		if err != nil {
+			closeBlock()
 			return assistant, fmt.Errorf("stream model: %w", err)
 		}
 		switch {
 		case event.Part.Type == PartToolCall:
 			closeBlock()
 			part := event.Part
-			if len(part.Input) == 0 {
+			if !json.Valid(part.Input) {
 				part.Input = json.RawMessage(`{}`)
 			}
 			assistant.Parts = append(assistant.Parts, part)
