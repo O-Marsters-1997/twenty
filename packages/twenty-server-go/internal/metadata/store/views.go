@@ -8,6 +8,7 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
 
@@ -75,7 +76,7 @@ func (v *Views) List(ctx context.Context, objectMetadataID string, viewTypes []s
 		WHERE v."deletedAt" IS NULL
 		AND ($1::text = '' OR v."objectMetadataId"::text = $1::text)
 		AND (cardinality($2::text[]) = 0 OR v.type::text = ANY($2::text[]))
-		ORDER BY v."position", v."createdAt", v.id`, objectMetadataID, viewTypes)
+		ORDER BY v."position", v.id`, objectMetadataID, viewTypes)
 }
 
 func (v *Views) Views(ctx context.Context, objectMetadataID string) ([]metadata.View, error) {
@@ -116,12 +117,16 @@ func (v *Views) Update(ctx context.Context, id string, patch map[string]any) (me
 	return v.Get(ctx, id)
 }
 
-func (v *Views) SaveView(ctx context.Context, view metadata.View) (metadata.View, error) {
+func (v *Views) SaveView(ctx context.Context, view metadata.View) (_ metadata.View, err error) {
 	tx, err := v.pool.Begin(ctx)
 	if err != nil {
 		return metadata.View{}, fmt.Errorf("begin save view: %w", err)
 	}
-	defer func() { _ = tx.Rollback(ctx) }()
+	defer func() {
+		if rollbackErr := tx.Rollback(ctx); rollbackErr != nil && !errors.Is(rollbackErr, pgx.ErrTxClosed) {
+			err = errors.Join(err, fmt.Errorf("roll back save view: %w", rollbackErr))
+		}
+	}()
 	tables := bindViewTables(tx)
 
 	values, err := columnsOf(view, viewColumns)

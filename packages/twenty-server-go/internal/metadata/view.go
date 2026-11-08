@@ -25,7 +25,7 @@ type View struct {
 	Groups                                 []ViewGroup
 }
 
-type ViewWriter interface { // views stay user-editable; only objects and fields are frozen
+type ViewWriter interface {
 	SaveView(ctx context.Context, view View) (View, error)
 	DeleteView(ctx context.Context, id string) error
 }
