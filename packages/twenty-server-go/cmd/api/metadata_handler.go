@@ -5,11 +5,14 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"slices"
+
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/frontdoor"
 )
 
 const objectMetadataOperation = "ObjectMetadataItems"
 
-func metadataHandler(objects, views http.Handler) http.Handler {
+func metadataHandler(objects, chat, views http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		body, err := io.ReadAll(r.Body)
 		if err != nil {
@@ -24,8 +27,12 @@ func metadataHandler(objects, views http.Handler) http.Handler {
 			views.ServeHTTP(w, r)
 			return
 		}
-		if request.OperationName == objectMetadataOperation {
+		switch {
+		case request.OperationName == objectMetadataOperation:
 			objects.ServeHTTP(w, r)
+			return
+		case slices.Contains(frontdoor.ChatOperations, request.OperationName):
+			chat.ServeHTTP(w, r)
 			return
 		}
 		views.ServeHTTP(w, r)

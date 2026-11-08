@@ -13,6 +13,9 @@ import (
 
 	"github.com/jackc/pgx/v5/pgxpool"
 
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai/aigql"
+	aistore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai/store"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/config"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/frontdoor"
@@ -44,6 +47,9 @@ func run() error {
 	defer pool.Close()
 	verifier := auth.NewJWTVerifier(pool, cfg.AppSecret)
 
+	chats := aistore.New(pool)
+	broker := ai.NewPersistingBroker(ai.NewMemoryBroker(), chats, logger)
+
 	goGraphQL := http.NewServeMux()
 	goGraphQL.Handle(string(frontdoor.EndpointWorkspace), recordsgql.NewHandler(&recordsgql.Resolver{
 		Store:              store.NewPeople(pool),
@@ -60,6 +66,7 @@ func run() error {
 	}, logger))
 	goGraphQL.Handle(string(frontdoor.EndpointMetadata), metadataHandler(
 		metadatagql.NewHandler(metadatastore.New(pool), logger),
+		aigql.NewHandler(chats, broker, logger),
 		metagql.NewHandler(metadatastore.NewViews(pool), logger),
 	))
 
