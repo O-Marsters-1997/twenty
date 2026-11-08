@@ -112,6 +112,30 @@ func TestHandler_ServesGoSubscriptionAsEventStream(t *testing.T) {
 	}
 }
 
+func TestHandler_RejectsUnauthenticatedGoSubscription(t *testing.T) {
+	t.Parallel()
+	front, _ := newSSEFront(t, newFakeSubscriber())
+	body := `{"operationName":"OnGo","query":"subscription OnGo { x }"}`
+	req, err := http.NewRequestWithContext(t.Context(), http.MethodPost, front.URL+"/graphql", strings.NewReader(body))
+	if err != nil {
+		t.Fatal(err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Accept", "text/event-stream")
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer func() { _ = resp.Body.Close() }()
+	got, err := io.ReadAll(resp.Body)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if ct := resp.Header.Get("Content-Type"); ct != "application/json" || !strings.Contains(string(got), "UNAUTHENTICATED") {
+		t.Errorf("Content-Type = %q, body = %q, want JSON UNAUTHENTICATED error", ct, got)
+	}
+}
+
 func TestHandler_ProxiesUnmarkedSubscriptionToNode(t *testing.T) {
 	t.Parallel()
 	front, nodeHits := newSSEFront(t, newFakeSubscriber())
