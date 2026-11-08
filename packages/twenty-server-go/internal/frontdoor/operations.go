@@ -19,7 +19,7 @@ type OperationTable map[Endpoint]map[string]Route // operation name → route; a
 
 // DefaultTable blocks the object and field mutations that change the frozen data model.
 func DefaultTable() OperationTable {
-	return OperationTable{
+	table := OperationTable{
 		EndpointMetadata: {
 			"CreateOneObjectMetadataItem": RouteBlocked,
 			"UpdateOneObjectMetadataItem": RouteBlocked,
@@ -29,6 +29,20 @@ func DefaultTable() OperationTable {
 			"DeleteOneFieldMetadataItem":  RouteBlocked,
 		},
 	}
+	for _, operation := range viewOperations {
+		table[EndpointMetadata][operation] = RouteGo
+	}
+	return table
+}
+
+var viewOperations = []string{
+	"FindManyViews", "FindAllViews", "FindFieldsWidgetViews", "FindTableWidgetViews",
+	"CreateView", "UpdateView", "DestroyView",
+	"CreateManyViewFields", "UpdateViewField", "DestroyViewField",
+	"CreateViewFilter", "UpdateViewFilter", "DestroyViewFilter",
+	"CreateViewFilterGroup", "UpdateViewFilterGroup", "DestroyViewFilterGroup",
+	"CreateViewSort", "UpdateViewSort", "DestroyViewSort",
+	"CreateManyViewGroups", "UpdateManyViewGroups",
 }
 
 var blockedMetadataFields = []string{
