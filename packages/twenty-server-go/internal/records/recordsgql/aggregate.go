@@ -18,11 +18,11 @@ const (
 )
 
 var aggregatableFields = []string{
-	"avatarFile", "avatarUrl", "createdAt", "createdBy", "deletedAt", "emails", "id", "jobTitle",
-	"linkedinLink", "name", "phones", "position", "updatedAt", "updatedBy",
+	"avatarFile", "avatarUrl", "bodyV2", "createdAt", "createdBy", "deletedAt", "dueAt", "emails", "id", "jobTitle",
+	"linkedinLink", "name", "phones", "position", "status", "title", "updatedAt", "updatedBy",
 }
 
-var dateAggregatableFields = []string{"createdAt", "deletedAt", "updatedAt"}
+var dateAggregatableFields = []string{"createdAt", "deletedAt", "dueAt", "updatedAt"}
 
 var aggregatesByFieldName = buildAggregatesByFieldName()
 
