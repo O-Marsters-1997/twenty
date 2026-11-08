@@ -170,7 +170,8 @@ func decode(input json.RawMessage, into any) error {
 	if err := json.Unmarshal(input, into); err != nil {
 		return fmt.Errorf("decode tool input: %w", err)
 	}
-	return nil}
+	return nil
+}
 
 func actorFor(principal auth.Principal) records.Actor {
 	return records.Actor{Source: "API", WorkspaceMemberID: principal.WorkspaceMemberID, Name: "AI"}
