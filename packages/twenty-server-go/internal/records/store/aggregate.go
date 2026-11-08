@@ -16,6 +16,8 @@ var compositeAggregateSubFields = map[model.FieldType][]string{
 	model.TypePhones:   {"primaryPhoneNumber", "primaryPhoneCountryCode", "primaryPhoneCallingCode"},
 	model.TypeLinks:    {"primaryLinkUrl"},
 	model.TypeActor:    {"workspaceMemberId", "source"},
+	model.TypeCurrency: {"amountMicros", "currencyCode"},
+	model.TypeAddress:  {"addressStreet1", "addressStreet2", "addressCity", "addressPostcode", "addressState", "addressCountry", "addressLat", "addressLng"},
 }
 
 type aggregateColumn struct {
@@ -32,8 +34,11 @@ func (c *compiler) aggregateColumn(aggregate records.Aggregate) (aggregateColumn
 	if aggregate.Operation == "count" && aggregate.Field == "id" {
 		key = "totalCount"
 	}
+	if fieldType == model.TypeCurrency && slices.Contains([]records.AggregateOperation{"min", "max", "avg", "sum"}, aggregate.Operation) {
+		key += "AmountMicros"
+	}
 	concatenated := `NULLIF(CONCAT(` + strings.Join(columns, ",") + `), '')`
-	numeric := fieldType == model.TypeNumber || fieldType == model.TypeNumeric || fieldType == model.TypePosition
+	numeric := fieldType == model.TypeNumber || fieldType == model.TypeNumeric || fieldType == model.TypePosition || fieldType == model.TypeCurrency
 	date := fieldType == model.TypeDateTime
 	function := strings.ToUpper(string(aggregate.Operation))
 

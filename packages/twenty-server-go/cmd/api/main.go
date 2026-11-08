@@ -45,7 +45,7 @@ func run() error {
 	verifier := auth.NewJWTVerifier(pool, cfg.AppSecret)
 
 	goGraphQL := http.NewServeMux()
-	goGraphQL.Handle(string(frontdoor.EndpointWorkspace), recordsgql.NewHandler(store.NewPeople(pool), logger))
+	goGraphQL.Handle(string(frontdoor.EndpointWorkspace), recordsgql.NewHandler(store.NewPeople(pool), store.NewCompanies(pool), store.NewOpportunities(pool), logger))
 	goGraphQL.Handle(string(frontdoor.EndpointMetadata), metadataHandler(
 		metadatagql.NewHandler(metadatastore.New(pool), logger),
 		metagql.NewHandler(metadatastore.NewViews(pool), logger),

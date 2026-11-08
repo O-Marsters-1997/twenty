@@ -29,13 +29,19 @@ func (verifier) Verify(context.Context, string) (auth.Principal, error) {
 
 func newServer(t *testing.T) *httptest.Server {
 	t.Helper()
+	server, _ := newServerWithPool(t)
+	return server
+}
+
+func newServerWithPool(t *testing.T) (*httptest.Server, *pgxpool.Pool) {
+	t.Helper()
 	pool, err := pgxpool.New(t.Context(), pgtest.New(t))
 	if err != nil {
 		t.Fatalf("connect: %v", err)
 	}
 	t.Cleanup(pool.Close)
 	table := frontdoor.OperationTable{frontdoor.EndpointWorkspace: {}}
-	for _, name := range []string{"Create", "Find", "Update", "Delete", "Restore", "Destroy", "AggregatePeople", "PeopleGroupByAggregates", "PeopleGroupByRecords"} {
+	for _, name := range []string{"Create", "Find", "Update", "Delete", "Restore", "Destroy", "AggregatePeople", "PeopleGroupByAggregates", "PeopleGroupByRecords", "FindCompanies", "AggregateCompanies", "CompaniesGroupByAggregates", "CompaniesGroupByRecords", "FindOpportunities", "AggregateOpportunities", "OpportunitiesGroupByAggregates", "OpportunitiesGroupByRecords"} {
 		table[frontdoor.EndpointWorkspace][name] = frontdoor.RouteGo
 	}
 	logger := slog.New(slog.NewTextHandler(io.Discard, nil))
@@ -43,9 +49,9 @@ func newServer(t *testing.T) *httptest.Server {
 	if err != nil {
 		t.Fatal(err)
 	}
-	server := httptest.NewServer(frontdoor.NewHandler(table, upstream, verifier{}, recordsgql.NewHandler(store.NewPeople(pool), logger), logger))
+	server := httptest.NewServer(frontdoor.NewHandler(table, upstream, verifier{}, recordsgql.NewHandler(store.NewPeople(pool), store.NewCompanies(pool), store.NewOpportunities(pool), logger), logger))
 	t.Cleanup(server.Close)
-	return server
+	return server, pool
 }
 
 func send(t *testing.T, server *httptest.Server, operation, query string, variables map[string]any) map[string]any {

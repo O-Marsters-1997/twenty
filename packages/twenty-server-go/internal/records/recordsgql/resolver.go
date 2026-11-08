@@ -11,7 +11,9 @@ import (
 const bulkPageSize = 200
 
 type Resolver struct {
-	Store records.People
+	Store         records.People
+	Companies     records.Companies
+	Opportunities records.Opportunities
 }
 
 func (r *Resolver) actor(ctx context.Context) (records.Actor, error) {
@@ -242,6 +244,68 @@ func (r *queryResolver) Person(ctx context.Context, filter map[string]any) (*Per
 		return nil, nil
 	}
 	return toPerson(page.Records[0]), nil
+}
+
+func (r *queryResolver) Companies(ctx context.Context, filter map[string]any, orderBy []map[string]any, first, last *int, after, before *string, _ *int) (*CompanyConnection, error) {
+	page, aggregates, err := listRecords(ctx, r.Resolver.Companies, objectNamed("company"), filter, orderBy, first, last, after, before)
+	if err != nil {
+		return nil, err
+	}
+	connection := &CompanyConnection{TotalCount: &page.TotalCount, Edges: companyEdges(page), PageInfo: pageInfoOf(page)}
+	fillAggregates(connection, aggregates)
+	return connection, nil
+}
+
+func (r *queryResolver) Company(ctx context.Context, filter map[string]any) (*Company, error) {
+	company, err := findOneRecord(ctx, r.Resolver.Companies, objectNamed("company"), filter)
+	if err != nil || company == nil {
+		return nil, err
+	}
+	return toCompany(*company), nil
+}
+
+func (r *queryResolver) CompaniesGroupBy(ctx context.Context, groupBy []map[string]any, filter map[string]any, orderBy []map[string]any, _ []map[string]any, _ *string, limit *int, _ *int) ([]*CompanyGroupByConnection, error) {
+	groups, err := groupRecords(ctx, r.Resolver.Companies, objectNamed("company"), groupBy, filter, orderBy, limit)
+	if err != nil {
+		return nil, err
+	}
+	connections := make([]*CompanyGroupByConnection, len(groups))
+	for i, group := range groups {
+		connections[i] = &CompanyGroupByConnection{GroupByDimensionValues: group.Key, Edges: companyEdges(group.Records), PageInfo: pageInfoOf(group.Records)}
+		fillAggregates(connections[i], group.Aggregates)
+	}
+	return connections, nil
+}
+
+func (r *queryResolver) Opportunities(ctx context.Context, filter map[string]any, orderBy []map[string]any, first, last *int, after, before *string, _ *int) (*OpportunityConnection, error) {
+	page, aggregates, err := listRecords(ctx, r.Resolver.Opportunities, objectNamed("opportunity"), filter, orderBy, first, last, after, before)
+	if err != nil {
+		return nil, err
+	}
+	connection := &OpportunityConnection{TotalCount: &page.TotalCount, Edges: opportunityEdges(page), PageInfo: pageInfoOf(page)}
+	fillAggregates(connection, aggregates)
+	return connection, nil
+}
+
+func (r *queryResolver) Opportunity(ctx context.Context, filter map[string]any) (*Opportunity, error) {
+	opportunity, err := findOneRecord(ctx, r.Resolver.Opportunities, objectNamed("opportunity"), filter)
+	if err != nil || opportunity == nil {
+		return nil, err
+	}
+	return toOpportunity(*opportunity), nil
+}
+
+func (r *queryResolver) OpportunitiesGroupBy(ctx context.Context, groupBy []map[string]any, filter map[string]any, orderBy []map[string]any, _ []map[string]any, _ *string, limit *int, _ *int) ([]*OpportunityGroupByConnection, error) {
+	groups, err := groupRecords(ctx, r.Resolver.Opportunities, objectNamed("opportunity"), groupBy, filter, orderBy, limit)
+	if err != nil {
+		return nil, err
+	}
+	connections := make([]*OpportunityGroupByConnection, len(groups))
+	for i, group := range groups {
+		connections[i] = &OpportunityGroupByConnection{GroupByDimensionValues: group.Key, Edges: opportunityEdges(group.Records), PageInfo: pageInfoOf(group.Records)}
+		fillAggregates(connections[i], group.Aggregates)
+	}
+	return connections, nil
 }
 
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
