@@ -1,0 +1,129 @@
+scalar JSON
+scalar UUID
+
+type Query {
+  objects(paging: CursorPaging = { first: 10 }): ObjectConnection!
+}
+
+input CursorPaging {
+  before: String
+  after: String
+  first: Int
+  last: Int
+}
+
+type PageInfo {
+  hasNextPage: Boolean
+  hasPreviousPage: Boolean
+  startCursor: String
+  endCursor: String
+}
+
+type ObjectEdge {
+  node: Object!
+  cursor: String!
+}
+
+type ObjectConnection {
+  pageInfo: PageInfo!
+  edges: [ObjectEdge!]!
+}
+
+type Object {
+  id: UUID!
+  universalIdentifier: String!
+  nameSingular: String!
+  namePlural: String!
+  labelSingular: String!
+  labelPlural: String!
+  color: String
+  description: String
+  icon: String
+  shortcut: String
+  isRemote: Boolean!
+  isActive: Boolean!
+  isSystem: Boolean!
+  isUIEditable: Boolean!
+  isUICreatable: Boolean!
+  writability: String!
+  openRecordIn: String!
+  sharingReach: String!
+  readability: String!
+  createdAt: String!
+  updatedAt: String!
+  labelIdentifierFieldMetadataId: UUID
+  imageIdentifierFieldMetadataId: UUID
+  applicationId: UUID!
+  isLabelSyncedWithName: Boolean!
+  isSearchable: Boolean!
+  duplicateCriteria: [[String!]!]
+  searchFieldMetadataList: [SearchField!]!
+  indexMetadataList: [Index!]!
+  fieldsList: [Field!]!
+}
+
+type Field {
+  id: UUID!
+  universalIdentifier: String!
+  type: String!
+  name: String!
+  label: String!
+  description: String
+  icon: String
+  isActive: Boolean
+  isSystem: Boolean
+  isUIEditable: Boolean
+  writability: String
+  isNullable: Boolean
+  isUnique: Boolean
+  isSearchable: Boolean
+  createdAt: String!
+  updatedAt: String!
+  defaultValue: JSON
+  options: JSON
+  settings: JSON
+  isLabelSyncedWithName: Boolean
+  morphId: UUID
+  applicationId: UUID!
+  objectMetadataId: UUID!
+  relation: Relation
+  morphRelations: [Relation!]
+}
+
+type Relation {
+  type: String!
+  sourceObjectMetadata: Object!
+  targetObjectMetadata: Object!
+  sourceFieldMetadata: Field!
+  targetFieldMetadata: Field!
+}
+
+type SearchField {
+  id: UUID!
+  fieldMetadataId: UUID!
+  tsVectorFieldMetadataId: UUID!
+  position: Float!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Index {
+  id: UUID!
+  createdAt: String!
+  updatedAt: String!
+  name: String!
+  indexWhereClause: String
+  indexType: String!
+  isUnique: Boolean!
+  isCustom: Boolean
+  indexFieldMetadataList: [IndexField!]!
+}
+
+type IndexField {
+  id: UUID!
+  fieldMetadataId: UUID!
+  subFieldName: String
+  createdAt: String!
+  updatedAt: String!
+  order: Int!
+}

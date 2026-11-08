@@ -1,0 +1,390 @@
+scalar UUID
+scalar DateTime
+scalar JSON
+
+enum ViewType {
+  TABLE
+  KANBAN
+  CALENDAR
+  LIST
+  FIELDS_WIDGET
+  TABLE_WIDGET
+  KANBAN_WIDGET
+  LIST_WIDGET
+  CALENDAR_WIDGET
+}
+
+enum ViewKey {
+  INDEX
+}
+
+enum ViewVisibility {
+  WORKSPACE
+  UNLISTED
+}
+
+enum ViewOpenRecordIn {
+  SIDE_PANEL
+  RECORD_PAGE
+}
+
+enum ViewCalendarLayout {
+  DAY
+  WEEK
+  MONTH
+}
+
+enum ViewSortDirection {
+  ASC
+  DESC
+}
+
+enum ViewFilterGroupLogicalOperator {
+  AND
+  OR
+  NOT
+}
+
+enum ViewFilterOperand {
+  IS
+  IS_NOT_NULL
+  IS_NOT
+  LESS_THAN_OR_EQUAL
+  GREATER_THAN_OR_EQUAL
+  IS_BEFORE
+  IS_AFTER
+  CONTAINS
+  DOES_NOT_CONTAIN
+  IS_EMPTY
+  IS_NOT_EMPTY
+  IS_RELATIVE
+  IS_IN_PAST
+  IS_IN_FUTURE
+  IS_TODAY
+  VECTOR_SEARCH
+}
+
+enum AggregateOperations {
+  MIN
+  MAX
+  AVG
+  SUM
+  COUNT
+  COUNT_UNIQUE_VALUES
+  COUNT_EMPTY
+  COUNT_NOT_EMPTY
+  COUNT_TRUE
+  COUNT_FALSE
+  PERCENTAGE_EMPTY
+  PERCENTAGE_NOT_EMPTY
+}
+
+type View {
+  id: UUID!
+  name: String!
+  objectMetadataId: UUID!
+  type: ViewType!
+  key: ViewKey
+  icon: String!
+  position: Float!
+  isCompact: Boolean!
+  isCustom: Boolean!
+  isActive: Boolean!
+  isSystemSideEffect: Boolean!
+  openRecordIn: ViewOpenRecordIn!
+  visibility: ViewVisibility!
+  kanbanAggregateOperation: AggregateOperations
+  kanbanAggregateOperationFieldMetadataId: UUID
+  kanbanColumnWidth: Int
+  mainGroupByFieldMetadataId: UUID
+  shouldHideEmptyGroups: Boolean!
+  groupLoadLimit: Int
+  anyFieldFilterValue: String
+  calendarLayout: ViewCalendarLayout
+  calendarFieldMetadataId: UUID
+  calendarEndFieldMetadataId: UUID
+  createdByUserWorkspaceId: UUID
+  universalIdentifier: UUID!
+  workspaceId: UUID!
+  applicationId: UUID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+  viewFields: [ViewField!]!
+  viewFieldGroups: [ViewFieldGroup!]!
+  viewFilters: [ViewFilter!]!
+  viewFilterGroups: [ViewFilterGroup!]!
+  viewSorts: [ViewSort!]!
+  viewGroups: [ViewGroup!]!
+}
+
+type ViewField {
+  id: UUID!
+  fieldMetadataId: UUID!
+  viewId: UUID!
+  viewFieldGroupId: UUID
+  isVisible: Boolean!
+  position: Float!
+  size: Float!
+  aggregateOperation: AggregateOperations
+  isActive: Boolean!
+  isOverridden: Boolean
+  isSystemSideEffect: Boolean!
+  universalIdentifier: UUID!
+  workspaceId: UUID!
+  applicationId: UUID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
+
+type ViewFieldGroup {
+  id: UUID!
+  name: String!
+  viewId: UUID!
+  position: Float!
+  isVisible: Boolean!
+  isActive: Boolean!
+  isOverridden: Boolean!
+  workspaceId: UUID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+  viewFields: [ViewField!]!
+}
+
+type ViewFilter {
+  id: UUID!
+  fieldMetadataId: UUID!
+  viewId: UUID!
+  viewFilterGroupId: UUID
+  operand: ViewFilterOperand!
+  value: JSON!
+  positionInViewFilterGroup: Float
+  subFieldName: String
+  relationTargetFieldMetadataId: UUID
+  workspaceId: UUID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
+
+type ViewFilterGroup {
+  id: UUID!
+  viewId: UUID!
+  parentViewFilterGroupId: UUID
+  logicalOperator: ViewFilterGroupLogicalOperator!
+  positionInViewFilterGroup: Float
+  workspaceId: UUID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
+
+type ViewSort {
+  id: UUID!
+  fieldMetadataId: UUID!
+  viewId: UUID!
+  direction: ViewSortDirection!
+  subFieldName: String
+  workspaceId: UUID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
+
+type ViewGroup {
+  id: UUID!
+  viewId: UUID!
+  fieldValue: String!
+  isVisible: Boolean!
+  position: Float!
+  workspaceId: UUID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
+
+input CreateViewInput {
+  id: UUID
+  name: String!
+  objectMetadataId: UUID!
+  icon: String!
+  type: ViewType
+  key: ViewKey
+  position: Float
+  isCompact: Boolean
+  openRecordIn: ViewOpenRecordIn
+  visibility: ViewVisibility
+  kanbanAggregateOperation: AggregateOperations
+  kanbanAggregateOperationFieldMetadataId: UUID
+  kanbanColumnWidth: Int
+  mainGroupByFieldMetadataId: UUID
+  shouldHideEmptyGroups: Boolean
+  groupLoadLimit: Int
+  anyFieldFilterValue: String
+  calendarLayout: ViewCalendarLayout
+  calendarFieldMetadataId: UUID
+  calendarEndFieldMetadataId: UUID
+}
+
+input UpdateViewInput {
+  id: UUID
+  name: String
+  icon: String
+  type: ViewType
+  position: Float
+  isCompact: Boolean
+  openRecordIn: ViewOpenRecordIn
+  visibility: ViewVisibility
+  kanbanAggregateOperation: AggregateOperations
+  kanbanAggregateOperationFieldMetadataId: UUID
+  kanbanColumnWidth: Int
+  mainGroupByFieldMetadataId: UUID
+  shouldHideEmptyGroups: Boolean
+  groupLoadLimit: Int
+  anyFieldFilterValue: String
+  calendarLayout: ViewCalendarLayout
+  calendarFieldMetadataId: UUID
+  calendarEndFieldMetadataId: UUID
+}
+
+input CreateViewFieldInput {
+  id: UUID
+  fieldMetadataId: UUID!
+  viewId: UUID!
+  viewFieldGroupId: UUID
+  isVisible: Boolean
+  position: Float
+  size: Float
+  aggregateOperation: AggregateOperations
+}
+
+input UpdateViewFieldInputUpdates {
+  viewFieldGroupId: UUID
+  isVisible: Boolean
+  position: Float
+  size: Float
+  aggregateOperation: AggregateOperations
+}
+
+input UpdateViewFieldInput {
+  id: UUID!
+  update: UpdateViewFieldInputUpdates!
+}
+
+input DestroyViewFieldInput {
+  id: UUID!
+}
+
+input CreateViewFilterInput {
+  id: UUID
+  fieldMetadataId: UUID!
+  viewId: UUID!
+  viewFilterGroupId: UUID
+  operand: ViewFilterOperand
+  value: JSON!
+  positionInViewFilterGroup: Float
+  subFieldName: String
+  relationTargetFieldMetadataId: UUID
+}
+
+input UpdateViewFilterInputUpdates {
+  fieldMetadataId: UUID
+  viewFilterGroupId: UUID
+  operand: ViewFilterOperand
+  value: JSON
+  positionInViewFilterGroup: Float
+  subFieldName: String
+  relationTargetFieldMetadataId: UUID
+}
+
+input UpdateViewFilterInput {
+  id: UUID!
+  update: UpdateViewFilterInputUpdates!
+}
+
+input DestroyViewFilterInput {
+  id: UUID!
+}
+
+input CreateViewFilterGroupInput {
+  id: UUID
+  viewId: UUID!
+  parentViewFilterGroupId: UUID
+  logicalOperator: ViewFilterGroupLogicalOperator
+  positionInViewFilterGroup: Float
+}
+
+input UpdateViewFilterGroupInput {
+  id: UUID
+  viewId: UUID
+  parentViewFilterGroupId: UUID
+  logicalOperator: ViewFilterGroupLogicalOperator
+  positionInViewFilterGroup: Float
+}
+
+input CreateViewSortInput {
+  id: UUID
+  fieldMetadataId: UUID!
+  viewId: UUID!
+  direction: ViewSortDirection
+  subFieldName: String
+}
+
+input UpdateViewSortInputUpdates {
+  direction: ViewSortDirection
+  subFieldName: String
+}
+
+input UpdateViewSortInput {
+  id: UUID!
+  update: UpdateViewSortInputUpdates!
+}
+
+input DestroyViewSortInput {
+  id: UUID!
+}
+
+input CreateViewGroupInput {
+  id: UUID
+  viewId: UUID!
+  fieldValue: String!
+  isVisible: Boolean
+  position: Float
+}
+
+input UpdateViewGroupInputUpdates {
+  fieldValue: String
+  isVisible: Boolean
+  position: Float
+}
+
+input UpdateViewGroupInput {
+  id: UUID!
+  update: UpdateViewGroupInputUpdates!
+}
+
+type Query {
+  getViews(objectMetadataId: String, viewTypes: [ViewType!]): [View!]!
+}
+
+type Mutation {
+  createView(input: CreateViewInput!): View!
+  updateView(id: String!, input: UpdateViewInput!): View!
+  destroyView(id: String!): Boolean!
+  createManyViewFields(inputs: [CreateViewFieldInput!]!): [ViewField!]!
+  updateViewField(input: UpdateViewFieldInput!): ViewField!
+  destroyViewField(input: DestroyViewFieldInput!): ViewField!
+  createViewFilter(input: CreateViewFilterInput!): ViewFilter!
+  updateViewFilter(input: UpdateViewFilterInput!): ViewFilter!
+  destroyViewFilter(input: DestroyViewFilterInput!): ViewFilter!
+  createViewFilterGroup(input: CreateViewFilterGroupInput!): ViewFilterGroup!
+  updateViewFilterGroup(id: String!, input: UpdateViewFilterGroupInput!): ViewFilterGroup!
+  destroyViewFilterGroup(id: String!): Boolean!
+  createViewSort(input: CreateViewSortInput!): ViewSort!
+  updateViewSort(input: UpdateViewSortInput!): ViewSort!
+  destroyViewSort(input: DestroyViewSortInput!): Boolean!
+  createManyViewGroups(inputs: [CreateViewGroupInput!]!): [ViewGroup!]!
+  updateManyViewGroups(inputs: [UpdateViewGroupInput!]!): [ViewGroup!]!
+}

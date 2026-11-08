@@ -95,6 +95,9 @@ func (c *compiler) fieldFilter(filter records.FieldFilter) (string, error) {
 	if column == `"deletedAt"` {
 		c.mentionsDeletedAt = true
 	}
+	if fieldType == model.TypeSelect {
+		column += "::text"
+	}
 	switch filter.Operand {
 	case "eq":
 		return column + " = " + c.arg(filter.Value), nil
@@ -164,29 +167,37 @@ func (c *compiler) order(orderBy []records.OrderBy) ([]orderColumn, error) {
 	var columns []orderColumn
 	hasID := false
 	for _, by := range orderBy {
-		expr, _, err := c.resolve(by.Field, by.SubField)
+		column, err := c.orderColumnFor(by)
 		if err != nil {
 			return nil, err
 		}
-		column := orderColumn{expr: expr}
-		switch by.Direction {
-		case "AscNullsFirst":
-			column.nullsFirst = true
-		case "AscNullsLast":
-		case "DescNullsFirst":
-			column.descending, column.nullsFirst = true, true
-		case "DescNullsLast":
-			column.descending = true
-		default:
-			return nil, fmt.Errorf("unknown order direction %q", by.Direction)
-		}
-		hasID = hasID || expr == `"id"`
+		hasID = hasID || column.expr == `"id"`
 		columns = append(columns, column)
 	}
 	if !hasID {
 		columns = append(columns, orderColumn{expr: `"id"`, nullsFirst: true})
 	}
 	return columns, nil
+}
+
+func (c *compiler) orderColumnFor(by records.OrderBy) (orderColumn, error) {
+	expr, _, err := c.resolve(by.Field, by.SubField)
+	if err != nil {
+		return orderColumn{}, err
+	}
+	column := orderColumn{expr: expr}
+	switch by.Direction {
+	case "AscNullsFirst":
+		column.nullsFirst = true
+	case "AscNullsLast":
+	case "DescNullsFirst":
+		column.descending, column.nullsFirst = true, true
+	case "DescNullsLast":
+		column.descending = true
+	default:
+		return orderColumn{}, fmt.Errorf("unknown order direction %q", by.Direction)
+	}
+	return column, nil
 }
 
 func (c *compiler) after(columns []orderColumn, values []any) string {

@@ -1,0 +1,32 @@
+schema:
+  - metadata.graphqls
+exec:
+  filename: generated.go
+  package: metadatagql
+model:
+  filename: models_gen.go
+  package: metadatagql
+resolver:
+  layout: single-file
+  filename: resolver.go
+  package: metadatagql
+  type: Resolver
+autobind:
+  - github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/store
+models:
+  UUID:
+    model: github.com/99designs/gqlgen/graphql.String
+  JSON:
+    model: github.com/99designs/gqlgen/graphql.Any
+  Object:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/store.ObjectDetail
+  Field:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/store.FieldDetail
+  Relation:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/store.RelationDetail
+  SearchField:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/store.SearchFieldDetail
+  Index:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/store.IndexDetail
+  IndexField:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/store.IndexFieldDetail

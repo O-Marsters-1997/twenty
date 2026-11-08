@@ -1,0 +1,359 @@
+
+type TimelineActivity {
+  id: UUID!
+  happensAt: DateTime!
+  timelineActivityTypeId: UUID
+  timelineActivityTypeSnapshot: JSON
+  properties: JSON
+  linkedRecordCachedName: String
+  linkedRecordId: UUID
+  linkedObjectMetadataId: UUID
+  targetCompanyId: UUID
+  targetDashboardId: UUID
+  targetMessageCampaignId: UUID
+  targetMessageListId: UUID
+  targetNoteId: UUID
+  targetOpportunityId: UUID
+  targetPersonId: UUID
+  targetTaskId: UUID
+  targetWorkflowId: UUID
+  targetWorkflowRunId: UUID
+  targetWorkflowVersionId: UUID
+  workspaceMemberId: UUID
+  position: Position!
+  createdBy: Actor!
+  updatedBy: Actor!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
+
+type TimelineActivityEdge {
+  node: TimelineActivity!
+  cursor: Cursor!
+}
+
+type TimelineActivityConnection {
+  totalCount: Int
+  edges: [TimelineActivityEdge!]!
+  pageInfo: PageInfo!
+  countUniqueValuesCreatedAt: Int
+  countEmptyCreatedAt: Int
+  countNotEmptyCreatedAt: Int
+  percentageEmptyCreatedAt: Float
+  percentageNotEmptyCreatedAt: Float
+  minCreatedAt: DateTime
+  maxCreatedAt: DateTime
+  countUniqueValuesCreatedBy: Int
+  countEmptyCreatedBy: Int
+  countNotEmptyCreatedBy: Int
+  percentageEmptyCreatedBy: Float
+  percentageNotEmptyCreatedBy: Float
+  countUniqueValuesDeletedAt: Int
+  countEmptyDeletedAt: Int
+  countNotEmptyDeletedAt: Int
+  percentageEmptyDeletedAt: Float
+  percentageNotEmptyDeletedAt: Float
+  minDeletedAt: DateTime
+  maxDeletedAt: DateTime
+  countUniqueValuesHappensAt: Int
+  countEmptyHappensAt: Int
+  countNotEmptyHappensAt: Int
+  percentageEmptyHappensAt: Float
+  percentageNotEmptyHappensAt: Float
+  minHappensAt: DateTime
+  maxHappensAt: DateTime
+  countUniqueValuesId: Int
+  countEmptyId: Int
+  countNotEmptyId: Int
+  percentageEmptyId: Float
+  percentageNotEmptyId: Float
+  countUniqueValuesLinkedObjectMetadataId: Int
+  countEmptyLinkedObjectMetadataId: Int
+  countNotEmptyLinkedObjectMetadataId: Int
+  percentageEmptyLinkedObjectMetadataId: Float
+  percentageNotEmptyLinkedObjectMetadataId: Float
+  countUniqueValuesLinkedRecordCachedName: Int
+  countEmptyLinkedRecordCachedName: Int
+  countNotEmptyLinkedRecordCachedName: Int
+  percentageEmptyLinkedRecordCachedName: Float
+  percentageNotEmptyLinkedRecordCachedName: Float
+  countUniqueValuesLinkedRecordId: Int
+  countEmptyLinkedRecordId: Int
+  countNotEmptyLinkedRecordId: Int
+  percentageEmptyLinkedRecordId: Float
+  percentageNotEmptyLinkedRecordId: Float
+  countUniqueValuesPosition: Int
+  countEmptyPosition: Int
+  countNotEmptyPosition: Int
+  percentageEmptyPosition: Float
+  percentageNotEmptyPosition: Float
+  countUniqueValuesProperties: Int
+  countEmptyProperties: Int
+  countNotEmptyProperties: Int
+  percentageEmptyProperties: Float
+  percentageNotEmptyProperties: Float
+  countUniqueValuesTimelineActivityTypeId: Int
+  countEmptyTimelineActivityTypeId: Int
+  countNotEmptyTimelineActivityTypeId: Int
+  percentageEmptyTimelineActivityTypeId: Float
+  percentageNotEmptyTimelineActivityTypeId: Float
+  countUniqueValuesTimelineActivityTypeSnapshot: Int
+  countEmptyTimelineActivityTypeSnapshot: Int
+  countNotEmptyTimelineActivityTypeSnapshot: Int
+  percentageEmptyTimelineActivityTypeSnapshot: Float
+  percentageNotEmptyTimelineActivityTypeSnapshot: Float
+  countUniqueValuesUpdatedAt: Int
+  countEmptyUpdatedAt: Int
+  countNotEmptyUpdatedAt: Int
+  percentageEmptyUpdatedAt: Float
+  percentageNotEmptyUpdatedAt: Float
+  minUpdatedAt: DateTime
+  maxUpdatedAt: DateTime
+  countUniqueValuesUpdatedBy: Int
+  countEmptyUpdatedBy: Int
+  countNotEmptyUpdatedBy: Int
+  percentageEmptyUpdatedBy: Float
+  percentageNotEmptyUpdatedBy: Float
+}
+
+type TimelineActivityGroupByConnection {
+  totalCount: Int
+  edges: [TimelineActivityEdge!]!
+  pageInfo: PageInfo!
+  groupByDimensionValues: JSON!
+  countUniqueValuesCreatedAt: Int
+  countEmptyCreatedAt: Int
+  countNotEmptyCreatedAt: Int
+  percentageEmptyCreatedAt: Float
+  percentageNotEmptyCreatedAt: Float
+  minCreatedAt: DateTime
+  maxCreatedAt: DateTime
+  countUniqueValuesCreatedBy: Int
+  countEmptyCreatedBy: Int
+  countNotEmptyCreatedBy: Int
+  percentageEmptyCreatedBy: Float
+  percentageNotEmptyCreatedBy: Float
+  countUniqueValuesDeletedAt: Int
+  countEmptyDeletedAt: Int
+  countNotEmptyDeletedAt: Int
+  percentageEmptyDeletedAt: Float
+  percentageNotEmptyDeletedAt: Float
+  minDeletedAt: DateTime
+  maxDeletedAt: DateTime
+  countUniqueValuesHappensAt: Int
+  countEmptyHappensAt: Int
+  countNotEmptyHappensAt: Int
+  percentageEmptyHappensAt: Float
+  percentageNotEmptyHappensAt: Float
+  minHappensAt: DateTime
+  maxHappensAt: DateTime
+  countUniqueValuesId: Int
+  countEmptyId: Int
+  countNotEmptyId: Int
+  percentageEmptyId: Float
+  percentageNotEmptyId: Float
+  countUniqueValuesLinkedObjectMetadataId: Int
+  countEmptyLinkedObjectMetadataId: Int
+  countNotEmptyLinkedObjectMetadataId: Int
+  percentageEmptyLinkedObjectMetadataId: Float
+  percentageNotEmptyLinkedObjectMetadataId: Float
+  countUniqueValuesLinkedRecordCachedName: Int
+  countEmptyLinkedRecordCachedName: Int
+  countNotEmptyLinkedRecordCachedName: Int
+  percentageEmptyLinkedRecordCachedName: Float
+  percentageNotEmptyLinkedRecordCachedName: Float
+  countUniqueValuesLinkedRecordId: Int
+  countEmptyLinkedRecordId: Int
+  countNotEmptyLinkedRecordId: Int
+  percentageEmptyLinkedRecordId: Float
+  percentageNotEmptyLinkedRecordId: Float
+  countUniqueValuesPosition: Int
+  countEmptyPosition: Int
+  countNotEmptyPosition: Int
+  percentageEmptyPosition: Float
+  percentageNotEmptyPosition: Float
+  countUniqueValuesProperties: Int
+  countEmptyProperties: Int
+  countNotEmptyProperties: Int
+  percentageEmptyProperties: Float
+  percentageNotEmptyProperties: Float
+  countUniqueValuesTimelineActivityTypeId: Int
+  countEmptyTimelineActivityTypeId: Int
+  countNotEmptyTimelineActivityTypeId: Int
+  percentageEmptyTimelineActivityTypeId: Float
+  percentageNotEmptyTimelineActivityTypeId: Float
+  countUniqueValuesTimelineActivityTypeSnapshot: Int
+  countEmptyTimelineActivityTypeSnapshot: Int
+  countNotEmptyTimelineActivityTypeSnapshot: Int
+  percentageEmptyTimelineActivityTypeSnapshot: Float
+  percentageNotEmptyTimelineActivityTypeSnapshot: Float
+  countUniqueValuesUpdatedAt: Int
+  countEmptyUpdatedAt: Int
+  countNotEmptyUpdatedAt: Int
+  percentageEmptyUpdatedAt: Float
+  percentageNotEmptyUpdatedAt: Float
+  minUpdatedAt: DateTime
+  maxUpdatedAt: DateTime
+  countUniqueValuesUpdatedBy: Int
+  countEmptyUpdatedBy: Int
+  countNotEmptyUpdatedBy: Int
+  percentageEmptyUpdatedBy: Float
+  percentageNotEmptyUpdatedBy: Float
+}
+
+input TimelineActivityFilterInput {
+  id: UUIDFilter
+  happensAt: DateTimeFilter
+  timelineActivityTypeId: UUIDFilter
+  linkedRecordCachedName: StringFilter
+  linkedRecordId: UUIDFilter
+  linkedObjectMetadataId: UUIDFilter
+  targetCompanyId: UUIDFilter
+  targetDashboardId: UUIDFilter
+  targetMessageCampaignId: UUIDFilter
+  targetMessageListId: UUIDFilter
+  targetNoteId: UUIDFilter
+  targetOpportunityId: UUIDFilter
+  targetPersonId: UUIDFilter
+  targetTaskId: UUIDFilter
+  targetWorkflowId: UUIDFilter
+  targetWorkflowRunId: UUIDFilter
+  targetWorkflowVersionId: UUIDFilter
+  workspaceMemberId: UUIDFilter
+  position: FloatFilter
+  createdBy: ActorFilter
+  updatedBy: ActorFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  deletedAt: DateTimeFilter
+  and: [TimelineActivityFilterInput]
+  or: [TimelineActivityFilterInput]
+  not: TimelineActivityFilterInput
+}
+
+input TimelineActivityOrderByInput {
+  id: OrderByDirection
+  happensAt: OrderByDirection
+  timelineActivityTypeId: OrderByDirection
+  linkedRecordCachedName: OrderByDirection
+  linkedRecordId: OrderByDirection
+  linkedObjectMetadataId: OrderByDirection
+  targetCompanyId: OrderByDirection
+  targetDashboardId: OrderByDirection
+  targetMessageCampaignId: OrderByDirection
+  targetMessageListId: OrderByDirection
+  targetNoteId: OrderByDirection
+  targetOpportunityId: OrderByDirection
+  targetPersonId: OrderByDirection
+  targetTaskId: OrderByDirection
+  targetWorkflowId: OrderByDirection
+  targetWorkflowRunId: OrderByDirection
+  targetWorkflowVersionId: OrderByDirection
+  workspaceMemberId: OrderByDirection
+  position: OrderByDirection
+  createdBy: ActorOrderByInput
+  updatedBy: ActorOrderByInput
+  createdAt: OrderByDirection
+  updatedAt: OrderByDirection
+  deletedAt: OrderByDirection
+}
+
+input TimelineActivityGroupByInput {
+  linkedRecordCachedName: Boolean
+  timelineActivityTypeId: Boolean
+  workspaceMember: Boolean
+  targetCompany: Boolean
+  targetDashboard: Boolean
+  targetMessageCampaign: Boolean
+  targetMessageList: Boolean
+  targetNote: Boolean
+  targetOpportunity: Boolean
+  targetPerson: Boolean
+  targetTask: Boolean
+  targetWorkflow: Boolean
+  targetWorkflowRun: Boolean
+  targetWorkflowVersion: Boolean
+}
+
+input TimelineActivityOrderByWithGroupByInput {
+  linkedRecordCachedName: OrderByDirection
+  timelineActivityTypeId: OrderByDirection
+  workspaceMember: OrderByDirection
+  targetCompany: OrderByDirection
+  targetDashboard: OrderByDirection
+  targetMessageCampaign: OrderByDirection
+  targetMessageList: OrderByDirection
+  targetNote: OrderByDirection
+  targetOpportunity: OrderByDirection
+  targetPerson: OrderByDirection
+  targetTask: OrderByDirection
+  targetWorkflow: OrderByDirection
+  targetWorkflowRun: OrderByDirection
+  targetWorkflowVersion: OrderByDirection
+}
+
+input TimelineActivityCreateInput {
+  id: UUID
+  happensAt: DateTime
+  timelineActivityTypeId: UUID
+  timelineActivityTypeSnapshot: JSON
+  properties: JSON
+  linkedRecordCachedName: String
+  linkedRecordId: UUID
+  linkedObjectMetadataId: UUID
+  targetCompanyId: UUID
+  targetDashboardId: UUID
+  targetMessageCampaignId: UUID
+  targetMessageListId: UUID
+  targetNoteId: UUID
+  targetOpportunityId: UUID
+  targetPersonId: UUID
+  targetTaskId: UUID
+  targetWorkflowId: UUID
+  targetWorkflowRunId: UUID
+  targetWorkflowVersionId: UUID
+  workspaceMemberId: UUID
+  position: Float
+}
+
+input TimelineActivityUpdateInput {
+  happensAt: DateTime
+  timelineActivityTypeId: UUID
+  timelineActivityTypeSnapshot: JSON
+  properties: JSON
+  linkedRecordCachedName: String
+  linkedRecordId: UUID
+  linkedObjectMetadataId: UUID
+  targetCompanyId: UUID
+  targetDashboardId: UUID
+  targetMessageCampaignId: UUID
+  targetMessageListId: UUID
+  targetNoteId: UUID
+  targetOpportunityId: UUID
+  targetPersonId: UUID
+  targetTaskId: UUID
+  targetWorkflowId: UUID
+  targetWorkflowRunId: UUID
+  targetWorkflowVersionId: UUID
+  workspaceMemberId: UUID
+  position: Float
+}
+
+extend type Query {
+  timelineActivities(filter: TimelineActivityFilterInput, orderBy: [TimelineActivityOrderByInput], first: Int, last: Int, after: String, before: String, offset: Int): TimelineActivityConnection!
+  timelineActivity(filter: TimelineActivityFilterInput): TimelineActivity
+  timelineActivitiesGroupBy(groupBy: [TimelineActivityGroupByInput!]!, filter: TimelineActivityFilterInput, orderBy: [TimelineActivityOrderByWithGroupByInput!], orderByForRecords: [TimelineActivityOrderByInput!], viewId: UUID, limit: Int, offsetForRecords: Int): [TimelineActivityGroupByConnection!]!
+}
+
+extend type Mutation {
+  createTimelineActivity(data: TimelineActivityCreateInput): TimelineActivity
+  createTimelineActivities(data: [TimelineActivityCreateInput!]!, upsert: Boolean): [TimelineActivity!]
+  updateTimelineActivity(id: UUID!, data: TimelineActivityUpdateInput!): TimelineActivity
+  updateTimelineActivities(filter: TimelineActivityFilterInput!, data: TimelineActivityUpdateInput!): [TimelineActivity!]
+  deleteTimelineActivity(id: UUID!): TimelineActivity
+  deleteTimelineActivities(filter: TimelineActivityFilterInput!): [TimelineActivity!]
+  destroyTimelineActivity(id: UUID!): TimelineActivity
+  destroyTimelineActivities(filter: TimelineActivityFilterInput!): [TimelineActivity!]
+  restoreTimelineActivities(filter: TimelineActivityFilterInput!): [TimelineActivity!]
+}

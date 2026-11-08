@@ -1,0 +1,303 @@
+enum AttachmentFileCategory {
+  ARCHIVE
+  AUDIO
+  IMAGE
+  PRESENTATION
+  SPREADSHEET
+  TEXT_DOCUMENT
+  VIDEO
+  OTHER
+}
+
+input AttachmentFileCategoryFilter {
+  eq: AttachmentFileCategory
+  neq: AttachmentFileCategory
+  in: [AttachmentFileCategory!]
+  is: FilterIs
+}
+
+type Attachment {
+  id: UUID!
+  name: String
+  file: JSON
+  fullPath: String
+  fileCategory: AttachmentFileCategory
+  targetAgentChatThreadId: UUID
+  targetCompanyId: UUID
+  targetDashboardId: UUID
+  targetNoteId: UUID
+  targetOpportunityId: UUID
+  targetPersonId: UUID
+  targetTaskId: UUID
+  targetWorkflowId: UUID
+  position: Position!
+  createdBy: Actor!
+  updatedBy: Actor!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
+
+type AttachmentEdge {
+  node: Attachment!
+  cursor: Cursor!
+}
+
+type AttachmentConnection {
+  totalCount: Int
+  edges: [AttachmentEdge!]!
+  pageInfo: PageInfo!
+  countUniqueValuesCreatedAt: Int
+  countEmptyCreatedAt: Int
+  countNotEmptyCreatedAt: Int
+  percentageEmptyCreatedAt: Float
+  percentageNotEmptyCreatedAt: Float
+  minCreatedAt: DateTime
+  maxCreatedAt: DateTime
+  countUniqueValuesCreatedBy: Int
+  countEmptyCreatedBy: Int
+  countNotEmptyCreatedBy: Int
+  percentageEmptyCreatedBy: Float
+  percentageNotEmptyCreatedBy: Float
+  countUniqueValuesDeletedAt: Int
+  countEmptyDeletedAt: Int
+  countNotEmptyDeletedAt: Int
+  percentageEmptyDeletedAt: Float
+  percentageNotEmptyDeletedAt: Float
+  minDeletedAt: DateTime
+  maxDeletedAt: DateTime
+  countUniqueValuesFile: Int
+  countEmptyFile: Int
+  countNotEmptyFile: Int
+  percentageEmptyFile: Float
+  percentageNotEmptyFile: Float
+  countUniqueValuesFileCategory: Int
+  countEmptyFileCategory: Int
+  countNotEmptyFileCategory: Int
+  percentageEmptyFileCategory: Float
+  percentageNotEmptyFileCategory: Float
+  countUniqueValuesFullPath: Int
+  countEmptyFullPath: Int
+  countNotEmptyFullPath: Int
+  percentageEmptyFullPath: Float
+  percentageNotEmptyFullPath: Float
+  countUniqueValuesId: Int
+  countEmptyId: Int
+  countNotEmptyId: Int
+  percentageEmptyId: Float
+  percentageNotEmptyId: Float
+  countUniqueValuesName: Int
+  countEmptyName: Int
+  countNotEmptyName: Int
+  percentageEmptyName: Float
+  percentageNotEmptyName: Float
+  countUniqueValuesPosition: Int
+  countEmptyPosition: Int
+  countNotEmptyPosition: Int
+  percentageEmptyPosition: Float
+  percentageNotEmptyPosition: Float
+  countUniqueValuesUpdatedAt: Int
+  countEmptyUpdatedAt: Int
+  countNotEmptyUpdatedAt: Int
+  percentageEmptyUpdatedAt: Float
+  percentageNotEmptyUpdatedAt: Float
+  minUpdatedAt: DateTime
+  maxUpdatedAt: DateTime
+  countUniqueValuesUpdatedBy: Int
+  countEmptyUpdatedBy: Int
+  countNotEmptyUpdatedBy: Int
+  percentageEmptyUpdatedBy: Float
+  percentageNotEmptyUpdatedBy: Float
+}
+
+type AttachmentGroupByConnection {
+  totalCount: Int
+  edges: [AttachmentEdge!]!
+  pageInfo: PageInfo!
+  groupByDimensionValues: JSON!
+  countUniqueValuesCreatedAt: Int
+  countEmptyCreatedAt: Int
+  countNotEmptyCreatedAt: Int
+  percentageEmptyCreatedAt: Float
+  percentageNotEmptyCreatedAt: Float
+  minCreatedAt: DateTime
+  maxCreatedAt: DateTime
+  countUniqueValuesCreatedBy: Int
+  countEmptyCreatedBy: Int
+  countNotEmptyCreatedBy: Int
+  percentageEmptyCreatedBy: Float
+  percentageNotEmptyCreatedBy: Float
+  countUniqueValuesDeletedAt: Int
+  countEmptyDeletedAt: Int
+  countNotEmptyDeletedAt: Int
+  percentageEmptyDeletedAt: Float
+  percentageNotEmptyDeletedAt: Float
+  minDeletedAt: DateTime
+  maxDeletedAt: DateTime
+  countUniqueValuesFile: Int
+  countEmptyFile: Int
+  countNotEmptyFile: Int
+  percentageEmptyFile: Float
+  percentageNotEmptyFile: Float
+  countUniqueValuesFileCategory: Int
+  countEmptyFileCategory: Int
+  countNotEmptyFileCategory: Int
+  percentageEmptyFileCategory: Float
+  percentageNotEmptyFileCategory: Float
+  countUniqueValuesFullPath: Int
+  countEmptyFullPath: Int
+  countNotEmptyFullPath: Int
+  percentageEmptyFullPath: Float
+  percentageNotEmptyFullPath: Float
+  countUniqueValuesId: Int
+  countEmptyId: Int
+  countNotEmptyId: Int
+  percentageEmptyId: Float
+  percentageNotEmptyId: Float
+  countUniqueValuesName: Int
+  countEmptyName: Int
+  countNotEmptyName: Int
+  percentageEmptyName: Float
+  percentageNotEmptyName: Float
+  countUniqueValuesPosition: Int
+  countEmptyPosition: Int
+  countNotEmptyPosition: Int
+  percentageEmptyPosition: Float
+  percentageNotEmptyPosition: Float
+  countUniqueValuesUpdatedAt: Int
+  countEmptyUpdatedAt: Int
+  countNotEmptyUpdatedAt: Int
+  percentageEmptyUpdatedAt: Float
+  percentageNotEmptyUpdatedAt: Float
+  minUpdatedAt: DateTime
+  maxUpdatedAt: DateTime
+  countUniqueValuesUpdatedBy: Int
+  countEmptyUpdatedBy: Int
+  countNotEmptyUpdatedBy: Int
+  percentageEmptyUpdatedBy: Float
+  percentageNotEmptyUpdatedBy: Float
+}
+
+input AttachmentFilterInput {
+  id: UUIDFilter
+  name: StringFilter
+  fullPath: StringFilter
+  fileCategory: AttachmentFileCategoryFilter
+  targetAgentChatThreadId: UUIDFilter
+  targetCompanyId: UUIDFilter
+  targetDashboardId: UUIDFilter
+  targetNoteId: UUIDFilter
+  targetOpportunityId: UUIDFilter
+  targetPersonId: UUIDFilter
+  targetTaskId: UUIDFilter
+  targetWorkflowId: UUIDFilter
+  position: FloatFilter
+  createdBy: ActorFilter
+  updatedBy: ActorFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  deletedAt: DateTimeFilter
+  and: [AttachmentFilterInput]
+  or: [AttachmentFilterInput]
+  not: AttachmentFilterInput
+}
+
+input AttachmentOrderByInput {
+  id: OrderByDirection
+  name: OrderByDirection
+  fullPath: OrderByDirection
+  fileCategory: OrderByDirection
+  targetAgentChatThreadId: OrderByDirection
+  targetCompanyId: OrderByDirection
+  targetDashboardId: OrderByDirection
+  targetNoteId: OrderByDirection
+  targetOpportunityId: OrderByDirection
+  targetPersonId: OrderByDirection
+  targetTaskId: OrderByDirection
+  targetWorkflowId: OrderByDirection
+  position: OrderByDirection
+  createdBy: ActorOrderByInput
+  updatedBy: ActorOrderByInput
+  createdAt: OrderByDirection
+  updatedAt: OrderByDirection
+  deletedAt: OrderByDirection
+}
+
+input AttachmentGroupByInput {
+  name: Boolean
+  fullPath: Boolean
+  fileCategory: Boolean
+  targetAgentChatThread: Boolean
+  targetCompany: Boolean
+  targetDashboard: Boolean
+  targetNote: Boolean
+  targetOpportunity: Boolean
+  targetPerson: Boolean
+  targetTask: Boolean
+  targetWorkflow: Boolean
+}
+
+input AttachmentOrderByWithGroupByInput {
+  name: OrderByDirection
+  fullPath: OrderByDirection
+  fileCategory: OrderByDirection
+  targetAgentChatThread: OrderByDirection
+  targetCompany: OrderByDirection
+  targetDashboard: OrderByDirection
+  targetNote: OrderByDirection
+  targetOpportunity: OrderByDirection
+  targetPerson: OrderByDirection
+  targetTask: OrderByDirection
+  targetWorkflow: OrderByDirection
+}
+
+input AttachmentCreateInput {
+  id: UUID
+  name: String
+  file: JSON
+  fullPath: String
+  fileCategory: AttachmentFileCategory
+  targetAgentChatThreadId: UUID
+  targetCompanyId: UUID
+  targetDashboardId: UUID
+  targetNoteId: UUID
+  targetOpportunityId: UUID
+  targetPersonId: UUID
+  targetTaskId: UUID
+  targetWorkflowId: UUID
+  position: Float
+}
+
+input AttachmentUpdateInput {
+  name: String
+  file: JSON
+  fullPath: String
+  fileCategory: AttachmentFileCategory
+  targetAgentChatThreadId: UUID
+  targetCompanyId: UUID
+  targetDashboardId: UUID
+  targetNoteId: UUID
+  targetOpportunityId: UUID
+  targetPersonId: UUID
+  targetTaskId: UUID
+  targetWorkflowId: UUID
+  position: Float
+}
+
+extend type Query {
+  attachments(filter: AttachmentFilterInput, orderBy: [AttachmentOrderByInput], first: Int, last: Int, after: String, before: String, offset: Int): AttachmentConnection!
+  attachment(filter: AttachmentFilterInput): Attachment
+  attachmentsGroupBy(groupBy: [AttachmentGroupByInput!]!, filter: AttachmentFilterInput, orderBy: [AttachmentOrderByWithGroupByInput!], orderByForRecords: [AttachmentOrderByInput!], viewId: UUID, limit: Int, offsetForRecords: Int): [AttachmentGroupByConnection!]!
+}
+
+extend type Mutation {
+  createAttachment(data: AttachmentCreateInput): Attachment
+  createAttachments(data: [AttachmentCreateInput!]!, upsert: Boolean): [Attachment!]
+  updateAttachment(id: UUID!, data: AttachmentUpdateInput!): Attachment
+  updateAttachments(filter: AttachmentFilterInput!, data: AttachmentUpdateInput!): [Attachment!]
+  deleteAttachment(id: UUID!): Attachment
+  deleteAttachments(filter: AttachmentFilterInput!): [Attachment!]
+  destroyAttachment(id: UUID!): Attachment
+  destroyAttachments(filter: AttachmentFilterInput!): [Attachment!]
+  restoreAttachments(filter: AttachmentFilterInput!): [Attachment!]
+}

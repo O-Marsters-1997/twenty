@@ -16,6 +16,9 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/config"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/frontdoor"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/metadatagql"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/metagql"
+	metadatastore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/store"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records/recordsgql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records/store"
 )
@@ -41,9 +44,28 @@ func run() error {
 	defer pool.Close()
 	verifier := auth.NewJWTVerifier(pool, cfg.AppSecret)
 
+	goGraphQL := http.NewServeMux()
+	goGraphQL.Handle(string(frontdoor.EndpointWorkspace), recordsgql.NewHandler(&recordsgql.Resolver{
+		Store:              store.NewPeople(pool),
+		Companies:          store.NewCompanies(pool),
+		Opportunities:      store.NewOpportunities(pool),
+		WorkspaceMembers:   store.NewWorkspaceMembers(pool),
+		Dashboards:         store.NewDashboards(pool),
+		TimelineActivities: store.NewTimelineActivities(pool),
+		Attachments:        store.NewAttachments(pool),
+		Notes:              store.NewNotes(pool),
+		NoteTargets:        store.NewNoteTargets(pool),
+		Tasks:              store.NewTasks(pool),
+		TaskTargets:        store.NewTaskTargets(pool),
+	}, logger))
+	goGraphQL.Handle(string(frontdoor.EndpointMetadata), metadataHandler(
+		metadatagql.NewHandler(metadatastore.New(pool), logger),
+		metagql.NewHandler(metadatastore.NewViews(pool), logger),
+	))
+
 	server := &http.Server{
 		Addr:              cfg.ListenAddr,
-		Handler:           frontdoor.NewHandler(frontdoor.DefaultTable(), cfg.NodeUpstreamURL, verifier, recordsgql.NewHandler(store.NewPeople(pool), logger), logger),
+		Handler:           frontdoor.NewHandler(frontdoor.DefaultTable(), cfg.NodeUpstreamURL, verifier, goGraphQL, logger),
 		ReadHeaderTimeout: 10 * time.Second,
 	}
 

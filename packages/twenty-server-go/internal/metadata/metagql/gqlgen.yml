@@ -1,0 +1,105 @@
+schema:
+  - view.graphqls
+exec:
+  filename: generated.go
+  package: metagql
+model:
+  filename: models_gen.go
+  package: metagql
+resolver:
+  layout: single-file
+  filename: resolver.go
+  package: metagql
+  type: Resolver
+models:
+  UUID:
+    model: github.com/99designs/gqlgen/graphql.String
+  ID:
+    model: github.com/99designs/gqlgen/graphql.ID
+  DateTime:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata.Timestamp
+  JSON:
+    model: github.com/99designs/gqlgen/graphql.Any
+  ViewType:
+    model: github.com/99designs/gqlgen/graphql.String
+  ViewKey:
+    model: github.com/99designs/gqlgen/graphql.String
+  ViewVisibility:
+    model: github.com/99designs/gqlgen/graphql.String
+  ViewOpenRecordIn:
+    model: github.com/99designs/gqlgen/graphql.String
+  ViewCalendarLayout:
+    model: github.com/99designs/gqlgen/graphql.String
+  ViewSortDirection:
+    model: github.com/99designs/gqlgen/graphql.String
+  ViewFilterGroupLogicalOperator:
+    model: github.com/99designs/gqlgen/graphql.String
+  ViewFilterOperand:
+    model: github.com/99designs/gqlgen/graphql.String
+  AggregateOperations:
+    model: github.com/99designs/gqlgen/graphql.String
+  View:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata.ViewRecord
+    fields:
+      viewFields:
+        fieldName: Fields
+      viewFieldGroups:
+        fieldName: FieldGroups
+      viewFilters:
+        fieldName: Filters
+      viewFilterGroups:
+        fieldName: FilterGroups
+      viewSorts:
+        fieldName: Sorts
+      viewGroups:
+        fieldName: Groups
+  ViewField:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata.ViewField
+  ViewFieldGroup:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata.ViewFieldGroup
+  ViewFilter:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata.ViewFilter
+  ViewFilterGroup:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata.ViewFilterGroup
+  ViewSort:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata.ViewSort
+  ViewGroup:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata.ViewGroup
+  CreateViewInput:
+    model: map[string]interface{}
+  UpdateViewInput:
+    model: map[string]interface{}
+  CreateViewFieldInput:
+    model: map[string]interface{}
+  UpdateViewFieldInput:
+    model: map[string]interface{}
+  UpdateViewFieldInputUpdates:
+    model: map[string]interface{}
+  DestroyViewFieldInput:
+    model: map[string]interface{}
+  CreateViewFilterInput:
+    model: map[string]interface{}
+  UpdateViewFilterInput:
+    model: map[string]interface{}
+  UpdateViewFilterInputUpdates:
+    model: map[string]interface{}
+  DestroyViewFilterInput:
+    model: map[string]interface{}
+  CreateViewFilterGroupInput:
+    model: map[string]interface{}
+  UpdateViewFilterGroupInput:
+    model: map[string]interface{}
+  CreateViewSortInput:
+    model: map[string]interface{}
+  UpdateViewSortInput:
+    model: map[string]interface{}
+  UpdateViewSortInputUpdates:
+    model: map[string]interface{}
+  DestroyViewSortInput:
+    model: map[string]interface{}
+  CreateViewGroupInput:
+    model: map[string]interface{}
+  UpdateViewGroupInput:
+    model: map[string]interface{}
+  UpdateViewGroupInputUpdates:
+    model: map[string]interface{}

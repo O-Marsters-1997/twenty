@@ -19,8 +19,32 @@ type OperationTable map[Endpoint]map[string]Route // operation name → route; a
 
 // DefaultTable blocks the object and field mutations that change the frozen data model.
 func DefaultTable() OperationTable {
-	return OperationTable{
+	table := OperationTable{
+		EndpointWorkspace: {
+			"AggregateTimelineActivities":         RouteGo,
+			"TimelineActivitiesGroupByAggregates": RouteGo,
+			"TimelineActivitiesGroupByRecords":    RouteGo,
+			"AggregateAttachments":                RouteGo,
+			"AttachmentsGroupByAggregates":        RouteGo,
+			"AttachmentsGroupByRecords":           RouteGo,
+			"AggregatePeople":                     RouteGo,
+			"PeopleGroupByAggregates":             RouteGo,
+			"PeopleGroupByRecords":                RouteGo,
+			"AggregateWorkspaceMembers":           RouteGo,
+			"WorkspaceMembersGroupByAggregates":   RouteGo,
+			"WorkspaceMembersGroupByRecords":      RouteGo,
+			"AggregateDashboards":                 RouteGo,
+			"DashboardsGroupByAggregates":         RouteGo,
+			"DashboardsGroupByRecords":            RouteGo,
+			"AggregateCompanies":                  RouteGo,
+			"CompaniesGroupByAggregates":          RouteGo,
+			"CompaniesGroupByRecords":             RouteGo,
+			"AggregateOpportunities":              RouteGo,
+			"OpportunitiesGroupByAggregates":      RouteGo,
+			"OpportunitiesGroupByRecords":         RouteGo,
+		},
 		EndpointMetadata: {
+			"ObjectMetadataItems":         RouteGo,
 			"CreateOneObjectMetadataItem": RouteBlocked,
 			"UpdateOneObjectMetadataItem": RouteBlocked,
 			"DeleteOneObjectMetadataItem": RouteBlocked,
@@ -29,6 +53,25 @@ func DefaultTable() OperationTable {
 			"DeleteOneFieldMetadataItem":  RouteBlocked,
 		},
 	}
+	for _, operation := range viewOperations {
+		table[EndpointMetadata][operation] = RouteGo
+	}
+	for _, plural := range []string{"Notes", "NoteTargets", "Tasks", "TaskTargets"} {
+		for _, operation := range []string{"Aggregate" + plural, plural + "GroupByAggregates", plural + "GroupByRecords"} {
+			table[EndpointWorkspace][operation] = RouteGo
+		}
+	}
+	return table
+}
+
+var viewOperations = []string{
+	"FindManyViews", "FindAllViews", "FindFieldsWidgetViews", "FindTableWidgetViews",
+	"CreateView", "UpdateView", "DestroyView",
+	"CreateManyViewFields", "UpdateViewField", "DestroyViewField",
+	"CreateViewFilter", "UpdateViewFilter", "DestroyViewFilter",
+	"CreateViewFilterGroup", "UpdateViewFilterGroup", "DestroyViewFilterGroup",
+	"CreateViewSort", "UpdateViewSort", "DestroyViewSort",
+	"CreateManyViewGroups", "UpdateManyViewGroups",
 }
 
 var blockedMetadataFields = []string{
