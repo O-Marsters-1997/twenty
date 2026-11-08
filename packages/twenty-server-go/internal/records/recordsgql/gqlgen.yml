@@ -1,6 +1,9 @@
 schema:
   - person.graphqls
   - aggregate.graphqls
+  - note.graphqls
+  - task.graphqls
+  - noteTaskOperations.graphqls
 exec:
   filename: generated.go
   package: recordsgql
@@ -36,6 +39,38 @@ models:
   PersonOrderByWithGroupByInput:
     model: map[string]interface{}
   PersonGroupByInput:
+    model: map[string]interface{}
+  NoteFilterInput:
+    model: map[string]interface{}
+  NoteOrderByInput:
+    model: map[string]interface{}
+  NoteOrderByWithGroupByInput:
+    model: map[string]interface{}
+  NoteGroupByInput:
+    model: map[string]interface{}
+  NoteTargetFilterInput:
+    model: map[string]interface{}
+  NoteTargetOrderByInput:
+    model: map[string]interface{}
+  NoteTargetOrderByWithGroupByInput:
+    model: map[string]interface{}
+  NoteTargetGroupByInput:
+    model: map[string]interface{}
+  TaskFilterInput:
+    model: map[string]interface{}
+  TaskOrderByInput:
+    model: map[string]interface{}
+  TaskOrderByWithGroupByInput:
+    model: map[string]interface{}
+  TaskGroupByInput:
+    model: map[string]interface{}
+  TaskTargetFilterInput:
+    model: map[string]interface{}
+  TaskTargetOrderByInput:
+    model: map[string]interface{}
+  TaskTargetOrderByWithGroupByInput:
+    model: map[string]interface{}
+  TaskTargetGroupByInput:
     model: map[string]interface{}
   JSON:
     model: github.com/99designs/gqlgen/graphql.Any

@@ -35,7 +35,8 @@ func newServer(t *testing.T) *httptest.Server {
 	}
 	t.Cleanup(pool.Close)
 	table := frontdoor.OperationTable{frontdoor.EndpointWorkspace: {}}
-	for _, name := range []string{"Create", "Find", "Update", "Delete", "Restore", "Destroy", "AggregatePeople", "PeopleGroupByAggregates", "PeopleGroupByRecords"} {
+	for _, name := range []string{"Create", "Find", "Update", "Delete", "Restore", "Destroy", "AggregatePeople", "PeopleGroupByAggregates", "PeopleGroupByRecords",
+		"AggregateNotes", "TasksGroupByRecords", "NoteTargetsGroupByAggregates"} {
 		table[frontdoor.EndpointWorkspace][name] = frontdoor.RouteGo
 	}
 	logger := slog.New(slog.NewTextHandler(io.Discard, nil))
@@ -43,7 +44,13 @@ func newServer(t *testing.T) *httptest.Server {
 	if err != nil {
 		t.Fatal(err)
 	}
-	server := httptest.NewServer(frontdoor.NewHandler(table, upstream, verifier{}, recordsgql.NewHandler(store.NewPeople(pool), logger), logger))
+	server := httptest.NewServer(frontdoor.NewHandler(table, upstream, verifier{}, recordsgql.NewHandler(&recordsgql.Resolver{
+		Store:       store.NewPeople(pool),
+		Notes:       store.NewNotes(pool),
+		NoteTargets: store.NewNoteTargets(pool),
+		Tasks:       store.NewTasks(pool),
+		TaskTargets: store.NewTaskTargets(pool),
+	}, logger), logger))
 	t.Cleanup(server.Close)
 	return server
 }
