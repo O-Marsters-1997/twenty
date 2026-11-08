@@ -3,7 +3,13 @@ package ai
 import (
 	"context"
 	"encoding/json"
+
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
 )
+
+type Runner interface { // shared by chat turns and, from phase 4, workflow agent steps
+	Run(ctx context.Context, principal auth.Principal, agent Agent, messages []Message, emit func(ChatEvent)) ([]Message, error)
+}
 
 // ChatEvent is one AI SDK UI message chunk of a thread's turn.
 type ChatEvent struct {
