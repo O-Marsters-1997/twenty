@@ -1,0 +1,34 @@
+schema:
+  - person.graphqls
+exec:
+  filename: generated.go
+  package: recordsgql
+model:
+  filename: models_gen.go
+  package: recordsgql
+resolver:
+  layout: single-file
+  filename: resolver.go
+  package: recordsgql
+  type: Resolver
+models:
+  UUID:
+    model: github.com/99designs/gqlgen/graphql.String
+  ID:
+    model: github.com/99designs/gqlgen/graphql.ID
+  Position:
+    model: github.com/99designs/gqlgen/graphql.Float
+  DateTime:
+    model: github.com/99designs/gqlgen/graphql.Time
+  ConnectionCursor:
+    model: github.com/99designs/gqlgen/graphql.String
+  Cursor:
+    model: github.com/99designs/gqlgen/graphql.String
+  FilterMap:
+    model: github.com/99designs/gqlgen/graphql.Map
+  OrderByMap:
+    model: github.com/99designs/gqlgen/graphql.Map
+  PersonFilterInput:
+    model: map[string]interface{}
+  PersonOrderByInput:
+    model: map[string]interface{}

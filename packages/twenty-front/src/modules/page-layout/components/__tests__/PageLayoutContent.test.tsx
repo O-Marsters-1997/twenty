@@ -234,7 +234,6 @@ describe('PageLayoutContent', () => {
     WidgetType.NOTES,
     WidgetType.CALENDAR,
     WidgetType.WORKFLOW,
-    WidgetType.CALL_RECORDING_SUMMARY,
   ])(
     'keeps only the between-widget plus when a field precedes a full-height %s widget',
     (type) => {
@@ -304,8 +303,6 @@ describe('PageLayoutContent', () => {
     WidgetType.WORKFLOW,
     WidgetType.WORKFLOW_RUN,
     WidgetType.WORKFLOW_VERSION,
-    WidgetType.CALL_RECORDING_SUMMARY,
-    WidgetType.CALL_RECORDING_TRANSCRIPT,
   ])(
     'shows the expanded chooser above a lone full-height %s widget',
     (type) => {

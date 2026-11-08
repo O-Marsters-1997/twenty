@@ -1,0 +1,49 @@
+{
+  "name": "twenty-server-go",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/twenty-server-go",
+  "projectType": "application",
+  "tags": ["scope:backend"],
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": ["{projectRoot}/bin"],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "go build -o bin/api ./cmd/api"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "go test ./..."
+      }
+    },
+    "golden:record": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "go run ./cmd/golden-record"
+      }
+    },
+    "e2e": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/twenty-e2e-testing",
+        "command": "cp -n .env.example .env; bunx playwright test",
+        "env": { "FRONTEND_BASE_URL": "http://localhost:3000" }
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "commands": ["go vet ./...", "golangci-lint run"],
+        "parallel": false
+      }
+    }
+  }
+}

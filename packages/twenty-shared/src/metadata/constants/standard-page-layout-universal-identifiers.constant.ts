@@ -386,25 +386,12 @@ export const STANDARD_PAGE_LAYOUT_UNIVERSAL_IDENTIFIERS = {
         widgets: {
           fields: 'Fields',
           participants: 'Participants',
-          callRecordings: 'Call Recordings',
         },
       },
       timeline: {
         title: 'Timeline',
         widgets: {
           timeline: 'Timeline',
-        },
-      },
-      summary: {
-        title: 'Summary',
-        widgets: {
-          summary: 'Summary',
-        },
-      },
-      callRecording: {
-        title: 'Call Recording',
-        widgets: {
-          transcript: 'Transcript',
         },
       },
     },
@@ -423,36 +410,6 @@ export const STANDARD_PAGE_LAYOUT_UNIVERSAL_IDENTIFIERS = {
         title: 'Timeline',
         widgets: {
           timeline: 'Timeline',
-        },
-      },
-    },
-  }),
-  callRecordingRecordPage: buildStandardObjectRecordPageLayout({
-    objectUniversalIdentifier:
-      STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.callRecording,
-    tabs: {
-      home: {
-        title: 'Home',
-        widgets: {
-          fields: 'Fields',
-        },
-      },
-      timeline: {
-        title: 'Timeline',
-        widgets: {
-          timeline: 'Timeline',
-        },
-      },
-      summary: {
-        title: 'Summary',
-        widgets: {
-          summary: 'Summary',
-        },
-      },
-      callRecording: {
-        title: 'Call Recording',
-        widgets: {
-          transcript: 'Transcript',
         },
       },
     },

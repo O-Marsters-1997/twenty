@@ -53,7 +53,7 @@ postgres-on-docker: ensure-docker-network
 		-c "CREATE DATABASE \"test\" WITH OWNER postgres;"
 
 redis-on-docker: ensure-docker-network
-	docker run -d --network $(DOCKER_NETWORK) --name twenty_redis -p 6379:6379 redis/redis-stack-server:latest
+	docker run -d --network $(DOCKER_NETWORK) --name twenty_redis -p 6379:6379 valkey/valkey:8
 
 clickhouse-on-docker: ensure-docker-network
 	docker run -d --network $(DOCKER_NETWORK) --name twenty_clickhouse -p 8123:8123 -p 9000:9000 -e CLICKHOUSE_PASSWORD=devPassword clickhouse/clickhouse-server:latest \

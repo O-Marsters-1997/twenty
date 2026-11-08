@@ -31,11 +31,6 @@ const meta: Meta<PageDecoratorArgs> = {
             },
           });
         }),
-        graphql.query('GetInviteSuggestions', () => {
-          return HttpResponse.json({
-            data: { getInviteSuggestions: [] },
-          });
-        }),
         graphqlMocks.handlers,
       ],
     },

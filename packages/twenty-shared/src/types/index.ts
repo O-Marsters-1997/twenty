@@ -22,11 +22,6 @@ export { CalendarChannelContactAutoCreationPolicy } from './CalendarChannelConta
 export { CalendarChannelSyncStage } from './CalendarChannelSyncStage';
 export { CalendarChannelSyncStatus } from './CalendarChannelSyncStatus';
 export { CalendarChannelVisibility } from './CalendarChannelVisibility';
-export type {
-  CallRecordingTranscriptStatusMarker,
-  CallRecordingParsedTranscriptWord,
-  CallRecordingParsedTranscriptEntry,
-} from './CallRecordingTranscript';
 export type { CommandMenuConfirmationModalResult } from './CommandMenuConfirmationModalResult';
 export type { CommandMenuConfirmationModalResultBrowserEventDetail } from './CommandMenuConfirmationModalResultBrowserEventDetail';
 export type { CommandMenuContextApi } from './CommandMenuContextApi';
@@ -232,8 +227,6 @@ export type {
   EmailThreadConfiguration,
   MessageCampaignBodyConfiguration,
   MessageCampaignDetailsConfiguration,
-  CallRecordingSummaryConfiguration,
-  CallRecordingTranscriptConfiguration,
   CalendarConfiguration,
   WorkflowConfiguration,
   WorkflowVersionConfiguration,

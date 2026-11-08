@@ -1,5 +1,3 @@
-import { CalendarEventCallRecorderAvatar } from '@/activities/calendar/components/CalendarEventCallRecorderAvatar';
-import { type CalendarEventCallRecording } from '@/activities/calendar/types/CalendarEventCallRecording';
 import { type CalendarEventParticipant } from '@/activities/calendar/types/CalendarEventParticipant';
 import { isTimelineCalendarEventParticipant } from '@/activities/calendar/types/guards/IsTimelineCalendarEventParticipant';
 import { isNonEmptyString } from '@sniptt/guards';
@@ -11,12 +9,10 @@ import { getAbsoluteImageUrl } from '~/utils/image/getAbsoluteImageUrl';
 
 type CalendarEventParticipantsAvatarGroupProps = {
   participants: CalendarEventParticipant[] | TimelineCalendarEventParticipant[];
-  callRecordings?: CalendarEventCallRecording[];
 };
 
 export const CalendarEventParticipantsAvatarGroup = ({
   participants,
-  callRecordings = [],
 }: CalendarEventParticipantsAvatarGroupProps) => {
   const timelineParticipants: TimelineCalendarEventParticipant[] =
     participants.map((participant) => {
@@ -54,13 +50,6 @@ export const CalendarEventParticipantsAvatarGroup = ({
   return (
     <AvatarGroup
       avatars={[
-        ...callRecordings.map((callRecording) => (
-          <CalendarEventCallRecorderAvatar
-            key={callRecording.id}
-            applicationId={callRecording.applicationId}
-            status={callRecording.status}
-          />
-        )),
         ...timelineParticipants.map((participant) => {
           const participantName =
             isNonEmptyString(participant.firstName) &&

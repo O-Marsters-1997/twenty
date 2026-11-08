@@ -18,14 +18,14 @@ export const Default: Story = {
   args: {
     Icon: IconArrowUpRight,
     label: 'See all',
-    to: '/objects/callRecordings',
+    to: '/objects/people',
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
     const link = await canvas.findByRole('link', { name: 'See all' });
 
-    expect(link).toHaveAttribute('href', '/objects/callRecordings');
+    expect(link).toHaveAttribute('href', '/objects/people');
     expect(canvas.queryByRole('button')).not.toBeInTheDocument();
   },
 };

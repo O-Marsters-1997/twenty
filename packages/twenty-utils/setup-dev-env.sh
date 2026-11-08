@@ -32,7 +32,7 @@ has_local_pg() {
 }
 
 has_local_redis() {
-  command -v redis-server &>/dev/null
+  command -v valkey-server &>/dev/null
 }
 
 can_use_docker() {
@@ -52,10 +52,10 @@ pg_is_up() {
 }
 
 redis_is_up() {
-  if command -v redis-cli &>/dev/null; then
-    redis-cli -h localhost -p 6379 ping 2>/dev/null | grep -q PONG
+  if command -v valkey-cli &>/dev/null; then
+    valkey-cli -h localhost -p 6379 ping 2>/dev/null | grep -q PONG
   elif can_use_docker && docker compose -f "$COMPOSE_FILE" ps --quiet redis 2>/dev/null | grep -q .; then
-    docker compose -f "$COMPOSE_FILE" exec -T redis redis-cli ping 2>/dev/null | grep -q PONG
+    docker compose -f "$COMPOSE_FILE" exec -T redis valkey-cli ping 2>/dev/null | grep -q PONG
   else
     # Portable fallback using bash /dev/tcp (no nc -q dependency)
     timeout 2 bash -c 'exec 3<>/dev/tcp/localhost/6379; echo PING >&3; read -r reply <&3; exec 3>&-; echo "$reply"' 2>/dev/null | grep -q PONG
@@ -75,7 +75,7 @@ wait_for_redis() {
   local retries=30
   while ! redis_is_up; do
     retries=$((retries - 1))
-    if [ "$retries" -le 0 ]; then fail "Redis did not start in time"; exit 1; fi
+    if [ "$retries" -le 0 ]; then fail "Valkey did not start in time"; exit 1; fi
     sleep 1
   done
 }
@@ -113,8 +113,8 @@ stop_docker() {
 
 stop_local() {
   if has_local_pg; then sudo pg_ctlcluster 16 main stop 2>/dev/null || true; fi
-  if has_local_redis && pgrep -x redis-server &>/dev/null; then
-    sudo service redis-server stop 2>/dev/null || true
+  if has_local_redis && pgrep -x valkey-server &>/dev/null; then
+    sudo service valkey-server stop 2>/dev/null || true
   fi
 }
 
@@ -136,10 +136,9 @@ fi
 
 if [ "$ACTION" = "reset" ]; then
   info "Resetting dev services (wiping data)..."
-  # Wipe local Redis data while it's still running
-  if [ "$USE_DOCKER" = false ] && has_local_redis && pgrep -x redis-server &>/dev/null; then
-    info "Flushing local Redis data..."
-    redis-cli flushall 2>/dev/null || true
+  if [ "$USE_DOCKER" = false ] && has_local_redis && pgrep -x valkey-server &>/dev/null; then
+    info "Flushing local Valkey data..."
+    valkey-cli flushall 2>/dev/null || true
   fi
   # Wipe local PostgreSQL data while it's still running
   if [ "$USE_DOCKER" = false ] && has_local_pg; then
@@ -183,20 +182,20 @@ start_pg() {
 
 start_redis() {
   if redis_is_up; then
-    ok "Redis already running"
+    ok "Valkey already running"
     return
   fi
 
   if [ "$USE_DOCKER" = false ] && has_local_redis; then
-    info "Starting local Redis..."
-    sudo service redis-server start 2>/dev/null || redis-server --daemonize yes 2>/dev/null || true
+    info "Starting local Valkey..."
+    sudo service valkey-server start 2>/dev/null || valkey-server --daemonize yes 2>/dev/null || true
     wait_for_redis
   elif can_use_docker; then
-    info "Starting Redis via Docker..."
+    info "Starting Valkey via Docker..."
     docker compose -f "$COMPOSE_FILE" up -d redis
     wait_for_redis
   else
-    fail "No Redis available. Install Redis or Docker."
+    fail "No Valkey available. Install Valkey or Docker."
     exit 1
   fi
 }

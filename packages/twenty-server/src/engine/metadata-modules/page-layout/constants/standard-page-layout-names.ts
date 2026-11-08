@@ -12,7 +12,6 @@ export const getStandardPageLayoutNames = () => [
     message: `Default Calendar Event Participant Layout`,
     context: 'pageLayout.name',
   }),
-  msg({ message: `Default Call Recording Layout`, context: 'pageLayout.name' }),
   msg({ message: `Default Campaign Layout`, context: 'pageLayout.name' }),
   msg({ message: `Default Company Layout`, context: 'pageLayout.name' }),
   msg({ message: `Default List Layout`, context: 'pageLayout.name' }),

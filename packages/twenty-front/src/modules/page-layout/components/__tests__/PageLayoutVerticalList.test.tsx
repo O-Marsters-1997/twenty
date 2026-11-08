@@ -151,11 +151,6 @@ describe('PageLayoutVerticalList', () => {
   it('gives FILL_VIEWPORT sizing to other viewport-filling widgets', () => {
     const viewportWidgets = [
       makeWidget('calendar', WidgetType.CALENDAR),
-      makeWidget('call-recording-summary', WidgetType.CALL_RECORDING_SUMMARY),
-      makeWidget(
-        'call-recording-transcript',
-        WidgetType.CALL_RECORDING_TRANSCRIPT,
-      ),
       makeWidget('emails', WidgetType.EMAILS),
       makeWidget('email-thread', WidgetType.EMAIL_THREAD),
       makeWidget('files', WidgetType.FILES),

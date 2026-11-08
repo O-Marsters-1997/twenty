@@ -17,7 +17,7 @@ import {
 import { SettingsProtectedRouteWrapper } from '@/settings/components/SettingsProtectedRouteWrapper';
 import { SettingsSkeletonLoader } from '@/settings/components/SettingsSkeletonLoader';
 import { SettingsPath } from 'twenty-shared/types';
-import { getSettingsPath } from 'twenty-shared/utils';
+import { getSettingsPath, isDefined } from 'twenty-shared/utils';
 import { PermissionFlagType } from '~/generated-metadata/graphql';
 
 const SettingsGraphQLPlayground = lazy(() =>
@@ -84,6 +84,21 @@ function LegacySettingsPathRedirect({ to }: LegacySettingsPathRedirectProps) {
   );
 }
 
+function ReadOnlyDataModelRedirect() {
+  const { objectNamePlural } = useParams();
+
+  return (
+    <Navigate
+      to={
+        isDefined(objectNamePlural)
+          ? getSettingsPath(SettingsPath.ObjectDetail, { objectNamePlural })
+          : getSettingsPath(SettingsPath.Objects)
+      }
+      replace
+    />
+  );
+}
+
 const SettingsAccountsConfiguration = lazy(() =>
   import('~/pages/settings/accounts/SettingsAccountsConfiguration').then(
     (module) => ({
@@ -95,12 +110,6 @@ const SettingsAccountsConfiguration = lazy(() =>
 const SettingsNewAccount = lazy(() =>
   import('~/pages/settings/accounts/SettingsNewAccount').then((module) => ({
     default: module.SettingsNewAccount,
-  })),
-);
-
-const SettingsNewObject = lazy(() =>
-  import('~/pages/settings/data-model/SettingsNewObject').then((module) => ({
-    default: module.SettingsNewObject,
   })),
 );
 
@@ -338,54 +347,6 @@ const SettingsDevelopersWebhookDetail = lazy(() =>
   ),
 );
 
-const SettingsObjectNewFieldSelect = lazy(() =>
-  import('~/pages/settings/data-model/new-field/SettingsObjectNewFieldSelect').then(
-    (module) => ({
-      default: module.SettingsObjectNewFieldSelect,
-    }),
-  ),
-);
-
-const SettingsObjectNewFieldConfigure = lazy(() =>
-  import('~/pages/settings/data-model/new-field/SettingsObjectNewFieldConfigure').then(
-    (module) => ({
-      default: module.SettingsObjectNewFieldConfigure,
-    }),
-  ),
-);
-
-const SettingsObjectNewIndex = lazy(() =>
-  import('~/pages/settings/data-model/new-index/SettingsObjectNewIndex').then(
-    (module) => ({
-      default: module.SettingsObjectNewIndex,
-    }),
-  ),
-);
-
-const SettingsObjectValidationRuleEdit = lazy(() =>
-  import('~/pages/settings/data-model/validation-rules/SettingsObjectValidationRuleEdit').then(
-    (module) => ({
-      default: module.SettingsObjectValidationRuleEdit,
-    }),
-  ),
-);
-
-const SettingsObjectFieldEdit = lazy(() =>
-  import('~/pages/settings/data-model/SettingsObjectFieldEdit').then(
-    (module) => ({
-      default: module.SettingsObjectFieldEdit,
-    }),
-  ),
-);
-
-const SettingsObjectTranslations = lazy(() =>
-  import('~/pages/settings/data-model/SettingsObjectTranslations').then(
-    (module) => ({
-      default: module.SettingsObjectTranslations,
-    }),
-  ),
-);
-
 const SettingsSecurityApprovedAccessDomain = lazy(() =>
   import('~/pages/settings/security/SettingsSecurityApprovedAccessDomain').then(
     (module) => ({
@@ -603,46 +564,18 @@ const createSettingsRouteElements = () => (
         element={<SettingsObjectDetailPage />}
         handle={MAIN_AND_SIDE_PANEL_SETTINGS_ROUTE_HANDLE}
       />
-      <Route
-        path={SettingsPath.NewObject}
-        element={<SettingsNewObject />}
-        handle={MAIN_AND_SIDE_PANEL_SETTINGS_ROUTE_HANDLE}
-      />
-      <Route
-        path={SettingsPath.ObjectNewFieldSelect}
-        element={<SettingsObjectNewFieldSelect />}
-        handle={MAIN_AND_SIDE_PANEL_SETTINGS_ROUTE_HANDLE}
-      />
-      <Route
-        path={SettingsPath.ObjectNewFieldConfigure}
-        element={<SettingsObjectNewFieldConfigure />}
-        handle={MAIN_AND_SIDE_PANEL_SETTINGS_ROUTE_HANDLE}
-      />
-      <Route
-        path={SettingsPath.ObjectNewIndex}
-        element={<SettingsObjectNewIndex />}
-        handle={MAIN_AND_SIDE_PANEL_SETTINGS_ROUTE_HANDLE}
-      />
-      <Route
-        path={SettingsPath.ObjectValidationRuleEdit}
-        element={<SettingsObjectValidationRuleEdit />}
-        handle={MAIN_AND_SIDE_PANEL_SETTINGS_ROUTE_HANDLE}
-      />
-      <Route
-        path={SettingsPath.ObjectFieldEdit}
-        element={<SettingsObjectFieldEdit />}
-        handle={MAIN_AND_SIDE_PANEL_SETTINGS_ROUTE_HANDLE}
-      />
-      <Route
-        path={SettingsPath.ObjectTranslations}
-        element={<SettingsObjectTranslations />}
-        handle={MAIN_AND_SIDE_PANEL_SETTINGS_ROUTE_HANDLE}
-      />
-      <Route
-        path={SettingsPath.ObjectFieldTranslations}
-        element={<SettingsObjectTranslations />}
-        handle={MAIN_AND_SIDE_PANEL_SETTINGS_ROUTE_HANDLE}
-      />
+      {[
+        SettingsPath.NewObject,
+        SettingsPath.ObjectNewFieldSelect,
+        SettingsPath.ObjectNewFieldConfigure,
+        SettingsPath.ObjectNewIndex,
+        SettingsPath.ObjectValidationRuleEdit,
+        SettingsPath.ObjectFieldEdit,
+        SettingsPath.ObjectTranslations,
+        SettingsPath.ObjectFieldTranslations,
+      ].map((path) => (
+        <Route key={path} path={path} element={<ReadOnlyDataModelRedirect />} />
+      ))}
     </Route>
     <Route
       element={

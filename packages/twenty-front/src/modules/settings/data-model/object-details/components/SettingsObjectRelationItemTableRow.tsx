@@ -1,32 +1,19 @@
-import { isDDLLockedState } from '@/client-config/states/isDDLLockedState';
-import { useDeleteOneFieldMetadataItem } from '@/object-metadata/hooks/useDeleteOneFieldMetadataItem';
-import { useFieldMetadataItem } from '@/object-metadata/hooks/useFieldMetadataItem';
-import { useGetIsMetadataItemCustom } from '@/object-metadata/hooks/useGetIsMetadataItemCustom';
 import { useGetRelationMetadata } from '@/object-metadata/hooks/useGetRelationMetadata';
 import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/EnrichedObjectMetadataItem';
 import { type FieldMetadataItem } from '@/object-metadata/types/FieldMetadataItem';
-import { isObjectMetadataReadOnly } from '@/object-record/read-only/utils/isObjectMetadataReadOnly';
 import { SettingsItemTypeTag } from '@/settings/components/SettingsItemTypeTag';
 import { SettingsNameCellSecondaryLabel } from '@/settings/components/SettingsNameCellSecondaryLabel';
 import { SettingsTextLink } from '@/settings/components/SettingsTextLink';
 import { RELATION_TYPES } from '@/settings/data-model/constants/RelationTypes';
-import { SettingsObjectFieldInactiveActionDropdown } from '@/settings/data-model/object-details/components/SettingsObjectFieldDisabledActionDropdown';
 import { TableCell } from '@/ui/layout/table/components/TableCell';
 import { TableRow } from '@/ui/layout/table/components/TableRow';
-import { UndecoratedLink } from '@/ui/navigation/link/components/UndecoratedLink/UndecoratedLink';
-import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
-import { type MouseEvent, useMemo } from 'react';
+import { useMemo } from 'react';
 import { FieldMetadataType, SettingsPath } from 'twenty-shared/types';
 import { getSettingsPath, isDefined } from 'twenty-shared/utils';
-import {
-  IconChevronRight,
-  IconRelationManyToMany,
-  useIcons,
-} from 'twenty-ui/icon';
+import { IconRelationManyToMany, useIcons } from 'twenty-ui/icon';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
-import { useNavigateSettings } from '~/hooks/useNavigateSettings';
 
 type SettingsObjectRelationItemTableRowProps = {
   fieldMetadataItem: FieldMetadataItem;
@@ -50,12 +37,6 @@ const StyledNameLabel = styled.div`
   white-space: nowrap;
 `;
 
-const StyledIconChevronRightContainer = styled.span`
-  align-items: center;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-`;
-
 const StyledRelationType = styled.div`
   align-items: center;
   display: flex;
@@ -69,10 +50,7 @@ export const SettingsObjectRelationItemTableRow = ({
 }: SettingsObjectRelationItemTableRowProps) => {
   const theme = useTheme();
   const { t } = useLingui();
-  const navigate = useNavigateSettings();
   const { getIcon } = useIcons();
-
-  const getIsMetadataItemCustom = useGetIsMetadataItemCustom();
 
   const Icon = getIcon(fieldMetadataItem.icon);
 
@@ -82,28 +60,6 @@ export const SettingsObjectRelationItemTableRow = ({
       () => getRelationMetadata({ fieldMetadataItem }),
       [fieldMetadataItem, getRelationMetadata],
     ) ?? {};
-
-  const isDDLLocked = useAtomStateValue(isDDLLockedState);
-
-  const readonly =
-    isObjectMetadataReadOnly({
-      objectMetadataItem,
-    }) || isDDLLocked;
-
-  const { activateMetadataField } = useFieldMetadataItem();
-  const { deleteOneFieldMetadataItem } = useDeleteOneFieldMetadataItem();
-
-  const linkToNavigate = getSettingsPath(SettingsPath.ObjectFieldEdit, {
-    objectNamePlural: objectMetadataItem.namePlural,
-    fieldName: fieldMetadataItem.name,
-  });
-
-  // oxlint-disable-next-line twenty/no-navigate-prefer-link
-  const navigateToFieldEdit = () =>
-    navigate(SettingsPath.ObjectFieldEdit, {
-      objectNamePlural: objectMetadataItem.namePlural,
-      fieldName: fieldMetadataItem.name,
-    });
 
   const isRelatedObjectLinkable = isDefined(
     relationObjectMetadataItem?.namePlural,
@@ -149,11 +105,6 @@ export const SettingsObjectRelationItemTableRow = ({
   return (
     <TableRow
       gridTemplateColumns={OBJECT_RELATION_TABLE_ROW_GRID_TEMPLATE_COLUMNS}
-      // The row can't be a Link: it contains a nested link to the related
-      // object, and <a> inside <a> is invalid HTML (React 19 errors on it).
-      // oxlint-disable-next-line twenty/no-navigate-prefer-link
-      onClick={navigateToFieldEdit}
-      cursor="pointer"
     >
       <TableCell
         color={themeCssVariables.font.color.primary}
@@ -174,9 +125,6 @@ export const SettingsObjectRelationItemTableRow = ({
               to={getSettingsPath(SettingsPath.ObjectDetail, {
                 objectNamePlural: relationObjectMetadataItem.namePlural,
               })}
-              onClick={(event: MouseEvent<HTMLAnchorElement>) =>
-                event.stopPropagation()
-              }
               title={targetObjectLabel}
             >
               {targetObjectLabel}
@@ -220,43 +168,7 @@ export const SettingsObjectRelationItemTableRow = ({
         </StyledRelationType>
       </TableCell>
 
-      <TableCell
-        align="center"
-        padding={`0 ${themeCssVariables.spacing[1]} 0 ${themeCssVariables.spacing[2]}`}
-      >
-        {fieldMetadataItem.isActive ? (
-          // The row navigates via onClick (it can't be a Link because it
-          // contains a nested link to the related object). This chevron is a
-          // real link to the same destination so keyboard users can still reach
-          // field edit; stopPropagation avoids firing the row onClick too.
-          <UndecoratedLink
-            to={linkToNavigate}
-            onClick={(event) => event.stopPropagation()}
-          >
-            <StyledIconChevronRightContainer>
-              <IconChevronRight
-                size={theme.icon.size.md}
-                stroke={theme.icon.stroke.sm}
-              />
-            </StyledIconChevronRightContainer>
-          </UndecoratedLink>
-        ) : (
-          <SettingsObjectFieldInactiveActionDropdown
-            isCustomField={getIsMetadataItemCustom(fieldMetadataItem)}
-            readonly={readonly}
-            fieldMetadataItemId={fieldMetadataItem.id}
-            onEdit={navigateToFieldEdit}
-            onActivate={() =>
-              activateMetadataField(fieldMetadataItem.id, objectMetadataItem.id)
-            }
-            onDelete={() =>
-              deleteOneFieldMetadataItem({
-                idToDelete: fieldMetadataItem.id,
-              })
-            }
-          />
-        )}
-      </TableCell>
+      <TableCell />
     </TableRow>
   );
 };

@@ -26,5 +26,4 @@ export class CalendarEventWorkspaceEntity extends BaseWorkspaceEntity {
     CalendarEventParticipantWorkspaceEntity[]
   >;
   calendarEventTargets: EntityRelation<CalendarEventTargetWorkspaceEntity[]>;
-  // callRecordings is omitted: a to-many relation here tips Person past TS's instantiation-depth limit
 }

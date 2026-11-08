@@ -15,7 +15,6 @@ export const STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS = {
   calendarEvent: '20202020-8f1d-4eef-9f85-0d1965e27221',
   calendarEventTarget: '6a9b9656-3e23-4234-94a4-b913c5dde668',
   calendarEventParticipant: '20202020-a1c3-47a6-9732-27e5b1e8436d',
-  callRecording: 'ce19efb9-710f-45b2-b141-473abbeea60b',
   noteTarget: '20202020-fff0-4b44-be82-bda313884400',
   taskTarget: '20202020-5a9a-44e8-95df-771cd06d0fb1',
   person: '20202020-e674-48e5-a542-72570eee7213',

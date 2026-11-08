@@ -12,14 +12,10 @@ import {
 // pre-2.31 literals before being compared with or committed to the workspace.
 const CALENDAR_EVENT_RECORD_PAGE_VIEW =
   STANDARD_OBJECTS.calendarEvent.views.calendarEventRecordPageFields;
-const CALL_RECORDING_RECORD_PAGE_VIEW =
-  STANDARD_OBJECTS.callRecording.views.callRecordingRecordPageFields;
 const MESSAGE_CAMPAIGN_RECORD_PAGE_VIEW =
   STANDARD_OBJECTS.messageCampaign.views.messageCampaignRecordPageFields;
 const CALENDAR_EVENT_RECORD_PAGE_LAYOUT =
   STANDARD_PAGE_LAYOUT_UNIVERSAL_IDENTIFIERS.calendarEventRecordPage;
-const CALL_RECORDING_RECORD_PAGE_LAYOUT =
-  STANDARD_PAGE_LAYOUT_UNIVERSAL_IDENTIFIERS.callRecordingRecordPage;
 const MESSAGE_CAMPAIGN_RECORD_PAGE_LAYOUT =
   STANDARD_PAGE_LAYOUT_UNIVERSAL_IDENTIFIERS.messageCampaignRecordPage;
 
@@ -65,44 +61,10 @@ export const PRE_2_31_RECORD_PAGE_UNIVERSAL_IDENTIFIER_BY_DERIVED: Record<
     .universalIdentifier]: 'fea5c1c2-0c1d-4d2e-a14c-a10108b0db0f',
   [CALENDAR_EVENT_RECORD_PAGE_LAYOUT.tabs.home.widgets.participants
     .universalIdentifier]: '6faea537-02fa-4993-957c-f2e1654986bd',
-  [CALENDAR_EVENT_RECORD_PAGE_LAYOUT.tabs.home.widgets.callRecordings
-    .universalIdentifier]: 'f473b435-e2d4-4928-8d90-1db0094389f7',
   [CALENDAR_EVENT_RECORD_PAGE_LAYOUT.tabs.timeline.universalIdentifier]:
     '9cb35d6d-932d-49bc-b303-593116ca5343',
   [CALENDAR_EVENT_RECORD_PAGE_LAYOUT.tabs.timeline.widgets.timeline
     .universalIdentifier]: '8273e2c4-cc17-4d3e-ba08-5bac612b5d44',
-  [CALL_RECORDING_RECORD_PAGE_VIEW.universalIdentifier]:
-    '99fa8b47-3b11-4f9b-8fbc-e67a9e1da682',
-  [CALL_RECORDING_RECORD_PAGE_VIEW.viewFieldGroups.general.universalIdentifier]:
-    '068426eb-dd20-49b0-ae9c-68727f3be2fb',
-  [CALL_RECORDING_RECORD_PAGE_VIEW.viewFields.title.universalIdentifier]:
-    '6308d574-8579-4cf2-a020-c208df97cf3e',
-  [CALL_RECORDING_RECORD_PAGE_VIEW.viewFields.status.universalIdentifier]:
-    '93483569-fcd2-46cf-b576-9f0318ad2b3b',
-  [CALL_RECORDING_RECORD_PAGE_VIEW.viewFields.recordingRequestStatus
-    .universalIdentifier]: '364a90b1-e9aa-4606-996b-46e579ebeb28',
-  [CALL_RECORDING_RECORD_PAGE_VIEW.viewFields.startedAt.universalIdentifier]:
-    '3fd00fbb-c153-45e3-b6e6-43d18d34052a',
-  [CALL_RECORDING_RECORD_PAGE_VIEW.viewFields.endedAt.universalIdentifier]:
-    'ba8c8d41-c112-4173-b927-5b5c5a5c047b',
-  [CALL_RECORDING_RECORD_PAGE_VIEW.viewFields.video.universalIdentifier]:
-    'acc54ade-cd26-4be2-9391-a42715ad1523',
-  [CALL_RECORDING_RECORD_PAGE_VIEW.viewFields.audio.universalIdentifier]:
-    '9445a547-1d1e-4da3-916b-2c2269c951c9',
-  [CALL_RECORDING_RECORD_PAGE_VIEW.viewFields.transcript.universalIdentifier]:
-    '782c97f6-e6b1-472b-8992-bbb60d25791b',
-  [CALL_RECORDING_RECORD_PAGE_VIEW.viewFields.summary.universalIdentifier]:
-    'a0ace064-cc72-4631-ade3-07cdded86b0e',
-  [CALL_RECORDING_RECORD_PAGE_LAYOUT.universalIdentifier]:
-    'fa475fb3-3fe4-4ab8-8320-495eba5b2e58',
-  [CALL_RECORDING_RECORD_PAGE_LAYOUT.tabs.home.universalIdentifier]:
-    'f61be659-f6f1-4f1f-b3f9-113370740f1b',
-  [CALL_RECORDING_RECORD_PAGE_LAYOUT.tabs.home.widgets.fields
-    .universalIdentifier]: 'e490d2dd-5b69-4518-b867-9dde815f9cb6',
-  [CALL_RECORDING_RECORD_PAGE_LAYOUT.tabs.timeline.universalIdentifier]:
-    '9fb360fa-bc10-430c-8425-25d4e9da4386',
-  [CALL_RECORDING_RECORD_PAGE_LAYOUT.tabs.timeline.widgets.timeline
-    .universalIdentifier]: '9347305a-73de-4651-a116-c67b2706beda',
   [MESSAGE_CAMPAIGN_RECORD_PAGE_VIEW.universalIdentifier]:
     '20202020-a009-4a09-8a09-fa9de11ca901',
   [MESSAGE_CAMPAIGN_RECORD_PAGE_VIEW.viewFieldGroups.stats.universalIdentifier]:
