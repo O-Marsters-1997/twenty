@@ -8,7 +8,7 @@ import (
 	"slices"
 )
 
-const objectMetadataOperation = "ObjectMetadataItems"
+var objectOperations = []string{"ObjectMetadataItems", "GetToolIndex", "GetToolInputSchema"}
 
 func metadataHandler(objects, views, agents http.Handler, agentOperations []string) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -26,7 +26,7 @@ func metadataHandler(objects, views, agents http.Handler, agentOperations []stri
 			return
 		}
 		switch {
-		case request.OperationName == objectMetadataOperation:
+		case slices.Contains(objectOperations, request.OperationName):
 			objects.ServeHTTP(w, r)
 		case slices.Contains(agentOperations, request.OperationName):
 			agents.ServeHTTP(w, r)
