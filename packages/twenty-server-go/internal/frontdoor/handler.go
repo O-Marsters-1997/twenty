@@ -23,6 +23,8 @@ type Handler struct {
 	verifier  auth.Verifier
 	goGraphQL http.Handler
 	logger    *slog.Logger
+
+	subscriber Subscriber
 }
 
 func NewHandler(table OperationTable, upstream *url.URL, verifier auth.Verifier, goGraphQL http.Handler, logger *slog.Logger) *Handler {
@@ -72,6 +74,10 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case RouteBlocked:
 		h.writeGraphQLError(w, "this operation is disabled: the data model is frozen", "FORBIDDEN")
 	case RouteGo:
+		if h.subscriber != nil && wantsEventStream(r) && isSubscription(body) {
+			h.serveSubscription(w, r, endpoint, body)
+			return
+		}
 		principal, ok := h.authenticate(w, r)
 		if !ok {
 			return
