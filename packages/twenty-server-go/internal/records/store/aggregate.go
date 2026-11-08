@@ -126,20 +126,8 @@ func (c *compiler) aggregateColumns(aggregates []records.Aggregate) ([]aggregate
 	return columns, nil
 }
 
-func (p *People) where(filter records.Filter) (*compiler, string, error) {
-	where := &compiler{object: p.object}
-	condition, err := where.filter(filter)
-	if err != nil {
-		return nil, "", err
-	}
-	if !where.mentionsDeletedAt {
-		condition = joinAnd(condition, `"deletedAt" IS NULL`)
-	}
-	return where, condition, nil
-}
-
-func (p *People) Aggregate(ctx context.Context, filter records.Filter, aggregates []records.Aggregate) (records.AggregateResult, error) {
-	where, condition, err := p.where(filter)
+func (t *recordTable[TRecord]) Aggregate(ctx context.Context, filter records.Filter, aggregates []records.Aggregate) (records.AggregateResult, error) {
+	where, condition, err := t.where(filter)
 	if err != nil {
 		return nil, err
 	}
@@ -158,8 +146,8 @@ func (p *People) Aggregate(ctx context.Context, filter records.Filter, aggregate
 		exprs[i] = column.expr
 		dests[i] = &values[i]
 	}
-	if err := p.pool.QueryRow(ctx, `SELECT `+strings.Join(exprs, ", ")+` FROM `+p.table+` WHERE `+orElse(condition, "TRUE"), where.args...).Scan(dests...); err != nil {
-		return nil, fmt.Errorf("aggregate people: %w", err)
+	if err := t.pool.QueryRow(ctx, `SELECT `+strings.Join(exprs, ", ")+` FROM `+t.table+` WHERE `+orElse(condition, "TRUE"), where.args...).Scan(dests...); err != nil {
+		return nil, fmt.Errorf("aggregate %s: %w", t.label, err)
 	}
 	for i, column := range columns {
 		result[column.key] = values[i]
@@ -167,11 +155,11 @@ func (p *People) Aggregate(ctx context.Context, filter records.Filter, aggregate
 	return result, nil
 }
 
-func (p *People) GroupBy(ctx context.Context, filter records.Filter, groupBy []records.GroupBy, orderBy []records.OrderBy, aggregates []records.Aggregate, perGroup records.PageRequest) ([]records.Group[records.Person], error) {
+func (t *recordTable[TRecord]) GroupBy(ctx context.Context, filter records.Filter, groupBy []records.GroupBy, orderBy []records.OrderBy, aggregates []records.Aggregate, perGroup records.PageRequest) ([]records.Group[TRecord], error) {
 	if len(groupBy) == 0 {
 		return nil, fmt.Errorf("%w: group by needs at least one field", records.ErrUnknownField)
 	}
-	where, condition, err := p.where(filter)
+	where, condition, err := t.where(filter)
 	if err != nil {
 		return nil, err
 	}
@@ -213,13 +201,13 @@ func (p *People) GroupBy(ctx context.Context, filter records.Filter, groupBy []r
 	for _, column := range aggregateColumns {
 		selects = append(selects, column.expr)
 	}
-	rows, err := p.pool.Query(ctx, `SELECT `+strings.Join(selects, ", ")+` FROM `+p.table+` WHERE `+orElse(condition, "TRUE")+` GROUP BY `+strings.Join(groupExprs, ", ")+` ORDER BY `+strings.Join(orderSQL, ", "), where.args...)
+	rows, err := t.pool.Query(ctx, `SELECT `+strings.Join(selects, ", ")+` FROM `+t.table+` WHERE `+orElse(condition, "TRUE")+` GROUP BY `+strings.Join(groupExprs, ", ")+` ORDER BY `+strings.Join(orderSQL, ", "), where.args...)
 	if err != nil {
-		return nil, fmt.Errorf("group people: %w", err)
+		return nil, fmt.Errorf("group %s: %w", t.label, err)
 	}
 	defer rows.Close()
 
-	var groups []records.Group[records.Person]
+	var groups []records.Group[TRecord]
 	for rows.Next() {
 		keys := make([]*string, len(groupBy))
 		values := make([]any, len(aggregateColumns))
@@ -231,9 +219,9 @@ func (p *People) GroupBy(ctx context.Context, filter records.Filter, groupBy []r
 			dests = append(dests, &values[i])
 		}
 		if err := rows.Scan(dests...); err != nil {
-			return nil, fmt.Errorf("read people group: %w", err)
+			return nil, fmt.Errorf("read %s group: %w", t.label, err)
 		}
-		group := records.Group[records.Person]{Key: make([]any, len(keys)), Aggregates: records.AggregateResult{}}
+		group := records.Group[TRecord]{Key: make([]any, len(keys)), Aggregates: records.AggregateResult{}}
 		for i, key := range keys {
 			if key != nil {
 				group.Key[i] = *key
@@ -245,7 +233,7 @@ func (p *People) GroupBy(ctx context.Context, filter records.Filter, groupBy []r
 		groups = append(groups, group)
 	}
 	if err := rows.Err(); err != nil {
-		return nil, fmt.Errorf("read people groups: %w", err)
+		return nil, fmt.Errorf("read %s groups: %w", t.label, err)
 	}
 	if perGroup == (records.PageRequest{}) {
 		return groups, nil
@@ -259,7 +247,7 @@ func (p *People) GroupBy(ctx context.Context, filter records.Filter, groupBy []r
 			}
 			inGroup.And = append(inGroup.And, records.Filter{Field: &field})
 		}
-		if groups[i].Records, err = p.Find(ctx, inGroup, nil, perGroup); err != nil {
+		if groups[i].Records, err = t.Find(ctx, inGroup, nil, perGroup); err != nil {
 			return nil, err
 		}
 	}

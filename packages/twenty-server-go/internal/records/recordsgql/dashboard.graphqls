@@ -1,0 +1,197 @@
+type Dashboard {
+  id: UUID!
+  title: String
+  pageLayoutId: UUID
+  position: Position!
+  createdBy: Actor!
+  updatedBy: Actor!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
+
+type DashboardEdge {
+  node: Dashboard!
+  cursor: Cursor!
+}
+
+type DashboardConnection {
+  totalCount: Int
+  edges: [DashboardEdge!]!
+  pageInfo: PageInfo!
+  countUniqueValuesCreatedAt: Int
+  countEmptyCreatedAt: Int
+  countNotEmptyCreatedAt: Int
+  percentageEmptyCreatedAt: Float
+  percentageNotEmptyCreatedAt: Float
+  minCreatedAt: DateTime
+  maxCreatedAt: DateTime
+  countUniqueValuesCreatedBy: Int
+  countEmptyCreatedBy: Int
+  countNotEmptyCreatedBy: Int
+  percentageEmptyCreatedBy: Float
+  percentageNotEmptyCreatedBy: Float
+  countUniqueValuesDeletedAt: Int
+  countEmptyDeletedAt: Int
+  countNotEmptyDeletedAt: Int
+  percentageEmptyDeletedAt: Float
+  percentageNotEmptyDeletedAt: Float
+  minDeletedAt: DateTime
+  maxDeletedAt: DateTime
+  countUniqueValuesId: Int
+  countEmptyId: Int
+  countNotEmptyId: Int
+  percentageEmptyId: Float
+  percentageNotEmptyId: Float
+  countUniqueValuesPageLayoutId: Int
+  countEmptyPageLayoutId: Int
+  countNotEmptyPageLayoutId: Int
+  percentageEmptyPageLayoutId: Float
+  percentageNotEmptyPageLayoutId: Float
+  countUniqueValuesPosition: Int
+  countEmptyPosition: Int
+  countNotEmptyPosition: Int
+  percentageEmptyPosition: Float
+  percentageNotEmptyPosition: Float
+  countUniqueValuesTitle: Int
+  countEmptyTitle: Int
+  countNotEmptyTitle: Int
+  percentageEmptyTitle: Float
+  percentageNotEmptyTitle: Float
+  countUniqueValuesUpdatedAt: Int
+  countEmptyUpdatedAt: Int
+  countNotEmptyUpdatedAt: Int
+  percentageEmptyUpdatedAt: Float
+  percentageNotEmptyUpdatedAt: Float
+  minUpdatedAt: DateTime
+  maxUpdatedAt: DateTime
+  countUniqueValuesUpdatedBy: Int
+  countEmptyUpdatedBy: Int
+  countNotEmptyUpdatedBy: Int
+  percentageEmptyUpdatedBy: Float
+  percentageNotEmptyUpdatedBy: Float
+}
+
+type DashboardGroupByConnection {
+  totalCount: Int
+  edges: [DashboardEdge!]!
+  pageInfo: PageInfo!
+  groupByDimensionValues: JSON!
+  countUniqueValuesCreatedAt: Int
+  countEmptyCreatedAt: Int
+  countNotEmptyCreatedAt: Int
+  percentageEmptyCreatedAt: Float
+  percentageNotEmptyCreatedAt: Float
+  minCreatedAt: DateTime
+  maxCreatedAt: DateTime
+  countUniqueValuesCreatedBy: Int
+  countEmptyCreatedBy: Int
+  countNotEmptyCreatedBy: Int
+  percentageEmptyCreatedBy: Float
+  percentageNotEmptyCreatedBy: Float
+  countUniqueValuesDeletedAt: Int
+  countEmptyDeletedAt: Int
+  countNotEmptyDeletedAt: Int
+  percentageEmptyDeletedAt: Float
+  percentageNotEmptyDeletedAt: Float
+  minDeletedAt: DateTime
+  maxDeletedAt: DateTime
+  countUniqueValuesId: Int
+  countEmptyId: Int
+  countNotEmptyId: Int
+  percentageEmptyId: Float
+  percentageNotEmptyId: Float
+  countUniqueValuesPageLayoutId: Int
+  countEmptyPageLayoutId: Int
+  countNotEmptyPageLayoutId: Int
+  percentageEmptyPageLayoutId: Float
+  percentageNotEmptyPageLayoutId: Float
+  countUniqueValuesPosition: Int
+  countEmptyPosition: Int
+  countNotEmptyPosition: Int
+  percentageEmptyPosition: Float
+  percentageNotEmptyPosition: Float
+  countUniqueValuesTitle: Int
+  countEmptyTitle: Int
+  countNotEmptyTitle: Int
+  percentageEmptyTitle: Float
+  percentageNotEmptyTitle: Float
+  countUniqueValuesUpdatedAt: Int
+  countEmptyUpdatedAt: Int
+  countNotEmptyUpdatedAt: Int
+  percentageEmptyUpdatedAt: Float
+  percentageNotEmptyUpdatedAt: Float
+  minUpdatedAt: DateTime
+  maxUpdatedAt: DateTime
+  countUniqueValuesUpdatedBy: Int
+  countEmptyUpdatedBy: Int
+  countNotEmptyUpdatedBy: Int
+  percentageEmptyUpdatedBy: Float
+  percentageNotEmptyUpdatedBy: Float
+}
+
+input DashboardFilterInput {
+  id: UUIDFilter
+  title: StringFilter
+  pageLayoutId: UUIDFilter
+  position: FloatFilter
+  createdBy: ActorFilter
+  updatedBy: ActorFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  deletedAt: DateTimeFilter
+  and: [DashboardFilterInput]
+  or: [DashboardFilterInput]
+  not: DashboardFilterInput
+}
+
+input DashboardOrderByInput {
+  id: OrderByDirection
+  title: OrderByDirection
+  pageLayoutId: OrderByDirection
+  position: OrderByDirection
+  createdBy: ActorOrderByInput
+  updatedBy: ActorOrderByInput
+  createdAt: OrderByDirection
+  updatedAt: OrderByDirection
+  deletedAt: OrderByDirection
+}
+
+input DashboardGroupByInput {
+  title: Boolean
+}
+
+input DashboardOrderByWithGroupByInput {
+  title: OrderByDirection
+}
+
+input DashboardCreateInput {
+  id: UUID
+  title: String
+  pageLayoutId: UUID
+  position: Float
+}
+
+input DashboardUpdateInput {
+  title: String
+  pageLayoutId: UUID
+  position: Float
+}
+
+extend type Query {
+  dashboards(filter: DashboardFilterInput, orderBy: [DashboardOrderByInput], first: Int, last: Int, after: String, before: String, offset: Int): DashboardConnection!
+  dashboard(filter: DashboardFilterInput): Dashboard
+  dashboardsGroupBy(groupBy: [DashboardGroupByInput!]!, filter: DashboardFilterInput, orderBy: [DashboardOrderByWithGroupByInput!], orderByForRecords: [DashboardOrderByInput!], viewId: UUID, limit: Int, offsetForRecords: Int): [DashboardGroupByConnection!]!
+}
+
+extend type Mutation {
+  createDashboard(data: DashboardCreateInput): Dashboard
+  createDashboards(data: [DashboardCreateInput!]!, upsert: Boolean): [Dashboard!]
+  updateDashboard(id: UUID!, data: DashboardUpdateInput!): Dashboard
+  updateDashboards(filter: DashboardFilterInput!, data: DashboardUpdateInput!): [Dashboard!]
+  deleteDashboard(id: UUID!): Dashboard
+  deleteDashboards(filter: DashboardFilterInput!): [Dashboard!]
+  destroyDashboard(id: UUID!): Dashboard
+  destroyDashboards(filter: DashboardFilterInput!): [Dashboard!]
+  restoreDashboards(filter: DashboardFilterInput!): [Dashboard!]
+}
