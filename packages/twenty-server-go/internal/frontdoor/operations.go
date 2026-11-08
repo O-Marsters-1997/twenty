@@ -60,7 +60,7 @@ func DefaultTable() OperationTable {
 	for _, operation := range viewOperations {
 		table[EndpointMetadata][operation] = RouteGo
 	}
-	for _, operation := range slices.Concat(SkillOperations, ChatOperations) {
+	for _, operation := range slices.Concat(SkillOperations, ChatOperations, agentOperations) {
 		table[EndpointMetadata][operation] = RouteGo
 	}
 	for _, plural := range []string{"Notes", "NoteTargets", "Tasks", "TaskTargets"} {
@@ -88,6 +88,10 @@ var viewOperations = []string{
 	"CreateViewFilterGroup", "UpdateViewFilterGroup", "DestroyViewFilterGroup",
 	"CreateViewSort", "UpdateViewSort", "DestroyViewSort",
 	"CreateManyViewGroups", "UpdateManyViewGroups",
+}
+
+var agentOperations = []string{
+	"FindManyAgents", "FindOneAgent", "CreateOneAgent", "UpdateOneAgent", "DeleteOneAgent", "AssignRoleToAgent",
 }
 
 var blockedMetadataFields = []string{

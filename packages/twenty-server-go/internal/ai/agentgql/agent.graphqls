@@ -1,0 +1,65 @@
+scalar UUID
+scalar DateTime
+scalar JSON
+
+type Agent {
+  id: UUID!
+  name: String!
+  label: String!
+  icon: String
+  description: String
+  prompt: String!
+  modelId: String!
+  responseFormat: JSON
+  roleId: UUID
+  isCustom: Boolean!
+  isSystem: Boolean!
+  applicationId: UUID
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  modelConfiguration: JSON
+  triggers: [JSON!]!
+}
+
+input AgentIdInput {
+  id: UUID!
+}
+
+input CreateAgentInput {
+  name: String
+  label: String!
+  icon: String
+  description: String
+  prompt: String!
+  modelId: String!
+  roleId: UUID
+  responseFormat: JSON
+  modelConfiguration: JSON
+  triggers: [JSON!]
+}
+
+input UpdateAgentInput {
+  id: UUID!
+  name: String
+  label: String
+  icon: String
+  description: String
+  prompt: String
+  modelId: String
+  roleId: UUID
+  responseFormat: JSON
+  modelConfiguration: JSON
+  triggers: [JSON!]
+}
+
+type Query {
+  findManyAgents: [Agent!]!
+  findOneAgent(input: AgentIdInput!): Agent!
+}
+
+type Mutation {
+  createOneAgent(input: CreateAgentInput!): Agent!
+  updateOneAgent(input: UpdateAgentInput!): Agent!
+  deleteOneAgent(input: AgentIdInput!): Agent!
+  assignRoleToAgent(agentId: UUID!, roleId: UUID!): Boolean!
+}
