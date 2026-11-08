@@ -28,3 +28,11 @@ linters:
           deny:
             - pkg: github.com/jackc/pgx
               desc: only internal/messaging/store may import pgx
+        ai-outside-store-never-touch-pgx:
+          files:
+            - "**/internal/ai/**"
+            - "!**/internal/ai/store/**"
+            - "!$test"
+          deny:
+            - pkg: github.com/jackc/pgx
+              desc: only internal/ai/store may import pgx

@@ -6,11 +6,13 @@ import (
 	"io"
 	"net/http"
 	"slices"
+
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/frontdoor"
 )
 
 var objectOperations = []string{"ObjectMetadataItems", "GetToolIndex", "GetToolInputSchema"}
 
-func metadataHandler(objects, views, agents http.Handler, agentOperations []string) http.Handler {
+func metadataHandler(objects, chat, views, agents http.Handler, agentOperations []string) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		body, err := io.ReadAll(r.Body)
 		if err != nil {
@@ -30,6 +32,8 @@ func metadataHandler(objects, views, agents http.Handler, agentOperations []stri
 			objects.ServeHTTP(w, r)
 		case slices.Contains(agentOperations, request.OperationName):
 			agents.ServeHTTP(w, r)
+		case slices.Contains(frontdoor.ChatOperations, request.OperationName):
+			chat.ServeHTTP(w, r)
 		default:
 			views.ServeHTTP(w, r)
 		}
