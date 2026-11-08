@@ -13,6 +13,7 @@ import (
 
 	"github.com/jackc/pgx/v5/pgxpool"
 
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/config"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/frontdoor"
@@ -58,8 +59,12 @@ func run() error {
 		Tasks:              store.NewTasks(pool),
 		TaskTargets:        store.NewTaskTargets(pool),
 	}, logger))
+	recordTools := ai.NewRecordTools(
+		store.NewCompanies(pool), store.NewPeople(pool), store.NewOpportunities(pool), store.NewNotes(pool), store.NewTasks(pool),
+	)
+	toolRegistry := ai.NewRegistry(recordTools...)
 	goGraphQL.Handle(string(frontdoor.EndpointMetadata), metadataHandler(
-		metadatagql.NewHandler(metadatastore.New(pool), logger),
+		metadatagql.NewHandler(metadatastore.New(pool), toolRegistry, logger),
 		metagql.NewHandler(metadatastore.NewViews(pool), logger),
 	))
 

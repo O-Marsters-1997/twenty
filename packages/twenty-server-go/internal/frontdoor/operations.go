@@ -45,6 +45,8 @@ func DefaultTable() OperationTable {
 		},
 		EndpointMetadata: {
 			"ObjectMetadataItems":         RouteGo,
+			"GetToolIndex":                RouteGo,
+			"GetToolInputSchema":          RouteGo,
 			"CreateOneObjectMetadataItem": RouteBlocked,
 			"UpdateOneObjectMetadataItem": RouteBlocked,
 			"DeleteOneObjectMetadataItem": RouteBlocked,

@@ -7,8 +7,6 @@ import (
 	"net/http"
 )
 
-const objectMetadataOperation = "ObjectMetadataItems"
-
 func metadataHandler(objects, views http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		body, err := io.ReadAll(r.Body)
@@ -24,10 +22,11 @@ func metadataHandler(objects, views http.Handler) http.Handler {
 			views.ServeHTTP(w, r)
 			return
 		}
-		if request.OperationName == objectMetadataOperation {
+		switch request.OperationName {
+		case "ObjectMetadataItems", "GetToolIndex", "GetToolInputSchema":
 			objects.ServeHTTP(w, r)
-			return
+		default:
+			views.ServeHTTP(w, r)
 		}
-		views.ServeHTTP(w, r)
 	})
 }
