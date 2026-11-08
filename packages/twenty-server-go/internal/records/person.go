@@ -60,6 +60,8 @@ type People interface {
 	SoftDelete(ctx context.Context, id string) error
 	Restore(ctx context.Context, id string) error
 	Destroy(ctx context.Context, id string) error
+	Aggregate(ctx context.Context, filter Filter, aggregates []Aggregate) (AggregateResult, error)
+	GroupBy(ctx context.Context, filter Filter, groupBy []GroupBy, orderBy []OrderBy, aggregates []Aggregate, perGroup PageRequest) ([]Group[Person], error)
 }
 
 var ErrNotFound = errors.New("record not found")

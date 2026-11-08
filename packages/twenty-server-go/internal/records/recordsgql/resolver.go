@@ -168,18 +168,65 @@ func (r *queryResolver) People(ctx context.Context, filter map[string]any, order
 	if err != nil {
 		return nil, err
 	}
-	connection := &PersonConnection{
-		TotalCount: &page.TotalCount,
-		Edges:      make([]*PersonEdge, len(page.Records)),
-		PageInfo:   &PageInfo{HasNextPage: page.HasNext, HasPreviousPage: page.HasPrevious},
-	}
-	for i, person := range page.Records {
-		connection.Edges[i] = &PersonEdge{Node: toPerson(person), Cursor: records.Cursor(person.ID)}
-	}
-	if len(page.Records) > 0 {
-		connection.PageInfo.StartCursor, connection.PageInfo.EndCursor = &page.StartCursor, &page.EndCursor
+	connection := &PersonConnection{TotalCount: &page.TotalCount}
+	connection.Edges, connection.PageInfo = edgesOf(page)
+	if aggregates := requestedAggregates(ctx); len(aggregates) > 0 {
+		result, err := r.Store.Aggregate(ctx, parsed, aggregates)
+		if err != nil {
+			return nil, err
+		}
+		fillAggregates(connection, result)
 	}
 	return connection, nil
+}
+
+func edgesOf(page records.Page[records.Person]) ([]*PersonEdge, *PageInfo) {
+	edges := make([]*PersonEdge, len(page.Records))
+	for i, person := range page.Records {
+		edges[i] = &PersonEdge{Node: toPerson(person), Cursor: records.Cursor(person.ID)}
+	}
+	pageInfo := &PageInfo{HasNextPage: page.HasNext, HasPreviousPage: page.HasPrevious}
+	if len(page.Records) > 0 {
+		pageInfo.StartCursor, pageInfo.EndCursor = &page.StartCursor, &page.EndCursor
+	}
+	return edges, pageInfo
+}
+
+func (r *queryResolver) PeopleGroupBy(ctx context.Context, groupBy []map[string]any, filter map[string]any, orderBy []map[string]any, _ []map[string]any, _ *string, limit *int, _ *int) ([]*PersonGroupByConnection, error) {
+	parsed, err := parseFilter(personObject(), filter)
+	if err != nil {
+		return nil, err
+	}
+	order, err := parseOrderBy(orderBy)
+	if err != nil {
+		return nil, err
+	}
+	by, err := parseGroupBy(groupBy)
+	if err != nil {
+		return nil, err
+	}
+	var perGroup records.PageRequest
+	if selects(ctx, "edges", "pageInfo") {
+		perGroup.First = recordsPerGroup
+	}
+	aggregates := append(requestedAggregates(ctx), records.Aggregate{Field: "id", Operation: "count"})
+	groups, err := r.Store.GroupBy(ctx, parsed, by, order, aggregates, perGroup)
+	if err != nil {
+		return nil, err
+	}
+	maxGroups := defaultGroups
+	if limit != nil && *limit > 0 {
+		maxGroups = *limit
+	}
+	groups = groups[:min(len(groups), maxGroups)]
+	connections := make([]*PersonGroupByConnection, len(groups))
+	for i, group := range groups {
+		connection := &PersonGroupByConnection{GroupByDimensionValues: group.Key}
+		connection.Edges, connection.PageInfo = edgesOf(group.Records)
+		fillAggregates(connection, group.Aggregates)
+		connections[i] = connection
+	}
+	return connections, nil
 }
 
 func (r *queryResolver) Person(ctx context.Context, filter map[string]any) (*Person, error) {

@@ -1,5 +1,6 @@
 schema:
   - person.graphqls
+  - aggregate.graphqls
 exec:
   filename: generated.go
   package: recordsgql
@@ -32,3 +33,9 @@ models:
     model: map[string]interface{}
   PersonOrderByInput:
     model: map[string]interface{}
+  PersonOrderByWithGroupByInput:
+    model: map[string]interface{}
+  PersonGroupByInput:
+    model: map[string]interface{}
+  JSON:
+    model: github.com/99designs/gqlgen/graphql.Any
