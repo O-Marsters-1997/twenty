@@ -83,7 +83,7 @@ func (v *JWTVerifier) apiKeyPrincipal(ctx context.Context, tokenClaims claims) (
 	err := v.pool.QueryRow(ctx,
 		`SELECT true FROM core."apiKey"
 		 WHERE id::text = $1 AND "workspaceId"::text = $2 AND "revokedAt" IS NULL AND "expiresAt" > now()`,
-		tokenClaims.Subject, tokenClaims.WorkspaceID,
+		tokenClaims.ID, tokenClaims.WorkspaceID,
 	).Scan(&found)
 	if errors.Is(err, pgx.ErrNoRows) {
 		return Principal{}, ErrUnauthenticated
@@ -91,7 +91,7 @@ func (v *JWTVerifier) apiKeyPrincipal(ctx context.Context, tokenClaims claims) (
 	if err != nil {
 		return Principal{}, fmt.Errorf("look up api key: %w", err)
 	}
-	return Principal{WorkspaceID: tokenClaims.WorkspaceID, APIKeyID: tokenClaims.Subject}, nil
+	return Principal{WorkspaceID: tokenClaims.WorkspaceID, APIKeyID: tokenClaims.ID}, nil
 }
 
 func (v *JWTVerifier) legacySecret(tokenClaims claims, secretType string) (any, error) {

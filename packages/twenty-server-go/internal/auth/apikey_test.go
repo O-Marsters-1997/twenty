@@ -61,7 +61,8 @@ func (f fixture) addWorkspace(t *testing.T) string {
 
 func apiKeyClaims(apiKeyID, workspaceID string) jwt.MapClaims {
 	return jwt.MapClaims{
-		"sub":         apiKeyID,
+		"sub":         workspaceID,
+		"jti":         apiKeyID,
 		"type":        "API_KEY",
 		"workspaceId": workspaceID,
 		"exp":         time.Now().Add(time.Hour).Unix(),

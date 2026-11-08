@@ -13,6 +13,7 @@ import (
 
 	"github.com/jackc/pgx/v5/pgxpool"
 
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/config"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/frontdoor"
@@ -63,9 +64,14 @@ func run() error {
 		metagql.NewHandler(metadatastore.NewViews(pool), logger),
 	))
 
+	registry := ai.NewRegistry(ai.NewRecordTools(
+		store.NewCompanies(pool), store.NewPeople(pool), store.NewOpportunities(pool), store.NewNotes(pool), store.NewTasks(pool),
+	)...)
+	handler := frontdoor.NewHandler(frontdoor.DefaultTable(), cfg.NodeUpstreamURL, verifier, goGraphQL, logger).WithMCP(registry)
+
 	server := &http.Server{
 		Addr:              cfg.ListenAddr,
-		Handler:           frontdoor.NewHandler(frontdoor.DefaultTable(), cfg.NodeUpstreamURL, verifier, goGraphQL, logger),
+		Handler:           handler,
 		ReadHeaderTimeout: 10 * time.Second,
 	}
 
