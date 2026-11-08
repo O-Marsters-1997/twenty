@@ -1,0 +1,303 @@
+scalar UUID
+scalar Position
+scalar DateTime
+scalar ConnectionCursor
+scalar Cursor
+
+enum OrderByDirection {
+  AscNullsFirst
+  AscNullsLast
+  DescNullsFirst
+  DescNullsLast
+}
+
+type PageInfo {
+  startCursor: ConnectionCursor
+  endCursor: ConnectionCursor
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+}
+
+type FullName {
+  firstName: String
+  lastName: String
+}
+
+type Emails {
+  primaryEmail: String
+  additionalEmails: [String!]
+}
+
+type AdditionalPhone {
+  number: String
+  callingCode: String
+  countryCode: String
+}
+
+type Phones {
+  primaryPhoneNumber: String
+  primaryPhoneCountryCode: String
+  primaryPhoneCallingCode: String
+  additionalPhones: [AdditionalPhone!]
+}
+
+type SecondaryLink {
+  label: String
+  url: String
+}
+
+type Links {
+  primaryLinkLabel: String
+  primaryLinkUrl: String
+  secondaryLinks: [SecondaryLink!]
+}
+
+type Actor {
+  source: String!
+  workspaceMemberId: UUID
+  name: String!
+}
+
+type Person {
+  id: UUID!
+  name: FullName
+  emails: Emails
+  linkedinLink: Links
+  jobTitle: String
+  phones: Phones
+  avatarUrl: String
+  position: Position!
+  companyId: ID
+  createdBy: Actor!
+  updatedBy: Actor!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
+
+type PersonEdge {
+  node: Person!
+  cursor: Cursor!
+}
+
+type PersonConnection {
+  totalCount: Int
+  edges: [PersonEdge!]!
+  pageInfo: PageInfo!
+}
+
+enum FilterIs {
+  NULL
+  NOT_NULL
+}
+
+input UUIDFilter {
+  eq: UUID
+  neq: UUID
+  in: [UUID!]
+  is: FilterIs
+}
+
+input StringFilter {
+  eq: String
+  neq: String
+  in: [String!]
+  like: String
+  ilike: String
+  startsWith: String
+  is: FilterIs
+}
+
+input DateTimeFilter {
+  eq: DateTime
+  neq: DateTime
+  gt: DateTime
+  gte: DateTime
+  lt: DateTime
+  lte: DateTime
+  in: [DateTime!]
+  is: FilterIs
+}
+
+input FloatFilter {
+  eq: Float
+  neq: Float
+  gt: Float
+  gte: Float
+  lt: Float
+  lte: Float
+  in: [Float!]
+  is: FilterIs
+}
+
+input RawJSONFilter {
+  containsAny: [String!]
+  containsIlike: String
+  is: FilterIs
+}
+
+input FullNameFilter {
+  firstName: StringFilter
+  lastName: StringFilter
+}
+
+input EmailsFilter {
+  primaryEmail: StringFilter
+  additionalEmails: RawJSONFilter
+}
+
+input LinksFilter {
+  primaryLinkLabel: StringFilter
+  primaryLinkUrl: StringFilter
+  secondaryLinks: RawJSONFilter
+}
+
+input PhonesFilter {
+  primaryPhoneNumber: StringFilter
+  primaryPhoneCountryCode: StringFilter
+  primaryPhoneCallingCode: StringFilter
+  additionalPhones: RawJSONFilter
+}
+
+input ActorFilter {
+  source: StringFilter
+  workspaceMemberId: UUIDFilter
+  name: StringFilter
+}
+
+input PersonFilterInput {
+  id: UUIDFilter
+  name: FullNameFilter
+  emails: EmailsFilter
+  linkedinLink: LinksFilter
+  jobTitle: StringFilter
+  phones: PhonesFilter
+  avatarUrl: StringFilter
+  position: FloatFilter
+  companyId: UUIDFilter
+  createdBy: ActorFilter
+  updatedBy: ActorFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  deletedAt: DateTimeFilter
+  and: [PersonFilterInput]
+  or: [PersonFilterInput]
+  not: PersonFilterInput
+}
+
+input FullNameOrderByInput {
+  firstName: OrderByDirection
+  lastName: OrderByDirection
+}
+
+input EmailsOrderByInput {
+  primaryEmail: OrderByDirection
+}
+
+input LinksOrderByInput {
+  primaryLinkLabel: OrderByDirection
+  primaryLinkUrl: OrderByDirection
+}
+
+input PhonesOrderByInput {
+  primaryPhoneNumber: OrderByDirection
+  primaryPhoneCountryCode: OrderByDirection
+  primaryPhoneCallingCode: OrderByDirection
+}
+
+input ActorOrderByInput {
+  source: OrderByDirection
+  workspaceMemberId: OrderByDirection
+  name: OrderByDirection
+}
+
+input PersonOrderByInput {
+  id: OrderByDirection
+  name: FullNameOrderByInput
+  emails: EmailsOrderByInput
+  linkedinLink: LinksOrderByInput
+  jobTitle: OrderByDirection
+  phones: PhonesOrderByInput
+  avatarUrl: OrderByDirection
+  position: OrderByDirection
+  companyId: OrderByDirection
+  createdBy: ActorOrderByInput
+  updatedBy: ActorOrderByInput
+  createdAt: OrderByDirection
+  updatedAt: OrderByDirection
+  deletedAt: OrderByDirection
+}
+
+input FullNameCreateInput {
+  firstName: String
+  lastName: String
+}
+
+input EmailsCreateInput {
+  primaryEmail: String
+  additionalEmails: [String!]
+}
+
+input LinkMetadataInput {
+  label: String
+  url: String
+}
+
+input LinksCreateInput {
+  primaryLinkLabel: String
+  primaryLinkUrl: String
+  secondaryLinks: [LinkMetadataInput!]
+}
+
+input AdditionalPhoneInput {
+  number: String
+  callingCode: String
+  countryCode: String
+}
+
+input PhonesCreateInput {
+  primaryPhoneNumber: String
+  primaryPhoneCountryCode: String
+  primaryPhoneCallingCode: String
+  additionalPhones: [AdditionalPhoneInput!]
+}
+
+input PersonCreateInput {
+  id: UUID
+  name: FullNameCreateInput
+  emails: EmailsCreateInput
+  linkedinLink: LinksCreateInput
+  jobTitle: String
+  phones: PhonesCreateInput
+  avatarUrl: String
+  position: Float
+  companyId: UUID
+}
+
+input PersonUpdateInput {
+  name: FullNameCreateInput
+  emails: EmailsCreateInput
+  linkedinLink: LinksCreateInput
+  jobTitle: String
+  phones: PhonesCreateInput
+  avatarUrl: String
+  position: Float
+  companyId: UUID
+}
+
+type Query {
+  people(filter: PersonFilterInput, orderBy: [PersonOrderByInput], first: Int, last: Int, after: String, before: String, offset: Int): PersonConnection!
+  person(filter: PersonFilterInput): Person
+}
+
+type Mutation {
+  createPerson(data: PersonCreateInput): Person
+  createPeople(data: [PersonCreateInput!]!, upsert: Boolean): [Person!]
+  updatePerson(id: UUID!, data: PersonUpdateInput!): Person
+  updatePeople(filter: PersonFilterInput!, data: PersonUpdateInput!): [Person!]
+  deletePerson(id: UUID!): Person
+  deletePeople(filter: PersonFilterInput!): [Person!]
+  destroyPerson(id: UUID!): Person
+  destroyPeople(filter: PersonFilterInput!): [Person!]
+  restorePeople(filter: PersonFilterInput!): [Person!]
+}
