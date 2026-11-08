@@ -13,6 +13,7 @@ type Principal struct {
 	UserWorkspaceID   string
 	WorkspaceMemberID string
 	AuthProvider      AuthProvider
+	APIKeyID          string // set for MCP and API-key callers, from core."apiKey"; user fields empty
 }
 
 type Verifier interface {
