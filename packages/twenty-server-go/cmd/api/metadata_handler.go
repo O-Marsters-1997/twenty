@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-const objectMetadataOperation = "ObjectMetadataItems"
+var objectHandlerOperations = map[string]bool{"ObjectMetadataItems": true, "GetToolIndex": true, "GetToolInputSchema": true}
 
 func metadataHandler(objects, views http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -24,7 +24,7 @@ func metadataHandler(objects, views http.Handler) http.Handler {
 			views.ServeHTTP(w, r)
 			return
 		}
-		if request.OperationName == objectMetadataOperation {
+		if objectHandlerOperations[request.OperationName] {
 			objects.ServeHTTP(w, r)
 			return
 		}

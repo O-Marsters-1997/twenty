@@ -14,6 +14,7 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/jackc/pgx/v5/pgxpool"
 
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/frontdoor"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/metadatagql"
@@ -64,7 +65,7 @@ func newServer(t *testing.T) *httptest.Server {
 		t.Fatal(err)
 	}
 	goGraphQL := http.NewServeMux()
-	goGraphQL.Handle("/metadata", metadatagql.NewHandler(store.New(pool), logger))
+	goGraphQL.Handle("/metadata", metadatagql.NewHandler(store.New(pool), ai.NewRegistry(), logger))
 	server := httptest.NewServer(frontdoor.NewHandler(frontdoor.DefaultTable(), upstream, verifier{}, goGraphQL, logger))
 	t.Cleanup(server.Close)
 	return server
