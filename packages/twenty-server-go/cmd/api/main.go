@@ -13,6 +13,8 @@ import (
 
 	"github.com/jackc/pgx/v5/pgxpool"
 
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai/agentgql"
+	aistore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai/store"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/config"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/frontdoor"
@@ -61,6 +63,8 @@ func run() error {
 	goGraphQL.Handle(string(frontdoor.EndpointMetadata), metadataHandler(
 		metadatagql.NewHandler(metadatastore.New(pool), logger),
 		metagql.NewHandler(metadatastore.NewViews(pool), logger),
+		agentgql.NewHandler(aistore.NewAgents(pool), logger),
+		agentgql.Operations,
 	))
 
 	server := &http.Server{

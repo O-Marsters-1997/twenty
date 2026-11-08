@@ -5,11 +5,12 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"slices"
 )
 
 const objectMetadataOperation = "ObjectMetadataItems"
 
-func metadataHandler(objects, views http.Handler) http.Handler {
+func metadataHandler(objects, views, agents http.Handler, agentOperations []string) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		body, err := io.ReadAll(r.Body)
 		if err != nil {
@@ -24,10 +25,13 @@ func metadataHandler(objects, views http.Handler) http.Handler {
 			views.ServeHTTP(w, r)
 			return
 		}
-		if request.OperationName == objectMetadataOperation {
+		switch {
+		case request.OperationName == objectMetadataOperation:
 			objects.ServeHTTP(w, r)
-			return
+		case slices.Contains(agentOperations, request.OperationName):
+			agents.ServeHTTP(w, r)
+		default:
+			views.ServeHTTP(w, r)
 		}
-		views.ServeHTTP(w, r)
 	})
 }
