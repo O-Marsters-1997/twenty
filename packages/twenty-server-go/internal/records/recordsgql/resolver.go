@@ -10,11 +10,19 @@ import (
 
 const bulkPageSize = 200
 
-type Resolver struct {
-	Store records.People
+type Stores struct {
+	People             records.People
+	TimelineActivities records.TimelineActivities
+	Attachments        records.Attachments
 }
 
-func (r *Resolver) actor(ctx context.Context) (records.Actor, error) {
+type Resolver struct {
+	Store              records.People
+	timelineActivities *objectOps[records.TimelineActivity, records.TimelineActivityInput]
+	attachments        *objectOps[records.Attachment, records.AttachmentInput]
+}
+
+func actorFrom(ctx context.Context) (records.Actor, error) {
 	principal, ok := auth.PrincipalFrom(ctx)
 	if !ok {
 		return records.Actor{}, auth.ErrUnauthenticated
@@ -46,7 +54,7 @@ func (r *mutationResolver) CreatePerson(ctx context.Context, data *PersonCreateI
 	if data == nil {
 		data = &PersonCreateInput{}
 	}
-	actor, err := r.actor(ctx)
+	actor, err := actorFrom(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -70,7 +78,7 @@ func (r *mutationResolver) CreatePeople(ctx context.Context, data []*PersonCreat
 }
 
 func (r *mutationResolver) update(ctx context.Context, id string, data PersonUpdateInput) (*Person, error) {
-	actor, err := r.actor(ctx)
+	actor, err := actorFrom(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -170,7 +178,7 @@ func (r *queryResolver) People(ctx context.Context, filter map[string]any, order
 	}
 	connection := &PersonConnection{TotalCount: &page.TotalCount}
 	connection.Edges, connection.PageInfo = edgesOf(page)
-	if aggregates := requestedAggregates(ctx); len(aggregates) > 0 {
+	if aggregates := requestedAggregates(ctx, personAggregates); len(aggregates) > 0 {
 		result, err := r.Store.Aggregate(ctx, parsed, aggregates)
 		if err != nil {
 			return nil, err
@@ -209,7 +217,7 @@ func (r *queryResolver) PeopleGroupBy(ctx context.Context, groupBy []map[string]
 	if selects(ctx, "edges", "pageInfo") {
 		perGroup.First = recordsPerGroup
 	}
-	aggregates := append(requestedAggregates(ctx), records.Aggregate{Field: "id", Operation: "count"})
+	aggregates := append(requestedAggregates(ctx, personAggregates), records.Aggregate{Field: "id", Operation: "count"})
 	groups, err := r.Store.GroupBy(ctx, parsed, by, order, aggregates, perGroup)
 	if err != nil {
 		return nil, err

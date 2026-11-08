@@ -15,8 +15,13 @@ import (
 )
 
 // NewHandler serves the Person operations over GraphQL; the caller supplies the principal in the request context.
-func NewHandler(people records.People, logger *slog.Logger) http.Handler {
-	server := handler.New(NewExecutableSchema(Config{Resolvers: &Resolver{Store: people}}))
+func NewHandler(stores Stores, logger *slog.Logger) http.Handler {
+	resolver := &Resolver{
+		Store:              stores.People,
+		timelineActivities: newTimelineActivityOps(stores.TimelineActivities),
+		attachments:        newAttachmentOps(stores.Attachments),
+	}
+	server := handler.New(NewExecutableSchema(Config{Resolvers: resolver}))
 	server.AddTransport(transport.POST{})
 	server.SetErrorPresenter(func(ctx context.Context, err error) *gqlerror.Error {
 		presented := graphql.DefaultErrorPresenter(ctx, err)

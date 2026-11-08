@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"slices"
-	"strings"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
@@ -25,10 +24,8 @@ const personColumns = `"id", "createdAt", "updatedAt", "deletedAt", "nameFirstNa
 type personRow = db.Workspace2abogkkt2zd45pa9aun09djpfPerson
 
 type People struct {
-	pool    *pgxpool.Pool
+	*rowset[records.Person]
 	queries *db.Queries
-	object  model.Object
-	table   string
 }
 
 var _ records.People = (*People)(nil)
@@ -38,7 +35,20 @@ func NewPeople(pool *pgxpool.Pool) *People {
 	if index < 0 {
 		panic("object model has no person object")
 	}
-	return &People{pool: pool, queries: db.New(pool), object: model.Objects[index], table: workspace.SchemaName() + `."person"`}
+	return &People{
+		rowset: &rowset[records.Person]{
+			pool: pool, object: model.Objects[index], table: workspace.SchemaName() + `."person"`, columns: personColumns, label: "people",
+			scan: func(row pgx.Row) (records.Person, error) {
+				scanned, err := scanPerson(row)
+				if err != nil {
+					return records.Person{}, err
+				}
+				return toPerson(scanned)
+			},
+			id: func(person records.Person) string { return person.ID },
+		},
+		queries: db.New(pool),
+	}
 }
 
 func (p *People) Get(ctx context.Context, id string) (records.Person, error) {
@@ -163,106 +173,6 @@ func (p *People) affect(ctx context.Context, id string, run func(context.Context
 		return records.ErrNotFound
 	}
 	return nil
-}
-
-func (p *People) Find(ctx context.Context, filter records.Filter, orderBy []records.OrderBy, page records.PageRequest) (records.Page[records.Person], error) {
-	where := &compiler{object: p.object}
-	condition, err := where.filter(filter)
-	if err != nil {
-		return records.Page[records.Person]{}, err
-	}
-	if !where.mentionsDeletedAt {
-		condition = joinAnd(condition, `"deletedAt" IS NULL`)
-	}
-	columns, err := where.order(orderBy)
-	if err != nil {
-		return records.Page[records.Person]{}, err
-	}
-
-	var total int
-	if err := p.pool.QueryRow(ctx, `SELECT count(*) FROM `+p.table+` WHERE `+orElse(condition, "TRUE"), where.args...).Scan(&total); err != nil {
-		return records.Page[records.Person]{}, fmt.Errorf("count people: %w", err)
-	}
-
-	backward := page.Last > 0 || page.Before != ""
-	limit, cursor := page.First, page.After
-	if backward {
-		limit, cursor = page.Last, page.Before
-	}
-	if limit <= 0 {
-		limit = defaultPageSize
-	}
-	ordered := columns
-	if backward {
-		ordered = make([]orderColumn, len(columns))
-		for i, column := range columns {
-			ordered[i] = column.reversed()
-		}
-	}
-	if cursor != "" {
-		values, err := p.cursorValues(ctx, cursor, columns)
-		if err != nil {
-			return records.Page[records.Person]{}, err
-		}
-		condition = joinAnd(condition, where.after(ordered, values))
-	}
-
-	orderSQL := make([]string, len(ordered))
-	for i, column := range ordered {
-		orderSQL[i] = column.sql()
-	}
-	rows, err := p.pool.Query(ctx, `SELECT `+personColumns+` FROM `+p.table+` WHERE `+orElse(condition, "TRUE")+` ORDER BY `+strings.Join(orderSQL, ", ")+` LIMIT `+fmt.Sprint(limit+1), where.args...)
-	if err != nil {
-		return records.Page[records.Person]{}, fmt.Errorf("query people: %w", err)
-	}
-	dbRows, err := pgx.CollectRows(rows, func(row pgx.CollectableRow) (personRow, error) { return scanPerson(row) })
-	if err != nil {
-		return records.Page[records.Person]{}, fmt.Errorf("read people: %w", err)
-	}
-
-	more := len(dbRows) > limit
-	if more {
-		dbRows = dbRows[:limit]
-	}
-	if backward {
-		slices.Reverse(dbRows)
-	}
-	result := records.Page[records.Person]{TotalCount: total, HasNext: more, HasPrevious: page.After != ""}
-	if backward {
-		result.HasNext, result.HasPrevious = page.Before != "", more
-	}
-	for _, row := range dbRows {
-		person, err := toPerson(row)
-		if err != nil {
-			return records.Page[records.Person]{}, err
-		}
-		result.Records = append(result.Records, person)
-	}
-	if n := len(result.Records); n > 0 {
-		result.StartCursor, result.EndCursor = records.Cursor(result.Records[0].ID), records.Cursor(result.Records[n-1].ID)
-	}
-	return result, nil
-}
-
-func (p *People) cursorValues(ctx context.Context, cursor string, columns []orderColumn) ([]any, error) {
-	id, err := records.CursorID(cursor)
-	if err != nil {
-		return nil, err
-	}
-	exprs := make([]string, len(columns))
-	for i, column := range columns {
-		exprs[i] = column.expr
-	}
-	var raw []byte
-	err = p.pool.QueryRow(ctx, `SELECT jsonb_build_array(`+strings.Join(exprs, ", ")+`) FROM `+p.table+` WHERE "id" = $1`, id).Scan(&raw)
-	if err != nil {
-		return nil, fmt.Errorf("resolve cursor: %w", err)
-	}
-	var values []any
-	if err := json.Unmarshal(raw, &values); err != nil {
-		return nil, fmt.Errorf("decode cursor row: %w", err)
-	}
-	return values, nil
 }
 
 func joinAnd(left, right string) string {

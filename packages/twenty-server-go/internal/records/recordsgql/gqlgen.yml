@@ -1,17 +1,14 @@
 schema:
   - person.graphqls
   - aggregate.graphqls
+  - timelineactivity.graphqls
+  - attachment.graphqls
 exec:
   filename: generated.go
   package: recordsgql
 model:
   filename: models_gen.go
   package: recordsgql
-resolver:
-  layout: single-file
-  filename: resolver.go
-  package: recordsgql
-  type: Resolver
 models:
   UUID:
     model: github.com/99designs/gqlgen/graphql.String
@@ -36,6 +33,22 @@ models:
   PersonOrderByWithGroupByInput:
     model: map[string]interface{}
   PersonGroupByInput:
+    model: map[string]interface{}
+  TimelineActivityFilterInput:
+    model: map[string]interface{}
+  TimelineActivityOrderByInput:
+    model: map[string]interface{}
+  TimelineActivityOrderByWithGroupByInput:
+    model: map[string]interface{}
+  TimelineActivityGroupByInput:
+    model: map[string]interface{}
+  AttachmentFilterInput:
+    model: map[string]interface{}
+  AttachmentOrderByInput:
+    model: map[string]interface{}
+  AttachmentOrderByWithGroupByInput:
+    model: map[string]interface{}
+  AttachmentGroupByInput:
     model: map[string]interface{}
   JSON:
     model: github.com/99designs/gqlgen/graphql.Any
