@@ -3,11 +3,14 @@ package ai
 import (
 	"context"
 	"encoding/json"
+	"log/slog"
 	"sync"
+	"time"
 )
 
 const (
 	subscriberBuffer = 256
+	saveTimeout      = 5 * time.Second
 
 	chunkStart  = "start"
 	chunkFinish = "finish"
@@ -91,4 +94,23 @@ func (b *MemoryBroker) Catchup(threadID string) []ChatEvent {
 	b.mu.Lock()
 	defer b.mu.Unlock()
 	return append([]ChatEvent(nil), b.turn[threadID]...)
+}
+
+type PersistingBroker struct {
+	Broker
+	chunks ChunkStore
+	logger *slog.Logger
+}
+
+func NewPersistingBroker(inner Broker, chunks ChunkStore, logger *slog.Logger) *PersistingBroker {
+	return &PersistingBroker{Broker: inner, chunks: chunks, logger: logger}
+}
+
+func (b *PersistingBroker) Publish(threadID string, event ChatEvent) {
+	ctx, cancel := context.WithTimeout(context.Background(), saveTimeout)
+	defer cancel()
+	if err := b.chunks.SaveChunk(ctx, event); err != nil {
+		b.logger.Error("save chat chunk", "thread_id", threadID, "err", err)
+	}
+	b.Broker.Publish(threadID, event)
 }

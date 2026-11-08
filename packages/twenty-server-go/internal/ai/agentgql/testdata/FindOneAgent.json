@@ -1,0 +1,32 @@
+{
+  "name": "FindOneAgent",
+  "operation": "FindOneAgent",
+  "fixture": "baseline seed",
+  "endpoint": "/metadata",
+  "query": "query FindOneAgent($id: UUID!) { findOneAgent(input: { id: $id }) { id name label description icon prompt modelId responseFormat roleId isCustom isSystem modelConfiguration triggers applicationId createdAt updatedAt } }",
+  "variables": {
+    "id": "6d8a2638-ae16-4268-8fda-9e3783f01d95"
+  },
+  "response": {
+    "data": {
+      "findOneAgent": {
+        "id": "6d8a2638-ae16-4268-8fda-9e3783f01d95",
+        "name": "helper",
+        "label": "Helper",
+        "description": "AI agent specialized in helping users learn how to use Twenty CRM",
+        "icon": "IconHelp",
+        "prompt": "<ignored>",
+        "modelId": "workspace-default-model",
+        "responseFormat": { "type": "text" },
+        "roleId": null,
+        "isCustom": false,
+        "isSystem": false,
+        "modelConfiguration": {},
+        "triggers": [],
+        "applicationId": "<ignored>",
+        "createdAt": "<ignored>",
+        "updatedAt": "<ignored>"
+      }
+    }
+  }
+}

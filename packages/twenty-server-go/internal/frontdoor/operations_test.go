@@ -6,6 +6,16 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/frontdoor"
 )
 
+func TestDefaultTable_RoutesAgentOperationsToGo(t *testing.T) {
+	t.Parallel()
+	table := frontdoor.DefaultTable()[frontdoor.EndpointMetadata]
+	for _, operation := range []string{"FindManyAgents", "FindOneAgent", "CreateOneAgent", "UpdateOneAgent", "DeleteOneAgent", "AssignRoleToAgent"} {
+		if table[operation] != frontdoor.RouteGo {
+			t.Errorf("route of %s = %q, want %q", operation, table[operation], frontdoor.RouteGo)
+		}
+	}
+}
+
 func TestDefaultTable_RoutesNoteAndTaskAggregatesToGo(t *testing.T) {
 	t.Parallel()
 	table := frontdoor.DefaultTable()[frontdoor.EndpointWorkspace]

@@ -58,12 +58,22 @@ func DefaultTable() OperationTable {
 	for _, operation := range viewOperations {
 		table[EndpointMetadata][operation] = RouteGo
 	}
+	for _, operation := range agentOperations {
+		table[EndpointMetadata][operation] = RouteGo
+	}
+	for _, operation := range ChatOperations {
+		table[EndpointMetadata][operation] = RouteGo
+	}
 	for _, plural := range []string{"Notes", "NoteTargets", "Tasks", "TaskTargets"} {
 		for _, operation := range []string{"Aggregate" + plural, plural + "GroupByAggregates", plural + "GroupByRecords"} {
 			table[EndpointWorkspace][operation] = RouteGo
 		}
 	}
 	return table
+}
+
+var ChatOperations = []string{
+	"GetChatMessages", "GetAgentChatOpenThreadsSummary", "AssignAgentChatThread", "UpdateAgentChatThreadInboxState",
 }
 
 var viewOperations = []string{
@@ -74,6 +84,10 @@ var viewOperations = []string{
 	"CreateViewFilterGroup", "UpdateViewFilterGroup", "DestroyViewFilterGroup",
 	"CreateViewSort", "UpdateViewSort", "DestroyViewSort",
 	"CreateManyViewGroups", "UpdateManyViewGroups",
+}
+
+var agentOperations = []string{
+	"FindManyAgents", "FindOneAgent", "CreateOneAgent", "UpdateOneAgent", "DeleteOneAgent", "AssignRoleToAgent",
 }
 
 var blockedMetadataFields = []string{

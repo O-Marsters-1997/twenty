@@ -1,0 +1,24 @@
+schema:
+  - chat.graphqls
+exec:
+  filename: generated.go
+  package: aigql
+model:
+  filename: models_gen.go
+  package: aigql
+resolver:
+  layout: single-file
+  filename: resolver.go
+  package: aigql
+  type: Resolver
+models:
+  UUID:
+    model: github.com/99designs/gqlgen/graphql.String
+  ID:
+    model: github.com/99designs/gqlgen/graphql.ID
+  DateTime:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata.Timestamp
+  JSON:
+    model: github.com/99designs/gqlgen/graphql.Any
+  AgentChatInboxAction:
+    model: github.com/99designs/gqlgen/graphql.String
