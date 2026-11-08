@@ -1,0 +1,243 @@
+enum OpportunityStageEnum {
+  NEW
+  SCREENING
+  MEETING
+  PROPOSAL
+  CUSTOMER
+}
+
+input OpportunityStageEnumFilter {
+  eq: OpportunityStageEnum
+  neq: OpportunityStageEnum
+  in: [OpportunityStageEnum!]
+  is: FilterIs
+}
+
+type Opportunity {
+  id: UUID!
+  name: String
+  amount: Currency
+  closeDate: DateTime
+  stage: OpportunityStageEnum
+  companyId: ID
+  pointOfContactId: ID
+  ownerId: ID
+  position: Position!
+  createdBy: Actor!
+  updatedBy: Actor!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
+
+type OpportunityEdge {
+  node: Opportunity!
+  cursor: Cursor!
+}
+
+type OpportunityConnection {
+  totalCount: Int
+  edges: [OpportunityEdge!]!
+  pageInfo: PageInfo!
+  countUniqueValuesAmount: Int
+  countEmptyAmount: Int
+  countNotEmptyAmount: Int
+  percentageEmptyAmount: Float
+  percentageNotEmptyAmount: Float
+  minAmountAmountMicros: Float
+  maxAmountAmountMicros: Float
+  avgAmountAmountMicros: Float
+  sumAmountAmountMicros: Float
+  countUniqueValuesCloseDate: Int
+  countEmptyCloseDate: Int
+  countNotEmptyCloseDate: Int
+  percentageEmptyCloseDate: Float
+  percentageNotEmptyCloseDate: Float
+  minCloseDate: DateTime
+  maxCloseDate: DateTime
+  countUniqueValuesCreatedAt: Int
+  countEmptyCreatedAt: Int
+  countNotEmptyCreatedAt: Int
+  percentageEmptyCreatedAt: Float
+  percentageNotEmptyCreatedAt: Float
+  minCreatedAt: DateTime
+  maxCreatedAt: DateTime
+  countUniqueValuesCreatedBy: Int
+  countEmptyCreatedBy: Int
+  countNotEmptyCreatedBy: Int
+  percentageEmptyCreatedBy: Float
+  percentageNotEmptyCreatedBy: Float
+  countUniqueValuesDeletedAt: Int
+  countEmptyDeletedAt: Int
+  countNotEmptyDeletedAt: Int
+  percentageEmptyDeletedAt: Float
+  percentageNotEmptyDeletedAt: Float
+  minDeletedAt: DateTime
+  maxDeletedAt: DateTime
+  countUniqueValuesId: Int
+  countEmptyId: Int
+  countNotEmptyId: Int
+  percentageEmptyId: Float
+  percentageNotEmptyId: Float
+  countUniqueValuesName: Int
+  countEmptyName: Int
+  countNotEmptyName: Int
+  percentageEmptyName: Float
+  percentageNotEmptyName: Float
+  countUniqueValuesPosition: Int
+  countEmptyPosition: Int
+  countNotEmptyPosition: Int
+  percentageEmptyPosition: Float
+  percentageNotEmptyPosition: Float
+  countUniqueValuesStage: Int
+  countEmptyStage: Int
+  countNotEmptyStage: Int
+  percentageEmptyStage: Float
+  percentageNotEmptyStage: Float
+  countUniqueValuesUpdatedAt: Int
+  countEmptyUpdatedAt: Int
+  countNotEmptyUpdatedAt: Int
+  percentageEmptyUpdatedAt: Float
+  percentageNotEmptyUpdatedAt: Float
+  minUpdatedAt: DateTime
+  maxUpdatedAt: DateTime
+  countUniqueValuesUpdatedBy: Int
+  countEmptyUpdatedBy: Int
+  countNotEmptyUpdatedBy: Int
+  percentageEmptyUpdatedBy: Float
+  percentageNotEmptyUpdatedBy: Float
+}
+
+type OpportunityGroupByConnection {
+  totalCount: Int
+  edges: [OpportunityEdge!]!
+  pageInfo: PageInfo!
+  groupByDimensionValues: JSON!
+  countUniqueValuesAmount: Int
+  countEmptyAmount: Int
+  countNotEmptyAmount: Int
+  percentageEmptyAmount: Float
+  percentageNotEmptyAmount: Float
+  minAmountAmountMicros: Float
+  maxAmountAmountMicros: Float
+  avgAmountAmountMicros: Float
+  sumAmountAmountMicros: Float
+  countUniqueValuesCloseDate: Int
+  countEmptyCloseDate: Int
+  countNotEmptyCloseDate: Int
+  percentageEmptyCloseDate: Float
+  percentageNotEmptyCloseDate: Float
+  minCloseDate: DateTime
+  maxCloseDate: DateTime
+  countUniqueValuesCreatedAt: Int
+  countEmptyCreatedAt: Int
+  countNotEmptyCreatedAt: Int
+  percentageEmptyCreatedAt: Float
+  percentageNotEmptyCreatedAt: Float
+  minCreatedAt: DateTime
+  maxCreatedAt: DateTime
+  countUniqueValuesCreatedBy: Int
+  countEmptyCreatedBy: Int
+  countNotEmptyCreatedBy: Int
+  percentageEmptyCreatedBy: Float
+  percentageNotEmptyCreatedBy: Float
+  countUniqueValuesDeletedAt: Int
+  countEmptyDeletedAt: Int
+  countNotEmptyDeletedAt: Int
+  percentageEmptyDeletedAt: Float
+  percentageNotEmptyDeletedAt: Float
+  minDeletedAt: DateTime
+  maxDeletedAt: DateTime
+  countUniqueValuesId: Int
+  countEmptyId: Int
+  countNotEmptyId: Int
+  percentageEmptyId: Float
+  percentageNotEmptyId: Float
+  countUniqueValuesName: Int
+  countEmptyName: Int
+  countNotEmptyName: Int
+  percentageEmptyName: Float
+  percentageNotEmptyName: Float
+  countUniqueValuesPosition: Int
+  countEmptyPosition: Int
+  countNotEmptyPosition: Int
+  percentageEmptyPosition: Float
+  percentageNotEmptyPosition: Float
+  countUniqueValuesStage: Int
+  countEmptyStage: Int
+  countNotEmptyStage: Int
+  percentageEmptyStage: Float
+  percentageNotEmptyStage: Float
+  countUniqueValuesUpdatedAt: Int
+  countEmptyUpdatedAt: Int
+  countNotEmptyUpdatedAt: Int
+  percentageEmptyUpdatedAt: Float
+  percentageNotEmptyUpdatedAt: Float
+  minUpdatedAt: DateTime
+  maxUpdatedAt: DateTime
+  countUniqueValuesUpdatedBy: Int
+  countEmptyUpdatedBy: Int
+  countNotEmptyUpdatedBy: Int
+  percentageEmptyUpdatedBy: Float
+  percentageNotEmptyUpdatedBy: Float
+}
+
+input OpportunityFilterInput {
+  name: StringFilter
+  amount: CurrencyFilter
+  closeDate: DateTimeFilter
+  stage: OpportunityStageEnumFilter
+  companyId: UUIDFilter
+  pointOfContactId: UUIDFilter
+  ownerId: UUIDFilter
+  id: UUIDFilter
+  position: FloatFilter
+  createdBy: ActorFilter
+  updatedBy: ActorFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  deletedAt: DateTimeFilter
+  and: [OpportunityFilterInput]
+  or: [OpportunityFilterInput]
+  not: OpportunityFilterInput
+}
+
+input OpportunityOrderByInput {
+  name: OrderByDirection
+  amount: CurrencyOrderByInput
+  closeDate: OrderByDirection
+  stage: OrderByDirection
+  companyId: OrderByDirection
+  pointOfContactId: OrderByDirection
+  ownerId: OrderByDirection
+  id: OrderByDirection
+  position: OrderByDirection
+  createdBy: ActorOrderByInput
+  updatedBy: ActorOrderByInput
+  createdAt: OrderByDirection
+  updatedAt: OrderByDirection
+  deletedAt: OrderByDirection
+}
+
+input OpportunityGroupByInput {
+  name: Boolean
+  stage: Boolean
+  company: Boolean
+  pointOfContact: Boolean
+  owner: Boolean
+}
+
+input OpportunityOrderByWithGroupByInput {
+  name: OrderByDirection
+  stage: OrderByDirection
+  company: OrderByDirection
+  pointOfContact: OrderByDirection
+  owner: OrderByDirection
+}
+
+extend type Query {
+  opportunities(filter: OpportunityFilterInput, orderBy: [OpportunityOrderByInput], first: Int, last: Int, after: String, before: String, offset: Int): OpportunityConnection!
+  opportunity(filter: OpportunityFilterInput): Opportunity
+  opportunitiesGroupBy(groupBy: [OpportunityGroupByInput!]!, filter: OpportunityFilterInput, orderBy: [OpportunityOrderByWithGroupByInput!], orderByForRecords: [OpportunityOrderByInput!], viewId: UUID, limit: Int, offsetForRecords: Int): [OpportunityGroupByConnection!]!
+}
+

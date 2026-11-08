@@ -46,11 +46,13 @@ func run() error {
 
 	goGraphQL := http.NewServeMux()
 	goGraphQL.Handle(string(frontdoor.EndpointWorkspace), recordsgql.NewHandler(&recordsgql.Resolver{
-		Store:       store.NewPeople(pool),
-		Notes:       store.NewNotes(pool),
-		NoteTargets: store.NewNoteTargets(pool),
-		Tasks:       store.NewTasks(pool),
-		TaskTargets: store.NewTaskTargets(pool),
+		Store:         store.NewPeople(pool),
+		Companies:     store.NewCompanies(pool),
+		Opportunities: store.NewOpportunities(pool),
+		Notes:         store.NewNotes(pool),
+		NoteTargets:   store.NewNoteTargets(pool),
+		Tasks:         store.NewTasks(pool),
+		TaskTargets:   store.NewTaskTargets(pool),
 	}, logger))
 	goGraphQL.Handle(string(frontdoor.EndpointMetadata), metadataHandler(
 		metadatagql.NewHandler(metadatastore.New(pool), logger),

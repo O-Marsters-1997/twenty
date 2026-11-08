@@ -48,6 +48,196 @@ type ComplexityRoot struct {
 		Number      func(childComplexity int) int
 	}
 
+	Address struct {
+		AddressCity     func(childComplexity int) int
+		AddressCountry  func(childComplexity int) int
+		AddressLat      func(childComplexity int) int
+		AddressLng      func(childComplexity int) int
+		AddressPostcode func(childComplexity int) int
+		AddressState    func(childComplexity int) int
+		AddressStreet1  func(childComplexity int) int
+		AddressStreet2  func(childComplexity int) int
+	}
+
+	Company struct {
+		AccountOwnerID func(childComplexity int) int
+		Address        func(childComplexity int) int
+		AnnualRevenue  func(childComplexity int) int
+		CreatedAt      func(childComplexity int) int
+		CreatedBy      func(childComplexity int) int
+		DeletedAt      func(childComplexity int) int
+		DomainName     func(childComplexity int) int
+		ID             func(childComplexity int) int
+		LinkedinLink   func(childComplexity int) int
+		Name           func(childComplexity int) int
+		Position       func(childComplexity int) int
+		UpdatedAt      func(childComplexity int) int
+		UpdatedBy      func(childComplexity int) int
+	}
+
+	CompanyConnection struct {
+		AvgAnnualRevenueAmountMicros    func(childComplexity int) int
+		CountEmptyAddress               func(childComplexity int) int
+		CountEmptyAnnualRevenue         func(childComplexity int) int
+		CountEmptyCreatedAt             func(childComplexity int) int
+		CountEmptyCreatedBy             func(childComplexity int) int
+		CountEmptyDeletedAt             func(childComplexity int) int
+		CountEmptyDomainName            func(childComplexity int) int
+		CountEmptyID                    func(childComplexity int) int
+		CountEmptyLinkedinLink          func(childComplexity int) int
+		CountEmptyName                  func(childComplexity int) int
+		CountEmptyPosition              func(childComplexity int) int
+		CountEmptyUpdatedAt             func(childComplexity int) int
+		CountEmptyUpdatedBy             func(childComplexity int) int
+		CountNotEmptyAddress            func(childComplexity int) int
+		CountNotEmptyAnnualRevenue      func(childComplexity int) int
+		CountNotEmptyCreatedAt          func(childComplexity int) int
+		CountNotEmptyCreatedBy          func(childComplexity int) int
+		CountNotEmptyDeletedAt          func(childComplexity int) int
+		CountNotEmptyDomainName         func(childComplexity int) int
+		CountNotEmptyID                 func(childComplexity int) int
+		CountNotEmptyLinkedinLink       func(childComplexity int) int
+		CountNotEmptyName               func(childComplexity int) int
+		CountNotEmptyPosition           func(childComplexity int) int
+		CountNotEmptyUpdatedAt          func(childComplexity int) int
+		CountNotEmptyUpdatedBy          func(childComplexity int) int
+		CountUniqueValuesAddress        func(childComplexity int) int
+		CountUniqueValuesAnnualRevenue  func(childComplexity int) int
+		CountUniqueValuesCreatedAt      func(childComplexity int) int
+		CountUniqueValuesCreatedBy      func(childComplexity int) int
+		CountUniqueValuesDeletedAt      func(childComplexity int) int
+		CountUniqueValuesDomainName     func(childComplexity int) int
+		CountUniqueValuesID             func(childComplexity int) int
+		CountUniqueValuesLinkedinLink   func(childComplexity int) int
+		CountUniqueValuesName           func(childComplexity int) int
+		CountUniqueValuesPosition       func(childComplexity int) int
+		CountUniqueValuesUpdatedAt      func(childComplexity int) int
+		CountUniqueValuesUpdatedBy      func(childComplexity int) int
+		Edges                           func(childComplexity int) int
+		MaxAnnualRevenueAmountMicros    func(childComplexity int) int
+		MaxCreatedAt                    func(childComplexity int) int
+		MaxDeletedAt                    func(childComplexity int) int
+		MaxUpdatedAt                    func(childComplexity int) int
+		MinAnnualRevenueAmountMicros    func(childComplexity int) int
+		MinCreatedAt                    func(childComplexity int) int
+		MinDeletedAt                    func(childComplexity int) int
+		MinUpdatedAt                    func(childComplexity int) int
+		PageInfo                        func(childComplexity int) int
+		PercentageEmptyAddress          func(childComplexity int) int
+		PercentageEmptyAnnualRevenue    func(childComplexity int) int
+		PercentageEmptyCreatedAt        func(childComplexity int) int
+		PercentageEmptyCreatedBy        func(childComplexity int) int
+		PercentageEmptyDeletedAt        func(childComplexity int) int
+		PercentageEmptyDomainName       func(childComplexity int) int
+		PercentageEmptyID               func(childComplexity int) int
+		PercentageEmptyLinkedinLink     func(childComplexity int) int
+		PercentageEmptyName             func(childComplexity int) int
+		PercentageEmptyPosition         func(childComplexity int) int
+		PercentageEmptyUpdatedAt        func(childComplexity int) int
+		PercentageEmptyUpdatedBy        func(childComplexity int) int
+		PercentageNotEmptyAddress       func(childComplexity int) int
+		PercentageNotEmptyAnnualRevenue func(childComplexity int) int
+		PercentageNotEmptyCreatedAt     func(childComplexity int) int
+		PercentageNotEmptyCreatedBy     func(childComplexity int) int
+		PercentageNotEmptyDeletedAt     func(childComplexity int) int
+		PercentageNotEmptyDomainName    func(childComplexity int) int
+		PercentageNotEmptyID            func(childComplexity int) int
+		PercentageNotEmptyLinkedinLink  func(childComplexity int) int
+		PercentageNotEmptyName          func(childComplexity int) int
+		PercentageNotEmptyPosition      func(childComplexity int) int
+		PercentageNotEmptyUpdatedAt     func(childComplexity int) int
+		PercentageNotEmptyUpdatedBy     func(childComplexity int) int
+		SumAnnualRevenueAmountMicros    func(childComplexity int) int
+		TotalCount                      func(childComplexity int) int
+	}
+
+	CompanyEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	CompanyGroupByConnection struct {
+		AvgAnnualRevenueAmountMicros    func(childComplexity int) int
+		CountEmptyAddress               func(childComplexity int) int
+		CountEmptyAnnualRevenue         func(childComplexity int) int
+		CountEmptyCreatedAt             func(childComplexity int) int
+		CountEmptyCreatedBy             func(childComplexity int) int
+		CountEmptyDeletedAt             func(childComplexity int) int
+		CountEmptyDomainName            func(childComplexity int) int
+		CountEmptyID                    func(childComplexity int) int
+		CountEmptyLinkedinLink          func(childComplexity int) int
+		CountEmptyName                  func(childComplexity int) int
+		CountEmptyPosition              func(childComplexity int) int
+		CountEmptyUpdatedAt             func(childComplexity int) int
+		CountEmptyUpdatedBy             func(childComplexity int) int
+		CountNotEmptyAddress            func(childComplexity int) int
+		CountNotEmptyAnnualRevenue      func(childComplexity int) int
+		CountNotEmptyCreatedAt          func(childComplexity int) int
+		CountNotEmptyCreatedBy          func(childComplexity int) int
+		CountNotEmptyDeletedAt          func(childComplexity int) int
+		CountNotEmptyDomainName         func(childComplexity int) int
+		CountNotEmptyID                 func(childComplexity int) int
+		CountNotEmptyLinkedinLink       func(childComplexity int) int
+		CountNotEmptyName               func(childComplexity int) int
+		CountNotEmptyPosition           func(childComplexity int) int
+		CountNotEmptyUpdatedAt          func(childComplexity int) int
+		CountNotEmptyUpdatedBy          func(childComplexity int) int
+		CountUniqueValuesAddress        func(childComplexity int) int
+		CountUniqueValuesAnnualRevenue  func(childComplexity int) int
+		CountUniqueValuesCreatedAt      func(childComplexity int) int
+		CountUniqueValuesCreatedBy      func(childComplexity int) int
+		CountUniqueValuesDeletedAt      func(childComplexity int) int
+		CountUniqueValuesDomainName     func(childComplexity int) int
+		CountUniqueValuesID             func(childComplexity int) int
+		CountUniqueValuesLinkedinLink   func(childComplexity int) int
+		CountUniqueValuesName           func(childComplexity int) int
+		CountUniqueValuesPosition       func(childComplexity int) int
+		CountUniqueValuesUpdatedAt      func(childComplexity int) int
+		CountUniqueValuesUpdatedBy      func(childComplexity int) int
+		Edges                           func(childComplexity int) int
+		GroupByDimensionValues          func(childComplexity int) int
+		MaxAnnualRevenueAmountMicros    func(childComplexity int) int
+		MaxCreatedAt                    func(childComplexity int) int
+		MaxDeletedAt                    func(childComplexity int) int
+		MaxUpdatedAt                    func(childComplexity int) int
+		MinAnnualRevenueAmountMicros    func(childComplexity int) int
+		MinCreatedAt                    func(childComplexity int) int
+		MinDeletedAt                    func(childComplexity int) int
+		MinUpdatedAt                    func(childComplexity int) int
+		PageInfo                        func(childComplexity int) int
+		PercentageEmptyAddress          func(childComplexity int) int
+		PercentageEmptyAnnualRevenue    func(childComplexity int) int
+		PercentageEmptyCreatedAt        func(childComplexity int) int
+		PercentageEmptyCreatedBy        func(childComplexity int) int
+		PercentageEmptyDeletedAt        func(childComplexity int) int
+		PercentageEmptyDomainName       func(childComplexity int) int
+		PercentageEmptyID               func(childComplexity int) int
+		PercentageEmptyLinkedinLink     func(childComplexity int) int
+		PercentageEmptyName             func(childComplexity int) int
+		PercentageEmptyPosition         func(childComplexity int) int
+		PercentageEmptyUpdatedAt        func(childComplexity int) int
+		PercentageEmptyUpdatedBy        func(childComplexity int) int
+		PercentageNotEmptyAddress       func(childComplexity int) int
+		PercentageNotEmptyAnnualRevenue func(childComplexity int) int
+		PercentageNotEmptyCreatedAt     func(childComplexity int) int
+		PercentageNotEmptyCreatedBy     func(childComplexity int) int
+		PercentageNotEmptyDeletedAt     func(childComplexity int) int
+		PercentageNotEmptyDomainName    func(childComplexity int) int
+		PercentageNotEmptyID            func(childComplexity int) int
+		PercentageNotEmptyLinkedinLink  func(childComplexity int) int
+		PercentageNotEmptyName          func(childComplexity int) int
+		PercentageNotEmptyPosition      func(childComplexity int) int
+		PercentageNotEmptyUpdatedAt     func(childComplexity int) int
+		PercentageNotEmptyUpdatedBy     func(childComplexity int) int
+		SumAnnualRevenueAmountMicros    func(childComplexity int) int
+		TotalCount                      func(childComplexity int) int
+	}
+
+	Currency struct {
+		AmountMicros func(childComplexity int) int
+		CurrencyCode func(childComplexity int) int
+	}
+
 	Emails struct {
 		AdditionalEmails func(childComplexity int) int
 		PrimaryEmail     func(childComplexity int) int
@@ -358,6 +548,175 @@ type ComplexityRoot struct {
 		TotalCount                  func(childComplexity int) int
 	}
 
+	Opportunity struct {
+		Amount           func(childComplexity int) int
+		CloseDate        func(childComplexity int) int
+		CompanyID        func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		DeletedAt        func(childComplexity int) int
+		ID               func(childComplexity int) int
+		Name             func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		PointOfContactID func(childComplexity int) int
+		Position         func(childComplexity int) int
+		Stage            func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
+	}
+
+	OpportunityConnection struct {
+		AvgAmountAmountMicros       func(childComplexity int) int
+		CountEmptyAmount            func(childComplexity int) int
+		CountEmptyCloseDate         func(childComplexity int) int
+		CountEmptyCreatedAt         func(childComplexity int) int
+		CountEmptyCreatedBy         func(childComplexity int) int
+		CountEmptyDeletedAt         func(childComplexity int) int
+		CountEmptyID                func(childComplexity int) int
+		CountEmptyName              func(childComplexity int) int
+		CountEmptyPosition          func(childComplexity int) int
+		CountEmptyStage             func(childComplexity int) int
+		CountEmptyUpdatedAt         func(childComplexity int) int
+		CountEmptyUpdatedBy         func(childComplexity int) int
+		CountNotEmptyAmount         func(childComplexity int) int
+		CountNotEmptyCloseDate      func(childComplexity int) int
+		CountNotEmptyCreatedAt      func(childComplexity int) int
+		CountNotEmptyCreatedBy      func(childComplexity int) int
+		CountNotEmptyDeletedAt      func(childComplexity int) int
+		CountNotEmptyID             func(childComplexity int) int
+		CountNotEmptyName           func(childComplexity int) int
+		CountNotEmptyPosition       func(childComplexity int) int
+		CountNotEmptyStage          func(childComplexity int) int
+		CountNotEmptyUpdatedAt      func(childComplexity int) int
+		CountNotEmptyUpdatedBy      func(childComplexity int) int
+		CountUniqueValuesAmount     func(childComplexity int) int
+		CountUniqueValuesCloseDate  func(childComplexity int) int
+		CountUniqueValuesCreatedAt  func(childComplexity int) int
+		CountUniqueValuesCreatedBy  func(childComplexity int) int
+		CountUniqueValuesDeletedAt  func(childComplexity int) int
+		CountUniqueValuesID         func(childComplexity int) int
+		CountUniqueValuesName       func(childComplexity int) int
+		CountUniqueValuesPosition   func(childComplexity int) int
+		CountUniqueValuesStage      func(childComplexity int) int
+		CountUniqueValuesUpdatedAt  func(childComplexity int) int
+		CountUniqueValuesUpdatedBy  func(childComplexity int) int
+		Edges                       func(childComplexity int) int
+		MaxAmountAmountMicros       func(childComplexity int) int
+		MaxCloseDate                func(childComplexity int) int
+		MaxCreatedAt                func(childComplexity int) int
+		MaxDeletedAt                func(childComplexity int) int
+		MaxUpdatedAt                func(childComplexity int) int
+		MinAmountAmountMicros       func(childComplexity int) int
+		MinCloseDate                func(childComplexity int) int
+		MinCreatedAt                func(childComplexity int) int
+		MinDeletedAt                func(childComplexity int) int
+		MinUpdatedAt                func(childComplexity int) int
+		PageInfo                    func(childComplexity int) int
+		PercentageEmptyAmount       func(childComplexity int) int
+		PercentageEmptyCloseDate    func(childComplexity int) int
+		PercentageEmptyCreatedAt    func(childComplexity int) int
+		PercentageEmptyCreatedBy    func(childComplexity int) int
+		PercentageEmptyDeletedAt    func(childComplexity int) int
+		PercentageEmptyID           func(childComplexity int) int
+		PercentageEmptyName         func(childComplexity int) int
+		PercentageEmptyPosition     func(childComplexity int) int
+		PercentageEmptyStage        func(childComplexity int) int
+		PercentageEmptyUpdatedAt    func(childComplexity int) int
+		PercentageEmptyUpdatedBy    func(childComplexity int) int
+		PercentageNotEmptyAmount    func(childComplexity int) int
+		PercentageNotEmptyCloseDate func(childComplexity int) int
+		PercentageNotEmptyCreatedAt func(childComplexity int) int
+		PercentageNotEmptyCreatedBy func(childComplexity int) int
+		PercentageNotEmptyDeletedAt func(childComplexity int) int
+		PercentageNotEmptyID        func(childComplexity int) int
+		PercentageNotEmptyName      func(childComplexity int) int
+		PercentageNotEmptyPosition  func(childComplexity int) int
+		PercentageNotEmptyStage     func(childComplexity int) int
+		PercentageNotEmptyUpdatedAt func(childComplexity int) int
+		PercentageNotEmptyUpdatedBy func(childComplexity int) int
+		SumAmountAmountMicros       func(childComplexity int) int
+		TotalCount                  func(childComplexity int) int
+	}
+
+	OpportunityEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	OpportunityGroupByConnection struct {
+		AvgAmountAmountMicros       func(childComplexity int) int
+		CountEmptyAmount            func(childComplexity int) int
+		CountEmptyCloseDate         func(childComplexity int) int
+		CountEmptyCreatedAt         func(childComplexity int) int
+		CountEmptyCreatedBy         func(childComplexity int) int
+		CountEmptyDeletedAt         func(childComplexity int) int
+		CountEmptyID                func(childComplexity int) int
+		CountEmptyName              func(childComplexity int) int
+		CountEmptyPosition          func(childComplexity int) int
+		CountEmptyStage             func(childComplexity int) int
+		CountEmptyUpdatedAt         func(childComplexity int) int
+		CountEmptyUpdatedBy         func(childComplexity int) int
+		CountNotEmptyAmount         func(childComplexity int) int
+		CountNotEmptyCloseDate      func(childComplexity int) int
+		CountNotEmptyCreatedAt      func(childComplexity int) int
+		CountNotEmptyCreatedBy      func(childComplexity int) int
+		CountNotEmptyDeletedAt      func(childComplexity int) int
+		CountNotEmptyID             func(childComplexity int) int
+		CountNotEmptyName           func(childComplexity int) int
+		CountNotEmptyPosition       func(childComplexity int) int
+		CountNotEmptyStage          func(childComplexity int) int
+		CountNotEmptyUpdatedAt      func(childComplexity int) int
+		CountNotEmptyUpdatedBy      func(childComplexity int) int
+		CountUniqueValuesAmount     func(childComplexity int) int
+		CountUniqueValuesCloseDate  func(childComplexity int) int
+		CountUniqueValuesCreatedAt  func(childComplexity int) int
+		CountUniqueValuesCreatedBy  func(childComplexity int) int
+		CountUniqueValuesDeletedAt  func(childComplexity int) int
+		CountUniqueValuesID         func(childComplexity int) int
+		CountUniqueValuesName       func(childComplexity int) int
+		CountUniqueValuesPosition   func(childComplexity int) int
+		CountUniqueValuesStage      func(childComplexity int) int
+		CountUniqueValuesUpdatedAt  func(childComplexity int) int
+		CountUniqueValuesUpdatedBy  func(childComplexity int) int
+		Edges                       func(childComplexity int) int
+		GroupByDimensionValues      func(childComplexity int) int
+		MaxAmountAmountMicros       func(childComplexity int) int
+		MaxCloseDate                func(childComplexity int) int
+		MaxCreatedAt                func(childComplexity int) int
+		MaxDeletedAt                func(childComplexity int) int
+		MaxUpdatedAt                func(childComplexity int) int
+		MinAmountAmountMicros       func(childComplexity int) int
+		MinCloseDate                func(childComplexity int) int
+		MinCreatedAt                func(childComplexity int) int
+		MinDeletedAt                func(childComplexity int) int
+		MinUpdatedAt                func(childComplexity int) int
+		PageInfo                    func(childComplexity int) int
+		PercentageEmptyAmount       func(childComplexity int) int
+		PercentageEmptyCloseDate    func(childComplexity int) int
+		PercentageEmptyCreatedAt    func(childComplexity int) int
+		PercentageEmptyCreatedBy    func(childComplexity int) int
+		PercentageEmptyDeletedAt    func(childComplexity int) int
+		PercentageEmptyID           func(childComplexity int) int
+		PercentageEmptyName         func(childComplexity int) int
+		PercentageEmptyPosition     func(childComplexity int) int
+		PercentageEmptyStage        func(childComplexity int) int
+		PercentageEmptyUpdatedAt    func(childComplexity int) int
+		PercentageEmptyUpdatedBy    func(childComplexity int) int
+		PercentageNotEmptyAmount    func(childComplexity int) int
+		PercentageNotEmptyCloseDate func(childComplexity int) int
+		PercentageNotEmptyCreatedAt func(childComplexity int) int
+		PercentageNotEmptyCreatedBy func(childComplexity int) int
+		PercentageNotEmptyDeletedAt func(childComplexity int) int
+		PercentageNotEmptyID        func(childComplexity int) int
+		PercentageNotEmptyName      func(childComplexity int) int
+		PercentageNotEmptyPosition  func(childComplexity int) int
+		PercentageNotEmptyStage     func(childComplexity int) int
+		PercentageNotEmptyUpdatedAt func(childComplexity int) int
+		PercentageNotEmptyUpdatedBy func(childComplexity int) int
+		SumAmountAmountMicros       func(childComplexity int) int
+		TotalCount                  func(childComplexity int) int
+	}
+
 	PageInfo struct {
 		EndCursor       func(childComplexity int) int
 		HasNextPage     func(childComplexity int) int
@@ -560,21 +919,27 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		Note               func(childComplexity int, filter map[string]any) int
-		NoteTarget         func(childComplexity int, filter map[string]any) int
-		NoteTargets        func(childComplexity int, filter map[string]any, orderBy []map[string]any, first *int, last *int, after *string, before *string, offset *int) int
-		NoteTargetsGroupBy func(childComplexity int, groupBy []map[string]any, filter map[string]any, orderBy []map[string]any, orderByForRecords []map[string]any, viewID *string, limit *int, offsetForRecords *int) int
-		Notes              func(childComplexity int, filter map[string]any, orderBy []map[string]any, first *int, last *int, after *string, before *string, offset *int) int
-		NotesGroupBy       func(childComplexity int, groupBy []map[string]any, filter map[string]any, orderBy []map[string]any, orderByForRecords []map[string]any, viewID *string, limit *int, offsetForRecords *int) int
-		People             func(childComplexity int, filter map[string]any, orderBy []map[string]any, first *int, last *int, after *string, before *string, offset *int) int
-		PeopleGroupBy      func(childComplexity int, groupBy []map[string]any, filter map[string]any, orderBy []map[string]any, orderByForRecords []map[string]any, viewID *string, limit *int, offsetForRecords *int) int
-		Person             func(childComplexity int, filter map[string]any) int
-		Task               func(childComplexity int, filter map[string]any) int
-		TaskTarget         func(childComplexity int, filter map[string]any) int
-		TaskTargets        func(childComplexity int, filter map[string]any, orderBy []map[string]any, first *int, last *int, after *string, before *string, offset *int) int
-		TaskTargetsGroupBy func(childComplexity int, groupBy []map[string]any, filter map[string]any, orderBy []map[string]any, orderByForRecords []map[string]any, viewID *string, limit *int, offsetForRecords *int) int
-		Tasks              func(childComplexity int, filter map[string]any, orderBy []map[string]any, first *int, last *int, after *string, before *string, offset *int) int
-		TasksGroupBy       func(childComplexity int, groupBy []map[string]any, filter map[string]any, orderBy []map[string]any, orderByForRecords []map[string]any, viewID *string, limit *int, offsetForRecords *int) int
+		Companies            func(childComplexity int, filter map[string]any, orderBy []map[string]any, first *int, last *int, after *string, before *string, offset *int) int
+		CompaniesGroupBy     func(childComplexity int, groupBy []map[string]any, filter map[string]any, orderBy []map[string]any, orderByForRecords []map[string]any, viewID *string, limit *int, offsetForRecords *int) int
+		Company              func(childComplexity int, filter map[string]any) int
+		Note                 func(childComplexity int, filter map[string]any) int
+		NoteTarget           func(childComplexity int, filter map[string]any) int
+		NoteTargets          func(childComplexity int, filter map[string]any, orderBy []map[string]any, first *int, last *int, after *string, before *string, offset *int) int
+		NoteTargetsGroupBy   func(childComplexity int, groupBy []map[string]any, filter map[string]any, orderBy []map[string]any, orderByForRecords []map[string]any, viewID *string, limit *int, offsetForRecords *int) int
+		Notes                func(childComplexity int, filter map[string]any, orderBy []map[string]any, first *int, last *int, after *string, before *string, offset *int) int
+		NotesGroupBy         func(childComplexity int, groupBy []map[string]any, filter map[string]any, orderBy []map[string]any, orderByForRecords []map[string]any, viewID *string, limit *int, offsetForRecords *int) int
+		Opportunities        func(childComplexity int, filter map[string]any, orderBy []map[string]any, first *int, last *int, after *string, before *string, offset *int) int
+		OpportunitiesGroupBy func(childComplexity int, groupBy []map[string]any, filter map[string]any, orderBy []map[string]any, orderByForRecords []map[string]any, viewID *string, limit *int, offsetForRecords *int) int
+		Opportunity          func(childComplexity int, filter map[string]any) int
+		People               func(childComplexity int, filter map[string]any, orderBy []map[string]any, first *int, last *int, after *string, before *string, offset *int) int
+		PeopleGroupBy        func(childComplexity int, groupBy []map[string]any, filter map[string]any, orderBy []map[string]any, orderByForRecords []map[string]any, viewID *string, limit *int, offsetForRecords *int) int
+		Person               func(childComplexity int, filter map[string]any) int
+		Task                 func(childComplexity int, filter map[string]any) int
+		TaskTarget           func(childComplexity int, filter map[string]any) int
+		TaskTargets          func(childComplexity int, filter map[string]any, orderBy []map[string]any, first *int, last *int, after *string, before *string, offset *int) int
+		TaskTargetsGroupBy   func(childComplexity int, groupBy []map[string]any, filter map[string]any, orderBy []map[string]any, orderByForRecords []map[string]any, viewID *string, limit *int, offsetForRecords *int) int
+		Tasks                func(childComplexity int, filter map[string]any, orderBy []map[string]any, first *int, last *int, after *string, before *string, offset *int) int
+		TasksGroupBy         func(childComplexity int, groupBy []map[string]any, filter map[string]any, orderBy []map[string]any, orderByForRecords []map[string]any, viewID *string, limit *int, offsetForRecords *int) int
 	}
 
 	RichText struct {
@@ -915,6 +1280,12 @@ type MutationResolver interface {
 type QueryResolver interface {
 	People(ctx context.Context, filter map[string]any, orderBy []map[string]any, first *int, last *int, after *string, before *string, offset *int) (*PersonConnection, error)
 	Person(ctx context.Context, filter map[string]any) (*Person, error)
+	Companies(ctx context.Context, filter map[string]any, orderBy []map[string]any, first *int, last *int, after *string, before *string, offset *int) (*CompanyConnection, error)
+	Company(ctx context.Context, filter map[string]any) (*Company, error)
+	CompaniesGroupBy(ctx context.Context, groupBy []map[string]any, filter map[string]any, orderBy []map[string]any, orderByForRecords []map[string]any, viewID *string, limit *int, offsetForRecords *int) ([]*CompanyGroupByConnection, error)
+	Opportunities(ctx context.Context, filter map[string]any, orderBy []map[string]any, first *int, last *int, after *string, before *string, offset *int) (*OpportunityConnection, error)
+	Opportunity(ctx context.Context, filter map[string]any) (*Opportunity, error)
+	OpportunitiesGroupBy(ctx context.Context, groupBy []map[string]any, filter map[string]any, orderBy []map[string]any, orderByForRecords []map[string]any, viewID *string, limit *int, offsetForRecords *int) ([]*OpportunityGroupByConnection, error)
 	PeopleGroupBy(ctx context.Context, groupBy []map[string]any, filter map[string]any, orderBy []map[string]any, orderByForRecords []map[string]any, viewID *string, limit *int, offsetForRecords *int) ([]*PersonGroupByConnection, error)
 	Notes(ctx context.Context, filter map[string]any, orderBy []map[string]any, first *int, last *int, after *string, before *string, offset *int) (*NoteConnection, error)
 	Note(ctx context.Context, filter map[string]any) (*Note, error)
@@ -985,6 +1356,1044 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.AdditionalPhone.Number(childComplexity), true
+
+	case "Address.addressCity":
+		if e.ComplexityRoot.Address.AddressCity == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Address.AddressCity(childComplexity), true
+	case "Address.addressCountry":
+		if e.ComplexityRoot.Address.AddressCountry == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Address.AddressCountry(childComplexity), true
+	case "Address.addressLat":
+		if e.ComplexityRoot.Address.AddressLat == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Address.AddressLat(childComplexity), true
+	case "Address.addressLng":
+		if e.ComplexityRoot.Address.AddressLng == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Address.AddressLng(childComplexity), true
+	case "Address.addressPostcode":
+		if e.ComplexityRoot.Address.AddressPostcode == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Address.AddressPostcode(childComplexity), true
+	case "Address.addressState":
+		if e.ComplexityRoot.Address.AddressState == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Address.AddressState(childComplexity), true
+	case "Address.addressStreet1":
+		if e.ComplexityRoot.Address.AddressStreet1 == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Address.AddressStreet1(childComplexity), true
+	case "Address.addressStreet2":
+		if e.ComplexityRoot.Address.AddressStreet2 == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Address.AddressStreet2(childComplexity), true
+
+	case "Company.accountOwnerId":
+		if e.ComplexityRoot.Company.AccountOwnerID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Company.AccountOwnerID(childComplexity), true
+	case "Company.address":
+		if e.ComplexityRoot.Company.Address == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Company.Address(childComplexity), true
+	case "Company.annualRevenue":
+		if e.ComplexityRoot.Company.AnnualRevenue == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Company.AnnualRevenue(childComplexity), true
+	case "Company.createdAt":
+		if e.ComplexityRoot.Company.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Company.CreatedAt(childComplexity), true
+	case "Company.createdBy":
+		if e.ComplexityRoot.Company.CreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Company.CreatedBy(childComplexity), true
+	case "Company.deletedAt":
+		if e.ComplexityRoot.Company.DeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Company.DeletedAt(childComplexity), true
+	case "Company.domainName":
+		if e.ComplexityRoot.Company.DomainName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Company.DomainName(childComplexity), true
+	case "Company.id":
+		if e.ComplexityRoot.Company.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Company.ID(childComplexity), true
+	case "Company.linkedinLink":
+		if e.ComplexityRoot.Company.LinkedinLink == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Company.LinkedinLink(childComplexity), true
+	case "Company.name":
+		if e.ComplexityRoot.Company.Name == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Company.Name(childComplexity), true
+	case "Company.position":
+		if e.ComplexityRoot.Company.Position == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Company.Position(childComplexity), true
+	case "Company.updatedAt":
+		if e.ComplexityRoot.Company.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Company.UpdatedAt(childComplexity), true
+	case "Company.updatedBy":
+		if e.ComplexityRoot.Company.UpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Company.UpdatedBy(childComplexity), true
+
+	case "CompanyConnection.avgAnnualRevenueAmountMicros":
+		if e.ComplexityRoot.CompanyConnection.AvgAnnualRevenueAmountMicros == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.AvgAnnualRevenueAmountMicros(childComplexity), true
+	case "CompanyConnection.countEmptyAddress":
+		if e.ComplexityRoot.CompanyConnection.CountEmptyAddress == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountEmptyAddress(childComplexity), true
+	case "CompanyConnection.countEmptyAnnualRevenue":
+		if e.ComplexityRoot.CompanyConnection.CountEmptyAnnualRevenue == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountEmptyAnnualRevenue(childComplexity), true
+	case "CompanyConnection.countEmptyCreatedAt":
+		if e.ComplexityRoot.CompanyConnection.CountEmptyCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountEmptyCreatedAt(childComplexity), true
+	case "CompanyConnection.countEmptyCreatedBy":
+		if e.ComplexityRoot.CompanyConnection.CountEmptyCreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountEmptyCreatedBy(childComplexity), true
+	case "CompanyConnection.countEmptyDeletedAt":
+		if e.ComplexityRoot.CompanyConnection.CountEmptyDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountEmptyDeletedAt(childComplexity), true
+	case "CompanyConnection.countEmptyDomainName":
+		if e.ComplexityRoot.CompanyConnection.CountEmptyDomainName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountEmptyDomainName(childComplexity), true
+	case "CompanyConnection.countEmptyId":
+		if e.ComplexityRoot.CompanyConnection.CountEmptyID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountEmptyID(childComplexity), true
+	case "CompanyConnection.countEmptyLinkedinLink":
+		if e.ComplexityRoot.CompanyConnection.CountEmptyLinkedinLink == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountEmptyLinkedinLink(childComplexity), true
+	case "CompanyConnection.countEmptyName":
+		if e.ComplexityRoot.CompanyConnection.CountEmptyName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountEmptyName(childComplexity), true
+	case "CompanyConnection.countEmptyPosition":
+		if e.ComplexityRoot.CompanyConnection.CountEmptyPosition == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountEmptyPosition(childComplexity), true
+	case "CompanyConnection.countEmptyUpdatedAt":
+		if e.ComplexityRoot.CompanyConnection.CountEmptyUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountEmptyUpdatedAt(childComplexity), true
+	case "CompanyConnection.countEmptyUpdatedBy":
+		if e.ComplexityRoot.CompanyConnection.CountEmptyUpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountEmptyUpdatedBy(childComplexity), true
+	case "CompanyConnection.countNotEmptyAddress":
+		if e.ComplexityRoot.CompanyConnection.CountNotEmptyAddress == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountNotEmptyAddress(childComplexity), true
+	case "CompanyConnection.countNotEmptyAnnualRevenue":
+		if e.ComplexityRoot.CompanyConnection.CountNotEmptyAnnualRevenue == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountNotEmptyAnnualRevenue(childComplexity), true
+	case "CompanyConnection.countNotEmptyCreatedAt":
+		if e.ComplexityRoot.CompanyConnection.CountNotEmptyCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountNotEmptyCreatedAt(childComplexity), true
+	case "CompanyConnection.countNotEmptyCreatedBy":
+		if e.ComplexityRoot.CompanyConnection.CountNotEmptyCreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountNotEmptyCreatedBy(childComplexity), true
+	case "CompanyConnection.countNotEmptyDeletedAt":
+		if e.ComplexityRoot.CompanyConnection.CountNotEmptyDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountNotEmptyDeletedAt(childComplexity), true
+	case "CompanyConnection.countNotEmptyDomainName":
+		if e.ComplexityRoot.CompanyConnection.CountNotEmptyDomainName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountNotEmptyDomainName(childComplexity), true
+	case "CompanyConnection.countNotEmptyId":
+		if e.ComplexityRoot.CompanyConnection.CountNotEmptyID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountNotEmptyID(childComplexity), true
+	case "CompanyConnection.countNotEmptyLinkedinLink":
+		if e.ComplexityRoot.CompanyConnection.CountNotEmptyLinkedinLink == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountNotEmptyLinkedinLink(childComplexity), true
+	case "CompanyConnection.countNotEmptyName":
+		if e.ComplexityRoot.CompanyConnection.CountNotEmptyName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountNotEmptyName(childComplexity), true
+	case "CompanyConnection.countNotEmptyPosition":
+		if e.ComplexityRoot.CompanyConnection.CountNotEmptyPosition == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountNotEmptyPosition(childComplexity), true
+	case "CompanyConnection.countNotEmptyUpdatedAt":
+		if e.ComplexityRoot.CompanyConnection.CountNotEmptyUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountNotEmptyUpdatedAt(childComplexity), true
+	case "CompanyConnection.countNotEmptyUpdatedBy":
+		if e.ComplexityRoot.CompanyConnection.CountNotEmptyUpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountNotEmptyUpdatedBy(childComplexity), true
+	case "CompanyConnection.countUniqueValuesAddress":
+		if e.ComplexityRoot.CompanyConnection.CountUniqueValuesAddress == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountUniqueValuesAddress(childComplexity), true
+	case "CompanyConnection.countUniqueValuesAnnualRevenue":
+		if e.ComplexityRoot.CompanyConnection.CountUniqueValuesAnnualRevenue == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountUniqueValuesAnnualRevenue(childComplexity), true
+	case "CompanyConnection.countUniqueValuesCreatedAt":
+		if e.ComplexityRoot.CompanyConnection.CountUniqueValuesCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountUniqueValuesCreatedAt(childComplexity), true
+	case "CompanyConnection.countUniqueValuesCreatedBy":
+		if e.ComplexityRoot.CompanyConnection.CountUniqueValuesCreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountUniqueValuesCreatedBy(childComplexity), true
+	case "CompanyConnection.countUniqueValuesDeletedAt":
+		if e.ComplexityRoot.CompanyConnection.CountUniqueValuesDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountUniqueValuesDeletedAt(childComplexity), true
+	case "CompanyConnection.countUniqueValuesDomainName":
+		if e.ComplexityRoot.CompanyConnection.CountUniqueValuesDomainName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountUniqueValuesDomainName(childComplexity), true
+	case "CompanyConnection.countUniqueValuesId":
+		if e.ComplexityRoot.CompanyConnection.CountUniqueValuesID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountUniqueValuesID(childComplexity), true
+	case "CompanyConnection.countUniqueValuesLinkedinLink":
+		if e.ComplexityRoot.CompanyConnection.CountUniqueValuesLinkedinLink == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountUniqueValuesLinkedinLink(childComplexity), true
+	case "CompanyConnection.countUniqueValuesName":
+		if e.ComplexityRoot.CompanyConnection.CountUniqueValuesName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountUniqueValuesName(childComplexity), true
+	case "CompanyConnection.countUniqueValuesPosition":
+		if e.ComplexityRoot.CompanyConnection.CountUniqueValuesPosition == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountUniqueValuesPosition(childComplexity), true
+	case "CompanyConnection.countUniqueValuesUpdatedAt":
+		if e.ComplexityRoot.CompanyConnection.CountUniqueValuesUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountUniqueValuesUpdatedAt(childComplexity), true
+	case "CompanyConnection.countUniqueValuesUpdatedBy":
+		if e.ComplexityRoot.CompanyConnection.CountUniqueValuesUpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.CountUniqueValuesUpdatedBy(childComplexity), true
+	case "CompanyConnection.edges":
+		if e.ComplexityRoot.CompanyConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.Edges(childComplexity), true
+	case "CompanyConnection.maxAnnualRevenueAmountMicros":
+		if e.ComplexityRoot.CompanyConnection.MaxAnnualRevenueAmountMicros == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.MaxAnnualRevenueAmountMicros(childComplexity), true
+	case "CompanyConnection.maxCreatedAt":
+		if e.ComplexityRoot.CompanyConnection.MaxCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.MaxCreatedAt(childComplexity), true
+	case "CompanyConnection.maxDeletedAt":
+		if e.ComplexityRoot.CompanyConnection.MaxDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.MaxDeletedAt(childComplexity), true
+	case "CompanyConnection.maxUpdatedAt":
+		if e.ComplexityRoot.CompanyConnection.MaxUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.MaxUpdatedAt(childComplexity), true
+	case "CompanyConnection.minAnnualRevenueAmountMicros":
+		if e.ComplexityRoot.CompanyConnection.MinAnnualRevenueAmountMicros == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.MinAnnualRevenueAmountMicros(childComplexity), true
+	case "CompanyConnection.minCreatedAt":
+		if e.ComplexityRoot.CompanyConnection.MinCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.MinCreatedAt(childComplexity), true
+	case "CompanyConnection.minDeletedAt":
+		if e.ComplexityRoot.CompanyConnection.MinDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.MinDeletedAt(childComplexity), true
+	case "CompanyConnection.minUpdatedAt":
+		if e.ComplexityRoot.CompanyConnection.MinUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.MinUpdatedAt(childComplexity), true
+	case "CompanyConnection.pageInfo":
+		if e.ComplexityRoot.CompanyConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.PageInfo(childComplexity), true
+	case "CompanyConnection.percentageEmptyAddress":
+		if e.ComplexityRoot.CompanyConnection.PercentageEmptyAddress == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.PercentageEmptyAddress(childComplexity), true
+	case "CompanyConnection.percentageEmptyAnnualRevenue":
+		if e.ComplexityRoot.CompanyConnection.PercentageEmptyAnnualRevenue == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.PercentageEmptyAnnualRevenue(childComplexity), true
+	case "CompanyConnection.percentageEmptyCreatedAt":
+		if e.ComplexityRoot.CompanyConnection.PercentageEmptyCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.PercentageEmptyCreatedAt(childComplexity), true
+	case "CompanyConnection.percentageEmptyCreatedBy":
+		if e.ComplexityRoot.CompanyConnection.PercentageEmptyCreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.PercentageEmptyCreatedBy(childComplexity), true
+	case "CompanyConnection.percentageEmptyDeletedAt":
+		if e.ComplexityRoot.CompanyConnection.PercentageEmptyDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.PercentageEmptyDeletedAt(childComplexity), true
+	case "CompanyConnection.percentageEmptyDomainName":
+		if e.ComplexityRoot.CompanyConnection.PercentageEmptyDomainName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.PercentageEmptyDomainName(childComplexity), true
+	case "CompanyConnection.percentageEmptyId":
+		if e.ComplexityRoot.CompanyConnection.PercentageEmptyID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.PercentageEmptyID(childComplexity), true
+	case "CompanyConnection.percentageEmptyLinkedinLink":
+		if e.ComplexityRoot.CompanyConnection.PercentageEmptyLinkedinLink == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.PercentageEmptyLinkedinLink(childComplexity), true
+	case "CompanyConnection.percentageEmptyName":
+		if e.ComplexityRoot.CompanyConnection.PercentageEmptyName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.PercentageEmptyName(childComplexity), true
+	case "CompanyConnection.percentageEmptyPosition":
+		if e.ComplexityRoot.CompanyConnection.PercentageEmptyPosition == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.PercentageEmptyPosition(childComplexity), true
+	case "CompanyConnection.percentageEmptyUpdatedAt":
+		if e.ComplexityRoot.CompanyConnection.PercentageEmptyUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.PercentageEmptyUpdatedAt(childComplexity), true
+	case "CompanyConnection.percentageEmptyUpdatedBy":
+		if e.ComplexityRoot.CompanyConnection.PercentageEmptyUpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.PercentageEmptyUpdatedBy(childComplexity), true
+	case "CompanyConnection.percentageNotEmptyAddress":
+		if e.ComplexityRoot.CompanyConnection.PercentageNotEmptyAddress == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.PercentageNotEmptyAddress(childComplexity), true
+	case "CompanyConnection.percentageNotEmptyAnnualRevenue":
+		if e.ComplexityRoot.CompanyConnection.PercentageNotEmptyAnnualRevenue == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.PercentageNotEmptyAnnualRevenue(childComplexity), true
+	case "CompanyConnection.percentageNotEmptyCreatedAt":
+		if e.ComplexityRoot.CompanyConnection.PercentageNotEmptyCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.PercentageNotEmptyCreatedAt(childComplexity), true
+	case "CompanyConnection.percentageNotEmptyCreatedBy":
+		if e.ComplexityRoot.CompanyConnection.PercentageNotEmptyCreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.PercentageNotEmptyCreatedBy(childComplexity), true
+	case "CompanyConnection.percentageNotEmptyDeletedAt":
+		if e.ComplexityRoot.CompanyConnection.PercentageNotEmptyDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.PercentageNotEmptyDeletedAt(childComplexity), true
+	case "CompanyConnection.percentageNotEmptyDomainName":
+		if e.ComplexityRoot.CompanyConnection.PercentageNotEmptyDomainName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.PercentageNotEmptyDomainName(childComplexity), true
+	case "CompanyConnection.percentageNotEmptyId":
+		if e.ComplexityRoot.CompanyConnection.PercentageNotEmptyID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.PercentageNotEmptyID(childComplexity), true
+	case "CompanyConnection.percentageNotEmptyLinkedinLink":
+		if e.ComplexityRoot.CompanyConnection.PercentageNotEmptyLinkedinLink == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.PercentageNotEmptyLinkedinLink(childComplexity), true
+	case "CompanyConnection.percentageNotEmptyName":
+		if e.ComplexityRoot.CompanyConnection.PercentageNotEmptyName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.PercentageNotEmptyName(childComplexity), true
+	case "CompanyConnection.percentageNotEmptyPosition":
+		if e.ComplexityRoot.CompanyConnection.PercentageNotEmptyPosition == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.PercentageNotEmptyPosition(childComplexity), true
+	case "CompanyConnection.percentageNotEmptyUpdatedAt":
+		if e.ComplexityRoot.CompanyConnection.PercentageNotEmptyUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.PercentageNotEmptyUpdatedAt(childComplexity), true
+	case "CompanyConnection.percentageNotEmptyUpdatedBy":
+		if e.ComplexityRoot.CompanyConnection.PercentageNotEmptyUpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.PercentageNotEmptyUpdatedBy(childComplexity), true
+	case "CompanyConnection.sumAnnualRevenueAmountMicros":
+		if e.ComplexityRoot.CompanyConnection.SumAnnualRevenueAmountMicros == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.SumAnnualRevenueAmountMicros(childComplexity), true
+	case "CompanyConnection.totalCount":
+		if e.ComplexityRoot.CompanyConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyConnection.TotalCount(childComplexity), true
+
+	case "CompanyEdge.cursor":
+		if e.ComplexityRoot.CompanyEdge.Cursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyEdge.Cursor(childComplexity), true
+	case "CompanyEdge.node":
+		if e.ComplexityRoot.CompanyEdge.Node == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyEdge.Node(childComplexity), true
+
+	case "CompanyGroupByConnection.avgAnnualRevenueAmountMicros":
+		if e.ComplexityRoot.CompanyGroupByConnection.AvgAnnualRevenueAmountMicros == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.AvgAnnualRevenueAmountMicros(childComplexity), true
+	case "CompanyGroupByConnection.countEmptyAddress":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountEmptyAddress == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountEmptyAddress(childComplexity), true
+	case "CompanyGroupByConnection.countEmptyAnnualRevenue":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountEmptyAnnualRevenue == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountEmptyAnnualRevenue(childComplexity), true
+	case "CompanyGroupByConnection.countEmptyCreatedAt":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountEmptyCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountEmptyCreatedAt(childComplexity), true
+	case "CompanyGroupByConnection.countEmptyCreatedBy":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountEmptyCreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountEmptyCreatedBy(childComplexity), true
+	case "CompanyGroupByConnection.countEmptyDeletedAt":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountEmptyDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountEmptyDeletedAt(childComplexity), true
+	case "CompanyGroupByConnection.countEmptyDomainName":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountEmptyDomainName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountEmptyDomainName(childComplexity), true
+	case "CompanyGroupByConnection.countEmptyId":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountEmptyID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountEmptyID(childComplexity), true
+	case "CompanyGroupByConnection.countEmptyLinkedinLink":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountEmptyLinkedinLink == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountEmptyLinkedinLink(childComplexity), true
+	case "CompanyGroupByConnection.countEmptyName":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountEmptyName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountEmptyName(childComplexity), true
+	case "CompanyGroupByConnection.countEmptyPosition":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountEmptyPosition == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountEmptyPosition(childComplexity), true
+	case "CompanyGroupByConnection.countEmptyUpdatedAt":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountEmptyUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountEmptyUpdatedAt(childComplexity), true
+	case "CompanyGroupByConnection.countEmptyUpdatedBy":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountEmptyUpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountEmptyUpdatedBy(childComplexity), true
+	case "CompanyGroupByConnection.countNotEmptyAddress":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountNotEmptyAddress == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountNotEmptyAddress(childComplexity), true
+	case "CompanyGroupByConnection.countNotEmptyAnnualRevenue":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountNotEmptyAnnualRevenue == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountNotEmptyAnnualRevenue(childComplexity), true
+	case "CompanyGroupByConnection.countNotEmptyCreatedAt":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountNotEmptyCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountNotEmptyCreatedAt(childComplexity), true
+	case "CompanyGroupByConnection.countNotEmptyCreatedBy":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountNotEmptyCreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountNotEmptyCreatedBy(childComplexity), true
+	case "CompanyGroupByConnection.countNotEmptyDeletedAt":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountNotEmptyDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountNotEmptyDeletedAt(childComplexity), true
+	case "CompanyGroupByConnection.countNotEmptyDomainName":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountNotEmptyDomainName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountNotEmptyDomainName(childComplexity), true
+	case "CompanyGroupByConnection.countNotEmptyId":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountNotEmptyID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountNotEmptyID(childComplexity), true
+	case "CompanyGroupByConnection.countNotEmptyLinkedinLink":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountNotEmptyLinkedinLink == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountNotEmptyLinkedinLink(childComplexity), true
+	case "CompanyGroupByConnection.countNotEmptyName":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountNotEmptyName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountNotEmptyName(childComplexity), true
+	case "CompanyGroupByConnection.countNotEmptyPosition":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountNotEmptyPosition == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountNotEmptyPosition(childComplexity), true
+	case "CompanyGroupByConnection.countNotEmptyUpdatedAt":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountNotEmptyUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountNotEmptyUpdatedAt(childComplexity), true
+	case "CompanyGroupByConnection.countNotEmptyUpdatedBy":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountNotEmptyUpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountNotEmptyUpdatedBy(childComplexity), true
+	case "CompanyGroupByConnection.countUniqueValuesAddress":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountUniqueValuesAddress == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountUniqueValuesAddress(childComplexity), true
+	case "CompanyGroupByConnection.countUniqueValuesAnnualRevenue":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountUniqueValuesAnnualRevenue == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountUniqueValuesAnnualRevenue(childComplexity), true
+	case "CompanyGroupByConnection.countUniqueValuesCreatedAt":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountUniqueValuesCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountUniqueValuesCreatedAt(childComplexity), true
+	case "CompanyGroupByConnection.countUniqueValuesCreatedBy":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountUniqueValuesCreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountUniqueValuesCreatedBy(childComplexity), true
+	case "CompanyGroupByConnection.countUniqueValuesDeletedAt":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountUniqueValuesDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountUniqueValuesDeletedAt(childComplexity), true
+	case "CompanyGroupByConnection.countUniqueValuesDomainName":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountUniqueValuesDomainName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountUniqueValuesDomainName(childComplexity), true
+	case "CompanyGroupByConnection.countUniqueValuesId":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountUniqueValuesID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountUniqueValuesID(childComplexity), true
+	case "CompanyGroupByConnection.countUniqueValuesLinkedinLink":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountUniqueValuesLinkedinLink == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountUniqueValuesLinkedinLink(childComplexity), true
+	case "CompanyGroupByConnection.countUniqueValuesName":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountUniqueValuesName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountUniqueValuesName(childComplexity), true
+	case "CompanyGroupByConnection.countUniqueValuesPosition":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountUniqueValuesPosition == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountUniqueValuesPosition(childComplexity), true
+	case "CompanyGroupByConnection.countUniqueValuesUpdatedAt":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountUniqueValuesUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountUniqueValuesUpdatedAt(childComplexity), true
+	case "CompanyGroupByConnection.countUniqueValuesUpdatedBy":
+		if e.ComplexityRoot.CompanyGroupByConnection.CountUniqueValuesUpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.CountUniqueValuesUpdatedBy(childComplexity), true
+	case "CompanyGroupByConnection.edges":
+		if e.ComplexityRoot.CompanyGroupByConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.Edges(childComplexity), true
+	case "CompanyGroupByConnection.groupByDimensionValues":
+		if e.ComplexityRoot.CompanyGroupByConnection.GroupByDimensionValues == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.GroupByDimensionValues(childComplexity), true
+	case "CompanyGroupByConnection.maxAnnualRevenueAmountMicros":
+		if e.ComplexityRoot.CompanyGroupByConnection.MaxAnnualRevenueAmountMicros == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.MaxAnnualRevenueAmountMicros(childComplexity), true
+	case "CompanyGroupByConnection.maxCreatedAt":
+		if e.ComplexityRoot.CompanyGroupByConnection.MaxCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.MaxCreatedAt(childComplexity), true
+	case "CompanyGroupByConnection.maxDeletedAt":
+		if e.ComplexityRoot.CompanyGroupByConnection.MaxDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.MaxDeletedAt(childComplexity), true
+	case "CompanyGroupByConnection.maxUpdatedAt":
+		if e.ComplexityRoot.CompanyGroupByConnection.MaxUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.MaxUpdatedAt(childComplexity), true
+	case "CompanyGroupByConnection.minAnnualRevenueAmountMicros":
+		if e.ComplexityRoot.CompanyGroupByConnection.MinAnnualRevenueAmountMicros == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.MinAnnualRevenueAmountMicros(childComplexity), true
+	case "CompanyGroupByConnection.minCreatedAt":
+		if e.ComplexityRoot.CompanyGroupByConnection.MinCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.MinCreatedAt(childComplexity), true
+	case "CompanyGroupByConnection.minDeletedAt":
+		if e.ComplexityRoot.CompanyGroupByConnection.MinDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.MinDeletedAt(childComplexity), true
+	case "CompanyGroupByConnection.minUpdatedAt":
+		if e.ComplexityRoot.CompanyGroupByConnection.MinUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.MinUpdatedAt(childComplexity), true
+	case "CompanyGroupByConnection.pageInfo":
+		if e.ComplexityRoot.CompanyGroupByConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.PageInfo(childComplexity), true
+	case "CompanyGroupByConnection.percentageEmptyAddress":
+		if e.ComplexityRoot.CompanyGroupByConnection.PercentageEmptyAddress == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.PercentageEmptyAddress(childComplexity), true
+	case "CompanyGroupByConnection.percentageEmptyAnnualRevenue":
+		if e.ComplexityRoot.CompanyGroupByConnection.PercentageEmptyAnnualRevenue == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.PercentageEmptyAnnualRevenue(childComplexity), true
+	case "CompanyGroupByConnection.percentageEmptyCreatedAt":
+		if e.ComplexityRoot.CompanyGroupByConnection.PercentageEmptyCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.PercentageEmptyCreatedAt(childComplexity), true
+	case "CompanyGroupByConnection.percentageEmptyCreatedBy":
+		if e.ComplexityRoot.CompanyGroupByConnection.PercentageEmptyCreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.PercentageEmptyCreatedBy(childComplexity), true
+	case "CompanyGroupByConnection.percentageEmptyDeletedAt":
+		if e.ComplexityRoot.CompanyGroupByConnection.PercentageEmptyDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.PercentageEmptyDeletedAt(childComplexity), true
+	case "CompanyGroupByConnection.percentageEmptyDomainName":
+		if e.ComplexityRoot.CompanyGroupByConnection.PercentageEmptyDomainName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.PercentageEmptyDomainName(childComplexity), true
+	case "CompanyGroupByConnection.percentageEmptyId":
+		if e.ComplexityRoot.CompanyGroupByConnection.PercentageEmptyID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.PercentageEmptyID(childComplexity), true
+	case "CompanyGroupByConnection.percentageEmptyLinkedinLink":
+		if e.ComplexityRoot.CompanyGroupByConnection.PercentageEmptyLinkedinLink == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.PercentageEmptyLinkedinLink(childComplexity), true
+	case "CompanyGroupByConnection.percentageEmptyName":
+		if e.ComplexityRoot.CompanyGroupByConnection.PercentageEmptyName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.PercentageEmptyName(childComplexity), true
+	case "CompanyGroupByConnection.percentageEmptyPosition":
+		if e.ComplexityRoot.CompanyGroupByConnection.PercentageEmptyPosition == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.PercentageEmptyPosition(childComplexity), true
+	case "CompanyGroupByConnection.percentageEmptyUpdatedAt":
+		if e.ComplexityRoot.CompanyGroupByConnection.PercentageEmptyUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.PercentageEmptyUpdatedAt(childComplexity), true
+	case "CompanyGroupByConnection.percentageEmptyUpdatedBy":
+		if e.ComplexityRoot.CompanyGroupByConnection.PercentageEmptyUpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.PercentageEmptyUpdatedBy(childComplexity), true
+	case "CompanyGroupByConnection.percentageNotEmptyAddress":
+		if e.ComplexityRoot.CompanyGroupByConnection.PercentageNotEmptyAddress == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.PercentageNotEmptyAddress(childComplexity), true
+	case "CompanyGroupByConnection.percentageNotEmptyAnnualRevenue":
+		if e.ComplexityRoot.CompanyGroupByConnection.PercentageNotEmptyAnnualRevenue == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.PercentageNotEmptyAnnualRevenue(childComplexity), true
+	case "CompanyGroupByConnection.percentageNotEmptyCreatedAt":
+		if e.ComplexityRoot.CompanyGroupByConnection.PercentageNotEmptyCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.PercentageNotEmptyCreatedAt(childComplexity), true
+	case "CompanyGroupByConnection.percentageNotEmptyCreatedBy":
+		if e.ComplexityRoot.CompanyGroupByConnection.PercentageNotEmptyCreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.PercentageNotEmptyCreatedBy(childComplexity), true
+	case "CompanyGroupByConnection.percentageNotEmptyDeletedAt":
+		if e.ComplexityRoot.CompanyGroupByConnection.PercentageNotEmptyDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.PercentageNotEmptyDeletedAt(childComplexity), true
+	case "CompanyGroupByConnection.percentageNotEmptyDomainName":
+		if e.ComplexityRoot.CompanyGroupByConnection.PercentageNotEmptyDomainName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.PercentageNotEmptyDomainName(childComplexity), true
+	case "CompanyGroupByConnection.percentageNotEmptyId":
+		if e.ComplexityRoot.CompanyGroupByConnection.PercentageNotEmptyID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.PercentageNotEmptyID(childComplexity), true
+	case "CompanyGroupByConnection.percentageNotEmptyLinkedinLink":
+		if e.ComplexityRoot.CompanyGroupByConnection.PercentageNotEmptyLinkedinLink == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.PercentageNotEmptyLinkedinLink(childComplexity), true
+	case "CompanyGroupByConnection.percentageNotEmptyName":
+		if e.ComplexityRoot.CompanyGroupByConnection.PercentageNotEmptyName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.PercentageNotEmptyName(childComplexity), true
+	case "CompanyGroupByConnection.percentageNotEmptyPosition":
+		if e.ComplexityRoot.CompanyGroupByConnection.PercentageNotEmptyPosition == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.PercentageNotEmptyPosition(childComplexity), true
+	case "CompanyGroupByConnection.percentageNotEmptyUpdatedAt":
+		if e.ComplexityRoot.CompanyGroupByConnection.PercentageNotEmptyUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.PercentageNotEmptyUpdatedAt(childComplexity), true
+	case "CompanyGroupByConnection.percentageNotEmptyUpdatedBy":
+		if e.ComplexityRoot.CompanyGroupByConnection.PercentageNotEmptyUpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.PercentageNotEmptyUpdatedBy(childComplexity), true
+	case "CompanyGroupByConnection.sumAnnualRevenueAmountMicros":
+		if e.ComplexityRoot.CompanyGroupByConnection.SumAnnualRevenueAmountMicros == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.SumAnnualRevenueAmountMicros(childComplexity), true
+	case "CompanyGroupByConnection.totalCount":
+		if e.ComplexityRoot.CompanyGroupByConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CompanyGroupByConnection.TotalCount(childComplexity), true
+
+	case "Currency.amountMicros":
+		if e.ComplexityRoot.Currency.AmountMicros == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Currency.AmountMicros(childComplexity), true
+	case "Currency.currencyCode":
+		if e.ComplexityRoot.Currency.CurrencyCode == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Currency.CurrencyCode(childComplexity), true
 
 	case "Emails.additionalEmails":
 		if e.ComplexityRoot.Emails.AdditionalEmails == nil {
@@ -2867,6 +4276,952 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.NoteTargetGroupByConnection.TotalCount(childComplexity), true
 
+	case "Opportunity.amount":
+		if e.ComplexityRoot.Opportunity.Amount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Opportunity.Amount(childComplexity), true
+	case "Opportunity.closeDate":
+		if e.ComplexityRoot.Opportunity.CloseDate == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Opportunity.CloseDate(childComplexity), true
+	case "Opportunity.companyId":
+		if e.ComplexityRoot.Opportunity.CompanyID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Opportunity.CompanyID(childComplexity), true
+	case "Opportunity.createdAt":
+		if e.ComplexityRoot.Opportunity.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Opportunity.CreatedAt(childComplexity), true
+	case "Opportunity.createdBy":
+		if e.ComplexityRoot.Opportunity.CreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Opportunity.CreatedBy(childComplexity), true
+	case "Opportunity.deletedAt":
+		if e.ComplexityRoot.Opportunity.DeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Opportunity.DeletedAt(childComplexity), true
+	case "Opportunity.id":
+		if e.ComplexityRoot.Opportunity.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Opportunity.ID(childComplexity), true
+	case "Opportunity.name":
+		if e.ComplexityRoot.Opportunity.Name == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Opportunity.Name(childComplexity), true
+	case "Opportunity.ownerId":
+		if e.ComplexityRoot.Opportunity.OwnerID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Opportunity.OwnerID(childComplexity), true
+	case "Opportunity.pointOfContactId":
+		if e.ComplexityRoot.Opportunity.PointOfContactID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Opportunity.PointOfContactID(childComplexity), true
+	case "Opportunity.position":
+		if e.ComplexityRoot.Opportunity.Position == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Opportunity.Position(childComplexity), true
+	case "Opportunity.stage":
+		if e.ComplexityRoot.Opportunity.Stage == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Opportunity.Stage(childComplexity), true
+	case "Opportunity.updatedAt":
+		if e.ComplexityRoot.Opportunity.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Opportunity.UpdatedAt(childComplexity), true
+	case "Opportunity.updatedBy":
+		if e.ComplexityRoot.Opportunity.UpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Opportunity.UpdatedBy(childComplexity), true
+
+	case "OpportunityConnection.avgAmountAmountMicros":
+		if e.ComplexityRoot.OpportunityConnection.AvgAmountAmountMicros == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.AvgAmountAmountMicros(childComplexity), true
+	case "OpportunityConnection.countEmptyAmount":
+		if e.ComplexityRoot.OpportunityConnection.CountEmptyAmount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.CountEmptyAmount(childComplexity), true
+	case "OpportunityConnection.countEmptyCloseDate":
+		if e.ComplexityRoot.OpportunityConnection.CountEmptyCloseDate == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.CountEmptyCloseDate(childComplexity), true
+	case "OpportunityConnection.countEmptyCreatedAt":
+		if e.ComplexityRoot.OpportunityConnection.CountEmptyCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.CountEmptyCreatedAt(childComplexity), true
+	case "OpportunityConnection.countEmptyCreatedBy":
+		if e.ComplexityRoot.OpportunityConnection.CountEmptyCreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.CountEmptyCreatedBy(childComplexity), true
+	case "OpportunityConnection.countEmptyDeletedAt":
+		if e.ComplexityRoot.OpportunityConnection.CountEmptyDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.CountEmptyDeletedAt(childComplexity), true
+	case "OpportunityConnection.countEmptyId":
+		if e.ComplexityRoot.OpportunityConnection.CountEmptyID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.CountEmptyID(childComplexity), true
+	case "OpportunityConnection.countEmptyName":
+		if e.ComplexityRoot.OpportunityConnection.CountEmptyName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.CountEmptyName(childComplexity), true
+	case "OpportunityConnection.countEmptyPosition":
+		if e.ComplexityRoot.OpportunityConnection.CountEmptyPosition == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.CountEmptyPosition(childComplexity), true
+	case "OpportunityConnection.countEmptyStage":
+		if e.ComplexityRoot.OpportunityConnection.CountEmptyStage == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.CountEmptyStage(childComplexity), true
+	case "OpportunityConnection.countEmptyUpdatedAt":
+		if e.ComplexityRoot.OpportunityConnection.CountEmptyUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.CountEmptyUpdatedAt(childComplexity), true
+	case "OpportunityConnection.countEmptyUpdatedBy":
+		if e.ComplexityRoot.OpportunityConnection.CountEmptyUpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.CountEmptyUpdatedBy(childComplexity), true
+	case "OpportunityConnection.countNotEmptyAmount":
+		if e.ComplexityRoot.OpportunityConnection.CountNotEmptyAmount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.CountNotEmptyAmount(childComplexity), true
+	case "OpportunityConnection.countNotEmptyCloseDate":
+		if e.ComplexityRoot.OpportunityConnection.CountNotEmptyCloseDate == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.CountNotEmptyCloseDate(childComplexity), true
+	case "OpportunityConnection.countNotEmptyCreatedAt":
+		if e.ComplexityRoot.OpportunityConnection.CountNotEmptyCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.CountNotEmptyCreatedAt(childComplexity), true
+	case "OpportunityConnection.countNotEmptyCreatedBy":
+		if e.ComplexityRoot.OpportunityConnection.CountNotEmptyCreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.CountNotEmptyCreatedBy(childComplexity), true
+	case "OpportunityConnection.countNotEmptyDeletedAt":
+		if e.ComplexityRoot.OpportunityConnection.CountNotEmptyDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.CountNotEmptyDeletedAt(childComplexity), true
+	case "OpportunityConnection.countNotEmptyId":
+		if e.ComplexityRoot.OpportunityConnection.CountNotEmptyID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.CountNotEmptyID(childComplexity), true
+	case "OpportunityConnection.countNotEmptyName":
+		if e.ComplexityRoot.OpportunityConnection.CountNotEmptyName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.CountNotEmptyName(childComplexity), true
+	case "OpportunityConnection.countNotEmptyPosition":
+		if e.ComplexityRoot.OpportunityConnection.CountNotEmptyPosition == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.CountNotEmptyPosition(childComplexity), true
+	case "OpportunityConnection.countNotEmptyStage":
+		if e.ComplexityRoot.OpportunityConnection.CountNotEmptyStage == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.CountNotEmptyStage(childComplexity), true
+	case "OpportunityConnection.countNotEmptyUpdatedAt":
+		if e.ComplexityRoot.OpportunityConnection.CountNotEmptyUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.CountNotEmptyUpdatedAt(childComplexity), true
+	case "OpportunityConnection.countNotEmptyUpdatedBy":
+		if e.ComplexityRoot.OpportunityConnection.CountNotEmptyUpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.CountNotEmptyUpdatedBy(childComplexity), true
+	case "OpportunityConnection.countUniqueValuesAmount":
+		if e.ComplexityRoot.OpportunityConnection.CountUniqueValuesAmount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.CountUniqueValuesAmount(childComplexity), true
+	case "OpportunityConnection.countUniqueValuesCloseDate":
+		if e.ComplexityRoot.OpportunityConnection.CountUniqueValuesCloseDate == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.CountUniqueValuesCloseDate(childComplexity), true
+	case "OpportunityConnection.countUniqueValuesCreatedAt":
+		if e.ComplexityRoot.OpportunityConnection.CountUniqueValuesCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.CountUniqueValuesCreatedAt(childComplexity), true
+	case "OpportunityConnection.countUniqueValuesCreatedBy":
+		if e.ComplexityRoot.OpportunityConnection.CountUniqueValuesCreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.CountUniqueValuesCreatedBy(childComplexity), true
+	case "OpportunityConnection.countUniqueValuesDeletedAt":
+		if e.ComplexityRoot.OpportunityConnection.CountUniqueValuesDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.CountUniqueValuesDeletedAt(childComplexity), true
+	case "OpportunityConnection.countUniqueValuesId":
+		if e.ComplexityRoot.OpportunityConnection.CountUniqueValuesID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.CountUniqueValuesID(childComplexity), true
+	case "OpportunityConnection.countUniqueValuesName":
+		if e.ComplexityRoot.OpportunityConnection.CountUniqueValuesName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.CountUniqueValuesName(childComplexity), true
+	case "OpportunityConnection.countUniqueValuesPosition":
+		if e.ComplexityRoot.OpportunityConnection.CountUniqueValuesPosition == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.CountUniqueValuesPosition(childComplexity), true
+	case "OpportunityConnection.countUniqueValuesStage":
+		if e.ComplexityRoot.OpportunityConnection.CountUniqueValuesStage == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.CountUniqueValuesStage(childComplexity), true
+	case "OpportunityConnection.countUniqueValuesUpdatedAt":
+		if e.ComplexityRoot.OpportunityConnection.CountUniqueValuesUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.CountUniqueValuesUpdatedAt(childComplexity), true
+	case "OpportunityConnection.countUniqueValuesUpdatedBy":
+		if e.ComplexityRoot.OpportunityConnection.CountUniqueValuesUpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.CountUniqueValuesUpdatedBy(childComplexity), true
+	case "OpportunityConnection.edges":
+		if e.ComplexityRoot.OpportunityConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.Edges(childComplexity), true
+	case "OpportunityConnection.maxAmountAmountMicros":
+		if e.ComplexityRoot.OpportunityConnection.MaxAmountAmountMicros == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.MaxAmountAmountMicros(childComplexity), true
+	case "OpportunityConnection.maxCloseDate":
+		if e.ComplexityRoot.OpportunityConnection.MaxCloseDate == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.MaxCloseDate(childComplexity), true
+	case "OpportunityConnection.maxCreatedAt":
+		if e.ComplexityRoot.OpportunityConnection.MaxCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.MaxCreatedAt(childComplexity), true
+	case "OpportunityConnection.maxDeletedAt":
+		if e.ComplexityRoot.OpportunityConnection.MaxDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.MaxDeletedAt(childComplexity), true
+	case "OpportunityConnection.maxUpdatedAt":
+		if e.ComplexityRoot.OpportunityConnection.MaxUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.MaxUpdatedAt(childComplexity), true
+	case "OpportunityConnection.minAmountAmountMicros":
+		if e.ComplexityRoot.OpportunityConnection.MinAmountAmountMicros == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.MinAmountAmountMicros(childComplexity), true
+	case "OpportunityConnection.minCloseDate":
+		if e.ComplexityRoot.OpportunityConnection.MinCloseDate == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.MinCloseDate(childComplexity), true
+	case "OpportunityConnection.minCreatedAt":
+		if e.ComplexityRoot.OpportunityConnection.MinCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.MinCreatedAt(childComplexity), true
+	case "OpportunityConnection.minDeletedAt":
+		if e.ComplexityRoot.OpportunityConnection.MinDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.MinDeletedAt(childComplexity), true
+	case "OpportunityConnection.minUpdatedAt":
+		if e.ComplexityRoot.OpportunityConnection.MinUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.MinUpdatedAt(childComplexity), true
+	case "OpportunityConnection.pageInfo":
+		if e.ComplexityRoot.OpportunityConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.PageInfo(childComplexity), true
+	case "OpportunityConnection.percentageEmptyAmount":
+		if e.ComplexityRoot.OpportunityConnection.PercentageEmptyAmount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.PercentageEmptyAmount(childComplexity), true
+	case "OpportunityConnection.percentageEmptyCloseDate":
+		if e.ComplexityRoot.OpportunityConnection.PercentageEmptyCloseDate == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.PercentageEmptyCloseDate(childComplexity), true
+	case "OpportunityConnection.percentageEmptyCreatedAt":
+		if e.ComplexityRoot.OpportunityConnection.PercentageEmptyCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.PercentageEmptyCreatedAt(childComplexity), true
+	case "OpportunityConnection.percentageEmptyCreatedBy":
+		if e.ComplexityRoot.OpportunityConnection.PercentageEmptyCreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.PercentageEmptyCreatedBy(childComplexity), true
+	case "OpportunityConnection.percentageEmptyDeletedAt":
+		if e.ComplexityRoot.OpportunityConnection.PercentageEmptyDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.PercentageEmptyDeletedAt(childComplexity), true
+	case "OpportunityConnection.percentageEmptyId":
+		if e.ComplexityRoot.OpportunityConnection.PercentageEmptyID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.PercentageEmptyID(childComplexity), true
+	case "OpportunityConnection.percentageEmptyName":
+		if e.ComplexityRoot.OpportunityConnection.PercentageEmptyName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.PercentageEmptyName(childComplexity), true
+	case "OpportunityConnection.percentageEmptyPosition":
+		if e.ComplexityRoot.OpportunityConnection.PercentageEmptyPosition == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.PercentageEmptyPosition(childComplexity), true
+	case "OpportunityConnection.percentageEmptyStage":
+		if e.ComplexityRoot.OpportunityConnection.PercentageEmptyStage == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.PercentageEmptyStage(childComplexity), true
+	case "OpportunityConnection.percentageEmptyUpdatedAt":
+		if e.ComplexityRoot.OpportunityConnection.PercentageEmptyUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.PercentageEmptyUpdatedAt(childComplexity), true
+	case "OpportunityConnection.percentageEmptyUpdatedBy":
+		if e.ComplexityRoot.OpportunityConnection.PercentageEmptyUpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.PercentageEmptyUpdatedBy(childComplexity), true
+	case "OpportunityConnection.percentageNotEmptyAmount":
+		if e.ComplexityRoot.OpportunityConnection.PercentageNotEmptyAmount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.PercentageNotEmptyAmount(childComplexity), true
+	case "OpportunityConnection.percentageNotEmptyCloseDate":
+		if e.ComplexityRoot.OpportunityConnection.PercentageNotEmptyCloseDate == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.PercentageNotEmptyCloseDate(childComplexity), true
+	case "OpportunityConnection.percentageNotEmptyCreatedAt":
+		if e.ComplexityRoot.OpportunityConnection.PercentageNotEmptyCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.PercentageNotEmptyCreatedAt(childComplexity), true
+	case "OpportunityConnection.percentageNotEmptyCreatedBy":
+		if e.ComplexityRoot.OpportunityConnection.PercentageNotEmptyCreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.PercentageNotEmptyCreatedBy(childComplexity), true
+	case "OpportunityConnection.percentageNotEmptyDeletedAt":
+		if e.ComplexityRoot.OpportunityConnection.PercentageNotEmptyDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.PercentageNotEmptyDeletedAt(childComplexity), true
+	case "OpportunityConnection.percentageNotEmptyId":
+		if e.ComplexityRoot.OpportunityConnection.PercentageNotEmptyID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.PercentageNotEmptyID(childComplexity), true
+	case "OpportunityConnection.percentageNotEmptyName":
+		if e.ComplexityRoot.OpportunityConnection.PercentageNotEmptyName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.PercentageNotEmptyName(childComplexity), true
+	case "OpportunityConnection.percentageNotEmptyPosition":
+		if e.ComplexityRoot.OpportunityConnection.PercentageNotEmptyPosition == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.PercentageNotEmptyPosition(childComplexity), true
+	case "OpportunityConnection.percentageNotEmptyStage":
+		if e.ComplexityRoot.OpportunityConnection.PercentageNotEmptyStage == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.PercentageNotEmptyStage(childComplexity), true
+	case "OpportunityConnection.percentageNotEmptyUpdatedAt":
+		if e.ComplexityRoot.OpportunityConnection.PercentageNotEmptyUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.PercentageNotEmptyUpdatedAt(childComplexity), true
+	case "OpportunityConnection.percentageNotEmptyUpdatedBy":
+		if e.ComplexityRoot.OpportunityConnection.PercentageNotEmptyUpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.PercentageNotEmptyUpdatedBy(childComplexity), true
+	case "OpportunityConnection.sumAmountAmountMicros":
+		if e.ComplexityRoot.OpportunityConnection.SumAmountAmountMicros == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.SumAmountAmountMicros(childComplexity), true
+	case "OpportunityConnection.totalCount":
+		if e.ComplexityRoot.OpportunityConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityConnection.TotalCount(childComplexity), true
+
+	case "OpportunityEdge.cursor":
+		if e.ComplexityRoot.OpportunityEdge.Cursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityEdge.Cursor(childComplexity), true
+	case "OpportunityEdge.node":
+		if e.ComplexityRoot.OpportunityEdge.Node == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityEdge.Node(childComplexity), true
+
+	case "OpportunityGroupByConnection.avgAmountAmountMicros":
+		if e.ComplexityRoot.OpportunityGroupByConnection.AvgAmountAmountMicros == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.AvgAmountAmountMicros(childComplexity), true
+	case "OpportunityGroupByConnection.countEmptyAmount":
+		if e.ComplexityRoot.OpportunityGroupByConnection.CountEmptyAmount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.CountEmptyAmount(childComplexity), true
+	case "OpportunityGroupByConnection.countEmptyCloseDate":
+		if e.ComplexityRoot.OpportunityGroupByConnection.CountEmptyCloseDate == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.CountEmptyCloseDate(childComplexity), true
+	case "OpportunityGroupByConnection.countEmptyCreatedAt":
+		if e.ComplexityRoot.OpportunityGroupByConnection.CountEmptyCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.CountEmptyCreatedAt(childComplexity), true
+	case "OpportunityGroupByConnection.countEmptyCreatedBy":
+		if e.ComplexityRoot.OpportunityGroupByConnection.CountEmptyCreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.CountEmptyCreatedBy(childComplexity), true
+	case "OpportunityGroupByConnection.countEmptyDeletedAt":
+		if e.ComplexityRoot.OpportunityGroupByConnection.CountEmptyDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.CountEmptyDeletedAt(childComplexity), true
+	case "OpportunityGroupByConnection.countEmptyId":
+		if e.ComplexityRoot.OpportunityGroupByConnection.CountEmptyID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.CountEmptyID(childComplexity), true
+	case "OpportunityGroupByConnection.countEmptyName":
+		if e.ComplexityRoot.OpportunityGroupByConnection.CountEmptyName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.CountEmptyName(childComplexity), true
+	case "OpportunityGroupByConnection.countEmptyPosition":
+		if e.ComplexityRoot.OpportunityGroupByConnection.CountEmptyPosition == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.CountEmptyPosition(childComplexity), true
+	case "OpportunityGroupByConnection.countEmptyStage":
+		if e.ComplexityRoot.OpportunityGroupByConnection.CountEmptyStage == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.CountEmptyStage(childComplexity), true
+	case "OpportunityGroupByConnection.countEmptyUpdatedAt":
+		if e.ComplexityRoot.OpportunityGroupByConnection.CountEmptyUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.CountEmptyUpdatedAt(childComplexity), true
+	case "OpportunityGroupByConnection.countEmptyUpdatedBy":
+		if e.ComplexityRoot.OpportunityGroupByConnection.CountEmptyUpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.CountEmptyUpdatedBy(childComplexity), true
+	case "OpportunityGroupByConnection.countNotEmptyAmount":
+		if e.ComplexityRoot.OpportunityGroupByConnection.CountNotEmptyAmount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.CountNotEmptyAmount(childComplexity), true
+	case "OpportunityGroupByConnection.countNotEmptyCloseDate":
+		if e.ComplexityRoot.OpportunityGroupByConnection.CountNotEmptyCloseDate == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.CountNotEmptyCloseDate(childComplexity), true
+	case "OpportunityGroupByConnection.countNotEmptyCreatedAt":
+		if e.ComplexityRoot.OpportunityGroupByConnection.CountNotEmptyCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.CountNotEmptyCreatedAt(childComplexity), true
+	case "OpportunityGroupByConnection.countNotEmptyCreatedBy":
+		if e.ComplexityRoot.OpportunityGroupByConnection.CountNotEmptyCreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.CountNotEmptyCreatedBy(childComplexity), true
+	case "OpportunityGroupByConnection.countNotEmptyDeletedAt":
+		if e.ComplexityRoot.OpportunityGroupByConnection.CountNotEmptyDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.CountNotEmptyDeletedAt(childComplexity), true
+	case "OpportunityGroupByConnection.countNotEmptyId":
+		if e.ComplexityRoot.OpportunityGroupByConnection.CountNotEmptyID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.CountNotEmptyID(childComplexity), true
+	case "OpportunityGroupByConnection.countNotEmptyName":
+		if e.ComplexityRoot.OpportunityGroupByConnection.CountNotEmptyName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.CountNotEmptyName(childComplexity), true
+	case "OpportunityGroupByConnection.countNotEmptyPosition":
+		if e.ComplexityRoot.OpportunityGroupByConnection.CountNotEmptyPosition == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.CountNotEmptyPosition(childComplexity), true
+	case "OpportunityGroupByConnection.countNotEmptyStage":
+		if e.ComplexityRoot.OpportunityGroupByConnection.CountNotEmptyStage == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.CountNotEmptyStage(childComplexity), true
+	case "OpportunityGroupByConnection.countNotEmptyUpdatedAt":
+		if e.ComplexityRoot.OpportunityGroupByConnection.CountNotEmptyUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.CountNotEmptyUpdatedAt(childComplexity), true
+	case "OpportunityGroupByConnection.countNotEmptyUpdatedBy":
+		if e.ComplexityRoot.OpportunityGroupByConnection.CountNotEmptyUpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.CountNotEmptyUpdatedBy(childComplexity), true
+	case "OpportunityGroupByConnection.countUniqueValuesAmount":
+		if e.ComplexityRoot.OpportunityGroupByConnection.CountUniqueValuesAmount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.CountUniqueValuesAmount(childComplexity), true
+	case "OpportunityGroupByConnection.countUniqueValuesCloseDate":
+		if e.ComplexityRoot.OpportunityGroupByConnection.CountUniqueValuesCloseDate == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.CountUniqueValuesCloseDate(childComplexity), true
+	case "OpportunityGroupByConnection.countUniqueValuesCreatedAt":
+		if e.ComplexityRoot.OpportunityGroupByConnection.CountUniqueValuesCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.CountUniqueValuesCreatedAt(childComplexity), true
+	case "OpportunityGroupByConnection.countUniqueValuesCreatedBy":
+		if e.ComplexityRoot.OpportunityGroupByConnection.CountUniqueValuesCreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.CountUniqueValuesCreatedBy(childComplexity), true
+	case "OpportunityGroupByConnection.countUniqueValuesDeletedAt":
+		if e.ComplexityRoot.OpportunityGroupByConnection.CountUniqueValuesDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.CountUniqueValuesDeletedAt(childComplexity), true
+	case "OpportunityGroupByConnection.countUniqueValuesId":
+		if e.ComplexityRoot.OpportunityGroupByConnection.CountUniqueValuesID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.CountUniqueValuesID(childComplexity), true
+	case "OpportunityGroupByConnection.countUniqueValuesName":
+		if e.ComplexityRoot.OpportunityGroupByConnection.CountUniqueValuesName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.CountUniqueValuesName(childComplexity), true
+	case "OpportunityGroupByConnection.countUniqueValuesPosition":
+		if e.ComplexityRoot.OpportunityGroupByConnection.CountUniqueValuesPosition == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.CountUniqueValuesPosition(childComplexity), true
+	case "OpportunityGroupByConnection.countUniqueValuesStage":
+		if e.ComplexityRoot.OpportunityGroupByConnection.CountUniqueValuesStage == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.CountUniqueValuesStage(childComplexity), true
+	case "OpportunityGroupByConnection.countUniqueValuesUpdatedAt":
+		if e.ComplexityRoot.OpportunityGroupByConnection.CountUniqueValuesUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.CountUniqueValuesUpdatedAt(childComplexity), true
+	case "OpportunityGroupByConnection.countUniqueValuesUpdatedBy":
+		if e.ComplexityRoot.OpportunityGroupByConnection.CountUniqueValuesUpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.CountUniqueValuesUpdatedBy(childComplexity), true
+	case "OpportunityGroupByConnection.edges":
+		if e.ComplexityRoot.OpportunityGroupByConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.Edges(childComplexity), true
+	case "OpportunityGroupByConnection.groupByDimensionValues":
+		if e.ComplexityRoot.OpportunityGroupByConnection.GroupByDimensionValues == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.GroupByDimensionValues(childComplexity), true
+	case "OpportunityGroupByConnection.maxAmountAmountMicros":
+		if e.ComplexityRoot.OpportunityGroupByConnection.MaxAmountAmountMicros == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.MaxAmountAmountMicros(childComplexity), true
+	case "OpportunityGroupByConnection.maxCloseDate":
+		if e.ComplexityRoot.OpportunityGroupByConnection.MaxCloseDate == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.MaxCloseDate(childComplexity), true
+	case "OpportunityGroupByConnection.maxCreatedAt":
+		if e.ComplexityRoot.OpportunityGroupByConnection.MaxCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.MaxCreatedAt(childComplexity), true
+	case "OpportunityGroupByConnection.maxDeletedAt":
+		if e.ComplexityRoot.OpportunityGroupByConnection.MaxDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.MaxDeletedAt(childComplexity), true
+	case "OpportunityGroupByConnection.maxUpdatedAt":
+		if e.ComplexityRoot.OpportunityGroupByConnection.MaxUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.MaxUpdatedAt(childComplexity), true
+	case "OpportunityGroupByConnection.minAmountAmountMicros":
+		if e.ComplexityRoot.OpportunityGroupByConnection.MinAmountAmountMicros == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.MinAmountAmountMicros(childComplexity), true
+	case "OpportunityGroupByConnection.minCloseDate":
+		if e.ComplexityRoot.OpportunityGroupByConnection.MinCloseDate == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.MinCloseDate(childComplexity), true
+	case "OpportunityGroupByConnection.minCreatedAt":
+		if e.ComplexityRoot.OpportunityGroupByConnection.MinCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.MinCreatedAt(childComplexity), true
+	case "OpportunityGroupByConnection.minDeletedAt":
+		if e.ComplexityRoot.OpportunityGroupByConnection.MinDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.MinDeletedAt(childComplexity), true
+	case "OpportunityGroupByConnection.minUpdatedAt":
+		if e.ComplexityRoot.OpportunityGroupByConnection.MinUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.MinUpdatedAt(childComplexity), true
+	case "OpportunityGroupByConnection.pageInfo":
+		if e.ComplexityRoot.OpportunityGroupByConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.PageInfo(childComplexity), true
+	case "OpportunityGroupByConnection.percentageEmptyAmount":
+		if e.ComplexityRoot.OpportunityGroupByConnection.PercentageEmptyAmount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.PercentageEmptyAmount(childComplexity), true
+	case "OpportunityGroupByConnection.percentageEmptyCloseDate":
+		if e.ComplexityRoot.OpportunityGroupByConnection.PercentageEmptyCloseDate == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.PercentageEmptyCloseDate(childComplexity), true
+	case "OpportunityGroupByConnection.percentageEmptyCreatedAt":
+		if e.ComplexityRoot.OpportunityGroupByConnection.PercentageEmptyCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.PercentageEmptyCreatedAt(childComplexity), true
+	case "OpportunityGroupByConnection.percentageEmptyCreatedBy":
+		if e.ComplexityRoot.OpportunityGroupByConnection.PercentageEmptyCreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.PercentageEmptyCreatedBy(childComplexity), true
+	case "OpportunityGroupByConnection.percentageEmptyDeletedAt":
+		if e.ComplexityRoot.OpportunityGroupByConnection.PercentageEmptyDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.PercentageEmptyDeletedAt(childComplexity), true
+	case "OpportunityGroupByConnection.percentageEmptyId":
+		if e.ComplexityRoot.OpportunityGroupByConnection.PercentageEmptyID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.PercentageEmptyID(childComplexity), true
+	case "OpportunityGroupByConnection.percentageEmptyName":
+		if e.ComplexityRoot.OpportunityGroupByConnection.PercentageEmptyName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.PercentageEmptyName(childComplexity), true
+	case "OpportunityGroupByConnection.percentageEmptyPosition":
+		if e.ComplexityRoot.OpportunityGroupByConnection.PercentageEmptyPosition == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.PercentageEmptyPosition(childComplexity), true
+	case "OpportunityGroupByConnection.percentageEmptyStage":
+		if e.ComplexityRoot.OpportunityGroupByConnection.PercentageEmptyStage == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.PercentageEmptyStage(childComplexity), true
+	case "OpportunityGroupByConnection.percentageEmptyUpdatedAt":
+		if e.ComplexityRoot.OpportunityGroupByConnection.PercentageEmptyUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.PercentageEmptyUpdatedAt(childComplexity), true
+	case "OpportunityGroupByConnection.percentageEmptyUpdatedBy":
+		if e.ComplexityRoot.OpportunityGroupByConnection.PercentageEmptyUpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.PercentageEmptyUpdatedBy(childComplexity), true
+	case "OpportunityGroupByConnection.percentageNotEmptyAmount":
+		if e.ComplexityRoot.OpportunityGroupByConnection.PercentageNotEmptyAmount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.PercentageNotEmptyAmount(childComplexity), true
+	case "OpportunityGroupByConnection.percentageNotEmptyCloseDate":
+		if e.ComplexityRoot.OpportunityGroupByConnection.PercentageNotEmptyCloseDate == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.PercentageNotEmptyCloseDate(childComplexity), true
+	case "OpportunityGroupByConnection.percentageNotEmptyCreatedAt":
+		if e.ComplexityRoot.OpportunityGroupByConnection.PercentageNotEmptyCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.PercentageNotEmptyCreatedAt(childComplexity), true
+	case "OpportunityGroupByConnection.percentageNotEmptyCreatedBy":
+		if e.ComplexityRoot.OpportunityGroupByConnection.PercentageNotEmptyCreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.PercentageNotEmptyCreatedBy(childComplexity), true
+	case "OpportunityGroupByConnection.percentageNotEmptyDeletedAt":
+		if e.ComplexityRoot.OpportunityGroupByConnection.PercentageNotEmptyDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.PercentageNotEmptyDeletedAt(childComplexity), true
+	case "OpportunityGroupByConnection.percentageNotEmptyId":
+		if e.ComplexityRoot.OpportunityGroupByConnection.PercentageNotEmptyID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.PercentageNotEmptyID(childComplexity), true
+	case "OpportunityGroupByConnection.percentageNotEmptyName":
+		if e.ComplexityRoot.OpportunityGroupByConnection.PercentageNotEmptyName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.PercentageNotEmptyName(childComplexity), true
+	case "OpportunityGroupByConnection.percentageNotEmptyPosition":
+		if e.ComplexityRoot.OpportunityGroupByConnection.PercentageNotEmptyPosition == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.PercentageNotEmptyPosition(childComplexity), true
+	case "OpportunityGroupByConnection.percentageNotEmptyStage":
+		if e.ComplexityRoot.OpportunityGroupByConnection.PercentageNotEmptyStage == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.PercentageNotEmptyStage(childComplexity), true
+	case "OpportunityGroupByConnection.percentageNotEmptyUpdatedAt":
+		if e.ComplexityRoot.OpportunityGroupByConnection.PercentageNotEmptyUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.PercentageNotEmptyUpdatedAt(childComplexity), true
+	case "OpportunityGroupByConnection.percentageNotEmptyUpdatedBy":
+		if e.ComplexityRoot.OpportunityGroupByConnection.PercentageNotEmptyUpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.PercentageNotEmptyUpdatedBy(childComplexity), true
+	case "OpportunityGroupByConnection.sumAmountAmountMicros":
+		if e.ComplexityRoot.OpportunityGroupByConnection.SumAmountAmountMicros == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.SumAmountAmountMicros(childComplexity), true
+	case "OpportunityGroupByConnection.totalCount":
+		if e.ComplexityRoot.OpportunityGroupByConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OpportunityGroupByConnection.TotalCount(childComplexity), true
+
 	case "PageInfo.endCursor":
 		if e.ComplexityRoot.PageInfo.EndCursor == nil {
 			break
@@ -3971,6 +6326,40 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Phones.PrimaryPhoneNumber(childComplexity), true
 
+	case "Query.companies":
+		if e.ComplexityRoot.Query.Companies == nil {
+			break
+		}
+
+		args, err := ec.field_Query_companies_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.Companies(childComplexity, args["filter"].(map[string]any), args["orderBy"].([]map[string]any), args["first"].(*int), args["last"].(*int), args["after"].(*string), args["before"].(*string), args["offset"].(*int)), true
+	case "Query.companiesGroupBy":
+		if e.ComplexityRoot.Query.CompaniesGroupBy == nil {
+			break
+		}
+
+		args, err := ec.field_Query_companiesGroupBy_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.CompaniesGroupBy(childComplexity, args["groupBy"].([]map[string]any), args["filter"].(map[string]any), args["orderBy"].([]map[string]any), args["orderByForRecords"].([]map[string]any), args["viewId"].(*string), args["limit"].(*int), args["offsetForRecords"].(*int)), true
+	case "Query.company":
+		if e.ComplexityRoot.Query.Company == nil {
+			break
+		}
+
+		args, err := ec.field_Query_company_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.Company(childComplexity, args["filter"].(map[string]any)), true
+
 	case "Query.note":
 		if e.ComplexityRoot.Query.Note == nil {
 			break
@@ -4037,6 +6426,39 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.NotesGroupBy(childComplexity, args["groupBy"].([]map[string]any), args["filter"].(map[string]any), args["orderBy"].([]map[string]any), args["orderByForRecords"].([]map[string]any), args["viewId"].(*string), args["limit"].(*int), args["offsetForRecords"].(*int)), true
+	case "Query.opportunities":
+		if e.ComplexityRoot.Query.Opportunities == nil {
+			break
+		}
+
+		args, err := ec.field_Query_opportunities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.Opportunities(childComplexity, args["filter"].(map[string]any), args["orderBy"].([]map[string]any), args["first"].(*int), args["last"].(*int), args["after"].(*string), args["before"].(*string), args["offset"].(*int)), true
+	case "Query.opportunitiesGroupBy":
+		if e.ComplexityRoot.Query.OpportunitiesGroupBy == nil {
+			break
+		}
+
+		args, err := ec.field_Query_opportunitiesGroupBy_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.OpportunitiesGroupBy(childComplexity, args["groupBy"].([]map[string]any), args["filter"].(map[string]any), args["orderBy"].([]map[string]any), args["orderByForRecords"].([]map[string]any), args["viewId"].(*string), args["limit"].(*int), args["offsetForRecords"].(*int)), true
+	case "Query.opportunity":
+		if e.ComplexityRoot.Query.Opportunity == nil {
+			break
+		}
+
+		args, err := ec.field_Query_opportunity_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.Opportunity(childComplexity, args["filter"].(map[string]any)), true
 	case "Query.people":
 		if e.ComplexityRoot.Query.People == nil {
 			break
@@ -5677,6 +8099,15 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 			graphql.NewInputUnmarshaler("ActorFilter", ec.unmarshalInputActorFilter),
 			graphql.NewInputUnmarshaler("ActorOrderByInput", ec.unmarshalInputActorOrderByInput),
 			graphql.NewInputUnmarshaler("AdditionalPhoneInput", ec.unmarshalInputAdditionalPhoneInput),
+			graphql.NewInputUnmarshaler("AddressFilter", ec.unmarshalInputAddressFilter),
+			graphql.NewInputUnmarshaler("AddressGroupByInput", ec.unmarshalInputAddressGroupByInput),
+			graphql.NewInputUnmarshaler("AddressOrderByInput", ec.unmarshalInputAddressOrderByInput),
+			graphql.NewInputUnmarshaler("CompanyFilterInput", ec.unmarshalInputCompanyFilterInput),
+			graphql.NewInputUnmarshaler("CompanyGroupByInput", ec.unmarshalInputCompanyGroupByInput),
+			graphql.NewInputUnmarshaler("CompanyOrderByInput", ec.unmarshalInputCompanyOrderByInput),
+			graphql.NewInputUnmarshaler("CompanyOrderByWithGroupByInput", ec.unmarshalInputCompanyOrderByWithGroupByInput),
+			graphql.NewInputUnmarshaler("CurrencyFilter", ec.unmarshalInputCurrencyFilter),
+			graphql.NewInputUnmarshaler("CurrencyOrderByInput", ec.unmarshalInputCurrencyOrderByInput),
 			graphql.NewInputUnmarshaler("DateTimeFilter", ec.unmarshalInputDateTimeFilter),
 			graphql.NewInputUnmarshaler("EmailsCreateInput", ec.unmarshalInputEmailsCreateInput),
 			graphql.NewInputUnmarshaler("EmailsFilter", ec.unmarshalInputEmailsFilter),
@@ -5702,6 +8133,11 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 			graphql.NewInputUnmarshaler("NoteTargetOrderByWithGroupByInput", ec.unmarshalInputNoteTargetOrderByWithGroupByInput),
 			graphql.NewInputUnmarshaler("NoteTargetUpdateInput", ec.unmarshalInputNoteTargetUpdateInput),
 			graphql.NewInputUnmarshaler("NoteUpdateInput", ec.unmarshalInputNoteUpdateInput),
+			graphql.NewInputUnmarshaler("OpportunityFilterInput", ec.unmarshalInputOpportunityFilterInput),
+			graphql.NewInputUnmarshaler("OpportunityGroupByInput", ec.unmarshalInputOpportunityGroupByInput),
+			graphql.NewInputUnmarshaler("OpportunityOrderByInput", ec.unmarshalInputOpportunityOrderByInput),
+			graphql.NewInputUnmarshaler("OpportunityOrderByWithGroupByInput", ec.unmarshalInputOpportunityOrderByWithGroupByInput),
+			graphql.NewInputUnmarshaler("OpportunityStageEnumFilter", ec.unmarshalInputOpportunityStageEnumFilter),
 			graphql.NewInputUnmarshaler("PersonCreateInput", ec.unmarshalInputPersonCreateInput),
 			graphql.NewInputUnmarshaler("PersonFilterInput", ec.unmarshalInputPersonFilterInput),
 			graphql.NewInputUnmarshaler("PersonGroupByInput", ec.unmarshalInputPersonGroupByInput),
@@ -5805,7 +8241,7 @@ func newExecutionContext(
 	}
 }
 
-//go:embed "person.graphqls" "aggregate.graphqls" "note.graphqls" "task.graphqls" "noteTaskOperations.graphqls"
+//go:embed "person.graphqls" "company.graphqls" "opportunity.graphqls" "aggregate.graphqls" "note.graphqls" "task.graphqls" "noteTaskOperations.graphqls"
 var sourcesFS embed.FS
 
 func sourceData(filename string) string {
@@ -5818,6 +8254,8 @@ func sourceData(filename string) string {
 
 var sources = []*ast.Source{
 	{Name: "person.graphqls", Input: sourceData("person.graphqls"), BuiltIn: false},
+	{Name: "company.graphqls", Input: sourceData("company.graphqls"), BuiltIn: false},
+	{Name: "opportunity.graphqls", Input: sourceData("opportunity.graphqls"), BuiltIn: false},
 	{Name: "aggregate.graphqls", Input: sourceData("aggregate.graphqls"), BuiltIn: false},
 	{Name: "note.graphqls", Input: sourceData("note.graphqls"), BuiltIn: false},
 	{Name: "task.graphqls", Input: sourceData("task.graphqls"), BuiltIn: false},
@@ -5851,6 +8289,386 @@ func (ec *executionContext) childFields_AdditionalPhone(ctx context.Context, fie
 		return ec.fieldContext_AdditionalPhone_countryCode(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type AdditionalPhone", field.Name)
+}
+
+func (ec *executionContext) childFields_Address(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "addressStreet1":
+		return ec.fieldContext_Address_addressStreet1(ctx, field)
+	case "addressStreet2":
+		return ec.fieldContext_Address_addressStreet2(ctx, field)
+	case "addressCity":
+		return ec.fieldContext_Address_addressCity(ctx, field)
+	case "addressPostcode":
+		return ec.fieldContext_Address_addressPostcode(ctx, field)
+	case "addressState":
+		return ec.fieldContext_Address_addressState(ctx, field)
+	case "addressCountry":
+		return ec.fieldContext_Address_addressCountry(ctx, field)
+	case "addressLat":
+		return ec.fieldContext_Address_addressLat(ctx, field)
+	case "addressLng":
+		return ec.fieldContext_Address_addressLng(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type Address", field.Name)
+}
+
+func (ec *executionContext) childFields_Company(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_Company_id(ctx, field)
+	case "name":
+		return ec.fieldContext_Company_name(ctx, field)
+	case "domainName":
+		return ec.fieldContext_Company_domainName(ctx, field)
+	case "address":
+		return ec.fieldContext_Company_address(ctx, field)
+	case "linkedinLink":
+		return ec.fieldContext_Company_linkedinLink(ctx, field)
+	case "annualRevenue":
+		return ec.fieldContext_Company_annualRevenue(ctx, field)
+	case "accountOwnerId":
+		return ec.fieldContext_Company_accountOwnerId(ctx, field)
+	case "position":
+		return ec.fieldContext_Company_position(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_Company_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_Company_updatedBy(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_Company_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_Company_updatedAt(ctx, field)
+	case "deletedAt":
+		return ec.fieldContext_Company_deletedAt(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type Company", field.Name)
+}
+
+func (ec *executionContext) childFields_CompanyConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "totalCount":
+		return ec.fieldContext_CompanyConnection_totalCount(ctx, field)
+	case "edges":
+		return ec.fieldContext_CompanyConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_CompanyConnection_pageInfo(ctx, field)
+	case "countUniqueValuesAddress":
+		return ec.fieldContext_CompanyConnection_countUniqueValuesAddress(ctx, field)
+	case "countEmptyAddress":
+		return ec.fieldContext_CompanyConnection_countEmptyAddress(ctx, field)
+	case "countNotEmptyAddress":
+		return ec.fieldContext_CompanyConnection_countNotEmptyAddress(ctx, field)
+	case "percentageEmptyAddress":
+		return ec.fieldContext_CompanyConnection_percentageEmptyAddress(ctx, field)
+	case "percentageNotEmptyAddress":
+		return ec.fieldContext_CompanyConnection_percentageNotEmptyAddress(ctx, field)
+	case "countUniqueValuesAnnualRevenue":
+		return ec.fieldContext_CompanyConnection_countUniqueValuesAnnualRevenue(ctx, field)
+	case "countEmptyAnnualRevenue":
+		return ec.fieldContext_CompanyConnection_countEmptyAnnualRevenue(ctx, field)
+	case "countNotEmptyAnnualRevenue":
+		return ec.fieldContext_CompanyConnection_countNotEmptyAnnualRevenue(ctx, field)
+	case "percentageEmptyAnnualRevenue":
+		return ec.fieldContext_CompanyConnection_percentageEmptyAnnualRevenue(ctx, field)
+	case "percentageNotEmptyAnnualRevenue":
+		return ec.fieldContext_CompanyConnection_percentageNotEmptyAnnualRevenue(ctx, field)
+	case "minAnnualRevenueAmountMicros":
+		return ec.fieldContext_CompanyConnection_minAnnualRevenueAmountMicros(ctx, field)
+	case "maxAnnualRevenueAmountMicros":
+		return ec.fieldContext_CompanyConnection_maxAnnualRevenueAmountMicros(ctx, field)
+	case "avgAnnualRevenueAmountMicros":
+		return ec.fieldContext_CompanyConnection_avgAnnualRevenueAmountMicros(ctx, field)
+	case "sumAnnualRevenueAmountMicros":
+		return ec.fieldContext_CompanyConnection_sumAnnualRevenueAmountMicros(ctx, field)
+	case "countUniqueValuesCreatedAt":
+		return ec.fieldContext_CompanyConnection_countUniqueValuesCreatedAt(ctx, field)
+	case "countEmptyCreatedAt":
+		return ec.fieldContext_CompanyConnection_countEmptyCreatedAt(ctx, field)
+	case "countNotEmptyCreatedAt":
+		return ec.fieldContext_CompanyConnection_countNotEmptyCreatedAt(ctx, field)
+	case "percentageEmptyCreatedAt":
+		return ec.fieldContext_CompanyConnection_percentageEmptyCreatedAt(ctx, field)
+	case "percentageNotEmptyCreatedAt":
+		return ec.fieldContext_CompanyConnection_percentageNotEmptyCreatedAt(ctx, field)
+	case "minCreatedAt":
+		return ec.fieldContext_CompanyConnection_minCreatedAt(ctx, field)
+	case "maxCreatedAt":
+		return ec.fieldContext_CompanyConnection_maxCreatedAt(ctx, field)
+	case "countUniqueValuesCreatedBy":
+		return ec.fieldContext_CompanyConnection_countUniqueValuesCreatedBy(ctx, field)
+	case "countEmptyCreatedBy":
+		return ec.fieldContext_CompanyConnection_countEmptyCreatedBy(ctx, field)
+	case "countNotEmptyCreatedBy":
+		return ec.fieldContext_CompanyConnection_countNotEmptyCreatedBy(ctx, field)
+	case "percentageEmptyCreatedBy":
+		return ec.fieldContext_CompanyConnection_percentageEmptyCreatedBy(ctx, field)
+	case "percentageNotEmptyCreatedBy":
+		return ec.fieldContext_CompanyConnection_percentageNotEmptyCreatedBy(ctx, field)
+	case "countUniqueValuesDeletedAt":
+		return ec.fieldContext_CompanyConnection_countUniqueValuesDeletedAt(ctx, field)
+	case "countEmptyDeletedAt":
+		return ec.fieldContext_CompanyConnection_countEmptyDeletedAt(ctx, field)
+	case "countNotEmptyDeletedAt":
+		return ec.fieldContext_CompanyConnection_countNotEmptyDeletedAt(ctx, field)
+	case "percentageEmptyDeletedAt":
+		return ec.fieldContext_CompanyConnection_percentageEmptyDeletedAt(ctx, field)
+	case "percentageNotEmptyDeletedAt":
+		return ec.fieldContext_CompanyConnection_percentageNotEmptyDeletedAt(ctx, field)
+	case "minDeletedAt":
+		return ec.fieldContext_CompanyConnection_minDeletedAt(ctx, field)
+	case "maxDeletedAt":
+		return ec.fieldContext_CompanyConnection_maxDeletedAt(ctx, field)
+	case "countUniqueValuesDomainName":
+		return ec.fieldContext_CompanyConnection_countUniqueValuesDomainName(ctx, field)
+	case "countEmptyDomainName":
+		return ec.fieldContext_CompanyConnection_countEmptyDomainName(ctx, field)
+	case "countNotEmptyDomainName":
+		return ec.fieldContext_CompanyConnection_countNotEmptyDomainName(ctx, field)
+	case "percentageEmptyDomainName":
+		return ec.fieldContext_CompanyConnection_percentageEmptyDomainName(ctx, field)
+	case "percentageNotEmptyDomainName":
+		return ec.fieldContext_CompanyConnection_percentageNotEmptyDomainName(ctx, field)
+	case "countUniqueValuesId":
+		return ec.fieldContext_CompanyConnection_countUniqueValuesId(ctx, field)
+	case "countEmptyId":
+		return ec.fieldContext_CompanyConnection_countEmptyId(ctx, field)
+	case "countNotEmptyId":
+		return ec.fieldContext_CompanyConnection_countNotEmptyId(ctx, field)
+	case "percentageEmptyId":
+		return ec.fieldContext_CompanyConnection_percentageEmptyId(ctx, field)
+	case "percentageNotEmptyId":
+		return ec.fieldContext_CompanyConnection_percentageNotEmptyId(ctx, field)
+	case "countUniqueValuesLinkedinLink":
+		return ec.fieldContext_CompanyConnection_countUniqueValuesLinkedinLink(ctx, field)
+	case "countEmptyLinkedinLink":
+		return ec.fieldContext_CompanyConnection_countEmptyLinkedinLink(ctx, field)
+	case "countNotEmptyLinkedinLink":
+		return ec.fieldContext_CompanyConnection_countNotEmptyLinkedinLink(ctx, field)
+	case "percentageEmptyLinkedinLink":
+		return ec.fieldContext_CompanyConnection_percentageEmptyLinkedinLink(ctx, field)
+	case "percentageNotEmptyLinkedinLink":
+		return ec.fieldContext_CompanyConnection_percentageNotEmptyLinkedinLink(ctx, field)
+	case "countUniqueValuesName":
+		return ec.fieldContext_CompanyConnection_countUniqueValuesName(ctx, field)
+	case "countEmptyName":
+		return ec.fieldContext_CompanyConnection_countEmptyName(ctx, field)
+	case "countNotEmptyName":
+		return ec.fieldContext_CompanyConnection_countNotEmptyName(ctx, field)
+	case "percentageEmptyName":
+		return ec.fieldContext_CompanyConnection_percentageEmptyName(ctx, field)
+	case "percentageNotEmptyName":
+		return ec.fieldContext_CompanyConnection_percentageNotEmptyName(ctx, field)
+	case "countUniqueValuesPosition":
+		return ec.fieldContext_CompanyConnection_countUniqueValuesPosition(ctx, field)
+	case "countEmptyPosition":
+		return ec.fieldContext_CompanyConnection_countEmptyPosition(ctx, field)
+	case "countNotEmptyPosition":
+		return ec.fieldContext_CompanyConnection_countNotEmptyPosition(ctx, field)
+	case "percentageEmptyPosition":
+		return ec.fieldContext_CompanyConnection_percentageEmptyPosition(ctx, field)
+	case "percentageNotEmptyPosition":
+		return ec.fieldContext_CompanyConnection_percentageNotEmptyPosition(ctx, field)
+	case "countUniqueValuesUpdatedAt":
+		return ec.fieldContext_CompanyConnection_countUniqueValuesUpdatedAt(ctx, field)
+	case "countEmptyUpdatedAt":
+		return ec.fieldContext_CompanyConnection_countEmptyUpdatedAt(ctx, field)
+	case "countNotEmptyUpdatedAt":
+		return ec.fieldContext_CompanyConnection_countNotEmptyUpdatedAt(ctx, field)
+	case "percentageEmptyUpdatedAt":
+		return ec.fieldContext_CompanyConnection_percentageEmptyUpdatedAt(ctx, field)
+	case "percentageNotEmptyUpdatedAt":
+		return ec.fieldContext_CompanyConnection_percentageNotEmptyUpdatedAt(ctx, field)
+	case "minUpdatedAt":
+		return ec.fieldContext_CompanyConnection_minUpdatedAt(ctx, field)
+	case "maxUpdatedAt":
+		return ec.fieldContext_CompanyConnection_maxUpdatedAt(ctx, field)
+	case "countUniqueValuesUpdatedBy":
+		return ec.fieldContext_CompanyConnection_countUniqueValuesUpdatedBy(ctx, field)
+	case "countEmptyUpdatedBy":
+		return ec.fieldContext_CompanyConnection_countEmptyUpdatedBy(ctx, field)
+	case "countNotEmptyUpdatedBy":
+		return ec.fieldContext_CompanyConnection_countNotEmptyUpdatedBy(ctx, field)
+	case "percentageEmptyUpdatedBy":
+		return ec.fieldContext_CompanyConnection_percentageEmptyUpdatedBy(ctx, field)
+	case "percentageNotEmptyUpdatedBy":
+		return ec.fieldContext_CompanyConnection_percentageNotEmptyUpdatedBy(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type CompanyConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_CompanyEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_CompanyEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_CompanyEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type CompanyEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_CompanyGroupByConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "totalCount":
+		return ec.fieldContext_CompanyGroupByConnection_totalCount(ctx, field)
+	case "edges":
+		return ec.fieldContext_CompanyGroupByConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_CompanyGroupByConnection_pageInfo(ctx, field)
+	case "groupByDimensionValues":
+		return ec.fieldContext_CompanyGroupByConnection_groupByDimensionValues(ctx, field)
+	case "countUniqueValuesAddress":
+		return ec.fieldContext_CompanyGroupByConnection_countUniqueValuesAddress(ctx, field)
+	case "countEmptyAddress":
+		return ec.fieldContext_CompanyGroupByConnection_countEmptyAddress(ctx, field)
+	case "countNotEmptyAddress":
+		return ec.fieldContext_CompanyGroupByConnection_countNotEmptyAddress(ctx, field)
+	case "percentageEmptyAddress":
+		return ec.fieldContext_CompanyGroupByConnection_percentageEmptyAddress(ctx, field)
+	case "percentageNotEmptyAddress":
+		return ec.fieldContext_CompanyGroupByConnection_percentageNotEmptyAddress(ctx, field)
+	case "countUniqueValuesAnnualRevenue":
+		return ec.fieldContext_CompanyGroupByConnection_countUniqueValuesAnnualRevenue(ctx, field)
+	case "countEmptyAnnualRevenue":
+		return ec.fieldContext_CompanyGroupByConnection_countEmptyAnnualRevenue(ctx, field)
+	case "countNotEmptyAnnualRevenue":
+		return ec.fieldContext_CompanyGroupByConnection_countNotEmptyAnnualRevenue(ctx, field)
+	case "percentageEmptyAnnualRevenue":
+		return ec.fieldContext_CompanyGroupByConnection_percentageEmptyAnnualRevenue(ctx, field)
+	case "percentageNotEmptyAnnualRevenue":
+		return ec.fieldContext_CompanyGroupByConnection_percentageNotEmptyAnnualRevenue(ctx, field)
+	case "minAnnualRevenueAmountMicros":
+		return ec.fieldContext_CompanyGroupByConnection_minAnnualRevenueAmountMicros(ctx, field)
+	case "maxAnnualRevenueAmountMicros":
+		return ec.fieldContext_CompanyGroupByConnection_maxAnnualRevenueAmountMicros(ctx, field)
+	case "avgAnnualRevenueAmountMicros":
+		return ec.fieldContext_CompanyGroupByConnection_avgAnnualRevenueAmountMicros(ctx, field)
+	case "sumAnnualRevenueAmountMicros":
+		return ec.fieldContext_CompanyGroupByConnection_sumAnnualRevenueAmountMicros(ctx, field)
+	case "countUniqueValuesCreatedAt":
+		return ec.fieldContext_CompanyGroupByConnection_countUniqueValuesCreatedAt(ctx, field)
+	case "countEmptyCreatedAt":
+		return ec.fieldContext_CompanyGroupByConnection_countEmptyCreatedAt(ctx, field)
+	case "countNotEmptyCreatedAt":
+		return ec.fieldContext_CompanyGroupByConnection_countNotEmptyCreatedAt(ctx, field)
+	case "percentageEmptyCreatedAt":
+		return ec.fieldContext_CompanyGroupByConnection_percentageEmptyCreatedAt(ctx, field)
+	case "percentageNotEmptyCreatedAt":
+		return ec.fieldContext_CompanyGroupByConnection_percentageNotEmptyCreatedAt(ctx, field)
+	case "minCreatedAt":
+		return ec.fieldContext_CompanyGroupByConnection_minCreatedAt(ctx, field)
+	case "maxCreatedAt":
+		return ec.fieldContext_CompanyGroupByConnection_maxCreatedAt(ctx, field)
+	case "countUniqueValuesCreatedBy":
+		return ec.fieldContext_CompanyGroupByConnection_countUniqueValuesCreatedBy(ctx, field)
+	case "countEmptyCreatedBy":
+		return ec.fieldContext_CompanyGroupByConnection_countEmptyCreatedBy(ctx, field)
+	case "countNotEmptyCreatedBy":
+		return ec.fieldContext_CompanyGroupByConnection_countNotEmptyCreatedBy(ctx, field)
+	case "percentageEmptyCreatedBy":
+		return ec.fieldContext_CompanyGroupByConnection_percentageEmptyCreatedBy(ctx, field)
+	case "percentageNotEmptyCreatedBy":
+		return ec.fieldContext_CompanyGroupByConnection_percentageNotEmptyCreatedBy(ctx, field)
+	case "countUniqueValuesDeletedAt":
+		return ec.fieldContext_CompanyGroupByConnection_countUniqueValuesDeletedAt(ctx, field)
+	case "countEmptyDeletedAt":
+		return ec.fieldContext_CompanyGroupByConnection_countEmptyDeletedAt(ctx, field)
+	case "countNotEmptyDeletedAt":
+		return ec.fieldContext_CompanyGroupByConnection_countNotEmptyDeletedAt(ctx, field)
+	case "percentageEmptyDeletedAt":
+		return ec.fieldContext_CompanyGroupByConnection_percentageEmptyDeletedAt(ctx, field)
+	case "percentageNotEmptyDeletedAt":
+		return ec.fieldContext_CompanyGroupByConnection_percentageNotEmptyDeletedAt(ctx, field)
+	case "minDeletedAt":
+		return ec.fieldContext_CompanyGroupByConnection_minDeletedAt(ctx, field)
+	case "maxDeletedAt":
+		return ec.fieldContext_CompanyGroupByConnection_maxDeletedAt(ctx, field)
+	case "countUniqueValuesDomainName":
+		return ec.fieldContext_CompanyGroupByConnection_countUniqueValuesDomainName(ctx, field)
+	case "countEmptyDomainName":
+		return ec.fieldContext_CompanyGroupByConnection_countEmptyDomainName(ctx, field)
+	case "countNotEmptyDomainName":
+		return ec.fieldContext_CompanyGroupByConnection_countNotEmptyDomainName(ctx, field)
+	case "percentageEmptyDomainName":
+		return ec.fieldContext_CompanyGroupByConnection_percentageEmptyDomainName(ctx, field)
+	case "percentageNotEmptyDomainName":
+		return ec.fieldContext_CompanyGroupByConnection_percentageNotEmptyDomainName(ctx, field)
+	case "countUniqueValuesId":
+		return ec.fieldContext_CompanyGroupByConnection_countUniqueValuesId(ctx, field)
+	case "countEmptyId":
+		return ec.fieldContext_CompanyGroupByConnection_countEmptyId(ctx, field)
+	case "countNotEmptyId":
+		return ec.fieldContext_CompanyGroupByConnection_countNotEmptyId(ctx, field)
+	case "percentageEmptyId":
+		return ec.fieldContext_CompanyGroupByConnection_percentageEmptyId(ctx, field)
+	case "percentageNotEmptyId":
+		return ec.fieldContext_CompanyGroupByConnection_percentageNotEmptyId(ctx, field)
+	case "countUniqueValuesLinkedinLink":
+		return ec.fieldContext_CompanyGroupByConnection_countUniqueValuesLinkedinLink(ctx, field)
+	case "countEmptyLinkedinLink":
+		return ec.fieldContext_CompanyGroupByConnection_countEmptyLinkedinLink(ctx, field)
+	case "countNotEmptyLinkedinLink":
+		return ec.fieldContext_CompanyGroupByConnection_countNotEmptyLinkedinLink(ctx, field)
+	case "percentageEmptyLinkedinLink":
+		return ec.fieldContext_CompanyGroupByConnection_percentageEmptyLinkedinLink(ctx, field)
+	case "percentageNotEmptyLinkedinLink":
+		return ec.fieldContext_CompanyGroupByConnection_percentageNotEmptyLinkedinLink(ctx, field)
+	case "countUniqueValuesName":
+		return ec.fieldContext_CompanyGroupByConnection_countUniqueValuesName(ctx, field)
+	case "countEmptyName":
+		return ec.fieldContext_CompanyGroupByConnection_countEmptyName(ctx, field)
+	case "countNotEmptyName":
+		return ec.fieldContext_CompanyGroupByConnection_countNotEmptyName(ctx, field)
+	case "percentageEmptyName":
+		return ec.fieldContext_CompanyGroupByConnection_percentageEmptyName(ctx, field)
+	case "percentageNotEmptyName":
+		return ec.fieldContext_CompanyGroupByConnection_percentageNotEmptyName(ctx, field)
+	case "countUniqueValuesPosition":
+		return ec.fieldContext_CompanyGroupByConnection_countUniqueValuesPosition(ctx, field)
+	case "countEmptyPosition":
+		return ec.fieldContext_CompanyGroupByConnection_countEmptyPosition(ctx, field)
+	case "countNotEmptyPosition":
+		return ec.fieldContext_CompanyGroupByConnection_countNotEmptyPosition(ctx, field)
+	case "percentageEmptyPosition":
+		return ec.fieldContext_CompanyGroupByConnection_percentageEmptyPosition(ctx, field)
+	case "percentageNotEmptyPosition":
+		return ec.fieldContext_CompanyGroupByConnection_percentageNotEmptyPosition(ctx, field)
+	case "countUniqueValuesUpdatedAt":
+		return ec.fieldContext_CompanyGroupByConnection_countUniqueValuesUpdatedAt(ctx, field)
+	case "countEmptyUpdatedAt":
+		return ec.fieldContext_CompanyGroupByConnection_countEmptyUpdatedAt(ctx, field)
+	case "countNotEmptyUpdatedAt":
+		return ec.fieldContext_CompanyGroupByConnection_countNotEmptyUpdatedAt(ctx, field)
+	case "percentageEmptyUpdatedAt":
+		return ec.fieldContext_CompanyGroupByConnection_percentageEmptyUpdatedAt(ctx, field)
+	case "percentageNotEmptyUpdatedAt":
+		return ec.fieldContext_CompanyGroupByConnection_percentageNotEmptyUpdatedAt(ctx, field)
+	case "minUpdatedAt":
+		return ec.fieldContext_CompanyGroupByConnection_minUpdatedAt(ctx, field)
+	case "maxUpdatedAt":
+		return ec.fieldContext_CompanyGroupByConnection_maxUpdatedAt(ctx, field)
+	case "countUniqueValuesUpdatedBy":
+		return ec.fieldContext_CompanyGroupByConnection_countUniqueValuesUpdatedBy(ctx, field)
+	case "countEmptyUpdatedBy":
+		return ec.fieldContext_CompanyGroupByConnection_countEmptyUpdatedBy(ctx, field)
+	case "countNotEmptyUpdatedBy":
+		return ec.fieldContext_CompanyGroupByConnection_countNotEmptyUpdatedBy(ctx, field)
+	case "percentageEmptyUpdatedBy":
+		return ec.fieldContext_CompanyGroupByConnection_percentageEmptyUpdatedBy(ctx, field)
+	case "percentageNotEmptyUpdatedBy":
+		return ec.fieldContext_CompanyGroupByConnection_percentageNotEmptyUpdatedBy(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type CompanyGroupByConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_Currency(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "amountMicros":
+		return ec.fieldContext_Currency_amountMicros(ctx, field)
+	case "currencyCode":
+		return ec.fieldContext_Currency_currencyCode(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type Currency", field.Name)
 }
 
 func (ec *executionContext) childFields_Emails(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -6375,6 +9193,344 @@ func (ec *executionContext) childFields_NoteTargetGroupByConnection(ctx context.
 		return ec.fieldContext_NoteTargetGroupByConnection_percentageNotEmptyUpdatedBy(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type NoteTargetGroupByConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_Opportunity(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_Opportunity_id(ctx, field)
+	case "name":
+		return ec.fieldContext_Opportunity_name(ctx, field)
+	case "amount":
+		return ec.fieldContext_Opportunity_amount(ctx, field)
+	case "closeDate":
+		return ec.fieldContext_Opportunity_closeDate(ctx, field)
+	case "stage":
+		return ec.fieldContext_Opportunity_stage(ctx, field)
+	case "companyId":
+		return ec.fieldContext_Opportunity_companyId(ctx, field)
+	case "pointOfContactId":
+		return ec.fieldContext_Opportunity_pointOfContactId(ctx, field)
+	case "ownerId":
+		return ec.fieldContext_Opportunity_ownerId(ctx, field)
+	case "position":
+		return ec.fieldContext_Opportunity_position(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_Opportunity_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_Opportunity_updatedBy(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_Opportunity_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_Opportunity_updatedAt(ctx, field)
+	case "deletedAt":
+		return ec.fieldContext_Opportunity_deletedAt(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type Opportunity", field.Name)
+}
+
+func (ec *executionContext) childFields_OpportunityConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "totalCount":
+		return ec.fieldContext_OpportunityConnection_totalCount(ctx, field)
+	case "edges":
+		return ec.fieldContext_OpportunityConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_OpportunityConnection_pageInfo(ctx, field)
+	case "countUniqueValuesAmount":
+		return ec.fieldContext_OpportunityConnection_countUniqueValuesAmount(ctx, field)
+	case "countEmptyAmount":
+		return ec.fieldContext_OpportunityConnection_countEmptyAmount(ctx, field)
+	case "countNotEmptyAmount":
+		return ec.fieldContext_OpportunityConnection_countNotEmptyAmount(ctx, field)
+	case "percentageEmptyAmount":
+		return ec.fieldContext_OpportunityConnection_percentageEmptyAmount(ctx, field)
+	case "percentageNotEmptyAmount":
+		return ec.fieldContext_OpportunityConnection_percentageNotEmptyAmount(ctx, field)
+	case "minAmountAmountMicros":
+		return ec.fieldContext_OpportunityConnection_minAmountAmountMicros(ctx, field)
+	case "maxAmountAmountMicros":
+		return ec.fieldContext_OpportunityConnection_maxAmountAmountMicros(ctx, field)
+	case "avgAmountAmountMicros":
+		return ec.fieldContext_OpportunityConnection_avgAmountAmountMicros(ctx, field)
+	case "sumAmountAmountMicros":
+		return ec.fieldContext_OpportunityConnection_sumAmountAmountMicros(ctx, field)
+	case "countUniqueValuesCloseDate":
+		return ec.fieldContext_OpportunityConnection_countUniqueValuesCloseDate(ctx, field)
+	case "countEmptyCloseDate":
+		return ec.fieldContext_OpportunityConnection_countEmptyCloseDate(ctx, field)
+	case "countNotEmptyCloseDate":
+		return ec.fieldContext_OpportunityConnection_countNotEmptyCloseDate(ctx, field)
+	case "percentageEmptyCloseDate":
+		return ec.fieldContext_OpportunityConnection_percentageEmptyCloseDate(ctx, field)
+	case "percentageNotEmptyCloseDate":
+		return ec.fieldContext_OpportunityConnection_percentageNotEmptyCloseDate(ctx, field)
+	case "minCloseDate":
+		return ec.fieldContext_OpportunityConnection_minCloseDate(ctx, field)
+	case "maxCloseDate":
+		return ec.fieldContext_OpportunityConnection_maxCloseDate(ctx, field)
+	case "countUniqueValuesCreatedAt":
+		return ec.fieldContext_OpportunityConnection_countUniqueValuesCreatedAt(ctx, field)
+	case "countEmptyCreatedAt":
+		return ec.fieldContext_OpportunityConnection_countEmptyCreatedAt(ctx, field)
+	case "countNotEmptyCreatedAt":
+		return ec.fieldContext_OpportunityConnection_countNotEmptyCreatedAt(ctx, field)
+	case "percentageEmptyCreatedAt":
+		return ec.fieldContext_OpportunityConnection_percentageEmptyCreatedAt(ctx, field)
+	case "percentageNotEmptyCreatedAt":
+		return ec.fieldContext_OpportunityConnection_percentageNotEmptyCreatedAt(ctx, field)
+	case "minCreatedAt":
+		return ec.fieldContext_OpportunityConnection_minCreatedAt(ctx, field)
+	case "maxCreatedAt":
+		return ec.fieldContext_OpportunityConnection_maxCreatedAt(ctx, field)
+	case "countUniqueValuesCreatedBy":
+		return ec.fieldContext_OpportunityConnection_countUniqueValuesCreatedBy(ctx, field)
+	case "countEmptyCreatedBy":
+		return ec.fieldContext_OpportunityConnection_countEmptyCreatedBy(ctx, field)
+	case "countNotEmptyCreatedBy":
+		return ec.fieldContext_OpportunityConnection_countNotEmptyCreatedBy(ctx, field)
+	case "percentageEmptyCreatedBy":
+		return ec.fieldContext_OpportunityConnection_percentageEmptyCreatedBy(ctx, field)
+	case "percentageNotEmptyCreatedBy":
+		return ec.fieldContext_OpportunityConnection_percentageNotEmptyCreatedBy(ctx, field)
+	case "countUniqueValuesDeletedAt":
+		return ec.fieldContext_OpportunityConnection_countUniqueValuesDeletedAt(ctx, field)
+	case "countEmptyDeletedAt":
+		return ec.fieldContext_OpportunityConnection_countEmptyDeletedAt(ctx, field)
+	case "countNotEmptyDeletedAt":
+		return ec.fieldContext_OpportunityConnection_countNotEmptyDeletedAt(ctx, field)
+	case "percentageEmptyDeletedAt":
+		return ec.fieldContext_OpportunityConnection_percentageEmptyDeletedAt(ctx, field)
+	case "percentageNotEmptyDeletedAt":
+		return ec.fieldContext_OpportunityConnection_percentageNotEmptyDeletedAt(ctx, field)
+	case "minDeletedAt":
+		return ec.fieldContext_OpportunityConnection_minDeletedAt(ctx, field)
+	case "maxDeletedAt":
+		return ec.fieldContext_OpportunityConnection_maxDeletedAt(ctx, field)
+	case "countUniqueValuesId":
+		return ec.fieldContext_OpportunityConnection_countUniqueValuesId(ctx, field)
+	case "countEmptyId":
+		return ec.fieldContext_OpportunityConnection_countEmptyId(ctx, field)
+	case "countNotEmptyId":
+		return ec.fieldContext_OpportunityConnection_countNotEmptyId(ctx, field)
+	case "percentageEmptyId":
+		return ec.fieldContext_OpportunityConnection_percentageEmptyId(ctx, field)
+	case "percentageNotEmptyId":
+		return ec.fieldContext_OpportunityConnection_percentageNotEmptyId(ctx, field)
+	case "countUniqueValuesName":
+		return ec.fieldContext_OpportunityConnection_countUniqueValuesName(ctx, field)
+	case "countEmptyName":
+		return ec.fieldContext_OpportunityConnection_countEmptyName(ctx, field)
+	case "countNotEmptyName":
+		return ec.fieldContext_OpportunityConnection_countNotEmptyName(ctx, field)
+	case "percentageEmptyName":
+		return ec.fieldContext_OpportunityConnection_percentageEmptyName(ctx, field)
+	case "percentageNotEmptyName":
+		return ec.fieldContext_OpportunityConnection_percentageNotEmptyName(ctx, field)
+	case "countUniqueValuesPosition":
+		return ec.fieldContext_OpportunityConnection_countUniqueValuesPosition(ctx, field)
+	case "countEmptyPosition":
+		return ec.fieldContext_OpportunityConnection_countEmptyPosition(ctx, field)
+	case "countNotEmptyPosition":
+		return ec.fieldContext_OpportunityConnection_countNotEmptyPosition(ctx, field)
+	case "percentageEmptyPosition":
+		return ec.fieldContext_OpportunityConnection_percentageEmptyPosition(ctx, field)
+	case "percentageNotEmptyPosition":
+		return ec.fieldContext_OpportunityConnection_percentageNotEmptyPosition(ctx, field)
+	case "countUniqueValuesStage":
+		return ec.fieldContext_OpportunityConnection_countUniqueValuesStage(ctx, field)
+	case "countEmptyStage":
+		return ec.fieldContext_OpportunityConnection_countEmptyStage(ctx, field)
+	case "countNotEmptyStage":
+		return ec.fieldContext_OpportunityConnection_countNotEmptyStage(ctx, field)
+	case "percentageEmptyStage":
+		return ec.fieldContext_OpportunityConnection_percentageEmptyStage(ctx, field)
+	case "percentageNotEmptyStage":
+		return ec.fieldContext_OpportunityConnection_percentageNotEmptyStage(ctx, field)
+	case "countUniqueValuesUpdatedAt":
+		return ec.fieldContext_OpportunityConnection_countUniqueValuesUpdatedAt(ctx, field)
+	case "countEmptyUpdatedAt":
+		return ec.fieldContext_OpportunityConnection_countEmptyUpdatedAt(ctx, field)
+	case "countNotEmptyUpdatedAt":
+		return ec.fieldContext_OpportunityConnection_countNotEmptyUpdatedAt(ctx, field)
+	case "percentageEmptyUpdatedAt":
+		return ec.fieldContext_OpportunityConnection_percentageEmptyUpdatedAt(ctx, field)
+	case "percentageNotEmptyUpdatedAt":
+		return ec.fieldContext_OpportunityConnection_percentageNotEmptyUpdatedAt(ctx, field)
+	case "minUpdatedAt":
+		return ec.fieldContext_OpportunityConnection_minUpdatedAt(ctx, field)
+	case "maxUpdatedAt":
+		return ec.fieldContext_OpportunityConnection_maxUpdatedAt(ctx, field)
+	case "countUniqueValuesUpdatedBy":
+		return ec.fieldContext_OpportunityConnection_countUniqueValuesUpdatedBy(ctx, field)
+	case "countEmptyUpdatedBy":
+		return ec.fieldContext_OpportunityConnection_countEmptyUpdatedBy(ctx, field)
+	case "countNotEmptyUpdatedBy":
+		return ec.fieldContext_OpportunityConnection_countNotEmptyUpdatedBy(ctx, field)
+	case "percentageEmptyUpdatedBy":
+		return ec.fieldContext_OpportunityConnection_percentageEmptyUpdatedBy(ctx, field)
+	case "percentageNotEmptyUpdatedBy":
+		return ec.fieldContext_OpportunityConnection_percentageNotEmptyUpdatedBy(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type OpportunityConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_OpportunityEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_OpportunityEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_OpportunityEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type OpportunityEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_OpportunityGroupByConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "totalCount":
+		return ec.fieldContext_OpportunityGroupByConnection_totalCount(ctx, field)
+	case "edges":
+		return ec.fieldContext_OpportunityGroupByConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_OpportunityGroupByConnection_pageInfo(ctx, field)
+	case "groupByDimensionValues":
+		return ec.fieldContext_OpportunityGroupByConnection_groupByDimensionValues(ctx, field)
+	case "countUniqueValuesAmount":
+		return ec.fieldContext_OpportunityGroupByConnection_countUniqueValuesAmount(ctx, field)
+	case "countEmptyAmount":
+		return ec.fieldContext_OpportunityGroupByConnection_countEmptyAmount(ctx, field)
+	case "countNotEmptyAmount":
+		return ec.fieldContext_OpportunityGroupByConnection_countNotEmptyAmount(ctx, field)
+	case "percentageEmptyAmount":
+		return ec.fieldContext_OpportunityGroupByConnection_percentageEmptyAmount(ctx, field)
+	case "percentageNotEmptyAmount":
+		return ec.fieldContext_OpportunityGroupByConnection_percentageNotEmptyAmount(ctx, field)
+	case "minAmountAmountMicros":
+		return ec.fieldContext_OpportunityGroupByConnection_minAmountAmountMicros(ctx, field)
+	case "maxAmountAmountMicros":
+		return ec.fieldContext_OpportunityGroupByConnection_maxAmountAmountMicros(ctx, field)
+	case "avgAmountAmountMicros":
+		return ec.fieldContext_OpportunityGroupByConnection_avgAmountAmountMicros(ctx, field)
+	case "sumAmountAmountMicros":
+		return ec.fieldContext_OpportunityGroupByConnection_sumAmountAmountMicros(ctx, field)
+	case "countUniqueValuesCloseDate":
+		return ec.fieldContext_OpportunityGroupByConnection_countUniqueValuesCloseDate(ctx, field)
+	case "countEmptyCloseDate":
+		return ec.fieldContext_OpportunityGroupByConnection_countEmptyCloseDate(ctx, field)
+	case "countNotEmptyCloseDate":
+		return ec.fieldContext_OpportunityGroupByConnection_countNotEmptyCloseDate(ctx, field)
+	case "percentageEmptyCloseDate":
+		return ec.fieldContext_OpportunityGroupByConnection_percentageEmptyCloseDate(ctx, field)
+	case "percentageNotEmptyCloseDate":
+		return ec.fieldContext_OpportunityGroupByConnection_percentageNotEmptyCloseDate(ctx, field)
+	case "minCloseDate":
+		return ec.fieldContext_OpportunityGroupByConnection_minCloseDate(ctx, field)
+	case "maxCloseDate":
+		return ec.fieldContext_OpportunityGroupByConnection_maxCloseDate(ctx, field)
+	case "countUniqueValuesCreatedAt":
+		return ec.fieldContext_OpportunityGroupByConnection_countUniqueValuesCreatedAt(ctx, field)
+	case "countEmptyCreatedAt":
+		return ec.fieldContext_OpportunityGroupByConnection_countEmptyCreatedAt(ctx, field)
+	case "countNotEmptyCreatedAt":
+		return ec.fieldContext_OpportunityGroupByConnection_countNotEmptyCreatedAt(ctx, field)
+	case "percentageEmptyCreatedAt":
+		return ec.fieldContext_OpportunityGroupByConnection_percentageEmptyCreatedAt(ctx, field)
+	case "percentageNotEmptyCreatedAt":
+		return ec.fieldContext_OpportunityGroupByConnection_percentageNotEmptyCreatedAt(ctx, field)
+	case "minCreatedAt":
+		return ec.fieldContext_OpportunityGroupByConnection_minCreatedAt(ctx, field)
+	case "maxCreatedAt":
+		return ec.fieldContext_OpportunityGroupByConnection_maxCreatedAt(ctx, field)
+	case "countUniqueValuesCreatedBy":
+		return ec.fieldContext_OpportunityGroupByConnection_countUniqueValuesCreatedBy(ctx, field)
+	case "countEmptyCreatedBy":
+		return ec.fieldContext_OpportunityGroupByConnection_countEmptyCreatedBy(ctx, field)
+	case "countNotEmptyCreatedBy":
+		return ec.fieldContext_OpportunityGroupByConnection_countNotEmptyCreatedBy(ctx, field)
+	case "percentageEmptyCreatedBy":
+		return ec.fieldContext_OpportunityGroupByConnection_percentageEmptyCreatedBy(ctx, field)
+	case "percentageNotEmptyCreatedBy":
+		return ec.fieldContext_OpportunityGroupByConnection_percentageNotEmptyCreatedBy(ctx, field)
+	case "countUniqueValuesDeletedAt":
+		return ec.fieldContext_OpportunityGroupByConnection_countUniqueValuesDeletedAt(ctx, field)
+	case "countEmptyDeletedAt":
+		return ec.fieldContext_OpportunityGroupByConnection_countEmptyDeletedAt(ctx, field)
+	case "countNotEmptyDeletedAt":
+		return ec.fieldContext_OpportunityGroupByConnection_countNotEmptyDeletedAt(ctx, field)
+	case "percentageEmptyDeletedAt":
+		return ec.fieldContext_OpportunityGroupByConnection_percentageEmptyDeletedAt(ctx, field)
+	case "percentageNotEmptyDeletedAt":
+		return ec.fieldContext_OpportunityGroupByConnection_percentageNotEmptyDeletedAt(ctx, field)
+	case "minDeletedAt":
+		return ec.fieldContext_OpportunityGroupByConnection_minDeletedAt(ctx, field)
+	case "maxDeletedAt":
+		return ec.fieldContext_OpportunityGroupByConnection_maxDeletedAt(ctx, field)
+	case "countUniqueValuesId":
+		return ec.fieldContext_OpportunityGroupByConnection_countUniqueValuesId(ctx, field)
+	case "countEmptyId":
+		return ec.fieldContext_OpportunityGroupByConnection_countEmptyId(ctx, field)
+	case "countNotEmptyId":
+		return ec.fieldContext_OpportunityGroupByConnection_countNotEmptyId(ctx, field)
+	case "percentageEmptyId":
+		return ec.fieldContext_OpportunityGroupByConnection_percentageEmptyId(ctx, field)
+	case "percentageNotEmptyId":
+		return ec.fieldContext_OpportunityGroupByConnection_percentageNotEmptyId(ctx, field)
+	case "countUniqueValuesName":
+		return ec.fieldContext_OpportunityGroupByConnection_countUniqueValuesName(ctx, field)
+	case "countEmptyName":
+		return ec.fieldContext_OpportunityGroupByConnection_countEmptyName(ctx, field)
+	case "countNotEmptyName":
+		return ec.fieldContext_OpportunityGroupByConnection_countNotEmptyName(ctx, field)
+	case "percentageEmptyName":
+		return ec.fieldContext_OpportunityGroupByConnection_percentageEmptyName(ctx, field)
+	case "percentageNotEmptyName":
+		return ec.fieldContext_OpportunityGroupByConnection_percentageNotEmptyName(ctx, field)
+	case "countUniqueValuesPosition":
+		return ec.fieldContext_OpportunityGroupByConnection_countUniqueValuesPosition(ctx, field)
+	case "countEmptyPosition":
+		return ec.fieldContext_OpportunityGroupByConnection_countEmptyPosition(ctx, field)
+	case "countNotEmptyPosition":
+		return ec.fieldContext_OpportunityGroupByConnection_countNotEmptyPosition(ctx, field)
+	case "percentageEmptyPosition":
+		return ec.fieldContext_OpportunityGroupByConnection_percentageEmptyPosition(ctx, field)
+	case "percentageNotEmptyPosition":
+		return ec.fieldContext_OpportunityGroupByConnection_percentageNotEmptyPosition(ctx, field)
+	case "countUniqueValuesStage":
+		return ec.fieldContext_OpportunityGroupByConnection_countUniqueValuesStage(ctx, field)
+	case "countEmptyStage":
+		return ec.fieldContext_OpportunityGroupByConnection_countEmptyStage(ctx, field)
+	case "countNotEmptyStage":
+		return ec.fieldContext_OpportunityGroupByConnection_countNotEmptyStage(ctx, field)
+	case "percentageEmptyStage":
+		return ec.fieldContext_OpportunityGroupByConnection_percentageEmptyStage(ctx, field)
+	case "percentageNotEmptyStage":
+		return ec.fieldContext_OpportunityGroupByConnection_percentageNotEmptyStage(ctx, field)
+	case "countUniqueValuesUpdatedAt":
+		return ec.fieldContext_OpportunityGroupByConnection_countUniqueValuesUpdatedAt(ctx, field)
+	case "countEmptyUpdatedAt":
+		return ec.fieldContext_OpportunityGroupByConnection_countEmptyUpdatedAt(ctx, field)
+	case "countNotEmptyUpdatedAt":
+		return ec.fieldContext_OpportunityGroupByConnection_countNotEmptyUpdatedAt(ctx, field)
+	case "percentageEmptyUpdatedAt":
+		return ec.fieldContext_OpportunityGroupByConnection_percentageEmptyUpdatedAt(ctx, field)
+	case "percentageNotEmptyUpdatedAt":
+		return ec.fieldContext_OpportunityGroupByConnection_percentageNotEmptyUpdatedAt(ctx, field)
+	case "minUpdatedAt":
+		return ec.fieldContext_OpportunityGroupByConnection_minUpdatedAt(ctx, field)
+	case "maxUpdatedAt":
+		return ec.fieldContext_OpportunityGroupByConnection_maxUpdatedAt(ctx, field)
+	case "countUniqueValuesUpdatedBy":
+		return ec.fieldContext_OpportunityGroupByConnection_countUniqueValuesUpdatedBy(ctx, field)
+	case "countEmptyUpdatedBy":
+		return ec.fieldContext_OpportunityGroupByConnection_countEmptyUpdatedBy(ctx, field)
+	case "countNotEmptyUpdatedBy":
+		return ec.fieldContext_OpportunityGroupByConnection_countNotEmptyUpdatedBy(ctx, field)
+	case "percentageEmptyUpdatedBy":
+		return ec.fieldContext_OpportunityGroupByConnection_percentageEmptyUpdatedBy(ctx, field)
+	case "percentageNotEmptyUpdatedBy":
+		return ec.fieldContext_OpportunityGroupByConnection_percentageNotEmptyUpdatedBy(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type OpportunityGroupByConnection", field.Name)
 }
 
 func (ec *executionContext) childFields_PageInfo(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -8225,6 +11381,144 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 	return args, nil
 }
 
+func (ec *executionContext) field_Query_companiesGroupBy_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "groupBy",
+		func(ctx context.Context, v any) ([]map[string]any, error) {
+			return ec.unmarshalNCompanyGroupByInput2ᚕmapᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["groupBy"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "filter",
+		func(ctx context.Context, v any) (map[string]any, error) {
+			return ec.unmarshalOCompanyFilterInput2map(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["filter"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]map[string]any, error) {
+			return ec.unmarshalOCompanyOrderByWithGroupByInput2ᚕmapᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "orderByForRecords",
+		func(ctx context.Context, v any) ([]map[string]any, error) {
+			return ec.unmarshalOCompanyOrderByInput2ᚕmapᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderByForRecords"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "viewId",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOUUID2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["viewId"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "limit",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["limit"] = arg5
+	arg6, err := graphql.ProcessArgField(ctx, rawArgs, "offsetForRecords",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["offsetForRecords"] = arg6
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_companies_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "filter",
+		func(ctx context.Context, v any) (map[string]any, error) {
+			return ec.unmarshalOCompanyFilterInput2map(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["filter"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]map[string]any, error) {
+			return ec.unmarshalOCompanyOrderByInput2ᚕmap(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOString2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOString2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg5
+	arg6, err := graphql.ProcessArgField(ctx, rawArgs, "offset",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["offset"] = arg6
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_company_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "filter",
+		func(ctx context.Context, v any) (map[string]any, error) {
+			return ec.unmarshalOCompanyFilterInput2map(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["filter"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Query_noteTarget_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -8498,6 +11792,144 @@ func (ec *executionContext) field_Query_notes_args(ctx context.Context, rawArgs 
 		return nil, err
 	}
 	args["offset"] = arg6
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_opportunitiesGroupBy_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "groupBy",
+		func(ctx context.Context, v any) ([]map[string]any, error) {
+			return ec.unmarshalNOpportunityGroupByInput2ᚕmapᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["groupBy"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "filter",
+		func(ctx context.Context, v any) (map[string]any, error) {
+			return ec.unmarshalOOpportunityFilterInput2map(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["filter"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]map[string]any, error) {
+			return ec.unmarshalOOpportunityOrderByWithGroupByInput2ᚕmapᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "orderByForRecords",
+		func(ctx context.Context, v any) ([]map[string]any, error) {
+			return ec.unmarshalOOpportunityOrderByInput2ᚕmapᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderByForRecords"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "viewId",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOUUID2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["viewId"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "limit",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["limit"] = arg5
+	arg6, err := graphql.ProcessArgField(ctx, rawArgs, "offsetForRecords",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["offsetForRecords"] = arg6
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_opportunities_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "filter",
+		func(ctx context.Context, v any) (map[string]any, error) {
+			return ec.unmarshalOOpportunityFilterInput2map(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["filter"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]map[string]any, error) {
+			return ec.unmarshalOOpportunityOrderByInput2ᚕmap(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOString2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOString2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg5
+	arg6, err := graphql.ProcessArgField(ctx, rawArgs, "offset",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["offset"] = arg6
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_opportunity_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "filter",
+		func(ctx context.Context, v any) (map[string]any, error) {
+			return ec.unmarshalOOpportunityFilterInput2map(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["filter"] = arg0
 	return args, nil
 }
 
@@ -9125,6 +12557,4061 @@ func (ec *executionContext) _AdditionalPhone_countryCode(ctx context.Context, fi
 }
 func (ec *executionContext) fieldContext_AdditionalPhone_countryCode(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("AdditionalPhone", field, false, false, "String")
+}
+
+func (ec *executionContext) _Address_addressStreet1(ctx context.Context, field graphql.CollectedField, obj *Address) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Address_addressStreet1(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AddressStreet1, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Address_addressStreet1(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Address", field, false, false, "String")
+}
+
+func (ec *executionContext) _Address_addressStreet2(ctx context.Context, field graphql.CollectedField, obj *Address) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Address_addressStreet2(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AddressStreet2, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Address_addressStreet2(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Address", field, false, false, "String")
+}
+
+func (ec *executionContext) _Address_addressCity(ctx context.Context, field graphql.CollectedField, obj *Address) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Address_addressCity(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AddressCity, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Address_addressCity(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Address", field, false, false, "String")
+}
+
+func (ec *executionContext) _Address_addressPostcode(ctx context.Context, field graphql.CollectedField, obj *Address) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Address_addressPostcode(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AddressPostcode, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Address_addressPostcode(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Address", field, false, false, "String")
+}
+
+func (ec *executionContext) _Address_addressState(ctx context.Context, field graphql.CollectedField, obj *Address) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Address_addressState(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AddressState, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Address_addressState(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Address", field, false, false, "String")
+}
+
+func (ec *executionContext) _Address_addressCountry(ctx context.Context, field graphql.CollectedField, obj *Address) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Address_addressCountry(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AddressCountry, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Address_addressCountry(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Address", field, false, false, "String")
+}
+
+func (ec *executionContext) _Address_addressLat(ctx context.Context, field graphql.CollectedField, obj *Address) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Address_addressLat(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AddressLat, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Address_addressLat(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Address", field, false, false, "Float")
+}
+
+func (ec *executionContext) _Address_addressLng(ctx context.Context, field graphql.CollectedField, obj *Address) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Address_addressLng(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AddressLng, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Address_addressLng(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Address", field, false, false, "Float")
+}
+
+func (ec *executionContext) _Company_id(ctx context.Context, field graphql.CollectedField, obj *Company) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Company_id(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNUUID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Company_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Company", field, false, false, "UUID")
+}
+
+func (ec *executionContext) _Company_name(ctx context.Context, field graphql.CollectedField, obj *Company) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Company_name(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Name, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Company_name(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Company", field, false, false, "String")
+}
+
+func (ec *executionContext) _Company_domainName(ctx context.Context, field graphql.CollectedField, obj *Company) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Company_domainName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.DomainName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *Links) graphql.Marshaler {
+			return ec.marshalOLinks2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐLinks(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Company_domainName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Company",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_Links(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Company_address(ctx context.Context, field graphql.CollectedField, obj *Company) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Company_address(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Address, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *Address) graphql.Marshaler {
+			return ec.marshalOAddress2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐAddress(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Company_address(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Company",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_Address(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Company_linkedinLink(ctx context.Context, field graphql.CollectedField, obj *Company) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Company_linkedinLink(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.LinkedinLink, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *Links) graphql.Marshaler {
+			return ec.marshalOLinks2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐLinks(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Company_linkedinLink(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Company",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_Links(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Company_annualRevenue(ctx context.Context, field graphql.CollectedField, obj *Company) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Company_annualRevenue(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AnnualRevenue, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *Currency) graphql.Marshaler {
+			return ec.marshalOCurrency2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐCurrency(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Company_annualRevenue(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Company",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_Currency(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Company_accountOwnerId(ctx context.Context, field graphql.CollectedField, obj *Company) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Company_accountOwnerId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AccountOwnerID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOID2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Company_accountOwnerId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Company", field, false, false, "ID")
+}
+
+func (ec *executionContext) _Company_position(ctx context.Context, field graphql.CollectedField, obj *Company) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Company_position(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Position, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v float64) graphql.Marshaler {
+			return ec.marshalNPosition2float64(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Company_position(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Company", field, false, false, "Position")
+}
+
+func (ec *executionContext) _Company_createdBy(ctx context.Context, field graphql.CollectedField, obj *Company) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Company_createdBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *Actor) graphql.Marshaler {
+			return ec.marshalNActor2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐActor(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Company_createdBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Company",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_Actor(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Company_updatedBy(ctx context.Context, field graphql.CollectedField, obj *Company) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Company_updatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *Actor) graphql.Marshaler {
+			return ec.marshalNActor2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐActor(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Company_updatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Company",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_Actor(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Company_createdAt(ctx context.Context, field graphql.CollectedField, obj *Company) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Company_createdAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v time.Time) graphql.Marshaler {
+			return ec.marshalNDateTime2timeᚐTime(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Company_createdAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Company", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _Company_updatedAt(ctx context.Context, field graphql.CollectedField, obj *Company) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Company_updatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v time.Time) graphql.Marshaler {
+			return ec.marshalNDateTime2timeᚐTime(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Company_updatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Company", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _Company_deletedAt(ctx context.Context, field graphql.CollectedField, obj *Company) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Company_deletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Company_deletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Company", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _CompanyConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_totalCount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TotalCount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_edges(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_edges(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Edges, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*CompanyEdge) graphql.Marshaler {
+			return ec.marshalNCompanyEdge2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐCompanyEdgeᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CompanyConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_CompanyEdge(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CompanyConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_pageInfo(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PageInfo, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *PageInfo) graphql.Marshaler {
+			return ec.marshalNPageInfo2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐPageInfo(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CompanyConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_PageInfo(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CompanyConnection_countUniqueValuesAddress(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countUniqueValuesAddress(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesAddress, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countUniqueValuesAddress(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_countEmptyAddress(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countEmptyAddress(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyAddress, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countEmptyAddress(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_countNotEmptyAddress(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countNotEmptyAddress(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyAddress, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countNotEmptyAddress(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_percentageEmptyAddress(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_percentageEmptyAddress(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyAddress, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_percentageEmptyAddress(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyConnection_percentageNotEmptyAddress(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_percentageNotEmptyAddress(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyAddress, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_percentageNotEmptyAddress(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyConnection_countUniqueValuesAnnualRevenue(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countUniqueValuesAnnualRevenue(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesAnnualRevenue, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countUniqueValuesAnnualRevenue(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_countEmptyAnnualRevenue(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countEmptyAnnualRevenue(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyAnnualRevenue, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countEmptyAnnualRevenue(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_countNotEmptyAnnualRevenue(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countNotEmptyAnnualRevenue(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyAnnualRevenue, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countNotEmptyAnnualRevenue(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_percentageEmptyAnnualRevenue(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_percentageEmptyAnnualRevenue(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyAnnualRevenue, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_percentageEmptyAnnualRevenue(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyConnection_percentageNotEmptyAnnualRevenue(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_percentageNotEmptyAnnualRevenue(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyAnnualRevenue, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_percentageNotEmptyAnnualRevenue(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyConnection_minAnnualRevenueAmountMicros(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_minAnnualRevenueAmountMicros(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MinAnnualRevenueAmountMicros, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_minAnnualRevenueAmountMicros(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyConnection_maxAnnualRevenueAmountMicros(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_maxAnnualRevenueAmountMicros(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MaxAnnualRevenueAmountMicros, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_maxAnnualRevenueAmountMicros(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyConnection_avgAnnualRevenueAmountMicros(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_avgAnnualRevenueAmountMicros(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AvgAnnualRevenueAmountMicros, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_avgAnnualRevenueAmountMicros(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyConnection_sumAnnualRevenueAmountMicros(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_sumAnnualRevenueAmountMicros(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SumAnnualRevenueAmountMicros, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_sumAnnualRevenueAmountMicros(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyConnection_countUniqueValuesCreatedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countUniqueValuesCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countUniqueValuesCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_countEmptyCreatedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countEmptyCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countEmptyCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_countNotEmptyCreatedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countNotEmptyCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countNotEmptyCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_percentageEmptyCreatedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_percentageEmptyCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_percentageEmptyCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyConnection_percentageNotEmptyCreatedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_percentageNotEmptyCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_percentageNotEmptyCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyConnection_minCreatedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_minCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MinCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_minCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _CompanyConnection_maxCreatedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_maxCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MaxCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_maxCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _CompanyConnection_countUniqueValuesCreatedBy(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countUniqueValuesCreatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesCreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countUniqueValuesCreatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_countEmptyCreatedBy(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countEmptyCreatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyCreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countEmptyCreatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_countNotEmptyCreatedBy(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countNotEmptyCreatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyCreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countNotEmptyCreatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_percentageEmptyCreatedBy(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_percentageEmptyCreatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyCreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_percentageEmptyCreatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyConnection_percentageNotEmptyCreatedBy(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_percentageNotEmptyCreatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyCreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_percentageNotEmptyCreatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyConnection_countUniqueValuesDeletedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countUniqueValuesDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countUniqueValuesDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_countEmptyDeletedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countEmptyDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countEmptyDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_countNotEmptyDeletedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countNotEmptyDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countNotEmptyDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_percentageEmptyDeletedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_percentageEmptyDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_percentageEmptyDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyConnection_percentageNotEmptyDeletedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_percentageNotEmptyDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_percentageNotEmptyDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyConnection_minDeletedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_minDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MinDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_minDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _CompanyConnection_maxDeletedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_maxDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MaxDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_maxDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _CompanyConnection_countUniqueValuesDomainName(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countUniqueValuesDomainName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesDomainName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countUniqueValuesDomainName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_countEmptyDomainName(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countEmptyDomainName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyDomainName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countEmptyDomainName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_countNotEmptyDomainName(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countNotEmptyDomainName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyDomainName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countNotEmptyDomainName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_percentageEmptyDomainName(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_percentageEmptyDomainName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyDomainName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_percentageEmptyDomainName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyConnection_percentageNotEmptyDomainName(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_percentageNotEmptyDomainName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyDomainName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_percentageNotEmptyDomainName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyConnection_countUniqueValuesId(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countUniqueValuesId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countUniqueValuesId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_countEmptyId(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countEmptyId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countEmptyId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_countNotEmptyId(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countNotEmptyId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countNotEmptyId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_percentageEmptyId(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_percentageEmptyId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_percentageEmptyId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyConnection_percentageNotEmptyId(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_percentageNotEmptyId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_percentageNotEmptyId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyConnection_countUniqueValuesLinkedinLink(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countUniqueValuesLinkedinLink(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesLinkedinLink, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countUniqueValuesLinkedinLink(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_countEmptyLinkedinLink(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countEmptyLinkedinLink(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyLinkedinLink, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countEmptyLinkedinLink(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_countNotEmptyLinkedinLink(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countNotEmptyLinkedinLink(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyLinkedinLink, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countNotEmptyLinkedinLink(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_percentageEmptyLinkedinLink(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_percentageEmptyLinkedinLink(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyLinkedinLink, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_percentageEmptyLinkedinLink(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyConnection_percentageNotEmptyLinkedinLink(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_percentageNotEmptyLinkedinLink(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyLinkedinLink, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_percentageNotEmptyLinkedinLink(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyConnection_countUniqueValuesName(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countUniqueValuesName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countUniqueValuesName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_countEmptyName(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countEmptyName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countEmptyName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_countNotEmptyName(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countNotEmptyName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countNotEmptyName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_percentageEmptyName(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_percentageEmptyName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_percentageEmptyName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyConnection_percentageNotEmptyName(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_percentageNotEmptyName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_percentageNotEmptyName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyConnection_countUniqueValuesPosition(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countUniqueValuesPosition(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesPosition, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countUniqueValuesPosition(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_countEmptyPosition(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countEmptyPosition(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyPosition, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countEmptyPosition(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_countNotEmptyPosition(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countNotEmptyPosition(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyPosition, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countNotEmptyPosition(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_percentageEmptyPosition(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_percentageEmptyPosition(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyPosition, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_percentageEmptyPosition(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyConnection_percentageNotEmptyPosition(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_percentageNotEmptyPosition(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyPosition, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_percentageNotEmptyPosition(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyConnection_countUniqueValuesUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countUniqueValuesUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countUniqueValuesUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_countEmptyUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countEmptyUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countEmptyUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_countNotEmptyUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countNotEmptyUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countNotEmptyUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_percentageEmptyUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_percentageEmptyUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_percentageEmptyUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyConnection_percentageNotEmptyUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_percentageNotEmptyUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_percentageNotEmptyUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyConnection_minUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_minUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MinUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_minUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _CompanyConnection_maxUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_maxUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MaxUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_maxUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _CompanyConnection_countUniqueValuesUpdatedBy(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countUniqueValuesUpdatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesUpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countUniqueValuesUpdatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_countEmptyUpdatedBy(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countEmptyUpdatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyUpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countEmptyUpdatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_countNotEmptyUpdatedBy(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_countNotEmptyUpdatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyUpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_countNotEmptyUpdatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyConnection_percentageEmptyUpdatedBy(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_percentageEmptyUpdatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyUpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_percentageEmptyUpdatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyConnection_percentageNotEmptyUpdatedBy(ctx context.Context, field graphql.CollectedField, obj *CompanyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyConnection_percentageNotEmptyUpdatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyUpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyConnection_percentageNotEmptyUpdatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyEdge_node(ctx context.Context, field graphql.CollectedField, obj *CompanyEdge) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyEdge_node(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Node, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *Company) graphql.Marshaler {
+			return ec.marshalNCompany2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐCompany(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyEdge_node(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CompanyEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_Company(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CompanyEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *CompanyEdge) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyEdge_cursor(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Cursor, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNCursor2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyEdge_cursor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyEdge", field, false, false, "Cursor")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_totalCount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TotalCount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_edges(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_edges(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Edges, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*CompanyEdge) graphql.Marshaler {
+			return ec.marshalNCompanyEdge2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐCompanyEdgeᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CompanyGroupByConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_CompanyEdge(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_pageInfo(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PageInfo, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *PageInfo) graphql.Marshaler {
+			return ec.marshalNPageInfo2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐPageInfo(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CompanyGroupByConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_PageInfo(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_groupByDimensionValues(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_groupByDimensionValues(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.GroupByDimensionValues, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v any) graphql.Marshaler {
+			return ec.marshalNJSON2interface(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_groupByDimensionValues(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "JSON")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countUniqueValuesAddress(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countUniqueValuesAddress(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesAddress, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countUniqueValuesAddress(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countEmptyAddress(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countEmptyAddress(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyAddress, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countEmptyAddress(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countNotEmptyAddress(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countNotEmptyAddress(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyAddress, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countNotEmptyAddress(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_percentageEmptyAddress(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_percentageEmptyAddress(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyAddress, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_percentageEmptyAddress(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_percentageNotEmptyAddress(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_percentageNotEmptyAddress(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyAddress, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_percentageNotEmptyAddress(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countUniqueValuesAnnualRevenue(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countUniqueValuesAnnualRevenue(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesAnnualRevenue, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countUniqueValuesAnnualRevenue(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countEmptyAnnualRevenue(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countEmptyAnnualRevenue(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyAnnualRevenue, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countEmptyAnnualRevenue(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countNotEmptyAnnualRevenue(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countNotEmptyAnnualRevenue(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyAnnualRevenue, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countNotEmptyAnnualRevenue(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_percentageEmptyAnnualRevenue(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_percentageEmptyAnnualRevenue(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyAnnualRevenue, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_percentageEmptyAnnualRevenue(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_percentageNotEmptyAnnualRevenue(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_percentageNotEmptyAnnualRevenue(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyAnnualRevenue, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_percentageNotEmptyAnnualRevenue(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_minAnnualRevenueAmountMicros(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_minAnnualRevenueAmountMicros(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MinAnnualRevenueAmountMicros, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_minAnnualRevenueAmountMicros(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_maxAnnualRevenueAmountMicros(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_maxAnnualRevenueAmountMicros(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MaxAnnualRevenueAmountMicros, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_maxAnnualRevenueAmountMicros(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_avgAnnualRevenueAmountMicros(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_avgAnnualRevenueAmountMicros(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AvgAnnualRevenueAmountMicros, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_avgAnnualRevenueAmountMicros(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_sumAnnualRevenueAmountMicros(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_sumAnnualRevenueAmountMicros(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SumAnnualRevenueAmountMicros, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_sumAnnualRevenueAmountMicros(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countUniqueValuesCreatedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countUniqueValuesCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countUniqueValuesCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countEmptyCreatedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countEmptyCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countEmptyCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countNotEmptyCreatedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countNotEmptyCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countNotEmptyCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_percentageEmptyCreatedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_percentageEmptyCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_percentageEmptyCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_percentageNotEmptyCreatedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_percentageNotEmptyCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_percentageNotEmptyCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_minCreatedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_minCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MinCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_minCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_maxCreatedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_maxCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MaxCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_maxCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countUniqueValuesCreatedBy(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countUniqueValuesCreatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesCreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countUniqueValuesCreatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countEmptyCreatedBy(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countEmptyCreatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyCreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countEmptyCreatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countNotEmptyCreatedBy(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countNotEmptyCreatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyCreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countNotEmptyCreatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_percentageEmptyCreatedBy(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_percentageEmptyCreatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyCreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_percentageEmptyCreatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_percentageNotEmptyCreatedBy(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_percentageNotEmptyCreatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyCreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_percentageNotEmptyCreatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countUniqueValuesDeletedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countUniqueValuesDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countUniqueValuesDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countEmptyDeletedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countEmptyDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countEmptyDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countNotEmptyDeletedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countNotEmptyDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countNotEmptyDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_percentageEmptyDeletedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_percentageEmptyDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_percentageEmptyDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_percentageNotEmptyDeletedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_percentageNotEmptyDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_percentageNotEmptyDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_minDeletedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_minDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MinDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_minDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_maxDeletedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_maxDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MaxDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_maxDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countUniqueValuesDomainName(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countUniqueValuesDomainName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesDomainName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countUniqueValuesDomainName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countEmptyDomainName(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countEmptyDomainName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyDomainName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countEmptyDomainName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countNotEmptyDomainName(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countNotEmptyDomainName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyDomainName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countNotEmptyDomainName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_percentageEmptyDomainName(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_percentageEmptyDomainName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyDomainName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_percentageEmptyDomainName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_percentageNotEmptyDomainName(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_percentageNotEmptyDomainName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyDomainName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_percentageNotEmptyDomainName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countUniqueValuesId(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countUniqueValuesId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countUniqueValuesId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countEmptyId(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countEmptyId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countEmptyId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countNotEmptyId(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countNotEmptyId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countNotEmptyId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_percentageEmptyId(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_percentageEmptyId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_percentageEmptyId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_percentageNotEmptyId(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_percentageNotEmptyId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_percentageNotEmptyId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countUniqueValuesLinkedinLink(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countUniqueValuesLinkedinLink(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesLinkedinLink, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countUniqueValuesLinkedinLink(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countEmptyLinkedinLink(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countEmptyLinkedinLink(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyLinkedinLink, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countEmptyLinkedinLink(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countNotEmptyLinkedinLink(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countNotEmptyLinkedinLink(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyLinkedinLink, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countNotEmptyLinkedinLink(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_percentageEmptyLinkedinLink(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_percentageEmptyLinkedinLink(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyLinkedinLink, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_percentageEmptyLinkedinLink(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_percentageNotEmptyLinkedinLink(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_percentageNotEmptyLinkedinLink(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyLinkedinLink, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_percentageNotEmptyLinkedinLink(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countUniqueValuesName(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countUniqueValuesName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countUniqueValuesName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countEmptyName(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countEmptyName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countEmptyName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countNotEmptyName(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countNotEmptyName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countNotEmptyName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_percentageEmptyName(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_percentageEmptyName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_percentageEmptyName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_percentageNotEmptyName(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_percentageNotEmptyName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_percentageNotEmptyName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countUniqueValuesPosition(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countUniqueValuesPosition(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesPosition, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countUniqueValuesPosition(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countEmptyPosition(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countEmptyPosition(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyPosition, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countEmptyPosition(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countNotEmptyPosition(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countNotEmptyPosition(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyPosition, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countNotEmptyPosition(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_percentageEmptyPosition(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_percentageEmptyPosition(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyPosition, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_percentageEmptyPosition(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_percentageNotEmptyPosition(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_percentageNotEmptyPosition(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyPosition, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_percentageNotEmptyPosition(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countUniqueValuesUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countUniqueValuesUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countUniqueValuesUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countEmptyUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countEmptyUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countEmptyUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countNotEmptyUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countNotEmptyUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countNotEmptyUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_percentageEmptyUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_percentageEmptyUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_percentageEmptyUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_percentageNotEmptyUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_percentageNotEmptyUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_percentageNotEmptyUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_minUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_minUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MinUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_minUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_maxUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_maxUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MaxUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_maxUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countUniqueValuesUpdatedBy(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countUniqueValuesUpdatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesUpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countUniqueValuesUpdatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countEmptyUpdatedBy(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countEmptyUpdatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyUpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countEmptyUpdatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_countNotEmptyUpdatedBy(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_countNotEmptyUpdatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyUpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_countNotEmptyUpdatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_percentageEmptyUpdatedBy(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_percentageEmptyUpdatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyUpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_percentageEmptyUpdatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _CompanyGroupByConnection_percentageNotEmptyUpdatedBy(ctx context.Context, field graphql.CollectedField, obj *CompanyGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CompanyGroupByConnection_percentageNotEmptyUpdatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyUpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CompanyGroupByConnection_percentageNotEmptyUpdatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CompanyGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _Currency_amountMicros(ctx context.Context, field graphql.CollectedField, obj *Currency) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Currency_amountMicros(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AmountMicros, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Currency_amountMicros(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Currency", field, false, false, "Float")
+}
+
+func (ec *executionContext) _Currency_currencyCode(ctx context.Context, field graphql.CollectedField, obj *Currency) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Currency_currencyCode(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CurrencyCode, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Currency_currencyCode(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Currency", field, false, false, "String")
 }
 
 func (ec *executionContext) _Emails_primaryEmail(ctx context.Context, field graphql.CollectedField, obj *Emails) (ret graphql.Marshaler) {
@@ -16518,6 +24005,3689 @@ func (ec *executionContext) fieldContext_NoteTargetGroupByConnection_percentageN
 	return graphql.NewScalarFieldContext("NoteTargetGroupByConnection", field, false, false, "Float")
 }
 
+func (ec *executionContext) _Opportunity_id(ctx context.Context, field graphql.CollectedField, obj *Opportunity) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Opportunity_id(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNUUID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Opportunity_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Opportunity", field, false, false, "UUID")
+}
+
+func (ec *executionContext) _Opportunity_name(ctx context.Context, field graphql.CollectedField, obj *Opportunity) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Opportunity_name(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Name, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Opportunity_name(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Opportunity", field, false, false, "String")
+}
+
+func (ec *executionContext) _Opportunity_amount(ctx context.Context, field graphql.CollectedField, obj *Opportunity) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Opportunity_amount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Amount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *Currency) graphql.Marshaler {
+			return ec.marshalOCurrency2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐCurrency(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Opportunity_amount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Opportunity",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_Currency(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Opportunity_closeDate(ctx context.Context, field graphql.CollectedField, obj *Opportunity) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Opportunity_closeDate(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CloseDate, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Opportunity_closeDate(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Opportunity", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _Opportunity_stage(ctx context.Context, field graphql.CollectedField, obj *Opportunity) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Opportunity_stage(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Stage, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *OpportunityStageEnum) graphql.Marshaler {
+			return ec.marshalOOpportunityStageEnum2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOpportunityStageEnum(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Opportunity_stage(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Opportunity", field, false, false, "OpportunityStageEnum")
+}
+
+func (ec *executionContext) _Opportunity_companyId(ctx context.Context, field graphql.CollectedField, obj *Opportunity) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Opportunity_companyId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CompanyID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOID2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Opportunity_companyId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Opportunity", field, false, false, "ID")
+}
+
+func (ec *executionContext) _Opportunity_pointOfContactId(ctx context.Context, field graphql.CollectedField, obj *Opportunity) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Opportunity_pointOfContactId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PointOfContactID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOID2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Opportunity_pointOfContactId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Opportunity", field, false, false, "ID")
+}
+
+func (ec *executionContext) _Opportunity_ownerId(ctx context.Context, field graphql.CollectedField, obj *Opportunity) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Opportunity_ownerId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.OwnerID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOID2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Opportunity_ownerId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Opportunity", field, false, false, "ID")
+}
+
+func (ec *executionContext) _Opportunity_position(ctx context.Context, field graphql.CollectedField, obj *Opportunity) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Opportunity_position(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Position, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v float64) graphql.Marshaler {
+			return ec.marshalNPosition2float64(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Opportunity_position(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Opportunity", field, false, false, "Position")
+}
+
+func (ec *executionContext) _Opportunity_createdBy(ctx context.Context, field graphql.CollectedField, obj *Opportunity) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Opportunity_createdBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *Actor) graphql.Marshaler {
+			return ec.marshalNActor2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐActor(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Opportunity_createdBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Opportunity",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_Actor(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Opportunity_updatedBy(ctx context.Context, field graphql.CollectedField, obj *Opportunity) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Opportunity_updatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *Actor) graphql.Marshaler {
+			return ec.marshalNActor2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐActor(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Opportunity_updatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Opportunity",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_Actor(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Opportunity_createdAt(ctx context.Context, field graphql.CollectedField, obj *Opportunity) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Opportunity_createdAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v time.Time) graphql.Marshaler {
+			return ec.marshalNDateTime2timeᚐTime(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Opportunity_createdAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Opportunity", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _Opportunity_updatedAt(ctx context.Context, field graphql.CollectedField, obj *Opportunity) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Opportunity_updatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v time.Time) graphql.Marshaler {
+			return ec.marshalNDateTime2timeᚐTime(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Opportunity_updatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Opportunity", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _Opportunity_deletedAt(ctx context.Context, field graphql.CollectedField, obj *Opportunity) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Opportunity_deletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Opportunity_deletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Opportunity", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _OpportunityConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_totalCount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TotalCount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityConnection_edges(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_edges(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Edges, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*OpportunityEdge) graphql.Marshaler {
+			return ec.marshalNOpportunityEdge2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOpportunityEdgeᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OpportunityConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_OpportunityEdge(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _OpportunityConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_pageInfo(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PageInfo, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *PageInfo) graphql.Marshaler {
+			return ec.marshalNPageInfo2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐPageInfo(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OpportunityConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_PageInfo(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _OpportunityConnection_countUniqueValuesAmount(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_countUniqueValuesAmount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesAmount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_countUniqueValuesAmount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityConnection_countEmptyAmount(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_countEmptyAmount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyAmount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_countEmptyAmount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityConnection_countNotEmptyAmount(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_countNotEmptyAmount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyAmount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_countNotEmptyAmount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityConnection_percentageEmptyAmount(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_percentageEmptyAmount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyAmount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_percentageEmptyAmount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityConnection_percentageNotEmptyAmount(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_percentageNotEmptyAmount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyAmount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_percentageNotEmptyAmount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityConnection_minAmountAmountMicros(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_minAmountAmountMicros(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MinAmountAmountMicros, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_minAmountAmountMicros(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityConnection_maxAmountAmountMicros(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_maxAmountAmountMicros(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MaxAmountAmountMicros, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_maxAmountAmountMicros(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityConnection_avgAmountAmountMicros(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_avgAmountAmountMicros(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AvgAmountAmountMicros, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_avgAmountAmountMicros(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityConnection_sumAmountAmountMicros(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_sumAmountAmountMicros(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SumAmountAmountMicros, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_sumAmountAmountMicros(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityConnection_countUniqueValuesCloseDate(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_countUniqueValuesCloseDate(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesCloseDate, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_countUniqueValuesCloseDate(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityConnection_countEmptyCloseDate(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_countEmptyCloseDate(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyCloseDate, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_countEmptyCloseDate(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityConnection_countNotEmptyCloseDate(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_countNotEmptyCloseDate(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyCloseDate, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_countNotEmptyCloseDate(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityConnection_percentageEmptyCloseDate(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_percentageEmptyCloseDate(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyCloseDate, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_percentageEmptyCloseDate(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityConnection_percentageNotEmptyCloseDate(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_percentageNotEmptyCloseDate(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyCloseDate, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_percentageNotEmptyCloseDate(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityConnection_minCloseDate(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_minCloseDate(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MinCloseDate, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_minCloseDate(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _OpportunityConnection_maxCloseDate(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_maxCloseDate(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MaxCloseDate, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_maxCloseDate(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _OpportunityConnection_countUniqueValuesCreatedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_countUniqueValuesCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_countUniqueValuesCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityConnection_countEmptyCreatedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_countEmptyCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_countEmptyCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityConnection_countNotEmptyCreatedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_countNotEmptyCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_countNotEmptyCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityConnection_percentageEmptyCreatedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_percentageEmptyCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_percentageEmptyCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityConnection_percentageNotEmptyCreatedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_percentageNotEmptyCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_percentageNotEmptyCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityConnection_minCreatedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_minCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MinCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_minCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _OpportunityConnection_maxCreatedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_maxCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MaxCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_maxCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _OpportunityConnection_countUniqueValuesCreatedBy(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_countUniqueValuesCreatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesCreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_countUniqueValuesCreatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityConnection_countEmptyCreatedBy(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_countEmptyCreatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyCreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_countEmptyCreatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityConnection_countNotEmptyCreatedBy(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_countNotEmptyCreatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyCreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_countNotEmptyCreatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityConnection_percentageEmptyCreatedBy(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_percentageEmptyCreatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyCreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_percentageEmptyCreatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityConnection_percentageNotEmptyCreatedBy(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_percentageNotEmptyCreatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyCreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_percentageNotEmptyCreatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityConnection_countUniqueValuesDeletedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_countUniqueValuesDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_countUniqueValuesDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityConnection_countEmptyDeletedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_countEmptyDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_countEmptyDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityConnection_countNotEmptyDeletedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_countNotEmptyDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_countNotEmptyDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityConnection_percentageEmptyDeletedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_percentageEmptyDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_percentageEmptyDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityConnection_percentageNotEmptyDeletedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_percentageNotEmptyDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_percentageNotEmptyDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityConnection_minDeletedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_minDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MinDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_minDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _OpportunityConnection_maxDeletedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_maxDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MaxDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_maxDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _OpportunityConnection_countUniqueValuesId(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_countUniqueValuesId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_countUniqueValuesId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityConnection_countEmptyId(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_countEmptyId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_countEmptyId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityConnection_countNotEmptyId(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_countNotEmptyId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_countNotEmptyId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityConnection_percentageEmptyId(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_percentageEmptyId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_percentageEmptyId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityConnection_percentageNotEmptyId(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_percentageNotEmptyId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_percentageNotEmptyId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityConnection_countUniqueValuesName(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_countUniqueValuesName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_countUniqueValuesName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityConnection_countEmptyName(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_countEmptyName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_countEmptyName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityConnection_countNotEmptyName(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_countNotEmptyName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_countNotEmptyName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityConnection_percentageEmptyName(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_percentageEmptyName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_percentageEmptyName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityConnection_percentageNotEmptyName(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_percentageNotEmptyName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_percentageNotEmptyName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityConnection_countUniqueValuesPosition(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_countUniqueValuesPosition(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesPosition, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_countUniqueValuesPosition(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityConnection_countEmptyPosition(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_countEmptyPosition(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyPosition, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_countEmptyPosition(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityConnection_countNotEmptyPosition(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_countNotEmptyPosition(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyPosition, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_countNotEmptyPosition(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityConnection_percentageEmptyPosition(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_percentageEmptyPosition(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyPosition, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_percentageEmptyPosition(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityConnection_percentageNotEmptyPosition(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_percentageNotEmptyPosition(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyPosition, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_percentageNotEmptyPosition(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityConnection_countUniqueValuesStage(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_countUniqueValuesStage(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesStage, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_countUniqueValuesStage(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityConnection_countEmptyStage(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_countEmptyStage(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyStage, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_countEmptyStage(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityConnection_countNotEmptyStage(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_countNotEmptyStage(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyStage, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_countNotEmptyStage(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityConnection_percentageEmptyStage(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_percentageEmptyStage(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyStage, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_percentageEmptyStage(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityConnection_percentageNotEmptyStage(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_percentageNotEmptyStage(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyStage, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_percentageNotEmptyStage(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityConnection_countUniqueValuesUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_countUniqueValuesUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_countUniqueValuesUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityConnection_countEmptyUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_countEmptyUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_countEmptyUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityConnection_countNotEmptyUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_countNotEmptyUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_countNotEmptyUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityConnection_percentageEmptyUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_percentageEmptyUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_percentageEmptyUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityConnection_percentageNotEmptyUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_percentageNotEmptyUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_percentageNotEmptyUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityConnection_minUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_minUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MinUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_minUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _OpportunityConnection_maxUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_maxUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MaxUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_maxUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _OpportunityConnection_countUniqueValuesUpdatedBy(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_countUniqueValuesUpdatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesUpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_countUniqueValuesUpdatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityConnection_countEmptyUpdatedBy(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_countEmptyUpdatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyUpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_countEmptyUpdatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityConnection_countNotEmptyUpdatedBy(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_countNotEmptyUpdatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyUpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_countNotEmptyUpdatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityConnection_percentageEmptyUpdatedBy(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_percentageEmptyUpdatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyUpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_percentageEmptyUpdatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityConnection_percentageNotEmptyUpdatedBy(ctx context.Context, field graphql.CollectedField, obj *OpportunityConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityConnection_percentageNotEmptyUpdatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyUpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityConnection_percentageNotEmptyUpdatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityEdge_node(ctx context.Context, field graphql.CollectedField, obj *OpportunityEdge) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityEdge_node(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Node, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *Opportunity) graphql.Marshaler {
+			return ec.marshalNOpportunity2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOpportunity(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityEdge_node(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OpportunityEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_Opportunity(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _OpportunityEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *OpportunityEdge) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityEdge_cursor(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Cursor, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNCursor2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityEdge_cursor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityEdge", field, false, false, "Cursor")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_totalCount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TotalCount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_edges(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_edges(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Edges, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*OpportunityEdge) graphql.Marshaler {
+			return ec.marshalNOpportunityEdge2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOpportunityEdgeᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OpportunityGroupByConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_OpportunityEdge(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_pageInfo(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PageInfo, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *PageInfo) graphql.Marshaler {
+			return ec.marshalNPageInfo2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐPageInfo(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OpportunityGroupByConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_PageInfo(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_groupByDimensionValues(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_groupByDimensionValues(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.GroupByDimensionValues, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v any) graphql.Marshaler {
+			return ec.marshalNJSON2interface(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_groupByDimensionValues(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "JSON")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_countUniqueValuesAmount(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_countUniqueValuesAmount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesAmount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_countUniqueValuesAmount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_countEmptyAmount(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_countEmptyAmount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyAmount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_countEmptyAmount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_countNotEmptyAmount(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_countNotEmptyAmount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyAmount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_countNotEmptyAmount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_percentageEmptyAmount(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_percentageEmptyAmount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyAmount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_percentageEmptyAmount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_percentageNotEmptyAmount(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_percentageNotEmptyAmount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyAmount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_percentageNotEmptyAmount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_minAmountAmountMicros(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_minAmountAmountMicros(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MinAmountAmountMicros, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_minAmountAmountMicros(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_maxAmountAmountMicros(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_maxAmountAmountMicros(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MaxAmountAmountMicros, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_maxAmountAmountMicros(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_avgAmountAmountMicros(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_avgAmountAmountMicros(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AvgAmountAmountMicros, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_avgAmountAmountMicros(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_sumAmountAmountMicros(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_sumAmountAmountMicros(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SumAmountAmountMicros, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_sumAmountAmountMicros(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_countUniqueValuesCloseDate(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_countUniqueValuesCloseDate(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesCloseDate, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_countUniqueValuesCloseDate(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_countEmptyCloseDate(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_countEmptyCloseDate(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyCloseDate, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_countEmptyCloseDate(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_countNotEmptyCloseDate(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_countNotEmptyCloseDate(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyCloseDate, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_countNotEmptyCloseDate(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_percentageEmptyCloseDate(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_percentageEmptyCloseDate(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyCloseDate, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_percentageEmptyCloseDate(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_percentageNotEmptyCloseDate(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_percentageNotEmptyCloseDate(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyCloseDate, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_percentageNotEmptyCloseDate(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_minCloseDate(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_minCloseDate(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MinCloseDate, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_minCloseDate(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_maxCloseDate(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_maxCloseDate(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MaxCloseDate, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_maxCloseDate(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_countUniqueValuesCreatedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_countUniqueValuesCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_countUniqueValuesCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_countEmptyCreatedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_countEmptyCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_countEmptyCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_countNotEmptyCreatedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_countNotEmptyCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_countNotEmptyCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_percentageEmptyCreatedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_percentageEmptyCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_percentageEmptyCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_percentageNotEmptyCreatedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_percentageNotEmptyCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_percentageNotEmptyCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_minCreatedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_minCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MinCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_minCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_maxCreatedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_maxCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MaxCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_maxCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_countUniqueValuesCreatedBy(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_countUniqueValuesCreatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesCreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_countUniqueValuesCreatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_countEmptyCreatedBy(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_countEmptyCreatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyCreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_countEmptyCreatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_countNotEmptyCreatedBy(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_countNotEmptyCreatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyCreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_countNotEmptyCreatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_percentageEmptyCreatedBy(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_percentageEmptyCreatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyCreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_percentageEmptyCreatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_percentageNotEmptyCreatedBy(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_percentageNotEmptyCreatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyCreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_percentageNotEmptyCreatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_countUniqueValuesDeletedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_countUniqueValuesDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_countUniqueValuesDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_countEmptyDeletedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_countEmptyDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_countEmptyDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_countNotEmptyDeletedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_countNotEmptyDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_countNotEmptyDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_percentageEmptyDeletedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_percentageEmptyDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_percentageEmptyDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_percentageNotEmptyDeletedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_percentageNotEmptyDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_percentageNotEmptyDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_minDeletedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_minDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MinDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_minDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_maxDeletedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_maxDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MaxDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_maxDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_countUniqueValuesId(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_countUniqueValuesId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_countUniqueValuesId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_countEmptyId(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_countEmptyId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_countEmptyId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_countNotEmptyId(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_countNotEmptyId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_countNotEmptyId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_percentageEmptyId(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_percentageEmptyId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_percentageEmptyId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_percentageNotEmptyId(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_percentageNotEmptyId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_percentageNotEmptyId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_countUniqueValuesName(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_countUniqueValuesName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_countUniqueValuesName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_countEmptyName(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_countEmptyName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_countEmptyName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_countNotEmptyName(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_countNotEmptyName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_countNotEmptyName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_percentageEmptyName(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_percentageEmptyName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_percentageEmptyName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_percentageNotEmptyName(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_percentageNotEmptyName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_percentageNotEmptyName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_countUniqueValuesPosition(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_countUniqueValuesPosition(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesPosition, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_countUniqueValuesPosition(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_countEmptyPosition(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_countEmptyPosition(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyPosition, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_countEmptyPosition(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_countNotEmptyPosition(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_countNotEmptyPosition(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyPosition, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_countNotEmptyPosition(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_percentageEmptyPosition(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_percentageEmptyPosition(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyPosition, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_percentageEmptyPosition(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_percentageNotEmptyPosition(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_percentageNotEmptyPosition(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyPosition, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_percentageNotEmptyPosition(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_countUniqueValuesStage(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_countUniqueValuesStage(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesStage, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_countUniqueValuesStage(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_countEmptyStage(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_countEmptyStage(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyStage, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_countEmptyStage(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_countNotEmptyStage(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_countNotEmptyStage(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyStage, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_countNotEmptyStage(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_percentageEmptyStage(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_percentageEmptyStage(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyStage, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_percentageEmptyStage(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_percentageNotEmptyStage(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_percentageNotEmptyStage(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyStage, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_percentageNotEmptyStage(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_countUniqueValuesUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_countUniqueValuesUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_countUniqueValuesUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_countEmptyUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_countEmptyUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_countEmptyUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_countNotEmptyUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_countNotEmptyUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_countNotEmptyUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_percentageEmptyUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_percentageEmptyUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_percentageEmptyUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_percentageNotEmptyUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_percentageNotEmptyUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_percentageNotEmptyUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_minUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_minUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MinUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_minUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_maxUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_maxUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MaxUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_maxUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_countUniqueValuesUpdatedBy(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_countUniqueValuesUpdatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesUpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_countUniqueValuesUpdatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_countEmptyUpdatedBy(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_countEmptyUpdatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyUpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_countEmptyUpdatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_countNotEmptyUpdatedBy(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_countNotEmptyUpdatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyUpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_countNotEmptyUpdatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_percentageEmptyUpdatedBy(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_percentageEmptyUpdatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyUpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_percentageEmptyUpdatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _OpportunityGroupByConnection_percentageNotEmptyUpdatedBy(ctx context.Context, field graphql.CollectedField, obj *OpportunityGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OpportunityGroupByConnection_percentageNotEmptyUpdatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyUpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OpportunityGroupByConnection_percentageNotEmptyUpdatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OpportunityGroupByConnection", field, false, false, "Float")
+}
+
 func (ec *executionContext) _PageInfo_startCursor(ctx context.Context, field graphql.CollectedField, obj *PageInfo) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -20917,6 +32087,270 @@ func (ec *executionContext) fieldContext_Query_person(ctx context.Context, field
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Query_person_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_companies(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_companies(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().Companies(ctx, fc.Args["filter"].(map[string]any), fc.Args["orderBy"].([]map[string]any), fc.Args["first"].(*int), fc.Args["last"].(*int), fc.Args["after"].(*string), fc.Args["before"].(*string), fc.Args["offset"].(*int))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *CompanyConnection) graphql.Marshaler {
+			return ec.marshalNCompanyConnection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐCompanyConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_companies(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_CompanyConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_companies_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_company(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_company(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().Company(ctx, fc.Args["filter"].(map[string]any))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *Company) graphql.Marshaler {
+			return ec.marshalOCompany2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐCompany(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Query_company(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_Company(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_company_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_companiesGroupBy(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_companiesGroupBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().CompaniesGroupBy(ctx, fc.Args["groupBy"].([]map[string]any), fc.Args["filter"].(map[string]any), fc.Args["orderBy"].([]map[string]any), fc.Args["orderByForRecords"].([]map[string]any), fc.Args["viewId"].(*string), fc.Args["limit"].(*int), fc.Args["offsetForRecords"].(*int))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*CompanyGroupByConnection) graphql.Marshaler {
+			return ec.marshalNCompanyGroupByConnection2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐCompanyGroupByConnectionᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_companiesGroupBy(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_CompanyGroupByConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_companiesGroupBy_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_opportunities(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_opportunities(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().Opportunities(ctx, fc.Args["filter"].(map[string]any), fc.Args["orderBy"].([]map[string]any), fc.Args["first"].(*int), fc.Args["last"].(*int), fc.Args["after"].(*string), fc.Args["before"].(*string), fc.Args["offset"].(*int))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *OpportunityConnection) graphql.Marshaler {
+			return ec.marshalNOpportunityConnection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOpportunityConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_opportunities(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_OpportunityConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_opportunities_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_opportunity(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_opportunity(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().Opportunity(ctx, fc.Args["filter"].(map[string]any))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *Opportunity) graphql.Marshaler {
+			return ec.marshalOOpportunity2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOpportunity(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Query_opportunity(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_Opportunity(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_opportunity_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_opportunitiesGroupBy(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_opportunitiesGroupBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().OpportunitiesGroupBy(ctx, fc.Args["groupBy"].([]map[string]any), fc.Args["filter"].(map[string]any), fc.Args["orderBy"].([]map[string]any), fc.Args["orderByForRecords"].([]map[string]any), fc.Args["viewId"].(*string), fc.Args["limit"].(*int), fc.Args["offsetForRecords"].(*int))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*OpportunityGroupByConnection) graphql.Marshaler {
+			return ec.marshalNOpportunityGroupByConnection2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOpportunityGroupByConnectionᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_opportunitiesGroupBy(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_OpportunityGroupByConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_opportunitiesGroupBy_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -28766,6 +40200,752 @@ func UnmarshalAdditionalPhoneInput(ctx context.Context, raw any) (AdditionalPhon
 	return out, err
 }
 
+func (ec *executionContext) unmarshalInputAddressFilter(ctx context.Context, obj any) (AddressFilter, error) {
+	var it AddressFilter
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"addressStreet1", "addressStreet2", "addressCity", "addressPostcode", "addressState", "addressCountry", "addressLat", "addressLng"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "addressStreet1":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addressStreet1"))
+			data, err := ec.unmarshalOStringFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐStringFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddressStreet1 = data
+		case "addressStreet2":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addressStreet2"))
+			data, err := ec.unmarshalOStringFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐStringFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddressStreet2 = data
+		case "addressCity":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addressCity"))
+			data, err := ec.unmarshalOStringFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐStringFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddressCity = data
+		case "addressPostcode":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addressPostcode"))
+			data, err := ec.unmarshalOStringFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐStringFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddressPostcode = data
+		case "addressState":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addressState"))
+			data, err := ec.unmarshalOStringFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐStringFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddressState = data
+		case "addressCountry":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addressCountry"))
+			data, err := ec.unmarshalOStringFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐStringFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddressCountry = data
+		case "addressLat":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addressLat"))
+			data, err := ec.unmarshalOFloatFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐFloatFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddressLat = data
+		case "addressLng":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addressLng"))
+			data, err := ec.unmarshalOFloatFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐFloatFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddressLng = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalAddressFilter unmarshals raw into the AddressFilter input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalAddressFilter(ctx context.Context, raw any) (AddressFilter, error) {
+	var out AddressFilter
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "AddressFilter", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputAddressGroupByInput(ctx context.Context, obj any) (AddressGroupByInput, error) {
+	var it AddressGroupByInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"addressStreet1", "addressStreet2", "addressCity", "addressPostcode", "addressState", "addressCountry"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "addressStreet1":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addressStreet1"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddressStreet1 = data
+		case "addressStreet2":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addressStreet2"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddressStreet2 = data
+		case "addressCity":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addressCity"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddressCity = data
+		case "addressPostcode":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addressPostcode"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddressPostcode = data
+		case "addressState":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addressState"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddressState = data
+		case "addressCountry":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addressCountry"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddressCountry = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalAddressGroupByInput unmarshals raw into the AddressGroupByInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalAddressGroupByInput(ctx context.Context, raw any) (AddressGroupByInput, error) {
+	var out AddressGroupByInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "AddressGroupByInput", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputAddressOrderByInput(ctx context.Context, obj any) (AddressOrderByInput, error) {
+	var it AddressOrderByInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"addressStreet1", "addressStreet2", "addressCity", "addressPostcode", "addressState", "addressCountry", "addressLat", "addressLng"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "addressStreet1":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addressStreet1"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddressStreet1 = data
+		case "addressStreet2":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addressStreet2"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddressStreet2 = data
+		case "addressCity":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addressCity"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddressCity = data
+		case "addressPostcode":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addressPostcode"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddressPostcode = data
+		case "addressState":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addressState"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddressState = data
+		case "addressCountry":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addressCountry"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddressCountry = data
+		case "addressLat":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addressLat"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddressLat = data
+		case "addressLng":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addressLng"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddressLng = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalAddressOrderByInput unmarshals raw into the AddressOrderByInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalAddressOrderByInput(ctx context.Context, raw any) (AddressOrderByInput, error) {
+	var out AddressOrderByInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "AddressOrderByInput", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputCompanyFilterInput(ctx context.Context, obj any) (map[string]any, error) {
+	var it map[string]any
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "domainName", "address", "linkedinLink", "annualRevenue", "accountOwnerId", "id", "position", "createdBy", "updatedBy", "createdAt", "updatedAt", "deletedAt", "and", "or", "not"}
+	it = make(map[string]any, len(asMap))
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalOStringFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐStringFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["name"] = data
+		case "domainName":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("domainName"))
+			data, err := ec.unmarshalOLinksFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐLinksFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["domainName"] = data
+		case "address":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("address"))
+			data, err := ec.unmarshalOAddressFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐAddressFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["address"] = data
+		case "linkedinLink":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("linkedinLink"))
+			data, err := ec.unmarshalOLinksFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐLinksFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["linkedinLink"] = data
+		case "annualRevenue":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("annualRevenue"))
+			data, err := ec.unmarshalOCurrencyFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐCurrencyFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["annualRevenue"] = data
+		case "accountOwnerId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("accountOwnerId"))
+			data, err := ec.unmarshalOUUIDFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐUUIDFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["accountOwnerId"] = data
+		case "id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalOUUIDFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐUUIDFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["id"] = data
+		case "position":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("position"))
+			data, err := ec.unmarshalOFloatFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐFloatFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["position"] = data
+		case "createdBy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdBy"))
+			data, err := ec.unmarshalOActorFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐActorFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["createdBy"] = data
+		case "updatedBy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedBy"))
+			data, err := ec.unmarshalOActorFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐActorFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["updatedBy"] = data
+		case "createdAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAt"))
+			data, err := ec.unmarshalODateTimeFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐDateTimeFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["createdAt"] = data
+		case "updatedAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAt"))
+			data, err := ec.unmarshalODateTimeFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐDateTimeFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["updatedAt"] = data
+		case "deletedAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("deletedAt"))
+			data, err := ec.unmarshalODateTimeFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐDateTimeFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["deletedAt"] = data
+		case "and":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
+			data, err := ec.unmarshalOCompanyFilterInput2ᚕmap(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["and"] = data
+		case "or":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
+			data, err := ec.unmarshalOCompanyFilterInput2ᚕmap(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["or"] = data
+		case "not":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
+			data, err := ec.unmarshalOCompanyFilterInput2map(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["not"] = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalCompanyFilterInput unmarshals raw into the CompanyFilterInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalCompanyFilterInput(ctx context.Context, raw any) (map[string]any, error) {
+	var out map[string]any
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "CompanyFilterInput", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputCompanyGroupByInput(ctx context.Context, obj any) (map[string]any, error) {
+	var it map[string]any
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "address", "accountOwner"}
+	it = make(map[string]any, len(asMap))
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["name"] = data
+		case "address":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("address"))
+			data, err := ec.unmarshalOAddressGroupByInput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐAddressGroupByInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["address"] = data
+		case "accountOwner":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("accountOwner"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["accountOwner"] = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalCompanyGroupByInput unmarshals raw into the CompanyGroupByInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalCompanyGroupByInput(ctx context.Context, raw any) (map[string]any, error) {
+	var out map[string]any
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "CompanyGroupByInput", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputCompanyOrderByInput(ctx context.Context, obj any) (map[string]any, error) {
+	var it map[string]any
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "domainName", "address", "linkedinLink", "annualRevenue", "accountOwnerId", "id", "position", "createdBy", "updatedBy", "createdAt", "updatedAt", "deletedAt"}
+	it = make(map[string]any, len(asMap))
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["name"] = data
+		case "domainName":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("domainName"))
+			data, err := ec.unmarshalOLinksOrderByInput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐLinksOrderByInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["domainName"] = data
+		case "address":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("address"))
+			data, err := ec.unmarshalOAddressOrderByInput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐAddressOrderByInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["address"] = data
+		case "linkedinLink":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("linkedinLink"))
+			data, err := ec.unmarshalOLinksOrderByInput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐLinksOrderByInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["linkedinLink"] = data
+		case "annualRevenue":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("annualRevenue"))
+			data, err := ec.unmarshalOCurrencyOrderByInput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐCurrencyOrderByInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["annualRevenue"] = data
+		case "accountOwnerId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("accountOwnerId"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["accountOwnerId"] = data
+		case "id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["id"] = data
+		case "position":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("position"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["position"] = data
+		case "createdBy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdBy"))
+			data, err := ec.unmarshalOActorOrderByInput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐActorOrderByInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["createdBy"] = data
+		case "updatedBy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedBy"))
+			data, err := ec.unmarshalOActorOrderByInput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐActorOrderByInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["updatedBy"] = data
+		case "createdAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAt"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["createdAt"] = data
+		case "updatedAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAt"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["updatedAt"] = data
+		case "deletedAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("deletedAt"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["deletedAt"] = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalCompanyOrderByInput unmarshals raw into the CompanyOrderByInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalCompanyOrderByInput(ctx context.Context, raw any) (map[string]any, error) {
+	var out map[string]any
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "CompanyOrderByInput", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputCompanyOrderByWithGroupByInput(ctx context.Context, obj any) (map[string]any, error) {
+	var it map[string]any
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "address", "accountOwner"}
+	it = make(map[string]any, len(asMap))
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["name"] = data
+		case "address":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("address"))
+			data, err := ec.unmarshalOAddressOrderByInput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐAddressOrderByInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["address"] = data
+		case "accountOwner":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("accountOwner"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["accountOwner"] = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalCompanyOrderByWithGroupByInput unmarshals raw into the CompanyOrderByWithGroupByInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalCompanyOrderByWithGroupByInput(ctx context.Context, raw any) (map[string]any, error) {
+	var out map[string]any
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "CompanyOrderByWithGroupByInput", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputCurrencyFilter(ctx context.Context, obj any) (CurrencyFilter, error) {
+	var it CurrencyFilter
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"amountMicros", "currencyCode"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "amountMicros":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("amountMicros"))
+			data, err := ec.unmarshalOFloatFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐFloatFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AmountMicros = data
+		case "currencyCode":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("currencyCode"))
+			data, err := ec.unmarshalOStringFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐStringFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CurrencyCode = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalCurrencyFilter unmarshals raw into the CurrencyFilter input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalCurrencyFilter(ctx context.Context, raw any) (CurrencyFilter, error) {
+	var out CurrencyFilter
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "CurrencyFilter", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputCurrencyOrderByInput(ctx context.Context, obj any) (CurrencyOrderByInput, error) {
+	var it CurrencyOrderByInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"amountMicros", "currencyCode"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "amountMicros":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("amountMicros"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AmountMicros = data
+		case "currencyCode":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("currencyCode"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CurrencyCode = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalCurrencyOrderByInput unmarshals raw into the CurrencyOrderByInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalCurrencyOrderByInput(ctx context.Context, raw any) (CurrencyOrderByInput, error) {
+	var out CurrencyOrderByInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "CurrencyOrderByInput", raw, &out)
+	return out, err
+}
+
 func (ec *executionContext) unmarshalInputDateTimeFilter(ctx context.Context, obj any) (DateTimeFilter, error) {
 	var it DateTimeFilter
 	if obj == nil {
@@ -30437,6 +42617,500 @@ func (ec *executionContext) unmarshalInputNoteUpdateInput(ctx context.Context, o
 func UnmarshalNoteUpdateInput(ctx context.Context, raw any) (NoteUpdateInput, error) {
 	var out NoteUpdateInput
 	err := graphql.UnmarshalNamedInputFromContext(ctx, "NoteUpdateInput", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputOpportunityFilterInput(ctx context.Context, obj any) (map[string]any, error) {
+	var it map[string]any
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "amount", "closeDate", "stage", "companyId", "pointOfContactId", "ownerId", "id", "position", "createdBy", "updatedBy", "createdAt", "updatedAt", "deletedAt", "and", "or", "not"}
+	it = make(map[string]any, len(asMap))
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalOStringFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐStringFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["name"] = data
+		case "amount":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("amount"))
+			data, err := ec.unmarshalOCurrencyFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐCurrencyFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["amount"] = data
+		case "closeDate":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("closeDate"))
+			data, err := ec.unmarshalODateTimeFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐDateTimeFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["closeDate"] = data
+		case "stage":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("stage"))
+			data, err := ec.unmarshalOOpportunityStageEnumFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOpportunityStageEnumFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["stage"] = data
+		case "companyId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("companyId"))
+			data, err := ec.unmarshalOUUIDFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐUUIDFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["companyId"] = data
+		case "pointOfContactId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pointOfContactId"))
+			data, err := ec.unmarshalOUUIDFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐUUIDFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["pointOfContactId"] = data
+		case "ownerId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerId"))
+			data, err := ec.unmarshalOUUIDFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐUUIDFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["ownerId"] = data
+		case "id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalOUUIDFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐUUIDFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["id"] = data
+		case "position":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("position"))
+			data, err := ec.unmarshalOFloatFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐFloatFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["position"] = data
+		case "createdBy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdBy"))
+			data, err := ec.unmarshalOActorFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐActorFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["createdBy"] = data
+		case "updatedBy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedBy"))
+			data, err := ec.unmarshalOActorFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐActorFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["updatedBy"] = data
+		case "createdAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAt"))
+			data, err := ec.unmarshalODateTimeFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐDateTimeFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["createdAt"] = data
+		case "updatedAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAt"))
+			data, err := ec.unmarshalODateTimeFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐDateTimeFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["updatedAt"] = data
+		case "deletedAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("deletedAt"))
+			data, err := ec.unmarshalODateTimeFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐDateTimeFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["deletedAt"] = data
+		case "and":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
+			data, err := ec.unmarshalOOpportunityFilterInput2ᚕmap(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["and"] = data
+		case "or":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
+			data, err := ec.unmarshalOOpportunityFilterInput2ᚕmap(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["or"] = data
+		case "not":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
+			data, err := ec.unmarshalOOpportunityFilterInput2map(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["not"] = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalOpportunityFilterInput unmarshals raw into the OpportunityFilterInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalOpportunityFilterInput(ctx context.Context, raw any) (map[string]any, error) {
+	var out map[string]any
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "OpportunityFilterInput", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputOpportunityGroupByInput(ctx context.Context, obj any) (map[string]any, error) {
+	var it map[string]any
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "stage", "company", "pointOfContact", "owner"}
+	it = make(map[string]any, len(asMap))
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["name"] = data
+		case "stage":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("stage"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["stage"] = data
+		case "company":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("company"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["company"] = data
+		case "pointOfContact":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pointOfContact"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["pointOfContact"] = data
+		case "owner":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("owner"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["owner"] = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalOpportunityGroupByInput unmarshals raw into the OpportunityGroupByInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalOpportunityGroupByInput(ctx context.Context, raw any) (map[string]any, error) {
+	var out map[string]any
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "OpportunityGroupByInput", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputOpportunityOrderByInput(ctx context.Context, obj any) (map[string]any, error) {
+	var it map[string]any
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "amount", "closeDate", "stage", "companyId", "pointOfContactId", "ownerId", "id", "position", "createdBy", "updatedBy", "createdAt", "updatedAt", "deletedAt"}
+	it = make(map[string]any, len(asMap))
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["name"] = data
+		case "amount":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("amount"))
+			data, err := ec.unmarshalOCurrencyOrderByInput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐCurrencyOrderByInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["amount"] = data
+		case "closeDate":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("closeDate"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["closeDate"] = data
+		case "stage":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("stage"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["stage"] = data
+		case "companyId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("companyId"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["companyId"] = data
+		case "pointOfContactId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pointOfContactId"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["pointOfContactId"] = data
+		case "ownerId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerId"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["ownerId"] = data
+		case "id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["id"] = data
+		case "position":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("position"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["position"] = data
+		case "createdBy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdBy"))
+			data, err := ec.unmarshalOActorOrderByInput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐActorOrderByInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["createdBy"] = data
+		case "updatedBy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedBy"))
+			data, err := ec.unmarshalOActorOrderByInput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐActorOrderByInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["updatedBy"] = data
+		case "createdAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAt"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["createdAt"] = data
+		case "updatedAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAt"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["updatedAt"] = data
+		case "deletedAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("deletedAt"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["deletedAt"] = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalOpportunityOrderByInput unmarshals raw into the OpportunityOrderByInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalOpportunityOrderByInput(ctx context.Context, raw any) (map[string]any, error) {
+	var out map[string]any
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "OpportunityOrderByInput", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputOpportunityOrderByWithGroupByInput(ctx context.Context, obj any) (map[string]any, error) {
+	var it map[string]any
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "stage", "company", "pointOfContact", "owner"}
+	it = make(map[string]any, len(asMap))
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["name"] = data
+		case "stage":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("stage"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["stage"] = data
+		case "company":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("company"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["company"] = data
+		case "pointOfContact":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pointOfContact"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["pointOfContact"] = data
+		case "owner":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("owner"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["owner"] = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalOpportunityOrderByWithGroupByInput unmarshals raw into the OpportunityOrderByWithGroupByInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalOpportunityOrderByWithGroupByInput(ctx context.Context, raw any) (map[string]any, error) {
+	var out map[string]any
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "OpportunityOrderByWithGroupByInput", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputOpportunityStageEnumFilter(ctx context.Context, obj any) (OpportunityStageEnumFilter, error) {
+	var it OpportunityStageEnumFilter
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"eq", "neq", "in", "is"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "eq":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("eq"))
+			data, err := ec.unmarshalOOpportunityStageEnum2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOpportunityStageEnum(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Eq = data
+		case "neq":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("neq"))
+			data, err := ec.unmarshalOOpportunityStageEnum2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOpportunityStageEnum(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Neq = data
+		case "in":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("in"))
+			data, err := ec.unmarshalOOpportunityStageEnum2ᚕgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOpportunityStageEnumᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.In = data
+		case "is":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("is"))
+			data, err := ec.unmarshalOFilterIs2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐFilterIs(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Is = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalOpportunityStageEnumFilter unmarshals raw into the OpportunityStageEnumFilter input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalOpportunityStageEnumFilter(ctx context.Context, raw any) (OpportunityStageEnumFilter, error) {
+	var out OpportunityStageEnumFilter
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "OpportunityStageEnumFilter", raw, &out)
 	return out, err
 }
 
@@ -32793,6 +45467,1034 @@ func (ec *executionContext) _AdditionalPhone(ctx context.Context, sel ast.Select
 	return out
 }
 
+var addressImplementors = []string{"Address"}
+
+func (ec *executionContext) _Address(ctx context.Context, sel ast.SelectionSet, obj *Address) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, addressImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Address")
+		case "addressStreet1":
+			out.Values[i] = ec._Address_addressStreet1(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "addressStreet2":
+			out.Values[i] = ec._Address_addressStreet2(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "addressCity":
+			out.Values[i] = ec._Address_addressCity(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "addressPostcode":
+			out.Values[i] = ec._Address_addressPostcode(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "addressState":
+			out.Values[i] = ec._Address_addressState(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "addressCountry":
+			out.Values[i] = ec._Address_addressCountry(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "addressLat":
+			out.Values[i] = ec._Address_addressLat(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "addressLng":
+			out.Values[i] = ec._Address_addressLng(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var companyImplementors = []string{"Company"}
+
+func (ec *executionContext) _Company(ctx context.Context, sel ast.SelectionSet, obj *Company) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, companyImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Company")
+		case "id":
+			out.Values[i] = ec._Company_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "name":
+			out.Values[i] = ec._Company_name(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "domainName":
+			out.Values[i] = ec._Company_domainName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "address":
+			out.Values[i] = ec._Company_address(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "linkedinLink":
+			out.Values[i] = ec._Company_linkedinLink(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "annualRevenue":
+			out.Values[i] = ec._Company_annualRevenue(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "accountOwnerId":
+			out.Values[i] = ec._Company_accountOwnerId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "position":
+			out.Values[i] = ec._Company_position(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createdBy":
+			out.Values[i] = ec._Company_createdBy(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedBy":
+			out.Values[i] = ec._Company_updatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createdAt":
+			out.Values[i] = ec._Company_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._Company_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deletedAt":
+			out.Values[i] = ec._Company_deletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var companyConnectionImplementors = []string{"CompanyConnection"}
+
+func (ec *executionContext) _CompanyConnection(ctx context.Context, sel ast.SelectionSet, obj *CompanyConnection) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, companyConnectionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("CompanyConnection")
+		case "totalCount":
+			out.Values[i] = ec._CompanyConnection_totalCount(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "edges":
+			out.Values[i] = ec._CompanyConnection_edges(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "pageInfo":
+			out.Values[i] = ec._CompanyConnection_pageInfo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "countUniqueValuesAddress":
+			out.Values[i] = ec._CompanyConnection_countUniqueValuesAddress(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyAddress":
+			out.Values[i] = ec._CompanyConnection_countEmptyAddress(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyAddress":
+			out.Values[i] = ec._CompanyConnection_countNotEmptyAddress(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyAddress":
+			out.Values[i] = ec._CompanyConnection_percentageEmptyAddress(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyAddress":
+			out.Values[i] = ec._CompanyConnection_percentageNotEmptyAddress(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesAnnualRevenue":
+			out.Values[i] = ec._CompanyConnection_countUniqueValuesAnnualRevenue(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyAnnualRevenue":
+			out.Values[i] = ec._CompanyConnection_countEmptyAnnualRevenue(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyAnnualRevenue":
+			out.Values[i] = ec._CompanyConnection_countNotEmptyAnnualRevenue(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyAnnualRevenue":
+			out.Values[i] = ec._CompanyConnection_percentageEmptyAnnualRevenue(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyAnnualRevenue":
+			out.Values[i] = ec._CompanyConnection_percentageNotEmptyAnnualRevenue(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "minAnnualRevenueAmountMicros":
+			out.Values[i] = ec._CompanyConnection_minAnnualRevenueAmountMicros(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "maxAnnualRevenueAmountMicros":
+			out.Values[i] = ec._CompanyConnection_maxAnnualRevenueAmountMicros(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "avgAnnualRevenueAmountMicros":
+			out.Values[i] = ec._CompanyConnection_avgAnnualRevenueAmountMicros(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "sumAnnualRevenueAmountMicros":
+			out.Values[i] = ec._CompanyConnection_sumAnnualRevenueAmountMicros(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesCreatedAt":
+			out.Values[i] = ec._CompanyConnection_countUniqueValuesCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyCreatedAt":
+			out.Values[i] = ec._CompanyConnection_countEmptyCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyCreatedAt":
+			out.Values[i] = ec._CompanyConnection_countNotEmptyCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyCreatedAt":
+			out.Values[i] = ec._CompanyConnection_percentageEmptyCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyCreatedAt":
+			out.Values[i] = ec._CompanyConnection_percentageNotEmptyCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "minCreatedAt":
+			out.Values[i] = ec._CompanyConnection_minCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "maxCreatedAt":
+			out.Values[i] = ec._CompanyConnection_maxCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesCreatedBy":
+			out.Values[i] = ec._CompanyConnection_countUniqueValuesCreatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyCreatedBy":
+			out.Values[i] = ec._CompanyConnection_countEmptyCreatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyCreatedBy":
+			out.Values[i] = ec._CompanyConnection_countNotEmptyCreatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyCreatedBy":
+			out.Values[i] = ec._CompanyConnection_percentageEmptyCreatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyCreatedBy":
+			out.Values[i] = ec._CompanyConnection_percentageNotEmptyCreatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesDeletedAt":
+			out.Values[i] = ec._CompanyConnection_countUniqueValuesDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyDeletedAt":
+			out.Values[i] = ec._CompanyConnection_countEmptyDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyDeletedAt":
+			out.Values[i] = ec._CompanyConnection_countNotEmptyDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyDeletedAt":
+			out.Values[i] = ec._CompanyConnection_percentageEmptyDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyDeletedAt":
+			out.Values[i] = ec._CompanyConnection_percentageNotEmptyDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "minDeletedAt":
+			out.Values[i] = ec._CompanyConnection_minDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "maxDeletedAt":
+			out.Values[i] = ec._CompanyConnection_maxDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesDomainName":
+			out.Values[i] = ec._CompanyConnection_countUniqueValuesDomainName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyDomainName":
+			out.Values[i] = ec._CompanyConnection_countEmptyDomainName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyDomainName":
+			out.Values[i] = ec._CompanyConnection_countNotEmptyDomainName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyDomainName":
+			out.Values[i] = ec._CompanyConnection_percentageEmptyDomainName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyDomainName":
+			out.Values[i] = ec._CompanyConnection_percentageNotEmptyDomainName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesId":
+			out.Values[i] = ec._CompanyConnection_countUniqueValuesId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyId":
+			out.Values[i] = ec._CompanyConnection_countEmptyId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyId":
+			out.Values[i] = ec._CompanyConnection_countNotEmptyId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyId":
+			out.Values[i] = ec._CompanyConnection_percentageEmptyId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyId":
+			out.Values[i] = ec._CompanyConnection_percentageNotEmptyId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesLinkedinLink":
+			out.Values[i] = ec._CompanyConnection_countUniqueValuesLinkedinLink(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyLinkedinLink":
+			out.Values[i] = ec._CompanyConnection_countEmptyLinkedinLink(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyLinkedinLink":
+			out.Values[i] = ec._CompanyConnection_countNotEmptyLinkedinLink(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyLinkedinLink":
+			out.Values[i] = ec._CompanyConnection_percentageEmptyLinkedinLink(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyLinkedinLink":
+			out.Values[i] = ec._CompanyConnection_percentageNotEmptyLinkedinLink(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesName":
+			out.Values[i] = ec._CompanyConnection_countUniqueValuesName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyName":
+			out.Values[i] = ec._CompanyConnection_countEmptyName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyName":
+			out.Values[i] = ec._CompanyConnection_countNotEmptyName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyName":
+			out.Values[i] = ec._CompanyConnection_percentageEmptyName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyName":
+			out.Values[i] = ec._CompanyConnection_percentageNotEmptyName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesPosition":
+			out.Values[i] = ec._CompanyConnection_countUniqueValuesPosition(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyPosition":
+			out.Values[i] = ec._CompanyConnection_countEmptyPosition(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyPosition":
+			out.Values[i] = ec._CompanyConnection_countNotEmptyPosition(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyPosition":
+			out.Values[i] = ec._CompanyConnection_percentageEmptyPosition(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyPosition":
+			out.Values[i] = ec._CompanyConnection_percentageNotEmptyPosition(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesUpdatedAt":
+			out.Values[i] = ec._CompanyConnection_countUniqueValuesUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyUpdatedAt":
+			out.Values[i] = ec._CompanyConnection_countEmptyUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyUpdatedAt":
+			out.Values[i] = ec._CompanyConnection_countNotEmptyUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyUpdatedAt":
+			out.Values[i] = ec._CompanyConnection_percentageEmptyUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyUpdatedAt":
+			out.Values[i] = ec._CompanyConnection_percentageNotEmptyUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "minUpdatedAt":
+			out.Values[i] = ec._CompanyConnection_minUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "maxUpdatedAt":
+			out.Values[i] = ec._CompanyConnection_maxUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesUpdatedBy":
+			out.Values[i] = ec._CompanyConnection_countUniqueValuesUpdatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyUpdatedBy":
+			out.Values[i] = ec._CompanyConnection_countEmptyUpdatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyUpdatedBy":
+			out.Values[i] = ec._CompanyConnection_countNotEmptyUpdatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyUpdatedBy":
+			out.Values[i] = ec._CompanyConnection_percentageEmptyUpdatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyUpdatedBy":
+			out.Values[i] = ec._CompanyConnection_percentageNotEmptyUpdatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var companyEdgeImplementors = []string{"CompanyEdge"}
+
+func (ec *executionContext) _CompanyEdge(ctx context.Context, sel ast.SelectionSet, obj *CompanyEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, companyEdgeImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("CompanyEdge")
+		case "node":
+			out.Values[i] = ec._CompanyEdge_node(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "cursor":
+			out.Values[i] = ec._CompanyEdge_cursor(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var companyGroupByConnectionImplementors = []string{"CompanyGroupByConnection"}
+
+func (ec *executionContext) _CompanyGroupByConnection(ctx context.Context, sel ast.SelectionSet, obj *CompanyGroupByConnection) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, companyGroupByConnectionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("CompanyGroupByConnection")
+		case "totalCount":
+			out.Values[i] = ec._CompanyGroupByConnection_totalCount(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "edges":
+			out.Values[i] = ec._CompanyGroupByConnection_edges(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "pageInfo":
+			out.Values[i] = ec._CompanyGroupByConnection_pageInfo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "groupByDimensionValues":
+			out.Values[i] = ec._CompanyGroupByConnection_groupByDimensionValues(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "countUniqueValuesAddress":
+			out.Values[i] = ec._CompanyGroupByConnection_countUniqueValuesAddress(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyAddress":
+			out.Values[i] = ec._CompanyGroupByConnection_countEmptyAddress(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyAddress":
+			out.Values[i] = ec._CompanyGroupByConnection_countNotEmptyAddress(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyAddress":
+			out.Values[i] = ec._CompanyGroupByConnection_percentageEmptyAddress(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyAddress":
+			out.Values[i] = ec._CompanyGroupByConnection_percentageNotEmptyAddress(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesAnnualRevenue":
+			out.Values[i] = ec._CompanyGroupByConnection_countUniqueValuesAnnualRevenue(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyAnnualRevenue":
+			out.Values[i] = ec._CompanyGroupByConnection_countEmptyAnnualRevenue(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyAnnualRevenue":
+			out.Values[i] = ec._CompanyGroupByConnection_countNotEmptyAnnualRevenue(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyAnnualRevenue":
+			out.Values[i] = ec._CompanyGroupByConnection_percentageEmptyAnnualRevenue(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyAnnualRevenue":
+			out.Values[i] = ec._CompanyGroupByConnection_percentageNotEmptyAnnualRevenue(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "minAnnualRevenueAmountMicros":
+			out.Values[i] = ec._CompanyGroupByConnection_minAnnualRevenueAmountMicros(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "maxAnnualRevenueAmountMicros":
+			out.Values[i] = ec._CompanyGroupByConnection_maxAnnualRevenueAmountMicros(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "avgAnnualRevenueAmountMicros":
+			out.Values[i] = ec._CompanyGroupByConnection_avgAnnualRevenueAmountMicros(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "sumAnnualRevenueAmountMicros":
+			out.Values[i] = ec._CompanyGroupByConnection_sumAnnualRevenueAmountMicros(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesCreatedAt":
+			out.Values[i] = ec._CompanyGroupByConnection_countUniqueValuesCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyCreatedAt":
+			out.Values[i] = ec._CompanyGroupByConnection_countEmptyCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyCreatedAt":
+			out.Values[i] = ec._CompanyGroupByConnection_countNotEmptyCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyCreatedAt":
+			out.Values[i] = ec._CompanyGroupByConnection_percentageEmptyCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyCreatedAt":
+			out.Values[i] = ec._CompanyGroupByConnection_percentageNotEmptyCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "minCreatedAt":
+			out.Values[i] = ec._CompanyGroupByConnection_minCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "maxCreatedAt":
+			out.Values[i] = ec._CompanyGroupByConnection_maxCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesCreatedBy":
+			out.Values[i] = ec._CompanyGroupByConnection_countUniqueValuesCreatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyCreatedBy":
+			out.Values[i] = ec._CompanyGroupByConnection_countEmptyCreatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyCreatedBy":
+			out.Values[i] = ec._CompanyGroupByConnection_countNotEmptyCreatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyCreatedBy":
+			out.Values[i] = ec._CompanyGroupByConnection_percentageEmptyCreatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyCreatedBy":
+			out.Values[i] = ec._CompanyGroupByConnection_percentageNotEmptyCreatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesDeletedAt":
+			out.Values[i] = ec._CompanyGroupByConnection_countUniqueValuesDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyDeletedAt":
+			out.Values[i] = ec._CompanyGroupByConnection_countEmptyDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyDeletedAt":
+			out.Values[i] = ec._CompanyGroupByConnection_countNotEmptyDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyDeletedAt":
+			out.Values[i] = ec._CompanyGroupByConnection_percentageEmptyDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyDeletedAt":
+			out.Values[i] = ec._CompanyGroupByConnection_percentageNotEmptyDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "minDeletedAt":
+			out.Values[i] = ec._CompanyGroupByConnection_minDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "maxDeletedAt":
+			out.Values[i] = ec._CompanyGroupByConnection_maxDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesDomainName":
+			out.Values[i] = ec._CompanyGroupByConnection_countUniqueValuesDomainName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyDomainName":
+			out.Values[i] = ec._CompanyGroupByConnection_countEmptyDomainName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyDomainName":
+			out.Values[i] = ec._CompanyGroupByConnection_countNotEmptyDomainName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyDomainName":
+			out.Values[i] = ec._CompanyGroupByConnection_percentageEmptyDomainName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyDomainName":
+			out.Values[i] = ec._CompanyGroupByConnection_percentageNotEmptyDomainName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesId":
+			out.Values[i] = ec._CompanyGroupByConnection_countUniqueValuesId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyId":
+			out.Values[i] = ec._CompanyGroupByConnection_countEmptyId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyId":
+			out.Values[i] = ec._CompanyGroupByConnection_countNotEmptyId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyId":
+			out.Values[i] = ec._CompanyGroupByConnection_percentageEmptyId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyId":
+			out.Values[i] = ec._CompanyGroupByConnection_percentageNotEmptyId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesLinkedinLink":
+			out.Values[i] = ec._CompanyGroupByConnection_countUniqueValuesLinkedinLink(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyLinkedinLink":
+			out.Values[i] = ec._CompanyGroupByConnection_countEmptyLinkedinLink(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyLinkedinLink":
+			out.Values[i] = ec._CompanyGroupByConnection_countNotEmptyLinkedinLink(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyLinkedinLink":
+			out.Values[i] = ec._CompanyGroupByConnection_percentageEmptyLinkedinLink(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyLinkedinLink":
+			out.Values[i] = ec._CompanyGroupByConnection_percentageNotEmptyLinkedinLink(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesName":
+			out.Values[i] = ec._CompanyGroupByConnection_countUniqueValuesName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyName":
+			out.Values[i] = ec._CompanyGroupByConnection_countEmptyName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyName":
+			out.Values[i] = ec._CompanyGroupByConnection_countNotEmptyName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyName":
+			out.Values[i] = ec._CompanyGroupByConnection_percentageEmptyName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyName":
+			out.Values[i] = ec._CompanyGroupByConnection_percentageNotEmptyName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesPosition":
+			out.Values[i] = ec._CompanyGroupByConnection_countUniqueValuesPosition(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyPosition":
+			out.Values[i] = ec._CompanyGroupByConnection_countEmptyPosition(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyPosition":
+			out.Values[i] = ec._CompanyGroupByConnection_countNotEmptyPosition(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyPosition":
+			out.Values[i] = ec._CompanyGroupByConnection_percentageEmptyPosition(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyPosition":
+			out.Values[i] = ec._CompanyGroupByConnection_percentageNotEmptyPosition(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesUpdatedAt":
+			out.Values[i] = ec._CompanyGroupByConnection_countUniqueValuesUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyUpdatedAt":
+			out.Values[i] = ec._CompanyGroupByConnection_countEmptyUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyUpdatedAt":
+			out.Values[i] = ec._CompanyGroupByConnection_countNotEmptyUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyUpdatedAt":
+			out.Values[i] = ec._CompanyGroupByConnection_percentageEmptyUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyUpdatedAt":
+			out.Values[i] = ec._CompanyGroupByConnection_percentageNotEmptyUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "minUpdatedAt":
+			out.Values[i] = ec._CompanyGroupByConnection_minUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "maxUpdatedAt":
+			out.Values[i] = ec._CompanyGroupByConnection_maxUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesUpdatedBy":
+			out.Values[i] = ec._CompanyGroupByConnection_countUniqueValuesUpdatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyUpdatedBy":
+			out.Values[i] = ec._CompanyGroupByConnection_countEmptyUpdatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyUpdatedBy":
+			out.Values[i] = ec._CompanyGroupByConnection_countNotEmptyUpdatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyUpdatedBy":
+			out.Values[i] = ec._CompanyGroupByConnection_percentageEmptyUpdatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyUpdatedBy":
+			out.Values[i] = ec._CompanyGroupByConnection_percentageNotEmptyUpdatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var currencyImplementors = []string{"Currency"}
+
+func (ec *executionContext) _Currency(ctx context.Context, sel ast.SelectionSet, obj *Currency) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, currencyImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Currency")
+		case "amountMicros":
+			out.Values[i] = ec._Currency_amountMicros(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "currencyCode":
+			out.Values[i] = ec._Currency_currencyCode(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
 var emailsImplementors = []string{"Emails"}
 
 func (ec *executionContext) _Emails(ctx context.Context, sel ast.SelectionSet, obj *Emails) graphql.Marshaler {
@@ -34597,6 +48299,903 @@ func (ec *executionContext) _NoteTargetGroupByConnection(ctx context.Context, se
 	return out
 }
 
+var opportunityImplementors = []string{"Opportunity"}
+
+func (ec *executionContext) _Opportunity(ctx context.Context, sel ast.SelectionSet, obj *Opportunity) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, opportunityImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Opportunity")
+		case "id":
+			out.Values[i] = ec._Opportunity_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "name":
+			out.Values[i] = ec._Opportunity_name(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "amount":
+			out.Values[i] = ec._Opportunity_amount(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "closeDate":
+			out.Values[i] = ec._Opportunity_closeDate(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "stage":
+			out.Values[i] = ec._Opportunity_stage(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "companyId":
+			out.Values[i] = ec._Opportunity_companyId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "pointOfContactId":
+			out.Values[i] = ec._Opportunity_pointOfContactId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "ownerId":
+			out.Values[i] = ec._Opportunity_ownerId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "position":
+			out.Values[i] = ec._Opportunity_position(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createdBy":
+			out.Values[i] = ec._Opportunity_createdBy(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedBy":
+			out.Values[i] = ec._Opportunity_updatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createdAt":
+			out.Values[i] = ec._Opportunity_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._Opportunity_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deletedAt":
+			out.Values[i] = ec._Opportunity_deletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var opportunityConnectionImplementors = []string{"OpportunityConnection"}
+
+func (ec *executionContext) _OpportunityConnection(ctx context.Context, sel ast.SelectionSet, obj *OpportunityConnection) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, opportunityConnectionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("OpportunityConnection")
+		case "totalCount":
+			out.Values[i] = ec._OpportunityConnection_totalCount(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "edges":
+			out.Values[i] = ec._OpportunityConnection_edges(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "pageInfo":
+			out.Values[i] = ec._OpportunityConnection_pageInfo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "countUniqueValuesAmount":
+			out.Values[i] = ec._OpportunityConnection_countUniqueValuesAmount(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyAmount":
+			out.Values[i] = ec._OpportunityConnection_countEmptyAmount(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyAmount":
+			out.Values[i] = ec._OpportunityConnection_countNotEmptyAmount(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyAmount":
+			out.Values[i] = ec._OpportunityConnection_percentageEmptyAmount(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyAmount":
+			out.Values[i] = ec._OpportunityConnection_percentageNotEmptyAmount(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "minAmountAmountMicros":
+			out.Values[i] = ec._OpportunityConnection_minAmountAmountMicros(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "maxAmountAmountMicros":
+			out.Values[i] = ec._OpportunityConnection_maxAmountAmountMicros(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "avgAmountAmountMicros":
+			out.Values[i] = ec._OpportunityConnection_avgAmountAmountMicros(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "sumAmountAmountMicros":
+			out.Values[i] = ec._OpportunityConnection_sumAmountAmountMicros(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesCloseDate":
+			out.Values[i] = ec._OpportunityConnection_countUniqueValuesCloseDate(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyCloseDate":
+			out.Values[i] = ec._OpportunityConnection_countEmptyCloseDate(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyCloseDate":
+			out.Values[i] = ec._OpportunityConnection_countNotEmptyCloseDate(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyCloseDate":
+			out.Values[i] = ec._OpportunityConnection_percentageEmptyCloseDate(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyCloseDate":
+			out.Values[i] = ec._OpportunityConnection_percentageNotEmptyCloseDate(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "minCloseDate":
+			out.Values[i] = ec._OpportunityConnection_minCloseDate(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "maxCloseDate":
+			out.Values[i] = ec._OpportunityConnection_maxCloseDate(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesCreatedAt":
+			out.Values[i] = ec._OpportunityConnection_countUniqueValuesCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyCreatedAt":
+			out.Values[i] = ec._OpportunityConnection_countEmptyCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyCreatedAt":
+			out.Values[i] = ec._OpportunityConnection_countNotEmptyCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyCreatedAt":
+			out.Values[i] = ec._OpportunityConnection_percentageEmptyCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyCreatedAt":
+			out.Values[i] = ec._OpportunityConnection_percentageNotEmptyCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "minCreatedAt":
+			out.Values[i] = ec._OpportunityConnection_minCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "maxCreatedAt":
+			out.Values[i] = ec._OpportunityConnection_maxCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesCreatedBy":
+			out.Values[i] = ec._OpportunityConnection_countUniqueValuesCreatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyCreatedBy":
+			out.Values[i] = ec._OpportunityConnection_countEmptyCreatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyCreatedBy":
+			out.Values[i] = ec._OpportunityConnection_countNotEmptyCreatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyCreatedBy":
+			out.Values[i] = ec._OpportunityConnection_percentageEmptyCreatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyCreatedBy":
+			out.Values[i] = ec._OpportunityConnection_percentageNotEmptyCreatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesDeletedAt":
+			out.Values[i] = ec._OpportunityConnection_countUniqueValuesDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyDeletedAt":
+			out.Values[i] = ec._OpportunityConnection_countEmptyDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyDeletedAt":
+			out.Values[i] = ec._OpportunityConnection_countNotEmptyDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyDeletedAt":
+			out.Values[i] = ec._OpportunityConnection_percentageEmptyDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyDeletedAt":
+			out.Values[i] = ec._OpportunityConnection_percentageNotEmptyDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "minDeletedAt":
+			out.Values[i] = ec._OpportunityConnection_minDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "maxDeletedAt":
+			out.Values[i] = ec._OpportunityConnection_maxDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesId":
+			out.Values[i] = ec._OpportunityConnection_countUniqueValuesId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyId":
+			out.Values[i] = ec._OpportunityConnection_countEmptyId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyId":
+			out.Values[i] = ec._OpportunityConnection_countNotEmptyId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyId":
+			out.Values[i] = ec._OpportunityConnection_percentageEmptyId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyId":
+			out.Values[i] = ec._OpportunityConnection_percentageNotEmptyId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesName":
+			out.Values[i] = ec._OpportunityConnection_countUniqueValuesName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyName":
+			out.Values[i] = ec._OpportunityConnection_countEmptyName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyName":
+			out.Values[i] = ec._OpportunityConnection_countNotEmptyName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyName":
+			out.Values[i] = ec._OpportunityConnection_percentageEmptyName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyName":
+			out.Values[i] = ec._OpportunityConnection_percentageNotEmptyName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesPosition":
+			out.Values[i] = ec._OpportunityConnection_countUniqueValuesPosition(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyPosition":
+			out.Values[i] = ec._OpportunityConnection_countEmptyPosition(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyPosition":
+			out.Values[i] = ec._OpportunityConnection_countNotEmptyPosition(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyPosition":
+			out.Values[i] = ec._OpportunityConnection_percentageEmptyPosition(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyPosition":
+			out.Values[i] = ec._OpportunityConnection_percentageNotEmptyPosition(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesStage":
+			out.Values[i] = ec._OpportunityConnection_countUniqueValuesStage(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyStage":
+			out.Values[i] = ec._OpportunityConnection_countEmptyStage(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyStage":
+			out.Values[i] = ec._OpportunityConnection_countNotEmptyStage(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyStage":
+			out.Values[i] = ec._OpportunityConnection_percentageEmptyStage(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyStage":
+			out.Values[i] = ec._OpportunityConnection_percentageNotEmptyStage(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesUpdatedAt":
+			out.Values[i] = ec._OpportunityConnection_countUniqueValuesUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyUpdatedAt":
+			out.Values[i] = ec._OpportunityConnection_countEmptyUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyUpdatedAt":
+			out.Values[i] = ec._OpportunityConnection_countNotEmptyUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyUpdatedAt":
+			out.Values[i] = ec._OpportunityConnection_percentageEmptyUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyUpdatedAt":
+			out.Values[i] = ec._OpportunityConnection_percentageNotEmptyUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "minUpdatedAt":
+			out.Values[i] = ec._OpportunityConnection_minUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "maxUpdatedAt":
+			out.Values[i] = ec._OpportunityConnection_maxUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesUpdatedBy":
+			out.Values[i] = ec._OpportunityConnection_countUniqueValuesUpdatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyUpdatedBy":
+			out.Values[i] = ec._OpportunityConnection_countEmptyUpdatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyUpdatedBy":
+			out.Values[i] = ec._OpportunityConnection_countNotEmptyUpdatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyUpdatedBy":
+			out.Values[i] = ec._OpportunityConnection_percentageEmptyUpdatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyUpdatedBy":
+			out.Values[i] = ec._OpportunityConnection_percentageNotEmptyUpdatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var opportunityEdgeImplementors = []string{"OpportunityEdge"}
+
+func (ec *executionContext) _OpportunityEdge(ctx context.Context, sel ast.SelectionSet, obj *OpportunityEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, opportunityEdgeImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("OpportunityEdge")
+		case "node":
+			out.Values[i] = ec._OpportunityEdge_node(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "cursor":
+			out.Values[i] = ec._OpportunityEdge_cursor(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var opportunityGroupByConnectionImplementors = []string{"OpportunityGroupByConnection"}
+
+func (ec *executionContext) _OpportunityGroupByConnection(ctx context.Context, sel ast.SelectionSet, obj *OpportunityGroupByConnection) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, opportunityGroupByConnectionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("OpportunityGroupByConnection")
+		case "totalCount":
+			out.Values[i] = ec._OpportunityGroupByConnection_totalCount(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "edges":
+			out.Values[i] = ec._OpportunityGroupByConnection_edges(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "pageInfo":
+			out.Values[i] = ec._OpportunityGroupByConnection_pageInfo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "groupByDimensionValues":
+			out.Values[i] = ec._OpportunityGroupByConnection_groupByDimensionValues(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "countUniqueValuesAmount":
+			out.Values[i] = ec._OpportunityGroupByConnection_countUniqueValuesAmount(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyAmount":
+			out.Values[i] = ec._OpportunityGroupByConnection_countEmptyAmount(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyAmount":
+			out.Values[i] = ec._OpportunityGroupByConnection_countNotEmptyAmount(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyAmount":
+			out.Values[i] = ec._OpportunityGroupByConnection_percentageEmptyAmount(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyAmount":
+			out.Values[i] = ec._OpportunityGroupByConnection_percentageNotEmptyAmount(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "minAmountAmountMicros":
+			out.Values[i] = ec._OpportunityGroupByConnection_minAmountAmountMicros(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "maxAmountAmountMicros":
+			out.Values[i] = ec._OpportunityGroupByConnection_maxAmountAmountMicros(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "avgAmountAmountMicros":
+			out.Values[i] = ec._OpportunityGroupByConnection_avgAmountAmountMicros(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "sumAmountAmountMicros":
+			out.Values[i] = ec._OpportunityGroupByConnection_sumAmountAmountMicros(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesCloseDate":
+			out.Values[i] = ec._OpportunityGroupByConnection_countUniqueValuesCloseDate(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyCloseDate":
+			out.Values[i] = ec._OpportunityGroupByConnection_countEmptyCloseDate(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyCloseDate":
+			out.Values[i] = ec._OpportunityGroupByConnection_countNotEmptyCloseDate(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyCloseDate":
+			out.Values[i] = ec._OpportunityGroupByConnection_percentageEmptyCloseDate(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyCloseDate":
+			out.Values[i] = ec._OpportunityGroupByConnection_percentageNotEmptyCloseDate(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "minCloseDate":
+			out.Values[i] = ec._OpportunityGroupByConnection_minCloseDate(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "maxCloseDate":
+			out.Values[i] = ec._OpportunityGroupByConnection_maxCloseDate(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesCreatedAt":
+			out.Values[i] = ec._OpportunityGroupByConnection_countUniqueValuesCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyCreatedAt":
+			out.Values[i] = ec._OpportunityGroupByConnection_countEmptyCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyCreatedAt":
+			out.Values[i] = ec._OpportunityGroupByConnection_countNotEmptyCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyCreatedAt":
+			out.Values[i] = ec._OpportunityGroupByConnection_percentageEmptyCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyCreatedAt":
+			out.Values[i] = ec._OpportunityGroupByConnection_percentageNotEmptyCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "minCreatedAt":
+			out.Values[i] = ec._OpportunityGroupByConnection_minCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "maxCreatedAt":
+			out.Values[i] = ec._OpportunityGroupByConnection_maxCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesCreatedBy":
+			out.Values[i] = ec._OpportunityGroupByConnection_countUniqueValuesCreatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyCreatedBy":
+			out.Values[i] = ec._OpportunityGroupByConnection_countEmptyCreatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyCreatedBy":
+			out.Values[i] = ec._OpportunityGroupByConnection_countNotEmptyCreatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyCreatedBy":
+			out.Values[i] = ec._OpportunityGroupByConnection_percentageEmptyCreatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyCreatedBy":
+			out.Values[i] = ec._OpportunityGroupByConnection_percentageNotEmptyCreatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesDeletedAt":
+			out.Values[i] = ec._OpportunityGroupByConnection_countUniqueValuesDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyDeletedAt":
+			out.Values[i] = ec._OpportunityGroupByConnection_countEmptyDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyDeletedAt":
+			out.Values[i] = ec._OpportunityGroupByConnection_countNotEmptyDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyDeletedAt":
+			out.Values[i] = ec._OpportunityGroupByConnection_percentageEmptyDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyDeletedAt":
+			out.Values[i] = ec._OpportunityGroupByConnection_percentageNotEmptyDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "minDeletedAt":
+			out.Values[i] = ec._OpportunityGroupByConnection_minDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "maxDeletedAt":
+			out.Values[i] = ec._OpportunityGroupByConnection_maxDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesId":
+			out.Values[i] = ec._OpportunityGroupByConnection_countUniqueValuesId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyId":
+			out.Values[i] = ec._OpportunityGroupByConnection_countEmptyId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyId":
+			out.Values[i] = ec._OpportunityGroupByConnection_countNotEmptyId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyId":
+			out.Values[i] = ec._OpportunityGroupByConnection_percentageEmptyId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyId":
+			out.Values[i] = ec._OpportunityGroupByConnection_percentageNotEmptyId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesName":
+			out.Values[i] = ec._OpportunityGroupByConnection_countUniqueValuesName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyName":
+			out.Values[i] = ec._OpportunityGroupByConnection_countEmptyName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyName":
+			out.Values[i] = ec._OpportunityGroupByConnection_countNotEmptyName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyName":
+			out.Values[i] = ec._OpportunityGroupByConnection_percentageEmptyName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyName":
+			out.Values[i] = ec._OpportunityGroupByConnection_percentageNotEmptyName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesPosition":
+			out.Values[i] = ec._OpportunityGroupByConnection_countUniqueValuesPosition(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyPosition":
+			out.Values[i] = ec._OpportunityGroupByConnection_countEmptyPosition(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyPosition":
+			out.Values[i] = ec._OpportunityGroupByConnection_countNotEmptyPosition(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyPosition":
+			out.Values[i] = ec._OpportunityGroupByConnection_percentageEmptyPosition(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyPosition":
+			out.Values[i] = ec._OpportunityGroupByConnection_percentageNotEmptyPosition(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesStage":
+			out.Values[i] = ec._OpportunityGroupByConnection_countUniqueValuesStage(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyStage":
+			out.Values[i] = ec._OpportunityGroupByConnection_countEmptyStage(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyStage":
+			out.Values[i] = ec._OpportunityGroupByConnection_countNotEmptyStage(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyStage":
+			out.Values[i] = ec._OpportunityGroupByConnection_percentageEmptyStage(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyStage":
+			out.Values[i] = ec._OpportunityGroupByConnection_percentageNotEmptyStage(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesUpdatedAt":
+			out.Values[i] = ec._OpportunityGroupByConnection_countUniqueValuesUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyUpdatedAt":
+			out.Values[i] = ec._OpportunityGroupByConnection_countEmptyUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyUpdatedAt":
+			out.Values[i] = ec._OpportunityGroupByConnection_countNotEmptyUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyUpdatedAt":
+			out.Values[i] = ec._OpportunityGroupByConnection_percentageEmptyUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyUpdatedAt":
+			out.Values[i] = ec._OpportunityGroupByConnection_percentageNotEmptyUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "minUpdatedAt":
+			out.Values[i] = ec._OpportunityGroupByConnection_minUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "maxUpdatedAt":
+			out.Values[i] = ec._OpportunityGroupByConnection_maxUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesUpdatedBy":
+			out.Values[i] = ec._OpportunityGroupByConnection_countUniqueValuesUpdatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyUpdatedBy":
+			out.Values[i] = ec._OpportunityGroupByConnection_countEmptyUpdatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyUpdatedBy":
+			out.Values[i] = ec._OpportunityGroupByConnection_countNotEmptyUpdatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyUpdatedBy":
+			out.Values[i] = ec._OpportunityGroupByConnection_percentageEmptyUpdatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyUpdatedBy":
+			out.Values[i] = ec._OpportunityGroupByConnection_percentageNotEmptyUpdatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
 var pageInfoImplementors = []string{"PageInfo"}
 
 func (ec *executionContext) _PageInfo(ctx context.Context, sel ast.SelectionSet, obj *PageInfo) graphql.Marshaler {
@@ -35710,6 +50309,42 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 				true, false,
 				func(ctx context.Context) graphql.Marshaler {
 					return ec._Query_person(ctx, field)
+				})
+		case "companies":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_companies(ctx, field)
+				})
+		case "company":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, false,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_company(ctx, field)
+				})
+		case "companiesGroupBy":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_companiesGroupBy(ctx, field)
+				})
+		case "opportunities":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_opportunities(ctx, field)
+				})
+		case "opportunity":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, false,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_opportunity(ctx, field)
+				})
+		case "opportunitiesGroupBy":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_opportunitiesGroupBy(ctx, field)
 				})
 		case "peopleGroupBy":
 			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
@@ -37762,6 +52397,99 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
+func (ec *executionContext) marshalNCompany2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐCompany(ctx context.Context, sel ast.SelectionSet, v *Company) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "Company!")
+		return graphql.Null
+	}
+	return ec._Company(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNCompanyConnection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐCompanyConnection(ctx context.Context, sel ast.SelectionSet, v *CompanyConnection) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "CompanyConnection!")
+		return graphql.Null
+	}
+	return ec._CompanyConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNCompanyEdge2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐCompanyEdgeᚄ(ctx context.Context, sel ast.SelectionSet, v []*CompanyEdge) graphql.Marshaler {
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNCompanyEdge2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐCompanyEdge(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNCompanyEdge2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐCompanyEdge(ctx context.Context, sel ast.SelectionSet, v *CompanyEdge) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "CompanyEdge!")
+		return graphql.Null
+	}
+	return ec._CompanyEdge(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNCompanyGroupByConnection2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐCompanyGroupByConnectionᚄ(ctx context.Context, sel ast.SelectionSet, v []*CompanyGroupByConnection) graphql.Marshaler {
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNCompanyGroupByConnection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐCompanyGroupByConnection(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNCompanyGroupByConnection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐCompanyGroupByConnection(ctx context.Context, sel ast.SelectionSet, v *CompanyGroupByConnection) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "CompanyGroupByConnection!")
+		return graphql.Null
+	}
+	return ec._CompanyGroupByConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNCompanyGroupByInput2map(ctx context.Context, v any) (map[string]any, error) {
+	res, err := ec.unmarshalInputCompanyGroupByInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCompanyGroupByInput2ᚕmapᚄ(ctx context.Context, v any) ([]map[string]any, error) {
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]map[string]any, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNCompanyGroupByInput2map(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalNCompanyOrderByInput2map(ctx context.Context, v any) (map[string]any, error) {
+	res, err := ec.unmarshalInputCompanyOrderByInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCompanyOrderByWithGroupByInput2map(ctx context.Context, v any) (map[string]any, error) {
+	res, err := ec.unmarshalInputCompanyOrderByWithGroupByInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalNCursor2string(ctx context.Context, v any) (string, error) {
 	res, err := graphql.UnmarshalString(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -38087,6 +52815,109 @@ func (ec *executionContext) unmarshalNNoteTargetUpdateInput2githubᚗcomᚋtwent
 func (ec *executionContext) unmarshalNNoteUpdateInput2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐNoteUpdateInput(ctx context.Context, v any) (NoteUpdateInput, error) {
 	res, err := ec.unmarshalInputNoteUpdateInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNOpportunity2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOpportunity(ctx context.Context, sel ast.SelectionSet, v *Opportunity) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "Opportunity!")
+		return graphql.Null
+	}
+	return ec._Opportunity(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNOpportunityConnection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOpportunityConnection(ctx context.Context, sel ast.SelectionSet, v *OpportunityConnection) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "OpportunityConnection!")
+		return graphql.Null
+	}
+	return ec._OpportunityConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNOpportunityEdge2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOpportunityEdgeᚄ(ctx context.Context, sel ast.SelectionSet, v []*OpportunityEdge) graphql.Marshaler {
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNOpportunityEdge2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOpportunityEdge(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNOpportunityEdge2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOpportunityEdge(ctx context.Context, sel ast.SelectionSet, v *OpportunityEdge) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "OpportunityEdge!")
+		return graphql.Null
+	}
+	return ec._OpportunityEdge(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNOpportunityGroupByConnection2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOpportunityGroupByConnectionᚄ(ctx context.Context, sel ast.SelectionSet, v []*OpportunityGroupByConnection) graphql.Marshaler {
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNOpportunityGroupByConnection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOpportunityGroupByConnection(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNOpportunityGroupByConnection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOpportunityGroupByConnection(ctx context.Context, sel ast.SelectionSet, v *OpportunityGroupByConnection) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "OpportunityGroupByConnection!")
+		return graphql.Null
+	}
+	return ec._OpportunityGroupByConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNOpportunityGroupByInput2map(ctx context.Context, v any) (map[string]any, error) {
+	res, err := ec.unmarshalInputOpportunityGroupByInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNOpportunityGroupByInput2ᚕmapᚄ(ctx context.Context, v any) ([]map[string]any, error) {
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]map[string]any, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNOpportunityGroupByInput2map(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalNOpportunityOrderByInput2map(ctx context.Context, v any) (map[string]any, error) {
+	res, err := ec.unmarshalInputOpportunityOrderByInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNOpportunityOrderByWithGroupByInput2map(ctx context.Context, v any) (map[string]any, error) {
+	res, err := ec.unmarshalInputOpportunityOrderByWithGroupByInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNOpportunityStageEnum2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOpportunityStageEnum(ctx context.Context, v any) (OpportunityStageEnum, error) {
+	var res OpportunityStageEnum
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNOpportunityStageEnum2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOpportunityStageEnum(ctx context.Context, sel ast.SelectionSet, v OpportunityStageEnum) graphql.Marshaler {
+	return v
 }
 
 func (ec *executionContext) marshalNPageInfo2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐPageInfo(ctx context.Context, sel ast.SelectionSet, v *PageInfo) graphql.Marshaler {
@@ -38717,6 +53548,37 @@ func (ec *executionContext) unmarshalOAdditionalPhoneInput2ᚕᚖgithubᚗcomᚋ
 	return res, nil
 }
 
+func (ec *executionContext) marshalOAddress2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐAddress(ctx context.Context, sel ast.SelectionSet, v *Address) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Address(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOAddressFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐAddressFilter(ctx context.Context, v any) (*AddressFilter, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputAddressFilter(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOAddressGroupByInput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐAddressGroupByInput(ctx context.Context, v any) (*AddressGroupByInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputAddressGroupByInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOAddressOrderByInput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐAddressOrderByInput(ctx context.Context, v any) (*AddressOrderByInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputAddressOrderByInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalOBoolean2bool(ctx context.Context, v any) (bool, error) {
 	res, err := graphql.UnmarshalBoolean(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -38747,6 +53609,97 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return res
 }
 
+func (ec *executionContext) marshalOCompany2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐCompany(ctx context.Context, sel ast.SelectionSet, v *Company) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Company(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOCompanyFilterInput2map(ctx context.Context, v any) (map[string]any, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputCompanyFilterInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOCompanyFilterInput2ᚕmap(ctx context.Context, v any) ([]map[string]any, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]map[string]any, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalOCompanyFilterInput2map(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOCompanyOrderByInput2map(ctx context.Context, v any) (map[string]any, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputCompanyOrderByInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOCompanyOrderByInput2ᚕmap(ctx context.Context, v any) ([]map[string]any, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]map[string]any, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalOCompanyOrderByInput2map(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOCompanyOrderByInput2ᚕmapᚄ(ctx context.Context, v any) ([]map[string]any, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]map[string]any, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNCompanyOrderByInput2map(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOCompanyOrderByWithGroupByInput2ᚕmapᚄ(ctx context.Context, v any) ([]map[string]any, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]map[string]any, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNCompanyOrderByWithGroupByInput2map(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
 func (ec *executionContext) unmarshalOConnectionCursor2ᚖstring(ctx context.Context, v any) (*string, error) {
 	if v == nil {
 		return nil, nil
@@ -38763,6 +53716,29 @@ func (ec *executionContext) marshalOConnectionCursor2ᚖstring(ctx context.Conte
 	_ = ctx
 	res := graphql.MarshalString(*v)
 	return res
+}
+
+func (ec *executionContext) marshalOCurrency2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐCurrency(ctx context.Context, sel ast.SelectionSet, v *Currency) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Currency(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOCurrencyFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐCurrencyFilter(ctx context.Context, v any) (*CurrencyFilter, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputCurrencyFilter(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOCurrencyOrderByInput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐCurrencyOrderByInput(ctx context.Context, v any) (*CurrencyOrderByInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputCurrencyOrderByInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalODateTime2ᚕᚖtimeᚐTimeᚄ(ctx context.Context, v any) ([]*time.Time, error) {
@@ -39290,6 +54266,157 @@ func (ec *executionContext) unmarshalONoteTargetOrderByWithGroupByInput2ᚕmap�
 		}
 	}
 	return res, nil
+}
+
+func (ec *executionContext) marshalOOpportunity2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOpportunity(ctx context.Context, sel ast.SelectionSet, v *Opportunity) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Opportunity(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOOpportunityFilterInput2map(ctx context.Context, v any) (map[string]any, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputOpportunityFilterInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOOpportunityFilterInput2ᚕmap(ctx context.Context, v any) ([]map[string]any, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]map[string]any, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalOOpportunityFilterInput2map(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOOpportunityOrderByInput2map(ctx context.Context, v any) (map[string]any, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputOpportunityOrderByInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOOpportunityOrderByInput2ᚕmap(ctx context.Context, v any) ([]map[string]any, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]map[string]any, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalOOpportunityOrderByInput2map(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOOpportunityOrderByInput2ᚕmapᚄ(ctx context.Context, v any) ([]map[string]any, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]map[string]any, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNOpportunityOrderByInput2map(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOOpportunityOrderByWithGroupByInput2ᚕmapᚄ(ctx context.Context, v any) ([]map[string]any, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]map[string]any, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNOpportunityOrderByWithGroupByInput2map(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOOpportunityStageEnum2ᚕgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOpportunityStageEnumᚄ(ctx context.Context, v any) ([]OpportunityStageEnum, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]OpportunityStageEnum, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNOpportunityStageEnum2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOpportunityStageEnum(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOOpportunityStageEnum2ᚕgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOpportunityStageEnumᚄ(ctx context.Context, sel ast.SelectionSet, v []OpportunityStageEnum) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNOpportunityStageEnum2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOpportunityStageEnum(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalOOpportunityStageEnum2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOpportunityStageEnum(ctx context.Context, v any) (*OpportunityStageEnum, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(OpportunityStageEnum)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOOpportunityStageEnum2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOpportunityStageEnum(ctx context.Context, sel ast.SelectionSet, v *OpportunityStageEnum) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
+}
+
+func (ec *executionContext) unmarshalOOpportunityStageEnumFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOpportunityStageEnumFilter(ctx context.Context, v any) (*OpportunityStageEnumFilter, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputOpportunityStageEnumFilter(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx context.Context, v any) (*OrderByDirection, error) {

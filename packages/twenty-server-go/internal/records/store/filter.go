@@ -95,6 +95,9 @@ func (c *compiler) fieldFilter(filter records.FieldFilter) (string, error) {
 	if column == `"deletedAt"` {
 		c.mentionsDeletedAt = true
 	}
+	if fieldType == model.TypeSelect {
+		column += "::text"
+	}
 	switch filter.Operand {
 	case "eq":
 		return column + " = " + c.arg(filter.Value), nil

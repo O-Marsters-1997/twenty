@@ -1,5 +1,7 @@
 schema:
   - person.graphqls
+  - company.graphqls
+  - opportunity.graphqls
   - aggregate.graphqls
   - note.graphqls
   - task.graphqls
@@ -39,6 +41,22 @@ models:
   PersonOrderByWithGroupByInput:
     model: map[string]interface{}
   PersonGroupByInput:
+    model: map[string]interface{}
+  CompanyFilterInput:
+    model: map[string]interface{}
+  CompanyOrderByInput:
+    model: map[string]interface{}
+  CompanyOrderByWithGroupByInput:
+    model: map[string]interface{}
+  CompanyGroupByInput:
+    model: map[string]interface{}
+  OpportunityFilterInput:
+    model: map[string]interface{}
+  OpportunityOrderByInput:
+    model: map[string]interface{}
+  OpportunityOrderByWithGroupByInput:
+    model: map[string]interface{}
+  OpportunityGroupByInput:
     model: map[string]interface{}
   NoteFilterInput:
     model: map[string]interface{}

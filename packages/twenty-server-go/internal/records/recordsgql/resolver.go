@@ -11,11 +11,13 @@ import (
 const bulkPageSize = 200
 
 type Resolver struct {
-	Store       records.People
-	Notes       records.Notes
-	NoteTargets records.NoteTargets
-	Tasks       records.Tasks
-	TaskTargets records.TaskTargets
+	Store         records.People
+	Companies     records.Companies
+	Opportunities records.Opportunities
+	Notes         records.Notes
+	NoteTargets   records.NoteTargets
+	Tasks         records.Tasks
+	TaskTargets   records.TaskTargets
 }
 
 func (r *Resolver) actor(ctx context.Context) (records.Actor, error) {
