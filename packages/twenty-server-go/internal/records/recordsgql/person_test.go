@@ -44,7 +44,8 @@ func newServerWithPool(t *testing.T) (*httptest.Server, *pgxpool.Pool) {
 	for _, name := range []string{"Create", "Find", "Update", "Delete", "Restore", "Destroy", "AggregatePeople", "PeopleGroupByAggregates", "PeopleGroupByRecords",
 		"FindCompanies", "AggregateCompanies", "CompaniesGroupByAggregates", "CompaniesGroupByRecords", "FindOpportunities", "AggregateOpportunities", "OpportunitiesGroupByAggregates", "OpportunitiesGroupByRecords",
 		"AggregateNotes", "TasksGroupByRecords", "NoteTargetsGroupByAggregates",
-		"AggregateWorkspaceMembers", "AggregateDashboards", "DashboardsGroupByAggregates"} {
+		"AggregateWorkspaceMembers", "AggregateDashboards", "DashboardsGroupByAggregates",
+		"AggregateTimelineActivities", "TimelineActivitiesGroupByAggregates", "AggregateAttachments", "AttachmentsGroupByRecords"} {
 		table[frontdoor.EndpointWorkspace][name] = frontdoor.RouteGo
 	}
 	logger := slog.New(slog.NewTextHandler(io.Discard, nil))
@@ -53,15 +54,17 @@ func newServerWithPool(t *testing.T) (*httptest.Server, *pgxpool.Pool) {
 		t.Fatal(err)
 	}
 	server := httptest.NewServer(frontdoor.NewHandler(table, upstream, verifier{}, recordsgql.NewHandler(&recordsgql.Resolver{
-		Store:            store.NewPeople(pool),
-		Companies:        store.NewCompanies(pool),
-		Opportunities:    store.NewOpportunities(pool),
-		WorkspaceMembers: store.NewWorkspaceMembers(pool),
-		Dashboards:       store.NewDashboards(pool),
-		Notes:            store.NewNotes(pool),
-		NoteTargets:      store.NewNoteTargets(pool),
-		Tasks:            store.NewTasks(pool),
-		TaskTargets:      store.NewTaskTargets(pool),
+		Store:              store.NewPeople(pool),
+		Companies:          store.NewCompanies(pool),
+		Opportunities:      store.NewOpportunities(pool),
+		WorkspaceMembers:   store.NewWorkspaceMembers(pool),
+		Dashboards:         store.NewDashboards(pool),
+		TimelineActivities: store.NewTimelineActivities(pool),
+		Attachments:        store.NewAttachments(pool),
+		Notes:              store.NewNotes(pool),
+		NoteTargets:        store.NewNoteTargets(pool),
+		Tasks:              store.NewTasks(pool),
+		TaskTargets:        store.NewTaskTargets(pool),
 	}, logger), logger))
 	t.Cleanup(server.Close)
 	return server, pool

@@ -82,6 +82,208 @@ type AddressOrderByInput struct {
 	AddressLng      *OrderByDirection `json:"addressLng,omitempty"`
 }
 
+type Attachment struct {
+	ID                      string                  `json:"id"`
+	Name                    *string                 `json:"name,omitempty"`
+	File                    any                     `json:"file,omitempty"`
+	FullPath                *string                 `json:"fullPath,omitempty"`
+	FileCategory            *AttachmentFileCategory `json:"fileCategory,omitempty"`
+	TargetAgentChatThreadID *string                 `json:"targetAgentChatThreadId,omitempty"`
+	TargetCompanyID         *string                 `json:"targetCompanyId,omitempty"`
+	TargetDashboardID       *string                 `json:"targetDashboardId,omitempty"`
+	TargetNoteID            *string                 `json:"targetNoteId,omitempty"`
+	TargetOpportunityID     *string                 `json:"targetOpportunityId,omitempty"`
+	TargetPersonID          *string                 `json:"targetPersonId,omitempty"`
+	TargetTaskID            *string                 `json:"targetTaskId,omitempty"`
+	TargetWorkflowID        *string                 `json:"targetWorkflowId,omitempty"`
+	Position                float64                 `json:"position"`
+	CreatedBy               *Actor                  `json:"createdBy"`
+	UpdatedBy               *Actor                  `json:"updatedBy"`
+	CreatedAt               time.Time               `json:"createdAt"`
+	UpdatedAt               time.Time               `json:"updatedAt"`
+	DeletedAt               *time.Time              `json:"deletedAt,omitempty"`
+}
+
+type AttachmentConnection struct {
+	TotalCount                     *int              `json:"totalCount,omitempty"`
+	Edges                          []*AttachmentEdge `json:"edges"`
+	PageInfo                       *PageInfo         `json:"pageInfo"`
+	CountUniqueValuesCreatedAt     *int              `json:"countUniqueValuesCreatedAt,omitempty"`
+	CountEmptyCreatedAt            *int              `json:"countEmptyCreatedAt,omitempty"`
+	CountNotEmptyCreatedAt         *int              `json:"countNotEmptyCreatedAt,omitempty"`
+	PercentageEmptyCreatedAt       *float64          `json:"percentageEmptyCreatedAt,omitempty"`
+	PercentageNotEmptyCreatedAt    *float64          `json:"percentageNotEmptyCreatedAt,omitempty"`
+	MinCreatedAt                   *time.Time        `json:"minCreatedAt,omitempty"`
+	MaxCreatedAt                   *time.Time        `json:"maxCreatedAt,omitempty"`
+	CountUniqueValuesCreatedBy     *int              `json:"countUniqueValuesCreatedBy,omitempty"`
+	CountEmptyCreatedBy            *int              `json:"countEmptyCreatedBy,omitempty"`
+	CountNotEmptyCreatedBy         *int              `json:"countNotEmptyCreatedBy,omitempty"`
+	PercentageEmptyCreatedBy       *float64          `json:"percentageEmptyCreatedBy,omitempty"`
+	PercentageNotEmptyCreatedBy    *float64          `json:"percentageNotEmptyCreatedBy,omitempty"`
+	CountUniqueValuesDeletedAt     *int              `json:"countUniqueValuesDeletedAt,omitempty"`
+	CountEmptyDeletedAt            *int              `json:"countEmptyDeletedAt,omitempty"`
+	CountNotEmptyDeletedAt         *int              `json:"countNotEmptyDeletedAt,omitempty"`
+	PercentageEmptyDeletedAt       *float64          `json:"percentageEmptyDeletedAt,omitempty"`
+	PercentageNotEmptyDeletedAt    *float64          `json:"percentageNotEmptyDeletedAt,omitempty"`
+	MinDeletedAt                   *time.Time        `json:"minDeletedAt,omitempty"`
+	MaxDeletedAt                   *time.Time        `json:"maxDeletedAt,omitempty"`
+	CountUniqueValuesFile          *int              `json:"countUniqueValuesFile,omitempty"`
+	CountEmptyFile                 *int              `json:"countEmptyFile,omitempty"`
+	CountNotEmptyFile              *int              `json:"countNotEmptyFile,omitempty"`
+	PercentageEmptyFile            *float64          `json:"percentageEmptyFile,omitempty"`
+	PercentageNotEmptyFile         *float64          `json:"percentageNotEmptyFile,omitempty"`
+	CountUniqueValuesFileCategory  *int              `json:"countUniqueValuesFileCategory,omitempty"`
+	CountEmptyFileCategory         *int              `json:"countEmptyFileCategory,omitempty"`
+	CountNotEmptyFileCategory      *int              `json:"countNotEmptyFileCategory,omitempty"`
+	PercentageEmptyFileCategory    *float64          `json:"percentageEmptyFileCategory,omitempty"`
+	PercentageNotEmptyFileCategory *float64          `json:"percentageNotEmptyFileCategory,omitempty"`
+	CountUniqueValuesFullPath      *int              `json:"countUniqueValuesFullPath,omitempty"`
+	CountEmptyFullPath             *int              `json:"countEmptyFullPath,omitempty"`
+	CountNotEmptyFullPath          *int              `json:"countNotEmptyFullPath,omitempty"`
+	PercentageEmptyFullPath        *float64          `json:"percentageEmptyFullPath,omitempty"`
+	PercentageNotEmptyFullPath     *float64          `json:"percentageNotEmptyFullPath,omitempty"`
+	CountUniqueValuesID            *int              `json:"countUniqueValuesId,omitempty"`
+	CountEmptyID                   *int              `json:"countEmptyId,omitempty"`
+	CountNotEmptyID                *int              `json:"countNotEmptyId,omitempty"`
+	PercentageEmptyID              *float64          `json:"percentageEmptyId,omitempty"`
+	PercentageNotEmptyID           *float64          `json:"percentageNotEmptyId,omitempty"`
+	CountUniqueValuesName          *int              `json:"countUniqueValuesName,omitempty"`
+	CountEmptyName                 *int              `json:"countEmptyName,omitempty"`
+	CountNotEmptyName              *int              `json:"countNotEmptyName,omitempty"`
+	PercentageEmptyName            *float64          `json:"percentageEmptyName,omitempty"`
+	PercentageNotEmptyName         *float64          `json:"percentageNotEmptyName,omitempty"`
+	CountUniqueValuesPosition      *int              `json:"countUniqueValuesPosition,omitempty"`
+	CountEmptyPosition             *int              `json:"countEmptyPosition,omitempty"`
+	CountNotEmptyPosition          *int              `json:"countNotEmptyPosition,omitempty"`
+	PercentageEmptyPosition        *float64          `json:"percentageEmptyPosition,omitempty"`
+	PercentageNotEmptyPosition     *float64          `json:"percentageNotEmptyPosition,omitempty"`
+	CountUniqueValuesUpdatedAt     *int              `json:"countUniqueValuesUpdatedAt,omitempty"`
+	CountEmptyUpdatedAt            *int              `json:"countEmptyUpdatedAt,omitempty"`
+	CountNotEmptyUpdatedAt         *int              `json:"countNotEmptyUpdatedAt,omitempty"`
+	PercentageEmptyUpdatedAt       *float64          `json:"percentageEmptyUpdatedAt,omitempty"`
+	PercentageNotEmptyUpdatedAt    *float64          `json:"percentageNotEmptyUpdatedAt,omitempty"`
+	MinUpdatedAt                   *time.Time        `json:"minUpdatedAt,omitempty"`
+	MaxUpdatedAt                   *time.Time        `json:"maxUpdatedAt,omitempty"`
+	CountUniqueValuesUpdatedBy     *int              `json:"countUniqueValuesUpdatedBy,omitempty"`
+	CountEmptyUpdatedBy            *int              `json:"countEmptyUpdatedBy,omitempty"`
+	CountNotEmptyUpdatedBy         *int              `json:"countNotEmptyUpdatedBy,omitempty"`
+	PercentageEmptyUpdatedBy       *float64          `json:"percentageEmptyUpdatedBy,omitempty"`
+	PercentageNotEmptyUpdatedBy    *float64          `json:"percentageNotEmptyUpdatedBy,omitempty"`
+}
+
+type AttachmentCreateInput struct {
+	ID                      *string                 `json:"id,omitempty"`
+	Name                    *string                 `json:"name,omitempty"`
+	File                    any                     `json:"file,omitempty"`
+	FullPath                *string                 `json:"fullPath,omitempty"`
+	FileCategory            *AttachmentFileCategory `json:"fileCategory,omitempty"`
+	TargetAgentChatThreadID *string                 `json:"targetAgentChatThreadId,omitempty"`
+	TargetCompanyID         *string                 `json:"targetCompanyId,omitempty"`
+	TargetDashboardID       *string                 `json:"targetDashboardId,omitempty"`
+	TargetNoteID            *string                 `json:"targetNoteId,omitempty"`
+	TargetOpportunityID     *string                 `json:"targetOpportunityId,omitempty"`
+	TargetPersonID          *string                 `json:"targetPersonId,omitempty"`
+	TargetTaskID            *string                 `json:"targetTaskId,omitempty"`
+	TargetWorkflowID        *string                 `json:"targetWorkflowId,omitempty"`
+	Position                *float64                `json:"position,omitempty"`
+}
+
+type AttachmentEdge struct {
+	Node   *Attachment `json:"node"`
+	Cursor string      `json:"cursor"`
+}
+
+type AttachmentFileCategoryFilter struct {
+	Eq  *AttachmentFileCategory  `json:"eq,omitempty"`
+	Neq *AttachmentFileCategory  `json:"neq,omitempty"`
+	In  []AttachmentFileCategory `json:"in,omitempty"`
+	Is  *FilterIs                `json:"is,omitempty"`
+}
+
+type AttachmentGroupByConnection struct {
+	TotalCount                     *int              `json:"totalCount,omitempty"`
+	Edges                          []*AttachmentEdge `json:"edges"`
+	PageInfo                       *PageInfo         `json:"pageInfo"`
+	GroupByDimensionValues         any               `json:"groupByDimensionValues"`
+	CountUniqueValuesCreatedAt     *int              `json:"countUniqueValuesCreatedAt,omitempty"`
+	CountEmptyCreatedAt            *int              `json:"countEmptyCreatedAt,omitempty"`
+	CountNotEmptyCreatedAt         *int              `json:"countNotEmptyCreatedAt,omitempty"`
+	PercentageEmptyCreatedAt       *float64          `json:"percentageEmptyCreatedAt,omitempty"`
+	PercentageNotEmptyCreatedAt    *float64          `json:"percentageNotEmptyCreatedAt,omitempty"`
+	MinCreatedAt                   *time.Time        `json:"minCreatedAt,omitempty"`
+	MaxCreatedAt                   *time.Time        `json:"maxCreatedAt,omitempty"`
+	CountUniqueValuesCreatedBy     *int              `json:"countUniqueValuesCreatedBy,omitempty"`
+	CountEmptyCreatedBy            *int              `json:"countEmptyCreatedBy,omitempty"`
+	CountNotEmptyCreatedBy         *int              `json:"countNotEmptyCreatedBy,omitempty"`
+	PercentageEmptyCreatedBy       *float64          `json:"percentageEmptyCreatedBy,omitempty"`
+	PercentageNotEmptyCreatedBy    *float64          `json:"percentageNotEmptyCreatedBy,omitempty"`
+	CountUniqueValuesDeletedAt     *int              `json:"countUniqueValuesDeletedAt,omitempty"`
+	CountEmptyDeletedAt            *int              `json:"countEmptyDeletedAt,omitempty"`
+	CountNotEmptyDeletedAt         *int              `json:"countNotEmptyDeletedAt,omitempty"`
+	PercentageEmptyDeletedAt       *float64          `json:"percentageEmptyDeletedAt,omitempty"`
+	PercentageNotEmptyDeletedAt    *float64          `json:"percentageNotEmptyDeletedAt,omitempty"`
+	MinDeletedAt                   *time.Time        `json:"minDeletedAt,omitempty"`
+	MaxDeletedAt                   *time.Time        `json:"maxDeletedAt,omitempty"`
+	CountUniqueValuesFile          *int              `json:"countUniqueValuesFile,omitempty"`
+	CountEmptyFile                 *int              `json:"countEmptyFile,omitempty"`
+	CountNotEmptyFile              *int              `json:"countNotEmptyFile,omitempty"`
+	PercentageEmptyFile            *float64          `json:"percentageEmptyFile,omitempty"`
+	PercentageNotEmptyFile         *float64          `json:"percentageNotEmptyFile,omitempty"`
+	CountUniqueValuesFileCategory  *int              `json:"countUniqueValuesFileCategory,omitempty"`
+	CountEmptyFileCategory         *int              `json:"countEmptyFileCategory,omitempty"`
+	CountNotEmptyFileCategory      *int              `json:"countNotEmptyFileCategory,omitempty"`
+	PercentageEmptyFileCategory    *float64          `json:"percentageEmptyFileCategory,omitempty"`
+	PercentageNotEmptyFileCategory *float64          `json:"percentageNotEmptyFileCategory,omitempty"`
+	CountUniqueValuesFullPath      *int              `json:"countUniqueValuesFullPath,omitempty"`
+	CountEmptyFullPath             *int              `json:"countEmptyFullPath,omitempty"`
+	CountNotEmptyFullPath          *int              `json:"countNotEmptyFullPath,omitempty"`
+	PercentageEmptyFullPath        *float64          `json:"percentageEmptyFullPath,omitempty"`
+	PercentageNotEmptyFullPath     *float64          `json:"percentageNotEmptyFullPath,omitempty"`
+	CountUniqueValuesID            *int              `json:"countUniqueValuesId,omitempty"`
+	CountEmptyID                   *int              `json:"countEmptyId,omitempty"`
+	CountNotEmptyID                *int              `json:"countNotEmptyId,omitempty"`
+	PercentageEmptyID              *float64          `json:"percentageEmptyId,omitempty"`
+	PercentageNotEmptyID           *float64          `json:"percentageNotEmptyId,omitempty"`
+	CountUniqueValuesName          *int              `json:"countUniqueValuesName,omitempty"`
+	CountEmptyName                 *int              `json:"countEmptyName,omitempty"`
+	CountNotEmptyName              *int              `json:"countNotEmptyName,omitempty"`
+	PercentageEmptyName            *float64          `json:"percentageEmptyName,omitempty"`
+	PercentageNotEmptyName         *float64          `json:"percentageNotEmptyName,omitempty"`
+	CountUniqueValuesPosition      *int              `json:"countUniqueValuesPosition,omitempty"`
+	CountEmptyPosition             *int              `json:"countEmptyPosition,omitempty"`
+	CountNotEmptyPosition          *int              `json:"countNotEmptyPosition,omitempty"`
+	PercentageEmptyPosition        *float64          `json:"percentageEmptyPosition,omitempty"`
+	PercentageNotEmptyPosition     *float64          `json:"percentageNotEmptyPosition,omitempty"`
+	CountUniqueValuesUpdatedAt     *int              `json:"countUniqueValuesUpdatedAt,omitempty"`
+	CountEmptyUpdatedAt            *int              `json:"countEmptyUpdatedAt,omitempty"`
+	CountNotEmptyUpdatedAt         *int              `json:"countNotEmptyUpdatedAt,omitempty"`
+	PercentageEmptyUpdatedAt       *float64          `json:"percentageEmptyUpdatedAt,omitempty"`
+	PercentageNotEmptyUpdatedAt    *float64          `json:"percentageNotEmptyUpdatedAt,omitempty"`
+	MinUpdatedAt                   *time.Time        `json:"minUpdatedAt,omitempty"`
+	MaxUpdatedAt                   *time.Time        `json:"maxUpdatedAt,omitempty"`
+	CountUniqueValuesUpdatedBy     *int              `json:"countUniqueValuesUpdatedBy,omitempty"`
+	CountEmptyUpdatedBy            *int              `json:"countEmptyUpdatedBy,omitempty"`
+	CountNotEmptyUpdatedBy         *int              `json:"countNotEmptyUpdatedBy,omitempty"`
+	PercentageEmptyUpdatedBy       *float64          `json:"percentageEmptyUpdatedBy,omitempty"`
+	PercentageNotEmptyUpdatedBy    *float64          `json:"percentageNotEmptyUpdatedBy,omitempty"`
+}
+
+type AttachmentUpdateInput struct {
+	Name                    *string                 `json:"name,omitempty"`
+	File                    any                     `json:"file,omitempty"`
+	FullPath                *string                 `json:"fullPath,omitempty"`
+	FileCategory            *AttachmentFileCategory `json:"fileCategory,omitempty"`
+	TargetAgentChatThreadID *string                 `json:"targetAgentChatThreadId,omitempty"`
+	TargetCompanyID         *string                 `json:"targetCompanyId,omitempty"`
+	TargetDashboardID       *string                 `json:"targetDashboardId,omitempty"`
+	TargetNoteID            *string                 `json:"targetNoteId,omitempty"`
+	TargetOpportunityID     *string                 `json:"targetOpportunityId,omitempty"`
+	TargetPersonID          *string                 `json:"targetPersonId,omitempty"`
+	TargetTaskID            *string                 `json:"targetTaskId,omitempty"`
+	TargetWorkflowID        *string                 `json:"targetWorkflowId,omitempty"`
+	Position                *float64                `json:"position,omitempty"`
+}
+
 type Company struct {
 	ID             string     `json:"id"`
 	Name           *string    `json:"name,omitempty"`
@@ -1569,6 +1771,256 @@ type TaskUpdateInput struct {
 	Position   *float64             `json:"position,omitempty"`
 }
 
+type TimelineActivity struct {
+	ID                           string     `json:"id"`
+	HappensAt                    time.Time  `json:"happensAt"`
+	TimelineActivityTypeID       *string    `json:"timelineActivityTypeId,omitempty"`
+	TimelineActivityTypeSnapshot any        `json:"timelineActivityTypeSnapshot,omitempty"`
+	Properties                   any        `json:"properties,omitempty"`
+	LinkedRecordCachedName       *string    `json:"linkedRecordCachedName,omitempty"`
+	LinkedRecordID               *string    `json:"linkedRecordId,omitempty"`
+	LinkedObjectMetadataID       *string    `json:"linkedObjectMetadataId,omitempty"`
+	TargetCompanyID              *string    `json:"targetCompanyId,omitempty"`
+	TargetDashboardID            *string    `json:"targetDashboardId,omitempty"`
+	TargetMessageCampaignID      *string    `json:"targetMessageCampaignId,omitempty"`
+	TargetMessageListID          *string    `json:"targetMessageListId,omitempty"`
+	TargetNoteID                 *string    `json:"targetNoteId,omitempty"`
+	TargetOpportunityID          *string    `json:"targetOpportunityId,omitempty"`
+	TargetPersonID               *string    `json:"targetPersonId,omitempty"`
+	TargetTaskID                 *string    `json:"targetTaskId,omitempty"`
+	TargetWorkflowID             *string    `json:"targetWorkflowId,omitempty"`
+	TargetWorkflowRunID          *string    `json:"targetWorkflowRunId,omitempty"`
+	TargetWorkflowVersionID      *string    `json:"targetWorkflowVersionId,omitempty"`
+	WorkspaceMemberID            *string    `json:"workspaceMemberId,omitempty"`
+	Position                     float64    `json:"position"`
+	CreatedBy                    *Actor     `json:"createdBy"`
+	UpdatedBy                    *Actor     `json:"updatedBy"`
+	CreatedAt                    time.Time  `json:"createdAt"`
+	UpdatedAt                    time.Time  `json:"updatedAt"`
+	DeletedAt                    *time.Time `json:"deletedAt,omitempty"`
+}
+
+type TimelineActivityConnection struct {
+	TotalCount                                     *int                    `json:"totalCount,omitempty"`
+	Edges                                          []*TimelineActivityEdge `json:"edges"`
+	PageInfo                                       *PageInfo               `json:"pageInfo"`
+	CountUniqueValuesCreatedAt                     *int                    `json:"countUniqueValuesCreatedAt,omitempty"`
+	CountEmptyCreatedAt                            *int                    `json:"countEmptyCreatedAt,omitempty"`
+	CountNotEmptyCreatedAt                         *int                    `json:"countNotEmptyCreatedAt,omitempty"`
+	PercentageEmptyCreatedAt                       *float64                `json:"percentageEmptyCreatedAt,omitempty"`
+	PercentageNotEmptyCreatedAt                    *float64                `json:"percentageNotEmptyCreatedAt,omitempty"`
+	MinCreatedAt                                   *time.Time              `json:"minCreatedAt,omitempty"`
+	MaxCreatedAt                                   *time.Time              `json:"maxCreatedAt,omitempty"`
+	CountUniqueValuesCreatedBy                     *int                    `json:"countUniqueValuesCreatedBy,omitempty"`
+	CountEmptyCreatedBy                            *int                    `json:"countEmptyCreatedBy,omitempty"`
+	CountNotEmptyCreatedBy                         *int                    `json:"countNotEmptyCreatedBy,omitempty"`
+	PercentageEmptyCreatedBy                       *float64                `json:"percentageEmptyCreatedBy,omitempty"`
+	PercentageNotEmptyCreatedBy                    *float64                `json:"percentageNotEmptyCreatedBy,omitempty"`
+	CountUniqueValuesDeletedAt                     *int                    `json:"countUniqueValuesDeletedAt,omitempty"`
+	CountEmptyDeletedAt                            *int                    `json:"countEmptyDeletedAt,omitempty"`
+	CountNotEmptyDeletedAt                         *int                    `json:"countNotEmptyDeletedAt,omitempty"`
+	PercentageEmptyDeletedAt                       *float64                `json:"percentageEmptyDeletedAt,omitempty"`
+	PercentageNotEmptyDeletedAt                    *float64                `json:"percentageNotEmptyDeletedAt,omitempty"`
+	MinDeletedAt                                   *time.Time              `json:"minDeletedAt,omitempty"`
+	MaxDeletedAt                                   *time.Time              `json:"maxDeletedAt,omitempty"`
+	CountUniqueValuesHappensAt                     *int                    `json:"countUniqueValuesHappensAt,omitempty"`
+	CountEmptyHappensAt                            *int                    `json:"countEmptyHappensAt,omitempty"`
+	CountNotEmptyHappensAt                         *int                    `json:"countNotEmptyHappensAt,omitempty"`
+	PercentageEmptyHappensAt                       *float64                `json:"percentageEmptyHappensAt,omitempty"`
+	PercentageNotEmptyHappensAt                    *float64                `json:"percentageNotEmptyHappensAt,omitempty"`
+	MinHappensAt                                   *time.Time              `json:"minHappensAt,omitempty"`
+	MaxHappensAt                                   *time.Time              `json:"maxHappensAt,omitempty"`
+	CountUniqueValuesID                            *int                    `json:"countUniqueValuesId,omitempty"`
+	CountEmptyID                                   *int                    `json:"countEmptyId,omitempty"`
+	CountNotEmptyID                                *int                    `json:"countNotEmptyId,omitempty"`
+	PercentageEmptyID                              *float64                `json:"percentageEmptyId,omitempty"`
+	PercentageNotEmptyID                           *float64                `json:"percentageNotEmptyId,omitempty"`
+	CountUniqueValuesLinkedObjectMetadataID        *int                    `json:"countUniqueValuesLinkedObjectMetadataId,omitempty"`
+	CountEmptyLinkedObjectMetadataID               *int                    `json:"countEmptyLinkedObjectMetadataId,omitempty"`
+	CountNotEmptyLinkedObjectMetadataID            *int                    `json:"countNotEmptyLinkedObjectMetadataId,omitempty"`
+	PercentageEmptyLinkedObjectMetadataID          *float64                `json:"percentageEmptyLinkedObjectMetadataId,omitempty"`
+	PercentageNotEmptyLinkedObjectMetadataID       *float64                `json:"percentageNotEmptyLinkedObjectMetadataId,omitempty"`
+	CountUniqueValuesLinkedRecordCachedName        *int                    `json:"countUniqueValuesLinkedRecordCachedName,omitempty"`
+	CountEmptyLinkedRecordCachedName               *int                    `json:"countEmptyLinkedRecordCachedName,omitempty"`
+	CountNotEmptyLinkedRecordCachedName            *int                    `json:"countNotEmptyLinkedRecordCachedName,omitempty"`
+	PercentageEmptyLinkedRecordCachedName          *float64                `json:"percentageEmptyLinkedRecordCachedName,omitempty"`
+	PercentageNotEmptyLinkedRecordCachedName       *float64                `json:"percentageNotEmptyLinkedRecordCachedName,omitempty"`
+	CountUniqueValuesLinkedRecordID                *int                    `json:"countUniqueValuesLinkedRecordId,omitempty"`
+	CountEmptyLinkedRecordID                       *int                    `json:"countEmptyLinkedRecordId,omitempty"`
+	CountNotEmptyLinkedRecordID                    *int                    `json:"countNotEmptyLinkedRecordId,omitempty"`
+	PercentageEmptyLinkedRecordID                  *float64                `json:"percentageEmptyLinkedRecordId,omitempty"`
+	PercentageNotEmptyLinkedRecordID               *float64                `json:"percentageNotEmptyLinkedRecordId,omitempty"`
+	CountUniqueValuesPosition                      *int                    `json:"countUniqueValuesPosition,omitempty"`
+	CountEmptyPosition                             *int                    `json:"countEmptyPosition,omitempty"`
+	CountNotEmptyPosition                          *int                    `json:"countNotEmptyPosition,omitempty"`
+	PercentageEmptyPosition                        *float64                `json:"percentageEmptyPosition,omitempty"`
+	PercentageNotEmptyPosition                     *float64                `json:"percentageNotEmptyPosition,omitempty"`
+	CountUniqueValuesProperties                    *int                    `json:"countUniqueValuesProperties,omitempty"`
+	CountEmptyProperties                           *int                    `json:"countEmptyProperties,omitempty"`
+	CountNotEmptyProperties                        *int                    `json:"countNotEmptyProperties,omitempty"`
+	PercentageEmptyProperties                      *float64                `json:"percentageEmptyProperties,omitempty"`
+	PercentageNotEmptyProperties                   *float64                `json:"percentageNotEmptyProperties,omitempty"`
+	CountUniqueValuesTimelineActivityTypeID        *int                    `json:"countUniqueValuesTimelineActivityTypeId,omitempty"`
+	CountEmptyTimelineActivityTypeID               *int                    `json:"countEmptyTimelineActivityTypeId,omitempty"`
+	CountNotEmptyTimelineActivityTypeID            *int                    `json:"countNotEmptyTimelineActivityTypeId,omitempty"`
+	PercentageEmptyTimelineActivityTypeID          *float64                `json:"percentageEmptyTimelineActivityTypeId,omitempty"`
+	PercentageNotEmptyTimelineActivityTypeID       *float64                `json:"percentageNotEmptyTimelineActivityTypeId,omitempty"`
+	CountUniqueValuesTimelineActivityTypeSnapshot  *int                    `json:"countUniqueValuesTimelineActivityTypeSnapshot,omitempty"`
+	CountEmptyTimelineActivityTypeSnapshot         *int                    `json:"countEmptyTimelineActivityTypeSnapshot,omitempty"`
+	CountNotEmptyTimelineActivityTypeSnapshot      *int                    `json:"countNotEmptyTimelineActivityTypeSnapshot,omitempty"`
+	PercentageEmptyTimelineActivityTypeSnapshot    *float64                `json:"percentageEmptyTimelineActivityTypeSnapshot,omitempty"`
+	PercentageNotEmptyTimelineActivityTypeSnapshot *float64                `json:"percentageNotEmptyTimelineActivityTypeSnapshot,omitempty"`
+	CountUniqueValuesUpdatedAt                     *int                    `json:"countUniqueValuesUpdatedAt,omitempty"`
+	CountEmptyUpdatedAt                            *int                    `json:"countEmptyUpdatedAt,omitempty"`
+	CountNotEmptyUpdatedAt                         *int                    `json:"countNotEmptyUpdatedAt,omitempty"`
+	PercentageEmptyUpdatedAt                       *float64                `json:"percentageEmptyUpdatedAt,omitempty"`
+	PercentageNotEmptyUpdatedAt                    *float64                `json:"percentageNotEmptyUpdatedAt,omitempty"`
+	MinUpdatedAt                                   *time.Time              `json:"minUpdatedAt,omitempty"`
+	MaxUpdatedAt                                   *time.Time              `json:"maxUpdatedAt,omitempty"`
+	CountUniqueValuesUpdatedBy                     *int                    `json:"countUniqueValuesUpdatedBy,omitempty"`
+	CountEmptyUpdatedBy                            *int                    `json:"countEmptyUpdatedBy,omitempty"`
+	CountNotEmptyUpdatedBy                         *int                    `json:"countNotEmptyUpdatedBy,omitempty"`
+	PercentageEmptyUpdatedBy                       *float64                `json:"percentageEmptyUpdatedBy,omitempty"`
+	PercentageNotEmptyUpdatedBy                    *float64                `json:"percentageNotEmptyUpdatedBy,omitempty"`
+}
+
+type TimelineActivityCreateInput struct {
+	ID                           *string    `json:"id,omitempty"`
+	HappensAt                    *time.Time `json:"happensAt,omitempty"`
+	TimelineActivityTypeID       *string    `json:"timelineActivityTypeId,omitempty"`
+	TimelineActivityTypeSnapshot any        `json:"timelineActivityTypeSnapshot,omitempty"`
+	Properties                   any        `json:"properties,omitempty"`
+	LinkedRecordCachedName       *string    `json:"linkedRecordCachedName,omitempty"`
+	LinkedRecordID               *string    `json:"linkedRecordId,omitempty"`
+	LinkedObjectMetadataID       *string    `json:"linkedObjectMetadataId,omitempty"`
+	TargetCompanyID              *string    `json:"targetCompanyId,omitempty"`
+	TargetDashboardID            *string    `json:"targetDashboardId,omitempty"`
+	TargetMessageCampaignID      *string    `json:"targetMessageCampaignId,omitempty"`
+	TargetMessageListID          *string    `json:"targetMessageListId,omitempty"`
+	TargetNoteID                 *string    `json:"targetNoteId,omitempty"`
+	TargetOpportunityID          *string    `json:"targetOpportunityId,omitempty"`
+	TargetPersonID               *string    `json:"targetPersonId,omitempty"`
+	TargetTaskID                 *string    `json:"targetTaskId,omitempty"`
+	TargetWorkflowID             *string    `json:"targetWorkflowId,omitempty"`
+	TargetWorkflowRunID          *string    `json:"targetWorkflowRunId,omitempty"`
+	TargetWorkflowVersionID      *string    `json:"targetWorkflowVersionId,omitempty"`
+	WorkspaceMemberID            *string    `json:"workspaceMemberId,omitempty"`
+	Position                     *float64   `json:"position,omitempty"`
+}
+
+type TimelineActivityEdge struct {
+	Node   *TimelineActivity `json:"node"`
+	Cursor string            `json:"cursor"`
+}
+
+type TimelineActivityGroupByConnection struct {
+	TotalCount                                     *int                    `json:"totalCount,omitempty"`
+	Edges                                          []*TimelineActivityEdge `json:"edges"`
+	PageInfo                                       *PageInfo               `json:"pageInfo"`
+	GroupByDimensionValues                         any                     `json:"groupByDimensionValues"`
+	CountUniqueValuesCreatedAt                     *int                    `json:"countUniqueValuesCreatedAt,omitempty"`
+	CountEmptyCreatedAt                            *int                    `json:"countEmptyCreatedAt,omitempty"`
+	CountNotEmptyCreatedAt                         *int                    `json:"countNotEmptyCreatedAt,omitempty"`
+	PercentageEmptyCreatedAt                       *float64                `json:"percentageEmptyCreatedAt,omitempty"`
+	PercentageNotEmptyCreatedAt                    *float64                `json:"percentageNotEmptyCreatedAt,omitempty"`
+	MinCreatedAt                                   *time.Time              `json:"minCreatedAt,omitempty"`
+	MaxCreatedAt                                   *time.Time              `json:"maxCreatedAt,omitempty"`
+	CountUniqueValuesCreatedBy                     *int                    `json:"countUniqueValuesCreatedBy,omitempty"`
+	CountEmptyCreatedBy                            *int                    `json:"countEmptyCreatedBy,omitempty"`
+	CountNotEmptyCreatedBy                         *int                    `json:"countNotEmptyCreatedBy,omitempty"`
+	PercentageEmptyCreatedBy                       *float64                `json:"percentageEmptyCreatedBy,omitempty"`
+	PercentageNotEmptyCreatedBy                    *float64                `json:"percentageNotEmptyCreatedBy,omitempty"`
+	CountUniqueValuesDeletedAt                     *int                    `json:"countUniqueValuesDeletedAt,omitempty"`
+	CountEmptyDeletedAt                            *int                    `json:"countEmptyDeletedAt,omitempty"`
+	CountNotEmptyDeletedAt                         *int                    `json:"countNotEmptyDeletedAt,omitempty"`
+	PercentageEmptyDeletedAt                       *float64                `json:"percentageEmptyDeletedAt,omitempty"`
+	PercentageNotEmptyDeletedAt                    *float64                `json:"percentageNotEmptyDeletedAt,omitempty"`
+	MinDeletedAt                                   *time.Time              `json:"minDeletedAt,omitempty"`
+	MaxDeletedAt                                   *time.Time              `json:"maxDeletedAt,omitempty"`
+	CountUniqueValuesHappensAt                     *int                    `json:"countUniqueValuesHappensAt,omitempty"`
+	CountEmptyHappensAt                            *int                    `json:"countEmptyHappensAt,omitempty"`
+	CountNotEmptyHappensAt                         *int                    `json:"countNotEmptyHappensAt,omitempty"`
+	PercentageEmptyHappensAt                       *float64                `json:"percentageEmptyHappensAt,omitempty"`
+	PercentageNotEmptyHappensAt                    *float64                `json:"percentageNotEmptyHappensAt,omitempty"`
+	MinHappensAt                                   *time.Time              `json:"minHappensAt,omitempty"`
+	MaxHappensAt                                   *time.Time              `json:"maxHappensAt,omitempty"`
+	CountUniqueValuesID                            *int                    `json:"countUniqueValuesId,omitempty"`
+	CountEmptyID                                   *int                    `json:"countEmptyId,omitempty"`
+	CountNotEmptyID                                *int                    `json:"countNotEmptyId,omitempty"`
+	PercentageEmptyID                              *float64                `json:"percentageEmptyId,omitempty"`
+	PercentageNotEmptyID                           *float64                `json:"percentageNotEmptyId,omitempty"`
+	CountUniqueValuesLinkedObjectMetadataID        *int                    `json:"countUniqueValuesLinkedObjectMetadataId,omitempty"`
+	CountEmptyLinkedObjectMetadataID               *int                    `json:"countEmptyLinkedObjectMetadataId,omitempty"`
+	CountNotEmptyLinkedObjectMetadataID            *int                    `json:"countNotEmptyLinkedObjectMetadataId,omitempty"`
+	PercentageEmptyLinkedObjectMetadataID          *float64                `json:"percentageEmptyLinkedObjectMetadataId,omitempty"`
+	PercentageNotEmptyLinkedObjectMetadataID       *float64                `json:"percentageNotEmptyLinkedObjectMetadataId,omitempty"`
+	CountUniqueValuesLinkedRecordCachedName        *int                    `json:"countUniqueValuesLinkedRecordCachedName,omitempty"`
+	CountEmptyLinkedRecordCachedName               *int                    `json:"countEmptyLinkedRecordCachedName,omitempty"`
+	CountNotEmptyLinkedRecordCachedName            *int                    `json:"countNotEmptyLinkedRecordCachedName,omitempty"`
+	PercentageEmptyLinkedRecordCachedName          *float64                `json:"percentageEmptyLinkedRecordCachedName,omitempty"`
+	PercentageNotEmptyLinkedRecordCachedName       *float64                `json:"percentageNotEmptyLinkedRecordCachedName,omitempty"`
+	CountUniqueValuesLinkedRecordID                *int                    `json:"countUniqueValuesLinkedRecordId,omitempty"`
+	CountEmptyLinkedRecordID                       *int                    `json:"countEmptyLinkedRecordId,omitempty"`
+	CountNotEmptyLinkedRecordID                    *int                    `json:"countNotEmptyLinkedRecordId,omitempty"`
+	PercentageEmptyLinkedRecordID                  *float64                `json:"percentageEmptyLinkedRecordId,omitempty"`
+	PercentageNotEmptyLinkedRecordID               *float64                `json:"percentageNotEmptyLinkedRecordId,omitempty"`
+	CountUniqueValuesPosition                      *int                    `json:"countUniqueValuesPosition,omitempty"`
+	CountEmptyPosition                             *int                    `json:"countEmptyPosition,omitempty"`
+	CountNotEmptyPosition                          *int                    `json:"countNotEmptyPosition,omitempty"`
+	PercentageEmptyPosition                        *float64                `json:"percentageEmptyPosition,omitempty"`
+	PercentageNotEmptyPosition                     *float64                `json:"percentageNotEmptyPosition,omitempty"`
+	CountUniqueValuesProperties                    *int                    `json:"countUniqueValuesProperties,omitempty"`
+	CountEmptyProperties                           *int                    `json:"countEmptyProperties,omitempty"`
+	CountNotEmptyProperties                        *int                    `json:"countNotEmptyProperties,omitempty"`
+	PercentageEmptyProperties                      *float64                `json:"percentageEmptyProperties,omitempty"`
+	PercentageNotEmptyProperties                   *float64                `json:"percentageNotEmptyProperties,omitempty"`
+	CountUniqueValuesTimelineActivityTypeID        *int                    `json:"countUniqueValuesTimelineActivityTypeId,omitempty"`
+	CountEmptyTimelineActivityTypeID               *int                    `json:"countEmptyTimelineActivityTypeId,omitempty"`
+	CountNotEmptyTimelineActivityTypeID            *int                    `json:"countNotEmptyTimelineActivityTypeId,omitempty"`
+	PercentageEmptyTimelineActivityTypeID          *float64                `json:"percentageEmptyTimelineActivityTypeId,omitempty"`
+	PercentageNotEmptyTimelineActivityTypeID       *float64                `json:"percentageNotEmptyTimelineActivityTypeId,omitempty"`
+	CountUniqueValuesTimelineActivityTypeSnapshot  *int                    `json:"countUniqueValuesTimelineActivityTypeSnapshot,omitempty"`
+	CountEmptyTimelineActivityTypeSnapshot         *int                    `json:"countEmptyTimelineActivityTypeSnapshot,omitempty"`
+	CountNotEmptyTimelineActivityTypeSnapshot      *int                    `json:"countNotEmptyTimelineActivityTypeSnapshot,omitempty"`
+	PercentageEmptyTimelineActivityTypeSnapshot    *float64                `json:"percentageEmptyTimelineActivityTypeSnapshot,omitempty"`
+	PercentageNotEmptyTimelineActivityTypeSnapshot *float64                `json:"percentageNotEmptyTimelineActivityTypeSnapshot,omitempty"`
+	CountUniqueValuesUpdatedAt                     *int                    `json:"countUniqueValuesUpdatedAt,omitempty"`
+	CountEmptyUpdatedAt                            *int                    `json:"countEmptyUpdatedAt,omitempty"`
+	CountNotEmptyUpdatedAt                         *int                    `json:"countNotEmptyUpdatedAt,omitempty"`
+	PercentageEmptyUpdatedAt                       *float64                `json:"percentageEmptyUpdatedAt,omitempty"`
+	PercentageNotEmptyUpdatedAt                    *float64                `json:"percentageNotEmptyUpdatedAt,omitempty"`
+	MinUpdatedAt                                   *time.Time              `json:"minUpdatedAt,omitempty"`
+	MaxUpdatedAt                                   *time.Time              `json:"maxUpdatedAt,omitempty"`
+	CountUniqueValuesUpdatedBy                     *int                    `json:"countUniqueValuesUpdatedBy,omitempty"`
+	CountEmptyUpdatedBy                            *int                    `json:"countEmptyUpdatedBy,omitempty"`
+	CountNotEmptyUpdatedBy                         *int                    `json:"countNotEmptyUpdatedBy,omitempty"`
+	PercentageEmptyUpdatedBy                       *float64                `json:"percentageEmptyUpdatedBy,omitempty"`
+	PercentageNotEmptyUpdatedBy                    *float64                `json:"percentageNotEmptyUpdatedBy,omitempty"`
+}
+
+type TimelineActivityUpdateInput struct {
+	HappensAt                    *time.Time `json:"happensAt,omitempty"`
+	TimelineActivityTypeID       *string    `json:"timelineActivityTypeId,omitempty"`
+	TimelineActivityTypeSnapshot any        `json:"timelineActivityTypeSnapshot,omitempty"`
+	Properties                   any        `json:"properties,omitempty"`
+	LinkedRecordCachedName       *string    `json:"linkedRecordCachedName,omitempty"`
+	LinkedRecordID               *string    `json:"linkedRecordId,omitempty"`
+	LinkedObjectMetadataID       *string    `json:"linkedObjectMetadataId,omitempty"`
+	TargetCompanyID              *string    `json:"targetCompanyId,omitempty"`
+	TargetDashboardID            *string    `json:"targetDashboardId,omitempty"`
+	TargetMessageCampaignID      *string    `json:"targetMessageCampaignId,omitempty"`
+	TargetMessageListID          *string    `json:"targetMessageListId,omitempty"`
+	TargetNoteID                 *string    `json:"targetNoteId,omitempty"`
+	TargetOpportunityID          *string    `json:"targetOpportunityId,omitempty"`
+	TargetPersonID               *string    `json:"targetPersonId,omitempty"`
+	TargetTaskID                 *string    `json:"targetTaskId,omitempty"`
+	TargetWorkflowID             *string    `json:"targetWorkflowId,omitempty"`
+	TargetWorkflowRunID          *string    `json:"targetWorkflowRunId,omitempty"`
+	TargetWorkflowVersionID      *string    `json:"targetWorkflowVersionId,omitempty"`
+	WorkspaceMemberID            *string    `json:"workspaceMemberId,omitempty"`
+	Position                     *float64   `json:"position,omitempty"`
+}
+
 type UUIDFilter struct {
 	Eq  *string   `json:"eq,omitempty"`
 	Neq *string   `json:"neq,omitempty"`
@@ -1896,6 +2348,73 @@ type WorkspaceMemberUpdateInput struct {
 	TimeFormat       *WorkspaceMemberTimeFormatEnum   `json:"timeFormat,omitempty"`
 	NumberFormat     *WorkspaceMemberNumberFormatEnum `json:"numberFormat,omitempty"`
 	Position         *float64                         `json:"position,omitempty"`
+}
+
+type AttachmentFileCategory string
+
+const (
+	AttachmentFileCategoryArchive      AttachmentFileCategory = "ARCHIVE"
+	AttachmentFileCategoryAudio        AttachmentFileCategory = "AUDIO"
+	AttachmentFileCategoryImage        AttachmentFileCategory = "IMAGE"
+	AttachmentFileCategoryPresentation AttachmentFileCategory = "PRESENTATION"
+	AttachmentFileCategorySpreadsheet  AttachmentFileCategory = "SPREADSHEET"
+	AttachmentFileCategoryTextDocument AttachmentFileCategory = "TEXT_DOCUMENT"
+	AttachmentFileCategoryVideo        AttachmentFileCategory = "VIDEO"
+	AttachmentFileCategoryOther        AttachmentFileCategory = "OTHER"
+)
+
+var AllAttachmentFileCategory = []AttachmentFileCategory{
+	AttachmentFileCategoryArchive,
+	AttachmentFileCategoryAudio,
+	AttachmentFileCategoryImage,
+	AttachmentFileCategoryPresentation,
+	AttachmentFileCategorySpreadsheet,
+	AttachmentFileCategoryTextDocument,
+	AttachmentFileCategoryVideo,
+	AttachmentFileCategoryOther,
+}
+
+func (e AttachmentFileCategory) IsValid() bool {
+	switch e {
+	case AttachmentFileCategoryArchive, AttachmentFileCategoryAudio, AttachmentFileCategoryImage, AttachmentFileCategoryPresentation, AttachmentFileCategorySpreadsheet, AttachmentFileCategoryTextDocument, AttachmentFileCategoryVideo, AttachmentFileCategoryOther:
+		return true
+	}
+	return false
+}
+
+func (e AttachmentFileCategory) String() string {
+	return string(e)
+}
+
+func (e *AttachmentFileCategory) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = AttachmentFileCategory(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid AttachmentFileCategory", str)
+	}
+	return nil
+}
+
+func (e AttachmentFileCategory) MarshalGQL(w io.Writer) {
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *AttachmentFileCategory) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e AttachmentFileCategory) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }
 
 type FilterIs string

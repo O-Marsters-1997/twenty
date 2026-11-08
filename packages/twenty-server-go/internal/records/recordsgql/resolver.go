@@ -11,15 +11,17 @@ import (
 const bulkPageSize = 200
 
 type Resolver struct {
-	Store            records.People
-	Companies        records.Companies
-	Opportunities    records.Opportunities
-	WorkspaceMembers records.WorkspaceMembers
-	Dashboards       records.Dashboards
-	Notes            records.Notes
-	NoteTargets      records.NoteTargets
-	Tasks            records.Tasks
-	TaskTargets      records.TaskTargets
+	Store              records.People
+	Companies          records.Companies
+	Opportunities      records.Opportunities
+	WorkspaceMembers   records.WorkspaceMembers
+	Dashboards         records.Dashboards
+	TimelineActivities records.TimelineActivities
+	Attachments        records.Attachments
+	Notes              records.Notes
+	NoteTargets        records.NoteTargets
+	Tasks              records.Tasks
+	TaskTargets        records.TaskTargets
 }
 
 func (r *Resolver) actor(ctx context.Context) (records.Actor, error) {
@@ -178,7 +180,7 @@ func (r *queryResolver) People(ctx context.Context, filter map[string]any, order
 	}
 	connection := &PersonConnection{TotalCount: &page.TotalCount}
 	connection.Edges, connection.PageInfo = edgesOf(page)
-	if aggregates := requestedAggregates(ctx); len(aggregates) > 0 {
+	if aggregates := requestedAggregates(ctx, personAggregates); len(aggregates) > 0 {
 		result, err := r.Store.Aggregate(ctx, parsed, aggregates)
 		if err != nil {
 			return nil, err
@@ -217,7 +219,7 @@ func (r *queryResolver) PeopleGroupBy(ctx context.Context, groupBy []map[string]
 	if selects(ctx, "edges", "pageInfo") {
 		perGroup.First = recordsPerGroup
 	}
-	aggregates := append(requestedAggregates(ctx), records.Aggregate{Field: "id", Operation: "count"})
+	aggregates := append(requestedAggregates(ctx, personAggregates), records.Aggregate{Field: "id", Operation: "count"})
 	groups, err := r.Store.GroupBy(ctx, parsed, by, order, aggregates, perGroup)
 	if err != nil {
 		return nil, err

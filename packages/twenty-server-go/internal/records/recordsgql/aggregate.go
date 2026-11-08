@@ -9,6 +9,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/model"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records"
 )
 
@@ -18,22 +19,35 @@ const (
 )
 
 var aggregatableFields = []string{
-	"address", "amount", "annualRevenue", "avatarFile", "avatarUrl", "bodyV2", "calendarStartDay", "closeDate", "colorScheme", "createdAt", "createdBy", "dateFormat", "deletedAt", "domainName", "dueAt", "emails", "id", "jobTitle",
-	"linkedinLink", "locale", "name", "numberFormat", "openRecordIn", "pageLayoutId", "phones", "position", "stage", "status", "timeFormat", "timeZone", "title",
-	"uiScale", "updatedAt", "updatedBy", "userEmail", "userId",
+	"avatarFile", "avatarUrl", "createdAt", "createdBy", "deletedAt", "emails", "id", "jobTitle",
+	"linkedinLink", "name", "phones", "position", "updatedAt", "updatedBy",
 }
 
-var dateAggregatableFields = []string{"closeDate", "createdAt", "deletedAt", "dueAt", "updatedAt"}
+var dateAggregatableFields = []string{"createdAt", "deletedAt", "updatedAt"}
 
 var currencyAggregatableFields = []string{"amount", "annualRevenue"}
 
-var aggregatesByFieldName = buildAggregatesByFieldName()
+var personAggregates = buildAggregatesByFieldName(aggregatableFields, dateAggregatableFields)
 
-func buildAggregatesByFieldName() map[string]records.Aggregate {
+func aggregatesOf(object model.Object) map[string]records.Aggregate {
+	var fields, dateFields []string
+	for _, field := range object.Fields {
+		switch field.Type {
+		case model.TypeRelation, model.TypeMorph, model.TypeTSVector:
+			continue
+		case model.TypeDateTime:
+			dateFields = append(dateFields, field.Name)
+		}
+		fields = append(fields, field.Name)
+	}
+	return buildAggregatesByFieldName(fields, dateFields)
+}
+
+func buildAggregatesByFieldName(fields, dateFields []string) map[string]records.Aggregate {
 	lookup := map[string]records.Aggregate{}
-	for _, field := range aggregatableFields {
+	for _, field := range fields {
 		operations := []records.AggregateOperation{"countUniqueValues", "countEmpty", "countNotEmpty", "percentageEmpty", "percentageNotEmpty"}
-		if slices.Contains(dateAggregatableFields, field) {
+		if slices.Contains(dateFields, field) {
 			operations = append(operations, "min", "max")
 		}
 		for _, operation := range operations {
@@ -48,10 +62,10 @@ func buildAggregatesByFieldName() map[string]records.Aggregate {
 	return lookup
 }
 
-func requestedAggregates(ctx context.Context) []records.Aggregate {
+func requestedAggregates(ctx context.Context, lookup map[string]records.Aggregate) []records.Aggregate {
 	var aggregates []records.Aggregate
 	for _, field := range graphql.CollectAllFields(ctx) {
-		if aggregate, ok := aggregatesByFieldName[field]; ok {
+		if aggregate, ok := lookup[field]; ok {
 			aggregates = append(aggregates, aggregate)
 		}
 	}
@@ -64,9 +78,14 @@ func selects(ctx context.Context, names ...string) bool {
 
 func fillAggregates(connection any, result records.AggregateResult) {
 	target := reflect.ValueOf(connection).Elem()
+	fieldsByKey := map[string]reflect.Value{}
+	for i := range target.NumField() {
+		key, _, _ := strings.Cut(target.Type().Field(i).Tag.Get("json"), ",")
+		fieldsByKey[key] = target.Field(i)
+	}
 	for key, value := range result {
-		field := target.FieldByName(strings.ToUpper(key[:1]) + key[1:])
-		if !field.IsValid() || value == nil {
+		field, ok := fieldsByKey[key]
+		if !ok || value == nil {
 			continue
 		}
 		switch typed := value.(type) {
@@ -76,6 +95,7 @@ func fillAggregates(connection any, result records.AggregateResult) {
 		case float64:
 			field.Set(reflect.ValueOf(&typed))
 		case time.Time:
+			typed = typed.UTC()
 			field.Set(reflect.ValueOf(&typed))
 		}
 	}

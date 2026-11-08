@@ -3,6 +3,8 @@ schema:
   - company.graphqls
   - opportunity.graphqls
   - aggregate.graphqls
+  - timelineactivity.graphqls
+  - attachment.graphqls
   - workspaceMember.graphqls
   - dashboard.graphqls
   - note.graphqls
@@ -38,6 +40,22 @@ models:
   PersonOrderByWithGroupByInput:
     model: map[string]interface{}
   PersonGroupByInput:
+    model: map[string]interface{}
+  TimelineActivityFilterInput:
+    model: map[string]interface{}
+  TimelineActivityOrderByInput:
+    model: map[string]interface{}
+  TimelineActivityOrderByWithGroupByInput:
+    model: map[string]interface{}
+  TimelineActivityGroupByInput:
+    model: map[string]interface{}
+  AttachmentFilterInput:
+    model: map[string]interface{}
+  AttachmentOrderByInput:
+    model: map[string]interface{}
+  AttachmentOrderByWithGroupByInput:
+    model: map[string]interface{}
+  AttachmentGroupByInput:
     model: map[string]interface{}
   WorkspaceMemberFilterInput:
     model: map[string]interface{}

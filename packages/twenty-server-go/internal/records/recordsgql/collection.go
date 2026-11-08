@@ -132,7 +132,7 @@ func (c collection[TRecord, TNode]) list(ctx context.Context, filter map[string]
 		return none, nil, err
 	}
 	var aggregated records.AggregateResult
-	if aggregates := requestedAggregates(ctx); len(aggregates) > 0 {
+	if aggregates := requestedAggregates(ctx, aggregatesOf(c.object)); len(aggregates) > 0 {
 		if aggregated, err = c.store.Aggregate(ctx, parsed, aggregates); err != nil {
 			return none, nil, err
 		}
@@ -157,7 +157,7 @@ func (c collection[TRecord, TNode]) groups(ctx context.Context, groupBy []map[st
 	if selects(ctx, "edges", "pageInfo") {
 		perGroup.First = recordsPerGroup
 	}
-	aggregates := append(requestedAggregates(ctx), records.Aggregate{Field: "id", Operation: "count"})
+	aggregates := append(requestedAggregates(ctx, aggregatesOf(c.object)), records.Aggregate{Field: "id", Operation: "count"})
 	groups, err := c.store.GroupBy(ctx, parsed, by, order, aggregates, perGroup)
 	if err != nil {
 		return nil, err
