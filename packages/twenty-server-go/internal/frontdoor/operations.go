@@ -21,6 +21,7 @@ type OperationTable map[Endpoint]map[string]Route // operation name → route; a
 func DefaultTable() OperationTable {
 	return OperationTable{
 		EndpointMetadata: {
+			"ObjectMetadataItems":         RouteGo,
 			"CreateOneObjectMetadataItem": RouteBlocked,
 			"UpdateOneObjectMetadataItem": RouteBlocked,
 			"DeleteOneObjectMetadataItem": RouteBlocked,
