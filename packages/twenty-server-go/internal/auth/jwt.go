@@ -14,7 +14,10 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-const accessTokenType = "ACCESS"
+const (
+	accessTokenType = "ACCESS"
+	apiKeyTokenType = "API_KEY"
+)
 
 var errKeyLookup = errors.New("look up signing key")
 
@@ -38,19 +41,18 @@ func NewJWTVerifier(pool *pgxpool.Pool, appSecret string) *JWTVerifier {
 }
 
 func (v *JWTVerifier) Verify(ctx context.Context, bearer string) (Principal, error) {
-	var tokenClaims claims
-	parser := jwt.NewParser(jwt.WithValidMethods([]string{"ES256", "HS256"}), jwt.WithExpirationRequired())
-	_, err := parser.ParseWithClaims(bearer, &tokenClaims, func(token *jwt.Token) (any, error) {
-		if token.Method.Alg() == "ES256" {
-			return v.publicKey(ctx, token)
-		}
-		return v.legacySecret(tokenClaims)
-	})
+	tokenClaims, err := v.parse(ctx, bearer, "")
+	// Node signed API-key tokens before 2025-12-12 with the ACCESS secret: https://github.com/twentyhq/twenty/pull/16504
+	if err != nil && tokenClaims.Type == apiKeyTokenType && !errors.Is(err, errKeyLookup) {
+		tokenClaims, err = v.parse(ctx, bearer, accessTokenType)
+	}
 	switch {
 	case errors.Is(err, errKeyLookup):
 		return Principal{}, fmt.Errorf("verify token: %w", err)
-	case err != nil, tokenClaims.Type != accessTokenType:
+	case err != nil:
 		return Principal{}, ErrUnauthenticated
+	case tokenClaims.Type == apiKeyTokenType:
+		return v.apiKeyPrincipal(ctx, tokenClaims)
 	}
 	return Principal{
 		UserID:            tokenClaims.UserID,
@@ -61,7 +63,41 @@ func (v *JWTVerifier) Verify(ctx context.Context, bearer string) (Principal, err
 	}, nil
 }
 
-func (v *JWTVerifier) legacySecret(tokenClaims claims) (any, error) {
+func (v *JWTVerifier) parse(ctx context.Context, bearer, secretType string) (claims, error) {
+	var tokenClaims claims
+	parser := jwt.NewParser(jwt.WithValidMethods([]string{"ES256", "HS256"}), jwt.WithExpirationRequired())
+	_, err := parser.ParseWithClaims(bearer, &tokenClaims, func(token *jwt.Token) (any, error) {
+		if token.Method.Alg() == "ES256" {
+			return v.publicKey(ctx, token)
+		}
+		return v.legacySecret(tokenClaims, secretType)
+	})
+	if err == nil && tokenClaims.Type != accessTokenType && tokenClaims.Type != apiKeyTokenType {
+		err = ErrUnauthenticated
+	}
+	return tokenClaims, err
+}
+
+func (v *JWTVerifier) apiKeyPrincipal(ctx context.Context, tokenClaims claims) (Principal, error) {
+	var found bool
+	err := v.pool.QueryRow(ctx,
+		`SELECT true FROM core."apiKey"
+		 WHERE id::text = $1 AND "workspaceId"::text = $2 AND "revokedAt" IS NULL AND "expiresAt" > now()`,
+		tokenClaims.Subject, tokenClaims.WorkspaceID,
+	).Scan(&found)
+	if errors.Is(err, pgx.ErrNoRows) {
+		return Principal{}, ErrUnauthenticated
+	}
+	if err != nil {
+		return Principal{}, fmt.Errorf("look up api key: %w", err)
+	}
+	return Principal{WorkspaceID: tokenClaims.WorkspaceID, APIKeyID: tokenClaims.Subject}, nil
+}
+
+func (v *JWTVerifier) legacySecret(tokenClaims claims, secretType string) (any, error) {
+	if secretType == "" {
+		secretType = tokenClaims.Type
+	}
 	body := tokenClaims.WorkspaceID
 	if body == "" {
 		body = tokenClaims.UserID
@@ -69,7 +105,7 @@ func (v *JWTVerifier) legacySecret(tokenClaims claims) (any, error) {
 	if v.appSecret == "" || body == "" {
 		return nil, ErrUnauthenticated
 	}
-	sum := sha256.Sum256([]byte(v.appSecret + body + tokenClaims.Type))
+	sum := sha256.Sum256([]byte(v.appSecret + body + secretType))
 	return []byte(hex.EncodeToString(sum[:])), nil
 }
 
