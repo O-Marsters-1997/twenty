@@ -16,6 +16,7 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai/agentgql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai/aigql"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai/skillgql"
 	aistore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai/store"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/config"
@@ -72,6 +73,7 @@ func run() error {
 	goGraphQL.Handle(string(frontdoor.EndpointMetadata), metadataHandler(
 		metadatagql.NewHandler(metadatastore.New(pool), toolRegistry, logger),
 		aigql.NewHandler(chats, broker, logger),
+		skillgql.NewHandler(ai.NewSkills(pool), logger),
 		metagql.NewHandler(metadatastore.NewViews(pool), logger),
 		agentgql.NewHandler(aistore.NewAgents(pool), logger),
 		agentgql.Operations,

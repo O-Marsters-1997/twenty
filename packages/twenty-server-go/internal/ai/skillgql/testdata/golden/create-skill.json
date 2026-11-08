@@ -1,0 +1,9 @@
+{
+  "name": "create-skill",
+  "operation": "CreateSkill",
+  "fixture": "baseline-with-alpha-and-beta-skills",
+  "endpoint": "/metadata",
+  "query": "mutation CreateSkill($input: CreateSkillInput!) { createSkill(input: $input) { ...SkillFields } } fragment SkillFields on Skill { id name label description icon content isCustom isSystem isActive applicationId createdAt updatedAt }",
+  "variables": {"input":{"id":"33333333-3333-4333-8333-333333333333","name":"gamma","label":"Gamma Skill","content":"  gamma content  "}},
+  "response": {"data":{"createSkill":{"id":"33333333-3333-4333-8333-333333333333","name":"gamma","label":"Gamma Skill","description":null,"icon":null,"content":"gamma content","isCustom":true,"isSystem":false,"isActive":true,"applicationId":"<ignored>","createdAt":"<ignored>","updatedAt":"<ignored>"}}}
+}

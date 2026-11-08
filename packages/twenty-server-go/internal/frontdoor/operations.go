@@ -1,5 +1,7 @@
 package frontdoor
 
+import "slices"
+
 type Endpoint string
 
 const (
@@ -58,10 +60,7 @@ func DefaultTable() OperationTable {
 	for _, operation := range viewOperations {
 		table[EndpointMetadata][operation] = RouteGo
 	}
-	for _, operation := range agentOperations {
-		table[EndpointMetadata][operation] = RouteGo
-	}
-	for _, operation := range ChatOperations {
+	for _, operation := range slices.Concat(SkillOperations, ChatOperations, agentOperations) {
 		table[EndpointMetadata][operation] = RouteGo
 	}
 	for _, plural := range []string{"Notes", "NoteTargets", "Tasks", "TaskTargets"} {
@@ -70,6 +69,11 @@ func DefaultTable() OperationTable {
 		}
 	}
 	return table
+}
+
+var SkillOperations = []string{
+	"FindManySkills", "FindOneSkill", "FindManySkillsForSuggestion",
+	"CreateSkill", "UpdateSkill", "DeleteSkill", "ActivateSkill", "DeactivateSkill",
 }
 
 var ChatOperations = []string{

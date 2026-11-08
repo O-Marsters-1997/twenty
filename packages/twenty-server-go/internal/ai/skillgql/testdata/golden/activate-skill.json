@@ -1,0 +1,9 @@
+{
+  "name": "activate-skill",
+  "operation": "ActivateSkill",
+  "fixture": "baseline-with-alpha-and-beta-skills",
+  "endpoint": "/metadata",
+  "query": "mutation ActivateSkill($id: UUID!) { activateSkill(id: $id) { ...SkillFields } } fragment SkillFields on Skill { id name label description icon content isCustom isSystem isActive applicationId createdAt updatedAt }",
+  "variables": {"id":"22222222-2222-4222-8222-222222222222"},
+  "response": {"data":{"activateSkill":{"id":"22222222-2222-4222-8222-222222222222","name":"beta","label":"Beta Skill","description":null,"icon":null,"content":"beta content","isCustom":true,"isSystem":false,"isActive":true,"applicationId":"<ignored>","createdAt":"<ignored>","updatedAt":"<ignored>"}}}
+}

@@ -1,0 +1,9 @@
+{
+  "name": "update-skill",
+  "operation": "UpdateSkill",
+  "fixture": "baseline-with-alpha-and-beta-skills",
+  "endpoint": "/metadata",
+  "query": "mutation UpdateSkill($input: UpdateSkillInput!) { updateSkill(input: $input) { ...SkillFields } } fragment SkillFields on Skill { id name label description icon content isCustom isSystem isActive applicationId createdAt updatedAt }",
+  "variables": {"input":{"id":"11111111-1111-4111-8111-111111111111","label":"Alpha Renamed"}},
+  "response": {"data":{"updateSkill":{"id":"11111111-1111-4111-8111-111111111111","name":"alpha","label":"Alpha Renamed","description":"First","icon":"IconA","content":"alpha content","isCustom":true,"isSystem":false,"isActive":true,"applicationId":"<ignored>","createdAt":"<ignored>","updatedAt":"<ignored>"}}}
+}

@@ -1,0 +1,49 @@
+scalar UUID
+scalar DateTime
+
+type Skill {
+  id: UUID!
+  name: String!
+  label: String!
+  icon: String
+  description: String
+  content: String!
+  isCustom: Boolean!
+  isSystem: Boolean!
+  isActive: Boolean!
+  applicationId: UUID
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input CreateSkillInput {
+  id: UUID
+  name: String!
+  label: String!
+  icon: String
+  description: String
+  content: String!
+}
+
+input UpdateSkillInput {
+  id: UUID!
+  name: String
+  label: String
+  icon: String
+  description: String
+  content: String
+  isActive: Boolean
+}
+
+type Query {
+  skills: [Skill!]!
+  skill(id: UUID!): Skill
+}
+
+type Mutation {
+  createSkill(input: CreateSkillInput!): Skill!
+  updateSkill(input: UpdateSkillInput!): Skill!
+  deleteSkill(id: UUID!): Skill!
+  activateSkill(id: UUID!): Skill!
+  deactivateSkill(id: UUID!): Skill!
+}

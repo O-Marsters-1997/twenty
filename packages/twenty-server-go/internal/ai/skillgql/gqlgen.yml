@@ -1,0 +1,24 @@
+schema:
+  - skill.graphqls
+exec:
+  filename: generated.go
+  package: skillgql
+model:
+  filename: models_gen.go
+  package: skillgql
+resolver:
+  layout: single-file
+  filename: resolver.go
+  package: skillgql
+  type: Resolver
+models:
+  UUID:
+    model: github.com/99designs/gqlgen/graphql.String
+  DateTime:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata.Timestamp
+  Skill:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai.SkillRecord
+  CreateSkillInput:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai.SkillInput
+  UpdateSkillInput:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai.SkillPatch
