@@ -1,0 +1,284 @@
+type Address {
+  addressStreet1: String
+  addressStreet2: String
+  addressCity: String
+  addressPostcode: String
+  addressState: String
+  addressCountry: String
+  addressLat: Float
+  addressLng: Float
+}
+
+type Currency {
+  amountMicros: Float
+  currencyCode: String
+}
+
+input AddressFilter {
+  addressStreet1: StringFilter
+  addressStreet2: StringFilter
+  addressCity: StringFilter
+  addressPostcode: StringFilter
+  addressState: StringFilter
+  addressCountry: StringFilter
+  addressLat: FloatFilter
+  addressLng: FloatFilter
+}
+
+input CurrencyFilter {
+  amountMicros: FloatFilter
+  currencyCode: StringFilter
+}
+
+input AddressOrderByInput {
+  addressStreet1: OrderByDirection
+  addressStreet2: OrderByDirection
+  addressCity: OrderByDirection
+  addressPostcode: OrderByDirection
+  addressState: OrderByDirection
+  addressCountry: OrderByDirection
+  addressLat: OrderByDirection
+  addressLng: OrderByDirection
+}
+
+input CurrencyOrderByInput {
+  amountMicros: OrderByDirection
+  currencyCode: OrderByDirection
+}
+
+input AddressGroupByInput {
+  addressStreet1: Boolean
+  addressStreet2: Boolean
+  addressCity: Boolean
+  addressPostcode: Boolean
+  addressState: Boolean
+  addressCountry: Boolean
+}
+
+type Company {
+  id: UUID!
+  name: String
+  domainName: Links
+  address: Address
+  linkedinLink: Links
+  annualRevenue: Currency
+  accountOwnerId: ID
+  position: Position!
+  createdBy: Actor!
+  updatedBy: Actor!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
+
+type CompanyEdge {
+  node: Company!
+  cursor: Cursor!
+}
+
+type CompanyConnection {
+  totalCount: Int
+  edges: [CompanyEdge!]!
+  pageInfo: PageInfo!
+  countUniqueValuesAddress: Int
+  countEmptyAddress: Int
+  countNotEmptyAddress: Int
+  percentageEmptyAddress: Float
+  percentageNotEmptyAddress: Float
+  countUniqueValuesAnnualRevenue: Int
+  countEmptyAnnualRevenue: Int
+  countNotEmptyAnnualRevenue: Int
+  percentageEmptyAnnualRevenue: Float
+  percentageNotEmptyAnnualRevenue: Float
+  minAnnualRevenueAmountMicros: Float
+  maxAnnualRevenueAmountMicros: Float
+  avgAnnualRevenueAmountMicros: Float
+  sumAnnualRevenueAmountMicros: Float
+  countUniqueValuesCreatedAt: Int
+  countEmptyCreatedAt: Int
+  countNotEmptyCreatedAt: Int
+  percentageEmptyCreatedAt: Float
+  percentageNotEmptyCreatedAt: Float
+  minCreatedAt: DateTime
+  maxCreatedAt: DateTime
+  countUniqueValuesCreatedBy: Int
+  countEmptyCreatedBy: Int
+  countNotEmptyCreatedBy: Int
+  percentageEmptyCreatedBy: Float
+  percentageNotEmptyCreatedBy: Float
+  countUniqueValuesDeletedAt: Int
+  countEmptyDeletedAt: Int
+  countNotEmptyDeletedAt: Int
+  percentageEmptyDeletedAt: Float
+  percentageNotEmptyDeletedAt: Float
+  minDeletedAt: DateTime
+  maxDeletedAt: DateTime
+  countUniqueValuesDomainName: Int
+  countEmptyDomainName: Int
+  countNotEmptyDomainName: Int
+  percentageEmptyDomainName: Float
+  percentageNotEmptyDomainName: Float
+  countUniqueValuesId: Int
+  countEmptyId: Int
+  countNotEmptyId: Int
+  percentageEmptyId: Float
+  percentageNotEmptyId: Float
+  countUniqueValuesLinkedinLink: Int
+  countEmptyLinkedinLink: Int
+  countNotEmptyLinkedinLink: Int
+  percentageEmptyLinkedinLink: Float
+  percentageNotEmptyLinkedinLink: Float
+  countUniqueValuesName: Int
+  countEmptyName: Int
+  countNotEmptyName: Int
+  percentageEmptyName: Float
+  percentageNotEmptyName: Float
+  countUniqueValuesPosition: Int
+  countEmptyPosition: Int
+  countNotEmptyPosition: Int
+  percentageEmptyPosition: Float
+  percentageNotEmptyPosition: Float
+  countUniqueValuesUpdatedAt: Int
+  countEmptyUpdatedAt: Int
+  countNotEmptyUpdatedAt: Int
+  percentageEmptyUpdatedAt: Float
+  percentageNotEmptyUpdatedAt: Float
+  minUpdatedAt: DateTime
+  maxUpdatedAt: DateTime
+  countUniqueValuesUpdatedBy: Int
+  countEmptyUpdatedBy: Int
+  countNotEmptyUpdatedBy: Int
+  percentageEmptyUpdatedBy: Float
+  percentageNotEmptyUpdatedBy: Float
+}
+
+type CompanyGroupByConnection {
+  totalCount: Int
+  edges: [CompanyEdge!]!
+  pageInfo: PageInfo!
+  groupByDimensionValues: JSON!
+  countUniqueValuesAddress: Int
+  countEmptyAddress: Int
+  countNotEmptyAddress: Int
+  percentageEmptyAddress: Float
+  percentageNotEmptyAddress: Float
+  countUniqueValuesAnnualRevenue: Int
+  countEmptyAnnualRevenue: Int
+  countNotEmptyAnnualRevenue: Int
+  percentageEmptyAnnualRevenue: Float
+  percentageNotEmptyAnnualRevenue: Float
+  minAnnualRevenueAmountMicros: Float
+  maxAnnualRevenueAmountMicros: Float
+  avgAnnualRevenueAmountMicros: Float
+  sumAnnualRevenueAmountMicros: Float
+  countUniqueValuesCreatedAt: Int
+  countEmptyCreatedAt: Int
+  countNotEmptyCreatedAt: Int
+  percentageEmptyCreatedAt: Float
+  percentageNotEmptyCreatedAt: Float
+  minCreatedAt: DateTime
+  maxCreatedAt: DateTime
+  countUniqueValuesCreatedBy: Int
+  countEmptyCreatedBy: Int
+  countNotEmptyCreatedBy: Int
+  percentageEmptyCreatedBy: Float
+  percentageNotEmptyCreatedBy: Float
+  countUniqueValuesDeletedAt: Int
+  countEmptyDeletedAt: Int
+  countNotEmptyDeletedAt: Int
+  percentageEmptyDeletedAt: Float
+  percentageNotEmptyDeletedAt: Float
+  minDeletedAt: DateTime
+  maxDeletedAt: DateTime
+  countUniqueValuesDomainName: Int
+  countEmptyDomainName: Int
+  countNotEmptyDomainName: Int
+  percentageEmptyDomainName: Float
+  percentageNotEmptyDomainName: Float
+  countUniqueValuesId: Int
+  countEmptyId: Int
+  countNotEmptyId: Int
+  percentageEmptyId: Float
+  percentageNotEmptyId: Float
+  countUniqueValuesLinkedinLink: Int
+  countEmptyLinkedinLink: Int
+  countNotEmptyLinkedinLink: Int
+  percentageEmptyLinkedinLink: Float
+  percentageNotEmptyLinkedinLink: Float
+  countUniqueValuesName: Int
+  countEmptyName: Int
+  countNotEmptyName: Int
+  percentageEmptyName: Float
+  percentageNotEmptyName: Float
+  countUniqueValuesPosition: Int
+  countEmptyPosition: Int
+  countNotEmptyPosition: Int
+  percentageEmptyPosition: Float
+  percentageNotEmptyPosition: Float
+  countUniqueValuesUpdatedAt: Int
+  countEmptyUpdatedAt: Int
+  countNotEmptyUpdatedAt: Int
+  percentageEmptyUpdatedAt: Float
+  percentageNotEmptyUpdatedAt: Float
+  minUpdatedAt: DateTime
+  maxUpdatedAt: DateTime
+  countUniqueValuesUpdatedBy: Int
+  countEmptyUpdatedBy: Int
+  countNotEmptyUpdatedBy: Int
+  percentageEmptyUpdatedBy: Float
+  percentageNotEmptyUpdatedBy: Float
+}
+
+input CompanyFilterInput {
+  name: StringFilter
+  domainName: LinksFilter
+  address: AddressFilter
+  linkedinLink: LinksFilter
+  annualRevenue: CurrencyFilter
+  accountOwnerId: UUIDFilter
+  id: UUIDFilter
+  position: FloatFilter
+  createdBy: ActorFilter
+  updatedBy: ActorFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  deletedAt: DateTimeFilter
+  and: [CompanyFilterInput]
+  or: [CompanyFilterInput]
+  not: CompanyFilterInput
+}
+
+input CompanyOrderByInput {
+  name: OrderByDirection
+  domainName: LinksOrderByInput
+  address: AddressOrderByInput
+  linkedinLink: LinksOrderByInput
+  annualRevenue: CurrencyOrderByInput
+  accountOwnerId: OrderByDirection
+  id: OrderByDirection
+  position: OrderByDirection
+  createdBy: ActorOrderByInput
+  updatedBy: ActorOrderByInput
+  createdAt: OrderByDirection
+  updatedAt: OrderByDirection
+  deletedAt: OrderByDirection
+}
+
+input CompanyGroupByInput {
+  name: Boolean
+  address: AddressGroupByInput
+  accountOwner: Boolean
+}
+
+input CompanyOrderByWithGroupByInput {
+  name: OrderByDirection
+  address: AddressOrderByInput
+  accountOwner: OrderByDirection
+}
+
+extend type Query {
+  companies(filter: CompanyFilterInput, orderBy: [CompanyOrderByInput], first: Int, last: Int, after: String, before: String, offset: Int): CompanyConnection!
+  company(filter: CompanyFilterInput): Company
+  companiesGroupBy(groupBy: [CompanyGroupByInput!]!, filter: CompanyFilterInput, orderBy: [CompanyOrderByWithGroupByInput!], orderByForRecords: [CompanyOrderByInput!], viewId: UUID, limit: Int, offsetForRecords: Int): [CompanyGroupByConnection!]!
+}
+

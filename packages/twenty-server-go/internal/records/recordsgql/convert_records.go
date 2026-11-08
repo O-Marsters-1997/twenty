@@ -79,10 +79,8 @@ func workspaceMemberUpdateInputOf(data WorkspaceMemberUpdateInput) records.Works
 		data.UserEmail, data.JobTitle, data.CalendarStartDay, data.UserID, data.TimeZone, data.DateFormat, data.TimeFormat, data.NumberFormat})
 }
 
-func workspaceMemberEdges(page records.Page[records.WorkspaceMember]) ([]*WorkspaceMemberEdge, *PageInfo) {
-	return edgesOf(page, func(member records.WorkspaceMember, cursor string) *WorkspaceMemberEdge {
-		return &WorkspaceMemberEdge{Node: toWorkspaceMember(member), Cursor: cursor}
-	}, func(member records.WorkspaceMember) string { return member.ID })
+func workspaceMemberEdge(member records.WorkspaceMember) *WorkspaceMemberEdge {
+	return &WorkspaceMemberEdge{Node: toWorkspaceMember(member), Cursor: records.Cursor(member.ID)}
 }
 
 func toDashboard(dashboard records.Dashboard) *Dashboard {
@@ -110,8 +108,6 @@ func dashboardUpdateInputOf(data DashboardUpdateInput) records.DashboardInput {
 	return records.DashboardInput{Title: data.Title, PageLayoutID: data.PageLayoutID}
 }
 
-func dashboardEdges(page records.Page[records.Dashboard]) ([]*DashboardEdge, *PageInfo) {
-	return edgesOf(page, func(dashboard records.Dashboard, cursor string) *DashboardEdge {
-		return &DashboardEdge{Node: toDashboard(dashboard), Cursor: cursor}
-	}, func(dashboard records.Dashboard) string { return dashboard.ID })
+func dashboardEdge(dashboard records.Dashboard) *DashboardEdge {
+	return &DashboardEdge{Node: toDashboard(dashboard), Cursor: records.Cursor(dashboard.ID)}
 }

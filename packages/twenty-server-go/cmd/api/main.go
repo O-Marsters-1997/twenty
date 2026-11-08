@@ -45,8 +45,17 @@ func run() error {
 	verifier := auth.NewJWTVerifier(pool, cfg.AppSecret)
 
 	goGraphQL := http.NewServeMux()
-	records := recordsgql.Stores{People: store.NewPeople(pool), WorkspaceMembers: store.NewWorkspaceMembers(pool), Dashboards: store.NewDashboards(pool)}
-	goGraphQL.Handle(string(frontdoor.EndpointWorkspace), recordsgql.NewHandler(records, logger))
+	goGraphQL.Handle(string(frontdoor.EndpointWorkspace), recordsgql.NewHandler(&recordsgql.Resolver{
+		Store:            store.NewPeople(pool),
+		Companies:        store.NewCompanies(pool),
+		Opportunities:    store.NewOpportunities(pool),
+		WorkspaceMembers: store.NewWorkspaceMembers(pool),
+		Dashboards:       store.NewDashboards(pool),
+		Notes:            store.NewNotes(pool),
+		NoteTargets:      store.NewNoteTargets(pool),
+		Tasks:            store.NewTasks(pool),
+		TaskTargets:      store.NewTaskTargets(pool),
+	}, logger))
 	goGraphQL.Handle(string(frontdoor.EndpointMetadata), metadataHandler(
 		metadatagql.NewHandler(metadatastore.New(pool), logger),
 		metagql.NewHandler(metadatastore.NewViews(pool), logger),

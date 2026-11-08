@@ -18,12 +18,14 @@ const (
 )
 
 var aggregatableFields = []string{
-	"avatarFile", "avatarUrl", "calendarStartDay", "colorScheme", "createdAt", "createdBy", "dateFormat", "deletedAt", "emails", "id", "jobTitle",
-	"linkedinLink", "locale", "name", "numberFormat", "openRecordIn", "pageLayoutId", "phones", "position", "timeFormat", "timeZone", "title",
+	"address", "amount", "annualRevenue", "avatarFile", "avatarUrl", "bodyV2", "calendarStartDay", "closeDate", "colorScheme", "createdAt", "createdBy", "dateFormat", "deletedAt", "domainName", "dueAt", "emails", "id", "jobTitle",
+	"linkedinLink", "locale", "name", "numberFormat", "openRecordIn", "pageLayoutId", "phones", "position", "stage", "status", "timeFormat", "timeZone", "title",
 	"uiScale", "updatedAt", "updatedBy", "userEmail", "userId",
 }
 
-var dateAggregatableFields = []string{"createdAt", "deletedAt", "updatedAt"}
+var dateAggregatableFields = []string{"closeDate", "createdAt", "deletedAt", "dueAt", "updatedAt"}
+
+var currencyAggregatableFields = []string{"amount", "annualRevenue"}
 
 var aggregatesByFieldName = buildAggregatesByFieldName()
 
@@ -36,6 +38,11 @@ func buildAggregatesByFieldName() map[string]records.Aggregate {
 		}
 		for _, operation := range operations {
 			lookup[string(operation)+strings.ToUpper(field[:1])+field[1:]] = records.Aggregate{Field: field, Operation: operation}
+		}
+		if slices.Contains(currencyAggregatableFields, field) {
+			for _, operation := range []records.AggregateOperation{"min", "max", "avg", "sum"} {
+				lookup[string(operation)+strings.ToUpper(field[:1])+field[1:]+"AmountMicros"] = records.Aggregate{Field: field, Operation: operation}
+			}
 		}
 	}
 	return lookup

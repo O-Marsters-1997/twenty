@@ -14,21 +14,8 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records"
 )
 
-type Stores struct {
-	People           records.People
-	WorkspaceMembers records.WorkspaceMembers
-	Dashboards       records.Dashboards
-}
-
-func NewHandler(stores Stores, logger *slog.Logger) http.Handler {
-	resolver := &Resolver{
-		people: newObjectOps[records.Person, records.PersonInput, Person](stores.People, "person",
-			func(person records.Person) string { return person.ID }, toPerson),
-		workspaceMembers: newObjectOps[records.WorkspaceMember, records.WorkspaceMemberInput, WorkspaceMember](stores.WorkspaceMembers, "workspaceMember",
-			func(member records.WorkspaceMember) string { return member.ID }, toWorkspaceMember),
-		dashboards: newObjectOps[records.Dashboard, records.DashboardInput, Dashboard](stores.Dashboards, "dashboard",
-			func(dashboard records.Dashboard) string { return dashboard.ID }, toDashboard),
-	}
+// NewHandler serves the record operations over GraphQL; the caller supplies the principal in the request context.
+func NewHandler(resolver *Resolver, logger *slog.Logger) http.Handler {
 	server := handler.New(NewExecutableSchema(Config{Resolvers: resolver}))
 	server.AddTransport(transport.POST{})
 	server.SetErrorPresenter(func(ctx context.Context, err error) *gqlerror.Error {

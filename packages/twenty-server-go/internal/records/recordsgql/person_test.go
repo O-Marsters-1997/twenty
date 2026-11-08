@@ -29,13 +29,22 @@ func (verifier) Verify(context.Context, string) (auth.Principal, error) {
 
 func newServer(t *testing.T) *httptest.Server {
 	t.Helper()
+	server, _ := newServerWithPool(t)
+	return server
+}
+
+func newServerWithPool(t *testing.T) (*httptest.Server, *pgxpool.Pool) {
+	t.Helper()
 	pool, err := pgxpool.New(t.Context(), pgtest.New(t))
 	if err != nil {
 		t.Fatalf("connect: %v", err)
 	}
 	t.Cleanup(pool.Close)
 	table := frontdoor.OperationTable{frontdoor.EndpointWorkspace: {}}
-	for _, name := range []string{"Create", "Find", "Update", "Delete", "Restore", "Destroy", "AggregatePeople", "PeopleGroupByAggregates", "PeopleGroupByRecords", "AggregateWorkspaceMembers", "AggregateDashboards", "DashboardsGroupByAggregates"} {
+	for _, name := range []string{"Create", "Find", "Update", "Delete", "Restore", "Destroy", "AggregatePeople", "PeopleGroupByAggregates", "PeopleGroupByRecords",
+		"FindCompanies", "AggregateCompanies", "CompaniesGroupByAggregates", "CompaniesGroupByRecords", "FindOpportunities", "AggregateOpportunities", "OpportunitiesGroupByAggregates", "OpportunitiesGroupByRecords",
+		"AggregateNotes", "TasksGroupByRecords", "NoteTargetsGroupByAggregates",
+		"AggregateWorkspaceMembers", "AggregateDashboards", "DashboardsGroupByAggregates"} {
 		table[frontdoor.EndpointWorkspace][name] = frontdoor.RouteGo
 	}
 	logger := slog.New(slog.NewTextHandler(io.Discard, nil))
@@ -43,11 +52,19 @@ func newServer(t *testing.T) *httptest.Server {
 	if err != nil {
 		t.Fatal(err)
 	}
-	server := httptest.NewServer(frontdoor.NewHandler(table, upstream, verifier{}, recordsgql.NewHandler(recordsgql.Stores{
-		People: store.NewPeople(pool), WorkspaceMembers: store.NewWorkspaceMembers(pool), Dashboards: store.NewDashboards(pool),
+	server := httptest.NewServer(frontdoor.NewHandler(table, upstream, verifier{}, recordsgql.NewHandler(&recordsgql.Resolver{
+		Store:            store.NewPeople(pool),
+		Companies:        store.NewCompanies(pool),
+		Opportunities:    store.NewOpportunities(pool),
+		WorkspaceMembers: store.NewWorkspaceMembers(pool),
+		Dashboards:       store.NewDashboards(pool),
+		Notes:            store.NewNotes(pool),
+		NoteTargets:      store.NewNoteTargets(pool),
+		Tasks:            store.NewTasks(pool),
+		TaskTargets:      store.NewTaskTargets(pool),
 	}, logger), logger))
 	t.Cleanup(server.Close)
-	return server
+	return server, pool
 }
 
 func send(t *testing.T, server *httptest.Server, operation, query string, variables map[string]any) map[string]any {
