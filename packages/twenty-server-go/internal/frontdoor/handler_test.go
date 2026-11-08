@@ -52,7 +52,11 @@ func newFixture(t *testing.T) fixture {
 	logs := &bytes.Buffer{}
 	table := frontdoor.DefaultTable()
 	table[frontdoor.EndpointWorkspace] = map[string]frontdoor.Route{"GoOnly": frontdoor.RouteGo}
-	handler := frontdoor.NewHandler(table, upstream, fakeVerifier{}, slog.New(slog.NewTextHandler(logs, nil)))
+	goGraphQL := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		principal, _ := auth.PrincipalFrom(r.Context())
+		_, _ = w.Write([]byte("go handled for " + principal.UserID))
+	})
+	handler := frontdoor.NewHandler(table, upstream, fakeVerifier{}, goGraphQL, slog.New(slog.NewTextHandler(logs, nil)))
 	front := httptest.NewServer(handler)
 	t.Cleanup(front.Close)
 	return fixture{front: front, hits: hits, logs: logs}
@@ -114,7 +118,7 @@ func TestHandler_ServeHTTP(t *testing.T) {
 		tests := []struct{ name, authorization, want string }{
 			{"missing", "", `"UNAUTHENTICATED"`},
 			{"invalid", "Bearer nope", `"UNAUTHENTICATED"`},
-			{"valid", "Bearer valid", "operation not implemented"},
+			{"valid", "Bearer valid", "go handled for user-1"},
 		}
 		for _, tt := range tests {
 			t.Run(tt.name, func(t *testing.T) {

@@ -18,16 +18,17 @@ import (
 const maxInspectedBodyBytes = 1 << 20
 
 type Handler struct {
-	table    OperationTable
-	proxy    *httputil.ReverseProxy
-	verifier auth.Verifier
-	logger   *slog.Logger
+	table     OperationTable
+	proxy     *httputil.ReverseProxy
+	verifier  auth.Verifier
+	goGraphQL http.Handler
+	logger    *slog.Logger
 }
 
-func NewHandler(table OperationTable, upstream *url.URL, verifier auth.Verifier, logger *slog.Logger) *Handler {
+func NewHandler(table OperationTable, upstream *url.URL, verifier auth.Verifier, goGraphQL http.Handler, logger *slog.Logger) *Handler {
 	proxy := httputil.NewSingleHostReverseProxy(upstream)
 	proxy.FlushInterval = -1 // SSE streams must not be buffered
-	return &Handler{table: table, proxy: proxy, verifier: verifier, logger: logger}
+	return &Handler{table: table, proxy: proxy, verifier: verifier, goGraphQL: goGraphQL, logger: logger}
 }
 
 type graphqlRequest struct {
@@ -71,10 +72,11 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case RouteBlocked:
 		h.writeGraphQLError(w, "this operation is disabled: the data model is frozen", "FORBIDDEN")
 	case RouteGo:
-		if _, ok := h.authenticate(w, r); !ok {
+		principal, ok := h.authenticate(w, r)
+		if !ok {
 			return
 		}
-		h.writeGraphQLError(w, "operation not implemented", "INTERNAL_SERVER_ERROR")
+		h.goGraphQL.ServeHTTP(w, r.WithContext(auth.WithPrincipal(r.Context(), principal)))
 	default:
 		h.proxy.ServeHTTP(w, r)
 	}

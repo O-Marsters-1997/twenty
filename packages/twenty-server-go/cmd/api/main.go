@@ -16,6 +16,8 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/config"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/frontdoor"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records/recordsgql"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records/store"
 )
 
 func main() {
@@ -41,7 +43,7 @@ func run() error {
 
 	server := &http.Server{
 		Addr:              cfg.ListenAddr,
-		Handler:           frontdoor.NewHandler(frontdoor.DefaultTable(), cfg.NodeUpstreamURL, verifier, logger),
+		Handler:           frontdoor.NewHandler(frontdoor.DefaultTable(), cfg.NodeUpstreamURL, verifier, recordsgql.NewHandler(store.NewPeople(pool), logger), logger),
 		ReadHeaderTimeout: 10 * time.Second,
 	}
 

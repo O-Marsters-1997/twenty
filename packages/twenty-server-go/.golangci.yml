@@ -1,0 +1,22 @@
+version: "2"
+linters:
+  enable:
+    - depguard
+  settings:
+    depguard:
+      rules:
+        sqlc-output-stays-in-store:
+          files:
+            - $all
+            - "!**/internal/records/store/**"
+          deny:
+            - pkg: github.com/twentyhq/twenty/packages/twenty-server-go/internal/records/store/db
+              desc: only internal/records/store may import the sqlc output
+        records-outside-store-never-touch-pgx:
+          files:
+            - "**/internal/records/**"
+            - "!**/internal/records/store/**"
+            - "!$test"
+          deny:
+            - pkg: github.com/jackc/pgx
+              desc: only internal/records/store may import pgx
