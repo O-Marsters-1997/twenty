@@ -35,7 +35,7 @@ func newServer(t *testing.T) *httptest.Server {
 	}
 	t.Cleanup(pool.Close)
 	table := frontdoor.OperationTable{frontdoor.EndpointWorkspace: {}}
-	for _, name := range []string{"Create", "Find", "Update", "Delete", "Restore", "Destroy"} {
+	for _, name := range []string{"Create", "Find", "Update", "Delete", "Restore", "Destroy", "AggregatePeople", "PeopleGroupByAggregates", "PeopleGroupByRecords"} {
 		table[frontdoor.EndpointWorkspace][name] = frontdoor.RouteGo
 	}
 	logger := slog.New(slog.NewTextHandler(io.Discard, nil))

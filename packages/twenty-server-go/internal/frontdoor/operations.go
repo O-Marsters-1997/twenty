@@ -20,7 +20,13 @@ type OperationTable map[Endpoint]map[string]Route // operation name → route; a
 // DefaultTable blocks the object and field mutations that change the frozen data model.
 func DefaultTable() OperationTable {
 	table := OperationTable{
+		EndpointWorkspace: {
+			"AggregatePeople":         RouteGo,
+			"PeopleGroupByAggregates": RouteGo,
+			"PeopleGroupByRecords":    RouteGo,
+		},
 		EndpointMetadata: {
+			"ObjectMetadataItems":         RouteGo,
 			"CreateOneObjectMetadataItem": RouteBlocked,
 			"UpdateOneObjectMetadataItem": RouteBlocked,
 			"DeleteOneObjectMetadataItem": RouteBlocked,

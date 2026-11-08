@@ -101,14 +101,173 @@ type ComplexityRoot struct {
 	}
 
 	PersonConnection struct {
-		Edges      func(childComplexity int) int
-		PageInfo   func(childComplexity int) int
-		TotalCount func(childComplexity int) int
+		CountEmptyAvatarFile           func(childComplexity int) int
+		CountEmptyAvatarURL            func(childComplexity int) int
+		CountEmptyCreatedAt            func(childComplexity int) int
+		CountEmptyCreatedBy            func(childComplexity int) int
+		CountEmptyDeletedAt            func(childComplexity int) int
+		CountEmptyEmails               func(childComplexity int) int
+		CountEmptyID                   func(childComplexity int) int
+		CountEmptyJobTitle             func(childComplexity int) int
+		CountEmptyLinkedinLink         func(childComplexity int) int
+		CountEmptyName                 func(childComplexity int) int
+		CountEmptyPhones               func(childComplexity int) int
+		CountEmptyPosition             func(childComplexity int) int
+		CountEmptyUpdatedAt            func(childComplexity int) int
+		CountEmptyUpdatedBy            func(childComplexity int) int
+		CountNotEmptyAvatarFile        func(childComplexity int) int
+		CountNotEmptyAvatarURL         func(childComplexity int) int
+		CountNotEmptyCreatedAt         func(childComplexity int) int
+		CountNotEmptyCreatedBy         func(childComplexity int) int
+		CountNotEmptyDeletedAt         func(childComplexity int) int
+		CountNotEmptyEmails            func(childComplexity int) int
+		CountNotEmptyID                func(childComplexity int) int
+		CountNotEmptyJobTitle          func(childComplexity int) int
+		CountNotEmptyLinkedinLink      func(childComplexity int) int
+		CountNotEmptyName              func(childComplexity int) int
+		CountNotEmptyPhones            func(childComplexity int) int
+		CountNotEmptyPosition          func(childComplexity int) int
+		CountNotEmptyUpdatedAt         func(childComplexity int) int
+		CountNotEmptyUpdatedBy         func(childComplexity int) int
+		CountUniqueValuesAvatarFile    func(childComplexity int) int
+		CountUniqueValuesAvatarURL     func(childComplexity int) int
+		CountUniqueValuesCreatedAt     func(childComplexity int) int
+		CountUniqueValuesCreatedBy     func(childComplexity int) int
+		CountUniqueValuesDeletedAt     func(childComplexity int) int
+		CountUniqueValuesEmails        func(childComplexity int) int
+		CountUniqueValuesID            func(childComplexity int) int
+		CountUniqueValuesJobTitle      func(childComplexity int) int
+		CountUniqueValuesLinkedinLink  func(childComplexity int) int
+		CountUniqueValuesName          func(childComplexity int) int
+		CountUniqueValuesPhones        func(childComplexity int) int
+		CountUniqueValuesPosition      func(childComplexity int) int
+		CountUniqueValuesUpdatedAt     func(childComplexity int) int
+		CountUniqueValuesUpdatedBy     func(childComplexity int) int
+		Edges                          func(childComplexity int) int
+		MaxCreatedAt                   func(childComplexity int) int
+		MaxDeletedAt                   func(childComplexity int) int
+		MaxUpdatedAt                   func(childComplexity int) int
+		MinCreatedAt                   func(childComplexity int) int
+		MinDeletedAt                   func(childComplexity int) int
+		MinUpdatedAt                   func(childComplexity int) int
+		PageInfo                       func(childComplexity int) int
+		PercentageEmptyAvatarFile      func(childComplexity int) int
+		PercentageEmptyAvatarURL       func(childComplexity int) int
+		PercentageEmptyCreatedAt       func(childComplexity int) int
+		PercentageEmptyCreatedBy       func(childComplexity int) int
+		PercentageEmptyDeletedAt       func(childComplexity int) int
+		PercentageEmptyEmails          func(childComplexity int) int
+		PercentageEmptyID              func(childComplexity int) int
+		PercentageEmptyJobTitle        func(childComplexity int) int
+		PercentageEmptyLinkedinLink    func(childComplexity int) int
+		PercentageEmptyName            func(childComplexity int) int
+		PercentageEmptyPhones          func(childComplexity int) int
+		PercentageEmptyPosition        func(childComplexity int) int
+		PercentageEmptyUpdatedAt       func(childComplexity int) int
+		PercentageEmptyUpdatedBy       func(childComplexity int) int
+		PercentageNotEmptyAvatarFile   func(childComplexity int) int
+		PercentageNotEmptyAvatarURL    func(childComplexity int) int
+		PercentageNotEmptyCreatedAt    func(childComplexity int) int
+		PercentageNotEmptyCreatedBy    func(childComplexity int) int
+		PercentageNotEmptyDeletedAt    func(childComplexity int) int
+		PercentageNotEmptyEmails       func(childComplexity int) int
+		PercentageNotEmptyID           func(childComplexity int) int
+		PercentageNotEmptyJobTitle     func(childComplexity int) int
+		PercentageNotEmptyLinkedinLink func(childComplexity int) int
+		PercentageNotEmptyName         func(childComplexity int) int
+		PercentageNotEmptyPhones       func(childComplexity int) int
+		PercentageNotEmptyPosition     func(childComplexity int) int
+		PercentageNotEmptyUpdatedAt    func(childComplexity int) int
+		PercentageNotEmptyUpdatedBy    func(childComplexity int) int
+		TotalCount                     func(childComplexity int) int
 	}
 
 	PersonEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
+	}
+
+	PersonGroupByConnection struct {
+		CountEmptyAvatarFile           func(childComplexity int) int
+		CountEmptyAvatarURL            func(childComplexity int) int
+		CountEmptyCreatedAt            func(childComplexity int) int
+		CountEmptyCreatedBy            func(childComplexity int) int
+		CountEmptyDeletedAt            func(childComplexity int) int
+		CountEmptyEmails               func(childComplexity int) int
+		CountEmptyID                   func(childComplexity int) int
+		CountEmptyJobTitle             func(childComplexity int) int
+		CountEmptyLinkedinLink         func(childComplexity int) int
+		CountEmptyName                 func(childComplexity int) int
+		CountEmptyPhones               func(childComplexity int) int
+		CountEmptyPosition             func(childComplexity int) int
+		CountEmptyUpdatedAt            func(childComplexity int) int
+		CountEmptyUpdatedBy            func(childComplexity int) int
+		CountNotEmptyAvatarFile        func(childComplexity int) int
+		CountNotEmptyAvatarURL         func(childComplexity int) int
+		CountNotEmptyCreatedAt         func(childComplexity int) int
+		CountNotEmptyCreatedBy         func(childComplexity int) int
+		CountNotEmptyDeletedAt         func(childComplexity int) int
+		CountNotEmptyEmails            func(childComplexity int) int
+		CountNotEmptyID                func(childComplexity int) int
+		CountNotEmptyJobTitle          func(childComplexity int) int
+		CountNotEmptyLinkedinLink      func(childComplexity int) int
+		CountNotEmptyName              func(childComplexity int) int
+		CountNotEmptyPhones            func(childComplexity int) int
+		CountNotEmptyPosition          func(childComplexity int) int
+		CountNotEmptyUpdatedAt         func(childComplexity int) int
+		CountNotEmptyUpdatedBy         func(childComplexity int) int
+		CountUniqueValuesAvatarFile    func(childComplexity int) int
+		CountUniqueValuesAvatarURL     func(childComplexity int) int
+		CountUniqueValuesCreatedAt     func(childComplexity int) int
+		CountUniqueValuesCreatedBy     func(childComplexity int) int
+		CountUniqueValuesDeletedAt     func(childComplexity int) int
+		CountUniqueValuesEmails        func(childComplexity int) int
+		CountUniqueValuesID            func(childComplexity int) int
+		CountUniqueValuesJobTitle      func(childComplexity int) int
+		CountUniqueValuesLinkedinLink  func(childComplexity int) int
+		CountUniqueValuesName          func(childComplexity int) int
+		CountUniqueValuesPhones        func(childComplexity int) int
+		CountUniqueValuesPosition      func(childComplexity int) int
+		CountUniqueValuesUpdatedAt     func(childComplexity int) int
+		CountUniqueValuesUpdatedBy     func(childComplexity int) int
+		Edges                          func(childComplexity int) int
+		GroupByDimensionValues         func(childComplexity int) int
+		MaxCreatedAt                   func(childComplexity int) int
+		MaxDeletedAt                   func(childComplexity int) int
+		MaxUpdatedAt                   func(childComplexity int) int
+		MinCreatedAt                   func(childComplexity int) int
+		MinDeletedAt                   func(childComplexity int) int
+		MinUpdatedAt                   func(childComplexity int) int
+		PageInfo                       func(childComplexity int) int
+		PercentageEmptyAvatarFile      func(childComplexity int) int
+		PercentageEmptyAvatarURL       func(childComplexity int) int
+		PercentageEmptyCreatedAt       func(childComplexity int) int
+		PercentageEmptyCreatedBy       func(childComplexity int) int
+		PercentageEmptyDeletedAt       func(childComplexity int) int
+		PercentageEmptyEmails          func(childComplexity int) int
+		PercentageEmptyID              func(childComplexity int) int
+		PercentageEmptyJobTitle        func(childComplexity int) int
+		PercentageEmptyLinkedinLink    func(childComplexity int) int
+		PercentageEmptyName            func(childComplexity int) int
+		PercentageEmptyPhones          func(childComplexity int) int
+		PercentageEmptyPosition        func(childComplexity int) int
+		PercentageEmptyUpdatedAt       func(childComplexity int) int
+		PercentageEmptyUpdatedBy       func(childComplexity int) int
+		PercentageNotEmptyAvatarFile   func(childComplexity int) int
+		PercentageNotEmptyAvatarURL    func(childComplexity int) int
+		PercentageNotEmptyCreatedAt    func(childComplexity int) int
+		PercentageNotEmptyCreatedBy    func(childComplexity int) int
+		PercentageNotEmptyDeletedAt    func(childComplexity int) int
+		PercentageNotEmptyEmails       func(childComplexity int) int
+		PercentageNotEmptyID           func(childComplexity int) int
+		PercentageNotEmptyJobTitle     func(childComplexity int) int
+		PercentageNotEmptyLinkedinLink func(childComplexity int) int
+		PercentageNotEmptyName         func(childComplexity int) int
+		PercentageNotEmptyPhones       func(childComplexity int) int
+		PercentageNotEmptyPosition     func(childComplexity int) int
+		PercentageNotEmptyUpdatedAt    func(childComplexity int) int
+		PercentageNotEmptyUpdatedBy    func(childComplexity int) int
+		TotalCount                     func(childComplexity int) int
 	}
 
 	Phones struct {
@@ -119,8 +278,9 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		People func(childComplexity int, filter map[string]any, orderBy []map[string]any, first *int, last *int, after *string, before *string, offset *int) int
-		Person func(childComplexity int, filter map[string]any) int
+		People        func(childComplexity int, filter map[string]any, orderBy []map[string]any, first *int, last *int, after *string, before *string, offset *int) int
+		PeopleGroupBy func(childComplexity int, groupBy []map[string]any, filter map[string]any, orderBy []map[string]any, orderByForRecords []map[string]any, viewID *string, limit *int, offsetForRecords *int) int
+		Person        func(childComplexity int, filter map[string]any) int
 	}
 
 	SecondaryLink struct {
@@ -147,6 +307,7 @@ type MutationResolver interface {
 type QueryResolver interface {
 	People(ctx context.Context, filter map[string]any, orderBy []map[string]any, first *int, last *int, after *string, before *string, offset *int) (*PersonConnection, error)
 	Person(ctx context.Context, filter map[string]any) (*Person, error)
+	PeopleGroupBy(ctx context.Context, groupBy []map[string]any, filter map[string]any, orderBy []map[string]any, orderByForRecords []map[string]any, viewID *string, limit *int, offsetForRecords *int) ([]*PersonGroupByConnection, error)
 }
 
 // endregion ************************** generated!.gotpl **************************
@@ -460,18 +621,474 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Person.UpdatedBy(childComplexity), true
 
+	case "PersonConnection.countEmptyAvatarFile":
+		if e.ComplexityRoot.PersonConnection.CountEmptyAvatarFile == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountEmptyAvatarFile(childComplexity), true
+	case "PersonConnection.countEmptyAvatarUrl":
+		if e.ComplexityRoot.PersonConnection.CountEmptyAvatarURL == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountEmptyAvatarURL(childComplexity), true
+	case "PersonConnection.countEmptyCreatedAt":
+		if e.ComplexityRoot.PersonConnection.CountEmptyCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountEmptyCreatedAt(childComplexity), true
+	case "PersonConnection.countEmptyCreatedBy":
+		if e.ComplexityRoot.PersonConnection.CountEmptyCreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountEmptyCreatedBy(childComplexity), true
+	case "PersonConnection.countEmptyDeletedAt":
+		if e.ComplexityRoot.PersonConnection.CountEmptyDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountEmptyDeletedAt(childComplexity), true
+	case "PersonConnection.countEmptyEmails":
+		if e.ComplexityRoot.PersonConnection.CountEmptyEmails == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountEmptyEmails(childComplexity), true
+	case "PersonConnection.countEmptyId":
+		if e.ComplexityRoot.PersonConnection.CountEmptyID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountEmptyID(childComplexity), true
+	case "PersonConnection.countEmptyJobTitle":
+		if e.ComplexityRoot.PersonConnection.CountEmptyJobTitle == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountEmptyJobTitle(childComplexity), true
+	case "PersonConnection.countEmptyLinkedinLink":
+		if e.ComplexityRoot.PersonConnection.CountEmptyLinkedinLink == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountEmptyLinkedinLink(childComplexity), true
+	case "PersonConnection.countEmptyName":
+		if e.ComplexityRoot.PersonConnection.CountEmptyName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountEmptyName(childComplexity), true
+	case "PersonConnection.countEmptyPhones":
+		if e.ComplexityRoot.PersonConnection.CountEmptyPhones == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountEmptyPhones(childComplexity), true
+	case "PersonConnection.countEmptyPosition":
+		if e.ComplexityRoot.PersonConnection.CountEmptyPosition == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountEmptyPosition(childComplexity), true
+	case "PersonConnection.countEmptyUpdatedAt":
+		if e.ComplexityRoot.PersonConnection.CountEmptyUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountEmptyUpdatedAt(childComplexity), true
+	case "PersonConnection.countEmptyUpdatedBy":
+		if e.ComplexityRoot.PersonConnection.CountEmptyUpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountEmptyUpdatedBy(childComplexity), true
+	case "PersonConnection.countNotEmptyAvatarFile":
+		if e.ComplexityRoot.PersonConnection.CountNotEmptyAvatarFile == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountNotEmptyAvatarFile(childComplexity), true
+	case "PersonConnection.countNotEmptyAvatarUrl":
+		if e.ComplexityRoot.PersonConnection.CountNotEmptyAvatarURL == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountNotEmptyAvatarURL(childComplexity), true
+	case "PersonConnection.countNotEmptyCreatedAt":
+		if e.ComplexityRoot.PersonConnection.CountNotEmptyCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountNotEmptyCreatedAt(childComplexity), true
+	case "PersonConnection.countNotEmptyCreatedBy":
+		if e.ComplexityRoot.PersonConnection.CountNotEmptyCreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountNotEmptyCreatedBy(childComplexity), true
+	case "PersonConnection.countNotEmptyDeletedAt":
+		if e.ComplexityRoot.PersonConnection.CountNotEmptyDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountNotEmptyDeletedAt(childComplexity), true
+	case "PersonConnection.countNotEmptyEmails":
+		if e.ComplexityRoot.PersonConnection.CountNotEmptyEmails == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountNotEmptyEmails(childComplexity), true
+	case "PersonConnection.countNotEmptyId":
+		if e.ComplexityRoot.PersonConnection.CountNotEmptyID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountNotEmptyID(childComplexity), true
+	case "PersonConnection.countNotEmptyJobTitle":
+		if e.ComplexityRoot.PersonConnection.CountNotEmptyJobTitle == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountNotEmptyJobTitle(childComplexity), true
+	case "PersonConnection.countNotEmptyLinkedinLink":
+		if e.ComplexityRoot.PersonConnection.CountNotEmptyLinkedinLink == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountNotEmptyLinkedinLink(childComplexity), true
+	case "PersonConnection.countNotEmptyName":
+		if e.ComplexityRoot.PersonConnection.CountNotEmptyName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountNotEmptyName(childComplexity), true
+	case "PersonConnection.countNotEmptyPhones":
+		if e.ComplexityRoot.PersonConnection.CountNotEmptyPhones == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountNotEmptyPhones(childComplexity), true
+	case "PersonConnection.countNotEmptyPosition":
+		if e.ComplexityRoot.PersonConnection.CountNotEmptyPosition == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountNotEmptyPosition(childComplexity), true
+	case "PersonConnection.countNotEmptyUpdatedAt":
+		if e.ComplexityRoot.PersonConnection.CountNotEmptyUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountNotEmptyUpdatedAt(childComplexity), true
+	case "PersonConnection.countNotEmptyUpdatedBy":
+		if e.ComplexityRoot.PersonConnection.CountNotEmptyUpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountNotEmptyUpdatedBy(childComplexity), true
+	case "PersonConnection.countUniqueValuesAvatarFile":
+		if e.ComplexityRoot.PersonConnection.CountUniqueValuesAvatarFile == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountUniqueValuesAvatarFile(childComplexity), true
+	case "PersonConnection.countUniqueValuesAvatarUrl":
+		if e.ComplexityRoot.PersonConnection.CountUniqueValuesAvatarURL == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountUniqueValuesAvatarURL(childComplexity), true
+	case "PersonConnection.countUniqueValuesCreatedAt":
+		if e.ComplexityRoot.PersonConnection.CountUniqueValuesCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountUniqueValuesCreatedAt(childComplexity), true
+	case "PersonConnection.countUniqueValuesCreatedBy":
+		if e.ComplexityRoot.PersonConnection.CountUniqueValuesCreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountUniqueValuesCreatedBy(childComplexity), true
+	case "PersonConnection.countUniqueValuesDeletedAt":
+		if e.ComplexityRoot.PersonConnection.CountUniqueValuesDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountUniqueValuesDeletedAt(childComplexity), true
+	case "PersonConnection.countUniqueValuesEmails":
+		if e.ComplexityRoot.PersonConnection.CountUniqueValuesEmails == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountUniqueValuesEmails(childComplexity), true
+	case "PersonConnection.countUniqueValuesId":
+		if e.ComplexityRoot.PersonConnection.CountUniqueValuesID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountUniqueValuesID(childComplexity), true
+	case "PersonConnection.countUniqueValuesJobTitle":
+		if e.ComplexityRoot.PersonConnection.CountUniqueValuesJobTitle == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountUniqueValuesJobTitle(childComplexity), true
+	case "PersonConnection.countUniqueValuesLinkedinLink":
+		if e.ComplexityRoot.PersonConnection.CountUniqueValuesLinkedinLink == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountUniqueValuesLinkedinLink(childComplexity), true
+	case "PersonConnection.countUniqueValuesName":
+		if e.ComplexityRoot.PersonConnection.CountUniqueValuesName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountUniqueValuesName(childComplexity), true
+	case "PersonConnection.countUniqueValuesPhones":
+		if e.ComplexityRoot.PersonConnection.CountUniqueValuesPhones == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountUniqueValuesPhones(childComplexity), true
+	case "PersonConnection.countUniqueValuesPosition":
+		if e.ComplexityRoot.PersonConnection.CountUniqueValuesPosition == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountUniqueValuesPosition(childComplexity), true
+	case "PersonConnection.countUniqueValuesUpdatedAt":
+		if e.ComplexityRoot.PersonConnection.CountUniqueValuesUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountUniqueValuesUpdatedAt(childComplexity), true
+	case "PersonConnection.countUniqueValuesUpdatedBy":
+		if e.ComplexityRoot.PersonConnection.CountUniqueValuesUpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.CountUniqueValuesUpdatedBy(childComplexity), true
 	case "PersonConnection.edges":
 		if e.ComplexityRoot.PersonConnection.Edges == nil {
 			break
 		}
 
 		return e.ComplexityRoot.PersonConnection.Edges(childComplexity), true
+	case "PersonConnection.maxCreatedAt":
+		if e.ComplexityRoot.PersonConnection.MaxCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.MaxCreatedAt(childComplexity), true
+	case "PersonConnection.maxDeletedAt":
+		if e.ComplexityRoot.PersonConnection.MaxDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.MaxDeletedAt(childComplexity), true
+	case "PersonConnection.maxUpdatedAt":
+		if e.ComplexityRoot.PersonConnection.MaxUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.MaxUpdatedAt(childComplexity), true
+	case "PersonConnection.minCreatedAt":
+		if e.ComplexityRoot.PersonConnection.MinCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.MinCreatedAt(childComplexity), true
+	case "PersonConnection.minDeletedAt":
+		if e.ComplexityRoot.PersonConnection.MinDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.MinDeletedAt(childComplexity), true
+	case "PersonConnection.minUpdatedAt":
+		if e.ComplexityRoot.PersonConnection.MinUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.MinUpdatedAt(childComplexity), true
 	case "PersonConnection.pageInfo":
 		if e.ComplexityRoot.PersonConnection.PageInfo == nil {
 			break
 		}
 
 		return e.ComplexityRoot.PersonConnection.PageInfo(childComplexity), true
+	case "PersonConnection.percentageEmptyAvatarFile":
+		if e.ComplexityRoot.PersonConnection.PercentageEmptyAvatarFile == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.PercentageEmptyAvatarFile(childComplexity), true
+	case "PersonConnection.percentageEmptyAvatarUrl":
+		if e.ComplexityRoot.PersonConnection.PercentageEmptyAvatarURL == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.PercentageEmptyAvatarURL(childComplexity), true
+	case "PersonConnection.percentageEmptyCreatedAt":
+		if e.ComplexityRoot.PersonConnection.PercentageEmptyCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.PercentageEmptyCreatedAt(childComplexity), true
+	case "PersonConnection.percentageEmptyCreatedBy":
+		if e.ComplexityRoot.PersonConnection.PercentageEmptyCreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.PercentageEmptyCreatedBy(childComplexity), true
+	case "PersonConnection.percentageEmptyDeletedAt":
+		if e.ComplexityRoot.PersonConnection.PercentageEmptyDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.PercentageEmptyDeletedAt(childComplexity), true
+	case "PersonConnection.percentageEmptyEmails":
+		if e.ComplexityRoot.PersonConnection.PercentageEmptyEmails == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.PercentageEmptyEmails(childComplexity), true
+	case "PersonConnection.percentageEmptyId":
+		if e.ComplexityRoot.PersonConnection.PercentageEmptyID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.PercentageEmptyID(childComplexity), true
+	case "PersonConnection.percentageEmptyJobTitle":
+		if e.ComplexityRoot.PersonConnection.PercentageEmptyJobTitle == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.PercentageEmptyJobTitle(childComplexity), true
+	case "PersonConnection.percentageEmptyLinkedinLink":
+		if e.ComplexityRoot.PersonConnection.PercentageEmptyLinkedinLink == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.PercentageEmptyLinkedinLink(childComplexity), true
+	case "PersonConnection.percentageEmptyName":
+		if e.ComplexityRoot.PersonConnection.PercentageEmptyName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.PercentageEmptyName(childComplexity), true
+	case "PersonConnection.percentageEmptyPhones":
+		if e.ComplexityRoot.PersonConnection.PercentageEmptyPhones == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.PercentageEmptyPhones(childComplexity), true
+	case "PersonConnection.percentageEmptyPosition":
+		if e.ComplexityRoot.PersonConnection.PercentageEmptyPosition == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.PercentageEmptyPosition(childComplexity), true
+	case "PersonConnection.percentageEmptyUpdatedAt":
+		if e.ComplexityRoot.PersonConnection.PercentageEmptyUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.PercentageEmptyUpdatedAt(childComplexity), true
+	case "PersonConnection.percentageEmptyUpdatedBy":
+		if e.ComplexityRoot.PersonConnection.PercentageEmptyUpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.PercentageEmptyUpdatedBy(childComplexity), true
+	case "PersonConnection.percentageNotEmptyAvatarFile":
+		if e.ComplexityRoot.PersonConnection.PercentageNotEmptyAvatarFile == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.PercentageNotEmptyAvatarFile(childComplexity), true
+	case "PersonConnection.percentageNotEmptyAvatarUrl":
+		if e.ComplexityRoot.PersonConnection.PercentageNotEmptyAvatarURL == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.PercentageNotEmptyAvatarURL(childComplexity), true
+	case "PersonConnection.percentageNotEmptyCreatedAt":
+		if e.ComplexityRoot.PersonConnection.PercentageNotEmptyCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.PercentageNotEmptyCreatedAt(childComplexity), true
+	case "PersonConnection.percentageNotEmptyCreatedBy":
+		if e.ComplexityRoot.PersonConnection.PercentageNotEmptyCreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.PercentageNotEmptyCreatedBy(childComplexity), true
+	case "PersonConnection.percentageNotEmptyDeletedAt":
+		if e.ComplexityRoot.PersonConnection.PercentageNotEmptyDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.PercentageNotEmptyDeletedAt(childComplexity), true
+	case "PersonConnection.percentageNotEmptyEmails":
+		if e.ComplexityRoot.PersonConnection.PercentageNotEmptyEmails == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.PercentageNotEmptyEmails(childComplexity), true
+	case "PersonConnection.percentageNotEmptyId":
+		if e.ComplexityRoot.PersonConnection.PercentageNotEmptyID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.PercentageNotEmptyID(childComplexity), true
+	case "PersonConnection.percentageNotEmptyJobTitle":
+		if e.ComplexityRoot.PersonConnection.PercentageNotEmptyJobTitle == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.PercentageNotEmptyJobTitle(childComplexity), true
+	case "PersonConnection.percentageNotEmptyLinkedinLink":
+		if e.ComplexityRoot.PersonConnection.PercentageNotEmptyLinkedinLink == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.PercentageNotEmptyLinkedinLink(childComplexity), true
+	case "PersonConnection.percentageNotEmptyName":
+		if e.ComplexityRoot.PersonConnection.PercentageNotEmptyName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.PercentageNotEmptyName(childComplexity), true
+	case "PersonConnection.percentageNotEmptyPhones":
+		if e.ComplexityRoot.PersonConnection.PercentageNotEmptyPhones == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.PercentageNotEmptyPhones(childComplexity), true
+	case "PersonConnection.percentageNotEmptyPosition":
+		if e.ComplexityRoot.PersonConnection.PercentageNotEmptyPosition == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.PercentageNotEmptyPosition(childComplexity), true
+	case "PersonConnection.percentageNotEmptyUpdatedAt":
+		if e.ComplexityRoot.PersonConnection.PercentageNotEmptyUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.PercentageNotEmptyUpdatedAt(childComplexity), true
+	case "PersonConnection.percentageNotEmptyUpdatedBy":
+		if e.ComplexityRoot.PersonConnection.PercentageNotEmptyUpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonConnection.PercentageNotEmptyUpdatedBy(childComplexity), true
 	case "PersonConnection.totalCount":
 		if e.ComplexityRoot.PersonConnection.TotalCount == nil {
 			break
@@ -491,6 +1108,487 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.PersonEdge.Node(childComplexity), true
+
+	case "PersonGroupByConnection.countEmptyAvatarFile":
+		if e.ComplexityRoot.PersonGroupByConnection.CountEmptyAvatarFile == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountEmptyAvatarFile(childComplexity), true
+	case "PersonGroupByConnection.countEmptyAvatarUrl":
+		if e.ComplexityRoot.PersonGroupByConnection.CountEmptyAvatarURL == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountEmptyAvatarURL(childComplexity), true
+	case "PersonGroupByConnection.countEmptyCreatedAt":
+		if e.ComplexityRoot.PersonGroupByConnection.CountEmptyCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountEmptyCreatedAt(childComplexity), true
+	case "PersonGroupByConnection.countEmptyCreatedBy":
+		if e.ComplexityRoot.PersonGroupByConnection.CountEmptyCreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountEmptyCreatedBy(childComplexity), true
+	case "PersonGroupByConnection.countEmptyDeletedAt":
+		if e.ComplexityRoot.PersonGroupByConnection.CountEmptyDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountEmptyDeletedAt(childComplexity), true
+	case "PersonGroupByConnection.countEmptyEmails":
+		if e.ComplexityRoot.PersonGroupByConnection.CountEmptyEmails == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountEmptyEmails(childComplexity), true
+	case "PersonGroupByConnection.countEmptyId":
+		if e.ComplexityRoot.PersonGroupByConnection.CountEmptyID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountEmptyID(childComplexity), true
+	case "PersonGroupByConnection.countEmptyJobTitle":
+		if e.ComplexityRoot.PersonGroupByConnection.CountEmptyJobTitle == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountEmptyJobTitle(childComplexity), true
+	case "PersonGroupByConnection.countEmptyLinkedinLink":
+		if e.ComplexityRoot.PersonGroupByConnection.CountEmptyLinkedinLink == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountEmptyLinkedinLink(childComplexity), true
+	case "PersonGroupByConnection.countEmptyName":
+		if e.ComplexityRoot.PersonGroupByConnection.CountEmptyName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountEmptyName(childComplexity), true
+	case "PersonGroupByConnection.countEmptyPhones":
+		if e.ComplexityRoot.PersonGroupByConnection.CountEmptyPhones == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountEmptyPhones(childComplexity), true
+	case "PersonGroupByConnection.countEmptyPosition":
+		if e.ComplexityRoot.PersonGroupByConnection.CountEmptyPosition == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountEmptyPosition(childComplexity), true
+	case "PersonGroupByConnection.countEmptyUpdatedAt":
+		if e.ComplexityRoot.PersonGroupByConnection.CountEmptyUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountEmptyUpdatedAt(childComplexity), true
+	case "PersonGroupByConnection.countEmptyUpdatedBy":
+		if e.ComplexityRoot.PersonGroupByConnection.CountEmptyUpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountEmptyUpdatedBy(childComplexity), true
+	case "PersonGroupByConnection.countNotEmptyAvatarFile":
+		if e.ComplexityRoot.PersonGroupByConnection.CountNotEmptyAvatarFile == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountNotEmptyAvatarFile(childComplexity), true
+	case "PersonGroupByConnection.countNotEmptyAvatarUrl":
+		if e.ComplexityRoot.PersonGroupByConnection.CountNotEmptyAvatarURL == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountNotEmptyAvatarURL(childComplexity), true
+	case "PersonGroupByConnection.countNotEmptyCreatedAt":
+		if e.ComplexityRoot.PersonGroupByConnection.CountNotEmptyCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountNotEmptyCreatedAt(childComplexity), true
+	case "PersonGroupByConnection.countNotEmptyCreatedBy":
+		if e.ComplexityRoot.PersonGroupByConnection.CountNotEmptyCreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountNotEmptyCreatedBy(childComplexity), true
+	case "PersonGroupByConnection.countNotEmptyDeletedAt":
+		if e.ComplexityRoot.PersonGroupByConnection.CountNotEmptyDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountNotEmptyDeletedAt(childComplexity), true
+	case "PersonGroupByConnection.countNotEmptyEmails":
+		if e.ComplexityRoot.PersonGroupByConnection.CountNotEmptyEmails == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountNotEmptyEmails(childComplexity), true
+	case "PersonGroupByConnection.countNotEmptyId":
+		if e.ComplexityRoot.PersonGroupByConnection.CountNotEmptyID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountNotEmptyID(childComplexity), true
+	case "PersonGroupByConnection.countNotEmptyJobTitle":
+		if e.ComplexityRoot.PersonGroupByConnection.CountNotEmptyJobTitle == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountNotEmptyJobTitle(childComplexity), true
+	case "PersonGroupByConnection.countNotEmptyLinkedinLink":
+		if e.ComplexityRoot.PersonGroupByConnection.CountNotEmptyLinkedinLink == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountNotEmptyLinkedinLink(childComplexity), true
+	case "PersonGroupByConnection.countNotEmptyName":
+		if e.ComplexityRoot.PersonGroupByConnection.CountNotEmptyName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountNotEmptyName(childComplexity), true
+	case "PersonGroupByConnection.countNotEmptyPhones":
+		if e.ComplexityRoot.PersonGroupByConnection.CountNotEmptyPhones == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountNotEmptyPhones(childComplexity), true
+	case "PersonGroupByConnection.countNotEmptyPosition":
+		if e.ComplexityRoot.PersonGroupByConnection.CountNotEmptyPosition == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountNotEmptyPosition(childComplexity), true
+	case "PersonGroupByConnection.countNotEmptyUpdatedAt":
+		if e.ComplexityRoot.PersonGroupByConnection.CountNotEmptyUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountNotEmptyUpdatedAt(childComplexity), true
+	case "PersonGroupByConnection.countNotEmptyUpdatedBy":
+		if e.ComplexityRoot.PersonGroupByConnection.CountNotEmptyUpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountNotEmptyUpdatedBy(childComplexity), true
+	case "PersonGroupByConnection.countUniqueValuesAvatarFile":
+		if e.ComplexityRoot.PersonGroupByConnection.CountUniqueValuesAvatarFile == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountUniqueValuesAvatarFile(childComplexity), true
+	case "PersonGroupByConnection.countUniqueValuesAvatarUrl":
+		if e.ComplexityRoot.PersonGroupByConnection.CountUniqueValuesAvatarURL == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountUniqueValuesAvatarURL(childComplexity), true
+	case "PersonGroupByConnection.countUniqueValuesCreatedAt":
+		if e.ComplexityRoot.PersonGroupByConnection.CountUniqueValuesCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountUniqueValuesCreatedAt(childComplexity), true
+	case "PersonGroupByConnection.countUniqueValuesCreatedBy":
+		if e.ComplexityRoot.PersonGroupByConnection.CountUniqueValuesCreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountUniqueValuesCreatedBy(childComplexity), true
+	case "PersonGroupByConnection.countUniqueValuesDeletedAt":
+		if e.ComplexityRoot.PersonGroupByConnection.CountUniqueValuesDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountUniqueValuesDeletedAt(childComplexity), true
+	case "PersonGroupByConnection.countUniqueValuesEmails":
+		if e.ComplexityRoot.PersonGroupByConnection.CountUniqueValuesEmails == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountUniqueValuesEmails(childComplexity), true
+	case "PersonGroupByConnection.countUniqueValuesId":
+		if e.ComplexityRoot.PersonGroupByConnection.CountUniqueValuesID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountUniqueValuesID(childComplexity), true
+	case "PersonGroupByConnection.countUniqueValuesJobTitle":
+		if e.ComplexityRoot.PersonGroupByConnection.CountUniqueValuesJobTitle == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountUniqueValuesJobTitle(childComplexity), true
+	case "PersonGroupByConnection.countUniqueValuesLinkedinLink":
+		if e.ComplexityRoot.PersonGroupByConnection.CountUniqueValuesLinkedinLink == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountUniqueValuesLinkedinLink(childComplexity), true
+	case "PersonGroupByConnection.countUniqueValuesName":
+		if e.ComplexityRoot.PersonGroupByConnection.CountUniqueValuesName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountUniqueValuesName(childComplexity), true
+	case "PersonGroupByConnection.countUniqueValuesPhones":
+		if e.ComplexityRoot.PersonGroupByConnection.CountUniqueValuesPhones == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountUniqueValuesPhones(childComplexity), true
+	case "PersonGroupByConnection.countUniqueValuesPosition":
+		if e.ComplexityRoot.PersonGroupByConnection.CountUniqueValuesPosition == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountUniqueValuesPosition(childComplexity), true
+	case "PersonGroupByConnection.countUniqueValuesUpdatedAt":
+		if e.ComplexityRoot.PersonGroupByConnection.CountUniqueValuesUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountUniqueValuesUpdatedAt(childComplexity), true
+	case "PersonGroupByConnection.countUniqueValuesUpdatedBy":
+		if e.ComplexityRoot.PersonGroupByConnection.CountUniqueValuesUpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.CountUniqueValuesUpdatedBy(childComplexity), true
+	case "PersonGroupByConnection.edges":
+		if e.ComplexityRoot.PersonGroupByConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.Edges(childComplexity), true
+	case "PersonGroupByConnection.groupByDimensionValues":
+		if e.ComplexityRoot.PersonGroupByConnection.GroupByDimensionValues == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.GroupByDimensionValues(childComplexity), true
+	case "PersonGroupByConnection.maxCreatedAt":
+		if e.ComplexityRoot.PersonGroupByConnection.MaxCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.MaxCreatedAt(childComplexity), true
+	case "PersonGroupByConnection.maxDeletedAt":
+		if e.ComplexityRoot.PersonGroupByConnection.MaxDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.MaxDeletedAt(childComplexity), true
+	case "PersonGroupByConnection.maxUpdatedAt":
+		if e.ComplexityRoot.PersonGroupByConnection.MaxUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.MaxUpdatedAt(childComplexity), true
+	case "PersonGroupByConnection.minCreatedAt":
+		if e.ComplexityRoot.PersonGroupByConnection.MinCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.MinCreatedAt(childComplexity), true
+	case "PersonGroupByConnection.minDeletedAt":
+		if e.ComplexityRoot.PersonGroupByConnection.MinDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.MinDeletedAt(childComplexity), true
+	case "PersonGroupByConnection.minUpdatedAt":
+		if e.ComplexityRoot.PersonGroupByConnection.MinUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.MinUpdatedAt(childComplexity), true
+	case "PersonGroupByConnection.pageInfo":
+		if e.ComplexityRoot.PersonGroupByConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.PageInfo(childComplexity), true
+	case "PersonGroupByConnection.percentageEmptyAvatarFile":
+		if e.ComplexityRoot.PersonGroupByConnection.PercentageEmptyAvatarFile == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.PercentageEmptyAvatarFile(childComplexity), true
+	case "PersonGroupByConnection.percentageEmptyAvatarUrl":
+		if e.ComplexityRoot.PersonGroupByConnection.PercentageEmptyAvatarURL == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.PercentageEmptyAvatarURL(childComplexity), true
+	case "PersonGroupByConnection.percentageEmptyCreatedAt":
+		if e.ComplexityRoot.PersonGroupByConnection.PercentageEmptyCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.PercentageEmptyCreatedAt(childComplexity), true
+	case "PersonGroupByConnection.percentageEmptyCreatedBy":
+		if e.ComplexityRoot.PersonGroupByConnection.PercentageEmptyCreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.PercentageEmptyCreatedBy(childComplexity), true
+	case "PersonGroupByConnection.percentageEmptyDeletedAt":
+		if e.ComplexityRoot.PersonGroupByConnection.PercentageEmptyDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.PercentageEmptyDeletedAt(childComplexity), true
+	case "PersonGroupByConnection.percentageEmptyEmails":
+		if e.ComplexityRoot.PersonGroupByConnection.PercentageEmptyEmails == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.PercentageEmptyEmails(childComplexity), true
+	case "PersonGroupByConnection.percentageEmptyId":
+		if e.ComplexityRoot.PersonGroupByConnection.PercentageEmptyID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.PercentageEmptyID(childComplexity), true
+	case "PersonGroupByConnection.percentageEmptyJobTitle":
+		if e.ComplexityRoot.PersonGroupByConnection.PercentageEmptyJobTitle == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.PercentageEmptyJobTitle(childComplexity), true
+	case "PersonGroupByConnection.percentageEmptyLinkedinLink":
+		if e.ComplexityRoot.PersonGroupByConnection.PercentageEmptyLinkedinLink == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.PercentageEmptyLinkedinLink(childComplexity), true
+	case "PersonGroupByConnection.percentageEmptyName":
+		if e.ComplexityRoot.PersonGroupByConnection.PercentageEmptyName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.PercentageEmptyName(childComplexity), true
+	case "PersonGroupByConnection.percentageEmptyPhones":
+		if e.ComplexityRoot.PersonGroupByConnection.PercentageEmptyPhones == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.PercentageEmptyPhones(childComplexity), true
+	case "PersonGroupByConnection.percentageEmptyPosition":
+		if e.ComplexityRoot.PersonGroupByConnection.PercentageEmptyPosition == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.PercentageEmptyPosition(childComplexity), true
+	case "PersonGroupByConnection.percentageEmptyUpdatedAt":
+		if e.ComplexityRoot.PersonGroupByConnection.PercentageEmptyUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.PercentageEmptyUpdatedAt(childComplexity), true
+	case "PersonGroupByConnection.percentageEmptyUpdatedBy":
+		if e.ComplexityRoot.PersonGroupByConnection.PercentageEmptyUpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.PercentageEmptyUpdatedBy(childComplexity), true
+	case "PersonGroupByConnection.percentageNotEmptyAvatarFile":
+		if e.ComplexityRoot.PersonGroupByConnection.PercentageNotEmptyAvatarFile == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.PercentageNotEmptyAvatarFile(childComplexity), true
+	case "PersonGroupByConnection.percentageNotEmptyAvatarUrl":
+		if e.ComplexityRoot.PersonGroupByConnection.PercentageNotEmptyAvatarURL == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.PercentageNotEmptyAvatarURL(childComplexity), true
+	case "PersonGroupByConnection.percentageNotEmptyCreatedAt":
+		if e.ComplexityRoot.PersonGroupByConnection.PercentageNotEmptyCreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.PercentageNotEmptyCreatedAt(childComplexity), true
+	case "PersonGroupByConnection.percentageNotEmptyCreatedBy":
+		if e.ComplexityRoot.PersonGroupByConnection.PercentageNotEmptyCreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.PercentageNotEmptyCreatedBy(childComplexity), true
+	case "PersonGroupByConnection.percentageNotEmptyDeletedAt":
+		if e.ComplexityRoot.PersonGroupByConnection.PercentageNotEmptyDeletedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.PercentageNotEmptyDeletedAt(childComplexity), true
+	case "PersonGroupByConnection.percentageNotEmptyEmails":
+		if e.ComplexityRoot.PersonGroupByConnection.PercentageNotEmptyEmails == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.PercentageNotEmptyEmails(childComplexity), true
+	case "PersonGroupByConnection.percentageNotEmptyId":
+		if e.ComplexityRoot.PersonGroupByConnection.PercentageNotEmptyID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.PercentageNotEmptyID(childComplexity), true
+	case "PersonGroupByConnection.percentageNotEmptyJobTitle":
+		if e.ComplexityRoot.PersonGroupByConnection.PercentageNotEmptyJobTitle == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.PercentageNotEmptyJobTitle(childComplexity), true
+	case "PersonGroupByConnection.percentageNotEmptyLinkedinLink":
+		if e.ComplexityRoot.PersonGroupByConnection.PercentageNotEmptyLinkedinLink == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.PercentageNotEmptyLinkedinLink(childComplexity), true
+	case "PersonGroupByConnection.percentageNotEmptyName":
+		if e.ComplexityRoot.PersonGroupByConnection.PercentageNotEmptyName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.PercentageNotEmptyName(childComplexity), true
+	case "PersonGroupByConnection.percentageNotEmptyPhones":
+		if e.ComplexityRoot.PersonGroupByConnection.PercentageNotEmptyPhones == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.PercentageNotEmptyPhones(childComplexity), true
+	case "PersonGroupByConnection.percentageNotEmptyPosition":
+		if e.ComplexityRoot.PersonGroupByConnection.PercentageNotEmptyPosition == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.PercentageNotEmptyPosition(childComplexity), true
+	case "PersonGroupByConnection.percentageNotEmptyUpdatedAt":
+		if e.ComplexityRoot.PersonGroupByConnection.PercentageNotEmptyUpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.PercentageNotEmptyUpdatedAt(childComplexity), true
+	case "PersonGroupByConnection.percentageNotEmptyUpdatedBy":
+		if e.ComplexityRoot.PersonGroupByConnection.PercentageNotEmptyUpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.PercentageNotEmptyUpdatedBy(childComplexity), true
+	case "PersonGroupByConnection.totalCount":
+		if e.ComplexityRoot.PersonGroupByConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PersonGroupByConnection.TotalCount(childComplexity), true
 
 	case "Phones.additionalPhones":
 		if e.ComplexityRoot.Phones.AdditionalPhones == nil {
@@ -528,6 +1626,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.People(childComplexity, args["filter"].(map[string]any), args["orderBy"].([]map[string]any), args["first"].(*int), args["last"].(*int), args["after"].(*string), args["before"].(*string), args["offset"].(*int)), true
+	case "Query.peopleGroupBy":
+		if e.ComplexityRoot.Query.PeopleGroupBy == nil {
+			break
+		}
+
+		args, err := ec.field_Query_peopleGroupBy_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.PeopleGroupBy(childComplexity, args["groupBy"].([]map[string]any), args["filter"].(map[string]any), args["orderBy"].([]map[string]any), args["orderByForRecords"].([]map[string]any), args["viewId"].(*string), args["limit"].(*int), args["offsetForRecords"].(*int)), true
 	case "Query.person":
 		if e.ComplexityRoot.Query.Person == nil {
 			break
@@ -572,6 +1681,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 			graphql.NewInputUnmarshaler("FloatFilter", ec.unmarshalInputFloatFilter),
 			graphql.NewInputUnmarshaler("FullNameCreateInput", ec.unmarshalInputFullNameCreateInput),
 			graphql.NewInputUnmarshaler("FullNameFilter", ec.unmarshalInputFullNameFilter),
+			graphql.NewInputUnmarshaler("FullNameGroupByInput", ec.unmarshalInputFullNameGroupByInput),
 			graphql.NewInputUnmarshaler("FullNameOrderByInput", ec.unmarshalInputFullNameOrderByInput),
 			graphql.NewInputUnmarshaler("LinkMetadataInput", ec.unmarshalInputLinkMetadataInput),
 			graphql.NewInputUnmarshaler("LinksCreateInput", ec.unmarshalInputLinksCreateInput),
@@ -579,7 +1689,9 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 			graphql.NewInputUnmarshaler("LinksOrderByInput", ec.unmarshalInputLinksOrderByInput),
 			graphql.NewInputUnmarshaler("PersonCreateInput", ec.unmarshalInputPersonCreateInput),
 			graphql.NewInputUnmarshaler("PersonFilterInput", ec.unmarshalInputPersonFilterInput),
+			graphql.NewInputUnmarshaler("PersonGroupByInput", ec.unmarshalInputPersonGroupByInput),
 			graphql.NewInputUnmarshaler("PersonOrderByInput", ec.unmarshalInputPersonOrderByInput),
+			graphql.NewInputUnmarshaler("PersonOrderByWithGroupByInput", ec.unmarshalInputPersonOrderByWithGroupByInput),
 			graphql.NewInputUnmarshaler("PersonUpdateInput", ec.unmarshalInputPersonUpdateInput),
 			graphql.NewInputUnmarshaler("PhonesCreateInput", ec.unmarshalInputPhonesCreateInput),
 			graphql.NewInputUnmarshaler("PhonesFilter", ec.unmarshalInputPhonesFilter),
@@ -662,7 +1774,7 @@ func newExecutionContext(
 	}
 }
 
-//go:embed "person.graphqls"
+//go:embed "person.graphqls" "aggregate.graphqls"
 var sourcesFS embed.FS
 
 func sourceData(filename string) string {
@@ -675,6 +1787,7 @@ func sourceData(filename string) string {
 
 var sources = []*ast.Source{
 	{Name: "person.graphqls", Input: sourceData("person.graphqls"), BuiltIn: false},
+	{Name: "aggregate.graphqls", Input: sourceData("aggregate.graphqls"), BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
@@ -794,6 +1907,158 @@ func (ec *executionContext) childFields_PersonConnection(ctx context.Context, fi
 		return ec.fieldContext_PersonConnection_edges(ctx, field)
 	case "pageInfo":
 		return ec.fieldContext_PersonConnection_pageInfo(ctx, field)
+	case "countUniqueValuesAvatarFile":
+		return ec.fieldContext_PersonConnection_countUniqueValuesAvatarFile(ctx, field)
+	case "countEmptyAvatarFile":
+		return ec.fieldContext_PersonConnection_countEmptyAvatarFile(ctx, field)
+	case "countNotEmptyAvatarFile":
+		return ec.fieldContext_PersonConnection_countNotEmptyAvatarFile(ctx, field)
+	case "percentageEmptyAvatarFile":
+		return ec.fieldContext_PersonConnection_percentageEmptyAvatarFile(ctx, field)
+	case "percentageNotEmptyAvatarFile":
+		return ec.fieldContext_PersonConnection_percentageNotEmptyAvatarFile(ctx, field)
+	case "countUniqueValuesAvatarUrl":
+		return ec.fieldContext_PersonConnection_countUniqueValuesAvatarUrl(ctx, field)
+	case "countEmptyAvatarUrl":
+		return ec.fieldContext_PersonConnection_countEmptyAvatarUrl(ctx, field)
+	case "countNotEmptyAvatarUrl":
+		return ec.fieldContext_PersonConnection_countNotEmptyAvatarUrl(ctx, field)
+	case "percentageEmptyAvatarUrl":
+		return ec.fieldContext_PersonConnection_percentageEmptyAvatarUrl(ctx, field)
+	case "percentageNotEmptyAvatarUrl":
+		return ec.fieldContext_PersonConnection_percentageNotEmptyAvatarUrl(ctx, field)
+	case "countUniqueValuesCreatedAt":
+		return ec.fieldContext_PersonConnection_countUniqueValuesCreatedAt(ctx, field)
+	case "countEmptyCreatedAt":
+		return ec.fieldContext_PersonConnection_countEmptyCreatedAt(ctx, field)
+	case "countNotEmptyCreatedAt":
+		return ec.fieldContext_PersonConnection_countNotEmptyCreatedAt(ctx, field)
+	case "percentageEmptyCreatedAt":
+		return ec.fieldContext_PersonConnection_percentageEmptyCreatedAt(ctx, field)
+	case "percentageNotEmptyCreatedAt":
+		return ec.fieldContext_PersonConnection_percentageNotEmptyCreatedAt(ctx, field)
+	case "minCreatedAt":
+		return ec.fieldContext_PersonConnection_minCreatedAt(ctx, field)
+	case "maxCreatedAt":
+		return ec.fieldContext_PersonConnection_maxCreatedAt(ctx, field)
+	case "countUniqueValuesCreatedBy":
+		return ec.fieldContext_PersonConnection_countUniqueValuesCreatedBy(ctx, field)
+	case "countEmptyCreatedBy":
+		return ec.fieldContext_PersonConnection_countEmptyCreatedBy(ctx, field)
+	case "countNotEmptyCreatedBy":
+		return ec.fieldContext_PersonConnection_countNotEmptyCreatedBy(ctx, field)
+	case "percentageEmptyCreatedBy":
+		return ec.fieldContext_PersonConnection_percentageEmptyCreatedBy(ctx, field)
+	case "percentageNotEmptyCreatedBy":
+		return ec.fieldContext_PersonConnection_percentageNotEmptyCreatedBy(ctx, field)
+	case "countUniqueValuesDeletedAt":
+		return ec.fieldContext_PersonConnection_countUniqueValuesDeletedAt(ctx, field)
+	case "countEmptyDeletedAt":
+		return ec.fieldContext_PersonConnection_countEmptyDeletedAt(ctx, field)
+	case "countNotEmptyDeletedAt":
+		return ec.fieldContext_PersonConnection_countNotEmptyDeletedAt(ctx, field)
+	case "percentageEmptyDeletedAt":
+		return ec.fieldContext_PersonConnection_percentageEmptyDeletedAt(ctx, field)
+	case "percentageNotEmptyDeletedAt":
+		return ec.fieldContext_PersonConnection_percentageNotEmptyDeletedAt(ctx, field)
+	case "minDeletedAt":
+		return ec.fieldContext_PersonConnection_minDeletedAt(ctx, field)
+	case "maxDeletedAt":
+		return ec.fieldContext_PersonConnection_maxDeletedAt(ctx, field)
+	case "countUniqueValuesEmails":
+		return ec.fieldContext_PersonConnection_countUniqueValuesEmails(ctx, field)
+	case "countEmptyEmails":
+		return ec.fieldContext_PersonConnection_countEmptyEmails(ctx, field)
+	case "countNotEmptyEmails":
+		return ec.fieldContext_PersonConnection_countNotEmptyEmails(ctx, field)
+	case "percentageEmptyEmails":
+		return ec.fieldContext_PersonConnection_percentageEmptyEmails(ctx, field)
+	case "percentageNotEmptyEmails":
+		return ec.fieldContext_PersonConnection_percentageNotEmptyEmails(ctx, field)
+	case "countUniqueValuesId":
+		return ec.fieldContext_PersonConnection_countUniqueValuesId(ctx, field)
+	case "countEmptyId":
+		return ec.fieldContext_PersonConnection_countEmptyId(ctx, field)
+	case "countNotEmptyId":
+		return ec.fieldContext_PersonConnection_countNotEmptyId(ctx, field)
+	case "percentageEmptyId":
+		return ec.fieldContext_PersonConnection_percentageEmptyId(ctx, field)
+	case "percentageNotEmptyId":
+		return ec.fieldContext_PersonConnection_percentageNotEmptyId(ctx, field)
+	case "countUniqueValuesJobTitle":
+		return ec.fieldContext_PersonConnection_countUniqueValuesJobTitle(ctx, field)
+	case "countEmptyJobTitle":
+		return ec.fieldContext_PersonConnection_countEmptyJobTitle(ctx, field)
+	case "countNotEmptyJobTitle":
+		return ec.fieldContext_PersonConnection_countNotEmptyJobTitle(ctx, field)
+	case "percentageEmptyJobTitle":
+		return ec.fieldContext_PersonConnection_percentageEmptyJobTitle(ctx, field)
+	case "percentageNotEmptyJobTitle":
+		return ec.fieldContext_PersonConnection_percentageNotEmptyJobTitle(ctx, field)
+	case "countUniqueValuesLinkedinLink":
+		return ec.fieldContext_PersonConnection_countUniqueValuesLinkedinLink(ctx, field)
+	case "countEmptyLinkedinLink":
+		return ec.fieldContext_PersonConnection_countEmptyLinkedinLink(ctx, field)
+	case "countNotEmptyLinkedinLink":
+		return ec.fieldContext_PersonConnection_countNotEmptyLinkedinLink(ctx, field)
+	case "percentageEmptyLinkedinLink":
+		return ec.fieldContext_PersonConnection_percentageEmptyLinkedinLink(ctx, field)
+	case "percentageNotEmptyLinkedinLink":
+		return ec.fieldContext_PersonConnection_percentageNotEmptyLinkedinLink(ctx, field)
+	case "countUniqueValuesName":
+		return ec.fieldContext_PersonConnection_countUniqueValuesName(ctx, field)
+	case "countEmptyName":
+		return ec.fieldContext_PersonConnection_countEmptyName(ctx, field)
+	case "countNotEmptyName":
+		return ec.fieldContext_PersonConnection_countNotEmptyName(ctx, field)
+	case "percentageEmptyName":
+		return ec.fieldContext_PersonConnection_percentageEmptyName(ctx, field)
+	case "percentageNotEmptyName":
+		return ec.fieldContext_PersonConnection_percentageNotEmptyName(ctx, field)
+	case "countUniqueValuesPhones":
+		return ec.fieldContext_PersonConnection_countUniqueValuesPhones(ctx, field)
+	case "countEmptyPhones":
+		return ec.fieldContext_PersonConnection_countEmptyPhones(ctx, field)
+	case "countNotEmptyPhones":
+		return ec.fieldContext_PersonConnection_countNotEmptyPhones(ctx, field)
+	case "percentageEmptyPhones":
+		return ec.fieldContext_PersonConnection_percentageEmptyPhones(ctx, field)
+	case "percentageNotEmptyPhones":
+		return ec.fieldContext_PersonConnection_percentageNotEmptyPhones(ctx, field)
+	case "countUniqueValuesPosition":
+		return ec.fieldContext_PersonConnection_countUniqueValuesPosition(ctx, field)
+	case "countEmptyPosition":
+		return ec.fieldContext_PersonConnection_countEmptyPosition(ctx, field)
+	case "countNotEmptyPosition":
+		return ec.fieldContext_PersonConnection_countNotEmptyPosition(ctx, field)
+	case "percentageEmptyPosition":
+		return ec.fieldContext_PersonConnection_percentageEmptyPosition(ctx, field)
+	case "percentageNotEmptyPosition":
+		return ec.fieldContext_PersonConnection_percentageNotEmptyPosition(ctx, field)
+	case "countUniqueValuesUpdatedAt":
+		return ec.fieldContext_PersonConnection_countUniqueValuesUpdatedAt(ctx, field)
+	case "countEmptyUpdatedAt":
+		return ec.fieldContext_PersonConnection_countEmptyUpdatedAt(ctx, field)
+	case "countNotEmptyUpdatedAt":
+		return ec.fieldContext_PersonConnection_countNotEmptyUpdatedAt(ctx, field)
+	case "percentageEmptyUpdatedAt":
+		return ec.fieldContext_PersonConnection_percentageEmptyUpdatedAt(ctx, field)
+	case "percentageNotEmptyUpdatedAt":
+		return ec.fieldContext_PersonConnection_percentageNotEmptyUpdatedAt(ctx, field)
+	case "minUpdatedAt":
+		return ec.fieldContext_PersonConnection_minUpdatedAt(ctx, field)
+	case "maxUpdatedAt":
+		return ec.fieldContext_PersonConnection_maxUpdatedAt(ctx, field)
+	case "countUniqueValuesUpdatedBy":
+		return ec.fieldContext_PersonConnection_countUniqueValuesUpdatedBy(ctx, field)
+	case "countEmptyUpdatedBy":
+		return ec.fieldContext_PersonConnection_countEmptyUpdatedBy(ctx, field)
+	case "countNotEmptyUpdatedBy":
+		return ec.fieldContext_PersonConnection_countNotEmptyUpdatedBy(ctx, field)
+	case "percentageEmptyUpdatedBy":
+		return ec.fieldContext_PersonConnection_percentageEmptyUpdatedBy(ctx, field)
+	case "percentageNotEmptyUpdatedBy":
+		return ec.fieldContext_PersonConnection_percentageNotEmptyUpdatedBy(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type PersonConnection", field.Name)
 }
@@ -806,6 +2071,172 @@ func (ec *executionContext) childFields_PersonEdge(ctx context.Context, field gr
 		return ec.fieldContext_PersonEdge_cursor(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type PersonEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_PersonGroupByConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "totalCount":
+		return ec.fieldContext_PersonGroupByConnection_totalCount(ctx, field)
+	case "edges":
+		return ec.fieldContext_PersonGroupByConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_PersonGroupByConnection_pageInfo(ctx, field)
+	case "groupByDimensionValues":
+		return ec.fieldContext_PersonGroupByConnection_groupByDimensionValues(ctx, field)
+	case "countUniqueValuesAvatarFile":
+		return ec.fieldContext_PersonGroupByConnection_countUniqueValuesAvatarFile(ctx, field)
+	case "countEmptyAvatarFile":
+		return ec.fieldContext_PersonGroupByConnection_countEmptyAvatarFile(ctx, field)
+	case "countNotEmptyAvatarFile":
+		return ec.fieldContext_PersonGroupByConnection_countNotEmptyAvatarFile(ctx, field)
+	case "percentageEmptyAvatarFile":
+		return ec.fieldContext_PersonGroupByConnection_percentageEmptyAvatarFile(ctx, field)
+	case "percentageNotEmptyAvatarFile":
+		return ec.fieldContext_PersonGroupByConnection_percentageNotEmptyAvatarFile(ctx, field)
+	case "countUniqueValuesAvatarUrl":
+		return ec.fieldContext_PersonGroupByConnection_countUniqueValuesAvatarUrl(ctx, field)
+	case "countEmptyAvatarUrl":
+		return ec.fieldContext_PersonGroupByConnection_countEmptyAvatarUrl(ctx, field)
+	case "countNotEmptyAvatarUrl":
+		return ec.fieldContext_PersonGroupByConnection_countNotEmptyAvatarUrl(ctx, field)
+	case "percentageEmptyAvatarUrl":
+		return ec.fieldContext_PersonGroupByConnection_percentageEmptyAvatarUrl(ctx, field)
+	case "percentageNotEmptyAvatarUrl":
+		return ec.fieldContext_PersonGroupByConnection_percentageNotEmptyAvatarUrl(ctx, field)
+	case "countUniqueValuesCreatedAt":
+		return ec.fieldContext_PersonGroupByConnection_countUniqueValuesCreatedAt(ctx, field)
+	case "countEmptyCreatedAt":
+		return ec.fieldContext_PersonGroupByConnection_countEmptyCreatedAt(ctx, field)
+	case "countNotEmptyCreatedAt":
+		return ec.fieldContext_PersonGroupByConnection_countNotEmptyCreatedAt(ctx, field)
+	case "percentageEmptyCreatedAt":
+		return ec.fieldContext_PersonGroupByConnection_percentageEmptyCreatedAt(ctx, field)
+	case "percentageNotEmptyCreatedAt":
+		return ec.fieldContext_PersonGroupByConnection_percentageNotEmptyCreatedAt(ctx, field)
+	case "minCreatedAt":
+		return ec.fieldContext_PersonGroupByConnection_minCreatedAt(ctx, field)
+	case "maxCreatedAt":
+		return ec.fieldContext_PersonGroupByConnection_maxCreatedAt(ctx, field)
+	case "countUniqueValuesCreatedBy":
+		return ec.fieldContext_PersonGroupByConnection_countUniqueValuesCreatedBy(ctx, field)
+	case "countEmptyCreatedBy":
+		return ec.fieldContext_PersonGroupByConnection_countEmptyCreatedBy(ctx, field)
+	case "countNotEmptyCreatedBy":
+		return ec.fieldContext_PersonGroupByConnection_countNotEmptyCreatedBy(ctx, field)
+	case "percentageEmptyCreatedBy":
+		return ec.fieldContext_PersonGroupByConnection_percentageEmptyCreatedBy(ctx, field)
+	case "percentageNotEmptyCreatedBy":
+		return ec.fieldContext_PersonGroupByConnection_percentageNotEmptyCreatedBy(ctx, field)
+	case "countUniqueValuesDeletedAt":
+		return ec.fieldContext_PersonGroupByConnection_countUniqueValuesDeletedAt(ctx, field)
+	case "countEmptyDeletedAt":
+		return ec.fieldContext_PersonGroupByConnection_countEmptyDeletedAt(ctx, field)
+	case "countNotEmptyDeletedAt":
+		return ec.fieldContext_PersonGroupByConnection_countNotEmptyDeletedAt(ctx, field)
+	case "percentageEmptyDeletedAt":
+		return ec.fieldContext_PersonGroupByConnection_percentageEmptyDeletedAt(ctx, field)
+	case "percentageNotEmptyDeletedAt":
+		return ec.fieldContext_PersonGroupByConnection_percentageNotEmptyDeletedAt(ctx, field)
+	case "minDeletedAt":
+		return ec.fieldContext_PersonGroupByConnection_minDeletedAt(ctx, field)
+	case "maxDeletedAt":
+		return ec.fieldContext_PersonGroupByConnection_maxDeletedAt(ctx, field)
+	case "countUniqueValuesEmails":
+		return ec.fieldContext_PersonGroupByConnection_countUniqueValuesEmails(ctx, field)
+	case "countEmptyEmails":
+		return ec.fieldContext_PersonGroupByConnection_countEmptyEmails(ctx, field)
+	case "countNotEmptyEmails":
+		return ec.fieldContext_PersonGroupByConnection_countNotEmptyEmails(ctx, field)
+	case "percentageEmptyEmails":
+		return ec.fieldContext_PersonGroupByConnection_percentageEmptyEmails(ctx, field)
+	case "percentageNotEmptyEmails":
+		return ec.fieldContext_PersonGroupByConnection_percentageNotEmptyEmails(ctx, field)
+	case "countUniqueValuesId":
+		return ec.fieldContext_PersonGroupByConnection_countUniqueValuesId(ctx, field)
+	case "countEmptyId":
+		return ec.fieldContext_PersonGroupByConnection_countEmptyId(ctx, field)
+	case "countNotEmptyId":
+		return ec.fieldContext_PersonGroupByConnection_countNotEmptyId(ctx, field)
+	case "percentageEmptyId":
+		return ec.fieldContext_PersonGroupByConnection_percentageEmptyId(ctx, field)
+	case "percentageNotEmptyId":
+		return ec.fieldContext_PersonGroupByConnection_percentageNotEmptyId(ctx, field)
+	case "countUniqueValuesJobTitle":
+		return ec.fieldContext_PersonGroupByConnection_countUniqueValuesJobTitle(ctx, field)
+	case "countEmptyJobTitle":
+		return ec.fieldContext_PersonGroupByConnection_countEmptyJobTitle(ctx, field)
+	case "countNotEmptyJobTitle":
+		return ec.fieldContext_PersonGroupByConnection_countNotEmptyJobTitle(ctx, field)
+	case "percentageEmptyJobTitle":
+		return ec.fieldContext_PersonGroupByConnection_percentageEmptyJobTitle(ctx, field)
+	case "percentageNotEmptyJobTitle":
+		return ec.fieldContext_PersonGroupByConnection_percentageNotEmptyJobTitle(ctx, field)
+	case "countUniqueValuesLinkedinLink":
+		return ec.fieldContext_PersonGroupByConnection_countUniqueValuesLinkedinLink(ctx, field)
+	case "countEmptyLinkedinLink":
+		return ec.fieldContext_PersonGroupByConnection_countEmptyLinkedinLink(ctx, field)
+	case "countNotEmptyLinkedinLink":
+		return ec.fieldContext_PersonGroupByConnection_countNotEmptyLinkedinLink(ctx, field)
+	case "percentageEmptyLinkedinLink":
+		return ec.fieldContext_PersonGroupByConnection_percentageEmptyLinkedinLink(ctx, field)
+	case "percentageNotEmptyLinkedinLink":
+		return ec.fieldContext_PersonGroupByConnection_percentageNotEmptyLinkedinLink(ctx, field)
+	case "countUniqueValuesName":
+		return ec.fieldContext_PersonGroupByConnection_countUniqueValuesName(ctx, field)
+	case "countEmptyName":
+		return ec.fieldContext_PersonGroupByConnection_countEmptyName(ctx, field)
+	case "countNotEmptyName":
+		return ec.fieldContext_PersonGroupByConnection_countNotEmptyName(ctx, field)
+	case "percentageEmptyName":
+		return ec.fieldContext_PersonGroupByConnection_percentageEmptyName(ctx, field)
+	case "percentageNotEmptyName":
+		return ec.fieldContext_PersonGroupByConnection_percentageNotEmptyName(ctx, field)
+	case "countUniqueValuesPhones":
+		return ec.fieldContext_PersonGroupByConnection_countUniqueValuesPhones(ctx, field)
+	case "countEmptyPhones":
+		return ec.fieldContext_PersonGroupByConnection_countEmptyPhones(ctx, field)
+	case "countNotEmptyPhones":
+		return ec.fieldContext_PersonGroupByConnection_countNotEmptyPhones(ctx, field)
+	case "percentageEmptyPhones":
+		return ec.fieldContext_PersonGroupByConnection_percentageEmptyPhones(ctx, field)
+	case "percentageNotEmptyPhones":
+		return ec.fieldContext_PersonGroupByConnection_percentageNotEmptyPhones(ctx, field)
+	case "countUniqueValuesPosition":
+		return ec.fieldContext_PersonGroupByConnection_countUniqueValuesPosition(ctx, field)
+	case "countEmptyPosition":
+		return ec.fieldContext_PersonGroupByConnection_countEmptyPosition(ctx, field)
+	case "countNotEmptyPosition":
+		return ec.fieldContext_PersonGroupByConnection_countNotEmptyPosition(ctx, field)
+	case "percentageEmptyPosition":
+		return ec.fieldContext_PersonGroupByConnection_percentageEmptyPosition(ctx, field)
+	case "percentageNotEmptyPosition":
+		return ec.fieldContext_PersonGroupByConnection_percentageNotEmptyPosition(ctx, field)
+	case "countUniqueValuesUpdatedAt":
+		return ec.fieldContext_PersonGroupByConnection_countUniqueValuesUpdatedAt(ctx, field)
+	case "countEmptyUpdatedAt":
+		return ec.fieldContext_PersonGroupByConnection_countEmptyUpdatedAt(ctx, field)
+	case "countNotEmptyUpdatedAt":
+		return ec.fieldContext_PersonGroupByConnection_countNotEmptyUpdatedAt(ctx, field)
+	case "percentageEmptyUpdatedAt":
+		return ec.fieldContext_PersonGroupByConnection_percentageEmptyUpdatedAt(ctx, field)
+	case "percentageNotEmptyUpdatedAt":
+		return ec.fieldContext_PersonGroupByConnection_percentageNotEmptyUpdatedAt(ctx, field)
+	case "minUpdatedAt":
+		return ec.fieldContext_PersonGroupByConnection_minUpdatedAt(ctx, field)
+	case "maxUpdatedAt":
+		return ec.fieldContext_PersonGroupByConnection_maxUpdatedAt(ctx, field)
+	case "countUniqueValuesUpdatedBy":
+		return ec.fieldContext_PersonGroupByConnection_countUniqueValuesUpdatedBy(ctx, field)
+	case "countEmptyUpdatedBy":
+		return ec.fieldContext_PersonGroupByConnection_countEmptyUpdatedBy(ctx, field)
+	case "countNotEmptyUpdatedBy":
+		return ec.fieldContext_PersonGroupByConnection_countNotEmptyUpdatedBy(ctx, field)
+	case "percentageEmptyUpdatedBy":
+		return ec.fieldContext_PersonGroupByConnection_percentageEmptyUpdatedBy(ctx, field)
+	case "percentageNotEmptyUpdatedBy":
+		return ec.fieldContext_PersonGroupByConnection_percentageNotEmptyUpdatedBy(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type PersonGroupByConnection", field.Name)
 }
 
 func (ec *executionContext) childFields_Phones(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -1109,6 +2540,68 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 		return nil, err
 	}
 	args["name"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_peopleGroupBy_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "groupBy",
+		func(ctx context.Context, v any) ([]map[string]any, error) {
+			return ec.unmarshalNPersonGroupByInput2ᚕmapᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["groupBy"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "filter",
+		func(ctx context.Context, v any) (map[string]any, error) {
+			return ec.unmarshalOPersonFilterInput2map(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["filter"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]map[string]any, error) {
+			return ec.unmarshalOPersonOrderByWithGroupByInput2ᚕmapᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "orderByForRecords",
+		func(ctx context.Context, v any) ([]map[string]any, error) {
+			return ec.unmarshalOPersonOrderByInput2ᚕmapᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderByForRecords"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "viewId",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOUUID2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["viewId"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "limit",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["limit"] = arg5
+	arg6, err := graphql.ProcessArgField(ctx, rawArgs, "offsetForRecords",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["offsetForRecords"] = arg6
 	return args, nil
 }
 
@@ -2521,6 +4014,1754 @@ func (ec *executionContext) fieldContext_PersonConnection_pageInfo(_ context.Con
 	return fc, nil
 }
 
+func (ec *executionContext) _PersonConnection_countUniqueValuesAvatarFile(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countUniqueValuesAvatarFile(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesAvatarFile, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countUniqueValuesAvatarFile(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_countEmptyAvatarFile(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countEmptyAvatarFile(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyAvatarFile, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countEmptyAvatarFile(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_countNotEmptyAvatarFile(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countNotEmptyAvatarFile(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyAvatarFile, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countNotEmptyAvatarFile(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_percentageEmptyAvatarFile(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_percentageEmptyAvatarFile(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyAvatarFile, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_percentageEmptyAvatarFile(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonConnection_percentageNotEmptyAvatarFile(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_percentageNotEmptyAvatarFile(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyAvatarFile, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_percentageNotEmptyAvatarFile(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonConnection_countUniqueValuesAvatarUrl(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countUniqueValuesAvatarUrl(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesAvatarURL, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countUniqueValuesAvatarUrl(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_countEmptyAvatarUrl(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countEmptyAvatarUrl(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyAvatarURL, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countEmptyAvatarUrl(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_countNotEmptyAvatarUrl(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countNotEmptyAvatarUrl(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyAvatarURL, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countNotEmptyAvatarUrl(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_percentageEmptyAvatarUrl(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_percentageEmptyAvatarUrl(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyAvatarURL, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_percentageEmptyAvatarUrl(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonConnection_percentageNotEmptyAvatarUrl(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_percentageNotEmptyAvatarUrl(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyAvatarURL, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_percentageNotEmptyAvatarUrl(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonConnection_countUniqueValuesCreatedAt(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countUniqueValuesCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countUniqueValuesCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_countEmptyCreatedAt(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countEmptyCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countEmptyCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_countNotEmptyCreatedAt(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countNotEmptyCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countNotEmptyCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_percentageEmptyCreatedAt(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_percentageEmptyCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_percentageEmptyCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonConnection_percentageNotEmptyCreatedAt(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_percentageNotEmptyCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_percentageNotEmptyCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonConnection_minCreatedAt(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_minCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MinCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_minCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _PersonConnection_maxCreatedAt(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_maxCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MaxCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_maxCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _PersonConnection_countUniqueValuesCreatedBy(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countUniqueValuesCreatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesCreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countUniqueValuesCreatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_countEmptyCreatedBy(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countEmptyCreatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyCreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countEmptyCreatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_countNotEmptyCreatedBy(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countNotEmptyCreatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyCreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countNotEmptyCreatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_percentageEmptyCreatedBy(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_percentageEmptyCreatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyCreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_percentageEmptyCreatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonConnection_percentageNotEmptyCreatedBy(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_percentageNotEmptyCreatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyCreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_percentageNotEmptyCreatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonConnection_countUniqueValuesDeletedAt(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countUniqueValuesDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countUniqueValuesDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_countEmptyDeletedAt(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countEmptyDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countEmptyDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_countNotEmptyDeletedAt(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countNotEmptyDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countNotEmptyDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_percentageEmptyDeletedAt(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_percentageEmptyDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_percentageEmptyDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonConnection_percentageNotEmptyDeletedAt(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_percentageNotEmptyDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_percentageNotEmptyDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonConnection_minDeletedAt(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_minDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MinDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_minDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _PersonConnection_maxDeletedAt(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_maxDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MaxDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_maxDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _PersonConnection_countUniqueValuesEmails(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countUniqueValuesEmails(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesEmails, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countUniqueValuesEmails(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_countEmptyEmails(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countEmptyEmails(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyEmails, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countEmptyEmails(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_countNotEmptyEmails(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countNotEmptyEmails(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyEmails, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countNotEmptyEmails(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_percentageEmptyEmails(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_percentageEmptyEmails(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyEmails, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_percentageEmptyEmails(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonConnection_percentageNotEmptyEmails(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_percentageNotEmptyEmails(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyEmails, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_percentageNotEmptyEmails(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonConnection_countUniqueValuesId(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countUniqueValuesId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countUniqueValuesId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_countEmptyId(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countEmptyId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countEmptyId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_countNotEmptyId(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countNotEmptyId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countNotEmptyId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_percentageEmptyId(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_percentageEmptyId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_percentageEmptyId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonConnection_percentageNotEmptyId(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_percentageNotEmptyId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_percentageNotEmptyId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonConnection_countUniqueValuesJobTitle(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countUniqueValuesJobTitle(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesJobTitle, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countUniqueValuesJobTitle(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_countEmptyJobTitle(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countEmptyJobTitle(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyJobTitle, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countEmptyJobTitle(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_countNotEmptyJobTitle(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countNotEmptyJobTitle(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyJobTitle, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countNotEmptyJobTitle(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_percentageEmptyJobTitle(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_percentageEmptyJobTitle(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyJobTitle, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_percentageEmptyJobTitle(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonConnection_percentageNotEmptyJobTitle(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_percentageNotEmptyJobTitle(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyJobTitle, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_percentageNotEmptyJobTitle(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonConnection_countUniqueValuesLinkedinLink(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countUniqueValuesLinkedinLink(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesLinkedinLink, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countUniqueValuesLinkedinLink(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_countEmptyLinkedinLink(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countEmptyLinkedinLink(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyLinkedinLink, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countEmptyLinkedinLink(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_countNotEmptyLinkedinLink(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countNotEmptyLinkedinLink(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyLinkedinLink, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countNotEmptyLinkedinLink(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_percentageEmptyLinkedinLink(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_percentageEmptyLinkedinLink(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyLinkedinLink, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_percentageEmptyLinkedinLink(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonConnection_percentageNotEmptyLinkedinLink(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_percentageNotEmptyLinkedinLink(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyLinkedinLink, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_percentageNotEmptyLinkedinLink(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonConnection_countUniqueValuesName(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countUniqueValuesName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countUniqueValuesName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_countEmptyName(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countEmptyName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countEmptyName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_countNotEmptyName(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countNotEmptyName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countNotEmptyName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_percentageEmptyName(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_percentageEmptyName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_percentageEmptyName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonConnection_percentageNotEmptyName(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_percentageNotEmptyName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_percentageNotEmptyName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonConnection_countUniqueValuesPhones(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countUniqueValuesPhones(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesPhones, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countUniqueValuesPhones(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_countEmptyPhones(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countEmptyPhones(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyPhones, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countEmptyPhones(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_countNotEmptyPhones(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countNotEmptyPhones(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyPhones, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countNotEmptyPhones(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_percentageEmptyPhones(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_percentageEmptyPhones(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyPhones, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_percentageEmptyPhones(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonConnection_percentageNotEmptyPhones(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_percentageNotEmptyPhones(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyPhones, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_percentageNotEmptyPhones(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonConnection_countUniqueValuesPosition(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countUniqueValuesPosition(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesPosition, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countUniqueValuesPosition(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_countEmptyPosition(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countEmptyPosition(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyPosition, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countEmptyPosition(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_countNotEmptyPosition(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countNotEmptyPosition(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyPosition, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countNotEmptyPosition(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_percentageEmptyPosition(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_percentageEmptyPosition(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyPosition, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_percentageEmptyPosition(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonConnection_percentageNotEmptyPosition(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_percentageNotEmptyPosition(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyPosition, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_percentageNotEmptyPosition(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonConnection_countUniqueValuesUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countUniqueValuesUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countUniqueValuesUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_countEmptyUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countEmptyUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countEmptyUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_countNotEmptyUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countNotEmptyUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countNotEmptyUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_percentageEmptyUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_percentageEmptyUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_percentageEmptyUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonConnection_percentageNotEmptyUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_percentageNotEmptyUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_percentageNotEmptyUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonConnection_minUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_minUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MinUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_minUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _PersonConnection_maxUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_maxUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MaxUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_maxUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _PersonConnection_countUniqueValuesUpdatedBy(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countUniqueValuesUpdatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesUpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countUniqueValuesUpdatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_countEmptyUpdatedBy(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countEmptyUpdatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyUpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countEmptyUpdatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_countNotEmptyUpdatedBy(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_countNotEmptyUpdatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyUpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_countNotEmptyUpdatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonConnection_percentageEmptyUpdatedBy(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_percentageEmptyUpdatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyUpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_percentageEmptyUpdatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonConnection_percentageNotEmptyUpdatedBy(ctx context.Context, field graphql.CollectedField, obj *PersonConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonConnection_percentageNotEmptyUpdatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyUpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonConnection_percentageNotEmptyUpdatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonConnection", field, false, false, "Float")
+}
+
 func (ec *executionContext) _PersonEdge_node(ctx context.Context, field graphql.CollectedField, obj *PersonEdge) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -2574,6 +5815,1864 @@ func (ec *executionContext) _PersonEdge_cursor(ctx context.Context, field graphq
 }
 func (ec *executionContext) fieldContext_PersonEdge_cursor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("PersonEdge", field, false, false, "Cursor")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_totalCount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TotalCount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_edges(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_edges(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Edges, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*PersonEdge) graphql.Marshaler {
+			return ec.marshalNPersonEdge2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐPersonEdgeᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PersonGroupByConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_PersonEdge(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PersonGroupByConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_pageInfo(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PageInfo, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *PageInfo) graphql.Marshaler {
+			return ec.marshalNPageInfo2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐPageInfo(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PersonGroupByConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_PageInfo(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PersonGroupByConnection_groupByDimensionValues(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_groupByDimensionValues(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.GroupByDimensionValues, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v any) graphql.Marshaler {
+			return ec.marshalNJSON2interface(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_groupByDimensionValues(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "JSON")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countUniqueValuesAvatarFile(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countUniqueValuesAvatarFile(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesAvatarFile, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countUniqueValuesAvatarFile(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countEmptyAvatarFile(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countEmptyAvatarFile(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyAvatarFile, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countEmptyAvatarFile(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countNotEmptyAvatarFile(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countNotEmptyAvatarFile(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyAvatarFile, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countNotEmptyAvatarFile(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_percentageEmptyAvatarFile(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_percentageEmptyAvatarFile(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyAvatarFile, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_percentageEmptyAvatarFile(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_percentageNotEmptyAvatarFile(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_percentageNotEmptyAvatarFile(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyAvatarFile, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_percentageNotEmptyAvatarFile(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countUniqueValuesAvatarUrl(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countUniqueValuesAvatarUrl(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesAvatarURL, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countUniqueValuesAvatarUrl(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countEmptyAvatarUrl(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countEmptyAvatarUrl(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyAvatarURL, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countEmptyAvatarUrl(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countNotEmptyAvatarUrl(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countNotEmptyAvatarUrl(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyAvatarURL, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countNotEmptyAvatarUrl(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_percentageEmptyAvatarUrl(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_percentageEmptyAvatarUrl(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyAvatarURL, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_percentageEmptyAvatarUrl(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_percentageNotEmptyAvatarUrl(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_percentageNotEmptyAvatarUrl(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyAvatarURL, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_percentageNotEmptyAvatarUrl(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countUniqueValuesCreatedAt(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countUniqueValuesCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countUniqueValuesCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countEmptyCreatedAt(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countEmptyCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countEmptyCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countNotEmptyCreatedAt(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countNotEmptyCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countNotEmptyCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_percentageEmptyCreatedAt(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_percentageEmptyCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_percentageEmptyCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_percentageNotEmptyCreatedAt(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_percentageNotEmptyCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_percentageNotEmptyCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_minCreatedAt(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_minCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MinCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_minCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_maxCreatedAt(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_maxCreatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MaxCreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_maxCreatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countUniqueValuesCreatedBy(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countUniqueValuesCreatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesCreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countUniqueValuesCreatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countEmptyCreatedBy(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countEmptyCreatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyCreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countEmptyCreatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countNotEmptyCreatedBy(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countNotEmptyCreatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyCreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countNotEmptyCreatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_percentageEmptyCreatedBy(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_percentageEmptyCreatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyCreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_percentageEmptyCreatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_percentageNotEmptyCreatedBy(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_percentageNotEmptyCreatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyCreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_percentageNotEmptyCreatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countUniqueValuesDeletedAt(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countUniqueValuesDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countUniqueValuesDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countEmptyDeletedAt(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countEmptyDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countEmptyDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countNotEmptyDeletedAt(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countNotEmptyDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countNotEmptyDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_percentageEmptyDeletedAt(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_percentageEmptyDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_percentageEmptyDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_percentageNotEmptyDeletedAt(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_percentageNotEmptyDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_percentageNotEmptyDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_minDeletedAt(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_minDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MinDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_minDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_maxDeletedAt(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_maxDeletedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MaxDeletedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_maxDeletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countUniqueValuesEmails(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countUniqueValuesEmails(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesEmails, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countUniqueValuesEmails(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countEmptyEmails(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countEmptyEmails(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyEmails, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countEmptyEmails(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countNotEmptyEmails(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countNotEmptyEmails(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyEmails, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countNotEmptyEmails(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_percentageEmptyEmails(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_percentageEmptyEmails(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyEmails, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_percentageEmptyEmails(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_percentageNotEmptyEmails(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_percentageNotEmptyEmails(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyEmails, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_percentageNotEmptyEmails(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countUniqueValuesId(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countUniqueValuesId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countUniqueValuesId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countEmptyId(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countEmptyId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countEmptyId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countNotEmptyId(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countNotEmptyId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countNotEmptyId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_percentageEmptyId(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_percentageEmptyId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_percentageEmptyId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_percentageNotEmptyId(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_percentageNotEmptyId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_percentageNotEmptyId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countUniqueValuesJobTitle(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countUniqueValuesJobTitle(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesJobTitle, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countUniqueValuesJobTitle(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countEmptyJobTitle(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countEmptyJobTitle(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyJobTitle, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countEmptyJobTitle(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countNotEmptyJobTitle(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countNotEmptyJobTitle(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyJobTitle, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countNotEmptyJobTitle(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_percentageEmptyJobTitle(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_percentageEmptyJobTitle(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyJobTitle, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_percentageEmptyJobTitle(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_percentageNotEmptyJobTitle(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_percentageNotEmptyJobTitle(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyJobTitle, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_percentageNotEmptyJobTitle(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countUniqueValuesLinkedinLink(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countUniqueValuesLinkedinLink(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesLinkedinLink, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countUniqueValuesLinkedinLink(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countEmptyLinkedinLink(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countEmptyLinkedinLink(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyLinkedinLink, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countEmptyLinkedinLink(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countNotEmptyLinkedinLink(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countNotEmptyLinkedinLink(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyLinkedinLink, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countNotEmptyLinkedinLink(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_percentageEmptyLinkedinLink(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_percentageEmptyLinkedinLink(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyLinkedinLink, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_percentageEmptyLinkedinLink(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_percentageNotEmptyLinkedinLink(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_percentageNotEmptyLinkedinLink(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyLinkedinLink, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_percentageNotEmptyLinkedinLink(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countUniqueValuesName(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countUniqueValuesName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countUniqueValuesName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countEmptyName(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countEmptyName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countEmptyName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countNotEmptyName(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countNotEmptyName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countNotEmptyName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_percentageEmptyName(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_percentageEmptyName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_percentageEmptyName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_percentageNotEmptyName(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_percentageNotEmptyName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_percentageNotEmptyName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countUniqueValuesPhones(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countUniqueValuesPhones(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesPhones, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countUniqueValuesPhones(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countEmptyPhones(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countEmptyPhones(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyPhones, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countEmptyPhones(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countNotEmptyPhones(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countNotEmptyPhones(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyPhones, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countNotEmptyPhones(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_percentageEmptyPhones(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_percentageEmptyPhones(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyPhones, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_percentageEmptyPhones(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_percentageNotEmptyPhones(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_percentageNotEmptyPhones(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyPhones, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_percentageNotEmptyPhones(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countUniqueValuesPosition(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countUniqueValuesPosition(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesPosition, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countUniqueValuesPosition(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countEmptyPosition(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countEmptyPosition(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyPosition, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countEmptyPosition(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countNotEmptyPosition(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countNotEmptyPosition(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyPosition, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countNotEmptyPosition(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_percentageEmptyPosition(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_percentageEmptyPosition(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyPosition, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_percentageEmptyPosition(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_percentageNotEmptyPosition(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_percentageNotEmptyPosition(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyPosition, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_percentageNotEmptyPosition(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countUniqueValuesUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countUniqueValuesUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countUniqueValuesUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countEmptyUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countEmptyUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countEmptyUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countNotEmptyUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countNotEmptyUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countNotEmptyUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_percentageEmptyUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_percentageEmptyUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_percentageEmptyUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_percentageNotEmptyUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_percentageNotEmptyUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_percentageNotEmptyUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_minUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_minUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MinUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_minUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_maxUpdatedAt(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_maxUpdatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MaxUpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_maxUpdatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countUniqueValuesUpdatedBy(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countUniqueValuesUpdatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountUniqueValuesUpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countUniqueValuesUpdatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countEmptyUpdatedBy(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countEmptyUpdatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountEmptyUpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countEmptyUpdatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_countNotEmptyUpdatedBy(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_countNotEmptyUpdatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountNotEmptyUpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_countNotEmptyUpdatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_percentageEmptyUpdatedBy(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_percentageEmptyUpdatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageEmptyUpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_percentageEmptyUpdatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Float")
+}
+
+func (ec *executionContext) _PersonGroupByConnection_percentageNotEmptyUpdatedBy(ctx context.Context, field graphql.CollectedField, obj *PersonGroupByConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonGroupByConnection_percentageNotEmptyUpdatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PercentageNotEmptyUpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PersonGroupByConnection_percentageNotEmptyUpdatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PersonGroupByConnection", field, false, false, "Float")
 }
 
 func (ec *executionContext) _Phones_primaryPhoneNumber(ctx context.Context, field graphql.CollectedField, obj *Phones) (ret graphql.Marshaler) {
@@ -2759,6 +7858,50 @@ func (ec *executionContext) fieldContext_Query_person(ctx context.Context, field
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Query_person_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_peopleGroupBy(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_peopleGroupBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().PeopleGroupBy(ctx, fc.Args["groupBy"].([]map[string]any), fc.Args["filter"].(map[string]any), fc.Args["orderBy"].([]map[string]any), fc.Args["orderByForRecords"].([]map[string]any), fc.Args["viewId"].(*string), fc.Args["limit"].(*int), fc.Args["offsetForRecords"].(*int))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*PersonGroupByConnection) graphql.Marshaler {
+			return ec.marshalNPersonGroupByConnection2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐPersonGroupByConnectionᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_peopleGroupBy(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_PersonGroupByConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_peopleGroupBy_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -4548,6 +9691,55 @@ func UnmarshalFullNameFilter(ctx context.Context, raw any) (FullNameFilter, erro
 	return out, err
 }
 
+func (ec *executionContext) unmarshalInputFullNameGroupByInput(ctx context.Context, obj any) (FullNameGroupByInput, error) {
+	var it FullNameGroupByInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"firstName", "lastName"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "firstName":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstName"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FirstName = data
+		case "lastName":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastName"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.LastName = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalFullNameGroupByInput unmarshals raw into the FullNameGroupByInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalFullNameGroupByInput(ctx context.Context, raw any) (FullNameGroupByInput, error) {
+	var out FullNameGroupByInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "FullNameGroupByInput", raw, &out)
+	return out, err
+}
+
 func (ec *executionContext) unmarshalInputFullNameOrderByInput(ctx context.Context, obj any) (FullNameOrderByInput, error) {
 	var it FullNameOrderByInput
 	if obj == nil {
@@ -5060,6 +10252,70 @@ func UnmarshalPersonFilterInput(ctx context.Context, raw any) (map[string]any, e
 	return out, err
 }
 
+func (ec *executionContext) unmarshalInputPersonGroupByInput(ctx context.Context, obj any) (map[string]any, error) {
+	var it map[string]any
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "jobTitle", "avatarUrl", "company"}
+	it = make(map[string]any, len(asMap))
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalOFullNameGroupByInput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐFullNameGroupByInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["name"] = data
+		case "jobTitle":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("jobTitle"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["jobTitle"] = data
+		case "avatarUrl":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("avatarUrl"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["avatarUrl"] = data
+		case "company":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("company"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["company"] = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalPersonGroupByInput unmarshals raw into the PersonGroupByInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalPersonGroupByInput(ctx context.Context, raw any) (map[string]any, error) {
+	var out map[string]any
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "PersonGroupByInput", raw, &out)
+	return out, err
+}
+
 func (ec *executionContext) unmarshalInputPersonOrderByInput(ctx context.Context, obj any) (map[string]any, error) {
 	var it map[string]any
 	if obj == nil {
@@ -5191,6 +10447,70 @@ func (ec *executionContext) unmarshalInputPersonOrderByInput(ctx context.Context
 func UnmarshalPersonOrderByInput(ctx context.Context, raw any) (map[string]any, error) {
 	var out map[string]any
 	err := graphql.UnmarshalNamedInputFromContext(ctx, "PersonOrderByInput", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputPersonOrderByWithGroupByInput(ctx context.Context, obj any) (map[string]any, error) {
+	var it map[string]any
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "jobTitle", "avatarUrl", "company"}
+	it = make(map[string]any, len(asMap))
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalOFullNameOrderByInput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐFullNameOrderByInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["name"] = data
+		case "jobTitle":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("jobTitle"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["jobTitle"] = data
+		case "avatarUrl":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("avatarUrl"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["avatarUrl"] = data
+		case "company":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("company"))
+			data, err := ec.unmarshalOOrderByDirection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOrderByDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["company"] = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalPersonOrderByWithGroupByInput unmarshals raw into the PersonOrderByWithGroupByInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalPersonOrderByWithGroupByInput(ctx context.Context, raw any) (map[string]any, error) {
+	var out map[string]any
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "PersonOrderByWithGroupByInput", raw, &out)
 	return out, err
 }
 
@@ -6154,6 +11474,386 @@ func (ec *executionContext) _PersonConnection(ctx context.Context, sel ast.Selec
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "countUniqueValuesAvatarFile":
+			out.Values[i] = ec._PersonConnection_countUniqueValuesAvatarFile(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyAvatarFile":
+			out.Values[i] = ec._PersonConnection_countEmptyAvatarFile(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyAvatarFile":
+			out.Values[i] = ec._PersonConnection_countNotEmptyAvatarFile(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyAvatarFile":
+			out.Values[i] = ec._PersonConnection_percentageEmptyAvatarFile(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyAvatarFile":
+			out.Values[i] = ec._PersonConnection_percentageNotEmptyAvatarFile(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesAvatarUrl":
+			out.Values[i] = ec._PersonConnection_countUniqueValuesAvatarUrl(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyAvatarUrl":
+			out.Values[i] = ec._PersonConnection_countEmptyAvatarUrl(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyAvatarUrl":
+			out.Values[i] = ec._PersonConnection_countNotEmptyAvatarUrl(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyAvatarUrl":
+			out.Values[i] = ec._PersonConnection_percentageEmptyAvatarUrl(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyAvatarUrl":
+			out.Values[i] = ec._PersonConnection_percentageNotEmptyAvatarUrl(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesCreatedAt":
+			out.Values[i] = ec._PersonConnection_countUniqueValuesCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyCreatedAt":
+			out.Values[i] = ec._PersonConnection_countEmptyCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyCreatedAt":
+			out.Values[i] = ec._PersonConnection_countNotEmptyCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyCreatedAt":
+			out.Values[i] = ec._PersonConnection_percentageEmptyCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyCreatedAt":
+			out.Values[i] = ec._PersonConnection_percentageNotEmptyCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "minCreatedAt":
+			out.Values[i] = ec._PersonConnection_minCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "maxCreatedAt":
+			out.Values[i] = ec._PersonConnection_maxCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesCreatedBy":
+			out.Values[i] = ec._PersonConnection_countUniqueValuesCreatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyCreatedBy":
+			out.Values[i] = ec._PersonConnection_countEmptyCreatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyCreatedBy":
+			out.Values[i] = ec._PersonConnection_countNotEmptyCreatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyCreatedBy":
+			out.Values[i] = ec._PersonConnection_percentageEmptyCreatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyCreatedBy":
+			out.Values[i] = ec._PersonConnection_percentageNotEmptyCreatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesDeletedAt":
+			out.Values[i] = ec._PersonConnection_countUniqueValuesDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyDeletedAt":
+			out.Values[i] = ec._PersonConnection_countEmptyDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyDeletedAt":
+			out.Values[i] = ec._PersonConnection_countNotEmptyDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyDeletedAt":
+			out.Values[i] = ec._PersonConnection_percentageEmptyDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyDeletedAt":
+			out.Values[i] = ec._PersonConnection_percentageNotEmptyDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "minDeletedAt":
+			out.Values[i] = ec._PersonConnection_minDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "maxDeletedAt":
+			out.Values[i] = ec._PersonConnection_maxDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesEmails":
+			out.Values[i] = ec._PersonConnection_countUniqueValuesEmails(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyEmails":
+			out.Values[i] = ec._PersonConnection_countEmptyEmails(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyEmails":
+			out.Values[i] = ec._PersonConnection_countNotEmptyEmails(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyEmails":
+			out.Values[i] = ec._PersonConnection_percentageEmptyEmails(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyEmails":
+			out.Values[i] = ec._PersonConnection_percentageNotEmptyEmails(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesId":
+			out.Values[i] = ec._PersonConnection_countUniqueValuesId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyId":
+			out.Values[i] = ec._PersonConnection_countEmptyId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyId":
+			out.Values[i] = ec._PersonConnection_countNotEmptyId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyId":
+			out.Values[i] = ec._PersonConnection_percentageEmptyId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyId":
+			out.Values[i] = ec._PersonConnection_percentageNotEmptyId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesJobTitle":
+			out.Values[i] = ec._PersonConnection_countUniqueValuesJobTitle(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyJobTitle":
+			out.Values[i] = ec._PersonConnection_countEmptyJobTitle(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyJobTitle":
+			out.Values[i] = ec._PersonConnection_countNotEmptyJobTitle(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyJobTitle":
+			out.Values[i] = ec._PersonConnection_percentageEmptyJobTitle(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyJobTitle":
+			out.Values[i] = ec._PersonConnection_percentageNotEmptyJobTitle(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesLinkedinLink":
+			out.Values[i] = ec._PersonConnection_countUniqueValuesLinkedinLink(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyLinkedinLink":
+			out.Values[i] = ec._PersonConnection_countEmptyLinkedinLink(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyLinkedinLink":
+			out.Values[i] = ec._PersonConnection_countNotEmptyLinkedinLink(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyLinkedinLink":
+			out.Values[i] = ec._PersonConnection_percentageEmptyLinkedinLink(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyLinkedinLink":
+			out.Values[i] = ec._PersonConnection_percentageNotEmptyLinkedinLink(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesName":
+			out.Values[i] = ec._PersonConnection_countUniqueValuesName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyName":
+			out.Values[i] = ec._PersonConnection_countEmptyName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyName":
+			out.Values[i] = ec._PersonConnection_countNotEmptyName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyName":
+			out.Values[i] = ec._PersonConnection_percentageEmptyName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyName":
+			out.Values[i] = ec._PersonConnection_percentageNotEmptyName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesPhones":
+			out.Values[i] = ec._PersonConnection_countUniqueValuesPhones(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyPhones":
+			out.Values[i] = ec._PersonConnection_countEmptyPhones(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyPhones":
+			out.Values[i] = ec._PersonConnection_countNotEmptyPhones(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyPhones":
+			out.Values[i] = ec._PersonConnection_percentageEmptyPhones(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyPhones":
+			out.Values[i] = ec._PersonConnection_percentageNotEmptyPhones(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesPosition":
+			out.Values[i] = ec._PersonConnection_countUniqueValuesPosition(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyPosition":
+			out.Values[i] = ec._PersonConnection_countEmptyPosition(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyPosition":
+			out.Values[i] = ec._PersonConnection_countNotEmptyPosition(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyPosition":
+			out.Values[i] = ec._PersonConnection_percentageEmptyPosition(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyPosition":
+			out.Values[i] = ec._PersonConnection_percentageNotEmptyPosition(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesUpdatedAt":
+			out.Values[i] = ec._PersonConnection_countUniqueValuesUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyUpdatedAt":
+			out.Values[i] = ec._PersonConnection_countEmptyUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyUpdatedAt":
+			out.Values[i] = ec._PersonConnection_countNotEmptyUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyUpdatedAt":
+			out.Values[i] = ec._PersonConnection_percentageEmptyUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyUpdatedAt":
+			out.Values[i] = ec._PersonConnection_percentageNotEmptyUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "minUpdatedAt":
+			out.Values[i] = ec._PersonConnection_minUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "maxUpdatedAt":
+			out.Values[i] = ec._PersonConnection_maxUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesUpdatedBy":
+			out.Values[i] = ec._PersonConnection_countUniqueValuesUpdatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyUpdatedBy":
+			out.Values[i] = ec._PersonConnection_countEmptyUpdatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyUpdatedBy":
+			out.Values[i] = ec._PersonConnection_countNotEmptyUpdatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyUpdatedBy":
+			out.Values[i] = ec._PersonConnection_percentageEmptyUpdatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyUpdatedBy":
+			out.Values[i] = ec._PersonConnection_percentageNotEmptyUpdatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -6190,6 +11890,434 @@ func (ec *executionContext) _PersonEdge(ctx context.Context, sel ast.SelectionSe
 		case "cursor":
 			out.Values[i] = ec._PersonEdge_cursor(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var personGroupByConnectionImplementors = []string{"PersonGroupByConnection"}
+
+func (ec *executionContext) _PersonGroupByConnection(ctx context.Context, sel ast.SelectionSet, obj *PersonGroupByConnection) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, personGroupByConnectionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("PersonGroupByConnection")
+		case "totalCount":
+			out.Values[i] = ec._PersonGroupByConnection_totalCount(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "edges":
+			out.Values[i] = ec._PersonGroupByConnection_edges(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "pageInfo":
+			out.Values[i] = ec._PersonGroupByConnection_pageInfo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "groupByDimensionValues":
+			out.Values[i] = ec._PersonGroupByConnection_groupByDimensionValues(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "countUniqueValuesAvatarFile":
+			out.Values[i] = ec._PersonGroupByConnection_countUniqueValuesAvatarFile(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyAvatarFile":
+			out.Values[i] = ec._PersonGroupByConnection_countEmptyAvatarFile(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyAvatarFile":
+			out.Values[i] = ec._PersonGroupByConnection_countNotEmptyAvatarFile(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyAvatarFile":
+			out.Values[i] = ec._PersonGroupByConnection_percentageEmptyAvatarFile(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyAvatarFile":
+			out.Values[i] = ec._PersonGroupByConnection_percentageNotEmptyAvatarFile(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesAvatarUrl":
+			out.Values[i] = ec._PersonGroupByConnection_countUniqueValuesAvatarUrl(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyAvatarUrl":
+			out.Values[i] = ec._PersonGroupByConnection_countEmptyAvatarUrl(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyAvatarUrl":
+			out.Values[i] = ec._PersonGroupByConnection_countNotEmptyAvatarUrl(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyAvatarUrl":
+			out.Values[i] = ec._PersonGroupByConnection_percentageEmptyAvatarUrl(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyAvatarUrl":
+			out.Values[i] = ec._PersonGroupByConnection_percentageNotEmptyAvatarUrl(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesCreatedAt":
+			out.Values[i] = ec._PersonGroupByConnection_countUniqueValuesCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyCreatedAt":
+			out.Values[i] = ec._PersonGroupByConnection_countEmptyCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyCreatedAt":
+			out.Values[i] = ec._PersonGroupByConnection_countNotEmptyCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyCreatedAt":
+			out.Values[i] = ec._PersonGroupByConnection_percentageEmptyCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyCreatedAt":
+			out.Values[i] = ec._PersonGroupByConnection_percentageNotEmptyCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "minCreatedAt":
+			out.Values[i] = ec._PersonGroupByConnection_minCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "maxCreatedAt":
+			out.Values[i] = ec._PersonGroupByConnection_maxCreatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesCreatedBy":
+			out.Values[i] = ec._PersonGroupByConnection_countUniqueValuesCreatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyCreatedBy":
+			out.Values[i] = ec._PersonGroupByConnection_countEmptyCreatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyCreatedBy":
+			out.Values[i] = ec._PersonGroupByConnection_countNotEmptyCreatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyCreatedBy":
+			out.Values[i] = ec._PersonGroupByConnection_percentageEmptyCreatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyCreatedBy":
+			out.Values[i] = ec._PersonGroupByConnection_percentageNotEmptyCreatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesDeletedAt":
+			out.Values[i] = ec._PersonGroupByConnection_countUniqueValuesDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyDeletedAt":
+			out.Values[i] = ec._PersonGroupByConnection_countEmptyDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyDeletedAt":
+			out.Values[i] = ec._PersonGroupByConnection_countNotEmptyDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyDeletedAt":
+			out.Values[i] = ec._PersonGroupByConnection_percentageEmptyDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyDeletedAt":
+			out.Values[i] = ec._PersonGroupByConnection_percentageNotEmptyDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "minDeletedAt":
+			out.Values[i] = ec._PersonGroupByConnection_minDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "maxDeletedAt":
+			out.Values[i] = ec._PersonGroupByConnection_maxDeletedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesEmails":
+			out.Values[i] = ec._PersonGroupByConnection_countUniqueValuesEmails(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyEmails":
+			out.Values[i] = ec._PersonGroupByConnection_countEmptyEmails(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyEmails":
+			out.Values[i] = ec._PersonGroupByConnection_countNotEmptyEmails(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyEmails":
+			out.Values[i] = ec._PersonGroupByConnection_percentageEmptyEmails(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyEmails":
+			out.Values[i] = ec._PersonGroupByConnection_percentageNotEmptyEmails(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesId":
+			out.Values[i] = ec._PersonGroupByConnection_countUniqueValuesId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyId":
+			out.Values[i] = ec._PersonGroupByConnection_countEmptyId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyId":
+			out.Values[i] = ec._PersonGroupByConnection_countNotEmptyId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyId":
+			out.Values[i] = ec._PersonGroupByConnection_percentageEmptyId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyId":
+			out.Values[i] = ec._PersonGroupByConnection_percentageNotEmptyId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesJobTitle":
+			out.Values[i] = ec._PersonGroupByConnection_countUniqueValuesJobTitle(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyJobTitle":
+			out.Values[i] = ec._PersonGroupByConnection_countEmptyJobTitle(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyJobTitle":
+			out.Values[i] = ec._PersonGroupByConnection_countNotEmptyJobTitle(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyJobTitle":
+			out.Values[i] = ec._PersonGroupByConnection_percentageEmptyJobTitle(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyJobTitle":
+			out.Values[i] = ec._PersonGroupByConnection_percentageNotEmptyJobTitle(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesLinkedinLink":
+			out.Values[i] = ec._PersonGroupByConnection_countUniqueValuesLinkedinLink(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyLinkedinLink":
+			out.Values[i] = ec._PersonGroupByConnection_countEmptyLinkedinLink(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyLinkedinLink":
+			out.Values[i] = ec._PersonGroupByConnection_countNotEmptyLinkedinLink(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyLinkedinLink":
+			out.Values[i] = ec._PersonGroupByConnection_percentageEmptyLinkedinLink(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyLinkedinLink":
+			out.Values[i] = ec._PersonGroupByConnection_percentageNotEmptyLinkedinLink(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesName":
+			out.Values[i] = ec._PersonGroupByConnection_countUniqueValuesName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyName":
+			out.Values[i] = ec._PersonGroupByConnection_countEmptyName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyName":
+			out.Values[i] = ec._PersonGroupByConnection_countNotEmptyName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyName":
+			out.Values[i] = ec._PersonGroupByConnection_percentageEmptyName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyName":
+			out.Values[i] = ec._PersonGroupByConnection_percentageNotEmptyName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesPhones":
+			out.Values[i] = ec._PersonGroupByConnection_countUniqueValuesPhones(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyPhones":
+			out.Values[i] = ec._PersonGroupByConnection_countEmptyPhones(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyPhones":
+			out.Values[i] = ec._PersonGroupByConnection_countNotEmptyPhones(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyPhones":
+			out.Values[i] = ec._PersonGroupByConnection_percentageEmptyPhones(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyPhones":
+			out.Values[i] = ec._PersonGroupByConnection_percentageNotEmptyPhones(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesPosition":
+			out.Values[i] = ec._PersonGroupByConnection_countUniqueValuesPosition(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyPosition":
+			out.Values[i] = ec._PersonGroupByConnection_countEmptyPosition(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyPosition":
+			out.Values[i] = ec._PersonGroupByConnection_countNotEmptyPosition(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyPosition":
+			out.Values[i] = ec._PersonGroupByConnection_percentageEmptyPosition(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyPosition":
+			out.Values[i] = ec._PersonGroupByConnection_percentageNotEmptyPosition(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesUpdatedAt":
+			out.Values[i] = ec._PersonGroupByConnection_countUniqueValuesUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyUpdatedAt":
+			out.Values[i] = ec._PersonGroupByConnection_countEmptyUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyUpdatedAt":
+			out.Values[i] = ec._PersonGroupByConnection_countNotEmptyUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyUpdatedAt":
+			out.Values[i] = ec._PersonGroupByConnection_percentageEmptyUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyUpdatedAt":
+			out.Values[i] = ec._PersonGroupByConnection_percentageNotEmptyUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "minUpdatedAt":
+			out.Values[i] = ec._PersonGroupByConnection_minUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "maxUpdatedAt":
+			out.Values[i] = ec._PersonGroupByConnection_maxUpdatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countUniqueValuesUpdatedBy":
+			out.Values[i] = ec._PersonGroupByConnection_countUniqueValuesUpdatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countEmptyUpdatedBy":
+			out.Values[i] = ec._PersonGroupByConnection_countEmptyUpdatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "countNotEmptyUpdatedBy":
+			out.Values[i] = ec._PersonGroupByConnection_countNotEmptyUpdatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageEmptyUpdatedBy":
+			out.Values[i] = ec._PersonGroupByConnection_percentageEmptyUpdatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "percentageNotEmptyUpdatedBy":
+			out.Values[i] = ec._PersonGroupByConnection_percentageNotEmptyUpdatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
 		default:
@@ -6287,6 +12415,12 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 				true, false,
 				func(ctx context.Context) graphql.Marshaler {
 					return ec._Query_person(ctx, field)
+				})
+		case "peopleGroupBy":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_peopleGroupBy(ctx, field)
 				})
 		case "__type":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
@@ -6814,6 +12948,24 @@ func (ec *executionContext) marshalNFloat2float64(ctx context.Context, sel ast.S
 	return graphql.WrapContextMarshaler(ctx, res)
 }
 
+func (ec *executionContext) unmarshalNJSON2interface(ctx context.Context, v any) (any, error) {
+	res, err := graphql.UnmarshalAny(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNJSON2interface(ctx context.Context, sel ast.SelectionSet, v any) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "JSON!")
+		return graphql.Null
+	}
+	_ = sel
+	res := graphql.MarshalAny(v)
+	if res == graphql.Null {
+		graphql.AddInvalidNullFromMarshaler(ctx, "JSON!")
+	}
+	return res
+}
+
 func (ec *executionContext) unmarshalNLinkMetadataInput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐLinkMetadataInput(ctx context.Context, v any) (*LinkMetadataInput, error) {
 	res, err := ec.unmarshalInputLinkMetadataInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
@@ -6888,6 +13040,59 @@ func (ec *executionContext) marshalNPersonEdge2ᚖgithubᚗcomᚋtwentyhqᚋtwen
 
 func (ec *executionContext) unmarshalNPersonFilterInput2map(ctx context.Context, v any) (map[string]any, error) {
 	res, err := ec.unmarshalInputPersonFilterInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNPersonGroupByConnection2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐPersonGroupByConnectionᚄ(ctx context.Context, sel ast.SelectionSet, v []*PersonGroupByConnection) graphql.Marshaler {
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNPersonGroupByConnection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐPersonGroupByConnection(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNPersonGroupByConnection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐPersonGroupByConnection(ctx context.Context, sel ast.SelectionSet, v *PersonGroupByConnection) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "PersonGroupByConnection!")
+		return graphql.Null
+	}
+	return ec._PersonGroupByConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNPersonGroupByInput2map(ctx context.Context, v any) (map[string]any, error) {
+	res, err := ec.unmarshalInputPersonGroupByInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNPersonGroupByInput2ᚕmapᚄ(ctx context.Context, v any) ([]map[string]any, error) {
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]map[string]any, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNPersonGroupByInput2map(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalNPersonOrderByInput2map(ctx context.Context, v any) (map[string]any, error) {
+	res, err := ec.unmarshalInputPersonOrderByInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNPersonOrderByWithGroupByInput2map(ctx context.Context, v any) (map[string]any, error) {
+	res, err := ec.unmarshalInputPersonOrderByWithGroupByInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
@@ -7379,6 +13584,14 @@ func (ec *executionContext) unmarshalOFullNameFilter2ᚖgithubᚗcomᚋtwentyhq�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) unmarshalOFullNameGroupByInput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐFullNameGroupByInput(ctx context.Context, v any) (*FullNameGroupByInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputFullNameGroupByInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalOFullNameOrderByInput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐFullNameOrderByInput(ctx context.Context, v any) (*FullNameOrderByInput, error) {
 	if v == nil {
 		return nil, nil
@@ -7564,6 +13777,40 @@ func (ec *executionContext) unmarshalOPersonOrderByInput2ᚕmap(ctx context.Cont
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
 		res[i], err = ec.unmarshalOPersonOrderByInput2map(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOPersonOrderByInput2ᚕmapᚄ(ctx context.Context, v any) ([]map[string]any, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]map[string]any, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNPersonOrderByInput2map(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOPersonOrderByWithGroupByInput2ᚕmapᚄ(ctx context.Context, v any) ([]map[string]any, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]map[string]any, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNPersonOrderByWithGroupByInput2map(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
