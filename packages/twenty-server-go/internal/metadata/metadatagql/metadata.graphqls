@@ -3,6 +3,19 @@ scalar UUID
 
 type Query {
   objects(paging: CursorPaging = { first: 10 }): ObjectConnection!
+  getToolIndex: [ToolIndexEntry!]!
+  getToolInputSchema(toolName: String!): JSON
+}
+
+type ToolIndexEntry {
+  name: String!
+  label: String!
+  description: String!
+  category: String!
+  objectName: String
+  icon: String
+  widgetName: String
+  inputSchema: JSON
 }
 
 input CursorPaging {

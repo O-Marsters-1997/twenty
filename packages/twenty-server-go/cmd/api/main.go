@@ -64,8 +64,12 @@ func run() error {
 		Tasks:              store.NewTasks(pool),
 		TaskTargets:        store.NewTaskTargets(pool),
 	}, logger))
+	recordTools := ai.NewRecordTools(
+		store.NewCompanies(pool), store.NewPeople(pool), store.NewOpportunities(pool), store.NewNotes(pool), store.NewTasks(pool),
+	)
+	toolRegistry := ai.NewRegistry(recordTools...)
 	goGraphQL.Handle(string(frontdoor.EndpointMetadata), metadataHandler(
-		metadatagql.NewHandler(metadatastore.New(pool), logger),
+		metadatagql.NewHandler(metadatastore.New(pool), toolRegistry, logger),
 		aigql.NewHandler(chats, broker, logger),
 		metagql.NewHandler(metadatastore.NewViews(pool), logger),
 	))

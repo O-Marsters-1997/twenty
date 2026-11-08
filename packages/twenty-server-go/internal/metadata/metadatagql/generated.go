@@ -6,6 +6,7 @@ import (
 	"bytes"
 	"context"
 	"embed"
+	"errors"
 	"fmt"
 	"math"
 	"strconv"
@@ -135,7 +136,9 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		Objects func(childComplexity int, paging *CursorPaging) int
+		GetToolIndex       func(childComplexity int) int
+		GetToolInputSchema func(childComplexity int, toolName string) int
+		Objects            func(childComplexity int, paging *CursorPaging) int
 	}
 
 	Relation struct {
@@ -154,6 +157,17 @@ type ComplexityRoot struct {
 		TsVectorFieldMetadataID func(childComplexity int) int
 		UpdatedAt               func(childComplexity int) int
 	}
+
+	ToolIndexEntry struct {
+		Category    func(childComplexity int) int
+		Description func(childComplexity int) int
+		Icon        func(childComplexity int) int
+		InputSchema func(childComplexity int) int
+		Label       func(childComplexity int) int
+		Name        func(childComplexity int) int
+		ObjectName  func(childComplexity int) int
+		WidgetName  func(childComplexity int) int
+	}
 }
 
 // endregion ***************************** api!.gotpl *****************************
@@ -162,6 +176,8 @@ type ComplexityRoot struct {
 
 type QueryResolver interface {
 	Objects(ctx context.Context, paging *CursorPaging) (*ObjectConnection, error)
+	GetToolIndex(ctx context.Context) ([]*ToolIndexEntry, error)
+	GetToolInputSchema(ctx context.Context, toolName string) (any, error)
 }
 
 // endregion ************************** generated!.gotpl **************************
@@ -657,6 +673,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.PageInfo.StartCursor(childComplexity), true
 
+	case "Query.getToolIndex":
+		if e.ComplexityRoot.Query.GetToolIndex == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Query.GetToolIndex(childComplexity), true
+	case "Query.getToolInputSchema":
+		if e.ComplexityRoot.Query.GetToolInputSchema == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getToolInputSchema_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.GetToolInputSchema(childComplexity, args["toolName"].(string)), true
+
 	case "Query.objects":
 		if e.ComplexityRoot.Query.Objects == nil {
 			break
@@ -736,6 +770,55 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SearchField.UpdatedAt(childComplexity), true
+
+	case "ToolIndexEntry.category":
+		if e.ComplexityRoot.ToolIndexEntry.Category == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ToolIndexEntry.Category(childComplexity), true
+	case "ToolIndexEntry.description":
+		if e.ComplexityRoot.ToolIndexEntry.Description == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ToolIndexEntry.Description(childComplexity), true
+	case "ToolIndexEntry.icon":
+		if e.ComplexityRoot.ToolIndexEntry.Icon == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ToolIndexEntry.Icon(childComplexity), true
+	case "ToolIndexEntry.inputSchema":
+		if e.ComplexityRoot.ToolIndexEntry.InputSchema == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ToolIndexEntry.InputSchema(childComplexity), true
+	case "ToolIndexEntry.label":
+		if e.ComplexityRoot.ToolIndexEntry.Label == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ToolIndexEntry.Label(childComplexity), true
+	case "ToolIndexEntry.name":
+		if e.ComplexityRoot.ToolIndexEntry.Name == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ToolIndexEntry.Name(childComplexity), true
+	case "ToolIndexEntry.objectName":
+		if e.ComplexityRoot.ToolIndexEntry.ObjectName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ToolIndexEntry.ObjectName(childComplexity), true
+	case "ToolIndexEntry.widgetName":
+		if e.ComplexityRoot.ToolIndexEntry.WidgetName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ToolIndexEntry.WidgetName(childComplexity), true
 
 	}
 	return 0, false
@@ -1059,6 +1142,28 @@ func (ec *executionContext) childFields_SearchField(ctx context.Context, field g
 	return nil, fmt.Errorf("no field named %q was found under type SearchField", field.Name)
 }
 
+func (ec *executionContext) childFields_ToolIndexEntry(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "name":
+		return ec.fieldContext_ToolIndexEntry_name(ctx, field)
+	case "label":
+		return ec.fieldContext_ToolIndexEntry_label(ctx, field)
+	case "description":
+		return ec.fieldContext_ToolIndexEntry_description(ctx, field)
+	case "category":
+		return ec.fieldContext_ToolIndexEntry_category(ctx, field)
+	case "objectName":
+		return ec.fieldContext_ToolIndexEntry_objectName(ctx, field)
+	case "icon":
+		return ec.fieldContext_ToolIndexEntry_icon(ctx, field)
+	case "widgetName":
+		return ec.fieldContext_ToolIndexEntry_widgetName(ctx, field)
+	case "inputSchema":
+		return ec.fieldContext_ToolIndexEntry_inputSchema(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ToolIndexEntry", field.Name)
+}
+
 func (ec *executionContext) childFields___Directive(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "name":
@@ -1186,6 +1291,20 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 		return nil, err
 	}
 	args["name"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getToolInputSchema_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "toolName",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["toolName"] = arg0
 	return args, nil
 }
 
@@ -3196,6 +3315,82 @@ func (ec *executionContext) fieldContext_Query_objects(ctx context.Context, fiel
 	return fc, nil
 }
 
+func (ec *executionContext) _Query_getToolIndex(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_getToolIndex(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return ec.Resolvers.Query().GetToolIndex(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*ToolIndexEntry) graphql.Marshaler {
+			return ec.marshalNToolIndexEntry2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚋmetadatagqlᚐToolIndexEntryᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_getToolIndex(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_ToolIndexEntry(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_getToolInputSchema(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_getToolInputSchema(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().GetToolInputSchema(ctx, fc.Args["toolName"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v any) graphql.Marshaler {
+			return ec.marshalOJSON2interface(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Query_getToolInputSchema(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type JSON does not have child fields")
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getToolInputSchema_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -3559,6 +3754,190 @@ func (ec *executionContext) _SearchField_updatedAt(ctx context.Context, field gr
 }
 func (ec *executionContext) fieldContext_SearchField_updatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("SearchField", field, false, false, "String")
+}
+
+func (ec *executionContext) _ToolIndexEntry_name(ctx context.Context, field graphql.CollectedField, obj *ToolIndexEntry) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ToolIndexEntry_name(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Name, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ToolIndexEntry_name(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ToolIndexEntry", field, false, false, "String")
+}
+
+func (ec *executionContext) _ToolIndexEntry_label(ctx context.Context, field graphql.CollectedField, obj *ToolIndexEntry) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ToolIndexEntry_label(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Label, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ToolIndexEntry_label(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ToolIndexEntry", field, false, false, "String")
+}
+
+func (ec *executionContext) _ToolIndexEntry_description(ctx context.Context, field graphql.CollectedField, obj *ToolIndexEntry) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ToolIndexEntry_description(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Description, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ToolIndexEntry_description(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ToolIndexEntry", field, false, false, "String")
+}
+
+func (ec *executionContext) _ToolIndexEntry_category(ctx context.Context, field graphql.CollectedField, obj *ToolIndexEntry) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ToolIndexEntry_category(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Category, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ToolIndexEntry_category(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ToolIndexEntry", field, false, false, "String")
+}
+
+func (ec *executionContext) _ToolIndexEntry_objectName(ctx context.Context, field graphql.CollectedField, obj *ToolIndexEntry) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ToolIndexEntry_objectName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ObjectName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ToolIndexEntry_objectName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ToolIndexEntry", field, false, false, "String")
+}
+
+func (ec *executionContext) _ToolIndexEntry_icon(ctx context.Context, field graphql.CollectedField, obj *ToolIndexEntry) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ToolIndexEntry_icon(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Icon, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ToolIndexEntry_icon(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ToolIndexEntry", field, false, false, "String")
+}
+
+func (ec *executionContext) _ToolIndexEntry_widgetName(ctx context.Context, field graphql.CollectedField, obj *ToolIndexEntry) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ToolIndexEntry_widgetName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.WidgetName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ToolIndexEntry_widgetName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ToolIndexEntry", field, false, false, "String")
+}
+
+func (ec *executionContext) _ToolIndexEntry_inputSchema(ctx context.Context, field graphql.CollectedField, obj *ToolIndexEntry) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ToolIndexEntry_inputSchema(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.InputSchema, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v any) graphql.Marshaler {
+			return ec.marshalOJSON2interface(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ToolIndexEntry_inputSchema(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ToolIndexEntry", field, false, false, "JSON")
 }
 
 func (ec *executionContext) ___Directive_name(ctx context.Context, field graphql.CollectedField, obj *introspection.Directive) (ret graphql.Marshaler) {
@@ -5316,6 +5695,18 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 				func(ctx context.Context) graphql.Marshaler {
 					return ec._Query_objects(ctx, field)
 				})
+		case "getToolIndex":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_getToolIndex(ctx, field)
+				})
+		case "getToolInputSchema":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, false,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_getToolInputSchema(ctx, field)
+				})
 		case "__type":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Query___type(ctx, field)
@@ -5439,6 +5830,74 @@ func (ec *executionContext) _SearchField(ctx context.Context, sel ast.SelectionS
 		case "updatedAt":
 			out.Values[i] = ec._SearchField_updatedAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var toolIndexEntryImplementors = []string{"ToolIndexEntry"}
+
+func (ec *executionContext) _ToolIndexEntry(ctx context.Context, sel ast.SelectionSet, obj *ToolIndexEntry) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, toolIndexEntryImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ToolIndexEntry")
+		case "name":
+			out.Values[i] = ec._ToolIndexEntry_name(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "label":
+			out.Values[i] = ec._ToolIndexEntry_label(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "description":
+			out.Values[i] = ec._ToolIndexEntry_description(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "category":
+			out.Values[i] = ec._ToolIndexEntry_category(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "objectName":
+			out.Values[i] = ec._ToolIndexEntry_objectName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "icon":
+			out.Values[i] = ec._ToolIndexEntry_icon(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "widgetName":
+			out.Values[i] = ec._ToolIndexEntry_widgetName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "inputSchema":
+			out.Values[i] = ec._ToolIndexEntry_inputSchema(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
 		default:
@@ -6047,6 +6506,30 @@ func (ec *executionContext) marshalNString2ᚕstringᚄ(ctx context.Context, sel
 	}
 
 	return ret
+}
+
+func (ec *executionContext) marshalNToolIndexEntry2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚋmetadatagqlᚐToolIndexEntryᚄ(ctx context.Context, sel ast.SelectionSet, v []*ToolIndexEntry) graphql.Marshaler {
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNToolIndexEntry2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚋmetadatagqlᚐToolIndexEntry(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNToolIndexEntry2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚋmetadatagqlᚐToolIndexEntry(ctx context.Context, sel ast.SelectionSet, v *ToolIndexEntry) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "ToolIndexEntry!")
+		return graphql.Null
+	}
+	return ec._ToolIndexEntry(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNUUID2string(ctx context.Context, v any) (string, error) {
