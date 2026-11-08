@@ -10,7 +10,7 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/frontdoor"
 )
 
-const objectMetadataOperation = "ObjectMetadataItems"
+var objectOperations = []string{"ObjectMetadataItems", "GetToolIndex", "GetToolInputSchema"}
 
 func metadataHandler(objects, skills, views http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -28,7 +28,7 @@ func metadataHandler(objects, skills, views http.Handler) http.Handler {
 			return
 		}
 		switch {
-		case request.OperationName == objectMetadataOperation:
+		case slices.Contains(objectOperations, request.OperationName):
 			objects.ServeHTTP(w, r)
 		case slices.Contains(frontdoor.SkillOperations, request.OperationName):
 			skills.ServeHTTP(w, r)

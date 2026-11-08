@@ -32,3 +32,14 @@ type PageInfo struct {
 
 type Query struct {
 }
+
+type ToolIndexEntry struct {
+	Name        string  `json:"name"`
+	Label       string  `json:"label"`
+	Description string  `json:"description"`
+	Category    string  `json:"category"`
+	ObjectName  *string `json:"objectName,omitempty"`
+	Icon        *string `json:"icon,omitempty"`
+	WidgetName  *string `json:"widgetName,omitempty"`
+	InputSchema any     `json:"inputSchema,omitempty"`
+}
