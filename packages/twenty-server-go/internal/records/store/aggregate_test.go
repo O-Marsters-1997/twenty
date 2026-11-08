@@ -63,19 +63,21 @@ func TestPeople_Aggregate(t *testing.T) {
 		{"avg", records.Aggregate{Field: "position", Operation: "avg"}, "avgPosition", -2.0},
 		{"min", records.Aggregate{Field: "position", Operation: "min"}, "minPosition", -4.0},
 		{"max", records.Aggregate{Field: "position", Operation: "max"}, "maxPosition", 0.0},
-		{"min of a date", records.Aggregate{Field: "createdAt", Operation: "min"}, "minCreatedAt", nil},
 	}
+	t.Run("min of a date is the earliest creation time", func(t *testing.T) {
+		got, err := people.Aggregate(t.Context(), records.Filter{}, []records.Aggregate{{Field: "createdAt", Operation: "min"}})
+		if err != nil {
+			t.Fatalf("Aggregate: %v", err)
+		}
+		if _, ok := got["minCreatedAt"].(time.Time); !ok {
+			t.Errorf("Aggregate(min createdAt)[minCreatedAt] = %v, want a time.Time", got["minCreatedAt"])
+		}
+	})
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := people.Aggregate(t.Context(), records.Filter{}, []records.Aggregate{tt.aggregate})
 			if err != nil {
 				t.Fatalf("Aggregate: %v", err)
-			}
-			if tt.want == nil {
-				if _, ok := got[tt.key].(time.Time); !ok {
-					t.Errorf("Aggregate[%s] = %v, want a time", tt.key, got[tt.key])
-				}
-				return
 			}
 			if diff := cmp.Diff(records.AggregateResult{tt.key: tt.want}, got); diff != "" {
 				t.Errorf("Aggregate mismatch (-want +got):\n%s", diff)
@@ -123,14 +125,18 @@ func TestPeople_AggregateRejects(t *testing.T) {
 		{Field: "jobTitle", Operation: "sum"},
 		{Field: "jobTitle", Operation: "countTrue"},
 	} {
-		_, err := people.Aggregate(t.Context(), records.Filter{}, []records.Aggregate{aggregate})
-		if !errors.Is(err, records.ErrUnknownField) {
-			t.Errorf("Aggregate(%+v) error = %v, want ErrUnknownField", aggregate, err)
+		t.Run(aggregate.Field+" "+string(aggregate.Operation), func(t *testing.T) {
+			_, err := people.Aggregate(t.Context(), records.Filter{}, []records.Aggregate{aggregate})
+			if !errors.Is(err, records.ErrUnknownField) {
+				t.Errorf("Aggregate(%+v) error = %v, want ErrUnknownField", aggregate, err)
+			}
+		})
+	}
+	t.Run("unknown operation", func(t *testing.T) {
+		if _, err := people.Aggregate(t.Context(), records.Filter{}, []records.Aggregate{{Field: "id", Operation: "median"}}); err == nil {
+			t.Error("Aggregate(id median) succeeded, want an error")
 		}
-	}
-	if _, err := people.Aggregate(t.Context(), records.Filter{}, []records.Aggregate{{Field: "id", Operation: "median"}}); err == nil {
-		t.Error("Aggregate with unknown operation succeeded")
-	}
+	})
 }
 
 func TestPeople_GroupBy(t *testing.T) {
@@ -157,6 +163,9 @@ func TestPeople_GroupBy(t *testing.T) {
 		if diff := cmp.Diff(want, counts); diff != "" {
 			t.Errorf("group counts mismatch (-want +got):\n%s", diff)
 		}
+		if len(groups) != 3 {
+			t.Fatalf("GroupBy returned %d groups, want 3", len(groups))
+		}
 		if last := groups[len(groups)-1].Key[0]; last != nil {
 			t.Errorf("last group key = %v, want nil (nulls last)", last)
 		}
@@ -168,13 +177,15 @@ func TestPeople_GroupBy(t *testing.T) {
 		if err != nil {
 			t.Fatalf("GroupBy: %v", err)
 		}
+		total := 0
 		for _, group := range groups {
+			total += group.Records.TotalCount
 			if len(group.Records.Records) != 1 {
 				t.Errorf("group %v has %d records, want 1", group.Key, len(group.Records.Records))
 			}
 		}
-		if groups[0].Records.TotalCount+groups[1].Records.TotalCount+groups[2].Records.TotalCount != 4 {
-			t.Errorf("per-group total counts do not add up to 4")
+		if total != 4 {
+			t.Errorf("sum of per-group TotalCount = %d, want 4", total)
 		}
 		var acmeGroup records.Group[records.Person]
 		for _, group := range groups {
@@ -216,9 +227,11 @@ func TestPeople_GroupBy(t *testing.T) {
 				return err
 			},
 		} {
-			if err := call(); !errors.Is(err, records.ErrUnknownField) {
-				t.Errorf("%s: error = %v, want ErrUnknownField", name, err)
-			}
+			t.Run(name, func(t *testing.T) {
+				if err := call(); !errors.Is(err, records.ErrUnknownField) {
+					t.Errorf("GroupBy error = %v, want ErrUnknownField", err)
+				}
+			})
 		}
 	})
 }

@@ -30,17 +30,19 @@ func TestCompiler_AggregateColumn_countsBooleans(t *testing.T) {
 	}}
 
 	for operation, want := range map[records.AggregateOperation]int64{"countTrue": 2, "countFalse": 1} {
-		c := &compiler{object: object}
-		column, err := c.aggregateColumn(records.Aggregate{Field: "flag", Operation: operation})
-		if err != nil {
-			t.Fatalf("aggregateColumn(%s): %v", operation, err)
-		}
-		var got int64
-		if err := conn.QueryRow(t.Context(), `SELECT `+column.expr+` FROM flagged`).Scan(&got); err != nil {
-			t.Fatalf("%s: %v", operation, err)
-		}
-		if got != want {
-			t.Errorf("%s = %d, want %d (key %s)", operation, got, want, column.key)
-		}
+		t.Run(string(operation), func(t *testing.T) {
+			c := &compiler{object: object}
+			column, err := c.aggregateColumn(records.Aggregate{Field: "flag", Operation: operation})
+			if err != nil {
+				t.Fatalf("aggregateColumn(%s): %v", operation, err)
+			}
+			var got int64
+			if err := conn.QueryRow(t.Context(), `SELECT `+column.expr+` FROM flagged`).Scan(&got); err != nil {
+				t.Fatalf("SELECT %s: %v", operation, err)
+			}
+			if got != want {
+				t.Errorf("%s = %d, want %d", column.key, got, want)
+			}
+		})
 	}
 }
