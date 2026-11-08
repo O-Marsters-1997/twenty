@@ -24,6 +24,13 @@ func DefaultTable() OperationTable {
 			"AggregatePeople":         RouteGo,
 			"PeopleGroupByAggregates": RouteGo,
 			"PeopleGroupByRecords":    RouteGo,
+
+			"AggregateWorkspaceMembers":         RouteGo,
+			"WorkspaceMembersGroupByAggregates": RouteGo,
+			"WorkspaceMembersGroupByRecords":    RouteGo,
+			"AggregateDashboards":               RouteGo,
+			"DashboardsGroupByAggregates":       RouteGo,
+			"DashboardsGroupByRecords":          RouteGo,
 		},
 		EndpointMetadata: {
 			"ObjectMetadataItems":         RouteGo,

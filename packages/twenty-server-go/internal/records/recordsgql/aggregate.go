@@ -18,8 +18,9 @@ const (
 )
 
 var aggregatableFields = []string{
-	"avatarFile", "avatarUrl", "createdAt", "createdBy", "deletedAt", "emails", "id", "jobTitle",
-	"linkedinLink", "name", "phones", "position", "updatedAt", "updatedBy",
+	"avatarFile", "avatarUrl", "calendarStartDay", "colorScheme", "createdAt", "createdBy", "dateFormat", "deletedAt", "emails", "id", "jobTitle",
+	"linkedinLink", "locale", "name", "numberFormat", "openRecordIn", "pageLayoutId", "phones", "position", "timeFormat", "timeZone", "title",
+	"uiScale", "updatedAt", "updatedBy", "userEmail", "userId",
 }
 
 var dateAggregatableFields = []string{"createdAt", "deletedAt", "updatedAt"}

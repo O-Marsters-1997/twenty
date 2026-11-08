@@ -12,11 +12,6 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records"
 )
 
-func personObject() model.Object {
-	index := slices.IndexFunc(model.Objects, func(object model.Object) bool { return object.NameSingular == "person" })
-	return model.Objects[index]
-}
-
 func isComposite(object model.Object, name string) bool {
 	index := slices.IndexFunc(object.Fields, func(field model.Field) bool { return field.Name == name })
 	return index >= 0 && len(object.Fields[index].Columns) > 1
@@ -225,6 +220,23 @@ type personInputFields struct {
 	JobTitle     *string
 	Phones       *PhonesCreateInput
 	CompanyID    *string
+}
+
+func personInputOf(data *PersonCreateInput) records.PersonInput {
+	if data == nil {
+		return records.PersonInput{}
+	}
+	return toPersonInput(personInputFields{data.Name, data.Emails, data.LinkedinLink, data.JobTitle, data.Phones, data.CompanyID})
+}
+
+func personUpdateInputOf(data PersonUpdateInput) records.PersonInput {
+	return toPersonInput(personInputFields{data.Name, data.Emails, data.LinkedinLink, data.JobTitle, data.Phones, data.CompanyID})
+}
+
+func personEdges(page records.Page[records.Person]) ([]*PersonEdge, *PageInfo) {
+	return edgesOf(page, func(person records.Person, cursor string) *PersonEdge {
+		return &PersonEdge{Node: toPerson(person), Cursor: cursor}
+	}, func(person records.Person) string { return person.ID })
 }
 
 func toPersonInput(in personInputFields) records.PersonInput {

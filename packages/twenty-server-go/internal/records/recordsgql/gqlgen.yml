@@ -1,17 +1,14 @@
 schema:
   - person.graphqls
   - aggregate.graphqls
+  - workspaceMember.graphqls
+  - dashboard.graphqls
 exec:
   filename: generated.go
   package: recordsgql
 model:
   filename: models_gen.go
   package: recordsgql
-resolver:
-  layout: single-file
-  filename: resolver.go
-  package: recordsgql
-  type: Resolver
 models:
   UUID:
     model: github.com/99designs/gqlgen/graphql.String
@@ -36,6 +33,22 @@ models:
   PersonOrderByWithGroupByInput:
     model: map[string]interface{}
   PersonGroupByInput:
+    model: map[string]interface{}
+  WorkspaceMemberFilterInput:
+    model: map[string]interface{}
+  WorkspaceMemberOrderByInput:
+    model: map[string]interface{}
+  WorkspaceMemberOrderByWithGroupByInput:
+    model: map[string]interface{}
+  WorkspaceMemberGroupByInput:
+    model: map[string]interface{}
+  DashboardFilterInput:
+    model: map[string]interface{}
+  DashboardOrderByInput:
+    model: map[string]interface{}
+  DashboardOrderByWithGroupByInput:
+    model: map[string]interface{}
+  DashboardGroupByInput:
     model: map[string]interface{}
   JSON:
     model: github.com/99designs/gqlgen/graphql.Any
