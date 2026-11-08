@@ -52,7 +52,6 @@ func noteTargetValues(input records.NoteTargetInput) (map[string]any, error) {
 	return values, err
 }
 
-// setUUIDs stores each non-nil id; an empty id clears the column.
 func setUUIDs(values map[string]any, ids map[string]*string) error {
 	for column, id := range ids {
 		if id == nil {

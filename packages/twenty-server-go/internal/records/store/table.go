@@ -19,7 +19,6 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/workspace"
 )
 
-// baseRow holds the columns every workspace object shares, as to_jsonb names them.
 type baseRow struct {
 	ID                         string     `json:"id"`
 	Position                   float64    `json:"position"`
@@ -49,7 +48,6 @@ func deref(value *string) string {
 	return *value
 }
 
-// table serves one workspace object with SQL built from its model.Object.
 type table[TRow, TRecord any] struct {
 	pool    *pgxpool.Pool
 	object  model.Object

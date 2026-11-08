@@ -18,7 +18,6 @@ type recordStore[TRecord any] interface {
 	GroupBy(ctx context.Context, filter records.Filter, groupBy []records.GroupBy, orderBy []records.OrderBy, aggregates []records.Aggregate, perGroup records.PageRequest) ([]records.Group[TRecord], error)
 }
 
-// collection holds the operations every record object shares, so each object's resolvers stay one-liners.
 type collection[TRecord, TNode any] struct {
 	object model.Object
 	store  recordStore[TRecord]
