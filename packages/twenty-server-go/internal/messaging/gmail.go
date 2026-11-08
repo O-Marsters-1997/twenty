@@ -14,6 +14,7 @@ import (
 	"net/mail"
 	"net/url"
 	"strings"
+	"time"
 )
 
 const (
@@ -43,7 +44,7 @@ func NewGmail(accounts Accounts, config GmailConfig) *Gmail {
 		config.TokenURL = defaultTokenURL
 	}
 	if config.HTTPClient == nil {
-		config.HTTPClient = http.DefaultClient
+		config.HTTPClient = &http.Client{Timeout: 30 * time.Second}
 	}
 	return &Gmail{accounts: accounts, config: config}
 }
@@ -111,8 +112,6 @@ func (g *Gmail) call(ctx context.Context, path, accessToken string, body []byte)
 	return result.ID, response.StatusCode, nil
 }
 
-// refresh exchanges the refresh token for a new access token and saves it.
-// A rejected refresh token marks the account as needing reconnection.
 func (g *Gmail) refresh(ctx context.Context, account ConnectedAccount) (string, error) {
 	form := url.Values{
 		"grant_type":    {"refresh_token"},
@@ -134,10 +133,17 @@ func (g *Gmail) refresh(ctx context.Context, account ConnectedAccount) (string, 
 	var token struct {
 		AccessToken string `json:"access_token"`
 	}
-	if response.StatusCode >= 500 {
+	rejected := response.StatusCode == http.StatusBadRequest || response.StatusCode == http.StatusUnauthorized
+	if !rejected && response.StatusCode != http.StatusOK {
 		return "", fmt.Errorf("refresh access token: status %d", response.StatusCode)
 	}
-	if response.StatusCode != http.StatusOK || json.NewDecoder(response.Body).Decode(&token) != nil || token.AccessToken == "" {
+	if !rejected {
+		if err := json.NewDecoder(response.Body).Decode(&token); err != nil {
+			return "", fmt.Errorf("decode token response: %w", err)
+		}
+		rejected = token.AccessToken == ""
+	}
+	if rejected {
 		if err := g.accounts.MarkAuthFailed(ctx, account.ID); err != nil {
 			return "", fmt.Errorf("mark account auth failed: %w", err)
 		}
@@ -165,12 +171,15 @@ func buildMessage(from string, email OutboundEmail) ([]byte, error) {
 		if len(header.addresses) == 0 {
 			continue
 		}
+		formatted := make([]string, 0, len(header.addresses))
 		for _, address := range header.addresses {
-			if _, err := mail.ParseAddress(address); err != nil {
+			parsed, err := mail.ParseAddress(address)
+			if err != nil {
 				return nil, fmt.Errorf("invalid %s address: %w", strings.ToLower(header.name), err)
 			}
+			formatted = append(formatted, parsed.String())
 		}
-		fmt.Fprintf(&message, "%s: %s\r\n", header.name, strings.Join(header.addresses, ", "))
+		fmt.Fprintf(&message, "%s: %s\r\n", header.name, strings.Join(formatted, ", "))
 	}
 	fmt.Fprintf(&message, "Subject: %s\r\n", mime.QEncoding.Encode("utf-8", email.Subject))
 	if email.InReplyTo != "" {

@@ -4,13 +4,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging"
 )
+
+var ErrNotFound = errors.New("connected account not found")
 
 // Cipher encrypts and decrypts the OAuth tokens stored in core."connectedAccount".
 type Cipher interface {
@@ -32,22 +33,20 @@ func NewAccounts(pool *pgxpool.Pool, cipher Cipher) *Accounts {
 func (a *Accounts) Get(ctx context.Context, id string) (messaging.ConnectedAccount, error) {
 	var account messaging.ConnectedAccount
 	var accessToken, refreshToken *string
-	var authFailedAt *time.Time
 	err := a.pool.QueryRow(ctx, `SELECT id::text, handle, "accessToken", "refreshToken", coalesce(scopes, '{}'), "authFailedAt"
 		FROM core."connectedAccount" WHERE id = $1 AND "archivedAt" IS NULL`, id).
-		Scan(&account.ID, &account.Handle, &accessToken, &refreshToken, &account.Scopes, &authFailedAt)
+		Scan(&account.ID, &account.Handle, &accessToken, &refreshToken, &account.Scopes, &account.AuthFailedAt)
 	if errors.Is(err, pgx.ErrNoRows) {
-		return account, fmt.Errorf("connected account %s: %w", id, err)
+		return messaging.ConnectedAccount{}, fmt.Errorf("connected account %s: %w", id, ErrNotFound)
 	}
 	if err != nil {
-		return account, fmt.Errorf("select connected account: %w", err)
+		return messaging.ConnectedAccount{}, fmt.Errorf("select connected account: %w", err)
 	}
-	account.AuthFailedAt = authFailedAt
 	if account.AccessToken, err = a.decrypt(accessToken); err != nil {
-		return account, fmt.Errorf("decrypt access token: %w", err)
+		return messaging.ConnectedAccount{}, fmt.Errorf("decrypt access token: %w", err)
 	}
 	if account.RefreshToken, err = a.decrypt(refreshToken); err != nil {
-		return account, fmt.Errorf("decrypt refresh token: %w", err)
+		return messaging.ConnectedAccount{}, fmt.Errorf("decrypt refresh token: %w", err)
 	}
 	return account, nil
 }
@@ -57,18 +56,21 @@ func (a *Accounts) SaveAccessToken(ctx context.Context, id, accessToken string) 
 	if err != nil {
 		return fmt.Errorf("encrypt access token: %w", err)
 	}
-	_, err = a.pool.Exec(ctx, `UPDATE core."connectedAccount"
-		SET "accessToken" = $2, "lastCredentialsRefreshedAt" = now(), "updatedAt" = now() WHERE id = $1`, id, encrypted)
-	if err != nil {
-		return fmt.Errorf("update access token: %w", err)
-	}
-	return nil
+	return a.update(ctx, id, `"accessToken" = $2, "lastCredentialsRefreshedAt" = now()`, encrypted)
 }
 
 func (a *Accounts) MarkAuthFailed(ctx context.Context, id string) error {
-	_, err := a.pool.Exec(ctx, `UPDATE core."connectedAccount" SET "authFailedAt" = now(), "updatedAt" = now() WHERE id = $1`, id)
+	return a.update(ctx, id, `"authFailedAt" = now()`)
+}
+
+func (a *Accounts) update(ctx context.Context, id, assignments string, args ...any) error {
+	result, err := a.pool.Exec(ctx, `UPDATE core."connectedAccount" SET `+assignments+`, "updatedAt" = now()
+		WHERE id = $1 AND "archivedAt" IS NULL`, append([]any{id}, args...)...)
 	if err != nil {
-		return fmt.Errorf("update auth failed: %w", err)
+		return fmt.Errorf("update connected account: %w", err)
+	}
+	if result.RowsAffected() == 0 {
+		return fmt.Errorf("connected account %s: %w", id, ErrNotFound)
 	}
 	return nil
 }

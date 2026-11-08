@@ -48,7 +48,6 @@ type gmailCall struct {
 	Body                map[string]any
 }
 
-// fakeGoogle accepts only validToken and records every Gmail call.
 func fakeGoogle(t *testing.T, validToken string, refreshStatus int) (gmailURL, tokenURL string, calls *[]gmailCall) {
 	t.Helper()
 	var recorded []gmailCall
@@ -129,7 +128,7 @@ func TestGmail_SendAndDraft(t *testing.T) {
 				t.Fatalf("calls = %+v", *calls)
 			}
 			raw := rawMessage(t, (*calls)[0])
-			for _, want := range []string{"From: me@example.com\r\n", "To: to@example.com\r\n", "Bcc: hidden@example.com\r\n", "Subject: Hello\r\n", "In-Reply-To: <abc@mail.gmail.com>\r\n", "<p>Hi</p>"} {
+			for _, want := range []string{"From: <me@example.com>\r\n", "To: <to@example.com>\r\n", "Bcc: <hidden@example.com>\r\n", "Subject: Hello\r\n", "In-Reply-To: <abc@mail.gmail.com>\r\n", "<p>Hi</p>"} {
 				if !strings.Contains(raw, want) {
 					t.Errorf("message missing %q:\n%s", want, raw)
 				}
