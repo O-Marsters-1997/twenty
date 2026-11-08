@@ -193,3 +193,39 @@ func TestNewModel_InvalidKey(t *testing.T) {
 		}
 	}
 }
+
+func TestAnthropicModel_StreamRequestAndTruncation(t *testing.T) {
+	server, requestBody := fakeSSE(t,
+		anthropicEvent("message_start", `{"type":"message_start","message":{"id":"m1","type":"message","role":"assistant","content":[],"model":"m","usage":{"input_tokens":1,"output_tokens":1}}}`),
+	)
+	messages := []ai.Message{
+		{Role: ai.RoleUser, Parts: []ai.Part{{Type: ai.PartText, Text: "hi"}}},
+		{Role: ai.RoleAssistant, Parts: []ai.Part{
+			{Type: ai.PartToolCall, ToolCallID: "a", ToolName: "weather", Input: json.RawMessage(`{}`)},
+			{Type: ai.PartToolCall, ToolCallID: "b", ToolName: "weather", Input: json.RawMessage(`{}`)},
+		}},
+		{Role: ai.RoleTool, Parts: []ai.Part{{Type: ai.PartToolResult, ToolCallID: "a", Output: json.RawMessage(`"x"`)}}},
+		{Role: ai.RoleTool, Parts: []ai.Part{{Type: ai.PartToolResult, ToolCallID: "b", Output: json.RawMessage(`"y"`)}}},
+	}
+
+	var gotErr error
+	for _, err := range newModel(t, ai.ProviderAnthropic, server.URL).Stream(t.Context(), "", messages, nil) {
+		gotErr = err
+	}
+
+	if gotErr == nil {
+		t.Error("Stream() error = nil, want error for stream ending before message_stop")
+	}
+	var request struct {
+		Messages []struct {
+			Role    string            `json:"role"`
+			Content []json.RawMessage `json:"content"`
+		} `json:"messages"`
+	}
+	if err := json.Unmarshal([]byte(*requestBody), &request); err != nil {
+		t.Fatalf("decode request: %v", err)
+	}
+	if len(request.Messages) != 3 || request.Messages[2].Role != "user" || len(request.Messages[2].Content) != 2 {
+		t.Errorf("request messages = %s, want tool results merged into one user message", *requestBody)
+	}
+}

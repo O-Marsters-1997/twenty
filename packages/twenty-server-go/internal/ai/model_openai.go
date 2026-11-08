@@ -125,13 +125,10 @@ func (m *openAIModel) params(system string, messages []Message, tools []ToolSpec
 	}
 	for _, message := range messages {
 		switch message.Role {
-		case RoleSystem, RoleUser:
-			text := joinText(message.Parts)
-			if message.Role == RoleSystem {
-				params.Messages = append(params.Messages, openai.SystemMessage(text))
-			} else {
-				params.Messages = append(params.Messages, openai.UserMessage(text))
-			}
+		case RoleSystem:
+			params.Messages = append(params.Messages, openai.SystemMessage(joinText(message.Parts)))
+		case RoleUser:
+			params.Messages = append(params.Messages, openai.UserMessage(joinText(message.Parts)))
 		case RoleAssistant:
 			assistant := openai.ChatCompletionAssistantMessageParam{}
 			if text := joinText(message.Parts); text != "" {

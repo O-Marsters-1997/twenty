@@ -3,6 +3,7 @@ package ai
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"iter"
 
@@ -85,7 +86,9 @@ func (m *anthropicModel) Stream(ctx context.Context, system string, messages []M
 		}
 		if err := stream.Err(); err != nil {
 			yield(StreamEvent{}, fmt.Errorf("stream anthropic: %w", err))
+			return
 		}
+		yield(StreamEvent{}, errors.New("stream anthropic: ended before message_stop"))
 	}
 }
 
@@ -122,12 +125,19 @@ func (m *anthropicModel) params(system string, messages []Message, tools []ToolS
 				blocks = append(blocks, anthropic.NewToolResultBlock(part.ToolCallID, string(part.Output), false))
 			}
 		}
+		role := anthropic.MessageParamRoleUser
 		switch message.Role {
 		case RoleAssistant:
-			params.Messages = append(params.Messages, anthropic.NewAssistantMessage(blocks...))
+			role = anthropic.MessageParamRoleAssistant
 		case RoleUser, RoleTool:
-			params.Messages = append(params.Messages, anthropic.NewUserMessage(blocks...))
+		default:
+			continue
 		}
+		if last := len(params.Messages) - 1; last >= 0 && params.Messages[last].Role == role {
+			params.Messages[last].Content = append(params.Messages[last].Content, blocks...)
+			continue
+		}
+		params.Messages = append(params.Messages, anthropic.MessageParam{Role: role, Content: blocks})
 	}
 	return params, nil
 }
