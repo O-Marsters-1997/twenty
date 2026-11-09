@@ -1,0 +1,11 @@
+{
+  "name": "MyMessageChannels",
+  "operation": "MyMessageChannels",
+  "fixture": "accounts seed",
+  "endpoint": "/metadata",
+  "query": "query MyMessageChannels($connectedAccountId: UUID) { myMessageChannels(connectedAccountId: $connectedAccountId) { id handle displayName type visibility connectedAccountId connectedAccount { id handle } } }",
+  "variables": {},
+  "response": {"data":{"myMessageChannels":[
+ {"id":"bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbb1","handle":"me@example.com","displayName":null,"type":"EMAIL","visibility":"SHARE_EVERYTHING","connectedAccountId":"aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa1","connectedAccount":{"id":"aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa1","handle":"me@example.com"}},
+ {"id":"bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbb2","handle":"ch_abc123abc123@in.example.com","displayName":"Sales","type":"EMAIL_GROUP","visibility":"SHARE_EVERYTHING","connectedAccountId":"aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa4","connectedAccount":{"id":"aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa4","handle":"team@example.com"}}]}}
+}

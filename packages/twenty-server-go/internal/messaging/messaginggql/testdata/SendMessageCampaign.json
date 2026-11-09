@@ -1,0 +1,9 @@
+{
+  "name": "SendMessageCampaign",
+  "operation": "SendMessageCampaign",
+  "fixture": "draft campaign on a list of one sendable person, one unsubscribed and one without an address",
+  "endpoint": "/metadata",
+  "query": "mutation SendMessageCampaign($input: SendMessageCampaignInput!) { sendMessageCampaign(input: $input) { campaignId queuedCount audience { totalMembers withoutEmail duplicateEmails hardSuppressed globallyUnsubscribed topicUnsubscribed trackingRefused sendable } } }",
+  "variables": {"input": {"campaignId": "7b0e8c1a-1f3a-4d6e-8b8e-2f5c4a9d0e11"}},
+  "response": {"data": {"sendMessageCampaign": {"campaignId": "7b0e8c1a-1f3a-4d6e-8b8e-2f5c4a9d0e11", "queuedCount": 1, "audience": {"totalMembers": 3, "withoutEmail": 1, "duplicateEmails": 0, "hardSuppressed": 0, "globallyUnsubscribed": 1, "topicUnsubscribed": 0, "trackingRefused": 0, "sendable": 1}}}}
+}

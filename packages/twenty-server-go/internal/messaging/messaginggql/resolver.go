@@ -1,0 +1,450 @@
+package messaginggql
+
+import (
+	"context"
+	"errors"
+	"fmt"
+	"log/slog"
+	"regexp"
+	"strings"
+	"time"
+
+	"github.com/riverqueue/river"
+
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging/store"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata"
+)
+
+var errNoWorkspaceMember = errors.New("no workspace member for the signed-in user")
+
+type Resolver struct {
+	Channels *store.Channels
+	Timeline *store.Timeline
+	Banners  *store.ReconnectBanners
+	Mailer   Mailer
+	Sent     SentMessages
+
+	Campaigns *store.Campaigns
+	Renderer  messaging.Renderer
+	Queue     func(ctx context.Context, args river.JobArgs) error
+	Logger    *slog.Logger
+}
+
+func caller(ctx context.Context) (string, error) {
+	principal, ok := auth.PrincipalFrom(ctx)
+	if !ok || principal.UserWorkspaceID == "" {
+		return "", fmt.Errorf("%w: a workspace member session is required", store.ErrForbidden)
+	}
+	return principal.UserWorkspaceID, nil
+}
+
+func pointer[TRecord any](record TRecord, err error) (*TRecord, error) {
+	if err != nil {
+		return nil, err
+	}
+	return &record, nil
+}
+
+func pointers[TRecord any](records []TRecord, err error) ([]*TRecord, error) {
+	if err != nil {
+		return nil, err
+	}
+	listed := make([]*TRecord, len(records))
+	for i := range records {
+		listed[i] = &records[i]
+	}
+	return listed, nil
+}
+
+func (r *messageChannelResolver) ConnectedAccount(ctx context.Context, channel *store.MessageChannel) (*store.Account, error) {
+	principal, _ := auth.PrincipalFrom(ctx)
+	return r.Channels.MessageChannelAccount(ctx, *channel, principal.UserWorkspaceID)
+}
+
+func (r *mutationResolver) DeleteConnectedAccount(ctx context.Context, id string) (*store.Account, error) {
+	userWorkspaceID, err := caller(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return pointer(r.Channels.DeleteAccount(ctx, id, userWorkspaceID))
+}
+
+func (r *mutationResolver) DisconnectConnectedAccount(ctx context.Context, id string) (*store.Account, error) {
+	userWorkspaceID, err := caller(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return pointer(r.Channels.DisconnectAccount(ctx, id, userWorkspaceID))
+}
+
+func (r *mutationResolver) UpdateMessageChannel(ctx context.Context, input map[string]any) (*store.MessageChannel, error) {
+	userWorkspaceID, err := caller(ctx)
+	if err != nil {
+		return nil, err
+	}
+	id, update := idAndUpdate(input)
+	return pointer(r.Channels.UpdateMessageChannel(ctx, id, userWorkspaceID, update))
+}
+
+func (r *mutationResolver) CreateEmailGroupChannel(ctx context.Context, input map[string]any) (*store.EmailGroupChannel, error) {
+	userWorkspaceID, err := caller(ctx)
+	if err != nil {
+		return nil, err
+	}
+	input = withoutPointers(input)
+	handle, _ := input["handle"].(string)
+	var displayName *string
+	if text, ok := input["displayName"].(string); ok {
+		displayName = &text
+	}
+	return pointer(r.Channels.CreateEmailGroupChannel(ctx, userWorkspaceID, handle, displayName))
+}
+
+func (r *mutationResolver) UpdateEmailGroupChannel(ctx context.Context, input map[string]any) (*store.MessageChannel, error) {
+	userWorkspaceID, err := caller(ctx)
+	if err != nil {
+		return nil, err
+	}
+	input = withoutPointers(input)
+	id, _ := input["id"].(string)
+	return pointer(r.Channels.UpdateEmailGroupChannel(ctx, id, userWorkspaceID, input))
+}
+
+func (r *mutationResolver) DeleteEmailGroupChannel(ctx context.Context, id string) (*store.MessageChannel, error) {
+	userWorkspaceID, err := caller(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return pointer(r.Channels.DeleteEmailGroupChannel(ctx, id, userWorkspaceID))
+}
+
+func (r *mutationResolver) UpdateCalendarChannel(ctx context.Context, input map[string]any) (*store.CalendarChannel, error) {
+	userWorkspaceID, err := caller(ctx)
+	if err != nil {
+		return nil, err
+	}
+	id, update := idAndUpdate(input)
+	return pointer(r.Channels.UpdateCalendarChannel(ctx, id, userWorkspaceID, update))
+}
+
+func (r *queryResolver) MyConnectedAccounts(ctx context.Context) ([]*store.Account, error) {
+	userWorkspaceID, err := caller(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return pointers(r.Channels.Accounts(ctx, userWorkspaceID))
+}
+
+func (r *queryResolver) ApplicationConnectedAccounts(ctx context.Context, applicationID string) ([]*store.ApplicationAccount, error) {
+	userWorkspaceID, err := caller(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return pointers(r.Channels.ApplicationAccounts(ctx, applicationID, userWorkspaceID))
+}
+
+func (r *queryResolver) MyMessageChannels(ctx context.Context, connectedAccountID *string) ([]*store.MessageChannel, error) {
+	userWorkspaceID, err := caller(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return pointers(r.Channels.MessageChannels(ctx, userWorkspaceID, connectedAccountID))
+}
+
+func (r *queryResolver) MyCalendarChannels(ctx context.Context, connectedAccountID *string) ([]*store.CalendarChannel, error) {
+	userWorkspaceID, err := caller(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return pointers(r.Channels.CalendarChannels(ctx, userWorkspaceID, connectedAccountID))
+}
+
+func idAndUpdate(input map[string]any) (string, map[string]any) {
+	input = withoutPointers(input)
+	id, _ := input["id"].(string)
+	update, _ := input["update"].(map[string]any)
+	return id, update
+}
+
+func withoutPointers(input map[string]any) map[string]any {
+	plain := make(map[string]any, len(input))
+	for key, value := range input {
+		switch typed := value.(type) {
+		case *string:
+			if typed != nil {
+				plain[key] = *typed
+			} else {
+				plain[key] = nil
+			}
+		case *bool:
+			if typed != nil {
+				plain[key] = *typed
+			} else {
+				plain[key] = nil
+			}
+		case map[string]any:
+			plain[key] = withoutPointers(typed)
+		default:
+			plain[key] = value
+		}
+	}
+	return plain
+}
+
+func (r *Resolver) MessageChannel() MessageChannelResolver { return &messageChannelResolver{r} }
+
+func (r *mutationResolver) DismissReconnectAccountBanner(ctx context.Context, connectedAccountID string) (bool, error) {
+	principal, ok := auth.PrincipalFrom(ctx)
+	if !ok || principal.UserID == "" {
+		return false, auth.ErrUnauthenticated
+	}
+	if err := r.Banners.Dismiss(ctx, principal.UserID, principal.WorkspaceID, connectedAccountID); err != nil {
+		return false, err
+	}
+	return true, nil
+}
+
+func (r *queryResolver) GetTimelineThreadsFromObjectRecord(ctx context.Context, objectNameSingular string, recordID string, page int, pageSize int) (*messaging.TimelineThreadsWithTotal, error) {
+	principal, ok := auth.PrincipalFrom(ctx)
+	if !ok {
+		return nil, auth.ErrUnauthenticated
+	}
+	if principal.WorkspaceMemberID == "" {
+		return nil, errNoWorkspaceMember
+	}
+	threads, err := r.Timeline.ThreadsForRecord(ctx, principal.UserWorkspaceID, objectNameSingular, recordID, page, pageSize)
+	if err != nil {
+		return nil, err
+	}
+	return &threads, nil
+}
+
+func (r *queryResolver) GetTimelineThreadsFromPersonID(ctx context.Context, personID string, page int, pageSize int) (*messaging.TimelineThreadsWithTotal, error) {
+	return r.GetTimelineThreadsFromObjectRecord(ctx, "person", personID, page, pageSize)
+}
+
+func (r *queryResolver) GetTimelineThreadsFromCompanyID(ctx context.Context, companyID string, page int, pageSize int) (*messaging.TimelineThreadsWithTotal, error) {
+	return r.GetTimelineThreadsFromObjectRecord(ctx, "company", companyID, page, pageSize)
+}
+
+func (r *queryResolver) GetTimelineThreadsFromOpportunityID(ctx context.Context, opportunityID string, page int, pageSize int) (*messaging.TimelineThreadsWithTotal, error) {
+	return r.GetTimelineThreadsFromObjectRecord(ctx, "opportunity", opportunityID, page, pageSize)
+}
+
+func (r *timelineThreadResolver) LastMessageReceivedAt(_ context.Context, thread *messaging.TimelineThread) (*metadata.Timestamp, error) {
+	return &metadata.Timestamp{Time: thread.LastMessageReceivedAt}, nil
+}
+
+func (r *Resolver) TimelineThread() TimelineThreadResolver { return &timelineThreadResolver{r} }
+
+func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
+
+func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
+
+type (
+	messageChannelResolver struct{ *Resolver }
+	mutationResolver       struct{ *Resolver }
+	queryResolver          struct{ *Resolver }
+	timelineThreadResolver struct{ *Resolver }
+)
+type SentMessages interface {
+	OwnedHandle(ctx context.Context, userWorkspaceID, accountID string) (handle, channelID string, err error)
+	FindDraft(ctx context.Context, accountID, draftMessageID string) (store.Draft, error)
+	Persist(ctx context.Context, sent store.SentMessage) (threadID string, err error)
+}
+
+type Mailer interface {
+	messaging.Mailer
+	messaging.DraftSender
+}
+
+var (
+	htmlTag          = regexp.MustCompile(`<[^>]*>`)
+	errForeignSender = errors.New("you cannot send from this address")
+	errAttachments   = errors.New("attachments are not supported")
+)
+
+func (r *mutationResolver) SendEmail(ctx context.Context, input SendEmailInput) (*SendEmailOutput, error) {
+	principal, ok := auth.PrincipalFrom(ctx)
+	if !ok {
+		return nil, auth.ErrUnauthenticated
+	}
+	handle, channelID, err := r.Sent.OwnedHandle(ctx, principal.UserWorkspaceID, input.ConnectedAccountID)
+	if err != nil {
+		return nil, err
+	}
+	threadID, err := r.send(ctx, input, handle, channelID)
+	if err != nil {
+		r.Logger.Warn("send email", "err", err)
+		message := "Failed to send email"
+		for _, known := range []error{messaging.ErrAccountAuthFailed, errForeignSender, errAttachments, store.ErrDraftNotFound} {
+			if errors.Is(err, known) {
+				message = known.Error()
+			}
+		}
+		return &SendEmailOutput{Error: &message}, nil
+	}
+	return &SendEmailOutput{Success: true, MessageThreadID: threadID}, nil
+}
+
+func (r *mutationResolver) send(ctx context.Context, input SendEmailInput, handle, channelID string) (*string, error) {
+	if input.FromHandle != nil && !strings.EqualFold(strings.TrimSpace(*input.FromHandle), handle) {
+		return nil, errForeignSender
+	}
+	if len(input.Files) > 0 {
+		return nil, errAttachments
+	}
+	email := messaging.OutboundEmail{
+		To: splitAddresses(input.To), Cc: splitAddresses(deref(input.Cc)), Bcc: splitAddresses(deref(input.Bcc)),
+		Subject: input.Subject, HTMLBody: input.Body, InReplyTo: deref(input.InReplyTo),
+	}
+
+	draftMessageID := deref(input.DraftMessageID)
+	var messageID string
+	var err error
+	if draftMessageID == "" {
+		messageID, err = r.Mailer.Send(ctx, input.ConnectedAccountID, email)
+	} else {
+		var draft store.Draft
+		if draft, err = r.Sent.FindDraft(ctx, input.ConnectedAccountID, draftMessageID); err != nil {
+			return nil, err
+		}
+		messageID, err = r.Mailer.SendDraft(ctx, input.ConnectedAccountID, draft.ExternalID, email)
+	}
+	if err != nil {
+		return nil, err
+	}
+	if channelID == "" {
+		return nil, nil
+	}
+
+	threadID, err := r.Sent.Persist(ctx, store.SentMessage{
+		ChannelID: channelID, ExternalID: messageID, InReplyTo: email.InReplyTo,
+		Subject: email.Subject, Text: htmlTag.ReplaceAllString(email.HTMLBody, ""),
+		From: handle, To: email.To, Cc: email.Cc, Bcc: email.Bcc,
+		ReceivedAt: time.Now(), ReplacesMessageID: draftMessageID,
+	})
+	if err != nil {
+		r.Logger.Warn("persist sent message; sync will recover", "err", err)
+		return nil, nil
+	}
+	if draftMessageID == "" {
+		return nil, nil
+	}
+	return &threadID, nil
+}
+
+var uuidPattern = regexp.MustCompile(`^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$`)
+
+var errScheduledSend = errors.New("scheduled campaign sends are not supported")
+
+func requireUUID(name, value string) error {
+	if !uuidPattern.MatchString(value) {
+		return fmt.Errorf("%s must be a UUID: %w", name, store.ErrInvalidInput)
+	}
+	return nil
+}
+
+func (r *mutationResolver) SendMessageCampaign(ctx context.Context, input SendMessageCampaignInput) (*SendMessageCampaignOutput, error) {
+	if _, err := caller(ctx); err != nil {
+		return nil, err
+	}
+	if err := requireUUID("campaignId", input.CampaignID); err != nil {
+		return nil, err
+	}
+	if input.ScheduledAt != nil {
+		return nil, fmt.Errorf("%w: %w", errScheduledSend, store.ErrInvalidInput)
+	}
+	send, err := r.Campaigns.PrepareSend(ctx, input.CampaignID)
+	if err != nil {
+		return nil, err
+	}
+	recipients, audience, err := r.Campaigns.Audience(ctx, send.ListID, send.TopicID)
+	if err != nil {
+		return nil, err
+	}
+	claimed, err := r.Campaigns.ClaimSending(ctx, input.CampaignID, send.Status)
+	if err != nil {
+		return nil, err
+	}
+	if !claimed {
+		return nil, store.ErrCampaignNotSendable
+	}
+	if err := r.Queue(ctx, messaging.SendCampaignArgs{CampaignID: input.CampaignID}); err != nil {
+		return nil, errors.Join(fmt.Errorf("enqueue campaign send: %w", err), r.Campaigns.ReleaseSending(ctx, input.CampaignID, send.Status))
+	}
+	return &SendMessageCampaignOutput{CampaignID: input.CampaignID, QueuedCount: len(recipients), Audience: &audience}, nil
+}
+
+func (r *mutationResolver) CancelMessageCampaign(ctx context.Context, input CancelMessageCampaignInput) (*CancelMessageCampaignOutput, error) {
+	if _, err := caller(ctx); err != nil {
+		return nil, err
+	}
+	if err := requireUUID("campaignId", input.CampaignID); err != nil {
+		return nil, err
+	}
+	canceled, err := r.Campaigns.Cancel(ctx, input.CampaignID)
+	if err != nil {
+		return nil, err
+	}
+	return &CancelMessageCampaignOutput{CampaignID: input.CampaignID, CanceledMessageCount: canceled}, nil
+}
+
+func (r *mutationResolver) SendMessageCampaignTest(ctx context.Context, input SendMessageCampaignTestInput) (*SendEmailViaDomainOutput, error) {
+	userWorkspaceID, err := caller(ctx)
+	if err != nil {
+		return nil, err
+	}
+	accountID, err := r.Campaigns.OwnedAccountForAddress(ctx, userWorkspaceID, input.FromAddress)
+	if err != nil {
+		return nil, err
+	}
+	html, _, err := r.Renderer.Render(ctx, input.Body, map[string]any{})
+	if err != nil {
+		return nil, fmt.Errorf("render test body: %w", errors.Join(err, store.ErrInvalidInput))
+	}
+	messageID, err := r.Mailer.Send(ctx, accountID, messaging.OutboundEmail{To: []string{input.ToAddress}, Subject: input.Subject, HTMLBody: html})
+	if err != nil {
+		return nil, fmt.Errorf("send test campaign email: %w", err)
+	}
+	return &SendEmailViaDomainOutput{MessageID: messageID}, nil
+}
+
+func (r *queryResolver) PreviewMessageCampaignAudience(ctx context.Context, input PreviewMessageCampaignAudienceInput) (*messaging.Audience, error) {
+	if _, err := caller(ctx); err != nil {
+		return nil, err
+	}
+	if err := requireUUID("listId", input.ListID); err != nil {
+		return nil, err
+	}
+	topicID := deref(input.UnsubscribeTopicID)
+	if topicID != "" {
+		if err := requireUUID("unsubscribeTopicId", topicID); err != nil {
+			return nil, err
+		}
+	}
+	_, audience, err := r.Campaigns.Audience(ctx, input.ListID, topicID)
+	if err != nil {
+		return nil, err
+	}
+	return &audience, nil
+}
+
+func splitAddresses(list string) []string {
+	var addresses []string
+	for address := range strings.SplitSeq(list, ",") {
+		if address = strings.TrimSpace(address); address != "" {
+			addresses = append(addresses, address)
+		}
+	}
+	return addresses
+}
+
+func deref(value *string) string {
+	if value == nil {
+		return ""
+	}
+	return *value
+}

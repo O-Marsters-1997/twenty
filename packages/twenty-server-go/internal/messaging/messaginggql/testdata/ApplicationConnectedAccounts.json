@@ -1,0 +1,9 @@
+{
+  "name": "ApplicationConnectedAccounts",
+  "operation": "ApplicationConnectedAccounts",
+  "fixture": "accounts seed",
+  "endpoint": "/metadata",
+  "query": "query ApplicationConnectedAccounts($applicationId: UUID!) { applicationConnectedAccounts(applicationId: $applicationId) { id handle provider isOwnedByCurrentUser } }",
+  "variables": {"applicationId":"dddddddd-dddd-4ddd-8ddd-ddddddddddd1"},
+  "response": {"data":{"applicationConnectedAccounts":[{"id":"aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa5","handle":"app-connection","provider":"app","isOwnedByCurrentUser":false}]}}
+}
