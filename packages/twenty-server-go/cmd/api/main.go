@@ -26,6 +26,7 @@ import (
 	metadatastore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/store"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records/recordsgql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records/store"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/workflowgql"
 )
 
 func main() {
@@ -75,7 +76,7 @@ func run() error {
 		NoteTargets:        store.NewNoteTargets(pool),
 		Tasks:              store.NewTasks(pool),
 		TaskTargets:        store.NewTaskTargets(pool),
-	}, logger), chatHandler))
+	}, logger), chatHandler, workflowgql.NewHandler(workflowAuthoring(pool), logger)))
 	goGraphQL.Handle(string(frontdoor.EndpointMetadata), metadataHandler(
 		metadatagql.NewHandler(metadatastore.New(pool), toolRegistry, logger),
 		chatHandler,

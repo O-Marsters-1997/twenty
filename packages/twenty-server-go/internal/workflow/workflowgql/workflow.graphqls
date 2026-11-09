@@ -1,0 +1,194 @@
+scalar UUID
+scalar JSON
+
+enum CoreWorkflowStatus {
+  DRAFT
+  ACTIVE
+  DEACTIVATED
+}
+
+enum CoreWorkflowVersionStatus {
+  DRAFT
+  ACTIVE
+  DEACTIVATED
+  ARCHIVED
+}
+
+enum WorkflowVisibility {
+  WORKSPACE
+  PRIVATE
+}
+
+type CoreWorkflowDTO {
+  id: UUID!
+  name: String
+  statuses: [CoreWorkflowStatus!]!
+  lastPublishedVersionId: UUID
+  lastPublishedCoreWorkflowVersionId: UUID
+  applicationId: UUID
+  workspaceWorkflowId: UUID
+  isSystem: Boolean!
+  visibility: WorkflowVisibility!
+  canChangeVisibility: Boolean!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type DeletedCoreWorkflowDTO {
+  id: UUID!
+  workspaceWorkflowId: UUID
+}
+
+type CoreWorkflowVersionDTO {
+  id: UUID!
+  coreWorkflowId: UUID
+  label: String!
+  status: CoreWorkflowVersionStatus!
+  workspaceWorkflowVersionId: UUID
+  workspaceWorkflowId: UUID
+  trigger: JSON
+  steps: JSON
+  createdAt: String!
+  updatedAt: String!
+}
+
+type WorkflowVersionStepChanges {
+  triggerDiff: JSON
+  stepsDiff: JSON
+}
+
+type WorkflowStepPosition {
+  x: Float!
+  y: Float!
+}
+
+type WorkflowAction {
+  id: UUID!
+  name: String!
+  type: String!
+  settings: JSON!
+  valid: Boolean!
+  nextStepIds: [UUID!]
+  position: WorkflowStepPosition
+}
+
+type WorkflowVersionTrigger {
+  trigger: JSON
+}
+
+input WorkflowStepPositionInput {
+  x: Float!
+  y: Float!
+}
+
+input WorkflowStepPositionUpdateInput {
+  id: String!
+  position: WorkflowStepPositionInput!
+}
+
+input CreateCoreWorkflowInput {
+  name: String
+  visibility: WorkflowVisibility
+}
+
+input UpdateCoreWorkflowInput {
+  coreWorkflowId: UUID!
+  name: String!
+}
+
+input UpdateCoreWorkflowVisibilityInput {
+  coreWorkflowId: UUID!
+  visibility: WorkflowVisibility!
+}
+
+input DuplicateCoreWorkflowInput {
+  coreWorkflowIdToDuplicate: UUID!
+  coreWorkflowVersionIdToCopy: UUID!
+}
+
+input DeleteCoreWorkflowsInput {
+  coreWorkflowIds: [UUID!]!
+}
+
+input DiscardCoreWorkflowDraftInput {
+  coreWorkflowVersionId: UUID!
+}
+
+input CreateDraftFromCoreWorkflowVersionInput {
+  coreWorkflowId: UUID!
+  coreWorkflowVersionIdToCopy: UUID!
+}
+
+input CreateCoreWorkflowVersionStepInput {
+  coreWorkflowVersionId: UUID!
+  stepType: String!
+  parentStepId: String
+  parentStepConnectionOptions: JSON
+  nextStepId: UUID
+  position: WorkflowStepPositionInput
+  id: String
+  defaultSettings: JSON
+}
+
+input UpdateCoreWorkflowVersionStepInput {
+  coreWorkflowVersionId: UUID!
+  step: JSON!
+}
+
+input UpdateCoreWorkflowVersionTriggerInput {
+  coreWorkflowVersionId: UUID!
+  trigger: JSON!
+}
+
+input DeleteCoreWorkflowVersionStepInput {
+  coreWorkflowVersionId: UUID!
+  stepId: String!
+}
+
+input DuplicateCoreWorkflowVersionStepInput {
+  coreWorkflowVersionId: UUID!
+  stepId: String!
+}
+
+input CreateCoreWorkflowVersionEdgeInput {
+  coreWorkflowVersionId: UUID!
+  source: String!
+  target: String!
+  sourceConnectionOptions: JSON
+}
+
+input DeleteCoreWorkflowVersionEdgeInput {
+  coreWorkflowVersionId: UUID!
+  source: String!
+  target: String!
+  sourceConnectionOptions: JSON
+}
+
+input UpdateCoreWorkflowVersionPositionsInput {
+  coreWorkflowVersionId: UUID!
+  positions: [WorkflowStepPositionUpdateInput!]!
+}
+
+type Query {
+  _empty: Boolean
+}
+
+type Mutation {
+  createCoreWorkflow(input: CreateCoreWorkflowInput!): CoreWorkflowDTO!
+  updateCoreWorkflow(input: UpdateCoreWorkflowInput!): CoreWorkflowDTO
+  updateCoreWorkflowVisibility(input: UpdateCoreWorkflowVisibilityInput!): CoreWorkflowDTO
+  duplicateCoreWorkflow(input: DuplicateCoreWorkflowInput!): CoreWorkflowDTO!
+  deleteCoreWorkflows(input: DeleteCoreWorkflowsInput!): [DeletedCoreWorkflowDTO!]!
+  discardCoreWorkflowDraft(input: DiscardCoreWorkflowDraftInput!): CoreWorkflowDTO
+  createDraftFromCoreWorkflowVersion(input: CreateDraftFromCoreWorkflowVersionInput!): CoreWorkflowVersionDTO!
+  activateCoreWorkflowVersion(coreWorkflowVersionId: UUID!): Boolean!
+  deactivateCoreWorkflowVersion(coreWorkflowVersionId: UUID!): Boolean!
+  createCoreWorkflowVersionStep(input: CreateCoreWorkflowVersionStepInput!): WorkflowVersionStepChanges!
+  updateCoreWorkflowVersionStep(input: UpdateCoreWorkflowVersionStepInput!): WorkflowAction!
+  updateCoreWorkflowVersionTrigger(input: UpdateCoreWorkflowVersionTriggerInput!): WorkflowVersionTrigger!
+  deleteCoreWorkflowVersionStep(input: DeleteCoreWorkflowVersionStepInput!): WorkflowVersionStepChanges!
+  duplicateCoreWorkflowVersionStep(input: DuplicateCoreWorkflowVersionStepInput!): WorkflowVersionStepChanges!
+  createCoreWorkflowVersionEdge(input: CreateCoreWorkflowVersionEdgeInput!): WorkflowVersionStepChanges!
+  deleteCoreWorkflowVersionEdge(input: DeleteCoreWorkflowVersionEdgeInput!): WorkflowVersionStepChanges!
+  updateCoreWorkflowVersionPositions(input: UpdateCoreWorkflowVersionPositionsInput!): Boolean!
+}

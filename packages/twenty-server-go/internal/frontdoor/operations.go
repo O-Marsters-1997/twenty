@@ -64,6 +64,9 @@ func DefaultTable() OperationTable {
 	for _, operation := range slices.Concat(SkillOperations, ChatOperations, agentOperations) {
 		table[EndpointMetadata][operation] = RouteGo
 	}
+	for _, operation := range WorkflowAuthoringOperations {
+		table[EndpointWorkspace][operation] = RouteGo
+	}
 	for _, plural := range []string{"Notes", "NoteTargets", "Tasks", "TaskTargets"} {
 		for _, operation := range []string{"Aggregate" + plural, plural + "GroupByAggregates", plural + "GroupByRecords"} {
 			table[EndpointWorkspace][operation] = RouteGo
@@ -92,6 +95,15 @@ var viewOperations = []string{
 	"CreateViewFilterGroup", "UpdateViewFilterGroup", "DestroyViewFilterGroup",
 	"CreateViewSort", "UpdateViewSort", "DestroyViewSort",
 	"CreateManyViewGroups", "UpdateManyViewGroups",
+}
+
+var WorkflowAuthoringOperations = []string{
+	"CreateCoreWorkflow", "UpdateCoreWorkflow", "UpdateCoreWorkflowVisibility", "DuplicateCoreWorkflow",
+	"DeleteCoreWorkflows", "DiscardCoreWorkflowDraft", "CreateDraftFromCoreWorkflowVersion",
+	"ActivateCoreWorkflowVersion", "DeactivateCoreWorkflowVersion",
+	"CreateCoreWorkflowVersionStep", "UpdateCoreWorkflowVersionStep", "UpdateCoreWorkflowVersionTrigger",
+	"DeleteCoreWorkflowVersionStep", "DuplicateCoreWorkflowVersionStep",
+	"CreateCoreWorkflowVersionEdge", "DeleteCoreWorkflowVersionEdge", "UpdateCoreWorkflowVersionPositions",
 }
 
 var agentOperations = []string{

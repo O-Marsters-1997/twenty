@@ -1,0 +1,15 @@
+{
+  "name": "DeactivateCoreWorkflowVersion",
+  "operation": "DeactivateCoreWorkflowVersion",
+  "fixture": "baseline seed; mutation JSON derived from the Node resolvers and microdiff, not captured from a running Node",
+  "endpoint": "/graphql",
+  "query": "mutation DeactivateCoreWorkflowVersion($coreWorkflowVersionId: UUID!) { deactivateWorkflowVersion: deactivateCoreWorkflowVersion(coreWorkflowVersionId: $coreWorkflowVersionId) }",
+  "variables": {
+    "coreWorkflowVersionId": "b6ee7abf-5306-5351-af2d-4cac51cbb62b"
+  },
+  "response": {
+    "data": {
+      "deactivateWorkflowVersion": true
+    }
+  }
+}

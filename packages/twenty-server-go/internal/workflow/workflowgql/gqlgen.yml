@@ -1,0 +1,72 @@
+schema:
+  - workflow.graphqls
+exec:
+  filename: generated.go
+  package: workflowgql
+model:
+  filename: models_gen.go
+  package: workflowgql
+resolver:
+  layout: single-file
+  filename: resolver.go
+  package: workflowgql
+  type: Resolver
+models:
+  UUID:
+    model: github.com/99designs/gqlgen/graphql.String
+  JSON:
+    model: github.com/99designs/gqlgen/graphql.Any
+  CoreWorkflowStatus:
+    model: github.com/99designs/gqlgen/graphql.String
+  CoreWorkflowVersionStatus:
+    model: github.com/99designs/gqlgen/graphql.String
+  WorkflowVisibility:
+    model: github.com/99designs/gqlgen/graphql.String
+  CoreWorkflowDTO:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/workflowgql.WorkflowDTO
+  DeletedCoreWorkflowDTO:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/workflowgql.DeletedWorkflowDTO
+  CoreWorkflowVersionDTO:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/workflowgql.VersionDTO
+  WorkflowVersionStepChanges:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/workflowgql.StepChangesDTO
+  WorkflowAction:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/workflowgql.ActionDTO
+  WorkflowStepPosition:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/workflowgql.PositionDTO
+  WorkflowVersionTrigger:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/workflowgql.TriggerDTO
+  CreateCoreWorkflowInput:
+    model: map[string]interface{}
+  UpdateCoreWorkflowInput:
+    model: map[string]interface{}
+  UpdateCoreWorkflowVisibilityInput:
+    model: map[string]interface{}
+  DuplicateCoreWorkflowInput:
+    model: map[string]interface{}
+  DeleteCoreWorkflowsInput:
+    model: map[string]interface{}
+  DiscardCoreWorkflowDraftInput:
+    model: map[string]interface{}
+  CreateDraftFromCoreWorkflowVersionInput:
+    model: map[string]interface{}
+  CreateCoreWorkflowVersionStepInput:
+    model: map[string]interface{}
+  UpdateCoreWorkflowVersionStepInput:
+    model: map[string]interface{}
+  UpdateCoreWorkflowVersionTriggerInput:
+    model: map[string]interface{}
+  DeleteCoreWorkflowVersionStepInput:
+    model: map[string]interface{}
+  DuplicateCoreWorkflowVersionStepInput:
+    model: map[string]interface{}
+  CreateCoreWorkflowVersionEdgeInput:
+    model: map[string]interface{}
+  DeleteCoreWorkflowVersionEdgeInput:
+    model: map[string]interface{}
+  UpdateCoreWorkflowVersionPositionsInput:
+    model: map[string]interface{}
+  WorkflowStepPositionUpdateInput:
+    model: map[string]interface{}
+  WorkflowStepPositionInput:
+    model: map[string]interface{}

@@ -1,0 +1,24 @@
+{
+  "name": "DeleteCoreWorkflows",
+  "operation": "DeleteCoreWorkflows",
+  "fixture": "baseline seed; mutation JSON derived from the Node resolvers and microdiff, not captured from a running Node",
+  "endpoint": "/graphql",
+  "query": "mutation DeleteCoreWorkflows($input: DeleteCoreWorkflowsInput!) { deleteCoreWorkflows(input: $input) { id workspaceWorkflowId } }",
+  "variables": {
+    "input": {
+      "coreWorkflowIds": [
+        "bce3421f-e977-5fb5-ae82-eaef2cf48be6"
+      ]
+    }
+  },
+  "response": {
+    "data": {
+      "deleteCoreWorkflows": [
+        {
+          "id": "bce3421f-e977-5fb5-ae82-eaef2cf48be6",
+          "workspaceWorkflowId": null
+        }
+      ]
+    }
+  }
+}
