@@ -188,6 +188,9 @@ func (t *Timeline) senders(ctx context.Context, ids []string) (map[string][]mess
 }
 
 func (t *Timeline) visibility(ctx context.Context, ids []string, userWorkspaceID string) (map[string]string, error) {
+	if userWorkspaceID == "" {
+		return map[string]string{}, nil
+	}
 	schema := workspace.SchemaName()
 	rows, err := t.pool.Query(ctx, `SELECT DISTINCT m."messageThreadId"::text,
 			CASE WHEN ca."userWorkspaceId" = $3::uuid THEN 'SHARE_EVERYTHING' ELSE mc.visibility::text END

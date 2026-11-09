@@ -22,7 +22,7 @@ func (r *ReconnectBanners) Dismiss(ctx context.Context, userID, workspaceID, con
 	err := pgx.BeginFunc(ctx, r.pool, func(tx pgx.Tx) error {
 		if _, err := tx.Exec(ctx, `UPDATE core."keyValuePair" SET "updatedAt" = now(), value = coalesce(
 				(SELECT jsonb_agg(entry) FROM jsonb_array_elements(value) entry WHERE entry #>> '{}' <> $4), '[]'::jsonb)
-			WHERE `+reconnectListScope, userID, workspaceID, accountsToReconnectKeys, connectedAccountID); err != nil {
+			WHERE `+reconnectListScope+` AND value @> to_jsonb($4::text)`, userID, workspaceID, accountsToReconnectKeys, connectedAccountID); err != nil {
 			return fmt.Errorf("remove account from lists: %w", err)
 		}
 		if _, err := tx.Exec(ctx, `DELETE FROM core."keyValuePair" WHERE `+reconnectListScope+` AND value = '[]'::jsonb`,
