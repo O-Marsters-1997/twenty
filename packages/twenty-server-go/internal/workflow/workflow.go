@@ -19,7 +19,7 @@ const (
 	RunStatusStopped    RunStatus = "STOPPED"
 )
 
-// ActionType names a kind of workflow step. CODE is intentionally absent.
+// ActionType names a kind of workflow step.
 type ActionType string
 
 const (
@@ -41,7 +41,6 @@ const (
 	ActionTypeEmpty        ActionType = "EMPTY"
 )
 
-// StepInput is what a step receives when it runs.
 type StepInput struct {
 	RunID    string
 	StepID   string
@@ -49,7 +48,6 @@ type StepInput struct {
 	Context  map[string]any // outputs of earlier steps, keyed by step id, plus the trigger payload
 }
 
-// StepOutput is what a step returns.
 type StepOutput struct {
 	Result  any
 	Error   string
