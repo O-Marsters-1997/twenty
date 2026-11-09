@@ -185,7 +185,7 @@ func (c *Channels) CreateEmailGroupChannel(ctx context.Context, userWorkspaceID,
 		return EmailGroupChannel{}, err
 	}
 	if c.inboundEmailDomain == "" {
-		return EmailGroupChannel{}, fmt.Errorf("%w: email handles are not configured: INBOUND_EMAIL_DOMAIN must be set", ErrInvalidInput)
+		return EmailGroupChannel{}, errors.New("email handles are not configured: INBOUND_EMAIL_DOMAIN must be set")
 	}
 	random := make([]byte, forwardingRandomBytes)
 	if _, err := rand.Read(random); err != nil {

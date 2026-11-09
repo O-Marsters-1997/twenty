@@ -2,7 +2,6 @@ package messaginggql_test
 
 import (
 	"bytes"
-	"context"
 	"encoding/json"
 	"io"
 	"log/slog"
@@ -68,7 +67,6 @@ func newHarness(t *testing.T, domain string) harness {
 	if err != nil {
 		t.Fatalf("begin: %v", err)
 	}
-	t.Cleanup(func() { _ = tx.Rollback(context.Background()) })
 	if _, err := tx.Exec(t.Context(), `SET LOCAL session_replication_role = replica`); err != nil {
 		t.Fatalf("disable foreign keys: %v", err)
 	}
@@ -109,8 +107,12 @@ func errorCode(t *testing.T, decoded map[string]any) string {
 	if !ok || len(errs) == 0 {
 		t.Fatalf("response = %v, want an error", decoded)
 	}
-	code := errs[0].(map[string]any)["extensions"].(map[string]any)["code"].(string)
-	t.Logf("error %s: %v", code, errs[0].(map[string]any)["message"])
+	first, _ := errs[0].(map[string]any)
+	extensions, _ := first["extensions"].(map[string]any)
+	code, ok := extensions["code"].(string)
+	if !ok {
+		t.Fatalf("error %v has no extensions.code", errs[0])
+	}
 	return code
 }
 
@@ -168,16 +170,16 @@ func TestCreateEmailGroupChannel(t *testing.T) {
 		}
 	})
 	for _, tt := range []struct {
-		name, domain, handle string
+		name, domain, handle, wantCode string
 	}{
-		{"rejects a handle that is not an email address", inboundDomain, "not-an-email"},
-		{"rejects creation when no inbound domain is configured", "", "support@example.com"},
+		{"rejects a handle that is not an email address", inboundDomain, "not-an-email", "BAD_USER_INPUT"},
+		{"fails when no inbound domain is configured", "", "support@example.com", "INTERNAL_SERVER_ERROR"},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			response := newHarness(t, tt.domain).send(t, "CreateEmailGroupChannel", mutation, map[string]any{"input": map[string]any{"handle": tt.handle}})
-			if got := errorCode(t, response); got != "BAD_USER_INPUT" {
-				t.Errorf("error code = %s, want BAD_USER_INPUT", got)
+			if got := errorCode(t, response); got != tt.wantCode {
+				t.Errorf("error code = %s, want %s", got, tt.wantCode)
 			}
 		})
 	}
