@@ -46,7 +46,7 @@ func (a emailAction) Run(ctx context.Context, input StepInput) (StepOutput, erro
 		return StepOutput{Error: err.Error()}, nil
 	}
 	if err != nil {
-		return StepOutput{}, fmt.Errorf("%s: %w", a.actionType, err)
+		return StepOutput{}, fmt.Errorf("deliver email: %w", err)
 	}
 	return StepOutput{Result: map[string]string{a.resultKey: id}}, nil
 }

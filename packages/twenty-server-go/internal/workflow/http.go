@@ -22,7 +22,7 @@ func (a httpRequestAction) Run(ctx context.Context, input StepInput) (StepOutput
 		URL     string
 		Method  string
 		Headers map[string]string
-		Body    json.RawMessage // a JSON string is sent as its text, any other JSON value as-is
+		Body    json.RawMessage
 	}
 	if err := json.Unmarshal(input.Settings, &settings); err != nil {
 		return StepOutput{}, fmt.Errorf("decode %s settings: %w", ActionTypeHTTPRequest, err)
