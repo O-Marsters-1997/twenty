@@ -20,22 +20,22 @@ import (
 )
 
 const (
-	userID          = "0a000000-0000-4000-8000-000000000001"
-	userWorkspaceID = "0a000000-0000-4000-8000-000000000002"
-	memberID        = "0a000000-0000-4000-8000-000000000003"
-	otherAccountID  = "0a000000-0000-4000-8000-000000000004"
-	ownAccountID    = "0a000000-0000-4000-8000-000000000005"
-	companyID       = "0c000000-0000-4000-8000-000000000001"
-	opportunityID   = "0e000000-0000-4000-8000-000000000001"
-	adaID           = "0b000000-0000-4000-8000-000000000001"
-	bobID           = "0b000000-0000-4000-8000-000000000002"
+	userID                  = "0a000000-0000-4000-8000-000000000001"
+	timelineUserWorkspaceID = "0a000000-0000-4000-8000-000000000002"
+	memberID                = "0a000000-0000-4000-8000-000000000003"
+	otherAccountID          = "0a000000-0000-4000-8000-000000000004"
+	ownAccountID            = "0a000000-0000-4000-8000-000000000005"
+	companyID               = "0c000000-0000-4000-8000-000000000001"
+	opportunityID           = "0e000000-0000-4000-8000-000000000001"
+	adaID                   = "0b000000-0000-4000-8000-000000000001"
+	bobID                   = "0b000000-0000-4000-8000-000000000002"
 )
 
 var principal = auth.Principal{
-	UserID: userID, WorkspaceID: workspace.PinnedWorkspaceID, UserWorkspaceID: userWorkspaceID, WorkspaceMemberID: memberID,
+	UserID: userID, WorkspaceID: workspace.PinnedWorkspaceID, UserWorkspaceID: timelineUserWorkspaceID, WorkspaceMemberID: memberID,
 }
 
-func seed(t *testing.T, pool *pgxpool.Pool) {
+func seedTimeline(t *testing.T, pool *pgxpool.Pool) {
 	t.Helper()
 	conn, err := pool.Acquire(t.Context())
 	if err != nil {
@@ -52,7 +52,7 @@ func seed(t *testing.T, pool *pgxpool.Pool) {
 		fmt.Sprintf(`INSERT INTO %s."workspaceMember" (id, "userId", "nameFirstName", "nameLastName", "avatarUrl") VALUES ('%s', '%s', 'Olly', 'Owner', 'https://img/olly.png')`, s, memberID, userID),
 		`INSERT INTO core."connectedAccount" (id, "workspaceId", handle, provider, "userWorkspaceId") VALUES
 			('` + otherAccountID + `', '` + workspace.PinnedWorkspaceID + `', 'other@x.com', 'google', gen_random_uuid()),
-			('` + ownAccountID + `', '` + workspace.PinnedWorkspaceID + `', 'olly@x.com', 'google', '` + userWorkspaceID + `')`,
+			('` + ownAccountID + `', '` + workspace.PinnedWorkspaceID + `', 'olly@x.com', 'google', '` + timelineUserWorkspaceID + `')`,
 		`INSERT INTO core."messageChannel" (id, "workspaceId", visibility, handle, type, "pendingGroupEmailsAction", "syncStage", "connectedAccountId") VALUES
 			('0d000000-0000-4000-8000-000000000001', '` + workspace.PinnedWorkspaceID + `', 'SUBJECT', 'other@x.com', 'EMAIL', 'NONE', 'PENDING_CONFIGURATION', '` + otherAccountID + `'),
 			('0d000000-0000-4000-8000-000000000002', '` + workspace.PinnedWorkspaceID + `', 'METADATA', 'olly@x.com', 'EMAIL', 'NONE', 'PENDING_CONFIGURATION', '` + ownAccountID + `')`,
@@ -87,7 +87,7 @@ func newHandler(t *testing.T) (http.Handler, *pgxpool.Pool) {
 		t.Fatalf("connect: %v", err)
 	}
 	t.Cleanup(pool.Close)
-	seed(t, pool)
+	seedTimeline(t, pool)
 	inner := messaginggql.NewHandler(&messaginggql.Resolver{
 		Timeline: store.NewTimeline(pool), Banners: store.NewReconnectBanners(pool),
 	}, slog.New(slog.NewTextHandler(io.Discard, nil)))
@@ -162,7 +162,7 @@ func TestTimeline_ThreadsForRecord_rejectsBadPaging(t *testing.T) {
 	}{{"page size over the maximum", 1, messaging.TimelineThreadsMaxPageSize + 1}, {"page zero", 0, 20}} {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			_, err := timeline.ThreadsForRecord(t.Context(), userWorkspaceID, "person", adaID, tt.page, tt.pageSize)
+			_, err := timeline.ThreadsForRecord(t.Context(), timelineUserWorkspaceID, "person", adaID, tt.page, tt.pageSize)
 			if !errors.Is(err, messaging.ErrInvalidTimelinePage) {
 				t.Errorf("ThreadsForRecord(page %d, size %d) error = %v, want ErrInvalidTimelinePage", tt.page, tt.pageSize, err)
 			}
