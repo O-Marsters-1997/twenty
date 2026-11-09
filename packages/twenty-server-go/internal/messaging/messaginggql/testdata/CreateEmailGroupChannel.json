@@ -1,0 +1,9 @@
+{
+  "name": "CreateEmailGroupChannel",
+  "operation": "CreateEmailGroupChannel",
+  "fixture": "accounts seed",
+  "endpoint": "/metadata",
+  "query": "mutation CreateEmailGroupChannel($input: CreateEmailGroupChannelInput!) { createEmailGroupChannel(input: $input) { messageChannel { id handle displayName type visibility isSyncEnabled syncStage syncStatus contactAutoCreationPolicy excludeGroupEmails } forwardingAddress } }",
+  "variables": {"input":{"handle":"support@example.com","displayName":"  Support  "}},
+  "response": {"data":{"createEmailGroupChannel":{"messageChannel":{"id":"<ignored>","handle":"<ignored>","displayName":"Support","type":"EMAIL_GROUP","visibility":"SHARE_EVERYTHING","isSyncEnabled":true,"syncStage":"MESSAGE_LIST_FETCH_PENDING","syncStatus":"ACTIVE","contactAutoCreationPolicy":"SENT_AND_RECEIVED","excludeGroupEmails":false},"forwardingAddress":"<ignored>"}}}
+}

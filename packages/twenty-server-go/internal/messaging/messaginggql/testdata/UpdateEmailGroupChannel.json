@@ -1,0 +1,9 @@
+{
+  "name": "UpdateEmailGroupChannel",
+  "operation": "UpdateEmailGroupChannel",
+  "fixture": "accounts seed",
+  "endpoint": "/metadata",
+  "query": "mutation UpdateEmailGroupChannel($input: UpdateEmailGroupChannelInput!) { updateEmailGroupChannel(input: $input) { id displayName } }",
+  "variables": {"input":{"id":"bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbb2","displayName":"  Support team "}},
+  "response": {"data":{"updateEmailGroupChannel":{"id":"bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbb2","displayName":"Support team"}}}
+}

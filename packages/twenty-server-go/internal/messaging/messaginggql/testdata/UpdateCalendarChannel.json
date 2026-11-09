@@ -1,0 +1,9 @@
+{
+  "name": "UpdateCalendarChannel",
+  "operation": "UpdateCalendarChannel",
+  "fixture": "accounts seed",
+  "endpoint": "/metadata",
+  "query": "mutation UpdateCalendarChannel($input: UpdateCalendarChannelInput!) { updateCalendarChannel(input: $input) { id visibility isContactAutoCreationEnabled contactAutoCreationPolicy isSyncEnabled } }",
+  "variables": {"input":{"id":"cccccccc-cccc-4ccc-8ccc-ccccccccccc1","update":{"visibility":"SHARE_EVERYTHING","isContactAutoCreationEnabled":false,"contactAutoCreationPolicy":"NONE"}}},
+  "response": {"data":{"updateCalendarChannel":{"id":"cccccccc-cccc-4ccc-8ccc-ccccccccccc1","visibility":"SHARE_EVERYTHING","isContactAutoCreationEnabled":false,"contactAutoCreationPolicy":"NONE","isSyncEnabled":true}}}
+}

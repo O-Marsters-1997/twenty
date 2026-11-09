@@ -1,0 +1,9 @@
+{
+  "name": "DeleteEmailGroupChannel",
+  "operation": "DeleteEmailGroupChannel",
+  "fixture": "accounts seed",
+  "endpoint": "/metadata",
+  "query": "mutation DeleteEmailGroupChannel($id: UUID!) { deleteEmailGroupChannel(id: $id) { id displayName type } }",
+  "variables": {"id":"bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbb2"},
+  "response": {"data":{"deleteEmailGroupChannel":{"id":"bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbb2","displayName":"Sales","type":"EMAIL_GROUP"}}}
+}

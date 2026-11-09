@@ -22,6 +22,6 @@ type SendEmailOutput {
   messageThreadId: String
 }
 
-type Mutation {
+extend type Mutation {
   sendEmail(input: SendEmailInput!): SendEmailOutput!
 }

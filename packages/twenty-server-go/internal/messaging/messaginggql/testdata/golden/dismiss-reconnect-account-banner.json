@@ -1,0 +1,9 @@
+{
+  "name": "dismiss-reconnect-account-banner",
+  "operation": "DismissReconnectAccountBanner",
+  "fixture": "reconnect-lists-with-two-accounts",
+  "endpoint": "/graphql",
+  "query": "mutation DismissReconnectAccountBanner($connectedAccountId: UUID!) { dismissReconnectAccountBanner(connectedAccountId: $connectedAccountId) }",
+  "variables": {"connectedAccountId":"0a000000-0000-4000-8000-000000000004"},
+  "response": {"data":{"dismissReconnectAccountBanner":true}}
+}

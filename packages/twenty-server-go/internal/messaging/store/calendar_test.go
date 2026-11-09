@@ -24,7 +24,7 @@ func newCalendarPool(t *testing.T) *pgxpool.Pool {
 	return pool
 }
 
-func seedChannel(t *testing.T, pool *pgxpool.Pool, syncEnabled, authFailed bool) string {
+func seedCalendarChannel(t *testing.T, pool *pgxpool.Pool, syncEnabled, authFailed bool) string {
 	t.Helper()
 	tx, err := pool.Begin(t.Context())
 	if err != nil {
@@ -80,7 +80,7 @@ func TestCalendarChannels_Apply(t *testing.T) {
 	t.Parallel()
 	pool := newCalendarPool(t)
 	channels := store.NewCalendarChannels(pool)
-	id := seedChannel(t, pool, true, false)
+	id := seedCalendarChannel(t, pool, true, false)
 	start := time.Date(2026, 1, 2, 9, 0, 0, 0, time.UTC)
 	link := "https://meet.example/x"
 
@@ -133,9 +133,9 @@ func TestCalendarChannels_ActiveIDs(t *testing.T) {
 	t.Parallel()
 	pool := newCalendarPool(t)
 	channels := store.NewCalendarChannels(pool)
-	active := seedChannel(t, pool, true, false)
-	seedChannel(t, pool, false, false)
-	seedChannel(t, pool, true, true)
+	active := seedCalendarChannel(t, pool, true, false)
+	seedCalendarChannel(t, pool, false, false)
+	seedCalendarChannel(t, pool, true, true)
 
 	got, err := channels.ActiveIDs(t.Context())
 	if err != nil {

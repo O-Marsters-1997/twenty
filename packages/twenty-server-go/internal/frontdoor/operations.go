@@ -62,10 +62,13 @@ func DefaultTable() OperationTable {
 	for _, operation := range viewOperations {
 		table[EndpointMetadata][operation] = RouteGo
 	}
-	for _, operation := range slices.Concat(SkillOperations, ChatOperations, agentOperations) {
+	for _, operation := range slices.Concat(SkillOperations, ChatOperations, agentOperations, MessagingOperations) {
 		table[EndpointMetadata][operation] = RouteGo
 	}
 	for _, operation := range slices.Concat(WorkflowOperations, WorkflowAuthoringOperations) {
+		table[EndpointWorkspace][operation] = RouteGo
+	}
+	for _, operation := range TimelineOperations {
 		table[EndpointWorkspace][operation] = RouteGo
 	}
 	for _, plural := range []string{"Notes", "NoteTargets", "Tasks", "TaskTargets"} {
@@ -93,6 +96,11 @@ var WorkflowOperations = []string{
 	"WorkflowStepConnectedAccountHandle", "TestHttpRequest",
 }
 
+var TimelineOperations = []string{
+	"GetTimelineThreadsFromObjectRecord", "GetTimelineThreadsFromPersonId",
+	"GetTimelineThreadsFromCompanyId", "GetTimelineThreadsFromOpportunityId", "DismissReconnectAccountBanner",
+}
+
 const AnswerToolCallOperation = "AnswerToolCall"
 
 var viewOperations = []string{
@@ -116,6 +124,12 @@ var WorkflowAuthoringOperations = []string{
 
 var agentOperations = []string{
 	"FindManyAgents", "FindOneAgent", "CreateOneAgent", "UpdateOneAgent", "DeleteOneAgent", "AssignRoleToAgent",
+}
+
+var MessagingOperations = []string{
+	"MyConnectedAccounts", "ApplicationConnectedAccounts", "DeleteConnectedAccount", "DisconnectConnectedAccount",
+	"MyMessageChannels", "UpdateMessageChannel", "CreateEmailGroupChannel", "UpdateEmailGroupChannel", "DeleteEmailGroupChannel",
+	"MyCalendarChannels", "UpdateCalendarChannel",
 }
 
 var blockedMetadataFields = []string{

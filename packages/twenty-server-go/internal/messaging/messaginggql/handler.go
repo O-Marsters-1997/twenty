@@ -12,6 +12,7 @@ import (
 	"github.com/vektah/gqlparser/v2/gqlerror"
 
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging/store"
 )
 
@@ -25,6 +26,14 @@ func NewHandler(resolver *Resolver, logger *slog.Logger) http.Handler {
 		presented := graphql.DefaultErrorPresenter(ctx, err)
 		code := "INTERNAL_SERVER_ERROR"
 		switch {
+		case errors.Is(err, messaging.ErrInvalidTimelinePage):
+			code = "BAD_USER_INPUT"
+		case errors.Is(err, store.ErrInvalidInput):
+			code = "BAD_USER_INPUT"
+		case errors.Is(err, store.ErrNotFound):
+			code = "NOT_FOUND"
+		case errors.Is(err, store.ErrForbidden):
+			code = "FORBIDDEN"
 		case errors.Is(err, store.ErrAccountNotOwned):
 			code = "FORBIDDEN"
 		case errors.Is(err, auth.ErrUnauthenticated):

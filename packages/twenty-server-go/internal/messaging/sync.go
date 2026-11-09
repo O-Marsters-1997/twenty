@@ -11,6 +11,59 @@ import (
 
 type SyncCursor string // Gmail historyId or Calendar syncToken
 
+type ImportedEvent struct {
+	ExternalID, Title, Description, Location, ConferenceLink string
+	StartsAt, EndsAt                                         time.Time
+	IsCanceled, IsFullDay                                    bool
+	Participants                                             []string
+}
+
+type CalendarSource interface {
+	ListChanges(ctx context.Context, account ConnectedAccount, since SyncCursor) ([]ImportedEvent, SyncCursor, error)
+}
+
+type CalendarChannel struct {
+	ID, ConnectedAccountID string
+	Cursor                 SyncCursor
+}
+
+type CalendarChannels interface {
+	Get(ctx context.Context, id string) (CalendarChannel, error)
+	ActiveIDs(ctx context.Context) ([]string, error)
+	Apply(ctx context.Context, channelID string, events []ImportedEvent, cursor SyncCursor) error
+}
+
+type CalendarSyncer struct {
+	Channels CalendarChannels
+	Accounts Accounts
+	Source   CalendarSource
+}
+
+func (s *CalendarSyncer) SyncChannel(ctx context.Context, channelID string) error {
+	channel, err := s.Channels.Get(ctx, channelID)
+	if err != nil {
+		return fmt.Errorf("load calendar channel: %w", err)
+	}
+	account, err := s.Accounts.Get(ctx, channel.ConnectedAccountID)
+	if err != nil {
+		return fmt.Errorf("load connected account: %w", err)
+	}
+	if account.AuthFailedAt != nil {
+		return ErrAccountAuthFailed
+	}
+	events, cursor, err := s.Source.ListChanges(ctx, account, channel.Cursor)
+	if errors.Is(err, ErrSyncCursorExpired) {
+		events, cursor, err = s.Source.ListChanges(ctx, account, "")
+	}
+	if err != nil {
+		return fmt.Errorf("list calendar changes: %w", err)
+	}
+	if err := s.Channels.Apply(ctx, channelID, events, cursor); err != nil {
+		return fmt.Errorf("apply calendar changes: %w", err)
+	}
+	return nil
+}
+
 type ImportedMessage struct {
 	ExternalID, ThreadExternalID, Subject, Text, HTML string
 	From                                              string

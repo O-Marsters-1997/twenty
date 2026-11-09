@@ -1,0 +1,9 @@
+{
+  "name": "UpdateMessageChannel",
+  "operation": "UpdateMessageChannel",
+  "fixture": "accounts seed",
+  "endpoint": "/metadata",
+  "query": "mutation UpdateMessageChannel($input: UpdateMessageChannelInput!) { updateMessageChannel(input: $input) { id visibility excludeGroupEmails messageFolderImportPolicy pendingGroupEmailsAction } }",
+  "variables": {"input":{"id":"bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbb1","update":{"visibility":"SUBJECT","excludeGroupEmails":false,"messageFolderImportPolicy":"SELECTED_FOLDERS"}}},
+  "response": {"data":{"updateMessageChannel":{"id":"bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbb1","visibility":"SUBJECT","excludeGroupEmails":false,"messageFolderImportPolicy":"SELECTED_FOLDERS","pendingGroupEmailsAction":"GROUP_EMAILS_IMPORT"}}}
+}

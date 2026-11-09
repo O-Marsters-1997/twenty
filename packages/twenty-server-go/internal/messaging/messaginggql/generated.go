@@ -6,6 +6,7 @@ import (
 	"bytes"
 	"context"
 	"embed"
+	"errors"
 	"fmt"
 	"math"
 	"strconv"
@@ -13,6 +14,9 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging/store"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -27,18 +31,123 @@ func NewExecutableSchema(cfg Config) graphql.ExecutableSchema {
 type Config = graphql.Config[ResolverRoot, DirectiveRoot, ComplexityRoot]
 
 type ResolverRoot interface {
+	MessageChannel() MessageChannelResolver
 	Mutation() MutationResolver
+	Query() QueryResolver
+	TimelineThread() TimelineThreadResolver
 }
 
 type DirectiveRoot struct {
 }
 
 type ComplexityRoot struct {
+	ApplicationConnectedAccountDTO struct {
+		ApplicationID              func(childComplexity int) int
+		ArchivedAt                 func(childComplexity int) int
+		AuthFailedAt               func(childComplexity int) int
+		AuthFailedReason           func(childComplexity int) int
+		CreatedAt                  func(childComplexity int) int
+		Handle                     func(childComplexity int) int
+		HandleAliases              func(childComplexity int) int
+		ID                         func(childComplexity int) int
+		IsOwnedByCurrentUser       func(childComplexity int) int
+		LastCredentialsRefreshedAt func(childComplexity int) int
+		LastSignedInAt             func(childComplexity int) int
+		Name                       func(childComplexity int) int
+		Provider                   func(childComplexity int) int
+		Scopes                     func(childComplexity int) int
+		UpdatedAt                  func(childComplexity int) int
+		UserWorkspaceID            func(childComplexity int) int
+		Visibility                 func(childComplexity int) int
+	}
+
+	CalendarChannel struct {
+		ConnectedAccountID           func(childComplexity int) int
+		ContactAutoCreationPolicy    func(childComplexity int) int
+		CreatedAt                    func(childComplexity int) int
+		Handle                       func(childComplexity int) int
+		ID                           func(childComplexity int) int
+		IsContactAutoCreationEnabled func(childComplexity int) int
+		IsSyncEnabled                func(childComplexity int) int
+		SyncStage                    func(childComplexity int) int
+		SyncStageStartedAt           func(childComplexity int) int
+		SyncStatus                   func(childComplexity int) int
+		SyncedAt                     func(childComplexity int) int
+		ThrottleFailureCount         func(childComplexity int) int
+		UpdatedAt                    func(childComplexity int) int
+		Visibility                   func(childComplexity int) int
+	}
+
+	ConnectedAccountPublicDTO struct {
+		ApplicationID              func(childComplexity int) int
+		ArchivedAt                 func(childComplexity int) int
+		AuthFailedAt               func(childComplexity int) int
+		AuthFailedReason           func(childComplexity int) int
+		CreatedAt                  func(childComplexity int) int
+		Handle                     func(childComplexity int) int
+		HandleAliases              func(childComplexity int) int
+		ID                         func(childComplexity int) int
+		LastCredentialsRefreshedAt func(childComplexity int) int
+		LastSignedInAt             func(childComplexity int) int
+		Name                       func(childComplexity int) int
+		Provider                   func(childComplexity int) int
+		Scopes                     func(childComplexity int) int
+		UpdatedAt                  func(childComplexity int) int
+		UserWorkspaceID            func(childComplexity int) int
+		Visibility                 func(childComplexity int) int
+	}
+
+	CreateEmailGroupChannelOutput struct {
+		ForwardingAddress func(childComplexity int) int
+		MessageChannel    func(childComplexity int) int
+	}
+
+	MessageChannel struct {
+		ConnectedAccount             func(childComplexity int) int
+		ConnectedAccountID           func(childComplexity int) int
+		ContactAutoCreationPolicy    func(childComplexity int) int
+		CreatedAt                    func(childComplexity int) int
+		DisplayName                  func(childComplexity int) int
+		ExcludeGroupEmails           func(childComplexity int) int
+		ExcludeNonProfessionalEmails func(childComplexity int) int
+		Handle                       func(childComplexity int) int
+		ID                           func(childComplexity int) int
+		IsContactAutoCreationEnabled func(childComplexity int) int
+		IsSyncEnabled                func(childComplexity int) int
+		MessageFolderImportPolicy    func(childComplexity int) int
+		PendingGroupEmailsAction     func(childComplexity int) int
+		SyncStage                    func(childComplexity int) int
+		SyncStageStartedAt           func(childComplexity int) int
+		SyncStatus                   func(childComplexity int) int
+		SyncedAt                     func(childComplexity int) int
+		ThrottleFailureCount         func(childComplexity int) int
+		ThrottleRetryAfter           func(childComplexity int) int
+		Type                         func(childComplexity int) int
+		UpdatedAt                    func(childComplexity int) int
+		Visibility                   func(childComplexity int) int
+	}
+
 	Mutation struct {
-		SendEmail func(childComplexity int, input SendEmailInput) int
+		CreateEmailGroupChannel       func(childComplexity int, input map[string]any) int
+		DeleteConnectedAccount        func(childComplexity int, id string) int
+		DeleteEmailGroupChannel       func(childComplexity int, id string) int
+		DisconnectConnectedAccount    func(childComplexity int, id string) int
+		DismissReconnectAccountBanner func(childComplexity int, connectedAccountID string) int
+		SendEmail                     func(childComplexity int, input SendEmailInput) int
+		UpdateCalendarChannel         func(childComplexity int, input map[string]any) int
+		UpdateEmailGroupChannel       func(childComplexity int, input map[string]any) int
+		UpdateMessageChannel          func(childComplexity int, input map[string]any) int
 	}
 
 	Query struct {
+		ApplicationConnectedAccounts        func(childComplexity int, applicationID string) int
+		GetTimelineThreadsFromCompanyID     func(childComplexity int, companyID string, page int, pageSize int) int
+		GetTimelineThreadsFromObjectRecord  func(childComplexity int, objectNameSingular string, recordID string, page int, pageSize int) int
+		GetTimelineThreadsFromOpportunityID func(childComplexity int, opportunityID string, page int, pageSize int) int
+		GetTimelineThreadsFromPersonID      func(childComplexity int, personID string, page int, pageSize int) int
+		MyCalendarChannels                  func(childComplexity int, connectedAccountID *string) int
+		MyConnectedAccounts                 func(childComplexity int) int
+		MyMessageChannels                   func(childComplexity int, connectedAccountID *string) int
 	}
 
 	SendEmailOutput struct {
@@ -46,14 +155,68 @@ type ComplexityRoot struct {
 		MessageThreadID func(childComplexity int) int
 		Success         func(childComplexity int) int
 	}
+
+	TimelineThread struct {
+		FirstParticipant         func(childComplexity int) int
+		ID                       func(childComplexity int) int
+		LastMessageBody          func(childComplexity int) int
+		LastMessageIsDraft       func(childComplexity int) int
+		LastMessageReceivedAt    func(childComplexity int) int
+		LastTwoParticipants      func(childComplexity int) int
+		NumberOfMessagesInThread func(childComplexity int) int
+		ParticipantCount         func(childComplexity int) int
+		Read                     func(childComplexity int) int
+		Subject                  func(childComplexity int) int
+		Visibility               func(childComplexity int) int
+	}
+
+	TimelineThreadParticipant struct {
+		AvatarURL         func(childComplexity int) int
+		DisplayName       func(childComplexity int) int
+		FirstName         func(childComplexity int) int
+		Handle            func(childComplexity int) int
+		LastName          func(childComplexity int) int
+		PersonID          func(childComplexity int) int
+		WorkspaceMemberID func(childComplexity int) int
+	}
+
+	TimelineThreadsWithTotal struct {
+		RelatedPersonIDs     func(childComplexity int) int
+		TimelineThreads      func(childComplexity int) int
+		TotalNumberOfThreads func(childComplexity int) int
+	}
 }
 
 // endregion ***************************** api!.gotpl *****************************
 
 // region    ************************** generated!.gotpl **************************
 
+type MessageChannelResolver interface {
+	ConnectedAccount(ctx context.Context, obj *store.MessageChannel) (*store.Account, error)
+}
 type MutationResolver interface {
+	DeleteConnectedAccount(ctx context.Context, id string) (*store.Account, error)
+	DisconnectConnectedAccount(ctx context.Context, id string) (*store.Account, error)
+	UpdateMessageChannel(ctx context.Context, input map[string]any) (*store.MessageChannel, error)
+	CreateEmailGroupChannel(ctx context.Context, input map[string]any) (*store.EmailGroupChannel, error)
+	UpdateEmailGroupChannel(ctx context.Context, input map[string]any) (*store.MessageChannel, error)
+	DeleteEmailGroupChannel(ctx context.Context, id string) (*store.MessageChannel, error)
+	UpdateCalendarChannel(ctx context.Context, input map[string]any) (*store.CalendarChannel, error)
+	DismissReconnectAccountBanner(ctx context.Context, connectedAccountID string) (bool, error)
 	SendEmail(ctx context.Context, input SendEmailInput) (*SendEmailOutput, error)
+}
+type QueryResolver interface {
+	MyConnectedAccounts(ctx context.Context) ([]*store.Account, error)
+	ApplicationConnectedAccounts(ctx context.Context, applicationID string) ([]*store.ApplicationAccount, error)
+	MyMessageChannels(ctx context.Context, connectedAccountID *string) ([]*store.MessageChannel, error)
+	MyCalendarChannels(ctx context.Context, connectedAccountID *string) ([]*store.CalendarChannel, error)
+	GetTimelineThreadsFromObjectRecord(ctx context.Context, objectNameSingular string, recordID string, page int, pageSize int) (*messaging.TimelineThreadsWithTotal, error)
+	GetTimelineThreadsFromPersonID(ctx context.Context, personID string, page int, pageSize int) (*messaging.TimelineThreadsWithTotal, error)
+	GetTimelineThreadsFromCompanyID(ctx context.Context, companyID string, page int, pageSize int) (*messaging.TimelineThreadsWithTotal, error)
+	GetTimelineThreadsFromOpportunityID(ctx context.Context, opportunityID string, page int, pageSize int) (*messaging.TimelineThreadsWithTotal, error)
+}
+type TimelineThreadResolver interface {
+	LastMessageReceivedAt(ctx context.Context, obj *messaging.TimelineThread) (*metadata.Timestamp, error)
 }
 
 // endregion ************************** generated!.gotpl **************************
@@ -74,6 +237,492 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 	_ = ec
 	switch typeName + "." + field {
 
+	case "ApplicationConnectedAccountDTO.applicationId":
+		if e.ComplexityRoot.ApplicationConnectedAccountDTO.ApplicationID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ApplicationConnectedAccountDTO.ApplicationID(childComplexity), true
+	case "ApplicationConnectedAccountDTO.archivedAt":
+		if e.ComplexityRoot.ApplicationConnectedAccountDTO.ArchivedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ApplicationConnectedAccountDTO.ArchivedAt(childComplexity), true
+	case "ApplicationConnectedAccountDTO.authFailedAt":
+		if e.ComplexityRoot.ApplicationConnectedAccountDTO.AuthFailedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ApplicationConnectedAccountDTO.AuthFailedAt(childComplexity), true
+	case "ApplicationConnectedAccountDTO.authFailedReason":
+		if e.ComplexityRoot.ApplicationConnectedAccountDTO.AuthFailedReason == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ApplicationConnectedAccountDTO.AuthFailedReason(childComplexity), true
+	case "ApplicationConnectedAccountDTO.createdAt":
+		if e.ComplexityRoot.ApplicationConnectedAccountDTO.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ApplicationConnectedAccountDTO.CreatedAt(childComplexity), true
+	case "ApplicationConnectedAccountDTO.handle":
+		if e.ComplexityRoot.ApplicationConnectedAccountDTO.Handle == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ApplicationConnectedAccountDTO.Handle(childComplexity), true
+	case "ApplicationConnectedAccountDTO.handleAliases":
+		if e.ComplexityRoot.ApplicationConnectedAccountDTO.HandleAliases == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ApplicationConnectedAccountDTO.HandleAliases(childComplexity), true
+	case "ApplicationConnectedAccountDTO.id":
+		if e.ComplexityRoot.ApplicationConnectedAccountDTO.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ApplicationConnectedAccountDTO.ID(childComplexity), true
+	case "ApplicationConnectedAccountDTO.isOwnedByCurrentUser":
+		if e.ComplexityRoot.ApplicationConnectedAccountDTO.IsOwnedByCurrentUser == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ApplicationConnectedAccountDTO.IsOwnedByCurrentUser(childComplexity), true
+	case "ApplicationConnectedAccountDTO.lastCredentialsRefreshedAt":
+		if e.ComplexityRoot.ApplicationConnectedAccountDTO.LastCredentialsRefreshedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ApplicationConnectedAccountDTO.LastCredentialsRefreshedAt(childComplexity), true
+	case "ApplicationConnectedAccountDTO.lastSignedInAt":
+		if e.ComplexityRoot.ApplicationConnectedAccountDTO.LastSignedInAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ApplicationConnectedAccountDTO.LastSignedInAt(childComplexity), true
+	case "ApplicationConnectedAccountDTO.name":
+		if e.ComplexityRoot.ApplicationConnectedAccountDTO.Name == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ApplicationConnectedAccountDTO.Name(childComplexity), true
+	case "ApplicationConnectedAccountDTO.provider":
+		if e.ComplexityRoot.ApplicationConnectedAccountDTO.Provider == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ApplicationConnectedAccountDTO.Provider(childComplexity), true
+	case "ApplicationConnectedAccountDTO.scopes":
+		if e.ComplexityRoot.ApplicationConnectedAccountDTO.Scopes == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ApplicationConnectedAccountDTO.Scopes(childComplexity), true
+	case "ApplicationConnectedAccountDTO.updatedAt":
+		if e.ComplexityRoot.ApplicationConnectedAccountDTO.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ApplicationConnectedAccountDTO.UpdatedAt(childComplexity), true
+	case "ApplicationConnectedAccountDTO.userWorkspaceId":
+		if e.ComplexityRoot.ApplicationConnectedAccountDTO.UserWorkspaceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ApplicationConnectedAccountDTO.UserWorkspaceID(childComplexity), true
+	case "ApplicationConnectedAccountDTO.visibility":
+		if e.ComplexityRoot.ApplicationConnectedAccountDTO.Visibility == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ApplicationConnectedAccountDTO.Visibility(childComplexity), true
+
+	case "CalendarChannel.connectedAccountId":
+		if e.ComplexityRoot.CalendarChannel.ConnectedAccountID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CalendarChannel.ConnectedAccountID(childComplexity), true
+	case "CalendarChannel.contactAutoCreationPolicy":
+		if e.ComplexityRoot.CalendarChannel.ContactAutoCreationPolicy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CalendarChannel.ContactAutoCreationPolicy(childComplexity), true
+	case "CalendarChannel.createdAt":
+		if e.ComplexityRoot.CalendarChannel.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CalendarChannel.CreatedAt(childComplexity), true
+	case "CalendarChannel.handle":
+		if e.ComplexityRoot.CalendarChannel.Handle == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CalendarChannel.Handle(childComplexity), true
+	case "CalendarChannel.id":
+		if e.ComplexityRoot.CalendarChannel.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CalendarChannel.ID(childComplexity), true
+	case "CalendarChannel.isContactAutoCreationEnabled":
+		if e.ComplexityRoot.CalendarChannel.IsContactAutoCreationEnabled == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CalendarChannel.IsContactAutoCreationEnabled(childComplexity), true
+	case "CalendarChannel.isSyncEnabled":
+		if e.ComplexityRoot.CalendarChannel.IsSyncEnabled == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CalendarChannel.IsSyncEnabled(childComplexity), true
+	case "CalendarChannel.syncStage":
+		if e.ComplexityRoot.CalendarChannel.SyncStage == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CalendarChannel.SyncStage(childComplexity), true
+	case "CalendarChannel.syncStageStartedAt":
+		if e.ComplexityRoot.CalendarChannel.SyncStageStartedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CalendarChannel.SyncStageStartedAt(childComplexity), true
+	case "CalendarChannel.syncStatus":
+		if e.ComplexityRoot.CalendarChannel.SyncStatus == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CalendarChannel.SyncStatus(childComplexity), true
+	case "CalendarChannel.syncedAt":
+		if e.ComplexityRoot.CalendarChannel.SyncedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CalendarChannel.SyncedAt(childComplexity), true
+	case "CalendarChannel.throttleFailureCount":
+		if e.ComplexityRoot.CalendarChannel.ThrottleFailureCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CalendarChannel.ThrottleFailureCount(childComplexity), true
+	case "CalendarChannel.updatedAt":
+		if e.ComplexityRoot.CalendarChannel.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CalendarChannel.UpdatedAt(childComplexity), true
+	case "CalendarChannel.visibility":
+		if e.ComplexityRoot.CalendarChannel.Visibility == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CalendarChannel.Visibility(childComplexity), true
+
+	case "ConnectedAccountPublicDTO.applicationId":
+		if e.ComplexityRoot.ConnectedAccountPublicDTO.ApplicationID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ConnectedAccountPublicDTO.ApplicationID(childComplexity), true
+	case "ConnectedAccountPublicDTO.archivedAt":
+		if e.ComplexityRoot.ConnectedAccountPublicDTO.ArchivedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ConnectedAccountPublicDTO.ArchivedAt(childComplexity), true
+	case "ConnectedAccountPublicDTO.authFailedAt":
+		if e.ComplexityRoot.ConnectedAccountPublicDTO.AuthFailedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ConnectedAccountPublicDTO.AuthFailedAt(childComplexity), true
+	case "ConnectedAccountPublicDTO.authFailedReason":
+		if e.ComplexityRoot.ConnectedAccountPublicDTO.AuthFailedReason == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ConnectedAccountPublicDTO.AuthFailedReason(childComplexity), true
+	case "ConnectedAccountPublicDTO.createdAt":
+		if e.ComplexityRoot.ConnectedAccountPublicDTO.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ConnectedAccountPublicDTO.CreatedAt(childComplexity), true
+	case "ConnectedAccountPublicDTO.handle":
+		if e.ComplexityRoot.ConnectedAccountPublicDTO.Handle == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ConnectedAccountPublicDTO.Handle(childComplexity), true
+	case "ConnectedAccountPublicDTO.handleAliases":
+		if e.ComplexityRoot.ConnectedAccountPublicDTO.HandleAliases == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ConnectedAccountPublicDTO.HandleAliases(childComplexity), true
+	case "ConnectedAccountPublicDTO.id":
+		if e.ComplexityRoot.ConnectedAccountPublicDTO.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ConnectedAccountPublicDTO.ID(childComplexity), true
+	case "ConnectedAccountPublicDTO.lastCredentialsRefreshedAt":
+		if e.ComplexityRoot.ConnectedAccountPublicDTO.LastCredentialsRefreshedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ConnectedAccountPublicDTO.LastCredentialsRefreshedAt(childComplexity), true
+	case "ConnectedAccountPublicDTO.lastSignedInAt":
+		if e.ComplexityRoot.ConnectedAccountPublicDTO.LastSignedInAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ConnectedAccountPublicDTO.LastSignedInAt(childComplexity), true
+	case "ConnectedAccountPublicDTO.name":
+		if e.ComplexityRoot.ConnectedAccountPublicDTO.Name == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ConnectedAccountPublicDTO.Name(childComplexity), true
+	case "ConnectedAccountPublicDTO.provider":
+		if e.ComplexityRoot.ConnectedAccountPublicDTO.Provider == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ConnectedAccountPublicDTO.Provider(childComplexity), true
+	case "ConnectedAccountPublicDTO.scopes":
+		if e.ComplexityRoot.ConnectedAccountPublicDTO.Scopes == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ConnectedAccountPublicDTO.Scopes(childComplexity), true
+	case "ConnectedAccountPublicDTO.updatedAt":
+		if e.ComplexityRoot.ConnectedAccountPublicDTO.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ConnectedAccountPublicDTO.UpdatedAt(childComplexity), true
+	case "ConnectedAccountPublicDTO.userWorkspaceId":
+		if e.ComplexityRoot.ConnectedAccountPublicDTO.UserWorkspaceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ConnectedAccountPublicDTO.UserWorkspaceID(childComplexity), true
+	case "ConnectedAccountPublicDTO.visibility":
+		if e.ComplexityRoot.ConnectedAccountPublicDTO.Visibility == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ConnectedAccountPublicDTO.Visibility(childComplexity), true
+
+	case "CreateEmailGroupChannelOutput.forwardingAddress":
+		if e.ComplexityRoot.CreateEmailGroupChannelOutput.ForwardingAddress == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CreateEmailGroupChannelOutput.ForwardingAddress(childComplexity), true
+	case "CreateEmailGroupChannelOutput.messageChannel":
+		if e.ComplexityRoot.CreateEmailGroupChannelOutput.MessageChannel == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CreateEmailGroupChannelOutput.MessageChannel(childComplexity), true
+
+	case "MessageChannel.connectedAccount":
+		if e.ComplexityRoot.MessageChannel.ConnectedAccount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MessageChannel.ConnectedAccount(childComplexity), true
+	case "MessageChannel.connectedAccountId":
+		if e.ComplexityRoot.MessageChannel.ConnectedAccountID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MessageChannel.ConnectedAccountID(childComplexity), true
+	case "MessageChannel.contactAutoCreationPolicy":
+		if e.ComplexityRoot.MessageChannel.ContactAutoCreationPolicy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MessageChannel.ContactAutoCreationPolicy(childComplexity), true
+	case "MessageChannel.createdAt":
+		if e.ComplexityRoot.MessageChannel.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MessageChannel.CreatedAt(childComplexity), true
+	case "MessageChannel.displayName":
+		if e.ComplexityRoot.MessageChannel.DisplayName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MessageChannel.DisplayName(childComplexity), true
+	case "MessageChannel.excludeGroupEmails":
+		if e.ComplexityRoot.MessageChannel.ExcludeGroupEmails == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MessageChannel.ExcludeGroupEmails(childComplexity), true
+	case "MessageChannel.excludeNonProfessionalEmails":
+		if e.ComplexityRoot.MessageChannel.ExcludeNonProfessionalEmails == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MessageChannel.ExcludeNonProfessionalEmails(childComplexity), true
+	case "MessageChannel.handle":
+		if e.ComplexityRoot.MessageChannel.Handle == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MessageChannel.Handle(childComplexity), true
+	case "MessageChannel.id":
+		if e.ComplexityRoot.MessageChannel.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MessageChannel.ID(childComplexity), true
+	case "MessageChannel.isContactAutoCreationEnabled":
+		if e.ComplexityRoot.MessageChannel.IsContactAutoCreationEnabled == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MessageChannel.IsContactAutoCreationEnabled(childComplexity), true
+	case "MessageChannel.isSyncEnabled":
+		if e.ComplexityRoot.MessageChannel.IsSyncEnabled == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MessageChannel.IsSyncEnabled(childComplexity), true
+	case "MessageChannel.messageFolderImportPolicy":
+		if e.ComplexityRoot.MessageChannel.MessageFolderImportPolicy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MessageChannel.MessageFolderImportPolicy(childComplexity), true
+	case "MessageChannel.pendingGroupEmailsAction":
+		if e.ComplexityRoot.MessageChannel.PendingGroupEmailsAction == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MessageChannel.PendingGroupEmailsAction(childComplexity), true
+	case "MessageChannel.syncStage":
+		if e.ComplexityRoot.MessageChannel.SyncStage == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MessageChannel.SyncStage(childComplexity), true
+	case "MessageChannel.syncStageStartedAt":
+		if e.ComplexityRoot.MessageChannel.SyncStageStartedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MessageChannel.SyncStageStartedAt(childComplexity), true
+	case "MessageChannel.syncStatus":
+		if e.ComplexityRoot.MessageChannel.SyncStatus == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MessageChannel.SyncStatus(childComplexity), true
+	case "MessageChannel.syncedAt":
+		if e.ComplexityRoot.MessageChannel.SyncedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MessageChannel.SyncedAt(childComplexity), true
+	case "MessageChannel.throttleFailureCount":
+		if e.ComplexityRoot.MessageChannel.ThrottleFailureCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MessageChannel.ThrottleFailureCount(childComplexity), true
+	case "MessageChannel.throttleRetryAfter":
+		if e.ComplexityRoot.MessageChannel.ThrottleRetryAfter == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MessageChannel.ThrottleRetryAfter(childComplexity), true
+	case "MessageChannel.type":
+		if e.ComplexityRoot.MessageChannel.Type == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MessageChannel.Type(childComplexity), true
+	case "MessageChannel.updatedAt":
+		if e.ComplexityRoot.MessageChannel.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MessageChannel.UpdatedAt(childComplexity), true
+	case "MessageChannel.visibility":
+		if e.ComplexityRoot.MessageChannel.Visibility == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MessageChannel.Visibility(childComplexity), true
+
+	case "Mutation.createEmailGroupChannel":
+		if e.ComplexityRoot.Mutation.CreateEmailGroupChannel == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createEmailGroupChannel_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateEmailGroupChannel(childComplexity, args["input"].(map[string]any)), true
+	case "Mutation.deleteConnectedAccount":
+		if e.ComplexityRoot.Mutation.DeleteConnectedAccount == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteConnectedAccount_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.DeleteConnectedAccount(childComplexity, args["id"].(string)), true
+	case "Mutation.deleteEmailGroupChannel":
+		if e.ComplexityRoot.Mutation.DeleteEmailGroupChannel == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteEmailGroupChannel_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.DeleteEmailGroupChannel(childComplexity, args["id"].(string)), true
+	case "Mutation.disconnectConnectedAccount":
+		if e.ComplexityRoot.Mutation.DisconnectConnectedAccount == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_disconnectConnectedAccount_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.DisconnectConnectedAccount(childComplexity, args["id"].(string)), true
+	case "Mutation.dismissReconnectAccountBanner":
+		if e.ComplexityRoot.Mutation.DismissReconnectAccountBanner == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_dismissReconnectAccountBanner_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.DismissReconnectAccountBanner(childComplexity, args["connectedAccountId"].(string)), true
 	case "Mutation.sendEmail":
 		if e.ComplexityRoot.Mutation.SendEmail == nil {
 			break
@@ -85,6 +734,124 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.SendEmail(childComplexity, args["input"].(SendEmailInput)), true
+	case "Mutation.updateCalendarChannel":
+		if e.ComplexityRoot.Mutation.UpdateCalendarChannel == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateCalendarChannel_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateCalendarChannel(childComplexity, args["input"].(map[string]any)), true
+	case "Mutation.updateEmailGroupChannel":
+		if e.ComplexityRoot.Mutation.UpdateEmailGroupChannel == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateEmailGroupChannel_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateEmailGroupChannel(childComplexity, args["input"].(map[string]any)), true
+	case "Mutation.updateMessageChannel":
+		if e.ComplexityRoot.Mutation.UpdateMessageChannel == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateMessageChannel_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateMessageChannel(childComplexity, args["input"].(map[string]any)), true
+
+	case "Query.applicationConnectedAccounts":
+		if e.ComplexityRoot.Query.ApplicationConnectedAccounts == nil {
+			break
+		}
+
+		args, err := ec.field_Query_applicationConnectedAccounts_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.ApplicationConnectedAccounts(childComplexity, args["applicationId"].(string)), true
+	case "Query.getTimelineThreadsFromCompanyId":
+		if e.ComplexityRoot.Query.GetTimelineThreadsFromCompanyID == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getTimelineThreadsFromCompanyId_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.GetTimelineThreadsFromCompanyID(childComplexity, args["companyId"].(string), args["page"].(int), args["pageSize"].(int)), true
+	case "Query.getTimelineThreadsFromObjectRecord":
+		if e.ComplexityRoot.Query.GetTimelineThreadsFromObjectRecord == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getTimelineThreadsFromObjectRecord_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.GetTimelineThreadsFromObjectRecord(childComplexity, args["objectNameSingular"].(string), args["recordId"].(string), args["page"].(int), args["pageSize"].(int)), true
+	case "Query.getTimelineThreadsFromOpportunityId":
+		if e.ComplexityRoot.Query.GetTimelineThreadsFromOpportunityID == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getTimelineThreadsFromOpportunityId_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.GetTimelineThreadsFromOpportunityID(childComplexity, args["opportunityId"].(string), args["page"].(int), args["pageSize"].(int)), true
+	case "Query.getTimelineThreadsFromPersonId":
+		if e.ComplexityRoot.Query.GetTimelineThreadsFromPersonID == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getTimelineThreadsFromPersonId_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.GetTimelineThreadsFromPersonID(childComplexity, args["personId"].(string), args["page"].(int), args["pageSize"].(int)), true
+
+	case "Query.myCalendarChannels":
+		if e.ComplexityRoot.Query.MyCalendarChannels == nil {
+			break
+		}
+
+		args, err := ec.field_Query_myCalendarChannels_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.MyCalendarChannels(childComplexity, args["connectedAccountId"].(*string)), true
+	case "Query.myConnectedAccounts":
+		if e.ComplexityRoot.Query.MyConnectedAccounts == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Query.MyConnectedAccounts(childComplexity), true
+	case "Query.myMessageChannels":
+		if e.ComplexityRoot.Query.MyMessageChannels == nil {
+			break
+		}
+
+		args, err := ec.field_Query_myMessageChannels_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.MyMessageChannels(childComplexity, args["connectedAccountId"].(*string)), true
 
 	case "SendEmailOutput.error":
 		if e.ComplexityRoot.SendEmailOutput.Error == nil {
@@ -105,6 +872,135 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.SendEmailOutput.Success(childComplexity), true
 
+	case "TimelineThread.firstParticipant":
+		if e.ComplexityRoot.TimelineThread.FirstParticipant == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TimelineThread.FirstParticipant(childComplexity), true
+	case "TimelineThread.id":
+		if e.ComplexityRoot.TimelineThread.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TimelineThread.ID(childComplexity), true
+	case "TimelineThread.lastMessageBody":
+		if e.ComplexityRoot.TimelineThread.LastMessageBody == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TimelineThread.LastMessageBody(childComplexity), true
+	case "TimelineThread.lastMessageIsDraft":
+		if e.ComplexityRoot.TimelineThread.LastMessageIsDraft == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TimelineThread.LastMessageIsDraft(childComplexity), true
+	case "TimelineThread.lastMessageReceivedAt":
+		if e.ComplexityRoot.TimelineThread.LastMessageReceivedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TimelineThread.LastMessageReceivedAt(childComplexity), true
+	case "TimelineThread.lastTwoParticipants":
+		if e.ComplexityRoot.TimelineThread.LastTwoParticipants == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TimelineThread.LastTwoParticipants(childComplexity), true
+	case "TimelineThread.numberOfMessagesInThread":
+		if e.ComplexityRoot.TimelineThread.NumberOfMessagesInThread == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TimelineThread.NumberOfMessagesInThread(childComplexity), true
+	case "TimelineThread.participantCount":
+		if e.ComplexityRoot.TimelineThread.ParticipantCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TimelineThread.ParticipantCount(childComplexity), true
+	case "TimelineThread.read":
+		if e.ComplexityRoot.TimelineThread.Read == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TimelineThread.Read(childComplexity), true
+	case "TimelineThread.subject":
+		if e.ComplexityRoot.TimelineThread.Subject == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TimelineThread.Subject(childComplexity), true
+	case "TimelineThread.visibility":
+		if e.ComplexityRoot.TimelineThread.Visibility == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TimelineThread.Visibility(childComplexity), true
+
+	case "TimelineThreadParticipant.avatarUrl":
+		if e.ComplexityRoot.TimelineThreadParticipant.AvatarURL == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TimelineThreadParticipant.AvatarURL(childComplexity), true
+	case "TimelineThreadParticipant.displayName":
+		if e.ComplexityRoot.TimelineThreadParticipant.DisplayName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TimelineThreadParticipant.DisplayName(childComplexity), true
+	case "TimelineThreadParticipant.firstName":
+		if e.ComplexityRoot.TimelineThreadParticipant.FirstName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TimelineThreadParticipant.FirstName(childComplexity), true
+	case "TimelineThreadParticipant.handle":
+		if e.ComplexityRoot.TimelineThreadParticipant.Handle == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TimelineThreadParticipant.Handle(childComplexity), true
+	case "TimelineThreadParticipant.lastName":
+		if e.ComplexityRoot.TimelineThreadParticipant.LastName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TimelineThreadParticipant.LastName(childComplexity), true
+	case "TimelineThreadParticipant.personId":
+		if e.ComplexityRoot.TimelineThreadParticipant.PersonID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TimelineThreadParticipant.PersonID(childComplexity), true
+	case "TimelineThreadParticipant.workspaceMemberId":
+		if e.ComplexityRoot.TimelineThreadParticipant.WorkspaceMemberID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TimelineThreadParticipant.WorkspaceMemberID(childComplexity), true
+
+	case "TimelineThreadsWithTotal.relatedPersonIds":
+		if e.ComplexityRoot.TimelineThreadsWithTotal.RelatedPersonIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TimelineThreadsWithTotal.RelatedPersonIDs(childComplexity), true
+	case "TimelineThreadsWithTotal.timelineThreads":
+		if e.ComplexityRoot.TimelineThreadsWithTotal.TimelineThreads == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TimelineThreadsWithTotal.TimelineThreads(childComplexity), true
+	case "TimelineThreadsWithTotal.totalNumberOfThreads":
+		if e.ComplexityRoot.TimelineThreadsWithTotal.TotalNumberOfThreads == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TimelineThreadsWithTotal.TotalNumberOfThreads(childComplexity), true
+
 	}
 	return 0, false
 }
@@ -114,8 +1010,14 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	ec := newExecutionContext(opCtx, e, make(chan graphql.DeferredResult))
 	inputUnmarshalers := func() *graphql.InputUnmarshalerIndex {
 		return graphql.NewInputUnmarshalerIndex(
+			graphql.NewInputUnmarshaler("CreateEmailGroupChannelInput", ec.unmarshalInputCreateEmailGroupChannelInput),
 			graphql.NewInputUnmarshaler("SendEmailAttachmentInput", ec.unmarshalInputSendEmailAttachmentInput),
 			graphql.NewInputUnmarshaler("SendEmailInput", ec.unmarshalInputSendEmailInput),
+			graphql.NewInputUnmarshaler("UpdateCalendarChannelInput", ec.unmarshalInputUpdateCalendarChannelInput),
+			graphql.NewInputUnmarshaler("UpdateCalendarChannelInputUpdates", ec.unmarshalInputUpdateCalendarChannelInputUpdates),
+			graphql.NewInputUnmarshaler("UpdateEmailGroupChannelInput", ec.unmarshalInputUpdateEmailGroupChannelInput),
+			graphql.NewInputUnmarshaler("UpdateMessageChannelInput", ec.unmarshalInputUpdateMessageChannelInput),
+			graphql.NewInputUnmarshaler("UpdateMessageChannelInputUpdates", ec.unmarshalInputUpdateMessageChannelInputUpdates),
 		)
 	}
 	first := true
@@ -191,7 +1093,7 @@ func newExecutionContext(
 	}
 }
 
-//go:embed "send.graphqls"
+//go:embed "timeline.graphqls" "messaging.graphqls" "send.graphqls"
 var sourcesFS embed.FS
 
 func sourceData(filename string) string {
@@ -203,6 +1105,8 @@ func sourceData(filename string) string {
 }
 
 var sources = []*ast.Source{
+	{Name: "timeline.graphqls", Input: sourceData("timeline.graphqls"), BuiltIn: false},
+	{Name: "messaging.graphqls", Input: sourceData("messaging.graphqls"), BuiltIn: false},
 	{Name: "send.graphqls", Input: sourceData("send.graphqls"), BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
@@ -210,6 +1114,178 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 // childFields_* functions provide shared child field context lookups.
 // Each function is generated once per unique object type, deduplicating the
 // switch statements that were previously inlined in every fieldContext_* function.
+
+func (ec *executionContext) childFields_ApplicationConnectedAccountDTO(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_ApplicationConnectedAccountDTO_id(ctx, field)
+	case "handle":
+		return ec.fieldContext_ApplicationConnectedAccountDTO_handle(ctx, field)
+	case "provider":
+		return ec.fieldContext_ApplicationConnectedAccountDTO_provider(ctx, field)
+	case "lastCredentialsRefreshedAt":
+		return ec.fieldContext_ApplicationConnectedAccountDTO_lastCredentialsRefreshedAt(ctx, field)
+	case "authFailedAt":
+		return ec.fieldContext_ApplicationConnectedAccountDTO_authFailedAt(ctx, field)
+	case "authFailedReason":
+		return ec.fieldContext_ApplicationConnectedAccountDTO_authFailedReason(ctx, field)
+	case "archivedAt":
+		return ec.fieldContext_ApplicationConnectedAccountDTO_archivedAt(ctx, field)
+	case "handleAliases":
+		return ec.fieldContext_ApplicationConnectedAccountDTO_handleAliases(ctx, field)
+	case "scopes":
+		return ec.fieldContext_ApplicationConnectedAccountDTO_scopes(ctx, field)
+	case "lastSignedInAt":
+		return ec.fieldContext_ApplicationConnectedAccountDTO_lastSignedInAt(ctx, field)
+	case "userWorkspaceId":
+		return ec.fieldContext_ApplicationConnectedAccountDTO_userWorkspaceId(ctx, field)
+	case "applicationId":
+		return ec.fieldContext_ApplicationConnectedAccountDTO_applicationId(ctx, field)
+	case "name":
+		return ec.fieldContext_ApplicationConnectedAccountDTO_name(ctx, field)
+	case "visibility":
+		return ec.fieldContext_ApplicationConnectedAccountDTO_visibility(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_ApplicationConnectedAccountDTO_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_ApplicationConnectedAccountDTO_updatedAt(ctx, field)
+	case "isOwnedByCurrentUser":
+		return ec.fieldContext_ApplicationConnectedAccountDTO_isOwnedByCurrentUser(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ApplicationConnectedAccountDTO", field.Name)
+}
+
+func (ec *executionContext) childFields_CalendarChannel(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_CalendarChannel_id(ctx, field)
+	case "handle":
+		return ec.fieldContext_CalendarChannel_handle(ctx, field)
+	case "syncStatus":
+		return ec.fieldContext_CalendarChannel_syncStatus(ctx, field)
+	case "syncStage":
+		return ec.fieldContext_CalendarChannel_syncStage(ctx, field)
+	case "visibility":
+		return ec.fieldContext_CalendarChannel_visibility(ctx, field)
+	case "isContactAutoCreationEnabled":
+		return ec.fieldContext_CalendarChannel_isContactAutoCreationEnabled(ctx, field)
+	case "contactAutoCreationPolicy":
+		return ec.fieldContext_CalendarChannel_contactAutoCreationPolicy(ctx, field)
+	case "isSyncEnabled":
+		return ec.fieldContext_CalendarChannel_isSyncEnabled(ctx, field)
+	case "syncedAt":
+		return ec.fieldContext_CalendarChannel_syncedAt(ctx, field)
+	case "syncStageStartedAt":
+		return ec.fieldContext_CalendarChannel_syncStageStartedAt(ctx, field)
+	case "throttleFailureCount":
+		return ec.fieldContext_CalendarChannel_throttleFailureCount(ctx, field)
+	case "connectedAccountId":
+		return ec.fieldContext_CalendarChannel_connectedAccountId(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_CalendarChannel_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_CalendarChannel_updatedAt(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type CalendarChannel", field.Name)
+}
+
+func (ec *executionContext) childFields_ConnectedAccountPublicDTO(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_ConnectedAccountPublicDTO_id(ctx, field)
+	case "handle":
+		return ec.fieldContext_ConnectedAccountPublicDTO_handle(ctx, field)
+	case "provider":
+		return ec.fieldContext_ConnectedAccountPublicDTO_provider(ctx, field)
+	case "lastCredentialsRefreshedAt":
+		return ec.fieldContext_ConnectedAccountPublicDTO_lastCredentialsRefreshedAt(ctx, field)
+	case "authFailedAt":
+		return ec.fieldContext_ConnectedAccountPublicDTO_authFailedAt(ctx, field)
+	case "authFailedReason":
+		return ec.fieldContext_ConnectedAccountPublicDTO_authFailedReason(ctx, field)
+	case "archivedAt":
+		return ec.fieldContext_ConnectedAccountPublicDTO_archivedAt(ctx, field)
+	case "handleAliases":
+		return ec.fieldContext_ConnectedAccountPublicDTO_handleAliases(ctx, field)
+	case "scopes":
+		return ec.fieldContext_ConnectedAccountPublicDTO_scopes(ctx, field)
+	case "lastSignedInAt":
+		return ec.fieldContext_ConnectedAccountPublicDTO_lastSignedInAt(ctx, field)
+	case "userWorkspaceId":
+		return ec.fieldContext_ConnectedAccountPublicDTO_userWorkspaceId(ctx, field)
+	case "applicationId":
+		return ec.fieldContext_ConnectedAccountPublicDTO_applicationId(ctx, field)
+	case "name":
+		return ec.fieldContext_ConnectedAccountPublicDTO_name(ctx, field)
+	case "visibility":
+		return ec.fieldContext_ConnectedAccountPublicDTO_visibility(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_ConnectedAccountPublicDTO_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_ConnectedAccountPublicDTO_updatedAt(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ConnectedAccountPublicDTO", field.Name)
+}
+
+func (ec *executionContext) childFields_CreateEmailGroupChannelOutput(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "messageChannel":
+		return ec.fieldContext_CreateEmailGroupChannelOutput_messageChannel(ctx, field)
+	case "forwardingAddress":
+		return ec.fieldContext_CreateEmailGroupChannelOutput_forwardingAddress(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type CreateEmailGroupChannelOutput", field.Name)
+}
+
+func (ec *executionContext) childFields_MessageChannel(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_MessageChannel_id(ctx, field)
+	case "visibility":
+		return ec.fieldContext_MessageChannel_visibility(ctx, field)
+	case "handle":
+		return ec.fieldContext_MessageChannel_handle(ctx, field)
+	case "displayName":
+		return ec.fieldContext_MessageChannel_displayName(ctx, field)
+	case "type":
+		return ec.fieldContext_MessageChannel_type(ctx, field)
+	case "isContactAutoCreationEnabled":
+		return ec.fieldContext_MessageChannel_isContactAutoCreationEnabled(ctx, field)
+	case "contactAutoCreationPolicy":
+		return ec.fieldContext_MessageChannel_contactAutoCreationPolicy(ctx, field)
+	case "messageFolderImportPolicy":
+		return ec.fieldContext_MessageChannel_messageFolderImportPolicy(ctx, field)
+	case "excludeNonProfessionalEmails":
+		return ec.fieldContext_MessageChannel_excludeNonProfessionalEmails(ctx, field)
+	case "excludeGroupEmails":
+		return ec.fieldContext_MessageChannel_excludeGroupEmails(ctx, field)
+	case "pendingGroupEmailsAction":
+		return ec.fieldContext_MessageChannel_pendingGroupEmailsAction(ctx, field)
+	case "isSyncEnabled":
+		return ec.fieldContext_MessageChannel_isSyncEnabled(ctx, field)
+	case "syncedAt":
+		return ec.fieldContext_MessageChannel_syncedAt(ctx, field)
+	case "syncStatus":
+		return ec.fieldContext_MessageChannel_syncStatus(ctx, field)
+	case "syncStage":
+		return ec.fieldContext_MessageChannel_syncStage(ctx, field)
+	case "syncStageStartedAt":
+		return ec.fieldContext_MessageChannel_syncStageStartedAt(ctx, field)
+	case "throttleFailureCount":
+		return ec.fieldContext_MessageChannel_throttleFailureCount(ctx, field)
+	case "throttleRetryAfter":
+		return ec.fieldContext_MessageChannel_throttleRetryAfter(ctx, field)
+	case "connectedAccountId":
+		return ec.fieldContext_MessageChannel_connectedAccountId(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_MessageChannel_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_MessageChannel_updatedAt(ctx, field)
+	case "connectedAccount":
+		return ec.fieldContext_MessageChannel_connectedAccount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type MessageChannel", field.Name)
+}
 
 func (ec *executionContext) childFields_SendEmailOutput(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
@@ -221,6 +1297,66 @@ func (ec *executionContext) childFields_SendEmailOutput(ctx context.Context, fie
 		return ec.fieldContext_SendEmailOutput_messageThreadId(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type SendEmailOutput", field.Name)
+}
+
+func (ec *executionContext) childFields_TimelineThread(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_TimelineThread_id(ctx, field)
+	case "read":
+		return ec.fieldContext_TimelineThread_read(ctx, field)
+	case "visibility":
+		return ec.fieldContext_TimelineThread_visibility(ctx, field)
+	case "firstParticipant":
+		return ec.fieldContext_TimelineThread_firstParticipant(ctx, field)
+	case "lastTwoParticipants":
+		return ec.fieldContext_TimelineThread_lastTwoParticipants(ctx, field)
+	case "lastMessageReceivedAt":
+		return ec.fieldContext_TimelineThread_lastMessageReceivedAt(ctx, field)
+	case "lastMessageBody":
+		return ec.fieldContext_TimelineThread_lastMessageBody(ctx, field)
+	case "subject":
+		return ec.fieldContext_TimelineThread_subject(ctx, field)
+	case "numberOfMessagesInThread":
+		return ec.fieldContext_TimelineThread_numberOfMessagesInThread(ctx, field)
+	case "participantCount":
+		return ec.fieldContext_TimelineThread_participantCount(ctx, field)
+	case "lastMessageIsDraft":
+		return ec.fieldContext_TimelineThread_lastMessageIsDraft(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TimelineThread", field.Name)
+}
+
+func (ec *executionContext) childFields_TimelineThreadParticipant(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "personId":
+		return ec.fieldContext_TimelineThreadParticipant_personId(ctx, field)
+	case "workspaceMemberId":
+		return ec.fieldContext_TimelineThreadParticipant_workspaceMemberId(ctx, field)
+	case "firstName":
+		return ec.fieldContext_TimelineThreadParticipant_firstName(ctx, field)
+	case "lastName":
+		return ec.fieldContext_TimelineThreadParticipant_lastName(ctx, field)
+	case "displayName":
+		return ec.fieldContext_TimelineThreadParticipant_displayName(ctx, field)
+	case "avatarUrl":
+		return ec.fieldContext_TimelineThreadParticipant_avatarUrl(ctx, field)
+	case "handle":
+		return ec.fieldContext_TimelineThreadParticipant_handle(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TimelineThreadParticipant", field.Name)
+}
+
+func (ec *executionContext) childFields_TimelineThreadsWithTotal(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "totalNumberOfThreads":
+		return ec.fieldContext_TimelineThreadsWithTotal_totalNumberOfThreads(ctx, field)
+	case "timelineThreads":
+		return ec.fieldContext_TimelineThreadsWithTotal_timelineThreads(ctx, field)
+	case "relatedPersonIds":
+		return ec.fieldContext_TimelineThreadsWithTotal_relatedPersonIds(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TimelineThreadsWithTotal", field.Name)
 }
 
 func (ec *executionContext) childFields___Directive(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -339,12 +1475,124 @@ func (ec *executionContext) childFields___Type(ctx context.Context, field graphq
 
 // region    ***************************** args.gotpl *****************************
 
+func (ec *executionContext) field_Mutation_createEmailGroupChannel_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
+		func(ctx context.Context, v any) (map[string]any, error) {
+			return ec.unmarshalNCreateEmailGroupChannelInput2map(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteConnectedAccount_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNUUID2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteEmailGroupChannel_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNUUID2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_disconnectConnectedAccount_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNUUID2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_dismissReconnectAccountBanner_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "connectedAccountId",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNUUID2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["connectedAccountId"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_sendEmail_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
 		func(ctx context.Context, v any) (SendEmailInput, error) {
 			return ec.unmarshalNSendEmailInput2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋmessaginggqlᚐSendEmailInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateCalendarChannel_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
+		func(ctx context.Context, v any) (map[string]any, error) {
+			return ec.unmarshalNUpdateCalendarChannelInput2map(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateEmailGroupChannel_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
+		func(ctx context.Context, v any) (map[string]any, error) {
+			return ec.unmarshalNUpdateEmailGroupChannelInput2map(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateMessageChannel_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
+		func(ctx context.Context, v any) (map[string]any, error) {
+			return ec.unmarshalNUpdateMessageChannelInput2map(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -364,6 +1612,176 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 		return nil, err
 	}
 	args["name"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_applicationConnectedAccounts_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "applicationId",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNUUID2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["applicationId"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getTimelineThreadsFromCompanyId_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "companyId",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNUUID2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["companyId"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "page",
+		func(ctx context.Context, v any) (int, error) {
+			return ec.unmarshalNInt2int(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["page"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "pageSize",
+		func(ctx context.Context, v any) (int, error) {
+			return ec.unmarshalNInt2int(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["pageSize"] = arg2
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getTimelineThreadsFromObjectRecord_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "objectNameSingular",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["objectNameSingular"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "recordId",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNUUID2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["recordId"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "page",
+		func(ctx context.Context, v any) (int, error) {
+			return ec.unmarshalNInt2int(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["page"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "pageSize",
+		func(ctx context.Context, v any) (int, error) {
+			return ec.unmarshalNInt2int(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["pageSize"] = arg3
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getTimelineThreadsFromOpportunityId_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "opportunityId",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNUUID2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["opportunityId"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "page",
+		func(ctx context.Context, v any) (int, error) {
+			return ec.unmarshalNInt2int(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["page"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "pageSize",
+		func(ctx context.Context, v any) (int, error) {
+			return ec.unmarshalNInt2int(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["pageSize"] = arg2
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getTimelineThreadsFromPersonId_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "personId",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNUUID2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["personId"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "page",
+		func(ctx context.Context, v any) (int, error) {
+			return ec.unmarshalNInt2int(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["page"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "pageSize",
+		func(ctx context.Context, v any) (int, error) {
+			return ec.unmarshalNInt2int(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["pageSize"] = arg2
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_myCalendarChannels_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "connectedAccountId",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOUUID2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["connectedAccountId"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_myMessageChannels_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "connectedAccountId",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOUUID2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["connectedAccountId"] = arg0
 	return args, nil
 }
 
@@ -441,6 +1859,2009 @@ func (ec *executionContext) field___Type_inputFields_args(ctx context.Context, r
 
 // region    **************************** field.gotpl *****************************
 
+func (ec *executionContext) _ApplicationConnectedAccountDTO_id(ctx context.Context, field graphql.CollectedField, obj *store.ApplicationAccount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ApplicationConnectedAccountDTO_id(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNUUID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ApplicationConnectedAccountDTO_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ApplicationConnectedAccountDTO", field, false, false, "UUID")
+}
+
+func (ec *executionContext) _ApplicationConnectedAccountDTO_handle(ctx context.Context, field graphql.CollectedField, obj *store.ApplicationAccount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ApplicationConnectedAccountDTO_handle(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Handle, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ApplicationConnectedAccountDTO_handle(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ApplicationConnectedAccountDTO", field, false, false, "String")
+}
+
+func (ec *executionContext) _ApplicationConnectedAccountDTO_provider(ctx context.Context, field graphql.CollectedField, obj *store.ApplicationAccount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ApplicationConnectedAccountDTO_provider(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Provider, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ApplicationConnectedAccountDTO_provider(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ApplicationConnectedAccountDTO", field, false, false, "String")
+}
+
+func (ec *executionContext) _ApplicationConnectedAccountDTO_lastCredentialsRefreshedAt(ctx context.Context, field graphql.CollectedField, obj *store.ApplicationAccount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ApplicationConnectedAccountDTO_lastCredentialsRefreshedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.LastCredentialsRefreshedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *metadata.Timestamp) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ApplicationConnectedAccountDTO_lastCredentialsRefreshedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ApplicationConnectedAccountDTO", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _ApplicationConnectedAccountDTO_authFailedAt(ctx context.Context, field graphql.CollectedField, obj *store.ApplicationAccount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ApplicationConnectedAccountDTO_authFailedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AuthFailedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *metadata.Timestamp) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ApplicationConnectedAccountDTO_authFailedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ApplicationConnectedAccountDTO", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _ApplicationConnectedAccountDTO_authFailedReason(ctx context.Context, field graphql.CollectedField, obj *store.ApplicationAccount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ApplicationConnectedAccountDTO_authFailedReason(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AuthFailedReason, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ApplicationConnectedAccountDTO_authFailedReason(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ApplicationConnectedAccountDTO", field, false, false, "String")
+}
+
+func (ec *executionContext) _ApplicationConnectedAccountDTO_archivedAt(ctx context.Context, field graphql.CollectedField, obj *store.ApplicationAccount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ApplicationConnectedAccountDTO_archivedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ArchivedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *metadata.Timestamp) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ApplicationConnectedAccountDTO_archivedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ApplicationConnectedAccountDTO", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _ApplicationConnectedAccountDTO_handleAliases(ctx context.Context, field graphql.CollectedField, obj *store.ApplicationAccount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ApplicationConnectedAccountDTO_handleAliases(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.HandleAliases, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOString2ᚕstringᚄ(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ApplicationConnectedAccountDTO_handleAliases(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ApplicationConnectedAccountDTO", field, false, false, "String")
+}
+
+func (ec *executionContext) _ApplicationConnectedAccountDTO_scopes(ctx context.Context, field graphql.CollectedField, obj *store.ApplicationAccount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ApplicationConnectedAccountDTO_scopes(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Scopes, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOString2ᚕstringᚄ(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ApplicationConnectedAccountDTO_scopes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ApplicationConnectedAccountDTO", field, false, false, "String")
+}
+
+func (ec *executionContext) _ApplicationConnectedAccountDTO_lastSignedInAt(ctx context.Context, field graphql.CollectedField, obj *store.ApplicationAccount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ApplicationConnectedAccountDTO_lastSignedInAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.LastSignedInAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *metadata.Timestamp) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ApplicationConnectedAccountDTO_lastSignedInAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ApplicationConnectedAccountDTO", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _ApplicationConnectedAccountDTO_userWorkspaceId(ctx context.Context, field graphql.CollectedField, obj *store.ApplicationAccount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ApplicationConnectedAccountDTO_userWorkspaceId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UserWorkspaceID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNUUID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ApplicationConnectedAccountDTO_userWorkspaceId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ApplicationConnectedAccountDTO", field, false, false, "UUID")
+}
+
+func (ec *executionContext) _ApplicationConnectedAccountDTO_applicationId(ctx context.Context, field graphql.CollectedField, obj *store.ApplicationAccount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ApplicationConnectedAccountDTO_applicationId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ApplicationID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOUUID2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ApplicationConnectedAccountDTO_applicationId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ApplicationConnectedAccountDTO", field, false, false, "UUID")
+}
+
+func (ec *executionContext) _ApplicationConnectedAccountDTO_name(ctx context.Context, field graphql.CollectedField, obj *store.ApplicationAccount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ApplicationConnectedAccountDTO_name(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Name, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ApplicationConnectedAccountDTO_name(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ApplicationConnectedAccountDTO", field, false, false, "String")
+}
+
+func (ec *executionContext) _ApplicationConnectedAccountDTO_visibility(ctx context.Context, field graphql.CollectedField, obj *store.ApplicationAccount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ApplicationConnectedAccountDTO_visibility(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Visibility, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ApplicationConnectedAccountDTO_visibility(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ApplicationConnectedAccountDTO", field, false, false, "String")
+}
+
+func (ec *executionContext) _ApplicationConnectedAccountDTO_createdAt(ctx context.Context, field graphql.CollectedField, obj *store.ApplicationAccount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ApplicationConnectedAccountDTO_createdAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v metadata.Timestamp) graphql.Marshaler {
+			return ec.marshalNDateTime2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ApplicationConnectedAccountDTO_createdAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ApplicationConnectedAccountDTO", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _ApplicationConnectedAccountDTO_updatedAt(ctx context.Context, field graphql.CollectedField, obj *store.ApplicationAccount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ApplicationConnectedAccountDTO_updatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v metadata.Timestamp) graphql.Marshaler {
+			return ec.marshalNDateTime2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ApplicationConnectedAccountDTO_updatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ApplicationConnectedAccountDTO", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _ApplicationConnectedAccountDTO_isOwnedByCurrentUser(ctx context.Context, field graphql.CollectedField, obj *store.ApplicationAccount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ApplicationConnectedAccountDTO_isOwnedByCurrentUser(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.IsOwnedByCurrentUser, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ApplicationConnectedAccountDTO_isOwnedByCurrentUser(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ApplicationConnectedAccountDTO", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _CalendarChannel_id(ctx context.Context, field graphql.CollectedField, obj *store.CalendarChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CalendarChannel_id(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNUUID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CalendarChannel_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CalendarChannel", field, false, false, "UUID")
+}
+
+func (ec *executionContext) _CalendarChannel_handle(ctx context.Context, field graphql.CollectedField, obj *store.CalendarChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CalendarChannel_handle(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Handle, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CalendarChannel_handle(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CalendarChannel", field, false, false, "String")
+}
+
+func (ec *executionContext) _CalendarChannel_syncStatus(ctx context.Context, field graphql.CollectedField, obj *store.CalendarChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CalendarChannel_syncStatus(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SyncStatus, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNCalendarChannelSyncStatus2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CalendarChannel_syncStatus(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CalendarChannel", field, false, false, "CalendarChannelSyncStatus")
+}
+
+func (ec *executionContext) _CalendarChannel_syncStage(ctx context.Context, field graphql.CollectedField, obj *store.CalendarChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CalendarChannel_syncStage(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SyncStage, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNCalendarChannelSyncStage2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CalendarChannel_syncStage(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CalendarChannel", field, false, false, "CalendarChannelSyncStage")
+}
+
+func (ec *executionContext) _CalendarChannel_visibility(ctx context.Context, field graphql.CollectedField, obj *store.CalendarChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CalendarChannel_visibility(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Visibility, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNCalendarChannelVisibility2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CalendarChannel_visibility(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CalendarChannel", field, false, false, "CalendarChannelVisibility")
+}
+
+func (ec *executionContext) _CalendarChannel_isContactAutoCreationEnabled(ctx context.Context, field graphql.CollectedField, obj *store.CalendarChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CalendarChannel_isContactAutoCreationEnabled(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.IsContactAutoCreationEnabled, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CalendarChannel_isContactAutoCreationEnabled(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CalendarChannel", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _CalendarChannel_contactAutoCreationPolicy(ctx context.Context, field graphql.CollectedField, obj *store.CalendarChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CalendarChannel_contactAutoCreationPolicy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ContactAutoCreationPolicy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNCalendarChannelContactAutoCreationPolicy2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CalendarChannel_contactAutoCreationPolicy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CalendarChannel", field, false, false, "CalendarChannelContactAutoCreationPolicy")
+}
+
+func (ec *executionContext) _CalendarChannel_isSyncEnabled(ctx context.Context, field graphql.CollectedField, obj *store.CalendarChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CalendarChannel_isSyncEnabled(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.IsSyncEnabled, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CalendarChannel_isSyncEnabled(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CalendarChannel", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _CalendarChannel_syncedAt(ctx context.Context, field graphql.CollectedField, obj *store.CalendarChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CalendarChannel_syncedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SyncedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *metadata.Timestamp) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CalendarChannel_syncedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CalendarChannel", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _CalendarChannel_syncStageStartedAt(ctx context.Context, field graphql.CollectedField, obj *store.CalendarChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CalendarChannel_syncStageStartedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SyncStageStartedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *metadata.Timestamp) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CalendarChannel_syncStageStartedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CalendarChannel", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _CalendarChannel_throttleFailureCount(ctx context.Context, field graphql.CollectedField, obj *store.CalendarChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CalendarChannel_throttleFailureCount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ThrottleFailureCount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CalendarChannel_throttleFailureCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CalendarChannel", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CalendarChannel_connectedAccountId(ctx context.Context, field graphql.CollectedField, obj *store.CalendarChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CalendarChannel_connectedAccountId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ConnectedAccountID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNUUID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CalendarChannel_connectedAccountId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CalendarChannel", field, false, false, "UUID")
+}
+
+func (ec *executionContext) _CalendarChannel_createdAt(ctx context.Context, field graphql.CollectedField, obj *store.CalendarChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CalendarChannel_createdAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v metadata.Timestamp) graphql.Marshaler {
+			return ec.marshalNDateTime2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CalendarChannel_createdAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CalendarChannel", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _CalendarChannel_updatedAt(ctx context.Context, field graphql.CollectedField, obj *store.CalendarChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CalendarChannel_updatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v metadata.Timestamp) graphql.Marshaler {
+			return ec.marshalNDateTime2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CalendarChannel_updatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CalendarChannel", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _ConnectedAccountPublicDTO_id(ctx context.Context, field graphql.CollectedField, obj *store.Account) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ConnectedAccountPublicDTO_id(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNUUID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ConnectedAccountPublicDTO_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ConnectedAccountPublicDTO", field, false, false, "UUID")
+}
+
+func (ec *executionContext) _ConnectedAccountPublicDTO_handle(ctx context.Context, field graphql.CollectedField, obj *store.Account) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ConnectedAccountPublicDTO_handle(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Handle, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ConnectedAccountPublicDTO_handle(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ConnectedAccountPublicDTO", field, false, false, "String")
+}
+
+func (ec *executionContext) _ConnectedAccountPublicDTO_provider(ctx context.Context, field graphql.CollectedField, obj *store.Account) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ConnectedAccountPublicDTO_provider(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Provider, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ConnectedAccountPublicDTO_provider(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ConnectedAccountPublicDTO", field, false, false, "String")
+}
+
+func (ec *executionContext) _ConnectedAccountPublicDTO_lastCredentialsRefreshedAt(ctx context.Context, field graphql.CollectedField, obj *store.Account) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ConnectedAccountPublicDTO_lastCredentialsRefreshedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.LastCredentialsRefreshedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *metadata.Timestamp) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ConnectedAccountPublicDTO_lastCredentialsRefreshedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ConnectedAccountPublicDTO", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _ConnectedAccountPublicDTO_authFailedAt(ctx context.Context, field graphql.CollectedField, obj *store.Account) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ConnectedAccountPublicDTO_authFailedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AuthFailedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *metadata.Timestamp) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ConnectedAccountPublicDTO_authFailedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ConnectedAccountPublicDTO", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _ConnectedAccountPublicDTO_authFailedReason(ctx context.Context, field graphql.CollectedField, obj *store.Account) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ConnectedAccountPublicDTO_authFailedReason(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AuthFailedReason, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ConnectedAccountPublicDTO_authFailedReason(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ConnectedAccountPublicDTO", field, false, false, "String")
+}
+
+func (ec *executionContext) _ConnectedAccountPublicDTO_archivedAt(ctx context.Context, field graphql.CollectedField, obj *store.Account) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ConnectedAccountPublicDTO_archivedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ArchivedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *metadata.Timestamp) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ConnectedAccountPublicDTO_archivedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ConnectedAccountPublicDTO", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _ConnectedAccountPublicDTO_handleAliases(ctx context.Context, field graphql.CollectedField, obj *store.Account) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ConnectedAccountPublicDTO_handleAliases(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.HandleAliases, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOString2ᚕstringᚄ(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ConnectedAccountPublicDTO_handleAliases(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ConnectedAccountPublicDTO", field, false, false, "String")
+}
+
+func (ec *executionContext) _ConnectedAccountPublicDTO_scopes(ctx context.Context, field graphql.CollectedField, obj *store.Account) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ConnectedAccountPublicDTO_scopes(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Scopes, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOString2ᚕstringᚄ(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ConnectedAccountPublicDTO_scopes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ConnectedAccountPublicDTO", field, false, false, "String")
+}
+
+func (ec *executionContext) _ConnectedAccountPublicDTO_lastSignedInAt(ctx context.Context, field graphql.CollectedField, obj *store.Account) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ConnectedAccountPublicDTO_lastSignedInAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.LastSignedInAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *metadata.Timestamp) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ConnectedAccountPublicDTO_lastSignedInAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ConnectedAccountPublicDTO", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _ConnectedAccountPublicDTO_userWorkspaceId(ctx context.Context, field graphql.CollectedField, obj *store.Account) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ConnectedAccountPublicDTO_userWorkspaceId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UserWorkspaceID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNUUID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ConnectedAccountPublicDTO_userWorkspaceId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ConnectedAccountPublicDTO", field, false, false, "UUID")
+}
+
+func (ec *executionContext) _ConnectedAccountPublicDTO_applicationId(ctx context.Context, field graphql.CollectedField, obj *store.Account) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ConnectedAccountPublicDTO_applicationId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ApplicationID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOUUID2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ConnectedAccountPublicDTO_applicationId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ConnectedAccountPublicDTO", field, false, false, "UUID")
+}
+
+func (ec *executionContext) _ConnectedAccountPublicDTO_name(ctx context.Context, field graphql.CollectedField, obj *store.Account) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ConnectedAccountPublicDTO_name(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Name, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ConnectedAccountPublicDTO_name(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ConnectedAccountPublicDTO", field, false, false, "String")
+}
+
+func (ec *executionContext) _ConnectedAccountPublicDTO_visibility(ctx context.Context, field graphql.CollectedField, obj *store.Account) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ConnectedAccountPublicDTO_visibility(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Visibility, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ConnectedAccountPublicDTO_visibility(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ConnectedAccountPublicDTO", field, false, false, "String")
+}
+
+func (ec *executionContext) _ConnectedAccountPublicDTO_createdAt(ctx context.Context, field graphql.CollectedField, obj *store.Account) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ConnectedAccountPublicDTO_createdAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v metadata.Timestamp) graphql.Marshaler {
+			return ec.marshalNDateTime2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ConnectedAccountPublicDTO_createdAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ConnectedAccountPublicDTO", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _ConnectedAccountPublicDTO_updatedAt(ctx context.Context, field graphql.CollectedField, obj *store.Account) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ConnectedAccountPublicDTO_updatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v metadata.Timestamp) graphql.Marshaler {
+			return ec.marshalNDateTime2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ConnectedAccountPublicDTO_updatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ConnectedAccountPublicDTO", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _CreateEmailGroupChannelOutput_messageChannel(ctx context.Context, field graphql.CollectedField, obj *store.EmailGroupChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CreateEmailGroupChannelOutput_messageChannel(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MessageChannel, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v store.MessageChannel) graphql.Marshaler {
+			return ec.marshalNMessageChannel2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐMessageChannel(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CreateEmailGroupChannelOutput_messageChannel(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CreateEmailGroupChannelOutput",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_MessageChannel(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CreateEmailGroupChannelOutput_forwardingAddress(ctx context.Context, field graphql.CollectedField, obj *store.EmailGroupChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CreateEmailGroupChannelOutput_forwardingAddress(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ForwardingAddress, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CreateEmailGroupChannelOutput_forwardingAddress(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CreateEmailGroupChannelOutput", field, false, false, "String")
+}
+
+func (ec *executionContext) _MessageChannel_id(ctx context.Context, field graphql.CollectedField, obj *store.MessageChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MessageChannel_id(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNUUID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_MessageChannel_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MessageChannel", field, false, false, "UUID")
+}
+
+func (ec *executionContext) _MessageChannel_visibility(ctx context.Context, field graphql.CollectedField, obj *store.MessageChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MessageChannel_visibility(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Visibility, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNMessageChannelVisibility2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_MessageChannel_visibility(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MessageChannel", field, false, false, "MessageChannelVisibility")
+}
+
+func (ec *executionContext) _MessageChannel_handle(ctx context.Context, field graphql.CollectedField, obj *store.MessageChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MessageChannel_handle(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Handle, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_MessageChannel_handle(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MessageChannel", field, false, false, "String")
+}
+
+func (ec *executionContext) _MessageChannel_displayName(ctx context.Context, field graphql.CollectedField, obj *store.MessageChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MessageChannel_displayName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.DisplayName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_MessageChannel_displayName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MessageChannel", field, false, false, "String")
+}
+
+func (ec *executionContext) _MessageChannel_type(ctx context.Context, field graphql.CollectedField, obj *store.MessageChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MessageChannel_type(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Type, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNMessageChannelType2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_MessageChannel_type(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MessageChannel", field, false, false, "MessageChannelType")
+}
+
+func (ec *executionContext) _MessageChannel_isContactAutoCreationEnabled(ctx context.Context, field graphql.CollectedField, obj *store.MessageChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MessageChannel_isContactAutoCreationEnabled(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.IsContactAutoCreationEnabled, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_MessageChannel_isContactAutoCreationEnabled(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MessageChannel", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _MessageChannel_contactAutoCreationPolicy(ctx context.Context, field graphql.CollectedField, obj *store.MessageChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MessageChannel_contactAutoCreationPolicy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ContactAutoCreationPolicy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNMessageChannelContactAutoCreationPolicy2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_MessageChannel_contactAutoCreationPolicy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MessageChannel", field, false, false, "MessageChannelContactAutoCreationPolicy")
+}
+
+func (ec *executionContext) _MessageChannel_messageFolderImportPolicy(ctx context.Context, field graphql.CollectedField, obj *store.MessageChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MessageChannel_messageFolderImportPolicy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MessageFolderImportPolicy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNMessageFolderImportPolicy2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_MessageChannel_messageFolderImportPolicy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MessageChannel", field, false, false, "MessageFolderImportPolicy")
+}
+
+func (ec *executionContext) _MessageChannel_excludeNonProfessionalEmails(ctx context.Context, field graphql.CollectedField, obj *store.MessageChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MessageChannel_excludeNonProfessionalEmails(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ExcludeNonProfessionalEmails, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_MessageChannel_excludeNonProfessionalEmails(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MessageChannel", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _MessageChannel_excludeGroupEmails(ctx context.Context, field graphql.CollectedField, obj *store.MessageChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MessageChannel_excludeGroupEmails(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ExcludeGroupEmails, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_MessageChannel_excludeGroupEmails(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MessageChannel", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _MessageChannel_pendingGroupEmailsAction(ctx context.Context, field graphql.CollectedField, obj *store.MessageChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MessageChannel_pendingGroupEmailsAction(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PendingGroupEmailsAction, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNMessageChannelPendingGroupEmailsAction2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_MessageChannel_pendingGroupEmailsAction(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MessageChannel", field, false, false, "MessageChannelPendingGroupEmailsAction")
+}
+
+func (ec *executionContext) _MessageChannel_isSyncEnabled(ctx context.Context, field graphql.CollectedField, obj *store.MessageChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MessageChannel_isSyncEnabled(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.IsSyncEnabled, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_MessageChannel_isSyncEnabled(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MessageChannel", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _MessageChannel_syncedAt(ctx context.Context, field graphql.CollectedField, obj *store.MessageChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MessageChannel_syncedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SyncedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *metadata.Timestamp) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_MessageChannel_syncedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MessageChannel", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _MessageChannel_syncStatus(ctx context.Context, field graphql.CollectedField, obj *store.MessageChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MessageChannel_syncStatus(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SyncStatus, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNMessageChannelSyncStatus2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_MessageChannel_syncStatus(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MessageChannel", field, false, false, "MessageChannelSyncStatus")
+}
+
+func (ec *executionContext) _MessageChannel_syncStage(ctx context.Context, field graphql.CollectedField, obj *store.MessageChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MessageChannel_syncStage(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SyncStage, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNMessageChannelSyncStage2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_MessageChannel_syncStage(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MessageChannel", field, false, false, "MessageChannelSyncStage")
+}
+
+func (ec *executionContext) _MessageChannel_syncStageStartedAt(ctx context.Context, field graphql.CollectedField, obj *store.MessageChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MessageChannel_syncStageStartedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SyncStageStartedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *metadata.Timestamp) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_MessageChannel_syncStageStartedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MessageChannel", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _MessageChannel_throttleFailureCount(ctx context.Context, field graphql.CollectedField, obj *store.MessageChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MessageChannel_throttleFailureCount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ThrottleFailureCount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_MessageChannel_throttleFailureCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MessageChannel", field, false, false, "Int")
+}
+
+func (ec *executionContext) _MessageChannel_throttleRetryAfter(ctx context.Context, field graphql.CollectedField, obj *store.MessageChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MessageChannel_throttleRetryAfter(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ThrottleRetryAfter, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *metadata.Timestamp) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_MessageChannel_throttleRetryAfter(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MessageChannel", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _MessageChannel_connectedAccountId(ctx context.Context, field graphql.CollectedField, obj *store.MessageChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MessageChannel_connectedAccountId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ConnectedAccountID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNUUID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_MessageChannel_connectedAccountId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MessageChannel", field, false, false, "UUID")
+}
+
+func (ec *executionContext) _MessageChannel_createdAt(ctx context.Context, field graphql.CollectedField, obj *store.MessageChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MessageChannel_createdAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v metadata.Timestamp) graphql.Marshaler {
+			return ec.marshalNDateTime2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_MessageChannel_createdAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MessageChannel", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _MessageChannel_updatedAt(ctx context.Context, field graphql.CollectedField, obj *store.MessageChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MessageChannel_updatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v metadata.Timestamp) graphql.Marshaler {
+			return ec.marshalNDateTime2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_MessageChannel_updatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MessageChannel", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _MessageChannel_connectedAccount(ctx context.Context, field graphql.CollectedField, obj *store.MessageChannel) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MessageChannel_connectedAccount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return ec.Resolvers.MessageChannel().ConnectedAccount(ctx, obj)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *store.Account) graphql.Marshaler {
+			return ec.marshalOConnectedAccountPublicDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐAccount(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_MessageChannel_connectedAccount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MessageChannel",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_ConnectedAccountPublicDTO(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteConnectedAccount(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_deleteConnectedAccount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().DeleteConnectedAccount(ctx, fc.Args["id"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *store.Account) graphql.Marshaler {
+			return ec.marshalNConnectedAccountPublicDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐAccount(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_deleteConnectedAccount(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_ConnectedAccountPublicDTO(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteConnectedAccount_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_disconnectConnectedAccount(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_disconnectConnectedAccount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().DisconnectConnectedAccount(ctx, fc.Args["id"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *store.Account) graphql.Marshaler {
+			return ec.marshalNConnectedAccountPublicDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐAccount(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_disconnectConnectedAccount(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_ConnectedAccountPublicDTO(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_disconnectConnectedAccount_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateMessageChannel(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_updateMessageChannel(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().UpdateMessageChannel(ctx, fc.Args["input"].(map[string]any))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *store.MessageChannel) graphql.Marshaler {
+			return ec.marshalNMessageChannel2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐMessageChannel(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_updateMessageChannel(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_MessageChannel(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateMessageChannel_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createEmailGroupChannel(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_createEmailGroupChannel(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().CreateEmailGroupChannel(ctx, fc.Args["input"].(map[string]any))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *store.EmailGroupChannel) graphql.Marshaler {
+			return ec.marshalNCreateEmailGroupChannelOutput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐEmailGroupChannel(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_createEmailGroupChannel(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_CreateEmailGroupChannelOutput(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createEmailGroupChannel_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateEmailGroupChannel(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_updateEmailGroupChannel(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().UpdateEmailGroupChannel(ctx, fc.Args["input"].(map[string]any))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *store.MessageChannel) graphql.Marshaler {
+			return ec.marshalNMessageChannel2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐMessageChannel(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_updateEmailGroupChannel(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_MessageChannel(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateEmailGroupChannel_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteEmailGroupChannel(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_deleteEmailGroupChannel(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().DeleteEmailGroupChannel(ctx, fc.Args["id"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *store.MessageChannel) graphql.Marshaler {
+			return ec.marshalNMessageChannel2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐMessageChannel(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_deleteEmailGroupChannel(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_MessageChannel(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteEmailGroupChannel_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateCalendarChannel(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_updateCalendarChannel(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().UpdateCalendarChannel(ctx, fc.Args["input"].(map[string]any))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *store.CalendarChannel) graphql.Marshaler {
+			return ec.marshalNCalendarChannel2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐCalendarChannel(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_updateCalendarChannel(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_CalendarChannel(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateCalendarChannel_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_dismissReconnectAccountBanner(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_dismissReconnectAccountBanner(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().DismissReconnectAccountBanner(ctx, fc.Args["connectedAccountId"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_dismissReconnectAccountBanner(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_dismissReconnectAccountBanner_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_sendEmail(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -479,6 +3900,346 @@ func (ec *executionContext) fieldContext_Mutation_sendEmail(ctx context.Context,
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_sendEmail_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_myConnectedAccounts(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_myConnectedAccounts(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return ec.Resolvers.Query().MyConnectedAccounts(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*store.Account) graphql.Marshaler {
+			return ec.marshalNConnectedAccountPublicDTO2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐAccountᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_myConnectedAccounts(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_ConnectedAccountPublicDTO(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_applicationConnectedAccounts(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_applicationConnectedAccounts(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().ApplicationConnectedAccounts(ctx, fc.Args["applicationId"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*store.ApplicationAccount) graphql.Marshaler {
+			return ec.marshalNApplicationConnectedAccountDTO2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐApplicationAccountᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_applicationConnectedAccounts(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_ApplicationConnectedAccountDTO(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_applicationConnectedAccounts_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_myMessageChannels(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_myMessageChannels(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().MyMessageChannels(ctx, fc.Args["connectedAccountId"].(*string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*store.MessageChannel) graphql.Marshaler {
+			return ec.marshalNMessageChannel2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐMessageChannelᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_myMessageChannels(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_MessageChannel(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_myMessageChannels_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_myCalendarChannels(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_myCalendarChannels(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().MyCalendarChannels(ctx, fc.Args["connectedAccountId"].(*string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*store.CalendarChannel) graphql.Marshaler {
+			return ec.marshalNCalendarChannel2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐCalendarChannelᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_myCalendarChannels(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_CalendarChannel(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_myCalendarChannels_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_getTimelineThreadsFromObjectRecord(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_getTimelineThreadsFromObjectRecord(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().GetTimelineThreadsFromObjectRecord(ctx, fc.Args["objectNameSingular"].(string), fc.Args["recordId"].(string), fc.Args["page"].(int), fc.Args["pageSize"].(int))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *messaging.TimelineThreadsWithTotal) graphql.Marshaler {
+			return ec.marshalNTimelineThreadsWithTotal2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚐTimelineThreadsWithTotal(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_getTimelineThreadsFromObjectRecord(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_TimelineThreadsWithTotal(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getTimelineThreadsFromObjectRecord_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_getTimelineThreadsFromPersonId(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_getTimelineThreadsFromPersonId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().GetTimelineThreadsFromPersonID(ctx, fc.Args["personId"].(string), fc.Args["page"].(int), fc.Args["pageSize"].(int))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *messaging.TimelineThreadsWithTotal) graphql.Marshaler {
+			return ec.marshalNTimelineThreadsWithTotal2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚐTimelineThreadsWithTotal(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_getTimelineThreadsFromPersonId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_TimelineThreadsWithTotal(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getTimelineThreadsFromPersonId_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_getTimelineThreadsFromCompanyId(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_getTimelineThreadsFromCompanyId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().GetTimelineThreadsFromCompanyID(ctx, fc.Args["companyId"].(string), fc.Args["page"].(int), fc.Args["pageSize"].(int))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *messaging.TimelineThreadsWithTotal) graphql.Marshaler {
+			return ec.marshalNTimelineThreadsWithTotal2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚐTimelineThreadsWithTotal(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_getTimelineThreadsFromCompanyId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_TimelineThreadsWithTotal(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getTimelineThreadsFromCompanyId_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_getTimelineThreadsFromOpportunityId(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_getTimelineThreadsFromOpportunityId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().GetTimelineThreadsFromOpportunityID(ctx, fc.Args["opportunityId"].(string), fc.Args["page"].(int), fc.Args["pageSize"].(int))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *messaging.TimelineThreadsWithTotal) graphql.Marshaler {
+			return ec.marshalNTimelineThreadsWithTotal2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚐTimelineThreadsWithTotal(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_getTimelineThreadsFromOpportunityId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_TimelineThreadsWithTotal(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getTimelineThreadsFromOpportunityId_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -628,6 +4389,516 @@ func (ec *executionContext) _SendEmailOutput_messageThreadId(ctx context.Context
 }
 func (ec *executionContext) fieldContext_SendEmailOutput_messageThreadId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("SendEmailOutput", field, false, false, "String")
+}
+
+func (ec *executionContext) _TimelineThread_id(ctx context.Context, field graphql.CollectedField, obj *messaging.TimelineThread) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TimelineThread_id(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNUUID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_TimelineThread_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TimelineThread", field, false, false, "UUID")
+}
+
+func (ec *executionContext) _TimelineThread_read(ctx context.Context, field graphql.CollectedField, obj *messaging.TimelineThread) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TimelineThread_read(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Read, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_TimelineThread_read(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TimelineThread", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _TimelineThread_visibility(ctx context.Context, field graphql.CollectedField, obj *messaging.TimelineThread) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TimelineThread_visibility(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Visibility, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNMessageChannelVisibility2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_TimelineThread_visibility(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TimelineThread", field, false, false, "MessageChannelVisibility")
+}
+
+func (ec *executionContext) _TimelineThread_firstParticipant(ctx context.Context, field graphql.CollectedField, obj *messaging.TimelineThread) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TimelineThread_firstParticipant(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.FirstParticipant, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v messaging.TimelineParticipant) graphql.Marshaler {
+			return ec.marshalNTimelineThreadParticipant2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚐTimelineParticipant(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_TimelineThread_firstParticipant(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TimelineThread",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_TimelineThreadParticipant(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TimelineThread_lastTwoParticipants(ctx context.Context, field graphql.CollectedField, obj *messaging.TimelineThread) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TimelineThread_lastTwoParticipants(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.LastTwoParticipants, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []messaging.TimelineParticipant) graphql.Marshaler {
+			return ec.marshalNTimelineThreadParticipant2ᚕgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚐTimelineParticipantᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_TimelineThread_lastTwoParticipants(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TimelineThread",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_TimelineThreadParticipant(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TimelineThread_lastMessageReceivedAt(ctx context.Context, field graphql.CollectedField, obj *messaging.TimelineThread) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TimelineThread_lastMessageReceivedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return ec.Resolvers.TimelineThread().LastMessageReceivedAt(ctx, obj)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *metadata.Timestamp) graphql.Marshaler {
+			return ec.marshalNDateTime2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_TimelineThread_lastMessageReceivedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TimelineThread", field, true, true, "DateTime")
+}
+
+func (ec *executionContext) _TimelineThread_lastMessageBody(ctx context.Context, field graphql.CollectedField, obj *messaging.TimelineThread) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TimelineThread_lastMessageBody(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.LastMessageBody, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_TimelineThread_lastMessageBody(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TimelineThread", field, false, false, "String")
+}
+
+func (ec *executionContext) _TimelineThread_subject(ctx context.Context, field graphql.CollectedField, obj *messaging.TimelineThread) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TimelineThread_subject(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Subject, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_TimelineThread_subject(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TimelineThread", field, false, false, "String")
+}
+
+func (ec *executionContext) _TimelineThread_numberOfMessagesInThread(ctx context.Context, field graphql.CollectedField, obj *messaging.TimelineThread) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TimelineThread_numberOfMessagesInThread(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.NumberOfMessagesInThread, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNFloat2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_TimelineThread_numberOfMessagesInThread(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TimelineThread", field, false, false, "Float")
+}
+
+func (ec *executionContext) _TimelineThread_participantCount(ctx context.Context, field graphql.CollectedField, obj *messaging.TimelineThread) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TimelineThread_participantCount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ParticipantCount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNFloat2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_TimelineThread_participantCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TimelineThread", field, false, false, "Float")
+}
+
+func (ec *executionContext) _TimelineThread_lastMessageIsDraft(ctx context.Context, field graphql.CollectedField, obj *messaging.TimelineThread) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TimelineThread_lastMessageIsDraft(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.LastMessageIsDraft, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_TimelineThread_lastMessageIsDraft(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TimelineThread", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _TimelineThreadParticipant_personId(ctx context.Context, field graphql.CollectedField, obj *messaging.TimelineParticipant) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TimelineThreadParticipant_personId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PersonID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOUUID2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TimelineThreadParticipant_personId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TimelineThreadParticipant", field, false, false, "UUID")
+}
+
+func (ec *executionContext) _TimelineThreadParticipant_workspaceMemberId(ctx context.Context, field graphql.CollectedField, obj *messaging.TimelineParticipant) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TimelineThreadParticipant_workspaceMemberId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.WorkspaceMemberID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOUUID2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TimelineThreadParticipant_workspaceMemberId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TimelineThreadParticipant", field, false, false, "UUID")
+}
+
+func (ec *executionContext) _TimelineThreadParticipant_firstName(ctx context.Context, field graphql.CollectedField, obj *messaging.TimelineParticipant) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TimelineThreadParticipant_firstName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.FirstName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_TimelineThreadParticipant_firstName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TimelineThreadParticipant", field, false, false, "String")
+}
+
+func (ec *executionContext) _TimelineThreadParticipant_lastName(ctx context.Context, field graphql.CollectedField, obj *messaging.TimelineParticipant) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TimelineThreadParticipant_lastName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.LastName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_TimelineThreadParticipant_lastName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TimelineThreadParticipant", field, false, false, "String")
+}
+
+func (ec *executionContext) _TimelineThreadParticipant_displayName(ctx context.Context, field graphql.CollectedField, obj *messaging.TimelineParticipant) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TimelineThreadParticipant_displayName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.DisplayName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_TimelineThreadParticipant_displayName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TimelineThreadParticipant", field, false, false, "String")
+}
+
+func (ec *executionContext) _TimelineThreadParticipant_avatarUrl(ctx context.Context, field graphql.CollectedField, obj *messaging.TimelineParticipant) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TimelineThreadParticipant_avatarUrl(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AvatarURL, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_TimelineThreadParticipant_avatarUrl(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TimelineThreadParticipant", field, false, false, "String")
+}
+
+func (ec *executionContext) _TimelineThreadParticipant_handle(ctx context.Context, field graphql.CollectedField, obj *messaging.TimelineParticipant) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TimelineThreadParticipant_handle(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Handle, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_TimelineThreadParticipant_handle(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TimelineThreadParticipant", field, false, false, "String")
+}
+
+func (ec *executionContext) _TimelineThreadsWithTotal_totalNumberOfThreads(ctx context.Context, field graphql.CollectedField, obj *messaging.TimelineThreadsWithTotal) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TimelineThreadsWithTotal_totalNumberOfThreads(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TotalNumberOfThreads, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_TimelineThreadsWithTotal_totalNumberOfThreads(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TimelineThreadsWithTotal", field, false, false, "Int")
+}
+
+func (ec *executionContext) _TimelineThreadsWithTotal_timelineThreads(ctx context.Context, field graphql.CollectedField, obj *messaging.TimelineThreadsWithTotal) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TimelineThreadsWithTotal_timelineThreads(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TimelineThreads, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []messaging.TimelineThread) graphql.Marshaler {
+			return ec.marshalNTimelineThread2ᚕgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚐTimelineThreadᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_TimelineThreadsWithTotal_timelineThreads(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TimelineThreadsWithTotal",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_TimelineThread(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TimelineThreadsWithTotal_relatedPersonIds(ctx context.Context, field graphql.CollectedField, obj *messaging.TimelineThreadsWithTotal) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TimelineThreadsWithTotal_relatedPersonIds(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.RelatedPersonIDs, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNUUID2ᚕstringᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_TimelineThreadsWithTotal_relatedPersonIds(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TimelineThreadsWithTotal", field, false, false, "UUID")
 }
 
 func (ec *executionContext) ___Directive_name(ctx context.Context, field graphql.CollectedField, obj *introspection.Directive) (ret graphql.Marshaler) {
@@ -1703,6 +5974,56 @@ func (ec *executionContext) fieldContext___Type_isOneOf(_ context.Context, field
 
 // region    **************************** input.gotpl *****************************
 
+func (ec *executionContext) unmarshalInputCreateEmailGroupChannelInput(ctx context.Context, obj any) (map[string]any, error) {
+	var it map[string]any
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"handle", "displayName"}
+	it = make(map[string]any, len(asMap))
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "handle":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("handle"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["handle"] = data
+		case "displayName":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayName"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["displayName"] = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalCreateEmailGroupChannelInput unmarshals raw into the CreateEmailGroupChannelInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalCreateEmailGroupChannelInput(ctx context.Context, raw any) (map[string]any, error) {
+	var out map[string]any
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "CreateEmailGroupChannelInput", raw, &out)
+	return out, err
+}
+
 func (ec *executionContext) unmarshalInputSendEmailAttachmentInput(ctx context.Context, obj any) (SendEmailAttachmentInput, error) {
 	var it SendEmailAttachmentInput
 	if obj == nil {
@@ -1857,6 +6178,305 @@ func UnmarshalSendEmailInput(ctx context.Context, raw any) (SendEmailInput, erro
 	return out, err
 }
 
+func (ec *executionContext) unmarshalInputUpdateCalendarChannelInput(ctx context.Context, obj any) (map[string]any, error) {
+	var it map[string]any
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"id", "update"}
+	it = make(map[string]any, len(asMap))
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalNUUID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["id"] = data
+		case "update":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("update"))
+			data, err := ec.unmarshalNUpdateCalendarChannelInputUpdates2map(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["update"] = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalUpdateCalendarChannelInput unmarshals raw into the UpdateCalendarChannelInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalUpdateCalendarChannelInput(ctx context.Context, raw any) (map[string]any, error) {
+	var out map[string]any
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "UpdateCalendarChannelInput", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputUpdateCalendarChannelInputUpdates(ctx context.Context, obj any) (map[string]any, error) {
+	var it map[string]any
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"visibility", "isContactAutoCreationEnabled", "contactAutoCreationPolicy", "isSyncEnabled"}
+	it = make(map[string]any, len(asMap))
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "visibility":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("visibility"))
+			data, err := ec.unmarshalOCalendarChannelVisibility2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["visibility"] = data
+		case "isContactAutoCreationEnabled":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isContactAutoCreationEnabled"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["isContactAutoCreationEnabled"] = data
+		case "contactAutoCreationPolicy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("contactAutoCreationPolicy"))
+			data, err := ec.unmarshalOCalendarChannelContactAutoCreationPolicy2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["contactAutoCreationPolicy"] = data
+		case "isSyncEnabled":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isSyncEnabled"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["isSyncEnabled"] = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalUpdateCalendarChannelInputUpdates unmarshals raw into the UpdateCalendarChannelInputUpdates input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalUpdateCalendarChannelInputUpdates(ctx context.Context, raw any) (map[string]any, error) {
+	var out map[string]any
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "UpdateCalendarChannelInputUpdates", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputUpdateEmailGroupChannelInput(ctx context.Context, obj any) (map[string]any, error) {
+	var it map[string]any
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"id", "displayName"}
+	it = make(map[string]any, len(asMap))
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalNUUID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["id"] = data
+		case "displayName":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayName"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["displayName"] = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalUpdateEmailGroupChannelInput unmarshals raw into the UpdateEmailGroupChannelInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalUpdateEmailGroupChannelInput(ctx context.Context, raw any) (map[string]any, error) {
+	var out map[string]any
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "UpdateEmailGroupChannelInput", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputUpdateMessageChannelInput(ctx context.Context, obj any) (map[string]any, error) {
+	var it map[string]any
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"id", "update"}
+	it = make(map[string]any, len(asMap))
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalNUUID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["id"] = data
+		case "update":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("update"))
+			data, err := ec.unmarshalNUpdateMessageChannelInputUpdates2map(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["update"] = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalUpdateMessageChannelInput unmarshals raw into the UpdateMessageChannelInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalUpdateMessageChannelInput(ctx context.Context, raw any) (map[string]any, error) {
+	var out map[string]any
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "UpdateMessageChannelInput", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputUpdateMessageChannelInputUpdates(ctx context.Context, obj any) (map[string]any, error) {
+	var it map[string]any
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"visibility", "isContactAutoCreationEnabled", "contactAutoCreationPolicy", "messageFolderImportPolicy", "isSyncEnabled", "excludeNonProfessionalEmails", "excludeGroupEmails"}
+	it = make(map[string]any, len(asMap))
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "visibility":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("visibility"))
+			data, err := ec.unmarshalOMessageChannelVisibility2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["visibility"] = data
+		case "isContactAutoCreationEnabled":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isContactAutoCreationEnabled"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["isContactAutoCreationEnabled"] = data
+		case "contactAutoCreationPolicy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("contactAutoCreationPolicy"))
+			data, err := ec.unmarshalOMessageChannelContactAutoCreationPolicy2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["contactAutoCreationPolicy"] = data
+		case "messageFolderImportPolicy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("messageFolderImportPolicy"))
+			data, err := ec.unmarshalOMessageFolderImportPolicy2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["messageFolderImportPolicy"] = data
+		case "isSyncEnabled":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isSyncEnabled"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["isSyncEnabled"] = data
+		case "excludeNonProfessionalEmails":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("excludeNonProfessionalEmails"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["excludeNonProfessionalEmails"] = data
+		case "excludeGroupEmails":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("excludeGroupEmails"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["excludeGroupEmails"] = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalUpdateMessageChannelInputUpdates unmarshals raw into the UpdateMessageChannelInputUpdates input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalUpdateMessageChannelInputUpdates(ctx context.Context, raw any) (map[string]any, error) {
+	var out map[string]any
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "UpdateMessageChannelInputUpdates", raw, &out)
+	return out, err
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -1864,6 +6484,502 @@ func UnmarshalSendEmailInput(ctx context.Context, raw any) (SendEmailInput, erro
 // endregion ************************** interface.gotpl ***************************
 
 // region    **************************** object.gotpl ****************************
+
+var applicationConnectedAccountDTOImplementors = []string{"ApplicationConnectedAccountDTO"}
+
+func (ec *executionContext) _ApplicationConnectedAccountDTO(ctx context.Context, sel ast.SelectionSet, obj *store.ApplicationAccount) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, applicationConnectedAccountDTOImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ApplicationConnectedAccountDTO")
+		case "id":
+			out.Values[i] = ec._ApplicationConnectedAccountDTO_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "handle":
+			out.Values[i] = ec._ApplicationConnectedAccountDTO_handle(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "provider":
+			out.Values[i] = ec._ApplicationConnectedAccountDTO_provider(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "lastCredentialsRefreshedAt":
+			out.Values[i] = ec._ApplicationConnectedAccountDTO_lastCredentialsRefreshedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "authFailedAt":
+			out.Values[i] = ec._ApplicationConnectedAccountDTO_authFailedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "authFailedReason":
+			out.Values[i] = ec._ApplicationConnectedAccountDTO_authFailedReason(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "archivedAt":
+			out.Values[i] = ec._ApplicationConnectedAccountDTO_archivedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "handleAliases":
+			out.Values[i] = ec._ApplicationConnectedAccountDTO_handleAliases(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "scopes":
+			out.Values[i] = ec._ApplicationConnectedAccountDTO_scopes(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "lastSignedInAt":
+			out.Values[i] = ec._ApplicationConnectedAccountDTO_lastSignedInAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "userWorkspaceId":
+			out.Values[i] = ec._ApplicationConnectedAccountDTO_userWorkspaceId(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "applicationId":
+			out.Values[i] = ec._ApplicationConnectedAccountDTO_applicationId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "name":
+			out.Values[i] = ec._ApplicationConnectedAccountDTO_name(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "visibility":
+			out.Values[i] = ec._ApplicationConnectedAccountDTO_visibility(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createdAt":
+			out.Values[i] = ec._ApplicationConnectedAccountDTO_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._ApplicationConnectedAccountDTO_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "isOwnedByCurrentUser":
+			out.Values[i] = ec._ApplicationConnectedAccountDTO_isOwnedByCurrentUser(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var calendarChannelImplementors = []string{"CalendarChannel"}
+
+func (ec *executionContext) _CalendarChannel(ctx context.Context, sel ast.SelectionSet, obj *store.CalendarChannel) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, calendarChannelImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("CalendarChannel")
+		case "id":
+			out.Values[i] = ec._CalendarChannel_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "handle":
+			out.Values[i] = ec._CalendarChannel_handle(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "syncStatus":
+			out.Values[i] = ec._CalendarChannel_syncStatus(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "syncStage":
+			out.Values[i] = ec._CalendarChannel_syncStage(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "visibility":
+			out.Values[i] = ec._CalendarChannel_visibility(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "isContactAutoCreationEnabled":
+			out.Values[i] = ec._CalendarChannel_isContactAutoCreationEnabled(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "contactAutoCreationPolicy":
+			out.Values[i] = ec._CalendarChannel_contactAutoCreationPolicy(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "isSyncEnabled":
+			out.Values[i] = ec._CalendarChannel_isSyncEnabled(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "syncedAt":
+			out.Values[i] = ec._CalendarChannel_syncedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "syncStageStartedAt":
+			out.Values[i] = ec._CalendarChannel_syncStageStartedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "throttleFailureCount":
+			out.Values[i] = ec._CalendarChannel_throttleFailureCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "connectedAccountId":
+			out.Values[i] = ec._CalendarChannel_connectedAccountId(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createdAt":
+			out.Values[i] = ec._CalendarChannel_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._CalendarChannel_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var connectedAccountPublicDTOImplementors = []string{"ConnectedAccountPublicDTO"}
+
+func (ec *executionContext) _ConnectedAccountPublicDTO(ctx context.Context, sel ast.SelectionSet, obj *store.Account) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, connectedAccountPublicDTOImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ConnectedAccountPublicDTO")
+		case "id":
+			out.Values[i] = ec._ConnectedAccountPublicDTO_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "handle":
+			out.Values[i] = ec._ConnectedAccountPublicDTO_handle(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "provider":
+			out.Values[i] = ec._ConnectedAccountPublicDTO_provider(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "lastCredentialsRefreshedAt":
+			out.Values[i] = ec._ConnectedAccountPublicDTO_lastCredentialsRefreshedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "authFailedAt":
+			out.Values[i] = ec._ConnectedAccountPublicDTO_authFailedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "authFailedReason":
+			out.Values[i] = ec._ConnectedAccountPublicDTO_authFailedReason(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "archivedAt":
+			out.Values[i] = ec._ConnectedAccountPublicDTO_archivedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "handleAliases":
+			out.Values[i] = ec._ConnectedAccountPublicDTO_handleAliases(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "scopes":
+			out.Values[i] = ec._ConnectedAccountPublicDTO_scopes(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "lastSignedInAt":
+			out.Values[i] = ec._ConnectedAccountPublicDTO_lastSignedInAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "userWorkspaceId":
+			out.Values[i] = ec._ConnectedAccountPublicDTO_userWorkspaceId(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "applicationId":
+			out.Values[i] = ec._ConnectedAccountPublicDTO_applicationId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "name":
+			out.Values[i] = ec._ConnectedAccountPublicDTO_name(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "visibility":
+			out.Values[i] = ec._ConnectedAccountPublicDTO_visibility(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createdAt":
+			out.Values[i] = ec._ConnectedAccountPublicDTO_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._ConnectedAccountPublicDTO_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var createEmailGroupChannelOutputImplementors = []string{"CreateEmailGroupChannelOutput"}
+
+func (ec *executionContext) _CreateEmailGroupChannelOutput(ctx context.Context, sel ast.SelectionSet, obj *store.EmailGroupChannel) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, createEmailGroupChannelOutputImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("CreateEmailGroupChannelOutput")
+		case "messageChannel":
+			out.Values[i] = ec._CreateEmailGroupChannelOutput_messageChannel(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "forwardingAddress":
+			out.Values[i] = ec._CreateEmailGroupChannelOutput_forwardingAddress(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var messageChannelImplementors = []string{"MessageChannel"}
+
+func (ec *executionContext) _MessageChannel(ctx context.Context, sel ast.SelectionSet, obj *store.MessageChannel) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, messageChannelImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("MessageChannel")
+		case "id":
+			out.Values[i] = ec._MessageChannel_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "visibility":
+			out.Values[i] = ec._MessageChannel_visibility(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "handle":
+			out.Values[i] = ec._MessageChannel_handle(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "displayName":
+			out.Values[i] = ec._MessageChannel_displayName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "type":
+			out.Values[i] = ec._MessageChannel_type(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "isContactAutoCreationEnabled":
+			out.Values[i] = ec._MessageChannel_isContactAutoCreationEnabled(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "contactAutoCreationPolicy":
+			out.Values[i] = ec._MessageChannel_contactAutoCreationPolicy(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "messageFolderImportPolicy":
+			out.Values[i] = ec._MessageChannel_messageFolderImportPolicy(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "excludeNonProfessionalEmails":
+			out.Values[i] = ec._MessageChannel_excludeNonProfessionalEmails(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "excludeGroupEmails":
+			out.Values[i] = ec._MessageChannel_excludeGroupEmails(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "pendingGroupEmailsAction":
+			out.Values[i] = ec._MessageChannel_pendingGroupEmailsAction(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "isSyncEnabled":
+			out.Values[i] = ec._MessageChannel_isSyncEnabled(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "syncedAt":
+			out.Values[i] = ec._MessageChannel_syncedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "syncStatus":
+			out.Values[i] = ec._MessageChannel_syncStatus(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "syncStage":
+			out.Values[i] = ec._MessageChannel_syncStage(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "syncStageStartedAt":
+			out.Values[i] = ec._MessageChannel_syncStageStartedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "throttleFailureCount":
+			out.Values[i] = ec._MessageChannel_throttleFailureCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "throttleRetryAfter":
+			out.Values[i] = ec._MessageChannel_throttleRetryAfter(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "connectedAccountId":
+			out.Values[i] = ec._MessageChannel_connectedAccountId(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "createdAt":
+			out.Values[i] = ec._MessageChannel_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "updatedAt":
+			out.Values[i] = ec._MessageChannel_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "connectedAccount":
+			out.ResolveConcurrently(ec.OperationContext, &deferred, i,
+				true, false,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._MessageChannel_connectedAccount(ctx, field, obj)
+				})
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
 
 var mutationImplementors = []string{"Mutation"}
 
@@ -1884,6 +7000,62 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Mutation")
+		case "deleteConnectedAccount":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteConnectedAccount(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "disconnectConnectedAccount":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_disconnectConnectedAccount(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateMessageChannel":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateMessageChannel(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createEmailGroupChannel":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createEmailGroupChannel(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateEmailGroupChannel":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateEmailGroupChannel(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteEmailGroupChannel":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteEmailGroupChannel(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateCalendarChannel":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateCalendarChannel(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "dismissReconnectAccountBanner":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_dismissReconnectAccountBanner(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "sendEmail":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_sendEmail(ctx, field)
@@ -1927,19 +7099,67 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Query")
+		case "myConnectedAccounts":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_myConnectedAccounts(ctx, field)
+				})
+		case "applicationConnectedAccounts":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_applicationConnectedAccounts(ctx, field)
+				})
+		case "myMessageChannels":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_myMessageChannels(ctx, field)
+				})
+		case "myCalendarChannels":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_myCalendarChannels(ctx, field)
+				})
+		case "getTimelineThreadsFromObjectRecord":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_getTimelineThreadsFromObjectRecord(ctx, field)
+				})
+		case "getTimelineThreadsFromPersonId":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_getTimelineThreadsFromPersonId(ctx, field)
+				})
+		case "getTimelineThreadsFromCompanyId":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_getTimelineThreadsFromCompanyId(ctx, field)
+				})
+		case "getTimelineThreadsFromOpportunityId":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_getTimelineThreadsFromOpportunityId(ctx, field)
+				})
 		case "__type":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Query___type(ctx, field)
 			})
 			if out.Values[i] == graphql.RequiredNull {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "__schema":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Query___schema(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -1982,6 +7202,196 @@ func (ec *executionContext) _SendEmailOutput(ctx context.Context, sel ast.Select
 		case "messageThreadId":
 			out.Values[i] = ec._SendEmailOutput_messageThreadId(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var timelineThreadImplementors = []string{"TimelineThread"}
+
+func (ec *executionContext) _TimelineThread(ctx context.Context, sel ast.SelectionSet, obj *messaging.TimelineThread) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, timelineThreadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("TimelineThread")
+		case "id":
+			out.Values[i] = ec._TimelineThread_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "read":
+			out.Values[i] = ec._TimelineThread_read(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "visibility":
+			out.Values[i] = ec._TimelineThread_visibility(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "firstParticipant":
+			out.Values[i] = ec._TimelineThread_firstParticipant(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "lastTwoParticipants":
+			out.Values[i] = ec._TimelineThread_lastTwoParticipants(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "lastMessageReceivedAt":
+			out.ResolveConcurrently(ec.OperationContext, &deferred, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._TimelineThread_lastMessageReceivedAt(ctx, field, obj)
+				})
+		case "lastMessageBody":
+			out.Values[i] = ec._TimelineThread_lastMessageBody(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "subject":
+			out.Values[i] = ec._TimelineThread_subject(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "numberOfMessagesInThread":
+			out.Values[i] = ec._TimelineThread_numberOfMessagesInThread(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "participantCount":
+			out.Values[i] = ec._TimelineThread_participantCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "lastMessageIsDraft":
+			out.Values[i] = ec._TimelineThread_lastMessageIsDraft(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var timelineThreadParticipantImplementors = []string{"TimelineThreadParticipant"}
+
+func (ec *executionContext) _TimelineThreadParticipant(ctx context.Context, sel ast.SelectionSet, obj *messaging.TimelineParticipant) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, timelineThreadParticipantImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("TimelineThreadParticipant")
+		case "personId":
+			out.Values[i] = ec._TimelineThreadParticipant_personId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "workspaceMemberId":
+			out.Values[i] = ec._TimelineThreadParticipant_workspaceMemberId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "firstName":
+			out.Values[i] = ec._TimelineThreadParticipant_firstName(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "lastName":
+			out.Values[i] = ec._TimelineThreadParticipant_lastName(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "displayName":
+			out.Values[i] = ec._TimelineThreadParticipant_displayName(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "avatarUrl":
+			out.Values[i] = ec._TimelineThreadParticipant_avatarUrl(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "handle":
+			out.Values[i] = ec._TimelineThreadParticipant_handle(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var timelineThreadsWithTotalImplementors = []string{"TimelineThreadsWithTotal"}
+
+func (ec *executionContext) _TimelineThreadsWithTotal(ctx context.Context, sel ast.SelectionSet, obj *messaging.TimelineThreadsWithTotal) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, timelineThreadsWithTotalImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("TimelineThreadsWithTotal")
+		case "totalNumberOfThreads":
+			out.Values[i] = ec._TimelineThreadsWithTotal_totalNumberOfThreads(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "timelineThreads":
+			out.Values[i] = ec._TimelineThreadsWithTotal_timelineThreads(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "relatedPersonIds":
+			out.Values[i] = ec._TimelineThreadsWithTotal_relatedPersonIds(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
 		default:
@@ -2363,6 +7773,30 @@ func (ec *executionContext) ___Type(ctx context.Context, sel ast.SelectionSet, o
 
 // region    ***************************** type.gotpl *****************************
 
+func (ec *executionContext) marshalNApplicationConnectedAccountDTO2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐApplicationAccountᚄ(ctx context.Context, sel ast.SelectionSet, v []*store.ApplicationAccount) graphql.Marshaler {
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNApplicationConnectedAccountDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐApplicationAccount(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNApplicationConnectedAccountDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐApplicationAccount(ctx context.Context, sel ast.SelectionSet, v *store.ApplicationAccount) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "ApplicationConnectedAccountDTO!")
+		return graphql.Null
+	}
+	return ec._ApplicationConnectedAccountDTO(ctx, sel, v)
+}
+
 func (ec *executionContext) unmarshalNBoolean2bool(ctx context.Context, v any) (bool, error) {
 	res, err := graphql.UnmarshalBoolean(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -2373,6 +7807,301 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	res := graphql.MarshalBoolean(v)
 	if res == graphql.Null {
 		graphql.AddInvalidNullFromMarshaler(ctx, "Boolean!")
+	}
+	return res
+}
+
+func (ec *executionContext) marshalNCalendarChannel2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐCalendarChannelᚄ(ctx context.Context, sel ast.SelectionSet, v []*store.CalendarChannel) graphql.Marshaler {
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNCalendarChannel2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐCalendarChannel(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNCalendarChannel2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐCalendarChannel(ctx context.Context, sel ast.SelectionSet, v *store.CalendarChannel) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "CalendarChannel!")
+		return graphql.Null
+	}
+	return ec._CalendarChannel(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNCalendarChannelContactAutoCreationPolicy2string(ctx context.Context, v any) (string, error) {
+	res, err := graphql.UnmarshalString(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNCalendarChannelContactAutoCreationPolicy2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
+	_ = sel
+	res := graphql.MarshalString(v)
+	if res == graphql.Null {
+		graphql.AddInvalidNullFromMarshaler(ctx, "CalendarChannelContactAutoCreationPolicy!")
+	}
+	return res
+}
+
+func (ec *executionContext) unmarshalNCalendarChannelSyncStage2string(ctx context.Context, v any) (string, error) {
+	res, err := graphql.UnmarshalString(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNCalendarChannelSyncStage2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
+	_ = sel
+	res := graphql.MarshalString(v)
+	if res == graphql.Null {
+		graphql.AddInvalidNullFromMarshaler(ctx, "CalendarChannelSyncStage!")
+	}
+	return res
+}
+
+func (ec *executionContext) unmarshalNCalendarChannelSyncStatus2string(ctx context.Context, v any) (string, error) {
+	res, err := graphql.UnmarshalString(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNCalendarChannelSyncStatus2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
+	_ = sel
+	res := graphql.MarshalString(v)
+	if res == graphql.Null {
+		graphql.AddInvalidNullFromMarshaler(ctx, "CalendarChannelSyncStatus!")
+	}
+	return res
+}
+
+func (ec *executionContext) unmarshalNCalendarChannelVisibility2string(ctx context.Context, v any) (string, error) {
+	res, err := graphql.UnmarshalString(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNCalendarChannelVisibility2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
+	_ = sel
+	res := graphql.MarshalString(v)
+	if res == graphql.Null {
+		graphql.AddInvalidNullFromMarshaler(ctx, "CalendarChannelVisibility!")
+	}
+	return res
+}
+
+func (ec *executionContext) marshalNConnectedAccountPublicDTO2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐAccountᚄ(ctx context.Context, sel ast.SelectionSet, v []*store.Account) graphql.Marshaler {
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNConnectedAccountPublicDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐAccount(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNConnectedAccountPublicDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐAccount(ctx context.Context, sel ast.SelectionSet, v *store.Account) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "ConnectedAccountPublicDTO!")
+		return graphql.Null
+	}
+	return ec._ConnectedAccountPublicDTO(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNCreateEmailGroupChannelInput2map(ctx context.Context, v any) (map[string]any, error) {
+	res, err := ec.unmarshalInputCreateEmailGroupChannelInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNCreateEmailGroupChannelOutput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐEmailGroupChannel(ctx context.Context, sel ast.SelectionSet, v *store.EmailGroupChannel) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "CreateEmailGroupChannelOutput!")
+		return graphql.Null
+	}
+	return ec._CreateEmailGroupChannelOutput(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNDateTime2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx context.Context, v any) (metadata.Timestamp, error) {
+	var res metadata.Timestamp
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNDateTime2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx context.Context, sel ast.SelectionSet, v metadata.Timestamp) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalNDateTime2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx context.Context, v any) (*metadata.Timestamp, error) {
+	var res = new(metadata.Timestamp)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNDateTime2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx context.Context, sel ast.SelectionSet, v *metadata.Timestamp) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "DateTime!")
+		return graphql.Null
+	}
+	return v
+}
+
+func (ec *executionContext) unmarshalNFloat2int(ctx context.Context, v any) (int, error) {
+	res, err := graphql.UnmarshalInt(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNFloat2int(ctx context.Context, sel ast.SelectionSet, v int) graphql.Marshaler {
+	_ = sel
+	res := graphql.MarshalInt(v)
+	if res == graphql.Null {
+		graphql.AddInvalidNullFromMarshaler(ctx, "Float!")
+	}
+	return res
+}
+
+func (ec *executionContext) unmarshalNInt2int(ctx context.Context, v any) (int, error) {
+	res, err := graphql.UnmarshalInt(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.SelectionSet, v int) graphql.Marshaler {
+	_ = sel
+	res := graphql.MarshalInt(v)
+	if res == graphql.Null {
+		graphql.AddInvalidNullFromMarshaler(ctx, "Int!")
+	}
+	return res
+}
+
+func (ec *executionContext) marshalNMessageChannel2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐMessageChannel(ctx context.Context, sel ast.SelectionSet, v store.MessageChannel) graphql.Marshaler {
+	return ec._MessageChannel(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNMessageChannel2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐMessageChannelᚄ(ctx context.Context, sel ast.SelectionSet, v []*store.MessageChannel) graphql.Marshaler {
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNMessageChannel2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐMessageChannel(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNMessageChannel2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐMessageChannel(ctx context.Context, sel ast.SelectionSet, v *store.MessageChannel) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "MessageChannel!")
+		return graphql.Null
+	}
+	return ec._MessageChannel(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNMessageChannelContactAutoCreationPolicy2string(ctx context.Context, v any) (string, error) {
+	res, err := graphql.UnmarshalString(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNMessageChannelContactAutoCreationPolicy2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
+	_ = sel
+	res := graphql.MarshalString(v)
+	if res == graphql.Null {
+		graphql.AddInvalidNullFromMarshaler(ctx, "MessageChannelContactAutoCreationPolicy!")
+	}
+	return res
+}
+
+func (ec *executionContext) unmarshalNMessageChannelPendingGroupEmailsAction2string(ctx context.Context, v any) (string, error) {
+	res, err := graphql.UnmarshalString(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNMessageChannelPendingGroupEmailsAction2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
+	_ = sel
+	res := graphql.MarshalString(v)
+	if res == graphql.Null {
+		graphql.AddInvalidNullFromMarshaler(ctx, "MessageChannelPendingGroupEmailsAction!")
+	}
+	return res
+}
+
+func (ec *executionContext) unmarshalNMessageChannelSyncStage2string(ctx context.Context, v any) (string, error) {
+	res, err := graphql.UnmarshalString(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNMessageChannelSyncStage2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
+	_ = sel
+	res := graphql.MarshalString(v)
+	if res == graphql.Null {
+		graphql.AddInvalidNullFromMarshaler(ctx, "MessageChannelSyncStage!")
+	}
+	return res
+}
+
+func (ec *executionContext) unmarshalNMessageChannelSyncStatus2string(ctx context.Context, v any) (string, error) {
+	res, err := graphql.UnmarshalString(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNMessageChannelSyncStatus2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
+	_ = sel
+	res := graphql.MarshalString(v)
+	if res == graphql.Null {
+		graphql.AddInvalidNullFromMarshaler(ctx, "MessageChannelSyncStatus!")
+	}
+	return res
+}
+
+func (ec *executionContext) unmarshalNMessageChannelType2string(ctx context.Context, v any) (string, error) {
+	res, err := graphql.UnmarshalString(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNMessageChannelType2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
+	_ = sel
+	res := graphql.MarshalString(v)
+	if res == graphql.Null {
+		graphql.AddInvalidNullFromMarshaler(ctx, "MessageChannelType!")
+	}
+	return res
+}
+
+func (ec *executionContext) unmarshalNMessageChannelVisibility2string(ctx context.Context, v any) (string, error) {
+	res, err := graphql.UnmarshalString(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNMessageChannelVisibility2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
+	_ = sel
+	res := graphql.MarshalString(v)
+	if res == graphql.Null {
+		graphql.AddInvalidNullFromMarshaler(ctx, "MessageChannelVisibility!")
+	}
+	return res
+}
+
+func (ec *executionContext) unmarshalNMessageFolderImportPolicy2string(ctx context.Context, v any) (string, error) {
+	res, err := graphql.UnmarshalString(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNMessageFolderImportPolicy2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
+	_ = sel
+	res := graphql.MarshalString(v)
+	if res == graphql.Null {
+		graphql.AddInvalidNullFromMarshaler(ctx, "MessageFolderImportPolicy!")
 	}
 	return res
 }
@@ -2407,6 +8136,122 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 		graphql.AddInvalidNullFromMarshaler(ctx, "String!")
 	}
 	return res
+}
+
+func (ec *executionContext) marshalNTimelineThread2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚐTimelineThread(ctx context.Context, sel ast.SelectionSet, v messaging.TimelineThread) graphql.Marshaler {
+	return ec._TimelineThread(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNTimelineThread2ᚕgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚐTimelineThreadᚄ(ctx context.Context, sel ast.SelectionSet, v []messaging.TimelineThread) graphql.Marshaler {
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNTimelineThread2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚐTimelineThread(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNTimelineThreadParticipant2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚐTimelineParticipant(ctx context.Context, sel ast.SelectionSet, v messaging.TimelineParticipant) graphql.Marshaler {
+	return ec._TimelineThreadParticipant(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNTimelineThreadParticipant2ᚕgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚐTimelineParticipantᚄ(ctx context.Context, sel ast.SelectionSet, v []messaging.TimelineParticipant) graphql.Marshaler {
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNTimelineThreadParticipant2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚐTimelineParticipant(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNTimelineThreadsWithTotal2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚐTimelineThreadsWithTotal(ctx context.Context, sel ast.SelectionSet, v *messaging.TimelineThreadsWithTotal) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "TimelineThreadsWithTotal!")
+		return graphql.Null
+	}
+	return ec._TimelineThreadsWithTotal(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNUUID2string(ctx context.Context, v any) (string, error) {
+	res, err := graphql.UnmarshalString(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNUUID2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
+	_ = sel
+	res := graphql.MarshalString(v)
+	if res == graphql.Null {
+		graphql.AddInvalidNullFromMarshaler(ctx, "UUID!")
+	}
+	return res
+}
+
+func (ec *executionContext) unmarshalNUUID2ᚕstringᚄ(ctx context.Context, v any) ([]string, error) {
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]string, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNUUID2string(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalNUUID2ᚕstringᚄ(ctx context.Context, sel ast.SelectionSet, v []string) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalNUUID2string(ctx, sel, v[i])
+	}
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalNUpdateCalendarChannelInput2map(ctx context.Context, v any) (map[string]any, error) {
+	res, err := ec.unmarshalInputUpdateCalendarChannelInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateCalendarChannelInputUpdates2map(ctx context.Context, v any) (map[string]any, error) {
+	res, err := ec.unmarshalInputUpdateCalendarChannelInputUpdates(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateEmailGroupChannelInput2map(ctx context.Context, v any) (map[string]any, error) {
+	res, err := ec.unmarshalInputUpdateEmailGroupChannelInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateMessageChannelInput2map(ctx context.Context, v any) (map[string]any, error) {
+	res, err := ec.unmarshalInputUpdateMessageChannelInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateMessageChannelInputUpdates2map(ctx context.Context, v any) (map[string]any, error) {
+	res, err := ec.unmarshalInputUpdateMessageChannelInputUpdates(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalN__Directive2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐDirective(ctx context.Context, sel ast.SelectionSet, v introspection.Directive) graphql.Marshaler {
@@ -2581,6 +8426,119 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return res
 }
 
+func (ec *executionContext) unmarshalOCalendarChannelContactAutoCreationPolicy2ᚖstring(ctx context.Context, v any) (*string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalString(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOCalendarChannelContactAutoCreationPolicy2ᚖstring(ctx context.Context, sel ast.SelectionSet, v *string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	_ = sel
+	_ = ctx
+	res := graphql.MarshalString(*v)
+	return res
+}
+
+func (ec *executionContext) unmarshalOCalendarChannelVisibility2ᚖstring(ctx context.Context, v any) (*string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalString(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOCalendarChannelVisibility2ᚖstring(ctx context.Context, sel ast.SelectionSet, v *string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	_ = sel
+	_ = ctx
+	res := graphql.MarshalString(*v)
+	return res
+}
+
+func (ec *executionContext) marshalOConnectedAccountPublicDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐAccount(ctx context.Context, sel ast.SelectionSet, v *store.Account) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._ConnectedAccountPublicDTO(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalODateTime2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx context.Context, v any) (*metadata.Timestamp, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(metadata.Timestamp)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalODateTime2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx context.Context, sel ast.SelectionSet, v *metadata.Timestamp) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
+}
+
+func (ec *executionContext) unmarshalOMessageChannelContactAutoCreationPolicy2ᚖstring(ctx context.Context, v any) (*string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalString(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOMessageChannelContactAutoCreationPolicy2ᚖstring(ctx context.Context, sel ast.SelectionSet, v *string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	_ = sel
+	_ = ctx
+	res := graphql.MarshalString(*v)
+	return res
+}
+
+func (ec *executionContext) unmarshalOMessageChannelVisibility2ᚖstring(ctx context.Context, v any) (*string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalString(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOMessageChannelVisibility2ᚖstring(ctx context.Context, sel ast.SelectionSet, v *string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	_ = sel
+	_ = ctx
+	res := graphql.MarshalString(*v)
+	return res
+}
+
+func (ec *executionContext) unmarshalOMessageFolderImportPolicy2ᚖstring(ctx context.Context, v any) (*string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalString(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOMessageFolderImportPolicy2ᚖstring(ctx context.Context, sel ast.SelectionSet, v *string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	_ = sel
+	_ = ctx
+	res := graphql.MarshalString(*v)
+	return res
+}
+
 func (ec *executionContext) unmarshalOSendEmailAttachmentInput2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋmessaginggqlᚐSendEmailAttachmentInputᚄ(ctx context.Context, v any) ([]*SendEmailAttachmentInput, error) {
 	if v == nil {
 		return nil, nil
@@ -2598,6 +8556,41 @@ func (ec *executionContext) unmarshalOSendEmailAttachmentInput2ᚕᚖgithubᚗco
 	return res, nil
 }
 
+func (ec *executionContext) unmarshalOString2ᚕstringᚄ(ctx context.Context, v any) ([]string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]string, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNString2string(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOString2ᚕstringᚄ(ctx context.Context, sel ast.SelectionSet, v []string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalNString2string(ctx, sel, v[i])
+	}
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
 func (ec *executionContext) unmarshalOString2ᚖstring(ctx context.Context, v any) (*string, error) {
 	if v == nil {
 		return nil, nil
@@ -2607,6 +8600,24 @@ func (ec *executionContext) unmarshalOString2ᚖstring(ctx context.Context, v an
 }
 
 func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel ast.SelectionSet, v *string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	_ = sel
+	_ = ctx
+	res := graphql.MarshalString(*v)
+	return res
+}
+
+func (ec *executionContext) unmarshalOUUID2ᚖstring(ctx context.Context, v any) (*string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalString(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOUUID2ᚖstring(ctx context.Context, sel ast.SelectionSet, v *string) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
