@@ -41,6 +41,47 @@ func (w *SyncMessageChannelWorker) Work(ctx context.Context, job *river.Job[Sync
 	return nil
 }
 
+type SendCampaignArgs struct {
+	CampaignID string `json:"campaignId"`
+}
+
+func (SendCampaignArgs) Kind() string { return "messaging_send_campaign" }
+
+type DeliverCampaignMessageArgs struct {
+	DeliveryID string `json:"deliveryId"`
+}
+
+func (DeliverCampaignMessageArgs) Kind() string { return "messaging_deliver_campaign_message" }
+
+func (DeliverCampaignMessageArgs) InsertOpts() river.InsertOpts {
+	return river.InsertOpts{UniqueOpts: river.UniqueOpts{ByArgs: true}}
+}
+
+type SendCampaignWorker struct {
+	river.WorkerDefaults[SendCampaignArgs]
+	Campaigns *Campaigns
+}
+
+func (w *SendCampaignWorker) Work(ctx context.Context, job *river.Job[SendCampaignArgs]) error {
+	if err := w.Campaigns.Send(ctx, job.Args.CampaignID); err != nil {
+		return fmt.Errorf("send campaign %s: %w", job.Args.CampaignID, err)
+	}
+	return nil
+}
+
+type DeliverCampaignMessageWorker struct {
+	river.WorkerDefaults[DeliverCampaignMessageArgs]
+	Campaigns *Campaigns
+}
+
+func (w *DeliverCampaignMessageWorker) Work(ctx context.Context, job *river.Job[DeliverCampaignMessageArgs]) error {
+	err := w.Campaigns.Deliver(ctx, job.Args.DeliveryID, job.Attempt >= job.MaxAttempts)
+	if errors.Is(err, ErrDeliveryFailed) || errors.Is(err, ErrDeliveryNotFound) {
+		return river.JobCancel(err)
+	}
+	return err
+}
+
 type EnqueueMessageSyncsWorker struct {
 	river.WorkerDefaults[EnqueueMessageSyncsArgs]
 	Store SyncStore
