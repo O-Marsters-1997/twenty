@@ -1,0 +1,18 @@
+{
+  "name": "CreateCoreWorkflowVersionEdge",
+  "operation": "CreateCoreWorkflowVersionEdge",
+  "fixture": "baseline seed; mutation JSON derived from the Node resolvers and microdiff, not captured from a running Node",
+  "endpoint": "/graphql",
+  "query": "mutation CreateCoreWorkflowVersionEdge($input: CreateCoreWorkflowVersionEdgeInput!) { createWorkflowVersionEdge: createCoreWorkflowVersionEdge(input: $input) { ...WorkflowDiffFragment } } fragment WorkflowDiffFragment on WorkflowVersionStepChanges { triggerDiff stepsDiff }",
+  "variables": {
+    "input": {}
+  },
+  "response": {
+    "data": {
+      "createWorkflowVersionEdge": {
+        "triggerDiff": [],
+        "stepsDiff": []
+      }
+    }
+  }
+}

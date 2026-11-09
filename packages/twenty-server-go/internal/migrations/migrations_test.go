@@ -71,4 +71,15 @@ func TestBaseline(t *testing.T) {
 			t.Errorf("callRecording objectMetadata rows = %d, want 0", count)
 		}
 	})
+
+	t.Run("applies the river schema", func(t *testing.T) {
+		var hasRiverJob bool
+		err := pool.QueryRow(t.Context(), `SELECT to_regclass('public.river_job') IS NOT NULL`).Scan(&hasRiverJob)
+		if err != nil {
+			t.Fatalf("inspect river schema: %v", err)
+		}
+		if !hasRiverJob {
+			t.Error("river_job table missing, want the river schema applied")
+		}
+	})
 }

@@ -8,7 +8,10 @@ import (
 	"io"
 	"io/fs"
 
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/pressly/goose/v3"
+	"github.com/riverqueue/river/riverdriver/riverpgxv5"
+	"github.com/riverqueue/river/rivermigrate"
 
 	_ "github.com/jackc/pgx/v5/stdlib"
 )
@@ -20,6 +23,22 @@ var FS fs.FS = embedded
 
 func Up(ctx context.Context, dsn string) error {
 	return Run(ctx, dsn, "up", io.Discard)
+}
+
+func migrateRiver(ctx context.Context, dsn string) error {
+	pool, err := pgxpool.New(ctx, dsn)
+	if err != nil {
+		return fmt.Errorf("open river pool: %w", err)
+	}
+	defer pool.Close()
+	migrator, err := rivermigrate.New(riverpgxv5.New(pool), nil)
+	if err != nil {
+		return fmt.Errorf("create river migrator: %w", err)
+	}
+	if _, err := migrator.Migrate(ctx, rivermigrate.DirectionUp, nil); err != nil {
+		return fmt.Errorf("migrate river: %w", err)
+	}
+	return nil
 }
 
 func Run(ctx context.Context, dsn, command string, out io.Writer) error {
@@ -40,7 +59,10 @@ func Run(ctx context.Context, dsn, command string, out io.Writer) error {
 
 	switch command {
 	case "up":
-		_, err = provider.Up(ctx)
+		if _, err = provider.Up(ctx); err != nil {
+			return fmt.Errorf("migrate %s: %w", command, err)
+		}
+		err = migrateRiver(ctx, dsn)
 	case "down":
 		_, err = provider.Down(ctx)
 	case "status":

@@ -23,9 +23,84 @@ type personRow = db.Workspace2abogkkt2zd45pa9aun09djpfPerson
 type People struct {
 	*recordTable[records.Person]
 	queries *db.Queries
+	events  records.EventPublisher
 }
 
 var _ records.People = (*People)(nil)
+
+func (p *People) WithEvents(events records.EventPublisher) *People {
+	p.events = events
+	return p
+}
+
+func (p *People) publish(ctx context.Context, tx pgx.Tx, kind records.EventKind, actor records.Actor, before, after *records.Person) error {
+	if p.events == nil {
+		return nil
+	}
+	event := records.RecordEvent{Object: "person", Kind: kind, Actor: actor}
+	for _, side := range []struct {
+		person *records.Person
+		target *json.RawMessage
+	}{{before, &event.Before}, {after, &event.After}} {
+		if side.person == nil {
+			continue
+		}
+		raw, err := json.Marshal(side.person)
+		if err != nil {
+			return fmt.Errorf("encode person event: %w", err)
+		}
+		*side.target = raw
+		event.RecordID = side.person.ID
+	}
+	return p.events.Publish(ctx, tx, event)
+}
+
+func (p *People) transition(ctx context.Context, id string, kind records.EventKind, run func(*db.Queries, context.Context, pgtype.UUID) (int64, error)) error {
+	uuid, err := parseUUID(id)
+	if err != nil {
+		return err
+	}
+	tx, err := p.pool.Begin(ctx)
+	if err != nil {
+		return fmt.Errorf("begin %s: %w", kind, err)
+	}
+	defer func() { _ = tx.Rollback(ctx) }()
+
+	load := func() (records.Person, error) {
+		row, err := scanPerson(tx.QueryRow(ctx, `SELECT `+personColumns+` FROM `+p.table+` WHERE "id" = $1 FOR UPDATE`, uuid))
+		if errors.Is(err, pgx.ErrNoRows) {
+			return records.Person{}, records.ErrNotFound
+		}
+		if err != nil {
+			return records.Person{}, fmt.Errorf("load person: %w", err)
+		}
+		return toPerson(row)
+	}
+	before, err := load()
+	if err != nil {
+		return err
+	}
+	if err := affect(ctx, id, "person", func(ctx context.Context, uuid pgtype.UUID) (int64, error) {
+		return run(p.queries.WithTx(tx), ctx, uuid)
+	}); err != nil {
+		return err
+	}
+	var after *records.Person
+	if kind != records.EventDestroyed {
+		current, err := load()
+		if err != nil {
+			return err
+		}
+		after = &current
+	}
+	if err := p.publish(ctx, tx, kind, records.Actor{}, &before, after); err != nil {
+		return err
+	}
+	if err := tx.Commit(ctx); err != nil {
+		return fmt.Errorf("commit %s: %w", kind, err)
+	}
+	return nil
+}
 
 func NewPeople(pool *pgxpool.Pool) *People {
 	scan := func(row pgx.Row) (records.Person, error) {
@@ -83,11 +158,26 @@ func (p *People) Create(ctx context.Context, actor records.Actor, input records.
 	params.UpdatedBySource = db.Workspace2abogkkt2zd45pa9aun09djpfPersonUpdatedBySourceEnum(actor.Source)
 	params.UpdatedByWorkspaceMemberId, params.UpdatedByName = memberID, actor.Name
 
-	row, err := p.queries.CreatePerson(ctx, params)
+	tx, err := p.pool.Begin(ctx)
+	if err != nil {
+		return records.Person{}, fmt.Errorf("begin create: %w", err)
+	}
+	defer func() { _ = tx.Rollback(ctx) }()
+	row, err := p.queries.WithTx(tx).CreatePerson(ctx, params)
 	if err != nil {
 		return records.Person{}, fmt.Errorf("create person: %w", err)
 	}
-	return toPerson(row)
+	person, err := toPerson(row)
+	if err != nil {
+		return records.Person{}, err
+	}
+	if err := p.publish(ctx, tx, records.EventCreated, actor, nil, &person); err != nil {
+		return records.Person{}, err
+	}
+	if err := tx.Commit(ctx); err != nil {
+		return records.Person{}, fmt.Errorf("commit create: %w", err)
+	}
+	return person, nil
 }
 
 func (p *People) Update(ctx context.Context, actor records.Actor, id string, input records.PersonInput) (records.Person, error) {
@@ -132,22 +222,33 @@ func (p *People) Update(ctx context.Context, actor records.Actor, id string, inp
 	if err != nil {
 		return records.Person{}, fmt.Errorf("update person: %w", err)
 	}
+	person, err := toPerson(row)
+	if err != nil {
+		return records.Person{}, err
+	}
+	before, err := toPerson(current)
+	if err != nil {
+		return records.Person{}, err
+	}
+	if err := p.publish(ctx, tx, records.EventUpdated, actor, &before, &person); err != nil {
+		return records.Person{}, err
+	}
 	if err := tx.Commit(ctx); err != nil {
 		return records.Person{}, fmt.Errorf("commit update: %w", err)
 	}
-	return toPerson(row)
+	return person, nil
 }
 
 func (p *People) SoftDelete(ctx context.Context, id string) error {
-	return affect(ctx, id, "person", p.queries.SoftDeletePerson)
+	return p.transition(ctx, id, records.EventDeleted, (*db.Queries).SoftDeletePerson)
 }
 
 func (p *People) Restore(ctx context.Context, id string) error {
-	return affect(ctx, id, "person", p.queries.RestorePerson)
+	return p.transition(ctx, id, records.EventRestored, (*db.Queries).RestorePerson)
 }
 
 func (p *People) Destroy(ctx context.Context, id string) error {
-	return affect(ctx, id, "person", p.queries.DestroyPerson)
+	return p.transition(ctx, id, records.EventDestroyed, (*db.Queries).DestroyPerson)
 }
 
 func affect(ctx context.Context, id, label string, run func(context.Context, pgtype.UUID) (int64, error)) error {

@@ -1,0 +1,26 @@
+{
+  "name": "DiscardCoreWorkflowDraft",
+  "operation": "DiscardCoreWorkflowDraft",
+  "fixture": "baseline seed; mutation JSON derived from the Node resolvers and microdiff, not captured from a running Node",
+  "endpoint": "/graphql",
+  "query": "mutation DiscardCoreWorkflowDraft($input: DiscardCoreWorkflowDraftInput!) { discardCoreWorkflowDraft(input: $input) { id name statuses lastPublishedVersionId workspaceWorkflowId updatedAt } }",
+  "variables": {
+    "input": {
+      "coreWorkflowVersionId": "replaced-by-test"
+    }
+  },
+  "response": {
+    "data": {
+      "discardCoreWorkflowDraft": {
+        "id": "bce3421f-e977-5fb5-ae82-eaef2cf48be6",
+        "name": "Quick Lead",
+        "statuses": [
+          "ACTIVE"
+        ],
+        "lastPublishedVersionId": null,
+        "workspaceWorkflowId": null,
+        "updatedAt": "<ignored>"
+      }
+    }
+  }
+}

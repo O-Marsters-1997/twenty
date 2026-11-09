@@ -1,0 +1,107 @@
+schema:
+  - workflow.graphqls
+exec:
+  filename: generated.go
+  package: workflowgql
+model:
+  filename: models_gen.go
+  package: workflowgql
+resolver:
+  layout: single-file
+  filename: resolver.go
+  package: workflowgql
+  type: Resolver
+models:
+  UUID:
+    model: github.com/99designs/gqlgen/graphql.String
+  JSON:
+    model: github.com/99designs/gqlgen/graphql.Any
+  CoreWorkflowVersionStatus:
+    model: github.com/99designs/gqlgen/graphql.String
+  WorkflowVisibility:
+    model: github.com/99designs/gqlgen/graphql.String
+  CoreWorkflowOrderByField:
+    model: github.com/99designs/gqlgen/graphql.String
+  CoreWorkflowOrderByDirection:
+    model: github.com/99designs/gqlgen/graphql.String
+  CoreWorkflowFilterFieldKey:
+    model: github.com/99designs/gqlgen/graphql.String
+  CoreWorkflowFilterOperand:
+    model: github.com/99designs/gqlgen/graphql.String
+  CoreWorkflowFilterLogicalOperator:
+    model: github.com/99designs/gqlgen/graphql.String
+  CoreWorkflowFilterInput:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/store.CoreWorkflowFilter
+  CoreWorkflowFilterRuleInput:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/store.CoreWorkflowFilterRule
+  CoreWorkflowsWithCurrentVersionsInput:
+    model: map[string]interface{}
+  SubmitFormStepInput:
+    model: map[string]interface{}
+  UpdateWorkflowRunStepInput:
+    model: map[string]interface{}
+  TestHttpRequestInput:
+    model: map[string]interface{}
+  CoreWorkflowDTO:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/store.CoreWorkflow
+  CoreWorkflowVersionDTO:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/store.CoreVersion
+  CoreWorkflowEdge:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/store.CoreWorkflowEdge
+  CoreWorkflowPageInfo:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/store.CoreWorkflowPageInfo
+  CoreWorkflowConnection:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/store.CoreWorkflowConnection
+  CoreWorkflowWithCurrentVersionDTO:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/store.CoreWorkflowWithVersions
+  WorkflowRun:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/store.Run
+  WorkflowAction:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/workflowgql.WorkflowAction
+  WorkflowStepPosition:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/workflowgql.StepPosition
+  TestHttpRequest:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/workflowgql.HTTPTestResult
+  ConnectedAccountHandleDTO:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/store.ConnectedAccount
+  DeletedCoreWorkflowDTO:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/workflowgql.DeletedWorkflowDTO
+  WorkflowVersionStepChanges:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/workflowgql.StepChangesDTO
+  WorkflowVersionTrigger:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/workflowgql.TriggerDTO
+  CreateCoreWorkflowInput:
+    model: map[string]interface{}
+  UpdateCoreWorkflowInput:
+    model: map[string]interface{}
+  UpdateCoreWorkflowVisibilityInput:
+    model: map[string]interface{}
+  DuplicateCoreWorkflowInput:
+    model: map[string]interface{}
+  DeleteCoreWorkflowsInput:
+    model: map[string]interface{}
+  DiscardCoreWorkflowDraftInput:
+    model: map[string]interface{}
+  CreateDraftFromCoreWorkflowVersionInput:
+    model: map[string]interface{}
+  CreateCoreWorkflowVersionStepInput:
+    model: map[string]interface{}
+  UpdateCoreWorkflowVersionStepInput:
+    model: map[string]interface{}
+  UpdateCoreWorkflowVersionTriggerInput:
+    model: map[string]interface{}
+  DeleteCoreWorkflowVersionStepInput:
+    model: map[string]interface{}
+  DuplicateCoreWorkflowVersionStepInput:
+    model: map[string]interface{}
+  CreateCoreWorkflowVersionEdgeInput:
+    model: map[string]interface{}
+  DeleteCoreWorkflowVersionEdgeInput:
+    model: map[string]interface{}
+  UpdateCoreWorkflowVersionPositionsInput:
+    model: map[string]interface{}
+  WorkflowStepPositionUpdateInput:
+    model: map[string]interface{}
+  WorkflowStepPositionInput:
+    model: map[string]interface{}
+

@@ -1,0 +1,22 @@
+{
+  "name": "UpdateCoreWorkflow",
+  "operation": "UpdateCoreWorkflow",
+  "fixture": "baseline seed; mutation JSON derived from the Node resolvers and microdiff, not captured from a running Node",
+  "endpoint": "/graphql",
+  "query": "mutation UpdateCoreWorkflow($input: UpdateCoreWorkflowInput!) { updateCoreWorkflow(input: $input) { id name updatedAt } }",
+  "variables": {
+    "input": {
+      "coreWorkflowId": "bce3421f-e977-5fb5-ae82-eaef2cf48be6",
+      "name": "Renamed lead"
+    }
+  },
+  "response": {
+    "data": {
+      "updateCoreWorkflow": {
+        "id": "bce3421f-e977-5fb5-ae82-eaef2cf48be6",
+        "name": "Renamed lead",
+        "updatedAt": "<ignored>"
+      }
+    }
+  }
+}

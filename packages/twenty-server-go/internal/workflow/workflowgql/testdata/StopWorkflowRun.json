@@ -1,0 +1,13 @@
+{
+  "name": "StopWorkflowRun",
+  "operation": "StopWorkflowRun",
+  "fixture": "run 22222222-2222-4222-8222-222222222222 RUNNING with no step in flight",
+  "endpoint": "/graphql",
+  "query": "mutation StopWorkflowRun($workflowRunId: UUID!) { stopWorkflowRun(workflowRunId: $workflowRunId) { id status __typename } }",
+  "variables": { "workflowRunId": "22222222-2222-4222-8222-222222222222" },
+  "response": {
+    "data": {
+      "stopWorkflowRun": { "id": "22222222-2222-4222-8222-222222222222", "status": "STOPPED", "__typename": "WorkflowRun" }
+    }
+  }
+}
