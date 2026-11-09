@@ -53,6 +53,10 @@ type DeliverCampaignMessageArgs struct {
 
 func (DeliverCampaignMessageArgs) Kind() string { return "messaging_deliver_campaign_message" }
 
+func (DeliverCampaignMessageArgs) InsertOpts() river.InsertOpts {
+	return river.InsertOpts{UniqueOpts: river.UniqueOpts{ByArgs: true}}
+}
+
 type SendCampaignWorker struct {
 	river.WorkerDefaults[SendCampaignArgs]
 	Campaigns *Campaigns

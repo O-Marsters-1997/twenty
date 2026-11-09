@@ -62,8 +62,13 @@ func (s *fakeCampaignStore) Settle(_ context.Context, id string, settlement mess
 	return nil
 }
 
-func (s *fakeCampaignStore) RecordOutcome(context.Context, string, messaging.ProviderOutcome) (string, error) {
-	return "c1", nil
+func (s *fakeCampaignStore) RecordOutcome(_ context.Context, providerMessageID string, _ messaging.ProviderOutcome) (string, error) {
+	for id, settlement := range s.settled {
+		if settlement.ProviderMsgID == providerMessageID {
+			return s.deliveries[id].CampaignID, nil
+		}
+	}
+	return "", nil
 }
 
 func (s *fakeCampaignStore) Counts(context.Context, string) (messaging.CampaignCounts, error) {
@@ -215,10 +220,18 @@ func TestCampaigns_RecordOutcome(t *testing.T) {
 	t.Parallel()
 
 	store := newFakeCampaignStore(nil)
-	store.deliveries["d1"] = &messaging.Delivery{ID: "d1", Status: messaging.DeliverySent}
+	store.deliveries["d1"] = &messaging.Delivery{ID: "d1", CampaignID: "c1", Status: messaging.DeliverySent}
+	store.settled["d1"] = messaging.DeliverySettlement{Status: messaging.DeliverySent, ProviderMsgID: "msg-1"}
 	var queued []string
+	campaigns := newCampaigns(store, &fakeMailer{}, &queued)
 
-	if err := newCampaigns(store, &fakeMailer{}, &queued).RecordOutcome(context.Background(), "msg-1", "BOUNCED"); err != nil {
+	if err := campaigns.RecordOutcome(context.Background(), "unknown", "BOUNCED"); err != nil {
+		t.Fatal(err)
+	}
+	if store.finished != "" {
+		t.Errorf("campaign status = %q for an unknown message, want unchanged", store.finished)
+	}
+	if err := campaigns.RecordOutcome(context.Background(), "msg-1", "BOUNCED"); err != nil {
 		t.Fatal(err)
 	}
 	if store.finished != messaging.CampaignSent {

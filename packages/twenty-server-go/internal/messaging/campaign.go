@@ -335,29 +335,24 @@ func (c *Campaigns) Deliver(ctx context.Context, deliveryID string, lastAttempt 
 	}
 	html, _, err := c.Renderer.Render(ctx, campaign.Template, delivery.Variables)
 	if err != nil {
-		if settleErr := c.settle(ctx, delivery, DeliverySettlement{Status: DeliveryFailed, FailureReason: "CONFIGURATION_ERROR"}); settleErr != nil {
-			return settleErr
-		}
-		return fmt.Errorf("render delivery %s: %w", deliveryID, errors.Join(err, ErrDeliveryFailed))
+		return c.fail(ctx, delivery, "CONFIGURATION_ERROR", fmt.Errorf("render delivery %s: %w", deliveryID, errors.Join(err, ErrDeliveryFailed)))
 	}
 	messageID, err := c.Mailer.Send(ctx, campaign.ConnectedAccountID, OutboundEmail{
 		To: []string{delivery.Email}, Subject: campaign.Subject, HTMLBody: html,
 	})
 	switch {
 	case errors.Is(err, ErrAccountAuthFailed):
-		if settleErr := c.settle(ctx, delivery, DeliverySettlement{Status: DeliveryFailed, FailureReason: "INSUFFICIENT_PERMISSIONS"}); settleErr != nil {
-			return settleErr
-		}
-		return fmt.Errorf("send delivery %s: %w", deliveryID, errors.Join(err, ErrDeliveryFailed))
+		return c.fail(ctx, delivery, "INSUFFICIENT_PERMISSIONS", fmt.Errorf("send delivery %s: %w", deliveryID, errors.Join(err, ErrDeliveryFailed)))
 	case err != nil && lastAttempt:
-		if settleErr := c.settle(ctx, delivery, DeliverySettlement{Status: DeliveryFailed, FailureReason: "TEMPORARY_ERROR"}); settleErr != nil {
-			return settleErr
-		}
-		return fmt.Errorf("send delivery %s: %w", deliveryID, err)
+		return c.fail(ctx, delivery, "TEMPORARY_ERROR", fmt.Errorf("send delivery %s: %w", deliveryID, err))
 	case err != nil:
 		return fmt.Errorf("send delivery %s: %w", deliveryID, err)
 	}
 	return c.settle(ctx, delivery, DeliverySettlement{Status: DeliverySent, ProviderMsgID: messageID})
+}
+
+func (c *Campaigns) fail(ctx context.Context, delivery Delivery, reason string, cause error) error {
+	return errors.Join(cause, c.settle(ctx, delivery, DeliverySettlement{Status: DeliveryFailed, FailureReason: reason}))
 }
 
 // RecordOutcome applies an outbound delivery event and settles the campaign if it was the last open delivery.
