@@ -28,7 +28,16 @@ func webhookRoutes(launcher *workflow.Launcher, next http.Handler, logger *slog.
 		var payload json.RawMessage
 		if r.Method == http.MethodPost {
 			body, err := io.ReadAll(http.MaxBytesReader(w, r.Body, maxWebhookBodySize))
-			if err != nil || (len(body) > 0 && !json.Valid(body)) {
+			var tooLarge *http.MaxBytesError
+			switch {
+			case errors.As(err, &tooLarge):
+				http.Error(w, "body too large", http.StatusRequestEntityTooLarge)
+				return
+			case err != nil:
+				logger.Warn("read webhook body", "err", err)
+				http.Error(w, "unreadable body", http.StatusBadRequest)
+				return
+			case len(body) > 0 && !json.Valid(body):
 				http.Error(w, "body must be JSON", http.StatusBadRequest)
 				return
 			}

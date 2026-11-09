@@ -98,8 +98,10 @@ func run() error {
 		return fmt.Errorf("create river insert client: %w", err)
 	}
 	launcher := &workflow.Launcher{Store: workflowstore.New(pool), Queue: func(ctx context.Context, args river.JobArgs) error {
-		_, err := queue.Insert(ctx, args, nil)
-		return err
+		if _, err := queue.Insert(ctx, args, nil); err != nil {
+			return fmt.Errorf("insert job: %w", err)
+		}
+		return nil
 	}}
 
 	server := &http.Server{

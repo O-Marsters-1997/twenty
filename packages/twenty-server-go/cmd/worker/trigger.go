@@ -26,7 +26,10 @@ func (w *cronTriggerWorker) Work(ctx context.Context, job *river.Job[workflow.Cr
 	if errors.Is(err, workflow.ErrNotLaunchable) || errors.Is(err, store.ErrNotFound) {
 		return river.JobCancel(err)
 	}
-	return err
+	if err != nil {
+		return fmt.Errorf("launch cron trigger %s: %w", job.Args.TriggerID, err)
+	}
+	return nil
 }
 
 type activeVersionSource interface {
