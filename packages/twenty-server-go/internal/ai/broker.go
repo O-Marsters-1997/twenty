@@ -54,8 +54,11 @@ func (b *MemoryBroker) Publish(threadID string, event ChatEvent) {
 		b.turn[threadID] = []ChatEvent{event}
 	case chunkFinish, chunkError, chunkAbort:
 		delete(b.turn, threadID)
+	case chunkQueueUpdated:
 	default:
-		b.turn[threadID] = append(b.turn[threadID], event)
+		if _, inFlight := b.turn[threadID]; inFlight {
+			b.turn[threadID] = append(b.turn[threadID], event)
+		}
 	}
 
 	for sub := range b.subs[threadID] {

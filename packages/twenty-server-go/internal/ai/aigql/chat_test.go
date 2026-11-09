@@ -57,6 +57,11 @@ func (v verifier) Verify(context.Context, string) (auth.Principal, error) {
 
 func newHarness(t *testing.T) harness {
 	t.Helper()
+	return newHarnessWith(t, nil)
+}
+
+func newHarnessWith(t *testing.T, model ai.Model, tools ...ai.Tool) harness {
+	t.Helper()
 	pool, err := pgxpool.New(t.Context(), pgtest.New(t))
 	if err != nil {
 		t.Fatalf("connect: %v", err)
@@ -74,7 +79,13 @@ func newHarness(t *testing.T) harness {
 	if err != nil {
 		t.Fatal(err)
 	}
-	front := frontdoor.NewHandler(frontdoor.DefaultTable(), upstream, verifier{memberID}, aigql.NewHandler(chats, broker, logger), logger)
+	var runner ai.Runner
+	if model != nil {
+		runner = ai.NewLoop(model, ai.NewRegistry(tools...))
+	}
+	turns := ai.NewChatService(chats, runner, broker, logger)
+	front := frontdoor.NewHandler(frontdoor.DefaultTable(), upstream, verifier{memberID}, aigql.NewHandler(chats, broker, turns, logger), logger).
+		WithSubscriber(aigql.NewSubscriber(broker))
 	server := httptest.NewServer(front)
 	t.Cleanup(server.Close)
 	return harness{server: server, broker: broker, pool: pool, memberID: memberID}

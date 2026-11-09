@@ -98,6 +98,10 @@ type ComplexityRoot struct {
 		Type                    func(childComplexity int) int
 	}
 
+	AnswerToolCallResult struct {
+		StreamID func(childComplexity int) int
+	}
+
 	ChatStreamCatchupChunks struct {
 		Chunks func(childComplexity int) int
 		Error  func(childComplexity int) int
@@ -110,7 +114,12 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
+		AnswerToolCall                  func(childComplexity int, input AnswerToolCallInput) int
 		AssignAgentChatThread           func(childComplexity int, threadID string, assigneeWorkspaceMemberID *string) int
+		DeleteQueuedChatMessage         func(childComplexity int, messageID string) int
+		RetryChatMessage                func(childComplexity int, threadID string, modelID *string) int
+		SendChatMessage                 func(childComplexity int, threadID string, text string, messageID string, browsingContext any, modelID *string, fileAttachments []*FileAttachmentInput, mentionedWorkspaceMemberIds []string) int
+		StopAgentChatStream             func(childComplexity int, threadID string) int
 		UpdateAgentChatThreadInboxState func(childComplexity int, threadIds []string, action string, snoozedUntil *metadata.Timestamp) int
 	}
 
@@ -118,6 +127,13 @@ type ComplexityRoot struct {
 		AgentChatOpenThreadsSummary func(childComplexity int) int
 		ChatMessages                func(childComplexity int, threadID string) int
 		ChatStreamCatchupChunks     func(childComplexity int, threadID string) int
+	}
+
+	SendChatMessageResult struct {
+		MentionedParticipantWorkspaceMemberIds func(childComplexity int) int
+		MessageID                              func(childComplexity int) int
+		Queued                                 func(childComplexity int) int
+		StreamID                               func(childComplexity int) int
 	}
 }
 
@@ -128,6 +144,11 @@ type ComplexityRoot struct {
 type MutationResolver interface {
 	UpdateAgentChatThreadInboxState(ctx context.Context, threadIds []string, action string, snoozedUntil *metadata.Timestamp) ([]*AgentChatThreadParticipant, error)
 	AssignAgentChatThread(ctx context.Context, threadID string, assigneeWorkspaceMemberID *string) (bool, error)
+	SendChatMessage(ctx context.Context, threadID string, text string, messageID string, browsingContext any, modelID *string, fileAttachments []*FileAttachmentInput, mentionedWorkspaceMemberIds []string) (*SendChatMessageResult, error)
+	RetryChatMessage(ctx context.Context, threadID string, modelID *string) (*SendChatMessageResult, error)
+	StopAgentChatStream(ctx context.Context, threadID string) (bool, error)
+	DeleteQueuedChatMessage(ctx context.Context, messageID string) (bool, error)
+	AnswerToolCall(ctx context.Context, input AnswerToolCallInput) (*AnswerToolCallResult, error)
 }
 type QueryResolver interface {
 	ChatMessages(ctx context.Context, threadID string) ([]*AgentMessage, error)
@@ -451,6 +472,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.AgentMessagePart.Type(childComplexity), true
 
+	case "AnswerToolCallResult.streamId":
+		if e.ComplexityRoot.AnswerToolCallResult.StreamID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AnswerToolCallResult.StreamID(childComplexity), true
+
 	case "ChatStreamCatchupChunks.chunks":
 		if e.ComplexityRoot.ChatStreamCatchupChunks.Chunks == nil {
 			break
@@ -483,6 +511,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.ChatStreamError.Message(childComplexity), true
 
+	case "Mutation.answerToolCall":
+		if e.ComplexityRoot.Mutation.AnswerToolCall == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_answerToolCall_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.AnswerToolCall(childComplexity, args["input"].(AnswerToolCallInput)), true
 	case "Mutation.assignAgentChatThread":
 		if e.ComplexityRoot.Mutation.AssignAgentChatThread == nil {
 			break
@@ -494,6 +533,50 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.AssignAgentChatThread(childComplexity, args["threadId"].(string), args["assigneeWorkspaceMemberId"].(*string)), true
+	case "Mutation.deleteQueuedChatMessage":
+		if e.ComplexityRoot.Mutation.DeleteQueuedChatMessage == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteQueuedChatMessage_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.DeleteQueuedChatMessage(childComplexity, args["messageId"].(string)), true
+	case "Mutation.retryChatMessage":
+		if e.ComplexityRoot.Mutation.RetryChatMessage == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_retryChatMessage_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.RetryChatMessage(childComplexity, args["threadId"].(string), args["modelId"].(*string)), true
+	case "Mutation.sendChatMessage":
+		if e.ComplexityRoot.Mutation.SendChatMessage == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_sendChatMessage_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.SendChatMessage(childComplexity, args["threadId"].(string), args["text"].(string), args["messageId"].(string), args["browsingContext"].(any), args["modelId"].(*string), args["fileAttachments"].([]*FileAttachmentInput), args["mentionedWorkspaceMemberIds"].([]string)), true
+	case "Mutation.stopAgentChatStream":
+		if e.ComplexityRoot.Mutation.StopAgentChatStream == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_stopAgentChatStream_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.StopAgentChatStream(childComplexity, args["threadId"].(string)), true
 	case "Mutation.updateAgentChatThreadInboxState":
 		if e.ComplexityRoot.Mutation.UpdateAgentChatThreadInboxState == nil {
 			break
@@ -535,6 +618,31 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Query.ChatStreamCatchupChunks(childComplexity, args["threadId"].(string)), true
 
+	case "SendChatMessageResult.mentionedParticipantWorkspaceMemberIds":
+		if e.ComplexityRoot.SendChatMessageResult.MentionedParticipantWorkspaceMemberIds == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SendChatMessageResult.MentionedParticipantWorkspaceMemberIds(childComplexity), true
+	case "SendChatMessageResult.messageId":
+		if e.ComplexityRoot.SendChatMessageResult.MessageID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SendChatMessageResult.MessageID(childComplexity), true
+	case "SendChatMessageResult.queued":
+		if e.ComplexityRoot.SendChatMessageResult.Queued == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SendChatMessageResult.Queued(childComplexity), true
+	case "SendChatMessageResult.streamId":
+		if e.ComplexityRoot.SendChatMessageResult.StreamID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SendChatMessageResult.StreamID(childComplexity), true
+
 	}
 	return 0, false
 }
@@ -543,7 +651,10 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	opCtx := graphql.GetOperationContext(ctx)
 	ec := newExecutionContext(opCtx, e, make(chan graphql.DeferredResult))
 	inputUnmarshalers := func() *graphql.InputUnmarshalerIndex {
-		return graphql.NewInputUnmarshalerIndex()
+		return graphql.NewInputUnmarshalerIndex(
+			graphql.NewInputUnmarshaler("AnswerToolCallInput", ec.unmarshalInputAnswerToolCallInput),
+			graphql.NewInputUnmarshaler("FileAttachmentInput", ec.unmarshalInputFileAttachmentInput),
+		)
 	}
 	first := true
 
@@ -760,6 +871,14 @@ func (ec *executionContext) childFields_AgentMessagePart(ctx context.Context, fi
 	return nil, fmt.Errorf("no field named %q was found under type AgentMessagePart", field.Name)
 }
 
+func (ec *executionContext) childFields_AnswerToolCallResult(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "streamId":
+		return ec.fieldContext_AnswerToolCallResult_streamId(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AnswerToolCallResult", field.Name)
+}
+
 func (ec *executionContext) childFields_ChatStreamCatchupChunks(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "chunks":
@@ -780,6 +899,20 @@ func (ec *executionContext) childFields_ChatStreamError(ctx context.Context, fie
 		return ec.fieldContext_ChatStreamError_message(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type ChatStreamError", field.Name)
+}
+
+func (ec *executionContext) childFields_SendChatMessageResult(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "messageId":
+		return ec.fieldContext_SendChatMessageResult_messageId(ctx, field)
+	case "queued":
+		return ec.fieldContext_SendChatMessageResult_queued(ctx, field)
+	case "streamId":
+		return ec.fieldContext_SendChatMessageResult_streamId(ctx, field)
+	case "mentionedParticipantWorkspaceMemberIds":
+		return ec.fieldContext_SendChatMessageResult_mentionedParticipantWorkspaceMemberIds(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type SendChatMessageResult", field.Name)
 }
 
 func (ec *executionContext) childFields___Directive(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -898,6 +1031,20 @@ func (ec *executionContext) childFields___Type(ctx context.Context, field graphq
 
 // region    ***************************** args.gotpl *****************************
 
+func (ec *executionContext) field_Mutation_answerToolCall_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
+		func(ctx context.Context, v any) (AnswerToolCallInput, error) {
+			return ec.unmarshalNAnswerToolCallInput2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋaiᚋaigqlᚐAnswerToolCallInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_assignAgentChatThread_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -917,6 +1064,118 @@ func (ec *executionContext) field_Mutation_assignAgentChatThread_args(ctx contex
 		return nil, err
 	}
 	args["assigneeWorkspaceMemberId"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteQueuedChatMessage_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "messageId",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNUUID2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["messageId"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_retryChatMessage_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "threadId",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNUUID2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["threadId"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "modelId",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOString2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["modelId"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_sendChatMessage_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "threadId",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNUUID2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["threadId"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "text",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["text"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "messageId",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNUUID2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["messageId"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "browsingContext",
+		func(ctx context.Context, v any) (any, error) {
+			return ec.unmarshalOJSON2interface(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["browsingContext"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "modelId",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOString2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["modelId"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "fileAttachments",
+		func(ctx context.Context, v any) ([]*FileAttachmentInput, error) {
+			return ec.unmarshalOFileAttachmentInput2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋaiᚋaigqlᚐFileAttachmentInputᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["fileAttachments"] = arg5
+	arg6, err := graphql.ProcessArgField(ctx, rawArgs, "mentionedWorkspaceMemberIds",
+		func(ctx context.Context, v any) ([]string, error) {
+			return ec.unmarshalOUUID2ᚕstringᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["mentionedWorkspaceMemberIds"] = arg6
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_stopAgentChatStream_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "threadId",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNUUID2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["threadId"] = arg0
 	return args, nil
 }
 
@@ -2202,6 +2461,29 @@ func (ec *executionContext) fieldContext_AgentMessagePart_createdAt(_ context.Co
 	return graphql.NewScalarFieldContext("AgentMessagePart", field, false, false, "DateTime")
 }
 
+func (ec *executionContext) _AnswerToolCallResult_streamId(ctx context.Context, field graphql.CollectedField, obj *AnswerToolCallResult) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AnswerToolCallResult_streamId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.StreamID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_AnswerToolCallResult_streamId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("AnswerToolCallResult", field, false, false, "String")
+}
+
 func (ec *executionContext) _ChatStreamCatchupChunks_chunks(ctx context.Context, field graphql.CollectedField, obj *ChatStreamCatchupChunks) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -2414,6 +2696,232 @@ func (ec *executionContext) fieldContext_Mutation_assignAgentChatThread(ctx cont
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_sendChatMessage(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_sendChatMessage(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().SendChatMessage(ctx, fc.Args["threadId"].(string), fc.Args["text"].(string), fc.Args["messageId"].(string),
+				func() any {
+					if fc.Args["browsingContext"] == nil {
+						return nil
+					}
+					return fc.Args["browsingContext"].(any)
+				}(), fc.Args["modelId"].(*string), fc.Args["fileAttachments"].([]*FileAttachmentInput), fc.Args["mentionedWorkspaceMemberIds"].([]string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *SendChatMessageResult) graphql.Marshaler {
+			return ec.marshalNSendChatMessageResult2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋaiᚋaigqlᚐSendChatMessageResult(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_sendChatMessage(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_SendChatMessageResult(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_sendChatMessage_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_retryChatMessage(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_retryChatMessage(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().RetryChatMessage(ctx, fc.Args["threadId"].(string), fc.Args["modelId"].(*string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *SendChatMessageResult) graphql.Marshaler {
+			return ec.marshalNSendChatMessageResult2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋaiᚋaigqlᚐSendChatMessageResult(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_retryChatMessage(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_SendChatMessageResult(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_retryChatMessage_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_stopAgentChatStream(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_stopAgentChatStream(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().StopAgentChatStream(ctx, fc.Args["threadId"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_stopAgentChatStream(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_stopAgentChatStream_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteQueuedChatMessage(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_deleteQueuedChatMessage(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().DeleteQueuedChatMessage(ctx, fc.Args["messageId"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_deleteQueuedChatMessage(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteQueuedChatMessage_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_answerToolCall(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_answerToolCall(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().AnswerToolCall(ctx, fc.Args["input"].(AnswerToolCallInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *AnswerToolCallResult) graphql.Marshaler {
+			return ec.marshalNAnswerToolCallResult2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋaiᚋaigqlᚐAnswerToolCallResult(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_answerToolCall(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_AnswerToolCallResult(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_answerToolCall_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_chatMessages(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -2608,6 +3116,98 @@ func (ec *executionContext) fieldContext_Query___schema(_ context.Context, field
 		},
 	}
 	return fc, nil
+}
+
+func (ec *executionContext) _SendChatMessageResult_messageId(ctx context.Context, field graphql.CollectedField, obj *SendChatMessageResult) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SendChatMessageResult_messageId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MessageID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_SendChatMessageResult_messageId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("SendChatMessageResult", field, false, false, "String")
+}
+
+func (ec *executionContext) _SendChatMessageResult_queued(ctx context.Context, field graphql.CollectedField, obj *SendChatMessageResult) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SendChatMessageResult_queued(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Queued, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_SendChatMessageResult_queued(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("SendChatMessageResult", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _SendChatMessageResult_streamId(ctx context.Context, field graphql.CollectedField, obj *SendChatMessageResult) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SendChatMessageResult_streamId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.StreamID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_SendChatMessageResult_streamId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("SendChatMessageResult", field, false, false, "String")
+}
+
+func (ec *executionContext) _SendChatMessageResult_mentionedParticipantWorkspaceMemberIds(ctx context.Context, field graphql.CollectedField, obj *SendChatMessageResult) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SendChatMessageResult_mentionedParticipantWorkspaceMemberIds(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MentionedParticipantWorkspaceMemberIds, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOUUID2ᚕstringᚄ(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_SendChatMessageResult_mentionedParticipantWorkspaceMemberIds(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("SendChatMessageResult", field, false, false, "UUID")
 }
 
 func (ec *executionContext) ___Directive_name(ctx context.Context, field graphql.CollectedField, obj *introspection.Directive) (ret graphql.Marshaler) {
@@ -3683,6 +4283,118 @@ func (ec *executionContext) fieldContext___Type_isOneOf(_ context.Context, field
 
 // region    **************************** input.gotpl *****************************
 
+func (ec *executionContext) unmarshalInputAnswerToolCallInput(ctx context.Context, obj any) (AnswerToolCallInput, error) {
+	var it AnswerToolCallInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"threadId", "toolCallId", "response", "modelId"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "threadId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("threadId"))
+			data, err := ec.unmarshalNUUID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ThreadID = data
+		case "toolCallId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("toolCallId"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ToolCallID = data
+		case "response":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("response"))
+			data, err := ec.unmarshalNJSON2interface(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Response = data
+		case "modelId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("modelId"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ModelID = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalAnswerToolCallInput unmarshals raw into the AnswerToolCallInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalAnswerToolCallInput(ctx context.Context, raw any) (AnswerToolCallInput, error) {
+	var out AnswerToolCallInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "AnswerToolCallInput", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputFileAttachmentInput(ctx context.Context, obj any) (FileAttachmentInput, error) {
+	var it FileAttachmentInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"id", "filename"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalNUUID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ID = data
+		case "filename":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filename"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Filename = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalFileAttachmentInput unmarshals raw into the FileAttachmentInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalFileAttachmentInput(ctx context.Context, raw any) (FileAttachmentInput, error) {
+	var out FileAttachmentInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "FileAttachmentInput", raw, &out)
+	return out, err
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -4048,6 +4760,39 @@ func (ec *executionContext) _AgentMessagePart(ctx context.Context, sel ast.Selec
 	return out
 }
 
+var answerToolCallResultImplementors = []string{"AnswerToolCallResult"}
+
+func (ec *executionContext) _AnswerToolCallResult(ctx context.Context, sel ast.SelectionSet, obj *AnswerToolCallResult) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, answerToolCallResultImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("AnswerToolCallResult")
+		case "streamId":
+			out.Values[i] = ec._AnswerToolCallResult_streamId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
 var chatStreamCatchupChunksImplementors = []string{"ChatStreamCatchupChunks"}
 
 func (ec *executionContext) _ChatStreamCatchupChunks(ctx context.Context, sel ast.SelectionSet, obj *ChatStreamCatchupChunks) graphql.Marshaler {
@@ -4162,6 +4907,41 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "sendChatMessage":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_sendChatMessage(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "retryChatMessage":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_retryChatMessage(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "stopAgentChatStream":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_stopAgentChatStream(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteQueuedChatMessage":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteQueuedChatMessage(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "answerToolCall":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_answerToolCall(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -4229,6 +5009,54 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			})
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&out.Invalids, 1)
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var sendChatMessageResultImplementors = []string{"SendChatMessageResult"}
+
+func (ec *executionContext) _SendChatMessageResult(ctx context.Context, sel ast.SelectionSet, obj *SendChatMessageResult) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, sendChatMessageResultImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("SendChatMessageResult")
+		case "messageId":
+			out.Values[i] = ec._SendChatMessageResult_messageId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "queued":
+			out.Values[i] = ec._SendChatMessageResult_queued(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "streamId":
+			out.Values[i] = ec._SendChatMessageResult_streamId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "mentionedParticipantWorkspaceMemberIds":
+			out.Values[i] = ec._SendChatMessageResult_mentionedParticipantWorkspaceMemberIds(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
 			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -4703,6 +5531,19 @@ func (ec *executionContext) marshalNAgentMessagePart2ᚖgithubᚗcomᚋtwentyhq�
 	return ec._AgentMessagePart(ctx, sel, v)
 }
 
+func (ec *executionContext) unmarshalNAnswerToolCallInput2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋaiᚋaigqlᚐAnswerToolCallInput(ctx context.Context, v any) (AnswerToolCallInput, error) {
+	res, err := ec.unmarshalInputAnswerToolCallInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNAnswerToolCallResult2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋaiᚋaigqlᚐAnswerToolCallResult(ctx context.Context, sel ast.SelectionSet, v *AnswerToolCallResult) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "AnswerToolCallResult!")
+		return graphql.Null
+	}
+	return ec._AnswerToolCallResult(ctx, sel, v)
+}
+
 func (ec *executionContext) unmarshalNBoolean2bool(ctx context.Context, v any) (bool, error) {
 	res, err := graphql.UnmarshalBoolean(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -4733,6 +5574,11 @@ func (ec *executionContext) unmarshalNDateTime2githubᚗcomᚋtwentyhqᚋtwenty�
 
 func (ec *executionContext) marshalNDateTime2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx context.Context, sel ast.SelectionSet, v metadata.Timestamp) graphql.Marshaler {
 	return v
+}
+
+func (ec *executionContext) unmarshalNFileAttachmentInput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋaiᚋaigqlᚐFileAttachmentInput(ctx context.Context, v any) (*FileAttachmentInput, error) {
+	res, err := ec.unmarshalInputFileAttachmentInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalNInt2int(ctx context.Context, v any) (int, error) {
@@ -4794,6 +5640,14 @@ func (ec *executionContext) marshalNJSON2ᚕinterfaceᚄ(ctx context.Context, se
 	}
 
 	return ret
+}
+
+func (ec *executionContext) marshalNSendChatMessageResult2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋaiᚋaigqlᚐSendChatMessageResult(ctx context.Context, sel ast.SelectionSet, v *SendChatMessageResult) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "SendChatMessageResult!")
+		return graphql.Null
+	}
+	return ec._SendChatMessageResult(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v any) (string, error) {
@@ -5048,6 +5902,23 @@ func (ec *executionContext) marshalODateTime2ᚖgithubᚗcomᚋtwentyhqᚋtwenty
 	return v
 }
 
+func (ec *executionContext) unmarshalOFileAttachmentInput2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋaiᚋaigqlᚐFileAttachmentInputᚄ(ctx context.Context, v any) ([]*FileAttachmentInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]*FileAttachmentInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNFileAttachmentInput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋaiᚋaigqlᚐFileAttachmentInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
 func (ec *executionContext) unmarshalOJSON2interface(ctx context.Context, v any) (any, error) {
 	if v == nil {
 		return nil, nil
@@ -5082,6 +5953,41 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	_ = ctx
 	res := graphql.MarshalString(*v)
 	return res
+}
+
+func (ec *executionContext) unmarshalOUUID2ᚕstringᚄ(ctx context.Context, v any) ([]string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]string, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNUUID2string(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOUUID2ᚕstringᚄ(ctx context.Context, sel ast.SelectionSet, v []string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalNUUID2string(ctx, sel, v[i])
+	}
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
 }
 
 func (ec *executionContext) unmarshalOUUID2ᚖstring(ctx context.Context, v any) (*string, error) {

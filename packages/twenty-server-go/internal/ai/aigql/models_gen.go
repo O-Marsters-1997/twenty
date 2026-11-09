@@ -67,6 +67,17 @@ type AgentMessagePart struct {
 	CreatedAt               metadata.Timestamp `json:"createdAt"`
 }
 
+type AnswerToolCallInput struct {
+	ThreadID   string  `json:"threadId"`
+	ToolCallID string  `json:"toolCallId"`
+	Response   any     `json:"response"`
+	ModelID    *string `json:"modelId,omitempty"`
+}
+
+type AnswerToolCallResult struct {
+	StreamID *string `json:"streamId,omitempty"`
+}
+
 type ChatStreamCatchupChunks struct {
 	Chunks []any            `json:"chunks"`
 	MaxSeq int              `json:"maxSeq"`
@@ -78,8 +89,20 @@ type ChatStreamError struct {
 	Message string `json:"message"`
 }
 
+type FileAttachmentInput struct {
+	ID       string `json:"id"`
+	Filename string `json:"filename"`
+}
+
 type Mutation struct {
 }
 
 type Query struct {
+}
+
+type SendChatMessageResult struct {
+	MessageID                              *string  `json:"messageId,omitempty"`
+	Queued                                 bool     `json:"queued"`
+	StreamID                               *string  `json:"streamId,omitempty"`
+	MentionedParticipantWorkspaceMemberIds []string `json:"mentionedParticipantWorkspaceMemberIds,omitempty"`
 }

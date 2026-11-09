@@ -52,8 +52,18 @@ func run() error {
 	chats := aistore.New(pool)
 	broker := ai.NewPersistingBroker(ai.NewMemoryBroker(), chats, logger)
 
+	recordTools := ai.NewRecordTools(
+		store.NewCompanies(pool), store.NewPeople(pool), store.NewOpportunities(pool), store.NewNotes(pool), store.NewTasks(pool),
+	)
+	toolRegistry := ai.NewRegistry(recordTools...)
+	runner, err := chatRunner(toolRegistry, logger)
+	if err != nil {
+		return err
+	}
+	chatHandler := aigql.NewHandler(chats, broker, ai.NewChatService(chats, runner, broker, logger), logger)
+
 	goGraphQL := http.NewServeMux()
-	goGraphQL.Handle(string(frontdoor.EndpointWorkspace), recordsgql.NewHandler(&recordsgql.Resolver{
+	goGraphQL.Handle(string(frontdoor.EndpointWorkspace), workspaceHandler(recordsgql.NewHandler(&recordsgql.Resolver{
 		Store:              store.NewPeople(pool),
 		Companies:          store.NewCompanies(pool),
 		Opportunities:      store.NewOpportunities(pool),
@@ -65,24 +75,19 @@ func run() error {
 		NoteTargets:        store.NewNoteTargets(pool),
 		Tasks:              store.NewTasks(pool),
 		TaskTargets:        store.NewTaskTargets(pool),
-	}, logger))
-	recordTools := ai.NewRecordTools(
-		store.NewCompanies(pool), store.NewPeople(pool), store.NewOpportunities(pool), store.NewNotes(pool), store.NewTasks(pool),
-	)
-	toolRegistry := ai.NewRegistry(recordTools...)
+	}, logger), chatHandler))
 	goGraphQL.Handle(string(frontdoor.EndpointMetadata), metadataHandler(
 		metadatagql.NewHandler(metadatastore.New(pool), toolRegistry, logger),
-		aigql.NewHandler(chats, broker, logger),
+		chatHandler,
 		skillgql.NewHandler(ai.NewSkills(pool), logger),
 		metagql.NewHandler(metadatastore.NewViews(pool), logger),
 		agentgql.NewHandler(aistore.NewAgents(pool), logger),
 		agentgql.Operations,
 	))
 
-	registry := ai.NewRegistry(ai.NewRecordTools(
-		store.NewCompanies(pool), store.NewPeople(pool), store.NewOpportunities(pool), store.NewNotes(pool), store.NewTasks(pool),
-	)...)
-	handler := frontdoor.NewHandler(frontdoor.DefaultTable(), cfg.NodeUpstreamURL, verifier, goGraphQL, logger).WithMCP(registry)
+	handler := frontdoor.NewHandler(frontdoor.DefaultTable(), cfg.NodeUpstreamURL, verifier, goGraphQL, logger).
+		WithMCP(toolRegistry).
+		WithSubscriber(aigql.NewSubscriber(broker))
 
 	server := &http.Server{
 		Addr:              cfg.ListenAddr,
