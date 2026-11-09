@@ -12,6 +12,9 @@ import (
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/riverqueue/river"
+
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/store"
 )
 
 func main() {
@@ -43,7 +46,14 @@ func run() error {
 	}
 	defer pool.Close()
 
-	client, err := newClient(pool, river.NewWorkers(), logger)
+	registry, err := workflow.NewRegistry()
+	if err != nil {
+		return fmt.Errorf("build action registry: %w", err)
+	}
+	workers := river.NewWorkers()
+	registerWorkflowWorkers(workers, &executor{store: store.New(pool), registry: registry})
+
+	client, err := newClient(pool, workers, logger)
 	if err != nil {
 		return err
 	}
