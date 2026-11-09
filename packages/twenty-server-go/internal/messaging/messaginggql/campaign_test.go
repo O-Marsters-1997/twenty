@@ -8,6 +8,7 @@ import (
 	"log/slog"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -177,9 +178,12 @@ func TestSendMessageCampaign_deliversThroughRiverJobs(t *testing.T) {
 		}
 	}
 
-	wantSent := []messaging.OutboundEmail{{To: []string{"ada@example.com"}, Subject: "Hello", HTMLBody: h.mailer.sent[0].HTMLBody}}
-	if diff := cmp.Diff(wantSent, h.mailer.sent); diff != "" {
-		t.Errorf("mailer sent (-want +got):\n%s", diff)
+	if len(h.mailer.sent) != 1 {
+		t.Fatalf("mailer sent %d emails, want one", len(h.mailer.sent))
+	}
+	sent := h.mailer.sent[0]
+	if diff := cmp.Diff([]string{"ada@example.com"}, sent.To); diff != "" || sent.Subject != "Hello" || !strings.Contains(sent.HTMLBody, "Hi Ada") {
+		t.Errorf("sent %+v, want Hello to ada@example.com rendered with her first name", sent)
 	}
 	if status := h.scalar(t, `SELECT status::text FROM `+schema+`."messageCampaign" WHERE id = $1`, campaignID); status != "SENT" {
 		t.Errorf("campaign status = %q, want SENT", status)
