@@ -101,6 +101,22 @@ func TestRunWorkflowWorker_Work(t *testing.T) {
 		}
 	})
 
+	t.Run("finished run cancels the job", func(t *testing.T) {
+		t.Parallel()
+		registry, err := workflow.NewRegistry()
+		if err != nil {
+			t.Fatal(err)
+		}
+		fake := newFakeStore(`[]`)
+		fake.run.Status = store.StatusCompleted
+		worker := &runWorkflowWorker{exec: &executor{store: fake, registry: registry}}
+
+		var cancelErr *river.JobCancelError
+		if err := worker.Work(t.Context(), args); !errors.As(err, &cancelErr) {
+			t.Errorf("Work() = %v, want JobCancelError", err)
+		}
+	})
+
 	t.Run("step error fails the run", func(t *testing.T) {
 		t.Parallel()
 		registry, err := workflow.NewRegistry(stubAction{actionType: workflow.ActionTypeEmpty, run: func(workflow.StepInput) (workflow.StepOutput, error) {

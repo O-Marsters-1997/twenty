@@ -57,10 +57,23 @@ func (w *runWorkflowWorker) Work(ctx context.Context, job *river.Job[workflow.Ru
 	if err != nil {
 		return fmt.Errorf("load run: %w", err)
 	}
-	if run.Status != store.StatusRunning {
+	switch run.Status {
+	case store.StatusNotStarted, store.StatusEnqueued:
 		if run, err = w.exec.store.Transition(ctx, run.ID, store.StatusRunning, ""); err != nil {
 			return fmt.Errorf("start run: %w", err)
 		}
+	case store.StatusRunning:
+		infos, err := parseStepInfos(run.State)
+		if err != nil {
+			return err
+		}
+		for _, info := range infos {
+			if info.Status == stepStatusPending {
+				return river.JobCancel(fmt.Errorf("run %s is parked on a pending step", run.ID))
+			}
+		}
+	default:
+		return river.JobCancel(fmt.Errorf("run %s is %s", run.ID, run.Status))
 	}
 	return w.exec.execute(ctx, run)
 }
@@ -79,26 +92,27 @@ func (w *resumeStepWorker) Work(ctx context.Context, job *river.Job[workflow.Res
 	if err != nil {
 		return err
 	}
-	if run.Status != store.StatusRunning || infos[job.Args.StepID].Status != stepStatusPending {
+	stepStatus := infos[job.Args.StepID].Status
+	if run.Status != store.StatusRunning || (stepStatus != stepStatusPending && stepStatus != stepStatusSuccess) {
 		return river.JobCancel(fmt.Errorf("step %q of run %s is not parked", job.Args.StepID, run.ID))
 	}
-	var result any
-	if len(job.Args.Input) > 0 {
-		if err := json.Unmarshal(job.Args.Input, &result); err != nil {
-			return river.JobCancel(fmt.Errorf("decode resume input: %w", err))
+	if stepStatus == stepStatusPending {
+		var result any
+		if len(job.Args.Input) > 0 {
+			if err := json.Unmarshal(job.Args.Input, &result); err != nil {
+				return river.JobCancel(fmt.Errorf("decode resume input: %w", err))
+			}
 		}
-	}
-	if err := w.exec.record(ctx, run.ID, job.Args.StepID, stepInfo{Status: stepStatusSuccess, Result: result}); err != nil {
-		return err
-	}
-	if run, err = w.exec.store.Run(ctx, run.ID); err != nil {
-		return fmt.Errorf("reload run: %w", err)
+		if err := w.exec.record(ctx, run.ID, job.Args.StepID, stepInfo{Status: stepStatusSuccess, Result: result}); err != nil {
+			return err
+		}
+		if run, err = w.exec.store.Run(ctx, run.ID); err != nil {
+			return fmt.Errorf("reload run: %w", err)
+		}
 	}
 	return w.exec.execute(ctx, run)
 }
 
-// execute runs every step without a SUCCESS record in order, then completes the run.
-// A failing step fails the run; a Pending step parks it still RUNNING.
 func (e *executor) execute(ctx context.Context, run store.Run) error {
 	version, err := e.store.Version(ctx, run.VersionID)
 	if err != nil {
@@ -127,9 +141,8 @@ func (e *executor) execute(ctx context.Context, run store.Run) error {
 		if err != nil {
 			return e.failStep(ctx, run.ID, current.ID, err.Error())
 		}
-		output, err := action.Run(ctx, workflow.StepInput{
-			RunID: run.ID, StepID: current.ID, Settings: current.Settings, Context: stepContext,
-		})
+		input := workflow.StepInput{RunID: run.ID, StepID: current.ID, Settings: current.Settings, Context: stepContext}
+		output, err := action.Run(ctx, input)
 		switch {
 		case err != nil:
 			return e.failStep(ctx, run.ID, current.ID, err.Error())
@@ -160,7 +173,6 @@ func (e *executor) record(ctx context.Context, runID, stepID string, info stepIn
 	return nil
 }
 
-// failStep and fail mark the run FAILED and return nil: a failed run is a result, not a job to retry.
 func (e *executor) failStep(ctx context.Context, runID, stepID, message string) error {
 	if err := e.record(ctx, runID, stepID, stepInfo{Status: stepStatusFailed, Error: message}); err != nil {
 		return err
