@@ -64,6 +64,9 @@ func DefaultTable() OperationTable {
 	for _, operation := range slices.Concat(SkillOperations, ChatOperations, agentOperations) {
 		table[EndpointMetadata][operation] = RouteGo
 	}
+	for _, operation := range WorkflowOperations {
+		table[EndpointWorkspace][operation] = RouteGo
+	}
 	for _, plural := range []string{"Notes", "NoteTargets", "Tasks", "TaskTargets"} {
 		for _, operation := range []string{"Aggregate" + plural, plural + "GroupByAggregates", plural + "GroupByRecords"} {
 			table[EndpointWorkspace][operation] = RouteGo
@@ -80,6 +83,13 @@ var SkillOperations = []string{
 var ChatOperations = []string{
 	"GetChatMessages", "GetAgentChatOpenThreadsSummary", "AssignAgentChatThread", "UpdateAgentChatThreadInboxState",
 	"SendChatMessage", "RetryChatMessage", "StopAgentChatStream", "DeleteQueuedChatMessage", "OnAgentChatEvent",
+}
+
+var WorkflowOperations = []string{
+	"GetCoreWorkflows", "GetCoreWorkflow", "GetCoreWorkflowsWithCurrentVersions", "GetCoreWorkflowLegacyMapping",
+	"GetCoreWorkflowVersions", "GetCoreWorkflowVersion", "GetCoreWorkflowVersionLegacyMapping",
+	"StopWorkflowRun", "RetryWorkflowRun", "SubmitFormStep", "UpdateWorkflowRunStep",
+	"WorkflowStepConnectedAccountHandle", "TestHttpRequest",
 }
 
 const AnswerToolCallOperation = "AnswerToolCall"

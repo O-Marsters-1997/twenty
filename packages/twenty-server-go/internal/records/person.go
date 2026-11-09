@@ -9,38 +9,52 @@ import (
 	"time"
 )
 
-type FullName struct{ FirstName, LastName string }
+type FullName struct {
+	FirstName string `json:"firstName"`
+	LastName  string `json:"lastName"`
+}
 type Emails struct {
-	PrimaryEmail     string
-	AdditionalEmails []string
+	PrimaryEmail     string   `json:"primaryEmail"`
+	AdditionalEmails []string `json:"additionalEmails"`
 }
-type Link struct{ Label, URL string }
+type Link struct {
+	Label string `json:"label"`
+	URL   string `json:"url"`
+}
 type Links struct {
-	PrimaryLink    Link
-	SecondaryLinks []Link
+	PrimaryLink    Link   `json:"primaryLink"`
+	SecondaryLinks []Link `json:"secondaryLinks"`
 }
-type Phone struct{ Number, CountryCode, CallingCode string }
+type Phone struct {
+	Number      string `json:"number"`
+	CountryCode string `json:"countryCode"`
+	CallingCode string `json:"callingCode"`
+}
 type Phones struct {
-	Primary    Phone
-	Additional []Phone
+	Primary    Phone   `json:"primaryPhone"`
+	Additional []Phone `json:"additionalPhones"`
 }
-type Actor struct{ Source, WorkspaceMemberID, Name string }
+type Actor struct {
+	Source            string `json:"source"`
+	WorkspaceMemberID string `json:"workspaceMemberId"`
+	Name              string `json:"name"`
+}
 
 type Person struct {
-	ID        string
-	Name      FullName
-	Emails    Emails
-	Linkedin  Links
-	JobTitle  string
-	Phones    Phones
-	AvatarURL string
-	Position  float64
-	CompanyID *string
-	CreatedBy Actor
-	UpdatedBy Actor
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeletedAt *time.Time
+	ID        string     `json:"id"`
+	Name      FullName   `json:"name"`
+	Emails    Emails     `json:"emails"`
+	Linkedin  Links      `json:"linkedinLink"`
+	JobTitle  string     `json:"jobTitle"`
+	Phones    Phones     `json:"phones"`
+	AvatarURL string     `json:"avatarUrl"`
+	Position  float64    `json:"position"`
+	CompanyID *string    `json:"companyId"`
+	CreatedBy Actor      `json:"createdBy"`
+	UpdatedBy Actor      `json:"updatedBy"`
+	CreatedAt time.Time  `json:"createdAt"`
+	UpdatedAt time.Time  `json:"updatedAt"`
+	DeletedAt *time.Time `json:"deletedAt"`
 }
 
 type PersonInput struct { // nil leaves a field unchanged on update

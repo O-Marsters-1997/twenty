@@ -1,0 +1,9 @@
+{
+  "name": "SubmitFormStep",
+  "operation": "SubmitFormStep",
+  "fixture": "run 33333333-3333-4333-8333-333333333333 parked on form step 55555555-5555-4555-8555-555555555555",
+  "endpoint": "/graphql",
+  "query": "mutation SubmitFormStep($input: SubmitFormStepInput!) { submitFormStep(input: $input) }",
+  "variables": { "input": { "workflowRunId": "33333333-3333-4333-8333-333333333333", "stepId": "55555555-5555-4555-8555-555555555555", "response": { "email": "a@b.c" } } },
+  "response": { "data": { "submitFormStep": true } }
+}

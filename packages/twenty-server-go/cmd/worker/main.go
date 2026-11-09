@@ -53,6 +53,7 @@ func run() error {
 	workers := river.NewWorkers()
 	workflowStore := store.New(pool)
 	registerWorkflowWorkers(workers, &executor{store: workflowStore, registry: registry})
+	registerRecordEventWorker(workers, pool, workflowStore)
 
 	launcher := &workflow.Launcher{Store: workflowStore}
 	river.AddWorker(workers, &cronTriggerWorker{launcher: launcher})

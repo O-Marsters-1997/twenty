@@ -26,10 +26,12 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/metadatagql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/metagql"
 	metadatastore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/store"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records/recordsgql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records/store"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow"
 	workflowstore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/store"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/workflowgql"
 )
 
 func main() {
@@ -56,8 +58,14 @@ func run() error {
 	chats := aistore.New(pool)
 	broker := ai.NewPersistingBroker(ai.NewMemoryBroker(), chats, logger)
 
+	insertClient, err := river.NewClient(riverpgxv5.New(pool), &river.Config{})
+	if err != nil {
+		return fmt.Errorf("create river insert client: %w", err)
+	}
+	people := store.NewPeople(pool).WithEvents(records.NewRiverPublisher(insertClient))
+
 	recordTools := ai.NewRecordTools(
-		store.NewCompanies(pool), store.NewPeople(pool), store.NewOpportunities(pool), store.NewNotes(pool), store.NewTasks(pool),
+		store.NewCompanies(pool), people, store.NewOpportunities(pool), store.NewNotes(pool), store.NewTasks(pool),
 	)
 	toolRegistry := ai.NewRegistry(recordTools...)
 	runner, err := chatRunner(toolRegistry, logger)
@@ -66,9 +74,19 @@ func run() error {
 	}
 	chatHandler := aigql.NewHandler(chats, broker, ai.NewChatService(chats, runner, broker, logger), logger)
 
+	queue, err := newWorkflowQueue(pool)
+	if err != nil {
+		return err
+	}
+	workflowHandler := workflowgql.NewHandler(&workflowgql.Resolver{
+		Store:      workflowstore.New(pool),
+		Queue:      queue,
+		HTTPClient: workflowgql.NewSafeHTTPClient(),
+	}, logger)
+
 	goGraphQL := http.NewServeMux()
 	goGraphQL.Handle(string(frontdoor.EndpointWorkspace), workspaceHandler(recordsgql.NewHandler(&recordsgql.Resolver{
-		Store:              store.NewPeople(pool),
+		Store:              people,
 		Companies:          store.NewCompanies(pool),
 		Opportunities:      store.NewOpportunities(pool),
 		WorkspaceMembers:   store.NewWorkspaceMembers(pool),
@@ -79,7 +97,7 @@ func run() error {
 		NoteTargets:        store.NewNoteTargets(pool),
 		Tasks:              store.NewTasks(pool),
 		TaskTargets:        store.NewTaskTargets(pool),
-	}, logger), chatHandler))
+	}, logger), chatHandler, workflowHandler))
 	goGraphQL.Handle(string(frontdoor.EndpointMetadata), metadataHandler(
 		metadatagql.NewHandler(metadatastore.New(pool), toolRegistry, logger),
 		chatHandler,
@@ -93,16 +111,7 @@ func run() error {
 		WithMCP(toolRegistry).
 		WithSubscriber(aigql.NewSubscriber(broker))
 
-	queue, err := river.NewClient(riverpgxv5.New(pool), &river.Config{Logger: logger})
-	if err != nil {
-		return fmt.Errorf("create river insert client: %w", err)
-	}
-	launcher := &workflow.Launcher{Store: workflowstore.New(pool), Queue: func(ctx context.Context, args river.JobArgs) error {
-		if _, err := queue.Insert(ctx, args, nil); err != nil {
-			return fmt.Errorf("insert job: %w", err)
-		}
-		return nil
-	}}
+	launcher := &workflow.Launcher{Store: workflowstore.New(pool), Queue: queue.Enqueue}
 
 	server := &http.Server{
 		Addr:              cfg.ListenAddr,
