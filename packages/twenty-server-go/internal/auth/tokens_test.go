@@ -142,9 +142,13 @@ func TestPGIssuer_IssueAccess(t *testing.T) {
 		t.Errorf("IssueAccess() claim names (-node +go):\n%s", diff)
 	}
 	if got["type"] != "ACCESS" || got["sub"] != principal.UserID {
-		t.Errorf("IssueAccess() type, sub = %v, %v", got["type"], got["sub"])
+		t.Errorf("IssueAccess() type, sub = %v, %v, want ACCESS, %v", got["type"], got["sub"], principal.UserID)
 	}
-	if exp, _ := got.GetExpirationTime(); exp.Unix() != expiresAt.Unix() {
+	exp, err := got.GetExpirationTime()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if exp.Unix() != expiresAt.Unix() {
 		t.Errorf("IssueAccess() exp = %v, want returned expiry %v", exp, expiresAt)
 	}
 	verified, err := env.verifier.Verify(t.Context(), token)
@@ -175,7 +179,7 @@ func TestPGIssuer_IssueLogin(t *testing.T) {
 			t.Errorf("IssueLogin() %s = %v, want %v", name, got[name], nodeClaims[name])
 		}
 	}
-	if _, err := uuid.Parse(got["jti"].(string)); err != nil {
+	if _, err := uuid.Parse(stringClaim(t, got, "jti")); err != nil {
 		t.Errorf("IssueLogin() jti = %v, want a uuid", got["jti"])
 	}
 }
@@ -200,14 +204,15 @@ func TestPGIssuer_Refresh(t *testing.T) {
 					t.Errorf("Refresh() refresh claim names (-node +go):\n%s", diff)
 				}
 				newClaims, _ := decodeClaims(t, pair.RefreshToken)
-				if newClaims["jti"] == tt.jti || newClaims["targetedTokenType"] != "ACCESS" {
-					t.Errorf("Refresh() refresh jti, targetedTokenType = %v, %v", newClaims["jti"], newClaims["targetedTokenType"])
+				newJTI := stringClaim(t, newClaims, "jti")
+				if newJTI == tt.jti || newClaims["targetedTokenType"] != "ACCESS" {
+					t.Errorf("Refresh() refresh jti, targetedTokenType = %v, %v, want a new jti (not %s), ACCESS", newJTI, newClaims["targetedTokenType"], tt.jti)
 				}
 				if revoked, _ := env.revokedAt(t, tt.jti); !revoked {
-					t.Errorf("Refresh() left the presented token %s unrevoked", tt.jti)
+					t.Errorf("Refresh() presented token %s revoked = false, want true", tt.jti)
 				}
-				if revoked, _ := env.revokedAt(t, newClaims["jti"].(string)); revoked {
-					t.Error("Refresh() issued an already revoked token")
+				if revoked, _ := env.revokedAt(t, newJTI); revoked {
+					t.Errorf("Refresh() issued token %s revoked = true, want false", newJTI)
 				}
 				principal, err := env.verifier.Verify(t.Context(), pair.AccessToken)
 				if err != nil {
@@ -256,21 +261,37 @@ func TestPGIssuer_Refresh(t *testing.T) {
 
 func TestPGIssuer_Revoke(t *testing.T) {
 	t.Parallel()
-	env := newTokenEnv(t)
 
-	if err := env.issuer.Revoke(t.Context(), env.node.Refresh); err != nil {
-		t.Fatalf("Revoke() error = %v", err)
-	}
+	t.Run("invalidates the token", func(t *testing.T) {
+		t.Parallel()
+		env := newTokenEnv(t)
+		if err := env.issuer.Revoke(t.Context(), env.node.Refresh); err != nil {
+			t.Fatalf("Revoke() error = %v", err)
+		}
+		if revoked, reason := env.revokedAt(t, env.node.RefreshJTI); !revoked || reason != "USER_SIGN_OUT" {
+			t.Errorf("revoked, reason = %v, %q, want true, USER_SIGN_OUT", revoked, reason)
+		}
+		if _, err := env.issuer.Refresh(t.Context(), env.node.Refresh); !errors.Is(err, auth.ErrInvalidRefreshToken) {
+			t.Errorf("Refresh(revoked token) error = %v, want ErrInvalidRefreshToken", err)
+		}
+	})
 
-	if revoked, reason := env.revokedAt(t, env.node.RefreshJTI); !revoked || reason != "USER_SIGN_OUT" {
-		t.Errorf("revoked, reason = %v, %q, want true, USER_SIGN_OUT", revoked, reason)
+	t.Run("rejects garbage", func(t *testing.T) {
+		t.Parallel()
+		env := newTokenEnv(t)
+		if err := env.issuer.Revoke(t.Context(), "not-a-token"); !errors.Is(err, auth.ErrInvalidRefreshToken) {
+			t.Errorf("Revoke(garbage) error = %v, want ErrInvalidRefreshToken", err)
+		}
+	})
+}
+
+func stringClaim(t *testing.T, body jwt.MapClaims, name string) string {
+	t.Helper()
+	value, ok := body[name].(string)
+	if !ok {
+		t.Fatalf("claim %s = %v, want a string", name, body[name])
 	}
-	if _, err := env.issuer.Refresh(t.Context(), env.node.Refresh); !errors.Is(err, auth.ErrInvalidRefreshToken) {
-		t.Errorf("Refresh(revoked token) error = %v, want ErrInvalidRefreshToken", err)
-	}
-	if err := env.issuer.Revoke(t.Context(), "not-a-token"); !errors.Is(err, auth.ErrInvalidRefreshToken) {
-		t.Errorf("Revoke(garbage) error = %v, want ErrInvalidRefreshToken", err)
-	}
+	return value
 }
 
 var _ auth.Issuer = (*auth.PGIssuer)(nil)

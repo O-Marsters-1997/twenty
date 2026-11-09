@@ -47,26 +47,30 @@ type Issuer interface { // ES256 with the current core."signingKey", same claims
 	Revoke(ctx context.Context, refreshToken string) error
 }
 
-var ErrInvalidRefreshToken = errors.New("invalid refresh token")
+var ErrInvalidRefreshToken = errors.New("auth: invalid refresh token")
 
 var errNoSigningKey = errors.New("no current signing key")
 
 const passwordProvider AuthProvider = "password"
 
 const (
-	refreshAppTokenType  = "REFRESH_TOKEN"
-	signOutRevokedReason = "USER_SIGN_OUT"
-	envelopePrefix       = "enc:v2:"
+	defaultAccessTTL         = 30 * time.Minute
+	defaultRefreshTTL        = 60 * 24 * time.Hour
+	defaultLoginTTL          = 15 * time.Minute
+	defaultRefreshReuseGrace = time.Minute
+	refreshAppTokenType      = "REFRESH_TOKEN"
+	signOutRevokedReason     = "USER_SIGN_OUT"
+	envelopePrefix           = "enc:v2:"
 )
 
-type IssuerConfig struct { // a zero lifetime takes Node's default, shown beside it
+type IssuerConfig struct {
 	AppSecret             string
 	EncryptionKey         string
 	FallbackEncryptionKey string
-	AccessTTL             time.Duration // 30m
-	RefreshTTL            time.Duration // 60d
-	LoginTTL              time.Duration // 15m
-	RefreshReuseGrace     time.Duration // 1m
+	AccessTTL             time.Duration
+	RefreshTTL            time.Duration
+	LoginTTL              time.Duration
+	RefreshReuseGrace     time.Duration
 }
 
 type PGIssuer struct {
@@ -77,16 +81,16 @@ type PGIssuer struct {
 
 func NewPGIssuer(pool *pgxpool.Pool, config IssuerConfig) *PGIssuer {
 	if config.AccessTTL == 0 {
-		config.AccessTTL = 30 * time.Minute
+		config.AccessTTL = defaultAccessTTL
 	}
 	if config.RefreshTTL == 0 {
-		config.RefreshTTL = 60 * 24 * time.Hour
+		config.RefreshTTL = defaultRefreshTTL
 	}
 	if config.LoginTTL == 0 {
-		config.LoginTTL = 15 * time.Minute
+		config.LoginTTL = defaultLoginTTL
 	}
 	if config.RefreshReuseGrace == 0 {
-		config.RefreshReuseGrace = time.Minute
+		config.RefreshReuseGrace = defaultRefreshReuseGrace
 	}
 	return &PGIssuer{pool: pool, verifier: NewJWTVerifier(pool, config.AppSecret), config: config}
 }
@@ -121,7 +125,7 @@ func (i *PGIssuer) IssueLogin(ctx context.Context, userID string) (string, error
 	err := i.pool.QueryRow(ctx,
 		`SELECT u.email::text, uw."workspaceId"::text
 		 FROM core."user" u JOIN core."userWorkspace" uw ON uw."userId" = u.id
-		 WHERE u.id::text = $1 AND uw."deletedAt" IS NULL
+		 WHERE u.id = $1::uuid AND u."deletedAt" IS NULL AND uw."deletedAt" IS NULL
 		 ORDER BY uw."createdAt" LIMIT 1`, userID,
 	).Scan(&email, &workspaceID)
 	if err != nil {
@@ -166,7 +170,7 @@ func (i *PGIssuer) Revoke(ctx context.Context, refreshToken string) error {
 		`UPDATE core."appToken"
 		 SET "revokedAt" = COALESCE("revokedAt", now()),
 		     context = COALESCE(context, '{}'::jsonb) || jsonb_build_object('revokedReason', $2::text)
-		 WHERE id::text = $1 AND type = $3`,
+		 WHERE id = $1::uuid AND type = $3`,
 		presented.ID, signOutRevokedReason, refreshAppTokenType)
 	if err != nil {
 		return fmt.Errorf("revoke refresh token: %w", err)
@@ -229,8 +233,8 @@ func (i *PGIssuer) consumeRefreshToken(ctx context.Context, tx pgx.Tx, presented
 	)
 	err := tx.QueryRow(ctx,
 		`SELECT t."workspaceId"::text, t."revokedAt", t.context->>'revokedReason',
-		        EXISTS (SELECT 1 FROM core."user" WHERE id::text = $2)
-		 FROM core."appToken" t WHERE t.id::text = $1 AND t.type = $3`,
+		        EXISTS (SELECT 1 FROM core."user" WHERE id = $2::uuid)
+		 FROM core."appToken" t WHERE t.id = $1::uuid AND t.type = $3`,
 		presented.ID, presented.Subject, refreshAppTokenType,
 	).Scan(&workspaceID, &revokedAt, &revokedReason, &userExists)
 	if errors.Is(err, pgx.ErrNoRows) || err == nil && !userExists {
@@ -246,7 +250,7 @@ func (i *PGIssuer) consumeRefreshToken(ctx context.Context, tx pgx.Tx, presented
 		return "", errors.New("refresh workspace-agnostic token: unsupported")
 	}
 	if _, err := tx.Exec(ctx,
-		`UPDATE core."appToken" SET "revokedAt" = now() WHERE id::text = $1 AND "revokedAt" IS NULL`, presented.ID,
+		`UPDATE core."appToken" SET "revokedAt" = now() WHERE id = $1::uuid AND "revokedAt" IS NULL`, presented.ID,
 	); err != nil {
 		return "", fmt.Errorf("revoke rotated refresh token: %w", err)
 	}
