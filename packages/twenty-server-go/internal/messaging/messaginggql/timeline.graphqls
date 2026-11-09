@@ -1,0 +1,49 @@
+scalar UUID
+scalar DateTime
+
+enum MessageChannelVisibility {
+  METADATA
+  SUBJECT
+  SHARE_EVERYTHING
+}
+
+type TimelineThreadParticipant {
+  personId: UUID
+  workspaceMemberId: UUID
+  firstName: String!
+  lastName: String!
+  displayName: String!
+  avatarUrl: String!
+  handle: String!
+}
+
+type TimelineThread {
+  id: UUID!
+  read: Boolean!
+  visibility: MessageChannelVisibility!
+  firstParticipant: TimelineThreadParticipant!
+  lastTwoParticipants: [TimelineThreadParticipant!]!
+  lastMessageReceivedAt: DateTime!
+  lastMessageBody: String!
+  subject: String!
+  numberOfMessagesInThread: Float!
+  participantCount: Float!
+  lastMessageIsDraft: Boolean!
+}
+
+type TimelineThreadsWithTotal {
+  totalNumberOfThreads: Int!
+  timelineThreads: [TimelineThread!]!
+  relatedPersonIds: [UUID!]!
+}
+
+type Query {
+  getTimelineThreadsFromObjectRecord(objectNameSingular: String!, recordId: UUID!, page: Int!, pageSize: Int!): TimelineThreadsWithTotal!
+  getTimelineThreadsFromPersonId(personId: UUID!, page: Int!, pageSize: Int!): TimelineThreadsWithTotal! @deprecated(reason: "Use getTimelineThreadsFromObjectRecord instead")
+  getTimelineThreadsFromCompanyId(companyId: UUID!, page: Int!, pageSize: Int!): TimelineThreadsWithTotal! @deprecated(reason: "Use getTimelineThreadsFromObjectRecord instead")
+  getTimelineThreadsFromOpportunityId(opportunityId: UUID!, page: Int!, pageSize: Int!): TimelineThreadsWithTotal! @deprecated(reason: "Use getTimelineThreadsFromObjectRecord instead")
+}
+
+type Mutation {
+  dismissReconnectAccountBanner(connectedAccountId: UUID!): Boolean!
+}

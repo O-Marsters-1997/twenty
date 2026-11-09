@@ -23,6 +23,8 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/config"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/frontdoor"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging/messaginggql"
+	messagingstore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging/store"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/metadatagql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/metagql"
 	metadatastore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/store"
@@ -98,7 +100,10 @@ func run() error {
 		NoteTargets:        store.NewNoteTargets(pool),
 		Tasks:              store.NewTasks(pool),
 		TaskTargets:        store.NewTaskTargets(pool),
-	}, logger), chatHandler, workflowHandler))
+	}, logger), chatHandler, workflowHandler, messaginggql.NewHandler(&messaginggql.Resolver{
+		Timeline: messagingstore.NewTimeline(pool),
+		Banners:  messagingstore.NewReconnectBanners(pool),
+	}, logger)))
 	goGraphQL.Handle(string(frontdoor.EndpointMetadata), metadataHandler(
 		metadatagql.NewHandler(metadatastore.New(pool), toolRegistry, logger),
 		chatHandler,

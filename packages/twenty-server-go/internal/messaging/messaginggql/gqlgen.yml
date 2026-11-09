@@ -1,0 +1,31 @@
+schema:
+  - timeline.graphqls
+exec:
+  filename: generated.go
+  package: messaginggql
+model:
+  filename: models_gen.go
+  package: messaginggql
+resolver:
+  layout: single-file
+  filename: resolver.go
+  package: messaginggql
+  type: Resolver
+models:
+  UUID:
+    model: github.com/99designs/gqlgen/graphql.String
+  DateTime:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata.Timestamp
+  MessageChannelVisibility:
+    model: github.com/99designs/gqlgen/graphql.String
+  Float:
+    model: github.com/99designs/gqlgen/graphql.Int
+  TimelineThreadParticipant:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging.TimelineParticipant
+  TimelineThread:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging.TimelineThread
+    fields:
+      lastMessageReceivedAt:
+        resolver: true
+  TimelineThreadsWithTotal:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging.TimelineThreadsWithTotal

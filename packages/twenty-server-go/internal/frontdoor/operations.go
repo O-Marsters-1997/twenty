@@ -67,6 +67,9 @@ func DefaultTable() OperationTable {
 	for _, operation := range slices.Concat(WorkflowOperations, WorkflowAuthoringOperations) {
 		table[EndpointWorkspace][operation] = RouteGo
 	}
+	for _, operation := range TimelineOperations {
+		table[EndpointWorkspace][operation] = RouteGo
+	}
 	for _, plural := range []string{"Notes", "NoteTargets", "Tasks", "TaskTargets"} {
 		for _, operation := range []string{"Aggregate" + plural, plural + "GroupByAggregates", plural + "GroupByRecords"} {
 			table[EndpointWorkspace][operation] = RouteGo
@@ -90,6 +93,11 @@ var WorkflowOperations = []string{
 	"GetCoreWorkflowVersions", "GetCoreWorkflowVersion", "GetCoreWorkflowVersionLegacyMapping",
 	"StopWorkflowRun", "RetryWorkflowRun", "SubmitFormStep", "UpdateWorkflowRunStep",
 	"WorkflowStepConnectedAccountHandle", "TestHttpRequest",
+}
+
+var TimelineOperations = []string{
+	"GetTimelineThreadsFromObjectRecord", "GetTimelineThreadsFromPersonId",
+	"GetTimelineThreadsFromCompanyId", "GetTimelineThreadsFromOpportunityId", "DismissReconnectAccountBanner",
 }
 
 const AnswerToolCallOperation = "AnswerToolCall"

@@ -10,7 +10,7 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/frontdoor"
 )
 
-func workspaceHandler(records, chat, workflows http.Handler) http.Handler {
+func workspaceHandler(records, chat, workflows, timeline http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		body, err := io.ReadAll(r.Body)
 		if err != nil {
@@ -25,6 +25,9 @@ func workspaceHandler(records, chat, workflows http.Handler) http.Handler {
 			switch {
 			case request.OperationName == frontdoor.AnswerToolCallOperation:
 				chat.ServeHTTP(w, r)
+				return
+			case slices.Contains(frontdoor.TimelineOperations, request.OperationName):
+				timeline.ServeHTTP(w, r)
 				return
 			case slices.Contains(frontdoor.WorkflowOperations, request.OperationName),
 				slices.Contains(frontdoor.WorkflowAuthoringOperations, request.OperationName):
