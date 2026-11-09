@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/pgtest"
@@ -67,8 +68,9 @@ func TestStore_Definitions(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Version() = %v", err)
 	}
-	if version.WorkflowID != workflowID || version.Status != "DRAFT" || version.Name != "v1" {
-		t.Errorf("Version() = %+v", version)
+	wantVersion := store.Version{ID: versionID, WorkflowID: workflowID, Name: "v1", Status: "DRAFT"}
+	if diff := cmp.Diff(wantVersion, version, cmpopts.IgnoreFields(store.Version{}, "Trigger", "Steps")); diff != "" {
+		t.Errorf("Version() (-want +got):\n%s", diff)
 	}
 	jsonEqual(t, `[{"id":"s1","type":"CODE"}]`, version.Steps)
 	jsonEqual(t, `{"type":"MANUAL"}`, version.Trigger)
