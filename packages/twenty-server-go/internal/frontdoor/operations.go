@@ -56,12 +56,13 @@ func DefaultTable() OperationTable {
 			"CreateOneFieldMetadataItem":  RouteBlocked,
 			"UpdateOneFieldMetadataItem":  RouteBlocked,
 			"DeleteOneFieldMetadataItem":  RouteBlocked,
+			"SendEmail":                   RouteGo,
 		},
 	}
 	for _, operation := range viewOperations {
 		table[EndpointMetadata][operation] = RouteGo
 	}
-	for _, operation := range slices.Concat(SkillOperations, ChatOperations, agentOperations) {
+	for _, operation := range slices.Concat(SkillOperations, ChatOperations, agentOperations, MessagingOperations) {
 		table[EndpointMetadata][operation] = RouteGo
 	}
 	for _, operation := range slices.Concat(WorkflowOperations, WorkflowAuthoringOperations) {
@@ -123,6 +124,12 @@ var WorkflowAuthoringOperations = []string{
 
 var agentOperations = []string{
 	"FindManyAgents", "FindOneAgent", "CreateOneAgent", "UpdateOneAgent", "DeleteOneAgent", "AssignRoleToAgent",
+}
+
+var MessagingOperations = []string{
+	"MyConnectedAccounts", "ApplicationConnectedAccounts", "DeleteConnectedAccount", "DisconnectConnectedAccount",
+	"MyMessageChannels", "UpdateMessageChannel", "CreateEmailGroupChannel", "UpdateEmailGroupChannel", "DeleteEmailGroupChannel",
+	"MyCalendarChannels", "UpdateCalendarChannel",
 }
 
 var blockedMetadataFields = []string{

@@ -1,0 +1,9 @@
+{
+  "name": "MyCalendarChannels",
+  "operation": "MyCalendarChannels",
+  "fixture": "accounts seed",
+  "endpoint": "/metadata",
+  "query": "query MyCalendarChannels($connectedAccountId: UUID) { myCalendarChannels(connectedAccountId: $connectedAccountId) { id handle visibility syncStatus isSyncEnabled connectedAccountId } }",
+  "variables": {},
+  "response": {"data":{"myCalendarChannels":[{"id":"cccccccc-cccc-4ccc-8ccc-ccccccccccc1","handle":"me@example.com","visibility":"METADATA","syncStatus":"NOT_SYNCED","isSyncEnabled":true,"connectedAccountId":"aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa1"}]}}
+}

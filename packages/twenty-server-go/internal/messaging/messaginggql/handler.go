@@ -13,10 +13,13 @@ import (
 
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging/store"
 )
 
-// NewHandler serves the timeline operations; the caller supplies the principal in the request context.
+var Operations = []string{"SendEmail"}
+
 func NewHandler(resolver *Resolver, logger *slog.Logger) http.Handler {
+	resolver.Logger = logger
 	server := handler.New(NewExecutableSchema(Config{Resolvers: resolver}))
 	server.AddTransport(transport.POST{})
 	server.SetErrorPresenter(func(ctx context.Context, err error) *gqlerror.Error {
@@ -25,6 +28,14 @@ func NewHandler(resolver *Resolver, logger *slog.Logger) http.Handler {
 		switch {
 		case errors.Is(err, messaging.ErrInvalidTimelinePage):
 			code = "BAD_USER_INPUT"
+		case errors.Is(err, store.ErrInvalidInput):
+			code = "BAD_USER_INPUT"
+		case errors.Is(err, store.ErrNotFound):
+			code = "NOT_FOUND"
+		case errors.Is(err, store.ErrForbidden):
+			code = "FORBIDDEN"
+		case errors.Is(err, store.ErrAccountNotOwned):
+			code = "FORBIDDEN"
 		case errors.Is(err, auth.ErrUnauthenticated):
 			code = "UNAUTHENTICATED"
 		default:

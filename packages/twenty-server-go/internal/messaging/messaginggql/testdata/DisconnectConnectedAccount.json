@@ -1,0 +1,9 @@
+{
+  "name": "DisconnectConnectedAccount",
+  "operation": "DisconnectConnectedAccount",
+  "fixture": "accounts seed",
+  "endpoint": "/metadata",
+  "query": "mutation DisconnectConnectedAccount($id: UUID!) { disconnectConnectedAccount(id: $id) { id handle archivedAt authFailedAt authFailedReason } }",
+  "variables": {"id":"aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa1"},
+  "response": {"data":{"disconnectConnectedAccount":{"id":"aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa1","handle":"me@example.com","archivedAt":"<ignored>","authFailedAt":null,"authFailedReason":null}}}
+}

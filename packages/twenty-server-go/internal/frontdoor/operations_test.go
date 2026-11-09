@@ -16,6 +16,20 @@ func TestDefaultTable_RoutesAgentOperationsToGo(t *testing.T) {
 	}
 }
 
+func TestDefaultTable_RoutesMessagingOperationsToGo(t *testing.T) {
+	t.Parallel()
+	table := frontdoor.DefaultTable()[frontdoor.EndpointMetadata]
+	for _, operation := range []string{
+		"MyConnectedAccounts", "ApplicationConnectedAccounts", "DeleteConnectedAccount", "DisconnectConnectedAccount",
+		"MyMessageChannels", "UpdateMessageChannel", "CreateEmailGroupChannel", "UpdateEmailGroupChannel", "DeleteEmailGroupChannel",
+		"MyCalendarChannels", "UpdateCalendarChannel",
+	} {
+		if table[operation] != frontdoor.RouteGo {
+			t.Errorf("route of %s = %q, want %q", operation, table[operation], frontdoor.RouteGo)
+		}
+	}
+}
+
 func TestDefaultTable_RoutesNoteAndTaskAggregatesToGo(t *testing.T) {
 	t.Parallel()
 	table := frontdoor.DefaultTable()[frontdoor.EndpointWorkspace]
@@ -38,6 +52,13 @@ func TestDefaultTable_RoutesTimelineOperationsToGo(t *testing.T) {
 		if table[operation] != frontdoor.RouteGo {
 			t.Errorf("route of %s = %q, want %q", operation, table[operation], frontdoor.RouteGo)
 		}
+	}
+}
+
+func TestDefaultTable_RoutesSendEmailToGo(t *testing.T) {
+	t.Parallel()
+	if got := frontdoor.DefaultTable()[frontdoor.EndpointMetadata]["SendEmail"]; got != frontdoor.RouteGo {
+		t.Errorf("route of SendEmail = %q, want %q", got, frontdoor.RouteGo)
 	}
 }
 

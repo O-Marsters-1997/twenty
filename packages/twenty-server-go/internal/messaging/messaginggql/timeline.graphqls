@@ -1,12 +1,3 @@
-scalar UUID
-scalar DateTime
-
-enum MessageChannelVisibility {
-  METADATA
-  SUBJECT
-  SHARE_EVERYTHING
-}
-
 type TimelineThreadParticipant {
   personId: UUID
   workspaceMemberId: UUID
@@ -37,13 +28,13 @@ type TimelineThreadsWithTotal {
   relatedPersonIds: [UUID!]!
 }
 
-type Query {
+extend type Query {
   getTimelineThreadsFromObjectRecord(objectNameSingular: String!, recordId: UUID!, page: Int!, pageSize: Int!): TimelineThreadsWithTotal!
   getTimelineThreadsFromPersonId(personId: UUID!, page: Int!, pageSize: Int!): TimelineThreadsWithTotal! @deprecated(reason: "Use getTimelineThreadsFromObjectRecord instead")
   getTimelineThreadsFromCompanyId(companyId: UUID!, page: Int!, pageSize: Int!): TimelineThreadsWithTotal! @deprecated(reason: "Use getTimelineThreadsFromObjectRecord instead")
   getTimelineThreadsFromOpportunityId(opportunityId: UUID!, page: Int!, pageSize: Int!): TimelineThreadsWithTotal! @deprecated(reason: "Use getTimelineThreadsFromObjectRecord instead")
 }
 
-type Mutation {
+extend type Mutation {
   dismissReconnectAccountBanner(connectedAccountId: UUID!): Boolean!
 }

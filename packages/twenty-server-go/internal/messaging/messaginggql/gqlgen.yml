@@ -1,5 +1,7 @@
 schema:
   - timeline.graphqls
+  - messaging.graphqls
+  - send.graphqls
 exec:
   filename: generated.go
   package: messaginggql
@@ -18,6 +20,48 @@ models:
     model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata.Timestamp
   MessageChannelVisibility:
     model: github.com/99designs/gqlgen/graphql.String
+  MessageChannelType:
+    model: github.com/99designs/gqlgen/graphql.String
+  MessageChannelContactAutoCreationPolicy:
+    model: github.com/99designs/gqlgen/graphql.String
+  MessageFolderImportPolicy:
+    model: github.com/99designs/gqlgen/graphql.String
+  MessageChannelPendingGroupEmailsAction:
+    model: github.com/99designs/gqlgen/graphql.String
+  MessageChannelSyncStatus:
+    model: github.com/99designs/gqlgen/graphql.String
+  MessageChannelSyncStage:
+    model: github.com/99designs/gqlgen/graphql.String
+  CalendarChannelVisibility:
+    model: github.com/99designs/gqlgen/graphql.String
+  CalendarChannelContactAutoCreationPolicy:
+    model: github.com/99designs/gqlgen/graphql.String
+  CalendarChannelSyncStatus:
+    model: github.com/99designs/gqlgen/graphql.String
+  CalendarChannelSyncStage:
+    model: github.com/99designs/gqlgen/graphql.String
+  ConnectedAccountPublicDTO:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging/store.Account
+  ApplicationConnectedAccountDTO:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging/store.ApplicationAccount
+  MessageChannel:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging/store.MessageChannel
+  CalendarChannel:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging/store.CalendarChannel
+  CreateEmailGroupChannelOutput:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging/store.EmailGroupChannel
+  UpdateMessageChannelInput:
+    model: map[string]interface{}
+  UpdateMessageChannelInputUpdates:
+    model: map[string]interface{}
+  CreateEmailGroupChannelInput:
+    model: map[string]interface{}
+  UpdateEmailGroupChannelInput:
+    model: map[string]interface{}
+  UpdateCalendarChannelInput:
+    model: map[string]interface{}
+  UpdateCalendarChannelInputUpdates:
+    model: map[string]interface{}
   Float:
     model: github.com/99designs/gqlgen/graphql.Int
   TimelineThreadParticipant:

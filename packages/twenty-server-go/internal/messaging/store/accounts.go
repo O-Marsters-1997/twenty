@@ -11,7 +11,7 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging"
 )
 
-var ErrNotFound = errors.New("connected account not found")
+var ErrNotFound = errors.New("not found")
 
 // Cipher encrypts and decrypts the OAuth tokens stored in core."connectedAccount".
 type Cipher interface {
