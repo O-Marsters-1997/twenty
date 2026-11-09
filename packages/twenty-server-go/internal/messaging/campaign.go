@@ -8,6 +8,8 @@ import (
 	"slices"
 	"strconv"
 	"strings"
+
+	"github.com/riverqueue/river"
 )
 
 // Renderer renders a campaign template, the tiptap JSON document a campaign stores as its body,
@@ -210,3 +212,190 @@ func stringify(value any) string {
 }
 
 func isLetter(b byte) bool { return (b|0x20) >= 'a' && (b|0x20) <= 'z' }
+
+// DeliveryStatus mirrors the campaignDelivery state enum.
+type DeliveryStatus string
+
+const (
+	DeliveryQueued  DeliveryStatus = "QUEUED"
+	DeliverySending DeliveryStatus = "SENDING"
+	DeliverySent    DeliveryStatus = "SENT"
+	DeliveryFailed  DeliveryStatus = "FAILED"
+	DeliverySkipped DeliveryStatus = "SKIPPED"
+)
+
+// CampaignStatus is the terminal messageCampaign status a finished send settles to.
+type CampaignStatus string
+
+const (
+	CampaignSent           CampaignStatus = "SENT"
+	CampaignSentWithErrors CampaignStatus = "SENT_WITH_ERRORS"
+)
+
+// ProviderOutcome is what an outbound delivery event reports about one sent message.
+type ProviderOutcome string
+
+type Campaign struct {
+	ID, Subject, Template, ConnectedAccountID string
+}
+
+type Recipient struct {
+	Email     string
+	Variables map[string]any
+}
+
+type Delivery struct {
+	ID, CampaignID, Email string
+	Variables             map[string]any
+	Status                DeliveryStatus
+}
+
+type DeliverySettlement struct {
+	Status                                   DeliveryStatus
+	SkipReason, FailureReason, ProviderMsgID string
+}
+
+type CampaignCounts struct{ Total, InProgress, Failed, Skipped int }
+
+// CampaignStore is the persistence campaign sending needs.
+type CampaignStore interface {
+	Campaign(ctx context.Context, id string) (Campaign, error)
+	Recipients(ctx context.Context, campaignID string) ([]Recipient, error)
+	// SuppressedAddresses lists lower-cased addresses from messageSuppression and blocklist.
+	SuppressedAddresses(ctx context.Context) ([]string, error)
+	// CreateDeliveries inserts QUEUED deliveries for recipients without one and returns the IDs of all
+	// the campaign's QUEUED deliveries, so a retried fan-out enqueues the same set.
+	CreateDeliveries(ctx context.Context, campaignID string, recipients []Recipient) ([]string, error)
+	Delivery(ctx context.Context, id string) (Delivery, error)
+	Settle(ctx context.Context, deliveryID string, settlement DeliverySettlement) error
+	// RecordOutcome stamps the delivery sent as providerMessageID and returns its campaign, or "" when none matches.
+	RecordOutcome(ctx context.Context, providerMessageID string, outcome ProviderOutcome) (campaignID string, err error)
+	Counts(ctx context.Context, campaignID string) (CampaignCounts, error)
+	Finish(ctx context.Context, campaignID string, status CampaignStatus) error
+}
+
+var ErrDeliveryNotFound = errors.New("campaign delivery not found")
+
+// Campaigns fans a campaign out into deliveries and sends each one.
+type Campaigns struct {
+	Store    CampaignStore
+	Renderer Renderer
+	Mailer   Mailer
+	Queue    func(ctx context.Context, args river.JobArgs) error
+}
+
+// Send creates a delivery per non-suppressed recipient and enqueues each as a DeliverCampaignMessageArgs job.
+func (c *Campaigns) Send(ctx context.Context, campaignID string) error {
+	recipients, err := c.Store.Recipients(ctx, campaignID)
+	if err != nil {
+		return fmt.Errorf("list campaign recipients: %w", err)
+	}
+	suppressed, err := c.Store.SuppressedAddresses(ctx)
+	if err != nil {
+		return fmt.Errorf("list suppressed addresses: %w", err)
+	}
+	allowed := slices.DeleteFunc(slices.Clone(recipients), func(recipient Recipient) bool {
+		return slices.Contains(suppressed, strings.ToLower(recipient.Email))
+	})
+	ids, err := c.Store.CreateDeliveries(ctx, campaignID, allowed)
+	if err != nil {
+		return fmt.Errorf("create deliveries: %w", err)
+	}
+	var errs []error
+	for _, id := range ids {
+		if err := c.Queue(ctx, DeliverCampaignMessageArgs{DeliveryID: id}); err != nil {
+			errs = append(errs, fmt.Errorf("enqueue delivery %s: %w", id, err))
+		}
+	}
+	if err := errors.Join(errs...); err != nil {
+		return err
+	}
+	return c.finishIfDone(ctx, campaignID)
+}
+
+// Deliver renders and sends one delivery. A send error is returned for retry unless lastAttempt, which settles it FAILED.
+func (c *Campaigns) Deliver(ctx context.Context, deliveryID string, lastAttempt bool) error {
+	delivery, err := c.Store.Delivery(ctx, deliveryID)
+	if err != nil {
+		return fmt.Errorf("load delivery: %w", err)
+	}
+	if delivery.Status != DeliveryQueued && delivery.Status != DeliverySending {
+		return nil
+	}
+	suppressed, err := c.Store.SuppressedAddresses(ctx)
+	if err != nil {
+		return fmt.Errorf("list suppressed addresses: %w", err)
+	}
+	if slices.Contains(suppressed, strings.ToLower(delivery.Email)) {
+		return c.settle(ctx, delivery, DeliverySettlement{Status: DeliverySkipped, SkipReason: "SUPPRESSED"})
+	}
+	campaign, err := c.Store.Campaign(ctx, delivery.CampaignID)
+	if err != nil {
+		return fmt.Errorf("load campaign: %w", err)
+	}
+	html, _, err := c.Renderer.Render(ctx, campaign.Template, delivery.Variables)
+	if err != nil {
+		if settleErr := c.settle(ctx, delivery, DeliverySettlement{Status: DeliveryFailed, FailureReason: "CONFIGURATION_ERROR"}); settleErr != nil {
+			return settleErr
+		}
+		return fmt.Errorf("render delivery %s: %w", deliveryID, errors.Join(err, ErrDeliveryFailed))
+	}
+	messageID, err := c.Mailer.Send(ctx, campaign.ConnectedAccountID, OutboundEmail{
+		To: []string{delivery.Email}, Subject: campaign.Subject, HTMLBody: html,
+	})
+	switch {
+	case errors.Is(err, ErrAccountAuthFailed):
+		if settleErr := c.settle(ctx, delivery, DeliverySettlement{Status: DeliveryFailed, FailureReason: "INSUFFICIENT_PERMISSIONS"}); settleErr != nil {
+			return settleErr
+		}
+		return fmt.Errorf("send delivery %s: %w", deliveryID, errors.Join(err, ErrDeliveryFailed))
+	case err != nil && lastAttempt:
+		if settleErr := c.settle(ctx, delivery, DeliverySettlement{Status: DeliveryFailed, FailureReason: "TEMPORARY_ERROR"}); settleErr != nil {
+			return settleErr
+		}
+		return fmt.Errorf("send delivery %s: %w", deliveryID, err)
+	case err != nil:
+		return fmt.Errorf("send delivery %s: %w", deliveryID, err)
+	}
+	return c.settle(ctx, delivery, DeliverySettlement{Status: DeliverySent, ProviderMsgID: messageID})
+}
+
+// RecordOutcome applies an outbound delivery event and settles the campaign if it was the last open delivery.
+func (c *Campaigns) RecordOutcome(ctx context.Context, providerMessageID string, outcome ProviderOutcome) error {
+	campaignID, err := c.Store.RecordOutcome(ctx, providerMessageID, outcome)
+	if err != nil {
+		return fmt.Errorf("record provider outcome: %w", err)
+	}
+	if campaignID == "" {
+		return nil
+	}
+	return c.finishIfDone(ctx, campaignID)
+}
+
+// ErrDeliveryFailed marks a delivery that is already settled FAILED and must not be retried.
+var ErrDeliveryFailed = errors.New("campaign delivery failed permanently")
+
+func (c *Campaigns) settle(ctx context.Context, delivery Delivery, settlement DeliverySettlement) error {
+	if err := c.Store.Settle(ctx, delivery.ID, settlement); err != nil {
+		return fmt.Errorf("settle delivery %s: %w", delivery.ID, err)
+	}
+	return c.finishIfDone(ctx, delivery.CampaignID)
+}
+
+func (c *Campaigns) finishIfDone(ctx context.Context, campaignID string) error {
+	counts, err := c.Store.Counts(ctx, campaignID)
+	if err != nil {
+		return fmt.Errorf("count deliveries: %w", err)
+	}
+	status := CampaignSent
+	switch {
+	case counts.InProgress > 0:
+		return nil
+	case counts.Total == 0, counts.Failed > 0, counts.Skipped > 0:
+		status = CampaignSentWithErrors
+	}
+	if err := c.Store.Finish(ctx, campaignID, status); err != nil {
+		return fmt.Errorf("finish campaign: %w", err)
+	}
+	return nil
+}
