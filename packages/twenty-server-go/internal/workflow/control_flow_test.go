@@ -188,7 +188,9 @@ func TestDelayAction_Run(t *testing.T) {
 		if !got.Pending {
 			t.Error("Run() Pending = false, want true")
 		}
-		resumeAt, err := time.Parse(time.RFC3339Nano, got.Result.(map[string]any)["resumeAt"].(string))
+		result, _ := got.Result.(map[string]any)
+		resumeText, _ := result["resumeAt"].(string)
+		resumeAt, err := time.Parse(time.RFC3339Nano, resumeText)
 		if err != nil {
 			t.Fatalf("resumeAt parse error = %v", err)
 		}

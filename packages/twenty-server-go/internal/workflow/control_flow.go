@@ -127,8 +127,6 @@ type iteratorAction struct{}
 
 func (iteratorAction) Type() ActionType { return ActionTypeIterator }
 
-// Run advances the iterator one item; the previous index is read from the
-// iterator's own earlier output in the context.
 func (iteratorAction) Run(_ context.Context, input StepInput) (StepOutput, error) {
 	var settings struct {
 		Items              any      `json:"items"`
@@ -192,7 +190,6 @@ type delayAction struct{}
 
 func (delayAction) Type() ActionType { return ActionTypeDelay }
 
-// Run parks the run and reports when to resume in Result["resumeAt"].
 func (delayAction) Run(_ context.Context, input StepInput) (StepOutput, error) {
 	var settings struct {
 		DelayType         string         `json:"delayType"`
@@ -217,7 +214,11 @@ func (delayAction) Run(_ context.Context, input StepInput) (StepOutput, error) {
 		if settings.Duration == nil {
 			return StepOutput{}, fmt.Errorf("duration is required for duration delay: %w", ErrInvalidStepInput)
 		}
-		duration, err := durationFromParts(resolveVariables(settings.Duration, input.Context).(map[string]any))
+		parts, ok := resolveVariables(settings.Duration, input.Context).(map[string]any)
+		if !ok {
+			return StepOutput{}, fmt.Errorf("duration must be an object: %w", ErrInvalidStepInput)
+		}
+		duration, err := durationFromParts(parts)
 		if err != nil {
 			return StepOutput{}, err
 		}

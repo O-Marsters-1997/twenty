@@ -35,8 +35,6 @@ type resolvedFilter struct {
 
 var variablePattern = regexp.MustCompile(`\{\{([^{}]+)\}\}`)
 
-// resolveVariables replaces {{path}} tokens from context. A string that is a
-// single token keeps the referenced value's type.
 func resolveVariables(input any, context map[string]any) any {
 	switch value := input.(type) {
 	case string:
@@ -201,8 +199,6 @@ func evaluateGroup(groupID string, groups []stepFilterGroup, filters []resolvedF
 	return false, fmt.Errorf("unknown logical operator %q: %w", groups[index].LogicalOperator, ErrInvalidStepInput)
 }
 
-// evaluateFilter covers the operands shared by every field type. Relative
-// dates, select, currency, actor and rating filters are not ported yet.
 func evaluateFilter(filter resolvedFilter) (bool, error) {
 	left, right := filter.left, filter.right
 	switch filter.operand {
