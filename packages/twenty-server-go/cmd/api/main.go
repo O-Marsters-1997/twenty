@@ -12,6 +12,8 @@ import (
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/riverqueue/river"
+	"github.com/riverqueue/river/riverdriver/riverpgxv5"
 
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai/agentgql"
@@ -24,6 +26,7 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/metadatagql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/metagql"
 	metadatastore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/store"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records/recordsgql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records/store"
 )
@@ -52,8 +55,14 @@ func run() error {
 	chats := aistore.New(pool)
 	broker := ai.NewPersistingBroker(ai.NewMemoryBroker(), chats, logger)
 
+	insertClient, err := river.NewClient(riverpgxv5.New(pool), &river.Config{})
+	if err != nil {
+		return fmt.Errorf("create river insert client: %w", err)
+	}
+	people := store.NewPeople(pool).WithEvents(records.NewRiverPublisher(insertClient))
+
 	recordTools := ai.NewRecordTools(
-		store.NewCompanies(pool), store.NewPeople(pool), store.NewOpportunities(pool), store.NewNotes(pool), store.NewTasks(pool),
+		store.NewCompanies(pool), people, store.NewOpportunities(pool), store.NewNotes(pool), store.NewTasks(pool),
 	)
 	toolRegistry := ai.NewRegistry(recordTools...)
 	runner, err := chatRunner(toolRegistry, logger)
@@ -64,7 +73,7 @@ func run() error {
 
 	goGraphQL := http.NewServeMux()
 	goGraphQL.Handle(string(frontdoor.EndpointWorkspace), workspaceHandler(recordsgql.NewHandler(&recordsgql.Resolver{
-		Store:              store.NewPeople(pool),
+		Store:              people,
 		Companies:          store.NewCompanies(pool),
 		Opportunities:      store.NewOpportunities(pool),
 		WorkspaceMembers:   store.NewWorkspaceMembers(pool),
