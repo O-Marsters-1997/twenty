@@ -1,12 +1,6 @@
 scalar UUID
 scalar JSON
 
-enum CoreWorkflowStatus {
-  DRAFT
-  ACTIVE
-  DEACTIVATED
-}
-
 enum CoreWorkflowVersionStatus {
   DRAFT
   ACTIVE
@@ -19,10 +13,80 @@ enum WorkflowVisibility {
   PRIVATE
 }
 
+enum CoreWorkflowOrderByField {
+  NAME
+  UPDATED_AT
+}
+
+enum CoreWorkflowOrderByDirection {
+  ASC
+  DESC
+}
+
+enum CoreWorkflowFilterFieldKey {
+  NAME
+  STATUSES
+  UPDATED_AT
+}
+
+enum CoreWorkflowFilterOperand {
+  CONTAINS
+  DOES_NOT_CONTAIN
+  IS
+  IS_NOT
+  IS_EMPTY
+  IS_NOT_EMPTY
+  IS_BEFORE
+  IS_AFTER
+  IS_IN_PAST
+  IS_IN_FUTURE
+  IS_TODAY
+  IS_RELATIVE
+}
+
+enum CoreWorkflowFilterLogicalOperator {
+  AND
+  OR
+}
+
+input CoreWorkflowFilterRuleInput {
+  fieldKey: CoreWorkflowFilterFieldKey!
+  operand: CoreWorkflowFilterOperand!
+  value: String
+  timezone: String
+}
+
+input CoreWorkflowFilterInput {
+  logicalOperator: CoreWorkflowFilterLogicalOperator!
+  rules: [CoreWorkflowFilterRuleInput!]!
+}
+
+input CoreWorkflowsWithCurrentVersionsInput {
+  coreWorkflowIds: [UUID!]!
+}
+
+input SubmitFormStepInput {
+  workflowRunId: UUID!
+  stepId: UUID!
+  response: JSON!
+}
+
+input UpdateWorkflowRunStepInput {
+  workflowRunId: UUID!
+  step: JSON!
+}
+
+input TestHttpRequestInput {
+  url: String!
+  method: String!
+  headers: JSON
+  body: JSON
+}
+
 type CoreWorkflowDTO {
   id: UUID!
   name: String
-  statuses: [CoreWorkflowStatus!]!
+  statuses: [String!]!
   lastPublishedVersionId: UUID
   lastPublishedCoreWorkflowVersionId: UUID
   applicationId: UUID
@@ -32,11 +96,6 @@ type CoreWorkflowDTO {
   canChangeVisibility: Boolean!
   createdAt: String!
   updatedAt: String!
-}
-
-type DeletedCoreWorkflowDTO {
-  id: UUID!
-  workspaceWorkflowId: UUID
 }
 
 type CoreWorkflowVersionDTO {
@@ -52,9 +111,31 @@ type CoreWorkflowVersionDTO {
   updatedAt: String!
 }
 
-type WorkflowVersionStepChanges {
-  triggerDiff: JSON
-  stepsDiff: JSON
+type CoreWorkflowEdge {
+  node: CoreWorkflowDTO!
+  cursor: String!
+}
+
+type CoreWorkflowPageInfo {
+  endCursor: String
+  hasNextPage: Boolean!
+}
+
+type CoreWorkflowConnection {
+  edges: [CoreWorkflowEdge!]!
+  pageInfo: CoreWorkflowPageInfo!
+  totalCount: Int!
+}
+
+type CoreWorkflowWithCurrentVersionDTO {
+  workflow: CoreWorkflowDTO!
+  versions: [CoreWorkflowVersionDTO!]!
+  currentVersion: CoreWorkflowVersionDTO!
+}
+
+type WorkflowRun {
+  id: UUID!
+  status: String!
 }
 
 type WorkflowStepPosition {
@@ -70,6 +151,33 @@ type WorkflowAction {
   valid: Boolean!
   nextStepIds: [UUID!]
   position: WorkflowStepPosition
+}
+
+type TestHttpRequest {
+  success: Boolean!
+  message: String!
+  result: JSON
+  error: JSON
+  status: Float
+  statusText: String
+  headers: JSON
+}
+
+type ConnectedAccountHandleDTO {
+  id: UUID!
+  handle: String!
+  provider: String!
+  handleAliases: [String!]
+}
+
+type DeletedCoreWorkflowDTO {
+  id: UUID!
+  workspaceWorkflowId: UUID
+}
+
+type WorkflowVersionStepChanges {
+  triggerDiff: JSON
+  stepsDiff: JSON
 }
 
 type WorkflowVersionTrigger {
@@ -170,10 +278,30 @@ input UpdateCoreWorkflowVersionPositionsInput {
 }
 
 type Query {
-  _empty: Boolean
+  coreWorkflows(
+    first: Int = 60
+    after: String
+    orderBy: CoreWorkflowOrderByField = UPDATED_AT
+    orderByDirection: CoreWorkflowOrderByDirection = DESC
+    filter: CoreWorkflowFilterInput
+    includeSystem: Boolean = false
+  ): CoreWorkflowConnection!
+  coreWorkflowById(coreWorkflowId: UUID!): CoreWorkflowDTO
+  coreWorkflowsWithCurrentVersions(input: CoreWorkflowsWithCurrentVersionsInput!): [CoreWorkflowWithCurrentVersionDTO!]!
+  coreWorkflow(workspaceWorkflowId: UUID!): CoreWorkflowDTO
+  coreWorkflowVersions(workspaceWorkflowId: UUID!): [CoreWorkflowVersionDTO!]!
+  coreWorkflowVersion(workspaceWorkflowVersionId: UUID!): CoreWorkflowVersionDTO
+  coreWorkflowVersionsByCoreWorkflowId(coreWorkflowId: UUID!): [CoreWorkflowVersionDTO!]!
+  coreWorkflowVersionById(coreWorkflowVersionId: UUID!): CoreWorkflowVersionDTO
+  workflowStepConnectedAccountHandle(connectedAccountId: UUID!): ConnectedAccountHandleDTO
 }
 
 type Mutation {
+  stopWorkflowRun(workflowRunId: UUID!): WorkflowRun!
+  retryWorkflowRun(workflowRunId: UUID!): WorkflowRun!
+  submitFormStep(input: SubmitFormStepInput!): Boolean!
+  updateWorkflowRunStep(input: UpdateWorkflowRunStepInput!): WorkflowAction!
+  testHttpRequest(input: TestHttpRequestInput!): TestHttpRequest!
   createCoreWorkflow(input: CreateCoreWorkflowInput!): CoreWorkflowDTO!
   updateCoreWorkflow(input: UpdateCoreWorkflowInput!): CoreWorkflowDTO
   updateCoreWorkflowVisibility(input: UpdateCoreWorkflowVisibilityInput!): CoreWorkflowDTO

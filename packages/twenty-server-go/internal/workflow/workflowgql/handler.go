@@ -11,25 +11,25 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 
-	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/store"
 )
 
-func NewHandler(authoring *workflow.Authoring, logger *slog.Logger) http.Handler {
-	server := handler.New(NewExecutableSchema(Config{Resolvers: &Resolver{Authoring: authoring}}))
+func NewHandler(resolver *Resolver, logger *slog.Logger) http.Handler {
+	server := handler.New(NewExecutableSchema(Config{Resolvers: resolver}))
 	server.AddTransport(transport.POST{})
 	server.SetErrorPresenter(func(ctx context.Context, err error) *gqlerror.Error {
 		presented := graphql.DefaultErrorPresenter(ctx, err)
 		code := "INTERNAL_SERVER_ERROR"
 		switch {
-		case errors.Is(err, store.ErrInvalidInput), presented.Path == nil:
+		case errors.Is(err, store.ErrInvalidInput), errors.Is(err, store.ErrInvalidTransition), presented.Path == nil:
 			code = "BAD_USER_INPUT"
 		case errors.Is(err, store.ErrNotFound):
 			code = "NOT_FOUND"
-		case errors.Is(err, store.ErrForbidden), errors.Is(err, store.ErrConflict):
+		case errors.Is(err, store.ErrForbidden), errors.Is(err, store.ErrActionForbidden), errors.Is(err, store.ErrConflict):
 			code = "FORBIDDEN"
 		default:
 			logger.Error("resolve graphql", "err", err)
+			presented.Message = "Internal server error"
 		}
 		presented.Extensions = map[string]any{"code": code}
 		return presented

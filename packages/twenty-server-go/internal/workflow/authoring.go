@@ -31,7 +31,7 @@ type StepPosition struct {
 }
 
 type draft struct {
-	version store.CoreVersion
+	version store.AuthoredVersion
 	trigger Step
 	steps   []Step
 }
@@ -63,7 +63,7 @@ func encodeContent(trigger Step, steps []Step) (json.RawMessage, json.RawMessage
 }
 
 func (a *Authoring) loadVersion(ctx context.Context, userWorkspaceID, versionID string) (draft, error) {
-	version, err := a.Store.CoreVersion(ctx, versionID)
+	version, err := a.Store.AuthoredVersion(ctx, versionID)
 	if err != nil {
 		return draft{}, err
 	}
@@ -86,7 +86,7 @@ func (a *Authoring) loadDraft(ctx context.Context, userWorkspaceID, versionID st
 		return draft{}, err
 	}
 	if d.version.Status != store.VersionDraft {
-		return draft{}, fmt.Errorf("%w: Workflow version is not a draft", store.ErrForbidden)
+		return draft{}, fmt.Errorf("%w: Workflow version is not a draft", store.ErrActionForbidden)
 	}
 	return d, nil
 }
@@ -150,24 +150,24 @@ func (a *Authoring) cloneAgentFactory(ctx context.Context) func(Step) (string, e
 	}
 }
 
-func (a *Authoring) CreateWorkflow(ctx context.Context, userWorkspaceID string, name *string, visibility string) (store.CoreWorkflow, error) {
+func (a *Authoring) CreateWorkflow(ctx context.Context, userWorkspaceID string, name *string, visibility string) (store.AuthoredWorkflow, error) {
 	if visibility == "" {
 		visibility = store.VisibilityWorkspace
 	}
 	return a.Store.CreateWorkflow(ctx, name, visibility, userWorkspaceID)
 }
 
-func (a *Authoring) UpdateWorkflow(ctx context.Context, userWorkspaceID, id, name string) (*store.CoreWorkflow, error) {
+func (a *Authoring) UpdateWorkflow(ctx context.Context, userWorkspaceID, id, name string) (*store.AuthoredWorkflow, error) {
 	if err := a.Store.AssertEditable(ctx, userWorkspaceID, id); err != nil {
 		return nil, err
 	}
 	if err := a.Store.Rename(ctx, id, name); err != nil {
 		return nil, err
 	}
-	return a.Store.CoreWorkflow(ctx, id, userWorkspaceID)
+	return a.Store.AuthoredWorkflow(ctx, id, userWorkspaceID)
 }
 
-func (a *Authoring) UpdateVisibility(ctx context.Context, userWorkspaceID, id, visibility string) (*store.CoreWorkflow, error) {
+func (a *Authoring) UpdateVisibility(ctx context.Context, userWorkspaceID, id, visibility string) (*store.AuthoredWorkflow, error) {
 	if err := a.Store.AssertEditable(ctx, userWorkspaceID, id); err != nil {
 		return nil, err
 	}
@@ -175,7 +175,7 @@ func (a *Authoring) UpdateVisibility(ctx context.Context, userWorkspaceID, id, v
 	if err != nil || !found {
 		return nil, err
 	}
-	return a.Store.CoreWorkflow(ctx, id, userWorkspaceID)
+	return a.Store.AuthoredWorkflow(ctx, id, userWorkspaceID)
 }
 
 func (a *Authoring) DeleteWorkflows(ctx context.Context, userWorkspaceID string, ids []string) ([]store.DeletedWorkflow, error) {
@@ -188,8 +188,8 @@ func (a *Authoring) DeleteWorkflows(ctx context.Context, userWorkspaceID string,
 	return a.Store.DeleteWorkflows(ctx, ids)
 }
 
-func (a *Authoring) DiscardDraft(ctx context.Context, userWorkspaceID, versionID string) (*store.CoreWorkflow, error) {
-	version, err := a.Store.CoreVersion(ctx, versionID)
+func (a *Authoring) DiscardDraft(ctx context.Context, userWorkspaceID, versionID string) (*store.AuthoredWorkflow, error) {
+	version, err := a.Store.AuthoredVersion(ctx, versionID)
 	if errors.Is(err, store.ErrNotFound) {
 		return nil, nil
 	}
@@ -197,7 +197,7 @@ func (a *Authoring) DiscardDraft(ctx context.Context, userWorkspaceID, versionID
 		return nil, err
 	}
 	if version.Status != store.VersionDraft {
-		return nil, fmt.Errorf("%w: Workflow version is not in draft status", store.ErrForbidden)
+		return nil, fmt.Errorf("%w: Workflow version is not in draft status", store.ErrActionForbidden)
 	}
 	if err := a.Store.AssertEditable(ctx, userWorkspaceID, version.CoreWorkflowID); err != nil {
 		return nil, err
@@ -207,37 +207,37 @@ func (a *Authoring) DiscardDraft(ctx context.Context, userWorkspaceID, versionID
 		return nil, err
 	}
 	if count <= 1 {
-		return nil, fmt.Errorf("%w: The initial version of a workflow can not be deleted", store.ErrForbidden)
+		return nil, fmt.Errorf("%w: The initial version of a workflow can not be deleted", store.ErrActionForbidden)
 	}
 	if err := a.Store.DeleteVersion(ctx, versionID); err != nil {
 		return nil, err
 	}
-	return a.Store.CoreWorkflow(ctx, version.CoreWorkflowID, userWorkspaceID)
+	return a.Store.AuthoredWorkflow(ctx, version.CoreWorkflowID, userWorkspaceID)
 }
 
-func (a *Authoring) DuplicateWorkflow(ctx context.Context, userWorkspaceID, workflowID, versionID string) (store.CoreWorkflow, error) {
+func (a *Authoring) DuplicateWorkflow(ctx context.Context, userWorkspaceID, workflowID, versionID string) (store.AuthoredWorkflow, error) {
 	if err := a.Store.AssertEditable(ctx, userWorkspaceID, workflowID); err != nil {
-		return store.CoreWorkflow{}, err
+		return store.AuthoredWorkflow{}, err
 	}
-	source, err := a.Store.CoreWorkflow(ctx, workflowID, userWorkspaceID)
+	source, err := a.Store.AuthoredWorkflow(ctx, workflowID, userWorkspaceID)
 	if err != nil {
-		return store.CoreWorkflow{}, err
+		return store.AuthoredWorkflow{}, err
 	}
 	if source == nil {
-		return store.CoreWorkflow{}, fmt.Errorf("%w: Workflow not found", store.ErrForbidden)
+		return store.AuthoredWorkflow{}, fmt.Errorf("%w: Workflow not found", store.ErrActionForbidden)
 	}
-	version, err := a.Store.CoreVersion(ctx, versionID)
+	version, err := a.Store.AuthoredVersion(ctx, versionID)
 	if err != nil || version.CoreWorkflowID != workflowID || len(version.Trigger) == 0 || string(version.Trigger) == "null" {
-		return store.CoreWorkflow{}, fmt.Errorf("%w: Workflow version to copy not found", store.ErrForbidden)
+		return store.AuthoredWorkflow{}, fmt.Errorf("%w: Workflow version to copy not found", store.ErrActionForbidden)
 	}
 	var trigger Step
 	var steps []Step
 	if err := errors.Join(decodeContent(version.Trigger, &trigger), decodeContent(version.Steps, &steps)); err != nil {
-		return store.CoreWorkflow{}, err
+		return store.AuthoredWorkflow{}, err
 	}
 	clonedTrigger, clonedSteps, err := a.cloneContent(ctx, trigger, steps)
 	if err != nil {
-		return store.CoreWorkflow{}, err
+		return store.AuthoredWorkflow{}, err
 	}
 	name := "(Duplicate)"
 	if source.Name != nil {
@@ -245,15 +245,15 @@ func (a *Authoring) DuplicateWorkflow(ctx context.Context, userWorkspaceID, work
 	}
 	duplicated, err := a.Store.CreateWorkflow(ctx, &name, source.Visibility, userWorkspaceID)
 	if err != nil {
-		return store.CoreWorkflow{}, err
+		return store.AuthoredWorkflow{}, err
 	}
 	if err := a.writeInitialDraft(ctx, duplicated.ID, clonedTrigger, clonedSteps); err != nil {
 		_, deleteErr := a.Store.DeleteWorkflows(ctx, []string{duplicated.ID})
-		return store.CoreWorkflow{}, errors.Join(err, deleteErr)
+		return store.AuthoredWorkflow{}, errors.Join(err, deleteErr)
 	}
-	result, err := a.Store.CoreWorkflow(ctx, duplicated.ID, userWorkspaceID)
+	result, err := a.Store.AuthoredWorkflow(ctx, duplicated.ID, userWorkspaceID)
 	if err != nil || result == nil {
-		return store.CoreWorkflow{}, fmt.Errorf("%w: Workflow duplication failed, please retry", store.ErrForbidden)
+		return store.AuthoredWorkflow{}, fmt.Errorf("%w: Workflow duplication failed, please retry", store.ErrActionForbidden)
 	}
 	return *result, nil
 }
@@ -263,7 +263,7 @@ func (a *Authoring) writeInitialDraft(ctx context.Context, workflowID string, tr
 	if err != nil {
 		return err
 	}
-	initial, err := a.Store.CoreVersion(ctx, draftID)
+	initial, err := a.Store.AuthoredVersion(ctx, draftID)
 	if err != nil {
 		return err
 	}
@@ -359,41 +359,41 @@ func remapTags(text string, clonedID map[string]string) string {
 	})
 }
 
-func (a *Authoring) CreateDraftFromVersion(ctx context.Context, userWorkspaceID, workflowID, versionToCopyID string) (store.CoreVersion, error) {
+func (a *Authoring) CreateDraftFromVersion(ctx context.Context, userWorkspaceID, workflowID, versionToCopyID string) (store.AuthoredVersion, error) {
 	if err := a.Store.AssertEditable(ctx, userWorkspaceID, workflowID); err != nil {
-		return store.CoreVersion{}, err
+		return store.AuthoredVersion{}, err
 	}
-	toCopy, err := a.Store.CoreVersion(ctx, versionToCopyID)
+	toCopy, err := a.Store.AuthoredVersion(ctx, versionToCopyID)
 	if err != nil || toCopy.CoreWorkflowID != workflowID {
-		return store.CoreVersion{}, fmt.Errorf("%w: WorkflowVersion to copy not found", store.ErrNotFound)
+		return store.AuthoredVersion{}, fmt.Errorf("%w: WorkflowVersion to copy not found", store.ErrNotFound)
 	}
 	var trigger Step
 	var steps []Step
 	if err := errors.Join(decodeContent(toCopy.Trigger, &trigger), decodeContent(toCopy.Steps, &steps)); err != nil {
-		return store.CoreVersion{}, err
+		return store.AuthoredVersion{}, err
 	}
 	if trigger == nil || len(steps) == 0 {
-		return store.CoreVersion{}, invalid("WorkflowVersion to copy has no trigger or no steps")
+		return store.AuthoredVersion{}, invalid("WorkflowVersion to copy has no trigger or no steps")
 	}
 	existing, err := a.Store.DraftVersionID(ctx, workflowID)
 	switch {
 	case err == nil:
-		current, loadErr := a.Store.CoreVersion(ctx, existing)
+		current, loadErr := a.Store.AuthoredVersion(ctx, existing)
 		if loadErr != nil {
-			return store.CoreVersion{}, loadErr
+			return store.AuthoredVersion{}, loadErr
 		}
 		if err := a.Store.WriteContent(ctx, existing, current, toCopy.Trigger, toCopy.Steps); err != nil {
-			return store.CoreVersion{}, err
+			return store.AuthoredVersion{}, err
 		}
-		return a.Store.CoreVersion(ctx, existing)
+		return a.Store.AuthoredVersion(ctx, existing)
 	case !errors.Is(err, store.ErrNotFound):
-		return store.CoreVersion{}, err
+		return store.AuthoredVersion{}, err
 	}
 	id, err := a.Store.CreateDraft(ctx, workflowID, toCopy.Trigger, toCopy.Steps)
 	if err != nil {
-		return store.CoreVersion{}, err
+		return store.AuthoredVersion{}, err
 	}
-	return a.Store.CoreVersion(ctx, id)
+	return a.Store.AuthoredVersion(ctx, id)
 }
 
 func (a *Authoring) ActivateVersion(ctx context.Context, userWorkspaceID, versionID string) (bool, error) {

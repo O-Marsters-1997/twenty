@@ -14,6 +14,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/store"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -36,6 +37,19 @@ type DirectiveRoot struct {
 }
 
 type ComplexityRoot struct {
+	ConnectedAccountHandleDTO struct {
+		Handle        func(childComplexity int) int
+		HandleAliases func(childComplexity int) int
+		ID            func(childComplexity int) int
+		Provider      func(childComplexity int) int
+	}
+
+	CoreWorkflowConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
 	CoreWorkflowDTO struct {
 		ApplicationID                      func(childComplexity int) int
 		CanChangeVisibility                func(childComplexity int) int
@@ -51,6 +65,16 @@ type ComplexityRoot struct {
 		WorkspaceWorkflowID                func(childComplexity int) int
 	}
 
+	CoreWorkflowEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	CoreWorkflowPageInfo struct {
+		EndCursor   func(childComplexity int) int
+		HasNextPage func(childComplexity int) int
+	}
+
 	CoreWorkflowVersionDTO struct {
 		CoreWorkflowID             func(childComplexity int) int
 		CreatedAt                  func(childComplexity int) int
@@ -62,6 +86,12 @@ type ComplexityRoot struct {
 		UpdatedAt                  func(childComplexity int) int
 		WorkspaceWorkflowID        func(childComplexity int) int
 		WorkspaceWorkflowVersionID func(childComplexity int) int
+	}
+
+	CoreWorkflowWithCurrentVersionDTO struct {
+		CurrentVersion func(childComplexity int) int
+		Versions       func(childComplexity int) int
+		Workflow       func(childComplexity int) int
 	}
 
 	DeletedCoreWorkflowDTO struct {
@@ -82,15 +112,38 @@ type ComplexityRoot struct {
 		DiscardCoreWorkflowDraft           func(childComplexity int, input map[string]any) int
 		DuplicateCoreWorkflow              func(childComplexity int, input map[string]any) int
 		DuplicateCoreWorkflowVersionStep   func(childComplexity int, input map[string]any) int
+		RetryWorkflowRun                   func(childComplexity int, workflowRunID string) int
+		StopWorkflowRun                    func(childComplexity int, workflowRunID string) int
+		SubmitFormStep                     func(childComplexity int, input map[string]any) int
+		TestHTTPRequest                    func(childComplexity int, input map[string]any) int
 		UpdateCoreWorkflow                 func(childComplexity int, input map[string]any) int
 		UpdateCoreWorkflowVersionPositions func(childComplexity int, input map[string]any) int
 		UpdateCoreWorkflowVersionStep      func(childComplexity int, input map[string]any) int
 		UpdateCoreWorkflowVersionTrigger   func(childComplexity int, input map[string]any) int
 		UpdateCoreWorkflowVisibility       func(childComplexity int, input map[string]any) int
+		UpdateWorkflowRunStep              func(childComplexity int, input map[string]any) int
 	}
 
 	Query struct {
-		Empty func(childComplexity int) int
+		CoreWorkflow                         func(childComplexity int, workspaceWorkflowID string) int
+		CoreWorkflowByID                     func(childComplexity int, coreWorkflowID string) int
+		CoreWorkflowVersion                  func(childComplexity int, workspaceWorkflowVersionID string) int
+		CoreWorkflowVersionByID              func(childComplexity int, coreWorkflowVersionID string) int
+		CoreWorkflowVersions                 func(childComplexity int, workspaceWorkflowID string) int
+		CoreWorkflowVersionsByCoreWorkflowID func(childComplexity int, coreWorkflowID string) int
+		CoreWorkflows                        func(childComplexity int, first *int, after *string, orderBy *string, orderByDirection *string, filter *store.CoreWorkflowFilter, includeSystem *bool) int
+		CoreWorkflowsWithCurrentVersions     func(childComplexity int, input map[string]any) int
+		WorkflowStepConnectedAccountHandle   func(childComplexity int, connectedAccountID string) int
+	}
+
+	TestHttpRequest struct {
+		Error      func(childComplexity int) int
+		Headers    func(childComplexity int) int
+		Message    func(childComplexity int) int
+		Result     func(childComplexity int) int
+		Status     func(childComplexity int) int
+		StatusText func(childComplexity int) int
+		Success    func(childComplexity int) int
 	}
 
 	WorkflowAction struct {
@@ -101,6 +154,11 @@ type ComplexityRoot struct {
 		Settings    func(childComplexity int) int
 		Type        func(childComplexity int) int
 		Valid       func(childComplexity int) int
+	}
+
+	WorkflowRun struct {
+		ID     func(childComplexity int) int
+		Status func(childComplexity int) int
 	}
 
 	WorkflowStepPosition struct {
@@ -123,17 +181,22 @@ type ComplexityRoot struct {
 // region    ************************** generated!.gotpl **************************
 
 type MutationResolver interface {
-	CreateCoreWorkflow(ctx context.Context, input map[string]any) (*WorkflowDTO, error)
-	UpdateCoreWorkflow(ctx context.Context, input map[string]any) (*WorkflowDTO, error)
-	UpdateCoreWorkflowVisibility(ctx context.Context, input map[string]any) (*WorkflowDTO, error)
-	DuplicateCoreWorkflow(ctx context.Context, input map[string]any) (*WorkflowDTO, error)
+	StopWorkflowRun(ctx context.Context, workflowRunID string) (*store.Run, error)
+	RetryWorkflowRun(ctx context.Context, workflowRunID string) (*store.Run, error)
+	SubmitFormStep(ctx context.Context, input map[string]any) (bool, error)
+	UpdateWorkflowRunStep(ctx context.Context, input map[string]any) (*WorkflowAction, error)
+	TestHTTPRequest(ctx context.Context, input map[string]any) (*HTTPTestResult, error)
+	CreateCoreWorkflow(ctx context.Context, input map[string]any) (*store.CoreWorkflow, error)
+	UpdateCoreWorkflow(ctx context.Context, input map[string]any) (*store.CoreWorkflow, error)
+	UpdateCoreWorkflowVisibility(ctx context.Context, input map[string]any) (*store.CoreWorkflow, error)
+	DuplicateCoreWorkflow(ctx context.Context, input map[string]any) (*store.CoreWorkflow, error)
 	DeleteCoreWorkflows(ctx context.Context, input map[string]any) ([]*DeletedWorkflowDTO, error)
-	DiscardCoreWorkflowDraft(ctx context.Context, input map[string]any) (*WorkflowDTO, error)
-	CreateDraftFromCoreWorkflowVersion(ctx context.Context, input map[string]any) (*VersionDTO, error)
+	DiscardCoreWorkflowDraft(ctx context.Context, input map[string]any) (*store.CoreWorkflow, error)
+	CreateDraftFromCoreWorkflowVersion(ctx context.Context, input map[string]any) (*store.CoreVersion, error)
 	ActivateCoreWorkflowVersion(ctx context.Context, coreWorkflowVersionID string) (bool, error)
 	DeactivateCoreWorkflowVersion(ctx context.Context, coreWorkflowVersionID string) (bool, error)
 	CreateCoreWorkflowVersionStep(ctx context.Context, input map[string]any) (*StepChangesDTO, error)
-	UpdateCoreWorkflowVersionStep(ctx context.Context, input map[string]any) (*ActionDTO, error)
+	UpdateCoreWorkflowVersionStep(ctx context.Context, input map[string]any) (*WorkflowAction, error)
 	UpdateCoreWorkflowVersionTrigger(ctx context.Context, input map[string]any) (*TriggerDTO, error)
 	DeleteCoreWorkflowVersionStep(ctx context.Context, input map[string]any) (*StepChangesDTO, error)
 	DuplicateCoreWorkflowVersionStep(ctx context.Context, input map[string]any) (*StepChangesDTO, error)
@@ -142,7 +205,15 @@ type MutationResolver interface {
 	UpdateCoreWorkflowVersionPositions(ctx context.Context, input map[string]any) (bool, error)
 }
 type QueryResolver interface {
-	Empty(ctx context.Context) (*bool, error)
+	CoreWorkflows(ctx context.Context, first *int, after *string, orderBy *string, orderByDirection *string, filter *store.CoreWorkflowFilter, includeSystem *bool) (*store.CoreWorkflowConnection, error)
+	CoreWorkflowByID(ctx context.Context, coreWorkflowID string) (*store.CoreWorkflow, error)
+	CoreWorkflowsWithCurrentVersions(ctx context.Context, input map[string]any) ([]*store.CoreWorkflowWithVersions, error)
+	CoreWorkflow(ctx context.Context, workspaceWorkflowID string) (*store.CoreWorkflow, error)
+	CoreWorkflowVersions(ctx context.Context, workspaceWorkflowID string) ([]*store.CoreVersion, error)
+	CoreWorkflowVersion(ctx context.Context, workspaceWorkflowVersionID string) (*store.CoreVersion, error)
+	CoreWorkflowVersionsByCoreWorkflowID(ctx context.Context, coreWorkflowID string) ([]*store.CoreVersion, error)
+	CoreWorkflowVersionByID(ctx context.Context, coreWorkflowVersionID string) (*store.CoreVersion, error)
+	WorkflowStepConnectedAccountHandle(ctx context.Context, connectedAccountID string) (*store.ConnectedAccount, error)
 }
 
 // endregion ************************** generated!.gotpl **************************
@@ -162,6 +233,50 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 	ec := newExecutionContext(nil, e, nil)
 	_ = ec
 	switch typeName + "." + field {
+
+	case "ConnectedAccountHandleDTO.handle":
+		if e.ComplexityRoot.ConnectedAccountHandleDTO.Handle == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ConnectedAccountHandleDTO.Handle(childComplexity), true
+	case "ConnectedAccountHandleDTO.handleAliases":
+		if e.ComplexityRoot.ConnectedAccountHandleDTO.HandleAliases == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ConnectedAccountHandleDTO.HandleAliases(childComplexity), true
+	case "ConnectedAccountHandleDTO.id":
+		if e.ComplexityRoot.ConnectedAccountHandleDTO.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ConnectedAccountHandleDTO.ID(childComplexity), true
+	case "ConnectedAccountHandleDTO.provider":
+		if e.ComplexityRoot.ConnectedAccountHandleDTO.Provider == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ConnectedAccountHandleDTO.Provider(childComplexity), true
+
+	case "CoreWorkflowConnection.edges":
+		if e.ComplexityRoot.CoreWorkflowConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CoreWorkflowConnection.Edges(childComplexity), true
+	case "CoreWorkflowConnection.pageInfo":
+		if e.ComplexityRoot.CoreWorkflowConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CoreWorkflowConnection.PageInfo(childComplexity), true
+	case "CoreWorkflowConnection.totalCount":
+		if e.ComplexityRoot.CoreWorkflowConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CoreWorkflowConnection.TotalCount(childComplexity), true
 
 	case "CoreWorkflowDTO.applicationId":
 		if e.ComplexityRoot.CoreWorkflowDTO.ApplicationID == nil {
@@ -236,6 +351,32 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.CoreWorkflowDTO.WorkspaceWorkflowID(childComplexity), true
 
+	case "CoreWorkflowEdge.cursor":
+		if e.ComplexityRoot.CoreWorkflowEdge.Cursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CoreWorkflowEdge.Cursor(childComplexity), true
+	case "CoreWorkflowEdge.node":
+		if e.ComplexityRoot.CoreWorkflowEdge.Node == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CoreWorkflowEdge.Node(childComplexity), true
+
+	case "CoreWorkflowPageInfo.endCursor":
+		if e.ComplexityRoot.CoreWorkflowPageInfo.EndCursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CoreWorkflowPageInfo.EndCursor(childComplexity), true
+	case "CoreWorkflowPageInfo.hasNextPage":
+		if e.ComplexityRoot.CoreWorkflowPageInfo.HasNextPage == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CoreWorkflowPageInfo.HasNextPage(childComplexity), true
+
 	case "CoreWorkflowVersionDTO.coreWorkflowId":
 		if e.ComplexityRoot.CoreWorkflowVersionDTO.CoreWorkflowID == nil {
 			break
@@ -296,6 +437,25 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.CoreWorkflowVersionDTO.WorkspaceWorkflowVersionID(childComplexity), true
+
+	case "CoreWorkflowWithCurrentVersionDTO.currentVersion":
+		if e.ComplexityRoot.CoreWorkflowWithCurrentVersionDTO.CurrentVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CoreWorkflowWithCurrentVersionDTO.CurrentVersion(childComplexity), true
+	case "CoreWorkflowWithCurrentVersionDTO.versions":
+		if e.ComplexityRoot.CoreWorkflowWithCurrentVersionDTO.Versions == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CoreWorkflowWithCurrentVersionDTO.Versions(childComplexity), true
+	case "CoreWorkflowWithCurrentVersionDTO.workflow":
+		if e.ComplexityRoot.CoreWorkflowWithCurrentVersionDTO.Workflow == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CoreWorkflowWithCurrentVersionDTO.Workflow(childComplexity), true
 
 	case "DeletedCoreWorkflowDTO.id":
 		if e.ComplexityRoot.DeletedCoreWorkflowDTO.ID == nil {
@@ -442,6 +602,50 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DuplicateCoreWorkflowVersionStep(childComplexity, args["input"].(map[string]any)), true
+	case "Mutation.retryWorkflowRun":
+		if e.ComplexityRoot.Mutation.RetryWorkflowRun == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_retryWorkflowRun_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.RetryWorkflowRun(childComplexity, args["workflowRunId"].(string)), true
+	case "Mutation.stopWorkflowRun":
+		if e.ComplexityRoot.Mutation.StopWorkflowRun == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_stopWorkflowRun_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.StopWorkflowRun(childComplexity, args["workflowRunId"].(string)), true
+	case "Mutation.submitFormStep":
+		if e.ComplexityRoot.Mutation.SubmitFormStep == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_submitFormStep_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.SubmitFormStep(childComplexity, args["input"].(map[string]any)), true
+	case "Mutation.testHttpRequest":
+		if e.ComplexityRoot.Mutation.TestHTTPRequest == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_testHttpRequest_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.TestHTTPRequest(childComplexity, args["input"].(map[string]any)), true
 	case "Mutation.updateCoreWorkflow":
 		if e.ComplexityRoot.Mutation.UpdateCoreWorkflow == nil {
 			break
@@ -497,13 +701,161 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateCoreWorkflowVisibility(childComplexity, args["input"].(map[string]any)), true
-
-	case "Query._empty":
-		if e.ComplexityRoot.Query.Empty == nil {
+	case "Mutation.updateWorkflowRunStep":
+		if e.ComplexityRoot.Mutation.UpdateWorkflowRunStep == nil {
 			break
 		}
 
-		return e.ComplexityRoot.Query.Empty(childComplexity), true
+		args, err := ec.field_Mutation_updateWorkflowRunStep_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateWorkflowRunStep(childComplexity, args["input"].(map[string]any)), true
+
+	case "Query.coreWorkflow":
+		if e.ComplexityRoot.Query.CoreWorkflow == nil {
+			break
+		}
+
+		args, err := ec.field_Query_coreWorkflow_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.CoreWorkflow(childComplexity, args["workspaceWorkflowId"].(string)), true
+	case "Query.coreWorkflowById":
+		if e.ComplexityRoot.Query.CoreWorkflowByID == nil {
+			break
+		}
+
+		args, err := ec.field_Query_coreWorkflowById_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.CoreWorkflowByID(childComplexity, args["coreWorkflowId"].(string)), true
+	case "Query.coreWorkflowVersion":
+		if e.ComplexityRoot.Query.CoreWorkflowVersion == nil {
+			break
+		}
+
+		args, err := ec.field_Query_coreWorkflowVersion_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.CoreWorkflowVersion(childComplexity, args["workspaceWorkflowVersionId"].(string)), true
+	case "Query.coreWorkflowVersionById":
+		if e.ComplexityRoot.Query.CoreWorkflowVersionByID == nil {
+			break
+		}
+
+		args, err := ec.field_Query_coreWorkflowVersionById_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.CoreWorkflowVersionByID(childComplexity, args["coreWorkflowVersionId"].(string)), true
+	case "Query.coreWorkflowVersions":
+		if e.ComplexityRoot.Query.CoreWorkflowVersions == nil {
+			break
+		}
+
+		args, err := ec.field_Query_coreWorkflowVersions_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.CoreWorkflowVersions(childComplexity, args["workspaceWorkflowId"].(string)), true
+	case "Query.coreWorkflowVersionsByCoreWorkflowId":
+		if e.ComplexityRoot.Query.CoreWorkflowVersionsByCoreWorkflowID == nil {
+			break
+		}
+
+		args, err := ec.field_Query_coreWorkflowVersionsByCoreWorkflowId_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.CoreWorkflowVersionsByCoreWorkflowID(childComplexity, args["coreWorkflowId"].(string)), true
+	case "Query.coreWorkflows":
+		if e.ComplexityRoot.Query.CoreWorkflows == nil {
+			break
+		}
+
+		args, err := ec.field_Query_coreWorkflows_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.CoreWorkflows(childComplexity, args["first"].(*int), args["after"].(*string), args["orderBy"].(*string), args["orderByDirection"].(*string), args["filter"].(*store.CoreWorkflowFilter), args["includeSystem"].(*bool)), true
+	case "Query.coreWorkflowsWithCurrentVersions":
+		if e.ComplexityRoot.Query.CoreWorkflowsWithCurrentVersions == nil {
+			break
+		}
+
+		args, err := ec.field_Query_coreWorkflowsWithCurrentVersions_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.CoreWorkflowsWithCurrentVersions(childComplexity, args["input"].(map[string]any)), true
+
+	case "Query.workflowStepConnectedAccountHandle":
+		if e.ComplexityRoot.Query.WorkflowStepConnectedAccountHandle == nil {
+			break
+		}
+
+		args, err := ec.field_Query_workflowStepConnectedAccountHandle_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.WorkflowStepConnectedAccountHandle(childComplexity, args["connectedAccountId"].(string)), true
+
+	case "TestHttpRequest.error":
+		if e.ComplexityRoot.TestHttpRequest.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TestHttpRequest.Error(childComplexity), true
+	case "TestHttpRequest.headers":
+		if e.ComplexityRoot.TestHttpRequest.Headers == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TestHttpRequest.Headers(childComplexity), true
+	case "TestHttpRequest.message":
+		if e.ComplexityRoot.TestHttpRequest.Message == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TestHttpRequest.Message(childComplexity), true
+	case "TestHttpRequest.result":
+		if e.ComplexityRoot.TestHttpRequest.Result == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TestHttpRequest.Result(childComplexity), true
+	case "TestHttpRequest.status":
+		if e.ComplexityRoot.TestHttpRequest.Status == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TestHttpRequest.Status(childComplexity), true
+	case "TestHttpRequest.statusText":
+		if e.ComplexityRoot.TestHttpRequest.StatusText == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TestHttpRequest.StatusText(childComplexity), true
+	case "TestHttpRequest.success":
+		if e.ComplexityRoot.TestHttpRequest.Success == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TestHttpRequest.Success(childComplexity), true
 
 	case "WorkflowAction.id":
 		if e.ComplexityRoot.WorkflowAction.ID == nil {
@@ -548,6 +900,19 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.WorkflowAction.Valid(childComplexity), true
 
+	case "WorkflowRun.id":
+		if e.ComplexityRoot.WorkflowRun.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.WorkflowRun.ID(childComplexity), true
+	case "WorkflowRun.status":
+		if e.ComplexityRoot.WorkflowRun.Status == nil {
+			break
+		}
+
+		return e.ComplexityRoot.WorkflowRun.Status(childComplexity), true
+
 	case "WorkflowStepPosition.x":
 		if e.ComplexityRoot.WorkflowStepPosition.X == nil {
 			break
@@ -590,6 +955,9 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	ec := newExecutionContext(opCtx, e, make(chan graphql.DeferredResult))
 	inputUnmarshalers := func() *graphql.InputUnmarshalerIndex {
 		return graphql.NewInputUnmarshalerIndex(
+			graphql.NewInputUnmarshaler("CoreWorkflowFilterInput", ec.unmarshalInputCoreWorkflowFilterInput),
+			graphql.NewInputUnmarshaler("CoreWorkflowFilterRuleInput", ec.unmarshalInputCoreWorkflowFilterRuleInput),
+			graphql.NewInputUnmarshaler("CoreWorkflowsWithCurrentVersionsInput", ec.unmarshalInputCoreWorkflowsWithCurrentVersionsInput),
 			graphql.NewInputUnmarshaler("CreateCoreWorkflowInput", ec.unmarshalInputCreateCoreWorkflowInput),
 			graphql.NewInputUnmarshaler("CreateCoreWorkflowVersionEdgeInput", ec.unmarshalInputCreateCoreWorkflowVersionEdgeInput),
 			graphql.NewInputUnmarshaler("CreateCoreWorkflowVersionStepInput", ec.unmarshalInputCreateCoreWorkflowVersionStepInput),
@@ -600,11 +968,14 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 			graphql.NewInputUnmarshaler("DiscardCoreWorkflowDraftInput", ec.unmarshalInputDiscardCoreWorkflowDraftInput),
 			graphql.NewInputUnmarshaler("DuplicateCoreWorkflowInput", ec.unmarshalInputDuplicateCoreWorkflowInput),
 			graphql.NewInputUnmarshaler("DuplicateCoreWorkflowVersionStepInput", ec.unmarshalInputDuplicateCoreWorkflowVersionStepInput),
+			graphql.NewInputUnmarshaler("SubmitFormStepInput", ec.unmarshalInputSubmitFormStepInput),
+			graphql.NewInputUnmarshaler("TestHttpRequestInput", ec.unmarshalInputTestHttpRequestInput),
 			graphql.NewInputUnmarshaler("UpdateCoreWorkflowInput", ec.unmarshalInputUpdateCoreWorkflowInput),
 			graphql.NewInputUnmarshaler("UpdateCoreWorkflowVersionPositionsInput", ec.unmarshalInputUpdateCoreWorkflowVersionPositionsInput),
 			graphql.NewInputUnmarshaler("UpdateCoreWorkflowVersionStepInput", ec.unmarshalInputUpdateCoreWorkflowVersionStepInput),
 			graphql.NewInputUnmarshaler("UpdateCoreWorkflowVersionTriggerInput", ec.unmarshalInputUpdateCoreWorkflowVersionTriggerInput),
 			graphql.NewInputUnmarshaler("UpdateCoreWorkflowVisibilityInput", ec.unmarshalInputUpdateCoreWorkflowVisibilityInput),
+			graphql.NewInputUnmarshaler("UpdateWorkflowRunStepInput", ec.unmarshalInputUpdateWorkflowRunStepInput),
 			graphql.NewInputUnmarshaler("WorkflowStepPositionInput", ec.unmarshalInputWorkflowStepPositionInput),
 			graphql.NewInputUnmarshaler("WorkflowStepPositionUpdateInput", ec.unmarshalInputWorkflowStepPositionUpdateInput),
 		)
@@ -702,6 +1073,32 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 // Each function is generated once per unique object type, deduplicating the
 // switch statements that were previously inlined in every fieldContext_* function.
 
+func (ec *executionContext) childFields_ConnectedAccountHandleDTO(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_ConnectedAccountHandleDTO_id(ctx, field)
+	case "handle":
+		return ec.fieldContext_ConnectedAccountHandleDTO_handle(ctx, field)
+	case "provider":
+		return ec.fieldContext_ConnectedAccountHandleDTO_provider(ctx, field)
+	case "handleAliases":
+		return ec.fieldContext_ConnectedAccountHandleDTO_handleAliases(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ConnectedAccountHandleDTO", field.Name)
+}
+
+func (ec *executionContext) childFields_CoreWorkflowConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_CoreWorkflowConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_CoreWorkflowConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_CoreWorkflowConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type CoreWorkflowConnection", field.Name)
+}
+
 func (ec *executionContext) childFields_CoreWorkflowDTO(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "id":
@@ -732,6 +1129,26 @@ func (ec *executionContext) childFields_CoreWorkflowDTO(ctx context.Context, fie
 	return nil, fmt.Errorf("no field named %q was found under type CoreWorkflowDTO", field.Name)
 }
 
+func (ec *executionContext) childFields_CoreWorkflowEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_CoreWorkflowEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_CoreWorkflowEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type CoreWorkflowEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_CoreWorkflowPageInfo(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "endCursor":
+		return ec.fieldContext_CoreWorkflowPageInfo_endCursor(ctx, field)
+	case "hasNextPage":
+		return ec.fieldContext_CoreWorkflowPageInfo_hasNextPage(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type CoreWorkflowPageInfo", field.Name)
+}
+
 func (ec *executionContext) childFields_CoreWorkflowVersionDTO(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "id":
@@ -758,6 +1175,18 @@ func (ec *executionContext) childFields_CoreWorkflowVersionDTO(ctx context.Conte
 	return nil, fmt.Errorf("no field named %q was found under type CoreWorkflowVersionDTO", field.Name)
 }
 
+func (ec *executionContext) childFields_CoreWorkflowWithCurrentVersionDTO(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "workflow":
+		return ec.fieldContext_CoreWorkflowWithCurrentVersionDTO_workflow(ctx, field)
+	case "versions":
+		return ec.fieldContext_CoreWorkflowWithCurrentVersionDTO_versions(ctx, field)
+	case "currentVersion":
+		return ec.fieldContext_CoreWorkflowWithCurrentVersionDTO_currentVersion(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type CoreWorkflowWithCurrentVersionDTO", field.Name)
+}
+
 func (ec *executionContext) childFields_DeletedCoreWorkflowDTO(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "id":
@@ -766,6 +1195,26 @@ func (ec *executionContext) childFields_DeletedCoreWorkflowDTO(ctx context.Conte
 		return ec.fieldContext_DeletedCoreWorkflowDTO_workspaceWorkflowId(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type DeletedCoreWorkflowDTO", field.Name)
+}
+
+func (ec *executionContext) childFields_TestHttpRequest(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "success":
+		return ec.fieldContext_TestHttpRequest_success(ctx, field)
+	case "message":
+		return ec.fieldContext_TestHttpRequest_message(ctx, field)
+	case "result":
+		return ec.fieldContext_TestHttpRequest_result(ctx, field)
+	case "error":
+		return ec.fieldContext_TestHttpRequest_error(ctx, field)
+	case "status":
+		return ec.fieldContext_TestHttpRequest_status(ctx, field)
+	case "statusText":
+		return ec.fieldContext_TestHttpRequest_statusText(ctx, field)
+	case "headers":
+		return ec.fieldContext_TestHttpRequest_headers(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TestHttpRequest", field.Name)
 }
 
 func (ec *executionContext) childFields_WorkflowAction(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -786,6 +1235,16 @@ func (ec *executionContext) childFields_WorkflowAction(ctx context.Context, fiel
 		return ec.fieldContext_WorkflowAction_position(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type WorkflowAction", field.Name)
+}
+
+func (ec *executionContext) childFields_WorkflowRun(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_WorkflowRun_id(ctx, field)
+	case "status":
+		return ec.fieldContext_WorkflowRun_status(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type WorkflowRun", field.Name)
 }
 
 func (ec *executionContext) childFields_WorkflowStepPosition(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -1100,6 +1559,62 @@ func (ec *executionContext) field_Mutation_duplicateCoreWorkflow_args(ctx contex
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_retryWorkflowRun_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "workflowRunId",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNUUID2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["workflowRunId"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_stopWorkflowRun_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "workflowRunId",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNUUID2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["workflowRunId"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_submitFormStep_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
+		func(ctx context.Context, v any) (map[string]any, error) {
+			return ec.unmarshalNSubmitFormStepInput2map(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_testHttpRequest_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
+		func(ctx context.Context, v any) (map[string]any, error) {
+			return ec.unmarshalNTestHttpRequestInput2map(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_updateCoreWorkflowVersionPositions_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -1170,6 +1685,20 @@ func (ec *executionContext) field_Mutation_updateCoreWorkflow_args(ctx context.C
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_updateWorkflowRunStep_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
+		func(ctx context.Context, v any) (map[string]any, error) {
+			return ec.unmarshalNUpdateWorkflowRunStepInput2map(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -1181,6 +1710,172 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 		return nil, err
 	}
 	args["name"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_coreWorkflowById_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "coreWorkflowId",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNUUID2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["coreWorkflowId"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_coreWorkflowVersionById_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "coreWorkflowVersionId",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNUUID2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["coreWorkflowVersionId"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_coreWorkflowVersion_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "workspaceWorkflowVersionId",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNUUID2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["workspaceWorkflowVersionId"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_coreWorkflowVersionsByCoreWorkflowId_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "coreWorkflowId",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNUUID2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["coreWorkflowId"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_coreWorkflowVersions_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "workspaceWorkflowId",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNUUID2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["workspaceWorkflowId"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_coreWorkflow_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "workspaceWorkflowId",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNUUID2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["workspaceWorkflowId"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_coreWorkflowsWithCurrentVersions_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
+		func(ctx context.Context, v any) (map[string]any, error) {
+			return ec.unmarshalNCoreWorkflowsWithCurrentVersionsInput2map(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_coreWorkflows_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOString2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOCoreWorkflowOrderByField2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "orderByDirection",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOCoreWorkflowOrderByDirection2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderByDirection"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "filter",
+		func(ctx context.Context, v any) (*store.CoreWorkflowFilter, error) {
+			return ec.unmarshalOCoreWorkflowFilterInput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreWorkflowFilter(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["filter"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "includeSystem",
+		func(ctx context.Context, v any) (*bool, error) {
+			return ec.unmarshalOBoolean2ᚖbool(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["includeSystem"] = arg5
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_workflowStepConnectedAccountHandle_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "connectedAccountId",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNUUID2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["connectedAccountId"] = arg0
 	return args, nil
 }
 
@@ -1258,7 +1953,186 @@ func (ec *executionContext) field___Type_inputFields_args(ctx context.Context, r
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) _CoreWorkflowDTO_id(ctx context.Context, field graphql.CollectedField, obj *WorkflowDTO) (ret graphql.Marshaler) {
+func (ec *executionContext) _ConnectedAccountHandleDTO_id(ctx context.Context, field graphql.CollectedField, obj *store.ConnectedAccount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ConnectedAccountHandleDTO_id(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNUUID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ConnectedAccountHandleDTO_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ConnectedAccountHandleDTO", field, false, false, "UUID")
+}
+
+func (ec *executionContext) _ConnectedAccountHandleDTO_handle(ctx context.Context, field graphql.CollectedField, obj *store.ConnectedAccount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ConnectedAccountHandleDTO_handle(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Handle, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ConnectedAccountHandleDTO_handle(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ConnectedAccountHandleDTO", field, false, false, "String")
+}
+
+func (ec *executionContext) _ConnectedAccountHandleDTO_provider(ctx context.Context, field graphql.CollectedField, obj *store.ConnectedAccount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ConnectedAccountHandleDTO_provider(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Provider, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ConnectedAccountHandleDTO_provider(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ConnectedAccountHandleDTO", field, false, false, "String")
+}
+
+func (ec *executionContext) _ConnectedAccountHandleDTO_handleAliases(ctx context.Context, field graphql.CollectedField, obj *store.ConnectedAccount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ConnectedAccountHandleDTO_handleAliases(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.HandleAliases, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOString2ᚕstringᚄ(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ConnectedAccountHandleDTO_handleAliases(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ConnectedAccountHandleDTO", field, false, false, "String")
+}
+
+func (ec *executionContext) _CoreWorkflowConnection_edges(ctx context.Context, field graphql.CollectedField, obj *store.CoreWorkflowConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CoreWorkflowConnection_edges(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Edges, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []store.CoreWorkflowEdge) graphql.Marshaler {
+			return ec.marshalNCoreWorkflowEdge2ᚕgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreWorkflowEdgeᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CoreWorkflowConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CoreWorkflowConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_CoreWorkflowEdge(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CoreWorkflowConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *store.CoreWorkflowConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CoreWorkflowConnection_pageInfo(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PageInfo, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v store.CoreWorkflowPageInfo) graphql.Marshaler {
+			return ec.marshalNCoreWorkflowPageInfo2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreWorkflowPageInfo(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CoreWorkflowConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CoreWorkflowConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_CoreWorkflowPageInfo(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CoreWorkflowConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *store.CoreWorkflowConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CoreWorkflowConnection_totalCount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TotalCount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CoreWorkflowConnection_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CoreWorkflowConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CoreWorkflowDTO_id(ctx context.Context, field graphql.CollectedField, obj *store.CoreWorkflow) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
@@ -1281,7 +2155,7 @@ func (ec *executionContext) fieldContext_CoreWorkflowDTO_id(_ context.Context, f
 	return graphql.NewScalarFieldContext("CoreWorkflowDTO", field, false, false, "UUID")
 }
 
-func (ec *executionContext) _CoreWorkflowDTO_name(ctx context.Context, field graphql.CollectedField, obj *WorkflowDTO) (ret graphql.Marshaler) {
+func (ec *executionContext) _CoreWorkflowDTO_name(ctx context.Context, field graphql.CollectedField, obj *store.CoreWorkflow) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
@@ -1304,7 +2178,7 @@ func (ec *executionContext) fieldContext_CoreWorkflowDTO_name(_ context.Context,
 	return graphql.NewScalarFieldContext("CoreWorkflowDTO", field, false, false, "String")
 }
 
-func (ec *executionContext) _CoreWorkflowDTO_statuses(ctx context.Context, field graphql.CollectedField, obj *WorkflowDTO) (ret graphql.Marshaler) {
+func (ec *executionContext) _CoreWorkflowDTO_statuses(ctx context.Context, field graphql.CollectedField, obj *store.CoreWorkflow) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
@@ -1317,17 +2191,17 @@ func (ec *executionContext) _CoreWorkflowDTO_statuses(ctx context.Context, field
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
-			return ec.marshalNCoreWorkflowStatus2ᚕstringᚄ(ctx, selections, v)
+			return ec.marshalNString2ᚕstringᚄ(ctx, selections, v)
 		},
 		true,
 		true,
 	)
 }
 func (ec *executionContext) fieldContext_CoreWorkflowDTO_statuses(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("CoreWorkflowDTO", field, false, false, "CoreWorkflowStatus")
+	return graphql.NewScalarFieldContext("CoreWorkflowDTO", field, false, false, "String")
 }
 
-func (ec *executionContext) _CoreWorkflowDTO_lastPublishedVersionId(ctx context.Context, field graphql.CollectedField, obj *WorkflowDTO) (ret graphql.Marshaler) {
+func (ec *executionContext) _CoreWorkflowDTO_lastPublishedVersionId(ctx context.Context, field graphql.CollectedField, obj *store.CoreWorkflow) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
@@ -1350,7 +2224,7 @@ func (ec *executionContext) fieldContext_CoreWorkflowDTO_lastPublishedVersionId(
 	return graphql.NewScalarFieldContext("CoreWorkflowDTO", field, false, false, "UUID")
 }
 
-func (ec *executionContext) _CoreWorkflowDTO_lastPublishedCoreWorkflowVersionId(ctx context.Context, field graphql.CollectedField, obj *WorkflowDTO) (ret graphql.Marshaler) {
+func (ec *executionContext) _CoreWorkflowDTO_lastPublishedCoreWorkflowVersionId(ctx context.Context, field graphql.CollectedField, obj *store.CoreWorkflow) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
@@ -1373,7 +2247,7 @@ func (ec *executionContext) fieldContext_CoreWorkflowDTO_lastPublishedCoreWorkfl
 	return graphql.NewScalarFieldContext("CoreWorkflowDTO", field, false, false, "UUID")
 }
 
-func (ec *executionContext) _CoreWorkflowDTO_applicationId(ctx context.Context, field graphql.CollectedField, obj *WorkflowDTO) (ret graphql.Marshaler) {
+func (ec *executionContext) _CoreWorkflowDTO_applicationId(ctx context.Context, field graphql.CollectedField, obj *store.CoreWorkflow) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
@@ -1396,7 +2270,7 @@ func (ec *executionContext) fieldContext_CoreWorkflowDTO_applicationId(_ context
 	return graphql.NewScalarFieldContext("CoreWorkflowDTO", field, false, false, "UUID")
 }
 
-func (ec *executionContext) _CoreWorkflowDTO_workspaceWorkflowId(ctx context.Context, field graphql.CollectedField, obj *WorkflowDTO) (ret graphql.Marshaler) {
+func (ec *executionContext) _CoreWorkflowDTO_workspaceWorkflowId(ctx context.Context, field graphql.CollectedField, obj *store.CoreWorkflow) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
@@ -1419,7 +2293,7 @@ func (ec *executionContext) fieldContext_CoreWorkflowDTO_workspaceWorkflowId(_ c
 	return graphql.NewScalarFieldContext("CoreWorkflowDTO", field, false, false, "UUID")
 }
 
-func (ec *executionContext) _CoreWorkflowDTO_isSystem(ctx context.Context, field graphql.CollectedField, obj *WorkflowDTO) (ret graphql.Marshaler) {
+func (ec *executionContext) _CoreWorkflowDTO_isSystem(ctx context.Context, field graphql.CollectedField, obj *store.CoreWorkflow) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
@@ -1442,7 +2316,7 @@ func (ec *executionContext) fieldContext_CoreWorkflowDTO_isSystem(_ context.Cont
 	return graphql.NewScalarFieldContext("CoreWorkflowDTO", field, false, false, "Boolean")
 }
 
-func (ec *executionContext) _CoreWorkflowDTO_visibility(ctx context.Context, field graphql.CollectedField, obj *WorkflowDTO) (ret graphql.Marshaler) {
+func (ec *executionContext) _CoreWorkflowDTO_visibility(ctx context.Context, field graphql.CollectedField, obj *store.CoreWorkflow) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
@@ -1465,7 +2339,7 @@ func (ec *executionContext) fieldContext_CoreWorkflowDTO_visibility(_ context.Co
 	return graphql.NewScalarFieldContext("CoreWorkflowDTO", field, false, false, "WorkflowVisibility")
 }
 
-func (ec *executionContext) _CoreWorkflowDTO_canChangeVisibility(ctx context.Context, field graphql.CollectedField, obj *WorkflowDTO) (ret graphql.Marshaler) {
+func (ec *executionContext) _CoreWorkflowDTO_canChangeVisibility(ctx context.Context, field graphql.CollectedField, obj *store.CoreWorkflow) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
@@ -1488,7 +2362,7 @@ func (ec *executionContext) fieldContext_CoreWorkflowDTO_canChangeVisibility(_ c
 	return graphql.NewScalarFieldContext("CoreWorkflowDTO", field, false, false, "Boolean")
 }
 
-func (ec *executionContext) _CoreWorkflowDTO_createdAt(ctx context.Context, field graphql.CollectedField, obj *WorkflowDTO) (ret graphql.Marshaler) {
+func (ec *executionContext) _CoreWorkflowDTO_createdAt(ctx context.Context, field graphql.CollectedField, obj *store.CoreWorkflow) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
@@ -1511,7 +2385,7 @@ func (ec *executionContext) fieldContext_CoreWorkflowDTO_createdAt(_ context.Con
 	return graphql.NewScalarFieldContext("CoreWorkflowDTO", field, false, false, "String")
 }
 
-func (ec *executionContext) _CoreWorkflowDTO_updatedAt(ctx context.Context, field graphql.CollectedField, obj *WorkflowDTO) (ret graphql.Marshaler) {
+func (ec *executionContext) _CoreWorkflowDTO_updatedAt(ctx context.Context, field graphql.CollectedField, obj *store.CoreWorkflow) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
@@ -1534,7 +2408,108 @@ func (ec *executionContext) fieldContext_CoreWorkflowDTO_updatedAt(_ context.Con
 	return graphql.NewScalarFieldContext("CoreWorkflowDTO", field, false, false, "String")
 }
 
-func (ec *executionContext) _CoreWorkflowVersionDTO_id(ctx context.Context, field graphql.CollectedField, obj *VersionDTO) (ret graphql.Marshaler) {
+func (ec *executionContext) _CoreWorkflowEdge_node(ctx context.Context, field graphql.CollectedField, obj *store.CoreWorkflowEdge) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CoreWorkflowEdge_node(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Node, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v store.CoreWorkflow) graphql.Marshaler {
+			return ec.marshalNCoreWorkflowDTO2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreWorkflow(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CoreWorkflowEdge_node(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CoreWorkflowEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_CoreWorkflowDTO(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CoreWorkflowEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *store.CoreWorkflowEdge) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CoreWorkflowEdge_cursor(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Cursor, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CoreWorkflowEdge_cursor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CoreWorkflowEdge", field, false, false, "String")
+}
+
+func (ec *executionContext) _CoreWorkflowPageInfo_endCursor(ctx context.Context, field graphql.CollectedField, obj *store.CoreWorkflowPageInfo) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CoreWorkflowPageInfo_endCursor(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.EndCursor, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CoreWorkflowPageInfo_endCursor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CoreWorkflowPageInfo", field, false, false, "String")
+}
+
+func (ec *executionContext) _CoreWorkflowPageInfo_hasNextPage(ctx context.Context, field graphql.CollectedField, obj *store.CoreWorkflowPageInfo) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CoreWorkflowPageInfo_hasNextPage(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.HasNextPage, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CoreWorkflowPageInfo_hasNextPage(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CoreWorkflowPageInfo", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _CoreWorkflowVersionDTO_id(ctx context.Context, field graphql.CollectedField, obj *store.CoreVersion) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
@@ -1557,7 +2532,7 @@ func (ec *executionContext) fieldContext_CoreWorkflowVersionDTO_id(_ context.Con
 	return graphql.NewScalarFieldContext("CoreWorkflowVersionDTO", field, false, false, "UUID")
 }
 
-func (ec *executionContext) _CoreWorkflowVersionDTO_coreWorkflowId(ctx context.Context, field graphql.CollectedField, obj *VersionDTO) (ret graphql.Marshaler) {
+func (ec *executionContext) _CoreWorkflowVersionDTO_coreWorkflowId(ctx context.Context, field graphql.CollectedField, obj *store.CoreVersion) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
@@ -1580,7 +2555,7 @@ func (ec *executionContext) fieldContext_CoreWorkflowVersionDTO_coreWorkflowId(_
 	return graphql.NewScalarFieldContext("CoreWorkflowVersionDTO", field, false, false, "UUID")
 }
 
-func (ec *executionContext) _CoreWorkflowVersionDTO_label(ctx context.Context, field graphql.CollectedField, obj *VersionDTO) (ret graphql.Marshaler) {
+func (ec *executionContext) _CoreWorkflowVersionDTO_label(ctx context.Context, field graphql.CollectedField, obj *store.CoreVersion) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
@@ -1603,7 +2578,7 @@ func (ec *executionContext) fieldContext_CoreWorkflowVersionDTO_label(_ context.
 	return graphql.NewScalarFieldContext("CoreWorkflowVersionDTO", field, false, false, "String")
 }
 
-func (ec *executionContext) _CoreWorkflowVersionDTO_status(ctx context.Context, field graphql.CollectedField, obj *VersionDTO) (ret graphql.Marshaler) {
+func (ec *executionContext) _CoreWorkflowVersionDTO_status(ctx context.Context, field graphql.CollectedField, obj *store.CoreVersion) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
@@ -1626,7 +2601,7 @@ func (ec *executionContext) fieldContext_CoreWorkflowVersionDTO_status(_ context
 	return graphql.NewScalarFieldContext("CoreWorkflowVersionDTO", field, false, false, "CoreWorkflowVersionStatus")
 }
 
-func (ec *executionContext) _CoreWorkflowVersionDTO_workspaceWorkflowVersionId(ctx context.Context, field graphql.CollectedField, obj *VersionDTO) (ret graphql.Marshaler) {
+func (ec *executionContext) _CoreWorkflowVersionDTO_workspaceWorkflowVersionId(ctx context.Context, field graphql.CollectedField, obj *store.CoreVersion) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
@@ -1649,7 +2624,7 @@ func (ec *executionContext) fieldContext_CoreWorkflowVersionDTO_workspaceWorkflo
 	return graphql.NewScalarFieldContext("CoreWorkflowVersionDTO", field, false, false, "UUID")
 }
 
-func (ec *executionContext) _CoreWorkflowVersionDTO_workspaceWorkflowId(ctx context.Context, field graphql.CollectedField, obj *VersionDTO) (ret graphql.Marshaler) {
+func (ec *executionContext) _CoreWorkflowVersionDTO_workspaceWorkflowId(ctx context.Context, field graphql.CollectedField, obj *store.CoreVersion) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
@@ -1672,7 +2647,7 @@ func (ec *executionContext) fieldContext_CoreWorkflowVersionDTO_workspaceWorkflo
 	return graphql.NewScalarFieldContext("CoreWorkflowVersionDTO", field, false, false, "UUID")
 }
 
-func (ec *executionContext) _CoreWorkflowVersionDTO_trigger(ctx context.Context, field graphql.CollectedField, obj *VersionDTO) (ret graphql.Marshaler) {
+func (ec *executionContext) _CoreWorkflowVersionDTO_trigger(ctx context.Context, field graphql.CollectedField, obj *store.CoreVersion) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
@@ -1695,7 +2670,7 @@ func (ec *executionContext) fieldContext_CoreWorkflowVersionDTO_trigger(_ contex
 	return graphql.NewScalarFieldContext("CoreWorkflowVersionDTO", field, false, false, "JSON")
 }
 
-func (ec *executionContext) _CoreWorkflowVersionDTO_steps(ctx context.Context, field graphql.CollectedField, obj *VersionDTO) (ret graphql.Marshaler) {
+func (ec *executionContext) _CoreWorkflowVersionDTO_steps(ctx context.Context, field graphql.CollectedField, obj *store.CoreVersion) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
@@ -1718,7 +2693,7 @@ func (ec *executionContext) fieldContext_CoreWorkflowVersionDTO_steps(_ context.
 	return graphql.NewScalarFieldContext("CoreWorkflowVersionDTO", field, false, false, "JSON")
 }
 
-func (ec *executionContext) _CoreWorkflowVersionDTO_createdAt(ctx context.Context, field graphql.CollectedField, obj *VersionDTO) (ret graphql.Marshaler) {
+func (ec *executionContext) _CoreWorkflowVersionDTO_createdAt(ctx context.Context, field graphql.CollectedField, obj *store.CoreVersion) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
@@ -1741,7 +2716,7 @@ func (ec *executionContext) fieldContext_CoreWorkflowVersionDTO_createdAt(_ cont
 	return graphql.NewScalarFieldContext("CoreWorkflowVersionDTO", field, false, false, "String")
 }
 
-func (ec *executionContext) _CoreWorkflowVersionDTO_updatedAt(ctx context.Context, field graphql.CollectedField, obj *VersionDTO) (ret graphql.Marshaler) {
+func (ec *executionContext) _CoreWorkflowVersionDTO_updatedAt(ctx context.Context, field graphql.CollectedField, obj *store.CoreVersion) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
@@ -1762,6 +2737,102 @@ func (ec *executionContext) _CoreWorkflowVersionDTO_updatedAt(ctx context.Contex
 }
 func (ec *executionContext) fieldContext_CoreWorkflowVersionDTO_updatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("CoreWorkflowVersionDTO", field, false, false, "String")
+}
+
+func (ec *executionContext) _CoreWorkflowWithCurrentVersionDTO_workflow(ctx context.Context, field graphql.CollectedField, obj *store.CoreWorkflowWithVersions) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CoreWorkflowWithCurrentVersionDTO_workflow(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Workflow, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v store.CoreWorkflow) graphql.Marshaler {
+			return ec.marshalNCoreWorkflowDTO2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreWorkflow(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CoreWorkflowWithCurrentVersionDTO_workflow(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CoreWorkflowWithCurrentVersionDTO",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_CoreWorkflowDTO(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CoreWorkflowWithCurrentVersionDTO_versions(ctx context.Context, field graphql.CollectedField, obj *store.CoreWorkflowWithVersions) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CoreWorkflowWithCurrentVersionDTO_versions(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Versions, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []store.CoreVersion) graphql.Marshaler {
+			return ec.marshalNCoreWorkflowVersionDTO2ᚕgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreVersionᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CoreWorkflowWithCurrentVersionDTO_versions(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CoreWorkflowWithCurrentVersionDTO",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_CoreWorkflowVersionDTO(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CoreWorkflowWithCurrentVersionDTO_currentVersion(ctx context.Context, field graphql.CollectedField, obj *store.CoreWorkflowWithVersions) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CoreWorkflowWithCurrentVersionDTO_currentVersion(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CurrentVersion, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v store.CoreVersion) graphql.Marshaler {
+			return ec.marshalNCoreWorkflowVersionDTO2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreVersion(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CoreWorkflowWithCurrentVersionDTO_currentVersion(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CoreWorkflowWithCurrentVersionDTO",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_CoreWorkflowVersionDTO(ctx, field)
+		},
+	}
+	return fc, nil
 }
 
 func (ec *executionContext) _DeletedCoreWorkflowDTO_id(ctx context.Context, field graphql.CollectedField, obj *DeletedWorkflowDTO) (ret graphql.Marshaler) {
@@ -1810,6 +2881,226 @@ func (ec *executionContext) fieldContext_DeletedCoreWorkflowDTO_workspaceWorkflo
 	return graphql.NewScalarFieldContext("DeletedCoreWorkflowDTO", field, false, false, "UUID")
 }
 
+func (ec *executionContext) _Mutation_stopWorkflowRun(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_stopWorkflowRun(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().StopWorkflowRun(ctx, fc.Args["workflowRunId"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *store.Run) graphql.Marshaler {
+			return ec.marshalNWorkflowRun2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐRun(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_stopWorkflowRun(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_WorkflowRun(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_stopWorkflowRun_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_retryWorkflowRun(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_retryWorkflowRun(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().RetryWorkflowRun(ctx, fc.Args["workflowRunId"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *store.Run) graphql.Marshaler {
+			return ec.marshalNWorkflowRun2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐRun(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_retryWorkflowRun(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_WorkflowRun(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_retryWorkflowRun_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_submitFormStep(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_submitFormStep(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().SubmitFormStep(ctx, fc.Args["input"].(map[string]any))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_submitFormStep(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_submitFormStep_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateWorkflowRunStep(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_updateWorkflowRunStep(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().UpdateWorkflowRunStep(ctx, fc.Args["input"].(map[string]any))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *WorkflowAction) graphql.Marshaler {
+			return ec.marshalNWorkflowAction2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋworkflowgqlᚐWorkflowAction(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_updateWorkflowRunStep(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_WorkflowAction(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateWorkflowRunStep_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_testHttpRequest(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_testHttpRequest(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().TestHTTPRequest(ctx, fc.Args["input"].(map[string]any))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *HTTPTestResult) graphql.Marshaler {
+			return ec.marshalNTestHttpRequest2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋworkflowgqlᚐHTTPTestResult(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_testHttpRequest(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_TestHttpRequest(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_testHttpRequest_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createCoreWorkflow(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -1823,8 +3114,8 @@ func (ec *executionContext) _Mutation_createCoreWorkflow(ctx context.Context, fi
 			return ec.Resolvers.Mutation().CreateCoreWorkflow(ctx, fc.Args["input"].(map[string]any))
 		},
 		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *WorkflowDTO) graphql.Marshaler {
-			return ec.marshalNCoreWorkflowDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋworkflowgqlᚐWorkflowDTO(ctx, selections, v)
+		func(ctx context.Context, selections ast.SelectionSet, v *store.CoreWorkflow) graphql.Marshaler {
+			return ec.marshalNCoreWorkflowDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreWorkflow(ctx, selections, v)
 		},
 		true,
 		true,
@@ -1867,8 +3158,8 @@ func (ec *executionContext) _Mutation_updateCoreWorkflow(ctx context.Context, fi
 			return ec.Resolvers.Mutation().UpdateCoreWorkflow(ctx, fc.Args["input"].(map[string]any))
 		},
 		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *WorkflowDTO) graphql.Marshaler {
-			return ec.marshalOCoreWorkflowDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋworkflowgqlᚐWorkflowDTO(ctx, selections, v)
+		func(ctx context.Context, selections ast.SelectionSet, v *store.CoreWorkflow) graphql.Marshaler {
+			return ec.marshalOCoreWorkflowDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreWorkflow(ctx, selections, v)
 		},
 		true,
 		false,
@@ -1911,8 +3202,8 @@ func (ec *executionContext) _Mutation_updateCoreWorkflowVisibility(ctx context.C
 			return ec.Resolvers.Mutation().UpdateCoreWorkflowVisibility(ctx, fc.Args["input"].(map[string]any))
 		},
 		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *WorkflowDTO) graphql.Marshaler {
-			return ec.marshalOCoreWorkflowDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋworkflowgqlᚐWorkflowDTO(ctx, selections, v)
+		func(ctx context.Context, selections ast.SelectionSet, v *store.CoreWorkflow) graphql.Marshaler {
+			return ec.marshalOCoreWorkflowDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreWorkflow(ctx, selections, v)
 		},
 		true,
 		false,
@@ -1955,8 +3246,8 @@ func (ec *executionContext) _Mutation_duplicateCoreWorkflow(ctx context.Context,
 			return ec.Resolvers.Mutation().DuplicateCoreWorkflow(ctx, fc.Args["input"].(map[string]any))
 		},
 		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *WorkflowDTO) graphql.Marshaler {
-			return ec.marshalNCoreWorkflowDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋworkflowgqlᚐWorkflowDTO(ctx, selections, v)
+		func(ctx context.Context, selections ast.SelectionSet, v *store.CoreWorkflow) graphql.Marshaler {
+			return ec.marshalNCoreWorkflowDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreWorkflow(ctx, selections, v)
 		},
 		true,
 		true,
@@ -2043,8 +3334,8 @@ func (ec *executionContext) _Mutation_discardCoreWorkflowDraft(ctx context.Conte
 			return ec.Resolvers.Mutation().DiscardCoreWorkflowDraft(ctx, fc.Args["input"].(map[string]any))
 		},
 		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *WorkflowDTO) graphql.Marshaler {
-			return ec.marshalOCoreWorkflowDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋworkflowgqlᚐWorkflowDTO(ctx, selections, v)
+		func(ctx context.Context, selections ast.SelectionSet, v *store.CoreWorkflow) graphql.Marshaler {
+			return ec.marshalOCoreWorkflowDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreWorkflow(ctx, selections, v)
 		},
 		true,
 		false,
@@ -2087,8 +3378,8 @@ func (ec *executionContext) _Mutation_createDraftFromCoreWorkflowVersion(ctx con
 			return ec.Resolvers.Mutation().CreateDraftFromCoreWorkflowVersion(ctx, fc.Args["input"].(map[string]any))
 		},
 		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *VersionDTO) graphql.Marshaler {
-			return ec.marshalNCoreWorkflowVersionDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋworkflowgqlᚐVersionDTO(ctx, selections, v)
+		func(ctx context.Context, selections ast.SelectionSet, v *store.CoreVersion) graphql.Marshaler {
+			return ec.marshalNCoreWorkflowVersionDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreVersion(ctx, selections, v)
 		},
 		true,
 		true,
@@ -2263,8 +3554,8 @@ func (ec *executionContext) _Mutation_updateCoreWorkflowVersionStep(ctx context.
 			return ec.Resolvers.Mutation().UpdateCoreWorkflowVersionStep(ctx, fc.Args["input"].(map[string]any))
 		},
 		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *ActionDTO) graphql.Marshaler {
-			return ec.marshalNWorkflowAction2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋworkflowgqlᚐActionDTO(ctx, selections, v)
+		func(ctx context.Context, selections ast.SelectionSet, v *WorkflowAction) graphql.Marshaler {
+			return ec.marshalNWorkflowAction2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋworkflowgqlᚐWorkflowAction(ctx, selections, v)
 		},
 		true,
 		true,
@@ -2558,27 +3849,400 @@ func (ec *executionContext) fieldContext_Mutation_updateCoreWorkflowVersionPosit
 	return fc, nil
 }
 
-func (ec *executionContext) _Query__empty(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+func (ec *executionContext) _Query_coreWorkflows(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
 		field,
 		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Query__empty(ctx, field)
+			return ec.fieldContext_Query_coreWorkflows(ctx, field)
 		},
 		func(ctx context.Context) (any, error) {
-			return ec.Resolvers.Query().Empty(ctx)
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().CoreWorkflows(ctx, fc.Args["first"].(*int), fc.Args["after"].(*string), fc.Args["orderBy"].(*string), fc.Args["orderByDirection"].(*string), fc.Args["filter"].(*store.CoreWorkflowFilter), fc.Args["includeSystem"].(*bool))
 		},
 		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *bool) graphql.Marshaler {
-			return ec.marshalOBoolean2ᚖbool(ctx, selections, v)
+		func(ctx context.Context, selections ast.SelectionSet, v *store.CoreWorkflowConnection) graphql.Marshaler {
+			return ec.marshalNCoreWorkflowConnection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreWorkflowConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_coreWorkflows(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_CoreWorkflowConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_coreWorkflows_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_coreWorkflowById(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_coreWorkflowById(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().CoreWorkflowByID(ctx, fc.Args["coreWorkflowId"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *store.CoreWorkflow) graphql.Marshaler {
+			return ec.marshalOCoreWorkflowDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreWorkflow(ctx, selections, v)
 		},
 		true,
 		false,
 	)
 }
-func (ec *executionContext) fieldContext_Query__empty(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("Query", field, true, true, "Boolean")
+func (ec *executionContext) fieldContext_Query_coreWorkflowById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_CoreWorkflowDTO(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_coreWorkflowById_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_coreWorkflowsWithCurrentVersions(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_coreWorkflowsWithCurrentVersions(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().CoreWorkflowsWithCurrentVersions(ctx, fc.Args["input"].(map[string]any))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*store.CoreWorkflowWithVersions) graphql.Marshaler {
+			return ec.marshalNCoreWorkflowWithCurrentVersionDTO2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreWorkflowWithVersionsᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_coreWorkflowsWithCurrentVersions(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_CoreWorkflowWithCurrentVersionDTO(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_coreWorkflowsWithCurrentVersions_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_coreWorkflow(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_coreWorkflow(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().CoreWorkflow(ctx, fc.Args["workspaceWorkflowId"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *store.CoreWorkflow) graphql.Marshaler {
+			return ec.marshalOCoreWorkflowDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreWorkflow(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Query_coreWorkflow(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_CoreWorkflowDTO(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_coreWorkflow_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_coreWorkflowVersions(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_coreWorkflowVersions(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().CoreWorkflowVersions(ctx, fc.Args["workspaceWorkflowId"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*store.CoreVersion) graphql.Marshaler {
+			return ec.marshalNCoreWorkflowVersionDTO2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreVersionᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_coreWorkflowVersions(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_CoreWorkflowVersionDTO(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_coreWorkflowVersions_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_coreWorkflowVersion(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_coreWorkflowVersion(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().CoreWorkflowVersion(ctx, fc.Args["workspaceWorkflowVersionId"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *store.CoreVersion) graphql.Marshaler {
+			return ec.marshalOCoreWorkflowVersionDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreVersion(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Query_coreWorkflowVersion(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_CoreWorkflowVersionDTO(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_coreWorkflowVersion_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_coreWorkflowVersionsByCoreWorkflowId(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_coreWorkflowVersionsByCoreWorkflowId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().CoreWorkflowVersionsByCoreWorkflowID(ctx, fc.Args["coreWorkflowId"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*store.CoreVersion) graphql.Marshaler {
+			return ec.marshalNCoreWorkflowVersionDTO2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreVersionᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_coreWorkflowVersionsByCoreWorkflowId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_CoreWorkflowVersionDTO(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_coreWorkflowVersionsByCoreWorkflowId_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_coreWorkflowVersionById(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_coreWorkflowVersionById(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().CoreWorkflowVersionByID(ctx, fc.Args["coreWorkflowVersionId"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *store.CoreVersion) graphql.Marshaler {
+			return ec.marshalOCoreWorkflowVersionDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreVersion(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Query_coreWorkflowVersionById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_CoreWorkflowVersionDTO(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_coreWorkflowVersionById_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_workflowStepConnectedAccountHandle(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_workflowStepConnectedAccountHandle(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().WorkflowStepConnectedAccountHandle(ctx, fc.Args["connectedAccountId"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *store.ConnectedAccount) graphql.Marshaler {
+			return ec.marshalOConnectedAccountHandleDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐConnectedAccount(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Query_workflowStepConnectedAccountHandle(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_ConnectedAccountHandleDTO(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_workflowStepConnectedAccountHandle_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
 }
 
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -2657,7 +4321,168 @@ func (ec *executionContext) fieldContext_Query___schema(_ context.Context, field
 	return fc, nil
 }
 
-func (ec *executionContext) _WorkflowAction_id(ctx context.Context, field graphql.CollectedField, obj *ActionDTO) (ret graphql.Marshaler) {
+func (ec *executionContext) _TestHttpRequest_success(ctx context.Context, field graphql.CollectedField, obj *HTTPTestResult) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TestHttpRequest_success(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Success, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_TestHttpRequest_success(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TestHttpRequest", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _TestHttpRequest_message(ctx context.Context, field graphql.CollectedField, obj *HTTPTestResult) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TestHttpRequest_message(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Message, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_TestHttpRequest_message(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TestHttpRequest", field, false, false, "String")
+}
+
+func (ec *executionContext) _TestHttpRequest_result(ctx context.Context, field graphql.CollectedField, obj *HTTPTestResult) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TestHttpRequest_result(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Result, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v any) graphql.Marshaler {
+			return ec.marshalOJSON2interface(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TestHttpRequest_result(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TestHttpRequest", field, false, false, "JSON")
+}
+
+func (ec *executionContext) _TestHttpRequest_error(ctx context.Context, field graphql.CollectedField, obj *HTTPTestResult) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TestHttpRequest_error(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Error, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v any) graphql.Marshaler {
+			return ec.marshalOJSON2interface(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TestHttpRequest_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TestHttpRequest", field, false, false, "JSON")
+}
+
+func (ec *executionContext) _TestHttpRequest_status(ctx context.Context, field graphql.CollectedField, obj *HTTPTestResult) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TestHttpRequest_status(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Status, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *float64) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖfloat64(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TestHttpRequest_status(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TestHttpRequest", field, false, false, "Float")
+}
+
+func (ec *executionContext) _TestHttpRequest_statusText(ctx context.Context, field graphql.CollectedField, obj *HTTPTestResult) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TestHttpRequest_statusText(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.StatusText, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TestHttpRequest_statusText(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TestHttpRequest", field, false, false, "String")
+}
+
+func (ec *executionContext) _TestHttpRequest_headers(ctx context.Context, field graphql.CollectedField, obj *HTTPTestResult) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TestHttpRequest_headers(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Headers, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v any) graphql.Marshaler {
+			return ec.marshalOJSON2interface(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TestHttpRequest_headers(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TestHttpRequest", field, false, false, "JSON")
+}
+
+func (ec *executionContext) _WorkflowAction_id(ctx context.Context, field graphql.CollectedField, obj *WorkflowAction) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
@@ -2680,7 +4505,7 @@ func (ec *executionContext) fieldContext_WorkflowAction_id(_ context.Context, fi
 	return graphql.NewScalarFieldContext("WorkflowAction", field, false, false, "UUID")
 }
 
-func (ec *executionContext) _WorkflowAction_name(ctx context.Context, field graphql.CollectedField, obj *ActionDTO) (ret graphql.Marshaler) {
+func (ec *executionContext) _WorkflowAction_name(ctx context.Context, field graphql.CollectedField, obj *WorkflowAction) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
@@ -2703,7 +4528,7 @@ func (ec *executionContext) fieldContext_WorkflowAction_name(_ context.Context, 
 	return graphql.NewScalarFieldContext("WorkflowAction", field, false, false, "String")
 }
 
-func (ec *executionContext) _WorkflowAction_type(ctx context.Context, field graphql.CollectedField, obj *ActionDTO) (ret graphql.Marshaler) {
+func (ec *executionContext) _WorkflowAction_type(ctx context.Context, field graphql.CollectedField, obj *WorkflowAction) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
@@ -2726,7 +4551,7 @@ func (ec *executionContext) fieldContext_WorkflowAction_type(_ context.Context, 
 	return graphql.NewScalarFieldContext("WorkflowAction", field, false, false, "String")
 }
 
-func (ec *executionContext) _WorkflowAction_settings(ctx context.Context, field graphql.CollectedField, obj *ActionDTO) (ret graphql.Marshaler) {
+func (ec *executionContext) _WorkflowAction_settings(ctx context.Context, field graphql.CollectedField, obj *WorkflowAction) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
@@ -2749,7 +4574,7 @@ func (ec *executionContext) fieldContext_WorkflowAction_settings(_ context.Conte
 	return graphql.NewScalarFieldContext("WorkflowAction", field, false, false, "JSON")
 }
 
-func (ec *executionContext) _WorkflowAction_valid(ctx context.Context, field graphql.CollectedField, obj *ActionDTO) (ret graphql.Marshaler) {
+func (ec *executionContext) _WorkflowAction_valid(ctx context.Context, field graphql.CollectedField, obj *WorkflowAction) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
@@ -2772,7 +4597,7 @@ func (ec *executionContext) fieldContext_WorkflowAction_valid(_ context.Context,
 	return graphql.NewScalarFieldContext("WorkflowAction", field, false, false, "Boolean")
 }
 
-func (ec *executionContext) _WorkflowAction_nextStepIds(ctx context.Context, field graphql.CollectedField, obj *ActionDTO) (ret graphql.Marshaler) {
+func (ec *executionContext) _WorkflowAction_nextStepIds(ctx context.Context, field graphql.CollectedField, obj *WorkflowAction) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
@@ -2795,7 +4620,7 @@ func (ec *executionContext) fieldContext_WorkflowAction_nextStepIds(_ context.Co
 	return graphql.NewScalarFieldContext("WorkflowAction", field, false, false, "UUID")
 }
 
-func (ec *executionContext) _WorkflowAction_position(ctx context.Context, field graphql.CollectedField, obj *ActionDTO) (ret graphql.Marshaler) {
+func (ec *executionContext) _WorkflowAction_position(ctx context.Context, field graphql.CollectedField, obj *WorkflowAction) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
@@ -2807,8 +4632,8 @@ func (ec *executionContext) _WorkflowAction_position(ctx context.Context, field 
 			return obj.Position, nil
 		},
 		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *PositionDTO) graphql.Marshaler {
-			return ec.marshalOWorkflowStepPosition2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋworkflowgqlᚐPositionDTO(ctx, selections, v)
+		func(ctx context.Context, selections ast.SelectionSet, v *StepPosition) graphql.Marshaler {
+			return ec.marshalOWorkflowStepPosition2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋworkflowgqlᚐStepPosition(ctx, selections, v)
 		},
 		true,
 		false,
@@ -2827,7 +4652,53 @@ func (ec *executionContext) fieldContext_WorkflowAction_position(_ context.Conte
 	return fc, nil
 }
 
-func (ec *executionContext) _WorkflowStepPosition_x(ctx context.Context, field graphql.CollectedField, obj *PositionDTO) (ret graphql.Marshaler) {
+func (ec *executionContext) _WorkflowRun_id(ctx context.Context, field graphql.CollectedField, obj *store.Run) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_WorkflowRun_id(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNUUID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_WorkflowRun_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("WorkflowRun", field, false, false, "UUID")
+}
+
+func (ec *executionContext) _WorkflowRun_status(ctx context.Context, field graphql.CollectedField, obj *store.Run) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_WorkflowRun_status(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Status, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_WorkflowRun_status(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("WorkflowRun", field, false, false, "String")
+}
+
+func (ec *executionContext) _WorkflowStepPosition_x(ctx context.Context, field graphql.CollectedField, obj *StepPosition) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
@@ -2850,7 +4721,7 @@ func (ec *executionContext) fieldContext_WorkflowStepPosition_x(_ context.Contex
 	return graphql.NewScalarFieldContext("WorkflowStepPosition", field, false, false, "Float")
 }
 
-func (ec *executionContext) _WorkflowStepPosition_y(ctx context.Context, field graphql.CollectedField, obj *PositionDTO) (ret graphql.Marshaler) {
+func (ec *executionContext) _WorkflowStepPosition_y(ctx context.Context, field graphql.CollectedField, obj *StepPosition) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
@@ -4015,6 +5886,161 @@ func (ec *executionContext) fieldContext___Type_isOneOf(_ context.Context, field
 
 // region    **************************** input.gotpl *****************************
 
+func (ec *executionContext) unmarshalInputCoreWorkflowFilterInput(ctx context.Context, obj any) (store.CoreWorkflowFilter, error) {
+	var it store.CoreWorkflowFilter
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"logicalOperator", "rules"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "logicalOperator":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logicalOperator"))
+			data, err := ec.unmarshalNCoreWorkflowFilterLogicalOperator2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.LogicalOperator = data
+		case "rules":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("rules"))
+			data, err := ec.unmarshalNCoreWorkflowFilterRuleInput2ᚕgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreWorkflowFilterRuleᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Rules = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalCoreWorkflowFilterInput unmarshals raw into the CoreWorkflowFilterInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalCoreWorkflowFilterInput(ctx context.Context, raw any) (store.CoreWorkflowFilter, error) {
+	var out store.CoreWorkflowFilter
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "CoreWorkflowFilterInput", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputCoreWorkflowFilterRuleInput(ctx context.Context, obj any) (store.CoreWorkflowFilterRule, error) {
+	var it store.CoreWorkflowFilterRule
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"fieldKey", "operand", "value", "timezone"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "fieldKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fieldKey"))
+			data, err := ec.unmarshalNCoreWorkflowFilterFieldKey2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FieldKey = data
+		case "operand":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("operand"))
+			data, err := ec.unmarshalNCoreWorkflowFilterOperand2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Operand = data
+		case "value":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("value"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Value = data
+		case "timezone":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("timezone"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Timezone = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalCoreWorkflowFilterRuleInput unmarshals raw into the CoreWorkflowFilterRuleInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalCoreWorkflowFilterRuleInput(ctx context.Context, raw any) (store.CoreWorkflowFilterRule, error) {
+	var out store.CoreWorkflowFilterRule
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "CoreWorkflowFilterRuleInput", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputCoreWorkflowsWithCurrentVersionsInput(ctx context.Context, obj any) (map[string]any, error) {
+	var it map[string]any
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"coreWorkflowIds"}
+	it = make(map[string]any, len(asMap))
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "coreWorkflowIds":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("coreWorkflowIds"))
+			data, err := ec.unmarshalNUUID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["coreWorkflowIds"] = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalCoreWorkflowsWithCurrentVersionsInput unmarshals raw into the CoreWorkflowsWithCurrentVersionsInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalCoreWorkflowsWithCurrentVersionsInput(ctx context.Context, raw any) (map[string]any, error) {
+	var out map[string]any
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "CoreWorkflowsWithCurrentVersionsInput", raw, &out)
+	return out, err
+}
+
 func (ec *executionContext) unmarshalInputCreateCoreWorkflowInput(ctx context.Context, obj any) (map[string]any, error) {
 	var it map[string]any
 	if obj == nil {
@@ -4571,6 +6597,127 @@ func UnmarshalDuplicateCoreWorkflowVersionStepInput(ctx context.Context, raw any
 	return out, err
 }
 
+func (ec *executionContext) unmarshalInputSubmitFormStepInput(ctx context.Context, obj any) (map[string]any, error) {
+	var it map[string]any
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"workflowRunId", "stepId", "response"}
+	it = make(map[string]any, len(asMap))
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "workflowRunId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("workflowRunId"))
+			data, err := ec.unmarshalNUUID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["workflowRunId"] = data
+		case "stepId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("stepId"))
+			data, err := ec.unmarshalNUUID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["stepId"] = data
+		case "response":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("response"))
+			data, err := ec.unmarshalNJSON2interface(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["response"] = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalSubmitFormStepInput unmarshals raw into the SubmitFormStepInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalSubmitFormStepInput(ctx context.Context, raw any) (map[string]any, error) {
+	var out map[string]any
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "SubmitFormStepInput", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputTestHttpRequestInput(ctx context.Context, obj any) (map[string]any, error) {
+	var it map[string]any
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"url", "method", "headers", "body"}
+	it = make(map[string]any, len(asMap))
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "url":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("url"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["url"] = data
+		case "method":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("method"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["method"] = data
+		case "headers":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("headers"))
+			data, err := ec.unmarshalOJSON2interface(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["headers"] = data
+		case "body":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("body"))
+			data, err := ec.unmarshalOJSON2interface(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["body"] = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalTestHttpRequestInput unmarshals raw into the TestHttpRequestInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalTestHttpRequestInput(ctx context.Context, raw any) (map[string]any, error) {
+	var out map[string]any
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "TestHttpRequestInput", raw, &out)
+	return out, err
+}
+
 func (ec *executionContext) unmarshalInputUpdateCoreWorkflowInput(ctx context.Context, obj any) (map[string]any, error) {
 	var it map[string]any
 	if obj == nil {
@@ -4821,6 +6968,56 @@ func UnmarshalUpdateCoreWorkflowVisibilityInput(ctx context.Context, raw any) (m
 	return out, err
 }
 
+func (ec *executionContext) unmarshalInputUpdateWorkflowRunStepInput(ctx context.Context, obj any) (map[string]any, error) {
+	var it map[string]any
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"workflowRunId", "step"}
+	it = make(map[string]any, len(asMap))
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "workflowRunId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("workflowRunId"))
+			data, err := ec.unmarshalNUUID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["workflowRunId"] = data
+		case "step":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("step"))
+			data, err := ec.unmarshalNJSON2interface(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["step"] = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalUpdateWorkflowRunStepInput unmarshals raw into the UpdateWorkflowRunStepInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalUpdateWorkflowRunStepInput(ctx context.Context, raw any) (map[string]any, error) {
+	var out map[string]any
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "UpdateWorkflowRunStepInput", raw, &out)
+	return out, err
+}
+
 func (ec *executionContext) unmarshalInputWorkflowStepPositionInput(ctx context.Context, obj any) (map[string]any, error) {
 	var it map[string]any
 	if obj == nil {
@@ -4929,9 +7126,100 @@ func UnmarshalWorkflowStepPositionUpdateInput(ctx context.Context, raw any) (map
 
 // region    **************************** object.gotpl ****************************
 
+var connectedAccountHandleDTOImplementors = []string{"ConnectedAccountHandleDTO"}
+
+func (ec *executionContext) _ConnectedAccountHandleDTO(ctx context.Context, sel ast.SelectionSet, obj *store.ConnectedAccount) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, connectedAccountHandleDTOImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ConnectedAccountHandleDTO")
+		case "id":
+			out.Values[i] = ec._ConnectedAccountHandleDTO_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "handle":
+			out.Values[i] = ec._ConnectedAccountHandleDTO_handle(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "provider":
+			out.Values[i] = ec._ConnectedAccountHandleDTO_provider(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "handleAliases":
+			out.Values[i] = ec._ConnectedAccountHandleDTO_handleAliases(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var coreWorkflowConnectionImplementors = []string{"CoreWorkflowConnection"}
+
+func (ec *executionContext) _CoreWorkflowConnection(ctx context.Context, sel ast.SelectionSet, obj *store.CoreWorkflowConnection) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, coreWorkflowConnectionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("CoreWorkflowConnection")
+		case "edges":
+			out.Values[i] = ec._CoreWorkflowConnection_edges(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "pageInfo":
+			out.Values[i] = ec._CoreWorkflowConnection_pageInfo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "totalCount":
+			out.Values[i] = ec._CoreWorkflowConnection_totalCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
 var coreWorkflowDTOImplementors = []string{"CoreWorkflowDTO"}
 
-func (ec *executionContext) _CoreWorkflowDTO(ctx context.Context, sel ast.SelectionSet, obj *WorkflowDTO) graphql.Marshaler {
+func (ec *executionContext) _CoreWorkflowDTO(ctx context.Context, sel ast.SelectionSet, obj *store.CoreWorkflow) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, coreWorkflowDTOImplementors)
 
 	out := graphql.NewFieldSet(fields)
@@ -5017,9 +7305,85 @@ func (ec *executionContext) _CoreWorkflowDTO(ctx context.Context, sel ast.Select
 	return out
 }
 
+var coreWorkflowEdgeImplementors = []string{"CoreWorkflowEdge"}
+
+func (ec *executionContext) _CoreWorkflowEdge(ctx context.Context, sel ast.SelectionSet, obj *store.CoreWorkflowEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, coreWorkflowEdgeImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("CoreWorkflowEdge")
+		case "node":
+			out.Values[i] = ec._CoreWorkflowEdge_node(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "cursor":
+			out.Values[i] = ec._CoreWorkflowEdge_cursor(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var coreWorkflowPageInfoImplementors = []string{"CoreWorkflowPageInfo"}
+
+func (ec *executionContext) _CoreWorkflowPageInfo(ctx context.Context, sel ast.SelectionSet, obj *store.CoreWorkflowPageInfo) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, coreWorkflowPageInfoImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("CoreWorkflowPageInfo")
+		case "endCursor":
+			out.Values[i] = ec._CoreWorkflowPageInfo_endCursor(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "hasNextPage":
+			out.Values[i] = ec._CoreWorkflowPageInfo_hasNextPage(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
 var coreWorkflowVersionDTOImplementors = []string{"CoreWorkflowVersionDTO"}
 
-func (ec *executionContext) _CoreWorkflowVersionDTO(ctx context.Context, sel ast.SelectionSet, obj *VersionDTO) graphql.Marshaler {
+func (ec *executionContext) _CoreWorkflowVersionDTO(ctx context.Context, sel ast.SelectionSet, obj *store.CoreVersion) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, coreWorkflowVersionDTOImplementors)
 
 	out := graphql.NewFieldSet(fields)
@@ -5075,6 +7439,49 @@ func (ec *executionContext) _CoreWorkflowVersionDTO(ctx context.Context, sel ast
 			}
 		case "updatedAt":
 			out.Values[i] = ec._CoreWorkflowVersionDTO_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var coreWorkflowWithCurrentVersionDTOImplementors = []string{"CoreWorkflowWithCurrentVersionDTO"}
+
+func (ec *executionContext) _CoreWorkflowWithCurrentVersionDTO(ctx context.Context, sel ast.SelectionSet, obj *store.CoreWorkflowWithVersions) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, coreWorkflowWithCurrentVersionDTOImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("CoreWorkflowWithCurrentVersionDTO")
+		case "workflow":
+			out.Values[i] = ec._CoreWorkflowWithCurrentVersionDTO_workflow(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "versions":
+			out.Values[i] = ec._CoreWorkflowWithCurrentVersionDTO_versions(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "currentVersion":
+			out.Values[i] = ec._CoreWorkflowWithCurrentVersionDTO_currentVersion(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -5152,6 +7559,41 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Mutation")
+		case "stopWorkflowRun":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_stopWorkflowRun(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "retryWorkflowRun":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_retryWorkflowRun(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "submitFormStep":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_submitFormStep(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateWorkflowRunStep":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateWorkflowRunStep(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "testHttpRequest":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_testHttpRequest(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "createCoreWorkflow":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createCoreWorkflow(ctx, field)
@@ -5307,11 +7749,59 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Query")
-		case "_empty":
+		case "coreWorkflows":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_coreWorkflows(ctx, field)
+				})
+		case "coreWorkflowById":
 			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
 				true, false,
 				func(ctx context.Context) graphql.Marshaler {
-					return ec._Query__empty(ctx, field)
+					return ec._Query_coreWorkflowById(ctx, field)
+				})
+		case "coreWorkflowsWithCurrentVersions":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_coreWorkflowsWithCurrentVersions(ctx, field)
+				})
+		case "coreWorkflow":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, false,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_coreWorkflow(ctx, field)
+				})
+		case "coreWorkflowVersions":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_coreWorkflowVersions(ctx, field)
+				})
+		case "coreWorkflowVersion":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, false,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_coreWorkflowVersion(ctx, field)
+				})
+		case "coreWorkflowVersionsByCoreWorkflowId":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_coreWorkflowVersionsByCoreWorkflowId(ctx, field)
+				})
+		case "coreWorkflowVersionById":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, false,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_coreWorkflowVersionById(ctx, field)
+				})
+		case "workflowStepConnectedAccountHandle":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, false,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_workflowStepConnectedAccountHandle(ctx, field)
 				})
 		case "__type":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
@@ -5344,9 +7834,72 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 	return out
 }
 
+var testHttpRequestImplementors = []string{"TestHttpRequest"}
+
+func (ec *executionContext) _TestHttpRequest(ctx context.Context, sel ast.SelectionSet, obj *HTTPTestResult) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, testHttpRequestImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("TestHttpRequest")
+		case "success":
+			out.Values[i] = ec._TestHttpRequest_success(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "message":
+			out.Values[i] = ec._TestHttpRequest_message(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "result":
+			out.Values[i] = ec._TestHttpRequest_result(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "error":
+			out.Values[i] = ec._TestHttpRequest_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "status":
+			out.Values[i] = ec._TestHttpRequest_status(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "statusText":
+			out.Values[i] = ec._TestHttpRequest_statusText(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "headers":
+			out.Values[i] = ec._TestHttpRequest_headers(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
 var workflowActionImplementors = []string{"WorkflowAction"}
 
-func (ec *executionContext) _WorkflowAction(ctx context.Context, sel ast.SelectionSet, obj *ActionDTO) graphql.Marshaler {
+func (ec *executionContext) _WorkflowAction(ctx context.Context, sel ast.SelectionSet, obj *WorkflowAction) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, workflowActionImplementors)
 
 	out := graphql.NewFieldSet(fields)
@@ -5407,9 +7960,47 @@ func (ec *executionContext) _WorkflowAction(ctx context.Context, sel ast.Selecti
 	return out
 }
 
+var workflowRunImplementors = []string{"WorkflowRun"}
+
+func (ec *executionContext) _WorkflowRun(ctx context.Context, sel ast.SelectionSet, obj *store.Run) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, workflowRunImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("WorkflowRun")
+		case "id":
+			out.Values[i] = ec._WorkflowRun_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "status":
+			out.Values[i] = ec._WorkflowRun_status(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
 var workflowStepPositionImplementors = []string{"WorkflowStepPosition"}
 
-func (ec *executionContext) _WorkflowStepPosition(ctx context.Context, sel ast.SelectionSet, obj *PositionDTO) graphql.Marshaler {
+func (ec *executionContext) _WorkflowStepPosition(ctx context.Context, sel ast.SelectionSet, obj *StepPosition) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, workflowStepPositionImplementors)
 
 	out := graphql.NewFieldSet(fields)
@@ -5892,7 +8483,19 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) marshalNCoreWorkflowDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋworkflowgqlᚐWorkflowDTO(ctx context.Context, sel ast.SelectionSet, v *WorkflowDTO) graphql.Marshaler {
+func (ec *executionContext) marshalNCoreWorkflowConnection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreWorkflowConnection(ctx context.Context, sel ast.SelectionSet, v *store.CoreWorkflowConnection) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "CoreWorkflowConnection!")
+		return graphql.Null
+	}
+	return ec._CoreWorkflowConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNCoreWorkflowDTO2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreWorkflow(ctx context.Context, sel ast.SelectionSet, v store.CoreWorkflow) graphql.Marshaler {
+	return ec._CoreWorkflowDTO(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNCoreWorkflowDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreWorkflow(ctx context.Context, sel ast.SelectionSet, v *store.CoreWorkflow) graphql.Marshaler {
 	if v == nil {
 		graphql.AddInvalidNullError(ctx, "CoreWorkflowDTO!")
 		return graphql.Null
@@ -5900,39 +8503,15 @@ func (ec *executionContext) marshalNCoreWorkflowDTO2ᚖgithubᚗcomᚋtwentyhq�
 	return ec._CoreWorkflowDTO(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNCoreWorkflowStatus2string(ctx context.Context, v any) (string, error) {
-	res, err := graphql.UnmarshalString(v)
-	return res, graphql.ErrorOnPath(ctx, err)
+func (ec *executionContext) marshalNCoreWorkflowEdge2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreWorkflowEdge(ctx context.Context, sel ast.SelectionSet, v store.CoreWorkflowEdge) graphql.Marshaler {
+	return ec._CoreWorkflowEdge(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNCoreWorkflowStatus2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
-	_ = sel
-	res := graphql.MarshalString(v)
-	if res == graphql.Null {
-		graphql.AddInvalidNullFromMarshaler(ctx, "CoreWorkflowStatus!")
-	}
-	return res
-}
-
-func (ec *executionContext) unmarshalNCoreWorkflowStatus2ᚕstringᚄ(ctx context.Context, v any) ([]string, error) {
-	vSlice := graphql.CoerceList(v)
-	var err error
-	res := make([]string, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNCoreWorkflowStatus2string(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
-}
-
-func (ec *executionContext) marshalNCoreWorkflowStatus2ᚕstringᚄ(ctx context.Context, sel ast.SelectionSet, v []string) graphql.Marshaler {
+func (ec *executionContext) marshalNCoreWorkflowEdge2ᚕgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreWorkflowEdgeᚄ(ctx context.Context, sel ast.SelectionSet, v []store.CoreWorkflowEdge) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNCoreWorkflowStatus2string(ctx, sel, v[i])
+		return ec.marshalNCoreWorkflowEdge2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreWorkflowEdge(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -5944,7 +8523,108 @@ func (ec *executionContext) marshalNCoreWorkflowStatus2ᚕstringᚄ(ctx context.
 	return ret
 }
 
-func (ec *executionContext) marshalNCoreWorkflowVersionDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋworkflowgqlᚐVersionDTO(ctx context.Context, sel ast.SelectionSet, v *VersionDTO) graphql.Marshaler {
+func (ec *executionContext) unmarshalNCoreWorkflowFilterFieldKey2string(ctx context.Context, v any) (string, error) {
+	res, err := graphql.UnmarshalString(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNCoreWorkflowFilterFieldKey2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
+	_ = sel
+	res := graphql.MarshalString(v)
+	if res == graphql.Null {
+		graphql.AddInvalidNullFromMarshaler(ctx, "CoreWorkflowFilterFieldKey!")
+	}
+	return res
+}
+
+func (ec *executionContext) unmarshalNCoreWorkflowFilterLogicalOperator2string(ctx context.Context, v any) (string, error) {
+	res, err := graphql.UnmarshalString(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNCoreWorkflowFilterLogicalOperator2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
+	_ = sel
+	res := graphql.MarshalString(v)
+	if res == graphql.Null {
+		graphql.AddInvalidNullFromMarshaler(ctx, "CoreWorkflowFilterLogicalOperator!")
+	}
+	return res
+}
+
+func (ec *executionContext) unmarshalNCoreWorkflowFilterOperand2string(ctx context.Context, v any) (string, error) {
+	res, err := graphql.UnmarshalString(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNCoreWorkflowFilterOperand2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
+	_ = sel
+	res := graphql.MarshalString(v)
+	if res == graphql.Null {
+		graphql.AddInvalidNullFromMarshaler(ctx, "CoreWorkflowFilterOperand!")
+	}
+	return res
+}
+
+func (ec *executionContext) unmarshalNCoreWorkflowFilterRuleInput2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreWorkflowFilterRule(ctx context.Context, v any) (store.CoreWorkflowFilterRule, error) {
+	res, err := ec.unmarshalInputCoreWorkflowFilterRuleInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCoreWorkflowFilterRuleInput2ᚕgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreWorkflowFilterRuleᚄ(ctx context.Context, v any) ([]store.CoreWorkflowFilterRule, error) {
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]store.CoreWorkflowFilterRule, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNCoreWorkflowFilterRuleInput2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreWorkflowFilterRule(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalNCoreWorkflowPageInfo2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreWorkflowPageInfo(ctx context.Context, sel ast.SelectionSet, v store.CoreWorkflowPageInfo) graphql.Marshaler {
+	return ec._CoreWorkflowPageInfo(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNCoreWorkflowVersionDTO2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreVersion(ctx context.Context, sel ast.SelectionSet, v store.CoreVersion) graphql.Marshaler {
+	return ec._CoreWorkflowVersionDTO(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNCoreWorkflowVersionDTO2ᚕgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreVersionᚄ(ctx context.Context, sel ast.SelectionSet, v []store.CoreVersion) graphql.Marshaler {
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNCoreWorkflowVersionDTO2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreVersion(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNCoreWorkflowVersionDTO2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreVersionᚄ(ctx context.Context, sel ast.SelectionSet, v []*store.CoreVersion) graphql.Marshaler {
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNCoreWorkflowVersionDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreVersion(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNCoreWorkflowVersionDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreVersion(ctx context.Context, sel ast.SelectionSet, v *store.CoreVersion) graphql.Marshaler {
 	if v == nil {
 		graphql.AddInvalidNullError(ctx, "CoreWorkflowVersionDTO!")
 		return graphql.Null
@@ -5964,6 +8644,35 @@ func (ec *executionContext) marshalNCoreWorkflowVersionStatus2string(ctx context
 		graphql.AddInvalidNullFromMarshaler(ctx, "CoreWorkflowVersionStatus!")
 	}
 	return res
+}
+
+func (ec *executionContext) marshalNCoreWorkflowWithCurrentVersionDTO2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreWorkflowWithVersionsᚄ(ctx context.Context, sel ast.SelectionSet, v []*store.CoreWorkflowWithVersions) graphql.Marshaler {
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNCoreWorkflowWithCurrentVersionDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreWorkflowWithVersions(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNCoreWorkflowWithCurrentVersionDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreWorkflowWithVersions(ctx context.Context, sel ast.SelectionSet, v *store.CoreWorkflowWithVersions) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "CoreWorkflowWithCurrentVersionDTO!")
+		return graphql.Null
+	}
+	return ec._CoreWorkflowWithCurrentVersionDTO(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNCoreWorkflowsWithCurrentVersionsInput2map(ctx context.Context, v any) (map[string]any, error) {
+	res, err := ec.unmarshalInputCoreWorkflowsWithCurrentVersionsInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalNCreateCoreWorkflowInput2map(ctx context.Context, v any) (map[string]any, error) {
@@ -6054,6 +8763,20 @@ func (ec *executionContext) marshalNFloat2float64(ctx context.Context, sel ast.S
 	return graphql.WrapContextMarshaler(ctx, res)
 }
 
+func (ec *executionContext) unmarshalNInt2int(ctx context.Context, v any) (int, error) {
+	res, err := graphql.UnmarshalInt(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.SelectionSet, v int) graphql.Marshaler {
+	_ = sel
+	res := graphql.MarshalInt(v)
+	if res == graphql.Null {
+		graphql.AddInvalidNullFromMarshaler(ctx, "Int!")
+	}
+	return res
+}
+
 func (ec *executionContext) unmarshalNJSON2interface(ctx context.Context, v any) (any, error) {
 	res, err := graphql.UnmarshalAny(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -6084,6 +8807,53 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 		graphql.AddInvalidNullFromMarshaler(ctx, "String!")
 	}
 	return res
+}
+
+func (ec *executionContext) unmarshalNString2ᚕstringᚄ(ctx context.Context, v any) ([]string, error) {
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]string, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNString2string(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalNString2ᚕstringᚄ(ctx context.Context, sel ast.SelectionSet, v []string) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalNString2string(ctx, sel, v[i])
+	}
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalNSubmitFormStepInput2map(ctx context.Context, v any) (map[string]any, error) {
+	res, err := ec.unmarshalInputSubmitFormStepInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNTestHttpRequest2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋworkflowgqlᚐHTTPTestResult(ctx context.Context, sel ast.SelectionSet, v *HTTPTestResult) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "TestHttpRequest!")
+		return graphql.Null
+	}
+	return ec._TestHttpRequest(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNTestHttpRequestInput2map(ctx context.Context, v any) (map[string]any, error) {
+	res, err := ec.unmarshalInputTestHttpRequestInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalNUUID2string(ctx context.Context, v any) (string, error) {
@@ -6154,12 +8924,25 @@ func (ec *executionContext) unmarshalNUpdateCoreWorkflowVisibilityInput2map(ctx 
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNWorkflowAction2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋworkflowgqlᚐActionDTO(ctx context.Context, sel ast.SelectionSet, v *ActionDTO) graphql.Marshaler {
+func (ec *executionContext) unmarshalNUpdateWorkflowRunStepInput2map(ctx context.Context, v any) (map[string]any, error) {
+	res, err := ec.unmarshalInputUpdateWorkflowRunStepInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNWorkflowAction2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋworkflowgqlᚐWorkflowAction(ctx context.Context, sel ast.SelectionSet, v *WorkflowAction) graphql.Marshaler {
 	if v == nil {
 		graphql.AddInvalidNullError(ctx, "WorkflowAction!")
 		return graphql.Null
 	}
 	return ec._WorkflowAction(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNWorkflowRun2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐRun(ctx context.Context, sel ast.SelectionSet, v *store.Run) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "WorkflowRun!")
+		return graphql.Null
+	}
+	return ec._WorkflowRun(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNWorkflowStepPositionInput2map(ctx context.Context, v any) (map[string]any, error) {
@@ -6388,11 +9171,104 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return res
 }
 
-func (ec *executionContext) marshalOCoreWorkflowDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋworkflowgqlᚐWorkflowDTO(ctx context.Context, sel ast.SelectionSet, v *WorkflowDTO) graphql.Marshaler {
+func (ec *executionContext) marshalOConnectedAccountHandleDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐConnectedAccount(ctx context.Context, sel ast.SelectionSet, v *store.ConnectedAccount) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._ConnectedAccountHandleDTO(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOCoreWorkflowDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreWorkflow(ctx context.Context, sel ast.SelectionSet, v *store.CoreWorkflow) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._CoreWorkflowDTO(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOCoreWorkflowFilterInput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreWorkflowFilter(ctx context.Context, v any) (*store.CoreWorkflowFilter, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputCoreWorkflowFilterInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOCoreWorkflowOrderByDirection2ᚖstring(ctx context.Context, v any) (*string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalString(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOCoreWorkflowOrderByDirection2ᚖstring(ctx context.Context, sel ast.SelectionSet, v *string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	_ = sel
+	_ = ctx
+	res := graphql.MarshalString(*v)
+	return res
+}
+
+func (ec *executionContext) unmarshalOCoreWorkflowOrderByField2ᚖstring(ctx context.Context, v any) (*string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalString(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOCoreWorkflowOrderByField2ᚖstring(ctx context.Context, sel ast.SelectionSet, v *string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	_ = sel
+	_ = ctx
+	res := graphql.MarshalString(*v)
+	return res
+}
+
+func (ec *executionContext) marshalOCoreWorkflowVersionDTO2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋstoreᚐCoreVersion(ctx context.Context, sel ast.SelectionSet, v *store.CoreVersion) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._CoreWorkflowVersionDTO(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOFloat2ᚖfloat64(ctx context.Context, v any) (*float64, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalFloatContext(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOFloat2ᚖfloat64(ctx context.Context, sel ast.SelectionSet, v *float64) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	_ = sel
+	res := graphql.MarshalFloatContext(*v)
+	return graphql.WrapContextMarshaler(ctx, res)
+}
+
+func (ec *executionContext) unmarshalOInt2ᚖint(ctx context.Context, v any) (*int, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalInt(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.SelectionSet, v *int) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	_ = sel
+	_ = ctx
+	res := graphql.MarshalInt(*v)
+	return res
 }
 
 func (ec *executionContext) unmarshalOJSON2interface(ctx context.Context, v any) (any, error) {
@@ -6411,6 +9287,41 @@ func (ec *executionContext) marshalOJSON2interface(ctx context.Context, sel ast.
 	_ = ctx
 	res := graphql.MarshalAny(v)
 	return res
+}
+
+func (ec *executionContext) unmarshalOString2ᚕstringᚄ(ctx context.Context, v any) ([]string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]string, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNString2string(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOString2ᚕstringᚄ(ctx context.Context, sel ast.SelectionSet, v []string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalNString2string(ctx, sel, v[i])
+	}
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
 }
 
 func (ec *executionContext) unmarshalOString2ᚖstring(ctx context.Context, v any) (*string, error) {
@@ -6484,7 +9395,7 @@ func (ec *executionContext) marshalOUUID2ᚖstring(ctx context.Context, sel ast.
 	return res
 }
 
-func (ec *executionContext) marshalOWorkflowStepPosition2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋworkflowgqlᚐPositionDTO(ctx context.Context, sel ast.SelectionSet, v *PositionDTO) graphql.Marshaler {
+func (ec *executionContext) marshalOWorkflowStepPosition2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkflowᚋworkflowgqlᚐStepPosition(ctx context.Context, sel ast.SelectionSet, v *StepPosition) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}

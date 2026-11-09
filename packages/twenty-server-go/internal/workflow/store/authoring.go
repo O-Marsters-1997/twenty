@@ -25,12 +25,11 @@ const (
 )
 
 var (
-	ErrForbidden    = errors.New("workflow action forbidden")
-	ErrInvalidInput = errors.New("invalid workflow input")
-	ErrConflict     = errors.New("workflow version changed")
+	ErrActionForbidden = errors.New("workflow action forbidden")
+	ErrConflict        = errors.New("workflow version changed")
 )
 
-type CoreWorkflow struct {
+type AuthoredWorkflow struct {
 	ID                         string
 	Name                       *string
 	Statuses                   []string
@@ -45,7 +44,7 @@ type CoreWorkflow struct {
 	UpdatedAt                  time.Time
 }
 
-type CoreVersion struct {
+type AuthoredVersion struct {
 	ID                 string
 	CoreWorkflowID     string
 	Label              string
@@ -69,7 +68,7 @@ type querier interface {
 	Exec(ctx context.Context, sql string, args ...any) (pgconn.CommandTag, error)
 }
 
-func forbidden(message string) error { return fmt.Errorf("%w: %s", ErrForbidden, message) }
+func forbidden(message string) error { return fmt.Errorf("%w: %s", ErrActionForbidden, message) }
 
 func optionalJSON(raw json.RawMessage, wrapInArray bool) any {
 	if len(raw) == 0 || string(raw) == "null" {
@@ -81,7 +80,7 @@ func optionalJSON(raw json.RawMessage, wrapInArray bool) any {
 	return string(raw)
 }
 
-const workflowColumns = `w.id::text, w.name, coalesce(s.statuses, '{}'), w."lastPublishedVersionId"::text,
+const authoringColumns = `w.id::text, w.name, coalesce(s.statuses, '{}'), w."lastPublishedVersionId"::text,
 	w."lastPublishedCoreWorkflowVersionId"::text, w."applicationId"::text, w."workspaceWorkflowId"::text, w."isSystem", w.visibility,
 	(w."createdByUserWorkspaceId" IS NULL OR w."createdByUserWorkspaceId"::text = $2), w."createdAt", w."updatedAt"`
 
@@ -92,23 +91,23 @@ const workflowFrom = `FROM core.workflow w LEFT JOIN LATERAL (
 		CASE WHEN NOT bool_or(v.status = 'ACTIVE') AND bool_or(v.status = 'DEACTIVATED') THEN 'DEACTIVATED' END
 	], NULL) AS statuses FROM core."workflowVersion" v WHERE v."coreWorkflowId" = w.id) s ON true`
 
-func scanWorkflow(row pgx.Row) (CoreWorkflow, error) {
-	var w CoreWorkflow
+func scanWorkflow(row pgx.Row) (AuthoredWorkflow, error) {
+	var w AuthoredWorkflow
 	err := row.Scan(&w.ID, &w.Name, &w.Statuses, &w.LastPublishedVersionID, &w.LastPublishedCoreVersionID, &w.ApplicationID,
 		&w.WorkspaceWorkflowID, &w.IsSystem, &w.Visibility, &w.CanChangeVisibility, &w.CreatedAt, &w.UpdatedAt)
 	return w, err
 }
 
-func workflowByID(ctx context.Context, q querier, id, userWorkspaceID string) (CoreWorkflow, error) {
-	w, err := scanWorkflow(q.QueryRow(ctx, `SELECT `+workflowColumns+` `+workflowFrom+` WHERE w."workspaceId" = $1 AND w.id = $3::uuid`,
+func workflowByID(ctx context.Context, q querier, id, userWorkspaceID string) (AuthoredWorkflow, error) {
+	w, err := scanWorkflow(q.QueryRow(ctx, `SELECT `+authoringColumns+` `+workflowFrom+` WHERE w."workspaceId" = $1 AND w.id = $3::uuid`,
 		workspace.PinnedWorkspaceID, userWorkspaceID, id))
 	if err != nil {
-		return CoreWorkflow{}, fmt.Errorf("select core workflow: %w", notFound(err))
+		return AuthoredWorkflow{}, fmt.Errorf("select core workflow: %w", notFound(err))
 	}
 	return w, nil
 }
 
-func (s *Store) CoreWorkflow(ctx context.Context, id, userWorkspaceID string) (*CoreWorkflow, error) {
+func (s *Store) AuthoredWorkflow(ctx context.Context, id, userWorkspaceID string) (*AuthoredWorkflow, error) {
 	w, err := workflowByID(ctx, s.pool, id, userWorkspaceID)
 	if errors.Is(err, ErrNotFound) {
 		return nil, nil
@@ -122,7 +121,7 @@ func (s *Store) CoreWorkflow(ctx context.Context, id, userWorkspaceID string) (*
 	return &w, nil
 }
 
-type workflowAccess struct {
+type authoringAccess struct {
 	visibility string
 	owner      *string
 	managed    bool
@@ -137,8 +136,8 @@ func assertAccessible(ctx context.Context, q querier, ids []string, userWorkspac
 	if err != nil {
 		return fmt.Errorf("select workflow access: %w", err)
 	}
-	accessList, err := pgx.CollectRows(rows, func(row pgx.CollectableRow) (workflowAccess, error) {
-		var a workflowAccess
+	accessList, err := pgx.CollectRows(rows, func(row pgx.CollectableRow) (authoringAccess, error) {
+		var a authoringAccess
 		err := row.Scan(&a.visibility, &a.owner, &a.managed)
 		return a, err
 	})
@@ -166,7 +165,7 @@ func (s *Store) AssertAccessible(ctx context.Context, userWorkspaceID string, wo
 	return assertAccessible(ctx, s.pool, workflowIDs, userWorkspaceID, false)
 }
 
-func (s *Store) CreateWorkflow(ctx context.Context, name *string, visibility, userWorkspaceID string) (CoreWorkflow, error) {
+func (s *Store) CreateWorkflow(ctx context.Context, name *string, visibility, userWorkspaceID string) (AuthoredWorkflow, error) {
 	var id string
 	err := pgx.BeginFunc(ctx, s.pool, func(tx pgx.Tx) error {
 		err := tx.QueryRow(ctx, `INSERT INTO core.workflow (name, "universalIdentifier", "applicationId", "workspaceId", visibility, "createdByUserWorkspaceId")
@@ -180,7 +179,7 @@ func (s *Store) CreateWorkflow(ctx context.Context, name *string, visibility, us
 		return err
 	})
 	if err != nil {
-		return CoreWorkflow{}, err
+		return AuthoredWorkflow{}, err
 	}
 	return workflowByID(ctx, s.pool, id, userWorkspaceID)
 }
@@ -262,25 +261,25 @@ const versionSelectSQL = `SELECT v.id::text, v."coreWorkflowId"::text, 'v' || ro
 const lockedVersionSQL = `SELECT v.id::text, v."coreWorkflowId"::text, '', v.status::text, v."workspaceWorkflowVersionId"::text, null::text, v.triggers->0, v.steps, v."createdAt", v."updatedAt"
 	FROM core."workflowVersion" v WHERE v."workspaceId" = $1 AND v.id = $2::uuid FOR UPDATE`
 
-func scanVersionRow(row pgx.Row) (CoreVersion, error) {
-	var v CoreVersion
+func scanVersionRow(row pgx.Row) (AuthoredVersion, error) {
+	var v AuthoredVersion
 	err := row.Scan(&v.ID, &v.CoreWorkflowID, &v.Label, &v.Status, &v.WorkspaceVersionID, &v.WorkspaceWorkflow, &v.Trigger, &v.Steps, &v.CreatedAt, &v.UpdatedAt)
 	return v, err
 }
 
-func versionByID(ctx context.Context, q querier, id string, lock bool) (CoreVersion, error) {
+func versionByID(ctx context.Context, q querier, id string, lock bool) (AuthoredVersion, error) {
 	query := `SELECT * FROM (` + versionSelectSQL + `) labelled WHERE id = $2`
 	if lock {
 		query = lockedVersionSQL
 	}
 	v, err := scanVersionRow(q.QueryRow(ctx, query, workspace.PinnedWorkspaceID, id))
 	if err != nil {
-		return CoreVersion{}, fmt.Errorf("select core version: %w", notFound(err))
+		return AuthoredVersion{}, fmt.Errorf("select core version: %w", notFound(err))
 	}
 	return v, nil
 }
 
-func (s *Store) CoreVersion(ctx context.Context, id string) (CoreVersion, error) {
+func (s *Store) AuthoredVersion(ctx context.Context, id string) (AuthoredVersion, error) {
 	return versionByID(ctx, s.pool, id, false)
 }
 
@@ -322,7 +321,7 @@ func (s *Store) FirstObjectName(ctx context.Context) (string, error) {
 	return name, nil
 }
 
-func (s *Store) WriteContent(ctx context.Context, id string, expected CoreVersion, trigger, steps json.RawMessage) error {
+func (s *Store) WriteContent(ctx context.Context, id string, expected AuthoredVersion, trigger, steps json.RawMessage) error {
 	return pgx.BeginFunc(ctx, s.pool, func(tx pgx.Tx) error {
 		current, err := versionByID(ctx, tx, id, true)
 		if err != nil {

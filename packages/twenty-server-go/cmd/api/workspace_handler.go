@@ -21,17 +21,17 @@ func workspaceHandler(records, chat, workflows http.Handler) http.Handler {
 		var request struct {
 			OperationName string `json:"operationName"`
 		}
-		if json.Unmarshal(body, &request) != nil {
-			records.ServeHTTP(w, r)
-			return
+		if json.Unmarshal(body, &request) == nil {
+			switch {
+			case request.OperationName == frontdoor.AnswerToolCallOperation:
+				chat.ServeHTTP(w, r)
+				return
+			case slices.Contains(frontdoor.WorkflowOperations, request.OperationName),
+				slices.Contains(frontdoor.WorkflowAuthoringOperations, request.OperationName):
+				workflows.ServeHTTP(w, r)
+				return
+			}
 		}
-		switch {
-		case request.OperationName == frontdoor.AnswerToolCallOperation:
-			chat.ServeHTTP(w, r)
-		case slices.Contains(frontdoor.WorkflowAuthoringOperations, request.OperationName):
-			workflows.ServeHTTP(w, r)
-		default:
-			records.ServeHTTP(w, r)
-		}
+		records.ServeHTTP(w, r)
 	})
 }
