@@ -34,7 +34,10 @@ type Gmail struct {
 	config   GmailConfig
 }
 
-var _ Mailer = (*Gmail)(nil)
+var (
+	_ Mailer      = (*Gmail)(nil)
+	_ DraftSender = (*Gmail)(nil)
+)
 
 func NewGmail(accounts Accounts, config GmailConfig) *Gmail {
 	if config.APIURL == "" {
@@ -58,6 +61,12 @@ func (g *Gmail) Send(ctx context.Context, connectedAccountID string, email Outbo
 func (g *Gmail) Draft(ctx context.Context, connectedAccountID string, email OutboundEmail) (string, error) {
 	return g.post(ctx, connectedAccountID, email, "/gmail/v1/users/me/drafts", func(raw string) any {
 		return map[string]any{"message": map[string]string{"raw": raw}}
+	})
+}
+
+func (g *Gmail) SendDraft(ctx context.Context, connectedAccountID, draftID string, email OutboundEmail) (string, error) {
+	return g.post(ctx, connectedAccountID, email, "/gmail/v1/users/me/drafts/send", func(raw string) any {
+		return map[string]any{"id": draftID, "message": map[string]string{"raw": raw}}
 	})
 }
 

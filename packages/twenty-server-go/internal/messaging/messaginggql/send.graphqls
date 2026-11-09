@@ -1,0 +1,27 @@
+input SendEmailAttachmentInput {
+  id: String!
+  name: String!
+}
+
+input SendEmailInput {
+  connectedAccountId: String!
+  fromHandle: String
+  to: String!
+  cc: String
+  bcc: String
+  subject: String!
+  body: String!
+  inReplyTo: String
+  draftMessageId: String
+  files: [SendEmailAttachmentInput!]
+}
+
+type SendEmailOutput {
+  success: Boolean!
+  error: String
+  messageThreadId: String
+}
+
+type Mutation {
+  sendEmail(input: SendEmailInput!): SendEmailOutput!
+}
