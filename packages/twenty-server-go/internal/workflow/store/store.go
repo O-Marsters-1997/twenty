@@ -140,8 +140,36 @@ func scanVersion(row pgx.CollectableRow) (Version, error) {
 	return v, err
 }
 
+func (s *Store) DatabaseEventVersions(ctx context.Context, eventName string) ([]Version, error) {
+	rows, err := s.pool.Query(ctx, `SELECT v.id::text, v."workflowId"::text, v.name, v.status::text, v.trigger, v.steps
+		FROM `+table("workflow")+` w
+		JOIN `+table("workflowVersion")+` v ON v.id::text = w."lastPublishedVersionId"::text
+		WHERE w."deletedAt" IS NULL AND v."deletedAt" IS NULL
+			AND 'ACTIVE' = ANY(w.statuses::text[])
+			AND v.trigger->>'type' = 'DATABASE_EVENT' AND v.trigger->'settings'->>'eventName' = $1
+		ORDER BY v."createdAt", v.id`, eventName)
+	if err != nil {
+		return nil, fmt.Errorf("select database event versions: %w", err)
+	}
+	versions, err := pgx.CollectRows(rows, scanVersion)
+	if err != nil {
+		return nil, fmt.Errorf("scan database event versions: %w", err)
+	}
+	return versions, nil
+}
+
 func (s *Store) CreateRun(ctx context.Context, run NewRun) (Run, error) {
-	rows, err := s.pool.Query(ctx, `INSERT INTO `+table("workflowRun")+` ("workflowId", "workflowVersionId", name, state)
+	return createRun(ctx, s.pool, run)
+}
+
+func (s *Store) CreateRunTx(ctx context.Context, tx pgx.Tx, run NewRun) (Run, error) {
+	return createRun(ctx, tx, run)
+}
+
+func createRun(ctx context.Context, db interface {
+	Query(context.Context, string, ...any) (pgx.Rows, error)
+}, run NewRun) (Run, error) {
+	rows, err := db.Query(ctx, `INSERT INTO `+table("workflowRun")+` ("workflowId", "workflowVersionId", name, state)
 		VALUES ($1, $2, $3, $4) RETURNING `+runColumns, run.WorkflowID, run.VersionID, nullable(run.Name), run.State)
 	if err != nil {
 		return Run{}, fmt.Errorf("insert run: %w", err)

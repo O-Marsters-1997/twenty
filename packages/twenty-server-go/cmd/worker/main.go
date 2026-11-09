@@ -51,7 +51,9 @@ func run() error {
 		return fmt.Errorf("build action registry: %w", err)
 	}
 	workers := river.NewWorkers()
-	registerWorkflowWorkers(workers, &executor{store: store.New(pool), registry: registry})
+	workflows := store.New(pool)
+	registerWorkflowWorkers(workers, &executor{store: workflows, registry: registry})
+	registerRecordEventWorker(workers, pool, workflows)
 
 	client, err := newClient(pool, workers, logger)
 	if err != nil {
