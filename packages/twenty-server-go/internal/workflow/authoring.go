@@ -247,18 +247,7 @@ func (a *Authoring) DuplicateWorkflow(ctx context.Context, userWorkspaceID, work
 	if err != nil {
 		return store.CoreWorkflow{}, err
 	}
-	draftID, err := a.Store.DraftVersionID(ctx, duplicated.ID)
-	if err == nil {
-		var initial store.CoreVersion
-		initial, err = a.Store.CoreVersion(ctx, draftID)
-		if err == nil {
-			triggerRaw, stepsRaw, encodeErr := encodeContent(clonedTrigger, clonedSteps)
-			if err = encodeErr; err == nil {
-				err = a.Store.WriteContent(ctx, draftID, initial, triggerRaw, stepsRaw)
-			}
-		}
-	}
-	if err != nil {
+	if err := a.writeInitialDraft(ctx, duplicated.ID, clonedTrigger, clonedSteps); err != nil {
 		_, deleteErr := a.Store.DeleteWorkflows(ctx, []string{duplicated.ID})
 		return store.CoreWorkflow{}, errors.Join(err, deleteErr)
 	}
@@ -267,6 +256,22 @@ func (a *Authoring) DuplicateWorkflow(ctx context.Context, userWorkspaceID, work
 		return store.CoreWorkflow{}, fmt.Errorf("%w: Workflow duplication failed, please retry", store.ErrForbidden)
 	}
 	return *result, nil
+}
+
+func (a *Authoring) writeInitialDraft(ctx context.Context, workflowID string, trigger Step, steps []Step) error {
+	draftID, err := a.Store.DraftVersionID(ctx, workflowID)
+	if err != nil {
+		return err
+	}
+	initial, err := a.Store.CoreVersion(ctx, draftID)
+	if err != nil {
+		return err
+	}
+	triggerRaw, stepsRaw, err := encodeContent(trigger, steps)
+	if err != nil {
+		return err
+	}
+	return a.Store.WriteContent(ctx, draftID, initial, triggerRaw, stepsRaw)
 }
 
 func (a *Authoring) cloneContent(ctx context.Context, trigger Step, steps []Step) (Step, []Step, error) {
