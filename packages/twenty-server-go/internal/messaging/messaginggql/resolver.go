@@ -9,6 +9,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/riverqueue/river"
+
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging/store"
@@ -23,7 +25,11 @@ type Resolver struct {
 	Banners  *store.ReconnectBanners
 	Mailer   Mailer
 	Sent     SentMessages
-	Logger   *slog.Logger
+
+	Campaigns *store.Campaigns
+	Renderer  messaging.Renderer
+	Queue     func(ctx context.Context, args river.JobArgs) error
+	Logger    *slog.Logger
 }
 
 func caller(ctx context.Context) (string, error) {
@@ -328,6 +334,102 @@ func (r *mutationResolver) send(ctx context.Context, input SendEmailInput, handl
 		return nil, nil
 	}
 	return &threadID, nil
+}
+
+var uuidPattern = regexp.MustCompile(`^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$`)
+
+var errScheduledSend = errors.New("scheduled campaign sends are not supported")
+
+func requireUUID(name, value string) error {
+	if !uuidPattern.MatchString(value) {
+		return fmt.Errorf("%s must be a UUID: %w", name, store.ErrInvalidInput)
+	}
+	return nil
+}
+
+func (r *mutationResolver) SendMessageCampaign(ctx context.Context, input SendMessageCampaignInput) (*SendMessageCampaignOutput, error) {
+	if _, err := caller(ctx); err != nil {
+		return nil, err
+	}
+	if err := requireUUID("campaignId", input.CampaignID); err != nil {
+		return nil, err
+	}
+	if input.ScheduledAt != nil {
+		return nil, fmt.Errorf("%w: %w", errScheduledSend, store.ErrInvalidInput)
+	}
+	send, err := r.Campaigns.PrepareSend(ctx, input.CampaignID)
+	if err != nil {
+		return nil, err
+	}
+	recipients, audience, err := r.Campaigns.Audience(ctx, send.ListID, send.TopicID)
+	if err != nil {
+		return nil, err
+	}
+	claimed, err := r.Campaigns.ClaimSending(ctx, input.CampaignID, send.Status)
+	if err != nil {
+		return nil, err
+	}
+	if !claimed {
+		return nil, store.ErrCampaignNotSendable
+	}
+	if err := r.Queue(ctx, messaging.SendCampaignArgs{CampaignID: input.CampaignID}); err != nil {
+		return nil, errors.Join(fmt.Errorf("enqueue campaign send: %w", err), r.Campaigns.ReleaseSending(ctx, input.CampaignID, send.Status))
+	}
+	return &SendMessageCampaignOutput{CampaignID: input.CampaignID, QueuedCount: len(recipients), Audience: &audience}, nil
+}
+
+func (r *mutationResolver) CancelMessageCampaign(ctx context.Context, input CancelMessageCampaignInput) (*CancelMessageCampaignOutput, error) {
+	if _, err := caller(ctx); err != nil {
+		return nil, err
+	}
+	if err := requireUUID("campaignId", input.CampaignID); err != nil {
+		return nil, err
+	}
+	canceled, err := r.Campaigns.Cancel(ctx, input.CampaignID)
+	if err != nil {
+		return nil, err
+	}
+	return &CancelMessageCampaignOutput{CampaignID: input.CampaignID, CanceledMessageCount: canceled}, nil
+}
+
+func (r *mutationResolver) SendMessageCampaignTest(ctx context.Context, input SendMessageCampaignTestInput) (*SendEmailViaDomainOutput, error) {
+	userWorkspaceID, err := caller(ctx)
+	if err != nil {
+		return nil, err
+	}
+	accountID, err := r.Campaigns.OwnedAccountForAddress(ctx, userWorkspaceID, input.FromAddress)
+	if err != nil {
+		return nil, err
+	}
+	html, _, err := r.Renderer.Render(ctx, input.Body, map[string]any{})
+	if err != nil {
+		return nil, fmt.Errorf("render test body: %w", errors.Join(err, store.ErrInvalidInput))
+	}
+	messageID, err := r.Mailer.Send(ctx, accountID, messaging.OutboundEmail{To: []string{input.ToAddress}, Subject: input.Subject, HTMLBody: html})
+	if err != nil {
+		return nil, fmt.Errorf("send test campaign email: %w", err)
+	}
+	return &SendEmailViaDomainOutput{MessageID: messageID}, nil
+}
+
+func (r *queryResolver) PreviewMessageCampaignAudience(ctx context.Context, input PreviewMessageCampaignAudienceInput) (*messaging.Audience, error) {
+	if _, err := caller(ctx); err != nil {
+		return nil, err
+	}
+	if err := requireUUID("listId", input.ListID); err != nil {
+		return nil, err
+	}
+	topicID := deref(input.UnsubscribeTopicID)
+	if topicID != "" {
+		if err := requireUUID("unsubscribeTopicId", topicID); err != nil {
+			return nil, err
+		}
+	}
+	_, audience, err := r.Campaigns.Audience(ctx, input.ListID, topicID)
+	if err != nil {
+		return nil, err
+	}
+	return &audience, nil
 }
 
 func splitAddresses(list string) []string {

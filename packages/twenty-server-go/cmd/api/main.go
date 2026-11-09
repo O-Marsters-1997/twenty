@@ -23,6 +23,7 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/config"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/frontdoor"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging/messaginggql"
 	messagingstore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging/store"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/metadatagql"
@@ -110,7 +111,12 @@ func run() error {
 		skillgql.NewHandler(ai.NewSkills(pool), logger),
 		metagql.NewHandler(metadatastore.NewViews(pool), logger),
 		agentgql.NewHandler(aistore.NewAgents(pool), logger),
-		messaginggql.NewHandler(&messaginggql.Resolver{Channels: messagingstore.NewChannels(pool, os.Getenv("INBOUND_EMAIL_DOMAIN"))}, logger),
+		messaginggql.NewHandler(&messaginggql.Resolver{
+			Channels:  messagingstore.NewChannels(pool, os.Getenv("INBOUND_EMAIL_DOMAIN")),
+			Campaigns: messagingstore.NewCampaigns(pool),
+			Renderer:  messaging.GoRenderer{},
+			Queue:     queue.Enqueue,
+		}, logger),
 		agentgql.Operations,
 	))
 

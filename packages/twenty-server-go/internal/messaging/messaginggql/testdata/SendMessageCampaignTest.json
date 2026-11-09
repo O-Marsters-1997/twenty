@@ -1,0 +1,9 @@
+{
+  "name": "SendMessageCampaignTest",
+  "operation": "SendMessageCampaignTest",
+  "fixture": "owned account whose address is the from address",
+  "endpoint": "/metadata",
+  "query": "mutation SendMessageCampaignTest($input: SendMessageCampaignTestInput!) { sendMessageCampaignTest(input: $input) { messageId } }",
+  "variables": {"input": {"toAddress": "ada@example.com", "subject": "Hello", "body": "{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Hi\"}]}]}", "fromAddress": "me@example.com"}},
+  "response": {"data": {"sendMessageCampaignTest": {"messageId": "<ignored>"}}}
+}

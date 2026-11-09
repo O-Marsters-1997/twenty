@@ -130,6 +130,7 @@ var MessagingOperations = []string{
 	"MyConnectedAccounts", "ApplicationConnectedAccounts", "DeleteConnectedAccount", "DisconnectConnectedAccount",
 	"MyMessageChannels", "UpdateMessageChannel", "CreateEmailGroupChannel", "UpdateEmailGroupChannel", "DeleteEmailGroupChannel",
 	"MyCalendarChannels", "UpdateCalendarChannel",
+	"SendMessageCampaign", "CancelMessageCampaign", "SendMessageCampaignTest", "PreviewMessageCampaignAudience",
 }
 
 var blockedMetadataFields = []string{

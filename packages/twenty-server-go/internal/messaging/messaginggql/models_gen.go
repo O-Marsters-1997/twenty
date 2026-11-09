@@ -2,7 +2,26 @@
 
 package messaginggql
 
+import (
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata"
+)
+
+type CancelMessageCampaignInput struct {
+	CampaignID string `json:"campaignId"`
+}
+
+type CancelMessageCampaignOutput struct {
+	CampaignID           string `json:"campaignId"`
+	CanceledMessageCount int    `json:"canceledMessageCount"`
+}
+
 type Mutation struct {
+}
+
+type PreviewMessageCampaignAudienceInput struct {
+	ListID             string  `json:"listId"`
+	UnsubscribeTopicID *string `json:"unsubscribeTopicId,omitempty"`
 }
 
 type Query struct {
@@ -30,4 +49,27 @@ type SendEmailOutput struct {
 	Success         bool    `json:"success"`
 	Error           *string `json:"error,omitempty"`
 	MessageThreadID *string `json:"messageThreadId,omitempty"`
+}
+
+type SendEmailViaDomainOutput struct {
+	MessageID string `json:"messageId"`
+}
+
+type SendMessageCampaignInput struct {
+	CampaignID  string              `json:"campaignId"`
+	ScheduledAt *metadata.Timestamp `json:"scheduledAt,omitempty"`
+}
+
+type SendMessageCampaignOutput struct {
+	CampaignID  string              `json:"campaignId"`
+	QueuedCount int                 `json:"queuedCount"`
+	Audience    *messaging.Audience `json:"audience"`
+}
+
+type SendMessageCampaignTestInput struct {
+	ToAddress          string  `json:"toAddress"`
+	UnsubscribeTopicID *string `json:"unsubscribeTopicId,omitempty"`
+	Subject            string  `json:"subject"`
+	Body               string  `json:"body"`
+	FromAddress        string  `json:"fromAddress"`
 }

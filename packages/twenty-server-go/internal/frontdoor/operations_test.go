@@ -23,6 +23,7 @@ func TestDefaultTable_RoutesMessagingOperationsToGo(t *testing.T) {
 		"MyConnectedAccounts", "ApplicationConnectedAccounts", "DeleteConnectedAccount", "DisconnectConnectedAccount",
 		"MyMessageChannels", "UpdateMessageChannel", "CreateEmailGroupChannel", "UpdateEmailGroupChannel", "DeleteEmailGroupChannel",
 		"MyCalendarChannels", "UpdateCalendarChannel",
+		"SendMessageCampaign", "CancelMessageCampaign", "SendMessageCampaignTest", "PreviewMessageCampaignAudience",
 	} {
 		if table[operation] != frontdoor.RouteGo {
 			t.Errorf("route of %s = %q, want %q", operation, table[operation], frontdoor.RouteGo)
