@@ -1,0 +1,57 @@
+type CampaignAudiencePreview {
+  totalMembers: Int!
+  withoutEmail: Int!
+  duplicateEmails: Int!
+  hardSuppressed: Int!
+  globallyUnsubscribed: Int!
+  topicUnsubscribed: Int!
+  trackingRefused: Int!
+  sendable: Int!
+}
+
+input SendMessageCampaignInput {
+  campaignId: String!
+  scheduledAt: DateTime
+}
+
+type SendMessageCampaignOutput {
+  campaignId: String!
+  queuedCount: Int!
+  audience: CampaignAudiencePreview!
+}
+
+input CancelMessageCampaignInput {
+  campaignId: String!
+}
+
+type CancelMessageCampaignOutput {
+  campaignId: String!
+  canceledMessageCount: Int!
+}
+
+input SendMessageCampaignTestInput {
+  toAddress: String!
+  unsubscribeTopicId: String
+  subject: String!
+  body: String!
+  fromAddress: String!
+}
+
+type SendEmailViaDomainOutput {
+  messageId: String!
+}
+
+input PreviewMessageCampaignAudienceInput {
+  listId: String!
+  unsubscribeTopicId: String
+}
+
+extend type Query {
+  previewMessageCampaignAudience(input: PreviewMessageCampaignAudienceInput!): CampaignAudiencePreview!
+}
+
+extend type Mutation {
+  sendMessageCampaign(input: SendMessageCampaignInput!): SendMessageCampaignOutput!
+  cancelMessageCampaign(input: CancelMessageCampaignInput!): CancelMessageCampaignOutput!
+  sendMessageCampaignTest(input: SendMessageCampaignTestInput!): SendEmailViaDomainOutput!
+}

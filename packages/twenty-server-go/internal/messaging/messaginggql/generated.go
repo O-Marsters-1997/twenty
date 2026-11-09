@@ -78,6 +78,22 @@ type ComplexityRoot struct {
 		Visibility                   func(childComplexity int) int
 	}
 
+	CampaignAudiencePreview struct {
+		DuplicateEmails      func(childComplexity int) int
+		GloballyUnsubscribed func(childComplexity int) int
+		HardSuppressed       func(childComplexity int) int
+		Sendable             func(childComplexity int) int
+		TopicUnsubscribed    func(childComplexity int) int
+		TotalMembers         func(childComplexity int) int
+		TrackingRefused      func(childComplexity int) int
+		WithoutEmail         func(childComplexity int) int
+	}
+
+	CancelMessageCampaignOutput struct {
+		CampaignID           func(childComplexity int) int
+		CanceledMessageCount func(childComplexity int) int
+	}
+
 	ConnectedAccountPublicDTO struct {
 		ApplicationID              func(childComplexity int) int
 		ArchivedAt                 func(childComplexity int) int
@@ -128,12 +144,15 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
+		CancelMessageCampaign         func(childComplexity int, input CancelMessageCampaignInput) int
 		CreateEmailGroupChannel       func(childComplexity int, input map[string]any) int
 		DeleteConnectedAccount        func(childComplexity int, id string) int
 		DeleteEmailGroupChannel       func(childComplexity int, id string) int
 		DisconnectConnectedAccount    func(childComplexity int, id string) int
 		DismissReconnectAccountBanner func(childComplexity int, connectedAccountID string) int
 		SendEmail                     func(childComplexity int, input SendEmailInput) int
+		SendMessageCampaign           func(childComplexity int, input SendMessageCampaignInput) int
+		SendMessageCampaignTest       func(childComplexity int, input SendMessageCampaignTestInput) int
 		UpdateCalendarChannel         func(childComplexity int, input map[string]any) int
 		UpdateEmailGroupChannel       func(childComplexity int, input map[string]any) int
 		UpdateMessageChannel          func(childComplexity int, input map[string]any) int
@@ -148,12 +167,23 @@ type ComplexityRoot struct {
 		MyCalendarChannels                  func(childComplexity int, connectedAccountID *string) int
 		MyConnectedAccounts                 func(childComplexity int) int
 		MyMessageChannels                   func(childComplexity int, connectedAccountID *string) int
+		PreviewMessageCampaignAudience      func(childComplexity int, input PreviewMessageCampaignAudienceInput) int
 	}
 
 	SendEmailOutput struct {
 		Error           func(childComplexity int) int
 		MessageThreadID func(childComplexity int) int
 		Success         func(childComplexity int) int
+	}
+
+	SendEmailViaDomainOutput struct {
+		MessageID func(childComplexity int) int
+	}
+
+	SendMessageCampaignOutput struct {
+		Audience    func(childComplexity int) int
+		CampaignID  func(childComplexity int) int
+		QueuedCount func(childComplexity int) int
 	}
 
 	TimelineThread struct {
@@ -204,6 +234,9 @@ type MutationResolver interface {
 	UpdateCalendarChannel(ctx context.Context, input map[string]any) (*store.CalendarChannel, error)
 	DismissReconnectAccountBanner(ctx context.Context, connectedAccountID string) (bool, error)
 	SendEmail(ctx context.Context, input SendEmailInput) (*SendEmailOutput, error)
+	SendMessageCampaign(ctx context.Context, input SendMessageCampaignInput) (*SendMessageCampaignOutput, error)
+	CancelMessageCampaign(ctx context.Context, input CancelMessageCampaignInput) (*CancelMessageCampaignOutput, error)
+	SendMessageCampaignTest(ctx context.Context, input SendMessageCampaignTestInput) (*SendEmailViaDomainOutput, error)
 }
 type QueryResolver interface {
 	MyConnectedAccounts(ctx context.Context) ([]*store.Account, error)
@@ -214,6 +247,7 @@ type QueryResolver interface {
 	GetTimelineThreadsFromPersonID(ctx context.Context, personID string, page int, pageSize int) (*messaging.TimelineThreadsWithTotal, error)
 	GetTimelineThreadsFromCompanyID(ctx context.Context, companyID string, page int, pageSize int) (*messaging.TimelineThreadsWithTotal, error)
 	GetTimelineThreadsFromOpportunityID(ctx context.Context, opportunityID string, page int, pageSize int) (*messaging.TimelineThreadsWithTotal, error)
+	PreviewMessageCampaignAudience(ctx context.Context, input PreviewMessageCampaignAudienceInput) (*messaging.Audience, error)
 }
 type TimelineThreadResolver interface {
 	LastMessageReceivedAt(ctx context.Context, obj *messaging.TimelineThread) (*metadata.Timestamp, error)
@@ -424,6 +458,68 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.CalendarChannel.Visibility(childComplexity), true
+
+	case "CampaignAudiencePreview.duplicateEmails":
+		if e.ComplexityRoot.CampaignAudiencePreview.DuplicateEmails == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CampaignAudiencePreview.DuplicateEmails(childComplexity), true
+	case "CampaignAudiencePreview.globallyUnsubscribed":
+		if e.ComplexityRoot.CampaignAudiencePreview.GloballyUnsubscribed == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CampaignAudiencePreview.GloballyUnsubscribed(childComplexity), true
+	case "CampaignAudiencePreview.hardSuppressed":
+		if e.ComplexityRoot.CampaignAudiencePreview.HardSuppressed == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CampaignAudiencePreview.HardSuppressed(childComplexity), true
+	case "CampaignAudiencePreview.sendable":
+		if e.ComplexityRoot.CampaignAudiencePreview.Sendable == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CampaignAudiencePreview.Sendable(childComplexity), true
+	case "CampaignAudiencePreview.topicUnsubscribed":
+		if e.ComplexityRoot.CampaignAudiencePreview.TopicUnsubscribed == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CampaignAudiencePreview.TopicUnsubscribed(childComplexity), true
+	case "CampaignAudiencePreview.totalMembers":
+		if e.ComplexityRoot.CampaignAudiencePreview.TotalMembers == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CampaignAudiencePreview.TotalMembers(childComplexity), true
+	case "CampaignAudiencePreview.trackingRefused":
+		if e.ComplexityRoot.CampaignAudiencePreview.TrackingRefused == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CampaignAudiencePreview.TrackingRefused(childComplexity), true
+	case "CampaignAudiencePreview.withoutEmail":
+		if e.ComplexityRoot.CampaignAudiencePreview.WithoutEmail == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CampaignAudiencePreview.WithoutEmail(childComplexity), true
+
+	case "CancelMessageCampaignOutput.campaignId":
+		if e.ComplexityRoot.CancelMessageCampaignOutput.CampaignID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CancelMessageCampaignOutput.CampaignID(childComplexity), true
+	case "CancelMessageCampaignOutput.canceledMessageCount":
+		if e.ComplexityRoot.CancelMessageCampaignOutput.CanceledMessageCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CancelMessageCampaignOutput.CanceledMessageCount(childComplexity), true
 
 	case "ConnectedAccountPublicDTO.applicationId":
 		if e.ComplexityRoot.ConnectedAccountPublicDTO.ApplicationID == nil {
@@ -668,6 +764,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.MessageChannel.Visibility(childComplexity), true
 
+	case "Mutation.cancelMessageCampaign":
+		if e.ComplexityRoot.Mutation.CancelMessageCampaign == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_cancelMessageCampaign_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CancelMessageCampaign(childComplexity, args["input"].(CancelMessageCampaignInput)), true
 	case "Mutation.createEmailGroupChannel":
 		if e.ComplexityRoot.Mutation.CreateEmailGroupChannel == nil {
 			break
@@ -734,6 +841,28 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.SendEmail(childComplexity, args["input"].(SendEmailInput)), true
+	case "Mutation.sendMessageCampaign":
+		if e.ComplexityRoot.Mutation.SendMessageCampaign == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_sendMessageCampaign_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.SendMessageCampaign(childComplexity, args["input"].(SendMessageCampaignInput)), true
+	case "Mutation.sendMessageCampaignTest":
+		if e.ComplexityRoot.Mutation.SendMessageCampaignTest == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_sendMessageCampaignTest_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.SendMessageCampaignTest(childComplexity, args["input"].(SendMessageCampaignTestInput)), true
 	case "Mutation.updateCalendarChannel":
 		if e.ComplexityRoot.Mutation.UpdateCalendarChannel == nil {
 			break
@@ -852,6 +981,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.MyMessageChannels(childComplexity, args["connectedAccountId"].(*string)), true
+	case "Query.previewMessageCampaignAudience":
+		if e.ComplexityRoot.Query.PreviewMessageCampaignAudience == nil {
+			break
+		}
+
+		args, err := ec.field_Query_previewMessageCampaignAudience_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.PreviewMessageCampaignAudience(childComplexity, args["input"].(PreviewMessageCampaignAudienceInput)), true
 
 	case "SendEmailOutput.error":
 		if e.ComplexityRoot.SendEmailOutput.Error == nil {
@@ -871,6 +1011,32 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SendEmailOutput.Success(childComplexity), true
+
+	case "SendEmailViaDomainOutput.messageId":
+		if e.ComplexityRoot.SendEmailViaDomainOutput.MessageID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SendEmailViaDomainOutput.MessageID(childComplexity), true
+
+	case "SendMessageCampaignOutput.audience":
+		if e.ComplexityRoot.SendMessageCampaignOutput.Audience == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SendMessageCampaignOutput.Audience(childComplexity), true
+	case "SendMessageCampaignOutput.campaignId":
+		if e.ComplexityRoot.SendMessageCampaignOutput.CampaignID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SendMessageCampaignOutput.CampaignID(childComplexity), true
+	case "SendMessageCampaignOutput.queuedCount":
+		if e.ComplexityRoot.SendMessageCampaignOutput.QueuedCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SendMessageCampaignOutput.QueuedCount(childComplexity), true
 
 	case "TimelineThread.firstParticipant":
 		if e.ComplexityRoot.TimelineThread.FirstParticipant == nil {
@@ -1010,9 +1176,13 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	ec := newExecutionContext(opCtx, e, make(chan graphql.DeferredResult))
 	inputUnmarshalers := func() *graphql.InputUnmarshalerIndex {
 		return graphql.NewInputUnmarshalerIndex(
+			graphql.NewInputUnmarshaler("CancelMessageCampaignInput", ec.unmarshalInputCancelMessageCampaignInput),
 			graphql.NewInputUnmarshaler("CreateEmailGroupChannelInput", ec.unmarshalInputCreateEmailGroupChannelInput),
+			graphql.NewInputUnmarshaler("PreviewMessageCampaignAudienceInput", ec.unmarshalInputPreviewMessageCampaignAudienceInput),
 			graphql.NewInputUnmarshaler("SendEmailAttachmentInput", ec.unmarshalInputSendEmailAttachmentInput),
 			graphql.NewInputUnmarshaler("SendEmailInput", ec.unmarshalInputSendEmailInput),
+			graphql.NewInputUnmarshaler("SendMessageCampaignInput", ec.unmarshalInputSendMessageCampaignInput),
+			graphql.NewInputUnmarshaler("SendMessageCampaignTestInput", ec.unmarshalInputSendMessageCampaignTestInput),
 			graphql.NewInputUnmarshaler("UpdateCalendarChannelInput", ec.unmarshalInputUpdateCalendarChannelInput),
 			graphql.NewInputUnmarshaler("UpdateCalendarChannelInputUpdates", ec.unmarshalInputUpdateCalendarChannelInputUpdates),
 			graphql.NewInputUnmarshaler("UpdateEmailGroupChannelInput", ec.unmarshalInputUpdateEmailGroupChannelInput),
@@ -1093,7 +1263,7 @@ func newExecutionContext(
 	}
 }
 
-//go:embed "timeline.graphqls" "messaging.graphqls" "send.graphqls"
+//go:embed "timeline.graphqls" "messaging.graphqls" "send.graphqls" "campaign.graphqls"
 var sourcesFS embed.FS
 
 func sourceData(filename string) string {
@@ -1108,6 +1278,7 @@ var sources = []*ast.Source{
 	{Name: "timeline.graphqls", Input: sourceData("timeline.graphqls"), BuiltIn: false},
 	{Name: "messaging.graphqls", Input: sourceData("messaging.graphqls"), BuiltIn: false},
 	{Name: "send.graphqls", Input: sourceData("send.graphqls"), BuiltIn: false},
+	{Name: "campaign.graphqls", Input: sourceData("campaign.graphqls"), BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
@@ -1187,6 +1358,38 @@ func (ec *executionContext) childFields_CalendarChannel(ctx context.Context, fie
 		return ec.fieldContext_CalendarChannel_updatedAt(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type CalendarChannel", field.Name)
+}
+
+func (ec *executionContext) childFields_CampaignAudiencePreview(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "totalMembers":
+		return ec.fieldContext_CampaignAudiencePreview_totalMembers(ctx, field)
+	case "withoutEmail":
+		return ec.fieldContext_CampaignAudiencePreview_withoutEmail(ctx, field)
+	case "duplicateEmails":
+		return ec.fieldContext_CampaignAudiencePreview_duplicateEmails(ctx, field)
+	case "hardSuppressed":
+		return ec.fieldContext_CampaignAudiencePreview_hardSuppressed(ctx, field)
+	case "globallyUnsubscribed":
+		return ec.fieldContext_CampaignAudiencePreview_globallyUnsubscribed(ctx, field)
+	case "topicUnsubscribed":
+		return ec.fieldContext_CampaignAudiencePreview_topicUnsubscribed(ctx, field)
+	case "trackingRefused":
+		return ec.fieldContext_CampaignAudiencePreview_trackingRefused(ctx, field)
+	case "sendable":
+		return ec.fieldContext_CampaignAudiencePreview_sendable(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type CampaignAudiencePreview", field.Name)
+}
+
+func (ec *executionContext) childFields_CancelMessageCampaignOutput(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "campaignId":
+		return ec.fieldContext_CancelMessageCampaignOutput_campaignId(ctx, field)
+	case "canceledMessageCount":
+		return ec.fieldContext_CancelMessageCampaignOutput_canceledMessageCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type CancelMessageCampaignOutput", field.Name)
 }
 
 func (ec *executionContext) childFields_ConnectedAccountPublicDTO(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -1297,6 +1500,26 @@ func (ec *executionContext) childFields_SendEmailOutput(ctx context.Context, fie
 		return ec.fieldContext_SendEmailOutput_messageThreadId(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type SendEmailOutput", field.Name)
+}
+
+func (ec *executionContext) childFields_SendEmailViaDomainOutput(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "messageId":
+		return ec.fieldContext_SendEmailViaDomainOutput_messageId(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type SendEmailViaDomainOutput", field.Name)
+}
+
+func (ec *executionContext) childFields_SendMessageCampaignOutput(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "campaignId":
+		return ec.fieldContext_SendMessageCampaignOutput_campaignId(ctx, field)
+	case "queuedCount":
+		return ec.fieldContext_SendMessageCampaignOutput_queuedCount(ctx, field)
+	case "audience":
+		return ec.fieldContext_SendMessageCampaignOutput_audience(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type SendMessageCampaignOutput", field.Name)
 }
 
 func (ec *executionContext) childFields_TimelineThread(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -1475,6 +1698,20 @@ func (ec *executionContext) childFields___Type(ctx context.Context, field graphq
 
 // region    ***************************** args.gotpl *****************************
 
+func (ec *executionContext) field_Mutation_cancelMessageCampaign_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
+		func(ctx context.Context, v any) (CancelMessageCampaignInput, error) {
+			return ec.unmarshalNCancelMessageCampaignInput2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋmessaginggqlᚐCancelMessageCampaignInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_createEmailGroupChannel_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -1551,6 +1788,34 @@ func (ec *executionContext) field_Mutation_sendEmail_args(ctx context.Context, r
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
 		func(ctx context.Context, v any) (SendEmailInput, error) {
 			return ec.unmarshalNSendEmailInput2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋmessaginggqlᚐSendEmailInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_sendMessageCampaignTest_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
+		func(ctx context.Context, v any) (SendMessageCampaignTestInput, error) {
+			return ec.unmarshalNSendMessageCampaignTestInput2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋmessaginggqlᚐSendMessageCampaignTestInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_sendMessageCampaign_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
+		func(ctx context.Context, v any) (SendMessageCampaignInput, error) {
+			return ec.unmarshalNSendMessageCampaignInput2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋmessaginggqlᚐSendMessageCampaignInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -1782,6 +2047,20 @@ func (ec *executionContext) field_Query_myMessageChannels_args(ctx context.Conte
 		return nil, err
 	}
 	args["connectedAccountId"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_previewMessageCampaignAudience_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
+		func(ctx context.Context, v any) (PreviewMessageCampaignAudienceInput, error) {
+			return ec.unmarshalNPreviewMessageCampaignAudienceInput2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋmessaginggqlᚐPreviewMessageCampaignAudienceInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
 	return args, nil
 }
 
@@ -2570,6 +2849,236 @@ func (ec *executionContext) _CalendarChannel_updatedAt(ctx context.Context, fiel
 }
 func (ec *executionContext) fieldContext_CalendarChannel_updatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("CalendarChannel", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _CampaignAudiencePreview_totalMembers(ctx context.Context, field graphql.CollectedField, obj *messaging.Audience) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CampaignAudiencePreview_totalMembers(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TotalMembers, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CampaignAudiencePreview_totalMembers(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CampaignAudiencePreview", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CampaignAudiencePreview_withoutEmail(ctx context.Context, field graphql.CollectedField, obj *messaging.Audience) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CampaignAudiencePreview_withoutEmail(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.WithoutEmail, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CampaignAudiencePreview_withoutEmail(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CampaignAudiencePreview", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CampaignAudiencePreview_duplicateEmails(ctx context.Context, field graphql.CollectedField, obj *messaging.Audience) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CampaignAudiencePreview_duplicateEmails(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.DuplicateEmails, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CampaignAudiencePreview_duplicateEmails(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CampaignAudiencePreview", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CampaignAudiencePreview_hardSuppressed(ctx context.Context, field graphql.CollectedField, obj *messaging.Audience) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CampaignAudiencePreview_hardSuppressed(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.HardSuppressed, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CampaignAudiencePreview_hardSuppressed(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CampaignAudiencePreview", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CampaignAudiencePreview_globallyUnsubscribed(ctx context.Context, field graphql.CollectedField, obj *messaging.Audience) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CampaignAudiencePreview_globallyUnsubscribed(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.GloballyUnsubscribed, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CampaignAudiencePreview_globallyUnsubscribed(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CampaignAudiencePreview", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CampaignAudiencePreview_topicUnsubscribed(ctx context.Context, field graphql.CollectedField, obj *messaging.Audience) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CampaignAudiencePreview_topicUnsubscribed(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TopicUnsubscribed, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CampaignAudiencePreview_topicUnsubscribed(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CampaignAudiencePreview", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CampaignAudiencePreview_trackingRefused(ctx context.Context, field graphql.CollectedField, obj *messaging.Audience) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CampaignAudiencePreview_trackingRefused(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TrackingRefused, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CampaignAudiencePreview_trackingRefused(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CampaignAudiencePreview", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CampaignAudiencePreview_sendable(ctx context.Context, field graphql.CollectedField, obj *messaging.Audience) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CampaignAudiencePreview_sendable(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Sendable, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CampaignAudiencePreview_sendable(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CampaignAudiencePreview", field, false, false, "Int")
+}
+
+func (ec *executionContext) _CancelMessageCampaignOutput_campaignId(ctx context.Context, field graphql.CollectedField, obj *CancelMessageCampaignOutput) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CancelMessageCampaignOutput_campaignId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CampaignID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CancelMessageCampaignOutput_campaignId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CancelMessageCampaignOutput", field, false, false, "String")
+}
+
+func (ec *executionContext) _CancelMessageCampaignOutput_canceledMessageCount(ctx context.Context, field graphql.CollectedField, obj *CancelMessageCampaignOutput) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CancelMessageCampaignOutput_canceledMessageCount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CanceledMessageCount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CancelMessageCampaignOutput_canceledMessageCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CancelMessageCampaignOutput", field, false, false, "Int")
 }
 
 func (ec *executionContext) _ConnectedAccountPublicDTO_id(ctx context.Context, field graphql.CollectedField, obj *store.Account) (ret graphql.Marshaler) {
@@ -3906,6 +4415,138 @@ func (ec *executionContext) fieldContext_Mutation_sendEmail(ctx context.Context,
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_sendMessageCampaign(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_sendMessageCampaign(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().SendMessageCampaign(ctx, fc.Args["input"].(SendMessageCampaignInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *SendMessageCampaignOutput) graphql.Marshaler {
+			return ec.marshalNSendMessageCampaignOutput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋmessaginggqlᚐSendMessageCampaignOutput(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_sendMessageCampaign(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_SendMessageCampaignOutput(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_sendMessageCampaign_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_cancelMessageCampaign(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_cancelMessageCampaign(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().CancelMessageCampaign(ctx, fc.Args["input"].(CancelMessageCampaignInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *CancelMessageCampaignOutput) graphql.Marshaler {
+			return ec.marshalNCancelMessageCampaignOutput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋmessaginggqlᚐCancelMessageCampaignOutput(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_cancelMessageCampaign(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_CancelMessageCampaignOutput(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_cancelMessageCampaign_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_sendMessageCampaignTest(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_sendMessageCampaignTest(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().SendMessageCampaignTest(ctx, fc.Args["input"].(SendMessageCampaignTestInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *SendEmailViaDomainOutput) graphql.Marshaler {
+			return ec.marshalNSendEmailViaDomainOutput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋmessaginggqlᚐSendEmailViaDomainOutput(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_sendMessageCampaignTest(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_SendEmailViaDomainOutput(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_sendMessageCampaignTest_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_myConnectedAccounts(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -4246,6 +4887,50 @@ func (ec *executionContext) fieldContext_Query_getTimelineThreadsFromOpportunity
 	return fc, nil
 }
 
+func (ec *executionContext) _Query_previewMessageCampaignAudience(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_previewMessageCampaignAudience(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().PreviewMessageCampaignAudience(ctx, fc.Args["input"].(PreviewMessageCampaignAudienceInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *messaging.Audience) graphql.Marshaler {
+			return ec.marshalNCampaignAudiencePreview2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚐAudience(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_previewMessageCampaignAudience(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_CampaignAudiencePreview(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_previewMessageCampaignAudience_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -4389,6 +5074,107 @@ func (ec *executionContext) _SendEmailOutput_messageThreadId(ctx context.Context
 }
 func (ec *executionContext) fieldContext_SendEmailOutput_messageThreadId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("SendEmailOutput", field, false, false, "String")
+}
+
+func (ec *executionContext) _SendEmailViaDomainOutput_messageId(ctx context.Context, field graphql.CollectedField, obj *SendEmailViaDomainOutput) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SendEmailViaDomainOutput_messageId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MessageID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_SendEmailViaDomainOutput_messageId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("SendEmailViaDomainOutput", field, false, false, "String")
+}
+
+func (ec *executionContext) _SendMessageCampaignOutput_campaignId(ctx context.Context, field graphql.CollectedField, obj *SendMessageCampaignOutput) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SendMessageCampaignOutput_campaignId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CampaignID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_SendMessageCampaignOutput_campaignId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("SendMessageCampaignOutput", field, false, false, "String")
+}
+
+func (ec *executionContext) _SendMessageCampaignOutput_queuedCount(ctx context.Context, field graphql.CollectedField, obj *SendMessageCampaignOutput) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SendMessageCampaignOutput_queuedCount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.QueuedCount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_SendMessageCampaignOutput_queuedCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("SendMessageCampaignOutput", field, false, false, "Int")
+}
+
+func (ec *executionContext) _SendMessageCampaignOutput_audience(ctx context.Context, field graphql.CollectedField, obj *SendMessageCampaignOutput) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SendMessageCampaignOutput_audience(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Audience, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *messaging.Audience) graphql.Marshaler {
+			return ec.marshalNCampaignAudiencePreview2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚐAudience(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_SendMessageCampaignOutput_audience(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SendMessageCampaignOutput",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_CampaignAudiencePreview(ctx, field)
+		},
+	}
+	return fc, nil
 }
 
 func (ec *executionContext) _TimelineThread_id(ctx context.Context, field graphql.CollectedField, obj *messaging.TimelineThread) (ret graphql.Marshaler) {
@@ -5974,6 +6760,48 @@ func (ec *executionContext) fieldContext___Type_isOneOf(_ context.Context, field
 
 // region    **************************** input.gotpl *****************************
 
+func (ec *executionContext) unmarshalInputCancelMessageCampaignInput(ctx context.Context, obj any) (CancelMessageCampaignInput, error) {
+	var it CancelMessageCampaignInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"campaignId"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "campaignId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("campaignId"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CampaignID = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalCancelMessageCampaignInput unmarshals raw into the CancelMessageCampaignInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalCancelMessageCampaignInput(ctx context.Context, raw any) (CancelMessageCampaignInput, error) {
+	var out CancelMessageCampaignInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "CancelMessageCampaignInput", raw, &out)
+	return out, err
+}
+
 func (ec *executionContext) unmarshalInputCreateEmailGroupChannelInput(ctx context.Context, obj any) (map[string]any, error) {
 	var it map[string]any
 	if obj == nil {
@@ -6021,6 +6849,55 @@ func (ec *executionContext) unmarshalInputCreateEmailGroupChannelInput(ctx conte
 func UnmarshalCreateEmailGroupChannelInput(ctx context.Context, raw any) (map[string]any, error) {
 	var out map[string]any
 	err := graphql.UnmarshalNamedInputFromContext(ctx, "CreateEmailGroupChannelInput", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputPreviewMessageCampaignAudienceInput(ctx context.Context, obj any) (PreviewMessageCampaignAudienceInput, error) {
+	var it PreviewMessageCampaignAudienceInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"listId", "unsubscribeTopicId"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "listId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("listId"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ListID = data
+		case "unsubscribeTopicId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("unsubscribeTopicId"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UnsubscribeTopicID = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalPreviewMessageCampaignAudienceInput unmarshals raw into the PreviewMessageCampaignAudienceInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalPreviewMessageCampaignAudienceInput(ctx context.Context, raw any) (PreviewMessageCampaignAudienceInput, error) {
+	var out PreviewMessageCampaignAudienceInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "PreviewMessageCampaignAudienceInput", raw, &out)
 	return out, err
 }
 
@@ -6175,6 +7052,125 @@ func (ec *executionContext) unmarshalInputSendEmailInput(ctx context.Context, ob
 func UnmarshalSendEmailInput(ctx context.Context, raw any) (SendEmailInput, error) {
 	var out SendEmailInput
 	err := graphql.UnmarshalNamedInputFromContext(ctx, "SendEmailInput", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputSendMessageCampaignInput(ctx context.Context, obj any) (SendMessageCampaignInput, error) {
+	var it SendMessageCampaignInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"campaignId", "scheduledAt"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "campaignId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("campaignId"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CampaignID = data
+		case "scheduledAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("scheduledAt"))
+			data, err := ec.unmarshalODateTime2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ScheduledAt = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalSendMessageCampaignInput unmarshals raw into the SendMessageCampaignInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalSendMessageCampaignInput(ctx context.Context, raw any) (SendMessageCampaignInput, error) {
+	var out SendMessageCampaignInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "SendMessageCampaignInput", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputSendMessageCampaignTestInput(ctx context.Context, obj any) (SendMessageCampaignTestInput, error) {
+	var it SendMessageCampaignTestInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"toAddress", "unsubscribeTopicId", "subject", "body", "fromAddress"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "toAddress":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("toAddress"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ToAddress = data
+		case "unsubscribeTopicId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("unsubscribeTopicId"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UnsubscribeTopicID = data
+		case "subject":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("subject"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Subject = data
+		case "body":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("body"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Body = data
+		case "fromAddress":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fromAddress"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FromAddress = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalSendMessageCampaignTestInput unmarshals raw into the SendMessageCampaignTestInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalSendMessageCampaignTestInput(ctx context.Context, raw any) (SendMessageCampaignTestInput, error) {
+	var out SendMessageCampaignTestInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "SendMessageCampaignTestInput", raw, &out)
 	return out, err
 }
 
@@ -6696,6 +7692,112 @@ func (ec *executionContext) _CalendarChannel(ctx context.Context, sel ast.Select
 	return out
 }
 
+var campaignAudiencePreviewImplementors = []string{"CampaignAudiencePreview"}
+
+func (ec *executionContext) _CampaignAudiencePreview(ctx context.Context, sel ast.SelectionSet, obj *messaging.Audience) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, campaignAudiencePreviewImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("CampaignAudiencePreview")
+		case "totalMembers":
+			out.Values[i] = ec._CampaignAudiencePreview_totalMembers(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "withoutEmail":
+			out.Values[i] = ec._CampaignAudiencePreview_withoutEmail(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "duplicateEmails":
+			out.Values[i] = ec._CampaignAudiencePreview_duplicateEmails(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "hardSuppressed":
+			out.Values[i] = ec._CampaignAudiencePreview_hardSuppressed(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "globallyUnsubscribed":
+			out.Values[i] = ec._CampaignAudiencePreview_globallyUnsubscribed(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "topicUnsubscribed":
+			out.Values[i] = ec._CampaignAudiencePreview_topicUnsubscribed(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "trackingRefused":
+			out.Values[i] = ec._CampaignAudiencePreview_trackingRefused(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "sendable":
+			out.Values[i] = ec._CampaignAudiencePreview_sendable(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var cancelMessageCampaignOutputImplementors = []string{"CancelMessageCampaignOutput"}
+
+func (ec *executionContext) _CancelMessageCampaignOutput(ctx context.Context, sel ast.SelectionSet, obj *CancelMessageCampaignOutput) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, cancelMessageCampaignOutputImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("CancelMessageCampaignOutput")
+		case "campaignId":
+			out.Values[i] = ec._CancelMessageCampaignOutput_campaignId(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "canceledMessageCount":
+			out.Values[i] = ec._CancelMessageCampaignOutput_canceledMessageCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
 var connectedAccountPublicDTOImplementors = []string{"ConnectedAccountPublicDTO"}
 
 func (ec *executionContext) _ConnectedAccountPublicDTO(ctx context.Context, sel ast.SelectionSet, obj *store.Account) graphql.Marshaler {
@@ -7063,6 +8165,27 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "sendMessageCampaign":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_sendMessageCampaign(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "cancelMessageCampaign":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_cancelMessageCampaign(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "sendMessageCampaignTest":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_sendMessageCampaignTest(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -7147,6 +8270,12 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 				func(ctx context.Context) graphql.Marshaler {
 					return ec._Query_getTimelineThreadsFromOpportunityId(ctx, field)
 				})
+		case "previewMessageCampaignAudience":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_previewMessageCampaignAudience(ctx, field)
+				})
 		case "__type":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Query___type(ctx, field)
@@ -7202,6 +8331,82 @@ func (ec *executionContext) _SendEmailOutput(ctx context.Context, sel ast.Select
 		case "messageThreadId":
 			out.Values[i] = ec._SendEmailOutput_messageThreadId(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var sendEmailViaDomainOutputImplementors = []string{"SendEmailViaDomainOutput"}
+
+func (ec *executionContext) _SendEmailViaDomainOutput(ctx context.Context, sel ast.SelectionSet, obj *SendEmailViaDomainOutput) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, sendEmailViaDomainOutputImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("SendEmailViaDomainOutput")
+		case "messageId":
+			out.Values[i] = ec._SendEmailViaDomainOutput_messageId(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var sendMessageCampaignOutputImplementors = []string{"SendMessageCampaignOutput"}
+
+func (ec *executionContext) _SendMessageCampaignOutput(ctx context.Context, sel ast.SelectionSet, obj *SendMessageCampaignOutput) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, sendMessageCampaignOutputImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("SendMessageCampaignOutput")
+		case "campaignId":
+			out.Values[i] = ec._SendMessageCampaignOutput_campaignId(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "queuedCount":
+			out.Values[i] = ec._SendMessageCampaignOutput_queuedCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "audience":
+			out.Values[i] = ec._SendMessageCampaignOutput_audience(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
 		default:
@@ -7891,6 +9096,27 @@ func (ec *executionContext) marshalNCalendarChannelVisibility2string(ctx context
 	return res
 }
 
+func (ec *executionContext) marshalNCampaignAudiencePreview2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚐAudience(ctx context.Context, sel ast.SelectionSet, v *messaging.Audience) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "CampaignAudiencePreview!")
+		return graphql.Null
+	}
+	return ec._CampaignAudiencePreview(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNCancelMessageCampaignInput2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋmessaginggqlᚐCancelMessageCampaignInput(ctx context.Context, v any) (CancelMessageCampaignInput, error) {
+	res, err := ec.unmarshalInputCancelMessageCampaignInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNCancelMessageCampaignOutput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋmessaginggqlᚐCancelMessageCampaignOutput(ctx context.Context, sel ast.SelectionSet, v *CancelMessageCampaignOutput) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "CancelMessageCampaignOutput!")
+		return graphql.Null
+	}
+	return ec._CancelMessageCampaignOutput(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNConnectedAccountPublicDTO2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐAccountᚄ(ctx context.Context, sel ast.SelectionSet, v []*store.Account) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
@@ -8106,6 +9332,11 @@ func (ec *executionContext) marshalNMessageFolderImportPolicy2string(ctx context
 	return res
 }
 
+func (ec *executionContext) unmarshalNPreviewMessageCampaignAudienceInput2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋmessaginggqlᚐPreviewMessageCampaignAudienceInput(ctx context.Context, v any) (PreviewMessageCampaignAudienceInput, error) {
+	res, err := ec.unmarshalInputPreviewMessageCampaignAudienceInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalNSendEmailAttachmentInput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋmessaginggqlᚐSendEmailAttachmentInput(ctx context.Context, v any) (*SendEmailAttachmentInput, error) {
 	res, err := ec.unmarshalInputSendEmailAttachmentInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
@@ -8122,6 +9353,32 @@ func (ec *executionContext) marshalNSendEmailOutput2ᚖgithubᚗcomᚋtwentyhq�
 		return graphql.Null
 	}
 	return ec._SendEmailOutput(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNSendEmailViaDomainOutput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋmessaginggqlᚐSendEmailViaDomainOutput(ctx context.Context, sel ast.SelectionSet, v *SendEmailViaDomainOutput) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "SendEmailViaDomainOutput!")
+		return graphql.Null
+	}
+	return ec._SendEmailViaDomainOutput(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNSendMessageCampaignInput2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋmessaginggqlᚐSendMessageCampaignInput(ctx context.Context, v any) (SendMessageCampaignInput, error) {
+	res, err := ec.unmarshalInputSendMessageCampaignInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNSendMessageCampaignOutput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋmessaginggqlᚐSendMessageCampaignOutput(ctx context.Context, sel ast.SelectionSet, v *SendMessageCampaignOutput) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "SendMessageCampaignOutput!")
+		return graphql.Null
+	}
+	return ec._SendMessageCampaignOutput(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNSendMessageCampaignTestInput2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋmessaginggqlᚐSendMessageCampaignTestInput(ctx context.Context, v any) (SendMessageCampaignTestInput, error) {
+	res, err := ec.unmarshalInputSendMessageCampaignTestInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v any) (string, error) {

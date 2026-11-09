@@ -240,6 +240,7 @@ type Campaign struct {
 }
 
 type Recipient struct {
+	PersonID  string
 	Email     string
 	Variables map[string]any
 }

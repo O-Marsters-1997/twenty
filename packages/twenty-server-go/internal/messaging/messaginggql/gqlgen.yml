@@ -2,6 +2,7 @@ schema:
   - timeline.graphqls
   - messaging.graphqls
   - send.graphqls
+  - campaign.graphqls
 exec:
   filename: generated.go
   package: messaginggql
@@ -62,6 +63,8 @@ models:
     model: map[string]interface{}
   UpdateCalendarChannelInputUpdates:
     model: map[string]interface{}
+  CampaignAudiencePreview:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging.Audience
   Float:
     model: github.com/99designs/gqlgen/graphql.Int
   TimelineThreadParticipant:

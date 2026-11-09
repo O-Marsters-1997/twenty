@@ -28,7 +28,7 @@ func NewHandler(resolver *Resolver, logger *slog.Logger) http.Handler {
 		switch {
 		case errors.Is(err, messaging.ErrInvalidTimelinePage):
 			code = "BAD_USER_INPUT"
-		case errors.Is(err, store.ErrInvalidInput):
+		case errors.Is(err, store.ErrInvalidInput), errors.Is(err, store.ErrCampaignNotSendable), errors.Is(err, store.ErrCampaignNotCancelable):
 			code = "BAD_USER_INPUT"
 		case errors.Is(err, store.ErrNotFound):
 			code = "NOT_FOUND"
