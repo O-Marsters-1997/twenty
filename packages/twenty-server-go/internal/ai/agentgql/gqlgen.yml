@@ -1,0 +1,28 @@
+schema:
+  - agent.graphqls
+exec:
+  filename: generated.go
+  package: agentgql
+model:
+  filename: models_gen.go
+  package: agentgql
+resolver:
+  layout: single-file
+  filename: resolver.go
+  package: agentgql
+  type: Resolver
+models:
+  UUID:
+    model: github.com/99designs/gqlgen/graphql.String
+  DateTime:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata.Timestamp
+  JSON:
+    model: github.com/99designs/gqlgen/graphql.Any
+  Agent:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai.AgentRecord
+  AgentIdInput:
+    model: map[string]interface{}
+  CreateAgentInput:
+    model: map[string]interface{}
+  UpdateAgentInput:
+    model: map[string]interface{}

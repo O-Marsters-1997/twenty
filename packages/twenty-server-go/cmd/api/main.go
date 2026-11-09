@@ -13,6 +13,11 @@ import (
 
 	"github.com/jackc/pgx/v5/pgxpool"
 
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai/agentgql"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai/aigql"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai/skillgql"
+	aistore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai/store"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/config"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/frontdoor"
@@ -44,8 +49,21 @@ func run() error {
 	defer pool.Close()
 	verifier := auth.NewJWTVerifier(pool, cfg.AppSecret)
 
+	chats := aistore.New(pool)
+	broker := ai.NewPersistingBroker(ai.NewMemoryBroker(), chats, logger)
+
+	recordTools := ai.NewRecordTools(
+		store.NewCompanies(pool), store.NewPeople(pool), store.NewOpportunities(pool), store.NewNotes(pool), store.NewTasks(pool),
+	)
+	toolRegistry := ai.NewRegistry(recordTools...)
+	runner, err := chatRunner(toolRegistry, logger)
+	if err != nil {
+		return err
+	}
+	chatHandler := aigql.NewHandler(chats, broker, ai.NewChatService(chats, runner, broker, logger), logger)
+
 	goGraphQL := http.NewServeMux()
-	goGraphQL.Handle(string(frontdoor.EndpointWorkspace), recordsgql.NewHandler(&recordsgql.Resolver{
+	goGraphQL.Handle(string(frontdoor.EndpointWorkspace), workspaceHandler(recordsgql.NewHandler(&recordsgql.Resolver{
 		Store:              store.NewPeople(pool),
 		Companies:          store.NewCompanies(pool),
 		Opportunities:      store.NewOpportunities(pool),
@@ -57,15 +75,23 @@ func run() error {
 		NoteTargets:        store.NewNoteTargets(pool),
 		Tasks:              store.NewTasks(pool),
 		TaskTargets:        store.NewTaskTargets(pool),
-	}, logger))
+	}, logger), chatHandler))
 	goGraphQL.Handle(string(frontdoor.EndpointMetadata), metadataHandler(
-		metadatagql.NewHandler(metadatastore.New(pool), logger),
+		metadatagql.NewHandler(metadatastore.New(pool), toolRegistry, logger),
+		chatHandler,
+		skillgql.NewHandler(ai.NewSkills(pool), logger),
 		metagql.NewHandler(metadatastore.NewViews(pool), logger),
+		agentgql.NewHandler(aistore.NewAgents(pool), logger),
+		agentgql.Operations,
 	))
+
+	handler := frontdoor.NewHandler(frontdoor.DefaultTable(), cfg.NodeUpstreamURL, verifier, goGraphQL, logger).
+		WithMCP(toolRegistry).
+		WithSubscriber(aigql.NewSubscriber(broker))
 
 	server := &http.Server{
 		Addr:              cfg.ListenAddr,
-		Handler:           frontdoor.NewHandler(frontdoor.DefaultTable(), cfg.NodeUpstreamURL, verifier, goGraphQL, logger),
+		Handler:           handler,
 		ReadHeaderTimeout: 10 * time.Second,
 	}
 

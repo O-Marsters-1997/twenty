@@ -11,12 +11,13 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/store"
 )
 
 // NewHandler serves the object metadata reads over GraphQL; the caller supplies the principal in the request context.
-func NewHandler(pager Pager, logger *slog.Logger) http.Handler {
-	server := handler.New(NewExecutableSchema(Config{Resolvers: &Resolver{Store: pager}}))
+func NewHandler(pager Pager, tools ai.Registry, logger *slog.Logger) http.Handler {
+	server := handler.New(NewExecutableSchema(Config{Resolvers: &Resolver{Store: pager, Tools: tools}}))
 	server.AddTransport(transport.POST{})
 	server.SetErrorPresenter(func(ctx context.Context, err error) *gqlerror.Error {
 		presented := graphql.DefaultErrorPresenter(ctx, err)

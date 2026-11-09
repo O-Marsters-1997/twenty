@@ -3,6 +3,8 @@ package metadatagql
 import (
 	"context"
 
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/store"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records"
 )
@@ -13,7 +15,10 @@ type Pager interface {
 
 type Resolver struct {
 	Store Pager
+	Tools ai.Registry
 }
+
+const toolCategoryDatabaseCRUD = "DATABASE_CRUD"
 
 func (r *queryResolver) Objects(ctx context.Context, paging *CursorPaging) (*ObjectConnection, error) {
 	var request store.PageRequest
@@ -36,6 +41,29 @@ func (r *queryResolver) Objects(ctx context.Context, paging *CursorPaging) (*Obj
 	start, end := connection.Edges[0].Cursor, connection.Edges[len(connection.Edges)-1].Cursor
 	connection.PageInfo.StartCursor, connection.PageInfo.EndCursor = &start, &end
 	return connection, nil
+}
+
+func (r *queryResolver) GetToolIndex(ctx context.Context) ([]*ToolIndexEntry, error) {
+	principal, ok := auth.PrincipalFrom(ctx)
+	if !ok {
+		return nil, auth.ErrUnauthenticated
+	}
+	entries := []*ToolIndexEntry{}
+	for _, tool := range r.Tools.Tools(ctx, principal) {
+		spec := tool.Spec()
+		entries = append(entries, &ToolIndexEntry{
+			Name: spec.Name, Label: spec.Name, Description: spec.Description, Category: toolCategoryDatabaseCRUD,
+		})
+	}
+	return entries, nil
+}
+
+func (r *queryResolver) GetToolInputSchema(_ context.Context, toolName string) (any, error) {
+	tool, ok := r.Tools.Lookup(toolName)
+	if !ok {
+		return nil, nil
+	}
+	return tool.Spec().InputSchema, nil
 }
 
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }

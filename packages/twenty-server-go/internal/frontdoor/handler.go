@@ -12,6 +12,7 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
 )
 
@@ -23,6 +24,9 @@ type Handler struct {
 	verifier  auth.Verifier
 	goGraphQL http.Handler
 	logger    *slog.Logger
+
+	subscriber Subscriber
+	mcpTools   ai.Registry
 }
 
 func NewHandler(table OperationTable, upstream *url.URL, verifier auth.Verifier, goGraphQL http.Handler, logger *slog.Logger) *Handler {
@@ -37,6 +41,10 @@ type graphqlRequest struct {
 }
 
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path == mcpPath && h.mcpTools != nil {
+		h.serveMCP(w, r)
+		return
+	}
 	endpoint := Endpoint(r.URL.Path)
 	if r.Method != http.MethodPost || (endpoint != EndpointWorkspace && endpoint != EndpointMetadata) || !isJSON(r) {
 		h.proxy.ServeHTTP(w, r)
@@ -72,6 +80,10 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case RouteBlocked:
 		h.writeGraphQLError(w, "this operation is disabled: the data model is frozen", "FORBIDDEN")
 	case RouteGo:
+		if h.subscriber != nil && wantsEventStream(r) && isSubscription(body) {
+			h.serveSubscription(w, r, endpoint, body)
+			return
+		}
 		principal, ok := h.authenticate(w, r)
 		if !ok {
 			return

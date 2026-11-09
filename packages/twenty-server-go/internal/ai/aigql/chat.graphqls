@@ -1,0 +1,127 @@
+scalar UUID
+scalar DateTime
+scalar JSON
+
+enum AgentChatInboxAction {
+  READ
+  UNREAD
+  ARCHIVE
+  SNOOZE
+  MOVE_TO_INBOX
+  SUBSCRIBE
+  UNSUBSCRIBE
+}
+
+type AgentMessagePart {
+  id: UUID!
+  messageId: UUID!
+  orderIndex: Int!
+  type: String!
+  textContent: String
+  reasoningContent: String
+  toolName: String
+  toolCallId: String
+  toolInput: JSON
+  toolOutput: JSON
+  state: String
+  providerExecuted: Boolean
+  errorMessage: String
+  sourceUrlSourceId: String
+  sourceUrlUrl: String
+  sourceUrlTitle: String
+  sourceDocumentSourceId: String
+  sourceDocumentMediaType: String
+  sourceDocumentTitle: String
+  sourceDocumentFilename: String
+  fileMediaType: String
+  fileFilename: String
+  fileId: UUID
+  fileUrl: String
+  providerMetadata: JSON
+  createdAt: DateTime!
+}
+
+type AgentMessage {
+  id: UUID!
+  threadId: UUID!
+  turnId: UUID
+  agentId: UUID
+  senderWorkspaceMemberId: UUID
+  role: String!
+  status: String!
+  parts: [AgentMessagePart!]!
+  processedAt: DateTime
+  createdAt: DateTime!
+}
+
+type ChatStreamError {
+  code: String!
+  message: String!
+}
+
+type ChatStreamCatchupChunks {
+  chunks: [JSON!]!
+  maxSeq: Int!
+  error: ChatStreamError
+}
+
+type AgentChatOpenThreadsSummary {
+  openThreadCount: Int!
+  needsInputThreadCount: Int!
+  hasUnreadOpenThread: Boolean!
+  hasUnreadMentionThread: Boolean!
+  hasUnreadAssignedThread: Boolean!
+}
+
+type AgentChatThreadParticipant {
+  id: UUID!
+  threadId: UUID!
+  lastReadAt: DateTime
+  archivedAt: DateTime
+  snoozedUntil: DateTime
+  isSubscribed: Boolean!
+  lastMentionedAt: DateTime
+  updatedAt: DateTime!
+}
+
+type Query {
+  chatMessages(threadId: UUID!): [AgentMessage!]!
+  chatStreamCatchupChunks(threadId: UUID!): ChatStreamCatchupChunks!
+  agentChatOpenThreadsSummary: AgentChatOpenThreadsSummary!
+}
+
+type Mutation {
+  updateAgentChatThreadInboxState(threadIds: [UUID!]!, action: AgentChatInboxAction!, snoozedUntil: DateTime): [AgentChatThreadParticipant!]!
+  assignAgentChatThread(threadId: UUID!, assigneeWorkspaceMemberId: UUID): Boolean!
+}
+
+input FileAttachmentInput {
+  id: UUID!
+  filename: String!
+}
+
+input AnswerToolCallInput {
+  threadId: UUID!
+  toolCallId: String!
+  response: JSON!
+  modelId: String
+}
+
+type SendChatMessageResult {
+  messageId: String
+  queued: Boolean!
+  streamId: String
+  mentionedParticipantWorkspaceMemberIds: [UUID!]
+}
+
+type AnswerToolCallResult {
+  streamId: String
+}
+
+extend type Mutation {
+  sendChatMessage(threadId: UUID!, text: String!, messageId: UUID!, browsingContext: JSON, modelId: String, fileAttachments: [FileAttachmentInput!], mentionedWorkspaceMemberIds: [UUID!]): SendChatMessageResult!
+  retryChatMessage(threadId: UUID!, modelId: String): SendChatMessageResult!
+  stopAgentChatStream(threadId: UUID!): Boolean!
+  deleteQueuedChatMessage(messageId: UUID!): Boolean!
+  answerToolCall(input: AnswerToolCallInput!): AnswerToolCallResult!
+}

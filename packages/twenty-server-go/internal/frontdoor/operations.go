@@ -1,5 +1,7 @@
 package frontdoor
 
+import "slices"
+
 type Endpoint string
 
 const (
@@ -39,12 +41,15 @@ func DefaultTable() OperationTable {
 			"AggregateCompanies":                  RouteGo,
 			"CompaniesGroupByAggregates":          RouteGo,
 			"CompaniesGroupByRecords":             RouteGo,
+			AnswerToolCallOperation:               RouteGo,
 			"AggregateOpportunities":              RouteGo,
 			"OpportunitiesGroupByAggregates":      RouteGo,
 			"OpportunitiesGroupByRecords":         RouteGo,
 		},
 		EndpointMetadata: {
 			"ObjectMetadataItems":         RouteGo,
+			"GetToolIndex":                RouteGo,
+			"GetToolInputSchema":          RouteGo,
 			"CreateOneObjectMetadataItem": RouteBlocked,
 			"UpdateOneObjectMetadataItem": RouteBlocked,
 			"DeleteOneObjectMetadataItem": RouteBlocked,
@@ -56,6 +61,9 @@ func DefaultTable() OperationTable {
 	for _, operation := range viewOperations {
 		table[EndpointMetadata][operation] = RouteGo
 	}
+	for _, operation := range slices.Concat(SkillOperations, ChatOperations, agentOperations) {
+		table[EndpointMetadata][operation] = RouteGo
+	}
 	for _, plural := range []string{"Notes", "NoteTargets", "Tasks", "TaskTargets"} {
 		for _, operation := range []string{"Aggregate" + plural, plural + "GroupByAggregates", plural + "GroupByRecords"} {
 			table[EndpointWorkspace][operation] = RouteGo
@@ -63,6 +71,18 @@ func DefaultTable() OperationTable {
 	}
 	return table
 }
+
+var SkillOperations = []string{
+	"FindManySkills", "FindOneSkill", "FindManySkillsForSuggestion",
+	"CreateSkill", "UpdateSkill", "DeleteSkill", "ActivateSkill", "DeactivateSkill",
+}
+
+var ChatOperations = []string{
+	"GetChatMessages", "GetAgentChatOpenThreadsSummary", "AssignAgentChatThread", "UpdateAgentChatThreadInboxState",
+	"SendChatMessage", "RetryChatMessage", "StopAgentChatStream", "DeleteQueuedChatMessage", "OnAgentChatEvent",
+}
+
+const AnswerToolCallOperation = "AnswerToolCall"
 
 var viewOperations = []string{
 	"FindManyViews", "FindAllViews", "FindFieldsWidgetViews", "FindTableWidgetViews",
@@ -72,6 +92,10 @@ var viewOperations = []string{
 	"CreateViewFilterGroup", "UpdateViewFilterGroup", "DestroyViewFilterGroup",
 	"CreateViewSort", "UpdateViewSort", "DestroyViewSort",
 	"CreateManyViewGroups", "UpdateManyViewGroups",
+}
+
+var agentOperations = []string{
+	"FindManyAgents", "FindOneAgent", "CreateOneAgent", "UpdateOneAgent", "DeleteOneAgent", "AssignRoleToAgent",
 }
 
 var blockedMetadataFields = []string{
