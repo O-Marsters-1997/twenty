@@ -94,3 +94,34 @@ type Mutation {
   updateAgentChatThreadInboxState(threadIds: [UUID!]!, action: AgentChatInboxAction!, snoozedUntil: DateTime): [AgentChatThreadParticipant!]!
   assignAgentChatThread(threadId: UUID!, assigneeWorkspaceMemberId: UUID): Boolean!
 }
+
+input FileAttachmentInput {
+  id: UUID!
+  filename: String!
+}
+
+input AnswerToolCallInput {
+  threadId: UUID!
+  toolCallId: String!
+  response: JSON!
+  modelId: String
+}
+
+type SendChatMessageResult {
+  messageId: String
+  queued: Boolean!
+  streamId: String
+  mentionedParticipantWorkspaceMemberIds: [UUID!]
+}
+
+type AnswerToolCallResult {
+  streamId: String
+}
+
+extend type Mutation {
+  sendChatMessage(threadId: UUID!, text: String!, messageId: UUID!, browsingContext: JSON, modelId: String, fileAttachments: [FileAttachmentInput!], mentionedWorkspaceMemberIds: [UUID!]): SendChatMessageResult!
+  retryChatMessage(threadId: UUID!, modelId: String): SendChatMessageResult!
+  stopAgentChatStream(threadId: UUID!): Boolean!
+  deleteQueuedChatMessage(messageId: UUID!): Boolean!
+  answerToolCall(input: AnswerToolCallInput!): AnswerToolCallResult!
+}

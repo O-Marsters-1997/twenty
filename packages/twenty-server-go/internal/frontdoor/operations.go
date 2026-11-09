@@ -41,6 +41,7 @@ func DefaultTable() OperationTable {
 			"AggregateCompanies":                  RouteGo,
 			"CompaniesGroupByAggregates":          RouteGo,
 			"CompaniesGroupByRecords":             RouteGo,
+			AnswerToolCallOperation:               RouteGo,
 			"AggregateOpportunities":              RouteGo,
 			"OpportunitiesGroupByAggregates":      RouteGo,
 			"OpportunitiesGroupByRecords":         RouteGo,
@@ -78,7 +79,10 @@ var SkillOperations = []string{
 
 var ChatOperations = []string{
 	"GetChatMessages", "GetAgentChatOpenThreadsSummary", "AssignAgentChatThread", "UpdateAgentChatThreadInboxState",
+	"SendChatMessage", "RetryChatMessage", "StopAgentChatStream", "DeleteQueuedChatMessage", "OnAgentChatEvent",
 }
+
+const AnswerToolCallOperation = "AnswerToolCall"
 
 var viewOperations = []string{
 	"FindManyViews", "FindAllViews", "FindFieldsWidgetViews", "FindTableWidgetViews",
