@@ -1,0 +1,13 @@
+{
+  "name": "RetryWorkflowRun",
+  "operation": "RetryWorkflowRun",
+  "fixture": "run 11111111-1111-4111-8111-111111111111 FAILED on step s2",
+  "endpoint": "/graphql",
+  "query": "mutation RetryWorkflowRun($workflowRunId: UUID!) { retryWorkflowRun(workflowRunId: $workflowRunId) { id status __typename } }",
+  "variables": { "workflowRunId": "11111111-1111-4111-8111-111111111111" },
+  "response": {
+    "data": {
+      "retryWorkflowRun": { "id": "11111111-1111-4111-8111-111111111111", "status": "RUNNING", "__typename": "WorkflowRun" }
+    }
+  }
+}

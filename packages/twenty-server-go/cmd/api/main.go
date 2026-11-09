@@ -26,6 +26,8 @@ import (
 	metadatastore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/store"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records/recordsgql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records/store"
+	workflowstore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/store"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/workflowgql"
 )
 
 func main() {
@@ -62,6 +64,16 @@ func run() error {
 	}
 	chatHandler := aigql.NewHandler(chats, broker, ai.NewChatService(chats, runner, broker, logger), logger)
 
+	queue, err := newWorkflowQueue(pool)
+	if err != nil {
+		return err
+	}
+	workflowHandler := workflowgql.NewHandler(&workflowgql.Resolver{
+		Store:      workflowstore.New(pool),
+		Queue:      queue,
+		HTTPClient: &http.Client{},
+	}, logger)
+
 	goGraphQL := http.NewServeMux()
 	goGraphQL.Handle(string(frontdoor.EndpointWorkspace), workspaceHandler(recordsgql.NewHandler(&recordsgql.Resolver{
 		Store:              store.NewPeople(pool),
@@ -75,7 +87,7 @@ func run() error {
 		NoteTargets:        store.NewNoteTargets(pool),
 		Tasks:              store.NewTasks(pool),
 		TaskTargets:        store.NewTaskTargets(pool),
-	}, logger), chatHandler))
+	}, logger), chatHandler, workflowHandler))
 	goGraphQL.Handle(string(frontdoor.EndpointMetadata), metadataHandler(
 		metadatagql.NewHandler(metadatastore.New(pool), toolRegistry, logger),
 		chatHandler,
