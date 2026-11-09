@@ -87,3 +87,14 @@ func (s *Store) ConnectedAccount(ctx context.Context, id string) (*ConnectedAcco
 	}
 	return &account, nil
 }
+
+func (s *Store) ClaimPendingStep(ctx context.Context, runID, stepID string, result json.RawMessage) (bool, error) {
+	tag, err := s.pool.Exec(ctx, `UPDATE `+table("workflowRun")+` SET "updatedAt" = now(),
+			state = jsonb_set(state, ARRAY['stepInfos', $2::text], jsonb_build_object('status', 'SUCCESS', 'result', $3::jsonb))
+		WHERE id = $1 AND status = 'RUNNING' AND "deletedAt" IS NULL AND state#>>ARRAY['stepInfos', $2::text, 'status'] = 'PENDING'`,
+		runID, stepID, result)
+	if err != nil {
+		return false, fmt.Errorf("claim pending step: %w", err)
+	}
+	return tag.RowsAffected() == 1, nil
+}

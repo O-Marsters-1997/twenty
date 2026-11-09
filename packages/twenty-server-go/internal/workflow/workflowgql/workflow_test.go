@@ -448,6 +448,9 @@ func TestSubmitFormStep(t *testing.T) {
 		if len(h.queue.jobs) != 1 {
 			t.Fatalf("jobs = %v, want one resume", h.queue.jobs)
 		}
+		if got := errorCode(t, h.send(t, "SubmitFormStep", submit, input(formRunID, formStepID, response))); got != "BAD_USER_INPUT" {
+			t.Errorf("second submit error = %q, want BAD_USER_INPUT", got)
+		}
 		resume := h.queue.jobs[0].(workflow.ResumeStepArgs)
 		var queued map[string]any
 		if err := json.Unmarshal(resume.Input, &queued); err != nil || resume.RunID != formRunID || resume.StepID != formStepID || cmp.Diff(response, queued) != "" {
@@ -529,6 +532,20 @@ func TestTestHttpRequest(t *testing.T) {
 	failed := call("/missing")
 	if failed["success"] != false || failed["status"] != float64(404) || failed["error"] != "nope\n" {
 		t.Errorf("failure = %v, want success false, status 404 and the response body as error", failed)
+	}
+}
+
+func TestNewSafeHTTPClient_refusesLoopback(t *testing.T) {
+	t.Parallel()
+	target := httptest.NewServer(http.NotFoundHandler())
+	t.Cleanup(target.Close)
+	request, err := http.NewRequestWithContext(t.Context(), http.MethodGet, target.URL, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if response, err := workflowgql.NewSafeHTTPClient().Do(request); err == nil {
+		_ = response.Body.Close()
+		t.Error("request to a loopback address succeeded, want it refused")
 	}
 }
 

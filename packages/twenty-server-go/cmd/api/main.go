@@ -71,7 +71,7 @@ func run() error {
 	workflowHandler := workflowgql.NewHandler(&workflowgql.Resolver{
 		Store:      workflowstore.New(pool),
 		Queue:      queue,
-		HTTPClient: &http.Client{},
+		HTTPClient: workflowgql.NewSafeHTTPClient(),
 	}, logger)
 
 	goGraphQL := http.NewServeMux()

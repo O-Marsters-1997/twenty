@@ -29,6 +29,7 @@ func NewHandler(resolver *Resolver, logger *slog.Logger) http.Handler {
 			code = "FORBIDDEN"
 		default:
 			logger.Error("resolve graphql", "err", err)
+			presented.Message = "Internal server error"
 		}
 		presented.Extensions = map[string]any{"code": code}
 		return presented

@@ -4,10 +4,14 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
+	"net"
 	"net/http"
+	"net/netip"
 	"strings"
+	"syscall"
 	"time"
 )
 
@@ -99,4 +103,30 @@ func responseHeaders(header http.Header) map[string]string {
 		flattened[strings.ToLower(name)] = strings.Join(values, ", ")
 	}
 	return flattened
+}
+
+func NewSafeHTTPClient() *http.Client {
+	dialer := &net.Dialer{
+		Timeout: 10 * time.Second,
+		Control: func(_, address string, _ syscall.RawConn) error {
+			host, _, err := net.SplitHostPort(address)
+			if err != nil {
+				return err
+			}
+			ip, err := netip.ParseAddr(host)
+			if err != nil || ip.IsLoopback() || ip.IsPrivate() || ip.IsLinkLocalUnicast() || ip.IsLinkLocalMulticast() || ip.IsUnspecified() || ip.IsMulticast() {
+				return fmt.Errorf("address %s is not a public address", host)
+			}
+			return nil
+		},
+	}
+	return &http.Client{
+		Transport: &http.Transport{DialContext: dialer.DialContext},
+		CheckRedirect: func(_ *http.Request, via []*http.Request) error {
+			if len(via) >= 5 {
+				return errors.New("too many redirects")
+			}
+			return nil
+		},
+	}
 }

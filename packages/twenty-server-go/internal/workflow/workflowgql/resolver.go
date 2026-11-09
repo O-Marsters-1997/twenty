@@ -16,9 +16,10 @@ import (
 )
 
 const (
-	defaultPageSize  = 60
-	defaultOrderBy   = "UPDATED_AT"
-	defaultDirection = "DESC"
+	maxCurrentVersionIDs = 500
+	defaultPageSize      = 60
+	defaultOrderBy       = "UPDATED_AT"
+	defaultDirection     = "DESC"
 )
 
 type Enqueuer interface {
@@ -93,8 +94,16 @@ func (r *mutationResolver) SubmitFormStep(ctx context.Context, input map[string]
 	if err != nil {
 		return false, fmt.Errorf("encode form response: %w", err)
 	}
+	claimed, err := r.Store.ClaimPendingStep(ctx, runID, stepID, payload)
+	if err != nil {
+		return false, err
+	}
+	if !claimed {
+		return false, invalidRequest("form step is no longer waiting for an answer")
+	}
 	if err := r.Queue.Enqueue(ctx, workflow.ResumeStepArgs{RunID: runID, StepID: stepID, Input: payload}); err != nil {
-		return false, fmt.Errorf("enqueue resume: %w", err)
+		_, failErr := r.Store.Transition(ctx, runID, store.StatusFailed, "The run could not resume after its form was submitted")
+		return false, fmt.Errorf("enqueue resume: %w", errors.Join(err, failErr))
 	}
 	return true, nil
 }
@@ -186,8 +195,13 @@ func (r *queryResolver) CoreWorkflowsWithCurrentVersions(ctx context.Context, in
 			ids = append(ids, id)
 		}
 	}
-	if len(ids) == 0 {
-		return nil, invalidRequest("coreWorkflowIds must not be empty")
+	if len(ids) == 0 || len(ids) > maxCurrentVersionIDs {
+		return nil, invalidRequest("coreWorkflowIds must hold between 1 and %d ids", maxCurrentVersionIDs)
+	}
+	for _, id := range ids {
+		if !uuidPattern.MatchString(id) {
+			return nil, invalidRequest("coreWorkflowIds holds an invalid id")
+		}
 	}
 	found, err := r.Store.CoreWorkflowsWithCurrentVersions(ctx, reader(ctx), ids)
 	if err != nil {

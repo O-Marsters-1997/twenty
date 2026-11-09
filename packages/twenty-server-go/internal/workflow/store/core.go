@@ -7,8 +7,10 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/workspace"
@@ -16,7 +18,7 @@ import (
 
 var (
 	ErrInvalidInput = errors.New("invalid workflow input")
-	ErrForbidden    = errors.New("workflow not accessible")
+	ErrForbidden    = errors.New("workflow not found")
 )
 
 const (
@@ -174,7 +176,13 @@ func decodeCursor(encoded string) (cursor, error) {
 	if err == nil {
 		err = json.Unmarshal(raw, &c)
 	}
-	if err != nil || c.ID == "" {
+	if err == nil {
+		_, err = uuid.Parse(c.ID)
+	}
+	if err == nil && c.SortValue != nil && strings.Contains(*c.SortValue, "T") {
+		_, err = time.Parse(time.RFC3339Nano, *c.SortValue)
+	}
+	if err != nil {
 		return cursor{}, fmt.Errorf("cursor %q: %w", encoded, ErrInvalidInput)
 	}
 	return c, nil
