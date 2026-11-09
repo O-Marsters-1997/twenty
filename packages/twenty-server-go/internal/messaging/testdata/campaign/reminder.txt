@@ -1,0 +1,5 @@
+QUICK REMINDER
+
+This is a deliberately long paragraph for Acme "Co" \ Ltd so that the plain text conversion has to decide whether to wrap the line at eighty columns or leave it alone, which we need to know.
+
+Unsubscribe https://example.com/u?x=1&y=2 after 1000000 days.

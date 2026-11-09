@@ -1,0 +1,84 @@
+{
+ "type": "doc",
+ "content": [
+  {
+   "type": "heading",
+   "attrs": {
+    "level": 1
+   },
+   "content": [
+    {
+     "type": "text",
+     "text": "Hello "
+    },
+    {
+     "type": "variableTag",
+     "attrs": {
+      "variable": "{{firstName}}"
+     }
+    }
+   ]
+  },
+  {
+   "type": "paragraph",
+   "content": [
+    {
+     "type": "text",
+     "text": "Hi {{firstName}}, "
+    },
+    {
+     "type": "text",
+     "text": "Bold ",
+     "marks": [
+      {
+       "type": "bold"
+      }
+     ]
+    },
+    {
+     "type": "text",
+     "text": "and <i>"
+    },
+    {
+     "type": "hardBreak"
+    },
+    {
+     "type": "text",
+     "text": "see site",
+     "marks": [
+      {
+       "type": "link",
+       "attrs": {
+        "href": "https://example.com/a?b=1&c=2"
+       }
+      },
+      {
+       "type": "italic"
+      }
+     ]
+    },
+    {
+     "type": "text",
+     "text": "x",
+     "marks": [
+      {
+       "type": "link",
+       "attrs": {
+        "href": "javascript:alert(1)"
+       }
+      },
+      {
+       "type": "underline"
+      },
+      {
+       "type": "strike"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "type": "paragraph"
+  }
+ ]
+}
