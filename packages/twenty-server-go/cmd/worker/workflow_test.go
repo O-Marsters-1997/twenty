@@ -117,6 +117,27 @@ func TestRunWorkflowWorker_Work(t *testing.T) {
 		}
 	})
 
+	t.Run("duplicate jobs on a parked run cancel", func(t *testing.T) {
+		t.Parallel()
+		registry, err := workflow.NewRegistry()
+		if err != nil {
+			t.Fatal(err)
+		}
+		fake := newFakeStore(`[]`)
+		fake.run.Status = store.StatusRunning
+		fake.run.State = json.RawMessage(`{"stepInfos":{"first":{"status":"SUCCESS"},"second":{"status":"PENDING"}}}`)
+		exec := &executor{store: fake, registry: registry}
+		var cancelErr *river.JobCancelError
+
+		if err := (&runWorkflowWorker{exec: exec}).Work(t.Context(), args); !errors.As(err, &cancelErr) {
+			t.Errorf("run Work() = %v, want JobCancelError", err)
+		}
+		resume := &river.Job[workflow.ResumeStepArgs]{Args: workflow.ResumeStepArgs{RunID: "run", StepID: "first"}}
+		if err := (&resumeStepWorker{exec: exec}).Work(t.Context(), resume); !errors.As(err, &cancelErr) {
+			t.Errorf("resume Work() = %v, want JobCancelError", err)
+		}
+	})
+
 	t.Run("step error fails the run", func(t *testing.T) {
 		t.Parallel()
 		registry, err := workflow.NewRegistry(stubAction{actionType: workflow.ActionTypeEmpty, run: func(workflow.StepInput) (workflow.StepOutput, error) {

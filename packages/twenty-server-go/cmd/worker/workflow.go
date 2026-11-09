@@ -67,10 +67,8 @@ func (w *runWorkflowWorker) Work(ctx context.Context, job *river.Job[workflow.Ru
 		if err != nil {
 			return err
 		}
-		for _, info := range infos {
-			if info.Status == stepStatusPending {
-				return river.JobCancel(fmt.Errorf("run %s is parked on a pending step", run.ID))
-			}
+		if hasPendingStep(infos) {
+			return river.JobCancel(fmt.Errorf("run %s is parked on a pending step", run.ID))
 		}
 	default:
 		return river.JobCancel(fmt.Errorf("run %s is %s", run.ID, run.Status))
@@ -93,7 +91,8 @@ func (w *resumeStepWorker) Work(ctx context.Context, job *river.Job[workflow.Res
 		return err
 	}
 	stepStatus := infos[job.Args.StepID].Status
-	if run.Status != store.StatusRunning || (stepStatus != stepStatusPending && stepStatus != stepStatusSuccess) {
+	retryOfResumed := stepStatus == stepStatusSuccess && !hasPendingStep(infos)
+	if run.Status != store.StatusRunning || (stepStatus != stepStatusPending && !retryOfResumed) {
 		return river.JobCancel(fmt.Errorf("step %q of run %s is not parked", job.Args.StepID, run.ID))
 	}
 	if stepStatus == stepStatusPending {
@@ -111,6 +110,15 @@ func (w *resumeStepWorker) Work(ctx context.Context, job *river.Job[workflow.Res
 		}
 	}
 	return w.exec.execute(ctx, run)
+}
+
+func hasPendingStep(infos map[string]stepInfo) bool {
+	for _, info := range infos {
+		if info.Status == stepStatusPending {
+			return true
+		}
+	}
+	return false
 }
 
 func (e *executor) execute(ctx context.Context, run store.Run) error {
@@ -144,6 +152,8 @@ func (e *executor) execute(ctx context.Context, run store.Run) error {
 		input := workflow.StepInput{RunID: run.ID, StepID: current.ID, Settings: current.Settings, Context: stepContext}
 		output, err := action.Run(ctx, input)
 		switch {
+		case ctx.Err() != nil:
+			return ctx.Err()
 		case err != nil:
 			return e.failStep(ctx, run.ID, current.ID, err.Error())
 		case output.Error != "":
