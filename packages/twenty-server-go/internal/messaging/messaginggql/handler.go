@@ -11,11 +11,15 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging/store"
 )
 
-func NewHandler(channels *store.Channels, logger *slog.Logger) http.Handler {
-	server := handler.New(NewExecutableSchema(Config{Resolvers: &Resolver{Channels: channels}}))
+var Operations = []string{"SendEmail"}
+
+func NewHandler(resolver *Resolver, logger *slog.Logger) http.Handler {
+	resolver.Logger = logger
+	server := handler.New(NewExecutableSchema(Config{Resolvers: resolver}))
 	server.AddTransport(transport.POST{})
 	server.SetErrorPresenter(func(ctx context.Context, err error) *gqlerror.Error {
 		presented := graphql.DefaultErrorPresenter(ctx, err)
@@ -27,6 +31,10 @@ func NewHandler(channels *store.Channels, logger *slog.Logger) http.Handler {
 			code = "NOT_FOUND"
 		case errors.Is(err, store.ErrForbidden):
 			code = "FORBIDDEN"
+		case errors.Is(err, store.ErrAccountNotOwned):
+			code = "FORBIDDEN"
+		case errors.Is(err, auth.ErrUnauthenticated):
+			code = "UNAUTHENTICATED"
 		default:
 			logger.Error("resolve graphql", "err", err)
 		}

@@ -45,6 +45,13 @@ func TestDefaultTable_RoutesNoteAndTaskAggregatesToGo(t *testing.T) {
 	}
 }
 
+func TestDefaultTable_RoutesSendEmailToGo(t *testing.T) {
+	t.Parallel()
+	if got := frontdoor.DefaultTable()[frontdoor.EndpointMetadata]["SendEmail"]; got != frontdoor.RouteGo {
+		t.Errorf("route of SendEmail = %q, want %q", got, frontdoor.RouteGo)
+	}
+}
+
 func TestDefaultTable_RoutesSkillOperationsToGo(t *testing.T) {
 	t.Parallel()
 	table := frontdoor.DefaultTable()[frontdoor.EndpointMetadata]

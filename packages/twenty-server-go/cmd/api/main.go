@@ -107,7 +107,7 @@ func run() error {
 		skillgql.NewHandler(ai.NewSkills(pool), logger),
 		metagql.NewHandler(metadatastore.NewViews(pool), logger),
 		agentgql.NewHandler(aistore.NewAgents(pool), logger),
-		messaginggql.NewHandler(messagingstore.NewChannels(pool, os.Getenv("INBOUND_EMAIL_DOMAIN")), logger),
+		messaginggql.NewHandler(&messaginggql.Resolver{Channels: messagingstore.NewChannels(pool, os.Getenv("INBOUND_EMAIL_DOMAIN"))}, logger),
 		agentgql.Operations,
 	))
 

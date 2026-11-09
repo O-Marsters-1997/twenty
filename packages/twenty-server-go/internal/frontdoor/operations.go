@@ -56,6 +56,7 @@ func DefaultTable() OperationTable {
 			"CreateOneFieldMetadataItem":  RouteBlocked,
 			"UpdateOneFieldMetadataItem":  RouteBlocked,
 			"DeleteOneFieldMetadataItem":  RouteBlocked,
+			"SendEmail":                   RouteGo,
 		},
 	}
 	for _, operation := range viewOperations {

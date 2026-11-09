@@ -51,12 +51,12 @@ INSERT INTO core."calendarChannel" ("workspaceId", id, handle, visibility, "sync
  ($1, '` + calendarMine + `', 'me@example.com', 'METADATA', 'PENDING_CONFIGURATION', '` + accountMine + `', '2026-01-01T00:00:00Z', '2026-01-01T00:00:00Z'),
  ($1, '` + calendarPrivate + `', 'private@example.com', 'METADATA', 'PENDING_CONFIGURATION', '` + accountPrivate + `', '2026-01-03T00:00:00Z', '2026-01-03T00:00:00Z');`
 
-type harness struct {
+type channelsHarness struct {
 	handler http.Handler
 	pool    *pgxpool.Pool
 }
 
-func newHarness(t *testing.T, domain string) harness {
+func newChannelsHarness(t *testing.T, domain string) channelsHarness {
 	t.Helper()
 	pool, err := pgxpool.New(t.Context(), pgtest.New(t))
 	if err != nil {
@@ -76,15 +76,15 @@ func newHarness(t *testing.T, domain string) harness {
 	if err := tx.Commit(t.Context()); err != nil {
 		t.Fatalf("commit seed: %v", err)
 	}
-	inner := messaginggql.NewHandler(store.NewChannels(pool, domain), slog.New(slog.NewTextHandler(io.Discard, nil)))
+	inner := messaginggql.NewHandler(&messaginggql.Resolver{Channels: store.NewChannels(pool, domain)}, slog.New(slog.NewTextHandler(io.Discard, nil)))
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := auth.WithPrincipal(r.Context(), auth.Principal{UserWorkspaceID: userWorkspaceMe})
 		inner.ServeHTTP(w, r.WithContext(ctx))
 	})
-	return harness{handler: handler, pool: pool}
+	return channelsHarness{handler: handler, pool: pool}
 }
 
-func (h harness) send(t *testing.T, operation, query string, variables map[string]any) map[string]any {
+func (h channelsHarness) send(t *testing.T, operation, query string, variables map[string]any) map[string]any {
 	t.Helper()
 	body, err := json.Marshal(map[string]any{"operationName": operation, "query": query, "variables": variables})
 	if err != nil {
@@ -116,7 +116,7 @@ func errorCode(t *testing.T, decoded map[string]any) string {
 	return code
 }
 
-func (h harness) count(t *testing.T, query string, args ...any) int {
+func (h channelsHarness) count(t *testing.T, query string, args ...any) int {
 	t.Helper()
 	var total int
 	if err := h.pool.QueryRow(t.Context(), query, args...).Scan(&total); err != nil {
@@ -127,7 +127,7 @@ func (h harness) count(t *testing.T, query string, args ...any) int {
 
 func TestReads_matchNodeGolden(t *testing.T) {
 	t.Parallel()
-	handler := newHarness(t, inboundDomain).handler
+	handler := newChannelsHarness(t, inboundDomain).handler
 	for _, name := range []string{"MyConnectedAccounts", "ApplicationConnectedAccounts", "MyMessageChannels", "MyCalendarChannels"} {
 		t.Run(name, func(t *testing.T) {
 			golden.Assert(t, handler, "testdata", name)
@@ -153,7 +153,7 @@ func TestMutations_matchNodeGolden(t *testing.T) {
 	} {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			golden.Assert(t, newHarness(t, inboundDomain).handler, "testdata", tt.name, tt.ignore...)
+			golden.Assert(t, newChannelsHarness(t, inboundDomain).handler, "testdata", tt.name, tt.ignore...)
 		})
 	}
 }
@@ -163,7 +163,7 @@ func TestCreateEmailGroupChannel(t *testing.T) {
 	const mutation = `mutation CreateEmailGroupChannel($input: CreateEmailGroupChannelInput!) { createEmailGroupChannel(input: $input) { forwardingAddress } }`
 	t.Run("forwards through a random address on the inbound domain", func(t *testing.T) {
 		t.Parallel()
-		response := newHarness(t, inboundDomain).send(t, "CreateEmailGroupChannel", mutation, map[string]any{"input": map[string]any{"handle": "support@example.com"}})
+		response := newChannelsHarness(t, inboundDomain).send(t, "CreateEmailGroupChannel", mutation, map[string]any{"input": map[string]any{"handle": "support@example.com"}})
 		address := response["data"].(map[string]any)["createEmailGroupChannel"].(map[string]any)["forwardingAddress"].(string)
 		if !regexp.MustCompile(`^ch_[0-9a-f]{12}@in\.example\.com$`).MatchString(address) {
 			t.Errorf("forwardingAddress = %q, want ch_<12 hex>@%s", address, inboundDomain)
@@ -177,7 +177,7 @@ func TestCreateEmailGroupChannel(t *testing.T) {
 	} {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			response := newHarness(t, tt.domain).send(t, "CreateEmailGroupChannel", mutation, map[string]any{"input": map[string]any{"handle": tt.handle}})
+			response := newChannelsHarness(t, tt.domain).send(t, "CreateEmailGroupChannel", mutation, map[string]any{"input": map[string]any{"handle": tt.handle}})
 			if got := errorCode(t, response); got != tt.wantCode {
 				t.Errorf("error code = %s, want %s", got, tt.wantCode)
 			}
@@ -187,7 +187,7 @@ func TestCreateEmailGroupChannel(t *testing.T) {
 
 func TestDeleteConnectedAccount_removesItsChannels(t *testing.T) {
 	t.Parallel()
-	h := newHarness(t, inboundDomain)
+	h := newChannelsHarness(t, inboundDomain)
 	h.send(t, "DeleteConnectedAccount", `mutation DeleteConnectedAccount($id: UUID!) { deleteConnectedAccount(id: $id) { id } }`, map[string]any{"id": accountMine})
 	if got := h.count(t, `SELECT count(*) FROM core."messageChannel" WHERE "connectedAccountId" = $1::uuid`, accountMine); got != 0 {
 		t.Errorf("message channels left = %d, want 0", got)
@@ -199,7 +199,7 @@ func TestDeleteConnectedAccount_removesItsChannels(t *testing.T) {
 
 func TestDisconnectConnectedAccount_keepsChannelsButStopsSync(t *testing.T) {
 	t.Parallel()
-	h := newHarness(t, inboundDomain)
+	h := newChannelsHarness(t, inboundDomain)
 	h.send(t, "DisconnectConnectedAccount", `mutation DisconnectConnectedAccount($id: UUID!) { disconnectConnectedAccount(id: $id) { id } }`, map[string]any{"id": accountMine})
 	if got := h.count(t, `SELECT count(*) FROM core."connectedAccount" WHERE id = $1::uuid AND "accessToken" IS NULL AND "refreshToken" IS NULL`, accountMine); got != 1 {
 		t.Errorf("accounts with tokens cleared = %d, want 1", got)
@@ -214,7 +214,7 @@ func TestDisconnectConnectedAccount_keepsChannelsButStopsSync(t *testing.T) {
 
 func TestDeleteEmailGroupChannel_removesItsAccount(t *testing.T) {
 	t.Parallel()
-	h := newHarness(t, inboundDomain)
+	h := newChannelsHarness(t, inboundDomain)
 	h.send(t, "DeleteEmailGroupChannel", `mutation DeleteEmailGroupChannel($id: UUID!) { deleteEmailGroupChannel(id: $id) { id } }`, map[string]any{"id": channelGroup})
 	if got := h.count(t, `SELECT count(*) FROM core."connectedAccount" WHERE id = $1::uuid`, accountGroup); got != 0 {
 		t.Errorf("email group accounts left = %d, want 0", got)
@@ -256,7 +256,7 @@ func TestMutations_rejectCallersWhoCannotAdminister(t *testing.T) {
 	} {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			response := newHarness(t, inboundDomain).send(t, "", tt.query, tt.variables)
+			response := newChannelsHarness(t, inboundDomain).send(t, "", tt.query, tt.variables)
 			if got := errorCode(t, response); got != tt.wantCode {
 				t.Errorf("error code = %s, want %s", got, tt.wantCode)
 			}

@@ -129,6 +129,7 @@ type ComplexityRoot struct {
 		DeleteConnectedAccount     func(childComplexity int, id string) int
 		DeleteEmailGroupChannel    func(childComplexity int, id string) int
 		DisconnectConnectedAccount func(childComplexity int, id string) int
+		SendEmail                  func(childComplexity int, input SendEmailInput) int
 		UpdateCalendarChannel      func(childComplexity int, input map[string]any) int
 		UpdateEmailGroupChannel    func(childComplexity int, input map[string]any) int
 		UpdateMessageChannel       func(childComplexity int, input map[string]any) int
@@ -139,6 +140,12 @@ type ComplexityRoot struct {
 		MyCalendarChannels           func(childComplexity int, connectedAccountID *string) int
 		MyConnectedAccounts          func(childComplexity int) int
 		MyMessageChannels            func(childComplexity int, connectedAccountID *string) int
+	}
+
+	SendEmailOutput struct {
+		Error           func(childComplexity int) int
+		MessageThreadID func(childComplexity int) int
+		Success         func(childComplexity int) int
 	}
 }
 
@@ -157,6 +164,7 @@ type MutationResolver interface {
 	UpdateEmailGroupChannel(ctx context.Context, input map[string]any) (*store.MessageChannel, error)
 	DeleteEmailGroupChannel(ctx context.Context, id string) (*store.MessageChannel, error)
 	UpdateCalendarChannel(ctx context.Context, input map[string]any) (*store.CalendarChannel, error)
+	SendEmail(ctx context.Context, input SendEmailInput) (*SendEmailOutput, error)
 }
 type QueryResolver interface {
 	MyConnectedAccounts(ctx context.Context) ([]*store.Account, error)
@@ -658,6 +666,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DisconnectConnectedAccount(childComplexity, args["id"].(string)), true
+	case "Mutation.sendEmail":
+		if e.ComplexityRoot.Mutation.SendEmail == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_sendEmail_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.SendEmail(childComplexity, args["input"].(SendEmailInput)), true
 	case "Mutation.updateCalendarChannel":
 		if e.ComplexityRoot.Mutation.UpdateCalendarChannel == nil {
 			break
@@ -733,6 +752,25 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Query.MyMessageChannels(childComplexity, args["connectedAccountId"].(*string)), true
 
+	case "SendEmailOutput.error":
+		if e.ComplexityRoot.SendEmailOutput.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SendEmailOutput.Error(childComplexity), true
+	case "SendEmailOutput.messageThreadId":
+		if e.ComplexityRoot.SendEmailOutput.MessageThreadID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SendEmailOutput.MessageThreadID(childComplexity), true
+	case "SendEmailOutput.success":
+		if e.ComplexityRoot.SendEmailOutput.Success == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SendEmailOutput.Success(childComplexity), true
+
 	}
 	return 0, false
 }
@@ -743,6 +781,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	inputUnmarshalers := func() *graphql.InputUnmarshalerIndex {
 		return graphql.NewInputUnmarshalerIndex(
 			graphql.NewInputUnmarshaler("CreateEmailGroupChannelInput", ec.unmarshalInputCreateEmailGroupChannelInput),
+			graphql.NewInputUnmarshaler("SendEmailAttachmentInput", ec.unmarshalInputSendEmailAttachmentInput),
+			graphql.NewInputUnmarshaler("SendEmailInput", ec.unmarshalInputSendEmailInput),
 			graphql.NewInputUnmarshaler("UpdateCalendarChannelInput", ec.unmarshalInputUpdateCalendarChannelInput),
 			graphql.NewInputUnmarshaler("UpdateCalendarChannelInputUpdates", ec.unmarshalInputUpdateCalendarChannelInputUpdates),
 			graphql.NewInputUnmarshaler("UpdateEmailGroupChannelInput", ec.unmarshalInputUpdateEmailGroupChannelInput),
@@ -823,7 +863,7 @@ func newExecutionContext(
 	}
 }
 
-//go:embed "messaging.graphqls"
+//go:embed "messaging.graphqls" "send.graphqls"
 var sourcesFS embed.FS
 
 func sourceData(filename string) string {
@@ -836,6 +876,7 @@ func sourceData(filename string) string {
 
 var sources = []*ast.Source{
 	{Name: "messaging.graphqls", Input: sourceData("messaging.graphqls"), BuiltIn: false},
+	{Name: "send.graphqls", Input: sourceData("send.graphqls"), BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
@@ -1015,6 +1056,18 @@ func (ec *executionContext) childFields_MessageChannel(ctx context.Context, fiel
 	return nil, fmt.Errorf("no field named %q was found under type MessageChannel", field.Name)
 }
 
+func (ec *executionContext) childFields_SendEmailOutput(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "success":
+		return ec.fieldContext_SendEmailOutput_success(ctx, field)
+	case "error":
+		return ec.fieldContext_SendEmailOutput_error(ctx, field)
+	case "messageThreadId":
+		return ec.fieldContext_SendEmailOutput_messageThreadId(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type SendEmailOutput", field.Name)
+}
+
 func (ec *executionContext) childFields___Directive(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "name":
@@ -1184,6 +1237,20 @@ func (ec *executionContext) field_Mutation_disconnectConnectedAccount_args(ctx c
 		return nil, err
 	}
 	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_sendEmail_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
+		func(ctx context.Context, v any) (SendEmailInput, error) {
+			return ec.unmarshalNSendEmailInput2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋmessaginggqlᚐSendEmailInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
 	return args, nil
 }
 
@@ -3318,6 +3385,50 @@ func (ec *executionContext) fieldContext_Mutation_updateCalendarChannel(ctx cont
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_sendEmail(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_sendEmail(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().SendEmail(ctx, fc.Args["input"].(SendEmailInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *SendEmailOutput) graphql.Marshaler {
+			return ec.marshalNSendEmailOutput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋmessaginggqlᚐSendEmailOutput(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_sendEmail(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_SendEmailOutput(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_sendEmail_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_myConnectedAccounts(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -3556,6 +3667,75 @@ func (ec *executionContext) fieldContext_Query___schema(_ context.Context, field
 		},
 	}
 	return fc, nil
+}
+
+func (ec *executionContext) _SendEmailOutput_success(ctx context.Context, field graphql.CollectedField, obj *SendEmailOutput) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SendEmailOutput_success(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Success, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_SendEmailOutput_success(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("SendEmailOutput", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _SendEmailOutput_error(ctx context.Context, field graphql.CollectedField, obj *SendEmailOutput) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SendEmailOutput_error(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Error, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_SendEmailOutput_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("SendEmailOutput", field, false, false, "String")
+}
+
+func (ec *executionContext) _SendEmailOutput_messageThreadId(ctx context.Context, field graphql.CollectedField, obj *SendEmailOutput) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SendEmailOutput_messageThreadId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MessageThreadID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_SendEmailOutput_messageThreadId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("SendEmailOutput", field, false, false, "String")
 }
 
 func (ec *executionContext) ___Directive_name(ctx context.Context, field graphql.CollectedField, obj *introspection.Directive) (ret graphql.Marshaler) {
@@ -4681,6 +4861,160 @@ func UnmarshalCreateEmailGroupChannelInput(ctx context.Context, raw any) (map[st
 	return out, err
 }
 
+func (ec *executionContext) unmarshalInputSendEmailAttachmentInput(ctx context.Context, obj any) (SendEmailAttachmentInput, error) {
+	var it SendEmailAttachmentInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"id", "name"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ID = data
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalSendEmailAttachmentInput unmarshals raw into the SendEmailAttachmentInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalSendEmailAttachmentInput(ctx context.Context, raw any) (SendEmailAttachmentInput, error) {
+	var out SendEmailAttachmentInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "SendEmailAttachmentInput", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputSendEmailInput(ctx context.Context, obj any) (SendEmailInput, error) {
+	var it SendEmailInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"connectedAccountId", "fromHandle", "to", "cc", "bcc", "subject", "body", "inReplyTo", "draftMessageId", "files"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "connectedAccountId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("connectedAccountId"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ConnectedAccountID = data
+		case "fromHandle":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fromHandle"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FromHandle = data
+		case "to":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("to"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.To = data
+		case "cc":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("cc"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Cc = data
+		case "bcc":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("bcc"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Bcc = data
+		case "subject":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("subject"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Subject = data
+		case "body":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("body"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Body = data
+		case "inReplyTo":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("inReplyTo"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InReplyTo = data
+		case "draftMessageId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("draftMessageId"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DraftMessageID = data
+		case "files":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("files"))
+			data, err := ec.unmarshalOSendEmailAttachmentInput2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋmessaginggqlᚐSendEmailAttachmentInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Files = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalSendEmailInput unmarshals raw into the SendEmailInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalSendEmailInput(ctx context.Context, raw any) (SendEmailInput, error) {
+	var out SendEmailInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "SendEmailInput", raw, &out)
+	return out, err
+}
+
 func (ec *executionContext) unmarshalInputUpdateCalendarChannelInput(ctx context.Context, obj any) (map[string]any, error) {
 	var it map[string]any
 	if obj == nil {
@@ -5552,6 +5886,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "sendEmail":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_sendEmail(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -5625,6 +5966,49 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			})
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&out.Invalids, 1)
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var sendEmailOutputImplementors = []string{"SendEmailOutput"}
+
+func (ec *executionContext) _SendEmailOutput(ctx context.Context, sel ast.SelectionSet, obj *SendEmailOutput) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, sendEmailOutputImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("SendEmailOutput")
+		case "success":
+			out.Values[i] = ec._SendEmailOutput_success(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "error":
+			out.Values[i] = ec._SendEmailOutput_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "messageThreadId":
+			out.Values[i] = ec._SendEmailOutput_messageThreadId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
 			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -6310,6 +6694,24 @@ func (ec *executionContext) marshalNMessageFolderImportPolicy2string(ctx context
 	return res
 }
 
+func (ec *executionContext) unmarshalNSendEmailAttachmentInput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋmessaginggqlᚐSendEmailAttachmentInput(ctx context.Context, v any) (*SendEmailAttachmentInput, error) {
+	res, err := ec.unmarshalInputSendEmailAttachmentInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNSendEmailInput2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋmessaginggqlᚐSendEmailInput(ctx context.Context, v any) (SendEmailInput, error) {
+	res, err := ec.unmarshalInputSendEmailInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNSendEmailOutput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋmessaginggqlᚐSendEmailOutput(ctx context.Context, sel ast.SelectionSet, v *SendEmailOutput) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "SendEmailOutput!")
+		return graphql.Null
+	}
+	return ec._SendEmailOutput(ctx, sel, v)
+}
+
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v any) (string, error) {
 	res, err := graphql.UnmarshalString(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -6646,6 +7048,23 @@ func (ec *executionContext) marshalOMessageFolderImportPolicy2ᚖstring(ctx cont
 	_ = ctx
 	res := graphql.MarshalString(*v)
 	return res
+}
+
+func (ec *executionContext) unmarshalOSendEmailAttachmentInput2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋmessaginggqlᚐSendEmailAttachmentInputᚄ(ctx context.Context, v any) ([]*SendEmailAttachmentInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]*SendEmailAttachmentInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNSendEmailAttachmentInput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋmessaginggqlᚐSendEmailAttachmentInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
 }
 
 func (ec *executionContext) unmarshalOString2ᚕstringᚄ(ctx context.Context, v any) ([]string, error) {

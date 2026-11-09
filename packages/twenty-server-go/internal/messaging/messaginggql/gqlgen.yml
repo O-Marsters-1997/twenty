@@ -1,5 +1,6 @@
 schema:
   - messaging.graphqls
+  - send.graphqls
 exec:
   filename: generated.go
   package: messaginggql
