@@ -17,3 +17,9 @@ type ResumeStepArgs struct {
 }
 
 func (ResumeStepArgs) Kind() string { return "workflow_resume_step" }
+
+type CronTriggerArgs struct {
+	TriggerID string `json:"triggerId"`
+}
+
+func (CronTriggerArgs) Kind() string { return "workflow_cron_trigger" }

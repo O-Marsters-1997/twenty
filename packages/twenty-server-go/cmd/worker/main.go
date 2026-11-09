@@ -51,17 +51,27 @@ func run() error {
 		return fmt.Errorf("build action registry: %w", err)
 	}
 	workers := river.NewWorkers()
-	workflows := store.New(pool)
-	registerWorkflowWorkers(workers, &executor{store: workflows, registry: registry})
-	registerRecordEventWorker(workers, pool, workflows)
+	workflowStore := store.New(pool)
+	registerWorkflowWorkers(workers, &executor{store: workflowStore, registry: registry})
+	registerRecordEventWorker(workers, pool, workflowStore)
+
+	launcher := &workflow.Launcher{Store: workflowStore}
+	river.AddWorker(workers, &cronTriggerWorker{launcher: launcher})
 
 	client, err := newClient(pool, workers, logger)
 	if err != nil {
 		return err
 	}
+	launcher.Queue = func(ctx context.Context, args river.JobArgs) error {
+		if _, err := client.Insert(ctx, args, nil); err != nil {
+			return fmt.Errorf("insert job: %w", err)
+		}
+		return nil
+	}
 	if err := client.Start(ctx); err != nil {
 		return fmt.Errorf("start river client: %w", err)
 	}
+	go newCronScheduler(workflowStore, client.PeriodicJobs(), logger).run(ctx)
 	logger.Info("worker started")
 
 	<-ctx.Done()

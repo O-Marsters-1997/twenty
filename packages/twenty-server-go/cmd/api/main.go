@@ -29,6 +29,7 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records/recordsgql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records/store"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow"
 	workflowstore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/store"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/workflowgql"
 )
@@ -111,9 +112,11 @@ func run() error {
 		WithMCP(toolRegistry).
 		WithSubscriber(aigql.NewSubscriber(broker))
 
+	launcher := &workflow.Launcher{Store: workflowstore.New(pool), Queue: queue.Enqueue}
+
 	server := &http.Server{
 		Addr:              cfg.ListenAddr,
-		Handler:           handler,
+		Handler:           webhookRoutes(launcher, handler, logger),
 		ReadHeaderTimeout: 10 * time.Second,
 	}
 
