@@ -6,12 +6,13 @@ import (
 	"errors"
 	"fmt"
 	"slices"
+	"strconv"
 	"strings"
 )
 
 // Renderer renders a campaign template, the tiptap JSON document a campaign stores as its body,
 // into the HTML and plain text a recipient gets.
-type Renderer interface { // twenty-emails templates; implementation chosen in this phase (PRD open question)
+type Renderer interface {
 	Render(ctx context.Context, template string, variables map[string]any) (html, text string, err error)
 }
 
@@ -45,9 +46,9 @@ const (
 var (
 	headingFontSizes = map[int]string{1: "32px", 2: "24px", 3: "16px"}
 	// underline is applied first (innermost) and link last, as twenty-emails sorts marks.
-	markOrder     = []string{"underline", "bold", "italic", "strike", "link"}
-	htmlEscaper   = strings.NewReplacer("&", "&amp;", "<", "&lt;", ">", "&gt;", `"`, "&quot;", "'", "&#x27;")
-	allowedSchema = []string{"http:", "https:", "mailto:", "tel:"}
+	markOrder      = []string{"underline", "bold", "italic", "strike", "link"}
+	htmlEscaper    = strings.NewReplacer("&", "&amp;", "<", "&lt;", ">", "&gt;", `"`, "&quot;", "'", "&#x27;")
+	allowedSchemes = []string{"http:", "https:", "mailto:", "tel:"}
 )
 
 func (GoRenderer) Render(ctx context.Context, template string, variables map[string]any) (string, string, error) {
@@ -60,9 +61,13 @@ func (GoRenderer) Render(ctx context.Context, template string, variables map[str
 	}
 	pairs := make([]string, 0, 2*len(variables))
 	for name, value := range variables {
-		pairs = append(pairs, "{{"+name+"}}", fmt.Sprint(value))
+		pairs = append(pairs, "{{"+name+"}}", stringify(value))
 	}
 	substitute := strings.NewReplacer(pairs...).Replace
+
+	if _, themed := doc.Attrs["canvasTheme"]; themed {
+		return "", "", fmt.Errorf("%w: canvasTheme", ErrUnsupportedNode)
+	}
 
 	var html strings.Builder
 	var blocks []string
@@ -80,6 +85,9 @@ func (GoRenderer) Render(ctx context.Context, template string, variables map[str
 }
 
 func renderBlock(node tiptapNode, substitute func(string) string) (html, text string, err error) {
+	if _, styled := node.Attrs["style"]; styled {
+		return "", "", fmt.Errorf("%w: %s style", ErrUnsupportedNode, node.Type)
+	}
 	switch node.Type {
 	case "paragraph":
 		inlineHTML, inlineText, err := renderInline(node.Content, substitute)
@@ -112,10 +120,10 @@ func renderInline(nodes []tiptapNode, substitute func(string) string) (html, tex
 		switch node.Type {
 		case "text":
 			content := node.Text
-			if content == "" {
+			if content == "" && len(node.Marks) > 0 {
 				content = nbsp
 			}
-			nodeHTML, nodeText, err := renderMarks(node.Marks, substitute(content))
+			nodeHTML, nodeText, err := renderMarks(node.Marks, substitute(content), substitute)
 			if err != nil {
 				return "", "", err
 			}
@@ -139,7 +147,7 @@ func renderInline(nodes []tiptapNode, substitute func(string) string) (html, tex
 	return htmlOut.String(), textOut.String(), nil
 }
 
-func renderMarks(marks []tiptapMark, content string) (html, text string, err error) {
+func renderMarks(marks []tiptapMark, content string, substitute func(string) string) (html, text string, err error) {
 	html, text = htmlEscaper.Replace(content), content
 	sorted := slices.Clone(marks)
 	slices.SortStableFunc(sorted, func(a, b tiptapMark) int {
@@ -157,7 +165,7 @@ func renderMarks(marks []tiptapMark, content string) (html, text string, err err
 			html = `<span style="text-decoration:line-through">` + html + `</span>`
 		case "link":
 			href, _ := mark.Attrs["href"].(string)
-			href = safeURL(href)
+			href = safeURL(substitute(href))
 			if href == "" {
 				html = `<a target="_blank" rel="noopener noreferrer" style="text-decoration:underline">` + html + `</a>`
 				continue
@@ -185,10 +193,20 @@ func safeURL(value string) string {
 	if !found || strings.ContainsAny(scheme, "/?#") || scheme == "" || !isLetter(scheme[0]) {
 		return value
 	}
-	if slices.Contains(allowedSchema, strings.ToLower(scheme)+":") {
+	if slices.Contains(allowedSchemes, strings.ToLower(scheme)+":") {
 		return value
 	}
 	return ""
+}
+
+func stringify(value any) string {
+	switch typed := value.(type) {
+	case nil:
+		return ""
+	case float64:
+		return strconv.FormatFloat(typed, 'f', -1, 64)
+	}
+	return fmt.Sprint(value)
 }
 
 func isLetter(b byte) bool { return (b|0x20) >= 'a' && (b|0x20) <= 'z' }
