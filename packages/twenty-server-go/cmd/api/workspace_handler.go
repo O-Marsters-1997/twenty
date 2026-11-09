@@ -26,7 +26,8 @@ func workspaceHandler(records, chat, workflows http.Handler) http.Handler {
 			case request.OperationName == frontdoor.AnswerToolCallOperation:
 				chat.ServeHTTP(w, r)
 				return
-			case slices.Contains(frontdoor.WorkflowOperations, request.OperationName):
+			case slices.Contains(frontdoor.WorkflowOperations, request.OperationName),
+				slices.Contains(frontdoor.WorkflowAuthoringOperations, request.OperationName):
 				workflows.ServeHTTP(w, r)
 				return
 			}

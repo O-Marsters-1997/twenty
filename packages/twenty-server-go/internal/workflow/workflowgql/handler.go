@@ -21,11 +21,11 @@ func NewHandler(resolver *Resolver, logger *slog.Logger) http.Handler {
 		presented := graphql.DefaultErrorPresenter(ctx, err)
 		code := "INTERNAL_SERVER_ERROR"
 		switch {
-		case errors.Is(err, store.ErrInvalidInput), errors.Is(err, store.ErrInvalidTransition):
+		case errors.Is(err, store.ErrInvalidInput), errors.Is(err, store.ErrInvalidTransition), presented.Path == nil:
 			code = "BAD_USER_INPUT"
 		case errors.Is(err, store.ErrNotFound):
 			code = "NOT_FOUND"
-		case errors.Is(err, store.ErrForbidden):
+		case errors.Is(err, store.ErrForbidden), errors.Is(err, store.ErrActionForbidden), errors.Is(err, store.ErrConflict):
 			code = "FORBIDDEN"
 		default:
 			logger.Error("resolve graphql", "err", err)

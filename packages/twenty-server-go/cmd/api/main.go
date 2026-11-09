@@ -80,6 +80,7 @@ func run() error {
 	}
 	workflowHandler := workflowgql.NewHandler(&workflowgql.Resolver{
 		Store:      workflowstore.New(pool),
+		Authoring:  workflowAuthoring(pool),
 		Queue:      queue,
 		HTTPClient: workflowgql.NewSafeHTTPClient(),
 	}, logger)

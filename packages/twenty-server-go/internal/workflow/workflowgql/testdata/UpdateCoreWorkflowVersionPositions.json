@@ -1,0 +1,15 @@
+{
+  "name": "UpdateCoreWorkflowVersionPositions",
+  "operation": "UpdateCoreWorkflowVersionPositions",
+  "fixture": "baseline seed; mutation JSON derived from the Node resolvers and microdiff, not captured from a running Node",
+  "endpoint": "/graphql",
+  "query": "mutation UpdateCoreWorkflowVersionPositions($input: UpdateCoreWorkflowVersionPositionsInput!) { updateWorkflowVersionPositions: updateCoreWorkflowVersionPositions(input: $input) }",
+  "variables": {
+    "input": {}
+  },
+  "response": {
+    "data": {
+      "updateWorkflowVersionPositions": true
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "CreateCoreWorkflow",
+  "operation": "CreateCoreWorkflow",
+  "fixture": "baseline seed; mutation JSON derived from the Node resolvers and microdiff, not captured from a running Node",
+  "endpoint": "/graphql",
+  "query": "mutation CreateCoreWorkflow($input: CreateCoreWorkflowInput!) { createCoreWorkflow(input: $input) { id name statuses workspaceWorkflowId updatedAt } }",
+  "variables": {
+    "input": {
+      "name": "Lead intake"
+    }
+  },
+  "response": {
+    "data": {
+      "createCoreWorkflow": {
+        "id": "<ignored>",
+        "name": "Lead intake",
+        "statuses": [
+          "DRAFT"
+        ],
+        "workspaceWorkflowId": null,
+        "updatedAt": "<ignored>"
+      }
+    }
+  }
+}
