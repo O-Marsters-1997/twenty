@@ -7,7 +7,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// bcryptCost matches saltRounds in the Node server's auth.util.ts.
 const bcryptCost = 10
 
 // ErrInvalidCredentials is returned when a password does not match its hash.

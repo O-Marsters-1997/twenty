@@ -7,30 +7,24 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
 )
 
-// Hashes produced by the Node server's bcrypt package (bcrypt.hashSync, cost 10).
-const (
-	nodeHashASCII       = "$2b$10$vkix7WuHehRTV2Bma6xRSOHLJxF06FHftiipkq95MySpGaJLvhAGa"
-	nodePasswordASCII   = "correct horse battery staple"
-	nodeHashUnicode     = "$2b$10$tdhVm9rD9A9tgbgNzXBdQeLgUctz6YUWIDqJkXpO9o.jsVQ5H8AEW"
-	nodePasswordUnicode = "pässwörd-密码"
-)
+var nodeWrittenHashes = []struct{ name, hash, password string }{
+	{"ascii", "$2b$10$vkix7WuHehRTV2Bma6xRSOHLJxF06FHftiipkq95MySpGaJLvhAGa", "correct horse battery staple"},
+	{"unicode", "$2b$10$tdhVm9rD9A9tgbgNzXBdQeLgUctz6YUWIDqJkXpO9o.jsVQ5H8AEW", "pässwörd-密码"},
+}
 
 func TestPasswordHasher_Compare(t *testing.T) {
 	hasher := auth.NewPasswordHasher()
 
-	t.Run("accepts Node-written hashes", func(t *testing.T) {
-		for _, tt := range []struct{ hash, password string }{
-			{nodeHashASCII, nodePasswordASCII},
-			{nodeHashUnicode, nodePasswordUnicode},
-		} {
+	for _, tt := range nodeWrittenHashes {
+		t.Run("accepts Node-written "+tt.name, func(t *testing.T) {
 			if err := hasher.Compare(tt.hash, tt.password); err != nil {
 				t.Errorf("Compare(%q, %q) = %v, want nil", tt.hash, tt.password, err)
 			}
-		}
-	})
+		})
+	}
 
 	t.Run("rejects a wrong password", func(t *testing.T) {
-		err := hasher.Compare(nodeHashASCII, "wrong")
+		err := hasher.Compare(nodeWrittenHashes[0].hash, "wrong")
 		if !errors.Is(err, auth.ErrInvalidCredentials) {
 			t.Errorf("Compare(wrong) = %v, want ErrInvalidCredentials", err)
 		}
@@ -46,11 +40,12 @@ func TestPasswordHasher_Compare(t *testing.T) {
 
 func TestPasswordHasher_Hash(t *testing.T) {
 	hasher := auth.NewPasswordHasher()
-	hash, err := hasher.Hash(nodePasswordUnicode)
+	password := nodeWrittenHashes[1].password
+	hash, err := hasher.Hash(password)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := hasher.Compare(hash, nodePasswordUnicode); err != nil {
+	if err := hasher.Compare(hash, password); err != nil {
 		t.Errorf("Compare(Hash(p), p) = %v, want nil", err)
 	}
 }
