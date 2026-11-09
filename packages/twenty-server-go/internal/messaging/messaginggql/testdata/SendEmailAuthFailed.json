@@ -1,0 +1,9 @@
+{
+  "name": "SendEmailAuthFailed",
+  "operation": "SendEmail",
+  "fixture": "owned account whose credentials were rejected",
+  "endpoint": "/metadata",
+  "query": "mutation SendEmail($input: SendEmailInput!) { sendEmail(input: $input) { success error messageThreadId } }",
+  "variables": {"input": {"connectedAccountId": "3f6f1c0e-2d34-4c1a-9a55-7d1b6a0c8e01", "to": "ada@example.com", "subject": "Hello", "body": "<p>Hi</p>"}},
+  "response": {"data": {"sendEmail": {"success": false, "error": "connected account needs reconnecting", "messageThreadId": null}}}
+}

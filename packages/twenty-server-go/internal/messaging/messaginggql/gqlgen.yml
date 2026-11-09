@@ -1,0 +1,13 @@
+schema:
+  - send.graphqls
+exec:
+  filename: generated.go
+  package: messaginggql
+model:
+  filename: models_gen.go
+  package: messaginggql
+resolver:
+  layout: single-file
+  filename: resolver.go
+  package: messaginggql
+  type: Resolver

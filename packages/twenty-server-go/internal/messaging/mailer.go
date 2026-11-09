@@ -25,6 +25,10 @@ type Mailer interface {
 	Draft(ctx context.Context, connectedAccountID string, email OutboundEmail) (draftID string, err error)
 }
 
+type DraftSender interface {
+	SendDraft(ctx context.Context, connectedAccountID, draftID string, email OutboundEmail) (messageID string, err error)
+}
+
 var ErrAccountAuthFailed = errors.New("connected account needs reconnecting")
 
 // Accounts is the persistence the Gmail mailer needs for connected accounts.

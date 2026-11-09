@@ -115,6 +115,7 @@ func TestGmail_SendAndDraft(t *testing.T) {
 	}{
 		{"send", func(g *messaging.Gmail) (string, error) { return g.Send(t.Context(), "acc-1", email) }, "/gmail/v1/users/me/messages/send"},
 		{"draft", func(g *messaging.Gmail) (string, error) { return g.Draft(t.Context(), "acc-1", email) }, "/gmail/v1/users/me/drafts"},
+		{"send draft", func(g *messaging.Gmail) (string, error) { return g.SendDraft(t.Context(), "acc-1", "draft-1", email) }, "/gmail/v1/users/me/drafts/send"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

@@ -4,60 +4,58 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"github.com/riverqueue/river"
 )
 
-func CalendarSyncPeriodicJob(interval time.Duration) *river.PeriodicJob {
-	return river.NewPeriodicJob(
-		river.PeriodicInterval(interval),
-		func() (river.JobArgs, *river.InsertOpts) { return EnqueueCalendarSyncArgs{}, nil },
-		&river.PeriodicJobOpts{RunOnStart: true},
-	)
-}
-
-type SyncCalendarChannelArgs struct {
+// SyncMessageChannelArgs is the River job that imports one channel's new messages.
+type SyncMessageChannelArgs struct {
 	ChannelID string `json:"channelId"`
 }
 
-func (SyncCalendarChannelArgs) Kind() string { return "calendar_channel_sync" }
+func (SyncMessageChannelArgs) Kind() string { return "messaging_sync_channel" }
 
-// EnqueueCalendarSyncArgs is the periodic River job that fans out one SyncCalendarChannelArgs per active channel.
-type EnqueueCalendarSyncArgs struct{}
-
-func (EnqueueCalendarSyncArgs) Kind() string { return "calendar_sync_enqueue" }
-
-type Enqueuer func(ctx context.Context, args river.JobArgs) error
-
-type SyncCalendarChannelWorker struct {
-	river.WorkerDefaults[SyncCalendarChannelArgs]
-	Syncer *CalendarSyncer
+// InsertOpts keeps a channel from queueing a second sync while one is waiting.
+func (SyncMessageChannelArgs) InsertOpts() river.InsertOpts {
+	return river.InsertOpts{UniqueOpts: river.UniqueOpts{ByArgs: true}}
 }
 
-func (w *SyncCalendarChannelWorker) Work(ctx context.Context, job *river.Job[SyncCalendarChannelArgs]) error {
-	err := w.Syncer.SyncChannel(ctx, job.Args.ChannelID)
-	if errors.Is(err, ErrAccountAuthFailed) {
+// EnqueueMessageSyncsArgs is the periodic River job that fans out one sync per active channel.
+type EnqueueMessageSyncsArgs struct{}
+
+func (EnqueueMessageSyncsArgs) Kind() string { return "messaging_enqueue_syncs" }
+
+type SyncMessageChannelWorker struct {
+	river.WorkerDefaults[SyncMessageChannelArgs]
+	Syncer *Syncer
+}
+
+func (w *SyncMessageChannelWorker) Work(ctx context.Context, job *river.Job[SyncMessageChannelArgs]) error {
+	err := w.Syncer.Sync(ctx, job.Args.ChannelID)
+	if errors.Is(err, ErrChannelNotFound) || errors.Is(err, ErrAccountAuthFailed) {
 		return river.JobCancel(err)
 	}
-	return err
-}
-
-type EnqueueCalendarSyncWorker struct {
-	river.WorkerDefaults[EnqueueCalendarSyncArgs]
-	Channels CalendarChannels
-	Queue    Enqueuer
-}
-
-func (w *EnqueueCalendarSyncWorker) Work(ctx context.Context, _ *river.Job[EnqueueCalendarSyncArgs]) error {
-	ids, err := w.Channels.ActiveIDs(ctx)
 	if err != nil {
-		return fmt.Errorf("list active calendar channels: %w", err)
+		return fmt.Errorf("sync channel %s: %w", job.Args.ChannelID, err)
+	}
+	return nil
+}
+
+type EnqueueMessageSyncsWorker struct {
+	river.WorkerDefaults[EnqueueMessageSyncsArgs]
+	Store SyncStore
+	Queue func(ctx context.Context, args river.JobArgs) error
+}
+
+func (w *EnqueueMessageSyncsWorker) Work(ctx context.Context, _ *river.Job[EnqueueMessageSyncsArgs]) error {
+	ids, err := w.Store.ActiveChannelIDs(ctx)
+	if err != nil {
+		return fmt.Errorf("list active channels: %w", err)
 	}
 	var errs []error
 	for _, id := range ids {
-		if err := w.Queue(ctx, SyncCalendarChannelArgs{ChannelID: id}); err != nil {
-			errs = append(errs, fmt.Errorf("enqueue calendar channel %s: %w", id, err))
+		if err := w.Queue(ctx, SyncMessageChannelArgs{ChannelID: id}); err != nil {
+			errs = append(errs, fmt.Errorf("enqueue sync for channel %s: %w", id, err))
 		}
 	}
 	return errors.Join(errs...)
