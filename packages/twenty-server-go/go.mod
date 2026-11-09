@@ -14,6 +14,7 @@ require (
 	github.com/pressly/goose/v3 v3.27.3
 	github.com/riverqueue/river v0.51.1
 	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.51.1
+	github.com/robfig/cron/v3 v3.0.1
 	github.com/testcontainers/testcontainers-go v0.45.0
 	github.com/testcontainers/testcontainers-go/modules/postgres v0.45.0
 	github.com/vektah/gqlparser/v2 v2.5.64

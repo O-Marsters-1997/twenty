@@ -10,6 +10,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/riverqueue/river"
 
@@ -51,15 +52,24 @@ func run() error {
 		return fmt.Errorf("build action registry: %w", err)
 	}
 	workers := river.NewWorkers()
-	registerWorkflowWorkers(workers, &executor{store: store.New(pool), registry: registry})
+	workflowStore := store.New(pool)
+	registerWorkflowWorkers(workers, &executor{store: workflowStore, registry: registry})
 
-	client, err := newClient(pool, workers, logger)
+	var client *river.Client[pgx.Tx]
+	launcher := &workflow.Launcher{Store: workflowStore, Queue: func(ctx context.Context, args river.JobArgs) error {
+		_, err := client.Insert(ctx, args, nil)
+		return err
+	}}
+	river.AddWorker(workers, &cronTriggerWorker{launcher: launcher})
+
+	client, err = newClient(pool, workers, logger)
 	if err != nil {
 		return err
 	}
 	if err := client.Start(ctx); err != nil {
 		return fmt.Errorf("start river client: %w", err)
 	}
+	go newCronScheduler(workflowStore, client.PeriodicJobs(), logger).run(ctx)
 	logger.Info("worker started")
 
 	<-ctx.Done()

@@ -12,6 +12,8 @@ import (
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/riverqueue/river"
+	"github.com/riverqueue/river/riverdriver/riverpgxv5"
 
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai/agentgql"
@@ -26,6 +28,8 @@ import (
 	metadatastore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/store"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records/recordsgql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records/store"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow"
+	workflowstore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/store"
 )
 
 func main() {
@@ -89,9 +93,18 @@ func run() error {
 		WithMCP(toolRegistry).
 		WithSubscriber(aigql.NewSubscriber(broker))
 
+	queue, err := river.NewClient(riverpgxv5.New(pool), &river.Config{Logger: logger})
+	if err != nil {
+		return fmt.Errorf("create river insert client: %w", err)
+	}
+	launcher := &workflow.Launcher{Store: workflowstore.New(pool), Queue: func(ctx context.Context, args river.JobArgs) error {
+		_, err := queue.Insert(ctx, args, nil)
+		return err
+	}}
+
 	server := &http.Server{
 		Addr:              cfg.ListenAddr,
-		Handler:           handler,
+		Handler:           webhookRoutes(launcher, handler, logger),
 		ReadHeaderTimeout: 10 * time.Second,
 	}
 

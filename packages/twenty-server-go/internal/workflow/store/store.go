@@ -127,6 +127,18 @@ func (s *Store) Versions(ctx context.Context, workflowID string) ([]Version, err
 	return versions, nil
 }
 
+func (s *Store) ActiveVersions(ctx context.Context) ([]Version, error) {
+	rows, err := s.pool.Query(ctx, versionSelect()+` AND status::text = 'ACTIVE' ORDER BY id`)
+	if err != nil {
+		return nil, fmt.Errorf("select active versions: %w", err)
+	}
+	versions, err := pgx.CollectRows(rows, scanVersion)
+	if err != nil {
+		return nil, fmt.Errorf("scan active versions: %w", err)
+	}
+	return versions, nil
+}
+
 func versionSelect() string {
 	return `SELECT id::text, "workflowId"::text, name, status::text, trigger, steps
 		FROM ` + table("workflowVersion") + ` WHERE "deletedAt" IS NULL`
