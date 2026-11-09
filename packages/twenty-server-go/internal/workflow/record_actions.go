@@ -25,25 +25,26 @@ type recordSettings struct {
 
 type recordAction struct {
 	actionType ActionType
-	records    Records
-	run        func(ctx context.Context, store Records, settings recordSettings) (any, error)
+	run        func(ctx context.Context, settings recordSettings) (any, error)
 }
 
 // NewRecordActions returns the CREATE_RECORD, UPDATE_RECORD, DELETE_RECORD,
 // UPSERT_RECORD and FIND_RECORDS actions backed by store.
 func NewRecordActions(store Records) []Action {
 	return []Action{
-		&recordAction{ActionTypeCreateRecord, store, func(ctx context.Context, store Records, s recordSettings) (any, error) {
+		&recordAction{actionType: ActionTypeCreateRecord, run: func(ctx context.Context, s recordSettings) (any, error) {
 			return store.Create(ctx, s.ObjectName, s.ObjectRecord)
 		}},
-		&recordAction{ActionTypeUpdateRecord, store, func(ctx context.Context, store Records, s recordSettings) (any, error) {
+		&recordAction{actionType: ActionTypeUpdateRecord, run: func(ctx context.Context, s recordSettings) (any, error) {
 			return store.Update(ctx, s.ObjectName, s.ObjectRecordID, s.ObjectRecord)
 		}},
-		&recordAction{ActionTypeDeleteRecord, store, func(ctx context.Context, store Records, s recordSettings) (any, error) {
+		&recordAction{actionType: ActionTypeDeleteRecord, run: func(ctx context.Context, s recordSettings) (any, error) {
 			return nil, store.Delete(ctx, s.ObjectName, s.ObjectRecordID)
 		}},
-		&recordAction{ActionTypeUpsertRecord, store, upsertRecord},
-		&recordAction{ActionTypeFindRecords, store, func(ctx context.Context, store Records, s recordSettings) (any, error) {
+		&recordAction{actionType: ActionTypeUpsertRecord, run: func(ctx context.Context, s recordSettings) (any, error) {
+			return upsertRecord(ctx, store, s)
+		}},
+		&recordAction{actionType: ActionTypeFindRecords, run: func(ctx context.Context, s recordSettings) (any, error) {
 			return store.Find(ctx, s.ObjectName, s.Filter)
 		}},
 	}
@@ -72,7 +73,7 @@ func (a *recordAction) Run(ctx context.Context, input StepInput) (StepOutput, er
 	if err := json.Unmarshal(input.Settings, &settings); err != nil {
 		return StepOutput{Error: fmt.Sprintf("decode settings: %v", err)}, nil
 	}
-	result, err := a.run(ctx, a.records, settings)
+	result, err := a.run(ctx, settings)
 	if err != nil {
 		return StepOutput{Error: err.Error()}, nil
 	}
