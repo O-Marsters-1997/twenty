@@ -183,4 +183,3 @@ func TestHandler_Callback(t *testing.T) {
 		}
 	})
 }
-
