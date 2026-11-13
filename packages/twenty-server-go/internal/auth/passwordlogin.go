@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/url"
+	"slices"
 	"strings"
 	"time"
 
@@ -263,7 +264,7 @@ func (l *PasswordLogin) availableWorkspaces(ctx context.Context, user loginUser)
 	if err != nil {
 		return nil, nil, err
 	}
-	forSignUp, err = l.present(ctx, user, append(joinable, invitations...), false)
+	forSignUp, err = l.present(ctx, user, slices.Concat(joinable, invitations), false)
 	if err != nil {
 		return nil, nil, err
 	}
