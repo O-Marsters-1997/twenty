@@ -1,0 +1,9 @@
+{
+  "name": "sign-in",
+  "operation": "SignIn",
+  "fixture": "workspace member in two workspaces and invited to a third",
+  "endpoint": "/metadata",
+  "query": "mutation SignIn($email: String!, $password: String!, $captchaToken: String) { signIn(email: $email, password: $password, captchaToken: $captchaToken) { availableWorkspaces { availableWorkspacesForSignIn { id displayName loginToken personalInviteToken inviteHash workspaceUrls { subdomainUrl } logo } availableWorkspacesForSignUp { id displayName loginToken personalInviteToken inviteHash workspaceUrls { subdomainUrl } logo } } tokens { accessOrWorkspaceAgnosticToken { token expiresAt } refreshToken { token expiresAt } } } }",
+  "variables": {"email": "member@example.com", "password": "correct horse"},
+  "response": {"data":{"signIn":{"availableWorkspaces":{"availableWorkspacesForSignIn":[{"id":"20202020-1c25-4d02-bf25-6aeccf7ea419","displayName":"Acme","loginToken":"x","personalInviteToken":null,"inviteHash":null,"workspaceUrls":{"subdomainUrl":"http://acme.localhost:3001/"},"logo":""},{"id":"20202020-1c25-4d02-bf25-6aeccf7ea420","displayName":"Locked","loginToken":"x","personalInviteToken":null,"inviteHash":null,"workspaceUrls":{"subdomainUrl":"http://locked.localhost:3001/"},"logo":""}],"availableWorkspacesForSignUp":[{"id":"20202020-1c25-4d02-bf25-6aeccf7ea421","displayName":"Pitch","loginToken":null,"personalInviteToken":"pitch-invite-token","inviteHash":null,"workspaceUrls":{"subdomainUrl":"http://pitch.localhost:3001/"},"logo":""}]},"tokens":{"accessOrWorkspaceAgnosticToken":{"token":"x","expiresAt":"x"},"refreshToken":{"token":"x","expiresAt":"x"}}}}}
+}

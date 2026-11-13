@@ -58,6 +58,10 @@ func run() error {
 	}
 	defer pool.Close()
 	verifier := auth.NewJWTVerifier(pool, cfg.AppSecret)
+	login, sessions, err := passwordLogin(pool, cfg.AppSecret, cfg.EncryptionKey, cfg.FallbackEncryptionKey, logger)
+	if err != nil {
+		return err
+	}
 
 	chats := aistore.New(pool)
 	broker := ai.NewPersistingBroker(ai.NewMemoryBroker(), chats, logger)
@@ -118,13 +122,18 @@ func run() error {
 			Renderer:  messaging.GoRenderer{},
 			Queue:     queue.Enqueue,
 		}, logger),
-		authgql.NewHandler(&authgql.Resolver{TwoFactor: auth.NewTwoFactor(
-			pool, auth.NewSecretCipher(cfg.EncryptionKey, cfg.FallbackEncryptionKey, cfg.AppSecret), cfg.RecoveryCodeTTL,
-		)}, logger),
+		authgql.NewHandler(&authgql.Resolver{
+			TwoFactor: auth.NewTwoFactor(
+				pool, auth.NewSecretCipher(cfg.EncryptionKey, cfg.FallbackEncryptionKey, cfg.AppSecret), cfg.RecoveryCodeTTL,
+			),
+			PasswordLogin: login,
+			Sessions:      sessions,
+		}, logger),
 		agentgql.Operations,
 	))
 
 	handler := frontdoor.NewHandler(frontdoor.DefaultTable(), cfg.NodeUpstreamURL, verifier, goGraphQL, logger).
+		WithPublicOperations(map[frontdoor.Endpoint][]string{frontdoor.EndpointMetadata: frontdoor.PasswordLoginOperations}).
 		WithMCP(toolRegistry).
 		WithSubscriber(aigql.NewSubscriber(broker))
 

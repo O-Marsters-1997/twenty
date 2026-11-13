@@ -37,6 +37,36 @@ type DirectiveRoot struct {
 }
 
 type ComplexityRoot struct {
+	AuthToken struct {
+		ExpiresAt func(childComplexity int) int
+		Token     func(childComplexity int) int
+	}
+
+	AuthTokenPair struct {
+		AccessOrWorkspaceAgnosticToken func(childComplexity int) int
+		RefreshToken                   func(childComplexity int) int
+	}
+
+	AvailableWorkspace struct {
+		DisplayName         func(childComplexity int) int
+		ID                  func(childComplexity int) int
+		InviteHash          func(childComplexity int) int
+		LoginToken          func(childComplexity int) int
+		Logo                func(childComplexity int) int
+		PersonalInviteToken func(childComplexity int) int
+		WorkspaceUrls       func(childComplexity int) int
+	}
+
+	AvailableWorkspaces struct {
+		AvailableWorkspacesForSignIn func(childComplexity int) int
+		AvailableWorkspacesForSignUp func(childComplexity int) int
+	}
+
+	AvailableWorkspacesAndAccessTokens struct {
+		AvailableWorkspaces func(childComplexity int) int
+		Tokens              func(childComplexity int) int
+	}
+
 	DeleteTwoFactorAuthenticationMethod struct {
 		Success func(childComplexity int) int
 	}
@@ -45,11 +75,17 @@ type ComplexityRoot struct {
 		URI func(childComplexity int) int
 	}
 
+	LoginToken struct {
+		LoginToken func(childComplexity int) int
+	}
+
 	Mutation struct {
 		DeleteTwoFactorAuthenticationMethod                     func(childComplexity int, twoFactorAuthenticationMethodID string) int
 		GenerateTwoFactorAuthenticationRecoveryCode             func(childComplexity int, userID string, otp *string) int
+		GetLoginTokenFromCredentials                            func(childComplexity int, email string, password string, captchaToken *string, locale *string, verifyEmailRedirectPath *string, origin string) int
 		InitiateOTPProvisioningForAuthenticatedUser             func(childComplexity int) int
 		RevokeTwoFactorAuthenticationRecoveryCode               func(childComplexity int, userID string) int
+		SignIn                                                  func(childComplexity int, email string, password string, captchaToken *string, locale *string, verifyEmailRedirectPath *string) int
 		VerifyTwoFactorAuthenticationMethodForAuthenticatedUser func(childComplexity int, otp string) int
 	}
 
@@ -71,6 +107,10 @@ type ComplexityRoot struct {
 	VerifyTwoFactorAuthenticationMethod struct {
 		Success func(childComplexity int) int
 	}
+
+	WorkspaceUrls struct {
+		SubdomainURL func(childComplexity int) int
+	}
 }
 
 // endregion ***************************** api!.gotpl *****************************
@@ -83,6 +123,8 @@ type MutationResolver interface {
 	DeleteTwoFactorAuthenticationMethod(ctx context.Context, twoFactorAuthenticationMethodID string) (*DeleteTwoFactorAuthenticationMethod, error)
 	GenerateTwoFactorAuthenticationRecoveryCode(ctx context.Context, userID string, otp *string) (*TwoFactorAuthenticationRecoveryCode, error)
 	RevokeTwoFactorAuthenticationRecoveryCode(ctx context.Context, userID string) (bool, error)
+	GetLoginTokenFromCredentials(ctx context.Context, email string, password string, captchaToken *string, locale *string, verifyEmailRedirectPath *string, origin string) (*LoginToken, error)
+	SignIn(ctx context.Context, email string, password string, captchaToken *string, locale *string, verifyEmailRedirectPath *string) (*AvailableWorkspacesAndAccessTokens, error)
 }
 type QueryResolver interface {
 	TwoFactorAuthenticationRecoveryStatus(ctx context.Context, userID string) (*TwoFactorAuthenticationRecoveryStatus, error)
@@ -106,6 +148,101 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 	_ = ec
 	switch typeName + "." + field {
 
+	case "AuthToken.expiresAt":
+		if e.ComplexityRoot.AuthToken.ExpiresAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AuthToken.ExpiresAt(childComplexity), true
+	case "AuthToken.token":
+		if e.ComplexityRoot.AuthToken.Token == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AuthToken.Token(childComplexity), true
+
+	case "AuthTokenPair.accessOrWorkspaceAgnosticToken":
+		if e.ComplexityRoot.AuthTokenPair.AccessOrWorkspaceAgnosticToken == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AuthTokenPair.AccessOrWorkspaceAgnosticToken(childComplexity), true
+	case "AuthTokenPair.refreshToken":
+		if e.ComplexityRoot.AuthTokenPair.RefreshToken == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AuthTokenPair.RefreshToken(childComplexity), true
+
+	case "AvailableWorkspace.displayName":
+		if e.ComplexityRoot.AvailableWorkspace.DisplayName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AvailableWorkspace.DisplayName(childComplexity), true
+	case "AvailableWorkspace.id":
+		if e.ComplexityRoot.AvailableWorkspace.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AvailableWorkspace.ID(childComplexity), true
+	case "AvailableWorkspace.inviteHash":
+		if e.ComplexityRoot.AvailableWorkspace.InviteHash == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AvailableWorkspace.InviteHash(childComplexity), true
+	case "AvailableWorkspace.loginToken":
+		if e.ComplexityRoot.AvailableWorkspace.LoginToken == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AvailableWorkspace.LoginToken(childComplexity), true
+	case "AvailableWorkspace.logo":
+		if e.ComplexityRoot.AvailableWorkspace.Logo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AvailableWorkspace.Logo(childComplexity), true
+	case "AvailableWorkspace.personalInviteToken":
+		if e.ComplexityRoot.AvailableWorkspace.PersonalInviteToken == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AvailableWorkspace.PersonalInviteToken(childComplexity), true
+	case "AvailableWorkspace.workspaceUrls":
+		if e.ComplexityRoot.AvailableWorkspace.WorkspaceUrls == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AvailableWorkspace.WorkspaceUrls(childComplexity), true
+
+	case "AvailableWorkspaces.availableWorkspacesForSignIn":
+		if e.ComplexityRoot.AvailableWorkspaces.AvailableWorkspacesForSignIn == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AvailableWorkspaces.AvailableWorkspacesForSignIn(childComplexity), true
+	case "AvailableWorkspaces.availableWorkspacesForSignUp":
+		if e.ComplexityRoot.AvailableWorkspaces.AvailableWorkspacesForSignUp == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AvailableWorkspaces.AvailableWorkspacesForSignUp(childComplexity), true
+
+	case "AvailableWorkspacesAndAccessTokens.availableWorkspaces":
+		if e.ComplexityRoot.AvailableWorkspacesAndAccessTokens.AvailableWorkspaces == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AvailableWorkspacesAndAccessTokens.AvailableWorkspaces(childComplexity), true
+	case "AvailableWorkspacesAndAccessTokens.tokens":
+		if e.ComplexityRoot.AvailableWorkspacesAndAccessTokens.Tokens == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AvailableWorkspacesAndAccessTokens.Tokens(childComplexity), true
+
 	case "DeleteTwoFactorAuthenticationMethod.success":
 		if e.ComplexityRoot.DeleteTwoFactorAuthenticationMethod.Success == nil {
 			break
@@ -119,6 +256,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.InitiateTwoFactorAuthenticationProvisioning.URI(childComplexity), true
+
+	case "LoginToken.loginToken":
+		if e.ComplexityRoot.LoginToken.LoginToken == nil {
+			break
+		}
+
+		return e.ComplexityRoot.LoginToken.LoginToken(childComplexity), true
 
 	case "Mutation.deleteTwoFactorAuthenticationMethod":
 		if e.ComplexityRoot.Mutation.DeleteTwoFactorAuthenticationMethod == nil {
@@ -142,6 +286,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.GenerateTwoFactorAuthenticationRecoveryCode(childComplexity, args["userId"].(string), args["otp"].(*string)), true
+	case "Mutation.getLoginTokenFromCredentials":
+		if e.ComplexityRoot.Mutation.GetLoginTokenFromCredentials == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_getLoginTokenFromCredentials_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.GetLoginTokenFromCredentials(childComplexity, args["email"].(string), args["password"].(string), args["captchaToken"].(*string), args["locale"].(*string), args["verifyEmailRedirectPath"].(*string), args["origin"].(string)), true
 	case "Mutation.initiateOTPProvisioningForAuthenticatedUser":
 		if e.ComplexityRoot.Mutation.InitiateOTPProvisioningForAuthenticatedUser == nil {
 			break
@@ -159,6 +314,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.RevokeTwoFactorAuthenticationRecoveryCode(childComplexity, args["userId"].(string)), true
+	case "Mutation.signIn":
+		if e.ComplexityRoot.Mutation.SignIn == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_signIn_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.SignIn(childComplexity, args["email"].(string), args["password"].(string), args["captchaToken"].(*string), args["locale"].(*string), args["verifyEmailRedirectPath"].(*string)), true
 	case "Mutation.verifyTwoFactorAuthenticationMethodForAuthenticatedUser":
 		if e.ComplexityRoot.Mutation.VerifyTwoFactorAuthenticationMethodForAuthenticatedUser == nil {
 			break
@@ -221,6 +387,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.VerifyTwoFactorAuthenticationMethod.Success(childComplexity), true
+
+	case "WorkspaceUrls.subdomainUrl":
+		if e.ComplexityRoot.WorkspaceUrls.SubdomainURL == nil {
+			break
+		}
+
+		return e.ComplexityRoot.WorkspaceUrls.SubdomainURL(childComplexity), true
 
 	}
 	return 0, false
@@ -305,7 +478,7 @@ func newExecutionContext(
 	}
 }
 
-//go:embed "twofactor.graphqls"
+//go:embed "twofactor.graphqls" "login.graphqls"
 var sourcesFS embed.FS
 
 func sourceData(filename string) string {
@@ -318,12 +491,73 @@ func sourceData(filename string) string {
 
 var sources = []*ast.Source{
 	{Name: "twofactor.graphqls", Input: sourceData("twofactor.graphqls"), BuiltIn: false},
+	{Name: "login.graphqls", Input: sourceData("login.graphqls"), BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
 // childFields_* functions provide shared child field context lookups.
 // Each function is generated once per unique object type, deduplicating the
 // switch statements that were previously inlined in every fieldContext_* function.
+
+func (ec *executionContext) childFields_AuthToken(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "token":
+		return ec.fieldContext_AuthToken_token(ctx, field)
+	case "expiresAt":
+		return ec.fieldContext_AuthToken_expiresAt(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AuthToken", field.Name)
+}
+
+func (ec *executionContext) childFields_AuthTokenPair(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "accessOrWorkspaceAgnosticToken":
+		return ec.fieldContext_AuthTokenPair_accessOrWorkspaceAgnosticToken(ctx, field)
+	case "refreshToken":
+		return ec.fieldContext_AuthTokenPair_refreshToken(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AuthTokenPair", field.Name)
+}
+
+func (ec *executionContext) childFields_AvailableWorkspace(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_AvailableWorkspace_id(ctx, field)
+	case "displayName":
+		return ec.fieldContext_AvailableWorkspace_displayName(ctx, field)
+	case "loginToken":
+		return ec.fieldContext_AvailableWorkspace_loginToken(ctx, field)
+	case "personalInviteToken":
+		return ec.fieldContext_AvailableWorkspace_personalInviteToken(ctx, field)
+	case "inviteHash":
+		return ec.fieldContext_AvailableWorkspace_inviteHash(ctx, field)
+	case "workspaceUrls":
+		return ec.fieldContext_AvailableWorkspace_workspaceUrls(ctx, field)
+	case "logo":
+		return ec.fieldContext_AvailableWorkspace_logo(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AvailableWorkspace", field.Name)
+}
+
+func (ec *executionContext) childFields_AvailableWorkspaces(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "availableWorkspacesForSignIn":
+		return ec.fieldContext_AvailableWorkspaces_availableWorkspacesForSignIn(ctx, field)
+	case "availableWorkspacesForSignUp":
+		return ec.fieldContext_AvailableWorkspaces_availableWorkspacesForSignUp(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AvailableWorkspaces", field.Name)
+}
+
+func (ec *executionContext) childFields_AvailableWorkspacesAndAccessTokens(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "tokens":
+		return ec.fieldContext_AvailableWorkspacesAndAccessTokens_tokens(ctx, field)
+	case "availableWorkspaces":
+		return ec.fieldContext_AvailableWorkspacesAndAccessTokens_availableWorkspaces(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AvailableWorkspacesAndAccessTokens", field.Name)
+}
 
 func (ec *executionContext) childFields_DeleteTwoFactorAuthenticationMethod(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
@@ -339,6 +573,14 @@ func (ec *executionContext) childFields_InitiateTwoFactorAuthenticationProvision
 		return ec.fieldContext_InitiateTwoFactorAuthenticationProvisioning_uri(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type InitiateTwoFactorAuthenticationProvisioning", field.Name)
+}
+
+func (ec *executionContext) childFields_LoginToken(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "loginToken":
+		return ec.fieldContext_LoginToken_loginToken(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type LoginToken", field.Name)
 }
 
 func (ec *executionContext) childFields_TwoFactorAuthenticationRecoveryCode(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -369,6 +611,14 @@ func (ec *executionContext) childFields_VerifyTwoFactorAuthenticationMethod(ctx 
 		return ec.fieldContext_VerifyTwoFactorAuthenticationMethod_success(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type VerifyTwoFactorAuthenticationMethod", field.Name)
+}
+
+func (ec *executionContext) childFields_WorkspaceUrls(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "subdomainUrl":
+		return ec.fieldContext_WorkspaceUrls_subdomainUrl(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type WorkspaceUrls", field.Name)
 }
 
 func (ec *executionContext) childFields___Directive(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -523,6 +773,60 @@ func (ec *executionContext) field_Mutation_generateTwoFactorAuthenticationRecove
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_getLoginTokenFromCredentials_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "email",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["email"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "password",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["password"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "captchaToken",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOString2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["captchaToken"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "locale",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOString2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["locale"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "verifyEmailRedirectPath",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOString2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["verifyEmailRedirectPath"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "origin",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["origin"] = arg5
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_revokeTwoFactorAuthenticationRecoveryCode_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -534,6 +838,52 @@ func (ec *executionContext) field_Mutation_revokeTwoFactorAuthenticationRecovery
 		return nil, err
 	}
 	args["userId"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_signIn_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "email",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["email"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "password",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["password"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "captchaToken",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOString2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["captchaToken"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "locale",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOString2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["locale"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "verifyEmailRedirectPath",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOString2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["verifyEmailRedirectPath"] = arg4
 	return args, nil
 }
 
@@ -653,6 +1003,414 @@ func (ec *executionContext) field___Type_inputFields_args(ctx context.Context, r
 
 // region    **************************** field.gotpl *****************************
 
+func (ec *executionContext) _AuthToken_token(ctx context.Context, field graphql.CollectedField, obj *AuthToken) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AuthToken_token(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Token, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_AuthToken_token(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("AuthToken", field, false, false, "String")
+}
+
+func (ec *executionContext) _AuthToken_expiresAt(ctx context.Context, field graphql.CollectedField, obj *AuthToken) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AuthToken_expiresAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ExpiresAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v metadata.Timestamp) graphql.Marshaler {
+			return ec.marshalNDateTime2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_AuthToken_expiresAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("AuthToken", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _AuthTokenPair_accessOrWorkspaceAgnosticToken(ctx context.Context, field graphql.CollectedField, obj *AuthTokenPair) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AuthTokenPair_accessOrWorkspaceAgnosticToken(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AccessOrWorkspaceAgnosticToken, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *AuthToken) graphql.Marshaler {
+			return ec.marshalNAuthToken2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐAuthToken(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_AuthTokenPair_accessOrWorkspaceAgnosticToken(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AuthTokenPair",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_AuthToken(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AuthTokenPair_refreshToken(ctx context.Context, field graphql.CollectedField, obj *AuthTokenPair) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AuthTokenPair_refreshToken(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.RefreshToken, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *AuthToken) graphql.Marshaler {
+			return ec.marshalNAuthToken2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐAuthToken(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_AuthTokenPair_refreshToken(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AuthTokenPair",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_AuthToken(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AvailableWorkspace_id(ctx context.Context, field graphql.CollectedField, obj *AvailableWorkspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AvailableWorkspace_id(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNUUID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_AvailableWorkspace_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("AvailableWorkspace", field, false, false, "UUID")
+}
+
+func (ec *executionContext) _AvailableWorkspace_displayName(ctx context.Context, field graphql.CollectedField, obj *AvailableWorkspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AvailableWorkspace_displayName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.DisplayName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_AvailableWorkspace_displayName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("AvailableWorkspace", field, false, false, "String")
+}
+
+func (ec *executionContext) _AvailableWorkspace_loginToken(ctx context.Context, field graphql.CollectedField, obj *AvailableWorkspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AvailableWorkspace_loginToken(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.LoginToken, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_AvailableWorkspace_loginToken(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("AvailableWorkspace", field, false, false, "String")
+}
+
+func (ec *executionContext) _AvailableWorkspace_personalInviteToken(ctx context.Context, field graphql.CollectedField, obj *AvailableWorkspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AvailableWorkspace_personalInviteToken(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PersonalInviteToken, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_AvailableWorkspace_personalInviteToken(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("AvailableWorkspace", field, false, false, "String")
+}
+
+func (ec *executionContext) _AvailableWorkspace_inviteHash(ctx context.Context, field graphql.CollectedField, obj *AvailableWorkspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AvailableWorkspace_inviteHash(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.InviteHash, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_AvailableWorkspace_inviteHash(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("AvailableWorkspace", field, false, false, "String")
+}
+
+func (ec *executionContext) _AvailableWorkspace_workspaceUrls(ctx context.Context, field graphql.CollectedField, obj *AvailableWorkspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AvailableWorkspace_workspaceUrls(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.WorkspaceUrls, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *WorkspaceUrls) graphql.Marshaler {
+			return ec.marshalNWorkspaceUrls2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐWorkspaceUrls(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_AvailableWorkspace_workspaceUrls(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AvailableWorkspace",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_WorkspaceUrls(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AvailableWorkspace_logo(ctx context.Context, field graphql.CollectedField, obj *AvailableWorkspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AvailableWorkspace_logo(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Logo, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_AvailableWorkspace_logo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("AvailableWorkspace", field, false, false, "String")
+}
+
+func (ec *executionContext) _AvailableWorkspaces_availableWorkspacesForSignIn(ctx context.Context, field graphql.CollectedField, obj *AvailableWorkspaces) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AvailableWorkspaces_availableWorkspacesForSignIn(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AvailableWorkspacesForSignIn, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*AvailableWorkspace) graphql.Marshaler {
+			return ec.marshalNAvailableWorkspace2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐAvailableWorkspaceᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_AvailableWorkspaces_availableWorkspacesForSignIn(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AvailableWorkspaces",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_AvailableWorkspace(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AvailableWorkspaces_availableWorkspacesForSignUp(ctx context.Context, field graphql.CollectedField, obj *AvailableWorkspaces) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AvailableWorkspaces_availableWorkspacesForSignUp(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AvailableWorkspacesForSignUp, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*AvailableWorkspace) graphql.Marshaler {
+			return ec.marshalNAvailableWorkspace2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐAvailableWorkspaceᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_AvailableWorkspaces_availableWorkspacesForSignUp(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AvailableWorkspaces",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_AvailableWorkspace(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AvailableWorkspacesAndAccessTokens_tokens(ctx context.Context, field graphql.CollectedField, obj *AvailableWorkspacesAndAccessTokens) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AvailableWorkspacesAndAccessTokens_tokens(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Tokens, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *AuthTokenPair) graphql.Marshaler {
+			return ec.marshalNAuthTokenPair2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐAuthTokenPair(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_AvailableWorkspacesAndAccessTokens_tokens(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AvailableWorkspacesAndAccessTokens",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_AuthTokenPair(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AvailableWorkspacesAndAccessTokens_availableWorkspaces(ctx context.Context, field graphql.CollectedField, obj *AvailableWorkspacesAndAccessTokens) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AvailableWorkspacesAndAccessTokens_availableWorkspaces(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AvailableWorkspaces, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *AvailableWorkspaces) graphql.Marshaler {
+			return ec.marshalNAvailableWorkspaces2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐAvailableWorkspaces(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_AvailableWorkspacesAndAccessTokens_availableWorkspaces(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AvailableWorkspacesAndAccessTokens",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_AvailableWorkspaces(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _DeleteTwoFactorAuthenticationMethod_success(ctx context.Context, field graphql.CollectedField, obj *DeleteTwoFactorAuthenticationMethod) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -697,6 +1455,38 @@ func (ec *executionContext) _InitiateTwoFactorAuthenticationProvisioning_uri(ctx
 }
 func (ec *executionContext) fieldContext_InitiateTwoFactorAuthenticationProvisioning_uri(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("InitiateTwoFactorAuthenticationProvisioning", field, false, false, "String")
+}
+
+func (ec *executionContext) _LoginToken_loginToken(ctx context.Context, field graphql.CollectedField, obj *LoginToken) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_LoginToken_loginToken(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.LoginToken, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *AuthToken) graphql.Marshaler {
+			return ec.marshalNAuthToken2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐAuthToken(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_LoginToken_loginToken(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "LoginToken",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_AuthToken(ctx, field)
+		},
+	}
+	return fc, nil
 }
 
 func (ec *executionContext) _Mutation_initiateOTPProvisioningForAuthenticatedUser(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -901,6 +1691,94 @@ func (ec *executionContext) fieldContext_Mutation_revokeTwoFactorAuthenticationR
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_revokeTwoFactorAuthenticationRecoveryCode_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_getLoginTokenFromCredentials(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_getLoginTokenFromCredentials(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().GetLoginTokenFromCredentials(ctx, fc.Args["email"].(string), fc.Args["password"].(string), fc.Args["captchaToken"].(*string), fc.Args["locale"].(*string), fc.Args["verifyEmailRedirectPath"].(*string), fc.Args["origin"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *LoginToken) graphql.Marshaler {
+			return ec.marshalNLoginToken2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐLoginToken(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_getLoginTokenFromCredentials(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_LoginToken(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_getLoginTokenFromCredentials_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_signIn(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_signIn(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().SignIn(ctx, fc.Args["email"].(string), fc.Args["password"].(string), fc.Args["captchaToken"].(*string), fc.Args["locale"].(*string), fc.Args["verifyEmailRedirectPath"].(*string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *AvailableWorkspacesAndAccessTokens) graphql.Marshaler {
+			return ec.marshalNAvailableWorkspacesAndAccessTokens2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐAvailableWorkspacesAndAccessTokens(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_signIn(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_AvailableWorkspacesAndAccessTokens(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_signIn_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -1163,6 +2041,29 @@ func (ec *executionContext) _VerifyTwoFactorAuthenticationMethod_success(ctx con
 }
 func (ec *executionContext) fieldContext_VerifyTwoFactorAuthenticationMethod_success(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("VerifyTwoFactorAuthenticationMethod", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _WorkspaceUrls_subdomainUrl(ctx context.Context, field graphql.CollectedField, obj *WorkspaceUrls) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_WorkspaceUrls_subdomainUrl(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SubdomainURL, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_WorkspaceUrls_subdomainUrl(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("WorkspaceUrls", field, false, false, "String")
 }
 
 func (ec *executionContext) ___Directive_name(ctx context.Context, field graphql.CollectedField, obj *introspection.Directive) (ret graphql.Marshaler) {
@@ -2246,6 +3147,221 @@ func (ec *executionContext) fieldContext___Type_isOneOf(_ context.Context, field
 
 // region    **************************** object.gotpl ****************************
 
+var authTokenImplementors = []string{"AuthToken"}
+
+func (ec *executionContext) _AuthToken(ctx context.Context, sel ast.SelectionSet, obj *AuthToken) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, authTokenImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("AuthToken")
+		case "token":
+			out.Values[i] = ec._AuthToken_token(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "expiresAt":
+			out.Values[i] = ec._AuthToken_expiresAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var authTokenPairImplementors = []string{"AuthTokenPair"}
+
+func (ec *executionContext) _AuthTokenPair(ctx context.Context, sel ast.SelectionSet, obj *AuthTokenPair) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, authTokenPairImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("AuthTokenPair")
+		case "accessOrWorkspaceAgnosticToken":
+			out.Values[i] = ec._AuthTokenPair_accessOrWorkspaceAgnosticToken(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "refreshToken":
+			out.Values[i] = ec._AuthTokenPair_refreshToken(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var availableWorkspaceImplementors = []string{"AvailableWorkspace"}
+
+func (ec *executionContext) _AvailableWorkspace(ctx context.Context, sel ast.SelectionSet, obj *AvailableWorkspace) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, availableWorkspaceImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("AvailableWorkspace")
+		case "id":
+			out.Values[i] = ec._AvailableWorkspace_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "displayName":
+			out.Values[i] = ec._AvailableWorkspace_displayName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "loginToken":
+			out.Values[i] = ec._AvailableWorkspace_loginToken(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "personalInviteToken":
+			out.Values[i] = ec._AvailableWorkspace_personalInviteToken(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "inviteHash":
+			out.Values[i] = ec._AvailableWorkspace_inviteHash(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "workspaceUrls":
+			out.Values[i] = ec._AvailableWorkspace_workspaceUrls(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "logo":
+			out.Values[i] = ec._AvailableWorkspace_logo(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var availableWorkspacesImplementors = []string{"AvailableWorkspaces"}
+
+func (ec *executionContext) _AvailableWorkspaces(ctx context.Context, sel ast.SelectionSet, obj *AvailableWorkspaces) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, availableWorkspacesImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("AvailableWorkspaces")
+		case "availableWorkspacesForSignIn":
+			out.Values[i] = ec._AvailableWorkspaces_availableWorkspacesForSignIn(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "availableWorkspacesForSignUp":
+			out.Values[i] = ec._AvailableWorkspaces_availableWorkspacesForSignUp(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var availableWorkspacesAndAccessTokensImplementors = []string{"AvailableWorkspacesAndAccessTokens"}
+
+func (ec *executionContext) _AvailableWorkspacesAndAccessTokens(ctx context.Context, sel ast.SelectionSet, obj *AvailableWorkspacesAndAccessTokens) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, availableWorkspacesAndAccessTokensImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("AvailableWorkspacesAndAccessTokens")
+		case "tokens":
+			out.Values[i] = ec._AvailableWorkspacesAndAccessTokens_tokens(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "availableWorkspaces":
+			out.Values[i] = ec._AvailableWorkspacesAndAccessTokens_availableWorkspaces(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
 var deleteTwoFactorAuthenticationMethodImplementors = []string{"DeleteTwoFactorAuthenticationMethod"}
 
 func (ec *executionContext) _DeleteTwoFactorAuthenticationMethod(ctx context.Context, sel ast.SelectionSet, obj *DeleteTwoFactorAuthenticationMethod) graphql.Marshaler {
@@ -2292,6 +3408,39 @@ func (ec *executionContext) _InitiateTwoFactorAuthenticationProvisioning(ctx con
 			out.Values[i] = graphql.MarshalString("InitiateTwoFactorAuthenticationProvisioning")
 		case "uri":
 			out.Values[i] = ec._InitiateTwoFactorAuthenticationProvisioning_uri(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var loginTokenImplementors = []string{"LoginToken"}
+
+func (ec *executionContext) _LoginToken(ctx context.Context, sel ast.SelectionSet, obj *LoginToken) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, loginTokenImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("LoginToken")
+		case "loginToken":
+			out.Values[i] = ec._LoginToken_loginToken(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -2362,6 +3511,20 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "revokeTwoFactorAuthenticationRecoveryCode":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_revokeTwoFactorAuthenticationRecoveryCode(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "getLoginTokenFromCredentials":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_getLoginTokenFromCredentials(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "signIn":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_signIn(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -2533,6 +3696,39 @@ func (ec *executionContext) _VerifyTwoFactorAuthenticationMethod(ctx context.Con
 			out.Values[i] = graphql.MarshalString("VerifyTwoFactorAuthenticationMethod")
 		case "success":
 			out.Values[i] = ec._VerifyTwoFactorAuthenticationMethod_success(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var workspaceUrlsImplementors = []string{"WorkspaceUrls"}
+
+func (ec *executionContext) _WorkspaceUrls(ctx context.Context, sel ast.SelectionSet, obj *WorkspaceUrls) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, workspaceUrlsImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("WorkspaceUrls")
+		case "subdomainUrl":
+			out.Values[i] = ec._WorkspaceUrls_subdomainUrl(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -2915,6 +4111,62 @@ func (ec *executionContext) ___Type(ctx context.Context, sel ast.SelectionSet, o
 
 // region    ***************************** type.gotpl *****************************
 
+func (ec *executionContext) marshalNAuthToken2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐAuthToken(ctx context.Context, sel ast.SelectionSet, v *AuthToken) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "AuthToken!")
+		return graphql.Null
+	}
+	return ec._AuthToken(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNAuthTokenPair2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐAuthTokenPair(ctx context.Context, sel ast.SelectionSet, v *AuthTokenPair) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "AuthTokenPair!")
+		return graphql.Null
+	}
+	return ec._AuthTokenPair(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNAvailableWorkspace2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐAvailableWorkspaceᚄ(ctx context.Context, sel ast.SelectionSet, v []*AvailableWorkspace) graphql.Marshaler {
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNAvailableWorkspace2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐAvailableWorkspace(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNAvailableWorkspace2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐAvailableWorkspace(ctx context.Context, sel ast.SelectionSet, v *AvailableWorkspace) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "AvailableWorkspace!")
+		return graphql.Null
+	}
+	return ec._AvailableWorkspace(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNAvailableWorkspaces2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐAvailableWorkspaces(ctx context.Context, sel ast.SelectionSet, v *AvailableWorkspaces) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "AvailableWorkspaces!")
+		return graphql.Null
+	}
+	return ec._AvailableWorkspaces(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNAvailableWorkspacesAndAccessTokens2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐAvailableWorkspacesAndAccessTokens(ctx context.Context, sel ast.SelectionSet, v *AvailableWorkspacesAndAccessTokens) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "AvailableWorkspacesAndAccessTokens!")
+		return graphql.Null
+	}
+	return ec._AvailableWorkspacesAndAccessTokens(ctx, sel, v)
+}
+
 func (ec *executionContext) unmarshalNBoolean2bool(ctx context.Context, v any) (bool, error) {
 	res, err := graphql.UnmarshalBoolean(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -2953,6 +4205,14 @@ func (ec *executionContext) marshalNInitiateTwoFactorAuthenticationProvisioning2
 		return graphql.Null
 	}
 	return ec._InitiateTwoFactorAuthenticationProvisioning(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNLoginToken2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐLoginToken(ctx context.Context, sel ast.SelectionSet, v *LoginToken) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "LoginToken!")
+		return graphql.Null
+	}
+	return ec._LoginToken(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v any) (string, error) {
@@ -3005,6 +4265,14 @@ func (ec *executionContext) marshalNVerifyTwoFactorAuthenticationMethod2ᚖgithu
 		return graphql.Null
 	}
 	return ec._VerifyTwoFactorAuthenticationMethod(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNWorkspaceUrls2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐWorkspaceUrls(ctx context.Context, sel ast.SelectionSet, v *WorkspaceUrls) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "WorkspaceUrls!")
+		return graphql.Null
+	}
+	return ec._WorkspaceUrls(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalN__Directive2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐDirective(ctx context.Context, sel ast.SelectionSet, v introspection.Directive) graphql.Marshaler {

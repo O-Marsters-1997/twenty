@@ -212,6 +212,19 @@ func (i *PGIssuer) signLogin(ctx context.Context, email, workspaceID string, pro
 	return token, nil
 }
 
+func (i *PGIssuer) IssueFileToken(ctx context.Context, workspaceID, fileID string, ttl time.Duration) (string, error) {
+	token, err := i.sign(ctx, jwt.MapClaims{
+		"workspaceId": workspaceID,
+		"fileId":      fileID,
+		"sub":         workspaceID,
+		"type":        TokenTypeFile,
+	}, time.Now().Add(ttl))
+	if err != nil {
+		return "", fmt.Errorf("issue file token: %w", err)
+	}
+	return token, nil
+}
+
 func (i *PGIssuer) VerifyLoginToken(ctx context.Context, loginToken string) (LoginClaims, error) {
 	var parsed claims
 	err := i.parseSigned(ctx, loginToken, &parsed, func() claims { return parsed })
