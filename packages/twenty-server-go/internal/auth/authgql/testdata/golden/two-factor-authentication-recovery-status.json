@@ -1,0 +1,9 @@
+{
+  "name": "two-factor-authentication-recovery-status",
+  "operation": "twoFactorAuthenticationRecoveryStatus",
+  "fixture": "admin reading a member with a verified TOTP method",
+  "endpoint": "/metadata",
+  "query": "query twoFactorAuthenticationRecoveryStatus($userId: UUID!) { twoFactorAuthenticationRecoveryStatus(userId: $userId) { hasVerifiedTwoFactorAuthenticationMethod isAwaitingRecoveryEnrollment pendingRecoveryCodeExpiresAt } }",
+  "variables": {"userId": "a0000000-0000-4000-8000-000000000003"},
+  "response": {"data":{"twoFactorAuthenticationRecoveryStatus":{"hasVerifiedTwoFactorAuthenticationMethod":true,"isAwaitingRecoveryEnrollment":false,"pendingRecoveryCodeExpiresAt":null}}}
+}

@@ -63,6 +63,19 @@ func TestDefaultTable_RoutesSendEmailToGo(t *testing.T) {
 	}
 }
 
+func TestDefaultTable_RoutesTwoFactorOperationsToGo(t *testing.T) {
+	t.Parallel()
+	table := frontdoor.DefaultTable()[frontdoor.EndpointMetadata]
+	for _, operation := range frontdoor.TwoFactorOperations {
+		if table[operation] != frontdoor.RouteGo {
+			t.Errorf("route of %s = %q, want %q", operation, table[operation], frontdoor.RouteGo)
+		}
+	}
+	if got := table["initiateOTPProvisioning"]; got == frontdoor.RouteGo {
+		t.Error("initiateOTPProvisioning is public and needs login-token verification, so it stays on Node")
+	}
+}
+
 func TestDefaultTable_RoutesSkillOperationsToGo(t *testing.T) {
 	t.Parallel()
 	table := frontdoor.DefaultTable()[frontdoor.EndpointMetadata]

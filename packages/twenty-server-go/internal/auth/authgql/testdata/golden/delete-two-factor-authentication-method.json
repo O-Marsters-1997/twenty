@@ -1,0 +1,9 @@
+{
+  "name": "delete-two-factor-authentication-method",
+  "operation": "deleteTwoFactorAuthenticationMethod",
+  "fixture": "user with a verified TOTP method",
+  "endpoint": "/metadata",
+  "query": "mutation deleteTwoFactorAuthenticationMethod($twoFactorAuthenticationMethodId: UUID!) { deleteTwoFactorAuthenticationMethod(twoFactorAuthenticationMethodId: $twoFactorAuthenticationMethodId) { success } }",
+  "variables": {"twoFactorAuthenticationMethodId": "b0000000-0000-4000-8000-000000000003"},
+  "response": {"data":{"deleteTwoFactorAuthenticationMethod":{"success":true}}}
+}
