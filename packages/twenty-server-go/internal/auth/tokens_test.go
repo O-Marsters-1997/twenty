@@ -184,6 +184,31 @@ func TestPGIssuer_IssueLogin(t *testing.T) {
 	}
 }
 
+func TestPGIssuer_IssueLoginForEmail(t *testing.T) {
+	t.Parallel()
+	env := newTokenEnv(t)
+
+	t.Run("matches email case-insensitively and carries the provider", func(t *testing.T) {
+		t.Parallel()
+		token, err := env.issuer.IssueLoginForEmail(t.Context(), "Fixture@Example.com", "google")
+		if err != nil {
+			t.Fatalf("IssueLoginForEmail() error = %v", err)
+		}
+		got, _ := decodeClaims(t, token)
+		if got["authProvider"] != "google" || got["sub"] != "fixture@example.com" {
+			t.Errorf("claims authProvider=%v sub=%v, want google and fixture@example.com", got["authProvider"], got["sub"])
+		}
+	})
+
+	t.Run("unknown email", func(t *testing.T) {
+		t.Parallel()
+		_, err := env.issuer.IssueLoginForEmail(t.Context(), "nobody@example.com", "google")
+		if !errors.Is(err, auth.ErrUnknownUser) {
+			t.Errorf("IssueLoginForEmail() error = %v, want ErrUnknownUser", err)
+		}
+	})
+}
+
 func TestPGIssuer_Refresh(t *testing.T) {
 	t.Parallel()
 

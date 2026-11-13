@@ -126,9 +126,14 @@ func run() error {
 
 	launcher := &workflow.Launcher{Store: workflowstore.New(pool), Queue: queue.Enqueue}
 
+	routes, err := googleRoutes(pool, cfg.AppSecret, webhookRoutes(launcher, handler, logger), logger)
+	if err != nil {
+		return err
+	}
+
 	server := &http.Server{
 		Addr:              cfg.ListenAddr,
-		Handler:           webhookRoutes(launcher, handler, logger),
+		Handler:           routes,
 		ReadHeaderTimeout: 10 * time.Second,
 	}
 
