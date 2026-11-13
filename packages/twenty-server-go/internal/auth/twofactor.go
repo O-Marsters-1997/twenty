@@ -416,6 +416,41 @@ func (s *TwoFactor) hasVerifiedMethod(ctx context.Context, workspaceID, userWork
 	return verified, nil
 }
 
+type TwoFactorRequirement string
+
+const (
+	TwoFactorNotRequired       TwoFactorRequirement = "none"
+	TwoFactorVerifyRequired    TwoFactorRequirement = "verification_required"
+	TwoFactorProvisionRequired TwoFactorRequirement = "provision_required"
+)
+
+func (s *TwoFactor) Requirement(ctx context.Context, userID, workspaceID string) (TwoFactorRequirement, error) {
+	userWorkspace, found, err := s.userWorkspace(ctx, s.pool, userID, workspaceID)
+	if err != nil {
+		return "", err
+	}
+	if !found {
+		return "", errUserWorkspaceMissing
+	}
+	verified, err := s.hasVerifiedMethod(ctx, workspaceID, userWorkspace.ID)
+	if err != nil {
+		return "", err
+	}
+	if verified {
+		return TwoFactorVerifyRequired, nil
+	}
+	var enforced bool
+	if err := s.pool.QueryRow(ctx,
+		`SELECT "isTwoFactorAuthenticationEnforced" FROM core.workspace WHERE id = $1::uuid`, workspaceID,
+	).Scan(&enforced); err != nil {
+		return "", fmt.Errorf("look up workspace enforcement: %w", err)
+	}
+	if enforced {
+		return TwoFactorProvisionRequired, nil
+	}
+	return TwoFactorNotRequired, nil
+}
+
 func (s *TwoFactor) isAwaitingRecoveryEnrollment(ctx context.Context, workspaceID, userID string, userWorkspace userWorkspaceRow) (bool, error) {
 	var awaiting bool
 	if err := s.pool.QueryRow(ctx,

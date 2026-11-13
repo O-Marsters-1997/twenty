@@ -27,6 +27,27 @@ type Handler struct {
 
 	subscriber Subscriber
 	mcpTools   ai.Registry
+	public     map[Endpoint]map[string]bool
+}
+
+func (h *Handler) WithPublicOperations(operations map[Endpoint][]string) *Handler {
+	h.public = map[Endpoint]map[string]bool{}
+	for endpoint, names := range operations {
+		h.public[endpoint] = map[string]bool{}
+		for _, name := range names {
+			h.public[endpoint][name] = true
+		}
+	}
+	return h
+}
+
+func (h *Handler) allPublic(endpoint Endpoint, requests []graphqlRequest) bool {
+	for _, request := range requests {
+		if !h.public[endpoint][request.OperationName] {
+			return false
+		}
+	}
+	return len(requests) > 0
 }
 
 func NewHandler(table OperationTable, upstream *url.URL, verifier auth.Verifier, goGraphQL http.Handler, logger *slog.Logger) *Handler {
@@ -70,7 +91,8 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	r.Body = io.NopCloser(bytes.NewReader(body))
 
 	route := RouteNode
-	for _, request := range parseRequests(body) {
+	requests := parseRequests(body)
+	for _, request := range requests {
 		operationRoute := h.routeFor(endpoint, request)
 		h.logger.Info("graphql request", "operation", request.OperationName, "route", operationRoute)
 		route = mostRestrictive(route, operationRoute)
@@ -82,6 +104,10 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case RouteGo:
 		if h.subscriber != nil && wantsEventStream(r) && isSubscription(body) {
 			h.serveSubscription(w, r, endpoint, body)
+			return
+		}
+		if h.allPublic(endpoint, requests) {
+			h.goGraphQL.ServeHTTP(w, r)
 			return
 		}
 		principal, ok := h.authenticate(w, r)
