@@ -72,10 +72,14 @@ func (t *totp) Generate() (string, string, error) {
 		return "", "", fmt.Errorf("generate totp secret: %w", err)
 	}
 	secret := totpEncoding.EncodeToString(key)
-	label := encodeURIComponent(t.issuer) + ":" + encodeURIComponent(t.account)
+	return secret, OTPAuthURL(t.issuer, t.account, secret), nil
+}
+
+func OTPAuthURL(issuer, account, secret string) string {
+	label := encodeURIComponent(issuer) + ":" + encodeURIComponent(account)
 	query := fmt.Sprintf("secret=%s&period=%d&digits=%d&algorithm=SHA1&issuer=%s",
-		secret, int(totpStep.Seconds()), totpDigits, encodeURIComponent(t.issuer))
-	return secret, "otpauth://totp/" + label + "?" + query, nil
+		secret, int(totpStep.Seconds()), totpDigits, encodeURIComponent(issuer))
+	return "otpauth://totp/" + label + "?" + query
 }
 
 func encodeURIComponent(value string) string {

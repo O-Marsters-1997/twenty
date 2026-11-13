@@ -1,0 +1,37 @@
+scalar UUID
+scalar DateTime
+
+type InitiateTwoFactorAuthenticationProvisioning {
+  uri: String!
+}
+
+type VerifyTwoFactorAuthenticationMethod {
+  success: Boolean!
+}
+
+type DeleteTwoFactorAuthenticationMethod {
+  success: Boolean!
+}
+
+type TwoFactorAuthenticationRecoveryStatus {
+  hasVerifiedTwoFactorAuthenticationMethod: Boolean!
+  isAwaitingRecoveryEnrollment: Boolean!
+  pendingRecoveryCodeExpiresAt: DateTime
+}
+
+type TwoFactorAuthenticationRecoveryCode {
+  recoveryCode: String!
+  expiresAt: DateTime!
+}
+
+type Query {
+  twoFactorAuthenticationRecoveryStatus(userId: UUID!): TwoFactorAuthenticationRecoveryStatus!
+}
+
+type Mutation {
+  initiateOTPProvisioningForAuthenticatedUser: InitiateTwoFactorAuthenticationProvisioning!
+  verifyTwoFactorAuthenticationMethodForAuthenticatedUser(otp: String!): VerifyTwoFactorAuthenticationMethod!
+  deleteTwoFactorAuthenticationMethod(twoFactorAuthenticationMethodId: UUID!): DeleteTwoFactorAuthenticationMethod!
+  generateTwoFactorAuthenticationRecoveryCode(userId: UUID!, otp: String): TwoFactorAuthenticationRecoveryCode!
+  revokeTwoFactorAuthenticationRecoveryCode(userId: UUID!): Boolean!
+}

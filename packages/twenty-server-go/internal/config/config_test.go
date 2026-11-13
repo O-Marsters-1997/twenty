@@ -3,6 +3,7 @@ package config_test
 import (
 	"log/slog"
 	"testing"
+	"time"
 
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/config"
 )
@@ -23,6 +24,13 @@ func TestLoad(t *testing.T) {
 		if cfg.LogLevel != slog.LevelInfo {
 			t.Errorf("LogLevel = %v, want info", cfg.LogLevel)
 		}
+		if cfg.RecoveryCodeTTL != time.Hour {
+			t.Errorf("RecoveryCodeTTL = %v, want 1h", cfg.RecoveryCodeTTL)
+		}
+		days, err := config.Load(env(map[string]string{"NODE_UPSTREAM_URL": "http://localhost:3001", "TWO_FACTOR_AUTHENTICATION_RECOVERY_CODE_EXPIRES_IN": "2d"}))
+		if err != nil || days.RecoveryCodeTTL != 48*time.Hour {
+			t.Errorf("RecoveryCodeTTL for 2d = %v, %v, want 48h", days.RecoveryCodeTTL, err)
+		}
 		if cfg.NodeUpstreamURL.Host != "localhost:3001" {
 			t.Errorf("NodeUpstreamURL.Host = %q, want localhost:3001", cfg.NodeUpstreamURL.Host)
 		}
@@ -33,6 +41,7 @@ func TestLoad(t *testing.T) {
 			"missing upstream": {},
 			"no scheme":        {"NODE_UPSTREAM_URL": "localhost:3001"},
 			"bad level":        {"NODE_UPSTREAM_URL": "http://n:1", "LOG_LEVEL": "loud"},
+			"bad recovery ttl": {"NODE_UPSTREAM_URL": "http://n:1", "TWO_FACTOR_AUTHENTICATION_RECOVERY_CODE_EXPIRES_IN": "soon"},
 		}
 		for name, values := range tests {
 			t.Run(name, func(t *testing.T) {

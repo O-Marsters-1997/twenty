@@ -1,0 +1,18 @@
+schema:
+  - twofactor.graphqls
+exec:
+  filename: generated.go
+  package: authgql
+model:
+  filename: models_gen.go
+  package: authgql
+resolver:
+  layout: single-file
+  filename: resolver.go
+  package: authgql
+  type: Resolver
+models:
+  UUID:
+    model: github.com/99designs/gqlgen/graphql.String
+  DateTime:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata.Timestamp

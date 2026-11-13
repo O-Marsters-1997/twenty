@@ -1,0 +1,9 @@
+{
+  "name": "generate-two-factor-authentication-recovery-code",
+  "operation": "generateTwoFactorAuthenticationRecoveryCode",
+  "fixture": "admin with a verified TOTP method generating a code for a member",
+  "endpoint": "/metadata",
+  "query": "mutation generateTwoFactorAuthenticationRecoveryCode($userId: UUID!, $otp: String) { generateTwoFactorAuthenticationRecoveryCode(userId: $userId, otp: $otp) { recoveryCode expiresAt } }",
+  "variables": {"userId": "a0000000-0000-4000-8000-000000000003", "otp": "123456"},
+  "response": {"data":{"generateTwoFactorAuthenticationRecoveryCode":{"recoveryCode":"<ignored>","expiresAt":"<ignored>"}}}
+}

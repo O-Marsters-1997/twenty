@@ -21,6 +21,7 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai/skillgql"
 	aistore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai/store"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth/authgql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/config"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/frontdoor"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging"
@@ -117,6 +118,9 @@ func run() error {
 			Renderer:  messaging.GoRenderer{},
 			Queue:     queue.Enqueue,
 		}, logger),
+		authgql.NewHandler(&authgql.Resolver{TwoFactor: auth.NewTwoFactor(
+			pool, auth.NewSecretCipher(cfg.EncryptionKey, cfg.FallbackEncryptionKey, cfg.AppSecret), cfg.RecoveryCodeTTL,
+		)}, logger),
 		agentgql.Operations,
 	))
 
