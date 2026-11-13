@@ -49,6 +49,8 @@ type Issuer interface { // ES256 with the current core."signingKey", same claims
 
 var ErrInvalidRefreshToken = errors.New("auth: invalid refresh token")
 
+var ErrUnknownUser = errors.New("auth: no user with that email")
+
 var errNoSigningKey = errors.New("no current signing key")
 
 const passwordProvider AuthProvider = "password"
@@ -121,6 +123,24 @@ func (i *PGIssuer) IssueAccess(ctx context.Context, principal Principal) (string
 }
 
 func (i *PGIssuer) IssueLogin(ctx context.Context, userID string) (string, error) {
+	return i.issueLogin(ctx, userID, passwordProvider)
+}
+
+func (i *PGIssuer) IssueLoginForEmail(ctx context.Context, email string, provider AuthProvider) (string, error) {
+	var userID string
+	err := i.pool.QueryRow(ctx,
+		`SELECT id::text FROM core."user" WHERE lower(email::text) = lower($1) AND "deletedAt" IS NULL`, email,
+	).Scan(&userID)
+	if errors.Is(err, pgx.ErrNoRows) {
+		return "", ErrUnknownUser
+	}
+	if err != nil {
+		return "", fmt.Errorf("look up user by email: %w", err)
+	}
+	return i.issueLogin(ctx, userID, provider)
+}
+
+func (i *PGIssuer) issueLogin(ctx context.Context, userID string, provider AuthProvider) (string, error) {
 	var email, workspaceID string
 	err := i.pool.QueryRow(ctx,
 		`SELECT u.email::text, uw."workspaceId"::text
@@ -135,7 +155,7 @@ func (i *PGIssuer) IssueLogin(ctx context.Context, userID string) (string, error
 		"type":         TokenTypeLogin,
 		"sub":          email,
 		"workspaceId":  workspaceID,
-		"authProvider": passwordProvider,
+		"authProvider": provider,
 		"jti":          uuid.NewString(),
 	}, time.Now().Add(i.config.LoginTTL))
 	if err != nil {
