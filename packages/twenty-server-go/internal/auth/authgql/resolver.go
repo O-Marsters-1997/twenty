@@ -7,7 +7,10 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata"
 )
 
-type Resolver struct{ TwoFactor *auth.TwoFactor }
+type Resolver struct {
+	TwoFactor *auth.TwoFactor
+	Login     *auth.TwoFactorLogin
+}
 
 func (r *mutationResolver) InitiateOTPProvisioningForAuthenticatedUser(ctx context.Context) (*InitiateTwoFactorAuthenticationProvisioning, error) {
 	principal, err := principalFrom(ctx)
@@ -67,6 +70,31 @@ func (r *mutationResolver) RevokeTwoFactorAuthenticationRecoveryCode(ctx context
 	return r.TwoFactor.RevokeRecoveryCode(ctx, principal, userID)
 }
 
+func (r *mutationResolver) GetAuthTokensFromOtp(ctx context.Context, loginToken string, otp string, _ *string, origin string) (*AuthTokens, error) {
+	w, req := exchangeFrom(ctx)
+	pair, err := r.Login.WithOTP(ctx, w, req, loginToken, otp, origin)
+	if err != nil {
+		return nil, err
+	}
+	return &AuthTokens{Tokens: tokenPair(pair)}, nil
+}
+
+func (r *mutationResolver) GetAuthTokensFromTwoFactorAuthenticationRecoveryCode(ctx context.Context, loginToken string, recoveryCode string, _ *string, origin string) (*TwoFactorAuthenticationRecoveryCodeRedemption, error) {
+	w, req := exchangeFrom(ctx)
+	login, err := r.Login.WithRecoveryCode(ctx, w, req, loginToken, recoveryCode, origin)
+	if err != nil {
+		return nil, err
+	}
+	result := &TwoFactorAuthenticationRecoveryCodeRedemption{}
+	if login.Tokens != nil {
+		result.Tokens = tokenPair(*login.Tokens)
+	}
+	if login.ProvisioningURI != "" {
+		result.ProvisioningURI = &login.ProvisioningURI
+	}
+	return result, nil
+}
+
 func (r *queryResolver) TwoFactorAuthenticationRecoveryStatus(ctx context.Context, userID string) (*TwoFactorAuthenticationRecoveryStatus, error) {
 	principal, err := principalFrom(ctx)
 	if err != nil {
@@ -94,11 +122,3 @@ type (
 	mutationResolver struct{ *Resolver }
 	queryResolver    struct{ *Resolver }
 )
-
-func principalFrom(ctx context.Context) (auth.Principal, error) {
-	principal, ok := auth.PrincipalFrom(ctx)
-	if !ok {
-		return auth.Principal{}, auth.ErrUnauthenticated
-	}
-	return principal, nil
-}

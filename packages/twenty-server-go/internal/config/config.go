@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log/slog"
 	"net/url"
+	"slices"
 	"strings"
 	"time"
 )
@@ -19,6 +20,17 @@ type Config struct {
 	EncryptionKey         string
 	FallbackEncryptionKey string
 	RecoveryCodeTTL       time.Duration
+
+	RedisURL             string
+	RedisCachePrefix     string
+	ServerURL            string
+	FrontendURL          string
+	CookieAllowedOrigins []string
+	CookieSameSite       string
+	Production           bool
+	TrustProxy           bool
+	MultiWorkspace       bool
+	DefaultSubdomain     string
 }
 
 // Load reads the process environment through getenv. NODE_UPSTREAM_URL is required.
@@ -30,6 +42,21 @@ func Load(getenv func(string) string) (Config, error) {
 
 		EncryptionKey:         getenv("ENCRYPTION_KEY"),
 		FallbackEncryptionKey: getenv("FALLBACK_ENCRYPTION_KEY"),
+
+		RedisURL:         getenv("REDIS_URL"),
+		RedisCachePrefix: getenv("REDIS_CACHE_PREFIX"),
+		ServerURL:        valueOr(getenv("SERVER_URL"), "http://localhost:3000"),
+		FrontendURL:      getenv("FRONTEND_URL"),
+		CookieSameSite:   valueOr(getenv("AUTH_COOKIE_SAME_SITE"), "lax"),
+		Production:       valueOr(getenv("NODE_ENV"), "production") == "production",
+		TrustProxy:       !slices.Contains([]string{"", "false", "0"}, valueOr(getenv("TRUST_PROXY"), "loopback, linklocal, uniquelocal")),
+		MultiWorkspace:   getenv("IS_MULTIWORKSPACE_ENABLED") == "true",
+		DefaultSubdomain: valueOr(getenv("DEFAULT_SUBDOMAIN"), "app"),
+	}
+	for _, origin := range strings.Split(getenv("AUTH_COOKIE_ALLOWED_ORIGINS"), ",") {
+		if origin = strings.TrimSpace(origin); origin != "" {
+			cfg.CookieAllowedOrigins = append(cfg.CookieAllowedOrigins, origin)
+		}
 	}
 
 	ttlText := valueOr(getenv("TWO_FACTOR_AUTHENTICATION_RECOVERY_CODE_EXPIRES_IN"), "1h")

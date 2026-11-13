@@ -30,6 +30,10 @@ var twoFactorErrorKinds = map[string]twoFactorErrorKind{
 	"INVALID_INPUT":                                        {"BAD_USER_INPUT", "Invalid input provided."},
 	"FORBIDDEN_EXCEPTION":                                  {"FORBIDDEN", "You do not have permission to perform this action."},
 	"PERMISSION_DENIED":                                    {"FORBIDDEN", "User does not have permission."},
+	"INVALID_RECOVERY_CODE":                                {"BAD_USER_INPUT", "Invalid or expired recovery code."},
+	"UNAUTHENTICATED":                                      {"UNAUTHENTICATED", "You must be authenticated to perform this action."},
+	"USER_NOT_FOUND":                                       {"UNAUTHENTICATED", "User not found."},
+	"WORKSPACE_NOT_FOUND":                                  {"UNAUTHENTICATED", "Workspace not found."},
 	"LIMIT_REACHED":                                        {"BAD_USER_INPUT", "Rate limit reached. Please try again later."},
 }
 
