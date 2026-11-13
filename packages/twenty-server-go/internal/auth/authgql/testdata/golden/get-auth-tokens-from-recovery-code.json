@@ -1,0 +1,29 @@
+{
+  "name": "get-auth-tokens-from-recovery-code",
+  "operation": "getAuthTokensFromTwoFactorAuthenticationRecoveryCode",
+  "fixture": "member with a verified TOTP method and an unredeemed recovery code",
+  "endpoint": "/graphql",
+  "query": "mutation getAuthTokensFromTwoFactorAuthenticationRecoveryCode($loginToken: String!, $recoveryCode: String!, $captchaToken: String, $origin: String!) { getAuthTokensFromTwoFactorAuthenticationRecoveryCode(loginToken: $loginToken, recoveryCode: $recoveryCode, captchaToken: $captchaToken, origin: $origin) { tokens { accessOrWorkspaceAgnosticToken { token expiresAt } refreshToken { token expiresAt } } provisioningUri } }",
+  "variables": {
+    "loginToken": "valid-login-token",
+    "recoveryCode": "ABCDE-FGHJK-MNPQR-STVWX",
+    "origin": "http://acme.localhost:3001"
+  },
+  "response": {
+    "data": {
+      "getAuthTokensFromTwoFactorAuthenticationRecoveryCode": {
+        "tokens": {
+          "accessOrWorkspaceAgnosticToken": {
+            "token": "<ignored>",
+            "expiresAt": "<ignored>"
+          },
+          "refreshToken": {
+            "token": "<ignored>",
+            "expiresAt": "<ignored>"
+          }
+        },
+        "provisioningUri": null
+      }
+    }
+  }
+}

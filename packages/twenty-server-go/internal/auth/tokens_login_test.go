@@ -197,3 +197,36 @@ func TestPGIssuer_IssueWorkspaceAgnostic(t *testing.T) {
 		}
 	})
 }
+
+func TestPGIssuer_IssueForWorkspace(t *testing.T) {
+	t.Parallel()
+	env := newTokenEnv(t)
+
+	t.Run("matches the claims Node issues for a sign-in", func(t *testing.T) {
+		t.Parallel()
+		pair, err := env.issuer.IssueForWorkspace(t.Context(), "Fixture@Example.com", env.node.WorkspaceID, "password")
+		if err != nil {
+			t.Fatalf("IssueForWorkspace() error = %v", err)
+		}
+		if diff := cmp.Diff(claimNames(t, env.node.Access), claimNames(t, pair.AccessToken)); diff != "" {
+			t.Errorf("IssueForWorkspace() access claim names (-node +go):\n%s", diff)
+		}
+		if diff := cmp.Diff(claimNames(t, env.node.Refresh), claimNames(t, pair.RefreshToken)); diff != "" {
+			t.Errorf("IssueForWorkspace() refresh claim names (-node +go):\n%s", diff)
+		}
+		refresh, _ := decodeClaims(t, pair.RefreshToken)
+		if revoked, _ := env.revokedAt(t, stringClaim(t, refresh, "jti")); revoked {
+			t.Error("IssueForWorkspace() refresh token already revoked")
+		}
+		if !pair.RefreshExpiresAt.After(pair.ExpiresAt) {
+			t.Errorf("IssueForWorkspace() refresh expiry %v, want after access expiry %v", pair.RefreshExpiresAt, pair.ExpiresAt)
+		}
+	})
+
+	t.Run("rejects an unknown email", func(t *testing.T) {
+		t.Parallel()
+		if _, err := env.issuer.IssueForWorkspace(t.Context(), "nobody@example.com", env.node.WorkspaceID, "password"); !errors.Is(err, auth.ErrUnknownUser) {
+			t.Errorf("IssueForWorkspace(unknown) error = %v, want ErrUnknownUser", err)
+		}
+	})
+}

@@ -6,6 +6,20 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata"
 )
 
+type AuthToken struct {
+	Token     string             `json:"token"`
+	ExpiresAt metadata.Timestamp `json:"expiresAt"`
+}
+
+type AuthTokenPair struct {
+	AccessOrWorkspaceAgnosticToken *AuthToken `json:"accessOrWorkspaceAgnosticToken"`
+	RefreshToken                   *AuthToken `json:"refreshToken"`
+}
+
+type AuthTokens struct {
+	Tokens *AuthTokenPair `json:"tokens"`
+}
+
 type DeleteTwoFactorAuthenticationMethod struct {
 	Success bool `json:"success"`
 }
@@ -23,6 +37,11 @@ type Query struct {
 type TwoFactorAuthenticationRecoveryCode struct {
 	RecoveryCode string             `json:"recoveryCode"`
 	ExpiresAt    metadata.Timestamp `json:"expiresAt"`
+}
+
+type TwoFactorAuthenticationRecoveryCodeRedemption struct {
+	Tokens          *AuthTokenPair `json:"tokens,omitempty"`
+	ProvisioningURI *string        `json:"provisioningUri,omitempty"`
 }
 
 type TwoFactorAuthenticationRecoveryStatus struct {

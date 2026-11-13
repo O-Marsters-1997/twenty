@@ -68,7 +68,7 @@ func DefaultTable() OperationTable {
 	for _, operation := range slices.Concat(WorkflowOperations, WorkflowAuthoringOperations) {
 		table[EndpointWorkspace][operation] = RouteGo
 	}
-	for _, operation := range TimelineOperations {
+	for _, operation := range slices.Concat(TimelineOperations, LoginOperations) {
 		table[EndpointWorkspace][operation] = RouteGo
 	}
 	for _, plural := range []string{"Notes", "NoteTargets", "Tasks", "TaskTargets"} {
@@ -132,6 +132,8 @@ var MessagingOperations = []string{
 	"MyCalendarChannels", "UpdateCalendarChannel",
 	"SendMessageCampaign", "CancelMessageCampaign", "SendMessageCampaignTest", "PreviewMessageCampaignAudience",
 }
+
+var LoginOperations = []string{"getAuthTokensFromOTP", "getAuthTokensFromTwoFactorAuthenticationRecoveryCode"}
 
 var TwoFactorOperations = []string{
 	"initiateOTPProvisioningForAuthenticatedUser", "verifyTwoFactorAuthenticationMethodForAuthenticatedUser",

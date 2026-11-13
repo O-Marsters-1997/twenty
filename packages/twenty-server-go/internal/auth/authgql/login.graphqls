@@ -1,0 +1,23 @@
+type AuthToken {
+  token: String!
+  expiresAt: DateTime!
+}
+
+type AuthTokenPair {
+  accessOrWorkspaceAgnosticToken: AuthToken!
+  refreshToken: AuthToken!
+}
+
+type AuthTokens {
+  tokens: AuthTokenPair!
+}
+
+type TwoFactorAuthenticationRecoveryCodeRedemption {
+  tokens: AuthTokenPair
+  provisioningUri: String
+}
+
+extend type Mutation {
+  getAuthTokensFromOTP(loginToken: String!, otp: String!, captchaToken: String, origin: String!): AuthTokens!
+  getAuthTokensFromTwoFactorAuthenticationRecoveryCode(loginToken: String!, recoveryCode: String!, captchaToken: String, origin: String!): TwoFactorAuthenticationRecoveryCodeRedemption!
+}
