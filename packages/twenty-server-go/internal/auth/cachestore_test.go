@@ -14,7 +14,11 @@ func TestRedisCache(t *testing.T) {
 	t.Parallel()
 	server := miniredis.RunT(t)
 	client := redis.NewClient(&redis.Options{Addr: server.Addr()})
-	t.Cleanup(func() { _ = client.Close() })
+	t.Cleanup(func() {
+		if err := client.Close(); err != nil {
+			t.Errorf("close redis client: %v", err)
+		}
+	})
 	cache := auth.NewRedisCache(client, "prod")
 
 	first, err := cache.SetIfAbsent(t.Context(), "login-token:consumed:abc", time.Minute)
