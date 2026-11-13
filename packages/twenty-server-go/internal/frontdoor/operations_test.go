@@ -76,6 +76,16 @@ func TestDefaultTable_RoutesTwoFactorOperationsToGo(t *testing.T) {
 	}
 }
 
+func TestDefaultTable_RoutesSessionOperationsToGo(t *testing.T) {
+	t.Parallel()
+	table := frontdoor.DefaultTable()[frontdoor.EndpointMetadata]
+	for _, operation := range []string{"getAuthTokensFromLoginToken", "RenewToken", "SignOut"} {
+		if table[operation] != frontdoor.RouteGo {
+			t.Errorf("route of %s = %q, want %q", operation, table[operation], frontdoor.RouteGo)
+		}
+	}
+}
+
 func TestDefaultTable_RoutesSkillOperationsToGo(t *testing.T) {
 	t.Parallel()
 	table := frontdoor.DefaultTable()[frontdoor.EndpointMetadata]

@@ -89,6 +89,14 @@ func run() error {
 		HTTPClient: workflowgql.NewSafeHTTPClient(),
 	}, logger)
 
+	twoFactor := auth.NewTwoFactor(
+		pool, auth.NewSecretCipher(cfg.EncryptionKey, cfg.FallbackEncryptionKey, cfg.AppSecret), cfg.RecoveryCodeTTL,
+	)
+	authResolver, err := newAuthResolver(pool, cfg, twoFactor, logger)
+	if err != nil {
+		return err
+	}
+
 	goGraphQL := http.NewServeMux()
 	goGraphQL.Handle(string(frontdoor.EndpointWorkspace), workspaceHandler(recordsgql.NewHandler(&recordsgql.Resolver{
 		Store:              people,
@@ -118,13 +126,12 @@ func run() error {
 			Renderer:  messaging.GoRenderer{},
 			Queue:     queue.Enqueue,
 		}, logger),
-		authgql.NewHandler(&authgql.Resolver{TwoFactor: auth.NewTwoFactor(
-			pool, auth.NewSecretCipher(cfg.EncryptionKey, cfg.FallbackEncryptionKey, cfg.AppSecret), cfg.RecoveryCodeTTL,
-		)}, logger),
+		authgql.NewHandler(authResolver, logger),
 		agentgql.Operations,
 	))
 
 	handler := frontdoor.NewHandler(frontdoor.DefaultTable(), cfg.NodeUpstreamURL, verifier, goGraphQL, logger).
+		WithPublicOperations(map[frontdoor.Endpoint][]string{frontdoor.EndpointMetadata: frontdoor.SessionOperations}).
 		WithMCP(toolRegistry).
 		WithSubscriber(aigql.NewSubscriber(broker))
 

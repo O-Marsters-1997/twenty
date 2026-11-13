@@ -62,7 +62,7 @@ func DefaultTable() OperationTable {
 	for _, operation := range viewOperations {
 		table[EndpointMetadata][operation] = RouteGo
 	}
-	for _, operation := range slices.Concat(SkillOperations, ChatOperations, agentOperations, MessagingOperations, TwoFactorOperations) {
+	for _, operation := range slices.Concat(SkillOperations, ChatOperations, agentOperations, MessagingOperations, TwoFactorOperations, SessionOperations) {
 		table[EndpointMetadata][operation] = RouteGo
 	}
 	for _, operation := range slices.Concat(WorkflowOperations, WorkflowAuthoringOperations) {
@@ -138,6 +138,8 @@ var TwoFactorOperations = []string{
 	"deleteTwoFactorAuthenticationMethod", "twoFactorAuthenticationRecoveryStatus",
 	"generateTwoFactorAuthenticationRecoveryCode", "revokeTwoFactorAuthenticationRecoveryCode",
 }
+
+var SessionOperations = []string{"getAuthTokensFromLoginToken", "RenewToken", "SignOut"}
 
 var blockedMetadataFields = []string{
 	"createOneObject", "updateOneObject", "deleteOneObject",

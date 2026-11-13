@@ -1,5 +1,5 @@
 schema:
-  - twofactor.graphqls
+  - "*.graphqls"
 exec:
   filename: generated.go
   package: authgql

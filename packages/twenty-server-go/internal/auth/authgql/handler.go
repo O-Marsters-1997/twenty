@@ -36,5 +36,18 @@ func NewHandler(resolver *Resolver, logger *slog.Logger) http.Handler {
 		}
 		return presented
 	})
-	return server
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		server.ServeHTTP(w, r.WithContext(context.WithValue(r.Context(), exchangeKey{}, exchange{w: w, r: r})))
+	})
+}
+
+type exchangeKey struct{}
+
+type exchange struct {
+	w http.ResponseWriter
+	r *http.Request
+}
+
+func exchangeFrom(ctx context.Context) exchange {
+	return ctx.Value(exchangeKey{}).(exchange)
 }
