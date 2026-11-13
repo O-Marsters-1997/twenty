@@ -51,12 +51,13 @@ func newFixture(t *testing.T) fixture {
 	}
 	logs := &bytes.Buffer{}
 	table := frontdoor.DefaultTable()
-	table[frontdoor.EndpointWorkspace] = map[string]frontdoor.Route{"GoOnly": frontdoor.RouteGo}
+	table[frontdoor.EndpointWorkspace] = map[string]frontdoor.Route{"GoOnly": frontdoor.RouteGo, "PublicGo": frontdoor.RouteGo}
 	goGraphQL := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		principal, _ := auth.PrincipalFrom(r.Context())
 		_, _ = w.Write([]byte("go handled for " + principal.UserID))
 	})
-	handler := frontdoor.NewHandler(table, upstream, fakeVerifier{}, goGraphQL, slog.New(slog.NewTextHandler(logs, nil)))
+	handler := frontdoor.NewHandler(table, upstream, fakeVerifier{}, goGraphQL, slog.New(slog.NewTextHandler(logs, nil))).
+		WithPublicOperations(map[frontdoor.Endpoint][]string{frontdoor.EndpointWorkspace: {"PublicGo"}})
 	front := httptest.NewServer(handler)
 	t.Cleanup(front.Close)
 	return fixture{front: front, hits: hits, logs: logs}
@@ -109,6 +110,21 @@ func TestHandler_ServeHTTP(t *testing.T) {
 		}
 		if !strings.Contains(f.logs.String(), "route=blocked") {
 			t.Errorf("blocked route not logged: %s", f.logs)
+		}
+	})
+
+	t.Run("serves a public Go operation without a bearer, unless a batch mixes in a private one", func(t *testing.T) {
+		f := newFixture(t)
+		tests := []struct{ name, body, want string }{
+			{"public alone", `{"operationName":"PublicGo","query":"{ a }"}`, "go handled for "},
+			{"public batch", `[{"operationName":"PublicGo","query":"{ a }"},{"operationName":"PublicGo","query":"{ b }"}]`, "go handled for "},
+			{"public with a private Go operation", `[{"operationName":"PublicGo","query":"{ a }"},{"operationName":"GoOnly","query":"{ b }"}]`, `"UNAUTHENTICATED"`},
+			{"private alone", `{"operationName":"GoOnly","query":"{ a }"}`, `"UNAUTHENTICATED"`},
+		}
+		for _, tt := range tests {
+			if got := f.post(t, "/graphql", tt.body); !strings.Contains(got, tt.want) {
+				t.Errorf("post(%s) = %s, want it to contain %s", tt.name, got, tt.want)
+			}
 		}
 	})
 

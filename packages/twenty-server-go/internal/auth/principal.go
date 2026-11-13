@@ -7,6 +7,10 @@ import (
 
 type AuthProvider string // mirrors Node's AuthProviderEnum values
 
+func (p AuthProvider) valid() bool {
+	return p == passwordProvider || p == googleProvider
+}
+
 type Principal struct {
 	UserID            string
 	WorkspaceID       string
