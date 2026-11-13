@@ -26,8 +26,7 @@ const (
 	secureSessionCookieName = "__Host-twenty-session"
 	sessionTokenPrefix      = "sess_"
 
-	sessionRevokedUserSignOut = "USER_SIGN_OUT"
-	sessionRevokedSuperseded  = "SUPERSEDED"
+	sessionRevokedSuperseded = "SUPERSEDED"
 
 	defaultSessionLifetime    = 180 * 24 * time.Hour
 	defaultSessionIdleTimeout = 30 * 24 * time.Hour
@@ -129,7 +128,7 @@ func (s *UserSession) IssueForTokenPair(ctx context.Context, w http.ResponseWrit
 func (s *UserSession) SignOut(ctx context.Context, w http.ResponseWriter, r *http.Request, refreshToken string) error {
 	var errs []error
 	if token := s.sessionTokenFromRequest(r); token != "" {
-		errs = append(errs, s.revokeByToken(ctx, token, sessionRevokedUserSignOut))
+		errs = append(errs, s.revokeByToken(ctx, token, signOutRevokedReason))
 	}
 	if refreshToken != "" {
 		if err := s.revoker.Revoke(ctx, refreshToken); !errors.Is(err, ErrInvalidRefreshToken) {
