@@ -143,9 +143,10 @@ func run() error {
 			Tokens:       stack.issuer,
 		}, logger),
 		workspacegql.NewHandler(&workspacegql.Resolver{
-			Workspaces: workspacestore.NewWorkspaces(
-				pool, cfg.DefaultSubdomain, os.Getenv("AUTH_GOOGLE_ENABLED") == "true", os.Getenv("AUTH_PASSWORD_ENABLED") != "false",
-			),
+			Workspaces: workspacestore.NewWorkspaces(pool, cfg.DefaultSubdomain, workspacestore.AuthProviders{
+				Google:   os.Getenv("AUTH_GOOGLE_ENABLED") == "true",
+				Password: os.Getenv("AUTH_PASSWORD_ENABLED") != "false",
+			}),
 			Permissions: accessstore.NewPermissions(pool),
 		}, logger),
 		authHandler,

@@ -107,10 +107,6 @@ input UpdateWorkspaceAllowedIframeOriginsInput {
   origin: String!
 }
 
-type Query {
-  currentWorkspace: Workspace!
-}
-
 type Mutation {
   updateWorkspace(data: UpdateWorkspaceInput!): Workspace!
   updateWorkspaceAllowedIframeOrigins(data: UpdateWorkspaceAllowedIframeOriginsInput!): Workspace!

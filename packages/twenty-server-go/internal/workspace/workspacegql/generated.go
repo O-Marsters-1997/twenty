@@ -30,7 +30,6 @@ type Config = graphql.Config[ResolverRoot, DirectiveRoot, ComplexityRoot]
 
 type ResolverRoot interface {
 	Mutation() MutationResolver
-	Query() QueryResolver
 	Workspace() WorkspaceResolver
 }
 
@@ -44,7 +43,6 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		CurrentWorkspace func(childComplexity int) int
 	}
 
 	Role struct {
@@ -106,9 +104,6 @@ type MutationResolver interface {
 	UpdateWorkspace(ctx context.Context, data map[string]any) (*store.Workspace, error)
 	UpdateWorkspaceAllowedIframeOrigins(ctx context.Context, data map[string]any) (*store.Workspace, error)
 }
-type QueryResolver interface {
-	CurrentWorkspace(ctx context.Context) (*store.Workspace, error)
-}
 type WorkspaceResolver interface {
 	DefaultRole(ctx context.Context, obj *store.Workspace) (*store1.Role, error)
 }
@@ -153,13 +148,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateWorkspaceAllowedIframeOrigins(childComplexity, args["data"].(map[string]any)), true
-
-	case "Query.currentWorkspace":
-		if e.ComplexityRoot.Query.CurrentWorkspace == nil {
-			break
-		}
-
-		return e.ComplexityRoot.Query.CurrentWorkspace(childComplexity), true
 
 	case "Role.canAccessAllTools":
 		if e.ComplexityRoot.Role.CanAccessAllTools == nil {
@@ -949,38 +937,6 @@ func (ec *executionContext) fieldContext_Mutation_updateWorkspaceAllowedIframeOr
 	if fc.Args, err = ec.field_Mutation_updateWorkspaceAllowedIframeOrigins_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Query_currentWorkspace(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Query_currentWorkspace(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return ec.Resolvers.Query().CurrentWorkspace(ctx)
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *store.Workspace) graphql.Marshaler {
-			return ec.marshalNWorkspace2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkspaceᚋstoreᚐWorkspace(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Query_currentWorkspace(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_Workspace(ctx, field)
-		},
 	}
 	return fc, nil
 }
@@ -3493,25 +3449,19 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Query")
-		case "currentWorkspace":
-			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
-				true, true,
-				func(ctx context.Context) graphql.Marshaler {
-					return ec._Query_currentWorkspace(ctx, field)
-				})
 		case "__type":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Query___type(ctx, field)
 			})
 			if out.Values[i] == graphql.RequiredNull {
-				atomic.AddUint32(&out.Invalids, 1)
+				out.Invalids++
 			}
 		case "__schema":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Query___schema(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&out.Invalids, 1)
+				out.Invalids++
 			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))

@@ -59,14 +59,6 @@ func (r *mutationResolver) UpdateWorkspaceAllowedIframeOrigins(ctx context.Conte
 	return &updated, nil
 }
 
-func (r *queryResolver) CurrentWorkspace(ctx context.Context) (*store.Workspace, error) {
-	current, err := r.Workspaces.Get(ctx)
-	if err != nil {
-		return nil, err
-	}
-	return &current, nil
-}
-
 func (r *workspaceResolver) DefaultRole(ctx context.Context, obj *store.Workspace) (*accessstore.Role, error) {
 	if obj.DefaultRoleID == nil {
 		return nil, nil
@@ -80,12 +72,9 @@ func (r *workspaceResolver) DefaultRole(ctx context.Context, obj *store.Workspac
 
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
-func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
-
 func (r *Resolver) Workspace() WorkspaceResolver { return &workspaceResolver{r} }
 
 type (
 	mutationResolver  struct{ *Resolver }
-	queryResolver     struct{ *Resolver }
 	workspaceResolver struct{ *Resolver }
 )

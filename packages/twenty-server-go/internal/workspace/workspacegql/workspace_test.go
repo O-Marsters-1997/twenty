@@ -3,6 +3,7 @@ package workspacegql_test
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"log/slog"
 	"net/http"
@@ -48,7 +49,7 @@ func newHarness(t *testing.T) harness {
 	}
 	t.Cleanup(pool.Close)
 	graphql := workspacegql.NewHandler(&workspacegql.Resolver{
-		Workspaces:  workspacestore.NewWorkspaces(pool, "app", true, true),
+		Workspaces:  workspacestore.NewWorkspaces(pool, "app", workspacestore.AuthProviders{Google: true, Password: true}),
 		Permissions: accessstore.NewPermissions(pool),
 	}, slog.New(slog.NewTextHandler(io.Discard, nil)))
 	h := harness{graphql: graphql, pool: pool}
@@ -102,11 +103,31 @@ func (h harness) send(t *testing.T, userWorkspaceID, operation, query string, va
 
 func errorCode(t *testing.T, decoded map[string]any) string {
 	t.Helper()
-	errs, ok := decoded["errors"].([]any)
-	if !ok || len(errs) == 0 {
-		t.Fatalf("response = %v, want an error", decoded)
+	code, ok := at(decoded, "errors", 0, "extensions", "code").(string)
+	if !ok {
+		t.Fatalf("response = %v, want an error with a code", decoded)
 	}
-	return errs[0].(map[string]any)["extensions"].(map[string]any)["code"].(string)
+	return code
+}
+
+func at(value any, path ...any) any {
+	for _, step := range path {
+		switch key := step.(type) {
+		case string:
+			object, ok := value.(map[string]any)
+			if !ok {
+				return nil
+			}
+			value = object[key]
+		case int:
+			list, ok := value.([]any)
+			if !ok || key >= len(list) {
+				return nil
+			}
+			value = list[key]
+		}
+	}
+	return value
 }
 
 func (h harness) updateWorkspace(t *testing.T, userWorkspaceID string, input map[string]any) map[string]any {
@@ -128,23 +149,21 @@ func originsOf(t *testing.T, decoded map[string]any) []any {
 	if errs, bad := decoded["errors"]; bad {
 		t.Fatalf("unexpected errors: %v", errs)
 	}
-	return decoded["data"].(map[string]any)["updateWorkspaceAllowedIframeOrigins"].(map[string]any)["allowedIframeOrigins"].([]any)
-}
-
-func TestUpdateWorkspace_matchesNodeGolden(t *testing.T) {
-	t.Parallel()
-	h := newHarness(t)
-	golden.Assert(t, h.as(adminUserWorkspaceID), "testdata", "UpdateWorkspace")
-}
-
-func TestUpdateWorkspaceAllowedIframeOrigins_matchesNodeGolden(t *testing.T) {
-	t.Parallel()
-	h := newHarness(t)
-	golden.Assert(t, h.as(adminUserWorkspaceID), "testdata", "UpdateWorkspaceAllowedIframeOrigins")
+	origins, ok := at(decoded, "data", "updateWorkspaceAllowedIframeOrigins", "allowedIframeOrigins").([]any)
+	if !ok {
+		t.Fatalf("response = %v, want allowedIframeOrigins", decoded)
+	}
+	return origins
 }
 
 func TestUpdateWorkspace(t *testing.T) {
 	t.Parallel()
+
+	t.Run("matches the Node golden", func(t *testing.T) {
+		t.Parallel()
+		h := newHarness(t)
+		golden.Assert(t, h.as(adminUserWorkspaceID), "testdata", "UpdateWorkspace")
+	})
 
 	t.Run("an admin changes a field and a role name comes back", func(t *testing.T) {
 		t.Parallel()
@@ -153,9 +172,13 @@ func TestUpdateWorkspace(t *testing.T) {
 		if err := h.pool.QueryRow(t.Context(), `SELECT id::text FROM core.role WHERE label = 'Plain member'`).Scan(&roleID); err != nil {
 			t.Fatal(err)
 		}
+		var seededSubdomain string
+		if err := h.pool.QueryRow(t.Context(), `SELECT subdomain FROM core.workspace`).Scan(&seededSubdomain); err != nil {
+			t.Fatal(err)
+		}
 		got := h.updateWorkspace(t, adminUserWorkspaceID, map[string]any{"displayName": "Acme", "defaultRoleId": roleID})
 		want := map[string]any{"data": map[string]any{"updateWorkspace": map[string]any{
-			"subdomain": got["data"].(map[string]any)["updateWorkspace"].(map[string]any)["subdomain"], "displayName": "Acme", "logo": "",
+			"subdomain": seededSubdomain, "displayName": "Acme", "logo": "",
 			"defaultRole": map[string]any{"label": "Plain member"},
 		}}}
 		if diff := cmp.Diff(want, got); diff != "" {
@@ -206,21 +229,43 @@ func TestUpdateWorkspace(t *testing.T) {
 
 func TestUpdateWorkspaceAllowedIframeOrigins(t *testing.T) {
 	t.Parallel()
-	h := newHarness(t)
 
-	if diff := cmp.Diff([]any{"https://a.example.com", "http://b.example.com:8080"}, func() []any {
+	t.Run("matches the Node golden", func(t *testing.T) {
+		t.Parallel()
+		h := newHarness(t)
+		golden.Assert(t, h.as(adminUserWorkspaceID), "testdata", "UpdateWorkspaceAllowedIframeOrigins")
+	})
+
+	t.Run("adds, deduplicates and removes", func(t *testing.T) {
+		t.Parallel()
+		h := newHarness(t)
 		h.updateOrigins(t, adminUserWorkspaceID, "add", "https://a.example.com/")
-		return originsOf(t, h.updateOrigins(t, adminUserWorkspaceID, "add", "HTTP://B.example.com:8080"))
-	}()); diff != "" {
-		t.Errorf("origins after adds (-want +got):\n%s", diff)
-	}
-	if diff := cmp.Diff([]any{"https://a.example.com", "http://b.example.com:8080"}, originsOf(t, h.updateOrigins(t, adminUserWorkspaceID, "add", "https://a.example.com"))); diff != "" {
-		t.Errorf("adding a duplicate (-want +got):\n%s", diff)
-	}
-	if diff := cmp.Diff([]any{"http://b.example.com:8080"}, originsOf(t, h.updateOrigins(t, adminUserWorkspaceID, "remove", "https://a.example.com"))); diff != "" {
-		t.Errorf("origins after remove (-want +got):\n%s", diff)
-	}
+		added := originsOf(t, h.updateOrigins(t, adminUserWorkspaceID, "add", "HTTP://B.example.com:8080"))
+		if diff := cmp.Diff([]any{"https://a.example.com", "http://b.example.com:8080"}, added); diff != "" {
+			t.Errorf("origins after adds (-want +got):\n%s", diff)
+		}
+		duplicated := originsOf(t, h.updateOrigins(t, adminUserWorkspaceID, "add", "https://a.example.com"))
+		if diff := cmp.Diff(added, duplicated); diff != "" {
+			t.Errorf("adding a duplicate (-want +got):\n%s", diff)
+		}
+		removed := originsOf(t, h.updateOrigins(t, adminUserWorkspaceID, "remove", "https://a.example.com"))
+		if diff := cmp.Diff([]any{"http://b.example.com:8080"}, removed); diff != "" {
+			t.Errorf("origins after remove (-want +got):\n%s", diff)
+		}
+	})
 
+	t.Run("refuses a twenty-first origin", func(t *testing.T) {
+		t.Parallel()
+		h := newHarness(t)
+		for i := range 20 {
+			originsOf(t, h.updateOrigins(t, adminUserWorkspaceID, "add", fmt.Sprintf("https://host%d.example.com", i)))
+		}
+		if got := errorCode(t, h.updateOrigins(t, adminUserWorkspaceID, "add", "https://over.example.com")); got != "BAD_USER_INPUT" {
+			t.Errorf("error code = %q, want BAD_USER_INPUT", got)
+		}
+	})
+
+	h := newHarness(t)
 	rejections := []struct {
 		name      string
 		caller    string
@@ -240,16 +285,5 @@ func TestUpdateWorkspaceAllowedIframeOrigins(t *testing.T) {
 				t.Errorf("error code = %q, want %q", got, tt.want)
 			}
 		})
-	}
-}
-
-func TestUpdateWorkspaceAllowedIframeOrigins_limit(t *testing.T) {
-	t.Parallel()
-	h := newHarness(t)
-	for i := range 20 {
-		originsOf(t, h.updateOrigins(t, adminUserWorkspaceID, "add", "https://h"+string(rune('a'+i))+".example.com"))
-	}
-	if got := errorCode(t, h.updateOrigins(t, adminUserWorkspaceID, "add", "https://over.example.com")); got != "BAD_USER_INPUT" {
-		t.Errorf("error code = %q, want BAD_USER_INPUT", got)
 	}
 }

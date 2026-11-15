@@ -5,10 +5,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"maps"
 	"net/url"
 	"regexp"
 	"slices"
-	"sort"
 	"strings"
 
 	"github.com/jackc/pgx/v5"
@@ -134,15 +134,19 @@ var (
 	subdomainPattern          = regexp.MustCompile(`^(?:[a-z0-9](?:[a-z0-9-]{0,28}[a-z0-9])?)$`)
 )
 
-type Workspaces struct {
-	pool                *pgxpool.Pool
-	defaultSubdomain    string
-	googleAuthAvailable bool
-	passwordAvailable   bool
+type AuthProviders struct {
+	Google   bool
+	Password bool
 }
 
-func NewWorkspaces(pool *pgxpool.Pool, defaultSubdomain string, googleAuthAvailable, passwordAuthAvailable bool) *Workspaces {
-	return &Workspaces{pool: pool, defaultSubdomain: defaultSubdomain, googleAuthAvailable: googleAuthAvailable, passwordAvailable: passwordAuthAvailable}
+type Workspaces struct {
+	pool             *pgxpool.Pool
+	defaultSubdomain string
+	providers        AuthProviders
+}
+
+func NewWorkspaces(pool *pgxpool.Pool, defaultSubdomain string, providers AuthProviders) *Workspaces {
+	return &Workspaces{pool: pool, defaultSubdomain: defaultSubdomain, providers: providers}
 }
 
 func (w *Workspaces) Get(ctx context.Context) (Workspace, error) {
@@ -171,18 +175,13 @@ func getWorkspace(ctx context.Context, conn interface {
 }
 
 // Update applies the settings in updates once allow has approved every permission flag they need.
-// A workspace still pending creation only accepts the fields in updatableBeforeActivation and needs no flag.
 func (w *Workspaces) Update(ctx context.Context, updates map[string]any, allow func(ctx context.Context, flag string) (bool, error)) (Workspace, error) {
 	current, err := w.Get(ctx)
 	if err != nil {
 		return Workspace{}, err
 	}
 	updates = plain(updates)
-	names := make([]string, 0, len(updates))
-	for name := range updates {
-		names = append(names, name)
-	}
-	sort.Strings(names)
+	names := slices.Sorted(maps.Keys(updates))
 	if len(names) == 0 {
 		return current, nil
 	}
@@ -286,10 +285,10 @@ func (w *Workspaces) authorize(ctx context.Context, names []string, allow func(c
 }
 
 func (w *Workspaces) validateSystemSwitches(updates map[string]any) error {
-	if enabled, _ := updates["isGoogleAuthEnabled"].(bool); enabled && !w.googleAuthAvailable {
+	if enabled, _ := updates["isGoogleAuthEnabled"].(bool); enabled && !w.providers.Google {
 		return fmt.Errorf("%w: Google auth is not enabled in the system", metadata.ErrInvalidInput)
 	}
-	if enabled, _ := updates["isPasswordAuthEnabled"].(bool); enabled && !w.passwordAvailable {
+	if enabled, _ := updates["isPasswordAuthEnabled"].(bool); enabled && !w.providers.Password {
 		return fmt.Errorf("%w: Password auth is not enabled in the system", metadata.ErrInvalidInput)
 	}
 	return nil
@@ -389,7 +388,6 @@ func wholeNumber(raw any) (int, bool) {
 	return 0, false
 }
 
-// UpdateAllowedIframeOrigins adds or removes one origin under a row lock so concurrent edits keep both changes.
 func (w *Workspaces) UpdateAllowedIframeOrigins(ctx context.Context, operation, origin string) (Workspace, error) {
 	if operation != "add" && operation != "remove" {
 		return Workspace{}, fmt.Errorf("%w: operation must be add or remove", metadata.ErrInvalidInput)
