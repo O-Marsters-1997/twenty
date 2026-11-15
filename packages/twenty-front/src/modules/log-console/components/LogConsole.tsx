@@ -1,5 +1,4 @@
 import { formatShortcut } from 'twenty-ui/primitives/typography';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useReducedMotion } from 'framer-motion';
 import { useStore } from 'jotai';
@@ -13,15 +12,13 @@ import {
   IconMaximize,
   IconMinimize,
 } from 'twenty-ui/icon';
-import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 
 import { isClickHouseConfiguredState } from '@/client-config/states/isClickHouseConfiguredState';
 import { LogConsoleDetailPanel } from '@/log-console/components/LogConsoleDetailPanel';
 import { LogConsoleToggleHotkeyEffect } from '@/log-console/components/LogConsoleToggleHotkeyEffect';
 import { LogConsoleResults } from '@/log-console/components/LogConsoleResults';
-import { LOG_CONSOLE_ANIMATION_EASING } from '@/log-console/constants/LogConsoleAnimationEasing';
 import { LOG_CONSOLE_HEIGHT_CONSTRAINTS } from '@/log-console/constants/LogConsoleHeightConstraints';
-import { LOG_CONSOLE_NARROW_BODY_MAX_WIDTH } from '@/log-console/constants/LogConsoleNarrowBodyMaxWidth';
 import { LOG_CONSOLE_SOURCES } from '@/log-console/constants/LogConsoleSources';
 import { LOG_CONSOLE_TAB_LIST_INSTANCE_ID } from '@/log-console/constants/LogConsoleTabListInstanceId';
 import { useIsLogConsoleAllowed } from '@/log-console/hooks/useIsLogConsoleAllowed';
@@ -39,7 +36,6 @@ import { RootStackingContextZIndices } from '@/ui/layout/constants/RootStackingC
 import { TabList } from '@/ui/layout/tab-list/components/TabList';
 import { TabListRoot } from '@/ui/layout/tab-list/components/TabListRoot';
 import { TAB_LIST_HEIGHT } from '@/ui/layout/tab-list/constants/TabListHeight';
-import { TAB_LIST_ROW_HEIGHT_CSS_VARIABLE } from '@/ui/layout/tab-list/constants/TabListRowHeightCssVariable';
 import { activeTabIdComponentState } from '@/ui/layout/tab-list/states/activeTabIdComponentState';
 import { isAdvancedModeEnabledState } from '@/ui/navigation/navigation-drawer/states/isAdvancedModeEnabledState';
 import { getUiZoom } from '@/ui/theme/utils/getUiZoom';
@@ -48,7 +44,15 @@ import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomState';
 import * as stylex from '@stylexjs/stylex';
-import { spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  animationDuration,
+  background,
+  borderColor,
+  boxShadow,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
+import { logConsoleEasing, logConsoleQueries } from './LogConsole.stylex';
 
 const LOG_CONSOLE_HEIGHT_CSS_VARIABLE = '--log-console-height';
 
@@ -61,8 +65,6 @@ const LOG_CONSOLE_TOP_BORDER_WIDTH = '1px';
 
 const LOG_CONSOLE_BAR_BOTTOM_BORDER_WIDTH = '1px';
 
-const LOG_CONSOLE_TRANSITION_TIMING = `calc(${themeCssVariables.animation.duration.normal} * 1s) ${LOG_CONSOLE_ANIMATION_EASING}`;
-
 const LOG_CONSOLE_DETAIL_PANEL_WIDTH_CONSTRAINTS = {
   min: 280,
   max: 800,
@@ -74,146 +76,13 @@ type LogConsoleLayout = {
   isFullScreen: boolean;
 };
 
-const getLogConsoleTransition = (isResizing: boolean, properties: string[]) =>
-  isResizing
-    ? 'none'
-    : properties
-        .map((property) => `${property} ${LOG_CONSOLE_TRANSITION_TIMING}`)
-        .join(', ');
-
-const StyledSpacer = styled.div<{
-  isResizing: boolean;
-  spacerHeight: string;
-}>`
-  flex: none;
-  height: ${({ spacerHeight }) => spacerHeight};
-  transition: ${({ isResizing }) =>
-    getLogConsoleTransition(isResizing, ['height'])};
-
-  @media (prefers-reduced-motion: no-preference) {
-    &[data-animate-entrance='true'] {
-      animation: logConsoleSpacerEntrance ${LOG_CONSOLE_TRANSITION_TIMING};
-    }
-  }
-
-  @keyframes logConsoleSpacerEntrance {
-    from {
-      height: 0;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-  }
-
-  @media print {
-    display: none;
-  }
-`;
-
-const StyledPanel = styled.div<{
-  isExiting: boolean;
-  isFullScreen: boolean;
-  isResizing: boolean;
-  panelHeight: string;
-}>`
-  ${TAB_LIST_ROW_HEIGHT_CSS_VARIABLE}: ${({ isFullScreen }) =>
-    isFullScreen ? `${APP_HEADER_HEIGHT}px` : TAB_LIST_HEIGHT};
-
-  background: ${themeCssVariables.background.primary};
-  border-left: 1px solid ${themeCssVariables.border.color.medium};
-  border-top: ${({ isFullScreen }) =>
-      isFullScreen ? '0px' : LOG_CONSOLE_TOP_BORDER_WIDTH}
-    solid ${themeCssVariables.border.color.medium};
-  bottom: 0;
-  box-shadow: ${themeCssVariables.boxShadow.bottomPanel};
-  box-sizing: border-box;
-  clip-path: inset(calc(-1 * ${themeCssVariables.spacing[6]}) 0 0 0);
-  display: flex;
-  flex-direction: column;
-  height: ${({ panelHeight }) => panelHeight};
-  left: 0;
-  opacity: ${({ isExiting }) => (isExiting ? 0 : 1)};
-  overflow: hidden;
-  position: absolute;
-  right: 0;
-  transition: ${({ isResizing }) =>
-    getLogConsoleTransition(isResizing, [
-      'height',
-      'border-top-width',
-      'opacity',
-    ])};
-  z-index: ${RootStackingContextZIndices.LogConsole};
-
-  @media (prefers-reduced-motion: no-preference) {
-    &[data-animate-entrance='true'] {
-      animation: logConsolePanelEntrance ${LOG_CONSOLE_TRANSITION_TIMING};
-    }
-  }
-
-  @keyframes logConsolePanelEntrance {
-    from {
-      height: 0;
-      opacity: 0;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-  }
-
-  @media print {
-    display: none;
-  }
-`;
-
-const StyledTabList = styled(TabList)`
-  && {
-    background-color: ${themeCssVariables.background.secondary};
-    flex-shrink: 0;
-    height: var(${TAB_LIST_ROW_HEIGHT_CSS_VARIABLE});
-    padding-left: ${themeCssVariables.spacing[2]};
-    transition: height ${LOG_CONSOLE_TRANSITION_TIMING};
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    && {
-      transition: none;
-    }
-  }
-
-  &&::after {
-    background-color: ${themeCssVariables.border.color.medium};
-  }
-`;
-
-const styles = stylex.create({
-  barActions: {
-    display: 'flex',
-    gap: spacing['--t-spacing-1'],
-    paddingRight: spacing['--t-spacing-3'],
-  },
-  body: {
-    containerName: 'log-console-body',
-    containerType: 'inline-size',
-    display: 'flex',
-    flex: '1',
-    minHeight: '0',
-    position: 'relative',
-  },
+const spacerEntrance = stylex.keyframes({
+  from: { height: 0 },
 });
 
-const StyledActiveSource = styled.div<{ isDetailPanelOpen: boolean }>`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-width: 0;
-
-  @container log-console-body (max-width: ${LOG_CONSOLE_NARROW_BODY_MAX_WIDTH}px) {
-    visibility: ${({ isDetailPanelOpen }) =>
-      isDetailPanelOpen ? 'hidden' : 'visible'};
-  }
-`;
+const panelEntrance = stylex.keyframes({
+  from: { height: 0, opacity: 0 },
+});
 
 const subscribeToWindowResize = (onWindowResize: () => void) => {
   window.addEventListener('resize', onWindowResize);
@@ -222,27 +91,6 @@ const subscribeToWindowResize = (onWindowResize: () => void) => {
 };
 
 const getWindowHeight = () => window.innerHeight;
-
-const StyledDetailPanelWrapper = styled.div<{
-  detailPanelWidth: number;
-  isOpen: boolean;
-  isResizing: boolean;
-}>`
-  overflow: hidden;
-  position: relative;
-  transition: ${({ isResizing }) =>
-    getLogConsoleTransition(isResizing, ['width'])};
-  width: ${({ isOpen, isResizing, detailPanelWidth }) =>
-    !isOpen
-      ? '0px'
-      : isResizing
-        ? `var(${LOG_CONSOLE_DETAIL_PANEL_CSS_VARIABLE}, ${detailPanelWidth}px)`
-        : `${detailPanelWidth}px`};
-
-  @container log-console-body (max-width: ${LOG_CONSOLE_NARROW_BODY_MAX_WIDTH}px) {
-    position: static;
-  }
-`;
 
 export const LogConsole = () => {
   const { t } = useLingui();
@@ -376,6 +224,12 @@ export const LogConsole = () => {
       : collapsedHeight;
   const panelHeight =
     !isExiting && displayedLayout.isFullScreen ? '100%' : spacerHeight;
+
+  const detailPanelWrapperWidth = !isDefined(logConsoleSelectedLog)
+    ? '0px'
+    : isDetailPanelResizing
+      ? `var(${LOG_CONSOLE_DETAIL_PANEL_CSS_VARIABLE}, ${detailPanelWidth}px)`
+      : `${detailPanelWidth}px`;
 
   const sources = LOG_CONSOLE_SOURCES;
 
@@ -548,21 +402,40 @@ export const LogConsole = () => {
   return (
     <>
       {toggleHotkeyEffect}
-      <StyledSpacer
-        data-animate-entrance={shouldAnimateEntrance}
-        isResizing={isResizing}
-        spacerHeight={spacerHeight}
+      <div
+        {...stylex.props(
+          styles.spacer,
+          styles.height(spacerHeight),
+          !isResizing && styles.transitionHeight,
+          shouldAnimateEntrance && styles.spacerEntrance,
+        )}
       />
-      <StyledPanel
-        isExiting={isExiting}
-        isFullScreen={displayedLayout.isFullScreen}
-        isResizing={isResizing}
-        panelHeight={panelHeight}
-        data-animate-entrance={shouldAnimateEntrance}
+      <div
+        {...stylex.props(
+          styles.panel,
+          styles.height(panelHeight),
+          styles.zIndex(RootStackingContextZIndices.LogConsole),
+          displayedLayout.isFullScreen
+            ? styles.panelFullScreen
+            : styles.panelWindowed,
+          isExiting && styles.panelExiting,
+          !isResizing && styles.transitionPanel,
+          shouldAnimateEntrance && styles.panelEntrance,
+        )}
         onTransitionEnd={handlePanelTransitionEnd}
       >
         <TabListRoot componentInstanceId={LOG_CONSOLE_TAB_LIST_INSTANCE_ID}>
-          <StyledTabList
+          <TabList
+            className={
+              stylex.props(
+                styles.tabList,
+                styles.height(
+                  displayedLayout.isFullScreen
+                    ? `${APP_HEADER_HEIGHT}px`
+                    : TAB_LIST_HEIGHT,
+                ),
+              ).className
+            }
             aria-label={t`Log sources`}
             tabs={tabs}
             behaveAsLinks={false}
@@ -602,15 +475,21 @@ export const LogConsole = () => {
           />
           {isBodyRendered && (
             <div {...stylex.props(styles.body)}>
-              <StyledActiveSource
-                isDetailPanelOpen={isDefined(logConsoleSelectedLog)}
+              <div
+                {...stylex.props(
+                  styles.activeSource,
+                  isDefined(logConsoleSelectedLog) &&
+                    styles.activeSourceHiddenWhenNarrow,
+                )}
               >
                 {renderActiveSource()}
-              </StyledActiveSource>
-              <StyledDetailPanelWrapper
-                detailPanelWidth={detailPanelWidth}
-                isOpen={isDefined(logConsoleSelectedLog)}
-                isResizing={isDetailPanelResizing}
+              </div>
+              <div
+                {...stylex.props(
+                  styles.detailPanelWrapper,
+                  styles.width(detailPanelWrapperWidth),
+                  !isDetailPanelResizing && styles.transitionWidth,
+                )}
               >
                 {isDefined(logConsoleSelectedLog) && (
                   <ResizeHandle
@@ -628,7 +507,7 @@ export const LogConsole = () => {
                   />
                 )}
                 <LogConsoleDetailPanel />
-              </StyledDetailPanelWrapper>
+              </div>
             </div>
           )}
         </TabListRoot>
@@ -646,7 +525,139 @@ export const LogConsole = () => {
             onResizeStart={handleResizeStart}
           />
         )}
-      </StyledPanel>
+      </div>
     </>
   );
 };
+
+const transitionDuration = `calc(${animationDuration['--t-animation-duration-normal']} * 1s)`;
+
+const styles = stylex.create({
+  barActions: {
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-3'],
+  },
+  body: {
+    containerName: 'log-console-body',
+    containerType: 'inline-size',
+    display: 'flex',
+    flex: '1',
+    minHeight: '0',
+    position: 'relative',
+  },
+  height: (height: string) => ({ height }),
+  width: (width: string) => ({ width }),
+  zIndex: (zIndex: number) => ({ zIndex }),
+  spacer: {
+    display: {
+      default: null,
+      [media.print]: 'none',
+    },
+    flex: 'none',
+  },
+  spacerEntrance: {
+    animationDuration: transitionDuration,
+    animationName: {
+      default: null,
+      [logConsoleQueries.motionAllowed]: spacerEntrance,
+    },
+    animationTimingFunction: logConsoleEasing.standard,
+  },
+  transitionHeight: {
+    transitionDuration,
+    transitionProperty: {
+      default: 'height',
+      [media.reducedMotion]: 'none',
+    },
+    transitionTimingFunction: logConsoleEasing.standard,
+  },
+  panel: {
+    backgroundColor: background['--t-background-primary'],
+    borderLeftColor: borderColor['--t-border-color-medium'],
+    borderLeftStyle: 'solid',
+    borderLeftWidth: 1,
+    borderTopColor: borderColor['--t-border-color-medium'],
+    borderTopStyle: 'solid',
+    bottom: 0,
+    boxShadow: boxShadow['--t-box-shadow-bottom-panel'],
+    boxSizing: 'border-box',
+    clipPath: `inset(calc(-1 * ${spacing['--t-spacing-6']}) 0 0 0)`,
+    display: {
+      default: 'flex',
+      [media.print]: 'none',
+    },
+    flexDirection: 'column',
+    left: 0,
+    opacity: 1,
+    overflow: 'hidden',
+    position: 'absolute',
+    right: 0,
+  },
+  panelWindowed: {
+    borderTopWidth: 1,
+  },
+  panelFullScreen: {
+    borderTopWidth: 0,
+  },
+  panelExiting: {
+    opacity: 0,
+  },
+  panelEntrance: {
+    animationDuration: transitionDuration,
+    animationName: {
+      default: null,
+      [logConsoleQueries.motionAllowed]: panelEntrance,
+    },
+    animationTimingFunction: logConsoleEasing.standard,
+  },
+  transitionPanel: {
+    transitionDuration,
+    transitionProperty: {
+      default: 'height, border-top-width, opacity',
+      [media.reducedMotion]: 'none',
+    },
+    transitionTimingFunction: logConsoleEasing.standard,
+  },
+  tabList: {
+    backgroundColor: background['--t-background-secondary'],
+    flexShrink: 0,
+    paddingLeft: spacing['--t-spacing-2'],
+    transitionDuration,
+    transitionProperty: {
+      default: 'height',
+      [media.reducedMotion]: 'none',
+    },
+    transitionTimingFunction: logConsoleEasing.standard,
+    '::after': {
+      backgroundColor: borderColor['--t-border-color-medium'],
+    },
+  },
+  activeSource: {
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'column',
+    minWidth: 0,
+  },
+  activeSourceHiddenWhenNarrow: {
+    visibility: {
+      default: null,
+      [logConsoleQueries.narrowBody]: 'hidden',
+    },
+  },
+  detailPanelWrapper: {
+    overflow: 'hidden',
+    position: {
+      default: 'relative',
+      [logConsoleQueries.narrowBody]: 'static',
+    },
+  },
+  transitionWidth: {
+    transitionDuration,
+    transitionProperty: {
+      default: 'width',
+      [media.reducedMotion]: 'none',
+    },
+    transitionTimingFunction: logConsoleEasing.standard,
+  },
+});
