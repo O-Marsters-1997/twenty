@@ -19,7 +19,6 @@ import { useDisableDragSelectOnPointerDown } from '@/ui/utilities/drag-select/ho
 import { useAtomComponentFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentFamilyStateValue';
 import { useAtomComponentSelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentSelectorValue';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { cx } from '@linaria/core';
 import { isDefined } from 'twenty-shared/utils';
 
 type RecordTableHeaderCellProps = {
@@ -86,10 +85,7 @@ export const RecordTableHeaderCell = ({
 
   return (
     <RecordTableHeaderCellContainer
-      className={cx(
-        'header-cell',
-        getRecordTableColumnFieldWidthClassName(recordFieldIndex),
-      )}
+      className={`header-cell ${getRecordTableColumnFieldWidthClassName(recordFieldIndex)}`}
       key={recordField.fieldMetadataItemId}
       onPointerCancel={handlePointerCancel}
       onPointerDown={handlePointerDown}

@@ -1,5 +1,3 @@
-import { styled } from '@linaria/react';
-
 import { useRecordIndexContextOrThrow } from '@/object-record/record-index/contexts/RecordIndexContext';
 import { RECORD_TABLE_COLUMN_MIN_WIDTH } from '@/object-record/record-table/constants/RecordTableColumnMinWidth';
 import { useRecordTableFirstColumnWidthOverride } from '@/object-record/record-table/hooks/useRecordTableFirstColumnWidthOverride';
@@ -14,36 +12,40 @@ import {
   sumByProperty,
 } from 'twenty-shared/utils';
 import { type IconComponent } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
-
-const StyledRecordTableDraggableTr = styled.div`
-  align-items: center;
-
-  background: ${themeCssVariables.background.primary};
-  border: none;
-
-  cursor: pointer;
-  display: flex;
-  flex-direction: row;
-
-  @media (hover: hover) {
-    &:hover {
-      div:not(:first-of-type) {
-        background-color: ${themeCssVariables.background.secondary};
-      }
-    }
-  }
-
-  div:not(:first-of-type) {
-    border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  }
-
-  width: 100%;
-`;
+import { media } from 'twenty-ui/theme/constants.stylex';
+import {
+  background,
+  borderColor,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
+import { actionRowMarker } from './RecordTableActionRow.stylex';
 
 const styles = stylex.create({
+  root: {
+    alignItems: 'center',
+    backgroundColor: background['--t-background-primary'],
+    borderStyle: 'none',
+    cursor: 'pointer',
+    display: 'flex',
+    flexDirection: 'row',
+    width: '100%',
+  },
+  rowCell: {
+    backgroundColor: {
+      default: null,
+      [stylex.when.ancestor(':hover', actionRowMarker)]: {
+        default: null,
+        [media.hoverCapable]: background['--t-background-secondary'],
+      },
+    },
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: 1,
+  },
   fieldPlaceholderCell: (widthOfFields: number) => ({
     height: recordTableLayout.rowHeight,
     minWidth: widthOfFields,
@@ -51,7 +53,6 @@ const styles = stylex.create({
   }),
   iconContainer: {
     alignItems: 'center',
-    backgroundColor: 'transparent',
     borderRightStyle: 'none',
     color: fontColor['--t-font-color-secondary'],
     display: 'flex',
@@ -125,9 +126,9 @@ export const RecordTableActionRow = ({
     visibleRecordFieldsWithoutLabelIdentifier.length;
 
   return (
-    <StyledRecordTableDraggableTr onClick={onClick}>
+    <div {...stylex.props(styles.root, actionRowMarker)} onClick={onClick}>
       <RecordTableDragAndDropPlaceholderCell />
-      <div {...stylex.props(styles.iconContainer)}>
+      <div {...stylex.props(styles.rowCell, styles.iconContainer)}>
         <LeftIcon
           stroke={theme.icon.stroke.sm}
           size={theme.icon.size.sm}
@@ -136,6 +137,7 @@ export const RecordTableActionRow = ({
       </div>
       <div
         {...stylex.props(
+          styles.rowCell,
           styles.actionTextContainer,
           styles.actionTextWidth(firstColumnWidth),
         )}
@@ -144,14 +146,17 @@ export const RecordTableActionRow = ({
       </div>
       <div
         {...stylex.props(
+          styles.rowCell,
           styles.fieldPlaceholderCell(
             sumOfWidthOfVisibleRecordFieldsAfterLabelIdentifierField +
               sumOfBorderWidthForFields,
           ),
         )}
       />
-      <RecordTableAddButtonPlaceholderCell />
-      <RecordTableGroupSectionLastDynamicFillingCell />
-    </StyledRecordTableDraggableTr>
+      <RecordTableAddButtonPlaceholderCell xstyle={styles.rowCell} />
+      <RecordTableGroupSectionLastDynamicFillingCell
+        xstyle={styles.rowCell}
+      />
+    </div>
   );
 };

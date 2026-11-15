@@ -1,8 +1,10 @@
-import { cx } from '@linaria/core';
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { mergeClassName } from '@/page-layout/utils/mergeClassName';
 import * as stylex from '@stylexjs/stylex';
-import { background, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  background,
+  borderColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 import { visibleRecordFieldsComponentSelector } from '@/object-record/record-field/states/visibleRecordFieldsComponentSelector';
 import { RecordGroupAggregateDropdown } from '@/object-record/record-group/components/RecordGroupAggregateDropdown';
@@ -40,16 +42,16 @@ import {
   sumByProperty,
 } from 'twenty-shared/utils';
 
-const StyledTrContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-
-  > div:not(:first-of-type) {
-    border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  }
-`;
-
 const styles = stylex.create({
+  trContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  cellBorderBottom: {
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: 1,
+  },
   recordGroupHeaderContainer: {
     alignItems: 'center',
     borderRightStyle: 'none',
@@ -171,19 +173,21 @@ export const RecordTableRecordGroupSection = () => {
     return null;
   }
 
-  const headerContainerProps = stylex.props(
-    styles.recordGroupHeaderContainer,
-    styles.recordGroupHeaderWidth(
-      widthOfLabelIdentifierRecordField + RECORD_TABLE_COLUMN_CHECKBOX_WIDTH,
-    ),
-  );
-
   return (
-    <StyledTrContainer>
+    <div {...stylex.props(styles.trContainer)}>
       <div {...stylex.props(styles.dragAndDropPlaceholderCell)} />
       <div
-        {...headerContainerProps}
-        className={cx('disable-shadow', headerContainerProps.className)}
+        {...mergeClassName(
+          stylex.props(
+            styles.cellBorderBottom,
+            styles.recordGroupHeaderContainer,
+            styles.recordGroupHeaderWidth(
+              widthOfLabelIdentifierRecordField +
+                RECORD_TABLE_COLUMN_CHECKBOX_WIDTH,
+            ),
+          ),
+          'disable-shadow',
+        )}
       >
         <RecordGroupSectionHeader
           recordGroupDefinition={recordGroupDefinition}
@@ -211,10 +215,15 @@ export const RecordTableRecordGroupSection = () => {
         </div>
       </div>
       <div
-        {...stylex.props(styles.fieldPlaceholderCell(fieldsPlaceholderWidth))}
+        {...stylex.props(
+          styles.cellBorderBottom,
+          styles.fieldPlaceholderCell(fieldsPlaceholderWidth),
+        )}
       />
-      <RecordTableAddButtonPlaceholderCell />
-      <RecordTableGroupSectionLastDynamicFillingCell />
-    </StyledTrContainer>
+      <RecordTableAddButtonPlaceholderCell xstyle={styles.cellBorderBottom} />
+      <RecordTableGroupSectionLastDynamicFillingCell
+        xstyle={styles.cellBorderBottom}
+      />
+    </div>
   );
 };

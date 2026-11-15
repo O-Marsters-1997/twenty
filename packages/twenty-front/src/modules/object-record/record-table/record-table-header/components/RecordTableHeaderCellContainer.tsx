@@ -1,5 +1,5 @@
 import { recordTableLayout } from '../../constants/recordTableLayout.stylex';
-import { cx } from '@linaria/core';
+import { mergeClassName } from '@/page-layout/utils/mergeClassName';
 import * as stylex from '@stylexjs/stylex';
 import { type ComponentProps } from 'react';
 import { media } from 'twenty-ui/theme/constants.stylex';
@@ -36,8 +36,7 @@ export const RecordTableHeaderCellContainer = ({
     <div
       // oxlint-disable-next-line react/jsx-props-no-spreading
       {...divProps}
-      {...stylexProps}
-      className={cx(className, stylexProps.className)}
+      {...mergeClassName(stylexProps, className)}
     />
   );
 };

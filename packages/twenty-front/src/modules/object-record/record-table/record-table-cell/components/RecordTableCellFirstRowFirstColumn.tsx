@@ -1,6 +1,6 @@
 import { recordTableZIndex } from '../../constants/recordTableLayout.stylex';
 import { getRecordTableColumnFieldWidthClassName } from '@/object-record/record-table/utils/getRecordTableColumnFieldWidthClassName';
-import { cx } from '@linaria/core';
+import { mergeClassName } from '@/page-layout/utils/mergeClassName';
 import * as stylex from '@stylexjs/stylex';
 import { type ReactNode } from 'react';
 import {
@@ -33,11 +33,9 @@ export const RecordTableCellFirstRowFirstColumn = ({
 
   return (
     <div
-      {...stylexProps}
-      className={cx(
-        'table-cell-0-0',
-        getRecordTableColumnFieldWidthClassName(0),
-        stylexProps.className,
+      {...mergeClassName(
+        stylexProps,
+        `table-cell-0-0 ${getRecordTableColumnFieldWidthClassName(0)}`,
       )}
     >
       {children}

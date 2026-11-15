@@ -1,23 +1,12 @@
 import { type Draggable } from '@dnd-kit/dom';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { useMemo } from 'react';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { background } from 'twenty-ui/theme/tokens.stylex';
 
-import { HorizontalScrollBoxShadowCSS } from '@/object-record/record-table/components/HorizontalScrollBoxShadowCSS';
-import {
-  getRecordTableColumnWidthInlineStyles,
-  RECORD_TABLE_CHECKBOX_WIDTH_CSS_VAR,
-  RECORD_TABLE_DRAG_DROP_WIDTH_CSS_VAR,
-} from '@/object-record/record-table/components/RecordTableStyleWrapper';
-import { RECORD_TABLE_COLUMN_ADD_COLUMN_BUTTON_WIDTH } from '@/object-record/record-table/constants/RecordTableColumnAddColumnButtonWidth';
-import { RECORD_TABLE_COLUMN_ADD_COLUMN_BUTTON_WIDTH_CLASS_NAME } from '@/object-record/record-table/constants/RecordTableColumnAddColumnButtonWidthClassName';
-import { RECORD_TABLE_COLUMN_CHECKBOX_WIDTH_CLASS_NAME } from '@/object-record/record-table/constants/RecordTableColumnCheckboxWidthClassName';
-import { RECORD_TABLE_COLUMN_DRAG_AND_DROP_WIDTH_CLASS_NAME } from '@/object-record/record-table/constants/RecordTableColumnDragAndDropWidthClassName';
-import { RECORD_TABLE_COLUMN_LAST_EMPTY_COLUMN_WIDTH_CLASS_NAME } from '@/object-record/record-table/constants/RecordTableColumnLastEmptyColumnWidthClassName';
+import { getRecordTableColumnWidthInlineStyles } from '@/object-record/record-table/components/RecordTableStyleWrapper';
 import { RECORD_TABLE_COLUMN_LAST_EMPTY_COLUMN_WIDTH_VARIABLE_NAME } from '@/object-record/record-table/constants/RecordTableColumnLastEmptyColumnWidthVariableName';
 import { RECORD_TABLE_COLUMN_WITH_GROUP_LAST_EMPTY_COLUMN_WIDTH_VARIABLE_NAME } from '@/object-record/record-table/constants/RecordTableColumnWithGroupLastEmptyColumnWidthVariableName';
-import { TABLE_Z_INDEX } from '@/object-record/record-table/constants/TableZIndex';
 import { useRecordTableContextOrThrow } from '@/object-record/record-table/contexts/RecordTableContext';
 import { RecordTableRowDraggableContextProvider } from '@/object-record/record-table/contexts/RecordTableRowDraggableContext';
 import { useIsRecordTableCheckboxColumnHidden } from '@/object-record/record-table/hooks/useIsRecordTableCheckboxColumnHidden';
@@ -31,98 +20,11 @@ import { RecordTablePlusButtonCellPlaceholder } from '@/object-record/record-tab
 import { RecordTableFieldsCells } from '@/object-record/record-table/record-table-row/components/RecordTableFieldsCells';
 import { RecordDragMultiDragCounterChip } from '@/object-record/record-drag/components/RecordDragMultiDragCounterChip';
 import { RecordTableTr } from '@/object-record/record-table/record-table-row/components/RecordTableTr';
+import { mergeClassName } from '@/page-layout/utils/mergeClassName';
 import { type RecordTableRowDragData } from '@/object-record/record-table/types/RecordTableRowDragData';
-import { getRecordTableColumnFieldWidthClassName } from '@/object-record/record-table/utils/getRecordTableColumnFieldWidthClassName';
 import { useScrollWrapperHTMLElement } from '@/ui/utilities/scroll/hooks/useScrollWrapperHTMLElement';
 
-const MAX_COLUMNS = 100;
-
-const cloneColumnFieldWidthRules = Array.from(
-  { length: MAX_COLUMNS },
-  (_, i) => {
-    const className = getRecordTableColumnFieldWidthClassName(i);
-    const cssVar = `var(--record-table-column-field-${i})`;
-    return `div.${className} {
-    width: ${cssVar};
-    min-width: ${cssVar};
-    max-width: ${cssVar};
-  }`;
-  },
-).join('\n');
-
-// The overlay portals outside the table, so its column width variables and sticky rules are redeclared.
-const StyledRowDragOverlayCSSBridge = styled.div`
-  position: relative;
-
-  div.table-cell.${RECORD_TABLE_COLUMN_DRAG_AND_DROP_WIDTH_CLASS_NAME} {
-    left: 0px;
-    position: sticky;
-    z-index: ${TABLE_Z_INDEX.cell.sticky};
-  }
-
-  div.table-cell.${RECORD_TABLE_COLUMN_CHECKBOX_WIDTH_CLASS_NAME} {
-    left: var(${RECORD_TABLE_DRAG_DROP_WIDTH_CSS_VAR});
-    position: sticky;
-    z-index: ${TABLE_Z_INDEX.cell.sticky};
-  }
-
-  div.table-cell-0-0 {
-    left: calc(
-      var(${RECORD_TABLE_DRAG_DROP_WIDTH_CSS_VAR}) +
-        var(${RECORD_TABLE_CHECKBOX_WIDTH_CSS_VAR})
-    );
-    position: sticky;
-
-    ${HorizontalScrollBoxShadowCSS}
-  }
-
-  div.table-cell.${getRecordTableColumnFieldWidthClassName(0)} {
-    left: calc(
-      var(${RECORD_TABLE_DRAG_DROP_WIDTH_CSS_VAR}) +
-        var(${RECORD_TABLE_CHECKBOX_WIDTH_CSS_VAR})
-    );
-    position: sticky;
-    z-index: ${TABLE_Z_INDEX.cell.sticky};
-
-    ${HorizontalScrollBoxShadowCSS}
-  }
-
-  div.${RECORD_TABLE_COLUMN_DRAG_AND_DROP_WIDTH_CLASS_NAME} {
-    max-width: var(${RECORD_TABLE_DRAG_DROP_WIDTH_CSS_VAR});
-    min-width: var(${RECORD_TABLE_DRAG_DROP_WIDTH_CSS_VAR});
-    width: var(${RECORD_TABLE_DRAG_DROP_WIDTH_CSS_VAR});
-  }
-
-  div.${RECORD_TABLE_COLUMN_CHECKBOX_WIDTH_CLASS_NAME} {
-    max-width: var(${RECORD_TABLE_CHECKBOX_WIDTH_CSS_VAR});
-    min-width: var(${RECORD_TABLE_CHECKBOX_WIDTH_CSS_VAR});
-    width: var(${RECORD_TABLE_CHECKBOX_WIDTH_CSS_VAR});
-  }
-
-  div.${RECORD_TABLE_COLUMN_ADD_COLUMN_BUTTON_WIDTH_CLASS_NAME} {
-    max-width: ${RECORD_TABLE_COLUMN_ADD_COLUMN_BUTTON_WIDTH}px;
-    min-width: ${RECORD_TABLE_COLUMN_ADD_COLUMN_BUTTON_WIDTH}px;
-    width: ${RECORD_TABLE_COLUMN_ADD_COLUMN_BUTTON_WIDTH}px;
-  }
-
-  ${cloneColumnFieldWidthRules}
-
-  div.${RECORD_TABLE_COLUMN_LAST_EMPTY_COLUMN_WIDTH_CLASS_NAME} {
-    max-width: var(
-      ${RECORD_TABLE_COLUMN_LAST_EMPTY_COLUMN_WIDTH_VARIABLE_NAME}
-    );
-    min-width: var(
-      ${RECORD_TABLE_COLUMN_LAST_EMPTY_COLUMN_WIDTH_VARIABLE_NAME}
-    );
-    width: var(${RECORD_TABLE_COLUMN_LAST_EMPTY_COLUMN_WIDTH_VARIABLE_NAME});
-  }
-`;
-
-// Clipped to the scroll wrapper so the preview doesn't overhang overlays; the counter chip sits outside
-// because it pokes past the row's top-left corner.
-const StyledRowClipContainer = styled.div`
-  overflow: hidden;
-`;
+import '@/object-record/record-table/components/RecordTableStyleWrapper.css';
 
 export const RecordTableRowDragOverlayContent = ({
   source,
@@ -145,18 +47,18 @@ export const RecordTableRowDragOverlayContent = ({
   const visibleTableWidth = scrollWrapperHTMLElement?.clientWidth;
 
   const columnWidthStyles = useMemo(() => {
-    const styles: Record<string, string> =
+    const widthStyles: Record<string, string> =
       getRecordTableColumnWidthInlineStyles({
         visibleRecordFields,
         isDragColumnHidden: isRecordTableDragColumnHidden,
         isCheckboxColumnHidden: isRecordTableCheckboxColumnHidden,
       });
-    styles[RECORD_TABLE_COLUMN_LAST_EMPTY_COLUMN_WIDTH_VARIABLE_NAME] =
+    widthStyles[RECORD_TABLE_COLUMN_LAST_EMPTY_COLUMN_WIDTH_VARIABLE_NAME] =
       `${lastColumnWidth}px`;
-    styles[
+    widthStyles[
       RECORD_TABLE_COLUMN_WITH_GROUP_LAST_EMPTY_COLUMN_WIDTH_VARIABLE_NAME
     ] = `${lastColumnWidth}px`;
-    return styles;
+    return widthStyles;
   }, [
     visibleRecordFields,
     lastColumnWidth,
@@ -173,21 +75,24 @@ export const RecordTableRowDragOverlayContent = ({
   const recordId = sourceData.recordId;
 
   return (
-    <StyledRowDragOverlayCSSBridge style={columnWidthStyles}>
-      <StyledRowClipContainer
-        style={
-          isDefined(visibleTableWidth)
-            ? { maxWidth: `${visibleTableWidth}px` }
-            : undefined
-        }
+    <div
+      {...mergeClassName(
+        stylex.props(styles.bridge),
+        'record-table-drag-overlay',
+      )}
+      style={columnWidthStyles}
+    >
+      <div
+        {...stylex.props(
+          styles.clipContainer,
+          isDefined(visibleTableWidth) &&
+            styles.clipContainerMaxWidth(visibleTableWidth),
+        )}
       >
         <RecordTableTr
           recordId={recordId}
           focusIndex={sourceData.focusIndex}
-          style={{
-            background: themeCssVariables.background.secondary,
-            borderColor: themeCssVariables.border.color.medium,
-          }}
+          xstyle={styles.draggedRow}
           isDragging
           data-testid={`row-id-${recordId}`}
           data-selectable-id={recordId}
@@ -201,8 +106,21 @@ export const RecordTableRowDragOverlayContent = ({
             <RecordTableLastEmptyCell />
           </RecordTableRowDraggableContextProvider>
         </RecordTableTr>
-      </StyledRowClipContainer>
+      </div>
       <RecordDragMultiDragCounterChip />
-    </StyledRowDragOverlayCSSBridge>
+    </div>
   );
 };
+
+const styles = stylex.create({
+  bridge: {
+    position: 'relative',
+  },
+  clipContainer: {
+    overflow: 'hidden',
+  },
+  clipContainerMaxWidth: (maxWidth: number) => ({ maxWidth }),
+  draggedRow: {
+    backgroundColor: background['--t-background-secondary'],
+  },
+});

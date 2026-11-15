@@ -1,0 +1,874 @@
+.record-table-style-wrapper,
+.record-table-drag-overlay {
+  --record-table-first-column-left: calc(var(--record-table-drag-drop-width) + var(--record-table-checkbox-width));
+}
+
+.record-table-style-wrapper[data-is-dragging='true'] > * {
+  pointer-events: none;
+}
+
+.record-table-style-wrapper > * {
+  pointer-events: auto;
+}
+
+@media (max-width: 768px) {
+  .record-table-style-wrapper {
+    --record-table-first-column-left: calc(
+      var(--record-table-drag-drop-width) + var(--record-table-checkbox-width) -
+        (var(--record-table-column-field-0) - 72px)
+    );
+  }
+}
+
+.record-table-style-wrapper div.header-cell {
+  z-index: 10;
+}
+
+.record-table-style-wrapper div.header-cell.record-table-column-drag-and-drop {
+  background-color: var(--t-background-primary);
+  left: 0px;
+  position: sticky;
+  z-index: 14;
+}
+
+.record-table-style-wrapper div.header-cell.record-table-column-checkbox {
+  background-color: var(--t-background-primary);
+  left: var(--record-table-drag-drop-width);
+  position: sticky;
+  top: 0;
+  z-index: 14;
+}
+
+.record-table-style-wrapper div.header-cell.record-table-column-field-0 {
+  background-color: var(--t-background-primary);
+  left: var(--record-table-first-column-left);
+  position: sticky;
+  right: 0;
+  z-index: 14;
+}
+
+.record-table-style-wrapper div.table-cell.record-table-column-drag-and-drop,
+.record-table-drag-overlay div.table-cell.record-table-column-drag-and-drop {
+  left: 0px;
+  position: sticky;
+  z-index: 8;
+}
+
+.record-table-style-wrapper div.table-cell.record-table-column-checkbox,
+.record-table-drag-overlay div.table-cell.record-table-column-checkbox {
+  left: var(--record-table-drag-drop-width);
+  position: sticky;
+  z-index: 8;
+}
+
+.record-table-style-wrapper div.table-cell-0-0,
+.record-table-drag-overlay div.table-cell-0-0 {
+  left: var(--record-table-first-column-left);
+  position: sticky;
+}
+
+.record-table-style-wrapper div.table-cell.record-table-column-field-0,
+.record-table-drag-overlay div.table-cell.record-table-column-field-0 {
+  left: var(--record-table-first-column-left);
+  position: sticky;
+  z-index: 8;
+}
+
+.record-table-style-wrapper div.header-cell.record-table-column-field-0::after,
+.record-table-style-wrapper div.table-cell-0-0::after,
+.record-table-drag-overlay div.table-cell-0-0::after,
+.record-table-style-wrapper div.table-cell.record-table-column-field-0::after,
+.record-table-drag-overlay div.table-cell.record-table-column-field-0::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  height: calc(100% + 2px);
+  width: 4px;
+  right: -1px;
+  box-shadow:
+    2px 0px 4px 0px var(--t-box-shadow-color),
+    0px 0px 4px 0px var(--t-box-shadow-color);
+  clip-path: inset(0px -4px 0px 0px);
+  visibility: var(--record-table-horizontal-scroll-visibility, hidden);
+}
+
+.record-table-style-wrapper div.record-table-column-drag-and-drop,
+.record-table-drag-overlay div.record-table-column-drag-and-drop {
+  max-width: var(--record-table-drag-drop-width);
+  min-width: var(--record-table-drag-drop-width);
+  width: var(--record-table-drag-drop-width);
+}
+
+.record-table-style-wrapper div.record-table-column-checkbox,
+.record-table-drag-overlay div.record-table-column-checkbox {
+  max-width: var(--record-table-checkbox-width);
+  min-width: var(--record-table-checkbox-width);
+  width: var(--record-table-checkbox-width);
+}
+
+.record-table-style-wrapper div.record-table-column-add-column-button,
+.record-table-drag-overlay div.record-table-column-add-column-button {
+  max-width: 32px;
+  min-width: 32px;
+  width: 32px;
+}
+
+.record-table-style-wrapper div.record-table-column-field-0,
+.record-table-drag-overlay div.record-table-column-field-0 {
+  width: var(--record-table-column-field-0);
+  min-width: var(--record-table-column-field-0);
+  max-width: var(--record-table-column-field-0);
+}
+
+.record-table-style-wrapper div.record-table-column-field-1,
+.record-table-drag-overlay div.record-table-column-field-1 {
+  width: var(--record-table-column-field-1);
+  min-width: var(--record-table-column-field-1);
+  max-width: var(--record-table-column-field-1);
+}
+
+.record-table-style-wrapper div.record-table-column-field-2,
+.record-table-drag-overlay div.record-table-column-field-2 {
+  width: var(--record-table-column-field-2);
+  min-width: var(--record-table-column-field-2);
+  max-width: var(--record-table-column-field-2);
+}
+
+.record-table-style-wrapper div.record-table-column-field-3,
+.record-table-drag-overlay div.record-table-column-field-3 {
+  width: var(--record-table-column-field-3);
+  min-width: var(--record-table-column-field-3);
+  max-width: var(--record-table-column-field-3);
+}
+
+.record-table-style-wrapper div.record-table-column-field-4,
+.record-table-drag-overlay div.record-table-column-field-4 {
+  width: var(--record-table-column-field-4);
+  min-width: var(--record-table-column-field-4);
+  max-width: var(--record-table-column-field-4);
+}
+
+.record-table-style-wrapper div.record-table-column-field-5,
+.record-table-drag-overlay div.record-table-column-field-5 {
+  width: var(--record-table-column-field-5);
+  min-width: var(--record-table-column-field-5);
+  max-width: var(--record-table-column-field-5);
+}
+
+.record-table-style-wrapper div.record-table-column-field-6,
+.record-table-drag-overlay div.record-table-column-field-6 {
+  width: var(--record-table-column-field-6);
+  min-width: var(--record-table-column-field-6);
+  max-width: var(--record-table-column-field-6);
+}
+
+.record-table-style-wrapper div.record-table-column-field-7,
+.record-table-drag-overlay div.record-table-column-field-7 {
+  width: var(--record-table-column-field-7);
+  min-width: var(--record-table-column-field-7);
+  max-width: var(--record-table-column-field-7);
+}
+
+.record-table-style-wrapper div.record-table-column-field-8,
+.record-table-drag-overlay div.record-table-column-field-8 {
+  width: var(--record-table-column-field-8);
+  min-width: var(--record-table-column-field-8);
+  max-width: var(--record-table-column-field-8);
+}
+
+.record-table-style-wrapper div.record-table-column-field-9,
+.record-table-drag-overlay div.record-table-column-field-9 {
+  width: var(--record-table-column-field-9);
+  min-width: var(--record-table-column-field-9);
+  max-width: var(--record-table-column-field-9);
+}
+
+.record-table-style-wrapper div.record-table-column-field-10,
+.record-table-drag-overlay div.record-table-column-field-10 {
+  width: var(--record-table-column-field-10);
+  min-width: var(--record-table-column-field-10);
+  max-width: var(--record-table-column-field-10);
+}
+
+.record-table-style-wrapper div.record-table-column-field-11,
+.record-table-drag-overlay div.record-table-column-field-11 {
+  width: var(--record-table-column-field-11);
+  min-width: var(--record-table-column-field-11);
+  max-width: var(--record-table-column-field-11);
+}
+
+.record-table-style-wrapper div.record-table-column-field-12,
+.record-table-drag-overlay div.record-table-column-field-12 {
+  width: var(--record-table-column-field-12);
+  min-width: var(--record-table-column-field-12);
+  max-width: var(--record-table-column-field-12);
+}
+
+.record-table-style-wrapper div.record-table-column-field-13,
+.record-table-drag-overlay div.record-table-column-field-13 {
+  width: var(--record-table-column-field-13);
+  min-width: var(--record-table-column-field-13);
+  max-width: var(--record-table-column-field-13);
+}
+
+.record-table-style-wrapper div.record-table-column-field-14,
+.record-table-drag-overlay div.record-table-column-field-14 {
+  width: var(--record-table-column-field-14);
+  min-width: var(--record-table-column-field-14);
+  max-width: var(--record-table-column-field-14);
+}
+
+.record-table-style-wrapper div.record-table-column-field-15,
+.record-table-drag-overlay div.record-table-column-field-15 {
+  width: var(--record-table-column-field-15);
+  min-width: var(--record-table-column-field-15);
+  max-width: var(--record-table-column-field-15);
+}
+
+.record-table-style-wrapper div.record-table-column-field-16,
+.record-table-drag-overlay div.record-table-column-field-16 {
+  width: var(--record-table-column-field-16);
+  min-width: var(--record-table-column-field-16);
+  max-width: var(--record-table-column-field-16);
+}
+
+.record-table-style-wrapper div.record-table-column-field-17,
+.record-table-drag-overlay div.record-table-column-field-17 {
+  width: var(--record-table-column-field-17);
+  min-width: var(--record-table-column-field-17);
+  max-width: var(--record-table-column-field-17);
+}
+
+.record-table-style-wrapper div.record-table-column-field-18,
+.record-table-drag-overlay div.record-table-column-field-18 {
+  width: var(--record-table-column-field-18);
+  min-width: var(--record-table-column-field-18);
+  max-width: var(--record-table-column-field-18);
+}
+
+.record-table-style-wrapper div.record-table-column-field-19,
+.record-table-drag-overlay div.record-table-column-field-19 {
+  width: var(--record-table-column-field-19);
+  min-width: var(--record-table-column-field-19);
+  max-width: var(--record-table-column-field-19);
+}
+
+.record-table-style-wrapper div.record-table-column-field-20,
+.record-table-drag-overlay div.record-table-column-field-20 {
+  width: var(--record-table-column-field-20);
+  min-width: var(--record-table-column-field-20);
+  max-width: var(--record-table-column-field-20);
+}
+
+.record-table-style-wrapper div.record-table-column-field-21,
+.record-table-drag-overlay div.record-table-column-field-21 {
+  width: var(--record-table-column-field-21);
+  min-width: var(--record-table-column-field-21);
+  max-width: var(--record-table-column-field-21);
+}
+
+.record-table-style-wrapper div.record-table-column-field-22,
+.record-table-drag-overlay div.record-table-column-field-22 {
+  width: var(--record-table-column-field-22);
+  min-width: var(--record-table-column-field-22);
+  max-width: var(--record-table-column-field-22);
+}
+
+.record-table-style-wrapper div.record-table-column-field-23,
+.record-table-drag-overlay div.record-table-column-field-23 {
+  width: var(--record-table-column-field-23);
+  min-width: var(--record-table-column-field-23);
+  max-width: var(--record-table-column-field-23);
+}
+
+.record-table-style-wrapper div.record-table-column-field-24,
+.record-table-drag-overlay div.record-table-column-field-24 {
+  width: var(--record-table-column-field-24);
+  min-width: var(--record-table-column-field-24);
+  max-width: var(--record-table-column-field-24);
+}
+
+.record-table-style-wrapper div.record-table-column-field-25,
+.record-table-drag-overlay div.record-table-column-field-25 {
+  width: var(--record-table-column-field-25);
+  min-width: var(--record-table-column-field-25);
+  max-width: var(--record-table-column-field-25);
+}
+
+.record-table-style-wrapper div.record-table-column-field-26,
+.record-table-drag-overlay div.record-table-column-field-26 {
+  width: var(--record-table-column-field-26);
+  min-width: var(--record-table-column-field-26);
+  max-width: var(--record-table-column-field-26);
+}
+
+.record-table-style-wrapper div.record-table-column-field-27,
+.record-table-drag-overlay div.record-table-column-field-27 {
+  width: var(--record-table-column-field-27);
+  min-width: var(--record-table-column-field-27);
+  max-width: var(--record-table-column-field-27);
+}
+
+.record-table-style-wrapper div.record-table-column-field-28,
+.record-table-drag-overlay div.record-table-column-field-28 {
+  width: var(--record-table-column-field-28);
+  min-width: var(--record-table-column-field-28);
+  max-width: var(--record-table-column-field-28);
+}
+
+.record-table-style-wrapper div.record-table-column-field-29,
+.record-table-drag-overlay div.record-table-column-field-29 {
+  width: var(--record-table-column-field-29);
+  min-width: var(--record-table-column-field-29);
+  max-width: var(--record-table-column-field-29);
+}
+
+.record-table-style-wrapper div.record-table-column-field-30,
+.record-table-drag-overlay div.record-table-column-field-30 {
+  width: var(--record-table-column-field-30);
+  min-width: var(--record-table-column-field-30);
+  max-width: var(--record-table-column-field-30);
+}
+
+.record-table-style-wrapper div.record-table-column-field-31,
+.record-table-drag-overlay div.record-table-column-field-31 {
+  width: var(--record-table-column-field-31);
+  min-width: var(--record-table-column-field-31);
+  max-width: var(--record-table-column-field-31);
+}
+
+.record-table-style-wrapper div.record-table-column-field-32,
+.record-table-drag-overlay div.record-table-column-field-32 {
+  width: var(--record-table-column-field-32);
+  min-width: var(--record-table-column-field-32);
+  max-width: var(--record-table-column-field-32);
+}
+
+.record-table-style-wrapper div.record-table-column-field-33,
+.record-table-drag-overlay div.record-table-column-field-33 {
+  width: var(--record-table-column-field-33);
+  min-width: var(--record-table-column-field-33);
+  max-width: var(--record-table-column-field-33);
+}
+
+.record-table-style-wrapper div.record-table-column-field-34,
+.record-table-drag-overlay div.record-table-column-field-34 {
+  width: var(--record-table-column-field-34);
+  min-width: var(--record-table-column-field-34);
+  max-width: var(--record-table-column-field-34);
+}
+
+.record-table-style-wrapper div.record-table-column-field-35,
+.record-table-drag-overlay div.record-table-column-field-35 {
+  width: var(--record-table-column-field-35);
+  min-width: var(--record-table-column-field-35);
+  max-width: var(--record-table-column-field-35);
+}
+
+.record-table-style-wrapper div.record-table-column-field-36,
+.record-table-drag-overlay div.record-table-column-field-36 {
+  width: var(--record-table-column-field-36);
+  min-width: var(--record-table-column-field-36);
+  max-width: var(--record-table-column-field-36);
+}
+
+.record-table-style-wrapper div.record-table-column-field-37,
+.record-table-drag-overlay div.record-table-column-field-37 {
+  width: var(--record-table-column-field-37);
+  min-width: var(--record-table-column-field-37);
+  max-width: var(--record-table-column-field-37);
+}
+
+.record-table-style-wrapper div.record-table-column-field-38,
+.record-table-drag-overlay div.record-table-column-field-38 {
+  width: var(--record-table-column-field-38);
+  min-width: var(--record-table-column-field-38);
+  max-width: var(--record-table-column-field-38);
+}
+
+.record-table-style-wrapper div.record-table-column-field-39,
+.record-table-drag-overlay div.record-table-column-field-39 {
+  width: var(--record-table-column-field-39);
+  min-width: var(--record-table-column-field-39);
+  max-width: var(--record-table-column-field-39);
+}
+
+.record-table-style-wrapper div.record-table-column-field-40,
+.record-table-drag-overlay div.record-table-column-field-40 {
+  width: var(--record-table-column-field-40);
+  min-width: var(--record-table-column-field-40);
+  max-width: var(--record-table-column-field-40);
+}
+
+.record-table-style-wrapper div.record-table-column-field-41,
+.record-table-drag-overlay div.record-table-column-field-41 {
+  width: var(--record-table-column-field-41);
+  min-width: var(--record-table-column-field-41);
+  max-width: var(--record-table-column-field-41);
+}
+
+.record-table-style-wrapper div.record-table-column-field-42,
+.record-table-drag-overlay div.record-table-column-field-42 {
+  width: var(--record-table-column-field-42);
+  min-width: var(--record-table-column-field-42);
+  max-width: var(--record-table-column-field-42);
+}
+
+.record-table-style-wrapper div.record-table-column-field-43,
+.record-table-drag-overlay div.record-table-column-field-43 {
+  width: var(--record-table-column-field-43);
+  min-width: var(--record-table-column-field-43);
+  max-width: var(--record-table-column-field-43);
+}
+
+.record-table-style-wrapper div.record-table-column-field-44,
+.record-table-drag-overlay div.record-table-column-field-44 {
+  width: var(--record-table-column-field-44);
+  min-width: var(--record-table-column-field-44);
+  max-width: var(--record-table-column-field-44);
+}
+
+.record-table-style-wrapper div.record-table-column-field-45,
+.record-table-drag-overlay div.record-table-column-field-45 {
+  width: var(--record-table-column-field-45);
+  min-width: var(--record-table-column-field-45);
+  max-width: var(--record-table-column-field-45);
+}
+
+.record-table-style-wrapper div.record-table-column-field-46,
+.record-table-drag-overlay div.record-table-column-field-46 {
+  width: var(--record-table-column-field-46);
+  min-width: var(--record-table-column-field-46);
+  max-width: var(--record-table-column-field-46);
+}
+
+.record-table-style-wrapper div.record-table-column-field-47,
+.record-table-drag-overlay div.record-table-column-field-47 {
+  width: var(--record-table-column-field-47);
+  min-width: var(--record-table-column-field-47);
+  max-width: var(--record-table-column-field-47);
+}
+
+.record-table-style-wrapper div.record-table-column-field-48,
+.record-table-drag-overlay div.record-table-column-field-48 {
+  width: var(--record-table-column-field-48);
+  min-width: var(--record-table-column-field-48);
+  max-width: var(--record-table-column-field-48);
+}
+
+.record-table-style-wrapper div.record-table-column-field-49,
+.record-table-drag-overlay div.record-table-column-field-49 {
+  width: var(--record-table-column-field-49);
+  min-width: var(--record-table-column-field-49);
+  max-width: var(--record-table-column-field-49);
+}
+
+.record-table-style-wrapper div.record-table-column-field-50,
+.record-table-drag-overlay div.record-table-column-field-50 {
+  width: var(--record-table-column-field-50);
+  min-width: var(--record-table-column-field-50);
+  max-width: var(--record-table-column-field-50);
+}
+
+.record-table-style-wrapper div.record-table-column-field-51,
+.record-table-drag-overlay div.record-table-column-field-51 {
+  width: var(--record-table-column-field-51);
+  min-width: var(--record-table-column-field-51);
+  max-width: var(--record-table-column-field-51);
+}
+
+.record-table-style-wrapper div.record-table-column-field-52,
+.record-table-drag-overlay div.record-table-column-field-52 {
+  width: var(--record-table-column-field-52);
+  min-width: var(--record-table-column-field-52);
+  max-width: var(--record-table-column-field-52);
+}
+
+.record-table-style-wrapper div.record-table-column-field-53,
+.record-table-drag-overlay div.record-table-column-field-53 {
+  width: var(--record-table-column-field-53);
+  min-width: var(--record-table-column-field-53);
+  max-width: var(--record-table-column-field-53);
+}
+
+.record-table-style-wrapper div.record-table-column-field-54,
+.record-table-drag-overlay div.record-table-column-field-54 {
+  width: var(--record-table-column-field-54);
+  min-width: var(--record-table-column-field-54);
+  max-width: var(--record-table-column-field-54);
+}
+
+.record-table-style-wrapper div.record-table-column-field-55,
+.record-table-drag-overlay div.record-table-column-field-55 {
+  width: var(--record-table-column-field-55);
+  min-width: var(--record-table-column-field-55);
+  max-width: var(--record-table-column-field-55);
+}
+
+.record-table-style-wrapper div.record-table-column-field-56,
+.record-table-drag-overlay div.record-table-column-field-56 {
+  width: var(--record-table-column-field-56);
+  min-width: var(--record-table-column-field-56);
+  max-width: var(--record-table-column-field-56);
+}
+
+.record-table-style-wrapper div.record-table-column-field-57,
+.record-table-drag-overlay div.record-table-column-field-57 {
+  width: var(--record-table-column-field-57);
+  min-width: var(--record-table-column-field-57);
+  max-width: var(--record-table-column-field-57);
+}
+
+.record-table-style-wrapper div.record-table-column-field-58,
+.record-table-drag-overlay div.record-table-column-field-58 {
+  width: var(--record-table-column-field-58);
+  min-width: var(--record-table-column-field-58);
+  max-width: var(--record-table-column-field-58);
+}
+
+.record-table-style-wrapper div.record-table-column-field-59,
+.record-table-drag-overlay div.record-table-column-field-59 {
+  width: var(--record-table-column-field-59);
+  min-width: var(--record-table-column-field-59);
+  max-width: var(--record-table-column-field-59);
+}
+
+.record-table-style-wrapper div.record-table-column-field-60,
+.record-table-drag-overlay div.record-table-column-field-60 {
+  width: var(--record-table-column-field-60);
+  min-width: var(--record-table-column-field-60);
+  max-width: var(--record-table-column-field-60);
+}
+
+.record-table-style-wrapper div.record-table-column-field-61,
+.record-table-drag-overlay div.record-table-column-field-61 {
+  width: var(--record-table-column-field-61);
+  min-width: var(--record-table-column-field-61);
+  max-width: var(--record-table-column-field-61);
+}
+
+.record-table-style-wrapper div.record-table-column-field-62,
+.record-table-drag-overlay div.record-table-column-field-62 {
+  width: var(--record-table-column-field-62);
+  min-width: var(--record-table-column-field-62);
+  max-width: var(--record-table-column-field-62);
+}
+
+.record-table-style-wrapper div.record-table-column-field-63,
+.record-table-drag-overlay div.record-table-column-field-63 {
+  width: var(--record-table-column-field-63);
+  min-width: var(--record-table-column-field-63);
+  max-width: var(--record-table-column-field-63);
+}
+
+.record-table-style-wrapper div.record-table-column-field-64,
+.record-table-drag-overlay div.record-table-column-field-64 {
+  width: var(--record-table-column-field-64);
+  min-width: var(--record-table-column-field-64);
+  max-width: var(--record-table-column-field-64);
+}
+
+.record-table-style-wrapper div.record-table-column-field-65,
+.record-table-drag-overlay div.record-table-column-field-65 {
+  width: var(--record-table-column-field-65);
+  min-width: var(--record-table-column-field-65);
+  max-width: var(--record-table-column-field-65);
+}
+
+.record-table-style-wrapper div.record-table-column-field-66,
+.record-table-drag-overlay div.record-table-column-field-66 {
+  width: var(--record-table-column-field-66);
+  min-width: var(--record-table-column-field-66);
+  max-width: var(--record-table-column-field-66);
+}
+
+.record-table-style-wrapper div.record-table-column-field-67,
+.record-table-drag-overlay div.record-table-column-field-67 {
+  width: var(--record-table-column-field-67);
+  min-width: var(--record-table-column-field-67);
+  max-width: var(--record-table-column-field-67);
+}
+
+.record-table-style-wrapper div.record-table-column-field-68,
+.record-table-drag-overlay div.record-table-column-field-68 {
+  width: var(--record-table-column-field-68);
+  min-width: var(--record-table-column-field-68);
+  max-width: var(--record-table-column-field-68);
+}
+
+.record-table-style-wrapper div.record-table-column-field-69,
+.record-table-drag-overlay div.record-table-column-field-69 {
+  width: var(--record-table-column-field-69);
+  min-width: var(--record-table-column-field-69);
+  max-width: var(--record-table-column-field-69);
+}
+
+.record-table-style-wrapper div.record-table-column-field-70,
+.record-table-drag-overlay div.record-table-column-field-70 {
+  width: var(--record-table-column-field-70);
+  min-width: var(--record-table-column-field-70);
+  max-width: var(--record-table-column-field-70);
+}
+
+.record-table-style-wrapper div.record-table-column-field-71,
+.record-table-drag-overlay div.record-table-column-field-71 {
+  width: var(--record-table-column-field-71);
+  min-width: var(--record-table-column-field-71);
+  max-width: var(--record-table-column-field-71);
+}
+
+.record-table-style-wrapper div.record-table-column-field-72,
+.record-table-drag-overlay div.record-table-column-field-72 {
+  width: var(--record-table-column-field-72);
+  min-width: var(--record-table-column-field-72);
+  max-width: var(--record-table-column-field-72);
+}
+
+.record-table-style-wrapper div.record-table-column-field-73,
+.record-table-drag-overlay div.record-table-column-field-73 {
+  width: var(--record-table-column-field-73);
+  min-width: var(--record-table-column-field-73);
+  max-width: var(--record-table-column-field-73);
+}
+
+.record-table-style-wrapper div.record-table-column-field-74,
+.record-table-drag-overlay div.record-table-column-field-74 {
+  width: var(--record-table-column-field-74);
+  min-width: var(--record-table-column-field-74);
+  max-width: var(--record-table-column-field-74);
+}
+
+.record-table-style-wrapper div.record-table-column-field-75,
+.record-table-drag-overlay div.record-table-column-field-75 {
+  width: var(--record-table-column-field-75);
+  min-width: var(--record-table-column-field-75);
+  max-width: var(--record-table-column-field-75);
+}
+
+.record-table-style-wrapper div.record-table-column-field-76,
+.record-table-drag-overlay div.record-table-column-field-76 {
+  width: var(--record-table-column-field-76);
+  min-width: var(--record-table-column-field-76);
+  max-width: var(--record-table-column-field-76);
+}
+
+.record-table-style-wrapper div.record-table-column-field-77,
+.record-table-drag-overlay div.record-table-column-field-77 {
+  width: var(--record-table-column-field-77);
+  min-width: var(--record-table-column-field-77);
+  max-width: var(--record-table-column-field-77);
+}
+
+.record-table-style-wrapper div.record-table-column-field-78,
+.record-table-drag-overlay div.record-table-column-field-78 {
+  width: var(--record-table-column-field-78);
+  min-width: var(--record-table-column-field-78);
+  max-width: var(--record-table-column-field-78);
+}
+
+.record-table-style-wrapper div.record-table-column-field-79,
+.record-table-drag-overlay div.record-table-column-field-79 {
+  width: var(--record-table-column-field-79);
+  min-width: var(--record-table-column-field-79);
+  max-width: var(--record-table-column-field-79);
+}
+
+.record-table-style-wrapper div.record-table-column-field-80,
+.record-table-drag-overlay div.record-table-column-field-80 {
+  width: var(--record-table-column-field-80);
+  min-width: var(--record-table-column-field-80);
+  max-width: var(--record-table-column-field-80);
+}
+
+.record-table-style-wrapper div.record-table-column-field-81,
+.record-table-drag-overlay div.record-table-column-field-81 {
+  width: var(--record-table-column-field-81);
+  min-width: var(--record-table-column-field-81);
+  max-width: var(--record-table-column-field-81);
+}
+
+.record-table-style-wrapper div.record-table-column-field-82,
+.record-table-drag-overlay div.record-table-column-field-82 {
+  width: var(--record-table-column-field-82);
+  min-width: var(--record-table-column-field-82);
+  max-width: var(--record-table-column-field-82);
+}
+
+.record-table-style-wrapper div.record-table-column-field-83,
+.record-table-drag-overlay div.record-table-column-field-83 {
+  width: var(--record-table-column-field-83);
+  min-width: var(--record-table-column-field-83);
+  max-width: var(--record-table-column-field-83);
+}
+
+.record-table-style-wrapper div.record-table-column-field-84,
+.record-table-drag-overlay div.record-table-column-field-84 {
+  width: var(--record-table-column-field-84);
+  min-width: var(--record-table-column-field-84);
+  max-width: var(--record-table-column-field-84);
+}
+
+.record-table-style-wrapper div.record-table-column-field-85,
+.record-table-drag-overlay div.record-table-column-field-85 {
+  width: var(--record-table-column-field-85);
+  min-width: var(--record-table-column-field-85);
+  max-width: var(--record-table-column-field-85);
+}
+
+.record-table-style-wrapper div.record-table-column-field-86,
+.record-table-drag-overlay div.record-table-column-field-86 {
+  width: var(--record-table-column-field-86);
+  min-width: var(--record-table-column-field-86);
+  max-width: var(--record-table-column-field-86);
+}
+
+.record-table-style-wrapper div.record-table-column-field-87,
+.record-table-drag-overlay div.record-table-column-field-87 {
+  width: var(--record-table-column-field-87);
+  min-width: var(--record-table-column-field-87);
+  max-width: var(--record-table-column-field-87);
+}
+
+.record-table-style-wrapper div.record-table-column-field-88,
+.record-table-drag-overlay div.record-table-column-field-88 {
+  width: var(--record-table-column-field-88);
+  min-width: var(--record-table-column-field-88);
+  max-width: var(--record-table-column-field-88);
+}
+
+.record-table-style-wrapper div.record-table-column-field-89,
+.record-table-drag-overlay div.record-table-column-field-89 {
+  width: var(--record-table-column-field-89);
+  min-width: var(--record-table-column-field-89);
+  max-width: var(--record-table-column-field-89);
+}
+
+.record-table-style-wrapper div.record-table-column-field-90,
+.record-table-drag-overlay div.record-table-column-field-90 {
+  width: var(--record-table-column-field-90);
+  min-width: var(--record-table-column-field-90);
+  max-width: var(--record-table-column-field-90);
+}
+
+.record-table-style-wrapper div.record-table-column-field-91,
+.record-table-drag-overlay div.record-table-column-field-91 {
+  width: var(--record-table-column-field-91);
+  min-width: var(--record-table-column-field-91);
+  max-width: var(--record-table-column-field-91);
+}
+
+.record-table-style-wrapper div.record-table-column-field-92,
+.record-table-drag-overlay div.record-table-column-field-92 {
+  width: var(--record-table-column-field-92);
+  min-width: var(--record-table-column-field-92);
+  max-width: var(--record-table-column-field-92);
+}
+
+.record-table-style-wrapper div.record-table-column-field-93,
+.record-table-drag-overlay div.record-table-column-field-93 {
+  width: var(--record-table-column-field-93);
+  min-width: var(--record-table-column-field-93);
+  max-width: var(--record-table-column-field-93);
+}
+
+.record-table-style-wrapper div.record-table-column-field-94,
+.record-table-drag-overlay div.record-table-column-field-94 {
+  width: var(--record-table-column-field-94);
+  min-width: var(--record-table-column-field-94);
+  max-width: var(--record-table-column-field-94);
+}
+
+.record-table-style-wrapper div.record-table-column-field-95,
+.record-table-drag-overlay div.record-table-column-field-95 {
+  width: var(--record-table-column-field-95);
+  min-width: var(--record-table-column-field-95);
+  max-width: var(--record-table-column-field-95);
+}
+
+.record-table-style-wrapper div.record-table-column-field-96,
+.record-table-drag-overlay div.record-table-column-field-96 {
+  width: var(--record-table-column-field-96);
+  min-width: var(--record-table-column-field-96);
+  max-width: var(--record-table-column-field-96);
+}
+
+.record-table-style-wrapper div.record-table-column-field-97,
+.record-table-drag-overlay div.record-table-column-field-97 {
+  width: var(--record-table-column-field-97);
+  min-width: var(--record-table-column-field-97);
+  max-width: var(--record-table-column-field-97);
+}
+
+.record-table-style-wrapper div.record-table-column-field-98,
+.record-table-drag-overlay div.record-table-column-field-98 {
+  width: var(--record-table-column-field-98);
+  min-width: var(--record-table-column-field-98);
+  max-width: var(--record-table-column-field-98);
+}
+
+.record-table-style-wrapper div.record-table-column-field-99,
+.record-table-drag-overlay div.record-table-column-field-99 {
+  width: var(--record-table-column-field-99);
+  min-width: var(--record-table-column-field-99);
+  max-width: var(--record-table-column-field-99);
+}
+
+.record-table-style-wrapper div.record-table-column-last-empty-column,
+.record-table-drag-overlay div.record-table-column-last-empty-column {
+  max-width: var(--record-table-column-last-empty-column);
+  min-width: var(--record-table-column-last-empty-column);
+  width: var(--record-table-column-last-empty-column);
+}
+
+.record-table-style-wrapper div.record-table-column-with-group-last-empty-column {
+  max-width: var(--record-table-column-with-group-last-empty-column);
+  min-width: var(--record-table-column-with-group-last-empty-column);
+  width: var(--record-table-column-with-group-last-empty-column);
+}
+
+@media (max-width: 768px) {
+  .record-table-style-wrapper div.header-cell.record-table-column-field-0,
+  .record-table-style-wrapper div.table-cell.record-table-column-field-0,
+  .record-table-style-wrapper div.footer-cell.record-table-column-field-0,
+  .record-table-style-wrapper div.table-cell-0-0 {
+    overflow: clip;
+    overflow-clip-margin: 4px;
+  }
+
+  .record-table-style-wrapper
+    div.table-cell.record-table-column-field-0
+    > .record-table-cell-content,
+  .record-table-style-wrapper div.table-cell-0-0 > .record-table-cell-content {
+    left: calc(var(--record-table-drag-drop-width) + var(--record-table-checkbox-width));
+    overflow: visible;
+    position: sticky;
+    width: 0;
+  }
+
+  .record-table-style-wrapper
+    div.table-cell.record-table-column-field-0
+    > .record-table-cell-content
+    > .record-table-cell-display,
+  .record-table-style-wrapper
+    div.table-cell-0-0
+    > .record-table-cell-content
+    > .record-table-cell-display {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: calc(var(--record-table-column-field-0) - var(--record-table-drag-drop-width) - var(--record-table-checkbox-width));
+  }
+
+  .record-table-style-wrapper
+    div.header-cell.record-table-column-field-0
+    .record-table-cell-content,
+  .record-table-style-wrapper
+    div.footer-cell.record-table-column-field-0
+    .record-table-cell-content {
+    left: calc(var(--record-table-drag-drop-width) + var(--record-table-checkbox-width));
+    position: sticky;
+    width: max-content;
+  }
+}
+
