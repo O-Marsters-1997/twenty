@@ -2,15 +2,17 @@ import { AgentChatFilePreview } from '@/ai/components/internal/AgentChatFilePrev
 import { agentChatSelectedFilesState } from '@/ai/states/agentChatSelectedFilesState';
 import { agentChatUploadedFilesState } from '@/ai/states/agentChatUploadedFilesState';
 import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledPreviewsContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: ${themeCssVariables.spacing[1]};
-  width: 100%;
-`;
+const styles = stylex.create({
+  previewsContainer: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: spacing['--t-spacing-1'],
+    width: '100%',
+  },
+});
 
 export const AgentChatContextPreview = () => {
   const [agentChatSelectedFiles, setAgentChatSelectedFiles] = useAtomState(
@@ -34,7 +36,7 @@ export const AgentChatContextPreview = () => {
   }
 
   return (
-    <StyledPreviewsContainer>
+    <div {...stylex.props(styles.previewsContainer)}>
       {agentChatSelectedFiles.map((file, index) => (
         <AgentChatFilePreview
           file={file}
@@ -57,6 +59,6 @@ export const AgentChatContextPreview = () => {
           isUploading={false}
         />
       ))}
-    </StyledPreviewsContainer>
+    </div>
   );
 };

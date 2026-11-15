@@ -1,19 +1,23 @@
-import { styled } from '@linaria/react';
 import { type MouseEvent } from 'react';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { AiChatThreadListItem } from '@/ai/components/AiChatThreadListItem';
 import { type AgentChatThreadRecord } from '@/ai/types/AgentChatThreadRecord';
 import { groupThreadsByDate } from '@/ai/utils/groupThreadsByDate';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledGroupTitle = styled.div`
-  color: ${themeCssVariables.font.color.light};
-  font-size: ${themeCssVariables.font.size.xs};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-  padding: ${themeCssVariables.spacing[3]} ${themeCssVariables.spacing[4]}
-    ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  groupTitle: {
+    color: fontColor['--t-font-color-light'],
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    paddingTop: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-4'],
+  },
+});
 
 type AiChatThreadListProps = {
   threads: AgentChatThreadRecord[];
@@ -65,7 +69,7 @@ export const AiChatThreadList = ({
     <>
       {groupThreadsByDate(threads).map((dateGroup) => (
         <div key={dateGroup.id}>
-          <StyledGroupTitle>{dateGroup.title}</StyledGroupTitle>
+          <div {...stylex.props(styles.groupTitle)}>{dateGroup.title}</div>
           {dateGroup.threads.map(renderThread)}
         </div>
       ))}

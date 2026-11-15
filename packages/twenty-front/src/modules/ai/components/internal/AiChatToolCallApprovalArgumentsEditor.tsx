@@ -5,6 +5,8 @@ import TextareaAutosize from 'react-textarea-autosize';
 import { themeCssVariables } from 'twenty-ui/theme';
 
 import { parseAndValidateVariableFriendlyStringifiedJson } from '~/utils/parseAndValidateVariableFriendlyStringifiedJson';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize } from 'twenty-ui/theme/tokens.stylex';
 
 const StyledTextarea = styled(TextareaAutosize)`
   background: ${themeCssVariables.background.transparent.lighter};
@@ -23,10 +25,12 @@ const StyledTextarea = styled(TextareaAutosize)`
   }
 `;
 
-const StyledError = styled.span`
-  color: ${themeCssVariables.font.color.danger};
-  font-size: ${themeCssVariables.font.size.sm};
-`;
+const styles = stylex.create({
+  error: {
+    color: fontColor['--t-font-color-danger'],
+    fontSize: fontSize['--t-font-size-sm'],
+  },
+});
 
 type AiChatToolCallApprovalArgumentsEditorProps = {
   defaultArguments: Record<string, unknown>;
@@ -68,9 +72,9 @@ export const AiChatToolCallApprovalArgumentsEditor = ({
         onChange={(event) => handleChange(event.target.value)}
       />
       {hasError && (
-        <StyledError role="alert">
+        <span role="alert" {...stylex.props(styles.error)}>
           {t`Arguments must be a valid JSON object.`}
-        </StyledError>
+        </span>
       )}
     </>
   );

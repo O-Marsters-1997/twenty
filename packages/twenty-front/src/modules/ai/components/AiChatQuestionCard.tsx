@@ -35,6 +35,8 @@ import { AiChatQuestionOtherOption } from '@/ai/components/internal/AiChatQuesti
 import { useAnswerAgentChatToolCall } from '@/ai/hooks/useAnswerAgentChatToolCall';
 import { type AgentChatPendingQuestion } from '@/ai/types/AgentChatPendingQuestion';
 import { TooltipDelay } from '@/ui/layout/tooltip/constants/TooltipDelay';
+import * as stylex from '@stylexjs/stylex';
+import { borderColor, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const NUMBER_ICONS: IconComponent[] = [
   IconSquareNumber1,
@@ -51,50 +53,91 @@ const NUMBER_ICONS: IconComponent[] = [
 const getOptionNumberIcon = (optionIndex: number) =>
   NUMBER_ICONS[Math.min(optionIndex, NUMBER_ICONS.length - 1)];
 
-const StyledQuestionSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[3]};
-  padding: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledQuestionHeaderRow = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  justify-content: space-between;
-  min-height: 24px;
-  padding-left: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledQuestionText = styled.p`
-  color: ${themeCssVariables.font.color.primary};
-  flex: 1 0 0;
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.medium};
-  line-height: 1.4;
-  margin: 0;
-  min-width: 0;
-  overflow-wrap: anywhere;
-`;
-
-const StyledPager = styled.div`
-  align-items: center;
-  display: flex;
-  flex-shrink: 0;
-  gap: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledPagerLabel = styled.span`
-  color: ${themeCssVariables.font.color.light};
-  font-size: ${themeCssVariables.font.size.sm};
-`;
-
-const StyledOptionsList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing['0.5']};
-`;
+const styles = stylex.create({
+  questionSection: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-3'],
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+  questionHeaderRow: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    justifyContent: 'space-between',
+    minHeight: '24px',
+    paddingLeft: spacing['--t-spacing-1'],
+  },
+  questionText: {
+    color: fontColor['--t-font-color-primary'],
+    flex: '1 0 0',
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    lineHeight: '1.4',
+    marginTop: '0',
+    marginRight: '0',
+    marginBottom: '0',
+    marginLeft: '0',
+    minWidth: '0',
+    overflowWrap: 'anywhere',
+  },
+  pager: {
+    alignItems: 'center',
+    display: 'flex',
+    flexShrink: '0',
+    gap: spacing['--t-spacing-1'],
+  },
+  pagerLabel: {
+    color: fontColor['--t-font-color-light'],
+    fontSize: fontSize['--t-font-size-sm'],
+  },
+  optionsList: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-0_5'],
+  },
+  optionLeft: {
+    alignItems: 'center',
+    display: 'flex',
+    flex: '1 0 0',
+    gap: spacing['--t-spacing-2'],
+    minWidth: '0',
+    overflow: 'hidden',
+  },
+  optionLabel: {
+    color: fontColor['--t-font-color-secondary'],
+    flexShrink: '0',
+    fontSize: fontSize['--t-font-size-md'],
+    lineHeight: '1.4',
+    maxWidth: '100%',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  recommended: {
+    color: fontColor['--t-font-color-light'],
+    flexShrink: '0',
+    fontSize: fontSize['--t-font-size-md'],
+    lineHeight: '1.4',
+  },
+  divider: {
+    background: borderColor['--t-border-color-light'],
+    height: '1px',
+    width: '100%',
+  },
+  composerSection: {
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+});
 
 const StyledOptionRow = styled.div<{ isHighlighted: boolean }>`
   align-items: center;
@@ -115,46 +158,6 @@ const StyledOptionRow = styled.div<{ isHighlighted: boolean }>`
   &:hover {
     background: ${themeCssVariables.background.transparent.light};
   }
-`;
-
-const StyledOptionLeft = styled.div`
-  align-items: center;
-  display: flex;
-  flex: 1 0 0;
-  gap: ${themeCssVariables.spacing[2]};
-  min-width: 0;
-  overflow: hidden;
-`;
-
-const StyledOptionLabel = styled.span`
-  color: ${themeCssVariables.font.color.secondary};
-  flex-shrink: 0;
-  font-size: ${themeCssVariables.font.size.md};
-  line-height: 1.4;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledRecommended = styled.span`
-  color: ${themeCssVariables.font.color.light};
-  flex-shrink: 0;
-  font-size: ${themeCssVariables.font.size.md};
-  line-height: 1.4;
-`;
-
-const StyledDivider = styled.div`
-  background: ${themeCssVariables.border.color.light};
-  height: 1px;
-  width: 100%;
-`;
-
-const StyledComposerSection = styled.div`
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  padding: ${themeCssVariables.spacing[2]};
 `;
 
 const areAllQuestionsAnswered = (
@@ -377,13 +380,13 @@ export const AiChatQuestionCard = ({
 
   return (
     <StyledAiChatAskCard>
-      <StyledQuestionSection>
-        <StyledQuestionHeaderRow>
-          <StyledQuestionText>
+      <div {...stylex.props(styles.questionSection)}>
+        <div {...stylex.props(styles.questionHeaderRow)}>
+          <p {...stylex.props(styles.questionText)}>
             <TextWithChatReferences text={currentQuestion.question} />
-          </StyledQuestionText>
+          </p>
           {hasMultipleQuestions && (
-            <StyledPager>
+            <div {...stylex.props(styles.pager)}>
               <LightIconButton
                 size="sm"
                 disabled={currentIndex === 0}
@@ -394,9 +397,9 @@ export const AiChatQuestionCard = ({
               >
                 <IconChevronLeft />
               </LightIconButton>
-              <StyledPagerLabel>
+              <span {...stylex.props(styles.pagerLabel)}>
                 {currentIndex + 1}/{questions.length}
-              </StyledPagerLabel>
+              </span>
               <LightIconButton
                 size="sm"
                 disabled={isLastQuestion}
@@ -409,11 +412,11 @@ export const AiChatQuestionCard = ({
               >
                 <IconChevronRightPipe />
               </LightIconButton>
-            </StyledPager>
+            </div>
           )}
-        </StyledQuestionHeaderRow>
+        </div>
 
-        <StyledOptionsList>
+        <div {...stylex.props(styles.optionsList)}>
           {currentQuestion.options.map((option, optionIndex) => {
             const NumberIcon = getOptionNumberIcon(optionIndex);
             const isSelected = (
@@ -443,18 +446,18 @@ export const AiChatQuestionCard = ({
                   }
                 }}
               >
-                <StyledOptionLeft>
+                <div {...stylex.props(styles.optionLeft)}>
                   <NumberIcon
                     size={theme.icon.size.sm}
                     color={themeCssVariables.font.color.tertiary}
                   />
-                  <StyledOptionLabel>
+                  <span {...stylex.props(styles.optionLabel)}>
                     <TextWithChatReferences text={option.label} />
-                  </StyledOptionLabel>
+                  </span>
                   {option.isRecommended === true && (
-                    <StyledRecommended>· {t`Recommended`}</StyledRecommended>
+                    <span {...stylex.props(styles.recommended)}>· {t`Recommended`}</span>
                   )}
-                </StyledOptionLeft>
+                </div>
                 {isDefined(option.description) && (
                   <Tooltip
                     content={option.description}
@@ -483,12 +486,12 @@ export const AiChatQuestionCard = ({
             onSelect={handleToggleOther}
             onTextareaKeyDown={handleKeyDown}
           />
-        </StyledOptionsList>
-      </StyledQuestionSection>
+        </div>
+      </div>
 
-      <StyledDivider />
+      <div {...stylex.props(styles.divider)} />
 
-      <StyledComposerSection>
+      <div {...stylex.props(styles.composerSection)}>
         <AiChatComposerActionsRow
           modelTierDropdownId={`ai-chat-question-model-tier-dropdown-${toolCallId}`}
           sendButton={
@@ -505,7 +508,7 @@ export const AiChatQuestionCard = ({
             </IconButton>
           }
         />
-      </StyledComposerSection>
+      </div>
     </StyledAiChatAskCard>
   );
 };

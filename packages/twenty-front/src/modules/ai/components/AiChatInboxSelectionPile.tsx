@@ -7,13 +7,36 @@ import { AiChatThreadSubtitle } from '@/ai/components/AiChatThreadSubtitle';
 import { AiChatThreadTitle } from '@/ai/components/AiChatThreadTitle';
 import { AI_CHAT_INBOX_SELECTION_PILE_MAX_CARDS } from '@/ai/constants/AiChatInboxSelectionPileMaxCards';
 import { type AgentChatThreadRecord } from '@/ai/types/AgentChatThreadRecord';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledPile = styled.div`
-  display: flex;
-  flex-direction: column;
-  max-width: 480px;
-  width: 100%;
-`;
+const styles = stylex.create({
+  pile: {
+    display: 'flex',
+    flexDirection: 'column',
+    maxWidth: '480px',
+    width: '100%',
+  },
+  leading: {
+    display: 'flex',
+    flexShrink: '0',
+    justifyContent: 'center',
+    paddingTop: spacing['--t-spacing-0_5'],
+    width: spacing['--t-spacing-7'],
+  },
+  content: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    minWidth: '0',
+  },
+  heading: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    minWidth: '0',
+  },
+});
 
 // Each card sits a step lower and wider than the one behind it, leaving the
 // title of the cards behind in view
@@ -34,28 +57,6 @@ const StyledCard = styled.div<{ $depth: number }>`
   }
 `;
 
-const StyledLeading = styled.div`
-  display: flex;
-  flex-shrink: 0;
-  justify-content: center;
-  padding-top: ${themeCssVariables.spacing['0.5']};
-  width: ${themeCssVariables.spacing[7]};
-`;
-
-const StyledContent = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-width: 0;
-`;
-
-const StyledHeading = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  min-width: 0;
-`;
-
 type AiChatInboxSelectionPileProps = {
   threads: AgentChatThreadRecord[];
 };
@@ -66,21 +67,21 @@ export const AiChatInboxSelectionPile = ({
   const pileThreads = threads.slice(0, AI_CHAT_INBOX_SELECTION_PILE_MAX_CARDS);
 
   return (
-    <StyledPile aria-hidden>
+    <div aria-hidden {...stylex.props(styles.pile)}>
       {pileThreads.map((thread, index) => (
         <StyledCard key={thread.id} $depth={pileThreads.length - 1 - index}>
-          <StyledLeading>
+          <div {...stylex.props(styles.leading)}>
             <AiChatThreadAvatar thread={thread} />
-          </StyledLeading>
-          <StyledContent>
-            <StyledHeading>
+          </div>
+          <div {...stylex.props(styles.content)}>
+            <div {...stylex.props(styles.heading)}>
               <AiChatThreadTitle thread={thread} />
               <AiChatThreadActivityTime thread={thread} />
-            </StyledHeading>
+            </div>
             <AiChatThreadSubtitle thread={thread} />
-          </StyledContent>
+          </div>
         </StyledCard>
       ))}
-    </StyledPile>
+    </div>
   );
 };

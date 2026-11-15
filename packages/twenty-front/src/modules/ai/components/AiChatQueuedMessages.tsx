@@ -12,6 +12,8 @@ import { LightIconButton } from 'twenty-ui/components/input';
 import { IconX } from 'twenty-ui/icon';
 import { themeCssVariables } from 'twenty-ui/theme';
 import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
+import * as stylex from '@stylexjs/stylex';
+import { background, borderRadius, fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const StyledQueueContainer = styled(StyledAiChatContentContainer)`
   display: flex;
@@ -20,29 +22,35 @@ const StyledQueueContainer = styled(StyledAiChatContentContainer)`
   padding: 0 ${themeCssVariables.spacing[3]};
 `;
 
-const StyledQueueLabel = styled.div`
-  color: ${themeCssVariables.font.color.light};
-  font-size: ${themeCssVariables.font.size.xs};
-  padding-left: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledQueuedItem = styled.div`
-  align-items: center;
-  background: ${themeCssVariables.background.tertiary};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  color: ${themeCssVariables.font.color.secondary};
-  display: flex;
-  font-size: ${themeCssVariables.font.size.md};
-  gap: ${themeCssVariables.spacing[2]};
-  justify-content: space-between;
-  padding: ${themeCssVariables.spacing[1]} ${themeCssVariables.spacing[2]};
-`;
-
-const StyledQueuedText = styled.span`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
+const styles = stylex.create({
+  queueLabel: {
+    color: fontColor['--t-font-color-light'],
+    fontSize: fontSize['--t-font-size-xs'],
+    paddingLeft: spacing['--t-spacing-1'],
+  },
+  queuedItem: {
+    alignItems: 'center',
+    background: background['--t-background-tertiary'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    color: fontColor['--t-font-color-secondary'],
+    display: 'flex',
+    fontSize: fontSize['--t-font-size-md'],
+    gap: spacing['--t-spacing-2'],
+    justifyContent: 'space-between',
+    paddingTop: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+  queuedText: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+});
 
 export const AiChatQueuedMessages = () => {
   const isReadOnly = useIsCurrentAiChatThreadReadOnly();
@@ -59,19 +67,19 @@ export const AiChatQueuedMessages = () => {
 
   return (
     <StyledQueueContainer>
-      <StyledQueueLabel>
+      <div {...stylex.props(styles.queueLabel)}>
         {plural(agentChatQueuedMessages.length, {
           one: '# Queued',
           other: '# Queued',
         })}
-      </StyledQueueLabel>
+      </div>
       {agentChatQueuedMessages.map((message) => {
         const textPart = message.parts?.find((part) => part.type === 'text');
         const displayText = textPart && 'text' in textPart ? textPart.text : '';
 
         return (
-          <StyledQueuedItem key={message.id}>
-            <StyledQueuedText>{displayText}</StyledQueuedText>
+          <div key={message.id} {...stylex.props(styles.queuedItem)}>
+            <span {...stylex.props(styles.queuedText)}>{displayText}</span>
             {!isReadOnly && (
               <LightIconButton
                 onClick={() => deleteQueuedMessage(message.id)}
@@ -81,7 +89,7 @@ export const AiChatQueuedMessages = () => {
                 <IconX />
               </LightIconButton>
             )}
-          </StyledQueuedItem>
+          </div>
         );
       })}
     </StyledQueueContainer>

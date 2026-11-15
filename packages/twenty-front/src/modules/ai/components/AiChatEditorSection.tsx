@@ -22,6 +22,7 @@ import { agentChatHasMessageSelector } from '@/ai/states/selectors/agentChatHasM
 import { aiModelsState } from '@/client-config/states/aiModelsState';
 import { useIsMobile } from 'twenty-ui/utilities';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
+import * as stylex from '@stylexjs/stylex';
 
 const StyledInputArea = styled(StyledAiChatContentContainer)<{
   isMobile: boolean;
@@ -94,11 +95,13 @@ const StyledEditorWrapper = styled.div<{ isMobile: boolean }>`
   }
 `;
 
-const StyledMessageListPlaceholder = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-`;
+const styles = stylex.create({
+  messageListPlaceholder: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+  },
+});
 
 const StyledComposerBottomSpacer = styled.div`
   flex-basis: 0;
@@ -157,10 +160,10 @@ const EditableAiChatEditorSection = () => {
         isComposerCentered={isComposerCentered}
       />
       {!agentChatHasMessage && (
-        <StyledMessageListPlaceholder>
+        <div {...stylex.props(styles.messageListPlaceholder)}>
           <AiChatEmptyState isCentered={isComposerCentered} />
           <AiChatStandaloneError />
-        </StyledMessageListPlaceholder>
+        </div>
       )}
 
       <StyledInputArea isMobile={isMobile}>

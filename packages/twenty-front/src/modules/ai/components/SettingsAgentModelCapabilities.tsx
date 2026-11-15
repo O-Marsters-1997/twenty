@@ -7,6 +7,8 @@ import { Section } from 'twenty-ui/components/layout';
 import { IconBrandX, IconWorld } from 'twenty-ui/icon';
 import { Checkbox } from 'twenty-ui/primitives/input';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const StyledCheckboxContainer = styled.div<{ disabled: boolean }>`
   align-items: center;
@@ -27,11 +29,13 @@ const StyledCheckboxContainer = styled.div<{ disabled: boolean }>`
   }
 `;
 
-const StyledCheckboxLabel = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  checkboxLabel: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+  },
+});
 
 type ModelConfiguration = {
   webSearch?: {
@@ -124,10 +128,10 @@ export const SettingsAgentModelCapabilities = ({
               handleCapabilityToggle(capability.key, !capability.enabled)
             }
           >
-            <StyledCheckboxLabel>
+            <div {...stylex.props(styles.checkboxLabel)}>
               <capability.Icon size={theme.icon.size.sm} />
               <span>{capability.label}</span>
-            </StyledCheckboxLabel>
+            </div>
             <Checkbox
               aria-label={capability.label}
               checked={capability.enabled}

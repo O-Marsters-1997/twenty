@@ -28,6 +28,8 @@ import { beautifyPastDateRelativeToNow } from '~/utils/date-utils';
 import { useAtomFamilySelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilySelectorValue';
 import { useIsFeatureEnabled } from '@/workspace/hooks/useIsFeatureEnabled';
 import { FeatureFlagKey } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const StyledMessageBubble = styled.div<{ isUser?: boolean }>`
   align-items: ${({ isUser }) => (isUser ? 'flex-end' : 'flex-start')};
@@ -130,28 +132,28 @@ const StyledMessageFooter = styled.div`
   width: 100%;
 `;
 
-const StyledSender = styled.div`
-  color: ${themeCssVariables.font.color.secondary};
-  font-size: ${themeCssVariables.font.size.sm};
-  margin-bottom: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledMessageTimestamp = styled.span`
-  color: ${themeCssVariables.font.color.light};
-`;
+const styles = stylex.create({
+  sender: {
+    color: fontColor['--t-font-color-secondary'],
+    fontSize: fontSize['--t-font-size-sm'],
+    marginBottom: spacing['--t-spacing-1'],
+  },
+  messageTimestamp: {
+    color: fontColor['--t-font-color-light'],
+  },
+  filesContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing['--t-spacing-2'],
+    marginTop: spacing['--t-spacing-2'],
+  },
+});
 
 const StyledMessageContainer = styled.div<{ isUser?: boolean }>`
   max-width: 100%;
   min-width: 0;
   width: ${({ isUser }) => (isUser ? 'fit-content' : '100%')};
-`;
-
-const StyledFilesContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: ${themeCssVariables.spacing[2]};
-  margin-top: ${themeCssVariables.spacing[2]};
 `;
 
 type AiChatUserMessageTextProps = {
@@ -247,7 +249,7 @@ export const AiChatMessage = ({
       )}
       <StyledMessageBubble isUser={isUser}>
         {isUser && isDefined(senderId) && (
-          <StyledSender>{senderLabel}</StyledSender>
+          <div {...stylex.props(styles.sender)}>{senderLabel}</div>
         )}
         <StyledMessageContainer isUser={isUser}>
           {isUser ? (
@@ -258,22 +260,22 @@ export const AiChatMessage = ({
             <StyledMessageText>{messageContent}</StyledMessageText>
           )}
           {fileParts.length > 0 && (
-            <StyledFilesContainer>
+            <div {...stylex.props(styles.filesContainer)}>
               {fileParts.map((file) => (
                 <AgentChatFilePreview key={file.filename} file={file} />
               ))}
-            </StyledFilesContainer>
+            </div>
           )}
           {shouldShowError && <AiChatErrorRenderer error={error} />}
         </StyledMessageContainer>
         {agentChatMessage.parts.length > 0 && (
           <StyledMessageFooter className="message-footer">
-            <StyledMessageTimestamp>
+            <span {...stylex.props(styles.messageTimestamp)}>
               {beautifyPastDateRelativeToNow(
                 agentChatMessage.metadata?.createdAt ?? new Date(),
                 localeCatalog,
               )}
-            </StyledMessageTimestamp>
+            </span>
             <LightCopyIconButton
               copyText={
                 agentChatMessage.parts.find((part) => part.type === 'text')

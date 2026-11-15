@@ -1,5 +1,4 @@
 import { FloatingPortal } from '@floating-ui/react';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isAiModelEffort } from 'twenty-shared/ai';
 import { isDefined } from 'twenty-shared/utils';
@@ -13,11 +12,7 @@ import {
 } from 'twenty-ui/icon';
 import { Separator } from 'twenty-ui/primitives/layout';
 import { MetricRow } from 'twenty-ui/components/data-display';
-import {
-  themeCssVariables,
-  useTheme,
-  useThemeContainer,
-} from 'twenty-ui/theme';
+import { useTheme, useThemeContainer } from 'twenty-ui/theme';
 
 import { useAiChatHoverCard } from '@/ai/hooks/useAiChatHoverCard';
 import { type ResolvedAiModelTier } from '@/ai/types/ResolvedAiModelTier';
@@ -25,41 +20,42 @@ import { getAiModelEffortLabel } from '@/ai/utils/getAiModelEffortLabel';
 import { getAiModelModeDescription } from '@/ai/utils/getAiModelModeDescription';
 import { StyledInformationCard } from '@/ui/layout/information-card/components/StyledInformationCard';
 import { formatNumber } from '@/localization/utils/formatNumber';
+import * as stylex from '@stylexjs/stylex';
+import { borderRadius, color, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledTrigger = styled.button`
-  align-items: center;
-  background: transparent;
-  border: none;
-  border-radius: ${themeCssVariables.border.radius.sm};
-  color: ${themeCssVariables.font.color.tertiary};
-  cursor: pointer;
-  display: flex;
-  height: 20px;
-  justify-content: center;
-  padding: 0;
-  width: 20px;
-
-  &:hover {
-    color: ${themeCssVariables.font.color.primary};
-  }
-
-  &:focus-visible {
-    outline: 2px solid ${themeCssVariables.color.blue};
-  }
-`;
-
-const StyledHeading = styled.div`
-  color: ${themeCssVariables.font.color.secondary};
-  font-size: ${themeCssVariables.font.size.xs};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-  padding-bottom: ${themeCssVariables.spacing[1]};
-  padding-top: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledNote = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.sm};
-`;
+const styles = stylex.create({
+  trigger: {
+    alignItems: 'center',
+    background: 'transparent',
+    borderStyle: 'none',
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    color: { default: fontColor['--t-font-color-tertiary'], ':hover': fontColor['--t-font-color-primary'] },
+    cursor: 'pointer',
+    display: 'flex',
+    height: '20px',
+    justifyContent: 'center',
+    paddingTop: '0',
+    paddingRight: '0',
+    paddingBottom: '0',
+    paddingLeft: '0',
+    width: '20px',
+    outline: { default: null, ':focus-visible': `2px solid ${color['--t-color-blue']}` },
+  },
+  heading: {
+    color: fontColor['--t-font-color-secondary'],
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingTop: spacing['--t-spacing-2'],
+  },
+  note: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-sm'],
+  },
+});
 
 type AiModelTierInformationButtonProps = {
   resolvedTier: ResolvedAiModelTier;
@@ -127,15 +123,15 @@ export const AiModelTierInformationButton = ({
 
   return (
     <>
-      <StyledTrigger
+      <button
         ref={refs.setReference}
         type="button"
         aria-label={t`Model information`}
         // oxlint-disable-next-line react/jsx-props-no-spreading
-        {...getReferenceProps()}
+        {...getReferenceProps()} {...stylex.props(styles.trigger)}
       >
         <IconInfoCircle size={theme.icon.size.sm} />
-      </StyledTrigger>
+      </button>
       {isOpen && (
         <FloatingPortal root={themeContainer}>
           <StyledInformationCard
@@ -154,7 +150,7 @@ export const AiModelTierInformationButton = ({
               </MetricRow>
             ))}
             <Separator />
-            <StyledHeading>{t`Vs Balanced mode`}</StyledHeading>
+            <div {...stylex.props(styles.heading)}>{t`Vs Balanced mode`}</div>
             {comparisons.map(({ label, Icon, value }) => (
               <MetricRow
                 key={label}
@@ -165,7 +161,7 @@ export const AiModelTierInformationButton = ({
               </MetricRow>
             ))}
             {model?.isBenchmarkInherited === true && (
-              <StyledNote>{t`Not measured at this effort yet, so these are the base model's readings.`}</StyledNote>
+              <div {...stylex.props(styles.note)}>{t`Not measured at this effort yet, so these are the base model's readings.`}</div>
             )}
           </StyledInformationCard>
         </FloatingPortal>

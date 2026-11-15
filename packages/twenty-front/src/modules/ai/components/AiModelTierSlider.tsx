@@ -7,6 +7,8 @@ import { themeCssVariables } from 'twenty-ui/theme';
 
 import { AiModelTierInformationButton } from '@/ai/components/AiModelTierInformationButton';
 import { useAiModelTiers } from '@/ai/hooks/useAiModelTiers';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const TRACK_HEIGHT_PX = 24;
 const TRACK_INSET_PX = 0;
@@ -15,28 +17,42 @@ const HANDLE_WIDTH_PX = 12;
 const HANDLE_HEIGHT_PX = 28;
 const LAST_STEP = AI_MODEL_TIERS.length - 1;
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[3]};
-  width: 100%;
-`;
-
-const StyledHeader = styled.div`
-  align-items: center;
-  display: flex;
-  height: 20px;
-  justify-content: space-between;
-`;
-
-const StyledTitle = styled.span`
-  color: ${themeCssVariables.font.color.primary};
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-3'],
+    width: '100%',
+  },
+  header: {
+    alignItems: 'center',
+    display: 'flex',
+    height: '20px',
+    justifyContent: 'space-between',
+  },
+  title: {
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  input: {
+    appearance: 'none',
+    background: 'transparent',
+    cursor: 'inherit',
+    height: '100%',
+    inset: '0',
+    marginTop: '0',
+    marginRight: '0',
+    marginBottom: '0',
+    marginLeft: '0',
+    opacity: '0',
+    position: 'absolute',
+    width: '100%',
+  },
+});
 
 const StyledTrack = styled.div<{ disabled: boolean }>`
   background: ${themeCssVariables.background.tertiary};
@@ -113,18 +129,6 @@ const StyledHandle = styled.div`
   width: ${HANDLE_WIDTH_PX}px;
 `;
 
-const StyledInput = styled.input`
-  appearance: none;
-  background: transparent;
-  cursor: inherit;
-  height: 100%;
-  inset: 0;
-  margin: 0;
-  opacity: 0;
-  position: absolute;
-  width: 100%;
-`;
-
 type AiModelTierSliderProps = {
   selectedTier: AiModelTier;
   onTierChange: (tier: AiModelTier) => void;
@@ -153,11 +157,11 @@ export const AiModelTierSlider = ({
   };
 
   return (
-    <StyledContainer>
-      <StyledHeader>
-        <StyledTitle>{title ?? resolvedTier.label}</StyledTitle>
+    <div {...stylex.props(styles.container)}>
+      <div {...stylex.props(styles.header)}>
+        <span {...stylex.props(styles.title)}>{title ?? resolvedTier.label}</span>
         <AiModelTierInformationButton resolvedTier={resolvedTier} />
-      </StyledHeader>
+      </div>
       <StyledTrack
         disabled={disabled}
         style={{ '--slider-step': selectedStep } as React.CSSProperties}
@@ -170,7 +174,7 @@ export const AiModelTierSlider = ({
             <StyledDot key={tier} isReached={index <= selectedStep} />
           ))}
         </StyledDots>
-        <StyledInput
+        <input
           type="range"
           min={0}
           max={LAST_STEP}
@@ -179,9 +183,9 @@ export const AiModelTierSlider = ({
           onChange={handleChange}
           disabled={disabled}
           aria-label={t`Model`}
-          aria-valuetext={resolvedTier.label}
+          aria-valuetext={resolvedTier.label} {...stylex.props(styles.input)}
         />
       </StyledTrack>
-    </StyledContainer>
+    </div>
   );
 };

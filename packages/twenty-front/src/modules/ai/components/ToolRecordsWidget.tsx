@@ -1,5 +1,4 @@
 import { getChipLabel } from '@/ui/field/display/utils/getChipLabel';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 
 import { LinkChip } from '@/ui/navigation/link/components/LinkChip/LinkChip';
@@ -7,37 +6,40 @@ import { type ToolRecordReference } from 'twenty-shared/ai';
 import { AppPath } from 'twenty-shared/types';
 import { getAppPath, isDefined } from 'twenty-shared/utils';
 import { useIcons } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { useObjectMetadataItems } from '@/object-metadata/hooks/useObjectMetadataItems';
+import * as stylex from '@stylexjs/stylex';
+import { font, fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const MAX_VISIBLE_RECORDS = 12;
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  padding: ${themeCssVariables.spacing[2]} 0;
-`;
-
-const StyledHeader = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-family: ${themeCssVariables.font.family};
-  font-size: ${themeCssVariables.font.size.sm};
-`;
-
-const StyledChips = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledOverflow = styled.span`
-  align-self: center;
-  color: ${themeCssVariables.font.color.tertiary};
-  font-family: ${themeCssVariables.font.family};
-  font-size: ${themeCssVariables.font.size.sm};
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: '0',
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: '0',
+  },
+  header: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontFamily: font['--t-font-family'],
+    fontSize: fontSize['--t-font-size-sm'],
+  },
+  chips: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: spacing['--t-spacing-1'],
+  },
+  overflow: {
+    alignSelf: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    fontFamily: font['--t-font-family'],
+    fontSize: fontSize['--t-font-size-sm'],
+  },
+});
 
 type ToolRecordsWidgetProps = {
   message: string;
@@ -56,9 +58,9 @@ export const ToolRecordsWidget = ({
   const hiddenCount = recordReferences.length - visibleReferences.length;
 
   return (
-    <StyledContainer>
-      <StyledHeader>{message}</StyledHeader>
-      <StyledChips>
+    <div {...stylex.props(styles.container)}>
+      <div {...stylex.props(styles.header)}>{message}</div>
+      <div {...stylex.props(styles.chips)}>
         {visibleReferences.map((recordReference) => {
           const objectMetadataItem = objectMetadataItems.find(
             (item) => item.nameSingular === recordReference.objectNameSingular,
@@ -79,9 +81,9 @@ export const ToolRecordsWidget = ({
           );
         })}
         {hiddenCount > 0 && (
-          <StyledOverflow>{t`and ${hiddenCount} more`}</StyledOverflow>
+          <span {...stylex.props(styles.overflow)}>{t`and ${hiddenCount} more`}</span>
         )}
-      </StyledChips>
-    </StyledContainer>
+      </div>
+    </div>
   );
 };

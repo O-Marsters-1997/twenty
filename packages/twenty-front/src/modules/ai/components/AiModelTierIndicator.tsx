@@ -1,15 +1,18 @@
 import { styled } from '@linaria/react';
 import { AI_MODEL_TIERS, type AiModelTier } from 'twenty-shared/ai';
 import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledIndicator = styled.span`
-  align-items: center;
-  display: inline-flex;
-  flex-shrink: 0;
-  gap: 2px;
-  height: 12px;
-  width: 24px;
-`;
+const styles = stylex.create({
+  indicator: {
+    alignItems: 'center',
+    display: 'inline-flex',
+    flexShrink: '0',
+    gap: '2px',
+    height: '12px',
+    width: '24px',
+  },
+});
 
 const StyledBar = styled.span<{ isReached: boolean }>`
   background: ${({ isReached }) =>
@@ -29,10 +32,10 @@ export const AiModelTierIndicator = ({ tier }: AiModelTierIndicatorProps) => {
   const selectedStep = AI_MODEL_TIERS.indexOf(tier);
 
   return (
-    <StyledIndicator aria-hidden="true">
+    <span aria-hidden="true" {...stylex.props(styles.indicator)}>
       {AI_MODEL_TIERS.map((modelTier, index) => (
         <StyledBar key={modelTier} isReached={index <= selectedStep} />
       ))}
-    </StyledIndicator>
+    </span>
   );
 };

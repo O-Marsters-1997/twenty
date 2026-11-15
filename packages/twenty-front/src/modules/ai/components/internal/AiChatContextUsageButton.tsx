@@ -1,6 +1,5 @@
 import { formatAiChatTokens } from '@/ai/utils/formatAiChatTokens';
 import { FloatingPortal, useTransitionStyles } from '@floating-ui/react';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useState } from 'react';
 import { useReducedMotion } from 'framer-motion';
@@ -10,7 +9,7 @@ import { ProgressRing } from 'twenty-ui/primitives/feedback';
 import { Button } from 'twenty-ui/primitives/input';
 import { IconWindow } from 'twenty-ui/icon';
 import { Separator } from 'twenty-ui/primitives/layout';
-import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 
 import { AiChatContextUsageDetails } from '@/ai/components/internal/AiChatContextUsageDetails';
 import { useAiChatHoverCard } from '@/ai/hooks/useAiChatHoverCard';
@@ -25,32 +24,35 @@ import { StyledInformationCard } from '@/ui/layout/information-card/components/S
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { formatNumber } from '@/localization/utils/formatNumber';
 import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
+import * as stylex from '@stylexjs/stylex';
+import { backgroundTransparent, borderRadius, color, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledTrigger = styled.button`
-  align-items: center;
-  background: transparent;
-  border: none;
-  border-radius: ${themeCssVariables.border.radius.md};
-  cursor: pointer;
-  display: flex;
-  height: 24px;
-  justify-content: center;
-  padding: 0;
-  width: 24px;
-
-  &:hover {
-    background: ${themeCssVariables.background.transparent.light};
-  }
-  &:focus-visible {
-    outline: 2px solid ${themeCssVariables.color.blue};
-  }
-`;
-
-const StyledFooter = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  padding-top: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  trigger: {
+    alignItems: 'center',
+    background: { default: 'transparent', ':hover': backgroundTransparent['--t-background-transparent-light'] },
+    borderStyle: 'none',
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    cursor: 'pointer',
+    display: 'flex',
+    height: '24px',
+    justifyContent: 'center',
+    paddingTop: '0',
+    paddingRight: '0',
+    paddingBottom: '0',
+    paddingLeft: '0',
+    width: '24px',
+    outline: { default: null, ':focus-visible': `2px solid ${color['--t-color-blue']}` },
+  },
+  footer: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    paddingTop: spacing['--t-spacing-1'],
+  },
+});
 
 export const AiChatContextUsageButton = () => {
   const { t } = useLingui();
@@ -114,7 +116,7 @@ export const AiChatContextUsageButton = () => {
 
   return (
     <>
-      <StyledTrigger
+      <button
         ref={refs.setReference}
         type="button"
         aria-label={
@@ -123,7 +125,7 @@ export const AiChatContextUsageButton = () => {
             : t`Context and usage, context window unavailable`
         }
         // oxlint-disable-next-line react/jsx-props-no-spreading
-        {...getReferenceProps()}
+        {...getReferenceProps()} {...stylex.props(styles.trigger)}
       >
         <ProgressRing
           value={percentage}
@@ -131,7 +133,7 @@ export const AiChatContextUsageButton = () => {
           barColor={contextWindowRingColor}
           render={<span />}
         />
-      </StyledTrigger>
+      </button>
       {isMounted && (
         <FloatingPortal>
           <StyledInformationCard
@@ -162,7 +164,7 @@ export const AiChatContextUsageButton = () => {
             {isDefined(agentChatUsage) && (
               <>
                 <Separator />
-                <StyledFooter>
+                <div {...stylex.props(styles.footer)}>
                   <Button
                     size="sm"
                     variant="outline"
@@ -170,7 +172,7 @@ export const AiChatContextUsageButton = () => {
                   >
                     {showDetails ? t`Less` : t`More`}
                   </Button>
-                </StyledFooter>
+                </div>
               </>
             )}
           </StyledInformationCard>

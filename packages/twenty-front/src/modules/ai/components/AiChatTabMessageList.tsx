@@ -20,15 +20,18 @@ import { styled } from '@linaria/react';
 import { Suspense, useContext } from 'react';
 import { themeCssVariables } from 'twenty-ui/theme';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledScrollWrapperContainer = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  overflow-y: auto;
-  position: relative;
-  width: 100%;
-`;
+const styles = stylex.create({
+  scrollWrapperContainer: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    overflowY: 'auto',
+    position: 'relative',
+    width: '100%',
+  },
+});
 
 const StyledPreambleOutsideScrollContainer = styled(
   StyledAiChatContentContainer,
@@ -74,14 +77,14 @@ export const AiChatTabMessageList = () => {
     >
       <Suspense
         fallback={
-          <StyledScrollWrapperContainer>
+          <div {...stylex.props(styles.scrollWrapperContainer)}>
             <StyledMessageListContent>
               <MarkdownLoadingSkeleton />
             </StyledMessageListContent>
-          </StyledScrollWrapperContainer>
+          </div>
         }
       >
-        <StyledScrollWrapperContainer>
+        <div {...stylex.props(styles.scrollWrapperContainer)}>
           <ScrollWrapper componentInstanceId={scrollWrapperInstanceId}>
             <StyledMessageListContent>
               {isWorkspaceSetupChat && <WorkspaceSetupChatPreamble />}
@@ -95,7 +98,7 @@ export const AiChatTabMessageList = () => {
             <AgentChatStreamingAutoScrollEffect />
           </ScrollWrapper>
           <AiChatScrollToBottomButton />
-        </StyledScrollWrapperContainer>
+        </div>
       </Suspense>
     </ScrollWrapperComponentInstanceContext.Provider>
   );

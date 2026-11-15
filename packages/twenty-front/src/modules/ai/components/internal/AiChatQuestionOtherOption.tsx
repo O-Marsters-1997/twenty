@@ -7,6 +7,8 @@ import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 import { usePushFocusItemToFocusStack } from '@/ui/utilities/focus/hooks/usePushFocusItemToFocusStack';
 import { useRemoveFocusItemFromFocusStackById } from '@/ui/utilities/focus/hooks/useRemoveFocusItemFromFocusStackById';
 import { FocusComponentType } from '@/ui/utilities/focus/types/FocusComponentType';
+import * as stylex from '@stylexjs/stylex';
+import { background, borderColor, borderRadius, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const StyledContainer = styled.div<{ isHighlighted: boolean }>`
   background: ${({ isHighlighted }) =>
@@ -25,43 +27,43 @@ const StyledContainer = styled.div<{ isHighlighted: boolean }>`
   }
 `;
 
-const StyledLabelRow = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  height: 32px;
-`;
-
-const StyledLabel = styled.span`
-  color: ${themeCssVariables.font.color.secondary};
-  font-size: ${themeCssVariables.font.size.md};
-  line-height: 1.4;
-`;
-
-const StyledTextArea = styled.textarea`
-  background: ${themeCssVariables.background.primary};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  box-sizing: border-box;
-  color: ${themeCssVariables.font.color.primary};
-  font-family: inherit;
-  font-size: ${themeCssVariables.font.size.md};
-  line-height: 1.4;
-  min-height: 24px;
-  outline: none;
-  padding: ${themeCssVariables.spacing[1]} ${themeCssVariables.spacing[2]};
-  resize: none;
-  width: 100%;
-
-  &:focus {
-    border-color: ${themeCssVariables.border.color.blue};
-  }
-
-  &::placeholder {
-    color: ${themeCssVariables.font.color.light};
-    font-weight: ${themeCssVariables.font.weight.medium};
-  }
-`;
+const styles = stylex.create({
+  labelRow: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    height: '32px',
+  },
+  label: {
+    color: fontColor['--t-font-color-secondary'],
+    fontSize: fontSize['--t-font-size-md'],
+    lineHeight: '1.4',
+  },
+  textArea: {
+    background: background['--t-background-primary'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: { default: borderColor['--t-border-color-medium'], ':focus': borderColor['--t-border-color-blue'] },
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    boxSizing: 'border-box',
+    color: { default: fontColor['--t-font-color-primary'], '::placeholder': fontColor['--t-font-color-light'] },
+    fontFamily: 'inherit',
+    fontSize: fontSize['--t-font-size-md'],
+    lineHeight: '1.4',
+    minHeight: '24px',
+    outline: 'none',
+    paddingTop: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-2'],
+    resize: 'none',
+    width: '100%',
+    fontWeight: { default: null, '::placeholder': fontWeight['--t-font-weight-medium'] },
+  },
+});
 
 type AiChatQuestionOtherOptionProps = {
   NumberIcon: IconComponent;
@@ -113,7 +115,7 @@ export const AiChatQuestionOtherOption = ({
 
   return (
     <StyledContainer isHighlighted={isHighlighted} onClick={selectAndFocus}>
-      <StyledLabelRow
+      <div
         role="button"
         tabIndex={0}
         aria-pressed={isHighlighted}
@@ -122,15 +124,15 @@ export const AiChatQuestionOtherOption = ({
             event.preventDefault();
             selectAndFocus();
           }
-        }}
+        }} {...stylex.props(styles.labelRow)}
       >
         <NumberIcon
           size={theme.icon.size.sm}
           color={themeCssVariables.font.color.tertiary}
         />
-        <StyledLabel>{t`Other`}</StyledLabel>
-      </StyledLabelRow>
-      <StyledTextArea
+        <span {...stylex.props(styles.label)}>{t`Other`}</span>
+      </div>
+      <textarea
         ref={textareaRef}
         value={value}
         placeholder={t`Type your own answer here`}
@@ -144,7 +146,7 @@ export const AiChatQuestionOtherOption = ({
         onChange={(event) => onChange(event.target.value)}
         onKeyDown={onTextareaKeyDown}
         onFocus={handleTextareaFocus}
-        onBlur={handleTextareaBlur}
+        onBlur={handleTextareaBlur} {...stylex.props(styles.textArea)}
       />
     </StyledContainer>
   );

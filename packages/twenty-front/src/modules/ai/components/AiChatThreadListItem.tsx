@@ -17,6 +17,8 @@ import { getCommandMenuDropdownIdFromCommandMenuId } from '@/command-menu-item/u
 import { TextInput } from '@/ui/input/components/TextInput';
 import { isDropdownOpenComponentState } from '@/ui/layout/dropdown/states/isDropdownOpenComponentState';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const StyledThreadItem = styled.div<{
   $isSelected: boolean;
@@ -44,13 +46,27 @@ const StyledThreadItem = styled.div<{
   }
 `;
 
-const StyledLeading = styled.div`
-  display: flex;
-  flex-shrink: 0;
-  justify-content: center;
-  padding-top: ${themeCssVariables.spacing['0.5']};
-  width: ${themeCssVariables.spacing[7]};
-`;
+const styles = stylex.create({
+  leading: {
+    display: 'flex',
+    flexShrink: '0',
+    justifyContent: 'center',
+    paddingTop: spacing['--t-spacing-0_5'],
+    width: spacing['--t-spacing-7'],
+  },
+  threadContent: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    minWidth: '0',
+  },
+  threadHeading: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    minWidth: '0',
+  },
+});
 
 // The checkbox takes the avatar's place while the chat is checked, or while
 // the row is hovered or focused; without hover, a tap on the avatar checks it
@@ -85,20 +101,6 @@ const StyledAvatarContainer = styled.div<{
         $isCheckable || $isChecked ? 'none' : 'flex'};
     }
   }
-`;
-
-const StyledThreadContent = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-width: 0;
-`;
-
-const StyledThreadHeading = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  min-width: 0;
 `;
 
 const StyledActivityTimeContainer = styled.div<{ $isDropdownOpen: boolean }>`
@@ -194,7 +196,7 @@ export const AiChatThreadListItem = ({
         }
       }}
     >
-      <StyledLeading
+      <div
         data-select-disable={isDefined(onCheckboxClick) || undefined}
         onClick={
           isDefined(onCheckboxClick)
@@ -203,7 +205,7 @@ export const AiChatThreadListItem = ({
                 onCheckboxClick(thread, event);
               }
             : undefined
-        }
+        } {...stylex.props(styles.leading)}
       >
         {isDefined(onCheckboxClick) && (
           <StyledCheckboxContainer $isChecked={isChecked}>
@@ -216,8 +218,8 @@ export const AiChatThreadListItem = ({
         >
           <AiChatThreadAvatar thread={thread} />
         </StyledAvatarContainer>
-      </StyledLeading>
-      <StyledThreadContent>
+      </div>
+      <div {...stylex.props(styles.threadContent)}>
         {isRenaming ? (
           <TextInput
             value={draftTitle}
@@ -243,15 +245,15 @@ export const AiChatThreadListItem = ({
             aria-label={t`Rename chat`}
           />
         ) : (
-          <StyledThreadHeading>
+          <div {...stylex.props(styles.threadHeading)}>
             <AiChatThreadTitle thread={thread} />
             <StyledActivityTimeContainer $isDropdownOpen={isDropdownOpen}>
               <AiChatThreadActivityTime thread={thread} />
             </StyledActivityTimeContainer>
-          </StyledThreadHeading>
+          </div>
         )}
         <AiChatThreadSubtitle thread={thread} />
-      </StyledThreadContent>
+      </div>
       <StyledMenuTrigger
         $isDropdownOpen={isDropdownOpen}
         onClick={(event) => event.stopPropagation()}

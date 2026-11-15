@@ -1,10 +1,12 @@
 import { useAiChatFileUpload } from '@/ai/hooks/useAiChatFileUpload';
-import { styled } from '@linaria/react';
 import { type ChangeEvent, type Ref } from 'react';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledFileInput = styled.input`
-  display: none;
-`;
+const styles = stylex.create({
+  fileInput: {
+    display: 'none',
+  },
+});
 
 type AgentChatFileInputProps = {
   ref: Ref<HTMLInputElement>;
@@ -25,12 +27,12 @@ export const AgentChatFileInput = ({ ref }: AgentChatFileInputProps) => {
   };
 
   return (
-    <StyledFileInput
+    <input
       ref={ref}
       type="file"
       multiple
       accept="*/*"
-      onChange={handleFileInputChange}
+      onChange={handleFileInputChange} {...stylex.props(styles.fileInput)}
     />
   );
 };

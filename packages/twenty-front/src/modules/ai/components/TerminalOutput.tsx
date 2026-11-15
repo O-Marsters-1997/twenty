@@ -6,36 +6,49 @@ import { LightIconButton } from 'twenty-ui/components/input';
 import { IconCopy, IconTerminal } from 'twenty-ui/icon';
 import { themeCssVariables } from 'twenty-ui/theme';
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard';
+import * as stylex from '@stylexjs/stylex';
+import { background, borderColor, borderRadius, fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  border-radius: ${themeCssVariables.border.radius.sm};
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-`;
-
-const StyledHeader = styled.div`
-  align-items: center;
-  background: ${themeCssVariables.background.tertiary};
-  border-bottom: 1px solid ${themeCssVariables.border.color.medium};
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  justify-content: space-between;
-  padding: ${themeCssVariables.spacing[1]} ${themeCssVariables.spacing[2]};
-`;
-
-const StyledHeaderLeft = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.secondary};
-  display: flex;
-  font-size: ${themeCssVariables.font.size.sm};
-  gap: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledTabContainer = styled.div`
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  container: {
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden',
+  },
+  header: {
+    alignItems: 'center',
+    background: background['--t-background-tertiary'],
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: borderColor['--t-border-color-medium'],
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    justifyContent: 'space-between',
+    paddingTop: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+  headerLeft: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-secondary'],
+    display: 'flex',
+    fontSize: fontSize['--t-font-size-sm'],
+    gap: spacing['--t-spacing-1'],
+  },
+  tabContainer: {
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+  },
+  emptyMessage: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontStyle: 'italic',
+  },
+});
 
 const StyledTab = styled.button<{ isActive: boolean; hasError?: boolean }>`
   background: ${({ isActive }) =>
@@ -80,11 +93,6 @@ const StyledOutputArea = styled.div<{ isError?: boolean }>`
   padding: ${themeCssVariables.spacing[2]};
   white-space: pre-wrap;
   word-break: break-word;
-`;
-
-const StyledEmptyMessage = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-style: italic;
 `;
 
 const StyledCursor = styled.span`
@@ -133,13 +141,13 @@ export const TerminalOutput = ({
   const currentOutput = activeTab === 'stdout' ? stdout : stderr;
 
   return (
-    <StyledContainer>
-      <StyledHeader>
-        <StyledHeaderLeft>
+    <div {...stylex.props(styles.container)}>
+      <div {...stylex.props(styles.header)}>
+        <div {...stylex.props(styles.headerLeft)}>
           <IconTerminal size={14} />
           {t`Output`}
-        </StyledHeaderLeft>
-        <StyledTabContainer>
+        </div>
+        <div {...stylex.props(styles.tabContainer)}>
           <StyledTab
             isActive={activeTab === 'stdout'}
             onClick={() => setUserSelectedTab('stdout')}
@@ -164,8 +172,8 @@ export const TerminalOutput = ({
           >
             <IconCopy />
           </LightIconButton>
-        </StyledTabContainer>
-      </StyledHeader>
+        </div>
+      </div>
       <StyledOutputArea isError={activeTab === 'stderr'}>
         {currentOutput ? (
           <>
@@ -173,11 +181,11 @@ export const TerminalOutput = ({
             {isRunning && <StyledCursor />}
           </>
         ) : (
-          <StyledEmptyMessage>
+          <div {...stylex.props(styles.emptyMessage)}>
             {isRunning ? t`Waiting for output...` : t`No output`}
-          </StyledEmptyMessage>
+          </div>
         )}
       </StyledOutputArea>
-    </StyledContainer>
+    </div>
   );
 };

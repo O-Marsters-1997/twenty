@@ -5,6 +5,8 @@ import { themeCssVariables, useTheme } from 'twenty-ui/theme';
 
 import { StyledAiChatAskStatusMessage } from '@/ai/components/AiChatAskStyledComponents';
 import { ShimmeringText } from '@/ai/components/ShimmeringText';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const StyledContainer = styled.div`
   align-items: flex-start;
@@ -19,12 +21,14 @@ const StyledContainer = styled.div`
   }
 `;
 
-const StyledContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing['0.5']};
-  min-width: 0;
-`;
+const styles = stylex.create({
+  content: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-0_5'],
+    minWidth: '0',
+  },
+});
 
 type AiChatAskStatusRowProps = {
   Icon: IconComponent;
@@ -48,14 +52,14 @@ export const AiChatAskStatusRow = ({
   return (
     <StyledContainer>
       <Icon size={theme.icon.size.sm} />
-      <StyledContent>
+      <div {...stylex.props(styles.content)}>
         {isShimmering ? (
           <ShimmeringText>{messageElement}</ShimmeringText>
         ) : (
           messageElement
         )}
         {children}
-      </StyledContent>
+      </div>
     </StyledContainer>
   );
 };

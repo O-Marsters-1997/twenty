@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useRef } from 'react';
 import { CoreObjectNameSingular } from 'twenty-shared/types';
@@ -13,7 +12,6 @@ import {
   IconPlus,
   IconUsers,
 } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { AiChatThreadDetailsRow } from '@/ai/components/AiChatThreadDetailsRow';
 import { useAgentChatThreadMembers } from '@/ai/hooks/useAgentChatThreadMembers';
@@ -37,18 +35,24 @@ import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomState
 import { useSetAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useSetAtomComponentState';
 import { useIsFeatureEnabled } from '@/workspace/hooks/useIsFeatureEnabled';
 import { FeatureFlagKey } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledEmptyValue = styled.span`
-  color: ${themeCssVariables.font.color.light};
-  font-size: ${themeCssVariables.font.size.sm};
-`;
-
-const StyledDetails = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  padding: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  emptyValue: {
+    color: fontColor['--t-font-color-light'],
+    fontSize: fontSize['--t-font-size-sm'],
+  },
+  details: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+});
 
 type AiChatThreadDetailsDropdownProps = {
   threadId: string;
@@ -136,7 +140,7 @@ export const AiChatThreadDetailsDropdown = ({
           width={GenericDropdownContentWidth.ExtraLarge}
           aria-label={t`Chat details`}
         >
-          <StyledDetails>
+          <div {...stylex.props(styles.details)}>
             {areRecordTargetsAvailable && (
               <AiChatThreadDetailsRow
                 Icon={IconLink}
@@ -175,7 +179,7 @@ export const AiChatThreadDetailsDropdown = ({
                     />
                   ))
                 ) : (
-                  <StyledEmptyValue>{t`None`}</StyledEmptyValue>
+                  <span {...stylex.props(styles.emptyValue)}>{t`None`}</span>
                 )}
               </AiChatThreadDetailsRow>
             )}
@@ -190,7 +194,7 @@ export const AiChatThreadDetailsDropdown = ({
                       record={{ ...assignee, __typename: 'WorkspaceMember' }}
                     />
                   ) : (
-                    <StyledEmptyValue>{t`None`}</StyledEmptyValue>
+                    <span {...stylex.props(styles.emptyValue)}>{t`None`}</span>
                   )}
                 </AiChatThreadDetailsRow>
                 <AiChatThreadDetailsRow Icon={IconBell} label={t`Following`}>
@@ -209,7 +213,7 @@ export const AiChatThreadDetailsDropdown = ({
                 </AiChatThreadDetailsRow>
               </>
             )}
-          </StyledDetails>
+          </div>
         </DropdownContent>
       </DropdownRoot>
       {canEditRecordTargets && (

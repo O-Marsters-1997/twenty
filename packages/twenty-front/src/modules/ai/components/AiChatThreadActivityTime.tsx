@@ -1,6 +1,4 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { useFormatAgentChatThreadDate } from '@/ai/hooks/useFormatAgentChatThreadDate';
 import { agentChatThreadInboxStatusFamilySelector } from '@/ai/states/selectors/agentChatThreadInboxStatusFamilySelector';
@@ -8,12 +6,16 @@ import { type AgentChatThreadRecord } from '@/ai/types/AgentChatThreadRecord';
 import { getAgentChatThreadLastActivityAt } from '@/ai/utils/getAgentChatThreadLastActivityAt';
 import { useAtomFamilySelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilySelectorValue';
 import { beautifyPastDateRelativeToNowShort } from '~/utils/date-utils';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledActivityTime = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  flex-shrink: 0;
-  font-size: ${themeCssVariables.font.size.sm};
-`;
+const styles = stylex.create({
+  activityTime: {
+    color: fontColor['--t-font-color-tertiary'],
+    flexShrink: '0',
+    fontSize: fontSize['--t-font-size-sm'],
+  },
+});
 
 type AiChatThreadActivityTimeProps = {
   thread: AgentChatThreadRecord;
@@ -55,5 +57,5 @@ export const AiChatThreadActivityTime = ({
     }
   };
 
-  return <StyledActivityTime>{getActivityTimeLabel()}</StyledActivityTime>;
+  return <div {...stylex.props(styles.activityTime)}>{getActivityTimeLabel()}</div>;
 };

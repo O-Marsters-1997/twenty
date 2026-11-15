@@ -1,8 +1,6 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { AI_MODEL_TIERS, type AiModelTier } from 'twenty-shared/ai';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { AiModelTierBars } from '@/ai/components/AiModelTierBars';
 import { AiModelTierSlider } from '@/ai/components/AiModelTierSlider';
@@ -14,12 +12,19 @@ import { Dropdown } from 'twenty-ui/components/navigation';
 import { DropdownRoot } from '@/ui/layout/dropdown/components/DropdownRoot';
 import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent';
 import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const SLIDER_DROPDOWN_WIDTH_PX = 240;
 
-const StyledSliderContainer = styled.div`
-  padding: ${themeCssVariables.spacing[3]};
-`;
+const styles = stylex.create({
+  sliderContainer: {
+    paddingTop: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingBottom: spacing['--t-spacing-3'],
+    paddingLeft: spacing['--t-spacing-3'],
+  },
+});
 
 type AiModelTierDropdownProps = {
   dropdownId: string;
@@ -70,13 +75,13 @@ export const AiModelTierDropdown = ({
         sideOffset={8}
         aria-label={t`Choose a model mode`}
       >
-        <StyledSliderContainer role="group" aria-label={t`Choose a model mode`}>
+        <div role="group" aria-label={t`Choose a model mode`} {...stylex.props(styles.sliderContainer)}>
           <AiModelTierSlider
             selectedTier={selectedTier}
             onTierChange={handleTierChange}
             disabled={disabled}
           />
-        </StyledSliderContainer>
+        </div>
       </DropdownContent>
     </DropdownRoot>
   );

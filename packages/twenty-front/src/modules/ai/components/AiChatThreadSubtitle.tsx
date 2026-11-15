@@ -14,16 +14,31 @@ import { currentWorkspaceMembersState } from '@/auth/states/currentWorkspaceMemb
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { getWorkspaceMemberNameOrEmail } from '@/workspace-member/utils/getWorkspaceMemberNameOrEmail';
 import { getAbsoluteImageUrl } from '~/utils/image/getAbsoluteImageUrl';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledSubtitle = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  font-size: ${themeCssVariables.font.size.sm};
-  gap: ${themeCssVariables.spacing[1]};
-  min-height: ${themeCssVariables.spacing[4]};
-  min-width: 0;
-`;
+const styles = stylex.create({
+  subtitle: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    fontSize: fontSize['--t-font-size-sm'],
+    gap: spacing['--t-spacing-1'],
+    minHeight: spacing['--t-spacing-4'],
+    minWidth: '0',
+  },
+  preview: {
+    minWidth: '0',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  assignee: {
+    display: 'flex',
+    flexShrink: '0',
+    marginLeft: 'auto',
+  },
+});
 
 const StyledNeedsInput = styled.div<{ $isUnread: boolean }>`
   align-items: center;
@@ -35,19 +50,6 @@ const StyledNeedsInput = styled.div<{ $isUnread: boolean }>`
   flex-shrink: 0;
   font-weight: ${themeCssVariables.font.weight.medium};
   gap: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledPreview = styled.div`
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledAssignee = styled.div`
-  display: flex;
-  flex-shrink: 0;
-  margin-left: auto;
 `;
 
 type AiChatThreadSubtitleProps = {
@@ -77,7 +79,7 @@ export const AiChatThreadSubtitle = ({ thread }: AiChatThreadSubtitleProps) => {
   });
 
   return (
-    <StyledSubtitle>
+    <div {...stylex.props(styles.subtitle)}>
       {isAwaitingAnswer && (
         <StyledNeedsInput $isUnread={isUnread}>
           <IconHandClick size={theme.icon.size.sm} />
@@ -87,9 +89,9 @@ export const AiChatThreadSubtitle = ({ thread }: AiChatThreadSubtitleProps) => {
       {isAwaitingAnswer && isNonEmptyString(previewText) && (
         <span aria-hidden>·</span>
       )}
-      <StyledPreview>{previewText}</StyledPreview>
+      <div {...stylex.props(styles.preview)}>{previewText}</div>
       {isDefined(assignee) && (
-        <StyledAssignee title={t`Assigned to ${assigneeName}`}>
+        <div title={t`Assigned to ${assigneeName}`} {...stylex.props(styles.assignee)}>
           <Avatar
             src={getAbsoluteImageUrl(assignee.avatarUrl)}
             colorSeed={assignee.id}
@@ -98,8 +100,8 @@ export const AiChatThreadSubtitle = ({ thread }: AiChatThreadSubtitleProps) => {
             shape="circle"
           />
           <VisuallyHidden>{t`, assigned to ${assigneeName}`}</VisuallyHidden>
-        </StyledAssignee>
+        </div>
       )}
-    </StyledSubtitle>
+    </div>
   );
 };

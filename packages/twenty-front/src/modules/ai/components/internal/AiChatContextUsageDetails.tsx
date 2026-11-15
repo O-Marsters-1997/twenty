@@ -1,31 +1,33 @@
 import { formatAiChatTokens } from '@/ai/utils/formatAiChatTokens';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { MetricRow } from 'twenty-ui/components/data-display';
 import { Separator } from 'twenty-ui/primitives/layout';
 import { IconArrowUp, IconArrowDown, IconHistory } from 'twenty-ui/icon';
-import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 
 import { agentChatUsageFamilyState } from '@/ai/states/agentChatUsageFamilyState';
 import { currentAiChatThreadState } from '@/ai/states/currentAiChatThreadState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledSectionTitle = styled.span`
-  align-items: center;
-  color: ${themeCssVariables.font.color.secondary};
-  display: flex;
-  font-size: ${themeCssVariables.font.size.xs};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-  height: 20px;
-`;
+const styles = stylex.create({
+  section: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-1'],
+  },
+  sectionTitle: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-secondary'],
+    display: 'flex',
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    height: '20px',
+  },
+});
 
 export const AiChatContextUsageDetails = () => {
   const { t } = useLingui();
@@ -45,8 +47,8 @@ export const AiChatContextUsageDetails = () => {
       {isDefined(lastMessage) && (
         <>
           <Separator />
-          <StyledSection>
-            <StyledSectionTitle>{t`Last message`}</StyledSectionTitle>
+          <div {...stylex.props(styles.section)}>
+            <span {...stylex.props(styles.sectionTitle)}>{t`Last message`}</span>
             <MetricRow
               startIcon={<IconArrowUp size={theme.icon.size.sm} />}
               value={formatAiChatTokens(lastMessage.inputTokens)}
@@ -65,12 +67,12 @@ export const AiChatContextUsageDetails = () => {
             >
               {t`Output tokens`}
             </MetricRow>
-          </StyledSection>
+          </div>
         </>
       )}
       <Separator />
-      <StyledSection>
-        <StyledSectionTitle>{t`Conversation`}</StyledSectionTitle>
+      <div {...stylex.props(styles.section)}>
+        <span {...stylex.props(styles.sectionTitle)}>{t`Conversation`}</span>
         <MetricRow
           startIcon={<IconArrowUp size={theme.icon.size.sm} />}
           value={formatAiChatTokens(agentChatUsage.inputTokens)}
@@ -89,7 +91,7 @@ export const AiChatContextUsageDetails = () => {
         >
           {t`Output tokens`}
         </MetricRow>
-      </StyledSection>
+      </div>
     </>
   );
 };
