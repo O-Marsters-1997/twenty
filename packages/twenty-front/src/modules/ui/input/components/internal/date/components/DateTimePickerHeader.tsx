@@ -82,7 +82,7 @@ const styles = stylex.create({
     flexShrink: '0',
   },
   timeInput: {
-    background: 'transparent',
+    backgroundColor: 'transparent',
     borderStyle: 'none',
     color: { default: fontColor['--t-font-color-primary'], '::placeholder': fontColor['--t-font-color-light'], ':disabled': fontColor['--t-font-color-tertiary'] },
     flex: '1',

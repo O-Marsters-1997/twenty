@@ -8,7 +8,7 @@ import { background } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   scrollAreaMock: {
-    background: background['--t-background-secondary'],
+    backgroundColor: background['--t-background-secondary'],
     height: '120px',
     position: 'relative',
     width: '320px',

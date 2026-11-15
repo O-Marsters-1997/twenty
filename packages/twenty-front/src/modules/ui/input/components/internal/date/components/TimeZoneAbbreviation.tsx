@@ -7,7 +7,7 @@ import { fontColor, fontSize } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   timezoneAbbreviation: {
-    background: 'transparent',
+    backgroundColor: 'transparent',
     color: fontColor['--t-font-color-tertiary'],
     fontSize: fontSize['--t-font-size-sm'],
     userSelect: 'none',

@@ -30,7 +30,6 @@ type SelectControlContainerProps = {
   children: ReactNode;
 };
 
-// TODO: factorize this with https://github.com/twentyhq/core-team-issues/issues/752
 export const SelectControlContainer = ({
   disabled,
   hasIcon,

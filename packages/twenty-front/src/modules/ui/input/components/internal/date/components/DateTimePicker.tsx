@@ -71,7 +71,7 @@ const styles = stylex.create({
     paddingBottom: spacing['--t-spacing-1'],
     paddingLeft: spacing['--t-spacing-1'],
     width: 'auto',
-    background: { default: null, ':hover': backgroundTransparent['--t-background-transparent-light'] },
+    backgroundColor: { default: null, ':hover': backgroundTransparent['--t-background-transparent-light'] },
   },
   buttonContent: {
     alignItems: 'center',
@@ -81,7 +81,7 @@ const styles = stylex.create({
   },
   datePickerFallback: {
     alignItems: 'center',
-    background: background['--t-background-secondary'],
+    backgroundColor: background['--t-background-secondary'],
     borderTopLeftRadius: borderRadius['--t-border-radius-md'],
     borderTopRightRadius: borderRadius['--t-border-radius-md'],
     borderBottomRightRadius: borderRadius['--t-border-radius-md'],

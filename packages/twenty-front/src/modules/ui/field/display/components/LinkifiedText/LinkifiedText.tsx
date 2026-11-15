@@ -3,12 +3,13 @@ import { isNonEmptyString } from '@sniptt/guards';
 import { getSafeUrl } from 'twenty-shared/utils';
 import { linkifyText } from './linkifyText';
 import * as stylex from '@stylexjs/stylex';
+import { color } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   link: {
-    color: 'var(--t-color-blue)',
+    color: color['--t-color-blue'],
     textDecoration: 'underline',
-    textDecorationColor: { default: null, ':hover': 'var(--t-color-blue)' },
+    textDecorationColor: { default: null, ':hover': color['--t-color-blue'] },
   },
 });
 

@@ -57,7 +57,7 @@ const styles = stylex.create({
     },
   },
   lightIconButtonContainer: {
-    background: 'transparent',
+    backgroundColor: 'transparent',
     position: 'absolute',
     right: '0',
     top: '16px',

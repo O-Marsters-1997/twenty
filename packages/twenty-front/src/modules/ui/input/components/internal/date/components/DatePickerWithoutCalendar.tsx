@@ -30,7 +30,7 @@ const styles = stylex.create({
   },
   datePickerFallback: {
     alignItems: 'center',
-    background: background['--t-background-secondary'],
+    backgroundColor: background['--t-background-secondary'],
     borderTopLeftRadius: borderRadius['--t-border-radius-md'],
     borderTopRightRadius: borderRadius['--t-border-radius-md'],
     borderBottomRightRadius: borderRadius['--t-border-radius-md'],
