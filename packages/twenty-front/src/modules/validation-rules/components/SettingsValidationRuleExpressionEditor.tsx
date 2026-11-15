@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { type JSONContent } from '@tiptap/core';
 import Document from '@tiptap/extension-document';
@@ -15,12 +14,9 @@ import {
 } from 'twenty-shared/utils';
 import { Field } from 'twenty-ui/primitives/input';
 import { Card } from 'twenty-ui/primitives/surfaces';
-import { themeCssVariables } from 'twenty-ui/theme';
 
-import { FORM_FIELD_PLACEHOLDER_STYLES } from '@/ui/input/constants/FormFieldPlaceholderStyles';
 import { SettingsValidationRuleAskAiButton } from '@/validation-rules/components/SettingsValidationRuleAskAiButton';
 import { SettingsValidationRuleHelperPanel } from '@/validation-rules/components/SettingsValidationRuleHelperPanel';
-import { VALIDATION_RULE_HIGHLIGHT_COLORS } from '@/validation-rules/constants/ValidationRuleHighlightColors';
 import { ValidationRuleExpressionExtension } from '@/validation-rules/extensions/ValidationRuleExpressionExtension';
 import { ValidationRuleFieldNode } from '@/validation-rules/extensions/ValidationRuleFieldNode';
 import { type ValidationRuleEditorField } from '@/validation-rules/types/ValidationRuleEditorField';
@@ -36,82 +32,50 @@ import { getValidationRuleEditorText } from '@/validation-rules/utils/getValidat
 import { handleValidationRuleEditorPaste } from '@/validation-rules/utils/handleValidationRuleEditorPaste';
 import { insertValidationRuleHelperItem } from '@/validation-rules/utils/insertValidationRuleHelperItem';
 import * as stylex from '@stylexjs/stylex';
-import { spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  codeFont,
+  color,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const SingleParagraphDocument = Document.extend({ content: 'paragraph' });
 
 const styles = stylex.create({
+  editorContent: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  editor: {
+    background: backgroundTransparent['--t-background-transparent-lighter'],
+    borderColor: {
+      default: borderColor['--t-border-color-medium'],
+      ':focus-within': color['--t-color-blue'],
+    },
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    color: fontColor['--t-font-color-primary'],
+    fontFamily: codeFont['--t-code-font-family'],
+    fontSize: fontSize['--t-font-size-md'],
+    position: 'relative',
+  },
+  editorError: {
+    borderColor: {
+      default: borderColor['--t-border-color-danger'],
+      ':focus-within': color['--t-color-blue'],
+    },
+  },
   askAiButtonContainer: {
     position: 'absolute',
     right: spacing['--t-spacing-1'],
     top: spacing['--t-spacing-1'],
   },
 });
-
-const StyledEditorContent = styled(Field.Root)`
-  display: flex;
-  flex-direction: column;
-`;
-
-const StyledEditor = styled.div<{ hasError: boolean }>`
-  background: ${themeCssVariables.background.transparent.lighter};
-  border: 1px solid
-    ${({ hasError }) =>
-      hasError
-        ? themeCssVariables.border.color.danger
-        : themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  color: ${themeCssVariables.font.color.primary};
-  font-family: ${themeCssVariables.code.font.family};
-  font-size: ${themeCssVariables.font.size.md};
-  position: relative;
-
-  &:focus-within {
-    border-color: ${themeCssVariables.color.blue};
-  }
-
-  .tiptap {
-    line-height: 24px;
-    min-height: 56px;
-    outline: none;
-    padding: ${themeCssVariables.spacing[2]} ${themeCssVariables.spacing[8]}
-      ${themeCssVariables.spacing[2]} ${themeCssVariables.spacing[3]};
-    white-space: pre-wrap;
-    word-break: break-word;
-
-    p {
-      margin: 0;
-    }
-
-    p.is-editor-empty:first-of-type::before {
-      ${FORM_FIELD_PLACEHOLDER_STYLES}
-      content: attr(data-placeholder);
-      float: left;
-      height: 0;
-      pointer-events: none;
-    }
-  }
-
-  .validation-rule-token-string {
-    color: ${VALIDATION_RULE_HIGHLIGHT_COLORS.string};
-  }
-
-  .validation-rule-token-number {
-    color: ${VALIDATION_RULE_HIGHLIGHT_COLORS.number};
-  }
-
-  .validation-rule-token-function {
-    color: ${VALIDATION_RULE_HIGHLIGHT_COLORS.function};
-  }
-
-  .validation-rule-token-keyword {
-    color: ${VALIDATION_RULE_HIGHLIGHT_COLORS.keyword};
-  }
-
-  .validation-rule-token-operator {
-    color: ${VALIDATION_RULE_HIGHLIGHT_COLORS.operator};
-  }
-`;
 
 type SettingsValidationRuleExpressionEditorProps = {
   value: string;
@@ -278,19 +242,25 @@ export const SettingsValidationRuleExpressionEditor = ({
   return (
     <>
       <Card.Content divider>
-        <StyledEditorContent>
-          <StyledEditor hasError={isDefined(errorMessage)}>
+        <Field.Root {...stylex.props(styles.editorContent)}>
+          <div
+            data-validation-rule-editor
+            {...stylex.props(
+              styles.editor,
+              isDefined(errorMessage) && styles.editorError,
+            )}
+          >
             <EditorContent editor={editor} />
             <div {...stylex.props(styles.askAiButtonContainer)}>
               <SettingsValidationRuleAskAiButton />
             </div>
-          </StyledEditor>
+          </div>
           {isDefined(errorMessage) && (
             <Field.Error match role="alert">
               {errorMessage}
             </Field.Error>
           )}
-        </StyledEditorContent>
+        </Field.Root>
       </Card.Content>
       <SettingsValidationRuleHelperPanel
         items={helperContext.items}
