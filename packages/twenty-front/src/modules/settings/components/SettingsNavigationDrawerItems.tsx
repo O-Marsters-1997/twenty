@@ -8,16 +8,18 @@ import {
 import { CollapsibleNavigationDrawerSection } from '@/ui/navigation/navigation-drawer/components/CollapsibleNavigationDrawerSection';
 import { NavigationDrawerItemGroup } from '@/ui/navigation/navigation-drawer/components/NavigationDrawerItemGroup';
 import { getNavigationSubItemLeftAdornment } from '@/ui/navigation/navigation-drawer/utils/getNavigationSubItemLeftAdornment';
-import { styled } from '@linaria/react';
 import { matchPath, resolvePath, useLocation } from 'react-router-dom';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { getSettingsPath } from 'twenty-shared/utils';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledSectionsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[3]};
-`;
+const styles = stylex.create({
+  sectionsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-3'],
+  },
+});
 
 const renderSectionItem = (
   item: SettingsNavigationItem,
@@ -102,7 +104,7 @@ export const SettingsNavigationDrawerItems = () => {
   };
 
   return (
-    <StyledSectionsContainer>
+    <div {...stylex.props(styles.sectionsContainer)}>
       {settingsNavigationItems.map((section) => {
         const allItemsHidden = section.items.every((item) => item.isHidden);
         if (allItemsHidden) {
@@ -135,6 +137,6 @@ export const SettingsNavigationDrawerItems = () => {
           </CollapsibleNavigationDrawerSection>
         );
       })}
-    </StyledSectionsContainer>
+    </div>
   );
 };

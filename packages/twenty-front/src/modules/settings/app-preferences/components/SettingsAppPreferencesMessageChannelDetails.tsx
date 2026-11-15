@@ -1,5 +1,4 @@
 import { useMutation } from '@apollo/client/react';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 
 import {
@@ -10,7 +9,6 @@ import {
 import { Section } from 'twenty-ui/components/layout';
 import { IconBriefcase, IconUsers } from 'twenty-ui/icon';
 import { Card } from 'twenty-ui/primitives/surfaces';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { type MessageChannel } from '@/accounts/types/MessageChannel';
 import { SettingsAccountsMessageAutoCreationCard } from '@/settings/accounts/components/SettingsAccountsMessageAutoCreationCard';
@@ -19,6 +17,8 @@ import { SettingsAccountsMessageVisibilityCard } from '@/settings/accounts/compo
 import { UPDATE_MESSAGE_CHANNEL } from '@/settings/accounts/graphql/mutations/updateMessageChannel';
 import { SettingsOptionCardContentSwitch } from '@/settings/components/SettingsOptions/SettingsOptionCardContentSwitch';
 import { type MessageChannelVisibility } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsAppPreferencesMessageChannelDetailsProps = {
   messageChannel: Pick<
@@ -42,11 +42,13 @@ type MessageChannelUpdateInput = Partial<{
   messageFolderImportPolicy: MessageFolderImportPolicy;
 }>;
 
-const StyledDetailsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[6]};
-`;
+const styles = stylex.create({
+  detailsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-6'],
+  },
+});
 
 export const SettingsAppPreferencesMessageChannelDetails = ({
   messageChannel,
@@ -89,7 +91,7 @@ export const SettingsAppPreferencesMessageChannelDetails = ({
   const isGroupMailbox = messageChannel.type === MessageChannelType.EMAIL_GROUP;
 
   return (
-    <StyledDetailsContainer>
+    <div {...stylex.props(styles.detailsContainer)}>
       {supportsFolderImportPolicy && (
         <Section.Root>
           <Section.Header
@@ -155,6 +157,6 @@ export const SettingsAppPreferencesMessageChannelDetails = ({
           />
         </Card.Root>
       </Section.Root>
-    </StyledDetailsContainer>
+    </div>
   );
 };

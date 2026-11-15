@@ -1,15 +1,17 @@
-import { styled } from '@linaria/react';
 import type { IconComponent } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { CancelButton } from './CancelButton';
 import { SaveButton } from './SaveButton';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+  },
+});
 
 type SaveAndCancelButtonsProps = {
   onSave?: () => void;
@@ -31,7 +33,7 @@ export const SaveAndCancelButtons = ({
   saveIcon,
 }: SaveAndCancelButtonsProps) => {
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <CancelButton
         onCancel={onCancel}
         disabled={isCancelDisabled}
@@ -44,6 +46,6 @@ export const SaveAndCancelButtons = ({
         inverted={inverted}
         saveIcon={saveIcon}
       />
-    </StyledContainer>
+    </div>
   );
 };

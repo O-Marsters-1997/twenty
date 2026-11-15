@@ -13,16 +13,18 @@ import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isNonEmptyArray } from 'twenty-shared/utils';
 import { MOBILE_VIEWPORT, themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
 
 const LANGUAGE_AND_RESET_COLUMNS_WIDTH = 184;
 const TRANSLATION_COLUMN_MOBILE_MIN_WIDTH = 150;
 
-const StyledScrollWrapper = styled.div`
-  @media (max-width: ${MOBILE_VIEWPORT}px) {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-`;
+const styles = stylex.create({
+  scrollWrapper: {
+    overflowX: { default: null, [media.mobile]: 'auto' },
+    WebkitOverflowScrolling: { default: null, [media.mobile]: 'touch' },
+  },
+});
 
 const StyledScrollableContent = styled.div<{ mobileMinWidth: number }>`
   @media (max-width: ${MOBILE_VIEWPORT}px) {
@@ -51,7 +53,7 @@ export const MetadataTranslationsTable = ({
   const showSkeleton = loading && !isNonEmptyArray(columns);
 
   return (
-    <StyledScrollWrapper>
+    <div {...stylex.props(styles.scrollWrapper)}>
       <StyledScrollableContent
         mobileMinWidth={
           LANGUAGE_AND_RESET_COLUMNS_WIDTH +
@@ -96,6 +98,6 @@ export const MetadataTranslationsTable = ({
           </StyledSettingsDataModelTableBodyContainer>
         </Table>
       </StyledScrollableContent>
-    </StyledScrollWrapper>
+    </div>
   );
 };

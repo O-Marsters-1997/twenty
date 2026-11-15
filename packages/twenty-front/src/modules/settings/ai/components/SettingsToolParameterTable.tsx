@@ -1,6 +1,5 @@
 
 import { SettingsEmptyPlaceholder } from '@/settings/components/SettingsEmptyPlaceholder';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { type ComponentType } from 'react';
 import { isDefined } from 'twenty-shared/utils';
@@ -23,6 +22,8 @@ import {
 } from 'twenty-ui/icon';
 import { Tooltip } from 'twenty-ui/primitives/surfaces';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing, border } from 'twenty-ui/theme/tokens.stylex';
 
 type SchemaProperty = {
   type?: string;
@@ -49,20 +50,22 @@ const TYPE_ICON_MAP: Record<string, ComponentType<{ size?: number }>> = {
   object: IllustrationIconJson,
 };
 
-const StyledTableHeaderRow = styled.div`
-  margin-bottom: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledFieldsContainer = styled.div`
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  padding-bottom: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledInfoIconContainer = styled.div`
-  align-items: center;
-  display: flex;
-  justify-content: center;
-`;
+const styles = stylex.create({
+  tableHeaderRow: {
+    marginBottom: spacing['--t-spacing-2'],
+  },
+  fieldsContainer: {
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: border['--t-border-color-light'],
+    paddingBottom: spacing['--t-spacing-2'],
+  },
+  infoIconContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+});
 
 const getDisplayType = (property: SchemaProperty): string => {
   if (property.format) {
@@ -98,15 +101,15 @@ export const SettingsToolParameterTable = ({
     <Table>
       {entries.length > 0 && (
         <>
-          <StyledTableHeaderRow>
+          <div {...stylex.props(styles.tableHeaderRow)}>
             <TableRow gridTemplateColumns={PARAMETER_TABLE_GRID}>
               <TableHeader>{t`Name`}</TableHeader>
               <TableHeader>{t`Type`}</TableHeader>
               <TableHeader>{t`Required`}</TableHeader>
               <TableHeader />
             </TableRow>
-          </StyledTableHeaderRow>
-          <StyledFieldsContainer>
+          </div>
+          <div {...stylex.props(styles.fieldsContainer)}>
             {entries.map(([paramName, property], index) => {
               const infoIconId = `param-info-${index}`;
               const displayType = getDisplayType(property);
@@ -136,7 +139,7 @@ export const SettingsToolParameterTable = ({
                   </TableCell>
                   <TableCell>
                     {property.description && (
-                      <StyledInfoIconContainer>
+                      <div {...stylex.props(styles.infoIconContainer)}>
                         <Tooltip
                           content={property.description}
                           sideOffset={5}
@@ -151,13 +154,13 @@ export const SettingsToolParameterTable = ({
                             style={{ outline: 'none', cursor: 'pointer' }}
                           />
                         </Tooltip>
-                      </StyledInfoIconContainer>
+                      </div>
                     )}
                   </TableCell>
                 </TableRow>
               );
             })}
-          </StyledFieldsContainer>
+          </div>
         </>
       )}
     </Table>

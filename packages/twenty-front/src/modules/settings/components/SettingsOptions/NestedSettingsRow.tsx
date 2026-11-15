@@ -1,6 +1,8 @@
 import { styled } from '@linaria/react';
 import { type ReactNode } from 'react';
 import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type NestedSettingsRowProps = {
   children: ReactNode;
@@ -8,11 +10,13 @@ type NestedSettingsRowProps = {
   guideOffset?: string;
 };
 
-const StyledNestedRow = styled.div`
-  margin-left: ${themeCssVariables.spacing[8]};
-  padding-left: ${themeCssVariables.spacing[4]};
-  position: relative;
-`;
+const styles = stylex.create({
+  nestedRow: {
+    marginLeft: spacing['--t-spacing-8'],
+    paddingLeft: spacing['--t-spacing-4'],
+    position: 'relative',
+  },
+});
 
 const StyledGuide = styled.div<{
   isLast: boolean;
@@ -56,8 +60,8 @@ export const NestedSettingsRow = ({
   isLast = false,
   guideOffset = '50%',
 }: NestedSettingsRowProps) => (
-  <StyledNestedRow>
+  <div {...stylex.props(styles.nestedRow)}>
     <StyledGuide aria-hidden="true" isLast={isLast} guideOffset={guideOffset} />
     {children}
-  </StyledNestedRow>
+  </div>
 );

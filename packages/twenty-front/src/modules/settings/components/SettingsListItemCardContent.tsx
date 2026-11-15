@@ -8,6 +8,8 @@ import { isDefined } from 'twenty-shared/utils';
 import { IconChevronRight, type IconComponent } from 'twenty-ui/icon';
 import { Card } from 'twenty-ui/primitives/surfaces';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing, font, text } from 'twenty-ui/theme/tokens.stylex';
 
 const StyledRowContainer = styled.div`
   > div {
@@ -52,35 +54,35 @@ const StyledRightContainer = styled.div`
   }
 `;
 
-const StyledContent = styled.div`
-  align-items: center;
-  display: flex;
-  flex: 1 1 0;
-  gap: ${themeCssVariables.spacing[1]};
-  min-width: 0;
-  overflow: hidden;
-`;
-
-const StyledLabel = styled.span`
-  flex: 0 1 auto;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
+const styles = stylex.create({
+  content: {
+    alignItems: 'center',
+    display: 'flex',
+    flex: '1 1 0',
+    gap: spacing['--t-spacing-1'],
+    minWidth: '0',
+    overflow: 'hidden',
+  },
+  label: {
+    flex: '0 1 auto',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  description: {
+    color: font['--t-font-color-light'],
+    flex: '1 1 0',
+    fontWeight: font['--t-font-weight-regular'],
+    lineHeight: text['--t-text-line-height-lg'],
+    minWidth: '0',
+    overflow: 'hidden',
+    paddingLeft: spacing['--t-spacing-1'],
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+});
 
 // Rows are fixed-height, so the description truncates first rather than wrapping or squeezing the label
-const StyledDescription = styled.span`
-  color: ${themeCssVariables.font.color.light};
-  flex: 1 1 0;
-  font-weight: ${themeCssVariables.font.weight.regular};
-  line-height: ${themeCssVariables.text.lineHeight.lg};
-  min-width: 0;
-  overflow: hidden;
-  padding-left: ${themeCssVariables.spacing[1]};
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
 const rowActionClassName = css`
   &:hover {
     background: ${themeCssVariables.background.transparent.lighter};
@@ -141,14 +143,14 @@ export const SettingsListItemCardContent = ({
             color={LeftIconColor ?? 'currentColor'}
           />
         )}
-        <StyledContent>
-          <StyledLabel id={labelId}>{label}</StyledLabel>
+        <div {...stylex.props(styles.content)}>
+          <span id={labelId} {...stylex.props(styles.label)}>{label}</span>
           {hasDescription && (
-            <StyledDescription id={descriptionId}>
+            <span id={descriptionId} {...stylex.props(styles.description)}>
               {description}
-            </StyledDescription>
+            </span>
           )}
-        </StyledContent>
+        </div>
         <StyledRightContainer>
           {rightComponent}
           {isDefined(to) && (

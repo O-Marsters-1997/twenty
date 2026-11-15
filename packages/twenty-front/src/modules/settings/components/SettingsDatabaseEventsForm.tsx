@@ -8,6 +8,8 @@ import { IconBox, IconNorthStar, IconPlus, IconTrash } from 'twenty-ui/icon';
 import { type SelectOption } from 'twenty-ui/primitives/input';
 import { IconButton } from 'twenty-ui/components/input';
 import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const OBJECT_DROPDOWN_WIDTH = 240;
 const ACTION_DROPDOWN_WIDTH = 240;
@@ -29,10 +31,12 @@ const StyledFilterRow = styled.div<{ isMobile: boolean }>`
   margin-bottom: ${themeCssVariables.spacing[2]};
 `;
 
-const StyledPlaceholder = styled.div`
-  height: ${themeCssVariables.spacing[8]};
-  width: ${themeCssVariables.spacing[8]};
-`;
+const styles = stylex.create({
+  placeholder: {
+    height: spacing['--t-spacing-8'],
+    width: spacing['--t-spacing-8'],
+  },
+});
 
 export const SettingsDatabaseEventsForm = ({
   events,
@@ -101,7 +105,7 @@ export const SettingsDatabaseEventsForm = ({
               <IconTrash />
             </IconButton>
           ) : (
-            <StyledPlaceholder />
+            <div {...stylex.props(styles.placeholder)} />
           )}
         </StyledFilterRow>
       ))}

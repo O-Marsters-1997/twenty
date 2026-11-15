@@ -1,5 +1,3 @@
-import { themeCssVariables } from 'twenty-ui/theme';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 
 import { useUnsubscribeTopics } from '@/activities/emails/hooks/useUnsubscribeTopics';
@@ -11,10 +9,14 @@ import {
 } from '~/generated-metadata/graphql';
 import { Status } from 'twenty-ui/primitives/data-display';
 import { useNavigateSettings } from '~/hooks/useNavigateSettings';
+import * as stylex from '@stylexjs/stylex';
+import { font } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledTopicName = styled.span`
-  color: ${themeCssVariables.font.color.primary};
-`;
+const styles = stylex.create({
+  topicName: {
+    color: font['--t-font-color-primary'],
+  },
+});
 
 type UnsubscribeTopic = UnsubscribeTopicsQuery['unsubscribeTopics'][number];
 
@@ -35,7 +37,7 @@ export const SettingsWorkspaceUnsubscribeTopicSection = () => {
         {
           label: t`Topic`,
           Cell: ({ item }) => (
-            <StyledTopicName>{item.name ?? t`Untitled topic`}</StyledTopicName>
+            <span {...stylex.props(styles.topicName)}>{item.name ?? t`Untitled topic`}</span>
           ),
         },
         {

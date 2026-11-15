@@ -12,6 +12,8 @@ import { styled } from '@linaria/react';
 import { IconX } from 'twenty-ui/icon';
 import { IconButton } from 'twenty-ui/components/input';
 import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing, border, boxShadow } from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsCustomizeVideoModalProps = {
   modalInstanceId: string;
@@ -33,11 +35,39 @@ const StyledHeader = styled.div<{ $hasBottomBorder: boolean }>`
   padding-right: ${themeCssVariables.spacing[3]};
 `;
 
-const StyledTabsContainer = styled.div`
-  flex: 1 1 auto;
-  min-width: 0;
-  padding-left: ${themeCssVariables.spacing[3]};
-`;
+const styles = stylex.create({
+  tabsContainer: {
+    flex: '1 1 auto',
+    minWidth: '0',
+    paddingLeft: spacing['--t-spacing-3'],
+  },
+  titleText: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  videoContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    paddingTop: spacing['--t-spacing-6'],
+    paddingRight: spacing['--t-spacing-6'],
+    paddingBottom: spacing['--t-spacing-6'],
+    paddingLeft: spacing['--t-spacing-6'],
+  },
+  videoIframe: {
+    aspectRatio: '1440 / 900',
+    borderWidth: '0',
+    borderTopLeftRadius: border['--t-border-radius-md'],
+    borderTopRightRadius: border['--t-border-radius-md'],
+    borderBottomRightRadius: border['--t-border-radius-md'],
+    borderBottomLeftRadius: border['--t-border-radius-md'],
+    boxShadow: boxShadow['--t-box-shadow-strong'],
+    display: 'block',
+    height: 'auto',
+    maxWidth: '100%',
+    width: '960px',
+  },
+});
 
 const StyledTitle = styled.div`
   align-items: center;
@@ -52,29 +82,6 @@ const StyledTitle = styled.div`
   & > svg {
     flex-shrink: 0;
   }
-`;
-
-const StyledTitleText = styled.span`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledVideoContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  padding: ${themeCssVariables.spacing[6]};
-`;
-
-const StyledVideoIframe = styled.iframe`
-  aspect-ratio: 1440 / 900;
-  border: 0;
-  border-radius: ${themeCssVariables.border.radius.md};
-  box-shadow: ${themeCssVariables.boxShadow.strong};
-  display: block;
-  height: auto;
-  max-width: 100%;
-  width: 960px;
 `;
 
 export const SettingsCustomizeVideoModal = ({
@@ -102,8 +109,8 @@ export const SettingsCustomizeVideoModal = ({
   };
 
   const videoContent = (
-    <StyledVideoContainer>
-      <StyledVideoIframe
+    <div {...stylex.props(styles.videoContainer)}>
+      <iframe
         key={activeTab.id}
         src={
           activeTab.hasSound
@@ -111,9 +118,9 @@ export const SettingsCustomizeVideoModal = ({
             : `https://player.vimeo.com/video/${activeTab.vimeoId}?autoplay=1&loop=1&autopause=0&background=1&muted=1&dnt=1`
         }
         allow="autoplay; fullscreen; picture-in-picture"
-        title={activeTab.title}
+        title={activeTab.title} {...stylex.props(styles.videoIframe)}
       />
-    </StyledVideoContainer>
+    </div>
   );
 
   return (
@@ -136,14 +143,14 @@ export const SettingsCustomizeVideoModal = ({
           >
             <StyledHeader $hasBottomBorder={!hasMultipleTabs}>
               {hasMultipleTabs ? (
-                <StyledTabsContainer>
+                <div {...stylex.props(styles.tabsContainer)}>
                   <TabList
                     aria-label={t`Video tutorials`}
                     tabs={tabs}
                     behaveAsLinks={false}
                     componentInstanceId={tabsInstanceId}
                   />
-                </StyledTabsContainer>
+                </div>
               ) : (
                 <StyledTitle>
                   <ActiveTabIcon
@@ -151,7 +158,7 @@ export const SettingsCustomizeVideoModal = ({
                     color={theme.font.color.primary}
                     aria-hidden
                   />
-                  <StyledTitleText>{activeTab.title}</StyledTitleText>
+                  <span {...stylex.props(styles.titleText)}>{activeTab.title}</span>
                 </StyledTitle>
               )}
               <IconButton

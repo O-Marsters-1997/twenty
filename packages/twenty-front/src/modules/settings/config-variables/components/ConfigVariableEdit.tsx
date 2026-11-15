@@ -8,7 +8,8 @@ import { useToast } from 'twenty-ui/components/feedback';
 import { Section } from 'twenty-ui/components/layout';
 import { IconCheck, IconPencil, IconX } from 'twenty-ui/icon';
 import { Button, ButtonGroup } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const StyledSectionHeader = styled(Section.Header)`
   margin-block-end: 0;
@@ -17,11 +18,13 @@ const StyledSectionHeader = styled(Section.Header)`
 const RESET_VARIABLE_MODAL_ID =
   'reset-application-registration-config-variable-modal';
 
-const StyledRow = styled.div`
-  align-items: flex-end;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  row: {
+    alignItems: 'flex-end',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+  },
+});
 
 const StyledButtonContainer = styled(ButtonGroup)`
   display: flex;
@@ -127,7 +130,7 @@ export const ConfigVariableEdit = ({
       </Section.Root>
 
       <Section.Root>
-        <StyledRow>
+        <div {...stylex.props(styles.row)}>
           {input}
           {!isEditing ? (
             <Button
@@ -166,7 +169,7 @@ export const ConfigVariableEdit = ({
             confirmButtonText={t`Reset`}
             confirmButtonColor="danger"
           />
-        </StyledRow>
+        </div>
         {helpContent}
       </Section.Root>
     </SettingsPageContainer>

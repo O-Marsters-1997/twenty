@@ -7,26 +7,28 @@ import { ConfirmationDialog } from '@/ui/layout/dialog/components/ConfirmationDi
 import { useDialog } from '@/ui/layout/dialog/hooks/useDialog';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useMutation } from '@apollo/client/react';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { useToast } from 'twenty-ui/components/feedback';
 import { Section } from 'twenty-ui/components/layout';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import {
   DeleteUserAccountDocument,
   DeleteUserWorkspaceDocument,
 } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const DELETE_ACCOUNT_MODAL_ID = 'delete-account-modal';
 const LEAVE_WORKSPACE_MODAL_ID = 'leave-workspace-modal';
 
-const StyledDangerActions = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  dangerActions: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: spacing['--t-spacing-2'],
+  },
+});
 
 export const DeleteAccount = () => {
   const { t } = useLingui();
@@ -78,7 +80,7 @@ export const DeleteAccount = () => {
             : t`Delete account and all the associated data`
         }
       />
-      <StyledDangerActions>
+      <div {...stylex.props(styles.dangerActions)}>
         {userHasMultipleWorkspaces && (
           <Button
             onClick={() => openDialog(LEAVE_WORKSPACE_MODAL_ID)}
@@ -91,7 +93,7 @@ export const DeleteAccount = () => {
           variant="outline"
           color="danger"
         >{t`Delete account`}</Button>
-      </StyledDangerActions>
+      </div>
       {userHasMultipleWorkspaces && (
         <ConfirmationDialog
           confirmationValue={userEmail}

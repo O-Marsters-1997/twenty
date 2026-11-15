@@ -5,13 +5,17 @@ import { TableCell } from '@/ui/layout/table/components/TableCell';
 import { TableRow } from '@/ui/layout/table/components/TableRow';
 import { styled } from '@linaria/react';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { font, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledNameCell = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.primary};
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  nameCell: {
+    alignItems: 'center',
+    color: font['--t-font-color-primary'],
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+  },
+});
 
 const StyledTableRowContainer = styled.div`
   > * {
@@ -36,13 +40,13 @@ export const SettingsConnectedAccountsTableRow = ({
     <StyledTableRowContainer>
       <TableRow key={account.id} gridTemplateColumns="minmax(0, 1fr) auto">
         <TableCell>
-          <StyledNameCell>
+          <div {...stylex.props(styles.nameCell)}>
             <IconComponent
               size={theme.icon.size.md}
               stroke={theme.icon.stroke.sm}
             />
             {account.handle}
-          </StyledNameCell>
+          </div>
         </TableCell>
         <TableCell align="right">
           <SettingsAccountsConnectedAccountsRowRightContainer

@@ -1,6 +1,8 @@
 import { styled } from '@linaria/react';
 import { type SlotProps } from 'input-otp';
 import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { font } from 'twenty-ui/theme/tokens.stylex';
 
 const StyledSlot = styled.div<{ isActive: boolean }>`
   align-items: center;
@@ -51,19 +53,19 @@ const StyledCaretContainer = styled.div`
   }
 `;
 
-const StyledPlaceholderChar = styled.div`
-  opacity: 0.2;
-`;
-
-const StyledInputChar = styled.div`
-  opacity: 1;
-`;
-
-const StyledCaret = styled.div`
-  background-color: ${themeCssVariables.font.color.primary};
-  height: 20px;
-  width: 1px;
-`;
+const styles = stylex.create({
+  placeholderChar: {
+    opacity: '0.2',
+  },
+  inputChar: {
+    opacity: '1',
+  },
+  caret: {
+    backgroundColor: font['--t-font-color-primary'],
+    height: '20px',
+    width: '1px',
+  },
+});
 
 type TwoFactorAuthenticationVerificationCodeSlotProps = SlotProps;
 
@@ -76,13 +78,13 @@ export const TwoFactorAuthenticationVerificationCodeSlot = ({
   return (
     <StyledSlot isActive={isActive}>
       {char ? (
-        <StyledInputChar>{char}</StyledInputChar>
+        <div {...stylex.props(styles.inputChar)}>{char}</div>
       ) : (
-        <StyledPlaceholderChar>{placeholderChar ?? 'X'}</StyledPlaceholderChar>
+        <div {...stylex.props(styles.placeholderChar)}>{placeholderChar ?? 'X'}</div>
       )}
       {hasFakeCaret && (
         <StyledCaretContainer>
-          <StyledCaret />
+          <div {...stylex.props(styles.caret)} />
         </StyledCaretContainer>
       )}
     </StyledSlot>

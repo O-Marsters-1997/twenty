@@ -13,36 +13,35 @@ import {
 } from '@/settings/mcp-and-apis/utils/mcpSetup';
 import { Section } from 'twenty-ui/components/layout';
 import { CodeEditor, CodeEditorHeader } from 'twenty-ui/components/code-editor';
-import { MOBILE_VIEWPORT, themeCssVariables } from 'twenty-ui/theme';
+import { themeCssVariables } from 'twenty-ui/theme';
 import { REACT_APP_SERVER_BASE_URL } from '~/config';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
 
-const StyledMcpEditorHeaderTitle = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  mcpEditorHeaderTitle: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+  },
+  mcpSetupContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-10'],
+  },
+  cardsGrid: {
+    display: 'grid',
+    gap: spacing['--t-spacing-3'],
+    gridTemplateColumns: { default: 'repeat(2, minmax(0, 1fr))', [media.mobile]: '1fr' },
+  },
+});
 
 const StyledMcpIcon = styled(ModelContextProtocolLogo)`
   color: inherit;
   flex-shrink: 0;
   height: calc(${themeCssVariables.icon.size.md} * 1px);
   width: calc(${themeCssVariables.icon.size.md} * 1px);
-`;
-
-const StyledMcpSetupContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[10]};
-`;
-
-const StyledCardsGrid = styled.div`
-  display: grid;
-  gap: ${themeCssVariables.spacing[3]};
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-
-  @media (max-width: ${MOBILE_VIEWPORT}px) {
-    grid-template-columns: 1fr;
-  }
 `;
 
 export const SettingsMcpSetup = () => {
@@ -54,7 +53,7 @@ export const SettingsMcpSetup = () => {
   });
 
   return (
-    <StyledMcpSetupContainer>
+    <div {...stylex.props(styles.mcpSetupContainer)}>
       {categories.map((category) => (
         <Fragment key={category.title}>
           <Section.Root>
@@ -62,11 +61,11 @@ export const SettingsMcpSetup = () => {
               title={category.title}
               description={category.description}
             />
-            <StyledCardsGrid>
+            <div {...stylex.props(styles.cardsGrid)}>
               {category.cards.map((card) => (
                 <SettingsMcpSetupCard key={card.title} card={card} />
               ))}
-            </StyledCardsGrid>
+            </div>
           </Section.Root>
 
           {category.showManualConfigurationAfter && (
@@ -77,10 +76,10 @@ export const SettingsMcpSetup = () => {
               />
               <CodeEditorHeader
                 startElement={
-                  <StyledMcpEditorHeaderTitle>
+                  <div {...stylex.props(styles.mcpEditorHeaderTitle)}>
                     <StyledMcpIcon aria-hidden />
                     <span>{t`MCP client configuration`}</span>
-                  </StyledMcpEditorHeaderTitle>
+                  </div>
                 }
                 endElement={<LightCopyIconButton copyText={mcpConfig} />}
               />
@@ -106,6 +105,6 @@ export const SettingsMcpSetup = () => {
           )}
         </Fragment>
       ))}
-    </StyledMcpSetupContainer>
+    </div>
   );
 };

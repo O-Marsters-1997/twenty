@@ -1,69 +1,74 @@
-import { styled } from '@linaria/react';
 import { type ReactNode } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
 import { type IconComponent } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { background, spacing, border, font, text } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContent = styled.div`
-  align-items: center;
-  background-color: ${themeCssVariables.background.secondary};
-  display: flex;
-  gap: ${themeCssVariables.spacing[3]};
-  padding: ${themeCssVariables.spacing[4]};
-`;
-
-const StyledIconContainer = styled.div`
-  align-items: center;
-  background-color: ${themeCssVariables.background.primary};
-  border: 2px solid ${themeCssVariables.border.color.light};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  display: flex;
-  height: ${themeCssVariables.spacing[8]};
-  justify-content: center;
-  min-width: ${themeCssVariables.spacing[8]};
-  width: ${themeCssVariables.spacing[8]};
-`;
-
-const StyledIcon = styled.div`
-  align-items: center;
-  display: inline-flex;
-  justify-content: center;
-  transform: rotate(-4deg);
-`;
-
-const StyledTextContainer = styled.div`
-  align-items: flex-start;
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  justify-content: center;
-  min-width: 0;
-`;
-
-const StyledTitle = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.primary};
-  display: flex;
-  font-weight: ${themeCssVariables.font.weight.medium};
-  min-height: ${themeCssVariables.spacing[4]};
-  width: 100%;
-`;
-
-const StyledDescription = styled.div`
-  color: ${themeCssVariables.font.color.secondary};
-  font-size: ${themeCssVariables.font.size.sm};
-  line-height: ${themeCssVariables.text.lineHeight.lg};
-  overflow: hidden;
-  text-box-edge: cap alphabetic;
-  text-box-trim: trim-both;
-`;
-
-const StyledActionContainer = styled.div`
-  flex-shrink: 0;
-  margin-left: auto;
-`;
+const styles = stylex.create({
+  content: {
+    alignItems: 'center',
+    backgroundColor: background['--t-background-secondary'],
+    display: 'flex',
+    gap: spacing['--t-spacing-3'],
+    paddingTop: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingBottom: spacing['--t-spacing-4'],
+    paddingLeft: spacing['--t-spacing-4'],
+  },
+  iconContainer: {
+    alignItems: 'center',
+    backgroundColor: background['--t-background-primary'],
+    borderWidth: '2px',
+    borderStyle: 'solid',
+    borderColor: border['--t-border-color-light'],
+    borderTopLeftRadius: border['--t-border-radius-sm'],
+    borderTopRightRadius: border['--t-border-radius-sm'],
+    borderBottomRightRadius: border['--t-border-radius-sm'],
+    borderBottomLeftRadius: border['--t-border-radius-sm'],
+    display: 'flex',
+    height: spacing['--t-spacing-8'],
+    justifyContent: 'center',
+    minWidth: spacing['--t-spacing-8'],
+    width: spacing['--t-spacing-8'],
+  },
+  icon: {
+    alignItems: 'center',
+    display: 'inline-flex',
+    justifyContent: 'center',
+    transform: 'rotate(-4deg)',
+  },
+  textContainer: {
+    alignItems: 'flex-start',
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    justifyContent: 'center',
+    minWidth: '0',
+  },
+  title: {
+    alignItems: 'center',
+    color: font['--t-font-color-primary'],
+    display: 'flex',
+    fontWeight: font['--t-font-weight-medium'],
+    minHeight: spacing['--t-spacing-4'],
+    width: '100%',
+  },
+  description: {
+    color: font['--t-font-color-secondary'],
+    fontSize: font['--t-font-size-sm'],
+    lineHeight: text['--t-text-line-height-lg'],
+    overflow: 'hidden',
+    textBoxEdge: 'cap alphabetic',
+    textBoxTrim: 'trim-both',
+  },
+  actionContainer: {
+    flexShrink: '0',
+    marginLeft: 'auto',
+  },
+});
 
 type SettingsDiscoveryHeroCardFooterProps = {
   Icon: IconComponent;
@@ -81,27 +86,27 @@ export const SettingsDiscoveryHeroCardFooter = ({
   const theme = useTheme();
 
   return (
-    <StyledContent>
-      <StyledIconContainer>
-        <StyledIcon>
+    <div {...stylex.props(styles.content)}>
+      <div {...stylex.props(styles.iconContainer)}>
+        <div {...stylex.props(styles.icon)}>
           <Icon
             size={theme.icon.size.lg}
             color={theme.IllustrationIcon.color.gray}
             stroke={theme.icon.stroke.md}
           />
-        </StyledIcon>
-      </StyledIconContainer>
-      <StyledTextContainer>
-        <StyledTitle>{title}</StyledTitle>
+        </div>
+      </div>
+      <div {...stylex.props(styles.textContainer)}>
+        <div {...stylex.props(styles.title)}>{title}</div>
         {description && (
-          <StyledDescription>
+          <div {...stylex.props(styles.description)}>
             <OverflowingTextWithTooltip text={description} />
-          </StyledDescription>
+          </div>
         )}
-      </StyledTextContainer>
+      </div>
       {isDefined(action) && (
-        <StyledActionContainer>{action}</StyledActionContainer>
+        <div {...stylex.props(styles.actionContainer)}>{action}</div>
       )}
-    </StyledContent>
+    </div>
   );
 };

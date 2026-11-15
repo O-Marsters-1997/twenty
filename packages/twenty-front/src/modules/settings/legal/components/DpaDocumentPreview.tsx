@@ -1,58 +1,70 @@
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { type DpaDocument } from '@/settings/legal/types/Dpa';
+import * as stylex from '@stylexjs/stylex';
+import { background, border, font, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledDocument = styled.div`
-  background: ${themeCssVariables.background.primary};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.md};
-  color: ${themeCssVariables.font.color.primary};
-  font-size: ${themeCssVariables.font.size.sm};
-  line-height: 1.5;
-  max-height: 460px;
-  overflow-y: auto;
-  padding: ${themeCssVariables.spacing[6]};
-`;
-
-const StyledTitle = styled.h1`
-  font-size: ${themeCssVariables.font.size.lg};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-  margin: 0;
-`;
-
-const StyledLastUpdated = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.xs};
-  margin-bottom: ${themeCssVariables.spacing[4]};
-  margin-top: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledHeading = styled.h2`
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-  margin-bottom: ${themeCssVariables.spacing[1]};
-  margin-top: ${themeCssVariables.spacing[4]};
-`;
-
-const StyledParagraph = styled.p`
-  color: ${themeCssVariables.font.color.secondary};
-  margin: ${themeCssVariables.spacing[2]} 0;
-  text-align: justify;
-`;
-
-const StyledSignatureField = styled.div`
-  margin: ${themeCssVariables.spacing[2]} 0;
-`;
-
-const StyledSignatureLabel = styled.div`
-  font-weight: ${themeCssVariables.font.weight.medium};
-`;
-
-const StyledSignatureValue = styled.div`
-  color: ${themeCssVariables.font.color.secondary};
-  white-space: pre-wrap;
-`;
+const styles = stylex.create({
+  document: {
+    background: background['--t-background-primary'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: border['--t-border-color-medium'],
+    borderTopLeftRadius: border['--t-border-radius-md'],
+    borderTopRightRadius: border['--t-border-radius-md'],
+    borderBottomRightRadius: border['--t-border-radius-md'],
+    borderBottomLeftRadius: border['--t-border-radius-md'],
+    color: font['--t-font-color-primary'],
+    fontSize: font['--t-font-size-sm'],
+    lineHeight: '1.5',
+    maxHeight: '460px',
+    overflowY: 'auto',
+    paddingTop: spacing['--t-spacing-6'],
+    paddingRight: spacing['--t-spacing-6'],
+    paddingBottom: spacing['--t-spacing-6'],
+    paddingLeft: spacing['--t-spacing-6'],
+  },
+  title: {
+    fontSize: font['--t-font-size-lg'],
+    fontWeight: font['--t-font-weight-semi-bold'],
+    marginTop: '0',
+    marginRight: '0',
+    marginBottom: '0',
+    marginLeft: '0',
+  },
+  lastUpdated: {
+    color: font['--t-font-color-tertiary'],
+    fontSize: font['--t-font-size-xs'],
+    marginBottom: spacing['--t-spacing-4'],
+    marginTop: spacing['--t-spacing-1'],
+  },
+  heading: {
+    fontSize: font['--t-font-size-md'],
+    fontWeight: font['--t-font-weight-semi-bold'],
+    marginBottom: spacing['--t-spacing-1'],
+    marginTop: spacing['--t-spacing-4'],
+  },
+  paragraph: {
+    color: font['--t-font-color-secondary'],
+    marginTop: spacing['--t-spacing-2'],
+    marginRight: '0',
+    marginBottom: spacing['--t-spacing-2'],
+    marginLeft: '0',
+    textAlign: 'justify',
+  },
+  signatureField: {
+    marginTop: spacing['--t-spacing-2'],
+    marginRight: '0',
+    marginBottom: spacing['--t-spacing-2'],
+    marginLeft: '0',
+  },
+  signatureLabel: {
+    fontWeight: font['--t-font-weight-medium'],
+  },
+  signatureValue: {
+    color: font['--t-font-color-secondary'],
+    whiteSpace: 'pre-wrap',
+  },
+});
 
 type DpaDocumentPreviewProps = {
   document: DpaDocument;
@@ -61,26 +73,26 @@ type DpaDocumentPreviewProps = {
 export const DpaDocumentPreview = ({ document }: DpaDocumentPreviewProps) => (
   // tabIndex makes the scrollable region focusable so keyboard-only users can
   // scroll the agreement with the arrow keys.
-  <StyledDocument tabIndex={0} role="region" aria-label={document.title}>
-    <StyledTitle>{document.title}</StyledTitle>
-    <StyledLastUpdated>
+  <div tabIndex={0} role="region" aria-label={document.title} {...stylex.props(styles.document)}>
+    <h1 {...stylex.props(styles.title)}>{document.title}</h1>
+    <div {...stylex.props(styles.lastUpdated)}>
       Last Updated: {document.lastUpdatedLabel}
-    </StyledLastUpdated>
+    </div>
     {document.blocks.map((block, index) => {
       if (block.kind === 'heading') {
-        return <StyledHeading key={index}>{block.text}</StyledHeading>;
+        return <h2 key={index} {...stylex.props(styles.heading)}>{block.text}</h2>;
       }
 
       if (block.kind === 'signatureField') {
         return (
-          <StyledSignatureField key={index}>
-            <StyledSignatureLabel>{block.label}</StyledSignatureLabel>
-            <StyledSignatureValue>{block.value}</StyledSignatureValue>
-          </StyledSignatureField>
+          <div key={index} {...stylex.props(styles.signatureField)}>
+            <div {...stylex.props(styles.signatureLabel)}>{block.label}</div>
+            <div {...stylex.props(styles.signatureValue)}>{block.value}</div>
+          </div>
         );
       }
 
-      return <StyledParagraph key={index}>{block.text}</StyledParagraph>;
+      return <p key={index} {...stylex.props(styles.paragraph)}>{block.text}</p>;
     })}
-  </StyledDocument>
+  </div>
 );

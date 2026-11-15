@@ -12,11 +12,23 @@ import { Section } from 'twenty-ui/components/layout';
 import { IconChevronRight, IconPlus } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
 import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing, border } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledTableRows = styled.div`
-  padding-bottom: ${themeCssVariables.spacing[2]};
-  padding-top: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  tableRows: {
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
+  },
+  footer: {
+    borderTopWidth: '1px',
+    borderTopStyle: 'solid',
+    borderTopColor: border['--t-border-color-light'],
+    display: 'flex',
+    justifyContent: 'flex-end',
+    paddingTop: spacing['--t-spacing-2'],
+  },
+});
 
 const StyledRowWrapper = styled.div<{ clickable: boolean }>`
   ${({ clickable }) =>
@@ -30,13 +42,6 @@ const StyledRowWrapper = styled.div<{ clickable: boolean }>`
         }
       `
       : ''}
-`;
-
-const StyledFooter = styled.div`
-  border-top: 1px solid ${themeCssVariables.border.color.light};
-  display: flex;
-  justify-content: flex-end;
-  padding-top: ${themeCssVariables.spacing[2]};
 `;
 
 const HEADER_PADDING = `0 ${themeCssVariables.spacing[2]} 0 ${themeCssVariables.spacing[2]}`;
@@ -106,7 +111,7 @@ export const SettingsTableListSection = <
             ))}
             {showRowChevron && <TableHeader padding={HEADER_PADDING} />}
           </TableRow>
-          <StyledTableRows>
+          <div {...stylex.props(styles.tableRows)}>
             {items.map((item) => (
               <StyledRowWrapper key={item.id} clickable={Boolean(onRowClick)}>
                 <TableRow
@@ -133,11 +138,11 @@ export const SettingsTableListSection = <
                 </TableRow>
               </StyledRowWrapper>
             ))}
-          </StyledTableRows>
+          </div>
         </Table>
       )}
       {isDefined(footerButtonLabel) && isDefined(onFooterButtonClick) && (
-        <StyledFooter>
+        <div {...stylex.props(styles.footer)}>
           <Button
             startIcon={<IconPlus />}
             size="sm"
@@ -146,7 +151,7 @@ export const SettingsTableListSection = <
           >
             {footerButtonLabel}
           </Button>
-        </StyledFooter>
+        </div>
       )}
     </Section.Root>
   );

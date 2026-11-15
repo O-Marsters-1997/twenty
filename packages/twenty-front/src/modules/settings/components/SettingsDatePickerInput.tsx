@@ -19,12 +19,26 @@ import { useListenClickOutside } from '@/ui/utilities/pointer-event/hooks/useLis
 import { isDefined } from 'twenty-shared/utils';
 import { IconCalendar } from 'twenty-ui/icon';
 import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { font, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const SETTINGS_DATE_PICKER_CLICK_OUTSIDE_ID = 'settings-date-picker-floating';
 
-const StyledInputContainer = styled.div`
-  position: relative;
-`;
+const styles = stylex.create({
+  inputContainer: {
+    position: 'relative',
+  },
+  label: {
+    color: font['--t-font-color-light'],
+    fontSize: font['--t-font-size-xs'],
+    fontWeight: font['--t-font-weight-medium'],
+    marginBottom: spacing['--t-spacing-1'],
+  },
+  iconContainer: {
+    color: font['--t-font-color-tertiary'],
+    display: 'flex',
+  },
+});
 
 const StyledInput = styled.div<{ hasValue: boolean }>`
   align-items: center;
@@ -46,18 +60,6 @@ const StyledInput = styled.div<{ hasValue: boolean }>`
   &:hover {
     border-color: ${themeCssVariables.border.color.strong};
   }
-`;
-
-const StyledLabel = styled.div`
-  color: ${themeCssVariables.font.color.light};
-  font-size: ${themeCssVariables.font.size.xs};
-  font-weight: ${themeCssVariables.font.weight.medium};
-  margin-bottom: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledIconContainer = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
 `;
 
 type SettingsDatePickerInputProps = {
@@ -148,16 +150,16 @@ export const SettingsDatePickerInput = ({
     : null;
 
   return (
-    <StyledInputContainer ref={containerRef}>
-      {label && <StyledLabel>{label}</StyledLabel>}
+    <div ref={containerRef} {...stylex.props(styles.inputContainer)}>
+      {label && <div {...stylex.props(styles.label)}>{label}</div>}
       <StyledInput
         ref={refs.setReference}
         hasValue={isDefined(value)}
         onClick={() => setIsOpen(true)}
       >
-        <StyledIconContainer>
+        <div {...stylex.props(styles.iconContainer)}>
           <IconCalendar size={16} />
-        </StyledIconContainer>
+        </div>
         {formatDisplayValue(value)}
       </StyledInput>
       {isOpen && (
@@ -184,6 +186,6 @@ export const SettingsDatePickerInput = ({
           </div>
         </FloatingPortal>
       )}
-    </StyledInputContainer>
+    </div>
   );
 };

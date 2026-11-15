@@ -4,17 +4,19 @@ import {
 } from '@/settings/developers/utils/formatExpiration';
 import { TableCell } from '@/ui/layout/table/components/TableCell';
 import { TableRow } from '@/ui/layout/table/components/TableRow';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { IconChevronRight } from 'twenty-ui/icon';
 import { useTheme } from 'twenty-ui/theme';
 import { type ApiKey } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledEllipsisLabel = styled.div`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
+const styles = stylex.create({
+  ellipsisLabel: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+});
 
 type ApiKeyType = Pick<ApiKey, 'id' | 'name' | 'expiresAt' | 'revokedAt'> & {
   role?: { id: string; label: string; icon?: string | null } | null;
@@ -44,9 +46,9 @@ export const SettingsApiKeysFieldItemTableRow = ({
         textOverflow="ellipsis"
         clickable
       >
-        <StyledEllipsisLabel>
+        <div {...stylex.props(styles.ellipsisLabel)}>
           {apiKey.name || t`Unnamed API Key`}
-        </StyledEllipsisLabel>
+        </div>
       </TableCell>
 
       <TableCell
@@ -56,7 +58,7 @@ export const SettingsApiKeysFieldItemTableRow = ({
         textOverflow="ellipsis"
         clickable
       >
-        <StyledEllipsisLabel>{apiKey.role?.label || '-'}</StyledEllipsisLabel>
+        <div {...stylex.props(styles.ellipsisLabel)}>{apiKey.role?.label || '-'}</div>
       </TableCell>
 
       <TableCell
@@ -70,7 +72,7 @@ export const SettingsApiKeysFieldItemTableRow = ({
         textOverflow="ellipsis"
         clickable
       >
-        <StyledEllipsisLabel>{formattedExpiration}</StyledEllipsisLabel>
+        <div {...stylex.props(styles.ellipsisLabel)}>{formattedExpiration}</div>
       </TableCell>
 
       <TableCell align="right">

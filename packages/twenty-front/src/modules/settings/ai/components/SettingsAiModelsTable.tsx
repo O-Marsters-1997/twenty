@@ -1,8 +1,6 @@
 import { t } from '@lingui/core/macro';
 import { useRef, useState } from 'react';
 
-import { css } from '@linaria/core';
-import { styled } from '@linaria/react';
 import { Trans } from '@lingui/react/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { IconTrash } from 'twenty-ui/icon';
@@ -19,46 +17,57 @@ import { TableBody } from '@/ui/layout/table/components/TableBody';
 import { TableCell } from '@/ui/layout/table/components/TableCell';
 import { TableHeader } from '@/ui/layout/table/components/TableHeader';
 import { TableRow } from '@/ui/layout/table/components/TableRow';
+import * as stylex from '@stylexjs/stylex';
+import { spacing, font, background, border } from 'twenty-ui/theme/tokens.stylex';
 
 const GRID_COLUMNS = '1fr 120px 40px';
 const GRID_COLUMNS_WITHOUT_PROVIDER = '1fr 40px';
 const GRID_COLUMNS_WITH_REMOVE = '1fr 120px 40px 32px';
 const GRID_COLUMNS_WITH_REMOVE_WITHOUT_PROVIDER = '1fr 40px 32px';
 
-const StyledModelNameCell = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  overflow: hidden;
-`;
-
-const StyledModelLabel = styled.span`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledDeprecatedSuffix = styled.span`
-  color: ${themeCssVariables.font.color.light};
-`;
+const styles = stylex.create({
+  modelNameCell: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    overflow: 'hidden',
+  },
+  modelLabel: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  deprecatedSuffix: {
+    color: font['--t-font-color-light'],
+  },
+  kindBadge: {
+    background: background['--t-background-transparent-light'],
+    borderTopLeftRadius: border['--t-border-radius-sm'],
+    borderTopRightRadius: border['--t-border-radius-sm'],
+    borderBottomRightRadius: border['--t-border-radius-sm'],
+    borderBottomLeftRadius: border['--t-border-radius-sm'],
+    color: font['--t-font-color-tertiary'],
+    flexShrink: '0',
+    fontSize: font['--t-font-size-xs'],
+    paddingTop: '0',
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: '0',
+    paddingLeft: spacing['--t-spacing-1'],
+  },
+  hoverCardTooltipClass: {
+    borderTopLeftRadius: border['--t-border-radius-rounded'],
+    borderTopRightRadius: border['--t-border-radius-rounded'],
+    borderBottomRightRadius: border['--t-border-radius-rounded'],
+    borderBottomLeftRadius: border['--t-border-radius-rounded'],
+    cornerShape: 'round',
+    paddingTop: '0',
+    paddingRight: '0',
+    paddingBottom: '0',
+    paddingLeft: '0',
+  },
+});
 
 // Evaluation models can't chat or run agents, so their rows are badged apart.
-const StyledKindBadge = styled.span`
-  background: ${themeCssVariables.background.transparent.light};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  color: ${themeCssVariables.font.color.tertiary};
-  flex-shrink: 0;
-  font-size: ${themeCssVariables.font.size.xs};
-  padding: 0 ${themeCssVariables.spacing[1]};
-`;
-
-const hoverCardTooltipClass = css`
-  border-radius: ${themeCssVariables.border.radius.rounded};
-  corner-shape: round;
-
-  padding: 0;
-`;
-
 const sanitizeIdForSelector = (id: string): string =>
   id.replace(/[^a-zA-Z0-9-_]/g, '_');
 
@@ -170,7 +179,7 @@ export const SettingsAiModelsTable = <TModel extends AiModelSummary>({
                       : themeCssVariables.font.color.primary
                   }
                 >
-                  <StyledModelNameCell>
+                  <div {...stylex.props(styles.modelNameCell)}>
                     <ModelIcon
                       size={theme.icon.size.md}
                       stroke={theme.icon.stroke.sm}
@@ -180,18 +189,18 @@ export const SettingsAiModelsTable = <TModel extends AiModelSummary>({
                           : theme.font.color.secondary
                       }
                     />
-                    <StyledModelLabel>{model.label}</StyledModelLabel>
+                    <span {...stylex.props(styles.modelLabel)}>{model.label}</span>
                     {model.kind === 'evaluation' && (
-                      <StyledKindBadge>
+                      <span {...stylex.props(styles.kindBadge)}>
                         <Trans>Evaluation</Trans>
-                      </StyledKindBadge>
+                      </span>
                     )}
                     {disabled && model.isDeprecated && (
-                      <StyledDeprecatedSuffix>
+                      <span {...stylex.props(styles.deprecatedSuffix)}>
                         · <Trans>Deprecated</Trans>
-                      </StyledDeprecatedSuffix>
+                      </span>
                     )}
-                  </StyledModelNameCell>
+                  </div>
                 </TableCell>
                 {showProviderColumn && (
                   <TableCell
@@ -243,7 +252,7 @@ export const SettingsAiModelsTable = <TModel extends AiModelSummary>({
               sideOffset={8}
               style={{ maxWidth: '320px' }}
             >
-              <Tooltip.Popup className={hoverCardTooltipClass}>
+              <Tooltip.Popup {...stylex.props(styles.hoverCardTooltipClass)}>
                 <SettingsAiModelHoverCard model={hoveredModel} />
               </Tooltip.Popup>
             </Tooltip.Positioner>

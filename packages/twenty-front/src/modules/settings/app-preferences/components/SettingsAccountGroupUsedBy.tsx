@@ -4,22 +4,24 @@ import { currentWorkspaceState } from '@/auth/states/currentWorkspaceState';
 import { type ConnectedAccountGroup } from '@/settings/app-preferences/types/ConnectedAccountGroup';
 import { getNativeAccountAppsUsingAccount } from '@/settings/app-preferences/utils/getNativeAccountAppsUsingAccount';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { type ReactNode } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { Tooltip } from 'twenty-ui/primitives/surfaces';
-import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledUsedBy = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledUsage = styled.span`
-  display: flex;
-`;
+const styles = stylex.create({
+  usedBy: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+  },
+  usage: {
+    display: 'flex',
+  },
+});
 
 type Usage = {
   key: string;
@@ -65,14 +67,14 @@ export const SettingsAccountGroupUsedBy = ({
   });
 
   return (
-    <StyledUsedBy>
+    <div {...stylex.props(styles.usedBy)}>
       {[...nativeUsages, ...appUsages].map(({ key, title, icon }) => (
         <Tooltip key={key} content={title}>
-          <StyledUsage role="img" aria-label={title}>
+          <span role="img" aria-label={title} {...stylex.props(styles.usage)}>
             {icon}
-          </StyledUsage>
+          </span>
         </Tooltip>
       ))}
-    </StyledUsedBy>
+    </div>
   );
 };

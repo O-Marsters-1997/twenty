@@ -1,17 +1,20 @@
 import { type NativeAccountApp } from '@/settings/app-preferences/types/NativeAccountApp';
 import { UndecoratedLink } from '@/ui/navigation/link/components/UndecoratedLink/UndecoratedLink';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { SettingsPath } from 'twenty-shared/types';
 import { getSettingsPath } from 'twenty-shared/utils';
-import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { font, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledNameCell = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.primary};
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  nameCell: {
+    alignItems: 'center',
+    color: font['--t-font-color-primary'],
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+  },
+});
 
 type SettingsNativeAccountAppNameCellProps = {
   item: NativeAccountApp;
@@ -30,10 +33,10 @@ export const SettingsNativeAccountAppNameCell = ({
       })}
       onClick={(event) => event.stopPropagation()}
     >
-      <StyledNameCell>
+      <div {...stylex.props(styles.nameCell)}>
         <item.Icon size={theme.icon.size.md} />
         {t(item.name)}
-      </StyledNameCell>
+      </div>
     </UndecoratedLink>
   );
 };

@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 
 import { WEBHOOK_TABLE_ROW_GRID_TEMPLATE_COLUMNS } from '@/settings/developers/constants/WebhookTableRowGridTemplateColumns';
 import { TableCell } from '@/ui/layout/table/components/TableCell';
@@ -8,12 +7,16 @@ import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
 import { IconChevronRight } from 'twenty-ui/icon';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 import { type Webhook } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { font } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledIconChevronRightContainer = styled.span`
-  align-items: center;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-`;
+const styles = stylex.create({
+  iconChevronRightContainer: {
+    alignItems: 'center',
+    color: font['--t-font-color-tertiary'],
+    display: 'flex',
+  },
+});
 
 export const SettingsDevelopersWebhookTableRow = ({
   webhook,
@@ -44,12 +47,12 @@ export const SettingsDevelopersWebhookTableRow = ({
         align="center"
         padding={`0 ${themeCssVariables.spacing[1]} 0 0`}
       >
-        <StyledIconChevronRightContainer>
+        <span {...stylex.props(styles.iconChevronRightContainer)}>
           <IconChevronRight
             size={theme.icon.size.md}
             stroke={theme.icon.stroke.sm}
           />
-        </StyledIconChevronRightContainer>
+        </span>
       </TableCell>
     </TableRow>
   );

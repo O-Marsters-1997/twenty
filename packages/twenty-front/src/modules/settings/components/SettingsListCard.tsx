@@ -7,6 +7,8 @@ import { type IconComponent, IconPlus } from 'twenty-ui/icon';
 import { Card } from 'twenty-ui/primitives/surfaces';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 import { SettingsListItemCardContent } from './SettingsListItemCardContent';
+import * as stylex from '@stylexjs/stylex';
+import { background, border, font, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const StyledFooterContainer = styled.div`
   > div {
@@ -16,25 +18,28 @@ const StyledFooterContainer = styled.div`
   }
 `;
 
-const StyledButton = styled.button`
-  align-items: center;
-  background: ${themeCssVariables.background.primary};
-  border: none;
-  border-radius: ${themeCssVariables.border.radius.sm};
-  color: ${themeCssVariables.font.color.secondary};
-  cursor: pointer;
-  display: flex;
-  flex: 1 0 0;
-  gap: ${themeCssVariables.spacing[2]};
-  height: ${themeCssVariables.spacing[8]};
-  padding: 0 ${themeCssVariables.spacing[1]};
-  padding-left: ${themeCssVariables.spacing[2]};
-  width: 100%;
-
-  &:hover {
-    background: ${themeCssVariables.background.transparent.light};
-  }
-`;
+const styles = stylex.create({
+  button: {
+    alignItems: 'center',
+    background: { default: background['--t-background-primary'], ':hover': background['--t-background-transparent-light'] },
+    borderStyle: 'none',
+    borderTopLeftRadius: border['--t-border-radius-sm'],
+    borderTopRightRadius: border['--t-border-radius-sm'],
+    borderBottomRightRadius: border['--t-border-radius-sm'],
+    borderBottomLeftRadius: border['--t-border-radius-sm'],
+    color: font['--t-font-color-secondary'],
+    cursor: 'pointer',
+    display: 'flex',
+    flex: '1 0 0',
+    gap: spacing['--t-spacing-2'],
+    height: spacing['--t-spacing-8'],
+    paddingTop: '0',
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: '0',
+    paddingLeft: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+});
 
 type SettingsListCardProps<ListItem extends { id: string }> = {
   items: ListItem[];
@@ -95,10 +100,10 @@ export const SettingsListCard = <
       {hasFooter && (
         <StyledFooterContainer>
           <Card.Footer divider={!!items.length}>
-            <StyledButton onClick={onFooterButtonClick}>
+            <button onClick={onFooterButtonClick} {...stylex.props(styles.button)}>
               <IconPlus size={theme.icon.size.md} />
               {footerButtonLabel}
-            </StyledButton>
+            </button>
           </Card.Footer>
         </StyledFooterContainer>
       )}

@@ -1,25 +1,26 @@
 import { TwoFactorAuthenticationVerificationCodeDash } from '@/settings/two-factor-authentication/components/TwoFactorAuthenticationVerificationCodeDash';
 import { TwoFactorAuthenticationVerificationCodeSlot } from '@/settings/two-factor-authentication/components/TwoFactorAuthenticationVerificationCodeSlot';
 import { ConfirmationDialog } from '@/ui/layout/dialog/components/ConfirmationDialog';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { OTPInput } from 'input-otp';
 import { useState } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const OTP_LENGTH = 6;
 
-const StyledConfirmationContent = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[4]};
-`;
-
-const StyledOTPContainer = styled.div`
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  confirmationContent: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-4'],
+  },
+  oTPContainer: {
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+  },
+});
 
 type TwoFactorAuthenticationRecoveryCodeConfirmationDialogProps = {
   dialogId: string;
@@ -47,7 +48,7 @@ export const TwoFactorAuthenticationRecoveryCodeConfirmationDialog = ({
       }}
       onClose={() => setOtp('')}
       subtitle={
-        <StyledConfirmationContent>
+        <div {...stylex.props(styles.confirmationContent)}>
           <div>
             {t`The code lets ${memberName} sign in to this workspace once without their authenticator app. Using it removes their current authenticator and signs them out of their other sessions here. They will be notified by email.`}
           </div>
@@ -58,7 +59,7 @@ export const TwoFactorAuthenticationRecoveryCodeConfirmationDialog = ({
             onChange={setOtp}
             autoFocus
             render={({ slots }) => (
-              <StyledOTPContainer>
+              <div {...stylex.props(styles.oTPContainer)}>
                 {slots.slice(0, 3).map((slot, index) => (
                   <TwoFactorAuthenticationVerificationCodeSlot
                     key={index}
@@ -78,10 +79,10 @@ export const TwoFactorAuthenticationRecoveryCodeConfirmationDialog = ({
                     hasFakeCaret={slot.hasFakeCaret}
                   />
                 ))}
-              </StyledOTPContainer>
+              </div>
             )}
           />
-        </StyledConfirmationContent>
+        </div>
       }
     />
   );

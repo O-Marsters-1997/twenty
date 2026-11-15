@@ -11,29 +11,30 @@ import { SettingsSecurityIframeOrigins } from '@/settings/security/components/Se
 import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useMutation } from '@apollo/client/react';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useToast } from 'twenty-ui/components/feedback';
 import { Section } from 'twenty-ui/components/layout';
 import { IconClockHour8, IconHistory, IconTrash } from 'twenty-ui/icon';
 import { Card } from 'twenty-ui/primitives/surfaces';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { useDebouncedCallback } from 'use-debounce';
 import { EVENT_LOG_RETENTION } from 'twenty-shared/constants';
 import { UpdateWorkspaceDocument } from '~/generated-metadata/graphql';
 
 import { getToastOptionsFromError } from '@/error-handler/utils/getToastOptionsFromError';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  width: 100%;
-`;
-
-const StyledMainContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[10]};
-  min-height: 200px;
-`;
+const styles = stylex.create({
+  container: {
+    width: '100%',
+  },
+  mainContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-10'],
+    minHeight: '200px',
+  },
+});
 
 export const SettingsSecuritySettings = () => {
   const { t } = useLingui();
@@ -115,24 +116,24 @@ export const SettingsSecuritySettings = () => {
   return (
     <>
       <SettingsRolesQueryEffect />
-      <StyledMainContent>
+      <div {...stylex.props(styles.mainContent)}>
         <Section.Root>
-          <StyledContainer>
+          <div {...stylex.props(styles.container)}>
             <Section.Header
               title={t`Authentication`}
               description={t`Customize your workspace security`}
             />
             <SettingsSecurityAuthProvidersOptionsList />
-          </StyledContainer>
+          </div>
         </Section.Root>
         <Section.Root>
-          <StyledContainer>
+          <div {...stylex.props(styles.container)}>
             <Section.Header
               title={t`Editable Profile Fields`}
               description={t`Choose which profile fields users with the Edit Profile permission can modify`}
             />
             <SettingsSecurityEditableProfileFields />
-          </StyledContainer>
+          </div>
         </Section.Root>
         <SettingsRoleDefaultRole roles={roles} />
         <SettingsSecurityIframeOrigins />
@@ -182,7 +183,7 @@ export const SettingsSecuritySettings = () => {
             />
           </Card.Root>
         </Section.Root>
-      </StyledMainContent>
+      </div>
     </>
   );
 };

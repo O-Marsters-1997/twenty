@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useState } from 'react';
 import { isDefined } from 'twenty-shared/utils';
@@ -16,36 +15,36 @@ import { useMessageSuppressions } from '@/settings/unsubscribers/hooks/useMessag
 import { getMessageSuppressionReasonBadge } from '@/settings/unsubscribers/utils/getMessageSuppressionReasonBadge';
 import { SearchInput } from 'twenty-ui/components/input';
 import { Status } from 'twenty-ui/primitives/data-display';
-import { themeCssVariables } from 'twenty-ui/theme';
 import {
   MessageSuppressionReason,
   type MessageSuppressionsQuery,
 } from '~/generated-metadata/graphql';
 import { formatToHumanReadableDate } from '~/utils/date-utils';
+import * as stylex from '@stylexjs/stylex';
+import { font, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledEmailAddress = styled.span`
-  color: ${themeCssVariables.font.color.primary};
-`;
+const styles = stylex.create({
+  emailAddress: {
+    color: font['--t-font-color-primary'],
+  },
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-4'],
+  },
+  toolbar: {
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+  search: {
+    flex: '1',
+  },
+});
 
 type MessageSuppression =
   MessageSuppressionsQuery['messageSuppressions']['records'][number];
-
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[4]};
-`;
-
-const StyledToolbar = styled.div`
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  padding-bottom: ${themeCssVariables.spacing[2]};
-  width: 100%;
-`;
-
-const StyledSearch = styled.div`
-  flex: 1;
-`;
 
 export const SettingsUnsubscribersList = () => {
   const { t } = useLingui();
@@ -129,19 +128,19 @@ export const SettingsUnsubscribersList = () => {
   );
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <SettingsTableListSection<MessageSuppression>
         title={t`Opt-outs`}
         description={t`Email addresses that opted out of campaign emails, a topic, or click tracking`}
         toolbar={
-          <StyledToolbar>
-            <StyledSearch>
+          <div {...stylex.props(styles.toolbar)}>
+            <div {...stylex.props(styles.search)}>
               <SearchInput
                 placeholder={t`Search by email address`}
                 value={searchText}
                 onValueChange={handleSearchChange}
               />
-            </StyledSearch>
+            </div>
             <SettingsUnsubscribersFilterDropdown
               topics={unsubscribeTopics}
               reasonValue={reasonFilter}
@@ -150,14 +149,14 @@ export const SettingsUnsubscribersList = () => {
               onChangeTopic={handleTopicChange}
               onClear={handleClearFilters}
             />
-          </StyledToolbar>
+          </div>
         }
         items={items}
         columns={[
           {
             label: t`Email address`,
             Cell: ({ item }) => (
-              <StyledEmailAddress>{item.emailAddress}</StyledEmailAddress>
+              <span {...stylex.props(styles.emailAddress)}>{item.emailAddress}</span>
             ),
           },
           {
@@ -200,6 +199,6 @@ export const SettingsUnsubscribersList = () => {
           isLoading={loading}
         />
       )}
-    </StyledContainer>
+    </div>
   );
 };

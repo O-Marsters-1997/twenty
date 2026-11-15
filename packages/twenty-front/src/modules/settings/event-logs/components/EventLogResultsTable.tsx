@@ -22,6 +22,8 @@ import {
   type ColumnConfig,
   getColumnsForEventLogTable,
 } from '@/settings/event-logs/utils/getColumnsForEventLogTable';
+import * as stylex from '@stylexjs/stylex';
+import { font, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type EventLogResultsTableProps = {
   records: EventLogRecord[];
@@ -31,10 +33,23 @@ type EventLogResultsTableProps = {
   selectedTable: EventLogTable;
 };
 
-const StyledScrollWrapperContainer = styled.div`
-  height: 100%;
-  overflow: hidden;
-`;
+const styles = stylex.create({
+  scrollWrapperContainer: {
+    height: '100%',
+    overflow: 'hidden',
+  },
+  loadingMore: {
+    color: font['--t-font-color-tertiary'],
+    paddingTop: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingBottom: spacing['--t-spacing-4'],
+    paddingLeft: spacing['--t-spacing-4'],
+    textAlign: 'center',
+  },
+  intersectionObserver: {
+    height: '1px',
+  },
+});
 
 const StyledTableContainer = styled.div`
   > div {
@@ -60,16 +75,6 @@ const StyledResizeHandle = styled.div<{ isResizing: boolean }>`
   &:hover {
     background: ${themeCssVariables.color.blue};
   }
-`;
-
-const StyledLoadingMore = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  padding: ${themeCssVariables.spacing[4]};
-  text-align: center;
-`;
-
-const StyledIntersectionObserver = styled.div`
-  height: 1px;
 `;
 
 const EVENT_LOG_SCROLL_WRAPPER_INSTANCE_ID = 'event-log-results-table';
@@ -172,7 +177,7 @@ export const EventLogResultsTable = ({
 
   if (isInitialLoading) {
     return (
-      <StyledScrollWrapperContainer>
+      <div {...stylex.props(styles.scrollWrapperContainer)}>
         <ScrollWrapper
           componentInstanceId={EVENT_LOG_SCROLL_WRAPPER_INSTANCE_ID}
         >
@@ -193,7 +198,7 @@ export const EventLogResultsTable = ({
             </Table>
           </StyledTableContainer>
         </ScrollWrapper>
-      </StyledScrollWrapperContainer>
+      </div>
     );
   }
 
@@ -206,7 +211,7 @@ export const EventLogResultsTable = ({
   }
 
   return (
-    <StyledScrollWrapperContainer>
+    <div {...stylex.props(styles.scrollWrapperContainer)}>
       <ScrollWrapper componentInstanceId={EVENT_LOG_SCROLL_WRAPPER_INSTANCE_ID}>
         <StyledTableContainer>
           <Table>
@@ -245,13 +250,13 @@ export const EventLogResultsTable = ({
             ))}
           </Table>
         </StyledTableContainer>
-        <StyledIntersectionObserver ref={fetchMoreRef} />
+        <div ref={fetchMoreRef} {...stylex.props(styles.intersectionObserver)} />
         {loading && records.length > 0 && (
-          <StyledLoadingMore>
+          <div {...stylex.props(styles.loadingMore)}>
             <Trans>Loading more...</Trans>
-          </StyledLoadingMore>
+          </div>
         )}
       </ScrollWrapper>
-    </StyledScrollWrapperContainer>
+    </div>
   );
 };

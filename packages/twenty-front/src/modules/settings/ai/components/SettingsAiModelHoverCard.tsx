@@ -1,5 +1,4 @@
 import { getChipLabel } from '@/ui/field/display/utils/getChipLabel';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { Chip } from 'twenty-ui/primitives/data-display';
 import {
@@ -18,25 +17,30 @@ import { getModelIcon } from '@/ai/utils/getModelIcon';
 import { SettingsTableCard } from '@/settings/components/SettingsTableCard';
 import { isDefined } from 'twenty-shared/utils';
 import { formatNumber } from '@/localization/utils/formatNumber';
+import * as stylex from '@stylexjs/stylex';
+import { border, boxShadow } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledHoverCardWrapper = styled.div`
-  border-radius: ${themeCssVariables.border.radius.md};
-  box-shadow: ${themeCssVariables.boxShadow.strong};
-  overflow: hidden;
-  width: 320px;
-`;
-
-const StyledChipContainer = styled.div`
-  max-width: 100%;
-  overflow: hidden;
-`;
-
-const StyledValueText = styled.span`
-  display: inline-block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
+const styles = stylex.create({
+  hoverCardWrapper: {
+    borderTopLeftRadius: border['--t-border-radius-md'],
+    borderTopRightRadius: border['--t-border-radius-md'],
+    borderBottomRightRadius: border['--t-border-radius-md'],
+    borderBottomLeftRadius: border['--t-border-radius-md'],
+    boxShadow: boxShadow['--t-box-shadow-strong'],
+    overflow: 'hidden',
+    width: '320px',
+  },
+  chipContainer: {
+    maxWidth: '100%',
+    overflow: 'hidden',
+  },
+  valueText: {
+    display: 'inline-block',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+});
 
 type SettingsAiModelHoverCardProps = {
   model: AiModelSummary;
@@ -61,7 +65,7 @@ export const SettingsAiModelHoverCard = ({
       Icon: IconTag,
       label: t`Name`,
       value: (
-        <StyledChipContainer>
+        <div {...stylex.props(styles.chipContainer)}>
           <Chip
             size="sm"
             color="primary"
@@ -76,13 +80,13 @@ export const SettingsAiModelHoverCard = ({
           >
             {getChipLabel(model.label).content}
           </Chip>
-        </StyledChipContainer>
+        </div>
       ),
     },
     {
       Icon: IconBuildingSkyscraper,
       label: t`Provider`,
-      value: <StyledValueText>{providerLabel}</StyledValueText>,
+      value: <span {...stylex.props(styles.valueText)}>{providerLabel}</span>,
     },
     ...(isDefined(model.contextWindowTokens)
       ? [
@@ -90,12 +94,12 @@ export const SettingsAiModelHoverCard = ({
             Icon: IconWindow,
             label: t`Context`,
             value: (
-              <StyledValueText>
+              <span {...stylex.props(styles.valueText)}>
                 {`${formatNumber(model.contextWindowTokens, {
                   abbreviate: true,
                   decimals: 1,
                 })} tokens`}
-              </StyledValueText>
+              </span>
             ),
           },
         ]
@@ -106,12 +110,12 @@ export const SettingsAiModelHoverCard = ({
             Icon: IconBolt,
             label: t`Max output`,
             value: (
-              <StyledValueText>
+              <span {...stylex.props(styles.valueText)}>
                 {`${formatNumber(model.maxOutputTokens, {
                   abbreviate: true,
                   decimals: 1,
                 })} tokens`}
-              </StyledValueText>
+              </span>
             ),
           },
         ]
@@ -122,9 +126,9 @@ export const SettingsAiModelHoverCard = ({
             Icon: IconFlag,
             label: t`Data residency`,
             value: (
-              <StyledValueText>
+              <span {...stylex.props(styles.valueText)}>
                 {getDataResidencyDisplay(model.dataResidency)}
-              </StyledValueText>
+              </span>
             ),
           },
         ]
@@ -132,12 +136,12 @@ export const SettingsAiModelHoverCard = ({
   ];
 
   return (
-    <StyledHoverCardWrapper>
+    <div {...stylex.props(styles.hoverCardWrapper)}>
       <SettingsTableCard
         rounded
         items={items}
         gridAutoColumns={`${themeCssVariables.spacing[30]} 1fr`}
       />
-    </StyledHoverCardWrapper>
+    </div>
   );
 };

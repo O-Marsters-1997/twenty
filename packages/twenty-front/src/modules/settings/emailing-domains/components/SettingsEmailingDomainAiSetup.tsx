@@ -12,6 +12,8 @@ import OpenAiLogo from '@/settings/mcp-and-apis/assets/mcp-clients/openai.svg';
 import { McpClientLogo } from '@/settings/mcp-and-apis/components/McpClientLogo';
 import { buildEmailingDomainAiSetupPrompt } from '@/settings/emailing-domains/utils/buildEmailingDomainAiSetupPrompt';
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsEmailingDomainAiSetupProps = {
   domain: string;
@@ -60,24 +62,24 @@ const StyledPromptButton = styled.button`
   }
 `;
 
-const StyledButtonLabel = styled.span`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledLogos = styled.span`
-  align-items: center;
-  display: flex;
-  flex: 0 0 auto;
-  gap: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledLogo = styled.span`
-  display: block;
-  height: ${themeCssVariables.spacing[4]};
-  width: ${themeCssVariables.spacing[4]};
-`;
+const styles = stylex.create({
+  buttonLabel: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  logos: {
+    alignItems: 'center',
+    display: 'flex',
+    flex: '0 0 auto',
+    gap: spacing['--t-spacing-1'],
+  },
+  logo: {
+    display: 'block',
+    height: spacing['--t-spacing-4'],
+    width: spacing['--t-spacing-4'],
+  },
+});
 
 const StyledDismissButton = styled.button`
   align-items: center;
@@ -138,21 +140,21 @@ export const SettingsEmailingDomainAiSetup = ({
         maxWidth="440px"
       >
         <StyledPromptButton type="button" onClick={handleCopy}>
-          <StyledButtonLabel>{t`Set up DNS with AI`}</StyledButtonLabel>
-          <StyledLogos aria-hidden="true">
-            <StyledLogo>
+          <span {...stylex.props(styles.buttonLabel)}>{t`Set up DNS with AI`}</span>
+          <span aria-hidden="true" {...stylex.props(styles.logos)}>
+            <span {...stylex.props(styles.logo)}>
               <McpClientLogo src={ClaudeLogo} />
-            </StyledLogo>
-            <StyledLogo>
+            </span>
+            <span {...stylex.props(styles.logo)}>
               <McpClientLogo src={OpenAiLogo} invertInDarkMode />
-            </StyledLogo>
-            <StyledLogo>
+            </span>
+            <span {...stylex.props(styles.logo)}>
               <McpClientLogo src={CursorLogo} invertInDarkMode />
-            </StyledLogo>
-            <StyledLogo>
+            </span>
+            <span {...stylex.props(styles.logo)}>
               <McpClientLogo src={GeminiCliLogo} />
-            </StyledLogo>
-          </StyledLogos>
+            </span>
+          </span>
         </StyledPromptButton>
       </Tooltip>
       <StyledDismissButton

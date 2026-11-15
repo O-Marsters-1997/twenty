@@ -7,6 +7,8 @@ import { useLingui } from '@lingui/react/macro';
 import { type ReactNode } from 'react';
 import { Card } from 'twenty-ui/primitives/surfaces';
 import { useThemeColorScheme, themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { background, border } from 'twenty-ui/theme/tokens.stylex';
 
 const DEFAULT_COVER_HEIGHT = 150;
 
@@ -18,28 +20,30 @@ const StyledCoverContainer = styled.div<{ coverHeight: number }>`
   position: relative;
 `;
 
-const StyledImage = styled.img`
-  display: block;
-  height: 100%;
-  inset: 0;
-  object-fit: cover;
-  object-position: center top;
-  position: absolute;
-  width: 100%;
-`;
-
-const StyledOverlay = styled.div`
-  align-items: center;
-  display: flex;
-  inset: 0;
-  justify-content: center;
-  position: absolute;
-`;
-
-const StyledFooter = styled.div`
-  background: ${themeCssVariables.background.secondary};
-  border-top: 1px solid ${themeCssVariables.border.color.medium};
-`;
+const styles = stylex.create({
+  image: {
+    display: 'block',
+    height: '100%',
+    inset: '0',
+    objectFit: 'cover',
+    objectPosition: 'center top',
+    position: 'absolute',
+    width: '100%',
+  },
+  overlay: {
+    alignItems: 'center',
+    display: 'flex',
+    inset: '0',
+    justifyContent: 'center',
+    position: 'absolute',
+  },
+  footer: {
+    background: background['--t-background-secondary'],
+    borderTopWidth: '1px',
+    borderTopStyle: 'solid',
+    borderTopColor: border['--t-border-color-medium'],
+  },
+});
 
 type SettingsDiscoveryHeroCardProps = {
   lightSrc: string;
@@ -74,18 +78,18 @@ export const SettingsDiscoveryHeroCard = ({
     <>
       <Card.Root rounded>
         <StyledCoverContainer coverHeight={coverHeight}>
-          <StyledImage src={src} alt="" aria-hidden />
+          <img src={src} alt="" aria-hidden {...stylex.props(styles.image)} />
           {shouldDisplayVideo && (
-            <StyledOverlay>
+            <div {...stylex.props(styles.overlay)}>
               <HeroPlayButton
                 onClick={() => openDialog(modalInstanceId)}
                 ariaLabel={playButtonAriaLabel ?? t`Watch demo`}
               />
-            </StyledOverlay>
+            </div>
           )}
         </StyledCoverContainer>
         {footer !== undefined && footer !== null && (
-          <StyledFooter>{footer}</StyledFooter>
+          <div {...stylex.props(styles.footer)}>{footer}</div>
         )}
       </Card.Root>
       {shouldDisplayVideo && (

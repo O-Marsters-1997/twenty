@@ -2,27 +2,31 @@ import { currentWorkspaceState } from '@/auth/states/currentWorkspaceState';
 import { SettingsOptionCardContentSwitch } from '@/settings/components/SettingsOptions/SettingsOptionCardContentSwitch';
 import { useLabPublicFeatureFlags } from '@/settings/lab/hooks/useLabPublicFeatureFlags';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { styled } from '@linaria/react';
 import { isNonEmptyString } from '@sniptt/guards';
 import { useState } from 'react';
 import { useIcons } from 'twenty-ui/icon';
 import { Card } from 'twenty-ui/primitives/surfaces';
 import { themeCssVariables } from 'twenty-ui/theme';
 import { type FeatureFlagKey } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { spacing, border } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledCardGrid = styled.div`
-  display: grid;
-  gap: ${themeCssVariables.spacing[4]};
-  grid-template-columns: 1fr;
-`;
-
-const StyledImage = styled.img`
-  border-bottom: 1px solid ${themeCssVariables.border.color.medium};
-  display: flex;
-  height: 120px;
-  object-fit: cover;
-  width: 100%;
-`;
+const styles = stylex.create({
+  cardGrid: {
+    display: 'grid',
+    gap: spacing['--t-spacing-4'],
+    gridTemplateColumns: '1fr',
+  },
+  image: {
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: border['--t-border-color-medium'],
+    display: 'flex',
+    height: '120px',
+    objectFit: 'cover',
+    width: '100%',
+  },
+});
 
 export const SettingsLabContent = () => {
   const currentWorkspace = useAtomStateValue(currentWorkspaceState);
@@ -50,7 +54,7 @@ export const SettingsLabContent = () => {
 
   return (
     currentWorkspace?.id && (
-      <StyledCardGrid>
+      <div {...stylex.props(styles.cardGrid)}>
         {labPublicFeatureFlagsWithImage.map((flag) => (
           <Card.Root
             key={flag.key}
@@ -58,10 +62,10 @@ export const SettingsLabContent = () => {
             backgroundColor={themeCssVariables.background.secondary}
           >
             {!hasImageLoadingError[flag.key] && (
-              <StyledImage
+              <img
                 src={flag.metadata.imagePath ?? undefined}
                 alt={flag.metadata.label}
-                onError={() => handleImageError(flag.key)}
+                onError={() => handleImageError(flag.key)} {...stylex.props(styles.image)}
               />
             )}
             <SettingsOptionCardContentSwitch
@@ -92,7 +96,7 @@ export const SettingsLabContent = () => {
             ))}
           </Card.Root>
         )}
-      </StyledCardGrid>
+      </div>
     )
   );
 };

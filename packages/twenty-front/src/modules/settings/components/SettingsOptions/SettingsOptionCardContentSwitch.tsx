@@ -12,6 +12,7 @@ import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
 import { type IconComponent } from 'twenty-ui/icon';
 import { Switch } from 'twenty-ui/primitives/input';
 import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
 
 const StyledSwitch = styled(Switch)`
   &[data-advanced-mode] {
@@ -34,18 +35,19 @@ const StyledSettingsCardSwitchContent = styled.div<{ disabled?: boolean }>`
   }
 `;
 
-const StyledSettingsCardSwitchButtonContainer = styled.span`
-  align-items: center;
-  display: flex;
-  flex-shrink: 0;
-  margin-left: auto;
-`;
-
-const StyledSettingsCardSwitchCover = styled.span`
-  cursor: pointer;
-  inset: 0;
-  position: absolute;
-`;
+const styles = stylex.create({
+  settingsCardSwitchButtonContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexShrink: '0',
+    marginLeft: 'auto',
+  },
+  settingsCardSwitchCover: {
+    cursor: 'pointer',
+    inset: '0',
+    position: 'absolute',
+  },
+});
 
 type SettingsOptionCardContentSwitchProps = {
   Icon?: IconComponent;
@@ -82,7 +84,7 @@ export const SettingsOptionCardContentSwitch = ({
           <StyledSettingsCardTitle>
             <label htmlFor={switchId}>
               {title}
-              <StyledSettingsCardSwitchCover />
+              <span {...stylex.props(styles.settingsCardSwitchCover)} />
             </label>
           </StyledSettingsCardTitle>
           {description && (
@@ -91,7 +93,7 @@ export const SettingsOptionCardContentSwitch = ({
             </StyledSettingsCardDescription>
           )}
         </StyledSettingsCardTextContainer>
-        <StyledSettingsCardSwitchButtonContainer>
+        <span {...stylex.props(styles.settingsCardSwitchButtonContainer)}>
           <StyledSwitch
             id={switchId}
             checked={checked}
@@ -100,7 +102,7 @@ export const SettingsOptionCardContentSwitch = ({
             size="sm"
             data-advanced-mode={advancedMode || undefined}
           />
-        </StyledSettingsCardSwitchButtonContainer>
+        </span>
       </StyledSettingsCardSwitchContent>
       {divider && <Separator />}
     </>

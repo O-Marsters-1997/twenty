@@ -1,14 +1,19 @@
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { border, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledHr = styled.hr`
-  border: none;
-  border-top: 1px solid ${themeCssVariables.border.color.light};
-  margin: 0px;
-  margin-left: ${themeCssVariables.spacing[4]};
-  margin-right: ${themeCssVariables.spacing[4]};
-`;
+const styles = stylex.create({
+  hr: {
+    borderStyle: 'none',
+    borderTopWidth: '1px',
+    borderTopStyle: 'solid',
+    borderTopColor: border['--t-border-color-light'],
+    marginTop: '0px',
+    marginRight: spacing['--t-spacing-4'],
+    marginBottom: '0px',
+    marginLeft: spacing['--t-spacing-4'],
+  },
+});
 
 export const Separator = () => {
-  return <StyledHr />;
+  return <hr {...stylex.props(styles.hr)} />;
 };

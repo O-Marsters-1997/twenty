@@ -5,6 +5,8 @@ import { Card } from 'twenty-ui/primitives/surfaces';
 import { type IconComponent } from 'twenty-ui/icon';
 import { Radio } from 'twenty-ui/primitives/input';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing, font, text } from 'twenty-ui/theme/tokens.stylex';
 
 const StyledRadioCardContentContainer = styled.label`
   > div {
@@ -23,23 +25,26 @@ const StyledRadioCardContentContainer = styled.label`
   }
 `;
 
-const StyledRadioContainer = styled.span`
-  align-items: center;
-  display: flex;
-  margin-left: auto;
-  padding: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledTitle = styled.div`
-  color: ${themeCssVariables.font.color.secondary};
-  font-weight: ${themeCssVariables.font.weight.medium};
-`;
-
-const StyledDescription = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.sm};
-  line-height: ${themeCssVariables.text.lineHeight.lg};
-`;
+const styles = stylex.create({
+  radioContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    marginLeft: 'auto',
+    paddingTop: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-1'],
+  },
+  title: {
+    color: font['--t-font-color-secondary'],
+    fontWeight: font['--t-font-weight-medium'],
+  },
+  description: {
+    color: font['--t-font-color-tertiary'],
+    fontSize: font['--t-font-size-sm'],
+    lineHeight: text['--t-text-line-height-lg'],
+  },
+});
 
 type SettingsRadioCardProps = {
   value: string;
@@ -64,20 +69,20 @@ export const SettingsRadioCard = ({
       <Card.Content>
         {Icon && <Icon size={theme.icon.size.xl} color={theme.color.gray10} />}
         <span>
-          {title && <StyledTitle id={titleId}>{title}</StyledTitle>}
+          {title && <div id={titleId} {...stylex.props(styles.title)}>{title}</div>}
           {hasDescription && (
-            <StyledDescription id={descriptionId}>
+            <div id={descriptionId} {...stylex.props(styles.description)}>
               {description}
-            </StyledDescription>
+            </div>
           )}
         </span>
-        <StyledRadioContainer>
+        <span {...stylex.props(styles.radioContainer)}>
           <Radio
             value={value}
             aria-labelledby={titleId}
             aria-describedby={hasDescription ? descriptionId : undefined}
           />
-        </StyledRadioContainer>
+        </span>
       </Card.Content>
     </StyledRadioCardContentContainer>
   );

@@ -8,6 +8,8 @@ import { IconChevronRight } from 'twenty-ui/icon';
 import { Badge } from 'twenty-ui/primitives/data-display';
 import { Card } from 'twenty-ui/primitives/surfaces';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing, font, text } from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsCardProps = {
   description?: string;
@@ -58,11 +60,23 @@ const StyledCardAction = styled.button`
   }
 `;
 
-const StyledHeader = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  header: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+  },
+  iconChevronRightContainer: {
+    alignItems: 'center',
+    color: font['--t-font-color-light'],
+    display: 'flex',
+  },
+  description: {
+    lineHeight: text['--t-text-line-height-lg'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-7'],
+  },
+});
 
 const StyledTitle = styled.div<{ disabled?: boolean }>`
   color: ${({ disabled }) =>
@@ -74,18 +88,6 @@ const StyledTitle = styled.div<{ disabled?: boolean }>`
   font-weight: ${themeCssVariables.font.weight.medium};
   gap: ${themeCssVariables.spacing[2]};
   justify-content: flex-start;
-`;
-
-const StyledIconChevronRightContainer = styled.span`
-  align-items: center;
-  color: ${themeCssVariables.font.color.light};
-  display: flex;
-`;
-
-const StyledDescription = styled.div`
-  line-height: ${themeCssVariables.text.lineHeight.lg};
-  padding-bottom: ${themeCssVariables.spacing[2]};
-  padding-left: ${themeCssVariables.spacing[7]};
 `;
 
 const StyledIconContainer = styled.div<{
@@ -130,7 +132,7 @@ export const SettingsCard = ({
                 disabled={disabled}
               />
             )}
-            <StyledHeader>
+            <div {...stylex.props(styles.header)}>
               <StyledIconContainer disabled={disabled} iconColor={iconColor}>
                 {Icon}
               </StyledIconContainer>
@@ -139,12 +141,12 @@ export const SettingsCard = ({
                 {soon && <Badge>{t`Soon`}</Badge>}
               </StyledTitle>
               {isDefined(Status) && Status}
-              <StyledIconChevronRightContainer>
+              <span {...stylex.props(styles.iconChevronRightContainer)}>
                 <IconChevronRight size={theme.icon.size.sm} />
-              </StyledIconChevronRightContainer>
-            </StyledHeader>
+              </span>
+            </div>
             {description && (
-              <StyledDescription>{description}</StyledDescription>
+              <div {...stylex.props(styles.description)}>{description}</div>
             )}
           </Card.Content>
         </StyledCardContentContainer>

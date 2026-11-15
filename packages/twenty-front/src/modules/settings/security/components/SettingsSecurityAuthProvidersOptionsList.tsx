@@ -8,14 +8,12 @@ import { SettingsOptionCardContentSwitch } from '@/settings/components/SettingsO
 import { Select } from '@/ui/input/components/Select';
 import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
 import { useMutation } from '@apollo/client/react';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { ConnectedAccountProvider } from 'twenty-shared/types';
 import { capitalize } from 'twenty-shared/utils';
 import { useToast } from 'twenty-ui/components/feedback';
 import { IconGoogle, IconLink, IconList, IconPassword } from 'twenty-ui/icon';
 import { Card } from 'twenty-ui/primitives/surfaces';
-import { themeCssVariables } from 'twenty-ui/theme';
 import {
   type AuthProviders,
   UpdateWorkspaceDocument,
@@ -24,12 +22,16 @@ import {
 
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { TwoFactorAuthenticationSwitch } from './TwoFactorAuthenticationSwitch';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledSettingsSecurityOptionsList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[4]};
-`;
+const styles = stylex.create({
+  settingsSecurityOptionsList: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-4'],
+  },
+});
 
 export const SettingsSecurityAuthProvidersOptionsList = () => {
   const { t } = useLingui();
@@ -184,7 +186,7 @@ export const SettingsSecurityAuthProvidersOptionsList = () => {
   };
 
   return (
-    <StyledSettingsSecurityOptionsList>
+    <div {...stylex.props(styles.settingsSecurityOptionsList)}>
       {currentWorkspace && (
         <>
           <Card.Root rounded>
@@ -248,6 +250,6 @@ export const SettingsSecurityAuthProvidersOptionsList = () => {
           </Card.Root>
         </>
       )}
-    </StyledSettingsSecurityOptionsList>
+    </div>
   );
 };

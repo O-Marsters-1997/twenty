@@ -7,6 +7,8 @@ import { IconExternalLink } from 'twenty-ui/icon';
 import { Badge } from 'twenty-ui/primitives/data-display';
 import { Card, Tooltip } from 'twenty-ui/primitives/surfaces';
 import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { font, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const StyledCardContent = styled(Card.Content)`
   align-items: center;
@@ -17,51 +19,48 @@ const StyledCardContent = styled(Card.Content)`
     ${themeCssVariables.spacing[3]} ${themeCssVariables.spacing[4]};
 `;
 
-const StyledLogo = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.primary};
-  display: flex;
-  flex: 0 0 ${themeCssVariables.spacing[8]};
-  height: ${themeCssVariables.spacing[8]};
-  justify-content: center;
-  width: ${themeCssVariables.spacing[8]};
-`;
-
-const StyledBody = styled.div`
-  align-self: stretch;
-  display: flex;
-  flex: 1 1 0;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  min-width: 0;
-`;
-
-const StyledHeader = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  min-width: 0;
-`;
-
-const StyledTitle = styled.div`
-  color: ${themeCssVariables.font.color.primary};
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.medium};
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledActionSlot = styled.div`
-  display: flex;
-  flex: 0 0 auto;
-  margin-left: auto;
-`;
-
-const StyledDescription = styled.div`
-  color: ${themeCssVariables.font.color.secondary};
-  font-size: ${themeCssVariables.font.size.sm};
-`;
+const styles = stylex.create({
+  logo: {
+    alignItems: 'center',
+    color: font['--t-font-color-primary'],
+    display: 'flex',
+    flex: `0 0 ${spacing['--t-spacing-8']}`,
+    height: spacing['--t-spacing-8'],
+    justifyContent: 'center',
+    width: spacing['--t-spacing-8'],
+  },
+  body: {
+    alignSelf: 'stretch',
+    display: 'flex',
+    flex: '1 1 0',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    minWidth: '0',
+  },
+  header: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    minWidth: '0',
+  },
+  title: {
+    color: font['--t-font-color-primary'],
+    fontSize: font['--t-font-size-md'],
+    fontWeight: font['--t-font-weight-medium'],
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  actionSlot: {
+    display: 'flex',
+    flex: '0 0 auto',
+    marginLeft: 'auto',
+  },
+  description: {
+    color: font['--t-font-color-secondary'],
+    fontSize: font['--t-font-size-sm'],
+  },
+});
 
 // Install links use custom URI schemes (goose://, vscode:, lmstudio://) that
 // twenty-ui Button/RawLink/RoundedLink strip through react-router or getSafeUrl,
@@ -147,17 +146,17 @@ type SettingsMcpSetupCardProps = {
 export const SettingsMcpSetupCard = ({ card }: SettingsMcpSetupCardProps) => (
   <Card.Root rounded>
     <StyledCardContent>
-      <StyledLogo aria-hidden>{card.logo}</StyledLogo>
-      <StyledBody>
-        <StyledHeader>
-          <StyledTitle>{card.title}</StyledTitle>
+      <div aria-hidden {...stylex.props(styles.logo)}>{card.logo}</div>
+      <div {...stylex.props(styles.body)}>
+        <div {...stylex.props(styles.header)}>
+          <div {...stylex.props(styles.title)}>{card.title}</div>
           <Badge>{card.badge}</Badge>
-          <StyledActionSlot>
+          <div {...stylex.props(styles.actionSlot)}>
             <SettingsMcpSetupCardAction card={card} />
-          </StyledActionSlot>
-        </StyledHeader>
-        <StyledDescription>{card.description}</StyledDescription>
-      </StyledBody>
+          </div>
+        </div>
+        <div {...stylex.props(styles.description)}>{card.description}</div>
+      </div>
     </StyledCardContent>
   </Card.Root>
 );
