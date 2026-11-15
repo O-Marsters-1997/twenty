@@ -23,7 +23,6 @@ import {
   offset,
   useFloating,
 } from '@floating-ui/react';
-import { styled } from '@linaria/react';
 import { useId, useRef, useState } from 'react';
 import { Temporal } from 'temporal-polyfill';
 import { Key } from 'ts-key-enum';
@@ -34,17 +33,18 @@ import * as stylex from '@stylexjs/stylex';
 const FORM_DATE_TIME_FIELD_PICKER_CLICK_OUTSIDE_ID =
   'form-date-time-field-picker-floating';
 
-const StyledDateInputTextContainer = styled.div<{ isReadonly?: boolean }>`
-  align-items: center;
-  display: flex;
-  flex: 1;
-  min-width: 0;
-  pointer-events: ${({ isReadonly }) => (isReadonly ? 'none' : 'auto')};
-  user-select: ${({ isReadonly }) => (isReadonly ? 'none' : 'auto')};
-  width: 100%;
-`;
-
 const styles = stylex.create({
+  dateInputTextContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flex: '1',
+    minWidth: '0',
+    width: '100%',
+  },
+  dateInputTextContainerReadonly: {
+    pointerEvents: 'none',
+    userSelect: 'none',
+  },
   datePickerInputWrapper: {
     display: 'flex',
     flex: '1',
@@ -272,8 +272,11 @@ export const FormDateTimeFieldInput = ({
             variant={variant}
           >
             {draftValue.type === 'static' ? (
-              <StyledDateInputTextContainer
-                isReadonly={readonly === true}
+              <div
+                {...stylex.props(
+                  styles.dateInputTextContainer,
+                  readonly === true && styles.dateInputTextContainerReadonly,
+                )}
                 onPointerDownCapture={handleOpenPicker}
               >
                 <DateTimePickerInput
@@ -284,7 +287,7 @@ export const FormDateTimeFieldInput = ({
                   timeZone={timeZone}
                   variant={variant}
                 />
-              </StyledDateInputTextContainer>
+              </div>
             ) : (
               <VariableChipStandalone
                 rawVariableName={draftValue.value}

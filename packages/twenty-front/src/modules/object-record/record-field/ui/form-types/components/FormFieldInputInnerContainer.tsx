@@ -4,7 +4,7 @@ import { useRemoveFocusItemFromFocusStackById } from '@/ui/utilities/focus/hooks
 import { useRemoveFocusItemFromFocusStackOnUnmount } from '@/ui/utilities/focus/hooks/useRemoveFocusItemFromFocusStackOnUnmount';
 import { FocusComponentType } from '@/ui/utilities/focus/types/FocusComponentType';
 import * as stylex from '@stylexjs/stylex';
-import { cx } from '@linaria/core';
+import { mergeClassName } from '@/page-layout/utils/mergeClassName';
 import { forwardRef, type HTMLAttributes, type Ref } from 'react';
 import {
   backgroundTransparent,
@@ -80,23 +80,25 @@ export const FormFieldInputInnerContainer = forwardRef(
 
     const hasRoundedRightCorners = multiline === true || !hasRightElement;
 
-    const containerProps = stylex.props(
-      styles.container,
-      multiline && styles.multiline,
-      variant === 'transparent'
-        ? styles.transparent
-        : [
-            styles.default,
-            hoverable && styles.defaultHoverable,
-            hasRoundedRightCorners && styles.defaultRoundedRight,
-          ],
+    const containerProps = mergeClassName(
+      stylex.props(
+        styles.container,
+        multiline && styles.multiline,
+        variant === 'transparent'
+          ? styles.transparent
+          : [
+              styles.default,
+              hoverable && styles.defaultHoverable,
+              hasRoundedRightCorners && styles.defaultRoundedRight,
+            ],
+      ),
+      className,
     );
 
     return (
       <div
         ref={ref}
-        className={cx(className, containerProps.className)}
-        style={containerProps.style}
+        {...containerProps}
         onFocus={handleFocus}
         onBlur={handleBlur}
         onClick={onClick}

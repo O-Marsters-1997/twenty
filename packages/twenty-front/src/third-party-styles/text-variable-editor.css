@@ -1,0 +1,59 @@
+.text-variable-editor .editor-content {
+  width: 100%;
+}
+
+.text-variable-editor .tiptap {
+  align-items: center;
+  border: none !important;
+  box-sizing: border-box;
+  color: var(--t-font-color-primary);
+  display: flex;
+  font-family: var(--t-font-family);
+  font-weight: var(--t-font-weight-regular);
+  height: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: var(--t-spacing-1) var(--t-spacing-2);
+  scrollbar-width: none;
+  white-space: nowrap;
+}
+
+.text-variable-editor .tiptap::-webkit-scrollbar {
+  display: none;
+}
+
+.text-variable-editor[data-multiline] .tiptap {
+  align-items: flex-start;
+  height: auto;
+  white-space: pre;
+}
+
+.text-variable-editor[data-readonly] .tiptap {
+  color: var(--t-font-color-light);
+}
+
+.text-variable-editor .tiptap p.is-editor-empty:first-of-type::before {
+  color: var(--t-font-color-light);
+  font-size: var(--t-font-size-md);
+  font-weight: var(--t-font-weight-medium);
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.text-variable-editor .tiptap p {
+  margin: 0;
+}
+
+.text-variable-editor .tiptap .variable-tag,
+.text-variable-editor .tiptap .text-tag {
+  background-color: var(--t-color-blue3);
+  border-radius: var(--t-border-radius-md);
+  color: var(--t-color-blue);
+  padding: var(--t-spacing-1);
+}
+
+.text-variable-editor .ProseMirror-focused {
+  outline: none;
+}

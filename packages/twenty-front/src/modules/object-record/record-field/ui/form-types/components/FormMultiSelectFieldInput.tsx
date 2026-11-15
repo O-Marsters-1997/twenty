@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 
 import { FormFieldInputContainer } from '@/ui/input/components/FormFieldInputContainer';
@@ -39,11 +38,10 @@ type FormMultiSelectFieldInputProps = {
   dropdownWidth?: number;
 };
 
-const StyledMultiSelectDisplay = styled(MultiSelectDisplay)`
-  flex-wrap: wrap;
-`;
-
 const styles = stylex.create({
+  multiSelectDisplay: {
+    flexWrap: 'wrap',
+  },
   rowContainer: {
     height: 'auto',
     minHeight: 32,
@@ -99,6 +97,9 @@ export const FormMultiSelectFieldInput = ({
   dropdownWidth,
 }: FormMultiSelectFieldInputProps) => {
   const theme = useTheme();
+  const multiSelectDisplayClassName = stylex.props(
+    styles.multiSelectDisplay,
+  ).className;
   const instanceId = useId();
   const { closeDropdown } = useCloseDropdown();
 
@@ -187,7 +188,8 @@ export const FormMultiSelectFieldInput = ({
             readonly ? (
               <div {...stylex.props(styles.displayModeReadonlyContainer)}>
                 {isNonEmptyArray(selectedOptions) ? (
-                  <StyledMultiSelectDisplay
+                  <MultiSelectDisplay
+                    className={multiSelectDisplayClassName}
                     values={selectedNames}
                     options={selectedOptions}
                   />
@@ -216,7 +218,8 @@ export const FormMultiSelectFieldInput = ({
                   aria-label={accessibleLabel}
                 >
                   {isNonEmptyArray(selectedOptions) ? (
-                    <StyledMultiSelectDisplay
+                    <MultiSelectDisplay
+                      className={multiSelectDisplayClassName}
                       values={selectedNames}
                       options={selectedOptions}
                     />

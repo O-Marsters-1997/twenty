@@ -1,22 +1,42 @@
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { mergeClassName } from '@/page-layout/utils/mergeClassName';
+import * as stylex from '@stylexjs/stylex';
+import { type ReactNode } from 'react';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
+import './RecordCardBodyContainer.css';
 
-const StyledCardBodyContainer = styled.div<{ padding?: string }>`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing['0.5']};
-  padding: ${({ padding }) =>
-    padding ??
-    `0 ${themeCssVariables.spacing[2]} ${themeCssVariables.spacing[2]} 10px`};
-  span:not(button *) {
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    svg:not(button svg) {
-      color: ${themeCssVariables.font.color.tertiary};
-      margin-right: ${themeCssVariables.spacing[2]};
-    }
-  }
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-0_5'],
+  },
+  defaultPadding: {
+    paddingTop: 0,
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: 10,
+  },
+  padding: (padding: string) => ({ padding }),
+});
 
-export { StyledCardBodyContainer as RecordCardBodyContainer };
+type RecordCardBodyContainerProps = {
+  children: ReactNode;
+  padding?: string;
+};
+
+export const RecordCardBodyContainer = ({
+  children,
+  padding,
+}: RecordCardBodyContainerProps) => (
+  <div
+    {...mergeClassName(
+      stylex.props(
+        styles.container,
+        padding === undefined ? styles.defaultPadding : styles.padding(padding),
+      ),
+      'record-card-body-container',
+    )}
+  >
+    {children}
+  </div>
+);

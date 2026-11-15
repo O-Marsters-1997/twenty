@@ -3,7 +3,7 @@ import { StyledHeaderIdentifierLabel } from '@/ui/layout/page/components/StyledH
 import { TooltipDelay } from '@/ui/layout/tooltip/constants/TooltipDelay';
 import { useAtomFamilySelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilySelectorValue';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { Trans } from '@lingui/react/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { useId } from 'react';
@@ -14,9 +14,11 @@ import {
   beautifyPastDateRelativeToNow,
 } from '~/utils/date-utils';
 
-const StyledCreatedAt = styled(StyledHeaderIdentifierLabel)`
-  cursor: pointer;
-`;
+const styles = stylex.create({
+  createdAt: {
+    cursor: 'pointer',
+  },
+});
 
 type RecordIdentifierBarCreatedAtProps = {
   objectRecordId: string;
@@ -48,9 +50,12 @@ export const RecordIdentifierBarCreatedAt = ({
       content={beautifyExactDateTime(recordCreatedAt)}
       side="left"
     >
-      <StyledCreatedAt id={createdAtElementId}>
+      <StyledHeaderIdentifierLabel
+        id={createdAtElementId}
+        {...stylex.props(styles.createdAt)}
+      >
         <Trans>Created {beautifiedCreatedAt}</Trans>
-      </StyledCreatedAt>
+      </StyledHeaderIdentifierLabel>
     </Tooltip>
   );
 };
