@@ -38,3 +38,7 @@ func (p *Permissions) Has(ctx context.Context, principal auth.Principal, flag st
 	}
 	return allowed, nil
 }
+
+func (p *Permissions) Role(ctx context.Context, id string) (Role, error) {
+	return queryOne[Role](ctx, p.pool, "role not found", `SELECT `+roleDocument+` FROM core.role r WHERE r.id = $1::uuid AND r."workspaceId" = $2::uuid`, id, workspace.PinnedWorkspaceID)
+}

@@ -16,3 +16,13 @@ models:
     model: github.com/99designs/gqlgen/graphql.String
   DateTime:
     model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata.Timestamp
+  JSON:
+    model: github.com/99designs/gqlgen/graphql.Any
+  OnboardingStatus:
+    model: github.com/99designs/gqlgen/graphql.String
+  WorkspaceActivationStatus:
+    model: github.com/99designs/gqlgen/graphql.String
+  WorkspaceDiscoverability:
+    model: github.com/99designs/gqlgen/graphql.String
+  AiModelTier:
+    model: github.com/99designs/gqlgen/graphql.String

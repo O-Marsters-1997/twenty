@@ -6,6 +6,7 @@ import (
 	"log/slog"
 	"net/url"
 	"slices"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -21,6 +22,10 @@ type Config struct {
 	FallbackEncryptionKey string
 	RecoveryCodeTTL       time.Duration
 
+	EmailVerificationTokenTTL time.Duration
+	PasswordResetTokenTTL     time.Duration
+	Email                     Email
+
 	RedisURL             string
 	RedisCachePrefix     string
 	ServerURL            string
@@ -31,6 +36,17 @@ type Config struct {
 	TrustProxy           bool
 	MultiWorkspace       bool
 	DefaultSubdomain     string
+}
+
+type Email struct {
+	Driver       string
+	FromAddress  string
+	FromName     string
+	SMTPHost     string
+	SMTPPort     int
+	SMTPUser     string
+	SMTPPassword string
+	SMTPNoTLS    bool
 }
 
 // Load reads the process environment through getenv. NODE_UPSTREAM_URL is required.
@@ -53,25 +69,39 @@ func Load(getenv func(string) string) (Config, error) {
 		MultiWorkspace:   getenv("IS_MULTIWORKSPACE_ENABLED") == "true",
 		DefaultSubdomain: valueOr(getenv("DEFAULT_SUBDOMAIN"), "app"),
 	}
+	cfg.Email.FromAddress = valueOr(getenv("EMAIL_FROM_ADDRESS"), "noreply@yourdomain.com")
+	cfg.Email.FromName = valueOr(getenv("EMAIL_FROM_NAME"), "Felix from Twenty")
+	cfg.Email.SMTPHost = getenv("EMAIL_SMTP_HOST")
+	cfg.Email.SMTPUser = getenv("EMAIL_SMTP_USER")
+	cfg.Email.SMTPPassword = getenv("EMAIL_SMTP_PASSWORD")
+	cfg.Email.SMTPNoTLS = getenv("EMAIL_SMTP_NO_TLS") == "true"
 	for _, origin := range strings.Split(getenv("AUTH_COOKIE_ALLOWED_ORIGINS"), ",") {
 		if origin = strings.TrimSpace(origin); origin != "" {
 			cfg.CookieAllowedOrigins = append(cfg.CookieAllowedOrigins, origin)
 		}
 	}
 
-	ttlText := valueOr(getenv("TWO_FACTOR_AUTHENTICATION_RECOVERY_CODE_EXPIRES_IN"), "1h")
-	days, hasDays := strings.CutSuffix(ttlText, "d")
-	if hasDays {
-		ttlText = days + "h"
+	var err error
+	for _, ttl := range []struct {
+		name, fallback string
+		into           *time.Duration
+	}{
+		{"TWO_FACTOR_AUTHENTICATION_RECOVERY_CODE_EXPIRES_IN", "1h", &cfg.RecoveryCodeTTL},
+		{"EMAIL_VERIFICATION_TOKEN_EXPIRES_IN", "1h", &cfg.EmailVerificationTokenTTL},
+		{"PASSWORD_RESET_TOKEN_EXPIRES_IN", "5m", &cfg.PasswordResetTokenTTL},
+	} {
+		if *ttl.into, err = parseTTL(ttl.name, valueOr(getenv(ttl.name), ttl.fallback)); err != nil {
+			return Config{}, err
+		}
 	}
-	ttl, err := time.ParseDuration(ttlText)
-	if err != nil || ttl <= 0 {
-		return Config{}, fmt.Errorf("TWO_FACTOR_AUTHENTICATION_RECOVERY_CODE_EXPIRES_IN %q must be a positive duration like 1h or 2d", getenv("TWO_FACTOR_AUTHENTICATION_RECOVERY_CODE_EXPIRES_IN"))
+
+	cfg.Email.Driver = valueOr(getenv("EMAIL_DRIVER"), "logger")
+	if cfg.Email.Driver != "logger" && cfg.Email.Driver != "smtp" {
+		return Config{}, fmt.Errorf("EMAIL_DRIVER %q must be logger or smtp", cfg.Email.Driver)
 	}
-	if hasDays {
-		ttl *= 24
+	if cfg.Email.SMTPPort, err = strconv.Atoi(valueOr(getenv("EMAIL_SMTP_PORT"), "587")); err != nil {
+		return Config{}, fmt.Errorf("parse EMAIL_SMTP_PORT: %w", err)
 	}
-	cfg.RecoveryCodeTTL = ttl
 
 	upstream := getenv("NODE_UPSTREAM_URL")
 	if upstream == "" {
@@ -92,6 +122,21 @@ func Load(getenv func(string) string) (Config, error) {
 		}
 	}
 	return cfg, nil
+}
+
+func parseTTL(name, text string) (time.Duration, error) {
+	days, hasDays := strings.CutSuffix(text, "d")
+	if hasDays {
+		text = days + "h"
+	}
+	ttl, err := time.ParseDuration(text)
+	if err != nil || ttl <= 0 {
+		return 0, fmt.Errorf("%s %q must be a positive duration like 5m, 1h or 2d", name, text)
+	}
+	if hasDays {
+		ttl *= 24
+	}
+	return ttl, nil
 }
 
 func valueOr(value, fallback string) string {
