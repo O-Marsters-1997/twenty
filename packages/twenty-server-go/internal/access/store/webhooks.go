@@ -114,6 +114,9 @@ func whatwgTargetURL(value any) (string, error) {
 	parsed.Host = strings.ToLower(parsed.Host)
 	if (parsed.Scheme == "http" && parsed.Port() == "80") || (parsed.Scheme == "https" && parsed.Port() == "443") {
 		parsed.Host = strings.ToLower(parsed.Hostname())
+		if strings.Contains(parsed.Host, ":") {
+			parsed.Host = "[" + parsed.Host + "]"
+		}
 	}
 	if parsed.Path == "" {
 		parsed.Path = "/"
