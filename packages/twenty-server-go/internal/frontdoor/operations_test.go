@@ -24,6 +24,9 @@ func TestDefaultTable_RoutesMessagingOperationsToGo(t *testing.T) {
 		"MyMessageChannels", "UpdateMessageChannel", "CreateEmailGroupChannel", "UpdateEmailGroupChannel", "DeleteEmailGroupChannel",
 		"MyCalendarChannels", "UpdateCalendarChannel",
 		"SendMessageCampaign", "CancelMessageCampaign", "SendMessageCampaignTest", "PreviewMessageCampaignAudience",
+		"GetWebhooks", "GetWebhook", "CreateWebhook", "UpdateWebhook", "DeleteWebhook",
+		"GetApiKeys", "GetApiKey", "GetApiKeyRoles", "CreateApiKey", "UpdateApiKey", "RevokeApiKey", "AssignRoleToApiKey",
+		"GenerateApiKeyToken", "GeneratePlaygroundToken",
 	} {
 		if table[operation] != frontdoor.RouteGo {
 			t.Errorf("route of %s = %q, want %q", operation, table[operation], frontdoor.RouteGo)

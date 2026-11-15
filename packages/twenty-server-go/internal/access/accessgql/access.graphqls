@@ -1,0 +1,111 @@
+scalar UUID
+scalar DateTime
+
+type Role {
+  id: UUID!
+  label: String!
+  description: String
+  icon: String
+  canUpdateAllSettings: Boolean!
+  canAccessAllTools: Boolean!
+  isEditable: Boolean!
+  canReadAllObjectRecords: Boolean!
+  canUpdateAllObjectRecords: Boolean!
+  canSoftDeleteAllObjectRecords: Boolean!
+  canDestroyAllObjectRecords: Boolean!
+  canBeAssignedToUsers: Boolean!
+  canBeAssignedToAgents: Boolean!
+  canBeAssignedToApiKeys: Boolean!
+}
+
+type Webhook {
+  id: UUID!
+  targetUrl: String!
+  operations: [String!]!
+  description: String
+  secret: String!
+  applicationId: UUID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
+
+input CreateWebhookInput {
+  id: UUID
+  targetUrl: String!
+  operations: [String!]!
+  description: String
+  secret: String
+}
+
+input UpdateWebhookInputUpdates {
+  targetUrl: String
+  operations: [String!]
+  description: String
+  secret: String
+}
+
+input UpdateWebhookInput {
+  id: UUID!
+  update: UpdateWebhookInputUpdates!
+}
+
+type ApiKey {
+  id: UUID!
+  name: String!
+  expiresAt: DateTime!
+  revokedAt: DateTime
+  createdAt: DateTime!
+  role: Role!
+}
+
+input CreateApiKeyInput {
+  name: String!
+  expiresAt: String!
+  revokedAt: String
+  roleId: UUID!
+}
+
+input UpdateApiKeyInput {
+  id: UUID!
+  name: String
+  expiresAt: String
+  revokedAt: String
+}
+
+input GetApiKeyInput {
+  id: UUID!
+}
+
+input RevokeApiKeyInput {
+  id: UUID!
+}
+
+type ApiKeyToken {
+  token: String!
+}
+
+type AuthToken {
+  token: String!
+  expiresAt: DateTime!
+}
+
+type Query {
+  webhooks: [Webhook!]!
+  webhook(id: UUID!): Webhook
+  apiKeys: [ApiKey!]!
+  apiKey(input: GetApiKeyInput!): ApiKey
+  getApiKeyRoles: [Role!]!
+}
+
+type Mutation {
+  createWebhook(input: CreateWebhookInput!): Webhook!
+  updateWebhook(input: UpdateWebhookInput!): Webhook!
+  deleteWebhook(id: UUID!): Webhook!
+  createApiKey(input: CreateApiKeyInput!): ApiKey!
+  updateApiKey(input: UpdateApiKeyInput!): ApiKey
+  revokeApiKey(input: RevokeApiKeyInput!): ApiKey
+  assignRoleToApiKey(apiKeyId: UUID!, roleId: UUID!): Boolean!
+  generateApiKeyToken(apiKeyId: UUID!, expiresAt: String!): ApiKeyToken!
+  generatePlaygroundToken: AuthToken!
+}

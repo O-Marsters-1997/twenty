@@ -17,6 +17,8 @@ import (
 const (
 	accessTokenType = "ACCESS"
 	apiKeyTokenType = "API_KEY"
+
+	playgroundTokenType = "PLAYGROUND"
 )
 
 var errKeyLookup = errors.New("look up signing key")
@@ -72,7 +74,7 @@ func (v *JWTVerifier) parse(ctx context.Context, bearer, secretType string) (cla
 		}
 		return v.legacySecret(tokenClaims, secretType)
 	})
-	if err == nil && tokenClaims.Type != accessTokenType && tokenClaims.Type != apiKeyTokenType {
+	if err == nil && tokenClaims.Type != accessTokenType && tokenClaims.Type != apiKeyTokenType && tokenClaims.Type != playgroundTokenType {
 		err = ErrUnauthenticated
 	}
 	return tokenClaims, err
