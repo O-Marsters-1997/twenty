@@ -39,6 +39,8 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow"
 	workflowstore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/store"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/workflowgql"
+	workspacestore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/workspace/store"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/workspace/workspacegql"
 )
 
 func main() {
@@ -141,6 +143,13 @@ func run() error {
 			RoleStore:    accessstore.NewRoles(pool),
 			Permissions:  accessstore.NewPermissions(pool),
 			Tokens:       stack.issuer,
+		}, logger),
+		workspacegql.NewHandler(&workspacegql.Resolver{
+			Workspaces: workspacestore.NewWorkspaces(pool, cfg.DefaultSubdomain, workspacestore.AuthProviders{
+				Google:   os.Getenv("AUTH_GOOGLE_ENABLED") == "true",
+				Password: os.Getenv("AUTH_PASSWORD_ENABLED") != "false",
+			}),
+			Permissions: accessstore.NewPermissions(pool),
 		}, logger),
 		authHandler,
 		agentgql.Operations,

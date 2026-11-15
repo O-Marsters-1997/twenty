@@ -1,0 +1,16 @@
+{
+  "name": "UpdateWorkspace",
+  "operation": "UpdateWorkspace",
+  "fixture": "rename the workspace and tighten two security switches",
+  "endpoint": "/metadata",
+  "query": "mutation UpdateWorkspace($input: UpdateWorkspaceInput!) { updateWorkspace(data: $input) { id displayName allowImpersonation workspaceDiscoverability trashRetentionDays editableProfileFields } }",
+  "variables": {"input": {"displayName": "Acme", "allowImpersonation": false, "workspaceDiscoverability": "HIDDEN", "trashRetentionDays": 30, "editableProfileFields": ["firstName"]}},
+  "response": {"data": {"updateWorkspace": {
+    "id": "26a06a83-ad30-4547-9126-7f6339d43e03",
+    "displayName": "Acme",
+    "allowImpersonation": false,
+    "workspaceDiscoverability": "HIDDEN",
+    "trashRetentionDays": 30,
+    "editableProfileFields": ["firstName"]
+  }}}
+}
