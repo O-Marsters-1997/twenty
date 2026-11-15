@@ -1,12 +1,20 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import { type ReactNode } from 'react';
 import { Card } from 'twenty-ui/primitives/surfaces';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { background, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-export const StyledLogConsoleFieldsCard = styled(Card.Root)`
-  --card-background-color: ${themeCssVariables.background.secondary};
+const styles = stylex.create({
+  card: {
+    '--card-background-color': background['--t-background-secondary'],
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-1'],
+    padding: spacing['--t-spacing-2'],
+  },
+});
 
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[1]};
-  padding: ${themeCssVariables.spacing[2]};
-`;
+export const StyledLogConsoleFieldsCard = ({
+  children,
+}: {
+  children: ReactNode;
+}) => <Card.Root {...stylex.props(styles.card)}>{children}</Card.Root>;
