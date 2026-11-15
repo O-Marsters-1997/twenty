@@ -232,34 +232,10 @@ func (l *PasswordLogin) assertMember(ctx context.Context, user loginUser, worksp
 }
 
 func (l *PasswordLogin) availableWorkspaces(ctx context.Context, user loginUser) (forSignIn, forSignUp []AvailableWorkspace, err error) {
-	members, err := l.queryWorkspaces(ctx,
-		`SELECT `+workspaceColumns+`, NULL::text FROM core."userWorkspace" uw JOIN core.workspace w ON w.id = uw."workspaceId"
-		 WHERE uw."userId" = $1::uuid AND uw."deletedAt" IS NULL AND w."deletedAt" IS NULL AND w."workspaceDiscoverability" <> 'HIDDEN'
-		 ORDER BY uw."createdAt"`, user.id)
+	members, joinable, invitations, err := l.discoverWorkspaces(ctx, user.id, user.email)
 	if err != nil {
 		return nil, nil, err
 	}
-	known := make([]string, 0, len(members))
-	for _, member := range members {
-		known = append(known, member.id)
-	}
-	joinable, err := l.joinableByDomain(ctx, user.email, known)
-	if err != nil {
-		return nil, nil, err
-	}
-	for _, workspace := range joinable {
-		known = append(known, workspace.id)
-	}
-	invitations, err := l.queryWorkspaces(ctx,
-		`SELECT `+workspaceColumns+`, t.value FROM core."appToken" t JOIN core.workspace w ON w.id = t."workspaceId"
-		 WHERE t.type IN ('INVITATION_TOKEN', 'ONBOARDING_INVITATION_TOKEN') AND lower(t.context->>'email') = lower($1)
-		   AND t."deletedAt" IS NULL AND t."expiresAt" > now() AND w."deletedAt" IS NULL
-		   AND w."workspaceDiscoverability" <> 'HIDDEN' AND NOT (w.id::text = ANY($2))
-		 ORDER BY t."createdAt"`, user.email, known)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	forSignIn, err = l.present(ctx, user, members, true)
 	if err != nil {
 		return nil, nil, err
@@ -269,6 +245,39 @@ func (l *PasswordLogin) availableWorkspaces(ctx context.Context, user loginUser)
 		return nil, nil, err
 	}
 	return forSignIn, forSignUp, nil
+}
+
+func (l *PasswordLogin) discoverWorkspaces(ctx context.Context, userID, email string) (members, joinable, invitations []workspaceRow, err error) {
+	if userID != "" {
+		members, err = l.queryWorkspaces(ctx,
+			`SELECT `+workspaceColumns+`, NULL::text FROM core."userWorkspace" uw JOIN core.workspace w ON w.id = uw."workspaceId"
+			 WHERE uw."userId" = $1::uuid AND uw."deletedAt" IS NULL AND w."deletedAt" IS NULL AND w."workspaceDiscoverability" <> 'HIDDEN'
+			 ORDER BY uw."createdAt"`, userID)
+		if err != nil {
+			return nil, nil, nil, err
+		}
+	}
+	known := make([]string, 0, len(members))
+	for _, member := range members {
+		known = append(known, member.id)
+	}
+	joinable, err = l.joinableByDomain(ctx, email, known)
+	if err != nil {
+		return nil, nil, nil, err
+	}
+	for _, workspace := range joinable {
+		known = append(known, workspace.id)
+	}
+	invitations, err = l.queryWorkspaces(ctx,
+		`SELECT `+workspaceColumns+`, t.value FROM core."appToken" t JOIN core.workspace w ON w.id = t."workspaceId"
+		 WHERE t.type IN ('INVITATION_TOKEN', 'ONBOARDING_INVITATION_TOKEN') AND lower(t.context->>'email') = lower($1)
+		   AND t."deletedAt" IS NULL AND t."expiresAt" > now() AND w."deletedAt" IS NULL
+		   AND w."workspaceDiscoverability" <> 'HIDDEN' AND NOT (w.id::text = ANY($2))
+		 ORDER BY t."createdAt"`, email, known)
+	if err != nil {
+		return nil, nil, nil, err
+	}
+	return members, joinable, invitations, nil
 }
 
 func (l *PasswordLogin) joinableByDomain(ctx context.Context, email string, memberIDs []string) ([]workspaceRow, error) {

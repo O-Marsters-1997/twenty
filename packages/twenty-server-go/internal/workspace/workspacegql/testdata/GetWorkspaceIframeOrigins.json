@@ -1,0 +1,9 @@
+{
+  "name": "GetWorkspaceIframeOrigins",
+  "operation": "GetWorkspaceIframeOrigins",
+  "fixture": "workspace twenty allowing one iframe origin; hand-written from the Node resolver",
+  "endpoint": "/metadata",
+  "query": "query GetWorkspaceIframeOrigins { currentWorkspace { id allowedIframeOrigins } }",
+  "variables": {},
+  "response": {"data": {"currentWorkspace": {"id": "26a06a83-ad30-4547-9126-7f6339d43e03", "allowedIframeOrigins": ["https://app.example.com"]}}}
+}

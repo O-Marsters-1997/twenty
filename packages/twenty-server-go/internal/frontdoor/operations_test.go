@@ -121,3 +121,13 @@ func TestDefaultTable_RoutesSkillOperationsToGo(t *testing.T) {
 		}
 	}
 }
+
+func TestDefaultTable_RoutesWorkspaceOperationsToGo(t *testing.T) {
+	t.Parallel()
+	table := frontdoor.DefaultTable()[frontdoor.EndpointMetadata]
+	for _, operation := range frontdoor.WorkspaceOperations {
+		if table[operation] != frontdoor.RouteGo {
+			t.Errorf("route of %s = %q, want %q", operation, table[operation], frontdoor.RouteGo)
+		}
+	}
+}

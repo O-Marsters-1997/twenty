@@ -13,8 +13,8 @@ import { isValidReturnToPath } from '@/auth/utils/isValidReturnToPath';
 import { useQuery } from '@apollo/client/react';
 import { isNonEmptyString } from '@sniptt/guards';
 import { matchPath, useLocation } from 'react-router-dom';
-import { AppPath, SettingsPath } from 'twenty-shared/types';
-import { getSettingsPath, isDefined } from 'twenty-shared/utils';
+import { AppPath } from 'twenty-shared/types';
+import { isDefined } from 'twenty-shared/utils';
 import {
   FindOnePageLayoutTypeDocument,
   OnboardingStatus,
@@ -120,10 +120,6 @@ export const usePageChangeEffectNavigateLocation = () => {
 
   if (isMatchingLocation(location, AppPath.Index) && isLogged) {
     return resolvedReturnToPath ?? defaultHomePagePath;
-  }
-
-  if (isMatchingLocation(location, AppPath.Dpa)) {
-    return getSettingsPath(SettingsPath.LegalDpa);
   }
 
   if (

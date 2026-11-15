@@ -167,10 +167,6 @@ export const createWorkspaceRouteObjects = (): WorkspaceRouteObject[] => {
       children: settingsRouteObjects,
     },
     {
-      path: AppPath.Dpa,
-      element: null,
-    },
-    {
       path: AppPath.NotFoundWildcard,
       element: (
         <LazyRoute>

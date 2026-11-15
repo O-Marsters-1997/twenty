@@ -1,0 +1,9 @@
+{
+  "name": "GetWorkspaceFromInviteHash",
+  "operation": "GetWorkspaceFromInviteHash",
+  "fixture": "workspace twenty with invite hash invite-abc; hand-written from the Node resolver",
+  "endpoint": "/metadata",
+  "query": "query GetWorkspaceFromInviteHash($inviteHash: String!) { findWorkspaceFromInviteHash(inviteHash: $inviteHash) { id displayName logo allowImpersonation } }",
+  "variables": {"inviteHash": "invite-abc"},
+  "response": {"data": {"findWorkspaceFromInviteHash": {"id": "26a06a83-ad30-4547-9126-7f6339d43e03", "displayName": "Twenty", "logo": "", "allowImpersonation": true}}}
+}

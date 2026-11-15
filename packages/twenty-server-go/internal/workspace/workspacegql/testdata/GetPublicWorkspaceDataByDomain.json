@@ -1,0 +1,16 @@
+{
+  "name": "GetPublicWorkspaceDataByDomain",
+  "operation": "GetPublicWorkspaceDataByDomain",
+  "fixture": "workspace twenty on subdomain twenty, password auth on, Google disabled system-wide; hand-written from the Node resolver",
+  "endpoint": "/metadata",
+  "query": "query GetPublicWorkspaceDataByDomain($origin: String!) { getPublicWorkspaceDataByDomain(origin: $origin) { id logo displayName workspaceUrls { ...WorkspaceUrlsFragment } authProviders { google magicLink password } authBypassProviders { google password } } } fragment WorkspaceUrlsFragment on WorkspaceUrls { subdomainUrl }",
+  "variables": {"origin": "http://twenty.localhost:3001"},
+  "response": {"data": {"getPublicWorkspaceDataByDomain": {
+    "id": "26a06a83-ad30-4547-9126-7f6339d43e03",
+    "logo": "",
+    "displayName": "Twenty",
+    "workspaceUrls": {"subdomainUrl": "http://twenty.localhost:3001/"},
+    "authProviders": {"google": false, "magicLink": false, "password": true},
+    "authBypassProviders": {"google": false, "password": false}
+  }}}
+}

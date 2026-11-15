@@ -1,0 +1,9 @@
+{
+  "name": "GetWorkspaceCreationDefaults",
+  "operation": "GetWorkspaceCreationDefaults",
+  "fixture": "signed-in user with a work email at acme.com; hand-written from the Node resolver",
+  "endpoint": "/metadata",
+  "query": "query GetWorkspaceCreationDefaults { getWorkspaceCreationDefaults { displayName subdomain } }",
+  "variables": {},
+  "response": {"data": {"getWorkspaceCreationDefaults": {"displayName": "Acme", "subdomain": "acme"}}}
+}

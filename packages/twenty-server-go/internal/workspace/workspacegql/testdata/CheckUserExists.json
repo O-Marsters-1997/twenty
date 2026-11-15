@@ -1,0 +1,9 @@
+{
+  "name": "CheckUserExists",
+  "operation": "CheckUserExists",
+  "fixture": "verified user who is a member of workspace twenty; hand-written from the Node resolver",
+  "endpoint": "/metadata",
+  "query": "query CheckUserExists($email: String!, $captchaToken: String) { checkUserExists(email: $email, captchaToken: $captchaToken) { exists availableWorkspacesCount isEmailVerified } }",
+  "variables": {"email": "Member@Example.com"},
+  "response": {"data": {"checkUserExists": {"exists": true, "availableWorkspacesCount": 1, "isEmailVerified": true}}}
+}

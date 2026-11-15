@@ -39,6 +39,7 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow"
 	workflowstore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/store"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/workflowgql"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/workspace/workspacegql"
 )
 
 func main() {
@@ -105,6 +106,13 @@ func run() error {
 	)
 	authHandler := authgql.NewHandler(newAuthResolver(pool, twoFactor, passwordLogins, stack), logger)
 
+	publicWorkspaces := auth.NewPublicWorkspaces(pool, stack.origins, passwordLogins, auth.PublicWorkspaceConfig{
+		GoogleEnabled:    os.Getenv("AUTH_GOOGLE_ENABLED") == "true",
+		PasswordEnabled:  os.Getenv("AUTH_PASSWORD_ENABLED") != "false",
+		DefaultSubdomain: cfg.DefaultSubdomain,
+	})
+	publicWorkspaceHandler := workspacegql.NewHandler(&workspacegql.Resolver{Workspaces: publicWorkspaces}, logger)
+
 	goGraphQL := http.NewServeMux()
 	goGraphQL.Handle(string(frontdoor.EndpointWorkspace), workspaceHandler(recordsgql.NewHandler(&recordsgql.Resolver{
 		Store:              people,
@@ -141,12 +149,13 @@ func run() error {
 			Tokens:       stack.issuer,
 		}, logger),
 		authHandler,
+		publicWorkspaceHandler,
 		agentgql.Operations,
 	))
 
 	handler := frontdoor.NewHandler(frontdoor.DefaultTable(), cfg.NodeUpstreamURL, verifier, goGraphQL, logger).
 		WithPublicOperations(map[frontdoor.Endpoint][]string{
-			frontdoor.EndpointMetadata:  slices.Concat(frontdoor.SessionOperations, frontdoor.PasswordLoginOperations),
+			frontdoor.EndpointMetadata:  slices.Concat(frontdoor.SessionOperations, frontdoor.PasswordLoginOperations, frontdoor.PublicWorkspaceOperations),
 			frontdoor.EndpointWorkspace: frontdoor.LoginOperations,
 		}).
 		WithMCP(toolRegistry).

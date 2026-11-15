@@ -1,0 +1,14 @@
+{
+  "name": "CheckWorkspaceSubdomainAvailability",
+  "operation": "CheckWorkspaceSubdomainAvailability",
+  "fixture": "subdomain twenty already taken; hand-written from the Node resolver",
+  "endpoint": "/metadata",
+  "query": "query CheckWorkspaceSubdomainAvailability($subdomain: String!) { checkWorkspaceSubdomainAvailability(subdomain: $subdomain) { isValid available suggestedSubdomain suggestedSubdomains } }",
+  "variables": {"subdomain": "twenty"},
+  "response": {"data": {"checkWorkspaceSubdomainAvailability": {
+    "isValid": true,
+    "available": false,
+    "suggestedSubdomain": "twenty-2",
+    "suggestedSubdomains": ["twenty-2", "twenty-3", "twenty-4"]
+  }}}
+}
