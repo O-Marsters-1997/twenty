@@ -3,6 +3,7 @@ package store
 import (
 	"context"
 	"fmt"
+	"slices"
 
 	"github.com/jackc/pgx/v5"
 
@@ -39,6 +40,9 @@ func (r *Roles) UpsertFieldPermissions(ctx context.Context, rawInput Input) ([]F
 		return nil, fmt.Errorf("%w: fieldPermissions must not be empty", metadata.ErrInvalidInput)
 	}
 	objectIDs, fieldIDs := idsOf(items, "objectMetadataId"), idsOf(items, "fieldMetadataId")
+	if err := requireUUIDs(append(slices.Clone(objectIDs), fieldIDs...)...); err != nil {
+		return nil, err
+	}
 	var result []FieldPermission
 	err := pgx.BeginFunc(ctx, r.pool, func(tx pgx.Tx) error {
 		role, err := editableRole(ctx, tx, input)

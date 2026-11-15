@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 
@@ -65,6 +66,11 @@ func (r *Roles) Create(ctx context.Context, rawInput Input) (Role, error) {
 		return Role{}, fmt.Errorf("%w: label is required for role", metadata.ErrInvalidInput)
 	}
 	id, _ := collapseWhitespace(input["id"]).(string)
+	if id != "" {
+		if err := requireUUIDs(id); err != nil {
+			return Role{}, err
+		}
+	}
 	flags := map[string]bool{"canBeAssignedToUsers": true, "canBeAssignedToAgents": true, "canBeAssignedToApiKeys": true}
 	for _, key := range roleFlagKeys {
 		if value, ok := input[key].(bool); ok {
@@ -132,6 +138,10 @@ func (r *Roles) Update(ctx context.Context, actingRoleIDs []string, rawInput Inp
 			}
 		}
 		for _, key := range roleTextKeys {
+			if value, present := updates[key]; present && value == nil && key != "label" {
+				set(key, nil)
+				continue
+			}
 			text, ok := collapseWhitespace(updates[key]).(string)
 			if !ok {
 				continue
@@ -225,11 +235,26 @@ func (role Role) flags() map[string]bool {
 }
 
 func getRole(ctx context.Context, conn db, id string) (Role, error) {
+	if err := requireUUIDs(id); err != nil {
+		return Role{}, err
+	}
 	return queryOne[Role](ctx, conn, "role not found", selectRoles+` AND r.id = $2::uuid`, workspace.PinnedWorkspaceID, id)
 }
 
 func getRoleForUpdate(ctx context.Context, conn db, id string) (Role, error) {
+	if err := requireUUIDs(id); err != nil {
+		return Role{}, err
+	}
 	return queryOne[Role](ctx, conn, "role not found", selectRoles+` AND r.id = $2::uuid FOR UPDATE OF r`, workspace.PinnedWorkspaceID, id)
+}
+
+func requireUUIDs(ids ...string) error {
+	for _, id := range ids {
+		if _, err := uuid.Parse(id); err != nil {
+			return fmt.Errorf("%w: %q is not a valid UUID", metadata.ErrInvalidInput, id)
+		}
+	}
+	return nil
 }
 
 func roleHasFlag(ctx context.Context, conn db, roleID, flag string) (bool, error) {

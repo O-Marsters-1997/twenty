@@ -91,6 +91,51 @@ func TestRoleOperations(t *testing.T) {
 	}
 }
 
+func TestUpdateOneRole_nullClearsIcon(t *testing.T) {
+	t.Parallel()
+	h := newHarness(t)
+	id := h.createRole(t, map[string]any{"label": "Iconic", "icon": "IconEye", "description": "Watches"})
+	cleared := h.data(t, "UpdateOneRole", `mutation UpdateOneRole($updateRoleInput: UpdateRoleInput!) { updateOneRole(updateRoleInput: $updateRoleInput) { icon description } }`,
+		map[string]any{"updateRoleInput": map[string]any{"id": id, "update": map[string]any{"icon": nil}}})["updateOneRole"]
+	if diff := cmp.Diff(map[string]any{"icon": nil, "description": "Watches"}, cleared); diff != "" {
+		t.Errorf("updateOneRole (-want +got):\n%s", diff)
+	}
+}
+
+func TestDeleteOneRole_rebindsTargetsToDefaultRole(t *testing.T) {
+	t.Parallel()
+	h := newHarness(t)
+	defaultID := h.createRole(t, map[string]any{"label": "Default"})
+	doomed := h.createRole(t, map[string]any{"label": "Doomed"})
+	if _, err := h.pool.Exec(t.Context(), `UPDATE core.workspace SET "defaultRoleId" = $1::uuid WHERE id = $2::uuid`, defaultID, workspace.PinnedWorkspaceID); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := h.pool.Exec(t.Context(), `UPDATE core."roleTarget" SET "roleId" = $1::uuid WHERE "userWorkspaceId" = $2::uuid`, doomed, memberWorkspaceID); err != nil {
+		t.Fatal(err)
+	}
+	h.data(t, "CreateApiKey", `mutation CreateApiKey($input: CreateApiKeyInput!) { createApiKey(input: $input) { id } }`,
+		map[string]any{"input": map[string]any{"name": "CI", "expiresAt": "2030-01-01T00:00:00.000Z", "roleId": doomed}})
+	h.data(t, "DeleteOneRole", deleteRole, map[string]any{"roleId": doomed})
+	var onDefault int
+	if err := h.pool.QueryRow(t.Context(), `SELECT count(*) FROM core."roleTarget" WHERE "roleId" = $1::uuid AND ("apiKeyId" IS NOT NULL OR "userWorkspaceId" = $2::uuid)`,
+		defaultID, memberWorkspaceID).Scan(&onDefault); err != nil {
+		t.Fatal(err)
+	}
+	if onDefault != 2 {
+		t.Errorf("targets on the default role after delete = %d, want 2 (member and API key)", onDefault)
+	}
+
+	blocking := h.createRole(t, map[string]any{"label": "Blocking"})
+	if _, err := h.pool.Exec(t.Context(), `UPDATE core.role SET "canBeAssignedToApiKeys" = false WHERE id = $1::uuid`, defaultID); err != nil {
+		t.Fatal(err)
+	}
+	h.data(t, "CreateApiKey", `mutation CreateApiKey($input: CreateApiKeyInput!) { createApiKey(input: $input) { id } }`,
+		map[string]any{"input": map[string]any{"name": "Pinned", "expiresAt": "2030-01-01T00:00:00.000Z", "roleId": blocking}})
+	if got := errorCode(t, h.send(t, "DeleteOneRole", deleteRole, map[string]any{"roleId": blocking})); got != "BAD_USER_INPUT" {
+		t.Errorf("delete with API keys the default role cannot hold: error code = %q, want BAD_USER_INPUT", got)
+	}
+}
+
 func containsRole(roles []any, id string) bool {
 	for _, role := range roles {
 		if role.(map[string]any)["id"] == id {
@@ -200,6 +245,12 @@ func TestUpsertObjectPermissions(t *testing.T) {
 	}
 	if got := errorCode(t, send(map[string]any{"objectMetadataId": missingID, "canReadObjectRecords": true})); got != "NOT_FOUND" {
 		t.Errorf("unknown object error code = %q, want NOT_FOUND", got)
+	}
+	if got := errorCode(t, send(map[string]any{"objectMetadataId": first}, map[string]any{"objectMetadataId": first})); got != "BAD_USER_INPUT" {
+		t.Errorf("duplicate object error code = %q, want BAD_USER_INPUT", got)
+	}
+	if got := errorCode(t, send(map[string]any{"objectMetadataId": "not-a-uuid"})); got != "BAD_USER_INPUT" {
+		t.Errorf("invalid object id error code = %q, want BAD_USER_INPUT", got)
 	}
 }
 

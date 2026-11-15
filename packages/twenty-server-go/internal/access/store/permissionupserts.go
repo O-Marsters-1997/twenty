@@ -66,6 +66,14 @@ func editableRole(ctx context.Context, tx pgx.Tx, input Input) (Role, error) {
 	case !role.IsEditable:
 		return Role{}, errNotEditable
 	}
+	var foreign bool
+	if err := tx.QueryRow(ctx, `SELECT r."applicationId" IS DISTINCT FROM w."workspaceCustomApplicationId" FROM core.role r, core.workspace w
+		WHERE r.id = $1::uuid AND w.id = $2::uuid`, role.ID, workspace.PinnedWorkspaceID).Scan(&foreign); err != nil {
+		return Role{}, fmt.Errorf("check role application: %w", err)
+	}
+	if foreign {
+		return Role{}, fmt.Errorf("%w: this role belongs to another application and cannot be modified here", ErrForbidden)
+	}
 	return role, nil
 }
 
@@ -108,6 +116,12 @@ func (r *Roles) UpsertObjectPermissions(ctx context.Context, rawInput Input) ([]
 		return nil, fmt.Errorf("%w: objectPermissions must not be empty", metadata.ErrInvalidInput)
 	}
 	objectIDs := idsOf(desired, "objectMetadataId")
+	if len(objectIDs) != len(desired) {
+		return nil, fmt.Errorf("%w: each object may appear only once in objectPermissions", metadata.ErrInvalidInput)
+	}
+	if err := requireUUIDs(objectIDs...); err != nil {
+		return nil, err
+	}
 	var result []ObjectPermission
 	err := pgx.BeginFunc(ctx, r.pool, func(tx pgx.Tx) error {
 		role, err := editableRole(ctx, tx, input)
