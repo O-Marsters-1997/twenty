@@ -62,13 +62,13 @@ func DefaultTable() OperationTable {
 	for _, operation := range viewOperations {
 		table[EndpointMetadata][operation] = RouteGo
 	}
-	for _, operation := range slices.Concat(SkillOperations, ChatOperations, agentOperations, MessagingOperations) {
+	for _, operation := range slices.Concat(SkillOperations, ChatOperations, agentOperations, MessagingOperations, TwoFactorOperations, SessionOperations, PasswordLoginOperations) {
 		table[EndpointMetadata][operation] = RouteGo
 	}
 	for _, operation := range slices.Concat(WorkflowOperations, WorkflowAuthoringOperations) {
 		table[EndpointWorkspace][operation] = RouteGo
 	}
-	for _, operation := range TimelineOperations {
+	for _, operation := range slices.Concat(TimelineOperations, LoginOperations) {
 		table[EndpointWorkspace][operation] = RouteGo
 	}
 	for _, plural := range []string{"Notes", "NoteTargets", "Tasks", "TaskTargets"} {
@@ -133,7 +133,19 @@ var MessagingOperations = []string{
 	"SendMessageCampaign", "CancelMessageCampaign", "SendMessageCampaignTest", "PreviewMessageCampaignAudience",
 }
 
+var LoginOperations = []string{"getAuthTokensFromOTP", "getAuthTokensFromTwoFactorAuthenticationRecoveryCode"}
+
+var TwoFactorOperations = []string{
+	"initiateOTPProvisioningForAuthenticatedUser", "verifyTwoFactorAuthenticationMethodForAuthenticatedUser",
+	"deleteTwoFactorAuthenticationMethod", "twoFactorAuthenticationRecoveryStatus",
+	"generateTwoFactorAuthenticationRecoveryCode", "revokeTwoFactorAuthenticationRecoveryCode",
+}
+
+var SessionOperations = []string{"getAuthTokensFromLoginToken", "RenewToken", "SignOut"}
+
 var blockedMetadataFields = []string{
 	"createOneObject", "updateOneObject", "deleteOneObject",
 	"createOneField", "updateOneField", "deleteOneField",
 }
+
+var PasswordLoginOperations = []string{"GetLoginTokenFromCredentials", "SignIn"}

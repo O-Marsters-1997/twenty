@@ -1,0 +1,19 @@
+type AuthToken {
+  token: String!
+  expiresAt: DateTime!
+}
+
+type AuthTokenPair {
+  accessOrWorkspaceAgnosticToken: AuthToken!
+  refreshToken: AuthToken!
+}
+
+type AuthTokens {
+  tokens: AuthTokenPair!
+}
+
+extend type Mutation {
+  getAuthTokensFromLoginToken(loginToken: String!, origin: String!): AuthTokens!
+  renewToken(appToken: String!): AuthTokens!
+  signOut(refreshToken: String): Boolean!
+}

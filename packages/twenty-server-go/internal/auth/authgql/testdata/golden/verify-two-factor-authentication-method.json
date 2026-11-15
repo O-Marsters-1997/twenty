@@ -1,0 +1,9 @@
+{
+  "name": "verify-two-factor-authentication-method",
+  "operation": "verifyTwoFactorAuthenticationMethodForAuthenticatedUser",
+  "fixture": "user with a pending TOTP method",
+  "endpoint": "/metadata",
+  "query": "mutation verifyTwoFactorAuthenticationMethodForAuthenticatedUser($otp: String!) { verifyTwoFactorAuthenticationMethodForAuthenticatedUser(otp: $otp) { success } }",
+  "variables": {"otp": "123456"},
+  "response": {"data":{"verifyTwoFactorAuthenticationMethodForAuthenticatedUser":{"success":true}}}
+}

@@ -1,0 +1,9 @@
+{
+  "name": "revoke-two-factor-authentication-recovery-code",
+  "operation": "revokeTwoFactorAuthenticationRecoveryCode",
+  "fixture": "admin revoking a member's pending recovery code",
+  "endpoint": "/metadata",
+  "query": "mutation revokeTwoFactorAuthenticationRecoveryCode($userId: UUID!) { revokeTwoFactorAuthenticationRecoveryCode(userId: $userId) }",
+  "variables": {"userId": "a0000000-0000-4000-8000-000000000003"},
+  "response": {"data":{"revokeTwoFactorAuthenticationRecoveryCode":true}}
+}

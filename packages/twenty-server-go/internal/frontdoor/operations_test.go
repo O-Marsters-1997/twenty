@@ -63,6 +63,49 @@ func TestDefaultTable_RoutesSendEmailToGo(t *testing.T) {
 	}
 }
 
+func TestDefaultTable_RoutesPasswordLoginOperationsToGo(t *testing.T) {
+	t.Parallel()
+	table := frontdoor.DefaultTable()[frontdoor.EndpointMetadata]
+	for _, operation := range []string{"GetLoginTokenFromCredentials", "SignIn"} {
+		if table[operation] != frontdoor.RouteGo {
+			t.Errorf("route of %s = %q, want %q", operation, table[operation], frontdoor.RouteGo)
+		}
+	}
+}
+
+func TestDefaultTable_RoutesTwoFactorOperationsToGo(t *testing.T) {
+	t.Parallel()
+	table := frontdoor.DefaultTable()[frontdoor.EndpointMetadata]
+	for _, operation := range frontdoor.TwoFactorOperations {
+		if table[operation] != frontdoor.RouteGo {
+			t.Errorf("route of %s = %q, want %q", operation, table[operation], frontdoor.RouteGo)
+		}
+	}
+	if got := table["initiateOTPProvisioning"]; got == frontdoor.RouteGo {
+		t.Error("initiateOTPProvisioning is public and needs login-token verification, so it stays on Node")
+	}
+}
+
+func TestDefaultTable_RoutesSessionOperationsToGo(t *testing.T) {
+	t.Parallel()
+	table := frontdoor.DefaultTable()[frontdoor.EndpointMetadata]
+	for _, operation := range []string{"getAuthTokensFromLoginToken", "RenewToken", "SignOut"} {
+		if table[operation] != frontdoor.RouteGo {
+			t.Errorf("route of %s = %q, want %q", operation, table[operation], frontdoor.RouteGo)
+		}
+	}
+}
+
+func TestDefaultTable_RoutesLoginOperationsToGo(t *testing.T) {
+	t.Parallel()
+	table := frontdoor.DefaultTable()[frontdoor.EndpointWorkspace]
+	for _, operation := range frontdoor.LoginOperations {
+		if table[operation] != frontdoor.RouteGo {
+			t.Errorf("route of %s = %q, want %q", operation, table[operation], frontdoor.RouteGo)
+		}
+	}
+}
+
 func TestDefaultTable_RoutesSkillOperationsToGo(t *testing.T) {
 	t.Parallel()
 	table := frontdoor.DefaultTable()[frontdoor.EndpointMetadata]

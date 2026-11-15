@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"slices"
 	"syscall"
 	"time"
 
@@ -21,6 +22,7 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai/skillgql"
 	aistore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai/store"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth/authgql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/config"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/frontdoor"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging"
@@ -57,6 +59,14 @@ func run() error {
 	}
 	defer pool.Close()
 	verifier := auth.NewJWTVerifier(pool, cfg.AppSecret)
+	stack, err := newAuthStack(pool, cfg, logger)
+	if err != nil {
+		return err
+	}
+	passwordLogins, err := passwordLogin(pool, cfg, stack)
+	if err != nil {
+		return err
+	}
 
 	chats := aistore.New(pool)
 	broker := ai.NewPersistingBroker(ai.NewMemoryBroker(), chats, logger)
@@ -88,6 +98,11 @@ func run() error {
 		HTTPClient: workflowgql.NewSafeHTTPClient(),
 	}, logger)
 
+	twoFactor := auth.NewTwoFactor(
+		pool, auth.NewSecretCipher(cfg.EncryptionKey, cfg.FallbackEncryptionKey, cfg.AppSecret), cfg.RecoveryCodeTTL,
+	)
+	authHandler := authgql.NewHandler(newAuthResolver(pool, twoFactor, passwordLogins, stack), logger)
+
 	goGraphQL := http.NewServeMux()
 	goGraphQL.Handle(string(frontdoor.EndpointWorkspace), workspaceHandler(recordsgql.NewHandler(&recordsgql.Resolver{
 		Store:              people,
@@ -104,7 +119,7 @@ func run() error {
 	}, logger), chatHandler, workflowHandler, messaginggql.NewHandler(&messaginggql.Resolver{
 		Timeline: messagingstore.NewTimeline(pool),
 		Banners:  messagingstore.NewReconnectBanners(pool),
-	}, logger)))
+	}, logger), authHandler))
 	goGraphQL.Handle(string(frontdoor.EndpointMetadata), metadataHandler(
 		metadatagql.NewHandler(metadatastore.New(pool), toolRegistry, logger),
 		chatHandler,
@@ -117,18 +132,28 @@ func run() error {
 			Renderer:  messaging.GoRenderer{},
 			Queue:     queue.Enqueue,
 		}, logger),
+		authHandler,
 		agentgql.Operations,
 	))
 
 	handler := frontdoor.NewHandler(frontdoor.DefaultTable(), cfg.NodeUpstreamURL, verifier, goGraphQL, logger).
+		WithPublicOperations(map[frontdoor.Endpoint][]string{
+			frontdoor.EndpointMetadata:  slices.Concat(frontdoor.SessionOperations, frontdoor.PasswordLoginOperations),
+			frontdoor.EndpointWorkspace: frontdoor.LoginOperations,
+		}).
 		WithMCP(toolRegistry).
 		WithSubscriber(aigql.NewSubscriber(broker))
 
 	launcher := &workflow.Launcher{Store: workflowstore.New(pool), Queue: queue.Enqueue}
 
+	routes, err := googleRoutes(pool, cfg.AppSecret, webhookRoutes(launcher, handler, logger), logger)
+	if err != nil {
+		return err
+	}
+
 	server := &http.Server{
 		Addr:              cfg.ListenAddr,
-		Handler:           webhookRoutes(launcher, handler, logger),
+		Handler:           routes,
 		ReadHeaderTimeout: 10 * time.Second,
 	}
 
