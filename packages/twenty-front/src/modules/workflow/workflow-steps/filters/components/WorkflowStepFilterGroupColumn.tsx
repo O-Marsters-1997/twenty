@@ -3,10 +3,10 @@ import { WorkflowStepFilterGroupChildren } from '@/workflow/workflow-steps/filte
 import { WorkflowStepFilterGroupOptionsDropdown } from '@/workflow/workflow-steps/filters/components/WorkflowStepFilterGroupOptionsDropdown';
 import { WorkflowStepFilterLogicalOperatorCell } from '@/workflow/workflow-steps/filters/components/WorkflowStepFilterLogicalOperatorCell';
 import { WorkflowStepFilterContext } from '@/workflow/workflow-steps/filters/states/context/WorkflowStepFilterContext';
-import { styled } from '@linaria/react';
 import { useContext } from 'react';
 import { type StepFilterGroup } from 'twenty-shared/types';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type WorkflowStepFilterGroupColumnProps = {
   parentStepFilterGroup: StepFilterGroup;
@@ -14,12 +14,14 @@ type WorkflowStepFilterGroupColumnProps = {
   stepFilterGroupIndex: number;
 };
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: ${themeCssVariables.spacing[1]};
-  justify-content: space-between;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: spacing['--t-spacing-1'],
+    justifyContent: 'space-between',
+  },
+});
 
 export const WorkflowStepFilterGroupColumn = ({
   parentStepFilterGroup,
@@ -30,7 +32,7 @@ export const WorkflowStepFilterGroupColumn = ({
 
   return (
     <AdvancedFilterSidePanelColumn>
-      <StyledContainer>
+      <div {...stylex.props(styles.container)}>
         <WorkflowStepFilterLogicalOperatorCell
           index={stepFilterGroupIndex}
           stepFilterGroup={parentStepFilterGroup}
@@ -40,7 +42,7 @@ export const WorkflowStepFilterGroupColumn = ({
             stepFilterGroupId={stepFilterGroup.id}
           />
         )}
-      </StyledContainer>
+      </div>
       <WorkflowStepFilterGroupChildren stepFilterGroupId={stepFilterGroup.id} />
     </AdvancedFilterSidePanelColumn>
   );

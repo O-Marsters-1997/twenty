@@ -10,7 +10,6 @@ import { WorkflowStepFooter } from '@/workflow/workflow-steps/components/Workflo
 import { WorkflowClassifyQuestionCriteria } from '@/workflow/workflow-steps/workflow-actions/classify-action/components/WorkflowClassifyQuestionCriteria';
 import { useClassifyForm } from '@/workflow/workflow-steps/workflow-actions/classify-action/hooks/useClassifyForm';
 import { WorkflowVariablePicker } from '@/workflow/workflow-variables/components/WorkflowVariablePicker';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import {
   type AiEvaluationQuestionType,
@@ -28,24 +27,25 @@ import {
 } from 'twenty-ui/icon';
 import { Button, Field } from 'twenty-ui/primitives/input';
 import { Separator } from 'twenty-ui/primitives/layout';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledQuestion = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[3]};
-`;
-
-const StyledNameRow = styled.div`
-  align-items: end;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledGrowingField = styled.div`
-  flex: 1;
-  min-width: 0;
-`;
+const styles = stylex.create({
+  question: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-3'],
+  },
+  nameRow: {
+    alignItems: 'end',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+  },
+  growingField: {
+    flex: '1',
+    minWidth: '0',
+  },
+});
 
 type WorkflowEditActionClassifyProps = {
   action: WorkflowClassifyAction;
@@ -151,12 +151,12 @@ export const WorkflowEditActionClassify = ({
         />
 
         {questions.map((question) => (
-          <StyledQuestion key={question.id}>
+          <div key={question.id} {...stylex.props(styles.question)}>
             <Separator />
 
             <FormFieldInputContainer>
-              <StyledNameRow>
-                <StyledGrowingField>
+              <div {...stylex.props(styles.nameRow)}>
+                <div {...stylex.props(styles.growingField)}>
                   <FormTextFieldInput
                     key={question.type}
                     label={t`Name`}
@@ -165,7 +165,7 @@ export const WorkflowEditActionClassify = ({
                     readonly={readonly}
                     onChange={(name) => updateQuestion(question.id, { name })}
                   />
-                </StyledGrowingField>
+                </div>
                 {!readonly && questions.length > 1 && (
                   <Button
                     startIcon={<IconTrash />}
@@ -179,7 +179,7 @@ export const WorkflowEditActionClassify = ({
                     }
                   />
                 )}
-              </StyledNameRow>
+              </div>
               <Field.Description>
                 {t`Use this name to find the answer in later workflow steps.`}
               </Field.Description>
@@ -226,7 +226,7 @@ export const WorkflowEditActionClassify = ({
                 }
               />
             )}
-          </StyledQuestion>
+          </div>
         ))}
 
         {!readonly && (

@@ -162,8 +162,7 @@ export const WorkflowEditActionEmailBase = ({
       : [];
 
   const missingScopes =
-    isDefined(ownAccount) &&
-    missingDraftScopes.length > 0
+    isDefined(ownAccount) && missingDraftScopes.length > 0
       ? {
           provider: ownAccount.provider,
           loginHint: ownAccount.handle,

@@ -2,25 +2,34 @@ import { WorkflowStepFilterAddFilterRuleSelect } from '@/workflow/workflow-steps
 import { WorkflowStepFilterColumn } from '@/workflow/workflow-steps/filters/components/WorkflowStepFilterColumn';
 import { useChildStepFiltersAndChildStepFilterGroups } from '@/workflow/workflow-steps/filters/hooks/useChildStepFiltersAndChildStepFilterGroups';
 import { WorkflowStepFilterContext } from '@/workflow/workflow-steps/filters/states/context/WorkflowStepFilterContext';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { useContext } from 'react';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import {
+  spacing,
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div<{ isGrayBackground?: boolean }>`
-  align-items: start;
-  background-color: ${({ isGrayBackground }) =>
-    isGrayBackground
-      ? themeCssVariables.background.transparent.lighter
-      : 'transparent'};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.md};
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[6]};
-  padding: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  root: {
+    alignItems: 'start',
+    borderColor: borderColor['--t-border-color-medium'],
+    borderRadius: borderRadius['--t-border-radius-md'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-6'],
+    padding: spacing['--t-spacing-2'],
+  },
+  grayBackground: {
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
+  },
+});
 
 type WorkflowStepFilterGroupChildrenProps = {
   stepFilterGroupId: string;
@@ -45,7 +54,12 @@ export const WorkflowStepFilterGroupChildren = ({
   );
 
   return (
-    <StyledContainer isGrayBackground={hasParentStepFilterGroup}>
+    <div
+      {...stylex.props(
+        styles.root,
+        hasParentStepFilterGroup && styles.grayBackground,
+      )}
+    >
       {(childStepFilters ?? []).map((childStepFilter, childStepFilterIndex) => (
         <WorkflowStepFilterColumn
           key={childStepFilter.id}
@@ -59,6 +73,6 @@ export const WorkflowStepFilterGroupChildren = ({
           stepFilterGroup={currentStepFilterGroup}
         />
       )}
-    </StyledContainer>
+    </div>
   );
 };

@@ -1,38 +1,37 @@
 import { FormTextFieldInput } from '@/object-record/record-field/ui/form-types/components/FormTextFieldInput';
 import { InputLabel } from '@/ui/input/components/internal/InputLabel/InputLabel';
 import { WorkflowVariablePicker } from '@/workflow/workflow-variables/components/WorkflowVariablePicker';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { useState } from 'react';
 import { type WorkflowClassifyCriterion } from 'twenty-shared/workflow';
 import { IconTrash } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { v4 } from 'uuid';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledCriterion = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledNameRow = styled.div`
-  align-items: end;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledGrowingField = styled.div`
-  flex: 1;
-  min-width: 0;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+  },
+  criterion: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+  },
+  nameRow: {
+    alignItems: 'end',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+  },
+  growingField: {
+    flex: '1',
+    minWidth: '0',
+  },
+});
 
 type WorkflowClassifyQuestionCriteriaProps = {
   criteria: WorkflowClassifyCriterion[];
@@ -90,12 +89,12 @@ export const WorkflowClassifyQuestionCriteria = ({
       : [...criteria, emptyCriterion];
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       {variant === 'levels' && <InputLabel>{t`Lowest first`}</InputLabel>}
       {visibleRows.map((criterion, index) => (
-        <StyledCriterion key={criterion.id}>
-          <StyledNameRow>
-            <StyledGrowingField>
+        <div key={criterion.id} {...stylex.props(styles.criterion)}>
+          <div {...stylex.props(styles.nameRow)}>
+            <div {...stylex.props(styles.growingField)}>
               <FormTextFieldInput
                 label={
                   variant === 'options'
@@ -107,7 +106,7 @@ export const WorkflowClassifyQuestionCriteria = ({
                 readonly={readonly}
                 onChange={(name) => changeCriterion(criterion.id, { name })}
               />
-            </StyledGrowingField>
+            </div>
             {!readonly && (
               <Button
                 disabled={criterion.id === emptyCriterion.id}
@@ -120,7 +119,7 @@ export const WorkflowClassifyQuestionCriteria = ({
                 }
               />
             )}
-          </StyledNameRow>
+          </div>
           <FormTextFieldInput
             label={
               variant === 'options' ? t`Description (optional)` : t`Description`
@@ -137,8 +136,8 @@ export const WorkflowClassifyQuestionCriteria = ({
               changeCriterion(criterion.id, { description })
             }
           />
-        </StyledCriterion>
+        </div>
       ))}
-    </StyledContainer>
+    </div>
   );
 };

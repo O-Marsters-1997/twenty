@@ -1,15 +1,17 @@
 import { useAddRootStepFilter } from '@/workflow/workflow-steps/filters/hooks/useAddRootStepFilter';
 import { WorkflowStepFilterContext } from '@/workflow/workflow-steps/filters/states/context/WorkflowStepFilterContext';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useContext } from 'react';
 import { IconFilter } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledButtonContainer = styled.div`
-  margin-top: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  buttonContainer: {
+    marginTop: spacing['--t-spacing-2'],
+  },
+});
 
 export const WorkflowStepFilterAddRootStepFilterButton = () => {
   const { t } = useLingui();
@@ -17,7 +19,7 @@ export const WorkflowStepFilterAddRootStepFilterButton = () => {
   const { addRootStepFilter } = useAddRootStepFilter();
 
   return (
-    <StyledButtonContainer>
+    <div {...stylex.props(styles.buttonContainer)}>
       <Button
         startIcon={<IconFilter />}
         size="sm"
@@ -26,6 +28,6 @@ export const WorkflowStepFilterAddRootStepFilterButton = () => {
         disabled={readonly}
         variant="outline"
       >{t`Add first filter`}</Button>
-    </StyledButtonContainer>
+    </div>
   );
 };

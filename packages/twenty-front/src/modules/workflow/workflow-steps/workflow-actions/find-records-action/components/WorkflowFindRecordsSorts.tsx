@@ -2,29 +2,29 @@ import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/Enriche
 import { filterSortableFieldMetadataItems } from '@/object-metadata/utils/filterSortableFieldMetadataItems';
 import { type RecordSort } from '@/object-record/record-sort/types/RecordSort';
 import { Select } from '@/ui/input/components/Select';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { IconArrowsSort, IconTrash, useIcons } from 'twenty-ui/icon';
 import { Button, type SelectOption } from 'twenty-ui/primitives/input';
 import { v4 as uuidv4 } from 'uuid';
 import { ViewSortDirection } from '~/generated-metadata/graphql';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledSortItemContainer = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledAddButtonContainer = styled.div`
-  margin-top: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+  },
+  sortItemContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+  },
+  addButtonContainer: {
+    marginTop: spacing['--t-spacing-1'],
+  },
+});
 
 type WorkflowFindRecordsSortsProps = {
   recordSorts: RecordSort[];
@@ -111,10 +111,10 @@ export const WorkflowFindRecordsSorts = ({
   };
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       {recordSorts.map((sort) => {
         return (
-          <StyledSortItemContainer key={sort.id}>
+          <div key={sort.id} {...stylex.props(styles.sortItemContainer)}>
             <Select
               dropdownId={`workflow-find-records-sort-field-${sort.id}`}
               fullWidth
@@ -144,11 +144,11 @@ export const WorkflowFindRecordsSorts = ({
                 disabled={readonly}
               />
             )}
-          </StyledSortItemContainer>
+          </div>
         );
       })}
 
-      <StyledAddButtonContainer>
+      <div {...stylex.props(styles.addButtonContainer)}>
         <Button
           startIcon={<IconArrowsSort />}
           size="sm"
@@ -157,7 +157,7 @@ export const WorkflowFindRecordsSorts = ({
           disabled={readonly}
           variant="outline"
         >{t`Add sort`}</Button>
-      </StyledAddButtonContainer>
-    </StyledContainer>
+      </div>
+    </div>
   );
 };

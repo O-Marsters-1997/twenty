@@ -6,55 +6,71 @@ import { FORM_SELECT_FIELD_TYPE_OPTIONS } from '@/workflow/workflow-steps/workfl
 import { type WorkflowFormActionField } from '@/workflow/workflow-steps/workflow-actions/form-action/types/WorkflowFormActionField';
 import { type WorkflowFormFieldType } from '@/workflow/workflow-steps/workflow-actions/form-action/types/WorkflowFormFieldType';
 import { getDefaultFormFieldSettings } from '@/workflow/workflow-steps/workflow-actions/form-action/utils/getDefaultFormFieldSettings';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { LightIconButton } from 'twenty-ui/components/input';
 import { IconSettingsAutomation, IconX } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  spacing,
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+} from 'twenty-ui/theme/tokens.stylex';
 type WorkflowEditActionFormFieldSettingsProps = {
   field: WorkflowFormActionField;
   onChange: (field: WorkflowFormActionField) => void;
   onClose: () => void;
 };
 
-const StyledFormFieldSettingsContainer = styled.div`
-  background-color: ${themeCssVariables.background.transparent.lighter};
-  border: 1px solid ${themeCssVariables.border.color.light};
-  border-radius: ${themeCssVariables.border.radius.md};
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[1]};
-  margin-top: ${themeCssVariables.spacing[3]};
-`;
-
-const StyledSettingsContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  padding: ${themeCssVariables.spacing[3]};
-`;
-
-const StyledSettingsHeader = styled.div`
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  display: grid;
-  gap: ${themeCssVariables.spacing[1]};
-  grid-template-columns: 1fr 24px;
-  padding-bottom: ${themeCssVariables.spacing[2]};
-  padding-left: ${themeCssVariables.spacing[3]};
-  padding-right: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledTitleContainer = styled.div`
-  color: ${themeCssVariables.font.color.primary};
-  display: flex;
-  flex-direction: row;
-  gap: ${themeCssVariables.spacing[1]};
-  padding-top: ${themeCssVariables.spacing[3]};
-`;
-
-const StyledCloseButtonContainer = styled.div`
-  padding-top: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  formFieldSettingsContainer: {
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-light'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-1'],
+    marginTop: spacing['--t-spacing-3'],
+  },
+  settingsContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingBottom: spacing['--t-spacing-3'],
+    paddingLeft: spacing['--t-spacing-3'],
+  },
+  settingsHeader: {
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: borderColor['--t-border-color-light'],
+    display: 'grid',
+    gap: spacing['--t-spacing-1'],
+    gridTemplateColumns: '1fr 24px',
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-2'],
+  },
+  titleContainer: {
+    color: fontColor['--t-font-color-primary'],
+    display: 'flex',
+    flexDirection: 'row',
+    gap: spacing['--t-spacing-1'],
+    paddingTop: spacing['--t-spacing-3'],
+  },
+  closeButtonContainer: {
+    paddingTop: spacing['--t-spacing-2'],
+  },
+});
 
 export const WorkflowEditActionFormFieldSettings = ({
   field,
@@ -64,16 +80,16 @@ export const WorkflowEditActionFormFieldSettings = ({
   const theme = useTheme();
 
   return (
-    <StyledFormFieldSettingsContainer>
-      <StyledSettingsHeader>
-        <StyledTitleContainer>
+    <div {...stylex.props(styles.formFieldSettingsContainer)}>
+      <div {...stylex.props(styles.settingsHeader)}>
+        <div {...stylex.props(styles.titleContainer)}>
           <IconSettingsAutomation
             size={theme.icon.size.md}
             color={theme.font.color.primary}
           />
           {t`Input settings`}
-        </StyledTitleContainer>
-        <StyledCloseButtonContainer>
+        </div>
+        <div {...stylex.props(styles.closeButtonContainer)}>
           <LightIconButton
             data-testid="close-button"
             size="sm"
@@ -83,9 +99,9 @@ export const WorkflowEditActionFormFieldSettings = ({
           >
             <IconX />
           </LightIconButton>
-        </StyledCloseButtonContainer>
-      </StyledSettingsHeader>
-      <StyledSettingsContent>
+        </div>
+      </div>
+      <div {...stylex.props(styles.settingsContent)}>
         <FormFieldInputContainer>
           <InputLabel>{t`Type`}</InputLabel>
           <FormSelectFieldInput
@@ -112,7 +128,7 @@ export const WorkflowEditActionFormFieldSettings = ({
           />
         </FormFieldInputContainer>
         <WorkflowFormFieldSettingsByType field={field} onChange={onChange} />
-      </StyledSettingsContent>
-    </StyledFormFieldSettingsContainer>
+      </div>
+    </div>
   );
 };

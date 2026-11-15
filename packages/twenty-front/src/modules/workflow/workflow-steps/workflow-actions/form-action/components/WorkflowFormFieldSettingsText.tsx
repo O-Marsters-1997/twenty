@@ -3,29 +3,31 @@ import { FormFieldInputContainer } from '@/ui/input/components/FormFieldInputCon
 import { InputLabel } from '@/ui/input/components/internal/InputLabel/InputLabel';
 import { type WorkflowFormActionField } from '@/workflow/workflow-steps/workflow-actions/form-action/types/WorkflowFormActionField';
 import { getDefaultFormFieldSettings } from '@/workflow/workflow-steps/workflow-actions/form-action/utils/getDefaultFormFieldSettings';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import camelCase from 'lodash.camelcase';
 import { FieldMetadataType } from 'twenty-shared/types';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type WorkflowFormFieldSettingsTextProps = {
   field: WorkflowFormActionField;
   onChange: (updatedField: WorkflowFormActionField) => void;
 };
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: spacing['--t-spacing-2'],
+  },
+});
 
 export const WorkflowFormFieldSettingsText = ({
   field,
   onChange,
 }: WorkflowFormFieldSettingsTextProps) => {
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <FormFieldInputContainer>
         <InputLabel>{t`Label`}</InputLabel>
         <FormTextFieldInput
@@ -57,6 +59,6 @@ export const WorkflowFormFieldSettingsText = ({
           }
         />
       </FormFieldInputContainer>
-    </StyledContainer>
+    </div>
   );
 };

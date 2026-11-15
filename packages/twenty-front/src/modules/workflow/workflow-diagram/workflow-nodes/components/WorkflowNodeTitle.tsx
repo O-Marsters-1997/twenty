@@ -1,28 +1,44 @@
 import type { WorkflowRunStepStatus } from '@/workflow/types/Workflow';
 import { getWorkflowDiagramColors } from '@/workflow/workflow-diagram/utils/getWorkflowDiagramColors';
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { type ReactNode } from 'react';
+import { fontSize, fontWeight } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledNodeTitle = styled.div<{
+const styles = stylex.create({
+  root: {
+    alignSelf: 'stretch',
+    boxSizing: 'border-box',
+    display: '-webkit-box',
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    WebkitBoxOrient: 'vertical',
+    WebkitLineClamp: 1,
+  },
+  color: (color: string) => ({ color }),
+});
+
+export const WorkflowNodeTitle = ({
+  highlight,
+  runStatus,
+  selected,
+  children,
+}: {
   highlight?: boolean;
   runStatus?: WorkflowRunStepStatus;
   selected: boolean;
-}>`
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
-  align-self: stretch;
-  box-sizing: border-box;
-  color: ${({ highlight, runStatus, selected }) => {
-    const colors = getWorkflowDiagramColors({ runStatus });
-    if (highlight === true) return colors.selected.titleColor;
-    return selected ? colors.selected.titleColor : colors.unselected.titleColor;
-  }};
-  display: -webkit-box;
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.medium};
-  overflow: hidden;
+  children?: ReactNode;
+}) => {
+  const colors = getWorkflowDiagramColors({ runStatus });
+  const titleColor =
+    highlight === true || selected
+      ? colors.selected.titleColor
+      : colors.unselected.titleColor;
 
-  text-overflow: ellipsis;
-`;
-
-export { StyledNodeTitle as WorkflowNodeTitle };
+  return (
+    <div {...stylex.props(styles.root, styles.color(titleColor))}>
+      {children}
+    </div>
+  );
+};

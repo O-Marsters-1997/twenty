@@ -1,8 +1,27 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import { type ReactNode } from 'react';
 
-const StyledContainer = styled.div<{ shouldDisplay: boolean }>`
-  opacity: ${({ shouldDisplay }) => (shouldDisplay ? 1 : 0)};
-  position: relative;
-`;
+const styles = stylex.create({
+  root: {
+    position: 'relative',
+  },
+  visible: { opacity: 1 },
+  hidden: { opacity: 0 },
+});
 
-export { StyledContainer as WorkflowDiagramEdgeV2VisibilityContainer };
+export const WorkflowDiagramEdgeV2VisibilityContainer = ({
+  shouldDisplay,
+  children,
+}: {
+  shouldDisplay: boolean;
+  children?: ReactNode;
+}) => (
+  <div
+    {...stylex.props(
+      styles.root,
+      shouldDisplay ? styles.visible : styles.hidden,
+    )}
+  >
+    {children}
+  </div>
+);

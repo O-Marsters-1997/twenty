@@ -5,23 +5,25 @@ import { DROPDOWN_OFFSET_Y } from '@/ui/layout/dropdown/constants/DropdownOffset
 import { OPTIONS_DROPDOWN_GLOBAL_HOTKEYS_CONFIG } from '@/ui/layout/dropdown/constants/OptionsDropdownGlobalHotkeysConfig';
 import { ParentClickOutsideIdContext } from '@/ui/utilities/pointer-event/contexts/ParentClickOutsideIdContext';
 import { WorkflowStepOptionsMenuItems } from '@/workflow/workflow-steps/components/WorkflowStepOptionsMenuItems';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
+import * as stylex from '@stylexjs/stylex';
 import { useId } from 'react';
 import { IconButton } from 'twenty-ui/components/input';
 import { Dropdown } from 'twenty-ui/components/navigation';
 import { IconDotsVertical } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledOptionsButtonContainer = styled.div`
-  align-items: center;
-  bottom: 0;
-  display: flex;
-  position: absolute;
-  right: calc(0px - ${themeCssVariables.spacing[4]});
-  top: 0;
-  transform: translateX(100%);
-`;
+const styles = stylex.create({
+  root: {
+    alignItems: 'center',
+    bottom: 0,
+    display: 'flex',
+    position: 'absolute',
+    right: `calc(0px - ${spacing['--t-spacing-4']})`,
+    top: 0,
+    transform: 'translateX(100%)',
+  },
+});
 
 export const WorkflowDiagramStepNodeOptionsDropdown = ({
   onChangeNode,
@@ -34,9 +36,13 @@ export const WorkflowDiagramStepNodeOptionsDropdown = ({
 }) => {
   const { t } = useLingui();
   const dropdownId = useId();
+  const containerProps = stylex.props(styles.root);
 
   return (
-    <StyledOptionsButtonContainer className="nodrag nopan">
+    <div
+      className={`nodrag nopan ${containerProps.className}`}
+      style={containerProps.style}
+    >
       <ParentClickOutsideIdContext.Provider
         value={WORKFLOW_DIAGRAM_STEP_NODE_BASE_CLICK_OUTSIDE_ID}
       >
@@ -69,6 +75,6 @@ export const WorkflowDiagramStepNodeOptionsDropdown = ({
           </DropdownContent>
         </DropdownRoot>
       </ParentClickOutsideIdContext.Provider>
-    </StyledOptionsButtonContainer>
+    </div>
   );
 };

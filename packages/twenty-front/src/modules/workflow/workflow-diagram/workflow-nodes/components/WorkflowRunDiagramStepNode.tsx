@@ -24,7 +24,6 @@ import { WorkflowNodeTitle } from '@/workflow/workflow-diagram/workflow-nodes/co
 import { WORKFLOW_DIAGRAM_NODE_DEFAULT_SOURCE_HANDLE_ID } from '@/workflow/workflow-diagram/workflow-nodes/constants/WorkflowDiagramNodeDefaultSourceHandleId';
 import { useWorkflowNodeLabel } from '@/workflow/workflow-diagram/workflow-nodes/hooks/useWorkflowNodeLabel';
 import { getNodeIterationCount } from '@/workflow/workflow-diagram/workflow-nodes/utils/getNodeIterationCount';
-import { styled } from '@linaria/react';
 import { Position } from '@xyflow/react';
 import { useContext } from 'react';
 import { isDefined } from 'twenty-shared/utils';
@@ -32,51 +31,51 @@ import { StepStatus } from 'twenty-shared/workflow';
 import { IconCheck, IconX, useIcons } from 'twenty-ui/icon';
 import { Loader } from 'twenty-ui/primitives/feedback';
 import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  spacing,
+  borderRadius,
+  fontSize,
+  fontWeight,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledNodeLabelWithCounterPart = styled.div`
-  align-items: center;
-  align-self: stretch;
-  box-sizing: border-box;
-  column-gap: ${themeCssVariables.spacing[2]};
-  display: flex;
-  height: 14px;
-  justify-content: space-between;
-`;
-
-const StyledStatusIconsContainer = styled.div`
-  align-items: center;
-  box-sizing: border-box;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  justify-content: flex-end;
-`;
-
-const StyledColorIcon = styled.div<{
-  color: string;
-}>`
-  align-items: center;
-  background: ${({ color }) => color};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  box-sizing: border-box;
-  display: flex;
-  height: 14px;
-  justify-content: center;
-  width: 14px;
-`;
-
-const StyledIterationCounter = styled.div<{
-  runStatus?: WorkflowRunStepStatus;
-}>`
-  color: ${({ runStatus }) =>
-    getWorkflowDiagramColors({ runStatus }).unselected.color};
-  font-size: ${themeCssVariables.font.size.sm};
-  font-weight: ${themeCssVariables.font.weight.medium};
-`;
-
-const StyledRightPartContainer = styled.div`
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  nodeLabelWithCounterPart: {
+    alignItems: 'center',
+    alignSelf: 'stretch',
+    boxSizing: 'border-box',
+    columnGap: spacing['--t-spacing-2'],
+    display: 'flex',
+    height: '14px',
+    justifyContent: 'space-between',
+  },
+  statusIconsContainer: {
+    alignItems: 'center',
+    boxSizing: 'border-box',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    justifyContent: 'flex-end',
+  },
+  colorIcon: (backgroundColor: string) => ({
+    alignItems: 'center',
+    backgroundColor,
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    height: '14px',
+    justifyContent: 'center',
+    width: '14px',
+  }),
+  iterationCounter: (color: string) => ({
+    color,
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+  }),
+  rightPartContainer: {
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+  },
+});
 
 export const WorkflowRunDiagramStepNode = ({
   id,
@@ -155,49 +154,64 @@ export const WorkflowRunDiagramStepNode = ({
         </WorkflowNodeIconContainer>
 
         <WorkflowNodeRightPart>
-          <StyledNodeLabelWithCounterPart>
+          <div {...stylex.props(styles.nodeLabelWithCounterPart)}>
             <WorkflowNodeLabel runStatus={data.runStatus} selected={selected}>
               {nodeLabel}
             </WorkflowNodeLabel>
 
-            <StyledRightPartContainer>
+            <div {...stylex.props(styles.rightPartContainer)}>
               {iterationCount > 0 && (
-                <StyledIterationCounter runStatus={data.runStatus}>
+                <div
+                  {...stylex.props(
+                    styles.iterationCounter(
+                      getWorkflowDiagramColors({ runStatus: data.runStatus })
+                        .unselected.color,
+                    ),
+                  )}
+                >
                   {iterationCount}
-                </StyledIterationCounter>
+                </div>
               )}
 
               {(data.runStatus === StepStatus.SUCCESS ||
                 data.runStatus === StepStatus.STOPPED) && (
-                <StyledStatusIconsContainer>
-                  <StyledColorIcon
-                    color={themeCssVariables.tag.background.turquoise}
+                <div {...stylex.props(styles.statusIconsContainer)}>
+                  <div
+                    {...stylex.props(
+                      styles.colorIcon(
+                        themeCssVariables.tag.background.turquoise,
+                      ),
+                    )}
                   >
                     <IconCheck
                       color={themeCssVariables.tag.text.turquoise}
                       size={14}
                     />
-                  </StyledColorIcon>
-                </StyledStatusIconsContainer>
+                  </div>
+                </div>
               )}
 
               {(data.runStatus === StepStatus.FAILED ||
                 data.runStatus === StepStatus.FAILED_SAFELY) && (
-                <StyledStatusIconsContainer>
-                  <StyledColorIcon color={themeCssVariables.tag.background.red}>
+                <div {...stylex.props(styles.statusIconsContainer)}>
+                  <div
+                    {...stylex.props(
+                      styles.colorIcon(themeCssVariables.tag.background.red),
+                    )}
+                  >
                     <IconX color={themeCssVariables.tag.text.red} size={14} />
-                  </StyledColorIcon>
-                </StyledStatusIconsContainer>
+                  </div>
+                </div>
               )}
 
               {(data.runStatus === StepStatus.RUNNING ||
                 data.runStatus === StepStatus.PENDING) && (
-                <StyledStatusIconsContainer>
+                <div {...stylex.props(styles.statusIconsContainer)}>
                   <Loader color="yellow" />
-                </StyledStatusIconsContainer>
+                </div>
               )}
-            </StyledRightPartContainer>
-          </StyledNodeLabelWithCounterPart>
+            </div>
+          </div>
 
           <WorkflowNodeTitle runStatus={data.runStatus} selected={selected}>
             {data.name}

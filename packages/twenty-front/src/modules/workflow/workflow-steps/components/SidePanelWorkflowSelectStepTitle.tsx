@@ -1,14 +1,26 @@
-import { themeCssVariables } from 'twenty-ui/theme';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import { type ReactNode } from 'react';
+import {
+  spacing,
+  fontColor,
+  fontSize,
+  fontWeight,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledSelectStepTitle = styled.span`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.sm};
-  font-weight: ${themeCssVariables.font.weight.medium};
-  padding-bottom: ${themeCssVariables.spacing[1]};
-  padding-left: ${themeCssVariables.spacing[1]};
-  padding-right: ${themeCssVariables.spacing[1]};
-  padding-top: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  root: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingTop: spacing['--t-spacing-2'],
+  },
+});
 
-export { StyledSelectStepTitle as SidePanelWorkflowSelectStepTitle };
+export const SidePanelWorkflowSelectStepTitle = ({
+  children,
+}: {
+  children?: ReactNode;
+}) => <span {...stylex.props(styles.root)}>{children}</span>;

@@ -25,3 +25,84 @@
     z-index: -1 !important;
   }
 }
+
+@layer third-party {
+  [data-workflow-diagram] {
+    --xy-node-background-color: none;
+    --xy-node-border: none;
+    --xy-node-border-radius: none;
+    --xy-node-boxshadow-hover: none;
+    --xy-node-boxshadow-selected: none;
+  }
+
+  [data-workflow-diagram] .react-flow__node-input,
+  [data-workflow-diagram] .react-flow__node-default,
+  [data-workflow-diagram] .react-flow__node-output,
+  [data-workflow-diagram] .react-flow__node-group {
+    padding: 0 !important;
+    text-align: start !important;
+    white-space: nowrap !important;
+    width: auto !important;
+  }
+
+  [data-workflow-handle-source] .react-flow__handle {
+    background: var(--handle-bg) !important;
+    border-color: var(--handle-border-color) !important;
+    corner-shape: round !important;
+    height: 7px !important;
+    opacity: var(--handle-opacity, 1) !important;
+    transform: var(--handle-transform) !important;
+    transform-origin: var(--handle-transform-origin) !important;
+    transition:
+      transform 0.1s ease-out,
+      background 0.1s,
+      border-color 0.1s !important;
+    width: 7px !important;
+    z-index: 1 !important;
+  }
+
+  [data-workflow-handle-source] .react-flow__handle::after {
+    content: '' !important;
+    height: calc(100% + var(--t-spacing-4)) !important;
+    left: 50% !important;
+    position: absolute !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: calc(100% + var(--t-spacing-4)) !important;
+  }
+
+  [data-workflow-handle-source] .react-flow__handle.connectionindicator,
+  [data-workflow-handle-target] .react-flow__handle.connectionindicator {
+    cursor: pointer !important;
+  }
+
+  [data-workflow-handle-source] .react-flow__handle:hover {
+    background: var(--handle-hover-bg, var(--handle-bg)) !important;
+    border-color: var(
+      --handle-hover-border-color,
+      var(--handle-border-color)
+    ) !important;
+    transform: var(
+      --handle-hover-transform,
+      var(--handle-transform)
+    ) !important;
+  }
+
+  [data-workflow-handle-target] .react-flow__handle {
+    border-radius: var(--t-border-radius-md) !important;
+    height: 100% !important;
+    left: 0 !important;
+    opacity: 0 !important;
+    top: 0 !important;
+    transform: translate(-1px, -5px) !important;
+    width: 100% !important;
+    z-index: 1 !important;
+  }
+}
+
+@layer third-party {
+  [data-workflow-handle-branch] {
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+}

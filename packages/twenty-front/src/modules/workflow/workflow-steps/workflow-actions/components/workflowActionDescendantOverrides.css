@@ -1,0 +1,34 @@
+@layer third-party {
+  [data-workflow-full-height-json-field] > div:last-child {
+    display: flex !important;
+    flex: 1 !important;
+    flex-direction: column !important;
+  }
+
+  [data-workflow-full-height-json-field] > div:last-child > div {
+    flex: 1 !important;
+    height: 100% !important;
+    max-height: none !important;
+  }
+
+  [data-workflow-full-height-json-field] > div:last-child > div > div {
+    height: 100% !important;
+  }
+
+  [data-workflow-permissions-search] input {
+    background-color: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    height: 40px !important;
+    line-height: 40px !important;
+    width: 100% !important;
+  }
+
+  [data-workflow-permissions-back-button] > div {
+    border-bottom: none !important;
+  }
+
+  [data-workflow-tool-call-json-tree] ul {
+    min-width: 0 !important;
+  }
+}

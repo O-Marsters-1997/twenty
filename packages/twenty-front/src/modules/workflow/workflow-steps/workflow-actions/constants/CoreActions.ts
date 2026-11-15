@@ -8,10 +8,7 @@ export const CORE_ACTIONS: Array<{
   defaultLabel: string;
   type: Extract<
     WorkflowActionType,
-    | 'SEND_EMAIL'
-    | 'DRAFT_EMAIL'
-    | 'HTTP_REQUEST'
-    | 'CREATE_CALENDAR_EVENT'
+    'SEND_EMAIL' | 'DRAFT_EMAIL' | 'HTTP_REQUEST' | 'CREATE_CALENDAR_EVENT'
   >;
   icon: string;
 }> = [

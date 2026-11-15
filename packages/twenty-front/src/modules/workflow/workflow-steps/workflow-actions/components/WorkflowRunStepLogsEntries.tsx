@@ -1,66 +1,85 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
+import { monospaceFont } from '@/ui/theme/constants/MonospaceFontFamily.stylex';
 import { type WorkflowRunStepLog } from 'twenty-shared/workflow';
 import { themeCssVariables } from 'twenty-ui/theme';
 
 import { MONOSPACE_FONT_FAMILY } from '@/ui/theme/constants/MonospaceFontFamily';
+import { logStyles } from '@/workflow/workflow-steps/workflow-actions/components/workflowRunStepLogs.stylex';
+import * as stylex from '@stylexjs/stylex';
 import {
-  StyledSection,
-  StyledSectionTitle,
-} from '@/workflow/workflow-steps/workflow-actions/components/workflowRunStepLogsStyles';
+  spacing,
+  background,
+  backgroundTransparent,
+  borderRadius,
+  fontColor,
+  fontSize,
+  fontWeight,
+  color,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledEntriesList = styled.div`
-  background: ${themeCssVariables.background.tertiary};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  display: flex;
-  flex-direction: column;
-  font-family: ${MONOSPACE_FONT_FAMILY};
-  font-size: ${themeCssVariables.font.size.sm};
-  max-height: 300px;
-  overflow-y: auto;
-  padding: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  entriesList: {
+    background: background['--t-background-tertiary'],
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    display: 'flex',
+    flexDirection: 'column',
+    fontFamily: monospaceFont.family,
+    fontSize: fontSize['--t-font-size-sm'],
+    maxHeight: '300px',
+    overflowY: 'auto',
+    padding: spacing['--t-spacing-2'],
+  },
+  levelBadge: {
+    borderRadius: borderRadius['--t-border-radius-xs'],
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    paddingBlock: 0,
+    paddingInline: spacing['--t-spacing-1'],
+    textTransform: 'uppercase',
+  },
+  levelError: {
+    background: backgroundTransparent['--t-background-transparent-danger'],
+    color: color['--t-color-red'],
+  },
+  levelWarn: {
+    background: backgroundTransparent['--t-background-transparent-orange'],
+    color: color['--t-color-orange'],
+  },
+  levelInfo: {
+    background: backgroundTransparent['--t-background-transparent-blue'],
+    color: color['--t-color-blue'],
+  },
+  levelDefault: {
+    background: backgroundTransparent['--t-background-transparent-light'],
+    color: fontColor['--t-font-color-tertiary'],
+  },
 
-const StyledEntryRow = styled.div`
-  align-items: baseline;
-  color: ${themeCssVariables.font.color.primary};
-  display: grid;
-  gap: ${themeCssVariables.spacing[2]};
-  grid-template-columns: max-content max-content 1fr;
-  padding: ${themeCssVariables.spacing['0.5']} 0;
-`;
+  entryRow: {
+    alignItems: 'baseline',
+    color: fontColor['--t-font-color-primary'],
+    display: 'grid',
+    gap: spacing['--t-spacing-2'],
+    gridTemplateColumns: 'max-content max-content 1fr',
+    paddingTop: spacing['--t-spacing-0_5'],
+    paddingRight: '0',
+    paddingBottom: spacing['--t-spacing-0_5'],
+    paddingLeft: '0',
+  },
+  timestamp: {
+    color: fontColor['--t-font-color-light'],
+    fontSize: fontSize['--t-font-size-xs'],
+  },
+  message: {
+    overflowWrap: 'anywhere',
+    whiteSpace: 'pre-wrap',
+  },
+});
 
-const StyledTimestamp = styled.span`
-  color: ${themeCssVariables.font.color.light};
-  font-size: ${themeCssVariables.font.size.xs};
-`;
-
-const StyledLevelBadge = styled.span<{ level: string }>`
-  background: ${({ level }) => {
-    if (level === 'error')
-      return themeCssVariables.background.transparent.danger;
-    if (level === 'warn')
-      return themeCssVariables.background.transparent.orange;
-    if (level === 'info') return themeCssVariables.background.transparent.blue;
-    return themeCssVariables.background.transparent.light;
-  }};
-  border-radius: ${themeCssVariables.border.radius.xs};
-  color: ${({ level }) => {
-    if (level === 'error') return themeCssVariables.color.red;
-    if (level === 'warn') return themeCssVariables.color.orange;
-    if (level === 'info') return themeCssVariables.color.blue;
-    return themeCssVariables.font.color.tertiary;
-  }};
-  font-size: ${themeCssVariables.font.size.xs};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-  padding: 0 ${themeCssVariables.spacing[1]};
-  text-transform: uppercase;
-`;
-
-const StyledMessage = styled.span`
-  overflow-wrap: anywhere;
-  white-space: pre-wrap;
-`;
+const levelStyles: Record<string, stylex.StyleXStyles> = {
+  error: styles.levelError,
+  warn: styles.levelWarn,
+  info: styles.levelInfo,
+};
 
 const formatTimestamp = (timestamp: string): string => {
   const date = new Date(timestamp);
@@ -90,21 +109,29 @@ export const WorkflowRunStepLogsEntries = ({
     : t`Entries (${entries.length})`;
 
   return (
-    <StyledSection>
-      <StyledSectionTitle>{sectionTitle}</StyledSectionTitle>
-      <StyledEntriesList>
+    <section {...stylex.props(logStyles.section)}>
+      <h3 {...stylex.props(logStyles.sectionTitle)}>{sectionTitle}</h3>
+      <div {...stylex.props(styles.entriesList)}>
         {entries.map((entry, index) => (
-          <StyledEntryRow key={`${entry.timestamp}-${index}`}>
-            <StyledTimestamp>
+          <div
+            key={`${entry.timestamp}-${index}`}
+            {...stylex.props(styles.entryRow)}
+          >
+            <span {...stylex.props(styles.timestamp)}>
               {formatTimestamp(entry.timestamp)}
-            </StyledTimestamp>
-            <StyledLevelBadge level={entry.level}>
+            </span>
+            <span
+              {...stylex.props(
+                styles.levelBadge,
+                levelStyles[entry.level] ?? styles.levelDefault,
+              )}
+            >
               {entry.level}
-            </StyledLevelBadge>
-            <StyledMessage>{entry.message}</StyledMessage>
-          </StyledEntryRow>
+            </span>
+            <span {...stylex.props(styles.message)}>{entry.message}</span>
+          </div>
         ))}
-      </StyledEntriesList>
-    </StyledSection>
+      </div>
+    </section>
   );
 };

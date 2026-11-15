@@ -1,60 +1,88 @@
 import type { WorkflowRunStepStatus } from '@/workflow/types/Workflow';
 import { getWorkflowDiagramColors } from '@/workflow/workflow-diagram/utils/getWorkflowDiagramColors';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import { type ReactNode } from 'react';
 import { themeCssVariables } from 'twenty-ui/theme';
+import { spacing, borderRadius } from 'twenty-ui/theme/tokens.stylex';
 
 const TARGET_HANDLE_SPACING = 32;
 
-const StyledNodeContainer = styled.div<{
+type WorkflowNodeContainerProps = {
   runStatus?: WorkflowRunStepStatus;
   isConnectable?: boolean;
   selected: boolean;
   targetHandleCount?: number;
-}>`
-  align-items: center;
-  background: ${({ runStatus, selected }) => {
-    const colors = getWorkflowDiagramColors({ runStatus });
-    return selected ? colors.selected.background : colors.unselected.background;
-  }};
-  border-color: ${({ runStatus, selected }) => {
-    const colors = getWorkflowDiagramColors({ runStatus });
-    return selected
-      ? colors.selected.borderColor
-      : colors.unselected.borderColor;
-  }};
-  border-radius: ${themeCssVariables.border.radius.md};
-  border-style: solid;
-  border-width: 1px;
-  box-sizing: border-box;
-  cursor: pointer;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  max-width: 240px;
-  min-width: ${({ targetHandleCount = 0 }) =>
-    Math.max(44, (targetHandleCount + 1) * TARGET_HANDLE_SPACING)}px;
-  padding: ${themeCssVariables.spacing[2]};
+  onClick?: () => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
+  'data-click-outside-id'?: string;
+  children?: ReactNode;
+};
 
-  position: relative;
+const styles = stylex.create({
+  root: {
+    alignItems: 'center',
+    borderRadius: borderRadius['--t-border-radius-md'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    boxSizing: 'border-box',
+    cursor: 'pointer',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    maxWidth: '240px',
+    padding: spacing['--t-spacing-2'],
+    position: 'relative',
+    transitionDuration: '0.1s',
+    transitionProperty: 'border-color',
+  },
+  colors: (
+    background: string,
+    borderColor: string,
+    hoverBackground: string,
+    hoverBorderColor: string,
+    minWidth: number,
+  ) => ({
+    background: { default: background, ':hover': hoverBackground },
+    borderColor: { default: borderColor, ':hover': hoverBorderColor },
+    minWidth: `${minWidth}px`,
+  }),
+});
 
-  transition: border-color 0.1s;
+export const WorkflowNodeContainer = ({
+  runStatus,
+  isConnectable,
+  selected,
+  targetHandleCount = 0,
+  onClick,
+  onMouseEnter,
+  onMouseLeave,
+  'data-click-outside-id': dataClickOutsideId,
+  children,
+}: WorkflowNodeContainerProps) => {
+  const colors = getWorkflowDiagramColors({ runStatus });
+  const current = selected ? colors.selected : colors.unselected;
+  const hoverBackground = `linear-gradient(0deg, ${themeCssVariables.background.transparent.lighter} 0%, ${themeCssVariables.background.transparent.lighter} 100%), ${current.background}`;
+  const hoverBorderColor =
+    isConnectable === true ? themeCssVariables.color.blue : current.borderColor;
 
-  &:hover {
-    background: ${({ runStatus, selected }) => {
-      const colors = getWorkflowDiagramColors({ runStatus });
-      const bg = selected
-        ? colors.selected.background
-        : colors.unselected.background;
-      return `linear-gradient(0deg, ${themeCssVariables.background.transparent.lighter} 0%, ${themeCssVariables.background.transparent.lighter} 100%), ${bg}`;
-    }};
-
-    border-color: ${({ runStatus, selected, isConnectable }) => {
-      if (isConnectable === true) return themeCssVariables.color.blue;
-      const colors = getWorkflowDiagramColors({ runStatus });
-      return selected
-        ? colors.selected.borderColor
-        : colors.unselected.borderColor;
-    }};
-  }
-`;
-
-export { StyledNodeContainer as WorkflowNodeContainer };
+  return (
+    <div
+      {...stylex.props(
+        styles.root,
+        styles.colors(
+          current.background,
+          current.borderColor,
+          hoverBackground,
+          hoverBorderColor,
+          Math.max(44, (targetHandleCount + 1) * TARGET_HANDLE_SPACING),
+        ),
+      )}
+      data-click-outside-id={dataClickOutsideId}
+      onClick={onClick}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
+      {children}
+    </div>
+  );
+};

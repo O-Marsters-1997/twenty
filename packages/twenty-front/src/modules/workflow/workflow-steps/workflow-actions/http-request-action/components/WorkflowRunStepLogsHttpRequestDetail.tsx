@@ -1,5 +1,5 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
+import { monospaceFont } from '@/ui/theme/constants/MonospaceFontFamily.stylex';
 import { Fragment } from 'react';
 import { formatBytes, isDefined } from 'twenty-shared/utils';
 import { type WorkflowRunStepLog } from 'twenty-shared/workflow';
@@ -14,91 +14,104 @@ import { themeCssVariables } from 'twenty-ui/theme';
 
 import { MONOSPACE_FONT_FAMILY } from '@/ui/theme/constants/MonospaceFontFamily';
 import { formatDuration } from '~/utils/format/formatDuration';
+import { logStyles } from '@/workflow/workflow-steps/workflow-actions/components/workflowRunStepLogs.stylex';
+import * as stylex from '@stylexjs/stylex';
 import {
-  StyledBadgeGroup,
-  StyledBodyMeta,
-  StyledEmptyHint,
-  StyledErrorCard,
-  StyledErrorMessageText,
-  StyledHeaderLeft,
-  StyledMetric,
-  StyledMetricLabel,
-  StyledMetricsRow,
-  StyledMetricValue,
-  StyledSection,
-  StyledSectionTitle,
-  StyledStatusBadge,
-  StyledSummaryCard,
-  StyledSummaryHeader,
-  StyledTitle,
-} from '@/workflow/workflow-steps/workflow-actions/components/workflowRunStepLogsStyles';
+  spacing,
+  background,
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  fontWeight,
+  font,
+  color,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledMethodBadge = styled.span<{ method: string }>`
-  background: ${themeCssVariables.background.transparent.light};
-  border-radius: ${themeCssVariables.border.radius.xs};
-  color: ${themeCssVariables.font.color.primary};
-  font-family: ${themeCssVariables.font.family};
-  font-size: ${themeCssVariables.font.size.xs};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-  padding: ${themeCssVariables.spacing['0.5']} ${themeCssVariables.spacing[1]};
-  text-transform: uppercase;
-`;
+const styles = stylex.create({
+  url: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontFamily: monospaceFont.family,
+    fontSize: fontSize['--t-font-size-sm'],
+    overflowWrap: 'anywhere',
+  },
+  headerName: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontFamily: monospaceFont.family,
+    fontSize: fontSize['--t-font-size-xs'],
+  },
+  headerValue: {
+    color: fontColor['--t-font-color-primary'],
+    fontFamily: monospaceFont.family,
+    fontSize: fontSize['--t-font-size-xs'],
+    overflowWrap: 'anywhere',
+  },
+  bodyPre: {
+    background: background['--t-background-tertiary'],
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    color: fontColor['--t-font-color-primary'],
+    fontFamily: monospaceFont.family,
+    fontSize: fontSize['--t-font-size-sm'],
+    margin: 0,
+    maxHeight: '300px',
+    overflow: 'auto',
+    padding: spacing['--t-spacing-2'],
+    whiteSpace: 'pre-wrap',
+    wordBreak: 'break-word',
+  },
 
-const StyledNetworkErrorBadge = styled.span`
-  align-items: center;
-  background: ${themeCssVariables.background.transparent.danger};
-  border-radius: ${themeCssVariables.border.radius.xs};
-  color: ${themeCssVariables.color.red};
-  display: inline-flex;
-  font-size: ${themeCssVariables.font.size.xs};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-  gap: ${themeCssVariables.spacing[1]};
-  padding: ${themeCssVariables.spacing['0.5']} ${themeCssVariables.spacing[1]};
-`;
-
-const StyledUrl = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-family: ${MONOSPACE_FONT_FAMILY};
-  font-size: ${themeCssVariables.font.size.sm};
-  overflow-wrap: anywhere;
-`;
-
-const StyledHeaderTable = styled.div`
-  background: ${themeCssVariables.background.transparent.lighter};
-  border: 1px solid ${themeCssVariables.border.color.light};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  display: grid;
-  gap: ${themeCssVariables.spacing[1]} ${themeCssVariables.spacing[3]};
-  grid-template-columns: max-content 1fr;
-  padding: ${themeCssVariables.spacing[3]};
-`;
-
-const StyledHeaderName = styled.span`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-family: ${MONOSPACE_FONT_FAMILY};
-  font-size: ${themeCssVariables.font.size.xs};
-`;
-
-const StyledHeaderValue = styled.span`
-  color: ${themeCssVariables.font.color.primary};
-  font-family: ${MONOSPACE_FONT_FAMILY};
-  font-size: ${themeCssVariables.font.size.xs};
-  overflow-wrap: anywhere;
-`;
-
-const StyledBodyPre = styled.pre`
-  background: ${themeCssVariables.background.tertiary};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  color: ${themeCssVariables.font.color.primary};
-  font-family: ${MONOSPACE_FONT_FAMILY};
-  font-size: ${themeCssVariables.font.size.sm};
-  margin: 0;
-  max-height: 300px;
-  overflow: auto;
-  padding: ${themeCssVariables.spacing[2]};
-  white-space: pre-wrap;
-  word-break: break-word;
-`;
+  methodBadge: {
+    background: backgroundTransparent['--t-background-transparent-light'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-xs'],
+    borderTopRightRadius: borderRadius['--t-border-radius-xs'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-xs'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-xs'],
+    color: fontColor['--t-font-color-primary'],
+    fontFamily: font['--t-font-family'],
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    paddingTop: spacing['--t-spacing-0_5'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: spacing['--t-spacing-0_5'],
+    paddingLeft: spacing['--t-spacing-1'],
+    textTransform: 'uppercase',
+  },
+  networkErrorBadge: {
+    alignItems: 'center',
+    background: backgroundTransparent['--t-background-transparent-danger'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-xs'],
+    borderTopRightRadius: borderRadius['--t-border-radius-xs'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-xs'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-xs'],
+    color: color['--t-color-red'],
+    display: 'inline-flex',
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    gap: spacing['--t-spacing-1'],
+    paddingTop: spacing['--t-spacing-0_5'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: spacing['--t-spacing-0_5'],
+    paddingLeft: spacing['--t-spacing-1'],
+  },
+  headerTable: {
+    background: backgroundTransparent['--t-background-transparent-lighter'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-light'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    display: 'grid',
+    gap: `${spacing['--t-spacing-1']} ${spacing['--t-spacing-3']}`,
+    gridTemplateColumns: 'max-content 1fr',
+    paddingTop: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingBottom: spacing['--t-spacing-3'],
+    paddingLeft: spacing['--t-spacing-3'],
+  },
+});
 
 type HttpRequestDetails = Extract<
   WorkflowRunStepLog['details'],
@@ -113,14 +126,14 @@ const HeaderTable = ({ headers }: { headers: Record<string, string> }) => {
   }
 
   return (
-    <StyledHeaderTable>
+    <div {...stylex.props(styles.headerTable)}>
       {entries.map(([name, value]) => (
         <Fragment key={name}>
-          <StyledHeaderName>{name}</StyledHeaderName>
-          <StyledHeaderValue>{value}</StyledHeaderValue>
+          <span {...stylex.props(styles.headerName)}>{name}</span>
+          <span {...stylex.props(styles.headerValue)}>{value}</span>
         </Fragment>
       ))}
-    </StyledHeaderTable>
+    </div>
   );
 };
 
@@ -136,17 +149,17 @@ const BodyBlock = ({
   emptyLabel: string;
 }) => {
   if (!isDefined(body) || body.length === 0) {
-    return <StyledEmptyHint>{emptyLabel}</StyledEmptyHint>;
+    return <div {...stylex.props(logStyles.emptyHint)}>{emptyLabel}</div>;
   }
 
   return (
     <>
-      <StyledBodyPre>{body}</StyledBodyPre>
+      <pre {...stylex.props(styles.bodyPre)}>{body}</pre>
       {(isDefined(bodyBytes) || bodyTruncated) && (
-        <StyledBodyMeta>
+        <div {...stylex.props(logStyles.bodyMeta)}>
           {isDefined(bodyBytes) && formatBytes(bodyBytes)}
           {bodyTruncated && ' · truncated'}
-        </StyledBodyMeta>
+        </div>
       )}
     </>
   );
@@ -167,49 +180,56 @@ export const WorkflowRunStepLogsHttpRequestDetail = ({
 
   return (
     <>
-      <StyledSummaryCard>
-        <StyledSummaryHeader>
-          <StyledHeaderLeft>
+      <div {...stylex.props(logStyles.summaryCard)}>
+        <div {...stylex.props(logStyles.summaryHeader)}>
+          <div {...stylex.props(logStyles.headerLeft)}>
             <IconWorld size={16} />
-            <StyledTitle>{t`HTTP request`}</StyledTitle>
-          </StyledHeaderLeft>
-          <StyledBadgeGroup>
-            <StyledMethodBadge method={request.method}>
-              {request.method}
-            </StyledMethodBadge>
+            <span {...stylex.props(logStyles.title)}>{t`HTTP request`}</span>
+          </div>
+          <div {...stylex.props(logStyles.badgeGroup)}>
+            <span {...stylex.props(styles.methodBadge)}>{request.method}</span>
             {isDefined(response) ? (
-              <StyledStatusBadge isSuccess={isSuccess}>
+              <span
+                {...stylex.props(
+                  logStyles.statusBadge,
+                  isSuccess
+                    ? logStyles.statusBadgeSuccess
+                    : logStyles.statusBadgeDanger,
+                )}
+              >
                 {response.status}
                 {isDefined(response.statusText) &&
                 response.statusText.length > 0
                   ? ` ${response.statusText}`
                   : ''}
-              </StyledStatusBadge>
+              </span>
             ) : (
-              <StyledNetworkErrorBadge>
+              <span {...stylex.props(styles.networkErrorBadge)}>
                 <IconAlertTriangle size={12} />
                 {t`Network error`}
-              </StyledNetworkErrorBadge>
+              </span>
             )}
-          </StyledBadgeGroup>
-        </StyledSummaryHeader>
-        <StyledUrl>{request.url}</StyledUrl>
-        <StyledMetricsRow>
-          <StyledMetric>
-            <StyledMetricLabel>
+          </div>
+        </div>
+        <div {...stylex.props(styles.url)}>{request.url}</div>
+        <div {...stylex.props(logStyles.metricsRow)}>
+          <div {...stylex.props(logStyles.metric)}>
+            <div {...stylex.props(logStyles.metricLabel)}>
               <IconClock size={12} />
               {t`Duration`}
-            </StyledMetricLabel>
-            <StyledMetricValue>{formatDuration(durationMs)}</StyledMetricValue>
-          </StyledMetric>
-        </StyledMetricsRow>
-      </StyledSummaryCard>
+            </div>
+            <div {...stylex.props(logStyles.metricValue)}>
+              {formatDuration(durationMs)}
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <StyledSection>
-        <StyledSectionTitle>
+      <section {...stylex.props(logStyles.section)}>
+        <h3 {...stylex.props(logStyles.sectionTitle)}>
           <IconArrowUp size={12} />
           {t`Request`}
-        </StyledSectionTitle>
+        </h3>
         <HeaderTable headers={request.headers} />
         <BodyBlock
           body={request.body}
@@ -217,14 +237,14 @@ export const WorkflowRunStepLogsHttpRequestDetail = ({
           bodyTruncated={request.bodyTruncated}
           emptyLabel={t`No request body`}
         />
-      </StyledSection>
+      </section>
 
       {isDefined(response) ? (
-        <StyledSection>
-          <StyledSectionTitle>
+        <section {...stylex.props(logStyles.section)}>
+          <h3 {...stylex.props(logStyles.sectionTitle)}>
             <IconArrowDown size={12} />
             {t`Response`}
-          </StyledSectionTitle>
+          </h3>
           <HeaderTable headers={response.headers} />
           <BodyBlock
             body={response.body}
@@ -232,19 +252,19 @@ export const WorkflowRunStepLogsHttpRequestDetail = ({
             bodyTruncated={response.bodyTruncated}
             emptyLabel={t`No response body`}
           />
-        </StyledSection>
+        </section>
       ) : (
         hasNetworkError &&
         isDefined(error) && (
-          <StyledSection>
-            <StyledSectionTitle>
+          <section {...stylex.props(logStyles.section)}>
+            <h3 {...stylex.props(logStyles.sectionTitle)}>
               <IconAlertTriangle size={12} />
               {t`Error`}
-            </StyledSectionTitle>
-            <StyledErrorCard>
-              <StyledErrorMessageText>{error}</StyledErrorMessageText>
-            </StyledErrorCard>
-          </StyledSection>
+            </h3>
+            <div {...stylex.props(logStyles.errorCard)}>
+              <div {...stylex.props(logStyles.errorMessageText)}>{error}</div>
+            </div>
+          </section>
         )
       )}
     </>

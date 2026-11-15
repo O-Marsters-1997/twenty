@@ -1,14 +1,20 @@
-import { themeCssVariables } from 'twenty-ui/theme';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import { type ReactNode } from 'react';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledStepListContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow-y: auto;
+const styles = stylex.create({
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    overflowY: 'auto',
+    paddingBlock: spacing['--t-spacing-1'],
+    paddingInline: spacing['--t-spacing-2'],
+  },
+});
 
-  padding-block: ${themeCssVariables.spacing[1]};
-  padding-inline: ${themeCssVariables.spacing[2]};
-`;
-
-export { StyledStepListContainer as SidePanelStepListContainer };
+export const SidePanelStepListContainer = ({
+  children,
+}: {
+  children?: ReactNode;
+}) => <div {...stylex.props(styles.root)}>{children}</div>;

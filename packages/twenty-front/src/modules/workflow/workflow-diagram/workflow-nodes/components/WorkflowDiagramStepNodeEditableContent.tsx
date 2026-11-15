@@ -20,22 +20,24 @@ import { useConnectionState } from '@/workflow/workflow-diagram/workflow-nodes/h
 import { useWorkflowNodeLabel } from '@/workflow/workflow-diagram/workflow-nodes/hooks/useWorkflowNodeLabel';
 import { isNodeTitleHighlighted } from '@/workflow/workflow-diagram/workflow-nodes/utils/isNodeTitleHighlighted';
 import { workflowInsertStepIdsComponentState } from '@/workflow/workflow-steps/states/workflowInsertStepIdsComponentState';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { Position } from '@xyflow/react';
 import { useState } from 'react';
 import { isDefined } from 'twenty-shared/utils';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledAddStepButtonContainer = styled.div`
-  align-items: center;
-  bottom: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  left: 50%;
-  position: absolute;
-  transform: translateX(-50%) translateY(100%);
-`;
+const styles = stylex.create({
+  addStepButtonContainer: {
+    alignItems: 'center',
+    bottom: '0',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    left: '50%',
+    position: 'absolute',
+    transform: 'translateX(-50%) translateY(100%)',
+  },
+});
 
 export const WorkflowDiagramStepNodeEditableContent = ({
   id,
@@ -142,10 +144,11 @@ export const WorkflowDiagramStepNodeEditableContent = ({
       {!data.hasNextStepIds &&
         !isConnectionInProgress &&
         !isCreatingEmptyNodeFromThisNode && (
-          <StyledAddStepButtonContainer
+          <div
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleAddStepButtonContainerClick}
+            {...stylex.props(styles.addStepButtonContainer)}
           >
             <WorkflowDiagramCreateStepElement
               data={data}
@@ -157,7 +160,7 @@ export const WorkflowDiagramStepNodeEditableContent = ({
                 ) : undefined
               }
             />
-          </StyledAddStepButtonContainer>
+          </div>
         )}
 
       {id !== EMPTY_NODE_ID && (
