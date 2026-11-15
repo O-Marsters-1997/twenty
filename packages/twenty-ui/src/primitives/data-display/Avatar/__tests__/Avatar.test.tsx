@@ -7,7 +7,6 @@ import { afterEach, describe, expect, expectTypeOf, it, vi } from 'vitest';
 import { ThemeProvider } from '@ui/theme';
 
 import { Avatar } from '../Avatar';
-import styles from '../Avatar.module.scss';
 import { type AvatarProps } from '../types/AvatarProps';
 import { type AvatarRootProps } from '../types/AvatarRootProps';
 
@@ -18,21 +17,18 @@ const AvatarRootWrapper = ({ children }: { children: ReactNode }) => (
 runComponentConformance({
   name: 'Avatar',
   element: <Avatar name="Jane" />,
-  ownClassName: styles.root,
   refInstanceOf: HTMLSpanElement,
 });
 
 runComponentConformance({
   name: 'Avatar.Root',
   element: <Avatar.Root>Jane</Avatar.Root>,
-  ownClassName: styles.root,
   refInstanceOf: HTMLSpanElement,
 });
 
 runComponentConformance({
   name: 'Avatar.Image',
   element: <Avatar.Image keepMounted alt="Jane" />,
-  ownClassName: styles.image,
   refInstanceOf: HTMLImageElement,
   renderPropTagName: 'img',
   wrapper: AvatarRootWrapper,
@@ -41,7 +37,6 @@ runComponentConformance({
 runComponentConformance({
   name: 'Avatar.Fallback',
   element: <Avatar.Fallback>Jane</Avatar.Fallback>,
-  ownClassName: styles.fallback,
   refInstanceOf: HTMLSpanElement,
   wrapper: AvatarRootWrapper,
 });

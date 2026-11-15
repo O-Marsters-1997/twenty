@@ -9,7 +9,6 @@ import { Input } from '@ui/primitives/input/Input/Input';
 
 import { ComponentDecorator } from '@ui/testing';
 
-import tabStyles from '../../internal/tab/Tab.module.scss';
 import { Tabs } from '../Tabs';
 import { type TabsListProps } from '../types/TabsListProps';
 import { type TabsRootProps } from '../types/TabsRootProps';
@@ -328,7 +327,7 @@ export const SlotsAndStateStyling: Story = {
       'aria-hidden',
       'true',
     );
-    await expect(tab).toHaveClass(tabStyles.tab, 'consumer');
+    await expect(tab).toHaveClass('consumer');
     await expect(tab).toHaveStyle({ marginInlineStart: '3px' });
     await expect(tab).toHaveAttribute('data-size', 'md');
     await expect(canvas.getByRole('tab', { name: 'Overview' })).toHaveAttribute(
@@ -336,7 +335,7 @@ export const SlotsAndStateStyling: Story = {
       'sm',
     );
     await userEvent.click(tab);
-    await expect(tab).toHaveClass(tabStyles.tab, 'selected-consumer');
+    await expect(tab).toHaveClass('selected-consumer');
     await expect(tab).toHaveStyle({ marginInlineStart: '7px' });
   },
 };
@@ -358,8 +357,8 @@ export const EmptySlots: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     for (const tab of canvas.getAllByRole('tab')) {
-      await expect(tab.querySelector(`.${tabStyles.badge}`)).toBeNull();
-      await expect(tab.querySelector(`.${tabStyles.startIcon}`)).toBeNull();
+      await expect(tab.querySelector('[aria-hidden]')).toBeNull();
+      await expect(tab.firstElementChild?.children).toHaveLength(1);
     }
   },
 };
@@ -450,14 +449,8 @@ export const ExplicitIndicator: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const indicator = canvas.getByTestId('indicator');
-    const list = canvas.getByRole('tablist');
-    await expect(list.querySelectorAll(`.${tabStyles.indicator}`)).toHaveLength(
-      1,
-    );
-    await expect(indicator).toHaveClass(
-      tabStyles.indicator,
-      'measured-indicator',
-    );
+    await expect(canvas.getAllByTestId('indicator')).toHaveLength(1);
+    await expect(indicator).toHaveClass('measured-indicator');
     await expect(indicator).toBeVisible();
     const overviewWidth = canvas
       .getByRole('tab', { name: 'Overview' })

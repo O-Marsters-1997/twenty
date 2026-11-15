@@ -1,0 +1,71 @@
+import * as stylex from '@stylexjs/stylex';
+
+import {
+  background,
+  borderColor,
+  borderRadius,
+  boxShadow,
+  fontColor,
+  fontWeight,
+  spacing,
+} from '../../../theme/tokens.stylex';
+
+export const shortcutStyles = stylex.create({
+  root: {
+    color: fontColor['--t-font-color-secondary'],
+    display: 'inline-flex',
+    flexBasis: 'auto',
+    flexGrow: 0,
+    flexShrink: 0,
+    fontSize: 'inherit',
+    verticalAlign: 'middle',
+    whiteSpace: 'nowrap',
+  },
+  variantText: { color: 'inherit' },
+  variantButton: {
+    alignItems: 'center',
+    color: 'inherit',
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    gap: spacing['--t-spacing-1_5'],
+    marginInlineStart: spacing['--t-spacing-1'],
+    opacity: 0.5,
+    '::before': {
+      backgroundColor: 'currentColor',
+      blockSize: spacing['--t-spacing-2'],
+      content: '""',
+      inlineSize: 1,
+      opacity: 0.4,
+    },
+  },
+  content: {
+    alignItems: 'center',
+    display: 'inline-flex',
+    gap: spacing['--t-spacing-1'],
+  },
+  combination: {
+    alignItems: 'center',
+    display: 'inline-flex',
+    gap: spacing['--t-spacing-1'],
+  },
+  key: {
+    alignItems: 'center',
+    backgroundColor: background['--t-background-secondary'],
+    blockSize: 18,
+    borderColor: borderColor['--t-border-color-strong'],
+    borderRadius: `calc(${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']})`,
+    borderStyle: 'solid',
+    borderWidth: 1,
+    boxShadow: boxShadow['--t-box-shadow-underline'],
+    boxSizing: 'content-box',
+    display: 'inline-flex',
+    fontFamily: 'inherit',
+    fontSize: 'inherit',
+    fontStyle: 'inherit',
+    fontWeight: 'inherit',
+    justifyContent: 'center',
+    lineHeight: 'inherit',
+    minInlineSize: spacing['--t-spacing-4'],
+    paddingInline: spacing['--t-spacing-0_5'],
+    textAlign: 'center',
+  },
+});

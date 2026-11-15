@@ -7,7 +7,6 @@ runComponentConformance({
   name: 'Skeleton',
   element: <Skeleton width={120} height={16} />,
   refInstanceOf: HTMLSpanElement,
-  ownClassName: 'root',
 });
 
 it('keeps placeholder shapes out of the accessibility tree', () => {

@@ -1,5 +1,6 @@
 import { DirectionProvider } from '@base-ui/react/direction-provider';
 import { type Meta, type StoryObj } from '@storybook/react-vite';
+import * as stylex from '@stylexjs/stylex';
 import { useState } from 'react';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 
@@ -19,7 +20,14 @@ import { type TabsRootProps } from '../types/TabsRootProps';
 import { type TabsSize } from '../types/TabsSize';
 import { type TabsTabProps } from '../types/TabsTabProps';
 
-import styles from './Tabs.stories.module.scss';
+import { spacing } from '../../../../theme/tokens.stylex';
+
+const styles = stylex.create({
+  panel: {
+    paddingBlock: spacing['--t-spacing-4'],
+    paddingInline: spacing['--t-spacing-4'],
+  },
+});
 
 type TabsExampleProps = {
   tabProps: TabsTabProps;
@@ -43,7 +51,7 @@ const TabsExample = ({
     </Tabs.List>
     <Tabs.Panel
       value="overview"
-      className={styles.panel}
+      xstyle={styles.panel}
       keepMounted={keepMounted}
     >
       {keepMounted ? (
@@ -54,14 +62,14 @@ const TabsExample = ({
     </Tabs.Panel>
     <Tabs.Panel
       value="activity"
-      className={styles.panel}
+      xstyle={styles.panel}
       keepMounted={keepMounted}
     >
       Recent activity
     </Tabs.Panel>
     <Tabs.Panel
       value="settings"
-      className={styles.panel}
+      xstyle={styles.panel}
       keepMounted={keepMounted}
     >
       Record settings

@@ -6,7 +6,6 @@ import { describe, expect, it, vi } from 'vitest';
 import { runComponentConformance } from '@test-utilities/conformance/runComponentConformance';
 
 import { Tooltip } from '../Tooltip';
-import styles from '../Tooltip.module.scss';
 import { type TooltipRootActions } from '../types/TooltipRootActions';
 
 const TooltipRootWrapper = ({ children }: { children: ReactNode }) => (
@@ -34,7 +33,6 @@ runComponentConformance({
   element: <Tooltip.Popup />,
   refInstanceOf: HTMLDivElement,
   wrapper: OpenTooltipWrapper,
-  ownClassName: styles.popup,
 });
 
 const PopupWrapper = ({ children }: { children: ReactNode }) => (
@@ -59,7 +57,6 @@ runComponentConformance({
       <Tooltip.Portal>{children}</Tooltip.Portal>
     </Tooltip.Root>
   ),
-  ownClassName: styles.positioner,
 });
 
 runComponentConformance({
@@ -67,7 +64,6 @@ runComponentConformance({
   element: <Tooltip.Arrow />,
   refInstanceOf: HTMLDivElement,
   wrapper: PopupWrapper,
-  ownClassName: styles.arrow,
 });
 
 runComponentConformance({
@@ -85,7 +81,6 @@ runComponentConformance({
     </Tooltip>
   ),
   refInstanceOf: HTMLDivElement,
-  ownClassName: styles.popup,
 });
 
 const ControlledTooltip = () => {

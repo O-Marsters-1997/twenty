@@ -1,12 +1,14 @@
 import { Avatar as AvatarPrimitive } from '@base-ui/react/avatar';
 import { isFunction } from '@sniptt/guards';
+import * as stylex from '@stylexjs/stylex';
 import { type CSSProperties } from 'react';
 
 import { useTheme } from '@ui/theme';
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 import { stringToThemeColorP3String } from '@ui/utilities';
 
-import styles from '../Avatar.module.scss';
+import { avatarSizeStyles, avatarStyles } from '../Avatar.stylex';
 import { type AvatarRootProps } from '../types/AvatarRootProps';
 
 import { getAvatarInitial } from './getAvatarInitial';
@@ -24,8 +26,9 @@ export const AvatarRoot = ({
   ring = false,
   className,
   style,
+  xstyle,
   ...props
-}: AvatarRootProps) => {
+}: WithXstyle<AvatarRootProps>) => {
   const theme = useTheme();
   const initial = getAvatarInitial(name);
   const fallbackColor = initial
@@ -54,6 +57,16 @@ export const AvatarRoot = ({
         })
       : undefined);
 
+  const stylexProps = stylex.props(
+    avatarStyles.root,
+    avatarSizeStyles[size],
+    shape === 'rounded-square' && avatarStyles.shapeRoundedSquare,
+    shape === 'circle' && avatarStyles.shapeCircle,
+    ring && avatarStyles.ring,
+    pulsing && avatarStyles.pulsing,
+    xstyle,
+  );
+
   return (
     <AvatarPrimitive.Root
       {...props}
@@ -61,21 +74,27 @@ export const AvatarRoot = ({
       data-shape={shape}
       data-pulsing={pulsing || undefined}
       data-ring={ring || undefined}
-      className={mergeClassNames(styles.root, className)}
-      style={(state) =>
-        ({
+      className={mergeStylexProps(stylexProps, className).className}
+      style={(state) => {
+        const borderColorValue =
+          variant === 'outline' &&
+          state.imageLoadingStatus !== 'loaded' &&
+          fallbackBorder
+            ? fallbackBorder
+            : undefined;
+
+        return {
+          ...stylexProps.style,
           '--tw-avatar-color': fallbackColor,
           '--tw-avatar-background':
-            state.imageLoadingStatus === 'loaded' ? 'none' : fallbackBackground,
-          '--tw-avatar-border':
-            variant === 'outline' &&
-            state.imageLoadingStatus !== 'loaded' &&
-            fallbackBorder
-              ? `1px solid ${fallbackBorder}`
-              : 'none',
+            state.imageLoadingStatus === 'loaded'
+              ? 'transparent'
+              : fallbackBackground,
+          '--tw-avatar-border-color': borderColorValue ?? 'transparent',
+          '--tw-avatar-border-width': borderColorValue ? '1px' : '0px',
           ...(isFunction(style) ? style(state) : style),
-        }) as CSSProperties
-      }
+        } as CSSProperties;
+      }}
     />
   );
 };

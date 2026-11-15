@@ -1,16 +1,22 @@
 import { Dialog as DialogPrimitive } from '@base-ui/react/dialog';
+import * as stylex from '@stylexjs/stylex';
 
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
-import styles from '@ui/primitives/surfaces/internal/Dialog.module.scss';
+import { dialogStyles } from '../../internal/Dialog.stylex';
 import { type DialogDescriptionProps } from '../types/DialogDescriptionProps';
 
 export const DialogDescription = ({
   className,
+  xstyle,
   ...props
-}: DialogDescriptionProps) => (
+}: WithXstyle<DialogDescriptionProps>) => (
   <DialogPrimitive.Description
     {...props}
-    className={mergeClassNames(styles.description, className)}
+    {...mergeStylexProps(
+      stylex.props(dialogStyles.description, xstyle),
+      className,
+    )}
   />
 );

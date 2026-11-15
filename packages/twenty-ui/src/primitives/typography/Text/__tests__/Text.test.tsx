@@ -4,12 +4,10 @@ import { describe, expect, it } from 'vitest';
 import { runComponentConformance } from '@test-utilities/conformance/runComponentConformance';
 
 import { Text } from '../Text';
-import styles from '../Text.module.scss';
 
 runComponentConformance({
   name: 'Text',
   element: <Text truncate>Body</Text>,
-  ownClassName: styles.truncate,
   refInstanceOf: HTMLDivElement,
 });
 
@@ -28,7 +26,7 @@ describe('Text', () => {
     'ignores invalid line limits %s',
     (lineClamp) => {
       render(<Text lineClamp={lineClamp}>Description</Text>);
-      expect(screen.getByText('Description')).not.toHaveClass(styles.lineClamp);
+      expect(screen.getByText('Description')).not.toHaveAttribute('style');
     },
   );
 });

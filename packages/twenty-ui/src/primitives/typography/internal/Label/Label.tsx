@@ -1,6 +1,9 @@
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 
-import styles from './Label.module.scss';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
+
+import { fontColor, fontWeight } from '../../../../theme/tokens.stylex';
 
 export type LabelVariant = 'default' | 'small';
 
@@ -14,10 +17,25 @@ export const Label = ({
   variant = 'default',
   children,
   className,
-}: LabelProps) => {
+  xstyle,
+}: WithXstyle<LabelProps>) => {
   return (
-    <div className={clsx(styles.label, styles[variant], className)}>
+    <div
+      {...mergeStylexProps(
+        stylex.props(styles.label, styles[variant], xstyle),
+        className,
+      )}
+    >
       {children}
     </div>
   );
 };
+
+const styles = stylex.create({
+  label: {
+    color: fontColor['--t-font-color-light'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+  },
+  default: { fontSize: 11 },
+  small: { fontSize: 9 },
+});

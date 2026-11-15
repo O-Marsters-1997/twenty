@@ -1,13 +1,19 @@
 import { Tabs as TabsPrimitive } from '@base-ui/react/tabs';
+import * as stylex from '@stylexjs/stylex';
 
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
-import styles from '../../internal/tab/Tab.module.scss';
+import { tabStyles } from '../../internal/tab/TabStyles.stylex';
 import { type TabsIndicatorProps } from '../types/TabsIndicatorProps';
 
-export const TabsIndicator = ({ className, ...props }: TabsIndicatorProps) => (
+export const TabsIndicator = ({
+  className,
+  xstyle,
+  ...props
+}: WithXstyle<TabsIndicatorProps>) => (
   <TabsPrimitive.Indicator
     {...props}
-    className={mergeClassNames(styles.indicator, className)}
+    {...mergeStylexProps(stylex.props(tabStyles.indicator, xstyle), className)}
   />
 );

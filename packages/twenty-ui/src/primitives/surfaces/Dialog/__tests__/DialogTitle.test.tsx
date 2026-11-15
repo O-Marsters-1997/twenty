@@ -7,8 +7,6 @@ import { ThemeProvider } from '@ui/theme/ThemeProvider';
 
 import { Dialog } from '../Dialog';
 
-import styles from '../DialogTitle.module.scss';
-
 const DialogRootWrapper = ({ children }: { children: ReactNode }) => (
   <Dialog.Root>{children}</Dialog.Root>
 );
@@ -16,7 +14,6 @@ const DialogRootWrapper = ({ children }: { children: ReactNode }) => (
 runComponentConformance({
   name: 'Dialog.Title',
   element: <Dialog.Title>Grant credits</Dialog.Title>,
-  ownClassName: styles.title,
   refInstanceOf: HTMLHeadingElement,
   wrapper: DialogRootWrapper,
 });

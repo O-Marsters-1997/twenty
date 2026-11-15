@@ -1,0 +1,6 @@
+@layer twenty-ui {
+  .tw-avatar-fallback > svg {
+    block-size: calc(var(--t-icon-size-xl) * 1px);
+    inline-size: calc(var(--t-icon-size-xl) * 1px);
+  }
+}

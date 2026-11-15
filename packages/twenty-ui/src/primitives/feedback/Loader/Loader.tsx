@@ -1,35 +1,50 @@
 import { useRender } from '@base-ui/react/use-render';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 import { type CSSProperties } from 'react';
 
 import { themeCssVariables } from '@ui/theme';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 import { isDefined } from '@ui/utilities/utils/isDefined';
 
+import { loaderStyles } from './Loader.stylex';
 import { type LoaderProps } from './types/LoaderProps';
-
-import styles from './Loader.module.scss';
 
 export const Loader = ({
   color,
   className,
   style,
+  xstyle,
   render,
   ref,
   ...props
-}: LoaderProps) =>
-  useRender({
+}: WithXstyle<LoaderProps>) => {
+  const loaderColor = isDefined(color)
+    ? themeCssVariables.tag.text[color]
+    : undefined;
+  const stylexProps = stylex.props(
+    loaderStyles.container,
+    isDefined(loaderColor) && loaderStyles.containerColor(loaderColor),
+    xstyle,
+  );
+
+  return useRender({
     defaultTagName: 'div',
     render,
     ref,
     props: {
       ...props,
-      className: clsx(styles.container, className),
-      style: {
-        ...(isDefined(color) && {
-          '--loader-color': themeCssVariables.tag.text[color],
-        }),
-        ...style,
-      } as CSSProperties,
-      children: <span className={styles.dot} aria-hidden="true" />,
+      ...mergeStylexProps(stylexProps, className),
+      style: { ...stylexProps.style, ...style } as CSSProperties,
+      children: (
+        <span
+          {...stylex.props(
+            loaderStyles.dot,
+            isDefined(loaderColor) && loaderStyles.dotColor(loaderColor),
+          )}
+          aria-hidden="true"
+        />
+      ),
     },
   });
+};

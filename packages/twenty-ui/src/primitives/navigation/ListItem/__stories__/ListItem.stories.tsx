@@ -121,11 +121,7 @@ export const WithCheckbox: Story = {
 };
 
 type ListItemCatalogState =
-  | 'default'
-  | 'hover'
-  | 'highlighted'
-  | 'selected'
-  | 'disabled';
+  'default' | 'hover' | 'highlighted' | 'selected' | 'disabled';
 
 const LIST_ITEM_CATALOG_STATE_PROPS: Record<
   ListItemCatalogState,

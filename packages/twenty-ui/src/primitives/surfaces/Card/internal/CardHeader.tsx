@@ -1,21 +1,34 @@
 import { useRender } from '@base-ui/react/use-render';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
+
+import { focusStyles } from '../../../../styles/focus.stylex';
+import { cardStyles } from '../Card.stylex';
 import { type CardHeaderProps } from '../types/CardHeaderProps';
-
-import styles from '../CardHeader.module.scss';
 
 export const CardHeader = ({
   className,
   render,
   ref,
+  xstyle,
   ...props
-}: CardHeaderProps) =>
+}: WithXstyle<CardHeaderProps>) =>
   useRender({
     render,
     ref,
     props: {
       ...props,
-      className: clsx(styles.cardHeader, className),
+      ...mergeStylexProps(
+        stylex.props(
+          focusStyles.ring,
+          cardStyles.owner,
+          cardStyles.section,
+          cardStyles.header,
+          xstyle,
+        ),
+        className,
+      ),
     },
   });

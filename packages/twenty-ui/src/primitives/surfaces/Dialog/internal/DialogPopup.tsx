@@ -1,16 +1,23 @@
 import { Dialog as DialogPrimitive } from '@base-ui/react/dialog';
+import * as stylex from '@stylexjs/stylex';
 
 import { useProvidedTextDirection } from '@ui/primitives/layout/DirectionProvider/internal/useProvidedTextDirection';
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
-import styles from '@ui/primitives/surfaces/internal/Dialog.module.scss';
+import {
+  dialogPopupMarker,
+  dialogPopupSizeStyles,
+  dialogStyles,
+} from '../../internal/Dialog.stylex';
 import { type DialogPopupProps } from '../types/DialogPopupProps';
 
 export const DialogPopup = ({
   size = 'md',
   className,
+  xstyle,
   ...props
-}: DialogPopupProps) => {
+}: WithXstyle<DialogPopupProps>) => {
   const direction = useProvidedTextDirection();
 
   return (
@@ -18,7 +25,15 @@ export const DialogPopup = ({
       dir={direction}
       {...props}
       data-size={size}
-      className={mergeClassNames(styles.popup, className)}
+      {...mergeStylexProps(
+        stylex.props(
+          dialogPopupMarker,
+          dialogStyles.popup,
+          size !== 'md' && dialogPopupSizeStyles[size],
+          xstyle,
+        ),
+        className,
+      )}
     />
   );
 };

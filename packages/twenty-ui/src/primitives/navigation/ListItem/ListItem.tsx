@@ -1,16 +1,22 @@
 import { useRender } from '@base-ui/react/use-render';
 import { isString } from '@sniptt/guards';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 
 import { IconCheck, IconChevronRight } from '@ui/icon';
 import { Shortcut } from '@ui/primitives/typography/Shortcut/Shortcut';
 import { OverflowingTextWithTooltip } from '@ui/primitives/typography/OverflowingTextWithTooltip/OverflowingTextWithTooltip';
 import { isRenderableSlot } from '@ui/utilities/internal/isRenderableSlot';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 import { isDefined } from '@ui/utilities/utils/isDefined';
 
+import { focusStyles } from '../../../styles/focus.stylex';
 import { ListItemCheckboxIndicator } from './internal/ListItemCheckboxIndicator';
-import styles from './ListItem.module.scss';
+import { listItemMarker } from './ListItem.stylex';
+import { listItemStyles as styles } from './ListItemStyles.stylex';
 import { type ListItemProps } from './types/ListItemProps';
+
+import './ListItem.css';
 
 export const ListItem = ({
   color = 'neutral',
@@ -28,11 +34,12 @@ export const ListItem = ({
   shortcutJoinLabel,
   hasSubmenu = false,
   className,
+  xstyle,
   children,
   render,
   ref,
   ...props
-}: ListItemProps) => {
+}: WithXstyle<ListItemProps>) => {
   const hasDescription = isRenderableSlot(description);
 
   return useRender({
@@ -42,17 +49,27 @@ export const ListItem = ({
     props: {
       ...props,
       'data-actions-visibility': actionsVisibility,
-      className: clsx(styles.root, className),
+      ...mergeStylexProps(
+        stylex.props(listItemMarker, focusStyles.ring, styles.root, xstyle),
+        className,
+      ),
       children: (
         <>
           {indicator === 'checkbox' && (
             <ListItemCheckboxIndicator checked={selected} disabled={disabled} />
           )}
           {isRenderableSlot(startIcon) && (
-            <span className={styles.startIcon}>{startIcon}</span>
+            <span
+              {...mergeStylexProps(
+                stylex.props(styles.icon),
+                'tw-list-item-icon',
+              )}
+            >
+              {startIcon}
+            </span>
           )}
-          <span className={styles.label}>
-            <span className={styles.text}>
+          <span {...stylex.props(styles.label)}>
+            <span {...stylex.props(styles.text)}>
               {isString(children) ? (
                 <OverflowingTextWithTooltip text={children} />
               ) : (
@@ -61,35 +78,48 @@ export const ListItem = ({
             </span>
             {hasDescription && descriptionPlacement === 'inline' && (
               <span
-                className={clsx(styles.description, styles.inlineDescription)}
+                {...stylex.props(styles.description, styles.inlineDescription)}
               >
                 {description}
               </span>
             )}
           </span>
           {hasDescription && descriptionPlacement === 'end' && (
-            <span className={clsx(styles.description, styles.endDescription)}>
+            <span {...stylex.props(styles.description, styles.endDescription)}>
               {description}
             </span>
           )}
           {isRenderableSlot(actions) && (
-            <span className={styles.actions}>{actions}</span>
+            <span {...stylex.props(styles.actions)}>{actions}</span>
           )}
           {isDefined(shortcut) && (
             <Shortcut
-              className={styles.hotkeys}
+              className={stylex.props(styles.hotkeys).className}
               shortcut={shortcut}
               sequenceJoinLabel={shortcutJoinLabel}
             />
           )}
           {isRenderableSlot(endIcon) && (
-            <span className={styles.endIcon}>{endIcon}</span>
+            <span
+              {...mergeStylexProps(
+                stylex.props(styles.icon),
+                'tw-list-item-icon',
+              )}
+            >
+              {endIcon}
+            </span>
           )}
           {indicator === 'check' && selected && (
-            <IconCheck className={styles.checkIndicator} aria-hidden />
+            <IconCheck
+              className={stylex.props(styles.checkIndicator).className}
+              aria-hidden
+            />
           )}
           {hasSubmenu && (
-            <IconChevronRight className={styles.submenuIcon} aria-hidden />
+            <IconChevronRight
+              className={stylex.props(styles.submenuIcon).className}
+              aria-hidden
+            />
           )}
         </>
       ),
