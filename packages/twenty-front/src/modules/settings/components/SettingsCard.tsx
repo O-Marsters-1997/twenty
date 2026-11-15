@@ -163,7 +163,9 @@ export const SettingsCard = ({
           className={
             stylex.props(
               styles.content,
-              hasAction ? styles.contentActionHover : styles.contentLinkHover,
+              hasAction
+                ? styles.contentActionHover
+                : !disabled && styles.contentLinkHover,
             ).className
           }
         >
