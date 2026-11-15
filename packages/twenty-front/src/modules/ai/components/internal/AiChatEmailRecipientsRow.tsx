@@ -25,7 +25,10 @@ const styles = stylex.create({
   input: {
     background: 'transparent',
     borderStyle: 'none',
-    color: { default: fontColor['--t-font-color-primary'], '::placeholder': fontColor['--t-font-color-light'] },
+    color: {
+      default: fontColor['--t-font-color-primary'],
+      '::placeholder': fontColor['--t-font-color-light'],
+    },
     flex: '1 0 80px',
     fontFamily: 'inherit',
     fontSize: fontSize['--t-font-size-sm'],
@@ -115,7 +118,8 @@ export const AiChatEmailRecipientsRow = ({
           value={draftRecipient}
           onChange={(event) => setDraftRecipient(event.target.value)}
           onKeyDown={handleKeyDown}
-          onBlur={addDraftRecipients} {...stylex.props(styles.input)}
+          onBlur={addDraftRecipients}
+          {...stylex.props(styles.input)}
         />
       )}
     </div>

@@ -58,7 +58,7 @@ export const AiChatInboxSelectionPane = ({
         />
       }
     >
-      <EmptyState.Root xstyle={styles.selection}>
+      <EmptyState.Root {...stylex.props(styles.selection)}>
         <AiChatInboxSelectionPile threads={selectedThreads} />
         <EmptyState.Content>
           <EmptyState.Title>

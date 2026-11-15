@@ -40,9 +40,7 @@ export const AiChatStandaloneError = () => {
   }
 
   return (
-    <div
-      {...stylex.props(aiChatContentContainerStyles.root, styles.root)}
-    >
+    <div {...stylex.props(aiChatContentContainerStyles.root, styles.root)}>
       <AiChatErrorRenderer error={agentChatError} />
     </div>
   );

@@ -20,7 +20,13 @@ import { AiChatEmailRecipientsRow } from '@/ai/components/internal/AiChatEmailRe
 import { AiChatToolCallApprovalCardLayout } from '@/ai/components/internal/AiChatToolCallApprovalCardLayout';
 import { useAnswerToolCallApproval } from '@/ai/hooks/useAnswerToolCallApproval';
 import * as stylex from '@stylexjs/stylex';
-import { borderColor, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  borderColor,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const EMAIL_TOOL_NAMES = {
   send: 'send_email',
@@ -219,7 +225,8 @@ export const AiChatToolCallApprovalEmailCard = ({
         placeholder={t`Subject`}
         value={subject}
         disabled={isAnswering}
-        onChange={(event) => setSubject(event.target.value)} {...stylex.props(styles.subjectInput)}
+        onChange={(event) => setSubject(event.target.value)}
+        {...stylex.props(styles.subjectInput)}
       />
       <FormAdvancedTextFieldInput
         defaultValue={serializeEmailBody(proposal.arguments.body)}

@@ -40,7 +40,10 @@ const styles = stylex.create({
     paddingBottom: '0',
     paddingLeft: '0',
     verticalAlign: 'middle',
-    outline: { default: null, ':focus-visible': `2px solid ${color['--t-color-blue']}` },
+    outline: {
+      default: null,
+      ':focus-visible': `2px solid ${color['--t-color-blue']}`,
+    },
     outlineOffset: { default: null, ':focus-visible': '-1px' },
   },
 });
@@ -117,7 +120,8 @@ export const AgentChatFilePreview = ({
         <button
           type="button"
           disabled={!isClickable}
-          onClick={handleClick} {...stylex.props(styles.previewButton)}
+          onClick={handleClick}
+          {...stylex.props(styles.previewButton)}
         >
           {leftComponent}
           <OverflowingTextWithTooltip

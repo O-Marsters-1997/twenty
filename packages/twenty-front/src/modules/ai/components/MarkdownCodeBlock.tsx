@@ -5,7 +5,12 @@ import { LightIconButton } from 'twenty-ui/components/input';
 import { IconCopy } from 'twenty-ui/icon';
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard';
 import * as stylex from '@stylexjs/stylex';
-import { animationDuration, background, borderRadius, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  animationDuration,
+  background,
+  borderRadius,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const extractTextFromNode = (node: React.ReactNode): string => {
   if (isString(node) || isNumber(node)) {

@@ -75,7 +75,11 @@ export const AiModelTierDropdown = ({
         sideOffset={8}
         aria-label={t`Choose a model mode`}
       >
-        <div role="group" aria-label={t`Choose a model mode`} {...stylex.props(styles.sliderContainer)}>
+        <div
+          role="group"
+          aria-label={t`Choose a model mode`}
+          {...stylex.props(styles.sliderContainer)}
+        >
           <AiModelTierSlider
             selectedTier={selectedTier}
             onTierChange={handleTierChange}

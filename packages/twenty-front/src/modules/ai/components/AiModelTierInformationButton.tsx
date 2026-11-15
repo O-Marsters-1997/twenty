@@ -21,7 +21,14 @@ import { getAiModelModeDescription } from '@/ai/utils/getAiModelModeDescription'
 import { StyledInformationCard } from '@/ui/layout/information-card/components/StyledInformationCard';
 import { formatNumber } from '@/localization/utils/formatNumber';
 import * as stylex from '@stylexjs/stylex';
-import { borderRadius, color, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  borderRadius,
+  color,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   trigger: {
@@ -32,7 +39,10 @@ const styles = stylex.create({
     borderTopRightRadius: borderRadius['--t-border-radius-sm'],
     borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
     borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
-    color: { default: fontColor['--t-font-color-tertiary'], ':hover': fontColor['--t-font-color-primary'] },
+    color: {
+      default: fontColor['--t-font-color-tertiary'],
+      ':hover': fontColor['--t-font-color-primary'],
+    },
     cursor: 'pointer',
     display: 'flex',
     height: '20px',
@@ -42,7 +52,10 @@ const styles = stylex.create({
     paddingBottom: '0',
     paddingLeft: '0',
     width: '20px',
-    outline: { default: null, ':focus-visible': `2px solid ${color['--t-color-blue']}` },
+    outline: {
+      default: null,
+      ':focus-visible': `2px solid ${color['--t-color-blue']}`,
+    },
   },
   heading: {
     color: fontColor['--t-font-color-secondary'],
@@ -128,7 +141,8 @@ export const AiModelTierInformationButton = ({
         type="button"
         aria-label={t`Model information`}
         // oxlint-disable-next-line react/jsx-props-no-spreading
-        {...getReferenceProps()} {...stylex.props(styles.trigger)}
+        {...getReferenceProps()}
+        {...stylex.props(styles.trigger)}
       >
         <IconInfoCircle size={theme.icon.size.sm} />
       </button>
@@ -161,7 +175,9 @@ export const AiModelTierInformationButton = ({
               </MetricRow>
             ))}
             {model?.isBenchmarkInherited === true && (
-              <div {...stylex.props(styles.note)}>{t`Not measured at this effort yet, so these are the base model's readings.`}</div>
+              <div
+                {...stylex.props(styles.note)}
+              >{t`Not measured at this effort yet, so these are the base model's readings.`}</div>
             )}
           </StyledInformationCard>
         </FloatingPortal>

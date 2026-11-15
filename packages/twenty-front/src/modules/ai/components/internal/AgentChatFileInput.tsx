@@ -32,7 +32,8 @@ export const AgentChatFileInput = ({ ref }: AgentChatFileInputProps) => {
       type="file"
       multiple
       accept="*/*"
-      onChange={handleFileInputChange} {...stylex.props(styles.fileInput)}
+      onChange={handleFileInputChange}
+      {...stylex.props(styles.fileInput)}
     />
   );
 };

@@ -28,8 +28,14 @@ import { useAtomFamilySelectorValue } from '@/ui/utilities/state/jotai/hooks/use
 import { useIsFeatureEnabled } from '@/workspace/hooks/useIsFeatureEnabled';
 import { FeatureFlagKey } from '~/generated-metadata/graphql';
 import * as stylex from '@stylexjs/stylex';
-import { animationDuration, background, borderRadius, fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
-import { spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  animationDuration,
+  background,
+  borderRadius,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 import '~/third-party-styles/ai-chat-content.css';
 
 const bubbleMarker = stylex.defineMarker();

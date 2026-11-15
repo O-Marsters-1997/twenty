@@ -50,10 +50,7 @@ export const LazyMarkdownContent = ({
   blockSplitCacheRef.current = cache;
 
   return (
-    <div
-      className="markdown-section"
-      data-replay-ignore-mutations="true"
-    >
+    <div className="markdown-section" data-replay-ignore-mutations="true">
       {markdownBlocks.map((blockText, blockIndex) => (
         <MemoizedMarkdownBlock
           key={blockIndex}

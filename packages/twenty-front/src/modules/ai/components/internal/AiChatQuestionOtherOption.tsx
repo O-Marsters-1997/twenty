@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { type KeyboardEvent, useId, useRef } from 'react';
 import { type IconComponent } from 'twenty-ui/icon';
@@ -8,26 +7,34 @@ import { usePushFocusItemToFocusStack } from '@/ui/utilities/focus/hooks/usePush
 import { useRemoveFocusItemFromFocusStackById } from '@/ui/utilities/focus/hooks/useRemoveFocusItemFromFocusStackById';
 import { FocusComponentType } from '@/ui/utilities/focus/types/FocusComponentType';
 import * as stylex from '@stylexjs/stylex';
-import { background, borderColor, borderRadius, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
-
-const StyledContainer = styled.div<{ isHighlighted: boolean }>`
-  background: ${({ isHighlighted }) =>
-    isHighlighted
-      ? themeCssVariables.background.transparent.light
-      : 'transparent'};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  box-sizing: border-box;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  padding: 0 ${themeCssVariables.spacing[1]} ${themeCssVariables.spacing[1]};
-
-  &:hover {
-    background: ${themeCssVariables.background.transparent.light};
-  }
-`;
+import {
+  background,
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
+  container: {
+    backgroundColor: {
+      default: 'transparent',
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    boxSizing: 'border-box',
+    cursor: 'pointer',
+    display: 'flex',
+    flexDirection: 'column',
+    paddingBlock: `0 ${spacing['--t-spacing-1']}`,
+    paddingInline: spacing['--t-spacing-1'],
+  },
+  containerHighlighted: {
+    backgroundColor: backgroundTransparent['--t-background-transparent-light'],
+  },
   labelRow: {
     alignItems: 'center',
     display: 'flex',
@@ -43,13 +50,19 @@ const styles = stylex.create({
     background: background['--t-background-primary'],
     borderWidth: '1px',
     borderStyle: 'solid',
-    borderColor: { default: borderColor['--t-border-color-medium'], ':focus': borderColor['--t-border-color-blue'] },
+    borderColor: {
+      default: borderColor['--t-border-color-medium'],
+      ':focus': borderColor['--t-border-color-blue'],
+    },
     borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
     borderTopRightRadius: borderRadius['--t-border-radius-sm'],
     borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
     borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
     boxSizing: 'border-box',
-    color: { default: fontColor['--t-font-color-primary'], '::placeholder': fontColor['--t-font-color-light'] },
+    color: {
+      default: fontColor['--t-font-color-primary'],
+      '::placeholder': fontColor['--t-font-color-light'],
+    },
     fontFamily: 'inherit',
     fontSize: fontSize['--t-font-size-md'],
     lineHeight: '1.4',
@@ -61,7 +74,10 @@ const styles = stylex.create({
     paddingLeft: spacing['--t-spacing-2'],
     resize: 'none',
     width: '100%',
-    fontWeight: { default: null, '::placeholder': fontWeight['--t-font-weight-medium'] },
+    fontWeight: {
+      default: null,
+      '::placeholder': fontWeight['--t-font-weight-medium'],
+    },
   },
 });
 
@@ -114,7 +130,13 @@ export const AiChatQuestionOtherOption = ({
   };
 
   return (
-    <StyledContainer isHighlighted={isHighlighted} onClick={selectAndFocus}>
+    <div
+      {...stylex.props(
+        styles.container,
+        isHighlighted && styles.containerHighlighted,
+      )}
+      onClick={selectAndFocus}
+    >
       <div
         role="button"
         tabIndex={0}
@@ -124,7 +146,8 @@ export const AiChatQuestionOtherOption = ({
             event.preventDefault();
             selectAndFocus();
           }
-        }} {...stylex.props(styles.labelRow)}
+        }}
+        {...stylex.props(styles.labelRow)}
       >
         <NumberIcon
           size={theme.icon.size.sm}
@@ -146,8 +169,9 @@ export const AiChatQuestionOtherOption = ({
         onChange={(event) => onChange(event.target.value)}
         onKeyDown={onTextareaKeyDown}
         onFocus={handleTextareaFocus}
-        onBlur={handleTextareaBlur} {...stylex.props(styles.textArea)}
+        onBlur={handleTextareaBlur}
+        {...stylex.props(styles.textArea)}
       />
-    </StyledContainer>
+    </div>
   );
 };

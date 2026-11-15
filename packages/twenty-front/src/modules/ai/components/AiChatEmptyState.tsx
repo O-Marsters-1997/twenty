@@ -30,9 +30,7 @@ export const AiChatEmptyState = ({
   }
 
   return (
-    <div
-      {...stylex.props(aiChatContentContainerStyles.root, styles.root)}
-    >
+    <div {...stylex.props(aiChatContentContainerStyles.root, styles.root)}>
       <AiChatSuggestedPrompts isCentered={isCentered} />
     </div>
   );

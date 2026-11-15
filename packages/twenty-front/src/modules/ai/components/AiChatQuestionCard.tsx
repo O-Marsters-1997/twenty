@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { type KeyboardEvent, useState } from 'react';
 import {
@@ -28,7 +27,7 @@ import {
 import { Tooltip } from 'twenty-ui/primitives/surfaces';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 
-import { StyledAiChatAskCard } from '@/ai/components/AiChatAskStyledComponents';
+import { aiChatAskStyles } from '@/ai/components/AiChatAskStyledComponents';
 import { TextWithChatReferences } from '@/ai/components/TextWithChatReferences';
 import { AiChatComposerActionsRow } from '@/ai/components/internal/AiChatComposerActionsRow';
 import { AiChatQuestionOtherOption } from '@/ai/components/internal/AiChatQuestionOtherOption';
@@ -36,7 +35,15 @@ import { useAnswerAgentChatToolCall } from '@/ai/hooks/useAnswerAgentChatToolCal
 import { type AgentChatPendingQuestion } from '@/ai/types/AgentChatPendingQuestion';
 import { TooltipDelay } from '@/ui/layout/tooltip/constants/TooltipDelay';
 import * as stylex from '@stylexjs/stylex';
-import { borderColor, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const NUMBER_ICONS: IconComponent[] = [
   IconSquareNumber1,
@@ -54,6 +61,26 @@ const getOptionNumberIcon = (optionIndex: number) =>
   NUMBER_ICONS[Math.min(optionIndex, NUMBER_ICONS.length - 1)];
 
 const styles = stylex.create({
+  optionRow: {
+    alignItems: 'center',
+    backgroundColor: {
+      default: 'transparent',
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    boxSizing: 'border-box',
+    cursor: 'pointer',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    height: '32px',
+    justifyContent: 'space-between',
+    overflow: 'hidden',
+    paddingBlock: 0,
+    paddingInline: spacing['--t-spacing-1'],
+  },
+  optionRowHighlighted: {
+    backgroundColor: backgroundTransparent['--t-background-transparent-light'],
+  },
   questionSection: {
     display: 'flex',
     flexDirection: 'column',
@@ -138,27 +165,6 @@ const styles = stylex.create({
     paddingLeft: spacing['--t-spacing-2'],
   },
 });
-
-const StyledOptionRow = styled.div<{ isHighlighted: boolean }>`
-  align-items: center;
-  background: ${({ isHighlighted }) =>
-    isHighlighted
-      ? themeCssVariables.background.transparent.light
-      : 'transparent'};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  box-sizing: border-box;
-  cursor: pointer;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  height: 32px;
-  justify-content: space-between;
-  overflow: hidden;
-  padding: 0 ${themeCssVariables.spacing[1]};
-
-  &:hover {
-    background: ${themeCssVariables.background.transparent.light};
-  }
-`;
 
 const areAllQuestionsAnswered = (
   questions: AskQuestionItem[],
@@ -379,7 +385,7 @@ export const AiChatQuestionCard = ({
   };
 
   return (
-    <StyledAiChatAskCard>
+    <div {...stylex.props(aiChatAskStyles.card)}>
       <div {...stylex.props(styles.questionSection)}>
         <div {...stylex.props(styles.questionHeaderRow)}>
           <p {...stylex.props(styles.questionText)}>
@@ -429,9 +435,12 @@ export const AiChatQuestionCard = ({
               isSelected || (!hasSelection && option.isRecommended === true);
 
             return (
-              <StyledOptionRow
+              <div
+                {...stylex.props(
+                  styles.optionRow,
+                  isHighlighted && styles.optionRowHighlighted,
+                )}
                 key={optionIndex}
-                isHighlighted={isHighlighted}
                 role="button"
                 tabIndex={0}
                 onClick={() => handleSelectOption(optionIndex)}
@@ -455,7 +464,9 @@ export const AiChatQuestionCard = ({
                     <TextWithChatReferences text={option.label} />
                   </span>
                   {option.isRecommended === true && (
-                    <span {...stylex.props(styles.recommended)}>· {t`Recommended`}</span>
+                    <span {...stylex.props(styles.recommended)}>
+                      · {t`Recommended`}
+                    </span>
                   )}
                 </div>
                 {isDefined(option.description) && (
@@ -475,7 +486,7 @@ export const AiChatQuestionCard = ({
                     </span>
                   </Tooltip>
                 )}
-              </StyledOptionRow>
+              </div>
             );
           })}
           <AiChatQuestionOtherOption
@@ -509,6 +520,6 @@ export const AiChatQuestionCard = ({
           }
         />
       </div>
-    </StyledAiChatAskCard>
+    </div>
   );
 };

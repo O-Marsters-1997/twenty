@@ -1,10 +1,9 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isDefined, isNonEmptyString } from 'twenty-shared/utils';
 import { IconHandClick } from 'twenty-ui/icon';
 import { VisuallyHidden } from 'twenty-ui/primitives/accessibility';
 import { Avatar } from 'twenty-ui/primitives/data-display';
-import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 
 import { useIsAgentChatThreadShownAsUnread } from '@/ai/hooks/useIsAgentChatThreadShownAsUnread';
 import { type AgentChatThreadRecord } from '@/ai/types/AgentChatThreadRecord';
@@ -15,9 +14,26 @@ import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomState
 import { getWorkspaceMemberNameOrEmail } from '@/workspace-member/utils/getWorkspaceMemberNameOrEmail';
 import { getAbsoluteImageUrl } from '~/utils/image/getAbsoluteImageUrl';
 import * as stylex from '@stylexjs/stylex';
-import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  color,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
+  needsInput: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    flexShrink: 0,
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    gap: spacing['--t-spacing-1'],
+  },
+  needsInputUnread: {
+    color: color['--t-color-blue'],
+  },
   subtitle: {
     alignItems: 'center',
     color: fontColor['--t-font-color-tertiary'],
@@ -39,18 +55,6 @@ const styles = stylex.create({
     marginLeft: 'auto',
   },
 });
-
-const StyledNeedsInput = styled.div<{ $isUnread: boolean }>`
-  align-items: center;
-  color: ${({ $isUnread }) =>
-    $isUnread
-      ? themeCssVariables.color.blue
-      : themeCssVariables.font.color.tertiary};
-  display: flex;
-  flex-shrink: 0;
-  font-weight: ${themeCssVariables.font.weight.medium};
-  gap: ${themeCssVariables.spacing[1]};
-`;
 
 type AiChatThreadSubtitleProps = {
   thread: AgentChatThreadRecord;
@@ -81,17 +85,25 @@ export const AiChatThreadSubtitle = ({ thread }: AiChatThreadSubtitleProps) => {
   return (
     <div {...stylex.props(styles.subtitle)}>
       {isAwaitingAnswer && (
-        <StyledNeedsInput $isUnread={isUnread}>
+        <div
+          {...stylex.props(
+            styles.needsInput,
+            isUnread && styles.needsInputUnread,
+          )}
+        >
           <IconHandClick size={theme.icon.size.sm} />
           {t`Needs input`}
-        </StyledNeedsInput>
+        </div>
       )}
       {isAwaitingAnswer && isNonEmptyString(previewText) && (
         <span aria-hidden>·</span>
       )}
       <div {...stylex.props(styles.preview)}>{previewText}</div>
       {isDefined(assignee) && (
-        <div title={t`Assigned to ${assigneeName}`} {...stylex.props(styles.assignee)}>
+        <div
+          title={t`Assigned to ${assigneeName}`}
+          {...stylex.props(styles.assignee)}
+        >
           <Avatar
             src={getAbsoluteImageUrl(assignee.avatarUrl)}
             colorSeed={assignee.id}

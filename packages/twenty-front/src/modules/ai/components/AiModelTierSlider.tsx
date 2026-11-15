@@ -1,14 +1,23 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { type ChangeEvent } from 'react';
 import { AI_MODEL_TIERS, type AiModelTier } from 'twenty-shared/ai';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { AiModelTierInformationButton } from '@/ai/components/AiModelTierInformationButton';
 import { useAiModelTiers } from '@/ai/hooks/useAiModelTiers';
 import * as stylex from '@stylexjs/stylex';
-import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  background,
+  borderColor,
+  borderRadius,
+  boxShadow,
+  color,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
 
 const TRACK_HEIGHT_PX = 24;
 const TRACK_INSET_PX = 0;
@@ -18,6 +27,78 @@ const HANDLE_HEIGHT_PX = 28;
 const LAST_STEP = AI_MODEL_TIERS.length - 1;
 
 const styles = stylex.create({
+  track: {
+    backgroundColor: background['--t-background-tertiary'],
+    borderRadius: borderRadius['--t-border-radius-md'],
+    boxShadow: {
+      default: null,
+      ':focus-within': `0 0 0 3px ${color['--t-color-blue3']}`,
+    },
+    cornerShape: 'round',
+    cursor: 'pointer',
+    height: `${TRACK_HEIGHT_PX}px`,
+    position: 'relative',
+    width: '100%',
+  },
+  trackDisabled: {
+    cursor: 'not-allowed',
+    opacity: 0.5,
+  },
+  fill: {
+    backgroundColor: color['--t-color-blue'],
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    cornerShape: 'round',
+    height: `${TRACK_HEIGHT_PX - 2 * TRACK_INSET_PX}px`,
+    left: `${TRACK_INSET_PX}px`,
+    position: 'absolute',
+    top: `${TRACK_INSET_PX}px`,
+    transitionDuration: '180ms',
+    transitionProperty: {
+      default: 'width',
+      [media.reducedMotion]: 'none',
+    },
+    transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)',
+    width: `calc(${DOT_CENTER_INSET_PX - TRACK_INSET_PX + HANDLE_WIDTH_PX / 2}px + var(--slider-step) * (100% - ${2 * DOT_CENTER_INSET_PX}px) / ${LAST_STEP})`,
+  },
+  dots: {
+    display: 'flex',
+    insetBlock: 0,
+    insetInline: `${DOT_CENTER_INSET_PX - 2}px`,
+    justifyContent: 'space-between',
+    pointerEvents: 'none',
+    position: 'absolute',
+  },
+  dot: {
+    alignSelf: 'center',
+    backgroundColor: borderColor['--t-border-color-strong'],
+    borderRadius: borderRadius['--t-border-radius-rounded'],
+    cornerShape: 'round',
+    height: '4px',
+    transitionDuration: '180ms',
+    transitionProperty: {
+      default: 'background-color',
+      [media.reducedMotion]: 'none',
+    },
+    transitionTimingFunction: 'ease-out',
+    width: '4px',
+  },
+  dotReached: {
+    // oxlint-disable-next-line twenty/no-hardcoded-colors -- Dots must remain translucent white over the blue track in both themes.
+    backgroundColor: 'rgba(255, 255, 255, 0.386)',
+  },
+  handle: {
+    backgroundColor: 'white',
+    borderRadius: borderRadius['--t-border-radius-md'],
+    boxShadow: boxShadow['--t-box-shadow-light'],
+    cornerShape: 'round',
+    height: `${HANDLE_HEIGHT_PX}px`,
+    pointerEvents: 'none',
+    position: 'absolute',
+    right: 0,
+    top: '50%',
+    transform: 'translateY(-50%)',
+    width: `${HANDLE_WIDTH_PX}px`,
+  },
   container: {
     display: 'flex',
     flexDirection: 'column',
@@ -54,81 +135,6 @@ const styles = stylex.create({
   },
 });
 
-const StyledTrack = styled.div<{ disabled: boolean }>`
-  background: ${themeCssVariables.background.tertiary};
-  border-radius: ${themeCssVariables.border.radius.md};
-  corner-shape: round;
-  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
-  height: ${TRACK_HEIGHT_PX}px;
-  opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
-  position: relative;
-  width: 100%;
-
-  &:has(input:focus-visible) {
-    box-shadow: 0 0 0 3px ${themeCssVariables.color.blue3};
-  }
-`;
-
-// The handle centre sits on a dot, so the fill runs half a handle past it.
-const StyledFill = styled.div`
-  background: ${themeCssVariables.color.blue};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  corner-shape: round;
-  height: ${TRACK_HEIGHT_PX - 2 * TRACK_INSET_PX}px;
-  left: ${TRACK_INSET_PX}px;
-  position: absolute;
-  top: ${TRACK_INSET_PX}px;
-  transition: width 180ms cubic-bezier(0.22, 1, 0.36, 1);
-  width: calc(
-    ${DOT_CENTER_INSET_PX - TRACK_INSET_PX + HANDLE_WIDTH_PX / 2}px +
-      var(--slider-step) * (100% - ${2 * DOT_CENTER_INSET_PX}px) / ${LAST_STEP}
-  );
-
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-  }
-`;
-
-const StyledDots = styled.div`
-  display: flex;
-  inset: 0 ${DOT_CENTER_INSET_PX - 2}px;
-  justify-content: space-between;
-  pointer-events: none;
-  position: absolute;
-`;
-
-const StyledDot = styled.span<{ isReached: boolean }>`
-  align-self: center;
-  background: ${({ isReached }) =>
-    isReached
-      ? // oxlint-disable-next-line twenty/no-hardcoded-colors -- Dots must remain translucent white over the blue track in both themes.
-        'rgba(255, 255, 255, 0.386)'
-      : themeCssVariables.border.color.strong};
-  border-radius: ${themeCssVariables.border.radius.rounded};
-  corner-shape: round;
-  height: 4px;
-  transition: background-color 180ms ease-out;
-  width: 4px;
-
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-  }
-`;
-
-const StyledHandle = styled.div`
-  background: white;
-  border-radius: ${themeCssVariables.border.radius.md};
-  box-shadow: ${themeCssVariables.boxShadow.light};
-  corner-shape: round;
-  height: ${HANDLE_HEIGHT_PX}px;
-  pointer-events: none;
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: ${HANDLE_WIDTH_PX}px;
-`;
-
 type AiModelTierSliderProps = {
   selectedTier: AiModelTier;
   onTierChange: (tier: AiModelTier) => void;
@@ -159,21 +165,29 @@ export const AiModelTierSlider = ({
   return (
     <div {...stylex.props(styles.container)}>
       <div {...stylex.props(styles.header)}>
-        <span {...stylex.props(styles.title)}>{title ?? resolvedTier.label}</span>
+        <span {...stylex.props(styles.title)}>
+          {title ?? resolvedTier.label}
+        </span>
         <AiModelTierInformationButton resolvedTier={resolvedTier} />
       </div>
-      <StyledTrack
-        disabled={disabled}
+      <div
+        {...stylex.props(styles.track, disabled && styles.trackDisabled)}
         style={{ '--slider-step': selectedStep } as React.CSSProperties}
       >
-        <StyledFill>
-          <StyledHandle />
-        </StyledFill>
-        <StyledDots>
+        <div {...stylex.props(styles.fill)}>
+          <div {...stylex.props(styles.handle)} />
+        </div>
+        <div {...stylex.props(styles.dots)}>
           {AI_MODEL_TIERS.map((tier, index) => (
-            <StyledDot key={tier} isReached={index <= selectedStep} />
+            <span
+              {...stylex.props(
+                styles.dot,
+                index <= selectedStep && styles.dotReached,
+              )}
+              key={tier}
+            />
           ))}
-        </StyledDots>
+        </div>
         <input
           type="range"
           min={0}
@@ -183,9 +197,10 @@ export const AiModelTierSlider = ({
           onChange={handleChange}
           disabled={disabled}
           aria-label={t`Model`}
-          aria-valuetext={resolvedTier.label} {...stylex.props(styles.input)}
+          aria-valuetext={resolvedTier.label}
+          {...stylex.props(styles.input)}
         />
-      </StyledTrack>
+      </div>
     </div>
   );
 };

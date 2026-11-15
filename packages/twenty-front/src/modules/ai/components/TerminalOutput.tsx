@@ -5,8 +5,16 @@ import { LightIconButton } from 'twenty-ui/components/input';
 import { IconCopy, IconTerminal } from 'twenty-ui/icon';
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard';
 import * as stylex from '@stylexjs/stylex';
-import { background, borderColor, borderRadius, color, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
-import { spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  background,
+  borderColor,
+  borderRadius,
+  color,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const blink = stylex.keyframes({
   '0%': { opacity: 1 },

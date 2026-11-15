@@ -5,8 +5,15 @@ import { LightIconButton } from 'twenty-ui/components/input';
 import { IconChevronDown, IconVariable, IconX } from 'twenty-ui/icon';
 import { useTheme } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { animationDuration, backgroundTransparent, borderColor, borderRadius, color, fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
-import { spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  animationDuration,
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  color,
+  fontColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 import { media } from 'twenty-ui/theme/constants.stylex';
 
 type AgentOutputSchemaFieldHeaderProps = {
@@ -70,8 +77,15 @@ const styles = stylex.create({
     minWidth: '0',
     paddingLeft: spacing['--t-spacing-2'],
     textAlign: 'left',
-    background: { default: null, ':hover': backgroundTransparent['--t-background-transparent-light'], ':active': backgroundTransparent['--t-background-transparent-medium'] },
-    outline: { default: null, ':focus-visible': `2px solid ${color['--t-color-blue']}` },
+    background: {
+      default: null,
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+      ':active': backgroundTransparent['--t-background-transparent-medium'],
+    },
+    outline: {
+      default: null,
+      ':focus-visible': `2px solid ${color['--t-color-blue']}`,
+    },
     outlineOffset: { default: null, ':focus-visible': '1px' },
   },
   name: {
@@ -90,10 +104,13 @@ export const AgentOutputSchemaFieldHeader = ({
   const theme = useTheme();
 
   return (
-    <div
-      {...stylex.props(styles.header, isExpanded && styles.headerExpanded)}
-    >
-      <button type="button" aria-expanded={isExpanded} onClick={onToggle} {...stylex.props(styles.toggle)}>
+    <div {...stylex.props(styles.header, isExpanded && styles.headerExpanded)}>
+      <button
+        type="button"
+        aria-expanded={isExpanded}
+        onClick={onToggle}
+        {...stylex.props(styles.toggle)}
+      >
         <span {...stylex.props(styles.title)}>
           <span {...stylex.props(styles.titleIcon)}>
             <IconVariable size={theme.icon.size.sm} aria-hidden />
@@ -103,7 +120,10 @@ export const AgentOutputSchemaFieldHeader = ({
           </span>
         </span>
         <span
-          {...stylex.props(styles.chevron, isExpanded && styles.chevronExpanded)}
+          {...stylex.props(
+            styles.chevron,
+            isExpanded && styles.chevronExpanded,
+          )}
           aria-hidden
         >
           <IconChevronDown size={theme.icon.size.sm} />

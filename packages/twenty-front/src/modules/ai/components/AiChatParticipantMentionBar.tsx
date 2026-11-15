@@ -8,7 +8,13 @@ import { useTheme } from 'twenty-ui/theme';
 
 import { useAiChatPendingParticipantMentions } from '@/ai/hooks/useAiChatPendingParticipantMentions';
 import * as stylex from '@stylexjs/stylex';
-import { background, borderRadius, fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  background,
+  borderRadius,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   bar: {
@@ -90,7 +96,9 @@ export const AiChatParticipantMentionBar = ({
   return (
     <div role="status" {...stylex.props(styles.bar)}>
       <IconUsers size={theme.icon.size.sm} />
-      <span title={message} {...stylex.props(styles.message)}>{message}</span>
+      <span title={message} {...stylex.props(styles.message)}>
+        {message}
+      </span>
       <LightButton emphasis="subtle" onClick={handleUndo}>
         {t`Undo`}
       </LightButton>

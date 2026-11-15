@@ -11,7 +11,12 @@ import { currentAiChatThreadState } from '@/ai/states/currentAiChatThreadState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
 import * as stylex from '@stylexjs/stylex';
-import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   section: {
@@ -48,7 +53,9 @@ export const AiChatContextUsageDetails = () => {
         <>
           <Separator />
           <div {...stylex.props(styles.section)}>
-            <span {...stylex.props(styles.sectionTitle)}>{t`Last message`}</span>
+            <span
+              {...stylex.props(styles.sectionTitle)}
+            >{t`Last message`}</span>
             <MetricRow
               startIcon={<IconArrowUp size={theme.icon.size.sm} />}
               value={formatAiChatTokens(lastMessage.inputTokens)}

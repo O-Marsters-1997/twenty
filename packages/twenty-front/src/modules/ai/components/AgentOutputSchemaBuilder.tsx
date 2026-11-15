@@ -13,7 +13,14 @@ import { ListItemButton } from 'twenty-ui/components/navigation';
 import { AgentOutputFieldTypeSelector } from '@/ai/components/AgentOutputFieldTypeSelector';
 import { AgentOutputSchemaFieldHeader } from '@/ai/components/AgentOutputSchemaFieldHeader';
 import * as stylex from '@stylexjs/stylex';
-import { backgroundTransparent, borderColor, borderRadius, fontColor, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 type AgentOutputSchemaBuilderProps = {
   fields: OutputSchemaField[];
   onChange: (fields: OutputSchemaField[]) => void;
@@ -31,7 +38,8 @@ const styles = stylex.create({
     gap: spacing['--t-spacing-2'],
   },
   outputSchemaFieldContainer: {
-    backgroundColor: backgroundTransparent['--t-background-transparent-lighter'],
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
     borderWidth: '1px',
     borderStyle: 'solid',
     borderColor: borderColor['--t-border-color-light'],
@@ -143,7 +151,10 @@ export const AgentOutputSchemaBuilder = ({
       {fields.length === 0 && (
         <div {...stylex.props(styles.outputSchemaFieldContainer)}>
           <div {...stylex.props(styles.messageContentContainer)}>
-            <div data-testid="empty-output-schema-message-description" {...stylex.props(styles.messageDescription)}>
+            <div
+              data-testid="empty-output-schema-message-description"
+              {...stylex.props(styles.messageDescription)}
+            >
               {t`Click on "Add Output Field" below to define the structure of your agent's response. These fields will be used to format and validate the agent's output when the workflow is executed, and can be referenced by subsequent workflow steps.`}
             </div>
           </div>
@@ -156,7 +167,10 @@ export const AgentOutputSchemaBuilder = ({
             const isExpanded = expandedFieldIds.has(field.id);
 
             return (
-              <div key={field.id} {...stylex.props(styles.outputSchemaFieldContainer)}>
+              <div
+                key={field.id}
+                {...stylex.props(styles.outputSchemaFieldContainer)}
+              >
                 <AgentOutputSchemaFieldHeader
                   name={field.name}
                   isExpanded={isExpanded}

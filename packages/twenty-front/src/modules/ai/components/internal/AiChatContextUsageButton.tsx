@@ -25,12 +25,20 @@ import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomState
 import { formatNumber } from '@/localization/utils/formatNumber';
 import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
 import * as stylex from '@stylexjs/stylex';
-import { backgroundTransparent, borderRadius, color, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  backgroundTransparent,
+  borderRadius,
+  color,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   trigger: {
     alignItems: 'center',
-    background: { default: 'transparent', ':hover': backgroundTransparent['--t-background-transparent-light'] },
+    background: {
+      default: 'transparent',
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
     borderStyle: 'none',
     borderTopLeftRadius: borderRadius['--t-border-radius-md'],
     borderTopRightRadius: borderRadius['--t-border-radius-md'],
@@ -45,7 +53,10 @@ const styles = stylex.create({
     paddingBottom: '0',
     paddingLeft: '0',
     width: '24px',
-    outline: { default: null, ':focus-visible': `2px solid ${color['--t-color-blue']}` },
+    outline: {
+      default: null,
+      ':focus-visible': `2px solid ${color['--t-color-blue']}`,
+    },
   },
   footer: {
     display: 'flex',
@@ -125,7 +136,8 @@ export const AiChatContextUsageButton = () => {
             : t`Context and usage, context window unavailable`
         }
         // oxlint-disable-next-line react/jsx-props-no-spreading
-        {...getReferenceProps()} {...stylex.props(styles.trigger)}
+        {...getReferenceProps()}
+        {...stylex.props(styles.trigger)}
       >
         <ProgressRing
           value={percentage}

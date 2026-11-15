@@ -16,7 +16,12 @@ import { TextInput } from '@/ui/input/components/TextInput';
 import { isDropdownOpenComponentState } from '@/ui/layout/dropdown/states/isDropdownOpenComponentState';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import * as stylex from '@stylexjs/stylex';
-import { accent, backgroundTransparent, borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  accent,
+  backgroundTransparent,
+  borderColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 import { media } from 'twenty-ui/theme/constants.stylex';
 
 const itemMarker = stylex.defineMarker();
@@ -47,7 +52,10 @@ const styles = stylex.create({
     display: {
       default: 'none',
       [stylex.when.ancestor(':focus-within', itemMarker)]: 'flex',
-      [media.hoverCapable]: { default: null, [stylex.when.ancestor(':hover', itemMarker)]: 'flex' },
+      [media.hoverCapable]: {
+        default: null,
+        [stylex.when.ancestor(':hover', itemMarker)]: 'flex',
+      },
     },
   },
   checkboxChecked: {
@@ -60,21 +68,30 @@ const styles = stylex.create({
     display: {
       default: 'flex',
       [stylex.when.ancestor(':focus-within', itemMarker)]: 'none',
-      [media.hoverCapable]: { default: null, [stylex.when.ancestor(':hover', itemMarker)]: 'none' },
+      [media.hoverCapable]: {
+        default: null,
+        [stylex.when.ancestor(':hover', itemMarker)]: 'none',
+      },
     },
   },
   avatarChecked: {
     display: 'none',
   },
   activityTime: {
-    visibility: { default: 'visible', [stylex.when.ancestor(':hover', itemMarker)]: 'hidden' },
+    visibility: {
+      default: 'visible',
+      [stylex.when.ancestor(':hover', itemMarker)]: 'hidden',
+    },
   },
   activityTimeHidden: {
     visibility: 'hidden',
   },
   menuTrigger: {
     opacity: { default: 0, [stylex.when.ancestor(':hover', itemMarker)]: 1 },
-    pointerEvents: { default: 'none', [stylex.when.ancestor(':hover', itemMarker)]: 'auto' },
+    pointerEvents: {
+      default: 'none',
+      [stylex.when.ancestor(':hover', itemMarker)]: 'auto',
+    },
     position: 'absolute',
     right: spacing['--t-spacing-3'],
     top: spacing['--t-spacing-3'],
@@ -188,11 +205,15 @@ export const AiChatThreadListItem = ({
                 onCheckboxClick(thread, event);
               }
             : undefined
-        } {...stylex.props(styles.leading)}
+        }
+        {...stylex.props(styles.leading)}
       >
         {isDefined(onCheckboxClick) && (
           <div
-            {...stylex.props(styles.checkbox, isChecked && styles.checkboxChecked)}
+            {...stylex.props(
+              styles.checkbox,
+              isChecked && styles.checkboxChecked,
+            )}
           >
             <Checkbox checked={isChecked} aria-label={t`Select chat`} />
           </div>

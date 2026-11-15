@@ -1,7 +1,14 @@
 import { t } from '@lingui/core/macro';
 import { ThinkingOrbitLoaderIcon } from 'twenty-ui/icon';
 import * as stylex from '@stylexjs/stylex';
-import { fontColor, fontSize, fontWeight, iconSize, spacing, textLineHeight } from 'twenty-ui/theme/tokens.stylex';
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  iconSize,
+  spacing,
+  textLineHeight,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   row: {

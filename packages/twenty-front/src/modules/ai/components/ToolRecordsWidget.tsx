@@ -9,7 +9,12 @@ import { useIcons } from 'twenty-ui/icon';
 
 import { useObjectMetadataItems } from '@/object-metadata/hooks/useObjectMetadataItems';
 import * as stylex from '@stylexjs/stylex';
-import { font, fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  font,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const MAX_VISIBLE_RECORDS = 12;
 
@@ -81,7 +86,9 @@ export const ToolRecordsWidget = ({
           );
         })}
         {hiddenCount > 0 && (
-          <span {...stylex.props(styles.overflow)}>{t`and ${hiddenCount} more`}</span>
+          <span
+            {...stylex.props(styles.overflow)}
+          >{t`and ${hiddenCount} more`}</span>
         )}
       </div>
     </div>

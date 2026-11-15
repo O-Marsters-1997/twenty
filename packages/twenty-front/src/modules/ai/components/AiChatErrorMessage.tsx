@@ -9,7 +9,16 @@ import { type AiChatError } from '@/ai/types/AiChatError';
 import { useTheme } from 'twenty-ui/theme';
 import { getErrorMessageFromApolloError } from '~/utils/get-error-message-from-apollo-error.util';
 import * as stylex from '@stylexjs/stylex';
-import { background, borderColor, borderRadius, color, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  background,
+  borderColor,
+  borderRadius,
+  color,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   errorContainer: {
@@ -76,11 +85,15 @@ export const AiChatErrorMessage = ({
         <IconAlertCircle size={theme.icon.size.md} />
       </div>
       <div {...stylex.props(styles.errorContent)}>
-        <div {...stylex.props(styles.errorTitle)}>{t`Failed to get response`}</div>
+        <div
+          {...stylex.props(styles.errorTitle)}
+        >{t`Failed to get response`}</div>
         <div {...stylex.props(styles.errorMessage)}>
           {errorMessage || t`An error occurred while processing your message`}
         </div>
-        {isDefined(hint) && <div {...stylex.props(styles.errorMessage)}>{hint}</div>}
+        {isDefined(hint) && (
+          <div {...stylex.props(styles.errorMessage)}>{hint}</div>
+        )}
       </div>
       {isDefined(onRetry) && (
         <Button

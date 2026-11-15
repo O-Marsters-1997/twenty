@@ -13,11 +13,19 @@ import { getAskedQuestionEntries } from '@/ai/utils/getAskedQuestionEntries';
 import { getChatReferenceSegments } from '@/ai/utils/getChatReferenceSegments';
 import { aiChatAskStyles } from '@/ai/components/AiChatAskStyledComponents';
 import * as stylex from '@stylexjs/stylex';
-import { backgroundTransparent, borderColor, borderRadius, fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   answersCard: {
-    backgroundColor: backgroundTransparent['--t-background-transparent-lighter'],
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
     borderWidth: '1px',
     borderStyle: 'solid',
     borderColor: borderColor['--t-border-color-medium'],

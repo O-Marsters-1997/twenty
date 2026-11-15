@@ -1,4 +1,3 @@
-
 import { AiChatThreadActivityTime } from '@/ai/components/AiChatThreadActivityTime';
 import { AiChatThreadAvatar } from '@/ai/components/AiChatThreadAvatar';
 import { AiChatThreadSubtitle } from '@/ai/components/AiChatThreadSubtitle';
@@ -6,7 +5,13 @@ import { AiChatThreadTitle } from '@/ai/components/AiChatThreadTitle';
 import { AI_CHAT_INBOX_SELECTION_PILE_MAX_CARDS } from '@/ai/constants/AiChatInboxSelectionPileMaxCards';
 import { type AgentChatThreadRecord } from '@/ai/types/AgentChatThreadRecord';
 import * as stylex from '@stylexjs/stylex';
-import { background, borderColor, borderRadius, boxShadow, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  background,
+  borderColor,
+  borderRadius,
+  boxShadow,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   card: (depth: number) => ({

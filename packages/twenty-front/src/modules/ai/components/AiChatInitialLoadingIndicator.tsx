@@ -1,7 +1,12 @@
 import { IconDotsVertical } from 'twenty-ui/icon';
 import { useTheme } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { borderColor, borderRadius, fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  borderColor,
+  borderRadius,
+  fontColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   loadingIconContainer: {

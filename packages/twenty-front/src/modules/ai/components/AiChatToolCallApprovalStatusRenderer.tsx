@@ -23,9 +23,7 @@ export const AiChatToolCallApprovalStatusRenderer = ({
   const { t } = useLingui();
 
   const output = toolPart.output as
-    | { result?: ProposeToolCallToolResult; error?: string }
-    | null
-    | undefined;
+    { result?: ProposeToolCallToolResult; error?: string } | null | undefined;
   const result = output?.result;
   const status: ProposeToolCallToolStatus = result?.status ?? 'pending';
   // refused when proposed, or failing outright, the call never reached the person

@@ -24,8 +24,20 @@ import { TooltipDelay } from '@/ui/layout/tooltip/constants/TooltipDelay';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard';
 import * as stylex from '@stylexjs/stylex';
-import { animationDuration, background, backgroundTransparent, borderColor, borderRadius, color, fontColor, fontSize, fontWeight, iconSize, spacing, textLineHeight } from 'twenty-ui/theme/tokens.stylex';
-import { spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  animationDuration,
+  background,
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  color,
+  fontColor,
+  fontSize,
+  fontWeight,
+  iconSize,
+  spacing,
+  textLineHeight,
+} from 'twenty-ui/theme/tokens.stylex';
 import '~/third-party-styles/ai-chat-content.css';
 
 const styles = stylex.create({

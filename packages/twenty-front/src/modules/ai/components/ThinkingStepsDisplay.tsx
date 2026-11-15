@@ -12,8 +12,18 @@ import { isThinkingStepPartActive } from '@/ai/utils/isThinkingStepPartActive';
 import { type ThinkingStepPart } from '@/ai/types/ThinkingStepPart';
 import { formatRoundedDuration } from '~/utils/format/formatRoundedDuration';
 import * as stylex from '@stylexjs/stylex';
-import { animationDuration, borderRadius, color, font, fontColor, fontSize, fontWeight, iconSize, spacing, textLineHeight } from 'twenty-ui/theme/tokens.stylex';
-import { spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  animationDuration,
+  borderRadius,
+  color,
+  font,
+  fontColor,
+  fontSize,
+  fontWeight,
+  iconSize,
+  spacing,
+  textLineHeight,
+} from 'twenty-ui/theme/tokens.stylex';
 import '~/third-party-styles/ai-chat-content.css';
 
 const styles = stylex.create({
@@ -59,7 +69,10 @@ const styles = stylex.create({
     borderTopRightRadius: borderRadius['--t-border-radius-sm'],
     borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
     borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
-    color: { default: fontColor['--t-font-color-tertiary'], ':hover': fontColor['--t-font-color-primary'] },
+    color: {
+      default: fontColor['--t-font-color-tertiary'],
+      ':hover': fontColor['--t-font-color-primary'],
+    },
     cursor: 'pointer',
     display: 'flex',
     fontFamily: 'inherit',
@@ -70,7 +83,10 @@ const styles = stylex.create({
     paddingBottom: '0',
     paddingLeft: '0',
     width: 'fit-content',
-    outline: { default: null, ':focus-visible': `2px solid ${color['--t-color-blue']}` },
+    outline: {
+      default: null,
+      ':focus-visible': `2px solid ${color['--t-color-blue']}`,
+    },
     outlineOffset: { default: null, ':focus-visible': '2px' },
   },
   rowsContainer: {
@@ -180,10 +196,14 @@ export const ThinkingStepsDisplay = ({
         <button
           type="button"
           aria-expanded={isExpanded}
-          onClick={() => setIsExpanded((previousValue) => !previousValue)} {...stylex.props(styles.summaryButton)}
+          onClick={() => setIsExpanded((previousValue) => !previousValue)}
+          {...stylex.props(styles.summaryButton)}
         >
           <div
-            {...stylex.props(styles.chevron, isExpanded && styles.chevronExpanded)}
+            {...stylex.props(
+              styles.chevron,
+              isExpanded && styles.chevronExpanded,
+            )}
           >
             <IconChevronRight size={14} />
           </div>

@@ -57,5 +57,7 @@ export const AiChatThreadActivityTime = ({
     }
   };
 
-  return <div {...stylex.props(styles.activityTime)}>{getActivityTimeLabel()}</div>;
+  return (
+    <div {...stylex.props(styles.activityTime)}>{getActivityTimeLabel()}</div>
+  );
 };

@@ -20,7 +20,16 @@ import { aiModelsState } from '@/client-config/states/aiModelsState';
 import { useIsMobile } from 'twenty-ui/utilities';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import * as stylex from '@stylexjs/stylex';
-import { animationDuration, background, backgroundTransparent, borderColor, borderRadius, color, colorTransparent, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  animationDuration,
+  background,
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  color,
+  colorTransparent,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 import { aiChatContentContainerStyles } from '@/ai/components/StyledAiChatContentContainer';
 import '~/third-party-styles/ai-chat-content.css';
 import { media } from 'twenty-ui/theme/constants.stylex';
@@ -41,7 +50,8 @@ const styles = stylex.create({
     paddingBlock: 0,
   },
   inputBox: {
-    backgroundColor: backgroundTransparent['--t-background-transparent-lighter'],
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
     borderColor: {
       default: borderColor['--t-border-color-medium'],
       ':focus-within': color['--t-color-blue'],
@@ -102,9 +112,7 @@ const EditableAiChatEditorSection = () => {
   const { editor, handleSendAndClear } = useAiChatEditor();
 
   const composer = (
-    <div
-      {...stylex.props(styles.inputBox, isMobile && styles.inputBoxMobile)}
-    >
+    <div {...stylex.props(styles.inputBox, isMobile && styles.inputBoxMobile)}>
       <div {...stylex.props(styles.editorWrapper)}>
         <EditorContent
           className={
@@ -142,12 +150,12 @@ const EditableAiChatEditorSection = () => {
       )}
 
       <div
-      {...stylex.props(
-        aiChatContentContainerStyles.root,
-        styles.inputArea,
-        isMobile && styles.inputAreaMobile,
-      )}
-    >
+        {...stylex.props(
+          aiChatContentContainerStyles.root,
+          styles.inputArea,
+          isMobile && styles.inputAreaMobile,
+        )}
+      >
         <AgentChatContextPreview />
         {hasNoEnabledModels && (
           <AiChatInlineBanner>{t`No AI provider is configured on this instance.`}</AiChatInlineBanner>
@@ -172,12 +180,12 @@ export const AiChatEditorSection = () => {
   if (access !== 'writer') {
     return (
       <div
-      {...stylex.props(
-        aiChatContentContainerStyles.root,
-        styles.inputArea,
-        isMobile && styles.inputAreaMobile,
-      )}
-    >
+        {...stylex.props(
+          aiChatContentContainerStyles.root,
+          styles.inputArea,
+          isMobile && styles.inputAreaMobile,
+        )}
+      >
         <div role="status">
           {access === 'loading'
             ? t`Loading conversation…`

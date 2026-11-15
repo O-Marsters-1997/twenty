@@ -128,7 +128,10 @@ export const AiChatAssistantMessageRenderer = ({
 
   return (
     <div>
-      <div data-replay-ignore-mutations="true" {...stylex.props(styles.messagePartsContainer)}>
+      <div
+        data-replay-ignore-mutations="true"
+        {...stylex.props(styles.messagePartsContainer)}
+      >
         {renderItems.map((renderItem, index) =>
           renderItem.type === 'thinking-steps' ? (
             <ThinkingStepsDisplay

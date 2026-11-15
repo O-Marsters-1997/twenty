@@ -1,35 +1,40 @@
 import { useResolvedAiModel } from '@/ai/hooks/useResolvedAiModel';
 import { InputLabel } from '@/ui/input/components/internal/InputLabel/InputLabel';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { Section } from 'twenty-ui/components/layout';
 import { IconBrandX, IconWorld } from 'twenty-ui/icon';
 import { Checkbox } from 'twenty-ui/primitives/input';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { spacing } from 'twenty-ui/theme/tokens.stylex';
-
-const StyledCheckboxContainer = styled.div<{ disabled: boolean }>`
-  align-items: center;
-  border-radius: ${themeCssVariables.border.radius.sm};
-  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
-  display: flex;
-  height: ${themeCssVariables.spacing[8]};
-  justify-content: space-between;
-  padding-inline: ${themeCssVariables.spacing[2]};
-  transition: background-color
-    calc(${themeCssVariables.animation.duration.normal} * 1s) ease;
-
-  &:hover {
-    background-color: ${({ disabled }) =>
-      disabled
-        ? 'transparent'
-        : themeCssVariables.background.transparent.light};
-  }
-`;
+import {
+  animationDuration,
+  backgroundTransparent,
+  borderRadius,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
+  checkbox: {
+    alignItems: 'center',
+    backgroundColor: {
+      default: null,
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    cursor: 'pointer',
+    display: 'flex',
+    height: spacing['--t-spacing-8'],
+    justifyContent: 'space-between',
+    paddingInline: spacing['--t-spacing-2'],
+    transitionDuration: `calc(${animationDuration['--t-animation-duration-normal']} * 1s)`,
+    transitionProperty: 'background-color',
+    transitionTimingFunction: 'ease',
+  },
+  checkboxDisabled: {
+    backgroundColor: 'transparent',
+    cursor: 'not-allowed',
+  },
   checkboxLabel: {
     alignItems: 'center',
     display: 'flex',
@@ -121,8 +126,11 @@ export const SettingsAgentModelCapabilities = ({
       <InputLabel>{t`Enable model-specific features`}</InputLabel>
       <div>
         {capabilities.map((capability) => (
-          <StyledCheckboxContainer
-            disabled={disabled}
+          <div
+            {...stylex.props(
+              styles.checkbox,
+              disabled && styles.checkboxDisabled,
+            )}
             key={capability.key}
             onClick={() =>
               handleCapabilityToggle(capability.key, !capability.enabled)
@@ -141,7 +149,7 @@ export const SettingsAgentModelCapabilities = ({
               disabled={disabled}
               onClick={(event) => event.stopPropagation()}
             />
-          </StyledCheckboxContainer>
+          </div>
         ))}
       </div>
     </Section.Root>
