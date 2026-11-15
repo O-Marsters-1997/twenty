@@ -1,3 +1,4 @@
+import { isString } from '@sniptt/guards';
 import { render, screen } from '@testing-library/react';
 
 import { StylexTokenSample } from '@ui/theme/__stories__/StylexTokenSample';
@@ -5,7 +6,7 @@ import * as tokens from '@ui/theme/tokens.stylex';
 import { themeCssVariables } from '@ui/theme/themeCssVariables';
 
 const collectVarNames = (node: unknown): string[] =>
-  typeof node === 'string'
+  isString(node)
     ? [node.match(/^var\((--t-[^,)]+)/)?.[1] ?? node]
     : Object.values(node as Record<string, unknown>).flatMap(collectVarNames);
 

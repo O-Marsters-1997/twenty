@@ -1,3 +1,4 @@
+import { isDefined } from '../../src/utilities/utils/isDefined';
 import { type CollectedTokenLeaf } from '../types/CollectedTokenLeaf';
 
 const capitalize = (segment: string) =>
@@ -6,10 +7,10 @@ const capitalize = (segment: string) =>
 const GROUP_NAME_PATTERN = /^[a-zA-Z][a-zA-Z0-9]*$/;
 
 const getGroupName = ([first, second, third]: string[]): string => {
-  if (first === undefined || second === undefined) {
+  if (!isDefined(first) || !isDefined(second)) {
     return 'general';
   }
-  return third === undefined ? first : `${first}${capitalize(second)}`;
+  return isDefined(third) ? `${first}${capitalize(second)}` : first;
 };
 
 export const groupLeavesForStylex = (

@@ -11,3 +11,5 @@ export default meta;
 type Story = StoryObj<typeof StylexTokenSample>;
 
 export const Default: Story = {};
+
+export const Dark: Story = { globals: { colorScheme: 'dark' } };
