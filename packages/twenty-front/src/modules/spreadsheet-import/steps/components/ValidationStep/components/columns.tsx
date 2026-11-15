@@ -1,6 +1,4 @@
 import { t } from '@lingui/core/macro';
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { type Column, useRowSelection } from 'react-data-grid';
 
 import {
@@ -15,58 +13,8 @@ import { Tooltip } from 'twenty-ui/primitives/surfaces';
 import { Checkbox, Switch } from 'twenty-ui/primitives/input';
 import { type ImportedStructuredRowMetadata } from '@/spreadsheet-import/steps/components/ValidationStep/types';
 import { TooltipDelay } from '@/ui/layout/tooltip/constants/TooltipDelay';
-
-const StyledHeaderContainer = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  position: relative;
-`;
-
-const StyledHeaderLabel = styled.span`
-  display: flex;
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-const StyledCheckboxContainer = styled.div`
-  align-items: center;
-  box-sizing: content-box;
-  display: flex;
-  flex: 1;
-  height: 100%;
-  justify-content: center;
-  line-height: 0;
-  width: 100%;
-`;
-
-const StyledSwitchContainer = styled.div`
-  align-items: center;
-  display: flex;
-  height: 100%;
-`;
-
-const StyledInputContainer = styled.div`
-  align-items: center;
-  display: flex;
-  min-height: 100%;
-  min-width: 100%;
-  padding-right: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledDefaultContainer = styled.div`
-  align-content: center;
-  min-height: 100%;
-  min-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledSelectReadonlyValueContianer = styled.div`
-  padding-left: ${themeCssVariables.spacing[2]};
-`;
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const SELECT_COLUMN_KEY = 'select-row';
 
@@ -91,7 +39,7 @@ export const generateColumns = (
       const { isRowSelected, onRowSelectionChange } = useRowSelection();
 
       return (
-        <StyledCheckboxContainer>
+        <div {...stylex.props(styles.checkboxContainer)}>
           <Checkbox
             aria-label={t`Select`}
             checked={isRowSelected}
@@ -106,7 +54,7 @@ export const generateColumns = (
               });
             }}
           />
-        </StyledCheckboxContainer>
+        </div>
       );
     },
   },
@@ -119,19 +67,19 @@ export const generateColumns = (
       minWidth: 150,
       resizable: true,
       renderHeaderCell: () => (
-        <StyledHeaderContainer>
+        <div {...stylex.props(styles.headerContainer)}>
           <Tooltip
             side="top"
             content={column.description}
             delay={TooltipDelay.mediumDelay}
             disabled={!column.description}
           >
-            <StyledHeaderLabel id={formatSafeId(column.key)}>
+            <span id={formatSafeId(column.key)} {...stylex.props(styles.headerLabel)}>
               {column.label}
-            </StyledHeaderLabel>
+            </span>
           </Tooltip>
           <></>
-        </StyledHeaderContainer>
+        </div>
       ),
       editable: column.fieldType.type !== 'checkbox',
       // Todo: remove usage of react-data-grid
@@ -143,9 +91,9 @@ export const generateColumns = (
         switch (column.fieldType.type) {
           case 'select': {
             component = (
-              <StyledSelectReadonlyValueContianer>
+              <div {...stylex.props(styles.selectReadonlyValueContianer)}>
                 {row[columnKey]}
-              </StyledSelectReadonlyValueContianer>
+              </div>
             );
             break;
           }
@@ -163,7 +111,7 @@ export const generateColumns = (
             );
         }
 
-        return <StyledInputContainer>{component}</StyledInputContainer>;
+        return <div {...stylex.props(styles.inputContainer)}>{component}</div>;
       },
       // Todo: remove usage of react-data-grid
       renderCell: ({ row, onRowChange }: { row: any; onRowChange: any }) => {
@@ -174,11 +122,11 @@ export const generateColumns = (
         switch (column.fieldType.type) {
           case 'checkbox':
             component = (
-              <StyledSwitchContainer
+              <div
                 id={formatSafeId(`${columnKey}-${row.__index}`)}
                 onClick={(event) => {
                   event.stopPropagation();
-                }}
+                }} {...stylex.props(styles.switchContainer)}
               >
                 <Switch
                   aria-label={column.label}
@@ -190,27 +138,27 @@ export const generateColumns = (
                     });
                   }}
                 />
-              </StyledSwitchContainer>
+              </div>
             );
             break;
           case 'select':
             component = (
-              <StyledDefaultContainer
-                id={formatSafeId(`${columnKey}-${row.__index}`)}
+              <div
+                id={formatSafeId(`${columnKey}-${row.__index}`)} {...stylex.props(styles.defaultContainer)}
               >
                 {column.fieldType.options.find(
                   (option) => option.value === row[columnKey],
                 )?.label || null}
-              </StyledDefaultContainer>
+              </div>
             );
             break;
           default:
             component = (
-              <StyledDefaultContainer
-                id={formatSafeId(`${columnKey}-${row.__index}`)}
+              <div
+                id={formatSafeId(`${columnKey}-${row.__index}`)} {...stylex.props(styles.defaultContainer)}
               >
                 {row[columnKey]}
-              </StyledDefaultContainer>
+              </div>
             );
         }
 
@@ -243,3 +191,51 @@ export const generateColumns = (
     }),
   ),
 ];
+
+const styles = stylex.create({
+  headerContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    position: 'relative',
+  },
+  headerLabel: {
+    display: 'flex',
+    flex: 1,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
+  checkboxContainer: {
+    alignItems: 'center',
+    boxSizing: 'content-box',
+    display: 'flex',
+    flex: 1,
+    height: '100%',
+    justifyContent: 'center',
+    lineHeight: '0',
+    width: '100%',
+  },
+  switchContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    height: '100%',
+  },
+  inputContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    minHeight: '100%',
+    minWidth: '100%',
+    paddingRight: spacing['--t-spacing-2'],
+  },
+  defaultContainer: {
+    alignContent: 'center',
+    minHeight: '100%',
+    minWidth: '100%',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  selectReadonlyValueContianer: {
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+});

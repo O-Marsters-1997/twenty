@@ -1,6 +1,4 @@
 import { Dialog } from 'twenty-ui/primitives/surfaces';
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { useCallback, useState } from 'react';
 
 import { Heading } from '@/spreadsheet-import/components/Heading';
@@ -13,16 +11,8 @@ import { type SpreadsheetImportStep } from '@/spreadsheet-import/steps/types/Spr
 import { SpreadsheetImportStepType } from '@/spreadsheet-import/steps/types/SpreadsheetImportStepType';
 import { useLingui } from '@lingui/react/macro';
 import { SelectHeaderTable } from './components/SelectHeaderTable';
-
-const StyledHeadingContainer = styled.div`
-  margin-bottom: ${themeCssVariables.spacing[8]};
-`;
-
-const StyledTableContainer = styled.div`
-  display: flex;
-  flex-grow: 1;
-  height: 0px;
-`;
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type SelectHeaderStepProps = {
   importedRows: ImportedRow[];
@@ -101,23 +91,18 @@ export const SelectHeaderStep = ({
   return (
     <>
       <Dialog.Body
-        style={{
-          display: 'flex',
-          flex: '1 1 0%',
-          flexDirection: 'column',
-          padding: 'var(--t-spacing-10)',
-        }}
+        {...stylex.props(styles.dialogBody)}
       >
-        <StyledHeadingContainer>
+        <div {...stylex.props(styles.headingContainer)}>
           <Heading title={t`Select header row`} />
-        </StyledHeadingContainer>
-        <StyledTableContainer>
+        </div>
+        <div {...stylex.props(styles.tableContainer)}>
           <SelectHeaderTable
             importedRows={importedRows}
             selectedRowIndex={selectedRowIndex}
             onSelectedRowChange={setSelectedRowIndex}
           />
-        </StyledTableContainer>
+        </div>
       </Dialog.Body>
       <StepNavigationButton
         onContinue={handleOnContinue}
@@ -128,3 +113,23 @@ export const SelectHeaderStep = ({
     </>
   );
 };
+
+const styles = stylex.create({
+  dialogBody: {
+    display: 'flex',
+    flexBasis: '0%',
+    flexGrow: 1,
+    flexShrink: 1,
+    flexDirection: 'column',
+    paddingBlock: spacing['--t-spacing-10'],
+    paddingInline: spacing['--t-spacing-10'],
+  },
+  headingContainer: {
+    marginBottom: spacing['--t-spacing-8'],
+  },
+  tableContainer: {
+    display: 'flex',
+    flexGrow: 1,
+    height: '0px',
+  },
+});

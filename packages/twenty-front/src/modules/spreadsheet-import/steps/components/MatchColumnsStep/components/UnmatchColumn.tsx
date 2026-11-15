@@ -5,13 +5,13 @@ import { type SpreadsheetImportFields } from '@/spreadsheet-import/types';
 import { type SpreadsheetColumn } from '@/spreadsheet-import/types/SpreadsheetColumn';
 import { type SpreadsheetColumns } from '@/spreadsheet-import/types/SpreadsheetColumns';
 import { SpreadsheetColumnType } from '@/spreadsheet-import/types/SpreadsheetColumnType';
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { t } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react/macro';
 import { useState } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { Collapsible } from 'twenty-ui/primitives/layout';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const getExpandableContainerTitle = (
   fields: SpreadsheetImportFields,
@@ -36,19 +36,6 @@ type UnmatchColumnProps = {
   onSubChange: (val: string, index: number, option: string) => void;
 };
 
-const StyledContainer = styled.div`
-  position: relative;
-  width: 100%;
-`;
-
-const StyledContentWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[3]};
-  margin-top: ${themeCssVariables.spacing[4]};
-  padding-bottom: ${themeCssVariables.spacing[4]};
-`;
-
 export const UnmatchColumn = ({
   columns,
   columnIndex,
@@ -65,7 +52,7 @@ export const UnmatchColumn = ({
   if (!isSelect) return null;
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <UnmatchColumnBanner
         message={getExpandableContainerTitle(fields, column)}
         buttonOnClick={() => setIsExpanded(!isExpanded)}
@@ -74,7 +61,7 @@ export const UnmatchColumn = ({
       />
       <Collapsible.Root open={isExpanded}>
         <Collapsible.Panel dimension="height" containAnimation>
-          <StyledContentWrapper>
+          <div {...stylex.props(styles.contentWrapper)}>
             {column.matchedOptions?.map((option) => (
               <SubMatchingSelectRow
                 option={option}
@@ -84,9 +71,23 @@ export const UnmatchColumn = ({
                 placeholder={t`Select an option`}
               />
             ))}
-          </StyledContentWrapper>
+          </div>
         </Collapsible.Panel>
       </Collapsible.Root>
-    </StyledContainer>
+    </div>
   );
 };
+
+const styles = stylex.create({
+  container: {
+    position: 'relative',
+    width: '100%',
+  },
+  contentWrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-3'],
+    marginTop: spacing['--t-spacing-4'],
+    paddingBottom: spacing['--t-spacing-4'],
+  },
+});

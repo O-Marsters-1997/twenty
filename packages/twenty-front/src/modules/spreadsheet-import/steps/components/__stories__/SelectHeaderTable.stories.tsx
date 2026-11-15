@@ -1,23 +1,17 @@
 import { RsiContext } from '@/spreadsheet-import/components/ReactSpreadsheetImportContextProvider';
 import { SelectHeaderTable } from '@/spreadsheet-import/steps/components/SelectHeaderStep/components/SelectHeaderTable';
-import { styled } from '@linaria/react';
 import { type Meta, type StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { ComponentDecorator } from 'twenty-ui/testing';
-
-const StyledContainer = styled.div`
-  display: flex;
-  height: 240px;
-  width: 480px;
-`;
+import * as stylex from '@stylexjs/stylex';
 
 const SelectHeaderTableExample = () => {
   const [selectedRowIndex, setSelectedRowIndex] = useState(0);
 
   return (
     <RsiContext.Provider value={{ rtl: false }}>
-      <StyledContainer>
+      <div {...stylex.props(styles.container)}>
         <SelectHeaderTable
           importedRows={[
             ['Report', 'September'],
@@ -27,7 +21,7 @@ const SelectHeaderTableExample = () => {
           selectedRowIndex={selectedRowIndex}
           onSelectedRowChange={setSelectedRowIndex}
         />
-      </StyledContainer>
+      </div>
     </RsiContext.Provider>
   );
 };
@@ -57,3 +51,11 @@ export const SingleRowSelection: Story = {
     await expect(radios[2]).not.toBeChecked();
   },
 };
+
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    height: '240px',
+    width: '480px',
+  },
+});

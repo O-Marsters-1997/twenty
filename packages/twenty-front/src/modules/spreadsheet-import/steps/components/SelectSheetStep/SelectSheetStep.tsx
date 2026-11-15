@@ -1,5 +1,4 @@
 import { Dialog } from 'twenty-ui/primitives/surfaces';
-import { styled } from '@linaria/react';
 import { useCallback, useState } from 'react';
 
 import { Heading } from '@/spreadsheet-import/components/Heading';
@@ -12,17 +11,9 @@ import { mapWorkbook } from '@/spreadsheet-import/utils/mapWorkbook';
 
 import { useLingui } from '@lingui/react/macro';
 import { Radio, RadioGroup } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { type WorkBook } from 'xlsx-ugnis';
-
-const StyledRadioContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const StyledRadioItemContainer = styled.div`
-  margin-bottom: ${themeCssVariables.spacing[6]};
-`;
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type SelectSheetStepProps = {
   sheetNames: string[];
@@ -100,27 +91,19 @@ export const SelectSheetStep = ({
   return (
     <>
       <Dialog.Body
-        style={{
-          display: 'flex',
-          flex: '1 1 0%',
-          flexDirection: 'column',
-          padding: 'var(--t-spacing-10)',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: 'var(--t-spacing-8)',
-        }}
+        {...stylex.props(styles.dialogBody)}
       >
         <Heading title={t`Select the sheet to use`} />
         <RadioGroup
-          render={<StyledRadioContainer />}
+          render={<div {...stylex.props(styles.radioContainer)} />}
           aria-label={t`Select the sheet to use`}
           value={value}
           onValueChange={setValue}
         >
           {sheetNames.map((sheetName) => (
-            <StyledRadioItemContainer key={sheetName}>
+            <div key={sheetName} {...stylex.props(styles.radioItemContainer)}>
               <Radio value={sheetName}>{sheetName}</Radio>
-            </StyledRadioItemContainer>
+            </div>
           ))}
         </RadioGroup>
       </Dialog.Body>
@@ -133,3 +116,25 @@ export const SelectSheetStep = ({
     </>
   );
 };
+
+const styles = stylex.create({
+  dialogBody: {
+    display: 'flex',
+    flexBasis: '0%',
+    flexGrow: 1,
+    flexShrink: 1,
+    flexDirection: 'column',
+    paddingBlock: spacing['--t-spacing-10'],
+    paddingInline: spacing['--t-spacing-10'],
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: spacing['--t-spacing-8'],
+  },
+  radioContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  radioItemContainer: {
+    marginBottom: spacing['--t-spacing-6'],
+  },
+});
