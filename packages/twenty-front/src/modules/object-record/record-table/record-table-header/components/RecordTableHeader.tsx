@@ -38,7 +38,6 @@ export const RecordTableHeader = () => {
   );
 };
 
-// Takes the first slot of the virtualized row grid, pitched one pixel taller than a row for its bottom border.
 const styles = stylex.create({
   headerContainer: {
     backgroundColor: background['--t-background-primary'],

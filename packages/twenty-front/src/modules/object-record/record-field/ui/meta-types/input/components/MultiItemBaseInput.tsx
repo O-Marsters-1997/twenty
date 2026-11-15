@@ -55,7 +55,19 @@ const styles = stylex.create({
   inputContainer: {
     backgroundColor: 'transparent',
     boxSizing: 'border-box',
-    padding: {
+    paddingTop: {
+      default: spacing['--t-spacing-1'],
+      ':first-of-type': 0,
+    },
+    paddingRight: {
+      default: spacing['--t-spacing-1'],
+      ':first-of-type': 0,
+    },
+    paddingBottom: {
+      default: spacing['--t-spacing-1'],
+      ':first-of-type': 0,
+    },
+    paddingLeft: {
       default: spacing['--t-spacing-1'],
       ':first-of-type': 0,
     },
@@ -70,9 +82,9 @@ const styles = stylex.create({
   },
   errorDiv: {
     color: color['--t-color-red'],
-    paddingTop: '0',
+    paddingTop: 0,
     paddingRight: spacing['--t-spacing-2'],
-    paddingBottom: '0',
+    paddingBottom: 0,
     paddingLeft: spacing['--t-spacing-2'],
   },
 });

@@ -108,7 +108,6 @@ export const RecordTableDraggableTr = ({
   );
 };
 
-// Above the sticky cell layer so sticky cells don't paint over the insertion line.
 const styles = stylex.create({
   rowDropTargetSlot: {
     left: 0,
