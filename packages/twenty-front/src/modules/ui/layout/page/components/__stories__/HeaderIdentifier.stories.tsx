@@ -1,15 +1,17 @@
 import { TitleInput } from '@/ui/input/components/TitleInput';
 import { HeaderIdentifier } from '@/ui/layout/page/components/HeaderIdentifier';
-import { styled } from '@linaria/react';
 import { type Meta, type StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, within } from 'storybook/test';
 import { IconChartBar } from 'twenty-ui/icon';
 import { ComponentDecorator } from 'twenty-ui/testing';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  width: 280px;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    width: '280px',
+  },
+});
 
 const onIconClick = fn();
 const onTitleChange = fn();
@@ -21,9 +23,9 @@ const meta: Meta<typeof HeaderIdentifier> = {
   decorators: [
     ComponentDecorator,
     (Story) => (
-      <StyledContainer>
+      <div {...stylex.props(styles.container)}>
         <Story />
-      </StyledContainer>
+      </div>
     ),
   ],
 };

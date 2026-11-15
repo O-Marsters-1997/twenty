@@ -1,40 +1,69 @@
-import { themeCssVariables } from 'twenty-ui/theme';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import {
+  background,
+  backgroundTransparent,
+  borderRadius,
+  color,
+  fontColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
+import { type ComponentProps } from 'react';
 
-type StyledDropdownButtonProps = {
+const styles = stylex.create({
+  root: {
+    alignItems: 'center',
+    backgroundColor: {
+      default: background['--t-background-primary'],
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
+    borderRadius: borderRadius['--t-border-radius-md'],
+    color: fontColor['--t-font-color-secondary'],
+    cursor: 'pointer',
+    display: 'flex',
+    paddingBlock: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-2'],
+    userSelect: 'none',
+  },
+  unfolded: {
+    backgroundColor: {
+      default: backgroundTransparent['--t-background-transparent-light'],
+      ':hover': backgroundTransparent['--t-background-transparent-medium'],
+    },
+  },
+  transparent: {
+    backgroundColor: 'transparent',
+  },
+  active: {
+    color: color['--t-color-blue'],
+  },
+});
+
+type StyledDropdownButtonContainerProps = ComponentProps<'div'> & {
   isUnfolded: boolean;
   isActive?: boolean;
   transparentBackground?: boolean;
 };
 
-export const StyledDropdownButtonContainer = styled.div<StyledDropdownButtonProps>`
-  align-items: center;
-  background: ${({ isUnfolded, transparentBackground }) =>
-    transparentBackground
-      ? 'none'
-      : isUnfolded
-        ? themeCssVariables.background.transparent.light
-        : themeCssVariables.background.primary};
-  border-radius: ${themeCssVariables.border.radius.md};
-  color: ${({ isActive }) =>
-    isActive
-      ? themeCssVariables.color.blue
-      : themeCssVariables.font.color.secondary};
-  cursor: pointer;
-  display: flex;
+export const StyledDropdownButtonContainer = ({
+  isUnfolded,
+  isActive,
+  transparentBackground,
+  className,
+  ...props
+}: StyledDropdownButtonContainerProps) => {
+  const rootProps = stylex.props(
+    styles.root,
+    isUnfolded && styles.unfolded,
+    transparentBackground && styles.transparent,
+    isActive && styles.active,
+  );
 
-  padding: ${themeCssVariables.spacing[1]};
-  padding-left: ${themeCssVariables.spacing[1]};
-
-  padding-right: ${themeCssVariables.spacing[2]};
-  user-select: none;
-
-  &:hover {
-    background: ${({ isUnfolded, transparentBackground }) =>
-      transparentBackground
-        ? 'transparent'
-        : isUnfolded
-          ? themeCssVariables.background.transparent.medium
-          : themeCssVariables.background.transparent.light};
-  }
-`;
+  return (
+    <div
+      {...props}
+      {...rootProps}
+      className={[rootProps.className, className].join(' ')}
+    />
+  );
+};

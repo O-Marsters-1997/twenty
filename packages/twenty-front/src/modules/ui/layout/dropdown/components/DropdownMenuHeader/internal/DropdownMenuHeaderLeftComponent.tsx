@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { type MouseEvent, type ReactElement } from 'react';
 import { LightIconButton } from 'twenty-ui/components/input';
@@ -7,29 +6,32 @@ import {
   type Avatar,
   type AvatarProps,
 } from 'twenty-ui/primitives/data-display';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { font, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledNonClickableStartIcon = styled.div`
-  align-items: center;
-  background: transparent;
-  border: none;
-
-  display: flex;
-  flex-direction: row;
-
-  font-family: ${themeCssVariables.font.family};
-  font-weight: ${themeCssVariables.font.weight.regular};
-  gap: ${themeCssVariables.spacing[1]};
-  height: ${themeCssVariables.spacing[6]};
-
-  justify-content: center;
-  white-space: nowrap;
-  width: ${themeCssVariables.spacing[6]};
-`;
-
-const StyledAvatarWrapper = styled.div`
-  padding: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  nonClickableStartIcon: {
+    alignItems: 'center',
+    background: 'transparent',
+    borderStyle: 'none',
+    display: 'flex',
+    flexDirection: 'row',
+    fontFamily: font['--t-font-family'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    gap: spacing['--t-spacing-1'],
+    height: spacing['--t-spacing-6'],
+    justifyContent: 'center',
+    whiteSpace: 'nowrap',
+    width: spacing['--t-spacing-6'],
+  },
+  avatarWrapper: {
+    paddingTop: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-1'],
+  },
+});
 
 export const DropdownMenuHeaderLeftComponent = ({
   onClick,
@@ -55,16 +57,16 @@ export const DropdownMenuHeaderLeftComponent = ({
             <props.Icon />
           </LightIconButton>
         ) : (
-          <StyledNonClickableStartIcon>
+          <div {...stylex.props(styles.nonClickableStartIcon)}>
             <props.Icon
               size={theme.icon.size.sm}
               color={theme.font.color.tertiary}
             />
-          </StyledNonClickableStartIcon>
+          </div>
         ))}
 
       {'Avatar' in props && (
-        <StyledAvatarWrapper>{props.Avatar}</StyledAvatarWrapper>
+        <div {...stylex.props(styles.avatarWrapper)}>{props.Avatar}</div>
       )}
     </>
   );

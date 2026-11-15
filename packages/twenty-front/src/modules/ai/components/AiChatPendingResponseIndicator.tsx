@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { isDefined } from 'twenty-shared/utils';
 
 import { AiChatInitialLoadingIndicator } from '@/ai/components/AiChatInitialLoadingIndicator';
@@ -8,12 +7,15 @@ import { agentChatIsAwaitingFirstChunkFamilyState } from '@/ai/states/agentChatI
 import { agentChatIsStreamingFamilyState } from '@/ai/states/agentChatIsStreamingFamilyState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledPendingResponseWrapper = styled.div`
-  align-items: flex-start;
-  display: flex;
-  width: 100%;
-`;
+const styles = stylex.create({
+  pendingResponseWrapper: {
+    alignItems: 'flex-start',
+    display: 'flex',
+    width: '100%',
+  },
+});
 
 export const AiChatPendingResponseIndicator = () => {
   const agentChatDisplayedThread = useAtomStateValue(
@@ -41,8 +43,8 @@ export const AiChatPendingResponseIndicator = () => {
   }
 
   return (
-    <StyledPendingResponseWrapper>
+    <div {...stylex.props(styles.pendingResponseWrapper)}>
       <AiChatInitialLoadingIndicator />
-    </StyledPendingResponseWrapper>
+    </div>
   );
 };

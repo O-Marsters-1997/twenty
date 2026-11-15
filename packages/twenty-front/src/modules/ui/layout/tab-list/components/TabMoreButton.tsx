@@ -1,17 +1,17 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 import { t } from '@lingui/core/macro';
 import { IconChevronDown } from 'twenty-ui/icon';
 import { Dropdown, TabButton } from 'twenty-ui/components/navigation';
 
-import { TAB_LIST_HEIGHT } from '@/ui/layout/tab-list/constants/TabListHeight';
-import { TAB_LIST_ROW_HEIGHT_CSS_VARIABLE } from '@/ui/layout/tab-list/constants/TabListRowHeightCssVariable';
-
 const TAB_MORE_BUTTON_TEST_ID = 'tab-tab-more-button';
 
-const StyledTabMoreButtonContainer = styled.div`
-  display: flex;
-  height: var(${TAB_LIST_ROW_HEIGHT_CSS_VARIABLE}, ${TAB_LIST_HEIGHT});
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    height: `var(--tab-list-row-height, ${spacing['--t-spacing-10']})`,
+  },
+});
 
 type TabMoreButtonProps = {
   hiddenTabsCount: number;
@@ -41,8 +41,8 @@ export const TabMoreButton = ({
   );
 
   return (
-    <StyledTabMoreButtonContainer>
+    <div {...stylex.props(styles.container)}>
       {isDropdownTrigger ? <Dropdown.Trigger render={tabButton} /> : tabButton}
-    </StyledTabMoreButtonContainer>
+    </div>
   );
 };

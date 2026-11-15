@@ -1,4 +1,4 @@
-import { APP_HEADER_HEIGHT } from '@/ui/layout/constants/AppHeaderHeight';
+import { layoutSize } from '@/ui/layout/constants/layout.stylex';
 import { useNavigationDrawerExpanded } from '@/ui/navigation/navigation-drawer/hooks/useNavigationDrawerExpanded';
 import { useWorkspaceSurface } from '@/ui/layout/hooks/useWorkspaceSurface';
 import { useWorkspaceSurfaceHeaderPortal } from '@/ui/layout/hooks/useWorkspaceSurfaceHeaderPortal';
@@ -7,11 +7,18 @@ import { type BreadcrumbProps } from '@/ui/navigation/bread-crumb/types/Breadcru
 import { PAGE_ACTION_CONTAINER_CLICK_OUTSIDE_ID } from '@/ui/layout/page/constants/PageActionContainerClickOutsideId';
 import { NavigationDrawerCollapseButton } from '@/ui/navigation/navigation-drawer/components/NavigationDrawerCollapseButton';
 import { useIsMobile } from 'twenty-ui/utilities';
-import { styled } from '@linaria/react';
 import { type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  background,
+  borderColor,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type PageCardHeaderProps = {
   links?: BreadcrumbProps['links'];
@@ -24,73 +31,74 @@ type PageCardHeaderProps = {
   titleColor?: string;
 };
 
-const StyledHeader = styled.div<{ centerTitle?: boolean }>`
-  align-items: center;
-  background-color: ${themeCssVariables.background.secondary};
-  border-bottom: 1px solid ${themeCssVariables.border.color.medium};
-  box-sizing: border-box;
-  column-gap: ${themeCssVariables.spacing[2]};
-  display: grid;
-  grid-template-columns: ${({ centerTitle }) =>
-    centerTitle
-      ? 'minmax(0, 1fr) minmax(0, auto) minmax(0, 1fr)'
-      : 'minmax(0, auto) minmax(min-content, 1fr)'};
-  min-height: ${APP_HEADER_HEIGHT}px;
-  padding: 0 ${themeCssVariables.spacing[3]};
-  width: 100%;
-`;
-
-const StyledLeft = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  grid-column: 1;
-  min-width: 0;
-  overflow: hidden;
-  width: 100%;
-`;
-
-const StyledTitle = styled.div<{ titleColor?: string }>`
-  align-items: center;
-  color: ${({ titleColor }) =>
-    titleColor ?? themeCssVariables.font.color.primary};
-  display: flex;
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-  gap: ${themeCssVariables.spacing[1]};
-  min-width: 0;
-`;
-
-const StyledCenteredTitle = styled(StyledTitle)`
-  grid-column: 2;
-  justify-content: center;
-  justify-self: stretch;
-  max-width: 100%;
-  min-width: 0;
-  overflow: hidden;
-`;
-
-const StyledRight = styled.div<{ centerTitle?: boolean }>`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  grid-column: ${({ centerTitle }) => (centerTitle ? 3 : 2)};
-  justify-content: flex-end;
-  justify-self: end;
-  width: 100%;
-`;
-
-const StyledSurfaceTitle = styled(StyledTitle)`
-  overflow: hidden;
-  width: 100%;
-`;
-
-const StyledSurfaceActions = styled.div`
-  align-items: center;
-  display: flex;
-  flex-shrink: 0;
-  gap: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  header: {
+    alignItems: 'center',
+    backgroundColor: background['--t-background-secondary'],
+    borderBottomColor: borderColor['--t-border-color-medium'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
+    boxSizing: 'border-box',
+    columnGap: spacing['--t-spacing-2'],
+    display: 'grid',
+    gridTemplateColumns: 'minmax(0, auto) minmax(min-content, 1fr)',
+    minHeight: layoutSize.appHeaderHeight,
+    paddingBlock: 0,
+    paddingInline: spacing['--t-spacing-3'],
+    width: '100%',
+  },
+  headerCentered: {
+    gridTemplateColumns: 'minmax(0, 1fr) minmax(0, auto) minmax(0, 1fr)',
+  },
+  title: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-primary'],
+    display: 'flex',
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    gap: spacing['--t-spacing-1'],
+    minWidth: 0,
+  },
+  titleColor: (color: string) => ({ color }),
+  centeredTitle: {
+    gridColumn: 2,
+    justifyContent: 'center',
+    justifySelf: 'stretch',
+    maxWidth: '100%',
+    overflow: 'hidden',
+  },
+  surfaceTitle: {
+    overflow: 'hidden',
+    width: '100%',
+  },
+  right: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    gridColumn: 2,
+    justifyContent: 'flex-end',
+    justifySelf: 'end',
+    width: '100%',
+  },
+  rightCentered: {
+    gridColumn: 3,
+  },
+  left: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    gridColumn: '1',
+    minWidth: '0',
+    overflow: 'hidden',
+    width: '100%',
+  },
+  surfaceActions: {
+    alignItems: 'center',
+    display: 'flex',
+    flexShrink: '0',
+    gap: spacing['--t-spacing-2'],
+  },
+});
 
 export const PageCardHeader = ({
   links,
@@ -132,19 +140,26 @@ export const PageCardHeader = ({
         {isDefined(workspaceSurfaceHeaderPortal.title) &&
           isDefined(surfaceTitleContent) &&
           createPortal(
-            <StyledSurfaceTitle titleColor={titleColor}>
+            <div
+              {...stylex.props(
+                styles.title,
+                styles.surfaceTitle,
+                isDefined(titleColor) && styles.titleColor(titleColor),
+              )}
+            >
               {surfaceTitleContent}
-            </StyledSurfaceTitle>,
+            </div>,
             workspaceSurfaceHeaderPortal.title,
           )}
         {isDefined(workspaceSurfaceHeaderPortal.actions) &&
           isDefined(actionButton) &&
           createPortal(
-            <StyledSurfaceActions
+            <div
               data-click-outside-id={PAGE_ACTION_CONTAINER_CLICK_OUTSIDE_ID}
+              {...stylex.props(styles.surfaceActions)}
             >
               {actionButton}
-            </StyledSurfaceActions>,
+            </div>,
             workspaceSurfaceHeaderPortal.actions,
           )}
       </>
@@ -152,8 +167,13 @@ export const PageCardHeader = ({
   }
 
   return (
-    <StyledHeader centerTitle={shouldCenterTitle}>
-      <StyledLeft>
+    <div
+      {...stylex.props(
+        styles.header,
+        shouldCenterTitle && styles.headerCentered,
+      )}
+    >
+      <div {...stylex.props(styles.left)}>
         {!isMobile && !isNavigationDrawerExpanded && (
           <NavigationDrawerCollapseButton direction="right" />
         )}
@@ -161,20 +181,36 @@ export const PageCardHeader = ({
           ? breadcrumb
           : isDefined(links) && <Breadcrumb links={links} />}
         {!shouldCenterTitle && hasTitleContent && (
-          <StyledTitle titleColor={titleColor}>{titleContent}</StyledTitle>
+          <div
+            {...stylex.props(
+              styles.title,
+              isDefined(titleColor) && styles.titleColor(titleColor),
+            )}
+          >
+            {titleContent}
+          </div>
         )}
-      </StyledLeft>
+      </div>
       {shouldCenterTitle && (
-        <StyledCenteredTitle titleColor={titleColor}>
+        <div
+          {...stylex.props(
+            styles.title,
+            styles.centeredTitle,
+            isDefined(titleColor) && styles.titleColor(titleColor),
+          )}
+        >
           {titleContent}
-        </StyledCenteredTitle>
+        </div>
       )}
-      <StyledRight
-        centerTitle={shouldCenterTitle}
+      <div
         data-click-outside-id={PAGE_ACTION_CONTAINER_CLICK_OUTSIDE_ID}
+        {...stylex.props(
+          styles.right,
+          shouldCenterTitle && styles.rightCentered,
+        )}
       >
         {actionButton}
-      </StyledRight>
-    </StyledHeader>
+      </div>
+    </div>
   );
 };

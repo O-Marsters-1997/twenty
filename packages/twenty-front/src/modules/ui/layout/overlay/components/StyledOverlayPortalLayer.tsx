@@ -1,12 +1,27 @@
-import { RootStackingContextZIndices } from '@/ui/layout/constants/RootStackingContextZIndices';
-import { styled } from '@linaria/react';
+import { zIndex } from '@/ui/layout/constants/layout.stylex';
+import * as stylex from '@stylexjs/stylex';
+import { type ComponentProps } from 'react';
 
-export const StyledOverlayPortalLayer = styled.div<{
+const styles = stylex.create({
+  root: {
+    display: 'flex',
+    zIndex: zIndex.dropdownPortalBelowModal,
+  },
+  aboveModal: {
+    zIndex: zIndex.dropdownPortalAboveModal,
+  },
+});
+
+type StyledOverlayPortalLayerProps = ComponentProps<'div'> & {
   isAboveModal?: boolean;
-}>`
-  display: flex;
-  z-index: ${({ isAboveModal }) =>
-    isAboveModal
-      ? RootStackingContextZIndices.DropdownPortalAboveModal
-      : RootStackingContextZIndices.DropdownPortalBelowModal};
-`;
+};
+
+export const StyledOverlayPortalLayer = ({
+  isAboveModal,
+  ...props
+}: StyledOverlayPortalLayerProps) => (
+  <div
+    {...props}
+    {...stylex.props(styles.root, isAboveModal === true && styles.aboveModal)}
+  />
+);

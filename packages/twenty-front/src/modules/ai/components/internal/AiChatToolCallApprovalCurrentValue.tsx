@@ -1,7 +1,5 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { FieldContextProvider } from '@/object-record/record-field/ui/components/FieldContextProvider';
 import { FieldDisplay } from '@/object-record/record-field/ui/components/FieldDisplay';
@@ -12,17 +10,21 @@ import { isFieldValueEmpty } from '@/object-record/record-field/ui/utils/isField
 import { useRecordFieldValue } from '@/object-record/record-store/hooks/useRecordFieldValue';
 import { recordStoreFamilyState } from '@/object-record/record-store/states/recordStoreFamilyState';
 import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledCurrentValue = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  flex-wrap: wrap;
-  font-size: ${themeCssVariables.font.size.sm};
-  gap: ${themeCssVariables.spacing[1]};
-  min-width: 0;
-  overflow-wrap: anywhere;
-`;
+const styles = stylex.create({
+  currentValue: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    flexWrap: 'wrap',
+    fontSize: fontSize['--t-font-size-sm'],
+    gap: spacing['--t-spacing-1'],
+    minWidth: '0',
+    overflowWrap: 'anywhere',
+  },
+});
 
 type AiChatToolCallApprovalCurrentValueProps = {
   objectNameSingular: string;
@@ -47,7 +49,7 @@ export const AiChatToolCallApprovalCurrentValue = ({
   }
 
   return (
-    <StyledCurrentValue>
+    <div {...stylex.props(styles.currentValue)}>
       {t`Currently:`}
       {isFieldValueEmpty({ fieldDefinition, fieldValue }) ? (
         t`Empty`
@@ -68,6 +70,6 @@ export const AiChatToolCallApprovalCurrentValue = ({
           </RecordFieldComponentInstanceContext.Provider>
         </FieldContextProvider>
       )}
-    </StyledCurrentValue>
+    </div>
   );
 };

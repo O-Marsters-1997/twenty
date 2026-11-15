@@ -1,26 +1,58 @@
-import { themeCssVariables } from 'twenty-ui/theme';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import {
+  backgroundTransparent,
+  blur,
+  borderColor,
+  borderRadius,
+  boxShadow,
+} from 'twenty-ui/theme/tokens.stylex';
+import { type ComponentProps } from 'react';
 
-// oxlint-disable-next-line twenty/styled-components-prefixed-with-styled
-export const OverlayContainer = styled.div<{
+const styles = stylex.create({
+  root: {
+    alignItems: 'center',
+    backdropFilter: blur['--t-blur-medium'],
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-primary'],
+    borderColor: borderColor['--t-border-color-medium'],
+    borderRadius: borderRadius['--t-border-radius-md'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    boxShadow: boxShadow['--t-box-shadow-strong'],
+    display: 'flex',
+    overflow: 'hidden',
+    zIndex: 30,
+  },
+  radiusSm: {
+    borderRadius: borderRadius['--t-border-radius-sm'],
+  },
+  dangerBorder: {
+    borderColor: borderColor['--t-border-color-danger'],
+  },
+});
+
+type OverlayContainerProps = ComponentProps<'div'> & {
   borderRadius?: 'sm' | 'md';
   hasDangerBorder?: boolean;
-}>`
-  align-items: center;
-  backdrop-filter: ${themeCssVariables.blur.medium};
+};
 
-  background: ${themeCssVariables.background.transparent.primary};
+export const OverlayContainer = ({
+  borderRadius: borderRadiusVariant,
+  hasDangerBorder,
+  className,
+  ...props
+}: OverlayContainerProps) => {
+  const rootProps = stylex.props(
+    styles.root,
+    borderRadiusVariant === 'sm' && styles.radiusSm,
+    hasDangerBorder === true && styles.dangerBorder,
+  );
 
-  border: 1px solid
-    ${({ hasDangerBorder }) =>
-      themeCssVariables.border.color[hasDangerBorder ? 'danger' : 'medium']};
-
-  border-radius: ${({ borderRadius }) =>
-    themeCssVariables.border.radius[borderRadius ?? 'md']};
-  box-shadow: ${themeCssVariables.boxShadow.strong};
-  display: flex;
-
-  overflow: hidden;
-
-  z-index: 30;
-`;
+  return (
+    <div
+      {...props}
+      {...rootProps}
+      className={[rootProps.className, className].join(' ')}
+    />
+  );
+};

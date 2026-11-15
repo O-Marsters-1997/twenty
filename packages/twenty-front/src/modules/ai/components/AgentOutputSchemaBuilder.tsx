@@ -3,7 +3,6 @@ import { createDefaultOutputSchemaField } from '@/ai/utils/createDefaultOutputSc
 import { FormTextFieldInput } from '@/object-record/record-field/ui/form-types/components/FormTextFieldInput';
 import { FormFieldInputContainer } from '@/ui/input/components/FormFieldInputContainer';
 import { InputLabel } from '@/ui/input/components/internal/InputLabel/InputLabel';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { useState } from 'react';
@@ -11,61 +10,74 @@ import { isValidAgentResponseSchemaPropertyKey } from 'twenty-shared/ai';
 import { IconPlus } from 'twenty-ui/icon';
 import { Collapsible } from 'twenty-ui/primitives/layout';
 import { ListItemButton } from 'twenty-ui/components/navigation';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { AgentOutputFieldTypeSelector } from '@/ai/components/AgentOutputFieldTypeSelector';
 import { AgentOutputSchemaFieldHeader } from '@/ai/components/AgentOutputSchemaFieldHeader';
+import * as stylex from '@stylexjs/stylex';
+import {
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 type AgentOutputSchemaBuilderProps = {
   fields: OutputSchemaField[];
   onChange: (fields: OutputSchemaField[]) => void;
   readonly?: boolean;
 };
 
-const StyledOutputSchemaContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const StyledFieldsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledOutputSchemaFieldContainer = styled.div`
-  background-color: ${themeCssVariables.background.transparent.lighter};
-  border: 1px solid ${themeCssVariables.border.color.light};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledSettingsContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  padding-bottom: ${themeCssVariables.spacing[3]};
-  padding-inline: ${themeCssVariables.spacing[3]};
-  padding-top: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledAddFieldButtonContainer = styled.div`
-  margin-top: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledMessageContentContainer = styled.div`
-  color: ${themeCssVariables.font.color.secondary};
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[4]};
-  line-height: normal;
-  padding: ${themeCssVariables.spacing[4]};
-`;
-
-const StyledMessageDescription = styled.div`
-  color: ${themeCssVariables.font.color.secondary};
-  font-weight: ${themeCssVariables.font.weight.regular};
-`;
+const styles = stylex.create({
+  outputSchemaContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  fieldsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+  },
+  outputSchemaFieldContainer: {
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-light'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-1'],
+  },
+  settingsContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-3'],
+    paddingInline: spacing['--t-spacing-3'],
+    paddingTop: spacing['--t-spacing-2'],
+  },
+  addFieldButtonContainer: {
+    marginTop: spacing['--t-spacing-2'],
+  },
+  messageContentContainer: {
+    color: fontColor['--t-font-color-secondary'],
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-4'],
+    lineHeight: 'normal',
+    paddingTop: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingBottom: spacing['--t-spacing-4'],
+    paddingLeft: spacing['--t-spacing-4'],
+  },
+  messageDescription: {
+    color: fontColor['--t-font-color-secondary'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+  },
+});
 
 export const AgentOutputSchemaBuilder = ({
   fields,
@@ -133,26 +145,32 @@ export const AgentOutputSchemaBuilder = ({
   };
 
   return (
-    <StyledOutputSchemaContainer>
+    <div {...stylex.props(styles.outputSchemaContainer)}>
       <InputLabel>{t`Output`}</InputLabel>
 
       {fields.length === 0 && (
-        <StyledOutputSchemaFieldContainer>
-          <StyledMessageContentContainer>
-            <StyledMessageDescription data-testid="empty-output-schema-message-description">
+        <div {...stylex.props(styles.outputSchemaFieldContainer)}>
+          <div {...stylex.props(styles.messageContentContainer)}>
+            <div
+              data-testid="empty-output-schema-message-description"
+              {...stylex.props(styles.messageDescription)}
+            >
               {t`Click on "Add Output Field" below to define the structure of your agent's response. These fields will be used to format and validate the agent's output when the workflow is executed, and can be referenced by subsequent workflow steps.`}
-            </StyledMessageDescription>
-          </StyledMessageContentContainer>
-        </StyledOutputSchemaFieldContainer>
+            </div>
+          </div>
+        </div>
       )}
 
       {fields.length > 0 && (
-        <StyledFieldsContainer>
+        <div {...stylex.props(styles.fieldsContainer)}>
           {fields.map((field) => {
             const isExpanded = expandedFieldIds.has(field.id);
 
             return (
-              <StyledOutputSchemaFieldContainer key={field.id}>
+              <div
+                key={field.id}
+                {...stylex.props(styles.outputSchemaFieldContainer)}
+              >
                 <AgentOutputSchemaFieldHeader
                   name={field.name}
                   isExpanded={isExpanded}
@@ -165,7 +183,7 @@ export const AgentOutputSchemaBuilder = ({
                 />
                 <Collapsible.Root open={isExpanded}>
                   <Collapsible.Panel>
-                    <StyledSettingsContent>
+                    <div {...stylex.props(styles.settingsContent)}>
                       <FormFieldInputContainer>
                         <FormTextFieldInput
                           label={t`Variable Name`}
@@ -201,23 +219,23 @@ export const AgentOutputSchemaBuilder = ({
                           readonly={readonly}
                         />
                       </FormFieldInputContainer>
-                    </StyledSettingsContent>
+                    </div>
                   </Collapsible.Panel>
                 </Collapsible.Root>
-              </StyledOutputSchemaFieldContainer>
+              </div>
             );
           })}
-        </StyledFieldsContainer>
+        </div>
       )}
 
       {!readonly && (
-        <StyledAddFieldButtonContainer>
+        <div {...stylex.props(styles.addFieldButtonContainer)}>
           <ListItemButton
             startIcon={<IconPlus />}
             onClick={addField}
           >{t`Add Output Field`}</ListItemButton>
-        </StyledAddFieldButtonContainer>
+        </div>
       )}
-    </StyledOutputSchemaContainer>
+    </div>
   );
 };

@@ -1,9 +1,7 @@
 import { plural } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react/macro';
-import { styled } from '@linaria/react';
 import { Key } from 'ts-key-enum';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { AiChatInboxSelectionPile } from '@/ai/components/AiChatInboxSelectionPile';
 import { type AgentChatThreadRecord } from '@/ai/types/AgentChatThreadRecord';
@@ -13,19 +11,23 @@ import { EmptyState } from '@/ui/feedback/empty-state/components/EmptyState';
 import { PageCardHeader } from '@/ui/layout/page/components/PageCardHeader';
 import { PageCardLayout } from '@/ui/layout/page/components/PageCardLayout';
 import { useGlobalHotkeys } from '@/ui/utilities/hotkey/hooks/useGlobalHotkeys';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledSelection = styled(EmptyState.Root)`
-  box-sizing: border-box;
-  gap: ${themeCssVariables.spacing[8]};
-  padding: ${themeCssVariables.spacing[10]} ${themeCssVariables.spacing[4]};
-`;
-
-const StyledButtons = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: ${themeCssVariables.spacing[2]};
-  justify-content: center;
-`;
+const styles = stylex.create({
+  selection: {
+    boxSizing: 'border-box',
+    gap: spacing['--t-spacing-8'],
+    paddingBlock: spacing['--t-spacing-10'],
+    paddingInline: spacing['--t-spacing-4'],
+  },
+  buttons: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: spacing['--t-spacing-2'],
+    justifyContent: 'center',
+  },
+});
 
 type AiChatInboxSelectionPaneProps = {
   selectedThreads: AgentChatThreadRecord[];
@@ -56,7 +58,7 @@ export const AiChatInboxSelectionPane = ({
         />
       }
     >
-      <StyledSelection>
+      <EmptyState.Root {...stylex.props(styles.selection)}>
         <AiChatInboxSelectionPile threads={selectedThreads} />
         <EmptyState.Content>
           <EmptyState.Title>
@@ -65,7 +67,7 @@ export const AiChatInboxSelectionPane = ({
               other: '# chats selected',
             })}
           </EmptyState.Title>
-          <StyledButtons>
+          <div {...stylex.props(styles.buttons)}>
             <Button
               size="sm"
               variant="outline"
@@ -82,9 +84,9 @@ export const AiChatInboxSelectionPane = ({
             >
               {t`All actions`}
             </Button>
-          </StyledButtons>
+          </div>
         </EmptyState.Content>
-      </StyledSelection>
+      </EmptyState.Root>
     </PageCardLayout>
   );
 };

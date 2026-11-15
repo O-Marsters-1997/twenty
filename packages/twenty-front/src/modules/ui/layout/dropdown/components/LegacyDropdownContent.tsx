@@ -1,16 +1,17 @@
 import { GenericDropdownContentWidth } from '@/ui/layout/dropdown/constants/GenericDropdownContentWidth';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { type Ref, forwardRef } from 'react';
 
-const StyledInternalBaseDropdownContent = styled.div<{
-  widthInPixels: number;
-}>`
-  display: flex;
-
-  flex-direction: column;
-  height: 100%;
-  width: ${({ widthInPixels }) => widthInPixels}px;
-`;
+const styles = stylex.create({
+  content: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+  },
+  width: (widthInPixels: number) => ({
+    width: `${widthInPixels}px`,
+  }),
+});
 
 export const LegacyDropdownContent = forwardRef(
   (
@@ -25,13 +26,13 @@ export const LegacyDropdownContent = forwardRef(
     ref: Ref<HTMLDivElement>,
   ) => {
     return (
-      <StyledInternalBaseDropdownContent
+      <div
         data-select-disable={selectDisabled}
-        widthInPixels={widthInPixels}
         ref={ref}
+        {...stylex.props(styles.content, styles.width(widthInPixels))}
       >
         {children}
-      </StyledInternalBaseDropdownContent>
+      </div>
     );
   },
 );

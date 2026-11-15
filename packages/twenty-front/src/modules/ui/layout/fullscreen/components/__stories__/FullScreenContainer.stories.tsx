@@ -1,8 +1,8 @@
 import { FullScreenContainer } from '@/ui/layout/fullscreen/components/FullScreenContainer';
-import { styled } from '@linaria/react';
 import { type Meta, type StoryObj } from '@storybook/react-vite';
 import { ComponentDecorator } from 'twenty-ui/testing';
 import { ComponentWithRouterDecorator } from '~/testing/decorators/ComponentWithRouterDecorator';
+import * as stylex from '@stylexjs/stylex';
 
 const meta: Meta<typeof FullScreenContainer> = {
   title: 'UI/Layout/FullScreenContainer',
@@ -13,18 +13,22 @@ export default meta;
 
 type Story = StoryObj<typeof FullScreenContainer>;
 
-const StyledContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  background-color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
+const styles = stylex.create({
+  container: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'white',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 export const Default: Story = {
   args: {
-    children: <StyledContainer>This is full-screen content</StyledContainer>,
+    children: (
+      <div {...stylex.props(styles.container)}>This is full-screen content</div>
+    ),
     links: [
       {
         children: 'Layout',

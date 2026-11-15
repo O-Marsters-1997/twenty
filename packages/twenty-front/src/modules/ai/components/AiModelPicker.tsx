@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useState } from 'react';
 import {
@@ -7,7 +6,6 @@ import {
 } from 'twenty-shared/ai';
 import { isDefined } from 'twenty-shared/utils';
 import { LightButton } from 'twenty-ui/components/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { AiModelTierSlider } from '@/ai/components/AiModelTierSlider';
 import { useAiModelTiers } from '@/ai/hooks/useAiModelTiers';
@@ -18,31 +16,47 @@ import { aiModelsState } from '@/client-config/states/aiModelsState';
 import { AiModelPinSelect } from '@/ai/components/AiModelPinSelect';
 import { GenericDropdownContentWidth } from '@/ui/layout/dropdown/constants/GenericDropdownContentWidth';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
+import * as stylex from '@stylexjs/stylex';
+import {
+  background,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledSliderCard = styled.div`
-  background: ${themeCssVariables.background.secondary};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.md};
-  corner-shape: round;
-  padding: ${themeCssVariables.spacing[3]};
-`;
-
-const StyledFooter = styled.div`
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-`;
-
-const StyledHint = styled.span`
-  color: ${themeCssVariables.font.color.light};
-  font-size: ${themeCssVariables.font.size.sm};
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+  },
+  sliderCard: {
+    background: background['--t-background-secondary'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-medium'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    cornerShape: 'round',
+    paddingTop: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingBottom: spacing['--t-spacing-3'],
+    paddingLeft: spacing['--t-spacing-3'],
+  },
+  footer: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  hint: {
+    color: fontColor['--t-font-color-light'],
+    fontSize: fontSize['--t-font-size-sm'],
+  },
+});
 
 type AiModelPickerProps = {
   modelId: string;
@@ -73,8 +87,8 @@ export const AiModelPicker = ({
     tierFromModelId ?? getNearestAiModelTier(pinnedModel, tiers);
 
   return (
-    <StyledContainer>
-      <StyledSliderCard>
+    <div {...stylex.props(styles.container)}>
+      <div {...stylex.props(styles.sliderCard)}>
         <AiModelTierSlider
           selectedTier={selectedTier}
           onTierChange={(tier) =>
@@ -83,22 +97,22 @@ export const AiModelPicker = ({
           title={hasPinnedModel ? (pinnedModel?.label ?? modelId) : undefined}
           disabled={disabled}
         />
-      </StyledSliderCard>
-      <StyledFooter>
-        <StyledHint>
+      </div>
+      <div {...stylex.props(styles.footer)}>
+        <span {...stylex.props(styles.hint)}>
           {isWorkspaceDefault
             ? t`Follows the workspace default for agents`
             : hasPinnedModel
               ? t`Pinned to a specific model`
               : t`Set for this agent only`}
-        </StyledHint>
+        </span>
         {!isAdvancedOpen && !disabled && (
           <LightButton
             emphasis="subtle"
             onClick={() => setIsAdvancedOpen(true)}
           >{t`Advanced`}</LightButton>
         )}
-      </StyledFooter>
+      </div>
       {isAdvancedOpen && (
         <AiModelPinSelect
           dropdownId="ai-model-picker-pinned-model"
@@ -116,6 +130,6 @@ export const AiModelPicker = ({
           dropdownWidth={GenericDropdownContentWidth.ExtraLarge}
         />
       )}
-    </StyledContainer>
+    </div>
   );
 };

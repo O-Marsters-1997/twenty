@@ -1,9 +1,27 @@
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize } from 'twenty-ui/theme/tokens.stylex';
+import { type ComponentProps } from 'react';
 
-export const StyledHeaderIdentifierLabel = styled.span`
-  color: ${themeCssVariables.font.color.tertiary};
-  flex-shrink: 0;
-  font-size: ${themeCssVariables.font.size.md};
-  white-space: nowrap;
-`;
+const styles = stylex.create({
+  label: {
+    color: fontColor['--t-font-color-tertiary'],
+    flexShrink: 0,
+    fontSize: fontSize['--t-font-size-md'],
+    whiteSpace: 'nowrap',
+  },
+});
+
+export const StyledHeaderIdentifierLabel = ({
+  className,
+  ...props
+}: ComponentProps<'span'>) => {
+  const labelProps = stylex.props(styles.label);
+
+  return (
+    <span
+      {...props}
+      {...labelProps}
+      className={[labelProps.className, className].join(' ')}
+    />
+  );
+};

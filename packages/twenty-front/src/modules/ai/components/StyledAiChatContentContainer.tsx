@@ -1,8 +1,10 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 
-export const StyledAiChatContentContainer = styled.div`
-  box-sizing: border-box;
-  margin-inline: auto;
-  max-width: var(--ai-chat-content-max-width, none);
-  width: 100%;
-`;
+export const aiChatContentContainerStyles = stylex.create({
+  root: {
+    boxSizing: 'border-box',
+    marginInline: 'auto',
+    maxWidth: 'var(--ai-chat-content-max-width, none)',
+    width: '100%',
+  },
+});

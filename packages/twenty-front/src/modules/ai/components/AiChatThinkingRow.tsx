@@ -1,36 +1,43 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { ThinkingOrbitLoaderIcon } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  iconSize,
+  spacing,
+  textLineHeight,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledRow = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  min-height: ${themeCssVariables.spacing[6]};
-`;
-
-const StyledLoaderIconContainer = styled.div`
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  min-width: calc(${themeCssVariables.icon.size.sm} * 1px);
-`;
-
-const StyledLabel = styled.span`
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.regular};
-  line-height: ${themeCssVariables.text.lineHeight.md};
-`;
+const styles = stylex.create({
+  row: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    minHeight: spacing['--t-spacing-6'],
+  },
+  loaderIconContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+    minWidth: `calc(${iconSize['--t-icon-size-sm']} * 1px)`,
+  },
+  label: {
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    lineHeight: textLineHeight['--t-text-line-height-md'],
+  },
+});
 
 export const AiChatThinkingRow = () => {
   return (
-    <StyledRow>
-      <StyledLoaderIconContainer>
+    <div {...stylex.props(styles.row)}>
+      <div {...stylex.props(styles.loaderIconContainer)}>
         <ThinkingOrbitLoaderIcon />
-      </StyledLoaderIconContainer>
-      <StyledLabel>{t`Thinking`}</StyledLabel>
-    </StyledRow>
+      </div>
+      <span {...stylex.props(styles.label)}>{t`Thinking`}</span>
+    </div>
   );
 };
