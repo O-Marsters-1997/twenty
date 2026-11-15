@@ -1,9 +1,14 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
-import { type CSSProperties } from 'react';
+import * as stylex from '@stylexjs/stylex';
 import { createPortal } from 'react-dom';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { media } from 'twenty-ui/theme/constants.stylex';
+import {
+  background,
+  fontColor,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 import { WelcomeAnimationAutoLeaveEffect } from '@/onboarding/components/WelcomeOverlay/WelcomeAnimationAutoLeaveEffect';
 import { WelcomeAnimationForcedTeardownEffect } from '@/onboarding/components/WelcomeOverlay/WelcomeAnimationForcedTeardownEffect';
@@ -14,229 +19,219 @@ import { WELCOME_TITLE_SOURCE_ELEMENT_ID } from '@/onboarding/constants/WelcomeT
 import { isWelcomeAnimationLeavingState } from '@/onboarding/states/isWelcomeAnimationLeavingState';
 import { isWelcomeAnimationVisibleState } from '@/onboarding/states/isWelcomeAnimationVisibleState';
 import { welcomeTitleFlightState } from '@/onboarding/states/welcomeTitleFlightState';
-import { RootStackingContextZIndices } from '@/ui/layout/constants/RootStackingContextZIndices';
 import { useIsMobile } from 'twenty-ui/utilities';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
+import { rootStackingContextZIndices } from '../../../ui/layout/constants/rootStackingContextZIndices.stylex';
+import { flightVars } from './WelcomeOverlay.stylex';
 
-const StyledOverlay = styled.div`
-  align-items: center;
-  bottom: 0;
-  display: flex;
-  justify-content: center;
-  left: 0;
-  overflow: hidden;
-  pointer-events: none;
-  position: fixed;
-  right: 0;
-  top: 0;
-  z-index: ${RootStackingContextZIndices.WelcomeOverlay};
-`;
+const NARROW_VIEWPORT = '@media (max-width: 600px)';
 
-const StyledBackdrop = styled.div`
-  background: ${themeCssVariables.background.primary};
-  inset: 0;
-  position: absolute;
-  will-change: opacity;
-  z-index: 0;
+const backdropOut = stylex.keyframes({
+  to: { opacity: 0 },
+});
 
-  &.is-leaving {
-    animation: welcomeBackdropOut 0.7s cubic-bezier(0.5, 0, 0.1, 1) 0.08s
-      forwards;
-  }
+const titleIn = stylex.keyframes({
+  from: { opacity: 0 },
+  to: { opacity: 1 },
+});
 
-  @keyframes welcomeBackdropOut {
-    to {
-      opacity: 0;
-    }
-  }
+const titleOut = stylex.keyframes({
+  to: { opacity: 0, transform: 'translateY(-10px)' },
+});
 
-  @media (prefers-reduced-motion: reduce) {
-    &.is-leaving {
-      animation-duration: 0.4s;
-      animation-delay: 0s;
-    }
-  }
-`;
+const titleFadeOut = stylex.keyframes({
+  to: { opacity: 0 },
+});
 
-const StyledCanvasLayer = styled.div`
-  inset: 0;
-  position: absolute;
-  z-index: 1;
-`;
+const titleFlight = stylex.keyframes({
+  to: {
+    transform: `translate(${flightVars.translateX}, ${flightVars.translateY}) scale(${flightVars.scale})`,
+  },
+});
 
-const StyledTitle = styled.div`
-  align-items: center;
-  animation: welcomeTitleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) 0.8s both;
-  color: ${themeCssVariables.font.color.primary};
-  display: flex;
-  flex-wrap: nowrap;
-  font-size: 26px;
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-  gap: ${themeCssVariables.spacing[2]};
-  justify-content: center;
-  padding: ${themeCssVariables.spacing[4]} ${themeCssVariables.spacing[8]};
-  position: relative;
-  white-space: nowrap;
-  will-change: transform, opacity;
-  z-index: 2;
+const titleFlightOut = stylex.keyframes({
+  to: { opacity: 0 },
+});
 
-  @keyframes welcomeTitleIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
+const boldRunOut = stylex.keyframes({
+  to: { opacity: 0 },
+});
 
-  @media (max-width: 600px) {
-    flex-wrap: wrap;
-    font-size: 20px;
-    max-width: calc(90vw / var(--t-zoom, 1));
-    padding: ${themeCssVariables.spacing[4]} ${themeCssVariables.spacing[2]};
-  }
+const regularRunIn = stylex.keyframes({
+  to: { opacity: 1 },
+});
 
-  &.is-leaving {
-    animation: welcomeTitleOut 0.34s cubic-bezier(0.4, 0, 1, 1) forwards;
-  }
+const wordIn = stylex.keyframes({
+  from: { opacity: 0, transform: 'translateY(14px)' },
+  to: { opacity: 1, transform: 'translateY(0)' },
+});
 
-  @keyframes welcomeTitleOut {
-    to {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-  }
+const wordFadeIn = stylex.keyframes({
+  from: { opacity: 0 },
+  to: { opacity: 1 },
+});
 
-  &.is-flying {
-    animation:
-      welcomeTitleFlight 0.62s cubic-bezier(0.16, 1, 0.3, 1) forwards,
-      welcomeTitleFlightOut 0.14s ease-out 0.66s forwards;
-    transform-origin: var(--welcome-flight-origin-x) center;
-  }
-
-  @keyframes welcomeTitleFlight {
-    to {
-      transform: translate(var(--welcome-flight-x), var(--welcome-flight-y))
-        scale(var(--welcome-flight-scale));
-    }
-  }
-
-  @keyframes welcomeTitleFlightOut {
-    to {
-      opacity: 0;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-
-    &.is-leaving,
-    &.is-flying {
-      animation: welcomeTitleFadeOut 0.34s ease-out forwards;
-    }
-
-    @keyframes welcomeTitleFadeOut {
-      to {
-        opacity: 0;
-      }
-    }
-  }
-`;
-
-const StyledTitleBoldRun = styled.span`
-  align-items: center;
-  display: inline-flex;
-  flex-wrap: wrap;
-  gap: ${themeCssVariables.spacing[2]};
-  justify-content: center;
-  white-space: normal;
-
-  .is-flying & {
-    animation: welcomeTitleBoldRunOut 0.38s ease 0.12s forwards;
-  }
-
-  @keyframes welcomeTitleBoldRunOut {
-    to {
-      opacity: 0;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .is-flying & {
-      animation: none;
-    }
-  }
-`;
-
-const StyledTitleRegularRun = styled.span`
-  align-items: center;
-  display: inline-flex;
-  font-weight: ${themeCssVariables.font.weight.regular};
-  gap: calc(${themeCssVariables.spacing[2]} * 2);
-  left: ${themeCssVariables.spacing[8]};
-  line-height: 1.4em;
-  opacity: 0;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  white-space: nowrap;
-
-  .is-flying & {
-    animation: welcomeTitleRegularRunIn 0.38s ease 0.12s forwards;
-  }
-
-  @keyframes welcomeTitleRegularRunIn {
-    to {
-      opacity: 1;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .is-flying & {
-      animation: none;
-    }
-  }
-`;
-
-const StyledTargetScaleChip = styled.span`
-  display: inline-flex;
-  font-size: 0.5em;
-  line-height: 1.4em;
-  transform: scale(2);
-  transform-origin: left center;
-`;
-
-const StyledWord = styled.span`
-  animation: welcomeWordIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
-  animation-delay: calc(1.1s + var(--word-index) * 0.07s);
-  display: inline-flex;
-  position: relative;
-
-  @keyframes welcomeWordIn {
-    from {
-      opacity: 0;
-      transform: translateY(14px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    animation-name: welcomeWordFadeIn;
-    animation-delay: 0s;
-
-    @keyframes welcomeWordFadeIn {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
-    }
-  }
-`;
+const styles = stylex.create({
+  overlay: {
+    alignItems: 'center',
+    bottom: 0,
+    display: 'flex',
+    justifyContent: 'center',
+    left: 0,
+    overflow: 'hidden',
+    pointerEvents: 'none',
+    position: 'fixed',
+    right: 0,
+    top: 0,
+    zIndex: rootStackingContextZIndices.welcomeOverlay,
+  },
+  backdrop: {
+    backgroundColor: background['--t-background-primary'],
+    inset: '0',
+    position: 'absolute',
+    willChange: 'opacity',
+    zIndex: 0,
+  },
+  backdropLeaving: {
+    animationDelay: { default: '0.08s', [media.reducedMotion]: '0s' },
+    animationDuration: { default: '0.7s', [media.reducedMotion]: '0.4s' },
+    animationFillMode: 'forwards',
+    animationName: backdropOut,
+    animationTimingFunction: 'cubic-bezier(0.5, 0, 0.1, 1)',
+  },
+  canvasLayer: {
+    inset: '0',
+    position: 'absolute',
+    zIndex: '1',
+  },
+  targetScaleChip: {
+    display: 'inline-flex',
+    fontSize: '0.5em',
+    lineHeight: '1.4em',
+    transform: 'scale(2)',
+    transformOrigin: 'left center',
+  },
+  title: {
+    alignItems: 'center',
+    animationDelay: '0.8s',
+    animationDuration: '0.3s',
+    animationFillMode: 'both',
+    animationName: { default: titleIn, [media.reducedMotion]: 'none' },
+    animationTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
+    color: fontColor['--t-font-color-primary'],
+    display: 'flex',
+    flexWrap: { default: 'nowrap', [NARROW_VIEWPORT]: 'wrap' },
+    fontSize: { default: '26px', [NARROW_VIEWPORT]: '20px' },
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    gap: spacing['--t-spacing-2'],
+    justifyContent: 'center',
+    maxWidth: {
+      default: null,
+      [NARROW_VIEWPORT]: 'calc(90vw / var(--t-zoom, 1))',
+    },
+    paddingBottom: spacing['--t-spacing-4'],
+    paddingLeft: {
+      default: spacing['--t-spacing-8'],
+      [NARROW_VIEWPORT]: spacing['--t-spacing-2'],
+    },
+    paddingRight: {
+      default: spacing['--t-spacing-8'],
+      [NARROW_VIEWPORT]: spacing['--t-spacing-2'],
+    },
+    paddingTop: spacing['--t-spacing-4'],
+    position: 'relative',
+    whiteSpace: 'nowrap',
+    willChange: 'transform, opacity',
+    zIndex: 2,
+  },
+  titleLeaving: {
+    animationDelay: '0s',
+    animationDuration: '0.34s',
+    animationFillMode: 'forwards',
+    animationName: { default: titleOut, [media.reducedMotion]: titleFadeOut },
+    animationTimingFunction: {
+      default: 'cubic-bezier(0.4, 0, 1, 1)',
+      [media.reducedMotion]: 'ease-out',
+    },
+  },
+  titleFlying: {
+    animationDelay: { default: '0s, 0.66s', [media.reducedMotion]: '0s' },
+    animationDuration: {
+      default: '0.62s, 0.14s',
+      [media.reducedMotion]: '0.34s',
+    },
+    animationFillMode: 'forwards',
+    animationName: {
+      default: `${titleFlight}, ${titleFlightOut}`,
+      [media.reducedMotion]: titleFadeOut,
+    },
+    animationTimingFunction: {
+      default: 'cubic-bezier(0.16, 1, 0.3, 1), ease-out',
+      [media.reducedMotion]: 'ease-out',
+    },
+    transformOrigin: `${flightVars.originX} center`,
+  },
+  titleFlight: (
+    translateX: string,
+    translateY: string,
+    scale: number,
+    originX: string,
+  ) => ({
+    [flightVars.translateX]: translateX,
+    [flightVars.translateY]: translateY,
+    [flightVars.scale]: scale,
+    [flightVars.originX]: originX,
+  }),
+  titleBoldRun: {
+    alignItems: 'center',
+    display: 'inline-flex',
+    flexWrap: 'wrap',
+    gap: spacing['--t-spacing-2'],
+    justifyContent: 'center',
+    whiteSpace: 'normal',
+  },
+  titleBoldRunFlying: {
+    animationDelay: '0.12s',
+    animationDuration: '0.38s',
+    animationFillMode: 'forwards',
+    animationName: { default: boldRunOut, [media.reducedMotion]: 'none' },
+    animationTimingFunction: 'ease',
+  },
+  titleRegularRun: {
+    alignItems: 'center',
+    display: 'inline-flex',
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    gap: `calc(${spacing['--t-spacing-2']} * 2)`,
+    left: spacing['--t-spacing-8'],
+    lineHeight: '1.4em',
+    opacity: 0,
+    position: 'absolute',
+    top: '50%',
+    transform: 'translateY(-50%)',
+    whiteSpace: 'nowrap',
+  },
+  titleRegularRunFlying: {
+    animationDelay: '0.12s',
+    animationDuration: '0.38s',
+    animationFillMode: 'forwards',
+    animationName: { default: regularRunIn, [media.reducedMotion]: 'none' },
+    animationTimingFunction: 'ease',
+  },
+  word: {
+    animationDuration: '0.6s',
+    animationFillMode: 'both',
+    animationName: { default: wordIn, [media.reducedMotion]: wordFadeIn },
+    animationTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
+    display: 'inline-flex',
+    position: 'relative',
+  },
+  wordDelay: (index: number) => ({
+    animationDelay: {
+      default: `${1.1 + index * 0.07}s`,
+      [media.reducedMotion]: '0s',
+    },
+  }),
+});
 
 export const WelcomeOverlay = () => {
   const { t } = useLingui();
@@ -254,67 +249,80 @@ export const WelcomeOverlay = () => {
   }
 
   const activeWelcomeTitleFlight = isMobile ? null : welcomeTitleFlight;
+  const isFlying =
+    isWelcomeAnimationLeaving && isDefined(activeWelcomeTitleFlight);
 
   const welcomeTitle = t(WELCOME_TITLE_MESSAGE);
   const welcomeTitleWords = welcomeTitle.split(' ');
 
-  const leavingClassName = isWelcomeAnimationLeaving ? 'is-leaving' : undefined;
-  const titleClassName = isWelcomeAnimationLeaving
-    ? isDefined(activeWelcomeTitleFlight)
-      ? 'is-flying'
-      : 'is-leaving'
-    : undefined;
-
-  const titleStyle = isDefined(activeWelcomeTitleFlight)
-    ? ({
-        '--welcome-flight-x': `${activeWelcomeTitleFlight.translateXInPx}px`,
-        '--welcome-flight-y': `${activeWelcomeTitleFlight.translateYInPx}px`,
-        '--welcome-flight-scale': activeWelcomeTitleFlight.scale,
-        '--welcome-flight-origin-x': `${activeWelcomeTitleFlight.transformOriginXInPx}px`,
-      } as CSSProperties)
-    : undefined;
-
   return createPortal(
-    <StyledOverlay>
+    <div {...stylex.props(styles.overlay)}>
       {isWelcomeAnimationLeaving ? (
         <WelcomeAnimationForcedTeardownEffect />
       ) : (
         <WelcomeAnimationAutoLeaveEffect />
       )}
-      <StyledBackdrop className={leavingClassName} />
-      <StyledCanvasLayer>
+      <div
+        {...stylex.props(
+          styles.backdrop,
+          isWelcomeAnimationLeaving && styles.backdropLeaving,
+        )}
+      />
+      <div {...stylex.props(styles.canvasLayer)}>
         <WelcomeHalftoneCanvas isLeaving={isWelcomeAnimationLeaving} />
-      </StyledCanvasLayer>
-      <StyledTitle
+      </div>
+      <div
         id={WELCOME_TITLE_SOURCE_ELEMENT_ID}
-        className={titleClassName}
-        style={titleStyle}
+        {...stylex.props(
+          styles.title,
+          isWelcomeAnimationLeaving && !isFlying && styles.titleLeaving,
+          isFlying && styles.titleFlying,
+          isDefined(activeWelcomeTitleFlight) &&
+            styles.titleFlight(
+              `${activeWelcomeTitleFlight.translateXInPx}px`,
+              `${activeWelcomeTitleFlight.translateYInPx}px`,
+              activeWelcomeTitleFlight.scale,
+              `${activeWelcomeTitleFlight.transformOriginXInPx}px`,
+            ),
+        )}
       >
-        <StyledTitleBoldRun>
+        <span
+          {...stylex.props(
+            styles.titleBoldRun,
+            isFlying && styles.titleBoldRunFlying,
+          )}
+        >
           {welcomeTitleWords.map((word, index) => (
-            <StyledWord
+            <span
               key={`${word}-${index}`}
-              style={{ '--word-index': index } as CSSProperties}
+              {...stylex.props(styles.word, styles.wordDelay(index))}
             >
               {word}
-            </StyledWord>
+            </span>
           ))}
-          <StyledWord
-            style={
-              { '--word-index': welcomeTitleWords.length } as CSSProperties
-            }
+          <span
+            {...stylex.props(
+              styles.word,
+              styles.wordDelay(welcomeTitleWords.length),
+            )}
           >
             <WelcomePersonChip />
-          </StyledWord>
-        </StyledTitleBoldRun>
-        <StyledTitleRegularRun aria-hidden>
+          </span>
+        </span>
+        <span
+          aria-hidden
+          {...stylex.props(
+            styles.titleRegularRun,
+            isFlying && styles.titleRegularRunFlying,
+          )}
+        >
           {welcomeTitle}
-          <StyledTargetScaleChip>
+          <span {...stylex.props(styles.targetScaleChip)}>
             <WelcomePersonChip avatarSize="xs" sizeVariant="compact" />
-          </StyledTargetScaleChip>
-        </StyledTitleRegularRun>
-      </StyledTitle>
-    </StyledOverlay>,
+          </span>
+        </span>
+      </div>
+    </div>,
     document.body,
   );
 };

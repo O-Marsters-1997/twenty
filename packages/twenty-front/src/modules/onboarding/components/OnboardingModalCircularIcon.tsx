@@ -1,19 +1,26 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { type IconComponent } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import { borderRadius } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledCheckContainer = styled.div<{ color: string }>`
-  align-items: center;
-  border: 2px solid ${({ color }) => color};
-  border-radius: ${themeCssVariables.border.radius.rounded};
-  box-shadow: ${({ color }) => color && `-4px 4px 0 -2px ${color}`};
-  box-sizing: content-box;
-  corner-shape: round;
-  display: flex;
-  height: 36px;
-  justify-content: center;
-  width: 36px;
-`;
+const styles = stylex.create({
+  checkContainer: {
+    alignItems: 'center',
+    borderRadius: borderRadius['--t-border-radius-rounded'],
+    borderStyle: 'solid',
+    borderWidth: '2px',
+    boxSizing: 'content-box',
+    cornerShape: 'round',
+    display: 'flex',
+    height: '36px',
+    justifyContent: 'center',
+    width: '36px',
+  },
+  checkContainerColor: (color: string) => ({
+    borderColor: color,
+    boxShadow: `-4px 4px 0 -2px ${color}`,
+  }),
+});
 
 type OnboardingModalCircularIconProps = {
   Icon: IconComponent;
@@ -26,8 +33,13 @@ export const OnboardingModalCircularIcon = ({
   const color = theme.background.invertedPrimary;
 
   return (
-    <StyledCheckContainer color={color}>
+    <div
+      {...stylex.props(
+        styles.checkContainer,
+        styles.checkContainerColor(color),
+      )}
+    >
       <Icon size={24} color={color} stroke={3} />
-    </StyledCheckContainer>
+    </div>
   );
 };

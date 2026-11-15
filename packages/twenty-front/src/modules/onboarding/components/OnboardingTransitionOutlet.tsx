@@ -2,7 +2,6 @@ import { ONBOARDING_MOTION_SLIDE_OFFSET } from '@/onboarding/constants/Onboardin
 import { useOnboardingMotionTransition } from '@/onboarding/hooks/useOnboardingMotionTransition';
 import { onboardingNavigationDirectionState } from '@/onboarding/states/onboardingNavigationDirectionState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { styled } from '@linaria/react';
 import {
   AnimatePresence,
   motion,
@@ -10,23 +9,25 @@ import {
   type Variants,
 } from 'framer-motion';
 import { useLocation, useOutlet } from 'react-router-dom';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledTransitionContainer = styled.div`
-  display: flex;
-  flex: 1;
-  min-height: 0;
-  min-width: 0;
-  position: relative;
-`;
-
-const StyledTransitionPage = styled(motion.div)`
-  display: flex;
-  flex-direction: column;
-  inset: 0;
-  min-height: 0;
-  min-width: 0;
-  position: absolute;
-`;
+const styles = stylex.create({
+  transitionContainer: {
+    display: 'flex',
+    flex: '1',
+    minHeight: '0',
+    minWidth: '0',
+    position: 'relative',
+  },
+  transitionPage: {
+    display: 'flex',
+    flexDirection: 'column',
+    inset: '0',
+    minHeight: '0',
+    minWidth: '0',
+    position: 'absolute',
+  },
+});
 
 const transitionPageVariants: Variants = {
   initial: { opacity: 0 },
@@ -55,9 +56,10 @@ export const OnboardingTransitionOutlet = () => {
   const exitSlideOffset = shouldReduceMotion ? 0 : directionalExitSlideOffset;
 
   return (
-    <StyledTransitionContainer>
+    <div {...stylex.props(styles.transitionContainer)}>
       <AnimatePresence custom={exitSlideOffset}>
-        <StyledTransitionPage
+        <motion.div
+          {...stylex.props(styles.transitionPage)}
           key={pathname}
           custom={exitSlideOffset}
           variants={transitionPageVariants}
@@ -67,8 +69,8 @@ export const OnboardingTransitionOutlet = () => {
           transition={transition}
         >
           {outlet}
-        </StyledTransitionPage>
+        </motion.div>
       </AnimatePresence>
-    </StyledTransitionContainer>
+    </div>
   );
 };

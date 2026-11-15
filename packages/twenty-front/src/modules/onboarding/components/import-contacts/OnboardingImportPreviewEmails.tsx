@@ -6,217 +6,224 @@ import {
   type ImportContactsPreviewEmail,
   IMPORT_CONTACTS_PREVIEW_EMAILS,
 } from '@/onboarding/constants/ImportContactsPreviewEmails';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { isDefined } from 'twenty-shared/utils';
-import { MOBILE_VIEWPORT, themeCssVariables } from 'twenty-ui/theme';
+import { media } from 'twenty-ui/theme/constants.stylex';
+import {
+  background,
+  borderColor,
+  borderRadius,
+  boxShadow,
+  color,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const EVENT_CARD_WIDTH = 160;
 
-const SENDER_COLORS: Record<ImportContactsPreviewEmail['senderColor'], string> =
-  {
-    primary: themeCssVariables.font.color.primary,
-    secondary: themeCssVariables.font.color.secondary,
-    tertiary: themeCssVariables.font.color.tertiary,
-  };
+const orangeCardIn = stylex.keyframes({
+  from: {
+    opacity: 0,
+    transform: 'translate(8px, -10px) rotate(-2deg) scale(0.94)',
+  },
+  to: { opacity: 1, transform: 'rotate(-7deg)' },
+});
 
-const StyledColumn = styled.div`
-  background-color: ${themeCssVariables.border.color.light};
-  box-sizing: border-box;
-  display: flex;
-  flex: 1 1 0;
-  flex-direction: column;
-  gap: 1px;
-  height: 100%;
-  min-width: 0;
-  overflow: hidden;
-  position: relative;
-`;
+const skyCardIn = stylex.keyframes({
+  from: {
+    opacity: 0,
+    transform: 'translate(8px, 10px) rotate(5deg) scale(0.94)',
+  },
+  to: { opacity: 1, transform: 'rotate(10deg)' },
+});
 
-const StyledEmailRow = styled.div`
-  align-items: center;
-  background-color: ${themeCssVariables.background.primary};
-  box-sizing: border-box;
-  display: flex;
-  flex-shrink: 0;
-  font-size: ${themeCssVariables.font.size.sm};
-  gap: ${themeCssVariables.spacing[3]};
-  height: ${themeCssVariables.spacing[8]};
-  padding: 0 ${themeCssVariables.spacing[3]};
-  white-space: nowrap;
-`;
-
-const StyledEmailCheckbox = styled.div`
-  border: 1px solid ${themeCssVariables.font.color.light};
-  border-radius: ${themeCssVariables.border.radius.xs};
-  box-sizing: border-box;
-  flex-shrink: 0;
-  height: ${themeCssVariables.spacing[3]};
-  width: ${themeCssVariables.spacing[3]};
-
-  &[data-selected='true'] {
-    border-color: ${themeCssVariables.font.color.primary};
-  }
-`;
-
-const StyledEmailStar = styled.span`
-  background-color: ${themeCssVariables.font.color.light};
-  flex-shrink: 0;
-  height: ${themeCssVariables.spacing[3]};
-  mask: url('/images/onboarding/import-preview/star.svg') center / contain
-    no-repeat;
-  width: ${themeCssVariables.spacing[3]};
-
-  &[data-selected='true'] {
-    background-color: ${themeCssVariables.font.color.primary};
-  }
-`;
-
-const StyledEmailSender = styled.span`
-  flex-shrink: 0;
-  font-weight: ${themeCssVariables.font.weight.regular};
-  overflow: hidden;
-  text-overflow: ellipsis;
-  width: ${themeCssVariables.spacing[30]};
-
-  &[data-medium='true'] {
-    font-weight: ${themeCssVariables.font.weight.medium};
-  }
-`;
-
-const StyledEmailSubject = styled.span`
-  color: ${themeCssVariables.font.color.secondary};
-`;
-
-const StyledEventCard = styled.div`
-  animation: onboardingImportPreviewEventCardIn 900ms
-    cubic-bezier(0.22, 1, 0.36, 1) both;
-  border-radius: ${themeCssVariables.border.radius.md};
-  box-shadow: ${themeCssVariables.boxShadow.strong};
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[1]};
-  line-height: 1.1;
-  overflow: hidden;
-  padding: ${themeCssVariables.spacing[2]};
-  position: absolute;
-  transform: var(--event-card-transform);
-  width: ${EVENT_CARD_WIDTH}px;
-
-  @keyframes onboardingImportPreviewEventCardIn {
-    from {
-      opacity: 0;
-      transform: var(--event-card-entry-transform);
-    }
-    to {
-      opacity: 1;
-      transform: var(--event-card-transform);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-  }
-
-  &[data-color='orange'] {
-    animation-delay: 300ms;
-    background-color: ${themeCssVariables.color.orange3};
-    border-left: 2px solid ${themeCssVariables.color.orange11};
-    color: ${themeCssVariables.color.orange11};
-  }
-
-  &[data-color='sky'] {
-    animation-delay: 150ms;
-    background-color: ${themeCssVariables.color.sky3};
-    border-left: 2px solid ${themeCssVariables.color.sky11};
-    color: ${themeCssVariables.color.sky11};
-  }
-
-  @media (max-width: ${MOBILE_VIEWPORT}px) {
-    display: none;
-  }
-`;
-
-const StyledEventTitle = styled.span`
-  font-size: ${themeCssVariables.font.size.sm};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-`;
-
-const StyledEventTime = styled.span`
-  font-size: ${themeCssVariables.font.size.xs};
-`;
-
-const EVENT_CARD_POSITIONS: Record<
-  ImportContactsPreviewCalendarEvent['color'],
-  {
-    top: number;
-    left: number;
-    rotate: number;
-    entry: { x: number; y: number; rotate: number; scale: number };
-  }
-> = {
-  orange: {
-    top: 159,
+const styles = stylex.create({
+  column: {
+    backgroundColor: borderColor['--t-border-color-light'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    flex: '1 1 0',
+    flexDirection: 'column',
+    gap: '1px',
+    height: '100%',
+    minWidth: '0',
+    overflow: 'hidden',
+    position: 'relative',
+  },
+  emailRow: {
+    alignItems: 'center',
+    backgroundColor: background['--t-background-primary'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexShrink: '0',
+    fontSize: fontSize['--t-font-size-sm'],
+    gap: spacing['--t-spacing-3'],
+    height: spacing['--t-spacing-8'],
+    paddingLeft: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-3'],
+    whiteSpace: 'nowrap',
+  },
+  emailCheckbox: {
+    borderColor: fontColor['--t-font-color-light'],
+    borderRadius: borderRadius['--t-border-radius-xs'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    boxSizing: 'border-box',
+    flexShrink: '0',
+    height: spacing['--t-spacing-3'],
+    width: spacing['--t-spacing-3'],
+  },
+  emailCheckboxSelected: {
+    borderColor: fontColor['--t-font-color-primary'],
+  },
+  emailStar: {
+    backgroundColor: fontColor['--t-font-color-light'],
+    flexShrink: '0',
+    height: spacing['--t-spacing-3'],
+    maskImage: "url('/images/onboarding/import-preview/star.svg')",
+    maskPosition: 'center',
+    maskRepeat: 'no-repeat',
+    maskSize: 'contain',
+    width: spacing['--t-spacing-3'],
+  },
+  emailStarSelected: {
+    backgroundColor: fontColor['--t-font-color-primary'],
+  },
+  emailSender: {
+    flexShrink: '0',
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    width: spacing['--t-spacing-30'],
+  },
+  emailSenderMedium: {
+    fontWeight: fontWeight['--t-font-weight-medium'],
+  },
+  senderPrimary: {
+    color: fontColor['--t-font-color-primary'],
+  },
+  senderSecondary: {
+    color: fontColor['--t-font-color-secondary'],
+  },
+  senderTertiary: {
+    color: fontColor['--t-font-color-tertiary'],
+  },
+  emailSubject: {
+    color: fontColor['--t-font-color-secondary'],
+  },
+  eventCard: {
+    animationDuration: '900ms',
+    animationFillMode: 'both',
+    animationTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)',
+    borderLeftStyle: 'solid',
+    borderLeftWidth: '2px',
+    borderRadius: borderRadius['--t-border-radius-md'],
+    boxShadow: boxShadow['--t-box-shadow-strong'],
+    boxSizing: 'border-box',
+    display: { default: 'flex', [media.mobile]: 'none' },
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-1'],
+    lineHeight: '1.1',
+    overflow: 'hidden',
+    padding: spacing['--t-spacing-2'],
+    position: 'absolute',
+    width: `${EVENT_CARD_WIDTH}px`,
+  },
+  eventCardOrange: {
+    animationDelay: '300ms',
+    animationName: { default: orangeCardIn, [media.reducedMotion]: 'none' },
+    backgroundColor: color['--t-color-orange3'],
+    borderLeftColor: color['--t-color-orange11'],
+    color: color['--t-color-orange11'],
     left: 21,
-    rotate: -7,
-    entry: { x: 8, y: -10, rotate: -2, scale: 0.94 },
+    top: 159,
+    transform: 'rotate(-7deg)',
   },
-  sky: {
-    top: -5,
+  eventCardSky: {
+    animationDelay: '150ms',
+    animationName: { default: skyCardIn, [media.reducedMotion]: 'none' },
+    backgroundColor: color['--t-color-sky3'],
+    borderLeftColor: color['--t-color-sky11'],
+    color: color['--t-color-sky11'],
     left: 43,
-    rotate: 10,
-    entry: { x: 8, y: 10, rotate: 5, scale: 0.94 },
+    top: -5,
+    transform: 'rotate(10deg)',
   },
+  eventTitle: {
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+  },
+  eventTime: {
+    fontSize: fontSize['--t-font-size-xs'],
+  },
+});
+
+const SENDER_COLOR_STYLES: Record<
+  ImportContactsPreviewEmail['senderColor'],
+  stylex.StyleXStyles
+> = {
+  primary: styles.senderPrimary,
+  secondary: styles.senderSecondary,
+  tertiary: styles.senderTertiary,
+};
+
+const EVENT_CARD_STYLES: Record<
+  ImportContactsPreviewCalendarEvent['color'],
+  stylex.StyleXStyles
+> = {
+  orange: styles.eventCardOrange,
+  sky: styles.eventCardSky,
 };
 
 const EmailRow = ({ email }: { email: ImportContactsPreviewEmail }) => (
-  <StyledEmailRow>
-    <StyledEmailCheckbox data-selected={email.isSelected} />
-    <StyledEmailStar data-selected={email.isSelected} />
-    <StyledEmailSender
-      data-medium={email.isSenderMedium}
-      style={{ color: SENDER_COLORS[email.senderColor] }}
+  <div {...stylex.props(styles.emailRow)}>
+    <div
+      {...stylex.props(
+        styles.emailCheckbox,
+        email.isSelected && styles.emailCheckboxSelected,
+      )}
+    />
+    <span
+      {...stylex.props(
+        styles.emailStar,
+        email.isSelected && styles.emailStarSelected,
+      )}
+    />
+    <span
+      {...stylex.props(
+        styles.emailSender,
+        email.isSenderMedium && styles.emailSenderMedium,
+        SENDER_COLOR_STYLES[email.senderColor],
+      )}
     >
       {email.sender}
-    </StyledEmailSender>
+    </span>
     {isDefined(email.subject) && (
-      <StyledEmailSubject>{email.subject}</StyledEmailSubject>
+      <span {...stylex.props(styles.emailSubject)}>{email.subject}</span>
     )}
-  </StyledEmailRow>
+  </div>
 );
 
 const EventCard = ({
   event,
 }: {
   event: ImportContactsPreviewCalendarEvent;
-}) => {
-  const position = EVENT_CARD_POSITIONS[event.color];
-
-  return (
-    <StyledEventCard
-      data-color={event.color}
-      style={
-        {
-          top: position.top,
-          left: position.left,
-          '--event-card-transform': `rotate(${position.rotate}deg)`,
-          '--event-card-entry-transform': `translate(${position.entry.x}px, ${position.entry.y}px) rotate(${position.entry.rotate}deg) scale(${position.entry.scale})`,
-        } as React.CSSProperties
-      }
-    >
-      <StyledEventTitle>{event.title}</StyledEventTitle>
-      <StyledEventTime>{event.time}</StyledEventTime>
-    </StyledEventCard>
-  );
-};
+}) => (
+  <div {...stylex.props(styles.eventCard, EVENT_CARD_STYLES[event.color])}>
+    <span {...stylex.props(styles.eventTitle)}>{event.title}</span>
+    <span {...stylex.props(styles.eventTime)}>{event.time}</span>
+  </div>
+);
 
 export const OnboardingImportPreviewEmails = () => (
-  <StyledColumn>
+  <div {...stylex.props(styles.column)}>
     {IMPORT_CONTACTS_PREVIEW_EMAILS.map((email) => (
       <EmailRow key={email.id} email={email} />
     ))}
     {IMPORT_CONTACTS_PREVIEW_CALENDAR_EVENTS.map((event) => (
       <EventCard key={event.id} event={event} />
     ))}
-  </StyledColumn>
+  </div>
 );

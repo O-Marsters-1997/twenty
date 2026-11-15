@@ -1,23 +1,25 @@
 import { isOnOnboardingVerifyPath } from '@/auth/utils/isOnOnboardingVerifyPath';
 import { OnboardingPulsingLogo } from '@/onboarding/components/OnboardingPulsingLogo';
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { background } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  align-items: center;
-  background: ${themeCssVariables.background.secondary};
-  display: flex;
-  flex-direction: column;
-  height: calc(100dvh / var(--t-zoom, 1));
-  justify-content: center;
-  width: 100%;
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    background: background['--t-background-secondary'],
+    display: 'flex',
+    flexDirection: 'column',
+    height: 'calc(100dvh / var(--t-zoom, 1))',
+    justifyContent: 'center',
+    width: '100%',
+  },
+});
 
 // No logo: the verify screen renders its own, which would flash twice on cold boot.
 export const OnboardingPageLoader = () => (
-  <StyledContainer>
+  <div {...stylex.props(styles.container)}>
     {!isOnOnboardingVerifyPath(window.location.pathname) && (
       <OnboardingPulsingLogo />
     )}
-  </StyledContainer>
+  </div>
 );

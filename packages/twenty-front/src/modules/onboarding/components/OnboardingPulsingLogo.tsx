@@ -1,27 +1,29 @@
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledLogo = styled.img`
-  animation: onboardingPulsingLogo 0.8s ease-in-out infinite alternate;
-  height: ${themeCssVariables.spacing[12]};
-  margin-bottom: ${themeCssVariables.spacing[8]};
-  width: ${themeCssVariables.spacing[12]};
+const pulse = stylex.keyframes({
+  from: { opacity: 1 },
+  to: { opacity: 0.4 },
+});
 
-  @keyframes onboardingPulsingLogo {
-    from {
-      opacity: 1;
-    }
-    to {
-      opacity: 0.4;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-    opacity: 1;
-  }
-`;
+const styles = stylex.create({
+  logo: {
+    animationDirection: 'alternate',
+    animationDuration: '0.8s',
+    animationIterationCount: 'infinite',
+    animationName: { default: pulse, [media.reducedMotion]: 'none' },
+    animationTimingFunction: 'ease-in-out',
+    height: spacing['--t-spacing-12'],
+    marginBottom: spacing['--t-spacing-8'],
+    width: spacing['--t-spacing-12'],
+  },
+});
 
 export const OnboardingPulsingLogo = () => (
-  <StyledLogo src="/images/integrations/twenty-logo.svg" alt="" />
+  <img
+    src="/images/integrations/twenty-logo.svg"
+    alt=""
+    {...stylex.props(styles.logo)}
+  />
 );

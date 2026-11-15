@@ -1,15 +1,17 @@
-import { styled } from '@linaria/react';
 import { useCallback, useRef, useState } from 'react';
 
 import { WelcomeHalftoneCanvasEffect } from '@/onboarding/components/WelcomeOverlay/WelcomeHalftoneCanvasEffect';
 
 import './welcomeHalftone.css';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledCanvas = styled.canvas`
-  display: block;
-  height: 100%;
-  width: 100%;
-`;
+const styles = stylex.create({
+  canvas: {
+    display: 'block',
+    height: '100%',
+    width: '100%',
+  },
+});
 
 type WelcomeHalftoneCanvasProps = {
   isLeaving: boolean;
@@ -24,10 +26,11 @@ export const WelcomeHalftoneCanvas = ({
 
   return (
     <>
-      <StyledCanvas
+      <canvas
         key={hasWorkerFailed ? 'main-thread' : 'worker'}
         ref={canvasRef}
         aria-hidden="true"
+        {...stylex.props(styles.canvas)}
       />
       <WelcomeHalftoneCanvasEffect
         canvasRef={canvasRef}
