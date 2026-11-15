@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { FormProvider } from 'react-hook-form';
 import QRCodeModule from 'react-qr-code';
@@ -26,6 +25,14 @@ import { background, borderColor, borderRadius, fontColor, fontSize, spacing } f
 const QRCode = resolveCjsModuleDefaultExport(QRCodeModule);
 
 const styles = stylex.create({
+  qrCodeSizer: {
+    height: '137px',
+    width: '137px',
+  },
+  qrCodeSvg: {
+    height: '100%',
+    width: '100%',
+  },
   qRCodeContainer: {
     alignItems: 'flex-start',
     display: 'flex',
@@ -84,16 +91,6 @@ const styles = stylex.create({
     width: '100%',
   },
 });
-
-const StyledQRCodeSizer = styled.div`
-  height: 137px;
-  width: 137px;
-
-  & > svg {
-    height: 100%;
-    width: 100%;
-  }
-`;
 
 export const SettingsTwoFactorAuthenticationMethod = () => {
   const { t } = useLingui();
@@ -170,9 +167,9 @@ export const SettingsTwoFactorAuthenticationMethod = () => {
                 ) : (
                   <>
                     <div {...stylex.props(styles.qRCodeWrapper)}>
-                      <StyledQRCodeSizer>
-                        <QRCode value={qrCode} />
-                      </StyledQRCodeSizer>
+                      <div {...stylex.props(styles.qrCodeSizer)}>
+                        <QRCode value={qrCode} {...stylex.props(styles.qrCodeSvg)} />
+                      </div>
                     </div>
                     <div {...stylex.props(styles.copySetupKeyText)}>
                       <Trans>Can't scan? Copy the</Trans>{' '}

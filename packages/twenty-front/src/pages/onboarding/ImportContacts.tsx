@@ -10,23 +10,19 @@ import { StyledOnboardingStepTitle } from '@/onboarding/components/StyledOnboard
 import { OnboardingImportPreview } from '@/onboarding/components/import-contacts/OnboardingImportPreview';
 import { OnboardingTrustBadges } from '@/onboarding/components/import-contacts/OnboardingTrustBadges';
 import { ONBOARDING_CONTENT_BLOCK_WIDTH } from '@/onboarding/constants/OnboardingContentBlockWidth';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
 import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledOnboardingStep = styled(StyledOnboardingStepPage)`
-  gap: ${themeCssVariables.spacing[8]};
-`;
-
-const StyledSubtitle = styled(StyledOnboardingStepSubtitle)`
-  max-width: 100%;
-  width: 320px;
-`;
-
 const styles = stylex.create({
+  step: {
+    gap: spacing['--t-spacing-8'],
+  },
+  subtitle: {
+    maxWidth: '100%',
+    width: '320px',
+  },
   footer: {
     alignItems: 'flex-end',
     display: 'flex',
@@ -61,15 +57,17 @@ export const ImportContacts = ({
   const { t } = useLingui();
 
   return (
-    <StyledOnboardingStep data-testid="onboarding-sync-emails-step">
+    <StyledOnboardingStepPage
+      {...stylex.props(styles.step)}
+      data-testid="onboarding-sync-emails-step">
       <StyledOnboardingStepHeading>
         <OnboardingStepAnimatedItem index={0}>
           <StyledOnboardingStepTitle>{t`Import your contacts`}</StyledOnboardingStepTitle>
         </OnboardingStepAnimatedItem>
         <OnboardingStepAnimatedItem index={1}>
-          <StyledSubtitle>
+          <StyledOnboardingStepSubtitle {...stylex.props(styles.subtitle)}>
             {t`Connect your email and calendar to see your entire network instantly. Takes only 30 seconds.`}
-          </StyledSubtitle>
+          </StyledOnboardingStepSubtitle>
         </OnboardingStepAnimatedItem>
       </StyledOnboardingStepHeading>
 
@@ -95,6 +93,6 @@ export const ImportContacts = ({
           {isDefined(onSkip) && <OnboardingSkipButton onClick={onSkip} />}
         </div>
       </OnboardingStepAnimatedItem>
-    </StyledOnboardingStep>
+    </StyledOnboardingStepPage>
   );
 };

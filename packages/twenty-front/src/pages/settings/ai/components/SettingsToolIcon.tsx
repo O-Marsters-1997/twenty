@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 
 import { useObjectMetadataItems } from '@/object-metadata/hooks/useObjectMetadataItems';
 import { getObjectColorWithFallback } from '@/object-metadata/utils/getObjectColorWithFallback';
@@ -14,7 +13,7 @@ import {
   type IconComponent,
 } from 'twenty-ui/icon';
 import { Avatar } from 'twenty-ui/primitives/data-display';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import { type SettingsAgentToolApplication } from '~/pages/settings/ai/types/SettingsAgentToolApplication';
 import * as stylex from '@stylexjs/stylex';
 import { borderRadius, grayScale } from 'twenty-ui/theme/tokens.stylex';
@@ -39,6 +38,19 @@ const getOperationIcon = (toolName: string): IconComponent | null => {
 };
 
 const styles = stylex.create({
+  mainIconWrapper: (backgroundColor: string, borderColor: string | undefined) => ({
+    alignItems: 'center',
+    backgroundColor,
+    borderColor: borderColor ?? 'transparent',
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    borderStyle: borderColor ? 'solid' : 'none',
+    borderWidth: borderColor ? '1px' : 0,
+    boxSizing: 'border-box',
+    display: 'flex',
+    inset: 0,
+    justifyContent: 'center',
+    position: 'absolute',
+  }),
   compositeContainer: {
     alignItems: 'center',
     borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
@@ -69,22 +81,6 @@ const styles = stylex.create({
     width: '12px',
   },
 });
-
-const StyledMainIconWrapper = styled.div<{
-  $backgroundColor: string;
-  $borderColor?: string;
-}>`
-  align-items: center;
-  background-color: ${({ $backgroundColor }) => $backgroundColor};
-  border: ${({ $borderColor }) =>
-    $borderColor ? `1px solid ${$borderColor}` : 'none'};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  box-sizing: border-box;
-  display: flex;
-  inset: 0;
-  justify-content: center;
-  position: absolute;
-`;
 
 export const SettingsToolIcon = ({
   icon,
@@ -121,16 +117,20 @@ export const SettingsToolIcon = ({
   if (isDefined(OperationIcon)) {
     return (
       <div {...stylex.props(styles.compositeContainer)}>
-        <StyledMainIconWrapper
-          $backgroundColor={objectStyle?.backgroundColor ?? 'transparent'}
-          $borderColor={objectStyle?.borderColor}
+        <div
+          {...stylex.props(
+            styles.mainIconWrapper(
+              objectStyle?.backgroundColor ?? 'transparent',
+              objectStyle?.borderColor,
+            ),
+          )}
         >
           <MainIcon
             size="14px"
             stroke={theme.icon.stroke.md}
             color={objectStyle?.iconColor ?? theme.font.color.secondary}
           />
-        </StyledMainIconWrapper>
+        </div>
         <div {...stylex.props(styles.operationOverlay)}>
           <OperationIcon
             size="12px"
@@ -145,16 +145,20 @@ export const SettingsToolIcon = ({
   if (isDefined(objectStyle)) {
     return (
       <div {...stylex.props(styles.compositeContainer)}>
-        <StyledMainIconWrapper
-          $backgroundColor={objectStyle.backgroundColor}
-          $borderColor={objectStyle.borderColor}
+        <div
+          {...stylex.props(
+            styles.mainIconWrapper(
+              objectStyle.backgroundColor,
+              objectStyle.borderColor,
+            ),
+          )}
         >
           <MainIcon
             size="14px"
             stroke={theme.icon.stroke.md}
             color={objectStyle.iconColor}
           />
-        </StyledMainIconWrapper>
+        </div>
       </div>
     );
   }

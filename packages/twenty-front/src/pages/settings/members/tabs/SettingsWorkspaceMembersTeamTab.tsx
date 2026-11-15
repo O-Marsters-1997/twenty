@@ -10,7 +10,6 @@ import { TableRow } from '@/ui/layout/table/components/TableRow';
 import { TooltipDelay } from '@/ui/layout/tooltip/constants/TooltipDelay';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { type WorkspaceMember } from '@/workspace-member/types/WorkspaceMember';
-import { styled } from '@linaria/react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMemo, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
@@ -39,18 +38,17 @@ import { useNavigateSettings } from '~/hooks/useNavigateSettings';
 import { getAbsoluteImageUrl } from '~/utils/image/getAbsoluteImageUrl';
 import { normalizeSearchText } from 'twenty-ui/utilities';
 import * as stylex from '@stylexjs/stylex';
-import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
-
-const StyledTableContainer = styled.div<{ hasMoreRows?: boolean }>`
-  > div {
-    border-bottom: ${({ hasMoreRows }) =>
-      hasMoreRows
-        ? 'none'
-        : `1px solid ${themeCssVariables.border.color.light}`};
-  }
-`;
+import { borderColor, fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
+  table: {
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
+  },
+  tableWithMoreRows: {
+    borderBottomStyle: 'none',
+  },
   iconWrapper: {
     alignItems: 'center',
     display: 'flex',
@@ -204,8 +202,13 @@ export const SettingsWorkspaceMembersTeamTab = () => {
           </DropdownContent>
         </DropdownRoot>
       </div>
-      <StyledTableContainer hasMoreRows={hasNextPage}>
-        <Table>
+      <>
+        <Table
+          {...stylex.props(
+            styles.table,
+            hasNextPage === true && styles.tableWithMoreRows,
+          )}
+        >
           <TableRow
             gridAutoColumns="150px 1fr 40px"
             mobileGridAutoColumns="100px 1fr 32px"
@@ -295,7 +298,7 @@ export const SettingsWorkspaceMembersTeamTab = () => {
             </TableRow>
           )}
         </Table>
-      </StyledTableContainer>
+      </>
     </Section.Root>
   );
 };

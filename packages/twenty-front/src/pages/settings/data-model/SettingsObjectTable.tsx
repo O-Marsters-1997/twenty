@@ -19,7 +19,6 @@ import { TableRow } from '@/ui/layout/table/components/TableRow';
 import { useSortedArray } from '@/ui/layout/table/hooks/useSortedArray';
 import { isAdvancedModeEnabledState } from '@/ui/navigation/navigation-drawer/states/isAdvancedModeEnabledState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useMemo, useState } from 'react';
 import { SettingsPath } from 'twenty-shared/types';
@@ -28,7 +27,7 @@ import { SearchInput } from 'twenty-ui/components/input';
 import { Dropdown } from 'twenty-ui/components/navigation';
 import { SettingsRow } from 'twenty-ui/components/settings';
 import { IconArchive, IconChevronRight, IconSettings } from 'twenty-ui/icon';
-import { MOBILE_VIEWPORT, useTheme } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import { GET_SETTINGS_OBJECT_TABLE_METADATA } from '~/pages/settings/data-model/constants/SettingsObjectTableMetadata';
 import type { SettingsObjectTableItem } from '~/pages/settings/data-model/types/SettingsObjectTableItem';
 import { normalizeSearchText } from 'twenty-ui/utilities';
@@ -37,6 +36,12 @@ import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 import { media } from 'twenty-ui/theme/constants.stylex';
 
 const styles = stylex.create({
+  scrollableContent: (mobileMinWidth: string) => ({
+    minWidth: {
+      default: null,
+      [media.mobile]: mobileMinWidth,
+    },
+  }),
   iconChevronRightContainer: {
     color: fontColor['--t-font-color-tertiary'],
   },
@@ -48,12 +53,6 @@ const styles = stylex.create({
     WebkitOverflowScrolling: { default: null, [media.mobile]: 'touch' },
   },
 });
-
-const StyledScrollableContent = styled.div`
-  @media (max-width: ${MOBILE_VIEWPORT}px) {
-    min-width: ${SETTINGS_OBJECT_TABLE_ROW_MOBILE_MIN_WIDTH};
-  }
-`;
 
 export const SettingsObjectTable = ({
   objectMetadataItems,
@@ -189,7 +188,7 @@ export const SettingsObjectTable = ({
       )}
 
       <div {...stylex.props(styles.scrollWrapper)}>
-        <StyledScrollableContent>
+        <div {...stylex.props(styles.scrollableContent(SETTINGS_OBJECT_TABLE_ROW_MOBILE_MIN_WIDTH))}>
           <Table>
             <TableRow
               gridTemplateColumns={
@@ -251,7 +250,7 @@ export const SettingsObjectTable = ({
               </TableBody>
             </StyledSettingsDataModelTableBodyContainer>
           </Table>
-        </StyledScrollableContent>
+        </div>
       </div>
     </>
   );

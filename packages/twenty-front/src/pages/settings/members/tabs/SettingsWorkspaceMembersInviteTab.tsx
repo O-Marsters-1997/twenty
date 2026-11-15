@@ -14,7 +14,6 @@ import { useResendWorkspaceInvitation } from '@/workspace-invitation/hooks/useRe
 import { WorkspaceInviteLink } from '@/workspace/components/WorkspaceInviteLink';
 import { WorkspaceInviteTeam } from '@/workspace/components/WorkspaceInviteTeam';
 import { useQuery } from '@apollo/client/react';
-import { styled } from '@linaria/react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { isNonEmptyArray } from '@sniptt/guards';
 import { formatDistanceToNow } from 'date-fns';
@@ -30,9 +29,14 @@ import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 import { GetWorkspaceInvitationsDocument } from '~/generated-metadata/graphql';
 import { dateLocaleState } from '@/localization/states/dateLocaleState';
 import * as stylex from '@stylexjs/stylex';
-import { spacing } from 'twenty-ui/theme/tokens.stylex';
+import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
+  table: {
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
+  },
   buttonContainer: {
     alignItems: 'center',
     display: 'flex',
@@ -59,12 +63,6 @@ const styles = stylex.create({
     paddingTop: spacing['--t-spacing-2'],
   },
 });
-
-const StyledTableContainer = styled.div`
-  > div {
-    border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  }
-`;
 
 export const SettingsWorkspaceMembersInviteTab = () => {
   const theme = useTheme();
@@ -141,8 +139,8 @@ export const SettingsWorkspaceMembersInviteTab = () => {
         />
         <WorkspaceInviteTeam roles={roles} />
         {isNonEmptyArray(workspaceInvitations) && (
-          <StyledTableContainer>
-            <Table>
+          <>
+            <Table {...stylex.props(styles.table)}>
               <TableRow
                 gridAutoColumns="2fr 1fr 1fr 80px"
                 mobileGridAutoColumns="2fr 1fr 1fr 72px"
@@ -234,7 +232,7 @@ export const SettingsWorkspaceMembersInviteTab = () => {
                 ))}
               </div>
             </Table>
-          </StyledTableContainer>
+          </>
         )}
       </Section.Root>
       <Section.Root>
