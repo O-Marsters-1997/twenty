@@ -30,10 +30,8 @@ const styles = stylex.create({
     cursor: 'pointer',
   },
   body: {
-    paddingTop: spacing['--t-spacing-0'],
-    paddingRight: spacing['--t-spacing-2'],
-    paddingBottom: spacing['--t-spacing-0'],
-    paddingLeft: spacing['--t-spacing-2'],
+    paddingBlock: spacing['--t-spacing-0'],
+    paddingInline: spacing['--t-spacing-2'],
   },
 });
 

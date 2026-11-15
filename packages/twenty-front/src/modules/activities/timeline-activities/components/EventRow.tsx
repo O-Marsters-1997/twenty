@@ -65,7 +65,7 @@ const styles = stylex.create({
     whiteSpace: 'nowrap',
   },
   verticalLine: {
-    background: borderColor['--t-border-color-light'],
+    backgroundColor: borderColor['--t-border-color-light'],
     flex: '1',
     width: '2px',
     zIndex: '2',

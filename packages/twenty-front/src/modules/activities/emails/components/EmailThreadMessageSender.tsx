@@ -22,10 +22,8 @@ const styles = stylex.create({
   unknownSender: {
     color: fontColor['--t-font-color-tertiary'],
     fontSize: fontSize['--t-font-size-md'],
-    paddingTop: spacing['--t-spacing-1'],
-    paddingRight: spacing['--t-spacing-1'],
-    paddingBottom: spacing['--t-spacing-1'],
-    paddingLeft: spacing['--t-spacing-1'],
+    paddingBlock: spacing['--t-spacing-1'],
+    paddingInline: spacing['--t-spacing-1'],
   },
   threadMessageSentAt: {
     alignItems: 'flex-end',

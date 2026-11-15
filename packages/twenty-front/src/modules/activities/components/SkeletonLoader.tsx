@@ -12,10 +12,8 @@ const styles = stylex.create({
     flexDirection: 'column',
     flexWrap: 'wrap',
     gap: spacing['--t-spacing-4'],
-    paddingTop: spacing['--t-spacing-8'],
-    paddingRight: spacing['--t-spacing-8'],
-    paddingBottom: spacing['--t-spacing-8'],
-    paddingLeft: spacing['--t-spacing-8'],
+    paddingBlock: spacing['--t-spacing-8'],
+    paddingInline: spacing['--t-spacing-8'],
     width: '100%',
   },
   skeletonSubSection: {

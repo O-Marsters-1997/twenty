@@ -64,7 +64,7 @@ const styles = stylex.create({
   },
   loadingContainer: {
     alignItems: 'center',
-    background: background['--t-background-primary'],
+    backgroundColor: background['--t-background-primary'],
     display: 'flex',
     height: 'calc(80vh / var(--t-zoom, 1))',
     justifyContent: 'center',

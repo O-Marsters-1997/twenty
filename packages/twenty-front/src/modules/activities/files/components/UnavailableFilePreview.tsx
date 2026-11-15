@@ -19,10 +19,8 @@ const styles = stylex.create({
     gap: spacing['--t-spacing-4'],
     height: '100%',
     justifyContent: 'center',
-    paddingTop: spacing['--t-spacing-8'],
-    paddingRight: spacing['--t-spacing-8'],
-    paddingBottom: spacing['--t-spacing-8'],
-    paddingLeft: spacing['--t-spacing-8'],
+    paddingBlock: spacing['--t-spacing-8'],
+    paddingInline: spacing['--t-spacing-8'],
     textAlign: 'center',
   },
   title: {

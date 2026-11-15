@@ -34,17 +34,15 @@ import {
 
 const styles = stylex.create({
   subjectInput: {
-    background: 'transparent',
+    backgroundColor: 'transparent',
     borderStyle: 'none',
     color: fontColor['--t-font-color-primary'],
     fontFamily: 'inherit',
     fontSize: fontSize['--t-font-size-md'],
     fontWeight: fontWeight['--t-font-weight-regular'],
     outline: 'none',
-    paddingTop: '0',
-    paddingRight: '0',
-    paddingBottom: '0',
-    paddingLeft: '0',
+    paddingBlock: '0',
+    paddingInline: '0',
     width: '100%',
   },
   warningContainer: {

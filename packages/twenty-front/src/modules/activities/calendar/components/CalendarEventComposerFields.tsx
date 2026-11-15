@@ -45,10 +45,8 @@ const styles = stylex.create({
     display: 'flex',
     flexDirection: 'column',
     gap: spacing['--t-spacing-2'],
-    paddingTop: spacing['--t-spacing-2'],
-    paddingRight: spacing['--t-spacing-2'],
-    paddingBottom: spacing['--t-spacing-2'],
-    paddingLeft: spacing['--t-spacing-2'],
+    paddingBlock: spacing['--t-spacing-2'],
+    paddingInline: spacing['--t-spacing-2'],
   },
 });
 

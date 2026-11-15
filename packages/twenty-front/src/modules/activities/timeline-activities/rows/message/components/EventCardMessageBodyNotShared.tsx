@@ -14,7 +14,8 @@ import {
 const styles = stylex.create({
   emailBodyNotSharedContainer: {
     alignItems: 'center',
-    background: backgroundTransparent['--t-background-transparent-lighter'],
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
     borderWidth: '1px',
     borderStyle: 'solid',
     borderColor: borderColor['--t-border-color-light'],

@@ -16,10 +16,8 @@ const styles = stylex.create({
   eventRowDate: {
     display: { default: null, [media.mobile]: 'none' },
     color: fontColor['--t-font-color-tertiary'],
-    paddingTop: '0',
-    paddingRight: spacing['--t-spacing-1'],
-    paddingBottom: '0',
-    paddingLeft: spacing['--t-spacing-1'],
+    paddingBlock: '0',
+    paddingInline: spacing['--t-spacing-1'],
     whiteSpace: 'nowrap',
   },
 });

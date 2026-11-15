@@ -22,7 +22,7 @@ type EventsGroupProps = {
 
 const styles = stylex.create({
   activityGroupBar: {
-    background: background['--t-background-secondary'],
+    backgroundColor: background['--t-background-secondary'],
     borderColor: borderColor['--t-border-color-light'],
     borderRadius: borderRadius['--t-border-radius-md'],
     borderStyle: 'solid',
@@ -55,7 +55,7 @@ const styles = stylex.create({
     gap: spacing['--t-spacing-4'],
   },
   monthSeperatorLine: {
-    background: borderColor['--t-border-color-light'],
+    backgroundColor: borderColor['--t-border-color-light'],
     borderRadius: borderRadius['--t-border-radius-pill'],
     cornerShape: 'round',
     flex: '1 0 0',

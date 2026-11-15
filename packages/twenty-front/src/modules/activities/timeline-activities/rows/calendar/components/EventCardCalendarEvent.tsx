@@ -77,10 +77,8 @@ const styles = stylex.create({
     flexDirection: 'column',
     gap: spacing['--t-spacing-1'],
     justifyContent: 'center',
-    paddingTop: spacing['--t-spacing-1'],
-    paddingRight: spacing['--t-spacing-1'],
-    paddingBottom: spacing['--t-spacing-1'],
-    paddingLeft: spacing['--t-spacing-1'],
+    paddingBlock: spacing['--t-spacing-1'],
+    paddingInline: spacing['--t-spacing-1'],
   },
   calendarEventDateCardMonth: {
     color: fontColor['--t-font-color-danger'],

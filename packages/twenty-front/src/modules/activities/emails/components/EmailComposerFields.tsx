@@ -57,10 +57,8 @@ const styles = stylex.create({
     cursor: 'pointer',
     flexShrink: '0',
     fontSize: fontSize['--t-font-size-md'],
-    paddingTop: '0',
-    paddingRight: spacing['--t-spacing-1'],
-    paddingBottom: '0',
-    paddingLeft: spacing['--t-spacing-1'],
+    paddingBlock: '0',
+    paddingInline: spacing['--t-spacing-1'],
     outline: {
       default: null,
       ':focus-visible': `2px solid ${color['--t-color-blue']}`,
@@ -72,19 +70,16 @@ const styles = stylex.create({
     flex: '1',
     flexDirection: 'column',
     minHeight: '0',
-    paddingTop: spacing['--t-spacing-2'],
-    paddingRight: spacing['--t-spacing-3'],
-    paddingBottom: spacing['--t-spacing-2'],
-    paddingLeft: spacing['--t-spacing-3'],
+    paddingBlock: spacing['--t-spacing-2'],
+    paddingInline: spacing['--t-spacing-3'],
   },
   attachments: {
     display: 'flex',
     flexDirection: 'column',
     gap: spacing['--t-spacing-2'],
     paddingTop: '0',
-    paddingRight: spacing['--t-spacing-3'],
     paddingBottom: spacing['--t-spacing-2'],
-    paddingLeft: spacing['--t-spacing-3'],
+    paddingInline: spacing['--t-spacing-3'],
   },
   attachAction: {
     alignItems: 'center',
@@ -107,10 +102,8 @@ const styles = stylex.create({
   recipientLimitWarning: {
     color: color['--t-color-red'],
     fontSize: fontSize['--t-font-size-xs'],
-    paddingTop: spacing['--t-spacing-1'],
-    paddingRight: spacing['--t-spacing-3'],
-    paddingBottom: spacing['--t-spacing-1'],
-    paddingLeft: spacing['--t-spacing-3'],
+    paddingBlock: spacing['--t-spacing-1'],
+    paddingInline: spacing['--t-spacing-3'],
   },
 });
 

@@ -18,10 +18,8 @@ const styles = stylex.create({
     display: 'flex',
     flexDirection: 'column',
     flexShrink: '0',
-    paddingTop: spacing['--t-spacing-3'],
-    paddingRight: '0',
-    paddingBottom: spacing['--t-spacing-3'],
-    paddingLeft: '0',
+    paddingBlock: spacing['--t-spacing-3'],
+    paddingInline: '0',
     width: '100%',
   },
   rows: {

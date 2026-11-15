@@ -15,7 +15,8 @@ import {
 const styles = stylex.create({
   container: {
     alignItems: 'center',
-    background: backgroundTransparent['--t-background-transparent-lighter'],
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
     borderWidth: '1px',
     borderStyle: 'solid',
     borderColor: borderColor['--t-border-color-light'],
@@ -27,10 +28,8 @@ const styles = stylex.create({
     fontWeight: fontWeight['--t-font-weight-medium'],
     gap: spacing['--t-spacing-1'],
     height: spacing['--t-spacing-6'],
-    paddingTop: spacing['--t-spacing-0'],
-    paddingRight: spacing['--t-spacing-1'],
-    paddingBottom: spacing['--t-spacing-0'],
-    paddingLeft: spacing['--t-spacing-1'],
+    paddingBlock: spacing['--t-spacing-0'],
+    paddingInline: spacing['--t-spacing-1'],
     width: '100%',
   },
 });

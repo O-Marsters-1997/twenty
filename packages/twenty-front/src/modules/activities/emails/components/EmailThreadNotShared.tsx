@@ -18,7 +18,8 @@ import { MessageChannelVisibility } from '~/generated/graphql';
 const styles = stylex.create({
   container: {
     alignItems: 'center',
-    background: backgroundTransparent['--t-background-transparent-lighter'],
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
     borderColor: borderColor['--t-border-color-light'],
     borderRadius: borderRadius['--t-border-radius-sm'],
     borderStyle: 'solid',

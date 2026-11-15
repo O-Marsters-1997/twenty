@@ -23,7 +23,7 @@ import {
 const styles = stylex.create({
   card: {
     alignItems: 'flex-start',
-    background: background['--t-background-secondary'],
+    backgroundColor: background['--t-background-secondary'],
     borderWidth: '1px',
     borderStyle: 'solid',
     borderColor: borderColor['--t-border-color-medium'],
@@ -44,10 +44,8 @@ const styles = stylex.create({
     gap: spacing['--t-spacing-2'],
     height: 'calc(100% - 45px)',
     justifyContent: 'start',
-    paddingTop: spacing['--t-spacing-4'],
-    paddingRight: spacing['--t-spacing-4'],
-    paddingBottom: spacing['--t-spacing-4'],
-    paddingLeft: spacing['--t-spacing-4'],
+    paddingBlock: spacing['--t-spacing-4'],
+    paddingInline: spacing['--t-spacing-4'],
     width: `calc(100% - ${spacing['--t-spacing-8']})`,
   },
   noteTitle: {
@@ -74,10 +72,8 @@ const styles = stylex.create({
     flexDirection: 'row',
     gap: spacing['--t-spacing-1'],
     justifyContent: 'center',
-    paddingTop: spacing['--t-spacing-2'],
-    paddingRight: spacing['--t-spacing-2'],
-    paddingBottom: spacing['--t-spacing-2'],
-    paddingLeft: spacing['--t-spacing-2'],
+    paddingBlock: spacing['--t-spacing-2'],
+    paddingInline: spacing['--t-spacing-2'],
     width: `calc(100% - ${spacing['--t-spacing-4']})`,
   },
 });

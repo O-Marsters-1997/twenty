@@ -73,10 +73,8 @@ const styles = stylex.create({
   receivedAt: {
     fontSize: fontSize['--t-font-size-sm'],
     fontWeight: fontWeight['--t-font-weight-regular'],
-    paddingTop: spacing['--t-spacing-0'],
-    paddingRight: spacing['--t-spacing-1'],
-    paddingBottom: spacing['--t-spacing-0'],
-    paddingLeft: spacing['--t-spacing-1'],
+    paddingBlock: spacing['--t-spacing-0'],
+    paddingInline: spacing['--t-spacing-1'],
   },
 });
 

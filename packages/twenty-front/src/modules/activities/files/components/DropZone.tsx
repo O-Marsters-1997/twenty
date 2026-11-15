@@ -19,7 +19,7 @@ import {
 const styles = stylex.create({
   container: {
     alignItems: 'center',
-    background: background['--t-background-secondary'],
+    backgroundColor: background['--t-background-secondary'],
     borderWidth: '2px',
     borderStyle: 'dashed',
     borderColor: borderColor['--t-border-color-strong'],

@@ -35,10 +35,8 @@ const styles = stylex.create({
     display: 'flex',
     gap: spacing['--t-spacing-1'],
     height: '20px',
-    paddingTop: spacing['--t-spacing-1'],
-    paddingRight: spacing['--t-spacing-1'],
-    paddingBottom: spacing['--t-spacing-1'],
-    paddingLeft: spacing['--t-spacing-1'],
+    paddingBlock: spacing['--t-spacing-1'],
+    paddingInline: spacing['--t-spacing-1'],
     whiteSpace: 'nowrap',
   },
 });
@@ -53,11 +51,9 @@ type ParticipantChipVariant = 'default' | 'bold';
 export const ParticipantChip = ({
   participant,
   variant = 'default',
-  className,
 }: {
   participant: any;
   variant?: ParticipantChipVariant;
-  className?: string;
 }) => {
   const { person, workspaceMember } = participant;
 
@@ -69,7 +65,7 @@ export const ParticipantChip = ({
   const avatarUrl = person?.avatarUrl ?? workspaceMember?.avatarUrl ?? '';
 
   return (
-    <StyledContainer className={className}>
+    <StyledContainer>
       {person ? (
         <RecordChip
           objectNameSingular={CoreObjectNameSingular.Person}
