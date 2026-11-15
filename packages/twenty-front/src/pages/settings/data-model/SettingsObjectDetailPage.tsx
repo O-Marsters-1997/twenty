@@ -11,7 +11,6 @@ import { ObjectLayout } from '@/settings/data-model/object-details/components/ta
 import { SettingsPageLayout } from '@/settings/components/layout/SettingsPageLayout';
 import { SettingsTabBar } from '@/settings/components/layout/SettingsTabBar';
 import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
-import { styled } from '@linaria/react';
 import {
   AppPath,
   CoreObjectNameSingular,
@@ -32,12 +31,15 @@ import {
 import { useNavigateApp } from '~/hooks/useNavigateApp';
 import { SETTINGS_OBJECT_DETAIL_TABS } from '~/pages/settings/data-model/constants/SettingsObjectDetailTabs';
 import { updatedObjectNamePluralState } from '@/settings/data-model/object-details/states/updatedObjectNamePluralState';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledContentContainer = styled.div`
-  flex: 1;
-  padding-left: 0;
-  width: 100%;
-`;
+const styles = stylex.create({
+  contentContainer: {
+    flex: '1',
+    paddingLeft: '0',
+    width: '100%',
+  },
+});
 
 export const SettingsObjectDetailPage = () => {
   const navigateApp = useNavigateApp();
@@ -151,9 +153,9 @@ export const SettingsObjectDetailPage = () => {
       }
     >
       <SettingsPageContainer>
-        <StyledContentContainer>
+        <div {...stylex.props(styles.contentContainer)}>
           {renderActiveTabContent()}
-        </StyledContentContainer>
+        </div>
       </SettingsPageContainer>
     </SettingsPageLayout>
   );

@@ -7,14 +7,21 @@ import {
   themeCssVariables,
 } from 'twenty-ui/theme';
 import { type ColorScheme } from '@/ui/theme/types/ColorScheme';
+import * as stylex from '@stylexjs/stylex';
+import { borderRadius } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledPreview = styled.div`
-  border-radius: ${themeCssVariables.border.radius.md};
-  display: flex;
-  height: 80px;
-  overflow: hidden;
-  width: 100%;
-`;
+const styles = stylex.create({
+  preview: {
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    display: 'flex',
+    height: '80px',
+    overflow: 'hidden',
+    width: '100%',
+  },
+});
 
 const StyledSegment = styled.div`
   align-items: flex-end;
@@ -74,7 +81,7 @@ export const SettingsAppearancePreview = ({
   const segments = colorScheme === 'System' ? ['Light', 'Dark'] : [colorScheme];
 
   return (
-    <StyledPreview aria-hidden>
+    <div aria-hidden {...stylex.props(styles.preview)}>
       {segments.map((segment) => {
         const grayScale =
           segment === 'Dark' ? GRAY_SCALE_DARK : GRAY_SCALE_LIGHT;
@@ -95,6 +102,6 @@ export const SettingsAppearancePreview = ({
           </StyledSegment>
         );
       })}
-    </StyledPreview>
+    </div>
   );
 };

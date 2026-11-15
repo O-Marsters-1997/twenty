@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { TintedIconTile } from 'twenty-ui/components/data-display';
 import { LightIconButton } from 'twenty-ui/components/input';
@@ -15,15 +14,18 @@ import { BackgroundMockTable } from '@/sign-in-background-mock/components/Backgr
 import { BackgroundMockViewBar } from '@/sign-in-background-mock/components/BackgroundMockViewBar';
 import { PageCardHeader } from '@/ui/layout/page/components/PageCardHeader';
 import { PageCardLayout } from '@/ui/layout/page/components/PageCardLayout';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledTableContainer = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-height: 0;
-  overflow: hidden;
-  width: 100%;
-`;
+const styles = stylex.create({
+  tableContainer: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    minHeight: '0',
+    overflow: 'hidden',
+    width: '100%',
+  },
+});
 
 export const BackgroundMockPage = () => {
   const theme = useTheme();
@@ -67,9 +69,9 @@ export const BackgroundMockPage = () => {
       secondaryBar={<BackgroundMockViewBar />}
       showInformationBanner={false}
     >
-      <StyledTableContainer>
+      <div {...stylex.props(styles.tableContainer)}>
         <BackgroundMockTable />
-      </StyledTableContainer>
+      </div>
     </PageCardLayout>
   );
 };

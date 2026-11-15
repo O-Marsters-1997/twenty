@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 
 import { SkeletonLine } from '@/ui/feedback/skeleton/components/SkeletonLine';
@@ -10,12 +9,14 @@ import { TableRow } from '@/ui/layout/table/components/TableRow';
 import { SettingsPath } from 'twenty-shared/types';
 import { getSettingsPath } from 'twenty-shared/utils';
 import { IconChevronRight } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 
 import { SettingsSkillInactiveMenuDropDown } from '~/pages/settings/ai/components/SettingsSkillInactiveMenuDropDown';
 import { SETTINGS_SKILL_TABLE_METADATA } from '~/pages/settings/ai/constants/SettingsSkillTableMetadata';
 import { type SettingsSkillTableItem } from '~/pages/settings/ai/types/SettingsSkillTableItem';
 import { SettingsSkillTableRow } from './SettingsSkillTableRow';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsAgentSkillsTableProps = {
   skills: SettingsSkillTableItem[];
@@ -24,9 +25,11 @@ type SettingsAgentSkillsTableProps = {
   onDelete: (skillId: string) => void;
 };
 
-const StyledTableHeaderRowContainer = styled.div`
-  margin-bottom: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  tableHeaderRowContainer: {
+    marginBottom: spacing['--t-spacing-2'],
+  },
+});
 
 export const SettingsAgentSkillsTable = ({
   skills,
@@ -41,7 +44,7 @@ export const SettingsAgentSkillsTable = ({
 
   return (
     <Table>
-      <StyledTableHeaderRowContainer>
+      <div {...stylex.props(styles.tableHeaderRowContainer)}>
         <TableRow gridTemplateColumns="1fr 120px 36px">
           {SETTINGS_SKILL_TABLE_METADATA.fields.map(
             (settingsSkillTableMetadataField) => (
@@ -57,7 +60,7 @@ export const SettingsAgentSkillsTable = ({
           )}
           <TableHeader />
         </TableRow>
-      </StyledTableHeaderRowContainer>
+      </div>
       {showSkeleton
         ? Array.from({ length: 3 }).map((_, index) => (
             <SkeletonLine

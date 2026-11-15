@@ -5,9 +5,10 @@ import { isNonEmptyString } from '@sniptt/guards';
 import { AppPath } from 'twenty-shared/types';
 import { getImageAbsoluteURI, isDefined } from 'twenty-shared/utils';
 import { Avatar } from 'twenty-ui/primitives/data-display';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { REACT_APP_SERVER_BASE_URL } from '~/config';
 import { useRedirectToDefaultDomain } from '@/domain-manager/hooks/useRedirectToDefaultDomain';
+import * as stylex from '@stylexjs/stylex';
+import { background, borderRadius, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type LogoProps = {
   primaryLogo?: string | null;
@@ -17,34 +18,38 @@ type LogoProps = {
   to?: AppPath;
 };
 
-const StyledContainer = styled.div`
-  height: ${themeCssVariables.spacing[12]};
-  margin-bottom: ${themeCssVariables.spacing[4]};
-  margin-top: ${themeCssVariables.spacing[4]};
-
-  position: relative;
-  width: ${themeCssVariables.spacing[12]};
-`;
-
-const StyledSecondaryLogo = styled.img`
-  border-radius: ${themeCssVariables.border.radius.xs};
-  height: ${themeCssVariables.spacing[6]};
-  width: ${themeCssVariables.spacing[6]};
-`;
-
-const StyledSecondaryLogoContainer = styled.div`
-  align-items: center;
-  background-color: ${themeCssVariables.background.primary};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  bottom: calc(-1 * ${themeCssVariables.spacing[3]});
-  display: flex;
-  height: ${themeCssVariables.spacing[7]};
-  justify-content: center;
-
-  position: absolute;
-  right: calc(-1 * ${themeCssVariables.spacing[3]});
-  width: ${themeCssVariables.spacing[7]};
-`;
+const styles = stylex.create({
+  container: {
+    height: spacing['--t-spacing-12'],
+    marginBottom: spacing['--t-spacing-4'],
+    marginTop: spacing['--t-spacing-4'],
+    position: 'relative',
+    width: spacing['--t-spacing-12'],
+  },
+  secondaryLogo: {
+    borderTopLeftRadius: borderRadius['--t-border-radius-xs'],
+    borderTopRightRadius: borderRadius['--t-border-radius-xs'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-xs'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-xs'],
+    height: spacing['--t-spacing-6'],
+    width: spacing['--t-spacing-6'],
+  },
+  secondaryLogoContainer: {
+    alignItems: 'center',
+    backgroundColor: background['--t-background-primary'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    bottom: `calc(-1 * ${spacing['--t-spacing-3']})`,
+    display: 'flex',
+    height: spacing['--t-spacing-7'],
+    justifyContent: 'center',
+    position: 'absolute',
+    right: `calc(-1 * ${spacing['--t-spacing-3']})`,
+    width: spacing['--t-spacing-7'],
+  },
+});
 
 const StyledPrimaryLogo = styled.div`
   background-size: cover;
@@ -77,7 +82,7 @@ export const Logo = ({
   const isUsingDefaultLogo = !isDefined(primaryLogo);
 
   return (
-    <StyledContainer onClick={() => onClick?.()}>
+    <div onClick={() => onClick?.()} {...stylex.props(styles.container)}>
       {isUsingDefaultLogo ? (
         <UndecoratedLink to={to} onClick={() => redirectToDefaultDomain()}>
           <StyledPrimaryLogo
@@ -90,21 +95,21 @@ export const Logo = ({
         />
       )}
       {isDefined(secondaryLogoUrl) ? (
-        <StyledSecondaryLogoContainer>
-          <StyledSecondaryLogo src={secondaryLogoUrl} />
-        </StyledSecondaryLogoContainer>
+        <div {...stylex.props(styles.secondaryLogoContainer)}>
+          <img src={secondaryLogoUrl} {...stylex.props(styles.secondaryLogo)} />
+        </div>
       ) : (
         isDefined(placeholder) && (
-          <StyledSecondaryLogoContainer>
+          <div {...stylex.props(styles.secondaryLogoContainer)}>
             <Avatar
               size="lg"
               name={placeholder}
               shape="square"
               colorSeed={getWorkspaceAvatarColorSeed(placeholder)}
             />
-          </StyledSecondaryLogoContainer>
+          </div>
         )
       )}
-    </StyledContainer>
+    </div>
   );
 };

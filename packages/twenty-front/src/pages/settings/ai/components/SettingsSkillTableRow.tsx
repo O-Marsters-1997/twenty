@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { type ReactNode } from 'react';
 
 import { SettingsItemTypeTag } from '@/settings/components/SettingsItemTypeTag';
@@ -9,6 +8,7 @@ import { useIcons } from 'twenty-ui/icon';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 
 import { type Skill } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
 
 export type SettingsSkillTableRowProps = {
   skill: Skill;
@@ -16,11 +16,13 @@ export type SettingsSkillTableRowProps = {
   link?: string;
 };
 
-const StyledIconContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-shrink: 0;
-`;
+const styles = stylex.create({
+  iconContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexShrink: '0',
+  },
+});
 
 export const SettingsSkillTableRow = ({
   skill,
@@ -44,9 +46,9 @@ export const SettingsSkillTableRow = ({
         minWidth="0"
         overflow="hidden"
       >
-        <StyledIconContainer>
+        <div {...stylex.props(styles.iconContainer)}>
           <Icon size={theme.icon.size.md} color={theme.color.blue9} />
-        </StyledIconContainer>
+        </div>
         <OverflowingTextWithTooltip text={skill.label} />
       </TableCell>
       <TableCell>

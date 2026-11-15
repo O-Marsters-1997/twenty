@@ -7,7 +7,6 @@ import { UndecoratedLink } from '@/ui/navigation/link/components/UndecoratedLink
 import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
 import { CombinedGraphQLErrors } from '@apollo/client';
 import { useMutation } from '@apollo/client/react';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { Fragment, useState } from 'react';
 import { SettingsPath } from 'twenty-shared/types';
@@ -15,15 +14,19 @@ import { getSettingsPath } from 'twenty-shared/utils';
 import { useToast } from 'twenty-ui/components/feedback';
 import { Section } from 'twenty-ui/components/layout';
 import { IconSparkles } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import { useDebouncedCallback } from 'use-debounce';
 import { UpdateWorkspaceDocument } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledInstructionsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[4]};
-`;
+const styles = stylex.create({
+  instructionsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-4'],
+  },
+});
 
 const MCP_DEEP_LINK = `${getSettingsPath(SettingsPath.ApiWebhooks)}#mcp`;
 
@@ -90,7 +93,7 @@ export const SettingsAiOverviewTab = () => {
           title={t`Workspace Instructions`}
           description={t`Custom instructions appended to every system prompt`}
         />
-        <StyledInstructionsContainer>
+        <div {...stylex.props(styles.instructionsContainer)}>
           <FormAdvancedTextFieldInput
             key={originalInstructions}
             readonly={false}
@@ -108,7 +111,7 @@ export const SettingsAiOverviewTab = () => {
             placeholder={t`E.g., "We are a B2B SaaS company. Always use formal language..."`}
             minHeight={150}
           />
-        </StyledInstructionsContainer>
+        </div>
       </Section.Root>
     </Fragment>
   );

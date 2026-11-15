@@ -16,13 +16,23 @@ import { TableHeader } from '@/ui/layout/table/components/TableHeader';
 import { TableRow } from '@/ui/layout/table/components/TableRow';
 import { TooltipDelay } from '@/ui/layout/tooltip/constants/TooltipDelay';
 import { formatNumber } from '@/localization/utils/formatNumber';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const GRID_TEMPLATE_COLUMNS = '1fr 1fr 1fr';
 const EMPTY_VALUE = '–';
 
-const StyledInheritedValue = styled.span`
-  color: ${themeCssVariables.font.color.light};
-`;
+const styles = stylex.create({
+  inheritedValue: {
+    color: fontColor['--t-font-color-light'],
+  },
+  mode: {
+    alignItems: 'center',
+    display: 'inline-flex',
+    gap: spacing['--t-spacing-2'],
+    whiteSpace: 'nowrap',
+  },
+});
 
 const renderBenchmarkValue = ({
   tier,
@@ -36,7 +46,7 @@ const renderBenchmarkValue = ({
       content={t`Not measured at this effort yet. Showing the base model's reading.`}
       delay={TooltipDelay.shortDelay}
     >
-      <StyledInheritedValue>{value}</StyledInheritedValue>
+      <span {...stylex.props(styles.inheritedValue)}>{value}</span>
     </Tooltip>
   ) : (
     value
@@ -51,13 +61,6 @@ const formatIntelligence = (tier: ResolvedAiModelTier) =>
   isDefined(tier.model?.intelligenceIndex)
     ? formatNumber(tier.model.intelligenceIndex, { decimals: 0 })
     : EMPTY_VALUE;
-
-const StyledMode = styled.span`
-  align-items: center;
-  display: inline-flex;
-  gap: ${themeCssVariables.spacing[2]};
-  white-space: nowrap;
-`;
 
 const StyledTable = styled(Table)`
   border-bottom: 1px solid ${themeCssVariables.border.color.light};
@@ -102,10 +105,10 @@ export const SettingsAiModelTiersPreview = () => {
                         : t`Automatically selected by Twenty for this mode.`
                   }
                 >
-                  <StyledMode tabIndex={0}>
+                  <span tabIndex={0} {...stylex.props(styles.mode)}>
                     <AiModelTierIndicator tier={tier.tier} />
                     {tier.label}
-                  </StyledMode>
+                  </span>
                 </Tooltip>
               </TableCell>
               <TableCell align="right">

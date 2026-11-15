@@ -18,6 +18,8 @@ import { pageLayoutPersistedComponentState } from '@/page-layout/states/pageLayo
 import { SaveAndCancelButtons } from '@/settings/components/SaveAndCancelButtons/SaveAndCancelButtons';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { PageLayoutType } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const StyledAnimatedContainer = styled(motion.div)`
   flex-shrink: 0;
@@ -48,28 +50,28 @@ const StyledContainer = styled.div`
   }
 `;
 
-const StyledLeftSection = styled.div`
-  align-items: center;
-  display: flex;
-  flex: 1;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledTitle = styled.span`
-  align-items: center;
-  display: flex;
-  flex: 1;
-  gap: ${themeCssVariables.spacing[2]};
-  justify-content: center;
-  text-align: center;
-`;
-
-const StyledRightSection = styled.div`
-  align-items: center;
-  display: flex;
-  flex: 1;
-  justify-content: flex-end;
-`;
+const styles = stylex.create({
+  leftSection: {
+    alignItems: 'center',
+    display: 'flex',
+    flex: '1',
+    gap: spacing['--t-spacing-2'],
+  },
+  title: {
+    alignItems: 'center',
+    display: 'flex',
+    flex: '1',
+    gap: spacing['--t-spacing-2'],
+    justifyContent: 'center',
+    textAlign: 'center',
+  },
+  rightSection: {
+    alignItems: 'center',
+    display: 'flex',
+    flex: '1',
+    justifyContent: 'flex-end',
+  },
+});
 
 const LayoutCustomizationBarContent = () => {
   const theme = useTheme();
@@ -110,16 +112,16 @@ const LayoutCustomizationBarContent = () => {
       }}
     >
       <StyledContainer data-globally-prevent-click-outside="true">
-        <StyledLeftSection>
+        <div {...stylex.props(styles.leftSection)}>
           {isDefined(recordPageLayoutObject) && (
             <LayoutCustomizationBarMenuDropdown />
           )}
-        </StyledLeftSection>
-        <StyledTitle>
+        </div>
+        <span {...stylex.props(styles.title)}>
           <IconPaint size={theme.icon.size.md} />
           {title}
-        </StyledTitle>
-        <StyledRightSection>
+        </span>
+        <div {...stylex.props(styles.rightSection)}>
           <SaveAndCancelButtons
             onSave={save}
             onCancel={cancel}
@@ -129,7 +131,7 @@ const LayoutCustomizationBarContent = () => {
             inverted
             saveIcon={IconCheck}
           />
-        </StyledRightSection>
+        </div>
       </StyledContainer>
       {isDefined(recordPageLayoutObject) && isDefined(currentPageLayoutId) && (
         <LayoutCustomizationBarResetConfirmationModal

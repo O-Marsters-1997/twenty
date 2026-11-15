@@ -5,6 +5,7 @@ import { Avatar } from 'twenty-ui/primitives/data-display';
 import { themeCssVariables } from 'twenty-ui/theme';
 
 import { getAbsoluteImageUrl } from '~/utils/image/getAbsoluteImageUrl';
+import * as stylex from '@stylexjs/stylex';
 
 const DEFAULT_MAX_VISIBLE_MEMBER_AVATARS = 5;
 
@@ -25,11 +26,13 @@ type WorkspaceMemberAvatarStackProps = {
   workspaceMembers: WorkspaceMemberAvatarStackMember[];
 };
 
-const StyledAvatarStackContainer = styled.div`
-  align-items: center;
-  display: flex;
-  min-width: 0;
-`;
+const styles = stylex.create({
+  avatarStackContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    minWidth: '0',
+  },
+});
 
 const StyledAvatarContainer = styled.div`
   border: 1px solid ${themeCssVariables.background.secondary};
@@ -70,7 +73,7 @@ export const WorkspaceMemberAvatarStack = ({
 }: WorkspaceMemberAvatarStackProps) => {
   return (
     <AvatarGroup
-      render={<StyledAvatarStackContainer />}
+      render={<div {...stylex.props(styles.avatarStackContainer)} />}
       avatars={workspaceMembers.map((workspaceMember) => {
         const displayName = getWorkspaceMemberDisplayName({
           workspaceMember,

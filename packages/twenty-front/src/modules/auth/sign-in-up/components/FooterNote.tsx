@@ -5,6 +5,8 @@ import { getTwentyWebsiteUrl } from '@/auth/utils/getTwentyWebsiteUrl';
 import { useIsCurrentLocationOnAWorkspace } from '@/domain-manager/hooks/useIsCurrentLocationOnAWorkspace';
 import { ONBOARDING_CONTENT_BLOCK_WIDTH } from '@/onboarding/constants/OnboardingContentBlockWidth';
 import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor } from 'twenty-ui/theme/tokens.stylex';
 
 const StyledCopyContainer = styled.div`
   align-items: center;
@@ -52,9 +54,11 @@ const StyledLinksContainer = styled.div`
   }
 `;
 
-const StyledSeparator = styled.span`
-  color: ${themeCssVariables.font.color.tertiary};
-`;
+const styles = stylex.create({
+  separator: {
+    color: fontColor['--t-font-color-tertiary'],
+  },
+});
 
 type FooterNoteProps = {
   secondaryAgreement?: 'privacyPolicy' | 'dataProcessingAgreement';
@@ -109,7 +113,7 @@ export const FooterNote = ({
       >
         <Trans>Privacy Policy</Trans>
       </a>
-      <StyledSeparator>•</StyledSeparator>
+      <span {...stylex.props(styles.separator)}>•</span>
       <a
         href={getTwentyWebsiteUrl(i18n.locale, 'terms')}
         target="_blank"

@@ -1,9 +1,7 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { type ValidationRuleFieldDescriptor } from 'twenty-shared/types';
 import { Section } from 'twenty-ui/components/layout';
 import { IconAddressBook, useIcons } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/EnrichedObjectMetadataItem';
 import { SettingsDataModelPreviewFormCard } from '@/settings/data-model/components/SettingsDataModelPreviewFormCard';
@@ -14,15 +12,19 @@ import { SettingsValidationRuleNameForm } from '@/validation-rules/components/Se
 import { SettingsValidationRulePreview } from '@/validation-rules/components/SettingsValidationRulePreview';
 import { type ValidationRuleEditorField } from '@/validation-rules/types/ValidationRuleEditorField';
 import { type ValidationRuleFormValues } from '@/validation-rules/types/ValidationRuleFormValues';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const RECORD_LEVEL_OPTION_VALUE = 'record-level';
 
-const StyledRow = styled.div`
-  align-items: flex-end;
-  display: grid;
-  gap: ${themeCssVariables.spacing[4]};
-  grid-template-columns: 1fr 1fr;
-`;
+const styles = stylex.create({
+  row: {
+    alignItems: 'flex-end',
+    display: 'grid',
+    gap: spacing['--t-spacing-4'],
+    gridTemplateColumns: '1fr 1fr',
+  },
+});
 
 type SettingsValidationRuleFormProps = {
   objectMetadataItem: EnrichedObjectMetadataItem;
@@ -102,7 +104,7 @@ export const SettingsValidationRuleForm = ({
           title={t`Error`}
           description={t`What people see when the condition is false, and where it shows.`}
         />
-        <StyledRow>
+        <div {...stylex.props(styles.row)}>
           <SettingsTextInput
             instanceId="validation-rule-message"
             label={t`Message`}
@@ -125,7 +127,7 @@ export const SettingsValidationRuleForm = ({
               })
             }
           />
-        </StyledRow>
+        </div>
       </Section.Root>
     </>
   );

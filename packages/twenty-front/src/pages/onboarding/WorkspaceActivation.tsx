@@ -11,31 +11,32 @@ import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomState
 import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomState';
 import { useLoadCurrentUser } from '@/users/hooks/useLoadCurrentUser';
 import { useMutation } from '@apollo/client/react';
-import { styled } from '@linaria/react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { useCallback, useEffect, useRef } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { useToast } from 'twenty-ui/components/feedback';
 import { MainButton } from 'twenty-ui/components/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { ActivateWorkspaceDocument } from '~/generated-metadata/graphql';
 import { getToastOptionsFromError } from '@/error-handler/utils/getToastOptionsFromError';
+import * as stylex from '@stylexjs/stylex';
+import { background, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  align-items: center;
-  background: ${themeCssVariables.background.secondary};
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: center;
-  width: 100%;
-`;
-
-const StyledButtonContainer = styled.div`
-  margin-top: ${themeCssVariables.spacing[8]};
-  width: 200px;
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    background: background['--t-background-secondary'],
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  buttonContainer: {
+    marginTop: spacing['--t-spacing-8'],
+    width: '200px',
+  },
+});
 
 export const WorkspaceActivation = () => {
   const { t } = useLingui();
@@ -113,7 +114,7 @@ export const WorkspaceActivation = () => {
   }
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <OnboardingStepAnimatedItem index={0}>
         <Logo
           primaryLogo={
@@ -137,7 +138,7 @@ export const WorkspaceActivation = () => {
         </SubTitle>
       </OnboardingStepAnimatedItem>
       <OnboardingStepAnimatedItem index={3}>
-        <StyledButtonContainer>
+        <div {...stylex.props(styles.buttonContainer)}>
           <MainButton
             onClick={() => {
               void activate();
@@ -145,8 +146,8 @@ export const WorkspaceActivation = () => {
             disabled={isActivating}
             fullWidth
           >{t`Retry`}</MainButton>
-        </StyledButtonContainer>
+        </div>
       </OnboardingStepAnimatedItem>
-    </StyledContainer>
+    </div>
   );
 };

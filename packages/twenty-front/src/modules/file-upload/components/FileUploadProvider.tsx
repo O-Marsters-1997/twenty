@@ -2,13 +2,15 @@ import {
   FileUploadContext,
   type FileUploadOptions,
 } from '@/file-upload/contexts/FileUploadContext';
-import { styled } from '@linaria/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { isDefined } from 'twenty-shared/utils';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledFileInput = styled.input`
-  display: none;
-`;
+const styles = stylex.create({
+  fileInput: {
+    display: 'none',
+  },
+});
 
 export const FileUploadProvider = ({
   children,
@@ -84,12 +86,12 @@ export const FileUploadProvider = ({
   return (
     <FileUploadContext.Provider value={{ openFileUpload }}>
       {children}
-      <StyledFileInput
+      <input
         ref={fileInputRef}
         type="file"
         multiple={uploadOptions?.multiple ?? false}
         accept={uploadOptions?.accept}
-        onChange={handleFileInputChange}
+        onChange={handleFileInputChange} {...stylex.props(styles.fileInput)}
       />
     </FileUploadContext.Provider>
   );

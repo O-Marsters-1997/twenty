@@ -3,6 +3,7 @@ import { type NodeViewProps, NodeViewWrapper } from '@tiptap/react';
 import React, { useCallback, useRef, useState } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
 
 const IMAGE_MIN_WIDTH = 32;
 const IMAGE_MAX_WIDTH = 600;
@@ -24,15 +25,16 @@ const StyledImageWrapper = styled.div<{ width?: number }>`
   height: 100%;
 `;
 
-const StyledImageContainer = styled.div`
-  max-width: 100%;
-  position: relative;
-`;
-
-const StyledImage = styled.img`
-  height: auto;
-  max-width: 100%;
-`;
+const styles = stylex.create({
+  imageContainer: {
+    maxWidth: '100%',
+    position: 'relative',
+  },
+  image: {
+    height: 'auto',
+    maxWidth: '100%',
+  },
+});
 
 const StyledImageHandle = styled.div<{ handle: 'left' | 'right' }>`
   background-color: ${themeCssVariables.background.primaryInverted};
@@ -172,12 +174,12 @@ export const ResizableImageView = (props: ResizableImageViewProps) => {
           ref={imageWrapperRef}
           style={{ width: width ? `${width}px` : 'fit-content' }}
         >
-          <StyledImageContainer>
-            <StyledImage
+          <div {...stylex.props(styles.imageContainer)}>
+            <img
               src={src}
               alt={alt}
               draggable={false}
-              contentEditable={false}
+              contentEditable={false} {...stylex.props(styles.image)}
             />
             {(isHovering || isDefined(resizeParams)) && (
               <>
@@ -191,7 +193,7 @@ export const ResizableImageView = (props: ResizableImageViewProps) => {
                 />
               </>
             )}
-          </StyledImageContainer>
+          </div>
         </StyledImageWrapper>
       </StyledNodeViewWrapperContainer>
     </NodeViewWrapper>

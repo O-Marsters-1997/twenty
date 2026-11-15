@@ -6,27 +6,31 @@ import { MultiWorkspaceDropdownButton } from '@/navigation/components/MultiWorks
 import { NavigationDrawerFixedContent } from '@/ui/navigation/navigation-drawer/components/NavigationDrawerFixedContent';
 import { NavigationDrawerScrollableContent } from '@/ui/navigation/navigation-drawer/components/NavigationDrawerScrollableContent';
 import { useIsMobile } from 'twenty-ui/utilities';
-import { styled } from '@linaria/react';
 import { Navigate } from 'react-router-dom';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { PermissionFlagType } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[4]};
-  height: 100%;
-  min-height: 0;
-  padding: ${themeCssVariables.spacing[2]} 0 ${themeCssVariables.spacing[4]};
-  width: 100%;
-`;
-
-const StyledSections = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[3]};
-`;
+const styles = stylex.create({
+  container: {
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-4'],
+    height: '100%',
+    minHeight: '0',
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: '0',
+    paddingBottom: spacing['--t-spacing-4'],
+    paddingLeft: '0',
+    width: '100%',
+  },
+  sections: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-3'],
+  },
+});
 
 export const MobileHomePage = () => {
   const isMobile = useIsMobile();
@@ -39,17 +43,17 @@ export const MobileHomePage = () => {
   }
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <NavigationDrawerFixedContent>
         <MultiWorkspaceDropdownButton />
       </NavigationDrawerFixedContent>
 
       <NavigationDrawerScrollableContent>
-        <StyledSections>
+        <div {...stylex.props(styles.sections)}>
           <MainNavigationDrawerNavigationContent />
           {hasAiPermission && <MobileHomeAiChatSection />}
-        </StyledSections>
+        </div>
       </NavigationDrawerScrollableContent>
-    </StyledContainer>
+    </div>
   );
 };

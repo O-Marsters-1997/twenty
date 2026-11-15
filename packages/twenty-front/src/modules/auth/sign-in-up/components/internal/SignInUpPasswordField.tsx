@@ -7,14 +7,17 @@ import { useLingui } from '@lingui/react/macro';
 import { motion } from 'framer-motion';
 import { Controller, useFormContext } from 'react-hook-form';
 import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledFullWidthMotionDiv = styled(motion.div)`
-  width: 100%;
-`;
-
-const StyledInputContainer = styled.div`
-  margin-bottom: ${themeCssVariables.spacing[3]};
-`;
+const styles = stylex.create({
+  fullWidthMotionDiv: {
+    width: '100%',
+  },
+  inputContainer: {
+    marginBottom: spacing['--t-spacing-3'],
+  },
+});
 
 export const SignInUpPasswordField = ({
   showErrors,
@@ -27,7 +30,7 @@ export const SignInUpPasswordField = ({
   const form = useFormContext<Form>();
 
   return (
-    <StyledFullWidthMotionDiv
+    <motion.div {...stylex.props(styles.fullWidthMotionDiv)}
       initial={{ opacity: 0, height: 0 }}
       animate={{ opacity: 1, height: 'auto' }}
       transition={{
@@ -43,7 +46,7 @@ export const SignInUpPasswordField = ({
           field: { onChange, onBlur, value },
           fieldState: { error },
         }) => (
-          <StyledInputContainer>
+          <div {...stylex.props(styles.inputContainer)}>
             <SettingsTextInput
               instanceId="sign-in-up-password"
               autoFocus
@@ -58,10 +61,10 @@ export const SignInUpPasswordField = ({
             {signInUpMode === SignInUpMode.SignUp && (
               <StyledPasswordHint>{t`At least 8 characters long.`}</StyledPasswordHint>
             )}
-          </StyledInputContainer>
+          </div>
         )}
       />
-    </StyledFullWidthMotionDiv>
+    </motion.div>
   );
 };
 

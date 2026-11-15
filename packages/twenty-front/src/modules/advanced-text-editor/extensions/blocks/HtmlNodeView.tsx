@@ -1,25 +1,27 @@
-import { styled } from '@linaria/react';
 import { NodeViewWrapper, type NodeViewProps } from '@tiptap/react';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { HtmlNodeInlineEditor } from '@/advanced-text-editor/extensions/blocks/HtmlNodeInlineEditor';
 import { sanitizeHtmlPreview } from '@/advanced-text-editor/utils/sanitizeHtmlPreview';
+import * as stylex from '@stylexjs/stylex';
+import { borderColor, borderRadius } from 'twenty-ui/theme/tokens.stylex';
 
 type HtmlNodeViewProps = Pick<
   NodeViewProps,
   'node' | 'editor' | 'extension' | 'updateAttributes'
 >;
 
-const StyledPreview = styled.div`
-  border-radius: ${themeCssVariables.border.radius.sm};
-  outline: 1px dashed transparent;
-  outline-offset: 2px;
-
-  &:hover {
-    outline-color: ${themeCssVariables.border.color.medium};
-  }
-`;
+const styles = stylex.create({
+  preview: {
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    outline: '1px dashed transparent',
+    outlineOffset: '2px',
+    outlineColor: { default: null, ':hover': borderColor['--t-border-color-medium'] },
+  },
+});
 
 export const HtmlNodeView = ({
   node,
@@ -47,9 +49,9 @@ export const HtmlNodeView = ({
 
   return (
     <NodeViewWrapper>
-      <StyledPreview
+      <div
         // eslint-disable-next-line react/no-danger
-        dangerouslySetInnerHTML={{ __html: sanitizeHtmlPreview(html) }}
+        dangerouslySetInnerHTML={{ __html: sanitizeHtmlPreview(html) }} {...stylex.props(styles.preview)}
       />
     </NodeViewWrapper>
   );

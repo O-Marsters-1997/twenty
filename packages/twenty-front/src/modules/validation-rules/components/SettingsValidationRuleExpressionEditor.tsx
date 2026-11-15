@@ -35,14 +35,18 @@ import { getValidationRuleEditorFieldChipLabel } from '@/validation-rules/utils/
 import { getValidationRuleEditorText } from '@/validation-rules/utils/getValidationRuleEditorText';
 import { handleValidationRuleEditorPaste } from '@/validation-rules/utils/handleValidationRuleEditorPaste';
 import { insertValidationRuleHelperItem } from '@/validation-rules/utils/insertValidationRuleHelperItem';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const SingleParagraphDocument = Document.extend({ content: 'paragraph' });
 
-const StyledAskAiButtonContainer = styled.div`
-  position: absolute;
-  right: ${themeCssVariables.spacing[1]};
-  top: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  askAiButtonContainer: {
+    position: 'absolute',
+    right: spacing['--t-spacing-1'],
+    top: spacing['--t-spacing-1'],
+  },
+});
 
 const StyledEditorContent = styled(Field.Root)`
   display: flex;
@@ -277,9 +281,9 @@ export const SettingsValidationRuleExpressionEditor = ({
         <StyledEditorContent>
           <StyledEditor hasError={isDefined(errorMessage)}>
             <EditorContent editor={editor} />
-            <StyledAskAiButtonContainer>
+            <div {...stylex.props(styles.askAiButtonContainer)}>
               <SettingsValidationRuleAskAiButton />
-            </StyledAskAiButtonContainer>
+            </div>
           </StyledEditor>
           {isDefined(errorMessage) && (
             <Field.Error match role="alert">

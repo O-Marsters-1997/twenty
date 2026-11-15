@@ -3,17 +3,77 @@ import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { IconReload } from 'twenty-ui/icon';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { background, grayScale } from 'twenty-ui/theme/tokens.stylex';
 
 type AppRootErrorFallbackProps = AppErrorDisplayProps;
 
-const StyledContainer = styled.div`
-  background: ${themeCssVariables.background.noisy};
-  box-sizing: border-box;
-  display: flex;
-  height: calc(100vh / var(--t-zoom, 1));
-  padding: 12px;
-  width: calc(100vw / var(--t-zoom, 1));
-`;
+const styles = stylex.create({
+  container: {
+    background: background['--t-background-noisy'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    height: 'calc(100vh / var(--t-zoom, 1))',
+    paddingTop: '12px',
+    paddingRight: '12px',
+    paddingBottom: '12px',
+    paddingLeft: '12px',
+    width: 'calc(100vw / var(--t-zoom, 1))',
+  },
+  emptyContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '24px',
+    height: '100%',
+    justifyContent: 'center',
+    textAlign: 'center',
+    width: '100%',
+  },
+  imageContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+    position: 'relative',
+  },
+  backgroundImage: {
+    maxHeight: '160px',
+    maxWidth: '160px',
+  },
+  innerImage: {
+    maxHeight: '130px',
+    maxWidth: '130px',
+    position: 'absolute',
+  },
+  emptyTextContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '8px',
+    justifyContent: 'center',
+    textAlign: 'center',
+    width: '100%',
+  },
+  emptyTitle: {
+    color: grayScale['--t-gray-scale-gray12'],
+    fontSize: '1.23rem',
+    fontWeight: '600',
+  },
+  emptySubTitle: {
+    color: grayScale['--t-gray-scale-gray11'],
+    fontSize: '0.92rem',
+    fontWeight: '400',
+    lineHeight: '1.5',
+    maxHeight: '2.8em',
+    overflow: 'hidden',
+    width: '50%',
+  },
+  iconContainer: {
+    color: grayScale['--t-gray-scale-gray12'],
+    display: 'inline-flex',
+    marginRight: '8px',
+  },
+});
 
 const StyledPanel = styled.div`
   background: ${themeCssVariables.grayScale.gray1};
@@ -23,61 +83,6 @@ const StyledPanel = styled.div`
   overflow-x: auto;
   overflow-y: hidden;
   width: 100%;
-`;
-
-const StyledEmptyContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  height: 100%;
-  justify-content: center;
-  text-align: center;
-  width: 100%;
-`;
-
-const StyledImageContainer = styled.div`
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  position: relative;
-`;
-
-const StyledBackgroundImage = styled.img`
-  max-height: 160px;
-  max-width: 160px;
-`;
-
-const StyledInnerImage = styled.img`
-  max-height: 130px;
-  max-width: 130px;
-  position: absolute;
-`;
-
-const StyledEmptyTextContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  justify-content: center;
-  text-align: center;
-  width: 100%;
-`;
-
-const StyledEmptyTitle = styled.div`
-  color: ${themeCssVariables.grayScale.gray12};
-  font-size: 1.23rem;
-  font-weight: 600;
-`;
-
-const StyledEmptySubTitle = styled.div`
-  color: ${themeCssVariables.grayScale.gray11};
-  font-size: 0.92rem;
-  font-weight: 400;
-  line-height: 1.5;
-  max-height: 2.8em;
-  overflow: hidden;
-  width: 50%;
 `;
 
 const StyledButton = styled.button`
@@ -92,12 +97,6 @@ const StyledButton = styled.button`
   padding: 8px 16px;
 `;
 
-const StyledIconContainer = styled.span`
-  color: ${themeCssVariables.grayScale.gray12};
-  display: inline-flex;
-  margin-right: 8px;
-`;
-
 export const AppRootErrorFallback = ({
   resetErrorBoundary,
   title = t`Sorry, something went wrong`,
@@ -105,33 +104,33 @@ export const AppRootErrorFallback = ({
   const theme = useTheme();
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <StyledPanel>
-        <StyledEmptyContainer>
-          <StyledImageContainer>
-            <StyledBackgroundImage
+        <div {...stylex.props(styles.emptyContainer)}>
+          <div {...stylex.props(styles.imageContainer)}>
+            <img
               src="/images/placeholders/background/error_index_bg.png"
-              alt={t`Background`}
+              alt={t`Background`} {...stylex.props(styles.backgroundImage)}
             />
-            <StyledInnerImage
+            <img
               src="/images/placeholders/moving-image/error_index.png"
-              alt={t`Error illustration`}
+              alt={t`Error illustration`} {...stylex.props(styles.innerImage)}
             />
-          </StyledImageContainer>
-          <StyledEmptyTextContainer>
-            <StyledEmptyTitle>{title}</StyledEmptyTitle>
-            <StyledEmptySubTitle>
+          </div>
+          <div {...stylex.props(styles.emptyTextContainer)}>
+            <div {...stylex.props(styles.emptyTitle)}>{title}</div>
+            <div {...stylex.props(styles.emptySubTitle)}>
               {t`Please refresh the page.`}
-            </StyledEmptySubTitle>
-          </StyledEmptyTextContainer>
+            </div>
+          </div>
           <StyledButton onClick={resetErrorBoundary}>
-            <StyledIconContainer>
+            <span {...stylex.props(styles.iconContainer)}>
               <IconReload size={theme.icon.size.md} />
-            </StyledIconContainer>
+            </span>
             {t`Reload`}
           </StyledButton>
-        </StyledEmptyContainer>
+        </div>
       </StyledPanel>
-    </StyledContainer>
+    </div>
   );
 };

@@ -1,11 +1,12 @@
 import { AvatarOrIcon } from '@/ui/field/display/components/internal/AvatarOrIcon/AvatarOrIcon';
-import { styled } from '@linaria/react';
 import { IconX } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 
 import { getFileType } from '@/activities/files/utils/getFileType';
 import { useFileCategoryColors } from '@/file/hooks/useFileCategoryColors';
 import { IconMapping } from '@/file/utils/fileIconMappings';
+import * as stylex from '@stylexjs/stylex';
+import { backgroundTransparent, borderColor, borderRadius, fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type AttachmentChipProps = {
   file: { id: string; name: string };
@@ -13,52 +14,59 @@ type AttachmentChipProps = {
   readonly?: boolean;
 };
 
-const StyledChip = styled.div<{ deletable: boolean }>`
-  align-items: center;
-  background-color: ${themeCssVariables.background.transparent.light};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.smRound};
-  column-gap: ${themeCssVariables.spacing[1]};
-  corner-shape: round;
-  display: inline-flex;
-  flex-direction: row;
-  flex-shrink: 0;
-  max-width: 140px;
-  padding-left: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledLabel = styled.span`
-  color: ${themeCssVariables.font.color.primary};
-  font-size: ${themeCssVariables.font.size.sm};
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledDelete = styled.button`
-  align-items: center;
-  background: none;
-  border: none;
-  border-bottom-right-radius: ${themeCssVariables.border.radius.smRound};
-  border-top-right-radius: ${themeCssVariables.border.radius.smRound};
-  color: ${themeCssVariables.font.color.tertiary};
-  corner-shape: round;
-  cursor: pointer;
-  display: flex;
-  flex-shrink: 0;
-  font-size: ${themeCssVariables.font.size.sm};
-  height: 20px;
-  justify-content: center;
-  margin: 0;
-  padding: 0;
-  user-select: none;
-  width: 20px;
-
-  &:hover {
-    background-color: ${themeCssVariables.background.transparent.medium};
-    color: ${themeCssVariables.font.color.primary};
-  }
-`;
+const styles = stylex.create({
+  chip: {
+    alignItems: 'center',
+    backgroundColor: backgroundTransparent['--t-background-transparent-light'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-medium'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm-round'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm-round'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm-round'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm-round'],
+    columnGap: spacing['--t-spacing-1'],
+    cornerShape: 'round',
+    display: 'inline-flex',
+    flexDirection: 'row',
+    flexShrink: '0',
+    maxWidth: '140px',
+    paddingLeft: spacing['--t-spacing-1'],
+  },
+  label: {
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-sm'],
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  delete: {
+    alignItems: 'center',
+    background: 'none',
+    borderStyle: 'none',
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm-round'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm-round'],
+    color: { default: fontColor['--t-font-color-tertiary'], ':hover': fontColor['--t-font-color-primary'] },
+    cornerShape: 'round',
+    cursor: 'pointer',
+    display: 'flex',
+    flexShrink: '0',
+    fontSize: fontSize['--t-font-size-sm'],
+    height: '20px',
+    justifyContent: 'center',
+    marginTop: '0',
+    marginRight: '0',
+    marginBottom: '0',
+    marginLeft: '0',
+    paddingTop: '0',
+    paddingRight: '0',
+    paddingBottom: '0',
+    paddingLeft: '0',
+    userSelect: 'none',
+    width: '20px',
+    backgroundColor: { default: null, ':hover': backgroundTransparent['--t-background-transparent-medium'] },
+  },
+});
 
 export const AttachmentChip = ({
   file,
@@ -78,18 +86,18 @@ export const AttachmentChip = ({
   };
 
   return (
-    <StyledChip deletable={!readonly} onClick={handleChipClick}>
+    <div onClick={handleChipClick} {...stylex.props(styles.chip)}>
       <AvatarOrIcon
         Icon={IconMapping[getFileType(file.name)]}
         IconBackgroundColor={iconColors[getFileType(file.name)]}
       />
-      <StyledLabel title={file.name}>{file.name}</StyledLabel>
+      <span title={file.name} {...stylex.props(styles.label)}>{file.name}</span>
 
       {!readonly && (
-        <StyledDelete onClick={handleRemoveClick}>
+        <button onClick={handleRemoveClick} {...stylex.props(styles.delete)}>
           <IconX size={theme.icon.size.sm} stroke={theme.icon.stroke.sm} />
-        </StyledDelete>
+        </button>
       )}
-    </StyledChip>
+    </div>
   );
 };

@@ -15,10 +15,13 @@ import {
   type BannerVariant,
 } from 'twenty-ui/primitives/feedback';
 import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledText = styled.div`
-  min-width: 0;
-`;
+const styles = stylex.create({
+  text: {
+    minWidth: '0',
+  },
+});
 
 const BANNER_ICON_BUTTON_CLASS_NAME = css`
   &[data-variant='ghost'] {
@@ -73,13 +76,13 @@ export const InformationBanner = ({
       {informationBannerIsOpen && (
         <Banner color={color} status={status} variant={variant}>
           <StyledContent hasCloseButton={isDefined(onClose)}>
-            <StyledText>
+            <div {...stylex.props(styles.text)}>
               <OverflowingTextWithTooltip
                 isFocusable
                 text={<>{message}</>}
                 tooltipContent={message}
               />
-            </StyledText>
+            </div>
             {buttonTitle && buttonOnClick && (
               <Banner.Action
                 startIcon={isDefined(ButtonIcon) ? <ButtonIcon /> : undefined}

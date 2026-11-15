@@ -12,7 +12,6 @@ import { ConfirmationDialog } from '@/ui/layout/dialog/components/ConfirmationDi
 import { useDialog } from '@/ui/layout/dialog/hooks/useDialog';
 import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
 import { useMutation, useQuery } from '@apollo/client/react';
-import { styled } from '@linaria/react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { useStore } from 'jotai';
@@ -24,7 +23,6 @@ import { useToast } from 'twenty-ui/components/feedback';
 import { Section } from 'twenty-ui/components/layout';
 import { IconRepeat, IconTrash } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import {
   AssignRoleToApiKeyDocument,
   CreateApiKeyDocument,
@@ -35,20 +33,23 @@ import {
 } from '~/generated-metadata/graphql';
 import { useNavigateSettings } from '~/hooks/useNavigateSettings';
 import { SETTINGS_API_WEBHOOKS_TABS } from '@/settings/developers/constants/SettingsApiWebhooksTabs';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledInfo = styled.span`
-  color: ${themeCssVariables.font.color.light};
-  font-size: ${themeCssVariables.font.size.sm};
-  font-weight: ${themeCssVariables.font.weight.regular};
-`;
-
-const StyledInputContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  gap: ${themeCssVariables.spacing[2]};
-  width: 100%;
-`;
+const styles = stylex.create({
+  info: {
+    color: fontColor['--t-font-color-light'],
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+  },
+  inputContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+    gap: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+});
 
 const DELETE_API_KEY_MODAL_ID = 'delete-api-key-modal';
 const REGENERATE_API_KEY_MODAL_ID = 'regenerate-api-key-modal';
@@ -285,15 +286,15 @@ export const SettingsDevelopersApiKeyDetail = () => {
                     title={t`API Key`}
                     description={t`Regenerate an API key`}
                   />
-                  <StyledInputContainer>
+                  <div {...stylex.props(styles.inputContainer)}>
                     <Button
                       startIcon={<IconRepeat />}
                       onClick={() => openDialog(REGENERATE_API_KEY_MODAL_ID)}
                     >{t`Regenerate Key`}</Button>
-                    <StyledInfo>
+                    <span {...stylex.props(styles.info)}>
                       {formatExpiration(apiKey?.expiresAt || '', true, false)}
-                    </StyledInfo>
-                  </StyledInputContainer>
+                    </span>
+                  </div>
                 </>
               )}
             </Section.Root>

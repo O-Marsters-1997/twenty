@@ -10,6 +10,8 @@ import { IconLink } from 'twenty-ui/icon';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 
 import { getLogoUrlFromDomainName } from 'twenty-shared/utils';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor } from 'twenty-ui/theme/tokens.stylex';
 
 const StyledRow = styled.div`
   display: flex;
@@ -49,16 +51,17 @@ const StyledCell = styled.div<{ width: number }>`
   width: ${({ width }) => width}px;
 `;
 
-const StyledTruncated = styled.span`
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-const StyledMutedText = styled.span`
-  color: ${themeCssVariables.font.color.tertiary};
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
+const styles = stylex.create({
+  truncated: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
+  mutedText: {
+    color: fontColor['--t-font-color-tertiary'],
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
+});
 
 const StyledLastEmptyCell = styled.div`
   border-bottom: 1px solid ${themeCssVariables.border.color.light};
@@ -150,13 +153,13 @@ export const BackgroundMockTableRow = ({
         <PersonChip fullName={company.accountOwner} />
       </StyledCell>
       <StyledCell width={BACKGROUND_MOCK_COLUMN_WIDTHS['Creation date']}>
-        <StyledMutedText>{company.creationDate}</StyledMutedText>
+        <span {...stylex.props(styles.mutedText)}>{company.creationDate}</span>
       </StyledCell>
       <StyledCell width={BACKGROUND_MOCK_COLUMN_WIDTHS.Employees}>
-        <StyledTruncated>{formatNumber(company.employees)}</StyledTruncated>
+        <span {...stylex.props(styles.truncated)}>{formatNumber(company.employees)}</span>
       </StyledCell>
       <StyledCell width={BACKGROUND_MOCK_COLUMN_WIDTHS.Address}>
-        <StyledTruncated>{company.address}</StyledTruncated>
+        <span {...stylex.props(styles.truncated)}>{company.address}</span>
       </StyledCell>
       <StyledLastEmptyCell />
     </StyledRow>

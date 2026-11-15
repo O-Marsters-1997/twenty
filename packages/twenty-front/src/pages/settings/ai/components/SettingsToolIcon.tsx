@@ -16,6 +16,8 @@ import {
 import { Avatar } from 'twenty-ui/primitives/data-display';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 import { type SettingsAgentToolApplication } from '~/pages/settings/ai/types/SettingsAgentToolApplication';
+import * as stylex from '@stylexjs/stylex';
+import { borderRadius, grayScale } from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsToolIconProps = {
   icon?: string | null;
@@ -36,17 +38,37 @@ const getOperationIcon = (toolName: string): IconComponent | null => {
   return null;
 };
 
-const StyledCompositeContainer = styled.div`
-  align-items: center;
-  border-radius: ${themeCssVariables.border.radius.sm};
-  box-sizing: border-box;
-  display: flex;
-  flex-shrink: 0;
-  height: 16px;
-  justify-content: center;
-  position: relative;
-  width: 16px;
-`;
+const styles = stylex.create({
+  compositeContainer: {
+    alignItems: 'center',
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexShrink: '0',
+    height: '16px',
+    justifyContent: 'center',
+    position: 'relative',
+    width: '16px',
+  },
+  operationOverlay: {
+    alignItems: 'center',
+    backgroundColor: grayScale['--t-gray-scale-gray4'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    bottom: '-5px',
+    display: 'flex',
+    height: '14px',
+    justifyContent: 'center',
+    position: 'absolute',
+    right: '-6px',
+    width: '12px',
+  },
+});
 
 const StyledMainIconWrapper = styled.div<{
   $backgroundColor: string;
@@ -62,19 +84,6 @@ const StyledMainIconWrapper = styled.div<{
   inset: 0;
   justify-content: center;
   position: absolute;
-`;
-
-const StyledOperationOverlay = styled.div`
-  align-items: center;
-  background-color: ${themeCssVariables.grayScale.gray4};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  bottom: -5px;
-  display: flex;
-  height: 14px;
-  justify-content: center;
-  position: absolute;
-  right: -6px;
-  width: 12px;
 `;
 
 export const SettingsToolIcon = ({
@@ -111,7 +120,7 @@ export const SettingsToolIcon = ({
 
   if (isDefined(OperationIcon)) {
     return (
-      <StyledCompositeContainer>
+      <div {...stylex.props(styles.compositeContainer)}>
         <StyledMainIconWrapper
           $backgroundColor={objectStyle?.backgroundColor ?? 'transparent'}
           $borderColor={objectStyle?.borderColor}
@@ -122,20 +131,20 @@ export const SettingsToolIcon = ({
             color={objectStyle?.iconColor ?? theme.font.color.secondary}
           />
         </StyledMainIconWrapper>
-        <StyledOperationOverlay>
+        <div {...stylex.props(styles.operationOverlay)}>
           <OperationIcon
             size="12px"
             stroke={theme.icon.stroke.md}
             color={theme.font.color.tertiary}
           />
-        </StyledOperationOverlay>
-      </StyledCompositeContainer>
+        </div>
+      </div>
     );
   }
 
   if (isDefined(objectStyle)) {
     return (
-      <StyledCompositeContainer>
+      <div {...stylex.props(styles.compositeContainer)}>
         <StyledMainIconWrapper
           $backgroundColor={objectStyle.backgroundColor}
           $borderColor={objectStyle.borderColor}
@@ -146,7 +155,7 @@ export const SettingsToolIcon = ({
             color={objectStyle.iconColor}
           />
         </StyledMainIconWrapper>
-      </StyledCompositeContainer>
+      </div>
     );
   }
 

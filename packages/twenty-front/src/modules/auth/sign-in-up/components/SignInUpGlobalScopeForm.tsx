@@ -36,6 +36,8 @@ import {
 } from '~/generated-metadata/graphql';
 import { getWorkspaceUrl } from '~/utils/getWorkspaceUrl';
 import { getAbsoluteImageUrl } from '~/utils/image/getAbsoluteImageUrl';
+import * as stylex from '@stylexjs/stylex';
+import { backgroundTransparent, borderRadius, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const StyledWorkspaceContainer = styled.div`
   background-color: ${themeCssVariables.background.primary};
@@ -55,73 +57,70 @@ const StyledWorkspaceContainer = styled.div`
   }
 `;
 
-const StyledWorkspaceItem = styled.div`
-  align-items: center;
-  cursor: pointer;
-  display: flex;
-  flex-direction: row;
-  height: ${themeCssVariables.spacing[15]};
-  justify-content: space-between;
-  overflow: hidden;
-
-  padding: 0;
-  width: 100%;
-
-  &:hover {
-    background-color: ${themeCssVariables.background.transparent.light};
-  }
-
-  &:last-child {
-    border-bottom: none;
-  }
-`;
-
-const StyledWorkspaceContent = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[4]};
-  padding: 0 ${themeCssVariables.spacing[4]};
-  width: 100%;
-`;
-
-const StyledWorkspaceTextContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-`;
-
-const StyledWorkspaceLogo = styled.div`
-  align-items: center;
-  background-color: ${themeCssVariables.background.transparent.light};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  display: flex;
-  height: ${themeCssVariables.spacing[6]};
-  justify-content: center;
-  width: ${themeCssVariables.spacing[6]};
-`;
-
-const StyledWorkspaceName = styled.div`
-  color: ${themeCssVariables.font.color.primary};
-  font-weight: ${themeCssVariables.font.weight.medium};
-  padding-bottom: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledWorkspaceUrl = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.xs};
-`;
-
-const StyledChevronIcon = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-`;
-
-const StyledForgotPasswordLinkContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  padding-top: ${themeCssVariables.spacing[4]};
-`;
+const styles = stylex.create({
+  workspaceItem: {
+    alignItems: 'center',
+    cursor: 'pointer',
+    display: 'flex',
+    flexDirection: 'row',
+    height: spacing['--t-spacing-15'],
+    justifyContent: 'space-between',
+    overflow: 'hidden',
+    paddingTop: '0',
+    paddingRight: '0',
+    paddingBottom: '0',
+    paddingLeft: '0',
+    width: '100%',
+    backgroundColor: { default: null, ':hover': backgroundTransparent['--t-background-transparent-light'] },
+    borderBottomStyle: { default: null, ':last-child': 'none' },
+  },
+  workspaceContent: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-4'],
+    paddingTop: '0',
+    paddingRight: spacing['--t-spacing-4'],
+    paddingBottom: '0',
+    paddingLeft: spacing['--t-spacing-4'],
+    width: '100%',
+  },
+  workspaceTextContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    flexGrow: '1',
+  },
+  workspaceLogo: {
+    alignItems: 'center',
+    backgroundColor: backgroundTransparent['--t-background-transparent-light'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    display: 'flex',
+    height: spacing['--t-spacing-6'],
+    justifyContent: 'center',
+    width: spacing['--t-spacing-6'],
+  },
+  workspaceName: {
+    color: fontColor['--t-font-color-primary'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    paddingBottom: spacing['--t-spacing-1'],
+  },
+  workspaceUrl: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-xs'],
+  },
+  chevronIcon: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+  },
+  forgotPasswordLinkContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    paddingTop: spacing['--t-spacing-4'],
+  },
+});
 
 export const SignInUpGlobalScopeForm = () => {
   const theme = useTheme();
@@ -175,8 +174,8 @@ export const SignInUpGlobalScopeForm = () => {
                 <UndecoratedLink
                   to={getAvailableWorkspaceUrl(availableWorkspace)}
                 >
-                  <StyledWorkspaceItem>
-                    <StyledWorkspaceContent>
+                  <div {...stylex.props(styles.workspaceItem)}>
+                    <div {...stylex.props(styles.workspaceContent)}>
                       <Avatar
                         name={availableWorkspace.displayName || ''}
                         colorSeed={getWorkspaceAvatarColorSeed(
@@ -187,24 +186,24 @@ export const SignInUpGlobalScopeForm = () => {
                         )}
                         size="lg"
                       />
-                      <StyledWorkspaceTextContainer>
-                        <StyledWorkspaceName>
+                      <div {...stylex.props(styles.workspaceTextContainer)}>
+                        <div {...stylex.props(styles.workspaceName)}>
                           {availableWorkspace.displayName ||
                             availableWorkspace.id}
-                        </StyledWorkspaceName>
-                        <StyledWorkspaceUrl>
+                        </div>
+                        <div {...stylex.props(styles.workspaceUrl)}>
                           {
                             new URL(
                               getWorkspaceUrl(availableWorkspace.workspaceUrls),
                             ).hostname
                           }
-                        </StyledWorkspaceUrl>
-                      </StyledWorkspaceTextContainer>
-                      <StyledChevronIcon>
+                        </div>
+                      </div>
+                      <div {...stylex.props(styles.chevronIcon)}>
                         <IconChevronRight size={theme.icon.size.md} />
-                      </StyledChevronIcon>
-                    </StyledWorkspaceContent>
-                  </StyledWorkspaceItem>
+                      </div>
+                    </div>
+                  </div>
                 </UndecoratedLink>
               </OnboardingStepAnimatedItem>
             ))}
@@ -212,23 +211,23 @@ export const SignInUpGlobalScopeForm = () => {
               <OnboardingStepAnimatedItem
                 index={availableWorkspacesList.length}
               >
-                <StyledWorkspaceItem
+                <div
                   onClick={() =>
                     setSignInUpStep(SignInUpStep.WorkspaceCreation)
-                  }
+                  } {...stylex.props(styles.workspaceItem)}
                 >
-                  <StyledWorkspaceContent>
-                    <StyledWorkspaceLogo>
+                  <div {...stylex.props(styles.workspaceContent)}>
+                    <div {...stylex.props(styles.workspaceLogo)}>
                       <IconPlus size={theme.icon.size.lg} />
-                    </StyledWorkspaceLogo>
-                    <StyledWorkspaceTextContainer>
-                      <StyledWorkspaceName>{t`Create a workspace`}</StyledWorkspaceName>
-                    </StyledWorkspaceTextContainer>
-                    <StyledChevronIcon>
+                    </div>
+                    <div {...stylex.props(styles.workspaceTextContainer)}>
+                      <div {...stylex.props(styles.workspaceName)}>{t`Create a workspace`}</div>
+                    </div>
+                    <div {...stylex.props(styles.chevronIcon)}>
                       <IconChevronRight size={theme.icon.size.md} />
-                    </StyledChevronIcon>
-                  </StyledWorkspaceContent>
-                </StyledWorkspaceItem>
+                    </div>
+                  </div>
+                </div>
               </OnboardingStepAnimatedItem>
             )}
           </StyledWorkspaceContainer>
@@ -255,14 +254,14 @@ export const SignInUpGlobalScopeForm = () => {
             <SignInUpWithCredentials isGlobalScope />
           </FormProvider>
           {signInUpStep === SignInUpStep.Password && (
-            <StyledForgotPasswordLinkContainer>
+            <div {...stylex.props(styles.forgotPasswordLinkContainer)}>
               <Button
                 variant="link"
                 onClick={handleResetPassword(form.getValues('email'))}
               >
                 <Trans>Forgot your password?</Trans>
               </Button>
-            </StyledForgotPasswordLinkContainer>
+            </div>
           )}
         </StyledOnboardingContentContainer>
       )}

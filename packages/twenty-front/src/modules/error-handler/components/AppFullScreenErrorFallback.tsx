@@ -1,18 +1,20 @@
 import { AppErrorDisplay } from '@/error-handler/components/internal/AppErrorDisplay';
 import { type AppErrorDisplayProps } from '@/error-handler/types/AppErrorDisplayProps';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { background } from 'twenty-ui/theme/tokens.stylex';
 
 type AppFullScreenErrorFallbackProps = AppErrorDisplayProps;
 
-const StyledContainer = styled.div`
-  background: ${themeCssVariables.background.primary};
-  box-sizing: border-box;
-  display: flex;
-  height: calc(100dvh / var(--t-zoom, 1));
-  width: calc(100vw / var(--t-zoom, 1));
-`;
+const styles = stylex.create({
+  container: {
+    background: background['--t-background-primary'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    height: 'calc(100dvh / var(--t-zoom, 1))',
+    width: 'calc(100vw / var(--t-zoom, 1))',
+  },
+});
 
 export const AppFullScreenErrorFallback = ({
   error,
@@ -20,12 +22,12 @@ export const AppFullScreenErrorFallback = ({
   title = t`Sorry, something went wrong`,
 }: AppFullScreenErrorFallbackProps) => {
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <AppErrorDisplay
         error={error}
         resetErrorBoundary={resetErrorBoundary}
         title={title}
       />
-    </StyledContainer>
+    </div>
   );
 };

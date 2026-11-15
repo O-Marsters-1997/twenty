@@ -1,17 +1,15 @@
 import { InformationBanner } from '@/information-banner/components/InformationBanner';
 import { useRestoreManyRecords } from '@/object-record/hooks/useRestoreManyRecords';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { IconRefresh } from 'twenty-ui/icon';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledInformationBannerDeletedRecord = styled.div`
-  height: 40px;
-  position: relative;
-
-  &:empty {
-    height: 0;
-  }
-`;
+const styles = stylex.create({
+  informationBannerDeletedRecord: {
+    height: { default: '40px', ':empty': '0' },
+    position: 'relative',
+  },
+});
 
 export const InformationBannerDeletedRecord = ({
   recordId,
@@ -25,7 +23,7 @@ export const InformationBannerDeletedRecord = ({
   });
 
   return (
-    <StyledInformationBannerDeletedRecord>
+    <div {...stylex.props(styles.informationBannerDeletedRecord)}>
       <InformationBanner
         componentInstanceId="information-banner-deleted-record"
         status="error"
@@ -34,6 +32,6 @@ export const InformationBannerDeletedRecord = ({
         buttonIcon={IconRefresh}
         buttonOnClick={() => restoreManyRecords({ idsToRestore: [recordId] })}
       />
-    </StyledInformationBannerDeletedRecord>
+    </div>
   );
 };

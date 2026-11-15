@@ -1,6 +1,5 @@
 import { DropdownRoot } from '@/ui/layout/dropdown/components/DropdownRoot';
 import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useState } from 'react';
 import { isDefined } from 'twenty-shared/utils';
@@ -9,16 +8,19 @@ import { Section } from 'twenty-ui/components/layout';
 import { Dropdown } from 'twenty-ui/components/navigation';
 import { SettingsRow } from 'twenty-ui/components/settings';
 import { IconLock, IconPuzzle, IconTool } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { SettingsAgentToolsTable } from '~/pages/settings/ai/components/SettingsAgentToolsTable';
 import { useSettingsAgentToolsTable } from '~/pages/settings/ai/hooks/useSettingsAgentToolsTable';
 import { type SettingsAgentToolItem } from '~/pages/settings/ai/types/SettingsAgentToolItem';
 import { isOwnedByInstalledApplication } from '@/applications/utils/isOwnedByInstalledApplication';
 import { normalizeSearchText } from 'twenty-ui/utilities';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledSearchContainer = styled.div`
-  padding-bottom: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  searchContainer: {
+    paddingBottom: spacing['--t-spacing-2'],
+  },
+});
 
 export const SettingsAgentToolsTab = () => {
   const { t } = useLingui();
@@ -74,7 +76,7 @@ export const SettingsAgentToolsTab = () => {
         title={t`Tools`}
         description={t`Use filter to see existing tools or create your own`}
       />
-      <StyledSearchContainer>
+      <div {...stylex.props(styles.searchContainer)}>
         <SearchInput
           placeholder={t`Search a tool...`}
           value={searchTerm}
@@ -112,7 +114,7 @@ export const SettingsAgentToolsTab = () => {
             </DropdownRoot>
           )}
         />
-      </StyledSearchContainer>
+      </div>
       <SettingsAgentToolsTable
         tools={filteredTools}
         isLoading={isLoading}

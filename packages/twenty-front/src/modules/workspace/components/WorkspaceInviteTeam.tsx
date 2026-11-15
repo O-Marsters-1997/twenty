@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { styled } from '@linaria/react';
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -22,37 +21,28 @@ import {
   type IconComponent,
 } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { MOBILE_VIEWPORT, themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
 
-const StyledContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  gap: ${themeCssVariables.spacing[2]};
-  padding-bottom: ${themeCssVariables.spacing[3]};
-
-  @media (max-width: ${MOBILE_VIEWPORT}px) {
-    flex-wrap: wrap;
-  }
-`;
-
-const StyledLinkContainer = styled.div`
-  flex: 1 1 auto;
-  min-width: 0;
-
-  @media (max-width: ${MOBILE_VIEWPORT}px) {
-    flex: 1 1 100%;
-  }
-`;
-
-const StyledRoleContainer = styled.div`
-  flex: 0 0 130px;
-  min-width: 130px;
-
-  @media (max-width: ${MOBILE_VIEWPORT}px) {
-    flex: 1 1 100%;
-  }
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+    gap: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-3'],
+    flexWrap: { default: null, [media.mobile]: 'wrap' },
+  },
+  linkContainer: {
+    flex: { default: '1 1 auto', [media.mobile]: '1 1 100%' },
+    minWidth: '0',
+  },
+  roleContainer: {
+    flex: { default: '0 0 130px', [media.mobile]: '1 1 100%' },
+    minWidth: '130px',
+  },
+});
 
 const emailsEmptyErrorMessage = msg`Emails should not be empty`;
 
@@ -175,8 +165,8 @@ export const WorkspaceInviteTeam = ({ roles }: WorkspaceInviteTeamProps) => {
 
   return (
     <form onSubmit={submit}>
-      <StyledContainer>
-        <StyledLinkContainer>
+      <div {...stylex.props(styles.container)}>
+        <div {...stylex.props(styles.linkContainer)}>
           <Controller
             name="emails"
             control={control}
@@ -194,8 +184,8 @@ export const WorkspaceInviteTeam = ({ roles }: WorkspaceInviteTeamProps) => {
               );
             }}
           />
-        </StyledLinkContainer>
-        <StyledRoleContainer>
+        </div>
+        <div {...stylex.props(styles.roleContainer)}>
           <Controller
             name="roleId"
             control={control}
@@ -214,7 +204,7 @@ export const WorkspaceInviteTeam = ({ roles }: WorkspaceInviteTeamProps) => {
               );
             }}
           />
-        </StyledRoleContainer>
+        </div>
         <Button
           startIcon={<IconSend />}
           type="submit"
@@ -222,7 +212,7 @@ export const WorkspaceInviteTeam = ({ roles }: WorkspaceInviteTeamProps) => {
           variant="solid"
           color="accent"
         >{t`Invite`}</Button>
-      </StyledContainer>
+      </div>
     </form>
   );
 };

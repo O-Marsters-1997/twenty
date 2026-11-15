@@ -1,26 +1,28 @@
 import { SkeletonLine } from '@/ui/feedback/skeleton/components/SkeletonLine';
 import { NavigationDrawerSection } from '@/ui/navigation/navigation-drawer/components/NavigationDrawerSection';
 import { css } from '@linaria/core';
-import { styled } from '@linaria/react';
 import { SKELETON_HEIGHT_SIZES } from 'twenty-ui/primitives/feedback';
 import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledTitleSkeleton = styled.div`
-  align-items: center;
-  display: flex;
-  height: ${themeCssVariables.spacing[5]};
-  padding-left: ${themeCssVariables.spacing[1]};
-  padding-right: ${themeCssVariables.spacing['0.5']};
-`;
-
-const StyledRowsContainer = styled.div`
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[1]};
-  padding-left: ${themeCssVariables.spacing[1]};
-  width: 100%;
-`;
+const styles = stylex.create({
+  titleSkeleton: {
+    alignItems: 'center',
+    display: 'flex',
+    height: spacing['--t-spacing-5'],
+    paddingLeft: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-0_5'],
+  },
+  rowsContainer: {
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-1'],
+    width: '100%',
+  },
+});
 
 const fillSkeletonContainer = css`
   display: block;
@@ -30,14 +32,14 @@ const fillSkeletonContainer = css`
 export const NavigationDrawerWorkspaceSectionSkeletonLoader = () => {
   return (
     <NavigationDrawerSection>
-      <StyledTitleSkeleton>
+      <div {...stylex.props(styles.titleSkeleton)}>
         <SkeletonLine
           width={72}
           height={SKELETON_HEIGHT_SIZES.xs}
           highlightColor={themeCssVariables.background.transparent.light}
         />
-      </StyledTitleSkeleton>
-      <StyledRowsContainer>
+      </div>
+      <div {...stylex.props(styles.rowsContainer)}>
         <SkeletonLine
           containerClassName={fillSkeletonContainer}
           height={SKELETON_HEIGHT_SIZES.s}
@@ -53,7 +55,7 @@ export const NavigationDrawerWorkspaceSectionSkeletonLoader = () => {
           height={SKELETON_HEIGHT_SIZES.s}
           highlightColor={themeCssVariables.background.transparent.light}
         />
-      </StyledRowsContainer>
+      </div>
     </NavigationDrawerSection>
   );
 };

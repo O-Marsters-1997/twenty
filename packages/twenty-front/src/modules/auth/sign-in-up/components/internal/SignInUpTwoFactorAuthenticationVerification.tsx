@@ -1,3 +1,4 @@
+import { onboardingLayout } from '../../../../onboarding/constants/onboardingLayout.stylex';
 import { useAuth } from '@/auth/hooks/useAuth';
 import {
   StyledTwoFactorInstructions,
@@ -29,14 +30,8 @@ import { MainButton } from 'twenty-ui/components/input';
 import { Button } from 'twenty-ui/primitives/input';
 import { themeCssVariables } from 'twenty-ui/theme';
 import { useNavigateApp } from '~/hooks/useNavigateApp';
-
-const StyledForm = styled.form`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  max-width: 100%;
-  width: ${ONBOARDING_CONTENT_BLOCK_WIDTH}px;
-`;
+import * as stylex from '@stylexjs/stylex';
+import { borderRadius, fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const StyledSlot = styled.div<{ isActive: boolean }>`
   align-items: center;
@@ -112,59 +107,66 @@ const StyledCaretContainer = styled.div`
   }
 `;
 
-const StyledCaret = styled.div`
-  background-color: ${themeCssVariables.font.color.light};
-  height: 2rem;
-  width: 1px;
-`;
+const styles = stylex.create({
+  form: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    maxWidth: '100%',
+    width: onboardingLayout.contentBlockWidth,
+  },
+  caret: {
+    backgroundColor: fontColor['--t-font-color-light'],
+    height: '2rem',
+    width: '1px',
+  },
+  dashContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+    width: '2.5rem',
+  },
+  dash: {
+    backgroundColor: fontColor['--t-font-color-primary'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-pill'],
+    borderTopRightRadius: borderRadius['--t-border-radius-pill'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-pill'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-pill'],
+    cornerShape: 'round',
+    height: '0.25rem',
+    width: '0.75rem',
+  },
+  oTPContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    opacity: { default: null, ':has(:disabled)': '0.3' },
+  },
+  slotGroup: {
+    display: 'flex',
+  },
+  actionBackLinkContainer: {
+    marginTop: spacing['--t-spacing-3'],
+    marginRight: '0',
+    marginBottom: '0',
+    marginLeft: '0',
+  },
+});
 
 const FakeCaret = () => {
   return (
     <StyledCaretContainer>
-      <StyledCaret />
+      <div {...stylex.props(styles.caret)} />
     </StyledCaretContainer>
   );
 };
 
-const StyledDashContainer = styled.div`
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  width: 2.5rem;
-`;
-
-const StyledDash = styled.div`
-  background-color: ${themeCssVariables.font.color.primary};
-  border-radius: ${themeCssVariables.border.radius.pill};
-  corner-shape: round;
-  height: 0.25rem;
-  width: 0.75rem;
-`;
-
 const FakeDash = () => {
   return (
-    <StyledDashContainer>
-      <StyledDash />
-    </StyledDashContainer>
+    <div {...stylex.props(styles.dashContainer)}>
+      <div {...stylex.props(styles.dash)} />
+    </div>
   );
 };
-
-const StyledOTPContainer = styled.div`
-  align-items: center;
-  display: flex;
-
-  &:has(:disabled) {
-    opacity: 0.3;
-  }
-`;
-
-const StyledSlotGroup = styled.div`
-  display: flex;
-`;
-
-const StyledActionBackLinkContainer = styled.div`
-  margin: ${themeCssVariables.spacing[3]} 0 0;
-`;
 
 export const SignInUpTOTPVerification = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -223,7 +225,7 @@ export const SignInUpTOTPVerification = () => {
   };
 
   return (
-    <StyledForm onSubmit={form.handleSubmit(submitOTP)}>
+    <form {...stylex.props(styles.form)} onSubmit={form.handleSubmit(submitOTP)}>
       <StyledTwoFactorInstructions>
         <Trans>Paste the code below</Trans>
       </StyledTwoFactorInstructions>
@@ -240,8 +242,8 @@ export const SignInUpTOTPVerification = () => {
               value={value}
               autoFocus
               render={({ slots }) => (
-                <StyledOTPContainer>
-                  <StyledSlotGroup>
+                <div {...stylex.props(styles.oTPContainer)}>
+                  <div {...stylex.props(styles.slotGroup)}>
                     {slots.slice(0, 3).map((slot, idx) => (
                       <Slot
                         key={idx}
@@ -249,11 +251,11 @@ export const SignInUpTOTPVerification = () => {
                         {...slot}
                       />
                     ))}
-                  </StyledSlotGroup>
+                  </div>
 
                   <FakeDash />
 
-                  <StyledSlotGroup>
+                  <div {...stylex.props(styles.slotGroup)}>
                     {slots.slice(3).map((slot, idx) => (
                       <Slot
                         key={idx}
@@ -261,8 +263,8 @@ export const SignInUpTOTPVerification = () => {
                         {...slot}
                       />
                     ))}
-                  </StyledSlotGroup>
-                </StyledOTPContainer>
+                  </div>
+                </div>
               )}
             />
           )}
@@ -273,16 +275,16 @@ export const SignInUpTOTPVerification = () => {
         fullWidth
         disabled={isLoading}
       >{t`Submit`}</MainButton>
-      <StyledActionBackLinkContainer>
+      <div {...stylex.props(styles.actionBackLinkContainer)}>
         <Button variant="link" onClick={handleUseRecoveryCode}>
           <Trans>Lost your authenticator? Use a recovery code</Trans>
         </Button>
-      </StyledActionBackLinkContainer>
-      <StyledActionBackLinkContainer>
+      </div>
+      <div {...stylex.props(styles.actionBackLinkContainer)}>
         <Button variant="link" onClick={handleBack}>
           <Trans>Back</Trans>
         </Button>
-      </StyledActionBackLinkContainer>
-    </StyledForm>
+      </div>
+    </form>
   );
 };

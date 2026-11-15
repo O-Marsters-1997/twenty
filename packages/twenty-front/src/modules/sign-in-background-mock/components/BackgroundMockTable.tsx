@@ -8,24 +8,45 @@ import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
 import { IconChevronDown, IconPlus, useIcons } from 'twenty-ui/icon';
 import { Checkbox } from 'twenty-ui/primitives/input';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { background, fontColor, fontSize } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledTableWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow: hidden;
-  width: 100%;
-`;
-
-const StyledTable = styled.div`
-  background: ${themeCssVariables.background.primary};
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  font-size: ${themeCssVariables.font.size.md};
-  overflow: hidden;
-  position: relative;
-`;
+const styles = stylex.create({
+  tableWrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    overflow: 'hidden',
+    width: '100%',
+  },
+  table: {
+    background: background['--t-background-primary'],
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    fontSize: fontSize['--t-font-size-md'],
+    overflow: 'hidden',
+    position: 'relative',
+  },
+  headerLabel: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  tableBody: {
+    display: 'flex',
+    flexDirection: 'column',
+    flexShrink: '0',
+  },
+  footerLabel: {
+    flex: '1',
+    minWidth: '0',
+  },
+  footerValue: {
+    color: fontColor['--t-font-color-primary'],
+    flexShrink: '0',
+  },
+});
 
 const StyledHeaderRow = styled.div`
   background: ${themeCssVariables.background.primary};
@@ -70,12 +91,6 @@ const StyledHeaderCell = styled.div<{ width: number }>`
   width: ${({ width }) => width}px;
 `;
 
-const StyledHeaderLabel = styled.span`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
 const StyledAddColumnHeaderCell = styled.div`
   align-items: center;
   background: ${themeCssVariables.background.primary};
@@ -95,12 +110,6 @@ const StyledAddColumnIconWrapper = styled.div`
   height: ${BACKGROUND_MOCK_TABLE_DIMENSIONS.rowHeight}px;
   justify-content: center;
   width: ${BACKGROUND_MOCK_TABLE_DIMENSIONS.addColumnButtonWidth}px;
-`;
-
-const StyledTableBody = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
 `;
 
 const StyledFooterRow = styled.div`
@@ -130,16 +139,6 @@ const StyledFooterCell = styled.div<{ width: number }>`
   width: ${({ width }) => width}px;
 `;
 
-const StyledFooterLabel = styled.div`
-  flex: 1;
-  min-width: 0;
-`;
-
-const StyledFooterValue = styled.span`
-  color: ${themeCssVariables.font.color.primary};
-  flex-shrink: 0;
-`;
-
 const StyledLastEmptyCell = styled.div`
   flex: 1;
   height: ${BACKGROUND_MOCK_TABLE_DIMENSIONS.rowHeight}px;
@@ -151,8 +150,8 @@ export const BackgroundMockTable = () => {
   const { getIcon } = useIcons();
 
   return (
-    <StyledTableWrapper>
-      <StyledTable>
+    <div {...stylex.props(styles.tableWrapper)}>
+      <div {...stylex.props(styles.table)}>
         <StyledHeaderRow>
           <StyledDragHandleColumn />
           <StyledCheckboxHeaderColumn>
@@ -168,7 +167,7 @@ export const BackgroundMockTable = () => {
                     stroke={theme.icon.stroke.sm}
                   />
                 )}
-                <StyledHeaderLabel>{column.label}</StyledHeaderLabel>
+                <span {...stylex.props(styles.headerLabel)}>{column.label}</span>
               </StyledHeaderCell>
             );
           })}
@@ -181,47 +180,47 @@ export const BackgroundMockTable = () => {
             </StyledAddColumnIconWrapper>
           </StyledAddColumnHeaderCell>
         </StyledHeaderRow>
-        <StyledTableBody>
+        <div {...stylex.props(styles.tableBody)}>
           {BACKGROUND_MOCK_COMPANIES.map((company) => (
             <BackgroundMockTableRow key={company.id} company={company} />
           ))}
-        </StyledTableBody>
+        </div>
         <StyledFooterRow>
           <StyledDragHandleColumn />
           <StyledFooterCheckboxColumn />
           <StyledFooterCell width={BACKGROUND_MOCK_COLUMNS[0].width}>
-            <StyledFooterLabel>
+            <div {...stylex.props(styles.footerLabel)}>
               <OverflowingTextWithTooltip text="Calculate" />
-            </StyledFooterLabel>
+            </div>
             <IconChevronDown
               size={theme.icon.size.sm}
               stroke={theme.icon.stroke.sm}
             />
           </StyledFooterCell>
           <StyledFooterCell width={BACKGROUND_MOCK_COLUMNS[1].width}>
-            <StyledFooterLabel>
+            <div {...stylex.props(styles.footerLabel)}>
               <OverflowingTextWithTooltip text="Count all" />
-            </StyledFooterLabel>
-            <StyledFooterValue>599</StyledFooterValue>
+            </div>
+            <span {...stylex.props(styles.footerValue)}>599</span>
           </StyledFooterCell>
           <StyledFooterCell width={BACKGROUND_MOCK_COLUMNS[2].width} />
           <StyledFooterCell width={BACKGROUND_MOCK_COLUMNS[3].width} />
           <StyledFooterCell width={BACKGROUND_MOCK_COLUMNS[4].width} />
           <StyledFooterCell width={BACKGROUND_MOCK_COLUMNS[5].width}>
-            <StyledFooterLabel>
+            <div {...stylex.props(styles.footerLabel)}>
               <OverflowingTextWithTooltip text="Max of Employees" />
-            </StyledFooterLabel>
-            <StyledFooterValue>284,571</StyledFooterValue>
+            </div>
+            <span {...stylex.props(styles.footerValue)}>284,571</span>
           </StyledFooterCell>
           <StyledFooterCell width={BACKGROUND_MOCK_COLUMNS[6].width}>
-            <StyledFooterLabel>
+            <div {...stylex.props(styles.footerLabel)}>
               <OverflowingTextWithTooltip text="Not empty of Address" />
-            </StyledFooterLabel>
-            <StyledFooterValue>599</StyledFooterValue>
+            </div>
+            <span {...stylex.props(styles.footerValue)}>599</span>
           </StyledFooterCell>
           <StyledLastEmptyCell />
         </StyledFooterRow>
-      </StyledTable>
-    </StyledTableWrapper>
+      </div>
+    </div>
   );
 };

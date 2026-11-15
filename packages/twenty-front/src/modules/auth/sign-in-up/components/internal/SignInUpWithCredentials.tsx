@@ -19,21 +19,23 @@ import { isDDLLockedState } from '@/client-config/states/isDDLLockedState';
 import { InputHint } from '@/ui/input/components/internal/InputHint/InputHint';
 import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useMemo, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { isDefined } from 'twenty-shared/utils';
 import { MainButton } from 'twenty-ui/components/input';
 import { Loader } from 'twenty-ui/primitives/feedback';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledForm = styled.form`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  max-width: 100%;
-  width: 100%;
-`;
+const styles = stylex.create({
+  form: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    maxWidth: '100%',
+    width: '100%',
+  },
+});
 
 export const SignInUpWithCredentials = ({
   isGlobalScope,
@@ -148,7 +150,7 @@ export const SignInUpWithCredentials = ({
       {(signInUpStep === SignInUpStep.Password ||
         signInUpStep === SignInUpStep.Email ||
         signInUpStep === SignInUpStep.Init) && (
-        <StyledForm onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} {...stylex.props(styles.form)}>
           {signInUpStep !== SignInUpStep.Init && (
             <SignInUpEmailField
               showErrors={showErrors}
@@ -176,7 +178,7 @@ export const SignInUpWithCredentials = ({
               <InputHint>{t`Sign-up is temporarily unavailable during maintenance.`}</InputHint>
             )}
           </StyledSsoButtonContainer>
-        </StyledForm>
+        </form>
       )}
     </>
   );
