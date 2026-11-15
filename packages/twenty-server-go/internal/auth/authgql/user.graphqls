@@ -1,0 +1,112 @@
+scalar JSON
+
+enum OnboardingStatus {
+  WORKSPACE_ACTIVATION
+  PROFILE_CREATION
+  SYNC_EMAIL
+  INVITE_TEAM
+  COMPLETED
+}
+
+enum WorkspaceActivationStatus {
+  ONGOING_CREATION
+  PENDING_CREATION
+  CREATED
+  ACTIVE
+  INACTIVE
+}
+
+enum WorkspaceDiscoverability {
+  PUBLIC
+  MEMBERS_AND_INVITEES
+  HIDDEN
+}
+
+enum AiModelTier {
+  extraFast
+  fast
+  balanced
+  smart
+  extraSmart
+}
+
+type FeatureFlag {
+  key: String!
+  value: Boolean!
+}
+
+type Application {
+  id: UUID!
+  name: String!
+  universalIdentifier: UUID!
+  logoUrl: String
+  createdAt: DateTime!
+}
+
+type Role {
+  id: UUID!
+  label: String!
+  description: String
+  icon: String
+  canUpdateAllSettings: Boolean!
+  canAccessAllTools: Boolean!
+  isEditable: Boolean!
+  canReadAllObjectRecords: Boolean!
+  canUpdateAllObjectRecords: Boolean!
+  canSoftDeleteAllObjectRecords: Boolean!
+  canDestroyAllObjectRecords: Boolean!
+  canBeAssignedToUsers: Boolean!
+  canBeAssignedToAgents: Boolean!
+  canBeAssignedToApiKeys: Boolean!
+}
+
+type Workspace {
+  id: UUID!
+  displayName: String
+  logo: String!
+  inviteHash: String
+  allowImpersonation: Boolean!
+  activationStatus: WorkspaceActivationStatus!
+  isPublicInviteLinkEnabled: Boolean!
+  isCampaignClickTrackingEnabled: Boolean!
+  isCampaignOpenTrackingEnabled: Boolean!
+  workspaceDiscoverability: WorkspaceDiscoverability!
+  isGoogleAuthEnabled: Boolean!
+  isPasswordAuthEnabled: Boolean!
+  isGoogleAuthBypassEnabled: Boolean!
+  isPasswordAuthBypassEnabled: Boolean!
+  subdomain: String!
+  workspaceCustomApplication: Application
+  installedApplications: [Application!]!
+  workspaceUrls: WorkspaceUrls!
+  featureFlags: [FeatureFlag!]
+  workspaceMembersCount: Int!
+  defaultRole: Role
+  aiChatModelTier: AiModelTier!
+  aiAgentModelTier: AiModelTier!
+  isAutoModelSelectionEnabled: Boolean!
+  aiModelIdByTier: JSON!
+  aiAdditionalInstructions: String
+  isTwoFactorAuthenticationEnforced: Boolean!
+  trashRetentionDays: Int!
+  eventLogRetentionDays: Int!
+  editableProfileFields: [String!]
+  isInternalMessagesImportEnabled: Boolean!
+}
+
+type User {
+  id: UUID!
+  firstName: String!
+  lastName: String!
+  email: String!
+  hasPassword: Boolean!
+  supportUserHash: String
+  onboardingStatus: OnboardingStatus
+  currentWorkspace: Workspace
+  availableWorkspaces: AvailableWorkspaces!
+  userVars: JSON
+}
+
+extend type Query {
+  currentUser: User!
+}

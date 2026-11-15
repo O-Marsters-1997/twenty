@@ -147,6 +147,8 @@ var TwoFactorOperations = []string{
 	"generateTwoFactorAuthenticationRecoveryCode", "revokeTwoFactorAuthenticationRecoveryCode",
 }
 
+var CurrentUserOperations = []string{"GetCurrentUser"}
+
 var SessionOperations = []string{"getAuthTokensFromLoginToken", "RenewToken", "SignOut"}
 
 var blockedMetadataFields = []string{
