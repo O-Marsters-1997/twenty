@@ -1,9 +1,9 @@
 import { BarChartBaseLayerEffect } from '@/page-layout/widgets/graph/graph-widget-bar-chart/components/BarChartBaseLayerEffect';
 import { type BarPosition } from '@/page-layout/widgets/graph/graph-widget-bar-chart/types/BarPosition';
 import { type ChartMargins } from '@/page-layout/widgets/graph/types/ChartMargins';
-import { styled } from '@linaria/react';
 import { useRef } from 'react';
 import { type BarChartLayout } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
 
 type BarChartBaseLayerProps = {
   bars: BarPosition[];
@@ -18,13 +18,15 @@ type BarChartBaseLayerProps = {
   allowDataTransitions: boolean;
 };
 
-const StyledBaseCanvas = styled.canvas`
-  display: block;
-  left: 0;
-  pointer-events: none;
-  position: absolute;
-  top: 0;
-`;
+const styles = stylex.create({
+  baseCanvas: {
+    display: 'block',
+    left: '0',
+    pointerEvents: 'none',
+    position: 'absolute',
+    top: '0',
+  },
+});
 
 export const BarChartBaseLayer = ({
   bars,
@@ -42,7 +44,7 @@ export const BarChartBaseLayer = ({
 
   return (
     <>
-      <StyledBaseCanvas ref={canvasRef} />
+      <canvas ref={canvasRef} {...stylex.props(styles.baseCanvas)} />
       <BarChartBaseLayerEffect
         bars={bars}
         chartHeight={chartHeight}

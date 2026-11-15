@@ -51,6 +51,7 @@ import {
   PageLayoutTabLayoutMode,
   PageLayoutType,
 } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
 
 const StyledNodeDimension = styled(NodeDimension)`
   min-width: 0;
@@ -95,10 +96,12 @@ const StyledContainer = styled.div<{
   }
 `;
 
-const StyledDropdownContainer = styled.div`
-  align-items: center;
-  display: flex;
-`;
+const styles = stylex.create({
+  dropdownContainer: {
+    alignItems: 'center',
+    display: 'flex',
+  },
+});
 
 const StyledAddButton = styled.div`
   align-items: center;
@@ -439,7 +442,7 @@ export const PageLayoutTabList = ({
           />
 
           {shouldRenderReorderableDropdown && (
-            <StyledDropdownContainer>
+            <div {...stylex.props(styles.dropdownContainer)}>
               <PageLayoutTabListReorderableOverflowDropdown
                 dropdownId={dropdownId}
                 hiddenTabs={hiddenTabs}
@@ -452,11 +455,11 @@ export const PageLayoutTabList = ({
                 pageLayoutType={pageLayoutType}
                 tabListContainerRef={tabListContainerRef}
               />
-            </StyledDropdownContainer>
+            </div>
           )}
 
           {shouldRenderStaticDropdown && (
-            <StyledDropdownContainer>
+            <div {...stylex.props(styles.dropdownContainer)}>
               <TabListDropdown
                 dropdownId={dropdownId}
                 hiddenTabs={hiddenTabs}
@@ -468,7 +471,7 @@ export const PageLayoutTabList = ({
                 loading={loading}
                 onTabSelect={handleSelectTabFromDropdown}
               />
-            </StyledDropdownContainer>
+            </div>
           )}
 
           {addTabStrategy?.mode === 'direct' && (

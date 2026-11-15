@@ -1,14 +1,16 @@
 import { PageLayoutWidgetForbiddenDisplay } from '@/page-layout/widgets/components/PageLayoutWidgetForbiddenDisplay';
 import { PageLayoutWidgetStatusDisplay } from '@/page-layout/widgets/components/PageLayoutWidgetStatusDisplay';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isGraphqlErrorOfType } from '~/utils/is-graphql-error-of-type.util';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledForbiddenContainer = styled.div`
-  align-items: center;
-  display: flex;
-  justify-content: center;
-`;
+const styles = stylex.create({
+  forbiddenContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+});
 
 type PageLayoutWidgetErrorDisplayProps = {
   widgetId: string;
@@ -21,12 +23,12 @@ export const PageLayoutWidgetErrorDisplay = ({
 }: PageLayoutWidgetErrorDisplayProps) => {
   if (isGraphqlErrorOfType(error, 'FORBIDDEN')) {
     return (
-      <StyledForbiddenContainer>
+      <div {...stylex.props(styles.forbiddenContainer)}>
         <PageLayoutWidgetForbiddenDisplay
           widgetId={widgetId}
           restriction={{ type: null }}
         />
-      </StyledForbiddenContainer>
+      </div>
     );
   }
 

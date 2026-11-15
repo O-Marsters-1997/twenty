@@ -30,6 +30,7 @@ import {
 import { isDefined } from 'twenty-shared/utils';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 import { type PieChartConfiguration } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
 
 type GraphWidgetPieChartProps = {
   data: PieChartDataItemWithColor[];
@@ -48,14 +49,16 @@ const emptyStateData: PieChartDataItemWithColor[] = [
   { key: 'empty', value: 1 },
 ];
 
-const StyledContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: center;
-  width: 100%;
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    justifyContent: 'center',
+    width: '100%',
+  },
+});
 
 const StyledPieChartWrapper = styled.div<{ preventHover: boolean }>`
   container-type: size;
@@ -184,7 +187,7 @@ export const GraphWidgetPieChart = ({
   );
 
   return (
-    <StyledContainer id={id}>
+    <div id={id} {...stylex.props(styles.container)}>
       <GraphWidgetChartContainer
         ref={containerRef}
         $isClickable={!hasNoData && isDefined(onSliceClick)}
@@ -246,6 +249,6 @@ export const GraphWidgetPieChart = ({
       {showLegend && data.length > 0 && (
         <GraphWidgetLegend show items={legendItems} />
       )}
-    </StyledContainer>
+    </div>
   );
 };

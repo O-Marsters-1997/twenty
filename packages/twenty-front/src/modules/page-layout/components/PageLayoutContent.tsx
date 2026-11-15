@@ -8,17 +8,19 @@ import { RecordPageAddWidgetSection } from '@/page-layout/widgets/components/Rec
 import { RecordPageWidgetInsertionSeparator } from '@/page-layout/widgets/components/RecordPageWidgetInsertionSeparator';
 import { StandaloneWidgetPlaceholder } from '@/page-layout/widgets/components/StandaloneWidgetPlaceholder';
 import { isViewportFillingWidget } from '@/page-layout/widgets/utils/isViewportFillingWidget';
-import { styled } from '@linaria/react';
 import { isDefined } from 'twenty-shared/utils';
 import {
   PageLayoutTabLayoutMode,
   PageLayoutType,
 } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledEmptyStandalonePageContainer = styled.div`
-  display: grid;
-  height: 100%;
-`;
+const styles = stylex.create({
+  emptyStandalonePageContainer: {
+    display: 'grid',
+    height: '100%',
+  },
+});
 
 export const PageLayoutContent = () => {
   const isPageLayoutInEditMode = useIsPageLayoutInEditMode();
@@ -41,9 +43,9 @@ export const PageLayoutContent = () => {
 
   if (isEmptyStandalonePage) {
     return (
-      <StyledEmptyStandalonePageContainer>
+      <div {...stylex.props(styles.emptyStandalonePageContainer)}>
         <StandaloneWidgetPlaceholder />
-      </StyledEmptyStandalonePageContainer>
+      </div>
     );
   }
 

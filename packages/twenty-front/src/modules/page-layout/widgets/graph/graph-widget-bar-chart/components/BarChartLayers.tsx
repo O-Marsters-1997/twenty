@@ -7,17 +7,19 @@ import { BarChartTotalsLayer } from '@/page-layout/widgets/graph/graph-widget-ba
 import { type BarChartSlice } from '@/page-layout/widgets/graph/graph-widget-bar-chart/types/BarChartSlice';
 import { type BarPosition } from '@/page-layout/widgets/graph/graph-widget-bar-chart/types/BarPosition';
 import { type ChartMargins } from '@/page-layout/widgets/graph/types/ChartMargins';
-import { styled } from '@linaria/react';
 import { BarChartLayout } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledNoDataOverlay = styled.svg`
-  height: 100%;
-  left: 0;
-  pointer-events: none;
-  position: absolute;
-  top: 0;
-  width: 100%;
-`;
+const styles = stylex.create({
+  noDataOverlay: {
+    height: '100%',
+    left: '0',
+    pointerEvents: 'none',
+    position: 'absolute',
+    top: '0',
+    width: '100%',
+  },
+});
 
 type BarChartLayersProps = {
   allowDataTransitions: boolean;
@@ -133,7 +135,7 @@ export const BarChartLayers = ({
         showValues={showValues}
       />
       {hasNoData && (
-        <StyledNoDataOverlay>
+        <svg {...stylex.props(styles.noDataOverlay)}>
           <g transform={`translate(${margins.left}, ${margins.top})`}>
             <NoDataLayer
               hasNoData={hasNoData}
@@ -141,7 +143,7 @@ export const BarChartLayers = ({
               innerWidth={innerWidth}
             />
           </g>
-        </StyledNoDataOverlay>
+        </svg>
       )}
     </>
   );

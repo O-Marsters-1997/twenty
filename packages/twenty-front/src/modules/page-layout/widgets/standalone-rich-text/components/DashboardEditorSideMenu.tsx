@@ -9,22 +9,24 @@ import {
   useBlockNoteEditor,
   useComponentsContext,
 } from '@blocknote/react';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { IconColorSwatch, IconPlus, IconTrash } from 'twenty-ui/icon';
 import { isDefined } from 'twenty-shared/utils';
 
 import { CustomSideMenuOptions } from '@/blocknote-editor/components/CustomSideMenuOptions';
 import { type DASHBOARD_BLOCK_SCHEMA } from '@/page-layout/widgets/standalone-rich-text/constants/DashboardBlockSchema';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type DashboardEditorSideMenuProps = {
   editor: typeof DASHBOARD_BLOCK_SCHEMA.BlockNoteEditor;
 };
 
-const StyledDivToCreateGap = styled.div`
-  width: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  divToCreateGap: {
+    width: spacing['--t-spacing-2'],
+  },
+});
 
 const DashboardAddBlockItem = ({
   editor,
@@ -100,7 +102,7 @@ export const DashboardEditorSideMenu = ({
               </DragHandleMenu>
             )}
           />
-          <StyledDivToCreateGap />
+          <div {...stylex.props(styles.divToCreateGap)} />
         </SideMenu>
       )}
     />

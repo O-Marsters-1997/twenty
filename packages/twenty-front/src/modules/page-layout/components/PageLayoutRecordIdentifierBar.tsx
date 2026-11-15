@@ -13,6 +13,8 @@ import { isDefined } from 'twenty-shared/utils';
 import { IconPinned } from 'twenty-ui/icon';
 import { IconButton } from 'twenty-ui/components/input';
 import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const SIDE_TRACK = `min(${PAGE_LAYOUT_LEFT_PANEL_CONTAINER_WIDTH}px, calc(100% / 3))`;
 
@@ -53,12 +55,22 @@ const StyledIdentifierCell = styled.div<{ hasPinnedTab: boolean }>`
 `;
 
 // The pinned-tab control stays over the left panel when editing.
-const StyledPinnedTab = styled.div`
-  align-items: center;
-  display: flex;
-  flex-shrink: 0;
-  height: 100%;
-`;
+const styles = stylex.create({
+  pinnedTab: {
+    alignItems: 'center',
+    display: 'flex',
+    flexShrink: '0',
+    height: '100%',
+  },
+  createdAtCell: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'flex-end',
+    minWidth: '0',
+    paddingLeft: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-3'],
+  },
+});
 
 const StyledTabsCell = styled.div`
   align-items: stretch;
@@ -68,15 +80,6 @@ const StyledTabsCell = styled.div`
   @media print {
     display: none;
   }
-`;
-
-const StyledCreatedAtCell = styled.div`
-  align-items: center;
-  display: flex;
-  justify-content: flex-end;
-  min-width: 0;
-  padding-left: ${themeCssVariables.spacing[2]};
-  padding-right: ${themeCssVariables.spacing[3]};
 `;
 
 type PageLayoutRecordIdentifierBarProps = {
@@ -109,7 +112,7 @@ export const PageLayoutRecordIdentifierBar = ({
         />
 
         {isPinnedTabEditable && isDefined(pinnedTab) && (
-          <StyledPinnedTab>
+          <div {...stylex.props(styles.pinnedTab)}>
             <IconButton
               aria-label={t`Edit pinned tab: ${pinnedTab.title}`}
               onClick={() => openTabSettings(pinnedTab.id)}
@@ -120,7 +123,7 @@ export const PageLayoutRecordIdentifierBar = ({
             >
               <IconPinned />
             </IconButton>
-          </StyledPinnedTab>
+          </div>
         )}
       </StyledIdentifierCell>
 
@@ -128,7 +131,7 @@ export const PageLayoutRecordIdentifierBar = ({
         <StyledTabsCell>{tabList}</StyledTabsCell>
       )}
 
-      {!hasPinnedTab && <StyledCreatedAtCell>{createdAt}</StyledCreatedAtCell>}
+      {!hasPinnedTab && <div {...stylex.props(styles.createdAtCell)}>{createdAt}</div>}
     </StyledBar>
   );
 };

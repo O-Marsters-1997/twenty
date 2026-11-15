@@ -15,6 +15,8 @@ import { Fragment, type ReactNode, useCallback } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { themeCssVariables } from 'twenty-ui/theme';
 import { PageLayoutTabLayoutMode } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const StyledVerticalListContainer = styled.div<{
   isInEditMode: boolean;
@@ -57,22 +59,20 @@ const StyledVerticalListContainer = styled.div<{
       : '0'};
 `;
 
-const StyledHeader = styled.div`
-  flex-shrink: 0;
-  margin-bottom: ${themeCssVariables.spacing[4]};
-`;
-
-const StyledDropTarget = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-height: ${themeCssVariables.spacing[6]};
-  position: relative;
-
-  &:not(:first-child) {
-    margin-top: ${themeCssVariables.spacing[4]};
-  }
-`;
+const styles = stylex.create({
+  header: {
+    flexShrink: '0',
+    marginBottom: spacing['--t-spacing-4'],
+  },
+  dropTarget: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    minHeight: spacing['--t-spacing-6'],
+    position: 'relative',
+    marginTop: { default: null, ':not(:first-child)': spacing['--t-spacing-4'] },
+  },
+});
 
 type PageLayoutVerticalListProps = {
   isInEditMode: boolean;
@@ -143,7 +143,7 @@ export const PageLayoutVerticalList = ({
     >
       <WorkflowDiagramAllowPageScrollContext.Provider value={hasPageScroll}>
         {isInEditMode && isDefined(leadingElement) && (
-          <StyledHeader>{leadingElement}</StyledHeader>
+          <div {...stylex.props(styles.header)}>{leadingElement}</div>
         )}
         {widgets.map((widget, index) => (
           <Fragment key={widget.id}>
@@ -168,7 +168,7 @@ export const PageLayoutVerticalList = ({
           </Fragment>
         ))}
         {isInEditMode && !hasViewportFillingWidget && (
-          <StyledDropTarget ref={endDropZoneRef}>
+          <div ref={endDropZoneRef} {...stylex.props(styles.dropTarget)}>
             <DragDropItemDropTarget
               index={widgets.length}
               droppableId={tabId}
@@ -176,7 +176,7 @@ export const PageLayoutVerticalList = ({
               compact
             />
             {trailingElement}
-          </StyledDropTarget>
+          </div>
         )}
       </WorkflowDiagramAllowPageScrollContext.Provider>
     </StyledVerticalListContainer>

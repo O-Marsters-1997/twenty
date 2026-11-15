@@ -15,6 +15,8 @@ import { WidgetGrip } from '@/page-layout/widgets/widget-card/components/WidgetG
 import { AnimatePresence, motion } from 'framer-motion';
 import { isDefined } from 'twenty-shared/utils';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { font, spacing } from 'twenty-ui/theme/tokens.stylex';
 export type WidgetCardHeaderProps = {
   variant: WidgetCardVariant;
   widgetId: string;
@@ -43,29 +45,29 @@ const StyledWidgetCardHeader = styled.div<{ shouldInset: boolean }>`
       : '0'};
 `;
 
-const StyledTitleContainer = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.primary};
-  display: flex;
-  flex: 1;
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.medium};
-  gap: ${themeCssVariables.spacing[1]};
-  overflow: hidden;
-  user-select: none;
-`;
-
-const StyledCount = styled.span`
-  color: ${themeCssVariables.font.color.light};
-  flex-shrink: 0;
-  font-weight: ${themeCssVariables.font.weight.regular};
-`;
-
-const StyledRightContainer = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[0.5]};
-`;
+const styles = stylex.create({
+  titleContainer: {
+    alignItems: 'center',
+    color: font['--t-font-color-primary'],
+    display: 'flex',
+    flex: '1',
+    fontSize: font['--t-font-size-md'],
+    fontWeight: font['--t-font-weight-medium'],
+    gap: spacing['--t-spacing-1'],
+    overflow: 'hidden',
+    userSelect: 'none',
+  },
+  count: {
+    color: font['--t-font-color-light'],
+    flexShrink: '0',
+    fontWeight: font['--t-font-weight-regular'],
+  },
+  rightContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-0_5'],
+  },
+});
 
 const StyledIconButtonContainerBase = styled.div`
   align-items: center;
@@ -104,13 +106,13 @@ export const WidgetCardHeader = ({
       <AnimatePresence initial={false}>
         {!isEmpty && isInEditMode && <WidgetGrip className="drag-handle" />}
       </AnimatePresence>
-      <StyledTitleContainer>
+      <div {...stylex.props(styles.titleContainer)}>
         <OverflowingTextWithTooltip text={isEmpty ? t`Add Widget` : title} />
         {isDefined(widgetHeaderCount) && (
-          <StyledCount>{formatNumber(widgetHeaderCount)}</StyledCount>
+          <span {...stylex.props(styles.count)}>{formatNumber(widgetHeaderCount)}</span>
         )}
-      </StyledTitleContainer>
-      <StyledRightContainer>
+      </div>
+      <div {...stylex.props(styles.rightContainer)}>
         {hasAccess && <WidgetCardHeaderActionsRenderer />}
         {isDefined(forbiddenDisplay) && forbiddenDisplay}
         <AnimatePresence initial={false}>
@@ -139,7 +141,7 @@ export const WidgetCardHeader = ({
               </StyledIconButtonContainer>
             )}
         </AnimatePresence>
-      </StyledRightContainer>
+      </div>
     </StyledWidgetCardHeader>
   );
 };

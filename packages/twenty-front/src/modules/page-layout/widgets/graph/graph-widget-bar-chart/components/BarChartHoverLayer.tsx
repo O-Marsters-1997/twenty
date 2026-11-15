@@ -1,9 +1,9 @@
 import { BarChartHoverLayerEffect } from '@/page-layout/widgets/graph/graph-widget-bar-chart/components/BarChartHoverLayerEffect';
 import { type BarChartSlice } from '@/page-layout/widgets/graph/graph-widget-bar-chart/types/BarChartSlice';
 import { type ChartMargins } from '@/page-layout/widgets/graph/types/ChartMargins';
-import { styled } from '@linaria/react';
 import { useRef } from 'react';
 import { type BarChartLayout } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
 
 type BarChartHoverLayerProps = {
   hoveredSlice: BarChartSlice | null;
@@ -13,12 +13,14 @@ type BarChartHoverLayerProps = {
   layout: BarChartLayout;
 };
 
-const StyledHoverCanvas = styled.canvas`
-  display: block;
-  left: 0;
-  position: absolute;
-  top: 0;
-`;
+const styles = stylex.create({
+  hoverCanvas: {
+    display: 'block',
+    left: '0',
+    position: 'absolute',
+    top: '0',
+  },
+});
 
 export const BarChartHoverLayer = ({
   hoveredSlice,
@@ -31,7 +33,7 @@ export const BarChartHoverLayer = ({
 
   return (
     <>
-      <StyledHoverCanvas ref={canvasRef} />
+      <canvas ref={canvasRef} {...stylex.props(styles.hoverCanvas)} />
       <BarChartHoverLayerEffect
         hoveredSlice={hoveredSlice}
         chartHeight={chartHeight}

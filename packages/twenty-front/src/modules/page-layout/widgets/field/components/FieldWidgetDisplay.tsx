@@ -16,11 +16,13 @@ import { generateFieldWidgetInstanceId } from '@/page-layout/widgets/field/utils
 import { useCurrentWidget } from '@/page-layout/widgets/hooks/useCurrentWidget';
 import { SidePanelProvider } from '@/ui/layout/side-panel/contexts/SidePanelContext';
 import { useAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useAtomComponentState';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledContainer = styled.div`
-  width: 100%;
-`;
+const styles = stylex.create({
+  container: {
+    width: '100%',
+  },
+});
 
 type FieldWidgetDisplayProps = {
   fieldDefinition: FieldDefinition<any>;
@@ -75,7 +77,7 @@ export const FieldWidgetDisplay = ({
           }),
         }}
       >
-        <StyledContainer>
+        <div {...stylex.props(styles.container)}>
           <FieldContext.Provider
             value={{
               recordId,
@@ -101,7 +103,7 @@ export const FieldWidgetDisplay = ({
           >
             <FieldWidgetInlineCell instanceIdPrefix={instanceId} />
           </FieldContext.Provider>
-        </StyledContainer>
+        </div>
 
         <FieldWidgetCellHoveredPortal
           objectMetadataItem={objectMetadataItem}

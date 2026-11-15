@@ -1,5 +1,4 @@
 import { DragDropProvider } from '@dnd-kit/react';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { Fragment, useState } from 'react';
 import { isDefined } from 'twenty-shared/utils';
@@ -23,14 +22,17 @@ import { type DragDropProviderDragEndEvent } from '@/ui/utilities/drag-and-drop/
 import { type DragDropProviderDragMoveEvent } from '@/ui/utilities/drag-and-drop/types/DragDropProviderDragMoveEvent';
 import { getDestinationIndex } from '@/ui/utilities/drag-and-drop/utils/getDestinationIndex';
 import { resolveDropFromPointer } from '@/ui/utilities/drag-and-drop/utils/resolveDropFromPointer';
+import * as stylex from '@stylexjs/stylex';
 
 const UNGROUPED_FIELDS_DROPPABLE_ID = 'ungrouped-fields';
 
-const StyledFieldsDroppable = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
+const styles = stylex.create({
+  fieldsDroppable: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+  },
+});
 
 type FieldsConfigurationUngroupedEditorProps = {
   ungroupedFields: FieldsWidgetGroupField[];
@@ -119,7 +121,7 @@ export const FieldsConfigurationUngroupedEditor = ({
         onDragMove={handleDragMove}
         onDragEnd={handleDragEnd}
       >
-        <StyledFieldsDroppable>
+        <div {...stylex.props(styles.fieldsDroppable)}>
           {sortedFields.map((field, fieldIndex) => {
             const fieldDragData: FieldsConfigurationFieldDragData = {
               type: 'field',
@@ -176,7 +178,7 @@ export const FieldsConfigurationUngroupedEditor = ({
             withIconContainer
             withIconContainerBackground={false}
           />
-        </StyledFieldsDroppable>
+        </div>
       </DragDropProvider>
     </DragDropItemDndContext.Provider>
   );

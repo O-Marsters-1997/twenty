@@ -4,11 +4,12 @@ import { type FieldMetadataItem } from '@/object-metadata/types/FieldMetadataIte
 import { recordStoreFamilySelector } from '@/object-record/record-store/states/selectors/recordStoreFamilySelector';
 import { ScrollWrapper } from '@/ui/utilities/scroll/components/ScrollWrapper';
 import { useAtomFamilySelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilySelectorValue';
-import { styled } from '@linaria/react';
 import { lazy, Suspense } from 'react';
 import { SKELETON_HEIGHT_SIZES } from 'twenty-ui/primitives/feedback';
 import { isUndefined } from '@sniptt/guards';
 import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const RichTextFieldEditor = lazy(() =>
   import('@/object-record/record-field/ui/meta-types/input/components/RichTextFieldEditor').then(
@@ -18,36 +19,39 @@ const RichTextFieldEditor = lazy(() =>
   ),
 );
 
-const StyledContainer = styled.div`
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
-
-const StyledEditorContainer = styled.div`
-  box-sizing: border-box;
-  margin-top: ${themeCssVariables.spacing[2]};
-  padding-left: ${themeCssVariables.spacing[6]};
-  padding-right: ${themeCssVariables.spacing[2]};
-  width: 100%;
-`;
-
-const StyledSkeletonContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 0 ${themeCssVariables.spacing[4]};
-`;
+const styles = stylex.create({
+  container: {
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+  },
+  editorContainer: {
+    boxSizing: 'border-box',
+    marginTop: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-6'],
+    paddingRight: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+  skeletonContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    paddingTop: '0',
+    paddingRight: spacing['--t-spacing-4'],
+    paddingBottom: '0',
+    paddingLeft: spacing['--t-spacing-4'],
+  },
+});
 
 const LoadingSkeleton = () => {
   return (
-    <StyledSkeletonContainer>
+    <div {...stylex.props(styles.skeletonContainer)}>
       <SkeletonLine
         height={SKELETON_HEIGHT_SIZES.s}
         borderRadius={themeCssVariables.border.radius.md}
       />
-    </StyledSkeletonContainer>
+    </div>
   );
 };
 
@@ -75,11 +79,11 @@ export const FieldWidgetRichTextEditor = ({
   }
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <ScrollWrapper
         componentInstanceId={`scroll-wrapper-field-widget-rich-text-${recordId}-${fieldName}`}
       >
-        <StyledEditorContainer>
+        <div {...stylex.props(styles.editorContainer)}>
           <Suspense fallback={<LoadingSkeleton />}>
             <RichTextFieldEditor
               recordId={recordId}
@@ -87,8 +91,8 @@ export const FieldWidgetRichTextEditor = ({
               fieldName={fieldName}
             />
           </Suspense>
-        </StyledEditorContainer>
+        </div>
       </ScrollWrapper>
-    </StyledContainer>
+    </div>
   );
 };

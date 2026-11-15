@@ -7,6 +7,8 @@ import {
   IconRadiusTopRight,
 } from 'twenty-ui/icon';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { border, spacing, icon } from 'twenty-ui/theme/tokens.stylex';
 type WidgetHandleAxis = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw';
 type WidgetHorizontalHandleAxis = 'n' | 's';
 type WidgetVerticalHandleAxis = 'e' | 'w';
@@ -59,12 +61,26 @@ const StyledCornerIconWrapper = styled.div<{
   }
 `;
 
-const StyledVerticalHandle = styled.div`
-  border-radius: ${themeCssVariables.border.radius.pill};
-  corner-shape: round;
-  height: ${themeCssVariables.spacing[5]};
-  width: calc(${themeCssVariables.icon.stroke.lg} * 1px);
-`;
+const styles = stylex.create({
+  verticalHandle: {
+    borderTopLeftRadius: border['--t-border-radius-pill'],
+    borderTopRightRadius: border['--t-border-radius-pill'],
+    borderBottomRightRadius: border['--t-border-radius-pill'],
+    borderBottomLeftRadius: border['--t-border-radius-pill'],
+    cornerShape: 'round',
+    height: spacing['--t-spacing-5'],
+    width: `calc(${icon['--t-icon-stroke-lg']} * 1px)`,
+  },
+  horizontalHandle: {
+    borderTopLeftRadius: border['--t-border-radius-pill'],
+    borderTopRightRadius: border['--t-border-radius-pill'],
+    borderBottomRightRadius: border['--t-border-radius-pill'],
+    borderBottomLeftRadius: border['--t-border-radius-pill'],
+    cornerShape: 'round',
+    height: `calc(${icon['--t-icon-stroke-lg']} * 1px)`,
+    width: spacing['--t-spacing-5'],
+  },
+});
 
 const StyledVerticalHandleWrapper = styled.div<{
   widgetHandleAxis: WidgetVerticalHandleAxis;
@@ -80,13 +96,6 @@ const StyledVerticalHandleWrapper = styled.div<{
       background-color: ${themeCssVariables.font.color.tertiary};
     }
   }
-`;
-
-const StyledHorizontalHandle = styled.div`
-  border-radius: ${themeCssVariables.border.radius.pill};
-  corner-shape: round;
-  height: calc(${themeCssVariables.icon.stroke.lg} * 1px);
-  width: ${themeCssVariables.spacing[5]};
 `;
 
 const StyledHorizontalHandleWrapper = styled.div<{
@@ -196,12 +205,12 @@ export const PageLayoutGridResizeHandle = forwardRef<
       >
         {isVerticalHandle(widgetHandleAxis) && (
           <StyledVerticalHandleWrapper widgetHandleAxis={widgetHandleAxis}>
-            <StyledVerticalHandle />
+            <div {...stylex.props(styles.verticalHandle)} />
           </StyledVerticalHandleWrapper>
         )}
         {isHorizontalHandle(widgetHandleAxis) && (
           <StyledHorizontalHandleWrapper widgetHandleAxis={widgetHandleAxis}>
-            <StyledHorizontalHandle />
+            <div {...stylex.props(styles.horizontalHandle)} />
           </StyledHorizontalHandleWrapper>
         )}
         {widgetHandleAxis === 'ne' && (

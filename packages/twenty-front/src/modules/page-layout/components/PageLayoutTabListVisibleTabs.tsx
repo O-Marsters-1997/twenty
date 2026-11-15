@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { TabListRow } from '@/ui/layout/tab-list/components/TabListRow';
 import { TabListItem } from '@/ui/layout/tab-list/components/TabListItem';
 
@@ -10,6 +9,7 @@ import { PageLayoutTabListReorderableTab } from '@/page-layout/components/PageLa
 import { usePrerenderPageLayoutTabOnHover } from '@/page-layout/hooks/usePrerenderPageLayoutTabOnHover';
 import { type PageLayoutWidget } from '@/page-layout/types/PageLayoutWidget';
 import { DragDropItemDropTarget } from '@/ui/utilities/drag-and-drop/components/DragDropItemDropTarget';
+import * as stylex from '@stylexjs/stylex';
 
 type PageLayoutTabListVisibleTabsProps = {
   'aria-label': string;
@@ -26,15 +26,16 @@ type PageLayoutTabListVisibleTabsProps = {
   isScrollable: boolean;
 };
 
-const StyledTabSlot = styled.div`
-  display: flex;
-`;
-
-const StyledLeadingDropTarget = styled.div`
-  flex: 0 0 2px;
-  margin-left: -1px;
-  margin-right: -1px;
-`;
+const styles = stylex.create({
+  tabSlot: {
+    display: 'flex',
+  },
+  leadingDropTarget: {
+    flex: '0 0 2px',
+    marginLeft: '-1px',
+    marginRight: '-1px',
+  },
+});
 
 export const PageLayoutTabListVisibleTabs = ({
   'aria-label': ariaLabel,
@@ -69,15 +70,15 @@ export const PageLayoutTabListVisibleTabs = ({
         isScrollable={isScrollable}
       >
         {shownTabs.map((tab, index) => (
-          <StyledTabSlot key={tab.id}>
-            <StyledLeadingDropTarget>
+          <div key={tab.id} {...stylex.props(styles.tabSlot)}>
+            <div {...stylex.props(styles.leadingDropTarget)}>
               <DragDropItemDropTarget
                 index={index}
                 droppableId={PAGE_LAYOUT_TAB_LIST_DROPPABLE_IDS.VISIBLE_TABS}
                 orientation="vertical"
                 compact
               />
-            </StyledLeadingDropTarget>
+            </div>
             <PageLayoutTabListReorderableTab
               tab={tab}
               index={index}
@@ -90,16 +91,16 @@ export const PageLayoutTabListVisibleTabs = ({
               )}
               onSelect={() => onSelectTab(tab.id)}
             />
-          </StyledTabSlot>
+          </div>
         ))}
-        <StyledLeadingDropTarget>
+        <div {...stylex.props(styles.leadingDropTarget)}>
           <DragDropItemDropTarget
             index={visibleTabCount}
             droppableId={PAGE_LAYOUT_TAB_LIST_DROPPABLE_IDS.VISIBLE_TABS}
             orientation="vertical"
             compact
           />
-        </StyledLeadingDropTarget>
+        </div>
       </TabListRow>
     );
   }

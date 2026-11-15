@@ -6,13 +6,16 @@ import { useFieldFocus } from '@/object-record/record-field/ui/hooks/useFieldFoc
 import { useRecordInlineCellContext } from '@/object-record/record-inline-cell/components/RecordInlineCellContext';
 import { RecordInlineCellValue } from '@/object-record/record-inline-cell/components/RecordInlineCellValue';
 import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledValueContainer = styled.div<{ readonly: boolean }>`
-  display: flex;
-  min-width: 0;
-  position: relative;
-  width: 100%;
-`;
+const styles = stylex.create({
+  valueContainer: {
+    display: 'flex',
+    minWidth: '0',
+    position: 'relative',
+    width: '100%',
+  },
+});
 
 const StyledInlineCellBaseContainer = styled.div<{ readonly: boolean }>`
   align-items: center;
@@ -52,9 +55,9 @@ export const FieldWidgetInlineCellContainer = () => {
       onMouseEnter={handleContainerMouseEnter}
       onMouseLeave={handleContainerMouseLeave}
     >
-      <StyledValueContainer readonly={readonly ?? false} id={anchorId}>
+      <div readonly={readonly ?? false} id={anchorId} {...stylex.props(styles.valueContainer)}>
         <RecordInlineCellValue />
-      </StyledValueContainer>
+      </div>
     </StyledInlineCellBaseContainer>
   );
 };

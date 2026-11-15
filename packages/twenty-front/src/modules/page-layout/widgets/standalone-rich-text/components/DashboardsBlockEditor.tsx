@@ -2,7 +2,6 @@ import { filterSuggestionItems } from '@blocknote/core/extensions';
 import { BlockNoteView } from '@blocknote/mantine';
 import { SuggestionMenuController } from '@blocknote/react';
 import { css } from '@linaria/core';
-import { styled } from '@linaria/react';
 import { type ClipboardEvent } from 'react';
 
 import { CustomSlashMenu } from '@/blocknote-editor/components/CustomSlashMenu';
@@ -12,6 +11,7 @@ import { DashboardFormattingToolbar } from '@/page-layout/widgets/standalone-ric
 import { type DASHBOARD_BLOCK_SCHEMA } from '@/page-layout/widgets/standalone-rich-text/constants/DashboardBlockSchema';
 import { getDashboardSlashMenu } from '@/page-layout/widgets/standalone-rich-text/utils/getDashboardSlashMenu';
 import { useThemeColorScheme, themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
 type DashboardsBlockEditorProps = {
   editor: typeof DASHBOARD_BLOCK_SCHEMA.BlockNoteEditor;
   onFocus?: () => void;
@@ -21,9 +21,11 @@ type DashboardsBlockEditorProps = {
   readonly?: boolean;
 };
 
-const StyledEditor = styled.div`
-  width: 100%;
-`;
+const styles = stylex.create({
+  editor: {
+    width: '100%',
+  },
+});
 
 // TODO: Refactor these BlockNote CSS overrides - some may be dead code now that we have custom components
 // (DashboardEditorSideMenu, DashboardColorSelectionMenu).
@@ -176,7 +178,7 @@ export const DashboardsBlockEditor = ({
   };
 
   return (
-    <StyledEditor>
+    <div {...stylex.props(styles.editor)}>
       <BlockNoteView
         className={editorStyles}
         onFocus={handleFocus}
@@ -206,6 +208,6 @@ export const DashboardsBlockEditor = ({
           </>
         )}
       </BlockNoteView>
-    </StyledEditor>
+    </div>
   );
 };

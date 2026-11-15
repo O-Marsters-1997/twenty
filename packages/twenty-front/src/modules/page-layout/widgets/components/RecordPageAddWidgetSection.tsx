@@ -6,7 +6,6 @@ import { useInsertCreatedWidgetAtContext } from '@/page-layout/hooks/useInsertCr
 import { useNavigateToMoreWidgets } from '@/page-layout/hooks/useNavigateToMoreWidgets';
 import { type WidgetInsertionContext } from '@/page-layout/states/widgetInsertionContextComponentState';
 import { type PageLayoutWidget } from '@/page-layout/types/PageLayoutWidget';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { MenuItem } from 'twenty-ui/components/navigation';
 import {
@@ -15,37 +14,54 @@ import {
   IconNotes,
   IconPlus,
 } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { border, spacing, font, background } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  border: 1px solid transparent;
-  border-radius: ${themeCssVariables.border.radius.md};
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  padding: ${themeCssVariables.spacing[2]};
-  width: 100%;
-`;
-
-const StyledHeader = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.primary};
-  display: flex;
-  flex-shrink: 0;
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.medium};
-  height: ${themeCssVariables.spacing[6]};
-  padding-inline: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledMenuItemList = styled.div`
-  background-color: ${themeCssVariables.background.secondary};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.md};
-  margin-top: ${themeCssVariables.spacing[2]};
-  overflow: hidden;
-  padding: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  container: {
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: 'transparent',
+    borderTopLeftRadius: border['--t-border-radius-md'],
+    borderTopRightRadius: border['--t-border-radius-md'],
+    borderBottomRightRadius: border['--t-border-radius-md'],
+    borderBottomLeftRadius: border['--t-border-radius-md'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+  header: {
+    alignItems: 'center',
+    color: font['--t-font-color-primary'],
+    display: 'flex',
+    flexShrink: '0',
+    fontSize: font['--t-font-size-md'],
+    fontWeight: font['--t-font-weight-medium'],
+    height: spacing['--t-spacing-6'],
+    paddingInline: spacing['--t-spacing-1'],
+  },
+  menuItemList: {
+    backgroundColor: background['--t-background-secondary'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: border['--t-border-color-medium'],
+    borderTopLeftRadius: border['--t-border-radius-md'],
+    borderTopRightRadius: border['--t-border-radius-md'],
+    borderBottomRightRadius: border['--t-border-radius-md'],
+    borderBottomLeftRadius: border['--t-border-radius-md'],
+    marginTop: spacing['--t-spacing-2'],
+    overflow: 'hidden',
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+});
 
 type RecordPageAddWidgetSectionProps = {
   insertionContext?: WidgetInsertionContext;
@@ -72,9 +88,9 @@ export const RecordPageAddWidgetSection = ({
   };
 
   return (
-    <StyledContainer>
-      <StyledHeader>{t`Add widget`}</StyledHeader>
-      <StyledMenuItemList>
+    <div {...stylex.props(styles.container)}>
+      <div {...stylex.props(styles.header)}>{t`Add widget`}</div>
+      <div {...stylex.props(styles.menuItemList)}>
         <MenuItem
           LeftIcon={IconListDetails}
           withIconContainer
@@ -105,7 +121,7 @@ export const RecordPageAddWidgetSection = ({
           hasSubMenu
           onClick={() => navigateToMoreWidgets(insertionContext)}
         />
-      </StyledMenuItemList>
-    </StyledContainer>
+      </div>
+    </div>
   );
 };

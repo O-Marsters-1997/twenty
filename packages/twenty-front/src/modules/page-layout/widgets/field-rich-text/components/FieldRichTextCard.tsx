@@ -3,12 +3,13 @@ import { type CoreObjectNameSingular } from 'twenty-shared/types';
 import { recordStoreFamilySelector } from '@/object-record/record-store/states/selectors/recordStoreFamilySelector';
 import { useTargetRecord } from '@/ui/layout/contexts/useTargetRecord';
 import { ScrollWrapper } from '@/ui/utilities/scroll/components/ScrollWrapper';
-import { styled } from '@linaria/react';
 import { lazy, Suspense } from 'react';
 import { SKELETON_HEIGHT_SIZES } from 'twenty-ui/primitives/feedback';
 import { useAtomFamilySelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilySelectorValue';
 import { isDefined } from 'twenty-shared/utils';
 import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const ActivityRichTextEditor = lazy(() =>
   import('@/activities/components/ActivityRichTextEditor').then((module) => ({
@@ -16,29 +17,33 @@ const ActivityRichTextEditor = lazy(() =>
   })),
 );
 
-const StyledShowPageActivityContainer = styled.div`
-  box-sizing: border-box;
-  margin-top: ${themeCssVariables.spacing[2]};
-  padding-left: ${themeCssVariables.spacing[6]};
-  padding-right: ${themeCssVariables.spacing[2]};
-  width: 100%;
-`;
-
-const StyledSkeletonContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 0 ${themeCssVariables.spacing[4]};
-`;
+const styles = stylex.create({
+  showPageActivityContainer: {
+    boxSizing: 'border-box',
+    marginTop: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-6'],
+    paddingRight: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+  skeletonContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    paddingTop: '0',
+    paddingRight: spacing['--t-spacing-4'],
+    paddingBottom: '0',
+    paddingLeft: spacing['--t-spacing-4'],
+  },
+});
 
 const LoadingSkeleton = () => {
   return (
-    <StyledSkeletonContainer>
+    <div {...stylex.props(styles.skeletonContainer)}>
       <SkeletonLine
         height={SKELETON_HEIGHT_SIZES.s}
         borderRadius={themeCssVariables.border.radius.md}
       />
-    </StyledSkeletonContainer>
+    </div>
   );
 };
 
@@ -61,14 +66,14 @@ export const FieldRichTextCard = () => {
     <ScrollWrapper
       componentInstanceId={`scroll-wrapper-tab-list-${targetRecord.id}`}
     >
-      <StyledShowPageActivityContainer>
+      <div {...stylex.props(styles.showPageActivityContainer)}>
         <Suspense fallback={<LoadingSkeleton />}>
           <ActivityRichTextEditor
             activityId={targetRecord.id}
             activityObjectNameSingular={activityObjectNameSingular}
           />
         </Suspense>
-      </StyledShowPageActivityContainer>
+      </div>
     </ScrollWrapper>
   );
 };

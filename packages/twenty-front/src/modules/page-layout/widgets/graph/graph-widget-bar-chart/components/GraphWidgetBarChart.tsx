@@ -26,13 +26,13 @@ import { NodeDimensionEffect } from '@/ui/utilities/dimensions/components/NodeDi
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useSetAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useSetAtomComponentState';
-import { styled } from '@linaria/react';
 import { isNumber } from '@sniptt/guards';
 import { useMemo, useRef, useState } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { useTheme } from 'twenty-ui/theme';
 import { useDebouncedCallback } from 'use-debounce';
 import { BarChartLayout } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
 
 type GraphWidgetBarChartProps = {
   axisDisplayType?: GraphValueFormatOptions['displayType'];
@@ -57,14 +57,16 @@ type GraphWidgetBarChartProps = {
   yAxisLabel?: string;
 } & GraphValueFormatOptions;
 
-const StyledContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: center;
-  width: 100%;
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    justifyContent: 'center',
+    width: '100%',
+  },
+});
 
 export const GraphWidgetBarChart = ({
   data,
@@ -251,7 +253,7 @@ export const GraphWidgetBarChart = ({
   };
 
   return (
-    <StyledContainer id={id}>
+    <div id={id} {...stylex.props(styles.container)}>
       <GraphWidgetChartContainer
         ref={containerRef}
         $isClickable={hasClickableItems}
@@ -313,6 +315,6 @@ export const GraphWidgetBarChart = ({
       {showLegend && data.length > 0 && keys.length > 0 && (
         <GraphWidgetLegend items={legendItems} show />
       )}
-    </StyledContainer>
+    </div>
   );
 };

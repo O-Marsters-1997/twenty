@@ -19,16 +19,23 @@ import { t } from '@lingui/core/macro';
 
 import { themeCssVariables } from 'twenty-ui/theme';
 import { type FieldsConfiguration } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { border, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledPropertyBox = styled.div`
-  align-self: stretch;
-  border-radius: ${themeCssVariables.border.radius.sm};
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  padding-bottom: ${themeCssVariables.spacing[3]};
-  padding-top: ${themeCssVariables.spacing[3]};
-`;
+const styles = stylex.create({
+  propertyBox: {
+    alignSelf: 'stretch',
+    borderTopLeftRadius: border['--t-border-radius-sm'],
+    borderTopRightRadius: border['--t-border-radius-sm'],
+    borderBottomRightRadius: border['--t-border-radius-sm'],
+    borderBottomLeftRadius: border['--t-border-radius-sm'],
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-3'],
+    paddingTop: spacing['--t-spacing-3'],
+  },
+});
 
 const StyledInlineFieldsPropertyBox = styled.div<{
   hasMoreGroup: boolean;
@@ -125,12 +132,12 @@ export const FieldsWidget = ({ widget }: FieldsWidgetProps) => {
           {shouldDisplayGroupHeaders ? (
             groups.map((group) => (
               <FieldsWidgetGroupContainer key={group.id} title={group.name}>
-                <StyledPropertyBox>
+                <div {...stylex.props(styles.propertyBox)}>
                   <FieldsWidgetFieldList
                     fields={group.fields}
                     instanceId={instanceId}
                   />
-                </StyledPropertyBox>
+                </div>
               </FieldsWidgetGroupContainer>
             ))
           ) : (
@@ -149,12 +156,12 @@ export const FieldsWidget = ({ widget }: FieldsWidgetProps) => {
               title={t`More (${hiddenFieldsWithOffsetGlobalIndex.length})`}
               defaultExpanded={false}
             >
-              <StyledPropertyBox>
+              <div {...stylex.props(styles.propertyBox)}>
                 <FieldsWidgetFieldList
                   fields={hiddenFieldsWithOffsetGlobalIndex}
                   instanceId={instanceId}
                 />
-              </StyledPropertyBox>
+              </div>
             </FieldsWidgetGroupContainer>
           )}
 

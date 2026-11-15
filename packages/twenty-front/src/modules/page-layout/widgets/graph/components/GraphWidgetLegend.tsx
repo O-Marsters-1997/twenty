@@ -18,6 +18,8 @@ import { LightIconButton } from 'twenty-ui/components/input';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
 import { IconChevronLeft, IconChevronRight } from 'twenty-ui/icon';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing, font } from 'twenty-ui/theme/tokens.stylex';
 
 export type GraphWidgetLegendItem = {
   id: string;
@@ -32,12 +34,25 @@ type GraphWidgetLegendProps = {
 
 type AnimationDirection = 'forward' | 'backward';
 
-const StyledAnimationClipContainer = styled.div`
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  position: relative;
-`;
+const styles = stylex.create({
+  animationClipContainer: {
+    flex: '1',
+    minWidth: '0',
+    overflow: 'hidden',
+    position: 'relative',
+  },
+  paginationContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+    flexShrink: '0',
+    gap: spacing['--t-spacing-0_5'],
+  },
+  paginationIndicator: {
+    color: font['--t-font-color-light'],
+    fontSize: font['--t-font-size-xs'],
+  },
+});
 
 const StyledLegendMotionWrapperBase = styled.div`
   width: 100%;
@@ -102,19 +117,6 @@ const StyledLegendDotWrapper = styled.div<{ isHidden?: boolean }>`
   display: flex;
   opacity: ${({ isHidden }) =>
     isHidden ? LEGEND_HIGHLIGHT_DIMMED_OPACITY : 1};
-`;
-
-const StyledPaginationContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  flex-shrink: 0;
-  gap: ${themeCssVariables.spacing[0.5]};
-`;
-
-const StyledPaginationIndicator = styled.span`
-  color: ${themeCssVariables.font.color.light};
-  font-size: ${themeCssVariables.font.size.xs};
 `;
 
 const legendEnterExitVariants = {
@@ -263,7 +265,7 @@ export const GraphWidgetLegend = ({
               }}
             />
             {needsPagination && (
-              <StyledPaginationContainer>
+              <div {...stylex.props(styles.paginationContainer)}>
                 <LightIconButton
                   onClick={handlePreviousPage}
                   disabled={safeCurrentPage === 0}
@@ -272,9 +274,9 @@ export const GraphWidgetLegend = ({
                 >
                   <IconChevronLeft />
                 </LightIconButton>
-                <StyledPaginationIndicator>
+                <span {...stylex.props(styles.paginationIndicator)}>
                   {safeCurrentPage + 1}/{totalPages}
-                </StyledPaginationIndicator>
+                </span>
                 <LightIconButton
                   onClick={handleNextPage}
                   disabled={safeCurrentPage === totalPages - 1}
@@ -282,9 +284,9 @@ export const GraphWidgetLegend = ({
                 >
                   <IconChevronRight />
                 </LightIconButton>
-              </StyledPaginationContainer>
+              </div>
             )}
-            <StyledAnimationClipContainer>
+            <div {...stylex.props(styles.animationClipContainer)}>
               <AnimatePresence
                 mode="popLayout"
                 custom={animationDirection}
@@ -331,7 +333,7 @@ export const GraphWidgetLegend = ({
                   })}
                 </StyledItemsWrapper>
               </AnimatePresence>
-            </StyledAnimationClipContainer>
+            </div>
           </StyledLegendContainer>
         </StyledLegendMotionWrapper>
       )}

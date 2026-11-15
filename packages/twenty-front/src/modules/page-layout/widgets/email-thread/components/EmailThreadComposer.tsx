@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useCallback, useMemo } from 'react';
 
 import { EmailComposerFields } from '@/activities/emails/components/EmailComposerFields';
@@ -20,23 +19,25 @@ import {
   IconSend,
   IconX,
 } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { font, spacing, background } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledReplyBar = styled.button`
-  align-items: center;
-  all: unset;
-  color: ${themeCssVariables.font.color.tertiary};
-  cursor: pointer;
-  display: flex;
-  font-size: ${themeCssVariables.font.size.md};
-  gap: ${themeCssVariables.spacing[2]};
-  padding: ${themeCssVariables.spacing[3]} ${themeCssVariables.spacing[4]};
-
-  &:hover {
-    background: ${themeCssVariables.background.transparent.light};
-    color: ${themeCssVariables.font.color.secondary};
-  }
-`;
+const styles = stylex.create({
+  replyBar: {
+    alignItems: 'center',
+    all: 'unset',
+    color: { default: font['--t-font-color-tertiary'], ':hover': font['--t-font-color-secondary'] },
+    cursor: 'pointer',
+    display: 'flex',
+    fontSize: font['--t-font-size-md'],
+    gap: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingBottom: spacing['--t-spacing-3'],
+    paddingLeft: spacing['--t-spacing-4'],
+    background: { default: null, ':hover': background['--t-background-transparent-light'] },
+  },
+});
 
 type EmailThreadComposerProps = {
   replyContext: ReplyContextReady;
@@ -160,10 +161,10 @@ export const EmailThreadComposer = ({
         />
       ) : (
         !isInSidePanel && (
-          <StyledReplyBar onClick={() => setIsComposerOpen(true)}>
+          <button onClick={() => setIsComposerOpen(true)} {...stylex.props(styles.replyBar)}>
             <IconArrowBackUp size={16} />
             {t`Reply...`}
-          </StyledReplyBar>
+          </button>
         )
       )}
     </>

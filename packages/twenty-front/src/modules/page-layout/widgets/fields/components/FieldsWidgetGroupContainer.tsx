@@ -4,19 +4,22 @@ import { Section } from 'twenty-ui/components/layout';
 import { IconChevronDown } from 'twenty-ui/icon';
 import { Collapsible } from 'twenty-ui/primitives/layout';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { font } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledHeader = styled.header`
-  align-items: center;
-  cursor: pointer;
-  display: flex;
-  height: 24px;
-  justify-content: space-between;
-`;
-
-const StyledTitleLabel = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-weight: ${themeCssVariables.font.weight.medium};
-`;
+const styles = stylex.create({
+  header: {
+    alignItems: 'center',
+    cursor: 'pointer',
+    display: 'flex',
+    height: '24px',
+    justifyContent: 'space-between',
+  },
+  titleLabel: {
+    color: font['--t-font-color-tertiary'],
+    fontWeight: font['--t-font-weight-medium'],
+  },
+});
 
 const StyledChevronWrapper = styled.div<{ isExpanded: boolean }>`
   color: ${themeCssVariables.font.color.tertiary};
@@ -46,15 +49,15 @@ export const FieldsWidgetGroupContainer = ({
 
   return (
     <Section.Root>
-      <StyledHeader onClick={handleToggleGroup}>
-        <StyledTitleLabel>{title}</StyledTitleLabel>
+      <header onClick={handleToggleGroup} {...stylex.props(styles.header)}>
+        <div {...stylex.props(styles.titleLabel)}>{title}</div>
         <StyledChevronWrapper isExpanded={isExpanded}>
           <IconChevronDown
             size={theme.icon.size.md}
             stroke={theme.icon.stroke.sm}
           />
         </StyledChevronWrapper>
-      </StyledHeader>
+      </header>
       <Collapsible.Root open={isExpanded}>
         <Collapsible.Panel>{children}</Collapsible.Panel>
       </Collapsible.Root>
