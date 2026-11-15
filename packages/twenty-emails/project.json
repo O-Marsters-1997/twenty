@@ -27,6 +27,18 @@
       }
     },
     "typecheck": {},
+    "test": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "dependsOn": ["^build"],
+      "inputs": ["default", "^default"],
+      "outputs": ["{projectRoot}/coverage"],
+      "options": {
+        "cwd": "{workspaceRoot}",
+        "command": "jest --config={projectRoot}/jest.config.mjs",
+        "env": { "NODE_OPTIONS": "--experimental-vm-modules" }
+      }
+    },
     "lint": {},
     "fmt": {
       "options": {
