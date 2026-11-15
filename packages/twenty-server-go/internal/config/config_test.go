@@ -31,6 +31,12 @@ func TestLoad(t *testing.T) {
 		if err != nil || days.RecoveryCodeTTL != 48*time.Hour {
 			t.Errorf("RecoveryCodeTTL for 2d = %v, %v, want 48h", days.RecoveryCodeTTL, err)
 		}
+		if cfg.PasswordResetTokenTTL != 5*time.Minute || cfg.EmailVerificationTokenTTL != time.Hour {
+			t.Errorf("token TTLs = %v, %v, want 5m, 1h", cfg.PasswordResetTokenTTL, cfg.EmailVerificationTokenTTL)
+		}
+		if cfg.Email.Driver != "logger" || cfg.Email.SMTPPort != 587 {
+			t.Errorf("Email = %+v, want logger driver on port 587", cfg.Email)
+		}
 		if cfg.NodeUpstreamURL.Host != "localhost:3001" {
 			t.Errorf("NodeUpstreamURL.Host = %q, want localhost:3001", cfg.NodeUpstreamURL.Host)
 		}
@@ -42,6 +48,8 @@ func TestLoad(t *testing.T) {
 			"no scheme":        {"NODE_UPSTREAM_URL": "localhost:3001"},
 			"bad level":        {"NODE_UPSTREAM_URL": "http://n:1", "LOG_LEVEL": "loud"},
 			"bad recovery ttl": {"NODE_UPSTREAM_URL": "http://n:1", "TWO_FACTOR_AUTHENTICATION_RECOVERY_CODE_EXPIRES_IN": "soon"},
+			"bad reset ttl":    {"NODE_UPSTREAM_URL": "http://n:1", "PASSWORD_RESET_TOKEN_EXPIRES_IN": "0m"},
+			"bad email driver": {"NODE_UPSTREAM_URL": "http://n:1", "EMAIL_DRIVER": "pigeon"},
 		}
 		for name, values := range tests {
 			t.Run(name, func(t *testing.T) {

@@ -3,6 +3,7 @@ package auth
 import (
 	"errors"
 	"fmt"
+	"unicode/utf16"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -17,6 +18,35 @@ var ErrInvalidCredentials = errors.New("invalid credentials")
 type PasswordHasher interface {
 	Hash(password string) (string, error)
 	Compare(hash, password string) error
+}
+
+const (
+	minPasswordLength = 8
+	maxPasswordLength = 50
+)
+
+var ErrInvalidPassword = errors.New("password must be 8 to 50 characters")
+
+func ValidatePassword(password string) error {
+	units := 0
+	for _, char := range password {
+		switch char {
+		case '\n', '\r', ' ', ' ':
+			return ErrInvalidPassword
+		}
+		units += utf16.RuneLen(char)
+	}
+	if units < minPasswordLength || units > maxPasswordLength {
+		return ErrInvalidPassword
+	}
+	return nil
+}
+
+func NewPasswordHash(hasher PasswordHasher, password string) (string, error) {
+	if err := ValidatePassword(password); err != nil {
+		return "", err
+	}
+	return hasher.Hash(password)
 }
 
 type bcryptHasher struct{}
