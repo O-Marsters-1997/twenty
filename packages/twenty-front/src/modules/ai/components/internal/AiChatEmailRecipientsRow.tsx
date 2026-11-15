@@ -1,42 +1,41 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { type KeyboardEvent, useState } from 'react';
 import { LightIconButton } from 'twenty-ui/components/input';
 import { IconX } from 'twenty-ui/icon';
 import { Chip } from 'twenty-ui/primitives/data-display';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { type EmailRecipient } from '@/activities/emails/recipients/types/EmailRecipient';
 import { parseEmailRecipients } from '@/activities/emails/recipients/utils/parseEmailRecipients';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledRow = styled.div`
-  align-items: center;
-  display: flex;
-  flex-wrap: wrap;
-  gap: ${themeCssVariables.spacing[1]};
-  min-height: 28px;
-`;
-
-const StyledRowLabel = styled.span`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.sm};
-  width: 32px;
-`;
-
-const StyledInput = styled.input`
-  background: transparent;
-  border: none;
-  color: ${themeCssVariables.font.color.primary};
-  flex: 1 0 80px;
-  font-family: inherit;
-  font-size: ${themeCssVariables.font.size.sm};
-  min-width: 80px;
-  outline: none;
-
-  &::placeholder {
-    color: ${themeCssVariables.font.color.light};
-  }
-`;
+const styles = stylex.create({
+  row: {
+    alignItems: 'center',
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: spacing['--t-spacing-1'],
+    minHeight: '28px',
+  },
+  rowLabel: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-sm'],
+    width: '32px',
+  },
+  input: {
+    background: 'transparent',
+    borderStyle: 'none',
+    color: {
+      default: fontColor['--t-font-color-primary'],
+      '::placeholder': fontColor['--t-font-color-light'],
+    },
+    flex: '1 0 80px',
+    fontFamily: 'inherit',
+    fontSize: fontSize['--t-font-size-sm'],
+    minWidth: '80px',
+    outline: 'none',
+  },
+});
 
 type AiChatEmailRecipientsRowProps = {
   label: string;
@@ -85,8 +84,8 @@ export const AiChatEmailRecipientsRow = ({
   };
 
   return (
-    <StyledRow>
-      <StyledRowLabel>{label}</StyledRowLabel>
+    <div {...stylex.props(styles.row)}>
+      <span {...stylex.props(styles.rowLabel)}>{label}</span>
       {recipients.map(({ address }) => (
         <Chip
           key={address}
@@ -113,15 +112,16 @@ export const AiChatEmailRecipientsRow = ({
         </Chip>
       ))}
       {!disabled && (
-        <StyledInput
+        <input
           aria-label={t`Add a recipient to ${label}`}
           placeholder={recipients.length === 0 ? t`Add recipient` : undefined}
           value={draftRecipient}
           onChange={(event) => setDraftRecipient(event.target.value)}
           onKeyDown={handleKeyDown}
           onBlur={addDraftRecipients}
+          {...stylex.props(styles.input)}
         />
       )}
-    </StyledRow>
+    </div>
   );
 };

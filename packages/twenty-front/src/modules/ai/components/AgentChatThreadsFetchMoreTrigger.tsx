@@ -1,16 +1,18 @@
-import { styled } from '@linaria/react';
 import { useInView } from 'react-intersection-observer';
 import { isDefined } from 'twenty-shared/utils';
 
 import { useRefreshAgentChatThreads } from '@/ai/hooks/useRefreshAgentChatThreads';
 import { agentChatThreadListState } from '@/ai/states/agentChatThreadListState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledFetchMoreTrigger = styled.div`
-  height: 1px;
-  min-height: 1px;
-  width: 100%;
-`;
+const styles = stylex.create({
+  fetchMoreTrigger: {
+    height: '1px',
+    minHeight: '1px',
+    width: '100%',
+  },
+});
 
 export const AgentChatThreadsFetchMoreTrigger = () => {
   const agentChatThreadList = useAtomStateValue(agentChatThreadListState);
@@ -27,5 +29,5 @@ export const AgentChatThreadsFetchMoreTrigger = () => {
     return null;
   }
 
-  return <StyledFetchMoreTrigger ref={ref} />;
+  return <div ref={ref} {...stylex.props(styles.fetchMoreTrigger)} />;
 };

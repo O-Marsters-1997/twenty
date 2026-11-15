@@ -9,7 +9,6 @@ import { LazyMarkdownContent } from '@/ai/components/LazyMarkdownRenderer';
 import { groupContiguousThinkingStepParts } from '@/ai/utils/groupContiguousThinkingStepParts';
 import { isEmptyReasoningPart } from '@/ai/utils/isEmptyReasoningPart';
 import { isHiddenCompleteWorkspaceSetupToolPart } from '@/ai/utils/isHiddenCompleteWorkspaceSetupToolPart';
-import { styled } from '@linaria/react';
 import { getToolName, isToolUIPart } from 'ai';
 import {
   ASK_QUESTION_TOOL_NAME,
@@ -19,13 +18,16 @@ import {
   PROPOSE_TOOL_CALL_TOOL_NAME,
   REQUEST_FORM_TOOL_NAME,
 } from 'twenty-shared/ai';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledMessagePartsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  messagePartsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-1'],
+  },
+});
 
 const MessagePartRenderer = ({
   part,
@@ -126,7 +128,10 @@ export const AiChatAssistantMessageRenderer = ({
 
   return (
     <div>
-      <StyledMessagePartsContainer data-replay-ignore-mutations="true">
+      <div
+        data-replay-ignore-mutations="true"
+        {...stylex.props(styles.messagePartsContainer)}
+      >
         {renderItems.map((renderItem, index) =>
           renderItem.type === 'thinking-steps' ? (
             <ThinkingStepsDisplay
@@ -160,7 +165,7 @@ export const AiChatAssistantMessageRenderer = ({
             />
           ),
         )}
-      </StyledMessagePartsContainer>
+      </div>
     </div>
   );
 };

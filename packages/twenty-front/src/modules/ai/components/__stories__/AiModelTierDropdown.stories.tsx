@@ -1,5 +1,4 @@
 import { type Meta, type StoryObj } from '@storybook/react-vite';
-import { styled } from '@linaria/react';
 import { useStore } from 'jotai';
 import { useEffect } from 'react';
 import { expect, fireEvent, userEvent, waitFor, within } from 'storybook/test';
@@ -9,11 +8,14 @@ import { AiModelTierDropdown } from '@/ai/components/AiModelTierDropdown';
 import { AiChatSurfaceContext } from '@/ai/contexts/AiChatSurfaceContext';
 import { agentChatUserSelectedModelTierState } from '@/ai/states/agentChatUserSelectedModelTierState';
 import { shouldOpenAiChatAfterOnboardingState } from '@/onboarding/states/shouldOpenAiChatAfterOnboardingState';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledTriggerContainer = styled.div`
-  margin-top: 200px;
-  margin-left: 200px;
-`;
+const styles = stylex.create({
+  triggerContainer: {
+    marginTop: '200px',
+    marginLeft: '200px',
+  },
+});
 
 const meta: Meta<typeof AiModelTierDropdown> = {
   title: 'Modules/AiChat/AiModelTierDropdown',
@@ -31,9 +33,9 @@ const meta: Meta<typeof AiModelTierDropdown> = {
       }, [store, setupChat]);
       return (
         <AiChatSurfaceContext.Provider value="side-panel">
-          <StyledTriggerContainer>
+          <div {...stylex.props(styles.triggerContainer)}>
             <Story />
-          </StyledTriggerContainer>
+          </div>
         </AiChatSurfaceContext.Provider>
       );
     },

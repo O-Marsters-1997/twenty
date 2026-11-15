@@ -1,23 +1,26 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { IconTransform } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledIndicatorContainer = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  indicatorContainer: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+  },
+});
 
 export const AiChatCompactionIndicator = () => {
   const { t } = useLingui();
   const theme = useTheme();
 
   return (
-    <StyledIndicatorContainer>
+    <div {...stylex.props(styles.indicatorContainer)}>
       <IconTransform size={theme.icon.size.sm} />
       <div>{t`The conversation has been compacted`}</div>
-    </StyledIndicatorContainer>
+    </div>
   );
 };

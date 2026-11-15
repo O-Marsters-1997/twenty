@@ -1,32 +1,44 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { parseAndValidateVariableFriendlyStringifiedJson } from '~/utils/parseAndValidateVariableFriendlyStringifiedJson';
+import * as stylex from '@stylexjs/stylex';
+import {
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  codeFont,
+  color,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledTextarea = styled(TextareaAutosize)`
-  background: ${themeCssVariables.background.transparent.lighter};
-  border: 1px solid ${themeCssVariables.border.color.light};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  color: ${themeCssVariables.font.color.primary};
-  font-family: ${themeCssVariables.code.font.family};
-  font-size: ${themeCssVariables.font.size.sm};
-  line-height: 1.5;
-  outline: none;
-  padding: ${themeCssVariables.spacing[2]};
-  resize: none;
-
-  &:focus-visible {
-    border-color: ${themeCssVariables.color.blue};
-  }
-`;
-
-const StyledError = styled.span`
-  color: ${themeCssVariables.font.color.danger};
-  font-size: ${themeCssVariables.font.size.sm};
-`;
+const styles = stylex.create({
+  textarea: {
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
+    borderColor: {
+      default: borderColor['--t-border-color-light'],
+      ':focus-visible': color['--t-color-blue'],
+    },
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    color: fontColor['--t-font-color-primary'],
+    fontFamily: codeFont['--t-code-font-family'],
+    fontSize: fontSize['--t-font-size-sm'],
+    lineHeight: 1.5,
+    outline: 'none',
+    padding: spacing['--t-spacing-2'],
+    resize: 'none',
+  },
+  error: {
+    color: fontColor['--t-font-color-danger'],
+    fontSize: fontSize['--t-font-size-sm'],
+  },
+});
 
 type AiChatToolCallApprovalArgumentsEditorProps = {
   defaultArguments: Record<string, unknown>;
@@ -58,7 +70,8 @@ export const AiChatToolCallApprovalArgumentsEditor = ({
 
   return (
     <>
-      <StyledTextarea
+      <TextareaAutosize
+        {...stylex.props(styles.textarea)}
         aria-label={t`Arguments`}
         minRows={3}
         maxRows={16}
@@ -68,9 +81,9 @@ export const AiChatToolCallApprovalArgumentsEditor = ({
         onChange={(event) => handleChange(event.target.value)}
       />
       {hasError && (
-        <StyledError role="alert">
+        <span role="alert" {...stylex.props(styles.error)}>
           {t`Arguments must be a valid JSON object.`}
-        </StyledError>
+        </span>
       )}
     </>
   );

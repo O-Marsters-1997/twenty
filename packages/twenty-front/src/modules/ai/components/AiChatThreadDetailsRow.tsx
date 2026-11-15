@@ -1,40 +1,40 @@
-import { styled } from '@linaria/react';
 import { type ReactNode } from 'react';
 import { type IconComponent } from 'twenty-ui/icon';
-import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledRow = styled.div`
-  align-items: flex-start;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledLabel = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  flex-shrink: 0;
-  font-size: ${themeCssVariables.font.size.sm};
-  gap: ${themeCssVariables.spacing[1]};
-  height: ${themeCssVariables.spacing[6]};
-  width: ${themeCssVariables.spacing[24]};
-`;
-
-const StyledLabelText = styled.span`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledValue = styled.div`
-  align-items: center;
-  display: flex;
-  flex: 1;
-  flex-wrap: wrap;
-  gap: ${themeCssVariables.spacing[1]};
-  min-height: ${themeCssVariables.spacing[6]};
-  min-width: 0;
-`;
+const styles = stylex.create({
+  row: {
+    alignItems: 'flex-start',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+  },
+  label: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    flexShrink: '0',
+    fontSize: fontSize['--t-font-size-sm'],
+    gap: spacing['--t-spacing-1'],
+    height: spacing['--t-spacing-6'],
+    width: spacing['--t-spacing-24'],
+  },
+  labelText: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  value: {
+    alignItems: 'center',
+    display: 'flex',
+    flex: '1',
+    flexWrap: 'wrap',
+    gap: spacing['--t-spacing-1'],
+    minHeight: spacing['--t-spacing-6'],
+    minWidth: '0',
+  },
+});
 
 type AiChatThreadDetailsRowProps = {
   Icon: IconComponent;
@@ -52,13 +52,13 @@ export const AiChatThreadDetailsRow = ({
   const theme = useTheme();
 
   return (
-    <StyledRow>
-      <StyledLabel>
+    <div {...stylex.props(styles.row)}>
+      <div {...stylex.props(styles.label)}>
         <Icon size={theme.icon.size.sm} />
-        <StyledLabelText>{label}</StyledLabelText>
-      </StyledLabel>
-      <StyledValue>{children}</StyledValue>
+        <span {...stylex.props(styles.labelText)}>{label}</span>
+      </div>
+      <div {...stylex.props(styles.value)}>{children}</div>
       {action}
-    </StyledRow>
+    </div>
   );
 };

@@ -1,20 +1,27 @@
 import { SkeletonLine } from '@/ui/feedback/skeleton/components/SkeletonLine';
-import { StyledAiChatContentContainer } from '@/ai/components/StyledAiChatContentContainer';
-import { styled } from '@linaria/react';
+import { aiChatContentContainerStyles } from '@/ai/components/StyledAiChatContentContainer';
 
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledSkeletonContainer = styled(StyledAiChatContentContainer)`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  padding: ${themeCssVariables.spacing[3]};
-`;
+const styles = stylex.create({
+  skeletonContainer: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    padding: spacing['--t-spacing-3'],
+  },
+});
 
 export const AiChatSkeletonLoader = () => {
   return (
-    <StyledSkeletonContainer>
+    <div
+      {...stylex.props(
+        aiChatContentContainerStyles.root,
+        styles.skeletonContainer,
+      )}
+    >
       <SkeletonLine height={20} borderRadius={8} />
-    </StyledSkeletonContainer>
+    </div>
   );
 };

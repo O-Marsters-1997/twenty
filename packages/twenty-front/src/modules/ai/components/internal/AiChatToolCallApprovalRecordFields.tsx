@@ -1,8 +1,6 @@
-import { styled } from '@linaria/react';
 import { useMemo } from 'react';
 import { FieldMetadataType } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { type JsonValue } from 'type-fest';
 
 import { AiChatToolCallApprovalCurrentValue } from '@/ai/components/internal/AiChatToolCallApprovalCurrentValue';
@@ -11,6 +9,8 @@ import { formatFieldMetadataItemAsFieldDefinition } from '@/object-metadata/util
 import { FormFieldInput } from '@/object-record/record-field/ui/components/FormFieldInput';
 import { isFieldRelationManyToOne } from '@/object-record/record-field/ui/types/guards/isFieldRelationManyToOne';
 import { useAtomFamilySelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilySelectorValue';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 // approvers read amounts in currency units, as the record shows them, not as micros
 const CURRENCY_INPUT_SETTINGS = {
@@ -18,17 +18,18 @@ const CURRENCY_INPUT_SETTINGS = {
   amountUnit: 'units',
 } as const;
 
-const StyledField = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing['0.5']};
-`;
-
-const StyledUnknownField = styled.div`
-  color: ${themeCssVariables.font.color.secondary};
-  font-size: ${themeCssVariables.font.size.sm};
-  overflow-wrap: anywhere;
-`;
+const styles = stylex.create({
+  field: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-0_5'],
+  },
+  unknownField: {
+    color: fontColor['--t-font-color-secondary'],
+    fontSize: fontSize['--t-font-size-sm'],
+    overflowWrap: 'anywhere',
+  },
+});
 
 type AiChatToolCallApprovalRecordFieldsProps = {
   objectNameSingular: string;
@@ -85,14 +86,14 @@ export const AiChatToolCallApprovalRecordFields = ({
 
           if (!isDefined(fieldDefinition)) {
             return (
-              <StyledUnknownField key={fieldName}>
+              <div key={fieldName} {...stylex.props(styles.unknownField)}>
                 {`${fieldName}: ${JSON.stringify(value)}`}
-              </StyledUnknownField>
+              </div>
             );
           }
 
           return (
-            <StyledField key={fieldName}>
+            <div key={fieldName} {...stylex.props(styles.field)}>
               <FormFieldInput
                 field={fieldDefinition}
                 settings={CURRENCY_INPUT_SETTINGS}
@@ -108,7 +109,7 @@ export const AiChatToolCallApprovalRecordFields = ({
                   fieldDefinition={fieldDefinition}
                 />
               )}
-            </StyledField>
+            </div>
           );
         })}
     </>

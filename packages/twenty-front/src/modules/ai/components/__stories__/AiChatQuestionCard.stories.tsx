@@ -9,15 +9,20 @@ import { agentChatDisplayedThreadState } from '@/ai/states/agentChatDisplayedThr
 import { currentAiChatThreadState } from '@/ai/states/currentAiChatThreadState';
 import { type AgentChatPendingQuestion } from '@/ai/types/AgentChatPendingQuestion';
 
-import { styled } from '@linaria/react';
 import { MemoryRouterDecorator } from '~/testing/decorators/MemoryRouterDecorator';
 import { RootDecorator } from '~/testing/decorators/RootDecorator';
 import { ToastDecorator } from '~/testing/decorators/ToastDecorator';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledContainer = styled.div`
-  max-width: 400px;
-  padding: 24px;
-`;
+const styles = stylex.create({
+  container: {
+    maxWidth: '400px',
+    paddingTop: '24px',
+    paddingRight: '24px',
+    paddingBottom: '24px',
+    paddingLeft: '24px',
+  },
+});
 
 const EMAIL_TYPE_QUESTION = {
   header: 'Email type',
@@ -103,9 +108,9 @@ const meta: Meta<typeof AiChatQuestionCard> = {
   decorators: [
     (Story) => (
       <StoreSeeder>
-        <StyledContainer>
+        <div {...stylex.props(styles.container)}>
           <Story />
-        </StyledContainer>
+        </div>
       </StoreSeeder>
     ),
     ToastDecorator,

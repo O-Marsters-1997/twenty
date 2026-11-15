@@ -1,8 +1,7 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { IconBellOff, IconCheck, IconZzz } from 'twenty-ui/icon';
-import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 
 import { useFormatAgentChatThreadDate } from '@/ai/hooks/useFormatAgentChatThreadDate';
 import { currentAiChatThreadState } from '@/ai/states/currentAiChatThreadState';
@@ -11,15 +10,19 @@ import { useAtomFamilySelectorValue } from '@/ui/utilities/state/jotai/hooks/use
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useIsFeatureEnabled } from '@/workspace/hooks/useIsFeatureEnabled';
 import { FeatureFlagKey } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledNotice = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  font-size: ${themeCssVariables.font.size.sm};
-  gap: ${themeCssVariables.spacing[1]};
-  justify-content: center;
-`;
+const styles = stylex.create({
+  notice: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    fontSize: fontSize['--t-font-size-sm'],
+    gap: spacing['--t-spacing-1'],
+    justifyContent: 'center',
+  },
+});
 
 // Ends the conversation with where the chat stands in the member's inbox
 export const AiChatThreadInboxStateNotice = () => {
@@ -52,9 +55,9 @@ export const AiChatThreadInboxStateNotice = () => {
   }[event.type];
 
   return (
-    <StyledNotice>
+    <div {...stylex.props(styles.notice)}>
       <notice.Icon size={theme.icon.size.sm} />
       {notice.text}
-    </StyledNotice>
+    </div>
   );
 };

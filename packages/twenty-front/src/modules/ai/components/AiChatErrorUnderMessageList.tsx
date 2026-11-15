@@ -6,14 +6,16 @@ import { agentChatIsStreamingFamilyState } from '@/ai/states/agentChatIsStreamin
 import { agentChatMessageFamilySelector } from '@/ai/states/selectors/agentChatMessageFamilySelector';
 import { agentChatMessageIdsSelector } from '@/ai/states/selectors/agentChatMessageIdsSelector';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { useAtomFamilySelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilySelectorValue';
 import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledErrorWrapper = styled.div`
-  padding-top: ${themeCssVariables.spacing[3]};
-`;
+const styles = stylex.create({
+  errorWrapper: {
+    paddingTop: spacing['--t-spacing-3'],
+  },
+});
 
 export const AiChatErrorUnderMessageList = () => {
   const agentChatDisplayedThread = useAtomStateValue(
@@ -45,8 +47,8 @@ export const AiChatErrorUnderMessageList = () => {
   }
 
   return (
-    <StyledErrorWrapper>
+    <div {...stylex.props(styles.errorWrapper)}>
       <AiChatErrorRenderer error={agentChatError} />
-    </StyledErrorWrapper>
+    </div>
   );
 };

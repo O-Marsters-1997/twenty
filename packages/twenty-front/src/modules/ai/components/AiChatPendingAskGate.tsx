@@ -1,34 +1,37 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { type ReactNode, useState } from 'react';
 import { LightIconButton } from 'twenty-ui/components/input';
 import { IconChevronLeft, IconChevronRight } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { AiChatAskCard } from '@/ai/components/AiChatAskCard';
 import { useAgentChatPendingToolCalls } from '@/ai/hooks/useAgentChatPendingToolCalls';
 import { agentChatDisplayedThreadState } from '@/ai/states/agentChatDisplayedThreadState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledGate = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[1]};
-  width: 100%;
-`;
-
-const StyledStepper = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  padding: 0 ${themeCssVariables.spacing[1]};
-`;
-
-const StyledStepperLabel = styled.span`
-  color: ${themeCssVariables.font.color.light};
-  flex: 1;
-  font-size: ${themeCssVariables.font.size.sm};
-`;
+const styles = stylex.create({
+  gate: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-1'],
+    width: '100%',
+  },
+  stepper: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    paddingTop: '0',
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: '0',
+    paddingLeft: spacing['--t-spacing-1'],
+  },
+  stepperLabel: {
+    color: fontColor['--t-font-color-light'],
+    flex: '1',
+    fontSize: fontSize['--t-font-size-sm'],
+  },
+});
 
 type AiChatPendingAskGateProps = {
   children: ReactNode;
@@ -93,12 +96,12 @@ export const AiChatPendingAskGate = ({
     });
 
   return (
-    <StyledGate>
+    <div {...stylex.props(styles.gate)}>
       {requestCount > 1 && (
-        <StyledStepper>
-          <StyledStepperLabel>
+        <div {...stylex.props(styles.stepper)}>
+          <span {...stylex.props(styles.stepperLabel)}>
             {t`Request ${requestNumber} of ${requestCount}`}
-          </StyledStepperLabel>
+          </span>
           <LightIconButton
             size="sm"
             disabled={currentIndex === 0}
@@ -115,13 +118,13 @@ export const AiChatPendingAskGate = ({
           >
             <IconChevronRight />
           </LightIconButton>
-        </StyledStepper>
+        </div>
       )}
       {pendingToolCalls.map((pendingToolCall, index) => (
         <div key={pendingToolCall.toolCallId} hidden={index !== currentIndex}>
           <AiChatAskCard pendingToolCall={pendingToolCall} />
         </div>
       ))}
-    </StyledGate>
+    </div>
   );
 };

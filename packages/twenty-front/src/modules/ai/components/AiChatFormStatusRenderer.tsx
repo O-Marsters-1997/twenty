@@ -9,7 +9,8 @@ import { isDefined } from 'twenty-shared/utils';
 import { IconListDetails } from 'twenty-ui/icon';
 
 import { AiChatAskStatusRow } from '@/ai/components/AiChatAskStatusRow';
-import { StyledAiChatAskStatusDetail } from '@/ai/components/AiChatAskStyledComponents';
+import * as stylex from '@stylexjs/stylex';
+import { aiChatAskStyles } from '@/ai/components/AiChatAskStyledComponents';
 
 export const AiChatFormStatusRenderer = ({
   toolPart,
@@ -46,9 +47,12 @@ export const AiChatFormStatusRenderer = ({
           const value = values[field.name];
 
           return (
-            <StyledAiChatAskStatusDetail key={field.name}>
+            <span
+              key={field.name}
+              {...stylex.props(aiChatAskStyles.statusDetail)}
+            >
               {`${field.label}: ${isString(value) ? value : JSON.stringify(value)}`}
-            </StyledAiChatAskStatusDetail>
+            </span>
           );
         })}
     </AiChatAskStatusRow>

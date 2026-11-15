@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { type Meta, type StoryObj } from '@storybook/react-vite';
 import { EditorContent } from '@tiptap/react';
 import { graphql, HttpResponse } from 'msw';
@@ -15,11 +14,14 @@ import { ObjectMetadataItemsDecorator } from '~/testing/decorators/ObjectMetadat
 import { ToastDecorator } from '~/testing/decorators/ToastDecorator';
 import { graphqlMocks } from '~/testing/graphqlMocks';
 import { mockedUserData } from '~/testing/mock-data/users';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledComposer = styled.div`
-  margin-top: 320px;
-  width: 400px;
-`;
+const styles = stylex.create({
+  composer: {
+    marginTop: '320px',
+    width: '400px',
+  },
+});
 
 const AiChatAddMenuWithEditor = () => {
   const editor = useAdvancedTextEditor({
@@ -31,10 +33,10 @@ const AiChatAddMenuWithEditor = () => {
   });
 
   return (
-    <StyledComposer>
+    <div {...stylex.props(styles.composer)}>
       <EditorContent editor={editor} />
       <AiChatAddMenu editor={editor} />
-    </StyledComposer>
+    </div>
   );
 };
 

@@ -1,24 +1,34 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import TextareaAutosize from 'react-textarea-autosize';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  borderColor,
+  borderRadius,
+  color,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledFeedbackTextarea = styled(TextareaAutosize)`
-  background: transparent;
-  border: 1px solid ${themeCssVariables.border.color.light};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  color: ${themeCssVariables.font.color.primary};
-  font-family: inherit;
-  font-size: ${themeCssVariables.font.size.md};
-  line-height: 1.5;
-  outline: none;
-  padding: ${themeCssVariables.spacing[2]};
-  resize: none;
-
-  &:focus-visible {
-    border-color: ${themeCssVariables.color.blue};
-  }
-`;
+const styles = stylex.create({
+  textarea: {
+    backgroundColor: 'transparent',
+    borderColor: {
+      default: borderColor['--t-border-color-light'],
+      ':focus-visible': color['--t-color-blue'],
+    },
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    color: fontColor['--t-font-color-primary'],
+    fontFamily: 'inherit',
+    fontSize: fontSize['--t-font-size-md'],
+    lineHeight: 1.5,
+    outline: 'none',
+    padding: spacing['--t-spacing-2'],
+    resize: 'none',
+  },
+});
 
 type AiChatToolCallApprovalFeedbackInputProps = {
   value: string;
@@ -34,7 +44,8 @@ export const AiChatToolCallApprovalFeedbackInput = ({
   const { t } = useLingui();
 
   return (
-    <StyledFeedbackTextarea
+    <TextareaAutosize
+      {...stylex.props(styles.textarea)}
       aria-label={t`Feedback`}
       placeholder={t`Tell the agent what to change`}
       minRows={2}

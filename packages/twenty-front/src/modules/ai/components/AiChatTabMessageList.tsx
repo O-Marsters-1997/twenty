@@ -1,6 +1,6 @@
 import { AI_CHAT_SURFACE } from '@/ai/constants/AiChatSurface';
 import { MarkdownLoadingSkeleton } from '@/ai/components/LazyMarkdownRenderer';
-import { StyledAiChatContentContainer } from '@/ai/components/StyledAiChatContentContainer';
+import { aiChatContentContainerStyles } from '@/ai/components/StyledAiChatContentContainer';
 import { AiChatErrorUnderMessageList } from '@/ai/components/AiChatErrorUnderMessageList';
 import { AiChatLastMessageWithStreamingState } from '@/ai/components/AiChatLastMessageWithStreamingState';
 import { AiChatNonLastMessageIdsList } from '@/ai/components/AiChatNonLastMessageIdsList';
@@ -16,35 +16,33 @@ import { getAiChatScrollWrapperInstanceId } from '@/ai/utils/getAiChatScrollWrap
 import { WorkspaceSetupChatPreamble } from '@/onboarding/components/WorkspaceSetupChatPreamble';
 import { ScrollWrapper } from '@/ui/utilities/scroll/components/ScrollWrapper';
 import { ScrollWrapperComponentInstanceContext } from '@/ui/utilities/scroll/states/contexts/ScrollWrapperComponentInstanceContext';
-import { styled } from '@linaria/react';
 import { Suspense, useContext } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledScrollWrapperContainer = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  overflow-y: auto;
-  position: relative;
-  width: 100%;
-`;
-
-const StyledPreambleOutsideScrollContainer = styled(
-  StyledAiChatContentContainer,
-)`
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-  padding: ${themeCssVariables.spacing[4]};
-`;
-
-const StyledMessageListContent = styled(StyledAiChatContentContainer)`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  padding: ${themeCssVariables.spacing[4]};
-`;
+const styles = stylex.create({
+  preambleOutsideScrollContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    flexShrink: 0,
+    padding: spacing['--t-spacing-4'],
+  },
+  messageListContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    padding: spacing['--t-spacing-4'],
+  },
+  scrollWrapperContainer: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    overflowY: 'auto',
+    position: 'relative',
+    width: '100%',
+  },
+});
 
 export const AiChatTabMessageList = () => {
   const isWorkspaceSetupChat = useIsWorkspaceSetupChat();
@@ -61,10 +59,15 @@ export const AiChatTabMessageList = () => {
     }
 
     return (
-      <StyledPreambleOutsideScrollContainer>
+      <div
+        {...stylex.props(
+          aiChatContentContainerStyles.root,
+          styles.preambleOutsideScrollContainer,
+        )}
+      >
         <WorkspaceSetupChatPreamble />
         <AiChatPendingResponseIndicator />
-      </StyledPreambleOutsideScrollContainer>
+      </div>
     );
   }
 
@@ -74,28 +77,38 @@ export const AiChatTabMessageList = () => {
     >
       <Suspense
         fallback={
-          <StyledScrollWrapperContainer>
-            <StyledMessageListContent>
+          <div {...stylex.props(styles.scrollWrapperContainer)}>
+            <div
+              {...stylex.props(
+                aiChatContentContainerStyles.root,
+                styles.messageListContent,
+              )}
+            >
               <MarkdownLoadingSkeleton />
-            </StyledMessageListContent>
-          </StyledScrollWrapperContainer>
+            </div>
+          </div>
         }
       >
-        <StyledScrollWrapperContainer>
+        <div {...stylex.props(styles.scrollWrapperContainer)}>
           <ScrollWrapper componentInstanceId={scrollWrapperInstanceId}>
-            <StyledMessageListContent>
+            <div
+              {...stylex.props(
+                aiChatContentContainerStyles.root,
+                styles.messageListContent,
+              )}
+            >
               {isWorkspaceSetupChat && <WorkspaceSetupChatPreamble />}
               <AiChatNonLastMessageIdsList />
               <AiChatLastMessageWithStreamingState />
               <AiChatPendingResponseIndicator />
               <AiChatErrorUnderMessageList />
               <AiChatThreadInboxStateNotice />
-            </StyledMessageListContent>
+            </div>
             <AgentChatScrollToBottomOnDisplayedThreadChangeLayoutEffect />
             <AgentChatStreamingAutoScrollEffect />
           </ScrollWrapper>
           <AiChatScrollToBottomButton />
-        </StyledScrollWrapperContainer>
+        </div>
       </Suspense>
     </ScrollWrapperComponentInstanceContext.Provider>
   );
