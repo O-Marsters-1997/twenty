@@ -12,28 +12,29 @@ import { isDropdownOpenComponentState } from '@/ui/layout/dropdown/states/isDrop
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { IconButton } from 'twenty-ui/components/input';
 import { OverflowingList } from 'twenty-ui/components/layout';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { type MouseEvent, useId, useState } from 'react';
 import { isDefined, isNonEmptyArray } from 'twenty-shared/utils';
 import { IconPlus } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledClickableContainer = styled.div`
-  align-items: center;
-  cursor: pointer;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  min-height: 24px;
-  min-width: 0;
-  width: 100%;
-`;
-
-const StyledPlaceholder = styled.span`
-  color: ${themeCssVariables.font.color.light};
-  font-size: ${themeCssVariables.font.size.md};
-`;
+const styles = stylex.create({
+  clickableContainer: {
+    alignItems: 'center',
+    cursor: 'pointer',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    minHeight: '24px',
+    minWidth: '0',
+    width: '100%',
+  },
+  placeholder: {
+    color: fontColor['--t-font-color-light'],
+    fontSize: fontSize['--t-font-size-md'],
+  },
+});
 
 type CalendarEventComposerTargetsInputProps = {
   targets: CalendarEventComposerTarget[];
@@ -105,10 +106,11 @@ export const CalendarEventComposerTargetsInput = ({
 
   return (
     <>
-      <StyledClickableContainer
+      <div
         ref={setContainerElement}
         onClick={handleToggleDropdown}
         data-click-outside-id={dropdownId}
+        {...stylex.props(styles.clickableContainer)}
       >
         {hasChips ? (
           <>
@@ -139,10 +141,10 @@ export const CalendarEventComposerTargetsInput = ({
             aria-expanded={isDropdownOpen}
             aria-haspopup="listbox"
           >
-            <StyledPlaceholder>{pickerLabel}</StyledPlaceholder>
+            <span {...stylex.props(styles.placeholder)}>{pickerLabel}</span>
           </Button>
         )}
-      </StyledClickableContainer>
+      </div>
       <Dropdown
         dropdownId={dropdownId}
         dropdownPlacement="bottom-start"

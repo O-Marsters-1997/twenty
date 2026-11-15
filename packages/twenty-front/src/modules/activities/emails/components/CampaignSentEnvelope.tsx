@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import {
@@ -6,7 +5,6 @@ import {
   MessageCampaignStatus,
 } from 'twenty-shared/types';
 import { isDefined, isValidUuid } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import {
   CampaignEnvelopeBox,
@@ -20,19 +18,22 @@ import { RecordChip } from '@/object-record/components/RecordChip';
 import { useFindOneRecord } from '@/object-record/hooks/useFindOneRecord';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { dateLocaleState } from '@/localization/states/dateLocaleState';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledValue = styled.span`
-  color: ${themeCssVariables.font.color.primary};
-  font-size: ${themeCssVariables.font.size.md};
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledEmptyValue = styled.span`
-  color: ${themeCssVariables.font.color.light};
-  font-size: ${themeCssVariables.font.size.md};
-`;
+const styles = stylex.create({
+  value: {
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-md'],
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  emptyValue: {
+    color: fontColor['--t-font-color-light'],
+    fontSize: fontSize['--t-font-size-md'],
+  },
+});
 
 type CampaignSentEnvelopeProps = {
   campaign: MessageCampaign;
@@ -93,9 +94,9 @@ export const CampaignSentEnvelope = ({
     <CampaignEnvelopeBox width={width}>
       <CampaignEnvelopeRow label={t`From`}>
         {isNonEmptyString(fromAddress) ? (
-          <StyledValue>{fromAddress}</StyledValue>
+          <span {...stylex.props(styles.value)}>{fromAddress}</span>
         ) : (
-          <StyledEmptyValue>{t`No sender`}</StyledEmptyValue>
+          <span {...stylex.props(styles.emptyValue)}>{t`No sender`}</span>
         )}
       </CampaignEnvelopeRow>
       <CampaignEnvelopeRow label={t`To`}>
@@ -105,36 +106,36 @@ export const CampaignSentEnvelope = ({
             objectNameSingular={CoreObjectNameSingular.MessageList}
           />
         ) : !hasList ? (
-          <StyledEmptyValue>{t`No list`}</StyledEmptyValue>
+          <span {...stylex.props(styles.emptyValue)}>{t`No list`}</span>
         ) : (
           isListUnresolved && (
-            <StyledEmptyValue>{t`Unavailable`}</StyledEmptyValue>
+            <span {...stylex.props(styles.emptyValue)}>{t`Unavailable`}</span>
           )
         )}
       </CampaignEnvelopeRow>
       {hasUnsubscribeTopic && (
         <CampaignEnvelopeRow label={t`Unsubscribe topic`}>
           {isDefined(unsubscribeTopic) ? (
-            <StyledValue>
+            <span {...stylex.props(styles.value)}>
               {unsubscribeTopic.name ?? t`Untitled topic`}
-            </StyledValue>
+            </span>
           ) : (
             isTopicUnresolved && (
-              <StyledEmptyValue>{t`Unavailable`}</StyledEmptyValue>
+              <span {...stylex.props(styles.emptyValue)}>{t`Unavailable`}</span>
             )
           )}
         </CampaignEnvelopeRow>
       )}
       <CampaignEnvelopeRow label={t`Subject`}>
         {isNonEmptyString(subject) ? (
-          <StyledValue>{subject}</StyledValue>
+          <span {...stylex.props(styles.value)}>{subject}</span>
         ) : (
-          <StyledEmptyValue>{t`No subject`}</StyledEmptyValue>
+          <span {...stylex.props(styles.emptyValue)}>{t`No subject`}</span>
         )}
       </CampaignEnvelopeRow>
       {isNonEmptyString(scheduledSendTime) && (
         <CampaignEnvelopeRow label={t`Scheduled at`}>
-          <StyledValue>{scheduledSendTime}</StyledValue>
+          <span {...stylex.props(styles.value)}>{scheduledSendTime}</span>
         </CampaignEnvelopeRow>
       )}
     </CampaignEnvelopeBox>

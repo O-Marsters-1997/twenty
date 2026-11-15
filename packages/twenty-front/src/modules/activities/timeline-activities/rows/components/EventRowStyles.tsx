@@ -1,37 +1,35 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
+import { timelineIconSlot } from '../../constants/TimelineIconSlotSize.stylex';
 
-import { TIMELINE_ICON_SLOT_SIZE } from '@/activities/timeline-activities/constants/TimelineIconSlotSize';
-import { themeCssVariables } from 'twenty-ui/theme';
-
-export const StyledEventRow = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[1]};
-  width: 100%;
-`;
-
-export const StyledEventRowContainer = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  justify-content: space-between;
-  min-height: ${TIMELINE_ICON_SLOT_SIZE}px;
-`;
-
-export const StyledEventRowContent = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  min-width: 0;
-  overflow: hidden;
-`;
-
-export const StyledEventRowLinkedRecord = styled.span`
-  color: ${themeCssVariables.font.color.primary};
-  cursor: pointer;
-  overflow: hidden;
-  text-decoration: underline;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  width: 100%;
-`;
+export const eventRowStyles = stylex.create({
+  row: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-1'],
+    width: '100%',
+  },
+  container: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    justifyContent: 'space-between',
+    minHeight: timelineIconSlot.size,
+  },
+  content: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    minWidth: 0,
+    overflow: 'hidden',
+  },
+  linkedRecord: {
+    color: fontColor['--t-font-color-primary'],
+    cursor: 'pointer',
+    overflow: 'hidden',
+    textDecoration: 'underline',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    width: '100%',
+  },
+});

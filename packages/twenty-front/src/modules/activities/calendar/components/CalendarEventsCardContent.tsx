@@ -16,14 +16,18 @@ import { Heading } from 'twenty-ui/primitives/typography';
 import { themeCssVariables } from 'twenty-ui/theme';
 import { type TimelineCalendarEvent } from '~/generated/graphql';
 import { dateLocaleState } from '@/localization/states/dateLocaleState';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor } from 'twenty-ui/theme/tokens.stylex';
 
 const StyledContainer = styled(StyledWidgetScrollContainer)`
   gap: ${themeCssVariables.spacing[8]};
 `;
 
-const StyledYear = styled.span`
-  color: ${themeCssVariables.font.color.light};
-`;
+const styles = stylex.create({
+  year: {
+    color: fontColor['--t-font-color-light'],
+  },
+});
 
 const StyledTitleContainer = styled.div`
   margin-bottom: ${themeCssVariables.spacing[2]};
@@ -101,7 +105,9 @@ export const CalendarEventsCardContent = ({
               <StyledTitleContainer>
                 <Heading level={3} size="lg">
                   {monthLabel}
-                  {isLastMonthOfYear && <StyledYear> {year}</StyledYear>}
+                  {isLastMonthOfYear && (
+                    <span {...stylex.props(styles.year)}> {year}</span>
+                  )}
                 </Heading>
               </StyledTitleContainer>
               <CalendarMonthCard dayTimes={monthDayTimes} />

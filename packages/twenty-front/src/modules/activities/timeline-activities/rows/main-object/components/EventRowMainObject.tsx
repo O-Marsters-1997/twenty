@@ -1,11 +1,8 @@
+import * as stylex from '@stylexjs/stylex';
 import { EventRowDate } from '@/activities/timeline-activities/rows/components/EventRowDate';
 import { type EventRowNativeComponentProps } from '@/activities/timeline-activities/rows/components/EventRowDynamicComponent.types';
 import { EventRowItem } from '@/activities/timeline-activities/rows/components/EventRowItem';
-import {
-  StyledEventRow,
-  StyledEventRowContainer,
-  StyledEventRowContent,
-} from '@/activities/timeline-activities/rows/components/EventRowStyles';
+import { eventRowStyles } from '@/activities/timeline-activities/rows/components/EventRowStyles';
 import { EventRowMainObjectUpdated } from '@/activities/timeline-activities/rows/main-object/components/EventRowMainObjectUpdated';
 import { t } from '@lingui/core/macro';
 import { isDefined } from 'twenty-shared/utils';
@@ -25,18 +22,18 @@ export const EventRowMainObject = ({
   switch (eventAction) {
     case 'created': {
       return (
-        <StyledEventRow>
-          <StyledEventRowContainer>
-            <StyledEventRowContent>
+        <div {...stylex.props(eventRowStyles.row)}>
+          <div {...stylex.props(eventRowStyles.container)}>
+            <div {...stylex.props(eventRowStyles.content)}>
               <EventRowItem>{labelIdentifierValue}</EventRowItem>
               <EventRowItem variant="action">
                 {eventTypeLabel ?? t`was created by`}
               </EventRowItem>
               <EventRowItem>{authorFullName}</EventRowItem>
-            </StyledEventRowContent>
+            </div>
             <EventRowDate happensAt={happensAt} />
-          </StyledEventRowContainer>
-        </StyledEventRow>
+          </div>
+        </div>
       );
     }
     case 'updated': {
@@ -54,34 +51,34 @@ export const EventRowMainObject = ({
     }
     case 'deleted': {
       return (
-        <StyledEventRow>
-          <StyledEventRowContainer>
-            <StyledEventRowContent>
+        <div {...stylex.props(eventRowStyles.row)}>
+          <div {...stylex.props(eventRowStyles.container)}>
+            <div {...stylex.props(eventRowStyles.content)}>
               <EventRowItem>{labelIdentifierValue}</EventRowItem>
               <EventRowItem variant="action">
                 {eventTypeLabel ?? t`was deleted by`}
               </EventRowItem>
               <EventRowItem>{authorFullName}</EventRowItem>
-            </StyledEventRowContent>
+            </div>
             <EventRowDate happensAt={happensAt} />
-          </StyledEventRowContainer>
-        </StyledEventRow>
+          </div>
+        </div>
       );
     }
     case 'restored': {
       return (
-        <StyledEventRow>
-          <StyledEventRowContainer>
-            <StyledEventRowContent>
+        <div {...stylex.props(eventRowStyles.row)}>
+          <div {...stylex.props(eventRowStyles.container)}>
+            <div {...stylex.props(eventRowStyles.content)}>
               <EventRowItem>{labelIdentifierValue}</EventRowItem>
               <EventRowItem variant="action">
                 {eventTypeLabel ?? t`was restored by`}
               </EventRowItem>
               <EventRowItem>{authorFullName}</EventRowItem>
-            </StyledEventRowContent>
+            </div>
             <EventRowDate happensAt={happensAt} />
-          </StyledEventRowContainer>
-        </StyledEventRow>
+          </div>
+        </div>
       );
     }
     default: {
@@ -90,16 +87,16 @@ export const EventRowMainObject = ({
       }
 
       return (
-        <StyledEventRow>
-          <StyledEventRowContainer>
-            <StyledEventRowContent>
+        <div {...stylex.props(eventRowStyles.row)}>
+          <div {...stylex.props(eventRowStyles.container)}>
+            <div {...stylex.props(eventRowStyles.content)}>
               <EventRowItem>{authorFullName}</EventRowItem>
               <EventRowItem variant="action">{eventTypeLabel}</EventRowItem>
               <EventRowItem>{labelIdentifierValue}</EventRowItem>
-            </StyledEventRowContent>
+            </div>
             <EventRowDate happensAt={happensAt} />
-          </StyledEventRowContainer>
-        </StyledEventRow>
+          </div>
+        </div>
       );
     }
   }

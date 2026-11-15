@@ -1,5 +1,3 @@
-import { styled } from '@linaria/react';
-
 import { EventFieldDiffLabel } from '@/activities/timeline-activities/rows/main-object/components/EventFieldDiffLabel';
 import { EventFieldDiffValue } from '@/activities/timeline-activities/rows/main-object/components/EventFieldDiffValue';
 import { EventFieldDiffValueEffect } from '@/activities/timeline-activities/rows/main-object/components/EventFieldDiffValueEffect';
@@ -9,7 +7,8 @@ import { type FieldMetadataItem } from '@/object-metadata/types/FieldMetadataIte
 import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/EnrichedObjectMetadataItem';
 import { Trans } from '@lingui/react/macro';
 import { FieldMetadataType } from 'twenty-shared/types';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type EventFieldDiffProps = {
   fieldDiff: { before: unknown; after: unknown };
@@ -18,25 +17,25 @@ type EventFieldDiffProps = {
   diffArtificialRecordStoreId: string;
 };
 
-const StyledEventFieldDiffContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  gap: ${themeCssVariables.spacing[1]};
-  height: 24px;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledEmptyValue = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-`;
-
-const StyledArrowContainer = styled.span`
-  color: ${themeCssVariables.font.color.secondary};
-`;
+const styles = stylex.create({
+  eventFieldDiffContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+    gap: spacing['--t-spacing-1'],
+    height: '24px',
+    maxWidth: '100%',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  emptyValue: {
+    color: fontColor['--t-font-color-tertiary'],
+  },
+  arrowContainer: {
+    color: fontColor['--t-font-color-secondary'],
+  },
+});
 
 export const EventFieldDiff = ({
   fieldDiff,
@@ -55,14 +54,14 @@ export const EventFieldDiff = ({
 
   if (isRelationFieldDiff) {
     return (
-      <StyledEventFieldDiffContainer>
+      <div {...stylex.props(styles.eventFieldDiffContainer)}>
         <EventFieldDiffLabel fieldMetadataItem={fieldMetadataItem} />
-        <StyledArrowContainer>→</StyledArrowContainer>
+        <span {...stylex.props(styles.arrowContainer)}>→</span>
         <EventRelationFieldDiffValues
           fieldDiff={fieldDiff}
           fieldMetadataItem={fieldMetadataItem}
         />
-      </StyledEventFieldDiffContainer>
+      </div>
     );
   }
 
@@ -81,13 +80,13 @@ export const EventFieldDiff = ({
       isObjectEmpty(diffRecord));
 
   return (
-    <StyledEventFieldDiffContainer>
+    <div {...stylex.props(styles.eventFieldDiffContainer)}>
       <EventFieldDiffLabel fieldMetadataItem={fieldMetadataItem} />
-      <StyledArrowContainer>→</StyledArrowContainer>
+      <span {...stylex.props(styles.arrowContainer)}>→</span>
       {isUpdatedToEmpty ? (
-        <StyledEmptyValue>
+        <div {...stylex.props(styles.emptyValue)}>
           <Trans>Empty</Trans>
-        </StyledEmptyValue>
+        </div>
       ) : (
         <>
           <EventFieldDiffValueEffect
@@ -103,6 +102,6 @@ export const EventFieldDiff = ({
           />
         </>
       )}
-    </StyledEventFieldDiffContainer>
+    </div>
   );
 };

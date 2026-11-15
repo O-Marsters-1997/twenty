@@ -1,29 +1,39 @@
-import { styled } from '@linaria/react';
 import { type ReactNode } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledThreadMessage = styled.div<{ hideBottomBorder?: boolean }>`
-  border-bottom: ${({ hideBottomBorder }) =>
-    hideBottomBorder
-      ? 'none'
-      : `1px solid ${themeCssVariables.border.color.light}`};
-  display: flex;
-  flex-direction: column;
-  padding: ${themeCssVariables.spacing[4]} ${themeCssVariables.spacing[0]};
-`;
-
-const StyledHeader = styled.div<{ isClickable?: boolean }>`
-  cursor: ${({ isClickable }) => (isClickable ? 'pointer' : 'auto')};
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin-bottom: ${themeCssVariables.spacing[2]};
-  padding: ${themeCssVariables.spacing[0]} ${themeCssVariables.spacing[2]};
-`;
-
-const StyledBody = styled.div`
-  padding: ${themeCssVariables.spacing[0]} ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  threadMessage: {
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
+    cursor: 'auto',
+    display: 'flex',
+    flexDirection: 'column',
+    paddingBlock: spacing['--t-spacing-4'],
+  },
+  threadMessageWithoutBottomBorder: {
+    borderBottomStyle: 'none',
+  },
+  threadMessageClickable: {
+    cursor: 'pointer',
+  },
+  header: {
+    cursor: 'auto',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    marginBottom: spacing['--t-spacing-2'],
+    paddingInline: spacing['--t-spacing-2'],
+  },
+  headerClickable: {
+    cursor: 'pointer',
+  },
+  body: {
+    paddingBlock: spacing['--t-spacing-0'],
+    paddingInline: spacing['--t-spacing-2'],
+  },
+});
 
 type EmailThreadMessageLayoutProps = {
   header: ReactNode;
@@ -44,14 +54,23 @@ export const EmailThreadMessageLayout = ({
   onRowClick,
   onHeaderClick,
 }: EmailThreadMessageLayoutProps) => (
-  <StyledThreadMessage
-    hideBottomBorder={hideBottomBorder}
+  <div
     onClick={onRowClick}
-    style={{ cursor: isRowClickable ? 'pointer' : 'auto' }}
+    {...stylex.props(
+      styles.threadMessage,
+      hideBottomBorder && styles.threadMessageWithoutBottomBorder,
+      isRowClickable && styles.threadMessageClickable,
+    )}
   >
-    <StyledHeader isClickable={isHeaderClickable} onClick={onHeaderClick}>
+    <div
+      onClick={onHeaderClick}
+      {...stylex.props(
+        styles.header,
+        isHeaderClickable && styles.headerClickable,
+      )}
+    >
       {header}
-    </StyledHeader>
-    <StyledBody>{children}</StyledBody>
-  </StyledThreadMessage>
+    </div>
+    <div {...stylex.props(styles.body)}>{children}</div>
+  </div>
 );

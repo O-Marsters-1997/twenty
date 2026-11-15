@@ -1,51 +1,62 @@
-import { styled } from '@linaria/react';
 import { Trans } from '@lingui/react/macro';
 import { IconLock } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  backgroundTransparent,
+  borderColor,
+  fontColor,
+  fontSize,
+  fontWeight,
+  iconSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledEmailBodyNotSharedContainer = styled.div`
-  align-items: center;
-  background: ${themeCssVariables.background.transparent.lighter};
-  border: 1px solid ${themeCssVariables.border.color.light};
-  border-radius: ${themeCssVariables.spacing[1]};
-  color: ${themeCssVariables.font.color.light};
-  display: flex;
-  flex-direction: column;
-  font-size: ${themeCssVariables.font.size.sm};
-  font-weight: ${themeCssVariables.font.weight.medium};
-  gap: ${themeCssVariables.spacing[3]};
-  height: 80px;
-  justify-content: center;
-  width: 100%;
-`;
-
-const StyledEmailBodyNotSharedIconContainer = styled.div`
-  align-items: center;
-  display: flex;
-  height: calc(${themeCssVariables.icon.size.sm} * 1px);
-  justify-content: center;
-  width: calc(${themeCssVariables.icon.size.sm} * 1px);
-`;
-
-const StyledEmailBodyNotShared = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  emailBodyNotSharedContainer: {
+    alignItems: 'center',
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-light'],
+    borderRadius: spacing['--t-spacing-1'],
+    color: fontColor['--t-font-color-light'],
+    display: 'flex',
+    flexDirection: 'column',
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    gap: spacing['--t-spacing-3'],
+    height: '80px',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  emailBodyNotSharedIconContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    height: `calc(${iconSize['--t-icon-size-sm']} * 1px)`,
+    justifyContent: 'center',
+    width: `calc(${iconSize['--t-icon-size-sm']} * 1px)`,
+  },
+  emailBodyNotShared: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+  },
+});
 
 export const EventCardMessageBodyNotShared = ({
   notSharedByFullName,
 }: {
   notSharedByFullName: string;
 }) => (
-  <StyledEmailBodyNotSharedContainer>
-    <StyledEmailBodyNotShared>
-      <StyledEmailBodyNotSharedIconContainer>
+  <div {...stylex.props(styles.emailBodyNotSharedContainer)}>
+    <div {...stylex.props(styles.emailBodyNotShared)}>
+      <div {...stylex.props(styles.emailBodyNotSharedIconContainer)}>
         <IconLock />
-      </StyledEmailBodyNotSharedIconContainer>
+      </div>
       <span>
         <Trans>Not shared by {notSharedByFullName}</Trans>
       </span>
-    </StyledEmailBodyNotShared>
-  </StyledEmailBodyNotSharedContainer>
+    </div>
+  </div>
 );

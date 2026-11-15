@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { type Editor } from '@tiptap/core';
 import { useCallback } from 'react';
@@ -11,13 +10,16 @@ import { activeEmailEditorState } from '@/activities/emails/states/activeEmailEd
 import { type MessageCampaign } from '@/activities/emails/types/MessageCampaign';
 import { FormAdvancedTextFieldInput } from '@/advanced-text-editor/components/FormAdvancedTextFieldInput';
 import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomState';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-height: 0;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    minHeight: '0',
+  },
+});
 
 type CampaignBodyFieldProps = {
   campaign: MessageCampaign;
@@ -44,7 +46,7 @@ export const CampaignBodyField = ({
   );
 
   return (
-    <StyledContainer onBlur={() => flush()}>
+    <div onBlur={() => flush()} {...stylex.props(styles.container)}>
       <FormAdvancedTextFieldInput
         key={draftResyncKey}
         defaultValue={body}
@@ -55,6 +57,6 @@ export const CampaignBodyField = ({
         onEditorReady={handleEditorReady}
         onImageUpload={uploadEmailImage}
       />
-    </StyledContainer>
+    </div>
   );
 };

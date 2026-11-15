@@ -1,3 +1,5 @@
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 import { AdvancedTextEditor } from '@/advanced-text-editor/components/AdvancedTextEditor';
 import { AdvancedTextEditorBlockHandle } from '@/advanced-text-editor/components/AdvancedTextEditorBlockHandle';
 import { useOpenEmailBlockStyleInSidePanel } from '@/side-panel/hooks/useOpenEmailBlockStyleInSidePanel';
@@ -8,13 +10,16 @@ import { type MouseEvent } from 'react';
 import { CANVAS_THEME_DEFAULTS, resolveCanvasTheme } from 'twenty-shared/utils';
 import { themeCssVariables } from 'twenty-ui/theme';
 
-const StyledCanvasBackdrop = styled.div`
-  box-sizing: border-box;
-  flex-grow: 1;
-  min-height: 100%;
-  padding: ${themeCssVariables.spacing[8]} ${themeCssVariables.spacing[4]};
-  width: 100%;
-`;
+const styles = stylex.create({
+  canvasBackdrop: {
+    boxSizing: 'border-box',
+    flexGrow: 1,
+    minHeight: '100%',
+    paddingBlock: spacing['--t-spacing-8'],
+    paddingInline: spacing['--t-spacing-4'],
+    width: '100%',
+  },
+});
 
 const StyledCanvasPage = styled.div`
   box-sizing: border-box;
@@ -61,7 +66,8 @@ export const EmailEditorCanvas = ({
   };
 
   return (
-    <StyledCanvasBackdrop
+    <div
+      {...stylex.props(styles.canvasBackdrop)}
       style={{
         backgroundColor: canvasTheme.pageBackground,
         padding: canvasTheme.pagePadding,
@@ -92,6 +98,6 @@ export const EmailEditorCanvas = ({
           onOpenBlockSettings={openEmailBlockStyleInSidePanel}
         />
       </StyledCanvasPage>
-    </StyledCanvasBackdrop>
+    </div>
   );
 };

@@ -1,14 +1,16 @@
 import React from 'react';
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledThreadMessageBodyPreview = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.sm};
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
+const styles = stylex.create({
+  threadMessageBodyPreview: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-sm'],
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+});
 
 type EmailThreadMessageBodyPreviewProps = {
   body: string;
@@ -17,7 +19,5 @@ type EmailThreadMessageBodyPreviewProps = {
 export const EmailThreadMessageBodyPreview = ({
   body,
 }: EmailThreadMessageBodyPreviewProps) => {
-  return (
-    <StyledThreadMessageBodyPreview>{body}</StyledThreadMessageBodyPreview>
-  );
+  return <div {...stylex.props(styles.threadMessageBodyPreview)}>{body}</div>;
 };

@@ -4,20 +4,22 @@ import { NoteList } from '@/activities/notes/components/NoteList';
 import { type Note } from '@/activities/types/Note';
 import { AnimatedPlaceholder } from '@/ui/feedback/empty-state/components/AnimatedPlaceholder/AnimatedPlaceholder';
 import { EmptyState } from '@/ui/feedback/empty-state/components/EmptyState';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isDefined } from 'twenty-shared/utils';
 
 import { IconPlus } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledNotesContainer = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  height: 100%;
-  overflow: auto;
-`;
+const styles = stylex.create({
+  notesContainer: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    height: '100%',
+    overflow: 'auto',
+  },
+});
 
 type NotesCardContentProps = {
   loading: boolean;
@@ -60,12 +62,12 @@ export const NotesCardContent = ({
   }
 
   return (
-    <StyledNotesContainer>
+    <div {...stylex.props(styles.notesContainer)}>
       <NoteList notes={notes} />
       <CustomResolverFetchMoreLoader
         loading={loading}
         onLastRowVisible={onLastRowVisible}
       />
-    </StyledNotesContainer>
+    </div>
   );
 };

@@ -1,13 +1,15 @@
 import { UnavailableFilePreview } from '@/activities/files/components/UnavailableFilePreview';
-import { styled } from '@linaria/react';
 import { Trans } from '@lingui/react/macro';
 import { useState } from 'react';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledVideo = styled.video`
-  height: 100%;
-  object-fit: contain;
-  width: 100%;
-`;
+const styles = stylex.create({
+  video: {
+    height: '100%',
+    objectFit: 'contain',
+    width: '100%',
+  },
+});
 
 type VideoPreviewProps = {
   videoName: string;
@@ -32,10 +34,11 @@ export const VideoPreview = ({ videoName, videoUrl }: VideoPreviewProps) => {
   }
 
   return (
-    <StyledVideo
+    <video
       controls
       src={videoUrl}
       onError={() => setHasFailedToLoad(true)}
+      {...stylex.props(styles.video)}
     />
   );
 };

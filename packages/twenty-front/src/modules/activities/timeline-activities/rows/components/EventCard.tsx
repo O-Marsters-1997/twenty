@@ -1,48 +1,55 @@
-import { styled } from '@linaria/react';
-import { MOBILE_VIEWPORT, themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  background,
+  borderColor,
+  borderRadius,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
 
 type EventCardProps = {
   children: React.ReactNode;
   isOpen: boolean;
 };
 
-const StyledCardContainer = styled.div`
-  align-items: flex-start;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  gap: ${themeCssVariables.spacing[2]};
-  max-width: 400px;
-  padding: ${themeCssVariables.spacing[2]} 0px ${themeCssVariables.spacing[1]}
-    0px;
-  width: 100%;
-
-  @media (max-width: ${MOBILE_VIEWPORT}px) {
-    max-width: 300px;
-  }
-`;
-
-const StyledCardInnerContainer = styled.div`
-  align-items: flex-start;
-  align-self: stretch;
-  background: ${themeCssVariables.background.secondary};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.md};
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  justify-content: center;
-  overflow: hidden;
-  padding: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  cardContainer: {
+    alignItems: 'flex-start',
+    display: 'flex',
+    flexDirection: 'column',
+    flexGrow: '1',
+    gap: spacing['--t-spacing-2'],
+    maxWidth: { default: '400px', [media.mobile]: '300px' },
+    paddingTop: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingInline: '0px',
+    width: '100%',
+  },
+  cardInnerContainer: {
+    alignItems: 'flex-start',
+    alignSelf: 'stretch',
+    backgroundColor: background['--t-background-secondary'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-medium'],
+    borderRadius: borderRadius['--t-border-radius-md'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    justifyContent: 'center',
+    overflow: 'hidden',
+    paddingBlock: spacing['--t-spacing-2'],
+    paddingInline: spacing['--t-spacing-2'],
+  },
+});
 
 export const EventCard = ({ children, isOpen }: EventCardProps) => {
   return (
     isOpen && (
-      <StyledCardContainer>
-        <StyledCardInnerContainer>{children}</StyledCardInnerContainer>
-      </StyledCardContainer>
+      <div {...stylex.props(styles.cardContainer)}>
+        <div {...stylex.props(styles.cardInnerContainer)}>{children}</div>
+      </div>
     )
   );
 };

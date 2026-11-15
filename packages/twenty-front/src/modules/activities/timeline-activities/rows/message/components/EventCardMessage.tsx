@@ -1,56 +1,58 @@
 import { CombinedGraphQLErrors } from '@apollo/client/errors';
-import { styled } from '@linaria/react';
 import { Trans } from '@lingui/react/macro';
 import { CoreObjectNameSingular } from 'twenty-shared/types';
 import { isDefined, isFieldValueRestricted } from 'twenty-shared/utils';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { type EmailThreadMessage } from '@/activities/emails/types/EmailThreadMessage';
 import { EventCardMessageForbidden } from '@/activities/timeline-activities/rows/message/components/EventCardMessageForbidden';
 import { useFindOneRecord } from '@/object-record/hooks/useFindOneRecord';
 import { useOpenRecordInSidePanel } from '@/side-panel/hooks/useOpenRecordInSidePanel';
+import * as stylex from '@stylexjs/stylex';
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledEventCardMessageContainer = styled.div`
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  max-width: 380px;
-  width: 100%;
-`;
-
-const StyledEmailContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[4]};
-  justify-content: center;
-`;
-
-const StyledEmailTop = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledEmailTitle = styled.div`
-  color: ${themeCssVariables.font.color.primary};
-  font-weight: ${themeCssVariables.font.weight.medium};
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledEmailParticipants = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.sm};
-`;
-
-const StyledEmailBody = styled.div`
-  cursor: pointer;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
+const styles = stylex.create({
+  eventCardMessageContainer: {
+    cursor: 'pointer',
+    display: 'flex',
+    flexDirection: 'column',
+    maxWidth: '380px',
+    width: '100%',
+  },
+  emailContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-4'],
+    justifyContent: 'center',
+  },
+  emailTop: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+  },
+  emailTitle: {
+    color: fontColor['--t-font-color-primary'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  emailParticipants: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-sm'],
+  },
+  emailBody: {
+    cursor: 'pointer',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+});
 
 export const EventCardMessage = ({
   messageId,
@@ -131,16 +133,19 @@ export const EventCardMessage = ({
   };
 
   return (
-    <StyledEventCardMessageContainer onClick={handleClick}>
-      <StyledEmailContent>
-        <StyledEmailTop>
-          <StyledEmailTitle>{message.subject}</StyledEmailTitle>
-          <StyledEmailParticipants>
+    <div
+      onClick={handleClick}
+      {...stylex.props(styles.eventCardMessageContainer)}
+    >
+      <div {...stylex.props(styles.emailContent)}>
+        <div {...stylex.props(styles.emailTop)}>
+          <div {...stylex.props(styles.emailTitle)}>{message.subject}</div>
+          <div {...stylex.props(styles.emailParticipants)}>
             <OverflowingTextWithTooltip text={participantHandles} />
-          </StyledEmailParticipants>
-        </StyledEmailTop>
-        <StyledEmailBody>{message.text}</StyledEmailBody>
-      </StyledEmailContent>
-    </StyledEventCardMessageContainer>
+          </div>
+        </div>
+        <div {...stylex.props(styles.emailBody)}>{message.text}</div>
+      </div>
+    </div>
   );
 };
