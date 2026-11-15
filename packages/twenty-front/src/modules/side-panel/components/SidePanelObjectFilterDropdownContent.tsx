@@ -11,7 +11,13 @@ import { SettingsRow } from 'twenty-ui/components/settings';
 import { IconCube } from 'twenty-ui/icon';
 import { useTheme } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { borderColor, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  borderColor,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   header: {

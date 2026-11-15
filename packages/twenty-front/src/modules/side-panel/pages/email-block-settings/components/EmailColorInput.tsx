@@ -21,10 +21,22 @@ const styles = stylex.create({
     borderWidth: '1px',
     borderStyle: { default: 'solid', '::-webkit-color-swatch': 'none' },
     borderColor: borderColor['--t-border-color-medium'],
-    borderTopLeftRadius: { default: borderRadius['--t-border-radius-sm'], '::-webkit-color-swatch': borderRadius['--t-border-radius-xs'] },
-    borderTopRightRadius: { default: borderRadius['--t-border-radius-sm'], '::-webkit-color-swatch': borderRadius['--t-border-radius-xs'] },
-    borderBottomRightRadius: { default: borderRadius['--t-border-radius-sm'], '::-webkit-color-swatch': borderRadius['--t-border-radius-xs'] },
-    borderBottomLeftRadius: { default: borderRadius['--t-border-radius-sm'], '::-webkit-color-swatch': borderRadius['--t-border-radius-xs'] },
+    borderTopLeftRadius: {
+      default: borderRadius['--t-border-radius-sm'],
+      '::-webkit-color-swatch': borderRadius['--t-border-radius-xs'],
+    },
+    borderTopRightRadius: {
+      default: borderRadius['--t-border-radius-sm'],
+      '::-webkit-color-swatch': borderRadius['--t-border-radius-xs'],
+    },
+    borderBottomRightRadius: {
+      default: borderRadius['--t-border-radius-sm'],
+      '::-webkit-color-swatch': borderRadius['--t-border-radius-xs'],
+    },
+    borderBottomLeftRadius: {
+      default: borderRadius['--t-border-radius-sm'],
+      '::-webkit-color-swatch': borderRadius['--t-border-radius-xs'],
+    },
     boxSizing: 'border-box',
     cursor: 'pointer',
     flexShrink: '0',

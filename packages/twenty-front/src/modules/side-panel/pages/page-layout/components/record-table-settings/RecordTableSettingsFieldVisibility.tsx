@@ -11,7 +11,12 @@ import { LightIconButton } from 'twenty-ui/components/input';
 import { MenuItemDraggable } from 'twenty-ui/components/navigation';
 import { IconEye, IconEyeOff, useIcons } from 'twenty-ui/icon';
 import * as stylex from '@stylexjs/stylex';
-import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   fieldListContainer: {

@@ -138,7 +138,10 @@ export const SidePanelShareRecordContent = ({
         <SidePanelList selectableItemIds={selectableItemIds} loading={loading}>
           {isDefined(error) ? (
             <>
-              <div role="alert" {...stylex.props(styles.description)}>{t`Sharing settings could not be loaded.`}</div>
+              <div
+                role="alert"
+                {...stylex.props(styles.description)}
+              >{t`Sharing settings could not be loaded.`}</div>
               <SelectableListItem
                 itemId={RETRY_ITEM_ID}
                 onEnter={() => {

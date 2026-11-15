@@ -182,7 +182,9 @@ export const SidePanelSearchRecordPreviewCard = ({
           <span {...stylex.props(styles.fieldIcon)}>
             <FieldIcon size={16} />
           </span>
-          <span {...stylex.props(styles.fieldLabelText)}>{fieldMetadataItem.label}</span>
+          <span {...stylex.props(styles.fieldLabelText)}>
+            {fieldMetadataItem.label}
+          </span>
         </div>
         <div {...stylex.props(styles.fieldValue)}>
           {isRecordLoaded ? (
@@ -211,9 +213,7 @@ export const SidePanelSearchRecordPreviewCard = ({
   };
 
   return (
-    <div
-      {...stylex.props(styles.card(SIDE_PANEL_SEARCH_RECORD_PREVIEW_WIDTH))}
-    >
+    <div {...stylex.props(styles.card(SIDE_PANEL_SEARCH_RECORD_PREVIEW_WIDTH))}>
       <div {...stylex.props(styles.header)}>
         <HeaderIdentifier
           avatar={{
@@ -223,7 +223,9 @@ export const SidePanelSearchRecordPreviewCard = ({
             shape: recordIdentifier?.avatarShape ?? 'circle',
           }}
           title={
-            <div {...stylex.props(styles.titleText)}>{recordIdentifier?.name ?? label}</div>
+            <div {...stylex.props(styles.titleText)}>
+              {recordIdentifier?.name ?? label}
+            </div>
           }
         />
       </div>
@@ -233,7 +235,8 @@ export const SidePanelSearchRecordPreviewCard = ({
         {!areAllFieldsVisible && remainingFieldCount > 0 && (
           // Keeping focus on the search input so arrow keys still move through results
           <div
-            onMouseDown={(event) => event.preventDefault()} {...stylex.props(styles.showMoreContainer)}
+            onMouseDown={(event) => event.preventDefault()}
+            {...stylex.props(styles.showMoreContainer)}
           >
             <FieldWidgetShowMoreButton
               remainingCount={remainingFieldCount}

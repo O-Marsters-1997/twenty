@@ -1,10 +1,6 @@
 import * as stylex from '@stylexjs/stylex';
 import { type ReactNode } from 'react';
-import {
-  fontColor,
-  fontSize,
-  spacing,
-} from 'twenty-ui/theme/tokens.stylex';
+import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   root: {

@@ -43,7 +43,10 @@ const BackgroundSelection = ({ children }: { children: ReactNode }) => {
 
   return (
     <ParentClickOutsideIdContext.Provider value={SIDE_PANEL_CLICK_OUTSIDE_ID}>
-      <div data-click-outside-id={SIDE_PANEL_CLICK_OUTSIDE_ID} {...stylex.props(styles.footer)}>
+      <div
+        data-click-outside-id={SIDE_PANEL_CLICK_OUTSIDE_ID}
+        {...stylex.props(styles.footer)}
+      >
         {children}
       </div>
     </ParentClickOutsideIdContext.Provider>

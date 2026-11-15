@@ -1,7 +1,13 @@
 import { IconChevronLeft } from 'twenty-ui/icon';
 import { IconButton } from 'twenty-ui/components/input';
 import * as stylex from '@stylexjs/stylex';
-import { borderColor, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  borderColor,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   container: {

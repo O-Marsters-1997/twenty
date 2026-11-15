@@ -85,7 +85,10 @@ const styles = stylex.create({
     borderTopRightRadius: '0',
     borderBottomRightRadius: '0',
     borderBottomLeftRadius: '0',
-    color: { default: fontColor['--t-font-color-primary'], '::placeholder': fontColor['--t-font-color-light'] },
+    color: {
+      default: fontColor['--t-font-color-primary'],
+      '::placeholder': fontColor['--t-font-color-light'],
+    },
     flex: '1',
     fontSize: fontSize['--t-font-size-md'],
     height: '24px',
@@ -98,7 +101,10 @@ const styles = stylex.create({
     paddingRight: '0',
     paddingBottom: '0',
     paddingLeft: '0',
-    fontWeight: { default: null, '::placeholder': fontWeight['--t-font-weight-medium'] },
+    fontWeight: {
+      default: null,
+      '::placeholder': fontWeight['--t-font-weight-medium'],
+    },
   },
   contentContainer: {
     alignItems: 'center',
@@ -279,14 +285,18 @@ export const SidePanelTopBar = ({
               onChange={handleSearchChange}
               onKeyDownCapture={handleInputKeyDownCapture}
               onFocus={handleInputFocus}
-              onBlur={handleInputBlur} {...stylex.props(styles.input)}
+              onBlur={handleInputBlur}
+              {...stylex.props(styles.input)}
             />
             <SidePanelTopBarInputFocusEffect inputRef={inputRef} />
           </>
         )}
       </div>
       <div {...stylex.props(styles.rightControlsContainer)}>
-        <div ref={setHeaderActionsPortal} {...stylex.props(styles.headerActionsPortal)} />
+        <div
+          ref={setHeaderActionsPortal}
+          {...stylex.props(styles.headerActionsPortal)}
+        />
         {sidePanelPage !== SidePanelPages.RoutedPage && (
           <SidePanelTopBarRightCornerIcon />
         )}

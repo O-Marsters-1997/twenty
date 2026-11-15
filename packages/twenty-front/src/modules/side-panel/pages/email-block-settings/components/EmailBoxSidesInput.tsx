@@ -6,7 +6,13 @@ import { IconFrame, IconSquare } from 'twenty-ui/icon';
 import { EmailFieldLabel } from '@/side-panel/pages/email-block-settings/components/EmailFieldLabel';
 import { TextInput } from '@/ui/input/components/TextInput';
 import * as stylex from '@stylexjs/stylex';
-import { borderColor, borderRadius, fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   row: {

@@ -16,7 +16,12 @@ import { EMAIL_BODY_THEME_FIELDS } from '@/side-panel/pages/email-block-settings
 import { EMAIL_PAGE_THEME_FIELDS } from '@/side-panel/pages/email-block-settings/constants/EmailPageThemeFields';
 import { type EmailThemeField } from '@/side-panel/pages/email-block-settings/types/EmailThemeField';
 import * as stylex from '@stylexjs/stylex';
-import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   container: {
@@ -32,7 +37,10 @@ const styles = stylex.create({
     color: fontColor['--t-font-color-primary'],
     fontSize: fontSize['--t-font-size-md'],
     fontWeight: fontWeight['--t-font-weight-medium'],
-    marginTop: { default: null, ':not(:first-child)': spacing['--t-spacing-3'] },
+    marginTop: {
+      default: null,
+      ':not(:first-child)': spacing['--t-spacing-3'],
+    },
   },
   hint: {
     color: fontColor['--t-font-color-tertiary'],

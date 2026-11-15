@@ -2,7 +2,14 @@ import { parseCssSizeValue } from '@/advanced-text-editor/utils/parseCssSizeValu
 import { EmailFieldLabel } from '@/side-panel/pages/email-block-settings/components/EmailFieldLabel';
 import { TextInput } from '@/ui/input/components/TextInput';
 import * as stylex from '@stylexjs/stylex';
-import { backgroundTransparent, borderColor, borderRadius, fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   row: {

@@ -151,7 +151,10 @@ export const SidePanelPageLayoutInfo = ({
         onChange={handleIconChange}
         {...stylex.props(styles.iconPickerContainerStyles)}
         clickableComponent={
-          <div aria-label={t`Choose icon`} {...stylex.props(styles.clickableIconWrapper)}>
+          <div
+            aria-label={t`Choose icon`}
+            {...stylex.props(styles.clickableIconWrapper)}
+          >
             {renderedIcon}
           </div>
         }
