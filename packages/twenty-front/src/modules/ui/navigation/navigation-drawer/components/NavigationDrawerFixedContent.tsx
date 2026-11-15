@@ -1,17 +1,21 @@
 import { type ReactNode } from 'react';
 
 import { NavigationDrawerSection } from '@/ui/navigation/navigation-drawer/components/NavigationDrawerSection';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { useIsMobile } from 'twenty-ui/utilities';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledFixedContainer = styled.div<{ isMobile?: boolean }>`
-  flex-shrink: 0;
-  padding-left: ${({ isMobile }) =>
-    isMobile ? themeCssVariables.spacing[5] : '0'};
-  padding-right: ${({ isMobile }) =>
-    isMobile ? themeCssVariables.spacing[5] : '0'};
-`;
+const styles = stylex.create({
+  fixedContainer: {
+    flexShrink: 0,
+    paddingLeft: 0,
+    paddingRight: 0,
+  },
+  fixedContainerMobile: {
+    paddingLeft: spacing['--t-spacing-5'],
+    paddingRight: spacing['--t-spacing-5'],
+  },
+});
 
 export const NavigationDrawerFixedContent = ({
   children,
@@ -21,8 +25,13 @@ export const NavigationDrawerFixedContent = ({
   const isMobile = useIsMobile();
 
   return (
-    <StyledFixedContainer isMobile={isMobile}>
+    <div
+      {...stylex.props(
+        styles.fixedContainer,
+        isMobile && styles.fixedContainerMobile,
+      )}
+    >
       <NavigationDrawerSection>{children}</NavigationDrawerSection>
-    </StyledFixedContainer>
+    </div>
   );
 };

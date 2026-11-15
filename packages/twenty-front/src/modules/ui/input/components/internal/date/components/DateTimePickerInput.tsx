@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useIMask } from 'react-imask';
 
 import { useDateTimeFormat } from '@/localization/hooks/useDateTimeFormat';
@@ -18,39 +17,15 @@ import { useUserTimezone } from '@/ui/input/components/internal/date/hooks/useUs
 import { useEffect, useState } from 'react';
 import { Temporal } from 'temporal-polyfill';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  borderRadius,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 import { isDifferentZonedDateTime } from '~/utils/dates/isDifferentZonedDateTime';
-
-const StyledInputContainer = styled.div<{
-  $variant: FormFieldInputVariant;
-}>`
-  align-items: center;
-
-  border-top-left-radius: ${themeCssVariables.border.radius.md};
-  border-top-right-radius: ${themeCssVariables.border.radius.md};
-  display: flex;
-  height: ${({ $variant }) =>
-    $variant === 'transparent'
-      ? themeCssVariables.spacing[6]
-      : themeCssVariables.spacing[8]};
-  width: 100%;
-`;
-
-const StyledInput = styled.input<{
-  hasError?: boolean;
-  $variant: FormFieldInputVariant;
-}>`
-  background: transparent;
-  border: none;
-  color: ${themeCssVariables.font.color.primary};
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${({ $variant }) =>
-    $variant === 'transparent' ? themeCssVariables.font.weight.regular : 500};
-  outline: none;
-  padding-left: ${({ $variant }) =>
-    $variant === 'transparent' ? '0' : themeCssVariables.spacing[2]};
-  width: 140px;
-`;
 
 type DateTimePickerInputProps = {
   onChange?: (date: Temporal.ZonedDateTime | null) => void;
@@ -69,6 +44,7 @@ export const DateTimePickerInput = ({
   timeZone,
   variant = 'default',
 }: DateTimePickerInputProps) => {
+  const isTransparent = variant === 'transparent';
   const [internalDate, setInternalDate] = useState(date);
 
   const { userTimezone } = useUserTimezone();
@@ -181,9 +157,17 @@ export const DateTimePickerInput = ({
     internalDate?.toInstant() ?? Temporal.Now.instant();
 
   return (
-    <StyledInputContainer $variant={variant}>
-      <StyledInput
-        $variant={variant}
+    <div
+      {...stylex.props(
+        styles.container,
+        isTransparent ? styles.containerTransparent : styles.containerDefault,
+      )}
+    >
+      <input
+        {...stylex.props(
+          styles.input,
+          isTransparent ? styles.inputTransparent : styles.inputDefault,
+        )}
         disabled={shouldDisplayReadOnly}
         type="text"
         ref={ref as any}
@@ -193,6 +177,38 @@ export const DateTimePickerInput = ({
         instant={internalDateForTimeZoneAbbreviation}
         timeZone={timeZone ?? userTimezone}
       />
-    </StyledInputContainer>
+    </div>
   );
 };
+
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    display: 'flex',
+    width: '100%',
+  },
+  containerDefault: {
+    height: spacing['--t-spacing-8'],
+  },
+  containerTransparent: {
+    height: spacing['--t-spacing-6'],
+  },
+  input: {
+    backgroundColor: 'transparent',
+    borderStyle: 'none',
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-md'],
+    outline: 'none',
+    width: '140px',
+  },
+  inputDefault: {
+    fontWeight: 500,
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+  inputTransparent: {
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    paddingLeft: 0,
+  },
+});

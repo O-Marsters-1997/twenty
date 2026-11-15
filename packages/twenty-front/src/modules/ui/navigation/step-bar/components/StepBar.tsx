@@ -1,20 +1,19 @@
-import { styled } from '@linaria/react';
 import React from 'react';
 
 import { useIsMobile } from 'twenty-ui/utilities';
 
-import { MOBILE_VIEWPORT } from 'twenty-ui/theme';
 import { Step, type StepProps } from './Step';
+import * as stylex from '@stylexjs/stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex: 1;
-  justify-content: space-between;
-  @media (max-width: ${MOBILE_VIEWPORT}px) {
-    align-items: center;
-    justify-content: center;
-  }
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flex: '1',
+    justifyContent: { default: 'space-between', [media.mobile]: 'center' },
+    alignItems: { default: null, [media.mobile]: 'center' },
+  },
+});
 
 export type StepBarProps = React.PropsWithChildren &
   React.ComponentProps<'div'> & {
@@ -25,7 +24,7 @@ export const StepBar = ({ activeStep, children }: StepBarProps) => {
   const isMobile = useIsMobile();
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       {React.Children.map(children, (child, index) => {
         if (!React.isValidElement(child)) {
           return null;
@@ -51,7 +50,7 @@ export const StepBar = ({ activeStep, children }: StepBarProps) => {
           activeStep,
         });
       })}
-    </StyledContainer>
+    </div>
   );
 };
 

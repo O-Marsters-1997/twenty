@@ -1,87 +1,98 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { type ReactNode, useContext } from 'react';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import {
+  backgroundTransparent,
+  borderRadius,
+  color,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 import { DragDropItemDndContext } from '@/ui/utilities/drag-and-drop/context/DragDropItemDndContext';
 import { type DragDropItemDropTargetOrientation } from '@/ui/utilities/drag-and-drop/types/DragDropItemDropTargetOrientation';
 
-const StyledDropTarget = styled.div<{
-  $compact?: boolean;
-  $overlay?: boolean;
-  $seamAligned?: boolean;
-}>`
-  // The line normally nudges up into the gap the dragged item opens; seam-aligned
-  // targets drop the nudge so the line sits exactly on the boundary between two
-  // bordered cells instead of overlapping the leading one's border.
-  --drop-line-nudge: ${({ $seamAligned }) =>
-    $seamAligned ? '0px' : themeCssVariables.spacing[1]};
-  min-height: ${({ $compact }) =>
-    $compact ? '0' : themeCssVariables.spacing[2]};
-  position: ${({ $overlay }) => ($overlay ? 'absolute' : 'relative')};
-  transition: background-color 120ms ease-out;
-
-  &[data-orientation='vertical'] {
-    height: 100%;
-    width: 100%;
-  }
-
-  &[data-orientation='horizontal'] {
-    width: 100%;
-  }
-
-  &::before {
-    background-color: ${themeCssVariables.color.blue};
-    border-radius: ${themeCssVariables.border.radius.sm};
-    content: '';
-    opacity: 0;
-    position: absolute;
-    transform-origin: center;
-    transition:
-      opacity 120ms ease-out,
-      transform 120ms ease-out;
-  }
-
-  &[data-orientation='vertical']::before {
-    height: 100%;
-    left: 50%;
-    top: 0;
-    transform: translateX(-50%) scaleY(0.7);
-    width: 2px;
-  }
-
-  &[data-orientation='horizontal']::before {
-    height: 2px;
-    left: 0;
-    top: 50%;
-    transform: translateY(calc(-50% - var(--drop-line-nudge))) scaleX(0.7);
-    width: 100%;
-  }
-
-  &[data-drag-over='true'] {
-    background-color: ${themeCssVariables.background.transparent.blue};
-  }
-
-  &[data-orientation='vertical'][data-drag-over='true']::before {
-    opacity: 1;
-    transform: translateX(-50%) scaleY(1);
-  }
-
-  &[data-orientation='horizontal'][data-drag-over='true']::before {
-    opacity: 1;
-    transform: translateY(calc(-50% - var(--drop-line-nudge))) scaleX(1);
-  }
-
-  &[data-orientation='horizontal'][data-leading='true']::before {
-    top: 0;
-    transform: scaleX(0.7);
-    z-index: 1;
-  }
-
-  &[data-orientation='horizontal'][data-leading='true'][data-drag-over='true']::before {
-    transform: scaleX(1);
-  }
-`;
+const styles = stylex.create({
+  root: {
+    '--drop-line-nudge': spacing['--t-spacing-1'],
+    minHeight: spacing['--t-spacing-2'],
+    position: 'relative',
+    transitionDuration: '120ms',
+    transitionProperty: 'background-color',
+    transitionTimingFunction: 'ease-out',
+    '::before': {
+      backgroundColor: color['--t-color-blue'],
+      borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+      borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+      borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+      borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+      content: '""',
+      opacity: 0,
+      position: 'absolute',
+      transformOrigin: 'center',
+      transitionDuration: '120ms, 120ms',
+      transitionProperty: 'opacity, transform',
+      transitionTimingFunction: 'ease-out',
+    },
+  },
+  compact: {
+    minHeight: 0,
+  },
+  overlay: {
+    position: 'absolute',
+  },
+  seamAligned: {
+    '--drop-line-nudge': '0px',
+  },
+  dragOver: {
+    backgroundColor: backgroundTransparent['--t-background-transparent-blue'],
+    '::before': {
+      opacity: 1,
+    },
+  },
+  vertical: {
+    height: '100%',
+    width: '100%',
+    '::before': {
+      height: '100%',
+      left: '50%',
+      top: 0,
+      transform: 'translateX(-50%) scaleY(0.7)',
+      width: '2px',
+    },
+  },
+  verticalDragOver: {
+    '::before': {
+      transform: 'translateX(-50%) scaleY(1)',
+    },
+  },
+  horizontal: {
+    width: '100%',
+    '::before': {
+      height: '2px',
+      left: 0,
+      top: '50%',
+      transform: 'translateY(calc(-50% - var(--drop-line-nudge))) scaleX(0.7)',
+      width: '100%',
+    },
+  },
+  horizontalDragOver: {
+    '::before': {
+      transform: 'translateY(calc(-50% - var(--drop-line-nudge))) scaleX(1)',
+    },
+  },
+  horizontalLeading: {
+    '::before': {
+      top: 0,
+      transform: 'scaleX(0.7)',
+      zIndex: 1,
+    },
+  },
+  horizontalLeadingDragOver: {
+    '::before': {
+      transform: 'scaleX(1)',
+    },
+  },
+});
 
 type DragDropItemDropTargetProps = {
   children?: ReactNode;
@@ -113,18 +124,31 @@ export const DragDropItemDropTarget = ({
 
   const isDragOver = activeDropTargetIndex === index && matchesDroppable;
 
+  const isLeading = orientation === 'horizontal' && index === 0;
+
   return (
-    <StyledDropTarget
-      $compact={compact}
-      $overlay={overlay}
-      $seamAligned={seamAligned}
+    <div
       data-orientation={orientation}
-      data-leading={
-        orientation === 'horizontal' && index === 0 ? 'true' : undefined
-      }
+      data-leading={isLeading ? 'true' : undefined}
       data-drag-over={isDragOver ? 'true' : undefined}
+      {...stylex.props(
+        styles.root,
+        compact && styles.compact,
+        overlay && styles.overlay,
+        seamAligned && styles.seamAligned,
+        isDragOver && styles.dragOver,
+        orientation === 'vertical' && styles.vertical,
+        orientation === 'vertical' && isDragOver && styles.verticalDragOver,
+        orientation === 'horizontal' && styles.horizontal,
+        orientation === 'horizontal' &&
+          !isLeading &&
+          isDragOver &&
+          styles.horizontalDragOver,
+        isLeading && styles.horizontalLeading,
+        isLeading && isDragOver && styles.horizontalLeadingDragOver,
+      )}
     >
       {children}
-    </StyledDropTarget>
+    </div>
   );
 };

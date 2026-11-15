@@ -1,14 +1,15 @@
-import { css } from '@linaria/core';
+import * as stylex from '@stylexjs/stylex';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const styles = {
-  undecoratedLink: css`
-    & {
-      text-decoration: none;
-    }
-  `,
-};
+const styles = stylex.create({
+  undecoratedLink: {
+    textDecoration: 'none',
+  },
+  fullWidth: {
+    width: '100%',
+  },
+});
 
 type UndecoratedLinkProps = {
   to: string | number;
@@ -30,8 +31,7 @@ export const UndecoratedLink = ({
       to={to as string}
       replace={replace}
       onClick={onClick}
-      className={styles.undecoratedLink}
-      style={fullWidth ? { width: '100%' } : undefined}
+      {...stylex.props(styles.undecoratedLink, fullWidth && styles.fullWidth)}
     >
       {children}
     </Link>

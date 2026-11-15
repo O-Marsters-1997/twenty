@@ -1,4 +1,5 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import { isDefined } from 'twenty-shared/utils';
 
 import { ScrollWrapperInitEffect } from '@/ui/utilities/scroll/components/internal/ScrollWrapperInitEffect';
 import { ScrollWrapperComponentInstanceContext } from '@/ui/utilities/scroll/states/contexts/ScrollWrapperComponentInstanceContext';
@@ -8,18 +9,23 @@ import { scrollWrapperScrollTopComponentState } from '@/ui/utilities/scroll/stat
 import { getScrollBottomInPx } from '@/ui/utilities/scroll/utils/getScrollBottomInPx';
 import { useSetAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useSetAtomComponentState';
 
-const StyledScrollWrapper = styled.div<{ autoHeight?: boolean }>`
-  &.scroll-wrapper-x-enabled {
-    overflow-x: overlay;
-  }
-  &.scroll-wrapper-y-enabled {
-    overflow-y: overlay;
-  }
-  height: ${({ autoHeight }) => (autoHeight ? 'auto' : '100%')};
-  overflow-x: hidden;
-  overflow-y: hidden;
-  width: 100%;
-`;
+const styles = stylex.create({
+  root: {
+    height: '100%',
+    overflowX: {
+      default: 'hidden',
+      ':is(.scroll-wrapper-x-enabled)': 'overlay',
+    },
+    overflowY: {
+      default: 'hidden',
+      ':is(.scroll-wrapper-y-enabled)': 'overlay',
+    },
+    width: '100%',
+  },
+  rootAutoHeight: {
+    height: 'auto',
+  },
+});
 
 export type ScrollWrapperProps = {
   children: React.ReactNode;
@@ -60,6 +66,11 @@ export const ScrollWrapper = ({
     setScrollWrapperScrollBottom(getScrollBottomInPx(target));
   };
 
+  const rootProps = stylex.props(
+    styles.root,
+    autoHeight && styles.rootAutoHeight,
+  );
+
   return (
     <ScrollWrapperComponentInstanceContext.Provider
       value={{ instanceId: componentInstanceId }}
@@ -68,14 +79,14 @@ export const ScrollWrapper = ({
         defaultEnableXScroll={defaultEnableXScroll}
         defaultEnableYScroll={defaultEnableYScroll}
       />
-      <StyledScrollWrapper
+      <div
         id={`scroll-wrapper-${componentInstanceId}`}
-        className={className}
-        autoHeight={autoHeight}
         onScroll={handleScroll}
+        {...rootProps}
+        className={[rootProps.className, className].filter(isDefined).join(' ')}
       >
         {children}
-      </StyledScrollWrapper>
+      </div>
     </ScrollWrapperComponentInstanceContext.Provider>
   );
 };

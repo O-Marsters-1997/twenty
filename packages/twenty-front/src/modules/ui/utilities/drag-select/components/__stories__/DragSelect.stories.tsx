@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { type Meta, type StoryObj } from '@storybook/react-vite';
 import { useRef, useState } from 'react';
 import { userEvent, within } from 'storybook/test';
@@ -7,66 +6,101 @@ import { DragSelect } from '@/ui/utilities/drag-select/components/DragSelect';
 import { ScrollWrapper } from '@/ui/utilities/scroll/components/ScrollWrapper';
 import { isDefined } from 'twenty-shared/utils';
 import { ComponentDecorator } from 'twenty-ui/testing';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  background,
+  borderColor,
+  borderRadius,
+  color,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  border: 1px solid ${themeCssVariables.border.color.light};
-  border-radius: ${themeCssVariables.border.radius.md};
-  height: 400px;
-  overflow: hidden;
-  padding: ${themeCssVariables.spacing[4]};
-  position: relative;
-  width: 600px;
-`;
-
-const StyledSelectableItem = styled.div<{ selected?: boolean }>`
-  width: 100px;
-  height: 80px;
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  background: ${({ selected }) =>
-    selected
-      ? themeCssVariables.color.blue3
-      : themeCssVariables.background.secondary};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: ${themeCssVariables.spacing[1]};
-  user-select: none;
-  cursor: pointer;
-
-  &:hover {
-    background: ${({ selected }) =>
-      selected
-        ? themeCssVariables.color.blue5
-        : themeCssVariables.background.tertiary};
-  }
-`;
-
-const StyledGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: ${themeCssVariables.spacing[2]};
-  width: 100%;
-  height: 100%;
-`;
-
-const StyledLargeGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: ${themeCssVariables.spacing[2]};
-  padding: ${themeCssVariables.spacing[4]};
-  width: 900px;
-  height: 600px;
-`;
-
-const StyledScrollableWrapperContainer = styled.div`
-  border: 1px solid ${themeCssVariables.border.color.light};
-  border-radius: ${themeCssVariables.border.radius.md};
-  height: 300px;
-  width: 600px;
-  overflow: hidden;
-`;
+const styles = stylex.create({
+  container: {
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-light'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    height: '400px',
+    overflow: 'hidden',
+    paddingTop: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingBottom: spacing['--t-spacing-4'],
+    paddingLeft: spacing['--t-spacing-4'],
+    position: 'relative',
+    width: '600px',
+  },
+  grid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(4, 1fr)',
+    gap: spacing['--t-spacing-2'],
+    width: '100%',
+    height: '100%',
+  },
+  largeGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(6, 1fr)',
+    gap: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingBottom: spacing['--t-spacing-4'],
+    paddingLeft: spacing['--t-spacing-4'],
+    width: '900px',
+    height: '600px',
+  },
+  selectableItem: {
+    alignItems: 'center',
+    backgroundColor: {
+      default: background['--t-background-secondary'],
+      ':hover': background['--t-background-tertiary'],
+    },
+    borderColor: borderColor['--t-border-color-medium'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    cursor: 'pointer',
+    display: 'flex',
+    height: '80px',
+    justifyContent: 'center',
+    marginTop: spacing['--t-spacing-1'],
+    marginRight: spacing['--t-spacing-1'],
+    marginBottom: spacing['--t-spacing-1'],
+    marginLeft: spacing['--t-spacing-1'],
+    userSelect: 'none',
+    width: '100px',
+  },
+  selectableItemSelected: {
+    backgroundColor: {
+      default: color['--t-color-blue3'],
+      ':hover': color['--t-color-blue5'],
+    },
+  },
+  scrollContent: {
+    paddingTop: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingBottom: spacing['--t-spacing-4'],
+    paddingLeft: spacing['--t-spacing-4'],
+    position: 'relative',
+  },
+  scrollableWrapperContainer: {
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-light'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    height: '300px',
+    width: '600px',
+    overflow: 'hidden',
+  },
+});
 
 type SelectableItemProps = {
   id: string;
@@ -75,9 +109,15 @@ type SelectableItemProps = {
 };
 
 const SelectableItem = ({ id, selected, children }: SelectableItemProps) => (
-  <StyledSelectableItem data-selectable-id={id} selected={selected}>
+  <div
+    data-selectable-id={id}
+    {...stylex.props(
+      styles.selectableItem,
+      selected && styles.selectableItemSelected,
+    )}
+  >
     {children}
-  </StyledSelectableItem>
+  </div>
 );
 
 type BasicDragSelectDemoProps = {
@@ -105,8 +145,8 @@ const BasicDragSelectDemo = ({
   };
 
   return (
-    <StyledContainer ref={containerRef}>
-      <StyledGrid>
+    <div ref={containerRef} {...stylex.props(styles.container)}>
+      <div {...stylex.props(styles.grid)}>
         {Array.from({ length: itemCount }, (_, index) => (
           <SelectableItem
             key={index}
@@ -116,7 +156,7 @@ const BasicDragSelectDemo = ({
             Item {index + 1}
           </SelectableItem>
         ))}
-      </StyledGrid>
+      </div>
 
       {!disableSelection && (
         <DragSelect
@@ -126,7 +166,7 @@ const BasicDragSelectDemo = ({
           onDragSelectionEnd={() => {}}
         />
       )}
-    </StyledContainer>
+    </div>
   );
 };
 
@@ -147,13 +187,10 @@ const ScrollableDragSelectDemo = () => {
   };
 
   return (
-    <StyledScrollableWrapperContainer>
+    <div {...stylex.props(styles.scrollableWrapperContainer)}>
       <ScrollWrapper componentInstanceId="scrollable-demo">
-        <div
-          ref={containerRef}
-          style={{ position: 'relative', padding: '16px' }}
-        >
-          <StyledLargeGrid>
+        <div ref={containerRef} {...stylex.props(styles.scrollContent)}>
+          <div {...stylex.props(styles.largeGrid)}>
             {Array.from({ length: 36 }, (_, index) => (
               <SelectableItem
                 key={index}
@@ -163,7 +200,7 @@ const ScrollableDragSelectDemo = () => {
                 Item {index + 1}
               </SelectableItem>
             ))}
-          </StyledLargeGrid>
+          </div>
 
           <DragSelect
             selectableItemsContainerRef={containerRef}
@@ -171,7 +208,7 @@ const ScrollableDragSelectDemo = () => {
           />
         </div>
       </ScrollWrapper>
-    </StyledScrollableWrapperContainer>
+    </div>
   );
 };
 

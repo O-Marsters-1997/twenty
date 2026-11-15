@@ -1,52 +1,62 @@
 import { getAvatarButtonRender } from '@/ui/field/display/utils/getAvatarButtonRender';
 import { t } from '@lingui/core/macro';
-import { css } from '@linaria/core';
 import { isNonEmptyString } from '@sniptt/guards';
+import * as stylex from '@stylexjs/stylex';
 
 import { Avatar } from 'twenty-ui/primitives/data-display';
 import { useTheme } from 'twenty-ui/theme';
+import {
+  background,
+  borderRadius,
+  color,
+} from 'twenty-ui/theme/tokens.stylex';
 import { type AvatarOrIconProps } from './types/AvatarOrIconProps';
 import { isDefined } from 'twenty-shared/utils';
 
-const styles = {
-  iconWithBackgroundContainer: css`
-    & {
-      align-items: center;
-      background-color: var(
-        --avatar-or-icon-background,
-        var(--t-background-inverted-secondary)
-      );
-      border-radius: var(--t-border-radius-sm);
-      display: flex;
-      height: 14px;
-      justify-content: center;
-      width: 14px;
-    }
-  `,
-  wrapper: css`
-    & {
-      cursor: inherit;
-      display: flex;
-    }
-    &[data-clickable] {
-      background: none;
-      border: 0;
-      border-radius: var(--t-border-radius-sm);
-      color: inherit;
-      cursor: pointer;
-      font: inherit;
-      margin: 0;
-      padding: 0;
-    }
-    &:focus-visible {
-      outline: 2px solid var(--t-color-blue);
-      outline-offset: 1px;
-    }
-    &:disabled {
-      cursor: inherit;
-    }
-  `,
-};
+const styles = stylex.create({
+  iconWithBackgroundContainer: {
+    alignItems: 'center',
+    backgroundColor: background['--t-background-inverted-secondary'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    display: 'flex',
+    height: '14px',
+    justifyContent: 'center',
+    width: '14px',
+  },
+  iconBackground: (backgroundColor: string) => ({
+    backgroundColor,
+  }),
+  wrapper: {
+    cursor: 'inherit',
+    display: 'flex',
+    outlineColor: color['--t-color-blue'],
+    outlineOffset: { default: null, ':focus-visible': '1px' },
+    outlineStyle: { default: null, ':focus-visible': 'solid' },
+    outlineWidth: { default: null, ':focus-visible': '2px' },
+  },
+  wrapperClickable: {
+    backgroundColor: 'transparent',
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderWidth: '0',
+    color: 'inherit',
+    cursor: 'pointer',
+    font: 'inherit',
+    marginBottom: '0',
+    marginLeft: '0',
+    marginRight: '0',
+    marginTop: '0',
+    paddingBottom: '0',
+    paddingLeft: '0',
+    paddingRight: '0',
+    paddingTop: '0',
+  },
+});
 
 export const AvatarOrIcon = ({
   Icon,
@@ -79,14 +89,11 @@ export const AvatarOrIcon = ({
   const iconContent =
     isIconInverted || isDefined(IconBackgroundColor) ? (
       <span
-        className={styles.iconWithBackgroundContainer}
-        style={
-          isDefined(IconBackgroundColor)
-            ? ({
-                '--avatar-or-icon-background': IconBackgroundColor,
-              } as React.CSSProperties)
-            : undefined
-        }
+        {...stylex.props(
+          styles.iconWithBackgroundContainer,
+          isDefined(IconBackgroundColor) &&
+            styles.iconBackground(IconBackgroundColor),
+        )}
       >
         <Icon
           color={theme.font.color.inverted}
@@ -108,8 +115,7 @@ export const AvatarOrIcon = ({
     return (
       <button
         type="button"
-        className={styles.wrapper}
-        data-clickable={true}
+        {...stylex.props(styles.wrapper, styles.wrapperClickable)}
         aria-label={accessibleLabel}
         onClick={onClick}
       >
@@ -118,5 +124,5 @@ export const AvatarOrIcon = ({
     );
   }
 
-  return <div className={styles.wrapper}>{iconContent}</div>;
+  return <div {...stylex.props(styles.wrapper)}>{iconContent}</div>;
 };

@@ -1,6 +1,6 @@
 import { type FormFieldInputVariant } from '@/ui/input/types/FormFieldInputVariant';
 import { type SelectSizeVariant } from '@/ui/input/types/SelectSizeVariant';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { type ReactNode } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { TintedIconTile } from 'twenty-ui/components/data-display';
@@ -8,101 +8,68 @@ import { IconChevronDown } from 'twenty-ui/icon';
 import { Tag } from 'twenty-ui/primitives/data-display';
 import { type SelectOption } from 'twenty-ui/primitives/input';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import {
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 export type SelectControlTextAccent = 'default' | 'placeholder';
 
-// TODO: factorize this with https://github.com/twentyhq/core-team-issues/issues/752
-export const StyledControlContainer = styled.div<{
+type SelectControlContainerProps = {
   disabled?: boolean;
   hasIcon: boolean;
   selectSizeVariant?: SelectSizeVariant;
   textAccent: SelectControlTextAccent;
   hasRightElement?: boolean;
-  $variant?: FormFieldInputVariant;
-}>`
-  align-items: center;
-  background-color: ${({ $variant }) =>
-    $variant === 'transparent'
-      ? 'transparent'
-      : themeCssVariables.background.transparent.lighter};
-  border: ${({ $variant }) =>
-    $variant === 'transparent'
-      ? 'none'
-      : `1px solid ${themeCssVariables.border.color.medium}`};
-  border-bottom-left-radius: ${({ $variant }) =>
-    $variant === 'transparent' ? '0' : themeCssVariables.border.radius.md};
-  border-bottom-right-radius: ${({ hasRightElement, $variant }) =>
-    $variant === 'transparent'
-      ? '0'
-      : hasRightElement
-        ? '0'
-        : themeCssVariables.border.radius.md};
-  border-right: ${({ hasRightElement, $variant }) =>
-    $variant === 'transparent'
-      ? 'none'
-      : hasRightElement
-        ? 'none'
-        : `1px solid ${themeCssVariables.border.color.medium}`};
-  border-top-left-radius: ${({ $variant }) =>
-    $variant === 'transparent' ? '0' : themeCssVariables.border.radius.md};
-  border-top-right-radius: ${({ hasRightElement, $variant }) =>
-    $variant === 'transparent'
-      ? '0'
-      : hasRightElement
-        ? '0'
-        : themeCssVariables.border.radius.md};
-  box-sizing: border-box;
-  color: ${({ disabled, textAccent }) =>
-    disabled
-      ? themeCssVariables.font.color.tertiary
-      : textAccent === 'default'
-        ? themeCssVariables.font.color.primary
-        : themeCssVariables.font.color.tertiary};
-  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
-  display: grid;
+  variant?: FormFieldInputVariant;
+  title?: string;
+  children: ReactNode;
+};
 
-  gap: ${themeCssVariables.spacing[1]};
-  grid-template-columns: ${({ hasIcon }) =>
-    hasIcon ? 'auto 1fr auto' : '1fr auto'};
-  height: ${({ selectSizeVariant, $variant }) =>
-    $variant === 'transparent'
-      ? themeCssVariables.spacing[6]
-      : selectSizeVariant === 'small'
-        ? themeCssVariables.spacing[6]
-        : themeCssVariables.spacing[8]};
+export const SelectControlContainer = ({
+  disabled,
+  hasIcon,
+  selectSizeVariant,
+  textAccent,
+  hasRightElement,
+  variant,
+  title,
+  children,
+}: SelectControlContainerProps) => (
+  <div
+    title={title}
+    {...stylex.props(
+      styles.container,
+      selectSizeVariant === 'small' && styles.sizeSmall,
+      hasIcon && styles.withIcon,
+      textAccent === 'placeholder' && styles.placeholderText,
+      disabled === true && styles.disabled,
+      hasRightElement === true && styles.withRightElement,
+      variant === 'transparent' && styles.transparent,
+    )}
+  >
+    {children}
+  </div>
+);
 
-  max-width: 100%;
-  padding: ${({ $variant }) =>
-    $variant === 'transparent' ? '0' : `0 ${themeCssVariables.spacing[2]}`};
-  text-align: left;
-`;
+export const SelectControlChevron = ({ disabled }: { disabled?: boolean }) => {
+  const theme = useTheme();
 
-const StyledLeadingContent = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledIconChevronDownWrapper = styled.div<{
-  disabled?: boolean;
-}>`
-  color: ${({ disabled }) =>
-    disabled
-      ? themeCssVariables.font.color.extraLight
-      : themeCssVariables.font.color.tertiary};
-  display: flex;
-`;
-
-const StyledTagContainer = styled.div`
-  min-width: 0;
-  overflow: hidden;
-`;
-
-const StyledTag = styled(Tag)`
-  box-sizing: border-box;
-  max-width: 100%;
-`;
+  return (
+    <div
+      {...stylex.props(
+        styles.chevron,
+        disabled === true && styles.chevronDisabled,
+      )}
+    >
+      <IconChevronDown size={theme.icon.size.md} />
+    </div>
+  );
+};
 
 export type SelectControlProps = {
   renderAsTag?: boolean;
@@ -131,19 +98,19 @@ export const SelectControl = ({
     isDefined(selectedOption.Icon) ||
     isDefined(selectedOption.LeftComponent);
   return (
-    <StyledControlContainer
+    <SelectControlContainer
       disabled={isDisabled}
       hasIcon={hasLeadingContent}
       selectSizeVariant={selectSizeVariant}
       textAccent={textAccent}
       hasRightElement={hasRightElement}
-      $variant={variant}
+      variant={variant}
       title={selectedOption.fullLabel}
     >
       {isDefined(LeftComponent) ? (
         LeftComponent
       ) : hasLeadingContent ? (
-        <StyledLeadingContent>
+        <div {...stylex.props(styles.leadingContent)}>
           {isDefined(selectedOption?.Icon) ? (
             isDefined(selectedOption.iconThemeColor) ? (
               <TintedIconTile
@@ -170,14 +137,17 @@ export const SelectControl = ({
             )
           ) : null}
           {selectedOption.LeftComponent}
-        </StyledLeadingContent>
+        </div>
       ) : null}
       {renderAsTag && isDefined(selectedOption.color) ? (
-        <StyledTagContainer>
-          <StyledTag color={selectedOption.color}>
+        <div {...stylex.props(styles.tagContainer)}>
+          <Tag
+            color={selectedOption.color}
+            className={stylex.props(styles.tag).className}
+          >
             {selectedOption.label}
-          </StyledTag>
-        </StyledTagContainer>
+          </Tag>
+        </div>
       ) : (
         <OverflowingTextWithTooltip
           text={
@@ -187,9 +157,87 @@ export const SelectControl = ({
           }
         />
       )}
-      <StyledIconChevronDownWrapper disabled={isDisabled}>
-        <IconChevronDown size={theme.icon.size.md} />
-      </StyledIconChevronDownWrapper>
-    </StyledControlContainer>
+      <SelectControlChevron disabled={isDisabled} />
+    </SelectControlContainer>
   );
 };
+
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    backgroundColor: backgroundTransparent['--t-background-transparent-lighter'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomWidth: 1,
+    borderColor: borderColor['--t-border-color-medium'],
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    borderStyle: 'solid',
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    borderTopWidth: 1,
+    boxSizing: 'border-box',
+    color: fontColor['--t-font-color-primary'],
+    cursor: 'pointer',
+    display: 'grid',
+    gap: spacing['--t-spacing-1'],
+    gridTemplateColumns: '1fr auto',
+    height: spacing['--t-spacing-8'],
+    maxWidth: '100%',
+    paddingBlock: 0,
+    paddingInline: spacing['--t-spacing-2'],
+    textAlign: 'left',
+  },
+  sizeSmall: {
+    height: spacing['--t-spacing-6'],
+  },
+  withIcon: {
+    gridTemplateColumns: 'auto 1fr auto',
+  },
+  placeholderText: {
+    color: fontColor['--t-font-color-tertiary'],
+  },
+  disabled: {
+    color: fontColor['--t-font-color-tertiary'],
+    cursor: 'not-allowed',
+  },
+  withRightElement: {
+    borderBottomRightRadius: 0,
+    borderRightWidth: 0,
+    borderTopRightRadius: 0,
+  },
+  transparent: {
+    backgroundColor: 'transparent',
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+    borderBottomWidth: 0,
+    borderLeftWidth: 0,
+    borderRightWidth: 0,
+    borderStyle: 'none',
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+    borderTopWidth: 0,
+    height: spacing['--t-spacing-6'],
+    paddingInline: 0,
+  },
+  chevron: {
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+  },
+  chevronDisabled: {
+    color: fontColor['--t-font-color-extra-light'],
+  },
+  leadingContent: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+  },
+  tagContainer: {
+    minWidth: '0',
+    overflow: 'hidden',
+  },
+  tag: {
+    boxSizing: 'border-box',
+    maxWidth: '100%',
+  },
+});

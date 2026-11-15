@@ -5,13 +5,13 @@ import { filePreviewState } from '@/ui/field/display/states/filePreviewState';
 import { useDialog } from '@/ui/layout/dialog/hooks/useDialog';
 import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
 import { ScrollWrapper } from '@/ui/utilities/scroll/components/ScrollWrapper';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { type JSX, lazy, Suspense, useEffect } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { IconDownload, IconX } from 'twenty-ui/icon';
 import { IconButton } from 'twenty-ui/components/input';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { borderColor, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const DocumentViewer = lazy(() =>
   import('@/activities/files/components/DocumentViewer').then((module) => ({
@@ -21,56 +21,59 @@ const DocumentViewer = lazy(() =>
 
 const GLOBAL_FILE_PREVIEW_MODAL_ID = 'global-file-preview-modal';
 
-const StyledModalHeader = styled.div`
-  align-items: center;
-  border-bottom: 1px solid ${themeCssVariables.border.color.medium};
-  display: flex;
-  flex-direction: row;
-  gap: ${themeCssVariables.spacing[2]};
-  height: 60px;
-  justify-content: space-between;
-  overflow: hidden;
-  padding: ${themeCssVariables.spacing[0]} ${themeCssVariables.spacing[4]}
-    ${themeCssVariables.spacing[0]} ${themeCssVariables.spacing[4]};
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledHeader = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  justify-content: space-between;
-  width: 100%;
-`;
-
-const StyledModalTitle = styled.div`
-  color: ${themeCssVariables.font.color.primary};
-  font-size: ${themeCssVariables.font.size.xl};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-`;
-
-const StyledButtonContainer = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledModalContent = styled.div`
-  height: 100%;
-  padding: ${themeCssVariables.spacing[4]};
-`;
-
-const StyledLoadingContainer = styled.div`
-  align-items: center;
-  display: flex;
-  height: 100%;
-  justify-content: center;
-`;
-
-const StyledLoadingText = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-`;
+const styles = stylex.create({
+  modalHeader: {
+    alignItems: 'center',
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: borderColor['--t-border-color-medium'],
+    display: 'flex',
+    flexDirection: 'row',
+    gap: spacing['--t-spacing-2'],
+    height: '60px',
+    justifyContent: 'space-between',
+    overflow: 'hidden',
+    paddingTop: spacing['--t-spacing-0'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingBottom: spacing['--t-spacing-0'],
+    paddingLeft: spacing['--t-spacing-4'],
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  header: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  modalTitle: {
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-xl'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+  },
+  buttonContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+  },
+  modalContent: {
+    height: '100%',
+    paddingTop: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingBottom: spacing['--t-spacing-4'],
+    paddingLeft: spacing['--t-spacing-4'],
+  },
+  loadingContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    height: '100%',
+    justifyContent: 'center',
+  },
+  loadingText: {
+    color: fontColor['--t-font-color-tertiary'],
+  },
+});
 
 export const GlobalFilePreviewModal = (): JSX.Element | null => {
   const { t } = useLingui();
@@ -111,10 +114,10 @@ export const GlobalFilePreviewModal = (): JSX.Element | null => {
           size="lg"
           style={{ padding: 'var(--t-spacing-4)' }}
         >
-          <StyledModalHeader>
-            <StyledHeader>
-              <StyledModalTitle>{filePreview.label}</StyledModalTitle>
-              <StyledButtonContainer>
+          <div {...stylex.props(styles.modalHeader)}>
+            <div {...stylex.props(styles.header)}>
+              <div {...stylex.props(styles.modalTitle)}>{filePreview.label}</div>
+              <div {...stylex.props(styles.buttonContainer)}>
                 <IconButton
                   aria-label={t`Download file`}
                   onClick={handleDownload}
@@ -129,20 +132,20 @@ export const GlobalFilePreviewModal = (): JSX.Element | null => {
                 >
                   <IconX />
                 </IconButton>
-              </StyledButtonContainer>
-            </StyledHeader>
-          </StyledModalHeader>
+              </div>
+            </div>
+          </div>
           <ScrollWrapper
             componentInstanceId={`preview-modal-${filePreview.fileId ?? 'file'}`}
           >
-            <StyledModalContent>
+            <div {...stylex.props(styles.modalContent)}>
               <Suspense
                 fallback={
-                  <StyledLoadingContainer>
-                    <StyledLoadingText>
+                  <div {...stylex.props(styles.loadingContainer)}>
+                    <div {...stylex.props(styles.loadingText)}>
                       {t`Loading document viewer...`}
-                    </StyledLoadingText>
-                  </StyledLoadingContainer>
+                    </div>
+                  </div>
                 }
               >
                 <DocumentViewer
@@ -151,7 +154,7 @@ export const GlobalFilePreviewModal = (): JSX.Element | null => {
                   documentExtension={filePreview.extension ?? ''}
                 />
               </Suspense>
-            </StyledModalContent>
+            </div>
           </ScrollWrapper>
         </Dialog.Popup>
       )}

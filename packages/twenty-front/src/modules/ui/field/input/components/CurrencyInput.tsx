@@ -1,5 +1,4 @@
 import { isDefined } from 'twenty-shared/utils';
-import { styled } from '@linaria/react';
 import { useEffect, useRef, useState } from 'react';
 
 import { useRegisterInputEvents } from '@/ui/input/hooks/useRegisterInputEvents';
@@ -8,52 +7,55 @@ import { CURRENCIES } from '@/ui/input/components/internal/currency/constants/Cu
 import { CurrencyPickerDropdownButton } from '@/ui/input/components/internal/currency/components/CurrencyPickerDropdownButton';
 import { CURRENCY_MICROS_DECIMAL_PLACES } from '@/ui/field/input/constants/CurrencyMicrosDecimalPlaces';
 import { IMaskInput } from 'react-imask';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import { getSeparatorsForNumberFormat } from '@/localization/utils/getSeparatorsForNumberFormat';
+import * as stylex from '@stylexjs/stylex';
+import {
+  font,
+  fontColor,
+  fontWeight,
+  iconSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-export const StyledIMaskInput = styled.div`
-  display: contents;
-
-  > input {
-    background-color: transparent;
-    border: none;
-    color: ${themeCssVariables.font.color.primary};
-    font-family: ${themeCssVariables.font.family};
-    font-size: inherit;
-    font-weight: inherit;
-    margin: 0;
-    outline: none;
-    padding: ${themeCssVariables.spacing[0]} ${themeCssVariables.spacing[1.5]};
-
-    &::placeholder,
-    &::-webkit-input-placeholder {
-      color: ${themeCssVariables.font.color.light};
-      font-family: ${themeCssVariables.font.family};
-      font-weight: ${themeCssVariables.font.weight.medium};
-    }
-
-    width: 100%;
-  }
-`;
-
-const StyledContainer = styled.div`
-  align-items: center;
-
-  display: flex;
-  justify-content: center;
-`;
-
-const StyledIcon = styled.div`
-  align-items: center;
-  display: flex;
-
-  & > svg {
-    color: ${themeCssVariables.font.color.tertiary};
-    height: ${themeCssVariables.icon.size.md}px;
-    padding-left: ${themeCssVariables.spacing[1]};
-    width: ${themeCssVariables.icon.size.md}px;
-  }
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  maskInput: {
+    backgroundColor: 'transparent',
+    borderWidth: '0',
+    color: fontColor['--t-font-color-primary'],
+    fontFamily: font['--t-font-family'],
+    fontSize: 'inherit',
+    fontWeight: 'inherit',
+    marginBottom: '0',
+    marginLeft: '0',
+    marginRight: '0',
+    marginTop: '0',
+    outlineStyle: 'none',
+    paddingBlock: spacing['--t-spacing-0'],
+    paddingInline: spacing['--t-spacing-1_5'],
+    width: '100%',
+    '::placeholder': {
+      color: fontColor['--t-font-color-light'],
+      fontFamily: font['--t-font-family'],
+      fontWeight: fontWeight['--t-font-weight-medium'],
+    },
+  },
+  iconContainer: {
+    alignItems: 'center',
+    display: 'flex',
+  },
+  icon: {
+    color: fontColor['--t-font-color-tertiary'],
+    height: `${iconSize['--t-icon-size-md']}px`,
+    paddingLeft: spacing['--t-spacing-1'],
+    width: `${iconSize['--t-icon-size-md']}px`,
+  },
+});
 
 export type CurrencyInputProps = {
   instanceId: string;
@@ -128,33 +130,36 @@ export const CurrencyInput = ({
   const Icon = currency?.Icon;
 
   return (
-    <StyledContainer ref={wrapperRef}>
+    <div ref={wrapperRef} {...stylex.props(styles.container)}>
       <CurrencyPickerDropdownButton
         selectedCurrencyCode={currencyCode}
         onChange={handleCurrencyChange}
       />
-      <StyledIcon>
+      <div {...stylex.props(styles.iconContainer)}>
         {isDefined(Icon) && (
-          <Icon size={theme.icon.size.md} stroke={theme.icon.stroke.sm} />
+          <Icon
+            size={theme.icon.size.md}
+            stroke={theme.icon.stroke.sm}
+            {...stylex.props(styles.icon)}
+          />
         )}
-      </StyledIcon>
-      <StyledIMaskInput>
-        <IMaskInput
-          mask={Number}
-          thousandsSeparator={thousandsSeparator}
-          radix={radix}
-          scale={CURRENCY_MICROS_DECIMAL_PLACES}
-          onAccept={(value: string, _maskRef: unknown, event?: InputEvent) =>
-            handleAccept(value, event)
-          }
-          inputRef={wrapperRef}
-          autoComplete="off"
-          placeholder={placeholder}
-          autoFocus={autoFocus}
-          value={value}
-          unmask
-        />
-      </StyledIMaskInput>
-    </StyledContainer>
+      </div>
+      <IMaskInput
+        mask={Number}
+        thousandsSeparator={thousandsSeparator}
+        radix={radix}
+        scale={CURRENCY_MICROS_DECIMAL_PLACES}
+        onAccept={(value: string, _maskRef: unknown, event?: InputEvent) =>
+          handleAccept(value, event)
+        }
+        inputRef={wrapperRef}
+        autoComplete="off"
+        placeholder={placeholder}
+        autoFocus={autoFocus}
+        value={value}
+        unmask
+        className={stylex.props(styles.maskInput).className}
+      />
+    </div>
   );
 };

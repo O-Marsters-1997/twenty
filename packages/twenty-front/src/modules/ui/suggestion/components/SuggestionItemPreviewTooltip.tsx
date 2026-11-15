@@ -1,21 +1,10 @@
-import { css } from '@linaria/core';
+import * as stylex from '@stylexjs/stylex';
 import { type ReactNode } from 'react';
 import {
   Tooltip,
   type TooltipPositionerProps,
 } from 'twenty-ui/primitives/surfaces';
-import { themeCssVariables } from 'twenty-ui/theme';
-
-const previewTooltipClass = css`
-  background: transparent;
-  border-radius: ${themeCssVariables.border.radius.md};
-  box-shadow: ${themeCssVariables.boxShadow.strong};
-  padding: 0;
-
-  [data-anchor-hidden] & {
-    visibility: hidden;
-  }
-`;
+import { borderRadius, boxShadow } from 'twenty-ui/theme/tokens.stylex';
 
 type SuggestionItemPreviewTooltipProps = {
   anchor: TooltipPositionerProps['anchor'];
@@ -36,11 +25,28 @@ export const SuggestionItemPreviewTooltip = ({
         align="start"
         sideOffset={16}
         style={{ maxWidth: `${width}px` }}
+        className={stylex.props(styles.positioner).className}
       >
-        <Tooltip.Popup className={previewTooltipClass}>
+        <Tooltip.Popup className={stylex.props(styles.popup).className}>
           {children}
         </Tooltip.Popup>
       </Tooltip.Positioner>
     </Tooltip.Portal>
   </Tooltip.Root>
 );
+
+const styles = stylex.create({
+  positioner: {
+    visibility: {
+      default: null,
+      ':is([data-anchor-hidden])': 'hidden',
+    },
+  },
+  popup: {
+    backgroundColor: 'transparent',
+    borderRadius: borderRadius['--t-border-radius-md'],
+    boxShadow: boxShadow['--t-box-shadow-strong'],
+    paddingBlock: 0,
+    paddingInline: 0,
+  },
+});

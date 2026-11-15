@@ -1,5 +1,4 @@
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { styled } from '@linaria/react';
 import { useEffect } from 'react';
 import { useIMask } from 'react-imask';
 
@@ -26,100 +25,101 @@ import {
   IconChevronRight,
   IconClock,
 } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { backgroundTransparent, borderColor, borderRadius, font, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const YEARS_SELECT_OPTIONS = Array.from(
   { length: 200 },
   (_, i) => new Date().getFullYear() + 50 - i,
 ).map((year) => ({ label: year.toString(), value: year }));
 
-const StyledTimeRow = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  justify-content: flex-start;
-  padding-bottom: ${themeCssVariables.spacing[2]};
-  padding-left: ${themeCssVariables.spacing[2]};
-  padding-right: ${themeCssVariables.spacing[2]};
-  padding-top: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledTimeInputWrapper = styled.div`
-  flex-grow: 1;
-`;
-
-const StyledTimeInputContainer = styled.div`
-  align-items: center;
-  background-color: ${themeCssVariables.background.transparent.lighter};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: calc(
-    ${themeCssVariables.border.radius.md} - ${themeCssVariables.spacing[1]}
-  );
-  box-sizing: border-box;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  height: ${themeCssVariables.spacing[8]};
-  padding: 0 ${themeCssVariables.spacing[2]};
-  transition: border-color 0.15s ease;
-
-  &:hover {
-    border-color: ${themeCssVariables.border.color.strong};
-  }
-`;
-
-const StyledClockIcon = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  flex-shrink: 0;
-`;
-
-const StyledTimeInput = styled.input`
-  background: transparent;
-  border: none;
-  color: ${themeCssVariables.font.color.primary};
-  flex: 1;
-  font-family: ${themeCssVariables.font.family};
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.regular};
-  letter-spacing: 0.05em;
-  outline: none;
-  width: 100%;
-
-  &::placeholder {
-    color: ${themeCssVariables.font.color.light};
-    font-weight: ${themeCssVariables.font.weight.medium};
-  }
-
-  &:disabled {
-    color: ${themeCssVariables.font.color.tertiary};
-  }
-`;
-
-const StyledRightControls = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledNavigationButtons = styled.div`
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledSeparator = styled.div`
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  height: 1px;
-  width: 100%;
-`;
-
-const StyledMonthYearSelector = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[1]};
-  padding: ${themeCssVariables.spacing[1]};
-  width: 160px;
-`;
+const styles = stylex.create({
+  timeRow: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    justifyContent: 'flex-start',
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
+  },
+  timeInputWrapper: {
+    flexGrow: '1',
+  },
+  timeInputContainer: {
+    alignItems: 'center',
+    backgroundColor: backgroundTransparent['--t-background-transparent-lighter'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: { default: borderColor['--t-border-color-medium'], ':hover': borderColor['--t-border-color-strong'] },
+    borderTopLeftRadius: `calc(
+    ${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']}
+  )`,
+    borderTopRightRadius: `calc(
+    ${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']}
+  )`,
+    borderBottomRightRadius: `calc(
+    ${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']}
+  )`,
+    borderBottomLeftRadius: `calc(
+    ${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']}
+  )`,
+    boxSizing: 'border-box',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    height: spacing['--t-spacing-8'],
+    paddingTop: '0',
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: '0',
+    paddingLeft: spacing['--t-spacing-2'],
+    transition: 'border-color 0.15s ease',
+  },
+  clockIcon: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    flexShrink: '0',
+  },
+  timeInput: {
+    backgroundColor: 'transparent',
+    borderStyle: 'none',
+    color: { default: fontColor['--t-font-color-primary'], '::placeholder': fontColor['--t-font-color-light'], ':disabled': fontColor['--t-font-color-tertiary'] },
+    flex: '1',
+    fontFamily: font['--t-font-family'],
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: { default: fontWeight['--t-font-weight-regular'], '::placeholder': fontWeight['--t-font-weight-medium'] },
+    letterSpacing: '0.05em',
+    outline: 'none',
+    width: '100%',
+  },
+  rightControls: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+  },
+  navigationButtons: {
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+  },
+  separator: {
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: borderColor['--t-border-color-light'],
+    height: '1px',
+    width: '100%',
+  },
+  monthYearSelector: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-1'],
+    paddingTop: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-1'],
+    width: '160px',
+  },
+});
 
 type DateTimePickerHeaderProps = {
   instanceId: string;
@@ -197,23 +197,23 @@ export const DateTimePickerHeader = ({
       {!hideInput && (
         <>
           <DateTimePickerInput date={date} onChange={onChange} />
-          <StyledSeparator />
+          <div {...stylex.props(styles.separator)} />
         </>
       )}
-      <StyledTimeRow>
-        <StyledTimeInputWrapper>
-          <StyledTimeInputContainer>
-            <StyledClockIcon>
+      <div {...stylex.props(styles.timeRow)}>
+        <div {...stylex.props(styles.timeInputWrapper)}>
+          <div {...stylex.props(styles.timeInputContainer)}>
+            <div {...stylex.props(styles.clockIcon)}>
               <IconClock size={16} />
-            </StyledClockIcon>
-            <StyledTimeInput
+            </div>
+            <input
               type="text"
               ref={timeInputRef}
-              placeholder={isHour12 ? 'HH:mm AA' : 'HH:mm'}
+              placeholder={isHour12 ? 'HH:mm AA' : 'HH:mm'} {...stylex.props(styles.timeInput)}
             />
-          </StyledTimeInputContainer>
-        </StyledTimeInputWrapper>
-        <StyledRightControls>
+          </div>
+        </div>
+        <div {...stylex.props(styles.rightControls)}>
           <DropdownRoot dropdownId={monthYearPanelDropdownId} type="panel">
             <Dropdown.Trigger
               render={
@@ -231,7 +231,7 @@ export const DateTimePickerHeader = ({
               width={170}
               initialFocus={false}
             >
-              <StyledMonthYearSelector>
+              <div {...stylex.props(styles.monthYearSelector)}>
                 <Select
                   dropdownId={monthSelectDropdownId}
                   options={getMonthSelectOptions(userLocale)}
@@ -248,10 +248,10 @@ export const DateTimePickerHeader = ({
                   fullWidth={false}
                   dropdownWidth={160}
                 />
-              </StyledMonthYearSelector>
+              </div>
             </DropdownContent>
           </DropdownRoot>
-          <StyledNavigationButtons>
+          <div {...stylex.props(styles.navigationButtons)}>
             <LightIconButton
               onClick={onSubtractMonth}
               size="md"
@@ -268,9 +268,9 @@ export const DateTimePickerHeader = ({
             >
               <IconChevronRight />
             </LightIconButton>
-          </StyledNavigationButtons>
-        </StyledRightControls>
-      </StyledTimeRow>
+          </div>
+        </div>
+      </div>
     </>
   );
 };

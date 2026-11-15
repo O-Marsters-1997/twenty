@@ -1,23 +1,19 @@
-import { css } from '@linaria/core';
+import * as stylex from '@stylexjs/stylex';
 import { useTheme } from 'twenty-ui/theme';
 
-const styles = {
-  animatedPath: css`
-    & {
-      animation: animated-checkmark-draw-checkmark
-        var(--animated-checkmark-duration, 0.5s) ease forwards;
-    }
+const drawCheckmark = stylex.keyframes({
+  from: { strokeDashoffset: 1 },
+  to: { strokeDashoffset: 0 },
+});
 
-    @keyframes animated-checkmark-draw-checkmark {
-      from {
-        stroke-dashoffset: 1;
-      }
-      to {
-        stroke-dashoffset: 0;
-      }
-    }
-  `,
-};
+const styles = stylex.create({
+  animatedPath: (duration: number) => ({
+    animationDuration: `${duration}s`,
+    animationFillMode: 'forwards',
+    animationName: drawCheckmark,
+    animationTimingFunction: 'ease',
+  }),
+});
 
 export type AnimatedCheckmarkProps = {
   isAnimating?: boolean;
@@ -42,7 +38,7 @@ export const AnimatedCheckmark = ({
       height={size}
     >
       <path
-        className={isAnimating ? styles.animatedPath : undefined}
+        {...stylex.props(isAnimating && styles.animatedPath(duration))}
         fill="none"
         stroke={color ?? theme.grayScale.gray1}
         strokeWidth={4}
@@ -50,11 +46,6 @@ export const AnimatedCheckmark = ({
         pathLength="1"
         strokeDasharray="1"
         strokeDashoffset={isAnimating ? 0 : 1}
-        style={
-          {
-            '--animated-checkmark-duration': `${duration}s`,
-          } as React.CSSProperties
-        }
       />
     </svg>
   );

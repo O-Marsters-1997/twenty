@@ -4,28 +4,31 @@ import { useToggleNavigationDrawer } from '@/ui/navigation/navigation-drawer/hoo
 import { TooltipDelay } from '@/ui/layout/tooltip/constants/TooltipDelay';
 import { useNavigationDrawerExpandButtonFocusHandOff } from '@/ui/navigation/navigation-drawer/hooks/useNavigationDrawerExpandButtonFocusHandOff';
 import { useIsMobile } from 'twenty-ui/utilities';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { LightIconButton } from 'twenty-ui/components/input';
 import { Tooltip } from 'twenty-ui/primitives/surfaces';
-import { themeCssVariables } from 'twenty-ui/theme';
+import {
+  borderRadius,
+  fontColor,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledCollapseButton = styled.div`
-  align-items: center;
-  border-radius: ${themeCssVariables.border.radius.md};
-  color: ${themeCssVariables.font.color.light};
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  user-select: none;
-`;
+const styles = stylex.create({
+  collapseButton: {
+    alignItems: 'center',
+    borderRadius: borderRadius['--t-border-radius-md'],
+    color: fontColor['--t-font-color-light'],
+    cursor: 'pointer',
+    display: 'flex',
+    justifyContent: 'center',
+    userSelect: 'none',
+  },
+});
 
 type NavigationDrawerCollapseButtonProps = {
-  className?: string;
   direction?: 'left' | 'right';
 };
 
 export const NavigationDrawerCollapseButton = ({
-  className,
   direction = 'left',
 }: NavigationDrawerCollapseButtonProps) => {
   const isMobile = useIsMobile();
@@ -49,7 +52,7 @@ export const NavigationDrawerCollapseButton = ({
       side="bottom"
       sideOffset={5}
     >
-      <StyledCollapseButton className={className}>
+      <div {...stylex.props(styles.collapseButton)}>
         <LightIconButton
           ref={direction === 'right' ? expandButtonFocusHandOffRef : undefined}
           emphasis="standard"
@@ -59,7 +62,7 @@ export const NavigationDrawerCollapseButton = ({
         >
           <Icon />
         </LightIconButton>
-      </StyledCollapseButton>
+      </div>
     </Tooltip>
   );
 };

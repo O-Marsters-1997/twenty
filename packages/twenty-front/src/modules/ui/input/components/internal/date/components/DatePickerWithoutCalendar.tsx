@@ -1,5 +1,4 @@
 import { SkeletonLine } from '@/ui/feedback/skeleton/components/SkeletonLine';
-import { styled } from '@linaria/react';
 import { Suspense, lazy, type ComponentType } from 'react';
 import type { DatePickerProps as ReactDatePickerLibProps } from 'react-datepicker';
 import { SKELETON_HEIGHT_SIZES } from 'twenty-ui/primitives/feedback';
@@ -13,34 +12,42 @@ import {
   DATE_PICKER_CONTAINER_WIDTH,
   StyledDatePickerContainer,
 } from '@/ui/input/components/internal/date/components/StyledDatePickerContainer';
-import 'react-datepicker/dist/react-datepicker.css';
+import '~/third-party-styles/react-datepicker.css';
 
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { Temporal } from 'temporal-polyfill';
 import { type Nullable } from 'twenty-shared/types';
 import { isDefined, turnJSDateToPlainDate } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { background, borderRadius, fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const DATE_PICKER_SKELETON_PADDING = 16;
 
-const StyledSpacer = styled.div`
-  height: ${themeCssVariables.spacing[2]};
-  width: auto;
-`;
-
-const StyledDatePickerFallback = styled.div`
-  align-items: center;
-  background: ${themeCssVariables.background.secondary};
-  border-radius: ${themeCssVariables.border.radius.md};
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  height: 300px;
-  justify-content: center;
-  padding: ${themeCssVariables.spacing[4]};
-  width: 280px;
-`;
+const styles = stylex.create({
+  spacer: {
+    height: spacing['--t-spacing-2'],
+    width: 'auto',
+  },
+  datePickerFallback: {
+    alignItems: 'center',
+    backgroundColor: background['--t-background-secondary'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    height: '300px',
+    justifyContent: 'center',
+    paddingTop: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingBottom: spacing['--t-spacing-4'],
+    paddingLeft: spacing['--t-spacing-4'],
+    width: '280px',
+  },
+});
 
 type DatePickerWithoutCalendarProps = {
   instanceId: string;
@@ -140,7 +147,7 @@ export const DatePickerWithoutCalendar = ({
       <div>
         <Suspense
           fallback={
-            <StyledDatePickerFallback>
+            <div {...stylex.props(styles.datePickerFallback)}>
               <SkeletonLine
                 width={
                   DATE_PICKER_CONTAINER_WIDTH - DATE_PICKER_SKELETON_PADDING
@@ -169,7 +176,7 @@ export const DatePickerWithoutCalendar = ({
                 height={SKELETON_HEIGHT_SIZES.l}
                 borderRadius={2}
               />
-            </StyledDatePickerFallback>
+            </div>
           }
         >
           <ReactDatePicker
@@ -198,7 +205,7 @@ export const DatePickerWithoutCalendar = ({
                   nextMonthButtonDisabled={nextMonthButtonDisabled}
                   hideInput={true}
                 />
-                <StyledSpacer />
+                <div {...stylex.props(styles.spacer)} />
               </>
             )}
             onSelect={handleDateSelect}
