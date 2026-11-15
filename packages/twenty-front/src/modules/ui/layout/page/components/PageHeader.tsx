@@ -27,7 +27,7 @@ import { media } from 'twenty-ui/theme/constants.stylex';
 const styles = stylex.create({
   topBarContainer: {
     alignItems: 'center',
-    backgroundColor: background['--t-background-noisy'],
+    background: background['--t-background-noisy'],
     color: fontColor['--t-font-color-primary'],
     display: 'flex',
     flexDirection: 'row',

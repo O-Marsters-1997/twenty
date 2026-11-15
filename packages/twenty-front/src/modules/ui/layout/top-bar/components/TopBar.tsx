@@ -41,7 +41,7 @@ const styles = stylex.create({
     justifyContent: 'space-between',
     marginLeft: spacing['--t-spacing-1'],
     paddingRight: spacing['--t-spacing-2'],
-    zIndex: '7',
+    zIndex: 7,
   },
   leftSection: {
     display: 'flex',

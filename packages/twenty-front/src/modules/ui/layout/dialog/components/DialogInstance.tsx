@@ -1,5 +1,6 @@
 import { useContext, type ReactNode } from 'react';
 import * as stylex from '@stylexjs/stylex';
+import { background } from 'twenty-ui/theme/tokens.stylex';
 import { useStore } from 'jotai';
 import { isDefined } from 'twenty-shared/utils';
 import { Dialog, type DialogPopupProps } from 'twenty-ui/primitives/surfaces';
@@ -32,7 +33,7 @@ const styles = stylex.create({
   fixed: { position: 'fixed' },
   backdrop: { zIndex: zIndex.rootModalBackDrop },
   backdropInContainer: {
-    background: 'var(--t-background-overlay-tertiary)',
+    backgroundColor: background['--t-background-overlay-tertiary'],
   },
   viewport: { zIndex: zIndex.rootModal },
 });

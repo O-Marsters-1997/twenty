@@ -221,7 +221,7 @@ export const Dropdown = ({
           role="button"
           {...stylex.props(
             styles.clickable,
-            styles.clickableWidth(clickableComponentWidth),
+            styles.clickableWidth(clickableComponentWidth ?? 'auto'),
           )}
         >
           {clickableComponent}
