@@ -1,6 +1,5 @@
 import { Trans } from '@lingui/react';
 import { Img } from 'react-email';
-import { canvasTheme } from 'src/common-style';
 
 import { BaseEmail } from 'src/components/BaseEmail';
 import { CallToAction } from 'src/components/CallToAction';
@@ -55,7 +54,7 @@ export const SendInviteLinkEmail = ({
               <Link
                 href={`mailto:${senderEmail}`}
                 value={senderEmail}
-                color={canvasTheme.font.colors.blue}
+                color="blue"
               />
             ),
             1: <b />,

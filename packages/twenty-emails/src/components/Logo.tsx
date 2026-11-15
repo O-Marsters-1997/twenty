@@ -1,9 +1,5 @@
 import { Img } from 'react-email';
 
-const logoStyle = {
-  marginBottom: '40px',
-};
-
 export const Logo = () => {
   return (
     <Img
@@ -11,7 +7,7 @@ export const Logo = () => {
       alt="Twenty logo"
       width="40"
       height="40"
-      style={logoStyle}
+      className="mb-10"
     />
   );
 };
