@@ -54,3 +54,7 @@ Agents run only: a typecheck of the touched package through `scripts/heavy` (`sc
 - **Entity file changes need a generated instance command**: `npx nx run twenty-server:database:migrate:generate --name <name> --type <fast|slow>` (slow = adds a data-backfill step).
 - A read-only Postgres MCP server is configured in `.mcp.json` for inspecting workspace data, metadata, and migration results. Writes go through the CLI commands above.
 - E2E login: click "Continue with Email" and use the prefilled credentials.
+
+## Fleet
+
+Run at most 5 implementation subagents at once in `/fleet dispatch`; start the next ticket as one finishes.
