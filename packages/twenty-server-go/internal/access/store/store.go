@@ -109,13 +109,12 @@ func queryAll[T any](ctx context.Context, conn db, statement string, args ...any
 }
 
 func queryOne[T any](ctx context.Context, conn db, notFound string, statement string, args ...any) (T, error) {
+	var zero T
 	found, err := queryAll[T](ctx, conn, statement, args...)
 	switch {
 	case err != nil:
-		var zero T
 		return zero, err
 	case len(found) == 0:
-		var zero T
 		return zero, fmt.Errorf("%w: %s", metadata.ErrNotFound, notFound)
 	}
 	return found[0], nil
