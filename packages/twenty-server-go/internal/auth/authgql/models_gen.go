@@ -39,6 +39,11 @@ type TwoFactorAuthenticationRecoveryCode struct {
 	ExpiresAt    metadata.Timestamp `json:"expiresAt"`
 }
 
+type TwoFactorAuthenticationRecoveryCodeRedemption struct {
+	Tokens          *AuthTokenPair `json:"tokens,omitempty"`
+	ProvisioningURI *string        `json:"provisioningUri,omitempty"`
+}
+
 type TwoFactorAuthenticationRecoveryStatus struct {
 	HasVerifiedTwoFactorAuthenticationMethod bool                `json:"hasVerifiedTwoFactorAuthenticationMethod"`
 	IsAwaitingRecoveryEnrollment             bool                `json:"isAwaitingRecoveryEnrollment"`

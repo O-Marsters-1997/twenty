@@ -1,0 +1,28 @@
+{
+  "name": "get-auth-tokens-from-otp",
+  "operation": "getAuthTokensFromOTP",
+  "fixture": "member with a verified TOTP method and a valid login token",
+  "endpoint": "/graphql",
+  "query": "mutation getAuthTokensFromOTP($loginToken: String!, $otp: String!, $captchaToken: String, $origin: String!) { getAuthTokensFromOTP(loginToken: $loginToken, otp: $otp, captchaToken: $captchaToken, origin: $origin) { tokens { accessOrWorkspaceAgnosticToken { token expiresAt } refreshToken { token expiresAt } } } }",
+  "variables": {
+    "loginToken": "valid-login-token",
+    "otp": "123456",
+    "origin": "http://acme.localhost:3001"
+  },
+  "response": {
+    "data": {
+      "getAuthTokensFromOTP": {
+        "tokens": {
+          "accessOrWorkspaceAgnosticToken": {
+            "token": "<ignored>",
+            "expiresAt": "<ignored>"
+          },
+          "refreshToken": {
+            "token": "<ignored>",
+            "expiresAt": "<ignored>"
+          }
+        }
+      }
+    }
+  }
+}

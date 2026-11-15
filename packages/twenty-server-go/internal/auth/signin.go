@@ -74,7 +74,7 @@ func (s *SignIn) TokensFromLoginToken(ctx context.Context, loginToken, origin st
 	if err != nil {
 		return TokenPair{}, err
 	}
-	return s.Issuer.IssueForWorkspace(ctx, userID, login.WorkspaceID, login.AuthProvider)
+	return s.Issuer.IssueForUser(ctx, userID, login.WorkspaceID, login.AuthProvider)
 }
 
 func (s *SignIn) Renew(ctx context.Context, refreshToken string) (TokenPair, error) {
@@ -98,7 +98,7 @@ func SessionIssueError(err error) error {
 	return err
 }
 
-func (i *PGIssuer) IssueForWorkspace(ctx context.Context, userID, workspaceID string, provider AuthProvider) (TokenPair, error) {
+func (i *PGIssuer) IssueForUser(ctx context.Context, userID, workspaceID string, provider AuthProvider) (TokenPair, error) {
 	var pair TokenPair
 	err := pgx.BeginFunc(ctx, i.pool, func(tx pgx.Tx) error {
 		principal, err := resolvePrincipal(ctx, tx, userID, workspaceID, provider)

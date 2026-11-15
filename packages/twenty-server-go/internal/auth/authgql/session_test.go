@@ -111,7 +111,7 @@ func (h *sessionHarness) send(t *testing.T, query string, variables map[string]a
 
 func (h *sessionHarness) pair(t *testing.T, userID string) auth.TokenPair {
 	t.Helper()
-	pair, err := h.issuer.IssueForWorkspace(t.Context(), userID, workspaceID, "password")
+	pair, err := h.issuer.IssueForUser(t.Context(), userID, workspaceID, "password")
 	if err != nil {
 		t.Fatal(err)
 	}

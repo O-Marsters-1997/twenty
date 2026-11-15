@@ -96,6 +96,7 @@ func run() error {
 	if err != nil {
 		return err
 	}
+	authHandler := authgql.NewHandler(authResolver, logger)
 
 	goGraphQL := http.NewServeMux()
 	goGraphQL.Handle(string(frontdoor.EndpointWorkspace), workspaceHandler(recordsgql.NewHandler(&recordsgql.Resolver{
@@ -113,7 +114,7 @@ func run() error {
 	}, logger), chatHandler, workflowHandler, messaginggql.NewHandler(&messaginggql.Resolver{
 		Timeline: messagingstore.NewTimeline(pool),
 		Banners:  messagingstore.NewReconnectBanners(pool),
-	}, logger)))
+	}, logger), authHandler))
 	goGraphQL.Handle(string(frontdoor.EndpointMetadata), metadataHandler(
 		metadatagql.NewHandler(metadatastore.New(pool), toolRegistry, logger),
 		chatHandler,
@@ -126,12 +127,15 @@ func run() error {
 			Renderer:  messaging.GoRenderer{},
 			Queue:     queue.Enqueue,
 		}, logger),
-		authgql.NewHandler(authResolver, logger),
+		authHandler,
 		agentgql.Operations,
 	))
 
 	handler := frontdoor.NewHandler(frontdoor.DefaultTable(), cfg.NodeUpstreamURL, verifier, goGraphQL, logger).
-		WithPublicOperations(map[frontdoor.Endpoint][]string{frontdoor.EndpointMetadata: frontdoor.SessionOperations}).
+		WithPublicOperations(map[frontdoor.Endpoint][]string{
+			frontdoor.EndpointMetadata:  frontdoor.SessionOperations,
+			frontdoor.EndpointWorkspace: frontdoor.LoginOperations,
+		}).
 		WithMCP(toolRegistry).
 		WithSubscriber(aigql.NewSubscriber(broker))
 

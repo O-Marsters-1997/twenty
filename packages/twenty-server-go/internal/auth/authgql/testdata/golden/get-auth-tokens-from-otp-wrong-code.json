@@ -1,0 +1,34 @@
+{
+  "name": "get-auth-tokens-from-otp-wrong-code",
+  "operation": "getAuthTokensFromOTP",
+  "fixture": "member with a verified TOTP method and a valid login token",
+  "endpoint": "/graphql",
+  "query": "mutation getAuthTokensFromOTP($loginToken: String!, $otp: String!, $captchaToken: String, $origin: String!) { getAuthTokensFromOTP(loginToken: $loginToken, otp: $otp, captchaToken: $captchaToken, origin: $origin) { tokens { accessOrWorkspaceAgnosticToken { token expiresAt } refreshToken { token expiresAt } } } }",
+  "variables": {
+    "loginToken": "valid-login-token",
+    "otp": "000000",
+    "origin": "http://acme.localhost:3001"
+  },
+  "response": {
+    "errors": [
+      {
+        "message": "Invalid OTP",
+        "locations": [
+          {
+            "line": 1,
+            "column": 111
+          }
+        ],
+        "path": [
+          "getAuthTokensFromOTP"
+        ],
+        "extensions": {
+          "code": "BAD_USER_INPUT",
+          "subCode": "INVALID_OTP",
+          "userFriendlyMessage": "Invalid verification code. Please try again."
+        }
+      }
+    ],
+    "data": null
+  }
+}

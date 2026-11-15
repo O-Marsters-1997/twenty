@@ -36,9 +36,10 @@ const (
 )
 
 type TokenPair struct {
-	AccessToken  string
-	RefreshToken string
-	ExpiresAt    time.Time // the access token's expiry
+	AccessToken      string
+	RefreshToken     string
+	ExpiresAt        time.Time // the access token's expiry
+	RefreshExpiresAt time.Time
 }
 
 type Issuer interface { // ES256 with the current core."signingKey", same claims as Node
@@ -239,6 +240,38 @@ func (i *PGIssuer) ConsumeLoginToken(ctx context.Context, login LoginClaims) err
 		return ErrLoginTokenConsumed
 	}
 	return nil
+}
+
+func (i *PGIssuer) IssueForWorkspace(ctx context.Context, email, workspaceID string, provider AuthProvider) (TokenPair, error) {
+	var userID string
+	err := i.pool.QueryRow(ctx,
+		`SELECT id::text FROM core."user" WHERE lower(email::text) = lower($1) AND "deletedAt" IS NULL`, email,
+	).Scan(&userID)
+	if errors.Is(err, pgx.ErrNoRows) {
+		return TokenPair{}, ErrUnknownUser
+	}
+	if err != nil {
+		return TokenPair{}, fmt.Errorf("look up user by email: %w", err)
+	}
+	var pair TokenPair
+	err = pgx.BeginFunc(ctx, i.pool, func(tx pgx.Tx) error {
+		principal, err := resolvePrincipal(ctx, tx, userID, workspaceID, provider)
+		if err != nil {
+			return err
+		}
+		access, expiresAt, err := i.IssueAccess(ctx, principal)
+		if err != nil {
+			return err
+		}
+		refreshExpiresAt := time.Now().Add(i.config.RefreshTTL)
+		refresh, err := i.insertRefresh(ctx, tx, userID, &workspaceID, provider, TokenTypeAccess)
+		if err != nil {
+			return err
+		}
+		pair = TokenPair{AccessToken: access, RefreshToken: refresh, ExpiresAt: expiresAt, RefreshExpiresAt: refreshExpiresAt}
+		return nil
+	})
+	return pair, err
 }
 
 func (i *PGIssuer) IssueWorkspaceAgnostic(ctx context.Context, userID string, provider AuthProvider) (TokenPair, error) {

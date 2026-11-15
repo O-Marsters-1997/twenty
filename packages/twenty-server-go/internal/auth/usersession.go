@@ -26,8 +26,7 @@ const (
 	secureSessionCookieName = "__Host-twenty-session"
 	sessionTokenPrefix      = "sess_"
 
-	sessionRevokedUserSignOut = "USER_SIGN_OUT"
-	sessionRevokedSuperseded  = "SUPERSEDED"
+	sessionRevokedSuperseded = "SUPERSEDED"
 
 	defaultSessionLifetime    = 180 * 24 * time.Hour
 	defaultSessionIdleTimeout = 30 * 24 * time.Hour
@@ -130,7 +129,7 @@ func (s *UserSession) SignOut(ctx context.Context, w http.ResponseWriter, r *htt
 	var errs []error
 	token := s.sessionTokenFromRequest(r)
 	if token != "" {
-		errs = append(errs, s.revokeByToken(ctx, token, sessionRevokedUserSignOut))
+		errs = append(errs, s.revokeByToken(ctx, token, signOutRevokedReason))
 	}
 	if refreshToken != "" {
 		if err := s.revoker.Revoke(ctx, refreshToken); !errors.Is(err, ErrInvalidRefreshToken) {
@@ -195,6 +194,24 @@ func (s *UserSession) revokeByToken(ctx context.Context, token, reason string) e
 		return fmt.Errorf("revoke user session: %w", err)
 	}
 	return s.cache.Delete(ctx, hash)
+}
+
+func (s *UserSession) revokeAllInWorkspace(ctx context.Context, userID, workspaceID, reason string) error {
+	rows, err := s.pool.Query(ctx,
+		`UPDATE core."userSession" SET "revokedAt" = now(), "revokedReason" = $3, "updatedAt" = now()
+		 WHERE "userId" = $1::uuid AND "workspaceId" = $2::uuid AND "revokedAt" IS NULL RETURNING "tokenHash"`,
+		userID, workspaceID, reason)
+	if err != nil {
+		return fmt.Errorf("revoke user sessions: %w", err)
+	}
+	hashes, err := pgx.CollectRows(rows, pgx.RowTo[string])
+	if err != nil {
+		return fmt.Errorf("read revoked user sessions: %w", err)
+	}
+	if len(hashes) == 0 {
+		return nil
+	}
+	return s.cache.Delete(ctx, hashes...)
 }
 
 func (s *UserSession) sessionTokenFromRequest(r *http.Request) string {

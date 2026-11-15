@@ -12,6 +12,7 @@ import (
 	"github.com/vektah/gqlparser/v2/gqlerror"
 
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata"
 )
 
 func NewHandler(resolver *Resolver, logger *slog.Logger) http.Handler {
@@ -37,7 +38,7 @@ func NewHandler(resolver *Resolver, logger *slog.Logger) http.Handler {
 		return presented
 	})
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		server.ServeHTTP(w, r.WithContext(context.WithValue(r.Context(), exchangeKey{}, exchange{w: w, r: r})))
+		server.ServeHTTP(w, r.WithContext(context.WithValue(r.Context(), exchangeKey{}, exchange{w, r})))
 	})
 }
 
@@ -48,6 +49,22 @@ type exchange struct {
 	r *http.Request
 }
 
-func exchangeFrom(ctx context.Context) exchange {
-	return ctx.Value(exchangeKey{}).(exchange)
+func exchangeFrom(ctx context.Context) (http.ResponseWriter, *http.Request) {
+	current := ctx.Value(exchangeKey{}).(exchange)
+	return current.w, current.r
+}
+
+func tokenPair(pair auth.TokenPair) *AuthTokenPair {
+	return &AuthTokenPair{
+		AccessOrWorkspaceAgnosticToken: &AuthToken{Token: pair.AccessToken, ExpiresAt: metadata.Timestamp{Time: pair.ExpiresAt}},
+		RefreshToken:                   &AuthToken{Token: pair.RefreshToken, ExpiresAt: metadata.Timestamp{Time: pair.RefreshExpiresAt}},
+	}
+}
+
+func principalFrom(ctx context.Context) (auth.Principal, error) {
+	principal, ok := auth.PrincipalFrom(ctx)
+	if !ok {
+		return auth.Principal{}, auth.ErrUnauthenticated
+	}
+	return principal, nil
 }
