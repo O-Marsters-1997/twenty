@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"slices"
 	"syscall"
 	"time"
 
@@ -100,12 +101,7 @@ func run() error {
 	twoFactor := auth.NewTwoFactor(
 		pool, auth.NewSecretCipher(cfg.EncryptionKey, cfg.FallbackEncryptionKey, cfg.AppSecret), cfg.RecoveryCodeTTL,
 	)
-	authHandler := authgql.NewHandler(&authgql.Resolver{
-		TwoFactor:     twoFactor,
-		Login:         twoFactorLogin(pool, twoFactor, stack),
-		PasswordLogin: passwordLogins,
-		Sessions:      stack.sessions,
-	}, logger)
+	authHandler := authgql.NewHandler(newAuthResolver(pool, twoFactor, passwordLogins, stack), logger)
 
 	goGraphQL := http.NewServeMux()
 	goGraphQL.Handle(string(frontdoor.EndpointWorkspace), workspaceHandler(recordsgql.NewHandler(&recordsgql.Resolver{
@@ -142,7 +138,7 @@ func run() error {
 
 	handler := frontdoor.NewHandler(frontdoor.DefaultTable(), cfg.NodeUpstreamURL, verifier, goGraphQL, logger).
 		WithPublicOperations(map[frontdoor.Endpoint][]string{
-			frontdoor.EndpointMetadata:  frontdoor.PasswordLoginOperations,
+			frontdoor.EndpointMetadata:  slices.Concat(frontdoor.SessionOperations, frontdoor.PasswordLoginOperations),
 			frontdoor.EndpointWorkspace: frontdoor.LoginOperations,
 		}).
 		WithMCP(toolRegistry).

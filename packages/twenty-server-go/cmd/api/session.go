@@ -6,11 +6,13 @@ import (
 	"log/slog"
 	"net/http"
 	"net/url"
+	"os"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/redis/go-redis/v9"
 
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth/authgql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/config"
 )
 
@@ -28,7 +30,7 @@ func newAuthStack(pool *pgxpool.Pool, cfg config.Config, logger *slog.Logger) (a
 	if cfg.RedisURL == "" {
 		return authStack{}, errors.New("REDIS_URL is required")
 	}
-	options, err := redis.ParseURL(cfg.RedisURL)
+	redisOptions, err := redis.ParseURL(cfg.RedisURL)
 	if err != nil {
 		return authStack{}, fmt.Errorf("parse REDIS_URL: %w", err)
 	}
@@ -48,7 +50,8 @@ func newAuthStack(pool *pgxpool.Pool, cfg config.Config, logger *slog.Logger) (a
 	if err != nil {
 		return authStack{}, err
 	}
-	cache := auth.NewRedisCache(redis.NewClient(options), cfg.RedisCachePrefix)
+	cache := auth.NewRedisCache(redis.NewClient(redisOptions), cfg.RedisCachePrefix)
+
 	issuer := auth.NewPGIssuer(pool, auth.IssuerConfig{
 		AppSecret:             cfg.AppSecret,
 		EncryptionKey:         cfg.EncryptionKey,
@@ -74,8 +77,20 @@ func newAuthStack(pool *pgxpool.Pool, cfg config.Config, logger *slog.Logger) (a
 	return authStack{issuer: issuer, origins: origins, sessions: sessions, frontURL: frontURL, serverURL: cfg.ServerURL}, nil
 }
 
-func twoFactorLogin(pool *pgxpool.Pool, factor *auth.TwoFactor, stack authStack) *auth.TwoFactorLogin {
-	return auth.NewTwoFactorLogin(pool, factor, stack.issuer, stack.origins, stack.sessions)
+func newAuthResolver(pool *pgxpool.Pool, twoFactor *auth.TwoFactor, passwordLogin *auth.PasswordLogin, stack authStack) *authgql.Resolver {
+	return &authgql.Resolver{
+		TwoFactor:     twoFactor,
+		PasswordLogin: passwordLogin,
+		Sessions:      stack.sessions,
+		Login:         auth.NewTwoFactorLogin(pool, twoFactor, stack.issuer, stack.origins, stack.sessions),
+		Exchange: &auth.SignIn{
+			Pool:                      pool,
+			Issuer:                    stack.issuer,
+			TwoFactor:                 twoFactor,
+			Origins:                   stack.origins,
+			EmailVerificationRequired: os.Getenv("IS_EMAIL_VERIFICATION_REQUIRED") == "true",
+		},
+	}
 }
 
 func parseSameSite(value string) (http.SameSite, error) {

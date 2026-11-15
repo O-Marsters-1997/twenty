@@ -127,7 +127,8 @@ func (s *UserSession) IssueForTokenPair(ctx context.Context, w http.ResponseWrit
 
 func (s *UserSession) SignOut(ctx context.Context, w http.ResponseWriter, r *http.Request, refreshToken string) error {
 	var errs []error
-	if token := s.sessionTokenFromRequest(r); token != "" {
+	token := s.sessionTokenFromRequest(r)
+	if token != "" {
 		errs = append(errs, s.revokeByToken(ctx, token, signOutRevokedReason))
 	}
 	if refreshToken != "" {
@@ -135,7 +136,9 @@ func (s *UserSession) SignOut(ctx context.Context, w http.ResponseWriter, r *htt
 			errs = append(errs, err)
 		}
 	}
-	s.clearCookies(w)
+	if token != "" {
+		s.clearCookies(w)
+	}
 	return errors.Join(errs...)
 }
 

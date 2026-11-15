@@ -1,13 +1,3 @@
-type AuthToken {
-  token: String!
-  expiresAt: DateTime!
-}
-
-type AuthTokenPair {
-  accessOrWorkspaceAgnosticToken: AuthToken!
-  refreshToken: AuthToken!
-}
-
 type LoginToken {
   loginToken: AuthToken!
 }
@@ -34,10 +24,6 @@ type AvailableWorkspaces {
 type AvailableWorkspacesAndAccessTokens {
   tokens: AuthTokenPair!
   availableWorkspaces: AvailableWorkspaces!
-}
-
-type AuthTokens {
-  tokens: AuthTokenPair!
 }
 
 type TwoFactorAuthenticationRecoveryCodeRedemption {

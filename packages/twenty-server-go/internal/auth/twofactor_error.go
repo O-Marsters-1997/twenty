@@ -32,8 +32,12 @@ var twoFactorErrorKinds = map[string]twoFactorErrorKind{
 	"PERMISSION_DENIED":                                    {"FORBIDDEN", "User does not have permission."},
 	"INVALID_RECOVERY_CODE":                                {"BAD_USER_INPUT", "Invalid or expired recovery code."},
 	"UNAUTHENTICATED":                                      {"UNAUTHENTICATED", "You must be authenticated to perform this action."},
-	"USER_NOT_FOUND":                                       {"UNAUTHENTICATED", "User not found."},
 	"WORKSPACE_NOT_FOUND":                                  {"UNAUTHENTICATED", "Workspace not found."},
+	"USER_NOT_FOUND":                                       {"UNAUTHENTICATED", "User not found."},
+	"USER_WORKSPACE_NOT_FOUND":                             {"UNAUTHENTICATED", "User workspace not found."},
+	"EMAIL_NOT_VERIFIED":                                   {"FORBIDDEN", "Email is not verified."},
+	"TWO_FACTOR_AUTHENTICATION_VERIFICATION_REQUIRED":      {"FORBIDDEN", "Two factor authentication verification required."},
+	"TWO_FACTOR_AUTHENTICATION_PROVISION_REQUIRED":         {"FORBIDDEN", "Two factor authentication setup required."},
 	"LIMIT_REACHED":                                        {"BAD_USER_INPUT", "Rate limit reached. Please try again later."},
 }
 
