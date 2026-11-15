@@ -4,7 +4,11 @@ import * as stylex from '@stylexjs/stylex';
 import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
 import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
-import { background, borderRadius, color } from '../../../../theme/tokens.stylex';
+import {
+  background,
+  borderRadius,
+  color,
+} from '../../../../theme/tokens.stylex';
 import { type SliderThumbProps } from '../types/SliderThumbProps';
 
 export const SliderThumb = ({
@@ -28,7 +32,10 @@ const styles = stylex.create({
     borderWidth: 2,
     boxSizing: 'border-box',
     inlineSize: 16,
-    outlineColor: { default: null, ':has(:focus-visible)': color['--t-color-blue'] },
+    outlineColor: {
+      default: null,
+      ':has(:focus-visible)': color['--t-color-blue'],
+    },
     outlineOffset: { default: null, ':has(:focus-visible)': '1px' },
     outlineStyle: { default: null, ':has(:focus-visible)': 'solid' },
     outlineWidth: { default: null, ':has(:focus-visible)': '2px' },

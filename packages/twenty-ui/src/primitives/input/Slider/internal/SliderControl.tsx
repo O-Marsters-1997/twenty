@@ -25,7 +25,10 @@ const styles = stylex.create({
     cursor: { default: 'pointer', ':is([data-disabled])': 'not-allowed' },
     display: 'flex',
     inlineSize: { default: null, ':is([data-orientation="vertical"])': 24 },
-    justifyContent: { default: null, ':is([data-orientation="vertical"])': 'center' },
+    justifyContent: {
+      default: null,
+      ':is([data-orientation="vertical"])': 'center',
+    },
     position: 'relative',
     touchAction: 'none',
     userSelect: 'none',

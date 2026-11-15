@@ -33,6 +33,8 @@ export const ButtonGroup = ({
     ref,
     props: {
       role: 'group',
+      'data-attached': attached || undefined,
+      'data-framed': framed || undefined,
       ...props,
       ...mergeStylexProps(
         stylex.props(
@@ -68,14 +70,18 @@ const styles = stylex.create({
   framed: {
     alignItems: 'flex-start',
     backdropFilter: 'blur(20px)',
-    backgroundColor: backgroundTransparent['--t-background-transparent-lighter'],
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
     borderColor: borderColor['--t-border-color-strong'],
     borderRadius: borderRadius['--t-border-radius-sm'],
     borderStyle: 'solid',
     borderWidth: 1,
     boxShadow: {
       default: null,
-      ':hover': { default: null, [media.hoverCapable]: boxShadow['--t-box-shadow-light'] },
+      ':hover': {
+        default: null,
+        [media.hoverCapable]: boxShadow['--t-box-shadow-light'],
+      },
     },
     padding: spacing['--t-spacing-0_5'],
   },

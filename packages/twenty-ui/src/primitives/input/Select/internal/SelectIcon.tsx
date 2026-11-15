@@ -16,10 +16,10 @@ export const SelectIcon = ({
 }: WithXstyle<SelectIconProps>) => (
   <SelectPrimitive.Icon
     {...props}
-    {...mergeStylexProps(stylex.props(styles.icon, xstyle), [
-      'tw-select-icon',
-      typeof className === 'string' ? className : undefined,
-    ].filter(Boolean).join(' '))}
+    {...mergeStylexProps(
+      stylex.props(styles.icon, xstyle),
+      className ?? 'tw-select-icon',
+    )}
   >
     {children}
   </SelectPrimitive.Icon>

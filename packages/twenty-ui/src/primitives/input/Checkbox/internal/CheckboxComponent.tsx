@@ -8,11 +8,6 @@ import { type CheckboxProps } from '../types/CheckboxProps';
 import { CheckboxIndicator } from './CheckboxIndicator';
 import { CheckboxRoot } from './CheckboxRoot';
 
-const indeterminate = stylex.when.ancestor(
-  ':is([data-indeterminate])',
-  checkboxIndicatorMarker,
-);
-
 export const CheckboxComponent = ({ children, ...props }: CheckboxProps) => (
   <CheckboxRoot {...props}>
     <CheckboxIndicator>
@@ -29,6 +24,22 @@ const styles = stylex.create({
     inlineSize: '100%',
     stroke: fontColor['--t-font-color-inverted'],
   },
-  check: { display: { default: 'block', [indeterminate]: 'none' } },
-  minus: { display: { default: 'none', [indeterminate]: 'block' } },
+  check: {
+    display: {
+      default: 'block',
+      [stylex.when.ancestor(
+        ':is([data-indeterminate])',
+        checkboxIndicatorMarker,
+      )]: 'none',
+    },
+  },
+  minus: {
+    display: {
+      default: 'none',
+      [stylex.when.ancestor(
+        ':is([data-indeterminate])',
+        checkboxIndicatorMarker,
+      )]: 'block',
+    },
+  },
 });

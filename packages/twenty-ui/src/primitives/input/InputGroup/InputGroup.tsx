@@ -64,7 +64,8 @@ export const InputGroup = ({
 const styles = stylex.create({
   root: {
     alignItems: 'center',
-    backgroundColor: backgroundTransparent['--t-background-transparent-lighter'],
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
     borderColor: {
       default: borderColor['--t-border-color-medium'],
       ':focus-within': color['--t-color-blue'],

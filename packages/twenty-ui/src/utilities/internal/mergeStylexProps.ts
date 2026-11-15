@@ -8,18 +8,28 @@ type StylexProps = {
   style?: Readonly<CSSProperties>;
 };
 
-type ConsumerClassName<TState> =
-  | string
-  | ((state: TState) => string | undefined)
-  | undefined;
+type StateClassName<TState> = (state: TState) => string | undefined;
 
-export const mergeStylexProps = <TState = never>(
+export function mergeStylexProps(
   stylexProps: StylexProps,
-  consumerClassName: ConsumerClassName<TState>,
-) => ({
-  ...stylexProps,
-  className:
-    typeof consumerClassName === 'function'
-      ? mergeClassNames(stylexProps.className ?? '', consumerClassName)
-      : clsx(stylexProps.className, consumerClassName),
-});
+  consumerClassName?: string,
+): { className: string; style?: Readonly<CSSProperties> };
+export function mergeStylexProps<TState>(
+  stylexProps: StylexProps,
+  consumerClassName?: string | StateClassName<TState>,
+): {
+  className: string | StateClassName<TState>;
+  style?: Readonly<CSSProperties>;
+};
+export function mergeStylexProps<TState>(
+  stylexProps: StylexProps,
+  consumerClassName?: string | StateClassName<TState>,
+) {
+  return {
+    ...stylexProps,
+    className:
+      typeof consumerClassName === 'function'
+        ? mergeClassNames(stylexProps.className ?? '', consumerClassName)
+        : clsx(stylexProps.className, consumerClassName),
+  };
+}

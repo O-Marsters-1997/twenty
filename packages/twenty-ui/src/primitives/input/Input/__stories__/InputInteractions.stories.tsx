@@ -7,7 +7,6 @@ import { Field } from '@ui/primitives/input/Field/Field';
 import { ComponentDecorator } from '@ui/testing';
 
 import { Input } from '../Input';
-import styles from '../Input.module.scss';
 import { type InputProps } from '../types/InputProps';
 
 const ControlledInputExample = (props: InputProps) => {
@@ -95,10 +94,6 @@ export const Sizes: Story = {
     const canvas = within(canvasElement);
     const defaultInput = canvas.getByRole('textbox', { name: 'Default size' });
     const smallInput = canvas.getByRole('textbox', { name: 'Small size' });
-
-    await expect(defaultInput).toHaveClass(styles.md);
-    await expect(smallInput).toHaveClass(styles.sm);
-    await expect(smallInput).not.toHaveClass(styles.md);
     await expect(defaultInput.clientHeight).toBeGreaterThan(
       smallInput.clientHeight,
     );

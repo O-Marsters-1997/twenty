@@ -3,7 +3,6 @@ import { type ReactNode } from 'react';
 import { runComponentConformance } from '@test-utilities/conformance/runComponentConformance';
 
 import { Select } from '../Select';
-import styles from '../Select.module.scss';
 
 const SelectRootWrapper = ({ children }: { children: ReactNode }) => (
   <Select.Root>{children}</Select.Root>
@@ -53,7 +52,6 @@ runComponentConformance({
   element: <Select.Trigger>Choose</Select.Trigger>,
   refInstanceOf: HTMLButtonElement,
   wrapper: SelectRootWrapper,
-  ownClassName: styles.trigger,
   renderPropTagName: 'button',
 });
 runComponentConformance({
@@ -61,14 +59,12 @@ runComponentConformance({
   element: <Select.Value placeholder="Choose" />,
   refInstanceOf: HTMLSpanElement,
   wrapper: SelectTriggerWrapper,
-  ownClassName: styles.value,
 });
 runComponentConformance({
   name: 'Select.Icon',
   element: <Select.Icon />,
   refInstanceOf: HTMLSpanElement,
   wrapper: SelectTriggerWrapper,
-  ownClassName: styles.icon,
 });
 runComponentConformance({
   name: 'Select.Portal',
@@ -87,14 +83,12 @@ runComponentConformance({
   element: <Select.Positioner alignItemWithTrigger={false} />,
   refInstanceOf: HTMLDivElement,
   wrapper: OpenSelectWrapper,
-  ownClassName: styles.positioner,
 });
 runComponentConformance({
   name: 'Select.Popup',
   element: <Select.Popup />,
   refInstanceOf: HTMLDivElement,
   wrapper: SelectPositionerWrapper,
-  ownClassName: styles.popup,
 });
 runComponentConformance({
   name: 'Select.List',
@@ -107,7 +101,6 @@ runComponentConformance({
   element: <Select.Item value="first">First</Select.Item>,
   refInstanceOf: HTMLDivElement,
   wrapper: SelectPopupWrapper,
-  ownClassName: styles.item,
 });
 runComponentConformance({
   name: 'Select.ItemText',
@@ -120,7 +113,6 @@ runComponentConformance({
   element: <Select.ItemIndicator />,
   refInstanceOf: HTMLSpanElement,
   wrapper: SelectItemWrapper,
-  ownClassName: styles.indicator,
 });
 runComponentConformance({
   name: 'Select.Arrow',
@@ -151,12 +143,10 @@ runComponentConformance({
   element: <Select.GroupLabel>Group</Select.GroupLabel>,
   refInstanceOf: HTMLDivElement,
   wrapper: SelectGroupWrapper,
-  ownClassName: styles.groupLabel,
 });
 runComponentConformance({
   name: 'Select.Separator',
   element: <Select.Separator />,
   refInstanceOf: HTMLDivElement,
   wrapper: SelectPopupWrapper,
-  ownClassName: styles.separator,
 });

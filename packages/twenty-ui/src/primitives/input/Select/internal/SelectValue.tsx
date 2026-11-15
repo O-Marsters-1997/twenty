@@ -5,6 +5,7 @@ import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
 import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
 import { fontColor } from '../../../../theme/tokens.stylex';
+import { selectTriggerMarker } from '../Select.stylex';
 import { type SelectValueProps } from '../types/SelectValueProps';
 
 export const SelectValue = ({

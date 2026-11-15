@@ -20,7 +20,10 @@ export const AutocompleteSeparator = ({
 
 const styles = stylex.create({
   separator: {
-    alignSelf: { default: null, ':is([data-orientation="vertical"])': 'stretch' },
+    alignSelf: {
+      default: null,
+      ':is([data-orientation="vertical"])': 'stretch',
+    },
     background: borderColor['--t-border-color-light'],
     blockSize: { default: 1, ':is([data-orientation="vertical"])': 'auto' },
     flex: 'none',

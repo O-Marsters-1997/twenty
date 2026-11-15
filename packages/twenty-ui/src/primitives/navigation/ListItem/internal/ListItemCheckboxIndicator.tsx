@@ -1,7 +1,13 @@
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 
 import { IconCheck } from '@ui/icon';
-import checkboxStyles from '@ui/primitives/input/Checkbox/Checkbox.module.scss';
+import {
+  checkboxColorStyles,
+  checkboxShapeStyles,
+  checkboxSizeStyles,
+  checkboxStyles,
+  checkboxVariantStyles,
+} from '@ui/primitives/input/Checkbox/Checkbox.stylex';
 
 type ListItemCheckboxIndicatorProps = {
   checked: boolean;
@@ -14,18 +20,18 @@ export const ListItemCheckboxIndicator = ({
 }: ListItemCheckboxIndicatorProps) => (
   <span
     aria-hidden
-    className={clsx(
+    {...stylex.props(
       checkboxStyles.root,
-      checkboxStyles.solid,
-      checkboxStyles.sm,
-      checkboxStyles.square,
-      checkboxStyles.accent,
+      checkboxSizeStyles.sm,
+      checkboxVariantStyles.solid,
+      checkboxShapeStyles.square,
+      checkboxColorStyles.accent,
     )}
     data-checked={checked || undefined}
     data-disabled={disabled || undefined}
   >
     {checked && (
-      <span className={checkboxStyles.indicator}>
+      <span {...stylex.props(checkboxStyles.listIndicator)}>
         <IconCheck aria-hidden />
       </span>
     )}

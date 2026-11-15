@@ -159,7 +159,8 @@ const invalid = ':is([aria-invalid="true"], [data-invalid])';
 const styles = stylex.create({
   textarea: {
     appearance: 'none',
-    backgroundColor: backgroundTransparent['--t-background-transparent-lighter'],
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
     borderColor: {
       default: borderColor['--t-border-color-medium'],
       ':focus': color['--t-color-blue'],

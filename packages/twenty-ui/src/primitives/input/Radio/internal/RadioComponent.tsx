@@ -1,17 +1,16 @@
 import * as stylex from '@stylexjs/stylex';
 
 import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
 import { focusStyles } from '../../../../styles/focus.stylex';
 import { media } from '../../../../theme/constants.stylex';
 import {
   background,
-  backgroundTransparent as bgTransparent,
   borderColor,
   borderRadius,
   color,
   colorTransparent,
-  font,
   fontColor,
   fontSize,
   fontWeight,
@@ -31,7 +30,7 @@ export const RadioComponent = <TValue,>({
   variant = 'default',
   render = variant === 'card' ? <div /> : undefined,
   ...props
-}: RadioProps<TValue>) => {
+}: WithXstyle<RadioProps<TValue>>) => {
   const isCard = variant === 'card';
 
   return (
@@ -73,17 +72,6 @@ export const RadioComponent = <TValue,>({
   );
 };
 
-const checkedRoot = stylex.when.ancestor(':is([data-checked])', radioRootMarker);
-const disabledRoot = stylex.when.ancestor(':is([data-disabled])', radioRootMarker);
-const hoveredRoot = stylex.when.ancestor(
-  ':hover:not(:is([data-disabled], [data-readonly], [data-checked]))',
-  radioRootMarker,
-);
-const hoveredCheckedRoot = stylex.when.ancestor(
-  ':hover:not(:is([data-disabled], [data-readonly])):is([data-checked])',
-  radioRootMarker,
-);
-
 const styles = stylex.create({
   root: {
     alignItems: 'center',
@@ -121,36 +109,80 @@ const styles = stylex.create({
     alignItems: 'center',
     backgroundColor: {
       default: 'transparent',
-      [checkedRoot]: color['--t-color-blue'],
-      [hoveredRoot]: { default: null, [media.hoverCapable]: background['--t-background-tertiary'] },
-      [hoveredCheckedRoot]: { default: null, [media.hoverCapable]: color['--t-color-blue'] },
+      [stylex.when.ancestor(':is([data-checked])', radioRootMarker)]:
+        color['--t-color-blue'],
+      [stylex.when.ancestor(
+        ':hover:not(:is([data-disabled], [data-readonly], [data-checked]))',
+        radioRootMarker,
+      )]: {
+        default: null,
+        [media.hoverCapable]: background['--t-background-tertiary'],
+      },
+      [stylex.when.ancestor(
+        ':hover:not(:is([data-disabled], [data-readonly])):is([data-checked])',
+        radioRootMarker,
+      )]: { default: null, [media.hoverCapable]: color['--t-color-blue'] },
     },
     borderColor: fontColor['--t-font-color-secondary'],
     borderRadius: borderRadius['--t-border-radius-rounded'],
-    borderStyle: { default: 'solid', [checkedRoot]: 'none' },
+    borderStyle: {
+      default: 'solid',
+      [stylex.when.ancestor(':is([data-checked])', radioRootMarker)]: 'none',
+    },
     borderWidth: 1,
     boxSizing: 'content-box',
     display: 'inline-flex',
     flexShrink: 0,
     justifyContent: 'center',
     marginInlineStart: 3,
-    opacity: { default: null, [disabledRoot]: 0.375 },
+    opacity: {
+      default: null,
+      [stylex.when.ancestor(':is([data-disabled])', radioRootMarker)]: 0.375,
+    },
     outlineColor: {
       default: null,
-      [hoveredRoot]: { default: null, [media.hoverCapable]: background['--t-background-tertiary'] },
-      [hoveredCheckedRoot]: { default: null, [media.hoverCapable]: colorTransparent['--t-color-transparent-blue2'] },
+      [stylex.when.ancestor(
+        ':hover:not(:is([data-disabled], [data-readonly], [data-checked]))',
+        radioRootMarker,
+      )]: {
+        default: null,
+        [media.hoverCapable]: background['--t-background-tertiary'],
+      },
+      [stylex.when.ancestor(
+        ':hover:not(:is([data-disabled], [data-readonly])):is([data-checked])',
+        radioRootMarker,
+      )]: {
+        default: null,
+        [media.hoverCapable]: colorTransparent['--t-color-transparent-blue2'],
+      },
     },
     outlineStyle: {
       default: null,
-      [hoveredRoot]: { default: null, [media.hoverCapable]: 'solid' },
-      [hoveredCheckedRoot]: { default: null, [media.hoverCapable]: 'solid' },
+      [stylex.when.ancestor(
+        ':hover:not(:is([data-disabled], [data-readonly], [data-checked]))',
+        radioRootMarker,
+      )]: { default: null, [media.hoverCapable]: 'solid' },
+      [stylex.when.ancestor(
+        ':hover:not(:is([data-disabled], [data-readonly])):is([data-checked])',
+        radioRootMarker,
+      )]: { default: null, [media.hoverCapable]: 'solid' },
     },
     outlineWidth: {
       default: null,
-      [hoveredRoot]: { default: null, [media.hoverCapable]: 4 },
-      [hoveredCheckedRoot]: { default: null, [media.hoverCapable]: 4 },
+      [stylex.when.ancestor(
+        ':hover:not(:is([data-disabled], [data-readonly], [data-checked]))',
+        radioRootMarker,
+      )]: { default: null, [media.hoverCapable]: 4 },
+      [stylex.when.ancestor(
+        ':hover:not(:is([data-disabled], [data-readonly])):is([data-checked])',
+        radioRootMarker,
+      )]: { default: null, [media.hoverCapable]: 4 },
     },
-    transform: { default: 'scale(0.95)', [checkedRoot]: 'scale(1.05)' },
+    transform: {
+      default: 'scale(0.95)',
+      [stylex.when.ancestor(':is([data-checked])', radioRootMarker)]:
+        'scale(1.05)',
+    },
     transition: {
       default: 'transform 0.3s ease',
       [media.reducedMotion]: 'none',
@@ -177,5 +209,3 @@ const styles = stylex.create({
   },
   indicatorMd: { blockSize: 8, inlineSize: 8 },
 });
-void bgTransparent;
-void font;

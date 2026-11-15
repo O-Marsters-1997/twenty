@@ -17,7 +17,8 @@ const invalid = ':is([aria-invalid="true"], [data-invalid])';
 export const inputStyles = stylex.create({
   input: {
     appearance: 'none',
-    backgroundColor: backgroundTransparent['--t-background-transparent-lighter'],
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
     blockSize: 32,
     borderColor: {
       default: borderColor['--t-border-color-medium'],

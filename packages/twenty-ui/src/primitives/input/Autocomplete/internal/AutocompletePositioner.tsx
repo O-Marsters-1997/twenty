@@ -1,7 +1,7 @@
 import { Autocomplete as AutocompletePrimitive } from '@base-ui/react/autocomplete';
 import * as stylex from '@stylexjs/stylex';
 
-import { useProvidedTextDirection } from '@ui/utilities/internal/useProvidedTextDirection';
+import { useProvidedTextDirection } from '@ui/primitives/layout/DirectionProvider/internal/useProvidedTextDirection';
 import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
 import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 

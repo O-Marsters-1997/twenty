@@ -23,7 +23,8 @@ const styles = stylex.create({
     background: 'currentColor',
     borderEndEndRadius: {
       default: null,
-      ':is([data-orientation="vertical"])': borderRadius['--t-border-radius-pill'],
+      ':is([data-orientation="vertical"])':
+        borderRadius['--t-border-radius-pill'],
     },
     borderEndStartRadius: borderRadius['--t-border-radius-pill'],
     borderStartStartRadius: {

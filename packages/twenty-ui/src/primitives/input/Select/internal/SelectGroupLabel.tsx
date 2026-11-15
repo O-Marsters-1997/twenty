@@ -4,7 +4,13 @@ import * as stylex from '@stylexjs/stylex';
 import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
 import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
-import { font, fontColor, fontSize, fontWeight, spacing } from '../../../../theme/tokens.stylex';
+import {
+  font,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from '../../../../theme/tokens.stylex';
 import { type SelectGroupLabelProps } from '../types/SelectGroupLabelProps';
 
 export const SelectGroupLabel = ({

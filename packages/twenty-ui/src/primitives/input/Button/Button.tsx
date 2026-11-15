@@ -99,6 +99,12 @@ export const Button = ({
         ),
         className,
       )}
+      data-variant={resolvedVariant}
+      data-color={resolvedColor}
+      data-size={resolvedSize}
+      data-full-width={fullWidth || undefined}
+      data-loading={loading || undefined}
+      data-elevated={elevated || undefined}
       aria-busy={loading ? 'true' : props['aria-busy']}
       disabled={disabled || loading}
       {...roleProps}
