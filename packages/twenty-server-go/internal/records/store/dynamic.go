@@ -35,7 +35,7 @@ func (d *Dynamic) Update(ctx context.Context, actor records.Actor, id string, va
 
 func (d *Dynamic) Merge(ctx context.Context, actor records.Actor, ids []string, priorityIndex int, dryRun bool) (map[string]any, error) {
 	if priorityIndex < 0 || priorityIndex >= len(ids) {
-		return nil, records.ErrNotFound
+		return nil, fmt.Errorf("%w: conflictPriorityIndex %d outside %d ids", records.ErrUnknownField, priorityIndex, len(ids))
 	}
 	found := make([]map[string]any, len(ids))
 	for i, id := range ids {
@@ -66,6 +66,11 @@ func (d *Dynamic) Merge(ctx context.Context, actor records.Actor, ids []string, 
 
 	priorityID := ids[priorityIndex]
 	others := slices.Delete(slices.Clone(ids), priorityIndex, priorityIndex+1)
+	if len(patch) > 0 {
+		if _, err := d.update(ctx, actor, priorityID, patch); err != nil {
+			return nil, err
+		}
+	}
 	tx, err := d.pool.Begin(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("begin merge %s: %w", d.object.NamePlural, err)
@@ -89,10 +94,7 @@ func (d *Dynamic) Merge(ctx context.Context, actor records.Actor, ids []string, 
 	if err := tx.Commit(ctx); err != nil {
 		return nil, fmt.Errorf("commit merge %s: %w", d.object.NamePlural, err)
 	}
-	if len(patch) == 0 {
-		return d.Get(ctx, priorityID)
-	}
-	return d.update(ctx, actor, priorityID, patch)
+	return d.Get(ctx, priorityID)
 }
 
 func isSystemColumn(name string) bool {
