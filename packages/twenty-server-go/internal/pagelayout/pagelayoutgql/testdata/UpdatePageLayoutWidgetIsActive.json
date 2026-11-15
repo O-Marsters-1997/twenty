@@ -1,0 +1,19 @@
+{
+  "name": "UpdatePageLayoutWidgetIsActive",
+  "operation": "UpdatePageLayoutWidgetIsActive",
+  "fixture": "standard-app form layout, company page layout with two tabs, standalone layout",
+  "endpoint": "/metadata",
+  "query": "mutation UpdatePageLayoutWidgetIsActive($id: String!, $isActive: Boolean!) { updatePageLayoutWidget(id: $id, input: { isActive: $isActive }) { id isActive } }",
+  "response": {
+    "data": {
+      "updatePageLayoutWidget": {
+        "id": "6b1f0000-0000-4000-8000-000000000022",
+        "isActive": false
+      }
+    }
+  },
+  "variables": {
+    "id": "6b1f0000-0000-4000-8000-000000000022",
+    "isActive": false
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "name": "FindOnePageLayoutType",
+  "operation": "FindOnePageLayoutType",
+  "fixture": "standard-app form layout, company page layout with two tabs, standalone layout",
+  "endpoint": "/metadata",
+  "query": "query FindOnePageLayoutType($id: String!) { getPageLayout(id: $id) { id type } }",
+  "response": {
+    "data": {
+      "getPageLayout": {
+        "id": "6b1f0000-0000-4000-8000-000000000001",
+        "type": "RECORD_FORM"
+      }
+    }
+  },
+  "variables": {
+    "id": "6b1f0000-0000-4000-8000-000000000001"
+  }
+}

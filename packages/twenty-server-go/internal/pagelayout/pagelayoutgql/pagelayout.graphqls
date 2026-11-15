@@ -1,0 +1,383 @@
+scalar UUID
+scalar DateTime
+scalar JSON
+
+enum PageLayoutType {
+  RECORD_INDEX
+  RECORD_PAGE
+  DASHBOARD
+  STANDALONE_PAGE
+  RECORD_FORM
+}
+
+enum PageLayoutTabLayoutMode {
+  GRID
+  VERTICAL_LIST
+  CANVAS
+}
+
+enum PageLayoutWidgetVerticalListHeightBehavior {
+  FIT_CONTENT
+  TAB_VIEWPORT
+}
+
+enum WidgetType {
+  VIEW
+  IFRAME
+  FIELD
+  FIELDS
+  GRAPH
+  STANDALONE_RICH_TEXT
+  TIMELINE
+  TASKS
+  NOTES
+  FILES
+  EMAILS
+  CALENDAR
+  FIELD_RICH_TEXT
+  WORKFLOW
+  WORKFLOW_VERSION
+  WORKFLOW_RUN
+  RECORD_TABLE
+  EMAIL_THREAD
+  MESSAGE_CAMPAIGN_BODY
+  MESSAGE_CAMPAIGN_DETAILS
+  FORM_FIELD
+  CHAT_THREADS
+  CHAT
+}
+
+type GridPosition {
+  row: Float!
+  column: Float!
+  rowSpan: Float!
+  columnSpan: Float!
+}
+
+type PageLayoutWidgetGridPosition {
+  layoutMode: PageLayoutTabLayoutMode!
+  row: Int!
+  column: Int!
+  rowSpan: Int!
+  columnSpan: Int!
+}
+
+type PageLayoutWidgetVerticalListPosition {
+  layoutMode: PageLayoutTabLayoutMode!
+  index: Int!
+  heightBehavior: PageLayoutWidgetVerticalListHeightBehavior
+}
+
+type PageLayoutWidgetCanvasPosition {
+  layoutMode: PageLayoutTabLayoutMode!
+}
+
+union PageLayoutWidgetPosition =
+    PageLayoutWidgetGridPosition
+  | PageLayoutWidgetVerticalListPosition
+  | PageLayoutWidgetCanvasPosition
+
+type RatioAggregateConfig {
+  fieldMetadataId: UUID!
+  optionValue: String!
+}
+
+type RichTextBody {
+  blocknote: String
+  markdown: String
+}
+
+type BarChartConfiguration {
+  configurationType: String!
+  aggregateFieldMetadataId: UUID
+  aggregateOperation: String
+  primaryAxisGroupByFieldMetadataId: UUID
+  primaryAxisGroupBySubFieldName: String
+  primaryAxisDateGranularity: String
+  primaryAxisOrderBy: String
+  primaryAxisManualSortOrder: [String!]
+  secondaryAxisGroupByFieldMetadataId: UUID
+  secondaryAxisGroupBySubFieldName: String
+  secondaryAxisGroupByDateGranularity: String
+  secondaryAxisOrderBy: String
+  secondaryAxisManualSortOrder: [String!]
+  omitNullValues: Boolean
+  axisNameDisplay: String
+  displayDataLabel: Boolean
+  displayLegend: Boolean
+  numberFormat: String
+  rangeMin: Float
+  rangeMax: Float
+  color: String
+  description: String
+  filter: JSON
+  groupMode: String
+  layout: String
+  isCumulative: Boolean
+  splitMultiValueFields: Boolean
+  timezone: String
+  firstDayOfTheWeek: Int
+}
+
+type LineChartConfiguration {
+  configurationType: String!
+  aggregateFieldMetadataId: UUID
+  aggregateOperation: String
+  primaryAxisGroupByFieldMetadataId: UUID
+  primaryAxisGroupBySubFieldName: String
+  primaryAxisDateGranularity: String
+  primaryAxisOrderBy: String
+  primaryAxisManualSortOrder: [String!]
+  secondaryAxisGroupByFieldMetadataId: UUID
+  secondaryAxisGroupBySubFieldName: String
+  secondaryAxisGroupByDateGranularity: String
+  secondaryAxisOrderBy: String
+  secondaryAxisManualSortOrder: [String!]
+  omitNullValues: Boolean
+  axisNameDisplay: String
+  displayDataLabel: Boolean
+  displayLegend: Boolean
+  numberFormat: String
+  rangeMin: Float
+  rangeMax: Float
+  color: String
+  description: String
+  filter: JSON
+  isStacked: Boolean
+  isCumulative: Boolean
+  splitMultiValueFields: Boolean
+  timezone: String
+  firstDayOfTheWeek: Int
+}
+
+type PieChartConfiguration {
+  configurationType: String!
+  groupByFieldMetadataId: UUID
+  aggregateFieldMetadataId: UUID
+  aggregateOperation: String
+  groupBySubFieldName: String
+  dateGranularity: String
+  orderBy: String
+  manualSortOrder: [String!]
+  displayDataLabel: Boolean
+  showCenterMetric: Boolean
+  displayLegend: Boolean
+  numberFormat: String
+  hideEmptyCategory: Boolean
+  splitMultiValueFields: Boolean
+  color: String
+  description: String
+  filter: JSON
+  timezone: String
+  firstDayOfTheWeek: Int
+}
+
+type AggregateChartConfiguration {
+  configurationType: String!
+  aggregateFieldMetadataId: UUID
+  aggregateOperation: String
+  label: String
+  displayDataLabel: Boolean
+  numberFormat: String
+  description: String
+  filter: JSON
+  prefix: String
+  suffix: String
+  timezone: String
+  firstDayOfTheWeek: Int
+  ratioAggregateConfig: RatioAggregateConfig
+}
+
+type IframeConfiguration {
+  configurationType: String!
+  url: String
+}
+
+type StandaloneRichTextConfiguration {
+  configurationType: String!
+  body: RichTextBody!
+}
+
+type CalendarConfiguration {
+  configurationType: String!
+}
+
+type EmailsConfiguration {
+  configurationType: String!
+}
+
+type EmailThreadConfiguration {
+  configurationType: String!
+}
+
+type ChatThreadsConfiguration {
+  configurationType: String!
+}
+
+type ChatConfiguration {
+  configurationType: String!
+}
+
+type MessageCampaignBodyConfiguration {
+  configurationType: String!
+}
+
+type MessageCampaignDetailsConfiguration {
+  configurationType: String!
+}
+
+type FieldConfiguration {
+  configurationType: String!
+  fieldDisplayMode: String
+  fieldMetadataId: UUID
+  viewId: UUID
+  nestedRelationFieldMetadataId: UUID
+  isUIEditable: Boolean
+}
+
+type FieldRichTextConfiguration {
+  configurationType: String!
+}
+
+type FieldsConfiguration {
+  configurationType: String!
+  viewId: UUID
+  newFieldDefaultVisibility: Boolean
+  shouldAllowUserToSeeHiddenFields: Boolean
+}
+
+type FormFieldConfiguration {
+  configurationType: String!
+  fieldMetadataId: UUID
+}
+
+type FilesConfiguration {
+  configurationType: String!
+}
+
+type NotesConfiguration {
+  configurationType: String!
+}
+
+type TasksConfiguration {
+  configurationType: String!
+}
+
+type TimelineConfiguration {
+  configurationType: String!
+}
+
+type ViewConfiguration {
+  configurationType: String!
+}
+
+type RecordTableConfiguration {
+  configurationType: String!
+  viewId: UUID
+  recordLimit: Int
+  isUIEditable: Boolean
+}
+
+type WorkflowConfiguration {
+  configurationType: String!
+}
+
+type WorkflowRunConfiguration {
+  configurationType: String!
+}
+
+type WorkflowVersionConfiguration {
+  configurationType: String!
+}
+
+union WidgetConfiguration =
+    BarChartConfiguration
+  | LineChartConfiguration
+  | PieChartConfiguration
+  | AggregateChartConfiguration
+  | IframeConfiguration
+  | StandaloneRichTextConfiguration
+  | CalendarConfiguration
+  | EmailsConfiguration
+  | EmailThreadConfiguration
+  | ChatThreadsConfiguration
+  | ChatConfiguration
+  | MessageCampaignBodyConfiguration
+  | MessageCampaignDetailsConfiguration
+  | FieldConfiguration
+  | FieldRichTextConfiguration
+  | FieldsConfiguration
+  | FormFieldConfiguration
+  | FilesConfiguration
+  | NotesConfiguration
+  | TasksConfiguration
+  | TimelineConfiguration
+  | ViewConfiguration
+  | RecordTableConfiguration
+  | WorkflowConfiguration
+  | WorkflowRunConfiguration
+  | WorkflowVersionConfiguration
+
+type PageLayoutWidget {
+  id: UUID!
+  universalIdentifier: UUID!
+  isSystemSideEffect: Boolean!
+  applicationId: UUID!
+  pageLayoutTabId: UUID!
+  title: String!
+  type: WidgetType!
+  objectMetadataId: UUID
+  gridPosition: GridPosition
+  position: PageLayoutWidgetPosition
+  configuration: WidgetConfiguration!
+  conditionalDisplay: JSON
+  conditionalAvailabilityExpression: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isActive: Boolean!
+  deletedAt: DateTime
+}
+
+type PageLayoutTab {
+  id: UUID!
+  universalIdentifier: UUID!
+  isSystemSideEffect: Boolean!
+  applicationId: UUID!
+  title: String!
+  position: Float!
+  pageLayoutId: UUID!
+  widgets: [PageLayoutWidget!]
+  icon: String
+  layoutMode: PageLayoutTabLayoutMode
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isActive: Boolean!
+}
+
+type PageLayout {
+  id: UUID!
+  name: String!
+  type: PageLayoutType!
+  objectMetadataId: UUID
+  tabs: [PageLayoutTab!]
+  defaultTabToFocusOnMobileAndSidePanelId: UUID
+  universalIdentifier: UUID!
+  applicationId: UUID!
+  isSystemSideEffect: Boolean!
+  isFirstTabPinned: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input UpdatePageLayoutWidgetInput {
+  isActive: Boolean
+}
+
+type Query {
+  getPageLayouts(objectMetadataId: String, pageLayoutType: PageLayoutType): [PageLayout!]!
+  getPageLayout(id: String!): PageLayout
+}
+
+type Mutation {
+  updatePageLayoutWidget(id: String!, input: UpdatePageLayoutWidgetInput!): PageLayoutWidget!
+}

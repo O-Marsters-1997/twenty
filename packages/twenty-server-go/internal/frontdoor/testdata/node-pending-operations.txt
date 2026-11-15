@@ -41,9 +41,6 @@ EnrichWorkspaceCompany
 EventLogs
 EventLogsLive
 ExportRecords
-FindAllRecordFormPageLayouts
-FindAllRecordPageLayouts
-FindAllStandalonePageLayouts
 FindManyApplications
 FindManyApplicationsForToolTable
 FindManyCommandMenuItems
@@ -55,8 +52,6 @@ FindOneApplication
 FindOneApplicationByUniversalIdentifier
 FindOneApplicationName
 FindOneApplicationSummary
-FindOnePageLayout
-FindOnePageLayoutType
 GenerateSignedDpa
 GetAddressDetails
 GetAgentRuns
@@ -116,7 +111,6 @@ UpdateLabPublicFeatureFlag
 UpdateManyNavigationMenuItems
 UpdateMessageFolders
 UpdateOneRole
-UpdatePageLayoutWidgetIsActive
 UpdatePageLayoutWithTabsAndWidgets
 UpdatePasswordViaResetToken
 UpdateTimelineActivityTypeIsActive

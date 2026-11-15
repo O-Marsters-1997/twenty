@@ -1,0 +1,185 @@
+{
+  "name": "FindOnePageLayout",
+  "operation": "FindOnePageLayout",
+  "fixture": "standard-app form layout, company page layout with two tabs, standalone layout",
+  "endpoint": "/metadata",
+  "query": "query FindOnePageLayout($id: String!) { getPageLayout(id: $id) { ...PageLayoutFragment } }  fragment PageLayoutFragment on PageLayout { id applicationId name objectMetadataId type universalIdentifier isSystemSideEffect isFirstTabPinned defaultTabToFocusOnMobileAndSidePanelId createdAt updatedAt tabs { ...PageLayoutTabFragment } }  fragment PageLayoutTabFragment on PageLayoutTab { id applicationId universalIdentifier isSystemSideEffect title icon position layoutMode widgets { ...PageLayoutWidgetFragment } pageLayoutId isActive createdAt updatedAt }  fragment PageLayoutWidgetFragment on PageLayoutWidget { id applicationId universalIdentifier isSystemSideEffect title type objectMetadataId createdAt updatedAt isActive deletedAt conditionalDisplay conditionalAvailabilityExpression gridPosition { column columnSpan row rowSpan } position { ... on PageLayoutWidgetGridPosition { layoutMode row column rowSpan columnSpan } ... on PageLayoutWidgetVerticalListPosition { layoutMode index heightBehavior } ... on PageLayoutWidgetCanvasPosition { layoutMode } } configuration { ... on BarChartConfiguration { configurationType aggregateFieldMetadataId aggregateOperation primaryAxisGroupByFieldMetadataId primaryAxisGroupBySubFieldName primaryAxisDateGranularity primaryAxisOrderBy primaryAxisManualSortOrder secondaryAxisGroupByFieldMetadataId secondaryAxisGroupBySubFieldName secondaryAxisGroupByDateGranularity secondaryAxisOrderBy secondaryAxisManualSortOrder omitNullValues axisNameDisplay displayDataLabel displayLegend numberFormat rangeMin rangeMax color description filter groupMode layout isCumulative splitMultiValueFields timezone firstDayOfTheWeek } ... on LineChartConfiguration { configurationType aggregateFieldMetadataId aggregateOperation primaryAxisGroupByFieldMetadataId primaryAxisGroupBySubFieldName primaryAxisDateGranularity primaryAxisOrderBy primaryAxisManualSortOrder secondaryAxisGroupByFieldMetadataId secondaryAxisGroupBySubFieldName secondaryAxisGroupByDateGranularity secondaryAxisOrderBy secondaryAxisManualSortOrder omitNullValues axisNameDisplay displayDataLabel displayLegend numberFormat rangeMin rangeMax color description filter isStacked isCumulative splitMultiValueFields timezone firstDayOfTheWeek } ... on PieChartConfiguration { configurationType groupByFieldMetadataId aggregateFieldMetadataId aggregateOperation groupBySubFieldName dateGranularity orderBy manualSortOrder displayDataLabel showCenterMetric displayLegend numberFormat hideEmptyCategory splitMultiValueFields color description filter timezone firstDayOfTheWeek } ... on AggregateChartConfiguration { configurationType aggregateFieldMetadataId aggregateOperation label displayDataLabel numberFormat description filter prefix suffix timezone firstDayOfTheWeek ratioAggregateConfig { fieldMetadataId optionValue } } ... on IframeConfiguration { configurationType url } ... on StandaloneRichTextConfiguration { configurationType body { blocknote markdown } } ... on CalendarConfiguration { configurationType } ... on EmailsConfiguration { configurationType } ... on EmailThreadConfiguration { configurationType } ... on ChatThreadsConfiguration { configurationType } ... on ChatConfiguration { configurationType } ... on MessageCampaignBodyConfiguration { configurationType } ... on MessageCampaignDetailsConfiguration { configurationType } ... on FieldConfiguration { configurationType fieldDisplayMode fieldMetadataId viewId nestedRelationFieldMetadataId isUIEditable } ... on FieldRichTextConfiguration { configurationType } ... on FieldsConfiguration { configurationType viewId newFieldDefaultVisibility shouldAllowUserToSeeHiddenFields } ... on FormFieldConfiguration { configurationType fieldMetadataId } ... on FilesConfiguration { configurationType } ... on NotesConfiguration { configurationType } ... on TasksConfiguration { configurationType } ... on TimelineConfiguration { configurationType } ... on ViewConfiguration { configurationType } ... on RecordTableConfiguration { configurationType viewId recordLimit isUIEditable } ... on WorkflowConfiguration { configurationType } ... on WorkflowRunConfiguration { configurationType } ... on WorkflowVersionConfiguration { configurationType } } pageLayoutTabId } ",
+  "response": {
+    "data": {
+      "getPageLayout": {
+        "id": "6b1f0000-0000-4000-8000-000000000002",
+        "applicationId": "<ignored>",
+        "name": "Company page",
+        "objectMetadataId": null,
+        "type": "RECORD_PAGE",
+        "universalIdentifier": "6b1f0000-0000-4000-8000-000000000002",
+        "isSystemSideEffect": false,
+        "isFirstTabPinned": true,
+        "defaultTabToFocusOnMobileAndSidePanelId": null,
+        "createdAt": "<ignored>",
+        "updatedAt": "<ignored>",
+        "tabs": [
+          {
+            "id": "6b1f0000-0000-4000-8000-000000000013",
+            "applicationId": "<ignored>",
+            "universalIdentifier": "6b1f0000-0000-4000-8000-000000000013",
+            "isSystemSideEffect": false,
+            "title": "Notes",
+            "icon": null,
+            "position": 0,
+            "layoutMode": "GRID",
+            "widgets": [
+              {
+                "id": "6b1f0000-0000-4000-8000-000000000024",
+                "applicationId": "<ignored>",
+                "universalIdentifier": "6b1f0000-0000-4000-8000-000000000024",
+                "isSystemSideEffect": false,
+                "title": "Intro",
+                "type": "STANDALONE_RICH_TEXT",
+                "objectMetadataId": null,
+                "createdAt": "<ignored>",
+                "updatedAt": "<ignored>",
+                "isActive": true,
+                "deletedAt": null,
+                "conditionalDisplay": null,
+                "conditionalAvailabilityExpression": null,
+                "gridPosition": {
+                  "row": 0,
+                  "column": 0,
+                  "rowSpan": 1,
+                  "columnSpan": 12
+                },
+                "position": null,
+                "configuration": {
+                  "configurationType": "STANDALONE_RICH_TEXT",
+                  "body": {
+                    "blocknote": null,
+                    "markdown": "hi"
+                  }
+                },
+                "pageLayoutTabId": "6b1f0000-0000-4000-8000-000000000013"
+              }
+            ],
+            "pageLayoutId": "6b1f0000-0000-4000-8000-000000000002",
+            "isActive": true,
+            "createdAt": "<ignored>",
+            "updatedAt": "<ignored>"
+          },
+          {
+            "id": "6b1f0000-0000-4000-8000-000000000012",
+            "applicationId": "<ignored>",
+            "universalIdentifier": "6b1f0000-0000-4000-8000-000000000012",
+            "isSystemSideEffect": false,
+            "title": "Home",
+            "icon": "IconHome",
+            "position": 1,
+            "layoutMode": "GRID",
+            "widgets": [
+              {
+                "id": "6b1f0000-0000-4000-8000-000000000022",
+                "applicationId": "<ignored>",
+                "universalIdentifier": "6b1f0000-0000-4000-8000-000000000022",
+                "isSystemSideEffect": false,
+                "title": "Deals by stage",
+                "type": "GRAPH",
+                "objectMetadataId": null,
+                "createdAt": "<ignored>",
+                "updatedAt": "<ignored>",
+                "isActive": true,
+                "deletedAt": null,
+                "conditionalDisplay": null,
+                "conditionalAvailabilityExpression": null,
+                "gridPosition": {
+                  "row": 0,
+                  "column": 0,
+                  "rowSpan": 1,
+                  "columnSpan": 12
+                },
+                "position": {
+                  "layoutMode": "GRID",
+                  "row": 0,
+                  "column": 0,
+                  "rowSpan": 4,
+                  "columnSpan": 6
+                },
+                "configuration": {
+                  "aggregateFieldMetadataId": null,
+                  "aggregateOperation": "COUNT",
+                  "primaryAxisGroupByFieldMetadataId": null,
+                  "primaryAxisGroupBySubFieldName": null,
+                  "primaryAxisDateGranularity": null,
+                  "primaryAxisOrderBy": "FIELD_ASC",
+                  "primaryAxisManualSortOrder": [
+                    "a",
+                    "b"
+                  ],
+                  "secondaryAxisGroupByFieldMetadataId": null,
+                  "secondaryAxisGroupBySubFieldName": null,
+                  "secondaryAxisGroupByDateGranularity": null,
+                  "secondaryAxisOrderBy": null,
+                  "secondaryAxisManualSortOrder": null,
+                  "omitNullValues": null,
+                  "axisNameDisplay": null,
+                  "displayDataLabel": null,
+                  "displayLegend": true,
+                  "numberFormat": null,
+                  "rangeMin": 1.5,
+                  "rangeMax": null,
+                  "color": null,
+                  "description": null,
+                  "filter": {
+                    "recordFilters": []
+                  },
+                  "groupMode": null,
+                  "layout": "VERTICAL",
+                  "isCumulative": null,
+                  "splitMultiValueFields": null,
+                  "timezone": null,
+                  "firstDayOfTheWeek": null,
+                  "configurationType": "BAR_CHART"
+                },
+                "pageLayoutTabId": "6b1f0000-0000-4000-8000-000000000012"
+              },
+              {
+                "id": "6b1f0000-0000-4000-8000-000000000023",
+                "applicationId": "<ignored>",
+                "universalIdentifier": "6b1f0000-0000-4000-8000-000000000023",
+                "isSystemSideEffect": false,
+                "title": "Docs",
+                "type": "IFRAME",
+                "objectMetadataId": null,
+                "createdAt": "<ignored>",
+                "updatedAt": "<ignored>",
+                "isActive": true,
+                "deletedAt": null,
+                "conditionalDisplay": null,
+                "conditionalAvailabilityExpression": null,
+                "gridPosition": {
+                  "row": 0,
+                  "column": 0,
+                  "rowSpan": 1,
+                  "columnSpan": 12
+                },
+                "position": {
+                  "layoutMode": "CANVAS"
+                },
+                "configuration": {
+                  "configurationType": "IFRAME",
+                  "url": "https://example.com"
+                },
+                "pageLayoutTabId": "6b1f0000-0000-4000-8000-000000000012"
+              }
+            ],
+            "pageLayoutId": "6b1f0000-0000-4000-8000-000000000002",
+            "isActive": true,
+            "createdAt": "<ignored>",
+            "updatedAt": "<ignored>"
+          }
+        ]
+      }
+    }
+  },
+  "variables": {
+    "id": "6b1f0000-0000-4000-8000-000000000002"
+  }
+}

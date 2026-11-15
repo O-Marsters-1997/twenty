@@ -1,0 +1,17 @@
+{
+  "name": "FindAllStandalonePageLayouts",
+  "operation": "FindAllStandalonePageLayouts",
+  "fixture": "standard-app form layout, company page layout with two tabs, standalone layout",
+  "endpoint": "/metadata",
+  "query": "query FindAllStandalonePageLayouts { getPageLayouts(pageLayoutType: STANDALONE_PAGE) { id name } }",
+  "response": {
+    "data": {
+      "getPageLayouts": [
+        {
+          "id": "6b1f0000-0000-4000-8000-000000000003",
+          "name": "Reports"
+        }
+      ]
+    }
+  }
+}

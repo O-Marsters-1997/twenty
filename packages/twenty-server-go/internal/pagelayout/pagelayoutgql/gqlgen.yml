@@ -1,0 +1,45 @@
+schema:
+  - pagelayout.graphqls
+exec:
+  filename: generated.go
+  package: pagelayoutgql
+model:
+  filename: models_gen.go
+  package: pagelayoutgql
+resolver:
+  layout: single-file
+  filename: resolver.go
+  package: pagelayoutgql
+  type: Resolver
+models:
+  UUID:
+    model: github.com/99designs/gqlgen/graphql.String
+  ID:
+    model: github.com/99designs/gqlgen/graphql.ID
+  DateTime:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata.Timestamp
+  JSON:
+    model: github.com/99designs/gqlgen/graphql.Any
+  PageLayoutType:
+    model: github.com/99designs/gqlgen/graphql.String
+  PageLayoutTabLayoutMode:
+    model: github.com/99designs/gqlgen/graphql.String
+  PageLayoutWidgetVerticalListHeightBehavior:
+    model: github.com/99designs/gqlgen/graphql.String
+  WidgetType:
+    model: github.com/99designs/gqlgen/graphql.String
+  PageLayout:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/pagelayout/store.PageLayout
+  PageLayoutTab:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/pagelayout/store.Tab
+  PageLayoutWidget:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/pagelayout/store.Widget
+    fields:
+      position:
+        resolver: true
+      configuration:
+        resolver: true
+  GridPosition:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/pagelayout/store.GridPosition
+  UpdatePageLayoutWidgetInput:
+    model: map[string]interface{}
