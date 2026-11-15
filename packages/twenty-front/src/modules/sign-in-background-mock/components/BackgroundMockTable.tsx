@@ -1,5 +1,3 @@
-import { styled } from '@linaria/react';
-
 import { BackgroundMockTableRow } from '@/sign-in-background-mock/components/BackgroundMockTableRow';
 import { BACKGROUND_MOCK_COLUMNS } from '@/sign-in-background-mock/constants/BackgroundMockColumns';
 import { BACKGROUND_MOCK_COMPANIES } from '@/sign-in-background-mock/constants/BackgroundMockCompanies';
@@ -7,9 +5,16 @@ import { BACKGROUND_MOCK_TABLE_DIMENSIONS } from '@/sign-in-background-mock/cons
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
 import { IconChevronDown, IconPlus, useIcons } from 'twenty-ui/icon';
 import { Checkbox } from 'twenty-ui/primitives/input';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { background, fontColor, fontSize } from 'twenty-ui/theme/tokens.stylex';
+import {
+  background,
+  borderColor,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   tableWrapper: {
@@ -46,104 +51,90 @@ const styles = stylex.create({
     color: fontColor['--t-font-color-primary'],
     flexShrink: '0',
   },
+  headerRow: {
+    background: background['--t-background-primary'],
+    display: 'flex',
+  },
+  dragHandleColumn: {
+    flexShrink: '0',
+  },
+  checkboxHeaderColumn: {
+    alignItems: 'center',
+    background: background['--t-background-primary'],
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexShrink: '0',
+    justifyContent: 'center',
+    paddingRight: spacing['--t-spacing-1'],
+  },
+  headerCell: {
+    alignItems: 'center',
+    background: background['--t-background-primary'],
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
+    borderRightColor: borderColor['--t-border-color-light'],
+    borderRightStyle: 'solid',
+    borderRightWidth: '1px',
+    boxSizing: 'border-box',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    flexShrink: '0',
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    gap: spacing['--t-spacing-1'],
+    overflow: 'hidden',
+    paddingBlock: 0,
+    paddingInline: spacing['--t-spacing-2'],
+  },
+  addColumnHeaderCell: {
+    alignItems: 'center',
+    background: background['--t-background-primary'],
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
+    boxSizing: 'border-box',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    flex: '1',
+  },
+  addColumnIconWrapper: {
+    alignItems: 'center',
+    display: 'flex',
+    flexShrink: '0',
+    justifyContent: 'center',
+  },
+  footerRow: {
+    display: 'flex',
+  },
+  footerCheckboxColumn: {
+    flexShrink: '0',
+  },
+  footerCell: {
+    alignItems: 'center',
+    boxSizing: 'border-box',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    flexShrink: '0',
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    gap: spacing['--t-spacing-1'],
+    justifyContent: 'space-between',
+    overflow: 'hidden',
+    paddingBlock: 0,
+    paddingInline: spacing['--t-spacing-2'],
+    whiteSpace: 'nowrap',
+  },
+  lastEmptyCell: {
+    flex: '1',
+  },
+  height: (height: number) => ({ height }),
+  width: (width: number) => ({ width }),
+  minWidth: (minWidth: number) => ({ minWidth }),
 });
 
-const StyledHeaderRow = styled.div`
-  background: ${themeCssVariables.background.primary};
-  display: flex;
-  height: ${BACKGROUND_MOCK_TABLE_DIMENSIONS.rowHeight}px;
-`;
-
-const StyledDragHandleColumn = styled.div`
-  background: ${themeCssVariables.background.primary};
-  flex-shrink: 0;
-  height: ${BACKGROUND_MOCK_TABLE_DIMENSIONS.rowHeight}px;
-  width: ${BACKGROUND_MOCK_TABLE_DIMENSIONS.dragHandleColumnWidth}px;
-`;
-
-const StyledCheckboxHeaderColumn = styled.div`
-  align-items: center;
-  background: ${themeCssVariables.background.primary};
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  box-sizing: border-box;
-  display: flex;
-  flex-shrink: 0;
-  height: ${BACKGROUND_MOCK_TABLE_DIMENSIONS.rowHeight}px;
-  justify-content: center;
-  padding-right: ${themeCssVariables.spacing[1]};
-  width: ${BACKGROUND_MOCK_TABLE_DIMENSIONS.checkboxColumnWidth}px;
-`;
-
-const StyledHeaderCell = styled.div<{ width: number }>`
-  align-items: center;
-  background: ${themeCssVariables.background.primary};
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  border-right: 1px solid ${themeCssVariables.border.color.light};
-  box-sizing: border-box;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  flex-shrink: 0;
-  font-weight: ${themeCssVariables.font.weight.medium};
-  gap: ${themeCssVariables.spacing[1]};
-  height: ${BACKGROUND_MOCK_TABLE_DIMENSIONS.rowHeight}px;
-  overflow: hidden;
-  padding: 0 ${themeCssVariables.spacing[2]};
-  width: ${({ width }) => width}px;
-`;
-
-const StyledAddColumnHeaderCell = styled.div`
-  align-items: center;
-  background: ${themeCssVariables.background.primary};
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  box-sizing: border-box;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  flex: 1;
-  height: ${BACKGROUND_MOCK_TABLE_DIMENSIONS.rowHeight}px;
-  min-width: ${BACKGROUND_MOCK_TABLE_DIMENSIONS.addColumnButtonWidth}px;
-`;
-
-const StyledAddColumnIconWrapper = styled.div`
-  align-items: center;
-  display: flex;
-  flex-shrink: 0;
-  height: ${BACKGROUND_MOCK_TABLE_DIMENSIONS.rowHeight}px;
-  justify-content: center;
-  width: ${BACKGROUND_MOCK_TABLE_DIMENSIONS.addColumnButtonWidth}px;
-`;
-
-const StyledFooterRow = styled.div`
-  display: flex;
-  height: ${BACKGROUND_MOCK_TABLE_DIMENSIONS.rowHeight}px;
-`;
-
-const StyledFooterCheckboxColumn = styled.div`
-  flex-shrink: 0;
-  height: ${BACKGROUND_MOCK_TABLE_DIMENSIONS.rowHeight}px;
-  width: ${BACKGROUND_MOCK_TABLE_DIMENSIONS.checkboxColumnWidth}px;
-`;
-
-const StyledFooterCell = styled.div<{ width: number }>`
-  align-items: center;
-  box-sizing: border-box;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  flex-shrink: 0;
-  font-weight: ${themeCssVariables.font.weight.medium};
-  gap: ${themeCssVariables.spacing[1]};
-  height: ${BACKGROUND_MOCK_TABLE_DIMENSIONS.rowHeight}px;
-  justify-content: space-between;
-  overflow: hidden;
-  padding: 0 ${themeCssVariables.spacing[2]};
-  white-space: nowrap;
-  width: ${({ width }) => width}px;
-`;
-
-const StyledLastEmptyCell = styled.div`
-  flex: 1;
-  height: ${BACKGROUND_MOCK_TABLE_DIMENSIONS.rowHeight}px;
-  min-width: ${BACKGROUND_MOCK_TABLE_DIMENSIONS.addColumnButtonWidth}px;
-`;
+const ROW_HEIGHT = BACKGROUND_MOCK_TABLE_DIMENSIONS.rowHeight;
 
 export const BackgroundMockTable = () => {
   const theme = useTheme();
@@ -152,15 +143,34 @@ export const BackgroundMockTable = () => {
   return (
     <div {...stylex.props(styles.tableWrapper)}>
       <div {...stylex.props(styles.table)}>
-        <StyledHeaderRow>
-          <StyledDragHandleColumn />
-          <StyledCheckboxHeaderColumn>
+        <div {...stylex.props(styles.headerRow, styles.height(ROW_HEIGHT))}>
+          <div
+            {...stylex.props(
+              styles.dragHandleColumn,
+              styles.height(ROW_HEIGHT),
+              styles.width(BACKGROUND_MOCK_TABLE_DIMENSIONS.dragHandleColumnWidth),
+            )}
+          />
+          <div
+            {...stylex.props(
+              styles.checkboxHeaderColumn,
+              styles.height(ROW_HEIGHT),
+              styles.width(BACKGROUND_MOCK_TABLE_DIMENSIONS.checkboxColumnWidth),
+            )}
+          >
             <Checkbox hoverable checked={false} />
-          </StyledCheckboxHeaderColumn>
+          </div>
           {BACKGROUND_MOCK_COLUMNS.map((column) => {
             const Icon = getIcon(column.iconName);
             return (
-              <StyledHeaderCell key={column.label} width={column.width}>
+              <div
+                key={column.label}
+                {...stylex.props(
+                  styles.headerCell,
+                  styles.height(ROW_HEIGHT),
+                  styles.width(column.width),
+                )}
+              >
                 {Icon !== undefined && (
                   <Icon
                     size={theme.icon.size.md}
@@ -168,27 +178,51 @@ export const BackgroundMockTable = () => {
                   />
                 )}
                 <span {...stylex.props(styles.headerLabel)}>{column.label}</span>
-              </StyledHeaderCell>
+              </div>
             );
           })}
-          <StyledAddColumnHeaderCell>
-            <StyledAddColumnIconWrapper>
+          <div
+            {...stylex.props(
+              styles.addColumnHeaderCell,
+              styles.height(ROW_HEIGHT),
+              styles.minWidth(BACKGROUND_MOCK_TABLE_DIMENSIONS.addColumnButtonWidth),
+            )}
+          >
+            <div
+              {...stylex.props(
+                styles.addColumnIconWrapper,
+                styles.height(ROW_HEIGHT),
+                styles.width(BACKGROUND_MOCK_TABLE_DIMENSIONS.addColumnButtonWidth),
+              )}
+            >
               <IconPlus
                 size={theme.icon.size.sm}
                 stroke={theme.icon.stroke.sm}
               />
-            </StyledAddColumnIconWrapper>
-          </StyledAddColumnHeaderCell>
-        </StyledHeaderRow>
+            </div>
+          </div>
+        </div>
         <div {...stylex.props(styles.tableBody)}>
           {BACKGROUND_MOCK_COMPANIES.map((company) => (
             <BackgroundMockTableRow key={company.id} company={company} />
           ))}
         </div>
-        <StyledFooterRow>
-          <StyledDragHandleColumn />
-          <StyledFooterCheckboxColumn />
-          <StyledFooterCell width={BACKGROUND_MOCK_COLUMNS[0].width}>
+        <div {...stylex.props(styles.footerRow, styles.height(ROW_HEIGHT))}>
+          <div
+            {...stylex.props(
+              styles.dragHandleColumn,
+              styles.height(ROW_HEIGHT),
+              styles.width(BACKGROUND_MOCK_TABLE_DIMENSIONS.dragHandleColumnWidth),
+            )}
+          />
+          <div
+            {...stylex.props(
+              styles.footerCheckboxColumn,
+              styles.height(ROW_HEIGHT),
+              styles.width(BACKGROUND_MOCK_TABLE_DIMENSIONS.checkboxColumnWidth),
+            )}
+          />
+          <div {...stylex.props(styles.footerCell, styles.height(ROW_HEIGHT), styles.width(BACKGROUND_MOCK_COLUMNS[0].width))}>
             <div {...stylex.props(styles.footerLabel)}>
               <OverflowingTextWithTooltip text="Calculate" />
             </div>
@@ -196,30 +230,36 @@ export const BackgroundMockTable = () => {
               size={theme.icon.size.sm}
               stroke={theme.icon.stroke.sm}
             />
-          </StyledFooterCell>
-          <StyledFooterCell width={BACKGROUND_MOCK_COLUMNS[1].width}>
+          </div>
+          <div {...stylex.props(styles.footerCell, styles.height(ROW_HEIGHT), styles.width(BACKGROUND_MOCK_COLUMNS[1].width))}>
             <div {...stylex.props(styles.footerLabel)}>
               <OverflowingTextWithTooltip text="Count all" />
             </div>
             <span {...stylex.props(styles.footerValue)}>599</span>
-          </StyledFooterCell>
-          <StyledFooterCell width={BACKGROUND_MOCK_COLUMNS[2].width} />
-          <StyledFooterCell width={BACKGROUND_MOCK_COLUMNS[3].width} />
-          <StyledFooterCell width={BACKGROUND_MOCK_COLUMNS[4].width} />
-          <StyledFooterCell width={BACKGROUND_MOCK_COLUMNS[5].width}>
+          </div>
+          <div {...stylex.props(styles.footerCell, styles.height(ROW_HEIGHT), styles.width(BACKGROUND_MOCK_COLUMNS[2].width))} />
+          <div {...stylex.props(styles.footerCell, styles.height(ROW_HEIGHT), styles.width(BACKGROUND_MOCK_COLUMNS[3].width))} />
+          <div {...stylex.props(styles.footerCell, styles.height(ROW_HEIGHT), styles.width(BACKGROUND_MOCK_COLUMNS[4].width))} />
+          <div {...stylex.props(styles.footerCell, styles.height(ROW_HEIGHT), styles.width(BACKGROUND_MOCK_COLUMNS[5].width))}>
             <div {...stylex.props(styles.footerLabel)}>
               <OverflowingTextWithTooltip text="Max of Employees" />
             </div>
             <span {...stylex.props(styles.footerValue)}>284,571</span>
-          </StyledFooterCell>
-          <StyledFooterCell width={BACKGROUND_MOCK_COLUMNS[6].width}>
+          </div>
+          <div {...stylex.props(styles.footerCell, styles.height(ROW_HEIGHT), styles.width(BACKGROUND_MOCK_COLUMNS[6].width))}>
             <div {...stylex.props(styles.footerLabel)}>
               <OverflowingTextWithTooltip text="Not empty of Address" />
             </div>
             <span {...stylex.props(styles.footerValue)}>599</span>
-          </StyledFooterCell>
-          <StyledLastEmptyCell />
-        </StyledFooterRow>
+          </div>
+          <div
+            {...stylex.props(
+              styles.lastEmptyCell,
+              styles.height(ROW_HEIGHT),
+              styles.minWidth(BACKGROUND_MOCK_TABLE_DIMENSIONS.addColumnButtonWidth),
+            )}
+          />
+        </div>
       </div>
     </div>
   );

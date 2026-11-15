@@ -11,7 +11,6 @@ import { TextInput } from '@/ui/input/components/TextInput';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomState';
 import { getWorkspaceAvatarColorSeed } from '@/workspace/utils/getWorkspaceAvatarColorSeed';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { useEffect, useRef, useState } from 'react';
@@ -21,11 +20,14 @@ import { LightIconButton, MainButton } from 'twenty-ui/components/input';
 import { IconTrash, IconUpload } from 'twenty-ui/icon';
 import { Avatar } from 'twenty-ui/primitives/data-display';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
 import { backgroundTransparent, borderColor, borderRadius, color, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
+  logoAvatar: {
+    height: spacing['--t-spacing-8'],
+    width: spacing['--t-spacing-8'],
+  },
   contentContainer: {
     display: 'flex',
     flexDirection: 'column',
@@ -139,11 +141,6 @@ const styles = stylex.create({
     width: '6px',
   },
 });
-
-const StyledLogoAvatar = styled(Avatar)`
-  height: ${themeCssVariables.spacing[8]};
-  width: ${themeCssVariables.spacing[8]};
-`;
 
 export const SignInUpWorkspaceCreationForm = () => {
   const { t } = useLingui();
@@ -259,7 +256,8 @@ export const SignInUpWorkspaceCreationForm = () => {
       <div {...stylex.props(styles.formSection)}>
         <OnboardingStepAnimatedItem index={2}>
           <div {...stylex.props(styles.logoRow)}>
-            <StyledLogoAvatar
+            <Avatar
+              {...stylex.props(styles.logoAvatar)}
               src={logoPreviewUrl}
               name={isNonEmptyString(workspaceName) ? workspaceName : '?'}
               colorSeed={getWorkspaceAvatarColorSeed(workspaceName)}

@@ -3,7 +3,6 @@ import { returnToPathState } from '@/auth/states/returnToPathState';
 import { useBuildWorkspaceUrl } from '@/domain-manager/hooks/useBuildWorkspaceUrl';
 import { UndecoratedLink } from '@/ui/navigation/link/components/UndecoratedLink/UndecoratedLink';
 import { useQuery } from '@apollo/client/react';
-import { styled } from '@linaria/react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { FormProvider } from 'react-hook-form';
 import { Button } from 'twenty-ui/primitives/input';
@@ -37,27 +36,25 @@ import {
 import { getWorkspaceUrl } from '~/utils/getWorkspaceUrl';
 import { getAbsoluteImageUrl } from '~/utils/image/getAbsoluteImageUrl';
 import * as stylex from '@stylexjs/stylex';
-import { backgroundTransparent, borderRadius, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
-
-const StyledWorkspaceContainer = styled.div`
-  background-color: ${themeCssVariables.background.primary};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.md};
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  width: 100%;
-
-  > * {
-    border-bottom: 1px solid ${themeCssVariables.border.color.medium};
-
-    &:last-child {
-      border-bottom: none;
-    }
-  }
-`;
+import { background, backgroundTransparent, borderColor, borderRadius, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
+  workspaceContainer: {
+    backgroundColor: background['--t-background-primary'],
+    borderColor: borderColor['--t-border-color-medium'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    borderRadius: borderRadius['--t-border-radius-md'],
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden',
+    width: '100%',
+  },
+  workspaceItem: {
+    borderBottomColor: borderColor['--t-border-color-medium'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: { default: '1px', ':last-child': '0' },
+  },
   workspaceItem: {
     alignItems: 'center',
     cursor: 'pointer',
@@ -165,11 +162,12 @@ export const SignInUpGlobalScopeForm = () => {
     <>
       {signInUpStep === SignInUpStep.WorkspaceSelection && (
         <StyledOnboardingContentContainer>
-          <StyledWorkspaceContainer>
+          <div {...stylex.props(styles.workspaceContainer)}>
             {availableWorkspacesList.map((availableWorkspace, index) => (
               <OnboardingStepAnimatedItem
                 key={availableWorkspace.id}
                 index={index}
+                {...stylex.props(styles.workspaceItem)}
               >
                 <UndecoratedLink
                   to={getAvailableWorkspaceUrl(availableWorkspace)}
@@ -210,6 +208,7 @@ export const SignInUpGlobalScopeForm = () => {
             {!isDDLLocked && (
               <OnboardingStepAnimatedItem
                 index={availableWorkspacesList.length}
+                {...stylex.props(styles.workspaceItem)}
               >
                 <div
                   onClick={() =>
@@ -230,7 +229,7 @@ export const SignInUpGlobalScopeForm = () => {
                 </div>
               </OnboardingStepAnimatedItem>
             )}
-          </StyledWorkspaceContainer>
+          </div>
         </StyledOnboardingContentContainer>
       )}
       {signInUpStep !== SignInUpStep.WorkspaceSelection && (

@@ -1,5 +1,3 @@
-import { styled } from '@linaria/react';
-
 import { type BackgroundMockCompany } from '@/sign-in-background-mock/constants/BackgroundMockCompanies';
 import { BACKGROUND_MOCK_COLUMN_WIDTHS } from '@/sign-in-background-mock/constants/BackgroundMockColumnWidths';
 import { BACKGROUND_MOCK_TABLE_DIMENSIONS } from '@/sign-in-background-mock/constants/BackgroundMockTableDimensions';
@@ -7,55 +5,63 @@ import { getAbsoluteImageUrl } from '~/utils/image/getAbsoluteImageUrl';
 import { Avatar, Chip } from 'twenty-ui/primitives/data-display';
 import { Checkbox } from 'twenty-ui/primitives/input';
 import { IconLink } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 
 import { getLogoUrlFromDomainName } from 'twenty-shared/utils';
 import * as stylex from '@stylexjs/stylex';
-import { fontColor } from 'twenty-ui/theme/tokens.stylex';
-
-const StyledRow = styled.div`
-  display: flex;
-  height: ${BACKGROUND_MOCK_TABLE_DIMENSIONS.rowHeight}px;
-`;
-
-const StyledDragHandleColumn = styled.div`
-  flex-shrink: 0;
-  height: ${BACKGROUND_MOCK_TABLE_DIMENSIONS.rowHeight}px;
-  width: ${BACKGROUND_MOCK_TABLE_DIMENSIONS.dragHandleColumnWidth}px;
-`;
-
-const StyledCheckboxColumn = styled.div`
-  align-items: center;
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  box-sizing: border-box;
-  display: flex;
-  flex-shrink: 0;
-  height: ${BACKGROUND_MOCK_TABLE_DIMENSIONS.rowHeight}px;
-  justify-content: center;
-  padding-right: ${themeCssVariables.spacing[1]};
-  width: ${BACKGROUND_MOCK_TABLE_DIMENSIONS.checkboxColumnWidth}px;
-`;
-
-const StyledCell = styled.div<{ width: number }>`
-  align-items: center;
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  border-right: 1px solid ${themeCssVariables.border.color.light};
-  box-sizing: border-box;
-  color: ${themeCssVariables.font.color.primary};
-  display: flex;
-  flex-shrink: 0;
-  height: ${BACKGROUND_MOCK_TABLE_DIMENSIONS.rowHeight}px;
-  overflow: hidden;
-  padding-left: ${themeCssVariables.spacing[2]};
-  white-space: nowrap;
-  width: ${({ width }) => width}px;
-`;
+import {
+  borderColor,
+  fontColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   truncated: {
     overflow: 'hidden',
     textOverflow: 'ellipsis',
   },
+  row: {
+    display: 'flex',
+  },
+  dragHandleColumn: {
+    flexShrink: '0',
+  },
+  checkboxColumn: {
+    alignItems: 'center',
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexShrink: '0',
+    justifyContent: 'center',
+    paddingRight: spacing['--t-spacing-1'],
+  },
+  cell: {
+    alignItems: 'center',
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
+    borderRightColor: borderColor['--t-border-color-light'],
+    borderRightStyle: 'solid',
+    borderRightWidth: '1px',
+    boxSizing: 'border-box',
+    color: fontColor['--t-font-color-primary'],
+    display: 'flex',
+    flexShrink: '0',
+    overflow: 'hidden',
+    paddingLeft: spacing['--t-spacing-2'],
+    whiteSpace: 'nowrap',
+  },
+  lastEmptyCell: {
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
+    flex: '1',
+  },
+  height: (height: number) => ({ height }),
+  width: (width: number) => ({ width }),
+  minWidth: (minWidth: number) => ({ minWidth }),
   mutedText: {
     color: fontColor['--t-font-color-tertiary'],
     overflow: 'hidden',
@@ -63,12 +69,7 @@ const styles = stylex.create({
   },
 });
 
-const StyledLastEmptyCell = styled.div`
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  flex: 1;
-  height: ${BACKGROUND_MOCK_TABLE_DIMENSIONS.rowHeight}px;
-  min-width: ${BACKGROUND_MOCK_TABLE_DIMENSIONS.addColumnButtonWidth}px;
-`;
+const ROW_HEIGHT = BACKGROUND_MOCK_TABLE_DIMENSIONS.rowHeight;
 
 type BackgroundMockTableRowProps = {
   company: BackgroundMockCompany;
@@ -104,12 +105,24 @@ export const BackgroundMockTableRow = ({
   const logoUrl = getLogoUrlFromDomainName(company.domainName);
 
   return (
-    <StyledRow>
-      <StyledDragHandleColumn />
-      <StyledCheckboxColumn>
+    <div {...stylex.props(styles.row, styles.height(ROW_HEIGHT))}>
+      <div
+        {...stylex.props(
+          styles.dragHandleColumn,
+          styles.height(ROW_HEIGHT),
+          styles.width(BACKGROUND_MOCK_TABLE_DIMENSIONS.dragHandleColumnWidth),
+        )}
+      />
+      <div
+        {...stylex.props(
+          styles.checkboxColumn,
+          styles.height(ROW_HEIGHT),
+          styles.width(BACKGROUND_MOCK_TABLE_DIMENSIONS.checkboxColumnWidth),
+        )}
+      >
         <Checkbox hoverable checked={false} />
-      </StyledCheckboxColumn>
-      <StyledCell width={BACKGROUND_MOCK_COLUMN_WIDTHS.Name}>
+      </div>
+      <div {...stylex.props(styles.cell, styles.height(ROW_HEIGHT), styles.width(BACKGROUND_MOCK_COLUMN_WIDTHS.Name))}>
         <Chip
           size="sm"
           variant="ghost"
@@ -127,8 +140,8 @@ export const BackgroundMockTableRow = ({
         >
           {company.name}
         </Chip>
-      </StyledCell>
-      <StyledCell width={BACKGROUND_MOCK_COLUMN_WIDTHS.Domain}>
+      </div>
+      <div {...stylex.props(styles.cell, styles.height(ROW_HEIGHT), styles.width(BACKGROUND_MOCK_COLUMN_WIDTHS.Domain))}>
         <Chip
           size="sm"
           variant="ghost"
@@ -145,23 +158,29 @@ export const BackgroundMockTableRow = ({
         >
           {company.domainName}
         </Chip>
-      </StyledCell>
-      <StyledCell width={BACKGROUND_MOCK_COLUMN_WIDTHS['Created by']}>
+      </div>
+      <div {...stylex.props(styles.cell, styles.height(ROW_HEIGHT), styles.width(BACKGROUND_MOCK_COLUMN_WIDTHS['Created by']))}>
         <PersonChip fullName={company.createdBy} />
-      </StyledCell>
-      <StyledCell width={BACKGROUND_MOCK_COLUMN_WIDTHS['Account Owner']}>
+      </div>
+      <div {...stylex.props(styles.cell, styles.height(ROW_HEIGHT), styles.width(BACKGROUND_MOCK_COLUMN_WIDTHS['Account Owner']))}>
         <PersonChip fullName={company.accountOwner} />
-      </StyledCell>
-      <StyledCell width={BACKGROUND_MOCK_COLUMN_WIDTHS['Creation date']}>
+      </div>
+      <div {...stylex.props(styles.cell, styles.height(ROW_HEIGHT), styles.width(BACKGROUND_MOCK_COLUMN_WIDTHS['Creation date']))}>
         <span {...stylex.props(styles.mutedText)}>{company.creationDate}</span>
-      </StyledCell>
-      <StyledCell width={BACKGROUND_MOCK_COLUMN_WIDTHS.Employees}>
+      </div>
+      <div {...stylex.props(styles.cell, styles.height(ROW_HEIGHT), styles.width(BACKGROUND_MOCK_COLUMN_WIDTHS.Employees))}>
         <span {...stylex.props(styles.truncated)}>{formatNumber(company.employees)}</span>
-      </StyledCell>
-      <StyledCell width={BACKGROUND_MOCK_COLUMN_WIDTHS.Address}>
+      </div>
+      <div {...stylex.props(styles.cell, styles.height(ROW_HEIGHT), styles.width(BACKGROUND_MOCK_COLUMN_WIDTHS.Address))}>
         <span {...stylex.props(styles.truncated)}>{company.address}</span>
-      </StyledCell>
-      <StyledLastEmptyCell />
-    </StyledRow>
+      </div>
+      <div
+        {...stylex.props(
+          styles.lastEmptyCell,
+          styles.height(ROW_HEIGHT),
+          styles.minWidth(BACKGROUND_MOCK_TABLE_DIMENSIONS.addColumnButtonWidth),
+        )}
+      />
+    </div>
   );
 };

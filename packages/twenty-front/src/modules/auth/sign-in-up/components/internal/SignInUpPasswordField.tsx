@@ -2,15 +2,23 @@ import { Text } from 'twenty-ui/primitives/typography';
 import { type Form } from '@/auth/sign-in-up/hooks/useSignInUpForm';
 import { SignInUpMode } from '@/auth/types/SignInUpMode';
 import { SettingsTextInput } from '@/ui/input/components/SettingsTextInput';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { motion } from 'framer-motion';
 import { Controller, useFormContext } from 'react-hook-form';
-import { themeCssVariables } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { spacing } from 'twenty-ui/theme/tokens.stylex';
+import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
+  passwordHint: {
+    color: fontColor['--t-font-color-secondary'],
+    cursor: 'initial',
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    overflow: 'hidden',
+    paddingBlock: spacing['--t-spacing-2'],
+    paddingInline: 0,
+    whiteSpace: 'nowrap',
+  },
   fullWidthMotionDiv: {
     width: '100%',
   },
@@ -59,7 +67,9 @@ export const SignInUpPasswordField = ({
               fullWidth
             />
             {signInUpMode === SignInUpMode.SignUp && (
-              <StyledPasswordHint>{t`At least 8 characters long.`}</StyledPasswordHint>
+              <Text {...stylex.props(styles.passwordHint)}>
+                {t`At least 8 characters long.`}
+              </Text>
             )}
           </div>
         )}
@@ -67,13 +77,3 @@ export const SignInUpPasswordField = ({
     </motion.div>
   );
 };
-
-const StyledPasswordHint = styled(Text)`
-  color: ${themeCssVariables.font.color.secondary};
-  cursor: initial;
-  font-size: ${themeCssVariables.font.size.sm};
-  font-weight: ${themeCssVariables.font.weight.regular};
-  overflow: hidden;
-  padding: ${themeCssVariables.spacing[2]} 0;
-  white-space: nowrap;
-`;

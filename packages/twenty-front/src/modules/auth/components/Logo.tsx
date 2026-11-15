@@ -1,6 +1,5 @@
 import { UndecoratedLink } from '@/ui/navigation/link/components/UndecoratedLink/UndecoratedLink';
 import { getWorkspaceAvatarColorSeed } from '@/workspace/utils/getWorkspaceAvatarColorSeed';
-import { styled } from '@linaria/react';
 import { isNonEmptyString } from '@sniptt/guards';
 import { AppPath } from 'twenty-shared/types';
 import { getImageAbsoluteURI, isDefined } from 'twenty-shared/utils';
@@ -19,6 +18,11 @@ type LogoProps = {
 };
 
 const styles = stylex.create({
+  primaryLogo: {
+    backgroundSize: 'cover',
+    height: '100%',
+    width: '100%',
+  },
   container: {
     height: spacing['--t-spacing-12'],
     marginBottom: spacing['--t-spacing-4'],
@@ -51,12 +55,6 @@ const styles = stylex.create({
   },
 });
 
-const StyledPrimaryLogo = styled.div`
-  background-size: cover;
-  height: 100%;
-  width: 100%;
-`;
-
 export const Logo = ({
   primaryLogo,
   secondaryLogo,
@@ -85,12 +83,14 @@ export const Logo = ({
     <div onClick={() => onClick?.()} {...stylex.props(styles.container)}>
       {isUsingDefaultLogo ? (
         <UndecoratedLink to={to} onClick={() => redirectToDefaultDomain()}>
-          <StyledPrimaryLogo
+          <div
+            {...stylex.props(styles.primaryLogo)}
             style={{ backgroundImage: `url(${primaryLogoUrl})` }}
           />
         </UndecoratedLink>
       ) : (
-        <StyledPrimaryLogo
+        <div
+          {...stylex.props(styles.primaryLogo)}
           style={{ backgroundImage: `url(${primaryLogoUrl})` }}
         />
       )}

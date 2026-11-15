@@ -17,7 +17,7 @@ export const SettingsItemTypeTag = ({
   item: { isRemote, applicationId },
 }: SettingsItemTypeTagProps) => {
   if (isDefined(applicationId)) {
-    return <AppChip applicationId={applicationId} className={className} />;
+    return <AppChip applicationId={applicationId} />;
   } else if (isRemote === true) {
     return (
       <Chip
