@@ -9,10 +9,6 @@ export const useShowFullscreen = () => {
 
   return useMemo(() => {
     if (
-      isMatchingLocation(
-        location,
-        'settings/' + SettingsPath.RestPlayground + '/*',
-      ) ||
       isMatchingLocation(location, 'settings/' + SettingsPath.GraphQLPlayground)
     ) {
       return true;

@@ -39,7 +39,6 @@ export enum SettingsPath {
   AiSkillDetail = 'ai/skills/:skillId',
   AiToolDetail = 'ai/tools/:toolIdentifier',
   ApiWebhooks = 'mcp-apis',
-  RestPlayground = 'playground/rest/:schema',
   GraphQLPlayground = 'playground/graphql/:schema',
   NewApiKey = 'mcp-apis/apis/new',
   ApiKeyDetail = 'mcp-apis/apis/:apiKeyId',

@@ -28,14 +28,6 @@ const SettingsGraphQLPlayground = lazy(() =>
   ),
 );
 
-const SettingsRestPlayground = lazy(() =>
-  import('~/pages/settings/developers/playground/SettingsRestPlayground').then(
-    (module) => ({
-      default: module.SettingsRestPlayground,
-    }),
-  ),
-);
-
 // TODO: remove these legacy /api-webhooks redirects after 2026-08-04.
 const LEGACY_API_WEBHOOKS_SETTINGS_PATHS = {
   ApiWebhooks: 'api-webhooks',
@@ -649,10 +641,6 @@ const createSettingsRouteElements = () => (
       <Route
         path={`${SettingsPath.GraphQLPlayground}`}
         element={<SettingsGraphQLPlayground />}
-      />
-      <Route
-        path={`${SettingsPath.RestPlayground}/*`}
-        element={<SettingsRestPlayground />}
       />
       <Route
         path={SettingsPath.NewApiKey}

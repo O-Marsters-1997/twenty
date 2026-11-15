@@ -1,20 +1,17 @@
 import { useOpenPlayground } from '@/settings/mcp-and-apis/hooks/useOpenPlayground';
 import { SETTINGS_PLAYGROUND_FORM_SCHEMA_SELECT_OPTIONS } from '@/settings/mcp-and-apis/constants/SettingsPlaygroundFormSchemaSelectOptions';
 import { PlaygroundSchemas } from '@/settings/mcp-and-apis/types/PlaygroundSchemas';
-import { PlaygroundTypes } from '@/settings/mcp-and-apis/types/PlaygroundTypes';
 import { Select } from '@/ui/input/components/Select';
 import { styled } from '@linaria/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLingui } from '@lingui/react/macro';
 import { Controller, useForm } from 'react-hook-form';
-import { IconApi, IconBrandGraphql } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
 import { themeCssVariables } from 'twenty-ui/theme';
 import { z } from 'zod';
 
 const playgroundSetupFormSchema = z.object({
   schema: z.enum(PlaygroundSchemas),
-  playgroundType: z.enum(PlaygroundTypes),
 });
 
 type PlaygroundSetupFormValues = z.infer<typeof playgroundSetupFormSchema>;
@@ -23,7 +20,7 @@ const StyledForm = styled.form`
   align-items: end;
   display: grid;
   gap: ${themeCssVariables.spacing[2]};
-  grid-template-columns: 1fr 1fr auto;
+  grid-template-columns: 1fr auto;
   width: 100%;
 `;
 
@@ -40,12 +37,11 @@ export const PlaygroundSetupForm = () => {
     resolver: zodResolver(playgroundSetupFormSchema),
     defaultValues: {
       schema: PlaygroundSchemas.CORE,
-      playgroundType: PlaygroundTypes.REST,
     },
   });
 
   const onSubmit = async (values: PlaygroundSetupFormValues) => {
-    await openPlayground(values.playgroundType, values.schema);
+    await openPlayground(values.schema);
   };
 
   return (
@@ -63,26 +59,6 @@ export const PlaygroundSetupForm = () => {
                 label: t(option.label),
               }),
             )}
-            value={value}
-            onChange={onChange}
-          />
-        )}
-      />
-      <Controller
-        name="playgroundType"
-        control={control}
-        render={({ field: { onChange, value } }) => (
-          <Select
-            dropdownId="apiPlaygroundType"
-            label={t`API`}
-            options={[
-              { value: PlaygroundTypes.REST, label: t`REST`, Icon: IconApi },
-              {
-                value: PlaygroundTypes.GRAPHQL,
-                label: t`GraphQL`,
-                Icon: IconBrandGraphql,
-              },
-            ]}
             value={value}
             onChange={onChange}
           />

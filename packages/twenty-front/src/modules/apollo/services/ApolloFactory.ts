@@ -7,7 +7,6 @@ import {
 import { setContext } from '@apollo/client/link/context';
 import { ErrorLink } from '@apollo/client/link/error';
 import { RetryLink } from '@apollo/client/link/retry';
-import { RestLink } from 'apollo-link-rest';
 import UploadHttpLink from 'apollo-upload-client/UploadHttpLink.mjs';
 
 import { type CurrentWorkspaceMember } from '@/auth/states/currentWorkspaceMemberState';
@@ -15,11 +14,9 @@ import { type CurrentWorkspace } from '@/auth/states/currentWorkspaceState';
 import { getSessionGeneration } from '@/auth/utils/getSessionGeneration';
 import { logDebug } from '~/utils/logDebug';
 
-import { REST_API_BASE_URL } from '@/apollo/constants/RestApiBaseUrl';
 import { type ApolloManager } from '@/apollo/types/ApolloManager';
 import { isUnauthenticatedGraphQLError } from '@/apollo/utils/isUnauthenticatedGraphQLError';
 import { loggerLink } from '@/apollo/utils/loggerLink';
-import { StreamingRestLink } from '@/apollo/utils/streamingRestLink';
 import { i18n } from '@lingui/core';
 import { t } from '@lingui/core/macro';
 import {
@@ -82,16 +79,6 @@ export class ApolloFactory implements ApolloManager {
     const buildApolloLink = (): ApolloLink => {
       const uploadLink = new UploadHttpLink({
         uri,
-        credentials: 'include',
-      });
-
-      const streamingRestLink = new StreamingRestLink({
-        uri: REST_API_BASE_URL,
-        credentials: 'include',
-      });
-
-      const restLink = new RestLink({
-        uri: REST_API_BASE_URL,
         credentials: 'include',
       });
 
@@ -236,8 +223,6 @@ export class ApolloFactory implements ApolloManager {
         ...(extraLinks || []),
         ...(isDebugMode ? [logger] : []),
         retryLink,
-        streamingRestLink,
-        restLink,
         uploadLink,
       ] as ApolloLink[];
 

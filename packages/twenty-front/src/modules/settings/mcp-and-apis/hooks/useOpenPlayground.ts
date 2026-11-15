@@ -9,7 +9,6 @@ import {
   playgroundApiKeyState,
 } from '@/settings/mcp-and-apis/states/playgroundApiKeyState';
 import { type PlaygroundSchemas } from '@/settings/mcp-and-apis/types/PlaygroundSchemas';
-import { PlaygroundTypes } from '@/settings/mcp-and-apis/types/PlaygroundTypes';
 import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
 import { useToast } from 'twenty-ui/components/feedback';
 import { GeneratePlaygroundTokenDocument } from '~/generated-metadata/graphql';
@@ -37,7 +36,7 @@ export const useOpenPlayground = () => {
   );
 
   return useCallback(
-    async (type: PlaygroundTypes, schema: PlaygroundSchemas) => {
+    async (schema: PlaygroundSchemas) => {
       if (
         !isPlaygroundApiKeyFresh(playgroundApiKey, TOKEN_FRESHNESS_BUFFER_MS)
       ) {
@@ -47,11 +46,7 @@ export const useOpenPlayground = () => {
         setPlaygroundApiKey(mintedToken);
       }
 
-      const path =
-        type === PlaygroundTypes.GRAPHQL
-          ? SettingsPath.GraphQLPlayground
-          : SettingsPath.RestPlayground;
-      navigateSettings(path, { schema });
+      navigateSettings(SettingsPath.GraphQLPlayground, { schema });
     },
     [
       playgroundApiKey,
