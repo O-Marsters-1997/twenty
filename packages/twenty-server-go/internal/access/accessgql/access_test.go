@@ -289,6 +289,25 @@ func TestOperations_authorization(t *testing.T) {
 		})
 	}
 
+	t.Run("a role holding only the webhooks flag lists webhooks but cannot create a key", func(t *testing.T) {
+		t.Parallel()
+		const flaggedWorkspaceID = "0b7a6c1e-3f55-4a47-8d6e-6c1f1b7f2a06"
+		h.seedSession(t, "0b7a6c1e-3f55-4a47-8d6e-6c1f1b7f2a05", flaggedWorkspaceID, "Webhook manager", false)
+		_, err := h.pool.Exec(t.Context(), `INSERT INTO core."rolePermissionFlag" ("roleId", "workspaceId", "universalIdentifier", "applicationId", "permissionFlagId")
+			SELECT rt."roleId", $1::uuid, gen_random_uuid(), rt."applicationId", (SELECT id FROM core."permissionFlag" WHERE key = 'API_KEYS_AND_WEBHOOKS')
+			FROM core."roleTarget" rt WHERE rt."userWorkspaceId" = $2::uuid`, workspace.PinnedWorkspaceID, flaggedWorkspaceID)
+		if err != nil {
+			t.Fatalf("insert role permission flag: %v", err)
+		}
+		flagged := h.as(auth.Principal{UserWorkspaceID: flaggedWorkspaceID})
+		if got := flagged.data(t, "GetWebhooks", listWebhooks, nil); got["webhooks"] == nil {
+			t.Errorf("webhooks = %v, want a list", got)
+		}
+		if got := errorCode(t, flagged.send(t, "CreateApiKey", createKey, createKeyVariables)); got != "FORBIDDEN" {
+			t.Errorf("createApiKey error code = %q, want FORBIDDEN without the ROLES permission", got)
+		}
+	})
+
 	t.Run("playground session lists webhooks", func(t *testing.T) {
 		t.Parallel()
 		got := h.as(auth.Principal{UserWorkspaceID: adminUserWorkspaceID, Playground: true}).data(t, "GetWebhooks", listWebhooks, nil)
