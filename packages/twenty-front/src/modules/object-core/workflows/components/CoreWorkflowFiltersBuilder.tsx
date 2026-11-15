@@ -1,9 +1,7 @@
 import { InputLabel } from '@/ui/input/components/internal/InputLabel/InputLabel';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { type StepFilter } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { CoreWorkflowFilterAddRuleButton } from '@/object-core/workflows/components/CoreWorkflowFilterAddRuleButton';
 import { CoreWorkflowFilterColumn } from '@/object-core/workflows/components/CoreWorkflowFilterColumn';
@@ -17,26 +15,28 @@ import { WorkflowStepFilterContext } from '@/workflow/workflow-steps/filters/sta
 import { rootLevelStepFilterGroupComponentSelector } from '@/workflow/workflow-steps/filters/states/rootLevelStepFilterGroupComponentSelector';
 import { type FilterSettings } from '@/workflow/workflow-steps/filters/types/FilterSettings';
 import { isStepFilterGroupChildAStepFilterGroup } from '@/workflow/workflow-steps/filters/utils/isStepFilterGroupChildAStepFilterGroup';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  align-items: start;
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledChildContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[6]};
-  width: 100%;
-`;
-
-const StyledConditions = styled.div`
-  display: flex;
-  flex-direction: column;
-  row-gap: ${themeCssVariables.spacing[0]};
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'start',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+  },
+  childContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-6'],
+    width: '100%',
+  },
+  conditions: {
+    display: 'flex',
+    flexDirection: 'column',
+    rowGap: spacing['--t-spacing-0'],
+  },
+});
 
 type CoreWorkflowFiltersBuilderProps = {
   instanceId: string;
@@ -55,11 +55,11 @@ const CoreWorkflowFiltersBuilderConditions = () => {
     });
 
   return (
-    <StyledConditions>
+    <div {...stylex.props(styles.conditions)}>
       <InputLabel>{t`Conditions`}</InputLabel>
       {isDefined(rootStepFilterGroup) ? (
-        <StyledContainer>
-          <StyledChildContainer>
+        <div {...stylex.props(styles.container)}>
+          <div {...stylex.props(styles.childContainer)}>
             {childStepFiltersAndChildStepFilterGroups
               .filter(
                 (stepFilterGroupChild): stepFilterGroupChild is StepFilter =>
@@ -73,15 +73,15 @@ const CoreWorkflowFiltersBuilderConditions = () => {
                   stepFilterIndex={stepFilterIndex}
                 />
               ))}
-          </StyledChildContainer>
+          </div>
           <CoreWorkflowFilterAddRuleButton
             stepFilterGroup={rootStepFilterGroup}
           />
-        </StyledContainer>
+        </div>
       ) : (
         <WorkflowStepFilterAddRootStepFilterButton />
       )}
-    </StyledConditions>
+    </div>
   );
 };
 

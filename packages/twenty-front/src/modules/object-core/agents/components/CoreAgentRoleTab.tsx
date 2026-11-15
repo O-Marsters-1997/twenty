@@ -1,5 +1,4 @@
 import { getOperationName } from '~/utils/getOperationName';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useState } from 'react';
 import { v4 } from 'uuid';
@@ -15,19 +14,22 @@ import { isDefined } from 'twenty-shared/utils';
 import { Section } from 'twenty-ui/components/layout';
 import { IconPlus } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { useMutation } from '@apollo/client/react';
 import {
   AssignRoleToAgentDocument,
   CreateOneRoleDocument,
 } from '~/generated-metadata/graphql';
 import { type CoreAgentFormValues } from '@/object-core/agents/validation-schemas/coreAgentFormSchema';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledWarningText = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.sm};
-  margin-bottom: ${themeCssVariables.spacing[4]};
-`;
+const styles = stylex.create({
+  warningText: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-sm'],
+    marginBottom: spacing['--t-spacing-4'],
+  },
+});
 
 type CoreAgentRoleTabProps = {
   formValues: CoreAgentFormValues;
@@ -162,9 +164,9 @@ export const CoreAgentRoleTab = ({
           {settingsPersistedRole?.id && (
             <>
               {isRoleShared && (
-                <StyledWarningText>
+                <div {...stylex.props(styles.warningText)}>
                   {t`This role is shared with other users or agents and cannot be edited here.`}
-                </StyledWarningText>
+                </div>
               )}
               <SettingsRolePermissions
                 roleId={settingsPersistedRole.id}

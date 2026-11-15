@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 
 import { AiModelPicker } from '@/ai/components/AiModelPicker';
@@ -12,35 +11,35 @@ import { isDefined } from 'twenty-shared/utils';
 import { Section } from 'twenty-ui/components/layout';
 import { IconTrash } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { type Agent } from '~/generated-metadata/graphql';
 import { CoreAgentDeleteConfirmationModal } from '@/object-core/agents/components/CoreAgentDeleteConfirmationModal';
 import { CoreAgentResponseFormat } from '@/object-core/agents/components/CoreAgentResponseFormat';
 import { computeMetadataNameFromLabel } from '@/object-metadata/utils/computeMetadataNameFromLabel';
 import { type CoreAgentFormValues } from '@/object-core/agents/validation-schemas/coreAgentFormSchema';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
+import * as stylex from '@stylexjs/stylex';
+import { color, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledFormContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledIconNameRow = styled.div`
-  align-items: flex-start;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledNameContainer = styled.div`
-  flex: 1;
-`;
-
-const StyledErrorMessage = styled.div`
-  color: ${themeCssVariables.color.red};
-  font-size: ${themeCssVariables.font.size.sm};
-  margin-top: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  formContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+  },
+  iconNameRow: {
+    alignItems: 'flex-start',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+  },
+  nameContainer: {
+    flex: '1',
+  },
+  errorMessage: {
+    color: color['--t-color-red'],
+    fontSize: fontSize['--t-font-size-sm'],
+    marginTop: spacing['--t-spacing-1'],
+  },
+});
 
 const DELETE_AGENT_MODAL_ID = 'delete-agent-modal';
 
@@ -73,9 +72,9 @@ export const CoreAgentSettingsTab = ({
   };
 
   return (
-    <StyledFormContainer>
-      <StyledFormContainer>
-        <StyledIconNameRow>
+    <div {...stylex.props(styles.formContainer)}>
+      <div {...stylex.props(styles.formContainer)}>
+        <div {...stylex.props(styles.iconNameRow)}>
           <IconPicker
             selectedIconKey={formValues.icon || 'IconLego'}
             onChange={({ iconKey }) => {
@@ -84,7 +83,7 @@ export const CoreAgentSettingsTab = ({
             disabled={disabled}
           />
 
-          <StyledNameContainer>
+          <div {...stylex.props(styles.nameContainer)}>
             <SettingsTextInput
               instanceId="agent-label-input"
               placeholder={t`Enter agent name*`}
@@ -96,10 +95,10 @@ export const CoreAgentSettingsTab = ({
               fullWidth
               disabled={disabled}
             />
-          </StyledNameContainer>
-        </StyledIconNameRow>
-      </StyledFormContainer>
-      <StyledFormContainer>
+          </div>
+        </div>
+      </div>
+      <div {...stylex.props(styles.formContainer)}>
         <TextArea
           textAreaId="agent-description-textarea"
           placeholder={t`Write a description for this agent`}
@@ -108,12 +107,12 @@ export const CoreAgentSettingsTab = ({
           onChange={(value) => onFieldChange('description', value)}
           disabled={disabled}
         />
-      </StyledFormContainer>
-      <StyledFormContainer>
+      </div>
+      <div {...stylex.props(styles.formContainer)}>
         {noModelsAvailable ? (
-          <StyledErrorMessage>
+          <div {...stylex.props(styles.errorMessage)}>
             {t`No AI provider is configured on this instance.`}
-          </StyledErrorMessage>
+          </div>
         ) : (
           <AiModelPicker
             modelId={formValues.modelId}
@@ -121,9 +120,9 @@ export const CoreAgentSettingsTab = ({
             disabled={disabled}
           />
         )}
-      </StyledFormContainer>
+      </div>
       {formValues.modelId && (
-        <StyledFormContainer>
+        <div {...stylex.props(styles.formContainer)}>
           <SettingsAgentModelCapabilities
             selectedModelId={formValues.modelId}
             modelConfiguration={formValues.modelConfiguration || {}}
@@ -132,9 +131,9 @@ export const CoreAgentSettingsTab = ({
             }
             disabled={disabled}
           />
-        </StyledFormContainer>
+        </div>
       )}
-      <StyledFormContainer>
+      <div {...stylex.props(styles.formContainer)}>
         <TextArea
           textAreaId="agent-prompt-textarea"
           label={t`System Prompt`}
@@ -145,8 +144,8 @@ export const CoreAgentSettingsTab = ({
           onChange={(value) => onFieldChange('prompt', value)}
           disabled={disabled}
         />
-      </StyledFormContainer>
-      <StyledFormContainer>
+      </div>
+      <div {...stylex.props(styles.formContainer)}>
         <CoreAgentResponseFormat
           responseFormat={formValues.responseFormat}
           onResponseFormatChange={(format) =>
@@ -154,7 +153,7 @@ export const CoreAgentSettingsTab = ({
           }
           disabled={disabled}
         />
-      </StyledFormContainer>
+      </div>
       {!disabled && agent && formValues.isCustom && (
         <Section.Root>
           <Section.Header
@@ -175,6 +174,6 @@ export const CoreAgentSettingsTab = ({
           agentName={agent.label}
         />
       )}
-    </StyledFormContainer>
+    </div>
   );
 };

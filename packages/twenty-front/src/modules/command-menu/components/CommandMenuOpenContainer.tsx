@@ -1,3 +1,4 @@
+import * as stylex from '@stylexjs/stylex';
 import { COMMAND_MENU_CLICK_OUTSIDE_ID } from '@/command-menu/constants/CommandMenuClickOutsideId';
 import { RECORD_CHIP_CLICK_OUTSIDE_ID } from '@/object-record/record-table/constants/RecordChipClickOutsideId';
 import { SIDE_PANEL_ANIMATION_VARIANTS } from '@/side-panel/constants/SidePanelAnimationVariants';
@@ -17,29 +18,37 @@ import { WORKFLOW_DIAGRAM_CREATE_STEP_NODE_CLICK_OUTSIDE_ID } from '@/workflow/w
 import { WORKFLOW_DIAGRAM_STEP_NODE_BASE_CLICK_OUTSIDE_ID } from '@/workflow/workflow-diagram/constants/WorkflowDiagramStepNodeClickOutsideId';
 import { WORKFLOW_DIAGRAM_EDGE_OPTIONS_CLICK_OUTSIDE_ID } from '@/workflow/workflow-diagram/workflow-edges/constants/WorkflowDiagramEdgeOptionsClickOutsideId';
 import { useStore } from 'jotai';
+import {
+  background,
+  borderColor,
+  boxShadow,
+  font,
+} from 'twenty-ui/theme/tokens.stylex';
 
 import { LINK_CHIP_CLICK_OUTSIDE_ID } from '@/ui/navigation/link/constants/LinkChipClickOutsideId';
-import { styled } from '@linaria/react';
 import { motion } from 'framer-motion';
 import { useCallback, useRef } from 'react';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import { useIsMobile } from 'twenty-ui/utilities';
-const StyledCommandMenuBase = styled.div`
-  background: ${themeCssVariables.background.primary};
-  border-left: 1px solid ${themeCssVariables.border.color.medium};
-  box-shadow: ${themeCssVariables.boxShadow.strong};
-  display: flex;
-  flex-direction: column;
-  font-family: ${themeCssVariables.font.family};
-  height: 100%;
-  overflow: hidden;
-  padding: 0;
-  position: fixed;
-  right: 0%;
-  top: 0%;
-  z-index: ${RootStackingContextZIndices.SidePanel};
-`;
-const StyledCommandMenu = motion.create(StyledCommandMenuBase);
+const styles = stylex.create({
+  commandMenu: {
+    backgroundColor: background['--t-background-primary'],
+    borderLeftColor: borderColor['--t-border-color-medium'],
+    borderLeftStyle: 'solid',
+    borderLeftWidth: '1px',
+    boxShadow: boxShadow['--t-box-shadow-strong'],
+    display: 'flex',
+    flexDirection: 'column',
+    fontFamily: font['--t-font-family'],
+    height: '100%',
+    overflow: 'hidden',
+    padding: 0,
+    position: 'fixed',
+    right: '0%',
+    top: '0%',
+  },
+  zIndex: (zIndex: number) => ({ zIndex }),
+});
 
 export const CommandMenuOpenContainer = ({
   children,
@@ -88,7 +97,11 @@ export const CommandMenuOpenContainer = ({
   });
 
   return (
-    <StyledCommandMenu
+    <motion.div
+      {...stylex.props(
+        styles.commandMenu,
+        styles.zIndex(RootStackingContextZIndices.SidePanel),
+      )}
       data-testid="command-menu"
       data-click-outside-id={COMMAND_MENU_CLICK_OUTSIDE_ID}
       ref={commandMenuRef}
@@ -103,6 +116,6 @@ export const CommandMenuOpenContainer = ({
       onAnimationComplete={() => setIsSidePanelAnimating(false)}
     >
       {children}
-    </StyledCommandMenu>
+    </motion.div>
   );
 };

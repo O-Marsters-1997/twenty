@@ -3,17 +3,19 @@ import { fieldsToSchema } from '@/ai/utils/fieldsToSchema';
 import { schemaToFields } from '@/ai/utils/schemaToFields';
 import { Select } from '@/ui/input/components/Select';
 import { AgentOutputSchemaBuilder } from '@/ai/components/AgentOutputSchemaBuilder';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { useState } from 'react';
 import { type AgentResponseSchema } from 'twenty-shared/ai';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+  },
+});
 
 type CoreAgentResponseFormatProps = {
   responseFormat?: {
@@ -64,7 +66,7 @@ export const CoreAgentResponseFormat = ({
   };
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <Select
         dropdownId="agent-response-format-type"
         label={t`Response Format`}
@@ -85,6 +87,6 @@ export const CoreAgentResponseFormat = ({
           readonly={disabled}
         />
       )}
-    </StyledContainer>
+    </div>
   );
 };

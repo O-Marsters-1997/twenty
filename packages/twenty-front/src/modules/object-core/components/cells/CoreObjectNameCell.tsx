@@ -1,26 +1,28 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { isDefined } from 'twenty-shared/utils';
 import { type IconComponent } from 'twenty-ui/icon';
 import { Avatar, type AvatarShape } from 'twenty-ui/primitives/data-display';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
-import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.primary};
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  min-width: 0;
-  overflow: hidden;
-`;
-
-const StyledAvatarContainer = styled.span`
-  align-items: center;
-  display: flex;
-  flex-shrink: 0;
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-primary'],
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    minWidth: '0',
+    overflow: 'hidden',
+  },
+  avatarContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexShrink: '0',
+  },
+});
 
 type CoreObjectNameCellProps = {
   name: string | null | undefined;
@@ -39,8 +41,8 @@ export const CoreObjectNameCell = ({
   const theme = useTheme();
 
   return (
-    <StyledContainer>
-      <StyledAvatarContainer>
+    <div {...stylex.props(styles.container)}>
+      <span {...stylex.props(styles.avatarContainer)}>
         {isDefined(Icon) ? (
           <span aria-hidden>
             <Icon size={theme.icon.size.md} stroke={theme.icon.stroke.sm} />
@@ -53,10 +55,10 @@ export const CoreObjectNameCell = ({
             shape={avatarShape}
           />
         )}
-      </StyledAvatarContainer>
+      </span>
       <OverflowingTextWithTooltip
         text={isNonEmptyString(name) ? name : t`Untitled`}
       />
-    </StyledContainer>
+    </div>
   );
 };

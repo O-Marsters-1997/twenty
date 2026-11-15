@@ -1,3 +1,4 @@
+import * as stylex from '@stylexjs/stylex';
 import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent';
 import { DropdownRoot } from '@/ui/layout/dropdown/components/DropdownRoot';
 import { MultiWorkspaceDropdownClickableComponent } from '@/navigation/components/MultiWorkspaceDropdown/internal/MultiWorkspaceDropdownClickableComponent';
@@ -7,13 +8,13 @@ import { MultiWorkspaceDropdownThemesComponents } from '@/navigation/components/
 import { MultiWorkspaceDropdownWorkspacesListComponents } from '@/navigation/components/MultiWorkspaceDropdown/internal/MultiWorkspaceDropdownWorkspacesListComponents';
 import { MULTI_WORKSPACE_DROPDOWN_ID } from '@/navigation/constants/MultiWorkspaceDropdownId';
 import { MULTI_WORKSPACE_DROPDOWN_MOBILE_BOUNDARY_PADDING } from '@/navigation/constants/MultiWorkspaceDropdownMobileBoundaryPadding';
-import { styled } from '@linaria/react';
 import { Dropdown } from 'twenty-ui/components/navigation';
 import { useIsMobile } from 'twenty-ui/utilities';
 
-const StyledTrigger = styled.div<{ shouldHideLabel: boolean }>`
-  width: ${({ shouldHideLabel }) => (shouldHideLabel ? 'auto' : '100%')};
-`;
+const styles = stylex.create({
+  trigger: { width: '100%' },
+  triggerAuto: { width: 'auto' },
+});
 
 type MultiWorkspaceDropdownButtonProps = {
   shouldHideLabel?: boolean;
@@ -29,7 +30,14 @@ export const MultiWorkspaceDropdownButton = ({
     <DropdownRoot dropdownId={MULTI_WORKSPACE_DROPDOWN_ID} type="menu">
       <Dropdown.Trigger
         nativeButton={false}
-        render={<StyledTrigger shouldHideLabel={shouldHideLabel} />}
+        render={
+          <div
+            {...stylex.props(
+              styles.trigger,
+              shouldHideLabel && styles.triggerAuto,
+            )}
+          />
+        }
       >
         <MultiWorkspaceDropdownClickableComponent
           shouldHideLabel={shouldHideLabel}

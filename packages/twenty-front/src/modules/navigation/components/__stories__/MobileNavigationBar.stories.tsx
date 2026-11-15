@@ -1,7 +1,6 @@
 import { MobileNavigationBar } from '@/navigation/components/MobileNavigationBar';
 import { isSidePanelOpenedState } from '@/side-panel/states/isSidePanelOpenedState';
 import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
-import { styled } from '@linaria/react';
 import { type Meta, type StoryObj } from '@storybook/react-vite';
 import { MemoryRouter } from 'react-router-dom';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
@@ -9,12 +8,15 @@ import { Button } from 'twenty-ui/primitives/input';
 import { ComponentDecorator } from 'twenty-ui/testing';
 import { ObjectMetadataItemsDecorator } from '~/testing/decorators/ObjectMetadataItemsDecorator';
 import { ToastDecorator } from '~/testing/decorators/ToastDecorator';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledFrame = styled.div`
-  height: 240px;
-  position: relative;
-  width: 320px;
-`;
+const styles = stylex.create({
+  frame: {
+    height: '240px',
+    position: 'relative',
+    width: '320px',
+  },
+});
 
 const VisibilityControl = () => {
   const [isSidePanelOpened, setIsSidePanelOpened] = useAtomState(
@@ -39,9 +41,9 @@ const meta: Meta<StoryArgs> = {
     ToastDecorator,
     (Story, { args }) => (
       <MemoryRouter initialEntries={[args.routePath]}>
-        <StyledFrame>
+        <div {...stylex.props(styles.frame)}>
           <Story />
-        </StyledFrame>
+        </div>
       </MemoryRouter>
     ),
   ],

@@ -1,11 +1,10 @@
 import { NavigationMenuItemAddDropdown } from '@/navigation-menu-item/edit/components/NavigationMenuItemAddDropdown';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useCallback, useContext, useMemo } from 'react';
 import { LightIconButton } from 'twenty-ui/components/input';
 import { IconHeartOff, IconPlus } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { type NavigationMenuItem } from '~/generated-metadata/graphql';
+import { general } from 'twenty-ui/theme/tokens.stylex';
 
 import { NavigationMenuItemDroppableIds } from '@/navigation-menu-item/common/constants/NavigationMenuItemDroppableIds';
 import { NavigationSections } from '@/navigation-menu-item/common/constants/NavigationSections';
@@ -24,18 +23,20 @@ import { NavigationMenuItemSection } from '@/navigation-menu-item/display/sectio
 import { useNavigationSection } from '@/ui/navigation/navigation-drawer/hooks/useNavigationSection';
 import { isNavigationSectionOpenFamilyState } from '@/ui/navigation/navigation-drawer/states/isNavigationSectionOpenFamilyState';
 import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.betweenSiblingsGap};
-`;
-
-const StyledListItemRow = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-`;
+const styles = stylex.create({
+  listItemRow: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '0',
+  },
+  list: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: general['--t-between-siblings-gap'],
+  },
+});
 
 const ORPHAN_DROPPABLE_ID =
   NavigationMenuItemDroppableIds.FAVORITE_ORPHAN_NAVIGATION_MENU_ITEMS;
@@ -119,9 +120,9 @@ export const FavoritesSection = () => {
         </NavigationMenuItemAddDropdown>
       }
     >
-      <StyledList>
+      <div {...stylex.props(styles.list)}>
         {topLevelItems.map((item, index) => (
-          <StyledListItemRow key={item.id}>
+          <div key={item.id} {...stylex.props(styles.listItemRow)}>
             {index === 0 ? (
               <NavigationMenuItemDroppableSlot
                 droppableId={ORPHAN_DROPPABLE_ID}
@@ -162,7 +163,7 @@ export const FavoritesSection = () => {
                 }
               />
             </NavigationMenuItemSortableItem>
-          </StyledListItemRow>
+          </div>
         ))}
         <NavigationMenuItemDroppableSlot
           droppableId={ORPHAN_DROPPABLE_ID}
@@ -176,7 +177,7 @@ export const FavoritesSection = () => {
             droppableId={ORPHAN_DROPPABLE_ID}
           />
         </NavigationMenuItemDroppableSlot>
-      </StyledList>
+      </div>
     </NavigationMenuItemSection>
   );
 };

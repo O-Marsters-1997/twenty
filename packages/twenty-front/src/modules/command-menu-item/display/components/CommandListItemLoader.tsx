@@ -1,20 +1,21 @@
-import { styled } from '@linaria/react';
 import { getCommandMenuItemProgressLabel } from '@/command-menu-item/utils/getCommandMenuItemProgressLabel';
 import { isDefined } from 'twenty-shared/utils';
 import { Loader } from 'twenty-ui/primitives/feedback';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledProgressText = styled.span`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.sm};
-  white-space: nowrap;
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+  },
+  progressText: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-sm'],
+    whiteSpace: 'nowrap',
+  },
+});
 
 export const CommandListItemLoader = ({ progress }: { progress?: number }) => {
   if (!isDefined(progress)) {
@@ -22,11 +23,11 @@ export const CommandListItemLoader = ({ progress }: { progress?: number }) => {
   }
 
   return (
-    <StyledContainer>
-      <StyledProgressText>
+    <div {...stylex.props(styles.container)}>
+      <span {...stylex.props(styles.progressText)}>
         {getCommandMenuItemProgressLabel(progress)}
-      </StyledProgressText>
+      </span>
       <Loader />
-    </StyledContainer>
+    </div>
   );
 };

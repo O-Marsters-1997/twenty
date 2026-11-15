@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { Key } from 'ts-key-enum';
 
 import { useObjectMetadataItemById } from '@/object-metadata/hooks/useObjectMetadataItemById';
@@ -37,15 +36,21 @@ import { viewPickerTypeComponentState } from '@/views/view-picker/states/viewPic
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMemo, useState } from 'react';
 import { IconX } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledFieldAvailableContainer = styled.div`
-  color: ${themeCssVariables.font.color.light};
-  display: flex;
-  margin: ${themeCssVariables.spacing[1]} ${themeCssVariables.spacing[2]};
-  user-select: none;
-  width: calc(100% - ${themeCssVariables.spacing[4]});
-`;
+const styles = stylex.create({
+  fieldAvailableContainer: {
+    color: fontColor['--t-font-color-light'],
+    display: 'flex',
+    marginTop: spacing['--t-spacing-1'],
+    marginRight: spacing['--t-spacing-2'],
+    marginBottom: spacing['--t-spacing-1'],
+    marginLeft: spacing['--t-spacing-2'],
+    userSelect: 'none',
+    width: `calc(100% - ${spacing['--t-spacing-4']})`,
+  },
+});
 
 export const ViewPickerContentCreateMode = () => {
   const { t } = useLingui();
@@ -218,11 +223,11 @@ export const ViewPickerContentCreateMode = () => {
               />
             </ViewPickerSelectContainer>
             {availableFieldsForGrouping.length === 0 && (
-              <StyledFieldAvailableContainer>
+              <div {...stylex.props(styles.fieldAvailableContainer)}>
                 <Trans>
                   Set up a Select field on {objectLabel} to create a Kanban
                 </Trans>
-              </StyledFieldAvailableContainer>
+              </div>
             )}
           </>
         )}
@@ -249,11 +254,11 @@ export const ViewPickerContentCreateMode = () => {
               />
             </ViewPickerSelectContainer>
             {availableFieldsForCalendar.length === 0 && (
-              <StyledFieldAvailableContainer>
+              <div {...stylex.props(styles.fieldAvailableContainer)}>
                 <Trans>
                   Set up a Date field on {objectLabel} to create a Calendar
                 </Trans>
-              </StyledFieldAvailableContainer>
+              </div>
             )}
           </>
         )}

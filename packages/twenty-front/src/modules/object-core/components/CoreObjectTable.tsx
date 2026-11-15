@@ -101,12 +101,13 @@ export const CoreObjectTable = <TItem,>({
         )}
       </TableRow>
       <CoreObjectTableBody>
-        {items.map((item) => {
+        {items.map((item, index) => {
           const rowId = getItemKey(item);
 
           return (
             <CoreObjectTableRow
               key={rowId}
+              isLast={index === items.length - 1}
               gridTemplateColumns={gridTemplateColumns}
               to={getItemLink?.(item)}
             >

@@ -1,5 +1,5 @@
+import * as stylex from '@stylexjs/stylex';
 import { NavigationDrawerAiChatContent } from '@/ai/components/NavigationDrawerAiChatContent';
-import { styled } from '@linaria/react';
 import { type ReactNode } from 'react';
 
 type NavigationDrawerTabbedContentProps = {
@@ -8,9 +8,10 @@ type NavigationDrawerTabbedContentProps = {
   navigationContent: ReactNode;
 };
 
-const StyledTabContent = styled.div<{ isHidden: boolean }>`
-  display: ${({ isHidden }) => (isHidden ? 'none' : 'contents')};
-`;
+const styles = stylex.create({
+  tabContent: { display: 'contents' },
+  tabContentHidden: { display: 'none' },
+});
 
 export const NavigationDrawerTabbedContent = ({
   showAiChatContent,
@@ -19,13 +20,23 @@ export const NavigationDrawerTabbedContent = ({
 }: NavigationDrawerTabbedContentProps) => {
   return (
     <>
-      <StyledTabContent isHidden={showAiChatContent}>
+      <div
+        {...stylex.props(
+          styles.tabContent,
+          showAiChatContent && styles.tabContentHidden,
+        )}
+      >
         {navigationContent}
-      </StyledTabContent>
+      </div>
       {shouldMountAiChatContent && (
-        <StyledTabContent isHidden={!showAiChatContent}>
+        <div
+          {...stylex.props(
+            styles.tabContent,
+            !showAiChatContent && styles.tabContentHidden,
+          )}
+        >
           <NavigationDrawerAiChatContent />
-        </StyledTabContent>
+        </div>
       )}
     </>
   );

@@ -1,10 +1,11 @@
-import { styled } from '@linaria/react';
-
 import { useCoreObjectTableFetchMore } from '@/object-core/hooks/useCoreObjectTableFetchMore';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledFetchMoreTrigger = styled.div`
-  height: 1px;
-`;
+const styles = stylex.create({
+  fetchMoreTrigger: {
+    height: '1px',
+  },
+});
 
 type CoreObjectTableFetchMoreTriggerProps = {
   isFetchingNextPage: boolean;
@@ -20,5 +21,5 @@ export const CoreObjectTableFetchMoreTrigger = ({
     onFetchNextPage,
   });
 
-  return <StyledFetchMoreTrigger ref={ref} />;
+  return <div ref={ref} {...stylex.props(styles.fetchMoreTrigger)} />;
 };

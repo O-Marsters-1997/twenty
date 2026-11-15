@@ -7,39 +7,50 @@ import { useResetRecordIndexSelection } from '@/object-record/record-index/hooks
 import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent';
 import { DropdownRoot } from '@/ui/layout/dropdown/components/DropdownRoot';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { Dropdown } from 'twenty-ui/components/navigation';
 import { IconChevronDown, IconSquareCheck, IconSquareX } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const DROPDOWN_ID = 'command-menu-edit-record-selection-dropdown';
 
-const StyledClickableArea = styled.div`
-  align-items: center;
-  background-color: ${themeCssVariables.background.transparent.lighter};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  cursor: pointer;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  height: 24px;
-  padding-left: ${themeCssVariables.spacing[2]};
-  padding-right: ${themeCssVariables.spacing[1]};
-
-  &[data-disabled] {
-    cursor: not-allowed;
-    opacity: 0.5;
-  }
-`;
-
-const StyledLabel = styled.span`
-  color: ${themeCssVariables.font.color.primary};
-  font-size: ${themeCssVariables.font.size.md};
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
+const styles = stylex.create({
+  label: {
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-md'],
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  clickableArea: {
+    alignItems: 'center',
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
+    borderColor: borderColor['--t-border-color-medium'],
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    cursor: 'pointer',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    height: '24px',
+    paddingLeft: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-1'],
+  },
+  clickableAreaDisabled: {
+    cursor: 'not-allowed',
+    opacity: 0.5,
+  },
+});
 
 type CommandMenuItemEditRecordSelectionDropdownProps = {
   isRecordPage?: boolean;
@@ -77,7 +88,11 @@ export const CommandMenuItemEditRecordSelectionDropdown = ({
     <DropdownRoot dropdownId={DROPDOWN_ID} type="picker">
       <Dropdown.Trigger
         render={
-          <StyledClickableArea
+          <div
+            {...stylex.props(
+              styles.clickableArea,
+              isRecordPage && styles.clickableAreaDisabled,
+            )}
             data-click-outside-id={COMMAND_MENU_DROPDOWN_CLICK_OUTSIDE_ID}
           />
         }
@@ -89,7 +104,7 @@ export const CommandMenuItemEditRecordSelectionDropdown = ({
           color={theme.font.color.primary}
           stroke={theme.icon.stroke.sm}
         />
-        <StyledLabel>{triggerLabel}</StyledLabel>
+        <span {...stylex.props(styles.label)}>{triggerLabel}</span>
         <IconChevronDown
           size={16}
           color={theme.font.color.primary}

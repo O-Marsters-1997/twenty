@@ -1,3 +1,4 @@
+import * as stylex from '@stylexjs/stylex';
 import { ListItemButton } from 'twenty-ui/components/navigation';
 import { useObjectMetadataItemById } from '@/object-metadata/hooks/useObjectMetadataItemById';
 import { availableFieldMetadataItemsForFilterFamilySelector } from '@/object-metadata/states/availableFieldMetadataItemsForFilterFamilySelector';
@@ -10,6 +11,7 @@ import { useAtomComponentFamilyStateValue } from '@/ui/utilities/state/jotai/hoo
 import { useAtomComponentSelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentSelectorValue';
 import { useAtomFamilySelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilySelectorValue';
 import { VIEW_BAR_FILTER_BOTTOM_MENU_ITEM_IDS } from '@/views/constants/ViewBarFilterBottomMenuItemIds';
+import { color } from 'twenty-ui/theme/tokens.stylex';
 
 import { useChildRecordFiltersAndRecordFilterGroups } from '@/object-record/advanced-filter/hooks/useChildRecordFiltersAndRecordFilterGroups';
 import { useSetRecordFilterUsedInAdvancedFilterDropdownRow } from '@/object-record/advanced-filter/hooks/useSetRecordFilterUsedInAdvancedFilterDropdownRow';
@@ -21,22 +23,20 @@ import { useOpenDropdown } from '@/ui/layout/dropdown/hooks/useOpenDropdown';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { useGetCurrentViewOnly } from '@/views/hooks/useGetCurrentViewOnly';
 import { getViewBarAdvancedFilterDropdownId } from '@/views/utils/getViewBarAdvancedFilterDropdownId';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { flushSync } from 'react-dom';
 import { RecordFilterGroupLogicalOperator } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 import { IconFilter } from 'twenty-ui/icon';
 import { Badge } from 'twenty-ui/primitives/data-display';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { v4 } from 'uuid';
 
-const StyledBadgeContainer = styled.span`
-  > span[data-badge-size] {
-    background: ${themeCssVariables.color.blue3};
-    color: ${themeCssVariables.color.blue};
-  }
-`;
+const styles = stylex.create({
+  badge: {
+    backgroundColor: color['--t-color-blue3'],
+    color: color['--t-color-blue'],
+  },
+});
 
 export const ViewBarFilterDropdownAdvancedFilterButton = () => {
   const rootRecordFilterGroup = useAtomComponentSelectorValue(
@@ -155,9 +155,9 @@ export const ViewBarFilterDropdownAdvancedFilterButton = () => {
         focused={isSelectedItemId}
         endIcon={
           advancedFilterQuerySubFilterCount > 0 ? (
-            <StyledBadgeContainer>
-              <Badge>{advancedFilterQuerySubFilterCount.toString()}</Badge>
-            </StyledBadgeContainer>
+            <Badge {...stylex.props(styles.badge)}>
+              {advancedFilterQuerySubFilterCount.toString()}
+            </Badge>
           ) : undefined
         }
       >{t`Advanced filter`}</ListItemButton>

@@ -1,5 +1,13 @@
-import { styled } from '@linaria/react';
+import { type ComponentProps } from 'react';
+import * as stylex from '@stylexjs/stylex';
 import React from 'react';
+import {
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 import { objectFilterDropdownSearchInputComponentState } from '@/object-record/object-filter-dropdown/states/objectFilterDropdownSearchInputComponentState';
 
@@ -24,33 +32,36 @@ import { DropdownComponentInstanceContext } from '@/ui/layout/dropdown/contexts/
 import { useAvailableComponentInstanceIdOrThrow } from '@/ui/utilities/state/component-state/hooks/useAvailableComponentInstanceIdOrThrow';
 import { useLingui } from '@lingui/react/macro';
 import { IconX } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
 
-export const StyledInput = styled.input`
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  border-radius: 0;
-  border-top: none;
-  border-top-left-radius: ${themeCssVariables.border.radius.md};
-  border-top-right-radius: ${themeCssVariables.border.radius.md};
-  color: ${themeCssVariables.font.color.primary};
-  font-family: inherit;
-  font-size: ${themeCssVariables.font.size.sm};
-  font-weight: inherit;
-  margin: 0;
-  max-width: 100%;
-  min-height: 19px;
+const styles = stylex.create({
+  input: {
+    backgroundColor: 'transparent',
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
+    borderLeftWidth: 0,
+    borderRightWidth: 0,
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    borderTopWidth: 0,
+    color: fontColor['--t-font-color-primary'],
+    fontFamily: 'inherit',
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: 'inherit',
+    margin: 0,
+    maxWidth: '100%',
+    minHeight: '19px',
+    outline: 'none',
+    overflow: 'hidden',
+    padding: spacing['--t-spacing-2'],
+    textDecoration: 'none',
+    '::placeholder': { color: fontColor['--t-font-color-light'] },
+  },
+});
 
-  outline: none;
-  overflow: hidden;
-  padding: ${themeCssVariables.spacing[2]};
-  text-decoration: none;
-
-  &::placeholder {
-    color: ${themeCssVariables.font.color.light};
-  }
-`;
+export const StyledInput = (props: ComponentProps<'input'>) => (
+  <input {...props} {...stylex.props(styles.input)} />
+);
 
 export const ViewBarFilterDropdownFieldSelectMenu = () => {
   const [objectFilterDropdownSearchInput, setObjectFilterDropdownSearchInput] =

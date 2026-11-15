@@ -10,37 +10,42 @@ import { NavigationDrawerSection } from '@/ui/navigation/navigation-drawer/compo
 import { isAdvancedModeEnabledState } from '@/ui/navigation/navigation-drawer/states/isAdvancedModeEnabledState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useIsFeatureEnabled } from '@/workspace/hooks/useIsFeatureEnabled';
-import { css } from '@linaria/core';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { useIsMobile } from 'twenty-ui/utilities';
 import { FeatureFlagKey } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledAdvancedSwitchFixedContent = styled.div<{ isMobile: boolean }>`
-  border-top: 1px solid ${themeCssVariables.border.color.light};
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-  height: ${({ isMobile }) => (isMobile ? 'auto' : TAB_LIST_HEIGHT)};
-  justify-content: center;
-  margin-bottom: ${({ isMobile }) =>
-    isMobile ? '0' : `calc(-1 * ${themeCssVariables.spacing[4]})`};
-  margin-top: auto;
-  padding-bottom: ${({ isMobile }) =>
-    isMobile ? MOBILE_NAVIGATION_BAR_CLEARANCE : '0'};
-  padding-left: ${({ isMobile }) =>
-    isMobile ? themeCssVariables.spacing[5] : '0'};
-  padding-right: ${({ isMobile }) =>
-    isMobile ? themeCssVariables.spacing[5] : '0'};
-  padding-top: ${({ isMobile }) =>
-    isMobile ? themeCssVariables.spacing[2] : '0'};
-`;
-
-const advancedSettingsSwitchClassName = css`
-  padding-right: 0;
-`;
+const styles = stylex.create({
+  advancedSettingsSwitchClassName: {
+    paddingRight: '0',
+  },
+  fixedContent: {
+    borderTopColor: borderColor['--t-border-color-light'],
+    borderTopStyle: 'solid',
+    borderTopWidth: '1px',
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    flexShrink: 0,
+    justifyContent: 'center',
+    marginBottom: `calc(-1 * ${spacing['--t-spacing-4']})`,
+    marginTop: 'auto',
+    paddingBottom: 0,
+    paddingLeft: 0,
+    paddingRight: 0,
+    paddingTop: 0,
+  },
+  fixedContentHeight: (height: string) => ({ height }),
+  fixedContentMobile: {
+    height: 'auto',
+    marginBottom: 0,
+    paddingLeft: spacing['--t-spacing-5'],
+    paddingRight: spacing['--t-spacing-5'],
+    paddingTop: spacing['--t-spacing-2'],
+  },
+  fixedContentClearance: (paddingBottom: string) => ({ paddingBottom }),
+});
 
 export const SettingsNavigationDrawerContent = () => {
   const { t } = useLingui();
@@ -58,7 +63,17 @@ export const SettingsNavigationDrawerContent = () => {
         <SettingsNavigationDrawerItems />
       </NavigationDrawerScrollableContent>
 
-      <StyledAdvancedSwitchFixedContent isMobile={isMobile}>
+      <div
+        {...stylex.props(
+          styles.fixedContent,
+          isMobile
+            ? [
+                styles.fixedContentMobile,
+                styles.fixedContentClearance(MOBILE_NAVIGATION_BAR_CLEARANCE),
+              ]
+            : styles.fixedContentHeight(TAB_LIST_HEIGHT),
+        )}
+      >
         <NavigationDrawerSection>
           {isLogsSettingsSectionEnabled ? (
             <DeveloperModeSwitch
@@ -68,7 +83,7 @@ export const SettingsNavigationDrawerContent = () => {
             />
           ) : (
             <AdvancedSettingsSwitch
-              className={advancedSettingsSwitchClassName}
+              {...stylex.props(styles.advancedSettingsSwitchClassName)}
               isAdvancedModeEnabled={isAdvancedModeEnabled}
               setIsAdvancedModeEnabled={setAdvancedMode}
               label={t`Advanced`}
@@ -76,7 +91,7 @@ export const SettingsNavigationDrawerContent = () => {
             />
           )}
         </NavigationDrawerSection>
-      </StyledAdvancedSwitchFixedContent>
+      </div>
     </>
   );
 };
