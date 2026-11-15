@@ -17,7 +17,6 @@ CreateCalendarEvent
 CreateFileUpload
 CreateManyNavigationMenuItems
 CreateNewWorkspaceLogoUpload
-CreateOneIndexMetadataItem
 CreateOneRole
 CreateUnsubscribeTopic
 CreateValidationRule
@@ -25,7 +24,6 @@ CurrentUserSessions
 DeleteApprovedAccessDomain
 DeleteCurrentWorkspace
 DeleteManyNavigationMenuItems
-DeleteOneIndexMetadataItem
 DeleteOneRole
 DeleteUnsubscribeTopic
 DeleteUserAccount
@@ -81,7 +79,6 @@ GetWorkspaceInvitations
 GoBackToPreviousOnboardingStep
 LineChartData
 MessageSuppressions
-MetadataTranslations
 MostlyEmptyFieldMetadataIds
 MyMessageFolders
 ObjectRecordCounts

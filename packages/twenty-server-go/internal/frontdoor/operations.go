@@ -56,6 +56,9 @@ func DefaultTable() OperationTable {
 			"CreateOneFieldMetadataItem":  RouteBlocked,
 			"UpdateOneFieldMetadataItem":  RouteBlocked,
 			"DeleteOneFieldMetadataItem":  RouteBlocked,
+			"CreateOneIndexMetadataItem":  RouteBlocked,
+			"DeleteOneIndexMetadataItem":  RouteBlocked,
+			"MetadataTranslations":        RouteBlocked,
 			"SendEmail":                   RouteGo,
 		},
 	}
