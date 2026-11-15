@@ -4,9 +4,9 @@
     background: transparent !important;
     width: 6px;
     height: 6px;
-    min-height: 6px;
-    min-width: 6px;
-    pointer-events: none;
+    min-height: 6px !important;
+    min-width: 6px !important;
+    pointer-events: none !important;
   }
 
   [data-settings-data-model-overview] .left-handle {

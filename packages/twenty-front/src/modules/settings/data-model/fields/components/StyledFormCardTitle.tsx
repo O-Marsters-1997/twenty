@@ -19,7 +19,9 @@ export const StyledFormCardTitle = ({
   const stylexProps = stylex.props(styles.title);
 
   return (
-    <h3 className={[stylexProps.className, className].join(' ')}>{children}</h3>
+    <h3 className={[stylexProps.className, className].filter(Boolean).join(' ')}>
+      {children}
+    </h3>
   );
 };
 
