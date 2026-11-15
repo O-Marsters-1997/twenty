@@ -109,3 +109,197 @@ type Mutation {
   generateApiKeyToken(apiKeyId: UUID!, expiresAt: String!): ApiKeyToken!
   generatePlaygroundToken: AuthToken!
 }
+
+scalar JSON
+
+type FullName {
+  firstName: String!
+  lastName: String!
+}
+
+type WorkspaceMember {
+  id: UUID!
+  name: FullName!
+  avatarUrl: String
+  userEmail: String!
+  userId: UUID!
+  userWorkspaceId: UUID
+}
+
+type Agent {
+  id: UUID!
+  name: String!
+  label: String!
+  icon: String
+  description: String
+  prompt: String!
+  modelId: String!
+  responseFormat: JSON
+  roleId: UUID
+  isCustom: Boolean!
+  isSystem: Boolean!
+  applicationId: UUID
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  modelConfiguration: JSON
+  triggers: [JSON!]!
+}
+
+type ApiKeyForRole {
+  id: UUID!
+  name: String!
+  expiresAt: DateTime!
+  revokedAt: DateTime
+}
+
+type PermissionFlag {
+  id: UUID!
+  universalIdentifier: UUID!
+  key: String!
+  label: String!
+  description: String
+  icon: String
+  permissionType: String!
+  applicationId: UUID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type RolePermissionFlag {
+  id: UUID!
+  roleId: UUID!
+  flag: String!
+}
+
+type ObjectPermission {
+  objectMetadataId: UUID!
+  canReadObjectRecords: Boolean
+  canUpdateObjectRecords: Boolean
+  canSoftDeleteObjectRecords: Boolean
+  canDestroyObjectRecords: Boolean
+  restrictedFields: JSON
+}
+
+type FieldPermission {
+  id: UUID!
+  objectMetadataId: UUID!
+  fieldMetadataId: UUID!
+  roleId: UUID!
+  canReadFieldValue: Boolean
+  canUpdateFieldValue: Boolean
+}
+
+type RowLevelPermissionPredicate {
+  id: String!
+  fieldMetadataId: String!
+  objectMetadataId: String!
+  operand: String!
+  subFieldName: String
+  workspaceMemberFieldMetadataId: String
+  workspaceMemberSubFieldName: String
+  rowLevelPermissionPredicateGroupId: String
+  positionInRowLevelPermissionPredicateGroup: Float
+  roleId: String!
+  value: JSON
+}
+
+type RowLevelPermissionPredicateGroup {
+  id: String!
+  parentRowLevelPermissionPredicateGroupId: String
+  logicalOperator: String!
+  positionInRowLevelPermissionPredicateGroup: Float
+  roleId: String!
+  objectMetadataId: String!
+}
+
+input CreateRoleInput {
+  id: UUID
+  label: String!
+  description: String
+  icon: String
+  canUpdateAllSettings: Boolean
+  canAccessAllTools: Boolean
+  canReadAllObjectRecords: Boolean
+  canUpdateAllObjectRecords: Boolean
+  canSoftDeleteAllObjectRecords: Boolean
+  canDestroyAllObjectRecords: Boolean
+  canBeAssignedToUsers: Boolean
+  canBeAssignedToAgents: Boolean
+  canBeAssignedToApiKeys: Boolean
+}
+
+input UpdateRolePayload {
+  label: String
+  description: String
+  icon: String
+  canUpdateAllSettings: Boolean
+  canAccessAllTools: Boolean
+  canReadAllObjectRecords: Boolean
+  canUpdateAllObjectRecords: Boolean
+  canSoftDeleteAllObjectRecords: Boolean
+  canDestroyAllObjectRecords: Boolean
+  canBeAssignedToUsers: Boolean
+  canBeAssignedToAgents: Boolean
+  canBeAssignedToApiKeys: Boolean
+}
+
+input UpdateRoleInput {
+  id: UUID!
+  update: UpdateRolePayload!
+}
+
+input ObjectPermissionInput {
+  objectMetadataId: UUID!
+  canReadObjectRecords: Boolean
+  canUpdateObjectRecords: Boolean
+  canSoftDeleteObjectRecords: Boolean
+  canDestroyObjectRecords: Boolean
+}
+
+input UpsertObjectPermissionsInput {
+  roleId: UUID!
+  objectPermissions: [ObjectPermissionInput!]!
+}
+
+input FieldPermissionInput {
+  objectMetadataId: UUID!
+  fieldMetadataId: UUID!
+  canReadFieldValue: Boolean
+  canUpdateFieldValue: Boolean
+}
+
+input UpsertFieldPermissionsInput {
+  roleId: UUID!
+  fieldPermissions: [FieldPermissionInput!]!
+}
+
+input UpsertPermissionFlagsInput {
+  roleId: UUID!
+  permissionFlagKeys: [String!]!
+}
+
+extend type Role {
+  workspaceMembers: [WorkspaceMember!]
+  agents: [Agent!]
+  apiKeys: [ApiKeyForRole!]
+  permissionFlags: [RolePermissionFlag!]
+  objectPermissions: [ObjectPermission!]
+  fieldPermissions: [FieldPermission!]
+  rowLevelPermissionPredicates: [RowLevelPermissionPredicate!]
+  rowLevelPermissionPredicateGroups: [RowLevelPermissionPredicateGroup!]
+}
+
+extend type Query {
+  getRoles: [Role!]!
+  getRole(id: UUID!): Role!
+  getPermissionFlags: [PermissionFlag!]!
+}
+
+extend type Mutation {
+  createOneRole(createRoleInput: CreateRoleInput!): Role!
+  updateOneRole(updateRoleInput: UpdateRoleInput!): Role!
+  deleteOneRole(roleId: UUID!): String!
+  upsertObjectPermissions(upsertObjectPermissionsInput: UpsertObjectPermissionsInput!): [ObjectPermission!]!
+  upsertPermissionFlags(upsertPermissionFlagsInput: UpsertPermissionFlagsInput!): [RolePermissionFlag!]!
+  upsertFieldPermissions(upsertFieldPermissionsInput: UpsertFieldPermissionsInput!): [FieldPermission!]!
+}
