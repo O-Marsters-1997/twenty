@@ -1,0 +1,9 @@
+{
+  "name": "DeleteApprovedAccessDomain",
+  "operation": "DeleteApprovedAccessDomain",
+  "fixture": "an approved access domain whose id is replaced at run time",
+  "endpoint": "/metadata",
+  "query": "mutation DeleteApprovedAccessDomain($input: DeleteApprovedAccessDomainInput!) { deleteApprovedAccessDomain(input: $input) }",
+  "variables": {"input": {"id": "<ignored>"}},
+  "response": {"data": {"deleteApprovedAccessDomain": true}}
+}

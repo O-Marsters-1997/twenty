@@ -1,0 +1,14 @@
+{
+  "name": "GetWorkspaceInvitations",
+  "operation": "GetWorkspaceInvitations",
+  "fixture": "one pending invitation without a role",
+  "endpoint": "/metadata",
+  "query": "query GetWorkspaceInvitations { findWorkspaceInvitations { id email roleId expiresAt } }",
+  "variables": {},
+  "response": {"data": {"findWorkspaceInvitations": [{
+    "id": "<ignored>",
+    "email": "ann@example.com",
+    "roleId": null,
+    "expiresAt": "2030-01-01T00:00:00.000Z"
+  }]}}
+}

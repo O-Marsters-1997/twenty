@@ -1,0 +1,14 @@
+{
+  "name": "GetApprovedAccessDomains",
+  "operation": "GetApprovedAccessDomains",
+  "fixture": "one validated approved access domain",
+  "endpoint": "/metadata",
+  "query": "query GetApprovedAccessDomains { getApprovedAccessDomains { id createdAt domain isValidated } }",
+  "variables": {},
+  "response": {"data": {"getApprovedAccessDomains": [{
+    "id": "<ignored>",
+    "createdAt": "<ignored>",
+    "domain": "example.com",
+    "isValidated": true
+  }]}}
+}

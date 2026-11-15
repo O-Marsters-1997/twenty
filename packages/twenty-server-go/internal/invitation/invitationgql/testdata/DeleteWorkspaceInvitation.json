@@ -1,0 +1,9 @@
+{
+  "name": "DeleteWorkspaceInvitation",
+  "operation": "DeleteWorkspaceInvitation",
+  "fixture": "an unknown invitation id",
+  "endpoint": "/metadata",
+  "query": "mutation DeleteWorkspaceInvitation($appTokenId: String!) { deleteWorkspaceInvitation(appTokenId: $appTokenId) }",
+  "variables": {"appTokenId": "00000000-0000-4000-8000-000000000000"},
+  "response": {"data": {"deleteWorkspaceInvitation": "error"}}
+}

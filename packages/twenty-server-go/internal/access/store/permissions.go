@@ -13,6 +13,7 @@ import (
 const (
 	FlagAPIKeysAndWebhooks = "API_KEYS_AND_WEBHOOKS"
 	FlagRoles              = "ROLES"
+	FlagWorkspaceMembers   = "WORKSPACE_MEMBERS"
 )
 
 type Permissions struct {
