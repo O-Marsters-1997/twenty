@@ -1,5 +1,4 @@
 import { useBlockNoteEditor } from '@blocknote/react';
-import { styled } from '@linaria/react';
 import { autoUpdate, flip, offset, useFloating } from '@floating-ui/react';
 import { motion } from 'framer-motion';
 import { createPortal } from 'react-dom';
@@ -12,11 +11,14 @@ import type { CustomSlashMenuProps } from '@/blocknote-editor/types/SuggestionMe
 import { OverlayMenuList } from '@/ui/layout/overlay/components/OverlayMenuList';
 import { OverlayContainer } from '@/ui/layout/overlay/components/OverlayContainer';
 import { SelectableList } from '@/ui/layout/selectable-list/components/SelectableList';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledContainer = styled.div`
-  height: 1px;
-  width: 1px;
-`;
+const styles = stylex.create({
+  container: {
+    height: '1px',
+    width: '1px',
+  },
+});
 
 export const CustomSlashMenu = ({
   items,
@@ -51,7 +53,7 @@ export const CustomSlashMenu = ({
   });
 
   return (
-    <StyledContainer ref={refs.setReference}>
+    <div ref={refs.setReference} {...stylex.props(styles.container)}>
       <CustomSlashMenuSelectedIndexSyncEffect
         items={items}
         selectedIndex={selectedIndex}
@@ -84,6 +86,6 @@ export const CustomSlashMenu = ({
           document.body,
         )}
       </>
-    </StyledContainer>
+    </div>
   );
 };

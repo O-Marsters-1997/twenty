@@ -1,14 +1,17 @@
 import { AppNavigationDrawer } from '@/navigation/components/AppNavigationDrawer';
 import { useShowFullscreen } from '@/ui/layout/fullscreen/hooks/useShowFullscreen';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
 
-const StyledNavigationDrawerWrapper = styled.div`
-  flex-shrink: 0;
-
-  @media print {
-    display: none;
-  }
-`;
+const styles = stylex.create({
+  wrapper: {
+    display: {
+      default: null,
+      [media.print]: 'none',
+    },
+    flexShrink: 0,
+  },
+});
 
 export const DefaultLayoutNavigationDrawer = () => {
   const showFullscreen = useShowFullscreen();
@@ -18,8 +21,8 @@ export const DefaultLayoutNavigationDrawer = () => {
   }
 
   return (
-    <StyledNavigationDrawerWrapper>
+    <div {...stylex.props(styles.wrapper)}>
       <AppNavigationDrawer />
-    </StyledNavigationDrawerWrapper>
+    </div>
   );
 };

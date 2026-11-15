@@ -18,6 +18,7 @@ import { ScrollWrapper } from '@/ui/utilities/scroll/components/ScrollWrapper';
 import { useScrollWrapperHTMLElement } from '@/ui/utilities/scroll/hooks/useScrollWrapperHTMLElement';
 import { type EventLogRecord } from '~/generated-metadata/graphql';
 import { isDeeplyEqual } from '~/utils/isDeeplyEqual';
+import * as stylex from '@stylexjs/stylex';
 
 const SKELETON_ROW_COUNT = 8;
 
@@ -78,9 +79,11 @@ const StyledTable = styled(Table)`
   }
 `;
 
-const StyledLoadMoreTrigger = styled.div`
-  height: 1px;
-`;
+const styles = stylex.create({
+  loadMoreTrigger: {
+    height: '1px',
+  },
+});
 
 type LogConsoleTableProps = {
   source: LogConsoleSource;
@@ -177,9 +180,9 @@ export const LogConsoleTable = ({
           ),
         )}
         {hasNextPage && (
-          <StyledLoadMoreTrigger
+          <div
             key={storedEntryCount}
-            ref={loadMoreTriggerRef}
+            ref={loadMoreTriggerRef} {...stylex.props(styles.loadMoreTrigger)}
           />
         )}
         {(isInitialLoading || isLoadingNextPage) && (

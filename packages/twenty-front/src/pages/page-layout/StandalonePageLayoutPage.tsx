@@ -1,4 +1,5 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
 import { useParams } from 'react-router-dom';
 
 import { CommandMenuComponentInstanceContext } from '@/command-menu/states/contexts/CommandMenuComponentInstanceContext';
@@ -9,19 +10,15 @@ import { isDefined } from 'twenty-shared/utils';
 import { PageLayoutType } from '~/generated-metadata/graphql';
 import { StandalonePageHeader } from '~/pages/page-layout/StandalonePageHeader';
 
-const StyledPageLayoutContainer = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-height: 0;
-  overflow-y: auto;
-
-  @media print {
-    display: block;
-    min-height: auto;
-    overflow: visible;
-  }
-`;
+const styles = stylex.create({
+  pageLayoutContainer: {
+    display: { default: 'flex', [media.print]: 'block' },
+    flex: 1,
+    flexDirection: 'column',
+    minHeight: { default: 0, [media.print]: 'auto' },
+    overflowY: { default: 'auto', [media.print]: 'visible' },
+  },
+});
 
 export const StandalonePageLayoutPage = () => {
   const { pageLayoutId } = useParams<{ pageLayoutId: string }>();
@@ -43,9 +40,9 @@ export const StandalonePageLayoutPage = () => {
             layoutType: PageLayoutType.STANDALONE_PAGE,
           }}
         >
-          <StyledPageLayoutContainer>
+          <div {...stylex.props(styles.pageLayoutContainer)}>
             <PageLayoutRenderer pageLayoutId={pageLayoutId} />
-          </StyledPageLayoutContainer>
+          </div>
         </LayoutRenderingProvider>
       </PageCardLayout>
     </CommandMenuComponentInstanceContext.Provider>

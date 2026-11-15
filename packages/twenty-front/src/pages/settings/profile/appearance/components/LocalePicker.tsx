@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 
 import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMemberState';
 import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
@@ -14,15 +13,18 @@ import { type APP_LOCALES } from 'twenty-shared/translations';
 import { isDefined } from 'twenty-shared/utils';
 import { useLocaleOptions } from '@/localization/hooks/useLocaleOptions';
 import { dateLocaleState } from '@/localization/states/dateLocaleState';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { dynamicActivate } from '~/utils/i18n/dynamicActivate';
 import { logError } from '~/utils/logError';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[4]};
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-4'],
+  },
+});
 
 export const LocalePicker = () => {
   const { t } = useLingui();
@@ -77,7 +79,7 @@ export const LocalePicker = () => {
   };
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <Select
         dropdownId="preferred-locale"
         label={t`Language`}
@@ -90,6 +92,6 @@ export const LocalePicker = () => {
           handleLocaleChange(value as keyof typeof APP_LOCALES)
         }
       />
-    </StyledContainer>
+    </div>
   );
 };

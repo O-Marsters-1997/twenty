@@ -1,6 +1,7 @@
 import { styled } from '@linaria/react';
 import { type IconComponent } from 'twenty-ui/icon';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
 
 const StyledContainer = styled.div<{ Variant: Variants }>`
   align-items: center;
@@ -11,7 +12,11 @@ const StyledContainer = styled.div<{ Variant: Variants }>`
   gap: ${themeCssVariables.spacing[2]};
 `;
 
-const StyledTextContainer = styled.div``;
+const styles = stylex.create({
+  textContainer: {
+
+  },
+});
 
 type CustomSideMenuOptionsProps = {
   LeftIcon: IconComponent; // Any valid React node (e.g., a component)
@@ -34,7 +39,7 @@ export const CustomSideMenuOptions = ({
         size={theme.icon.size.md}
         stroke={theme.icon.stroke.sm}
       ></LeftIcon>
-      <StyledTextContainer>{text}</StyledTextContainer>
+      <div {...stylex.props(styles.textContainer)}>{text}</div>
     </StyledContainer>
   );
 };

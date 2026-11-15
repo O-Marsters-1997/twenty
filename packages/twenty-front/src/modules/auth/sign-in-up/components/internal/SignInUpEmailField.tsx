@@ -1,19 +1,20 @@
 import { type Form } from '@/auth/sign-in-up/hooks/useSignInUpForm';
 import { SettingsTextInput } from '@/ui/input/components/SettingsTextInput';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { motion } from 'framer-motion';
 import { Controller, useFormContext } from 'react-hook-form';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledFullWidthMotionDiv = styled(motion.div)`
-  width: 100%;
-`;
-
-const StyledInputContainer = styled.div`
-  margin-bottom: ${themeCssVariables.spacing[3]};
-`;
+const styles = stylex.create({
+  fullWidthMotionDiv: {
+    width: '100%',
+  },
+  inputContainer: {
+    marginBottom: spacing['--t-spacing-3'],
+  },
+});
 
 export const SignInUpEmailField = ({
   showErrors,
@@ -26,7 +27,7 @@ export const SignInUpEmailField = ({
   const form = useFormContext<Form>();
 
   return (
-    <StyledFullWidthMotionDiv
+    <motion.div {...stylex.props(styles.fullWidthMotionDiv)}
       initial={{ opacity: 0, height: 0 }}
       animate={{ opacity: 1, height: 'auto' }}
       transition={{
@@ -42,7 +43,7 @@ export const SignInUpEmailField = ({
           field: { onChange, onBlur, value },
           fieldState: { error },
         }) => (
-          <StyledInputContainer>
+          <div {...stylex.props(styles.inputContainer)}>
             <SettingsTextInput
               instanceId="sign-in-up-email"
               autoComplete="email"
@@ -57,9 +58,9 @@ export const SignInUpEmailField = ({
               error={showErrors ? error?.message : undefined}
               fullWidth
             />
-          </StyledInputContainer>
+          </div>
         )}
       />
-    </StyledFullWidthMotionDiv>
+    </motion.div>
   );
 };

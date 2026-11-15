@@ -1,10 +1,10 @@
-import { styled } from '@linaria/react';
 import { isNonEmptyString } from '@sniptt/guards';
 import { AvatarGroup } from 'twenty-ui/components/data-display';
 import { Avatar } from 'twenty-ui/primitives/data-display';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { getAbsoluteImageUrl } from '~/utils/image/getAbsoluteImageUrl';
+import * as stylex from '@stylexjs/stylex';
+import { background } from 'twenty-ui/theme/tokens.stylex';
 
 const DEFAULT_MAX_VISIBLE_MEMBER_AVATARS = 5;
 
@@ -25,18 +25,21 @@ type WorkspaceMemberAvatarStackProps = {
   workspaceMembers: WorkspaceMemberAvatarStackMember[];
 };
 
-const StyledAvatarStackContainer = styled.div`
-  align-items: center;
-  display: flex;
-  min-width: 0;
-`;
-
-const StyledAvatarContainer = styled.div`
-  border: 1px solid ${themeCssVariables.background.secondary};
-  border-radius: 50%;
-  corner-shape: round;
-  display: flex;
-`;
+const styles = stylex.create({
+  avatarContainer: {
+    borderColor: background['--t-background-secondary'],
+    borderRadius: '50%',
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    cornerShape: 'round',
+    display: 'flex',
+  },
+  avatarStackContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    minWidth: '0',
+  },
+});
 
 const getWorkspaceMemberDisplayName = ({
   workspaceMember,
@@ -70,7 +73,7 @@ export const WorkspaceMemberAvatarStack = ({
 }: WorkspaceMemberAvatarStackProps) => {
   return (
     <AvatarGroup
-      render={<StyledAvatarStackContainer />}
+      render={<div {...stylex.props(styles.avatarStackContainer)} />}
       avatars={workspaceMembers.map((workspaceMember) => {
         const displayName = getWorkspaceMemberDisplayName({
           workspaceMember,
@@ -78,7 +81,7 @@ export const WorkspaceMemberAvatarStack = ({
         });
 
         return (
-          <StyledAvatarContainer key={workspaceMember.id}>
+          <div key={workspaceMember.id} {...stylex.props(styles.avatarContainer)}>
             <Avatar
               src={getAbsoluteImageUrl(workspaceMember.avatarUrl)}
               name={displayName}
@@ -87,7 +90,7 @@ export const WorkspaceMemberAvatarStack = ({
               size="md"
               shape="circle"
             />
-          </StyledAvatarContainer>
+          </div>
         );
       })}
       maxVisible={maxVisible}

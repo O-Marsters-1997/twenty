@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useState } from 'react';
 import { isDefined } from 'twenty-shared/utils';
@@ -6,7 +5,6 @@ import { useToast } from 'twenty-ui/components/feedback';
 import { Section } from 'twenty-ui/components/layout';
 import { IconArchive, IconArchiveOff, IconTrash } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { useObjectMetadataItems } from '@/object-metadata/hooks/useObjectMetadataItems';
 import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/EnrichedObjectMetadataItem';
@@ -24,13 +22,17 @@ import { getValidationRuleFormEdits } from '@/validation-rules/utils/getValidati
 import { getValidationRuleFormValues } from '@/validation-rules/utils/getValidationRuleFormValues';
 import { getValidationRuleSaveErrorMessage } from '@/validation-rules/utils/getValidationRuleSaveErrorMessage';
 import { isValidationRuleFormSubmittable } from '@/validation-rules/utils/isValidationRuleFormSubmittable';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const DELETE_VALIDATION_RULE_MODAL_ID = 'validation-rule-edit-delete';
 
-const StyledDangerButtons = styled.div`
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  dangerButtons: {
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+  },
+});
 
 type SettingsValidationRuleEditFormProps = {
   objectMetadataItem: EnrichedObjectMetadataItem;
@@ -178,7 +180,7 @@ export const SettingsValidationRuleEditForm = ({
               : t`This rule is disabled. Records are not checked against it.`
           }
         />
-        <StyledDangerButtons>
+        <div {...stylex.props(styles.dangerButtons)}>
           <Button
             startIcon={
               validationRule.isActive ? <IconArchive /> : <IconArchiveOff />
@@ -198,7 +200,7 @@ export const SettingsValidationRuleEditForm = ({
             disabled={isDeleting}
             onClick={() => openDialog(DELETE_VALIDATION_RULE_MODAL_ID)}
           >{t`Delete`}</Button>
-        </StyledDangerButtons>
+        </div>
         <ConfirmationDialog
           dialogId={DELETE_VALIDATION_RULE_MODAL_ID}
           title={t`Delete this rule?`}

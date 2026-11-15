@@ -7,7 +7,6 @@ import {
   signInUpStepState,
 } from '@/auth/states/signInUpStepState';
 import { workspacePublicDataState } from '@/auth/states/workspacePublicDataState';
-import { styled } from '@linaria/react';
 
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomState';
@@ -36,25 +35,27 @@ import { useLingui } from '@lingui/react/macro';
 import { useSearchParams } from 'react-router-dom';
 import { isDefined } from 'twenty-shared/utils';
 import { Loader } from 'twenty-ui/primitives/feedback';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { background, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledLoaderContainer = styled.div`
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  margin-bottom: ${themeCssVariables.spacing[8]};
-  margin-top: ${themeCssVariables.spacing[8]};
-  width: 100%;
-`;
-
-const StyledBackground = styled.div`
-  background: ${themeCssVariables.background.secondary};
-  display: flex;
-  flex-direction: column;
-  height: calc(100dvh / var(--t-zoom, 1));
-  overflow-y: auto;
-  width: 100%;
-`;
+const styles = stylex.create({
+  loaderContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+    marginBottom: spacing['--t-spacing-8'],
+    marginTop: spacing['--t-spacing-8'],
+    width: '100%',
+  },
+  background: {
+    background: background['--t-background-secondary'],
+    display: 'flex',
+    flexDirection: 'column',
+    height: 'calc(100dvh / var(--t-zoom, 1))',
+    overflowY: 'auto',
+    width: '100%',
+  },
+});
 
 export const SignInUp = () => {
   const { t } = useLingui();
@@ -142,9 +143,9 @@ export const SignInUp = () => {
   const signInUpForm = useMemo(() => {
     if (getPublicWorkspaceDataLoading || !clientConfigApiStatus.isLoadedOnce) {
       return (
-        <StyledLoaderContainer>
+        <div {...stylex.props(styles.loaderContainer)}>
           <Loader color="gray" />
-        </StyledLoaderContainer>
+        </div>
       );
     }
 
@@ -206,7 +207,7 @@ export const SignInUp = () => {
       <StyledOnboardingStepPage>{signInUpForm}</StyledOnboardingStepPage>
     </OnboardingLayout>
   ) : (
-    <StyledBackground>
+    <div {...stylex.props(styles.background)}>
       {signInUpStep === SignInUpStep.EmailVerification ? (
         <StyledAuthContent>
           <EmailVerificationSent email={searchParams.get('email')} />
@@ -220,6 +221,6 @@ export const SignInUp = () => {
           onClickOnLogo={onClickOnLogo}
         />
       )}
-    </StyledBackground>
+    </div>
   );
 };

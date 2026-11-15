@@ -38,6 +38,8 @@ import { useNavigateApp } from '~/hooks/useNavigateApp';
 import { useNavigateSettings } from '~/hooks/useNavigateSettings';
 import { getAbsoluteImageUrl } from '~/utils/image/getAbsoluteImageUrl';
 import { normalizeSearchText } from 'twenty-ui/utilities';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const StyledTableContainer = styled.div<{ hasMoreRows?: boolean }>`
   > div {
@@ -48,37 +50,35 @@ const StyledTableContainer = styled.div<{ hasMoreRows?: boolean }>`
   }
 `;
 
-const StyledIconWrapper = styled.div`
-  align-items: center;
-  display: flex;
-  margin-right: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledTextContainerWithEllipsis = styled.div`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledSearchContainer = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  padding-bottom: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledTableRows = styled.div`
-  padding-bottom: ${themeCssVariables.spacing[2]};
-  padding-top: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledChevronWrapper = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.secondary};
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
-`;
+const styles = stylex.create({
+  iconWrapper: {
+    alignItems: 'center',
+    display: 'flex',
+    marginRight: spacing['--t-spacing-2'],
+  },
+  textContainerWithEllipsis: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  searchContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+  },
+  tableRows: {
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
+  },
+  chevronWrapper: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-secondary'],
+    display: 'flex',
+    justifyContent: 'flex-end',
+    width: '100%',
+  },
+});
 
 export const SettingsWorkspaceMembersTeamTab = () => {
   const theme = useTheme();
@@ -166,7 +166,7 @@ export const SettingsWorkspaceMembersTeamTab = () => {
         title={t`Manage Members`}
         description={t`Manage the members of your workspace here`}
       />
-      <StyledSearchContainer>
+      <div {...stylex.props(styles.searchContainer)}>
         <SearchInput
           value={searchFilter}
           onValueChange={handleSearchChange}
@@ -203,7 +203,7 @@ export const SettingsWorkspaceMembersTeamTab = () => {
             </Dropdown.Section>
           </DropdownContent>
         </DropdownRoot>
-      </StyledSearchContainer>
+      </div>
       <StyledTableContainer hasMoreRows={hasNextPage}>
         <Table>
           <TableRow
@@ -218,7 +218,7 @@ export const SettingsWorkspaceMembersTeamTab = () => {
             </TableHeader>
             <TableHeader align="right"></TableHeader>
           </TableRow>
-          <StyledTableRows>
+          <div {...stylex.props(styles.tableRows)}>
             {optimizedWorkspaceMembers.length > 0 ? (
               optimizedWorkspaceMembers.map((workspaceMember) => (
                 <TableRow
@@ -236,7 +236,7 @@ export const SettingsWorkspaceMembersTeamTab = () => {
                   }}
                 >
                   <TableCell color={themeCssVariables.font.color.primary}>
-                    <StyledIconWrapper>
+                    <div {...stylex.props(styles.iconWrapper)}>
                       <Avatar
                         src={getAbsoluteImageUrl(workspaceMember.avatarUrl)}
                         colorSeed={workspaceMember.id}
@@ -244,33 +244,33 @@ export const SettingsWorkspaceMembersTeamTab = () => {
                         shape="circle"
                         size="sm"
                       />
-                    </StyledIconWrapper>
+                    </div>
                     <Tooltip
                       content={`${workspaceMember.name.firstName} ${workspaceMember.name.lastName}`}
                       side="top"
                       positionMethod="fixed"
                       delay={TooltipDelay.shortDelay}
                     >
-                      <StyledTextContainerWithEllipsis
-                        id={`hover-text-${workspaceMember.id}`}
+                      <div
+                        id={`hover-text-${workspaceMember.id}`} {...stylex.props(styles.textContainerWithEllipsis)}
                       >
                         {workspaceMember.name.firstName +
                           ' ' +
                           workspaceMember.name.lastName}
-                      </StyledTextContainerWithEllipsis>
+                      </div>
                     </Tooltip>
                   </TableCell>
                   <TableCell>
-                    <StyledTextContainerWithEllipsis>
+                    <div {...stylex.props(styles.textContainerWithEllipsis)}>
                       {workspaceMember.userEmail}
-                    </StyledTextContainerWithEllipsis>
+                    </div>
                   </TableCell>
                   <TableCell align="right">
-                    <StyledChevronWrapper>
+                    <div {...stylex.props(styles.chevronWrapper)}>
                       {currentWorkspaceMember?.id !== workspaceMember.id && (
                         <IconChevronRight size={theme.icon.size.sm} />
                       )}
-                    </StyledChevronWrapper>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))
@@ -281,7 +281,7 @@ export const SettingsWorkspaceMembersTeamTab = () => {
                   : t`No members match your search`}
               </TableCell>
             )}
-          </StyledTableRows>
+          </div>
           {hasNextPage && (
             <TableRow
               gridAutoColumns="250px 1fr 1fr"

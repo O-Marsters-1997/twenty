@@ -1,34 +1,35 @@
-import { styled } from '@linaria/react';
 import { type ReactNode } from 'react';
 import { type IconComponent } from 'twenty-ui/icon';
-import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledFieldRow = styled.div`
-  align-items: center;
-  display: grid;
-  gap: ${themeCssVariables.spacing[1]};
-  grid-template-columns: 92px minmax(0, 1fr);
-  min-height: 24px;
-`;
-
-const StyledFieldLabel = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  font-size: ${themeCssVariables.font.size.sm};
-  gap: ${themeCssVariables.spacing[2]};
-  min-width: 0;
-`;
-
-const StyledFieldValue = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.primary};
-  display: flex;
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.regular};
-  min-width: 0;
-`;
+const styles = stylex.create({
+  fieldRow: {
+    alignItems: 'center',
+    display: 'grid',
+    gap: spacing['--t-spacing-1'],
+    gridTemplateColumns: '92px minmax(0, 1fr)',
+    minHeight: '24px',
+  },
+  fieldLabel: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    fontSize: fontSize['--t-font-size-sm'],
+    gap: spacing['--t-spacing-2'],
+    minWidth: '0',
+  },
+  fieldValue: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-primary'],
+    display: 'flex',
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    minWidth: '0',
+  },
+});
 
 type LogConsoleFieldRowProps = {
   Icon: IconComponent;
@@ -44,12 +45,12 @@ export const LogConsoleFieldRow = ({
   const theme = useTheme();
 
   return (
-    <StyledFieldRow>
-      <StyledFieldLabel>
+    <div {...stylex.props(styles.fieldRow)}>
+      <div {...stylex.props(styles.fieldLabel)}>
         <Icon size={theme.icon.size.md} stroke={theme.icon.stroke.sm} />
         <OverflowingTextWithTooltip text={label} />
-      </StyledFieldLabel>
-      <StyledFieldValue>{children}</StyledFieldValue>
-    </StyledFieldRow>
+      </div>
+      <div {...stylex.props(styles.fieldValue)}>{children}</div>
+    </div>
   );
 };

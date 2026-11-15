@@ -1,7 +1,7 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { MainButton } from 'twenty-ui/components/input';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type AuthorizeActionButtonsProps = {
   onAuthorize: () => void;
@@ -9,16 +9,18 @@ type AuthorizeActionButtonsProps = {
   isLoading?: boolean;
 };
 
-const StyledButtonContainer = styled.div`
-  display: grid;
-  gap: ${themeCssVariables.spacing[3]};
-  grid-template-columns: repeat(
+const styles = stylex.create({
+  buttonContainer: {
+    display: 'grid',
+    gap: spacing['--t-spacing-3'],
+    gridTemplateColumns: `repeat(
     2,
-    minmax(${themeCssVariables.spacing[0]}, 1fr)
-  );
-  margin-top: ${themeCssVariables.spacing[8]};
-  width: 100%;
-`;
+    minmax(${spacing['--t-spacing-0']}, 1fr)
+  )`,
+    marginTop: spacing['--t-spacing-8'],
+    width: '100%',
+  },
+});
 
 export const AuthorizeActionButtons = ({
   onAuthorize,
@@ -28,7 +30,7 @@ export const AuthorizeActionButtons = ({
   const { t } = useLingui();
 
   return (
-    <StyledButtonContainer>
+    <div {...stylex.props(styles.buttonContainer)}>
       <MainButton
         elevated={false}
         onClick={onCancel}
@@ -44,6 +46,6 @@ export const AuthorizeActionButtons = ({
       >
         {isLoading ? t`Authorizing...` : t`Authorize`}
       </MainButton>
-    </StyledButtonContainer>
+    </div>
   );
 };

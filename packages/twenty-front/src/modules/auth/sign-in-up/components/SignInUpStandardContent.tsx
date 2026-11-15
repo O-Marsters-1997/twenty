@@ -5,26 +5,27 @@ import { AnimatedEaseIn } from '@/auth/components/internal/AnimatedEaseIn/Animat
 import { FooterNote } from '@/auth/sign-in-up/components/FooterNote';
 import { WorkspaceSelectionFooter } from '@/auth/sign-in-up/components/WorkspaceSelectionFooter';
 import { SignInUpStep } from '@/auth/states/signInUpStepState';
-import { styled } from '@linaria/react';
 import { type JSX } from 'react';
 import { AppPath } from 'twenty-shared/types';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { type PublicWorkspaceData } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledTitleContainer = styled.div`
-  line-height: 1.2;
-  margin-top: ${themeCssVariables.spacing[10]};
-`;
-
-const StyledFormContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  margin-bottom: ${themeCssVariables.spacing[6]};
-  margin-top: ${themeCssVariables.spacing[6]};
-  min-width: 0;
-  width: 100%;
-`;
+const styles = stylex.create({
+  titleContainer: {
+    lineHeight: '1.2',
+    marginTop: spacing['--t-spacing-10'],
+  },
+  formContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    marginBottom: spacing['--t-spacing-6'],
+    marginTop: spacing['--t-spacing-6'],
+    minWidth: '0',
+    width: '100%',
+  },
+});
 
 type SignInUpStandardContentProps = {
   workspacePublicData: PublicWorkspaceData | null;
@@ -51,10 +52,10 @@ export const SignInUpStandardContent = ({
           to={AppPath.SignInUp}
         />
       </AnimatedEaseIn>
-      <StyledTitleContainer>
+      <div {...stylex.props(styles.titleContainer)}>
         <Title animate>{title}</Title>
-      </StyledTitleContainer>
-      <StyledFormContainer>{signInUpForm}</StyledFormContainer>
+      </div>
+      <div {...stylex.props(styles.formContainer)}>{signInUpForm}</div>
       {signInUpStep === SignInUpStep.WorkspaceSelection && (
         <WorkspaceSelectionFooter />
       )}

@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 
 import { SettingsPageContainer } from '@/settings/components/SettingsPageContainer';
@@ -17,14 +16,18 @@ import { IconMailX } from 'twenty-ui/icon';
 import coverDark from '~/pages/settings/communications/assets/cover-dark.png';
 import coverLight from '~/pages/settings/communications/assets/cover-light.png';
 import { SettingsCard } from '@/settings/components/SettingsCard';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import { useNavigateSettings } from '~/hooks/useNavigateSettings';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledCardsColumn = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  cardsColumn: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+  },
+});
 
 export const SettingsWorkspaceCommunications = () => {
   const theme = useTheme();
@@ -64,10 +67,10 @@ export const SettingsWorkspaceCommunications = () => {
               title={t`Tracking`}
               description={t`Measure engagement on the campaigns this workspace sends`}
             />
-            <StyledCardsColumn>
+            <div {...stylex.props(styles.cardsColumn)}>
               <ClickTrackingSwitch />
               <OpenTrackingSwitch />
-            </StyledCardsColumn>
+            </div>
           </Section.Root>
         )}
         {isMessageCampaignFeatureEnabled && (
@@ -76,7 +79,7 @@ export const SettingsWorkspaceCommunications = () => {
               title={t`Unsubscribe`}
               description={t`Manage unsubscribers, opt-out topics, and the page recipients see`}
             />
-            <StyledCardsColumn>
+            <div {...stylex.props(styles.cardsColumn)}>
               <SettingsCard
                 Icon={
                   <IconMailX
@@ -87,7 +90,7 @@ export const SettingsWorkspaceCommunications = () => {
                 title={t`Manage unsubscribe`}
                 onClick={() => navigateSettings(SettingsPath.Unsubscribe)}
               />
-            </StyledCardsColumn>
+            </div>
           </Section.Root>
         )}
         <SettingsWorkspaceEmailSyncSection />

@@ -6,55 +6,44 @@ import { LogConsole } from '@/log-console/components/LogConsole';
 import { SidePanelForDesktop } from '@/side-panel/components/SidePanelForDesktop';
 import { SidePanelPathUrlSyncEffect } from '@/side-panel/routing/components/SidePanelPathUrlSyncEffect';
 import { useIsMobile } from 'twenty-ui/utilities';
-import { styled } from '@linaria/react';
 import { Outlet } from 'react-router-dom';
+import * as stylex from '@stylexjs/stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
 
-const StyledRow = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: row;
-  min-height: 0;
-  min-width: 0;
 
-  @media print {
-    display: block;
-    min-height: auto;
-    min-width: auto;
-
-    > *:not(:first-child) {
-      display: none;
-    }
-  }
-`;
-
-const StyledMainColumn = styled.div`
-  display: flex;
-  flex: 1 1 0;
-  flex-direction: column;
-  min-height: 0;
-  min-width: 0;
-  position: relative;
-
-  @media print {
-    display: block;
-    min-height: auto;
-    min-width: auto;
-  }
-`;
-
-const StyledContent = styled.div`
-  display: flex;
-  flex: 1 1 0;
-  min-height: 0;
-  min-width: 0;
-
-  @media print {
-    display: block;
-    min-height: auto;
-    min-width: auto;
-    overflow: visible;
-  }
-`;
+const styles = stylex.create({
+  row: {
+    display: { default: 'flex', [media.print]: 'block' },
+    flexBasis: '0%',
+    flexDirection: 'row',
+    flexGrow: 1,
+    flexShrink: 1,
+    minHeight: { default: 0, [media.print]: 'auto' },
+    minWidth: { default: 0, [media.print]: 'auto' },
+  },
+  mainColumn: {
+    display: { default: 'flex', [media.print]: 'block' },
+    flexBasis: 0,
+    flexDirection: 'column',
+    flexGrow: 1,
+    flexShrink: 1,
+    minHeight: { default: 0, [media.print]: 'auto' },
+    minWidth: { default: 0, [media.print]: 'auto' },
+    position: 'relative',
+  },
+  content: {
+    display: { default: 'flex', [media.print]: 'block' },
+    flexBasis: 0,
+    flexGrow: 1,
+    flexShrink: 1,
+    minHeight: { default: 0, [media.print]: 'auto' },
+    minWidth: { default: 0, [media.print]: 'auto' },
+    overflow: { default: null, [media.print]: 'visible' },
+  },
+  sidePanel: {
+    display: { default: 'contents', [media.print]: 'none' },
+  },
+});
 
 export const MainAppLayoutWithSidePanel = () => {
   const isMobile = useIsMobile();
@@ -62,17 +51,21 @@ export const MainAppLayoutWithSidePanel = () => {
   useCommandMenuHotKeys();
 
   return (
-    <StyledRow>
+    <div {...stylex.props(styles.row)}>
       <RouteContextStoreProvider />
       <SidePanelPathUrlSyncEffect />
       <WorkspaceSetupChatSidePanelEffect />
-      <StyledMainColumn>
-        <StyledContent>
+      <div {...stylex.props(styles.mainColumn)}>
+        <div {...stylex.props(styles.content)}>
           <Outlet />
-        </StyledContent>
+        </div>
         <LogConsole />
-      </StyledMainColumn>
-      {isMobile ? <CommandMenuForMobile /> : <SidePanelForDesktop />}
-    </StyledRow>
+      </div>
+      {isMobile ? <CommandMenuForMobile /> : (
+          <div {...stylex.props(styles.sidePanel)}>
+            <SidePanelForDesktop />
+          </div>
+        )}
+    </div>
   );
 };

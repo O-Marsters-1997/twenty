@@ -45,7 +45,10 @@ export const resolveTokenReference = (
     return undefined;
   }
 
-  const [group] = segments;
+  const group =
+    segments.length >= 3
+      ? `${segments[0]}${segments[1][0].toUpperCase()}${segments[1].slice(1)}`
+      : segments[0];
   const variableName = `--t-${segments.map(toKebabCase).join('-')}`;
 
   return { group, code: `${group}['${variableName}']`, segments };

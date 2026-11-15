@@ -27,7 +27,6 @@ import { useWorkspaceSurface } from '@/ui/layout/hooks/useWorkspaceSurface';
 import { navigationMemorizedUrlState } from '@/ui/navigation/states/navigationMemorizedUrlState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import omit from 'lodash.omit';
 import { useEffect, useState } from 'react';
@@ -39,17 +38,20 @@ import { useToast } from 'twenty-ui/components/feedback';
 import { Section } from 'twenty-ui/components/layout';
 import { IconArchive, IconArchiveOff, IconTrash } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { FieldMetadataType } from '~/generated-metadata/graphql';
 import { useNavigateApp } from '~/hooks/useNavigateApp';
 import { useNavigateSettings } from '~/hooks/useNavigateSettings';
 import { getFieldMetadataItemInitialValues } from '@/settings/data-model/fields/forms/utils/getFieldMetadataItemInitialValues';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const DELETE_FIELD_MODAL_ID = 'delete-field-confirmation-modal';
-const StyledDangerButtons = styled.div`
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  dangerButtons: {
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+  },
+});
 
 export const SettingsObjectFieldEdit = () => {
   const navigateSettings = useNavigateSettings();
@@ -423,7 +425,7 @@ export const SettingsObjectFieldEdit = () => {
                   title={t`Danger zone`}
                   description={t`Deactivate this field`}
                 />
-                <StyledDangerButtons>
+                <div {...stylex.props(styles.dangerButtons)}>
                   <Button
                     startIcon={
                       fieldMetadataItem.isActive ? (
@@ -451,7 +453,7 @@ export const SettingsObjectFieldEdit = () => {
                       color="danger"
                     >{t`Delete`}</Button>
                   )}
-                </StyledDangerButtons>
+                </div>
               </Section.Root>
             )}
           </SettingsPageContainer>

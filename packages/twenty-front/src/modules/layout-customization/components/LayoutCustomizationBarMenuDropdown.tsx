@@ -1,5 +1,4 @@
 import { LAYOUT_CUSTOMIZATION_BAR_DROPDOWN_ID } from '@/layout-customization/constants/LayoutCustomizationBarDropdownId';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { IconDotsVertical, IconReload } from 'twenty-ui/icon';
 import { DropdownRoot } from '@/ui/layout/dropdown/components/DropdownRoot';
@@ -7,23 +6,28 @@ import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent
 import { GenericDropdownContentWidth } from '@/ui/layout/dropdown/constants/GenericDropdownContentWidth';
 import { LightIconButton } from 'twenty-ui/components/input';
 import { Dropdown } from 'twenty-ui/components/navigation';
-import { GRAY_SCALE_LIGHT, themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  backgroundTransparent,
+  color,
+} from 'twenty-ui/theme/tokens.stylex';
 
 import { RESET_RECORD_PAGE_LAYOUT_MODAL_ID } from '@/layout-customization/constants/ResetRecordPageLayoutModalId';
 import { useDialog } from '@/ui/layout/dialog/hooks/useDialog';
 
-const StyledInvertedIconButtonWrapper = styled.span`
-  align-items: center;
-  display: flex;
-
-  button {
-    color: ${GRAY_SCALE_LIGHT.gray1};
-  }
-
-  button:hover {
-    background: ${themeCssVariables.background.transparent.light};
-  }
-`;
+const styles = stylex.create({
+  wrapper: {
+    alignItems: 'center',
+    display: 'flex',
+  },
+  invertedButton: {
+    background: {
+      default: null,
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
+    color: color['--t-color-gray1'],
+  },
+});
 
 export const LayoutCustomizationBarMenuDropdown = () => {
   const { t } = useLingui();
@@ -35,10 +39,11 @@ export const LayoutCustomizationBarMenuDropdown = () => {
 
   return (
     <DropdownRoot dropdownId={LAYOUT_CUSTOMIZATION_BAR_DROPDOWN_ID} type="menu">
-      <StyledInvertedIconButtonWrapper>
+      <span {...stylex.props(styles.wrapper)}>
         <Dropdown.Trigger
           render={
             <LightIconButton
+              {...stylex.props(styles.invertedButton)}
               emphasis="subtle"
               aria-label={t`Layout customization menu`}
             >
@@ -46,7 +51,7 @@ export const LayoutCustomizationBarMenuDropdown = () => {
             </LightIconButton>
           }
         />
-      </StyledInvertedIconButtonWrapper>
+      </span>
       <DropdownContent width={GenericDropdownContentWidth.Large}>
         <Dropdown.Section>
           <Dropdown.ActionItem

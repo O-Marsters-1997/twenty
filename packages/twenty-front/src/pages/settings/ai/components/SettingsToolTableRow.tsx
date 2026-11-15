@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { type ReactNode } from 'react';
 
 import { AppChip } from '@/applications/components/AppChip';
@@ -7,6 +6,7 @@ import { TableCell } from '@/ui/layout/table/components/TableCell';
 import { TableRow } from '@/ui/layout/table/components/TableRow';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
 import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
 
 export type SettingsToolTableRowProps = {
   leftIcon: ReactNode;
@@ -18,11 +18,13 @@ export type SettingsToolTableRowProps = {
 
 export const TOOL_TABLE_ROW_GRID_TEMPLATE_COLUMNS = '1fr 100px 36px';
 
-const StyledIconContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-shrink: 0;
-`;
+const styles = stylex.create({
+  iconContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexShrink: '0',
+  },
+});
 
 export const SettingsToolTableRow = ({
   leftIcon,
@@ -42,7 +44,7 @@ export const SettingsToolTableRow = ({
         minWidth="0"
         overflow="hidden"
       >
-        <StyledIconContainer>{leftIcon}</StyledIconContainer>
+        <div {...stylex.props(styles.iconContainer)}>{leftIcon}</div>
         <OverflowingTextWithTooltip text={name} />
       </TableCell>
       <StyledNameTableCell minWidth="0" overflow="hidden">

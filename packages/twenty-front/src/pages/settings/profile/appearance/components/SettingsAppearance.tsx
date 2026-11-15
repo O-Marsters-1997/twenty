@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 
 import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMemberState';
@@ -7,19 +6,20 @@ import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomState
 import { isDefined } from 'twenty-shared/utils';
 import { Section } from 'twenty-ui/components/layout';
 import { RadioGroup } from 'twenty-ui/primitives/input';
-import { MOBILE_VIEWPORT, themeCssVariables } from 'twenty-ui/theme';
 import { SettingsAppearanceOption } from '~/pages/settings/profile/appearance/components/SettingsAppearanceOption';
 import { type ColorScheme } from '@/ui/theme/types/ColorScheme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
 
-const StyledChoices = styled.div`
-  flex-direction: row;
-  gap: ${themeCssVariables.spacing[4]};
-  width: 100%;
-
-  @media (max-width: ${MOBILE_VIEWPORT}px) {
-    overflow-x: auto;
-  }
-`;
+const styles = stylex.create({
+  choices: {
+    flexDirection: 'row',
+    gap: spacing['--t-spacing-4'],
+    width: '100%',
+    overflowX: { default: null, [media.mobile]: 'auto' },
+  },
+});
 
 export const SettingsAppearance = () => {
   const { t } = useLingui();
@@ -35,7 +35,7 @@ export const SettingsAppearance = () => {
     <Section.Root>
       <Section.Header title={t`Appearance`} />
       <RadioGroup
-        render={<StyledChoices />}
+        render={<div {...stylex.props(styles.choices)} />}
         aria-label={t`Appearance`}
         value={colorScheme}
         disabled={!isDefined(currentWorkspaceMember)}

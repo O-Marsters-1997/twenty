@@ -2,12 +2,13 @@ import { type AttachmentFileCategory } from '@/activities/files/types/Attachment
 import { useFileIconColors } from '@/file/hooks/useFileIconColors';
 import { IconMapping } from '@/file/utils/fileIconMappings';
 import { AvatarOrIcon } from '@/ui/field/display/components/internal/AvatarOrIcon/AvatarOrIcon';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { isNonEmptyString } from '@sniptt/guards';
+import { borderRadius, grayScale } from 'twenty-ui/theme/tokens.stylex';
 import { useState } from 'react';
 import { FILE_CATEGORIES, type FileCategory } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 
 type FileIconSize = 'small' | 'medium';
 
@@ -16,26 +17,25 @@ const THUMBNAIL_SIZE_PX_BY_FILE_ICON_SIZE: Record<FileIconSize, number> = {
   medium: 24,
 };
 
-const StyledIconContainer = styled.div<{
-  background: string;
-}>`
-  align-items: center;
-  background: ${({ background }) => background};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  color: ${themeCssVariables.grayScale.gray1};
-  display: flex;
-  flex-shrink: 0;
-  justify-content: center;
-  padding: 5px;
-`;
-
-const StyledThumbnail = styled.img<{ sizePx: number }>`
-  border-radius: ${themeCssVariables.border.radius.sm};
-  flex-shrink: 0;
-  height: ${({ sizePx }) => sizePx}px;
-  object-fit: cover;
-  width: ${({ sizePx }) => sizePx}px;
-`;
+const styles = stylex.create({
+  iconContainer: (background: string) => ({
+    alignItems: 'center',
+    background,
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    color: grayScale['--t-gray-scale-gray1'],
+    display: 'flex',
+    flexShrink: 0,
+    justifyContent: 'center',
+    padding: '5px',
+  }),
+  thumbnail: (sizePx: number) => ({
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    flexShrink: 0,
+    height: sizePx,
+    objectFit: 'cover',
+    width: sizePx,
+  }),
+});
 
 type FileIconProps = {
   fileCategory: AttachmentFileCategory | FileCategory;
@@ -60,10 +60,12 @@ export const FileIcon = ({
 
   if (shouldRenderThumbnail) {
     return (
-      <StyledThumbnail
+      <img
+        {...stylex.props(
+          styles.thumbnail(THUMBNAIL_SIZE_PX_BY_FILE_ICON_SIZE[size]),
+        )}
         alt=""
         aria-hidden
-        sizePx={THUMBNAIL_SIZE_PX_BY_FILE_ICON_SIZE[size]}
         src={thumbnailUrl}
         onError={() => setFailedThumbnailUrl(thumbnailUrl)}
       />
@@ -80,12 +82,14 @@ export const FileIcon = ({
   }
 
   return (
-    <StyledIconContainer
-      background={iconColors[fileCategory] ?? theme.color.gray}
+    <div
+      {...stylex.props(
+        styles.iconContainer(iconColors[fileCategory] ?? theme.color.gray),
+      )}
     >
       {isDefined(Icon) && (
         <Icon size={theme.icon.size.sm} stroke={theme.icon.stroke.sm} />
       )}
-    </StyledIconContainer>
+    </div>
   );
 };

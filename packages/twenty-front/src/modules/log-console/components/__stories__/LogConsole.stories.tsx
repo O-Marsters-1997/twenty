@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { type Meta, type StoryObj } from '@storybook/react-vite';
 import { type ExecutionResult, print } from 'graphql';
 import { type RequestParams, type Sink } from 'graphql-sse';
@@ -61,6 +60,7 @@ import {
 import { getMockObjectMetadataItemOrThrow } from '~/testing/utils/getMockObjectMetadataItemOrThrow';
 import { getOperationName } from '~/utils/getOperationName';
 import { sleep } from '~/utils/sleep';
+import * as stylex from '@stylexjs/stylex';
 
 const WORKSPACE_WITH_LOGS_CONSOLE = {
   ...mockCurrentWorkspace,
@@ -95,29 +95,30 @@ const emitEventLogsLive = (records: EventLogRecord[]) =>
     sink.next({ data: { eventLogsLive: records } }),
   );
 
-const StyledPageWithSidePanel = styled.div`
-  display: flex;
-  flex: 1;
-  min-height: 0;
-  min-width: 0;
-`;
-
-const StyledPageWithLogConsole = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-width: 0;
-  position: relative;
-`;
+const styles = stylex.create({
+  pageWithSidePanel: {
+    display: 'flex',
+    flex: '1',
+    minHeight: '0',
+    minWidth: '0',
+  },
+  pageWithLogConsole: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    minWidth: '0',
+    position: 'relative',
+  },
+});
 
 const PageWithLogConsole = ({ children }: { children: ReactNode }) => (
-  <StyledPageWithSidePanel>
-    <StyledPageWithLogConsole>
+  <div {...stylex.props(styles.pageWithSidePanel)}>
+    <div {...stylex.props(styles.pageWithLogConsole)}>
       {children}
       <LogConsole />
-    </StyledPageWithLogConsole>
+    </div>
     <SidePanelForDesktop />
-  </StyledPageWithSidePanel>
+  </div>
 );
 
 const meta: Meta<PageDecoratorArgs> = {

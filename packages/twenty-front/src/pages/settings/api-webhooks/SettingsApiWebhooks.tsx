@@ -14,7 +14,6 @@ import McpCoverLight from '@/settings/mcp-and-apis/assets/mcp-cover-light.png';
 import { PlaygroundSetupForm } from '@/settings/mcp-and-apis/components/PlaygroundSetupForm';
 import { SettingsMcpSetup } from '@/settings/mcp-and-apis/components/SettingsMcpSetup';
 import { useIsMobile } from 'twenty-ui/utilities';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { SettingsPath } from 'twenty-shared/types';
 import { getSettingsPath } from 'twenty-shared/utils';
@@ -26,36 +25,38 @@ import {
   IconSparkles,
   IconWebhook,
 } from 'twenty-ui/icon';
-import { MOBILE_VIEWPORT, themeCssVariables } from 'twenty-ui/theme';
 import { SETTINGS_API_WEBHOOKS_TABS } from '@/settings/developers/constants/SettingsApiWebhooksTabs';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
 
 type TabKey =
   (typeof SETTINGS_API_WEBHOOKS_TABS.TABS_IDS)[keyof typeof SETTINGS_API_WEBHOOKS_TABS.TABS_IDS];
 
 const SETTINGS_API_HERO_INSTANCE_ID_PREFIX = 'settings-api-hero';
 
-const StyledButtonContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  padding-top: ${themeCssVariables.spacing[2]};
-  @media (max-width: ${MOBILE_VIEWPORT}px) {
-    padding-top: ${themeCssVariables.spacing[5]};
-  }
-`;
-
-const StyledTabContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[10]};
-  padding-top: ${themeCssVariables.spacing[6]};
-`;
-
-const StyledTableContainer = styled.div<{ isMobile?: boolean }>`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  overflow: ${({ isMobile }) => (isMobile ? 'hidden' : 'visible')};
-`;
+const styles = stylex.create({
+  tableContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    overflow: 'visible',
+  },
+  tableContainerMobile: {
+    overflow: 'hidden',
+  },
+  buttonContainer: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    paddingTop: { default: spacing['--t-spacing-2'], [media.mobile]: spacing['--t-spacing-5'] },
+  },
+  tabContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-10'],
+    paddingTop: spacing['--t-spacing-6'],
+  },
+});
 
 export const SettingsApiWebhooks = () => {
   const isMobile = useIsMobile();
@@ -125,7 +126,7 @@ export const SettingsApiWebhooks = () => {
         </Section.Root>
 
         {activeTab === SETTINGS_API_WEBHOOKS_TABS.TABS_IDS.API && (
-          <StyledTabContent>
+          <div {...stylex.props(styles.tabContent)}>
             <Section.Root>
               <Section.Header
                 title={t`Documentation`}
@@ -139,47 +140,47 @@ export const SettingsApiWebhooks = () => {
                 title={t`API Keys`}
                 description={t`Active API keys created by you or your team.`}
               />
-              <StyledTableContainer isMobile={isMobile}>
+              <div {...stylex.props(styles.tableContainer, isMobile && styles.tableContainerMobile)}>
                 <SettingsApiKeysTable />
-                <StyledButtonContainer>
+                <div {...stylex.props(styles.buttonContainer)}>
                   <NavigationButton
                     startIcon={<IconPlus />}
                     size="sm"
                     to={getSettingsPath(SettingsPath.NewApiKey)}
                     variant="outline"
                   >{t`Create API key`}</NavigationButton>
-                </StyledButtonContainer>
-              </StyledTableContainer>
+                </div>
+              </div>
             </Section.Root>
-          </StyledTabContent>
+          </div>
         )}
 
         {activeTab === SETTINGS_API_WEBHOOKS_TABS.TABS_IDS.MCP && (
-          <StyledTabContent>
+          <div {...stylex.props(styles.tabContent)}>
             <SettingsMcpSetup />
-          </StyledTabContent>
+          </div>
         )}
 
         {activeTab === SETTINGS_API_WEBHOOKS_TABS.TABS_IDS.WEBHOOKS && (
-          <StyledTabContent>
+          <div {...stylex.props(styles.tabContent)}>
             <Section.Root>
               <Section.Header
                 title={t`Webhooks`}
                 description={t`Establish Webhook endpoints for notifications on asynchronous events.`}
               />
-              <StyledTableContainer isMobile={isMobile}>
+              <div {...stylex.props(styles.tableContainer, isMobile && styles.tableContainerMobile)}>
                 <SettingsWebhooksTable />
-                <StyledButtonContainer>
+                <div {...stylex.props(styles.buttonContainer)}>
                   <NavigationButton
                     startIcon={<IconPlus />}
                     size="sm"
                     to={getSettingsPath(SettingsPath.NewWebhook)}
                     variant="outline"
                   >{t`Create webhook`}</NavigationButton>
-                </StyledButtonContainer>
-              </StyledTableContainer>
+                </div>
+              </div>
             </Section.Root>
-          </StyledTabContent>
+          </div>
         )}
       </SettingsPageContainer>
     </SettingsPageLayout>

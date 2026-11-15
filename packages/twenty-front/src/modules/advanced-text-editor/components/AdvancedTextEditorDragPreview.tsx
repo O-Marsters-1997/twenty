@@ -3,6 +3,8 @@ import { type Ref } from 'react';
 import { createPortal } from 'react-dom';
 import { type IconComponent, IconPlus } from 'twenty-ui/icon';
 import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { borderRadius, color } from 'twenty-ui/theme/tokens.stylex';
 
 const StyledDragPreview = styled.div`
   align-items: center;
@@ -27,15 +29,20 @@ const StyledDragPreview = styled.div`
   }
 `;
 
-const StyledInsertionBadge = styled.span`
-  align-items: center;
-  background-color: ${themeCssVariables.color.blue};
-  border-radius: ${themeCssVariables.border.radius.rounded};
-  display: inline-flex;
-  height: 16px;
-  justify-content: center;
-  width: 16px;
-`;
+const styles = stylex.create({
+  insertionBadge: {
+    alignItems: 'center',
+    backgroundColor: color['--t-color-blue'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-rounded'],
+    borderTopRightRadius: borderRadius['--t-border-radius-rounded'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-rounded'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-rounded'],
+    display: 'inline-flex',
+    height: '16px',
+    justifyContent: 'center',
+    width: '16px',
+  },
+});
 
 type AdvancedTextEditorDragPreviewProps = {
   Icon: IconComponent;
@@ -59,9 +66,9 @@ export const AdvancedTextEditorDragPreview = ({
       data-insertion={String(isInsertion)}
     >
       {isInsertion && (
-        <StyledInsertionBadge>
+        <span {...stylex.props(styles.insertionBadge)}>
           <IconPlus size={10} stroke={theme.icon.stroke.lg} />
-        </StyledInsertionBadge>
+        </span>
       )}
       <Icon size={theme.icon.size.sm} stroke={theme.icon.stroke.sm} />
       {label}

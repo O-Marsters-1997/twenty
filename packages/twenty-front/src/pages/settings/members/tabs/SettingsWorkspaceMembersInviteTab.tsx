@@ -29,41 +29,41 @@ import { Tooltip } from 'twenty-ui/primitives/surfaces';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 import { GetWorkspaceInvitationsDocument } from '~/generated-metadata/graphql';
 import { dateLocaleState } from '@/localization/states/dateLocaleState';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledButtonContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  flex-shrink: 0;
-  gap: ${themeCssVariables.spacing[1]};
-  margin-left: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledExpiresInHeader = styled.span`
-  white-space: nowrap;
-`;
+const styles = stylex.create({
+  buttonContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+    flexShrink: '0',
+    gap: spacing['--t-spacing-1'],
+    marginLeft: spacing['--t-spacing-2'],
+  },
+  expiresInHeader: {
+    whiteSpace: 'nowrap',
+  },
+  iconWrapper: {
+    alignItems: 'center',
+    display: 'flex',
+    marginRight: spacing['--t-spacing-2'],
+  },
+  textContainerWithEllipsis: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  tableRows: {
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
+  },
+});
 
 const StyledTableContainer = styled.div`
   > div {
     border-bottom: 1px solid ${themeCssVariables.border.color.light};
   }
-`;
-
-const StyledIconWrapper = styled.div`
-  align-items: center;
-  display: flex;
-  margin-right: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledTextContainerWithEllipsis = styled.div`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledTableRows = styled.div`
-  padding-bottom: ${themeCssVariables.spacing[2]};
-  padding-top: ${themeCssVariables.spacing[2]};
 `;
 
 export const SettingsWorkspaceMembersInviteTab = () => {
@@ -154,13 +154,13 @@ export const SettingsWorkspaceMembersInviteTab = () => {
                   <Trans>Role</Trans>
                 </TableHeader>
                 <TableHeader align="center">
-                  <StyledExpiresInHeader>
+                  <span {...stylex.props(styles.expiresInHeader)}>
                     <Trans>Expires in</Trans>
-                  </StyledExpiresInHeader>
+                  </span>
                 </TableHeader>
                 <TableHeader></TableHeader>
               </TableRow>
-              <StyledTableRows>
+              <div {...stylex.props(styles.tableRows)}>
                 {workspaceInvitations.map((workspaceInvitation) => (
                   <TableRow
                     gridAutoColumns="2fr 1fr 1fr 80px"
@@ -172,30 +172,30 @@ export const SettingsWorkspaceMembersInviteTab = () => {
                       minWidth="0"
                       overflow="hidden"
                     >
-                      <StyledIconWrapper>
+                      <div {...stylex.props(styles.iconWrapper)}>
                         <IconMail
                           size={theme.icon.size.md}
                           stroke={theme.icon.stroke.sm}
                         />
-                      </StyledIconWrapper>
+                      </div>
                       <Tooltip
                         content={workspaceInvitation.email}
                         side="top"
                         positionMethod="fixed"
                         delay={TooltipDelay.shortDelay}
                       >
-                        <StyledTextContainerWithEllipsis
-                          id={`invitation-email-${workspaceInvitation.id}`}
+                        <div
+                          id={`invitation-email-${workspaceInvitation.id}`} {...stylex.props(styles.textContainerWithEllipsis)}
                         >
                           {workspaceInvitation.email}
-                        </StyledTextContainerWithEllipsis>
+                        </div>
                       </Tooltip>
                     </TableCell>
                     <TableCell minWidth="0" overflow="hidden">
-                      <StyledTextContainerWithEllipsis>
+                      <div {...stylex.props(styles.textContainerWithEllipsis)}>
                         {rolesById.get(workspaceInvitation.roleId ?? '')
                           ?.label ?? t`Default role`}
-                      </StyledTextContainerWithEllipsis>
+                      </div>
                     </TableCell>
                     <TableCell align="center">
                       <Status color="gray">
@@ -203,7 +203,7 @@ export const SettingsWorkspaceMembersInviteTab = () => {
                       </Status>
                     </TableCell>
                     <TableCell align="right">
-                      <StyledButtonContainer>
+                      <div {...stylex.props(styles.buttonContainer)}>
                         <IconButton
                           aria-label={t`Resend invitation`}
                           onClick={() => {
@@ -228,11 +228,11 @@ export const SettingsWorkspaceMembersInviteTab = () => {
                         >
                           <IconTrash />
                         </IconButton>
-                      </StyledButtonContainer>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
-              </StyledTableRows>
+              </div>
             </Table>
           </StyledTableContainer>
         )}

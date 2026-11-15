@@ -6,7 +6,6 @@ import { useSortedArray } from '@/ui/layout/table/hooks/useSortedArray';
 import { isAdvancedModeEnabledState } from '@/ui/navigation/navigation-drawer/states/isAdvancedModeEnabledState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useMutation, useQuery } from '@apollo/client/react';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useMemo, useState } from 'react';
 import { isDefined } from 'twenty-shared/utils';
@@ -16,7 +15,6 @@ import { Section } from 'twenty-ui/components/layout';
 import { Dropdown } from 'twenty-ui/components/navigation';
 import { SettingsRow } from 'twenty-ui/components/settings';
 import { IconArchive, IconSettings } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
 import {
   ActivateSkillDocument,
   DeleteSkillDocument,
@@ -26,10 +24,14 @@ import { SETTINGS_SKILL_TABLE_METADATA } from '~/pages/settings/ai/constants/Set
 import { type SettingsSkillTableItem } from '~/pages/settings/ai/types/SettingsSkillTableItem';
 import { SettingsAgentSkillsTable } from './SettingsAgentSkillsTable';
 import { normalizeSearchText } from 'twenty-ui/utilities';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledSearchContainer = styled.div`
-  padding-bottom: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  searchContainer: {
+    paddingBottom: spacing['--t-spacing-2'],
+  },
+});
 
 export const SettingsAgentSkillsTab = () => {
   const { t } = useLingui();
@@ -123,7 +125,7 @@ export const SettingsAgentSkillsTab = () => {
         description={t`Use filter to see existing skills or create your own`}
       />
 
-      <StyledSearchContainer>
+      <div {...stylex.props(styles.searchContainer)}>
         <SearchInput
           placeholder={t`Search a skill...`}
           value={searchTerm}
@@ -158,7 +160,7 @@ export const SettingsAgentSkillsTab = () => {
             </DropdownRoot>
           )}
         />
-      </StyledSearchContainer>
+      </div>
       <SettingsAgentSkillsTable
         skills={filteredSkills}
         loading={loading}

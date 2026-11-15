@@ -19,7 +19,6 @@ import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomState
 import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomState';
 import { useMutation, useQuery } from '@apollo/client/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { styled } from '@linaria/react';
 import { i18n } from '@lingui/core';
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react/macro';
@@ -40,6 +39,8 @@ import {
 } from '~/generated-metadata/graphql';
 import { useNavigateApp } from '~/hooks/useNavigateApp';
 import { logError } from '~/utils/logError';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const passwordLengthMessage = msg`Password must be between 8 and 50 characters`;
 
@@ -54,32 +55,30 @@ const validationSchema = z
 
 type Form = z.infer<typeof validationSchema>;
 
-const StyledMainContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  width: 100%;
-`;
-
-const StyledForm = styled.form`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
-
-const StyledFullWidthContainer = styled.div`
-  width: 100%;
-`;
-
-const StyledInputContainer = styled.div`
-  margin-bottom: ${themeCssVariables.spacing[3]};
-`;
-
-const StyledMainButtonContainer = styled.div`
-  margin-top: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  mainContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    width: '100%',
+  },
+  form: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+  },
+  fullWidthContainer: {
+    width: '100%',
+  },
+  inputContainer: {
+    marginBottom: spacing['--t-spacing-3'],
+  },
+  mainButtonContainer: {
+    marginTop: spacing['--t-spacing-2'],
+  },
+});
 
 export const PasswordReset = () => {
   const { t } = useLingui();
@@ -211,7 +210,7 @@ export const PasswordReset = () => {
   return (
     isTokenValid && (
       <StyledAuthContent>
-        <StyledMainContainer>
+        <div {...stylex.props(styles.mainContainer)}>
           <AnimatedEaseIn>
             <Logo
               secondaryLogo={workspacePublicData?.logo}
@@ -232,8 +231,8 @@ export const PasswordReset = () => {
                 highlightColor={themeCssVariables.background.secondary}
               />
             ) : (
-              <StyledForm onSubmit={handleSubmit(onSubmit)}>
-                <StyledFullWidthContainer>
+              <form onSubmit={handleSubmit(onSubmit)} {...stylex.props(styles.form)}>
+                <div {...stylex.props(styles.fullWidthContainer)}>
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
@@ -243,7 +242,7 @@ export const PasswordReset = () => {
                       damping: 35,
                     }}
                   >
-                    <StyledInputContainer>
+                    <div {...stylex.props(styles.inputContainer)}>
                       <TextInput
                         autoFocus
                         value={email}
@@ -251,10 +250,10 @@ export const PasswordReset = () => {
                         fullWidth
                         disabled
                       />
-                    </StyledInputContainer>
+                    </div>
                   </motion.div>
-                </StyledFullWidthContainer>
-                <StyledFullWidthContainer>
+                </div>
+                <div {...stylex.props(styles.fullWidthContainer)}>
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
@@ -271,7 +270,7 @@ export const PasswordReset = () => {
                         field: { onChange, onBlur, value },
                         fieldState: { error },
                       }) => (
-                        <StyledInputContainer>
+                        <div {...stylex.props(styles.inputContainer)}>
                           <TextInput
                             autoFocus
                             value={value}
@@ -282,13 +281,13 @@ export const PasswordReset = () => {
                             error={error?.message}
                             fullWidth
                           />
-                        </StyledInputContainer>
+                        </div>
                       )}
                     />
                   </motion.div>
-                </StyledFullWidthContainer>
+                </div>
 
-                <StyledMainButtonContainer>
+                <div {...stylex.props(styles.mainButtonContainer)}>
                   <MainButton
                     type="submit"
                     fullWidth
@@ -297,11 +296,11 @@ export const PasswordReset = () => {
                   >
                     {passwordActionLabel}
                   </MainButton>
-                </StyledMainButtonContainer>
-              </StyledForm>
+                </div>
+              </form>
             )}
           </StyledOnboardingContentContainer>
-        </StyledMainContainer>
+        </div>
       </StyledAuthContent>
     )
   );
