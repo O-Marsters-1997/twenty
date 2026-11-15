@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import ts from 'typescript';
 
 import { themeCssVariables } from '../../../../twenty-ui/src/theme/themeCssVariables';
@@ -111,7 +113,9 @@ const Example = () => <StyledBox />;
     expect(output).toContain("borderTopRightRadius: '8px',");
     expect(output).toContain("borderWidth: '1px',");
     expect(output).toContain("borderStyle: 'solid',");
-    expect(output).toContain("borderColor: border['--t-border-color-medium'],");
+    expect(output).toContain(
+      "borderColor: borderColor['--t-border-color-medium'],",
+    );
   });
 
   it.each([
@@ -165,7 +169,18 @@ const Example = () => <StyledBox />;
     ).toThrow('Example.tsx:4');
   });
 
-  it('derives variable names that match themeCssVariables', () => {
+  it('derives groups and variable names that match tokens.stylex.ts', () => {
+    const groupByVariable = new Map<string, string>();
+    let currentGroup = '';
+    for (const line of readFileSync(
+      resolve(__dirname, '../../../../twenty-ui/src/theme/tokens.stylex.ts'),
+      'utf8',
+    ).split('\n')) {
+      const group = line.match(/^export const (\w+) = stylex\.defineVars/);
+      if (group) currentGroup = group[1];
+      const variable = line.match(/^\s+'--t-([^']+)':/);
+      if (variable) groupByVariable.set(`--t-${variable[1]}`, currentGroup);
+    }
     const walk = (node: unknown, path: string[]) => {
       if (typeof node === 'string') {
         const expression = ts.createSourceFile(
@@ -175,8 +190,9 @@ const Example = () => <StyledBox />;
           true,
         ).statements[0] as ts.ExpressionStatement;
         const token = resolveTokenReference(expression.expression);
+        const variableName = node.slice(4, -1);
         expect(token?.code).toBe(
-          `${path[0]}['${node.slice(4, -1)}']`,
+          `${groupByVariable.get(variableName)}['${variableName}']`,
         );
         return;
       }
