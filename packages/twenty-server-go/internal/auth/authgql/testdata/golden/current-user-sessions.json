@@ -1,0 +1,24 @@
+{
+  "name": "current-user-sessions",
+  "operation": "CurrentUserSessions",
+  "fixture": "workspace Acme where the user has one active session and another user has one too",
+  "endpoint": "/metadata",
+  "query": "query CurrentUserSessions { currentUserSessions { id workspaceId authProvider userAgent ipAddress createdAt lastActiveAt expiresAt isCurrent } }",
+  "response": {
+    "data": {
+      "currentUserSessions": [
+        {
+          "id": "f0000000-0000-4000-8000-000000000001",
+          "workspaceId": "20202020-1c25-4d02-bf25-6aeccf7ea419",
+          "authProvider": "password",
+          "userAgent": "Mozilla/5.0 (test)",
+          "ipAddress": "203.0.113.7",
+          "createdAt": "<ignored>",
+          "lastActiveAt": "<ignored>",
+          "expiresAt": "<ignored>",
+          "isCurrent": false
+        }
+      ]
+    }
+  }
+}

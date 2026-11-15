@@ -98,14 +98,18 @@ type ComplexityRoot struct {
 
 	Mutation struct {
 		DeleteTwoFactorAuthenticationMethod                     func(childComplexity int, twoFactorAuthenticationMethodID string) int
+		GenerateTransientToken                                  func(childComplexity int) int
 		GenerateTwoFactorAuthenticationRecoveryCode             func(childComplexity int, userID string, otp *string) int
 		GetAuthTokensFromLoginToken                             func(childComplexity int, loginToken string, origin string) int
 		GetAuthTokensFromOtp                                    func(childComplexity int, loginToken string, otp string, captchaToken *string, origin string) int
 		GetAuthTokensFromTwoFactorAuthenticationRecoveryCode    func(childComplexity int, loginToken string, recoveryCode string, captchaToken *string, origin string) int
 		GetLoginTokenFromCredentials                            func(childComplexity int, email string, password string, captchaToken *string, locale *string, verifyEmailRedirectPath *string, origin string) int
+		InitiateOTPProvisioning                                 func(childComplexity int, loginToken string, origin string) int
 		InitiateOTPProvisioningForAuthenticatedUser             func(childComplexity int) int
 		RenewToken                                              func(childComplexity int, appToken string) int
+		RevokeAllOtherUserSessions                              func(childComplexity int) int
 		RevokeTwoFactorAuthenticationRecoveryCode               func(childComplexity int, userID string) int
+		RevokeUserSession                                       func(childComplexity int, userSessionID string) int
 		SignIn                                                  func(childComplexity int, email string, password string, captchaToken *string, locale *string, verifyEmailRedirectPath *string) int
 		SignOut                                                 func(childComplexity int, refreshToken *string) int
 		VerifyTwoFactorAuthenticationMethodForAuthenticatedUser func(childComplexity int, otp string) int
@@ -113,6 +117,7 @@ type ComplexityRoot struct {
 
 	Query struct {
 		CurrentUser                           func(childComplexity int) int
+		CurrentUserSessions                   func(childComplexity int) int
 		TwoFactorAuthenticationRecoveryStatus func(childComplexity int, userID string) int
 	}
 
@@ -131,6 +136,10 @@ type ComplexityRoot struct {
 		Icon                          func(childComplexity int) int
 		IsEditable                    func(childComplexity int) int
 		Label                         func(childComplexity int) int
+	}
+
+	TransientToken struct {
+		TransientToken func(childComplexity int) int
 	}
 
 	TwoFactorAuthenticationRecoveryCode struct {
@@ -160,6 +169,18 @@ type ComplexityRoot struct {
 		OnboardingStatus    func(childComplexity int) int
 		SupportUserHash     func(childComplexity int) int
 		UserVars            func(childComplexity int) int
+	}
+
+	UserSession struct {
+		AuthProvider func(childComplexity int) int
+		CreatedAt    func(childComplexity int) int
+		ExpiresAt    func(childComplexity int) int
+		ID           func(childComplexity int) int
+		IPAddress    func(childComplexity int) int
+		IsCurrent    func(childComplexity int) int
+		LastActiveAt func(childComplexity int) int
+		UserAgent    func(childComplexity int) int
+		WorkspaceID  func(childComplexity int) int
 	}
 
 	VerifyTwoFactorAuthenticationMethod struct {
@@ -219,12 +240,17 @@ type MutationResolver interface {
 	SignIn(ctx context.Context, email string, password string, captchaToken *string, locale *string, verifyEmailRedirectPath *string) (*AvailableWorkspacesAndAccessTokens, error)
 	GetAuthTokensFromOtp(ctx context.Context, loginToken string, otp string, captchaToken *string, origin string) (*AuthTokens, error)
 	GetAuthTokensFromTwoFactorAuthenticationRecoveryCode(ctx context.Context, loginToken string, recoveryCode string, captchaToken *string, origin string) (*TwoFactorAuthenticationRecoveryCodeRedemption, error)
+	InitiateOTPProvisioning(ctx context.Context, loginToken string, origin string) (*InitiateTwoFactorAuthenticationProvisioning, error)
 	GetAuthTokensFromLoginToken(ctx context.Context, loginToken string, origin string) (*AuthTokens, error)
 	RenewToken(ctx context.Context, appToken string) (*AuthTokens, error)
 	SignOut(ctx context.Context, refreshToken *string) (bool, error)
+	RevokeUserSession(ctx context.Context, userSessionID string) (bool, error)
+	RevokeAllOtherUserSessions(ctx context.Context) (int, error)
+	GenerateTransientToken(ctx context.Context) (*TransientToken, error)
 }
 type QueryResolver interface {
 	TwoFactorAuthenticationRecoveryStatus(ctx context.Context, userID string) (*TwoFactorAuthenticationRecoveryStatus, error)
+	CurrentUserSessions(ctx context.Context) ([]*UserSession, error)
 	CurrentUser(ctx context.Context) (*User, error)
 }
 
@@ -424,6 +450,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteTwoFactorAuthenticationMethod(childComplexity, args["twoFactorAuthenticationMethodId"].(string)), true
+	case "Mutation.generateTransientToken":
+		if e.ComplexityRoot.Mutation.GenerateTransientToken == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Mutation.GenerateTransientToken(childComplexity), true
 	case "Mutation.generateTwoFactorAuthenticationRecoveryCode":
 		if e.ComplexityRoot.Mutation.GenerateTwoFactorAuthenticationRecoveryCode == nil {
 			break
@@ -479,6 +511,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.GetLoginTokenFromCredentials(childComplexity, args["email"].(string), args["password"].(string), args["captchaToken"].(*string), args["locale"].(*string), args["verifyEmailRedirectPath"].(*string), args["origin"].(string)), true
+	case "Mutation.initiateOTPProvisioning":
+		if e.ComplexityRoot.Mutation.InitiateOTPProvisioning == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_initiateOTPProvisioning_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.InitiateOTPProvisioning(childComplexity, args["loginToken"].(string), args["origin"].(string)), true
 	case "Mutation.initiateOTPProvisioningForAuthenticatedUser":
 		if e.ComplexityRoot.Mutation.InitiateOTPProvisioningForAuthenticatedUser == nil {
 			break
@@ -496,6 +539,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.RenewToken(childComplexity, args["appToken"].(string)), true
+	case "Mutation.revokeAllOtherUserSessions":
+		if e.ComplexityRoot.Mutation.RevokeAllOtherUserSessions == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Mutation.RevokeAllOtherUserSessions(childComplexity), true
 	case "Mutation.revokeTwoFactorAuthenticationRecoveryCode":
 		if e.ComplexityRoot.Mutation.RevokeTwoFactorAuthenticationRecoveryCode == nil {
 			break
@@ -507,6 +556,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.RevokeTwoFactorAuthenticationRecoveryCode(childComplexity, args["userId"].(string)), true
+	case "Mutation.revokeUserSession":
+		if e.ComplexityRoot.Mutation.RevokeUserSession == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_revokeUserSession_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.RevokeUserSession(childComplexity, args["userSessionId"].(string)), true
 	case "Mutation.signIn":
 		if e.ComplexityRoot.Mutation.SignIn == nil {
 			break
@@ -547,6 +607,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.CurrentUser(childComplexity), true
+	case "Query.currentUserSessions":
+		if e.ComplexityRoot.Query.CurrentUserSessions == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Query.CurrentUserSessions(childComplexity), true
 
 	case "Query.twoFactorAuthenticationRecoveryStatus":
 		if e.ComplexityRoot.Query.TwoFactorAuthenticationRecoveryStatus == nil {
@@ -644,6 +710,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Role.Label(childComplexity), true
+
+	case "TransientToken.transientToken":
+		if e.ComplexityRoot.TransientToken.TransientToken == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TransientToken.TransientToken(childComplexity), true
 
 	case "TwoFactorAuthenticationRecoveryCode.expiresAt":
 		if e.ComplexityRoot.TwoFactorAuthenticationRecoveryCode.ExpiresAt == nil {
@@ -750,6 +823,61 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.User.UserVars(childComplexity), true
+
+	case "UserSession.authProvider":
+		if e.ComplexityRoot.UserSession.AuthProvider == nil {
+			break
+		}
+
+		return e.ComplexityRoot.UserSession.AuthProvider(childComplexity), true
+	case "UserSession.createdAt":
+		if e.ComplexityRoot.UserSession.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.UserSession.CreatedAt(childComplexity), true
+	case "UserSession.expiresAt":
+		if e.ComplexityRoot.UserSession.ExpiresAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.UserSession.ExpiresAt(childComplexity), true
+	case "UserSession.id":
+		if e.ComplexityRoot.UserSession.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.UserSession.ID(childComplexity), true
+	case "UserSession.ipAddress":
+		if e.ComplexityRoot.UserSession.IPAddress == nil {
+			break
+		}
+
+		return e.ComplexityRoot.UserSession.IPAddress(childComplexity), true
+	case "UserSession.isCurrent":
+		if e.ComplexityRoot.UserSession.IsCurrent == nil {
+			break
+		}
+
+		return e.ComplexityRoot.UserSession.IsCurrent(childComplexity), true
+	case "UserSession.lastActiveAt":
+		if e.ComplexityRoot.UserSession.LastActiveAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.UserSession.LastActiveAt(childComplexity), true
+	case "UserSession.userAgent":
+		if e.ComplexityRoot.UserSession.UserAgent == nil {
+			break
+		}
+
+		return e.ComplexityRoot.UserSession.UserAgent(childComplexity), true
+	case "UserSession.workspaceId":
+		if e.ComplexityRoot.UserSession.WorkspaceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.UserSession.WorkspaceID(childComplexity), true
 
 	case "VerifyTwoFactorAuthenticationMethod.success":
 		if e.ComplexityRoot.VerifyTwoFactorAuthenticationMethod.Success == nil {
@@ -1210,6 +1338,14 @@ func (ec *executionContext) childFields_Role(ctx context.Context, field graphql.
 	return nil, fmt.Errorf("no field named %q was found under type Role", field.Name)
 }
 
+func (ec *executionContext) childFields_TransientToken(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "transientToken":
+		return ec.fieldContext_TransientToken_transientToken(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TransientToken", field.Name)
+}
+
 func (ec *executionContext) childFields_TwoFactorAuthenticationRecoveryCode(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "recoveryCode":
@@ -1266,6 +1402,30 @@ func (ec *executionContext) childFields_User(ctx context.Context, field graphql.
 		return ec.fieldContext_User_userVars(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
+}
+
+func (ec *executionContext) childFields_UserSession(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_UserSession_id(ctx, field)
+	case "workspaceId":
+		return ec.fieldContext_UserSession_workspaceId(ctx, field)
+	case "authProvider":
+		return ec.fieldContext_UserSession_authProvider(ctx, field)
+	case "userAgent":
+		return ec.fieldContext_UserSession_userAgent(ctx, field)
+	case "ipAddress":
+		return ec.fieldContext_UserSession_ipAddress(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_UserSession_createdAt(ctx, field)
+	case "lastActiveAt":
+		return ec.fieldContext_UserSession_lastActiveAt(ctx, field)
+	case "expiresAt":
+		return ec.fieldContext_UserSession_expiresAt(ctx, field)
+	case "isCurrent":
+		return ec.fieldContext_UserSession_isCurrent(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type UserSession", field.Name)
 }
 
 func (ec *executionContext) childFields_VerifyTwoFactorAuthenticationMethod(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -1656,6 +1816,28 @@ func (ec *executionContext) field_Mutation_getLoginTokenFromCredentials_args(ctx
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_initiateOTPProvisioning_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "loginToken",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["loginToken"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "origin",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["origin"] = arg1
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_renewToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -1681,6 +1863,20 @@ func (ec *executionContext) field_Mutation_revokeTwoFactorAuthenticationRecovery
 		return nil, err
 	}
 	args["userId"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_revokeUserSession_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "userSessionId",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNUUID2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["userSessionId"] = arg0
 	return args, nil
 }
 
@@ -2923,6 +3119,50 @@ func (ec *executionContext) fieldContext_Mutation_getAuthTokensFromTwoFactorAuth
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_initiateOTPProvisioning(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_initiateOTPProvisioning(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().InitiateOTPProvisioning(ctx, fc.Args["loginToken"].(string), fc.Args["origin"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *InitiateTwoFactorAuthenticationProvisioning) graphql.Marshaler {
+			return ec.marshalNInitiateTwoFactorAuthenticationProvisioning2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐInitiateTwoFactorAuthenticationProvisioning(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_initiateOTPProvisioning(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_InitiateTwoFactorAuthenticationProvisioning(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_initiateOTPProvisioning_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_getAuthTokensFromLoginToken(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -3055,6 +3295,105 @@ func (ec *executionContext) fieldContext_Mutation_signOut(ctx context.Context, f
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_revokeUserSession(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_revokeUserSession(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().RevokeUserSession(ctx, fc.Args["userSessionId"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_revokeUserSession(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_revokeUserSession_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_revokeAllOtherUserSessions(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_revokeAllOtherUserSessions(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return ec.Resolvers.Mutation().RevokeAllOtherUserSessions(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_revokeAllOtherUserSessions(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Mutation", field, true, true, "Int")
+}
+
+func (ec *executionContext) _Mutation_generateTransientToken(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_generateTransientToken(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return ec.Resolvers.Mutation().GenerateTransientToken(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *TransientToken) graphql.Marshaler {
+			return ec.marshalNTransientToken2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐTransientToken(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_generateTransientToken(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_TransientToken(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_twoFactorAuthenticationRecoveryStatus(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -3095,6 +3434,38 @@ func (ec *executionContext) fieldContext_Query_twoFactorAuthenticationRecoverySt
 	if fc.Args, err = ec.field_Query_twoFactorAuthenticationRecoveryStatus_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_currentUserSessions(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_currentUserSessions(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return ec.Resolvers.Query().CurrentUserSessions(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*UserSession) graphql.Marshaler {
+			return ec.marshalNUserSession2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐUserSessionᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_currentUserSessions(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_UserSession(ctx, field)
+		},
 	}
 	return fc, nil
 }
@@ -3529,6 +3900,38 @@ func (ec *executionContext) fieldContext_Role_canBeAssignedToApiKeys(_ context.C
 	return graphql.NewScalarFieldContext("Role", field, false, false, "Boolean")
 }
 
+func (ec *executionContext) _TransientToken_transientToken(ctx context.Context, field graphql.CollectedField, obj *TransientToken) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TransientToken_transientToken(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TransientToken, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *AuthToken) graphql.Marshaler {
+			return ec.marshalNAuthToken2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐAuthToken(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_TransientToken_transientToken(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TransientToken",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_AuthToken(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _TwoFactorAuthenticationRecoveryCode_recoveryCode(ctx context.Context, field graphql.CollectedField, obj *TwoFactorAuthenticationRecoveryCode) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -3945,6 +4348,213 @@ func (ec *executionContext) _User_userVars(ctx context.Context, field graphql.Co
 }
 func (ec *executionContext) fieldContext_User_userVars(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("User", field, false, false, "JSON")
+}
+
+func (ec *executionContext) _UserSession_id(ctx context.Context, field graphql.CollectedField, obj *UserSession) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_UserSession_id(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNUUID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_UserSession_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("UserSession", field, false, false, "UUID")
+}
+
+func (ec *executionContext) _UserSession_workspaceId(ctx context.Context, field graphql.CollectedField, obj *UserSession) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_UserSession_workspaceId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.WorkspaceID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOUUID2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_UserSession_workspaceId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("UserSession", field, false, false, "UUID")
+}
+
+func (ec *executionContext) _UserSession_authProvider(ctx context.Context, field graphql.CollectedField, obj *UserSession) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_UserSession_authProvider(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AuthProvider, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_UserSession_authProvider(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("UserSession", field, false, false, "String")
+}
+
+func (ec *executionContext) _UserSession_userAgent(ctx context.Context, field graphql.CollectedField, obj *UserSession) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_UserSession_userAgent(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UserAgent, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_UserSession_userAgent(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("UserSession", field, false, false, "String")
+}
+
+func (ec *executionContext) _UserSession_ipAddress(ctx context.Context, field graphql.CollectedField, obj *UserSession) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_UserSession_ipAddress(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.IPAddress, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_UserSession_ipAddress(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("UserSession", field, false, false, "String")
+}
+
+func (ec *executionContext) _UserSession_createdAt(ctx context.Context, field graphql.CollectedField, obj *UserSession) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_UserSession_createdAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v metadata.Timestamp) graphql.Marshaler {
+			return ec.marshalNDateTime2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_UserSession_createdAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("UserSession", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _UserSession_lastActiveAt(ctx context.Context, field graphql.CollectedField, obj *UserSession) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_UserSession_lastActiveAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.LastActiveAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v metadata.Timestamp) graphql.Marshaler {
+			return ec.marshalNDateTime2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_UserSession_lastActiveAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("UserSession", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _UserSession_expiresAt(ctx context.Context, field graphql.CollectedField, obj *UserSession) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_UserSession_expiresAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ExpiresAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v metadata.Timestamp) graphql.Marshaler {
+			return ec.marshalNDateTime2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_UserSession_expiresAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("UserSession", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _UserSession_isCurrent(ctx context.Context, field graphql.CollectedField, obj *UserSession) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_UserSession_isCurrent(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.IsCurrent, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_UserSession_isCurrent(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("UserSession", field, false, false, "Boolean")
 }
 
 func (ec *executionContext) _VerifyTwoFactorAuthenticationMethod_success(ctx context.Context, field graphql.CollectedField, obj *VerifyTwoFactorAuthenticationMethod) (ret graphql.Marshaler) {
@@ -6352,6 +6962,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "initiateOTPProvisioning":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_initiateOTPProvisioning(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "getAuthTokensFromLoginToken":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_getAuthTokensFromLoginToken(ctx, field)
@@ -6369,6 +6986,27 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "signOut":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_signOut(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "revokeUserSession":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_revokeUserSession(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "revokeAllOtherUserSessions":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_revokeAllOtherUserSessions(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "generateTransientToken":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_generateTransientToken(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -6414,6 +7052,12 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 				true, true,
 				func(ctx context.Context) graphql.Marshaler {
 					return ec._Query_twoFactorAuthenticationRecoveryStatus(ctx, field)
+				})
+		case "currentUserSessions":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_currentUserSessions(ctx, field)
 				})
 		case "currentUser":
 			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
@@ -6530,6 +7174,39 @@ func (ec *executionContext) _Role(ctx context.Context, sel ast.SelectionSet, obj
 			}
 		case "canBeAssignedToApiKeys":
 			out.Values[i] = ec._Role_canBeAssignedToApiKeys(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var transientTokenImplementors = []string{"TransientToken"}
+
+func (ec *executionContext) _TransientToken(ctx context.Context, sel ast.SelectionSet, obj *TransientToken) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, transientTokenImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("TransientToken")
+		case "transientToken":
+			out.Values[i] = ec._TransientToken_transientToken(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -6728,6 +7405,79 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 		case "userVars":
 			out.Values[i] = ec._User_userVars(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var userSessionImplementors = []string{"UserSession"}
+
+func (ec *executionContext) _UserSession(ctx context.Context, sel ast.SelectionSet, obj *UserSession) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, userSessionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("UserSession")
+		case "id":
+			out.Values[i] = ec._UserSession_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "workspaceId":
+			out.Values[i] = ec._UserSession_workspaceId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "authProvider":
+			out.Values[i] = ec._UserSession_authProvider(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "userAgent":
+			out.Values[i] = ec._UserSession_userAgent(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "ipAddress":
+			out.Values[i] = ec._UserSession_ipAddress(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "createdAt":
+			out.Values[i] = ec._UserSession_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "lastActiveAt":
+			out.Values[i] = ec._UserSession_lastActiveAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "expiresAt":
+			out.Values[i] = ec._UserSession_expiresAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "isCurrent":
+			out.Values[i] = ec._UserSession_isCurrent(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
 		default:
@@ -7562,6 +8312,14 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 	return res
 }
 
+func (ec *executionContext) marshalNTransientToken2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐTransientToken(ctx context.Context, sel ast.SelectionSet, v *TransientToken) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "TransientToken!")
+		return graphql.Null
+	}
+	return ec._TransientToken(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNTwoFactorAuthenticationRecoveryCode2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐTwoFactorAuthenticationRecoveryCode(ctx context.Context, sel ast.SelectionSet, v *TwoFactorAuthenticationRecoveryCode) graphql.Marshaler {
 	if v == nil {
 		graphql.AddInvalidNullError(ctx, "TwoFactorAuthenticationRecoveryCode!")
@@ -7606,6 +8364,30 @@ func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋp
 		return graphql.Null
 	}
 	return ec._User(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNUserSession2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐUserSessionᚄ(ctx context.Context, sel ast.SelectionSet, v []*UserSession) graphql.Marshaler {
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNUserSession2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐUserSession(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNUserSession2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐUserSession(ctx context.Context, sel ast.SelectionSet, v *UserSession) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "UserSession!")
+		return graphql.Null
+	}
+	return ec._UserSession(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNVerifyTwoFactorAuthenticationMethod2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐVerifyTwoFactorAuthenticationMethod(ctx context.Context, sel ast.SelectionSet, v *VerifyTwoFactorAuthenticationMethod) graphql.Marshaler {
@@ -7960,6 +8742,24 @@ func (ec *executionContext) unmarshalOString2ᚖstring(ctx context.Context, v an
 }
 
 func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel ast.SelectionSet, v *string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	_ = sel
+	_ = ctx
+	res := graphql.MarshalString(*v)
+	return res
+}
+
+func (ec *executionContext) unmarshalOUUID2ᚖstring(ctx context.Context, v any) (*string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalString(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOUUID2ᚖstring(ctx context.Context, sel ast.SelectionSet, v *string) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}

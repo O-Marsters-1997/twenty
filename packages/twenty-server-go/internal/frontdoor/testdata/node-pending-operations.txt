@@ -17,14 +17,11 @@ CreateCalendarEvent
 CreateFileUpload
 CreateManyNavigationMenuItems
 CreateNewWorkspaceLogoUpload
-CreateOneIndexMetadataItem
 CreateUnsubscribeTopic
 CreateValidationRule
-CurrentUserSessions
 DeleteApprovedAccessDomain
 DeleteCurrentWorkspace
 DeleteManyNavigationMenuItems
-DeleteOneIndexMetadataItem
 DeleteUnsubscribeTopic
 DeleteUserAccount
 DeleteUserWorkspace
@@ -77,7 +74,6 @@ GetWorkspaceInvitations
 GoBackToPreviousOnboardingStep
 LineChartData
 MessageSuppressions
-MetadataTranslations
 MostlyEmptyFieldMetadataIds
 MyMessageFolders
 ObjectRecordCounts
@@ -92,8 +88,6 @@ ResetPageLayoutTabToDefault
 ResetPageLayoutToDefault
 ResetPageLayoutWidgetToDefault
 ResetTimelineActivityType
-RevokeAllOtherUserSessions
-RevokeUserSession
 RunCoreWorkflowVersion
 Search
 SendInvitations
@@ -128,8 +122,6 @@ ValidatePasswordResetToken
 VerifyEmailAndGetLoginToken
 VerifyEmailAndGetWorkspaceAgnosticToken
 VerifyEmailingDomain
-generateTransientToken
-initiateOTPProvisioning
 records:agentChatThread
 records:agentChatThreadParticipant
 records:agentChatThreadTarget

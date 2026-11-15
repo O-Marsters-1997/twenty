@@ -1,0 +1,12 @@
+{
+  "name": "initiate-otp-provisioning",
+  "operation": "initiateOTPProvisioning",
+  "fixture": "workspace Acme with a user who has no two-factor method and a valid login token",
+  "endpoint": "/graphql",
+  "query": "mutation initiateOTPProvisioning($loginToken: String!, $origin: String!) { initiateOTPProvisioning(loginToken: $loginToken, origin: $origin) { uri } }",
+  "variables": {
+    "loginToken": "valid-login-token",
+    "origin": "http://acme.localhost:3001"
+  },
+  "response": {"data":{"initiateOTPProvisioning":{"uri":"otpauth://totp/Twenty%20-%20Acme:3%40example.com?secret=JBSWY3DPEHPK3PXP&period=30&digits=6&algorithm=SHA1&issuer=Twenty%20-%20Acme"}}}
+}

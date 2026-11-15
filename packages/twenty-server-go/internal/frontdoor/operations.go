@@ -96,13 +96,16 @@ func staticTable() OperationTable {
 			"CreateOneFieldMetadataItem":  RouteBlocked,
 			"UpdateOneFieldMetadataItem":  RouteBlocked,
 			"DeleteOneFieldMetadataItem":  RouteBlocked,
+			"CreateOneIndexMetadataItem":  RouteBlocked,
+			"DeleteOneIndexMetadataItem":  RouteBlocked,
+			"MetadataTranslations":        RouteBlocked,
 			"SendEmail":                   RouteGo,
 		},
 	}
 	for _, operation := range viewOperations {
 		table[EndpointMetadata][operation] = RouteGo
 	}
-	for _, operation := range slices.Concat(SkillOperations, ChatOperations, agentOperations, MessagingOperations, AccessOperations, WorkspaceSettingsOperations, TwoFactorOperations, SessionOperations, PasswordLoginOperations) {
+	for _, operation := range slices.Concat(SkillOperations, ChatOperations, agentOperations, MessagingOperations, AccessOperations, WorkspaceSettingsOperations, TwoFactorOperations, SessionOperations, SessionManagementOperations, PasswordLoginOperations) {
 		table[EndpointMetadata][operation] = RouteGo
 	}
 	for _, operation := range slices.Concat(WorkflowOperations, WorkflowAuthoringOperations) {
@@ -183,7 +186,7 @@ var AccessOperations = []string{
 
 var WorkspaceSettingsOperations = []string{"UpdateWorkspace", "UpdateWorkspaceAllowedIframeOrigins"}
 
-var LoginOperations = []string{"getAuthTokensFromOTP", "getAuthTokensFromTwoFactorAuthenticationRecoveryCode"}
+var LoginOperations = []string{"getAuthTokensFromOTP", "getAuthTokensFromTwoFactorAuthenticationRecoveryCode", "initiateOTPProvisioning"}
 
 var TwoFactorOperations = []string{
 	"initiateOTPProvisioningForAuthenticatedUser", "verifyTwoFactorAuthenticationMethodForAuthenticatedUser",
@@ -194,6 +197,8 @@ var TwoFactorOperations = []string{
 var CurrentUserOperations = []string{"GetCurrentUser"}
 
 var SessionOperations = []string{"getAuthTokensFromLoginToken", "RenewToken", "SignOut"}
+
+var SessionManagementOperations = []string{"CurrentUserSessions", "RevokeUserSession", "RevokeAllOtherUserSessions", "generateTransientToken"}
 
 var blockedMetadataFields = []string{
 	"createOneObject", "updateOneObject", "deleteOneObject",

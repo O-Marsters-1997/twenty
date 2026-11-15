@@ -37,3 +37,7 @@ extend type Mutation {
   getAuthTokensFromOTP(loginToken: String!, otp: String!, captchaToken: String, origin: String!): AuthTokens!
   getAuthTokensFromTwoFactorAuthenticationRecoveryCode(loginToken: String!, recoveryCode: String!, captchaToken: String, origin: String!): TwoFactorAuthenticationRecoveryCodeRedemption!
 }
+
+extend type Mutation {
+  initiateOTPProvisioning(loginToken: String!, origin: String!): InitiateTwoFactorAuthenticationProvisioning!
+}

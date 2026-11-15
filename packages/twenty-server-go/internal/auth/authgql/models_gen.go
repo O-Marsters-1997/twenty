@@ -88,6 +88,10 @@ type Role struct {
 	CanBeAssignedToAPIKeys        bool    `json:"canBeAssignedToApiKeys"`
 }
 
+type TransientToken struct {
+	TransientToken *AuthToken `json:"transientToken"`
+}
+
 type TwoFactorAuthenticationRecoveryCode struct {
 	RecoveryCode string             `json:"recoveryCode"`
 	ExpiresAt    metadata.Timestamp `json:"expiresAt"`
@@ -115,6 +119,18 @@ type User struct {
 	CurrentWorkspace    *Workspace           `json:"currentWorkspace,omitempty"`
 	AvailableWorkspaces *AvailableWorkspaces `json:"availableWorkspaces"`
 	UserVars            any                  `json:"userVars,omitempty"`
+}
+
+type UserSession struct {
+	ID           string             `json:"id"`
+	WorkspaceID  *string            `json:"workspaceId,omitempty"`
+	AuthProvider string             `json:"authProvider"`
+	UserAgent    *string            `json:"userAgent,omitempty"`
+	IPAddress    *string            `json:"ipAddress,omitempty"`
+	CreatedAt    metadata.Timestamp `json:"createdAt"`
+	LastActiveAt metadata.Timestamp `json:"lastActiveAt"`
+	ExpiresAt    metadata.Timestamp `json:"expiresAt"`
+	IsCurrent    bool               `json:"isCurrent"`
 }
 
 type VerifyTwoFactorAuthenticationMethod struct {
