@@ -22,7 +22,6 @@ CreateOneRole
 CreateUnsubscribeTopic
 CreateValidationRule
 CurrentUserSessions
-DeleteApprovedAccessDomain
 DeleteCurrentWorkspace
 DeleteManyNavigationMenuItems
 DeleteOneIndexMetadataItem
@@ -31,7 +30,6 @@ DeleteUnsubscribeTopic
 DeleteUserAccount
 DeleteUserWorkspace
 DeleteValidationRule
-DeleteWorkspaceInvitation
 DuplicateDashboard
 DuplicateMessageList
 EmailPasswordResetLink
@@ -61,7 +59,6 @@ GenerateSignedDpa
 GetAddressDetails
 GetAgentRuns
 GetAiSystemPromptPreview
-GetApprovedAccessDomains
 GetAutoCompleteAddress
 GetCurrentUser
 GetDpaAgreements
@@ -77,7 +74,6 @@ GetTimelineCalendarEventsFromObjectRecord
 GetWorkspaceCreationDefaults
 GetWorkspaceFromInviteHash
 GetWorkspaceIframeOrigins
-GetWorkspaceInvitations
 GoBackToPreviousOnboardingStep
 LineChartData
 MessageSuppressions
