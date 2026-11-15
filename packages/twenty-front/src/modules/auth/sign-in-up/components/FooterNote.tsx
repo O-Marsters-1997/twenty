@@ -49,7 +49,7 @@ const FooterLink = ({ href, children }: { href: string; children: ReactNode }) =
     {...stylex.props(styles.link)}
   >
     {children}
-  </FooterLink>
+  </a>
 );
 
 type FooterNoteProps = {

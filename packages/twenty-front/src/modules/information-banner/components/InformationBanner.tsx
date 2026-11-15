@@ -1,8 +1,6 @@
 import { InformationBannerComponentInstanceContext } from '@/information-banner/states/contexts/InformationBannerComponentInstanceContext';
 import { informationBannerIsOpenComponentState } from '@/information-banner/states/informationBannerIsOpenComponentState';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { css } from '@linaria/core';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { IconButton } from 'twenty-ui/components/input';
@@ -14,30 +12,30 @@ import {
   type BannerStatus,
   type BannerVariant,
 } from 'twenty-ui/primitives/feedback';
-import { themeCssVariables } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   text: {
     minWidth: '0',
   },
+  content: {
+    alignItems: 'center',
+    display: 'flex',
+    flexBasis: '0%',
+    flexGrow: 1,
+    flexShrink: 1,
+    gap: spacing['--t-spacing-3'],
+    justifyContent: 'center',
+    minWidth: 0,
+  },
+  contentWithCloseButton: {
+    marginLeft: '24px',
+  },
+  iconButton: {
+    color: 'inherit',
+  },
 });
-
-const BANNER_ICON_BUTTON_CLASS_NAME = css`
-  &[data-variant='ghost'] {
-    color: inherit;
-  }
-`;
-
-const StyledContent = styled.div<{ hasCloseButton: boolean }>`
-  align-items: center;
-  display: flex;
-  flex: 1;
-  gap: ${themeCssVariables.spacing[3]};
-  justify-content: center;
-  margin-left: ${({ hasCloseButton }) => (hasCloseButton ? '24px' : '0')};
-  min-width: 0;
-`;
 
 export const InformationBanner = ({
   message,
@@ -75,7 +73,12 @@ export const InformationBanner = ({
     >
       {informationBannerIsOpen && (
         <Banner color={color} status={status} variant={variant}>
-          <StyledContent hasCloseButton={isDefined(onClose)}>
+          <div
+            {...stylex.props(
+              styles.content,
+              isDefined(onClose) && styles.contentWithCloseButton,
+            )}
+          >
             <div {...stylex.props(styles.text)}>
               <OverflowingTextWithTooltip
                 isFocusable
@@ -92,10 +95,10 @@ export const InformationBanner = ({
                 {buttonTitle}
               </Banner.Action>
             )}
-          </StyledContent>
+          </div>
           {isDefined(onClose) && (
             <IconButton
-              className={BANNER_ICON_BUTTON_CLASS_NAME}
+              {...stylex.props(styles.iconButton)}
               size="sm"
               variant="ghost"
               onClick={onClose}

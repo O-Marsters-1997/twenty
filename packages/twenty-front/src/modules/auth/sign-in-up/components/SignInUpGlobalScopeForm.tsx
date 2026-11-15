@@ -50,7 +50,7 @@ const styles = stylex.create({
     overflow: 'hidden',
     width: '100%',
   },
-  workspaceItem: {
+  workspaceRow: {
     borderBottomColor: borderColor['--t-border-color-medium'],
     borderBottomStyle: 'solid',
     borderBottomWidth: { default: '1px', ':last-child': '0' },
@@ -167,7 +167,7 @@ export const SignInUpGlobalScopeForm = () => {
               <OnboardingStepAnimatedItem
                 key={availableWorkspace.id}
                 index={index}
-                {...stylex.props(styles.workspaceItem)}
+                {...stylex.props(styles.workspaceRow)}
               >
                 <UndecoratedLink
                   to={getAvailableWorkspaceUrl(availableWorkspace)}
@@ -208,7 +208,7 @@ export const SignInUpGlobalScopeForm = () => {
             {!isDDLLocked && (
               <OnboardingStepAnimatedItem
                 index={availableWorkspacesList.length}
-                {...stylex.props(styles.workspaceItem)}
+                {...stylex.props(styles.workspaceRow)}
               >
                 <div
                   onClick={() =>

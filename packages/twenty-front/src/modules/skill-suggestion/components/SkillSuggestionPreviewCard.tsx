@@ -1,25 +1,23 @@
-import { styled } from '@linaria/react';
 import { isNonEmptyString } from '@sniptt/guards';
 import { useIcons } from 'twenty-ui/icon';
-import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 
 import { DEFAULT_SKILL_ICON } from '@/skill-suggestion/constants/DefaultSkillIcon';
 import { SKILL_SUGGESTION_PREVIEW_WIDTH } from '@/skill-suggestion/constants/SkillSuggestionPreviewWidth';
 import type { SkillSuggestionItem } from '@/skill-suggestion/types/SkillSuggestionItem';
 import * as stylex from '@stylexjs/stylex';
-import { borderColor, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
-
-const StyledCard = styled.div`
-  background: ${themeCssVariables.background.primary};
-  border-radius: ${themeCssVariables.border.radius.md};
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  width: ${SKILL_SUGGESTION_PREVIEW_WIDTH}px;
-`;
+import { background, borderColor, borderRadius, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
+  card: (width: number) => ({
+    background: background['--t-background-primary'],
+    borderRadius: borderRadius['--t-border-radius-md'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden',
+    width,
+  }),
   header: {
     alignItems: 'center',
     borderBottomWidth: '1px',
@@ -73,7 +71,7 @@ export const SkillSuggestionPreviewCard = ({
   const Icon = getIcon(skill.icon ?? DEFAULT_SKILL_ICON);
 
   return (
-    <StyledCard>
+    <div {...stylex.props(styles.card(SKILL_SUGGESTION_PREVIEW_WIDTH))}>
       <div {...stylex.props(styles.header)}>
         <Icon size={theme.icon.size.md} stroke={theme.icon.stroke.sm} />
         <div {...stylex.props(styles.titleText)}>{skill.label}</div>
@@ -82,6 +80,6 @@ export const SkillSuggestionPreviewCard = ({
       {isNonEmptyString(skill.description) && (
         <div {...stylex.props(styles.description)}>{skill.description}</div>
       )}
-    </StyledCard>
+    </div>
   );
 };

@@ -1,12 +1,15 @@
 import { SkeletonLine } from '@/ui/feedback/skeleton/components/SkeletonLine';
 import { NavigationDrawerSection } from '@/ui/navigation/navigation-drawer/components/NavigationDrawerSection';
-import { css } from '@linaria/core';
 import { SKELETON_HEIGHT_SIZES } from 'twenty-ui/primitives/feedback';
 import { themeCssVariables } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
 import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
+  fillSkeleton: {
+    display: 'block',
+    width: '100%',
+  },
   titleSkeleton: {
     alignItems: 'center',
     display: 'flex',
@@ -24,10 +27,9 @@ const styles = stylex.create({
   },
 });
 
-const fillSkeletonContainer = css`
-  display: block;
-  width: 100%;
-`;
+const FILL_SKELETON_CONTAINER_CLASS_NAME = stylex.props(
+  styles.fillSkeleton,
+).className;
 
 export const NavigationDrawerWorkspaceSectionSkeletonLoader = () => {
   return (
@@ -41,17 +43,17 @@ export const NavigationDrawerWorkspaceSectionSkeletonLoader = () => {
       </div>
       <div {...stylex.props(styles.rowsContainer)}>
         <SkeletonLine
-          containerClassName={fillSkeletonContainer}
+          containerClassName={FILL_SKELETON_CONTAINER_CLASS_NAME}
           height={SKELETON_HEIGHT_SIZES.s}
           highlightColor={themeCssVariables.background.transparent.light}
         />
         <SkeletonLine
-          containerClassName={fillSkeletonContainer}
+          containerClassName={FILL_SKELETON_CONTAINER_CLASS_NAME}
           height={SKELETON_HEIGHT_SIZES.s}
           highlightColor={themeCssVariables.background.transparent.light}
         />
         <SkeletonLine
-          containerClassName={fillSkeletonContainer}
+          containerClassName={FILL_SKELETON_CONTAINER_CLASS_NAME}
           height={SKELETON_HEIGHT_SIZES.s}
           highlightColor={themeCssVariables.background.transparent.light}
         />

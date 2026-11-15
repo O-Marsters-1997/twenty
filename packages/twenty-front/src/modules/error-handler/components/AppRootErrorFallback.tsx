@@ -1,14 +1,37 @@
 import { type AppErrorDisplayProps } from '@/error-handler/types/AppErrorDisplayProps';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { IconReload } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { background, grayScale } from 'twenty-ui/theme/tokens.stylex';
+import { background, borderRadius, grayScale } from 'twenty-ui/theme/tokens.stylex';
 
 type AppRootErrorFallbackProps = AppErrorDisplayProps;
 
 const styles = stylex.create({
+  panel: {
+    background: grayScale['--t-gray-scale-gray1'],
+    borderColor: grayScale['--t-gray-scale-gray5'],
+    borderRadius: borderRadius['--t-border-radius-md'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    height: '100%',
+    overflowX: 'auto',
+    overflowY: 'hidden',
+    width: '100%',
+  },
+  button: {
+    alignItems: 'center',
+    background: grayScale['--t-gray-scale-gray1'],
+    borderColor: grayScale['--t-gray-scale-gray5'],
+    borderRadius: borderRadius['--t-border-radius-md'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    color: grayScale['--t-gray-scale-gray12'],
+    cursor: 'pointer',
+    display: 'flex',
+    paddingBlock: '8px',
+    paddingInline: '16px',
+  },
   container: {
     background: background['--t-background-noisy'],
     boxSizing: 'border-box',
@@ -75,28 +98,6 @@ const styles = stylex.create({
   },
 });
 
-const StyledPanel = styled.div`
-  background: ${themeCssVariables.grayScale.gray1};
-  border: 1px solid ${themeCssVariables.grayScale.gray5};
-  border-radius: ${themeCssVariables.border.radius.md};
-  height: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-  width: 100%;
-`;
-
-const StyledButton = styled.button`
-  align-items: center;
-  background: ${themeCssVariables.grayScale.gray1};
-  border: 1px solid ${themeCssVariables.grayScale.gray5};
-  border-radius: ${themeCssVariables.border.radius.md};
-  color: ${themeCssVariables.grayScale.gray12};
-  cursor: pointer;
-  display: flex;
-  padding: 8px;
-  padding: 8px 16px;
-`;
-
 export const AppRootErrorFallback = ({
   resetErrorBoundary,
   title = t`Sorry, something went wrong`,
@@ -105,7 +106,7 @@ export const AppRootErrorFallback = ({
 
   return (
     <div {...stylex.props(styles.container)}>
-      <StyledPanel>
+      <div {...stylex.props(styles.panel)}>
         <div {...stylex.props(styles.emptyContainer)}>
           <div {...stylex.props(styles.imageContainer)}>
             <img
@@ -123,14 +124,17 @@ export const AppRootErrorFallback = ({
               {t`Please refresh the page.`}
             </div>
           </div>
-          <StyledButton onClick={resetErrorBoundary}>
+          <button
+            {...stylex.props(styles.button)}
+            onClick={resetErrorBoundary}
+          >
             <span {...stylex.props(styles.iconContainer)}>
               <IconReload size={theme.icon.size.md} />
             </span>
             {t`Reload`}
-          </StyledButton>
+          </button>
         </div>
-      </StyledPanel>
+      </div>
     </div>
   );
 };
