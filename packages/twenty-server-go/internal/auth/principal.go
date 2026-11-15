@@ -17,6 +17,7 @@ type Principal struct {
 	UserWorkspaceID   string
 	WorkspaceMemberID string
 	AuthProvider      AuthProvider
+	Playground        bool
 	APIKeyID          string // set for MCP and API-key callers, from core."apiKey"; user fields empty
 }
 

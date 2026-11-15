@@ -1,0 +1,18 @@
+{
+  "name": "GetWebhook",
+  "operation": "GetWebhook",
+  "fixture": "webhook with two operations",
+  "endpoint": "/metadata",
+  "query": "query GetWebhook($id: UUID!) { webhook(id: $id) { id targetUrl operations description secret applicationId createdAt updatedAt } }",
+  "variables": {"id": "5b3f6d54-8c67-4f0e-9a52-0f4a2f3d9c11"},
+  "response": {"data": {"webhook": {
+    "id": "5b3f6d54-8c67-4f0e-9a52-0f4a2f3d9c11",
+    "targetUrl": "https://example.com/hook",
+    "operations": ["person.created", "*.deleted"],
+    "description": "Sync people",
+    "secret": "topsecret",
+    "applicationId": "<ignored>",
+    "createdAt": "<ignored>",
+    "updatedAt": "<ignored>"
+  }}}
+}

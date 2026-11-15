@@ -3,7 +3,6 @@
 # records:<object> stands for the runtime-built record operations of that object.
 ActivateWorkspace
 AddQueryToEventStream
-AssignRoleToApiKey
 BarChartData
 CheckUserExists
 CheckWorkspaceSubdomainAvailability
@@ -13,7 +12,6 @@ CompleteNewWorkspaceLogoUpload
 CompleteWorkspaceLogoUpload
 CompleteWorkspaceMemberProfilePictureUpload
 ComputeStepOutputSchema
-CreateApiKey
 CreateApprovedAccessDomain
 CreateCalendarEvent
 CreateFileUpload
@@ -23,7 +21,6 @@ CreateOneIndexMetadataItem
 CreateOneRole
 CreateUnsubscribeTopic
 CreateValidationRule
-CreateWebhook
 CurrentUserSessions
 DeleteApprovedAccessDomain
 DeleteCurrentWorkspace
@@ -34,7 +31,6 @@ DeleteUnsubscribeTopic
 DeleteUserAccount
 DeleteUserWorkspace
 DeleteValidationRule
-DeleteWebhook
 DeleteWorkspaceInvitation
 DuplicateDashboard
 DuplicateMessageList
@@ -61,15 +57,10 @@ FindOneApplicationName
 FindOneApplicationSummary
 FindOnePageLayout
 FindOnePageLayoutType
-GenerateApiKeyToken
-GeneratePlaygroundToken
 GenerateSignedDpa
 GetAddressDetails
 GetAgentRuns
 GetAiSystemPromptPreview
-GetApiKey
-GetApiKeyRoles
-GetApiKeys
 GetApprovedAccessDomains
 GetAutoCompleteAddress
 GetCurrentUser
@@ -83,8 +74,6 @@ GetRecordSharing
 GetRole
 GetRoles
 GetTimelineCalendarEventsFromObjectRecord
-GetWebhook
-GetWebhooks
 GetWorkspaceCreationDefaults
 GetWorkspaceFromInviteHash
 GetWorkspaceIframeOrigins
@@ -108,7 +97,6 @@ ResetPageLayoutToDefault
 ResetPageLayoutWidgetToDefault
 ResetTimelineActivityType
 RevokeAllOtherUserSessions
-RevokeApiKey
 RevokeUserSession
 RunCoreWorkflowVersion
 Search
@@ -123,7 +111,6 @@ StartChannelSync
 StartWorkspaceSetupChat
 TriggerAddPeopleToMessageListJob
 UnsubscribeTopics
-UpdateApiKey
 UpdateCommandMenuItem
 UpdateLabPublicFeatureFlag
 UpdateManyNavigationMenuItems
@@ -136,7 +123,6 @@ UpdateTimelineActivityTypeIsActive
 UpdateUnsubscribeTopic
 UpdateUserEmail
 UpdateValidationRule
-UpdateWebhook
 UpdateWorkspace
 UpdateWorkspaceAllowedIframeOrigins
 UpdateWorkspaceMemberRole
