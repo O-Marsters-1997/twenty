@@ -3,17 +3,13 @@ import { Column, Container, Row } from 'react-email';
 import { Link } from 'src/components/Link';
 import { ShadowText } from 'src/components/ShadowText';
 
-const footerContainerStyle = {
-  marginTop: '12px',
-};
-
 type FooterProps = {
   i18n: I18n;
 };
 
 export const Footer = ({ i18n }: FooterProps) => {
   return (
-    <Container style={footerContainerStyle}>
+    <Container className="mt-3">
       <Row>
         <Column>
           <ShadowText>

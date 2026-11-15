@@ -1,4 +1,4 @@
-import { type ComponentType } from 'react';
+import { type ComponentType, createElement } from 'react';
 
 import { renderEmail } from 'src/utils/render-email';
 
@@ -55,7 +55,9 @@ describe('email templates', () => {
   it.each(Object.entries(TEMPLATES))(
     'renders %s to stable HTML',
     async (_name, Template) => {
-      const html = await renderEmail(<Template {...Template.PreviewProps} />);
+      const html = await renderEmail(
+        createElement(Template, Template.PreviewProps),
+      );
 
       expect(html).toMatchSnapshot();
     },
