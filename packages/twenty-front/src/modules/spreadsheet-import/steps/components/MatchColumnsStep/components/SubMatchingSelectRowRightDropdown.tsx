@@ -16,12 +16,6 @@ import { Dropdown } from 'twenty-ui/components/navigation';
 import { type SelectOption } from 'twenty-ui/primitives/input';
 import * as stylex from '@stylexjs/stylex';
 
-const styles = stylex.create({
-  dropdownContainer: {
-    width: '100%',
-  },
-});
-
 type SubMatchingSelectRowRightDropdownProps = {
   option: SpreadsheetMatchedOptions | Partial<SpreadsheetMatchedOptions>;
   column:
@@ -76,3 +70,9 @@ export const SubMatchingSelectRowRightDropdown = ({
     </div>
   );
 };
+
+const styles = stylex.create({
+  dropdownContainer: {
+    width: '100%',
+  },
+});

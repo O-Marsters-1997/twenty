@@ -9,32 +9,6 @@ import { Loader } from 'twenty-ui/primitives/feedback';
 import * as stylex from '@stylexjs/stylex';
 import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const styles = stylex.create({
-  dialogBody: {
-    display: 'flex',
-    flexBasis: '0%',
-    flexGrow: 1,
-    flexShrink: 1,
-    flexDirection: 'column',
-    paddingBlock: 0,
-    paddingInline: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  header: {
-    color: fontColor['--t-font-color-primary'],
-    fontSize: fontSize['--t-font-size-md'],
-    fontWeight: fontWeight['--t-font-weight-medium'],
-    marginBottom: spacing['--t-spacing-2'],
-  },
-  description: {
-    color: fontColor['--t-font-color-tertiary'],
-    fontSize: fontSize['--t-font-size-md'],
-    fontWeight: fontWeight['--t-font-weight-regular'],
-    marginBottom: spacing['--t-spacing-5'],
-  },
-});
-
 type ImportDataStepProps = {
   recordsToImportCount: number;
 };
@@ -66,3 +40,29 @@ export const ImportDataStep = ({
     </>
   );
 };
+
+const styles = stylex.create({
+  dialogBody: {
+    display: 'flex',
+    flexBasis: '0%',
+    flexGrow: 1,
+    flexShrink: 1,
+    flexDirection: 'column',
+    paddingBlock: 0,
+    paddingInline: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  header: {
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    marginBottom: spacing['--t-spacing-2'],
+  },
+  description: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    marginBottom: spacing['--t-spacing-5'],
+  },
+});

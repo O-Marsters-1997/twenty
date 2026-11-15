@@ -4,19 +4,6 @@ import { IconX } from 'twenty-ui/icon';
 import { IconButton } from 'twenty-ui/components/input';
 import * as stylex from '@stylexjs/stylex';
 
-const styles = stylex.create({
-  closeButtonContainer: {
-    alignItems: 'center',
-    aspectRatio: '1',
-    display: 'flex',
-    height: '60px',
-    justifyContent: 'center',
-    position: 'absolute',
-    right: '0',
-    top: '0',
-  },
-});
-
 type SpreadSheetImportModalCloseButtonProps = {
   onClose: () => void;
 };
@@ -32,3 +19,16 @@ export const SpreadSheetImportModalCloseButton = ({
     </div>
   );
 };
+
+const styles = stylex.create({
+  closeButtonContainer: {
+    alignItems: 'center',
+    aspectRatio: '1',
+    display: 'flex',
+    height: '60px',
+    justifyContent: 'center',
+    position: 'absolute',
+    right: '0',
+    top: '0',
+  },
+});

@@ -16,54 +16,6 @@ import { TooltipDelay } from '@/ui/layout/tooltip/constants/TooltipDelay';
 import * as stylex from '@stylexjs/stylex';
 import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const styles = stylex.create({
-  headerContainer: {
-    alignItems: 'center',
-    display: 'flex',
-    gap: spacing['--t-spacing-1'],
-    position: 'relative',
-  },
-  headerLabel: {
-    display: 'flex',
-    flex: '1',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-  },
-  checkboxContainer: {
-    alignItems: 'center',
-    boxSizing: 'content-box',
-    display: 'flex',
-    flex: '1',
-    height: '100%',
-    justifyContent: 'center',
-    lineHeight: '0',
-    width: '100%',
-  },
-  switchContainer: {
-    alignItems: 'center',
-    display: 'flex',
-    height: '100%',
-  },
-  inputContainer: {
-    alignItems: 'center',
-    display: 'flex',
-    minHeight: '100%',
-    minWidth: '100%',
-    paddingRight: spacing['--t-spacing-2'],
-  },
-  defaultContainer: {
-    alignContent: 'center',
-    minHeight: '100%',
-    minWidth: '100%',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-  },
-  selectReadonlyValueContianer: {
-    paddingLeft: spacing['--t-spacing-2'],
-  },
-});
-
 const SELECT_COLUMN_KEY = 'select-row';
 
 const formatSafeId = (columnKey: string) => {
@@ -239,3 +191,51 @@ export const generateColumns = (
     }),
   ),
 ];
+
+const styles = stylex.create({
+  headerContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    position: 'relative',
+  },
+  headerLabel: {
+    display: 'flex',
+    flex: 1,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
+  checkboxContainer: {
+    alignItems: 'center',
+    boxSizing: 'content-box',
+    display: 'flex',
+    flex: 1,
+    height: '100%',
+    justifyContent: 'center',
+    lineHeight: '0',
+    width: '100%',
+  },
+  switchContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    height: '100%',
+  },
+  inputContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    minHeight: '100%',
+    minWidth: '100%',
+    paddingRight: spacing['--t-spacing-2'],
+  },
+  defaultContainer: {
+    alignContent: 'center',
+    minHeight: '100%',
+    minWidth: '100%',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  selectReadonlyValueContianer: {
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+});

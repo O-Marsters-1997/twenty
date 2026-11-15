@@ -12,21 +12,6 @@ import { IconForbid } from 'twenty-ui/icon';
 import * as stylex from '@stylexjs/stylex';
 import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const styles = stylex.create({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    minHeight: '10px',
-    width: '100%',
-  },
-  errorMessage: {
-    color: fontColor['--t-font-color-danger'],
-    fontSize: fontSize['--t-font-size-sm'],
-    fontWeight: fontWeight['--t-font-weight-regular'],
-    marginTop: spacing['--t-spacing-1'],
-  },
-});
-
 type TemplateColumnProps = {
   columns: SpreadsheetColumns;
   columnIndex: number;
@@ -87,3 +72,18 @@ export const TemplateColumn = ({
     </div>
   );
 };
+
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: '10px',
+    width: '100%',
+  },
+  errorMessage: {
+    color: fontColor['--t-font-color-danger'],
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    marginTop: spacing['--t-spacing-1'],
+  },
+});

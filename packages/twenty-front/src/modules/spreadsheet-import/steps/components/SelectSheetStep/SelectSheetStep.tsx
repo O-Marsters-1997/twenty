@@ -15,28 +15,6 @@ import { type WorkBook } from 'xlsx-ugnis';
 import * as stylex from '@stylexjs/stylex';
 import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const styles = stylex.create({
-  dialogBody: {
-    display: 'flex',
-    flexBasis: '0%',
-    flexGrow: 1,
-    flexShrink: 1,
-    flexDirection: 'column',
-    paddingBlock: spacing['--t-spacing-10'],
-    paddingInline: spacing['--t-spacing-10'],
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: spacing['--t-spacing-8'],
-  },
-  radioContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  radioItemContainer: {
-    marginBottom: spacing['--t-spacing-6'],
-  },
-});
-
 type SelectSheetStepProps = {
   sheetNames: string[];
   onBack: () => void;
@@ -138,3 +116,25 @@ export const SelectSheetStep = ({
     </>
   );
 };
+
+const styles = stylex.create({
+  dialogBody: {
+    display: 'flex',
+    flexBasis: '0%',
+    flexGrow: 1,
+    flexShrink: 1,
+    flexDirection: 'column',
+    paddingBlock: spacing['--t-spacing-10'],
+    paddingInline: spacing['--t-spacing-10'],
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: spacing['--t-spacing-8'],
+  },
+  radioContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  radioItemContainer: {
+    marginBottom: spacing['--t-spacing-6'],
+  },
+});

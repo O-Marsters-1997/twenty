@@ -30,86 +30,6 @@ import { type ImportedStructuredRowMetadata } from './types';
 import * as stylex from '@stylexjs/stylex';
 import { background, borderColor, borderRadius, boxShadow, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const styles = stylex.create({
-  removeButton: {
-    height: '24px',
-  },
-  dialogBody: {
-    display: 'flex',
-    flexBasis: '0%',
-    flexGrow: 1,
-    flexShrink: 1,
-    flexDirection: 'column',
-    paddingBlock: 0,
-    paddingInline: 0,
-  },
-  contentWrapper: {
-    display: 'flex',
-    flex: '1 1 0%',
-    flexDirection: 'column',
-    position: 'relative',
-  },
-  toolbar: {
-    alignItems: 'center',
-    backgroundColor: background['--t-background-secondary'],
-    borderWidth: '1px',
-    borderStyle: 'solid',
-    borderColor: borderColor['--t-border-color-medium'],
-    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
-    borderTopRightRadius: borderRadius['--t-border-radius-md'],
-    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
-    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
-    bottom: spacing['--t-spacing-3'],
-    boxShadow: boxShadow['--t-box-shadow-strong'],
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    left: '50%',
-    paddingTop: spacing['--t-spacing-3'],
-    paddingRight: spacing['--t-spacing-3'],
-    paddingBottom: spacing['--t-spacing-3'],
-    paddingLeft: spacing['--t-spacing-3'],
-    position: 'absolute',
-    transform: 'translateX(-50%)',
-    width: '400px',
-    zIndex: '1',
-  },
-  errorSwitch: {
-    alignItems: 'center',
-    display: 'flex',
-    flexDirection: 'row',
-  },
-  errorSwitchDescription: {
-    color: fontColor['--t-font-color-secondary'],
-    fontSize: fontSize['--t-font-size-md'],
-    fontWeight: fontWeight['--t-font-weight-regular'],
-    marginLeft: spacing['--t-spacing-2'],
-  },
-  scrollContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    flexGrow: '1',
-    height: '0px',
-    overflow: 'auto',
-    width: '100%',
-  },
-  noRowsContainer: {
-    display: 'flex',
-    gridColumn: '1/-1',
-    justifyContent: 'center',
-    marginTop: spacing['--t-spacing-8'],
-  },
-  noRowsWithErrorsContainer: {
-    color: fontColor['--t-font-color-tertiary'],
-    display: 'flex',
-    justifyContent: 'center',
-    marginTop: 'auto',
-    marginRight: '0',
-    marginBottom: 'auto',
-    marginLeft: '0',
-  },
-});
-
 type ValidationStepProps = {
   initialData: ImportedStructuredRow[];
   importedColumns: SpreadsheetColumns;
@@ -360,3 +280,77 @@ export const ValidationStep = ({
     </>
   );
 };
+
+const styles = stylex.create({
+  removeButton: {
+    height: '24px',
+  },
+  dialogBody: {
+    display: 'flex',
+    flexBasis: '0%',
+    flexGrow: 1,
+    flexShrink: 1,
+    flexDirection: 'column',
+    paddingBlock: 0,
+    paddingInline: 0,
+  },
+  contentWrapper: {
+    display: 'flex',
+    flex: '1 1 0%',
+    flexDirection: 'column',
+    position: 'relative',
+  },
+  toolbar: {
+    alignItems: 'center',
+    backgroundColor: background['--t-background-secondary'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-medium'],
+    borderRadius: borderRadius['--t-border-radius-md'],
+    bottom: spacing['--t-spacing-3'],
+    boxShadow: boxShadow['--t-box-shadow-strong'],
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    left: '50%',
+    padding: spacing['--t-spacing-3'],
+    position: 'absolute',
+    transform: 'translateX(-50%)',
+    width: '400px',
+    zIndex: 1,
+  },
+  errorSwitch: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  errorSwitchDescription: {
+    color: fontColor['--t-font-color-secondary'],
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    marginLeft: spacing['--t-spacing-2'],
+  },
+  scrollContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    flexGrow: 1,
+    height: '0px',
+    overflow: 'auto',
+    width: '100%',
+  },
+  noRowsContainer: {
+    display: 'flex',
+    gridColumn: '1/-1',
+    justifyContent: 'center',
+    marginTop: spacing['--t-spacing-8'],
+  },
+  noRowsWithErrorsContainer: {
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: 'auto',
+    marginRight: '0',
+    marginBottom: 'auto',
+    marginLeft: '0',
+  },
+});

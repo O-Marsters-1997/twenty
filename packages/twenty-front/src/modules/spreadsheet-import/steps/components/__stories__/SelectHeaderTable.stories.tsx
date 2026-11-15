@@ -6,14 +6,6 @@ import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { ComponentDecorator } from 'twenty-ui/testing';
 import * as stylex from '@stylexjs/stylex';
 
-const styles = stylex.create({
-  container: {
-    display: 'flex',
-    height: '240px',
-    width: '480px',
-  },
-});
-
 const SelectHeaderTableExample = () => {
   const [selectedRowIndex, setSelectedRowIndex] = useState(0);
 
@@ -59,3 +51,11 @@ export const SingleRowSelection: Story = {
     await expect(radios[2]).not.toBeChecked();
   },
 };
+
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    height: '240px',
+    width: '480px',
+  },
+});

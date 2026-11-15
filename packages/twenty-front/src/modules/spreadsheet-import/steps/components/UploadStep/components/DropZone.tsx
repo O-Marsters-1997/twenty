@@ -12,97 +12,6 @@ import { read, type WorkBook } from 'xlsx-ugnis';
 import * as stylex from '@stylexjs/stylex';
 import { backgroundTransparent, borderRadius, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const styles = stylex.create({
-  container: {
-    alignItems: 'center',
-    background: `repeating-linear-gradient(
-      0deg,
-      ${fontColor['--t-font-color-primary']},
-      ${fontColor['--t-font-color-primary']} 10px,
-      transparent 10px,
-      transparent 20px,
-      ${fontColor['--t-font-color-primary']} 20px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      ${fontColor['--t-font-color-primary']},
-      ${fontColor['--t-font-color-primary']} 10px,
-      transparent 10px,
-      transparent 20px,
-      ${fontColor['--t-font-color-primary']} 20px
-    ),
-    repeating-linear-gradient(
-      180deg,
-      ${fontColor['--t-font-color-primary']},
-      ${fontColor['--t-font-color-primary']} 10px,
-      transparent 10px,
-      transparent 20px,
-      ${fontColor['--t-font-color-primary']} 20px
-    ),
-    repeating-linear-gradient(
-      270deg,
-      ${fontColor['--t-font-color-primary']},
-      ${fontColor['--t-font-color-primary']} 10px,
-      transparent 10px,
-      transparent 20px,
-      ${fontColor['--t-font-color-primary']} 20px
-    )`,
-    backgroundPosition: '0 0, 0 0, 100% 0, 0 100%',
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: '2px 100%, 100% 2px, 2px 100%, 100% 2px',
-    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
-    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
-    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
-    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
-    display: 'flex',
-    flex: '1',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    position: 'relative',
-  },
-  overlay: {
-    background: backgroundTransparent['--t-background-transparent-medium'],
-    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
-    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
-    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
-    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
-    bottom: '0px',
-    left: '0px',
-    position: 'absolute',
-    right: '0px',
-    top: '0px',
-  },
-  text: {
-    color: fontColor['--t-font-color-primary'],
-    fontSize: fontSize['--t-font-size-sm'],
-    fontWeight: fontWeight['--t-font-weight-medium'],
-    paddingTop: '16px',
-    paddingRight: '16px',
-    paddingBottom: '16px',
-    paddingLeft: '16px',
-    textAlign: 'center',
-  },
-  footerText: {
-    bottom: spacing['--t-spacing-4'],
-    color: fontColor['--t-font-color-tertiary'],
-    fontSize: fontSize['--t-font-size-xs'],
-    fontWeight: fontWeight['--t-font-weight-regular'],
-    left: '50%',
-    position: 'absolute',
-    textAlign: 'center',
-    transform: 'translateX(-50%)',
-    width: '100%',
-  },
-  buttonsContainer: {
-    alignItems: 'center',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: spacing['--t-spacing-2'],
-    maxWidth: '200px',
-    width: '100%',
-  },
-});
-
 type DropZoneProps = {
   onContinue: (data: WorkBook, file: File) => void;
   isLoading: boolean;
@@ -201,3 +110,85 @@ export const DropZone = ({ onContinue, isLoading }: DropZoneProps) => {
     </div>
   );
 };
+
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    background: `repeating-linear-gradient(
+      0deg,
+      ${fontColor['--t-font-color-primary']},
+      ${fontColor['--t-font-color-primary']} 10px,
+      transparent 10px,
+      transparent 20px,
+      ${fontColor['--t-font-color-primary']} 20px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      ${fontColor['--t-font-color-primary']},
+      ${fontColor['--t-font-color-primary']} 10px,
+      transparent 10px,
+      transparent 20px,
+      ${fontColor['--t-font-color-primary']} 20px
+    ),
+    repeating-linear-gradient(
+      180deg,
+      ${fontColor['--t-font-color-primary']},
+      ${fontColor['--t-font-color-primary']} 10px,
+      transparent 10px,
+      transparent 20px,
+      ${fontColor['--t-font-color-primary']} 20px
+    ),
+    repeating-linear-gradient(
+      270deg,
+      ${fontColor['--t-font-color-primary']},
+      ${fontColor['--t-font-color-primary']} 10px,
+      transparent 10px,
+      transparent 20px,
+      ${fontColor['--t-font-color-primary']} 20px
+    )`,
+    backgroundPosition: '0 0, 0 0, 100% 0, 0 100%',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: '2px 100%, 100% 2px, 2px 100%, 100% 2px',
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    position: 'relative',
+  },
+  overlay: {
+    background: backgroundTransparent['--t-background-transparent-medium'],
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    bottom: '0px',
+    left: '0px',
+    position: 'absolute',
+    right: '0px',
+    top: '0px',
+  },
+  text: {
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    padding: '16px',
+    textAlign: 'center',
+  },
+  footerText: {
+    bottom: spacing['--t-spacing-4'],
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    left: '50%',
+    position: 'absolute',
+    textAlign: 'center',
+    transform: 'translateX(-50%)',
+    width: '100%',
+  },
+  buttonsContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    maxWidth: '200px',
+    width: '100%',
+  },
+});

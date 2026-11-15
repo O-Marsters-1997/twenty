@@ -14,26 +14,6 @@ import { SelectHeaderTable } from './components/SelectHeaderTable';
 import * as stylex from '@stylexjs/stylex';
 import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const styles = stylex.create({
-  dialogBody: {
-    display: 'flex',
-    flexBasis: '0%',
-    flexGrow: 1,
-    flexShrink: 1,
-    flexDirection: 'column',
-    paddingBlock: spacing['--t-spacing-10'],
-    paddingInline: spacing['--t-spacing-10'],
-  },
-  headingContainer: {
-    marginBottom: spacing['--t-spacing-8'],
-  },
-  tableContainer: {
-    display: 'flex',
-    flexGrow: '1',
-    height: '0px',
-  },
-});
-
 type SelectHeaderStepProps = {
   importedRows: ImportedRow[];
   setCurrentStepState: (currentStepState: SpreadsheetImportStep) => void;
@@ -133,3 +113,23 @@ export const SelectHeaderStep = ({
     </>
   );
 };
+
+const styles = stylex.create({
+  dialogBody: {
+    display: 'flex',
+    flexBasis: '0%',
+    flexGrow: 1,
+    flexShrink: 1,
+    flexDirection: 'column',
+    paddingBlock: spacing['--t-spacing-10'],
+    paddingInline: spacing['--t-spacing-10'],
+  },
+  headingContainer: {
+    marginBottom: spacing['--t-spacing-8'],
+  },
+  tableContainer: {
+    display: 'flex',
+    flexGrow: 1,
+    height: '0px',
+  },
+});

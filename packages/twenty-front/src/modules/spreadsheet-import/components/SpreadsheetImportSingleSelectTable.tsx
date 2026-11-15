@@ -7,13 +7,6 @@ import { isDefined } from 'twenty-shared/utils';
 import { RadioGroup, type RadioGroupProps } from 'twenty-ui/primitives/input';
 import * as stylex from '@stylexjs/stylex';
 
-const styles = stylex.create({
-  radioGroupContainer: {
-    flex: '1',
-    minHeight: '0',
-  },
-});
-
 // The grid owns keyboard navigation, including rows outside the viewport.
 const preventRadioGroupNavigation: RadioGroupProps['onKeyDown'] = (event) => {
   event.preventBaseUIHandler();
@@ -82,3 +75,10 @@ export const SpreadsheetImportSingleSelectTable = <
     </RadioGroup>
   );
 };
+
+const styles = stylex.create({
+  radioGroupContainer: {
+    flex: 1,
+    minHeight: '0',
+  },
+});

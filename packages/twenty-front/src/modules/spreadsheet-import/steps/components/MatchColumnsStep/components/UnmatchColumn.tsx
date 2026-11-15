@@ -36,20 +36,6 @@ type UnmatchColumnProps = {
   onSubChange: (val: string, index: number, option: string) => void;
 };
 
-const styles = stylex.create({
-  container: {
-    position: 'relative',
-    width: '100%',
-  },
-  contentWrapper: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: spacing['--t-spacing-3'],
-    marginTop: spacing['--t-spacing-4'],
-    paddingBottom: spacing['--t-spacing-4'],
-  },
-});
-
 export const UnmatchColumn = ({
   columns,
   columnIndex,
@@ -91,3 +77,17 @@ export const UnmatchColumn = ({
     </div>
   );
 };
+
+const styles = stylex.create({
+  container: {
+    position: 'relative',
+    width: '100%',
+  },
+  contentWrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-3'],
+    marginTop: spacing['--t-spacing-4'],
+    paddingBottom: spacing['--t-spacing-4'],
+  },
+});

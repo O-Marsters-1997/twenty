@@ -6,6 +6,28 @@ import { isDefined } from 'twenty-shared/utils';
 import * as stylex from '@stylexjs/stylex';
 import { fontColor, fontSize, fontWeight } from 'twenty-ui/theme/tokens.stylex';
 
+type UserTableColumnProps = {
+  column: SpreadsheetColumn;
+  importedRow: ImportedRow;
+};
+
+export const UserTableColumn = ({
+  column,
+  importedRow,
+}: UserTableColumnProps) => {
+  const { header } = column;
+  const firstDefinedValue = importedRow.find(isDefined);
+
+  return (
+    <div {...stylex.props(styles.container)}>
+      <span {...stylex.props(styles.value)}>{header}</span>
+      {firstDefinedValue && (
+        <span {...stylex.props(styles.example)}>{`ex: ${firstDefinedValue}`}</span>
+      )}
+    </div>
+  );
+};
+
 const styles = stylex.create({
   container: {
     display: 'flex',
@@ -29,25 +51,3 @@ const styles = stylex.create({
     whiteSpace: 'nowrap',
   },
 });
-
-type UserTableColumnProps = {
-  column: SpreadsheetColumn;
-  importedRow: ImportedRow;
-};
-
-export const UserTableColumn = ({
-  column,
-  importedRow,
-}: UserTableColumnProps) => {
-  const { header } = column;
-  const firstDefinedValue = importedRow.find(isDefined);
-
-  return (
-    <div {...stylex.props(styles.container)}>
-      <span {...stylex.props(styles.value)}>{header}</span>
-      {firstDefinedValue && (
-        <span {...stylex.props(styles.example)}>{`ex: ${firstDefinedValue}`}</span>
-      )}
-    </div>
-  );
-};

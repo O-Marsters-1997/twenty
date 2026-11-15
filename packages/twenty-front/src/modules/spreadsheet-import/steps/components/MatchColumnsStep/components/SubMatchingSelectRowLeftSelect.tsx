@@ -4,19 +4,6 @@ import { type SpreadsheetMatchedOptions } from '@/spreadsheet-import/types/Sprea
 import * as stylex from '@stylexjs/stylex';
 import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const styles = stylex.create({
-  label: {
-    color: fontColor['--t-font-color-primary'],
-    fontSize: fontSize['--t-font-size-md'],
-    fontWeight: fontWeight['--t-font-weight-regular'],
-  },
-  controlLabel: {
-    alignItems: 'center',
-    display: 'flex',
-    gap: spacing['--t-spacing-1'],
-  },
-});
-
 export type SubMatchingSelectRowLeftSelectProps = {
   option: SpreadsheetMatchedOptions | Partial<SpreadsheetMatchedOptions>;
 };
@@ -32,3 +19,16 @@ export const SubMatchingSelectRowLeftSelect = ({
     </SubMatchingSelectControlContainer>
   );
 };
+
+const styles = stylex.create({
+  label: {
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+  },
+  controlLabel: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+  },
+});

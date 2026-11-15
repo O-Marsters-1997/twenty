@@ -12,12 +12,6 @@ import { Tag, type TagColor } from 'twenty-ui/primitives/data-display';
 import { IconChevronDown } from 'twenty-ui/icon';
 import * as stylex from '@stylexjs/stylex';
 import { fontColor } from 'twenty-ui/theme/tokens.stylex';
-const styles = stylex.create({
-  iconChevronDownContainer: {
-    color: fontColor['--t-font-color-tertiary'],
-    display: 'flex',
-  },
-});
 
 type SubMatchingSelectDropdownButtonProps = {
   option: SpreadsheetMatchedOptions | Partial<SpreadsheetMatchedOptions>;
@@ -47,3 +41,10 @@ export const SubMatchingSelectDropdownButton = ({
     </SubMatchingSelectControlContainer>
   );
 };
+
+const styles = stylex.create({
+  iconChevronDownContainer: {
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+  },
+});

@@ -32,35 +32,6 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import * as stylex from '@stylexjs/stylex';
 import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const styles = stylex.create({
-  dialogBody: {
-    display: 'flex',
-    flexBasis: '0%',
-    flexGrow: 1,
-    flexShrink: 1,
-    flexDirection: 'column',
-    paddingBlock: 0,
-    paddingInline: 0,
-    alignItems: 'center',
-  },
-  columnsContainer: {
-    alignItems: 'center',
-    display: 'flex',
-    flexDirection: 'column',
-    marginBottom: spacing['--t-spacing-4'],
-  },
-  columns: {
-    color: fontColor['--t-font-color-primary'],
-    fontSize: fontSize['--t-font-size-sm'],
-    fontWeight: fontWeight['--t-font-weight-medium'],
-  },
-  column: {
-    color: fontColor['--t-font-color-primary'],
-    fontSize: fontSize['--t-font-size-sm'],
-    fontWeight: fontWeight['--t-font-weight-regular'],
-  },
-});
-
 export type MatchColumnsStepProps = {
   data: ImportedRow[];
   headerValues: ImportedRow;
@@ -323,3 +294,32 @@ export const MatchColumnsStep = ({
     </>
   );
 };
+
+const styles = stylex.create({
+  dialogBody: {
+    display: 'flex',
+    flexBasis: '0%',
+    flexGrow: 1,
+    flexShrink: 1,
+    flexDirection: 'column',
+    paddingBlock: 0,
+    paddingInline: 0,
+    alignItems: 'center',
+  },
+  columnsContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    marginBottom: spacing['--t-spacing-4'],
+  },
+  columns: {
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+  },
+  column: {
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+  },
+});

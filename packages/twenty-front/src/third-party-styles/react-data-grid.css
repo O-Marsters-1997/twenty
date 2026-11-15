@@ -29,7 +29,6 @@
     background-color: var(--t-background-secondary);
     font-size: var(--t-font-size-sm);
     font-weight: var(--t-font-weight-semi-bold);
-    letter-spacing: wider;
     border-bottom: 1px solid var(--t-border-color-medium);
   }
 
@@ -94,6 +93,5 @@
   [data-spreadsheet-import-table] .rdg-checkbox {
     align-items: center;
     display: flex;
-    line-height: none;
   }
 }

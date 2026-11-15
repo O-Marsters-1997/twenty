@@ -14,13 +14,6 @@ import { type ReadonlyDeep } from 'type-fest';
 import { normalizeSearchText } from 'twenty-ui/utilities';
 import * as stylex from '@stylexjs/stylex';
 
-const styles = stylex.create({
-  container: {
-    maxHeight: '360px',
-    overflowY: 'auto',
-  },
-});
-
 type MatchColumnSelectFieldSelectDropdownContentProps = {
   selectedValue: SelectOption | undefined;
   onSelectFieldMetadataItem: (fieldMetadataItem: FieldMetadataItem) => void;
@@ -137,3 +130,10 @@ export const MatchColumnSelectFieldSelectDropdownContent = ({
     </>
   );
 };
+
+const styles = stylex.create({
+  container: {
+    maxHeight: '360px',
+    overflowY: 'auto',
+  },
+});

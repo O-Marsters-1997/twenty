@@ -8,16 +8,6 @@ import { type SpreadsheetMatchedOptions } from '@/spreadsheet-import/types/Sprea
 import * as stylex from '@stylexjs/stylex';
 import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const styles = stylex.create({
-  rowContainer: {
-    alignItems: 'center',
-    display: 'flex',
-    gap: spacing['--t-spacing-4'],
-    justifyContent: 'space-between',
-    paddingBottom: spacing['--t-spacing-1'],
-  },
-});
-
 interface SubMatchingSelectRowProps {
   option: SpreadsheetMatchedOptions | Partial<SpreadsheetMatchedOptions>;
   column:
@@ -47,3 +37,13 @@ export const SubMatchingSelectRow = ({
     </div>
   );
 };
+
+const styles = stylex.create({
+  rowContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-4'],
+    justifyContent: 'space-between',
+    paddingBottom: spacing['--t-spacing-1'],
+  },
+});

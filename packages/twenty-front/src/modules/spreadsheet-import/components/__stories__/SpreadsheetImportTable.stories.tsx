@@ -8,15 +8,6 @@ import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 import { ComponentDecorator } from 'twenty-ui/testing';
 import * as stylex from '@stylexjs/stylex';
 
-const styles = stylex.create({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    height: '240px',
-    width: '480px',
-  },
-});
-
 const ROWS = Array.from({ length: 60 }, (_, index) => ({
   id: `row-${index}`,
   name: `Contact ${index + 1}`,
@@ -193,3 +184,12 @@ export const MultipleSelection: Story = {
     await expect(checkboxes[1]).toBeChecked();
   },
 };
+
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '240px',
+    width: '480px',
+  },
+});
