@@ -11,11 +11,7 @@ import { useRef } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { IconPlus, IconReorder } from 'twenty-ui/icon';
 import { WorkflowDiagramRightClickCommandMenuClickOutsideEffect } from './WorkflowDiagramRightClickCommandMenuClickOutsideEffect';
-import {
-  background,
-  boxShadow,
-  spacing,
-} from 'twenty-ui/theme/tokens.stylex';
+import { spacing, background, boxShadow } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   root: {

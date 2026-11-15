@@ -5,7 +5,6 @@ import { type VariablePickerComponent } from '@/ui/input/types/VariablePickerCom
 import { InputLabel } from '@/ui/input/components/internal/InputLabel/InputLabel';
 import { useUploadWorkflowFile } from '@/workflow/workflow-steps/workflow-actions/hooks/useUploadWorkflowFile';
 
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isString } from '@sniptt/guards';
 import { useId } from 'react';
@@ -14,7 +13,15 @@ import { type WorkflowEmailFiles } from 'twenty-shared/workflow';
 import { IconUpload } from 'twenty-ui/icon';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { spacing, fontColor, fontSize, fontWeight } from 'twenty-ui/theme/tokens.stylex';
+import {
+  spacing,
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  fontWeight,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type WorkflowSendEmailAttachmentsProps = {
   files: WorkflowEmailFiles;
@@ -25,6 +32,38 @@ type WorkflowSendEmailAttachmentsProps = {
 };
 
 const styles = stylex.create({
+  uploadArea: {
+    backgroundColor: {
+      default: backgroundTransparent['--t-background-transparent-lighter'],
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderColor: {
+      default: borderColor['--t-border-color-medium'],
+      ':hover': borderColor['--t-border-color-strong'],
+    },
+    borderStyle: 'solid',
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderWidth: '1px',
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    minHeight: '24px',
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-1'],
+  },
+  uploadAreaWithFiles: { minHeight: 'auto' },
+  uploadAreaWithPicker: {
+    borderBottomRightRadius: 0,
+    borderRightWidth: 0,
+    borderTopRightRadius: 0,
+  },
+
   container: {
     display: 'flex',
     flexDirection: 'column',
@@ -51,33 +90,6 @@ const styles = stylex.create({
     justifyContent: 'center',
   },
 });
-
-const StyledUploadArea = styled.div<{ hasFiles: boolean; hasPicker: boolean }>`
-  background-color: ${themeCssVariables.background.transparent.lighter};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-bottom-left-radius: ${themeCssVariables.border.radius.sm};
-  border-bottom-right-radius: ${({ hasPicker }) =>
-    hasPicker ? '0' : themeCssVariables.border.radius.sm};
-  border-right: ${({ hasPicker }) =>
-    hasPicker ? 'none' : `1px solid ${themeCssVariables.border.color.medium}`};
-  border-top-left-radius: ${themeCssVariables.border.radius.sm};
-  border-top-right-radius: ${({ hasPicker }) =>
-    hasPicker ? '0' : themeCssVariables.border.radius.sm};
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  justify-content: center;
-  min-height: ${({ hasFiles }) => (hasFiles ? 'auto' : '24px')};
-  padding-bottom: ${themeCssVariables.spacing[1]};
-  padding-left: ${themeCssVariables.spacing[2]};
-  padding-right: ${themeCssVariables.spacing[2]};
-  padding-top: ${themeCssVariables.spacing[1]};
-
-  &:hover {
-    background-color: ${themeCssVariables.background.transparent.light};
-    border-color: ${themeCssVariables.border.color.strong};
-  }
-`;
 
 export const WorkflowSendEmailAttachments = ({
   files,
@@ -130,9 +142,12 @@ export const WorkflowSendEmailAttachments = ({
       {label ? <InputLabel>{label}</InputLabel> : null}
 
       <div {...stylex.props(styles.row)}>
-        <StyledUploadArea
-          hasFiles={files.length > 0}
-          hasPicker={hasPicker}
+        <div
+          {...stylex.props(
+            styles.uploadArea,
+            files.length > 0 && styles.uploadAreaWithFiles,
+            hasPicker && styles.uploadAreaWithPicker,
+          )}
           onClick={handleAddFileClick}
         >
           {files.length > 0 ? (
@@ -141,7 +156,8 @@ export const WorkflowSendEmailAttachments = ({
                 isString(file) ? (
                   <span
                     key={index}
-                    onClick={(event) => event.stopPropagation()} {...stylex.props(styles.variableChipWrapper)}
+                    onClick={(event) => event.stopPropagation()}
+                    {...stylex.props(styles.variableChipWrapper)}
                   >
                     <VariableChip
                       rawVariableName={file}
@@ -166,7 +182,7 @@ export const WorkflowSendEmailAttachments = ({
               <span>{t`Upload file`}</span>
             </div>
           )}
-        </StyledUploadArea>
+        </div>
 
         {hasPicker ? (
           <VariablePicker

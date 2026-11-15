@@ -2,7 +2,7 @@ import { AppErrorBoundary } from '@/error-handler/components/AppErrorBoundary';
 import { AppErrorDisplay } from '@/error-handler/components/internal/AppErrorDisplay';
 import { type AppErrorDisplayProps } from '@/error-handler/types/AppErrorDisplayProps';
 import * as stylex from '@stylexjs/stylex';
-import { background, spacing } from 'twenty-ui/theme/tokens.stylex';
+import { spacing, background } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   root: {

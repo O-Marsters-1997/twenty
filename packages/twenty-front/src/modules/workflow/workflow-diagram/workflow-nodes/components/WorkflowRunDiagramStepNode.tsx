@@ -33,10 +33,10 @@ import { Loader } from 'twenty-ui/primitives/feedback';
 import { themeCssVariables } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
 import {
+  spacing,
   borderRadius,
   fontSize,
   fontWeight,
-  spacing,
 } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
@@ -178,7 +178,9 @@ export const WorkflowRunDiagramStepNode = ({
                 <div {...stylex.props(styles.statusIconsContainer)}>
                   <div
                     {...stylex.props(
-                      styles.colorIcon(themeCssVariables.tag.background.turquoise),
+                      styles.colorIcon(
+                        themeCssVariables.tag.background.turquoise,
+                      ),
                     )}
                   >
                     <IconCheck

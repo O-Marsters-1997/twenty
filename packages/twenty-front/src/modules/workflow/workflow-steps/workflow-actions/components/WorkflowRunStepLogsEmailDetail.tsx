@@ -11,26 +11,18 @@ import {
 } from 'twenty-ui/icon';
 
 import { formatDuration } from '~/utils/format/formatDuration';
-import {
-  StyledBadgeGroup,
-  StyledBodyMeta,
-  StyledEmptyHint,
-  StyledErrorCard,
-  StyledErrorMessageText,
-  StyledHeaderLeft,
-  StyledMetric,
-  StyledMetricLabel,
-  StyledMetricsRow,
-  StyledMetricValue,
-  StyledSection,
-  StyledSectionTitle,
-  StyledStatusBadge,
-  StyledSummaryCard,
-  StyledSummaryHeader,
-  StyledTitle,
-} from '@/workflow/workflow-steps/workflow-actions/components/workflowRunStepLogsStyles';
+import { logStyles } from '@/workflow/workflow-steps/workflow-actions/components/workflowRunStepLogs.stylex';
 import * as stylex from '@stylexjs/stylex';
-import { spacing, background, backgroundTransparent, borderColor, borderRadius, fontColor, fontSize, fontWeight } from 'twenty-ui/theme/tokens.stylex';
+import {
+  spacing,
+  background,
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  fontWeight,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   modeBadge: {
@@ -126,55 +118,66 @@ export const WorkflowRunStepLogsEmailDetail = ({
 
   return (
     <>
-      <StyledSummaryCard>
-        <StyledSummaryHeader>
-          <StyledHeaderLeft>
+      <div {...stylex.props(logStyles.summaryCard)}>
+        <div {...stylex.props(logStyles.summaryHeader)}>
+          <div {...stylex.props(logStyles.headerLeft)}>
             <IconMail size={16} />
-            <StyledTitle>{titleText}</StyledTitle>
-          </StyledHeaderLeft>
-          <StyledBadgeGroup>
+            <span {...stylex.props(logStyles.title)}>{titleText}</span>
+          </div>
+          <div {...stylex.props(logStyles.badgeGroup)}>
             <span {...stylex.props(styles.modeBadge)}>{details.mode}</span>
-            <StyledStatusBadge isSuccess={isSuccess}>
+            <span
+              {...stylex.props(
+                logStyles.statusBadge,
+                isSuccess
+                  ? logStyles.statusBadgeSuccess
+                  : logStyles.statusBadgeDanger,
+              )}
+            >
               <StatusIcon size={12} />
               {statusLabel}
-            </StyledStatusBadge>
-          </StyledBadgeGroup>
-        </StyledSummaryHeader>
+            </span>
+          </div>
+        </div>
 
         {isDefined(details.subject) && details.subject.length > 0 && (
           <div {...stylex.props(styles.subject)}>{details.subject}</div>
         )}
 
-        <StyledMetricsRow>
-          <StyledMetric>
-            <StyledMetricLabel>
+        <div {...stylex.props(logStyles.metricsRow)}>
+          <div {...stylex.props(logStyles.metric)}>
+            <div {...stylex.props(logStyles.metricLabel)}>
               <IconClock size={12} />
               {t`Duration`}
-            </StyledMetricLabel>
-            <StyledMetricValue>
+            </div>
+            <div {...stylex.props(logStyles.metricValue)}>
               {formatDuration(details.durationMs)}
-            </StyledMetricValue>
-          </StyledMetric>
+            </div>
+          </div>
           {isDefined(details.attachmentCount) &&
             details.attachmentCount > 0 && (
-              <StyledMetric>
-                <StyledMetricLabel>
+              <div {...stylex.props(logStyles.metric)}>
+                <div {...stylex.props(logStyles.metricLabel)}>
                   <IconPaperclip size={12} />
                   {t`Attachments`}
-                </StyledMetricLabel>
-                <StyledMetricValue>{details.attachmentCount}</StyledMetricValue>
-              </StyledMetric>
+                </div>
+                <div {...stylex.props(logStyles.metricValue)}>
+                  {details.attachmentCount}
+                </div>
+              </div>
             )}
-        </StyledMetricsRow>
-      </StyledSummaryCard>
+        </div>
+      </div>
 
-      <StyledSection>
-        <StyledSectionTitle>{t`Recipients`}</StyledSectionTitle>
+      <section {...stylex.props(logStyles.section)}>
+        <h3 {...stylex.props(logStyles.sectionTitle)}>{t`Recipients`}</h3>
         <div {...stylex.props(styles.recipientsCard)}>
           {isNonEmptyString(details.fromHandle) && (
             <>
               <span {...stylex.props(styles.recipientLabel)}>{t`From`}</span>
-              <span {...stylex.props(styles.recipientValue)}>{details.fromHandle}</span>
+              <span {...stylex.props(styles.recipientValue)}>
+                {details.fromHandle}
+              </span>
             </>
           )}
           <span {...stylex.props(styles.recipientLabel)}>{t`To`}</span>
@@ -200,34 +203,36 @@ export const WorkflowRunStepLogsEmailDetail = ({
             </>
           )}
         </div>
-      </StyledSection>
+      </section>
 
-      <StyledSection>
-        <StyledSectionTitle>{t`Body`}</StyledSectionTitle>
+      <section {...stylex.props(logStyles.section)}>
+        <h3 {...stylex.props(logStyles.sectionTitle)}>{t`Body`}</h3>
         {isDefined(details.bodyPreview) && details.bodyPreview.length > 0 ? (
           <>
             <div {...stylex.props(styles.bodyContainer)}>
               <pre {...stylex.props(styles.bodyPre)}>{details.bodyPreview}</pre>
             </div>
             {(isDefined(details.bodyBytes) || details.bodyTruncated) && (
-              <StyledBodyMeta>
+              <div {...stylex.props(logStyles.bodyMeta)}>
                 {isDefined(details.bodyBytes) && formatBytes(details.bodyBytes)}
                 {details.bodyTruncated && ' · truncated'}
-              </StyledBodyMeta>
+              </div>
             )}
           </>
         ) : (
-          <StyledEmptyHint>{t`No body`}</StyledEmptyHint>
+          <div {...stylex.props(logStyles.emptyHint)}>{t`No body`}</div>
         )}
-      </StyledSection>
+      </section>
 
       {!isSuccess && isDefined(details.error) && (
-        <StyledSection>
-          <StyledSectionTitle>{t`Error`}</StyledSectionTitle>
-          <StyledErrorCard>
-            <StyledErrorMessageText>{details.error}</StyledErrorMessageText>
-          </StyledErrorCard>
-        </StyledSection>
+        <section {...stylex.props(logStyles.section)}>
+          <h3 {...stylex.props(logStyles.sectionTitle)}>{t`Error`}</h3>
+          <div {...stylex.props(logStyles.errorCard)}>
+            <div {...stylex.props(logStyles.errorMessageText)}>
+              {details.error}
+            </div>
+          </div>
+        </section>
       )}
     </>
   );

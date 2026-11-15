@@ -12,24 +12,19 @@ import {
 } from 'twenty-ui/icon';
 
 import { formatDuration } from '~/utils/format/formatDuration';
-import {
-  StyledBadgeGroup,
-  StyledEmptyHint,
-  StyledHeaderLeft,
-  StyledMetric,
-  StyledMetricLabel,
-  StyledMetricsRow,
-  StyledMetricValue,
-  StyledSection,
-  StyledSectionTitle,
-  StyledSummaryCard,
-  StyledSummaryHeader,
-  StyledTitle,
-} from '@/workflow/workflow-steps/workflow-actions/components/workflowRunStepLogsStyles';
+import { logStyles } from '@/workflow/workflow-steps/workflow-actions/components/workflowRunStepLogs.stylex';
 import { WorkflowRunStepLogsToolCallRow } from '@/workflow/workflow-steps/workflow-actions/ai-agent-action/components/WorkflowRunStepLogsToolCallRow';
 import { formatNumber } from '@/localization/utils/formatNumber';
 import * as stylex from '@stylexjs/stylex';
-import { spacing, backgroundTransparent, borderColor, borderRadius, fontColor, fontSize, font } from 'twenty-ui/theme/tokens.stylex';
+import {
+  spacing,
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  font,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   modelBadge: {
@@ -136,65 +131,71 @@ export const WorkflowRunStepLogsAiAgentDetail = ({
 
   return (
     <>
-      <StyledSummaryCard>
-        <StyledSummaryHeader>
-          <StyledHeaderLeft>
+      <div {...stylex.props(logStyles.summaryCard)}>
+        <div {...stylex.props(logStyles.summaryHeader)}>
+          <div {...stylex.props(logStyles.headerLeft)}>
             <IconLego size={16} />
-            <StyledTitle>{t`Agent run`}</StyledTitle>
-          </StyledHeaderLeft>
-          <StyledBadgeGroup>
+            <span {...stylex.props(logStyles.title)}>{t`Agent run`}</span>
+          </div>
+          <div {...stylex.props(logStyles.badgeGroup)}>
             <span {...stylex.props(styles.modelBadge)}>{modelId}</span>
-          </StyledBadgeGroup>
-        </StyledSummaryHeader>
+          </div>
+        </div>
 
-        <StyledMetricsRow>
-          <StyledMetric>
-            <StyledMetricLabel>
+        <div {...stylex.props(logStyles.metricsRow)}>
+          <div {...stylex.props(logStyles.metric)}>
+            <div {...stylex.props(logStyles.metricLabel)}>
               <IconCpu size={12} />
               {t`Tokens`}
-            </StyledMetricLabel>
-            <StyledMetricValue>
+            </div>
+            <div {...stylex.props(logStyles.metricValue)}>
               {formatTokenCount(usage.totalTokens)}
-            </StyledMetricValue>
-          </StyledMetric>
-          <StyledMetric>
-            <StyledMetricLabel>
+            </div>
+          </div>
+          <div {...stylex.props(logStyles.metric)}>
+            <div {...stylex.props(logStyles.metricLabel)}>
               <IconCoins size={12} />
               {t`Cost`}
-            </StyledMetricLabel>
-            <StyledMetricValue>
+            </div>
+            <div {...stylex.props(logStyles.metricValue)}>
               {formatCost(cost.totalCostInDollars)}
-            </StyledMetricValue>
-          </StyledMetric>
-          <StyledMetric>
-            <StyledMetricLabel>
+            </div>
+          </div>
+          <div {...stylex.props(logStyles.metric)}>
+            <div {...stylex.props(logStyles.metricLabel)}>
               <IconTool size={12} />
               {t`Tool calls`}
-            </StyledMetricLabel>
-            <StyledMetricValue>{toolCalls.length}</StyledMetricValue>
-          </StyledMetric>
+            </div>
+            <div {...stylex.props(logStyles.metricValue)}>
+              {toolCalls.length}
+            </div>
+          </div>
           {nativeWebSearchCallCount > 0 && (
-            <StyledMetric>
-              <StyledMetricLabel>
+            <div {...stylex.props(logStyles.metric)}>
+              <div {...stylex.props(logStyles.metricLabel)}>
                 <IconWorld size={12} />
                 {t`Web searches`}
-              </StyledMetricLabel>
-              <StyledMetricValue>{nativeWebSearchCallCount}</StyledMetricValue>
-            </StyledMetric>
+              </div>
+              <div {...stylex.props(logStyles.metricValue)}>
+                {nativeWebSearchCallCount}
+              </div>
+            </div>
           )}
-          <StyledMetric>
-            <StyledMetricLabel>
+          <div {...stylex.props(logStyles.metric)}>
+            <div {...stylex.props(logStyles.metricLabel)}>
               <IconClock size={12} />
               {t`Duration`}
-            </StyledMetricLabel>
-            <StyledMetricValue>{formatDuration(durationMs)}</StyledMetricValue>
-          </StyledMetric>
-        </StyledMetricsRow>
-      </StyledSummaryCard>
+            </div>
+            <div {...stylex.props(logStyles.metricValue)}>
+              {formatDuration(durationMs)}
+            </div>
+          </div>
+        </div>
+      </div>
 
       {usageRows.length > 0 && (
-        <StyledSection>
-          <StyledSectionTitle>{t`Token usage`}</StyledSectionTitle>
+        <section {...stylex.props(logStyles.section)}>
+          <h3 {...stylex.props(logStyles.sectionTitle)}>{t`Token usage`}</h3>
           <div {...stylex.props(styles.usageGrid)}>
             {usageRows.map((row) => (
               <Fragment key={row.label}>
@@ -205,17 +206,19 @@ export const WorkflowRunStepLogsAiAgentDetail = ({
               </Fragment>
             ))}
           </div>
-        </StyledSection>
+        </section>
       )}
 
-      <StyledSection>
-        <StyledSectionTitle>
+      <section {...stylex.props(logStyles.section)}>
+        <h3 {...stylex.props(logStyles.sectionTitle)}>
           {toolCalls.length > 0
             ? t`Tool calls (${toolCalls.length})`
             : t`Tool calls`}
-        </StyledSectionTitle>
+        </h3>
         {toolCalls.length === 0 ? (
-          <StyledEmptyHint>{t`No tools were called`}</StyledEmptyHint>
+          <div
+            {...stylex.props(logStyles.emptyHint)}
+          >{t`No tools were called`}</div>
         ) : (
           <div {...stylex.props(styles.toolList)}>
             {toolCalls.map((toolCall) => (
@@ -226,7 +229,7 @@ export const WorkflowRunStepLogsAiAgentDetail = ({
             ))}
           </div>
         )}
-      </StyledSection>
+      </section>
     </>
   );
 };

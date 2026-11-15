@@ -78,8 +78,14 @@
 
   [data-workflow-handle-source] .react-flow__handle:hover {
     background: var(--handle-hover-bg, var(--handle-bg)) !important;
-    border-color: var(--handle-hover-border-color, var(--handle-border-color)) !important;
-    transform: var(--handle-hover-transform, var(--handle-transform)) !important;
+    border-color: var(
+      --handle-hover-border-color,
+      var(--handle-border-color)
+    ) !important;
+    transform: var(
+      --handle-hover-transform,
+      var(--handle-transform)
+    ) !important;
   }
 
   [data-workflow-handle-target] .react-flow__handle {

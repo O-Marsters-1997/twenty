@@ -16,7 +16,13 @@ import { WorkflowRunStepLogsEntries } from '@/workflow/workflow-steps/workflow-a
 import { WorkflowRunStepLogsHttpRequestDetail } from '@/workflow/workflow-steps/workflow-actions/http-request-action/components/WorkflowRunStepLogsHttpRequestDetail';
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard';
 import * as stylex from '@stylexjs/stylex';
-import { spacing, backgroundTransparent, borderRadius, fontColor, fontSize } from 'twenty-ui/theme/tokens.stylex';
+import {
+  spacing,
+  backgroundTransparent,
+  borderRadius,
+  fontColor,
+  fontSize,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   root: {

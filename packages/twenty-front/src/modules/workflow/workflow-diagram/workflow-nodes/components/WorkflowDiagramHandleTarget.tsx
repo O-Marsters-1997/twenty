@@ -35,7 +35,10 @@ export const WorkflowDiagramHandleTarget = ({
           targetHandlesKey={targetHandlesKey}
         />
       )}
-      <div data-workflow-handle-target {...stylex.props(styles.handleContainer)}>
+      <div
+        data-workflow-handle-target
+        {...stylex.props(styles.handleContainer)}
+      >
         <Handle
           id={WORKFLOW_DIAGRAM_NODE_DEFAULT_TARGET_HANDLE_ID}
           type="target"

@@ -1,4 +1,5 @@
 import { TabListRoot } from '@/ui/layout/tab-list/components/TabListRoot';
+import '@/workflow/workflow-steps/workflow-actions/components/workflowActionDescendantOverrides.css';
 import { WorkflowStepTabPanel } from '@/workflow/workflow-steps/components/WorkflowStepTabPanel';
 import { FormRawJsonFieldInput } from '@/object-record/record-field/ui/form-types/components/FormRawJsonFieldInput';
 import { FormTextFieldInput } from '@/object-record/record-field/ui/form-types/components/FormTextFieldInput';
@@ -15,7 +16,6 @@ import { WorkflowStepFooter } from '@/workflow/workflow-steps/components/Workflo
 import { getBodyTypeFromHeaders } from '@/workflow/workflow-steps/workflow-actions/http-request-action/utils/getBodyTypeFromHeaders';
 import { isMethodWithBody } from '@/workflow/workflow-steps/workflow-actions/http-request-action/utils/isMethodWithBody';
 import { WorkflowVariablePicker } from '@/workflow/workflow-variables/components/WorkflowVariablePicker';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useEffect } from 'react';
 import { IconPlayerPlay, IconSettings } from 'twenty-ui/icon';
@@ -44,6 +44,12 @@ type WorkflowEditActionHttpRequestProps = {
 };
 
 const styles = stylex.create({
+  fullHeightJsonField: {
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'column',
+  },
+
   tabListContainer: {
     backgroundColor: background['--t-background-secondary'],
     paddingLeft: spacing['--t-spacing-2'],
@@ -64,28 +70,6 @@ const styles = stylex.create({
     height: '100%',
   },
 });
-
-const StyledFullHeightFormRawJsonFieldInputContainer = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-
-  & > div:last-child {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-
-    & > div {
-      flex: 1;
-      height: 100%;
-      max-height: none !important;
-
-      & > div {
-        height: 100%;
-      }
-    }
-  }
-`;
 
 export const WorkflowEditActionHttpRequest = ({
   action,
@@ -186,7 +170,10 @@ export const WorkflowEditActionHttpRequest = ({
                 />
               )}
 
-              <StyledFullHeightFormRawJsonFieldInputContainer>
+              <div
+                data-workflow-full-height-json-field
+                {...stylex.props(styles.fullHeightJsonField)}
+              >
                 <FormRawJsonFieldInput
                   label={t`Expected Response Body`}
                   placeholder={JSON_RESPONSE_PLACEHOLDER}
@@ -195,7 +182,7 @@ export const WorkflowEditActionHttpRequest = ({
                   readonly={actionOptions.readonly}
                   error={error}
                 />
-              </StyledFullHeightFormRawJsonFieldInputContainer>
+              </div>
             </div>
           )}
           {activeTabId === WorkflowHttpRequestTabId.TEST && (

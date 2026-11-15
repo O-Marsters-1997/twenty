@@ -19,7 +19,6 @@ import { type WorkflowFormActionField } from '@/workflow/workflow-steps/workflow
 import { getDefaultFormFieldSettings } from '@/workflow/workflow-steps/workflow-actions/form-action/utils/getDefaultFormFieldSettings';
 import { WorkflowVariablePicker } from '@/workflow/workflow-variables/components/WorkflowVariablePicker';
 import { useIsFeatureEnabled } from '@/workspace/hooks/useIsFeatureEnabled';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { useEffect, useState } from 'react';
@@ -40,7 +39,12 @@ import { v4 } from 'uuid';
 import { FeatureFlagKey } from '~/generated-metadata/graphql';
 import { openUrlInNewTab } from '~/utils/openUrlInNewTab';
 import * as stylex from '@stylexjs/stylex';
-import { spacing, backgroundTransparent, fontColor, fontWeight } from 'twenty-ui/theme/tokens.stylex';
+import {
+  spacing,
+  backgroundTransparent,
+  fontColor,
+  fontWeight,
+} from 'twenty-ui/theme/tokens.stylex';
 
 export type WorkflowEditActionFormBuilderProps = {
   triggerType: WorkflowTriggerType | undefined;
@@ -58,6 +62,29 @@ export type WorkflowEditActionFormBuilderProps = {
 type FormData = WorkflowFormActionField[];
 
 const styles = stylex.create({
+  fieldContainer: {
+    alignItems: 'center',
+    background: 'transparent',
+    backgroundColor: {
+      default: 'transparent',
+      ':hover': backgroundTransparent['--t-background-transparent-lighter'],
+      ':is([data-open="true"])':
+        backgroundTransparent['--t-background-transparent-lighter'],
+    },
+    borderStyle: 'none',
+    cursor: 'pointer',
+    display: 'flex',
+    fontFamily: 'inherit',
+    height: '100%',
+    paddingLeft: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+  fieldContainerReadonly: {
+    backgroundColor: 'transparent',
+    cursor: 'default',
+  },
+
   formFieldContainer: {
     alignItems: 'flex-end',
     columnGap: spacing['--t-spacing-1'],
@@ -127,30 +154,6 @@ const styles = stylex.create({
     paddingTop: spacing['--t-spacing-2'],
   },
 });
-
-const StyledFieldContainer = styled.div<{
-  readonly?: boolean;
-}>`
-  align-items: center;
-  background: transparent;
-  border: none;
-  cursor: ${({ readonly }) => (readonly ? 'default' : 'pointer')};
-  display: flex;
-  font-family: inherit;
-  height: 100%;
-  padding-left: ${themeCssVariables.spacing[2]};
-
-  padding-right: ${themeCssVariables.spacing[2]};
-  width: 100%;
-
-  &:hover,
-  &[data-open='true'] {
-    background-color: ${({ readonly }) =>
-      readonly
-        ? 'transparent'
-        : themeCssVariables.background.transparent.lighter};
-  }
-`;
 
 export const WorkflowEditActionFormBuilder = ({
   triggerType,
@@ -332,9 +335,12 @@ export const WorkflowEditActionFormBuilder = ({
                       <div
                         key={field.id}
                         onMouseEnter={() => setHoveredField(field.id)}
-                        onMouseLeave={() => setHoveredField(null)} {...stylex.props(styles.formFieldContainer)}
+                        onMouseLeave={() => setHoveredField(null)}
+                        {...stylex.props(styles.formFieldContainer)}
                       >
-                        {isDragging && <div {...stylex.props(styles.draggingIndicator)} />}
+                        {isDragging && (
+                          <div {...stylex.props(styles.draggingIndicator)} />
+                        )}
 
                         {showButtons && (
                           <div {...stylex.props(styles.gripButtonContainer)}>
@@ -346,7 +352,11 @@ export const WorkflowEditActionFormBuilder = ({
                           </div>
                         )}
 
-                        <div {...stylex.props(styles.formFieldInputContainerWrapper)}>
+                        <div
+                          {...stylex.props(
+                            styles.formFieldInputContainerWrapper,
+                          )}
+                        >
                           <InputLabel>{field.label || ''}</InputLabel>
 
                           <FormFieldInputRowContainer>
@@ -357,10 +367,16 @@ export const WorkflowEditActionFormBuilder = ({
                                 handleFieldClick(field.id);
                               }}
                             >
-                              <StyledFieldContainer
-                                readonly={actionOptions.readonly}
+                              <div
+                                {...stylex.props(
+                                  styles.fieldContainer,
+                                  actionOptions.readonly &&
+                                    styles.fieldContainerReadonly,
+                                )}
                               >
-                                <div {...stylex.props(styles.placeholderContainer)}>
+                                <div
+                                  {...stylex.props(styles.placeholderContainer)}
+                                >
                                   <FormFieldPlaceholder>
                                     {isDefined(field.placeholder) &&
                                     isNonEmptyString(field.placeholder)
@@ -379,7 +395,7 @@ export const WorkflowEditActionFormBuilder = ({
                                     }
                                   />
                                 )}
-                              </StyledFieldContainer>
+                              </div>
                             </FormFieldInputInnerContainer>
                           </FormFieldInputRowContainer>
                         </div>
@@ -409,7 +425,9 @@ export const WorkflowEditActionFormBuilder = ({
                         )}
 
                         {isFieldSelected(field.id) && (
-                          <div {...stylex.props(styles.openedSettingsContainer)}>
+                          <div
+                            {...stylex.props(styles.openedSettingsContainer)}
+                          >
                             <WorkflowEditActionFormFieldSettings
                               field={field}
                               onChange={onFieldUpdate}
@@ -457,12 +475,14 @@ export const WorkflowEditActionFormBuilder = ({
                     setSelectedField(newField.id);
                   }}
                 >
-                  <StyledFieldContainer>
-                    <div {...stylex.props(styles.addFieldButtonContentContainer)}>
+                  <div {...stylex.props(styles.fieldContainer)}>
+                    <div
+                      {...stylex.props(styles.addFieldButtonContentContainer)}
+                    >
                       <IconPlus size={theme.icon.size.sm} />
                       {t`Add Field`}
                     </div>
-                  </StyledFieldContainer>
+                  </div>
                 </FormFieldInputInnerContainer>
               </FormFieldInputRowContainer>
             </FormFieldInputContainer>

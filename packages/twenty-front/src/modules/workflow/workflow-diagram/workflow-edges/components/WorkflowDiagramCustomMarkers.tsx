@@ -1,10 +1,19 @@
 import { EDGE_BRANCH_ARROW_MARKER } from '@/workflow/workflow-diagram/workflow-edges/constants/EdgeBranchArrowMarker';
+import * as stylex from '@stylexjs/stylex';
 import { useTheme } from 'twenty-ui/theme';
+
+const styles = stylex.create({
+  root: {
+    left: 0,
+    position: 'absolute',
+    top: 0,
+  },
+});
 
 export const WorkflowDiagramCustomMarkers = () => {
   const theme = useTheme();
   return (
-    <svg style={{ position: 'absolute', top: 0, left: 0 }}>
+    <svg {...stylex.props(styles.root)}>
       <defs>
         <marker
           id={EDGE_BRANCH_ARROW_MARKER.Default.markerEnd}

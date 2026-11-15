@@ -4,7 +4,6 @@ import { InputLabel } from '@/ui/input/components/internal/InputLabel/InputLabel
 import { AUTO_SET_HEADER_KEYS } from '@/workflow/workflow-steps/workflow-actions/http-request-action/constants/AutoSetHeaderKeys';
 import { isAutoSetHeaderKey } from '@/workflow/workflow-steps/workflow-actions/http-request-action/utils/isReadOnlyHeaderKey';
 import { WorkflowVariablePicker } from '@/workflow/workflow-variables/components/WorkflowVariablePicker';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { useState } from 'react';
 import { IconTrash } from 'twenty-ui/icon';
@@ -15,6 +14,15 @@ import * as stylex from '@stylexjs/stylex';
 import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
+  keyValueContainer: {
+    display: 'grid',
+    gap: spacing['--t-spacing-2'],
+    gridTemplateColumns: `repeat(2, minmax(0, 1fr)) ${spacing['--t-spacing-8']}`,
+  },
+  keyValueContainerReadonly: {
+    gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+  },
+
   container: {
     display: 'flex',
     flexDirection: 'column',
@@ -22,15 +30,6 @@ const styles = stylex.create({
   },
 });
 
-const StyledKeyValueContainer = styled.div<{ readonly: boolean | undefined }>`
-  display: grid;
-  gap: ${themeCssVariables.spacing[2]};
-
-  grid-template-columns: ${({ readonly }) =>
-    readonly
-      ? 'repeat(2, minmax(0, 1fr))'
-      : `repeat(2, minmax(0, 1fr)) ${themeCssVariables.spacing[8]}`};
-`;
 export type KeyValuePair = {
   id: string;
   key: string;
@@ -146,7 +145,13 @@ export const KeyValuePairInput = ({
       {label && <InputLabel>{label}</InputLabel>}
       <div {...stylex.props(styles.container)}>
         {pairs.map((pair) => (
-          <StyledKeyValueContainer key={pair.id} readonly={readonly}>
+          <div
+            key={pair.id}
+            {...stylex.props(
+              styles.keyValueContainer,
+              readonly && styles.keyValueContainerReadonly,
+            )}
+          >
             <FormTextFieldInput
               placeholder={keyPlaceholder}
               readonly={readonly || pair.isAutoSet}
@@ -182,7 +187,7 @@ export const KeyValuePairInput = ({
                   disabled={true}
                 />
               ))}
-          </StyledKeyValueContainer>
+          </div>
         ))}
       </div>
     </FormFieldInputContainer>

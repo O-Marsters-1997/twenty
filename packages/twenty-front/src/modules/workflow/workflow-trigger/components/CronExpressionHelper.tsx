@@ -11,7 +11,15 @@ import { CronExpressionParser } from 'cron-parser';
 import { dateLocaleState } from '@/localization/states/dateLocaleState';
 import { formatDateTimeString } from '@/object-record/record-field/ui/utils/formatDateTimeString';
 import * as stylex from '@stylexjs/stylex';
-import { spacing, backgroundTransparent, borderColor, borderRadius, fontColor, fontSize, fontWeight } from 'twenty-ui/theme/tokens.stylex';
+import {
+  spacing,
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  fontWeight,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const getNextExecutions = (
   cronExpression: string,
@@ -50,7 +58,8 @@ const styles = stylex.create({
     marginTop: spacing['--t-spacing-2'],
   },
   section: {
-    backgroundColor: backgroundTransparent['--t-background-transparent-lighter'],
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
     borderWidth: '1px',
     borderStyle: 'solid',
     borderColor: borderColor['--t-border-color-medium'],
@@ -151,7 +160,9 @@ export const CronExpressionHelper = ({
       )}
       {nextExecutions.length > 0 && isUpcomingExecutionVisible && (
         <div {...stylex.props(styles.section)}>
-          <div {...stylex.props(styles.scheduleTitle)}>{t`Upcoming execution time (${timeZone})`}</div>
+          <div
+            {...stylex.props(styles.scheduleTitle)}
+          >{t`Upcoming execution time (${timeZone})`}</div>
           {nextExecutions.slice(0, 3).map((execution, index) => (
             <div key={index} {...stylex.props(styles.executionItem)}>
               {formatDateTimeString({

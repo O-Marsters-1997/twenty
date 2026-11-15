@@ -6,10 +6,10 @@ import * as stylex from '@stylexjs/stylex';
 import { useContext } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import {
+  spacing,
   backgroundTransparent,
   borderColor,
   borderRadius,
-  spacing,
 } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
@@ -26,7 +26,8 @@ const styles = stylex.create({
     padding: spacing['--t-spacing-2'],
   },
   grayBackground: {
-    backgroundColor: backgroundTransparent['--t-background-transparent-lighter'],
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
   },
 });
 

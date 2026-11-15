@@ -78,7 +78,9 @@ export const WorkflowStepFilterLogicalOperatorCell = ({
     <div {...stylex.props(styles.container)}>
       {index === 0 ? (
         <div {...stylex.props(styles.text)}>
-          {isDefined(elseIfIndex) && <span {...stylex.props(styles.number)}>{elseIfIndex}</span>}
+          {isDefined(elseIfIndex) && (
+            <span {...stylex.props(styles.number)}>{elseIfIndex}</span>
+          )}
           {firstFilterLabel ?? defaultFirstFilterLabel}
         </div>
       ) : index === 1 ? (

@@ -11,7 +11,13 @@ import { LightIconButton } from 'twenty-ui/components/input';
 import { IconSettingsAutomation, IconX } from 'twenty-ui/icon';
 import { useTheme } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { spacing, backgroundTransparent, borderColor, borderRadius, fontColor } from 'twenty-ui/theme/tokens.stylex';
+import {
+  spacing,
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+} from 'twenty-ui/theme/tokens.stylex';
 type WorkflowEditActionFormFieldSettingsProps = {
   field: WorkflowFormActionField;
   onChange: (field: WorkflowFormActionField) => void;
@@ -20,7 +26,8 @@ type WorkflowEditActionFormFieldSettingsProps = {
 
 const styles = stylex.create({
   formFieldSettingsContainer: {
-    backgroundColor: backgroundTransparent['--t-background-transparent-lighter'],
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
     borderWidth: '1px',
     borderStyle: 'solid',
     borderColor: borderColor['--t-border-color-light'],

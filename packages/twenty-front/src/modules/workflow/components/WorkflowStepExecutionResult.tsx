@@ -1,6 +1,5 @@
 import { LightCopyIconButton } from '@/ui/input/components/LightCopyIconButton';
 import { AnimatedCircleLoading } from '@/workflow/components/internal/AnimatedCircleLoading/AnimatedCircleLoading';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { CodeEditor, CodeEditorHeader } from 'twenty-ui/components/code-editor';
 import {
@@ -8,10 +7,23 @@ import {
   IconSquareRoundedCheck,
   IconSquareRoundedX,
 } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { spacing, fontColor, fontSize } from 'twenty-ui/theme/tokens.stylex';
+import {
+  spacing,
+  fontColor,
+  fontSize,
+  color,
+} from 'twenty-ui/theme/tokens.stylex';
 const styles = stylex.create({
+  output: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-secondary'],
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+  },
+  outputSuccess: { color: color['--t-color-turquoise'] },
+  outputError: { color: color['--t-color-red'] },
   container: {
     display: 'flex',
     flex: '1',
@@ -33,20 +45,6 @@ const styles = stylex.create({
     gap: spacing['--t-spacing-2'],
   },
 });
-
-type OutputAccent = 'default' | 'success' | 'error';
-
-const StyledOutput = styled.div<{ accent?: OutputAccent }>`
-  align-items: center;
-  color: ${({ accent }) =>
-    accent === 'success'
-      ? themeCssVariables.color.turquoise
-      : accent === 'error'
-        ? themeCssVariables.color.red
-        : themeCssVariables.font.color.secondary};
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-`;
 
 export type ExecutionStatus = {
   isSuccess: boolean;
@@ -78,38 +76,42 @@ export const WorkflowStepExecutionResult = ({
   const theme = useTheme();
 
   const SuccessLeftNode = (
-    <StyledOutput accent="success">
+    <div {...stylex.props(styles.output, styles.outputSuccess)}>
       <IconSquareRoundedCheck size={theme.icon.size.md} />
       <div>
         <div>{status.successMessage}</div>
         {status.additionalInfo && (
-          <div {...stylex.props(styles.statusInfo)}>{status.additionalInfo}</div>
+          <div {...stylex.props(styles.statusInfo)}>
+            {status.additionalInfo}
+          </div>
         )}
       </div>
-    </StyledOutput>
+    </div>
   );
 
   const ErrorLeftNode = (
-    <StyledOutput accent="error">
+    <div {...stylex.props(styles.output, styles.outputError)}>
       <IconSquareRoundedX size={theme.icon.size.md} />
       <div>
         <div>{status.errorMessage}</div>
         {status.additionalInfo && (
-          <div {...stylex.props(styles.statusInfo)}>{status.additionalInfo}</div>
+          <div {...stylex.props(styles.statusInfo)}>
+            {status.additionalInfo}
+          </div>
         )}
       </div>
-    </StyledOutput>
+    </div>
   );
 
   const IdleLeftNode = idleMessage;
 
   const PendingLeftNode = isTesting && (
-    <StyledOutput>
+    <div {...stylex.props(styles.output)}>
       <AnimatedCircleLoading>
         <IconLoader size={theme.icon.size.md} />
       </AnimatedCircleLoading>
       <div {...stylex.props(styles.infoContainer)}>{loadingMessage}</div>
-    </StyledOutput>
+    </div>
   );
 
   const computeLeftNode = () => {

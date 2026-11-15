@@ -17,7 +17,12 @@ import { TRIGGER_STEP_ID } from 'twenty-shared/workflow';
 import { useIcons } from 'twenty-ui/icon';
 import { type SelectOption } from 'twenty-ui/primitives/input';
 import * as stylex from '@stylexjs/stylex';
-import { spacing, fontColor, fontSize, fontWeight } from 'twenty-ui/theme/tokens.stylex';
+import {
+  spacing,
+  fontColor,
+  fontSize,
+  fontWeight,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type WorkflowEditTriggerManualProps = {
   trigger: WorkflowManualTrigger;
@@ -167,7 +172,8 @@ export const WorkflowEditTriggerManual = ({
                   e.stopPropagation();
                   e.preventDefault();
                 }
-              }} {...stylex.props(styles.iconPickerContainer)}
+              }}
+              {...stylex.props(styles.iconPickerContainer)}
             >
               <span {...stylex.props(styles.label)}>{t`Command Icon`}</span>
               <SelectControl
@@ -178,7 +184,9 @@ export const WorkflowEditTriggerManual = ({
                   label: '',
                 }}
               />
-              <span {...stylex.props(styles.description)}>{t`The icon your workflow trigger will display in the command menu`}</span>
+              <span
+                {...stylex.props(styles.description)}
+              >{t`The icon your workflow trigger will display in the command menu`}</span>
             </div>
           }
           onChange={({ iconKey }) => {

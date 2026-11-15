@@ -1,6 +1,14 @@
 import { isDefined } from 'twenty-shared/utils';
 import * as stylex from '@stylexjs/stylex';
-import { spacing, background, borderColor, borderRadius, fontColor, fontSize, fontWeight } from 'twenty-ui/theme/tokens.stylex';
+import {
+  spacing,
+  background,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  fontWeight,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   container: {
@@ -42,7 +50,9 @@ export const WorkflowDiagramEdgeLabel = ({
 }: WorkflowDiagramEdgeLabelProps) => {
   return (
     <div {...stylex.props(styles.container)}>
-      {isDefined(elseIfIndex) && <span {...stylex.props(styles.number)}>{elseIfIndex}</span>}
+      {isDefined(elseIfIndex) && (
+        <span {...stylex.props(styles.number)}>{elseIfIndex}</span>
+      )}
       <div {...stylex.props(styles.label)}>{label}</div>
     </div>
   );

@@ -1,28 +1,25 @@
-import { css } from '@linaria/core';
+import * as stylex from '@stylexjs/stylex';
+import { animationDuration } from 'twenty-ui/theme/tokens.stylex';
 
-const styles = {
-  container: css`
-    & {
-      align-items: center;
-      animation: animated-circle-loading-animatedCircleLoadingSpin
-        calc(var(--t-animation-duration-slow) * 1s) ease-in-out infinite;
-      display: flex;
-      justify-content: center;
-    }
+const spin = stylex.keyframes({
+  from: { transform: 'rotate(0deg)' },
+  to: { transform: 'rotate(360deg)' },
+});
 
-    @keyframes animated-circle-loading-animatedCircleLoadingSpin {
-      from {
-        transform: rotate(0deg);
-      }
-      to {
-        transform: rotate(360deg);
-      }
-    }
-  `,
-};
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    animationDuration: `calc(${animationDuration['--t-animation-duration-slow']} * 1s)`,
+    animationIterationCount: 'infinite',
+    animationName: spin,
+    animationTimingFunction: 'ease-in-out',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+});
 
 export const AnimatedCircleLoading = ({
   children,
 }: {
   children: React.ReactNode;
-}) => <div className={styles.container}>{children}</div>;
+}) => <div {...stylex.props(styles.container)}>{children}</div>;

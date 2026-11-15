@@ -3,7 +3,7 @@ import { getWorkflowDiagramColors } from '@/workflow/workflow-diagram/utils/getW
 import * as stylex from '@stylexjs/stylex';
 import { type ReactNode } from 'react';
 import { themeCssVariables } from 'twenty-ui/theme';
-import { borderRadius, spacing } from 'twenty-ui/theme/tokens.stylex';
+import { spacing, borderRadius } from 'twenty-ui/theme/tokens.stylex';
 
 const TARGET_HANDLE_SPACING = 32;
 

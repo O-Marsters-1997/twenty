@@ -673,7 +673,10 @@ export const WorkflowDiagramCanvasBase = ({
         <WorkflowDiagramRightClickCommandMenu />
       )}
 
-      <div data-testid={tagContainerTestId} {...stylex.props(styles.statusTagContainer)}>
+      <div
+        data-testid={tagContainerTestId}
+        {...stylex.props(styles.statusTagContainer)}
+      >
         <Tag color={tagColor}>{tagText}</Tag>
       </div>
     </div>

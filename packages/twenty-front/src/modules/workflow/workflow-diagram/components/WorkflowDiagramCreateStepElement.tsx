@@ -54,7 +54,9 @@ export const WorkflowDiagramCreateStepElement = ({
         <WorkflowDiagramConnector />
       </div>
 
-      {isDefined(Label) && <div {...stylex.props(styles.labelContainer)}>{Label}</div>}
+      {isDefined(Label) && (
+        <div {...stylex.props(styles.labelContainer)}>{Label}</div>
+      )}
 
       <IconButton size="sm" aria-label={t`Add a step`} onClick={addNode}>
         <IconPlus />

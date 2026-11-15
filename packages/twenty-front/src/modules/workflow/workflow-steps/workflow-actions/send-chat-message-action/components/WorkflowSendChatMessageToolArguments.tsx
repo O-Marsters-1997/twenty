@@ -190,7 +190,9 @@ export const WorkflowSendChatMessageToolArguments = ({
               </span>
             )}
             {isMissing && !readonly && (
-              <span {...stylex.props(styles.error)}>{t`Required to run the action`}</span>
+              <span
+                {...stylex.props(styles.error)}
+              >{t`Required to run the action`}</span>
             )}
           </div>
         );

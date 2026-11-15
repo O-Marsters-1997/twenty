@@ -147,7 +147,8 @@ export const WorkflowDiagramStepNodeEditableContent = ({
           <div
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            onClick={handleAddStepButtonContainerClick} {...stylex.props(styles.addStepButtonContainer)}
+            onClick={handleAddStepButtonContainerClick}
+            {...stylex.props(styles.addStepButtonContainer)}
           >
             <WorkflowDiagramCreateStepElement
               data={data}
