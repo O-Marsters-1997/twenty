@@ -9,27 +9,29 @@ import { RootStackingContextZIndices } from '@/ui/layout/constants/RootStackingC
 import { PAGE_HEADER_SIDE_PANEL_BUTTON_CLICK_OUTSIDE_ID } from '@/ui/layout/page-header/constants/PageHeaderSidePanelButtonClickOutsideId';
 import { TooltipDelay } from '@/ui/layout/tooltip/constants/TooltipDelay';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
+import * as stylex from '@stylexjs/stylex';
 import { SidePanelPages } from 'twenty-shared/types';
 import { IconDotsVertical } from 'twenty-ui/icon';
 import { IconButton } from 'twenty-ui/components/input';
 import { Tooltip } from 'twenty-ui/primitives/surfaces';
 import { useIsMobile } from 'twenty-ui/utilities';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledButtonWrapper = styled.div<{ alignToTop: boolean }>`
-  align-items: ${({ alignToTop }) => (alignToTop ? 'center' : 'initial')};
-  display: ${({ alignToTop }) => (alignToTop ? 'flex' : 'block')};
-  height: ${({ alignToTop }) =>
-    alignToTop ? `${SIDE_PANEL_TOP_BAR_HEIGHT_MOBILE}px` : 'auto'};
-  position: ${({ alignToTop }) => (alignToTop ? 'fixed' : 'static')};
-  right: ${({ alignToTop }) =>
-    alignToTop ? themeCssVariables.spacing[3] : 'auto'};
-  top: ${({ alignToTop }) => (alignToTop ? '0' : 'auto')};
-  z-index: ${({ alignToTop }) =>
-    alignToTop ? RootStackingContextZIndices.SidePanelButton : 'auto'};
-`;
+const styles = stylex.create({
+  wrapper: {
+    display: 'block',
+  },
+  wrapperAlignedToTop: (height: number, zIndex: number) => ({
+    alignItems: 'center',
+    display: 'flex',
+    height: `${height}px`,
+    position: 'fixed',
+    right: spacing['--t-spacing-3'],
+    top: 0,
+    zIndex,
+  }),
+});
 
 export const SidePanelToggleButton = () => {
   const { openSidePanelMenu } = useSidePanelMenu();
@@ -71,7 +73,16 @@ export const SidePanelToggleButton = () => {
   const tooltipContent = t`Command menu | ${formatShortcut({ shortcut: ['Mod', 'K'] })}`;
 
   return (
-    <StyledButtonWrapper alignToTop={alignWithSidePanelTopBar}>
+    <div
+      {...stylex.props(
+        alignWithSidePanelTopBar
+          ? styles.wrapperAlignedToTop(
+              SIDE_PANEL_TOP_BAR_HEIGHT_MOBILE,
+              RootStackingContextZIndices.SidePanelButton,
+            )
+          : styles.wrapper,
+      )}
+    >
       <Tooltip
         content={tooltipContent}
         delay={TooltipDelay.longDelay}
@@ -94,6 +105,6 @@ export const SidePanelToggleButton = () => {
           </IconButton>
         </div>
       </Tooltip>
-    </StyledButtonWrapper>
+    </div>
   );
 };

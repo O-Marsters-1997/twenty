@@ -18,8 +18,8 @@ import { useUpdateCurrentWidgetConfig } from '@/side-panel/pages/page-layout/hoo
 import { useWidgetInEditMode } from '@/side-panel/pages/page-layout/hooks/useWidgetInEditMode';
 import { FieldWidgetNestedFieldDropdownContent } from '@/side-panel/pages/page-layout/components/dropdown-content/FieldWidgetNestedFieldDropdownContent';
 import {
-  StyledPageLayoutDropdownContentContainer,
-  StyledPageLayoutDropdownMenuItemsContainer,
+  PageLayoutDropdownContentContainer,
+  PageLayoutDropdownMenuItemsContainer,
 } from '@/side-panel/pages/page-layout/components/dropdown-content/PageLayoutDropdownContentContainer';
 import { DropdownMenuSearchInput } from '@/ui/layout/dropdown/components/DropdownMenuSearchInput';
 import { DropdownMenuSeparator } from '@/ui/layout/dropdown/components/DropdownMenuSeparator';
@@ -295,7 +295,7 @@ export const FieldWidgetFieldDropdownContent = () => {
   }
 
   return (
-    <StyledPageLayoutDropdownContentContainer>
+    <PageLayoutDropdownContentContainer>
       <DropdownMenuSearchInput
         autoFocus
         type="text"
@@ -304,7 +304,7 @@ export const FieldWidgetFieldDropdownContent = () => {
         value={searchQuery}
       />
       <DropdownMenuSeparator />
-      <StyledPageLayoutDropdownMenuItemsContainer>
+      <PageLayoutDropdownMenuItemsContainer>
         <SelectableList
           selectableListInstanceId={dropdownId}
           focusId={dropdownId}
@@ -356,7 +356,7 @@ export const FieldWidgetFieldDropdownContent = () => {
             );
           })}
         </SelectableList>
-      </StyledPageLayoutDropdownMenuItemsContainer>
-    </StyledPageLayoutDropdownContentContainer>
+      </PageLayoutDropdownMenuItemsContainer>
+    </PageLayoutDropdownContentContainer>
   );
 };

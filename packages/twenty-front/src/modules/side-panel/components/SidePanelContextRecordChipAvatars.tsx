@@ -3,31 +3,44 @@ import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/Enriche
 import { useRecordChipData } from '@/object-record/hooks/useRecordChipData';
 import { type ObjectRecord } from '@/object-record/types/ObjectRecord';
 import { getAbsoluteImageUrl } from '~/utils/image/getAbsoluteImageUrl';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { Avatar } from 'twenty-ui/primitives/data-display';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
-const StyledIconWrapper = styled.div<{
-  withIconBackground?: boolean;
-  borderColor: string;
-}>`
-  align-items: center;
-  background: ${({ withIconBackground }) =>
-    withIconBackground ? themeCssVariables.background.primary : 'unset'};
-  border: 1px solid
-    ${({ withIconBackground, borderColor }) =>
-      withIconBackground ? borderColor : 'transparent'};
-  &:not(:first-of-type) {
-    margin-left: -${themeCssVariables.spacing[1]};
-  }
-  border-radius: ${themeCssVariables.border.radius.sm};
-  display: flex;
-  justify-content: center;
-`;
+import { useTheme } from 'twenty-ui/theme';
+import {
+  background,
+  borderColor as borderColorVariables,
+  borderRadius,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
+
+const styles = stylex.create({
+  root: {
+    alignItems: 'center',
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    display: 'flex',
+    justifyContent: 'center',
+    marginLeft: {
+      default: `calc(${spacing['--t-spacing-1']} * -1)`,
+      ':first-of-type': '0',
+    },
+  },
+  withIconBackground: {
+    backgroundColor: background['--t-background-primary'],
+  },
+  borderTransparent: {
+    borderColor: 'transparent',
+  },
+  borderColor: (color: string) => ({
+    borderColor: color,
+  }),
+});
 
 export const SidePanelContextRecordChipAvatars = ({
   objectMetadataItem,
   record,
-  borderColor = themeCssVariables.border.color.medium,
+  borderColor = borderColorVariables['--t-border-color-medium'],
 }: {
   objectMetadataItem: EnrichedObjectMetadataItem;
   record: ObjectRecord;
@@ -41,10 +54,17 @@ export const SidePanelContextRecordChipAvatars = ({
   const { Icon, IconColor } = useGetStandardObjectIcon(
     objectMetadataItem.nameSingular,
   );
+  const hasIconBackground = recordChipData.avatarShape !== 'circle';
+
   return (
-    <StyledIconWrapper
-      withIconBackground={recordChipData.avatarShape !== 'circle'}
-      borderColor={borderColor}
+    <div
+      {...stylex.props(
+        styles.root,
+        hasIconBackground && styles.withIconBackground,
+        hasIconBackground
+          ? styles.borderColor(borderColor)
+          : styles.borderTransparent,
+      )}
     >
       {Icon ? (
         <Icon color={IconColor} size={theme.icon.size.sm} />
@@ -57,6 +77,6 @@ export const SidePanelContextRecordChipAvatars = ({
           size="sm"
         />
       )}
-    </StyledIconWrapper>
+    </div>
   );
 };

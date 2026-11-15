@@ -14,24 +14,25 @@ import { useWidgetInEditMode } from '@/side-panel/pages/page-layout/hooks/useWid
 import { useWidgetSettingsPlacementSelectableItemIds } from '@/side-panel/pages/page-layout/hooks/useWidgetSettingsPlacementSelectableItemIds';
 import { SidePanelSubPages } from '@/side-panel/types/SidePanelSubPages';
 import { SelectableListItem } from '@/ui/layout/selectable-list/components/SelectableListItem';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { IconChevronDown, IconLayoutSidebarRight } from 'twenty-ui/icon';
 import { type FieldsConfiguration } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-`;
-
-const StyledSidePanelContainer = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  overflow: hidden;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+  },
+  sidePanelContainer: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    overflow: 'hidden',
+  },
+});
 
 export const SidePanelRecordPageFieldsSettings = () => {
   const { t } = useLingui();
@@ -94,8 +95,8 @@ export const SidePanelRecordPageFieldsSettings = () => {
   ];
 
   return (
-    <StyledContainer>
-      <StyledSidePanelContainer>
+    <div {...stylex.props(styles.container)}>
+      <div {...stylex.props(styles.sidePanelContainer)}>
         <SidePanelList selectableItemIds={selectableItemIds}>
           <SidePanelGroup heading={t`Data and display`}>
             <SelectableListItem
@@ -143,7 +144,7 @@ export const SidePanelRecordPageFieldsSettings = () => {
             showMoveUp={widgetSettingsPlacement.showMoveUp}
           />
         </SidePanelList>
-      </StyledSidePanelContainer>
-    </StyledContainer>
+      </div>
+    </div>
   );
 };

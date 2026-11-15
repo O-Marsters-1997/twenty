@@ -1,10 +1,8 @@
-import { styled } from '@linaria/react';
 import { Fragment } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { IconLink, IconLock, IconRefresh, IconUsers } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMemberState';
 import { currentWorkspaceMembersState } from '@/auth/states/currentWorkspaceMembersState';
@@ -29,38 +27,44 @@ import {
   RecordSharingMode,
 } from '~/generated-metadata/graphql';
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const ADD_PEOPLE_ITEM_ID = 'share-record-add-people';
 const GENERAL_ACCESS_ITEM_ID = 'share-record-general-access';
 const RETRY_ITEM_ID = 'share-record-retry';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-`;
-
-const StyledListContainer = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  overflow: hidden;
-`;
-
-const StyledDescription = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.sm};
-  line-height: 1.5;
-  padding: ${themeCssVariables.spacing[2]} ${themeCssVariables.spacing[1]};
-  white-space: normal;
-`;
-
-const StyledRoleAccessNote = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.xs};
-  padding: 0 ${themeCssVariables.spacing[2]} ${themeCssVariables.spacing[1]}
-    ${themeCssVariables.spacing[8]};
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+  },
+  listContainer: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    overflow: 'hidden',
+  },
+  description: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-sm'],
+    lineHeight: 1.5,
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-1'],
+    whiteSpace: 'normal',
+  },
+  roleAccessNote: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-xs'],
+    paddingTop: '0',
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-8'],
+  },
+});
 
 type SidePanelShareRecordContentProps = {
   recordUrl: string;
@@ -129,12 +133,15 @@ export const SidePanelShareRecordContent = ({
       : [];
 
   return (
-    <StyledContainer>
-      <StyledListContainer>
+    <div {...stylex.props(styles.container)}>
+      <div {...stylex.props(styles.listContainer)}>
         <SidePanelList selectableItemIds={selectableItemIds} loading={loading}>
           {isDefined(error) ? (
             <>
-              <StyledDescription role="alert">{t`Sharing settings could not be loaded.`}</StyledDescription>
+              <div
+                role="alert"
+                {...stylex.props(styles.description)}
+              >{t`Sharing settings could not be loaded.`}</div>
               <SelectableListItem
                 itemId={RETRY_ITEM_ID}
                 onEnter={() => {
@@ -228,16 +235,16 @@ export const SidePanelShareRecordContent = ({
                             />
                           )}
                           {isDefined(roleAccessNote) && (
-                            <StyledRoleAccessNote>
+                            <div {...stylex.props(styles.roleAccessNote)}>
                               {roleAccessNote}
-                            </StyledRoleAccessNote>
+                            </div>
                           )}
                         </Fragment>
                       );
                     },
                   )}
                 </SidePanelGroup>
-                <StyledDescription>
+                <div {...stylex.props(styles.description)}>
                   {sharing.hasManagedGeneralAccess
                     ? t`Workspace access is also managed by an application.`
                     : sharing.sharingMode === RecordSharingMode.INHERITED
@@ -245,20 +252,20 @@ export const SidePanelShareRecordContent = ({
                       : sharingReach === ObjectSharingReach.WORKSPACE
                         ? t`People you add get this record even if their role can't access ${objectLabelPlural}. Field permissions still apply.`
                         : t`Role and field permissions still apply.`}
-                </StyledDescription>
+                </div>
               </>
             ) : (
-              <StyledDescription>
+              <div {...stylex.props(styles.description)}>
                 {sharing.sharingMode === RecordSharingMode.ROLE_ONLY
                   ? t`Access to ${objectLabelPlural} is set by roles, not record by record.`
                   : sharing.sharingMode === RecordSharingMode.OPEN_BY_DEFAULT
                     ? t`Only the creator of this record, people with full access to it and admins can change who has access.`
                     : t`Only the creator of this record and people with full access to it can change who has access.`}
-              </StyledDescription>
+              </div>
             ))
           )}
         </SidePanelList>
-      </StyledListContainer>
+      </div>
       <SidePanelFooter
         actions={[
           <Button
@@ -272,6 +279,6 @@ export const SidePanelShareRecordContent = ({
           >{t`Copy link`}</Button>,
         ]}
       />
-    </StyledContainer>
+    </div>
   );
 };

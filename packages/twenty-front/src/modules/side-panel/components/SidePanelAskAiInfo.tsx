@@ -5,17 +5,19 @@ import { agentChatThreadRecordFamilySelector } from '@/ai/states/selectors/agent
 import { HeaderIdentifier } from '@/ui/layout/page/components/HeaderIdentifier';
 import { useAtomFamilySelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilySelectorValue';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  min-width: 0;
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    minWidth: '0',
+  },
+});
 
 export const SidePanelAskAiInfo = () => {
   const currentAiChatThread = useAtomStateValue(currentAiChatThreadState);
@@ -26,11 +28,11 @@ export const SidePanelAskAiInfo = () => {
   )?.title;
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <HeaderIdentifier title={currentAiChatThreadTitle ?? t`Ask AI`} />
       {isDefined(currentAiChatThread) && !isOnNewAiChatSlot && (
         <AiChatThreadDetailsDropdown threadId={currentAiChatThread} />
       )}
-    </StyledContainer>
+    </div>
   );
 };

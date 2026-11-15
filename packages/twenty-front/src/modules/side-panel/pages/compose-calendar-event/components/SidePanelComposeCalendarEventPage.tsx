@@ -9,7 +9,6 @@ import { composeCalendarEventInitialValuesComponentState } from '@/side-panel/pa
 import { SidePanelFooter } from '@/ui/layout/side-panel/components/SidePanelFooter';
 import { useHotkeysOnFocusedElement } from '@/ui/utilities/hotkey/hooks/useHotkeysOnFocusedElement';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { ConnectedAccountProvider, SettingsPath } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
@@ -19,12 +18,15 @@ import { IconCalendarEvent, IconTrash } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
 import { PermissionFlagType } from '~/generated-metadata/graphql';
 import { useNavigateSettings } from '~/hooks/useNavigateSettings';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+  },
+});
 
 export const SidePanelComposeCalendarEventPage = () => {
   const composeCalendarEventInitialValues = useAtomComponentStateValue(
@@ -86,7 +88,7 @@ export const SidePanelComposeCalendarEventPage = () => {
   }
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <CalendarEventComposerFields
         composerState={composerState}
         contextRecord={composeCalendarEventInitialValues.contextRecord}
@@ -120,6 +122,6 @@ export const SidePanelComposeCalendarEventPage = () => {
           >{t`Create event`}</Button>,
         ]}
       />
-    </StyledContainer>
+    </div>
   );
 };

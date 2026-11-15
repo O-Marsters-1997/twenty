@@ -6,25 +6,26 @@ import { SidePanelList } from '@/side-panel/components/SidePanelList';
 import { WidgetSettingsFooter } from '@/side-panel/pages/page-layout/components/WidgetSettingsFooter';
 import { usePageLayoutSidePanelTarget } from '@/side-panel/pages/page-layout/hooks/usePageLayoutSidePanelTarget';
 import { useWidgetInEditMode } from '@/side-panel/pages/page-layout/hooks/useWidgetInEditMode';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isNonEmptyString, isString } from '@sniptt/guards';
 import { useState } from 'react';
 import { isDefined, isValidUrl } from 'twenty-shared/utils';
 import { WidgetConfigurationType } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-`;
-
-const StyledSidePanelContainer = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  overflow: hidden;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+  },
+  sidePanelContainer: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    overflow: 'hidden',
+  },
+});
 
 export const SidePanelDashboardIframeSettings = () => {
   const { pageLayoutId } = usePageLayoutSidePanelTarget();
@@ -85,8 +86,8 @@ export const SidePanelDashboardIframeSettings = () => {
   };
 
   return (
-    <StyledContainer>
-      <StyledSidePanelContainer>
+    <div {...stylex.props(styles.container)}>
+      <div {...stylex.props(styles.sidePanelContainer)}>
         <SidePanelList selectableItemIds={[]}>
           <SidePanelGroup heading={t`URL to Embed`}>
             <SidePanelGroupFormContainer>
@@ -99,8 +100,8 @@ export const SidePanelDashboardIframeSettings = () => {
             </SidePanelGroupFormContainer>
           </SidePanelGroup>
         </SidePanelList>
-      </StyledSidePanelContainer>
+      </div>
       <WidgetSettingsFooter pageLayoutId={pageLayoutId} />
-    </StyledContainer>
+    </div>
   );
 };

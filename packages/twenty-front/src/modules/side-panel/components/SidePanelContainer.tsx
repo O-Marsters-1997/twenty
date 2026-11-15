@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { CommandMenuComponentInstanceContext } from '@/command-menu/states/contexts/CommandMenuComponentInstanceContext';
 import { MAIN_CONTEXT_STORE_INSTANCE_ID } from '@/context-store/constants/MainContextStoreInstanceId';
 import { SIDE_PANEL_COMPONENT_INSTANCE_ID } from '@/side-panel/constants/SidePanelComponentInstanceId';
@@ -10,14 +9,17 @@ import { RecordComponentInstanceContextsWrapper } from '@/object-record/componen
 import { getRecordIndexIdFromObjectNamePluralAndViewId } from '@/object-record/utils/getRecordIndexIdFromObjectNamePluralAndViewId';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledSidePanelContainer = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  max-height: 100%;
-  min-height: 0;
-`;
+const styles = stylex.create({
+  sidePanelContainer: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    maxHeight: '100%',
+    minHeight: '0',
+  },
+});
 
 type SidePanelContainerProps = {
   children: React.ReactNode;
@@ -54,7 +56,7 @@ export const SidePanelContainer = ({ children }: SidePanelContainerProps) => {
         <CommandMenuComponentInstanceContext.Provider
           value={{ instanceId: SIDE_PANEL_COMPONENT_INSTANCE_ID }}
         >
-          <StyledSidePanelContainer>{children}</StyledSidePanelContainer>
+          <div {...stylex.props(styles.sidePanelContainer)}>{children}</div>
         </CommandMenuComponentInstanceContext.Provider>
       </ContextStoreComponentInstanceContext.Provider>
     </RecordComponentInstanceContextsWrapper>

@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { plural, t } from '@lingui/core/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { useState } from 'react';
@@ -10,7 +9,6 @@ import { isDefined } from 'twenty-shared/utils';
 import { IconClock, IconSend } from 'twenty-ui/icon';
 import { Button, type SelectOption } from 'twenty-ui/primitives/input';
 import { Text } from 'twenty-ui/primitives/typography';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { useCampaignAudiencePreview } from '@/activities/emails/hooks/useCampaignAudiencePreview';
 import { useSendMessageCampaign } from '@/activities/emails/hooks/useSendMessageCampaign';
@@ -31,63 +29,73 @@ import { Select } from '@/ui/input/components/Select';
 import { SidePanelFooter } from '@/ui/layout/side-panel/components/SidePanelFooter';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { dateLocaleState } from '@/localization/states/dateLocaleState';
+import * as stylex from '@stylexjs/stylex';
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-`;
-
-const StyledContent = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[5]};
-  overflow-y: auto;
-  padding: ${themeCssVariables.spacing[4]};
-`;
-
-const StyledSection = styled.div`
-  align-items: flex-start;
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledRecipientCount = styled.span`
-  color: ${themeCssVariables.font.color.primary};
-  font-size: ${themeCssVariables.font.size.xl};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-`;
-
-const StyledValue = styled.span<{ $isEmpty: boolean }>`
-  color: ${({ $isEmpty }) =>
-    $isEmpty
-      ? themeCssVariables.font.color.light
-      : themeCssVariables.font.color.primary};
-  font-size: ${themeCssVariables.font.size.md};
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledHint = styled.span`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.sm};
-`;
-
-const StyledErrorHint = styled.span`
-  color: ${themeCssVariables.font.color.danger};
-  font-size: ${themeCssVariables.font.size.sm};
-`;
-
-const StyledDeliveryFields = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  width: 100%;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+  },
+  content: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-5'],
+    overflowY: 'auto',
+    paddingTop: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingBottom: spacing['--t-spacing-4'],
+    paddingLeft: spacing['--t-spacing-4'],
+  },
+  section: {
+    alignItems: 'flex-start',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-1'],
+  },
+  recipientCount: {
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-xl'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+  },
+  hint: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-sm'],
+  },
+  errorHint: {
+    color: fontColor['--t-font-color-danger'],
+    fontSize: fontSize['--t-font-size-sm'],
+  },
+  displayLabel: {
+    color: fontColor['--t-font-color-light'],
+    fontSize: '11px',
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+  },
+  value: {
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-md'],
+    maxWidth: '100%',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  valueEmpty: {
+    color: fontColor['--t-font-color-light'],
+  },
+  deliveryFields: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+});
 
 type SendCampaignFormProps = {
   campaign: MessageCampaign;
@@ -189,68 +197,80 @@ export const SendCampaignForm = ({ campaign }: SendCampaignFormProps) => {
   };
 
   return (
-    <StyledContainer>
-      <StyledContent>
-        <StyledSection>
-          <StyledDisplayLabel>{t`Recipients`}</StyledDisplayLabel>
+    <div {...stylex.props(styles.container)}>
+      <div {...stylex.props(styles.content)}>
+        <div {...stylex.props(styles.section)}>
+          <Text {...stylex.props(styles.displayLabel)}>{t`Recipients`}</Text>
           {isDefined(audiencePreview) ? (
             <>
-              <StyledRecipientCount>
+              <span {...stylex.props(styles.recipientCount)}>
                 {plural(audiencePreview.sendable, {
                   one: `${formatNumber(audiencePreview.sendable)} recipient`,
                   other: `${formatNumber(audiencePreview.sendable)} recipients`,
                 })}
-              </StyledRecipientCount>
+              </span>
               {excludedReasons.length > 0 && (
-                <StyledHint>
+                <span {...stylex.props(styles.hint)}>
                   {t`${formatNumber(audiencePreview.totalMembers)} in the list, skipping ${excludedReasons.join(', ')}`}
-                </StyledHint>
+                </span>
               )}
               {audiencePreview.trackingRefused > 0 && (
-                <StyledHint>
+                <span {...stylex.props(styles.hint)}>
                   {t`${formatNumber(audiencePreview.trackingRefused)} opted out of email tracking, their clicks are not recorded`}
-                </StyledHint>
+                </span>
               )}
               {isScheduling && (
-                <StyledHint>
+                <span {...stylex.props(styles.hint)}>
                   {t`Counted again when the campaign sends, so this can change.`}
-                </StyledHint>
+                </span>
               )}
             </>
           ) : (
-            <StyledHint>
+            <span {...stylex.props(styles.hint)}>
               {hasAudiencePreviewFailed
                 ? t`Recipient count unavailable`
                 : t`Counting recipients...`}
-            </StyledHint>
+            </span>
           )}
-        </StyledSection>
-        <StyledSection>
-          <StyledDisplayLabel>{t`List`}</StyledDisplayLabel>
+        </div>
+        <div {...stylex.props(styles.section)}>
+          <Text {...stylex.props(styles.displayLabel)}>{t`List`}</Text>
           {isDefined(list) ? (
             <RecordChip
               record={list}
               objectNameSingular={CoreObjectNameSingular.MessageList}
             />
           ) : (
-            <StyledValue $isEmpty>{t`No list`}</StyledValue>
+            <span {...stylex.props(styles.value, styles.valueEmpty)}>
+              {t`No list`}
+            </span>
           )}
-        </StyledSection>
-        <StyledSection>
-          <StyledDisplayLabel>{t`From`}</StyledDisplayLabel>
-          <StyledValue $isEmpty={!isNonEmptyString(fromAddress)}>
+        </div>
+        <div {...stylex.props(styles.section)}>
+          <Text {...stylex.props(styles.displayLabel)}>{t`From`}</Text>
+          <span
+            {...stylex.props(
+              styles.value,
+              !isNonEmptyString(fromAddress) && styles.valueEmpty,
+            )}
+          >
             {isNonEmptyString(fromAddress) ? fromAddress : t`No sender`}
-          </StyledValue>
-        </StyledSection>
-        <StyledSection>
-          <StyledDisplayLabel>{t`Subject`}</StyledDisplayLabel>
-          <StyledValue $isEmpty={!isNonEmptyString(subject)}>
+          </span>
+        </div>
+        <div {...stylex.props(styles.section)}>
+          <Text {...stylex.props(styles.displayLabel)}>{t`Subject`}</Text>
+          <span
+            {...stylex.props(
+              styles.value,
+              !isNonEmptyString(subject) && styles.valueEmpty,
+            )}
+          >
             {isNonEmptyString(subject) ? subject : t`No subject`}
-          </StyledValue>
-        </StyledSection>
-        <StyledSection>
-          <StyledDisplayLabel>{t`Delivery`}</StyledDisplayLabel>
-          <StyledDeliveryFields>
+          </span>
+        </div>
+        <div {...stylex.props(styles.section)}>
+          <Text {...stylex.props(styles.displayLabel)}>{t`Delivery`}</Text>
+          <div {...stylex.props(styles.deliveryFields)}>
             <Select
               dropdownId="send-campaign-delivery-timing"
               fullWidth
@@ -259,9 +279,9 @@ export const SendCampaignForm = ({ campaign }: SendCampaignFormProps) => {
               onChange={handleDeliveryTimingChange}
             />
             {hasInvalidSendTime ? (
-              <StyledErrorHint>{deliveryHint}</StyledErrorHint>
+              <span {...stylex.props(styles.errorHint)}>{deliveryHint}</span>
             ) : (
-              <StyledHint>{deliveryHint}</StyledHint>
+              <span {...stylex.props(styles.hint)}>{deliveryHint}</span>
             )}
             {isScheduling && (
               <FormDateTimeFieldInput
@@ -270,9 +290,9 @@ export const SendCampaignForm = ({ campaign }: SendCampaignFormProps) => {
                 onChange={setScheduledAt}
               />
             )}
-          </StyledDeliveryFields>
-        </StyledSection>
-      </StyledContent>
+          </div>
+        </div>
+      </div>
       <SidePanelFooter
         actions={[
           <Button
@@ -291,12 +311,6 @@ export const SendCampaignForm = ({ campaign }: SendCampaignFormProps) => {
           </Button>,
         ]}
       />
-    </StyledContainer>
+    </div>
   );
 };
-
-const StyledDisplayLabel = styled(Text)`
-  color: var(--t-font-color-light);
-  font-size: 11px;
-  font-weight: var(--t-font-weight-semi-bold);
-`;

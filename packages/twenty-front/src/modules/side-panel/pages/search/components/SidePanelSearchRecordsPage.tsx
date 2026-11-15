@@ -10,7 +10,6 @@ import { useSidePanelSearchRecordPreviewItem } from '@/side-panel/pages/search/h
 import { useSidePanelSearchRecords } from '@/side-panel/pages/search/hooks/useSidePanelSearchRecords';
 import { SelectableListItem } from '@/ui/layout/selectable-list/components/SelectableListItem';
 import { useIsMobile } from 'twenty-ui/utilities';
-import { css } from '@linaria/core';
 import { useLingui } from '@lingui/react/macro';
 import { useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -18,16 +17,28 @@ import { AppPath, CoreObjectNameSingular } from 'twenty-shared/types';
 import { getAppPath, isDefined } from 'twenty-shared/utils';
 import { Avatar } from 'twenty-ui/primitives/data-display';
 import { Tooltip } from 'twenty-ui/primitives/surfaces';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { getAbsoluteImageUrl } from '~/utils/image/getAbsoluteImageUrl';
+import * as stylex from '@stylexjs/stylex';
+import { borderRadius, boxShadow } from 'twenty-ui/theme/tokens.stylex';
 
 // The card brings its own surface, so the tooltip only contributes the shadow.
-const previewTooltipClass = css`
-  background: transparent;
-  border-radius: ${themeCssVariables.border.radius.md};
-  box-shadow: ${themeCssVariables.boxShadow.strong};
-  padding: 0;
-`;
+const styles = stylex.create({
+  previewPositioner: (maxWidth: number) => ({
+    maxWidth: `${maxWidth}px`,
+  }),
+  previewTooltipClass: {
+    background: 'transparent',
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    boxShadow: boxShadow['--t-box-shadow-strong'],
+    paddingTop: '0',
+    paddingRight: '0',
+    paddingBottom: '0',
+    paddingLeft: '0',
+  },
+});
 
 export const SidePanelSearchRecordsPage = () => {
   const { t } = useLingui();
@@ -127,11 +138,13 @@ export const SidePanelSearchRecordsPage = () => {
               side="left"
               align="start"
               sideOffset={16}
-              style={{
-                maxWidth: `${SIDE_PANEL_SEARCH_RECORD_PREVIEW_WIDTH}px`,
-              }}
+              {...stylex.props(
+                styles.previewPositioner(
+                  SIDE_PANEL_SEARCH_RECORD_PREVIEW_WIDTH,
+                ),
+              )}
             >
-              <Tooltip.Popup className={previewTooltipClass}>
+              <Tooltip.Popup {...stylex.props(styles.previewTooltipClass)}>
                 <SidePanelSearchRecordPreviewCard
                   key={previewedItem.recordId}
                   objectNameSingular={previewedItem.objectNameSingular}
