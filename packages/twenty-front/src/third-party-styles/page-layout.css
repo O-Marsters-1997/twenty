@@ -47,7 +47,8 @@
       container-type: normal !important;
     }
 
-    [data-page-layout-tabs-container] .page-layout-viewport-filling-widget-slot {
+    [data-page-layout-tabs-container]
+      .page-layout-viewport-filling-widget-slot {
       --widget-height: auto !important;
 
       height: auto !important;
@@ -64,5 +65,12 @@
     .page-layout-tab-list-print-hidden {
       display: none;
     }
+  }
+}
+
+@layer third-party {
+  [data-aggregate-heading] > h2 {
+    font-size: var(--t-font-size-xxl);
+    margin: 0;
   }
 }

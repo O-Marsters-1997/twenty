@@ -87,7 +87,11 @@ export const AxisLayer = ({
   });
 
   return (
-    <svg width={chartWidth} height={chartHeight} {...stylex.props(styles.svgOverlay)}>
+    <svg
+      width={chartWidth}
+      height={chartHeight}
+      {...stylex.props(styles.svgOverlay)}
+    >
       <g transform={`translate(${margins.left}, ${margins.top})`}>
         <line
           x1={0}

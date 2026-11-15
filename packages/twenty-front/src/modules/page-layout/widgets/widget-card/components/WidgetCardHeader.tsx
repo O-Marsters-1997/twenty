@@ -3,7 +3,6 @@ import { widgetCardHoveredComponentFamilyState } from '@/page-layout/widgets/sta
 import { widgetHeaderCountComponentFamilyState } from '@/page-layout/widgets/states/widgetHeaderCountComponentFamilyState';
 import { WidgetCardHeaderActionsRenderer } from '@/page-layout/widgets/widget-card/components/WidgetCardHeaderActionsRenderer';
 import { useAtomComponentFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentFamilyStateValue';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { type ReactNode } from 'react';
 import { IconButton } from 'twenty-ui/components/input';
@@ -14,9 +13,15 @@ import { type WidgetCardVariant } from '@/page-layout/widgets/types/WidgetCardVa
 import { WidgetGrip } from '@/page-layout/widgets/widget-card/components/WidgetGrip';
 import { AnimatePresence, motion } from 'framer-motion';
 import { isDefined } from 'twenty-shared/utils';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  spacing,
+  fontColor,
+  fontSize,
+  fontWeight,
+} from 'twenty-ui/theme/tokens.stylex';
+import { mergeClassName } from '@/page-layout/utils/mergeClassName';
 export type WidgetCardHeaderProps = {
   variant: WidgetCardVariant;
   widgetId: string;
@@ -30,22 +35,25 @@ export type WidgetCardHeaderProps = {
   isResizing?: boolean;
 };
 
-const StyledWidgetCardHeader = styled.div<{ shouldInset: boolean }>`
-  align-items: center;
-  box-sizing: border-box;
-  display: flex;
-  flex-shrink: 0;
-  height: ${({ shouldInset }) =>
-    shouldInset
-      ? `calc(${themeCssVariables.spacing[6]} + var(--widget-card-title-padding-top))`
-      : themeCssVariables.spacing[6]};
-  padding: ${({ shouldInset }) =>
-    shouldInset
-      ? `var(--widget-card-title-padding-top) var(--widget-card-padding-inline) 0`
-      : '0'};
-`;
-
 const styles = stylex.create({
+  header: {
+    alignItems: 'center',
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexShrink: 0,
+  },
+  headerPlain: { height: spacing['--t-spacing-6'], padding: 0 },
+  headerInset: {
+    height: `calc(${spacing['--t-spacing-6']} + var(--widget-card-title-padding-top))`,
+    paddingBlockStart: 'var(--widget-card-title-padding-top)',
+    paddingBlockEnd: 0,
+    paddingInline: 'var(--widget-card-padding-inline)',
+  },
+  iconButtonContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+  },
   titleContainer: {
     alignItems: 'center',
     color: fontColor['--t-font-color-primary'],
@@ -68,13 +76,6 @@ const styles = stylex.create({
     gap: spacing['--t-spacing-0_5'],
   },
 });
-
-const StyledIconButtonContainerBase = styled.div`
-  align-items: center;
-  display: flex;
-  justify-content: center;
-`;
-const StyledIconButtonContainer = motion.create(StyledIconButtonContainerBase);
 
 export const WidgetCardHeader = ({
   variant,
@@ -102,14 +103,24 @@ export const WidgetCardHeader = ({
 
   const shouldInset = variant === 'flush';
   return (
-    <StyledWidgetCardHeader className={className} shouldInset={shouldInset}>
+    <div
+      {...mergeClassName(
+        stylex.props(
+          styles.header,
+          shouldInset ? styles.headerInset : styles.headerPlain,
+        ),
+        className,
+      )}
+    >
       <AnimatePresence initial={false}>
         {!isEmpty && isInEditMode && <WidgetGrip className="drag-handle" />}
       </AnimatePresence>
       <div {...stylex.props(styles.titleContainer)}>
         <OverflowingTextWithTooltip text={isEmpty ? t`Add Widget` : title} />
         {isDefined(widgetHeaderCount) && (
-          <span {...stylex.props(styles.count)}>{formatNumber(widgetHeaderCount)}</span>
+          <span {...stylex.props(styles.count)}>
+            {formatNumber(widgetHeaderCount)}
+          </span>
         )}
       </div>
       <div {...stylex.props(styles.rightContainer)}>
@@ -121,7 +132,7 @@ export const WidgetCardHeader = ({
             isInEditMode &&
             onRemove &&
             widgetCardHovered && (
-              <StyledIconButtonContainer
+              <motion.div
                 initial={{ width: 0, opacity: 0 }}
                 animate={{ width: 'auto', opacity: 1 }}
                 exit={{ width: 0, opacity: 0 }}
@@ -129,6 +140,7 @@ export const WidgetCardHeader = ({
                   duration: theme.animation.duration.fast,
                   ease: 'easeInOut',
                 }}
+                {...stylex.props(styles.iconButtonContainer)}
               >
                 <IconButton
                   aria-label={t`Remove widget`}
@@ -138,10 +150,10 @@ export const WidgetCardHeader = ({
                 >
                   <IconTrash />
                 </IconButton>
-              </StyledIconButtonContainer>
+              </motion.div>
             )}
         </AnimatePresence>
       </div>
-    </StyledWidgetCardHeader>
+    </div>
   );
 };

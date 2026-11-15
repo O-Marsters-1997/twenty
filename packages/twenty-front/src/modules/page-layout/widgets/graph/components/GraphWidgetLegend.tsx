@@ -10,16 +10,20 @@ import { graphWidgetHighlightedLegendIdComponentState } from '@/page-layout/widg
 import { NodeDimensionEffect } from '@/ui/utilities/dimensions/components/NodeDimensionEffect';
 import { useAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useAtomComponentState';
 import { useSetAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useSetAtomComponentState';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useRef, useState } from 'react';
 import { LightIconButton } from 'twenty-ui/components/input';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
 import { IconChevronLeft, IconChevronRight } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  spacing,
+  fontColor,
+  fontSize,
+  fontWeight,
+} from 'twenty-ui/theme/tokens.stylex';
 
 export type GraphWidgetLegendItem = {
   id: string;
@@ -35,6 +39,57 @@ type GraphWidgetLegendProps = {
 type AnimationDirection = 'forward' | 'backward';
 
 const styles = stylex.create({
+  motionWrapper: { width: '100%' },
+  itemsWrapper: {
+    display: 'flex',
+    flexBasis: '0%',
+    flexGrow: 1,
+    flexShrink: 1,
+    flexWrap: 'nowrap',
+    gap: spacing['--t-spacing-3'],
+    justifyContent: 'flex-start',
+    minWidth: 0,
+  },
+  itemsWrapperCentered: { justifyContent: 'center' },
+  legendContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexWrap: 'nowrap',
+    gap: spacing['--t-spacing-3'],
+    justifyContent: 'flex-start',
+    overflow: 'hidden',
+    paddingTop: spacing['--t-spacing-3'],
+    width: '100%',
+  },
+  legendContainerCentered: { justifyContent: 'center' },
+  legendItem: {
+    alignItems: 'center',
+    cursor: 'default',
+    display: 'flex',
+    flexShrink: 0,
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    gap: spacing['--t-spacing-1'],
+    minWidth: 0,
+  },
+  legendItemShrinks: { flexShrink: 1 },
+  legendItemInteractive: { cursor: 'pointer' },
+  legendLabel: {
+    color: fontColor['--t-font-color-secondary'],
+    opacity: { default: 1, ':hover': 1 },
+    overflow: 'hidden',
+    textDecoration: 'none',
+    width: 'auto',
+  },
+  legendLabelHidden: (dimmedOpacity: number) => ({
+    opacity: { default: dimmedOpacity, ':hover': 1 },
+    textDecoration: 'line-through',
+  }),
+  legendLabelFixedWidth: (maxWidth: number) => ({ width: maxWidth }),
+  legendDotWrapper: { display: 'flex', opacity: 1 },
+  legendDotWrapperHidden: (dimmedOpacity: number) => ({
+    opacity: dimmedOpacity,
+  }),
   animationClipContainer: {
     flex: '1',
     minWidth: '0',
@@ -53,71 +108,6 @@ const styles = stylex.create({
     fontSize: fontSize['--t-font-size-xs'],
   },
 });
-
-const StyledLegendMotionWrapperBase = styled.div`
-  width: 100%;
-`;
-const StyledLegendMotionWrapper = motion.create(StyledLegendMotionWrapperBase);
-
-const StyledItemsWrapperBase = styled.div<{ centered?: boolean }>`
-  display: flex;
-  flex: 1;
-  flex-wrap: nowrap;
-  gap: ${themeCssVariables.spacing[3]};
-  justify-content: ${({ centered }) => (centered ? 'center' : 'flex-start')};
-  min-width: 0;
-`;
-const StyledItemsWrapper = motion.create(StyledItemsWrapperBase);
-
-const StyledLegendContainer = styled.div<{ needsPagination: boolean }>`
-  align-items: center;
-  display: flex;
-  flex-wrap: nowrap;
-  gap: ${themeCssVariables.spacing[3]};
-  justify-content: ${({ needsPagination }) =>
-    needsPagination ? 'flex-start' : 'center'};
-  overflow: hidden;
-  padding-top: ${themeCssVariables.spacing[3]};
-  width: 100%;
-`;
-
-const StyledLegendItem = styled.div<{
-  canShrink?: boolean;
-  isHidden?: boolean;
-  isInteractive?: boolean;
-}>`
-  align-items: center;
-  cursor: ${({ isInteractive }) => (isInteractive ? 'pointer' : 'default')};
-  display: flex;
-  flex-shrink: ${({ canShrink }) => (canShrink ? 1 : 0)};
-  font-size: ${themeCssVariables.font.size.xs};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-  gap: ${themeCssVariables.spacing[1]};
-  min-width: 0;
-`;
-
-const StyledLegendLabel = styled.div<{
-  fixedWidth?: boolean;
-  isHidden?: boolean;
-}>`
-  color: ${themeCssVariables.font.color.secondary};
-  opacity: ${({ isHidden }) =>
-    isHidden ? LEGEND_HIGHLIGHT_DIMMED_OPACITY : 1};
-  overflow: hidden;
-  text-decoration: ${({ isHidden }) => (isHidden ? 'line-through' : 'none')};
-  width: ${({ fixedWidth }) =>
-    fixedWidth ? `${LEGEND_LABEL_MAX_WIDTH}px` : 'auto'};
-
-  :hover {
-    opacity: 1;
-  }
-`;
-
-const StyledLegendDotWrapper = styled.div<{ isHidden?: boolean }>`
-  display: flex;
-  opacity: ${({ isHidden }) =>
-    isHidden ? LEGEND_HIGHLIGHT_DIMMED_OPACITY : 1};
-`;
 
 const legendEnterExitVariants = {
   hidden: {
@@ -232,7 +222,7 @@ export const GraphWidgetLegend = ({
   return (
     <AnimatePresence mode="popLayout" initial={false}>
       {shouldShowLegend && (
-        <StyledLegendMotionWrapper
+        <motion.div
           variants={legendEnterExitVariants}
           initial="hidden"
           animate="visible"
@@ -241,10 +231,14 @@ export const GraphWidgetLegend = ({
             duration: theme.animation.duration.normal,
             ease: 'easeInOut',
           }}
+          {...stylex.props(styles.motionWrapper)}
         >
-          <StyledLegendContainer
+          <div
             ref={containerRef}
-            needsPagination={needsPagination}
+            {...stylex.props(
+              styles.legendContainer,
+              !needsPagination && styles.legendContainerCentered,
+            )}
           >
             <NodeDimensionEffect
               elementRef={containerRef}
@@ -292,7 +286,7 @@ export const GraphWidgetLegend = ({
                 custom={animationDirection}
                 initial={false}
               >
-                <StyledItemsWrapper
+                <motion.div
                   key={safeCurrentPage}
                   custom={animationDirection}
                   variants={variants}
@@ -303,39 +297,61 @@ export const GraphWidgetLegend = ({
                     duration: theme.animation.duration.normal,
                     ease: 'easeInOut',
                   }}
-                  centered={!needsPagination}
+                  {...stylex.props(
+                    styles.itemsWrapper,
+                    !needsPagination && styles.itemsWrapperCentered,
+                  )}
                 >
                   {visibleItems.map((item) => {
                     const isHidden = graphWidgetHiddenLegendIds.includes(
                       item.id,
                     );
                     return (
-                      <StyledLegendItem
+                      <div
                         key={item.id}
-                        canShrink={!needsPagination}
-                        isHidden={isHidden}
-                        isInteractive={isInteractive}
                         onClick={() => toggleLegendItem(item.id)}
                         onMouseEnter={() => handleLegendItemMouseEnter(item.id)}
                         onMouseLeave={handleLegendItemMouseLeave}
+                        {...stylex.props(
+                          styles.legendItem,
+                          !needsPagination && styles.legendItemShrinks,
+                          isInteractive && styles.legendItemInteractive,
+                        )}
                       >
-                        <StyledLegendDotWrapper isHidden={isHidden}>
+                        <div
+                          {...stylex.props(
+                            styles.legendDotWrapper,
+                            isHidden &&
+                              styles.legendDotWrapperHidden(
+                                LEGEND_HIGHLIGHT_DIMMED_OPACITY,
+                              ),
+                          )}
+                        >
                           <GraphWidgetLegendDot color={item.color} />
-                        </StyledLegendDotWrapper>
-                        <StyledLegendLabel
-                          fixedWidth={needsPagination}
-                          isHidden={isHidden}
+                        </div>
+                        <div
+                          {...stylex.props(
+                            styles.legendLabel,
+                            isHidden &&
+                              styles.legendLabelHidden(
+                                LEGEND_HIGHLIGHT_DIMMED_OPACITY,
+                              ),
+                            needsPagination &&
+                              styles.legendLabelFixedWidth(
+                                LEGEND_LABEL_MAX_WIDTH,
+                              ),
+                          )}
                         >
                           <OverflowingTextWithTooltip text={item.label} />
-                        </StyledLegendLabel>
-                      </StyledLegendItem>
+                        </div>
+                      </div>
                     );
                   })}
-                </StyledItemsWrapper>
+                </motion.div>
               </AnimatePresence>
             </div>
-          </StyledLegendContainer>
-        </StyledLegendMotionWrapper>
+          </div>
+        </motion.div>
       )}
     </AnimatePresence>
   );

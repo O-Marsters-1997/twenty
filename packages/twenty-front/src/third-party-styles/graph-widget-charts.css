@@ -1,0 +1,6 @@
+@layer third-party {
+  [data-clickable-target='canvas'] canvas,
+  [data-clickable-target='svg-path'] svg g path {
+    cursor: pointer;
+  }
+}

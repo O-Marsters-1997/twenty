@@ -1,12 +1,15 @@
-import { styled } from '@linaria/react';
-
 import { IconGripVertical } from 'twenty-ui/icon';
 import { Text } from 'twenty-ui/primitives/typography';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { spacing } from 'twenty-ui/theme/tokens.stylex';
+import { spacing, fontColor, fontWeight } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
+  displayLabel: {
+    color: fontColor['--t-font-color-light'],
+    fontSize: 11,
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+  },
   container: {
     alignItems: 'center',
     boxSizing: 'content-box',
@@ -48,13 +51,7 @@ export const FieldsConfigurationGroupDraggableHeader = ({
           color={themeCssVariables.font.color.tertiary}
         />
       </div>
-      <StyledDisplayLabel>{text}</StyledDisplayLabel>
+      <Text {...stylex.props(styles.displayLabel)}>{text}</Text>
     </div>
   );
 };
-
-const StyledDisplayLabel = styled(Text)`
-  color: var(--t-font-color-light);
-  font-size: 11px;
-  font-weight: var(--t-font-weight-semi-bold);
-`;

@@ -10,12 +10,19 @@ import { extractColorFromProps } from '@/page-layout/widgets/standalone-rich-tex
 import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent';
 import { DropdownRoot } from '@/ui/layout/dropdown/components/DropdownRoot';
 import * as stylex from '@stylexjs/stylex';
-import { backgroundTransparent, borderRadius, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  backgroundTransparent,
+  borderRadius,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   colorButton: {
     alignItems: 'center',
-    background: { default: 'transparent', ':hover': backgroundTransparent['--t-background-transparent-light'] },
+    background: {
+      default: 'transparent',
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
     borderStyle: 'none',
     borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
     borderTopRightRadius: borderRadius['--t-border-radius-sm'],
@@ -64,7 +71,10 @@ export const DashboardFormattingToolbarColorButton = () => {
     <DropdownRoot dropdownId={`dashboard-color-${instanceId}`} type="picker">
       <Dropdown.Trigger
         render={
-          <button aria-label={t`Text and background colors`} {...stylex.props(styles.colorButton)}>
+          <button
+            aria-label={t`Text and background colors`}
+            {...stylex.props(styles.colorButton)}
+          >
             <DashboardColorIcon
               textColor={currentTextColor}
               backgroundColor={currentBackgroundColor}

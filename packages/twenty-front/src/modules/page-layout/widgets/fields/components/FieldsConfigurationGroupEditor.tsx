@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { Fragment, useRef } from 'react';
 import { type DropdownDismissEvent } from 'twenty-ui/components/navigation';
@@ -22,11 +21,29 @@ import { DragDropItemSortableCell } from '@/ui/utilities/drag-and-drop/component
 import { DragDropItemSortableHandle } from '@/ui/utilities/drag-and-drop/components/DragDropItemSortableHandle';
 
 import { FieldsConfigurationGroupDraggableHeader } from '@/page-layout/widgets/fields/components/FieldsConfigurationGroupDraggableHeader';
-import { themeCssVariables } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  spacing,
+  background,
+  borderRadius,
+  color,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
+  groupContainer: {
+    backgroundColor: 'transparent',
+    borderColor: 'transparent',
+    borderRadius: borderRadius['--t-border-radius-md'],
+    borderStyle: 'solid',
+    borderWidth: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+  },
+  groupContainerDragging: {
+    backgroundColor: background['--t-background-primary'],
+    borderColor: color['--t-color-blue'],
+  },
   fieldsDroppable: {
     display: 'flex',
     flexDirection: 'column',
@@ -49,18 +66,6 @@ const styles = stylex.create({
     zIndex: '1',
   },
 });
-
-const StyledGroupContainer = styled.div<{ isDragging: boolean }>`
-  background: ${({ isDragging }) =>
-    isDragging ? themeCssVariables.background.primary : 'transparent'};
-  border: 1px solid
-    ${({ isDragging }) =>
-      isDragging ? themeCssVariables.color.blue : 'transparent'};
-  border-radius: ${themeCssVariables.border.radius.md};
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
 
 type FieldsConfigurationGroupEditorProps = {
   group: FieldsWidgetGroup;
@@ -118,9 +123,17 @@ export const FieldsConfigurationGroupEditor = ({
   );
 
   return (
-    <StyledGroupContainer isDragging={isDragging}>
+    <div
+      {...stylex.props(
+        styles.groupContainer,
+        isDragging && styles.groupContainerDragging,
+      )}
+    >
       <div {...stylex.props(styles.groupHeaderRow)}>
-        <div ref={groupHeaderRef} {...stylex.props(styles.menuItemDraggableWrapper)}>
+        <div
+          ref={groupHeaderRef}
+          {...stylex.props(styles.menuItemDraggableWrapper)}
+        >
           <DragDropItemSortableHandle fill>
             <FieldsConfigurationGroupDraggableHeader text={group.name} />
           </DragDropItemSortableHandle>
@@ -213,6 +226,6 @@ export const FieldsConfigurationGroupEditor = ({
           </>
         )}
       </div>
-    </StyledGroupContainer>
+    </div>
   );
 };

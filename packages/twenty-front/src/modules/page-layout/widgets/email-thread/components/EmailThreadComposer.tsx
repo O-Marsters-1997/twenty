@@ -20,13 +20,21 @@ import {
   IconX,
 } from 'twenty-ui/icon';
 import * as stylex from '@stylexjs/stylex';
-import { backgroundTransparent, fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  backgroundTransparent,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   replyBar: {
     alignItems: 'center',
     all: 'unset',
-    color: { default: fontColor['--t-font-color-tertiary'], ':hover': fontColor['--t-font-color-secondary'] },
+    color: {
+      default: fontColor['--t-font-color-tertiary'],
+      ':hover': fontColor['--t-font-color-secondary'],
+    },
     cursor: 'pointer',
     display: 'flex',
     fontSize: fontSize['--t-font-size-md'],
@@ -35,7 +43,10 @@ const styles = stylex.create({
     paddingRight: spacing['--t-spacing-4'],
     paddingBottom: spacing['--t-spacing-3'],
     paddingLeft: spacing['--t-spacing-4'],
-    background: { default: null, ':hover': backgroundTransparent['--t-background-transparent-light'] },
+    background: {
+      default: null,
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
   },
 });
 
@@ -161,7 +172,10 @@ export const EmailThreadComposer = ({
         />
       ) : (
         !isInSidePanel && (
-          <button onClick={() => setIsComposerOpen(true)} {...stylex.props(styles.replyBar)}>
+          <button
+            onClick={() => setIsComposerOpen(true)}
+            {...stylex.props(styles.replyBar)}
+          >
             <IconArrowBackUp size={16} />
             {t`Reply...`}
           </button>

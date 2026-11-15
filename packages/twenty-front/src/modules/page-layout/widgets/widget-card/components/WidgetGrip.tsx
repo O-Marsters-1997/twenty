@@ -1,37 +1,17 @@
-import { styled } from '@linaria/react';
 import { motion } from 'framer-motion';
 import { isDefined } from 'twenty-shared/utils';
 import { IconGripVertical } from 'twenty-ui/icon';
-import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import {
   type MouseEvent as ReactMouseEvent,
   type PointerEvent as ReactPointerEvent,
   useState,
 } from 'react';
+import { background, borderRadius } from 'twenty-ui/theme/tokens.stylex';
+import * as stylex from '@stylexjs/stylex';
+import { mergeClassName } from '@/page-layout/utils/mergeClassName';
 
 const DRAG_CLICK_SUPPRESSION_DISTANCE = 5;
-
-const StyledGripContainerBase = styled.div`
-  align-items: center;
-  border-radius: ${themeCssVariables.border.radius.sm};
-  box-sizing: border-box;
-  cursor: grab;
-  display: flex;
-  height: 20px;
-  justify-content: center;
-  user-select: none;
-  width: 20px;
-
-  &:active {
-    background: ${themeCssVariables.background.tertiary};
-    cursor: grabbing;
-  }
-
-  &:hover {
-    background: ${themeCssVariables.background.tertiary};
-  }
-`;
-const StyledGripContainer = motion.create(StyledGripContainerBase);
 
 type WidgetGripProps = {
   className?: string;
@@ -69,9 +49,8 @@ export const WidgetGrip = ({ className }: WidgetGripProps) => {
   };
 
   return (
-    <StyledGripContainer
+    <motion.div
       layout
-      className={className}
       onPointerDown={handlePointerDown}
       onClick={handleClick}
       initial={{ width: 0, opacity: 0 }}
@@ -81,11 +60,31 @@ export const WidgetGrip = ({ className }: WidgetGripProps) => {
         duration: theme.animation.duration.fast,
         ease: 'easeInOut',
       }}
+      {...mergeClassName(stylex.props(styles.grip), className)}
     >
       <IconGripVertical
         size={theme.icon.size.sm}
         color={theme.font.color.extraLight}
       />
-    </StyledGripContainer>
+    </motion.div>
   );
 };
+
+const styles = stylex.create({
+  grip: {
+    alignItems: 'center',
+    backgroundColor: {
+      default: null,
+      ':hover': background['--t-background-tertiary'],
+      ':active': background['--t-background-tertiary'],
+    },
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    boxSizing: 'border-box',
+    cursor: { default: 'grab', ':active': 'grabbing' },
+    display: 'flex',
+    height: 20,
+    justifyContent: 'center',
+    userSelect: 'none',
+    width: 20,
+  },
+});

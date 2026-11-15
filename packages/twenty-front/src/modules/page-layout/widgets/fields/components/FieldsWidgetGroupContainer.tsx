@@ -1,13 +1,25 @@
-import { styled } from '@linaria/react';
 import { useState } from 'react';
 import { Section } from 'twenty-ui/components/layout';
 import { IconChevronDown } from 'twenty-ui/icon';
 import { Collapsible } from 'twenty-ui/primitives/layout';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { fontColor, fontWeight } from 'twenty-ui/theme/tokens.stylex';
+import {
+  animationDuration,
+  fontColor,
+  fontWeight,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
+  chevron: {
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    transform: 'rotate(0deg)',
+    transitionDuration: `calc(${animationDuration['--t-animation-duration-normal']} * 1s)`,
+    transitionProperty: 'transform',
+    transitionTimingFunction: 'ease',
+  },
+  chevronExpanded: { transform: 'rotate(180deg)' },
   header: {
     alignItems: 'center',
     cursor: 'pointer',
@@ -20,15 +32,6 @@ const styles = stylex.create({
     fontWeight: fontWeight['--t-font-weight-medium'],
   },
 });
-
-const StyledChevronWrapper = styled.div<{ isExpanded: boolean }>`
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  transform: ${({ isExpanded }) =>
-    isExpanded ? 'rotate(180deg)' : 'rotate(0deg)'};
-  transition: transform
-    calc(${themeCssVariables.animation.duration.normal} * 1s) ease;
-`;
 
 type FieldsWidgetGroupContainerProps = {
   children: React.ReactNode;
@@ -51,12 +54,17 @@ export const FieldsWidgetGroupContainer = ({
     <Section.Root>
       <header onClick={handleToggleGroup} {...stylex.props(styles.header)}>
         <div {...stylex.props(styles.titleLabel)}>{title}</div>
-        <StyledChevronWrapper isExpanded={isExpanded}>
+        <div
+          {...stylex.props(
+            styles.chevron,
+            isExpanded && styles.chevronExpanded,
+          )}
+        >
           <IconChevronDown
             size={theme.icon.size.md}
             stroke={theme.icon.stroke.sm}
           />
-        </StyledChevronWrapper>
+        </div>
       </header>
       <Collapsible.Root open={isExpanded}>
         <Collapsible.Panel>{children}</Collapsible.Panel>

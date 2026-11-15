@@ -3,15 +3,9 @@ import { WidgetComponentInstanceContext } from '@/page-layout/widgets/states/con
 import { useComponentInstanceStateContext } from '@/ui/utilities/state/component-state/hooks/useComponentInstanceStateContext';
 import { useIsMobile } from 'twenty-ui/utilities';
 import { useAtomComponentFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentFamilyStateValue';
-import { styled } from '@linaria/react';
 import { type ReactNode } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
-
-const StyledHoverReveal = styled.div<{ isVisible: boolean }>`
-  opacity: ${({ isVisible }) => (isVisible ? '1' : '0')};
-  pointer-events: ${({ isVisible }) => (isVisible ? 'auto' : 'none')};
-  transition: opacity ${themeCssVariables.animation.duration.instant}s ease;
-`;
+import { animationDuration } from 'twenty-ui/theme/tokens.stylex';
+import * as stylex from '@stylexjs/stylex';
 
 type WidgetCardHeaderHoverRevealProps = {
   children: ReactNode;
@@ -32,8 +26,23 @@ export const WidgetCardHeaderHoverReveal = ({
   );
 
   return (
-    <StyledHoverReveal isVisible={isMobile || widgetCardHovered}>
+    <div
+      {...stylex.props(
+        styles.hoverReveal,
+        isMobile || widgetCardHovered ? styles.visible : styles.hidden,
+      )}
+    >
       {children}
-    </StyledHoverReveal>
+    </div>
   );
 };
+
+const styles = stylex.create({
+  hoverReveal: {
+    transitionDuration: `${animationDuration['--t-animation-duration-instant']}s`,
+    transitionProperty: 'opacity',
+    transitionTimingFunction: 'ease',
+  },
+  visible: { opacity: 1, pointerEvents: 'auto' },
+  hidden: { opacity: 0, pointerEvents: 'none' },
+});

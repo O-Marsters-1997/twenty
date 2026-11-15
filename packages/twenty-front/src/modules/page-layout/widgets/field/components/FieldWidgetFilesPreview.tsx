@@ -75,7 +75,9 @@ export const FieldWidgetFilesPreview = ({
       )}
       <Suspense
         fallback={
-          <div {...stylex.props(styles.loadingText)}>{t`Loading document viewer...`}</div>
+          <div
+            {...stylex.props(styles.loadingText)}
+          >{t`Loading document viewer...`}</div>
         }
       >
         <DocumentViewer

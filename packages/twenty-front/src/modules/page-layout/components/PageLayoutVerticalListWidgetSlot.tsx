@@ -5,47 +5,9 @@ import { WidgetRenderer } from '@/page-layout/widgets/components/WidgetRenderer'
 import { DragDropItemDropTarget } from '@/ui/utilities/drag-and-drop/components/DragDropItemDropTarget';
 import { DragDropItemSortableCell } from '@/ui/utilities/drag-and-drop/components/DragDropItemSortableCell';
 import { type Draggable } from '@dnd-kit/abstract';
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
-
-const StyledWidgetSlot = styled.div<{
-  isInEditMode: boolean;
-  shouldShowDivider: boolean;
-}>`
-  display: flex;
-  flex: 0 0 auto;
-  flex-direction: column;
-  min-height: 0;
-  min-width: 0;
-
-  @container tab-viewport (min-height: 0px) {
-    &.page-layout-viewport-filling-widget-slot {
-      --widget-height: 100%;
-      --widget-scroll-overflow: auto;
-
-      height: calc(100cqh - var(--viewport-filling-widget-editor-block-inset));
-      overflow: clip;
-
-      .widget {
-        overflow: clip;
-      }
-
-      .widget-card-header {
-        background: var(--record-card-background-color);
-        position: sticky;
-        top: 0;
-        z-index: 3;
-      }
-    }
-  }
-
-  &:not(:last-child) {
-    border-bottom: ${({ isInEditMode, shouldShowDivider }) =>
-      !isInEditMode && shouldShowDivider
-        ? `1px solid ${themeCssVariables.border.color.light}`
-        : 'none'};
-  }
-`;
+import { borderColor } from 'twenty-ui/theme/tokens.stylex';
+import * as stylex from '@stylexjs/stylex';
+import { mergeClassName } from '@/page-layout/utils/mergeClassName';
 
 type PageLayoutVerticalListWidgetSlotProps = {
   canAcceptWidgetDrag: (source: Draggable) => boolean;
@@ -76,12 +38,14 @@ export const PageLayoutVerticalListWidgetSlot = ({
   };
 
   return (
-    <StyledWidgetSlot
-      className={
-        fillsViewport ? 'page-layout-viewport-filling-widget-slot' : undefined
-      }
-      isInEditMode={isInEditMode}
-      shouldShowDivider={shouldShowDivider}
+    <div
+      {...mergeClassName(
+        stylex.props(
+          styles.slot,
+          !isInEditMode && shouldShowDivider && styles.slotDivider,
+        ),
+        fillsViewport ? 'page-layout-viewport-filling-widget-slot' : undefined,
+      )}
     >
       <DragDropItemDropTarget
         index={index}
@@ -105,6 +69,26 @@ export const PageLayoutVerticalListWidgetSlot = ({
       >
         <WidgetRenderer widget={widget} />
       </DragDropItemSortableCell>
-    </StyledWidgetSlot>
+    </div>
   );
 };
+
+const styles = stylex.create({
+  slot: {
+    display: 'flex',
+    flexBasis: 'auto',
+    flexDirection: 'column',
+    flexGrow: 0,
+    flexShrink: 0,
+    minHeight: 0,
+    minWidth: 0,
+  },
+  slotDivider: {
+    borderBottomColor: {
+      default: null,
+      ':not(:last-child)': borderColor['--t-border-color-light'],
+    },
+    borderBottomStyle: { default: null, ':not(:last-child)': 'solid' },
+    borderBottomWidth: { default: null, ':not(:last-child)': 1 },
+  },
+});

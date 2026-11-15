@@ -1,6 +1,4 @@
 import { useDragDropMonitor } from '@dnd-kit/react';
-import { css } from '@linaria/core';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useCallback, useMemo, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -12,9 +10,7 @@ import { useCloseDropdown } from '@/ui/layout/dropdown/hooks/useCloseDropdown';
 import { useOpenDropdown } from '@/ui/layout/dropdown/hooks/useOpenDropdown';
 import { TabListHiddenMeasurements } from '@/ui/layout/tab-list/components/TabListHiddenMeasurements';
 import { TAB_LIST_GAP } from '@/ui/layout/tab-list/constants/TabListGap';
-import { TAB_LIST_HEIGHT } from '@/ui/layout/tab-list/constants/TabListHeight';
 import { TAB_LIST_HORIZONTAL_PADDING } from '@/ui/layout/tab-list/constants/TabListPadding';
-import { TAB_LIST_ROW_HEIGHT_CSS_VARIABLE } from '@/ui/layout/tab-list/constants/TabListRowHeightCssVariable';
 import { useTabListMeasurements } from '@/ui/layout/tab-list/hooks/useTabListMeasurements';
 import { activeTabIdComponentState } from '@/ui/layout/tab-list/states/activeTabIdComponentState';
 import { TabListComponentInstanceContext } from '@/ui/layout/tab-list/states/contexts/TabListComponentInstanceContext';
@@ -25,7 +21,6 @@ import { useWorkspaceSurface } from '@/ui/layout/hooks/useWorkspaceSurface';
 import { useAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useAtomComponentState';
 import { useSetAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useSetAtomComponentState';
 
-import { PAGE_LAYOUT_RECORD_IDENTIFIER_BAR_HEIGHT } from '@/page-layout/constants/PageLayoutRecordIdentifierBarHeight';
 import { PAGE_LAYOUT_TAB_LIST_END_DROP_ZONE_WIDTH } from '@/page-layout/constants/PageLayoutTabListEndDropZoneWidth';
 import { PageLayoutTabListNewTabDropdownContent } from '@/page-layout/components/PageLayoutTabListNewTabDropdownContent';
 import { PageLayoutTabListReorderableOverflowDropdown } from '@/page-layout/components/PageLayoutTabListReorderableOverflowDropdown';
@@ -46,69 +41,57 @@ import { TabListDropdown } from '@/ui/layout/tab-list/components/TabListDropdown
 import { type SingleTabProps } from '@/ui/layout/tab-list/types/SingleTabProps';
 import { useAvailableComponentInstanceIdOrThrow } from '@/ui/utilities/state/component-state/hooks/useAvailableComponentInstanceIdOrThrow';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
 import {
   PageLayoutTabLayoutMode,
   PageLayoutType,
 } from '~/generated-metadata/graphql';
 import * as stylex from '@stylexjs/stylex';
-
-const StyledNodeDimension = styled(NodeDimension)`
-  min-width: 0;
-`;
-
-// Fill the identifier bar's track so tabs reappear when it grows; standalone, growing would eat content height.
-const identifierBarTrackCssClass = css`
-  flex: 1;
-`;
-
-const StyledContainer = styled.div<{
-  isInIdentifierBar: boolean;
-  centerTabs: boolean;
-}>`
-  ${TAB_LIST_ROW_HEIGHT_CSS_VARIABLE}: ${({ isInIdentifierBar }) =>
-    isInIdentifierBar
-      ? `${PAGE_LAYOUT_RECORD_IDENTIFIER_BAR_HEIGHT}px`
-      : TAB_LIST_HEIGHT};
-
-  box-sizing: border-box;
-  display: flex;
-  height: var(${TAB_LIST_ROW_HEIGHT_CSS_VARIABLE});
-  justify-content: ${({ centerTabs }) =>
-    centerTabs ? 'center' : 'flex-start'};
-  padding-left: ${themeCssVariables.spacing[2]};
-  padding-right: ${({ isInIdentifierBar }) =>
-    isInIdentifierBar ? themeCssVariables.spacing[2] : '0'};
-  position: relative;
-  user-select: none;
-  width: 100%;
-
-  &::after {
-    background-color: ${themeCssVariables.border.color.light};
-    bottom: 0;
-    content: '';
-    display: ${({ isInIdentifierBar }) =>
-      isInIdentifierBar ? 'none' : 'block'};
-    height: 1px;
-    left: 0;
-    position: absolute;
-    right: 0;
-  }
-`;
+import { spacing, borderColor } from 'twenty-ui/theme/tokens.stylex';
+import { mergeClassName } from '@/page-layout/utils/mergeClassName';
 
 const styles = stylex.create({
+  nodeDimension: { minWidth: 0 },
+  identifierBarTrack: { flexGrow: 1, flexShrink: 1, flexBasis: '0%' },
+  container: {
+    boxSizing: 'border-box',
+    display: 'flex',
+    height: 'var(--tab-list-row-height)',
+    justifyContent: 'flex-start',
+    paddingLeft: spacing['--t-spacing-2'],
+    position: 'relative',
+    userSelect: 'none',
+    width: '100%',
+  },
+  containerStandalone: {
+    '--tab-list-row-height': spacing['--t-spacing-10'],
+    paddingRight: 0,
+    '::after': {
+      backgroundColor: borderColor['--t-border-color-light'],
+      bottom: 0,
+      content: '""',
+      display: 'block',
+      height: 1,
+      left: 0,
+      position: 'absolute',
+      right: 0,
+    },
+  },
+  containerInIdentifierBar: {
+    '--tab-list-row-height': '40px',
+    paddingRight: spacing['--t-spacing-2'],
+  },
+  containerCentered: { justifyContent: 'center' },
+  addButton: {
+    alignItems: 'center',
+    display: 'flex',
+    height: `var(--tab-list-row-height, ${spacing['--t-spacing-10']})`,
+  },
+  addButtonGap: (gap: number) => ({ marginLeft: gap }),
   dropdownContainer: {
     alignItems: 'center',
     display: 'flex',
   },
 });
-
-const StyledAddButton = styled.div`
-  align-items: center;
-  display: flex;
-  height: var(${TAB_LIST_ROW_HEIGHT_CSS_VARIABLE}, ${TAB_LIST_HEIGHT});
-  margin-left: ${TAB_LIST_GAP}px;
-`;
 
 type PageLayoutTabListProps = Omit<TabListProps, 'tabs'> & {
   tabs: PageLayoutTab[];
@@ -401,23 +384,38 @@ export const PageLayoutTabList = ({
           }
           addButtonMeasurement={
             addTabStrategy ? (
-              <StyledAddButton>
+              <div
+                {...stylex.props(
+                  styles.addButton,
+                  styles.addButtonGap(TAB_LIST_GAP),
+                )}
+              >
                 <TabButton startIcon={<IconPlus />}>{t`New Tab`}</TabButton>
-              </StyledAddButton>
+              </div>
             ) : undefined
           }
         />
       )}
 
-      <StyledNodeDimension
-        className={isInIdentifierBar ? identifierBarTrackCssClass : undefined}
+      <NodeDimension
         onDimensionChange={handleContainerWidthChange}
+        {...stylex.props(
+          styles.nodeDimension,
+          isInIdentifierBar && styles.identifierBarTrack,
+        )}
       >
-        <StyledContainer
+        <div
           ref={tabListContainerRef}
-          className={className}
-          isInIdentifierBar={isInIdentifierBar}
-          centerTabs={centerTabs}
+          {...mergeClassName(
+            stylex.props(
+              styles.container,
+              isInIdentifierBar
+                ? styles.containerInIdentifierBar
+                : styles.containerStandalone,
+              centerTabs && styles.containerCentered,
+            ),
+            className,
+          )}
         >
           <PageLayoutTabListVisibleTabs
             aria-label={ariaLabel}
@@ -475,17 +473,27 @@ export const PageLayoutTabList = ({
           )}
 
           {addTabStrategy?.mode === 'direct' && (
-            <StyledAddButton>
+            <div
+              {...stylex.props(
+                styles.addButton,
+                styles.addButtonGap(TAB_LIST_GAP),
+              )}
+            >
               <TabButton
                 startIcon={<IconPlus />}
                 onClick={() => addTabStrategy.onCreate()}
               >
                 {t`New Tab`}
               </TabButton>
-            </StyledAddButton>
+            </div>
           )}
           {addTabStrategy?.mode === 'dropdown' && (
-            <StyledAddButton>
+            <div
+              {...stylex.props(
+                styles.addButton,
+                styles.addButtonGap(TAB_LIST_GAP),
+              )}
+            >
               <DropdownRoot dropdownId={addTabDropdownId} type="menu">
                 <Dropdown.Trigger
                   render={
@@ -498,10 +506,10 @@ export const PageLayoutTabList = ({
                   />
                 </DropdownContent>
               </DropdownRoot>
-            </StyledAddButton>
+            </div>
           )}
-        </StyledContainer>
-      </StyledNodeDimension>
+        </div>
+      </NodeDimension>
     </TabListComponentInstanceContext.Provider>
   );
 };

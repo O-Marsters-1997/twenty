@@ -2,32 +2,79 @@ import { GRAPH_TOOLTIP_MAX_WIDTH_PX } from '@/page-layout/widgets/graph/componen
 import { GRAPH_TOOLTIP_MIN_WIDTH_PX } from '@/page-layout/widgets/graph/components/constants/GraphTooltipMinWidthPx';
 import { GRAPH_TOOLTIP_SCROLL_MAX_HEIGHT_PX } from '@/page-layout/widgets/graph/components/constants/GraphTooltipScrollMaxHeightPx';
 import { GraphWidgetLegendDot } from '@/page-layout/widgets/graph/components/GraphWidgetLegendDot';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { isDefined } from 'twenty-shared/utils';
 import { IconArrowUpRight } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { borderColor, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
-
-const StyledTooltip = styled.div`
-  background: ${themeCssVariables.background.primary};
-  border: 1px solid ${themeCssVariables.border.color.light};
-  border-radius: ${themeCssVariables.border.radius.md};
-  box-shadow: ${themeCssVariables.boxShadow.strong};
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  max-width: min(
-    ${GRAPH_TOOLTIP_MAX_WIDTH_PX}px,
-    calc(100vw / var(--t-zoom, 1) - 40px)
-  );
-  min-width: ${GRAPH_TOOLTIP_MIN_WIDTH_PX}px;
-  pointer-events: auto;
-`;
+import {
+  spacing,
+  background,
+  borderColor,
+  borderRadius,
+  boxShadow,
+  fontColor,
+  fontSize,
+  fontWeight,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
+  tooltip: {
+    backgroundColor: background['--t-background-primary'],
+    borderColor: borderColor['--t-border-color-light'],
+    borderRadius: borderRadius['--t-border-radius-md'],
+    borderStyle: 'solid',
+    borderWidth: 1,
+    boxShadow: boxShadow['--t-box-shadow-strong'],
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 2,
+    pointerEvents: 'auto',
+  },
+  tooltipSize: (maxWidth: number, minWidth: number) => ({
+    maxWidth: `min(${maxWidth}px, calc(100vw / var(--t-zoom, 1) - 40px))`,
+    minWidth,
+  }),
+  rowContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    overflowY: 'auto',
+  },
+  rowContainerMaxHeight: (maxHeight: number) => ({ maxHeight }),
+  label: {
+    color: fontColor['--t-font-color-tertiary'],
+    flexBasis: '0%',
+    flexGrow: 1,
+    flexShrink: 1,
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    minWidth: 0,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  labelHighlighted: {
+    color: fontColor['--t-font-color-secondary'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+  },
+  value: {
+    color: fontColor['--t-font-color-extra-light'],
+    flexShrink: 0,
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    whiteSpace: 'nowrap',
+  },
+  valueHighlighted: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+  },
+  sectionPadding: {
+    marginBottom: 0,
+    marginTop: 0,
+    paddingInline: spacing['--t-spacing-1'],
+  },
+  sectionPaddingTop: { marginTop: spacing['--t-spacing-1'] },
+  sectionPaddingBottom: { marginBottom: spacing['--t-spacing-1'] },
   tooltipContent: {
     display: 'flex',
     flexDirection: 'column',
@@ -84,53 +131,6 @@ const styles = stylex.create({
   },
 });
 
-const StyledTooltipRowContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  max-height: ${GRAPH_TOOLTIP_SCROLL_MAX_HEIGHT_PX}px;
-  overflow-y: auto;
-`;
-
-const StyledTooltipLabel = styled.span<{ isHighlighted?: boolean }>`
-  color: ${({ isHighlighted }) =>
-    isHighlighted
-      ? themeCssVariables.font.color.secondary
-      : themeCssVariables.font.color.tertiary};
-  flex: 1;
-  font-weight: ${({ isHighlighted }) =>
-    isHighlighted
-      ? themeCssVariables.font.weight.medium
-      : themeCssVariables.font.weight.regular};
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledTooltipValue = styled.span<{ isHighlighted?: boolean }>`
-  color: ${({ isHighlighted }) =>
-    isHighlighted
-      ? themeCssVariables.font.color.tertiary
-      : themeCssVariables.font.color.extraLight};
-  flex-shrink: 0;
-  font-weight: ${({ isHighlighted }) =>
-    isHighlighted
-      ? themeCssVariables.font.weight.semiBold
-      : themeCssVariables.font.weight.medium};
-  white-space: nowrap;
-`;
-
-const StyledHorizontalSectionPadding = styled.div<{
-  addTop?: boolean;
-  addBottom?: boolean;
-}>`
-  margin-bottom: ${({ addBottom }) =>
-    addBottom ? themeCssVariables.spacing[1] : 0};
-  margin-top: ${({ addTop }) => (addTop ? themeCssVariables.spacing[1] : 0)};
-  padding-inline: ${themeCssVariables.spacing[1]};
-`;
-
 export type GraphWidgetTooltipItem = {
   key: string;
   label: string;
@@ -163,13 +163,32 @@ export const GraphWidgetTooltip = ({
   const shouldShowClickFooter = hasData && isDefined(onGraphWidgetTooltipClick);
 
   return (
-    <StyledTooltip>
-      <StyledHorizontalSectionPadding addTop addBottom={!shouldShowClickFooter}>
+    <div
+      {...stylex.props(
+        styles.tooltip,
+        styles.tooltipSize(
+          GRAPH_TOOLTIP_MAX_WIDTH_PX,
+          GRAPH_TOOLTIP_MIN_WIDTH_PX,
+        ),
+      )}
+    >
+      <div
+        {...stylex.props(
+          styles.sectionPadding,
+          true && styles.sectionPaddingTop,
+          !shouldShowClickFooter && styles.sectionPaddingBottom,
+        )}
+      >
         <div {...stylex.props(styles.tooltipContent)}>
           {indexLabel && (
             <div {...stylex.props(styles.tooltipHeader)}>{indexLabel}</div>
           )}
-          <StyledTooltipRowContainer>
+          <div
+            {...stylex.props(
+              styles.rowContainer,
+              styles.rowContainerMaxHeight(GRAPH_TOOLTIP_SCROLL_MAX_HEIGHT_PX),
+            )}
+          >
             {filteredItems.length === 0 ? (
               <span {...stylex.props(styles.noDataMessage)}>{t`No data`}</span>
             ) : (
@@ -180,31 +199,49 @@ export const GraphWidgetTooltip = ({
                   <div key={item.key} {...stylex.props(styles.tooltipRow)}>
                     <GraphWidgetLegendDot color={item.dotColor} />
                     <div {...stylex.props(styles.tooltipRowRightContent)}>
-                      <StyledTooltipLabel isHighlighted={isHighlighted}>
+                      <span
+                        {...stylex.props(
+                          styles.label,
+                          isHighlighted && styles.labelHighlighted,
+                        )}
+                      >
                         {item.label}
-                      </StyledTooltipLabel>
-                      <StyledTooltipValue isHighlighted={isHighlighted}>
+                      </span>
+                      <span
+                        {...stylex.props(
+                          styles.value,
+                          isHighlighted && styles.valueHighlighted,
+                        )}
+                      >
                         {item.formattedValue}
-                      </StyledTooltipValue>
+                      </span>
                     </div>
                   </div>
                 );
               })
             )}
-          </StyledTooltipRowContainer>
+          </div>
         </div>
-      </StyledHorizontalSectionPadding>
+      </div>
       {shouldShowClickFooter && (
         <>
           <div {...stylex.props(styles.tooltipSeparator)} />
-          <StyledHorizontalSectionPadding addBottom>
-            <div onClick={onGraphWidgetTooltipClick} {...stylex.props(styles.tooltipLink)}>
+          <div
+            {...stylex.props(
+              styles.sectionPadding,
+              styles.sectionPaddingBottom,
+            )}
+          >
+            <div
+              onClick={onGraphWidgetTooltipClick}
+              {...stylex.props(styles.tooltipLink)}
+            >
               <span>{t`Click to see data`}</span>
               <IconArrowUpRight size={theme.icon.size.sm} />
             </div>
-          </StyledHorizontalSectionPadding>
+          </div>
         </>
       )}
-    </StyledTooltip>
+    </div>
   );
 };

@@ -71,7 +71,11 @@ export const BarChartTotalsLayer = ({
     : barChartLabels;
 
   return (
-    <svg width={chartWidth} height={chartHeight} {...stylex.props(styles.svgLabels)}>
+    <svg
+      width={chartWidth}
+      height={chartHeight}
+      {...stylex.props(styles.svgLabels)}
+    >
       <g transform={`translate(${margins.left}, ${margins.top})`}>
         {barChartLabelsToRender.map((barChartLabel) => {
           const graphLabel = convertToGraphLabelData(

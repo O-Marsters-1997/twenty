@@ -256,8 +256,8 @@ export const GraphWidgetBarChart = ({
     <div id={id} {...stylex.props(styles.container)}>
       <GraphWidgetChartContainer
         ref={containerRef}
-        $isClickable={hasClickableItems}
-        $cursorSelector="canvas"
+        isClickable={hasClickableItems}
+        cursorTarget="canvas"
       >
         <NodeDimensionEffect
           elementRef={containerRef}

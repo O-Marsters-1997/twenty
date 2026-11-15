@@ -1,27 +1,18 @@
 import { pointerIntersection } from '@dnd-kit/collision';
 import { useDroppable } from '@dnd-kit/react';
-import { styled } from '@linaria/react';
 import { type ReactNode } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { FIELDS_CONFIGURATION_FIELD_DND_TYPE } from '@/page-layout/widgets/fields/constants/FieldsConfigurationFieldDndType';
 import { type FieldsConfigurationFieldListEndDropData } from '@/page-layout/widgets/fields/types/FieldsConfigurationFieldListEndDropData';
-
-const StyledEmptyGroupDropZone = styled.div<{ isDropTarget: boolean }>`
-  align-items: center;
-  border: 1px dashed
-    ${({ isDropTarget }) =>
-      isDropTarget
-        ? themeCssVariables.color.blue
-        : themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  color: ${themeCssVariables.font.color.light};
-  display: flex;
-  font-size: ${themeCssVariables.font.size.sm};
-  justify-content: center;
-  margin: ${themeCssVariables.spacing[1]} ${themeCssVariables.spacing[2]};
-  min-height: ${themeCssVariables.spacing[10]};
-`;
+import {
+  spacing,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  color,
+} from 'twenty-ui/theme/tokens.stylex';
+import * as stylex from '@stylexjs/stylex';
 
 type FieldsConfigurationEmptyGroupDropZoneProps = {
   groupId: string;
@@ -44,8 +35,29 @@ export const FieldsConfigurationEmptyGroupDropZone = ({
   });
 
   return (
-    <StyledEmptyGroupDropZone ref={ref} isDropTarget={isDropTarget}>
+    <div
+      ref={ref}
+      {...stylex.props(styles.dropZone, isDropTarget && styles.dropTarget)}
+    >
       {children}
-    </StyledEmptyGroupDropZone>
+    </div>
   );
 };
+
+const styles = stylex.create({
+  dropZone: {
+    alignItems: 'center',
+    borderColor: borderColor['--t-border-color-medium'],
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    borderStyle: 'dashed',
+    borderWidth: 1,
+    color: fontColor['--t-font-color-light'],
+    display: 'flex',
+    fontSize: fontSize['--t-font-size-sm'],
+    justifyContent: 'center',
+    marginBlock: spacing['--t-spacing-1'],
+    marginInline: spacing['--t-spacing-2'],
+    minHeight: spacing['--t-spacing-10'],
+  },
+  dropTarget: { borderColor: color['--t-color-blue'] },
+});

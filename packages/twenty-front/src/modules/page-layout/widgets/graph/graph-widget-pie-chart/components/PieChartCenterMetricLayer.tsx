@@ -1,5 +1,4 @@
 import { usePieChartCenterMetricData } from '@/page-layout/widgets/graph/graph-widget-pie-chart/hooks/usePieChartCenterMetricData';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { AnimatePresence, motion } from 'framer-motion';
 import { type PieChartConfiguration } from '~/generated-metadata/graphql';
@@ -14,22 +13,18 @@ type PieChartCenterMetricProps = {
   hasNoData?: boolean;
 };
 
-const StyledCenterMetricContainerBase = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  left: 50%;
-  pointer-events: none;
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%);
-`;
-const StyledCenterMetricContainer = motion.create(
-  StyledCenterMetricContainerBase,
-);
-
 const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    left: '50%',
+    pointerEvents: 'none',
+    position: 'absolute',
+    top: '50%',
+    transform: 'translate(-50%, -50%)',
+  },
   value: {
     color: fontColor['--t-font-color-primary'],
     fontSize: 'clamp(12px, 10cqmin, 48px)',
@@ -65,7 +60,7 @@ export const PieChartCenterMetric = ({
   return (
     <AnimatePresence>
       {shouldShowContent && (
-        <StyledCenterMetricContainer
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -73,6 +68,7 @@ export const PieChartCenterMetric = ({
             duration: theme.animation.duration.fast,
             ease: 'easeInOut',
           }}
+          {...stylex.props(styles.container)}
         >
           {hasNoData ? (
             <span {...stylex.props(styles.noDataText)}>{t`No data`}</span>
@@ -82,7 +78,7 @@ export const PieChartCenterMetric = ({
               <span {...stylex.props(styles.label)}>{centerMetricLabel}</span>
             </>
           )}
-        </StyledCenterMetricContainer>
+        </motion.div>
       )}
     </AnimatePresence>
   );

@@ -301,7 +301,7 @@ export const GraphWidgetLineChart = ({
   return (
     <div id={id} {...stylex.props(styles.container)}>
       <GraphWidgetChartContainer
-        $isClickable={hasClickableItems}
+        isClickable={hasClickableItems}
         onMouseLeave={() => debouncedHideTooltip()}
         ref={containerRef}
       >

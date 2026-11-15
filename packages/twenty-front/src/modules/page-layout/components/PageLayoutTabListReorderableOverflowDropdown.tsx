@@ -1,4 +1,3 @@
-
 import { PAGE_LAYOUT_TAB_LIST_DROPPABLE_IDS } from '@/page-layout/components/PageLayoutTabListDroppableIds';
 import { PageLayoutTabListDroppableMoreButton } from '@/page-layout/components/PageLayoutTabListDroppableMoreButton';
 import { PageLayoutTabMenuItemSelectAvatar } from '@/page-layout/components/PageLayoutTabMenuItemSelectAvatar';

@@ -1,11 +1,16 @@
 import { formatNumberChartTrend } from '@/page-layout/widgets/graph/graph-widget-aggregate-chart/utils/formatNumberChartTrend';
-import { styled } from '@linaria/react';
 import { isDefined } from 'twenty-shared/utils';
 import { IconTrendingDown, IconTrendingUp } from 'twenty-ui/icon';
 import { Heading } from 'twenty-ui/primitives/typography';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import '~/third-party-styles/page-layout.css';
 import * as stylex from '@stylexjs/stylex';
-import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  spacing,
+  fontColor,
+  fontSize,
+  fontWeight,
+} from 'twenty-ui/theme/tokens.stylex';
 type GraphWidgetAggregateChartProps = {
   value: string | number;
   trendPercentage?: number;
@@ -14,6 +19,7 @@ type GraphWidgetAggregateChartProps = {
 };
 
 const styles = stylex.create({
+  headingWrapper: {},
   trendPercentageValue: {
     color: fontColor['--t-font-color-secondary'],
     fontSize: fontSize['--t-font-size-xs'],
@@ -34,13 +40,6 @@ const styles = stylex.create({
   },
 });
 
-const StyledHeadingWrapper = styled.div`
-  > h2 {
-    font-size: ${themeCssVariables.font.size.xxl};
-    margin: 0;
-  }
-`;
-
 export const GraphWidgetAggregateChart = ({
   value,
   trendPercentage,
@@ -57,11 +56,11 @@ export const GraphWidgetAggregateChart = ({
 
   return (
     <div {...stylex.props(styles.container)}>
-      <StyledHeadingWrapper>
+      <div data-aggregate-heading="">
         <Heading level={2} size="lg">
           {displayValue}
         </Heading>
-      </StyledHeadingWrapper>
+      </div>
       {isDefined(trendPercentage) && (
         <div {...stylex.props(styles.trendIconContainer)}>
           <span {...stylex.props(styles.trendPercentageValue)}>

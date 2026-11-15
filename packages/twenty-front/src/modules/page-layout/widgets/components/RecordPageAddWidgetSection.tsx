@@ -15,7 +15,15 @@ import {
   IconPlus,
 } from 'twenty-ui/icon';
 import * as stylex from '@stylexjs/stylex';
-import { background, borderColor, borderRadius, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  background,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   container: {

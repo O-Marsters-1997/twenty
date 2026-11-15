@@ -6,20 +6,9 @@ import { type PageLayoutWidget } from '@/page-layout/types/PageLayoutWidget';
 import { StandaloneRichTextEditorContent } from '@/page-layout/widgets/standalone-rich-text/components/StandaloneRichTextEditorContent';
 import { ScrollWrapper } from '@/ui/utilities/scroll/components/ScrollWrapper';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { styled } from '@linaria/react';
 import { type StandaloneRichTextConfiguration } from '~/generated-metadata/graphql';
-import { themeCssVariables } from 'twenty-ui/theme';
-
-const StyledContainer = styled.div<{ isPageLayoutInEditMode?: boolean }>`
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow: hidden;
-  padding-left: ${({ isPageLayoutInEditMode }) =>
-    isPageLayoutInEditMode ? themeCssVariables.spacing[5] : 0};
-  width: 100%;
-`;
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
+import * as stylex from '@stylexjs/stylex';
 
 type StandaloneRichTextWidgetProps = {
   widget: PageLayoutWidget;
@@ -45,9 +34,12 @@ export const StandaloneRichTextWidget = ({
   const isEditable = isPageLayoutInEditMode;
 
   return (
-    <StyledContainer
+    <div
       ref={containerElementRef}
-      isPageLayoutInEditMode={isPageLayoutInEditMode}
+      {...stylex.props(
+        styles.container,
+        isPageLayoutInEditMode && styles.containerEditMode,
+      )}
     >
       <ScrollWrapper
         componentInstanceId={`scroll-wrapper-rich-text-widget-${widget.id}`}
@@ -61,6 +53,19 @@ export const StandaloneRichTextWidget = ({
           containerElement={containerElementRef.current}
         />
       </ScrollWrapper>
-    </StyledContainer>
+    </div>
   );
 };
+
+const styles = stylex.create({
+  container: {
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    overflow: 'hidden',
+    paddingInlineStart: 0,
+    width: '100%',
+  },
+  containerEditMode: { paddingInlineStart: spacing['--t-spacing-5'] },
+});

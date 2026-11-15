@@ -9,27 +9,10 @@ import { useLayoutRenderingContext } from '@/ui/layout/contexts/LayoutRenderingC
 import { useWorkspaceSurfaceScopedComponentInstanceId } from '@/ui/layout/hooks/useWorkspaceSurfaceScopedComponentInstanceId';
 import { useTargetRecord } from '@/ui/layout/contexts/useTargetRecord';
 import { ScrollWrapper } from '@/ui/utilities/scroll/components/ScrollWrapper';
-import { styled } from '@linaria/react';
 import { PageLayoutType } from '~/generated-metadata/graphql';
-import { themeCssVariables } from 'twenty-ui/theme';
-
-const StyledContainer = styled.div`
-  --record-card-background-color: ${themeCssVariables.background.secondary};
-
-  background: var(--record-card-background-color);
-  border-bottom-left-radius: 8px;
-  border-right: 1px solid ${themeCssVariables.border.color.medium};
-  box-sizing: border-box;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: minmax(0, 1fr);
-  height: 100%;
-
-  .page-layout-scroll-wrapper {
-    container-name: tab-viewport;
-    container-type: size;
-  }
-`;
+import { background, borderColor } from 'twenty-ui/theme/tokens.stylex';
+import * as stylex from '@stylexjs/stylex';
+import '~/third-party-styles/page-layout.css';
 
 type PageLayoutLeftPanelProps = {
   pageLayoutId: string;
@@ -64,7 +47,7 @@ export const PageLayoutLeftPanel = ({
   });
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <PageLayoutScrollResetEffect
         pageLayoutTabId={pinnedLeftTabId}
         scrollWrapperInstanceId={scrollWrapperInstanceId}
@@ -89,6 +72,22 @@ export const PageLayoutLeftPanel = ({
           <PageLayoutContent />
         </ScrollWrapper>
       </PageLayoutContentProvider>
-    </StyledContainer>
+    </div>
   );
 };
+
+const styles = stylex.create({
+  container: {
+    '--record-card-background-color': background['--t-background-secondary'],
+    backgroundColor: 'var(--record-card-background-color)',
+    borderBottomLeftRadius: 8,
+    borderRightColor: borderColor['--t-border-color-medium'],
+    borderRightStyle: 'solid',
+    borderRightWidth: 1,
+    boxSizing: 'border-box',
+    display: 'grid',
+    gridTemplateColumns: 'minmax(0, 1fr)',
+    gridTemplateRows: 'minmax(0, 1fr)',
+    height: '100%',
+  },
+});

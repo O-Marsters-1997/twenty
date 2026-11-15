@@ -14,15 +14,23 @@ import { StyledWidgetScrollContainer } from '@/ui/layout/components/WidgetConten
 import { useTargetRecord } from '@/ui/layout/contexts/useTargetRecord';
 import { useWorkspaceSurface } from '@/ui/layout/hooks/useWorkspaceSurface';
 import { SidePanelProvider } from '@/ui/layout/side-panel/contexts/SidePanelContext';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 
-import { themeCssVariables } from 'twenty-ui/theme';
 import { type FieldsConfiguration } from '~/generated-metadata/graphql';
 import * as stylex from '@stylexjs/stylex';
-import { borderRadius, spacing } from 'twenty-ui/theme/tokens.stylex';
+import { spacing, borderRadius } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
+  inlinePropertyBox: {
+    alignSelf: 'stretch',
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    paddingBottom: 0,
+    paddingTop: 0,
+  },
+  inlinePropertyBoxWithMoreGroup: { paddingBottom: spacing['--t-spacing-3'] },
   propertyBox: {
     alignSelf: 'stretch',
     borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
@@ -36,19 +44,6 @@ const styles = stylex.create({
     paddingTop: spacing['--t-spacing-3'],
   },
 });
-
-const StyledInlineFieldsPropertyBox = styled.div<{
-  hasMoreGroup: boolean;
-}>`
-  align-self: stretch;
-  border-radius: ${themeCssVariables.border.radius.sm};
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  padding-bottom: ${({ hasMoreGroup }) =>
-    hasMoreGroup ? themeCssVariables.spacing[3] : '0'};
-  padding-top: 0;
-`;
 
 type FieldsWidgetProps = {
   widget: PageLayoutWidget;
@@ -141,14 +136,17 @@ export const FieldsWidget = ({ widget }: FieldsWidgetProps) => {
               </FieldsWidgetGroupContainer>
             ))
           ) : (
-            <StyledInlineFieldsPropertyBox
-              hasMoreGroup={shouldShowHiddenFields}
+            <div
+              {...stylex.props(
+                styles.inlinePropertyBox,
+                shouldShowHiddenFields && styles.inlinePropertyBoxWithMoreGroup,
+              )}
             >
               <FieldsWidgetFieldList
                 fields={visibleFields}
                 instanceId={instanceId}
               />
-            </StyledInlineFieldsPropertyBox>
+            </div>
           )}
 
           {shouldShowHiddenFields && (
