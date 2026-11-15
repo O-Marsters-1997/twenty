@@ -1,23 +1,23 @@
 import { useNumberFormat } from '@/localization/hooks/useNumberFormat';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledTitleWithSelectedRecords = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledTitle = styled.div`
-  color: ${themeCssVariables.font.color.primary};
-  padding-right: ${themeCssVariables.spacing['0.5']};
-`;
-
-const StyledSelectedRecordsCount = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  padding-left: ${themeCssVariables.spacing['0.5']};
-`;
+const styles = stylex.create({
+  titleWithSelectedRecords: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: spacing['--t-spacing-1'],
+  },
+  title: {
+    color: fontColor['--t-font-color-primary'],
+    paddingRight: spacing['--t-spacing-0_5'],
+  },
+  selectedRecordsCount: {
+    color: fontColor['--t-font-color-tertiary'],
+    paddingLeft: spacing['--t-spacing-0_5'],
+  },
+});
 
 type RecordIndexPageHeaderTitleProps = {
   label: string;
@@ -35,12 +35,12 @@ export const RecordIndexPageHeaderTitle = ({
   }
 
   return (
-    <StyledTitleWithSelectedRecords>
-      <StyledTitle>{label}</StyledTitle>
+    <div {...stylex.props(styles.titleWithSelectedRecords)}>
+      <div {...stylex.props(styles.title)}>{label}</div>
       <>{'->'}</>
-      <StyledSelectedRecordsCount>
+      <div {...stylex.props(styles.selectedRecordsCount)}>
         {t`${formatNumber(numberOfSelectedRecords)} selected`}
-      </StyledSelectedRecordsCount>
-    </StyledTitleWithSelectedRecords>
+      </div>
+    </div>
   );
 };

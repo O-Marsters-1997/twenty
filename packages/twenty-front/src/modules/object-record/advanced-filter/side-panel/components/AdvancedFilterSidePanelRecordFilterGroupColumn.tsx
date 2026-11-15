@@ -5,16 +5,18 @@ import { AdvancedFilterRecordFilterGroupOptionsDropdown } from '@/object-record/
 import { AdvancedFilterContext } from '@/object-record/advanced-filter/states/context/AdvancedFilterContext';
 import { type RecordFilterGroup } from '@/object-record/record-filter-group/types/RecordFilterGroup';
 
-import { styled } from '@linaria/react';
 import { useContext } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: ${themeCssVariables.spacing[1]};
-  justify-content: space-between;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: spacing['--t-spacing-1'],
+    justifyContent: 'space-between',
+  },
+});
 
 export const AdvancedFilterSidePanelRecordFilterGroupColumn = ({
   parentRecordFilterGroup,
@@ -29,7 +31,7 @@ export const AdvancedFilterSidePanelRecordFilterGroupColumn = ({
 
   return (
     <AdvancedFilterSidePanelColumn>
-      <StyledContainer>
+      <div {...stylex.props(styles.container)}>
         <AdvancedFilterSidePanelLogicalOperatorCell
           index={recordFilterGroupIndex}
           recordFilterGroup={parentRecordFilterGroup}
@@ -39,7 +41,7 @@ export const AdvancedFilterSidePanelRecordFilterGroupColumn = ({
             recordFilterGroupId={recordFilterGroup.id}
           />
         )}
-      </StyledContainer>
+      </div>
       <AdvancedFilterSidePanelRecordFilterGroupChildren
         recordFilterGroupId={recordFilterGroup.id}
       />

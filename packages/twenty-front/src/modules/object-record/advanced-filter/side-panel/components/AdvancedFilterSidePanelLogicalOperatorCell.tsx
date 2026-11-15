@@ -6,25 +6,26 @@ import { type RecordFilterGroup } from '@/object-record/record-filter-group/type
 import { Select } from '@/ui/input/components/Select';
 import { GenericDropdownContentWidth } from '@/ui/layout/dropdown/constants/GenericDropdownContentWidth';
 
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { useContext } from 'react';
 import { capitalize } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledText = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.primary};
-  display: flex;
-  height: ${themeCssVariables.spacing[8]};
-`;
-
-const StyledContainer = styled.div`
-  align-items: start;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  min-width: ${themeCssVariables.spacing[20]};
-`;
+const styles = stylex.create({
+  text: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-primary'],
+    display: 'flex',
+    height: spacing['--t-spacing-8'],
+  },
+  container: {
+    alignItems: 'start',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    minWidth: spacing['--t-spacing-20'],
+  },
+});
 
 type AdvancedFilterSidePanelLogicalOperatorCellProps = {
   index: number;
@@ -38,9 +39,9 @@ export const AdvancedFilterSidePanelLogicalOperatorCell = ({
   const { readonly } = useContext(AdvancedFilterContext);
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       {index === 0 ? (
-        <StyledText>{t`Where`}</StyledText>
+        <div {...stylex.props(styles.text)}>{t`Where`}</div>
       ) : index === 1 ? (
         readonly ? (
           <Select
@@ -57,10 +58,10 @@ export const AdvancedFilterSidePanelLogicalOperatorCell = ({
           />
         )
       ) : (
-        <StyledText>
+        <div {...stylex.props(styles.text)}>
           {capitalize(recordFilterGroup.logicalOperator.toLowerCase())}
-        </StyledText>
+        </div>
       )}
-    </StyledContainer>
+    </div>
   );
 };

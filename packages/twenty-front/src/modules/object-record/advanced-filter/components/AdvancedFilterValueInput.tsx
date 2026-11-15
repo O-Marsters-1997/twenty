@@ -14,12 +14,14 @@ import { type DropdownOffset } from '@/ui/layout/dropdown/types/DropdownOffset';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { useSetAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useSetAtomComponentState';
 
-import { styled } from '@linaria/react';
 import { isDefined } from 'twenty-shared/utils';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledValueDropdownContainer = styled.div`
-  flex: 3;
-`;
+const styles = stylex.create({
+  valueDropdownContainer: {
+    flex: '3',
+  },
+});
 
 type AdvancedFilterValueInputProps = {
   recordFilterId: string;
@@ -85,7 +87,7 @@ export const AdvancedFilterValueInput = ({
   });
 
   return (
-    <StyledValueDropdownContainer>
+    <div {...stylex.props(styles.valueDropdownContainer)}>
       {operandHasNoInput ? (
         <></>
       ) : isDisabled ? (
@@ -114,6 +116,6 @@ export const AdvancedFilterValueInput = ({
           onOpen={handleFilterValueDropdownOpen}
         />
       )}
-    </StyledValueDropdownContainer>
+    </div>
   );
 };

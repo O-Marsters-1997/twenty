@@ -1,6 +1,4 @@
-import { styled } from '@linaria/react';
 import { Fragment } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { RecordBoardColumnNewRecordButton } from '@/object-record/record-board/record-board-column/components/RecordBoardColumnNewRecordButton';
 import { RecordBoardColumnLoadingSkeletonCards } from '@/object-record/record-board/record-board-column/components/RecordBoardColumnLoadingSkeletonCards';
@@ -9,16 +7,19 @@ import { recordIndexRecordIdsByGroupComponentFamilyState } from '@/object-record
 import { useAtomComponentFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentFamilyStateValue';
 import { DragDropItemDropTarget } from '@/ui/utilities/drag-and-drop/components/DragDropItemDropTarget';
 import { RecordBoardCardContextProvider } from '@/object-record/record-board/record-board-card/components/RecordBoardCardContextProvider';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledColumnCardsContainer = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-`;
-
-const StyledNewButtonContainer = styled.div`
-  padding-bottom: ${themeCssVariables.spacing[4]};
-`;
+const styles = stylex.create({
+  columnCardsContainer: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+  },
+  newButtonContainer: {
+    paddingBottom: spacing['--t-spacing-4'],
+  },
+});
 
 type RecordBoardColumnCardsContainerProps = {
   recordBoardColumnId: string;
@@ -38,7 +39,10 @@ export const RecordBoardColumnCardsContainer = ({
   );
 
   return (
-    <StyledColumnCardsContainer data-replay-ignore-mutations="true">
+    <div
+      data-replay-ignore-mutations="true"
+      {...stylex.props(styles.columnCardsContainer)}
+    >
       {recordIndexRecordIdsByGroup.map((recordId, index) => (
         <Fragment key={recordId}>
           <DragDropItemDropTarget
@@ -63,9 +67,9 @@ export const RecordBoardColumnCardsContainer = ({
         orientation="horizontal"
         compact
       />
-      <StyledNewButtonContainer>
+      <div {...stylex.props(styles.newButtonContainer)}>
         <RecordBoardColumnNewRecordButton />
-      </StyledNewButtonContainer>
-    </StyledColumnCardsContainer>
+      </div>
+    </div>
   );
 };

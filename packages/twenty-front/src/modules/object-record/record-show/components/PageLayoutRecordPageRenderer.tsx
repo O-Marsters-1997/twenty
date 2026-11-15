@@ -12,33 +12,33 @@ import { type TargetRecordIdentifier } from '@/ui/layout/contexts/TargetRecordId
 import { useWorkspaceSurface } from '@/ui/layout/hooks/useWorkspaceSurface';
 import { SidePanelFooter } from '@/ui/layout/side-panel/components/SidePanelFooter';
 import { useAtomFamilySelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilySelectorValue';
-import { styled } from '@linaria/react';
 import { CoreObjectNameSingular } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { PageLayoutType } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { background } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledShowPageBannerContainer = styled.div`
-  flex-shrink: 0;
-  z-index: 1;
-`;
-
-const StyledShowPageRightContainer = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  justify-content: start;
-  min-height: 0;
-  overflow: hidden;
-  width: 100%;
-`;
-
-const StyledContentContainer = styled.div`
-  background: ${themeCssVariables.background.primary};
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-`;
+const styles = stylex.create({
+  showPageBannerContainer: {
+    flexShrink: '0',
+    zIndex: '1',
+  },
+  showPageRightContainer: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    justifyContent: 'start',
+    minHeight: '0',
+    overflow: 'hidden',
+    width: '100%',
+  },
+  contentContainer: {
+    background: background['--t-background-primary'],
+    flex: '1',
+    minHeight: '0',
+    overflowY: 'auto',
+  },
+});
 
 export const PageLayoutRecordPageRenderer = ({
   targetRecordIdentifier,
@@ -68,16 +68,19 @@ export const PageLayoutRecordPageRenderer = ({
       />
 
       {recordDeletedAt && (
-        <StyledShowPageBannerContainer>
+        <div {...stylex.props(styles.showPageBannerContainer)}>
           <InformationBannerDeletedRecord
             recordId={targetRecordIdentifier.id}
             objectNameSingular={targetRecordIdentifier.targetObjectNameSingular}
           />
-        </StyledShowPageBannerContainer>
+        </div>
       )}
 
-      <StyledShowPageRightContainer data-record-show-page-body="">
-        <StyledContentContainer>
+      <div
+        data-record-show-page-body=""
+        {...stylex.props(styles.showPageRightContainer)}
+      >
+        <div {...stylex.props(styles.contentContainer)}>
           <LayoutRenderingProvider
             value={{
               targetRecordIdentifier: {
@@ -97,7 +100,7 @@ export const PageLayoutRecordPageRenderer = ({
               <PageLayoutRenderer pageLayoutId={pageLayoutId} />
             )}
           </LayoutRenderingProvider>
-        </StyledContentContainer>
+        </div>
 
         {isInSidePanel && (
           <SidePanelFooter
@@ -108,7 +111,7 @@ export const PageLayoutRecordPageRenderer = ({
             ]}
           />
         )}
-      </StyledShowPageRightContainer>
+      </div>
     </PageLayoutIdContext.Provider>
   );
 };

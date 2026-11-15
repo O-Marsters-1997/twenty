@@ -2,19 +2,21 @@ import { RecordDragMultiDragCounterChip } from '@/object-record/record-drag/comp
 import { draggedRecordIdsComponentState } from '@/object-record/record-drag/states/draggedRecordIdsComponentState';
 import { RecordSelectionComponentInstanceContext } from '@/object-record/record-selection/states/contexts/RecordSelectionComponentInstanceContext';
 import { jotaiStore } from '@/ui/utilities/state/jotai/jotaiStore';
-import { styled } from '@linaria/react';
 import { type Meta, type StoryObj } from '@storybook/react-vite';
 import { expect, waitFor, within } from 'storybook/test';
 import { ComponentDecorator } from 'twenty-ui/testing';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const RECORD_SELECTION_INSTANCE_ID = 'record-drag-count-story';
 
-const StyledDragOverlay = styled.div`
-  height: ${themeCssVariables.spacing[6]};
-  position: relative;
-  width: ${themeCssVariables.spacing[6]};
-`;
+const styles = stylex.create({
+  dragOverlay: {
+    height: spacing['--t-spacing-6'],
+    position: 'relative',
+    width: spacing['--t-spacing-6'],
+  },
+});
 
 const meta: Meta<typeof RecordDragMultiDragCounterChip> = {
   title: 'Modules/ObjectRecord/RecordDrag/RecordDragMultiDragCounterChip',
@@ -24,9 +26,13 @@ const meta: Meta<typeof RecordDragMultiDragCounterChip> = {
       <RecordSelectionComponentInstanceContext.Provider
         value={{ instanceId: RECORD_SELECTION_INSTANCE_ID }}
       >
-        <StyledDragOverlay role="group" aria-label="Dragged records">
+        <div
+          role="group"
+          aria-label="Dragged records"
+          {...stylex.props(styles.dragOverlay)}
+        >
           <Story />
-        </StyledDragOverlay>
+        </div>
       </RecordSelectionComponentInstanceContext.Provider>
     ),
     ComponentDecorator,

@@ -15,25 +15,26 @@ import { isRecordSelectedComponentFamilyState } from '@/object-record/record-sel
 import { useAtomComponentFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentFamilyStateValue';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { useGetCurrentViewOnly } from '@/views/hooks/useGetCurrentViewOnly';
-import { styled } from '@linaria/react';
 import { Collapsible } from 'twenty-ui/primitives/layout';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-`;
-
-const StyledRecordCardContainer = styled.div`
-  padding-bottom: ${themeCssVariables.spacing[2]};
-  width: calc(100% - 2px);
-`;
-
-const StyledCardContainer = styled.div<{ isPrimaryMultiDrag?: boolean }>`
-  position: relative;
-  transform: ${({ isPrimaryMultiDrag }) =>
-    isPrimaryMultiDrag ? 'scale(1.02)' : 'none'};
-  z-index: ${({ isPrimaryMultiDrag }) => (isPrimaryMultiDrag ? '10' : 'auto')};
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+  },
+  recordCardContainer: {
+    paddingBottom: spacing['--t-spacing-2'],
+    width: 'calc(100% - 2px)',
+  },
+  cardContainer: {
+    position: 'relative',
+  },
+  primaryMultiDrag: {
+    transform: 'scale(1.02)',
+    zIndex: 10,
+  },
+});
 
 type RecordCalendarCardProps = {
   recordId: string;
@@ -87,11 +88,17 @@ export const RecordCalendarCard = ({
         instanceId: `${recordId}-${calendarDay}`,
       }}
     >
-      <StyledContainer
+      <div
         onContextMenu={(event) => openRecordContextMenu({ event, recordId })}
+        {...stylex.props(styles.container)}
       >
-        <StyledRecordCardContainer>
-          <StyledCardContainer isPrimaryMultiDrag={isMultiDragOverlay}>
+        <div {...stylex.props(styles.recordCardContainer)}>
+          <div
+            {...stylex.props(
+              styles.cardContainer,
+              isMultiDragOverlay && styles.primaryMultiDrag,
+            )}
+          >
             {isMultiDragOverlay && <RecordDragMultiDragStack />}
             <RecordCard
               data-selected={isRecordSelected}
@@ -110,8 +117,8 @@ export const RecordCalendarCard = ({
                 </Collapsible.Panel>
               </Collapsible.Root>
             </RecordCard>
-          </StyledCardContainer>
-        </StyledRecordCardContainer>
+          </div>
+        </div>
         {!isDragOverlay && (
           <>
             <RecordCalendarCardCellHoveredPortal
@@ -124,7 +131,7 @@ export const RecordCalendarCard = ({
             />
           </>
         )}
-      </StyledContainer>
+      </div>
     </RecordCalendarCardComponentInstanceContext.Provider>
   );
 };

@@ -1,4 +1,11 @@
 import { type Country } from '@/ui/input/components/internal/types/Country';
+import * as stylex from '@stylexjs/stylex';
+
+const styles = stylex.create({
+  flagPlaceholder: {
+    width: '20px',
+  },
+});
 
 export const getCountryFlagMenuItemAvatar = (
   countryName: string,
@@ -9,7 +16,7 @@ export const getCountryFlagMenuItemAvatar = (
   );
 
   if (!country) {
-    return <div style={{ width: 20 }} />;
+    return <div {...stylex.props(styles.flagPlaceholder)} />;
   }
 
   return country.Flag({ width: 20 });

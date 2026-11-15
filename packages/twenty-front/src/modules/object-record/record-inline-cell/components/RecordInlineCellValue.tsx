@@ -1,25 +1,27 @@
-import { styled } from '@linaria/react';
-
 import { FieldDisplay } from '@/object-record/record-field/ui/components/FieldDisplay';
 import { useFieldFocus } from '@/object-record/record-field/ui/hooks/useFieldFocus';
 import { useRecordInlineCellContext } from '@/object-record/record-inline-cell/components/RecordInlineCellContext';
 import { RecordInlineCellDisplayMode } from '@/object-record/record-inline-cell/components/RecordInlineCellDisplayMode';
 import { RecordInlineCellSkeletonLoader } from '@/object-record/record-inline-cell/components/RecordInlineCellSkeletonLoader';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledClickableContainer = styled.div<{
-  readonly?: boolean;
-  isCentered?: boolean;
-}>`
-  align-items: center;
-  cursor: ${({ readonly }) => (readonly ? 'default' : 'pointer')};
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-
-  justify-content: ${({ isCentered }) =>
-    isCentered === true ? 'center' : 'normal'};
-  width: 100%;
-`;
+const styles = stylex.create({
+  clickableContainer: {
+    alignItems: 'center',
+    cursor: 'pointer',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    justifyContent: 'normal',
+    width: '100%',
+  },
+  readonly: {
+    cursor: 'default',
+  },
+  centered: {
+    justifyContent: 'center',
+  },
+});
 
 export const RecordInlineCellValue = () => {
   const { readonly, loading, isCentered, onOpenEditMode } =
@@ -31,13 +33,19 @@ export const RecordInlineCellValue = () => {
   }
 
   return (
-    <StyledClickableContainer readonly={readonly} isCentered={isCentered}>
+    <div
+      {...stylex.props(
+        styles.clickableContainer,
+        readonly && styles.readonly,
+        isCentered === true && styles.centered,
+      )}
+    >
       <RecordInlineCellDisplayMode
         isHovered={isFocused}
         onClick={onOpenEditMode}
       >
         <FieldDisplay />
       </RecordInlineCellDisplayMode>
-    </StyledClickableContainer>
+    </div>
   );
 };

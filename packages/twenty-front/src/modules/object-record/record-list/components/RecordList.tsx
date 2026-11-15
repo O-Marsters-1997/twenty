@@ -11,18 +11,22 @@ import { RecordSelectionEscapeHotkeyEffect } from '@/object-record/record-select
 import { ScrollWrapper } from '@/ui/utilities/scroll/components/ScrollWrapper';
 import { useAvailableComponentInstanceIdOrThrow } from '@/ui/utilities/state/component-state/hooks/useAvailableComponentInstanceIdOrThrow';
 import { useAtomComponentSelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentSelectorValue';
-import { styled } from '@linaria/react';
 import { useState } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  padding: ${themeCssVariables.spacing[2]};
-  padding-left: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  container: {
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-1'],
+  },
+});
 
 export const RecordList = () => {
   const recordListId = useAvailableComponentInstanceIdOrThrow(
@@ -37,7 +41,7 @@ export const RecordList = () => {
     useState<HTMLDivElement | null>(null);
 
   return (
-    <StyledContainer ref={setContainerElement}>
+    <div ref={setContainerElement} {...stylex.props(styles.container)}>
       <RecordListResponsiveFieldsEffect containerElement={containerElement} />
       <RecordSelectionEscapeHotkeyEffect />
       <RecordListSSESubscribeEffect />
@@ -56,6 +60,6 @@ export const RecordList = () => {
           </RecordListDragDropProvider>
         </ScrollWrapper>
       </RecordListFieldTooltip>
-    </StyledContainer>
+    </div>
   );
 };

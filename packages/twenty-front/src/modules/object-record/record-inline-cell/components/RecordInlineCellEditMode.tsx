@@ -14,7 +14,6 @@ import { OverlayContainer } from '@/ui/layout/overlay/components/OverlayContaine
 import { useAvailableComponentInstanceIdOrThrow } from '@/ui/utilities/state/component-state/hooks/useAvailableComponentInstanceIdOrThrow';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { useSetAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useSetAtomComponentState';
-import { styled } from '@linaria/react';
 import {
   autoUpdate,
   flip,
@@ -26,22 +25,23 @@ import {
 } from '@floating-ui/react';
 import { useContext } from 'react';
 import { createPortal } from 'react-dom';
+import * as stylex from '@stylexjs/stylex';
 
 const INLINE_FIELD_INPUT_SIDE_OFFSET = -29;
 const INLINE_FIELD_INPUT_CENTERED_SIDE_OFFSET = -26;
 const INLINE_FIELD_INPUT_ALIGN_OFFSET = -5;
 const INLINE_FIELD_INPUT_COLLISION_PADDING = 8;
 
-const StyledInlineCellEditModeContainer = styled.div`
-  align-items: center;
-
-  background: transparent;
-  display: flex;
-  height: 24px;
-  position: absolute;
-
-  width: 100%;
-`;
+const styles = stylex.create({
+  inlineCellEditModeContainer: {
+    alignItems: 'center',
+    background: 'transparent',
+    display: 'flex',
+    height: '24px',
+    position: 'absolute',
+    width: '100%',
+  },
+});
 
 type RecordInlineCellEditModeProps = {
   children: React.ReactNode;
@@ -116,9 +116,10 @@ export const RecordInlineCellEditMode = ({
   });
 
   return (
-    <StyledInlineCellEditModeContainer
+    <div
       ref={refs.setReference}
       data-testid="inline-cell-edit-mode-container"
+      {...stylex.props(styles.inlineCellEditModeContainer)}
     >
       {isDropdownFieldInput ? (
         <FieldInputAnchorContextProvider
@@ -149,6 +150,6 @@ export const RecordInlineCellEditMode = ({
           document.body,
         )
       )}
-    </StyledInlineCellEditModeContainer>
+    </div>
   );
 };

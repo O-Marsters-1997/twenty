@@ -1,18 +1,20 @@
 import { RecordList } from '@/object-record/record-list/components/RecordList';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledListContainer = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-height: 0;
-  overflow: hidden;
-`;
+const styles = stylex.create({
+  listContainer: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    minHeight: '0',
+    overflow: 'hidden',
+  },
+});
 
 export const RecordListWidget = () => {
   return (
-    <StyledListContainer>
+    <div {...stylex.props(styles.listContainer)}>
       <RecordList />
-    </StyledListContainer>
+    </div>
   );
 };

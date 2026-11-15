@@ -5,13 +5,15 @@ import { useAdvancedFilterFieldSelectDropdown } from '@/object-record/advanced-f
 import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent';
 import { DropdownRoot } from '@/ui/layout/dropdown/components/DropdownRoot';
 import { GenericDropdownContentWidth } from '@/ui/layout/dropdown/constants/GenericDropdownContentWidth';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { Dropdown } from 'twenty-ui/components/navigation';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledContainer = styled.div`
-  flex: 2;
-`;
+const styles = stylex.create({
+  container: {
+    flex: '2',
+  },
+});
 
 type AdvancedFilterFieldSelectDropdownButtonProps = {
   recordFilterId: string;
@@ -24,7 +26,7 @@ export const AdvancedFilterFieldSelectDropdownButton = ({
     useAdvancedFilterFieldSelectDropdown(recordFilterId);
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <DropdownRoot
         dropdownId={advancedFilterFieldSelectDropdownId}
         type="picker"
@@ -45,6 +47,6 @@ export const AdvancedFilterFieldSelectDropdownButton = ({
           />
         </DropdownContent>
       </DropdownRoot>
-    </StyledContainer>
+    </div>
   );
 };

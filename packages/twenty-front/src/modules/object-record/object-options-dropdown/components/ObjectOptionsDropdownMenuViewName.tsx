@@ -9,44 +9,47 @@ import { useSetAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useSe
 import { type View } from '@/views/types/View';
 import { viewPickerIsDirtyComponentState } from '@/views/view-picker/states/viewPickerIsDirtyComponentState';
 import { viewPickerSelectedIconComponentState } from '@/views/view-picker/states/viewPickerSelectedIconComponentState';
-import { styled } from '@linaria/react';
 import { useEffect, useRef, useState } from 'react';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
 import { useIcons } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledDropdownMenuIconAndNameContainer = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  margin-left: 0;
-  margin-right: 0;
-`;
-
-const StyledMenuTitleContainer = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  padding: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledMenuIconContainer = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.primary};
-  display: flex;
-  height: ${themeCssVariables.spacing[6]};
-  justify-content: center;
-  width: ${themeCssVariables.spacing[6]};
-`;
-
-const StyledMainText = styled.div`
-  color: ${themeCssVariables.font.color.primary};
-  flex-shrink: 0;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
+const styles = stylex.create({
+  dropdownMenuIconAndNameContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    marginLeft: '0',
+    marginRight: '0',
+  },
+  menuTitleContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    paddingTop: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-1'],
+  },
+  menuIconContainer: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-primary'],
+    display: 'flex',
+    height: spacing['--t-spacing-6'],
+    justifyContent: 'center',
+    width: spacing['--t-spacing-6'],
+  },
+  mainText: {
+    color: fontColor['--t-font-color-primary'],
+    flexShrink: '0',
+    maxWidth: '100%',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+});
 
 type ObjectOptionsDropdownMenuViewNameProps = {
   currentView: Pick<View, 'name' | 'icon' | 'key'>;
@@ -95,17 +98,17 @@ export const ObjectOptionsDropdownMenuViewName = ({
   return (
     <>
       {currentView?.key === 'INDEX' ? (
-        <StyledMenuTitleContainer>
-          <StyledMenuIconContainer>
+        <div {...stylex.props(styles.menuTitleContainer)}>
+          <div {...stylex.props(styles.menuIconContainer)}>
             <MainIcon size={theme.icon.size.md} stroke={theme.icon.stroke.sm} />
-          </StyledMenuIconContainer>
-          <StyledMainText>
+          </div>
+          <div {...stylex.props(styles.mainText)}>
             <OverflowingTextWithTooltip text={currentView.name} />
-          </StyledMainText>
-        </StyledMenuTitleContainer>
+          </div>
+        </div>
       ) : (
         <DropdownMenuItemsContainer>
-          <StyledDropdownMenuIconAndNameContainer>
+          <div {...stylex.props(styles.dropdownMenuIconAndNameContainer)}>
             <IconPicker
               size="sm"
               onChange={handleIconChange}
@@ -121,7 +124,7 @@ export const ObjectOptionsDropdownMenuViewName = ({
               sizeVariant="sm"
               fullWidth
             />
-          </StyledDropdownMenuIconAndNameContainer>
+          </div>
         </DropdownMenuItemsContainer>
       )}
     </>

@@ -1,24 +1,57 @@
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { type ReactNode } from 'react';
+import { fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-export const StyledBoardCardHeaderContainer = styled.div<{
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    height: '32px',
+    justifyContent: 'space-between',
+    transitionDuration: '160ms',
+    transitionProperty: 'padding',
+    transitionTimingFunction: 'ease-in-out',
+  },
+  paddingDefault: {
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingInline: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
+  },
+  paddingCompact: {
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingInline: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
+  },
+  paddingSmall: {
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingInline: spacing['--t-spacing-1'],
+    paddingTop: spacing['--t-spacing-1'],
+  },
+});
+
+type RecordCardHeaderContainerProps = {
   isCompact: boolean;
-  padding?: string;
-}>`
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  font-weight: ${themeCssVariables.font.weight.medium};
-  height: 32px;
-  justify-content: space-between;
-  padding: ${({ padding, isCompact }) =>
-    padding ??
-    `${themeCssVariables.spacing[2]} ${themeCssVariables.spacing[2]} ${isCompact ? themeCssVariables.spacing[2] : themeCssVariables.spacing[1]} ${themeCssVariables.spacing[2]}`};
-  transition: padding ease-in-out 160ms;
+  hasSmallPadding?: boolean;
+  children: ReactNode;
+};
 
-  img {
-    object-fit: cover;
-  }
-`;
-
-export { StyledBoardCardHeaderContainer as RecordCardHeaderContainer };
+export const RecordCardHeaderContainer = ({
+  isCompact,
+  hasSmallPadding = false,
+  children,
+}: RecordCardHeaderContainerProps) => (
+  <div
+    {...stylex.props(
+      styles.container,
+      hasSmallPadding
+        ? styles.paddingSmall
+        : isCompact
+          ? styles.paddingCompact
+          : styles.paddingDefault,
+    )}
+  >
+    {children}
+  </div>
+);

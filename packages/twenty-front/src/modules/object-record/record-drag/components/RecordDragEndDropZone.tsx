@@ -1,17 +1,19 @@
 import { pointerIntersection } from '@dnd-kit/collision';
 import { useDroppable } from '@dnd-kit/react';
-import { styled } from '@linaria/react';
 import { type ReactNode } from 'react';
 
 import { isDraggingRecordComponentState } from '@/object-record/record-drag/states/isDraggingRecordComponentState';
 import { DragDropItemDropTarget } from '@/ui/utilities/drag-and-drop/components/DragDropItemDropTarget';
 import { DND_KIT_COLLISION_PRIORITY } from '@/ui/utilities/drag-and-drop/constants/DndKitCollisionPriority';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledEndDropZone = styled.div`
-  position: relative;
-  width: 100%;
-`;
+const styles = stylex.create({
+  endDropZone: {
+    position: 'relative',
+    width: '100%',
+  },
+});
 
 type RecordDragEndDropZoneProps = {
   droppableId: string;
@@ -40,7 +42,7 @@ export const RecordDragEndDropZone = ({
   });
 
   return (
-    <StyledEndDropZone ref={ref}>
+    <div ref={ref} {...stylex.props(styles.endDropZone)}>
       {/* Expands during a drag so the zone stays droppable when nothing renders below it */}
       <DragDropItemDropTarget
         index={index}
@@ -50,6 +52,6 @@ export const RecordDragEndDropZone = ({
         seamAligned
       />
       {children}
-    </StyledEndDropZone>
+    </div>
   );
 };

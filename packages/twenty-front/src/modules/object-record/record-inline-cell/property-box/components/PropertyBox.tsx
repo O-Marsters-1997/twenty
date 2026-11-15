@@ -1,47 +1,46 @@
 import { useLayoutRenderingContext } from '@/ui/layout/contexts/LayoutRenderingContext';
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { borderRadius, spacing } from 'twenty-ui/theme/tokens.stylex';
 import { PageLayoutType } from '~/generated-metadata/graphql';
 
-interface PropertyBoxProps {
+type PropertyBoxProps = {
   children: React.ReactNode;
-  className?: string;
   dataTestId?: string;
-}
+};
 
-const StyledPropertyBoxContainer = styled.div<{
-  noHorizontalPadding?: boolean;
-}>`
-  align-self: stretch;
-  border-radius: ${themeCssVariables.border.radius.md};
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  padding-bottom: ${themeCssVariables.spacing[3]};
-  padding-left: ${({ noHorizontalPadding }) =>
-    noHorizontalPadding ? 0 : themeCssVariables.spacing[3]};
-  padding-right: ${({ noHorizontalPadding }) =>
-    noHorizontalPadding ? 0 : themeCssVariables.spacing[2]};
-  padding-top: ${themeCssVariables.spacing[3]};
-`;
+const styles = stylex.create({
+  container: {
+    alignSelf: 'stretch',
+    borderRadius: borderRadius['--t-border-radius-md'],
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-3'],
+    paddingLeft: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-3'],
+  },
+  noHorizontalPadding: {
+    paddingLeft: 0,
+    paddingRight: 0,
+  },
+});
 
-export const PropertyBox = ({
-  children,
-  className,
-  dataTestId,
-}: PropertyBoxProps) => {
+export const PropertyBox = ({ children, dataTestId }: PropertyBoxProps) => {
   const layoutRenderingContext = useLayoutRenderingContext();
 
   const isInRecordPageLayout =
     layoutRenderingContext.layoutType === PageLayoutType.RECORD_PAGE;
 
   return (
-    <StyledPropertyBoxContainer
-      className={className}
+    <div
       data-testid={dataTestId}
-      noHorizontalPadding={isInRecordPageLayout}
+      {...stylex.props(
+        styles.container,
+        isInRecordPageLayout && styles.noHorizontalPadding,
+      )}
     >
       {children}
-    </StyledPropertyBoxContainer>
+    </div>
   );
 };

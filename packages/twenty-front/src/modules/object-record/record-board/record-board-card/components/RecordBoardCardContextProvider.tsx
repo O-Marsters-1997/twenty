@@ -1,4 +1,4 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { useContext } from 'react';
 
 import { RecordBoardCardHotkeysEffect } from '@/object-record/record-board/record-board-card/components/RecordBoardCardHotkeysEffect';
@@ -15,15 +15,18 @@ import { useAtomComponentFamilyStateValue } from '@/ui/utilities/state/jotai/hoo
 import { DragDropItemSortableCell } from '@/ui/utilities/drag-and-drop/components/DragDropItemSortableCell';
 import { RECORD_BOARD_CARD_DND_TYPE } from '@/object-record/record-board/record-board-dnd/constants/RecordBoardCardDndType';
 
-const StyledDraggableContainer = styled.div<{
-  isDragDisabled: boolean;
-}>`
-  cursor: ${({ isDragDisabled }) => (isDragDisabled ? 'default' : 'grab')};
-  position: relative;
-  scroll-margin-left: 8px;
-  scroll-margin-right: 8px;
-  scroll-margin-top: 40px;
-`;
+const styles = stylex.create({
+  draggableContainer: {
+    cursor: 'grab',
+    position: 'relative',
+    scrollMarginLeft: '8px',
+    scrollMarginRight: '8px',
+    scrollMarginTop: '40px',
+  },
+  dragDisabled: {
+    cursor: 'default',
+  },
+});
 
 type RecordBoardCardContextProviderProps = {
   recordId: string;
@@ -76,17 +79,19 @@ export const RecordBoardCardContextProvider = ({
         data={{ recordId }}
         disabled={isRecordBoardDropProcessing || isRecordBoardCellsNonEditable}
       >
-        <StyledDraggableContainer
-          isDragDisabled={
-            isRecordBoardDropProcessing || isRecordBoardCellsNonEditable
-          }
+        <div
           id={`record-board-card-${columnIndex}-${rowIndex}`}
           data-selectable-id={recordId}
           data-select-disable
+          {...stylex.props(
+            styles.draggableContainer,
+            (isRecordBoardDropProcessing || isRecordBoardCellsNonEditable) &&
+              styles.dragDisabled,
+          )}
         >
           {isRecordBoardCardFocused && <RecordBoardCardHotkeysEffect />}
           <RecordBoardCard />
-        </StyledDraggableContainer>
+        </div>
       </DragDropItemSortableCell>
     </RecordBoardCardContext.Provider>
   );

@@ -3,13 +3,15 @@ import { useRecordIndexContextOrThrow } from '@/object-record/record-index/conte
 import { RecordTableWidgetStatesEffect } from '@/object-record/record-table-widget/components/RecordTableWidgetStatesEffect';
 import { RecordTableWidgetContext } from '@/object-record/record-table-widget/contexts/RecordTableWidgetContext';
 import { RecordTableWithWrappers } from '@/object-record/record-table/components/RecordTableWithWrappers';
-import { styled } from '@linaria/react';
 import { useContext } from 'react';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledTableContainer = styled.div`
-  min-height: 0;
-  overflow: hidden;
-`;
+const styles = stylex.create({
+  tableContainer: {
+    minHeight: '0',
+    overflow: 'hidden',
+  },
+});
 
 type RecordTableWidgetProps = {
   isUIEditable?: boolean;
@@ -35,13 +37,13 @@ export const RecordTableWidget = ({
         isEmptyStateHidden={isEmptyStateHidden}
       />
       <RecordIndexTableContainerEffect />
-      <StyledTableContainer>
+      <div {...stylex.props(styles.tableContainer)}>
         <RecordTableWithWrappers
           recordTableId={recordIndexId}
           objectNameSingular={objectNameSingular}
           viewBarId={viewBarInstanceId}
         />
-      </StyledTableContainer>
+      </div>
     </>
   );
 };
