@@ -62,7 +62,7 @@ func DefaultTable() OperationTable {
 	for _, operation := range viewOperations {
 		table[EndpointMetadata][operation] = RouteGo
 	}
-	for _, operation := range slices.Concat(SkillOperations, ChatOperations, agentOperations, MessagingOperations, AccessOperations, TwoFactorOperations, SessionOperations, PasswordLoginOperations) {
+	for _, operation := range slices.Concat(SkillOperations, ChatOperations, agentOperations, MessagingOperations, AccessOperations, TwoFactorOperations, SessionOperations, PasswordLoginOperations, WorkspaceOperations) {
 		table[EndpointMetadata][operation] = RouteGo
 	}
 	for _, operation := range slices.Concat(WorkflowOperations, WorkflowAuthoringOperations) {
@@ -152,6 +152,15 @@ var SessionOperations = []string{"getAuthTokensFromLoginToken", "RenewToken", "S
 var blockedMetadataFields = []string{
 	"createOneObject", "updateOneObject", "deleteOneObject",
 	"createOneField", "updateOneField", "deleteOneField",
+}
+
+var WorkspaceOperations = []string{
+	"GetPublicWorkspaceDataByDomain", "GetPublicWorkspaceDataById", "GetWorkspaceFromInviteHash", "CheckUserExists",
+	"GetWorkspaceCreationDefaults", "CheckWorkspaceSubdomainAvailability", "GetWorkspaceIframeOrigins",
+}
+
+var PublicWorkspaceOperations = []string{
+	"GetPublicWorkspaceDataByDomain", "GetPublicWorkspaceDataById", "GetWorkspaceFromInviteHash", "CheckUserExists",
 }
 
 var PasswordLoginOperations = []string{"GetLoginTokenFromCredentials", "SignIn"}

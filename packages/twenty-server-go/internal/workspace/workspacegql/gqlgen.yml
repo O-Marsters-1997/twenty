@@ -1,0 +1,16 @@
+schema:
+  - workspace.graphqls
+exec:
+  filename: generated.go
+  package: workspacegql
+model:
+  filename: models_gen.go
+  package: workspacegql
+resolver:
+  layout: single-file
+  filename: resolver.go
+  package: workspacegql
+  type: Resolver
+models:
+  UUID:
+    model: github.com/99designs/gqlgen/graphql.String

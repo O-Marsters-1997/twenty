@@ -1,0 +1,67 @@
+scalar UUID
+
+type WorkspaceUrls {
+  subdomainUrl: String!
+}
+
+type AuthProviders {
+  google: Boolean!
+  magicLink: Boolean!
+  password: Boolean!
+}
+
+type AuthBypassProviders {
+  google: Boolean!
+  password: Boolean!
+}
+
+type PublicWorkspaceData {
+  id: UUID!
+  authProviders: AuthProviders!
+  authBypassProviders: AuthBypassProviders
+  logo: String
+  displayName: String
+  workspaceUrls: WorkspaceUrls!
+}
+
+type PublicWorkspaceDataSummary {
+  id: UUID!
+  logo: String
+  displayName: String
+}
+
+type Workspace {
+  id: UUID!
+  displayName: String
+  logo: String!
+  allowImpersonation: Boolean!
+  allowedIframeOrigins: [String!]
+}
+
+type CheckUserExist {
+  exists: Boolean!
+  availableWorkspacesCount: Int!
+  isEmailVerified: Boolean!
+}
+
+type SubdomainAvailability {
+  isValid: Boolean!
+  available: Boolean!
+  suggestedSubdomain: String!
+  suggestedSubdomains: [String!]!
+}
+
+type WorkspaceCreationDefaults {
+  displayName: String!
+  subdomain: String!
+}
+
+type Query {
+  checkUserExists(email: String!, captchaToken: String): CheckUserExist!
+  findWorkspaceFromInviteHash(inviteHash: String!): Workspace!
+  checkWorkspaceSubdomainAvailability(subdomain: String!): SubdomainAvailability!
+  getWorkspaceCreationDefaults: WorkspaceCreationDefaults!
+  getPublicWorkspaceDataByDomain(origin: String!): PublicWorkspaceData!
+  getPublicWorkspaceDataById(id: UUID!): PublicWorkspaceDataSummary!
+  currentWorkspace: Workspace!
+}

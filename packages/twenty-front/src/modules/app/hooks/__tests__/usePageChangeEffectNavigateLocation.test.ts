@@ -4,8 +4,8 @@ import { useOnboardingStatus } from '@/onboarding/hooks/useOnboardingStatus';
 import { useQuery } from '@apollo/client/react';
 import { useLocation } from 'react-router-dom';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { AppPath, SettingsPath } from 'twenty-shared/types';
-import { getAppPath, getSettingsPath } from 'twenty-shared/utils';
+import { AppPath } from 'twenty-shared/types';
+import { getAppPath } from 'twenty-shared/utils';
 import { OnboardingStatus, PageLayoutType } from '~/generated-metadata/graphql';
 
 import { useIsCurrentLocationOnAWorkspace } from '@/domain-manager/hooks/useIsCurrentLocationOnAWorkspace';
@@ -194,12 +194,6 @@ const testCases: {
   { loc: AppPath.TasksPage, isLogged: true, onboardingStatus: OnboardingStatus.SYNC_EMAIL, res: AppPath.SyncEmails },
   { loc: AppPath.TasksPage, isLogged: true, onboardingStatus: OnboardingStatus.INVITE_TEAM, res: AppPath.InviteTeam },
   { loc: AppPath.TasksPage, isLogged: true, onboardingStatus: OnboardingStatus.COMPLETED, res: undefined },
-  { loc: AppPath.Dpa, isLogged: false, onboardingStatus: undefined, res: AppPath.SignInUp },
-  { loc: AppPath.Dpa, isLogged: true, onboardingStatus: OnboardingStatus.WORKSPACE_ACTIVATION, res: AppPath.WorkspaceActivation },
-  { loc: AppPath.Dpa, isLogged: true, onboardingStatus: OnboardingStatus.PROFILE_CREATION, res: AppPath.CreateProfile },
-  { loc: AppPath.Dpa, isLogged: true, onboardingStatus: OnboardingStatus.SYNC_EMAIL, res: AppPath.SyncEmails },
-  { loc: AppPath.Dpa, isLogged: true, onboardingStatus: OnboardingStatus.INVITE_TEAM, res: AppPath.InviteTeam },
-  { loc: AppPath.Dpa, isLogged: true, onboardingStatus: OnboardingStatus.COMPLETED, res: getSettingsPath(SettingsPath.LegalDpa) },
 
   { loc: AppPath.AiChat, isLogged: false, onboardingStatus: undefined, res: AppPath.SignInUp },
   { loc: AppPath.AiChat, isLogged: true, onboardingStatus: OnboardingStatus.WORKSPACE_ACTIVATION, res: AppPath.WorkspaceActivation },

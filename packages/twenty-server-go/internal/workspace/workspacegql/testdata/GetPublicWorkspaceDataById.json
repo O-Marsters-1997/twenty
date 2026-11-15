@@ -1,0 +1,9 @@
+{
+  "name": "GetPublicWorkspaceDataById",
+  "operation": "GetPublicWorkspaceDataById",
+  "fixture": "workspace twenty with the deprecated logo column set and no logo file; hand-written from the Node resolver",
+  "endpoint": "/metadata",
+  "query": "query GetPublicWorkspaceDataById($id: UUID!) { getPublicWorkspaceDataById(id: $id) { id displayName logo } }",
+  "variables": {"id": "26a06a83-ad30-4547-9126-7f6339d43e03"},
+  "response": {"data": {"getPublicWorkspaceDataById": {"id": "26a06a83-ad30-4547-9126-7f6339d43e03", "displayName": "Twenty", "logo": "https://example.com/logo.png"}}}
+}
