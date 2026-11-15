@@ -1,7 +1,7 @@
 import { Collapsible } from '@base-ui/react/collapsible';
 import { isNonEmptyString } from '@sniptt/guards';
 import { isDefined } from '@ui/utilities/utils/isDefined';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 import { useState } from 'react';
 import { type JsonValue } from 'type-fest';
 
@@ -13,7 +13,7 @@ import { useJsonTreeContextOrThrow } from '@ui/components/data-display/JsonTree/
 import { type JsonNodeHighlighting } from '@ui/components/data-display/JsonTree/types/JsonNodeHighlighting';
 import { type IconComponent } from '@ui/icon';
 
-import styles from './JsonNestedNode.module.scss';
+import { fontColor, spacing } from '../../../../theme/tokens.stylex';
 
 export const JsonNestedNode = ({
   label,
@@ -43,7 +43,7 @@ export const JsonNestedNode = ({
   );
 
   const renderedChildren = (
-    <ul className={clsx(styles.list, depth > 0 && styles.nested)}>
+    <ul {...stylex.props(styles.list, depth > 0 && styles.nested)}>
       {elements.length === 0 ? (
         <JsonValueNode
           valueAsString={emptyElementsText}
@@ -74,16 +74,16 @@ export const JsonNestedNode = ({
   };
 
   if (hideRoot) {
-    return <li className={styles.container}>{renderedChildren}</li>;
+    return <li {...stylex.props(styles.container)}>{renderedChildren}</li>;
   }
 
   return (
     <Collapsible.Root
-      className={styles.container}
+      {...stylex.props(styles.container)}
       open={isOpen}
       render={<li />}
     >
-      <div className={styles.labelContainer}>
+      <div {...stylex.props(styles.labelContainer)}>
         <JsonArrow
           isOpen={isOpen}
           onClick={handleArrowClick}
@@ -104,7 +104,7 @@ export const JsonNestedNode = ({
 
         {renderElementsCount && (
           <span
-            className={clsx(
+            {...stylex.props(
               styles.elementsCount,
               highlighting === 'red' && styles.elementsCountRed,
             )}
@@ -114,9 +114,54 @@ export const JsonNestedNode = ({
         )}
       </div>
 
-      <Collapsible.Panel className={styles.panel}>
+      <Collapsible.Panel {...stylex.props(styles.panel)}>
         {renderedChildren}
       </Collapsible.Panel>
     </Collapsible.Root>
   );
 };
+
+const styles = stylex.create({
+  container: {
+    display: 'grid',
+    listStyleType: 'none',
+  },
+  labelContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+  },
+  elementsCount: {
+    color: fontColor['--t-font-color-tertiary'],
+  },
+  elementsCountRed: {
+    color: fontColor['--t-font-color-danger'],
+  },
+  panel: {
+    height: {
+      default: 'var(--collapsible-panel-height)',
+      ':is([data-starting-style])': 0,
+      ':is([data-ending-style])': 0,
+    },
+    opacity: {
+      default: null,
+      ':is([data-starting-style])': 0,
+      ':is([data-ending-style])': 0,
+    },
+    overflow: 'clip',
+    transitionDuration: '0.3s',
+    transitionProperty: 'height, opacity',
+    transitionTimingFunction: 'ease',
+  },
+  list: {
+    display: 'grid',
+    margin: 0,
+    paddingBlock: 0,
+    paddingInline: 0,
+    rowGap: spacing['--t-spacing-2'],
+  },
+  nested: {
+    paddingBlockStart: spacing['--t-spacing-2'],
+    paddingInlineStart: spacing['--t-spacing-8'],
+  },
+});

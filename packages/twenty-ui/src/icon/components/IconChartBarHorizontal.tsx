@@ -1,8 +1,8 @@
+import * as stylex from '@stylexjs/stylex';
+
 import { IconChartBar } from '@ui/icon/components/TablerIcons';
 import { type IconComponentProps } from '@ui/icon/types/IconComponent';
 import { useTheme } from '@ui/theme';
-
-import styles from './IconChartBarHorizontal.module.scss';
 
 type IconChartBarHorizontalProps = Pick<
   IconComponentProps,
@@ -15,8 +15,15 @@ export const IconChartBarHorizontal = (props: IconChartBarHorizontalProps) => {
   const stroke = props.stroke ?? theme.icon.stroke.sm;
 
   return (
-    <div className={styles.rotatedIconWrapper}>
+    <div {...stylex.props(styles.rotatedIconWrapper)}>
       <IconChartBar size={size} stroke={stroke} color={props.color} />
     </div>
   );
 };
+
+const styles = stylex.create({
+  rotatedIconWrapper: {
+    display: 'inline-flex',
+    transform: 'rotate(90deg)',
+  },
+});

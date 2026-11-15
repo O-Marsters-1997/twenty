@@ -1,10 +1,12 @@
 import { useRender } from '@base-ui/react/use-render';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 
 import { getIconTileColorShades } from '@ui/components/data-display/TintedIconTile/utils/getIconTileColorShades';
 import { DEFAULT_THEME_COLOR_FALLBACK } from '@ui/theme';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
-import styles from './TintedIconTile.module.scss';
+import { borderRadius, spacing } from '../../../theme/tokens.stylex';
 import { type TintedIconTileProps } from './types/TintedIconTileProps';
 
 export const TintedIconTile = ({
@@ -12,10 +14,11 @@ export const TintedIconTile = ({
   color = DEFAULT_THEME_COLOR_FALLBACK,
   className,
   style,
+  xstyle,
   render,
   ref,
   ...props
-}: TintedIconTileProps) => {
+}: WithXstyle<TintedIconTileProps>) => {
   const colorShades = getIconTileColorShades(color);
 
   return useRender({
@@ -23,13 +26,33 @@ export const TintedIconTile = ({
     ref,
     props: {
       ...props,
-      className: clsx(styles.root, className),
+      ...mergeStylexProps(stylex.props(styles.root, xstyle), className),
       style: {
         backgroundColor: colorShades.backgroundColor,
         color: colorShades.iconColor,
         ...style,
       },
-      children: <span aria-hidden="true">{icon}</span>,
+      children: (
+        <span aria-hidden="true" {...stylex.props(styles.icon)}>
+          {icon}
+        </span>
+      ),
     },
   });
 };
+
+const styles = stylex.create({
+  root: {
+    alignItems: 'center',
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexShrink: 0,
+    height: spacing['--t-spacing-4'],
+    justifyContent: 'center',
+    width: spacing['--t-spacing-4'],
+  },
+  icon: {
+    display: 'flex',
+  },
+});

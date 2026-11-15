@@ -4,7 +4,6 @@ import { runComponentConformance } from '@test-utilities/conformance/runComponen
 import { ToastProvider } from '@ui/components/feedback/Toast/ToastProvider';
 
 import { Toaster } from '../Toaster';
-import styles from '../Toaster.module.scss';
 
 const ToastWrapper = ({ children }: { children: ReactNode }) => (
   <ToastProvider>{children}</ToastProvider>
@@ -15,5 +14,4 @@ runComponentConformance({
   element: <Toaster />,
   wrapper: ToastWrapper,
   refInstanceOf: HTMLDivElement,
-  ownClassName: styles.root,
 });

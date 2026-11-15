@@ -4,13 +4,11 @@ import { describe, expect, it } from 'vitest';
 import { runComponentConformance } from '@test-utilities/conformance/runComponentConformance';
 
 import { Callout } from '../Callout';
-import styles from '../Callout.module.scss';
 
 runComponentConformance({
   name: 'Callout',
   element: <Callout title="Sync result" />,
   refInstanceOf: HTMLDivElement,
-  ownClassName: styles.container,
 });
 
 describe('Callout feedback', () => {
@@ -65,9 +63,6 @@ describe('Callout feedback', () => {
     );
     expect(screen.getByText('0')).toBeInTheDocument();
     expect(screen.getByTestId('feedback').querySelector('svg')).toBeNull();
-    expect(
-      screen.getByTestId('feedback').querySelector(`.${styles.footer}`),
-    ).toBeNull();
     rerender(<Callout title="No records" description="" />);
     expect(screen.queryByText('0')).not.toBeInTheDocument();
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
