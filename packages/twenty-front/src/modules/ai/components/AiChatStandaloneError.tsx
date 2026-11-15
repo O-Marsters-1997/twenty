@@ -1,6 +1,4 @@
-import { StyledAiChatContentContainer } from '@/ai/components/StyledAiChatContentContainer';
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { aiChatContentContainerStyles } from '@/ai/components/StyledAiChatContentContainer';
 
 import { AiChatErrorRenderer } from '@/ai/components/AiChatErrorRenderer';
 import { agentChatErrorFamilyState } from '@/ai/states/agentChatErrorFamilyState';
@@ -10,13 +8,17 @@ import { agentChatDisplayedThreadState } from '@/ai/states/agentChatDisplayedThr
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { isDefined } from 'twenty-shared/utils';
 import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledErrorContainer = styled(StyledAiChatContentContainer)`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  padding: ${themeCssVariables.spacing[3]};
-`;
+const styles = stylex.create({
+  root: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    padding: spacing['--t-spacing-3'],
+  },
+});
 
 export const AiChatStandaloneError = () => {
   const agentChatIsLoading = useAtomStateValue(agentChatIsLoadingSelector);
@@ -38,8 +40,10 @@ export const AiChatStandaloneError = () => {
   }
 
   return (
-    <StyledErrorContainer>
+    <div
+      {...stylex.props(aiChatContentContainerStyles.root, styles.root)}
+    >
       <AiChatErrorRenderer error={agentChatError} />
-    </StyledErrorContainer>
+    </div>
   );
 };

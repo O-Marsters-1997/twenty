@@ -2,7 +2,6 @@ import { useLingui } from '@lingui/react/macro';
 import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMemberState';
 import { currentWorkspaceMembersState } from '@/auth/states/currentWorkspaceMembersState';
 import { useAiChatSentMessageHandOff } from '@/ai/hooks/useAiChatSentMessageHandOff';
-import { styled } from '@linaria/react';
 import { type ReactNode } from 'react';
 
 import { AgentChatFilePreview } from '@/ai/components/internal/AgentChatFilePreview';
@@ -29,110 +28,69 @@ import { useAtomFamilySelectorValue } from '@/ui/utilities/state/jotai/hooks/use
 import { useIsFeatureEnabled } from '@/workspace/hooks/useIsFeatureEnabled';
 import { FeatureFlagKey } from '~/generated-metadata/graphql';
 import * as stylex from '@stylexjs/stylex';
-import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
+import { animationDuration, background, borderRadius, fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
+import '~/third-party-styles/ai-chat-content.css';
 
-const StyledMessageBubble = styled.div<{ isUser?: boolean }>`
-  align-items: ${({ isUser }) => (isUser ? 'flex-end' : 'flex-start')};
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  width: 100%;
-
-  &:hover .message-footer {
-    opacity: 1;
-    pointer-events: auto;
-  }
-`;
-
-const StyledMessageText = styled.div<{ isUser?: boolean }>`
-  background: ${({ isUser }) =>
-    isUser ? themeCssVariables.background.tertiary : 'transparent'};
-  border-radius: ${({ isUser }) =>
-    isUser ? themeCssVariables.border.radius.lg : '0'};
-  color: ${themeCssVariables.font.color.primary};
-  font-weight: ${({ isUser }) => (isUser ? 500 : 400)};
-  line-height: 1.4em;
-  max-width: 100%;
-  overflow-wrap: break-word;
-  padding: ${({ isUser }) =>
-    isUser ? `0 ${themeCssVariables.spacing[2]}` : '0'};
-  white-space: normal;
-  width: ${({ isUser }) => (isUser ? 'fit-content' : '100%')};
-  /* Pre-wrap on the container turns newlines between blocks into spacing; only code pre-wraps. */
-  word-wrap: break-word;
-
-  code {
-    background: ${themeCssVariables.background.tertiary};
-    border-radius: ${themeCssVariables.border.radius.sm};
-    line-height: 1.4;
-    max-width: 100%;
-    overflow: auto;
-    padding: 1px 3px;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-  }
-
-  pre {
-    background: ${themeCssVariables.background.tertiary};
-    border-radius: ${themeCssVariables.border.radius.sm};
-    max-width: 100%;
-    overflow-x: auto;
-    padding: ${themeCssVariables.spacing[2]};
-
-    code {
-      background: none;
-      border-radius: 0;
-      padding: 0;
-    }
-  }
-
-  p {
-    line-height: 1.4em;
-    margin-block: ${({ isUser }) =>
-      isUser ? '0' : themeCssVariables.spacing[1]};
-  }
-
-  ul,
-  ol {
-    line-height: 1.4em;
-    margin: ${themeCssVariables.spacing[1]} 0;
-    padding-left: ${themeCssVariables.spacing[4]};
-  }
-
-  ul {
-    list-style-type: disc;
-  }
-
-  li {
-    line-height: 1.4em;
-    margin: ${themeCssVariables.spacing['0.5']} 0;
-    padding-bottom: ${themeCssVariables.spacing['0.5']};
-    padding-top: ${themeCssVariables.spacing['0.5']};
-  }
-
-  blockquote {
-    border-left: 3px solid ${themeCssVariables.border.color.medium};
-    color: ${themeCssVariables.font.color.secondary};
-    margin: ${themeCssVariables.spacing[2]} 0;
-    padding-left: ${themeCssVariables.spacing[2]};
-  }
-`;
-
-const StyledMessageFooter = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.secondary};
-  display: flex;
-  font-size: ${themeCssVariables.font.size.sm};
-  justify-content: space-between;
-  margin-top: ${themeCssVariables.spacing[1]};
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity calc(${themeCssVariables.animation.duration.normal} * 1s)
-    ease-in-out;
-  width: 100%;
-`;
+const bubbleMarker = stylex.defineMarker();
 
 const styles = stylex.create({
+  bubble: {
+    alignItems: 'flex-start',
+    display: 'flex',
+    flexDirection: 'column',
+    position: 'relative',
+    width: '100%',
+  },
+  bubbleUser: {
+    alignItems: 'flex-end',
+  },
+  messageText: {
+    backgroundColor: 'transparent',
+    borderRadius: 0,
+    color: fontColor['--t-font-color-primary'],
+    fontWeight: 400,
+    lineHeight: '1.4em',
+    maxWidth: '100%',
+    overflowWrap: 'break-word',
+    paddingBlock: 0,
+    paddingInline: 0,
+    whiteSpace: 'normal',
+    width: '100%',
+    wordWrap: 'break-word',
+  },
+  messageTextUser: {
+    backgroundColor: background['--t-background-tertiary'],
+    borderRadius: borderRadius['--t-border-radius-lg'],
+    fontWeight: 500,
+    paddingInline: spacing['--t-spacing-2'],
+    width: 'fit-content',
+  },
+  messageFooter: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-secondary'],
+    display: 'flex',
+    fontSize: fontSize['--t-font-size-sm'],
+    justifyContent: 'space-between',
+    marginTop: spacing['--t-spacing-1'],
+    opacity: { default: 0, [stylex.when.ancestor(':hover', bubbleMarker)]: 1 },
+    pointerEvents: {
+      default: 'none',
+      [stylex.when.ancestor(':hover', bubbleMarker)]: 'auto',
+    },
+    transitionDuration: `calc(${animationDuration['--t-animation-duration-normal']} * 1s)`,
+    transitionProperty: 'opacity',
+    transitionTimingFunction: 'ease-in-out',
+    width: '100%',
+  },
+  messageContainer: {
+    maxWidth: '100%',
+    minWidth: 0,
+    width: '100%',
+  },
+  messageContainerUser: {
+    width: 'fit-content',
+  },
   sender: {
     color: fontColor['--t-font-color-secondary'],
     fontSize: fontSize['--t-font-size-sm'],
@@ -150,12 +108,6 @@ const styles = stylex.create({
   },
 });
 
-const StyledMessageContainer = styled.div<{ isUser?: boolean }>`
-  max-width: 100%;
-  min-width: 0;
-  width: ${({ isUser }) => (isUser ? 'fit-content' : '100%')};
-`;
-
 type AiChatUserMessageTextProps = {
   messageId: string;
   children: ReactNode;
@@ -168,9 +120,12 @@ const AiChatUserMessageText = ({
   const sentMessageHandOffRef = useAiChatSentMessageHandOff(messageId);
 
   return (
-    <StyledMessageText isUser ref={sentMessageHandOffRef}>
-      {children}
-    </StyledMessageText>
+    <div
+      ref={sentMessageHandOffRef}
+      {...stylex.props(styles.messageText, styles.messageTextUser)}
+    >
+      <div className="chat-message-text chat-message-text-user">{children}</div>
+    </div>
   );
 };
 
@@ -247,17 +202,30 @@ export const AiChatMessage = ({
           noMargin
         >{t`New`}</LabeledDivider>
       )}
-      <StyledMessageBubble isUser={isUser}>
+      <div
+        {...stylex.props(
+          styles.bubble,
+          bubbleMarker,
+          isUser && styles.bubbleUser,
+        )}
+      >
         {isUser && isDefined(senderId) && (
           <div {...stylex.props(styles.sender)}>{senderLabel}</div>
         )}
-        <StyledMessageContainer isUser={isUser}>
+        <div
+          {...stylex.props(
+            styles.messageContainer,
+            isUser && styles.messageContainerUser,
+          )}
+        >
           {isUser ? (
             <AiChatUserMessageText messageId={messageId}>
               {messageContent}
             </AiChatUserMessageText>
           ) : (
-            <StyledMessageText>{messageContent}</StyledMessageText>
+            <div {...stylex.props(styles.messageText)}>
+              <div className="chat-message-text">{messageContent}</div>
+            </div>
           )}
           {fileParts.length > 0 && (
             <div {...stylex.props(styles.filesContainer)}>
@@ -267,9 +235,9 @@ export const AiChatMessage = ({
             </div>
           )}
           {shouldShowError && <AiChatErrorRenderer error={error} />}
-        </StyledMessageContainer>
+        </div>
         {agentChatMessage.parts.length > 0 && (
-          <StyledMessageFooter className="message-footer">
+          <div {...stylex.props(styles.messageFooter)}>
             <span {...stylex.props(styles.messageTimestamp)}>
               {beautifyPastDateRelativeToNow(
                 agentChatMessage.metadata?.createdAt ?? new Date(),
@@ -282,9 +250,9 @@ export const AiChatMessage = ({
                   ?.text ?? ''
               }
             />
-          </StyledMessageFooter>
+          </div>
         )}
-      </StyledMessageBubble>
+      </div>
     </>
   );
 };

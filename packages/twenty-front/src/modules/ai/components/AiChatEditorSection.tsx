@@ -1,9 +1,6 @@
 import { useCurrentAiChatThreadAccess } from '@/ai/hooks/useCurrentAiChatThreadAccess';
-import { StyledAiChatContentContainer } from '@/ai/components/StyledAiChatContentContainer';
-import { styled } from '@linaria/react';
 import { EditorContent } from '@tiptap/react';
 import { useLingui } from '@lingui/react/macro';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { AiChatInlineBanner } from '@/ai/components/AiChatInlineBanner';
 import { AiChatEmptyState } from '@/ai/components/AiChatEmptyState';
@@ -23,106 +20,77 @@ import { aiModelsState } from '@/client-config/states/aiModelsState';
 import { useIsMobile } from 'twenty-ui/utilities';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import * as stylex from '@stylexjs/stylex';
-
-const StyledInputArea = styled(StyledAiChatContentContainer)<{
-  isMobile: boolean;
-}>`
-  align-items: flex-end;
-  background: ${themeCssVariables.background.primary};
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-  gap: ${themeCssVariables.spacing[2]};
-  margin-top: auto;
-  padding-block: ${({ isMobile }) =>
-    isMobile ? '0' : themeCssVariables.spacing[3]};
-  padding-inline: ${themeCssVariables.spacing[3]};
-`;
-
-const StyledInputBox = styled.div<{ isMobile: boolean }>`
-  background-color: ${themeCssVariables.background.transparent.lighter};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: calc(
-    ${themeCssVariables.border.radius.md} + ${themeCssVariables.spacing[1]}
-  );
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  min-height: ${({ isMobile }) => (isMobile ? 'auto' : '140px')};
-  padding: ${themeCssVariables.spacing[2]};
-  width: 100%;
-
-  &:focus-within {
-    border-color: ${themeCssVariables.color.blue};
-    box-shadow: 0px 0px 0px 3px ${themeCssVariables.color.transparent.blue2};
-  }
-`;
-
-const StyledEditorWrapper = styled.div<{ isMobile: boolean }>`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-height: 0;
-
-  .tiptap {
-    background: transparent;
-    border: none;
-    box-shadow: none;
-    color: ${themeCssVariables.font.color.primary};
-    font-family: inherit;
-    font-size: ${themeCssVariables.font.size.md};
-    font-weight: ${themeCssVariables.font.weight.regular};
-    line-height: 16px;
-    max-height: ${({ isMobile }) => (isMobile ? '160px' : '320px')};
-    min-height: ${({ isMobile }) => (isMobile ? 'auto' : '48px')};
-    outline: none;
-    overflow-y: auto;
-    padding: 0;
-
-    p {
-      margin: 0;
-    }
-
-    p.is-editor-empty:first-of-type::before {
-      color: ${themeCssVariables.font.color.light};
-      content: attr(data-placeholder);
-      float: left;
-      font-weight: ${themeCssVariables.font.weight.regular};
-      height: 0;
-      pointer-events: none;
-    }
-  }
-`;
+import { animationDuration, background, backgroundTransparent, borderColor, borderRadius, color, colorTransparent, spacing } from 'twenty-ui/theme/tokens.stylex';
+import { aiChatContentContainerStyles } from '@/ai/components/StyledAiChatContentContainer';
+import '~/third-party-styles/ai-chat-content.css';
+import { media } from 'twenty-ui/theme/constants.stylex';
 
 const styles = stylex.create({
+  inputArea: {
+    alignItems: 'flex-end',
+    backgroundColor: background['--t-background-primary'],
+    display: 'flex',
+    flexDirection: 'column',
+    flexShrink: 0,
+    gap: spacing['--t-spacing-2'],
+    marginTop: 'auto',
+    paddingBlock: spacing['--t-spacing-3'],
+    paddingInline: spacing['--t-spacing-3'],
+  },
+  inputAreaMobile: {
+    paddingBlock: 0,
+  },
+  inputBox: {
+    backgroundColor: backgroundTransparent['--t-background-transparent-lighter'],
+    borderColor: {
+      default: borderColor['--t-border-color-medium'],
+      ':focus-within': color['--t-color-blue'],
+    },
+    borderRadius: `calc(${borderRadius['--t-border-radius-md']} + ${spacing['--t-spacing-1']})`,
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    boxShadow: {
+      default: null,
+      ':focus-within': `0px 0px 0px 3px ${colorTransparent['--t-color-transparent-blue2']}`,
+    },
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    minHeight: '140px',
+    padding: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+  inputBoxMobile: {
+    minHeight: 'auto',
+  },
+  editorWrapper: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    minHeight: 0,
+  },
+  composerBottomSpacer: {
+    flexBasis: 0,
+    flexGrow: 0,
+    flexShrink: 0,
+    transitionDuration: `calc(${animationDuration['--t-animation-duration-normal']} * 1s)`,
+    transitionProperty: {
+      default: 'flex-grow',
+      [media.reducedMotion]: 'none',
+    },
+    transitionTimingFunction: 'ease-out',
+  },
+  composerBottomSpacerCentered: {
+    flexGrow: 1,
+    transitionProperty: 'none',
+  },
   messageListPlaceholder: {
     display: 'flex',
     flex: '1',
     flexDirection: 'column',
   },
 });
-
-const StyledComposerBottomSpacer = styled.div`
-  flex-basis: 0;
-  flex-grow: 0;
-  flex-shrink: 0;
-  transition-duration: calc(
-    ${themeCssVariables.animation.duration.normal} * 1s
-  );
-  transition-property: flex-grow;
-  transition-timing-function: ease-out;
-
-  // Only the collapse animates: re-centering on a thread switch would trail the content change.
-  &.is-centered {
-    flex-grow: 1;
-    transition-property: none;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    transition-property: none;
-  }
-`;
 
 const EditableAiChatEditorSection = () => {
   const { t } = useLingui();
@@ -134,10 +102,17 @@ const EditableAiChatEditorSection = () => {
   const { editor, handleSendAndClear } = useAiChatEditor();
 
   const composer = (
-    <StyledInputBox isMobile={isMobile}>
-      <StyledEditorWrapper isMobile={isMobile}>
-        <EditorContent editor={editor} />
-      </StyledEditorWrapper>
+    <div
+      {...stylex.props(styles.inputBox, isMobile && styles.inputBoxMobile)}
+    >
+      <div {...stylex.props(styles.editorWrapper)}>
+        <EditorContent
+          className={
+            isMobile ? 'ai-chat-editor ai-chat-editor-mobile' : 'ai-chat-editor'
+          }
+          editor={editor}
+        />
+      </div>
       <AiChatComposerActionsRow
         leftActions={<AiChatAddMenu editor={editor} />}
         modelTierDropdownId="ai-chat-model-tier-dropdown"
@@ -148,7 +123,7 @@ const EditableAiChatEditorSection = () => {
           />
         }
       />
-    </StyledInputBox>
+    </div>
   );
   const agentChatHasMessage = useAtomStateValue(agentChatHasMessageSelector);
 
@@ -166,16 +141,25 @@ const EditableAiChatEditorSection = () => {
         </div>
       )}
 
-      <StyledInputArea isMobile={isMobile}>
+      <div
+      {...stylex.props(
+        aiChatContentContainerStyles.root,
+        styles.inputArea,
+        isMobile && styles.inputAreaMobile,
+      )}
+    >
         <AgentChatContextPreview />
         {hasNoEnabledModels && (
           <AiChatInlineBanner>{t`No AI provider is configured on this instance.`}</AiChatInlineBanner>
         )}
         <AiChatParticipantMentionBar editor={editor} />
         <AiChatPendingAskGate>{composer}</AiChatPendingAskGate>
-      </StyledInputArea>
-      <StyledComposerBottomSpacer
-        className={isComposerCentered ? 'is-centered' : undefined}
+      </div>
+      <div
+        {...stylex.props(
+          styles.composerBottomSpacer,
+          isComposerCentered && styles.composerBottomSpacerCentered,
+        )}
       />
     </>
   );
@@ -187,7 +171,13 @@ export const AiChatEditorSection = () => {
   const access = useCurrentAiChatThreadAccess();
   if (access !== 'writer') {
     return (
-      <StyledInputArea isMobile={isMobile}>
+      <div
+      {...stylex.props(
+        aiChatContentContainerStyles.root,
+        styles.inputArea,
+        isMobile && styles.inputAreaMobile,
+      )}
+    >
         <div role="status">
           {access === 'loading'
             ? t`Loading conversation…`
@@ -196,7 +186,7 @@ export const AiChatEditorSection = () => {
               : t`View only — You can read this conversation.`}
         </div>
         <AiChatStandaloneError />
-      </StyledInputArea>
+      </div>
     );
   }
   return <EditableAiChatEditorSection />;

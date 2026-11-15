@@ -1,15 +1,73 @@
 import { MONOSPACE_FONT_FAMILY } from '@/ui/theme/constants/MonospaceFontFamily';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useState } from 'react';
 import { LightIconButton } from 'twenty-ui/components/input';
 import { IconCopy, IconTerminal } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard';
 import * as stylex from '@stylexjs/stylex';
-import { background, borderColor, borderRadius, fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
+import { background, borderColor, borderRadius, color, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
+
+const blink = stylex.keyframes({
+  '0%': { opacity: 1 },
+  '50%': { opacity: 0 },
+  '100%': { opacity: 1 },
+});
 
 const styles = stylex.create({
+  tab: {
+    backgroundColor: {
+      default: 'transparent',
+      ':hover': background['--t-background-secondary'],
+    },
+    borderRadius: borderRadius['--t-border-radius-xs'],
+    borderStyle: 'none',
+    color: {
+      default: fontColor['--t-font-color-tertiary'],
+      ':hover': fontColor['--t-font-color-primary'],
+    },
+    cursor: 'pointer',
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    paddingBlock: spacing['--t-spacing-0_5'],
+    paddingInline: spacing['--t-spacing-1'],
+  },
+  tabActive: {
+    backgroundColor: background['--t-background-secondary'],
+    color: fontColor['--t-font-color-primary'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+  },
+  tabError: {
+    color: color['--t-color-red'],
+  },
+  outputArea: {
+    backgroundColor: background['--t-background-tertiary'],
+    color: fontColor['--t-font-color-primary'],
+    fontFamily: MONOSPACE_FONT_FAMILY,
+    fontSize: fontSize['--t-font-size-sm'],
+    lineHeight: 1.5,
+    maxHeight: '300px',
+    minHeight: '100px',
+    overflowY: 'auto',
+    padding: spacing['--t-spacing-2'],
+    whiteSpace: 'pre-wrap',
+    wordBreak: 'break-word',
+  },
+  outputAreaError: {
+    color: color['--t-color-red'],
+  },
+  cursor: {
+    animationDuration: '1s',
+    animationIterationCount: 'infinite',
+    animationName: blink,
+    animationTimingFunction: 'step-end',
+    backgroundColor: fontColor['--t-font-color-primary'],
+    display: 'inline-block',
+    height: '1em',
+    marginLeft: '2px',
+    verticalAlign: 'text-bottom',
+    width: '8px',
+  },
   container: {
     borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
     borderTopRightRadius: borderRadius['--t-border-radius-sm'],
@@ -50,71 +108,6 @@ const styles = stylex.create({
   },
 });
 
-const StyledTab = styled.button<{ isActive: boolean; hasError?: boolean }>`
-  background: ${({ isActive }) =>
-    isActive ? themeCssVariables.background.secondary : 'transparent'};
-  border: none;
-  border-radius: ${themeCssVariables.border.radius.xs};
-  color: ${({ isActive, hasError }) =>
-    hasError
-      ? themeCssVariables.color.red
-      : isActive
-        ? themeCssVariables.font.color.primary
-        : themeCssVariables.font.color.tertiary};
-  cursor: pointer;
-  font-size: ${themeCssVariables.font.size.xs};
-  font-weight: ${({ isActive }) =>
-    isActive
-      ? themeCssVariables.font.weight.medium
-      : themeCssVariables.font.weight.regular};
-  padding: ${themeCssVariables.spacing['0.5']} ${themeCssVariables.spacing[1]};
-
-  &:hover {
-    background: ${themeCssVariables.background.secondary};
-    color: ${({ hasError }) =>
-      hasError
-        ? themeCssVariables.color.red
-        : themeCssVariables.font.color.primary};
-  }
-`;
-
-const StyledOutputArea = styled.div<{ isError?: boolean }>`
-  background: ${themeCssVariables.background.tertiary};
-  color: ${({ isError }) =>
-    isError
-      ? themeCssVariables.color.red
-      : themeCssVariables.font.color.primary};
-  font-family: ${MONOSPACE_FONT_FAMILY};
-  font-size: ${themeCssVariables.font.size.sm};
-  line-height: 1.5;
-  max-height: 300px;
-  min-height: 100px;
-  overflow-y: auto;
-  padding: ${themeCssVariables.spacing[2]};
-  white-space: pre-wrap;
-  word-break: break-word;
-`;
-
-const StyledCursor = styled.span`
-  animation: blink 1s step-end infinite;
-  background: ${themeCssVariables.font.color.primary};
-  display: inline-block;
-  height: 1em;
-  margin-left: 2px;
-  vertical-align: text-bottom;
-  width: 8px;
-
-  @keyframes blink {
-    0%,
-    100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0;
-    }
-  }
-`;
-
 type TabType = 'stdout' | 'stderr';
 
 type TerminalOutputProps = {
@@ -148,20 +141,26 @@ export const TerminalOutput = ({
           {t`Output`}
         </div>
         <div {...stylex.props(styles.tabContainer)}>
-          <StyledTab
-            isActive={activeTab === 'stdout'}
+          <button
+            {...stylex.props(
+              styles.tab,
+              activeTab === 'stdout' && styles.tabActive,
+            )}
             onClick={() => setUserSelectedTab('stdout')}
           >
             stdout
-          </StyledTab>
+          </button>
           {hasStderr && (
-            <StyledTab
-              isActive={activeTab === 'stderr'}
-              hasError
+            <button
+              {...stylex.props(
+                styles.tab,
+                activeTab === 'stderr' && styles.tabActive,
+                styles.tabError,
+              )}
               onClick={() => setUserSelectedTab('stderr')}
             >
               stderr
-            </StyledTab>
+            </button>
           )}
           <LightIconButton
             onClick={() => copyToClipboard(currentOutput)}
@@ -174,18 +173,23 @@ export const TerminalOutput = ({
           </LightIconButton>
         </div>
       </div>
-      <StyledOutputArea isError={activeTab === 'stderr'}>
+      <div
+        {...stylex.props(
+          styles.outputArea,
+          activeTab === 'stderr' && styles.outputAreaError,
+        )}
+      >
         {currentOutput ? (
           <>
             {currentOutput}
-            {isRunning && <StyledCursor />}
+            {isRunning && <span {...stylex.props(styles.cursor)} />}
           </>
         ) : (
           <div {...stylex.props(styles.emptyMessage)}>
             {isRunning ? t`Waiting for output...` : t`No output`}
           </div>
         )}
-      </StyledOutputArea>
+      </div>
     </div>
   );
 };

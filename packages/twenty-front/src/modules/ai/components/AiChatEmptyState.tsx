@@ -1,16 +1,18 @@
 import { MarkdownRenderer } from '@/ai/components/MarkdownRenderer';
-import { StyledAiChatContentContainer } from '@/ai/components/StyledAiChatContentContainer';
-import { styled } from '@linaria/react';
+import { aiChatContentContainerStyles } from '@/ai/components/StyledAiChatContentContainer';
 
 import { AiChatSuggestedPrompts } from '@/ai/components/suggested-prompts/AiChatSuggestedPrompts';
 import { useShouldShowAiChatEmptyState } from '@/ai/hooks/useShouldShowAiChatEmptyState';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledEmptyState = styled(StyledAiChatContentContainer)`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  justify-content: flex-end;
-`;
+const styles = stylex.create({
+  root: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+  },
+});
 
 type AiChatEmptyStateProps = {
   isCentered?: boolean;
@@ -28,8 +30,10 @@ export const AiChatEmptyState = ({
   }
 
   return (
-    <StyledEmptyState>
+    <div
+      {...stylex.props(aiChatContentContainerStyles.root, styles.root)}
+    >
       <AiChatSuggestedPrompts isCentered={isCentered} />
-    </StyledEmptyState>
+    </div>
   );
 };

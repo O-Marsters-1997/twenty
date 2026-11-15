@@ -1,8 +1,6 @@
 import { useIsWorkspaceSetupChat } from '@/ai/hooks/useIsWorkspaceSetupChat';
 import { WorkspaceSetupChatKickoffEffect } from '@/onboarding/effect-components/WorkspaceSetupChatKickoffEffect';
-import { styled } from '@linaria/react';
 import { type DragEvent, useState } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { DropZone } from '@/activities/files/components/DropZone';
 import { AgentChatHasBeenOpenedEffect } from '@/ai/components/AgentChatHasBeenOpenedEffect';
@@ -15,16 +13,22 @@ import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomState
 
 import { AiChatQueuedMessages } from '@/ai/components/AiChatQueuedMessages';
 import { AiChatTabMessageList } from '@/ai/components/AiChatTabMessageList';
+import * as stylex from '@stylexjs/stylex';
+import { background, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div<{ isDraggingFile: boolean }>`
-  background: ${themeCssVariables.background.primary};
-  display: flex;
-  flex-direction: column;
-  height: ${({ isDraggingFile }) =>
-    isDraggingFile ? `calc(100% - 24px)` : '100%'};
-  padding: ${({ isDraggingFile }) =>
-    isDraggingFile ? themeCssVariables.spacing[3] : '0'};
-`;
+const styles = stylex.create({
+  container: {
+    backgroundColor: background['--t-background-primary'],
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    padding: 0,
+  },
+  containerDragging: {
+    height: 'calc(100% - 24px)',
+    padding: spacing['--t-spacing-3'],
+  },
+});
 
 export const AiChatTab = () => {
   const isWorkspaceSetupChat = useIsWorkspaceSetupChat();
@@ -50,8 +54,11 @@ export const AiChatTab = () => {
   };
 
   return (
-    <StyledContainer
-      isDraggingFile={isDraggingFile}
+    <div
+      {...stylex.props(
+        styles.container,
+        isDraggingFile && styles.containerDragging,
+      )}
       onDragEnter={() => setIsDraggingFile(true)}
       onDragLeave={handleDragLeave}
       onDragOver={(event) => event.preventDefault()}
@@ -74,6 +81,6 @@ export const AiChatTab = () => {
           <AiChatEditorSection key={currentAiChatThread} />
         </>
       )}
-    </StyledContainer>
+    </div>
   );
 };

@@ -9,8 +9,9 @@ import { isDefined } from 'twenty-shared/utils';
 import { IconMail, IconTool } from 'twenty-ui/icon';
 
 import { AiChatAskStatusRow } from '@/ai/components/AiChatAskStatusRow';
-import { StyledAiChatAskStatusDetail } from '@/ai/components/AiChatAskStyledComponents';
+import { aiChatAskStyles } from '@/ai/components/AiChatAskStyledComponents';
 import { TextWithChatReferences } from '@/ai/components/TextWithChatReferences';
+import * as stylex from '@stylexjs/stylex';
 
 export const AiChatToolCallApprovalStatusRenderer = ({
   toolPart,
@@ -72,9 +73,9 @@ export const AiChatToolCallApprovalStatusRenderer = ({
       }
     >
       {isNonEmptyString(detail) && (
-        <StyledAiChatAskStatusDetail>
+        <span {...stylex.props(aiChatAskStyles.statusDetail)}>
           <TextWithChatReferences text={detail} />
-        </StyledAiChatAskStatusDetail>
+        </span>
       )}
     </AiChatAskStatusRow>
   );

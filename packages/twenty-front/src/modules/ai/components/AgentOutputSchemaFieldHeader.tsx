@@ -1,12 +1,13 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { isDefined } from 'twenty-shared/utils';
 import { LightIconButton } from 'twenty-ui/components/input';
 import { IconChevronDown, IconVariable, IconX } from 'twenty-ui/icon';
-import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { backgroundTransparent, borderRadius, color, fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
+import { animationDuration, backgroundTransparent, borderColor, borderRadius, color, fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
 
 type AgentOutputSchemaFieldHeaderProps = {
   name: string;
@@ -15,18 +16,45 @@ type AgentOutputSchemaFieldHeaderProps = {
   onRemove?: () => void;
 };
 
-const StyledHeader = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  padding-right: ${themeCssVariables.spacing[1]};
-
-  &[data-expanded='true'] {
-    box-shadow: inset 0 -1px 0 ${themeCssVariables.border.color.medium};
-  }
-`;
-
 const styles = stylex.create({
+  header: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+  },
+  headerExpanded: {
+    boxShadow: `inset 0 -1px 0 ${borderColor['--t-border-color-medium']}`,
+  },
+  title: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    minWidth: 0,
+  },
+  titleIcon: {
+    display: 'flex',
+    flexShrink: 0,
+  },
+  chevron: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-secondary'],
+    display: 'flex',
+    flexShrink: 0,
+    height: spacing['--t-spacing-6'],
+    justifyContent: 'center',
+    transform: 'rotate(0deg)',
+    transitionDuration: `calc(${animationDuration['--t-animation-duration-normal']} * 1s)`,
+    transitionProperty: {
+      default: 'transform',
+      [media.reducedMotion]: 'none',
+    },
+    transitionTimingFunction: 'ease',
+    width: spacing['--t-spacing-6'],
+  },
+  chevronExpanded: {
+    transform: 'rotate(-180deg)',
+  },
   toggle: {
     alignItems: 'center',
     borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
@@ -53,37 +81,6 @@ const styles = stylex.create({
   },
 });
 
-const StyledTitle = styled.span`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  min-width: 0;
-
-  & > svg {
-    flex-shrink: 0;
-  }
-`;
-
-const StyledChevron = styled.span`
-  align-items: center;
-  color: ${themeCssVariables.font.color.secondary};
-  display: flex;
-  flex-shrink: 0;
-  height: ${themeCssVariables.spacing[6]};
-  justify-content: center;
-  transition: transform
-    calc(${themeCssVariables.animation.duration.normal} * 1s) ease;
-  width: ${themeCssVariables.spacing[6]};
-
-  &[data-expanded='true'] {
-    transform: rotate(-180deg);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-  }
-`;
-
 export const AgentOutputSchemaFieldHeader = ({
   name,
   isExpanded,
@@ -93,17 +90,24 @@ export const AgentOutputSchemaFieldHeader = ({
   const theme = useTheme();
 
   return (
-    <StyledHeader data-expanded={isExpanded}>
+    <div
+      {...stylex.props(styles.header, isExpanded && styles.headerExpanded)}
+    >
       <button type="button" aria-expanded={isExpanded} onClick={onToggle} {...stylex.props(styles.toggle)}>
-        <StyledTitle>
-          <IconVariable size={theme.icon.size.sm} aria-hidden />
+        <span {...stylex.props(styles.title)}>
+          <span {...stylex.props(styles.titleIcon)}>
+            <IconVariable size={theme.icon.size.sm} aria-hidden />
+          </span>
           <span {...stylex.props(styles.name)}>
             {isNonEmptyString(name) ? name : t`Untitled field`}
           </span>
-        </StyledTitle>
-        <StyledChevron data-expanded={isExpanded} aria-hidden>
+        </span>
+        <span
+          {...stylex.props(styles.chevron, isExpanded && styles.chevronExpanded)}
+          aria-hidden
+        >
           <IconChevronDown size={theme.icon.size.sm} />
-        </StyledChevron>
+        </span>
       </button>
       {isDefined(onRemove) && (
         <LightIconButton
@@ -115,6 +119,6 @@ export const AgentOutputSchemaFieldHeader = ({
           <IconX />
         </LightIconButton>
       )}
-    </StyledHeader>
+    </div>
   );
 };

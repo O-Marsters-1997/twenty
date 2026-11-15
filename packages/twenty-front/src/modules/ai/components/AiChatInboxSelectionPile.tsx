@@ -1,5 +1,3 @@
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { AiChatThreadActivityTime } from '@/ai/components/AiChatThreadActivityTime';
 import { AiChatThreadAvatar } from '@/ai/components/AiChatThreadAvatar';
@@ -8,9 +6,27 @@ import { AiChatThreadTitle } from '@/ai/components/AiChatThreadTitle';
 import { AI_CHAT_INBOX_SELECTION_PILE_MAX_CARDS } from '@/ai/constants/AiChatInboxSelectionPileMaxCards';
 import { type AgentChatThreadRecord } from '@/ai/types/AgentChatThreadRecord';
 import * as stylex from '@stylexjs/stylex';
-import { spacing } from 'twenty-ui/theme/tokens.stylex';
+import { background, borderColor, borderRadius, boxShadow, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
+  card: (depth: number) => ({
+    alignItems: 'flex-start',
+    backgroundColor: background['--t-background-primary'],
+    borderColor: borderColor['--t-border-color-light'],
+    borderRadius: borderRadius['--t-border-radius-md'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    boxShadow: boxShadow['--t-box-shadow-light'],
+    display: 'flex',
+    gap: spacing['--t-spacing-3'],
+    marginBlock: 0,
+    marginInline: `calc(${spacing['--t-spacing-3']} * ${depth})`,
+    padding: spacing['--t-spacing-4'],
+    textAlign: 'left',
+  }),
+  cardStacked: {
+    marginTop: `calc(-1 * ${spacing['--t-spacing-8']})`,
+  },
   pile: {
     display: 'flex',
     flexDirection: 'column',
@@ -38,25 +54,6 @@ const styles = stylex.create({
   },
 });
 
-// Each card sits a step lower and wider than the one behind it, leaving the
-// title of the cards behind in view
-const StyledCard = styled.div<{ $depth: number }>`
-  align-items: flex-start;
-  background: ${themeCssVariables.background.primary};
-  border: 1px solid ${themeCssVariables.border.color.light};
-  border-radius: ${themeCssVariables.border.radius.md};
-  box-shadow: ${themeCssVariables.boxShadow.light};
-  display: flex;
-  gap: ${themeCssVariables.spacing[3]};
-  margin: 0 calc(${themeCssVariables.spacing[3]} * ${({ $depth }) => $depth});
-  padding: ${themeCssVariables.spacing[4]};
-  text-align: left;
-
-  & + & {
-    margin-top: calc(-1 * ${themeCssVariables.spacing[8]});
-  }
-`;
-
 type AiChatInboxSelectionPileProps = {
   threads: AgentChatThreadRecord[];
 };
@@ -69,7 +66,13 @@ export const AiChatInboxSelectionPile = ({
   return (
     <div aria-hidden {...stylex.props(styles.pile)}>
       {pileThreads.map((thread, index) => (
-        <StyledCard key={thread.id} $depth={pileThreads.length - 1 - index}>
+        <div
+          key={thread.id}
+          {...stylex.props(
+            styles.card(pileThreads.length - 1 - index),
+            index > 0 && styles.cardStacked,
+          )}
+        >
           <div {...stylex.props(styles.leading)}>
             <AiChatThreadAvatar thread={thread} />
           </div>
@@ -80,7 +83,7 @@ export const AiChatInboxSelectionPile = ({
             </div>
             <AiChatThreadSubtitle thread={thread} />
           </div>
-        </StyledCard>
+        </div>
       ))}
     </div>
   );

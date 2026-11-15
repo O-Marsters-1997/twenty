@@ -7,7 +7,7 @@ import {
 import { isDefined } from 'twenty-shared/utils';
 import { Button } from 'twenty-ui/primitives/input';
 
-import { StyledAiChatAskCard } from '@/ai/components/AiChatAskStyledComponents';
+import { aiChatAskStyles } from '@/ai/components/AiChatAskStyledComponents';
 import { useAnswerAgentChatToolCall } from '@/ai/hooks/useAnswerAgentChatToolCall';
 import { WorkflowFormFields } from '@/workflow/workflow-steps/workflow-actions/form-action/components/WorkflowFormFields';
 import * as stylex from '@stylexjs/stylex';
@@ -67,7 +67,7 @@ export const AiChatFormCard = ({ toolCallId, fields }: AiChatFormCardProps) => {
   };
 
   return (
-    <StyledAiChatAskCard>
+    <div {...stylex.props(aiChatAskStyles.card)}>
       <div {...stylex.props(styles.fields)}>
         <WorkflowFormFields
           fields={fields}
@@ -93,6 +93,6 @@ export const AiChatFormCard = ({ toolCallId, fields }: AiChatFormCardProps) => {
           {t`Submit`}
         </Button>
       </div>
-    </StyledAiChatAskCard>
+    </div>
   );
 };

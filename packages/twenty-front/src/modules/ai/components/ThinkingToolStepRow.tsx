@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { getToolName, type DynamicToolUIPart, type ToolUIPart } from 'ai';
@@ -9,7 +8,6 @@ import { IconChevronRight } from 'twenty-ui/icon';
 import { Collapsible } from 'twenty-ui/primitives/layout';
 import { Tabs } from 'twenty-ui/primitives/navigation';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { type JsonValue } from 'type-fest';
 
 import { ShimmeringText } from '@/ai/components/ShimmeringText';
@@ -26,9 +24,59 @@ import { TooltipDelay } from '@/ui/layout/tooltip/constants/TooltipDelay';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard';
 import * as stylex from '@stylexjs/stylex';
-import { animationDuration, background, backgroundTransparent, borderColor, borderRadius, fontColor, fontSize, fontWeight, iconSize, spacing, textLineHeight } from 'twenty-ui/theme/tokens.stylex';
+import { animationDuration, background, backgroundTransparent, borderColor, borderRadius, color, fontColor, fontSize, fontWeight, iconSize, spacing, textLineHeight } from 'twenty-ui/theme/tokens.stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
+import '~/third-party-styles/ai-chat-content.css';
 
 const styles = stylex.create({
+  chevron: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-light'],
+    display: 'flex',
+    justifyContent: 'center',
+    transform: 'rotate(0deg)',
+    transitionDuration: `calc(${animationDuration['--t-animation-duration-fast']} * 1s)`,
+    transitionProperty: 'transform',
+    transitionTimingFunction: 'ease-in-out',
+  },
+  chevronExpanded: {
+    transform: 'rotate(90deg)',
+  },
+  toolRowButton: {
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    borderStyle: 'none',
+    color: fontColor['--t-font-color-tertiary'],
+    cursor: 'default',
+    display: 'flex',
+    fontFamily: 'inherit',
+    gap: spacing['--t-spacing-2'],
+    minHeight: '24px',
+    outline: {
+      default: null,
+      ':focus-visible': `2px solid ${color['--t-color-blue']}`,
+    },
+    outlineOffset: { default: null, ':focus-visible': '2px' },
+    paddingBlock: 0,
+    paddingInline: 0,
+    textAlign: 'left',
+    transitionDuration: `calc(${animationDuration['--t-animation-duration-fast']} * 1s)`,
+    transitionProperty: 'color',
+    transitionTimingFunction: 'ease-in-out',
+    width: '100%',
+  },
+  toolRowButtonExpandable: {
+    color: {
+      default: fontColor['--t-font-color-tertiary'],
+      ':hover': fontColor['--t-font-color-primary'],
+    },
+    cursor: 'pointer',
+  },
+  shimmeringLabel: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
   toolRowLabel: {
     color: 'inherit',
     fontSize: fontSize['--t-font-size-md'],
@@ -106,65 +154,6 @@ const styles = stylex.create({
   },
 });
 
-const StyledChevronContainer = styled.div<{ isExpanded: boolean }>`
-  align-items: center;
-  color: ${themeCssVariables.font.color.light};
-  display: flex;
-  justify-content: center;
-  transform: rotate(${({ isExpanded }) => (isExpanded ? '90deg' : '0deg')});
-  transition: transform calc(${themeCssVariables.animation.duration.fast} * 1s)
-    ease-in-out;
-`;
-
-const StyledToolRowButton = styled.button<{ isExpandable: boolean }>`
-  align-items: center;
-  background: none;
-  border: none;
-  color: ${themeCssVariables.font.color.tertiary};
-  cursor: ${({ isExpandable }) => (isExpandable ? 'pointer' : 'default')};
-  display: flex;
-  font-family: inherit;
-  gap: ${themeCssVariables.spacing[2]};
-  min-height: 24px;
-  padding: 0;
-  text-align: left;
-  transition: color calc(${themeCssVariables.animation.duration.fast} * 1s)
-    ease-in-out;
-  width: 100%;
-
-  &:hover {
-    color: ${({ isExpandable }) =>
-      isExpandable
-        ? themeCssVariables.font.color.primary
-        : themeCssVariables.font.color.tertiary};
-  }
-
-  &:focus-visible {
-    outline: 2px solid ${themeCssVariables.color.blue};
-    outline-offset: 2px;
-  }
-`;
-
-const StyledShimmeringLabel = styled(ShimmeringText)`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledJsonTreeContainer = styled.div`
-  font-size: ${themeCssVariables.font.size.md};
-  overflow-x: auto;
-
-  li,
-  span {
-    line-height: 1;
-  }
-
-  ul {
-    min-width: 0;
-  }
-`;
-
 type ToolDetailsTab = 'output' | 'input';
 
 type ThinkingToolStepRowProps = {
@@ -216,9 +205,12 @@ export const ThinkingToolStepRow = ({
 
   return (
     <div {...stylex.props(styles.toolRowContainer)}>
-      <StyledToolRowButton
+      <button
         type="button"
-        isExpandable={isExpandable}
+        {...stylex.props(
+          styles.toolRowButton,
+          isExpandable && styles.toolRowButtonExpandable,
+        )}
         onClick={() => {
           if (!isExpandable) {
             return;
@@ -234,7 +226,9 @@ export const ThinkingToolStepRow = ({
         <div {...stylex.props(styles.rowLabelContainer)}>
           <div {...stylex.props(styles.toolRowLabel)}>
             {isActive ? (
-              <StyledShimmeringLabel>{displayMessage}</StyledShimmeringLabel>
+              <ShimmeringText xstyle={styles.shimmeringLabel}>
+                {displayMessage}
+              </ShimmeringText>
             ) : (
               <OverflowingTextWithTooltip
                 text={displayMessage}
@@ -243,12 +237,17 @@ export const ThinkingToolStepRow = ({
             )}
           </div>
           {isExpandable && (
-            <StyledChevronContainer isExpanded={isExpanded}>
+            <div
+              {...stylex.props(
+                styles.chevron,
+                isExpanded && styles.chevronExpanded,
+              )}
+            >
               <IconChevronRight size={14} />
-            </StyledChevronContainer>
+            </div>
           )}
         </div>
-      </StyledToolRowButton>
+      </button>
 
       {isExpandable && (
         <Collapsible.Root open={isExpanded}>
@@ -281,7 +280,7 @@ export const ThinkingToolStepRow = ({
                       value={activeTab}
                       render={<div {...stylex.props(styles.toolJsonContent)} />}
                     >
-                      <StyledJsonTreeContainer>
+                      <div className="json-tree-container">
                         <JsonTree
                           value={
                             (activeTab === 'output'
@@ -296,7 +295,7 @@ export const ThinkingToolStepRow = ({
                           arrowButtonExpandedLabel={t`Collapse`}
                           onNodeValueClick={copyToClipboard}
                         />
-                      </StyledJsonTreeContainer>
+                      </div>
                     </Tabs.Panel>
                   </div>
                 </TabListRoot>

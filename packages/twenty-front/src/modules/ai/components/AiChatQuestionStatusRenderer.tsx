@@ -11,10 +11,7 @@ import { AiChatAskStatusRow } from '@/ai/components/AiChatAskStatusRow';
 import { TextWithChatReferences } from '@/ai/components/TextWithChatReferences';
 import { getAskedQuestionEntries } from '@/ai/utils/getAskedQuestionEntries';
 import { getChatReferenceSegments } from '@/ai/utils/getChatReferenceSegments';
-import {
-  StyledAiChatAskStatusDetail,
-  StyledAiChatAskStatusMessage,
-} from '@/ai/components/AiChatAskStyledComponents';
+import { aiChatAskStyles } from '@/ai/components/AiChatAskStyledComponents';
 import * as stylex from '@stylexjs/stylex';
 import { backgroundTransparent, borderColor, borderRadius, fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
@@ -114,7 +111,7 @@ export const AiChatQuestionStatusRenderer = ({
 
   return (
     <div {...stylex.props(styles.answersCard)}>
-      <StyledAiChatAskStatusMessage>{t`Answers`}</StyledAiChatAskStatusMessage>
+      <span {...stylex.props(aiChatAskStyles.statusMessage)}>{t`Answers`}</span>
       {entries.map(({ question, answer }, index) => {
         const selectedLabels = (answer?.selectedOptionIndices ?? [])
           .map((optionIndex) => question.options[optionIndex]?.label)
@@ -134,9 +131,9 @@ export const AiChatQuestionStatusRenderer = ({
             <span {...stylex.props(styles.answerQuestion)}>
               <TextWithChatReferences text={question.question} />
             </span>
-            <StyledAiChatAskStatusDetail>
+            <span {...stylex.props(aiChatAskStyles.statusDetail)}>
               <TextWithChatReferences text={value} />
-            </StyledAiChatAskStatusDetail>
+            </span>
           </div>
         );
       })}

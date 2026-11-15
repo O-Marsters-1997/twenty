@@ -1,8 +1,4 @@
 import { SkeletonLine } from '@/ui/feedback/skeleton/components/SkeletonLine';
-import {
-  StyledMarkdownContainer,
-  StyledSkeletonContainer,
-} from '@/ai/components/LazyMarkdownRendererStyledComponents';
 import { MarkdownRenderer } from '@/ai/components/MarkdownRenderer';
 import { EMPTY_MARKDOWN_BLOCK_SPLIT_CACHE } from '@/ai/constants/EmptyMarkdownBlockSplitCache';
 import { getMarkdownBlocksIncrementally } from '@/ai/utils/getMarkdownBlocksIncrementally';
@@ -10,16 +6,17 @@ import { protectChatReferencesForMarkdown } from '@/ai/utils/protectChatReferenc
 import { memo, Suspense, useRef } from 'react';
 import { SKELETON_HEIGHT_SIZES } from 'twenty-ui/primitives/feedback';
 import { themeCssVariables } from 'twenty-ui/theme';
+import '~/third-party-styles/markdown.css';
 
 export const MarkdownLoadingSkeleton = () => {
   return (
-    <StyledSkeletonContainer>
+    <div className="markdown-skeleton">
       <SkeletonLine
         borderRadius={themeCssVariables.border.radius.smRound}
         width={200}
         height={SKELETON_HEIGHT_SIZES.s}
       />
-    </StyledSkeletonContainer>
+    </div>
   );
 };
 
@@ -53,7 +50,7 @@ export const LazyMarkdownContent = ({
   blockSplitCacheRef.current = cache;
 
   return (
-    <StyledMarkdownContainer
+    <div
       className="markdown-section"
       data-replay-ignore-mutations="true"
     >
@@ -64,7 +61,7 @@ export const LazyMarkdownContent = ({
           noImage={noImage}
         />
       ))}
-    </StyledMarkdownContainer>
+    </div>
   );
 };
 

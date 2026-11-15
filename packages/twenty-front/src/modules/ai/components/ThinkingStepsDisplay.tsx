@@ -1,13 +1,10 @@
-import { styled } from '@linaria/react';
 import { plural, t } from '@lingui/core/macro';
 import { useState } from 'react';
 import { IconChevronRight, IconCpu } from 'twenty-ui/icon';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { AiChatThinkingRow } from '@/ai/components/AiChatThinkingRow';
 import { LazyMarkdownRenderer } from '@/ai/components/LazyMarkdownRenderer';
-import { StyledParagraph } from '@/ai/components/LazyMarkdownRendererStyledComponents';
 import { ThinkingToolStepRow } from '@/ai/components/ThinkingToolStepRow';
 import { getActiveReasoningContent } from '@/ai/utils/getActiveReasoningContent';
 import { getLastReasoningContent } from '@/ai/utils/getLastReasoningContent';
@@ -16,8 +13,23 @@ import { type ThinkingStepPart } from '@/ai/types/ThinkingStepPart';
 import { formatRoundedDuration } from '~/utils/format/formatRoundedDuration';
 import * as stylex from '@stylexjs/stylex';
 import { animationDuration, borderRadius, color, font, fontColor, fontSize, fontWeight, iconSize, spacing, textLineHeight } from 'twenty-ui/theme/tokens.stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
+import '~/third-party-styles/ai-chat-content.css';
 
 const styles = stylex.create({
+  chevron: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-light'],
+    display: 'flex',
+    justifyContent: 'center',
+    transform: 'rotate(0deg)',
+    transitionDuration: `calc(${animationDuration['--t-animation-duration-fast']} * 1s)`,
+    transitionProperty: 'transform',
+    transitionTimingFunction: 'ease-in-out',
+  },
+  chevronExpanded: {
+    transform: 'rotate(90deg)',
+  },
   container: {
     display: 'flex',
     flexDirection: 'column',
@@ -102,28 +114,6 @@ const styles = stylex.create({
   },
 });
 
-const StyledSummaryChevronContainer = styled.div<{ isExpanded: boolean }>`
-  align-items: center;
-  color: ${themeCssVariables.font.color.light};
-  display: flex;
-  justify-content: center;
-  transform: rotate(${({ isExpanded }) => (isExpanded ? '90deg' : '0deg')});
-  transition: transform calc(${themeCssVariables.animation.duration.fast} * 1s)
-    ease-in-out;
-`;
-
-const StyledReasoningText = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.regular};
-  line-height: ${themeCssVariables.text.lineHeight.lg};
-
-  // reasoning uses single newlines as line breaks, which markdown would collapse
-  ${StyledParagraph} {
-    white-space: pre-line;
-  }
-`;
-
 const ThinkingStepRow = ({
   isActive,
   part,
@@ -192,9 +182,11 @@ export const ThinkingStepsDisplay = ({
           aria-expanded={isExpanded}
           onClick={() => setIsExpanded((previousValue) => !previousValue)} {...stylex.props(styles.summaryButton)}
         >
-          <StyledSummaryChevronContainer isExpanded={isExpanded}>
+          <div
+            {...stylex.props(styles.chevron, isExpanded && styles.chevronExpanded)}
+          >
             <IconChevronRight size={14} />
-          </StyledSummaryChevronContainer>
+          </div>
           <span {...stylex.props(styles.summaryText)}>
             {isDefined(workDurationMs)
               ? t`Worked for ${formatRoundedDuration(workDurationMs)}`
@@ -225,9 +217,9 @@ export const ThinkingStepsDisplay = ({
           </div>
           {!!shouldDisplayReasoningContent && (
             <div {...stylex.props(styles.reasoningContainer)}>
-              <StyledReasoningText>
+              <div className="reasoning-text">
                 <LazyMarkdownRenderer text={reasoningContent} />
-              </StyledReasoningText>
+              </div>
             </div>
           )}
         </div>
