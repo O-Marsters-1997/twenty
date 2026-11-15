@@ -17,7 +17,7 @@ import { t } from '@lingui/core/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
 import { IconChevronDown, IconList, useIcons } from 'twenty-ui/icon';
-import { MOBILE_VIEWPORT, useTheme } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
 import { grayScale, spacing } from 'twenty-ui/theme/tokens.stylex';
 

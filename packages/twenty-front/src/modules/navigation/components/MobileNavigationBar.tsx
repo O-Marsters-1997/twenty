@@ -76,6 +76,13 @@ const styles = stylex.create({
   navigationButton: {
     '--tw-button-size': spacing['--t-spacing-10'],
     '--tw-icon-button-icon-size': iconSize['--t-icon-size-lg'],
+    backgroundColor: {
+      default: null,
+      [media.hoverCapable]: {
+        default: null,
+        ':hover': backgroundTransparent['--t-background-transparent-light'],
+      },
+    },
     borderWidth: 0,
     color: grayScale['--t-gray-scale-gray10'],
     transitionDuration: {
@@ -87,15 +94,6 @@ const styles = stylex.create({
   },
   navigationButtonPressed: {
     backgroundColor: backgroundTransparent['--t-background-transparent-medium'],
-  },
-  navigationButtonHover: {
-    backgroundColor: {
-      default: null,
-      [media.hoverCapable]: {
-        default: null,
-        ':hover': backgroundTransparent['--t-background-transparent-light'],
-      },
-    },
   },
 });
 
@@ -139,7 +137,6 @@ export const MobileNavigationBar = () => {
               {...stylex.props(
                 styles.navigationButton,
                 activeItemName === name && styles.navigationButtonPressed,
-                styles.navigationButtonHover,
               )}
               variant="ghost"
               shape="round"

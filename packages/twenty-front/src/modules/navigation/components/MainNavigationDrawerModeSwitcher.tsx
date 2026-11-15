@@ -62,10 +62,16 @@ const styles = stylex.create({
   },
   mode: {
     alignItems: 'center',
-    backgroundColor: 'transparent',
+    backgroundColor: {
+      default: 'transparent',
+      ':hover': backgroundTransparent['--t-background-transparent-lighter'],
+    },
     borderRadius: borderRadius['--t-border-radius-md-round'],
     borderWidth: 0,
-    color: fontColor['--t-font-color-tertiary'],
+    color: {
+      default: fontColor['--t-font-color-tertiary'],
+      ':hover': fontColor['--t-font-color-primary'],
+    },
     cornerShape: 'round',
     cursor: 'pointer',
     display: 'flex',
@@ -94,27 +100,18 @@ const styles = stylex.create({
     width: 'auto',
   },
   modeActive: {
-    backgroundColor: backgroundTransparent['--t-background-transparent-light'],
+    backgroundColor: {
+      default: backgroundTransparent['--t-background-transparent-light'],
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
     color: fontColor['--t-font-color-primary'],
   },
   modeActiveExpanded: {
     flexShrink: 1,
     gap: spacing['--t-spacing-1'],
   },
-  modeHover: {
-    backgroundColor: {
-      default: null,
-      ':hover': backgroundTransparent['--t-background-transparent-lighter'],
-    },
-    color: { default: null, ':hover': fontColor['--t-font-color-primary'] },
-  },
-  modeHoverActive: {
-    backgroundColor: {
-      default: null,
-      ':hover': backgroundTransparent['--t-background-transparent-light'],
-    },
-  },
   modeDisabled: {
+    backgroundColor: 'transparent',
     color: fontColor['--t-font-color-light'],
     cursor: 'not-allowed',
   },
@@ -199,8 +196,6 @@ export const MainNavigationDrawerModeSwitcher = () => {
                     ),
                 isActive && styles.modeActive,
                 isActive && isExpanded && styles.modeActiveExpanded,
-                !isDisabled && styles.modeHover,
-                !isDisabled && isActive && styles.modeHoverActive,
                 isDisabled && styles.modeDisabled,
               )}
               aria-label={isUnread ? t`${label}, unread` : label}

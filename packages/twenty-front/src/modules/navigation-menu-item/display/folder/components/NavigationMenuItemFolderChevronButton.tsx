@@ -6,9 +6,6 @@ import { IconChevronRight } from 'twenty-ui/icon';
 import { animationDuration } from 'twenty-ui/theme/tokens.stylex';
 import { media } from 'twenty-ui/theme/constants.stylex';
 
-// Rotating a wrapper around the button keeps the icon component identity
-// stable: passing an inline component to LightIconButton's Icon prop remounts
-// the svg on every render, so the transition never runs.
 const styles = stylex.create({
   container: {
     display: 'inline-flex',

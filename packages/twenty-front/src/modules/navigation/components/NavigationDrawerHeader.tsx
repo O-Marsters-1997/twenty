@@ -3,7 +3,6 @@ import { NAVIGATION_DRAWER_COLLAPSED_BUTTON_SIZE } from '@/ui/navigation/navigat
 import { t } from '@lingui/core/macro';
 import { LightIconButton } from 'twenty-ui/components/input';
 import { IconSearch } from 'twenty-ui/icon';
-import { MOBILE_VIEWPORT } from 'twenty-ui/theme';
 import { media } from 'twenty-ui/theme/constants.stylex';
 
 import { useIsNavigationDrawerContentExpanded } from '@/ui/navigation/navigation-drawer/hooks/useIsNavigationDrawerContentExpanded';

@@ -93,7 +93,7 @@ const styles = stylex.create({
   },
   deleteHoverDefault: {
     backgroundColor: {
-      default: null,
+      default: 'transparent',
       ':hover': accent['--t-accent-secondary'],
     },
     borderRadius: {
@@ -102,7 +102,10 @@ const styles = stylex.create({
     },
   },
   deleteHoverDanger: {
-    backgroundColor: { default: null, ':hover': color['--t-color-red5'] },
+    backgroundColor: {
+      default: 'transparent',
+      ':hover': color['--t-color-red5'],
+    },
     borderRadius: {
       default: null,
       ':hover': borderRadius['--t-border-radius-sm-round'],
