@@ -132,6 +132,8 @@ spec:
           image: {{ include "twenty.image.repository" $img }}:{{ include "twenty.image.tag" $img }}
           imagePullPolicy: {{ include "twenty.image.pullPolicy" $img }}
           env:
+            - name: LISTEN_ADDR
+              value: {{ printf ":%v" (include "twenty.server.containerPort" .) | quote }}
             - name: SERVER_URL
               value: {{ include "twenty.serverUrl" . | quote }}
             {{- if eq (include "twenty.db.useExternalSecret" .) "true" }}
@@ -149,18 +151,6 @@ spec:
                   name: {{ include "twenty.dbUrl.secretName" . }}
                   key: url
             {{- end }}
-            {{- if eq (include "twenty.redis.useExternalSecret" .) "true" }}
-            - name: REDIS_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.redis.external.secretName }}
-                  key: {{ .Values.redis.external.passwordKey }}
-            {{- else if .Values.redis.external.password }}
-            - name: REDIS_PASSWORD
-              value: {{ .Values.redis.external.password | quote }}
-            {{- end }}
-            - name: REDIS_URL
-              value: {{ include "twenty.redisUrl" . | quote }}
             - name: SIGN_IN_PREFILLED
               value: {{ .Values.server.env.SIGN_IN_PREFILLED | quote }}
             - name: STORAGE_TYPE
@@ -206,7 +196,7 @@ spec:
             {{- end }}
             {{- if .Values.server.persistence.enabled }}
             - name: server-data
-              mountPath: /app/packages/twenty-server/.local-storage
+              mountPath: /app/.local-storage
             {{- end }}
             {{- with .Values.server.extraVolumeMounts }}
             {{- toYaml . | nindent 12 }}

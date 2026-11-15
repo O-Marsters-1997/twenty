@@ -39,7 +39,7 @@ Jobs for DB creation and migrations have been removed to simplify deployments; t
 ## Advanced Configuration
 
 See [full README](README.md) for:
-- External PostgreSQL/Redis
+- External PostgreSQL
 - S3 storage configuration
 - Custom resource limits
 

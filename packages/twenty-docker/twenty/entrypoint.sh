@@ -1,39 +1,12 @@
 #!/bin/sh
 set -e
 
-setup_and_migrate_db() {
-    if [ "${DISABLE_DB_MIGRATIONS}" = "true" ]; then
-        echo "Database setup and migrations are disabled, skipping..."
-        return
-    fi
-
+if [ "${DISABLE_DB_MIGRATIONS}" = "true" ]; then
+    echo "Database setup and migrations are disabled, skipping..."
+else
     echo "Running database setup and migrations..."
-
-    migrate up
-
-    if ! node dist/command/command cache:flush; then
-        echo "Warning: Failed to flush cache after migrations, but continuing startup..."
-    fi
-
+    /app/migrate up
     echo "Successfully migrated DB!"
-}
+fi
 
-register_background_jobs() {
-    if [ "${DISABLE_CRON_JOBS_REGISTRATION}" = "true" ]; then
-        echo "Cron job registration is disabled, skipping..."
-        return
-    fi
-
-    echo "Registering background sync jobs..."
-    if node dist/command/command cron:register:all; then
-        echo "Successfully registered all background sync jobs!"
-    else
-        echo "Warning: Failed to register background jobs, but continuing startup..."
-    fi
-}
-
-setup_and_migrate_db
-register_background_jobs
-
-# Continue with the original Docker command
 exec "$@"

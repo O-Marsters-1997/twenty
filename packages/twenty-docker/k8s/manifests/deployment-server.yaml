@@ -33,14 +33,12 @@ spec:
           image: twentycrm/twenty:latest
           imagePullPolicy: Always
           env:
-            - name: NODE_PORT
-              value: 3000
+            - name: LISTEN_ADDR
+              value: ":3000"
             - name: SERVER_URL
               value: "https://crm.example.com:443"
             - name: "PG_DATABASE_URL"
               value: "postgres://postgres:postgres@twentycrm-db.twentycrm.svc.cluster.local/default"
-            - name: "REDIS_URL"
-              value: "redis://twentycrm-redis.twentycrm.svc.cluster.local:6379"
             - name: SIGN_IN_PREFILLED
               value: "false"
             - name: STORAGE_TYPE
@@ -70,7 +68,7 @@ spec:
           volumeMounts:
             - mountPath: /app/docker-data
               name: twentycrm-docker-data
-            - mountPath: /app/packages/twenty-server/.local-storage
+            - mountPath: /app/.local-storage
               name: twentycrm-server-data
       dnsPolicy: ClusterFirst
       restartPolicy: Always

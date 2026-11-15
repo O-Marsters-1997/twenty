@@ -53,8 +53,8 @@ variable "twentycrm_db_replicas" {
 
 variable "twentycrm_server_data_mount_path" {
   type        = string
-  default     = "/app/packages/twenty-server/.local-storage"
-  description = "TwentyCRM mount path for servers application data. Defaults to '/app/packages/twenty-server/.local-storage'."
+  default     = "/app/.local-storage"
+  description = "TwentyCRM mount path for servers application data. Defaults to '/app/.local-storage'."
 }
 
 variable "twentycrm_db_pv_path" {
@@ -97,18 +97,6 @@ variable "twentycrm_namespace" {
   type        = string
   default     = "twentycrm"
   description = "Namespace for all TwentyCRM resources"
-}
-
-variable "twentycrm_redis_replicas" {
-  type        = number
-  default     = 1
-  description = "Number of replicas for the TwentyCRM Redis deployment. This defaults to 1."
-}
-
-variable "twentycrm_redis_image" {
-  type        = string
-  default     = "redis/redis-stack-server:latest"
-  description = "TwentyCRM image for Redis deployment. This defaults to latest."
 }
 
 variable "twentycrm_docker_data_mount_path" {

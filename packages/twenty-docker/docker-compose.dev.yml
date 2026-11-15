@@ -1,4 +1,4 @@
-# Development infrastructure services only (Postgres + Valkey).
+# Development infrastructure services only (Postgres).
 # Use this when developing locally against the source code.
 #
 # Usage:
@@ -21,18 +21,6 @@ services:
       POSTGRES_DB: default
     healthcheck:
       test: pg_isready -U postgres -h localhost -d postgres
-      interval: 5s
-      timeout: 5s
-      retries: 10
-    restart: unless-stopped
-
-  redis:
-    image: valkey/valkey:8
-    ports:
-      - "6379:6379"
-    command: ["--maxmemory-policy", "noeviction"]
-    healthcheck:
-      test: ["CMD", "valkey-cli", "ping"]
       interval: 5s
       timeout: 5s
       retries: 10

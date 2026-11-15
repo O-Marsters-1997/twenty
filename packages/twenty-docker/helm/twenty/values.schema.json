@@ -107,9 +107,7 @@
           "type": "object",
           "properties": {
             "SERVER_URL": { "type": "string", "description": "Override for the server URL (e.g., https://crm.example.com). If not set, derived from ingress or service." },
-            "NODE_PORT": { "type": "integer", "minimum": 1 },
             "PG_DATABASE_URL": { "type": "string" },
-            "REDIS_URL": { "type": "string" },
             "SIGN_IN_PREFILLED": { "type": "string" },
             "STORAGE_TYPE": { "type": "string" },
             "ACCESS_TOKEN_EXPIRES_IN": { "type": "string" },
@@ -225,7 +223,6 @@
           "type": "object",
           "properties": {
             "PG_DATABASE_URL": { "type": "string" },
-            "REDIS_URL": { "type": "string" },
             "STORAGE_TYPE": { "type": "string" },
             "DISABLE_DB_MIGRATIONS": { "type": "string" }
           }
