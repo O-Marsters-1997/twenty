@@ -1,21 +1,31 @@
 import { draggedRecordIdsComponentState } from '@/object-record/record-drag/states/draggedRecordIdsComponentState';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  accent,
+  borderColor,
+  borderRadius,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const MAX_STACK_CARDS = 5;
 
-const StyledRecordDragMultiDragStackCard = styled.div<{ offset: number }>`
-  background-color: ${themeCssVariables.accent.tertiary};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  height: 100%;
-  left: 0;
-  position: absolute;
-  right: 0;
-  top: ${({ offset }) => (offset === 1 ? 2 : (offset - 1) * 4 + 2)}px;
-  z-index: ${({ offset }) => -offset};
-`;
+const styles = stylex.create({
+  card: {
+    backgroundColor: accent['--t-accent-tertiary'],
+    borderColor: borderColor['--t-border-color-medium'],
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    height: '100%',
+    left: 0,
+    position: 'absolute',
+    right: 0,
+  },
+  cardOffset: (offset: number) => ({
+    top: `${offset === 1 ? 2 : (offset - 1) * 4 + 2}px`,
+    zIndex: -offset,
+  }),
+});
 
 export const RecordDragMultiDragStack = () => {
   const draggedRecordIds = useAtomComponentStateValue(
@@ -29,6 +39,9 @@ export const RecordDragMultiDragStack = () => {
   return Array.from({
     length: Math.min(MAX_STACK_CARDS, draggedRecordIds.length - 1),
   }).map((_, index) => (
-    <StyledRecordDragMultiDragStackCard key={index} offset={index + 1} />
+    <div
+      key={index}
+      {...stylex.props(styles.card, styles.cardOffset(index + 1))}
+    />
   ));
 };

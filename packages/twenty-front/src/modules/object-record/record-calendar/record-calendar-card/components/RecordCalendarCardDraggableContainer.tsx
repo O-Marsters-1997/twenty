@@ -1,18 +1,20 @@
 import { pointerIntersection } from '@dnd-kit/collision';
-import { styled } from '@linaria/react';
 
 import { RECORD_CALENDAR_CARD_DND_TYPE } from '@/object-record/record-calendar/constants/RecordCalendarCardDndType';
 import { RecordCalendarCard } from '@/object-record/record-calendar/record-calendar-card/components/RecordCalendarCard';
 import { useIsRecordCalendarCardDragDisabled } from '@/object-record/record-calendar/record-calendar-card/hooks/useIsRecordCalendarCardDragDisabled';
 import { getRecordCalendarCardDraggableId } from '@/object-record/record-calendar/record-calendar-card/utils/getRecordCalendarCardDraggableId';
 import { DragDropItemSortableCell } from '@/ui/utilities/drag-and-drop/components/DragDropItemSortableCell';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledDraggableContainer = styled.div`
-  position: relative;
-  scroll-margin-left: 8px;
-  scroll-margin-right: 8px;
-  scroll-margin-top: 8px;
-`;
+const styles = stylex.create({
+  draggableContainer: {
+    position: 'relative',
+    scrollMarginLeft: '8px',
+    scrollMarginRight: '8px',
+    scrollMarginTop: '8px',
+  },
+});
 
 export const RecordCalendarCardDraggableContainer = ({
   calendarDay,
@@ -42,12 +44,13 @@ export const RecordCalendarCardDraggableContainer = ({
       disabled={dragIsDisabled}
       fadeSourceWhileDragging
     >
-      <StyledDraggableContainer
+      <div
         id={`record-calendar-card-${recordId}-${calendarDay}`}
         data-selectable-id={recordId}
+        {...stylex.props(styles.draggableContainer)}
       >
         <RecordCalendarCard recordId={recordId} calendarDay={calendarDay} />
-      </StyledDraggableContainer>
+      </div>
     </DragDropItemSortableCell>
   );
 };

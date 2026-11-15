@@ -1,7 +1,6 @@
 import { FieldDescriptionTooltip } from '@/object-record/record-field/ui/components/FieldDescriptionTooltip';
-import { styled } from '@linaria/react';
 import { useContext } from 'react';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 
 import { FieldContext } from '@/object-record/record-field/ui/contexts/FieldContext';
 import { useFieldFocus } from '@/object-record/record-field/ui/hooks/useFieldFocus';
@@ -14,59 +13,53 @@ import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
 import { Tooltip } from 'twenty-ui/primitives/surfaces';
 import { FieldMetadataType } from '~/generated-metadata/graphql';
 import { useRecordInlineCellContext } from './RecordInlineCellContext';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledIconContainer = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  width: 16px;
-
-  svg {
-    align-items: center;
-    display: flex;
-    height: 16px;
-    justify-content: center;
-    width: 16px;
-  }
-`;
-
-const StyledLabelAndIconContainer = styled.div`
-  align-items: center;
-  align-self: flex-start;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  height: 24px;
-`;
-
-const StyledValueContainer = styled.div<{ readonly: boolean }>`
-  display: flex;
-  min-width: 0;
-  position: relative;
-  user-select: text;
-  width: 100%;
-`;
-
-const StyledLabelContainer = styled.div<{ width?: number }>`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.sm};
-  width: ${({ width }) => (width !== undefined ? `${width}px` : 'auto')};
-`;
-
-const StyledInlineCellBaseContainer = styled.div<{ readonly: boolean }>`
-  align-items: center;
-  box-sizing: border-box;
-  cursor: ${({ readonly }) => (readonly ? 'default' : 'pointer')};
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  height: fit-content;
-  user-select: none;
-  width: 100%;
-`;
-
-export const StyledSkeletonDiv = styled.div`
-  height: 24px;
-`;
+const styles = stylex.create({
+  iconContainer: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    width: '16px',
+  },
+  labelContainer: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-sm'],
+    width: 'auto',
+  },
+  labelWidth: (width: number) => ({
+    width: `${width}px`,
+  }),
+  inlineCellBaseContainer: {
+    alignItems: 'center',
+    boxSizing: 'border-box',
+    cursor: 'pointer',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    height: 'fit-content',
+    userSelect: 'none',
+    width: '100%',
+  },
+  readonly: {
+    cursor: 'default',
+  },
+  labelAndIconContainer: {
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    height: '24px',
+  },
+  valueContainer: {
+    display: 'flex',
+    minWidth: '0',
+    position: 'relative',
+    userSelect: 'text',
+    width: '100%',
+  },
+});
 
 export const RecordInlineCellContainer = () => {
   const { readonly, IconLabel, label, labelWidth, showLabel } =
@@ -97,10 +90,13 @@ export const RecordInlineCellContainer = () => {
   };
 
   return (
-    <StyledInlineCellBaseContainer
-      readonly={readonly ?? false}
+    <div
       onMouseEnter={handleContainerMouseEnter}
       onMouseLeave={handleContainerMouseLeave}
+      {...stylex.props(
+        styles.inlineCellBaseContainer,
+        readonly && styles.readonly,
+      )}
     >
       {(IconLabel || label) && (
         <Tooltip
@@ -110,14 +106,19 @@ export const RecordInlineCellContainer = () => {
           positionMethod="fixed"
           delay={TooltipDelay.shortDelay}
         >
-          <StyledLabelAndIconContainer>
+          <div {...stylex.props(styles.labelAndIconContainer)}>
             {IconLabel && (
-              <StyledIconContainer>
-                <IconLabel stroke={theme.icon.stroke.sm} />
-              </StyledIconContainer>
+              <div {...stylex.props(styles.iconContainer)}>
+                <IconLabel size={16} stroke={theme.icon.stroke.sm} />
+              </div>
             )}
             {showLabel && (
-              <StyledLabelContainer width={labelWidth}>
+              <div
+                {...stylex.props(
+                  styles.labelContainer,
+                  labelWidth !== undefined && styles.labelWidth(labelWidth),
+                )}
+              >
                 <FieldDescriptionTooltip
                   label={label}
                   description={fieldDefinition?.metadata?.description}
@@ -125,14 +126,14 @@ export const RecordInlineCellContainer = () => {
                     <OverflowingTextWithTooltip text={label} lineClamp={1} />
                   }
                 />
-              </StyledLabelContainer>
+              </div>
             )}
-          </StyledLabelAndIconContainer>
+          </div>
         </Tooltip>
       )}
-      <StyledValueContainer readonly={readonly ?? false} id={anchorId}>
+      <div id={anchorId} {...stylex.props(styles.valueContainer)}>
         <RecordInlineCellValue />
-      </StyledValueContainer>
-    </StyledInlineCellBaseContainer>
+      </div>
+    </div>
   );
 };

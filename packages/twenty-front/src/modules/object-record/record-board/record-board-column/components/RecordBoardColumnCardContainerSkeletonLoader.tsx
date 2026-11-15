@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { Skeleton, SKELETON_HEIGHT_SIZES } from 'twenty-ui/primitives/feedback';
 import { themeCssVariables } from 'twenty-ui/theme';
 
@@ -7,23 +6,25 @@ import { RecordCardHeaderContainer } from '@/object-record/record-card/component
 import { visibleRecordFieldsComponentSelector } from '@/object-record/record-field/states/visibleRecordFieldsComponentSelector';
 import { useAtomComponentSelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentSelectorValue';
 import { useGetCurrentViewOnly } from '@/views/hooks/useGetCurrentViewOnly';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledSkeletonIconAndText = styled.div`
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledSkeletonTitle = styled.div`
-  padding-left: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledBodyContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing['0.5']};
-  padding-bottom: 4px;
-  padding-top: 4px;
-`;
+const styles = stylex.create({
+  skeletonIconAndText: {
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+  },
+  skeletonTitle: {
+    paddingLeft: spacing['--t-spacing-1'],
+  },
+  bodyContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-0_5'],
+    paddingBottom: '4px',
+    paddingTop: '4px',
+  },
+});
 
 export const RecordBoardColumnCardContainerSkeletonLoader = () => {
   const { currentView } = useGetCurrentViewOnly();
@@ -47,7 +48,7 @@ export const RecordBoardColumnCardContainerSkeletonLoader = () => {
   return (
     <>
       <RecordCardHeaderContainer isCompact={isCompactModeActive}>
-        <StyledSkeletonTitle>
+        <div {...stylex.props(styles.skeletonTitle)}>
           <Skeleton
             render={<div />}
             animated={false}
@@ -57,13 +58,13 @@ export const RecordBoardColumnCardContainerSkeletonLoader = () => {
             height={12}
             style={{ display: 'block' }}
           />
-        </StyledSkeletonTitle>
+        </div>
       </RecordCardHeaderContainer>
-      <StyledBodyContainer>
+      <div {...stylex.props(styles.bodyContainer)}>
         {!isCompactModeActive &&
           skeletonItems.map(({ id }) => (
             <RecordCardBodyContainer key={id}>
-              <StyledSkeletonIconAndText>
+              <div {...stylex.props(styles.skeletonIconAndText)}>
                 <Skeleton
                   render={<div />}
                   animated={false}
@@ -82,10 +83,10 @@ export const RecordBoardColumnCardContainerSkeletonLoader = () => {
                   width={151}
                   height={SKELETON_HEIGHT_SIZES.s}
                 />
-              </StyledSkeletonIconAndText>
+              </div>
             </RecordCardBodyContainer>
           ))}
-      </StyledBodyContainer>
+      </div>
     </>
   );
 };

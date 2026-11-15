@@ -4,22 +4,22 @@ import { visibleRecordGroupIdsComponentFamilySelector } from '@/object-record/re
 import { canAddRecordGroupForFieldMetadataItem } from '@/object-record/record-group/utils/canAddRecordGroupForFieldMetadataItem';
 import { useAtomComponentFamilySelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentFamilySelectorValue';
 import { ViewType } from '@/views/types/ViewType';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { useContext } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { borderColor } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledColumnContainer = styled.div`
-  display: flex;
-  flex: 1;
-
-  & > *:not(:first-of-type) {
-    border-left: 1px solid ${themeCssVariables.border.color.light};
-  }
-`;
-
-const StyledAddGroupColumnDivider = styled.div`
-  width: 0;
-`;
+const styles = stylex.create({
+  columnContainer: {
+    display: 'flex',
+    flex: '1',
+  },
+  addGroupColumnDivider: {
+    borderLeftColor: borderColor['--t-border-color-light'],
+    borderLeftStyle: 'solid',
+    borderLeftWidth: '1px',
+    width: '0',
+  },
+});
 
 export const RecordBoardColumns = () => {
   const { selectFieldMetadataItem } = useContext(RecordBoardContext);
@@ -34,7 +34,7 @@ export const RecordBoardColumns = () => {
   );
 
   return (
-    <StyledColumnContainer>
+    <div {...stylex.props(styles.columnContainer)}>
       {visibleRecordGroupIds.map((recordGroupId, index) => {
         return (
           <RecordBoardColumn
@@ -44,7 +44,9 @@ export const RecordBoardColumns = () => {
           />
         );
       })}
-      {shouldShowAddGroupColumnDivider && <StyledAddGroupColumnDivider />}
-    </StyledColumnContainer>
+      {shouldShowAddGroupColumnDivider && (
+        <div {...stylex.props(styles.addGroupColumnDivider)} />
+      )}
+    </div>
   );
 };

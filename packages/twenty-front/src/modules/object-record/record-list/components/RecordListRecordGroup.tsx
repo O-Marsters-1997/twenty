@@ -7,14 +7,16 @@ import { RecordListRecordsEffect } from '@/object-record/record-list/components/
 import { useRecordIndexContextOrThrow } from '@/object-record/record-index/contexts/RecordIndexContext';
 import { isRecordListGroupSectionToggledComponentState } from '@/object-record/record-list/states/isRecordListGroupSectionToggledComponentState';
 import { useAtomComponentFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentFamilyStateValue';
-import { styled } from '@linaria/react';
 import { isDefined } from 'twenty-shared/utils';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding-bottom: 14px;
-`;
+const styles = stylex.create({
+  section: {
+    display: 'flex',
+    flexDirection: 'column',
+    paddingBottom: '14px',
+  },
+});
 
 export const RecordListRecordGroup = () => {
   const { objectNameSingular } = useRecordIndexContextOrThrow();
@@ -39,7 +41,7 @@ export const RecordListRecordGroup = () => {
         error={error}
       />
       {!shouldHideRecordGroup && (
-        <StyledSection>
+        <div {...stylex.props(styles.section)}>
           <RecordListRecordGroupSection />
           {isRecordListGroupSectionToggled && !isDefined(error) && (
             <RecordListRecords
@@ -49,7 +51,7 @@ export const RecordListRecordGroup = () => {
               fetchMoreRecords={fetchMoreRecords}
             />
           )}
-        </StyledSection>
+        </div>
       )}
     </>
   );

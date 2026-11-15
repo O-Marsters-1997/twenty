@@ -1,5 +1,4 @@
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { styled } from '@linaria/react';
 
 import { COMMAND_MENU_DROPDOWN_CLICK_OUTSIDE_ID } from '@/command-menu-item/constants/CommandMenuDropdownClickOutsideId';
 import { COMMAND_MENU_CLICK_OUTSIDE_ID } from '@/command-menu/constants/CommandMenuClickOutsideId';
@@ -18,17 +17,22 @@ import { useListenClickOutside } from '@/ui/utilities/pointer-event/hooks/useLis
 import { ScrollWrapper } from '@/ui/utilities/scroll/components/ScrollWrapper';
 import { useAvailableComponentInstanceIdOrThrow } from '@/ui/utilities/state/component-state/hooks/useAvailableComponentInstanceIdOrThrow';
 import { useEffect } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainerContainer = styled.div`
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  height: 100%;
-  padding: ${themeCssVariables.spacing[2]};
-  padding-left: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  containerContainer: {
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    height: '100%',
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-1'],
+  },
+});
 
 export const RecordCalendar = () => {
   const recordCalendarId = useAvailableComponentInstanceIdOrThrow(
@@ -60,7 +64,7 @@ export const RecordCalendar = () => {
   });
 
   return (
-    <StyledContainerContainer>
+    <div {...stylex.props(styles.containerContainer)}>
       <RecordSelectionEscapeHotkeyEffect />
       <RecordCalendarTopBar />
       <ScrollWrapper
@@ -68,6 +72,6 @@ export const RecordCalendar = () => {
       >
         <RecordCalendarGrid calendarLayout={recordIndexCalendarLayout} />
       </ScrollWrapper>
-    </StyledContainerContainer>
+    </div>
   );
 };

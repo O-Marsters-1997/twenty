@@ -9,22 +9,24 @@ import { recordStoreFamilyState } from '@/object-record/record-store/states/reco
 import { useAtomComponentFamilyState } from '@/ui/utilities/state/jotai/hooks/useAtomComponentFamilyState';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { useGetCurrentViewOnly } from '@/views/hooks/useGetCurrentViewOnly';
-import { styled } from '@linaria/react';
+import { RecordCardCheckboxContainer } from '@/object-record/record-card/components/RecordCardCheckboxContainer';
 import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
 import { isDefined } from 'twenty-shared/utils';
 import { Checkbox } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledCheckboxContainer = styled.div`
-  margin-left: auto;
-`;
-
-const StyledRecordChipContainer = styled.div`
-  display: flex;
-  flex: 1 1 auto;
-  overflow: hidden;
-  padding: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  recordChipContainer: {
+    display: 'flex',
+    flex: '1 1 auto',
+    overflow: 'hidden',
+    paddingTop: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-1'],
+  },
+});
 
 type RecordCalendarCardHeaderProps = {
   recordId: string;
@@ -62,11 +64,8 @@ export const RecordCalendarCardHeader = ({
   }
 
   return (
-    <RecordCardHeaderContainer
-      isCompact={isCompactModeActive}
-      padding={themeCssVariables.spacing[1]}
-    >
-      <StyledRecordChipContainer>
+    <RecordCardHeaderContainer isCompact={isCompactModeActive} hasSmallPadding>
+      <div {...stylex.props(styles.recordChipContainer)}>
         {isCompactModeActive ? (
           <RecordChip
             objectNameSingular={objectMetadataItem.nameSingular}
@@ -88,8 +87,8 @@ export const RecordCalendarCardHeader = ({
             />
           </StopPropagationContainer>
         )}
-      </StyledRecordChipContainer>
-      <StyledCheckboxContainer className="checkbox-container">
+      </div>
+      <RecordCardCheckboxContainer>
         <StopPropagationContainer>
           <Checkbox
             hoverable
@@ -98,7 +97,7 @@ export const RecordCalendarCardHeader = ({
             variant="outline"
           />
         </StopPropagationContainer>
-      </StyledCheckboxContainer>
+      </RecordCardCheckboxContainer>
     </RecordCardHeaderContainer>
   );
 };

@@ -5,14 +5,16 @@ import { RecordListAddNew } from '@/object-record/record-list/components/RecordL
 import { RecordListDraggableRow } from '@/object-record/record-list/components/RecordListDraggableRow';
 import { RECORD_LIST_ROW_DND_TYPE } from '@/object-record/record-list/constants/RecordListRowDndType';
 import { type ObjectRecord } from '@/object-record/types/ObjectRecord';
-import { styled } from '@linaria/react';
 import { useContext } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { isDefined } from 'twenty-shared/utils';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledFetchMoreTrigger = styled.div`
-  height: 0;
-`;
+const styles = stylex.create({
+  fetchMoreTrigger: {
+    height: '0',
+  },
+});
 
 type RecordListRecordsProps = {
   records: ObjectRecord[];
@@ -51,7 +53,9 @@ export const RecordListRecords = ({
           droppableId={droppableId}
         />
       ))}
-      {hasNextPage && !loading && <StyledFetchMoreTrigger ref={fetchMoreRef} />}
+      {hasNextPage && !loading && (
+        <div ref={fetchMoreRef} {...stylex.props(styles.fetchMoreTrigger)} />
+      )}
       <RecordDragEndDropZone
         droppableId={droppableId}
         dndType={RECORD_LIST_ROW_DND_TYPE}

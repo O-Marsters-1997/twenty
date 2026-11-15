@@ -1,47 +1,31 @@
+import { recordDetailRecordsListItemMarker } from '@/object-record/record-field-list/record-detail-section/components/RecordDetailRecordsListItemContainer.stylex';
 import { useLayoutRenderingContext } from '@/ui/layout/contexts/LayoutRenderingContext';
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 import { PageLayoutType } from '~/generated-metadata/graphql';
 
-const StyledListItem = styled.div<{
-  noHorizontalPadding?: boolean;
-  isDropdownOpen?: boolean;
-}>`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  height: ${themeCssVariables.spacing[10]};
-  justify-content: space-between;
-  padding-left: ${({ noHorizontalPadding }) =>
-    noHorizontalPadding ? 0 : themeCssVariables.spacing[3]};
-  padding-right: ${({ noHorizontalPadding }) =>
-    noHorizontalPadding ? 0 : themeCssVariables.spacing[2]};
-
-  .displayOnHover {
-    opacity: ${({ isDropdownOpen }) => (isDropdownOpen ? 1 : 0)};
-    pointer-events: ${({ isDropdownOpen }) =>
-      isDropdownOpen ? 'auto' : 'none'};
-    transition: opacity
-      calc(${themeCssVariables.animation.duration.instant} * 1s) ease;
-  }
-
-  &:hover .displayOnHover,
-  &:focus-within .displayOnHover {
-    opacity: 1;
-    pointer-events: auto;
-  }
-`;
+const styles = stylex.create({
+  listItem: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    height: spacing['--t-spacing-10'],
+    justifyContent: 'space-between',
+    paddingLeft: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-2'],
+  },
+  noHorizontalPadding: {
+    paddingLeft: 0,
+    paddingRight: 0,
+  },
+});
 
 type RecordDetailRecordsListItemContainerProps = {
   children: React.ReactNode;
-  className?: string;
-  isDropdownOpen?: boolean;
 };
 
 export const RecordDetailRecordsListItemContainer = ({
   children,
-  className,
-  isDropdownOpen,
 }: RecordDetailRecordsListItemContainerProps) => {
   const layoutRenderingContext = useLayoutRenderingContext();
 
@@ -49,12 +33,14 @@ export const RecordDetailRecordsListItemContainer = ({
     layoutRenderingContext?.layoutType === PageLayoutType.RECORD_PAGE;
 
   return (
-    <StyledListItem
-      className={className}
-      noHorizontalPadding={isInRecordPageLayout}
-      isDropdownOpen={isDropdownOpen}
+    <div
+      {...stylex.props(
+        recordDetailRecordsListItemMarker,
+        styles.listItem,
+        isInRecordPageLayout && styles.noHorizontalPadding,
+      )}
     >
       {children}
-    </StyledListItem>
+    </div>
   );
 };

@@ -22,7 +22,6 @@ import { GenericDropdownContentWidth } from '@/ui/layout/dropdown/constants/Gene
 import { isDropdownOpenComponentState } from '@/ui/layout/dropdown/states/isDropdownOpenComponentState';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { useSetAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useSetAtomComponentState';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
 import { motion } from 'framer-motion';
@@ -44,15 +43,19 @@ import {
 } from 'twenty-ui/icon';
 import { Collapsible } from 'twenty-ui/primitives/layout';
 import { FieldMetadataType, RelationType } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { recordDetailDisplayOnHoverStyles } from '@/object-record/record-field-list/record-detail-section/components/recordDetailDisplayOnHoverStyles';
 
-const StyledClickableZone = styled.div`
-  align-items: center;
-  cursor: pointer;
-  display: flex;
-  flex: 1 0 auto;
-  height: 100%;
-  justify-content: flex-end;
-`;
+const styles = stylex.create({
+  clickableZone: {
+    alignItems: 'center',
+    cursor: 'pointer',
+    display: 'flex',
+    flex: '1 0 auto',
+    height: '100%',
+    justifyContent: 'flex-end',
+  },
+});
 
 const MotionIconChevronDown = motion.create(IconChevronDown);
 
@@ -205,31 +208,37 @@ export const RecordDetailRelationRecordsListItem = ({
     [isExpanded],
   );
 
+  const displayOnHoverClassName = stylex.props(
+    recordDetailDisplayOnHoverStyles.base,
+    isDropdownOpen && recordDetailDisplayOnHoverStyles.dropdownOpen,
+  ).className;
+
   return (
     <>
-      <RecordDetailRecordsListItemContainer
-        isDropdownOpen={isDropdownOpen}
-        data-testid="record-detail-records-list-item"
-      >
+      <RecordDetailRecordsListItemContainer data-testid="record-detail-records-list-item">
         <RecordChip
           record={relationRecord}
           objectNameSingular={relationObjectMetadataItem.nameSingular}
         />
-        <StyledClickableZone onClick={handleClick} data-testid="expand-button">
+        <div
+          onClick={handleClick}
+          data-testid="expand-button"
+          {...stylex.props(styles.clickableZone)}
+        >
           <LightIconButton
-            className="displayOnHover"
+            className={displayOnHoverClassName}
             emphasis="subtle"
             aria-label={t`Expand relation`}
           >
             <AnimatedIconChevronDown />
           </LightIconButton>
-        </StyledClickableZone>
+        </div>
         {!parentIsRecordFieldReadOnly && (
           <DropdownRoot dropdownId={dropdownInstanceId} type="menu">
             <Dropdown.Trigger
               render={
                 <LightIconButton
-                  className="displayOnHover"
+                  className={displayOnHoverClassName}
                   emphasis="subtle"
                   aria-label={t`More options`}
                 >

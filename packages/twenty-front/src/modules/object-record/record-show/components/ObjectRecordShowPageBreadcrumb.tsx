@@ -16,61 +16,73 @@ import { RecordTitleCellContainerType } from '@/object-record/record-title-cell/
 import { useIsMobile } from 'twenty-ui/utilities';
 import { useAtomFamilySelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilySelectorValue';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { styled } from '@linaria/react';
 import { useState } from 'react';
 import { FieldMetadataType } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 import { Avatar } from 'twenty-ui/primitives/data-display';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { getAbsoluteImageUrl } from '~/utils/image/getAbsoluteImageUrl';
+import * as stylex from '@stylexjs/stylex';
+import {
+  backgroundTransparent,
+  borderRadius,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledEditableTitleContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  overflow-x: hidden;
-  width: 100%;
-`;
-
-const StyledEditableTitlePrefix = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.tertiary};
-  cursor: pointer;
-  display: flex;
-  flex-direction: row;
-  gap: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledBreadcrumbPrefixObjectIcon = styled.div`
-  display: flex;
-  flex-shrink: 0;
-  opacity: 0.64;
-`;
-
-const StyledTitle = styled.div<{ isEmphasized: boolean }>`
-  font-size: ${({ isEmphasized }) =>
-    isEmphasized ? themeCssVariables.font.size.md : 'inherit'};
-  font-weight: ${({ isEmphasized }) =>
-    isEmphasized ? themeCssVariables.font.weight.semiBold : 'inherit'};
-  max-width: 100%;
-  overflow: hidden;
-  width: fit-content;
-`;
-
-const StyledAvatarContainer = styled.div`
-  align-items: center;
-  background: ${themeCssVariables.background.transparent.light};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  display: flex;
-  flex-shrink: 0;
-  justify-content: center;
-  margin-right: ${themeCssVariables.spacing[0.5]};
-  padding: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledPaginationInformation = styled.span`
-  color: ${themeCssVariables.font.color.tertiary};
-`;
+const styles = stylex.create({
+  editableTitleContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+    overflowX: 'hidden',
+    width: '100%',
+  },
+  editableTitlePrefix: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    cursor: 'pointer',
+    display: 'flex',
+    flexDirection: 'row',
+    gap: spacing['--t-spacing-1'],
+  },
+  breadcrumbPrefixObjectIcon: {
+    display: 'flex',
+    flexShrink: '0',
+    opacity: '0.64',
+  },
+  avatarContainer: {
+    alignItems: 'center',
+    background: backgroundTransparent['--t-background-transparent-light'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    display: 'flex',
+    flexShrink: '0',
+    justifyContent: 'center',
+    marginRight: spacing['--t-spacing-0_5'],
+    paddingTop: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-1'],
+  },
+  paginationInformation: {
+    color: fontColor['--t-font-color-tertiary'],
+  },
+  title: {
+    fontSize: 'inherit',
+    fontWeight: 'inherit',
+    maxWidth: '100%',
+    overflow: 'hidden',
+    width: 'fit-content',
+  },
+  titleEmphasized: {
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+  },
+});
 
 export const ObjectRecordShowPageBreadcrumb = ({
   objectNameSingular,
@@ -150,10 +162,13 @@ export const ObjectRecordShowPageBreadcrumb = ({
   }
 
   return (
-    <StyledEditableTitleContainer data-testid="top-bar-title">
+    <div
+      data-testid="top-bar-title"
+      {...stylex.props(styles.editableTitleContainer)}
+    >
       {isMobile ? (
         isDefined(recordIdentifier) && (
-          <StyledAvatarContainer>
+          <div {...stylex.props(styles.avatarContainer)}>
             <Avatar
               src={getAbsoluteImageUrl(recordIdentifier.avatarUrl)}
               name={recordIdentifier.name}
@@ -161,22 +176,23 @@ export const ObjectRecordShowPageBreadcrumb = ({
               size="md"
               shape={recordIdentifier.avatarShape ?? undefined}
             />
-          </StyledAvatarContainer>
+          </div>
         )
       ) : (
-        <StyledEditableTitlePrefix
+        <div
           onClick={() => {
             navigateToIndexView();
           }}
+          {...stylex.props(styles.editableTitlePrefix)}
         >
-          <StyledBreadcrumbPrefixObjectIcon>
+          <div {...stylex.props(styles.breadcrumbPrefixObjectIcon)}>
             <ObjectMetadataIcon objectMetadataItem={objectMetadataItem} />
-          </StyledBreadcrumbPrefixObjectIcon>
+          </div>
           {objectLabel}
           <span>{' / '}</span>
-        </StyledEditableTitlePrefix>
+        </div>
       )}
-      <StyledTitle isEmphasized={isMobile}>
+      <div {...stylex.props(styles.title, isMobile && styles.titleEmphasized)}>
         <FieldContext.Provider
           value={{
             recordId: objectRecordId,
@@ -205,12 +221,12 @@ export const ObjectRecordShowPageBreadcrumb = ({
             containerType={RecordTitleCellContainerType.PageHeader}
           />
         </FieldContext.Provider>
-      </StyledTitle>
+      </div>
       {!isMobile && (
-        <StyledPaginationInformation>
+        <span {...stylex.props(styles.paginationInformation)}>
           {paginationInformation}
-        </StyledPaginationInformation>
+        </span>
       )}
-    </StyledEditableTitleContainer>
+    </div>
   );
 };

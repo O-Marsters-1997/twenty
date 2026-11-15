@@ -20,16 +20,18 @@ import { RECORD_INDEX_DRAG_SELECT_BOUNDARY_CLASS } from '@/ui/utilities/drag-sel
 import { PageCardLayout } from '@/ui/layout/page/components/PageCardLayout';
 import { PageTitle } from '@/ui/utilities/page-title/components/PageTitle';
 import { ViewComponentInstanceContext } from '@/views/states/contexts/ViewComponentInstanceContext';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { memo, useCallback } from 'react';
 import { useSetAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useSetAtomComponentState';
 
-const StyledIndexContainer = styled.div`
-  display: flex;
-  flex: 1;
-  min-height: 0;
-  width: 100%;
-`;
+const styles = stylex.create({
+  indexContainer: {
+    display: 'flex',
+    flex: '1',
+    minHeight: 0,
+    width: '100%',
+  },
+});
 
 export const RecordIndexContainerGater = memo(() => {
   const setLastShowPageRecordId = useSetAtomComponentState(
@@ -66,8 +68,12 @@ export const RecordIndexContainerGater = memo(() => {
     recordIndexId,
   );
 
+  const indexContainerProps = stylex.props(styles.indexContainer);
+
   const indexContent = (
-    <StyledIndexContainer className={RECORD_INDEX_DRAG_SELECT_BOUNDARY_CLASS}>
+    <div
+      className={`${indexContainerProps.className} ${RECORD_INDEX_DRAG_SELECT_BOUNDARY_CLASS}`}
+    >
       {hasObjectReadPermissions ? (
         <>
           <RecordIndexContainerContextStoreNumberOfSelectedRecordsEffect />
@@ -76,7 +82,7 @@ export const RecordIndexContainerGater = memo(() => {
       ) : (
         <RecordIndexEmptyStateNotShared />
       )}
-    </StyledIndexContainer>
+    </div>
   );
 
   return (
