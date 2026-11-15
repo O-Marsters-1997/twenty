@@ -1,4 +1,3 @@
-
 import { ActivityRow } from '@/activities/components/ActivityRow';
 import { EmailThreadNotShared } from '@/activities/emails/components/EmailThreadNotShared';
 import { getEmailParticipantAvatarColorSeed } from '@/activities/emails/utils/getEmailParticipantAvatarColorSeed';
@@ -17,7 +16,12 @@ import {
 import { formatToHumanReadableDate } from '~/utils/date-utils';
 import { getAbsoluteImageUrl } from '~/utils/image/getAbsoluteImageUrl';
 import * as stylex from '@stylexjs/stylex';
-import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   heading: {
@@ -194,7 +198,9 @@ export const EmailThreadPreview = ({ thread }: EmailThreadPreviewProps) => {
         </div>
 
         <span {...stylex.props(styles.senderNames)}>{senderNames}</span>
-        <span {...stylex.props(styles.threadCount)}>{thread.numberOfMessagesInThread}</span>
+        <span {...stylex.props(styles.threadCount)}>
+          {thread.numberOfMessagesInThread}
+        </span>
       </div>
 
       <div {...stylex.props(styles.subjectAndBody)}>

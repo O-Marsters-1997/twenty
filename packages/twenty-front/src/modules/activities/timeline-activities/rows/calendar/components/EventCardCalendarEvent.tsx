@@ -20,7 +20,13 @@ import {
   formatToHumanReadableTime,
 } from '~/utils/format/formatDate';
 import * as stylex from '@stylexjs/stylex';
-import { borderColor, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  borderColor,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   eventCardCalendarEventContainer: {
@@ -172,7 +178,8 @@ export const EventCardCalendarEvent = ({
     : null;
   return (
     <div
-      onClick={() => openCalendarEventInSidePanel(calendarEventId)} {...stylex.props(styles.eventCardCalendarEventContainer)}
+      onClick={() => openCalendarEventInSidePanel(calendarEventId)}
+      {...stylex.props(styles.eventCardCalendarEventContainer)}
     >
       <div {...stylex.props(styles.calendarEventDateCard)}>
         <div {...stylex.props(styles.calendarEventDateCardMonth)}>

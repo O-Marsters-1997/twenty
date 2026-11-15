@@ -1,4 +1,3 @@
-
 import { type EmailThreadMessageParticipant } from '@/activities/emails/types/EmailThreadMessageParticipant';
 import { getDisplayNameFromParticipant } from '@/activities/emails/utils/getDisplayNameFromParticipant';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';

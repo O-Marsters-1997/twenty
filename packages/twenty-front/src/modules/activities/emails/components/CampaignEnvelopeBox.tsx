@@ -2,7 +2,12 @@ import { type MouseEventHandler, type ReactNode } from 'react';
 
 import { ComposerFieldRow } from '@/activities/components/ComposerFieldRow';
 import * as stylex from '@stylexjs/stylex';
-import { background, borderColor, borderRadius, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  background,
+  borderColor,
+  borderRadius,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 // Widest campaign row label ("Unsubscribe topic"), so every value starts on the same column.
 const CAMPAIGN_ENVELOPE_LABEL_MIN_WIDTH = '116px';

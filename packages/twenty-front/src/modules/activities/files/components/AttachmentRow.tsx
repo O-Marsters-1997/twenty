@@ -205,7 +205,8 @@ export const AttachmentRow = ({
           <FileIcon fileCategory={fileCategory} thumbnailUrl={fileUrl} />
           {isEditing ? (
             <div
-              onClick={(event) => event.stopPropagation()} {...stylex.props(styles.textInputContainer)}
+              onClick={(event) => event.stopPropagation()}
+              {...stylex.props(styles.textInputContainer)}
             >
               <SettingsTextInput
                 instanceId={`attachment-${attachment.id}-name`}

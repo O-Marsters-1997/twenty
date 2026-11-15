@@ -1,7 +1,15 @@
 import { Trans } from '@lingui/react/macro';
 import { IconLock } from 'twenty-ui/icon';
 import * as stylex from '@stylexjs/stylex';
-import { backgroundTransparent, borderColor, fontColor, fontSize, fontWeight, iconSize, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  backgroundTransparent,
+  borderColor,
+  fontColor,
+  fontSize,
+  fontWeight,
+  iconSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   emailBodyNotSharedContainer: {

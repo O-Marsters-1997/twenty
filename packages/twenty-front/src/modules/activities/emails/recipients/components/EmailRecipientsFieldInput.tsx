@@ -1,5 +1,10 @@
 import * as stylex from '@stylexjs/stylex';
-import { backgroundTransparent, borderRadius, color, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  backgroundTransparent,
+  borderRadius,
+  color,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 import { type EmailRecipientSuggestion } from '@/activities/emails/recipients/types/EmailRecipientSuggestion';
 import { ToastOnQueryErrorEffect } from '@/apollo/components/ToastOnQueryErrorEffect';
 import { pointerIntersection } from '@dnd-kit/collision';

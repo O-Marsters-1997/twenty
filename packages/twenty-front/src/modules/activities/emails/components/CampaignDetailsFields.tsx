@@ -25,7 +25,12 @@ import { useRemoveFocusItemFromFocusStackById } from '@/ui/utilities/focus/hooks
 import { useRemoveFocusItemFromFocusStackOnUnmount } from '@/ui/utilities/focus/hooks/useRemoveFocusItemFromFocusStackOnUnmount';
 import { FocusComponentType } from '@/ui/utilities/focus/types/FocusComponentType';
 import * as stylex from '@stylexjs/stylex';
-import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   subjectInput: {
@@ -172,7 +177,8 @@ export const CampaignDetailsFields = ({
           defaultValue={detailsState.subject}
           onChange={(event) => detailsState.setSubject(event.target.value)}
           onFocus={handleSubjectFocus}
-          onBlur={handleSubjectBlur} {...stylex.props(styles.subjectInput)}
+          onBlur={handleSubjectBlur}
+          {...stylex.props(styles.subjectInput)}
         />
       </CampaignEnvelopeRow>
     </CampaignEnvelopeBox>

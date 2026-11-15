@@ -90,7 +90,8 @@ export const EventRowGenericLinked = ({
             {eventTypeLabel ?? t`linked a ${objectLabel}`}
           </EventRowItem>
           {canOpen && (
-            <span {...stylex.props(eventRowStyles.linkedRecord)}
+            <span
+              {...stylex.props(eventRowStyles.linkedRecord)}
               role="button"
               tabIndex={0}
               onClick={handleOpen}

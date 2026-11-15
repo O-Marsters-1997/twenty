@@ -53,7 +53,8 @@ export const FilesCardContent = ({
   if (isAttachmentsEmpty) {
     return (
       <div
-        onDragEnter={() => canUploadFiles && setIsDraggingFile(true)} {...stylex.props(styles.dropZoneContainer)}
+        onDragEnter={() => canUploadFiles && setIsDraggingFile(true)}
+        {...stylex.props(styles.dropZoneContainer)}
       >
         {isDraggingFile && canUploadFiles ? (
           <DropZone

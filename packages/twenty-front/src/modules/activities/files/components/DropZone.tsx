@@ -5,7 +5,16 @@ import { useSpreadsheetImportInternal } from '@/spreadsheet-import/hooks/useSpre
 import { IconUpload } from 'twenty-ui/icon';
 import { useTheme } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { background, borderColor, borderRadius, fontColor, fontSize, fontWeight, spacing, textLineHeight } from 'twenty-ui/theme/tokens.stylex';
+import {
+  background,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+  textLineHeight,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   container: {
@@ -77,7 +86,8 @@ export const DropZone = ({
   return (
     <div
       // oxlint-disable-next-line react/jsx-props-no-spreading
-      {...getRootProps()} {...stylex.props(styles.container)}
+      {...getRootProps()}
+      {...stylex.props(styles.container)}
     >
       {isDragActive && (
         <>

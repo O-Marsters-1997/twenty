@@ -1,5 +1,10 @@
 import * as stylex from '@stylexjs/stylex';
-import { background, borderColor, borderRadius, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  background,
+  borderColor,
+  borderRadius,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 import { media } from 'twenty-ui/theme/constants.stylex';
 
 type EventCardProps = {

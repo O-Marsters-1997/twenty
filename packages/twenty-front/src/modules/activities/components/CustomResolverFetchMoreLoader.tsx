@@ -37,7 +37,9 @@ export const CustomResolverFetchMoreLoader = ({
 
   return (
     <div ref={tbodyRef} {...stylex.props(styles.container)}>
-      {loading && <div {...stylex.props(styles.text)}>{t`Loading more...`}</div>}
+      {loading && (
+        <div {...stylex.props(styles.text)}>{t`Loading more...`}</div>
+      )}
     </div>
   );
 };

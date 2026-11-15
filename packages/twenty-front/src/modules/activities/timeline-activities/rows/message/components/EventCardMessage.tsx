@@ -9,7 +9,12 @@ import { EventCardMessageForbidden } from '@/activities/timeline-activities/rows
 import { useFindOneRecord } from '@/object-record/hooks/useFindOneRecord';
 import { useOpenRecordInSidePanel } from '@/side-panel/hooks/useOpenRecordInSidePanel';
 import * as stylex from '@stylexjs/stylex';
-import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   eventCardMessageContainer: {
@@ -128,7 +133,10 @@ export const EventCardMessage = ({
   };
 
   return (
-    <div onClick={handleClick} {...stylex.props(styles.eventCardMessageContainer)}>
+    <div
+      onClick={handleClick}
+      {...stylex.props(styles.eventCardMessageContainer)}
+    >
       <div {...stylex.props(styles.emailContent)}>
         <div {...stylex.props(styles.emailTop)}>
           <div {...stylex.props(styles.emailTitle)}>{message.subject}</div>

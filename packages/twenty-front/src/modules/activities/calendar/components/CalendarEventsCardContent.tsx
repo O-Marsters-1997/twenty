@@ -105,7 +105,9 @@ export const CalendarEventsCardContent = ({
               <StyledTitleContainer>
                 <Heading level={3} size="lg">
                   {monthLabel}
-                  {isLastMonthOfYear && <span {...stylex.props(styles.year)}> {year}</span>}
+                  {isLastMonthOfYear && (
+                    <span {...stylex.props(styles.year)}> {year}</span>
+                  )}
                 </Heading>
               </StyledTitleContainer>
               <CalendarMonthCard dayTimes={monthDayTimes} />

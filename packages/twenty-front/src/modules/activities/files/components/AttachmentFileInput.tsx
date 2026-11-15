@@ -39,7 +39,8 @@ export const AttachmentFileInput = ({
       ref={ref}
       onChange={handleFileInputChange}
       type="file"
-      multiple {...stylex.props(styles.fileInput)}
+      multiple
+      {...stylex.props(styles.fileInput)}
     />
   );
 };

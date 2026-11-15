@@ -109,7 +109,8 @@ export const CalendarEventComposerTargetsInput = ({
       <div
         ref={setContainerElement}
         onClick={handleToggleDropdown}
-        data-click-outside-id={dropdownId} {...stylex.props(styles.clickableContainer)}
+        data-click-outside-id={dropdownId}
+        {...stylex.props(styles.clickableContainer)}
       >
         {hasChips ? (
           <>

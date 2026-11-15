@@ -53,7 +53,9 @@ export const TaskList = ({
   <>
     {tasks.length > 0 && (
       <div {...stylex.props(styles.container)}>
-        <div {...stylex.props(styles.titleBar, isFirst && styles.titleBarFirst)}>
+        <div
+          {...stylex.props(styles.titleBar, isFirst && styles.titleBarFirst)}
+        >
           {title && (
             <span {...stylex.props(styles.title)}>
               <SelectDisplay color={titleColor} label={title} />

@@ -57,7 +57,11 @@ export const EventRowDate = ({ happensAt }: EventRowDateProps) => {
       delay={TooltipDelay.mediumDelay}
       side="left"
     >
-      <div id={dateElementId} tabIndex={0} {...stylex.props(styles.eventRowDate)}>
+      <div
+        id={dateElementId}
+        tabIndex={0}
+        {...stylex.props(styles.eventRowDate)}
+      >
         {relativeHappensAt}
       </div>
     </Tooltip>

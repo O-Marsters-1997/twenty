@@ -1,4 +1,3 @@
-
 import { type FieldMetadataItem } from '@/object-metadata/types/FieldMetadataItem';
 import { Icon123, useIcons } from 'twenty-ui/icon';
 import * as stylex from '@stylexjs/stylex';

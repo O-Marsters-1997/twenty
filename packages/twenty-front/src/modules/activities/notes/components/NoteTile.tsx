@@ -11,7 +11,14 @@ import { RecordFieldComponentInstanceContext } from '@/object-record/record-fiel
 import { RecordInlineCell } from '@/object-record/record-inline-cell/components/RecordInlineCell';
 import { getRecordFieldInputInstanceId } from '@/object-record/utils/getRecordFieldInputId';
 import * as stylex from '@stylexjs/stylex';
-import { background, borderColor, borderRadius, fontColor, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  background,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   card: {
@@ -106,9 +113,12 @@ export const NoteTile = ({
             recordId: note.id,
             objectNameSingular: CoreObjectNameSingular.Note,
           })
-        } {...stylex.props(styles.cardDetailsContainer)}
+        }
+        {...stylex.props(styles.cardDetailsContainer)}
       >
-        <div {...stylex.props(styles.noteTitle)}>{note.title ?? t`Task Title`}</div>
+        <div {...stylex.props(styles.noteTitle)}>
+          {note.title ?? t`Task Title`}
+        </div>
         <div {...stylex.props(styles.cardContent)}>{body}</div>
       </div>
       <div {...stylex.props(styles.footer)}>

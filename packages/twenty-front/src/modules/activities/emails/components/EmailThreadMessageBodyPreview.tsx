@@ -19,7 +19,5 @@ type EmailThreadMessageBodyPreviewProps = {
 export const EmailThreadMessageBodyPreview = ({
   body,
 }: EmailThreadMessageBodyPreviewProps) => {
-  return (
-    <div {...stylex.props(styles.threadMessageBodyPreview)}>{body}</div>
-  );
+  return <div {...stylex.props(styles.threadMessageBodyPreview)}>{body}</div>;
 };

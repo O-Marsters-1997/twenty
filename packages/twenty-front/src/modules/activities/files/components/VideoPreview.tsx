@@ -37,7 +37,8 @@ export const VideoPreview = ({ videoName, videoUrl }: VideoPreviewProps) => {
     <video
       controls
       src={videoUrl}
-      onError={() => setHasFailedToLoad(true)} {...stylex.props(styles.video)}
+      onError={() => setHasFailedToLoad(true)}
+      {...stylex.props(styles.video)}
     />
   );
 };

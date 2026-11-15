@@ -26,7 +26,13 @@ import { IconButton } from 'twenty-ui/components/input';
 import { PermissionFlagType } from '~/generated-metadata/graphql';
 import { AttachmentRow } from './AttachmentRow';
 import * as stylex from '@stylexjs/stylex';
-import { background, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  background,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const DocumentViewer = lazy(() =>
   import('@/activities/files/components/DocumentViewer').then((module) => ({
@@ -145,7 +151,8 @@ export const AttachmentList = ({
       {attachmentsWithFile.length > 0 && (
         <div {...stylex.props(styles.container)}>
           <div
-            onDragEnter={() => hasUploadPermission && setIsDraggingFile(true)} {...stylex.props(styles.dropZoneContainer)}
+            onDragEnter={() => hasUploadPermission && setIsDraggingFile(true)}
+            {...stylex.props(styles.dropZoneContainer)}
           >
             {isDraggingFile && hasUploadPermission ? (
               <DropZone

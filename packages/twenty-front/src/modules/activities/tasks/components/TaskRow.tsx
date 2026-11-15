@@ -120,7 +120,8 @@ export const TaskRow = ({ task }: { task: Task }) => {
         <div
           onClick={(e) => {
             e.stopPropagation();
-          }} {...stylex.props(styles.checkboxContainer)}
+          }}
+          {...stylex.props(styles.checkboxContainer)}
         >
           <Checkbox
             checked={task.status === 'DONE'}
@@ -134,7 +135,9 @@ export const TaskRow = ({ task }: { task: Task }) => {
             task.status === 'DONE' && styles.taskTitleCompleted,
           )}
         >
-          {task.title || <div {...stylex.props(styles.placeholder)}>{t`Task title`}</div>}
+          {task.title || (
+            <div {...stylex.props(styles.placeholder)}>{t`Task title`}</div>
+          )}
         </div>
         <div {...stylex.props(styles.taskBody)}>
           <OverflowingTextWithTooltip

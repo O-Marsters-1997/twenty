@@ -66,7 +66,10 @@ export const EmailThreadMessageLayout = ({
   >
     <div
       onClick={onHeaderClick}
-      {...stylex.props(styles.header, isHeaderClickable && styles.headerClickable)}
+      {...stylex.props(
+        styles.header,
+        isHeaderClickable && styles.headerClickable,
+      )}
     >
       {header}
     </div>

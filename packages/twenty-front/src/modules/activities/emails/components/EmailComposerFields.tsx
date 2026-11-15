@@ -33,7 +33,12 @@ import { DND_KIT_SENSORS } from '@/ui/utilities/drag-and-drop/constants/DndKitSe
 import { DragDropItemDndContext } from '@/ui/utilities/drag-and-drop/context/DragDropItemDndContext';
 import { GET_MY_CONNECTED_ACCOUNTS } from '@/settings/accounts/graphql/queries/getMyConnectedAccounts';
 import * as stylex from '@stylexjs/stylex';
-import { color, fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  color,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   fieldsContainer: {
@@ -45,7 +50,10 @@ const styles = stylex.create({
   },
   ccBccToggle: {
     all: 'unset',
-    color: { default: fontColor['--t-font-color-tertiary'], ':hover': fontColor['--t-font-color-secondary'] },
+    color: {
+      default: fontColor['--t-font-color-tertiary'],
+      ':hover': fontColor['--t-font-color-secondary'],
+    },
     cursor: 'pointer',
     flexShrink: '0',
     fontSize: fontSize['--t-font-size-md'],
@@ -53,7 +61,10 @@ const styles = stylex.create({
     paddingRight: spacing['--t-spacing-1'],
     paddingBottom: '0',
     paddingLeft: spacing['--t-spacing-1'],
-    outline: { default: null, ':focus-visible': `2px solid ${color['--t-color-blue']}` },
+    outline: {
+      default: null,
+      ':focus-visible': `2px solid ${color['--t-color-blue']}`,
+    },
     outlineOffset: { default: null, ':focus-visible': '2px' },
   },
   body: {
@@ -79,12 +90,18 @@ const styles = stylex.create({
     alignItems: 'center',
     alignSelf: 'flex-start',
     all: 'unset',
-    color: { default: fontColor['--t-font-color-tertiary'], ':hover': fontColor['--t-font-color-secondary'] },
+    color: {
+      default: fontColor['--t-font-color-tertiary'],
+      ':hover': fontColor['--t-font-color-secondary'],
+    },
     cursor: 'pointer',
     display: 'flex',
     fontSize: fontSize['--t-font-size-md'],
     gap: spacing['--t-spacing-1'],
-    outline: { default: null, ':focus-visible': `2px solid ${color['--t-color-blue']}` },
+    outline: {
+      default: null,
+      ':focus-visible': `2px solid ${color['--t-color-blue']}`,
+    },
     outlineOffset: { default: null, ':focus-visible': '2px' },
   },
   recipientLimitWarning: {
@@ -219,7 +236,8 @@ export const EmailComposerFields = ({
               trailing={
                 !areCcBccFieldsVisible && (
                   <button
-                    onClick={() => composerState.setShowCcBcc(true)} {...stylex.props(styles.ccBccToggle)}
+                    onClick={() => composerState.setShowCcBcc(true)}
+                    {...stylex.props(styles.ccBccToggle)}
                   >
                     {t`Cc/Bcc`}
                   </button>
@@ -295,7 +313,11 @@ export const EmailComposerFields = ({
       {(composerState.files.length > 0 || isDefined(onAttachFiles)) && (
         <div {...stylex.props(styles.attachments)}>
           {isDefined(onAttachFiles) && (
-            <button type="button" onClick={onAttachFiles} {...stylex.props(styles.attachAction)}>
+            <button
+              type="button"
+              onClick={onAttachFiles}
+              {...stylex.props(styles.attachAction)}
+            >
               <IconPaperclip size={theme.icon.size.sm} />
               {t`Attach files`}
             </button>

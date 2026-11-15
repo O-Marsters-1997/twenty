@@ -16,7 +16,13 @@ import { useOpenCalendarEventInSidePanel } from '@/side-panel/hooks/useOpenCalen
 import { IconArrowRight } from 'twenty-ui/icon';
 import { useTheme } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { borderRadius, fontColor, fontWeight, spacing, tagBackground } from 'twenty-ui/theme/tokens.stylex';
+import {
+  borderRadius,
+  fontColor,
+  fontWeight,
+  spacing,
+  tagBackground,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type CalendarEventRowProps = {
   calendarEvent: TimelineCalendarEvent;
@@ -98,7 +104,10 @@ export const CalendarEventRow = ({ calendarEvent }: CalendarEventRowProps) => {
 
   return (
     <div
-      {...stylex.props(styles.container, showTitle && styles.containerClickable)}
+      {...stylex.props(
+        styles.container,
+        showTitle && styles.containerClickable,
+      )}
       onClick={
         showTitle
           ? () => {

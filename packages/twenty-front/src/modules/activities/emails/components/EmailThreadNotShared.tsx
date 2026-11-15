@@ -1,5 +1,13 @@
 import * as stylex from '@stylexjs/stylex';
-import { backgroundTransparent, borderColor, borderRadius, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 import { TooltipDelay } from '@/ui/layout/tooltip/constants/TooltipDelay';
 import { useLingui } from '@lingui/react/macro';
 import { IconLock } from 'twenty-ui/icon';
@@ -55,7 +63,10 @@ export const EmailThreadNotShared = ({
     >
       <div
         id={containerId}
-        {...stylex.props(styles.container, isCompact && styles.containerCompact)}
+        {...stylex.props(
+          styles.container,
+          isCompact && styles.containerCompact,
+        )}
       >
         <IconLock size={theme.icon.size.sm} />
         {t`Not shared`}

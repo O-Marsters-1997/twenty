@@ -7,7 +7,12 @@ import { Card } from 'twenty-ui/primitives/surfaces';
 import { themeCssVariables } from 'twenty-ui/theme';
 import { type TimelineCalendarEvent } from '~/generated/graphql';
 import * as stylex from '@stylexjs/stylex';
-import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type CalendarDayCardContentProps = {
   calendarEvents: TimelineCalendarEvent[];
@@ -82,7 +87,10 @@ export const CalendarDayCardContent = ({
         </div>
         <div {...stylex.props(styles.events)}>
           {calendarEvents.map((calendarEvent) => (
-            <div key={calendarEvent.id} {...stylex.props(styles.eventRowContainer)}>
+            <div
+              key={calendarEvent.id}
+              {...stylex.props(styles.eventRowContainer)}
+            >
               <CalendarEventRow calendarEvent={calendarEvent} />
             </div>
           ))}

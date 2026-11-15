@@ -1,7 +1,13 @@
 import { type MouseEventHandler, type ReactNode } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import * as stylex from '@stylexjs/stylex';
-import { borderColor, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  borderColor,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const ROW_MIN_HEIGHT = '40px';
 
@@ -81,7 +87,10 @@ export const ComposerFieldRow = ({
     </span>
     <div {...stylex.props(styles.content)}>{children}</div>
     {isDefined(trailing) && (
-      <div onClick={(event) => event.stopPropagation()} {...stylex.props(styles.trailing)}>
+      <div
+        onClick={(event) => event.stopPropagation()}
+        {...stylex.props(styles.trailing)}
+      >
         {trailing}
       </div>
     )}
