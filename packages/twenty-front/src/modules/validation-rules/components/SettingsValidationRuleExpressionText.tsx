@@ -1,29 +1,15 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { type ReactNode } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { codeFont, color, fontColor } from 'twenty-ui/theme/tokens.stylex';
 
-import { VALIDATION_RULE_HIGHLIGHT_COLORS } from '@/validation-rules/constants/ValidationRuleHighlightColors';
-import { type ValidationRuleExpressionHighlightKind } from '@/validation-rules/types/ValidationRuleExpressionHighlight';
 import { computeValidationRuleExpressionHighlights } from '@/validation-rules/utils/computeValidationRuleExpressionHighlights';
-
-const StyledExpression = styled.span`
-  font-family: ${themeCssVariables.code.font.family};
-`;
-
-const StyledToken = styled.span<{
-  kind: ValidationRuleExpressionHighlightKind;
-}>`
-  color: ${({ kind }) => VALIDATION_RULE_HIGHLIGHT_COLORS[kind]};
-`;
 
 type SettingsValidationRuleExpressionTextProps = {
   expression: string;
-  className?: string;
 };
 
 export const SettingsValidationRuleExpressionText = ({
   expression,
-  className,
 }: SettingsValidationRuleExpressionTextProps) => {
   const highlights = computeValidationRuleExpressionHighlights(expression);
 
@@ -35,9 +21,9 @@ export const SettingsValidationRuleExpressionText = ({
       nodes: [
         ...nodes,
         expression.slice(offset, start),
-        <StyledToken key={start} kind={kind}>
+        <span key={start} {...stylex.props(styles[kind])}>
           {expression.slice(start, end)}
-        </StyledToken>,
+        </span>,
       ],
       offset: end,
     }),
@@ -45,9 +31,20 @@ export const SettingsValidationRuleExpressionText = ({
   );
 
   return (
-    <StyledExpression className={className}>
+    <span {...stylex.props(styles.expression)}>
       {parts.nodes}
       {expression.slice(parts.offset)}
-    </StyledExpression>
+    </span>
   );
 };
+
+const styles = stylex.create({
+  expression: {
+    fontFamily: codeFont['--t-code-font-family'],
+  },
+  string: { color: color['--t-color-green11'] },
+  number: { color: color['--t-color-orange11'] },
+  function: { color: color['--t-color-blue11'] },
+  keyword: { color: color['--t-color-pink11'] },
+  operator: { color: fontColor['--t-font-color-tertiary'] },
+});

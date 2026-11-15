@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useId } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -33,11 +32,10 @@ const styles = stylex.create({
   emptyValue: {
     color: fontColor['--t-font-color-tertiary'],
   },
+  openRecordButton: {
+    alignSelf: 'flex-start',
+  },
 });
-
-const StyledOpenRecordButton = styled(Button)`
-  align-self: flex-start;
-`;
 
 type LogConsoleRecordChangeDetailProps = {
   entry: EventLogRecord;
@@ -153,7 +151,8 @@ export const LogConsoleRecordChangeDetail = ({
           </Section.Root>
         )}
       {isDefined(recordSnapshot) && isDefined(recordSnapshot.id) && (
-        <StyledOpenRecordButton
+        <Button
+          xstyle={styles.openRecordButton}
           size="sm"
           startIcon={<IconArrowUpRight />}
           onClick={() =>
@@ -164,7 +163,7 @@ export const LogConsoleRecordChangeDetail = ({
           }
         >
           {t`Open record`}
-        </StyledOpenRecordButton>
+        </Button>
       )}
     </div>
   );

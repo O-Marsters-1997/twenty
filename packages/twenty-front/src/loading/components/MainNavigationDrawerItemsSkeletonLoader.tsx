@@ -1,20 +1,6 @@
 import { SkeletonLine } from '@/ui/feedback/skeleton/components/SkeletonLine';
-import { css } from '@linaria/core';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { SKELETON_HEIGHT_SIZES } from 'twenty-ui/primitives/feedback';
-
-const StyledSkeletonContainer = styled.div`
-  align-items: flex-start;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  width: 100%;
-`;
-
-const fillSkeletonContainer = css`
-  display: block;
-  width: 100%;
-`;
 
 export const MainNavigationDrawerItemsSkeletonLoader = ({
   title,
@@ -24,15 +10,31 @@ export const MainNavigationDrawerItemsSkeletonLoader = ({
   length: number;
 }) => {
   return (
-    <StyledSkeletonContainer>
+    <div {...stylex.props(styles.skeletonContainer)}>
       {title && <SkeletonLine width={48} height={SKELETON_HEIGHT_SIZES.xs} />}
       {Array.from({ length }).map((_, index) => (
         <SkeletonLine
           key={index}
-          containerClassName={fillSkeletonContainer}
+          containerClassName={
+            stylex.props(styles.fillSkeletonContainer).className
+          }
           height={SKELETON_HEIGHT_SIZES.s}
         />
       ))}
-    </StyledSkeletonContainer>
+    </div>
   );
 };
+
+const styles = stylex.create({
+  skeletonContainer: {
+    alignItems: 'flex-start',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 6,
+    width: '100%',
+  },
+  fillSkeletonContainer: {
+    display: 'block',
+    width: '100%',
+  },
+});

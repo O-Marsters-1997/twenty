@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { Fragment, useState } from 'react';
@@ -15,7 +14,7 @@ import { LightIconButton } from 'twenty-ui/components/input';
 import { IconChevronDown, IconChevronUp, useIcons } from 'twenty-ui/icon';
 import { Status } from 'twenty-ui/primitives/data-display';
 import { Card, Tooltip } from 'twenty-ui/primitives/surfaces';
-import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 
 import { useObjectMetadataItems } from '@/object-metadata/hooks/useObjectMetadataItems';
 import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/EnrichedObjectMetadataItem';
@@ -78,43 +77,38 @@ const styles = stylex.create({
   errorMessage: {
     marginTop: spacing['--t-spacing-3'],
   },
+  previewTitle: {
+    marginBottom: 0,
+  },
+  fieldLabel: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    minWidth: 0,
+    overflowWrap: 'anywhere',
+  },
+  fieldIcon: {
+    display: 'flex',
+    flexShrink: 0,
+  },
+  value: {
+    color: fontColor['--t-font-color-primary'],
+    minWidth: 0,
+    overflowWrap: 'anywhere',
+  },
+  valueEmpty: {
+    color: fontColor['--t-font-color-light'],
+  },
+  muted: {
+    color: fontColor['--t-font-color-light'],
+  },
+  fieldValuesPlaceholder: {
+    fontSize: fontSize['--t-font-size-md'],
+    lineHeight: '24px',
+    marginTop: spacing['--t-spacing-2'],
+  },
 });
-
-const StyledPreviewTitle = styled(StyledFormCardTitle)`
-  margin-bottom: 0;
-`;
-
-const StyledFieldLabel = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  min-width: 0;
-  overflow-wrap: anywhere;
-
-  > svg {
-    flex-shrink: 0;
-  }
-`;
-
-const StyledValue = styled.span<{ isEmpty: boolean }>`
-  color: ${({ isEmpty }) =>
-    isEmpty
-      ? themeCssVariables.font.color.light
-      : themeCssVariables.font.color.primary};
-  min-width: 0;
-  overflow-wrap: anywhere;
-`;
-
-const StyledMuted = styled.div`
-  color: ${themeCssVariables.font.color.light};
-`;
-
-const StyledFieldValuesPlaceholder = styled(StyledMuted)`
-  font-size: ${themeCssVariables.font.size.md};
-  line-height: 24px;
-  margin-top: ${themeCssVariables.spacing[2]};
-`;
 
 type SettingsValidationRulePreviewProps = {
   objectMetadataItem: EnrichedObjectMetadataItem;
@@ -162,9 +156,11 @@ export const SettingsValidationRulePreview = ({
   });
 
   const previewTitle = (
-    <StyledPreviewTitle>
+    <StyledFormCardTitle
+      className={stylex.props(styles.previewTitle).className}
+    >
       <Trans>Preview</Trans>
-    </StyledPreviewTitle>
+    </StyledFormCardTitle>
   );
 
   if (loading) {
@@ -179,9 +175,9 @@ export const SettingsValidationRulePreview = ({
         <div {...stylex.props(styles.previewHeader)}>{previewTitle}</div>
         <Card.Root fullWidth>
           <Card.Content>
-            <StyledMuted>
+            <div {...stylex.props(styles.muted)}>
               {t`Create a few ${objectMetadataItem.labelPlural} to preview this rule on real records.`}
-            </StyledMuted>
+            </div>
           </Card.Content>
         </Card.Root>
       </>
@@ -282,11 +278,11 @@ export const SettingsValidationRulePreview = ({
             {renderStatus()}
           </div>
           {referencedPaths.length === 0 ? (
-            <StyledFieldValuesPlaceholder>
+            <div {...stylex.props(styles.muted, styles.fieldValuesPlaceholder)}>
               {compilationResult.isValid
                 ? t`This condition doesn't read any field.`
                 : t`Fields used in the condition show their values here.`}
-            </StyledFieldValuesPlaceholder>
+            </div>
           ) : (
             <div {...stylex.props(styles.fieldValues)}>
               {referencedPaths.map((path) => {
@@ -305,18 +301,25 @@ export const SettingsValidationRulePreview = ({
 
                 return (
                   <Fragment key={path}>
-                    <StyledFieldLabel>
+                    <div {...stylex.props(styles.fieldLabel)}>
                       {isDefined(FieldIcon) && (
-                        <FieldIcon
-                          size={theme.icon.size.md}
-                          stroke={theme.icon.stroke.sm}
-                        />
+                        <span {...stylex.props(styles.fieldIcon)}>
+                          <FieldIcon
+                            size={theme.icon.size.md}
+                            stroke={theme.icon.stroke.sm}
+                          />
+                        </span>
                       )}
                       {fieldLabel}
-                    </StyledFieldLabel>
-                    <StyledValue isEmpty={formattedValue.length === 0}>
+                    </div>
+                    <span
+                      {...stylex.props(
+                        styles.value,
+                        formattedValue.length === 0 && styles.valueEmpty,
+                      )}
+                    >
                       {formattedValue.length > 0 ? formattedValue : t`Empty`}
-                    </StyledValue>
+                    </span>
                   </Fragment>
                 );
               })}
