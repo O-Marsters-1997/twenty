@@ -1,4 +1,4 @@
-import { cx } from '@linaria/core';
+import { mergeClassName } from '@/page-layout/utils/mergeClassName';
 import { useRef, type KeyboardEvent, type Ref } from 'react';
 import { type MultiItemBaseInputProps } from '@/object-record/record-field/ui/meta-types/input/types/MultiItemBaseInputProps';
 import { isKeyboardEventComposing } from '@/ui/utilities/hotkey/utils/isKeyboardEventComposing';
@@ -160,14 +160,9 @@ export const MultiItemBaseInput = ({
     handler();
   };
 
-  const inputContainerProps = stylex.props(styles.inputContainer);
-
   return (
     <>
-      <div
-        {...inputContainerProps}
-        className={cx(className, inputContainerProps.className)}
-      >
+      <div {...mergeClassName(stylex.props(styles.inputContainer), className)}>
         {isDefined(renderInput) ? (
           renderInput({
             value,

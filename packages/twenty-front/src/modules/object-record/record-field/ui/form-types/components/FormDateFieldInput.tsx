@@ -22,36 +22,30 @@ import {
   offset,
   useFloating,
 } from '@floating-ui/react';
-import { styled } from '@linaria/react';
+import { mergeClassName } from '@/page-layout/utils/mergeClassName';
 import { useId, useRef, useState } from 'react';
 import { Temporal } from 'temporal-polyfill';
 import { Key } from 'ts-key-enum';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { type Nullable } from 'twenty-shared/types';
 import * as stylex from '@stylexjs/stylex';
+import './FormDateFieldInput.css';
 
 const FORM_DATE_FIELD_PICKER_CLICK_OUTSIDE_ID =
   'form-date-field-picker-floating';
 
-const StyledDateInputTextContainer = styled.div<{ isReadonly?: boolean }>`
-  align-items: center;
-  display: flex;
-  flex: 1;
-  min-width: 0;
-  pointer-events: ${({ isReadonly }) => (isReadonly ? 'none' : 'auto')};
-  user-select: ${({ isReadonly }) => (isReadonly ? 'none' : 'auto')};
-  width: 100%;
-
-  & input {
-    color: ${({ isReadonly }) =>
-      isReadonly
-        ? themeCssVariables.font.color.light
-        : themeCssVariables.font.color.primary};
-  }
-`;
-
 const styles = stylex.create({
+  dateInputTextContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flex: '1',
+    minWidth: '0',
+    width: '100%',
+  },
+  dateInputTextContainerReadonly: {
+    pointerEvents: 'none',
+    userSelect: 'none',
+  },
   datePickerInputWrapper: {
     display: 'flex',
     flex: '1',
@@ -279,8 +273,16 @@ export const FormDateFieldInput = ({
             variant={variant}
           >
             {draftValue.type === 'static' ? (
-              <StyledDateInputTextContainer
-                isReadonly={readonly === true}
+              <div
+                {...mergeClassName(
+                  stylex.props(
+                    styles.dateInputTextContainer,
+                    readonly === true && styles.dateInputTextContainerReadonly,
+                  ),
+                  readonly === true
+                    ? 'form-date-field-input-readonly'
+                    : undefined,
+                )}
                 onPointerDownCapture={handleMaskedDatePointerDownCapture}
               >
                 <DatePickerInput
@@ -289,7 +291,7 @@ export const FormDateFieldInput = ({
                   readonly={readonly}
                   variant={variant}
                 />
-              </StyledDateInputTextContainer>
+              </div>
             ) : (
               <VariableChipStandalone
                 rawVariableName={draftValue.value}

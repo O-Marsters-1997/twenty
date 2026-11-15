@@ -2,7 +2,6 @@ import { StyledHeaderDropdownButton } from '@/ui/layout/dropdown/components/Styl
 import { isDropdownOpenComponentState } from '@/ui/layout/dropdown/states/isDropdownOpenComponentState';
 import { TooltipDelay } from '@/ui/layout/tooltip/constants/TooltipDelay';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { styled } from '@linaria/react';
 import { type Nullable } from 'twenty-shared/types';
 import { Dropdown } from 'twenty-ui/components/navigation';
 import { isDefined } from 'twenty-shared/utils';
@@ -14,13 +13,13 @@ const styles = stylex.create({
   tagContainer: {
     width: '100%',
   },
+  headerButton: {
+    paddingTop: 0,
+    paddingRight: 0,
+    paddingBottom: 0,
+    paddingLeft: 0,
+  },
 });
-
-const StyledHeaderContainer = styled.div`
-  > * {
-    padding: 0;
-  }
-`;
 
 export const RecordGroupAggregateDropdownButton = ({
   dropdownId,
@@ -37,25 +36,28 @@ export const RecordGroupAggregateDropdownButton = ({
   );
 
   return (
-    <StyledHeaderContainer>
-      <Tooltip
-        content={tooltip ?? ''}
-        side="right"
-        positionMethod="fixed"
-        delay={TooltipDelay.mediumDelay}
-        disabled={isDropdownOpen}
+    <Tooltip
+      content={tooltip ?? ''}
+      side="right"
+      positionMethod="fixed"
+      delay={TooltipDelay.mediumDelay}
+      disabled={isDropdownOpen}
+    >
+      <Dropdown.Trigger
+        id={dropdownId}
+        render={
+          <StyledHeaderDropdownButton
+            isUnfolded={isDropdownOpen}
+            {...stylex.props(styles.headerButton)}
+          />
+        }
       >
-        <Dropdown.Trigger
-          id={dropdownId}
-          render={<StyledHeaderDropdownButton isUnfolded={isDropdownOpen} />}
-        >
-          <div {...stylex.props(styles.tagContainer)}>
-            <Tag color="transparent" weight="regular">
-              {isDefined(value) ? value.toString() : '-'}
-            </Tag>
-          </div>
-        </Dropdown.Trigger>
-      </Tooltip>
-    </StyledHeaderContainer>
+        <div {...stylex.props(styles.tagContainer)}>
+          <Tag color="transparent" weight="regular">
+            {isDefined(value) ? value.toString() : '-'}
+          </Tag>
+        </div>
+      </Dropdown.Trigger>
+    </Tooltip>
   );
 };
