@@ -62,6 +62,12 @@ var MessagingOperations = []string{
 }
 
 var LoginOperations = []string{"getAuthTokensFromOTP", "getAuthTokensFromTwoFactorAuthenticationRecoveryCode", "initiateOTPProvisioning"}
+var AccessOperations = []string{
+	"GetWebhooks", "GetWebhook", "CreateWebhook", "UpdateWebhook", "DeleteWebhook",
+	"GetApiKeys", "GetApiKey", "GetApiKeyRoles", "CreateApiKey", "UpdateApiKey", "RevokeApiKey", "AssignRoleToApiKey",
+	"GenerateApiKeyToken", "GeneratePlaygroundToken",
+}
+
 
 var TwoFactorOperations = []string{
 	"initiateOTPProvisioningForAuthenticatedUser", "verifyTwoFactorAuthenticationMethodForAuthenticatedUser",

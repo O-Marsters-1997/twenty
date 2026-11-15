@@ -1,0 +1,45 @@
+schema:
+  - access.graphqls
+exec:
+  filename: generated.go
+  package: accessgql
+model:
+  filename: models_gen.go
+  package: accessgql
+resolver:
+  layout: single-file
+  filename: resolver.go
+  package: accessgql
+  type: Resolver
+models:
+  UUID:
+    model: github.com/99designs/gqlgen/graphql.String
+  DateTime:
+    model: github.com/99designs/gqlgen/graphql.String
+  Role:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/access/store.Role
+  Webhook:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/access/store.Webhook
+  ApiKey:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/access/store.APIKey
+    fields:
+      role:
+        resolver: true
+  ApiKeyToken:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/access/store.Token
+  AuthToken:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/access/store.Token
+  CreateWebhookInput:
+    model: map[string]interface{}
+  UpdateWebhookInput:
+    model: map[string]interface{}
+  UpdateWebhookInputUpdates:
+    model: map[string]interface{}
+  CreateApiKeyInput:
+    model: map[string]interface{}
+  UpdateApiKeyInput:
+    model: map[string]interface{}
+  GetApiKeyInput:
+    model: map[string]interface{}
+  RevokeApiKeyInput:
+    model: map[string]interface{}

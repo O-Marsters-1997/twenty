@@ -158,6 +158,39 @@ func (i *PGIssuer) IssueAccess(ctx context.Context, principal Principal) (string
 	return token, expiresAt, nil
 }
 
+func (i *PGIssuer) IssuePlayground(ctx context.Context, principal Principal, ttl time.Duration) (string, time.Time, error) {
+	expiresAt := time.Now().Add(ttl)
+	body := jwt.MapClaims{
+		"sub":             principal.UserID,
+		"userId":          principal.UserID,
+		"workspaceId":     principal.WorkspaceID,
+		"userWorkspaceId": principal.UserWorkspaceID,
+		"type":            playgroundTokenType,
+		"authProvider":    principal.AuthProvider,
+	}
+	if principal.WorkspaceMemberID != "" {
+		body["workspaceMemberId"] = principal.WorkspaceMemberID
+	}
+	token, err := i.sign(ctx, body, expiresAt)
+	if err != nil {
+		return "", time.Time{}, fmt.Errorf("issue playground token: %w", err)
+	}
+	return token, expiresAt, nil
+}
+
+func (i *PGIssuer) IssueAPIKey(ctx context.Context, workspaceID, apiKeyID string, expiresAt time.Time) (string, error) {
+	token, err := i.sign(ctx, jwt.MapClaims{
+		"sub":         workspaceID,
+		"workspaceId": workspaceID,
+		"jti":         apiKeyID,
+		"type":        TokenTypeAPIKey,
+	}, expiresAt)
+	if err != nil {
+		return "", fmt.Errorf("issue api key token: %w", err)
+	}
+	return token, nil
+}
+
 func (i *PGIssuer) IssueLogin(ctx context.Context, userID string) (string, error) {
 	return i.issueLogin(ctx, userID, passwordProvider)
 }
