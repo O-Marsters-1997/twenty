@@ -41,8 +41,8 @@ func (w *Webhooks) Create(ctx context.Context, rawInput Input) (Webhook, error) 
 	if err != nil {
 		return Webhook{}, err
 	}
-	secret, _ := input["secret"].(string)
-	if secret == "" {
+	secret, hasSecret := input["secret"].(string)
+	if !hasSecret {
 		secret, err = newSecret()
 		if err != nil {
 			return Webhook{}, err
@@ -79,7 +79,7 @@ func (w *Webhooks) Update(ctx context.Context, id string, rawUpdates Input) (Web
 	}
 	var description any = existing.Description
 	if value, present := updates["description"]; present {
-		description = collapseWhitespace(value)
+		description = value
 	}
 	secret := existing.Secret
 	if value, present := updates["secret"].(string); present {
@@ -107,9 +107,13 @@ func (w *Webhooks) Delete(ctx context.Context, id string) (Webhook, error) {
 
 func whatwgTargetURL(value any) (string, error) {
 	raw, _ := value.(string)
-	parsed, err := url.Parse(raw)
+	parsed, err := url.Parse(strings.Join(strings.Fields(raw), " "))
 	if err != nil || (parsed.Scheme != "http" && parsed.Scheme != "https") || parsed.Host == "" {
 		return "", fmt.Errorf("%w: invalid target URL, provide a valid HTTP or HTTPS URL", metadata.ErrInvalidInput)
+	}
+	parsed.Host = strings.ToLower(parsed.Host)
+	if (parsed.Scheme == "http" && parsed.Port() == "80") || (parsed.Scheme == "https" && parsed.Port() == "443") {
+		parsed.Host = strings.ToLower(parsed.Hostname())
 	}
 	if parsed.Path == "" {
 		parsed.Path = "/"

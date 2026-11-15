@@ -137,6 +137,7 @@ func run() error {
 		accessgql.NewHandler(&accessgql.Resolver{
 			WebhookStore: accessstore.NewWebhooks(pool),
 			APIKeyStore:  accessstore.NewAPIKeys(pool),
+			Permissions:  accessstore.NewPermissions(pool),
 			Tokens:       stack.issuer,
 		}, logger),
 		authHandler,

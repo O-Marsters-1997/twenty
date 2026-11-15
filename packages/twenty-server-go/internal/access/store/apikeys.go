@@ -46,8 +46,15 @@ func (a *APIKeys) AssignableRoles(ctx context.Context) ([]Role, error) {
 }
 
 func (a *APIKeys) RoleOf(ctx context.Context, apiKeyID string) (Role, error) {
-	return queryOne[Role](ctx, a.pool, "API key has no role assigned", `SELECT `+roleDocument+` FROM core."roleTarget" rt JOIN core.role r ON r.id = rt."roleId"
+	roles, err := queryAll[Role](ctx, a.pool, `SELECT `+roleDocument+` FROM core."roleTarget" rt JOIN core.role r ON r.id = rt."roleId"
 		WHERE rt."apiKeyId" = $1::uuid AND rt."workspaceId" = $2::uuid`, apiKeyID, workspace.PinnedWorkspaceID)
+	switch {
+	case err != nil:
+		return Role{}, err
+	case len(roles) == 0:
+		return Role{}, fmt.Errorf("%w: API key %s has no role assigned", ErrForbidden, apiKeyID)
+	}
+	return roles[0], nil
 }
 
 func (a *APIKeys) Create(ctx context.Context, rawInput Input) (APIKey, error) {

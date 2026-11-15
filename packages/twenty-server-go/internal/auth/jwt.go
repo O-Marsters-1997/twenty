@@ -62,6 +62,7 @@ func (v *JWTVerifier) Verify(ctx context.Context, bearer string) (Principal, err
 		UserWorkspaceID:   tokenClaims.UserWorkspaceID,
 		WorkspaceMemberID: tokenClaims.WorkspaceMemberID,
 		AuthProvider:      tokenClaims.AuthProvider,
+		Playground:        tokenClaims.Type == playgroundTokenType,
 	}, nil
 }
 
