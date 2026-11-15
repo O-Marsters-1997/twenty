@@ -1,52 +1,17 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 
 import {
-  RECORD_TABLE_CHECKBOX_WIDTH_CSS_VAR,
-  RECORD_TABLE_DRAG_DROP_WIDTH_CSS_VAR,
-} from '@/object-record/record-table/components/RecordTableStyleWrapper';
-import { RECORD_TABLE_COLUMN_ADD_COLUMN_BUTTON_WIDTH } from '@/object-record/record-table/constants/RecordTableColumnAddColumnButtonWidth';
+  recordTableCssVariable,
+  recordTableLayout,
+  recordTableZIndex,
+} from '../../constants/recordTableLayout.stylex';
 import { RECORD_TABLE_COLUMN_LAST_EMPTY_COLUMN_WIDTH_CLASS_NAME } from '@/object-record/record-table/constants/RecordTableColumnLastEmptyColumnWidthClassName';
-import { TABLE_Z_INDEX } from '@/object-record/record-table/constants/TableZIndex';
+import { cx } from '@linaria/core';
 import { useRecordTableContextOrThrow } from '@/object-record/record-table/contexts/RecordTableContext';
 import { RecordTableAggregateFooterCell } from '@/object-record/record-table/record-table-footer/components/RecordTableAggregateFooterCell';
 import { RecordTableColumnAggregateFooterCellContext } from '@/object-record/record-table/record-table-footer/components/RecordTableColumnAggregateFooterCellContext';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { background } from 'twenty-ui/theme/tokens.stylex';
 import { useIsMobile } from 'twenty-ui/utilities';
-
-const StyledPlaceholderDragAndDropFooterCell = styled.div`
-  background-color: ${themeCssVariables.background.primary};
-  bottom: 0;
-  left: 0px;
-  position: sticky;
-  width: calc(
-    var(${RECORD_TABLE_DRAG_DROP_WIDTH_CSS_VAR}) +
-      var(${RECORD_TABLE_CHECKBOX_WIDTH_CSS_VAR})
-  );
-
-  z-index: ${TABLE_Z_INDEX.footer.stickyColumn};
-`;
-
-const StyledPlaceholderAddButtonPlaceholderFooterCell = styled.div`
-  background-color: ${themeCssVariables.background.primary};
-  bottom: 0;
-  position: sticky;
-  width: ${RECORD_TABLE_COLUMN_ADD_COLUMN_BUTTON_WIDTH}px;
-  z-index: ${TABLE_Z_INDEX.footer.default};
-`;
-
-const StyledPlaceholderLastColumnEmptyFooterCell = styled.div`
-  background-color: ${themeCssVariables.background.primary};
-  bottom: 0;
-  position: sticky;
-  z-index: ${TABLE_Z_INDEX.footer.default};
-`;
-
-const StyledAggregateFooterContainer = styled.div`
-  bottom: 0;
-  display: flex;
-  position: sticky;
-  z-index: ${TABLE_Z_INDEX.footer.default};
-`;
 
 export const RecordTableAggregateFooter = ({
   currentRecordGroupId,
@@ -60,9 +25,13 @@ export const RecordTableAggregateFooter = ({
     return null;
   }
 
+  const lastColumnEmptyFooterCellProps = stylex.props(
+    styles.placeholderLastColumnEmptyFooterCell,
+  );
+
   return (
-    <StyledAggregateFooterContainer>
-      <StyledPlaceholderDragAndDropFooterCell />
+    <div {...stylex.props(styles.aggregateFooterContainer)}>
+      <div {...stylex.props(styles.placeholderDragAndDropFooterCell)} />
       {visibleRecordFields.map((recordField, index) => {
         return (
           <RecordTableColumnAggregateFooterCellContext.Provider
@@ -79,10 +48,44 @@ export const RecordTableAggregateFooter = ({
           </RecordTableColumnAggregateFooterCellContext.Provider>
         );
       })}
-      <StyledPlaceholderAddButtonPlaceholderFooterCell />
-      <StyledPlaceholderLastColumnEmptyFooterCell
-        className={RECORD_TABLE_COLUMN_LAST_EMPTY_COLUMN_WIDTH_CLASS_NAME}
+      <div {...stylex.props(styles.placeholderAddButtonFooterCell)} />
+      <div
+        {...lastColumnEmptyFooterCellProps}
+        className={cx(
+          RECORD_TABLE_COLUMN_LAST_EMPTY_COLUMN_WIDTH_CLASS_NAME,
+          lastColumnEmptyFooterCellProps.className,
+        )}
       />
-    </StyledAggregateFooterContainer>
+    </div>
   );
 };
+
+const styles = stylex.create({
+  placeholderDragAndDropFooterCell: {
+    backgroundColor: background['--t-background-primary'],
+    bottom: 0,
+    left: 0,
+    position: 'sticky',
+    width: `calc(var(${recordTableCssVariable.dragDropWidth}) + var(${recordTableCssVariable.checkboxWidth}))`,
+    zIndex: recordTableZIndex.footerStickyColumn,
+  },
+  placeholderAddButtonFooterCell: {
+    backgroundColor: background['--t-background-primary'],
+    bottom: 0,
+    position: 'sticky',
+    width: recordTableLayout.addColumnButtonWidth,
+    zIndex: recordTableZIndex.footerDefault,
+  },
+  placeholderLastColumnEmptyFooterCell: {
+    backgroundColor: background['--t-background-primary'],
+    bottom: 0,
+    position: 'sticky',
+    zIndex: recordTableZIndex.footerDefault,
+  },
+  aggregateFooterContainer: {
+    bottom: 0,
+    display: 'flex',
+    position: 'sticky',
+    zIndex: recordTableZIndex.footerDefault,
+  },
+});

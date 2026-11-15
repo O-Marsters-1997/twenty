@@ -5,17 +5,21 @@ import { useCreateNewIndexRecord } from '@/object-record/record-table/hooks/useC
 import { canCreateRecordsForObjectMetadataItem } from '@/object-record/utils/canCreateRecordsForObjectMetadataItem';
 import { useAtomComponentSelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentSelectorValue';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { LightIconButton } from 'twenty-ui/components/input';
 import { IconPlus } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { useIsMobile } from 'twenty-ui/utilities';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledHeaderIcon = styled.div`
-  margin: ${themeCssVariables.spacing[1]} ${themeCssVariables.spacing[1]}
-    ${themeCssVariables.spacing[1]} ${themeCssVariables.spacing['1.5']};
-`;
+const styles = stylex.create({
+  headerIcon: {
+    marginTop: spacing['--t-spacing-1'],
+    marginRight: spacing['--t-spacing-1'],
+    marginBottom: spacing['--t-spacing-1'],
+    marginLeft: spacing['--t-spacing-1_5'],
+  },
+});
 
 export const RecordTableHeaderLabelIdentifierCellPlusButton = () => {
   const { objectMetadataItem, objectPermissions } =
@@ -48,7 +52,7 @@ export const RecordTableHeaderLabelIdentifierCellPlusButton = () => {
       objectPermissions,
       objectMetadataItem,
     }) && (
-      <StyledHeaderIcon>
+      <div {...stylex.props(styles.headerIcon)}>
         <LightIconButton
           size="sm"
           emphasis="subtle"
@@ -57,7 +61,7 @@ export const RecordTableHeaderLabelIdentifierCellPlusButton = () => {
         >
           <IconPlus />
         </LightIconButton>
-      </StyledHeaderIcon>
+      </div>
     )
   );
 };

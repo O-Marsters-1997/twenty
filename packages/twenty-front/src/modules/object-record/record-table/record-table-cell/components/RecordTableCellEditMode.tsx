@@ -15,7 +15,6 @@ import { OverlayContainer } from '@/ui/layout/overlay/components/OverlayContaine
 import { useAvailableComponentInstanceIdOrThrow } from '@/ui/utilities/state/component-state/hooks/useAvailableComponentInstanceIdOrThrow';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { useSetAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useSetAtomComponentState';
-import { styled } from '@linaria/react';
 import {
   FloatingPortal,
   autoUpdate,
@@ -25,28 +24,28 @@ import {
   type MiddlewareState,
 } from '@floating-ui/react';
 import { useContext, type ReactElement } from 'react';
+import * as stylex from '@stylexjs/stylex';
 
 const TABLE_FIELD_INPUT_SIDE_OFFSET = -33;
 const TABLE_FIELD_INPUT_ALIGN_OFFSET = -3;
 
-const StyledEditableCellEditModeContainer = styled.div<{
-  isFieldInputOnly: boolean;
-}>`
-  align-items: center;
-  display: flex;
-  height: 100%;
-  position: absolute;
-  width: calc(100% + 2px);
-`;
-
-const StyledInputModeOnlyContainer = styled.div`
-  align-items: center;
-  display: flex;
-  height: 100%;
-  overflow: hidden;
-  padding-left: 8px;
-  width: 100%;
-`;
+const styles = stylex.create({
+  editableCellEditModeContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    height: '100%',
+    position: 'absolute',
+    width: 'calc(100% + 2px)',
+  },
+  inputModeOnlyContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    height: '100%',
+    overflow: 'hidden',
+    paddingLeft: '8px',
+    width: '100%',
+  },
+});
 
 type RecordTableCellEditModeProps = {
   children: ReactElement;
@@ -114,13 +113,14 @@ export const RecordTableCellEditMode = ({
   const renderEditModeContent = () => {
     if (isFieldInputOnly) {
       return (
-        <StyledInputModeOnlyContainer
+        <div
           onClick={() => {
             focusRecordTableCell(cellPosition);
           }}
+          {...stylex.props(styles.inputModeOnlyContainer)}
         >
           {children}
-        </StyledInputModeOnlyContainer>
+        </div>
       );
     }
 
@@ -158,12 +158,12 @@ export const RecordTableCellEditMode = ({
   };
 
   return (
-    <StyledEditableCellEditModeContainer
+    <div
       ref={refs.setReference}
       data-testid="editable-cell-edit-mode-container"
-      isFieldInputOnly={isFieldInputOnly}
+      {...stylex.props(styles.editableCellEditModeContainer)}
     >
       {renderEditModeContent()}
-    </StyledEditableCellEditModeContainer>
+    </div>
   );
 };

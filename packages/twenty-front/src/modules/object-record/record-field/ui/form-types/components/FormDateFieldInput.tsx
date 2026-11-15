@@ -29,6 +29,7 @@ import { Key } from 'ts-key-enum';
 import { isDefined } from 'twenty-shared/utils';
 import { themeCssVariables } from 'twenty-ui/theme';
 import { type Nullable } from 'twenty-shared/types';
+import * as stylex from '@stylexjs/stylex';
 
 const FORM_DATE_FIELD_PICKER_CLICK_OUTSIDE_ID =
   'form-date-field-picker-floating';
@@ -50,11 +51,13 @@ const StyledDateInputTextContainer = styled.div<{ isReadonly?: boolean }>`
   }
 `;
 
-const StyledDatePickerInputWrapper = styled.div`
-  display: flex;
-  flex: 1;
-  min-width: 0;
-`;
+const styles = stylex.create({
+  datePickerInputWrapper: {
+    display: 'flex',
+    flex: '1',
+    minWidth: '0',
+  },
+});
 
 type DraftValue =
   | {
@@ -264,7 +267,10 @@ export const FormDateFieldInput = ({
       {label ? <Field.Label>{label}</Field.Label> : null}
 
       <FormFieldInputRowContainer>
-        <StyledDatePickerInputWrapper ref={datePickerWrapperRef}>
+        <div
+          ref={datePickerWrapperRef}
+          {...stylex.props(styles.datePickerInputWrapper)}
+        >
           <FormFieldInputInnerContainer
             ref={refs.setReference}
             formFieldInputInstanceId={instanceId}
@@ -291,7 +297,7 @@ export const FormDateFieldInput = ({
               />
             )}
           </FormFieldInputInnerContainer>
-        </StyledDatePickerInputWrapper>
+        </div>
         {draftValue.type === 'static' &&
         draftValue.mode === 'edit' &&
         !readonly ? (

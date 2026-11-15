@@ -13,25 +13,29 @@ import {
 import { type VariablePickerComponent } from '@/ui/input/types/VariablePickerComponent';
 import { ForbiddenFieldDisplay } from '@/object-record/record-field/ui/meta-types/display/components/ForbiddenFieldDisplay';
 import { Field } from 'twenty-ui/primitives/input';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isString } from '@sniptt/guards';
 import { useId } from 'react';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { type JsonValue } from 'type-fest';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledReadonlyContainer = styled.div`
-  cursor: default;
-  display: flex;
-  height: 32px;
-  width: 100%;
-`;
-
-const StyledForbiddenFieldDisplayContainer = styled.div`
-  display: flex;
-  margin: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  readonlyContainer: {
+    cursor: 'default',
+    display: 'flex',
+    height: '32px',
+    width: '100%',
+  },
+  forbiddenFieldDisplayContainer: {
+    display: 'flex',
+    marginTop: spacing['--t-spacing-2'],
+    marginRight: spacing['--t-spacing-2'],
+    marginBottom: spacing['--t-spacing-2'],
+    marginLeft: spacing['--t-spacing-2'],
+  },
+});
 
 export type FormMorphRelationToOneValue =
   | {
@@ -117,16 +121,16 @@ export const FormMorphRelationToOneFieldInput = ({
       <FormFieldInputContainer data-testid={testId}>
         {label ? <Field.Label>{label}</Field.Label> : null}
         <FormFieldInputRowContainer>
-          <StyledReadonlyContainer>
+          <div {...stylex.props(styles.readonlyContainer)}>
             <FormFieldInputInnerContainer
               formFieldInputInstanceId={componentId}
               hasRightElement={false}
             >
-              <StyledForbiddenFieldDisplayContainer>
+              <div {...stylex.props(styles.forbiddenFieldDisplayContainer)}>
                 <ForbiddenFieldDisplay />
-              </StyledForbiddenFieldDisplayContainer>
+              </div>
             </FormFieldInputInnerContainer>
-          </StyledReadonlyContainer>
+          </div>
         </FormFieldInputRowContainer>
       </FormFieldInputContainer>
     );
@@ -137,14 +141,14 @@ export const FormMorphRelationToOneFieldInput = ({
       <FormFieldInputContainer data-testid={testId}>
         {label ? <Field.Label>{label}</Field.Label> : null}
         <FormFieldInputRowContainer>
-          <StyledReadonlyContainer>
+          <div {...stylex.props(styles.readonlyContainer)}>
             <FormFieldInputInnerContainer
               formFieldInputInstanceId={componentId}
               hasRightElement={false}
             >
               <FormFieldPlaceholder>{t`No record`}</FormFieldPlaceholder>
             </FormFieldInputInnerContainer>
-          </StyledReadonlyContainer>
+          </div>
         </FormFieldInputRowContainer>
       </FormFieldInputContainer>
     );

@@ -2,7 +2,7 @@ import { FieldDisplay } from '@/object-record/record-field/ui/components/FieldDi
 import { FieldContext } from '@/object-record/record-field/ui/contexts/FieldContext';
 import { FieldFocusStaticFocusedProvider } from '@/object-record/record-field/ui/contexts/FieldFocusContextProvider';
 import { useIsFieldInputOnly } from '@/object-record/record-field/ui/hooks/useIsFieldInputOnly';
-import { RECORD_TABLE_ROW_HEIGHT } from '@/object-record/record-table/constants/RecordTableRowHeight';
+import { recordTableLayout } from '../../constants/recordTableLayout.stylex';
 import { useRecordTableRowContextOrThrow } from '@/object-record/record-table/contexts/RecordTableRowContext';
 import { RecordTableCellDisplayMode } from '@/object-record/record-table/record-table-cell/components/RecordTableCellDisplayMode';
 import { RecordTableCellEditButton } from '@/object-record/record-table/record-table-cell/components/RecordTableCellEditButton';
@@ -13,40 +13,16 @@ import { isRecordTableRowActiveComponentFamilyState } from '@/object-record/reco
 import { recordTableHoverPositionComponentState } from '@/object-record/record-table/states/recordTableHoverPositionComponentState';
 import { useAtomComponentFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentFamilyStateValue';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { useContext } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import {
+  accent,
+  background,
+  borderColor,
+  borderRadius,
+  fontColor,
+} from 'twenty-ui/theme/tokens.stylex';
 import { useIsMobile } from 'twenty-ui/utilities';
-
-const StyledRecordTableCellHoveredPortalContent = styled.div<{
-  showInteractiveStyle: boolean;
-  isRecordTableRowActive: boolean;
-}>`
-  align-items: center;
-  background: ${themeCssVariables.background.transparent.secondary};
-  background-color: ${({ isRecordTableRowActive }) =>
-    isRecordTableRowActive
-      ? themeCssVariables.accent.quaternary
-      : themeCssVariables.background.primary};
-  border-radius: ${({ showInteractiveStyle }) =>
-    showInteractiveStyle ? themeCssVariables.border.radius.sm : 'none'};
-  box-sizing: border-box;
-  cursor: ${({ showInteractiveStyle }) =>
-    showInteractiveStyle ? 'pointer' : 'default'};
-  display: flex;
-
-  height: ${RECORD_TABLE_ROW_HEIGHT}px;
-
-  outline: ${({ showInteractiveStyle, isRecordTableRowActive }) =>
-    isRecordTableRowActive
-      ? 'none'
-      : showInteractiveStyle
-        ? `1px solid ${themeCssVariables.font.color.extraLight}`
-        : `1px solid ${themeCssVariables.border.color.medium}`};
-  outline-offset: -1px;
-
-  user-select: none;
-`;
 
 export const RecordTableCellHoveredPortalContent = () => {
   const recordTableHoverPosition = useAtomComponentStateValue(
@@ -76,9 +52,16 @@ export const RecordTableCellHoveredPortalContent = () => {
   );
 
   return (
-    <StyledRecordTableCellHoveredPortalContent
-      showInteractiveStyle={showInteractiveStyle}
-      isRecordTableRowActive={isRecordTableRowActive}
+    <div
+      {...stylex.props(
+        styles.container,
+        showInteractiveStyle ? styles.interactive : styles.nonInteractive,
+        isRecordTableRowActive
+          ? styles.rowActive
+          : showInteractiveStyle
+            ? styles.outlineInteractive
+            : styles.outlineNonInteractive,
+      )}
     >
       <FieldFocusStaticFocusedProvider>
         {isFieldInputOnly ? (
@@ -92,6 +75,46 @@ export const RecordTableCellHoveredPortalContent = () => {
         )}
       </FieldFocusStaticFocusedProvider>
       {showButton && <RecordTableCellEditButton />}
-    </StyledRecordTableCellHoveredPortalContent>
+    </div>
   );
 };
+
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    backgroundColor: background['--t-background-primary'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    height: recordTableLayout.rowHeight,
+    outlineOffset: -1,
+    userSelect: 'none',
+  },
+  interactive: {
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    cursor: 'pointer',
+  },
+  nonInteractive: {
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+    borderBottomRightRadius: 0,
+    borderBottomLeftRadius: 0,
+    cursor: 'default',
+  },
+  rowActive: {
+    backgroundColor: accent['--t-accent-quaternary'],
+    outlineStyle: 'none',
+  },
+  outlineInteractive: {
+    outlineColor: fontColor['--t-font-color-extra-light'],
+    outlineStyle: 'solid',
+    outlineWidth: 1,
+  },
+  outlineNonInteractive: {
+    outlineColor: borderColor['--t-border-color-medium'],
+    outlineStyle: 'solid',
+    outlineWidth: 1,
+  },
+});

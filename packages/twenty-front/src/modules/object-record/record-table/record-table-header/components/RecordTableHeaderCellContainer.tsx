@@ -1,49 +1,84 @@
-import { RECORD_TABLE_ROW_HEIGHT } from '@/object-record/record-table/constants/RecordTableRowHeight';
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { recordTableLayout } from '../../constants/recordTableLayout.stylex';
+import { cx } from '@linaria/core';
+import * as stylex from '@stylexjs/stylex';
+import { type ComponentProps } from 'react';
+import { media } from 'twenty-ui/theme/constants.stylex';
+import {
+  background,
+  borderColor,
+  fontColor,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledHeaderCell = styled.div<{
+type RecordTableHeaderCellContainerProps = ComponentProps<'div'> & {
   shouldDisplayBorderBottom: boolean;
   isResizing: boolean;
   isReadOnly: boolean;
-}>`
-  background-color: ${themeCssVariables.background.primary};
-  border-bottom: ${({ shouldDisplayBorderBottom }) =>
-    shouldDisplayBorderBottom
-      ? `1px solid ${themeCssVariables.border.color.light}`
-      : 'none'};
-  border-right: 1px solid ${themeCssVariables.border.color.light};
+};
 
-  color: ${themeCssVariables.font.color.tertiary};
+export const RecordTableHeaderCellContainer = ({
+  shouldDisplayBorderBottom,
+  isResizing,
+  isReadOnly,
+  className,
+  ...divProps
+}: RecordTableHeaderCellContainerProps) => {
+  const stylexProps = stylex.props(
+    styles.cell,
+    shouldDisplayBorderBottom && styles.borderBottom,
+    isReadOnly
+      ? styles.readOnly
+      : isResizing
+        ? styles.resizing
+        : styles.interactive,
+  );
 
-  cursor: ${({ isResizing, isReadOnly }) =>
-    isReadOnly ? 'default' : isResizing ? 'col-resize' : 'pointer'};
-  height: ${RECORD_TABLE_ROW_HEIGHT}px;
+  return (
+    <div
+      // oxlint-disable-next-line react/jsx-props-no-spreading
+      {...divProps}
+      {...stylexProps}
+      className={cx(className, stylexProps.className)}
+    />
+  );
+};
 
-  max-height: ${RECORD_TABLE_ROW_HEIGHT}px;
-  padding: 0;
-
-  position: relative;
-
-  text-align: left;
-
-  @media (hover: hover) {
-    &:hover {
-      background: ${({ isResizing, isReadOnly }) =>
-        isReadOnly || isResizing
-          ? themeCssVariables.background.primary
-          : themeCssVariables.background.secondary};
-    }
-  }
-
-  &:active {
-    background: ${({ isResizing, isReadOnly }) =>
-      isReadOnly || isResizing
-        ? themeCssVariables.background.primary
-        : themeCssVariables.background.tertiary};
-  }
-
-  user-select: none;
-`;
-
-export const RecordTableHeaderCellContainer = StyledHeaderCell;
+const styles = stylex.create({
+  cell: {
+    backgroundColor: background['--t-background-primary'],
+    borderRightColor: borderColor['--t-border-color-light'],
+    borderRightStyle: 'solid',
+    borderRightWidth: 1,
+    color: fontColor['--t-font-color-tertiary'],
+    height: recordTableLayout.rowHeight,
+    maxHeight: recordTableLayout.rowHeight,
+    paddingBottom: 0,
+    paddingLeft: 0,
+    paddingRight: 0,
+    paddingTop: 0,
+    position: 'relative',
+    textAlign: 'left',
+    userSelect: 'none',
+  },
+  borderBottom: {
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: 1,
+  },
+  readOnly: {
+    cursor: 'default',
+  },
+  resizing: {
+    cursor: 'col-resize',
+  },
+  interactive: {
+    backgroundColor: {
+      default: background['--t-background-primary'],
+      ':active': background['--t-background-tertiary'],
+      ':hover': {
+        default: null,
+        [media.hoverCapable]: background['--t-background-secondary'],
+      },
+    },
+    cursor: 'pointer',
+  },
+});
