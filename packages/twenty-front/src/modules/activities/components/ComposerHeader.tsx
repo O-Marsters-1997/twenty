@@ -1,15 +1,19 @@
-import { styled } from '@linaria/react';
 import { type ReactNode } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { background, borderColor } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledHeader = styled.div`
-  background-color: ${themeCssVariables.background.secondary};
-  border-bottom: 1px solid ${themeCssVariables.border.color.medium};
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
+const styles = stylex.create({
+  header: {
+    backgroundColor: background['--t-background-secondary'],
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: borderColor['--t-border-color-medium'],
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+  },
+});
 
 export const ComposerHeader = ({ children }: { children: ReactNode }) => (
-  <StyledHeader>{children}</StyledHeader>
+  <div {...stylex.props(styles.header)}>{children}</div>
 );

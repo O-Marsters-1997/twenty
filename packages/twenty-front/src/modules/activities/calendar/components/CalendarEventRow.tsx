@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { format } from 'date-fns';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
@@ -15,65 +14,69 @@ import { hasCalendarEventEnded } from '@/activities/calendar/utils/hasCalendarEv
 import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMemberState';
 import { useOpenCalendarEventInSidePanel } from '@/side-panel/hooks/useOpenCalendarEventInSidePanel';
 import { IconArrowRight } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { borderRadius, fontColor, fontWeight, spacing, tagBackground } from 'twenty-ui/theme/tokens.stylex';
 
 type CalendarEventRowProps = {
   calendarEvent: TimelineCalendarEvent;
-  className?: string;
 };
 
-const StyledContainer = styled.div<{ showTitle?: boolean }>`
-  align-items: center;
-  cursor: ${({ showTitle }) => (showTitle ? 'pointer' : 'not-allowed')};
-  display: flex;
-  gap: ${themeCssVariables.spacing[3]};
-  height: ${themeCssVariables.spacing[6]};
-  position: relative;
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    cursor: 'not-allowed',
+    display: 'flex',
+    gap: spacing['--t-spacing-3'],
+    height: spacing['--t-spacing-6'],
+    position: 'relative',
+  },
+  containerClickable: {
+    cursor: 'pointer',
+  },
+  attendanceIndicator: {
+    backgroundColor: tagBackground['--t-tag-background-gray'],
+    borderRadius: borderRadius['--t-border-radius-xs'],
+    height: '100%',
+    width: spacing['--t-spacing-1'],
+  },
+  attendanceIndicatorActive: {
+    backgroundColor: tagBackground['--t-tag-background-red'],
+  },
+  title: {
+    color: 'inherit',
+    flex: '1 0 auto',
+    fontWeight: 'inherit',
+    overflow: 'hidden',
+    textDecoration: 'none',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    width: spacing['--t-spacing-10'],
+  },
+  titleActive: {
+    color: fontColor['--t-font-color-primary'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+  },
+  titleCanceled: {
+    textDecoration: 'line-through',
+  },
+  labels: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-primary'],
+    display: 'flex',
+    flex: '1 0 auto',
+    gap: spacing['--t-spacing-2'],
+  },
+  time: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    width: spacing['--t-spacing-26'],
+  },
+});
 
-const StyledAttendanceIndicator = styled.div<{ active?: boolean }>`
-  background-color: ${({ active }) =>
-    active
-      ? themeCssVariables.tag.background.red
-      : themeCssVariables.tag.background.gray};
-  border-radius: ${themeCssVariables.border.radius.xs};
-  height: 100%;
-  width: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledLabels = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.primary};
-  display: flex;
-  flex: 1 0 auto;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledTime = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  width: ${themeCssVariables.spacing[26]};
-`;
-
-const StyledTitle = styled.div<{ active: boolean; canceled: boolean }>`
-  color: ${({ active }) =>
-    active ? themeCssVariables.font.color.primary : 'inherit'};
-  flex: 1 0 auto;
-  font-weight: ${({ active }) =>
-    active ? themeCssVariables.font.weight.medium : 'inherit'};
-  overflow: hidden;
-  text-decoration: ${({ canceled }) => (canceled ? 'line-through' : 'none')};
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  width: ${themeCssVariables.spacing[10]};
-`;
-
-export const CalendarEventRow = ({
-  calendarEvent,
-  className,
-}: CalendarEventRowProps) => {
+export const CalendarEventRow = ({ calendarEvent }: CalendarEventRowProps) => {
   const theme = useTheme();
   const currentWorkspaceMember = useAtomStateValue(currentWorkspaceMemberState);
   const { openCalendarEventInSidePanel } = useOpenCalendarEventInSidePanel();
@@ -94,9 +97,8 @@ export const CalendarEventRow = ({
     calendarEvent.visibility === CalendarChannelVisibility.SHARE_EVERYTHING;
 
   return (
-    <StyledContainer
-      className={className}
-      showTitle={showTitle}
+    <div
+      {...stylex.props(styles.container, showTitle && styles.containerClickable)}
       onClick={
         showTitle
           ? () => {
@@ -105,9 +107,14 @@ export const CalendarEventRow = ({
           : undefined
       }
     >
-      <StyledAttendanceIndicator active={isCurrentWorkspaceMemberAttending} />
-      <StyledLabels>
-        <StyledTime>
+      <div
+        {...stylex.props(
+          styles.attendanceIndicator,
+          isCurrentWorkspaceMemberAttending && styles.attendanceIndicatorActive,
+        )}
+      />
+      <div {...stylex.props(styles.labels)}>
+        <div {...stylex.props(styles.time)}>
           {startTimeLabel}
           {endTimeLabel && (
             <>
@@ -115,20 +122,26 @@ export const CalendarEventRow = ({
               {endTimeLabel}
             </>
           )}
-        </StyledTime>
+        </div>
         {showTitle ? (
-          <StyledTitle active={!hasEnded} canceled={!!calendarEvent.isCanceled}>
+          <div
+            {...stylex.props(
+              styles.title,
+              !hasEnded && styles.titleActive,
+              calendarEvent.isCanceled && styles.titleCanceled,
+            )}
+          >
             {calendarEvent.title}
-          </StyledTitle>
+          </div>
         ) : (
           <CalendarEventNotSharedContent />
         )}
-      </StyledLabels>
+      </div>
       {!!calendarEvent.participants?.length && (
         <CalendarEventParticipantsAvatarGroup
           participants={calendarEvent.participants ?? []}
         />
       )}
-    </StyledContainer>
+    </div>
   );
 };

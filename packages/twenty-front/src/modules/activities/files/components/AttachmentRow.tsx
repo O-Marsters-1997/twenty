@@ -25,30 +25,40 @@ import { PermissionFlagType } from '~/generated-metadata/graphql';
 import { formatToHumanReadableDate } from '~/utils/date-utils';
 import { getFileNameAndExtension } from '~/utils/file/getFileNameAndExtension';
 import { openUrlInNewTab } from '~/utils/openUrlInNewTab';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledLeftContent = styled.div`
-  align-items: center;
-  display: flex;
-  flex: 1;
-
-  gap: ${themeCssVariables.spacing[3]};
-  overflow: auto;
-  width: 100%;
-`;
-
-const StyledRightContent = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing['0.5']};
-  position: relative;
-  z-index: 1;
-`;
-
-const StyledCalendarIconContainer = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.light};
-  display: flex;
-`;
+const styles = stylex.create({
+  leftContent: {
+    alignItems: 'center',
+    display: 'flex',
+    flex: '1',
+    gap: spacing['--t-spacing-3'],
+    overflow: 'auto',
+    width: '100%',
+  },
+  rightContent: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-0_5'],
+    position: 'relative',
+    zIndex: '1',
+  },
+  calendarIconContainer: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-light'],
+    display: 'flex',
+  },
+  linkContainer: {
+    overflow: 'auto',
+    width: '100%',
+  },
+  textInputContainer: {
+    position: 'relative',
+    width: '100%',
+    zIndex: '1',
+  },
+});
 
 const StyledLink = styled.a`
   align-items: center;
@@ -70,17 +80,6 @@ const StyledLink = styled.a`
   :hover {
     color: ${themeCssVariables.font.color.secondary};
   }
-`;
-
-const StyledLinkContainer = styled.div`
-  overflow: auto;
-  width: 100%;
-`;
-
-const StyledTextInputContainer = styled.div`
-  position: relative;
-  width: 100%;
-  z-index: 1;
 `;
 
 type AttachmentRowProps = {
@@ -205,11 +204,11 @@ export const AttachmentRow = ({
         disabled={isEditing}
         label={`${attachmentFileName}${attachmentFileExtension}`}
       >
-        <StyledLeftContent>
+        <div {...stylex.props(styles.leftContent)}>
           <FileIcon fileCategory={fileCategory} thumbnailUrl={fileUrl} />
           {isEditing ? (
-            <StyledTextInputContainer
-              onClick={(event) => event.stopPropagation()}
+            <div
+              onClick={(event) => event.stopPropagation()} {...stylex.props(styles.textInputContainer)}
             >
               <SettingsTextInput
                 instanceId={`attachment-${attachment.id}-name`}
@@ -219,9 +218,9 @@ export const AttachmentRow = ({
                 autoFocus
                 onKeyDown={handleOnKeyDown}
               />
-            </StyledTextInputContainer>
+            </div>
           ) : (
-            <StyledLinkContainer>
+            <div {...stylex.props(styles.linkContainer)}>
               <StyledLink
                 onClick={handleFileLinkClick}
                 href={safeFileUrl}
@@ -232,13 +231,13 @@ export const AttachmentRow = ({
                   text={`${attachmentFileName}${attachmentFileExtension}`}
                 />
               </StyledLink>
-            </StyledLinkContainer>
+            </div>
           )}
-        </StyledLeftContent>
-        <StyledRightContent>
-          <StyledCalendarIconContainer>
+        </div>
+        <div {...stylex.props(styles.rightContent)}>
+          <div {...stylex.props(styles.calendarIconContainer)}>
             <IconCalendar size={theme.icon.size.md} />
-          </StyledCalendarIconContainer>
+          </div>
           {formatToHumanReadableDate(attachment.createdAt)}
           <AttachmentDropdown
             attachmentId={attachment.id}
@@ -247,7 +246,7 @@ export const AttachmentRow = ({
             onRename={handleRename}
             hasDownloadPermission={hasDownloadPermission}
           />
-        </StyledRightContent>
+        </div>
       </ActivityRow>
     </FieldContext.Provider>
   );

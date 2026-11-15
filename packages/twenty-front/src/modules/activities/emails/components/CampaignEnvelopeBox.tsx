@@ -1,37 +1,43 @@
 import { styled } from '@linaria/react';
 import { type MouseEventHandler, type ReactNode } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { ComposerFieldRow } from '@/activities/components/ComposerFieldRow';
+import * as stylex from '@stylexjs/stylex';
+import { background, borderColor, borderRadius, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 // Widest campaign row label ("Unsubscribe topic"), so every value starts on the same column.
 const CAMPAIGN_ENVELOPE_LABEL_MIN_WIDTH = '116px';
 
-const StyledContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-  padding: ${themeCssVariables.spacing[3]} 0;
-  width: 100%;
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    flexShrink: '0',
+    paddingTop: spacing['--t-spacing-3'],
+    paddingRight: '0',
+    paddingBottom: spacing['--t-spacing-3'],
+    paddingLeft: '0',
+    width: '100%',
+  },
+  rows: {
+    backgroundColor: background['--t-background-secondary'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-medium'],
+    borderRadius: borderRadius['--t-border-radius-md'],
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden',
+    width: '100%',
+  },
+});
 
 const StyledColumn = styled.div<{ $width: string }>`
   display: flex;
   flex-direction: column;
   max-width: ${({ $width }) => $width};
   min-width: 0;
-  width: 100%;
-`;
-
-const StyledRows = styled.div`
-  background-color: ${themeCssVariables.background.secondary};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.md};
-  display: flex;
-  flex-direction: column;
-  /* Keeps the row hairlines from crossing the rounded corners. */
-  overflow: hidden;
   width: 100%;
 `;
 
@@ -48,12 +54,12 @@ export const CampaignEnvelopeBox = ({
   below,
   onBlur,
 }: CampaignEnvelopeBoxProps) => (
-  <StyledContainer onBlur={onBlur}>
+  <div onBlur={onBlur} {...stylex.props(styles.container)}>
     <StyledColumn $width={width}>
-      <StyledRows>{children}</StyledRows>
+      <div {...stylex.props(styles.rows)}>{children}</div>
       {below}
     </StyledColumn>
-  </StyledContainer>
+  </div>
 );
 
 type CampaignEnvelopeRowProps = {

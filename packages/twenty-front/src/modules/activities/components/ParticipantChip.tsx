@@ -7,36 +7,40 @@ import { CoreObjectNameSingular } from 'twenty-shared/types';
 import { RecordChip } from '@/object-record/components/RecordChip';
 import { getAbsoluteImageUrl } from '~/utils/image/getAbsoluteImageUrl';
 import { Avatar } from 'twenty-ui/primitives/data-display';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledAvatarContainer = styled.span`
-  margin-right: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledSenderName = styled.span<{ variant?: 'default' | 'bold' }>`
-  color: ${themeCssVariables.font.color.primary};
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${({ variant }) =>
-    variant === 'bold'
-      ? themeCssVariables.font.weight.medium
-      : themeCssVariables.font.weight.regular};
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
+const styles = stylex.create({
+  senderName: {
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
+  senderNameBold: {
+    fontWeight: fontWeight['--t-font-weight-medium'],
+  },
+  avatarContainer: {
+    marginRight: spacing['--t-spacing-1'],
+  },
+  chip: {
+    alignItems: 'center',
+    boxSizing: 'border-box',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    height: '20px',
+    paddingTop: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-1'],
+    whiteSpace: 'nowrap',
+  },
+});
 
 const StyledContainer = styled.div`
   align-items: flex-start;
   display: flex;
-`;
-
-const StyledChip = styled.div`
-  align-items: center;
-  box-sizing: border-box;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  height: 20px;
-  padding: ${themeCssVariables.spacing[1]};
-  white-space: nowrap;
 `;
 
 type ParticipantChipVariant = 'default' | 'bold';
@@ -68,8 +72,8 @@ export const ParticipantChip = ({
           isBold={variant === 'bold'}
         />
       ) : (
-        <StyledChip>
-          <StyledAvatarContainer>
+        <div {...stylex.props(styles.chip)}>
+          <span {...stylex.props(styles.avatarContainer)}>
             <Avatar
               src={getAbsoluteImageUrl(avatarUrl)}
               shape="circle"
@@ -77,9 +81,16 @@ export const ParticipantChip = ({
               colorSeed={getEmailParticipantAvatarColorSeed(participant)}
               size="sm"
             />
-          </StyledAvatarContainer>
-          <StyledSenderName variant={variant}>{displayName}</StyledSenderName>
-        </StyledChip>
+          </span>
+          <span
+            {...stylex.props(
+              styles.senderName,
+              variant === 'bold' && styles.senderNameBold,
+            )}
+          >
+            {displayName}
+          </span>
+        </div>
       )}
     </StyledContainer>
   );

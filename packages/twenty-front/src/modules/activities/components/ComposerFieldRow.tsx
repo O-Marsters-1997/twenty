@@ -1,46 +1,51 @@
-import { styled } from '@linaria/react';
 import { type MouseEventHandler, type ReactNode } from 'react';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { borderColor, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const ROW_MIN_HEIGHT = '40px';
 
-const StyledRow = styled.div<{ $clickable: boolean }>`
-  align-items: center;
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  box-sizing: border-box;
-  cursor: ${({ $clickable }) => ($clickable ? 'pointer' : 'default')};
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  min-height: ${ROW_MIN_HEIGHT};
-  padding: ${themeCssVariables.spacing[1]} ${themeCssVariables.spacing[2]}
-    ${themeCssVariables.spacing[1]} ${themeCssVariables.spacing[3]};
-  width: 100%;
-
-  &:last-of-type {
-    border-bottom: none;
-  }
-`;
-
-const StyledLabel = styled.span<{ $minWidth: string | undefined }>`
-  color: ${themeCssVariables.font.color.tertiary};
-  flex-shrink: 0;
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.regular};
-  min-width: ${({ $minWidth }) => $minWidth ?? 'auto'};
-`;
-
-const StyledContent = styled.div`
-  align-items: center;
-  display: flex;
-  flex: 1;
-  min-width: 0;
-`;
-
-const StyledTrailing = styled.div`
-  align-items: center;
-  display: flex;
-`;
+const styles = stylex.create({
+  row: {
+    alignItems: 'center',
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: {
+      default: 'solid',
+      ':last-of-type': 'none',
+    },
+    borderBottomWidth: '1px',
+    boxSizing: 'border-box',
+    cursor: 'default',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    minHeight: ROW_MIN_HEIGHT,
+    paddingBlock: spacing['--t-spacing-1'],
+    paddingInlineEnd: spacing['--t-spacing-2'],
+    paddingInlineStart: spacing['--t-spacing-3'],
+    width: '100%',
+  },
+  rowClickable: {
+    cursor: 'pointer',
+  },
+  label: {
+    color: fontColor['--t-font-color-tertiary'],
+    flexShrink: 0,
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    minWidth: 'auto',
+  },
+  labelMinWidth: (minWidth: string) => ({ minWidth }),
+  content: {
+    alignItems: 'center',
+    display: 'flex',
+    flex: '1',
+    minWidth: '0',
+  },
+  trailing: {
+    alignItems: 'center',
+    display: 'flex',
+  },
+});
 
 type ComposerFieldRowProps = {
   label: string;
@@ -59,20 +64,26 @@ export const ComposerFieldRow = ({
   onClick,
   labelMinWidth,
 }: ComposerFieldRowProps) => (
-  <StyledRow
+  <div
     role="group"
     aria-label={label}
-    $clickable={isDefined(onClick)}
+    {...stylex.props(styles.row, isDefined(onClick) && styles.rowClickable)}
     onClick={onClick}
   >
-    <StyledLabel aria-hidden="true" $minWidth={labelMinWidth}>
+    <span
+      aria-hidden="true"
+      {...stylex.props(
+        styles.label,
+        isDefined(labelMinWidth) && styles.labelMinWidth(labelMinWidth),
+      )}
+    >
       {label}
-    </StyledLabel>
-    <StyledContent>{children}</StyledContent>
+    </span>
+    <div {...stylex.props(styles.content)}>{children}</div>
     {isDefined(trailing) && (
-      <StyledTrailing onClick={(event) => event.stopPropagation()}>
+      <div onClick={(event) => event.stopPropagation()} {...stylex.props(styles.trailing)}>
         {trailing}
-      </StyledTrailing>
+      </div>
     )}
-  </StyledRow>
+  </div>
 );

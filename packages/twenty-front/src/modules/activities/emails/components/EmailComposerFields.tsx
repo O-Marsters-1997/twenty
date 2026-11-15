@@ -1,7 +1,6 @@
 import { EmailOperation } from 'twenty-shared/types';
 import { useQuery } from '@apollo/client/react';
 import { DragDropProvider } from '@dnd-kit/react';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import {
   canConnectedAccountPerformEmailOperation,
@@ -9,7 +8,7 @@ import {
   isDefined,
 } from 'twenty-shared/utils';
 import { IconPaperclip } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 
 import { ComposerFieldRow } from '@/activities/components/ComposerFieldRow';
 import { ComposerHeader } from '@/activities/components/ComposerHeader';
@@ -33,73 +32,70 @@ import { DND_KIT_PROVIDER_PLUGINS_WITHOUT_DROP_ANIMATION } from '@/ui/utilities/
 import { DND_KIT_SENSORS } from '@/ui/utilities/drag-and-drop/constants/DndKitSensors';
 import { DragDropItemDndContext } from '@/ui/utilities/drag-and-drop/context/DragDropItemDndContext';
 import { GET_MY_CONNECTED_ACCOUNTS } from '@/settings/accounts/graphql/queries/getMyConnectedAccounts';
+import * as stylex from '@stylexjs/stylex';
+import { color, fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledFieldsContainer = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-height: 0;
-  width: 100%;
-`;
-
-const StyledCcBccToggle = styled.button`
-  all: unset;
-  color: ${themeCssVariables.font.color.tertiary};
-  cursor: pointer;
-  flex-shrink: 0;
-  font-size: ${themeCssVariables.font.size.md};
-  padding: 0 ${themeCssVariables.spacing[1]};
-
-  &:hover {
-    color: ${themeCssVariables.font.color.secondary};
-  }
-
-  &:focus-visible {
-    outline: 2px solid ${themeCssVariables.color.blue};
-    outline-offset: 2px;
-  }
-`;
-
-const StyledBody = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-height: 0;
-  padding: ${themeCssVariables.spacing[2]} ${themeCssVariables.spacing[3]};
-`;
-
-const StyledAttachments = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  padding: 0 ${themeCssVariables.spacing[3]} ${themeCssVariables.spacing[2]};
-`;
-
-const StyledAttachAction = styled.button`
-  align-items: center;
-  align-self: flex-start;
-  all: unset;
-  color: ${themeCssVariables.font.color.tertiary};
-  cursor: pointer;
-  display: flex;
-  font-size: ${themeCssVariables.font.size.md};
-  gap: ${themeCssVariables.spacing[1]};
-
-  &:hover {
-    color: ${themeCssVariables.font.color.secondary};
-  }
-
-  &:focus-visible {
-    outline: 2px solid ${themeCssVariables.color.blue};
-    outline-offset: 2px;
-  }
-`;
-
-const StyledRecipientLimitWarning = styled.div`
-  color: ${themeCssVariables.color.red};
-  font-size: ${themeCssVariables.font.size.xs};
-  padding: ${themeCssVariables.spacing[1]} ${themeCssVariables.spacing[3]};
-`;
+const styles = stylex.create({
+  fieldsContainer: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    minHeight: '0',
+    width: '100%',
+  },
+  ccBccToggle: {
+    all: 'unset',
+    color: { default: fontColor['--t-font-color-tertiary'], ':hover': fontColor['--t-font-color-secondary'] },
+    cursor: 'pointer',
+    flexShrink: '0',
+    fontSize: fontSize['--t-font-size-md'],
+    paddingTop: '0',
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: '0',
+    paddingLeft: spacing['--t-spacing-1'],
+    outline: { default: null, ':focus-visible': `2px solid ${color['--t-color-blue']}` },
+    outlineOffset: { default: null, ':focus-visible': '2px' },
+  },
+  body: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    minHeight: '0',
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-3'],
+  },
+  attachments: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    paddingTop: '0',
+    paddingRight: spacing['--t-spacing-3'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-3'],
+  },
+  attachAction: {
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    all: 'unset',
+    color: { default: fontColor['--t-font-color-tertiary'], ':hover': fontColor['--t-font-color-secondary'] },
+    cursor: 'pointer',
+    display: 'flex',
+    fontSize: fontSize['--t-font-size-md'],
+    gap: spacing['--t-spacing-1'],
+    outline: { default: null, ':focus-visible': `2px solid ${color['--t-color-blue']}` },
+    outlineOffset: { default: null, ':focus-visible': '2px' },
+  },
+  recipientLimitWarning: {
+    color: color['--t-color-red'],
+    fontSize: fontSize['--t-font-size-xs'],
+    paddingTop: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-3'],
+  },
+});
 
 type EmailComposerFieldsProps = {
   composerState: EmailComposerState;
@@ -197,7 +193,7 @@ export const EmailComposerFields = ({
   const areCcBccFieldsVisible = composerState.showCcBcc || isDraggingRecipients;
 
   return (
-    <StyledFieldsContainer>
+    <div {...stylex.props(styles.fieldsContainer)}>
       <DragDropItemDndContext.Provider value={contextValues}>
         <DragDropProvider<EmailRecipientDragData>
           sensors={DND_KIT_SENSORS}
@@ -222,11 +218,11 @@ export const EmailComposerFields = ({
               label={t`To`}
               trailing={
                 !areCcBccFieldsVisible && (
-                  <StyledCcBccToggle
-                    onClick={() => composerState.setShowCcBcc(true)}
+                  <button
+                    onClick={() => composerState.setShowCcBcc(true)} {...stylex.props(styles.ccBccToggle)}
                   >
                     {t`Cc/Bcc`}
-                  </StyledCcBccToggle>
+                  </button>
                 )
               }
             >
@@ -283,11 +279,11 @@ export const EmailComposerFields = ({
         </DragDropProvider>
       </DragDropItemDndContext.Provider>
       {composerState.exceedsRecipientLimit && (
-        <StyledRecipientLimitWarning>
+        <div {...stylex.props(styles.recipientLimitWarning)}>
           {t`Too many recipients (${composerState.recipientCount}/${composerState.maxRecipients}).`}
-        </StyledRecipientLimitWarning>
+        </div>
       )}
-      <StyledBody>
+      <div {...stylex.props(styles.body)}>
         <FormAdvancedTextFieldInput
           defaultValue={composerState.initialBody}
           onChange={composerState.setBody}
@@ -295,14 +291,14 @@ export const EmailComposerFields = ({
           profile={INLINE_EMAIL_BODY_EDITOR_PROFILE}
           onImageUpload={uploadEmailImage}
         />
-      </StyledBody>
+      </div>
       {(composerState.files.length > 0 || isDefined(onAttachFiles)) && (
-        <StyledAttachments>
+        <div {...stylex.props(styles.attachments)}>
           {isDefined(onAttachFiles) && (
-            <StyledAttachAction type="button" onClick={onAttachFiles}>
+            <button type="button" onClick={onAttachFiles} {...stylex.props(styles.attachAction)}>
               <IconPaperclip size={theme.icon.size.sm} />
               {t`Attach files`}
-            </StyledAttachAction>
+            </button>
           )}
           {composerState.files.length > 0 && (
             <EmailAttachmentsField
@@ -310,8 +306,8 @@ export const EmailComposerFields = ({
               onChange={composerState.setFiles}
             />
           )}
-        </StyledAttachments>
+        </div>
       )}
-    </StyledFieldsContainer>
+    </div>
   );
 };

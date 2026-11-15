@@ -19,35 +19,38 @@ import { DND_KIT_PROVIDER_PLUGINS_WITHOUT_DROP_ANIMATION } from '@/ui/utilities/
 import { DND_KIT_SENSORS } from '@/ui/utilities/drag-and-drop/constants/DndKitSensors';
 import { DragDropItemDndContext } from '@/ui/utilities/drag-and-drop/context/DragDropItemDndContext';
 import { DragDropProvider } from '@dnd-kit/react';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { Callout } from 'twenty-ui/components/feedback';
 import { Switch } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const COMPOSER_LABEL_MIN_WIDTH = '80px';
 
-const StyledFieldsContainer = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-height: 0;
-  overflow-y: auto;
-  width: 100%;
-`;
-
-const StyledRowDescription = styled.span`
-  color: ${themeCssVariables.font.color.secondary};
-  font-size: ${themeCssVariables.font.size.md};
-`;
-
-const StyledNoticesContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  padding: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  fieldsContainer: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    minHeight: '0',
+    overflowY: 'auto',
+    width: '100%',
+  },
+  rowDescription: {
+    color: fontColor['--t-font-color-secondary'],
+    fontSize: fontSize['--t-font-size-md'],
+  },
+  noticesContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+});
 
 type CalendarEventComposerFieldsProps = {
   composerState: ReturnType<typeof useCalendarEventComposer>;
@@ -88,7 +91,7 @@ export const CalendarEventComposerFields = ({
     composerState.hasTooManyAttendees;
 
   return (
-    <StyledFieldsContainer>
+    <div {...stylex.props(styles.fieldsContainer)}>
       <DragDropItemDndContext.Provider value={contextValues}>
         <DragDropProvider<EmailRecipientDragData>
           sensors={DND_KIT_SENSORS}
@@ -174,9 +177,9 @@ export const CalendarEventComposerFields = ({
                 />
               }
             >
-              <StyledRowDescription>
+              <span {...stylex.props(styles.rowDescription)}>
                 {t`Create an all-day event`}
-              </StyledRowDescription>
+              </span>
             </ComposerFieldRow>
             {composerState.isFullDay ? (
               <>
@@ -259,9 +262,9 @@ export const CalendarEventComposerFields = ({
                 />
               }
             >
-              <StyledRowDescription>
+              <span {...stylex.props(styles.rowDescription)}>
                 {t`Email guests an invitation`}
-              </StyledRowDescription>
+              </span>
             </ComposerFieldRow>
             <ComposerFieldRow
               label={t`Video call`}
@@ -278,9 +281,9 @@ export const CalendarEventComposerFields = ({
                 />
               }
             >
-              <StyledRowDescription>
+              <span {...stylex.props(styles.rowDescription)}>
                 {t`Add a meeting link`}
-              </StyledRowDescription>
+              </span>
             </ComposerFieldRow>
             <ComposerFieldRow
               label={t`Description`}
@@ -301,7 +304,7 @@ export const CalendarEventComposerFields = ({
       </DragDropItemDndContext.Provider>
 
       {hasNotices && (
-        <StyledNoticesContainer>
+        <div {...stylex.props(styles.noticesContainer)}>
           {composerState.accountOptions.length === 0 && (
             <Callout
               status="warning"
@@ -358,8 +361,8 @@ export const CalendarEventComposerFields = ({
               description={t`Remove some guests before creating this event.`}
             />
           )}
-        </StyledNoticesContainer>
+        </div>
       )}
-    </StyledFieldsContainer>
+    </div>
   );
 };

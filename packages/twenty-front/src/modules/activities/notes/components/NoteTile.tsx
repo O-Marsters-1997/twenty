@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 
 import { useActivityFieldComponentInstanceId } from '@/activities/hooks/useActivityFieldComponentInstanceId';
@@ -11,61 +10,70 @@ import { FieldContextProvider } from '@/object-record/record-field/ui/components
 import { RecordFieldComponentInstanceContext } from '@/object-record/record-field/ui/states/contexts/RecordFieldComponentInstanceContext';
 import { RecordInlineCell } from '@/object-record/record-inline-cell/components/RecordInlineCell';
 import { getRecordFieldInputInstanceId } from '@/object-record/utils/getRecordFieldInputId';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { background, borderColor, borderRadius, fontColor, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledCard = styled.div<{ isSingleNote: boolean }>`
-  align-items: flex-start;
-  background: ${themeCssVariables.background.secondary};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.md};
-  display: flex;
-  flex-direction: column;
-  height: 300px;
-  justify-content: space-between;
-  width: 100%;
-`;
-
-const StyledCardDetailsContainer = styled.div`
-  align-items: flex-start;
-  align-self: stretch;
-  box-sizing: border-box;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  height: calc(100% - 45px);
-  justify-content: start;
-  padding: ${themeCssVariables.spacing[4]};
-  width: calc(100% - ${themeCssVariables.spacing[8]});
-`;
-
-const StyledNoteTitle = styled.div`
-  color: ${themeCssVariables.font.color.primary};
-  font-weight: ${themeCssVariables.font.weight.medium};
-`;
-
-const StyledCardContent = styled.div`
-  align-self: stretch;
-  color: ${themeCssVariables.font.color.secondary};
-  line-break: anywhere;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: pre-line;
-  width: 100%;
-`;
-
-const StyledFooter = styled.div`
-  align-items: center;
-  align-self: stretch;
-  border-top: 1px solid ${themeCssVariables.border.color.light};
-  color: ${themeCssVariables.font.color.primary};
-  display: flex;
-  flex-direction: row;
-  gap: ${themeCssVariables.spacing[1]};
-  justify-content: center;
-  padding: ${themeCssVariables.spacing[2]};
-  width: calc(100% - ${themeCssVariables.spacing[4]});
-`;
+const styles = stylex.create({
+  card: {
+    alignItems: 'flex-start',
+    background: background['--t-background-secondary'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-medium'],
+    borderRadius: borderRadius['--t-border-radius-md'],
+    display: 'flex',
+    flexDirection: 'column',
+    height: '300px',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  cardDetailsContainer: {
+    alignItems: 'flex-start',
+    alignSelf: 'stretch',
+    boxSizing: 'border-box',
+    cursor: 'pointer',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    height: 'calc(100% - 45px)',
+    justifyContent: 'start',
+    paddingTop: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingBottom: spacing['--t-spacing-4'],
+    paddingLeft: spacing['--t-spacing-4'],
+    width: `calc(100% - ${spacing['--t-spacing-8']})`,
+  },
+  noteTitle: {
+    color: fontColor['--t-font-color-primary'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+  },
+  cardContent: {
+    alignSelf: 'stretch',
+    color: fontColor['--t-font-color-secondary'],
+    lineBreak: 'anywhere',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'pre-line',
+    width: '100%',
+  },
+  footer: {
+    alignItems: 'center',
+    alignSelf: 'stretch',
+    borderTopWidth: '1px',
+    borderTopStyle: 'solid',
+    borderTopColor: borderColor['--t-border-color-light'],
+    color: fontColor['--t-font-color-primary'],
+    display: 'flex',
+    flexDirection: 'row',
+    gap: spacing['--t-spacing-1'],
+    justifyContent: 'center',
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-2'],
+    width: `calc(100% - ${spacing['--t-spacing-4']})`,
+  },
+});
 
 export const NoteTile = ({
   note,
@@ -91,19 +99,19 @@ export const NoteTile = ({
   });
 
   return (
-    <StyledCard isSingleNote={isSingleNote}>
-      <StyledCardDetailsContainer
+    <div isSingleNote={isSingleNote} {...stylex.props(styles.card)}>
+      <div
         onClick={() =>
           openRecordInSidePanel({
             recordId: note.id,
             objectNameSingular: CoreObjectNameSingular.Note,
           })
-        }
+        } {...stylex.props(styles.cardDetailsContainer)}
       >
-        <StyledNoteTitle>{note.title ?? t`Task Title`}</StyledNoteTitle>
-        <StyledCardContent>{body}</StyledCardContent>
-      </StyledCardDetailsContainer>
-      <StyledFooter>
+        <div {...stylex.props(styles.noteTitle)}>{note.title ?? t`Task Title`}</div>
+        <div {...stylex.props(styles.cardContent)}>{body}</div>
+      </div>
+      <div {...stylex.props(styles.footer)}>
         <FieldContextProvider
           objectNameSingular={CoreObjectNameSingular.Note}
           objectRecordId={note.id}
@@ -117,7 +125,7 @@ export const NoteTile = ({
             <RecordInlineCell instanceIdPrefix={instanceIdPrefix} />
           </RecordFieldComponentInstanceContext.Provider>
         </FieldContextProvider>
-      </StyledFooter>
-    </StyledCard>
+      </div>
+    </div>
   );
 };

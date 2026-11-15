@@ -22,15 +22,25 @@ import { useObjectMetadataItems } from '@/object-metadata/hooks/useObjectMetadat
 import { themeCssVariables } from 'twenty-ui/theme';
 import { allowRequestsToTwentyIconsState } from '@/client-config/states/allowRequestsToTwentyIcons';
 import { isDefined } from 'twenty-shared/utils';
+import * as stylex from '@stylexjs/stylex';
+import { borderColor, fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledTimelineItemContainer = styled.div`
-  color: ${themeCssVariables.font.color.primary};
-  display: flex;
-  gap: ${themeCssVariables.spacing[4]};
-  justify-content: space-between;
-  overflow: hidden;
-  white-space: nowrap;
-`;
+const styles = stylex.create({
+  timelineItemContainer: {
+    color: fontColor['--t-font-color-primary'],
+    display: 'flex',
+    gap: spacing['--t-spacing-4'],
+    justifyContent: 'space-between',
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+  },
+  verticalLine: {
+    background: borderColor['--t-border-color-light'],
+    flex: '1',
+    width: '2px',
+    zIndex: '2',
+  },
+});
 
 const StyledLeftContainer = styled.div`
   align-items: center;
@@ -49,13 +59,6 @@ const StyledIconContainer = styled.div`
   justify-content: center;
   user-select: none;
   width: 100%;
-  z-index: 2;
-`;
-
-const StyledVerticalLine = styled.div`
-  background: ${themeCssVariables.border.color.light};
-  flex: 1;
-  width: 2px;
   z-index: 2;
 `;
 
@@ -142,7 +145,7 @@ export const EventRow = ({
 
   return (
     <>
-      <StyledTimelineItemContainer>
+      <div {...stylex.props(styles.timelineItemContainer)}>
         <StyledLeftContainer>
           <StyledIconContainer>
             <EventIconDynamicComponent
@@ -150,7 +153,7 @@ export const EventRow = ({
               linkedObjectMetadataItem={linkedObjectMetadataItem}
             />
           </StyledIconContainer>
-          {!isLastEvent && <StyledVerticalLine />}
+          {!isLastEvent && <div {...stylex.props(styles.verticalLine)} />}
         </StyledLeftContainer>
         <StyledItemContainer isMarginBottom={!isLastEvent}>
           <EventRowDynamicComponent
@@ -165,7 +168,7 @@ export const EventRow = ({
             happensAt={event.happensAt}
           />
         </StyledItemContainer>
-      </StyledTimelineItemContainer>
+      </div>
     </>
   );
 };

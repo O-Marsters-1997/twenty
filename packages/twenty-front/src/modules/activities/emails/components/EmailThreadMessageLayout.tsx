@@ -1,6 +1,8 @@
 import { styled } from '@linaria/react';
 import { type ReactNode } from 'react';
 import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const StyledThreadMessage = styled.div<{ hideBottomBorder?: boolean }>`
   border-bottom: ${({ hideBottomBorder }) =>
@@ -21,9 +23,14 @@ const StyledHeader = styled.div<{ isClickable?: boolean }>`
   padding: ${themeCssVariables.spacing[0]} ${themeCssVariables.spacing[2]};
 `;
 
-const StyledBody = styled.div`
-  padding: ${themeCssVariables.spacing[0]} ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  body: {
+    paddingTop: spacing['--t-spacing-0'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-0'],
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+});
 
 type EmailThreadMessageLayoutProps = {
   header: ReactNode;
@@ -52,6 +59,6 @@ export const EmailThreadMessageLayout = ({
     <StyledHeader isClickable={isHeaderClickable} onClick={onHeaderClick}>
       {header}
     </StyledHeader>
-    <StyledBody>{children}</StyledBody>
+    <div {...stylex.props(styles.body)}>{children}</div>
   </StyledThreadMessage>
 );

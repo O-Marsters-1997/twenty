@@ -17,6 +17,8 @@ import { IconDownload } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 import { getFileNameAndExtension } from '~/utils/file/getFileNameAndExtension';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const MS_OFFICE_EXTENSIONS = [
   'doc',
@@ -60,21 +62,25 @@ const StyledDocumentViewerContainer = styled.div`
   }
 `;
 
-const StyledUnavailablePreviewContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[4]};
-  height: 100%;
-  justify-content: center;
-  padding: ${themeCssVariables.spacing[8]};
-  text-align: center;
-`;
-
-const StyledLightMessage = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.sm};
-`;
+const styles = stylex.create({
+  unavailablePreviewContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-4'],
+    height: '100%',
+    justifyContent: 'center',
+    paddingTop: spacing['--t-spacing-8'],
+    paddingRight: spacing['--t-spacing-8'],
+    paddingBottom: spacing['--t-spacing-8'],
+    paddingLeft: spacing['--t-spacing-8'],
+    textAlign: 'center',
+  },
+  lightMessage: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-sm'],
+  },
+});
 
 const StyledCsvTable = styled.table`
   border-collapse: collapse;
@@ -277,19 +283,19 @@ export const DocumentViewer = ({
   if (isMsOfficeFile && isPrivateUrl(documentUrl)) {
     return (
       <StyledDocumentViewerContainer>
-        <StyledUnavailablePreviewContainer>
-          <StyledLightMessage>
+        <div {...stylex.props(styles.unavailablePreviewContainer)}>
+          <div {...stylex.props(styles.lightMessage)}>
             <Trans>
               This file cannot be previewed because it is hosted locally.
             </Trans>
-          </StyledLightMessage>
+          </div>
           <Button
             startIcon={<IconDownload />}
             onClick={() => downloadFile(documentUrl, documentName)}
             size="sm"
             variant="outline"
           >{t`Download`}</Button>
-        </StyledUnavailablePreviewContainer>
+        </div>
       </StyledDocumentViewerContainer>
     );
   }

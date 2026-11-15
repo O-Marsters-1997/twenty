@@ -1,6 +1,5 @@
 import { Dialog } from 'twenty-ui/primitives/surfaces';
 import { DialogInstance } from '@/ui/layout/dialog/components/DialogInstance';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { lazy, Suspense, useState } from 'react';
 
@@ -24,9 +23,10 @@ import { ScrollWrapper } from '@/ui/utilities/scroll/components/ScrollWrapper';
 import { isDefined } from 'twenty-shared/utils';
 import { IconDownload, IconX } from 'twenty-ui/icon';
 import { IconButton } from 'twenty-ui/components/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { PermissionFlagType } from '~/generated-metadata/graphql';
 import { AttachmentRow } from './AttachmentRow';
+import * as stylex from '@stylexjs/stylex';
+import { background, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const DocumentViewer = lazy(() =>
   import('@/activities/files/components/DocumentViewer').then((module) => ({
@@ -39,56 +39,52 @@ type AttachmentListProps = {
   attachments: Attachment[];
 };
 
-const StyledContainer = styled.div`
-  align-items: flex-start;
-  align-self: stretch;
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  height: 100%;
-  min-height: 0;
-  width: 100%;
-`;
-
-const StyledDropZoneContainer = styled.div`
-  flex: 1;
-  height: 100%;
-  min-height: 0;
-  width: 100%;
-`;
-
-const StyledLoadingContainer = styled.div`
-  align-items: center;
-  background: ${themeCssVariables.background.primary};
-  display: flex;
-  height: calc(80vh / var(--t-zoom, 1));
-  justify-content: center;
-  width: 100%;
-`;
-
-const StyledLoadingText = styled.div`
-  color: ${themeCssVariables.font.color.secondary};
-  font-size: ${themeCssVariables.font.size.lg};
-  font-weight: ${themeCssVariables.font.weight.medium};
-`;
-
-const StyledHeader = styled.div`
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-  min-height: 40px;
-  width: 100%;
-`;
-
-const StyledModalTitle = styled.span`
-  color: ${themeCssVariables.font.color.primary};
-`;
-
-const StyledButtonContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'flex-start',
+    alignSelf: 'stretch',
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    height: '100%',
+    minHeight: '0',
+    width: '100%',
+  },
+  dropZoneContainer: {
+    flex: '1',
+    height: '100%',
+    minHeight: '0',
+    width: '100%',
+  },
+  loadingContainer: {
+    alignItems: 'center',
+    background: background['--t-background-primary'],
+    display: 'flex',
+    height: 'calc(80vh / var(--t-zoom, 1))',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  loadingText: {
+    color: fontColor['--t-font-color-secondary'],
+    fontSize: fontSize['--t-font-size-lg'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+  },
+  header: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'space-between',
+    minHeight: '40px',
+    width: '100%',
+  },
+  modalTitle: {
+    color: fontColor['--t-font-color-primary'],
+  },
+  buttonContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: spacing['--t-spacing-1'],
+  },
+});
 
 const PREVIEW_MODAL_ID = 'preview-modal';
 
@@ -147,9 +143,9 @@ export const AttachmentList = ({
   return (
     <>
       {attachmentsWithFile.length > 0 && (
-        <StyledContainer>
-          <StyledDropZoneContainer
-            onDragEnter={() => hasUploadPermission && setIsDraggingFile(true)}
+        <div {...stylex.props(styles.container)}>
+          <div
+            onDragEnter={() => hasUploadPermission && setIsDraggingFile(true)} {...stylex.props(styles.dropZoneContainer)}
           >
             {isDraggingFile && hasUploadPermission ? (
               <DropZone
@@ -169,8 +165,8 @@ export const AttachmentList = ({
                 ))}
               </ActivityList>
             )}
-          </StyledDropZoneContainer>
-        </StyledContainer>
+          </div>
+        </div>
       )}
       {previewedAttachment && isAttachmentPreviewEnabled && (
         <DialogInstance
@@ -197,11 +193,11 @@ export const AttachmentList = ({
                   padding: 0,
                 }}
               >
-                <StyledHeader>
-                  <StyledModalTitle>
+                <div {...stylex.props(styles.header)}>
+                  <span {...stylex.props(styles.modalTitle)}>
                     {previewedAttachment.name}
-                  </StyledModalTitle>
-                  <StyledButtonContainer>
+                  </span>
+                  <div {...stylex.props(styles.buttonContainer)}>
                     {hasDownloadPermission && (
                       <IconButton
                         aria-label={t`Download attachment`}
@@ -218,8 +214,8 @@ export const AttachmentList = ({
                     >
                       <IconX />
                     </IconButton>
-                  </StyledButtonContainer>
-                </StyledHeader>
+                  </div>
+                </div>
               </Dialog.Header>
               <ScrollWrapper
                 componentInstanceId={`preview-modal-${previewedAttachment.id}`}
@@ -234,11 +230,11 @@ export const AttachmentList = ({
                 >
                   <Suspense
                     fallback={
-                      <StyledLoadingContainer>
-                        <StyledLoadingText>
+                      <div {...stylex.props(styles.loadingContainer)}>
+                        <div {...stylex.props(styles.loadingText)}>
                           {t`Loading document viewer...`}
-                        </StyledLoadingText>
-                      </StyledLoadingContainer>
+                        </div>
+                      </div>
                     }
                   >
                     <DocumentViewer

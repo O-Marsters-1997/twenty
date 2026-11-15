@@ -1,20 +1,22 @@
-import { styled } from '@linaria/react';
 import { type EmailAttachment } from 'twenty-shared/types';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { AttachmentChip } from '@/file/components/AttachmentChip';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type EmailAttachmentsFieldProps = {
   files: EmailAttachment[];
   onChange: (files: EmailAttachment[]) => void;
 };
 
-const StyledChipsContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  chipsContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing['--t-spacing-1'],
+  },
+});
 
 export const EmailAttachmentsField = ({
   files,
@@ -25,7 +27,7 @@ export const EmailAttachmentsField = ({
   };
 
   return (
-    <StyledChipsContainer>
+    <div {...stylex.props(styles.chipsContainer)}>
       {files.map((file) => (
         <AttachmentChip
           key={file.id}
@@ -33,6 +35,6 @@ export const EmailAttachmentsField = ({
           onRemove={() => handleRemoveFile(file.id)}
         />
       ))}
-    </StyledChipsContainer>
+    </div>
   );
 };

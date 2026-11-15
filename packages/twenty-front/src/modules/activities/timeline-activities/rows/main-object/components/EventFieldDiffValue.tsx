@@ -1,11 +1,11 @@
-import { styled } from '@linaria/react';
 
 import { type FieldMetadataItem } from '@/object-metadata/types/FieldMetadataItem';
 import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/EnrichedObjectMetadataItem';
 import { FieldDisplay } from '@/object-record/record-field/ui/components/FieldDisplay';
 import { FieldContext } from '@/object-record/record-field/ui/contexts/FieldContext';
 import { RecordFieldComponentInstanceContext } from '@/object-record/record-field/ui/states/contexts/RecordFieldComponentInstanceContext';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor } from 'twenty-ui/theme/tokens.stylex';
 
 type EventFieldDiffValueProps = {
   diffArtificialRecordStoreId: string;
@@ -13,14 +13,16 @@ type EventFieldDiffValueProps = {
   fieldMetadataItem: FieldMetadataItem;
 };
 
-const StyledEventFieldDiffValue = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.primary};
-  display: flex;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
+const styles = stylex.create({
+  eventFieldDiffValue: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-primary'],
+    display: 'flex',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+});
 
 export const EventFieldDiffValue = ({
   diffArtificialRecordStoreId,
@@ -28,7 +30,7 @@ export const EventFieldDiffValue = ({
   fieldMetadataItem,
 }: EventFieldDiffValueProps) => {
   return (
-    <StyledEventFieldDiffValue>
+    <div {...stylex.props(styles.eventFieldDiffValue)}>
       <RecordFieldComponentInstanceContext.Provider
         value={{
           instanceId: `${diffArtificialRecordStoreId}-${fieldMetadataItem.name}`,
@@ -56,6 +58,6 @@ export const EventFieldDiffValue = ({
           <FieldDisplay />
         </FieldContext.Provider>
       </RecordFieldComponentInstanceContext.Provider>
-    </StyledEventFieldDiffValue>
+    </div>
   );
 };

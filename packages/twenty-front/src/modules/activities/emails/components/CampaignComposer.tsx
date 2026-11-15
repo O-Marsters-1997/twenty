@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { type Editor } from '@tiptap/core';
 import { useState } from 'react';
 
@@ -6,14 +5,17 @@ import { CampaignBodyField } from '@/activities/emails/components/CampaignBodyFi
 import { CampaignDetailsFields } from '@/activities/emails/components/CampaignDetailsFields';
 import { useCampaignCanvasWidth } from '@/activities/emails/hooks/useCampaignCanvasWidth';
 import { type MessageCampaign } from '@/activities/emails/types/MessageCampaign';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  min-height: 0;
-  width: 100%;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    minHeight: '0',
+    width: '100%',
+  },
+});
 
 type CampaignComposerProps = {
   campaign: MessageCampaign;
@@ -25,9 +27,9 @@ export const CampaignComposer = ({ campaign }: CampaignComposerProps) => {
   const canvasWidth = useCampaignCanvasWidth(bodyEditor);
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <CampaignDetailsFields campaign={campaign} width={canvasWidth} />
       <CampaignBodyField campaign={campaign} onEditorReady={setBodyEditor} />
-    </StyledContainer>
+    </div>
   );
 };

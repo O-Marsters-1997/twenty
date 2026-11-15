@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { useId } from 'react';
 import {
@@ -9,7 +8,6 @@ import { isDefined } from 'twenty-shared/utils';
 import { InlineBanner } from 'twenty-ui/components/feedback';
 import { IconAlertTriangle } from 'twenty-ui/icon';
 import { type SelectOption } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import {
   CampaignEnvelopeBox,
@@ -26,22 +24,28 @@ import { usePushFocusItemToFocusStack } from '@/ui/utilities/focus/hooks/usePush
 import { useRemoveFocusItemFromFocusStackById } from '@/ui/utilities/focus/hooks/useRemoveFocusItemFromFocusStackById';
 import { useRemoveFocusItemFromFocusStackOnUnmount } from '@/ui/utilities/focus/hooks/useRemoveFocusItemFromFocusStackOnUnmount';
 import { FocusComponentType } from '@/ui/utilities/focus/types/FocusComponentType';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledSubjectInput = styled.input`
-  background: transparent;
-  border: none;
-  color: ${themeCssVariables.font.color.primary};
-  font-family: inherit;
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.regular};
-  outline: none;
-  padding: 0;
-  width: 100%;
-`;
-
-const StyledWarningContainer = styled.div`
-  margin-top: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  subjectInput: {
+    background: 'transparent',
+    borderStyle: 'none',
+    color: fontColor['--t-font-color-primary'],
+    fontFamily: 'inherit',
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    outline: 'none',
+    paddingTop: '0',
+    paddingRight: '0',
+    paddingBottom: '0',
+    paddingLeft: '0',
+    width: '100%',
+  },
+  warningContainer: {
+    marginTop: spacing['--t-spacing-2'],
+  },
+});
 
 type CampaignDetailsFieldsProps = {
   campaign: MessageCampaign;
@@ -117,13 +121,13 @@ export const CampaignDetailsFields = ({
       onBlur={() => detailsState.flush()}
       below={
         !hasSenderOptions && (
-          <StyledWarningContainer>
+          <div {...stylex.props(styles.warningContainer)}>
             <InlineBanner
               embedded
               status="error"
               icon={<IconAlertTriangle aria-hidden="true" />}
             >{t`No sending address. Connect a verified domain in Settings.`}</InlineBanner>
-          </StyledWarningContainer>
+          </div>
         )
       }
     >
@@ -161,14 +165,14 @@ export const CampaignDetailsFields = ({
         </CampaignEnvelopeRow>
       )}
       <CampaignEnvelopeRow label={t`Subject`}>
-        <StyledSubjectInput
+        <input
           key={`subject-${detailsState.draftResyncKey}`}
           type="text"
           aria-label={t`Subject`}
           defaultValue={detailsState.subject}
           onChange={(event) => detailsState.setSubject(event.target.value)}
           onFocus={handleSubjectFocus}
-          onBlur={handleSubjectBlur}
+          onBlur={handleSubjectBlur} {...stylex.props(styles.subjectInput)}
         />
       </CampaignEnvelopeRow>
     </CampaignEnvelopeBox>

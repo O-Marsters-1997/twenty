@@ -6,24 +6,25 @@ import { type Attachment } from '@/activities/files/types/Attachment';
 import { type ActivityTargetableObject } from '@/activities/types/ActivityTargetableEntity';
 import { AnimatedPlaceholder } from '@/ui/feedback/empty-state/components/AnimatedPlaceholder/AnimatedPlaceholder';
 import { EmptyState } from '@/ui/feedback/empty-state/components/EmptyState';
-import { styled } from '@linaria/react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useState } from 'react';
 
 import { IconPlus } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledAttachmentsContainer = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  height: 100%;
-  overflow: auto;
-`;
-
-const StyledDropZoneContainer = styled.div`
-  height: 100%;
-`;
+const styles = stylex.create({
+  attachmentsContainer: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    height: '100%',
+    overflow: 'auto',
+  },
+  dropZoneContainer: {
+    height: '100%',
+  },
+});
 
 type FilesCardContentProps = {
   attachments: Attachment[];
@@ -51,8 +52,8 @@ export const FilesCardContent = ({
 
   if (isAttachmentsEmpty) {
     return (
-      <StyledDropZoneContainer
-        onDragEnter={() => canUploadFiles && setIsDraggingFile(true)}
+      <div
+        onDragEnter={() => canUploadFiles && setIsDraggingFile(true)} {...stylex.props(styles.dropZoneContainer)}
       >
         {isDraggingFile && canUploadFiles ? (
           <DropZone
@@ -83,16 +84,16 @@ export const FilesCardContent = ({
             )}
           </EmptyState.Root>
         )}
-      </StyledDropZoneContainer>
+      </div>
     );
   }
 
   return (
-    <StyledAttachmentsContainer>
+    <div {...stylex.props(styles.attachmentsContainer)}>
       <AttachmentList
         targetableObject={targetRecord}
         attachments={attachments}
       />
-    </StyledAttachmentsContainer>
+    </div>
   );
 };
