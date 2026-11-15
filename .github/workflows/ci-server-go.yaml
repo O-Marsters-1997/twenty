@@ -66,6 +66,8 @@ jobs:
         run: go vet ./...
       - name: Test
         run: go test ./...
+      - name: Fail if a front-end operation resolves to Node
+        run: go test ./internal/frontdoor -run TestFrontEndOperations
   ci-server-go-status-check:
     if: always() && !cancelled()
     timeout-minutes: 5
