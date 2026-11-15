@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { type Meta, type StoryObj } from '@storybook/react-vite';
 
 import { NavigationDrawerItem } from '@/ui/navigation/navigation-drawer/components/NavigationDrawerItem';
@@ -6,12 +5,15 @@ import { IconSearch } from 'twenty-ui/icon';
 import { CatalogDecorator, type CatalogStory } from 'twenty-ui/testing';
 import { ComponentWithRouterDecorator } from '~/testing/decorators/ComponentWithRouterDecorator';
 import { MemoryRouterDecorator } from '~/testing/decorators/MemoryRouterDecorator';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 200px;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '200px',
+  },
+});
 
 const meta: Meta<typeof NavigationDrawerItem> = {
   title: 'UI/Navigation/NavigationDrawer/NavigationDrawerItem',
@@ -29,9 +31,9 @@ type Story = StoryObj<typeof NavigationDrawerItem>;
 export const Default: Story = {
   decorators: [
     (Story) => (
-      <StyledContainer>
+      <div {...stylex.props(styles.container)}>
         <Story />
-      </StyledContainer>
+      </div>
     ),
     ComponentWithRouterDecorator,
   ],
@@ -40,7 +42,7 @@ export const Default: Story = {
 export const Breadcrumb: Story = {
   decorators: [
     (Story) => (
-      <StyledContainer>
+      <div {...stylex.props(styles.container)}>
         <h1>Breadcrumb</h1>
         <Story
           args={{
@@ -89,7 +91,7 @@ export const Breadcrumb: Story = {
             Icon: IconSearch,
           }}
         />
-      </StyledContainer>
+      </div>
     ),
     ComponentWithRouterDecorator,
   ],
@@ -98,7 +100,7 @@ export const Breadcrumb: Story = {
 export const NewBadge: Story = {
   decorators: [
     (Story) => (
-      <StyledContainer>
+      <div {...stylex.props(styles.container)}>
         <h1>New Badge Examples</h1>
         <Story
           args={{
@@ -114,7 +116,7 @@ export const NewBadge: Story = {
             modifier: { keyboard: ['Mod', 'N'] },
           }}
         />
-      </StyledContainer>
+      </div>
     ),
     ComponentWithRouterDecorator,
   ],
@@ -126,9 +128,9 @@ export const BreadcrumbCatalog: CatalogStory<
 > = {
   decorators: [
     (Story) => (
-      <StyledContainer>
+      <div {...stylex.props(styles.container)}>
         <Story />
-      </StyledContainer>
+      </div>
     ),
     CatalogDecorator,
     MemoryRouterDecorator,
@@ -174,9 +176,9 @@ export const BreadcrumbCatalog: CatalogStory<
 export const Catalog: CatalogStory<Story, typeof NavigationDrawerItem> = {
   decorators: [
     (Story) => (
-      <StyledContainer>
+      <div {...stylex.props(styles.container)}>
         <Story />
-      </StyledContainer>
+      </div>
     ),
     CatalogDecorator,
     MemoryRouterDecorator,

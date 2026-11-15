@@ -1,46 +1,39 @@
-import { css } from '@linaria/core';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 import { type ReactNode } from 'react';
-
-const styles = {
-  container: css`
-    & {
-      max-width: 100%;
-      position: relative;
-    }
-  `,
-  nodeWrapper: css`
-    & {
-      pointer-events: none;
-      visibility: hidden;
-      white-space: pre;
-    }
-  `,
-  childWrapper: css`
-    & {
-      left: 0;
-      position: absolute;
-      top: 0;
-      width: 100%;
-    }
-  `,
-};
 
 type AutogrowWrapperProps = {
   children: ReactNode;
   node?: ReactNode;
-  className?: string;
+  xstyle?: stylex.StyleXStyles;
 };
 
 export const AutogrowWrapper = ({
   children,
   node = children,
-  className,
+  xstyle,
 }: AutogrowWrapperProps) => {
   return (
-    <div className={clsx(styles.container, className)}>
-      <span className={styles.nodeWrapper}>{node}</span>
-      <div className={styles.childWrapper}>{children}</div>
+    <div {...stylex.props(styles.container, xstyle)}>
+      <span {...stylex.props(styles.nodeWrapper)}>{node}</span>
+      <div {...stylex.props(styles.childWrapper)}>{children}</div>
     </div>
   );
 };
+
+const styles = stylex.create({
+  container: {
+    maxWidth: '100%',
+    position: 'relative',
+  },
+  nodeWrapper: {
+    pointerEvents: 'none',
+    visibility: 'hidden',
+    whiteSpace: 'pre',
+  },
+  childWrapper: {
+    left: 0,
+    position: 'absolute',
+    top: 0,
+    width: '100%',
+  },
+});

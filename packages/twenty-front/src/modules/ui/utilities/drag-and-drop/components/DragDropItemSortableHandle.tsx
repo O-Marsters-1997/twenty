@@ -1,24 +1,29 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { type ReactNode, useContext } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { color } from 'twenty-ui/theme/tokens.stylex';
 
 import { DragDropItemSortableHandleRefContext } from '@/ui/utilities/drag-and-drop/context/DragDropItemSortableHandleRefContext';
 
-const StyledSortableHandle = styled.div<{
-  $fill?: boolean;
-  $disabled?: boolean;
-}>`
-  cursor: ${({ $disabled }) => ($disabled ? 'default' : 'grab')};
-  display: ${({ $fill }) => ($fill ? 'flex' : 'block')};
-  height: 100%;
-  min-width: 0;
-  outline: none;
-  width: ${({ $fill }) => ($fill ? '100%' : 'auto')};
-  &:focus-visible {
-    outline: 2px solid ${themeCssVariables.color.blue};
-    outline-offset: -2px;
-  }
-`;
+const styles = stylex.create({
+  handle: {
+    cursor: 'grab',
+    display: 'block',
+    height: '100%',
+    minWidth: 0,
+    outlineColor: color['--t-color-blue'],
+    outlineOffset: { default: null, ':focus-visible': '-2px' },
+    outlineStyle: { default: 'none', ':focus-visible': 'solid' },
+    outlineWidth: { default: null, ':focus-visible': '2px' },
+    width: 'auto',
+  },
+  handleDisabled: {
+    cursor: 'default',
+  },
+  handleFill: {
+    display: 'flex',
+    width: '100%',
+  },
+});
 
 type DragDropItemSortableHandleProps = {
   children: ReactNode;
@@ -34,13 +39,16 @@ export const DragDropItemSortableHandle = ({
   const sortableHandleRef = useContext(DragDropItemSortableHandleRefContext);
 
   return (
-    <StyledSortableHandle
+    <div
       ref={sortableHandleRef}
-      $fill={fill}
-      $disabled={disabled}
       data-dnd-sortable-handle
+      {...stylex.props(
+        styles.handle,
+        disabled && styles.handleDisabled,
+        fill && styles.handleFill,
+      )}
     >
       {children}
-    </StyledSortableHandle>
+    </div>
   );
 };

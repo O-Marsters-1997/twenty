@@ -1,13 +1,18 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { LightIconButton } from 'twenty-ui/components/input';
 import { IconCopy } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledButtonContainer = styled.div`
-  padding: 0 ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  buttonContainer: {
+    paddingTop: '0',
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: '0',
+    paddingLeft: spacing['--t-spacing-1'],
+  },
+});
 
 export type LightCopyIconButtonProps = {
   copyText: string;
@@ -18,7 +23,7 @@ export const LightCopyIconButton = ({ copyText }: LightCopyIconButtonProps) => {
   const { t } = useLingui();
 
   return (
-    <StyledButtonContainer>
+    <div {...stylex.props(styles.buttonContainer)}>
       <LightIconButton
         onClick={() => {
           copyToClipboard(copyText, t`Text copied to clipboard`);
@@ -27,6 +32,6 @@ export const LightCopyIconButton = ({ copyText }: LightCopyIconButtonProps) => {
       >
         <IconCopy />
       </LightIconButton>
-    </StyledButtonContainer>
+    </div>
   );
 };

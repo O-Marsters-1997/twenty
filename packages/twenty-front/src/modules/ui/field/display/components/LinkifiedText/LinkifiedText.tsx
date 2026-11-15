@@ -1,17 +1,16 @@
 import { isNonEmptyString } from '@sniptt/guards';
 
-import { styled } from '@linaria/react';
 import { getSafeUrl } from 'twenty-shared/utils';
 import { linkifyText } from './linkifyText';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledLink = styled.a`
-  color: var(--t-color-blue);
-  text-decoration: underline;
-
-  &:hover {
-    text-decoration-color: var(--t-color-blue);
-  }
-`;
+const styles = stylex.create({
+  link: {
+    color: 'var(--t-color-blue)',
+    textDecoration: 'underline',
+    textDecorationColor: { default: null, ':hover': 'var(--t-color-blue)' },
+  },
+});
 
 type LinkifiedTextProps = {
   text: string;
@@ -26,15 +25,15 @@ export const LinkifiedText = ({ text }: LinkifiedTextProps) => {
     <>
       {linkifyText(text).map((part, index) =>
         part.type === 'link' ? (
-          <StyledLink
+          <a
             key={index}
             href={getSafeUrl(part.content)}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={(event) => event.stopPropagation()}
+            onClick={(event) => event.stopPropagation()} {...stylex.props(styles.link)}
           >
             {part.content}
-          </StyledLink>
+          </a>
         ) : (
           part.content
         ),

@@ -1,25 +1,26 @@
 import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMemberState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { SOURCE_LOCALE } from 'twenty-shared/translations';
 import { LightIconButton } from 'twenty-ui/components/input';
 import { IconChevronLeft, IconChevronRight } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledMonthYearLabel = styled.span`
-  color: ${themeCssVariables.font.color.primary};
-  flex: 1;
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.medium};
-  text-align: center;
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+  },
+  monthYearLabel: {
+    color: fontColor['--t-font-color-primary'],
+    flex: '1',
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    textAlign: 'center',
+  },
+});
 
 type RelativeDatePickerCalendarNavigationProps = {
   monthLabelDate: Date;
@@ -45,7 +46,7 @@ export const RelativeDatePickerCalendarNavigation = ({
   }).format(monthLabelDate);
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <LightIconButton
         onClick={onPreviousMonth}
         size="md"
@@ -54,7 +55,7 @@ export const RelativeDatePickerCalendarNavigation = ({
       >
         <IconChevronLeft />
       </LightIconButton>
-      <StyledMonthYearLabel>{monthYearLabel}</StyledMonthYearLabel>
+      <span {...stylex.props(styles.monthYearLabel)}>{monthYearLabel}</span>
       <LightIconButton
         onClick={onNextMonth}
         size="md"
@@ -63,6 +64,6 @@ export const RelativeDatePickerCalendarNavigation = ({
       >
         <IconChevronRight />
       </LightIconButton>
-    </StyledContainer>
+    </div>
   );
 };

@@ -1,12 +1,24 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import { type ReactNode } from 'react';
 
-import { FIELD_INPUT_ANCHOR_WIDTH_CSS_VARIABLE } from '@/ui/field/input/constants/FieldInputAnchorWidthCssVariable';
+const styles = stylex.create({
+  root: {
+    alignItems: 'center',
+    display: 'flex',
+    minHeight: '32px',
+    minWidth: 'max(200px, var(--field-input-anchor-width, 0px))',
+    width: '100%',
+  },
+});
 
-// oxlint-disable-next-line twenty/styled-components-prefixed-with-styled
-export const FieldInputContainer = styled.div`
-  align-items: center;
-  display: flex;
-  min-height: 32px;
-  min-width: max(200px, var(${FIELD_INPUT_ANCHOR_WIDTH_CSS_VARIABLE}, 0px));
-  width: 100%;
-`;
+type FieldInputContainerProps = {
+  children?: ReactNode;
+  xstyle?: stylex.StyleXStyles;
+};
+
+export const FieldInputContainer = ({
+  children,
+  xstyle,
+}: FieldInputContainerProps) => (
+  <div {...stylex.props(styles.root, xstyle)}>{children}</div>
+);

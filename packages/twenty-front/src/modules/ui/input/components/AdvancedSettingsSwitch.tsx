@@ -1,38 +1,45 @@
 import { NAVIGATION_DRAWER_COLLAPSED_BUTTON_SIZE } from '@/ui/navigation/navigation-drawer/constants/NavigationDrawerCollapsedButtonSize';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
+import { isNonEmptyString } from '@sniptt/guards';
 import { useId } from 'react';
 import { Switch } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  color,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.label<{ isCompact: boolean }>`
-  align-items: center;
-  box-sizing: border-box;
-  cursor: pointer;
-  display: flex;
-  height: ${({ isCompact }) =>
-    isCompact
-      ? `${NAVIGATION_DRAWER_COLLAPSED_BUTTON_SIZE}px`
-      : themeCssVariables.spacing[5]};
-  justify-content: ${({ isCompact }) =>
-    isCompact ? 'center' : 'space-between'};
-  padding: ${({ isCompact }) =>
-    isCompact ? '0' : themeCssVariables.spacing[1]};
-  width: ${({ isCompact }) =>
-    isCompact ? `${NAVIGATION_DRAWER_COLLAPSED_BUTTON_SIZE}px` : '100%'};
-`;
-
-const StyledText = styled.div`
-  color: ${themeCssVariables.font.color.secondary};
-  font-size: ${themeCssVariables.font.size.sm};
-  font-weight: ${themeCssVariables.font.weight.medium};
-`;
-
-const StyledSwitch = styled(Switch)`
-  ${StyledContainer} & {
-    color: ${themeCssVariables.color.yellow};
-  }
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    boxSizing: 'border-box',
+    cursor: 'pointer',
+    display: 'flex',
+    height: spacing['--t-spacing-5'],
+    justifyContent: 'space-between',
+    paddingBlock: spacing['--t-spacing-1'],
+    paddingInline: spacing['--t-spacing-1'],
+    width: '100%',
+  },
+  compact: (size: number) => ({
+    height: size,
+    justifyContent: 'center',
+    paddingBlock: 0,
+    paddingInline: 0,
+    width: size,
+  }),
+  text: {
+    color: fontColor['--t-font-color-secondary'],
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+  },
+  switch: {
+    color: color['--t-color-yellow'],
+  },
+});
 
 type AdvancedSettingsSwitchProps = {
   isAdvancedModeEnabled: boolean;
@@ -57,21 +64,28 @@ export const AdvancedSettingsSwitch = ({
   const labelId = `${instanceId}-text`;
   const switchLabel = label ?? t`Advanced`;
 
+  const { className: containerClassName } = stylex.props(
+    styles.container,
+    isCompact && styles.compact(NAVIGATION_DRAWER_COLLAPSED_BUTTON_SIZE),
+  );
+
   return (
-    <StyledContainer
-      className={className}
+    <label
+      className={[containerClassName, className]
+        .filter(isNonEmptyString)
+        .join(' ')}
       htmlFor={instanceId}
-      isCompact={isCompact}
       title={isCompact ? switchLabel : undefined}
     >
-      {!isCompact && <StyledText id={labelId}>{switchLabel}</StyledText>}
-      <StyledSwitch
+      {!isCompact && <div id={labelId} {...stylex.props(styles.text)}>{switchLabel}</div>}
+      <Switch
+        className={stylex.props(styles.switch).className}
         id={instanceId}
         aria-label={isCompact ? switchLabel : undefined}
         aria-labelledby={isCompact ? undefined : labelId}
         onCheckedChange={onChange}
         checked={isAdvancedModeEnabled}
       />
-    </StyledContainer>
+    </label>
   );
 };

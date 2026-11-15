@@ -1,26 +1,28 @@
 import { ScrollOverlayButton } from '@/ui/utilities/scroll/components/ScrollOverlayButton';
-import { styled } from '@linaria/react';
 import { type Meta, type StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, within } from 'storybook/test';
 import { IconArrowDown } from 'twenty-ui/icon';
 import { ComponentDecorator } from 'twenty-ui/testing';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { background } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledScrollAreaMock = styled.div`
-  background: ${themeCssVariables.background.secondary};
-  height: 120px;
-  position: relative;
-  width: 320px;
-`;
+const styles = stylex.create({
+  scrollAreaMock: {
+    background: background['--t-background-secondary'],
+    height: '120px',
+    position: 'relative',
+    width: '320px',
+  },
+});
 
 const meta: Meta<typeof ScrollOverlayButton> = {
   title: 'UI/Utilities/Scroll/ScrollOverlayButton',
   component: ScrollOverlayButton,
   decorators: [
     (Story) => (
-      <StyledScrollAreaMock>
+      <div {...stylex.props(styles.scrollAreaMock)}>
         <Story />
-      </StyledScrollAreaMock>
+      </div>
     ),
     ComponentDecorator,
   ],

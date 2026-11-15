@@ -1,5 +1,3 @@
-import { css } from '@linaria/core';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { type ReactElement, useMemo, useRef, useState } from 'react';
@@ -13,7 +11,11 @@ import {
   type ButtonSize,
   type ButtonVariant,
 } from 'twenty-ui/primitives/input';
-import { type ThemeColor, themeCssVariables } from 'twenty-ui/theme';
+import { type ThemeColor } from 'twenty-ui/theme';
+import {
+  backgroundTransparent,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 import { ThemeColorPickerMenu } from '@/ui/input/components/ThemeColorPickerMenu';
 import { ICON_PICKER_DROPDOWN_CONTENT_WIDTH } from '@/ui/input/components/constants/IconPickerDropdownContentWidth';
@@ -25,6 +27,7 @@ import { getIconPickerSearchScore } from '@/ui/input/utils/getIconPickerSearchSc
 import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent';
 import { DropdownRoot } from '@/ui/layout/dropdown/components/DropdownRoot';
 import { useAtomFamilyState } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyState';
+import * as stylex from '@stylexjs/stylex';
 
 type IconPickerProps = {
   disabled?: boolean;
@@ -51,29 +54,32 @@ const ICON_CELL_WIDTH = 32;
 const ICON_GRID_GAP = 2;
 const ICON_GRID_PADDING = 8;
 
-const StyledSearchRow = styled.div`
-  align-items: center;
-  box-sizing: border-box;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  padding-right: ${themeCssVariables.spacing[2]};
-  width: 100%;
-
-  > :first-child {
-    flex: 1;
-    min-width: 0;
-  }
-`;
-
-const StyledPopupContent = styled.div`
-  display: contents;
-`;
-
-const iconButtonStyles = css`
-  &[data-selected] {
-    background: ${themeCssVariables.background.transparent.medium};
-  }
-`;
+const styles = stylex.create({
+  popupContent: {
+    display: 'contents',
+  },
+  searchRow: {
+    alignItems: 'center',
+    boxSizing: 'border-box',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+  searchGrow: {
+    flexBasis: '0%',
+    flexGrow: 1,
+    flexShrink: 1,
+    minWidth: 0,
+  },
+  iconButton: {
+    backgroundColor: {
+      default: null,
+      ':is([data-selected])':
+        backgroundTransparent['--t-background-transparent-medium'],
+    },
+  },
+});
 
 export const IconPicker = ({
   disabled,
@@ -185,14 +191,16 @@ export const IconPicker = ({
           width={dropdownWidth}
           sideOffset={dropdownSideOffset}
         >
-          <StyledPopupContent data-click-outside-id={dropdownId}>
-            <StyledSearchRow>
-              <Dropdown.Search
-                aria-label={t`Search icon`}
-                placeholder={t`Search icon`}
-                value={searchString}
-                onValueChange={setSearchString}
-              />
+          <div data-click-outside-id={dropdownId} {...stylex.props(styles.popupContent)}>
+            <div {...stylex.props(styles.searchRow)}>
+              <div {...stylex.props(styles.searchGrow)}>
+                <Dropdown.Search
+                  aria-label={t`Search icon`}
+                  placeholder={t`Search icon`}
+                  value={searchString}
+                  onValueChange={setSearchString}
+                />
+              </div>
               {isDefined(iconColorPicker) && (
                 <DropdownRoot dropdownId={colorDropdownId} type="picker">
                   <Dropdown.Trigger
@@ -212,16 +220,16 @@ export const IconPicker = ({
                     alignOffset={24}
                     width={dropdownWidth}
                   >
-                    <StyledPopupContent data-click-outside-id={colorDropdownId}>
+                    <div data-click-outside-id={colorDropdownId} {...stylex.props(styles.popupContent)}>
                       <ThemeColorPickerMenu
                         selectedColor={iconColorPicker.selectedColor}
                         onSelectColor={iconColorPicker.onColorChange}
                       />
-                    </StyledPopupContent>
+                    </div>
                   </DropdownContent>
                 </DropdownRoot>
               )}
-            </StyledSearchRow>
+            </div>
             <Dropdown.Separator />
             <Dropdown.Section
               scrollable
@@ -240,7 +248,7 @@ export const IconPicker = ({
                       selected={iconKey === selectedIconKey}
                       indicator="none"
                       nativeButton
-                      className={iconButtonStyles}
+                      className={stylex.props(styles.iconButton).className}
                       render={
                         <LightIconButton
                           size="md"
@@ -266,7 +274,7 @@ export const IconPicker = ({
                 enabled={isLoadingMore}
               />
             </Dropdown.Section>
-          </StyledPopupContent>
+          </div>
         </DropdownContent>
       </DropdownRoot>
     </div>

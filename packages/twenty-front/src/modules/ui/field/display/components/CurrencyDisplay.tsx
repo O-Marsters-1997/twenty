@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { formatToShortNumber, isDefined } from 'twenty-shared/utils';
 import { Tooltip } from 'twenty-ui/primitives/surfaces';
 import { useTheme } from 'twenty-ui/theme';
@@ -14,11 +13,14 @@ import { CURRENCY_CODE_ICONS } from '@/ui/input/components/internal/currency/con
 import { EllipsisDisplay } from '@/ui/field/display/components/internal/EllipsisDisplay/EllipsisDisplay';
 import { TooltipDelay } from '@/ui/layout/tooltip/constants/TooltipDelay';
 import { DEFAULT_DECIMAL_VALUE } from '@/localization/utils/formatNumber';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledCurrencyIconContainer = styled.span`
-  align-items: center;
-  display: flex;
-`;
+const styles = stylex.create({
+  currencyIconContainer: {
+    alignItems: 'center',
+    display: 'flex',
+  },
+});
 
 type CurrencyDisplayProps = {
   currencyValue: FieldCurrencyValue | null | undefined;
@@ -66,13 +68,13 @@ export const CurrencyDisplay = ({
             side="top"
             positionMethod="fixed"
           >
-            <StyledCurrencyIconContainer>
+            <span {...stylex.props(styles.currencyIconContainer)}>
               <CurrencyIcon
                 color={theme.font.color.primary}
                 size={theme.icon.size.md}
                 stroke={theme.icon.stroke.sm}
               />
-            </StyledCurrencyIconContainer>
+            </span>
           </Tooltip>{' '}
         </>
       )}

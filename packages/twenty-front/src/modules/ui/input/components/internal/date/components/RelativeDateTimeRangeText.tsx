@@ -1,28 +1,33 @@
 import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMemberState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { styled } from '@linaria/react';
 import { type Temporal } from 'temporal-polyfill';
 import { SOURCE_LOCALE } from 'twenty-shared/translations';
 import { IconArrowDown } from 'twenty-ui/icon';
 import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  justify-content: center;
-  min-height: 96px;
-  padding: ${themeCssVariables.spacing[4]} ${themeCssVariables.spacing[2]};
-  text-align: center;
-`;
-
-const StyledBound = styled.span`
-  color: ${themeCssVariables.font.color.primary};
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.medium};
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    justifyContent: 'center',
+    minHeight: '96px',
+    paddingTop: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-4'],
+    paddingLeft: spacing['--t-spacing-2'],
+    textAlign: 'center',
+  },
+  bound: {
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+  },
+});
 
 type RelativeDateTimeRangeTextProps = {
   start: Temporal.ZonedDateTime;
@@ -43,14 +48,14 @@ export const RelativeDateTimeRangeText = ({
   });
 
   return (
-    <StyledContainer>
-      <StyledBound>
+    <div {...stylex.props(styles.container)}>
+      <span {...stylex.props(styles.bound)}>
         {formatter.format(new Date(start.epochMilliseconds))}
-      </StyledBound>
+      </span>
       <IconArrowDown size={14} color={themeCssVariables.font.color.tertiary} />
-      <StyledBound>
+      <span {...stylex.props(styles.bound)}>
         {formatter.format(new Date(end.epochMilliseconds))}
-      </StyledBound>
-    </StyledContainer>
+      </span>
+    </div>
   );
 };

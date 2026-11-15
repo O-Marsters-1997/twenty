@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { atom, useAtomValue, useStore } from 'jotai';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
@@ -12,7 +11,8 @@ import { type AddressInputProps } from '@/ui/field/input/types/AddressInputProps
 import { CountrySelect } from '@/ui/input/components/internal/country/components/CountrySelect';
 import { isDefined } from 'twenty-shared/utils';
 import { Autocomplete } from 'twenty-ui/primitives/input';
-import { MOBILE_VIEWPORT } from 'twenty-ui/theme';
+import { media } from 'twenty-ui/theme/constants.stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 import { turnIntoEmptyStringIfWhitespacesOnly } from '~/utils/string/turnIntoEmptyStringIfWhitespacesOnly';
 
 import { t } from '@lingui/core/macro';
@@ -21,43 +21,38 @@ import { useAddressAutocomplete } from '@/ui/field/input/hooks/useAddressAutocom
 import { useAddressInputClickOutside } from '@/ui/field/input/hooks/useAddressInputClickOutside';
 import { useCountryUtils } from '@/ui/field/input/hooks/useCountryUtils';
 import { useFocusManagement } from '@/ui/field/input/hooks/useFocusManagement';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledAddressContainer = styled.div`
-  padding: 4px 8px;
-
-  width: 344px;
-  > div {
-    margin-bottom: 6px;
-  }
-
-  @media (max-width: ${MOBILE_VIEWPORT}px) {
-    width: auto;
-    min-width: 100px;
-    max-width: 200px;
-    overflow: hidden;
-    > div {
-      margin-bottom: 8px;
-    }
-  }
-`;
-
-const StyledHalfRowContainer = styled.div`
-  display: grid;
-  gap: 8px;
-  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
-
-  @media (max-width: ${MOBILE_VIEWPORT}px) {
-    display: block;
-    > div {
-      margin-bottom: 7px;
-    }
-  }
-`;
-
-const StyledInputWithDropdownContainer = styled.div`
-  position: relative;
-  width: 100%;
-`;
+const styles = stylex.create({
+  container: {
+    maxWidth: { default: null, [media.mobile]: '200px' },
+    minWidth: { default: null, [media.mobile]: '100px' },
+    overflow: { default: null, [media.mobile]: 'hidden' },
+    paddingBlock: '4px',
+    paddingInline: spacing['--t-spacing-2'],
+    width: { default: '344px', [media.mobile]: 'auto' },
+  },
+  item: {
+    marginBottom: { default: '6px', [media.mobile]: spacing['--t-spacing-2'] },
+  },
+  halfRow: {
+    display: { default: 'grid', [media.mobile]: 'block' },
+    gap: spacing['--t-spacing-2'],
+    gridTemplateColumns: 'repeat(auto-fit, minmax(0, 1fr))',
+    marginBottom: { default: '6px', [media.mobile]: spacing['--t-spacing-2'] },
+  },
+  halfRowCell: {
+    marginBottom: { default: null, [media.mobile]: '7px' },
+  },
+  field: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  inputWithDropdownContainer: {
+    position: 'relative',
+    width: '100%',
+  },
+});
 
 export const AddressInput = ({
   instanceId,
@@ -242,12 +237,19 @@ export const AddressInput = ({
     fieldType,
     label,
     autoFocus = false,
+    isInHalfRow = false,
   }: {
     fieldType: 'addressStreet1' | 'addressCity';
     label: string;
     autoFocus?: boolean;
+    isInHalfRow?: boolean;
   }) => (
-    <StyledInputWithDropdownContainer>
+    <div
+      {...stylex.props(
+        styles.inputWithDropdownContainer,
+        isInHalfRow ? styles.halfRowCell : styles.item,
+      )}
+    >
       <AutocompleteRoot
         dropdownId={SELECT_AUTOCOMPLETE_LIST_DROPDOWN_ID}
         enabled={typeOfAddressForAutocomplete === fieldType}
@@ -281,11 +283,11 @@ export const AddressInput = ({
           onChange={handlePlaceSelection}
         />
       </AutocompleteRoot>
-    </StyledInputWithDropdownContainer>
+    </div>
   );
 
   return (
-    <StyledAddressContainer ref={wrapperRef}>
+    <div ref={wrapperRef} {...stylex.props(styles.container)}>
       {isFieldInputInSubFieldsAddress('addressStreet1') &&
         renderInputWithAutocomplete({
           fieldType: 'addressStreet1',
@@ -293,51 +295,60 @@ export const AddressInput = ({
           autoFocus: true,
         })}
       {isFieldInputInSubFieldsAddress('addressStreet2') && (
-        <TextInput
-          value={internalValue.addressStreet2 ?? ''}
-          ref={inputRefs.addressStreet2}
-          label={t`Address 2`}
-          fullWidth
-          onChange={getChangeHandler('addressStreet2')}
-          onFocus={getFocusHandler('addressStreet2')}
-        />
+        <div {...stylex.props(styles.field, styles.item)}>
+          <TextInput
+            value={internalValue.addressStreet2 ?? ''}
+            ref={inputRefs.addressStreet2}
+            label={t`Address 2`}
+            fullWidth
+            onChange={getChangeHandler('addressStreet2')}
+            onFocus={getFocusHandler('addressStreet2')}
+          />
+        </div>
       )}
-      <StyledHalfRowContainer>
+      <div {...stylex.props(styles.halfRow)}>
         {isFieldInputInSubFieldsAddress('addressCity') &&
           renderInputWithAutocomplete({
             fieldType: 'addressCity',
             label: t`City`,
+            isInHalfRow: true,
           })}
         {isFieldInputInSubFieldsAddress('addressState') && (
-          <TextInput
-            value={internalValue.addressState ?? ''}
-            ref={inputRefs.addressState}
-            label={t`State`}
-            fullWidth
-            onChange={getChangeHandler('addressState')}
-            onFocus={getFocusHandler('addressState')}
-          />
+          <div {...stylex.props(styles.field, styles.halfRowCell)}>
+            <TextInput
+              value={internalValue.addressState ?? ''}
+              ref={inputRefs.addressState}
+              label={t`State`}
+              fullWidth
+              onChange={getChangeHandler('addressState')}
+              onFocus={getFocusHandler('addressState')}
+            />
+          </div>
         )}
-      </StyledHalfRowContainer>
-      <StyledHalfRowContainer>
+      </div>
+      <div {...stylex.props(styles.halfRow)}>
         {isFieldInputInSubFieldsAddress('addressPostcode') && (
-          <TextInput
-            value={internalValue.addressPostcode ?? ''}
-            ref={inputRefs.addressPostcode}
-            label={t`Post Code`}
-            fullWidth
-            onChange={getChangeHandler('addressPostcode')}
-            onFocus={getFocusHandler('addressPostcode')}
-          />
+          <div {...stylex.props(styles.field, styles.halfRowCell)}>
+            <TextInput
+              value={internalValue.addressPostcode ?? ''}
+              ref={inputRefs.addressPostcode}
+              label={t`Post Code`}
+              fullWidth
+              onChange={getChangeHandler('addressPostcode')}
+              onFocus={getFocusHandler('addressPostcode')}
+            />
+          </div>
         )}
         {isFieldInputInSubFieldsAddress('addressCountry') && (
-          <CountrySelect
-            label={t`Country`}
-            onChange={getChangeHandler('addressCountry')}
-            selectedCountryName={internalValue.addressCountry ?? ''}
-          />
+          <div {...stylex.props(styles.field, styles.halfRowCell)}>
+            <CountrySelect
+              label={t`Country`}
+              onChange={getChangeHandler('addressCountry')}
+              selectedCountryName={internalValue.addressCountry ?? ''}
+            />
+          </div>
         )}
-      </StyledHalfRowContainer>
-    </StyledAddressContainer>
+      </div>
+    </div>
   );
 };

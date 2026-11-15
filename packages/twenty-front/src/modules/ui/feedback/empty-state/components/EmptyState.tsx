@@ -1,56 +1,103 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import { type ReactNode } from 'react';
 import { isDefined } from 'twenty-shared/utils';
+import {
+  animationDuration,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+  textLineHeight,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledRoot = styled.div<{ width?: number }>`
-  align-items: center;
-  animation: emptyStateFadeIn calc(var(--t-animation-duration-fast) * 1s) ease;
-  display: flex;
-  flex-direction: column;
-  gap: var(--t-spacing-6);
-  height: 100%;
-  justify-content: center;
-  text-align: center;
-  width: ${({ width }) => (isDefined(width) ? `${width}px` : '100%')};
+const fadeIn = stylex.keyframes({
+  from: { opacity: 0 },
+  to: { opacity: 1 },
+});
 
-  @keyframes emptyStateFadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-`;
+const styles = stylex.create({
+  root: {
+    alignItems: 'center',
+    animationDuration: `calc(${animationDuration['--t-animation-duration-fast']} * 1s)`,
+    animationName: fadeIn,
+    animationTimingFunction: 'ease',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-6'],
+    height: '100%',
+    justifyContent: 'center',
+    textAlign: 'center',
+    width: '100%',
+  },
+  rootWidth: (width: number) => ({
+    width: `${width}px`,
+  }),
+  content: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    justifyContent: 'center',
+    textAlign: 'center',
+    width: '100%',
+  },
+  title: {
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-lg'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+  },
+  description: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    lineHeight: textLineHeight['--t-text-line-height-lg'],
+    maxHeight: '2.8em',
+    overflow: 'hidden',
+    width: '50%',
+  },
+});
 
-const StyledContent = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  gap: var(--t-spacing-2);
-  justify-content: center;
-  text-align: center;
-  width: 100%;
-`;
+type EmptyStateRootProps = {
+  children?: ReactNode;
+  width?: number;
+  className?: string;
+};
 
-const StyledTitle = styled.div`
-  color: var(--t-font-color-primary);
-  font-size: var(--t-font-size-lg);
-  font-weight: var(--t-font-weight-semi-bold);
-`;
+type EmptyStateSectionProps = {
+  children?: ReactNode;
+};
 
-const StyledDescription = styled.div`
-  color: var(--t-font-color-tertiary);
-  font-size: var(--t-font-size-sm);
-  font-weight: var(--t-font-weight-regular);
-  line-height: var(--t-text-line-height-lg);
-  max-height: 2.8em;
-  overflow: hidden;
-  width: 50%;
-`;
+const EmptyStateRoot = ({ children, width, className }: EmptyStateRootProps) => {
+  const rootProps = stylex.props(
+    styles.root,
+    isDefined(width) && styles.rootWidth(width),
+  );
+
+  return (
+    <div
+      {...rootProps}
+      className={[rootProps.className, className].filter(isDefined).join(' ')}
+    >
+      {children}
+    </div>
+  );
+};
+
+const EmptyStateContent = ({ children }: EmptyStateSectionProps) => (
+  <div {...stylex.props(styles.content)}>{children}</div>
+);
+
+const EmptyStateTitle = ({ children }: EmptyStateSectionProps) => (
+  <div {...stylex.props(styles.title)}>{children}</div>
+);
+
+const EmptyStateDescription = ({ children }: EmptyStateSectionProps) => (
+  <div {...stylex.props(styles.description)}>{children}</div>
+);
 
 export const EmptyState = {
-  Root: StyledRoot,
-  Content: StyledContent,
-  Title: StyledTitle,
-  Description: StyledDescription,
+  Root: EmptyStateRoot,
+  Content: EmptyStateContent,
+  Title: EmptyStateTitle,
+  Description: EmptyStateDescription,
 };

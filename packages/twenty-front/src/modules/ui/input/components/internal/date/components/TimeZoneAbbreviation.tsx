@@ -1,19 +1,19 @@
 import { useUserTimezone } from '@/ui/input/components/internal/date/hooks/useUserTimezone';
 import { getTimezoneAbbreviationForZonedDateTime } from '@/ui/input/components/internal/date/utils/getTimeZoneAbbreviationForZonedDateTime';
-import { styled } from '@linaria/react';
 import { isNonEmptyString, isString } from '@sniptt/guards';
 import { Temporal } from 'temporal-polyfill';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledTimezoneAbbreviation = styled.span<{ hasError?: boolean }>`
-  background: transparent;
-  color: ${themeCssVariables.font.color.tertiary};
-
-  font-size: ${themeCssVariables.font.size.sm};
-  user-select: none;
-
-  width: fit-content;
-`;
+const styles = stylex.create({
+  timezoneAbbreviation: {
+    background: 'transparent',
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-sm'],
+    userSelect: 'none',
+    width: 'fit-content',
+  },
+});
 
 export const TimeZoneAbbreviation = ({
   instant,
@@ -39,8 +39,8 @@ export const TimeZoneAbbreviation = ({
   ).toZonedDateTimeISO(timeZone ?? userTimezone);
 
   return (
-    <StyledTimezoneAbbreviation>
+    <span {...stylex.props(styles.timezoneAbbreviation)}>
       {` ${getTimezoneAbbreviationForZonedDateTime(zonedDate)}`}
-    </StyledTimezoneAbbreviation>
+    </span>
   );
 };

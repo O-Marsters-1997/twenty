@@ -98,7 +98,6 @@ export const ClickAndKeyboard: Story = {
   args: {
     href: 'https://twenty.com',
     label: 'Open website',
-    className: 'caller-link',
     onClick: handleLinkClick,
   },
   render: (args) => (
@@ -110,7 +109,6 @@ export const ClickAndKeyboard: Story = {
     const canvas = within(canvasElement);
     const link = canvas.getByRole('link', { name: 'Open website' });
 
-    await expect(link).toHaveClass('caller-link');
     await userEvent.tab();
     await expect(link).toHaveFocus();
     await userEvent.keyboard('{Enter}');

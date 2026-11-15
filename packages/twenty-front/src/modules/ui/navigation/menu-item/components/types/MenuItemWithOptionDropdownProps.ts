@@ -1,3 +1,4 @@
+import type * as stylex from '@stylexjs/stylex';
 import { type ComponentProps, type MouseEvent, type ReactNode } from 'react';
 import {
   type Dropdown,
@@ -7,7 +8,7 @@ import { type IconComponent } from 'twenty-ui/icon';
 
 export type MenuItemWithOptionDropdownProps = {
   accent?: MenuItemAccent;
-  className?: string;
+  xstyle?: stylex.StyleXStyles;
   dropdownContent: ReactNode;
   dropdownId: string;
   isIconDisplayedOnHoverOnly?: boolean;

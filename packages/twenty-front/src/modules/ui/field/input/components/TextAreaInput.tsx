@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useEffect, useRef, useState, type ChangeEvent } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 
@@ -6,12 +5,17 @@ import { LightCopyIconButton } from '@/ui/input/components/LightCopyIconButton';
 import { useRegisterInputEvents } from '@/ui/input/hooks/useRegisterInputEvents';
 import { isDefined } from 'twenty-shared/utils';
 import { turnIntoEmptyStringIfWhitespacesOnly } from '~/utils/string/turnIntoEmptyStringIfWhitespacesOnly';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  font,
+  fontColor,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 export type TextAreaInputProps = {
   instanceId: string;
   disabled?: boolean;
-  className?: string;
   placeholder?: string;
   autoFocus?: boolean;
   value: string;
@@ -25,49 +29,45 @@ export type TextAreaInputProps = {
   copyButton?: boolean;
 };
 
-const StyledTextAreaContainer = styled.div`
-  width: 100%;
-
-  > textarea {
-    align-items: center;
-    background-color: transparent;
-    border: none;
-    color: ${themeCssVariables.font.color.primary};
-    display: flex;
-    font-family: ${themeCssVariables.font.family};
-    font-size: inherit;
-    font-weight: inherit;
-
-    &::placeholder,
-    &::-webkit-input-placeholder {
-      color: ${themeCssVariables.font.color.light};
-      font-family: ${themeCssVariables.font.family};
-      font-weight: ${themeCssVariables.font.weight.medium};
-    }
-
-    justify-content: center;
-    line-height: 18px;
-    max-height: 400px;
-    outline: none;
-    padding: ${themeCssVariables.spacing[0]} ${themeCssVariables.spacing[2]};
-    resize: none;
-
-    width: calc(100% - ${themeCssVariables.spacing[7]});
-  }
-`;
-
-const StyledLightIconButtonContainer = styled.div`
-  background: transparent;
-  position: absolute;
-  right: 0;
-  top: 16px;
-  transform: translateY(-50%);
-`;
+const styles = stylex.create({
+  container: {
+    width: '100%',
+  },
+  textarea: {
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    borderWidth: '0',
+    color: fontColor['--t-font-color-primary'],
+    display: 'flex',
+    fontFamily: font['--t-font-family'],
+    fontSize: 'inherit',
+    fontWeight: 'inherit',
+    justifyContent: 'center',
+    lineHeight: '18px',
+    maxHeight: '400px',
+    outlineStyle: 'none',
+    paddingBlock: spacing['--t-spacing-0'],
+    paddingInline: spacing['--t-spacing-2'],
+    resize: 'none',
+    width: `calc(100% - ${spacing['--t-spacing-7']})`,
+    '::placeholder': {
+      color: fontColor['--t-font-color-light'],
+      fontFamily: font['--t-font-family'],
+      fontWeight: fontWeight['--t-font-weight-medium'],
+    },
+  },
+  lightIconButtonContainer: {
+    background: 'transparent',
+    position: 'absolute',
+    right: '0',
+    top: '16px',
+    transform: 'translateY(-50%)',
+  },
+});
 
 export const TextAreaInput = ({
   instanceId,
   disabled,
-  className,
   placeholder,
   autoFocus,
   value,
@@ -115,22 +115,22 @@ export const TextAreaInput = ({
 
   return (
     <>
-      <StyledTextAreaContainer>
+      <div {...stylex.props(styles.container)}>
         <TextareaAutosize
           placeholder={placeholder}
           disabled={disabled}
-          className={className}
           ref={wrapperRef}
           onChange={handleChange}
           autoFocus={autoFocus}
           value={internalText}
           maxRows={maxRows}
+          {...stylex.props(styles.textarea)}
         />
-      </StyledTextAreaContainer>
+      </div>
       {copyButton && (
-        <StyledLightIconButtonContainer ref={copyRef}>
+        <div ref={copyRef} {...stylex.props(styles.lightIconButtonContainer)}>
           <LightCopyIconButton copyText={internalText} />
-        </StyledLightIconButtonContainer>
+        </div>
       )}
     </>
   );

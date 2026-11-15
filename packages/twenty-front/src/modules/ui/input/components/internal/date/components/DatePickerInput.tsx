@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useEffect, useState } from 'react';
 import { useIMask } from 'react-imask';
 
@@ -14,43 +13,15 @@ import { type FormFieldInputVariant } from '@/ui/input/types/FormFieldInputVaria
 import { useParseDateInputStringToPlainDate } from '@/ui/input/components/internal/date/hooks/useParseDateInputStringToPlainDate';
 import { useParseJSDateToIMaskDateInputString } from '@/ui/input/components/internal/date/hooks/useParseJSDateToIMaskDateInputString';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
-
-const StyledInputContainer = styled.div<{
-  $variant: FormFieldInputVariant;
-}>`
-  align-items: center;
-  border-bottom: ${({ $variant }) =>
-    $variant === 'transparent'
-      ? 'none'
-      : `1px solid ${themeCssVariables.border.color.light}`};
-  border-top-left-radius: ${themeCssVariables.border.radius.md};
-  border-top-right-radius: ${themeCssVariables.border.radius.md};
-  display: flex;
-  height: ${({ $variant }) =>
-    $variant === 'transparent'
-      ? themeCssVariables.spacing[6]
-      : themeCssVariables.spacing[8]};
-  width: 100%;
-`;
-
-const StyledInput = styled.input<{
-  hasError?: boolean;
-  $variant: FormFieldInputVariant;
-}>`
-  background: transparent;
-  border: none;
-  color: ${({ hasError }) =>
-    hasError
-      ? themeCssVariables.color.red
-      : themeCssVariables.font.color.primary};
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${({ $variant }) =>
-    $variant === 'transparent' ? themeCssVariables.font.weight.regular : 500};
-  outline: none;
-  padding: ${({ $variant }) => ($variant === 'transparent' ? '0' : '4px 8px')};
-  width: 100%;
-`;
+import * as stylex from '@stylexjs/stylex';
+import {
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type DatePickerInputProps = {
   onChange?: (date: string | null) => void;
@@ -66,6 +37,7 @@ export const DatePickerInput = ({
   variant = 'default',
 }: DatePickerInputProps) => {
   const { dateFormat } = useDateTimeFormat();
+  const isTransparent = variant === 'transparent';
 
   const [internalDate, setInternalDate] = useState(date);
 
@@ -126,15 +98,59 @@ export const DatePickerInput = ({
   }, [date, internalDate, parsePlainDateToDateInputString, setValue]);
 
   return (
-    <StyledInputContainer $variant={variant}>
-      <StyledInput
-        $variant={variant}
+    <div
+      {...stylex.props(
+        styles.container,
+        isTransparent ? styles.containerTransparent : styles.containerDefault,
+      )}
+    >
+      <input
+        {...stylex.props(
+          styles.input,
+          isTransparent ? styles.inputTransparent : styles.inputDefault,
+        )}
         type="text"
         disabled={readonly}
         ref={ref as any}
         value={value}
         onChange={() => {}} // Prevent React warning
       />
-    </StyledInputContainer>
+    </div>
   );
 };
+
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    display: 'flex',
+    width: '100%',
+  },
+  containerDefault: {
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
+    height: spacing['--t-spacing-8'],
+  },
+  containerTransparent: {
+    height: spacing['--t-spacing-6'],
+  },
+  input: {
+    backgroundColor: 'transparent',
+    borderStyle: 'none',
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-md'],
+    outline: 'none',
+    width: '100%',
+  },
+  inputDefault: {
+    fontWeight: 500,
+    paddingBlock: '4px',
+    paddingInline: '8px',
+  },
+  inputTransparent: {
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    padding: 0,
+  },
+});

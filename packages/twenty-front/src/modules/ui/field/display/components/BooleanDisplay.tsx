@@ -1,35 +1,36 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { IconCheck, IconX } from 'twenty-ui/icon';
+import * as stylex from '@stylexjs/stylex';
 const iconSizeSm = 14;
 
-const StyledBooleanFieldValue = styled.div`
-  margin-left: 4px;
-`;
+const styles = stylex.create({
+  booleanFieldValue: {
+    marginLeft: '4px',
+  },
+  container: {
+    alignItems: 'center',
+    display: 'flex',
+    height: '20px',
+  },
+});
 
 type BooleanDisplayProps = {
   value: boolean | null | undefined;
 };
 
-const StyledContainer = styled.div`
-  align-items: center;
-  display: flex;
-  height: 20px;
-`;
-
 export const BooleanDisplay = ({ value }: BooleanDisplayProps) => {
   if (value === null || value === undefined) {
-    return <StyledContainer />;
+    return <div {...stylex.props(styles.container)} />;
   }
 
   const isTrue = value === true;
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       {isTrue ? <IconCheck size={iconSizeSm} /> : <IconX size={iconSizeSm} />}
-      <StyledBooleanFieldValue>
+      <div {...stylex.props(styles.booleanFieldValue)}>
         {isTrue ? t`True` : t`False`}
-      </StyledBooleanFieldValue>
-    </StyledContainer>
+      </div>
+    </div>
   );
 };

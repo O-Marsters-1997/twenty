@@ -1,65 +1,72 @@
 import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent';
 import { DropdownRoot } from '@/ui/layout/dropdown/components/DropdownRoot';
 import { isDropdownOpenComponentState } from '@/ui/layout/dropdown/states/isDropdownOpenComponentState';
+import { menuItemMarker } from '@/ui/navigation/menu-item/components/MenuItemWithOptionDropdown.stylex';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
+import * as stylex from '@stylexjs/stylex';
 import { type MouseEvent } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { LightIconButton } from 'twenty-ui/components/input';
 import { Dropdown } from 'twenty-ui/components/navigation';
 import { IconDotsVertical } from 'twenty-ui/icon';
 import { ListItem } from 'twenty-ui/primitives/navigation';
-import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import {
+  backgroundTransparent,
+  borderRadius,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 import { type MenuItemWithOptionDropdownProps } from './types/MenuItemWithOptionDropdownProps';
 
-const StyledMenuItemContainer = styled.div<{
-  focused: boolean;
-  showActions: boolean;
-}>`
-  align-items: center;
-  background: ${({ focused }) =>
-    focused ? themeCssVariables.background.transparent.light : 'transparent'};
-  border-radius: calc(
-    ${themeCssVariables.border.radius.md} - ${themeCssVariables.spacing[1]}
-  );
-  box-sizing: border-box;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  min-width: 0;
-  padding-inline: ${themeCssVariables.spacing[1]};
-  width: 100%;
+const HOVER_FINE_POINTER = '@media (hover: hover) and (pointer: fine)';
 
-  &:hover {
-    background: ${themeCssVariables.background.transparent.light};
-  }
-
-  .hoverable-buttons {
-    display: flex;
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .hoverable-buttons {
-      opacity: ${({ showActions }) => (showActions ? 1 : 0)};
-    }
-
-    &:hover .hoverable-buttons,
-    &:focus-within .hoverable-buttons {
-      opacity: 1;
-    }
-  }
-`;
-
-const StyledPrimaryListItem = styled(ListItem)`
-  background: transparent;
-  flex: 1;
-  min-width: 0;
-  padding-inline: 0;
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    backgroundColor: {
+      default: 'transparent',
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
+    borderRadius: `calc(${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']})`,
+    boxSizing: 'border-box',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    minWidth: 0,
+    paddingInline: spacing['--t-spacing-1'],
+    width: '100%',
+  },
+  containerFocused: {
+    backgroundColor: backgroundTransparent['--t-background-transparent-light'],
+  },
+  primaryItem: {
+    backgroundColor: 'transparent',
+    flex: 1,
+    minWidth: 0,
+    paddingInline: 0,
+  },
+  hoverableButtons: {
+    display: 'flex',
+    opacity: {
+      default: null,
+      [HOVER_FINE_POINTER]: {
+        default: 0,
+        [stylex.when.ancestor(':hover', menuItemMarker)]: 1,
+        [stylex.when.ancestor(':focus-within', menuItemMarker)]: 1,
+      },
+    },
+  },
+  hoverableButtonsVisible: {
+    opacity: {
+      default: null,
+      [HOVER_FINE_POINTER]: 1,
+    },
+  },
+});
 
 export const MenuItemWithOptionDropdown = ({
   accent = 'default',
-  className,
+  xstyle,
   isIconDisplayedOnHoverOnly = true,
   dropdownContent,
   dropdownId,
@@ -87,16 +94,22 @@ export const MenuItemWithOptionDropdown = ({
     onClick?.(event);
   };
 
+  const showActions = !isIconDisplayedOnHoverOnly || isDropdownOpen;
+
   return (
-    <StyledMenuItemContainer
+    <div
       data-testid={testId ?? undefined}
-      className={className}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      focused={selected}
-      showActions={!isIconDisplayedOnHoverOnly || isDropdownOpen}
+      {...stylex.props(
+        menuItemMarker,
+        styles.container,
+        selected && styles.containerFocused,
+        xstyle,
+      )}
     >
-      <StyledPrimaryListItem
+      <ListItem
+        {...stylex.props(styles.primaryItem)}
         render={
           isDefined(onClick) ? (
             <button type="button" onClick={handleMenuItemClick} />
@@ -111,8 +124,13 @@ export const MenuItemWithOptionDropdown = ({
         hasSubmenu={hasSubMenu}
       >
         {text}
-      </StyledPrimaryListItem>
-      <div className="hoverable-buttons">
+      </ListItem>
+      <div
+        {...stylex.props(
+          styles.hoverableButtons,
+          showActions && styles.hoverableButtonsVisible,
+        )}
+      >
         <DropdownRoot dropdownId={dropdownId} type="menu">
           <Dropdown.Trigger
             onClick={(event) => event.stopPropagation()}
@@ -135,6 +153,6 @@ export const MenuItemWithOptionDropdown = ({
           </DropdownContent>
         </DropdownRoot>
       </div>
-    </StyledMenuItemContainer>
+    </div>
   );
 };

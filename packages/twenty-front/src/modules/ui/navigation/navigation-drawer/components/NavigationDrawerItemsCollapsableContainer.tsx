@@ -1,34 +1,36 @@
 import { NAVIGATION_DRAWER_COLLAPSED_BUTTON_SIZE } from '@/ui/navigation/navigation-drawer/constants/NavigationDrawerCollapsedButtonSize';
 import { useIsNavigationDrawerContentExpanded } from '@/ui/navigation/navigation-drawer/hooks/useIsNavigationDrawerContentExpanded';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { type ReactNode } from 'react';
 import {
   type AnimationControls,
   motion,
   type TargetAndTransition,
 } from 'framer-motion';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import {
+  animationDuration,
+  backgroundTransparent,
+  borderRadius,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledAnimationGroupContainerBase = styled.div<{
-  isCollapsedGroup: boolean;
-}>`
-  background-color: ${({ isCollapsedGroup }) =>
-    isCollapsedGroup
-      ? themeCssVariables.background.transparent.lighter
-      : 'transparent'};
-  border: ${({ isCollapsedGroup }) =>
-    isCollapsedGroup
-      ? `1px solid ${themeCssVariables.background.transparent.lighter}`
-      : 'none'};
-  border-radius: ${({ isCollapsedGroup }) =>
-    isCollapsedGroup ? themeCssVariables.border.radius.md : '0'};
-  transition: background-color
-    calc(${themeCssVariables.animation.duration.normal} * 1s) ease;
-`;
-
-const StyledAnimationGroupContainer = motion.create(
-  StyledAnimationGroupContainerBase,
-);
+const styles = stylex.create({
+  container: {
+    backgroundColor: 'transparent',
+    borderRadius: 0,
+    borderStyle: 'none',
+    transitionDuration: `calc(${animationDuration['--t-animation-duration-normal']} * 1s)`,
+    transitionProperty: 'background-color',
+    transitionTimingFunction: 'ease',
+  },
+  collapsedGroup: {
+    backgroundColor: backgroundTransparent['--t-background-transparent-lighter'],
+    borderColor: backgroundTransparent['--t-background-transparent-lighter'],
+    borderRadius: borderRadius['--t-border-radius-md'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+  },
+});
 
 type NavigationDrawerItemsCollapsableContainerProps = {
   isGroup?: boolean;
@@ -47,15 +49,18 @@ export const NavigationDrawerItemsCollapsableContainer = ({
     : { width: NAVIGATION_DRAWER_COLLAPSED_BUTTON_SIZE };
 
   return (
-    <StyledAnimationGroupContainer
-      isCollapsedGroup={isGroup && !isExpanded}
+    <motion.div
       initial={false}
       animate={animate}
       transition={{
         duration: theme.animation.duration.normal,
       }}
+      {...stylex.props(
+        styles.container,
+        isGroup && !isExpanded && styles.collapsedGroup,
+      )}
     >
       {children}
-    </StyledAnimationGroupContainer>
+    </motion.div>
   );
 };
