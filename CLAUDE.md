@@ -14,7 +14,7 @@ Where this repo differs from your defaults:
 - Prefer event handlers over `useEffect` for state updates.
 - No abbreviations in names (`fieldMetadata`, not `fm`); constants in SCREAMING_SNAKE_CASE; component props types suffixed `Props`.
 - Use existing guards and helpers before writing your own: `isDefined`, `isNonEmptyArray`, `isPlainObject`, … from `twenty-shared/utils`; `isNonEmptyString`, `isString`, `isNull`, `isObject`, … from `@sniptt/guards`. Reimplementing an existing util is the most common AI-authored defect here.
-- Lingui for user-facing strings; Linaria (zero-runtime, styled-components pattern) for twenty-front styling.
+- Lingui for user-facing strings; StyleX for new styling. Linaria/SCSS only when editing a file that hasn't been converted yet; see `docs/styling.md`.
 - For Twenty product concepts, consult `packages/twenty-ui/src/icon/icon-dictionary.md` and use the canonical icon.
 - Import icons from `twenty-ui/icon`, never directly from `@tabler/icons-react`; action and status concepts should use their action or status icons.
 - Test behavior, not implementation: query by user-visible text/roles, `@testing-library/user-event` for interactions.

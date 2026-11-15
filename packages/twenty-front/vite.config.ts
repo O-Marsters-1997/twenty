@@ -1,5 +1,6 @@
 import { lingui } from '@lingui/vite-plugin';
 import { isNonEmptyString } from '@sniptt/guards';
+import stylex from '@stylexjs/unplugin';
 import react from '@vitejs/plugin-react-swc';
 import wyw from '@wyw-in-js/vite';
 import fs from 'fs';
@@ -89,6 +90,11 @@ export default defineConfig(({ mode }) => {
     },
 
     plugins: [
+      stylex.vite({
+        useCSSLayers: true,
+        dev: mode === 'development',
+        runtimeInjection: false,
+      }),
       react({
         plugins: [['@lingui/swc-plugin', {}]],
       }),
