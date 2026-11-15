@@ -1,35 +1,30 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { type ReactNode } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
-
-type ThemeSpacingKey = keyof typeof themeCssVariables.spacing;
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsEmptyPlaceholderProps = {
   children: ReactNode;
-  padding?: ThemeSpacingKey;
   textAlign?: 'left' | 'center' | 'right';
 };
 
-const StyledPlaceholder = styled.div<{
-  placeholderPadding: string;
-  placeholderTextAlign: string;
-}>`
-  color: ${themeCssVariables.font.color.tertiary};
-  padding: ${({ placeholderPadding }) => placeholderPadding};
-  text-align: ${({ placeholderTextAlign }) => placeholderTextAlign};
-`;
+const styles = stylex.create({
+  root: {
+    color: fontColor['--t-font-color-tertiary'],
+    paddingBottom: spacing['--t-spacing-8'],
+    paddingLeft: spacing['--t-spacing-8'],
+    paddingRight: spacing['--t-spacing-8'],
+    paddingTop: spacing['--t-spacing-8'],
+  },
+  left: { textAlign: 'left' },
+  center: { textAlign: 'center' },
+  right: { textAlign: 'right' },
+});
 
 export const SettingsEmptyPlaceholder = ({
   children,
-  padding = '8',
   textAlign = 'center',
 }: SettingsEmptyPlaceholderProps) => {
   return (
-    <StyledPlaceholder
-      placeholderPadding={themeCssVariables.spacing[padding]}
-      placeholderTextAlign={textAlign}
-    >
-      {children}
-    </StyledPlaceholder>
+    <div {...stylex.props(styles.root, styles[textAlign])}>{children}</div>
   );
 };

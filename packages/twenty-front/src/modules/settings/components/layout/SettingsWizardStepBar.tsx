@@ -1,9 +1,14 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { type ReactNode } from 'react';
 import { LightIconButton } from 'twenty-ui/components/input';
 import { IconChevronLeft } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsWizardStepBarProps = {
   label: ReactNode;
@@ -11,44 +16,43 @@ type SettingsWizardStepBarProps = {
   trailing?: ReactNode;
 };
 
-const StyledStepBar = styled.div`
-  align-items: center;
-  display: grid;
-  flex: 1;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-  min-width: 0;
-`;
-
-const StyledLeft = styled.div`
-  align-items: center;
-  display: flex;
-  min-width: 0;
-`;
-
-const StyledLabel = styled.div`
-  color: ${themeCssVariables.font.color.primary};
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-  justify-self: center;
-  min-width: 0;
-  text-align: center;
-`;
-
-const StyledRight = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  justify-content: flex-end;
-  min-width: 0;
-`;
+const styles = stylex.create({
+  stepBar: {
+    alignItems: 'center',
+    display: 'grid',
+    flex: '1',
+    gridTemplateColumns: 'minmax(0, 1fr) auto minmax(0, 1fr)',
+    minWidth: '0',
+  },
+  left: {
+    alignItems: 'center',
+    display: 'flex',
+    minWidth: '0',
+  },
+  label: {
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    justifySelf: 'center',
+    minWidth: '0',
+    textAlign: 'center',
+  },
+  right: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    justifyContent: 'flex-end',
+    minWidth: '0',
+  },
+});
 
 export const SettingsWizardStepBar = ({
   label,
   onBack,
   trailing,
 }: SettingsWizardStepBarProps) => (
-  <StyledStepBar>
-    <StyledLeft>
+  <div {...stylex.props(styles.stepBar)}>
+    <div {...stylex.props(styles.left)}>
       {onBack && (
         <LightIconButton
           size="sm"
@@ -59,8 +63,8 @@ export const SettingsWizardStepBar = ({
           <IconChevronLeft />
         </LightIconButton>
       )}
-    </StyledLeft>
-    <StyledLabel>{label}</StyledLabel>
-    <StyledRight>{trailing}</StyledRight>
-  </StyledStepBar>
+    </div>
+    <div {...stylex.props(styles.label)}>{label}</div>
+    <div {...stylex.props(styles.right)}>{trailing}</div>
+  </div>
 );

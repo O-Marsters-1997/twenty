@@ -1,15 +1,17 @@
-import { styled } from '@linaria/react';
 import { type ReactNode } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
 import { themeCssVariables } from 'twenty-ui/theme';
 
 import { TableCell } from '@/ui/layout/table/components/TableCell';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledStartElement = styled.span`
-  display: flex;
-  flex-shrink: 0;
-`;
+const styles = stylex.create({
+  startElement: {
+    display: 'flex',
+    flexShrink: '0',
+  },
+});
 
 type SettingsTableTextCellProps = {
   text?: string | null;
@@ -29,7 +31,7 @@ export const SettingsTableTextCell = ({
     whiteSpace="nowrap"
   >
     {isDefined(startElement) && (
-      <StyledStartElement>{startElement}</StyledStartElement>
+      <span {...stylex.props(styles.startElement)}>{startElement}</span>
     )}
     <OverflowingTextWithTooltip text={text} />
   </TableCell>

@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useMemo, useState } from 'react';
 
@@ -30,58 +29,64 @@ import { themeCssVariables } from 'twenty-ui/theme';
 import { EventLogTable } from '~/generated-metadata/graphql';
 import { useNavigateSettings } from '~/hooks/useNavigateSettings';
 import { isGraphqlErrorOfType } from '~/utils/is-graphql-error-of-type.util';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledRoot = styled.div`
-  box-sizing: border-box;
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[6]};
-  margin: 0 auto;
-  max-width: 760px;
-  min-height: 0;
-  padding: ${themeCssVariables.spacing[6]} ${themeCssVariables.spacing[8]}
-    ${themeCssVariables.spacing[8]};
-  width: 100%;
-`;
-
-const StyledCardContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[4]};
-  padding: ${themeCssVariables.spacing[4]};
-`;
-
-const StyledSelectorRow = styled.div`
-  align-items: flex-end;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledSelectorGrow = styled.div`
-  flex: 1;
-  min-width: 0;
-`;
-
-const StyledResults = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  min-height: 0;
-`;
-
-const StyledRecordCount = styled.span`
-  align-self: flex-end;
-  color: ${themeCssVariables.font.color.secondary};
-  font-size: ${themeCssVariables.font.size.sm};
-`;
-
-const StyledTableWrapper = styled.div`
-  flex: 1;
-  min-height: 0;
-  overflow: hidden;
-`;
+const styles = stylex.create({
+  root: {
+    boxSizing: 'border-box',
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-6'],
+    marginTop: '0',
+    marginRight: 'auto',
+    marginBottom: '0',
+    marginLeft: 'auto',
+    maxWidth: '760px',
+    minHeight: '0',
+    paddingTop: spacing['--t-spacing-6'],
+    paddingRight: spacing['--t-spacing-8'],
+    paddingBottom: spacing['--t-spacing-8'],
+    paddingLeft: spacing['--t-spacing-8'],
+    width: '100%',
+  },
+  cardContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-4'],
+    paddingTop: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingBottom: spacing['--t-spacing-4'],
+    paddingLeft: spacing['--t-spacing-4'],
+  },
+  selectorRow: {
+    alignItems: 'flex-end',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+  },
+  selectorGrow: {
+    flex: '1',
+    minWidth: '0',
+  },
+  results: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    minHeight: '0',
+  },
+  recordCount: {
+    alignSelf: 'flex-end',
+    color: fontColor['--t-font-color-secondary'],
+    fontSize: fontSize['--t-font-size-sm'],
+  },
+  tableWrapper: {
+    flex: '1',
+    minHeight: '0',
+    overflow: 'hidden',
+  },
+});
 
 const RECORDS_PER_PAGE = 100;
 
@@ -165,9 +170,11 @@ export const SettingsLogs = () => {
     }
 
     return (
-      <StyledResults>
-        <StyledRecordCount>{t`${formatNumber(displayedRecords.length)} of ${formatNumber(totalCount + liveRecords.length)}`}</StyledRecordCount>
-        <StyledTableWrapper>
+      <div {...stylex.props(styles.results)}>
+        <span
+          {...stylex.props(styles.recordCount)}
+        >{t`${formatNumber(displayedRecords.length)} of ${formatNumber(totalCount + liveRecords.length)}`}</span>
+        <div {...stylex.props(styles.tableWrapper)}>
           <EventLogResultsTable
             records={displayedRecords}
             loading={loading}
@@ -175,26 +182,26 @@ export const SettingsLogs = () => {
             onLoadMore={loadMore}
             selectedTable={selectedTable}
           />
-        </StyledTableWrapper>
-      </StyledResults>
+        </div>
+      </div>
     );
   };
 
   return (
-    <StyledRoot>
+    <div {...stylex.props(styles.root)}>
       <Card.Root
         rounded
         fullWidth
         backgroundColor={themeCssVariables.background.secondary}
       >
-        <StyledCardContent>
-          <StyledSelectorRow>
-            <StyledSelectorGrow>
+        <div {...stylex.props(styles.cardContent)}>
+          <div {...stylex.props(styles.selectorRow)}>
+            <div {...stylex.props(styles.selectorGrow)}>
               <EventLogTableSelector
                 value={selectedTable}
                 onChange={handleTableChange}
               />
-            </StyledSelectorGrow>
+            </div>
             {canQuery && (
               <IconButton
                 variant="outline"
@@ -205,16 +212,16 @@ export const SettingsLogs = () => {
                 {isPaused ? <IconPlayerPlay /> : <IconPlayerPause />}
               </IconButton>
             )}
-          </StyledSelectorRow>
+          </div>
           <EventLogFilters
             table={selectedTable}
             value={filters}
             onChange={handleFiltersChange}
           />
-        </StyledCardContent>
+        </div>
       </Card.Root>
 
       {renderResults()}
-    </StyledRoot>
+    </div>
   );
 };

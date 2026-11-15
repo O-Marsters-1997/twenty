@@ -1,0 +1,18 @@
+[data-settings-list-item-action]:hover {
+  background: var(--t-background-transparent-lighter);
+}
+
+[data-settings-list-item-right]
+  :is(
+    a,
+    button,
+    input,
+    select,
+    textarea,
+    [role='button'],
+    [role='checkbox'],
+    [role='link'],
+    [role='switch']
+  ) {
+  pointer-events: auto;
+}

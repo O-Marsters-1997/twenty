@@ -1,38 +1,37 @@
 import { WebhookEntitySelect } from '@/settings/developers/components/WebhookEntitySelect';
 import { Select } from '@/ui/input/components/Select';
 import { useIsMobile } from 'twenty-ui/utilities';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { IconBox, IconNorthStar, IconPlus, IconTrash } from 'twenty-ui/icon';
 import { type SelectOption } from 'twenty-ui/primitives/input';
 import { IconButton } from 'twenty-ui/components/input';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const OBJECT_DROPDOWN_WIDTH = 240;
 const ACTION_DROPDOWN_WIDTH = 240;
 const OBJECT_MOBILE_WIDTH = 150;
 const ACTION_MOBILE_WIDTH = 140;
 
-const StyledFilterRow = styled.div<{ isMobile: boolean }>`
-  align-items: center;
-  display: grid;
-  gap: ${themeCssVariables.spacing[2]};
-  grid-template-columns: ${({ isMobile }) =>
-    isMobile
-      ? `minmax(${OBJECT_MOBILE_WIDTH}px, 1fr) ${ACTION_MOBILE_WIDTH}px ${
-          themeCssVariables.spacing[8]
-        }`
-      : `minmax(${OBJECT_DROPDOWN_WIDTH}px, 1fr) ${ACTION_DROPDOWN_WIDTH}px ${
-          themeCssVariables.spacing[8]
-        }`};
-  margin-bottom: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledPlaceholder = styled.div`
-  height: ${themeCssVariables.spacing[8]};
-  width: ${themeCssVariables.spacing[8]};
-`;
+const styles = stylex.create({
+  filterRow: {
+    alignItems: 'center',
+    display: 'grid',
+    gap: spacing['--t-spacing-2'],
+    marginBottom: spacing['--t-spacing-2'],
+  },
+  filterRowDesktop: {
+    gridTemplateColumns: `minmax(${OBJECT_DROPDOWN_WIDTH}px, 1fr) ${ACTION_DROPDOWN_WIDTH}px ${spacing['--t-spacing-8']}`,
+  },
+  filterRowMobile: {
+    gridTemplateColumns: `minmax(${OBJECT_MOBILE_WIDTH}px, 1fr) ${ACTION_MOBILE_WIDTH}px ${spacing['--t-spacing-8']}`,
+  },
+  placeholder: {
+    height: spacing['--t-spacing-8'],
+    width: spacing['--t-spacing-8'],
+  },
+});
 
 export const SettingsDatabaseEventsForm = ({
   events,
@@ -72,7 +71,13 @@ export const SettingsDatabaseEventsForm = ({
   return (
     <>
       {events.map((operation, index) => (
-        <StyledFilterRow key={index} isMobile={isMobile}>
+        <div
+          key={index}
+          {...stylex.props(
+            styles.filterRow,
+            isMobile ? styles.filterRowMobile : styles.filterRowDesktop,
+          )}
+        >
           <WebhookEntitySelect
             dropdownId={`object-webhook-type-select-${index}`}
             value={operation.object}
@@ -101,9 +106,9 @@ export const SettingsDatabaseEventsForm = ({
               <IconTrash />
             </IconButton>
           ) : (
-            <StyledPlaceholder />
+            <div {...stylex.props(styles.placeholder)} />
           )}
-        </StyledFilterRow>
+        </div>
       ))}
     </>
   );

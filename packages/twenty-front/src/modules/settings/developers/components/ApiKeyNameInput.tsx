@@ -1,21 +1,21 @@
 import { t } from '@lingui/core/macro';
-import { styled } from '@linaria/react';
 import { useCallback, useEffect } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 
 import { SettingsTextInput } from '@/ui/input/components/SettingsTextInput';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 import { useMutation } from '@apollo/client/react';
 import { UpdateApiKeyDocument } from '~/generated-metadata/graphql';
 
-const StyledComboInputContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  > * + * {
-    margin-left: ${themeCssVariables.spacing[4]};
-  }
-`;
+const styles = stylex.create({
+  comboInput: {
+    display: 'flex',
+    flexDirection: 'row',
+    columnGap: spacing['--t-spacing-4'],
+  },
+});
 
 type ApiKeyNameInputProps = {
   apiKeyName: string;
@@ -66,7 +66,7 @@ export const ApiKeyNameInput = ({
   const nameTextInputId = `${apiKeyId}-name`;
 
   return (
-    <StyledComboInputContainer>
+    <div {...stylex.props(styles.comboInput)}>
       <SettingsTextInput
         instanceId={nameTextInputId}
         placeholder={t`E.g. backoffice integration`}
@@ -75,6 +75,6 @@ export const ApiKeyNameInput = ({
         value={apiKeyName}
         disabled={disabled}
       />
-    </StyledComboInputContainer>
+    </div>
   );
 };

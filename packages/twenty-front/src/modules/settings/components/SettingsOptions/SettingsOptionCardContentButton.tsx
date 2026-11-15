@@ -6,10 +6,10 @@ import {
   StyledSettingsCardTitle,
 } from '@/settings/components/SettingsOptions/SettingsCardContentBase';
 import { SettingsOptionIconCustomizer } from '@/settings/components/SettingsOptions/SettingsOptionIconCustomizer';
-import { styled } from '@linaria/react';
 import { isDefined } from 'twenty-shared/utils';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
 import { type IconComponent } from 'twenty-ui/icon';
+import * as stylex from '@stylexjs/stylex';
 
 type SettingsOptionCardContentButtonProps = {
   Icon?: IconComponent;
@@ -19,20 +19,21 @@ type SettingsOptionCardContentButtonProps = {
   Button?: React.ReactNode;
 };
 
-const StyledButtonContainer = styled.div`
-  flex-shrink: 0;
-  margin-left: auto;
-`;
+const styles = stylex.create({
+  buttonContainer: {
+    flexShrink: '0',
+    marginLeft: 'auto',
+  },
+});
 
 export const SettingsOptionCardContentButton = ({
   Icon,
   title,
   description,
-  disabled = false,
   Button,
 }: SettingsOptionCardContentButtonProps) => {
   return (
-    <StyledSettingsCardContent disabled={disabled}>
+    <StyledSettingsCardContent>
       {Icon && (
         <StyledSettingsCardIcon>
           <SettingsOptionIconCustomizer Icon={Icon} />
@@ -47,7 +48,7 @@ export const SettingsOptionCardContentButton = ({
         )}
       </StyledSettingsCardTextContainer>
       {isDefined(Button) && (
-        <StyledButtonContainer>{Button}</StyledButtonContainer>
+        <div {...stylex.props(styles.buttonContainer)}>{Button}</div>
       )}
     </StyledSettingsCardContent>
   );

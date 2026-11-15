@@ -3,24 +3,18 @@ import { SettingsAccountsConnectedAccountsRowRightContainer } from '@/settings/a
 import { SettingsConnectedAccountIcon } from '@/settings/accounts/components/SettingsConnectedAccountIcon';
 import { TableCell } from '@/ui/layout/table/components/TableCell';
 import { TableRow } from '@/ui/layout/table/components/TableRow';
-import { styled } from '@linaria/react';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledNameCell = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.primary};
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledTableRowContainer = styled.div`
-  > * {
-    &:hover {
-      background-color: ${themeCssVariables.background.transparent.light};
-      cursor: pointer;
-    }
-  }
-`;
+const styles = stylex.create({
+  nameCell: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-primary'],
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+  },
+});
 
 type SettingsConnectedAccountsTableRowProps = {
   account: ConnectedAccount;
@@ -33,23 +27,24 @@ export const SettingsConnectedAccountsTableRow = ({
   const IconComponent = SettingsConnectedAccountIcon({ account });
 
   return (
-    <StyledTableRowContainer>
-      <TableRow key={account.id} gridTemplateColumns="minmax(0, 1fr) auto">
-        <TableCell>
-          <StyledNameCell>
-            <IconComponent
-              size={theme.icon.size.md}
-              stroke={theme.icon.stroke.sm}
-            />
-            {account.handle}
-          </StyledNameCell>
-        </TableCell>
-        <TableCell align="right">
-          <SettingsAccountsConnectedAccountsRowRightContainer
-            account={account}
+    <TableRow
+      key={account.id}
+      gridTemplateColumns="minmax(0, 1fr) auto"
+      cursor="pointer"
+      hoverBackgroundColor={themeCssVariables.background.transparent.light}
+    >
+      <TableCell>
+        <div {...stylex.props(styles.nameCell)}>
+          <IconComponent
+            size={theme.icon.size.md}
+            stroke={theme.icon.stroke.sm}
           />
-        </TableCell>
-      </TableRow>
-    </StyledTableRowContainer>
+          {account.handle}
+        </div>
+      </TableCell>
+      <TableCell align="right">
+        <SettingsAccountsConnectedAccountsRowRightContainer account={account} />
+      </TableCell>
+    </TableRow>
   );
 };

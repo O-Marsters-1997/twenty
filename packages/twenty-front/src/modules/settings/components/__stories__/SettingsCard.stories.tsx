@@ -20,7 +20,6 @@ export const Default: Story = {
     title: 'Settings Card',
   },
   argTypes: {
-    className: { control: false },
     Icon: { control: false },
   },
   play: async ({ canvasElement, args }) => {

@@ -1,18 +1,14 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { Card } from 'twenty-ui/primitives/surfaces';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { background } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledCardContainer = styled.div`
-  height: 40px;
-
-  > div {
-    background-color: ${themeCssVariables.background.secondary};
-    height: 100%;
-  }
-`;
+const styles = stylex.create({
+  card: {
+    backgroundColor: background['--t-background-secondary'],
+    height: '40px',
+  },
+});
 
 export const SettingsListSkeletonCard = () => (
-  <StyledCardContainer>
-    <Card.Root />
-  </StyledCardContainer>
+  <Card.Root {...stylex.props(styles.card)} />
 );

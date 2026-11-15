@@ -3,15 +3,20 @@ import { TableBody } from '@/ui/layout/table/components/TableBody';
 import { TableCell } from '@/ui/layout/table/components/TableCell';
 import { TableHeader } from '@/ui/layout/table/components/TableHeader';
 import { TableRow } from '@/ui/layout/table/components/TableRow';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
 import { IconChevronRight } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { borderColor } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledTableBodyContainer = styled.div`
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-`;
+const styles = stylex.create({
+  tableBodyContainer: {
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: borderColor['--t-border-color-light'],
+  },
+});
 
 const GRID_AUTO_COLUMNS = '5fr 3fr 3fr 1fr';
 
@@ -37,7 +42,7 @@ export const ConfigVariableTable = ({
         <TableHeader align="right">{t`Value`}</TableHeader>
         <TableHeader align="right"></TableHeader>
       </TableRow>
-      <StyledTableBodyContainer>
+      <div {...stylex.props(styles.tableBodyContainer)}>
         <TableBody>
           {configVariables.map((variable, index) => (
             <TableRow
@@ -86,7 +91,7 @@ export const ConfigVariableTable = ({
             </TableRow>
           ))}
         </TableBody>
-      </StyledTableBodyContainer>
+      </div>
     </Table>
   );
 };

@@ -1,91 +1,75 @@
 import { CARD_ACTION_CLASS_NAME } from '@/ui/layout/card/styles/CardActionClassName';
-import { css, cx } from '@linaria/core';
-import { styled } from '@linaria/react';
 import { isNonEmptyString } from '@sniptt/guards';
 import { type ReactNode, useId } from 'react';
 import { Link } from 'react-router-dom';
 import { isDefined } from 'twenty-shared/utils';
 import { IconChevronRight, type IconComponent } from 'twenty-ui/icon';
 import { Card } from 'twenty-ui/primitives/surfaces';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+  textLineHeight,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledRowContainer = styled.div`
-  > div {
-    align-items: center;
-    box-sizing: border-box;
-    display: flex;
-    font-size: ${themeCssVariables.font.size.md};
-    font-weight: ${themeCssVariables.font.weight.medium};
-    gap: ${themeCssVariables.spacing[2]};
-    height: ${themeCssVariables.spacing[10]};
-    padding: ${themeCssVariables.spacing[2]};
-    padding-left: ${themeCssVariables.spacing[3]};
-    position: relative;
+import './SettingsListItemCardContent.css';
 
-    > svg {
-      flex-shrink: 0;
-    }
-  }
-`;
-
-const StyledRightContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-shrink: 0;
-  gap: ${themeCssVariables.spacing[1]};
-  pointer-events: none;
-  position: relative;
-  z-index: 1;
-
-  :is(
-    a,
-    button,
-    input,
-    select,
-    textarea,
-    [role='button'],
-    [role='checkbox'],
-    [role='link'],
-    [role='switch']
-  ) {
-    pointer-events: auto;
-  }
-`;
-
-const StyledContent = styled.div`
-  align-items: center;
-  display: flex;
-  flex: 1 1 0;
-  gap: ${themeCssVariables.spacing[1]};
-  min-width: 0;
-  overflow: hidden;
-`;
-
-const StyledLabel = styled.span`
-  flex: 0 1 auto;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-// Rows are fixed-height, so the description truncates first rather than wrapping or squeezing the label
-const StyledDescription = styled.span`
-  color: ${themeCssVariables.font.color.light};
-  flex: 1 1 0;
-  font-weight: ${themeCssVariables.font.weight.regular};
-  line-height: ${themeCssVariables.text.lineHeight.lg};
-  min-width: 0;
-  overflow: hidden;
-  padding-left: ${themeCssVariables.spacing[1]};
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const rowActionClassName = css`
-  &:hover {
-    background: ${themeCssVariables.background.transparent.lighter};
-  }
-`;
+const styles = stylex.create({
+  row: {
+    alignItems: 'center',
+    boxSizing: 'border-box',
+    display: 'flex',
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    gap: spacing['--t-spacing-2'],
+    height: spacing['--t-spacing-10'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
+    position: 'relative',
+  },
+  leftIcon: {
+    flexShrink: 0,
+  },
+  content: {
+    alignItems: 'center',
+    display: 'flex',
+    flex: '1 1 0',
+    gap: spacing['--t-spacing-1'],
+    minWidth: '0',
+    overflow: 'hidden',
+  },
+  label: {
+    flex: '0 1 auto',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  description: {
+    color: fontColor['--t-font-color-light'],
+    flex: '1 1 0',
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    lineHeight: textLineHeight['--t-text-line-height-lg'],
+    minWidth: '0',
+    overflow: 'hidden',
+    paddingLeft: spacing['--t-spacing-1'],
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  right: {
+    alignItems: 'center',
+    display: 'flex',
+    flexShrink: 0,
+    gap: spacing['--t-spacing-1'],
+    pointerEvents: 'none',
+    position: 'relative',
+    zIndex: 1,
+  },
+});
 
 type SettingsListItemCardContentProps = {
   label: string;
@@ -114,51 +98,54 @@ export const SettingsListItemCardContent = ({
   const hasDescription = isNonEmptyString(description);
 
   return (
-    <StyledRowContainer>
-      <Card.Content divider={divider}>
-        {isDefined(to) ? (
-          <Link
-            className={cx(CARD_ACTION_CLASS_NAME, rowActionClassName)}
+    <Card.Content divider={divider} {...stylex.props(styles.row)}>
+      {isDefined(to) ? (
+        <Link
+          className={CARD_ACTION_CLASS_NAME}
+          data-settings-list-item-action
+          aria-labelledby={labelId}
+          aria-describedby={hasDescription ? descriptionId : undefined}
+          onClick={onClick}
+          to={to}
+        />
+      ) : (
+        isDefined(onClick) && (
+          <button
+            className={CARD_ACTION_CLASS_NAME}
+            data-settings-list-item-action
             aria-labelledby={labelId}
             aria-describedby={hasDescription ? descriptionId : undefined}
             onClick={onClick}
-            to={to}
+            type="button"
           />
-        ) : (
-          isDefined(onClick) && (
-            <button
-              className={cx(CARD_ACTION_CLASS_NAME, rowActionClassName)}
-              aria-labelledby={labelId}
-              aria-describedby={hasDescription ? descriptionId : undefined}
-              onClick={onClick}
-              type="button"
-            />
-          )
+        )
+      )}
+      {isDefined(LeftIcon) && (
+        <LeftIcon
+          size={theme.icon.size.md}
+          color={LeftIconColor ?? 'currentColor'}
+          {...stylex.props(styles.leftIcon)}
+        />
+      )}
+      <div {...stylex.props(styles.content)}>
+        <span id={labelId} {...stylex.props(styles.label)}>
+          {label}
+        </span>
+        {hasDescription && (
+          <span id={descriptionId} {...stylex.props(styles.description)}>
+            {description}
+          </span>
         )}
-        {isDefined(LeftIcon) && (
-          <LeftIcon
+      </div>
+      <div data-settings-list-item-right {...stylex.props(styles.right)}>
+        {rightComponent}
+        {isDefined(to) && (
+          <IconChevronRight
             size={theme.icon.size.md}
-            color={LeftIconColor ?? 'currentColor'}
+            color={theme.font.color.tertiary}
           />
         )}
-        <StyledContent>
-          <StyledLabel id={labelId}>{label}</StyledLabel>
-          {hasDescription && (
-            <StyledDescription id={descriptionId}>
-              {description}
-            </StyledDescription>
-          )}
-        </StyledContent>
-        <StyledRightContainer>
-          {rightComponent}
-          {isDefined(to) && (
-            <IconChevronRight
-              size={theme.icon.size.md}
-              color={theme.font.color.tertiary}
-            />
-          )}
-        </StyledRightContainer>
-      </Card.Content>
-    </StyledRowContainer>
+      </div>
+    </Card.Content>
   );
 };

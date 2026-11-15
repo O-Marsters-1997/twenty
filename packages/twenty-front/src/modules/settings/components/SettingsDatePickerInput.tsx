@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useId, useRef, useState } from 'react';
 import { Temporal } from 'temporal-polyfill';
@@ -18,47 +17,60 @@ import { ParentClickOutsideIdContext } from '@/ui/utilities/pointer-event/contex
 import { useListenClickOutside } from '@/ui/utilities/pointer-event/hooks/useListenClickOutside';
 import { isDefined } from 'twenty-shared/utils';
 import { IconCalendar } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const SETTINGS_DATE_PICKER_CLICK_OUTSIDE_ID = 'settings-date-picker-floating';
 
-const StyledInputContainer = styled.div`
-  position: relative;
-`;
-
-const StyledInput = styled.div<{ hasValue: boolean }>`
-  align-items: center;
-  background-color: ${themeCssVariables.background.transparent.lighter};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  box-sizing: border-box;
-  color: ${({ hasValue }) =>
-    hasValue
-      ? themeCssVariables.font.color.primary
-      : themeCssVariables.font.color.light};
-  cursor: pointer;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  height: 32px;
-  padding: 0 ${themeCssVariables.spacing[2]};
-  width: 100%;
-
-  &:hover {
-    border-color: ${themeCssVariables.border.color.strong};
-  }
-`;
-
-const StyledLabel = styled.div`
-  color: ${themeCssVariables.font.color.light};
-  font-size: ${themeCssVariables.font.size.xs};
-  font-weight: ${themeCssVariables.font.weight.medium};
-  margin-bottom: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledIconContainer = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-`;
+const styles = stylex.create({
+  inputContainer: {
+    position: 'relative',
+  },
+  label: {
+    color: fontColor['--t-font-color-light'],
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    marginBottom: spacing['--t-spacing-1'],
+  },
+  iconContainer: {
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+  },
+  input: {
+    alignItems: 'center',
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
+    borderColor: {
+      default: borderColor['--t-border-color-medium'],
+      ':hover': borderColor['--t-border-color-strong'],
+    },
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    boxSizing: 'border-box',
+    cursor: 'pointer',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    height: '32px',
+    paddingBlock: 0,
+    paddingInline: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+  inputWithValue: {
+    color: fontColor['--t-font-color-primary'],
+  },
+  inputWithoutValue: {
+    color: fontColor['--t-font-color-light'],
+  },
+});
 
 type SettingsDatePickerInputProps = {
   label?: string;
@@ -148,18 +160,21 @@ export const SettingsDatePickerInput = ({
     : null;
 
   return (
-    <StyledInputContainer ref={containerRef}>
-      {label && <StyledLabel>{label}</StyledLabel>}
-      <StyledInput
+    <div ref={containerRef} {...stylex.props(styles.inputContainer)}>
+      {label && <div {...stylex.props(styles.label)}>{label}</div>}
+      <div
         ref={refs.setReference}
-        hasValue={isDefined(value)}
+        {...stylex.props(
+          styles.input,
+          isDefined(value) ? styles.inputWithValue : styles.inputWithoutValue,
+        )}
         onClick={() => setIsOpen(true)}
       >
-        <StyledIconContainer>
+        <div {...stylex.props(styles.iconContainer)}>
           <IconCalendar size={16} />
-        </StyledIconContainer>
+        </div>
         {formatDisplayValue(value)}
-      </StyledInput>
+      </div>
       {isOpen && (
         <FloatingPortal>
           <div
@@ -184,6 +199,6 @@ export const SettingsDatePickerInput = ({
           </div>
         </FloatingPortal>
       )}
-    </StyledInputContainer>
+    </div>
   );
 };

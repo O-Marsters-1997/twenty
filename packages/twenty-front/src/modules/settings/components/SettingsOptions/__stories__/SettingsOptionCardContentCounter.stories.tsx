@@ -1,13 +1,15 @@
 import { SettingsOptionCardContentCounter } from '@/settings/components/SettingsOptions/SettingsOptionCardContentCounter';
-import { styled } from '@linaria/react';
 import { type Meta, type StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { IconUsers } from 'twenty-ui/icon';
 import { ComponentDecorator } from 'twenty-ui/testing';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledContainer = styled.div`
-  width: 480px;
-`;
+const styles = stylex.create({
+  container: {
+    width: '480px',
+  },
+});
 
 const SettingsOptionCardContentCounterWrapper = (
   args: React.ComponentProps<typeof SettingsOptionCardContentCounter>,
@@ -15,7 +17,7 @@ const SettingsOptionCardContentCounterWrapper = (
   const [value, setValue] = useState(args.value);
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <SettingsOptionCardContentCounter
         value={value}
         onChange={setValue}
@@ -27,7 +29,7 @@ const SettingsOptionCardContentCounterWrapper = (
         maxValue={args.maxValue}
         showButtons={args.showButtons}
       />
-    </StyledContainer>
+    </div>
   );
 };
 

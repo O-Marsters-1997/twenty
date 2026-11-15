@@ -10,16 +10,18 @@ import { ConfirmationDialog } from '@/ui/layout/dialog/components/ConfirmationDi
 import { SettingsPageLayout } from '@/settings/components/layout/SettingsPageLayout';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { Trans, useLingui } from '@lingui/react/macro';
-import { styled } from '@linaria/react';
 import { SettingsPath } from 'twenty-shared/types';
 import { getSettingsPath, isDefined } from 'twenty-shared/utils';
 import { useNavigateSettings } from '~/hooks/useNavigateSettings';
 import { Section } from 'twenty-ui/components/layout';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledDomainFormWrapper = styled.div`
-  align-items: center;
-  display: flex;
-`;
+const styles = stylex.create({
+  domainFormWrapper: {
+    alignItems: 'center',
+    display: 'flex',
+  },
+});
 
 export const SettingsSubdomain = () => {
   const navigate = useNavigateSettings();
@@ -66,7 +68,7 @@ export const SettingsSubdomain = () => {
               title={t`Subdomain`}
               description={t`Set the name of your subdomain`}
             />
-            <StyledDomainFormWrapper>
+            <div {...stylex.props(styles.domainFormWrapper)}>
               <TextInput
                 value={subdomain}
                 type="text"
@@ -79,7 +81,7 @@ export const SettingsSubdomain = () => {
                 }
                 fullWidth
               />
-            </StyledDomainFormWrapper>
+            </div>
           </Section.Root>
         </SettingsPageContainer>
       </SettingsPageLayout>

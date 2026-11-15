@@ -1,20 +1,24 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { InlineBanner } from 'twenty-ui/components/feedback';
 
-const StyledFullWidthBanner = styled.div`
-  & > * {
-    max-width: 100%;
-  }
-`;
+const styles = stylex.create({
+  banner: {
+    maxWidth: '100%',
+  },
+});
 
 type DpaNoticeProps = {
   text: string;
 };
 
 export const DpaNotice = ({ text }: DpaNoticeProps) => (
-  <StyledFullWidthBanner>
-    <InlineBanner layout="compact" status="warning">
+  <div>
+    <InlineBanner
+      layout="compact"
+      status="warning"
+      {...stylex.props(styles.banner)}
+    >
       {text}
     </InlineBanner>
-  </StyledFullWidthBanner>
+  </div>
 );

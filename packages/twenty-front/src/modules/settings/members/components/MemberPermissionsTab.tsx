@@ -5,7 +5,6 @@ import { ConfirmationDialog } from '@/ui/layout/dialog/components/ConfirmationDi
 import { useDialog } from '@/ui/layout/dialog/hooks/useDialog';
 import { type WorkspaceMember } from '@/workspace-member/types/WorkspaceMember';
 import { useMutation } from '@apollo/client/react';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { useState } from 'react';
 import { SettingsPath } from 'twenty-shared/types';
@@ -14,30 +13,34 @@ import { useToast } from 'twenty-ui/components/feedback';
 import { Section } from 'twenty-ui/components/layout';
 import { IconArrowUpRight, IconUser, useIcons } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { UpdateWorkspaceMemberRoleDocument } from '~/generated-metadata/graphql';
 import { useNavigateSettings } from '~/hooks/useNavigateSettings';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const CONFIRM_ROLE_CHANGE_MODAL_ID = 'confirm-role-change-modal';
 
-const StyledNoRoleContainer = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  justify-content: center;
-  padding: ${themeCssVariables.spacing[8]};
-`;
-
-const StyledRoleContainer = styled.div`
-  align-items: flex-end;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  margin-bottom: ${themeCssVariables.spacing[8]};
-`;
-
-const StyledRoleSelector = styled.div`
-  flex: 1;
-`;
+const styles = stylex.create({
+  noRoleContainer: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    justifyContent: 'center',
+    paddingTop: spacing['--t-spacing-8'],
+    paddingRight: spacing['--t-spacing-8'],
+    paddingBottom: spacing['--t-spacing-8'],
+    paddingLeft: spacing['--t-spacing-8'],
+  },
+  roleContainer: {
+    alignItems: 'flex-end',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    marginBottom: spacing['--t-spacing-8'],
+  },
+  roleSelector: {
+    flex: '1',
+  },
+});
 
 type MemberPermissionsTabProps = {
   member: Pick<WorkspaceMember, 'id'>;
@@ -114,7 +117,9 @@ export const MemberPermissionsTab = ({
 
   if (!isDefined(primaryRole)) {
     return (
-      <StyledNoRoleContainer>{t`No role assigned to this member`}</StyledNoRoleContainer>
+      <div
+        {...stylex.props(styles.noRoleContainer)}
+      >{t`No role assigned to this member`}</div>
     );
   }
 
@@ -128,8 +133,8 @@ export const MemberPermissionsTab = ({
           title={t`Role`}
           description={t`Customize what this user can view and perform`}
         />
-        <StyledRoleContainer>
-          <StyledRoleSelector>
+        <div {...stylex.props(styles.roleContainer)}>
+          <div {...stylex.props(styles.roleSelector)}>
             <Select
               dropdownId="member-role-select"
               options={rolesOptions}
@@ -138,13 +143,13 @@ export const MemberPermissionsTab = ({
               withSearchInput
               fullWidth
             />
-          </StyledRoleSelector>
+          </div>
           <Button
             startIcon={<IconArrowUpRight />}
             onClick={handleOpenRole}
             variant="outline"
           >{t`Open in Roles`}</Button>
-        </StyledRoleContainer>
+        </div>
         <SettingsRolePermissions roleId={primaryRole.id} isEditable={false} />
       </Section.Root>
 

@@ -1,16 +1,17 @@
-import { styled } from '@linaria/react';
-
 import { type MessageChannel } from '@/accounts/types/MessageChannel';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontWeight } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledNameCell = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.primary};
-  display: flex;
-  font-weight: ${themeCssVariables.font.weight.medium};
-  min-width: 0;
-`;
+const styles = stylex.create({
+  nameCell: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-primary'],
+    display: 'flex',
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    minWidth: '0',
+  },
+});
 
 type SettingsWorkspaceEmailGroupSourceCellProps = {
   item: MessageChannel;
@@ -22,8 +23,8 @@ export const SettingsWorkspaceEmailGroupSourceCell = ({
   const sourceHandle = item.connectedAccount?.handle;
 
   return (
-    <StyledNameCell>
+    <div {...stylex.props(styles.nameCell)}>
       <OverflowingTextWithTooltip text={sourceHandle ?? '—'} />
-    </StyledNameCell>
+    </div>
   );
 };

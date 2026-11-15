@@ -1,6 +1,4 @@
-import { styled } from '@linaria/react';
 import { Trans, useLingui } from '@lingui/react/macro';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { downloadFile } from '@/activities/files/utils/downloadFile';
 import {
@@ -13,10 +11,16 @@ import { TableBody } from '@/ui/layout/table/components/TableBody';
 import { TableHeader } from '@/ui/layout/table/components/TableHeader';
 import { TableRow } from '@/ui/layout/table/components/TableRow';
 import { useToast } from 'twenty-ui/components/feedback';
+import * as stylex from '@stylexjs/stylex';
+import { borderColor } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledTableBodyContainer = styled.div`
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-`;
+const styles = stylex.create({
+  tableBodyContainer: {
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: borderColor['--t-border-color-light'],
+  },
+});
 
 type SettingsDpaAgreementsTableProps = {
   agreements: DpaAgreement[];
@@ -61,7 +65,7 @@ export const SettingsDpaAgreementsTable = ({
         <TableHeader></TableHeader>
       </TableRow>
       {agreements.length > 0 && (
-        <StyledTableBodyContainer>
+        <div {...stylex.props(styles.tableBodyContainer)}>
           <TableBody>
             {agreements.map((agreement) => (
               <SettingsDpaAgreementRow
@@ -71,7 +75,7 @@ export const SettingsDpaAgreementsTable = ({
               />
             ))}
           </TableBody>
-        </StyledTableBodyContainer>
+        </div>
       )}
     </Table>
   );

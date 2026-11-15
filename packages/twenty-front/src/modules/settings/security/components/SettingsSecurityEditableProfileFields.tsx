@@ -7,7 +7,6 @@ import { DropdownRoot } from '@/ui/layout/dropdown/components/DropdownRoot';
 import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent';
 import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
 import { useMutation } from '@apollo/client/react';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { useToast } from 'twenty-ui/components/feedback';
@@ -20,14 +19,17 @@ import {
   type IconComponent,
 } from 'twenty-ui/icon';
 import { type SelectOption } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { UpdateWorkspaceDocument } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledDropdownContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[3]};
-`;
+const styles = stylex.create({
+  dropdownContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-3'],
+  },
+});
 
 type ProfileFieldOption = {
   value: string;
@@ -113,7 +115,7 @@ export const SettingsSecurityEditableProfileFields = () => {
   };
 
   return (
-    <StyledDropdownContainer>
+    <div {...stylex.props(styles.dropdownContainer)}>
       <DropdownRoot
         dropdownId={EDITABLE_PROFILE_FIELDS_DROPDOWN_ID}
         type="picker"
@@ -146,6 +148,6 @@ export const SettingsSecurityEditableProfileFields = () => {
           </Dropdown.Section>
         </DropdownContent>
       </DropdownRoot>
-    </StyledDropdownContainer>
+    </div>
   );
 };
