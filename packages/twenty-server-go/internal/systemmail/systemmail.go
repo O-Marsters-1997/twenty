@@ -46,8 +46,7 @@ func NewSender(cfg config.Email, logger *slog.Logger) (Sender, error) {
 type loggerSender struct{ logger *slog.Logger }
 
 func (s loggerSender) Send(ctx context.Context, message Message) error {
-	s.logger.InfoContext(ctx, "system email not sent: EMAIL_DRIVER is logger",
-		"to", message.To, "subject", message.Subject, "text", message.Text)
+	s.logger.InfoContext(ctx, "system email not sent: EMAIL_DRIVER is logger", "subject", message.Subject)
 	return nil
 }
 

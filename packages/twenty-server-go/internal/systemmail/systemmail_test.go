@@ -77,8 +77,8 @@ func TestNewSender_logger(t *testing.T) {
 	if err := sender.Send(t.Context(), systemmail.Message{To: "a@example.com", Subject: "hi"}); err != nil {
 		t.Fatal(err)
 	}
-	if !strings.Contains(logged.String(), "a@example.com") {
-		t.Errorf("log = %q, want the recipient", logged.String())
+	if got := logged.String(); !strings.Contains(got, "subject=hi") || strings.Contains(got, "a@example.com") {
+		t.Errorf("log = %q, want the subject and no recipient", got)
 	}
 }
 

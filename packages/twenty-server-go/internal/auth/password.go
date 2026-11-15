@@ -23,6 +23,9 @@ type PasswordHasher interface {
 const (
 	minPasswordLength = 8
 	maxPasswordLength = 50
+
+	lineSeparator      = rune(0x2028)
+	paragraphSeparator = rune(0x2029)
 )
 
 var ErrInvalidPassword = errors.New("password must be 8 to 50 characters")
@@ -30,8 +33,7 @@ var ErrInvalidPassword = errors.New("password must be 8 to 50 characters")
 func ValidatePassword(password string) error {
 	units := 0
 	for _, char := range password {
-		switch char {
-		case '\n', '\r', ' ', ' ':
+		if char == '\n' || char == '\r' || char == lineSeparator || char == paragraphSeparator {
 			return ErrInvalidPassword
 		}
 		units += utf16.RuneLen(char)
