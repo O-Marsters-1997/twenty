@@ -9,24 +9,32 @@ import {
   IconSquareRoundedX,
 } from 'twenty-ui/icon';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
-const StyledContainer = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-`;
-
-const StyledCodeEditorWrapper = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-`;
+import * as stylex from '@stylexjs/stylex';
+import { font, spacing } from 'twenty-ui/theme/tokens.stylex';
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+  },
+  codeEditorWrapper: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+  },
+  infoContainer: {
+    display: 'flex',
+    fontSize: fontSize['--t-font-size-md'],
+  },
+  statusInfo: {
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    fontSize: fontSize['--t-font-size-sm'],
+    gap: spacing['--t-spacing-2'],
+  },
+});
 
 type OutputAccent = 'default' | 'success' | 'error';
-
-const StyledInfoContainer = styled.div`
-  display: flex;
-  font-size: ${themeCssVariables.font.size.md};
-`;
 
 const StyledOutput = styled.div<{ accent?: OutputAccent }>`
   align-items: center;
@@ -38,13 +46,6 @@ const StyledOutput = styled.div<{ accent?: OutputAccent }>`
         : themeCssVariables.font.color.secondary};
   display: flex;
   gap: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledStatusInfo = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  font-size: ${themeCssVariables.font.size.sm};
-  gap: ${themeCssVariables.spacing[2]};
 `;
 
 export type ExecutionStatus = {
@@ -82,7 +83,7 @@ export const WorkflowStepExecutionResult = ({
       <div>
         <div>{status.successMessage}</div>
         {status.additionalInfo && (
-          <StyledStatusInfo>{status.additionalInfo}</StyledStatusInfo>
+          <div {...stylex.props(styles.statusInfo)}>{status.additionalInfo}</div>
         )}
       </div>
     </StyledOutput>
@@ -94,7 +95,7 @@ export const WorkflowStepExecutionResult = ({
       <div>
         <div>{status.errorMessage}</div>
         {status.additionalInfo && (
-          <StyledStatusInfo>{status.additionalInfo}</StyledStatusInfo>
+          <div {...stylex.props(styles.statusInfo)}>{status.additionalInfo}</div>
         )}
       </div>
     </StyledOutput>
@@ -107,7 +108,7 @@ export const WorkflowStepExecutionResult = ({
       <AnimatedCircleLoading>
         <IconLoader size={theme.icon.size.md} />
       </AnimatedCircleLoading>
-      <StyledInfoContainer>{loadingMessage}</StyledInfoContainer>
+      <div {...stylex.props(styles.infoContainer)}>{loadingMessage}</div>
     </StyledOutput>
   );
 
@@ -125,12 +126,12 @@ export const WorkflowStepExecutionResult = ({
   };
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <CodeEditorHeader
         startElement={computeLeftNode()}
         endElement={<LightCopyIconButton copyText={result} />}
       />
-      <StyledCodeEditorWrapper>
+      <div {...stylex.props(styles.codeEditorWrapper)}>
         <CodeEditor
           resizable={true}
           resizeLabel={t`Resize output`}
@@ -141,7 +142,7 @@ export const WorkflowStepExecutionResult = ({
           isLoading={isTesting}
           variant="with-header"
         />
-      </StyledCodeEditorWrapper>
-    </StyledContainer>
+      </div>
+    </div>
   );
 };

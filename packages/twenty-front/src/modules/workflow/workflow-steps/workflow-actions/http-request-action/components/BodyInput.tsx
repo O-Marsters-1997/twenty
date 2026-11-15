@@ -12,7 +12,6 @@ import {
 import { getBodyTypeFromHeaders } from '@/workflow/workflow-steps/workflow-actions/http-request-action/utils/getBodyTypeFromHeaders';
 import { parseHttpJsonBodyWithoutVariablesOrThrow } from '@/workflow/workflow-steps/workflow-actions/http-request-action/utils/parseHttpJsonBodyWithoutVariablesOrThrow';
 import { WorkflowVariablePicker } from '@/workflow/workflow-variables/components/WorkflowVariablePicker';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isString } from '@sniptt/guards';
 import { useState } from 'react';
@@ -22,25 +21,30 @@ import {
   type BodyType,
 } from 'twenty-shared/workflow';
 import { IconFileText, IconKey } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { type JsonValue } from 'type-fest';
 import { KeyValuePairInput } from './KeyValuePairInput';
+import * as stylex from '@stylexjs/stylex';
+import { spacing, font } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledSelectDropdownContainer = styled.div`
-  margin-bottom: ${themeCssVariables.spacing[2]};
-`;
-const StyledNoBodyMessage = styled.div`
-  color: ${themeCssVariables.font.color.light};
-  font-size: ${themeCssVariables.font.size.md};
-  padding: ${themeCssVariables.spacing[2]};
-  text-align: left;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+  },
+  selectDropdownContainer: {
+    marginBottom: spacing['--t-spacing-2'],
+  },
+  noBodyMessage: {
+    color: fontColor['--t-font-color-light'],
+    fontSize: fontSize['--t-font-size-md'],
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-2'],
+    textAlign: 'left',
+  },
+});
 
 type BodyInputProps = {
   label?: string;
@@ -163,7 +167,7 @@ export const BodyInput = ({
   return (
     <FormFieldInputContainer>
       <InputLabel>{t`Body Input`}</InputLabel>
-      <StyledSelectDropdownContainer>
+      <div {...stylex.props(styles.selectDropdownContainer)}>
         <Select
           options={[
             { label: t`Key/Value`, value: BODY_TYPES.KEY_VALUE, Icon: IconKey },
@@ -181,9 +185,9 @@ export const BodyInput = ({
           onChange={(value) => handleModeChange(value as BodyType)}
           disabled={readonly}
         />
-      </StyledSelectDropdownContainer>
+      </div>
 
-      <StyledContainer>
+      <div {...stylex.props(styles.container)}>
         {isBodyTypeRawJson ? (
           <FormRawJsonFieldInput
             placeholder={DEFAULT_JSON_BODY_PLACEHOLDER}
@@ -221,9 +225,9 @@ export const BodyInput = ({
             VariablePicker={WorkflowVariablePicker}
           />
         ) : (
-          <StyledNoBodyMessage>{t`No body`}</StyledNoBodyMessage>
+          <div {...stylex.props(styles.noBodyMessage)}>{t`No body`}</div>
         )}
-      </StyledContainer>
+      </div>
     </FormFieldInputContainer>
   );
 };

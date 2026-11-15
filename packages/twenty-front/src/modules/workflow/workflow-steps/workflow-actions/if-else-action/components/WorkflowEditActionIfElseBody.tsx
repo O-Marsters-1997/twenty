@@ -21,7 +21,6 @@ import { getBranchLabel } from '@/workflow/workflow-steps/workflow-actions/if-el
 import { getBranchesToDelete } from '@/workflow/workflow-steps/workflow-actions/if-else-action/utils/getBranchesToDelete';
 import { useStepsOutputSchema } from '@/workflow/workflow-variables/hooks/useStepsOutputSchema';
 import { useTidyUpWorkflowVersion } from '@/workflow/workflow-version/hooks/useTidyUpWorkflowVersion';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { Fragment } from 'react';
 import { isDefined } from 'twenty-shared/utils';
@@ -30,13 +29,17 @@ import { IconPlus } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
 import { Separator } from 'twenty-ui/primitives/layout';
 import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  align-items: start;
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[4]};
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'start',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-4'],
+  },
+});
 
 type WorkflowEditActionIfElseBodyProps = {
   action: WorkflowIfElseAction;
@@ -245,7 +248,7 @@ export const WorkflowEditActionIfElseBody = ({
   return (
     <WorkflowStepBody rowGap={themeCssVariables.spacing[2]}>
       <InputLabel>{t`Conditions`}</InputLabel>
-      <StyledContainer>
+      <div {...stylex.props(styles.container)}>
         {branches.map((branch, branchIndex) => {
           const branchFilterGroup = isDefined(branch.filterGroupId)
             ? stepFilterGroups.find((g) => g.id === branch.filterGroupId)
@@ -294,7 +297,7 @@ export const WorkflowEditActionIfElseBody = ({
             </Fragment>
           );
         })}
-      </StyledContainer>
+      </div>
     </WorkflowStepBody>
   );
 };

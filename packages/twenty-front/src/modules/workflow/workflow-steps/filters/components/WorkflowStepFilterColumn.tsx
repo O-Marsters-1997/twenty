@@ -5,10 +5,10 @@ import { WorkflowStepFilterOperandSelect } from '@/workflow/workflow-steps/filte
 import { WorkflowStepFilterOptionsDropdown } from '@/workflow/workflow-steps/filters/components/WorkflowStepFilterOptionsDropdown';
 import { WorkflowStepFilterValueInput } from '@/workflow/workflow-steps/filters/components/WorkflowStepFilterValueInput';
 import { WorkflowStepFilterContext } from '@/workflow/workflow-steps/filters/states/context/WorkflowStepFilterContext';
-import { styled } from '@linaria/react';
 import { useContext } from 'react';
 import { type StepFilter, type StepFilterGroup } from 'twenty-shared/types';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type WorkflowStepFilterColumnProps = {
   stepFilterGroup: StepFilterGroup;
@@ -19,12 +19,14 @@ type WorkflowStepFilterColumnProps = {
   preventDeletion?: boolean;
 };
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: ${themeCssVariables.spacing[1]};
-  justify-content: space-between;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: spacing['--t-spacing-1'],
+    justifyContent: 'space-between',
+  },
+});
 
 export const WorkflowStepFilterColumn = ({
   stepFilterGroup,
@@ -40,7 +42,7 @@ export const WorkflowStepFilterColumn = ({
 
   return (
     <AdvancedFilterSidePanelColumn>
-      <StyledContainer>
+      <div {...stylex.props(styles.container)}>
         <WorkflowStepFilterLogicalOperatorCell
           index={stepFilterIndex}
           stepFilterGroup={stepFilterGroup}
@@ -50,7 +52,7 @@ export const WorkflowStepFilterColumn = ({
         {shouldShowDropdown && (
           <WorkflowStepFilterOptionsDropdown stepFilterId={stepFilter.id} />
         )}
-      </StyledContainer>
+      </div>
       <WorkflowStepFilterFieldSelect stepFilter={stepFilter} />
       <WorkflowStepFilterOperandSelect stepFilter={stepFilter} />
       <WorkflowStepFilterValueInput stepFilter={stepFilter} />

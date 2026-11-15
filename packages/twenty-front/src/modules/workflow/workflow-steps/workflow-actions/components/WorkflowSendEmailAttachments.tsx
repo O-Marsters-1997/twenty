@@ -13,6 +13,8 @@ import { isDefined } from 'twenty-shared/utils';
 import { type WorkflowEmailFiles } from 'twenty-shared/workflow';
 import { IconUpload } from 'twenty-ui/icon';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing, font } from 'twenty-ui/theme/tokens.stylex';
 
 type WorkflowSendEmailAttachmentsProps = {
   files: WorkflowEmailFiles;
@@ -22,15 +24,33 @@ type WorkflowSendEmailAttachmentsProps = {
   VariablePicker?: VariablePickerComponent;
 };
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const StyledRow = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  row: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  chipsContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing['--t-spacing-1'],
+  },
+  variableChipWrapper: {
+    display: 'inline-flex',
+  },
+  uploadAreaLabel: {
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    gap: spacing['--t-spacing-1'],
+    justifyContent: 'center',
+  },
+});
 
 const StyledUploadArea = styled.div<{ hasFiles: boolean; hasPicker: boolean }>`
   background-color: ${themeCssVariables.background.transparent.lighter};
@@ -57,26 +77,6 @@ const StyledUploadArea = styled.div<{ hasFiles: boolean; hasPicker: boolean }>`
     background-color: ${themeCssVariables.background.transparent.light};
     border-color: ${themeCssVariables.border.color.strong};
   }
-`;
-
-const StyledChipsContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledVariableChipWrapper = styled.span`
-  display: inline-flex;
-`;
-
-const StyledUploadAreaLabel = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  font-size: ${themeCssVariables.font.size.sm};
-  font-weight: ${themeCssVariables.font.weight.medium};
-  gap: ${themeCssVariables.spacing[1]};
-  justify-content: center;
 `;
 
 export const WorkflowSendEmailAttachments = ({
@@ -126,22 +126,22 @@ export const WorkflowSendEmailAttachments = ({
   const hasPicker = isDefined(VariablePicker) && !readonly;
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       {label ? <InputLabel>{label}</InputLabel> : null}
 
-      <StyledRow>
+      <div {...stylex.props(styles.row)}>
         <StyledUploadArea
           hasFiles={files.length > 0}
           hasPicker={hasPicker}
           onClick={handleAddFileClick}
         >
           {files.length > 0 ? (
-            <StyledChipsContainer>
+            <div {...stylex.props(styles.chipsContainer)}>
               {files.map((file, index) =>
                 isString(file) ? (
-                  <StyledVariableChipWrapper
+                  <span
                     key={index}
-                    onClick={(event) => event.stopPropagation()}
+                    onClick={(event) => event.stopPropagation()} {...stylex.props(styles.variableChipWrapper)}
                   >
                     <VariableChip
                       rawVariableName={file}
@@ -149,7 +149,7 @@ export const WorkflowSendEmailAttachments = ({
                         readonly ? undefined : () => handleRemoveItem(index)
                       }
                     />
-                  </StyledVariableChipWrapper>
+                  </span>
                 ) : (
                   <AttachmentChip
                     key={index}
@@ -159,12 +159,12 @@ export const WorkflowSendEmailAttachments = ({
                   />
                 ),
               )}
-            </StyledChipsContainer>
+            </div>
           ) : (
-            <StyledUploadAreaLabel>
+            <div {...stylex.props(styles.uploadAreaLabel)}>
               <IconUpload size={theme.icon.size.sm} />
               <span>{t`Upload file`}</span>
-            </StyledUploadAreaLabel>
+            </div>
           )}
         </StyledUploadArea>
 
@@ -174,7 +174,7 @@ export const WorkflowSendEmailAttachments = ({
             onVariableSelect={handleAddVariable}
           />
         ) : null}
-      </StyledRow>
-    </StyledContainer>
+      </div>
+    </div>
   );
 };

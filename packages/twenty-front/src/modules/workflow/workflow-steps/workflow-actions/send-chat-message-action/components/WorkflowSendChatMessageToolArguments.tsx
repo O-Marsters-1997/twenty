@@ -6,37 +6,36 @@ import { type ToolArgumentField } from '@/workflow/workflow-steps/workflow-actio
 import { buildToolArgumentFields } from '@/workflow/workflow-steps/workflow-actions/send-chat-message-action/utils/buildToolArgumentFields';
 import { isEmptyToolArgument } from '@/workflow/workflow-steps/workflow-actions/send-chat-message-action/utils/isEmptyToolArgument';
 import { WorkflowVariablePicker } from '@/workflow/workflow-variables/components/WorkflowVariablePicker';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { useMemo, useState } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { isStandaloneVariableString } from 'twenty-shared/workflow';
 import { LightButton } from 'twenty-ui/components/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { GetToolInputSchemaDocument } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { spacing, font } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledArguments = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[4]};
-`;
-
-const StyledArgument = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledHint = styled.span`
-  color: ${themeCssVariables.font.color.light};
-  font-size: ${themeCssVariables.font.size.sm};
-`;
-
-const StyledError = styled.span`
-  color: ${themeCssVariables.font.color.danger};
-  font-size: ${themeCssVariables.font.size.sm};
-`;
+const styles = stylex.create({
+  arguments: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-4'],
+  },
+  argument: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-1'],
+  },
+  hint: {
+    color: fontColor['--t-font-color-light'],
+    fontSize: fontSize['--t-font-size-sm'],
+  },
+  error: {
+    color: fontColor['--t-font-color-danger'],
+    fontSize: fontSize['--t-font-size-sm'],
+  },
+});
 
 type ToolArguments = Record<string, unknown>;
 
@@ -148,14 +147,14 @@ export const WorkflowSendChatMessageToolArguments = ({
   const hiddenOptionalCount = fields.filter((field) => !isShown(field)).length;
 
   return (
-    <StyledArguments>
+    <div {...stylex.props(styles.arguments)}>
       {fields.filter(isShown).map((field) => {
         const value = toolArguments[field.name];
         const label = field.isRequired ? `${field.label} *` : field.label;
         const isMissing = field.isRequired && isEmptyToolArgument(value);
 
         return (
-          <StyledArgument key={field.name}>
+          <div key={field.name} {...stylex.props(styles.argument)}>
             {isDefined(field.schemaProperty) ? (
               <WorkflowEditActionCodeFieldLeaf
                 label={label}
@@ -183,17 +182,17 @@ export const WorkflowSendChatMessageToolArguments = ({
               />
             )}
             {isDefined(field.description) && (
-              <StyledHint>{field.description}</StyledHint>
+              <span {...stylex.props(styles.hint)}>{field.description}</span>
             )}
             {!field.isListed && (
-              <StyledHint>
+              <span {...stylex.props(styles.hint)}>
                 {t`This action no longer takes this argument. Clear it to remove it.`}
-              </StyledHint>
+              </span>
             )}
             {isMissing && !readonly && (
-              <StyledError>{t`Required to run the action`}</StyledError>
+              <span {...stylex.props(styles.error)}>{t`Required to run the action`}</span>
             )}
-          </StyledArgument>
+          </div>
         );
       })}
       {!readonly && (hiddenOptionalCount > 0 || isShowingOptionalArguments) && (
@@ -210,6 +209,6 @@ export const WorkflowSendChatMessageToolArguments = ({
             : t`Show ${hiddenOptionalCount} optional arguments`}
         </LightButton>
       )}
-    </StyledArguments>
+    </div>
   );
 };

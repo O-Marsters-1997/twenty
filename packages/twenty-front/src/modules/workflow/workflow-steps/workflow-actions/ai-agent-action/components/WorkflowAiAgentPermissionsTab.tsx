@@ -27,6 +27,8 @@ import { WorkflowAiAgentPermissionsCrudList } from './WorkflowAiAgentPermissions
 import { WorkflowAiAgentPermissionsFlagList } from './WorkflowAiAgentPermissionsFlagList';
 import { WorkflowAiAgentPermissionsObjectsList } from './WorkflowAiAgentPermissionsObjectsList';
 import { getFilteredPermissions } from './workflowAiAgentPermissions.utils';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const StyledSearchInputContainer = styled.div`
   background-color: ${themeCssVariables.background.transparent.lighter};
@@ -52,13 +54,17 @@ const StyledBackButtonContainer = styled.div`
   }
 `;
 
-const StyledContainer = styled.div`
-  width: 100%;
-`;
-
-const StyledGroupsContainer = styled.div`
-  padding: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  container: {
+    width: '100%',
+  },
+  groupsContainer: {
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+});
 
 type WorkflowAiAgentPermissionsTabProps = {
   action: WorkflowAiAgentAction;
@@ -218,7 +224,7 @@ export const WorkflowAiAgentPermissionsTab = ({
     hasRoleWithPermissions && !workflowAiAgentPermissionsIsAddingPermission;
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       {shouldShowBackButton && (
         <StyledBackButtonContainer>
           <SidePanelSubPageNavigationHeader
@@ -242,7 +248,7 @@ export const WorkflowAiAgentPermissionsTab = ({
         />
       </StyledSearchInputContainer>
 
-      <StyledGroupsContainer>
+      <div {...stylex.props(styles.groupsContainer)}>
         {shouldShowCrudList && (
           <WorkflowAiAgentPermissionsCrudList
             permissions={filterBySearchQuery({
@@ -306,7 +312,7 @@ export const WorkflowAiAgentPermissionsTab = ({
             />
           </>
         )}
-      </StyledGroupsContainer>
-    </StyledContainer>
+      </div>
+    </div>
   );
 };

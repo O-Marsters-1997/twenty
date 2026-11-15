@@ -8,6 +8,8 @@ import {
   StyledSection,
   StyledSectionTitle,
 } from '@/workflow/workflow-steps/workflow-actions/components/workflowRunStepLogsStyles';
+import * as stylex from '@stylexjs/stylex';
+import { font, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const StyledEntriesList = styled.div`
   background: ${themeCssVariables.background.tertiary};
@@ -21,19 +23,27 @@ const StyledEntriesList = styled.div`
   padding: ${themeCssVariables.spacing[2]};
 `;
 
-const StyledEntryRow = styled.div`
-  align-items: baseline;
-  color: ${themeCssVariables.font.color.primary};
-  display: grid;
-  gap: ${themeCssVariables.spacing[2]};
-  grid-template-columns: max-content max-content 1fr;
-  padding: ${themeCssVariables.spacing['0.5']} 0;
-`;
-
-const StyledTimestamp = styled.span`
-  color: ${themeCssVariables.font.color.light};
-  font-size: ${themeCssVariables.font.size.xs};
-`;
+const styles = stylex.create({
+  entryRow: {
+    alignItems: 'baseline',
+    color: fontColor['--t-font-color-primary'],
+    display: 'grid',
+    gap: spacing['--t-spacing-2'],
+    gridTemplateColumns: 'max-content max-content 1fr',
+    paddingTop: spacing['--t-spacing-0_5'],
+    paddingRight: '0',
+    paddingBottom: spacing['--t-spacing-0_5'],
+    paddingLeft: '0',
+  },
+  timestamp: {
+    color: fontColor['--t-font-color-light'],
+    fontSize: fontSize['--t-font-size-xs'],
+  },
+  message: {
+    overflowWrap: 'anywhere',
+    whiteSpace: 'pre-wrap',
+  },
+});
 
 const StyledLevelBadge = styled.span<{ level: string }>`
   background: ${({ level }) => {
@@ -55,11 +65,6 @@ const StyledLevelBadge = styled.span<{ level: string }>`
   font-weight: ${themeCssVariables.font.weight.semiBold};
   padding: 0 ${themeCssVariables.spacing[1]};
   text-transform: uppercase;
-`;
-
-const StyledMessage = styled.span`
-  overflow-wrap: anywhere;
-  white-space: pre-wrap;
 `;
 
 const formatTimestamp = (timestamp: string): string => {
@@ -94,15 +99,15 @@ export const WorkflowRunStepLogsEntries = ({
       <StyledSectionTitle>{sectionTitle}</StyledSectionTitle>
       <StyledEntriesList>
         {entries.map((entry, index) => (
-          <StyledEntryRow key={`${entry.timestamp}-${index}`}>
-            <StyledTimestamp>
+          <div key={`${entry.timestamp}-${index}`} {...stylex.props(styles.entryRow)}>
+            <span {...stylex.props(styles.timestamp)}>
               {formatTimestamp(entry.timestamp)}
-            </StyledTimestamp>
+            </span>
             <StyledLevelBadge level={entry.level}>
               {entry.level}
             </StyledLevelBadge>
-            <StyledMessage>{entry.message}</StyledMessage>
-          </StyledEntryRow>
+            <span {...stylex.props(styles.message)}>{entry.message}</span>
+          </div>
         ))}
       </StyledEntriesList>
     </StyledSection>

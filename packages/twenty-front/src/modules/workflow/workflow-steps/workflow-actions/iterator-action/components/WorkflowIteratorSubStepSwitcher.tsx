@@ -6,25 +6,26 @@ import { useWorkflowRunIdOrThrow } from '@/workflow/hooks/useWorkflowRunIdOrThro
 import { getStepDefinitionOrThrow } from '@/workflow/utils/getStepDefinitionOrThrow';
 import { getIsDescendantOfIterator } from '@/workflow/workflow-steps/utils/getIsDescendantOfIterator';
 import { getWorkflowRunAllStepInfoHistory } from '@/workflow/workflow-steps/utils/getWorkflowRunAllStepInfoHistory';
-import { styled } from '@linaria/react';
 import { plural, t } from '@lingui/core/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { IconChevronLeft, IconChevronRight } from 'twenty-ui/icon';
 import { IconButton } from 'twenty-ui/components/input';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing, font } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-  padding-block: ${themeCssVariables.spacing[2]};
-  padding-inline: ${themeCssVariables.spacing[3]};
-`;
-
-const StyledCounter = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-weight: ${themeCssVariables.font.weight.medium};
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'space-between',
+    paddingBlock: spacing['--t-spacing-2'],
+    paddingInline: spacing['--t-spacing-3'],
+  },
+  counter: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+  },
+});
 
 export const WorkflowIteratorSubStepSwitcher = ({
   stepId,
@@ -100,7 +101,7 @@ export const WorkflowIteratorSubStepSwitcher = ({
   }
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <IconButton
         aria-label={t`Previous iteration`}
         size="sm"
@@ -110,13 +111,13 @@ export const WorkflowIteratorSubStepSwitcher = ({
         <IconChevronLeft />
       </IconButton>
 
-      <StyledCounter>
+      <div {...stylex.props(styles.counter)}>
         {workflowRunIteratorSubStepIterationIndex + 1}/
         {plural(workflowRunIteratorSubStepIterationsCount, {
           one: '# item',
           other: '# items',
         })}
-      </StyledCounter>
+      </div>
 
       <IconButton
         aria-label={t`Next iteration`}
@@ -126,6 +127,6 @@ export const WorkflowIteratorSubStepSwitcher = ({
       >
         <IconChevronRight />
       </IconButton>
-    </StyledContainer>
+    </div>
   );
 };

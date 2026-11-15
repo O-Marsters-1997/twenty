@@ -4,22 +4,28 @@ import { getWorkflowVisualizerComponentInstanceId } from '@/workflow/utils/getWo
 import { WorkflowVersionVisualizer } from '@/workflow/workflow-diagram/components/WorkflowVersionVisualizer';
 import { WorkflowVersionVisualizerEffect } from '@/workflow/workflow-diagram/components/WorkflowVersionVisualizerEffect';
 import { WorkflowVisualizerComponentInstanceContext } from '@/workflow/workflow-diagram/states/contexts/WorkflowVisualizerComponentInstanceContext';
-import { styled } from '@linaria/react';
 import { Suspense } from 'react';
 import { SKELETON_HEIGHT_SIZES } from 'twenty-ui/primitives/feedback';
 import { themeCssVariables } from 'twenty-ui/theme';
-const StyledLoadingSkeletonContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  height: 100%;
-  padding: ${themeCssVariables.spacing[4]};
-  width: 100%;
-`;
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
+const styles = stylex.create({
+  loadingSkeletonContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    height: '100%',
+    paddingTop: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingBottom: spacing['--t-spacing-4'],
+    paddingLeft: spacing['--t-spacing-4'],
+    width: '100%',
+  },
+});
 
 const LoadingSkeleton = () => {
   return (
-    <StyledLoadingSkeletonContainer>
+    <div {...stylex.props(styles.loadingSkeletonContainer)}>
       <SkeletonLine
         borderRadius={themeCssVariables.border.radius.smRound}
         height={SKELETON_HEIGHT_SIZES.m}
@@ -32,7 +38,7 @@ const LoadingSkeleton = () => {
         borderRadius={themeCssVariables.border.radius.smRound}
         height={SKELETON_HEIGHT_SIZES.m}
       />
-    </StyledLoadingSkeletonContainer>
+    </div>
   );
 };
 

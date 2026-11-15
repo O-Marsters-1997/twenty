@@ -1,7 +1,6 @@
 import { useSidePanelHistory } from '@/side-panel/hooks/useSidePanelHistory';
 import { workflowRunIteratorSubStepIterationIndexComponentState } from '@/side-panel/pages/workflow/step/view-run/states/workflowRunIteratorSubStepIterationIndexComponentState';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { styled } from '@linaria/react';
 import { SidePanelFooter } from '@/ui/layout/side-panel/components/SidePanelFooter';
 import { useWorkflowRun } from '@/workflow/hooks/useWorkflowRun';
 import { useWorkflowRunIdOrThrow } from '@/workflow/hooks/useWorkflowRunIdOrThrow';
@@ -16,8 +15,9 @@ import { getFormInstructionsContext } from '@/workflow/workflow-steps/workflow-a
 import { resolveFormInstructions } from '@/workflow/workflow-steps/workflow-actions/form-action/utils/resolveFormInstructions';
 import { useEffect, useState } from 'react';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { useDebouncedCallback } from 'use-debounce';
+import * as stylex from '@stylexjs/stylex';
+import { font } from 'twenty-ui/theme/tokens.stylex';
 
 export type WorkflowEditActionFormFillerProps = {
   action: WorkflowFormAction;
@@ -28,11 +28,13 @@ export type WorkflowEditActionFormFillerProps = {
 
 type FormData = WorkflowFormActionField[];
 
-const StyledInstructions = styled.div`
-  color: ${themeCssVariables.font.color.secondary};
-  white-space: pre-wrap;
-  word-break: break-word;
-`;
+const styles = stylex.create({
+  instructions: {
+    color: fontColor['--t-font-color-secondary'],
+    whiteSpace: 'pre-wrap',
+    wordBreak: 'break-word',
+  },
+});
 
 export const WorkflowEditActionFormFiller = ({
   action,
@@ -108,7 +110,7 @@ export const WorkflowEditActionFormFiller = ({
       <WorkflowRunSSESubscribeEffect workflowRunId={workflowRunId} />
       <WorkflowStepBody>
         {isDefined(instructions) && (
-          <StyledInstructions>{instructions}</StyledInstructions>
+          <div {...stylex.props(styles.instructions)}>{instructions}</div>
         )}
         <WorkflowFormFields
           fields={formData}

@@ -16,14 +16,12 @@ import { useResetWorkflowAiAgentPermissionsStateOnSidePanelClose } from '@/workf
 import { workflowAiAgentActionAgentState } from '@/workflow/workflow-steps/workflow-actions/ai-agent-action/states/workflowAiAgentActionAgentState';
 import { workflowAiAgentPermissionsIsAddingPermissionState } from '@/workflow/workflow-steps/workflow-actions/ai-agent-action/states/workflowAiAgentPermissionsIsAddingPermissionState';
 import { useQuery } from '@apollo/client/react';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useEffect, useState } from 'react';
 import { SettingsPath } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 import { type WorkflowConversation } from 'twenty-shared/workflow';
 import { IconLock, IconSparkles } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { useDebouncedCallback } from 'use-debounce';
 import {
   FindOneAgentDocument,
@@ -32,6 +30,8 @@ import {
 import { useNavigateSettings } from '~/hooks/useNavigateSettings';
 import { SidePanelSkeletonLoader } from '~/loading/components/SidePanelSkeletonLoader';
 import { WorkflowAiAgentPromptTab } from './WorkflowAiAgentPromptTab';
+import * as stylex from '@stylexjs/stylex';
+import { background, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 export type WorkflowAiAgentTabId =
   (typeof WORKFLOW_AI_AGENT_TABS)[keyof typeof WORKFLOW_AI_AGENT_TABS];
@@ -46,10 +46,12 @@ type WorkflowEditActionAiAgentProps = {
       };
 };
 
-const StyledTabListContainer = styled.div`
-  background-color: ${themeCssVariables.background.secondary};
-  padding-left: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  tabListContainer: {
+    backgroundColor: background['--t-background-secondary'],
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+});
 
 export const WorkflowEditActionAiAgent = ({
   action,
@@ -205,14 +207,14 @@ export const WorkflowEditActionAiAgent = ({
     <SidePanelSkeletonLoader />
   ) : (
     <TabListRoot componentInstanceId={componentInstanceId}>
-      <StyledTabListContainer>
+      <div {...stylex.props(styles.tabListContainer)}>
         <TabList
           aria-label={t`Agent configuration`}
           tabs={tabs}
           componentInstanceId={componentInstanceId}
           behaveAsLinks={false}
         />
-      </StyledTabListContainer>
+      </div>
       <WorkflowStepTabPanel value={currentTabId}>
         {currentTabId === WORKFLOW_AI_AGENT_TABS.PERMISSIONS ? (
           <WorkflowStepBody paddingBlock="0" paddingInline="0">

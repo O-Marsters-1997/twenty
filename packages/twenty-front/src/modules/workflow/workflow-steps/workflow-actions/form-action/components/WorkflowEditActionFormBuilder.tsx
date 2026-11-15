@@ -39,6 +39,8 @@ import { useDebouncedCallback } from 'use-debounce';
 import { v4 } from 'uuid';
 import { FeatureFlagKey } from '~/generated-metadata/graphql';
 import { openUrlInNewTab } from '~/utils/openUrlInNewTab';
+import * as stylex from '@stylexjs/stylex';
+import { spacing, background, font } from 'twenty-ui/theme/tokens.stylex';
 
 export type WorkflowEditActionFormBuilderProps = {
   triggerType: WorkflowTriggerType | undefined;
@@ -55,46 +57,77 @@ export type WorkflowEditActionFormBuilderProps = {
 
 type FormData = WorkflowFormActionField[];
 
-const StyledFormFieldContainer = styled.div`
-  align-items: flex-end;
-  column-gap: ${themeCssVariables.spacing[1]};
-  display: grid;
-  grid-template-areas:
-    'grip input delete'
-    '. settings .';
-  grid-template-columns: 24px 1fr 24px;
-  margin-bottom: ${themeCssVariables.spacing[4]};
-  position: relative;
-`;
-
-const StyledDraggingIndicator = styled.div`
-  background-color: ${themeCssVariables.background.transparent.light};
-  inset: -8px;
-  position: absolute;
-  top: -4px;
-`;
-
-const StyledGripButtonContainer = styled.div`
-  align-items: flex-end;
-  display: flex;
-  grid-area: grip;
-  margin-bottom: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledTrashButtonContainer = styled.div`
-  align-items: flex-end;
-  display: flex;
-  grid-area: delete;
-  margin-bottom: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledFormFieldInputContainerWrapper = styled.div`
-  grid-area: input;
-`;
-
-const StyledOpenedSettingsContainer = styled.div`
-  grid-area: settings;
-`;
+const styles = stylex.create({
+  formFieldContainer: {
+    alignItems: 'flex-end',
+    columnGap: spacing['--t-spacing-1'],
+    display: 'grid',
+    gridTemplateAreas: "'grip input delete'
+    '. settings .'",
+    gridTemplateColumns: '24px 1fr 24px',
+    marginBottom: spacing['--t-spacing-4'],
+    position: 'relative',
+  },
+  draggingIndicator: {
+    backgroundColor: backgroundTransparent['--t-background-transparent-light'],
+    inset: '-8px',
+    position: 'absolute',
+    top: '-4px',
+  },
+  gripButtonContainer: {
+    alignItems: 'flex-end',
+    display: 'flex',
+    gridArea: 'grip',
+    marginBottom: spacing['--t-spacing-1'],
+  },
+  trashButtonContainer: {
+    alignItems: 'flex-end',
+    display: 'flex',
+    gridArea: 'delete',
+    marginBottom: spacing['--t-spacing-1'],
+  },
+  formFieldInputContainerWrapper: {
+    gridArea: 'input',
+  },
+  openedSettingsContainer: {
+    gridArea: 'settings',
+  },
+  placeholderContainer: {
+    width: '100%',
+  },
+  addFieldButtonContainer: {
+    paddingLeft: spacing['--t-spacing-7'],
+    paddingRight: spacing['--t-spacing-7'],
+    paddingTop: spacing['--t-spacing-2'],
+  },
+  addFieldButtonContentContainer: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-secondary'],
+    display: 'flex',
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    gap: spacing['--t-spacing-0_5'],
+    justifyContent: 'center',
+    width: '100%',
+  },
+  calloutContainer: {
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-7'],
+    paddingRight: spacing['--t-spacing-7'],
+    paddingTop: spacing['--t-spacing-2'],
+  },
+  instructionsContainer: {
+    paddingBottom: spacing['--t-spacing-4'],
+    paddingLeft: spacing['--t-spacing-7'],
+    paddingRight: spacing['--t-spacing-7'],
+    paddingTop: spacing['--t-spacing-2'],
+  },
+  notClosableCalloutContainer: {
+    paddingBottom: spacing['--t-spacing-4'],
+    paddingLeft: spacing['--t-spacing-7'],
+    paddingRight: spacing['--t-spacing-7'],
+    paddingTop: spacing['--t-spacing-2'],
+  },
+});
 
 const StyledFieldContainer = styled.div<{
   readonly?: boolean;
@@ -118,47 +151,6 @@ const StyledFieldContainer = styled.div<{
         ? 'transparent'
         : themeCssVariables.background.transparent.lighter};
   }
-`;
-
-const StyledPlaceholderContainer = styled.div`
-  width: 100%;
-`;
-
-const StyledAddFieldButtonContainer = styled.div`
-  padding-left: ${themeCssVariables.spacing[7]};
-  padding-right: ${themeCssVariables.spacing[7]};
-  padding-top: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledAddFieldButtonContentContainer = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.secondary};
-  display: flex;
-  font-weight: ${themeCssVariables.font.weight.medium};
-  gap: ${themeCssVariables.spacing[0.5]};
-  justify-content: center;
-  width: 100%;
-`;
-
-const StyledCalloutContainer = styled.div`
-  padding-bottom: ${themeCssVariables.spacing[2]};
-  padding-left: ${themeCssVariables.spacing[7]};
-  padding-right: ${themeCssVariables.spacing[7]};
-  padding-top: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledInstructionsContainer = styled.div`
-  padding-bottom: ${themeCssVariables.spacing[4]};
-  padding-left: ${themeCssVariables.spacing[7]};
-  padding-right: ${themeCssVariables.spacing[7]};
-  padding-top: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledNotClosableCalloutContainer = styled.div`
-  padding-bottom: ${themeCssVariables.spacing[4]};
-  padding-left: ${themeCssVariables.spacing[7]};
-  padding-right: ${themeCssVariables.spacing[7]};
-  padding-top: ${themeCssVariables.spacing[2]};
 `;
 
 export const WorkflowEditActionFormBuilder = ({
@@ -269,7 +261,7 @@ export const WorkflowEditActionFormBuilder = ({
         paddingInline={themeCssVariables.spacing[2]}
       >
         {triggerType && triggerType !== 'MANUAL' && isCalloutVisible && (
-          <StyledCalloutContainer>
+          <div {...stylex.props(styles.calloutContainer)}>
             <Callout
               status={'warning'}
               icon={
@@ -297,9 +289,9 @@ export const WorkflowEditActionFormBuilder = ({
                 >{t`Learn more`}</Callout.Action>
               }
             />
-          </StyledCalloutContainer>
+          </div>
         )}
-        <StyledInstructionsContainer>
+        <div {...stylex.props(styles.instructionsContainer)}>
           <FormTextFieldInput
             label={t`Instructions`}
             placeholder={t`Shown above the fields, for example what to fill in and why`}
@@ -309,15 +301,15 @@ export const WorkflowEditActionFormBuilder = ({
             onChange={handleInstructionsChange}
             VariablePicker={WorkflowVariablePicker}
           />
-        </StyledInstructionsContainer>
+        </div>
         {formData.length === 0 && (
-          <StyledNotClosableCalloutContainer>
+          <div {...stylex.props(styles.notClosableCalloutContainer)}>
             <Callout
               status={'neutral'}
               title={t`Add inputs to your form`}
               description={t`Click on "Add Field" below to add the first input to your form. The form pops up for the person who launches the workflow manually. For workflows with other triggers, it is filled in from the workflow run.`}
             />
-          </StyledNotClosableCalloutContainer>
+          </div>
         )}
         <DraggableList
           onDragEnd={handleDragEnd}
@@ -338,24 +330,24 @@ export const WorkflowEditActionFormBuilder = ({
                         isDragging);
 
                     return (
-                      <StyledFormFieldContainer
+                      <div
                         key={field.id}
                         onMouseEnter={() => setHoveredField(field.id)}
-                        onMouseLeave={() => setHoveredField(null)}
+                        onMouseLeave={() => setHoveredField(null)} {...stylex.props(styles.formFieldContainer)}
                       >
-                        {isDragging && <StyledDraggingIndicator />}
+                        {isDragging && <div {...stylex.props(styles.draggingIndicator)} />}
 
                         {showButtons && (
-                          <StyledGripButtonContainer>
+                          <div {...stylex.props(styles.gripButtonContainer)}>
                             <DragDropItemSortableHandle>
                               <LightIconButton aria-label={t`Reorder field`}>
                                 <IconGripVertical />
                               </LightIconButton>
                             </DragDropItemSortableHandle>
-                          </StyledGripButtonContainer>
+                          </div>
                         )}
 
-                        <StyledFormFieldInputContainerWrapper>
+                        <div {...stylex.props(styles.formFieldInputContainerWrapper)}>
                           <InputLabel>{field.label || ''}</InputLabel>
 
                           <FormFieldInputRowContainer>
@@ -369,7 +361,7 @@ export const WorkflowEditActionFormBuilder = ({
                               <StyledFieldContainer
                                 readonly={actionOptions.readonly}
                               >
-                                <StyledPlaceholderContainer>
+                                <div {...stylex.props(styles.placeholderContainer)}>
                                   <FormFieldPlaceholder>
                                     {isDefined(field.placeholder) &&
                                     isNonEmptyString(field.placeholder)
@@ -377,7 +369,7 @@ export const WorkflowEditActionFormBuilder = ({
                                       : getDefaultFormFieldSettings(field.type)
                                           .placeholder}
                                   </FormFieldPlaceholder>
-                                </StyledPlaceholderContainer>
+                                </div>
                                 {(field.type === 'RECORD' ||
                                   field.type === 'SELECT' ||
                                   field.type === 'MULTI_SELECT') && (
@@ -391,10 +383,10 @@ export const WorkflowEditActionFormBuilder = ({
                               </StyledFieldContainer>
                             </FormFieldInputInnerContainer>
                           </FormFieldInputRowContainer>
-                        </StyledFormFieldInputContainerWrapper>
+                        </div>
 
                         {showButtons && (
-                          <StyledTrashButtonContainer>
+                          <div {...stylex.props(styles.trashButtonContainer)}>
                             <LightIconButton
                               aria-label={t`Delete field`}
                               onClick={() => {
@@ -414,11 +406,11 @@ export const WorkflowEditActionFormBuilder = ({
                             >
                               <IconTrash />
                             </LightIconButton>
-                          </StyledTrashButtonContainer>
+                          </div>
                         )}
 
                         {isFieldSelected(field.id) && (
-                          <StyledOpenedSettingsContainer>
+                          <div {...stylex.props(styles.openedSettingsContainer)}>
                             <WorkflowEditActionFormFieldSettings
                               field={field}
                               onChange={onFieldUpdate}
@@ -426,9 +418,9 @@ export const WorkflowEditActionFormBuilder = ({
                                 setSelectedField(null);
                               }}
                             />
-                          </StyledOpenedSettingsContainer>
+                          </div>
                         )}
-                      </StyledFormFieldContainer>
+                      </div>
                     );
                   }}
                 />
@@ -438,7 +430,7 @@ export const WorkflowEditActionFormBuilder = ({
         />
 
         {!actionOptions.readonly && (
-          <StyledAddFieldButtonContainer>
+          <div {...stylex.props(styles.addFieldButtonContainer)}>
             <FormFieldInputContainer>
               <FormFieldInputRowContainer>
                 <FormFieldInputInnerContainer
@@ -467,15 +459,15 @@ export const WorkflowEditActionFormBuilder = ({
                   }}
                 >
                   <StyledFieldContainer>
-                    <StyledAddFieldButtonContentContainer>
+                    <div {...stylex.props(styles.addFieldButtonContentContainer)}>
                       <IconPlus size={theme.icon.size.sm} />
                       {t`Add Field`}
-                    </StyledAddFieldButtonContentContainer>
+                    </div>
                   </StyledFieldContainer>
                 </FormFieldInputInnerContainer>
               </FormFieldInputRowContainer>
             </FormFieldInputContainer>
-          </StyledAddFieldButtonContainer>
+          </div>
         )}
       </WorkflowStepBody>
       {!actionOptions.readonly && <WorkflowStepFooter stepId={action.id} />}

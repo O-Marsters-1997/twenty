@@ -11,12 +11,16 @@ import { IconTrash } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
 import { themeCssVariables } from 'twenty-ui/theme';
 import { v4 } from 'uuid';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+  },
+});
 
 const StyledKeyValueContainer = styled.div<{ readonly: boolean | undefined }>`
   display: grid;
@@ -140,7 +144,7 @@ export const KeyValuePairInput = ({
   return (
     <FormFieldInputContainer>
       {label && <InputLabel>{label}</InputLabel>}
-      <StyledContainer>
+      <div {...stylex.props(styles.container)}>
         {pairs.map((pair) => (
           <StyledKeyValueContainer key={pair.id} readonly={readonly}>
             <FormTextFieldInput
@@ -180,7 +184,7 @@ export const KeyValuePairInput = ({
               ))}
           </StyledKeyValueContainer>
         ))}
-      </StyledContainer>
+      </div>
     </FormFieldInputContainer>
   );
 };

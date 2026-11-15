@@ -4,31 +4,31 @@ import { GenericDropdownContentWidth } from '@/ui/layout/dropdown/constants/Gene
 import { useUpsertStepFilterSettings } from '@/workflow/workflow-steps/filters/hooks/useUpsertStepFilterSettings';
 import { WorkflowStepFilterContext } from '@/workflow/workflow-steps/filters/states/context/WorkflowStepFilterContext';
 
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useContext, useMemo } from 'react';
 import { StepLogicalOperator, type StepFilterGroup } from 'twenty-shared/types';
 import { capitalize, isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { font, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledText = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.primary};
-  display: flex;
-  height: ${themeCssVariables.spacing[8]};
-`;
-
-const StyledNumber = styled.span`
-  color: ${themeCssVariables.font.color.tertiary};
-  margin-right: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledContainer = styled.div`
-  align-items: start;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  min-width: ${themeCssVariables.spacing[20]};
-`;
+const styles = stylex.create({
+  text: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-primary'],
+    display: 'flex',
+    height: spacing['--t-spacing-8'],
+  },
+  number: {
+    color: fontColor['--t-font-color-tertiary'],
+    marginRight: spacing['--t-spacing-1'],
+  },
+  container: {
+    alignItems: 'start',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    minWidth: spacing['--t-spacing-20'],
+  },
+});
 
 type WorkflowStepFilterLogicalOperatorCellProps = {
   index: number;
@@ -75,12 +75,12 @@ export const WorkflowStepFilterLogicalOperatorCell = ({
   };
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       {index === 0 ? (
-        <StyledText>
-          {isDefined(elseIfIndex) && <StyledNumber>{elseIfIndex}</StyledNumber>}
+        <div {...stylex.props(styles.text)}>
+          {isDefined(elseIfIndex) && <span {...stylex.props(styles.number)}>{elseIfIndex}</span>}
           {firstFilterLabel ?? defaultFirstFilterLabel}
-        </StyledText>
+        </div>
       ) : index === 1 ? (
         readonly ? (
           <Select
@@ -102,10 +102,10 @@ export const WorkflowStepFilterLogicalOperatorCell = ({
           />
         )
       ) : (
-        <StyledText>
+        <div {...stylex.props(styles.text)}>
           {capitalize(stepFilterGroup.logicalOperator.toLowerCase())}
-        </StyledText>
+        </div>
       )}
-    </StyledContainer>
+    </div>
   );
 };

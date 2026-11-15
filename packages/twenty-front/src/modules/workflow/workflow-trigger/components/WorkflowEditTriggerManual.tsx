@@ -10,14 +10,14 @@ import { WorkflowStepFooter } from '@/workflow/workflow-steps/components/Workflo
 import { MANUAL_TRIGGER_AVAILABILITY_TYPE_OPTIONS } from '@/workflow/workflow-trigger/constants/ManualTriggerAvailabilityTypeOptions';
 import { MANUAL_TRIGGER_IS_PINNED_OPTIONS } from '@/workflow/workflow-trigger/constants/ManualTriggerIsPinnedOptions';
 import { getManualTriggerDefaultSettings } from '@/workflow/workflow-trigger/utils/getManualTriggerDefaultSettings';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { QUERY_MAX_RECORDS } from 'twenty-shared/constants';
 import { isDefined } from 'twenty-shared/utils';
 import { TRIGGER_STEP_ID } from 'twenty-shared/workflow';
 import { useIcons } from 'twenty-ui/icon';
 import { type SelectOption } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { font, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type WorkflowEditTriggerManualProps = {
   trigger: WorkflowManualTrigger;
@@ -32,25 +32,25 @@ type WorkflowEditTriggerManualProps = {
       };
 };
 
-const StyledLabel = styled.span`
-  color: ${themeCssVariables.font.color.light};
-  font-size: ${themeCssVariables.font.size.xs};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-  margin-bottom: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledDescription = styled.span`
-  color: ${themeCssVariables.font.color.light};
-  font-size: ${themeCssVariables.font.size.sm};
-  margin-top: 1px;
-`;
+const styles = stylex.create({
+  label: {
+    color: fontColor['--t-font-color-light'],
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    marginBottom: spacing['--t-spacing-1'],
+  },
+  description: {
+    color: fontColor['--t-font-color-light'],
+    fontSize: fontSize['--t-font-size-sm'],
+    marginTop: '1px',
+  },
+  iconPickerContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+});
 
 const MANUAL_TRIGGER_VISIBLE_ICON_COUNT = 72;
-
-const StyledIconPickerContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
 
 export const WorkflowEditTriggerManual = ({
   trigger,
@@ -160,16 +160,16 @@ export const WorkflowEditTriggerManual = ({
           maxIconsVisible={MANUAL_TRIGGER_VISIBLE_ICON_COUNT}
           disabled={triggerOptions.readonly}
           clickableComponent={
-            <StyledIconPickerContainer
+            <div
               aria-label={t`Command Icon`}
               onClick={(e) => {
                 if (triggerOptions.readonly === true) {
                   e.stopPropagation();
                   e.preventDefault();
                 }
-              }}
+              }} {...stylex.props(styles.iconPickerContainer)}
             >
-              <StyledLabel>{t`Command Icon`}</StyledLabel>
+              <span {...stylex.props(styles.label)}>{t`Command Icon`}</span>
               <SelectControl
                 isDisabled={triggerOptions.readonly}
                 selectedOption={{
@@ -178,8 +178,8 @@ export const WorkflowEditTriggerManual = ({
                   label: '',
                 }}
               />
-              <StyledDescription>{t`The icon your workflow trigger will display in the command menu`}</StyledDescription>
-            </StyledIconPickerContainer>
+              <span {...stylex.props(styles.description)}>{t`The icon your workflow trigger will display in the command menu`}</span>
+            </div>
           }
           onChange={({ iconKey }) => {
             if (triggerOptions.readonly === true) {

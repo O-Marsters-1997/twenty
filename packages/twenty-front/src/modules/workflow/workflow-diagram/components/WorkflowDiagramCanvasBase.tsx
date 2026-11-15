@@ -70,11 +70,9 @@ import React, {
 import { isDefined } from 'twenty-shared/utils';
 import { WORKFLOW_DIAGRAM_DEFAULT_NODE_DIMENSIONS } from 'twenty-shared/workflow';
 import { Tag, type TagColor } from 'twenty-ui/primitives/data-display';
-import {
-  useTheme,
-  useThemeColorScheme,
-  themeCssVariables,
-} from 'twenty-ui/theme';
+import { useTheme, useThemeColorScheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 const StyledResetReactflowStyles = styled.div`
   --xy-node-background-color: none;
   --xy-node-border: none;
@@ -98,12 +96,17 @@ const StyledResetReactflowStyles = styled.div`
   width: 100%;
 `;
 
-const StyledStatusTagContainer = styled.div`
-  left: 0;
-  padding: ${themeCssVariables.spacing[4]};
-  position: absolute;
-  top: 0;
-`;
+const styles = stylex.create({
+  statusTagContainer: {
+    left: '0',
+    paddingTop: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingBottom: spacing['--t-spacing-4'],
+    paddingLeft: spacing['--t-spacing-4'],
+    position: 'absolute',
+    top: '0',
+  },
+});
 
 const defaultFitViewOptions = {
   minZoom: 1,
@@ -684,9 +687,9 @@ export const WorkflowDiagramCanvasBase = ({
         <WorkflowDiagramRightClickCommandMenu />
       )}
 
-      <StyledStatusTagContainer data-testid={tagContainerTestId}>
+      <div data-testid={tagContainerTestId} {...stylex.props(styles.statusTagContainer)}>
         <Tag color={tagColor}>{tagText}</Tag>
-      </StyledStatusTagContainer>
+      </div>
     </StyledResetReactflowStyles>
   );
 };

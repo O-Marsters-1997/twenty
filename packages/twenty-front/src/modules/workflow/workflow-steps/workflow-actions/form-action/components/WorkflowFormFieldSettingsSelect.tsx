@@ -6,27 +6,28 @@ import { FormFieldInputContainer } from '@/ui/input/components/FormFieldInputCon
 import { InputLabel } from '@/ui/input/components/internal/InputLabel/InputLabel';
 import { type WorkflowFormActionField } from '@/workflow/workflow-steps/workflow-actions/form-action/types/WorkflowFormActionField';
 import { getDefaultFormFieldSettings } from '@/workflow/workflow-steps/workflow-actions/form-action/utils/getDefaultFormFieldSettings';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import camelCase from 'lodash.camelcase';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type WorkflowFormFieldSettingsSelectProps = {
   field: WorkflowFormActionField;
   onChange: (updatedField: WorkflowFormActionField) => void;
 };
 
-const StyledFormFieldSettingsSelect = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledRowContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  formFieldSettingsSelect: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+  },
+  rowContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: spacing['--t-spacing-2'],
+  },
+});
 
 export const WorkflowFormFieldSettingsSelect = ({
   field,
@@ -64,8 +65,8 @@ export const WorkflowFormFieldSettingsSelect = ({
   );
 
   return (
-    <StyledFormFieldSettingsSelect>
-      <StyledRowContainer>
+    <div {...stylex.props(styles.formFieldSettingsSelect)}>
+      <div {...stylex.props(styles.rowContainer)}>
         <FormFieldInputContainer>
           <InputLabel>{t`Label`}</InputLabel>
           <FormTextFieldInput
@@ -100,7 +101,7 @@ export const WorkflowFormFieldSettingsSelect = ({
             readonly
           />
         </FormFieldInputContainer>
-      </StyledRowContainer>
+      </div>
       <FormFieldInputContainer>
         <InputLabel>{t`Field`}</InputLabel>
         <FormSelectFieldInput
@@ -120,6 +121,6 @@ export const WorkflowFormFieldSettingsSelect = ({
           options={fieldOptions}
         />
       </FormFieldInputContainer>
-    </StyledFormFieldSettingsSelect>
+    </div>
   );
 };

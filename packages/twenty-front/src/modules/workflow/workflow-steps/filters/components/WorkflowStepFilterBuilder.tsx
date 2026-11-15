@@ -15,30 +15,30 @@ import {
   type FilterSettingsWithPotentiallyDeprecatedOperand,
 } from '@/workflow/workflow-steps/filters/types/FilterSettings';
 import { isStepFilterGroupChildAStepFilterGroup } from '@/workflow/workflow-steps/filters/utils/isStepFilterGroupChildAStepFilterGroup';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  align-items: start;
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledChildContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[6]};
-  width: 100%;
-`;
-
-const StyledConditions = styled.div`
-  display: flex;
-  flex-direction: column;
-  row-gap: ${themeCssVariables.spacing[0]};
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'start',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+  },
+  childContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-6'],
+    width: '100%',
+  },
+  conditions: {
+    display: 'flex',
+    flexDirection: 'column',
+    rowGap: spacing['--t-spacing-0'],
+  },
+});
 
 type WorkflowStepFilterBuilderProps = {
   instanceId: string;
@@ -62,11 +62,11 @@ const WorkflowStepFilterBuilderConditions = ({
     });
 
   return (
-    <StyledConditions>
+    <div {...stylex.props(styles.conditions)}>
       <InputLabel>{t`Conditions`}</InputLabel>
       {isDefined(rootStepFilterGroup) ? (
-        <StyledContainer>
-          <StyledChildContainer>
+        <div {...stylex.props(styles.container)}>
+          <div {...stylex.props(styles.childContainer)}>
             {childStepFiltersAndChildStepFilterGroups.map(
               (stepFilterGroupChild, stepFilterGroupChildIndex) =>
                 isStepFilterGroupChildAStepFilterGroup(stepFilterGroupChild) ? (
@@ -85,17 +85,17 @@ const WorkflowStepFilterBuilderConditions = ({
                   />
                 ),
             )}
-          </StyledChildContainer>
+          </div>
           {!readonly && (
             <WorkflowStepFilterAddFilterRuleSelect
               stepFilterGroup={rootStepFilterGroup}
             />
           )}
-        </StyledContainer>
+        </div>
       ) : (
         <WorkflowStepFilterAddRootStepFilterButton />
       )}
-    </StyledConditions>
+    </div>
   );
 };
 

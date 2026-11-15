@@ -7,14 +7,16 @@ import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAto
 import { useSetAtomFamilyState } from '@/ui/utilities/state/jotai/hooks/useSetAtomFamilyState';
 import { httpRequestTestDataFamilyState } from '@/workflow/workflow-steps/workflow-actions/http-request-action/states/httpRequestTestDataFamilyState';
 import { t } from '@lingui/core/macro';
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledVariableInputsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  variableInputsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+  },
+});
 
 type HttpRequestTestVariableInputProps = {
   httpRequestFormData: HttpRequestFormData;
@@ -69,7 +71,7 @@ export const HttpRequestTestVariableInput = ({
 
   return (
     <FormFieldInputContainer>
-      <StyledVariableInputsContainer>
+      <div {...stylex.props(styles.variableInputsContainer)}>
         {variableArray.map((variablePath) => (
           <FormTextFieldInput
             key={variablePath}
@@ -84,7 +86,7 @@ export const HttpRequestTestVariableInput = ({
             }
           />
         ))}
-      </StyledVariableInputsContainer>
+      </div>
     </FormFieldInputContainer>
   );
 };

@@ -32,7 +32,9 @@ import { BodyInput } from './BodyInput';
 import { HttpRequestExecutionResult } from './HttpRequestExecutionResult';
 import { HttpRequestTestVariableInput } from './HttpRequestTestVariableInput';
 import { KeyValuePairInput } from './KeyValuePairInput';
-import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { background, spacing } from 'twenty-ui/theme/tokens.stylex';
 type WorkflowEditActionHttpRequestProps = {
   action: WorkflowHttpRequestAction;
   actionOptions: {
@@ -41,27 +43,27 @@ type WorkflowEditActionHttpRequestProps = {
   };
 };
 
-const StyledTabListContainer = styled.div`
-  background-color: ${themeCssVariables.background.secondary};
-  padding-left: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledTestTabContent = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[4]};
-  height: 100%;
-  min-height: 400px;
-`;
-
-const StyledConfigurationTabContent = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[4]};
-  height: 100%;
-`;
+const styles = stylex.create({
+  tabListContainer: {
+    backgroundColor: background['--t-background-secondary'],
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+  testTabContent: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-4'],
+    height: '100%',
+    minHeight: '400px',
+  },
+  configurationTabContent: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-4'],
+    height: '100%',
+  },
+});
 
 const StyledFullHeightFormRawJsonFieldInputContainer = styled.div`
   display: flex;
@@ -132,18 +134,18 @@ export const WorkflowEditActionHttpRequest = ({
     <TabListRoot
       componentInstanceId={WORKFLOW_HTTP_REQUEST_TAB_LIST_COMPONENT_ID}
     >
-      <StyledTabListContainer>
+      <div {...stylex.props(styles.tabListContainer)}>
         <TabList
           aria-label={t`HTTP request`}
           tabs={tabs}
           behaveAsLinks={false}
           componentInstanceId={WORKFLOW_HTTP_REQUEST_TAB_LIST_COMPONENT_ID}
         />
-      </StyledTabListContainer>
+      </div>
       <WorkflowStepTabPanel value={activeTabId ?? ''}>
         <WorkflowStepBody>
           {activeTabId === WorkflowHttpRequestTabId.CONFIGURATION && (
-            <StyledConfigurationTabContent>
+            <div {...stylex.props(styles.configurationTabContent)}>
               <FormTextFieldInput
                 label={t`URL`}
                 placeholder={t`https://api.example.com/endpoint`}
@@ -194,10 +196,10 @@ export const WorkflowEditActionHttpRequest = ({
                   error={error}
                 />
               </StyledFullHeightFormRawJsonFieldInputContainer>
-            </StyledConfigurationTabContent>
+            </div>
           )}
           {activeTabId === WorkflowHttpRequestTabId.TEST && (
-            <StyledTestTabContent>
+            <div {...stylex.props(styles.testTabContent)}>
               <HttpRequestTestVariableInput
                 httpRequestFormData={formData}
                 actionId={action.id}
@@ -207,7 +209,7 @@ export const WorkflowEditActionHttpRequest = ({
                 httpRequestTestData={httpRequestTestData}
                 isTesting={isTesting}
               />
-            </StyledTestTabContent>
+            </div>
           )}
         </WorkflowStepBody>
       </WorkflowStepTabPanel>

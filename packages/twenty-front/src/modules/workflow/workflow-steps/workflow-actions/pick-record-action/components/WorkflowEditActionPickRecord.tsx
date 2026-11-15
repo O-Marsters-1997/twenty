@@ -1,5 +1,4 @@
 import { InputHint } from '@/ui/input/components/internal/InputHint/InputHint';
-import { styled } from '@linaria/react';
 import { i18n } from '@lingui/core';
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react/macro';
@@ -18,10 +17,13 @@ import { useObjectMetadataItemSelectOptions } from '@/object-metadata/hooks/useO
 import { type WorkflowPickRecordAction } from '@/workflow/types/Workflow';
 import { WorkflowStepBody } from '@/workflow/workflow-steps/components/WorkflowStepBody';
 import { WorkflowStepFooter } from '@/workflow/workflow-steps/components/WorkflowStepFooter';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledObjectSelectContainer = styled.div`
-  width: 100%;
-`;
+const styles = stylex.create({
+  objectSelectContainer: {
+    width: '100%',
+  },
+});
 
 const defaultSelectedOptionMessage = msg`Select an option`;
 
@@ -262,7 +264,7 @@ export const WorkflowEditActionPickRecord = ({
             />
 
             {isDefined(loadBalanceObjectMetadataItem) && (
-              <StyledObjectSelectContainer>
+              <div {...stylex.props(styles.objectSelectContainer)}>
                 <Select
                   dropdownId={`workflow-edit-action-pick-record-load-balance-field-${action.id}`}
                   label={t`Count by`}
@@ -283,7 +285,7 @@ export const WorkflowEditActionPickRecord = ({
                     {t`${loadBalanceObjectMetadataItem.labelPlural} have no relation to ${loadBalancePoolObjectLabel}. Pick a different object to balance by.`}
                   </InputHint>
                 )}
-              </StyledObjectSelectContainer>
+              </div>
             )}
           </>
         )}

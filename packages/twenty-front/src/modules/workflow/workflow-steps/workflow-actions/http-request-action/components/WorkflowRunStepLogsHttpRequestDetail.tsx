@@ -32,45 +32,67 @@ import {
   StyledSummaryHeader,
   StyledTitle,
 } from '@/workflow/workflow-steps/workflow-actions/components/workflowRunStepLogsStyles';
+import * as stylex from '@stylexjs/stylex';
+import { background, border, font, spacing, color } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledMethodBadge = styled.span<{ method: string }>`
-  background: ${themeCssVariables.background.transparent.light};
-  border-radius: ${themeCssVariables.border.radius.xs};
-  color: ${themeCssVariables.font.color.primary};
-  font-family: ${themeCssVariables.font.family};
-  font-size: ${themeCssVariables.font.size.xs};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-  padding: ${themeCssVariables.spacing['0.5']} ${themeCssVariables.spacing[1]};
-  text-transform: uppercase;
-`;
-
-const StyledNetworkErrorBadge = styled.span`
-  align-items: center;
-  background: ${themeCssVariables.background.transparent.danger};
-  border-radius: ${themeCssVariables.border.radius.xs};
-  color: ${themeCssVariables.color.red};
-  display: inline-flex;
-  font-size: ${themeCssVariables.font.size.xs};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-  gap: ${themeCssVariables.spacing[1]};
-  padding: ${themeCssVariables.spacing['0.5']} ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  methodBadge: {
+    background: backgroundTransparent['--t-background-transparent-light'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-xs'],
+    borderTopRightRadius: borderRadius['--t-border-radius-xs'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-xs'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-xs'],
+    color: fontColor['--t-font-color-primary'],
+    fontFamily: font['--t-font-family'],
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    paddingTop: spacing['--t-spacing-0_5'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: spacing['--t-spacing-0_5'],
+    paddingLeft: spacing['--t-spacing-1'],
+    textTransform: 'uppercase',
+  },
+  networkErrorBadge: {
+    alignItems: 'center',
+    background: backgroundTransparent['--t-background-transparent-danger'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-xs'],
+    borderTopRightRadius: borderRadius['--t-border-radius-xs'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-xs'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-xs'],
+    color: color['--t-color-red'],
+    display: 'inline-flex',
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    gap: spacing['--t-spacing-1'],
+    paddingTop: spacing['--t-spacing-0_5'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: spacing['--t-spacing-0_5'],
+    paddingLeft: spacing['--t-spacing-1'],
+  },
+  headerTable: {
+    background: backgroundTransparent['--t-background-transparent-lighter'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-light'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    display: 'grid',
+    gap: `${spacing['--t-spacing-1']} ${spacing['--t-spacing-3']}`,
+    gridTemplateColumns: 'max-content 1fr',
+    paddingTop: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingBottom: spacing['--t-spacing-3'],
+    paddingLeft: spacing['--t-spacing-3'],
+  },
+});
 
 const StyledUrl = styled.div`
   color: ${themeCssVariables.font.color.tertiary};
   font-family: ${MONOSPACE_FONT_FAMILY};
   font-size: ${themeCssVariables.font.size.sm};
   overflow-wrap: anywhere;
-`;
-
-const StyledHeaderTable = styled.div`
-  background: ${themeCssVariables.background.transparent.lighter};
-  border: 1px solid ${themeCssVariables.border.color.light};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  display: grid;
-  gap: ${themeCssVariables.spacing[1]} ${themeCssVariables.spacing[3]};
-  grid-template-columns: max-content 1fr;
-  padding: ${themeCssVariables.spacing[3]};
 `;
 
 const StyledHeaderName = styled.span`
@@ -113,14 +135,14 @@ const HeaderTable = ({ headers }: { headers: Record<string, string> }) => {
   }
 
   return (
-    <StyledHeaderTable>
+    <div {...stylex.props(styles.headerTable)}>
       {entries.map(([name, value]) => (
         <Fragment key={name}>
           <StyledHeaderName>{name}</StyledHeaderName>
           <StyledHeaderValue>{value}</StyledHeaderValue>
         </Fragment>
       ))}
-    </StyledHeaderTable>
+    </div>
   );
 };
 
@@ -174,9 +196,9 @@ export const WorkflowRunStepLogsHttpRequestDetail = ({
             <StyledTitle>{t`HTTP request`}</StyledTitle>
           </StyledHeaderLeft>
           <StyledBadgeGroup>
-            <StyledMethodBadge method={request.method}>
+            <span method={request.method} {...stylex.props(styles.methodBadge)}>
               {request.method}
-            </StyledMethodBadge>
+            </span>
             {isDefined(response) ? (
               <StyledStatusBadge isSuccess={isSuccess}>
                 {response.status}
@@ -186,10 +208,10 @@ export const WorkflowRunStepLogsHttpRequestDetail = ({
                   : ''}
               </StyledStatusBadge>
             ) : (
-              <StyledNetworkErrorBadge>
+              <span {...stylex.props(styles.networkErrorBadge)}>
                 <IconAlertTriangle size={12} />
                 {t`Network error`}
-              </StyledNetworkErrorBadge>
+              </span>
             )}
           </StyledBadgeGroup>
         </StyledSummaryHeader>
