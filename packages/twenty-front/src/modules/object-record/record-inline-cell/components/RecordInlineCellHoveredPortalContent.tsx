@@ -1,33 +1,32 @@
 import { RecordInlineCellHoveredPortal } from '@/object-record/record-inline-cell/components/RecordInlineCellHoveredPortal';
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { background, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledRecordTableCellHoveredPortalContent = styled.div<{
-  readonly?: boolean;
-  isCentered?: boolean;
-}>`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  justify-content: ${({ isCentered }) =>
-    isCentered === true ? 'center' : 'normal'};
-
-  width: 100%;
-`;
-
-const StyledInlineCellBaseContainer = styled.div<{ readonly: boolean }>`
-  align-items: center;
-  background: var(
+const styles = stylex.create({
+  inlineCellBaseContainer: {
+    alignItems: 'center',
+    background: `var(
     --record-card-background-color,
-    ${themeCssVariables.background.primary}
-  );
-  box-sizing: border-box;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  height: fit-content;
-  user-select: text;
-  width: 100%;
-`;
+    ${background['--t-background-primary']}
+  )`,
+    boxSizing: 'border-box',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    height: 'fit-content',
+    userSelect: 'text',
+    width: '100%',
+  },
+  content: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    justifyContent: 'normal',
+    width: '100%',
+  },
+  contentCentered: {
+    justifyContent: 'center',
+  },
+});
 
 type RecordInlineCellHoveredPortalContentProps = {
   children: React.ReactNode;
@@ -39,22 +38,23 @@ type RecordInlineCellHoveredPortalContentProps = {
 export const RecordInlineCellHoveredPortalContent = ({
   children,
   isCentered,
-  readonly,
   onMouseLeave,
 }: RecordInlineCellHoveredPortalContentProps) => {
   return (
     <RecordInlineCellHoveredPortal>
-      <StyledInlineCellBaseContainer
-        readonly={readonly}
+      <div
         onMouseLeave={onMouseLeave}
+        {...stylex.props(styles.inlineCellBaseContainer)}
       >
-        <StyledRecordTableCellHoveredPortalContent
-          isCentered={isCentered}
-          readonly={readonly}
+        <div
+          {...stylex.props(
+            styles.content,
+            isCentered === true && styles.contentCentered,
+          )}
         >
           {children}
-        </StyledRecordTableCellHoveredPortalContent>
-      </StyledInlineCellBaseContainer>
+        </div>
+      </div>
     </RecordInlineCellHoveredPortal>
   );
 };

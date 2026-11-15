@@ -10,16 +10,24 @@ import { FileIcon } from '@/file/components/FileIcon';
 import { t } from '@lingui/core/macro';
 import { getSafeUrl, isDefined } from 'twenty-shared/utils';
 import { Button } from 'twenty-ui/primitives/input';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledFileInput = styled.input`
-  display: none;
-`;
-
-const StyledFileLine = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  fileInput: {
+    display: 'none',
+  },
+  fileLine: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+  },
+  uploadFileContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+  },
+});
 
 const StyledLink = styled.a`
   align-items: center;
@@ -29,12 +37,6 @@ const StyledLink = styled.a`
   :hover {
     color: ${themeCssVariables.font.color.secondary};
   }
-`;
-
-const StyledUploadFileContainer = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
 `;
 
 export const FileBlock = createReactBlockSpec(
@@ -89,7 +91,7 @@ export const FileBlock = createReactBlockSpec(
 
       if (safeUrl) {
         return (
-          <StyledFileLine>
+          <div {...stylex.props(styles.fileLine)}>
             <FileIcon
               fileCategory={block.props.fileCategory as AttachmentFileCategory}
               thumbnailUrl={safeUrl}
@@ -101,19 +103,19 @@ export const FileBlock = createReactBlockSpec(
             >
               {block.props.name}
             </StyledLink>
-          </StyledFileLine>
+          </div>
         );
       }
 
       return (
-        <StyledUploadFileContainer>
-          <StyledFileInput
+        <div {...stylex.props(styles.uploadFileContainer)}>
+          <input
             ref={inputFileRef}
             onChange={handleFileChange}
-            type="file"
+            type="file" {...stylex.props(styles.fileInput)}
           />
           <Button onClick={handleUploadFileClick}>{t`Upload File`}</Button>
-        </StyledUploadFileContainer>
+        </div>
       );
     },
   },

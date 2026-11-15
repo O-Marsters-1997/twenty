@@ -1,30 +1,33 @@
-import { styled } from '@linaria/react';
 import { type ReactNode } from 'react';
 import { type IconComponent } from 'twenty-ui/icon';
-import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 
-import { StyledAiChatAskStatusMessage } from '@/ai/components/AiChatAskStyledComponents';
+import { aiChatAskStyles } from '@/ai/components/AiChatAskStyledComponents';
 import { ShimmeringText } from '@/ai/components/ShimmeringText';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  align-items: flex-start;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  padding: ${themeCssVariables.spacing[1]} 0;
-
-  svg {
-    flex-shrink: 0;
-    margin-top: 1px;
-  }
-`;
-
-const StyledContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing['0.5']};
-  min-width: 0;
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'flex-start',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    paddingBlock: spacing['--t-spacing-1'],
+    paddingInline: 0,
+  },
+  icon: {
+    display: 'flex',
+    flexShrink: 0,
+    marginTop: '1px',
+  },
+  content: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-0_5'],
+    minWidth: '0',
+  },
+});
 
 type AiChatAskStatusRowProps = {
   Icon: IconComponent;
@@ -42,20 +45,22 @@ export const AiChatAskStatusRow = ({
   const theme = useTheme();
 
   const messageElement = (
-    <StyledAiChatAskStatusMessage>{message}</StyledAiChatAskStatusMessage>
+    <span {...stylex.props(aiChatAskStyles.statusMessage)}>{message}</span>
   );
 
   return (
-    <StyledContainer>
-      <Icon size={theme.icon.size.sm} />
-      <StyledContent>
+    <div {...stylex.props(styles.container)}>
+      <span {...stylex.props(styles.icon)}>
+        <Icon size={theme.icon.size.sm} />
+      </span>
+      <div {...stylex.props(styles.content)}>
         {isShimmering ? (
           <ShimmeringText>{messageElement}</ShimmeringText>
         ) : (
           messageElement
         )}
         {children}
-      </StyledContent>
-    </StyledContainer>
+      </div>
+    </div>
   );
 };

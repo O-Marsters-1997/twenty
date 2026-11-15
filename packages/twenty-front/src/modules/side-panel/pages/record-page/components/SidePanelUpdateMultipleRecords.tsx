@@ -3,11 +3,13 @@ import { useContextStoreObjectMetadataItemOrThrow } from '@/context-store/hooks/
 
 import { UpdateMultipleRecordsContainer } from '@/object-record/record-update-multiple/components/UpdateMultipleRecordsContainer';
 import { useComponentInstanceStateContext } from '@/ui/utilities/state/component-state/hooks/useComponentInstanceStateContext';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledSidePanelRecord = styled.div`
-  height: 100%;
-`;
+const styles = stylex.create({
+  sidePanelRecord: {
+    height: '100%',
+  },
+});
 
 export const SidePanelUpdateMultipleRecords = () => {
   const sidePanelPageInstanceId = useComponentInstanceStateContext(
@@ -23,11 +25,11 @@ export const SidePanelUpdateMultipleRecords = () => {
   );
 
   return (
-    <StyledSidePanelRecord>
+    <div {...stylex.props(styles.sidePanelRecord)}>
       <UpdateMultipleRecordsContainer
         objectNameSingular={objectMetadataItem.nameSingular}
         contextStoreInstanceId={sidePanelPageInstanceId}
       />
-    </StyledSidePanelRecord>
+    </div>
   );
 };

@@ -5,13 +5,15 @@ import {
   RestrictToVerticalAxis,
 } from '@dnd-kit/abstract/modifiers';
 import { type UseSortableInput, useSortable } from '@dnd-kit/react/sortable';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { type ReactNode, useCallback, useState } from 'react';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import {
+  backgroundTransparent,
+  borderRadius,
+} from 'twenty-ui/theme/tokens.stylex';
 
 import { DND_KIT_PLUGINS_WITHOUT_OPTIMISTIC } from '@/ui/utilities/drag-and-drop/constants/DndKitPluginsWithoutOptimistic';
-import { DRAG_SOURCE_OPACITY } from '@/ui/utilities/drag-and-drop/constants/DragSourceOpacity';
 import { DragDropItemSortableHandleRefContext } from '@/ui/utilities/drag-and-drop/context/DragDropItemSortableHandleRefContext';
 import { type DragDropItemDropTargetOrientation } from '@/ui/utilities/drag-and-drop/types/DragDropItemDropTargetOrientation';
 import { preventNativeDragStart } from '@/ui/utilities/drag-and-drop/utils/preventNativeDragStart';
@@ -26,35 +28,48 @@ const SORTABLE_TRANSITION = {
   idle: true,
 };
 
-const StyledSortableRoot = styled.div<{
-  $disabled?: boolean;
-  $fill?: boolean;
-  $isDragSourceFaded?: boolean;
-  $isDraggingHighlighted?: boolean;
-}>`
-  background: ${({ $isDraggingHighlighted }) =>
-    $isDraggingHighlighted
-      ? themeCssVariables.background.transparent.light
-      : 'transparent'};
-  border-radius: ${({ $isDraggingHighlighted }) =>
-    $isDraggingHighlighted ? themeCssVariables.border.radius.sm : '0'};
-  cursor: ${({ $disabled }) => ($disabled ? 'inherit' : 'grab')};
-  display: ${({ $fill }) => ($fill ? 'flex' : 'block')};
-  flex-shrink: ${({ $fill }) => ($fill ? 0 : 'initial')};
-  height: ${({ $fill }) => ($fill ? '100%' : 'auto')};
-  min-height: 0;
-  min-width: ${({ $fill }) => ($fill ? '0' : 'auto')};
-  opacity: ${({ $isDragSourceFaded }) =>
-    $isDragSourceFaded ? DRAG_SOURCE_OPACITY : 1};
-  outline: none;
-  position: relative;
-  transition: background 0.1s ease;
-  will-change: transform;
-
-  &:has([data-dnd-sortable-handle]) {
-    cursor: inherit;
-  }
-`;
+const styles = stylex.create({
+  root: {
+    backgroundColor: 'transparent',
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+    cursor: {
+      default: 'grab',
+      ':has([data-dnd-sortable-handle])': 'inherit',
+    },
+    display: 'block',
+    height: 'auto',
+    minHeight: 0,
+    minWidth: 'auto',
+    outlineStyle: 'none',
+    position: 'relative',
+    transitionDuration: '0.1s',
+    transitionProperty: 'background-color',
+    transitionTimingFunction: 'ease',
+    willChange: 'transform',
+  },
+  rootDisabled: {
+    cursor: 'inherit',
+  },
+  rootFill: {
+    display: 'flex',
+    flexShrink: 0,
+    height: '100%',
+    minWidth: 0,
+  },
+  rootDragSourceFaded: {
+    opacity: 'var(--dnd-drag-source-opacity)',
+  },
+  rootDraggingHighlighted: {
+    backgroundColor: backgroundTransparent['--t-background-transparent-light'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+  },
+});
 
 type DragDropItemSortableCellProps = {
   accept?: UseSortableInput['accept'];
@@ -166,20 +181,23 @@ export const DragDropItemSortableCell = ({
 
   return (
     <DragDropItemSortableHandleRefContext.Provider value={setSortableHandleRef}>
-      <StyledSortableRoot
+      <div
         ref={setSortableRef}
-        $disabled={disabled}
-        $fill={fill}
-        $isDragSourceFaded={fadeSourceWhileDragging && isDragSource}
-        $isDraggingHighlighted={highlightWhileDragging && isDragging}
         onDragStart={
           disabled && allowNativeDragWhenDisabled
             ? undefined
             : preventNativeDragStart
         }
+        {...stylex.props(
+          styles.root,
+          disabled && styles.rootDisabled,
+          fill && styles.rootFill,
+          fadeSourceWhileDragging && isDragSource && styles.rootDragSourceFaded,
+          highlightWhileDragging && isDragging && styles.rootDraggingHighlighted,
+        )}
       >
         {children}
-      </StyledSortableRoot>
+      </div>
     </DragDropItemSortableHandleRefContext.Provider>
   );
 };

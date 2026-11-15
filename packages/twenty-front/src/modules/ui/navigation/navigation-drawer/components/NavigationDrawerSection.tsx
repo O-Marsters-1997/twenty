@@ -1,32 +1,28 @@
 import { isNavigationDrawerExpandedState } from '@/ui/navigation/states/isNavigationDrawerExpanded';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { general, spacing } from 'twenty-ui/theme/tokens.stylex';
 import { useIsMobile } from 'twenty-ui/utilities';
 
-const StyledSection = styled.div`
-  width: 100%;
-`;
-
-const StyledSectionInnerContainerMinusScrollPadding = styled.div<{
-  isMobile: boolean;
-  isCollapsed: boolean;
-}>`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.betweenSiblingsGap};
-  width: ${({ isMobile, isCollapsed }) =>
-    isMobile || isCollapsed
-      ? '100%'
-      : `calc(100% - ${themeCssVariables.spacing[2]})`};
-`;
+const styles = stylex.create({
+  section: {
+    width: '100%',
+  },
+  innerContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: general['--t-between-siblings-gap'],
+    width: `calc(100% - ${spacing['--t-spacing-2']})`,
+  },
+  innerContainerFull: {
+    width: '100%',
+  },
+});
 
 export const NavigationDrawerSection = ({
   children,
-  className,
 }: {
   children: React.ReactNode;
-  className?: string;
 }) => {
   const isMobile = useIsMobile();
   const isNavigationDrawerExpanded = useAtomStateValue(
@@ -35,13 +31,15 @@ export const NavigationDrawerSection = ({
   const isCollapsed = !isMobile && !isNavigationDrawerExpanded;
 
   return (
-    <StyledSection className={className}>
-      <StyledSectionInnerContainerMinusScrollPadding
-        isMobile={isMobile}
-        isCollapsed={isCollapsed}
+    <div {...stylex.props(styles.section)}>
+      <div
+        {...stylex.props(
+          styles.innerContainer,
+          (isMobile || isCollapsed) && styles.innerContainerFull,
+        )}
       >
         {children}
-      </StyledSectionInnerContainerMinusScrollPadding>
-    </StyledSection>
+      </div>
+    </div>
   );
 };

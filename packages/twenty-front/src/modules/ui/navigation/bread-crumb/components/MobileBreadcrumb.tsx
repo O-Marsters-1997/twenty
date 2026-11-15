@@ -3,52 +3,68 @@ import { type BreadcrumbProps } from '@/ui/navigation/bread-crumb/types/Breadcru
 import { getBreadcrumbItems } from '@/ui/navigation/bread-crumb/utils/getBreadcrumbItems';
 import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
-import { styled } from '@linaria/react';
 import { isNonEmptyString } from '@sniptt/guards';
 import { Link } from 'react-router-dom';
 import { isDefined } from 'twenty-shared/utils';
 import { IconChevronLeft } from 'twenty-ui/icon';
 import { Breadcrumb as BreadcrumbPrimitive } from 'twenty-ui/primitives/navigation';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  color,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type MobileBreadcrumbProps = BreadcrumbProps;
 
-const StyledWrapper = styled.nav`
-  align-items: center;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: grid;
-  font-size: ${themeCssVariables.font.size.md};
-  grid-auto-flow: column;
-  grid-column-gap: ${themeCssVariables.spacing[1]};
-  height: ${themeCssVariables.spacing[8]};
-  max-width: 100%;
-  min-width: 0;
-`;
-
-const StyledLinkContainer = styled.div`
-  min-width: 0;
-
-  > a {
-    color: inherit;
-    display: block;
-    overflow: hidden;
-    text-decoration: none;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-
-    &:focus-visible {
-      outline: 2px solid ${themeCssVariables.color.blue};
-      outline-offset: -2px;
-    }
-  }
-`;
-
-const StyledText = styled.span`
-  color: inherit;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
+const styles = stylex.create({
+  wrapper: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    columnGap: spacing['--t-spacing-1'],
+    display: 'grid',
+    fontSize: fontSize['--t-font-size-md'],
+    gridAutoFlow: 'column',
+    height: spacing['--t-spacing-8'],
+    maxWidth: '100%',
+    minWidth: 0,
+  },
+  linkContainer: {
+    minWidth: 0,
+  },
+  link: {
+    color: 'inherit',
+    display: 'block',
+    outlineColor: {
+      default: null,
+      ':focus-visible': color['--t-color-blue'],
+    },
+    outlineOffset: {
+      default: null,
+      ':focus-visible': '-2px',
+    },
+    outlineStyle: {
+      default: null,
+      ':focus-visible': 'solid',
+    },
+    outlineWidth: {
+      default: null,
+      ':focus-visible': '2px',
+    },
+    overflow: 'hidden',
+    textDecoration: 'none',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  text: {
+    color: 'inherit',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+});
 
 export const MobileBreadcrumb = ({
   className,
@@ -75,21 +91,32 @@ export const MobileBreadcrumb = ({
 
   const text = previousLink.children;
   const title = isNonEmptyString(text) ? text : undefined;
+  const wrapperProps = stylex.props(styles.wrapper);
 
   return (
-    <StyledWrapper aria-label={t`Breadcrumb`} className={className}>
+    <nav
+      aria-label={t`Breadcrumb`}
+      {...wrapperProps}
+      className={[wrapperProps.className, className].join(' ')}
+    >
       {isNonEmptyString(previousLink.href) ? (
         <>
           <IconChevronLeft size={theme.icon.size.md} aria-hidden />
-          <StyledLinkContainer>
-            <Link title={title} to={previousLink.href}>
+          <div {...stylex.props(styles.linkContainer)}>
+            <Link
+              title={title}
+              to={previousLink.href}
+              {...stylex.props(styles.link)}
+            >
               <Trans>Back to {text}</Trans>
             </Link>
-          </StyledLinkContainer>
+          </div>
         </>
       ) : (
-        <StyledText title={title}>{text}</StyledText>
+        <span title={title} {...stylex.props(styles.text)}>
+          {text}
+        </span>
       )}
-    </StyledWrapper>
+    </nav>
   );
 };

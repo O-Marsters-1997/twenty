@@ -1,20 +1,41 @@
-import { themeCssVariables } from 'twenty-ui/theme';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import {
+  backgroundTransparent,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledDropdownMenuSectionLabel = styled.div`
-  align-items: center;
-  background-color: ${themeCssVariables.background.transparent.lighter};
-  box-sizing: border-box;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  font-size: ${themeCssVariables.font.size.xxs};
-  justify-content: flex-start;
-  min-height: 20px;
-  padding-left: ${themeCssVariables.spacing[2]};
-  padding-right: ${themeCssVariables.spacing[2]};
-  user-select: none;
-  width: 100%;
-`;
+import {
+  itemsLayout,
+  separatorMarker,
+} from '@/ui/layout/dropdown/components/DropdownMenuItemsContainer.stylex';
+
+const styles = stylex.create({
+  root: {
+    alignItems: 'center',
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
+    boxSizing: 'border-box',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    fontSize: fontSize['--t-font-size-xxs'],
+    justifyContent: 'flex-start',
+    marginBottom: `calc(${itemsLayout.padding} - ${itemsLayout.rowGap})`,
+    marginInline: `calc(0px - ${itemsLayout.padding})`,
+    marginTop: {
+      default: null,
+      ':first-child': `calc(0px - ${itemsLayout.padding})`,
+      [stylex.when.siblingBefore(':is(*)', separatorMarker)]:
+        `calc(0px - ${itemsLayout.rowGap})`,
+    },
+    minHeight: '20px',
+    paddingLeft: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    userSelect: 'none',
+    width: `calc(100% + ${itemsLayout.padding} + ${itemsLayout.padding})`,
+  },
+});
 
 export type DropdownMenuSectionLabelProps = {
   label: string;
@@ -23,9 +44,5 @@ export type DropdownMenuSectionLabelProps = {
 export const DropdownMenuSectionLabel = ({
   label,
 }: DropdownMenuSectionLabelProps) => {
-  return (
-    <StyledDropdownMenuSectionLabel data-dropdown-menu-section-label>
-      {label}
-    </StyledDropdownMenuSectionLabel>
-  );
+  return <div {...stylex.props(styles.root)}>{label}</div>;
 };

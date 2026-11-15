@@ -15,7 +15,6 @@ import { shouldHideChartSetting } from '@/side-panel/pages/page-layout/utils/sho
 import { useObjectMetadataItems } from '@/object-metadata/hooks/useObjectMetadataItems';
 import { hasWidgetTooManyGroupsComponentState } from '@/page-layout/widgets/graph/states/hasWidgetTooManyGroupsComponentState';
 import { useAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useAtomComponentState';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isFieldMetadataDateKind } from 'twenty-shared/utils';
 
@@ -24,13 +23,16 @@ import { assertChartWidgetOrThrow } from '@/side-panel/pages/page-layout/utils/a
 import { getCurrentGraphTypeFromConfig } from '@/side-panel/pages/page-layout/utils/getCurrentGraphTypeFromConfig';
 import { isWidgetConfigurationOfType } from '@/side-panel/pages/page-layout/utils/isWidgetConfigurationOfType';
 import { type PageLayoutWidget } from '@/page-layout/types/PageLayoutWidget';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledSidePanelContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow: hidden;
-`;
+const styles = stylex.create({
+  sidePanelContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    overflow: 'hidden',
+  },
+});
 
 export const ChartSettings = ({ widget }: { widget: PageLayoutWidget }) => {
   const { updateSidePanelPageInfo } = useUpdateSidePanelPageInfo();
@@ -137,7 +139,7 @@ export const ChartSettings = ({ widget }: { widget: PageLayoutWidget }) => {
       : CHART_SETTINGS_HEADINGS.X_AXIS;
 
   return (
-    <StyledSidePanelContainer>
+    <div {...stylex.props(styles.sidePanelContainer)}>
       <SidePanelList selectableItemIds={visibleItemIds}>
         <ChartTypeSelectionSection
           currentGraphType={currentGraphType}
@@ -179,6 +181,6 @@ export const ChartSettings = ({ widget }: { widget: PageLayoutWidget }) => {
           );
         })}
       </SidePanelList>
-    </StyledSidePanelContainer>
+    </div>
   );
 };

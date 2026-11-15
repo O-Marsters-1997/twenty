@@ -1,5 +1,3 @@
-import { styled } from '@linaria/react';
-
 import { useRecordTableContextOrThrow } from '@/object-record/record-table/contexts/RecordTableContext';
 import { RecordTableColumnHead } from '@/object-record/record-table/record-table-header/components/RecordTableColumnHead';
 import { RecordTableColumnHeadWithDropdown } from '@/object-record/record-table/record-table-header/components/RecordTableColumnHeadWithDropdown';
@@ -8,7 +6,7 @@ import { RecordTableHeaderResizeHandler } from '@/object-record/record-table/rec
 import { RecordTableHeaderCellContainer } from '@/object-record/record-table/record-table-header/components/RecordTableHeaderCellContainer';
 
 import { hasRecordGroupsComponentSelector } from '@/object-record/record-group/states/selectors/hasRecordGroupsComponentSelector';
-import { TABLE_Z_INDEX } from '@/object-record/record-table/constants/TableZIndex';
+import { recordTableZIndex } from '../../constants/recordTableLayout.stylex';
 import { RecordTableHeaderLabelIdentifierCellPlusButton } from '@/object-record/record-table/record-table-header/components/RecordTableHeaderLabelIdentifierCellPlusButton';
 import { getVisibleFieldWithLowestPosition } from '@/object-record/record-table/record-table-header/utils/getVisibleFieldWithLowestPosition';
 import { isRecordTableColumnHeadersReadOnlyComponentState } from '@/object-record/record-table/states/isRecordTableColumnHeadersReadOnlyComponentState';
@@ -23,15 +21,9 @@ import { useAtomComponentFamilyStateValue } from '@/ui/utilities/state/jotai/hoo
 import { useAtomComponentSelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentSelectorValue';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { cx } from '@linaria/core';
+import * as stylex from '@stylexjs/stylex';
 import { useState } from 'react';
 import { isDefined } from 'twenty-shared/utils';
-
-const StyledPlusButtonWrapper = styled.div`
-  position: absolute;
-  right: 0;
-  top: 0;
-  z-index: ${TABLE_Z_INDEX.headerColumns.headerColumnsSticky};
-`;
 
 export const RecordTableHeaderFirstCell = () => {
   const { objectMetadataItem, visibleRecordFields } =
@@ -109,9 +101,9 @@ export const RecordTableHeaderFirstCell = () => {
         />
       )}
       {iconIsVisible && !isRecordTableColumnHeadersReadOnly && (
-        <StyledPlusButtonWrapper>
+        <div {...stylex.props(styles.plusButtonWrapper)}>
           <RecordTableHeaderLabelIdentifierCellPlusButton />
-        </StyledPlusButtonWrapper>
+        </div>
       )}
 
       {isRecordTableColumnResizable && (
@@ -120,3 +112,12 @@ export const RecordTableHeaderFirstCell = () => {
     </RecordTableHeaderCellContainer>
   );
 };
+
+const styles = stylex.create({
+  plusButtonWrapper: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    zIndex: recordTableZIndex.headerColumnsSticky,
+  },
+});

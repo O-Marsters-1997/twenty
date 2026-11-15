@@ -1,11 +1,18 @@
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { type ReactNode } from 'react';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledColumn = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[1]};
-  width: 100%;
-`;
+const styles = stylex.create({
+  column: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-1'],
+    width: '100%',
+  },
+});
 
-export const AdvancedFilterSidePanelColumn = StyledColumn;
+export const AdvancedFilterSidePanelColumn = ({
+  children,
+}: {
+  children: ReactNode;
+}) => <div {...stylex.props(styles.column)}>{children}</div>;

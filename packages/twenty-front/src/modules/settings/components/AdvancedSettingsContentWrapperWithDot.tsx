@@ -1,11 +1,34 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { IconPoint } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledWrapper = styled.div`
-  position: relative;
-  width: 100%;
-`;
+const styles = stylex.create({
+  wrapper: {
+    position: 'relative',
+    width: '100%',
+  },
+  iconPointContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    marginRight: '0',
+  },
+  dotContainer: {
+    display: 'flex',
+    height: '100%',
+    left: `calc(-1 * ${spacing['--t-spacing-5']})`,
+    position: 'absolute',
+  },
+  dotContainerTop: {
+    alignItems: 'stretch',
+    top: 0,
+  },
+  dotContainerCentered: {
+    alignItems: 'center',
+    top: 'auto',
+  },
+});
+
 type DotPosition = 'top' | 'centered';
 
 type AdvancedSettingsContentWrapperWithDotProps = {
@@ -13,23 +36,6 @@ type AdvancedSettingsContentWrapperWithDotProps = {
   hideDot?: boolean;
   dotPosition?: DotPosition;
 };
-
-const StyledDotContainer = styled.div<{ dotPosition: DotPosition }>`
-  align-items: ${({ dotPosition }) =>
-    dotPosition === 'top' ? 'stretch' : 'center'};
-  display: flex;
-  height: 100%;
-  left: calc(-1 * ${themeCssVariables.spacing[5]});
-
-  position: absolute;
-  top: ${({ dotPosition }) => (dotPosition === 'top' ? '0' : 'auto')};
-`;
-
-const StyledIconPointContainer = styled.span`
-  align-items: center;
-  display: flex;
-  margin-right: 0;
-`;
 
 export const AdvancedSettingsContentWrapperWithDot = ({
   children,
@@ -39,19 +45,26 @@ export const AdvancedSettingsContentWrapperWithDot = ({
   const theme = useTheme();
 
   return (
-    <StyledWrapper>
+    <div {...stylex.props(styles.wrapper)}>
       {!hideDot && (
-        <StyledDotContainer dotPosition={dotPosition}>
-          <StyledIconPointContainer>
+        <div
+          {...stylex.props(
+            styles.dotContainer,
+            dotPosition === 'top'
+              ? styles.dotContainerTop
+              : styles.dotContainerCentered,
+          )}
+        >
+          <span {...stylex.props(styles.iconPointContainer)}>
             <IconPoint
               size={12}
               color={theme.color.yellow}
               fill={theme.color.yellow}
             />
-          </StyledIconPointContainer>
-        </StyledDotContainer>
+          </span>
+        </div>
       )}
       {children}
-    </StyledWrapper>
+    </div>
   );
 };

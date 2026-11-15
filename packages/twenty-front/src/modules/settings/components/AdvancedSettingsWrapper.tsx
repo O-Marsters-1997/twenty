@@ -2,23 +2,19 @@ import { AdvancedSettingsContentWrapperWithDot } from '@/settings/components/Adv
 import { ADVANCED_SETTINGS_ANIMATION_DURATION } from '@/settings/constants/AdvancedSettingsAnimationDurations';
 import { isAdvancedModeEnabledState } from '@/ui/navigation/navigation-drawer/states/isAdvancedModeEnabledState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { Collapsible } from 'twenty-ui/primitives/layout';
 
-const StyledContainer = styled.div`
-  display: contents;
-
-  // The collapsed panel unmounts but leaves its empty root, which would still
-  // take a gap in the parent's layout. It stays rendered, out of the flow, so
-  // the panel can measure its height when it opens again.
-  > :empty {
-    position: absolute;
-  }
-`;
-
-const StyledContent = styled.div`
-  width: 100%;
-`;
+const styles = stylex.create({
+  root: {
+    ':empty': {
+      position: 'absolute',
+    },
+  },
+  content: {
+    width: '100%',
+  },
+});
 
 type DotPosition = 'top' | 'centered';
 
@@ -38,23 +34,24 @@ export const AdvancedSettingsWrapper = ({
   const isAdvancedModeEnabled = useAtomStateValue(isAdvancedModeEnabledState);
 
   return (
-    <StyledContainer>
-      <Collapsible.Root open={isAdvancedModeEnabled}>
-        <Collapsible.Panel
-          dimension={animationDimension}
-          style={{
-            transitionDuration: `${ADVANCED_SETTINGS_ANIMATION_DURATION.size}s, ${ADVANCED_SETTINGS_ANIMATION_DURATION.opacity}s`,
-          }}
-          containAnimation={false}
+    <Collapsible.Root
+      open={isAdvancedModeEnabled}
+      className={stylex.props(styles.root).className}
+    >
+      <Collapsible.Panel
+        dimension={animationDimension}
+        style={{
+          transitionDuration: `${ADVANCED_SETTINGS_ANIMATION_DURATION.size}s, ${ADVANCED_SETTINGS_ANIMATION_DURATION.opacity}s`,
+        }}
+        containAnimation={false}
+      >
+        <AdvancedSettingsContentWrapperWithDot
+          hideDot={hideDot}
+          dotPosition={dotPosition}
         >
-          <AdvancedSettingsContentWrapperWithDot
-            hideDot={hideDot}
-            dotPosition={dotPosition}
-          >
-            <StyledContent>{children}</StyledContent>
-          </AdvancedSettingsContentWrapperWithDot>
-        </Collapsible.Panel>
-      </Collapsible.Root>
-    </StyledContainer>
+          <div {...stylex.props(styles.content)}>{children}</div>
+        </AdvancedSettingsContentWrapperWithDot>
+      </Collapsible.Panel>
+    </Collapsible.Root>
   );
 };

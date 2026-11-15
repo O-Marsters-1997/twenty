@@ -1,5 +1,4 @@
 import { type DialogProps } from '@/ui/feedback/dialog-manager/types/DialogProps';
-import { styled } from '@linaria/react';
 import { motion } from 'framer-motion';
 import { Key } from 'ts-key-enum';
 
@@ -12,62 +11,71 @@ import { useListenClickOutside } from '@/ui/utilities/pointer-event/hooks/useLis
 import { useRef } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  background,
+  borderRadius,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledDialogOverlayBase = styled.div`
-  align-items: center;
-  background: ${themeCssVariables.background.overlayPrimary};
-  display: flex;
-  height: calc(100dvh / var(--t-zoom, 1));
-  justify-content: center;
-  left: 0;
-  position: fixed;
-  top: 0;
-  width: calc(100vw / var(--t-zoom, 1));
-  z-index: ${RootStackingContextZIndices.Dialog};
-`;
-const StyledDialogOverlay = motion.create(StyledDialogOverlayBase);
-
-const StyledDialogContainerBase = styled.div`
-  background: ${themeCssVariables.background.primary};
-  border-radius: ${themeCssVariables.border.radius.md};
-  display: flex;
-  flex-direction: column;
-  max-width: 320px;
-  padding: 2em;
-  position: relative;
-  width: 100%;
-`;
-const StyledDialogContainer = motion.create(StyledDialogContainerBase);
-
-const StyledDialogTitle = styled.span`
-  color: ${themeCssVariables.font.color.primary};
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-  margin-bottom: ${themeCssVariables.spacing[6]};
-  text-align: center;
-`;
-
-const StyledDialogMessage = styled.span`
-  color: ${themeCssVariables.font.color.primary};
-  font-size: ${themeCssVariables.font.size.sm};
-  font-weight: ${themeCssVariables.font.weight.regular};
-  margin-bottom: ${themeCssVariables.spacing[6]};
-  text-align: center;
-`;
-
-const StyledDialogButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-bottom: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  overlay: {
+    alignItems: 'center',
+    backgroundColor: background['--t-background-overlay-primary'],
+    display: 'flex',
+    height: 'calc(100dvh / var(--t-zoom, 1))',
+    justifyContent: 'center',
+    left: 0,
+    position: 'fixed',
+    top: 0,
+    width: 'calc(100vw / var(--t-zoom, 1))',
+  },
+  overlayZIndex: (zIndex: number) => ({
+    zIndex,
+  }),
+  container: {
+    backgroundColor: background['--t-background-primary'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    display: 'flex',
+    flexDirection: 'column',
+    maxWidth: '320px',
+    padding: '2em',
+    position: 'relative',
+    width: '100%',
+  },
+  dialogTitle: {
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    marginBottom: spacing['--t-spacing-6'],
+    textAlign: 'center',
+  },
+  dialogMessage: {
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    marginBottom: spacing['--t-spacing-6'],
+    textAlign: 'center',
+  },
+  dialogButtonContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginBottom: spacing['--t-spacing-2'],
+  },
+});
 
 export const Dialog = ({
   title,
   message,
   buttons = [],
   children,
-  className,
+  xstyle,
   onClose,
   id,
 }: DialogProps) => {
@@ -122,25 +130,30 @@ export const Dialog = ({
   });
 
   return (
-    <StyledDialogOverlay
+    <motion.div
       variants={dialogVariants}
       initial="closed"
       animate="open"
       exit="closed"
-      className={className}
       data-click-outside-id={DIALOG_CLICK_OUTSIDE_ID}
+      {...stylex.props(
+        styles.overlay,
+        styles.overlayZIndex(RootStackingContextZIndices.Dialog),
+        xstyle,
+      )}
     >
-      <StyledDialogContainer
+      <motion.div
         variants={containerVariants}
         transition={{ damping: 15, stiffness: 100 }}
         id={id}
         ref={dialogRef}
+        {...stylex.props(styles.container)}
       >
-        {title && <StyledDialogTitle>{title}</StyledDialogTitle>}
-        {message && <StyledDialogMessage>{message}</StyledDialogMessage>}
+        {title && <span {...stylex.props(styles.dialogTitle)}>{title}</span>}
+        {message && <span {...stylex.props(styles.dialogMessage)}>{message}</span>}
         {children}
         {buttons.map(({ color, onClick, title: key, variant }) => (
-          <StyledDialogButtonContainer key={key}>
+          <div key={key} {...stylex.props(styles.dialogButtonContainer)}>
             <Button
               onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
                 onClose?.();
@@ -152,9 +165,9 @@ export const Dialog = ({
             >
               {key}
             </Button>
-          </StyledDialogButtonContainer>
+          </div>
         ))}
-      </StyledDialogContainer>
-    </StyledDialogOverlay>
+      </motion.div>
+    </motion.div>
   );
 };

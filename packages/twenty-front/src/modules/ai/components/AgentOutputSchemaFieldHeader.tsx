@@ -1,10 +1,20 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { isDefined } from 'twenty-shared/utils';
 import { LightIconButton } from 'twenty-ui/components/input';
 import { IconChevronDown, IconVariable, IconX } from 'twenty-ui/icon';
-import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  animationDuration,
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  color,
+  fontColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
 
 type AgentOutputSchemaFieldHeaderProps = {
   name: string;
@@ -13,80 +23,77 @@ type AgentOutputSchemaFieldHeaderProps = {
   onRemove?: () => void;
 };
 
-const StyledHeader = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  padding-right: ${themeCssVariables.spacing[1]};
-
-  &[data-expanded='true'] {
-    box-shadow: inset 0 -1px 0 ${themeCssVariables.border.color.medium};
-  }
-`;
-
-const StyledToggle = styled.button`
-  align-items: center;
-  border-radius: ${themeCssVariables.border.radius.sm};
-  color: ${themeCssVariables.font.color.primary};
-  display: flex;
-  flex: 1;
-  gap: ${themeCssVariables.spacing[1]};
-  height: ${themeCssVariables.spacing[8]};
-  justify-content: space-between;
-  min-width: 0;
-  padding-left: ${themeCssVariables.spacing[2]};
-  text-align: left;
-
-  &:hover {
-    background: ${themeCssVariables.background.transparent.light};
-  }
-
-  &:active {
-    background: ${themeCssVariables.background.transparent.medium};
-  }
-
-  &:focus-visible {
-    outline: 2px solid ${themeCssVariables.color.blue};
-    outline-offset: 1px;
-  }
-`;
-
-const StyledTitle = styled.span`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  min-width: 0;
-
-  & > svg {
-    flex-shrink: 0;
-  }
-`;
-
-const StyledName = styled.span`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledChevron = styled.span`
-  align-items: center;
-  color: ${themeCssVariables.font.color.secondary};
-  display: flex;
-  flex-shrink: 0;
-  height: ${themeCssVariables.spacing[6]};
-  justify-content: center;
-  transition: transform
-    calc(${themeCssVariables.animation.duration.normal} * 1s) ease;
-  width: ${themeCssVariables.spacing[6]};
-
-  &[data-expanded='true'] {
-    transform: rotate(-180deg);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-  }
-`;
+const styles = stylex.create({
+  header: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+  },
+  headerExpanded: {
+    boxShadow: `inset 0 -1px 0 ${borderColor['--t-border-color-medium']}`,
+  },
+  title: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    minWidth: 0,
+  },
+  titleIcon: {
+    display: 'flex',
+    flexShrink: 0,
+  },
+  chevron: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-secondary'],
+    display: 'flex',
+    flexShrink: 0,
+    height: spacing['--t-spacing-6'],
+    justifyContent: 'center',
+    transform: 'rotate(0deg)',
+    transitionDuration: `calc(${animationDuration['--t-animation-duration-normal']} * 1s)`,
+    transitionProperty: {
+      default: 'transform',
+      [media.reducedMotion]: 'none',
+    },
+    transitionTimingFunction: 'ease',
+    width: spacing['--t-spacing-6'],
+  },
+  chevronExpanded: {
+    transform: 'rotate(-180deg)',
+  },
+  toggle: {
+    alignItems: 'center',
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    color: fontColor['--t-font-color-primary'],
+    display: 'flex',
+    flex: '1',
+    gap: spacing['--t-spacing-1'],
+    height: spacing['--t-spacing-8'],
+    justifyContent: 'space-between',
+    minWidth: '0',
+    paddingLeft: spacing['--t-spacing-2'],
+    textAlign: 'left',
+    background: {
+      default: null,
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+      ':active': backgroundTransparent['--t-background-transparent-medium'],
+    },
+    outline: {
+      default: null,
+      ':focus-visible': `2px solid ${color['--t-color-blue']}`,
+    },
+    outlineOffset: { default: null, ':focus-visible': '1px' },
+  },
+  name: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+});
 
 export const AgentOutputSchemaFieldHeader = ({
   name,
@@ -97,18 +104,31 @@ export const AgentOutputSchemaFieldHeader = ({
   const theme = useTheme();
 
   return (
-    <StyledHeader data-expanded={isExpanded}>
-      <StyledToggle type="button" aria-expanded={isExpanded} onClick={onToggle}>
-        <StyledTitle>
-          <IconVariable size={theme.icon.size.sm} aria-hidden />
-          <StyledName>
+    <div {...stylex.props(styles.header, isExpanded && styles.headerExpanded)}>
+      <button
+        type="button"
+        aria-expanded={isExpanded}
+        onClick={onToggle}
+        {...stylex.props(styles.toggle)}
+      >
+        <span {...stylex.props(styles.title)}>
+          <span {...stylex.props(styles.titleIcon)}>
+            <IconVariable size={theme.icon.size.sm} aria-hidden />
+          </span>
+          <span {...stylex.props(styles.name)}>
             {isNonEmptyString(name) ? name : t`Untitled field`}
-          </StyledName>
-        </StyledTitle>
-        <StyledChevron data-expanded={isExpanded} aria-hidden>
+          </span>
+        </span>
+        <span
+          {...stylex.props(
+            styles.chevron,
+            isExpanded && styles.chevronExpanded,
+          )}
+          aria-hidden
+        >
           <IconChevronDown size={theme.icon.size.sm} />
-        </StyledChevron>
-      </StyledToggle>
+        </span>
+      </button>
       {isDefined(onRemove) && (
         <LightIconButton
           data-testid="remove-output-field-button"
@@ -119,6 +139,6 @@ export const AgentOutputSchemaFieldHeader = ({
           <IconX />
         </LightIconButton>
       )}
-    </StyledHeader>
+    </div>
   );
 };

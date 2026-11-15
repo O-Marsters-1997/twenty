@@ -1,50 +1,53 @@
+import * as stylex from '@stylexjs/stylex';
 import { type NavigationDrawerSubItemState } from '@/ui/navigation/navigation-drawer/types/NavigationDrawerSubItemState';
 import { NavigationMenuItemInsertionPreview } from '@/navigation-menu-item/edit/components/NavigationMenuItemInsertionPreview';
-import { styled } from '@linaria/react';
 import { type ReactNode, useContext } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import {
+  backgroundTransparent,
+  borderRadius,
+  color,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 import { type NavigationSections } from '@/navigation-menu-item/common/constants/NavigationSections';
 import { NavigationDropTargetContext } from '@/navigation-menu-item/common/contexts/NavigationDropTargetContext';
 
-const StyledDropTarget = styled.div<{
-  $compact?: boolean;
-  $highlightPosition?: 'top' | 'bottom';
-}>`
-  min-height: ${({ $compact }) =>
-    $compact ? 0 : themeCssVariables.spacing[2]};
-  position: relative;
-  transition: all 150ms ease-in-out;
-
-  &[data-drag-over='true'] {
-    background-color: ${themeCssVariables.background.transparent.blue};
-
-    &::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background-color: ${themeCssVariables.color.blue};
-      ${({ $highlightPosition }) =>
-        $highlightPosition === 'top'
-          ? `
-      top: 0;
-      border-radius: 0 0 ${themeCssVariables.border.radius.sm}
-        ${themeCssVariables.border.radius.sm};
-      `
-          : `
-      bottom: 0;
-      border-radius: ${themeCssVariables.border.radius.sm}
-        ${themeCssVariables.border.radius.sm} 0 0;
-      `}
-    }
-  }
-
-  &[data-drop-forbidden='true'] {
-    cursor: not-allowed;
-  }
-`;
+const styles = stylex.create({
+  dropTarget: {
+    minHeight: spacing['--t-spacing-2'],
+    position: 'relative',
+    transitionDuration: '150ms',
+    transitionProperty: 'all',
+    transitionTimingFunction: 'ease-in-out',
+  },
+  compact: { minHeight: 0 },
+  dragOver: {
+    backgroundColor: backgroundTransparent['--t-background-transparent-blue'],
+    '::before': {
+      backgroundColor: color['--t-color-blue'],
+      content: '""',
+      height: '2px',
+      left: 0,
+      position: 'absolute',
+      width: '100%',
+    },
+  },
+  highlightTop: {
+    '::before': {
+      borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+      borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+      top: 0,
+    },
+  },
+  highlightBottom: {
+    '::before': {
+      borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+      borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+      bottom: 0,
+    },
+  },
+  forbidden: { cursor: 'not-allowed' },
+});
 
 type NavigationItemDropTargetProps = {
   folderId: string | null;
@@ -76,11 +79,18 @@ export const NavigationItemDropTarget = ({
   const isDropForbidden = forbiddenDropTargetId === dropTargetId;
 
   return (
-    <StyledDropTarget
-      $compact={compact}
-      $highlightPosition={highlightPosition}
-      data-drag-over={isDragOver && !isDropForbidden ? 'true' : undefined}
-      data-drop-forbidden={isDropForbidden ? 'true' : undefined}
+    <div
+      {...stylex.props(
+        styles.dropTarget,
+        compact && styles.compact,
+        isDragOver && !isDropForbidden && styles.dragOver,
+        isDragOver &&
+          !isDropForbidden &&
+          (highlightPosition === 'top'
+            ? styles.highlightTop
+            : styles.highlightBottom),
+        isDropForbidden && styles.forbidden,
+      )}
     >
       <NavigationMenuItemInsertionPreview
         folderId={folderId}
@@ -89,6 +99,6 @@ export const NavigationItemDropTarget = ({
         subItemState={previewSubItemState}
       />
       {children}
-    </StyledDropTarget>
+    </div>
   );
 };

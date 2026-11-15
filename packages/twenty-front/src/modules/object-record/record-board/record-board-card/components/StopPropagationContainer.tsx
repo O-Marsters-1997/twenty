@@ -1,22 +1,25 @@
-import { styled } from '@linaria/react';
 import { type ReactNode } from 'react';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledFieldContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-`;
+const styles = stylex.create({
+  fieldContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    width: '100%',
+  },
+});
 
 export const StopPropagationContainer = ({
   children,
 }: {
   children: ReactNode;
 }) => (
-  <StyledFieldContainer
+  <div
     onClick={(e) => {
       e.stopPropagation();
     }}
+    {...stylex.props(styles.fieldContainer)}
   >
     {children}
-  </StyledFieldContainer>
+  </div>
 );

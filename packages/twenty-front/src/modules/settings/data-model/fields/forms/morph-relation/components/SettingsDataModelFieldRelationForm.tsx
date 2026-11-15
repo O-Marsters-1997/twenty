@@ -14,39 +14,47 @@ import { IconPicker } from '@/ui/input/components/IconPicker';
 import { Select } from '@/ui/input/components/Select';
 import { SettingsTextInput } from '@/ui/input/components/SettingsTextInput';
 import { useIsMobile } from 'twenty-ui/utilities';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { RelationType } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  gap: ${themeCssVariables.spacing[2]};
-  padding-bottom: ${themeCssVariables.spacing[4]};
-  padding-left: ${themeCssVariables.spacing[4]};
-  padding-right: ${themeCssVariables.spacing[4]};
-  padding-top: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledSelectsContainer = styled.div<{ isMobile: boolean }>`
-  display: grid;
-  gap: ${themeCssVariables.spacing[4]};
-  grid-template-columns: ${({ isMobile }) => (isMobile ? '1fr' : '1fr 1fr')};
-  margin-bottom: ${themeCssVariables.spacing[4]};
-`;
-const StyledInputsLabel = styled.span`
-  color: ${themeCssVariables.font.color.light};
-  display: block;
-  font-size: ${themeCssVariables.font.size.xs};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-  margin-bottom: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledInputsContainer = styled.div`
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  width: 100%;
-`;
+const styles = stylex.create({
+  container: {
+    gap: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-4'],
+    paddingLeft: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingTop: spacing['--t-spacing-1'],
+  },
+  inputsLabel: {
+    color: fontColor['--t-font-color-light'],
+    display: 'block',
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    marginBottom: spacing['--t-spacing-1'],
+  },
+  selectsContainer: {
+    display: 'grid',
+    gap: spacing['--t-spacing-4'],
+    gridTemplateColumns: '1fr 1fr',
+    marginBottom: spacing['--t-spacing-4'],
+  },
+  selectsContainerMobile: {
+    gridTemplateColumns: '1fr',
+  },
+  inputsContainer: {
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+});
 
 const RELATION_TYPE_OPTIONS = Object.entries(RELATION_TYPES).map(
   ([value, { label, Icon }]) => ({
@@ -129,8 +137,13 @@ export const SettingsDataModelFieldRelationForm = ({
   const isMobile = useIsMobile();
 
   return (
-    <StyledContainer>
-      <StyledSelectsContainer isMobile={isMobile}>
+    <div {...stylex.props(styles.container)}>
+      <div
+        {...stylex.props(
+          styles.selectsContainer,
+          isMobile && styles.selectsContainerMobile,
+        )}
+      >
         <Controller
           name="relationType"
           control={control}
@@ -169,9 +182,11 @@ export const SettingsDataModelFieldRelationForm = ({
             />
           )}
         />
-      </StyledSelectsContainer>
-      <StyledInputsLabel>{t`Field on destination`}</StyledInputsLabel>
-      <StyledInputsContainer>
+      </div>
+      <span
+        {...stylex.props(styles.inputsLabel)}
+      >{t`Field on destination`}</span>
+      <div {...stylex.props(styles.inputsContainer)}>
         <Controller
           name="iconOnDestination"
           control={control}
@@ -202,7 +217,7 @@ export const SettingsDataModelFieldRelationForm = ({
             />
           )}
         />
-      </StyledInputsContainer>
-    </StyledContainer>
+      </div>
+    </div>
   );
 };

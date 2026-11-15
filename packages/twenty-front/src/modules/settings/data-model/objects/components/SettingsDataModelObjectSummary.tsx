@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 
 import { ObjectMetadataIcon } from '@/object-metadata/components/ObjectMetadataIcon';
@@ -6,7 +5,9 @@ import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/Enriche
 import { SettingsItemTypeTag } from '@/settings/components/SettingsItemTypeTag';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
 import { IconBox } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { background, fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 export type SettingsDataModelObjectPreviewProps = {
   className?: string;
@@ -24,38 +25,35 @@ export type SettingsDataModelObjectPreviewProps = {
   pluralizeLabel?: boolean;
 };
 
-const StyledObjectPreview = styled.div`
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-`;
-
-const StyledObjectName = styled.div`
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  max-width: 60%;
-`;
-
-const StyledOverflowingTextWithTooltip = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-`;
-
-const StyledNumber = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  padding-right: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledIconContainer = styled.div`
-  flex-shrink: 0;
-`;
-
-const StyledSeparator = styled.div`
-  align-self: stretch;
-  background: ${themeCssVariables.background.quaternary};
-  height: 1px;
-  margin-bottom: ${themeCssVariables.spacing[2]};
-  margin-top: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  objectPreview: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  objectName: {
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    maxWidth: '60%',
+  },
+  overflowingTextWithTooltip: {
+    color: fontColor['--t-font-color-tertiary'],
+  },
+  number: {
+    color: fontColor['--t-font-color-tertiary'],
+    paddingRight: spacing['--t-spacing-2'],
+  },
+  iconContainer: {
+    flexShrink: '0',
+  },
+  separator: {
+    alignSelf: 'stretch',
+    background: background['--t-background-quaternary'],
+    height: '1px',
+    marginBottom: spacing['--t-spacing-2'],
+    marginTop: spacing['--t-spacing-2'],
+  },
+});
 
 type SettingsDataModelObjectPreviewItemProps = {
   objectMetadataItem: Pick<
@@ -82,16 +80,19 @@ const SettingsDataModelObjectPreviewItem = ({
 
   return (
     <>
-      {index > 0 && <StyledSeparator />}
-      <StyledObjectPreview key={`${objectMetadataItem.labelSingular}-${index}`}>
-        <StyledObjectName>
-          <StyledIconContainer>
+      {index > 0 && <div {...stylex.props(styles.separator)} />}
+      <div
+        key={`${objectMetadataItem.labelSingular}-${index}`}
+        {...stylex.props(styles.objectPreview)}
+      >
+        <div {...stylex.props(styles.objectName)}>
+          <div {...stylex.props(styles.iconContainer)}>
             <ObjectMetadataIcon
               objectMetadataItem={objectMetadataItem}
               size={theme.icon.size.sm}
               stroke={theme.icon.stroke.md}
             />
-          </StyledIconContainer>
+          </div>
           <OverflowingTextWithTooltip
             text={
               pluralizeLabel
@@ -99,9 +100,9 @@ const SettingsDataModelObjectPreviewItem = ({
                 : objectMetadataItem.labelSingular
             }
           />
-        </StyledObjectName>
+        </div>
         <SettingsItemTypeTag item={objectMetadataItem} />
-      </StyledObjectPreview>
+      </div>
     </>
   );
 };
@@ -115,24 +116,24 @@ const SettingsDataModelObjectPreviewOtherObjects = ({
 
   return (
     <>
-      <StyledSeparator />
-      <StyledObjectPreview key={`other-objects`}>
-        <StyledObjectName>
-          <StyledIconContainer>
+      <div {...stylex.props(styles.separator)} />
+      <div key={`other-objects`} {...stylex.props(styles.objectPreview)}>
+        <div {...stylex.props(styles.objectName)}>
+          <div {...stylex.props(styles.iconContainer)}>
             <IconBox
               size={theme.icon.size.sm}
               stroke={theme.icon.stroke.md}
               color={theme.font.color.tertiary}
             />
-          </StyledIconContainer>
-          <StyledOverflowingTextWithTooltip>
+          </div>
+          <div {...stylex.props(styles.overflowingTextWithTooltip)}>
             <OverflowingTextWithTooltip text={t`Other objects`} />
-          </StyledOverflowingTextWithTooltip>
-        </StyledObjectName>
-        <StyledNumber>
+          </div>
+        </div>
+        <div {...stylex.props(styles.number)}>
           <OverflowingTextWithTooltip text={`${selected - 3}`} />
-        </StyledNumber>
-      </StyledObjectPreview>
+        </div>
+      </div>
     </>
   );
 };

@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { type ReactNode, useRef, useState } from 'react';
 
 import { useNavigationDrawerExpanded } from '@/ui/navigation/navigation-drawer/hooks/useNavigationDrawerExpanded';
@@ -6,7 +5,6 @@ import { isResizablePanelDraggingState } from '@/ui/layout/resizable-panel/state
 import { ResizeHandle } from 'twenty-ui/primitives/layout';
 import { useLingui } from '@lingui/react/macro';
 import { getUiZoom } from '@/ui/theme/utils/getUiZoom';
-import { NAVIGATION_DRAWER_COLLAPSED_WIDTH } from '@/ui/navigation/navigation-drawer/constants/NavigationDrawerCollapsedWidth';
 import { NAVIGATION_DRAWER_CONSTRAINTS } from '@/ui/navigation/navigation-drawer/constants/NavigationDrawerConstraints';
 import { NavigationDrawerWidthEffect } from '@/ui/navigation/components/NavigationDrawerWidthEffect';
 import { NAVIGATION_DRAWER_CLICK_OUTSIDE_ID } from '@/ui/navigation/navigation-drawer/constants/NavigationDrawerClickOutsideId';
@@ -21,7 +19,9 @@ import { shouldFocusNavigationDrawerExpandButtonState } from '@/ui/navigation/na
 import { useIsMobile } from 'twenty-ui/utilities';
 import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
 import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomState';
-import { MOBILE_VIEWPORT, themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { animationDuration, spacing } from 'twenty-ui/theme/tokens.stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
 
 export type NavigationDrawerProps = {
   children?: ReactNode;
@@ -29,57 +29,54 @@ export type NavigationDrawerProps = {
   header?: ReactNode;
 };
 
-const StyledAnimatedContainer = styled.div<{
-  isExpanded: boolean;
-  isResizing: boolean;
-}>`
-  height: 100%;
-  max-height: 100%;
-  overflow: clip;
-  position: relative;
-  transition: ${({ isResizing }) =>
-    isResizing
-      ? 'none'
-      : `width calc(${themeCssVariables.animation.duration.normal} * 1s)`};
-  width: ${({ isExpanded }) =>
-    isExpanded
-      ? `var(${NAVIGATION_DRAWER_WIDTH_VAR})`
-      : `${NAVIGATION_DRAWER_COLLAPSED_WIDTH}px`};
-
-  @media (max-width: ${MOBILE_VIEWPORT}px) {
-    width: ${({ isExpanded }) =>
-      isExpanded ? 'calc(100vw / var(--t-zoom, 1))' : '0'};
-  }
-`;
-
-const StyledContainer = styled.div<{
-  isExpanded?: boolean;
-}>`
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  padding-bottom: ${themeCssVariables.spacing[4]};
-  width: ${({ isExpanded }) =>
-    isExpanded ? `var(${NAVIGATION_DRAWER_WIDTH_VAR})` : '100%'};
-  @media (max-width: ${MOBILE_VIEWPORT}px) {
-    width: 100%;
-  }
-`;
-
-const StyledContent = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  min-height: 0;
-  padding-left: ${themeCssVariables.spacing[2]};
-
-  @media (max-width: ${MOBILE_VIEWPORT}px) {
-    gap: ${themeCssVariables.spacing[4]};
-    padding-right: ${themeCssVariables.spacing[2]};
-  }
-`;
+const styles = stylex.create({
+  animatedContainer: {
+    height: '100%',
+    maxHeight: '100%',
+    overflow: 'clip',
+    position: 'relative',
+    transitionDuration: `calc(${animationDuration['--t-animation-duration-normal']} * 1s)`,
+    transitionProperty: 'width',
+  },
+  animatedContainerResizing: {
+    transitionProperty: 'none',
+  },
+  animatedContainerExpanded: {
+    width: {
+      default: 'var(--navigation-drawer-width)',
+      [media.mobile]: 'calc(100vw / var(--t-zoom, 1))',
+    },
+  },
+  animatedContainerCollapsed: {
+    width: {
+      default: spacing['--t-spacing-12'],
+      [media.mobile]: 0,
+    },
+  },
+  container: {
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    paddingBottom: spacing['--t-spacing-4'],
+    width: '100%',
+  },
+  containerExpanded: {
+    width: {
+      default: 'var(--navigation-drawer-width)',
+      [media.mobile]: '100%',
+    },
+  },
+  content: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    gap: { default: spacing['--t-spacing-2'], [media.mobile]: spacing['--t-spacing-4'] },
+    minHeight: '0',
+    paddingLeft: spacing['--t-spacing-2'],
+    paddingRight: { default: null, [media.mobile]: spacing['--t-spacing-2'] },
+  },
+});
 
 export const NavigationDrawer = ({
   children,
@@ -145,19 +142,31 @@ export const NavigationDrawer = ({
     setIsResizablePanelDragging(true);
   };
 
+  const animatedContainerProps = stylex.props(
+    styles.animatedContainer,
+    isResizing && styles.animatedContainerResizing,
+    isExpanded
+      ? styles.animatedContainerExpanded
+      : styles.animatedContainerCollapsed,
+  );
+
   return (
     <>
       <NavigationDrawerWidthEffect />
-      <StyledAnimatedContainer
-        className={className}
+      <div
         data-click-outside-id={NAVIGATION_DRAWER_CLICK_OUTSIDE_ID}
-        isExpanded={isExpanded}
-        isResizing={isResizing}
+        {...animatedContainerProps}
+        className={[animatedContainerProps.className, className].join(' ')}
       >
-        <StyledContainer isExpanded={isExpanded}>
+        <div
+          {...stylex.props(
+            styles.container,
+            isExpanded && styles.containerExpanded,
+          )}
+        >
           {header}
-          <StyledContent>{children}</StyledContent>
-        </StyledContainer>
+          <div {...stylex.props(styles.content)}>{children}</div>
+        </div>
 
         {isNavigationDrawerExpanded && !isMobile && (
           <ResizeHandle
@@ -176,7 +185,7 @@ export const NavigationDrawer = ({
             onResizeStart={handleResizeStart}
           />
         )}
-      </StyledAnimatedContainer>
+      </div>
     </>
   );
 };

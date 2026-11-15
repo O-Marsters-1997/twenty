@@ -1,11 +1,15 @@
+import * as stylex from '@stylexjs/stylex';
 import { isSelectedItemIdComponentFamilyState } from '@/ui/layout/selectable-list/states/isSelectedItemIdComponentFamilyState';
 import { useAtomComponentFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentFamilyStateValue';
-import { styled } from '@linaria/react';
 import { isDefined } from 'twenty-shared/utils';
 import { SettingsRow } from 'twenty-ui/components/settings';
 import { type IconComponent } from 'twenty-ui/icon';
 import { type SwitchProps } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
+import {
+  backgroundTransparent,
+  borderRadius,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type CommandMenuItemSwitchProps = {
   id: string;
@@ -18,19 +22,15 @@ type CommandMenuItemSwitchProps = {
   className?: string;
 };
 
-const StyledIconContainer = styled.span`
-  align-items: center;
-  background: ${themeCssVariables.background.transparent.light};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  display: flex;
-  padding: ${themeCssVariables.spacing[1]};
-
-  svg {
-    height: calc(${themeCssVariables.icon.size.md} * 1px);
-    stroke-width: ${themeCssVariables.icon.stroke.sm};
-    width: calc(${themeCssVariables.icon.size.md} * 1px);
-  }
-`;
+const styles = stylex.create({
+  iconContainer: {
+    alignItems: 'center',
+    backgroundColor: backgroundTransparent['--t-background-transparent-light'],
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    display: 'flex',
+    padding: spacing['--t-spacing-1'],
+  },
+});
 
 export const CommandMenuItemSwitch = ({
   id,
@@ -53,9 +53,9 @@ export const CommandMenuItemSwitch = ({
       focused={isSelectedItemId}
       startElement={
         isDefined(LeftIcon) && (
-          <StyledIconContainer>
+          <span {...stylex.props(styles.iconContainer)}>
             <LeftIcon />
-          </StyledIconContainer>
+          </span>
         )
       }
       disabled={disabled}

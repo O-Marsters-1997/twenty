@@ -1,119 +1,122 @@
-import { styled } from '@linaria/react';
 import { IconArrowsDiagonal, IconUserCircle } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  accent,
+  background,
+  borderColor,
+  borderRadius,
+  fontColor,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type OpenRecordInCardMediaProps = {
   type: 'member-preference' | 'side-panel' | 'full-page';
 };
 
-const StyledPreviewFrame = styled.div`
-  background-color: ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  box-sizing: border-box;
-  display: flex;
-  flex-shrink: 0;
-  height: 40px;
-  padding: 2px;
-  width: 32px;
-`;
-
-const StyledPreviewCanvas = styled.div`
-  background-color: ${themeCssVariables.background.secondary};
-  border-radius: 2px;
-  display: flex;
-  flex: 1;
-  gap: 2px;
-  min-width: 0;
-  overflow: hidden;
-  padding: 2px;
-`;
-
-const StyledMemberPreferenceCanvas = styled(StyledPreviewCanvas)`
-  flex-direction: column;
-  position: relative;
-`;
-
-const StyledMemberPreferenceIcon = styled.div`
-  align-items: center;
-  background-color: ${themeCssVariables.background.secondary};
-  border-radius: ${themeCssVariables.border.radius.rounded};
-  box-sizing: border-box;
-  color: ${themeCssVariables.accent.accent7};
-  corner-shape: round;
-  display: flex;
-  height: 16px;
-  justify-content: center;
-  left: 50%;
-  padding: 1px;
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 16px;
-`;
-
-const StyledSidePanelPreview = styled.div`
-  display: flex;
-  flex: 1;
-  gap: 2px;
-  min-height: 0;
-`;
-
-const StyledSidePanelContent = styled.div`
-  background-color: ${themeCssVariables.border.color.medium};
-  border-radius: 1px;
-  flex: 1;
-`;
-
-const StyledSidePanel = styled.div`
-  background-color: ${themeCssVariables.accent.accent7};
-  border-radius: 1px;
-  width: 6px;
-`;
-
-const StyledFullPage = styled.div`
-  align-items: center;
-  background-color: ${themeCssVariables.accent.accent7};
-  border-radius: 1px;
-  color: ${themeCssVariables.font.color.inverted};
-  display: flex;
-  flex: 1;
-  justify-content: center;
-  min-height: 0;
-`;
+const styles = stylex.create({
+  previewFrame: {
+    backgroundColor: borderColor['--t-border-color-medium'],
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexShrink: 0,
+    height: '40px',
+    padding: '2px',
+    width: '32px',
+  },
+  previewCanvas: {
+    backgroundColor: background['--t-background-secondary'],
+    borderRadius: '2px',
+    display: 'flex',
+    flex: 1,
+    gap: '2px',
+    minWidth: 0,
+    overflow: 'hidden',
+    padding: '2px',
+  },
+  memberPreferenceCanvas: {
+    flexDirection: 'column',
+    position: 'relative',
+  },
+  memberPreferenceIcon: {
+    alignItems: 'center',
+    backgroundColor: background['--t-background-secondary'],
+    borderRadius: borderRadius['--t-border-radius-rounded'],
+    boxSizing: 'border-box',
+    color: accent['--t-accent-accent7'],
+    cornerShape: 'round',
+    display: 'flex',
+    height: '16px',
+    justifyContent: 'center',
+    left: '50%',
+    padding: '1px',
+    position: 'absolute',
+    top: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '16px',
+  },
+  sidePanelPreview: {
+    display: 'flex',
+    flex: 1,
+    gap: '2px',
+    minHeight: 0,
+  },
+  sidePanelContent: {
+    backgroundColor: borderColor['--t-border-color-medium'],
+    borderRadius: '1px',
+    flex: 1,
+  },
+  sidePanel: {
+    backgroundColor: accent['--t-accent-accent7'],
+    borderRadius: '1px',
+    width: '6px',
+  },
+  fullPage: {
+    alignItems: 'center',
+    backgroundColor: accent['--t-accent-accent7'],
+    borderRadius: '1px',
+    color: fontColor['--t-font-color-inverted'],
+    display: 'flex',
+    flex: 1,
+    justifyContent: 'center',
+    minHeight: 0,
+  },
+});
 
 const SidePanelPreview = () => (
-  <StyledSidePanelPreview>
-    <StyledSidePanelContent />
-    <StyledSidePanel />
-  </StyledSidePanelPreview>
+  <div {...stylex.props(styles.sidePanelPreview)}>
+    <div {...stylex.props(styles.sidePanelContent)} />
+    <div {...stylex.props(styles.sidePanel)} />
+  </div>
 );
 
 export const OpenRecordInCardMedia = ({ type }: OpenRecordInCardMediaProps) => {
   if (type === 'member-preference') {
     return (
-      <StyledPreviewFrame>
-        <StyledMemberPreferenceCanvas>
+      <div {...stylex.props(styles.previewFrame)}>
+        <div
+          {...stylex.props(styles.previewCanvas, styles.memberPreferenceCanvas)}
+        >
           <SidePanelPreview />
-          <StyledFullPage />
-          <StyledMemberPreferenceIcon>
+          <div {...stylex.props(styles.fullPage)} />
+          <div {...stylex.props(styles.memberPreferenceIcon)}>
             <IconUserCircle size={14} />
-          </StyledMemberPreferenceIcon>
-        </StyledMemberPreferenceCanvas>
-      </StyledPreviewFrame>
+          </div>
+        </div>
+      </div>
     );
   }
 
   return (
-    <StyledPreviewFrame>
-      <StyledPreviewCanvas>
+    <div {...stylex.props(styles.previewFrame)}>
+      <div {...stylex.props(styles.previewCanvas)}>
         {type === 'side-panel' ? (
           <SidePanelPreview />
         ) : (
-          <StyledFullPage>
+          <div {...stylex.props(styles.fullPage)}>
             <IconArrowsDiagonal size={14} />
-          </StyledFullPage>
+          </div>
         )}
-      </StyledPreviewCanvas>
-    </StyledPreviewFrame>
+      </div>
+    </div>
   );
 };

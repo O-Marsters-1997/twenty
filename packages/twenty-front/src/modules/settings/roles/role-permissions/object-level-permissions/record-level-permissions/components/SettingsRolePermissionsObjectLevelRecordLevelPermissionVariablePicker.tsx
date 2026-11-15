@@ -1,12 +1,19 @@
 /* @license Enterprise */
 
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
+import * as stylex from '@stylexjs/stylex';
 import { useContext } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { Dropdown } from 'twenty-ui/components/navigation';
 import { IconVariablePlus } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import {
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 import { type VariablePickerComponent } from '@/ui/input/types/VariablePickerComponent';
 import { SettingsRolePermissionsObjectLevelRecordLevelPermissionMeValueSelect } from '@/settings/roles/role-permissions/object-level-permissions/record-level-permissions/components/SettingsRolePermissionsObjectLevelRecordLevelPermissionMeValueSelect';
@@ -15,48 +22,57 @@ import { DropdownRoot } from '@/ui/layout/dropdown/components/DropdownRoot';
 import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent';
 import { GenericDropdownContentWidth } from '@/ui/layout/dropdown/constants/GenericDropdownContentWidth';
 
-const StyledRecordLevelPermissionPickerContainer = styled.div<{
-  multiline?: boolean;
-  readonly?: boolean;
-}>`
-  align-items: center;
-  background-color: ${({ multiline }) =>
-    multiline
-      ? 'transparent'
-      : themeCssVariables.background.transparent.lighter};
-  border: ${({ multiline }) =>
-    multiline ? 'none' : `1px solid ${themeCssVariables.border.color.medium}`};
-
-  border-bottom-right-radius: ${({ multiline }) =>
-    multiline ? '0' : themeCssVariables.border.radius.sm};
-  border-radius: ${({ multiline }) =>
-    multiline ? themeCssVariables.border.radius.sm : '0'};
-  border-top-right-radius: ${({ multiline }) =>
-    multiline ? '0' : themeCssVariables.border.radius.sm};
-  color: ${({ multiline }) =>
-    multiline
-      ? themeCssVariables.font.color.primary
-      : themeCssVariables.font.color.tertiary};
-  cursor: ${({ multiline }) => (multiline ? 'default' : 'pointer')};
-  display: flex;
-  justify-content: center;
-  padding: ${({ multiline }) =>
-    multiline
-      ? `${themeCssVariables.spacing['0.5']} ${themeCssVariables.spacing[0]}`
-      : themeCssVariables.spacing[2]};
-  position: ${({ multiline }) => (multiline ? 'absolute' : 'relative')};
-  right: ${({ multiline }) =>
-    multiline ? themeCssVariables.spacing[0] : 'auto'};
-  top: ${({ multiline }) =>
-    multiline ? themeCssVariables.spacing[0] : 'auto'};
-
-  &:hover {
-    background-color: ${({ readonly }) =>
-      readonly
-        ? 'transparent'
-        : themeCssVariables.background.transparent.light};
-  }
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    backgroundColor: {
+      default: backgroundTransparent['--t-background-transparent-lighter'],
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
+    borderBottomRightRadius: 0,
+    borderColor: borderColor['--t-border-color-medium'],
+    borderStyle: 'solid',
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: 0,
+    borderWidth: '1px',
+    color: fontColor['--t-font-color-tertiary'],
+    cursor: 'pointer',
+    display: 'flex',
+    justifyContent: 'center',
+    paddingBlock: spacing['--t-spacing-2'],
+    paddingInline: spacing['--t-spacing-2'],
+    position: 'relative',
+  },
+  readonly: {
+    backgroundColor: {
+      default: backgroundTransparent['--t-background-transparent-lighter'],
+      ':hover': 'transparent',
+    },
+  },
+  multiline: {
+    backgroundColor: {
+      default: 'transparent',
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderStyle: 'none',
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: 0,
+    borderWidth: 0,
+    color: fontColor['--t-font-color-primary'],
+    cursor: 'default',
+    paddingBlock: spacing['--t-spacing-0_5'],
+    paddingInline: spacing['--t-spacing-0'],
+    position: 'absolute',
+    right: spacing['--t-spacing-0'],
+    top: spacing['--t-spacing-0'],
+  },
+  multilineReadonly: {
+    backgroundColor: { default: 'transparent', ':hover': 'transparent' },
+  },
+});
 
 export const SettingsRolePermissionsObjectLevelRecordLevelPermissionVariablePicker: VariablePickerComponent =
   ({ instanceId, disabled, multiline }) => {
@@ -78,9 +94,13 @@ export const SettingsRolePermissionsObjectLevelRecordLevelPermissionVariablePick
       >
         <Dropdown.Trigger
           render={
-            <StyledRecordLevelPermissionPickerContainer
-              multiline={multiline}
-              readonly={disabled}
+            <div
+              {...stylex.props(
+                styles.container,
+                disabled && styles.readonly,
+                multiline && styles.multiline,
+                multiline && disabled && styles.multilineReadonly,
+              )}
             />
           }
           nativeButton={false}

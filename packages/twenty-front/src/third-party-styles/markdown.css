@@ -1,0 +1,193 @@
+@layer third-party {
+  .markdown-section {
+    border-radius: var(--t-border-radius-sm);
+    line-height: 150%;
+    margin: var(--t-spacing-1_5) 0;
+    overflow-x: auto;
+    position: relative;
+    scroll-margin-bottom: var(--t-spacing-10);
+    scroll-margin-top: var(--t-spacing-10);
+  }
+
+  .markdown-section:empty {
+    display: none;
+  }
+
+  .markdown-section .markdown-link {
+    color: var(--t-accent-accent11);
+    text-decoration: none;
+  }
+
+  .markdown-section .markdown-link:visited {
+    color: var(--t-accent-accent11);
+  }
+
+  .markdown-section .markdown-link:hover {
+    text-decoration: underline;
+  }
+
+  .markdown-section strong,
+  .markdown-section b {
+    font-weight: var(--t-font-weight-medium);
+  }
+
+  .markdown-section h1,
+  .markdown-section h2,
+  .markdown-section h3 {
+    font-weight: var(--t-font-weight-semi-bold);
+  }
+
+  .markdown-section h1 {
+    font-size: 1.6em;
+    line-height: 1.25;
+    margin-bottom: 12px;
+    margin-top: 24px;
+  }
+
+  .markdown-section h2 {
+    font-size: 1.3em;
+    line-height: 1.25;
+    margin-bottom: 10px;
+    margin-top: 20px;
+  }
+
+  .markdown-section h3 {
+    font-size: 1.15em;
+    line-height: 1.25;
+    margin-bottom: 8px;
+    margin-top: 18px;
+  }
+
+  .markdown-section h4 {
+    font-size: 1.05em;
+    line-height: 1.25;
+    margin-bottom: 8px;
+    margin-top: 16px;
+  }
+
+  .markdown-section h5 {
+    font-size: 0.95em;
+    line-height: 1.25;
+    margin-bottom: 6px;
+    margin-top: 14px;
+  }
+
+  .markdown-section h6 {
+    font-size: 0.85em;
+    line-height: 1.25;
+    margin-bottom: 6px;
+    margin-top: 12px;
+  }
+
+  .markdown-section hr {
+    background-color: var(--t-border-color-light);
+    border: none;
+    height: 1px;
+    margin: var(--t-spacing-4) 0;
+  }
+
+  .markdown-section ol:first-of-type:not(.nested),
+  .markdown-section ul:first-of-type:not(.nested) {
+    margin-top: var(--t-spacing-1);
+  }
+
+  .markdown-section ol:last-of-type:not(.nested),
+  .markdown-section ul:last-of-type:not(.nested) {
+    margin-bottom: var(--t-spacing-1);
+  }
+
+  .markdown-section li {
+    line-height: 150%;
+    margin-bottom: var(--t-spacing-0_5);
+    margin-top: var(--t-spacing-0_5);
+    padding-bottom: var(--t-spacing-0_5);
+    padding-top: var(--t-spacing-0_5);
+  }
+
+  .markdown-section :not(pre) > code {
+    background-color: var(--t-background-tertiary);
+    border-radius: var(--t-border-radius-sm);
+    color: var(--t-color-red10);
+    font-family: var(--t-code-font-family), monospace;
+    font-size: 1em;
+    padding: var(--t-spacing-0) var(--t-spacing-1);
+    transition: all calc(var(--t-animation-duration-fast) * 1s) ease;
+  }
+
+  .markdown-section :not(pre) > code[style*='cursor: pointer'] {
+    background-color: var(--t-background-secondary);
+    border: 1px solid var(--t-accent-accent10);
+    color: var(--t-accent-accent10);
+  }
+
+  .markdown-section :not(pre) > code[style*='cursor: pointer']:hover {
+    background-color: var(--t-background-transparent-blue);
+  }
+
+  .markdown-section .markdown-code-outer-container {
+    border-radius: var(--t-border-radius-md);
+    overflow: hidden;
+  }
+
+  .markdown-section .markdown-block-code {
+    background-color: var(--t-background-secondary);
+    border: 1px solid var(--t-border-color-medium);
+    border-radius: var(--t-border-radius-md);
+    margin: 0;
+    overflow-x: auto;
+  }
+
+  .markdown-section .markdown-block-code * {
+    animation: none;
+  }
+
+  .markdown-section img {
+    height: auto;
+    max-width: 100%;
+  }
+
+  .markdown-paragraph {
+    line-height: inherit;
+    margin-block: var(--t-spacing-2);
+  }
+
+  .markdown-paragraph:first-child {
+    margin-block-start: 0;
+  }
+
+  .markdown-paragraph:last-child {
+    margin-block-end: 0;
+  }
+
+  .markdown-skeleton {
+    max-width: 100%;
+  }
+
+  .markdown-skeleton [data-skeleton] {
+    max-width: 100%;
+  }
+
+  .markdown-table-scroll {
+    overflow-x: auto;
+  }
+
+  .markdown-table-scroll table {
+    border-collapse: collapse;
+    margin-block: var(--t-spacing-2);
+  }
+
+  .markdown-table-scroll th,
+  .markdown-table-scroll td {
+    border: 1px solid var(--t-border-color-light);
+    padding: var(--t-spacing-2);
+  }
+
+  .markdown-table-scroll th {
+    background-color: var(--t-background-secondary);
+    font-weight: var(--t-font-weight-medium);
+  }
+
+  .reasoning-text .markdown-paragraph {
+    white-space: pre-line;
+  }
+}

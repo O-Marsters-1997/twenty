@@ -7,7 +7,6 @@ import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent
 import { DropdownRoot } from '@/ui/layout/dropdown/components/DropdownRoot';
 import { Table } from '@/ui/layout/table/components/Table';
 import { TableCell } from '@/ui/layout/table/components/TableCell';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { useState } from 'react';
 import { SettingsPath } from 'twenty-shared/types';
@@ -27,32 +26,33 @@ import { Button } from 'twenty-ui/primitives/input';
 import { themeCssVariables } from 'twenty-ui/theme';
 import { useNavigateSettings } from '~/hooks/useNavigateSettings';
 import { sortByAscString } from '~/utils/array/sortByAscString';
+import * as stylex from '@stylexjs/stylex';
+import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledCreateRoleSectionContainer = styled.div`
-  > * {
-    border-top: 1px solid ${themeCssVariables.border.color.light};
-    display: flex;
-    justify-content: flex-end;
-    padding-bottom: ${themeCssVariables.spacing[2]};
-    padding-top: ${themeCssVariables.spacing[2]};
-  }
-`;
-
-const StyledTableRows = styled.div`
-  padding-bottom: ${themeCssVariables.spacing[2]};
-  padding-top: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledSearchAndFilterContainer = styled.div`
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  margin-bottom: ${themeCssVariables.spacing[2]};
-  width: 100%;
-`;
-
-const StyledSearchInputContainer = styled.div`
-  flex: 1;
-`;
+const styles = stylex.create({
+  createRoleSection: {
+    borderTopColor: borderColor['--t-border-color-light'],
+    borderTopStyle: 'solid',
+    borderTopWidth: '1px',
+    display: 'flex',
+    justifyContent: 'flex-end',
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
+  },
+  tableRows: {
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
+  },
+  searchAndFilterContainer: {
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    marginBottom: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+  searchInputContainer: {
+    flex: '1',
+  },
+});
 
 export const SettingsRolesList = () => {
   const navigateSettings = useNavigateSettings();
@@ -105,8 +105,8 @@ export const SettingsRolesList = () => {
         description={t`Assign roles to specify access permissions`}
       />
 
-      <StyledSearchAndFilterContainer>
-        <StyledSearchInputContainer>
+      <div {...stylex.props(styles.searchAndFilterContainer)}>
+        <div {...stylex.props(styles.searchInputContainer)}>
           <SettingsTextInput
             instanceId="settings-roles-search"
             LeftIcon={IconSearch}
@@ -114,7 +114,7 @@ export const SettingsRolesList = () => {
             value={searchTerm}
             onChange={setSearchTerm}
           />
-        </StyledSearchInputContainer>
+        </div>
         <DropdownRoot dropdownId="settings-roles-filter-dropdown" type="panel">
           <Dropdown.Trigger
             render={
@@ -148,11 +148,11 @@ export const SettingsRolesList = () => {
             </Dropdown.Section>
           </DropdownContent>
         </DropdownRoot>
-      </StyledSearchAndFilterContainer>
+      </div>
 
       <Table>
         <SettingsRolesTableHeader />
-        <StyledTableRows>
+        <div {...stylex.props(styles.tableRows)}>
           {filteredRoles.length === 0 ? (
             <TableCell color={themeCssVariables.font.color.tertiary}>
               {t`No roles found`}
@@ -166,18 +166,18 @@ export const SettingsRolesList = () => {
               />
             ))
           )}
-        </StyledTableRows>
+        </div>
       </Table>
-      <StyledCreateRoleSectionContainer>
-        <Section.Root>
-          <Button
-            startIcon={<IconPlus />}
-            size="sm"
-            onClick={() => navigateSettings(SettingsPath.RoleCreate)}
-            variant="outline"
-          >{t`Create Role`}</Button>
-        </Section.Root>
-      </StyledCreateRoleSectionContainer>
+      <Section.Root
+        render={<div {...stylex.props(styles.createRoleSection)} />}
+      >
+        <Button
+          startIcon={<IconPlus />}
+          size="sm"
+          onClick={() => navigateSettings(SettingsPath.RoleCreate)}
+          variant="outline"
+        >{t`Create Role`}</Button>
+      </Section.Root>
     </Section.Root>
   );
 };

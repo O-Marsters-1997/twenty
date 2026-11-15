@@ -1,35 +1,38 @@
-import { css } from '@linaria/core';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 import { Text } from 'twenty-ui/primitives/typography';
 import { isDefined } from 'twenty-shared/utils';
 
-const styles = {
-  ellipsis: css`
-    & {
-      align-items: center;
-      display: flex;
-      height: 20px;
-      max-width: 100%;
-      width: 100%;
-    }
-  `,
-};
+const styles = stylex.create({
+  ellipsis: {
+    alignItems: 'center',
+    display: 'flex',
+    height: '20px',
+    maxWidth: '100%',
+    width: '100%',
+  },
+  maxWidth: (maxWidth: number) => ({
+    maxWidth: `${maxWidth}px`,
+  }),
+});
 
 type EllipsisDisplayProps = {
   children: React.ReactNode;
   maxWidth?: number;
-  className?: string;
+  xstyle?: stylex.StyleXStyles;
 };
 
 export const EllipsisDisplay = ({
   children,
   maxWidth,
-  className,
+  xstyle,
 }: EllipsisDisplayProps) => (
   <Text
     truncate
-    className={clsx(styles.ellipsis, className)}
-    style={isDefined(maxWidth) ? { maxWidth: `${maxWidth}px` } : undefined}
+    {...stylex.props(
+      styles.ellipsis,
+      isDefined(maxWidth) && styles.maxWidth(maxWidth),
+      xstyle,
+    )}
   >
     {children}
   </Text>

@@ -1,22 +1,24 @@
 import { type MetadataTranslationRow } from '@/settings/translations/hooks/useMetadataTranslations';
 import { TextInput } from '@/ui/input/components/TextInput';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { useState } from 'react';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { fontColor } from 'twenty-ui/theme/tokens.stylex';
 import { MetadataTranslationProvenance } from '~/generated-metadata/graphql';
 
-const StyledValue = styled.div<{ isInherited: boolean }>`
-  color: ${({ isInherited }) =>
-    isInherited
-      ? themeCssVariables.font.color.light
-      : themeCssVariables.font.color.secondary};
-  cursor: pointer;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  width: 100%;
-`;
+const styles = stylex.create({
+  value: {
+    color: fontColor['--t-font-color-secondary'],
+    cursor: 'pointer',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    width: '100%',
+  },
+  valueInherited: {
+    color: fontColor['--t-font-color-light'],
+  },
+});
 
 type MetadataTranslationValueCellProps = {
   row: MetadataTranslationRow;
@@ -36,8 +38,8 @@ export const MetadataTranslationValueCell = ({
 
   if (!isEditing) {
     return (
-      <StyledValue
-        isInherited={isInherited}
+      <div
+        {...stylex.props(styles.value, isInherited && styles.valueInherited)}
         onClick={() => {
           if (disabled) {
             return;
@@ -47,7 +49,7 @@ export const MetadataTranslationValueCell = ({
         }}
       >
         {row.value}
-      </StyledValue>
+      </div>
     );
   }
 

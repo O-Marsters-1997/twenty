@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { type DraggableListDropResult } from '@/ui/layout/draggable-list/types/DraggableListDropResult';
 import { Controller, useFormContext } from 'react-hook-form';
 import { z } from 'zod';
@@ -44,6 +43,15 @@ import {
 import { Card } from 'twenty-ui/primitives/surfaces';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 import { SettingsDataModelFieldSelectFormOptionRow } from './SettingsDataModelFieldSelectFormOptionRow';
+import * as stylex from '@stylexjs/stylex';
+import {
+  background,
+  color,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 export const settingsDataModelFieldSelectFormSchema = z.object({
   defaultValue: selectFieldDefaultValueSchema(),
@@ -66,99 +74,81 @@ type SettingsDataModelFieldSelectFormProps = {
   disabled?: boolean;
 };
 
-const StyledContainerWrapper = styled.div`
-  > div {
-    padding-bottom: 14px;
-  }
-`;
-
-const StyledOptionsLabel = styled.div<{
-  isAdvancedModeEnabled: boolean;
-  isBulkInputMode: boolean;
-}>`
-  color: ${themeCssVariables.font.color.light};
-  font-size: ${themeCssVariables.font.size.xs};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-  margin-bottom: ${themeCssVariables.spacing['1.5']};
-  margin-left: ${({ isAdvancedModeEnabled, isBulkInputMode }) =>
-    isAdvancedModeEnabled && !isBulkInputMode
-      ? themeCssVariables.spacing[10]
-      : themeCssVariables.spacing[0]};
-  margin-top: ${themeCssVariables.spacing[1]};
-  width: 100%;
-`;
-
-const StyledApiKeyContainer = styled.div`
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  width: 100%;
-`;
-
-const StyledApiKey = styled.span`
-  color: ${themeCssVariables.font.color.light};
-  font-size: ${themeCssVariables.font.size.xs};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-  margin-bottom: ${themeCssVariables.spacing['1.5']};
-  margin-top: ${themeCssVariables.spacing[1]};
-  white-space: nowrap;
-
-  width: 100%;
-`;
-
-const StyledLabelContainer = styled.div`
-  align-items: center;
-  display: flex;
-  width: 100%;
-`;
-
-const StyledIconContainer = styled.div`
-  align-items: center;
-  border-right: 1px solid ${themeCssVariables.color.yellow};
-  display: flex;
-
-  margin-bottom: ${themeCssVariables.spacing['1.5']};
-  margin-top: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledIconPointContainer = styled.span`
-  align-items: center;
-  display: flex;
-  margin-right: ${themeCssVariables.spacing['0.5']};
-`;
-
-const StyledFooterContainer = styled.div`
-  > div {
-    background-color: ${themeCssVariables.background.secondary};
-    padding: ${themeCssVariables.spacing[1]};
-  }
-`;
-
-const StyledButtonContainer = styled.div`
-  > button {
-    justify-content: center;
-    width: 100%;
-  }
-`;
-
-const StyledOptionsHeaderContainer = styled.div`
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: ${themeCssVariables.spacing['1.5']};
-  margin-top: ${themeCssVariables.spacing[1]};
-  width: 100%;
-`;
-
-const StyledTextAreaContainer = styled.div`
-  margin-bottom: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledHelpText = styled.div`
-  color: ${themeCssVariables.font.color.light};
-  font-size: ${themeCssVariables.font.size.xs};
-  margin-bottom: ${themeCssVariables.spacing[2]};
-  margin-top: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  optionsCardContent: {
+    paddingBottom: 14,
+  },
+  optionsLabel: {
+    color: fontColor['--t-font-color-light'],
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    marginBottom: spacing['--t-spacing-1_5'],
+    marginLeft: spacing['--t-spacing-0'],
+    marginTop: spacing['--t-spacing-1'],
+    width: '100%',
+  },
+  optionsLabelIndented: {
+    marginLeft: spacing['--t-spacing-10'],
+  },
+  footer: {
+    backgroundColor: background['--t-background-secondary'],
+    padding: spacing['--t-spacing-1'],
+  },
+  addOptionButton: {
+    justifyContent: 'center',
+    width: '100%',
+  },
+  apiKeyContainer: {
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+  apiKey: {
+    color: fontColor['--t-font-color-light'],
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    marginBottom: spacing['--t-spacing-1_5'],
+    marginTop: spacing['--t-spacing-1'],
+    whiteSpace: 'nowrap',
+    width: '100%',
+  },
+  labelContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    width: '100%',
+  },
+  iconContainer: {
+    alignItems: 'center',
+    borderRightWidth: '1px',
+    borderRightStyle: 'solid',
+    borderRightColor: color['--t-color-yellow'],
+    display: 'flex',
+    marginBottom: spacing['--t-spacing-1_5'],
+    marginTop: spacing['--t-spacing-1'],
+  },
+  iconPointContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    marginRight: spacing['--t-spacing-0_5'],
+  },
+  optionsHeaderContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginBottom: spacing['--t-spacing-1_5'],
+    marginTop: spacing['--t-spacing-1'],
+    width: '100%',
+  },
+  textAreaContainer: {
+    marginBottom: spacing['--t-spacing-2'],
+  },
+  helpText: {
+    color: fontColor['--t-font-color-light'],
+    fontSize: fontSize['--t-font-size-xs'],
+    marginBottom: spacing['--t-spacing-2'],
+    marginTop: spacing['--t-spacing-1'],
+  },
+});
 
 export const SettingsDataModelFieldSelectForm = ({
   existingFieldMetadataId,
@@ -331,36 +321,42 @@ export const SettingsDataModelFieldSelectForm = ({
         defaultValue={initialOptions}
         render={({ field: { onChange, value: options } }) => (
           <>
-            <StyledContainerWrapper>
-              <Card.Content>
-                <StyledOptionsHeaderContainer>
-                  <StyledLabelContainer>
+            <>
+              <Card.Content {...stylex.props(styles.optionsCardContent)}>
+                <div {...stylex.props(styles.optionsHeaderContainer)}>
+                  <div {...stylex.props(styles.labelContainer)}>
                     {!isBulkInputMode && (
                       <AdvancedSettingsWrapper
                         animationDimension="width"
                         hideDot
                       >
-                        <StyledApiKeyContainer>
-                          <StyledIconContainer>
-                            <StyledIconPointContainer>
+                        <div {...stylex.props(styles.apiKeyContainer)}>
+                          <div {...stylex.props(styles.iconContainer)}>
+                            <span {...stylex.props(styles.iconPointContainer)}>
                               <IconPoint
                                 size={12}
                                 color={theme.color.yellow}
                                 fill={theme.color.yellow}
                               />
-                            </StyledIconPointContainer>
-                          </StyledIconContainer>
-                          <StyledApiKey>{t`API values`}</StyledApiKey>
-                        </StyledApiKeyContainer>
+                            </span>
+                          </div>
+                          <span
+                            {...stylex.props(styles.apiKey)}
+                          >{t`API values`}</span>
+                        </div>
                       </AdvancedSettingsWrapper>
                     )}
-                    <StyledOptionsLabel
-                      isAdvancedModeEnabled={isAdvancedModeEnabled}
-                      isBulkInputMode={isBulkInputMode}
+                    <div
+                      {...stylex.props(
+                        styles.optionsLabel,
+                        isAdvancedModeEnabled &&
+                          !isBulkInputMode &&
+                          styles.optionsLabelIndented,
+                      )}
                     >
                       {t`Options`}
-                    </StyledOptionsLabel>
-                  </StyledLabelContainer>
+                    </div>
+                  </div>
                   {!disabled && (
                     <DropdownRoot dropdownId={OPTIONS_DROPDOWN_ID} type="menu">
                       <Dropdown.Trigger
@@ -402,10 +398,10 @@ export const SettingsDataModelFieldSelectForm = ({
                       </DropdownContent>
                     </DropdownRoot>
                   )}
-                </StyledOptionsHeaderContainer>
+                </div>
 
                 {isBulkInputMode ? (
-                  <StyledTextAreaContainer>
+                  <div {...stylex.props(styles.textAreaContainer)}>
                     <TextArea
                       textAreaId="bulk-options-input"
                       placeholder={t`Enter one option per line`}
@@ -427,10 +423,10 @@ export const SettingsDataModelFieldSelectForm = ({
                       maxRows={15}
                       disabled={disabled}
                     />
-                    <StyledHelpText>
+                    <div {...stylex.props(styles.helpText)}>
                       {t`Enter one option per line. Each line will become a new option.`}
-                    </StyledHelpText>
-                  </StyledTextAreaContainer>
+                    </div>
+                  </div>
                 ) : (
                   <>
                     <DraggableList
@@ -517,18 +513,15 @@ export const SettingsDataModelFieldSelectForm = ({
                   </>
                 )}
               </Card.Content>
-            </StyledContainerWrapper>
+            </>
             {!disabled && !isBulkInputMode && (
-              <StyledFooterContainer>
-                <Card.Footer>
-                  <StyledButtonContainer>
-                    <LightButton
-                      startIcon={<IconPlus />}
-                      onClick={handleAddOption}
-                    >{t`Add option`}</LightButton>
-                  </StyledButtonContainer>
-                </Card.Footer>
-              </StyledFooterContainer>
+              <Card.Footer {...stylex.props(styles.footer)}>
+                <LightButton
+                  {...stylex.props(styles.addOptionButton)}
+                  startIcon={<IconPlus />}
+                  onClick={handleAddOption}
+                >{t`Add option`}</LightButton>
+              </Card.Footer>
             )}
           </>
         )}

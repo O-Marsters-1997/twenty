@@ -1,14 +1,16 @@
 import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/EnrichedObjectMetadataItem';
 import { SETTINGS_ROLE_OBJECT_LEVEL_PERMISSION_TO_ROLE_OBJECT_PERMISSION_MAPPING } from '@/settings/roles/role-permissions/objects-permissions/constants/SettingsRoleObjectLevelPermissionToRoleObjectPermissionMapping';
 import { type SettingsRoleObjectPermissionKey } from '@/settings/roles/role-permissions/objects-permissions/constants/SettingsRoleObjectPermissionIconConfig';
-import { styled } from '@linaria/react';
 import { SettingsRolePermissionsObjectLevelOverrideCell } from './SettingsRolePermissionsObjectLevelOverrideCell';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledSettingsRolePermissionsObjectLevelOverrideCell = styled.div`
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  settingsRolePermissionsObjectLevelOverrideCell: {
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+  },
+});
 
 type SettingsRolePermissionsObjectLevelOverrideCellContainerProps = {
   objectMetadataItem: EnrichedObjectMetadataItem;
@@ -25,7 +27,9 @@ export const SettingsRolePermissionsObjectLevelOverrideCellContainer = ({
     SETTINGS_ROLE_OBJECT_LEVEL_PERMISSION_TO_ROLE_OBJECT_PERMISSION_MAPPING;
 
   return (
-    <StyledSettingsRolePermissionsObjectLevelOverrideCell>
+    <div
+      {...stylex.props(styles.settingsRolePermissionsObjectLevelOverrideCell)}
+    >
       {(
         Object.keys(permissionMappings) as SettingsRoleObjectPermissionKey[]
       ).map((permissionKey) => {
@@ -39,6 +43,6 @@ export const SettingsRolePermissionsObjectLevelOverrideCellContainer = ({
           />
         );
       })}
-    </StyledSettingsRolePermissionsObjectLevelOverrideCell>
+    </div>
   );
 };

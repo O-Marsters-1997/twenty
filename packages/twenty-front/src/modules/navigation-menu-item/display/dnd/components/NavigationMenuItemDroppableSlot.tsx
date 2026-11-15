@@ -1,17 +1,16 @@
+import * as stylex from '@stylexjs/stylex';
 import { pointerIntersection } from '@dnd-kit/collision';
 import { useDroppable } from '@dnd-kit/react';
-import { styled } from '@linaria/react';
 import { type ReactNode } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 import type { DroppableData } from '@/navigation-menu-item/common/types/NavigationMenuItemDndKitDroppableData';
 import { getDndKitDropTargetId } from '@/navigation-menu-item/common/utils/getDndKitDropTargetId';
 
-const StyledSlotWrapper = styled.div<{ $empty: boolean }>`
-  min-height: 0;
-  ${({ $empty }) =>
-    $empty ? `min-height: ${themeCssVariables.spacing[2]};` : ''}
-`;
+const styles = stylex.create({
+  slot: { minHeight: 0 },
+  empty: { minHeight: spacing['--t-spacing-2'] },
+});
 
 const SLOT_COLLISION_PRIORITY = 1;
 export const FOLDER_HEADER_SLOT_COLLISION_PRIORITY = 4;
@@ -45,8 +44,8 @@ export const NavigationMenuItemDroppableSlot = ({
     children == null || (Array.isArray(children) && children.length === 0);
 
   return (
-    <StyledSlotWrapper ref={ref} $empty={isEmpty}>
+    <div ref={ref} {...stylex.props(styles.slot, isEmpty && styles.empty)}>
       {children}
-    </StyledSlotWrapper>
+    </div>
   );
 };

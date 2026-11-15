@@ -1,11 +1,12 @@
 import { SkeletonLine } from '@/ui/feedback/skeleton/components/SkeletonLine';
 import { viewableRichTextComponentState } from '@/side-panel/pages/rich-text-page/states/viewableRichTextComponentState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { styled } from '@linaria/react';
 import { lazy, Suspense } from 'react';
 import { SKELETON_HEIGHT_SIZES } from 'twenty-ui/primitives/feedback';
 import { CoreObjectNameSingular } from 'twenty-shared/types';
 import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const ActivityRichTextEditor = lazy(() =>
   import('@/activities/components/ActivityRichTextEditor').then((module) => ({
@@ -21,12 +22,18 @@ const RichTextFieldEditor = lazy(() =>
   ),
 );
 
-const StyledContainer = styled.div`
-  box-sizing: border-box;
-  margin: ${themeCssVariables.spacing[4]} -8px;
-  padding-inline: 44px 0px;
-  width: 100%;
-`;
+const styles = stylex.create({
+  container: {
+    boxSizing: 'border-box',
+    marginTop: spacing['--t-spacing-4'],
+    marginRight: '-8px',
+    marginBottom: spacing['--t-spacing-4'],
+    marginLeft: '-8px',
+    paddingInlineEnd: '0px',
+    paddingInlineStart: '44px',
+    width: '100%',
+  },
+});
 
 const LoadingSkeleton = () => {
   return (
@@ -51,7 +58,7 @@ export const SidePanelEditRichTextPage = () => {
   );
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <Suspense fallback={<LoadingSkeleton />}>
         {isActivityObject(objectNameSingular) ? (
           <ActivityRichTextEditor
@@ -66,6 +73,6 @@ export const SidePanelEditRichTextPage = () => {
           />
         )}
       </Suspense>
-    </StyledContainer>
+    </div>
   );
 };

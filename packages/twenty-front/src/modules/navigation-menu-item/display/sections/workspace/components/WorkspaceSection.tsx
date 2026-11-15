@@ -1,12 +1,10 @@
 import { NavigationMenuItemAddDropdown } from '@/navigation-menu-item/edit/components/NavigationMenuItemAddDropdown';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { useNavigate } from 'react-router-dom';
 import { NavigationMenuItemType } from 'twenty-shared/types';
 import { LightIconButton } from 'twenty-ui/components/input';
 import { IconPlus, IconTool } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { useIsMobile } from 'twenty-ui/utilities';
 
 import { useEnterLayoutCustomizationMode } from '@/layout-customization/hooks/useEnterLayoutCustomizationMode';
@@ -33,12 +31,16 @@ import {
   FeatureFlagKey,
   PermissionFlagType,
 } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledRightIconsContainer = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  rightIconsContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+  },
+});
 
 export const WorkspaceSection = () => {
   const isMobile = useIsMobile();
@@ -107,7 +109,7 @@ export const WorkspaceSection = () => {
       rightIcon={
         // Customising the menu is desktop-only.
         isMobile ? undefined : (
-          <StyledRightIconsContainer>
+          <div {...stylex.props(styles.rightIconsContainer)}>
             {isLayoutCustomizationModeEnabled ? (
               <NavigationMenuItemAddDropdown
                 instanceId="workspace-header"
@@ -136,7 +138,7 @@ export const WorkspaceSection = () => {
                 </div>
               )
             )}
-          </StyledRightIconsContainer>
+          </div>
         )
       }
       selectedNavigationMenuItemId={selectedNavigationMenuItemIdInEditMode}

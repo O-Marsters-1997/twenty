@@ -1,4 +1,4 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { type IconComponent } from 'twenty-ui/icon';
 import { Tag } from 'twenty-ui/primitives/data-display';
 import { type ThemeColor } from 'twenty-ui/theme';
@@ -10,16 +10,19 @@ type SelectDisplayProps = {
   Icon?: IconComponent;
 };
 
-const StyledSelectTag = styled(Tag)`
-  min-width: fit-content;
-`;
+const styles = stylex.create({
+  tag: {
+    minWidth: 'fit-content',
+  },
+});
 
 export const SelectDisplay = ({ color, label, Icon }: SelectDisplayProps) => (
-  <StyledSelectTag
+  <Tag
     truncate={false}
     color={color}
     startIcon={isDefined(Icon) ? <Icon /> : undefined}
+    {...stylex.props(styles.tag)}
   >
     {label}
-  </StyledSelectTag>
+  </Tag>
 );

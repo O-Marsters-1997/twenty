@@ -47,6 +47,8 @@ import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/use
 import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomState';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const LOG_CONSOLE_HEIGHT_CSS_VARIABLE = '--log-console-height';
 
@@ -185,20 +187,21 @@ const StyledTabList = styled(TabList)`
   }
 `;
 
-const StyledBarActions = styled.div`
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  padding-right: ${themeCssVariables.spacing[3]};
-`;
-
-const StyledBody = styled.div`
-  container-name: log-console-body;
-  container-type: inline-size;
-  display: flex;
-  flex: 1;
-  min-height: 0;
-  position: relative;
-`;
+const styles = stylex.create({
+  barActions: {
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-3'],
+  },
+  body: {
+    containerName: 'log-console-body',
+    containerType: 'inline-size',
+    display: 'flex',
+    flex: '1',
+    minHeight: '0',
+    position: 'relative',
+  },
+});
 
 const StyledActiveSource = styled.div<{ isDetailPanelOpen: boolean }>`
   display: flex;
@@ -568,7 +571,7 @@ export const LogConsole = () => {
             onClickTab={openLogConsole}
             onChangeTab={changeSource}
             rightComponent={
-              <StyledBarActions>
+              <div {...stylex.props(styles.barActions)}>
                 <LightIconButton
                   emphasis="subtle"
                   tooltip={fullScreenLabel}
@@ -594,11 +597,11 @@ export const LogConsole = () => {
                     <IconChevronUp />
                   )}
                 </IconButton>
-              </StyledBarActions>
+              </div>
             }
           />
           {isBodyRendered && (
-            <StyledBody>
+            <div {...stylex.props(styles.body)}>
               <StyledActiveSource
                 isDetailPanelOpen={isDefined(logConsoleSelectedLog)}
               >
@@ -626,7 +629,7 @@ export const LogConsole = () => {
                 )}
                 <LogConsoleDetailPanel />
               </StyledDetailPanelWrapper>
-            </StyledBody>
+            </div>
           )}
         </TabListRoot>
         {!displayedLayout.isFullScreen && (

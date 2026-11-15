@@ -16,7 +16,6 @@ import { TableCell } from '@/ui/layout/table/components/TableCell';
 import { TableHeader } from '@/ui/layout/table/components/TableHeader';
 import { TableRow } from '@/ui/layout/table/components/TableRow';
 import { useIsFeatureEnabled } from '@/workspace/hooks/useIsFeatureEnabled';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useMemo, useState } from 'react';
 import { useToast } from 'twenty-ui/components/feedback';
@@ -31,8 +30,10 @@ import {
 } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
 import { Card } from 'twenty-ui/primitives/surfaces';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import { FeatureFlagKey } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsObjectSearchSectionProps = {
   objectMetadataItem: EnrichedObjectMetadataItem;
@@ -47,22 +48,22 @@ type SearchFieldEntry = {
   isLabelIdentifier: boolean;
 };
 
-const StyledSearchSectionContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[4]};
-`;
-
-const StyledNameLabel = styled.div`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledButtonContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-`;
+const styles = stylex.create({
+  searchSectionContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-4'],
+  },
+  nameLabel: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  buttonContainer: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+  },
+});
 
 const SEARCH_FIELDS_GRID_TEMPLATE_COLUMNS = 'minmax(0, 1fr) 148px 40px';
 
@@ -182,7 +183,7 @@ export const SettingsObjectSearchSection = ({
   };
 
   return (
-    <StyledSearchSectionContent>
+    <div {...stylex.props(styles.searchSectionContent)}>
       {!isReadOnly && (
         <Card.Root rounded>
           <SettingsOptionCardContentSwitch
@@ -225,7 +226,7 @@ export const SettingsObjectSearchSection = ({
                       size={theme.icon.size.md}
                       stroke={theme.icon.stroke.sm}
                     />
-                    <StyledNameLabel>{entry.label}</StyledNameLabel>
+                    <div {...stylex.props(styles.nameLabel)}>{entry.label}</div>
                   </TableCell>
                   <TableCell>
                     <SettingsObjectFieldDataType
@@ -252,7 +253,7 @@ export const SettingsObjectSearchSection = ({
         </>
       )}
       {isEditable && (
-        <StyledButtonContainer>
+        <div {...stylex.props(styles.buttonContainer)}>
           <DropdownRoot dropdownId={ADD_SEARCH_FIELD_DROPDOWN_ID} type="menu">
             <Dropdown.Trigger
               disabled={addableFields.length === 0}
@@ -283,8 +284,8 @@ export const SettingsObjectSearchSection = ({
               </Dropdown.Section>
             </DropdownContent>
           </DropdownRoot>
-        </StyledButtonContainer>
+        </div>
       )}
-    </StyledSearchSectionContent>
+    </div>
   );
 };

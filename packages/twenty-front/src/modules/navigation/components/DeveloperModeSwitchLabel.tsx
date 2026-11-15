@@ -1,44 +1,53 @@
 import { type DeveloperModeTypingFrame } from '@/navigation/types/DeveloperModeTypingFrame';
-import { styled } from '@linaria/react';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  accent,
+  borderRadius,
+  codeFont,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
 
-const StyledLabel = styled.span`
-  color: ${themeCssVariables.font.color.secondary};
-  flex: 1;
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.medium};
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: pre;
-`;
+const caretBlink = stylex.keyframes({
+  '50%': { opacity: 0 },
+});
 
-const StyledCodeFontText = styled.span`
-  font-family: ${themeCssVariables.code.font.family};
-  font-weight: ${themeCssVariables.font.weight.regular};
-`;
-
-const StyledCaret = styled.span`
-  animation: developer-mode-caret-blink 1.06s steps(1) infinite;
-  background: ${themeCssVariables.accent.accent9};
-  border-radius: ${themeCssVariables.border.radius.xs};
-  display: inline-block;
-  height: ${themeCssVariables.spacing[3]};
-  margin-left: ${themeCssVariables.spacing[0.5]};
-  vertical-align: middle;
-  width: ${themeCssVariables.spacing[0.5]};
-
-  @keyframes developer-mode-caret-blink {
-    50% {
-      opacity: 0;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-  }
-`;
+const styles = stylex.create({
+  label: {
+    color: fontColor['--t-font-color-secondary'],
+    flex: '1',
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    minWidth: '0',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'pre',
+  },
+  codeFontText: {
+    fontFamily: codeFont['--t-code-font-family'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+  },
+  caret: {
+    animationDuration: '1.06s',
+    animationIterationCount: 'infinite',
+    animationName: {
+      default: caretBlink,
+      [media.reducedMotion]: 'none',
+    },
+    animationTimingFunction: 'steps(1)',
+    backgroundColor: accent['--t-accent-accent9'],
+    borderRadius: borderRadius['--t-border-radius-xs'],
+    display: 'inline-block',
+    height: spacing['--t-spacing-3'],
+    marginLeft: spacing['--t-spacing-0_5'],
+    verticalAlign: 'middle',
+    width: spacing['--t-spacing-0_5'],
+  },
+});
 
 type DeveloperModeSwitchLabelProps = {
   label: string;
@@ -52,17 +61,21 @@ export const DeveloperModeSwitchLabel = ({
   isTyping,
 }: DeveloperModeSwitchLabelProps) => {
   if (!isDefined(frame)) {
-    return <StyledLabel aria-hidden>{label}</StyledLabel>;
+    return (
+      <span aria-hidden {...stylex.props(styles.label)}>
+        {label}
+      </span>
+    );
   }
 
   return (
-    <StyledLabel aria-hidden>
+    <span aria-hidden {...stylex.props(styles.label)}>
       {frame.text.slice(0, frame.codeFontStart)}
-      <StyledCodeFontText>
+      <span {...stylex.props(styles.codeFontText)}>
         {frame.text.slice(frame.codeFontStart, frame.codeFontEnd)}
-      </StyledCodeFontText>
+      </span>
       {frame.text.slice(frame.codeFontEnd)}
-      {isTyping && <StyledCaret />}
-    </StyledLabel>
+      {isTyping && <span {...stylex.props(styles.caret)} />}
+    </span>
   );
 };

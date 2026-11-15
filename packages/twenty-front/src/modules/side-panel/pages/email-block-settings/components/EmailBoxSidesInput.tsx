@@ -1,42 +1,55 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useState } from 'react';
 import { LightIconButton } from 'twenty-ui/components/input';
 import { IconFrame, IconSquare } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
 
-import { StyledEmailFieldLabel } from '@/side-panel/pages/email-block-settings/components/StyledEmailFieldLabel';
+import { EmailFieldLabel } from '@/side-panel/pages/email-block-settings/components/EmailFieldLabel';
 import { TextInput } from '@/ui/input/components/TextInput';
+import * as stylex from '@stylexjs/stylex';
+import {
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledRow = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-
-  & > :first-child {
-    flex: 1;
-  }
-`;
-
-const StyledSidesGrid = styled.div`
-  display: grid;
-  gap: ${themeCssVariables.spacing[1]};
-  grid-template-columns: repeat(4, 1fr);
-  margin-top: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledUnitChip = styled.div`
-  align-items: center;
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  box-sizing: border-box;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  flex-shrink: 0;
-  font-size: ${themeCssVariables.font.size.sm};
-  height: 32px;
-  padding: 0 ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  row: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+  },
+  grow: {
+    flex: '1',
+  },
+  sidesGrid: {
+    display: 'grid',
+    gap: spacing['--t-spacing-1'],
+    gridTemplateColumns: 'repeat(4, 1fr)',
+    marginTop: spacing['--t-spacing-1'],
+  },
+  unitChip: {
+    alignItems: 'center',
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-medium'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    boxSizing: 'border-box',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    flexShrink: '0',
+    fontSize: fontSize['--t-font-size-sm'],
+    height: '32px',
+    paddingTop: '0',
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: '0',
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+});
 
 const SIDE_KEYS = ['top', 'right', 'bottom', 'left'] as const;
 
@@ -103,29 +116,31 @@ export const EmailBoxSidesInput = ({
 
   return (
     <div>
-      <StyledEmailFieldLabel>{label}</StyledEmailFieldLabel>
-      <StyledRow>
-        {isPerSide ? (
-          <StyledSidesGrid>
-            {SIDE_KEYS.map((side) => (
-              <TextInput
-                key={side}
-                value={toDisplayAmount(sides[side])}
-                onChange={(input) => commitSide(side, input)}
-                placeholder={SIDE_PLACEHOLDERS[side]}
-                fullWidth
-              />
-            ))}
-          </StyledSidesGrid>
-        ) : (
-          <TextInput
-            value={toDisplayAmount(sides.top)}
-            onChange={commitAllSides}
-            placeholder={placeholder ?? '0'}
-            fullWidth
-          />
-        )}
-        <StyledUnitChip>px</StyledUnitChip>
+      <EmailFieldLabel>{label}</EmailFieldLabel>
+      <div {...stylex.props(styles.row)}>
+        <div {...stylex.props(styles.grow)}>
+          {isPerSide ? (
+            <div {...stylex.props(styles.sidesGrid)}>
+              {SIDE_KEYS.map((side) => (
+                <TextInput
+                  key={side}
+                  value={toDisplayAmount(sides[side])}
+                  onChange={(input) => commitSide(side, input)}
+                  placeholder={SIDE_PLACEHOLDERS[side]}
+                  fullWidth
+                />
+              ))}
+            </div>
+          ) : (
+            <TextInput
+              value={toDisplayAmount(sides.top)}
+              onChange={commitAllSides}
+              placeholder={placeholder ?? '0'}
+              fullWidth
+            />
+          )}
+        </div>
+        <div {...stylex.props(styles.unitChip)}>px</div>
         <LightIconButton
           size="sm"
           emphasis={isPerSide ? 'subtle' : 'standard'}
@@ -149,7 +164,7 @@ export const EmailBoxSidesInput = ({
         >
           <IconFrame />
         </LightIconButton>
-      </StyledRow>
+      </div>
     </div>
   );
 };

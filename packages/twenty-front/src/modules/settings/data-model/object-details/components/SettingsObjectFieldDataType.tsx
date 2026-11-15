@@ -1,12 +1,18 @@
 import { useLingui } from '@lingui/react/macro';
 import { isDefined } from 'twenty-shared/utils';
-import { styled } from '@linaria/react';
 import { Link } from 'react-router-dom';
 
 import { type SettingsFieldType } from '@/settings/data-model/types/SettingsFieldType';
 import { getSettingsFieldTypeConfig } from '@/settings/data-model/utils/getSettingsFieldTypeConfig';
 import { type IconComponent, IconTwentyStar } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  borderRadius,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsObjectFieldDataTypeProps = {
   to?: string;
@@ -17,48 +23,6 @@ type SettingsObjectFieldDataTypeProps = {
   onClick?: (event: React.MouseEvent) => void;
 };
 
-const StyledDataType = styled.div<{
-  value: SettingsFieldType;
-  to?: string;
-}>`
-  align-items: center;
-  border: 1px solid transparent;
-  border-radius: ${themeCssVariables.border.radius.sm};
-  color: ${({ to }) =>
-    to
-      ? themeCssVariables.font.color.secondary
-      : themeCssVariables.font.color.primary};
-  cursor: ${({ to }) => (to ? 'pointer' : 'default')};
-  display: flex;
-  font-size: ${themeCssVariables.font.size.sm};
-  gap: ${themeCssVariables.spacing[2]};
-  height: 20px;
-  overflow: hidden;
-  text-decoration: ${({ to }) => (to ? 'underline' : 'none')};
-  user-select: none;
-
-  &:hover {
-    color: ${({ to }) =>
-      to
-        ? themeCssVariables.font.color.primary
-        : themeCssVariables.font.color.primary};
-  }
-`;
-
-const StyledLabelContainer = styled.div`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledIconWrapper = styled.div`
-  display: flex;
-  flex: 1 0 auto;
-`;
-
-const StyledSpan = styled.span`
-  color: ${themeCssVariables.font.color.extraLight};
-`;
 export const SettingsObjectFieldDataType = ({
   to,
   value,
@@ -76,19 +40,73 @@ export const SettingsObjectFieldDataType = ({
     labelFromProps ??
     (isDefined(fieldTypeConfig) ? i18n._(fieldTypeConfig.label) : undefined);
 
-  return (
-    <StyledDataType
-      as={to ? Link : 'div'}
+  const content = (
+    <>
+      <div {...stylex.props(styles.iconWrapper)}>
+        <Icon size={theme.icon.size.sm} />
+      </div>
+      <div {...stylex.props(styles.labelContainer)}>
+        {label}{' '}
+        <span {...stylex.props(styles.span)}>
+          {labelDetail && `· ${labelDetail}`}
+        </span>
+      </div>
+    </>
+  );
+
+  return to ? (
+    <Link
+      {...stylex.props(styles.dataType, styles.dataTypeLink)}
       to={to}
-      value={value}
       onClick={onClick}
     >
-      <StyledIconWrapper>
-        <Icon size={theme.icon.size.sm} />
-      </StyledIconWrapper>
-      <StyledLabelContainer>
-        {label} <StyledSpan>{labelDetail && `· ${labelDetail}`}</StyledSpan>
-      </StyledLabelContainer>
-    </StyledDataType>
+      {content}
+    </Link>
+  ) : (
+    <div {...stylex.props(styles.dataType)} onClick={onClick}>
+      {content}
+    </div>
   );
 };
+
+const styles = stylex.create({
+  dataType: {
+    alignItems: 'center',
+    borderColor: 'transparent',
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    borderStyle: 'solid',
+    borderWidth: 1,
+    color: {
+      default: fontColor['--t-font-color-primary'],
+      ':hover': fontColor['--t-font-color-primary'],
+    },
+    cursor: 'default',
+    display: 'flex',
+    fontSize: fontSize['--t-font-size-sm'],
+    gap: spacing['--t-spacing-2'],
+    height: 20,
+    overflow: 'hidden',
+    textDecoration: 'none',
+    userSelect: 'none',
+  },
+  dataTypeLink: {
+    color: {
+      default: fontColor['--t-font-color-secondary'],
+      ':hover': fontColor['--t-font-color-primary'],
+    },
+    cursor: 'pointer',
+    textDecoration: 'underline',
+  },
+  labelContainer: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  iconWrapper: {
+    display: 'flex',
+    flex: '1 0 auto',
+  },
+  span: {
+    color: fontColor['--t-font-color-extra-light'],
+  },
+});

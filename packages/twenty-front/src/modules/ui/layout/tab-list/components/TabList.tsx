@@ -1,5 +1,4 @@
 import { TabListHiddenMeasurements } from '@/ui/layout/tab-list/components/TabListHiddenMeasurements';
-import { TAB_LIST_HEIGHT } from '@/ui/layout/tab-list/constants/TabListHeight';
 import { useScrollActiveTabIntoView } from '@/ui/layout/tab-list/hooks/useScrollActiveTabIntoView';
 import { useTabListMeasurements } from '@/ui/layout/tab-list/hooks/useTabListMeasurements';
 import { activeTabIdComponentState } from '@/ui/layout/tab-list/states/activeTabIdComponentState';
@@ -9,59 +8,58 @@ import { NodeDimension } from '@/ui/utilities/dimensions/components/NodeDimensio
 import { useWorkspaceSurface } from '@/ui/layout/hooks/useWorkspaceSurface';
 import { useIsMobile } from 'twenty-ui/utilities';
 import { useAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useAtomComponentState';
-import { styled } from '@linaria/react';
 import { useCallback, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { isDefined } from 'twenty-shared/utils';
 import { TabListRow } from '@/ui/layout/tab-list/components/TabListRow';
 import { TabListItem } from '@/ui/layout/tab-list/components/TabListItem';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { TabListDropdown } from './TabListDropdown';
 import { TabListSelectionSyncEffect } from '@/ui/layout/tab-list/components/TabListSelectionSyncEffect';
+import * as stylex from '@stylexjs/stylex';
+import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  box-sizing: border-box;
-  display: flex;
-  height: ${TAB_LIST_HEIGHT};
-  position: relative;
-  user-select: none;
-  width: 100%;
-
-  &::after {
-    background-color: ${themeCssVariables.border.color.light};
-    bottom: 0;
-    content: '';
-    height: 1px;
-    left: 0;
-    position: absolute;
-    right: 0;
-  }
-`;
-
-const StyledInnerContainer = styled.div<{ $centerTabs: boolean }>`
-  display: flex;
-  flex: 1;
-  justify-content: ${({ $centerTabs }) =>
-    $centerTabs ? 'center' : 'flex-start'};
-  min-width: 0;
-`;
-
-const StyledDropdownContainer = styled.div`
-  align-items: center;
-  display: flex;
-`;
-
-const StyledNodeDimension = styled(NodeDimension)`
-  display: flex;
-  flex: 1;
-  min-width: 0;
-`;
-
-const StyledRightContainer = styled.div`
-  align-items: center;
-  display: flex;
-  margin-left: auto;
-`;
+const styles = stylex.create({
+  container: {
+    boxSizing: 'border-box',
+    display: 'flex',
+    height: spacing['--t-spacing-10'],
+    position: 'relative',
+    userSelect: 'none',
+    width: '100%',
+    '::after': {
+      backgroundColor: borderColor['--t-border-color-light'],
+      bottom: 0,
+      content: '""',
+      height: '1px',
+      left: 0,
+      position: 'absolute',
+      right: 0,
+    },
+  },
+  innerContainer: {
+    display: 'flex',
+    flex: 1,
+    justifyContent: 'flex-start',
+    minWidth: 0,
+  },
+  innerContainerCentered: {
+    justifyContent: 'center',
+  },
+  nodeDimension: {
+    display: 'flex',
+    flex: 1,
+    minWidth: 0,
+  },
+  dropdownContainer: {
+    alignItems: 'center',
+    display: 'flex',
+  },
+  rightContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    marginLeft: 'auto',
+  },
+});
 
 export const TabList = ({
   'aria-label': ariaLabel,
@@ -172,6 +170,8 @@ export const TabList = ({
     ],
   );
 
+  const containerProps = stylex.props(styles.container);
+
   if (visibleTabs.length === 0) {
     return (
       <TabListSelectionSyncEffect
@@ -203,9 +203,22 @@ export const TabList = ({
           />
         )}
 
-        <StyledContainer className={className}>
-          <StyledNodeDimension onDimensionChange={onContainerWidthChange}>
-            <StyledInnerContainer $centerTabs={centerTabs && !shouldScrollTabs}>
+        <div
+          {...containerProps}
+          className={[containerProps.className, className].join(' ')}
+        >
+          <NodeDimension
+            className={stylex.props(styles.nodeDimension).className}
+            onDimensionChange={onContainerWidthChange}
+          >
+            <div
+              {...stylex.props(
+                styles.innerContainer,
+                centerTabs &&
+                  !shouldScrollTabs &&
+                  styles.innerContainerCentered,
+              )}
+            >
               <TabListRow
                 aria-label={ariaLabel}
                 ref={tabRowRef}
@@ -225,7 +238,7 @@ export const TabList = ({
               </TabListRow>
 
               {shouldShowOverflowDropdown && (
-                <StyledDropdownContainer>
+                <div {...stylex.props(styles.dropdownContainer)}>
                   <TabListDropdown
                     dropdownId={dropdownId}
                     overflow={{
@@ -237,15 +250,15 @@ export const TabList = ({
                     onTabSelect={handleTabSelectFromDropdown}
                     loading={loading}
                   />
-                </StyledDropdownContainer>
+                </div>
               )}
-            </StyledInnerContainer>
-          </StyledNodeDimension>
+            </div>
+          </NodeDimension>
 
           {isDefined(rightComponent) && (
-            <StyledRightContainer>{rightComponent}</StyledRightContainer>
+            <div {...stylex.props(styles.rightContainer)}>{rightComponent}</div>
           )}
-        </StyledContainer>
+        </div>
       </>
     </TabListComponentInstanceContext.Provider>
   );

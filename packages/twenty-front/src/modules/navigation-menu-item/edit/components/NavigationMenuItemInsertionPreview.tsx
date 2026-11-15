@@ -1,3 +1,4 @@
+import * as stylex from '@stylexjs/stylex';
 import { isDefined } from 'twenty-shared/utils';
 import { type NavigationDrawerSubItemState } from '@/ui/navigation/navigation-drawer/types/NavigationDrawerSubItemState';
 import { useCallback } from 'react';
@@ -7,10 +8,9 @@ import { NavigationSections } from '@/navigation-menu-item/common/constants/Navi
 import { navigationMenuItemInsertionPreviewState } from '@/navigation-menu-item/common/states/navigationMenuItemInsertionPreviewState';
 import { NavigationDrawerItem } from '@/ui/navigation/navigation-drawer/components/NavigationDrawerItem';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useIcons } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { general } from 'twenty-ui/theme/tokens.stylex';
 
 type NavigationMenuItemInsertionPreviewProps = {
   folderId: string | null;
@@ -19,10 +19,10 @@ type NavigationMenuItemInsertionPreviewProps = {
   subItemState?: NavigationDrawerSubItemState;
 };
 
-const StyledPreview = styled.div<{ isInFolder: boolean }>`
-  margin-bottom: ${({ isInFolder }) =>
-    isInFolder ? 0 : themeCssVariables.betweenSiblingsGap};
-`;
+const styles = stylex.create({
+  preview: { marginBottom: general['--t-between-siblings-gap'] },
+  previewInFolder: { marginBottom: 0 },
+});
 
 export const NavigationMenuItemInsertionPreview = ({
   folderId,
@@ -66,9 +66,12 @@ export const NavigationMenuItemInsertionPreview = ({
   }
 
   return (
-    <StyledPreview
+    <div
       ref={setAnchor}
-      isInFolder={isDefined(folderId)}
+      {...stylex.props(
+        styles.preview,
+        isDefined(folderId) && styles.previewInFolder,
+      )}
       role="status"
       aria-label={t`Select a menu item`}
     >
@@ -79,6 +82,6 @@ export const NavigationMenuItemInsertionPreview = ({
         indentationLevel={isDefined(folderId) ? 2 : 1}
         subItemState={subItemState}
       />
-    </StyledPreview>
+    </div>
   );
 };

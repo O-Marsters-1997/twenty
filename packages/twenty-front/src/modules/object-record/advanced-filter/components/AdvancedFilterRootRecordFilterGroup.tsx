@@ -12,18 +12,23 @@ import { isRecordFilterGroupChildARecordFilterGroup } from '@/object-record/adva
 import { LegacyDropdownContent } from '@/ui/layout/dropdown/components/LegacyDropdownContent';
 import { ScrollWrapper } from '@/ui/utilities/scroll/components/ScrollWrapper';
 import { useAtomComponentSelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentSelectorValue';
-import { styled } from '@linaria/react';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  align-items: start;
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  padding: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'start',
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+});
 
 export const AdvancedFilterRootRecordFilterGroup = () => {
   const rootRecordFilterGroup = useAtomComponentSelectorValue(
@@ -50,7 +55,7 @@ export const AdvancedFilterRootRecordFilterGroup = () => {
       >
         <AdvancedFilterContext.Provider value={{ objectMetadataItem }}>
           <AdvancedFilterSSEEffect />
-          <StyledContainer>
+          <div {...stylex.props(styles.container)}>
             {childRecordFiltersAndRecordFilterGroups.map(
               (recordFilterGroupChild, recordFilterGroupChildIndex) =>
                 isRecordFilterGroupChildARecordFilterGroup(
@@ -74,7 +79,7 @@ export const AdvancedFilterRootRecordFilterGroup = () => {
             <AdvancedFilterAddFilterRuleSelect
               recordFilterGroup={rootRecordFilterGroup}
             />
-          </StyledContainer>
+          </div>
         </AdvancedFilterContext.Provider>
       </LegacyDropdownContent>
     </ScrollWrapper>

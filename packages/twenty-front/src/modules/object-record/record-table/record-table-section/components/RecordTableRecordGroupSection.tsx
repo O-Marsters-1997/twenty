@@ -1,5 +1,8 @@
+import { cx } from '@linaria/core';
 import { styled } from '@linaria/react';
 import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { background, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 import { visibleRecordFieldsComponentSelector } from '@/object-record/record-field/states/visibleRecordFieldsComponentSelector';
 import { RecordGroupAggregateDropdown } from '@/object-record/record-group/components/RecordGroupAggregateDropdown';
@@ -9,9 +12,10 @@ import { useShouldHideRecordGroup } from '@/object-record/record-group/hooks/use
 import { recordGroupDefinitionFamilyState } from '@/object-record/record-group/states/recordGroupDefinitionFamilyState';
 import { useRecordIndexContextOrThrow } from '@/object-record/record-index/contexts/RecordIndexContext';
 import { recordIndexGroupFieldMetadataItemComponentState } from '@/object-record/record-index/states/recordIndexGroupFieldMetadataComponentState';
-import { RECORD_TABLE_COLUMN_DRAG_AND_DROP_WIDTH } from '@/object-record/record-table/constants/RecordTableColumnDragAndDropWidth';
-import { RECORD_TABLE_ROW_HEIGHT } from '@/object-record/record-table/constants/RecordTableRowHeight';
-import { TABLE_Z_INDEX } from '@/object-record/record-table/constants/TableZIndex';
+import {
+  recordTableLayout,
+  recordTableZIndex,
+} from '../../constants/recordTableLayout.stylex';
 import { useRecordTableContextOrThrow } from '@/object-record/record-table/contexts/RecordTableContext';
 import { RecordTableAddButtonPlaceholderCell } from '@/object-record/record-table/record-table-row/components/RecordTableAddButtonPlaceholderCell';
 import { RecordTableGroupSectionLastDynamicFillingCell } from '@/object-record/record-table/record-table-row/components/RecordTableGroupSectionLastDynamicFillingCell';
@@ -45,51 +49,48 @@ const StyledTrContainer = styled.div`
   }
 `;
 
-const StyledRecordGroupHeaderContainer = styled.div<{ width: number }>`
-  align-items: center;
-  border-right: none;
-  display: flex;
-  flex-direction: row;
-  gap: ${themeCssVariables.spacing[1]};
-  height: ${RECORD_TABLE_ROW_HEIGHT}px;
-  left: ${RECORD_TABLE_COLUMN_DRAG_AND_DROP_WIDTH}px;
-  min-width: ${({ width }) => width + RECORD_TABLE_COLUMN_CHECKBOX_WIDTH}px;
-
-  position: sticky;
-  width: ${({ width }) => width + RECORD_TABLE_COLUMN_CHECKBOX_WIDTH}px;
-
-  z-index: ${TABLE_Z_INDEX.groupSection.stickyCell};
-`;
-
-const StyledAggregateDropdownContainer = styled.div<{
-  isNonInteractive: boolean;
-}>`
-  display: flex;
-  pointer-events: ${({ isNonInteractive }) =>
-    isNonInteractive ? 'none' : 'auto'};
-`;
-
-const StyledFieldPlaceholderCell = styled.div<{ widthOfFields: number }>`
-  height: ${RECORD_TABLE_ROW_HEIGHT}px;
-  min-width: ${({ widthOfFields }) => widthOfFields}px;
-  width: ${({ widthOfFields }) => widthOfFields}px;
-
-  z-index: ${TABLE_Z_INDEX.groupSection.normalCell};
-`;
-
-const StyledRecordTableDragAndDropPlaceholderCell = styled.div`
-  background-color: ${themeCssVariables.background.primary};
-  border-bottom: 1px solid ${themeCssVariables.background.primary};
-  height: ${RECORD_TABLE_ROW_HEIGHT}px;
-
-  left: 0;
-
-  min-width: ${RECORD_TABLE_COLUMN_DRAG_AND_DROP_WIDTH}px;
-
-  position: sticky;
-  width: ${RECORD_TABLE_COLUMN_DRAG_AND_DROP_WIDTH}px;
-  z-index: ${TABLE_Z_INDEX.groupSection.stickyCell};
-`;
+const styles = stylex.create({
+  recordGroupHeaderContainer: {
+    alignItems: 'center',
+    borderRightStyle: 'none',
+    display: 'flex',
+    flexDirection: 'row',
+    gap: spacing['--t-spacing-1'],
+    height: recordTableLayout.rowHeight,
+    left: recordTableLayout.dragAndDropColumnWidth,
+    position: 'sticky',
+    zIndex: recordTableZIndex.groupSectionStickyCell,
+  },
+  recordGroupHeaderWidth: (width: number) => ({
+    minWidth: width,
+    width,
+  }),
+  aggregateDropdownContainer: {
+    display: 'flex',
+    pointerEvents: 'auto',
+  },
+  aggregateDropdownContainerNonInteractive: {
+    pointerEvents: 'none',
+  },
+  fieldPlaceholderCell: (widthOfFields: number) => ({
+    height: recordTableLayout.rowHeight,
+    minWidth: widthOfFields,
+    width: widthOfFields,
+    zIndex: recordTableZIndex.groupSectionNormalCell,
+  }),
+  dragAndDropPlaceholderCell: {
+    backgroundColor: background['--t-background-primary'],
+    borderBottomColor: background['--t-background-primary'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: 1,
+    height: recordTableLayout.rowHeight,
+    left: 0,
+    minWidth: recordTableLayout.dragAndDropColumnWidth,
+    position: 'sticky',
+    width: recordTableLayout.dragAndDropColumnWidth,
+    zIndex: recordTableZIndex.groupSectionStickyCell,
+  },
+});
 
 export const RecordTableRecordGroupSection = () => {
   const currentRecordGroupId = useCurrentRecordGroupId();
@@ -170,12 +171,19 @@ export const RecordTableRecordGroupSection = () => {
     return null;
   }
 
+  const headerContainerProps = stylex.props(
+    styles.recordGroupHeaderContainer,
+    styles.recordGroupHeaderWidth(
+      widthOfLabelIdentifierRecordField + RECORD_TABLE_COLUMN_CHECKBOX_WIDTH,
+    ),
+  );
+
   return (
     <StyledTrContainer>
-      <StyledRecordTableDragAndDropPlaceholderCell />
-      <StyledRecordGroupHeaderContainer
-        className="disable-shadow"
-        width={widthOfLabelIdentifierRecordField}
+      <div {...stylex.props(styles.dragAndDropPlaceholderCell)} />
+      <div
+        {...headerContainerProps}
+        className={cx('disable-shadow', headerContainerProps.className)}
       >
         <RecordGroupSectionHeader
           recordGroupDefinition={recordGroupDefinition}
@@ -186,8 +194,12 @@ export const RecordTableRecordGroupSection = () => {
           }
           chevronWidth={RECORD_TABLE_COLUMN_CHECKBOX_WIDTH}
         />
-        <StyledAggregateDropdownContainer
-          isNonInteractive={isAggregateDropdownNonInteractive}
+        <div
+          {...stylex.props(
+            styles.aggregateDropdownContainer,
+            isAggregateDropdownNonInteractive &&
+              styles.aggregateDropdownContainerNonInteractive,
+          )}
           inert={isAggregateDropdownNonInteractive || undefined}
         >
           <RecordGroupAggregateDropdown
@@ -196,9 +208,11 @@ export const RecordTableRecordGroupSection = () => {
             objectMetadataItem={objectMetadataItem}
             aggregateLabel={recordIndexAggregateDisplayLabel}
           />
-        </StyledAggregateDropdownContainer>
-      </StyledRecordGroupHeaderContainer>
-      <StyledFieldPlaceholderCell widthOfFields={fieldsPlaceholderWidth} />
+        </div>
+      </div>
+      <div
+        {...stylex.props(styles.fieldPlaceholderCell(fieldsPlaceholderWidth))}
+      />
       <RecordTableAddButtonPlaceholderCell />
       <RecordTableGroupSectionLastDynamicFillingCell />
     </StyledTrContainer>

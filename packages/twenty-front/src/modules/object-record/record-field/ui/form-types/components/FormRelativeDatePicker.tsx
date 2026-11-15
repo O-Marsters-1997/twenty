@@ -3,22 +3,24 @@ import { useGetRelativeDateFilterWithUserTimezone } from '@/object-record/record
 import { RelativeDatePickerHeader } from '@/ui/input/components/internal/date/components/RelativeDatePickerHeader';
 import { stringifyRelativeDateFilter } from '@/views/view-filter-value/utils/stringifyRelativeDateFilter';
 
-import { styled } from '@linaria/react';
 import { isNonEmptyString } from '@sniptt/guards';
 import { useId } from 'react';
 import { DEFAULT_RELATIVE_DATE_FILTER_VALUE } from 'twenty-shared/constants';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import {
   type RelativeDateFilter,
   resolveRelativeDateFilterStringified,
 } from 'twenty-shared/utils';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-1'],
+  },
+});
 
 export type FormRelativeDatePickerProps = {
   label?: string;
@@ -59,7 +61,7 @@ export const FormRelativeDatePicker = ({
   };
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <RelativeDatePickerHeader
         instanceId={instanceId}
         onChange={handleValueChange}
@@ -75,6 +77,6 @@ export const FormRelativeDatePicker = ({
         relativeDateFilterValue={effectiveRelativeDateFilterValue}
         isDateTimeField={isDateTimeField}
       />
-    </StyledContainer>
+    </div>
   );
 };

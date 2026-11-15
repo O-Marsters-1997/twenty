@@ -1,8 +1,6 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { IconFilter } from 'twenty-ui/icon';
 import { IconButton } from 'twenty-ui/components/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { findCoreWorkflowFilterField } from '@/object-core/workflows/utils/findCoreWorkflowFilterField';
 import { useOpenCoreWorkflowFiltersSidePanel } from '@/object-core/workflows/hooks/useOpenCoreWorkflowFiltersSidePanel';
@@ -14,14 +12,18 @@ import { removeCoreWorkflowFilterRule } from '@/object-core/workflows/utils/remo
 import { useUserTimezone } from '@/ui/input/components/internal/date/hooks/useUserTimezone';
 import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
 import { SortOrFilterChip } from '@/views/components/SortOrFilterChip';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-wrap: wrap;
-  gap: ${themeCssVariables.spacing[2]};
-  min-width: 0;
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: spacing['--t-spacing-2'],
+    minWidth: '0',
+  },
+});
 
 export const CoreWorkflowsFilterBar = () => {
   const { t } = useLingui();
@@ -37,7 +39,7 @@ export const CoreWorkflowsFilterBar = () => {
     .slice(0, MAX_CORE_WORKFLOW_FILTER_RULES);
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       {appliedStepFilters.map((stepFilter) => (
         <SortOrFilterChip
           key={stepFilter.id}
@@ -67,6 +69,6 @@ export const CoreWorkflowsFilterBar = () => {
       >
         <IconFilter />
       </IconButton>
-    </StyledContainer>
+    </div>
   );
 };

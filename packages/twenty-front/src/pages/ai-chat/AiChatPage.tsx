@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useParams } from 'react-router-dom';
 import { isDefined } from 'twenty-shared/utils';
 import { useIsMobile } from 'twenty-ui/utilities';
@@ -15,16 +14,18 @@ import { PageCardLayout } from '@/ui/layout/page/components/PageCardLayout';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { AiChatPageEffects } from '~/pages/ai-chat/AiChatPageEffects';
 import { AiChatThreadPageContent } from '~/pages/ai-chat/AiChatThreadPageContent';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledChatContainer = styled.div`
-  --ai-chat-content-max-width: 768px;
-
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-height: 0;
-  width: 100%;
-`;
+const styles = stylex.create({
+  chatContainer: {
+    '--ai-chat-content-max-width': '768px',
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    minHeight: '0',
+    width: '100%',
+  },
+});
 
 export const AiChatPage = () => {
   const { threadId } = useParams();
@@ -48,11 +49,11 @@ export const AiChatPage = () => {
       ) : (
         // A new chat has no record until its first message is sent
         <PageCardLayout header={<AiChatPageHeader />}>
-          <StyledChatContainer>
+          <div {...stylex.props(styles.chatContainer)}>
             <AiChatSurfaceContext.Provider value={AI_CHAT_SURFACE.PAGE}>
               <AiChatTab />
             </AiChatSurfaceContext.Provider>
-          </StyledChatContainer>
+          </div>
         </PageCardLayout>
       )}
     </>

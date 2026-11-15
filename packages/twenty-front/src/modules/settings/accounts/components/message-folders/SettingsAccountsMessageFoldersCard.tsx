@@ -12,7 +12,6 @@ import { SettingsTextInput } from '@/ui/input/components/SettingsTextInput';
 import { Table } from '@/ui/layout/table/components/Table';
 import { TableCell } from '@/ui/layout/table/components/TableCell';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useMemo, useState } from 'react';
 import { useToast } from 'twenty-ui/components/feedback';
@@ -20,44 +19,64 @@ import { Section } from 'twenty-ui/components/layout';
 import { Checkbox } from 'twenty-ui/primitives/input';
 import { Text } from 'twenty-ui/primitives/typography';
 import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  backgroundTransparent,
+  borderColor,
+  fontColor,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledTreeList = styled.ul`
-  list-style: none;
-  margin: 0;
-  padding: 0;
-`;
-
-const StyledFoldersContainer = styled.div`
-  max-height: 400px;
-  overflow-y: auto;
-  padding-bottom: ${themeCssVariables.spacing[2]};
-  padding-top: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledSearchInputContainer = styled.div`
-  margin-bottom: ${themeCssVariables.spacing[2]};
-  width: 100%;
-`;
-
-const StyledSectionHeader = styled.div`
-  align-items: center;
-  background-color: ${themeCssVariables.background.transparent.lighter};
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  cursor: pointer;
-  display: flex;
-  height: ${themeCssVariables.spacing[6]};
-  justify-content: space-between;
-  padding-left: ${themeCssVariables.spacing[1]};
-  text-align: left;
-`;
-
-const StyledLabelContainer = styled.span`
-  align-items: center;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  margin-bottom: ${themeCssVariables.spacing[2]};
-  margin-top: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  displayLabel: {
+    color: fontColor['--t-font-color-light'],
+    fontSize: '11px',
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+  },
+  treeList: {
+    listStyle: 'none',
+    marginTop: '0',
+    marginRight: '0',
+    marginBottom: '0',
+    marginLeft: '0',
+    paddingTop: '0',
+    paddingRight: '0',
+    paddingBottom: '0',
+    paddingLeft: '0',
+  },
+  foldersContainer: {
+    maxHeight: '400px',
+    overflowY: 'auto',
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
+  },
+  searchInputContainer: {
+    marginBottom: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+  sectionHeader: {
+    alignItems: 'center',
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: borderColor['--t-border-color-light'],
+    cursor: 'pointer',
+    display: 'flex',
+    height: spacing['--t-spacing-6'],
+    justifyContent: 'space-between',
+    paddingLeft: spacing['--t-spacing-1'],
+    textAlign: 'left',
+  },
+  labelContainer: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    marginBottom: spacing['--t-spacing-2'],
+    marginTop: spacing['--t-spacing-2'],
+  },
+});
 
 export const SettingsAccountsMessageFoldersCard = () => {
   const { t } = useLingui();
@@ -134,20 +153,22 @@ export const SettingsAccountsMessageFoldersCard = () => {
   return (
     <Section.Root>
       <Table>
-        <StyledSearchInputContainer>
+        <div {...stylex.props(styles.searchInputContainer)}>
           <SettingsTextInput
             placeholder={t`Search folders...`}
             value={search}
             onChange={setSearch}
             instanceId={'message-folders-search'}
           />
-        </StyledSearchInputContainer>
-        <StyledLabelContainer>
-          <StyledDisplayLabel>{t`Folders`}</StyledDisplayLabel>
-        </StyledLabelContainer>
+        </div>
+        <span {...stylex.props(styles.labelContainer)}>
+          <Text {...stylex.props(styles.displayLabel)}>{t`Folders`}</Text>
+        </span>
 
-        <StyledSectionHeader>
-          <StyledDisplayLabel>{t`Toggle all folders`}</StyledDisplayLabel>
+        <div {...stylex.props(styles.sectionHeader)}>
+          <Text {...stylex.props(styles.displayLabel)}>
+            {t`Toggle all folders`}
+          </Text>
           <TableCell
             align="right"
             padding={`0 ${themeCssVariables.spacing[1]} 0 ${themeCssVariables.spacing[2]}`}
@@ -158,10 +179,10 @@ export const SettingsAccountsMessageFoldersCard = () => {
               size={'sm'}
             />
           </TableCell>
-        </StyledSectionHeader>
+        </div>
 
-        <StyledFoldersContainer>
-          <StyledTreeList>
+        <div {...stylex.props(styles.foldersContainer)}>
+          <ul {...stylex.props(styles.treeList)}>
             {folderTreeNodes.map((rootFolder) => (
               <SettingsMessageFoldersTreeItem
                 key={rootFolder.folder.id}
@@ -169,15 +190,9 @@ export const SettingsAccountsMessageFoldersCard = () => {
                 onToggleFolder={handleToggleFolder}
               />
             ))}
-          </StyledTreeList>
-        </StyledFoldersContainer>
+          </ul>
+        </div>
       </Table>
     </Section.Root>
   );
 };
-
-const StyledDisplayLabel = styled(Text)`
-  color: var(--t-font-color-light);
-  font-size: 11px;
-  font-weight: var(--t-font-weight-semi-bold);
-`;

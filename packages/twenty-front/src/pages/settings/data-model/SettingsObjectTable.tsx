@@ -28,25 +28,26 @@ import { SearchInput } from 'twenty-ui/components/input';
 import { Dropdown } from 'twenty-ui/components/navigation';
 import { SettingsRow } from 'twenty-ui/components/settings';
 import { IconArchive, IconChevronRight, IconSettings } from 'twenty-ui/icon';
-import { MOBILE_VIEWPORT, useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { MOBILE_VIEWPORT, useTheme } from 'twenty-ui/theme';
 import { GET_SETTINGS_OBJECT_TABLE_METADATA } from '~/pages/settings/data-model/constants/SettingsObjectTableMetadata';
 import type { SettingsObjectTableItem } from '~/pages/settings/data-model/types/SettingsObjectTableItem';
 import { normalizeSearchText } from 'twenty-ui/utilities';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
 
-const StyledIconChevronRightContainer = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-`;
-
-const StyledSearchInputContainer = styled.div`
-  padding-bottom: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledScrollWrapper = styled.div`
-  @media (max-width: ${MOBILE_VIEWPORT}px) {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-`;
+const styles = stylex.create({
+  iconChevronRightContainer: {
+    color: fontColor['--t-font-color-tertiary'],
+  },
+  searchInputContainer: {
+    paddingBottom: spacing['--t-spacing-2'],
+  },
+  scrollWrapper: {
+    overflowX: { default: null, [media.mobile]: 'auto' },
+    WebkitOverflowScrolling: { default: null, [media.mobile]: 'touch' },
+  },
+});
 
 const StyledScrollableContent = styled.div`
   @media (max-width: ${MOBILE_VIEWPORT}px) {
@@ -145,7 +146,7 @@ export const SettingsObjectTable = ({
   return (
     <>
       {withSearchBar && (
-        <StyledSearchInputContainer>
+        <div {...stylex.props(styles.searchInputContainer)}>
           <SearchInput
             placeholder={t`Search for an object...`}
             value={searchTerm}
@@ -184,10 +185,10 @@ export const SettingsObjectTable = ({
               </DropdownRoot>
             )}
           />
-        </StyledSearchInputContainer>
+        </div>
       )}
 
-      <StyledScrollWrapper>
+      <div {...stylex.props(styles.scrollWrapper)}>
         <StyledScrollableContent>
           <Table>
             <TableRow
@@ -234,12 +235,12 @@ export const SettingsObjectTable = ({
                     objectMetadataItem={objectSettingsItem.objectMetadataItem}
                     totalObjectCount={objectSettingsItem.totalObjectCount}
                     action={
-                      <StyledIconChevronRightContainer>
+                      <div {...stylex.props(styles.iconChevronRightContainer)}>
                         <IconChevronRight
                           size={theme.icon.size.md}
                           stroke={theme.icon.stroke.sm}
                         />
-                      </StyledIconChevronRightContainer>
+                      </div>
                     }
                     link={getSettingsPath(SettingsPath.ObjectDetail, {
                       objectNamePlural:
@@ -251,7 +252,7 @@ export const SettingsObjectTable = ({
             </StyledSettingsDataModelTableBodyContainer>
           </Table>
         </StyledScrollableContent>
-      </StyledScrollWrapper>
+      </div>
     </>
   );
 };

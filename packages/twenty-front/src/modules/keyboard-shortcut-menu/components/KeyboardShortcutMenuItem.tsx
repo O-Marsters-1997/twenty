@@ -1,40 +1,41 @@
 import { type Shortcut as ShortcutMenuEntry } from '@/keyboard-shortcut-menu/types/Shortcut';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { Fragment } from 'react';
 import { Shortcut } from 'twenty-ui/primitives/typography';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledItem = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.primary};
-  display: flex;
-  flex-direction: row;
-  font-weight: ${themeCssVariables.font.weight.regular};
-  height: 24px;
-  justify-content: space-between;
-`;
-
-const StyledShortcuts = styled.span`
-  align-items: center;
-  display: inline-flex;
-  gap: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  item: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-primary'],
+    display: 'flex',
+    flexDirection: 'row',
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    height: '24px',
+    justifyContent: 'space-between',
+  },
+  shortcuts: {
+    alignItems: 'center',
+    display: 'inline-flex',
+    gap: spacing['--t-spacing-1'],
+  },
+});
 
 type KeyboardMenuItemProps = {
   shortcut: ShortcutMenuEntry;
 };
 
 export const KeyboardMenuItem = ({ shortcut }: KeyboardMenuItemProps) => (
-  <StyledItem>
+  <div {...stylex.props(styles.item)}>
     {shortcut.label}
-    <StyledShortcuts>
+    <span {...stylex.props(styles.shortcuts)}>
       {shortcut.shortcuts.map((definition, index) => (
         <Fragment key={index}>
           {index > 0 && t`or`}
           <Shortcut shortcut={definition} sequenceJoinLabel={t`then`} />
         </Fragment>
       ))}
-    </StyledShortcuts>
-  </StyledItem>
+    </span>
+  </div>
 );

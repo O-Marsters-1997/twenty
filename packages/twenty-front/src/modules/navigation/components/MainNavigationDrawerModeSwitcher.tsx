@@ -1,9 +1,8 @@
 import { NAVIGATION_DRAWER_COLLAPSED_BUTTON_SIZE } from '@/ui/navigation/navigation-drawer/constants/NavigationDrawerCollapsedButtonSize';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Tooltip } from 'twenty-ui/primitives/surfaces';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 
 import { useAgentChatOpenThreadsSummary } from '@/ai/hooks/useAgentChatOpenThreadsSummary';
 import { isLayoutCustomizationModeEnabledState } from '@/layout-customization/states/isLayoutCustomizationModeEnabledState';
@@ -21,97 +20,109 @@ import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomState
 import { useIsFeatureEnabled } from '@/workspace/hooks/useIsFeatureEnabled';
 import { FeatureFlagKey } from '~/generated-metadata/graphql';
 import { useIsMobile } from 'twenty-ui/utilities';
+import * as stylex from '@stylexjs/stylex';
+import {
+  animationDuration,
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  fontWeight,
+  general,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-// Expanded, the row matches the page card header so their borders read as one line.
-const StyledSwitcher = styled.div<{ isExpanded: boolean }>`
-  align-items: ${({ isExpanded }) => (isExpanded ? 'center' : 'flex-start')};
-  border-bottom: ${({ isExpanded }) =>
-    isExpanded ? `1px solid ${themeCssVariables.border.color.light}` : 'none'};
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: ${({ isExpanded }) => (isExpanded ? 'row' : 'column')};
-  gap: ${({ isExpanded }) =>
-    isExpanded
-      ? themeCssVariables.spacing['0.5']
-      : themeCssVariables.betweenSiblingsGap};
-  height: ${({ isExpanded }) =>
-    isExpanded ? themeCssVariables.spacing[10] : 'auto'};
-  min-width: 0;
-`;
-
-const StyledMode = styled.button<{ isActive: boolean; isExpanded: boolean }>`
-  align-items: center;
-  background: ${({ isActive }) =>
-    isActive ? themeCssVariables.background.transparent.light : 'transparent'};
-  border: none;
-  border-radius: ${({ isExpanded }) =>
-    isExpanded
-      ? themeCssVariables.border.radius.smRound
-      : themeCssVariables.border.radius.mdRound};
-  color: ${({ isActive }) =>
-    isActive
-      ? themeCssVariables.font.color.primary
-      : themeCssVariables.font.color.tertiary};
-  corner-shape: round;
-  cursor: pointer;
-  display: flex;
-  // Only the labelled mode may shrink: long translations otherwise push Settings off the drawer.
-  flex-shrink: ${({ isActive, isExpanded }) =>
-    isActive && isExpanded ? 1 : 0};
-  font-family: inherit;
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.medium};
-  gap: ${({ isActive, isExpanded }) =>
-    isActive && isExpanded ? themeCssVariables.spacing[1] : '0'};
-  height: ${({ isExpanded }) =>
-    isExpanded
-      ? themeCssVariables.spacing[7]
-      : `${NAVIGATION_DRAWER_COLLAPSED_BUTTON_SIZE}px`};
-  justify-content: ${({ isExpanded }) =>
-    isExpanded ? 'flex-start' : 'center'};
-  min-width: 0;
-  padding: ${({ isExpanded }) =>
-    isExpanded ? `0 ${themeCssVariables.spacing['1.5']}` : '0'};
-  transition:
-    background calc(${themeCssVariables.animation.duration.fast} * 1s) ease,
-    color calc(${themeCssVariables.animation.duration.fast} * 1s) ease,
-    gap calc(${themeCssVariables.animation.duration.normal} * 1s) ease;
-  width: ${({ isExpanded }) =>
-    isExpanded ? 'auto' : `${NAVIGATION_DRAWER_COLLAPSED_BUTTON_SIZE}px`};
-
-  &[aria-disabled='true'] {
-    color: ${themeCssVariables.font.color.light};
-    cursor: not-allowed;
-  }
-
-  &:hover:not([aria-disabled='true']) {
-    background: ${({ isActive }) =>
-      isActive
-        ? themeCssVariables.background.transparent.light
-        : themeCssVariables.background.transparent.lighter};
-    color: ${themeCssVariables.font.color.primary};
-  }
-`;
-
-const StyledModeIcon = styled.span`
-  align-items: center;
-  display: flex;
-  flex-shrink: 0;
-  height: ${themeCssVariables.spacing[4]};
-  justify-content: center;
-  position: relative;
-  width: ${themeCssVariables.spacing[4]};
-`;
-
-const StyledModeLabelBase = styled.span`
-  display: block;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledModeLabel = motion.create(StyledModeLabelBase);
+const styles = stylex.create({
+  modeIcon: {
+    alignItems: 'center',
+    display: 'flex',
+    flexShrink: '0',
+    height: spacing['--t-spacing-4'],
+    justifyContent: 'center',
+    position: 'relative',
+    width: spacing['--t-spacing-4'],
+  },
+  switcher: {
+    alignItems: 'flex-start',
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: general['--t-between-siblings-gap'],
+    minWidth: 0,
+  },
+  switcherExpanded: {
+    alignItems: 'center',
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
+    flexDirection: 'row',
+    gap: spacing['--t-spacing-0_5'],
+    height: spacing['--t-spacing-10'],
+  },
+  mode: {
+    alignItems: 'center',
+    backgroundColor: {
+      default: 'transparent',
+      ':hover': backgroundTransparent['--t-background-transparent-lighter'],
+    },
+    borderRadius: borderRadius['--t-border-radius-md-round'],
+    borderWidth: 0,
+    color: {
+      default: fontColor['--t-font-color-tertiary'],
+      ':hover': fontColor['--t-font-color-primary'],
+    },
+    cornerShape: 'round',
+    cursor: 'pointer',
+    display: 'flex',
+    flexShrink: 0,
+    fontFamily: 'inherit',
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    gap: 0,
+    justifyContent: 'center',
+    minWidth: 0,
+    padding: 0,
+    transitionDuration: `calc(${animationDuration['--t-animation-duration-fast']} * 1s), calc(${animationDuration['--t-animation-duration-fast']} * 1s), calc(${animationDuration['--t-animation-duration-normal']} * 1s)`,
+    transitionProperty: 'background, color, gap',
+    transitionTimingFunction: 'ease',
+  },
+  modeCollapsedSize: (size: number) => ({
+    height: `${size}px`,
+    width: `${size}px`,
+  }),
+  modeExpanded: {
+    borderRadius: borderRadius['--t-border-radius-sm-round'],
+    height: spacing['--t-spacing-7'],
+    justifyContent: 'flex-start',
+    paddingBlock: 0,
+    paddingInline: spacing['--t-spacing-1_5'],
+    width: 'auto',
+  },
+  modeActive: {
+    backgroundColor: {
+      default: backgroundTransparent['--t-background-transparent-light'],
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
+    color: fontColor['--t-font-color-primary'],
+  },
+  modeActiveExpanded: {
+    flexShrink: 1,
+    gap: spacing['--t-spacing-1'],
+  },
+  modeDisabled: {
+    backgroundColor: 'transparent',
+    color: fontColor['--t-font-color-light'],
+    cursor: 'not-allowed',
+  },
+  modeLabel: {
+    display: 'block',
+    minWidth: 0,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+});
 
 export const MainNavigationDrawerModeSwitcher = () => {
   const { t } = useLingui();
@@ -148,8 +159,8 @@ export const MainNavigationDrawerModeSwitcher = () => {
   const shouldShowTooltips = !isExpanded && !isMobile;
 
   return (
-    <StyledSwitcher
-      isExpanded={isExpanded}
+    <div
+      {...stylex.props(styles.switcher, isExpanded && styles.switcherExpanded)}
       role="group"
       aria-label={t`Navigation modes`}
     >
@@ -174,10 +185,19 @@ export const MainNavigationDrawerModeSwitcher = () => {
             side={isExpanded ? 'bottom' : 'right'}
             positionMethod="fixed"
           >
-            <StyledMode
+            <button
               type="button"
-              isActive={isActive}
-              isExpanded={isExpanded}
+              {...stylex.props(
+                styles.mode,
+                isExpanded
+                  ? styles.modeExpanded
+                  : styles.modeCollapsedSize(
+                      NAVIGATION_DRAWER_COLLAPSED_BUTTON_SIZE,
+                    ),
+                isActive && styles.modeActive,
+                isActive && isExpanded && styles.modeActiveExpanded,
+                isDisabled && styles.modeDisabled,
+              )}
               aria-label={isUnread ? t`${label}, unread` : label}
               aria-current={isActive}
               aria-disabled={isDisabled}
@@ -189,11 +209,12 @@ export const MainNavigationDrawerModeSwitcher = () => {
                 switchNavigationDrawerMode(mode);
               }}
             >
-              <StyledModeIcon>
+              <span {...stylex.props(styles.modeIcon)}>
                 <Icon size={theme.icon.size.md} />
                 {isUnread && <StyledNavigationDrawerUnreadDot />}
-              </StyledModeIcon>
-              <StyledModeLabel
+              </span>
+              <motion.span
+                {...stylex.props(styles.modeLabel)}
                 initial={false}
                 animate={{ width: isExpanded && isActive ? 'auto' : 0 }}
                 transition={{
@@ -204,11 +225,11 @@ export const MainNavigationDrawerModeSwitcher = () => {
                 }}
               >
                 {label}
-              </StyledModeLabel>
-            </StyledMode>
+              </motion.span>
+            </button>
           </Tooltip>
         );
       })}
-    </StyledSwitcher>
+    </div>
   );
 };

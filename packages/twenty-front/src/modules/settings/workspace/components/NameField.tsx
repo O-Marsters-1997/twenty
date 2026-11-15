@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useCallback, useEffect, useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 
@@ -9,18 +8,19 @@ import { SettingsTextInput } from '@/ui/input/components/SettingsTextInput';
 import { useLingui } from '@lingui/react/macro';
 import isEmpty from 'lodash.isempty';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 import { useMutation } from '@apollo/client/react';
 import { UpdateWorkspaceDocument } from '~/generated-metadata/graphql';
 import { logError } from '~/utils/logError';
 
-const StyledComboInputContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  > * + * {
-    margin-left: ${themeCssVariables.spacing[4]};
-  }
-`;
+const styles = stylex.create({
+  comboInput: {
+    display: 'flex',
+    flexDirection: 'row',
+    columnGap: spacing['--t-spacing-4'],
+  },
+});
 
 type NameFieldProps = {
   autoSave?: boolean;
@@ -90,7 +90,7 @@ export const NameField = ({
   }, [debouncedUpdate, displayName]);
 
   return (
-    <StyledComboInputContainer>
+    <div {...stylex.props(styles.comboInput)}>
       <SettingsTextInput
         instanceId="workspace-name"
         label={t`Name`}
@@ -99,6 +99,6 @@ export const NameField = ({
         placeholder={t`Apple`}
         fullWidth
       />
-    </StyledComboInputContainer>
+    </div>
   );
 };

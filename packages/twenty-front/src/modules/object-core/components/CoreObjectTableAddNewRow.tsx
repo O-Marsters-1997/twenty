@@ -1,36 +1,48 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { IconPlus } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
+import {
+  backgroundTransparent,
+  borderColor,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 import { CORE_OBJECT_TABLE_CHECKBOX_COLUMN_GRID_TRACK } from '@/object-core/constants/CoreObjectTableCheckboxColumnGridTrack';
 
-const StyledAddNewRow = styled.button`
-  align-items: center;
-  background: transparent;
-  border: none;
-  border-top: 1px solid ${themeCssVariables.border.color.light};
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  font-family: inherit;
-  font-size: ${themeCssVariables.font.size.md};
-  gap: ${themeCssVariables.spacing[1]};
-  height: ${themeCssVariables.spacing[8]};
-  padding: 0 ${themeCssVariables.spacing[2]};
-  padding-inline-start: calc(
-    ${CORE_OBJECT_TABLE_CHECKBOX_COLUMN_GRID_TRACK} +
-      ${themeCssVariables.spacing[2]}
-  );
-  width: 100%;
-
-  &:not(:disabled) {
-    cursor: pointer;
-  }
-
-  &:not(:disabled):hover {
-    background-color: ${themeCssVariables.background.transparent.light};
-    color: ${themeCssVariables.font.color.secondary};
-  }
-`;
+const styles = stylex.create({
+  addNewRow: {
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    borderStyle: 'none',
+    borderTopColor: borderColor['--t-border-color-light'],
+    borderTopStyle: 'solid',
+    borderTopWidth: '1px',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    fontFamily: 'inherit',
+    fontSize: fontSize['--t-font-size-md'],
+    gap: spacing['--t-spacing-1'],
+    height: spacing['--t-spacing-8'],
+    paddingBlock: 0,
+    paddingInlineEnd: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+  paddingInlineStart: (track: string) => ({
+    paddingInlineStart: `calc(${track} + ${spacing['--t-spacing-2']})`,
+  }),
+  enabled: {
+    cursor: 'pointer',
+    backgroundColor: {
+      default: 'transparent',
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
+    color: {
+      default: fontColor['--t-font-color-tertiary'],
+      ':hover': fontColor['--t-font-color-secondary'],
+    },
+  },
+});
 
 type CoreObjectTableAddNewRowProps = {
   label: string;
@@ -43,8 +55,17 @@ export const CoreObjectTableAddNewRow = ({
   onClick,
   disabled = false,
 }: CoreObjectTableAddNewRowProps) => (
-  <StyledAddNewRow type="button" onClick={onClick} disabled={disabled}>
+  <button
+    type="button"
+    onClick={onClick}
+    disabled={disabled}
+    {...stylex.props(
+      styles.addNewRow,
+      styles.paddingInlineStart(CORE_OBJECT_TABLE_CHECKBOX_COLUMN_GRID_TRACK),
+      !disabled && styles.enabled,
+    )}
+  >
     <IconPlus size={14} />
     {label}
-  </StyledAddNewRow>
+  </button>
 );

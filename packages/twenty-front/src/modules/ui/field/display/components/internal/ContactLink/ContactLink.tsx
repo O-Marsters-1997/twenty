@@ -1,24 +1,27 @@
-import { css } from '@linaria/core';
+import * as stylex from '@stylexjs/stylex';
 import * as React from 'react';
 
-import { getSafeUrl } from 'twenty-shared/utils';
-const styles = {
-  root: css`
-    & {
-      color: inherit;
-      overflow: hidden;
-      text-decoration: underline;
-      text-decoration-color: var(--t-border-color-strong);
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      width: 100%;
-      max-width: var(--contact-link-max-width);
-    }
-    &:hover {
-      text-decoration-color: var(--t-font-color-primary);
-    }
-  `,
-};
+import { getSafeUrl, isDefined } from 'twenty-shared/utils';
+import { borderColor, fontColor } from 'twenty-ui/theme/tokens.stylex';
+
+const styles = stylex.create({
+  root: {
+    color: 'inherit',
+    maxWidth: '100%',
+    overflow: 'hidden',
+    textDecorationLine: 'underline',
+    textDecorationColor: {
+      default: borderColor['--t-border-color-strong'],
+      ':hover': fontColor['--t-font-color-primary'],
+    },
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    width: '100%',
+  },
+  maxWidth: (maxWidth: number) => ({
+    maxWidth: `${maxWidth}px`,
+  }),
+});
 
 type ContactLinkProps = {
   href: string;
@@ -35,12 +38,10 @@ export const ContactLink = ({
 }: ContactLinkProps) => {
   return (
     <a
-      className={styles.root}
-      style={
-        {
-          '--contact-link-max-width': maxWidth ?? '100%',
-        } as React.CSSProperties
-      }
+      {...stylex.props(
+        styles.root,
+        isDefined(maxWidth) && styles.maxWidth(maxWidth),
+      )}
       target="_blank"
       dir="ltr"
       onClick={onClick}

@@ -3,20 +3,25 @@ import { Dropdown } from 'twenty-ui/components/navigation';
 import { type KeyboardEvent, useState } from 'react';
 import { Key } from 'ts-key-enum';
 import { type FieldDoubleText } from '@/object-record/record-field/ui/types/FieldDoubleText';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isDefined, isSafeInternalPath, isValidUrl } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { type NavigationMenuItem } from '~/generated-metadata/graphql';
 import { DoubleTextInput } from '@/ui/field/input/components/DoubleTextInput';
 import { getLinkNavigationMenuItemComputedLink } from '@/navigation-menu-item/common/utils/getLinkNavigationMenuItemComputedLink';
 import { useNavigationMenuItemEditController } from '@/navigation-menu-item/edit/hooks/useNavigationMenuItemEditController';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledError = styled.div`
-  color: ${themeCssVariables.font.color.danger};
-  font-size: ${themeCssVariables.font.size.sm};
-  padding: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  error: {
+    color: fontColor['--t-font-color-danger'],
+    fontSize: fontSize['--t-font-size-sm'],
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+});
 
 type NavigationMenuItemLinkEditorProps = {
   item: NavigationMenuItem;
@@ -94,7 +99,10 @@ export const NavigationMenuItemLinkEditor = ({
           }}
         />
         {error && (
-          <StyledError role="alert">{t`Enter a valid URL`}</StyledError>
+          <div
+            role="alert"
+            {...stylex.props(styles.error)}
+          >{t`Enter a valid URL`}</div>
         )}
       </div>
     </Dropdown.Page>

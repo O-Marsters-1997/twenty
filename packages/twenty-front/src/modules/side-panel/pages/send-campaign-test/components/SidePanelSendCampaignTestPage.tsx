@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { useState } from 'react';
 import { CoreObjectNameSingular } from 'twenty-shared/types';
@@ -16,22 +15,27 @@ import { sendCampaignTestCampaignIdComponentState } from '@/side-panel/pages/sen
 import { useSidePanelHistory } from '@/side-panel/hooks/useSidePanelHistory';
 import { SidePanelFooter } from '@/ui/layout/side-panel/components/SidePanelFooter';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-`;
-
-const StyledContent = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[4]};
-  overflow-y: auto;
-  padding: ${themeCssVariables.spacing[4]};
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+  },
+  content: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-4'],
+    overflowY: 'auto',
+    paddingTop: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingBottom: spacing['--t-spacing-4'],
+    paddingLeft: spacing['--t-spacing-4'],
+  },
+});
 
 export const SidePanelSendCampaignTestPage = () => {
   const sendCampaignTestCampaignId = useAtomComponentStateValue(
@@ -75,15 +79,15 @@ export const SidePanelSendCampaignTestPage = () => {
   };
 
   return (
-    <StyledContainer>
-      <StyledContent>
+    <div {...stylex.props(styles.container)}>
+      <div {...stylex.props(styles.content)}>
         <FormTextFieldInput
           label={t`Recipient`}
           placeholder={t`recipient@example.com`}
           defaultValue={toAddress}
           onChange={setToAddress}
         />
-      </StyledContent>
+      </div>
       <SidePanelFooter
         actions={[
           <Button
@@ -97,6 +101,6 @@ export const SidePanelSendCampaignTestPage = () => {
           >{t`Send test email`}</Button>,
         ]}
       />
-    </StyledContainer>
+    </div>
   );
 };

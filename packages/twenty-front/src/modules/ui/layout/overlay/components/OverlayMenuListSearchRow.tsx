@@ -1,34 +1,49 @@
 import { t } from '@lingui/core/macro';
-import { styled } from '@linaria/react';
 import { type InputHTMLAttributes } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  font,
+  fontColor,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledSearchRow = styled.div`
-  align-items: center;
-  box-sizing: content-box;
-  display: flex;
-  min-height: 20px;
-  padding: ${themeCssVariables.spacing[2]} 0;
-  width: 100%;
-`;
-
-const StyledInput = styled.input`
-  background-color: transparent;
-  border: none;
-  color: ${themeCssVariables.font.color.primary};
-  font-family: ${themeCssVariables.font.family};
-  font-size: inherit;
-  font-weight: inherit;
-  outline: none;
-  padding: ${themeCssVariables.spacing[0]} ${themeCssVariables.spacing[2]};
-  width: 100%;
-
-  &::placeholder {
-    color: ${themeCssVariables.font.color.light};
-    font-family: ${themeCssVariables.font.family};
-    font-weight: ${themeCssVariables.font.weight.medium};
-  }
-`;
+const styles = stylex.create({
+  searchRow: {
+    alignItems: 'center',
+    boxSizing: 'content-box',
+    display: 'flex',
+    minHeight: '20px',
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: '0',
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: '0',
+    width: '100%',
+  },
+  input: {
+    backgroundColor: 'transparent',
+    borderStyle: 'none',
+    color: {
+      default: fontColor['--t-font-color-primary'],
+      '::placeholder': fontColor['--t-font-color-light'],
+    },
+    fontFamily: {
+      default: font['--t-font-family'],
+      '::placeholder': font['--t-font-family'],
+    },
+    fontSize: 'inherit',
+    fontWeight: {
+      default: 'inherit',
+      '::placeholder': fontWeight['--t-font-weight-medium'],
+    },
+    outline: 'none',
+    paddingTop: spacing['--t-spacing-0'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-0'],
+    paddingLeft: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+});
 
 type OverlayMenuListSearchRowProps = Pick<
   InputHTMLAttributes<HTMLInputElement>,
@@ -45,15 +60,16 @@ export const OverlayMenuListSearchRow = ({
   placeholder = t`Search`,
 }: OverlayMenuListSearchRowProps) => {
   return (
-    <StyledSearchRow>
-      <StyledInput
+    <div {...stylex.props(styles.searchRow)}>
+      <input
         ref={focusSearchInput}
         autoComplete="off"
         value={value}
         onChange={onChange}
         placeholder={placeholder}
         aria-label={placeholder}
+        {...stylex.props(styles.input)}
       />
-    </StyledSearchRow>
+    </div>
   );
 };

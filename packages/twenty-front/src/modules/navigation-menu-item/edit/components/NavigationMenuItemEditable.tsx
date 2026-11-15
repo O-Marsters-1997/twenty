@@ -1,3 +1,5 @@
+import { rowMarker } from './NavigationMenuItemRow.stylex';
+import * as stylex from '@stylexjs/stylex';
 import { type NavigationMenuItemMenuMode } from '@/navigation-menu-item/edit/types/NavigationMenuItemMenuMode';
 import { NavigationMenuItemObjectColorEditor } from '@/navigation-menu-item/edit/components/NavigationMenuItemObjectColorEditor';
 import { useIsNavigationDrawerContentExpanded } from '@/ui/navigation/navigation-drawer/hooks/useIsNavigationDrawerContentExpanded';
@@ -9,10 +11,8 @@ import {
 } from '@/ui/layout/dropdown/states/isDropdownOpenComponentState';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { useCallback, useRef, useState, type ReactNode } from 'react';
-import { styled } from '@linaria/react';
 import { NavigationMenuItemType } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { type NavigationMenuItem } from '~/generated-metadata/graphql';
 import { NavigationMenuItemMenu } from '@/navigation-menu-item/edit/components/NavigationMenuItemMenu';
 import { useOpenDropdown } from '@/ui/layout/dropdown/hooks/useOpenDropdown';
@@ -27,20 +27,13 @@ import { NavigationMenuItemLinkEditorOpenEffect } from '@/navigation-menu-item/e
 import { NavigationMenuItemLinkEditor } from '@/navigation-menu-item/edit/components/NavigationMenuItemLinkEditor';
 import { NavigationMenuItemInlineEditor } from '@/navigation-menu-item/edit/components/NavigationMenuItemInlineEditor';
 
-const StyledRow = styled.div`
-  min-width: 0;
-  position: relative;
+const styles = stylex.create({
+  row: {
+    minWidth: 0,
+    position: 'relative',
+  },
+});
 
-  &:hover .navigation-drawer-item {
-    background: ${themeCssVariables.background.transparent.light};
-  }
-
-  &:hover > [data-navigation-actions],
-  &:focus-within > [data-navigation-actions] {
-    opacity: 1;
-    pointer-events: auto;
-  }
-`;
 type NavigationMenuItemEditableProps = {
   item: NavigationMenuItem;
   children: ReactNode;
@@ -168,8 +161,9 @@ export const NavigationMenuItemEditable = ({
         selectedNavigationMenuItemIdInEditMode === item.id
       }
     >
-      <StyledRow
+      <div
         ref={rowRef}
+        {...stylex.props(styles.row, rowMarker)}
         id={anchorId}
         data-navigation-menu-item-id={dropdownId}
         onContextMenu={(event) => {
@@ -198,7 +192,7 @@ export const NavigationMenuItemEditable = ({
             onOpenActions={() => open('actions')}
           />
         )}
-      </StyledRow>
+      </div>
     </NavigationMenuItemTypeTooltip>
   );
 };

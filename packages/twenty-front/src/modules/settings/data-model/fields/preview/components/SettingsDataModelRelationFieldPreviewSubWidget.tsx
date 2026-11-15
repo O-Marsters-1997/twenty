@@ -1,4 +1,4 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 
 import { useObjectMetadataItems } from '@/object-metadata/hooks/useObjectMetadataItems';
 import { type FieldMetadataItem } from '@/object-metadata/types/FieldMetadataItem';
@@ -6,7 +6,11 @@ import { SettingsDataModelRelationFieldPreview } from '@/settings/data-model/fie
 import { SettingsDataModelObjectPreview } from '@/settings/data-model/objects/components/SettingsDataModelObjectSummary';
 import { isDefined } from 'twenty-shared/utils';
 import { Card } from 'twenty-ui/primitives/surfaces';
-import { themeCssVariables } from 'twenty-ui/theme';
+import {
+  borderRadius,
+  fontColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 export type SettingsDataModelRelationFieldPreviewSubWidgetProps = {
   fieldMetadataItem: Pick<
@@ -17,29 +21,10 @@ export type SettingsDataModelRelationFieldPreviewSubWidgetProps = {
   fieldPreviewTargetObjectNameSingular: string;
   shrink?: boolean;
   withFieldLabel?: boolean;
-  className?: string;
   pluralizeLabel?: boolean;
 };
 
-const StyledCardContainer = styled.div`
-  display: flex;
-  flex: 1 1 0;
-  min-width: 0;
-
-  > div {
-    border-radius: ${themeCssVariables.border.radius.md};
-    color: ${themeCssVariables.font.color.primary};
-  }
-`;
-
-const StyledCardContentContainer = styled.div`
-  > div {
-    padding: ${themeCssVariables.spacing[2]};
-  }
-`;
-
 export const SettingsDataModelRelationFieldPreviewSubWidget = ({
-  className,
   fieldMetadataItem,
   objectNameSingulars,
   fieldPreviewTargetObjectNameSingular,
@@ -56,25 +41,40 @@ export const SettingsDataModelRelationFieldPreviewSubWidget = ({
     .filter(isDefined);
 
   return (
-    <StyledCardContainer className={className}>
-      <Card.Root fullWidth>
-        <StyledCardContentContainer>
-          <Card.Content>
-            <SettingsDataModelObjectPreview
-              objectMetadataItems={targetObjectMetadataItems}
-              pluralizeLabel={pluralizeLabel}
-            />
-            <SettingsDataModelRelationFieldPreview
-              fieldMetadataItem={fieldMetadataItem}
-              relationTargetObjectNameSingular={
-                fieldPreviewTargetObjectNameSingular
-              }
-              shrink={shrink}
-              withFieldLabel={withFieldLabel}
-            />
-          </Card.Content>
-        </StyledCardContentContainer>
+    <div {...stylex.props(styles.container)}>
+      <Card.Root fullWidth {...stylex.props(styles.card)}>
+        <Card.Content {...stylex.props(styles.cardContent)}>
+          <SettingsDataModelObjectPreview
+            objectMetadataItems={targetObjectMetadataItems}
+            pluralizeLabel={pluralizeLabel}
+          />
+          <SettingsDataModelRelationFieldPreview
+            fieldMetadataItem={fieldMetadataItem}
+            relationTargetObjectNameSingular={
+              fieldPreviewTargetObjectNameSingular
+            }
+            shrink={shrink}
+            withFieldLabel={withFieldLabel}
+          />
+        </Card.Content>
       </Card.Root>
-    </StyledCardContainer>
+    </div>
   );
 };
+
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexBasis: 0,
+    flexGrow: 1,
+    flexShrink: 1,
+    minWidth: 0,
+  },
+  card: {
+    borderRadius: borderRadius['--t-border-radius-md'],
+    color: fontColor['--t-font-color-primary'],
+  },
+  cardContent: {
+    padding: spacing['--t-spacing-2'],
+  },
+});

@@ -1,10 +1,15 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import { type ComponentProps } from 'react';
 import { Field } from 'twenty-ui/primitives/input';
 
-const StyledFormFieldInputContainer = styled(Field.Root)`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
+export const FormFieldInputContainer = (
+  props: Omit<ComponentProps<typeof Field.Root>, 'className'>,
+) => <Field.Root {...props} className={stylex.props(styles.root).className} />;
 
-export { StyledFormFieldInputContainer as FormFieldInputContainer };
+const styles = stylex.create({
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+  },
+});

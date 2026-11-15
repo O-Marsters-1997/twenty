@@ -4,34 +4,46 @@ import { useRecordTitleCell } from '@/object-record/record-title-cell/hooks/useR
 import { getRecordFieldInputInstanceId } from '@/object-record/utils/getRecordFieldInputId';
 import { usePushFocusItemToFocusStack } from '@/ui/utilities/focus/hooks/usePushFocusItemToFocusStack';
 import { FocusComponentType } from '@/ui/utilities/focus/types/FocusComponentType';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { useContext } from 'react';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  backgroundTransparent,
+  borderRadius,
+  fontColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledDiv = styled.div`
-  align-items: center;
-  background: inherit;
-  border: none;
-  border-radius: ${themeCssVariables.border.radius.md};
-  box-sizing: border-box;
-  color: ${themeCssVariables.font.color.primary};
-  cursor: pointer;
-  display: flex;
-  height: 24px;
-  justify-content: center;
-  overflow: hidden;
-  padding: ${themeCssVariables.spacing[0]} 5px;
-  &:hover {
-    background: ${themeCssVariables.background.transparent.light};
-  }
-`;
-
-const StyledEmptyText = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-`;
+const styles = stylex.create({
+  div: {
+    alignItems: 'center',
+    background: {
+      default: 'inherit',
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
+    borderStyle: 'none',
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    boxSizing: 'border-box',
+    color: fontColor['--t-font-color-primary'],
+    cursor: 'pointer',
+    display: 'flex',
+    height: '24px',
+    justifyContent: 'center',
+    overflow: 'hidden',
+    paddingTop: spacing['--t-spacing-0'],
+    paddingRight: '5px',
+    paddingBottom: spacing['--t-spacing-0'],
+    paddingLeft: '5px',
+  },
+  emptyText: {
+    color: fontColor['--t-font-color-tertiary'],
+  },
+});
 
 export const RecordTitleFullNameFieldDisplay = ({
   containerType,
@@ -58,7 +70,7 @@ export const RecordTitleFullNameFieldDisplay = ({
   });
 
   return (
-    <StyledDiv
+    <div
       onClick={() => {
         pushFocusItemToFocusStack({
           focusId: recordTitleCellId,
@@ -81,14 +93,15 @@ export const RecordTitleFullNameFieldDisplay = ({
           }),
         });
       }}
+      {...stylex.props(styles.div)}
     >
       {!content ? (
-        <StyledEmptyText>{t`Untitled`}</StyledEmptyText>
+        <div {...stylex.props(styles.emptyText)}>{t`Untitled`}</div>
       ) : (
         <OverflowingTextWithTooltip
           text={isNonEmptyString(content) ? content : fieldDefinition.label}
         />
       )}
-    </StyledDiv>
+    </div>
   );
 };

@@ -8,7 +8,8 @@ import { TabListRoot } from '@/ui/layout/tab-list/components/TabListRoot';
 import { Tabs } from 'twenty-ui/primitives/navigation';
 import { Text } from 'twenty-ui/primitives/typography';
 import { TabList } from '@/ui/layout/tab-list/components/TabList';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 import { type Meta, type StoryObj } from '@storybook/react-vite';
 import {
   IconCalendar,
@@ -47,15 +48,20 @@ const tabs = [
 import { themeCssVariables } from 'twenty-ui/theme';
 import { ComponentWithRouterDecorator } from '~/testing/decorators/ComponentWithRouterDecorator';
 
-const StyledInteractiveContainer = styled.div`
-  border: 1px solid ${themeCssVariables.border.color.strong};
-  max-width: 100%;
-  min-width: 300px;
-  overflow: auto;
-  padding: ${themeCssVariables.spacing[5]};
-  resize: horizontal;
-  width: 600px;
-`;
+const styles = stylex.create({
+  interactive: {
+    borderColor: borderColor['--t-border-color-strong'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    maxWidth: '100%',
+    minWidth: '300px',
+    overflow: 'auto',
+    padding: spacing['--t-spacing-5'],
+    resize: 'horizontal',
+    width: '600px',
+  },
+  narrow: { width: '300px' },
+});
 
 const meta: Meta<typeof TabList> = {
   title: 'UI/Layout/TabList/TabList',
@@ -78,7 +84,7 @@ export const Default: Story = {
     componentInstanceId: 'resizable-tabs',
   },
   render: (args) => (
-    <StyledInteractiveContainer>
+    <div {...stylex.props(styles.interactive)}>
       <p>
         <strong>↔ Drag the bottom-right corner to resize!</strong>
       </p>
@@ -103,18 +109,18 @@ export const Default: Story = {
               </Tabs.Panel>
             ))}
       </TabListRoot>
-    </StyledInteractiveContainer>
+    </div>
   ),
 };
 
 export const Overflow: Story = {
   args: { behaveAsLinks: false },
   render: (args) => (
-    <StyledInteractiveContainer style={{ width: 300 }}>
+    <div {...stylex.props(styles.interactive, styles.narrow)}>
       <TabListRoot componentInstanceId={args.componentInstanceId}>
         <TabList {...args} />
       </TabListRoot>
-    </StyledInteractiveContainer>
+    </div>
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -170,11 +176,11 @@ const TabListInDialog = (args: ComponentProps<typeof TabList>) => {
               <Dialog.Description>Choose a record section.</Dialog.Description>
             </Dialog.Header>
             <Dialog.Body>
-              <StyledInteractiveContainer style={{ width: 300 }}>
+              <div {...stylex.props(styles.interactive, styles.narrow)}>
                 <TabListRoot componentInstanceId={args.componentInstanceId}>
                   <TabList {...args} />
                 </TabListRoot>
-              </StyledInteractiveContainer>
+              </div>
             </Dialog.Body>
           </Dialog.Popup>
         )}

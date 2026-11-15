@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { type Meta, type StoryObj } from '@storybook/react-vite';
 import { expect, waitFor, within } from 'storybook/test';
 import { FormProviderDecorator } from '~/testing/decorators/FormProviderDecorator';
@@ -10,15 +9,18 @@ import { isAdvancedModeEnabledState } from '@/ui/navigation/navigation-drawer/st
 import { jotaiStore } from '@/ui/utilities/state/jotai/jotaiStore';
 import { ComponentDecorator } from 'twenty-ui/testing';
 import { getTestEnrichedObjectMetadataItemsMock } from '~/testing/utils/getTestEnrichedObjectMetadataItemsMock';
+import * as stylex from '@stylexjs/stylex';
 
 const mockedCompanyObjectMetadataItem =
   getTestEnrichedObjectMetadataItemsMock().find(
     (item) => item.nameSingular === 'company',
   );
 
-const StyledContainer = styled.div`
-  flex: 1;
-`;
+const styles = stylex.create({
+  container: {
+    flex: '1',
+  },
+});
 
 const meta: Meta<typeof SettingsDataModelObjectAboutForm> = {
   title:
@@ -26,9 +28,9 @@ const meta: Meta<typeof SettingsDataModelObjectAboutForm> = {
   component: SettingsDataModelObjectAboutForm,
   decorators: [
     (Story) => (
-      <StyledContainer>
+      <div {...stylex.props(styles.container)}>
         <Story />
-      </StyledContainer>
+      </div>
     ),
     FormProviderDecorator,
     IconsProviderDecorator,

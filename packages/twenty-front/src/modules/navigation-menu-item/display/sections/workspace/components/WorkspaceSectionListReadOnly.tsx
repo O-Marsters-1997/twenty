@@ -1,17 +1,19 @@
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { general } from 'twenty-ui/theme/tokens.stylex';
 
 import type { NavigationMenuItem } from '~/generated-metadata/graphql';
 import { NavigationMenuItemType } from 'twenty-shared/types';
 import type { NavigationMenuItemSectionListDndKitProps } from '@/navigation-menu-item/display/sections/types/NavigationMenuItemSectionListDndKitProps';
 import { NavigationMenuItemDisplay } from '@/navigation-menu-item/display/components/NavigationMenuItemDisplay';
 
-const StyledList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.betweenSiblingsGap};
-  padding-top: ${themeCssVariables.betweenSiblingsGap};
-`;
+const styles = stylex.create({
+  list: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: general['--t-between-siblings-gap'],
+    paddingTop: general['--t-between-siblings-gap'],
+  },
+});
 
 type WorkspaceSectionListReadOnlyProps = Pick<
   NavigationMenuItemSectionListDndKitProps,
@@ -33,7 +35,7 @@ export const WorkspaceSectionListReadOnly = ({
   ).length;
 
   return (
-    <StyledList>
+    <div {...stylex.props(styles.list)}>
       {filteredItems.map((item: NavigationMenuItem) => (
         <NavigationMenuItemDisplay
           key={item.id}
@@ -46,6 +48,6 @@ export const WorkspaceSectionListReadOnly = ({
           readOnly
         />
       ))}
-    </StyledList>
+    </div>
   );
 };

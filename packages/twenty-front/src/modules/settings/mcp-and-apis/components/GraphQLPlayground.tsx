@@ -4,14 +4,15 @@ import {
 } from '@/settings/mcp-and-apis/states/playgroundApiKeyState';
 import { PlaygroundSchemas } from '@/settings/mcp-and-apis/types/PlaygroundSchemas';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { styled } from '@linaria/react';
 import { explorerPlugin } from '@graphiql/plugin-explorer';
 import '@graphiql/plugin-explorer/style.css';
 import { createGraphiQLFetcher } from '@graphiql/toolkit';
 import { GraphiQL } from 'graphiql';
 import 'graphiql/style.css';
+import '~/third-party-styles/graphiql.css';
+import * as stylex from '@stylexjs/stylex';
 import { REACT_APP_SERVER_BASE_URL } from '~/config';
-import { useThemeColorScheme, themeCssVariables } from 'twenty-ui/theme';
+import { useThemeColorScheme } from 'twenty-ui/theme';
 
 type GraphQLPlaygroundProps = {
   onError(): void;
@@ -23,15 +24,12 @@ export const schemaToPath = {
   [PlaygroundSchemas.METADATA]: 'metadata',
 };
 
-const StyledGraphiQLContainer = styled.div`
-  height: 100%;
-  width: 100%;
-
-  .graphiql-container {
-    background: ${themeCssVariables.background.primary};
-    border-radius: ${themeCssVariables.border.radius.md};
-  }
-`;
+const styles = stylex.create({
+  container: {
+    height: '100%',
+    width: '100%',
+  },
+});
 
 export const GraphQLPlayground = ({
   onError,
@@ -59,7 +57,7 @@ export const GraphQLPlayground = ({
   });
 
   return (
-    <StyledGraphiQLContainer>
+    <div {...stylex.props(styles.container)}>
       <GraphiQL
         forcedTheme={colorScheme}
         plugins={[explorer]}
@@ -68,6 +66,6 @@ export const GraphQLPlayground = ({
           Authorization: `Bearer ${playgroundApiKey.token}`,
         })}
       />
-    </StyledGraphiQLContainer>
+    </div>
   );
 };

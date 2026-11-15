@@ -1,7 +1,4 @@
-import { styled } from '@linaria/react';
-
 import { useContext, useRef } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { RecordBoardColumnWidthEffect } from '@/object-record/record-board/components/RecordBoardColumnWidthEffect';
 import { RecordBoardColumns } from '@/object-record/record-board/components/RecordBoardColumns';
@@ -16,27 +13,29 @@ import { ScrollWrapper } from '@/ui/utilities/scroll/components/ScrollWrapper';
 
 import { getRecordBoardHtmlId } from '@/object-record/record-board/utils/getRecordBoardHtmlId';
 import { RecordBoardDndKitProvider } from '@/object-record/record-board/record-board-dnd/providers/RecordBoardDndKitProvider';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-height: 100%;
-  position: relative;
-`;
-
-const StyledContainerContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: min-content;
-  min-height: calc(100% - ${themeCssVariables.spacing[2]});
-`;
-
-const StyledBoardContentContainer = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    minHeight: '100%',
+    position: 'relative',
+  },
+  containerContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: 'min-content',
+    minHeight: `calc(100% - ${spacing['--t-spacing-2']})`,
+  },
+  boardContentContainer: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+  },
+});
 
 export const RecordBoard = () => {
   const { recordBoardId } = useContext(RecordBoardContext);
@@ -53,10 +52,13 @@ export const RecordBoard = () => {
       >
         <RecordBoardEffects />
         <RecordBoardColumnWidthEffect />
-        <StyledContainerContainer id={getRecordBoardHtmlId(recordBoardId)}>
+        <div
+          id={getRecordBoardHtmlId(recordBoardId)}
+          {...stylex.props(styles.containerContainer)}
+        >
           <RecordBoardHeader />
-          <StyledBoardContentContainer>
-            <StyledContainer ref={boardRef}>
+          <div {...stylex.props(styles.boardContentContainer)}>
+            <div ref={boardRef} {...stylex.props(styles.container)}>
               <RecordBoardDndKitProvider>
                 <RecordBoardColumns />
               </RecordBoardDndKitProvider>
@@ -64,9 +66,9 @@ export const RecordBoard = () => {
                 <RecordBoardDragSelect boardRef={boardRef} />
               )}
               <RecordBoardFetchMoreInViewTriggerComponent />
-            </StyledContainer>
-          </StyledBoardContentContainer>
-        </StyledContainerContainer>
+            </div>
+          </div>
+        </div>
       </ScrollWrapper>
     </>
   );

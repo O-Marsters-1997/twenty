@@ -1,17 +1,19 @@
-import { styled } from '@linaria/react';
 import { type Meta, type StoryObj } from '@storybook/react-vite';
 import { action } from 'storybook/actions';
 import { within } from 'storybook/test';
 import { IconGoogle } from 'twenty-ui/icon';
 
 import { ImportContacts } from '~/pages/onboarding/ImportContacts';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledViewport = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  width: 100%;
-`;
+const styles = stylex.create({
+  viewport: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100vh',
+    width: '100%',
+  },
+});
 
 const meta: Meta<typeof ImportContacts> = {
   title: 'Pages/Onboarding/ImportContacts',
@@ -29,9 +31,9 @@ const meta: Meta<typeof ImportContacts> = {
   },
   decorators: [
     (Story) => (
-      <StyledViewport>
+      <div {...stylex.props(styles.viewport)}>
         <Story />
-      </StyledViewport>
+      </div>
     ),
   ],
 };

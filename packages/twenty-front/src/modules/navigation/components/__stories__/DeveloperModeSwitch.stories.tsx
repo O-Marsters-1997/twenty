@@ -1,26 +1,28 @@
 import { DeveloperModeSwitch } from '@/navigation/components/DeveloperModeSwitch';
 import { DEVELOPER_MODE_PHRASES } from '@/navigation/constants/DeveloperModePhrases';
 import { i18n } from '@lingui/core';
-import { styled } from '@linaria/react';
 import { type Meta, type StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { ComponentDecorator } from 'twenty-ui/testing';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledSidebarFooter = styled.div`
-  width: 204px;
-`;
+const styles = stylex.create({
+  sidebarFooter: {
+    width: '204px',
+  },
+});
 
 const DeveloperModeSwitchWithState = () => {
   const [isEnabled, setIsEnabled] = useState(false);
 
   return (
-    <StyledSidebarFooter>
+    <div {...stylex.props(styles.sidebarFooter)}>
       <DeveloperModeSwitch
         isEnabled={isEnabled}
         onEnabledChange={setIsEnabled}
       />
-    </StyledSidebarFooter>
+    </div>
   );
 };
 

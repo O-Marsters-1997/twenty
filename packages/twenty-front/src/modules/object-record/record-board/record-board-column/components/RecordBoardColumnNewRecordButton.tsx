@@ -9,29 +9,42 @@ import { RecordTableWidgetContext } from '@/object-record/record-table-widget/co
 import { canCreateRecordsForObjectMetadataItem } from '@/object-record/utils/canCreateRecordsForObjectMetadataItem';
 import { useAtomComponentSelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentSelectorValue';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { useContext } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { IconPlus } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  background,
+  borderRadius,
+  fontColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledNewButton = styled.button`
-  align-items: center;
-  align-self: baseline;
-  background-color: ${themeCssVariables.background.primary};
-  border: none;
-  border-radius: ${themeCssVariables.border.radius.sm};
-  color: ${themeCssVariables.font.color.tertiary};
-  cursor: pointer;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  padding: ${themeCssVariables.spacing[1]};
-
-  &:hover {
-    background-color: ${themeCssVariables.background.tertiary};
-  }
-`;
+const styles = stylex.create({
+  newButton: {
+    alignItems: 'center',
+    alignSelf: 'baseline',
+    backgroundColor: {
+      default: background['--t-background-primary'],
+      ':hover': background['--t-background-tertiary'],
+    },
+    borderStyle: 'none',
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    color: fontColor['--t-font-color-tertiary'],
+    cursor: 'pointer',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    paddingTop: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-1'],
+  },
+});
 
 export const RecordBoardColumnNewRecordButton = () => {
   const theme = useTheme();
@@ -84,7 +97,7 @@ export const RecordBoardColumnNewRecordButton = () => {
   }
 
   return (
-    <StyledNewButton
+    <button
       onClick={async () => {
         await createNewIndexRecord({
           position: 'last',
@@ -92,9 +105,10 @@ export const RecordBoardColumnNewRecordButton = () => {
             columnDefinition.value,
         });
       }}
+      {...stylex.props(styles.newButton)}
     >
       <IconPlus size={theme.icon.size.md} />
       {t`New`}
-    </StyledNewButton>
+    </button>
   );
 };

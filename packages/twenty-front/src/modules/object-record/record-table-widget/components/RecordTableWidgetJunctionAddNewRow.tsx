@@ -9,11 +9,18 @@ import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent
 import { DropdownRoot } from '@/ui/layout/dropdown/components/DropdownRoot';
 import { GenericDropdownContentWidth } from '@/ui/layout/dropdown/constants/GenericDropdownContentWidth';
 import { t } from '@lingui/core/macro';
+import * as stylex from '@stylexjs/stylex';
 import { type RecordGqlOperationFilter } from 'twenty-shared/types';
 import { useToast } from 'twenty-ui/components/feedback';
 import { Dropdown } from 'twenty-ui/components/navigation';
 import { IconPlus } from 'twenty-ui/icon';
 import { logError } from '~/utils/logError';
+
+const styles = stylex.create({
+  triggerFullWidth: {
+    width: '100%',
+  },
+});
 
 type RecordTableWidgetJunctionAddNewRowProps = {
   dropdownId: string;
@@ -61,9 +68,8 @@ export const RecordTableWidgetJunctionAddNewRow = ({
   return (
     <DropdownRoot dropdownId={dropdownId} type="picker">
       <Dropdown.Trigger
-        render={<div />}
+        render={<div {...stylex.props(styles.triggerFullWidth)} />}
         nativeButton={false}
-        style={{ width: '100%' }}
       >
         <RecordTableActionRow LeftIcon={IconPlus} text={t`Add New`} />
       </Dropdown.Trigger>

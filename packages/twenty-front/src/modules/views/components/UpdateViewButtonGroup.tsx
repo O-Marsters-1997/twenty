@@ -1,5 +1,3 @@
-import { styled } from '@linaria/react';
-
 import { contextStoreCurrentViewIdComponentState } from '@/context-store/states/contextStoreCurrentViewIdComponentState';
 import { IconButton } from 'twenty-ui/components/input';
 import { Dropdown } from 'twenty-ui/components/navigation';
@@ -26,14 +24,20 @@ import { t } from '@lingui/core/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { IconChevronDown, IconPlus } from 'twenty-ui/icon';
 import { Button, ButtonGroup } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { borderRadius, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  border-radius: ${themeCssVariables.border.radius.md};
-  display: inline-flex;
-  margin-right: ${themeCssVariables.spacing[2]};
-  position: relative;
-`;
+const styles = stylex.create({
+  container: {
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    display: 'inline-flex',
+    marginRight: spacing['--t-spacing-2'],
+    position: 'relative',
+  },
+});
 
 export const UpdateViewButtonGroup = () => {
   const { saveCurrentViewFilterAndSorts } = useSaveCurrentViewFiltersAndSorts();
@@ -110,7 +114,7 @@ export const UpdateViewButtonGroup = () => {
   }
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       {currentView?.key !== 'INDEX' ? (
         <ButtonGroup size="sm" variant="solid" color="accent">
           <Button
@@ -143,6 +147,6 @@ export const UpdateViewButtonGroup = () => {
           color="accent"
         >{t`Save as new view`}</Button>
       )}
-    </StyledContainer>
+    </div>
   );
 };

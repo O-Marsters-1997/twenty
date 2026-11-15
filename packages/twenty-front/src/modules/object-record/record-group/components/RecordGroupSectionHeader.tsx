@@ -1,31 +1,43 @@
 import { type FieldMetadataItem } from '@/object-metadata/types/FieldMetadataItem';
 import { RecordGroupChip } from '@/object-record/record-group/components/RecordGroupChip';
 import { type RecordGroupDefinition } from '@/object-record/record-group/types/RecordGroupDefinition';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { IconChevronDown } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledSectionToggle = styled.button`
-  align-items: center;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  height: 100%;
-  min-width: 0;
-  overflow: hidden;
-  padding: 0;
-`;
-
-const StyledChevronContainer = styled.div<{ isExpanded: boolean }>`
-  align-items: center;
-  display: flex;
-  flex-shrink: 0;
-  justify-content: center;
-  transform: rotate(${({ isExpanded }) => (isExpanded ? 0 : -90)}deg);
-`;
+const styles = stylex.create({
+  sectionToggle: {
+    alignItems: 'center',
+    background: 'transparent',
+    borderStyle: 'none',
+    cursor: 'pointer',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    height: '100%',
+    minWidth: '0',
+    overflow: 'hidden',
+    paddingTop: '0',
+    paddingRight: '0',
+    paddingBottom: '0',
+    paddingLeft: '0',
+  },
+  chevronContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexShrink: 0,
+    justifyContent: 'center',
+    transform: 'rotate(0deg)',
+  },
+  chevronCollapsed: {
+    transform: 'rotate(-90deg)',
+  },
+  chevronWidth: (width: number | undefined) => ({
+    minWidth: width,
+    width,
+  }),
+});
 
 type RecordGroupSectionHeaderProps = {
   recordGroupDefinition: RecordGroupDefinition;
@@ -45,27 +57,31 @@ export const RecordGroupSectionHeader = ({
   const theme = useTheme();
 
   return (
-    <StyledSectionToggle
+    <button
       type="button"
       aria-expanded={isExpanded}
       aria-label={t`Toggle ${recordGroupDefinition.title} group`}
       onClick={onToggle}
+      {...stylex.props(styles.sectionToggle)}
     >
-      <StyledChevronContainer
-        isExpanded={isExpanded}
-        style={{ minWidth: chevronWidth, width: chevronWidth }}
+      <div
+        {...stylex.props(
+          styles.chevronContainer,
+          !isExpanded && styles.chevronCollapsed,
+          styles.chevronWidth(chevronWidth),
+        )}
       >
         <IconChevronDown
           aria-hidden
           size={theme.icon.size.sm}
           stroke={theme.icon.stroke.sm}
         />
-      </StyledChevronContainer>
+      </div>
       <RecordGroupChip
         recordGroupDefinition={recordGroupDefinition}
         fieldMetadataItem={fieldMetadataItem}
         valueTagWeight="medium"
       />
-    </StyledSectionToggle>
+    </button>
   );
 };

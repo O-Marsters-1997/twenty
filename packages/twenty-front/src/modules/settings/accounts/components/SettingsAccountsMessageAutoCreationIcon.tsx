@@ -1,61 +1,79 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { IconArrowDown, IconArrowUp } from 'twenty-ui/icon';
 
-import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import {
+  accent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsAccountsMessageAutoCreationIconProps = {
-  className?: string;
   isSentActive?: boolean;
   isReceivedActive?: boolean;
 };
 
-const StyledIconContainer = styled.div`
-  align-items: stretch;
-  border: 2px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  box-sizing: border-box;
-  color: ${themeCssVariables.font.color.light};
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing['0.5']};
-  height: 40px;
-  justify-content: center;
-  padding: ${themeCssVariables.spacing['0.5']};
-  width: 32px;
-`;
-
-const StyledDirectionSkeleton = styled.div<{ isActive?: boolean }>`
-  align-items: center;
-  background-color: ${({ isActive }) =>
-    isActive
-      ? themeCssVariables.accent.accent7
-      : themeCssVariables.border.color.medium};
-  border-radius: 1px;
-  color: ${themeCssVariables.font.color.inverted};
-  display: flex;
-  flex: 1 0 0;
-  justify-content: center;
-  min-height: 0;
-`;
+const styles = stylex.create({
+  iconContainer: {
+    alignItems: 'stretch',
+    borderColor: borderColor['--t-border-color-medium'],
+    borderStyle: 'solid',
+    borderWidth: '2px',
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    boxSizing: 'border-box',
+    color: fontColor['--t-font-color-light'],
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-0_5'],
+    height: '40px',
+    justifyContent: 'center',
+    padding: spacing['--t-spacing-0_5'],
+    width: '32px',
+  },
+  directionSkeleton: {
+    alignItems: 'center',
+    backgroundColor: borderColor['--t-border-color-medium'],
+    borderRadius: '1px',
+    color: fontColor['--t-font-color-inverted'],
+    display: 'flex',
+    flex: '1 0 0',
+    justifyContent: 'center',
+    minHeight: '0',
+  },
+  directionSkeletonActive: {
+    backgroundColor: accent['--t-accent-accent7'],
+  },
+});
 
 export const SettingsAccountsMessageAutoCreationIcon = ({
-  className,
   isSentActive,
   isReceivedActive,
 }: SettingsAccountsMessageAutoCreationIconProps) => {
   const theme = useTheme();
 
   return (
-    <StyledIconContainer className={className}>
-      <StyledDirectionSkeleton isActive={isSentActive}>
+    <div {...stylex.props(styles.iconContainer)}>
+      <div
+        {...stylex.props(
+          styles.directionSkeleton,
+          isSentActive && styles.directionSkeletonActive,
+        )}
+      >
         <IconArrowUp size={theme.icon.size.sm} stroke={theme.icon.stroke.md} />
-      </StyledDirectionSkeleton>
-      <StyledDirectionSkeleton isActive={isReceivedActive}>
+      </div>
+      <div
+        {...stylex.props(
+          styles.directionSkeleton,
+          isReceivedActive && styles.directionSkeletonActive,
+        )}
+      >
         <IconArrowDown
           size={theme.icon.size.sm}
           stroke={theme.icon.stroke.md}
         />
-      </StyledDirectionSkeleton>
-    </StyledIconContainer>
+      </div>
+    </div>
   );
 };

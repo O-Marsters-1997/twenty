@@ -1,10 +1,8 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { type ComponentProps } from 'react';
 import { isAiModelEffort, parseAiModelVariantId } from 'twenty-shared/ai';
 import { isDefined } from 'twenty-shared/utils';
 import { IconWand } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { AUTOMATIC_MODEL_PIN } from '@/ai/constants/AutomaticModelPin';
 import { getAiModelEffortLabel } from '@/ai/utils/getAiModelEffortLabel';
@@ -12,16 +10,22 @@ import { type PinnableAiModel } from '@/ai/types/PinnableAiModel';
 import { getAiModelPinOptions } from '@/ai/utils/getAiModelPinOptions';
 import { Select } from '@/ui/input/components/Select';
 import { GenericDropdownContentWidth } from '@/ui/layout/dropdown/constants/GenericDropdownContentWidth';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
+
+const styles = stylex.create({
+  row: {
+    alignItems: 'flex-end',
+    display: 'grid',
+    gap: spacing['--t-spacing-2'],
+    gridTemplateColumns: 'minmax(0, 1fr)',
+  },
+  rowWithEffortSelect: {
+    gridTemplateColumns: 'minmax(0, 1fr) 96px',
+  },
+});
 
 const DEFAULT_EFFORT = '';
-
-const StyledRow = styled.div<{ hasEffortSelect: boolean }>`
-  align-items: flex-end;
-  display: grid;
-  gap: ${themeCssVariables.spacing[2]};
-  grid-template-columns: ${({ hasEffortSelect }) =>
-    hasEffortSelect ? 'minmax(0, 1fr) 96px' : 'minmax(0, 1fr)'};
-`;
 
 type AiModelPinSelectProps = {
   dropdownId: string;
@@ -76,7 +80,12 @@ export const AiModelPinSelect = ({
   };
 
   return (
-    <StyledRow hasEffortSelect={efforts.length > 0}>
+    <div
+      {...stylex.props(
+        styles.row,
+        efforts.length > 0 && styles.rowWithEffortSelect,
+      )}
+    >
       <Select
         dropdownId={dropdownId}
         label={label}
@@ -123,6 +132,6 @@ export const AiModelPinSelect = ({
           dropdownWidth={GenericDropdownContentWidth.Medium}
         />
       )}
-    </StyledRow>
+    </div>
   );
 };

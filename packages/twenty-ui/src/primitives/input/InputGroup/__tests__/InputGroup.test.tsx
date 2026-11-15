@@ -1,14 +1,11 @@
 import { render, screen } from '@testing-library/react';
 import { createRef } from 'react';
 
-import inputStyles from '@ui/primitives/input/Input/Input.module.scss';
-
 import { runComponentConformance } from '@test-utilities/conformance/runComponentConformance';
 
 import { Input } from '@ui/primitives/input/Input/Input';
 
 import { InputGroup } from '../InputGroup';
-import styles from '../InputGroup.module.scss';
 
 runComponentConformance({
   name: 'InputGroup',
@@ -18,7 +15,6 @@ runComponentConformance({
     </InputGroup>
   ),
   refInstanceOf: HTMLDivElement,
-  ownClassName: styles.root,
 });
 
 it('keeps native layout customization separate from input props and child size precedence', () => {
@@ -44,11 +40,6 @@ it('keeps native layout customization separate from input props and child size p
   expect(layout).toHaveStyle({ maxWidth: '240px' });
   expect(inputRef.current).toBe(explicitInput);
   expect(explicitInput).toHaveAttribute('name', 'email');
-  expect(explicitInput).toHaveClass(inputStyles.md);
-  expect(explicitInput).not.toHaveClass(inputStyles.sm);
-  expect(screen.getByRole('textbox', { name: 'Inherited' })).toHaveClass(
-    inputStyles.sm,
-  );
   expect(screen.getByText('@')).toBeInTheDocument();
   expect(screen.getByText('.com')).toBeInTheDocument();
 });

@@ -3,7 +3,7 @@ import { isDefined } from 'twenty-shared/utils';
 
 import { activeEmailEditorState } from '@/activities/emails/states/activeEmailEditorState';
 import { EmailBlockInsertList } from '@/side-panel/pages/email-block-settings/components/EmailBlockInsertList';
-import { StyledEmailSidePanelHint } from '@/side-panel/pages/email-block-settings/components/StyledEmailSidePanelHint';
+import { EmailSidePanelHint } from '@/side-panel/pages/email-block-settings/components/EmailSidePanelHint';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 
 export const SidePanelEmailDesignPage = () => {
@@ -12,7 +12,7 @@ export const SidePanelEmailDesignPage = () => {
 
   if (!isDefined(activeEmailEditor) || activeEmailEditor.isDestroyed) {
     return (
-      <StyledEmailSidePanelHint>{t`Open an email editor to design it.`}</StyledEmailSidePanelHint>
+      <EmailSidePanelHint>{t`Open an email editor to design it.`}</EmailSidePanelHint>
     );
   }
 

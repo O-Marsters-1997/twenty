@@ -1,9 +1,25 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import { type ComponentProps } from 'react';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+  },
+});
 
-export { StyledContainer as PageContainer };
+export const PageContainer = ({
+  className,
+  ...props
+}: ComponentProps<'div'>) => {
+  const rootProps = stylex.props(styles.container);
+
+  return (
+    <div
+      {...props}
+      {...rootProps}
+      className={[rootProps.className, className].join(' ')}
+    />
+  );
+};

@@ -1,33 +1,12 @@
 import { cx } from '@linaria/core';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { type ReactNode } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
-
-const StyledCell = styled.div`
-  background: ${themeCssVariables.background.primary};
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  border-right: 1px solid ${themeCssVariables.border.color.light};
-  color: ${themeCssVariables.font.color.primary};
-  padding: 0;
-  text-align: left;
-
-  &[data-selected] {
-    background: ${themeCssVariables.accent.quaternary};
-  }
-
-  &[data-without-right-border] {
-    border-right: none;
-  }
-
-  &[data-without-bottom-border] {
-    border-bottom-color: transparent;
-  }
-
-  &[data-dragging] {
-    background: transparent;
-    border-bottom-color: transparent;
-  }
-`;
+import {
+  accent,
+  background,
+  borderColor,
+  fontColor,
+} from 'twenty-ui/theme/tokens.stylex';
 
 export const RecordTableCellStyleWrapper = ({
   children,
@@ -46,17 +25,53 @@ export const RecordTableCellStyleWrapper = ({
   hasBottomBorder?: boolean;
   widthClassName: string;
 } & React.ComponentProps<'div'>) => {
+  const stylexProps = stylex.props(
+    styles.cell,
+    isSelected && styles.selected,
+    !hasRightBorder && styles.withoutRightBorder,
+    !hasBottomBorder && styles.withoutBottomBorder,
+    isDragging && styles.dragging,
+  );
+
   return (
-    <StyledCell
-      data-selected={isSelected || undefined}
-      data-dragging={isDragging || undefined}
-      data-without-right-border={!hasRightBorder || undefined}
-      data-without-bottom-border={!hasBottomBorder || undefined}
+    <div
       // oxlint-disable-next-line react/jsx-props-no-spreading
       {...divProps}
-      className={cx('table-cell', widthClassName)}
+      {...stylexProps}
+      className={cx('table-cell', widthClassName, stylexProps.className)}
     >
       {children}
-    </StyledCell>
+    </div>
   );
 };
+
+const styles = stylex.create({
+  cell: {
+    backgroundColor: background['--t-background-primary'],
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: 1,
+    borderRightColor: borderColor['--t-border-color-light'],
+    borderRightStyle: 'solid',
+    borderRightWidth: 1,
+    color: fontColor['--t-font-color-primary'],
+    paddingBottom: 0,
+    paddingLeft: 0,
+    paddingRight: 0,
+    paddingTop: 0,
+    textAlign: 'left',
+  },
+  selected: {
+    backgroundColor: accent['--t-accent-quaternary'],
+  },
+  withoutRightBorder: {
+    borderRightStyle: 'none',
+  },
+  withoutBottomBorder: {
+    borderBottomColor: 'transparent',
+  },
+  dragging: {
+    backgroundColor: 'transparent',
+    borderBottomColor: 'transparent',
+  },
+});

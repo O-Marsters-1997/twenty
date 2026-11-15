@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import {
   forwardRef,
   useRef,
@@ -9,62 +8,65 @@ import 'react-phone-number-input/style.css';
 
 import { useRegisterInputEvents } from '@/ui/input/hooks/useRegisterInputEvents';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { combineRefs } from '~/utils/combineRefs';
+import * as stylex from '@stylexjs/stylex';
+import {
+  color,
+  font,
+  fontColor,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledInput = styled.input<{
-  withRightComponent?: boolean;
-  hasError?: boolean;
-}>`
-  background-color: transparent;
-  border: none;
-  box-sizing: border-box;
-  color: ${themeCssVariables.font.color.primary};
-  font-family: ${themeCssVariables.font.family};
-  font-size: inherit;
-  font-weight: ${themeCssVariables.font.weight.medium};
-  font-weight: inherit;
-
-  &::placeholder,
-  &::-webkit-input-placeholder {
-    color: ${themeCssVariables.font.color.light};
-    font-family: ${themeCssVariables.font.family};
-    font-weight: ${themeCssVariables.font.weight.medium};
-  }
-
-  height: 32px;
-  outline: none;
-  padding: ${themeCssVariables.spacing[0]} ${themeCssVariables.spacing[2]};
-  padding-left: ${themeCssVariables.spacing[1]};
-  padding-right: ${({ withRightComponent }) =>
-    withRightComponent ? '32px' : '0'};
-  position: relative;
-
-  width: 100%;
-`;
-
-const StyledInputContainer = styled.div`
-  background-color: transparent;
-  box-sizing: border-box;
-  position: relative;
-  width: 100%;
-
-  &:not(:first-of-type) {
-    padding: ${themeCssVariables.spacing[1]};
-  }
-`;
-
-const StyledRightContainer = styled.div`
-  position: absolute;
-  right: ${themeCssVariables.spacing[2]};
-  top: 50%;
-  transform: translateY(-50%);
-`;
-
-const StyledErrorDiv = styled.div`
-  color: ${themeCssVariables.color.red};
-  padding: 0 ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  input: {
+    backgroundColor: 'transparent',
+    borderStyle: 'none',
+    boxSizing: 'border-box',
+    color: fontColor['--t-font-color-primary'],
+    fontFamily: font['--t-font-family'],
+    fontSize: 'inherit',
+    fontWeight: 'inherit',
+    height: '32px',
+    outlineStyle: 'none',
+    paddingBlock: spacing['--t-spacing-0'],
+    paddingLeft: spacing['--t-spacing-1'],
+    paddingRight: 0,
+    position: 'relative',
+    width: '100%',
+    '::placeholder': {
+      color: fontColor['--t-font-color-light'],
+      fontFamily: font['--t-font-family'],
+      fontWeight: fontWeight['--t-font-weight-medium'],
+    },
+  },
+  inputWithRightComponent: {
+    paddingRight: '32px',
+  },
+  inputContainer: {
+    backgroundColor: 'transparent',
+    boxSizing: 'border-box',
+    padding: {
+      default: null,
+      ':not(:first-of-type)': spacing['--t-spacing-1'],
+    },
+    position: 'relative',
+    width: '100%',
+  },
+  rightContainer: {
+    position: 'absolute',
+    right: spacing['--t-spacing-2'],
+    top: '50%',
+    transform: 'translateY(-50%)',
+  },
+  errorDiv: {
+    color: color['--t-color-red'],
+    paddingTop: '0',
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: '0',
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+});
 
 type HTMLInputProps = InputHTMLAttributes<HTMLInputElement>;
 
@@ -83,7 +85,6 @@ export type DropdownMenuInputProps = HTMLInputProps & {
     placeholder: HTMLInputProps['placeholder'];
   }) => React.ReactNode;
   error?: string | null;
-  hasError?: boolean;
 };
 
 export const DropdownMenuInput = forwardRef<
@@ -106,7 +107,6 @@ export const DropdownMenuInput = forwardRef<
       rightComponent,
       renderInput,
       error = '',
-      hasError = false,
     },
     ref,
   ) => {
@@ -124,9 +124,14 @@ export const DropdownMenuInput = forwardRef<
       onShiftTab,
     });
 
+    const containerProps = stylex.props(styles.inputContainer);
+
     return (
       <>
-        <StyledInputContainer className={className}>
+        <div
+          {...containerProps}
+          className={[containerProps.className, className].join(' ')}
+        >
           {renderInput ? (
             renderInput({
               value,
@@ -135,21 +140,23 @@ export const DropdownMenuInput = forwardRef<
               placeholder,
             })
           ) : (
-            <StyledInput
-              hasError={hasError}
+            <input
               autoFocus={autoFocus}
               value={value}
               placeholder={placeholder}
               onChange={onChange}
               ref={combinedRef}
-              withRightComponent={isDefined(rightComponent)}
+              {...stylex.props(
+                styles.input,
+                isDefined(rightComponent) && styles.inputWithRightComponent,
+              )}
             />
           )}
           {isDefined(rightComponent) && (
-            <StyledRightContainer>{rightComponent}</StyledRightContainer>
+            <div {...stylex.props(styles.rightContainer)}>{rightComponent}</div>
           )}
-        </StyledInputContainer>
-        {error && <StyledErrorDiv>{error}</StyledErrorDiv>}
+        </div>
+        {error && <div {...stylex.props(styles.errorDiv)}>{error}</div>}
       </>
     );
   },

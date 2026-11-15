@@ -1,11 +1,9 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useState } from 'react';
 import { CoreObjectNameSingular } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 import { IconUserPlus } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { useCreateOneRecord } from '@/object-record/hooks/useCreateOneRecord';
 import { FormSingleRecordPicker } from '@/object-record/record-field/ui/form-types/components/FormSingleRecordPicker';
@@ -14,21 +12,27 @@ import { useAddPeopleToMessageList } from '@/side-panel/pages/add-to-message-lis
 import { addToMessageListPersonFilterComponentState } from '@/side-panel/pages/add-to-message-list/states/addToMessageListPersonFilterComponentState';
 import { SidePanelFooter } from '@/ui/layout/side-panel/components/SidePanelFooter';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-`;
-
-const StyledContent = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[4]};
-  overflow-y: auto;
-  padding: ${themeCssVariables.spacing[4]};
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+  },
+  content: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-4'],
+    overflowY: 'auto',
+    paddingTop: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingBottom: spacing['--t-spacing-4'],
+    paddingLeft: spacing['--t-spacing-4'],
+  },
+});
 
 export const SidePanelAddToMessageListPage = () => {
   const addToMessageListPersonFilter = useAtomComponentStateValue(
@@ -59,8 +63,8 @@ export const SidePanelAddToMessageListPage = () => {
   };
 
   return (
-    <StyledContainer>
-      <StyledContent>
+    <div {...stylex.props(styles.container)}>
+      <div {...stylex.props(styles.content)}>
         <FormSingleRecordPicker
           label={t`List`}
           defaultValue={messageListId}
@@ -70,7 +74,7 @@ export const SidePanelAddToMessageListPage = () => {
           onCreate={handleCreateMessageList}
           disabled={isAdding}
         />
-      </StyledContent>
+      </div>
       <SidePanelFooter
         actions={[
           <Button
@@ -91,6 +95,6 @@ export const SidePanelAddToMessageListPage = () => {
           >{t`Add to List`}</Button>,
         ]}
       />
-    </StyledContainer>
+    </div>
   );
 };

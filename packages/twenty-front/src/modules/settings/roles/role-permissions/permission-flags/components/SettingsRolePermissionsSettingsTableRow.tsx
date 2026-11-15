@@ -5,24 +5,25 @@ import { TableCell } from '@/ui/layout/table/components/TableCell';
 import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
 import { useSetAtomFamilyState } from '@/ui/utilities/state/jotai/hooks/useSetAtomFamilyState';
 import { TableRow } from '@/ui/layout/table/components/TableRow';
-import { styled } from '@linaria/react';
 import { Checkbox } from 'twenty-ui/primitives/input';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 import { v4 } from 'uuid';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledName = styled.span`
-  color: ${themeCssVariables.font.color.primary};
-`;
-
-const StyledDescription = styled.span`
-  color: ${themeCssVariables.font.color.secondary};
-`;
-
-const StyledIconContainer = styled.div`
-  align-items: center;
-  display: flex;
-  justify-content: center;
-`;
+const styles = stylex.create({
+  name: {
+    color: fontColor['--t-font-color-primary'],
+  },
+  description: {
+    color: fontColor['--t-font-color-secondary'],
+  },
+  iconContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+});
 
 type SettingsRolePermissionsSettingsTableRowProps = {
   roleId: string;
@@ -101,20 +102,22 @@ export const SettingsRolePermissionsSettingsTableRow = ({
       cursor={isDisabled ? 'default' : 'pointer'}
     >
       <TableCell gap={themeCssVariables.spacing[2]}>
-        <StyledIconContainer>
+        <div {...stylex.props(styles.iconContainer)}>
           <permission.Icon
             size={theme.icon.size.md}
             color={theme.font.color.primary}
             stroke={theme.icon.stroke.sm}
           />
-        </StyledIconContainer>
-        <StyledName>{permission.name}</StyledName>
+        </div>
+        <span {...stylex.props(styles.name)}>{permission.name}</span>
       </TableCell>
       <TableCell>
         <SettingsItemTypeTag item={permission} />
       </TableCell>
       <TableCell gap={themeCssVariables.spacing[2]}>
-        <StyledDescription>{permission.description}</StyledDescription>
+        <span {...stylex.props(styles.description)}>
+          {permission.description}
+        </span>
       </TableCell>
       <TableCell
         align="right"

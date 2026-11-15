@@ -1,0 +1,115 @@
+@layer third-party {
+  .ai-chat-editor .tiptap {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    color: var(--t-font-color-primary);
+    font-family: inherit;
+    font-size: var(--t-font-size-md);
+    font-weight: var(--t-font-weight-regular);
+    line-height: 16px;
+    max-height: 320px;
+    min-height: 48px;
+    outline: none;
+    overflow-y: auto;
+    padding: 0;
+  }
+
+  .ai-chat-editor-mobile .tiptap {
+    max-height: 160px;
+    min-height: auto;
+  }
+
+  .ai-chat-editor .tiptap p {
+    margin: 0;
+  }
+
+  .ai-chat-editor .tiptap p.is-editor-empty:first-of-type::before {
+    color: var(--t-font-color-light);
+    content: attr(data-placeholder);
+    float: left;
+    font-weight: var(--t-font-weight-regular);
+    height: 0;
+    pointer-events: none;
+  }
+
+  .chat-message-text code {
+    background: var(--t-background-tertiary);
+    border-radius: var(--t-border-radius-sm);
+    line-height: 1.4;
+    max-width: 100%;
+    overflow: auto;
+    padding: 1px 3px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  .chat-message-text pre {
+    background: var(--t-background-tertiary);
+    border-radius: var(--t-border-radius-sm);
+    max-width: 100%;
+    overflow-x: auto;
+    padding: var(--t-spacing-2);
+  }
+
+  .chat-message-text pre code {
+    background: none;
+    border-radius: 0;
+    padding: 0;
+  }
+
+  .chat-message-text p {
+    line-height: 1.4em;
+    margin-block: var(--t-spacing-1);
+  }
+
+  .chat-message-text-user p {
+    margin-block: 0;
+  }
+
+  .chat-message-text ul,
+  .chat-message-text ol {
+    line-height: 1.4em;
+    margin: var(--t-spacing-1) 0;
+    padding-left: var(--t-spacing-4);
+  }
+
+  .chat-message-text ul {
+    list-style-type: disc;
+  }
+
+  .chat-message-text li {
+    line-height: 1.4em;
+    margin: var(--t-spacing-0_5) 0;
+    padding-bottom: var(--t-spacing-0_5);
+    padding-top: var(--t-spacing-0_5);
+  }
+
+  .chat-message-text blockquote {
+    border-left: 3px solid var(--t-border-color-medium);
+    color: var(--t-font-color-secondary);
+    margin: var(--t-spacing-2) 0;
+    padding-left: var(--t-spacing-2);
+  }
+
+  .reasoning-text {
+    color: var(--t-font-color-tertiary);
+    font-size: var(--t-font-size-md);
+    font-weight: var(--t-font-weight-regular);
+    line-height: var(--t-text-line-height-lg);
+  }
+
+  .json-tree-container {
+    font-size: var(--t-font-size-md);
+    overflow-x: auto;
+  }
+
+  .json-tree-container li,
+  .json-tree-container span {
+    line-height: 1;
+  }
+
+  .json-tree-container ul {
+    min-width: 0;
+  }
+}

@@ -31,7 +31,6 @@ import { groupValidationRuleViolationsByField } from '@/validation-rules/utils/g
 import { useAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useAtomComponentState';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { useId, useState } from 'react';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { Key } from 'ts-key-enum';
 import { type JsonValue } from 'type-fest';
@@ -47,37 +46,44 @@ import {
   IconPlus,
 } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-`;
-
-const StyledValidationRuleErrors = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-  gap: ${themeCssVariables.spacing[2]};
-  max-height: 30%;
-  overflow-y: auto;
-  padding: ${themeCssVariables.spacing[2]} ${themeCssVariables.spacing[3]};
-`;
-
-const StyledContent = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[4]};
-  min-height: 0;
-  overflow-y: auto;
-  padding: ${themeCssVariables.spacing[4]};
-`;
-
-const StyledHiddenFieldsToggle = styled.div`
-  display: flex;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+  },
+  validationRuleErrors: {
+    display: 'flex',
+    flexDirection: 'column',
+    flexShrink: '0',
+    gap: spacing['--t-spacing-2'],
+    maxHeight: '30%',
+    overflowY: 'auto',
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-3'],
+  },
+  content: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-4'],
+    minHeight: '0',
+    overflowY: 'auto',
+    paddingTop: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingBottom: spacing['--t-spacing-4'],
+    paddingLeft: spacing['--t-spacing-4'],
+  },
+  hiddenFieldsToggle: {
+    display: 'flex',
+  },
+});
 
 export const SidePanelRecordCreationFormPage = () => {
   const recordCreationFormRequest = useAtomComponentStateValue(
@@ -287,7 +293,7 @@ const SidePanelRecordCreationForm = ({
   });
 
   return (
-    <StyledContainer ref={containerRef}>
+    <div ref={containerRef} {...stylex.props(styles.container)}>
       <PageCardHeader
         title={
           <HeaderIdentifier
@@ -302,7 +308,7 @@ const SidePanelRecordCreationForm = ({
           />
         }
       />
-      <StyledContent>
+      <div {...stylex.props(styles.content)}>
         <RecordFormFieldInputs
           objectMetadataItem={objectMetadataItem}
           fieldMetadataItems={visibleFieldMetadataItems}
@@ -314,7 +320,7 @@ const SidePanelRecordCreationForm = ({
           onFieldValueClear={handleFieldValueClear}
         />
         {hiddenFieldsCount > 0 && (
-          <StyledHiddenFieldsToggle>
+          <div {...stylex.props(styles.hiddenFieldsToggle)}>
             <LightButton
               startIcon={
                 recordCreationFormAreHiddenFieldsShown ? (
@@ -333,7 +339,7 @@ const SidePanelRecordCreationForm = ({
                 ? t`Collapse hidden fields`
                 : t`Show hidden fields (${hiddenFieldsCount})`}
             </LightButton>
-          </StyledHiddenFieldsToggle>
+          </div>
         )}
         {recordCreationFormAreHiddenFieldsShown && hiddenFieldsCount > 0 && (
           <RecordFormFieldInputs
@@ -347,15 +353,15 @@ const SidePanelRecordCreationForm = ({
             onFieldValueClear={handleFieldValueClear}
           />
         )}
-      </StyledContent>
+      </div>
       {recordViolations.length > 0 && (
-        <StyledValidationRuleErrors>
+        <div {...stylex.props(styles.validationRuleErrors)}>
           {recordViolations.map((violation) => (
             <InlineBanner key={violation.ruleId} status="error" role="alert">
               {violation.message}
             </InlineBanner>
           ))}
-        </StyledValidationRuleErrors>
+        </div>
       )}
       <SidePanelFooter
         actions={[
@@ -389,6 +395,6 @@ const SidePanelRecordCreationForm = ({
           >{t`Create`}</Button>,
         ]}
       />
-    </StyledContainer>
+    </div>
   );
 };

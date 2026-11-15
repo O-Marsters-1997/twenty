@@ -1,73 +1,64 @@
 import { type NavigationDrawerSubItemState } from '@/ui/navigation/navigation-drawer/types/NavigationDrawerSubItemState';
-import { styled } from '@linaria/react';
-import { MOBILE_VIEWPORT, themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
+import {
+  borderColor,
+  fontColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
+import './NavigationDrawerItemBreadcrumb.css';
 
 export type NavigationDrawerItemBreadcrumbProps = {
   state?: NavigationDrawerSubItemState;
 };
 
-const StyledNavigationDrawerItemBreadcrumbContainer = styled.div`
-  height: ${themeCssVariables.spacing[7]};
-
-  margin-inline-end: ${themeCssVariables.spacing[2]};
-  margin-inline-start: 7.5px;
-  position: relative;
-  width: 9px;
-
-  [data-dnd-dragging] & {
-    display: none;
-  }
-
-  @media (max-width: ${MOBILE_VIEWPORT}px) {
-    height: ${themeCssVariables.spacing[8]};
-  }
-`;
-
-const StyledGapVerticalLine = styled.div<{ darker: boolean }>`
-  background: ${({ darker }) =>
-    darker
-      ? themeCssVariables.font.color.tertiary
-      : themeCssVariables.border.color.strong};
-
-  height: 2px;
-  position: absolute;
-
-  top: -2px;
-  width: 1px;
-`;
-
-const StyledSecondaryFullVerticalBar = styled.div<{ darker: boolean }>`
-  background: ${({ darker }) =>
-    darker
-      ? themeCssVariables.font.color.tertiary
-      : themeCssVariables.border.color.strong};
-
-  height: 100%;
-  position: absolute;
-  top: 0;
-  width: 1px;
-`;
-
-const StyledRoundedProtrusion = styled.div<{ darker: boolean }>`
-  border: 1px solid
-    ${({ darker }) =>
-      darker
-        ? themeCssVariables.font.color.tertiary
-        : themeCssVariables.border.color.strong};
-  // Logical, not physical, so the elbow mirrors under dir="rtl"
-  border-end-start-radius: 4px;
-
-  border-inline-end: none;
-
-  border-top: none;
-
-  height: 14px;
-
-  position: absolute;
-  top: 0;
-  width: 8px;
-  z-index: ${({ darker }) => (darker ? '1' : 'auto')};
-`;
+const styles = stylex.create({
+  container: {
+    height: {
+      default: spacing['--t-spacing-7'],
+      [media.mobile]: spacing['--t-spacing-8'],
+    },
+    marginInlineEnd: spacing['--t-spacing-2'],
+    marginInlineStart: '7.5px',
+    position: 'relative',
+    width: '9px',
+  },
+  gapVerticalLine: {
+    backgroundColor: borderColor['--t-border-color-strong'],
+    height: '2px',
+    position: 'absolute',
+    top: '-2px',
+    width: '1px',
+  },
+  secondaryFullVerticalBar: {
+    backgroundColor: borderColor['--t-border-color-strong'],
+    height: '100%',
+    position: 'absolute',
+    top: 0,
+    width: '1px',
+  },
+  roundedProtrusion: {
+    borderBottomWidth: '1px',
+    borderColor: borderColor['--t-border-color-strong'],
+    borderEndStartRadius: '4px',
+    borderInlineEndWidth: 0,
+    borderInlineStartWidth: '1px',
+    borderStyle: 'solid',
+    borderTopWidth: 0,
+    height: '14px',
+    position: 'absolute',
+    top: 0,
+    width: '8px',
+    zIndex: 'auto',
+  },
+  darkerBackground: {
+    backgroundColor: fontColor['--t-font-color-tertiary'],
+  },
+  darkerBorder: {
+    borderColor: fontColor['--t-font-color-tertiary'],
+    zIndex: 1,
+  },
+});
 
 export const NavigationDrawerItemBreadcrumb = ({
   state,
@@ -86,12 +77,30 @@ export const NavigationDrawerItemBreadcrumb = ({
     state === 'last-selected';
 
   return (
-    <StyledNavigationDrawerItemBreadcrumbContainer>
-      <StyledGapVerticalLine darker={gapShouldBeDarker} />
-      <StyledRoundedProtrusion darker={protrusionShouldBeDarker} />
+    <div
+      data-navigation-drawer-item-breadcrumb=""
+      {...stylex.props(styles.container)}
+    >
+      <div
+        {...stylex.props(
+          styles.gapVerticalLine,
+          gapShouldBeDarker && styles.darkerBackground,
+        )}
+      />
+      <div
+        {...stylex.props(
+          styles.roundedProtrusion,
+          protrusionShouldBeDarker && styles.darkerBorder,
+        )}
+      />
       {showVerticalBar && (
-        <StyledSecondaryFullVerticalBar darker={verticalBarShouldBeDarker} />
+        <div
+          {...stylex.props(
+            styles.secondaryFullVerticalBar,
+            verticalBarShouldBeDarker && styles.darkerBackground,
+          )}
+        />
       )}
-    </StyledNavigationDrawerItemBreadcrumbContainer>
+    </div>
   );
 };

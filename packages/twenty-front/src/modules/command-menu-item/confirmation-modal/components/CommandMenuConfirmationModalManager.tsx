@@ -1,6 +1,6 @@
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
 import { NavigationButton } from '@/ui/input/components/NavigationButton';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 import { COMMAND_MENU_CONFIRMATION_MODAL_INSTANCE_ID } from '@/command-menu-item/confirmation-modal/constants/CommandMenuItemConfirmationModalId';
 import { COMMAND_MENU_CONFIRMATION_MODAL_RESULT_BROWSER_EVENT_NAME } from 'twenty-shared/constants';
@@ -16,10 +16,12 @@ import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomState
 import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomState';
 import { isDefined } from 'twenty-shared/utils';
 
-const StyledCenteredNavigationButton = styled(NavigationButton)`
-  box-sizing: border-box;
-  margin-top: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  centeredButton: {
+    boxSizing: 'border-box',
+    marginTop: spacing['--t-spacing-2'],
+  },
+});
 
 export const CommandMenuConfirmationModalManager = () => {
   const commandMenuItemConfirmationModalConfig = useAtomStateValue(
@@ -78,14 +80,15 @@ export const CommandMenuConfirmationModalManager = () => {
       }
       AdditionalButtons={
         isDefined(linkButton) ? (
-          <StyledCenteredNavigationButton
+          <NavigationButton
+            {...stylex.props(styles.centeredButton)}
             to={linkButton.to}
             onClick={() => emitConfirmationResult('cancel')}
             fullWidth
             variant="outline"
           >
             {linkButton.title}
-          </StyledCenteredNavigationButton>
+          </NavigationButton>
         ) : undefined
       }
     />

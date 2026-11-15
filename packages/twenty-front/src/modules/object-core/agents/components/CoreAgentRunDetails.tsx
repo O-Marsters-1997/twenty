@@ -1,81 +1,91 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { isDefined, isNonEmptyArray } from 'twenty-shared/utils';
 import { Tag } from 'twenty-ui/primitives/data-display';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { CoreAgentModelCell } from '@/object-core/agents/components/CoreAgentModelCell';
 import { type CoreAgentRun } from '@/object-core/agents/types/CoreAgentRun';
+import * as stylex from '@stylexjs/stylex';
+import {
+  borderColor,
+  color,
+  fontColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledDetails = styled.div`
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  display: grid;
-  gap: ${themeCssVariables.spacing[2]} ${themeCssVariables.spacing[4]};
-  grid-template-columns: 120px minmax(0, 1fr);
-  padding: ${themeCssVariables.spacing[3]} ${themeCssVariables.spacing[2]};
-`;
-
-const StyledLabel = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-`;
-
-const StyledText = styled.div`
-  color: ${themeCssVariables.font.color.primary};
-  min-width: 0;
-  overflow-wrap: anywhere;
-  white-space: pre-wrap;
-`;
-
-const StyledError = styled(StyledText)`
-  color: ${themeCssVariables.color.red};
-`;
-
-const StyledTags = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  details: {
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: borderColor['--t-border-color-light'],
+    display: 'grid',
+    gap: `${spacing['--t-spacing-2']} ${spacing['--t-spacing-4']}`,
+    gridTemplateColumns: '120px minmax(0, 1fr)',
+    paddingTop: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-3'],
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+  label: {
+    color: fontColor['--t-font-color-tertiary'],
+  },
+  tags: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: spacing['--t-spacing-1'],
+  },
+  text: {
+    color: fontColor['--t-font-color-primary'],
+    minWidth: '0',
+    overflowWrap: 'anywhere',
+    whiteSpace: 'pre-wrap',
+  },
+  error: {
+    color: color['--t-color-red'],
+  },
+});
 
 type CoreAgentRunDetailsProps = {
   run: CoreAgentRun;
 };
 
 export const CoreAgentRunDetails = ({ run }: CoreAgentRunDetailsProps) => (
-  <StyledDetails>
+  <div {...stylex.props(styles.details)}>
     {isNonEmptyString(run.errorMessage) && (
       <>
-        <StyledLabel>{t`Error`}</StyledLabel>
-        <StyledError>{run.errorMessage}</StyledError>
+        <div {...stylex.props(styles.label)}>{t`Error`}</div>
+        <div {...stylex.props(styles.text, styles.error)}>
+          {run.errorMessage}
+        </div>
       </>
     )}
-    <StyledLabel>{t`Input`}</StyledLabel>
-    <StyledText>{run.input ?? t`No input`}</StyledText>
-    <StyledLabel>{t`Reply`}</StyledLabel>
-    <StyledText>{run.reply ?? t`No reply`}</StyledText>
+    <div {...stylex.props(styles.label)}>{t`Input`}</div>
+    <div {...stylex.props(styles.text)}>{run.input ?? t`No input`}</div>
+    <div {...stylex.props(styles.label)}>{t`Reply`}</div>
+    <div {...stylex.props(styles.text)}>{run.reply ?? t`No reply`}</div>
     {isNonEmptyArray(run.toolNames) && (
       <>
-        <StyledLabel>{t`Tools`}</StyledLabel>
-        <StyledTags>
+        <div {...stylex.props(styles.label)}>{t`Tools`}</div>
+        <div {...stylex.props(styles.tags)}>
           {run.toolNames.map((toolName) => (
             <Tag key={toolName} color="gray">
               {toolName}
             </Tag>
           ))}
-        </StyledTags>
+        </div>
       </>
     )}
     {isDefined(run.modelId) && (
       <>
-        <StyledLabel>{t`Model`}</StyledLabel>
+        <div {...stylex.props(styles.label)}>{t`Model`}</div>
         <CoreAgentModelCell modelId={run.modelId} />
       </>
     )}
     {isNonEmptyString(run.threadTitle) && (
       <>
-        <StyledLabel>{t`Conversation`}</StyledLabel>
-        <StyledText>{run.threadTitle}</StyledText>
+        <div {...stylex.props(styles.label)}>{t`Conversation`}</div>
+        <div {...stylex.props(styles.text)}>{run.threadTitle}</div>
       </>
     )}
-  </StyledDetails>
+  </div>
 );

@@ -1,4 +1,4 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { type ReactNode } from 'react';
 import { Tabs } from 'twenty-ui/primitives/navigation';
 
@@ -6,9 +6,11 @@ import { activeTabIdComponentState } from '@/ui/layout/tab-list/states/activeTab
 import { TabListComponentInstanceContext } from '@/ui/layout/tab-list/states/contexts/TabListComponentInstanceContext';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 
-const StyledRoot = styled(Tabs.Root)`
-  display: contents;
-`;
+const styles = stylex.create({
+  root: {
+    display: 'contents',
+  },
+});
 
 type TabListRootProps = {
   componentInstanceId: string;
@@ -31,7 +33,9 @@ export const TabListRoot = ({
       value={{ instanceId: componentInstanceId }}
     >
       {enabled ? (
-        <StyledRoot value={activeTabId}>{children}</StyledRoot>
+        <Tabs.Root value={activeTabId} {...stylex.props(styles.root)}>
+          {children}
+        </Tabs.Root>
       ) : (
         children
       )}

@@ -1,32 +1,41 @@
-import { styled } from '@linaria/react';
 import { type ReactNode } from 'react';
 import { type IconComponent } from 'twenty-ui/icon';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  borderRadius,
+  grayScale,
+  iconSize,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledCompositeContainer = styled.div`
-  align-items: center;
-  border-radius: ${themeCssVariables.border.radius.sm};
-  box-sizing: border-box;
-  display: flex;
-  flex-shrink: 0;
-  height: calc(${themeCssVariables.icon.size.md} * 1px);
-  justify-content: center;
-  position: relative;
-  width: calc(${themeCssVariables.icon.size.md} * 1px);
-`;
-
-const StyledOverlay = styled.div<{ $backgroundColor: string }>`
-  align-items: center;
-  background-color: ${({ $backgroundColor }) => $backgroundColor};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  bottom: -5px;
-  display: flex;
-  height: 14px;
-  justify-content: center;
-  position: absolute;
-  right: -6px;
-  width: 12px;
-`;
+const styles = stylex.create({
+  compositeContainer: {
+    alignItems: 'center',
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexShrink: '0',
+    height: `calc(${iconSize['--t-icon-size-md']} * 1px)`,
+    justifyContent: 'center',
+    position: 'relative',
+    width: `calc(${iconSize['--t-icon-size-md']} * 1px)`,
+  },
+  overlay: {
+    alignItems: 'center',
+    backgroundColor: grayScale['--t-gray-scale-gray4'],
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    bottom: '-5px',
+    display: 'flex',
+    height: '14px',
+    justifyContent: 'center',
+    position: 'absolute',
+    right: '-6px',
+    width: '12px',
+  },
+});
 
 type NavigationMenuItemIconWithOverlayProps = {
   children: ReactNode;
@@ -40,15 +49,15 @@ export const NavigationMenuItemIconWithOverlay = ({
   const theme = useTheme();
 
   return (
-    <StyledCompositeContainer>
+    <div {...stylex.props(styles.compositeContainer)}>
       {children}
-      <StyledOverlay $backgroundColor={themeCssVariables.grayScale.gray4}>
+      <div {...stylex.props(styles.overlay)}>
         <OverlayIcon
           size="12px"
           stroke={theme.icon.stroke.md}
           color={themeCssVariables.grayScale.gray10}
         />
-      </StyledOverlay>
-    </StyledCompositeContainer>
+      </div>
+    </div>
   );
 };

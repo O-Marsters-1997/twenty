@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { type ReactNode } from 'react';
 
@@ -16,7 +15,9 @@ import {
 } from '@/settings/data-model/object-details/components/SettingsObjectItemTableRowStyledComponents';
 import { TableCell } from '@/ui/layout/table/components/TableCell';
 import { TableRow } from '@/ui/layout/table/components/TableRow';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 export type SettingsObjectMetadataItemTableRowProps = {
   action: ReactNode;
@@ -25,19 +26,20 @@ export type SettingsObjectMetadataItemTableRowProps = {
   totalObjectCount: number;
 };
 
-const StyledNameContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex: 1;
-  gap: ${themeCssVariables.spacing[1]};
-  min-width: 0;
-`;
-
-const StyledNameLabel = styled.div`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
+const styles = stylex.create({
+  nameContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flex: '1',
+    gap: spacing['--t-spacing-1'],
+    minWidth: '0',
+  },
+  nameLabel: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+});
 
 export const SettingsObjectMetadataItemTableRow = ({
   action,
@@ -62,16 +64,19 @@ export const SettingsObjectMetadataItemTableRow = ({
             size={theme.icon.size.md}
             stroke={theme.icon.stroke.sm}
           />
-          <StyledNameContainer>
-            <StyledNameLabel title={objectMetadataItem.labelPlural}>
+          <div {...stylex.props(styles.nameContainer)}>
+            <div
+              title={objectMetadataItem.labelPlural}
+              {...stylex.props(styles.nameLabel)}
+            >
               {objectMetadataItem.labelPlural}
-            </StyledNameLabel>
+            </div>
             {!objectMetadataItem.isActive && (
               <SettingsNameCellSecondaryLabel>
                 {t`Deactivated`}
               </SettingsNameCellSecondaryLabel>
             )}
-          </StyledNameContainer>
+          </div>
         </StyledNameTableCell>
       </StyledStickyFirstCell>
       <TableCell>

@@ -11,17 +11,19 @@ import { useAtomComponentFamilyState } from '@/ui/utilities/state/jotai/hooks/us
 import { useAtomComponentFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentFamilyStateValue';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
-import { styled } from '@linaria/react';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledSectionHeader = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  height: 32px;
-  margin-bottom: 2px;
-`;
+const styles = stylex.create({
+  sectionHeader: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    height: '32px',
+    marginBottom: '2px',
+  },
+});
 
 export const RecordListRecordGroupSection = () => {
   const { objectMetadataItem } = useRecordIndexContextOrThrow();
@@ -58,7 +60,7 @@ export const RecordListRecordGroupSection = () => {
   }
 
   return (
-    <StyledSectionHeader>
+    <div {...stylex.props(styles.sectionHeader)}>
       <RecordGroupSectionHeader
         recordGroupDefinition={recordGroupDefinition}
         fieldMetadataItem={recordIndexGroupFieldMetadataItem}
@@ -73,6 +75,6 @@ export const RecordListRecordGroupSection = () => {
         objectMetadataItem={objectMetadataItem}
         aggregateLabel={recordIndexAggregateDisplayLabel}
       />
-    </StyledSectionHeader>
+    </div>
   );
 };

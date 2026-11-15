@@ -1,4 +1,4 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import {
   useEffect,
   useRef,
@@ -16,18 +16,21 @@ import { isDefined } from 'twenty-shared/utils';
 import { splitFullName } from '~/utils/format/splitFullName';
 import { turnIntoEmptyStringIfWhitespacesOnly } from '~/utils/string/turnIntoEmptyStringIfWhitespacesOnly';
 import { StyledTextInput } from './TextInput';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-
-  & > input:last-child {
-    border-left: 1px solid ${themeCssVariables.border.color.strong};
-    padding-left: ${themeCssVariables.spacing[2]};
-  }
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  secondInput: {
+    borderLeftColor: borderColor['--t-border-color-strong'],
+    borderLeftStyle: 'solid',
+    borderLeftWidth: '1px',
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+});
 
 type DoubleTextInputProps = {
   instanceId: string;
@@ -199,7 +202,7 @@ export const DoubleTextInput = ({
 
   return (
     <FieldInputContainer>
-      <StyledContainer ref={containerRef}>
+      <div ref={containerRef} {...stylex.props(styles.container)}>
         <StyledTextInput
           autoComplete="off"
           autoFocus
@@ -227,6 +230,7 @@ export const DoubleTextInput = ({
           }
         />
         <StyledTextInput
+          xstyle={styles.secondInput}
           autoComplete="off"
           onFocus={(event) => {
             setFocusPosition('right');
@@ -248,7 +252,7 @@ export const DoubleTextInput = ({
             selectOnFocus ? handleClickToPreventParentClickEvents : undefined
           }
         />
-      </StyledContainer>
+      </div>
     </FieldInputContainer>
   );
 };

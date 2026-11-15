@@ -1,5 +1,5 @@
 import { SKELETON_HEIGHT_SIZES } from 'twenty-ui/primitives/feedback';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 
@@ -19,10 +19,12 @@ import { useAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useAtomC
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { ViewType } from '@/views/types/ViewType';
 
-const StyledFetchMoreTriggerDiv = styled.div<{ width: number }>`
-  max-width: ${({ width }) => width}px;
-  min-width: ${({ width }) => width}px;
-`;
+const styles = stylex.create({
+  fetchMoreTrigger: (width: number) => ({
+    maxWidth: `${width}px`,
+    minWidth: `${width}px`,
+  }),
+});
 
 // RecordCardHeaderContainer: height (32px) + padding top spacing(2) + padding bottom spacing(1)
 const BOARD_CARD_HEADER_HEIGHT = 32 + 8 + 4;
@@ -97,9 +99,9 @@ export const RecordBoardFetchMoreInViewTriggerComponent = () => {
   ]);
 
   return (
-    <StyledFetchMoreTriggerDiv
-      width={componentWidth}
+    <div
+      {...stylex.props(styles.fetchMoreTrigger(componentWidth))}
       ref={ref}
-    ></StyledFetchMoreTriggerDiv>
+    ></div>
   );
 };

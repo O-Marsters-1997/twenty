@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { useState } from 'react';
 import { SettingsPath } from 'twenty-shared/types';
@@ -6,7 +5,7 @@ import { isDefined } from 'twenty-shared/utils';
 import { Section } from 'twenty-ui/components/layout';
 import { IconInfoCircle, IconRefresh, useIcons } from 'twenty-ui/icon';
 import { Card, Tooltip } from 'twenty-ui/primitives/surfaces';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 
 import { FormAdvancedTextFieldInput } from '@/advanced-text-editor/components/FormAdvancedTextFieldInput';
 import { AI_INSTRUCTIONS_EDITOR_PROFILE } from '@/ai/constants/AiInstructionsEditorProfile';
@@ -28,33 +27,33 @@ import { type SettingsSkillFormValues } from '~/pages/settings/ai/types/Settings
 import { getSettingsAiBreadcrumbLinks } from '~/pages/settings/ai/utils/getSettingsAiBreadcrumbLinks';
 import { getSettingsSkillInitialFormValues } from '~/pages/settings/ai/utils/getSettingsSkillInitialFormValues';
 import { computeMetadataNameFromLabel } from '@/object-metadata/utils/computeMetadataNameFromLabel';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledFormContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[4]};
-`;
-
-const StyledIconNameRow = styled.div`
-  align-items: flex-start;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledNameContainer = styled.div`
-  flex: 1;
-`;
-
-const StyledAdvancedSettingsOuterContainer = styled.div`
-  padding-top: ${themeCssVariables.spacing[4]};
-`;
-
-const StyledAdvancedSettingsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[4]};
-  width: 100%;
-`;
+const styles = stylex.create({
+  formContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-4'],
+  },
+  iconNameRow: {
+    alignItems: 'flex-start',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+  },
+  nameContainer: {
+    flex: '1',
+  },
+  advancedSettingsOuterContainer: {
+    paddingTop: spacing['--t-spacing-4'],
+  },
+  advancedSettingsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-4'],
+    width: '100%',
+  },
+});
 
 type SettingsSkillFormContentProps = {
   skill?: NonNullable<FindOneSkillQuery['skill']>;
@@ -167,14 +166,14 @@ export const SettingsSkillFormContent = ({
             title={t`About`}
             description={t`Define the name and instructions for this skill`}
           />
-          <StyledFormContainer>
-            <StyledIconNameRow>
+          <div {...stylex.props(styles.formContainer)}>
+            <div {...stylex.props(styles.iconNameRow)}>
               <IconPicker
                 selectedIconKey={formValues.icon || 'IconBook'}
                 onChange={({ iconKey }) => handleFieldChange('icon', iconKey)}
                 disabled={isReadonlyMode}
               />
-              <StyledNameContainer>
+              <div {...stylex.props(styles.nameContainer)}>
                 <SettingsTextInput
                   instanceId="skill-label-field-input"
                   placeholder={t`Skill name`}
@@ -183,8 +182,8 @@ export const SettingsSkillFormContent = ({
                   disabled={isReadonlyMode}
                   fullWidth
                 />
-              </StyledNameContainer>
-            </StyledIconNameRow>
+              </div>
+            </div>
 
             <TextArea
               textAreaId="skill-description-textarea"
@@ -220,8 +219,8 @@ export const SettingsSkillFormContent = ({
             />
 
             <AdvancedSettingsWrapper hideDot>
-              <StyledAdvancedSettingsOuterContainer>
-                <StyledAdvancedSettingsContainer>
+              <div {...stylex.props(styles.advancedSettingsOuterContainer)}>
+                <div {...stylex.props(styles.advancedSettingsContainer)}>
                   <SettingsTextInput
                     instanceId="skill-api-name"
                     label={t`API Name`}
@@ -262,10 +261,10 @@ export const SettingsSkillFormContent = ({
                       }
                     />
                   </Card.Root>
-                </StyledAdvancedSettingsContainer>
-              </StyledAdvancedSettingsOuterContainer>
+                </div>
+              </div>
             </AdvancedSettingsWrapper>
-          </StyledFormContainer>
+          </div>
         </Section.Root>
 
         {isDefined(skill) && <SettingsSkillDangerZone skill={skill} />}

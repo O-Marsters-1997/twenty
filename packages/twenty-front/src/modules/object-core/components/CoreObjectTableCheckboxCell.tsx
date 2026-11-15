@@ -1,14 +1,16 @@
-import { styled } from '@linaria/react';
 import { type MouseEvent } from 'react';
 import { Checkbox } from 'twenty-ui/primitives/input';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledContainer = styled.div`
-  align-items: center;
-  display: flex;
-  height: 100%;
-  justify-content: center;
-  width: 100%;
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    display: 'flex',
+    height: '100%',
+    justifyContent: 'center',
+    width: '100%',
+  },
+});
 
 type CoreObjectTableCheckboxCellProps = {
   checked: boolean;
@@ -29,13 +31,13 @@ export const CoreObjectTableCheckboxCell = ({
   };
 
   return (
-    <StyledContainer onClick={stopRowNavigation}>
+    <div onClick={stopRowNavigation} {...stylex.props(styles.container)}>
       <Checkbox
         checked={checked}
         indeterminate={indeterminate}
         aria-label={ariaLabel}
         onCheckedChange={onToggle}
       />
-    </StyledContainer>
+    </div>
   );
 };

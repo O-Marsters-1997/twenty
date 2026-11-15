@@ -2,17 +2,22 @@ import { getWidgetConfigurationViewId } from '@/page-layout/utils/getWidgetConfi
 import { RecordTableSettingsFieldVisibility } from '@/side-panel/pages/page-layout/components/record-table-settings/RecordTableSettingsFieldVisibility';
 import { usePageLayoutSidePanelTarget } from '@/side-panel/pages/page-layout/hooks/usePageLayoutSidePanelTarget';
 import { useWidgetInEditMode } from '@/side-panel/pages/page-layout/hooks/useWidgetInEditMode';
-import { styled } from '@linaria/react';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  overflow-y: auto;
-  padding: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    overflowY: 'auto',
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+});
 
 export const SidePanelFieldRelationTableFieldsSubPage = () => {
   const { pageLayoutId } = usePageLayoutSidePanelTarget();
@@ -29,12 +34,12 @@ export const SidePanelFieldRelationTableFieldsSubPage = () => {
   }
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <RecordTableSettingsFieldVisibility
         viewId={viewId}
         widgetId={widgetInEditMode.id}
         pageLayoutId={pageLayoutId}
       />
-    </StyledContainer>
+    </div>
   );
 };

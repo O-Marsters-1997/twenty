@@ -1,6 +1,5 @@
 /* @license Enterprise */
 
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { useContext, useMemo } from 'react';
 import { FieldMetadataType, CoreObjectNameSingular } from 'twenty-shared/types';
@@ -28,70 +27,87 @@ import { SettingsRolePermissionsObjectLevelRecordLevelPermissionVariablePicker }
 import { RecordLevelPermissionVariablePickerContext } from '@/settings/roles/role-permissions/object-level-permissions/record-level-permissions/contexts/RecordLevelPermissionVariablePickerContext';
 import { TooltipDelay } from '@/ui/layout/tooltip/constants/TooltipDelay';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  background,
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  color,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  align-items: stretch;
-  display: flex;
-  flex: 3;
-  flex-direction: row;
-  max-width: 100%;
-  min-width: 0;
-`;
-
-const StyledIconContainer = styled.div`
-  align-items: center;
-  background-color: ${themeCssVariables.background.transparent.lighter};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-bottom-right-radius: ${themeCssVariables.border.radius.sm};
-  border-left: none;
-  border-top-right-radius: ${themeCssVariables.border.radius.sm};
-  color: ${themeCssVariables.font.color.tertiary};
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  padding: ${themeCssVariables.spacing[2]};
-
-  &:hover {
-    background-color: ${themeCssVariables.background.transparent.light};
-  }
-`;
-
-const StyledReadOnlyInput = styled.div`
-  align-items: center;
-  background-color: ${themeCssVariables.background.secondary};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-bottom-left-radius: ${themeCssVariables.border.radius.sm};
-  border-top-left-radius: ${themeCssVariables.border.radius.sm};
-  box-sizing: border-box;
-  color: ${themeCssVariables.font.color.primary};
-  display: flex;
-  flex: 1;
-  font-size: ${themeCssVariables.font.size.md};
-  gap: ${themeCssVariables.spacing[1]};
-  height: 32px;
-  overflow: hidden;
-  padding: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledMeText = styled.span`
-  color: ${themeCssVariables.color.blue};
-  flex-shrink: 0;
-`;
-
-const StyledFieldLabel = styled.span`
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledFormFieldInputWrapper = styled.div`
-  display: flex;
-  flex: 1;
-  min-width: 0;
-  overflow: visible;
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'stretch',
+    display: 'flex',
+    flex: '3',
+    flexDirection: 'row',
+    maxWidth: '100%',
+    minWidth: '0',
+  },
+  iconContainer: {
+    alignItems: 'center',
+    backgroundColor: {
+      default: backgroundTransparent['--t-background-transparent-lighter'],
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-medium'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderLeftStyle: 'none',
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    color: fontColor['--t-font-color-tertiary'],
+    cursor: 'pointer',
+    display: 'flex',
+    justifyContent: 'center',
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+  readOnlyInput: {
+    alignItems: 'center',
+    backgroundColor: background['--t-background-secondary'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-medium'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    boxSizing: 'border-box',
+    color: fontColor['--t-font-color-primary'],
+    display: 'flex',
+    flex: '1',
+    fontSize: fontSize['--t-font-size-md'],
+    gap: spacing['--t-spacing-1'],
+    height: '32px',
+    overflow: 'hidden',
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+  meText: {
+    color: color['--t-color-blue'],
+    flexShrink: '0',
+  },
+  fieldLabel: {
+    minWidth: '0',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  formFieldInputWrapper: {
+    display: 'flex',
+    flex: '1',
+    minWidth: '0',
+    overflow: 'visible',
+  },
+});
 
 type SettingsRolePermissionsObjectLevelRecordLevelPermissionValueInputProps = {
   recordFilterId: string;
@@ -212,27 +228,30 @@ export const SettingsRolePermissionsObjectLevelRecordLevelPermissionValueInput =
         : 'Me';
 
       return (
-        <StyledContainer>
+        <div {...stylex.props(styles.container)}>
           <Tooltip
             content={fullLabel}
             delay={TooltipDelay.shortDelay}
             side="bottom"
             positionMethod="fixed"
           >
-            <StyledReadOnlyInput id={tooltipId}>
-              <StyledMeText>{t`Me`}</StyledMeText>
+            <div id={tooltipId} {...stylex.props(styles.readOnlyInput)}>
+              <span {...stylex.props(styles.meText)}>{t`Me`}</span>
               {isDefined(workspaceMemberFieldLabel) && (
-                <StyledFieldLabel>{` / ${workspaceMemberFieldLabel}`}</StyledFieldLabel>
+                <span
+                  {...stylex.props(styles.fieldLabel)}
+                >{` / ${workspaceMemberFieldLabel}`}</span>
               )}
-            </StyledReadOnlyInput>
+            </div>
           </Tooltip>
-          <StyledIconContainer
+          <div
             onClick={handleResetToStaticValue}
             aria-label={t`Reset to static value`}
+            {...stylex.props(styles.iconContainer)}
           >
             <IconEraser size={theme.icon.size.sm} />
-          </StyledIconContainer>
-        </StyledContainer>
+          </div>
+        </div>
       );
     }
 
@@ -241,7 +260,7 @@ export const SettingsRolePermissionsObjectLevelRecordLevelPermissionValueInput =
     }
 
     if (operandHasNoInput) {
-      return <StyledContainer />;
+      return <div {...stylex.props(styles.container)} />;
     }
 
     const handleChange = (value: JsonValue) => {
@@ -299,11 +318,11 @@ export const SettingsRolePermissionsObjectLevelRecordLevelPermissionValueInput =
       }
 
       return (
-        <StyledContainer>
+        <div {...stylex.props(styles.container)}>
           <RecordLevelPermissionVariablePickerContext.Provider
             value={{ recordFilterId, onSelect: handleSelectDynamicValue }}
           >
-            <StyledFormFieldInputWrapper>
+            <div {...stylex.props(styles.formFieldInputWrapper)}>
               <FormMultiSelectFieldInput
                 label=""
                 defaultValue={formattedValue}
@@ -314,18 +333,18 @@ export const SettingsRolePermissionsObjectLevelRecordLevelPermissionValueInput =
                 }
                 dropdownWidth={200}
               />
-            </StyledFormFieldInputWrapper>
+            </div>
           </RecordLevelPermissionVariablePickerContext.Provider>
-        </StyledContainer>
+        </div>
       );
     }
 
     return (
-      <StyledContainer>
+      <div {...stylex.props(styles.container)}>
         <RecordLevelPermissionVariablePickerContext.Provider
           value={{ recordFilterId, onSelect: handleSelectDynamicValue }}
         >
-          <StyledFormFieldInputWrapper>
+          <div {...stylex.props(styles.formFieldInputWrapper)}>
             <FormFieldInput
               field={fieldDefinition}
               defaultValue={recordFilter.value}
@@ -334,8 +353,8 @@ export const SettingsRolePermissionsObjectLevelRecordLevelPermissionValueInput =
                 SettingsRolePermissionsObjectLevelRecordLevelPermissionVariablePicker
               }
             />
-          </StyledFormFieldInputWrapper>
+          </div>
         </RecordLevelPermissionVariablePickerContext.Provider>
-      </StyledContainer>
+      </div>
     );
   };

@@ -1,3 +1,4 @@
+import { backgroundTransparent, blur } from 'twenty-ui/theme/tokens.stylex';
 import { EmptyState } from '@/ui/feedback/empty-state/components/EmptyState';
 import { ErrorState } from '@/ui/feedback/empty-state/components/ErrorState';
 import { NavigationButton } from '@/ui/input/components/NavigationButton';
@@ -12,30 +13,30 @@ const BackgroundMockPage = lazy(() =>
 );
 
 import { AnimatedPlaceholder } from '@/ui/feedback/empty-state/components/AnimatedPlaceholder/AnimatedPlaceholder';
-import { RootStackingContextZIndices } from '@/ui/layout/constants/RootStackingContextZIndices';
+import { rootStackingContextZIndices } from '../../modules/ui/layout/constants/rootStackingContextZIndices.stylex';
 import { PageTitle } from '@/ui/utilities/page-title/components/PageTitle';
-import { styled } from '@linaria/react';
 import { MainButton } from 'twenty-ui/components/input';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledBackDrop = styled.div`
-  align-items: center;
-  backdrop-filter: ${themeCssVariables.blur.light};
-  background: ${themeCssVariables.background.transparent.secondary};
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: center;
-  left: 0;
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: ${RootStackingContextZIndices.NotFound};
-`;
-
-const StyledButtonContainer = styled.div`
-  width: 200px;
-`;
+const styles = stylex.create({
+  backDrop: {
+    alignItems: 'center',
+    backdropFilter: blur['--t-blur-light'],
+    background: backgroundTransparent['--t-background-transparent-secondary'],
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    justifyContent: 'center',
+    left: 0,
+    position: 'fixed',
+    top: 0,
+    width: '100%',
+    zIndex: rootStackingContextZIndices.notFound,
+  },
+  buttonContainer: {
+    width: '200px',
+  },
+});
 
 export const NotFound = () => {
   const { t } = useLingui();
@@ -43,7 +44,7 @@ export const NotFound = () => {
   return (
     <>
       <PageTitle title={t`Page Not Found | Twenty`} />
-      <StyledBackDrop>
+      <div {...stylex.props(styles.backDrop)}>
         <ErrorState.Root>
           <AnimatedPlaceholder type="error404" />
           <EmptyState.Content>
@@ -57,15 +58,15 @@ export const NotFound = () => {
               </Trans>
             </ErrorState.Description>
           </EmptyState.Content>
-          <StyledButtonContainer>
+          <div {...stylex.props(styles.buttonContainer)}>
             <NavigationButton
               buttonComponent={MainButton}
               to={AppPath.Index}
               fullWidth
             >{t`Back to content`}</NavigationButton>
-          </StyledButtonContainer>
+          </div>
         </ErrorState.Root>
-      </StyledBackDrop>
+      </div>
       <Suspense fallback={null}>
         <BackgroundMockPage />
       </Suspense>

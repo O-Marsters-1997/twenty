@@ -8,58 +8,53 @@ import { LayoutCustomizationBar } from '@/layout-customization/components/Layout
 import { MobileNavigationBar } from '@/navigation/components/MobileNavigationBar';
 import { PageDragDropProvider } from '@/navigation-menu-item/display/dnd/providers/PageDragDropProvider';
 import { useIsMobile } from 'twenty-ui/utilities';
-import { styled } from '@linaria/react';
 import { Outlet } from 'react-router-dom';
-import { themeCssVariables } from 'twenty-ui/theme';
-const StyledLayout = styled.div`
-  background: ${themeCssVariables.grayScale.gray3};
-  display: flex;
-  flex-direction: column;
-  height: calc(100dvh / var(--t-zoom, 1));
-  overflow: clip;
-  position: relative;
-  scrollbar-color: ${themeCssVariables.border.color.medium} transparent;
-  scrollbar-width: 4px;
-  width: 100%;
+import * as stylex from '@stylexjs/stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
+import {
+  background,
+  borderColor,
+  grayScale,
+} from 'twenty-ui/theme/tokens.stylex';
 
-  *::-webkit-scrollbar-thumb {
-    border-radius: ${themeCssVariables.border.radius.md};
-  }
-
-  @media print {
-    background: ${themeCssVariables.background.primary};
-    height: auto;
-    min-height: 100%;
-    overflow: visible;
-  }
-`;
-
-const StyledPageContainer = styled.div`
-  display: flex;
-  flex: 1 1 auto;
-  flex-direction: row;
-  min-height: 0;
-  min-width: 0;
-
-  @media print {
-    display: block;
-    min-height: auto;
-    min-width: auto;
-    overflow: visible;
-  }
-`;
-
-const StyledMainContainer = styled.div`
-  display: flex;
-  flex: 0 1 100%;
-  min-width: 0;
-
-  @media print {
-    display: block;
-    min-width: auto;
-    overflow: visible;
-  }
-`;
+const styles = stylex.create({
+  layout: {
+    background: {
+      default: grayScale['--t-gray-scale-gray3'],
+      [media.print]: background['--t-background-primary'],
+    },
+    display: 'flex',
+    flexDirection: 'column',
+    height: {
+      default: 'calc(100dvh / var(--t-zoom, 1))',
+      [media.print]: 'auto',
+    },
+    minHeight: { default: null, [media.print]: '100%' },
+    overflow: { default: 'clip', [media.print]: 'visible' },
+    position: 'relative',
+    scrollbarColor: `${borderColor['--t-border-color-medium']} transparent`,
+    scrollbarWidth: '4px',
+    width: '100%',
+  },
+  pageContainer: {
+    display: { default: 'flex', [media.print]: 'block' },
+    flexBasis: 'auto',
+    flexDirection: 'row',
+    flexGrow: 1,
+    flexShrink: 1,
+    minHeight: { default: 0, [media.print]: 'auto' },
+    minWidth: { default: 0, [media.print]: 'auto' },
+    overflow: { default: null, [media.print]: 'visible' },
+  },
+  mainContainer: {
+    display: { default: 'flex', [media.print]: 'block' },
+    flexBasis: '100%',
+    flexGrow: 0,
+    flexShrink: 1,
+    minWidth: { default: 0, [media.print]: 'auto' },
+    overflow: { default: null, [media.print]: 'visible' },
+  },
+});
 
 export const DefaultLayout = () => {
   const isMobile = useIsMobile();
@@ -67,23 +62,23 @@ export const DefaultLayout = () => {
   return (
     <>
       <FileUploadProvider>
-        <StyledLayout>
+        <div {...stylex.props(styles.layout)}>
           <AppErrorBoundary FallbackComponent={AppFullScreenErrorFallback}>
             <LayoutCustomizationBar />
-            <StyledPageContainer>
+            <div {...stylex.props(styles.pageContainer)}>
               <PageDragDropProvider>
                 <KeyboardShortcutMenu />
                 <DefaultLayoutNavigationDrawer />
-                <StyledMainContainer>
+                <div {...stylex.props(styles.mainContainer)}>
                   <AppErrorBoundary FallbackComponent={AppPageErrorFallback}>
                     <Outlet />
                   </AppErrorBoundary>
-                </StyledMainContainer>
+                </div>
               </PageDragDropProvider>
-            </StyledPageContainer>
+            </div>
             {isMobile && <MobileNavigationBar />}
           </AppErrorBoundary>
-        </StyledLayout>
+        </div>
       </FileUploadProvider>
     </>
   );

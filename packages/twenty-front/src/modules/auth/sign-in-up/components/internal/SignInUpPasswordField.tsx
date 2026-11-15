@@ -2,19 +2,30 @@ import { Text } from 'twenty-ui/primitives/typography';
 import { type Form } from '@/auth/sign-in-up/hooks/useSignInUpForm';
 import { SignInUpMode } from '@/auth/types/SignInUpMode';
 import { SettingsTextInput } from '@/ui/input/components/SettingsTextInput';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { motion } from 'framer-motion';
 import { Controller, useFormContext } from 'react-hook-form';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledFullWidthMotionDiv = styled(motion.div)`
-  width: 100%;
-`;
-
-const StyledInputContainer = styled.div`
-  margin-bottom: ${themeCssVariables.spacing[3]};
-`;
+const styles = stylex.create({
+  passwordHint: {
+    color: fontColor['--t-font-color-secondary'],
+    cursor: 'initial',
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    overflow: 'hidden',
+    paddingBlock: spacing['--t-spacing-2'],
+    paddingInline: 0,
+    whiteSpace: 'nowrap',
+  },
+  fullWidthMotionDiv: {
+    width: '100%',
+  },
+  inputContainer: {
+    marginBottom: spacing['--t-spacing-3'],
+  },
+});
 
 export const SignInUpPasswordField = ({
   showErrors,
@@ -27,7 +38,7 @@ export const SignInUpPasswordField = ({
   const form = useFormContext<Form>();
 
   return (
-    <StyledFullWidthMotionDiv
+    <motion.div {...stylex.props(styles.fullWidthMotionDiv)}
       initial={{ opacity: 0, height: 0 }}
       animate={{ opacity: 1, height: 'auto' }}
       transition={{
@@ -43,7 +54,7 @@ export const SignInUpPasswordField = ({
           field: { onChange, onBlur, value },
           fieldState: { error },
         }) => (
-          <StyledInputContainer>
+          <div {...stylex.props(styles.inputContainer)}>
             <SettingsTextInput
               instanceId="sign-in-up-password"
               autoFocus
@@ -56,21 +67,13 @@ export const SignInUpPasswordField = ({
               fullWidth
             />
             {signInUpMode === SignInUpMode.SignUp && (
-              <StyledPasswordHint>{t`At least 8 characters long.`}</StyledPasswordHint>
+              <Text {...stylex.props(styles.passwordHint)}>
+                {t`At least 8 characters long.`}
+              </Text>
             )}
-          </StyledInputContainer>
+          </div>
         )}
       />
-    </StyledFullWidthMotionDiv>
+    </motion.div>
   );
 };
-
-const StyledPasswordHint = styled(Text)`
-  color: ${themeCssVariables.font.color.secondary};
-  cursor: initial;
-  font-size: ${themeCssVariables.font.size.sm};
-  font-weight: ${themeCssVariables.font.weight.regular};
-  overflow: hidden;
-  padding: ${themeCssVariables.spacing[2]} 0;
-  white-space: nowrap;
-`;

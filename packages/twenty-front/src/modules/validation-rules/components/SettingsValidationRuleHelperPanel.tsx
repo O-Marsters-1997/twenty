@@ -1,35 +1,43 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { MenuItem } from 'twenty-ui/components/navigation';
 import { useIcons } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { SettingsValidationRuleHelperDetails } from '@/validation-rules/components/SettingsValidationRuleHelperDetails';
 import { type ValidationRuleEditorField } from '@/validation-rules/types/ValidationRuleEditorField';
 import { type ValidationRuleHelperItem } from '@/validation-rules/types/ValidationRuleHelperItem';
 import { getValidationRuleHelperItemIcon } from '@/validation-rules/utils/getValidationRuleHelperItemIcon';
+import * as stylex from '@stylexjs/stylex';
+import { borderColor, fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledPanel = styled.div`
-  display: grid;
-  font-size: ${themeCssVariables.font.size.md};
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  height: 240px;
-  overflow: hidden;
-`;
-
-const StyledList = styled.div`
-  border-right: 1px solid ${themeCssVariables.border.color.medium};
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  padding: ${themeCssVariables.spacing[1]} ${themeCssVariables.spacing[4]};
-`;
-
-const StyledEmpty = styled.div`
-  color: ${themeCssVariables.font.color.light};
-  padding: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  panel: {
+    display: 'grid',
+    fontSize: fontSize['--t-font-size-md'],
+    gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)',
+    height: '240px',
+    overflow: 'hidden',
+  },
+  list: {
+    borderRightWidth: '1px',
+    borderRightStyle: 'solid',
+    borderRightColor: borderColor['--t-border-color-medium'],
+    display: 'flex',
+    flexDirection: 'column',
+    overflowY: 'auto',
+    paddingTop: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-4'],
+  },
+  empty: {
+    color: fontColor['--t-font-color-light'],
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+});
 
 const getItemKey = (item: ValidationRuleHelperItem) =>
   item.kind === 'field'
@@ -60,10 +68,10 @@ export const SettingsValidationRuleHelperPanel = ({
   const EnterHintIcon = getIcon('IconArrowBack');
 
   return (
-    <StyledPanel>
-      <StyledList role="listbox" aria-label={t`Suggestions`}>
+    <div {...stylex.props(styles.panel)}>
+      <div role="listbox" aria-label={t`Suggestions`} {...stylex.props(styles.list)}>
         {items.length === 0 && (
-          <StyledEmpty>{t`Nothing to suggest here.`}</StyledEmpty>
+          <div {...stylex.props(styles.empty)}>{t`Nothing to suggest here.`}</div>
         )}
         {items.map((item, index) => {
           const isHighlighted = index === highlightedIndex;
@@ -97,7 +105,7 @@ export const SettingsValidationRuleHelperPanel = ({
             </div>
           );
         })}
-      </StyledList>
+      </div>
       {isDefined(highlightedItem) ? (
         <SettingsValidationRuleHelperDetails
           item={highlightedItem}
@@ -106,6 +114,6 @@ export const SettingsValidationRuleHelperPanel = ({
       ) : (
         <div />
       )}
-    </StyledPanel>
+    </div>
   );
 };

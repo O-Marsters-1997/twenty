@@ -4,37 +4,38 @@ import { TableCell } from '@/ui/layout/table/components/TableCell';
 import { TableRow } from '@/ui/layout/table/components/TableRow';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { UserContext } from '@/users/contexts/UserContext';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { useContext } from 'react';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
 import { IconKey, useIcons } from 'twenty-ui/icon';
 import { Avatar } from 'twenty-ui/primitives/data-display';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import { type Agent, type ApiKeyForRole } from '~/generated-metadata/graphql';
 import { dateLocaleState } from '@/localization/states/dateLocaleState';
 import { getAbsoluteImageUrl } from '~/utils/image/getAbsoluteImageUrl';
 import { formatDateString } from '@/object-record/record-field/ui/utils/formatDateString';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledIconWrapper = styled.div`
-  align-items: center;
-  display: flex;
-  flex-shrink: 0;
-`;
-
-const StyledNameCell = styled.div`
-  color: ${themeCssVariables.font.color.primary};
-  flex: 1;
-  min-width: 0;
-`;
-
-const StyledNameContainer = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  overflow: hidden;
-  width: 100%;
-`;
+const styles = stylex.create({
+  iconWrapper: {
+    alignItems: 'center',
+    display: 'flex',
+    flexShrink: '0',
+  },
+  nameCell: {
+    color: fontColor['--t-font-color-primary'],
+    flex: '1',
+    minWidth: '0',
+  },
+  nameContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    overflow: 'hidden',
+    width: '100%',
+  },
+});
 
 export type RoleTarget =
   | { type: 'member'; data: PartialWorkspaceMember }
@@ -116,12 +117,12 @@ export const SettingsRoleAssignmentTableRow = ({
   return (
     <TableRow gridAutoColumns="2fr 4fr">
       <TableCell overflow="hidden">
-        <StyledNameContainer>
-          <StyledIconWrapper>{renderIcon()}</StyledIconWrapper>
-          <StyledNameCell>
+        <div {...stylex.props(styles.nameContainer)}>
+          <div {...stylex.props(styles.iconWrapper)}>{renderIcon()}</div>
+          <div {...stylex.props(styles.nameCell)}>
             <OverflowingTextWithTooltip text={renderName()} />
-          </StyledNameCell>
-        </StyledNameContainer>
+          </div>
+        </div>
       </TableCell>
       <TableCell overflow="hidden">
         <OverflowingTextWithTooltip text={renderSecondaryInfo()} />

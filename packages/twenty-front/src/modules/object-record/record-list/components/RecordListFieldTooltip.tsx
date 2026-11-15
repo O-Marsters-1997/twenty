@@ -1,9 +1,16 @@
 import { useRecordIndexContextOrThrow } from '@/object-record/record-index/contexts/RecordIndexContext';
 import { TooltipTextContent } from '@/ui/layout/tooltip/components/TooltipTextContent';
+import * as stylex from '@stylexjs/stylex';
 import { type ReactNode } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { useIcons } from 'twenty-ui/icon';
 import { Tooltip } from 'twenty-ui/primitives/surfaces';
+
+const styles = stylex.create({
+  positioner: {
+    maxWidth: '300px',
+  },
+});
 
 type RecordListFieldTooltipProps = {
   children: ReactNode;
@@ -34,7 +41,7 @@ export const RecordListFieldTooltip = ({
                 side="bottom"
                 positionMethod="fixed"
                 sideOffset={10}
-                style={{ maxWidth: '300px' }}
+                {...stylex.props(styles.positioner)}
               >
                 <Tooltip.Popup>
                   <TooltipTextContent

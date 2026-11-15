@@ -1,14 +1,18 @@
-import { styled } from '@linaria/react';
-
+import * as stylex from '@stylexjs/stylex';
 import { useThemeColorScheme } from 'twenty-ui/theme';
 
-const StyledLogoImage = styled.img<{ isInverted: boolean }>`
-  display: block;
-  filter: ${({ isInverted }) => (isInverted ? 'invert(1)' : 'none')};
-  height: 100%;
-  object-fit: contain;
-  width: 100%;
-`;
+const styles = stylex.create({
+  image: {
+    display: 'block',
+    filter: 'none',
+    height: '100%',
+    objectFit: 'contain',
+    width: '100%',
+  },
+  imageInverted: {
+    filter: 'invert(1)',
+  },
+});
 
 type McpClientLogoProps = {
   invertInDarkMode?: boolean;
@@ -22,10 +26,13 @@ export const McpClientLogo = ({
   const colorScheme = useThemeColorScheme();
 
   return (
-    <StyledLogoImage
+    <img
       src={src}
       alt=""
-      isInverted={invertInDarkMode && colorScheme === 'dark'}
+      {...stylex.props(
+        styles.image,
+        invertInDarkMode && colorScheme === 'dark' && styles.imageInverted,
+      )}
     />
   );
 };

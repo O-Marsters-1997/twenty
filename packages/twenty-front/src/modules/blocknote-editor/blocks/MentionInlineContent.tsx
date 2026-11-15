@@ -3,27 +3,40 @@ import { objectMetadataItemsSelector } from '@/object-metadata/states/objectMeta
 import { RecordChip } from '@/object-record/components/RecordChip';
 import { useFindOneRecord } from '@/object-record/hooks/useFindOneRecord';
 import { createReactInlineContentSpec } from '@blocknote/react';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { isDefined } from 'twenty-shared/utils';
 import { Chip } from 'twenty-ui/primitives/data-display';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledRecordChipContainer = styled.div`
-  display: inline;
-  height: auto;
-  margin: 0;
-  padding: 0 ${themeCssVariables.spacing[1]};
-`;
-
-const StyledInlineMentionRecordChipContainer = styled.div`
-  display: inline;
-  height: auto;
-  margin: 0;
-  padding: 0 ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  recordChipContainer: {
+    display: 'inline',
+    height: 'auto',
+    marginTop: '0',
+    marginRight: '0',
+    marginBottom: '0',
+    marginLeft: '0',
+    paddingTop: '0',
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: '0',
+    paddingLeft: spacing['--t-spacing-1'],
+  },
+  inlineMentionRecordChipContainer: {
+    display: 'inline',
+    height: 'auto',
+    marginTop: '0',
+    marginRight: '0',
+    marginBottom: '0',
+    marginLeft: '0',
+    paddingTop: '0',
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: '0',
+    paddingLeft: spacing['--t-spacing-1'],
+  },
+});
 
 const LegacyMentionRenderer = ({
   recordId,
@@ -71,13 +84,13 @@ const LegacyMentionRenderer = ({
   }
 
   return (
-    <StyledRecordChipContainer>
+    <div {...stylex.props(styles.recordChipContainer)}>
       <RecordChip
         objectNameSingular={objectMetadataItem.nameSingular}
         record={record}
         forceDisableClick={false}
       />
-    </StyledRecordChipContainer>
+    </div>
   );
 };
 
@@ -116,14 +129,14 @@ export const MentionInlineContent = createReactInlineContentSpec(
       // New notes store objectNameSingular + label + imageUrl directly
       if (isNonEmptyString(objectNameSingular) && isNonEmptyString(label)) {
         return (
-          <StyledInlineMentionRecordChipContainer>
+          <div {...stylex.props(styles.inlineMentionRecordChipContainer)}>
             <MentionRecordChip
               recordId={recordId}
               objectNameSingular={objectNameSingular}
               label={label}
               imageUrl={imageUrl}
             />
-          </StyledInlineMentionRecordChipContainer>
+          </div>
         );
       }
 

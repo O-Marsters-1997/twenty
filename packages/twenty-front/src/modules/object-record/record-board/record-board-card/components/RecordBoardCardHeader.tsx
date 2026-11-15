@@ -17,32 +17,38 @@ import { useAtomComponentFamilyStateValue } from '@/ui/utilities/state/jotai/hoo
 import { useAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useAtomComponentState';
 import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
 import { useGetCurrentViewOnly } from '@/views/hooks/useGetCurrentViewOnly';
-import { styled } from '@linaria/react';
+import { RecordCardCheckboxContainer } from '@/object-record/record-card/components/RecordCardCheckboxContainer';
+import { recordCardMarker } from '../../../record-card/components/RecordCardMarker.stylex';
 import { useContext } from 'react';
 import { OpenRecordIn } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 import { LightIconButton } from 'twenty-ui/components/input';
 import { IconEye, IconEyeOff } from 'twenty-ui/icon';
 import { Checkbox } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { useIsMobile, useIsTouchDevice } from 'twenty-ui/utilities';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledCompactIconContainer = styled.div`
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  margin-left: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledCheckboxContainer = styled.div`
-  margin-left: auto;
-`;
-
-const StyledRecordChipContainer = styled.div`
-  display: flex;
-  flex: 1 1 auto;
-  overflow: hidden;
-`;
+const styles = stylex.create({
+  compactIconContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+    marginLeft: spacing['--t-spacing-1'],
+    opacity: {
+      default: 0,
+      [stylex.when.ancestor(':hover', recordCardMarker)]: 1,
+    },
+    transitionDuration: '160ms',
+    transitionProperty: 'all',
+    transitionTimingFunction: 'ease-in-out',
+  },
+  recordChipContainer: {
+    display: 'flex',
+    flex: '1 1 auto',
+    overflow: 'hidden',
+  },
+});
 
 export const RecordBoardCardHeader = () => {
   const { recordId } = useContext(RecordBoardCardContext);
@@ -82,7 +88,7 @@ export const RecordBoardCardHeader = () => {
 
   return (
     <RecordCardHeaderContainer isCompact={isCompactModeActive}>
-      <StyledRecordChipContainer>
+      <div {...stylex.props(styles.recordChipContainer)}>
         <StopPropagationContainer>
           {isDefined(recordStore) && (
             <RecordChip
@@ -98,10 +104,10 @@ export const RecordBoardCardHeader = () => {
             />
           )}
         </StopPropagationContainer>
-      </StyledRecordChipContainer>
+      </div>
 
       {isCompactModeActive && (
-        <StyledCompactIconContainer className="compact-icon-container">
+        <div {...stylex.props(styles.compactIconContainer)}>
           <StopPropagationContainer>
             <LightIconButton
               emphasis="subtle"
@@ -116,10 +122,10 @@ export const RecordBoardCardHeader = () => {
               {recordBoardCardIsExpanded ? <IconEyeOff /> : <IconEye />}
             </LightIconButton>
           </StopPropagationContainer>
-        </StyledCompactIconContainer>
+        </div>
       )}
       {!isMobile && (
-        <StyledCheckboxContainer className="checkbox-container">
+        <RecordCardCheckboxContainer>
           <StopPropagationContainer>
             <Checkbox
               hoverable
@@ -133,7 +139,7 @@ export const RecordBoardCardHeader = () => {
               variant="outline"
             />
           </StopPropagationContainer>
-        </StyledCheckboxContainer>
+        </RecordCardCheckboxContainer>
       )}
     </RecordCardHeaderContainer>
   );

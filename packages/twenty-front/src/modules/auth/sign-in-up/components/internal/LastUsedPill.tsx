@@ -1,36 +1,44 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { useLingui } from '@lingui/react/macro';
 import { Badge } from 'twenty-ui/primitives/data-display';
-import { themeCssVariables } from 'twenty-ui/theme';
+import {
+  accent,
+  borderRadius,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledPillContainer = styled.span`
-  position: absolute;
-  right: -14px;
-  top: -10px;
-
-  > span[data-badge-size] {
-    background: ${themeCssVariables.accent.accent3};
-    border: 1px solid ${themeCssVariables.accent.accent5};
-    border-radius: ${themeCssVariables.border.radius.pill};
-    color: ${themeCssVariables.accent.accent9};
-    corner-shape: round;
-    font-weight: ${themeCssVariables.font.weight.semiBold};
-    height: ${themeCssVariables.spacing[5]};
-  }
-`;
+const styles = stylex.create({
+  container: {
+    position: 'absolute',
+    right: '-14px',
+    top: '-10px',
+  },
+  badge: {
+    background: accent['--t-accent-accent3'],
+    borderColor: accent['--t-accent-accent5'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    borderRadius: borderRadius['--t-border-radius-pill'],
+    color: accent['--t-accent-accent9'],
+    cornerShape: 'round',
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    height: spacing['--t-spacing-5'],
+  },
+});
 
 export const LastUsedPill = () => {
   const { t } = useLingui();
 
   return (
-    <StyledPillContainer>
-      <Badge>
+    <span {...stylex.props(styles.container)}>
+      <Badge {...stylex.props(styles.badge)}>
         {t({
           message: 'Last',
           comment:
             'Short label (keep brief) indicating the most recently used login method',
         })}
       </Badge>
-    </StyledPillContainer>
+    </span>
   );
 };

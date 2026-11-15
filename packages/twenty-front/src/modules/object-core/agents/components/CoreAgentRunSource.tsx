@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { FieldActorSource } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
@@ -10,15 +9,19 @@ import {
   IconUsers,
 } from 'twenty-ui/icon';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
-import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.secondary};
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  min-width: 0;
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-secondary'],
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    minWidth: '0',
+  },
+});
 
 const SOURCE_ICONS: Partial<Record<string, typeof IconApps>> = {
   [FieldActorSource.WORKFLOW]: IconSettingsAutomation,
@@ -41,7 +44,7 @@ export const CoreAgentRunSource = ({
   const SourceIcon = SOURCE_ICONS[creatorSource];
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       {isDefined(SourceIcon) ? (
         <SourceIcon size={theme.icon.size.sm} stroke={theme.icon.stroke.sm} />
       ) : null}
@@ -51,6 +54,6 @@ export const CoreAgentRunSource = ({
           creatorSource === FieldActorSource.AGENT ? t`Trigger` : creatorName
         }
       />
-    </StyledContainer>
+    </div>
   );
 };

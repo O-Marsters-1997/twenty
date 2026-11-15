@@ -1,10 +1,9 @@
 import { useControlled } from '@base-ui/utils/useControlled';
 import { useValueAsRef } from '@base-ui/utils/useValueAsRef';
-import { clsx } from 'clsx';
 
 import { IconMinus, IconPlus } from '@ui/icon';
 import { Button } from '@ui/primitives/input/Button/Button';
-import inputStyles from '@ui/primitives/input/Input/Input.module.scss';
+import { inputStyles } from '@ui/primitives/input/Input/Input.stylex';
 import { NumberField } from '@ui/primitives/input/NumberField/NumberField';
 import { type NumberFieldRootProps } from '@ui/primitives/input/NumberField/types/NumberFieldRootProps';
 import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
@@ -111,10 +110,8 @@ export const NumberStepper = ({
       <NumberField.Input
         {...props}
         form={form}
-        className={mergeClassNames(
-          clsx(inputStyles.input, inputStyles.sm, styles.valueInput),
-          className,
-        )}
+        xstyle={inputStyles.sizeSm}
+        className={mergeClassNames(styles.valueInput, className)}
       />
       {showButtons && (
         <NumberField.Increment

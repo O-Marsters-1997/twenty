@@ -1,99 +1,90 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { MessageFolderImportPolicy } from 'twenty-shared/types';
 
-import { themeCssVariables } from 'twenty-ui/theme';
+import {
+  accent,
+  background,
+  borderColor,
+  borderRadius,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsAccountsMessageFolderIconProps = {
-  className?: string;
   value?: MessageFolderImportPolicy;
 };
 
-const StyledCardMedia = styled.div`
-  align-items: center;
-  background-color: ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  box-sizing: border-box;
-  display: flex;
-  height: 40px;
-  justify-content: center;
-  padding: 2px;
-  width: 32px;
-`;
+const styles = stylex.create({
+  cardMedia: {
+    alignItems: 'center',
+    backgroundColor: borderColor['--t-border-color-medium'],
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    height: '40px',
+    justifyContent: 'center',
+    padding: '2px',
+    width: '32px',
+  },
+  cardMediaContent: {
+    alignItems: 'stretch',
+    backgroundColor: background['--t-background-secondary'],
+    borderRadius: borderRadius['--t-border-radius-xs'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    gap: '2px',
+    height: '100%',
+    justifyContent: 'center',
+    minWidth: '0',
+    padding: '2px',
+  },
+  folderRow: {
+    alignItems: 'center',
+    display: 'flex',
+    flex: '1 0 0',
+    gap: '2px',
+    minHeight: '0',
+  },
+  folderIcon: {
+    backgroundColor: accent['--t-accent-accent7'],
+    borderRadius: '1px',
+    height: '100%',
+    width: '4.8px',
+  },
+  folderLabel: {
+    backgroundColor: accent['--t-accent-accent7'],
+    borderRadius: '1px',
+    flex: '1',
+    height: '100%',
+  },
+  disabled: {
+    backgroundColor: borderColor['--t-border-color-medium'],
+  },
+});
 
-const StyledCardMediaContent = styled.div`
-  align-items: stretch;
-  background-color: ${themeCssVariables.background.secondary};
-  border-radius: ${themeCssVariables.border.radius.xs};
-  box-sizing: border-box;
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: 2px;
-  height: 100%;
-  justify-content: center;
-  min-width: 0;
-  padding: 2px;
-`;
-
-const StyledFolderRow = styled.div`
-  align-items: center;
-  display: flex;
-  flex: 1 0 0;
-  gap: 2px;
-  min-height: 0;
-`;
-
-const StyledFolderIcon = styled.div<{ isDisabled?: boolean }>`
-  background-color: ${({ isDisabled }) =>
-    isDisabled
-      ? themeCssVariables.border.color.medium
-      : themeCssVariables.accent.accent7};
-  border-radius: 1px;
-  height: 100%;
-  width: 4.8px;
-`;
-
-const StyledFolderLabel = styled.div<{ isDisabled?: boolean }>`
-  background-color: ${({ isDisabled }) =>
-    isDisabled
-      ? themeCssVariables.border.color.medium
-      : themeCssVariables.accent.accent7};
-  border-radius: 1px;
-  flex: 1;
-  height: 100%;
-`;
+const ROW_CAN_BE_DISABLED = [true, true, false, true, false];
 
 export const SettingsAccountsMessageFolderIcon = ({
-  className,
   value,
 }: SettingsAccountsMessageFolderIconProps) => {
   const isSelectedFolders =
     value === MessageFolderImportPolicy.SELECTED_FOLDERS;
 
   return (
-    <StyledCardMedia className={className}>
-      <StyledCardMediaContent>
-        <StyledFolderRow>
-          <StyledFolderIcon isDisabled={isSelectedFolders} />
-          <StyledFolderLabel isDisabled={isSelectedFolders} />
-        </StyledFolderRow>
-        <StyledFolderRow>
-          <StyledFolderIcon isDisabled={isSelectedFolders} />
-          <StyledFolderLabel isDisabled={isSelectedFolders} />
-        </StyledFolderRow>
-        <StyledFolderRow>
-          <StyledFolderIcon />
-          <StyledFolderLabel />
-        </StyledFolderRow>
-        <StyledFolderRow>
-          <StyledFolderIcon isDisabled={isSelectedFolders} />
-          <StyledFolderLabel isDisabled={isSelectedFolders} />
-        </StyledFolderRow>
-        <StyledFolderRow>
-          <StyledFolderIcon />
-          <StyledFolderLabel />
-        </StyledFolderRow>
-      </StyledCardMediaContent>
-    </StyledCardMedia>
+    <div {...stylex.props(styles.cardMedia)}>
+      <div {...stylex.props(styles.cardMediaContent)}>
+        {ROW_CAN_BE_DISABLED.map((canBeDisabled, index) => {
+          const disabled =
+            canBeDisabled && isSelectedFolders && styles.disabled;
+
+          return (
+            <div key={index} {...stylex.props(styles.folderRow)}>
+              <div {...stylex.props(styles.folderIcon, disabled)} />
+              <div {...stylex.props(styles.folderLabel, disabled)} />
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
 };

@@ -9,18 +9,20 @@ import {
   SideMenu,
   SideMenuController,
 } from '@blocknote/react';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { IconColorSwatch, IconPlus, IconTrash } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type CustomSideMenuProps = {
   editor: typeof BLOCK_SCHEMA.BlockNoteEditor;
 };
 
-const StyledDivToCreateGap = styled.div`
-  width: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  divToCreateGap: {
+    width: spacing['--t-spacing-2'],
+  },
+});
 
 export const CustomSideMenu = ({ editor }: CustomSideMenuProps) => {
   const { t } = useLingui();
@@ -55,7 +57,7 @@ export const CustomSideMenu = ({ editor }: CustomSideMenuProps) => {
               </DragHandleMenu>
             )}
           />
-          <StyledDivToCreateGap />
+          <div {...stylex.props(styles.divToCreateGap)} />
         </SideMenu>
       )}
     />

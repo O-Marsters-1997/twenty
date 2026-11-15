@@ -1,15 +1,17 @@
-import { styled } from '@linaria/react';
 import { type ReactNode, useRef } from 'react';
 
 import { NavigationDrawerModeTransitionEffect } from '@/navigation/components/NavigationDrawerModeTransitionEffect';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: inherit;
-  min-height: 0;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    gap: 'inherit',
+    minHeight: '0',
+  },
+});
 
 type NavigationDrawerModeTransitionProps = {
   children: ReactNode;
@@ -21,9 +23,9 @@ export const NavigationDrawerModeTransition = ({
   const containerRef = useRef<HTMLDivElement>(null);
 
   return (
-    <StyledContainer ref={containerRef}>
+    <div ref={containerRef} {...stylex.props(styles.container)}>
       <NavigationDrawerModeTransitionEffect containerRef={containerRef} />
       {children}
-    </StyledContainer>
+    </div>
   );
 };

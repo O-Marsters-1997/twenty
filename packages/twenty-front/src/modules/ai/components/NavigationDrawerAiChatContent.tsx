@@ -1,7 +1,5 @@
 import { useIsNavigationDrawerContentExpanded } from '@/ui/navigation/navigation-drawer/hooks/useIsNavigationDrawerContentExpanded';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { AgentChatThreadsFetchMoreTrigger } from '@/ai/components/AgentChatThreadsFetchMoreTrigger';
 import { AiChatSkeletonLoader } from '@/ai/components/internal/AiChatSkeletonLoader';
@@ -15,27 +13,29 @@ import { agentChatFavoriteThreadsSelector } from '@/ai/states/selectors/agentCha
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useIsFeatureEnabled } from '@/workspace/hooks/useIsFeatureEnabled';
 import { FeatureFlagKey } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  min-height: 0;
-`;
-
-const StyledThreadList = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-height: 0;
-  width: 100%;
-`;
-
-const StyledSectionsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[3]};
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    minHeight: '0',
+  },
+  threadList: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    minHeight: '0',
+    width: '100%',
+  },
+  sectionsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-3'],
+  },
+});
 
 const AI_CHAT_RECENTS_NAVIGATION_SECTION_ID = 'AiChatRecents';
 const AI_CHAT_FAVORITES_NAVIGATION_SECTION_ID = 'AiChatFavorites';
@@ -62,9 +62,9 @@ export const NavigationDrawerAiChatContent = () => {
 
   if (loading && threads.length === 0) {
     return (
-      <StyledContainer>
+      <div {...stylex.props(styles.container)}>
         {isExpanded && <AiChatSkeletonLoader />}
-      </StyledContainer>
+      </div>
     );
   }
 
@@ -76,9 +76,9 @@ export const NavigationDrawerAiChatContent = () => {
   );
 
   return (
-    <StyledContainer>
-      <StyledThreadList>
-        <StyledSectionsContainer>
+    <div {...stylex.props(styles.container)}>
+      <div {...stylex.props(styles.threadList)}>
+        <div {...stylex.props(styles.sectionsContainer)}>
           {isAiChatInboxEnabled && <NavigationDrawerAiChatTriageSection />}
           {agentChatFavoriteThreads.length > 0 && (
             <NavigationDrawerAiChatThreadSection
@@ -98,9 +98,9 @@ export const NavigationDrawerAiChatContent = () => {
               onThreadClick={handleThreadClick}
             />
           )}
-        </StyledSectionsContainer>
+        </div>
         <AgentChatThreadsFetchMoreTrigger />
-      </StyledThreadList>
-    </StyledContainer>
+      </div>
+    </div>
   );
 };

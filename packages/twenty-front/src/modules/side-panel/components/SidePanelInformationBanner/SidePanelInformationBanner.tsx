@@ -1,53 +1,55 @@
-import { css } from '@linaria/core';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 
 import { IconAlertTriangle, IconInfoCircle } from 'twenty-ui/icon';
 import { Tooltip } from 'twenty-ui/primitives/surfaces';
-
-const styles = {
-  banner: css`
-    & {
-      align-items: center;
-      background-color: var(--t-accent-secondary);
-      border-radius: var(--t-border-radius-md);
-      box-sizing: border-box;
-      display: flex;
-      gap: var(--t-spacing-2);
-      padding: var(--t-spacing-2);
-      width: 100%;
-    }
-  `,
-  iconContainer: css`
-    & {
-      align-items: center;
-      color: var(--t-color-blue);
-      display: flex;
-      flex-shrink: 0;
-      height: 16px;
-      justify-content: center;
-      width: 16px;
-    }
-  `,
-  message: css`
-    & {
-      color: var(--t-color-blue);
-      flex-grow: 1;
-      font-family: var(--t-font-family);
-      font-size: var(--t-font-size-sm);
-      font-style: normal;
-      font-weight: var(--t-font-weight-medium);
-      line-height: 1.4;
-      margin: 0;
-      min-width: 0;
-    }
-  `,
-};
-import { type SidePanelInformationBannerProps } from './types/SidePanelInformationBannerProps';
 import { isDefined } from 'twenty-shared/utils';
+import {
+  accent,
+  borderRadius,
+  color,
+  font,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
+import { type SidePanelInformationBannerProps } from './types/SidePanelInformationBannerProps';
+
+const styles = stylex.create({
+  banner: {
+    alignItems: 'center',
+    backgroundColor: accent['--t-accent-secondary'],
+    borderRadius: borderRadius['--t-border-radius-md'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    padding: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+  iconContainer: {
+    alignItems: 'center',
+    color: color['--t-color-blue'],
+    display: 'flex',
+    flexShrink: 0,
+    height: '16px',
+    justifyContent: 'center',
+    width: '16px',
+  },
+  message: {
+    color: color['--t-color-blue'],
+    flexGrow: 1,
+    fontFamily: font['--t-font-family'],
+    fontSize: fontSize['--t-font-size-sm'],
+    fontStyle: 'normal',
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    lineHeight: 1.4,
+    margin: 0,
+    minWidth: 0,
+  },
+});
 
 export const SidePanelInformationBanner = ({
   message,
-  className,
+  xstyle,
   variant = 'default',
   tooltipMessage,
 }: SidePanelInformationBannerProps) => {
@@ -58,15 +60,15 @@ export const SidePanelInformationBanner = ({
       side="bottom"
       delay={500}
     >
-      <div className={clsx(styles.banner, className)}>
-        <div className={styles.iconContainer}>
+      <div {...stylex.props(styles.banner, xstyle)}>
+        <div {...stylex.props(styles.iconContainer)}>
           {variant === 'default' ? (
             <IconInfoCircle size={16} />
           ) : (
             <IconAlertTriangle size={16} />
           )}
         </div>
-        <p className={styles.message}>{message}</p>
+        <p {...stylex.props(styles.message)}>{message}</p>
       </div>
     </Tooltip>
   );

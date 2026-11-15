@@ -10,7 +10,6 @@ import { RecordTableWidgetContext } from '@/object-record/record-table-widget/co
 import { canCreateRecordsForObjectMetadataItem } from '@/object-record/utils/canCreateRecordsForObjectMetadataItem';
 import { useUserTimezone } from '@/ui/input/components/internal/date/hooks/useUserTimezone';
 import { useAtomComponentSelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentSelectorValue';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { useContext } from 'react';
 import { type Temporal } from 'temporal-polyfill';
@@ -18,13 +17,20 @@ import { FieldMetadataType } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 import { IconPlus } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledButtonContainer = styled.div`
-  height: auto;
-  min-width: unset;
-  padding: ${themeCssVariables.spacing['0.5']};
-`;
+const styles = stylex.create({
+  buttonContainer: {
+    height: 'auto',
+    minWidth: 'unset',
+    paddingTop: spacing['--t-spacing-0_5'],
+    paddingRight: spacing['--t-spacing-0_5'],
+    paddingBottom: spacing['--t-spacing-0_5'],
+    paddingLeft: spacing['--t-spacing-0_5'],
+  },
+});
 
 type RecordCalendarAddNewProps = {
   cardDate: Temporal.PlainDate;
@@ -87,7 +93,7 @@ export const RecordCalendarAddNew = ({
   }
 
   return (
-    <StyledButtonContainer>
+    <div {...stylex.props(styles.buttonContainer)}>
       <Button
         aria-label={t`Create record`}
         onClick={async (event) => {
@@ -110,6 +116,6 @@ export const RecordCalendarAddNew = ({
         startIcon={<IconPlus size={theme.icon.size.sm} />}
         variant="ghost"
       />
-    </StyledButtonContainer>
+    </div>
   );
 };

@@ -7,20 +7,24 @@ import { RECORD_LIST_ROW_INPUT_ID_PREFIX } from '@/object-record/record-list/con
 import { type ColumnDefinition } from '@/object-record/record-table/types/ColumnDefinition';
 import { getRecordFieldInputInstanceId } from '@/object-record/utils/getRecordFieldInputId';
 import { TooltipDelay } from '@/ui/layout/tooltip/constants/TooltipDelay';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { Tooltip } from 'twenty-ui/primitives/surfaces';
 
-// Shrinkable so a long record label narrows fields instead of clipping them off the left edge.
-const StyledFieldContainer = styled.div`
-  align-items: center;
-  display: flex;
-  min-width: 0;
-  overflow: hidden;
-
-  & > * {
-    pointer-events: none;
-  }
-`;
+const styles = stylex.create({
+  fieldContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    minWidth: 0,
+    overflow: 'hidden',
+  },
+  maxWidth: (maxWidth: number) => ({
+    maxWidth,
+  }),
+  nonInteractiveContent: {
+    display: 'contents',
+    pointerEvents: 'none',
+  },
+});
 
 type RecordListRowFieldProps = {
   recordId: string;
@@ -39,7 +43,11 @@ export const RecordListRowField = ({
     <Tooltip.Trigger
       payload={recordField.fieldMetadataItemId}
       delay={TooltipDelay.shortDelay}
-      render={<StyledFieldContainer style={{ maxWidth }} />}
+      render={
+        <div
+          {...stylex.props(styles.fieldContainer, styles.maxWidth(maxWidth))}
+        />
+      }
     >
       <FieldContext.Provider
         value={{
@@ -62,7 +70,9 @@ export const RecordListRowField = ({
             }),
           }}
         >
-          <FieldDisplay />
+          <div {...stylex.props(styles.nonInteractiveContent)}>
+            <FieldDisplay />
+          </div>
         </RecordFieldComponentInstanceContext.Provider>
       </FieldContext.Provider>
     </Tooltip.Trigger>

@@ -1,16 +1,18 @@
 /* @license Enterprise */
 
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { Section } from 'twenty-ui/components/layout';
 
 import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/EnrichedObjectMetadataItem';
 import { SettingsRolePermissionsObjectLevelRecordLevelPermissionFilterBuilder } from '@/settings/roles/role-permissions/object-level-permissions/record-level-permissions/components/SettingsRolePermissionsObjectLevelRecordLevelPermissionFilterBuilder';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContent = styled.div`
-  padding-bottom: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  content: {
+    paddingBottom: spacing['--t-spacing-2'],
+  },
+});
 
 type SettingsRolePermissionsObjectLevelRecordLevelSectionProps = {
   objectMetadataItem: EnrichedObjectMetadataItem;
@@ -26,11 +28,11 @@ export const SettingsRolePermissionsObjectLevelRecordLevelSection = ({
       title={t`Record-level`}
       description={t`Ability to filter the records a user can interact with.`}
     />
-    <StyledContent>
+    <div {...stylex.props(styles.content)}>
       <SettingsRolePermissionsObjectLevelRecordLevelPermissionFilterBuilder
         roleId={roleId}
         objectMetadataItem={objectMetadataItem}
       />
-    </StyledContent>
+    </div>
   </Section.Root>
 );

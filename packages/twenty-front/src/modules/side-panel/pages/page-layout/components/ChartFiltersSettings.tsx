@@ -15,20 +15,23 @@ import { RecordFiltersComponentInstanceContext } from '@/object-record/record-fi
 import { currentRecordFiltersComponentState } from '@/object-record/record-filter/states/currentRecordFiltersComponentState';
 import { InputLabel } from '@/ui/input/components/internal/InputLabel/InputLabel';
 import { useAtomComponentStateCallbackState } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateCallbackState';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { useStore } from 'jotai';
 import { useMemo } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledChartFiltersPageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  gap: ${themeCssVariables.spacing[2]};
-
-  padding: ${themeCssVariables.spacing[3]};
-`;
+const styles = stylex.create({
+  chartFiltersPageContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingBottom: spacing['--t-spacing-3'],
+    paddingLeft: spacing['--t-spacing-3'],
+  },
+});
 
 export type ChartFiltersSettingsProps = {
   objectMetadataItem: EnrichedObjectMetadataItem;
@@ -99,7 +102,7 @@ export const ChartFiltersSettings = ({
   };
 
   return (
-    <StyledChartFiltersPageContainer>
+    <div {...stylex.props(styles.chartFiltersPageContainer)}>
       <div>
         <InputLabel>{t`Conditions`}</InputLabel>
         <RecordFilterGroupsComponentInstanceContext.Provider
@@ -122,6 +125,6 @@ export const ChartFiltersSettings = ({
           </RecordFiltersComponentInstanceContext.Provider>
         </RecordFilterGroupsComponentInstanceContext.Provider>
       </div>
-    </StyledChartFiltersPageContainer>
+    </div>
   );
 };

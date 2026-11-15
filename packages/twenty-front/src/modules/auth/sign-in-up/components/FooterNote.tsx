@@ -1,60 +1,56 @@
-import { styled } from '@linaria/react';
 import { Trans, useLingui } from '@lingui/react/macro';
 
 import { getTwentyWebsiteUrl } from '@/auth/utils/getTwentyWebsiteUrl';
 import { useIsCurrentLocationOnAWorkspace } from '@/domain-manager/hooks/useIsCurrentLocationOnAWorkspace';
-import { ONBOARDING_CONTENT_BLOCK_WIDTH } from '@/onboarding/constants/OnboardingContentBlockWidth';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { type ReactNode } from 'react';
+import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledCopyContainer = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.sm};
-  line-height: 1.4;
-  max-width: ${ONBOARDING_CONTENT_BLOCK_WIDTH}px;
-  text-align: center;
+import { onboardingLayout } from '../../../onboarding/constants/onboardingLayout.stylex';
 
-  & > a {
-    color: ${themeCssVariables.font.color.tertiary};
-    text-decoration: none;
+const styles = stylex.create({
+  copyContainer: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-sm'],
+    lineHeight: 1.4,
+    maxWidth: onboardingLayout.contentBlockWidth,
+    textAlign: 'center',
+  },
+  linksContainer: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    flexWrap: 'nowrap',
+    fontSize: fontSize['--t-font-size-sm'],
+    gap: spacing['--t-spacing-2'],
+    justifyContent: 'center',
+    maxWidth: '100%',
+    textAlign: 'center',
+    whiteSpace: 'nowrap',
+  },
+  link: {
+    color: fontColor['--t-font-color-tertiary'],
+    textDecoration: {
+      default: 'none',
+      ':hover': 'underline',
+    },
+  },
+  separator: {
+    color: fontColor['--t-font-color-tertiary'],
+  },
+});
 
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-`;
-
-const StyledLinksContainer = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  flex-wrap: nowrap;
-  font-size: ${themeCssVariables.font.size.sm};
-  gap: ${themeCssVariables.spacing[2]};
-  justify-content: center;
-  max-width: 100%;
-  text-align: center;
-  white-space: nowrap;
-
-  & > a,
-  & > button {
-    background: none;
-    border: none;
-    color: ${themeCssVariables.font.color.tertiary};
-    cursor: pointer;
-    font: inherit;
-    padding: 0;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-`;
-
-const StyledSeparator = styled.span`
-  color: ${themeCssVariables.font.color.tertiary};
-`;
+const FooterLink = ({ href, children }: { href: string; children: ReactNode }) => (
+  <a
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    {...stylex.props(styles.link)}
+  >
+    {children}
+  </a>
+);
 
 type FooterNoteProps = {
   secondaryAgreement?: 'privacyPolicy' | 'dataProcessingAgreement';
@@ -68,55 +64,35 @@ export const FooterNote = ({
 
   if (!isOnAWorkspace) {
     return (
-      <StyledCopyContainer>
+      <div {...stylex.props(styles.copyContainer)}>
         <Trans>By using Twenty, you agree to the</Trans>{' '}
-        <a
-          href={getTwentyWebsiteUrl(i18n.locale, 'terms')}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <FooterLink href={getTwentyWebsiteUrl(i18n.locale, 'terms')}>
           <Trans>Terms of Service</Trans>
-        </a>{' '}
+        </FooterLink>{' '}
         <Trans>and</Trans>{' '}
         {secondaryAgreement === 'dataProcessingAgreement' ? (
-          <a
-            href="https://twenty.com/legal/dpa"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <FooterLink href="https://twenty.com/legal/dpa">
             <Trans>Data Processing Agreement</Trans>
-          </a>
+          </FooterLink>
         ) : (
-          <a
-            href={getTwentyWebsiteUrl(i18n.locale, 'privacy-policy')}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <FooterLink href={getTwentyWebsiteUrl(i18n.locale, 'privacy-policy')}>
             <Trans>Privacy Policy</Trans>
-          </a>
+          </FooterLink>
         )}
         .
-      </StyledCopyContainer>
+      </div>
     );
   }
 
   return (
-    <StyledLinksContainer>
-      <a
-        href={getTwentyWebsiteUrl(i18n.locale, 'privacy-policy')}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+    <div {...stylex.props(styles.linksContainer)}>
+      <FooterLink href={getTwentyWebsiteUrl(i18n.locale, 'privacy-policy')}>
         <Trans>Privacy Policy</Trans>
-      </a>
-      <StyledSeparator>•</StyledSeparator>
-      <a
-        href={getTwentyWebsiteUrl(i18n.locale, 'terms')}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      </FooterLink>
+      <span {...stylex.props(styles.separator)}>•</span>
+      <FooterLink href={getTwentyWebsiteUrl(i18n.locale, 'terms')}>
         <Trans>Terms of Service</Trans>
-      </a>
-    </StyledLinksContainer>
+      </FooterLink>
+    </div>
   );
 };

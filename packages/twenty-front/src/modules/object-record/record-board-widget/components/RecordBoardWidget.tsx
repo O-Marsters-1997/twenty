@@ -1,15 +1,17 @@
 import { RecordBoardContainer } from '@/object-record/record-board/components/RecordBoardContainer';
 import { RecordBoardWidgetStatesEffect } from '@/object-record/record-board-widget/components/RecordBoardWidgetStatesEffect';
 import { useRecordIndexContextOrThrow } from '@/object-record/record-index/contexts/RecordIndexContext';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledBoardContainer = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-height: 0;
-  overflow: hidden;
-`;
+const styles = stylex.create({
+  boardContainer: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    minHeight: '0',
+    overflow: 'hidden',
+  },
+});
 
 type RecordBoardWidgetProps = {
   isUIEditable?: boolean;
@@ -27,13 +29,13 @@ export const RecordBoardWidget = ({
         recordBoardId={recordIndexId}
         isUIEditable={isUIEditable}
       />
-      <StyledBoardContainer>
+      <div {...stylex.props(styles.boardContainer)}>
         <RecordBoardContainer
           recordBoardId={recordIndexId}
           viewBarId={viewBarInstanceId}
           objectNameSingular={objectNameSingular}
         />
-      </StyledBoardContainer>
+      </div>
     </>
   );
 };

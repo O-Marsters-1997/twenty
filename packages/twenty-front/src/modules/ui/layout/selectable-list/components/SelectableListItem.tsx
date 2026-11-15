@@ -3,16 +3,18 @@ import { type ReactNode, useEffect, useRef } from 'react';
 import { SelectableListItemHotkeyEffect } from '@/ui/layout/selectable-list/components/SelectableListItemHotkeyEffect';
 import { isSelectedItemIdComponentFamilyState } from '@/ui/layout/selectable-list/states/isSelectedItemIdComponentFamilyState';
 import { useAtomComponentFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentFamilyStateValue';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { isDefined } from 'twenty-shared/utils';
 
-const StyledListItemContainer = styled.div`
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
-`;
+const styles = stylex.create({
+  container: {
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    width: '100%',
+  },
+});
 
 export type SelectableListItemProps = {
   itemId: string;
@@ -45,14 +47,20 @@ export const SelectableListItem = ({
     });
   }, [isSelectedItemId]);
 
+  const containerProps = stylex.props(styles.container);
+
   return (
     <>
       {isSelectedItemId && isDefined(onEnter) && (
         <SelectableListItemHotkeyEffect itemId={itemId} onEnter={onEnter} />
       )}
-      <StyledListItemContainer ref={listItemRef} className={className}>
+      <div
+        ref={listItemRef}
+        {...containerProps}
+        className={[containerProps.className, className].join(' ')}
+      >
         {children}
-      </StyledListItemContainer>
+      </div>
     </>
   );
 };

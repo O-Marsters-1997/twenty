@@ -3,16 +3,18 @@ import { RecordCalendarWidgetReadOnlyEffect } from '@/object-record/record-calen
 import { useRecordIndexContextOrThrow } from '@/object-record/record-index/contexts/RecordIndexContext';
 import { recordIndexCalendarFieldMetadataIdComponentState } from '@/object-record/record-index/states/recordIndexCalendarFieldMetadataIdComponentState';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { styled } from '@linaria/react';
 import { isDefined } from 'twenty-shared/utils';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledCalendarContainer = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-height: 0;
-  overflow: hidden;
-`;
+const styles = stylex.create({
+  calendarContainer: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    minHeight: '0',
+    overflow: 'hidden',
+  },
+});
 
 type RecordCalendarWidgetProps = {
   isReadOnly?: boolean;
@@ -40,12 +42,12 @@ export const RecordCalendarWidget = ({
         recordCalendarId={recordIndexId}
         isReadOnly={isReadOnly}
       />
-      <StyledCalendarContainer>
+      <div {...stylex.props(styles.calendarContainer)}>
         <RecordCalendarContainer
           objectNameSingular={objectNameSingular}
           viewBarInstanceId={viewBarInstanceId}
         />
-      </StyledCalendarContainer>
+      </div>
     </>
   );
 };

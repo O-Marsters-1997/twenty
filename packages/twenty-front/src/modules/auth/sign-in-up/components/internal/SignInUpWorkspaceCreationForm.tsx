@@ -1,3 +1,4 @@
+import { onboardingLayout } from '../../../../onboarding/constants/onboardingLayout.stylex';
 import { useSignUpInNewWorkspace } from '@/auth/sign-in-up/hooks/useSignUpInNewWorkspace';
 import { useWorkspaceSubdomainField } from '@/auth/sign-in-up/hooks/useWorkspaceSubdomainField';
 import { isCreatingWorkspaceState } from '@/auth/states/isCreatingWorkspaceState';
@@ -10,7 +11,6 @@ import { TextInput } from '@/ui/input/components/TextInput';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomState';
 import { getWorkspaceAvatarColorSeed } from '@/workspace/utils/getWorkspaceAvatarColorSeed';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { useEffect, useRef, useState } from 'react';
@@ -20,122 +20,127 @@ import { LightIconButton, MainButton } from 'twenty-ui/components/input';
 import { IconTrash, IconUpload } from 'twenty-ui/icon';
 import { Avatar } from 'twenty-ui/primitives/data-display';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { backgroundTransparent, borderColor, borderRadius, color, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContentContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[14]};
-  max-width: 100%;
-  width: ${ONBOARDING_CONTENT_BLOCK_WIDTH}px;
-`;
-
-const StyledHeading = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[4]};
-`;
-
-const StyledTitle = styled.div`
-  color: ${themeCssVariables.font.color.primary};
-  font-size: ${themeCssVariables.font.size.xl};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-  line-height: 1.2;
-`;
-
-const StyledSubtitle = styled.div`
-  color: ${themeCssVariables.font.color.secondary};
-  font-size: ${themeCssVariables.font.size.md};
-  line-height: 1.4;
-`;
-
-const StyledFormSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[8]};
-  padding-bottom: ${themeCssVariables.spacing[4]};
-  width: 100%;
-`;
-
-const StyledLogoRow = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledLogoAvatar = styled(Avatar)`
-  height: ${themeCssVariables.spacing[8]};
-  width: ${themeCssVariables.spacing[8]};
-`;
-
-const StyledLogoButtons = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing['0.5']};
-`;
-
-const StyledHiddenFileInput = styled.input`
-  display: none;
-`;
-
-const StyledSubdomainSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  width: 100%;
-`;
-
-const StyledAlternativesBox = styled.div`
-  background-color: ${themeCssVariables.background.transparent.lighter};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.md};
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  padding: ${themeCssVariables.spacing[3]};
-`;
-
-const StyledAlternativesLabel = styled.span`
-  color: ${themeCssVariables.font.color.secondary};
-  font-size: ${themeCssVariables.font.size.sm};
-  font-weight: ${themeCssVariables.font.weight.medium};
-  padding-bottom: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledAlternativeRows = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledAlternativeRow = styled.button`
-  align-items: center;
-  background: transparent;
-  border: none;
-  color: ${themeCssVariables.color.green};
-  cursor: pointer;
-  display: flex;
-  font-size: ${themeCssVariables.font.size.xs};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-  gap: ${themeCssVariables.spacing[1]};
-  padding: 2px 0;
-  text-align: left;
-`;
-
-const StyledAvailabilityDotBox = styled.div`
-  display: flex;
-  padding: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledAvailabilityDot = styled.div`
-  background-color: ${themeCssVariables.color.green};
-  border-radius: 50%;
-  box-shadow: 0 0 0 3px ${themeCssVariables.color.green5};
-  corner-shape: round;
-  flex-shrink: 0;
-  height: 6px;
-  width: 6px;
-`;
+const styles = stylex.create({
+  logoAvatar: {
+    height: spacing['--t-spacing-8'],
+    width: spacing['--t-spacing-8'],
+  },
+  contentContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-14'],
+    maxWidth: '100%',
+    width: onboardingLayout.contentBlockWidth,
+  },
+  heading: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-4'],
+  },
+  title: {
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-xl'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    lineHeight: '1.2',
+  },
+  subtitle: {
+    color: fontColor['--t-font-color-secondary'],
+    fontSize: fontSize['--t-font-size-md'],
+    lineHeight: '1.4',
+  },
+  formSection: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-8'],
+    paddingBottom: spacing['--t-spacing-4'],
+    width: '100%',
+  },
+  logoRow: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+  },
+  logoButtons: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-0_5'],
+  },
+  hiddenFileInput: {
+    display: 'none',
+  },
+  subdomainSection: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+  alternativesBox: {
+    backgroundColor: backgroundTransparent['--t-background-transparent-lighter'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-medium'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingBottom: spacing['--t-spacing-3'],
+    paddingLeft: spacing['--t-spacing-3'],
+  },
+  alternativesLabel: {
+    color: fontColor['--t-font-color-secondary'],
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    paddingBottom: spacing['--t-spacing-1'],
+  },
+  alternativeRows: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-1'],
+  },
+  alternativeRow: {
+    alignItems: 'center',
+    background: 'transparent',
+    borderStyle: 'none',
+    color: color['--t-color-green'],
+    cursor: 'pointer',
+    display: 'flex',
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    gap: spacing['--t-spacing-1'],
+    paddingTop: '2px',
+    paddingRight: '0',
+    paddingBottom: '2px',
+    paddingLeft: '0',
+    textAlign: 'left',
+  },
+  availabilityDotBox: {
+    display: 'flex',
+    paddingTop: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-1'],
+  },
+  availabilityDot: {
+    backgroundColor: color['--t-color-green'],
+    borderTopLeftRadius: '50%',
+    borderTopRightRadius: '50%',
+    borderBottomRightRadius: '50%',
+    borderBottomLeftRadius: '50%',
+    boxShadow: `0 0 0 3px ${color['--t-color-green5']}`,
+    cornerShape: 'round',
+    flexShrink: '0',
+    height: '6px',
+    width: '6px',
+  },
+});
 
 export const SignInUpWorkspaceCreationForm = () => {
   const { t } = useLingui();
@@ -237,21 +242,22 @@ export const SignInUpWorkspaceCreationForm = () => {
           : undefined;
 
   return (
-    <StyledContentContainer>
-      <StyledHeading>
+    <div {...stylex.props(styles.contentContainer)}>
+      <div {...stylex.props(styles.heading)}>
         <OnboardingStepAnimatedItem index={0}>
-          <StyledTitle>{t`Create your workspace`}</StyledTitle>
+          <div {...stylex.props(styles.title)}>{t`Create your workspace`}</div>
         </OnboardingStepAnimatedItem>
         <OnboardingStepAnimatedItem index={1}>
-          <StyledSubtitle>
+          <div {...stylex.props(styles.subtitle)}>
             {t`Move work forward across teams and agents`}
-          </StyledSubtitle>
+          </div>
         </OnboardingStepAnimatedItem>
-      </StyledHeading>
-      <StyledFormSection>
+      </div>
+      <div {...stylex.props(styles.formSection)}>
         <OnboardingStepAnimatedItem index={2}>
-          <StyledLogoRow>
-            <StyledLogoAvatar
+          <div {...stylex.props(styles.logoRow)}>
+            <Avatar
+              {...stylex.props(styles.logoAvatar)}
               src={logoPreviewUrl}
               name={isNonEmptyString(workspaceName) ? workspaceName : '?'}
               colorSeed={getWorkspaceAvatarColorSeed(workspaceName)}
@@ -265,7 +271,7 @@ export const SignInUpWorkspaceCreationForm = () => {
                 />
               }
             />
-            <StyledHiddenFileInput
+            <input
               type="file"
               ref={hiddenFileInputRef}
               accept="image/jpeg, image/png, image/gif"
@@ -275,9 +281,9 @@ export const SignInUpWorkspaceCreationForm = () => {
                   handleLogoUpload(file);
                 }
                 event.target.value = '';
-              }}
+              }} {...stylex.props(styles.hiddenFileInput)}
             />
-            <StyledLogoButtons>
+            <div {...stylex.props(styles.logoButtons)}>
               <Button
                 startIcon={<IconUpload />}
                 onClick={openFilePicker}
@@ -292,8 +298,8 @@ export const SignInUpWorkspaceCreationForm = () => {
               >
                 <IconTrash />
               </LightIconButton>
-            </StyledLogoButtons>
-          </StyledLogoRow>
+            </div>
+          </div>
         </OnboardingStepAnimatedItem>
         <OnboardingStepAnimatedItem index={3}>
           <TextInput
@@ -308,7 +314,7 @@ export const SignInUpWorkspaceCreationForm = () => {
         </OnboardingStepAnimatedItem>
         {isMultiWorkspaceEnabled && (
           <OnboardingStepAnimatedItem index={4}>
-            <StyledSubdomainSection>
+            <div {...stylex.props(styles.subdomainSection)}>
               <TextInput
                 label={t`Subdomain`}
                 value={subdomain}
@@ -325,30 +331,30 @@ export const SignInUpWorkspaceCreationForm = () => {
                 fullWidth
               />
               <OnboardingAnimatedReveal isVisible={status === 'unavailable'}>
-                <StyledAlternativesBox>
-                  <StyledAlternativesLabel>
+                <div {...stylex.props(styles.alternativesBox)}>
+                  <span {...stylex.props(styles.alternativesLabel)}>
                     {t`Subdomain already in use, here are some alternatives:`}
-                  </StyledAlternativesLabel>
-                  <StyledAlternativeRows>
+                  </span>
+                  <div {...stylex.props(styles.alternativeRows)}>
                     {suggestions.map((alternative) => (
-                      <StyledAlternativeRow
+                      <button
                         key={alternative}
                         type="button"
-                        onClick={() => applySuggestionValue(alternative)}
+                        onClick={() => applySuggestionValue(alternative)} {...stylex.props(styles.alternativeRow)}
                       >
-                        <StyledAvailabilityDotBox>
-                          <StyledAvailabilityDot />
-                        </StyledAvailabilityDotBox>
+                        <div {...stylex.props(styles.availabilityDotBox)}>
+                          <div {...stylex.props(styles.availabilityDot)} />
+                        </div>
                         {alternative}
-                      </StyledAlternativeRow>
+                      </button>
                     ))}
-                  </StyledAlternativeRows>
-                </StyledAlternativesBox>
+                  </div>
+                </div>
               </OnboardingAnimatedReveal>
-            </StyledSubdomainSection>
+            </div>
           </OnboardingStepAnimatedItem>
         )}
-      </StyledFormSection>
+      </div>
       <OnboardingStepAnimatedItem index={isMultiWorkspaceEnabled ? 5 : 4}>
         <MainButton
           onClick={handleSubmit}
@@ -356,6 +362,6 @@ export const SignInUpWorkspaceCreationForm = () => {
           fullWidth
         >{t`Create workspace`}</MainButton>
       </OnboardingStepAnimatedItem>
-    </StyledContentContainer>
+    </div>
   );
 };

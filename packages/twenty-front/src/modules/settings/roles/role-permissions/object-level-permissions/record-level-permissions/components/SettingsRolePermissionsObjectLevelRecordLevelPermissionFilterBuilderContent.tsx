@@ -1,11 +1,9 @@
 /* @license Enterprise */
 
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { IconFilter, IconPlus } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { CommandMenuButton } from '@/command-menu/components/CommandMenuButton';
 import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/EnrichedObjectMetadataItem';
@@ -27,24 +25,26 @@ import { useAtomComponentSelectorValue } from '@/ui/utilities/state/jotai/hooks/
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
 import { useSetAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useSetAtomComponentState';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  align-items: start;
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledFiltersContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  width: 100%;
-`;
-
-const StyledActionButtonWrapper = styled.div`
-  margin-top: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'start',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+  },
+  filtersContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+  actionButtonWrapper: {
+    marginTop: spacing['--t-spacing-2'],
+  },
+});
 
 type SettingsRolePermissionsObjectLevelRecordLevelPermissionFilterBuilderContentProps =
   {
@@ -120,8 +120,8 @@ export const SettingsRolePermissionsObjectLevelRecordLevelPermissionFilterBuilde
     return (
       <AdvancedFilterContext.Provider value={{ objectMetadataItem }}>
         {isDefined(rootRecordFilterGroup) ? (
-          <StyledContainer>
-            <StyledFiltersContainer>
+          <div {...stylex.props(styles.container)}>
+            <div {...stylex.props(styles.filtersContainer)}>
               {childRecordFiltersAndRecordFilterGroups
                 .filter(
                   (child): child is RecordFilter =>
@@ -135,8 +135,8 @@ export const SettingsRolePermissionsObjectLevelRecordLevelPermissionFilterBuilde
                     recordFilterGroup={rootRecordFilterGroup}
                   />
                 ))}
-            </StyledFiltersContainer>
-            <StyledActionButtonWrapper>
+            </div>
+            <div {...stylex.props(styles.actionButtonWrapper)}>
               <CommandMenuButton
                 command={{
                   Icon: IconPlus,
@@ -146,8 +146,8 @@ export const SettingsRolePermissionsObjectLevelRecordLevelPermissionFilterBuilde
                 }}
                 onClick={() => handleAddFilter(rootRecordFilterGroup)}
               />
-            </StyledActionButtonWrapper>
-          </StyledContainer>
+            </div>
+          </div>
         ) : (
           <Button
             startIcon={<IconFilter />}

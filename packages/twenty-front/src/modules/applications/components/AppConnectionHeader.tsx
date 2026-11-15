@@ -1,57 +1,69 @@
-import { styled } from '@linaria/react';
 import { useState } from 'react';
 import { isNonEmptyString } from '@sniptt/guards';
 import { Avatar } from 'twenty-ui/primitives/data-display';
 import { IconRefresh } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { background, blur, borderRadius, boxShadow, fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type AppConnectionHeaderProps = {
   appLogoUrl?: string | null;
   appName: string;
 };
 
-const StyledContainer = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  justify-content: center;
-`;
-
-const StyledAppLogoTile = styled.div`
-  align-items: center;
-  backdrop-filter: ${themeCssVariables.blur.strong};
-  background: ${themeCssVariables.background.primary};
-  border-radius: ${themeCssVariables.border.radius.md};
-  box-shadow: ${themeCssVariables.boxShadow.strong};
-  box-sizing: border-box;
-  display: flex;
-  flex-shrink: 0;
-  height: ${themeCssVariables.spacing[12]};
-  justify-content: center;
-  padding: ${themeCssVariables.spacing[1]};
-  width: ${themeCssVariables.spacing[12]};
-`;
-
-const StyledAppLogo = styled.img`
-  border-radius: ${themeCssVariables.border.radius.sm};
-  height: ${themeCssVariables.spacing[10]};
-  object-fit: cover;
-  width: ${themeCssVariables.spacing[10]};
-`;
-
-const StyledLinkIconContainer = styled.div`
-  align-items: center;
-  background: ${themeCssVariables.background.primary};
-  border-radius: ${themeCssVariables.border.radius.rounded};
-  box-shadow: ${themeCssVariables.boxShadow.strong};
-  color: ${themeCssVariables.font.color.primary};
-  corner-shape: round;
-  display: flex;
-  flex-shrink: 0;
-  height: ${themeCssVariables.spacing[6]};
-  justify-content: center;
-  width: ${themeCssVariables.spacing[6]};
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    justifyContent: 'center',
+  },
+  appLogoTile: {
+    alignItems: 'center',
+    backdropFilter: blur['--t-blur-strong'],
+    background: background['--t-background-primary'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    boxShadow: boxShadow['--t-box-shadow-strong'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexShrink: '0',
+    height: spacing['--t-spacing-12'],
+    justifyContent: 'center',
+    paddingTop: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-1'],
+    width: spacing['--t-spacing-12'],
+  },
+  appLogo: {
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    height: spacing['--t-spacing-10'],
+    objectFit: 'cover',
+    width: spacing['--t-spacing-10'],
+  },
+  linkIconContainer: {
+    alignItems: 'center',
+    background: background['--t-background-primary'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-rounded'],
+    borderTopRightRadius: borderRadius['--t-border-radius-rounded'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-rounded'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-rounded'],
+    boxShadow: boxShadow['--t-box-shadow-strong'],
+    color: fontColor['--t-font-color-primary'],
+    cornerShape: 'round',
+    display: 'flex',
+    flexShrink: '0',
+    height: spacing['--t-spacing-6'],
+    justifyContent: 'center',
+    width: spacing['--t-spacing-6'],
+  },
+});
 
 export const AppConnectionHeader = ({
   appLogoUrl,
@@ -64,24 +76,24 @@ export const AppConnectionHeader = ({
   const showAppLogoImage = isNonEmptyString(appLogoUrl) && !hasAppLogoError;
 
   return (
-    <StyledContainer>
-      <StyledAppLogoTile>
-        <StyledAppLogo src={'/images/integrations/twenty-logo.svg'} alt="" />
-      </StyledAppLogoTile>
-      <StyledLinkIconContainer aria-hidden>
+    <div {...stylex.props(styles.container)}>
+      <div {...stylex.props(styles.appLogoTile)}>
+        <img src={'/images/integrations/twenty-logo.svg'} alt="" {...stylex.props(styles.appLogo)} />
+      </div>
+      <div aria-hidden {...stylex.props(styles.linkIconContainer)}>
         <IconRefresh size={theme.icon.size.md} stroke={theme.icon.stroke.lg} />
-      </StyledLinkIconContainer>
-      <StyledAppLogoTile>
+      </div>
+      <div {...stylex.props(styles.appLogoTile)}>
         {showAppLogoImage ? (
-          <StyledAppLogo
+          <img
             src={appLogoUrl}
             alt=""
-            onError={() => setHasAppLogoError(true)}
+            onError={() => setHasAppLogoError(true)} {...stylex.props(styles.appLogo)}
           />
         ) : (
           <Avatar size="xl" name={appName} colorSeed={appName} shape="square" />
         )}
-      </StyledAppLogoTile>
-    </StyledContainer>
+      </div>
+    </div>
   );
 };

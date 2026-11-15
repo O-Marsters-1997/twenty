@@ -1,22 +1,26 @@
+import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import * as stylex from '@stylexjs/stylex';
 import { AnimatedEaseIn } from '@/auth/components/internal/AnimatedEaseIn/AnimatedEaseIn';
-import { styled } from '@linaria/react';
 import React from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 type TitleProps = React.PropsWithChildren & {
   animate?: boolean;
   noMarginTop?: boolean;
 };
 
-const StyledTitle = styled.div<Pick<TitleProps, 'noMarginTop'>>`
-  color: ${themeCssVariables.font.color.primary};
-  font-size: ${themeCssVariables.font.size.xl};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-  margin-bottom: ${themeCssVariables.spacing[4]};
-  margin-top: ${({ noMarginTop }) =>
-    !noMarginTop ? themeCssVariables.spacing[4] : '0'};
-  text-align: center;
-`;
+const styles = stylex.create({
+  title: {
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-xl'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    marginBottom: spacing['--t-spacing-4'],
+    marginTop: spacing['--t-spacing-4'],
+    textAlign: 'center',
+  },
+  titleNoMarginTop: {
+    marginTop: 0,
+  },
+});
 
 export const Title = ({
   children,
@@ -25,11 +29,11 @@ export const Title = ({
 }: TitleProps) => {
   if (animate) {
     return (
-      <StyledTitle noMarginTop={noMarginTop}>
+      <div {...stylex.props(styles.title, noMarginTop && styles.titleNoMarginTop)}>
         <AnimatedEaseIn>{children}</AnimatedEaseIn>
-      </StyledTitle>
+      </div>
     );
   }
 
-  return <StyledTitle noMarginTop={noMarginTop}>{children}</StyledTitle>;
+  return <div {...stylex.props(styles.title, noMarginTop && styles.titleNoMarginTop)}>{children}</div>;
 };

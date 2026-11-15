@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react';
 
-import { TAB_LIST_GAP } from '@/ui/layout/tab-list/constants/TabListGap';
+import { layoutSize } from '@/ui/layout/constants/layout.stylex';
 import { type SingleTabProps } from '@/ui/layout/tab-list/types/SingleTabProps';
 import { NodeDimension } from '@/ui/utilities/dimensions/components/NodeDimension';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { IconPlus } from 'twenty-ui/icon';
 import { TabButton } from 'twenty-ui/components/navigation';
 import { getTabListItemContent } from '@/ui/layout/tab-list/utils/getTabListItemContent';
@@ -21,14 +21,16 @@ type TabListHiddenMeasurementsProps = {
   addButtonMeasurement?: ReactNode;
 };
 
-const StyledHiddenMeasurement = styled.div`
-  display: flex;
-  gap: ${TAB_LIST_GAP}px;
-  pointer-events: none;
-  position: absolute;
-  top: -9999px;
-  visibility: hidden;
-`;
+const styles = stylex.create({
+  hiddenMeasurement: {
+    display: 'flex',
+    gap: layoutSize.tabListGap,
+    pointerEvents: 'none',
+    position: 'absolute',
+    top: '-9999px',
+    visibility: 'hidden',
+  },
+});
 
 export const TabListHiddenMeasurements = ({
   visibleTabs,
@@ -40,7 +42,7 @@ export const TabListHiddenMeasurements = ({
   addButtonMeasurement,
 }: TabListHiddenMeasurementsProps) => {
   return (
-    <StyledHiddenMeasurement aria-hidden inert>
+    <div aria-hidden inert {...stylex.props(styles.hiddenMeasurement)}>
       {visibleTabs.map((tab) => {
         const { startIcon, badge } = getTabListItemContent(tab);
 
@@ -77,6 +79,6 @@ export const TabListHiddenMeasurements = ({
           )}
         </NodeDimension>
       )}
-    </StyledHiddenMeasurement>
+    </div>
   );
 };

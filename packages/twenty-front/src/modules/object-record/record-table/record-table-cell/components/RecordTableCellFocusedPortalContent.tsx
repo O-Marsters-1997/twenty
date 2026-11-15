@@ -1,5 +1,5 @@
 import { FieldDisplay } from '@/object-record/record-field/ui/components/FieldDisplay';
-import { RECORD_TABLE_ROW_HEIGHT } from '@/object-record/record-table/constants/RecordTableRowHeight';
+import { recordTableLayout } from '../../constants/recordTableLayout.stylex';
 import { useRecordTableBodyContextOrThrow } from '@/object-record/record-table/contexts/RecordTableBodyContext';
 import { useRecordTableRowContextOrThrow } from '@/object-record/record-table/contexts/RecordTableRowContext';
 import { RecordTableCellDisplayMode } from '@/object-record/record-table/record-table-cell/components/RecordTableCellDisplayMode';
@@ -9,30 +9,14 @@ import { recordTableFocusPositionComponentState } from '@/object-record/record-t
 import { recordTableHoverPositionComponentState } from '@/object-record/record-table/states/recordTableHoverPositionComponentState';
 import { useAtomComponentFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentFamilyStateValue';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
-
-const StyledRecordTableCellFocusPortalContent = styled.div<{
-  isRecordTableRowActive: boolean;
-}>`
-  align-items: center;
-  background: ${themeCssVariables.background.transparent.secondary};
-  background-color: ${({ isRecordTableRowActive }) =>
-    isRecordTableRowActive
-      ? themeCssVariables.accent.quaternary
-      : themeCssVariables.background.primary};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  box-sizing: border-box;
-  display: flex;
-
-  height: ${RECORD_TABLE_ROW_HEIGHT}px;
-
-  outline: 1px solid ${themeCssVariables.color.blue8};
-  outline-offset: -1px;
-
-  user-select: none;
-`;
+import {
+  accent,
+  background,
+  borderRadius,
+  color,
+} from 'twenty-ui/theme/tokens.stylex';
 
 export const RecordTableCellFocusedPortalContent = () => {
   const { rowIndex } = useRecordTableRowContextOrThrow();
@@ -62,13 +46,38 @@ export const RecordTableCellFocusedPortalContent = () => {
   };
 
   return (
-    <StyledRecordTableCellFocusPortalContent
-      isRecordTableRowActive={isRecordTableRowActive}
+    <div
+      {...stylex.props(
+        styles.container,
+        isRecordTableRowActive && styles.containerActive,
+      )}
       onMouseMove={handleContainerMouseMove}
     >
       <RecordTableCellDisplayMode>
         <FieldDisplay />
       </RecordTableCellDisplayMode>
-    </StyledRecordTableCellFocusPortalContent>
+    </div>
   );
 };
+
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    backgroundColor: background['--t-background-primary'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    height: recordTableLayout.rowHeight,
+    outlineColor: color['--t-color-blue8'],
+    outlineOffset: -1,
+    outlineStyle: 'solid',
+    outlineWidth: 1,
+    userSelect: 'none',
+  },
+  containerActive: {
+    backgroundColor: accent['--t-accent-quaternary'],
+  },
+});

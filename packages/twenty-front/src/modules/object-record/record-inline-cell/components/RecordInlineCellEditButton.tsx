@@ -1,13 +1,15 @@
 import { AnimatedContainer } from '@/ui/layout/animation/components/internal/AnimatedContainer/AnimatedContainer';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { IconButton } from 'twenty-ui/components/input';
 import { type IconComponent } from 'twenty-ui/icon';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledInlineCellButtonContainer = styled.div`
-  align-items: center;
-  display: flex;
-`;
+const styles = stylex.create({
+  inlineCellButtonContainer: {
+    alignItems: 'center',
+    display: 'flex',
+  },
+});
 
 export const RecordInlineCellButton = ({
   Icon,
@@ -20,7 +22,7 @@ export const RecordInlineCellButton = ({
 }) => {
   return (
     <AnimatedContainer>
-      <StyledInlineCellButtonContainer>
+      <div {...stylex.props(styles.inlineCellButtonContainer)}>
         <IconButton
           elevated
           size="sm"
@@ -30,7 +32,7 @@ export const RecordInlineCellButton = ({
         >
           <Icon />
         </IconButton>
-      </StyledInlineCellButtonContainer>
+      </div>
     </AnimatedContainer>
   );
 };

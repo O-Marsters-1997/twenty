@@ -1,19 +1,35 @@
 import { DropdownMenuItemsContainer } from '@/ui/layout/dropdown/components/DropdownMenuItemsContainer';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import { type ReactNode } from 'react';
 
-const PAGE_LAYOUT_DROPDOWN_CONTENT_MAX_HEIGHT = 340;
+const styles = stylex.create({
+  contentContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    maxHeight: '340px',
+    minHeight: 0,
+    overflow: 'hidden',
+  },
+  menuItemsContainer: {
+    flex: '1',
+    minHeight: 0,
+  },
+});
 
-export const StyledPageLayoutDropdownContentContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  max-height: ${PAGE_LAYOUT_DROPDOWN_CONTENT_MAX_HEIGHT}px;
-  min-height: 0;
-  overflow: hidden;
-`;
+export const PageLayoutDropdownContentContainer = ({
+  children,
+}: {
+  children: ReactNode;
+}) => <div {...stylex.props(styles.contentContainer)}>{children}</div>;
 
-export const StyledPageLayoutDropdownMenuItemsContainer = styled(
-  DropdownMenuItemsContainer,
-)`
-  flex: 1;
-  min-height: 0;
-`;
+export const PageLayoutDropdownMenuItemsContainer = ({
+  children,
+}: {
+  children: ReactNode;
+}) => (
+  <DropdownMenuItemsContainer
+    className={stylex.props(styles.menuItemsContainer).className}
+  >
+    {children}
+  </DropdownMenuItemsContainer>
+);

@@ -1,10 +1,10 @@
-import { RootStackingContextZIndices } from '@/ui/layout/constants/RootStackingContextZIndices';
+import { zIndex } from '@/ui/layout/constants/layout.stylex';
 import { OverlayContainer } from '@/ui/layout/overlay/components/OverlayContainer';
 import { useListenClickOutside } from '@/ui/utilities/pointer-event/hooks/useListenClickOutside';
-import { styled } from '@linaria/react';
 import { flip, FloatingPortal, offset, useFloating } from '@floating-ui/react';
 import { type ReactNode } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type ExpandedFieldDisplayProps = {
   anchorElement?: HTMLElement;
@@ -12,23 +12,27 @@ type ExpandedFieldDisplayProps = {
   onClickOutside?: () => void;
 };
 
-const StyledExpandedFieldContainer = styled.div`
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[1]};
-  height: 300px;
-  overflow: auto;
-  overflow-y: auto;
-  padding: ${themeCssVariables.spacing[2]};
-  position: relative;
-  width: 400px;
-`;
-
-const StyledContainer = styled.div`
-  display: flex;
-  z-index: ${RootStackingContextZIndices.DropdownPortalBelowModal};
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    zIndex: zIndex.dropdownPortalBelowModal,
+  },
+  expandedFieldContainer: {
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-1'],
+    height: '300px',
+    overflow: 'auto',
+    overflowY: 'auto',
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-2'],
+    position: 'relative',
+    width: '400px',
+  },
+});
 
 export const ExpandedFieldDisplay = ({
   anchorElement,
@@ -57,17 +61,16 @@ export const ExpandedFieldDisplay = ({
 
   return (
     <FloatingPortal>
-      <StyledContainer
+      <div
         ref={refs.setFloating}
+        {...stylex.props(styles.container)}
         style={floatingStyles}
         data-globally-prevent-click-outside="true"
       >
         <OverlayContainer>
-          <StyledExpandedFieldContainer>
-            {children}
-          </StyledExpandedFieldContainer>
+          <div {...stylex.props(styles.expandedFieldContainer)}>{children}</div>
         </OverlayContainer>
-      </StyledContainer>
+      </div>
     </FloatingPortal>
   );
 };

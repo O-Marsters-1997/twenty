@@ -1,7 +1,5 @@
-import { styled } from '@linaria/react';
 import { useContext } from 'react';
 import { type StepFilter, type StepFilterGroup } from 'twenty-shared/types';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { CoreWorkflowFilterFieldSelect } from '@/object-core/workflows/components/CoreWorkflowFilterFieldSelect';
 import { CoreWorkflowFilterValueInput } from '@/object-core/workflows/components/CoreWorkflowFilterValueInput';
@@ -10,6 +8,8 @@ import { WorkflowStepFilterLogicalOperatorCell } from '@/workflow/workflow-steps
 import { WorkflowStepFilterOperandSelect } from '@/workflow/workflow-steps/filters/components/WorkflowStepFilterOperandSelect';
 import { WorkflowStepFilterOptionsDropdown } from '@/workflow/workflow-steps/filters/components/WorkflowStepFilterOptionsDropdown';
 import { WorkflowStepFilterContext } from '@/workflow/workflow-steps/filters/states/context/WorkflowStepFilterContext';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type CoreWorkflowFilterColumnProps = {
   stepFilterGroup: StepFilterGroup;
@@ -17,12 +17,14 @@ type CoreWorkflowFilterColumnProps = {
   stepFilterIndex: number;
 };
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: ${themeCssVariables.spacing[1]};
-  justify-content: space-between;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: spacing['--t-spacing-1'],
+    justifyContent: 'space-between',
+  },
+});
 
 export const CoreWorkflowFilterColumn = ({
   stepFilterGroup,
@@ -33,7 +35,7 @@ export const CoreWorkflowFilterColumn = ({
 
   return (
     <AdvancedFilterSidePanelColumn>
-      <StyledContainer>
+      <div {...stylex.props(styles.container)}>
         <WorkflowStepFilterLogicalOperatorCell
           index={stepFilterIndex}
           stepFilterGroup={stepFilterGroup}
@@ -41,7 +43,7 @@ export const CoreWorkflowFilterColumn = ({
         {!readonly && (
           <WorkflowStepFilterOptionsDropdown stepFilterId={stepFilter.id} />
         )}
-      </StyledContainer>
+      </div>
       <CoreWorkflowFilterFieldSelect stepFilter={stepFilter} />
       <WorkflowStepFilterOperandSelect stepFilter={stepFilter} />
       <CoreWorkflowFilterValueInput stepFilter={stepFilter} />

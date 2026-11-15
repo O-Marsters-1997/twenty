@@ -3,15 +3,20 @@ import { useMergeRecordsSettings } from '@/object-record/record-merge/hooks/useM
 import { getPositionNumberIcon } from '@/object-record/record-merge/utils/getPositionNumberIcon';
 import { getPositionWordLabel } from '@/object-record/record-merge/utils/getPositionWordLabel';
 import { Select } from '@/ui/input/components/Select';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { Section } from 'twenty-ui/components/layout';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledSectionContainer = styled.div`
-  padding: ${themeCssVariables.spacing[2]};
-  width: auto;
-`;
+const styles = stylex.create({
+  sectionContainer: {
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-2'],
+    width: 'auto',
+  },
+});
 
 export const MergeSettingsTab = () => {
   const { mergeSettings, updatePriorityRecordIndex } =
@@ -37,7 +42,7 @@ export const MergeSettingsTab = () => {
   }
 
   return (
-    <StyledSectionContainer>
+    <div {...stylex.props(styles.sectionContainer)}>
       <Section.Root>
         <Select
           dropdownId="merge-settings-priority-select"
@@ -47,6 +52,6 @@ export const MergeSettingsTab = () => {
           label={t`Fields conflicts`}
         />
       </Section.Root>
-    </StyledSectionContainer>
+    </div>
   );
 };

@@ -3,9 +3,14 @@ import { usePushFocusItemToFocusStack } from '@/ui/utilities/focus/hooks/usePush
 import { useRemoveFocusItemFromFocusStackById } from '@/ui/utilities/focus/hooks/useRemoveFocusItemFromFocusStackById';
 import { useRemoveFocusItemFromFocusStackOnUnmount } from '@/ui/utilities/focus/hooks/useRemoveFocusItemFromFocusStackOnUnmount';
 import { FocusComponentType } from '@/ui/utilities/focus/types/FocusComponentType';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import { cx } from '@linaria/core';
 import { forwardRef, type HTMLAttributes, type Ref } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import {
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type FormFieldInputInnerContainerProps = {
   hasRightElement: boolean;
@@ -18,65 +23,6 @@ type FormFieldInputInnerContainerProps = {
   variant?: FormFieldInputVariant;
 };
 
-const StyledFormFieldInputInnerContainer = styled.div<
-  Omit<FormFieldInputInnerContainerProps, 'formFieldInputInstanceId'> & {
-    $variant: FormFieldInputVariant;
-  }
->`
-  align-items: ${({ multiline }) => (multiline ? 'flex-start' : 'center')};
-  background-color: ${({ $variant }) =>
-    $variant === 'transparent'
-      ? 'transparent'
-      : themeCssVariables.background.transparent.lighter};
-  border: ${({ $variant }) =>
-    $variant === 'transparent'
-      ? 'none'
-      : `1px solid ${themeCssVariables.border.color.medium}`};
-  border-bottom-left-radius: ${({ $variant }) =>
-    $variant === 'transparent' ? '0' : themeCssVariables.border.radius.md};
-  border-bottom-right-radius: ${({ multiline, hasRightElement, $variant }) =>
-    $variant === 'transparent'
-      ? '0'
-      : multiline || !hasRightElement
-        ? themeCssVariables.border.radius.md
-        : '0'};
-  border-right: ${({ multiline, hasRightElement, $variant }) =>
-    $variant === 'transparent'
-      ? 'none'
-      : multiline || !hasRightElement
-        ? `1px solid ${themeCssVariables.border.color.medium}`
-        : 'none'};
-  border-top-left-radius: ${({ $variant }) =>
-    $variant === 'transparent' ? '0' : themeCssVariables.border.radius.md};
-  border-top-right-radius: ${({ multiline, hasRightElement, $variant }) =>
-    $variant === 'transparent'
-      ? '0'
-      : multiline || !hasRightElement
-        ? themeCssVariables.border.radius.md
-        : '0'};
-  box-sizing: border-box;
-  display: flex;
-  justify-content: space-between;
-  overflow-x: auto;
-  overflow-y: ${({ multiline }) => (multiline ? 'auto' : 'hidden')};
-  scrollbar-width: none;
-  width: 100%;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-
-  &:hover,
-  &[data-open='true'] {
-    background-color: ${({ hoverable, $variant }) =>
-      $variant === 'transparent'
-        ? 'transparent'
-        : hoverable
-          ? themeCssVariables.background.transparent.light
-          : themeCssVariables.background.transparent.lighter};
-  }
-`;
-
 export const FormFieldInputInnerContainer = forwardRef(
   (
     {
@@ -87,7 +33,6 @@ export const FormFieldInputInnerContainer = forwardRef(
       hasRightElement,
       hoverable,
       multiline,
-      readonly,
       preventFocusStackUpdate = false,
       enableGlobalEscapeHotkeysConflictingWithKeyboard = true,
       onClick,
@@ -133,21 +78,93 @@ export const FormFieldInputInnerContainer = forwardRef(
       }
     };
 
+    const hasRoundedRightCorners = multiline === true || !hasRightElement;
+
+    const containerProps = stylex.props(
+      styles.container,
+      multiline && styles.multiline,
+      variant === 'transparent'
+        ? styles.transparent
+        : [
+            styles.default,
+            hoverable && styles.defaultHoverable,
+            hasRoundedRightCorners && styles.defaultRoundedRight,
+          ],
+    );
+
     return (
-      <StyledFormFieldInputInnerContainer
+      <div
         ref={ref}
-        className={className}
-        hasRightElement={hasRightElement}
-        hoverable={hoverable}
-        multiline={multiline}
-        readonly={readonly}
-        $variant={variant}
+        className={cx(className, containerProps.className)}
+        style={containerProps.style}
         onFocus={handleFocus}
         onBlur={handleBlur}
         onClick={onClick}
       >
         {children}
-      </StyledFormFieldInputInnerContainer>
+      </div>
     );
   },
 );
+
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    boxSizing: 'border-box',
+    display: 'flex',
+    justifyContent: 'space-between',
+    overflowX: 'auto',
+    overflowY: 'hidden',
+    scrollbarWidth: 'none',
+    width: '100%',
+    '::-webkit-scrollbar': {
+      display: 'none',
+    },
+  },
+  multiline: {
+    alignItems: 'flex-start',
+    overflowY: 'auto',
+  },
+  transparent: {
+    backgroundColor: 'transparent',
+    borderTopWidth: 0,
+    borderRightWidth: 0,
+    borderBottomWidth: 0,
+    borderLeftWidth: 0,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+    borderBottomRightRadius: 0,
+    borderBottomLeftRadius: 0,
+  },
+  default: {
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
+    borderTopColor: borderColor['--t-border-color-medium'],
+    borderTopStyle: 'solid',
+    borderTopWidth: 1,
+    borderBottomColor: borderColor['--t-border-color-medium'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: 1,
+    borderLeftColor: borderColor['--t-border-color-medium'],
+    borderLeftStyle: 'solid',
+    borderLeftWidth: 1,
+    borderRightWidth: 0,
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: 0,
+    borderBottomRightRadius: 0,
+  },
+  defaultHoverable: {
+    backgroundColor: {
+      default: backgroundTransparent['--t-background-transparent-lighter'],
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
+  },
+  defaultRoundedRight: {
+    borderRightColor: borderColor['--t-border-color-medium'],
+    borderRightStyle: 'solid',
+    borderRightWidth: 1,
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+  },
+});

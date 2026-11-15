@@ -1,8 +1,8 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import React, { lazy, Suspense } from 'react';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { type NavigationMenuItem } from '~/generated-metadata/graphql';
+import { general } from 'twenty-ui/theme/tokens.stylex';
 
 import { isLayoutCustomizationModeEnabledState } from '@/layout-customization/states/isLayoutCustomizationModeEnabledState';
 import { type NavigationMenuItemClickParams } from '@/navigation-menu-item/display/hooks/useNavigationMenuItemSectionItems';
@@ -24,9 +24,11 @@ const LazyWorkspaceSectionListDndKit = lazy(() =>
   ),
 );
 
-const StyledWorkspaceSectionContentGapOffset = styled.div`
-  margin-top: calc(-1 * ${themeCssVariables.betweenSiblingsGap});
-`;
+const styles = stylex.create({
+  contentGapOffset: {
+    marginTop: `calc(-1 * ${general['--t-between-siblings-gap']})`,
+  },
+});
 
 type WorkspaceSectionContainerProps = {
   sectionTitle: string;
@@ -117,9 +119,7 @@ export const WorkspaceSectionContainer = ({
       rightIcon={rightIcon}
       alwaysShowRightIcon={isLayoutCustomizationModeEnabled}
       contentWrapper={(children) => (
-        <StyledWorkspaceSectionContentGapOffset>
-          {children}
-        </StyledWorkspaceSectionContentGapOffset>
+        <div {...stylex.props(styles.contentGapOffset)}>{children}</div>
       )}
     >
       {isLayoutCustomizationModeEnabled ? (

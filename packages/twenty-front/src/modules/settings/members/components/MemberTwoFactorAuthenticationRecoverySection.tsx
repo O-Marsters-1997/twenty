@@ -4,7 +4,6 @@ import { TwoFactorAuthenticationRecoveryCodeDisplay } from '@/settings/two-facto
 import { useGeneratedRecoveryCode } from '@/settings/two-factor-authentication/hooks/useGeneratedRecoveryCode';
 import { useDialog } from '@/ui/layout/dialog/hooks/useDialog';
 import { useMutation, useQuery } from '@apollo/client/react';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { isDefined } from 'twenty-shared/utils';
@@ -12,30 +11,31 @@ import { useToast } from 'twenty-ui/components/feedback';
 import { Section } from 'twenty-ui/components/layout';
 import { Status } from 'twenty-ui/primitives/data-display';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import {
   GenerateTwoFactorAuthenticationRecoveryCodeDocument,
   RevokeTwoFactorAuthenticationRecoveryCodeDocument,
   TwoFactorAuthenticationRecoveryStatusDocument,
 } from '~/generated-metadata/graphql';
 import { beautifyExactDateTime } from '~/utils/date-utils';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[3]};
-`;
-
-const StyledActionRow = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledNotice = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.sm};
-`;
+const styles = stylex.create({
+  content: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-3'],
+  },
+  actionRow: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+  },
+  notice: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-sm'],
+  },
+});
 
 type MemberTwoFactorAuthenticationRecoverySectionProps = {
   userId: string;
@@ -127,7 +127,7 @@ export const MemberTwoFactorAuthenticationRecoverySection = ({
       />
       {recoveryStatus.hasVerifiedTwoFactorAuthenticationMethod ||
       recoveryStatus.isAwaitingRecoveryEnrollment ? (
-        <StyledContent>
+        <div {...stylex.props(styles.content)}>
           {isDefined(generatedRecoveryCode) && (
             <TwoFactorAuthenticationRecoveryCodeDisplay
               recoveryCode={generatedRecoveryCode.recoveryCode}
@@ -136,7 +136,7 @@ export const MemberTwoFactorAuthenticationRecoverySection = ({
               onExpire={clearGeneratedRecoveryCode}
             />
           )}
-          <StyledActionRow>
+          <div {...stylex.props(styles.actionRow)}>
             <Button
               size="sm"
               variant="outline"
@@ -154,12 +154,12 @@ export const MemberTwoFactorAuthenticationRecoverySection = ({
                 >{t`Revoke`}</Button>
               </>
             )}
-          </StyledActionRow>
-        </StyledContent>
+          </div>
+        </div>
       ) : (
-        <StyledNotice>
+        <div {...stylex.props(styles.notice)}>
           {t`This member hasn't set up two-factor authentication.`}
-        </StyledNotice>
+        </div>
       )}
       <TwoFactorAuthenticationRecoveryCodeConfirmationDialog
         dialogId={generateRecoveryCodeDialogId}

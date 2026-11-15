@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { type Meta, type StoryObj } from '@storybook/react-vite';
 import { createStore, Provider } from 'jotai';
 import { type ReactNode, useState } from 'react';
@@ -17,6 +16,7 @@ import {
 } from '~/generated-metadata/graphql';
 import { MemoryRouterDecorator } from '~/testing/decorators/MemoryRouterDecorator';
 import { ToastDecorator } from '~/testing/decorators/ToastDecorator';
+import * as stylex from '@stylexjs/stylex';
 
 const setGeneralAccess = fn();
 const setShare = fn();
@@ -85,10 +85,12 @@ const SHARING = {
   roles: [{ id: 'sales', label: 'Sales', canRead: true, canUpdate: true }],
 };
 
-const StyledSidePanel = styled.div`
-  height: 600px;
-  width: 400px;
-`;
+const styles = stylex.create({
+  sidePanel: {
+    height: '600px',
+    width: '400px',
+  },
+});
 
 const SidePanelStoryProviders = ({ children }: { children: ReactNode }) => {
   const [store] = useState(() => {
@@ -104,7 +106,7 @@ const SidePanelStoryProviders = ({ children }: { children: ReactNode }) => {
 
   return (
     <Provider store={store}>
-      <StyledSidePanel>{children}</StyledSidePanel>
+      <div {...stylex.props(styles.sidePanel)}>{children}</div>
     </Provider>
   );
 };

@@ -1,34 +1,55 @@
-import { styled } from '@linaria/react';
-import { useEffect, useRef, useState, type ChangeEvent } from 'react';
+import * as stylex from '@stylexjs/stylex';
+import {
+  useEffect,
+  useRef,
+  useState,
+  type ChangeEvent,
+  type ComponentProps,
+} from 'react';
 
 import { LightCopyIconButton } from '@/ui/input/components/LightCopyIconButton';
 import { useRegisterInputEvents } from '@/ui/input/hooks/useRegisterInputEvents';
-import { themeCssVariables } from 'twenty-ui/theme';
+import {
+  font,
+  fontColor,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-export const StyledTextInput = styled.input`
-  background-color: transparent;
-  border: none;
-  color: ${themeCssVariables.font.color.primary};
-  font-family: ${themeCssVariables.font.family};
-  font-size: inherit;
-  font-weight: inherit;
-  margin: 0;
-  outline: none;
-  padding: ${themeCssVariables.spacing[0]} ${themeCssVariables.spacing[2]};
+const styles = stylex.create({
+  input: {
+    backgroundColor: 'transparent',
+    borderWidth: '0',
+    color: {
+      default: fontColor['--t-font-color-primary'],
+      ':disabled': fontColor['--t-font-color-tertiary'],
+    },
+    fontFamily: font['--t-font-family'],
+    fontSize: 'inherit',
+    fontWeight: 'inherit',
+    marginBottom: '0',
+    marginLeft: '0',
+    marginRight: '0',
+    marginTop: '0',
+    outlineStyle: 'none',
+    paddingBlock: spacing['--t-spacing-0'],
+    paddingInline: spacing['--t-spacing-2'],
+    width: '100%',
+    '::placeholder': {
+      color: fontColor['--t-font-color-light'],
+      fontFamily: font['--t-font-family'],
+      fontWeight: fontWeight['--t-font-weight-medium'],
+    },
+  },
+});
 
-  &::placeholder,
-  &::-webkit-input-placeholder {
-    color: ${themeCssVariables.font.color.light};
-    font-family: ${themeCssVariables.font.family};
-    font-weight: ${themeCssVariables.font.weight.medium};
-  }
+type StyledTextInputProps = ComponentProps<'input'> & {
+  xstyle?: stylex.StyleXStyles;
+};
 
-  width: 100%;
-
-  &:disabled {
-    color: ${themeCssVariables.font.color.tertiary};
-  }
-`;
+export const StyledTextInput = ({ xstyle, ...props }: StyledTextInputProps) => (
+  <input {...props} {...stylex.props(styles.input, xstyle)} />
+);
 
 export type TextInputProps = {
   instanceId: string;
@@ -45,7 +66,6 @@ export type TextInputProps = {
   copyButton?: boolean;
   shouldTrim?: boolean;
   disabled?: boolean;
-  className?: string;
 };
 
 const getValue = (value: string, shouldTrim: boolean) => {
@@ -71,7 +91,6 @@ export const TextInput = ({
   copyButton = true,
   shouldTrim = true,
   disabled,
-  className,
 }: TextInputProps) => {
   const [internalText, setInternalText] = useState(value);
 
@@ -112,7 +131,6 @@ export const TextInput = ({
         }
         value={internalText}
         disabled={disabled}
-        className={className}
       />
       {copyButton && (
         <div ref={copyRef}>

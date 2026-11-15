@@ -1,21 +1,29 @@
 import { NumberField as NumberFieldPrimitive } from '@base-ui/react/number-field';
-import { clsx } from 'clsx';
 
-import buttonStyles from '@ui/primitives/input/Button/Button.module.scss';
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
+import { Button } from '@ui/primitives/input/Button/Button';
+import { type ButtonProps } from '@ui/primitives/input/Button/types/ButtonProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
-import styles from '../NumberField.module.scss';
+import { numberFieldStyles } from '../NumberField.stylex';
 import { type NumberFieldDecrementProps } from '../types/NumberFieldDecrementProps';
 
 export const NumberFieldDecrement = ({
   className,
+  xstyle,
+  render,
   ...props
-}: NumberFieldDecrementProps) => (
+}: WithXstyle<NumberFieldDecrementProps>) => (
   <NumberFieldPrimitive.Decrement
     {...props}
-    className={mergeClassNames(
-      clsx(buttonStyles.button, styles.button),
-      className,
-    )}
+    className={className}
+    render={
+      render ??
+      ((elementProps, state) => (
+        <Button
+          {...(elementProps as ButtonProps)}
+          xstyle={state.readOnly ? numberFieldStyles.readOnly : xstyle}
+        />
+      ))
+    }
   />
 );

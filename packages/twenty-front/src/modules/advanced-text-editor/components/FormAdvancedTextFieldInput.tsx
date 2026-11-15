@@ -22,6 +22,8 @@ import { IconMaximize } from 'twenty-ui/icon';
 import { Field } from 'twenty-ui/primitives/input';
 import { themeCssVariables } from 'twenty-ui/theme';
 import { useIsMobile } from 'twenty-ui/utilities';
+import * as stylex from '@stylexjs/stylex';
+import { background, borderColor, borderRadius, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const StyledAdvancedTextFieldContainerWrapper = styled.div<{
   hasFieldChrome: boolean;
@@ -38,13 +40,32 @@ const StyledAdvancedTextFieldContainerWrapper = styled.div<{
   }
 `;
 
-const StyledAdvancedTextFieldFieldContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  gap: ${themeCssVariables.spacing[2]};
-  position: relative;
-`;
+const styles = stylex.create({
+  advancedTextFieldFieldContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    flexGrow: '1',
+    gap: spacing['--t-spacing-2'],
+    position: 'relative',
+  },
+  fullScreenEditorContainer: {
+    backgroundColor: background['--t-background-secondary'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-medium'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    flex: '1',
+    minHeight: '0',
+    overflowY: 'auto',
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+});
 
 const StyledAdvancedTextFieldInnerContainer = styled.div<{
   hasFieldChrome: boolean;
@@ -76,16 +97,6 @@ const StyledEditorActionButtonContainer = styled.div<{
       : themeCssVariables.spacing[1]};
   top: ${themeCssVariables.spacing[0]};
   z-index: 1;
-`;
-
-const StyledFullScreenEditorContainer = styled.div`
-  background-color: ${themeCssVariables.background.secondary};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.md};
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  padding: ${themeCssVariables.spacing[2]};
 `;
 
 type FormAdvancedTextFieldInputProps = {
@@ -224,13 +235,13 @@ export const FormAdvancedTextFieldInput = ({
   const fullScreenOverlay = isFullScreenEnabled
     ? renderFullScreenModal(
         <div data-globally-prevent-click-outside="true">
-          <StyledFullScreenEditorContainer>
+          <div {...stylex.props(styles.fullScreenEditorContainer)}>
             <EditorComponent
               editor={editor}
               readonly={readonly}
               minHeight={editorMinHeight}
             />
-          </StyledFullScreenEditorContainer>
+          </div>
         </div>,
         isFullScreen,
       )
@@ -244,7 +255,7 @@ export const FormAdvancedTextFieldInput = ({
         <FormFieldInputContainer>
           {label ? <Field.Label>{label}</Field.Label> : null}
 
-          <StyledAdvancedTextFieldFieldContainer>
+          <div {...stylex.props(styles.advancedTextFieldFieldContainer)}>
             <StyledAdvancedTextFieldInnerContainer
               hasFieldChrome={chrome === 'field'}
             >
@@ -281,7 +292,7 @@ export const FormAdvancedTextFieldInput = ({
                 />
               ) : null}
             </StyledAdvancedTextFieldInnerContainer>
-          </StyledAdvancedTextFieldFieldContainer>
+          </div>
           {hint && <Field.Description>{hint}</Field.Description>}
           {error && <Field.Error match>{error}</Field.Error>}
         </FormFieldInputContainer>

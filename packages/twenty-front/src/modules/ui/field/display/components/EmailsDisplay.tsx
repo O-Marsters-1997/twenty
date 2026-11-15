@@ -3,9 +3,9 @@ import React, { useMemo } from 'react';
 
 import { type FieldEmailsValue } from '@/object-record/record-field/ui/types/FieldMetadata';
 import { OverflowingList } from 'twenty-ui/components/layout';
-import { styled } from '@linaria/react';
 import { isDefined } from 'twenty-shared/utils';
 import { RoundedLink } from '@/ui/navigation/link/components/RoundedLink/RoundedLink';
+import * as stylex from '@stylexjs/stylex';
 
 type EmailsDisplayProps = {
   value?: FieldEmailsValue;
@@ -13,18 +13,17 @@ type EmailsDisplayProps = {
   onEmailClick?: (email: string, event: React.MouseEvent<HTMLElement>) => void;
 };
 
-const StyledContainer = styled.div`
-  align-items: center;
-  display: flex;
-  gap: 4px;
-  justify-content: flex-start;
-
-  max-width: 100%;
-
-  overflow: hidden;
-
-  width: 100%;
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: '4px',
+    justifyContent: 'flex-start',
+    maxWidth: '100%',
+    overflow: 'hidden',
+    width: '100%',
+  },
+});
 
 export const EmailsDisplay = ({
   value,
@@ -54,7 +53,7 @@ export const EmailsDisplay = ({
       ))}
     </OverflowingList>
   ) : (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       {emails.map((email, index) => (
         <RoundedLink
           key={index}
@@ -63,6 +62,6 @@ export const EmailsDisplay = ({
           onClick={(event) => onEmailClick?.(email, event)}
         />
       ))}
-    </StyledContainer>
+    </div>
   );
 };

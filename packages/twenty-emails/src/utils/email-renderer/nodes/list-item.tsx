@@ -9,11 +9,8 @@ export const listItem = (
 ): ReactNode => {
   return (
     <li
-      style={{
-        marginBottom: '8px',
-        lineHeight: '1.5',
-        ...inherited,
-      }}
+      className="mb-2 leading-normal"
+      style={inherited}
     >
       {mappedNodeContent(node, inherited)}
     </li>

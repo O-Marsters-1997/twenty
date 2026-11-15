@@ -4,17 +4,19 @@ import { sidePanelPageInfoSelector } from '@/side-panel/states/sidePanelPageInfo
 import { sidePanelSearchObjectFilterState } from '@/side-panel/states/sidePanelSearchObjectFilterState';
 import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { SidePanelPages } from 'twenty-shared/types';
 import { IconEdit } from 'twenty-ui/icon';
 import { IconButton } from 'twenty-ui/components/input';
 import { useIsMobile } from 'twenty-ui/utilities';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledIconButtonContainer = styled.div`
-  color: ${themeCssVariables.font.color.secondary};
-`;
+const styles = stylex.create({
+  iconButtonContainer: {
+    color: fontColor['--t-font-color-secondary'],
+  },
+});
 
 export const SidePanelTopBarRightCornerIcon = () => {
   const isMobile = useIsMobile();
@@ -41,7 +43,7 @@ export const SidePanelTopBarRightCornerIcon = () => {
   }
 
   return (
-    <StyledIconButtonContainer>
+    <div {...stylex.props(styles.iconButtonContainer)}>
       <IconButton
         size="sm"
         variant="ghost"
@@ -50,6 +52,6 @@ export const SidePanelTopBarRightCornerIcon = () => {
       >
         <IconEdit />
       </IconButton>
-    </StyledIconButtonContainer>
+    </div>
   );
 };

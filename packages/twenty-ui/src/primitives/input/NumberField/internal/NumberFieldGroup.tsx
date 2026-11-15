@@ -1,16 +1,27 @@
 import { NumberField as NumberFieldPrimitive } from '@base-ui/react/number-field';
+import * as stylex from '@stylexjs/stylex';
 
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
-import styles from '../NumberField.module.scss';
+import { spacing } from '../../../../theme/tokens.stylex';
 import { type NumberFieldGroupProps } from '../types/NumberFieldGroupProps';
 
 export const NumberFieldGroup = ({
   className,
+  xstyle,
   ...props
-}: NumberFieldGroupProps) => (
+}: WithXstyle<NumberFieldGroupProps>) => (
   <NumberFieldPrimitive.Group
     {...props}
-    className={mergeClassNames(styles.group, className)}
+    {...mergeStylexProps(stylex.props(styles.group, xstyle), className)}
   />
 );
+
+const styles = stylex.create({
+  group: {
+    alignItems: 'center',
+    display: 'inline-flex',
+    gap: spacing['--t-spacing-1'],
+  },
+});

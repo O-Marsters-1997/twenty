@@ -6,16 +6,18 @@ import { FormFieldInput } from '@/object-record/record-field/ui/components/FormF
 import { getRecordFormFieldInputSettings } from '@/object-record/record-form/utils/getRecordFormFieldInputSettings';
 import { type ObjectRecord } from '@/object-record/types/ObjectRecord';
 import { type ValidationRuleViolation } from '@/validation-rules/types/ValidationRuleViolation';
-import { styled } from '@linaria/react';
 import { type JsonValue } from 'type-fest';
 import { Field } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledFieldList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[3]};
-`;
+const styles = stylex.create({
+  fieldList: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-3'],
+  },
+});
 
 type RecordFormFieldInputsProps = {
   objectMetadataItem: EnrichedObjectMetadataItem;
@@ -37,7 +39,7 @@ export const RecordFormFieldInputs = ({
   onFieldValueChange,
   onFieldValueClear,
 }: RecordFormFieldInputsProps) => (
-  <StyledFieldList>
+  <div {...stylex.props(styles.fieldList)}>
     {fieldMetadataItems.map((fieldMetadataItem) => {
       const gqlFieldName = getFieldMetadataItemGqlFieldName(fieldMetadataItem);
 
@@ -65,5 +67,5 @@ export const RecordFormFieldInputs = ({
         </Field.Root>
       );
     })}
-  </StyledFieldList>
+  </div>
 );

@@ -9,27 +9,30 @@ import { SettingsSectionSkeletonLoader } from '@/settings/components/SettingsSec
 import { Table } from '@/ui/layout/table/components/Table';
 import { TableHeader } from '@/ui/layout/table/components/TableHeader';
 import { TableRow } from '@/ui/layout/table/components/TableRow';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { SettingsPath } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 import { Section } from 'twenty-ui/components/layout';
 import { IconPlus } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { useNavigateSettings } from '~/hooks/useNavigateSettings';
+import * as stylex from '@stylexjs/stylex';
+import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledTableRows = styled.div`
-  padding-bottom: ${themeCssVariables.spacing[2]};
-  padding-top: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledAddAccountContainer = styled.div`
-  border-top: 1px solid ${themeCssVariables.border.color.light};
-  display: flex;
-  justify-content: flex-end;
-  padding-top: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  tableRows: {
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
+  },
+  addAccountContainer: {
+    borderTopWidth: '1px',
+    borderTopStyle: 'solid',
+    borderTopColor: borderColor['--t-border-color-light'],
+    display: 'flex',
+    justifyContent: 'flex-end',
+    paddingTop: spacing['--t-spacing-2'],
+  },
+});
 
 type SettingsAccountGroupsSectionProps = {
   nativeAccountApp?: NativeAccountApp;
@@ -80,7 +83,7 @@ export const SettingsAccountGroupsSection = ({
               )}
               <TableHeader />
             </TableRow>
-            <StyledTableRows>
+            <div {...stylex.props(styles.tableRows)}>
               {groups.map((group) => (
                 <SettingsAccountGroupTableRow
                   key={group.id}
@@ -89,16 +92,16 @@ export const SettingsAccountGroupsSection = ({
                   nativeAccountApp={nativeAccountApp}
                 />
               ))}
-            </StyledTableRows>
+            </div>
           </Table>
-          <StyledAddAccountContainer>
+          <div {...stylex.props(styles.addAccountContainer)}>
             <Button
               startIcon={<IconPlus />}
               size="sm"
               onClick={() => navigateSettings(SettingsPath.NewAccount)}
               variant="outline"
             >{t`Add account`}</Button>
-          </StyledAddAccountContainer>
+          </div>
         </>
       )}
     </Section.Root>

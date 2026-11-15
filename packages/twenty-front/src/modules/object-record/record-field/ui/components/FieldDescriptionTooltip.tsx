@@ -1,18 +1,20 @@
 import { FieldDescriptionTooltipContext } from '@/object-record/record-field/ui/contexts/FieldDescriptionTooltipContext';
 import { TooltipDelay } from '@/ui/layout/tooltip/constants/TooltipDelay';
-import { styled } from '@linaria/react';
 import { isNonEmptyString } from '@sniptt/guards';
 import { type ReactNode, useContext, useId } from 'react';
 import { Tooltip } from 'twenty-ui/primitives/surfaces';
 import { isDefined } from 'twenty-shared/utils';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledLabel = styled.span`
-  display: block;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
+const styles = stylex.create({
+  label: {
+    display: 'block',
+    minWidth: '0',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+});
 
 type FieldDescriptionTooltipProps = {
   label?: string;
@@ -33,7 +35,7 @@ export const FieldDescriptionTooltip = ({
     !isNonEmptyString(label) ||
     !isNonEmptyString(description)
   ) {
-    return fallback ?? <StyledLabel>{label}</StyledLabel>;
+    return fallback ?? <span {...stylex.props(styles.label)}>{label}</span>;
   }
 
   return (
@@ -42,7 +44,7 @@ export const FieldDescriptionTooltip = ({
         handle={tooltipHandle}
         delay={TooltipDelay.longDelay}
         payload={{ title: label, description }}
-        render={<StyledLabel />}
+        render={<span {...stylex.props(styles.label)} />}
         aria-describedby={descriptionId}
         tabIndex={0}
       >

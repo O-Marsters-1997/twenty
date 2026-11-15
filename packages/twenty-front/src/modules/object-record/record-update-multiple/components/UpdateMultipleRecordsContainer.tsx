@@ -8,30 +8,31 @@ import { useDialog } from '@/ui/layout/dialog/hooks/useDialog';
 import { ShowPageContainer } from '@/ui/layout/page/components/ShowPageContainer';
 import { SidePanelProvider } from '@/ui/layout/side-panel/contexts/SidePanelContext';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useState } from 'react';
 import { useToast } from 'twenty-ui/components/feedback';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { background, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const UPDATE_MULTIPLE_RECORDS_CONFIRMATION_MODAL_ID =
   'update-multiple-records-confirmation';
 
-const StyledShowPageRightContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: start;
-  overflow: auto;
-  width: 100%;
-`;
-
-const StyledContentContainer = styled.div`
-  background: ${themeCssVariables.background.primary};
-  flex: 1;
-  overflow-y: auto;
-  padding-bottom: ${themeCssVariables.spacing[16]};
-`;
+const styles = stylex.create({
+  showPageRightContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    justifyContent: 'start',
+    overflow: 'auto',
+    width: '100%',
+  },
+  contentContainer: {
+    background: background['--t-background-primary'],
+    flex: '1',
+    overflowY: 'auto',
+    paddingBottom: spacing['--t-spacing-16'],
+  },
+});
 
 export type UpdateMultipleRecordsState = Record<string, any>;
 
@@ -102,15 +103,15 @@ export const UpdateMultipleRecordsContainer = ({
   return (
     <SidePanelProvider value={{ isInSidePanel: true }}>
       <ShowPageContainer>
-        <StyledShowPageRightContainer>
-          <StyledContentContainer>
+        <div {...stylex.props(styles.showPageRightContainer)}>
+          <div {...stylex.props(styles.contentContainer)}>
             <UpdateMultipleRecordsForm
               disabled={isUpdating}
               values={fieldUpdates}
               onChange={handleFieldChange}
               objectNameSingular={objectNameSingular}
             />
-          </StyledContentContainer>
+          </div>
           <UpdateMultipleRecordsFooter
             isUpdating={isUpdating}
             progress={progress}
@@ -118,7 +119,7 @@ export const UpdateMultipleRecordsContainer = ({
             onCancel={handleCancel}
             isUpdateDisabled={!hasChanges || !hasSelectedRecords}
           />
-        </StyledShowPageRightContainer>
+        </div>
       </ShowPageContainer>
       <ConfirmationDialog
         dialogId={UPDATE_MULTIPLE_RECORDS_CONFIRMATION_MODAL_ID}

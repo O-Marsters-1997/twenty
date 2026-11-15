@@ -20,7 +20,6 @@ import { useRemoveFocusItemFromFocusStackById } from '@/ui/utilities/focus/hooks
 import { FocusComponentType } from '@/ui/utilities/focus/types/FocusComponentType';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { isStandaloneVariableString } from 'twenty-shared/workflow';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isNonEmptyArray, isNonEmptyString } from '@sniptt/guards';
 import { type FocusEvent, type KeyboardEvent, useId, useState } from 'react';
@@ -28,8 +27,10 @@ import { Key } from 'ts-key-enum';
 import { isDefined } from 'twenty-shared/utils';
 import { IconPlus } from 'twenty-ui/icon';
 import { Dropdown } from 'twenty-ui/components/navigation';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import { toSpliced } from '~/utils/array/toSpliced';
+import * as stylex from '@stylexjs/stylex';
+import { backgroundTransparent, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type FormArrayFieldInputProps = {
   label?: string;
@@ -42,41 +43,45 @@ type FormArrayFieldInputProps = {
   maxItemCount?: number;
 };
 
-const StyledDisplayModeReadonlyContainer = styled.div`
-  align-items: center;
-  background: transparent;
-  border: none;
-  display: flex;
-  font-family: inherit;
-  padding-inline: ${themeCssVariables.spacing[2]};
-  width: 100%;
-`;
-
-const StyledDisplayModeContainer = styled.div`
-  align-items: center;
-  background: transparent;
-  border: none;
-  box-sizing: border-box;
-  cursor: pointer;
-  display: flex;
-  font-family: inherit;
-  height: 30px;
-  padding-inline: ${themeCssVariables.spacing[2]};
-  width: 100%;
-
-  &:hover,
-  &[data-open='true'] {
-    background-color: ${themeCssVariables.background.transparent.lighter};
-  }
-`;
-
-const StyledInputContainer = styled.div`
-  padding: ${themeCssVariables.spacing[1]} ${themeCssVariables.spacing[2]};
-`;
-
-const StyledPlaceholderContainer = styled.div`
-  width: 100%;
-`;
+const styles = stylex.create({
+  displayModeContainer: {
+    alignItems: 'center',
+    backgroundColor: {
+      default: 'transparent',
+      ':hover': backgroundTransparent['--t-background-transparent-lighter'],
+    },
+    borderStyle: 'none',
+    boxSizing: 'border-box',
+    cursor: 'pointer',
+    display: 'flex',
+    fontFamily: 'inherit',
+    height: 30,
+    paddingInline: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+  displayModeContainerOpen: {
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
+  },
+  displayModeReadonlyContainer: {
+    alignItems: 'center',
+    background: 'transparent',
+    borderStyle: 'none',
+    display: 'flex',
+    fontFamily: 'inherit',
+    paddingInline: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+  inputContainer: {
+    paddingTop: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+  placeholderContainer: {
+    width: '100%',
+  },
+});
 
 export const FormArrayFieldInput = ({
   label,
@@ -359,17 +364,17 @@ export const FormArrayFieldInput = ({
         >
           {draftValue.type === 'static' ? (
             readonly ? (
-              <StyledDisplayModeReadonlyContainer>
+              <div {...stylex.props(styles.displayModeReadonlyContainer)}>
                 {draftValue.value.length > 0 ? (
                   <ArrayDisplay value={draftValue.value} />
                 ) : (
-                  <StyledPlaceholderContainer>
+                  <div {...stylex.props(styles.placeholderContainer)}>
                     <FormFieldPlaceholder />
-                  </StyledPlaceholderContainer>
+                  </div>
                 )}
-              </StyledDisplayModeReadonlyContainer>
+              </div>
             ) : draftValue.value.length === 0 ? (
-              <StyledInputContainer>
+              <div {...stylex.props(styles.inputContainer)}>
                 <StyledTextInput
                   autoComplete="off"
                   placeholder={t`Enter an item`}
@@ -379,12 +384,17 @@ export const FormArrayFieldInput = ({
                   }
                   onKeyDown={handleFirstItemInputKeyDown}
                 />
-              </StyledInputContainer>
+              </div>
             ) : (
               <DropdownRoot dropdownId={dropdownId} type="panel">
                 <Dropdown.Trigger
                   render={
-                    <StyledDisplayModeContainer data-open={isDropdownOpen} />
+                    <div
+                      {...stylex.props(
+                        styles.displayModeContainer,
+                        isDropdownOpen && styles.displayModeContainerOpen,
+                      )}
+                    />
                   }
                   nativeButton={false}
                   aria-label={accessibleLabel}

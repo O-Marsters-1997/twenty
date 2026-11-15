@@ -1,25 +1,20 @@
-import { css } from '@linaria/core';
 import { isUndefined } from '@sniptt/guards';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 import { useMemo } from 'react';
 
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
 import { LinkifiedText } from '@/ui/field/display/components/LinkifiedText/LinkifiedText';
 
-const styles = {
-  container: css`
-    & {
-      align-items: center;
-      display: flex;
-      height: auto;
-    }
-  `,
-  fixHeight: css`
-    & {
-      height: 20px;
-    }
-  `,
-};
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    display: 'flex',
+    height: 'auto',
+  },
+  fixHeight: {
+    height: '20px',
+  },
+});
 
 type TextDisplayProps = {
   text: string;
@@ -31,7 +26,7 @@ export const TextDisplay = ({ text, displayedMaxRows }: TextDisplayProps) => {
   const fixHeight = isUndefined(displayedMaxRows) || displayedMaxRows === 1;
 
   return (
-    <div className={clsx(styles.container, fixHeight && styles.fixHeight)}>
+    <div {...stylex.props(styles.container, fixHeight && styles.fixHeight)}>
       <OverflowingTextWithTooltip
         text={linkifiedText}
         tooltipContent={text}

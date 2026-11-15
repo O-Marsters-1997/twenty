@@ -1,17 +1,22 @@
-import { RECORD_TABLE_COLUMN_ADD_COLUMN_BUTTON_WIDTH } from '@/object-record/record-table/constants/RecordTableColumnAddColumnButtonWidth';
-import { RECORD_TABLE_ROW_HEIGHT } from '@/object-record/record-table/constants/RecordTableRowHeight';
-import { styled } from '@linaria/react';
+import { recordTableLayout } from '../../constants/recordTableLayout.stylex';
 import { cx } from '@linaria/core';
-
-const StyledPlaceholderAddButtonCell = styled.div`
-  height: ${RECORD_TABLE_ROW_HEIGHT}px;
-  width: ${RECORD_TABLE_COLUMN_ADD_COLUMN_BUTTON_WIDTH}px;
-`;
+import * as stylex from '@stylexjs/stylex';
 
 export const RecordTableAddButtonPlaceholderCell = ({
   className,
 }: {
   className?: string;
 }) => {
-  return <StyledPlaceholderAddButtonCell className={cx(className)} />;
+  const stylexProps = stylex.props(styles.cell);
+
+  return (
+    <div {...stylexProps} className={cx(className, stylexProps.className)} />
+  );
 };
+
+const styles = stylex.create({
+  cell: {
+    height: recordTableLayout.rowHeight,
+    width: recordTableLayout.addColumnButtonWidth,
+  },
+});

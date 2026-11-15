@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { type MouseEvent, useId, useRef } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
@@ -43,34 +42,37 @@ import { FeatureFlagKey } from '~/generated-metadata/graphql';
 import { useNavigateApp } from '~/hooks/useNavigateApp';
 import { AiChatPageEffects } from '~/pages/ai-chat/AiChatPageEffects';
 import { AiChatThreadPageContent } from '~/pages/ai-chat/AiChatThreadPageContent';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledInbox = styled.div`
-  display: flex;
-  flex: 1;
-  min-height: 0;
-  min-width: 0;
-`;
-
-const StyledListPane = styled.div<{ $isFullWidth: boolean }>`
-  display: flex;
-  flex: ${({ $isFullWidth }) => ($isFullWidth ? '1' : '0 0 400px')};
-  min-width: 0;
-`;
-
-const StyledThreadListContainer = styled.div`
-  display: flex;
-  flex: 1;
-  min-height: 0;
-  position: relative;
-`;
-
-const StyledThreadList = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-height: 0;
-  overflow: auto;
-`;
+const styles = stylex.create({
+  listPane: {
+    display: 'flex',
+    flex: '0 0 400px',
+    minWidth: 0,
+  },
+  listPaneFullWidth: {
+    flex: 1,
+  },
+  inbox: {
+    display: 'flex',
+    flex: '1',
+    minHeight: '0',
+    minWidth: '0',
+  },
+  threadListContainer: {
+    display: 'flex',
+    flex: '1',
+    minHeight: '0',
+    position: 'relative',
+  },
+  threadList: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    minHeight: '0',
+    overflow: 'auto',
+  },
+});
 
 const AiChatInboxPageContent = () => {
   const { t } = useLingui();
@@ -172,7 +174,7 @@ const AiChatInboxPageContent = () => {
   });
 
   return (
-    <StyledInbox>
+    <div {...stylex.props(styles.inbox)}>
       <RecordSelectionRecordIdsEffect records={threads} />
       <AiChatInboxSelectionEffect
         selectedThreadId={selectedThreadId}
@@ -195,7 +197,7 @@ const AiChatInboxPageContent = () => {
       )}
       <AiChatInboxCommandMenuScope>
         {isListShown && (
-          <StyledListPane $isFullWidth={!isSplitView}>
+          <div {...stylex.props(styles.listPane, !isSplitView && styles.listPaneFullWidth)}>
             <PageCardLayout
               showInformationBanner={!isSplitView}
               header={
@@ -204,8 +206,8 @@ const AiChatInboxPageContent = () => {
                 />
               }
             >
-              <StyledThreadListContainer ref={threadListContainerRef}>
-                <StyledThreadList>
+              <div ref={threadListContainerRef} {...stylex.props(styles.threadListContainer)}>
+                <div {...stylex.props(styles.threadList)}>
                   {loading && threads.length === 0 ? (
                     <SkeletonLoader />
                   ) : threads.length === 0 ? (
@@ -228,15 +230,15 @@ const AiChatInboxPageContent = () => {
                     />
                   )}
                   <AgentChatThreadsFetchMoreTrigger />
-                </StyledThreadList>
+                </div>
                 {!isMobile && (
                   <RecordSelectionDragSelect
                     selectableItemsContainerRef={threadListContainerRef}
                   />
                 )}
-              </StyledThreadListContainer>
+              </div>
             </PageCardLayout>
-          </StyledListPane>
+          </div>
         )}
         {isSelectionPaneShown && (
           <AiChatInboxSelectionPane
@@ -284,7 +286,7 @@ const AiChatInboxPageContent = () => {
           </EmptyState.Root>
         </PageCardLayout>
       )}
-    </StyledInbox>
+    </div>
   );
 };
 

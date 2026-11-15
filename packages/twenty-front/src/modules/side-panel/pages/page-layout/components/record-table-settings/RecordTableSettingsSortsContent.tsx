@@ -1,25 +1,26 @@
 import { type RecordSort } from '@/object-record/record-sort/types/RecordSort';
 import { currentRecordSortsComponentState } from '@/object-record/record-sort/states/currentRecordSortsComponentState';
 import { useAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useAtomComponentState';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { IconArrowsSort, IconTrash } from 'twenty-ui/icon';
 import { Button, type SelectOption } from 'twenty-ui/primitives/input';
 import { Select } from '@/ui/input/components/Select';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { v4 as uuidv4 } from 'uuid';
 import { ViewSortDirection } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledSortItemContainer = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledAddButtonContainer = styled.div`
-  margin-top: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  sortItemContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+  },
+  addButtonContainer: {
+    marginTop: spacing['--t-spacing-1'],
+  },
+});
 
 type RecordTableSettingsSortsContentProps = {
   sortableFieldOptions: Array<SelectOption<string>>;
@@ -84,7 +85,7 @@ export const RecordTableSettingsSortsContent = ({
   return (
     <>
       {currentRecordSorts.map((sort) => (
-        <StyledSortItemContainer key={sort.id}>
+        <div key={sort.id} {...stylex.props(styles.sortItemContainer)}>
           <Select
             dropdownId={`record-table-widget-sort-field-${sort.id}`}
             fullWidth
@@ -107,9 +108,9 @@ export const RecordTableSettingsSortsContent = ({
             startIcon={<IconTrash />}
             aria-label={t`Delete`}
           />
-        </StyledSortItemContainer>
+        </div>
       ))}
-      <StyledAddButtonContainer>
+      <div {...stylex.props(styles.addButtonContainer)}>
         <Button
           startIcon={<IconArrowsSort />}
           size="sm"
@@ -117,7 +118,7 @@ export const RecordTableSettingsSortsContent = ({
           aria-label={t`Add sort`}
           variant="outline"
         >{t`Add sort`}</Button>
-      </StyledAddButtonContainer>
+      </div>
     </>
   );
 };

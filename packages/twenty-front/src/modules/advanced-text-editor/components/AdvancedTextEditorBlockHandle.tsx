@@ -13,6 +13,8 @@ import { type CSSProperties, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { isDefined, TIPTAP_NODE_TYPES } from 'twenty-shared/utils';
 import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const DRAG_HANDLE_OPTIONS: Pick<
   DragHandleProps,
@@ -31,13 +33,15 @@ const DRAG_HANDLE_OPTIONS: Pick<
   computePositionConfig: { middleware: [offset(8)] },
 };
 
-const StyledHandleSlot = styled.div`
-  align-items: center;
-  display: flex;
-  height: ${themeCssVariables.spacing[6]};
-  justify-content: center;
-  width: ${themeCssVariables.spacing[6]};
-`;
+const styles = stylex.create({
+  handleSlot: {
+    alignItems: 'center',
+    display: 'flex',
+    height: spacing['--t-spacing-6'],
+    justifyContent: 'center',
+    width: spacing['--t-spacing-6'],
+  },
+});
 
 const StyledBlockOutline = styled.div`
   border-radius: ${themeCssVariables.border.radius.sm};
@@ -126,7 +130,7 @@ export const AdvancedTextEditorBlockHandle = ({
           setHoveredBlock(null);
         }}
       >
-        <StyledHandleSlot>
+        <div {...stylex.props(styles.handleSlot)}>
           {isDefined(hoveredBlock) && (
             <>
               <AdvancedTextEditorBlockHandleMenu
@@ -142,7 +146,7 @@ export const AdvancedTextEditorBlockHandle = ({
               />
             </>
           )}
-        </StyledHandleSlot>
+        </div>
       </DragHandle>
       {isDefined(hoveredBlock) &&
         isDefined(outlineContainer) &&

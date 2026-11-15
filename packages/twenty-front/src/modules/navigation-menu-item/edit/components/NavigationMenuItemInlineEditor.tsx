@@ -4,11 +4,9 @@ import { ColoredIcon } from '@/ui/icon/components/ColoredIcon';
 import { useIcons } from 'twenty-ui/icon';
 import { NavigationMenuItemNameInputFocusEffect } from '@/navigation-menu-item/edit/effect-components/NavigationMenuItemNameInputFocusEffect';
 import { useState, type ReactNode } from 'react';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { NavigationMenuItemType } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { parseThemeColor } from 'twenty-ui/utilities';
 import { type NavigationMenuItem } from '~/generated-metadata/graphql';
 import { TextInput } from '@/ui/field/input/components/TextInput';
@@ -21,42 +19,54 @@ import { NavigationDrawerItemEditingContext } from '@/ui/navigation/navigation-d
 import { selectedNavigationMenuItemIdInEditModeState } from '@/navigation-menu-item/common/states/selectedNavigationMenuItemIdInEditModeState';
 import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
 import { useIsNavigationDrawerContentExpanded } from '@/ui/navigation/navigation-drawer/hooks/useIsNavigationDrawerContentExpanded';
+import * as stylex from '@stylexjs/stylex';
+import { fontWeight } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledEditor = styled.div`
-  display: contents;
-`;
-
-const StyledIconPickerTrigger = styled.div`
-  align-items: center;
-  cursor: pointer;
-  display: flex;
-`;
-
-const StyledButton = styled.button`
-  align-items: center;
-  background: transparent;
-  border: 0;
-  color: inherit;
-  cursor: pointer;
-  display: flex;
-  font: inherit;
-  font-weight: ${themeCssVariables.font.weight.medium};
-  min-width: 0;
-  padding: 0;
-  text-align: left;
-`;
-const StyledLabelButton = styled(StyledButton)`
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  width: 100%;
-`;
-const StyledNameInput = styled(TextInput)`
-  font-weight: ${themeCssVariables.font.weight.medium};
-  min-width: 0;
-  padding: 0;
-`;
+const styles = stylex.create({
+  editor: {
+    display: 'contents',
+  },
+  iconPickerTrigger: {
+    alignItems: 'center',
+    cursor: 'pointer',
+    display: 'flex',
+  },
+  labelButton: {
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    borderWidth: 0,
+    color: 'inherit',
+    cursor: 'pointer',
+    display: 'block',
+    font: 'inherit',
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    minWidth: 0,
+    overflow: 'hidden',
+    padding: 0,
+    textAlign: 'left',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    width: '100%',
+  },
+  nameInput: {
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    minWidth: 0,
+    padding: 0,
+  },
+  iconButton: {
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    borderWidth: 0,
+    color: 'inherit',
+    cursor: 'pointer',
+    display: 'flex',
+    font: 'inherit',
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    minWidth: 0,
+    padding: 0,
+    textAlign: 'left',
+  },
+});
 
 type NavigationMenuItemInlineEditorProps = {
   item: NavigationMenuItem;
@@ -130,22 +140,31 @@ export const NavigationMenuItemInlineEditor = ({
         onColorChange: (color) => void updateItem(item.id, { color }),
       }}
       clickableComponent={
-        <StyledIconPickerTrigger aria-label={t`Choose icon and color`}>
+        <div
+          aria-label={t`Choose icon and color`}
+          {...stylex.props(styles.iconPickerTrigger)}
+        >
           <ColoredIcon
             Icon={getIcon(item.icon ?? FOLDER_ICON_DEFAULT)}
             color={item.color ?? DEFAULT_NAVIGATION_MENU_ITEM_COLOR_FOLDER}
           />
-        </StyledIconPickerTrigger>
+        </div>
       }
     />
   ) : (
-    <StyledButton type="button" aria-label={t`Edit link`} onClick={onEditLink}>
+    <button
+      type="button"
+      aria-label={t`Edit link`}
+      onClick={onEditLink}
+      {...stylex.props(styles.iconButton)}
+    >
       <NavigationMenuItemIcon navigationMenuItem={item} />
-    </StyledButton>
+    </button>
   );
   const label =
     isFolder && isNameInputVisible ? (
-      <StyledNameInput
+      <TextInput
+        {...stylex.props(styles.nameInput)}
         instanceId={focusId}
         autoFocus
         selectOnFocus
@@ -168,8 +187,9 @@ export const NavigationMenuItemInlineEditor = ({
         }
       />
     ) : (
-      <StyledLabelButton
+      <button
         type="button"
+        {...stylex.props(styles.labelButton)}
         onClick={(event) => {
           event.stopPropagation();
           if (!isFolder) {
@@ -184,7 +204,7 @@ export const NavigationMenuItemInlineEditor = ({
         }}
       >
         {isFolder ? item.name : getLinkNavigationMenuItemLabel(item)}
-      </StyledLabelButton>
+      </button>
     );
   return (
     <NavigationDrawerItemEditingContext.Provider
@@ -199,7 +219,7 @@ export const NavigationMenuItemInlineEditor = ({
       {isNameInputVisible && (
         <NavigationMenuItemNameInputFocusEffect focusId={focusId} />
       )}
-      <StyledEditor>{children}</StyledEditor>
+      <div {...stylex.props(styles.editor)}>{children}</div>
     </NavigationDrawerItemEditingContext.Provider>
   );
 };

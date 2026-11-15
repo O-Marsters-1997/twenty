@@ -7,7 +7,6 @@ import { getFileCategoryFromExtension } from '@/object-record/record-field/ui/ut
 import { AvatarOrIcon } from '@/ui/field/display/components/internal/AvatarOrIcon/AvatarOrIcon';
 import { filePreviewState } from '@/ui/field/display/states/filePreviewState';
 import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomState';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { useCallback } from 'react';
 import { type ExtendedFileUIPart } from 'twenty-shared/ai';
@@ -16,32 +15,38 @@ import { type IconComponent, IconX } from 'twenty-ui/icon';
 import { Chip } from 'twenty-ui/primitives/data-display';
 import { Loader } from 'twenty-ui/primitives/feedback';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
-import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { borderRadius, color, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledPreviewButton = styled.button`
-  align-items: center;
-  background: transparent;
-  border: 0;
-  border-radius: ${themeCssVariables.border.radius.sm};
-  color: inherit;
-  cursor: pointer;
-  display: inline-flex;
-  font: inherit;
-  gap: ${themeCssVariables.spacing[1]};
-  max-width: 100%;
-  min-width: 0;
-  padding: 0;
-  vertical-align: middle;
-
-  &:focus-visible {
-    outline: 2px solid ${themeCssVariables.color.blue};
-    outline-offset: -1px;
-  }
-
-  &:disabled {
-    cursor: inherit;
-  }
-`;
+const styles = stylex.create({
+  previewButton: {
+    alignItems: 'center',
+    background: 'transparent',
+    borderWidth: '0',
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    color: 'inherit',
+    cursor: { default: 'pointer', ':disabled': 'inherit' },
+    display: 'inline-flex',
+    font: 'inherit',
+    gap: spacing['--t-spacing-1'],
+    maxWidth: '100%',
+    minWidth: '0',
+    paddingTop: '0',
+    paddingRight: '0',
+    paddingBottom: '0',
+    paddingLeft: '0',
+    verticalAlign: 'middle',
+    outline: {
+      default: null,
+      ':focus-visible': `2px solid ${color['--t-color-blue']}`,
+    },
+    outlineOffset: { default: null, ':focus-visible': '-1px' },
+  },
+});
 
 export const AgentChatFilePreview = ({
   file,
@@ -112,10 +117,11 @@ export const AgentChatFilePreview = ({
     <Chip
       variant="soft"
       startElement={
-        <StyledPreviewButton
+        <button
           type="button"
           disabled={!isClickable}
           onClick={handleClick}
+          {...stylex.props(styles.previewButton)}
         >
           {leftComponent}
           <OverflowingTextWithTooltip
@@ -124,7 +130,7 @@ export const AgentChatFilePreview = ({
             tooltipContent={displayName}
             style={{ minWidth: 0 }}
           />
-        </StyledPreviewButton>
+        </button>
       }
       endElement={rightComponent}
       endElementDivider={hasRightDivider}

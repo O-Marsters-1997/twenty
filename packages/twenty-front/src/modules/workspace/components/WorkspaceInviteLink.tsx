@@ -1,22 +1,23 @@
-import { styled } from '@linaria/react';
 
 import { SettingsTextInput } from '@/ui/input/components/SettingsTextInput';
 import { useLingui } from '@lingui/react/macro';
 import { IconLink } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-`;
-
-const StyledLinkContainer = styled.div`
-  flex: 1;
-  margin-right: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  linkContainer: {
+    flex: '1',
+    marginRight: spacing['--t-spacing-2'],
+  },
+});
 
 type WorkspaceInviteLinkProps = {
   inviteLink: string;
@@ -30,15 +31,15 @@ export const WorkspaceInviteLink = ({
   const { copyToClipboard } = useCopyToClipboard();
 
   return (
-    <StyledContainer data-chromatic="ignore">
-      <StyledLinkContainer>
+    <div data-chromatic="ignore" {...stylex.props(styles.container)}>
+      <div {...stylex.props(styles.linkContainer)}>
         <SettingsTextInput
           instanceId="workspace-invite-link"
           value={inviteLink}
           disabled
           fullWidth
         />
-      </StyledLinkContainer>
+      </div>
       <Button
         startIcon={<IconLink />}
         onClick={() => {
@@ -47,6 +48,6 @@ export const WorkspaceInviteLink = ({
         variant="solid"
         color="accent"
       >{t`Copy link`}</Button>
-    </StyledContainer>
+    </div>
   );
 };

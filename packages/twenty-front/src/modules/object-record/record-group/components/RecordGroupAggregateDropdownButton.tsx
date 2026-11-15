@@ -8,10 +8,13 @@ import { Dropdown } from 'twenty-ui/components/navigation';
 import { isDefined } from 'twenty-shared/utils';
 import { Tag } from 'twenty-ui/primitives/data-display';
 import { Tooltip } from 'twenty-ui/primitives/surfaces';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledTagContainer = styled.div`
-  width: 100%;
-`;
+const styles = stylex.create({
+  tagContainer: {
+    width: '100%',
+  },
+});
 
 const StyledHeaderContainer = styled.div`
   > * {
@@ -46,11 +49,11 @@ export const RecordGroupAggregateDropdownButton = ({
           id={dropdownId}
           render={<StyledHeaderDropdownButton isUnfolded={isDropdownOpen} />}
         >
-          <StyledTagContainer>
+          <div {...stylex.props(styles.tagContainer)}>
             <Tag color="transparent" weight="regular">
               {isDefined(value) ? value.toString() : '-'}
             </Tag>
-          </StyledTagContainer>
+          </div>
         </Dropdown.Trigger>
       </Tooltip>
     </StyledHeaderContainer>

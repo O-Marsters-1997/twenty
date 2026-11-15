@@ -1,8 +1,13 @@
 import { useApplicationChipData } from '@/applications/hooks/useApplicationChipData';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
 import { Avatar, type AvatarSize } from 'twenty-ui/primitives/data-display';
-import { themeCssVariables } from 'twenty-ui/theme';
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 import { getAbsoluteImageUrl } from '~/utils/image/getAbsoluteImageUrl';
 
 type AppChipProps = {
@@ -15,30 +20,32 @@ type AppChipProps = {
     logoUrl?: string | null;
     name?: string | null;
   };
-  className?: string;
+  xstyle?: stylex.StyleXStyles;
   chipOnly?: boolean;
   rounded?: boolean;
   pulsing?: boolean;
 };
 
-const StyledContainer = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.secondary};
-  display: inline-flex;
-  font-size: ${themeCssVariables.font.size.sm};
-  font-weight: ${themeCssVariables.font.weight.regular};
-  gap: ${themeCssVariables.spacing[1]};
-  max-width: 100%;
-  min-width: 0;
-  overflow: hidden;
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-secondary'],
+    display: 'inline-flex',
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    gap: spacing['--t-spacing-1'],
+    maxWidth: '100%',
+    minWidth: 0,
+    overflow: 'hidden',
+  },
+});
 
 export const AppChip = ({
   applicationId,
   size = 'sm',
   logoUrl,
   fallbackApplicationData,
-  className,
+  xstyle,
   chipOnly = false,
   rounded = false,
   pulsing = false,
@@ -49,7 +56,7 @@ export const AppChip = ({
   });
 
   return (
-    <StyledContainer className={className}>
+    <div {...stylex.props(styles.container, xstyle)}>
       <Avatar
         shape={rounded ? 'circle' : 'square'}
         variant={rounded ? 'soft' : 'outline'}
@@ -65,6 +72,6 @@ export const AppChip = ({
       {!chipOnly && (
         <OverflowingTextWithTooltip text={applicationChipData.name} />
       )}
-    </StyledContainer>
+    </div>
   );
 };

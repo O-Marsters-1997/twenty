@@ -8,9 +8,14 @@ import { TitleInputAutoOpenEffect } from '@/ui/input/components/TitleInputAutoOp
 import { usePushFocusItemToFocusStack } from '@/ui/utilities/focus/hooks/usePushFocusItemToFocusStack';
 import { useRemoveFocusItemFromFocusStackById } from '@/ui/utilities/focus/hooks/useRemoveFocusItemFromFocusStackById';
 import { FocusComponentType } from '@/ui/utilities/focus/types/FocusComponentType';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
-import { themeCssVariables } from 'twenty-ui/theme';
+import {
+  backgroundTransparent,
+  borderRadius,
+  fontColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type CommonInputProps = {
   instanceId: string;
@@ -55,35 +60,32 @@ export type TitleInputProps = CommonInputProps &
     textColor?: string;
   };
 
-const StyledDiv = styled.div<{
-  sizeVariant: TextInputSize;
-  disabled?: boolean;
-  textColor?: string;
-}>`
-  align-items: center;
-  background: inherit;
-  border: none;
-  border-radius: ${themeCssVariables.border.radius.md};
-  box-sizing: border-box;
-  color: ${({ textColor }) =>
-    textColor ?? themeCssVariables.font.color.primary};
-  cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
-  display: flex;
-  height: ${({ sizeVariant }) =>
-    sizeVariant === 'xs'
-      ? '20px'
-      : sizeVariant === 'sm'
-        ? '24px'
-        : sizeVariant === 'md'
-          ? '28px'
-          : '32px'};
-  overflow: hidden;
-  padding: ${themeCssVariables.spacing[0]} 5px;
-  &:hover {
-    background: ${({ disabled }) =>
-      disabled ? 'inherit' : themeCssVariables.background.transparent.light};
-  }
-`;
+const styles = stylex.create({
+  title: {
+    alignItems: 'center',
+    backgroundColor: 'inherit',
+    borderRadius: borderRadius['--t-border-radius-md'],
+    borderStyle: 'none',
+    boxSizing: 'border-box',
+    color: fontColor['--t-font-color-primary'],
+    display: 'flex',
+    overflow: 'hidden',
+    paddingBlock: spacing['--t-spacing-0'],
+    paddingInline: 5,
+  },
+  clickable: {
+    backgroundColor: {
+      default: 'inherit',
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
+    cursor: 'pointer',
+  },
+  xs: { height: 20 },
+  sm: { height: 24 },
+  md: { height: 28 },
+  lg: { height: 32 },
+  textColor: (color: string) => ({ color }),
+});
 
 const Input = ({
   instanceId,
@@ -206,10 +208,13 @@ export const TitleInput = ({
           setIsOpened={setIsOpened}
         />
       ) : (
-        <StyledDiv
-          sizeVariant={sizeVariant}
-          disabled={disabled}
-          textColor={textColor}
+        <div
+          {...stylex.props(
+            styles.title,
+            styles[sizeVariant],
+            !disabled && styles.clickable,
+            isDefined(textColor) && styles.textColor(textColor),
+          )}
           onClick={() => {
             if (!disabled) {
               setIsOpened(true);
@@ -227,7 +232,7 @@ export const TitleInput = ({
           }}
         >
           <OverflowingTextWithTooltip text={value || placeholder} />
-        </StyledDiv>
+        </div>
       )}
     </>
   );

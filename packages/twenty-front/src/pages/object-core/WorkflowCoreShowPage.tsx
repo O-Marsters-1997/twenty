@@ -2,7 +2,6 @@ import { useIsThirdPartyApplication } from '@/applications/hooks/useIsThirdParty
 import { CoreWorkflowEditor } from '@/object-core/workflows/components/CoreWorkflowEditor';
 import { CoreObjectIdentifierBar } from '@/object-core/components/CoreObjectIdentifierBar';
 import { useRenameCoreWorkflow } from '@/object-core/workflows/hooks/useRenameCoreWorkflow';
-import { styled } from '@linaria/react';
 import { isNonEmptyString } from '@sniptt/guards';
 import { t } from '@lingui/core/macro';
 import { useCallback } from 'react';
@@ -11,7 +10,6 @@ import { AppPath } from 'twenty-shared/types';
 import { PermissionFlagType } from 'twenty-shared/constants';
 import { getAppPath, isDefined } from 'twenty-shared/utils';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { WorkspaceRouteUnavailable } from '@/ui/layout/page/components/WorkspaceRouteUnavailable';
 import { RecordShowCommandMenu } from '@/command-menu-item/components/RecordShowCommandMenu';
@@ -31,17 +29,20 @@ import { PageCardLayout } from '@/ui/layout/page/components/PageCardLayout';
 import { PageTitle } from '@/ui/utilities/page-title/components/PageTitle';
 import { getWorkflowCurrentVersion } from '@/workflow/utils/getWorkflowCurrentVersion';
 import { PageContentSkeletonLoader } from '~/loading/components/PageContentSkeletonLoader';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  min-height: 0;
-`;
-
-const StyledUntitled = styled.span`
-  color: ${themeCssVariables.font.color.tertiary};
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    minHeight: '0',
+  },
+  untitled: {
+    color: fontColor['--t-font-color-tertiary'],
+  },
+});
 
 const CoreWorkflowShowContent = ({
   coreWorkflowId,
@@ -152,7 +153,7 @@ const CoreWorkflowShowContent = ({
                 children: isNonEmptyString(record.name) ? (
                   record.name
                 ) : (
-                  <StyledUntitled>{t`Untitled`}</StyledUntitled>
+                  <span {...stylex.props(styles.untitled)}>{t`Untitled`}</span>
                 ),
               },
             ]}
@@ -165,7 +166,7 @@ const CoreWorkflowShowContent = ({
           />
         }
       >
-        <StyledContainer>
+        <div {...stylex.props(styles.container)}>
           <CoreObjectIdentifierBar
             recordId={coreWorkflowId}
             name={record.name}
@@ -183,7 +184,7 @@ const CoreWorkflowShowContent = ({
           ) : (
             <WorkspaceRouteUnavailable>{t`Workflow version not found.`}</WorkspaceRouteUnavailable>
           )}
-        </StyledContainer>
+        </div>
       </PageCardLayout>
     </CommandMenuComponentInstanceContext.Provider>
   );

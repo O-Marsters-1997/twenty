@@ -1,17 +1,16 @@
-import { styled } from '@linaria/react';
 
 import { InformationBannerReconnectAccountEmailAliases } from '@/information-banner/components/reconnect-account/InformationBannerReconnectAccountEmailAliases';
 import { InformationBannerReconnectAccountInsufficientPermissions } from '@/information-banner/components/reconnect-account/InformationBannerReconnectAccountInsufficientPermissions';
 import { useHasPermissionFlag } from '@/settings/roles/hooks/useHasPermissionFlag';
 import { PermissionFlagType } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledInformationBannerWrapper = styled.div`
-  position: relative;
-
-  &:empty {
-    height: 0;
-  }
-`;
+const styles = stylex.create({
+  informationBannerWrapper: {
+    position: 'relative',
+    height: { default: null, ':empty': '0' },
+  },
+});
 
 export const InformationBannerWrapper = () => {
   const isAccountSyncEnabled = useHasPermissionFlag(
@@ -19,13 +18,13 @@ export const InformationBannerWrapper = () => {
   );
 
   return (
-    <StyledInformationBannerWrapper>
+    <div {...stylex.props(styles.informationBannerWrapper)}>
       {isAccountSyncEnabled && (
         <InformationBannerReconnectAccountInsufficientPermissions />
       )}
       {isAccountSyncEnabled && (
         <InformationBannerReconnectAccountEmailAliases />
       )}
-    </StyledInformationBannerWrapper>
+    </div>
   );
 };

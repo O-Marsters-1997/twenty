@@ -3,14 +3,14 @@ import { SETTINGS_PLAYGROUND_FORM_SCHEMA_SELECT_OPTIONS } from '@/settings/mcp-a
 import { PlaygroundSchemas } from '@/settings/mcp-and-apis/types/PlaygroundSchemas';
 import { PlaygroundTypes } from '@/settings/mcp-and-apis/types/PlaygroundTypes';
 import { Select } from '@/ui/input/components/Select';
-import { styled } from '@linaria/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLingui } from '@lingui/react/macro';
 import { Controller, useForm } from 'react-hook-form';
 import { IconApi, IconBrandGraphql } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { z } from 'zod';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const playgroundSetupFormSchema = z.object({
   schema: z.enum(PlaygroundSchemas),
@@ -19,13 +19,15 @@ const playgroundSetupFormSchema = z.object({
 
 type PlaygroundSetupFormValues = z.infer<typeof playgroundSetupFormSchema>;
 
-const StyledForm = styled.form`
-  align-items: end;
-  display: grid;
-  gap: ${themeCssVariables.spacing[2]};
-  grid-template-columns: 1fr 1fr auto;
-  width: 100%;
-`;
+const styles = stylex.create({
+  form: {
+    alignItems: 'end',
+    display: 'grid',
+    gap: spacing['--t-spacing-2'],
+    gridTemplateColumns: '1fr 1fr auto',
+    width: '100%',
+  },
+});
 
 export const PlaygroundSetupForm = () => {
   const { t } = useLingui();
@@ -49,7 +51,7 @@ export const PlaygroundSetupForm = () => {
   };
 
   return (
-    <StyledForm onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} {...stylex.props(styles.form)}>
       <Controller
         name="schema"
         control={control}
@@ -94,6 +96,6 @@ export const PlaygroundSetupForm = () => {
         variant="solid"
         color="accent"
       >{t`Launch`}</Button>
-    </StyledForm>
+    </form>
   );
 };

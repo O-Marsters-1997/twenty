@@ -1,28 +1,33 @@
-import { styled } from '@linaria/react';
-import { type CSSProperties, type ReactNode } from 'react';
+import { type ReactNode } from 'react';
 
 import { useIsMobile } from 'twenty-ui/utilities';
 import { ScrollWrapper } from '@/ui/utilities/scroll/components/ScrollWrapper';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { background, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledOuterContainer = styled.div`
-  display: flex;
-  gap: var(--show-page-gap, 0);
-  height: 100%;
-  width: 100%;
-`;
-
-const StyledInnerContainer = styled.div`
-  display: flex;
-  flex-direction: var(--show-page-direction, row);
-  height: 100%;
-  width: 100%;
-`;
-
-const StyledScrollWrapperContainer = styled.div`
-  background-color: ${themeCssVariables.background.secondary};
-  overflow: hidden;
-`;
+const styles = stylex.create({
+  outer: {
+    display: 'flex',
+    height: '100%',
+    width: '100%',
+  },
+  outerMobile: {
+    gap: spacing['--t-spacing-3'],
+  },
+  inner: {
+    display: 'flex',
+    flexDirection: 'row',
+    height: '100%',
+    width: '100%',
+  },
+  innerMobile: {
+    flexDirection: 'column',
+  },
+  scrollWrapperContainer: {
+    backgroundColor: background['--t-background-secondary'],
+    overflow: 'hidden',
+  },
+});
 
 export type ShowPageContainerProps = {
   children: ReactNode;
@@ -31,26 +36,19 @@ export type ShowPageContainerProps = {
 export const ShowPageContainer = ({ children }: ShowPageContainerProps) => {
   const isMobile = useIsMobile();
 
-  const mobileStyle = isMobile
-    ? ({
-        '--show-page-gap': themeCssVariables.spacing[3],
-        '--show-page-direction': 'column',
-      } as CSSProperties)
-    : undefined;
-
   return isMobile ? (
-    <StyledOuterContainer style={mobileStyle}>
-      <StyledScrollWrapperContainer>
+    <div {...stylex.props(styles.outer, styles.outerMobile)}>
+      <div {...stylex.props(styles.scrollWrapperContainer)}>
         <ScrollWrapper componentInstanceId="scroll-wrapper-show-page-container">
-          <StyledInnerContainer style={mobileStyle}>
+          <div {...stylex.props(styles.inner, styles.innerMobile)}>
             {children}
-          </StyledInnerContainer>
+          </div>
         </ScrollWrapper>
-      </StyledScrollWrapperContainer>
-    </StyledOuterContainer>
+      </div>
+    </div>
   ) : (
-    <StyledOuterContainer>
-      <StyledInnerContainer>{children}</StyledInnerContainer>
-    </StyledOuterContainer>
+    <div {...stylex.props(styles.outer)}>
+      <div {...stylex.props(styles.inner)}>{children}</div>
+    </div>
   );
 };

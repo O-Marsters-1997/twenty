@@ -1,69 +1,68 @@
-import { styled } from '@linaria/react';
 import { type SlotProps } from 'input-otp';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledSlot = styled.div<{ isActive: boolean }>`
-  align-items: center;
-  background-color: ${themeCssVariables.background.transparent.lighter};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  display: flex;
-  font-size: ${themeCssVariables.font.size.md};
-  height: 32px;
-  justify-content: center;
-  outline: 0;
-  outline-color: ${({ isActive }) =>
-    isActive
-      ? themeCssVariables.border.color.strong
-      : themeCssVariables.border.color.medium};
-  outline-color: ${themeCssVariables.border.color.medium};
+const caretBlink = stylex.keyframes({
+  '0%': { opacity: 1 },
+  '50%': { opacity: 0 },
+  '100%': { opacity: 1 },
+});
 
-  .group:hover &,
-  .group:focus-within & {
-    border-color: ${themeCssVariables.border.color.medium};
-  }
-
-  outline-style: ${({ isActive }) => (isActive ? 'solid' : 'none')};
-  outline-width: ${({ isActive }) => (isActive ? '1px' : '0')};
-
-  position: relative;
-  transition: all 0.3s;
-  width: 24px;
-`;
-
-const StyledCaretContainer = styled.div`
-  align-items: center;
-  animation: caret-blink 1s steps(2, start) infinite;
-  display: flex;
-  inset: 0;
-  justify-content: center;
-  pointer-events: none;
-  position: absolute;
-
-  @keyframes caret-blink {
-    0%,
-    100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0;
-    }
-  }
-`;
-
-const StyledPlaceholderChar = styled.div`
-  opacity: 0.2;
-`;
-
-const StyledInputChar = styled.div`
-  opacity: 1;
-`;
-
-const StyledCaret = styled.div`
-  background-color: ${themeCssVariables.font.color.primary};
-  height: 20px;
-  width: 1px;
-`;
+const styles = stylex.create({
+  slot: {
+    alignItems: 'center',
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
+    borderColor: borderColor['--t-border-color-medium'],
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    display: 'flex',
+    fontSize: fontSize['--t-font-size-md'],
+    height: '32px',
+    justifyContent: 'center',
+    outlineColor: borderColor['--t-border-color-medium'],
+    outlineStyle: 'none',
+    outlineWidth: 0,
+    position: 'relative',
+    transitionDuration: '0.3s',
+    transitionProperty: 'all',
+    width: '24px',
+  },
+  slotActive: {
+    outlineStyle: 'solid',
+    outlineWidth: '1px',
+  },
+  caretContainer: {
+    alignItems: 'center',
+    animationDuration: '1s',
+    animationIterationCount: 'infinite',
+    animationName: caretBlink,
+    animationTimingFunction: 'steps(2, start)',
+    display: 'flex',
+    inset: 0,
+    justifyContent: 'center',
+    pointerEvents: 'none',
+    position: 'absolute',
+  },
+  placeholderChar: {
+    opacity: 0.2,
+  },
+  inputChar: {
+    opacity: 1,
+  },
+  caret: {
+    backgroundColor: fontColor['--t-font-color-primary'],
+    height: '20px',
+    width: '1px',
+  },
+});
 
 type TwoFactorAuthenticationVerificationCodeSlotProps = SlotProps;
 
@@ -74,17 +73,19 @@ export const TwoFactorAuthenticationVerificationCodeSlot = ({
   placeholderChar,
 }: TwoFactorAuthenticationVerificationCodeSlotProps) => {
   return (
-    <StyledSlot isActive={isActive}>
+    <div {...stylex.props(styles.slot, isActive && styles.slotActive)}>
       {char ? (
-        <StyledInputChar>{char}</StyledInputChar>
+        <div {...stylex.props(styles.inputChar)}>{char}</div>
       ) : (
-        <StyledPlaceholderChar>{placeholderChar ?? 'X'}</StyledPlaceholderChar>
+        <div {...stylex.props(styles.placeholderChar)}>
+          {placeholderChar ?? 'X'}
+        </div>
       )}
       {hasFakeCaret && (
-        <StyledCaretContainer>
-          <StyledCaret />
-        </StyledCaretContainer>
+        <div {...stylex.props(styles.caretContainer)}>
+          <div {...stylex.props(styles.caret)} />
+        </div>
       )}
-    </StyledSlot>
+    </div>
   );
 };

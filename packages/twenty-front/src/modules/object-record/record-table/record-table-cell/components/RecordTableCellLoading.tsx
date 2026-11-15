@@ -1,15 +1,8 @@
 import { RecordTableCellStyleWrapper } from '@/object-record/record-table/record-table-cell/components/RecordTableCellStyleWrapper';
 import { getRecordTableColumnFieldWidthClassName } from '@/object-record/record-table/utils/getRecordTableColumnFieldWidthClassName';
-import { css } from '@linaria/core';
+import * as stylex from '@stylexjs/stylex';
 import { Skeleton, SKELETON_HEIGHT_SIZES } from 'twenty-ui/primitives/feedback';
-import { themeCssVariables } from 'twenty-ui/theme';
-
-const cellSkeletonClassName = css`
-  border-radius: ${themeCssVariables.border.radius.sm};
-  height: ${SKELETON_HEIGHT_SIZES.s}px;
-  margin: ${themeCssVariables.spacing[2]};
-  width: auto;
-`;
+import { borderRadius, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 export const RecordTableCellLoading = ({
   recordFieldIndex,
@@ -25,9 +18,22 @@ export const RecordTableCellLoading = ({
     >
       <Skeleton
         layout="block"
-        className={cellSkeletonClassName}
+        height={SKELETON_HEIGHT_SIZES.s}
+        {...stylex.props(styles.cellSkeleton)}
         animated={false}
       />
     </RecordTableCellStyleWrapper>
   );
 };
+
+const styles = stylex.create({
+  cellSkeleton: {
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    marginBlock: spacing['--t-spacing-2'],
+    marginInline: spacing['--t-spacing-2'],
+    width: 'auto',
+  },
+});

@@ -1,11 +1,17 @@
-import { styled } from '@linaria/react';
 import { type MessageDescriptor } from '@lingui/core';
 import { useLingui } from '@lingui/react/macro';
 import { type ReactNode, useId } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { Radio, RadioGroup } from 'twenty-ui/primitives/input';
 import { Card } from 'twenty-ui/primitives/surfaces';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  backgroundTransparent,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsRadioSettingsCardProps<Option extends { value: string }> = {
   name: string;
@@ -15,47 +21,41 @@ type SettingsRadioSettingsCardProps<Option extends { value: string }> = {
   disabled?: boolean;
 };
 
-const StyledCardContentContainer = styled.div`
-  > div {
-    cursor: pointer;
-
-    &:hover {
-      background: ${themeCssVariables.background.transparent.lighter};
-    }
-  }
-`;
-
-const StyledOptionHeader = styled.label`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[4]};
-`;
-
-const StyledTextContainer = styled.div`
-  flex: 1;
-  min-width: 0;
-`;
-
-const StyledTitle = styled.div`
-  color: ${themeCssVariables.font.color.primary};
-  font-weight: ${themeCssVariables.font.weight.medium};
-  margin-bottom: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledDescription = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.sm};
-`;
-
-const StyledRadioContainer = styled.span`
-  align-items: center;
-  display: flex;
-  margin-left: auto;
-`;
-
-const StyledExpandedContent = styled.div`
-  margin-top: ${themeCssVariables.spacing[4]};
-`;
+const styles = stylex.create({
+  card: {
+    backgroundColor: {
+      default: null,
+      ':hover': backgroundTransparent['--t-background-transparent-lighter'],
+    },
+    cursor: 'pointer',
+  },
+  optionHeader: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-4'],
+  },
+  textContainer: {
+    flex: '1',
+    minWidth: '0',
+  },
+  title: {
+    color: fontColor['--t-font-color-primary'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    marginBottom: spacing['--t-spacing-2'],
+  },
+  description: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-sm'],
+  },
+  radioContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    marginLeft: 'auto',
+  },
+  expandedContent: {
+    marginTop: spacing['--t-spacing-4'],
+  },
+});
 
 export const SettingsRadioSettingsCard = <
   Option extends {
@@ -95,33 +95,35 @@ export const SettingsRadioSettingsCard = <
           const isSelected = value === option.value;
 
           return (
-            <StyledCardContentContainer key={option.value}>
-              <Card.Content divider={index < options.length - 1}>
-                <StyledOptionHeader>
+            <Card.Content
+              key={option.value}
+              divider={index < options.length - 1}
+              {...stylex.props(styles.card)}
+            >
+                <label {...stylex.props(styles.optionHeader)}>
                   {option.cardMedia}
-                  <StyledTextContainer>
-                    <StyledTitle id={`${groupId}-${index}-title`}>
+                  <div {...stylex.props(styles.textContainer)}>
+                    <div id={`${groupId}-${index}-title`} {...stylex.props(styles.title)}>
                       {i18n._(option.title)}
-                    </StyledTitle>
-                    <StyledDescription id={`${groupId}-${index}-description`}>
+                    </div>
+                    <div id={`${groupId}-${index}-description`} {...stylex.props(styles.description)}>
                       {i18n._(option.description)}
-                    </StyledDescription>
-                  </StyledTextContainer>
-                  <StyledRadioContainer>
+                    </div>
+                  </div>
+                  <span {...stylex.props(styles.radioContainer)}>
                     <Radio
                       aria-labelledby={`${groupId}-${index}-title`}
                       aria-describedby={`${groupId}-${index}-description`}
                       value={option.value}
                     />
-                  </StyledRadioContainer>
-                </StyledOptionHeader>
+                  </span>
+                </label>
                 {isDefined(option.cardContentExpanded) && isSelected && (
-                  <StyledExpandedContent>
+                  <div {...stylex.props(styles.expandedContent)}>
                     {option.cardContentExpanded}
-                  </StyledExpandedContent>
+                  </div>
                 )}
-              </Card.Content>
-            </StyledCardContentContainer>
+            </Card.Content>
           );
         })}
       </Card.Root>

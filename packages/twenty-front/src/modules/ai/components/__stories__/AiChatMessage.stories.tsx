@@ -15,18 +15,23 @@ import { agentChatDisplayedThreadState } from '@/ai/states/agentChatDisplayedThr
 import { agentChatMessagesFamilyState } from '@/ai/states/agentChatMessagesFamilyState';
 import { currentAiChatThreadState } from '@/ai/states/currentAiChatThreadState';
 
-import { styled } from '@linaria/react';
 import { useStore } from 'jotai';
 import { RootDecorator } from '~/testing/decorators/RootDecorator';
 import { ToastDecorator } from '~/testing/decorators/ToastDecorator';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledConversationContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  max-width: 700px;
-  padding: 24px;
-`;
+const styles = stylex.create({
+  conversationContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '24px',
+    maxWidth: '700px',
+    paddingTop: '24px',
+    paddingRight: '24px',
+    paddingBottom: '24px',
+    paddingLeft: '24px',
+  },
+});
 
 const mockUserMessage: ExtendedUIMessage = {
   id: 'msg-user-1',

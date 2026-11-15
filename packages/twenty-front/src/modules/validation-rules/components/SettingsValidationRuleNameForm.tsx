@@ -1,24 +1,25 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isNonEmptyString } from '@sniptt/guards';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { IconPicker } from '@/ui/input/components/IconPicker';
 import { SettingsTextInput } from '@/ui/input/components/SettingsTextInput';
 import { TextArea } from '@/ui/input/components/TextArea';
 import { type ValidationRuleFormValues } from '@/validation-rules/types/ValidationRuleFormValues';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledNameRow = styled.div`
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  width: 100%;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+  },
+  nameRow: {
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+});
 
 type SettingsValidationRuleNameFormProps = {
   values: ValidationRuleFormValues;
@@ -32,8 +33,8 @@ export const SettingsValidationRuleNameForm = ({
   const { t } = useLingui();
 
   return (
-    <StyledContainer>
-      <StyledNameRow>
+    <div {...stylex.props(styles.container)}>
+      <div {...stylex.props(styles.nameRow)}>
         <IconPicker
           dropdownId="validation-rule-icon"
           selectedIconKey={values.icon}
@@ -47,7 +48,7 @@ export const SettingsValidationRuleNameForm = ({
           onChange={(name) => onChange({ ...values, name })}
           fullWidth
         />
-      </StyledNameRow>
+      </div>
       <TextArea
         textAreaId="validation-rule-description"
         placeholder={t`Write a description`}
@@ -61,6 +62,6 @@ export const SettingsValidationRuleNameForm = ({
           })
         }
       />
-    </StyledContainer>
+    </div>
   );
 };

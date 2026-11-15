@@ -16,22 +16,24 @@ import { TableHeaderText } from '@/ui/layout/table/components/TableHeaderText';
 import { sortedFieldByTableFamilyState } from '@/ui/layout/table/states/sortedFieldByTableFamilyState';
 import { useWorkspaceSurfaceScopedComponentInstanceId } from '@/ui/layout/hooks/useWorkspaceSurfaceScopedComponentInstanceId';
 import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useState } from 'react';
 import { isNonEmptyArray } from 'twenty-shared/utils';
 import { Section } from 'twenty-ui/components/layout';
 import { IconSearch } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { sortByProperty } from '~/utils/array/sortByProperty';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 export const SETTINGS_ROLE_PERMISSION_OBJECT_LEVEL_FIELD_PERMISSION_TABLE_ID =
   'settings-role-permissions-object-level-object-field-permission';
 
-const StyledSearchInputContainer = styled.div`
-  padding-bottom: ${themeCssVariables.spacing[2]};
-  width: 100%;
-`;
+const styles = stylex.create({
+  searchInputContainer: {
+    paddingBottom: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+});
 
 export type SettingsRolePermissionsObjectLevelObjectFieldPermissionTableProps =
   {
@@ -95,7 +97,7 @@ export const SettingsRolePermissionsObjectLevelObjectFieldPermissionTable = ({
         title={t`Fields Permissions`}
         description={t`Ability to interact with this object's fields.`}
       />
-      <StyledSearchInputContainer>
+      <div {...stylex.props(styles.searchInputContainer)}>
         <SettingsTextInput
           instanceId="object-field-table-search"
           LeftIcon={IconSearch}
@@ -103,7 +105,7 @@ export const SettingsRolePermissionsObjectLevelObjectFieldPermissionTable = ({
           value={searchTerm}
           onChange={setSearchTerm}
         />
-      </StyledSearchInputContainer>
+      </div>
       <Table>
         <TableRow
           gridTemplateColumns={FIELD_PERMISSION_TABLE_ROW_GRID_TEMPLATE_COLUMNS}

@@ -1,15 +1,17 @@
-import { styled } from '@linaria/react';
 
 import { WorkspaceSectionListReadOnly } from '@/navigation-menu-item/display/sections/workspace/components/WorkspaceSectionListReadOnly';
 import { WorkspaceSectionAddMenuItemButton } from '@/navigation-menu-item/edit/components/WorkspaceSectionAddMenuItemButton';
 import type { NavigationMenuItemSectionListDndKitProps } from '@/navigation-menu-item/display/sections/types/NavigationMenuItemSectionListDndKitProps';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledFallback = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  fallback: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-1'],
+  },
+});
 
 type WorkspaceSectionListEditModeFallbackProps = Pick<
   NavigationMenuItemSectionListDndKitProps,
@@ -21,12 +23,12 @@ export const WorkspaceSectionListEditModeFallback = ({
   folderChildrenById,
   onActiveObjectMetadataItemClick,
 }: WorkspaceSectionListEditModeFallbackProps) => (
-  <StyledFallback>
+  <div {...stylex.props(styles.fallback)}>
     <WorkspaceSectionListReadOnly
       filteredItems={filteredItems}
       folderChildrenById={folderChildrenById}
       onActiveObjectMetadataItemClick={onActiveObjectMetadataItemClick}
     />
     <WorkspaceSectionAddMenuItemButton />
-  </StyledFallback>
+  </div>
 );

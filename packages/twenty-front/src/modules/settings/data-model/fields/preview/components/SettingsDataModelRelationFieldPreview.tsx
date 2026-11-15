@@ -1,5 +1,3 @@
-import { styled } from '@linaria/react';
-
 import { useObjectMetadataItem } from '@/object-metadata/hooks/useObjectMetadataItem';
 import { CoreObjectNameSingular } from 'twenty-shared/types';
 import { type FieldMetadataItem } from '@/object-metadata/types/FieldMetadataItem';
@@ -10,9 +8,17 @@ import { RecordFieldComponentInstanceContext } from '@/object-record/record-fiel
 import { SettingsDataModelSetFieldValueEffect } from '@/settings/data-model/fields/preview/components/SettingsDataModelSetFieldValueEffect';
 import { useFieldPreviewValue } from '@/settings/data-model/fields/preview/hooks/useFieldPreviewValue';
 import { useIcons } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import { v4 } from 'uuid';
 import { FieldMetadataType } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import {
+  background,
+  borderColor,
+  borderRadius,
+  fontColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsDataModelRelationFieldPreviewProps = {
   fieldMetadataItem: Pick<
@@ -24,31 +30,35 @@ type SettingsDataModelRelationFieldPreviewProps = {
   withFieldLabel?: boolean;
 };
 
-const StyledFieldPreview = styled.div<{ shrink?: boolean }>`
-  align-items: center;
-  background-color: ${themeCssVariables.background.primary};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  height: fit-content;
-  line-height: 24px;
-  margin-top: ${themeCssVariables.spacing[2]};
-  overflow: hidden;
-  padding: 0
-    ${({ shrink }) =>
-      shrink ? themeCssVariables.spacing[1] : themeCssVariables.spacing[2]};
-  padding-bottom: ${themeCssVariables.spacing[2]};
-  padding-top: ${themeCssVariables.spacing[2]};
-  white-space: nowrap;
-`;
-
-const StyledFieldLabel = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  fieldPreview: {
+    alignItems: 'center',
+    backgroundColor: background['--t-background-primary'],
+    borderColor: borderColor['--t-border-color-medium'],
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    borderStyle: 'solid',
+    borderWidth: 1,
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    height: 'fit-content',
+    lineHeight: '24px',
+    marginTop: spacing['--t-spacing-2'],
+    overflow: 'hidden',
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingInline: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
+    whiteSpace: 'nowrap',
+  },
+  fieldPreviewShrink: {
+    paddingInline: spacing['--t-spacing-1'],
+  },
+  fieldLabel: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+  },
+});
 
 export const SettingsDataModelRelationFieldPreview = ({
   fieldMetadataItem,
@@ -126,15 +136,20 @@ export const SettingsDataModelRelationFieldPreview = ({
           gqlFieldName={fieldName}
           value={fieldPreviewValue}
         />
-        <StyledFieldPreview shrink={shrink}>
+        <div
+          {...stylex.props(
+            styles.fieldPreview,
+            shrink && styles.fieldPreviewShrink,
+          )}
+        >
           {!!withFieldLabel && (
-            <StyledFieldLabel>
+            <div {...stylex.props(styles.fieldLabel)}>
               <FieldIcon
                 size={theme.icon.size.md}
                 stroke={theme.icon.stroke.sm}
               />
               {fieldMetadataItem.label}:
-            </StyledFieldLabel>
+            </div>
           )}
           <FieldContext.Provider
             value={{
@@ -154,7 +169,7 @@ export const SettingsDataModelRelationFieldPreview = ({
           >
             <FieldDisplay />
           </FieldContext.Provider>
-        </StyledFieldPreview>
+        </div>
       </RecordFieldComponentInstanceContext.Provider>
     </>
   );

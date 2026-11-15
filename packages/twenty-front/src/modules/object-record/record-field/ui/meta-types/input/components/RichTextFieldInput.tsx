@@ -6,7 +6,6 @@ import { RecordFieldComponentInstanceContext } from '@/object-record/record-fiel
 import { type FieldRichTextMetadata } from '@/object-record/record-field/ui/types/FieldMetadata';
 import { useOpenRichTextInSidePanel } from '@/side-panel/hooks/useOpenRichTextInSidePanel';
 import { useAvailableComponentInstanceIdOrThrow } from '@/ui/utilities/state/component-state/hooks/useAvailableComponentInstanceIdOrThrow';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { Suspense, lazy, useContext, useRef } from 'react';
 import { SKELETON_HEIGHT_SIZES } from 'twenty-ui/primitives/feedback';
@@ -14,6 +13,13 @@ import { CoreObjectNameSingular } from 'twenty-shared/types';
 import { IconButton } from 'twenty-ui/components/input';
 import { IconLayoutSidebarLeftCollapse } from 'twenty-ui/icon';
 import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  background,
+  borderRadius,
+  fontColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const ActivityRichTextEditor = lazy(() =>
   import('@/activities/components/ActivityRichTextEditor').then((module) => ({
@@ -29,33 +35,41 @@ const RichTextFieldEditor = lazy(() =>
   ),
 );
 
-const StyledContainer = styled.div`
-  align-items: flex-start;
-  background-color: ${themeCssVariables.background.primary};
-  box-sizing: border-box;
-  display: flex;
-  margin: 0 0 0 calc(-1 * ${themeCssVariables.spacing[5]});
-  max-height: min(calc(60vh / var(--t-zoom, 1)), 500px);
-  overflow: hidden;
-  padding: ${themeCssVariables.spacing[2]} ${themeCssVariables.spacing[2]}
-    ${themeCssVariables.spacing[2]} ${themeCssVariables.spacing[12]};
-  position: relative;
-  width: 480px;
-`;
-
-const StyledEditorScroll = styled.div`
-  align-self: stretch;
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-`;
-
-const StyledCollapseButton = styled.div`
-  border-radius: ${themeCssVariables.border.radius.md};
-  color: ${themeCssVariables.font.color.light};
-  cursor: pointer;
-  display: flex;
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'flex-start',
+    backgroundColor: background['--t-background-primary'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    marginTop: 0,
+    marginRight: 0,
+    marginBottom: 0,
+    marginLeft: `calc(-1 * ${spacing['--t-spacing-5']})`,
+    maxHeight: 'min(calc(60vh / var(--t-zoom, 1)), 500px)',
+    overflow: 'hidden',
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-12'],
+    position: 'relative',
+    width: '480px',
+  },
+  editorScroll: {
+    alignSelf: 'stretch',
+    flex: '1',
+    minHeight: '0',
+    overflowY: 'auto',
+  },
+  collapseButton: {
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    color: fontColor['--t-font-color-light'],
+    cursor: 'pointer',
+    display: 'flex',
+  },
+});
 
 const LoadingSkeleton = () => {
   return (
@@ -108,8 +122,8 @@ export const RichTextFieldInput = () => {
   });
 
   return (
-    <StyledContainer ref={containerRef}>
-      <StyledEditorScroll>
+    <div ref={containerRef} {...stylex.props(styles.container)}>
+      <div {...stylex.props(styles.editorScroll)}>
         <Suspense fallback={<LoadingSkeleton />}>
           {isActivityObject(objectNameSingular) ? (
             <ActivityRichTextEditor
@@ -124,8 +138,8 @@ export const RichTextFieldInput = () => {
             />
           )}
         </Suspense>
-      </StyledEditorScroll>
-      <StyledCollapseButton>
+      </div>
+      <div {...stylex.props(styles.collapseButton)}>
         <IconButton
           elevated
           size="sm"
@@ -137,7 +151,7 @@ export const RichTextFieldInput = () => {
         >
           <IconLayoutSidebarLeftCollapse />
         </IconButton>
-      </StyledCollapseButton>
-    </StyledContainer>
+      </div>
+    </div>
   );
 };

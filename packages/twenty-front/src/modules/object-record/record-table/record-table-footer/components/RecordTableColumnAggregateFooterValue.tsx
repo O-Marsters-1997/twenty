@@ -1,47 +1,44 @@
-import { RECORD_TABLE_ROW_HEIGHT } from '@/object-record/record-table/constants/RecordTableRowHeight';
+import { recordTableLayout } from '../../constants/recordTableLayout.stylex';
 import { useAggregateRecordsForRecordTableColumnFooter } from '@/object-record/record-table/record-table-footer/hooks/useAggregateRecordsForRecordTableColumnFooter';
-import { styled } from '@linaria/react';
 import { Trans } from '@lingui/react/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledText = styled.span`
-  align-items: center;
-  display: flex;
-  flex-grow: 1;
-  gap: 4px;
-  height: 20px;
-  overflow: hidden;
-  padding-left: ${themeCssVariables.spacing[2]};
-  text-overflow: ellipsis;
-
-  white-space: nowrap;
-  z-index: 1;
-`;
-
-const StyledValueContainer = styled.div`
-  -ms-overflow-style: none;
-  align-items: center;
-  display: flex;
-  gap: 4px;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-
-  height: ${RECORD_TABLE_ROW_HEIGHT}px;
-  justify-content: flex-end;
-  overflow-x: auto;
-  padding: 0 8px;
-  scrollbar-width: none;
-  white-space: nowrap;
-`;
-
-const StyledValue = styled.div`
-  color: ${themeCssVariables.font.color.primary};
-  max-width: 100%;
-`;
+const styles = stylex.create({
+  valueContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: 4,
+    height: recordTableLayout.rowHeight,
+    justifyContent: 'flex-end',
+    overflowX: 'auto',
+    paddingBlock: 0,
+    paddingInline: 8,
+    scrollbarWidth: 'none',
+    whiteSpace: 'nowrap',
+    '::-webkit-scrollbar': {
+      display: 'none',
+    },
+  },
+  text: {
+    alignItems: 'center',
+    display: 'flex',
+    flexGrow: '1',
+    gap: '4px',
+    height: '20px',
+    overflow: 'hidden',
+    paddingLeft: spacing['--t-spacing-2'],
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    zIndex: '1',
+  },
+  value: {
+    color: fontColor['--t-font-color-primary'],
+    maxWidth: '100%',
+  },
+});
 
 export const RecordTableColumnAggregateFooterValue = ({
   dropdownId,
@@ -58,20 +55,20 @@ export const RecordTableColumnAggregateFooterValue = ({
   return (
     <>
       {isDefined(aggregateValue) || isLoading ? (
-        <StyledValueContainer>
+        <div {...stylex.props(styles.valueContainer)}>
           {isLoading ? (
             <></>
           ) : (
             <>
               <OverflowingTextWithTooltip text={aggregateLabel} />
-              <StyledValue>{aggregateValue}</StyledValue>
+              <div {...stylex.props(styles.value)}>{aggregateValue}</div>
             </>
           )}
-        </StyledValueContainer>
+        </div>
       ) : (
-        <StyledText id={sanitizedId}>
+        <span id={sanitizedId} {...stylex.props(styles.text)}>
           <Trans>Calculate</Trans>
-        </StyledText>
+        </span>
       )}
     </>
   );

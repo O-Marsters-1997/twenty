@@ -7,11 +7,11 @@ import {
   StyledSettingsCardTitle,
 } from '@/settings/components/SettingsOptions/SettingsCardContentBase';
 import { SettingsOptionIconCustomizer } from '@/settings/components/SettingsOptions/SettingsOptionIconCustomizer';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { isDefined } from 'twenty-shared/utils';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
 import { type IconComponent } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsOptionCardContentSelectProps = {
   Icon?: IconComponent;
@@ -23,61 +23,61 @@ type SettingsOptionCardContentSelectProps = {
   children?: React.ReactNode;
 };
 
-const StyledSelectContainer = styled.div`
-  flex-shrink: 0;
-  justify-content: flex-end;
-  margin-left: auto;
-  max-width: var(--settings-select-control-width, 120px);
-  width: var(--settings-select-control-width, auto);
-
-  @container settings-select-group (max-width: 520px) {
-    max-width: 100%;
-  }
-`;
-
-const StyledSelectRow = styled(StyledSettingsCardContent)`
-  @container settings-select-group (max-width: 520px) {
-    flex-wrap: wrap;
-  }
-`;
-
-const StyledSelectText = styled(StyledSettingsCardTextContainer)`
-  @container settings-select-group (max-width: 520px) {
-    flex-basis: calc(
-      100% - ${themeCssVariables.spacing[8]} - ${themeCssVariables.spacing[3]}
-    );
-  }
-`;
-
 export const SettingsOptionCardContentSelect = ({
   Icon,
   LeftComponent,
   title,
   description,
   divider,
-  disabled = false,
   children,
 }: SettingsOptionCardContentSelectProps) => {
   return (
     <>
-      <StyledSelectRow disabled={disabled}>
+      <StyledSettingsCardContent xstyle={styles.row}>
         {(isDefined(LeftComponent) || isDefined(Icon)) && (
           <StyledSettingsCardIcon>
             {LeftComponent ??
               (Icon && <SettingsOptionIconCustomizer Icon={Icon} />)}
           </StyledSettingsCardIcon>
         )}
-        <StyledSelectText>
+        <StyledSettingsCardTextContainer xstyle={styles.text}>
           <StyledSettingsCardTitle>{title}</StyledSettingsCardTitle>
           {description && (
             <StyledSettingsCardDescription>
               <OverflowingTextWithTooltip text={description} />
             </StyledSettingsCardDescription>
           )}
-        </StyledSelectText>
-        <StyledSelectContainer>{children}</StyledSelectContainer>
-      </StyledSelectRow>
+        </StyledSettingsCardTextContainer>
+        <div {...stylex.props(styles.container)}>{children}</div>
+      </StyledSettingsCardContent>
       {divider && <Separator />}
     </>
   );
 };
+
+const NARROW_CONTAINER = '@container settings-select-group (max-width: 520px)';
+
+const styles = stylex.create({
+  container: {
+    flexShrink: 0,
+    justifyContent: 'flex-end',
+    marginLeft: 'auto',
+    maxWidth: {
+      default: 'var(--settings-select-control-width, 120px)',
+      [NARROW_CONTAINER]: '100%',
+    },
+    width: 'var(--settings-select-control-width, auto)',
+  },
+  row: {
+    flexWrap: {
+      default: null,
+      [NARROW_CONTAINER]: 'wrap',
+    },
+  },
+  text: {
+    flexBasis: {
+      default: null,
+      [NARROW_CONTAINER]: `calc(100% - ${spacing['--t-spacing-8']} - ${spacing['--t-spacing-3']})`,
+    },
+  },
+});

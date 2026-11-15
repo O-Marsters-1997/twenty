@@ -1,28 +1,34 @@
 import { SkeletonLine } from '@/ui/feedback/skeleton/components/SkeletonLine';
-import { styled } from '@linaria/react';
 import { SKELETON_HEIGHT_SIZES } from 'twenty-ui/primitives/feedback';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledSkeletonContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[1]};
-  padding: ${themeCssVariables.spacing[2]} 0;
-`;
-
-const StyledSkeletonRow = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  padding: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledSkeletonFolderInfo = styled.div`
-  align-items: center;
-  display: flex;
-  flex: 1;
-  gap: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  skeletonContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-1'],
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: '0',
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: '0',
+  },
+  skeletonRow: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-1'],
+  },
+  skeletonFolderInfo: {
+    alignItems: 'center',
+    display: 'flex',
+    flex: '1',
+    gap: spacing['--t-spacing-2'],
+  },
+});
 
 const SKELETON_ROWS = [
   { width: 160 },
@@ -35,16 +41,16 @@ const SKELETON_ROWS = [
 
 export const SettingsMessageFoldersSkeletonLoader = () => {
   return (
-    <StyledSkeletonContainer>
+    <div {...stylex.props(styles.skeletonContainer)}>
       {SKELETON_ROWS.map((row, index) => (
-        <StyledSkeletonRow key={index}>
-          <StyledSkeletonFolderInfo>
+        <div key={index} {...stylex.props(styles.skeletonRow)}>
+          <div {...stylex.props(styles.skeletonFolderInfo)}>
             <SkeletonLine width={20} height={SKELETON_HEIGHT_SIZES.s} />
             <SkeletonLine width={row.width} height={SKELETON_HEIGHT_SIZES.s} />
-          </StyledSkeletonFolderInfo>
+          </div>
           <SkeletonLine width={16} height={SKELETON_HEIGHT_SIZES.s} />
-        </StyledSkeletonRow>
+        </div>
       ))}
-    </StyledSkeletonContainer>
+    </div>
   );
 };
