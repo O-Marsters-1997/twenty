@@ -19,7 +19,10 @@ type ResizeMessage = {
 };
 
 type WelcomeHalftoneWorkerMessage =
-  InitMessage | ResizeMessage | { type: 'leave' } | { type: 'stop' };
+  | InitMessage
+  | ResizeMessage
+  | { type: 'leave' }
+  | { type: 'stop' };
 
 const workerSelf = self as unknown as {
   postMessage: (message: unknown) => void;
