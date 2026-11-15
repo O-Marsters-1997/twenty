@@ -1,25 +1,22 @@
-import { styled } from '@linaria/react';
-import { type IconComponent } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-
-const StyledContainer = styled.div<{ Variant: Variants }>`
-  align-items: center;
-  color: ${({ Variant }) =>
-    Variant === 'danger' ? themeCssVariables.color.red : 'inherit'};
-  display: flex;
-  flex-direction: row;
-  gap: ${themeCssVariables.spacing[2]};
-`;
+import { type IconComponent } from 'twenty-ui/icon';
+import { useTheme } from 'twenty-ui/theme';
+import { color, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
-  textContainer: {
-
+  container: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+    gap: spacing['--t-spacing-2'],
+  },
+  danger: {
+    color: color['--t-color-red'],
   },
 });
 
 type CustomSideMenuOptionsProps = {
-  LeftIcon: IconComponent; // Any valid React node (e.g., a component)
+  LeftIcon: IconComponent;
   Variant: Variants;
   text: string;
 };
@@ -34,12 +31,11 @@ export const CustomSideMenuOptions = ({
   const theme = useTheme();
 
   return (
-    <StyledContainer Variant={Variant}>
-      <LeftIcon
-        size={theme.icon.size.md}
-        stroke={theme.icon.stroke.sm}
-      ></LeftIcon>
-      <div {...stylex.props(styles.textContainer)}>{text}</div>
-    </StyledContainer>
+    <div
+      {...stylex.props(styles.container, Variant === 'danger' && styles.danger)}
+    >
+      <LeftIcon size={theme.icon.size.md} stroke={theme.icon.stroke.sm} />
+      <div>{text}</div>
+    </div>
   );
 };

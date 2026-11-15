@@ -1,13 +1,16 @@
 import { BaseChip } from '@/ui/input/components/BaseChip';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
+import * as stylex from '@stylexjs/stylex';
 import { NodeViewWrapper, type NodeViewProps } from '@tiptap/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledWrapper = styled.span`
-  display: inline-block;
-  padding-inline: ${themeCssVariables.spacing[0.5]};
-`;
+const styles = stylex.create({
+  wrapper: {
+    display: 'inline-block',
+    paddingInline: spacing['--t-spacing-0_5'],
+    whiteSpace: 'nowrap',
+  },
+});
 
 type VariableChipProps = Pick<NodeViewProps, 'deleteNode' | 'editor'> & {
   label: string;
@@ -20,7 +23,7 @@ export const VariableChip = ({
   label,
   title,
 }: VariableChipProps) => (
-  <NodeViewWrapper as={StyledWrapper} style={{ whiteSpace: 'nowrap' }}>
+  <NodeViewWrapper as="span" {...stylex.props(styles.wrapper)}>
     <BaseChip
       label={label}
       title={title}

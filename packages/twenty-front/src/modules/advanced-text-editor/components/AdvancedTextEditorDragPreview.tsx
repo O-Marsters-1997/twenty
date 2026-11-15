@@ -1,35 +1,42 @@
-import { styled } from '@linaria/react';
 import { type Ref } from 'react';
 import { createPortal } from 'react-dom';
 import { type IconComponent, IconPlus } from 'twenty-ui/icon';
-import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { borderRadius, color } from 'twenty-ui/theme/tokens.stylex';
-
-const StyledDragPreview = styled.div`
-  align-items: center;
-  backdrop-filter: ${themeCssVariables.blur.strong};
-  background-color: ${themeCssVariables.tooltip.background};
-  border-radius: ${themeCssVariables.border.radius.md};
-  color: ${themeCssVariables.tooltip.color};
-  display: inline-flex;
-  font-family: ${themeCssVariables.font.family};
-  font-size: ${themeCssVariables.font.size.sm};
-  font-weight: ${themeCssVariables.font.weight.medium};
-  gap: ${themeCssVariables.spacing[1]};
-  left: -10000px;
-  padding: ${themeCssVariables.spacing[1]} ${themeCssVariables.spacing[2]};
-  pointer-events: none;
-  position: fixed;
-  top: 0;
-  white-space: nowrap;
-
-  &[data-insertion='true'] {
-    padding-left: ${themeCssVariables.spacing[1]};
-  }
-`;
+import {
+  blur,
+  borderRadius,
+  color,
+  font,
+  fontSize,
+  fontWeight,
+  spacing,
+  tooltip,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
+  dragPreview: {
+    alignItems: 'center',
+    backdropFilter: blur['--t-blur-strong'],
+    backgroundColor: tooltip['--t-tooltip-background'],
+    borderRadius: borderRadius['--t-border-radius-md'],
+    color: tooltip['--t-tooltip-color'],
+    display: 'inline-flex',
+    fontFamily: font['--t-font-family'],
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    gap: spacing['--t-spacing-1'],
+    left: '-10000px',
+    paddingBlock: spacing['--t-spacing-1'],
+    paddingInline: spacing['--t-spacing-2'],
+    pointerEvents: 'none',
+    position: 'fixed',
+    top: 0,
+    whiteSpace: 'nowrap',
+  },
+  insertion: {
+    paddingInlineStart: spacing['--t-spacing-1'],
+  },
   insertionBadge: {
     alignItems: 'center',
     backgroundColor: color['--t-color-blue'],
@@ -60,10 +67,10 @@ export const AdvancedTextEditorDragPreview = ({
   const theme = useTheme();
 
   return createPortal(
-    <StyledDragPreview
+    <div
       ref={ref}
       aria-hidden
-      data-insertion={String(isInsertion)}
+      {...stylex.props(styles.dragPreview, isInsertion && styles.insertion)}
     >
       {isInsertion && (
         <span {...stylex.props(styles.insertionBadge)}>
@@ -72,7 +79,7 @@ export const AdvancedTextEditorDragPreview = ({
       )}
       <Icon size={theme.icon.size.sm} stroke={theme.icon.stroke.sm} />
       {label}
-    </StyledDragPreview>,
+    </div>,
     document.body,
   );
 };

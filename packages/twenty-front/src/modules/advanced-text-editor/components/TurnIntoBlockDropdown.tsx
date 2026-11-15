@@ -3,37 +3,45 @@ import { useTurnIntoBlockOptions } from '@/advanced-text-editor/hooks/useTurnInt
 import { Dropdown } from 'twenty-ui/components/navigation';
 import { DropdownRoot } from '@/ui/layout/dropdown/components/DropdownRoot';
 import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
+import * as stylex from '@stylexjs/stylex';
 import { type Editor } from '@tiptap/react';
 import { useId } from 'react';
 import { IconPilcrow } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import {
+  backgroundTransparent,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledMenuItem = styled.button`
-  align-items: center;
-  background: none;
-  border: none;
-  border-radius: ${themeCssVariables.spacing[1.5]};
-  color: ${themeCssVariables.font.color.tertiary};
-  cursor: pointer;
-  display: flex;
-  font-size: ${themeCssVariables.font.size.sm};
-  font-weight: ${themeCssVariables.font.weight.regular};
-  gap: 4px;
-  height: ${themeCssVariables.spacing[6]};
-  padding: 0 ${themeCssVariables.spacing[1.5]};
-  padding: 0;
-  width: 100%;
-
-  :hover {
-    background: ${themeCssVariables.background.transparent.medium};
-  }
-
-  :focus {
-    outline: none;
-  }
-`;
+const styles = stylex.create({
+  menuItem: {
+    alignItems: 'center',
+    backgroundColor: {
+      default: 'transparent',
+      ':hover': backgroundTransparent['--t-background-transparent-medium'],
+    },
+    borderStyle: 'none',
+    borderRadius: spacing['--t-spacing-1_5'],
+    color: fontColor['--t-font-color-tertiary'],
+    cursor: 'pointer',
+    display: 'flex',
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    gap: spacing['--t-spacing-1'],
+    height: spacing['--t-spacing-6'],
+    outline: {
+      default: null,
+      ':focus': 'none',
+    },
+    paddingBlock: 0,
+    paddingInline: 0,
+    width: '100%',
+  },
+});
 
 type TurnIntoBlockDropdownProps = {
   editor: Editor;
@@ -55,10 +63,10 @@ export const TurnIntoBlockDropdown = ({
     <DropdownRoot dropdownId={dropdownId} type="picker">
       <Dropdown.Trigger
         render={
-          <StyledMenuItem>
+          <button {...stylex.props(styles.menuItem)}>
             <ActiveIcon size={theme.icon.size.md} />
             {activeTitle}
-          </StyledMenuItem>
+          </button>
         }
       />
       <DropdownContent

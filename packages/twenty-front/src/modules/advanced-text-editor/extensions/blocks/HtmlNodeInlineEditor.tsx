@@ -1,40 +1,15 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { EditorContent, type Editor } from '@tiptap/react';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { useTextVariableEditor } from '@/object-record/record-field/ui/form-types/hooks/useTextVariableEditor';
-import { FORM_FIELD_PLACEHOLDER_STYLES } from '@/ui/input/constants/FormFieldPlaceholderStyles';
+import '~/third-party-styles/advanced-text-editor.css';
 
 type HtmlNodeInlineEditorProps = {
   html: string;
   onChange: (html: string) => void;
   onFocus: (htmlEditor: Editor) => void;
 };
-
-const StyledHtmlEditor = styled.div`
-  .tiptap {
-    color: ${themeCssVariables.font.color.primary};
-    font-family: ${themeCssVariables.code.font.family};
-    font-size: ${themeCssVariables.font.size.sm};
-    outline: none;
-    overflow-wrap: anywhere;
-    white-space: pre-wrap;
-
-    p {
-      margin: 0;
-    }
-
-    p.is-editor-empty:first-of-type::before {
-      ${FORM_FIELD_PLACEHOLDER_STYLES}
-      content: attr(data-placeholder);
-      float: left;
-      height: 0;
-      pointer-events: none;
-    }
-  }
-`;
 
 export const HtmlNodeInlineEditor = ({
   html,
@@ -54,8 +29,8 @@ export const HtmlNodeInlineEditor = ({
   }
 
   return (
-    <StyledHtmlEditor onFocus={() => onFocus(htmlEditor)}>
+    <div data-html-node-inline-editor onFocus={() => onFocus(htmlEditor)}>
       <EditorContent editor={htmlEditor} />
-    </StyledHtmlEditor>
+    </div>
   );
 };
