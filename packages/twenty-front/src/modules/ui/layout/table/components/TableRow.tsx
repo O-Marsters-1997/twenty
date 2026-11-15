@@ -1,58 +1,73 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import {
+  accent,
+  animationDuration,
+  backgroundTransparent,
+  borderRadius,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
+import { type ComponentProps } from 'react';
 import { Link } from 'react-router-dom';
-import { MOBILE_VIEWPORT, themeCssVariables } from 'twenty-ui/theme';
+import { media } from 'twenty-ui/theme/constants.stylex';
 
-const StyledTableRow = styled.div<{
-  isSelected?: boolean;
-  isExpanded?: boolean;
-  onClick?: () => void;
-  to?: string;
-  gridAutoColumns?: string;
-  gridTemplateColumns?: string;
-  mobileGridAutoColumns?: string;
-  height?: string;
-  cursor?: string;
-  hoverBackgroundColor?: string;
-}>`
-  background-color: ${({ isSelected, isExpanded }) =>
-    isSelected
-      ? themeCssVariables.accent.quaternary
-      : isExpanded === true
-        ? themeCssVariables.background.transparent.light
-        : 'transparent'};
-  border-radius: ${themeCssVariables.border.radius.md};
-  cursor: ${({ cursor }) => cursor ?? 'default'};
-  display: grid;
-  grid-auto-columns: ${({ gridAutoColumns }) => gridAutoColumns ?? '1fr'};
-  grid-auto-flow: column;
-
-  @media (max-width: ${MOBILE_VIEWPORT}px) {
-    grid-auto-columns: ${({ mobileGridAutoColumns, gridAutoColumns }) =>
-      mobileGridAutoColumns ?? gridAutoColumns ?? '1fr'};
-  }
-
-  grid-template-columns: ${({ gridTemplateColumns }) =>
-    gridTemplateColumns ?? 'none'};
-  height: ${({ height }) => height ?? 'auto'};
-  text-decoration: none;
-  transition: background-color
-    calc(${themeCssVariables.animation.duration.normal} * 1s);
-  width: 100%;
-
-  &:hover {
-    background-color: ${({ onClick, to, hoverBackgroundColor }) =>
-      hoverBackgroundColor ??
-      (onClick || to
-        ? themeCssVariables.background.transparent.light
-        : 'transparent')};
-    cursor: ${({ onClick, to, cursor }) =>
-      cursor ?? (onClick || to ? 'pointer' : 'default')};
-  }
-
-  &[data-clickable='true'] {
-    cursor: pointer;
-  }
-`;
+const styles = stylex.create({
+  row: {
+    backgroundColor: {
+      default: 'transparent',
+      ':hover': 'transparent',
+    },
+    borderRadius: borderRadius['--t-border-radius-md'],
+    cursor: 'default',
+    display: 'grid',
+    gridAutoColumns: '1fr',
+    gridAutoFlow: 'column',
+    gridTemplateColumns: 'none',
+    height: 'auto',
+    marginBottom: {
+      default: null,
+      ':last-child:not(:has([data-table-header]))': spacing['--t-spacing-2'],
+    },
+    marginTop: {
+      default: null,
+      ':first-child:not(:has([data-table-header]))': spacing['--t-spacing-2'],
+    },
+    textDecoration: 'none',
+    transitionDuration: `calc(${animationDuration['--t-animation-duration-normal']} * 1s)`,
+    transitionProperty: 'background-color',
+    width: '100%',
+  },
+  selected: {
+    backgroundColor: accent['--t-accent-quaternary'],
+  },
+  expanded: {
+    backgroundColor: backgroundTransparent['--t-background-transparent-light'],
+  },
+  interactive: {
+    backgroundColor: {
+      default: null,
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
+    cursor: 'pointer',
+  },
+  clickable: { cursor: 'pointer' },
+  cursor: (cursor: string) => ({ cursor }),
+  hoverBackgroundColor: (hoverBackgroundColor: string) => ({
+    backgroundColor: { default: null, ':hover': hoverBackgroundColor },
+  }),
+  gridAutoColumns: (
+    gridAutoColumns: string,
+    mobileGridAutoColumns: string,
+  ) => ({
+    gridAutoColumns: {
+      default: gridAutoColumns,
+      [media.mobile]: mobileGridAutoColumns,
+    },
+  }),
+  gridTemplateColumns: (gridTemplateColumns: string) => ({
+    gridTemplateColumns,
+  }),
+  height: (height: string) => ({ height }),
+});
 
 type TableRowProps = {
   id?: string;
@@ -99,32 +114,48 @@ export const TableRow = ({
   height,
   cursor,
   hoverBackgroundColor,
-}: React.PropsWithChildren<TableRowProps>) => (
-  <StyledTableRow
-    id={id}
-    isSelected={isSelected}
-    isExpanded={isExpanded}
-    onClick={onClick}
-    onKeyDown={onKeyDown}
-    role={role}
-    tabIndex={tabIndex}
-    aria-expanded={ariaExpanded}
-    onMouseEnter={onMouseEnter}
-    onMouseLeave={onMouseLeave}
-    gridAutoColumns={gridAutoColumns}
-    gridTemplateColumns={gridTemplateColumns}
-    className={className}
-    style={style}
-    data-clickable={isClickable}
-    data-expanded={isExpanded || undefined}
-    data-table-row
-    mobileGridAutoColumns={mobileGridAutoColumns}
-    height={height}
-    cursor={cursor}
-    hoverBackgroundColor={hoverBackgroundColor}
-    to={to}
-    as={to ? Link : 'div'}
-  >
-    {children}
-  </StyledTableRow>
-);
+}: React.PropsWithChildren<TableRowProps>) => {
+  const isInteractive = Boolean(onClick || to);
+  const rowProps = stylex.props(
+    styles.row,
+    isInteractive && styles.interactive,
+    isExpanded === true && !isSelected && styles.expanded,
+    isSelected === true && styles.selected,
+    isClickable === true && styles.clickable,
+    cursor !== undefined && styles.cursor(cursor),
+    hoverBackgroundColor !== undefined &&
+      styles.hoverBackgroundColor(hoverBackgroundColor),
+    (gridAutoColumns !== undefined || mobileGridAutoColumns !== undefined) &&
+      styles.gridAutoColumns(
+        gridAutoColumns ?? '1fr',
+        mobileGridAutoColumns ?? gridAutoColumns ?? '1fr',
+      ),
+    gridTemplateColumns !== undefined &&
+      styles.gridTemplateColumns(gridTemplateColumns),
+    height !== undefined && styles.height(height),
+  );
+
+  const sharedProps = {
+    id,
+    onClick,
+    onKeyDown,
+    role,
+    tabIndex,
+    'aria-expanded': ariaExpanded,
+    onMouseEnter,
+    onMouseLeave,
+    'data-clickable': isClickable,
+    'data-expanded': isExpanded || undefined,
+    'data-table-row': true,
+    className: [rowProps.className, className].join(' '),
+    style: { ...rowProps.style, ...style },
+  };
+
+  return to ? (
+    <Link to={to} {...(sharedProps as Omit<ComponentProps<typeof Link>, 'to'>)}>
+      {children}
+    </Link>
+  ) : (
+    <div {...sharedProps}>{children}</div>
+  );
+};

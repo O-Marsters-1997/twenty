@@ -1,11 +1,25 @@
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
+import { type ComponentProps } from 'react';
 
-const StyledTableBody = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: ${themeCssVariables.spacing[2]} 0;
-`;
+const styles = stylex.create({
+  body: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '2px',
+    paddingBlock: spacing['--t-spacing-2'],
+    paddingInline: 0,
+  },
+});
 
-export { StyledTableBody as TableBody };
+export const TableBody = ({ className, ...props }: ComponentProps<'div'>) => {
+  const rootProps = stylex.props(styles.body);
+
+  return (
+    <div
+      {...props}
+      {...rootProps}
+      className={[rootProps.className, className].join(' ')}
+    />
+  );
+};

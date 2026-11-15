@@ -11,9 +11,6 @@ const meta: Meta<typeof Table> = {
   title: 'UI/Layout/Table/Table',
   component: Table,
   decorators: [ComponentDecorator],
-  argTypes: {
-    as: { table: { disable: true } },
-  },
 };
 
 export default meta;

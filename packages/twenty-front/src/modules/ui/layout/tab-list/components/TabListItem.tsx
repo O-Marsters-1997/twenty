@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { isNonEmptyString } from '@sniptt/guards';
 import { useLocation } from 'react-router-dom';
 import { TabButton } from 'twenty-ui/components/navigation';
@@ -9,12 +8,15 @@ import { NavigationLink } from '@/ui/input/components/NavigationLink';
 import { useWorkspaceSurface } from '@/ui/layout/hooks/useWorkspaceSurface';
 import { type TabListItemProps } from '@/ui/layout/tab-list/types/TabListItemProps';
 import { getTabListItemContent } from '@/ui/layout/tab-list/utils/getTabListItemContent';
+import * as stylex from '@stylexjs/stylex';
 
 const TAB_TEST_ID_PREFIX = 'tab-';
 
-const StyledTooltipAnchor = styled.div`
-  display: flex;
-`;
+const styles = stylex.create({
+  tooltipAnchor: {
+    display: 'flex',
+  },
+});
 
 export const TabListItem = ({
   tab,
@@ -42,7 +44,7 @@ export const TabListItem = ({
       positionMethod="fixed"
       delay={300}
     >
-      <StyledTooltipAnchor>
+      <div {...stylex.props(styles.tooltipAnchor)}>
         {mode === 'tab' ? (
           <Tabs.Tab
             data-testid={testId}
@@ -87,7 +89,7 @@ export const TabListItem = ({
             )}
           </NavigationLink>
         )}
-      </StyledTooltipAnchor>
+      </div>
     </Tooltip>
   );
 };

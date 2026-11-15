@@ -15,7 +15,6 @@ import { useListenClickOutside } from '@/ui/utilities/pointer-event/hooks/useLis
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useSetAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useSetAtomComponentState';
-import { styled } from '@linaria/react';
 import {
   FloatingPortal,
   type Placement,
@@ -24,14 +23,16 @@ import {
 import { useContext, useEffect } from 'react';
 import { type Keys } from 'react-hotkeys-hook';
 import { Key } from 'ts-key-enum';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledDropdownInsideContainer = styled.div`
-  display: flex;
-
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
-`;
+const styles = stylex.create({
+  dropdownInsideContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    width: '100%',
+  },
+});
 
 type DropdownInternalContainerProps = {
   dropdownId: string;
@@ -155,13 +156,14 @@ export const DropdownInternalContainer = ({
           isAboveModal={isDropdownInModal}
         >
           <OverlayContainer>
-            <StyledDropdownInsideContainer
+            <div
               id={dropdownId}
               data-select-disable
               data-click-outside-id={parentClickOutsideId}
+              {...stylex.props(styles.dropdownInsideContainer)}
             >
               {dropdownComponents}
-            </StyledDropdownInsideContainer>
+            </div>
           </OverlayContainer>
         </StyledOverlayPortalLayer>
       </FloatingPortal>

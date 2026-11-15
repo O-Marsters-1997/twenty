@@ -1,3 +1,4 @@
+import * as stylex from '@stylexjs/stylex';
 import { type Meta, type StoryObj } from '@storybook/react-vite';
 import { type ComponentProps, useState } from 'react';
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
@@ -53,6 +54,10 @@ const DialogInstanceExample = (props: DialogInstanceExampleProps) => {
     </>
   );
 };
+
+const styles = stylex.create({
+  container: { height: '480px', position: 'relative', width: '640px' },
+});
 
 const meta: Meta<typeof DialogInstanceExample> = {
   title: 'UI/Layout/Dialog/DialogInstance',
@@ -192,7 +197,7 @@ const ContainedDialogExample = (props: DialogInstanceExampleProps) => {
     <div
       ref={setContainer}
       data-testid="dialog-container"
-      style={{ position: 'relative', width: 640, height: 480 }}
+      {...stylex.props(styles.container)}
     >
       <DialogContainerContext.Provider value={{ container }}>
         <DialogInstanceExample {...props} />

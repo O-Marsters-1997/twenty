@@ -1,6 +1,12 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import {
+  background,
+  borderColor,
+  boxShadow,
+  fontColor,
+} from 'twenty-ui/theme/tokens.stylex';
 import { IconPlayerPlay } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 
 type HeroPlayButtonProps = {
   onClick?: () => void;
@@ -8,38 +14,49 @@ type HeroPlayButtonProps = {
   className?: string;
 };
 
-const StyledButton = styled.button`
-  align-items: center;
-  background: ${themeCssVariables.background.primary};
-  border: none;
-  border-radius: 50%;
-  box-shadow: ${themeCssVariables.boxShadow.strong};
-  color: ${themeCssVariables.font.color.tertiary};
-  corner-shape: round;
-  cursor: pointer;
-  display: inline-flex;
-  height: 44px;
-  justify-content: center;
-  padding: 0;
-  transition:
-    transform 120ms ease-out,
-    background-color 120ms ease-out;
-  width: 44px;
-
-  &:hover {
-    background: ${themeCssVariables.background.secondary};
-    transform: scale(1.04);
-  }
-
-  &:active {
-    transform: scale(0.98);
-  }
-
-  &:focus-visible {
-    outline: 2px solid ${themeCssVariables.border.color.blue};
-    outline-offset: 2px;
-  }
-`;
+const styles = stylex.create({
+  button: {
+    alignItems: 'center',
+    backgroundColor: {
+      default: background['--t-background-primary'],
+      ':hover': background['--t-background-secondary'],
+    },
+    borderRadius: '50%',
+    borderStyle: 'none',
+    boxShadow: boxShadow['--t-box-shadow-strong'],
+    color: fontColor['--t-font-color-tertiary'],
+    cursor: 'pointer',
+    display: 'inline-flex',
+    height: '44px',
+    justifyContent: 'center',
+    outlineColor: {
+      default: null,
+      ':focus-visible': borderColor['--t-border-color-blue'],
+    },
+    outlineOffset: {
+      default: null,
+      ':focus-visible': '2px',
+    },
+    outlineStyle: {
+      default: null,
+      ':focus-visible': 'solid',
+    },
+    outlineWidth: {
+      default: null,
+      ':focus-visible': '2px',
+    },
+    padding: 0,
+    transform: {
+      default: null,
+      ':hover': 'scale(1.04)',
+      ':active': 'scale(0.98)',
+    },
+    transitionDuration: '120ms',
+    transitionProperty: 'transform, background-color',
+    transitionTimingFunction: 'ease-out',
+    width: '44px',
+  },
+});
 
 export const HeroPlayButton = ({
   onClick,
@@ -47,15 +64,17 @@ export const HeroPlayButton = ({
   className,
 }: HeroPlayButtonProps) => {
   const theme = useTheme();
+  const buttonProps = stylex.props(styles.button);
 
   return (
-    <StyledButton
+    <button
       type="button"
       onClick={onClick}
       aria-label={ariaLabel}
-      className={className}
+      {...buttonProps}
+      className={[buttonProps.className, className].join(' ')}
     >
       <IconPlayerPlay size={theme.icon.size.md} stroke={theme.icon.stroke.md} />
-    </StyledButton>
+    </button>
   );
 };

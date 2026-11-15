@@ -1,56 +1,57 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import {
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 import { type ComponentProps, type MouseEvent } from 'react';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
 
-const StyledHeader = styled.li`
-  align-items: center;
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  border-top-left-radius: calc(
-    ${themeCssVariables.border.radius.md} - ${themeCssVariables.spacing[1]}
-  );
-  border-top-right-radius: calc(
-    ${themeCssVariables.border.radius.md} - ${themeCssVariables.spacing[1]}
-  );
-  box-sizing: content-box;
-  color: ${themeCssVariables.font.color.primary};
-  cursor: ${({ onClick }) => (onClick ? 'pointer' : 'default')};
-  display: flex;
-  flex-shrink: 0;
-  font-size: ${({ onClick }) =>
-    onClick ? themeCssVariables.font.size.sm : themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.medium};
-
-  height: ${themeCssVariables.spacing[6]};
-
-  padding: ${themeCssVariables.spacing[1]};
-
-  &:hover {
-    background: ${({ onClick }) =>
-      onClick ? themeCssVariables.background.transparent.light : 'none'};
-  }
-
-  user-select: none;
-`;
-
-const StyledChildrenWrapper = styled.span`
-  overflow: hidden;
-  padding: 0 ${themeCssVariables.spacing[1]};
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledEndComponent = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  display: inline-flex;
-  margin-left: auto;
-  margin-right: 0;
-
-  & > svg {
-    height: ${themeCssVariables.icon.size.md}px;
-    width: ${themeCssVariables.icon.size.md}px;
-  }
-`;
+const styles = stylex.create({
+  header: {
+    alignItems: 'center',
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
+    borderTopLeftRadius: `calc(${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']})`,
+    borderTopRightRadius: `calc(${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']})`,
+    boxSizing: 'content-box',
+    color: fontColor['--t-font-color-primary'],
+    cursor: 'default',
+    display: 'flex',
+    flexShrink: 0,
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    height: spacing['--t-spacing-6'],
+    padding: spacing['--t-spacing-1'],
+    userSelect: 'none',
+  },
+  headerClickable: {
+    backgroundColor: {
+      default: null,
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
+    cursor: 'pointer',
+    fontSize: fontSize['--t-font-size-sm'],
+  },
+  childrenWrapper: {
+    overflow: 'hidden',
+    paddingBlock: 0,
+    paddingInline: spacing['--t-spacing-1'],
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  endComponent: {
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'inline-flex',
+    marginLeft: 'auto',
+    marginRight: 0,
+  },
+});
 
 type DropdownMenuHeaderProps = ComponentProps<'li'> & {
   onClick?: (event: MouseEvent<HTMLLIElement>) => void;
@@ -68,13 +69,23 @@ export const DropdownMenuHeader = ({
   className,
   EndComponent,
 }: DropdownMenuHeaderProps) => {
+  const headerProps = stylex.props(
+    styles.header,
+    isDefined(onClick) && styles.headerClickable,
+  );
+
   return (
-    <StyledHeader data-testid={testId} className={className} onClick={onClick}>
+    <li
+      data-testid={testId}
+      onClick={onClick}
+      {...headerProps}
+      className={[headerProps.className, className].join(' ')}
+    >
       {isDefined(StartComponent) && StartComponent}
-      <StyledChildrenWrapper>{children}</StyledChildrenWrapper>
+      <span {...stylex.props(styles.childrenWrapper)}>{children}</span>
       {isDefined(EndComponent) && (
-        <StyledEndComponent>{EndComponent}</StyledEndComponent>
+        <div {...stylex.props(styles.endComponent)}>{EndComponent}</div>
       )}
-    </StyledHeader>
+    </li>
   );
 };

@@ -1,6 +1,5 @@
 import { getAvatarButtonRender } from '@/ui/field/display/utils/getAvatarButtonRender';
 import { StyledHeaderIdentifierLabel } from '@/ui/layout/page/components/StyledHeaderIdentifierLabel';
-import { styled } from '@linaria/react';
 import { type MouseEventHandler, type ReactNode } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
@@ -9,46 +8,54 @@ import {
   Avatar,
   type AvatarProps,
 } from 'twenty-ui/primitives/data-display';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  backgroundTransparent,
+  borderRadius,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const HEADER_IDENTIFIER_TILE_SIZE = AVATAR_PROPERTIES_BY_SIZE.lg.width;
 
-const StyledContainer = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  min-width: 0;
-`;
-
-const StyledIcon = styled.div<{ iconColor?: string }>`
-  align-items: center;
-  background: ${themeCssVariables.background.transparent.light};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  box-sizing: border-box;
-  color: ${({ iconColor }) => iconColor ?? ''};
-  display: flex;
-  flex-shrink: 0;
-  height: ${HEADER_IDENTIFIER_TILE_SIZE};
-  justify-content: center;
-  width: ${HEADER_IDENTIFIER_TILE_SIZE};
-`;
-
-const StyledTextContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex: 1;
-  gap: ${themeCssVariables.spacing[2]};
-  min-width: 0;
-`;
-
-const StyledTitle = styled.h3<{ fontSize: 'md' | 'lg' }>`
-  color: ${themeCssVariables.font.color.primary};
-  font-size: ${({ fontSize }) => themeCssVariables.font.size[fontSize]};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-  margin: 0;
-  min-width: 0;
-  overflow: hidden;
-`;
+const styles = stylex.create({
+  icon: {
+    alignItems: 'center',
+    backgroundColor: backgroundTransparent['--t-background-transparent-light'],
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexShrink: 0,
+    height: HEADER_IDENTIFIER_TILE_SIZE,
+    justifyContent: 'center',
+    width: HEADER_IDENTIFIER_TILE_SIZE,
+  },
+  iconColor: (color: string) => ({ color }),
+  title: {
+    color: fontColor['--t-font-color-primary'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    margin: 0,
+    minWidth: 0,
+    overflow: 'hidden',
+  },
+  titleMd: { fontSize: fontSize['--t-font-size-md'] },
+  titleLg: { fontSize: fontSize['--t-font-size-lg'] },
+  container: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    minWidth: '0',
+  },
+  textContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flex: '1',
+    gap: spacing['--t-spacing-2'],
+    minWidth: '0',
+  },
+});
 
 type HeaderIdentifierProps = {
   avatar?: Pick<
@@ -89,25 +96,37 @@ export const HeaderIdentifier = ({
   const shouldRenderInTile = !isDefined(avatar) || fontSize === 'md';
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       {isDefined(identifierIcon) &&
         (shouldRenderInTile ? (
-          <StyledIcon iconColor={iconColor}>{identifierIcon}</StyledIcon>
+          <div
+            {...stylex.props(
+              styles.icon,
+              isDefined(iconColor) && styles.iconColor(iconColor),
+            )}
+          >
+            {identifierIcon}
+          </div>
         ) : (
           identifierIcon
         ))}
-      <StyledTextContainer>
-        <StyledTitle fontSize={fontSize}>
+      <div {...stylex.props(styles.textContainer)}>
+        <h3
+          {...stylex.props(
+            styles.title,
+            fontSize === 'lg' ? styles.titleLg : styles.titleMd,
+          )}
+        >
           {typeof title === 'string' ? (
             <OverflowingTextWithTooltip text={title} />
           ) : (
             title
           )}
-        </StyledTitle>
+        </h3>
         {isDefined(label) && (
           <StyledHeaderIdentifierLabel>{label}</StyledHeaderIdentifierLabel>
         )}
-      </StyledTextContainer>
-    </StyledContainer>
+      </div>
+    </div>
   );
 };
