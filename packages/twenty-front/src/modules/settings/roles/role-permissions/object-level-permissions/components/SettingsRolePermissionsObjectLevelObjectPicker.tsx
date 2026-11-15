@@ -5,48 +5,41 @@ import { SettingsCard } from '@/settings/components/SettingsCard';
 import { useFilterObjectMetadataItemsWithPermissionOverride } from '@/settings/roles/role-permissions/object-level-permissions/hooks/useFilterObjectWithPermissionOverride';
 import { useObjectMetadataItemsThatCanHavePermission } from '@/settings/roles/role-permissions/object-level-permissions/hooks/useObjectMetadataItemsThatCanHavePermission';
 import { SettingsTextInput } from '@/ui/input/components/SettingsTextInput';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { SettingsPath } from 'twenty-shared/types';
 import { Section } from 'twenty-ui/components/layout';
 import { IconSearch } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import { useNavigateSettings } from '~/hooks/useNavigateSettings';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledTypeSelectContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: inherit;
-  width: 100%;
-`;
-
-const StyledContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: ${themeCssVariables.spacing[2]};
-  justify-content: flex-start;
-  width: 100%;
-`;
-
-const StyledCardContainer = styled.div`
-  cursor: pointer;
-  display: flex;
-  position: relative;
-  width: calc(50% - ${themeCssVariables.spacing[1]});
-`;
-
-const StyledSearchContainer = styled.div`
-  padding-bottom: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledSearchInputContainer = styled.div`
-  > * input {
-    background: ${themeCssVariables.background.transparent.lighter};
-    border: 1px solid ${themeCssVariables.border.color.medium};
-  }
-`;
+const styles = stylex.create({
+  typeSelectContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 'inherit',
+    width: '100%',
+  },
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: spacing['--t-spacing-2'],
+    justifyContent: 'flex-start',
+    width: '100%',
+  },
+  cardContainer: {
+    cursor: 'pointer',
+    display: 'flex',
+    position: 'relative',
+    width: `calc(50% - ${spacing['--t-spacing-1']})`,
+  },
+  searchContainer: {
+    paddingBottom: spacing['--t-spacing-2'],
+  },
+});
 
 export const SettingsRolePermissionsObjectLevelObjectPicker = ({
   roleId,
@@ -102,21 +95,19 @@ export const SettingsRolePermissionsObjectLevelObjectPicker = ({
   );
 
   return (
-    <StyledTypeSelectContainer>
+    <div {...stylex.props(styles.typeSelectContainer)}>
       <Section.Root>
-        <StyledSearchContainer>
-          <StyledSearchInputContainer>
-            <SettingsTextInput
-              instanceId="role-permissions-object-search"
-              value={searchFilter}
-              onChange={handleSearchChange}
-              placeholder={t`Search an object`}
-              fullWidth
-              LeftIcon={IconSearch}
-              sizeVariant="lg"
-            />
-          </StyledSearchInputContainer>
-        </StyledSearchContainer>
+        <div {...stylex.props(styles.searchContainer)}>
+          <SettingsTextInput
+            instanceId="role-permissions-object-search"
+            value={searchFilter}
+            onChange={handleSearchChange}
+            placeholder={t`Search an object`}
+            fullWidth
+            LeftIcon={IconSearch}
+            sizeVariant="lg"
+          />
+        </div>
       </Section.Root>
 
       {standardObjects.length > 0 && (
@@ -125,9 +116,12 @@ export const SettingsRolePermissionsObjectLevelObjectPicker = ({
             title={t`Standard`}
             description={t`All the standard objects`}
           />
-          <StyledContainer>
+          <div {...stylex.props(styles.container)}>
             {standardObjects.map((objectMetadataItem) => (
-              <StyledCardContainer key={objectMetadataItem.id}>
+              <div
+                key={objectMetadataItem.id}
+                {...stylex.props(styles.cardContainer)}
+              >
                 <SettingsCard
                   Icon={
                     <ObjectMetadataIcon
@@ -141,9 +135,9 @@ export const SettingsRolePermissionsObjectLevelObjectPicker = ({
                     handleSelectObjectMetadata(objectMetadataItem.id)
                   }
                 />
-              </StyledCardContainer>
+              </div>
             ))}
-          </StyledContainer>
+          </div>
         </Section.Root>
       )}
       {customObjects.length > 0 && (
@@ -152,9 +146,12 @@ export const SettingsRolePermissionsObjectLevelObjectPicker = ({
             title={t`Custom`}
             description={t`All your custom objects`}
           />
-          <StyledContainer>
+          <div {...stylex.props(styles.container)}>
             {customObjects.map((objectMetadataItem) => (
-              <StyledCardContainer key={objectMetadataItem.id}>
+              <div
+                key={objectMetadataItem.id}
+                {...stylex.props(styles.cardContainer)}
+              >
                 <SettingsCard
                   Icon={
                     <ObjectMetadataIcon
@@ -168,11 +165,11 @@ export const SettingsRolePermissionsObjectLevelObjectPicker = ({
                     handleSelectObjectMetadata(objectMetadataItem.id)
                   }
                 />
-              </StyledCardContainer>
+              </div>
             ))}
-          </StyledContainer>
+          </div>
         </Section.Root>
       )}
-    </StyledTypeSelectContainer>
+    </div>
   );
 };

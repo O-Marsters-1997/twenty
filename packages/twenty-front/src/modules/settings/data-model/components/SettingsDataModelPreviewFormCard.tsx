@@ -1,11 +1,11 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { type ReactNode } from 'react';
 
 import { StyledFormCardTitle } from '@/settings/data-model/fields/components/StyledFormCardTitle';
 import { Trans } from '@lingui/react/macro';
 import { Card } from 'twenty-ui/primitives/surfaces';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { backgroundTransparent } from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsDataModelPreviewFormCardProps = {
   className?: string;
@@ -15,18 +15,6 @@ type SettingsDataModelPreviewFormCardProps = {
   isPreviewTitleVisible?: boolean;
 };
 
-const StyledPreviewContainerWrapper = styled.div`
-  > div {
-    background-color: ${themeCssVariables.background.transparent.lighter};
-  }
-`;
-
-const StyledFormContainerWrapper = styled.div`
-  > div {
-    padding: 0;
-  }
-`;
-
 export const SettingsDataModelPreviewFormCard = ({
   className,
   preview,
@@ -34,20 +22,30 @@ export const SettingsDataModelPreviewFormCard = ({
   isPreviewTitleVisible = true,
 }: SettingsDataModelPreviewFormCardProps) => (
   <Card.Root className={className} fullWidth rounded>
-    <StyledPreviewContainerWrapper>
-      <Card.Content divider={isDefined(form)}>
-        {isPreviewTitleVisible && (
-          <StyledFormCardTitle>
-            <Trans>Preview</Trans>
-          </StyledFormCardTitle>
-        )}
-        {preview}
-      </Card.Content>
-    </StyledPreviewContainerWrapper>
+    <Card.Content
+      divider={isDefined(form)}
+      {...stylex.props(styles.previewContent)}
+    >
+      {isPreviewTitleVisible && (
+        <StyledFormCardTitle>
+          <Trans>Preview</Trans>
+        </StyledFormCardTitle>
+      )}
+      {preview}
+    </Card.Content>
     {isDefined(form) && (
-      <StyledFormContainerWrapper>
-        <Card.Content>{form}</Card.Content>
-      </StyledFormContainerWrapper>
+      <Card.Content {...stylex.props(styles.formContent)}>{form}</Card.Content>
     )}
   </Card.Root>
 );
+
+const styles = stylex.create({
+  previewContent: {
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
+  },
+  formContent: {
+    paddingBlock: 0,
+    paddingInline: 0,
+  },
+});

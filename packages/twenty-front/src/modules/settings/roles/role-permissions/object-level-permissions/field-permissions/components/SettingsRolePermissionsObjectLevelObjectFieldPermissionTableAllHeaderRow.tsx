@@ -8,28 +8,40 @@ import { useRestrictUpdateOnAllFieldsOfObject } from '@/settings/roles/role-perm
 import { OverridableCheckbox } from '@/settings/roles/role-permissions/object-level-permissions/object-form/components/OverridableCheckbox';
 import { settingsDraftRoleFamilyState } from '@/settings/roles/states/settingsDraftRoleFamilyState';
 import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
-import { Text } from 'twenty-ui/primitives/typography';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  backgroundTransparent,
+  borderColor,
+  fontColor,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledSectionHeader = styled.div`
-  align-items: center;
-  background-color: ${themeCssVariables.background.transparent.lighter};
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  display: grid;
-  grid-template-columns: ${FIELD_LEVEL_PERMISSION_TABLE_GRID_TEMPLATE_COLUMNS};
-
-  height: ${themeCssVariables.spacing[6]};
-
-  padding-left: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledCheckboxContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  padding-right: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  sectionHeader: (gridTemplateColumns: string) => ({
+    alignItems: 'center',
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
+    display: 'grid',
+    gridTemplateColumns,
+    height: spacing['--t-spacing-6'],
+    paddingLeft: spacing['--t-spacing-2'],
+  }),
+  displayLabel: {
+    color: fontColor['--t-font-color-light'],
+    fontSize: '11px',
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+  },
+  checkboxContainer: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    paddingRight: spacing['--t-spacing-1'],
+  },
+});
 
 export const SettingsRolePermissionsObjectLevelObjectFieldPermissionTableAllHeaderRow =
   ({
@@ -101,39 +113,39 @@ export const SettingsRolePermissionsObjectLevelObjectFieldPermissionTableAllHead
 
     return (
       <>
-        <StyledSectionHeader>
-          <StyledDisplayLabel>{t`All`}</StyledDisplayLabel>
+        <div
+          {...stylex.props(
+            styles.sectionHeader(
+              FIELD_LEVEL_PERMISSION_TABLE_GRID_TEMPLATE_COLUMNS,
+            ),
+          )}
+        >
+          <div {...stylex.props(styles.displayLabel)}>{t`All`}</div>
           <div></div>
           <>
             {shouldShowEmptyTableHeader && <div />}
             {shouldShowSeeTableHeader && (
-              <StyledCheckboxContainer>
+              <div {...stylex.props(styles.checkboxContainer)}>
                 <OverridableCheckbox
                   disabled={false}
                   checked={true}
                   onChange={handleReadAllChange}
                   type={hasAnyRestrictionOnRead ? 'override' : 'default'}
                 />
-              </StyledCheckboxContainer>
+              </div>
             )}
             {shouldShowUpdateTableHeader && (
-              <StyledCheckboxContainer>
+              <div {...stylex.props(styles.checkboxContainer)}>
                 <OverridableCheckbox
                   disabled={false}
                   checked={true}
                   onChange={handleUpdateAllChange}
                   type={hasAnyRestrictionOnUpdate ? 'override' : 'default'}
                 />
-              </StyledCheckboxContainer>
+              </div>
             )}
           </>
-        </StyledSectionHeader>
+        </div>
       </>
     );
   };
-
-const StyledDisplayLabel = styled(Text)`
-  color: var(--t-font-color-light);
-  font-size: 11px;
-  font-weight: var(--t-font-weight-semi-bold);
-`;

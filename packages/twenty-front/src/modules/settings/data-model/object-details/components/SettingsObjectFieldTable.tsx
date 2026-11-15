@@ -20,7 +20,6 @@ import { isAdvancedModeEnabledState } from '@/ui/navigation/navigation-drawer/st
 import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useSetAtomFamilyState } from '@/ui/utilities/state/jotai/hooks/useSetAtomFamilyState';
-import { styled } from '@linaria/react';
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react/macro';
 import { useEffect, useMemo, useState } from 'react';
@@ -29,14 +28,17 @@ import { SearchInput } from 'twenty-ui/components/input';
 import { Dropdown } from 'twenty-ui/components/navigation';
 import { SettingsRow } from 'twenty-ui/components/settings';
 import { IconArchive, IconCircleDashed, IconSettings } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { useMapFieldMetadataItemToSettingsObjectDetailTableItem } from '@/settings/data-model/object-details/hooks/useMapFieldMetadataItemToSettingsObjectDetailTableItem';
 import { type SettingsObjectDetailTableItem } from '@/settings/data-model/types/SettingsObjectDetailTableItem';
 import { normalizeSearchText } from 'twenty-ui/utilities';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledSearchContainer = styled.div`
-  padding-bottom: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  searchContainer: {
+    paddingBottom: spacing['--t-spacing-2'],
+  },
+});
 
 const SETTINGS_OBJECT_FIELD_TABLE_METADATA: TableMetadata<SettingsObjectDetailTableItem> =
   {
@@ -169,7 +171,7 @@ export const SettingsObjectFieldTable = ({
 
   return (
     <>
-      <StyledSearchContainer>
+      <div {...stylex.props(styles.searchContainer)}>
         <SearchInput
           placeholder={t`Search a field...`}
           value={searchTerm}
@@ -216,7 +218,7 @@ export const SettingsObjectFieldTable = ({
             </DropdownRoot>
           )}
         />
-      </StyledSearchContainer>
+      </div>
       <Table>
         <TableRow
           gridTemplateColumns={OBJECT_FIELD_TABLE_ROW_GRID_TEMPLATE_COLUMNS}

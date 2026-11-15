@@ -1,12 +1,30 @@
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { type ReactNode } from 'react';
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledTitle = styled.h3`
-  color: ${themeCssVariables.font.color.extraLight};
-  font-size: ${themeCssVariables.font.size.sm};
-  font-weight: ${themeCssVariables.font.weight.medium};
-  margin: 0;
-  margin-bottom: ${themeCssVariables.spacing[4]};
-`;
+type SettingsDataModelCardTitleProps = {
+  children: ReactNode;
+};
 
-export { StyledTitle as SettingsDataModelCardTitle };
+export const SettingsDataModelCardTitle = ({
+  children,
+}: SettingsDataModelCardTitleProps) => (
+  <h3 {...stylex.props(styles.title)}>{children}</h3>
+);
+
+const styles = stylex.create({
+  title: {
+    color: fontColor['--t-font-color-extra-light'],
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    marginBottom: spacing['--t-spacing-4'],
+    marginLeft: 0,
+    marginRight: 0,
+    marginTop: 0,
+  },
+});

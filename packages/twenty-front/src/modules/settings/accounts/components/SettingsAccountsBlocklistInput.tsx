@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { styled } from '@linaria/react';
 import { isNonEmptyString } from '@sniptt/guards';
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -10,17 +9,19 @@ import { SettingsTextInput } from '@/ui/input/components/SettingsTextInput';
 import { useLingui } from '@lingui/react/macro';
 import { isNonEmptyArray, isValidHostname } from 'twenty-shared/utils';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
-const StyledLinkContainer = styled.div`
-  flex: 1;
-  margin-right: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  linkContainer: {
+    flex: '1',
+    marginRight: spacing['--t-spacing-2'],
+  },
+});
 
 const parseHandles = (value: string): string[] =>
   value
@@ -120,8 +121,8 @@ export const SettingsAccountsBlocklistInput = ({
 
   return (
     <form onSubmit={submit}>
-      <StyledContainer>
-        <StyledLinkContainer>
+      <div {...stylex.props(styles.container)}>
+        <div {...stylex.props(styles.linkContainer)}>
           <Controller
             name="emailOrDomain"
             control={control}
@@ -137,9 +138,9 @@ export const SettingsAccountsBlocklistInput = ({
               />
             )}
           />
-        </StyledLinkContainer>
+        </div>
         <Button type="submit">{t`Add to blocklist`}</Button>
-      </StyledContainer>
+      </div>
     </form>
   );
 };

@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { type Node, type NodeProps } from '@xyflow/react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -17,7 +16,17 @@ import '@xyflow/react/dist/style.css';
 import { SettingsPath } from 'twenty-shared/types';
 import { getSettingsPath, isDefined } from 'twenty-shared/utils';
 import { IconChevronDown, IconChevronUp } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  background,
+  borderColor,
+  borderRadius,
+  boxShadow,
+  fontColor,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsDataModelOverviewObjectNode = Node<
   EnrichedObjectMetadataItem,
@@ -26,85 +35,96 @@ type SettingsDataModelOverviewObjectNode = Node<
 type SettingsDataModelOverviewObjectProps =
   NodeProps<SettingsDataModelOverviewObjectNode>;
 
-const StyledNode = styled.div`
-  background-color: ${themeCssVariables.background.secondary};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.md};
-  box-shadow: ${themeCssVariables.boxShadow.light};
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  padding: ${themeCssVariables.spacing[2]};
-  width: 220px;
-`;
-
-const StyledHeader = styled.div`
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-`;
-
-const StyledObjectName = styled.div`
-  border: 0;
-  border-radius: ${themeCssVariables.border.radius.sm}
-    ${themeCssVariables.border.radius.sm} 0 0;
-  display: flex;
-  font-weight: ${themeCssVariables.font.weight.medium};
-  gap: ${themeCssVariables.spacing[1]};
-  position: relative;
-  text-align: center;
-`;
-
-const StyledInnerCard = styled.div`
-  background-color: ${themeCssVariables.background.primary};
-  border: 1px solid ${themeCssVariables.border.color.light};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  flex-flow: column nowrap;
-  gap: ${themeCssVariables.spacing['0.5']};
-  padding: ${themeCssVariables.spacing[2]} 0 ${themeCssVariables.spacing[2]} 0;
-`;
-
-const StyledCardRow = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  height: 24px;
-`;
-
-const StyledCardRowOther = styled.div`
-  align-items: center;
-  cursor: pointer;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  height: 24px;
-  padding: 0 ${themeCssVariables.spacing[2]};
-
-  &:hover {
-    background-color: ${themeCssVariables.background.tertiary};
-  }
-`;
-
-const StyledCardRowText = styled.div``;
-
-const StyledObjectInstanceCount = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-`;
-
-const StyledObjectLinkContainer = styled.div`
-  > a {
-    align-items: center;
-    color: ${themeCssVariables.font.color.primary};
-    display: flex;
-    gap: ${themeCssVariables.spacing[1]};
-    text-decoration: none;
-
-    &:hover {
-      color: ${themeCssVariables.font.color.secondary};
-    }
-  }
-`;
+const styles = stylex.create({
+  node: {
+    backgroundColor: background['--t-background-secondary'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-medium'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    boxShadow: boxShadow['--t-box-shadow-light'],
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-2'],
+    width: '220px',
+  },
+  header: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  objectName: {
+    borderWidth: '0',
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: '0',
+    borderBottomLeftRadius: '0',
+    display: 'flex',
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    gap: spacing['--t-spacing-1'],
+    position: 'relative',
+    textAlign: 'center',
+  },
+  innerCard: {
+    backgroundColor: background['--t-background-primary'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-light'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    gap: spacing['--t-spacing-0_5'],
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: '0',
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: '0',
+  },
+  cardRow: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    height: '24px',
+  },
+  cardRowOther: {
+    alignItems: 'center',
+    cursor: 'pointer',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    height: '24px',
+    paddingTop: '0',
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: '0',
+    paddingLeft: spacing['--t-spacing-2'],
+    backgroundColor: {
+      default: null,
+      ':hover': background['--t-background-tertiary'],
+    },
+  },
+  objectLink: {
+    alignItems: 'center',
+    color: {
+      default: fontColor['--t-font-color-primary'],
+      ':hover': fontColor['--t-font-color-secondary'],
+    },
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    textDecoration: 'none',
+  },
+  objectInstanceCount: {
+    color: fontColor['--t-font-color-tertiary'],
+  },
+});
 
 export const SettingsDataModelOverviewObject = ({
   data: objectMetadataItem,
@@ -126,61 +146,65 @@ export const SettingsDataModelOverviewObject = ({
   ).length;
 
   return (
-    <StyledNode>
-      <StyledHeader>
-        <StyledObjectName onMouseEnter={() => {}} onMouseLeave={() => {}}>
-          <StyledObjectLinkContainer>
-            <Link
-              to={getSettingsPath(SettingsPath.Objects, {
-                objectNamePlural: objectMetadataItem.namePlural,
-              })}
-            >
-              <ObjectMetadataIcon
-                objectMetadataItem={objectMetadataItem}
-                size={theme.icon.size.md}
-              />
-              {objectMetadataItem.labelPlural}
-            </Link>
-          </StyledObjectLinkContainer>
-          <StyledObjectInstanceCount>
+    <div {...stylex.props(styles.node)}>
+      <div {...stylex.props(styles.header)}>
+        <div
+          onMouseEnter={() => {}}
+          onMouseLeave={() => {}}
+          {...stylex.props(styles.objectName)}
+        >
+          <Link
+            {...stylex.props(styles.objectLink)}
+            to={getSettingsPath(SettingsPath.Objects, {
+              objectNamePlural: objectMetadataItem.namePlural,
+            })}
+          >
+            <ObjectMetadataIcon
+              objectMetadataItem={objectMetadataItem}
+              size={theme.icon.size.md}
+            />
+            {objectMetadataItem.labelPlural}
+          </Link>
+          <div {...stylex.props(styles.objectInstanceCount)}>
             {' '}
             · {isDefined(totalCount) ? formatNumber(totalCount) : totalCount}
-          </StyledObjectInstanceCount>
-        </StyledObjectName>
+          </div>
+        </div>
         <SettingsItemTypeTag item={objectMetadataItem} />
-      </StyledHeader>
+      </div>
 
-      <StyledInnerCard>
+      <div {...stylex.props(styles.innerCard)}>
         {fields
           .filter((x) => x.type === FieldMetadataType.RELATION)
           .map((field) => (
-            <StyledCardRow key={field.id}>
+            <div key={field.id} {...stylex.props(styles.cardRow)}>
               <ObjectFieldRow field={field} />
-            </StyledCardRow>
+            </div>
           ))}
         {countNonRelation > 0 && (
           <>
-            <StyledCardRowOther
+            <div
               onClick={() => setOtherFieldsExpanded(!otherFieldsExpanded)}
+              {...stylex.props(styles.cardRowOther)}
             >
               {otherFieldsExpanded ? (
                 <IconChevronUp size={theme.icon.size.md} />
               ) : (
                 <IconChevronDown size={theme.icon.size.md} />
               )}
-              <StyledCardRowText>{countNonRelation} fields</StyledCardRowText>
-            </StyledCardRowOther>
+              <div>{countNonRelation} fields</div>
+            </div>
             {otherFieldsExpanded &&
               fields
                 .filter((x) => x.type !== FieldMetadataType.RELATION)
                 .map((field) => (
-                  <StyledCardRow key={field.id}>
+                  <div key={field.id} {...stylex.props(styles.cardRow)}>
                     <ObjectFieldRowWithoutRelation field={field} />
-                  </StyledCardRow>
+                  </div>
                 ))}
           </>
         )}
-      </StyledInnerCard>
-    </StyledNode>
+      </div>
+    </div>
   );
 };

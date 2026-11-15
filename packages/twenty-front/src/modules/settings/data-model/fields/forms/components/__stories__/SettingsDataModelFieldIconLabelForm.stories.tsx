@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { type Meta, type StoryObj } from '@storybook/react-vite';
 
 import { FormProviderDecorator } from '~/testing/decorators/FormProviderDecorator';
@@ -7,19 +6,22 @@ import { IconsProviderDecorator } from '~/testing/decorators/IconsProviderDecora
 import { SettingsDataModelFieldIconLabelForm } from '@/settings/data-model/fields/forms/components/SettingsDataModelFieldIconLabelForm';
 import { ComponentDecorator } from 'twenty-ui/testing';
 import { getTestEnrichedObjectMetadataItemsMock } from '~/testing/utils/getTestEnrichedObjectMetadataItemsMock';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledContainer = styled.div`
-  flex: 1;
-`;
+const styles = stylex.create({
+  container: {
+    flex: '1',
+  },
+});
 
 const meta: Meta<typeof SettingsDataModelFieldIconLabelForm> = {
   title: 'Modules/Settings/DataModel/SettingsDataModelFieldIconLabelForm',
   component: SettingsDataModelFieldIconLabelForm,
   decorators: [
     (Story) => (
-      <StyledContainer>
+      <div {...stylex.props(styles.container)}>
         <Story />
-      </StyledContainer>
+      </div>
     ),
     FormProviderDecorator,
     IconsProviderDecorator,

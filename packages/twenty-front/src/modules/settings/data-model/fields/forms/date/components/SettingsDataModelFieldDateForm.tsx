@@ -10,11 +10,11 @@ import { useDateSettingsFormInitialValues } from '@/settings/data-model/fields/f
 import { getDisplayFormatLabel } from '@/settings/data-model/fields/forms/date/utils/getDisplayFormatLabel';
 import { Select } from '@/ui/input/components/Select';
 import { SettingsTextInput } from '@/ui/input/components/SettingsTextInput';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { IconSlash } from 'twenty-ui/icon';
 import { Collapsible } from 'twenty-ui/primitives/layout';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const fieldDateSettings = z.discriminatedUnion('displayFormat', [
   z.object({
@@ -33,10 +33,14 @@ export const settingsDataModelFieldDateFormSchema = z.object({
   settings: fieldDateSettings.optional(),
 });
 
-const StyledTextInputContainer = styled.div`
-  padding: ${themeCssVariables.spacing[4]};
-  padding-top: 0;
-`;
+const styles = stylex.create({
+  textInputContainer: {
+    paddingTop: '0',
+    paddingRight: spacing['--t-spacing-4'],
+    paddingBottom: spacing['--t-spacing-4'],
+    paddingLeft: spacing['--t-spacing-4'],
+  },
+});
 
 export type SettingsDataModelFieldDateFormValues = z.infer<
   typeof settingsDataModelFieldDateFormSchema
@@ -118,7 +122,7 @@ export const SettingsDataModelFieldDateForm = ({
             control={control}
             defaultValue={initialCustomUnicodeDateFormat}
             render={({ field: { onChange, value } }) => (
-              <StyledTextInputContainer>
+              <div {...stylex.props(styles.textInputContainer)}>
                 <SettingsTextInput
                   instanceId="custom-date-format-input"
                   placeholder={t`Format e.g. d-MMM-y (qqq''yy)`}
@@ -127,7 +131,7 @@ export const SettingsDataModelFieldDateForm = ({
                   disabled={false}
                   fullWidth
                 />
-              </StyledTextInputContainer>
+              </div>
             )}
           />
         </Collapsible.Panel>

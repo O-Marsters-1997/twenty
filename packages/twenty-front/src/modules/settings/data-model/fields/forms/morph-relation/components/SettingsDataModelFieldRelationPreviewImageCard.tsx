@@ -1,22 +1,4 @@
-import { styled } from '@linaria/react';
-
-const StyledRelationImage = styled.img<{
-  flip?: boolean;
-  isMobile: boolean;
-}>`
-  margin: auto;
-  transform: ${({ flip, isMobile }) => {
-    let transform = '';
-    if (isMobile) {
-      transform += 'rotate(90deg) ';
-    }
-    if (flip === true) {
-      transform += 'scaleX(-1)';
-    }
-    return transform.trim();
-  }};
-  width: 54px;
-`;
+import * as stylex from '@stylexjs/stylex';
 
 export const SettingsDataModelRelationPreviewImage = ({
   isMobile,
@@ -30,6 +12,34 @@ export const SettingsDataModelRelationPreviewImage = ({
   alt: string;
 }) => {
   return (
-    <StyledRelationImage isMobile={isMobile} flip={flip} src={src} alt={alt} />
+    <img
+      {...stylex.props(
+        styles.image,
+        isMobile && !flip && styles.rotated,
+        !isMobile && flip === true && styles.flipped,
+        isMobile && flip === true && styles.rotatedFlipped,
+      )}
+      src={src}
+      alt={alt}
+    />
   );
 };
+
+const styles = stylex.create({
+  image: {
+    marginBottom: 'auto',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginTop: 'auto',
+    width: 54,
+  },
+  rotated: {
+    transform: 'rotate(90deg)',
+  },
+  flipped: {
+    transform: 'scaleX(-1)',
+  },
+  rotatedFlipped: {
+    transform: 'rotate(90deg) scaleX(-1)',
+  },
+});

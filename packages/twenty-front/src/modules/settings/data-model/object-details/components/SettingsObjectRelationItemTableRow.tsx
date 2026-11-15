@@ -7,13 +7,14 @@ import { SettingsTextLink } from '@/settings/components/SettingsTextLink';
 import { RELATION_TYPES } from '@/settings/data-model/constants/RelationTypes';
 import { TableCell } from '@/ui/layout/table/components/TableCell';
 import { TableRow } from '@/ui/layout/table/components/TableRow';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useMemo } from 'react';
 import { FieldMetadataType, SettingsPath } from 'twenty-shared/types';
 import { getSettingsPath, isDefined } from 'twenty-shared/utils';
 import { IconRelationManyToMany, useIcons } from 'twenty-ui/icon';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsObjectRelationItemTableRowProps = {
   fieldMetadataItem: FieldMetadataItem;
@@ -23,26 +24,26 @@ type SettingsObjectRelationItemTableRowProps = {
 export const OBJECT_RELATION_TABLE_ROW_GRID_TEMPLATE_COLUMNS =
   'minmax(0, 1fr) 148px 148px 36px';
 
-const StyledNameContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex: 1;
-  gap: ${themeCssVariables.spacing[1]};
-  min-width: 0;
-`;
-
-const StyledNameLabel = styled.div`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledRelationType = styled.div`
-  align-items: center;
-  display: flex;
-  font-size: ${themeCssVariables.font.size.sm};
-  gap: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  nameContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flex: '1',
+    gap: spacing['--t-spacing-1'],
+    minWidth: '0',
+  },
+  nameLabel: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  relationType: {
+    alignItems: 'center',
+    display: 'flex',
+    fontSize: fontSize['--t-font-size-sm'],
+    gap: spacing['--t-spacing-1'],
+  },
+});
 
 export const SettingsObjectRelationItemTableRow = ({
   fieldMetadataItem,
@@ -119,7 +120,7 @@ export const SettingsObjectRelationItemTableRow = ({
             stroke={theme.icon.stroke.sm}
           />
         )}
-        <StyledNameContainer>
+        <div {...stylex.props(styles.nameContainer)}>
           {isRelatedObjectLinkable ? (
             <SettingsTextLink
               to={getSettingsPath(SettingsPath.ObjectDetail, {
@@ -130,9 +131,9 @@ export const SettingsObjectRelationItemTableRow = ({
               {targetObjectLabel}
             </SettingsTextLink>
           ) : (
-            <StyledNameLabel title={targetObjectLabel}>
+            <div title={targetObjectLabel} {...stylex.props(styles.nameLabel)}>
               {targetObjectLabel}
-            </StyledNameLabel>
+            </div>
           )}
           {shouldDisplayFieldLabelAsSubtitle && (
             <SettingsNameCellSecondaryLabel title={fieldLabelSubtitle}>
@@ -144,7 +145,7 @@ export const SettingsObjectRelationItemTableRow = ({
               {t`Deactivated`}
             </SettingsNameCellSecondaryLabel>
           )}
-        </StyledNameContainer>
+        </div>
       </TableCell>
 
       <TableCell>
@@ -157,7 +158,7 @@ export const SettingsObjectRelationItemTableRow = ({
       </TableCell>
 
       <TableCell>
-        <StyledRelationType>
+        <div {...stylex.props(styles.relationType)}>
           {RelationIcon && (
             <RelationIcon
               size={theme.icon.size.sm}
@@ -165,7 +166,7 @@ export const SettingsObjectRelationItemTableRow = ({
             />
           )}
           {relationTypeLabel}
-        </StyledRelationType>
+        </div>
       </TableCell>
 
       <TableCell />

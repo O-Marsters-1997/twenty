@@ -1,4 +1,4 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { useMemo } from 'react';
 
 import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/EnrichedObjectMetadataItem';
@@ -9,32 +9,16 @@ import { SettingsDataModelObjectPreview } from '@/settings/data-model/objects/co
 import { SettingsDataModelObjectIdentifiersForm } from '@/settings/data-model/objects/forms/components/SettingsDataModelObjectIdentifiersForm';
 import { Trans } from '@lingui/react/macro';
 import { Card } from 'twenty-ui/primitives/surfaces';
-import { themeCssVariables } from 'twenty-ui/theme';
+import {
+  backgroundTransparent,
+  borderRadius,
+  fontColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsDataModelObjectSettingsFormCardProps = {
   objectMetadataItem: EnrichedObjectMetadataItem;
 };
-
-const StyledTopCardContentContainer = styled.div`
-  > div {
-    background-color: ${themeCssVariables.background.transparent.lighter};
-  }
-`;
-
-const StyledObjectSummaryCardContainer = styled.div`
-  max-width: 480px;
-
-  > div {
-    border-radius: ${themeCssVariables.border.radius.md};
-    color: ${themeCssVariables.font.color.primary};
-  }
-`;
-
-const StyledObjectSummaryCardContentContainer = styled.div`
-  > div {
-    padding: ${themeCssVariables.spacing[2]};
-  }
-`;
 
 export const SettingsDataModelObjectSettingsFormCard = ({
   objectMetadataItem,
@@ -49,32 +33,28 @@ export const SettingsDataModelObjectSettingsFormCard = ({
 
   return (
     <Card.Root fullWidth>
-      <StyledTopCardContentContainer>
-        <Card.Content divider>
-          <SettingsDataModelCardTitle>
-            <Trans>Preview</Trans>
-          </SettingsDataModelCardTitle>
-          {labelIdentifierFieldMetadataItem ? (
-            <SettingsDataModelFieldPreviewWidget
-              objectNameSingular={objectMetadataItem.nameSingular}
-              fieldMetadataItem={labelIdentifierFieldMetadataItem}
-              withFieldLabel={false}
-            />
-          ) : (
-            <StyledObjectSummaryCardContainer>
-              <Card.Root>
-                <StyledObjectSummaryCardContentContainer>
-                  <Card.Content>
-                    <SettingsDataModelObjectPreview
-                      objectMetadataItems={[objectMetadataItem]}
-                    />
-                  </Card.Content>
-                </StyledObjectSummaryCardContentContainer>
-              </Card.Root>
-            </StyledObjectSummaryCardContainer>
-          )}
-        </Card.Content>
-      </StyledTopCardContentContainer>
+      <Card.Content divider {...stylex.props(styles.topCardContent)}>
+        <SettingsDataModelCardTitle>
+          <Trans>Preview</Trans>
+        </SettingsDataModelCardTitle>
+        {labelIdentifierFieldMetadataItem ? (
+          <SettingsDataModelFieldPreviewWidget
+            objectNameSingular={objectMetadataItem.nameSingular}
+            fieldMetadataItem={labelIdentifierFieldMetadataItem}
+            withFieldLabel={false}
+          />
+        ) : (
+          <div {...stylex.props(styles.objectSummaryCardContainer)}>
+            <Card.Root {...stylex.props(styles.objectSummaryCard)}>
+              <Card.Content {...stylex.props(styles.objectSummaryCardContent)}>
+                <SettingsDataModelObjectPreview
+                  objectMetadataItems={[objectMetadataItem]}
+                />
+              </Card.Content>
+            </Card.Root>
+          </div>
+        )}
+      </Card.Content>
       <Card.Content>
         <SettingsDataModelObjectIdentifiersForm
           objectMetadataItem={objectMetadataItem}
@@ -83,3 +63,20 @@ export const SettingsDataModelObjectSettingsFormCard = ({
     </Card.Root>
   );
 };
+
+const styles = stylex.create({
+  topCardContent: {
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
+  },
+  objectSummaryCardContainer: {
+    maxWidth: 480,
+  },
+  objectSummaryCard: {
+    borderRadius: borderRadius['--t-border-radius-md'],
+    color: fontColor['--t-font-color-primary'],
+  },
+  objectSummaryCardContent: {
+    padding: spacing['--t-spacing-2'],
+  },
+});

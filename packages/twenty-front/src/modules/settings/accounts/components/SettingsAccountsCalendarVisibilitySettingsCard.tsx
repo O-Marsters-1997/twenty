@@ -1,9 +1,9 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 
 import { SettingsAccountsVisibilityIcon } from '@/settings/accounts/components/SettingsAccountsVisibilityIcon';
 import { SettingsRadioSettingsCard } from '@/settings/components/SettingsRadioSettingsCard';
 import { msg } from '@lingui/core/macro';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 import { CalendarChannelVisibility } from '~/generated-metadata/graphql';
 
 type SettingsAccountsEventVisibilitySettingsCardProps = {
@@ -11,11 +11,11 @@ type SettingsAccountsEventVisibilitySettingsCardProps = {
   value?: CalendarChannelVisibility;
 };
 
-const StyledCardMediaContainer = styled.div`
-  > * {
-    height: ${themeCssVariables.spacing[8]};
-  }
-`;
+const styles = stylex.create({
+  cardMedia: {
+    height: spacing['--t-spacing-8'],
+  },
+});
 
 const eventSettingsVisibilityOptions = [
   {
@@ -23,9 +23,11 @@ const eventSettingsVisibilityOptions = [
     description: msg`The whole event details will be shared with your team.`,
     value: CalendarChannelVisibility.SHARE_EVERYTHING,
     cardMedia: (
-      <StyledCardMediaContainer>
-        <SettingsAccountsVisibilityIcon subject="active" body="active" />
-      </StyledCardMediaContainer>
+      <SettingsAccountsVisibilityIcon
+        subject="active"
+        body="active"
+        xstyle={styles.cardMedia}
+      />
     ),
   },
   {
@@ -33,9 +35,11 @@ const eventSettingsVisibilityOptions = [
     description: msg`Only date & participants will be shared with your team.`,
     value: CalendarChannelVisibility.METADATA,
     cardMedia: (
-      <StyledCardMediaContainer>
-        <SettingsAccountsVisibilityIcon subject="active" body="inactive" />
-      </StyledCardMediaContainer>
+      <SettingsAccountsVisibilityIcon
+        subject="active"
+        body="inactive"
+        xstyle={styles.cardMedia}
+      />
     ),
   },
 ];

@@ -2,39 +2,42 @@ import {
   SETTINGS_ROLE_OBJECT_PERMISSION_ICON_CONFIG,
   type SettingsRoleObjectPermissionKey,
 } from '@/settings/roles/role-permissions/objects-permissions/constants/SettingsRoleObjectPermissionIconConfig';
-import { styled } from '@linaria/react';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { useTheme } from 'twenty-ui/theme';
+import { borderRadius, color, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type PermissionIconProps = {
   permission: SettingsRoleObjectPermissionKey;
   state: 'granted' | 'revoked';
 };
 
-const StyledIconWrapper = styled.div<{ isRevoked?: boolean }>`
-  align-items: center;
-  background: ${({ isRevoked }) =>
-    isRevoked
-      ? themeCssVariables.color.orange3
-      : themeCssVariables.color.blue3};
-  border: 1px solid
-    ${({ isRevoked }) =>
-      isRevoked
-        ? themeCssVariables.color.orange7
-        : themeCssVariables.color.blue7};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  display: flex;
-  height: ${themeCssVariables.spacing[4]};
-  justify-content: center;
-  width: ${themeCssVariables.spacing[4]};
-`;
-
-const StyledIcon = styled.div<{ isRevoked?: boolean }>`
-  align-items: center;
-  color: ${({ isRevoked }) =>
-    isRevoked ? themeCssVariables.color.orange : themeCssVariables.color.blue};
-  display: flex;
-  justify-content: center;
-`;
+const styles = stylex.create({
+  iconWrapper: {
+    alignItems: 'center',
+    backgroundColor: color['--t-color-blue3'],
+    borderColor: color['--t-color-blue7'],
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    display: 'flex',
+    height: spacing['--t-spacing-4'],
+    justifyContent: 'center',
+    width: spacing['--t-spacing-4'],
+  },
+  iconWrapperRevoked: {
+    backgroundColor: color['--t-color-orange3'],
+    borderColor: color['--t-color-orange7'],
+  },
+  icon: {
+    alignItems: 'center',
+    color: color['--t-color-blue'],
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  iconRevoked: {
+    color: color['--t-color-orange'],
+  },
+});
 
 export const PermissionIcon = ({ permission, state }: PermissionIconProps) => {
   const { Icon, IconForbidden } =
@@ -44,11 +47,16 @@ export const PermissionIcon = ({ permission, state }: PermissionIconProps) => {
   const isRevoked = state === 'revoked';
 
   return (
-    <StyledIconWrapper isRevoked={isRevoked}>
-      <StyledIcon isRevoked={isRevoked}>
+    <div
+      {...stylex.props(
+        styles.iconWrapper,
+        isRevoked && styles.iconWrapperRevoked,
+      )}
+    >
+      <div {...stylex.props(styles.icon, isRevoked && styles.iconRevoked)}>
         {isRevoked && <IconForbidden size={theme.icon.size.sm} />}
         {!isRevoked && <Icon size={theme.icon.size.sm} />}
-      </StyledIcon>
-    </StyledIconWrapper>
+      </div>
+    </div>
   );
 };

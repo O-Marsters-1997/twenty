@@ -1,37 +1,39 @@
 import { AnimatedRotate } from '@/settings/roles/role-permissions/object-level-permissions/object-form/components/internal/AnimatedRotate/AnimatedRotate';
-import { styled } from '@linaria/react';
 import { IconReload, IconX } from 'twenty-ui/icon';
 import { Checkbox } from 'twenty-ui/primitives/input';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { iconSize } from 'twenty-ui/theme/tokens.stylex';
 
 export type OverridableCheckboxType = 'default' | 'override' | 'no_cta';
 
-const StyledOverridableCheckboxContainer = styled.div`
-  align-items: center;
-  display: inline-flex;
-  justify-content: flex-start;
-  width: calc(${themeCssVariables.icon.size.xl} * 2 * 1px);
-`;
-
-const StyledOverridableCheckboxContainerItem = styled.div`
-  align-items: center;
-  display: flex;
-  height: calc(${themeCssVariables.icon.size.xl} * 1px);
-  justify-content: center;
-  width: calc(${themeCssVariables.icon.size.xl} * 1px);
-`;
-
-const StyledIconWrapper = styled.div<{
-  isDisabled?: boolean;
-}>`
-  align-items: center;
-  cursor: ${({ isDisabled }) => (isDisabled ? 'not-allowed' : 'pointer')};
-  display: flex;
-  height: 100%;
-  justify-content: center;
-  opacity: ${({ isDisabled }) => (isDisabled ? 0.5 : 1)};
-  width: 100%;
-`;
+const styles = stylex.create({
+  overridableCheckboxContainer: {
+    alignItems: 'center',
+    display: 'inline-flex',
+    justifyContent: 'flex-start',
+    width: `calc(${iconSize['--t-icon-size-xl']} * 2 * 1px)`,
+  },
+  overridableCheckboxContainerItem: {
+    alignItems: 'center',
+    display: 'flex',
+    height: `calc(${iconSize['--t-icon-size-xl']} * 1px)`,
+    justifyContent: 'center',
+    width: `calc(${iconSize['--t-icon-size-xl']} * 1px)`,
+  },
+  iconWrapper: {
+    alignItems: 'center',
+    cursor: 'pointer',
+    display: 'flex',
+    height: '100%',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  iconWrapperDisabled: {
+    cursor: 'not-allowed',
+    opacity: 0.5,
+  },
+});
 
 export type OverridableCheckboxProps = {
   type?: OverridableCheckboxType;
@@ -49,16 +51,19 @@ export const OverridableCheckbox = ({
   const theme = useTheme();
 
   return (
-    <StyledOverridableCheckboxContainer>
+    <div {...stylex.props(styles.overridableCheckboxContainer)}>
       {type === 'default' && (
         <>
-          <StyledOverridableCheckboxContainerItem>
+          <div {...stylex.props(styles.overridableCheckboxContainerItem)}>
             <Checkbox checked={true} disabled={true} />
-          </StyledOverridableCheckboxContainerItem>
-          <StyledOverridableCheckboxContainerItem>
-            <StyledIconWrapper
+          </div>
+          <div {...stylex.props(styles.overridableCheckboxContainerItem)}>
+            <div
+              {...stylex.props(
+                styles.iconWrapper,
+                disabled && styles.iconWrapperDisabled,
+              )}
               onClick={disabled ? undefined : onChange}
-              isDisabled={disabled}
             >
               {!disabled && (
                 <AnimatedRotate>
@@ -68,19 +73,22 @@ export const OverridableCheckbox = ({
                   />
                 </AnimatedRotate>
               )}
-            </StyledIconWrapper>
-          </StyledOverridableCheckboxContainerItem>
+            </div>
+          </div>
         </>
       )}
       {type === 'override' && (
         <>
-          <StyledOverridableCheckboxContainerItem>
+          <div {...stylex.props(styles.overridableCheckboxContainerItem)}>
             <Checkbox checked={false} disabled={true} />
-          </StyledOverridableCheckboxContainerItem>
-          <StyledOverridableCheckboxContainerItem>
-            <StyledIconWrapper
+          </div>
+          <div {...stylex.props(styles.overridableCheckboxContainerItem)}>
+            <div
+              {...stylex.props(
+                styles.iconWrapper,
+                disabled && styles.iconWrapperDisabled,
+              )}
               onClick={disabled ? undefined : onChange}
-              isDisabled={disabled}
             >
               <AnimatedRotate animateOnHover={!disabled}>
                 <IconReload
@@ -88,12 +96,12 @@ export const OverridableCheckbox = ({
                   color={theme.color.orange8}
                 />
               </AnimatedRotate>
-            </StyledIconWrapper>
-          </StyledOverridableCheckboxContainerItem>
+            </div>
+          </div>
         </>
       )}
       {type === 'no_cta' && (
-        <StyledOverridableCheckboxContainerItem>
+        <div {...stylex.props(styles.overridableCheckboxContainerItem)}>
           <AnimatedRotate>
             <Checkbox
               checked={checked}
@@ -101,8 +109,8 @@ export const OverridableCheckbox = ({
               onCheckedChange={() => onChange()}
             />
           </AnimatedRotate>
-        </StyledOverridableCheckboxContainerItem>
+        </div>
       )}
-    </StyledOverridableCheckboxContainer>
+    </div>
   );
 };

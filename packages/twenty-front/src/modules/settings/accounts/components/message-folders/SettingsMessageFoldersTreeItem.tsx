@@ -5,7 +5,6 @@ import { type MessageFolderTreeNode } from '@/settings/accounts/components/messa
 import { countNestedFolders } from '@/settings/accounts/components/message-folders/utils/countNestedFolders';
 import { formatFolderName } from '@/settings/accounts/components/message-folders/utils/formatFolderName';
 import { isFolderTreePartiallySelected } from '@/settings/accounts/components/message-folders/utils/isFolderTreePartiallySelected';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useState } from 'react';
 import { MessageFolderPendingSyncAction } from 'twenty-shared/types';
@@ -13,7 +12,15 @@ import { Status } from 'twenty-ui/primitives/data-display';
 import { Checkbox } from 'twenty-ui/primitives/input';
 import { IconChevronDown, IconChevronUp } from 'twenty-ui/icon';
 
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  animationDuration,
+  backgroundTransparent,
+  borderRadius,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsMessageFoldersTreeItemProps = {
   depth?: number;
@@ -25,105 +32,108 @@ type SettingsMessageFoldersTreeItemProps = {
 
 const BREADCRUMB_WIDTH = 24;
 
-const StyledTreeItem = styled.li`
-  position: relative;
-`;
-
-const StyledNestedList = styled.ul`
-  list-style: none;
-  margin: 0;
-  padding: 0;
-`;
-
-const StyledCollapsibleWrapper = styled.div<{ isExpanded: boolean }>`
-  display: grid;
-  grid-template-rows: ${({ isExpanded }) => (isExpanded ? '1fr' : '0fr')};
-  transition: grid-template-rows
-    calc(${themeCssVariables.animation.duration.fast} * 1s) ease-out;
-`;
-
-const StyledCollapsibleContent = styled.div`
-  overflow: hidden;
-`;
-
-const StyledTreeItemContent = styled.div<{ depth: number }>`
-  align-items: center;
-  border-radius: ${themeCssVariables.border.radius.sm};
-  cursor: pointer;
-  display: flex;
-  height: 28px;
-  padding-left: ${({ depth }) => depth * BREADCRUMB_WIDTH}px;
-  transition: background-color
-    calc(${themeCssVariables.animation.duration.instant} * 1s);
-  user-select: none;
-
-  &:hover {
-    background-color: ${themeCssVariables.background.transparent.lighter};
-  }
-`;
-
-const StyledFolderContent = styled.div`
-  align-items: center;
-  display: flex;
-  flex: 1;
-  gap: ${themeCssVariables.spacing[2]};
-  min-width: 0;
-  padding-left: ${themeCssVariables.spacing[1]};
-  padding-right: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledFolderInfo = styled.div`
-  align-items: center;
-  display: flex;
-  flex: 1;
-  gap: ${themeCssVariables.spacing[2]};
-  min-width: 0;
-`;
-
-const StyledFolderName = styled.span`
-  color: ${themeCssVariables.font.color.primary};
-  font-size: ${themeCssVariables.font.size.md};
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledRightSection = styled.div`
-  align-items: center;
-  display: flex;
-  flex-shrink: 0;
-  gap: ${themeCssVariables.spacing[1]};
-  margin-left: auto;
-`;
-
-const StyledChildCount = styled.span`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.sm};
-  min-width: ${themeCssVariables.spacing[3]};
-  text-align: right;
-`;
-
-const StyledExpandButton = styled.button`
-  align-items: center;
-  background: none;
-  border: none;
-  color: ${themeCssVariables.font.color.tertiary};
-  cursor: pointer;
-  display: flex;
-  height: ${themeCssVariables.spacing[4]};
-  justify-content: center;
-  padding: 0;
-  width: ${themeCssVariables.spacing[4]};
-
-  &:hover {
-    color: ${themeCssVariables.font.color.primary};
-  }
-`;
-
-const StyledCheckboxWrapper = styled.div`
-  align-items: center;
-  display: flex;
-`;
+const styles = stylex.create({
+  collapsibleWrapper: {
+    display: 'grid',
+    gridTemplateRows: '0fr',
+    transitionDuration: `calc(${animationDuration['--t-animation-duration-fast']} * 1s)`,
+    transitionProperty: 'grid-template-rows',
+    transitionTimingFunction: 'ease-out',
+  },
+  collapsibleWrapperExpanded: {
+    gridTemplateRows: '1fr',
+  },
+  treeItemContent: (depth: number) => ({
+    alignItems: 'center',
+    backgroundColor: {
+      default: null,
+      ':hover': backgroundTransparent['--t-background-transparent-lighter'],
+    },
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    cursor: 'pointer',
+    display: 'flex',
+    height: '28px',
+    paddingInlineStart: `${depth * BREADCRUMB_WIDTH}px`,
+    transitionDuration: `calc(${animationDuration['--t-animation-duration-instant']} * 1s)`,
+    transitionProperty: 'background-color',
+    userSelect: 'none',
+  }),
+  treeItem: {
+    position: 'relative',
+  },
+  nestedList: {
+    listStyle: 'none',
+    marginTop: '0',
+    marginRight: '0',
+    marginBottom: '0',
+    marginLeft: '0',
+    paddingTop: '0',
+    paddingRight: '0',
+    paddingBottom: '0',
+    paddingLeft: '0',
+  },
+  collapsibleContent: {
+    overflow: 'hidden',
+  },
+  folderContent: {
+    alignItems: 'center',
+    display: 'flex',
+    flex: '1',
+    gap: spacing['--t-spacing-2'],
+    minWidth: '0',
+    paddingLeft: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+  },
+  folderInfo: {
+    alignItems: 'center',
+    display: 'flex',
+    flex: '1',
+    gap: spacing['--t-spacing-2'],
+    minWidth: '0',
+  },
+  folderName: {
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-md'],
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  rightSection: {
+    alignItems: 'center',
+    display: 'flex',
+    flexShrink: '0',
+    gap: spacing['--t-spacing-1'],
+    marginLeft: 'auto',
+  },
+  childCount: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-sm'],
+    minWidth: spacing['--t-spacing-3'],
+    textAlign: 'right',
+  },
+  expandButton: {
+    alignItems: 'center',
+    background: 'none',
+    borderStyle: 'none',
+    color: {
+      default: fontColor['--t-font-color-tertiary'],
+      ':hover': fontColor['--t-font-color-primary'],
+    },
+    cursor: 'pointer',
+    display: 'flex',
+    height: spacing['--t-spacing-4'],
+    justifyContent: 'center',
+    paddingTop: '0',
+    paddingRight: '0',
+    paddingBottom: '0',
+    paddingLeft: '0',
+    width: spacing['--t-spacing-4'],
+  },
+  checkboxWrapper: {
+    alignItems: 'center',
+    display: 'flex',
+  },
+});
 
 export const SettingsMessageFoldersTreeItem = ({
   depth = 0,
@@ -161,8 +171,11 @@ export const SettingsMessageFoldersTreeItem = ({
     depth > 0 ? [...parentsIsLastList, isLast] : parentsIsLastList;
 
   return (
-    <StyledTreeItem>
-      <StyledTreeItemContent depth={depth} onClick={handleRowClick}>
+    <li {...stylex.props(styles.treeItem)}>
+      <div
+        {...stylex.props(styles.treeItemContent(depth))}
+        onClick={handleRowClick}
+      >
         {depth > 0 && (
           <SettingsMessageFoldersBreadcrumb
             depth={depth}
@@ -171,16 +184,18 @@ export const SettingsMessageFoldersTreeItem = ({
           />
         )}
 
-        <StyledFolderContent>
-          <StyledFolderInfo>
+        <div {...stylex.props(styles.folderContent)}>
+          <div {...stylex.props(styles.folderInfo)}>
             <SettingsAccountsMessageFolderIcon
               folder={folder}
               isChildFolder={depth > 0}
             />
-            <StyledFolderName>{formatFolderName(folder.name)}</StyledFolderName>
-          </StyledFolderInfo>
+            <span {...stylex.props(styles.folderName)}>
+              {formatFolderName(folder.name)}
+            </span>
+          </div>
 
-          <StyledRightSection>
+          <div {...stylex.props(styles.rightSection)}>
             {folder.pendingSyncAction ===
               MessageFolderPendingSyncAction.FOLDER_IMPORT && (
               <Status color="turquoise" loading>{t`Importing`}</Status>
@@ -188,38 +203,47 @@ export const SettingsMessageFoldersTreeItem = ({
 
             {hasChildren && (
               <>
-                <StyledChildCount>{childCount}</StyledChildCount>
-                <StyledExpandButton
+                <span {...stylex.props(styles.childCount)}>{childCount}</span>
+                <button
                   aria-label={
                     isExpanded ? t`Collapse folder` : t`Expand folder`
                   }
                   onClick={handleExpandToggle}
+                  {...stylex.props(styles.expandButton)}
                 >
                   {isExpanded ? (
                     <IconChevronUp size={16} />
                   ) : (
                     <IconChevronDown size={16} />
                   )}
-                </StyledExpandButton>
+                </button>
               </>
             )}
 
-            <StyledCheckboxWrapper onClick={handleCheckboxClick}>
+            <div
+              onClick={handleCheckboxClick}
+              {...stylex.props(styles.checkboxWrapper)}
+            >
               <Checkbox
                 checked={folder.isSynced}
                 indeterminate={isIndeterminate}
                 onCheckedChange={() => onToggleFolder(folder)}
                 size={'sm'}
               />
-            </StyledCheckboxWrapper>
-          </StyledRightSection>
-        </StyledFolderContent>
-      </StyledTreeItemContent>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {hasChildren && (
-        <StyledCollapsibleWrapper isExpanded={isExpanded}>
-          <StyledCollapsibleContent>
-            <StyledNestedList>
+        <div
+          {...stylex.props(
+            styles.collapsibleWrapper,
+            isExpanded && styles.collapsibleWrapperExpanded,
+          )}
+        >
+          <div {...stylex.props(styles.collapsibleContent)}>
+            <ul {...stylex.props(styles.nestedList)}>
               {children.map((child, index) => (
                 <SettingsMessageFoldersTreeItem
                   key={child.folder.id}
@@ -230,10 +254,10 @@ export const SettingsMessageFoldersTreeItem = ({
                   parentsIsLastList={childParentsIsLastList}
                 />
               ))}
-            </StyledNestedList>
-          </StyledCollapsibleContent>
-        </StyledCollapsibleWrapper>
+            </ul>
+          </div>
+        </div>
       )}
-    </StyledTreeItem>
+    </li>
   );
 };

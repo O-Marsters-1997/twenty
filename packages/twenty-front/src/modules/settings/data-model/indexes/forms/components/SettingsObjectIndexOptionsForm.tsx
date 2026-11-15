@@ -1,23 +1,29 @@
 import { Select } from '@/ui/input/components/Select';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { Controller, useFormContext } from 'react-hook-form';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { IndexType } from '~/generated-metadata/graphql';
 import { type SettingsObjectNewIndexFormValues } from '@/settings/data-model/indexes/forms/validation-schemas/settingsObjectNewIndexFormSchema';
+import * as stylex from '@stylexjs/stylex';
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[4]};
-`;
-
-const StyledFieldLabel = styled.div`
-  color: ${themeCssVariables.font.color.light};
-  font-size: ${themeCssVariables.font.size.xs};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-  margin-bottom: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  content: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-4'],
+  },
+  fieldLabel: {
+    color: fontColor['--t-font-color-light'],
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    marginBottom: spacing['--t-spacing-1'],
+  },
+});
 
 export const SettingsObjectIndexOptionsForm = () => {
   const { t } = useLingui();
@@ -35,9 +41,9 @@ export const SettingsObjectIndexOptionsForm = () => {
   ];
 
   return (
-    <StyledContent>
+    <div {...stylex.props(styles.content)}>
       <div>
-        <StyledFieldLabel>{t`Type`}</StyledFieldLabel>
+        <div {...stylex.props(styles.fieldLabel)}>{t`Type`}</div>
         <Controller
           name="indexType"
           control={control}
@@ -52,6 +58,6 @@ export const SettingsObjectIndexOptionsForm = () => {
           )}
         />
       </div>
-    </StyledContent>
+    </div>
   );
 };
