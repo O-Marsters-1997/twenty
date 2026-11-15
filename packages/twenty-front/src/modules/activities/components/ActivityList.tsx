@@ -1,6 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
 import { Card } from 'twenty-ui/primitives/surfaces';
-import { borderColor } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   list: {

@@ -99,7 +99,8 @@ const styles = stylex.create({
     height: '20px',
     minWidth: '60px',
     outlineStyle: 'none',
-    padding: 0,
+    paddingBlock: 0,
+    paddingInline: 0,
     '::placeholder': {
       color: fontColor['--t-font-color-light'],
       fontSize: fontSize['--t-font-size-md'],
