@@ -1,5 +1,6 @@
 import { type ShortcutDefinition } from '@ui/primitives/typography/Shortcut/types/ShortcutDefinition';
 import { type Button as ButtonPrimitive } from '@base-ui/react/button';
+import { type StyleXStyles } from '@stylexjs/stylex';
 import { type ComponentPropsWithRef, type ReactNode } from 'react';
 
 import { type ButtonColor } from './ButtonColor';
@@ -26,4 +27,5 @@ export type ButtonProps = Omit<
     endIcon?: ReactNode;
     shortcut?: ShortcutDefinition;
     shortcutJoinLabel?: string;
+    xstyle?: StyleXStyles;
   };
