@@ -28,6 +28,7 @@ func TestDefaultTable_RoutesMessagingOperationsToGo(t *testing.T) {
 		"GetApiKeys", "GetApiKey", "GetApiKeyRoles", "CreateApiKey", "UpdateApiKey", "RevokeApiKey", "AssignRoleToApiKey",
 		"GenerateApiKeyToken", "GeneratePlaygroundToken",
 		"UpdateWorkspace", "UpdateWorkspaceAllowedIframeOrigins",
+		"GetAutoCompleteAddress", "GetAddressDetails",
 	} {
 		if table[operation] != frontdoor.RouteGo {
 			t.Errorf("route of %s = %q, want %q", operation, table[operation], frontdoor.RouteGo)

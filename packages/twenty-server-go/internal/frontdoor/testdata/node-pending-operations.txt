@@ -56,11 +56,9 @@ FindOneApplicationSummary
 FindOnePageLayout
 FindOnePageLayoutType
 GenerateSignedDpa
-GetAddressDetails
 GetAgentRuns
 GetAiSystemPromptPreview
 GetApprovedAccessDomains
-GetAutoCompleteAddress
 GetCurrentUser
 GetDpaAgreements
 GetDpaPreview
