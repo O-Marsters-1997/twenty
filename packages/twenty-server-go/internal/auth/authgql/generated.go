@@ -47,6 +47,10 @@ type ComplexityRoot struct {
 		RefreshToken                   func(childComplexity int) int
 	}
 
+	AuthTokens struct {
+		Tokens func(childComplexity int) int
+	}
+
 	AvailableWorkspace struct {
 		DisplayName         func(childComplexity int) int
 		ID                  func(childComplexity int) int
@@ -82,6 +86,8 @@ type ComplexityRoot struct {
 	Mutation struct {
 		DeleteTwoFactorAuthenticationMethod                     func(childComplexity int, twoFactorAuthenticationMethodID string) int
 		GenerateTwoFactorAuthenticationRecoveryCode             func(childComplexity int, userID string, otp *string) int
+		GetAuthTokensFromOtp                                    func(childComplexity int, loginToken string, otp string, captchaToken *string, origin string) int
+		GetAuthTokensFromTwoFactorAuthenticationRecoveryCode    func(childComplexity int, loginToken string, recoveryCode string, captchaToken *string, origin string) int
 		GetLoginTokenFromCredentials                            func(childComplexity int, email string, password string, captchaToken *string, locale *string, verifyEmailRedirectPath *string, origin string) int
 		InitiateOTPProvisioningForAuthenticatedUser             func(childComplexity int) int
 		RevokeTwoFactorAuthenticationRecoveryCode               func(childComplexity int, userID string) int
@@ -96,6 +102,11 @@ type ComplexityRoot struct {
 	TwoFactorAuthenticationRecoveryCode struct {
 		ExpiresAt    func(childComplexity int) int
 		RecoveryCode func(childComplexity int) int
+	}
+
+	TwoFactorAuthenticationRecoveryCodeRedemption struct {
+		ProvisioningURI func(childComplexity int) int
+		Tokens          func(childComplexity int) int
 	}
 
 	TwoFactorAuthenticationRecoveryStatus struct {
@@ -125,6 +136,8 @@ type MutationResolver interface {
 	RevokeTwoFactorAuthenticationRecoveryCode(ctx context.Context, userID string) (bool, error)
 	GetLoginTokenFromCredentials(ctx context.Context, email string, password string, captchaToken *string, locale *string, verifyEmailRedirectPath *string, origin string) (*LoginToken, error)
 	SignIn(ctx context.Context, email string, password string, captchaToken *string, locale *string, verifyEmailRedirectPath *string) (*AvailableWorkspacesAndAccessTokens, error)
+	GetAuthTokensFromOtp(ctx context.Context, loginToken string, otp string, captchaToken *string, origin string) (*AuthTokens, error)
+	GetAuthTokensFromTwoFactorAuthenticationRecoveryCode(ctx context.Context, loginToken string, recoveryCode string, captchaToken *string, origin string) (*TwoFactorAuthenticationRecoveryCodeRedemption, error)
 }
 type QueryResolver interface {
 	TwoFactorAuthenticationRecoveryStatus(ctx context.Context, userID string) (*TwoFactorAuthenticationRecoveryStatus, error)
@@ -173,6 +186,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.AuthTokenPair.RefreshToken(childComplexity), true
+
+	case "AuthTokens.tokens":
+		if e.ComplexityRoot.AuthTokens.Tokens == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AuthTokens.Tokens(childComplexity), true
 
 	case "AvailableWorkspace.displayName":
 		if e.ComplexityRoot.AvailableWorkspace.DisplayName == nil {
@@ -286,6 +306,28 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.GenerateTwoFactorAuthenticationRecoveryCode(childComplexity, args["userId"].(string), args["otp"].(*string)), true
+	case "Mutation.getAuthTokensFromOTP":
+		if e.ComplexityRoot.Mutation.GetAuthTokensFromOtp == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_getAuthTokensFromOTP_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.GetAuthTokensFromOtp(childComplexity, args["loginToken"].(string), args["otp"].(string), args["captchaToken"].(*string), args["origin"].(string)), true
+	case "Mutation.getAuthTokensFromTwoFactorAuthenticationRecoveryCode":
+		if e.ComplexityRoot.Mutation.GetAuthTokensFromTwoFactorAuthenticationRecoveryCode == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_getAuthTokensFromTwoFactorAuthenticationRecoveryCode_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.GetAuthTokensFromTwoFactorAuthenticationRecoveryCode(childComplexity, args["loginToken"].(string), args["recoveryCode"].(string), args["captchaToken"].(*string), args["origin"].(string)), true
 	case "Mutation.getLoginTokenFromCredentials":
 		if e.ComplexityRoot.Mutation.GetLoginTokenFromCredentials == nil {
 			break
@@ -361,6 +403,19 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TwoFactorAuthenticationRecoveryCode.RecoveryCode(childComplexity), true
+
+	case "TwoFactorAuthenticationRecoveryCodeRedemption.provisioningUri":
+		if e.ComplexityRoot.TwoFactorAuthenticationRecoveryCodeRedemption.ProvisioningURI == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TwoFactorAuthenticationRecoveryCodeRedemption.ProvisioningURI(childComplexity), true
+	case "TwoFactorAuthenticationRecoveryCodeRedemption.tokens":
+		if e.ComplexityRoot.TwoFactorAuthenticationRecoveryCodeRedemption.Tokens == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TwoFactorAuthenticationRecoveryCodeRedemption.Tokens(childComplexity), true
 
 	case "TwoFactorAuthenticationRecoveryStatus.hasVerifiedTwoFactorAuthenticationMethod":
 		if e.ComplexityRoot.TwoFactorAuthenticationRecoveryStatus.HasVerifiedTwoFactorAuthenticationMethod == nil {
@@ -519,6 +574,14 @@ func (ec *executionContext) childFields_AuthTokenPair(ctx context.Context, field
 	return nil, fmt.Errorf("no field named %q was found under type AuthTokenPair", field.Name)
 }
 
+func (ec *executionContext) childFields_AuthTokens(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "tokens":
+		return ec.fieldContext_AuthTokens_tokens(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AuthTokens", field.Name)
+}
+
 func (ec *executionContext) childFields_AvailableWorkspace(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "id":
@@ -591,6 +654,16 @@ func (ec *executionContext) childFields_TwoFactorAuthenticationRecoveryCode(ctx 
 		return ec.fieldContext_TwoFactorAuthenticationRecoveryCode_expiresAt(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type TwoFactorAuthenticationRecoveryCode", field.Name)
+}
+
+func (ec *executionContext) childFields_TwoFactorAuthenticationRecoveryCodeRedemption(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "tokens":
+		return ec.fieldContext_TwoFactorAuthenticationRecoveryCodeRedemption_tokens(ctx, field)
+	case "provisioningUri":
+		return ec.fieldContext_TwoFactorAuthenticationRecoveryCodeRedemption_provisioningUri(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TwoFactorAuthenticationRecoveryCodeRedemption", field.Name)
 }
 
 func (ec *executionContext) childFields_TwoFactorAuthenticationRecoveryStatus(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -770,6 +843,82 @@ func (ec *executionContext) field_Mutation_generateTwoFactorAuthenticationRecove
 		return nil, err
 	}
 	args["otp"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_getAuthTokensFromOTP_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "loginToken",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["loginToken"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "otp",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["otp"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "captchaToken",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOString2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["captchaToken"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "origin",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["origin"] = arg3
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_getAuthTokensFromTwoFactorAuthenticationRecoveryCode_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "loginToken",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["loginToken"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "recoveryCode",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["recoveryCode"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "captchaToken",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOString2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["captchaToken"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "origin",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["origin"] = arg3
 	return args, nil
 }
 
@@ -1108,6 +1257,38 @@ func (ec *executionContext) fieldContext_AuthTokenPair_refreshToken(_ context.Co
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return ec.childFields_AuthToken(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AuthTokens_tokens(ctx context.Context, field graphql.CollectedField, obj *AuthTokens) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AuthTokens_tokens(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Tokens, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *AuthTokenPair) graphql.Marshaler {
+			return ec.marshalNAuthTokenPair2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐAuthTokenPair(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_AuthTokens_tokens(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AuthTokens",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_AuthTokenPair(ctx, field)
 		},
 	}
 	return fc, nil
@@ -1785,6 +1966,94 @@ func (ec *executionContext) fieldContext_Mutation_signIn(ctx context.Context, fi
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_getAuthTokensFromOTP(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_getAuthTokensFromOTP(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().GetAuthTokensFromOtp(ctx, fc.Args["loginToken"].(string), fc.Args["otp"].(string), fc.Args["captchaToken"].(*string), fc.Args["origin"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *AuthTokens) graphql.Marshaler {
+			return ec.marshalNAuthTokens2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐAuthTokens(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_getAuthTokensFromOTP(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_AuthTokens(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_getAuthTokensFromOTP_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_getAuthTokensFromTwoFactorAuthenticationRecoveryCode(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_getAuthTokensFromTwoFactorAuthenticationRecoveryCode(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().GetAuthTokensFromTwoFactorAuthenticationRecoveryCode(ctx, fc.Args["loginToken"].(string), fc.Args["recoveryCode"].(string), fc.Args["captchaToken"].(*string), fc.Args["origin"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *TwoFactorAuthenticationRecoveryCodeRedemption) graphql.Marshaler {
+			return ec.marshalNTwoFactorAuthenticationRecoveryCodeRedemption2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐTwoFactorAuthenticationRecoveryCodeRedemption(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_getAuthTokensFromTwoFactorAuthenticationRecoveryCode(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_TwoFactorAuthenticationRecoveryCodeRedemption(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_getAuthTokensFromTwoFactorAuthenticationRecoveryCode_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_twoFactorAuthenticationRecoveryStatus(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -1949,6 +2218,61 @@ func (ec *executionContext) _TwoFactorAuthenticationRecoveryCode_expiresAt(ctx c
 }
 func (ec *executionContext) fieldContext_TwoFactorAuthenticationRecoveryCode_expiresAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("TwoFactorAuthenticationRecoveryCode", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _TwoFactorAuthenticationRecoveryCodeRedemption_tokens(ctx context.Context, field graphql.CollectedField, obj *TwoFactorAuthenticationRecoveryCodeRedemption) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TwoFactorAuthenticationRecoveryCodeRedemption_tokens(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Tokens, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *AuthTokenPair) graphql.Marshaler {
+			return ec.marshalOAuthTokenPair2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐAuthTokenPair(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TwoFactorAuthenticationRecoveryCodeRedemption_tokens(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TwoFactorAuthenticationRecoveryCodeRedemption",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_AuthTokenPair(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TwoFactorAuthenticationRecoveryCodeRedemption_provisioningUri(ctx context.Context, field graphql.CollectedField, obj *TwoFactorAuthenticationRecoveryCodeRedemption) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TwoFactorAuthenticationRecoveryCodeRedemption_provisioningUri(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ProvisioningURI, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TwoFactorAuthenticationRecoveryCodeRedemption_provisioningUri(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TwoFactorAuthenticationRecoveryCodeRedemption", field, false, false, "String")
 }
 
 func (ec *executionContext) _TwoFactorAuthenticationRecoveryStatus_hasVerifiedTwoFactorAuthenticationMethod(ctx context.Context, field graphql.CollectedField, obj *TwoFactorAuthenticationRecoveryStatus) (ret graphql.Marshaler) {
@@ -3223,6 +3547,39 @@ func (ec *executionContext) _AuthTokenPair(ctx context.Context, sel ast.Selectio
 	return out
 }
 
+var authTokensImplementors = []string{"AuthTokens"}
+
+func (ec *executionContext) _AuthTokens(ctx context.Context, sel ast.SelectionSet, obj *AuthTokens) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, authTokensImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("AuthTokens")
+		case "tokens":
+			out.Values[i] = ec._AuthTokens_tokens(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
 var availableWorkspaceImplementors = []string{"AvailableWorkspace"}
 
 func (ec *executionContext) _AvailableWorkspace(ctx context.Context, sel ast.SelectionSet, obj *AvailableWorkspace) graphql.Marshaler {
@@ -3529,6 +3886,20 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "getAuthTokensFromOTP":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_getAuthTokensFromOTP(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "getAuthTokensFromTwoFactorAuthenticationRecoveryCode":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_getAuthTokensFromTwoFactorAuthenticationRecoveryCode(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -3621,6 +3992,44 @@ func (ec *executionContext) _TwoFactorAuthenticationRecoveryCode(ctx context.Con
 		case "expiresAt":
 			out.Values[i] = ec._TwoFactorAuthenticationRecoveryCode_expiresAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var twoFactorAuthenticationRecoveryCodeRedemptionImplementors = []string{"TwoFactorAuthenticationRecoveryCodeRedemption"}
+
+func (ec *executionContext) _TwoFactorAuthenticationRecoveryCodeRedemption(ctx context.Context, sel ast.SelectionSet, obj *TwoFactorAuthenticationRecoveryCodeRedemption) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, twoFactorAuthenticationRecoveryCodeRedemptionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("TwoFactorAuthenticationRecoveryCodeRedemption")
+		case "tokens":
+			out.Values[i] = ec._TwoFactorAuthenticationRecoveryCodeRedemption_tokens(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "provisioningUri":
+			out.Values[i] = ec._TwoFactorAuthenticationRecoveryCodeRedemption_provisioningUri(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
 		default:
@@ -4127,6 +4536,14 @@ func (ec *executionContext) marshalNAuthTokenPair2ᚖgithubᚗcomᚋtwentyhqᚋt
 	return ec._AuthTokenPair(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalNAuthTokens2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐAuthTokens(ctx context.Context, sel ast.SelectionSet, v *AuthTokens) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "AuthTokens!")
+		return graphql.Null
+	}
+	return ec._AuthTokens(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNAvailableWorkspace2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐAvailableWorkspaceᚄ(ctx context.Context, sel ast.SelectionSet, v []*AvailableWorkspace) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
@@ -4235,6 +4652,14 @@ func (ec *executionContext) marshalNTwoFactorAuthenticationRecoveryCode2ᚖgithu
 		return graphql.Null
 	}
 	return ec._TwoFactorAuthenticationRecoveryCode(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNTwoFactorAuthenticationRecoveryCodeRedemption2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐTwoFactorAuthenticationRecoveryCodeRedemption(ctx context.Context, sel ast.SelectionSet, v *TwoFactorAuthenticationRecoveryCodeRedemption) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "TwoFactorAuthenticationRecoveryCodeRedemption!")
+		return graphql.Null
+	}
+	return ec._TwoFactorAuthenticationRecoveryCodeRedemption(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNTwoFactorAuthenticationRecoveryStatus2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐTwoFactorAuthenticationRecoveryStatus(ctx context.Context, sel ast.SelectionSet, v *TwoFactorAuthenticationRecoveryStatus) graphql.Marshaler {
@@ -4415,6 +4840,13 @@ func (ec *executionContext) marshalN__TypeKind2string(ctx context.Context, sel a
 		graphql.AddInvalidNullFromMarshaler(ctx, "__TypeKind!")
 	}
 	return res
+}
+
+func (ec *executionContext) marshalOAuthTokenPair2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐAuthTokenPair(ctx context.Context, sel ast.SelectionSet, v *AuthTokenPair) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._AuthTokenPair(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOBoolean2bool(ctx context.Context, v any) (bool, error) {

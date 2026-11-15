@@ -3,104 +3,31 @@ package main
 import (
 	"errors"
 	"fmt"
-	"log/slog"
-	"net/http"
-	"net/url"
 	"os"
 	"strings"
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/redis/go-redis/v9"
 
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/config"
 )
 
-const seedWorkspaceID = "20202020-1c25-4d02-bf25-6aeccf7ea419"
-
-func passwordLogin(pool *pgxpool.Pool, appSecret, encryptionKey, fallbackEncryptionKey string, logger *slog.Logger) (*auth.PasswordLogin, *auth.UserSession, error) {
+func passwordLogin(pool *pgxpool.Pool, cfg config.Config, stack authStack) (*auth.PasswordLogin, error) {
 	if os.Getenv("CAPTCHA_DRIVER") != "" {
-		return nil, nil, errors.New("CAPTCHA_DRIVER is set, but Go cannot verify captcha tokens for password login yet")
+		return nil, errors.New("CAPTCHA_DRIVER is set, but Go cannot verify captcha tokens for password login yet")
 	}
-	redisURL := os.Getenv("REDIS_URL")
-	if redisURL == "" {
-		return nil, nil, errors.New("REDIS_URL is required for password login")
-	}
-	redisOptions, err := redis.ParseURL(redisURL)
-	if err != nil {
-		return nil, nil, fmt.Errorf("parse REDIS_URL: %w", err)
-	}
-
-	serverURL := valueOrDefault(os.Getenv("SERVER_URL"), "http://localhost:3000")
-	frontURL, err := url.Parse(valueOrDefault(os.Getenv("FRONTEND_URL"), serverURL))
-	if err != nil || frontURL.Scheme == "" || frontURL.Host == "" {
-		return nil, nil, errors.New("FRONTEND_URL, or SERVER_URL when it is unset, needs a scheme and host")
-	}
-	multiWorkspace := os.Getenv("IS_MULTIWORKSPACE_ENABLED") == "true"
-	defaultSubdomain := valueOrDefault(os.Getenv("DEFAULT_SUBDOMAIN"), "app")
-
 	fileTokenTTL, err := parseDuration(valueOrDefault(os.Getenv("FILE_TOKEN_EXPIRES_IN"), "1d"))
 	if err != nil {
-		return nil, nil, fmt.Errorf("FILE_TOKEN_EXPIRES_IN: %w", err)
+		return nil, fmt.Errorf("FILE_TOKEN_EXPIRES_IN: %w", err)
 	}
-	sessionLifetime, err := optionalDuration("SESSION_ABSOLUTE_LIFETIME")
-	if err != nil {
-		return nil, nil, err
-	}
-	sessionIdleTimeout, err := optionalDuration("SESSION_IDLE_TIMEOUT")
-	if err != nil {
-		return nil, nil, err
-	}
-
-	var cookieOrigins []string
-	for _, origin := range strings.Split(os.Getenv("AUTH_COOKIE_ALLOWED_ORIGINS"), ",") {
-		if origin = strings.TrimSpace(origin); origin != "" {
-			cookieOrigins = append(cookieOrigins, origin)
-		}
-	}
-
-	cache := auth.NewRedisCache(redis.NewClient(redisOptions), os.Getenv("REDIS_CACHE_PREFIX"))
-	issuer := auth.NewPGIssuer(pool, auth.IssuerConfig{
-		AppSecret:             appSecret,
-		EncryptionKey:         encryptionKey,
-		FallbackEncryptionKey: fallbackEncryptionKey,
-		Cache:                 cache,
-	})
-	origins := auth.NewOriginResolver(pool, auth.OriginConfig{
-		MultiWorkspace:   multiWorkspace,
-		FrontURL:         frontURL.String(),
-		DefaultSubdomain: defaultSubdomain,
-		SeedWorkspaceID:  seedWorkspaceID,
-	})
-	login := auth.NewPasswordLogin(pool, auth.NewPasswordHasher(), issuer, origins, auth.PasswordLoginConfig{
-		FrontURL:                  frontURL,
-		ServerURL:                 serverURL,
-		MultiWorkspace:            multiWorkspace,
+	return auth.NewPasswordLogin(pool, auth.NewPasswordHasher(), stack.issuer, stack.origins, auth.PasswordLoginConfig{
+		FrontURL:                  stack.frontURL,
+		ServerURL:                 stack.serverURL,
+		MultiWorkspace:            cfg.MultiWorkspace,
 		EmailVerificationRequired: os.Getenv("IS_EMAIL_VERIFICATION_REQUIRED") == "true",
 		FileTokenTTL:              fileTokenTTL,
-	})
-	sessions := auth.NewUserSession(pool, cache, issuer, auth.SessionConfig{
-		ServerURL:            serverURL,
-		FrontendURL:          frontURL.String(),
-		CookieAllowedOrigins: cookieOrigins,
-		Production:           os.Getenv("NODE_ENV") == "production",
-		SameSite:             sameSite(os.Getenv("AUTH_COOKIE_SAME_SITE")),
-		TrustProxy:           os.Getenv("TRUST_PROXY") != "false",
-		AbsoluteLifetime:     sessionLifetime,
-		IdleTimeout:          sessionIdleTimeout,
-	}, logger)
-	return login, sessions, nil
-}
-
-func sameSite(value string) http.SameSite {
-	switch value {
-	case "strict":
-		return http.SameSiteStrictMode
-	case "none":
-		return http.SameSiteNoneMode
-	default:
-		return http.SameSiteLaxMode
-	}
+	}), nil
 }
 
 func valueOrDefault(value, fallback string) string {

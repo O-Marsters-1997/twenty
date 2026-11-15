@@ -36,7 +36,18 @@ type AvailableWorkspacesAndAccessTokens {
   availableWorkspaces: AvailableWorkspaces!
 }
 
+type AuthTokens {
+  tokens: AuthTokenPair!
+}
+
+type TwoFactorAuthenticationRecoveryCodeRedemption {
+  tokens: AuthTokenPair
+  provisioningUri: String
+}
+
 extend type Mutation {
   getLoginTokenFromCredentials(email: String!, password: String!, captchaToken: String, locale: String, verifyEmailRedirectPath: String, origin: String!): LoginToken!
   signIn(email: String!, password: String!, captchaToken: String, locale: String, verifyEmailRedirectPath: String): AvailableWorkspacesAndAccessTokens!
+  getAuthTokensFromOTP(loginToken: String!, otp: String!, captchaToken: String, origin: String!): AuthTokens!
+  getAuthTokensFromTwoFactorAuthenticationRecoveryCode(loginToken: String!, recoveryCode: String!, captchaToken: String, origin: String!): TwoFactorAuthenticationRecoveryCodeRedemption!
 }

@@ -58,7 +58,11 @@ func run() error {
 	}
 	defer pool.Close()
 	verifier := auth.NewJWTVerifier(pool, cfg.AppSecret)
-	login, sessions, err := passwordLogin(pool, cfg.AppSecret, cfg.EncryptionKey, cfg.FallbackEncryptionKey, logger)
+	stack, err := newAuthStack(pool, cfg, logger)
+	if err != nil {
+		return err
+	}
+	passwordLogins, err := passwordLogin(pool, cfg, stack)
 	if err != nil {
 		return err
 	}
@@ -93,6 +97,16 @@ func run() error {
 		HTTPClient: workflowgql.NewSafeHTTPClient(),
 	}, logger)
 
+	twoFactor := auth.NewTwoFactor(
+		pool, auth.NewSecretCipher(cfg.EncryptionKey, cfg.FallbackEncryptionKey, cfg.AppSecret), cfg.RecoveryCodeTTL,
+	)
+	authHandler := authgql.NewHandler(&authgql.Resolver{
+		TwoFactor:     twoFactor,
+		Login:         twoFactorLogin(pool, twoFactor, stack),
+		PasswordLogin: passwordLogins,
+		Sessions:      stack.sessions,
+	}, logger)
+
 	goGraphQL := http.NewServeMux()
 	goGraphQL.Handle(string(frontdoor.EndpointWorkspace), workspaceHandler(recordsgql.NewHandler(&recordsgql.Resolver{
 		Store:              people,
@@ -109,7 +123,7 @@ func run() error {
 	}, logger), chatHandler, workflowHandler, messaginggql.NewHandler(&messaginggql.Resolver{
 		Timeline: messagingstore.NewTimeline(pool),
 		Banners:  messagingstore.NewReconnectBanners(pool),
-	}, logger)))
+	}, logger), authHandler))
 	goGraphQL.Handle(string(frontdoor.EndpointMetadata), metadataHandler(
 		metadatagql.NewHandler(metadatastore.New(pool), toolRegistry, logger),
 		chatHandler,
@@ -122,18 +136,15 @@ func run() error {
 			Renderer:  messaging.GoRenderer{},
 			Queue:     queue.Enqueue,
 		}, logger),
-		authgql.NewHandler(&authgql.Resolver{
-			TwoFactor: auth.NewTwoFactor(
-				pool, auth.NewSecretCipher(cfg.EncryptionKey, cfg.FallbackEncryptionKey, cfg.AppSecret), cfg.RecoveryCodeTTL,
-			),
-			PasswordLogin: login,
-			Sessions:      sessions,
-		}, logger),
+		authHandler,
 		agentgql.Operations,
 	))
 
 	handler := frontdoor.NewHandler(frontdoor.DefaultTable(), cfg.NodeUpstreamURL, verifier, goGraphQL, logger).
-		WithPublicOperations(map[frontdoor.Endpoint][]string{frontdoor.EndpointMetadata: frontdoor.PasswordLoginOperations}).
+		WithPublicOperations(map[frontdoor.Endpoint][]string{
+			frontdoor.EndpointMetadata:  frontdoor.PasswordLoginOperations,
+			frontdoor.EndpointWorkspace: frontdoor.LoginOperations,
+		}).
 		WithMCP(toolRegistry).
 		WithSubscriber(aigql.NewSubscriber(broker))
 

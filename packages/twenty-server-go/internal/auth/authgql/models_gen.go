@@ -16,6 +16,10 @@ type AuthTokenPair struct {
 	RefreshToken                   *AuthToken `json:"refreshToken"`
 }
 
+type AuthTokens struct {
+	Tokens *AuthTokenPair `json:"tokens"`
+}
+
 type AvailableWorkspace struct {
 	ID                  string         `json:"id"`
 	DisplayName         *string        `json:"displayName,omitempty"`
@@ -57,6 +61,11 @@ type Query struct {
 type TwoFactorAuthenticationRecoveryCode struct {
 	RecoveryCode string             `json:"recoveryCode"`
 	ExpiresAt    metadata.Timestamp `json:"expiresAt"`
+}
+
+type TwoFactorAuthenticationRecoveryCodeRedemption struct {
+	Tokens          *AuthTokenPair `json:"tokens,omitempty"`
+	ProvisioningURI *string        `json:"provisioningUri,omitempty"`
 }
 
 type TwoFactorAuthenticationRecoveryStatus struct {
