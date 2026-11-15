@@ -1,11 +1,28 @@
 import { type Meta, type StoryObj } from '@storybook/react-vite';
+import * as stylex from '@stylexjs/stylex';
 import { expect, within } from 'storybook/test';
 
 import { ComponentDecorator } from '@ui/testing';
 
+import {
+  background,
+  borderColor,
+  borderRadius,
+  spacing,
+} from '../../../../theme/tokens.stylex';
 import { AlertDialogExample } from './AlertDialogExample';
-import styles from './AlertDialog.stories.module.scss';
 import { waitForAlertDialog } from './waitForAlertDialog';
+
+const styles = stylex.create({
+  record: {
+    backgroundColor: background['--t-background-secondary'],
+    borderColor: borderColor['--t-border-color-medium'],
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    borderStyle: 'solid',
+    borderWidth: 1,
+    padding: spacing['--t-spacing-3'],
+  },
+});
 
 const meta: Meta<typeof AlertDialogExample> = {
   title: 'UI/Surfaces/AlertDialog',
@@ -73,7 +90,7 @@ export const Catalog: Story = {
   ...Default,
   args: {
     defaultOpen: true,
-    content: <div className={styles.record}>Acme · Company record</div>,
+    content: <div {...stylex.props(styles.record)}>Acme · Company record</div>,
   },
 };
 

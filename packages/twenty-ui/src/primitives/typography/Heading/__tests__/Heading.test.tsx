@@ -4,12 +4,10 @@ import { describe, expect, it } from 'vitest';
 import { runComponentConformance } from '@test-utilities/conformance/runComponentConformance';
 
 import { Heading } from '../Heading';
-import styles from '../Heading.module.scss';
 
 runComponentConformance({
   name: 'Heading',
   element: <Heading>Workspace</Heading>,
-  ownClassName: styles.heading,
   refInstanceOf: HTMLHeadingElement,
 });
 

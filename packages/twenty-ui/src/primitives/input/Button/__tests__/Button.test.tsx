@@ -3,7 +3,6 @@ import userEvent from '@testing-library/user-event';
 import { createRef } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
-import loaderStyles from '@ui/primitives/feedback/Loader/Loader.module.scss';
 import { runComponentConformance } from '@test-utilities/conformance/runComponentConformance';
 import { Button } from '../Button';
 
@@ -48,9 +47,7 @@ describe('Button loading', () => {
 
     const button = screen.getByRole('button', { name: 'Installing (42%)' });
     const content = screen.getByText('Installing (42%)').parentElement;
-    const loader = button.querySelector<HTMLDivElement>(
-      `.${loaderStyles.container}`,
-    );
+    const loader = button.querySelector<HTMLDivElement>('div');
 
     expect(content).toContainElement(screen.getByText('Download icon'));
     expect(content).toContainElement(screen.getByText('Arrow icon'));
@@ -86,9 +83,7 @@ describe('Button loading', () => {
 
       const button = screen.getByRole('button', { name: 'Installing (42%)' });
       const label = screen.getByText('Installing (42%)');
-      const loader = button.querySelector<HTMLDivElement>(
-        `.${loaderStyles.container}`,
-      );
+      const loader = button.querySelector<HTMLDivElement>('div');
 
       expect(screen.queryByText(replacedIcon)).not.toBeInTheDocument();
       expect(screen.getByText(preservedIcon)).toBeVisible();
@@ -109,9 +104,7 @@ describe('Button loading', () => {
 
       const button = screen.getByRole('button', { name: 'Installing' });
 
-      expect(
-        button.querySelector<HTMLDivElement>(`.${loaderStyles.container}`),
-      ).toBeInTheDocument();
+      expect(button.querySelector<HTMLDivElement>('div')).toBeInTheDocument();
     },
   );
 
@@ -162,7 +155,7 @@ describe('Button loading', () => {
       expect(screen.getByText('Download icon')).toBeVisible();
       expect(screen.getByText('Arrow icon')).toBeVisible();
       expect(
-        button.querySelector<HTMLDivElement>(`.${loaderStyles.container}`),
+        button.querySelector<HTMLDivElement>('div'),
       ).not.toBeInTheDocument();
       await user.click(button);
       expect(onClick).toHaveBeenCalledOnce();

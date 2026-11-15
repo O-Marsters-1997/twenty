@@ -1,14 +1,24 @@
 import { useRender } from '@base-ui/react/use-render';
-import { clsx } from 'clsx';
 import { isBoolean, isString } from '@sniptt/guards';
+import * as stylex from '@stylexjs/stylex';
 import { type CSSProperties } from 'react';
 
 import { OverflowingTextWithTooltip } from '@ui/primitives/typography/OverflowingTextWithTooltip/OverflowingTextWithTooltip';
 import { themeCssVariables } from '@ui/theme';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 import { isDefined } from '@ui/utilities/utils/isDefined';
 
-import styles from './Tag.module.scss';
+import './Tag.css';
+import { tagStyles } from './Tag.stylex';
 import { type TagProps } from './types/TagProps';
+
+const variantStyles = {
+  soft: null,
+  outline: tagStyles.variantOutline,
+  ghost: tagStyles.variantGhost,
+  solid: tagStyles.variantSolid,
+};
 
 export const Tag = ({
   children,
@@ -20,11 +30,19 @@ export const Tag = ({
   borderStyle = 'solid',
   className,
   style,
+  xstyle,
   render,
   ref,
   ...props
-}: TagProps) =>
-  useRender({
+}: WithXstyle<TagProps>) => {
+  const stylexProps = stylex.props(
+    tagStyles.root,
+    weight === 'medium' && tagStyles.weightMedium,
+    variantStyles[variant],
+    xstyle,
+  );
+
+  return useRender({
     defaultTagName: 'span',
     render,
     ref,
@@ -35,8 +53,9 @@ export const Tag = ({
     },
     props: {
       ...props,
-      className: clsx(styles.tag, className),
+      ...mergeStylexProps(stylexProps, className),
       style: {
+        ...stylexProps.style,
         '--tw-tag-background':
           color === 'transparent'
             ? 'transparent'
@@ -55,16 +74,27 @@ export const Tag = ({
           {isDefined(startIcon) &&
             !isBoolean(startIcon) &&
             startIcon !== '' && (
-              <span className={styles.iconContainer} aria-hidden>
+              <span
+                {...mergeStylexProps(
+                  stylex.props(tagStyles.iconContainer),
+                  'tw-tag-icon',
+                )}
+                aria-hidden
+              >
                 {startIcon}
               </span>
             )}
-          <span className={styles.content}>
+          <span
+            {...stylex.props(
+              tagStyles.content,
+              truncate && tagStyles.contentTruncate,
+            )}
+          >
             {isString(children) && truncate ? (
               <OverflowingTextWithTooltip
                 text={children}
                 render={<span />}
-                className={styles.overflowingText}
+                xstyle={tagStyles.overflowingText}
               />
             ) : (
               children
@@ -74,3 +104,4 @@ export const Tag = ({
       ),
     },
   });
+};

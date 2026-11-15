@@ -1,8 +1,12 @@
+import * as stylex from '@stylexjs/stylex';
+
 import { isRenderableSlot } from '@ui/utilities/internal/isRenderableSlot';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
 
 import { type TabsTabProps } from '../../Tabs/types/TabsTabProps';
+import { tabStyles } from './TabStyles.stylex';
 
-import styles from './Tab.module.scss';
+import './Tab.css';
 
 type TabsTabContentProps = Pick<
   TabsTabProps,
@@ -15,18 +19,26 @@ export const TabsTabContent = ({
   endIcon,
   badge,
 }: TabsTabContentProps) => (
-  <span className={styles.content}>
+  <span {...stylex.props(tabStyles.content)}>
     {isRenderableSlot(startIcon) && (
-      <span className={styles.startIcon} aria-hidden>
+      <span
+        {...mergeStylexProps(stylex.props(tabStyles.startIcon), 'tw-tabs-icon')}
+        aria-hidden
+      >
         {startIcon}
       </span>
     )}
-    <span className={styles.label}>{children}</span>
+    <span {...stylex.props(tabStyles.label)}>{children}</span>
     {isRenderableSlot(endIcon) && (
-      <span className={styles.startIcon} aria-hidden>
+      <span
+        {...mergeStylexProps(stylex.props(tabStyles.startIcon), 'tw-tabs-icon')}
+        aria-hidden
+      >
         {endIcon}
       </span>
     )}
-    {isRenderableSlot(badge) && <span className={styles.badge}>{badge}</span>}
+    {isRenderableSlot(badge) && (
+      <span {...stylex.props(tabStyles.badge)}>{badge}</span>
+    )}
   </span>
 );

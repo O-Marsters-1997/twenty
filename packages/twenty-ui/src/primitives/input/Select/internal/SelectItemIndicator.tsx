@@ -2,7 +2,7 @@ import { Select as SelectPrimitive } from '@base-ui/react/select';
 import * as stylex from '@stylexjs/stylex';
 
 import { IconCheck } from '@ui/icon';
-import listItemStyles from '@ui/primitives/navigation/ListItem/ListItem.module.scss';
+import { listItemStyles } from '@ui/primitives/navigation/ListItem/ListItemStyles.stylex';
 import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
 import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
@@ -11,7 +11,7 @@ import { type SelectItemIndicatorProps } from '../types/SelectItemIndicatorProps
 export const SelectItemIndicator = ({
   className,
   xstyle,
-  children = <IconCheck className={listItemStyles.checkIndicator} />,
+  children = <IconCheck {...stylex.props(listItemStyles.checkIndicator)} />,
   ...props
 }: WithXstyle<SelectItemIndicatorProps>) => (
   <SelectPrimitive.ItemIndicator

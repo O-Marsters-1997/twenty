@@ -1,22 +1,31 @@
 import { AlertDialog as AlertDialogPrimitive } from '@base-ui/react/alert-dialog';
+import * as stylex from '@stylexjs/stylex';
 
 import { useProvidedTextDirection } from '@ui/primitives/layout/DirectionProvider/internal/useProvidedTextDirection';
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
-import styles from '@ui/primitives/surfaces/internal/Dialog.module.scss';
+import {
+  dialogStyles,
+  dialogViewportMarker,
+} from '../../internal/Dialog.stylex';
 import { type AlertDialogViewportProps } from '../types/AlertDialogViewportProps';
 
 export const AlertDialogViewport = ({
   className,
+  xstyle,
   ...props
-}: AlertDialogViewportProps) => {
+}: WithXstyle<AlertDialogViewportProps>) => {
   const direction = useProvidedTextDirection();
 
   return (
     <AlertDialogPrimitive.Viewport
       dir={direction}
       {...props}
-      className={mergeClassNames(styles.viewport, className)}
+      {...mergeStylexProps(
+        stylex.props(dialogViewportMarker, dialogStyles.viewport, xstyle),
+        className,
+      )}
     />
   );
 };

@@ -1,16 +1,22 @@
 import { Popover as PopoverPrimitive } from '@base-ui/react/popover';
+import * as stylex from '@stylexjs/stylex';
 
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
-import styles from '../Popover.module.scss';
+import { popoverStyles } from '../Popover.stylex';
 import { type PopoverDescriptionProps } from '../types/PopoverDescriptionProps';
 
 export const PopoverDescription = ({
   className,
+  xstyle,
   ...props
-}: PopoverDescriptionProps) => (
+}: WithXstyle<PopoverDescriptionProps>) => (
   <PopoverPrimitive.Description
     {...props}
-    className={mergeClassNames(styles.description, className)}
+    {...mergeStylexProps(
+      stylex.props(popoverStyles.description, xstyle),
+      className,
+    )}
   />
 );

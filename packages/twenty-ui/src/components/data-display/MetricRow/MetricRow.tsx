@@ -1,12 +1,19 @@
 import { useRender } from '@base-ui/react/use-render';
 import { isNonEmptyString } from '@sniptt/guards';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 import { useId } from 'react';
 
 import { ProgressRing } from '@ui/primitives/feedback/ProgressRing/ProgressRing';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 import { isDefined } from '@ui/utilities/utils/isDefined';
 
-import styles from './MetricRow.module.scss';
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from '../../../theme/tokens.stylex';
 import { type MetricRowProps } from './types/MetricRowProps';
 
 export const MetricRow = ({
@@ -19,8 +26,9 @@ export const MetricRow = ({
   render,
   ref,
   className,
+  xstyle,
   ...props
-}: MetricRowProps) => {
+}: WithXstyle<MetricRowProps>) => {
   const labelId = useId();
   const accessibleValueText = progressValueText ?? value;
 
@@ -29,12 +37,12 @@ export const MetricRow = ({
     ref,
     props: {
       ...props,
-      className: clsx(styles.row, className),
+      ...mergeStylexProps(stylex.props(styles.row, xstyle), className),
       children: (
         <>
-          <div className={styles.label}>
+          <div {...stylex.props(styles.label)}>
             {isDefined(startIcon) && (
-              <span className={styles.icon} aria-hidden="true">
+              <span {...stylex.props(styles.icon)} aria-hidden="true">
                 {startIcon}
               </span>
             )}
@@ -60,3 +68,29 @@ export const MetricRow = ({
     },
   });
 };
+
+const styles = stylex.create({
+  row: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-primary'],
+    display: 'flex',
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    gap: spacing['--t-spacing-2'],
+    minHeight: 24,
+  },
+  label: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    flexGrow: 1,
+    flexShrink: 1,
+    flexBasis: '0%',
+    gap: spacing['--t-spacing-1'],
+    minWidth: 0,
+  },
+  icon: {
+    display: 'flex',
+    flexShrink: 0,
+  },
+});

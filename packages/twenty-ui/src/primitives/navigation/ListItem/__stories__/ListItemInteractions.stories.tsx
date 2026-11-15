@@ -7,7 +7,6 @@ import { Button } from '@ui/primitives/input/Button/Button';
 import { A11Y_DEFER_COLOR_CONTRAST, ComponentDecorator } from '@ui/testing';
 
 import { ListItem } from '../ListItem';
-import styles from '../ListItem.module.scss';
 import { type ListItemProps } from '../types/ListItemProps';
 
 const SelectableListItemExample = (props: ListItemProps) => {
@@ -193,7 +192,7 @@ export const SelectionAndRenderState: Story = {
     await expect(item).not.toHaveAttribute('data-disabled');
     await expect(item).toHaveAttribute('data-color', 'neutral');
     await expect(item).toHaveAttribute('data-indicator', 'check');
-    await expect(item.querySelector(`.${styles.checkIndicator}`)).toBeNull();
+    await expect(item.querySelector('svg')).toBeNull();
 
     await userEvent.click(item);
 
@@ -202,7 +201,7 @@ export const SelectionAndRenderState: Story = {
     await expect(item).toHaveAttribute('data-highlighted');
     await expect(item).toHaveAttribute('data-render-highlighted', 'true');
     await expect(item).toHaveAttribute('data-color', 'danger');
-    await expect(item.querySelector(`.${styles.checkIndicator}`)).toBeVisible();
+    await expect(item.querySelector('svg')).toBeVisible();
   },
 };
 

@@ -1,22 +1,31 @@
 import { Dialog as DialogPrimitive } from '@base-ui/react/dialog';
+import * as stylex from '@stylexjs/stylex';
 
 import { useProvidedTextDirection } from '@ui/primitives/layout/DirectionProvider/internal/useProvidedTextDirection';
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
-import styles from '@ui/primitives/surfaces/internal/Dialog.module.scss';
+import {
+  dialogStyles,
+  dialogViewportMarker,
+} from '../../internal/Dialog.stylex';
 import { type DialogViewportProps } from '../types/DialogViewportProps';
 
 export const DialogViewport = ({
   className,
+  xstyle,
   ...props
-}: DialogViewportProps) => {
+}: WithXstyle<DialogViewportProps>) => {
   const direction = useProvidedTextDirection();
 
   return (
     <DialogPrimitive.Viewport
       dir={direction}
       {...props}
-      className={mergeClassNames(styles.viewport, className)}
+      {...mergeStylexProps(
+        stylex.props(dialogViewportMarker, dialogStyles.viewport, xstyle),
+        className,
+      )}
     />
   );
 };

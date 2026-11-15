@@ -6,13 +6,11 @@ import { runComponentConformance } from '@test-utilities/conformance/runComponen
 import { Button } from '@ui/primitives/input/Button/Button';
 
 import { Banner } from '../Banner';
-import styles from '../Banner.module.scss';
 
 runComponentConformance({
   name: 'Banner',
   element: <Banner>Sync result</Banner>,
   refInstanceOf: HTMLDivElement,
-  ownClassName: styles.banner,
 });
 
 describe('Banner feedback', () => {

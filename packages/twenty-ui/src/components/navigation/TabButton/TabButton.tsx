@@ -1,19 +1,17 @@
-import * as stylex from '@stylexjs/stylex';
 import { useContext } from 'react';
 
 import { Button } from '@ui/primitives/input/Button/Button';
 import { ButtonGroupContext } from '@ui/primitives/input/ButtonGroup/internal/ButtonGroupContext';
 import { TabsTabContent } from '@ui/primitives/navigation/internal/tab/TabsTabContent';
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
 
-import tabStyles from '@ui/primitives/navigation/internal/tab/Tab.module.scss';
-import { borderColor, spacing } from '../../../theme/tokens.stylex';
+import { tabMarker } from '@ui/primitives/navigation/internal/tab/Tab.stylex';
+import { tabStyles } from '@ui/primitives/navigation/internal/tab/TabStyles.stylex';
+import { tabButtonStyles } from './TabButton.stylex';
 import { type TabButtonProps } from './types/TabButtonProps';
 
 export const TabButton = ({
   active = false,
   className,
-  xstyle,
   children,
   startIcon,
   endIcon,
@@ -30,8 +28,13 @@ export const TabButton = ({
       variant="ghost"
       size={resolvedSize}
       data-active={active || undefined}
-      className={mergeClassNames(tabStyles.tab, className)}
-      xstyle={[styles.root, active && styles.active, xstyle]}
+      xstyle={[
+        tabMarker,
+        tabStyles.tab,
+        tabButtonStyles.button,
+        active && tabButtonStyles.active,
+      ]}
+      className={className}
     >
       <TabsTabContent startIcon={startIcon} endIcon={endIcon} badge={badge}>
         {children}
@@ -39,32 +42,3 @@ export const TabButton = ({
     </Button>
   );
 };
-
-const styles = stylex.create({
-  root: {
-    '--tw-button-active': 'transparent',
-    '--tw-button-hover': 'transparent',
-    '--tw-button-radius': 0,
-    blockSize: 'auto',
-    borderWidth: 0,
-    color: 'var(--tw-tabs-color)',
-    display: 'flex',
-    minBlockSize: spacing['--t-spacing-10'],
-    opacity: 1,
-    paddingBlock: 0,
-    paddingInline: 0,
-    '::after': {
-      backgroundColor: 'transparent',
-      blockSize: 1,
-      content: '""',
-      insetBlockEnd: 0,
-      insetInline: 0,
-      pointerEvents: 'none',
-      position: 'absolute',
-      zIndex: 1,
-    },
-  },
-  active: {
-    '::after': { backgroundColor: borderColor['--t-border-color-inverted'] },
-  },
-});

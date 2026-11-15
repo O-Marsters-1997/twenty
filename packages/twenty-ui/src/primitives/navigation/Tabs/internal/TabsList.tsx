@@ -1,18 +1,22 @@
 import { useDirection } from '@base-ui/react/direction-provider';
 import { Tabs as TabsPrimitive } from '@base-ui/react/tabs';
 
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
+import * as stylex from '@stylexjs/stylex';
 
-import styles from '../../internal/tab/Tab.module.scss';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
+
+import { tabStyles } from '../../internal/tab/TabStyles.stylex';
 import { type TabsListProps } from '../types/TabsListProps';
 import { focusNextEnabledTab } from './focusNextEnabledTab';
 
 export const TabsList = ({
   className,
+  xstyle,
   onKeyDown,
   loopFocus = true,
   ...props
-}: TabsListProps) => {
+}: WithXstyle<TabsListProps>) => {
   const direction = useDirection();
 
   const handleKeyDown: TabsListProps['onKeyDown'] = (event) => {
@@ -35,7 +39,7 @@ export const TabsList = ({
       {...props}
       loopFocus={loopFocus}
       onKeyDown={handleKeyDown}
-      className={mergeClassNames(styles.list, className)}
+      {...mergeStylexProps(stylex.props(tabStyles.list, xstyle), className)}
     />
   );
 };

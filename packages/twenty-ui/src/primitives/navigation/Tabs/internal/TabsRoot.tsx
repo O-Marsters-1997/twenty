@@ -1,13 +1,19 @@
 import { Tabs as TabsPrimitive } from '@base-ui/react/tabs';
+import * as stylex from '@stylexjs/stylex';
 
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
-import styles from '../../internal/tab/Tab.module.scss';
+import { tabStyles } from '../../internal/tab/TabStyles.stylex';
 import { type TabsRootProps } from '../types/TabsRootProps';
 
-export const TabsRoot = ({ className, ...props }: TabsRootProps) => (
+export const TabsRoot = ({
+  className,
+  xstyle,
+  ...props
+}: WithXstyle<TabsRootProps>) => (
   <TabsPrimitive.Root
     {...props}
-    className={mergeClassNames(styles.root, className)}
+    {...mergeStylexProps(stylex.props(tabStyles.root, xstyle), className)}
   />
 );

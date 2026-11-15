@@ -1,18 +1,33 @@
 import { AlertDialog as AlertDialogPrimitive } from '@base-ui/react/alert-dialog';
+import * as stylex from '@stylexjs/stylex';
 
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
-import styles from '@ui/primitives/surfaces/internal/Dialog.module.scss';
+import {
+  dialogPopupMarker,
+  dialogPopupSizeStyles,
+  dialogStyles,
+} from '../../internal/Dialog.stylex';
 import { type AlertDialogPopupProps } from '../types/AlertDialogPopupProps';
 
 export const AlertDialogPopup = ({
   size = 'md',
   className,
+  xstyle,
   ...props
-}: AlertDialogPopupProps) => (
+}: WithXstyle<AlertDialogPopupProps>) => (
   <AlertDialogPrimitive.Popup
     {...props}
     data-size={size}
-    className={mergeClassNames(styles.popup, className)}
+    {...mergeStylexProps(
+      stylex.props(
+        dialogPopupMarker,
+        dialogStyles.popup,
+        size !== 'md' && dialogPopupSizeStyles[size],
+        xstyle,
+      ),
+      className,
+    )}
   />
 );

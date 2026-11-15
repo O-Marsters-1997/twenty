@@ -1,6 +1,7 @@
+import * as stylex from '@stylexjs/stylex';
 import { type ReactElement } from 'react';
 
-import styles from '../OverflowingList.module.scss';
+import { overflowingListItemsMarker } from '../OverflowingList.stylex';
 import { useFocusedElementUnmountRef } from './useFocusedElementUnmountRef';
 
 type OverflowingListItemProps = {
@@ -22,7 +23,11 @@ export const OverflowingListItem = ({
   return (
     <div
       ref={resetFocusWhenFocusedItemUnmounts}
-      className={styles.item}
+      {...stylex.props(
+        styles.item,
+        isHidden && styles.hidden,
+        isLastVisible && styles.lastVisible,
+      )}
       data-hidden={isHidden || undefined}
       data-last-visible={isLastVisible || undefined}
       aria-hidden={isHidden || undefined}
@@ -32,3 +37,55 @@ export const OverflowingListItem = ({
     </div>
   );
 };
+
+const styles = stylex.create({
+  item: {
+    display: 'flex',
+    flexBasis: 'auto',
+    flexGrow: 0,
+    flexShrink: 0,
+    inlineSize: {
+      default: null,
+      [stylex.when.ancestor(
+        ':is([data-measuring])',
+        overflowingListItemsMarker,
+      )]: 'max-content',
+    },
+    maxInlineSize: {
+      default: null,
+      [stylex.when.ancestor(
+        ':is([data-measuring])',
+        overflowingListItemsMarker,
+      )]: 'none',
+    },
+    minInlineSize: 0,
+    overflow: 'hidden',
+    position: {
+      default: null,
+      [stylex.when.ancestor(
+        ':is([data-measuring])',
+        overflowingListItemsMarker,
+      )]: 'static',
+    },
+  },
+  hidden: {
+    inlineSize: 'max-content',
+    position: {
+      default: 'absolute',
+      [stylex.when.ancestor(
+        ':is([data-measuring])',
+        overflowingListItemsMarker,
+      )]: 'static',
+    },
+    visibility: 'hidden',
+  },
+  lastVisible: {
+    flexShrink: {
+      default: 1,
+      [stylex.when.ancestor(
+        ':is([data-measuring])',
+        overflowingListItemsMarker,
+      )]: 0,
+    },
+  },
+});

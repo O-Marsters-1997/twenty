@@ -1,6 +1,8 @@
+import * as stylex from '@stylexjs/stylex';
+
 import { getProgressIndicatorPercentage } from '../../Progress/internal/getProgressIndicatorPercentage';
 import { Progress } from '../../Progress/Progress';
-import styles from '../ProgressRing.module.scss';
+import { progressRingStyles } from '../ProgressRing.stylex';
 import { type ProgressRingProps } from '../types/ProgressRingProps';
 
 const RING_SIZE = { sm: 14, md: 16 };
@@ -16,7 +18,7 @@ export const ProgressRingIndicator = ({
 
   return (
     <Progress.Indicator
-      className={styles.ring}
+      {...stylex.props(progressRingStyles.ring)}
       aria-hidden="true"
       render={(indicatorProps) => {
         const percentage = getProgressIndicatorPercentage({
@@ -41,14 +43,14 @@ export const ProgressRingIndicator = ({
               focusable="false"
             >
               <circle
-                className={styles.track}
+                {...stylex.props(progressRingStyles.track)}
                 cx={diameter / 2}
                 cy={diameter / 2}
                 r={radius}
                 strokeWidth={STROKE_WIDTH}
               />
               <circle
-                className={styles.indicator}
+                {...stylex.props(progressRingStyles.indicator)}
                 cx={diameter / 2}
                 cy={diameter / 2}
                 r={radius}

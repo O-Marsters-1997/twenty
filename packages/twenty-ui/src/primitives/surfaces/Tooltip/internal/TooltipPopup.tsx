@@ -1,19 +1,29 @@
 import { Tooltip as TooltipPrimitive } from '@base-ui/react/tooltip';
+import * as stylex from '@stylexjs/stylex';
 
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
-import styles from '../Tooltip.module.scss';
+import { tooltipStyles } from '../Tooltip.stylex';
 import { type TooltipPopupProps } from '../types/TooltipPopupProps';
 
 export const TooltipPopup = ({
   className,
+  xstyle,
   withExitAnimation = false,
   ...props
-}: TooltipPopupProps) => (
+}: WithXstyle<TooltipPopupProps>) => (
   <TooltipPrimitive.Popup
     role="tooltip"
     data-with-exit-animation={withExitAnimation || undefined}
     {...props}
-    className={mergeClassNames(styles.popup, className)}
+    {...mergeStylexProps(
+      stylex.props(
+        tooltipStyles.popup,
+        withExitAnimation && tooltipStyles.exitAnimation,
+        xstyle,
+      ),
+      className,
+    )}
   />
 );

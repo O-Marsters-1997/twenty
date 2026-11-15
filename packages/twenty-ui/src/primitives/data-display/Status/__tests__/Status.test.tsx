@@ -7,12 +7,10 @@ import { expect, it, vi } from 'vitest';
 import { ThemeProvider } from '@ui/theme/ThemeProvider';
 
 import { Status } from '../Status';
-import styles from '../Status.module.scss';
 
 runComponentConformance({
   name: 'Status',
   element: <Status color="blue">Label</Status>,
-  ownClassName: styles.status,
   refInstanceOf: HTMLSpanElement,
 });
 

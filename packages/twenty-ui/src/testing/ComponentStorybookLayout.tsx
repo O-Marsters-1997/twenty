@@ -1,7 +1,8 @@
+import * as stylex from '@stylexjs/stylex';
 import { type JSX } from 'react';
 import { isDefined } from '@ui/utilities/utils/isDefined';
 
-import styles from './ComponentStorybookLayout.module.scss';
+import { background, borderColor } from '../theme/tokens.stylex';
 
 type ComponentStorybookLayoutProps = {
   width?: number;
@@ -18,9 +19,8 @@ export const ComponentStorybookLayout = ({
 }: ComponentStorybookLayoutProps) => {
   return (
     <div
-      className={styles.layout}
+      {...stylex.props(styles.layout)}
       style={{
-        // background falls back to the SCSS default when undefined
         background: backgroundColor,
         height: isDefined(height) ? `${height}px` : 'fit-content',
         minWidth: width ? 'unset' : '300px',
@@ -31,3 +31,17 @@ export const ComponentStorybookLayout = ({
     </div>
   );
 };
+
+const styles = stylex.create({
+  layout: {
+    backgroundColor: background['--t-background-primary'],
+    borderColor: borderColor['--t-border-color-light'],
+    borderRadius: 5,
+    borderStyle: 'solid',
+    borderWidth: 1,
+    display: 'flex',
+    flexDirection: 'row',
+    maxWidth: 'calc(100% - 40px)',
+    padding: 20,
+  },
+});

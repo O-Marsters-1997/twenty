@@ -5,12 +5,9 @@ import userEvent from '@testing-library/user-event';
 
 import { runComponentConformance } from '@test-utilities/conformance/runComponentConformance';
 
-import styles from '../SectionHeader.module.scss';
-
 runComponentConformance({
   name: 'Section.Header',
   element: <Section.Header title="Workspace" description="Manage your team" />,
-  ownClassName: styles.header,
   refInstanceOf: HTMLDivElement,
   renderPropTagName: 'header',
 });
