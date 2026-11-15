@@ -6,13 +6,14 @@ import { type MenuItemProps } from './types/MenuItemProps';
 import { MenuItemLeftContent } from '@ui/components/navigation/MenuItem/parts/MenuItemLeftContent';
 import {
   StyledHoverableMenuItemBase,
+  StyledMenuItemHoverableButtons,
   StyledMenuItemRightContent,
 } from '@ui/components/navigation/MenuItem/parts/StyledMenuItemBase';
 import { Shortcut } from '@ui/primitives/typography/Shortcut/Shortcut';
 import { useTheme } from '@ui/theme';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 
-import styles from './MenuItem.module.scss';
+import { animationDuration } from '../../../theme/tokens.stylex';
 
 export const MenuItem = ({
   accent = 'default',
@@ -76,9 +77,11 @@ export const MenuItem = ({
 
       <StyledMenuItemRightContent>
         {iconButtons && (
-          <StyledMenuItemRightContent className="hoverable-buttons">
+          <StyledMenuItemHoverableButtons
+            hoverOnly={isIconDisplayedOnHoverOnly}
+          >
             {iconButtons}
-          </StyledMenuItemRightContent>
+          </StyledMenuItemHoverableButtons>
         )}
         {isDefined(shortcut) && (
           <Shortcut shortcut={shortcut} sequenceJoinLabel={shortcutJoinLabel} />
@@ -89,11 +92,11 @@ export const MenuItem = ({
         {RightComponent}
         {hasSubMenu && (
           <div
-            className={clsx(
+            {...stylex.props(
               styles.subMenuIcon,
               isSubMenuOpened && styles.subMenuIconOpened,
+              disabled && styles.subMenuIconHidden,
             )}
-            style={{ visibility: disabled ? 'hidden' : 'visible' }}
           >
             <IconChevronRight
               size={theme.icon.size.sm}
@@ -105,3 +108,15 @@ export const MenuItem = ({
     </StyledHoverableMenuItemBase>
   );
 };
+
+const styles = stylex.create({
+  subMenuIcon: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+    transform: 'rotate(0deg)',
+    transition: `transform calc(${animationDuration['--t-animation-duration-normal']} * 1s) ease-in-out`,
+  },
+  subMenuIconOpened: { transform: 'rotate(90deg)' },
+  subMenuIconHidden: { visibility: 'hidden' },
+});

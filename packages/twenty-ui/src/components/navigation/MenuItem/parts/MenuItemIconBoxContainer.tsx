@@ -1,7 +1,13 @@
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 import { type ReactNode } from 'react';
 
-import styles from './MenuItemIconBoxContainer.module.scss';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+
+import {
+  backgroundTransparent,
+  borderRadius,
+  spacing,
+} from '../../../../theme/tokens.stylex';
 
 export const StyledIconContainer = ({
   children,
@@ -13,9 +19,8 @@ export const StyledIconContainer = ({
   hasBackground?: boolean;
 }) => (
   <div
-    className={clsx(
-      styles.iconContainer,
-      hasBackground && styles.withBackground,
+    {...mergeStylexProps(
+      stylex.props(styles.root, hasBackground && styles.withBackground),
       className,
     )}
   >
@@ -24,3 +29,16 @@ export const StyledIconContainer = ({
 );
 
 export { StyledIconContainer as MenuItemIconBoxContainer };
+
+const styles = stylex.create({
+  root: {
+    alignItems: 'flex-start',
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    display: 'flex',
+    flexDirection: 'column',
+    padding: spacing['--t-spacing-1'],
+  },
+  withBackground: {
+    backgroundColor: backgroundTransparent['--t-background-transparent-light'],
+  },
+});

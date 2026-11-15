@@ -1,8 +1,10 @@
+import * as stylex from '@stylexjs/stylex';
+
 import { Dropdown } from '@ui/components/navigation/Dropdown/Dropdown';
 import { IconChevronDown } from '@ui/icon';
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
 
-import styles from '../CurrencyPicker.module.scss';
+import { currencyPickerStyles } from '../CurrencyPicker.stylex';
 import { type CurrencyPickerTriggerProps } from '../types/CurrencyPickerTriggerProps';
 
 export const CurrencyPickerTrigger = ({
@@ -12,9 +14,12 @@ export const CurrencyPickerTrigger = ({
 }: CurrencyPickerTriggerProps) => (
   <Dropdown.Trigger
     {...props}
-    className={mergeClassNames(styles.trigger, className)}
+    {...mergeStylexProps(stylex.props(currencyPickerStyles.trigger), className)}
   >
     {value}
-    <IconChevronDown aria-hidden="true" className={styles.chevron} />
+    <IconChevronDown
+      aria-hidden="true"
+      {...stylex.props(currencyPickerStyles.chevron)}
+    />
   </Dropdown.Trigger>
 );

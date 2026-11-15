@@ -1,9 +1,10 @@
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 import { type ComponentPropsWithRef } from 'react';
 
 import { Text } from '@ui/primitives/typography/Text/Text';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
 
-import styles from '../Dropdown.module.scss';
+import { dropdownStyles } from '../Dropdown.stylex';
 
 export const DropdownLoading = ({
   className,
@@ -14,6 +15,6 @@ export const DropdownLoading = ({
     role="status"
     aria-live="polite"
     aria-busy="true"
-    className={clsx(styles.status, className)}
+    {...mergeStylexProps(stylex.props(dropdownStyles.status), className)}
   />
 );

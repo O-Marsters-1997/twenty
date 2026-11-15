@@ -1,13 +1,14 @@
 import { useRender } from '@base-ui/react/use-render';
 import { isNonEmptyArray } from '@sniptt/guards';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 import { useState } from 'react';
 
 import { Dropdown } from '@ui/components/navigation/Dropdown/Dropdown';
 import { OverflowingTextWithTooltip } from '@ui/primitives/typography/OverflowingTextWithTooltip/OverflowingTextWithTooltip';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
 import { isDefined } from '@ui/utilities/utils/isDefined';
 
-import styles from '../CurrencyPicker.module.scss';
+import { currencyPickerStyles } from '../CurrencyPicker.stylex';
 import { getCurrencyPickerLabel } from './getCurrencyPickerLabel';
 import { type CurrencyPickerOptionsProps } from '../types/CurrencyPickerOptionsProps';
 
@@ -44,7 +45,10 @@ export const CurrencyPickerOptions = ({
     ref,
     props: {
       ...props,
-      className: clsx(styles.options, className),
+      ...mergeStylexProps(
+        stylex.props(currencyPickerStyles.options),
+        className,
+      ),
       children: (
         <>
           <Dropdown.Search
@@ -71,7 +75,7 @@ export const CurrencyPickerOptions = ({
               ))}
             </Dropdown.Section>
           )}
-          <Dropdown.Empty className={styles.emptyStatus}>
+          <Dropdown.Empty xstyle={currencyPickerStyles.emptyStatus}>
             {hasMatchingCurrencies ? null : emptyLabel}
           </Dropdown.Empty>
         </>

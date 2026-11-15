@@ -1,7 +1,7 @@
 import { MenuItemLeftContent } from '@ui/components/navigation/MenuItem/parts/MenuItemLeftContent';
 import {
   StyledHoverableMenuItemBase,
-  StyledMenuItemRightContent,
+  StyledMenuItemHoverableButtons,
 } from '@ui/components/navigation/MenuItem/parts/StyledMenuItemBase';
 import { type MenuItemDraggableProps } from './types/MenuItemDraggableProps';
 
@@ -40,9 +40,9 @@ export const MenuItemDraggable = ({
         gripMode={gripMode}
       />
       {iconButtons && (
-        <StyledMenuItemRightContent className="hoverable-buttons">
+        <StyledMenuItemHoverableButtons hoverOnly={isIconDisplayedOnHoverOnly}>
           {iconButtons}
-        </StyledMenuItemRightContent>
+        </StyledMenuItemHoverableButtons>
       )}
     </StyledHoverableMenuItemBase>
   );

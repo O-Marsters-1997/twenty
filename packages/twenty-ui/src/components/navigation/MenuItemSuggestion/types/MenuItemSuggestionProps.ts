@@ -1,3 +1,5 @@
+import { type StyleXStyles } from '@stylexjs/stylex';
+
 import { type IconComponent } from '@ui/icon';
 import { type MouseEvent } from 'react';
 
@@ -9,5 +11,6 @@ export type MenuItemSuggestionProps = {
   contextualTextPosition?: 'left' | 'right';
   selected?: boolean;
   className?: string;
+  xstyle?: StyleXStyles;
   onClick?: (event: MouseEvent<HTMLLIElement>) => void;
 };

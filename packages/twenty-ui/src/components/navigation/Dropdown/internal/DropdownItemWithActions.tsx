@@ -1,11 +1,13 @@
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 import { type ReactNode } from 'react';
 
 import { IconCheck, IconChevronRight } from '@ui/icon';
-import listItemStyles from '@ui/primitives/navigation/ListItem/ListItem.module.scss';
 import { type ListItemProps } from '@ui/primitives/navigation/ListItem/types/ListItemProps';
 
-import styles from '../Dropdown.module.scss';
+import {
+  dropdownItemWithActionsMarker,
+  dropdownStyles,
+} from '../Dropdown.stylex';
 
 const DROPDOWN_ITEM_SELECTOR = '[data-dropdown-item]';
 
@@ -35,7 +37,14 @@ export const DropdownItemWithActions = ({
   children,
 }: DropdownItemWithActionsProps) => (
   <div
-    className={clsx(listItemStyles.root, styles.itemWithActions)}
+    {...stylex.props(
+      dropdownItemWithActionsMarker,
+      dropdownStyles.itemWithActions,
+      (focused || (selected && indicator === 'none')) &&
+        dropdownStyles.itemWithActionsHighlighted,
+      color === 'danger' && dropdownStyles.itemWithActionsDanger,
+      disabled && dropdownStyles.itemWithActionsDisabled,
+    )}
     role="none"
     data-actions-visibility={actionsVisibility}
     data-color={color}
@@ -54,18 +63,30 @@ export const DropdownItemWithActions = ({
     }}
   >
     {children}
-    <span className={clsx(listItemStyles.actions, styles.itemActions)}>
+    <span
+      {...stylex.props(
+        dropdownStyles.itemActions,
+        actionsVisibility === 'hover' && dropdownStyles.itemActionsHoverOnly,
+      )}
+    >
       {actions}
     </span>
     {indicator === 'check' && selected && (
       <IconCheck
-        className={clsx(listItemStyles.checkIndicator, styles.itemDecoration)}
+        {...stylex.props(
+          dropdownStyles.checkIndicator,
+          dropdownStyles.itemDecoration,
+        )}
         aria-hidden
       />
     )}
     {hasSubmenu && (
       <IconChevronRight
-        className={clsx(listItemStyles.submenuIcon, styles.itemDecoration)}
+        {...stylex.props(
+          dropdownStyles.submenuIcon,
+          dropdownStyles.itemDecoration,
+          disabled && dropdownStyles.submenuIconHidden,
+        )}
         aria-hidden
       />
     )}

@@ -1,12 +1,15 @@
 import { isNonEmptyArray } from '@sniptt/guards';
+import * as stylex from '@stylexjs/stylex';
 import { useState } from 'react';
 
 import { Dropdown } from '@ui/components/navigation/Dropdown/Dropdown';
 import { OverflowingTextWithTooltip } from '@ui/primitives/typography/OverflowingTextWithTooltip/OverflowingTextWithTooltip';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
 import { normalizeSearchText } from '@ui/utilities/utils/normalizeSearchText';
 import { isDefined } from '@ui/utilities/utils/isDefined';
 
-import styles from '../PhoneCountryPicker.module.scss';
+import '../PhoneCountryPicker.css';
+import { phoneCountryPickerStyles } from '../PhoneCountryPicker.stylex';
 import { type PhoneCountryPickerOptionsProps } from '../types/PhoneCountryPickerOptionsProps';
 import { getPhoneCountryOptionLabel } from './getPhoneCountryOptionLabel';
 
@@ -55,7 +58,16 @@ export const PhoneCountryPickerOptions = ({
               selected={country.value === value}
               onSelect={() => onValueChange(country.value)}
               startIcon={
-                <span className={styles.optionFlag} aria-hidden>
+                <span
+                  {...mergeStylexProps(
+                    stylex.props(
+                      phoneCountryPickerStyles.flag,
+                      phoneCountryPickerStyles.optionFlag,
+                    ),
+                    'tw-phone-country-flag',
+                  )}
+                  aria-hidden
+                >
                   {country.flag}
                 </span>
               }

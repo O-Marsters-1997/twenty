@@ -1,14 +1,26 @@
 import { useRender } from '@base-ui/react/use-render';
 import { useMergedRefs } from '@base-ui/utils/useMergedRefs';
 import { isNonEmptyString } from '@sniptt/guards';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 import { type ChangeEvent, useId, useRef } from 'react';
 
 import { IconTrash, IconUpload, IconX } from '@ui/icon';
 import { Button } from '@ui/primitives/input/Button/Button';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
 import { isDefined } from '@ui/utilities/utils/isDefined';
 
-import styles from './ImageInput.module.scss';
+import { focusStyles } from '../../../styles/focus.stylex';
+import { media } from '../../../theme/constants.stylex';
+import {
+  background,
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  spacing,
+} from '../../../theme/tokens.stylex';
+import { imageInputPreviewMarker } from './ImageInput.stylex';
 import { ImageInputPreview } from './internal/ImageInputPreview';
 import { type ImageInputProps } from './types/ImageInputProps';
 
@@ -87,14 +99,19 @@ export const ImageInput = ({
     render,
     ref,
     props: {
-      className: clsx(styles.root, className),
+      ...mergeStylexProps(stylex.props(styles.root), className),
       style,
       dir,
       'aria-busy': isUploading || inputProps['aria-busy'],
       children: (
         <>
           <button
-            className={styles.preview}
+            {...stylex.props(
+              imageInputPreviewMarker,
+              focusStyles.ring,
+              styles.preview,
+              hasPicture && styles.previewWithPicture,
+            )}
             type="button"
             disabled={isSelectionUnavailable}
             aria-disabled={isUploading || undefined}
@@ -104,13 +121,13 @@ export const ImageInput = ({
           >
             <ImageInputPreview key={src} src={src} />
           </button>
-          <div className={styles.content}>
-            <div className={styles.actions}>
+          <div {...stylex.props(styles.content)}>
+            <div {...stylex.props(styles.actions)}>
               <input
                 aria-label={uploadLabel}
                 {...inputProps}
                 ref={mergedFileInputRef}
-                className={styles.fileInput}
+                {...stylex.props(styles.fileInput)}
                 dir={dir}
                 children={undefined}
                 dangerouslySetInnerHTML={undefined}
@@ -159,13 +176,13 @@ export const ImageInput = ({
               </Button>
             </div>
             {hasHelperText && (
-              <span className={styles.helperText} id={helperTextId}>
+              <span {...stylex.props(styles.helperText)} id={helperTextId}>
                 {helperText}
               </span>
             )}
             {hasErrorMessage && (
               <span
-                className={styles.errorMessage}
+                {...stylex.props(styles.errorMessage)}
                 id={errorMessageId}
                 role="alert"
               >
@@ -178,3 +195,72 @@ export const ImageInput = ({
     },
   });
 };
+
+const unavailable = ':is(:disabled, [aria-disabled="true"])';
+
+const styles = stylex.create({
+  root: { display: 'flex', flexDirection: 'row' },
+  preview: {
+    alignItems: 'center',
+    backgroundColor: {
+      default: backgroundTransparent['--t-background-transparent-light'],
+      [unavailable]: background['--t-background-secondary'],
+      [`:hover:not(${unavailable})`]: {
+        default: null,
+        [media.hoverCapable]:
+          backgroundTransparent['--t-background-transparent-medium'],
+      },
+    },
+    blockSize: 66,
+    borderColor: borderColor['--t-border-color-medium'],
+    borderRadius: borderRadius['--t-border-radius-md'],
+    borderStyle: 'solid',
+    borderWidth: 1,
+    boxSizing: 'content-box',
+    color: fontColor['--t-font-color-light'],
+    cursor: { default: 'pointer', [unavailable]: 'not-allowed' },
+    display: 'flex',
+    flexShrink: 0,
+    inlineSize: 66,
+    justifyContent: 'center',
+    overflow: 'hidden',
+    padding: 0,
+    transition: {
+      default: 'background 0.1s ease',
+      [media.reducedMotion]: 'none',
+    },
+  },
+  previewWithPicture: {
+    backgroundColor: {
+      default: backgroundTransparent['--t-background-transparent-light'],
+      [unavailable]: background['--t-background-secondary'],
+      [`:hover:not(${unavailable})`]: {
+        default: null,
+        [media.hoverCapable]: 'transparent',
+      },
+    },
+  },
+  fileInput: { display: 'none' },
+  content: {
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-3'],
+    justifyContent: 'start',
+    marginInlineStart: spacing['--t-spacing-4'],
+  },
+  actions: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: spacing['--t-spacing-2'],
+  },
+  helperText: {
+    color: fontColor['--t-font-color-light'],
+    fontSize: fontSize['--t-font-size-xs'],
+  },
+  errorMessage: {
+    color: fontColor['--t-font-color-danger'],
+    fontSize: fontSize['--t-font-size-xs'],
+    marginBlockStart: spacing['--t-spacing-1'],
+  },
+});

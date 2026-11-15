@@ -1,4 +1,5 @@
 import { isNonEmptyString, isString } from '@sniptt/guards';
+import * as stylex from '@stylexjs/stylex';
 import { type ReactNode } from 'react';
 
 import { MenuItemIcon } from '@ui/components/navigation/MenuItem/parts/MenuItemIcon';
@@ -17,7 +18,7 @@ import { IconGripVertical, type IconComponent } from '@ui/icon';
 import { type ThemeColor, themeCssVariables, useTheme } from '@ui/theme';
 import { isDefined } from '@ui/utilities/utils/isDefined';
 
-import styles from './MenuItemLeftContent.module.scss';
+import { fontSize, fontWeight } from '../../../../theme/tokens.stylex';
 
 type MenuItemLeftContentProps = {
   className?: string;
@@ -133,7 +134,7 @@ export const MenuItemLeftContent = ({
       )}
       <StyledMenuItemLabel>
         {isString(text) ? (
-          <div className={styles.mainText}>
+          <div {...stylex.props(styles.mainText)}>
             <OverflowingTextWithTooltip text={text} />
           </div>
         ) : (
@@ -155,7 +156,7 @@ export const MenuItemLeftContent = ({
         )}
       </StyledMenuItemLabel>
       {contextualTextPosition === 'right' && (
-        <div className={styles.menuItemLabelRight}>
+        <div {...stylex.props(styles.menuItemLabelRight)}>
           <StyledRightMenuItemContextualText>
             {isString(contextualText) ? (
               <OverflowingTextWithTooltip text={contextualText} />
@@ -168,3 +169,22 @@ export const MenuItemLeftContent = ({
     </StyledMenuItemLeftContent>
   );
 };
+
+const styles = stylex.create({
+  mainText: {
+    flexShrink: 0,
+    maxInlineSize: '100%',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  menuItemLabelRight: {
+    display: 'flex',
+    flexDirection: 'row',
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    marginInlineStart: 'auto',
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+  },
+});

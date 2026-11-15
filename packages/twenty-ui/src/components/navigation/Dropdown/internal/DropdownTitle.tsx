@@ -1,9 +1,10 @@
 import { Popover as PopoverPrimitive } from '@base-ui/react/popover';
 import { useMergedRefs } from '@base-ui/utils/useMergedRefs';
+import * as stylex from '@stylexjs/stylex';
 
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
 
-import styles from '../Dropdown.module.scss';
+import { dropdownStyles } from '../Dropdown.stylex';
 import { type DropdownTitleProps } from '../types/DropdownTitleProps';
 import { useDropdownContext } from './useDropdownContext';
 import { useRegisterDropdownLabelElement } from './useRegisterDropdownLabelElement';
@@ -23,7 +24,7 @@ export const DropdownTitle = ({
       {...props}
       ref={mergedRef}
       render={render ?? <div />}
-      className={mergeClassNames(styles.title, className)}
+      {...mergeStylexProps(stylex.props(dropdownStyles.title), className)}
     />
   );
 };

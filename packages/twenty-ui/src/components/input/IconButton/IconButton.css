@@ -1,0 +1,10 @@
+@layer twenty-ui {
+  .tw-icon-button-icon > svg {
+    block-size: calc(
+      var(--tw-icon-button-icon-size, var(--t-icon-size-md)) * 1px
+    );
+    inline-size: calc(
+      var(--tw-icon-button-icon-size, var(--t-icon-size-md)) * 1px
+    );
+  }
+}

@@ -1,11 +1,14 @@
 import { isNonEmptyArray, isNonEmptyString } from '@sniptt/guards';
+import * as stylex from '@stylexjs/stylex';
 import { useState } from 'react';
 
 import { Dropdown } from '@ui/components/navigation/Dropdown/Dropdown';
 import { IconCircleOff } from '@ui/icon';
 import { normalizeSearchText } from '@ui/utilities/utils/normalizeSearchText';
 
-import styles from '../CountrySelect.module.scss';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+
+import { countrySelectStyles } from '../CountrySelect.stylex';
 import { type CountryChoice } from '../types/CountryChoice';
 
 type CountrySelectOptionsProps = {
@@ -16,6 +19,11 @@ type CountrySelectOptionsProps = {
   noCountryLabel: string;
   noResultsLabel: string;
 };
+
+const countrySelectFlagProps = mergeStylexProps(
+  stylex.props(countrySelectStyles.flag),
+  'tw-country-select-flag',
+);
 
 export const CountrySelectOptions = ({
   countries,
@@ -38,7 +46,7 @@ export const CountrySelectOptions = ({
     <Dropdown.OptionItem
       selected={!isNonEmptyString(value)}
       startIcon={
-        <span className={styles.flag} aria-hidden="true">
+        <span {...countrySelectFlagProps} aria-hidden="true">
           <IconCircleOff />
         </span>
       }
@@ -65,7 +73,7 @@ export const CountrySelectOptions = ({
               key={country.value}
               selected={country.value === value}
               startIcon={
-                <span className={styles.flag} aria-hidden="true">
+                <span {...countrySelectFlagProps} aria-hidden="true">
                   {country.flag}
                 </span>
               }

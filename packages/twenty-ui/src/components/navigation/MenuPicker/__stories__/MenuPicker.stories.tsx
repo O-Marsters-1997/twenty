@@ -5,7 +5,9 @@ import { Heading } from '@ui/primitives/typography/Heading/Heading';
 import { A11Y_DEFER_COLOR_CONTRAST, ComponentDecorator } from '@ui/testing';
 import { type ReactNode } from 'react';
 
-import styles from './MenuPicker.stories.module.scss';
+import * as stylex from '@stylexjs/stylex';
+
+import { spacing } from '../../../../theme/tokens.stylex';
 
 const meta: Meta<typeof MenuPicker> = {
   id: 'ui-navigation-menu-menupicker',
@@ -56,11 +58,19 @@ export const WithoutLabel: Story = {
 
 const SectionTitle = ({ children }: { children?: ReactNode }) => {
   return (
-    <Heading className={styles.title} level={3} size="lg">
+    <Heading
+      className={stylex.props(styles.title).className}
+      level={3}
+      size="lg"
+    >
       {children}
     </Heading>
   );
 };
+
+const styles = stylex.create({
+  title: { lineHeight: 'inherit', marginBlockEnd: spacing['--t-spacing-2'] },
+});
 
 export const AllStates: Story = {
   parameters: { a11y: A11Y_DEFER_COLOR_CONTRAST },

@@ -1,8 +1,9 @@
+import * as stylex from '@stylexjs/stylex';
 import { useCallback } from 'react';
 
 import { isDefined } from '@ui/utilities/utils/isDefined';
 
-import styles from '../Dropdown.module.scss';
+import { dropdownStyles } from '../Dropdown.stylex';
 import { type DropdownPageProps } from '../types/DropdownPageProps';
 import { DropdownContext } from './DropdownContext';
 import { useDropdownContext } from './useDropdownContext';
@@ -29,7 +30,7 @@ export const DropdownPage = ({ id, type, children }: DropdownPageProps) => {
     >
       <div
         ref={registerPageType}
-        className={styles.page}
+        {...stylex.props(dropdownStyles.page)}
         data-dropdown-page-type={type ?? context.rootType}
       >
         {children}
