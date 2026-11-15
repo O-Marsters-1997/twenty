@@ -16,15 +16,8 @@ export const image = (node: JSONContent): ReactNode => {
     <img
       src={src}
       alt={alt}
-      style={{
-        width: isDefined(width) ? width : 'auto',
-        height: 'auto',
-        maxWidth: '100%',
-        outline: 'none',
-        border: 'none',
-        textDecoration: 'none',
-        display: 'block',
-      }}
+      className="block h-auto max-w-full border-none no-underline outline-none"
+      style={{ width: isDefined(width) ? width : 'auto' }}
     />
   );
 

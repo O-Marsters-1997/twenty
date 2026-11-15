@@ -25,9 +25,9 @@ export const columns = (
         return (
           <Fragment key={index}>
             <Column
+              className="align-top"
               style={{
                 width: columnWidth,
-                verticalAlign: 'top',
                 ...columnStyle,
               }}
             >

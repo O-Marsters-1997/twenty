@@ -1,7 +1,8 @@
 import { type ReactNode } from 'react';
-import { Body, Container, Head, Html } from 'react-email';
+import { Body, Container, Head, Html, Tailwind } from 'react-email';
 import { type JSONContent } from '@tiptap/core';
 import { type CanvasTheme, resolveCanvasTheme } from 'twenty-shared/utils';
+import { EMAIL_TAILWIND_CONFIG } from 'src/tailwind.config';
 import { mappedNodeContent } from 'src/utils/email-renderer/renderers/render-node';
 
 const BASE_STYLE_RESET = `blockquote,h1,h2,h3,img,li,ol,p,ul{margin-top:0;margin-bottom:0}`;
@@ -44,18 +45,20 @@ export const reactMarkupFromJSON = (json: JSONContent | string) => {
 
   return (
     <Html>
-      <Head>
-        <style
-          dangerouslySetInnerHTML={{
-            __html: BASE_STYLE_RESET,
-          }}
-        />
-      </Head>
-      {canvasTheme !== null ? (
-        themedBody(canvasTheme, jsxNodes)
-      ) : (
-        <Body>{jsxNodes}</Body>
-      )}
+      <Tailwind config={EMAIL_TAILWIND_CONFIG}>
+        <Head>
+          <style
+            dangerouslySetInnerHTML={{
+              __html: BASE_STYLE_RESET,
+            }}
+          />
+        </Head>
+        {canvasTheme !== null ? (
+          themedBody(canvasTheme, jsxNodes)
+        ) : (
+          <Body>{jsxNodes}</Body>
+        )}
+      </Tailwind>
     </Html>
   );
 };

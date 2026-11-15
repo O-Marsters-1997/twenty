@@ -10,13 +10,13 @@ type HeadingLevel = 1 | 2 | 3;
 
 type HeadingStyle = {
   element: 'h1' | 'h2' | 'h3';
-  fontSize: string;
+  className: string;
 };
 
 const HEADING_STYLES: Record<HeadingLevel, HeadingStyle> = {
-  1: { element: 'h1', fontSize: '32px' },
-  2: { element: 'h2', fontSize: '24px' },
-  3: { element: 'h3', fontSize: '16px' },
+  1: { element: 'h1', className: 'text-[32px]' },
+  2: { element: 'h2', className: 'text-xl' },
+  3: { element: 'h3', className: 'text-lg' },
 };
 
 export const heading = (
@@ -30,15 +30,15 @@ export const heading = (
   }
 
   const content = mappedNodeContent(node, inherited);
-  const { element, fontSize } = HEADING_STYLES[level as HeadingLevel];
+  const { element, className } = HEADING_STYLES[level as HeadingLevel];
 
   const { fontSize: _inheritedFontSize, ...inheritedWithoutSize } = inherited;
 
   return (
     <Heading
       as={element}
+      className={className}
       style={{
-        fontSize,
         ...inheritedWithoutSize,
         ...blockStyle(node.attrs?.style),
       }}
