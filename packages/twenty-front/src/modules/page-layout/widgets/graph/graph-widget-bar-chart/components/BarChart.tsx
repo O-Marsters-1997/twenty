@@ -15,11 +15,11 @@ import {
   type GraphValueFormatOptions,
 } from '@/page-layout/widgets/graph/utils/graphFormatters';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { styled } from '@linaria/react';
 import { type MouseEvent } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { useTheme } from 'twenty-ui/theme';
 import { BarChartLayout } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
 type BarChartProps = {
   data: BarChartDatum[];
   indexBy: string;
@@ -50,13 +50,6 @@ type BarChartProps = {
   allowDataTransitions: boolean;
   hasNoData?: boolean;
 };
-
-const StyledCanvasContainer = styled.div<{ isClickable: boolean }>`
-  cursor: ${({ isClickable }) => (isClickable ? 'pointer' : 'default')};
-  height: 100%;
-  position: relative;
-  width: 100%;
-`;
 
 export const BarChart = ({
   data,
@@ -212,11 +205,14 @@ export const BarChart = ({
   const formatValue = (value: number) => formatGraphValue(value, formatOptions);
 
   return (
-    <StyledCanvasContainer
-      isClickable={isDefined(onSliceClick)}
+    <div
       onMouseMove={handleMouseMove}
       onMouseLeave={onSliceLeave}
       onClick={handleClick}
+      {...stylex.props(
+        styles.canvasContainer,
+        isDefined(onSliceClick) && styles.clickable,
+      )}
     >
       <BarChartLayers
         allowDataTransitions={allowDataTransitions}
@@ -249,6 +245,16 @@ export const BarChart = ({
         xAxisLabel={axisConfig?.xAxisLabel}
         yAxisLabel={axisConfig?.yAxisLabel}
       />
-    </StyledCanvasContainer>
+    </div>
   );
 };
+
+const styles = stylex.create({
+  canvasContainer: {
+    cursor: 'default',
+    height: '100%',
+    position: 'relative',
+    width: '100%',
+  },
+  clickable: { cursor: 'pointer' },
+});

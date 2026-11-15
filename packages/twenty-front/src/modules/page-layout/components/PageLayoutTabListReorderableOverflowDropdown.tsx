@@ -1,5 +1,3 @@
-import { styled } from '@linaria/react';
-
 import { PAGE_LAYOUT_TAB_LIST_DROPPABLE_IDS } from '@/page-layout/components/PageLayoutTabListDroppableIds';
 import { PageLayoutTabListDroppableMoreButton } from '@/page-layout/components/PageLayoutTabListDroppableMoreButton';
 import { PageLayoutTabMenuItemSelectAvatar } from '@/page-layout/components/PageLayoutTabMenuItemSelectAvatar';
@@ -27,18 +25,17 @@ import { useSetAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useSe
 import { Fragment, type RefObject, useContext } from 'react';
 import { SidePanelPages } from 'twenty-shared/types';
 import { type PageLayoutType } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
 
 const SORTABLE_HANDLE_SELECTOR = '[data-dnd-sortable-handle]';
 
-const StyledOverflowMenuItemWrapper = styled.div`
-  cursor: grab;
-  display: flex;
-  min-width: 100%;
-
-  &:active {
-    cursor: grabbing;
-  }
-`;
+const styles = stylex.create({
+  overflowMenuItemWrapper: {
+    cursor: { default: 'grab', ':active': 'grabbing' },
+    display: 'flex',
+    minWidth: '100%',
+  },
+});
 
 type PageLayoutTabListReorderableOverflowDropdownProps = {
   dropdownId: string;
@@ -165,7 +162,7 @@ export const PageLayoutTabListReorderableOverflowDropdown = ({
                   hasTransition={false}
                   orientation="horizontal"
                 >
-                  <StyledOverflowMenuItemWrapper>
+                  <div {...stylex.props(styles.overflowMenuItemWrapper)}>
                     <PageLayoutTabMenuItemSelectAvatar
                       tab={tab}
                       selected={tab.id === activeTabId}
@@ -175,7 +172,7 @@ export const PageLayoutTabListReorderableOverflowDropdown = ({
                       showEditButton={shouldShowEditButton}
                       onEditClick={handleEditClick}
                     />
-                  </StyledOverflowMenuItemWrapper>
+                  </div>
                 </DragDropItemSortableCell>
               </Fragment>
             );

@@ -2,16 +2,18 @@ import { useIsPageLayoutInEditMode } from '@/page-layout/hooks/useIsPageLayoutIn
 import { useCurrentWidgetOrNull } from '@/page-layout/widgets/hooks/useCurrentWidgetOrNull';
 import { getWidgetHeaderActionDefinition } from '@/page-layout/widgets/utils/getWidgetHeaderActionDefinition';
 import { useLayoutRenderingContext } from '@/ui/layout/contexts/LayoutRenderingContext';
-import { styled } from '@linaria/react';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { WidgetType } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledActionsContainer = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  actionsContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+  },
+});
 
 export const WidgetCardHeaderActionsRenderer = () => {
   const widget = useCurrentWidgetOrNull();
@@ -36,8 +38,8 @@ export const WidgetCardHeaderActionsRenderer = () => {
   const HeaderActionComponent = headerActionDefinition.Component;
 
   return (
-    <StyledActionsContainer>
+    <div {...stylex.props(styles.actionsContainer)}>
       <HeaderActionComponent widget={widget} />
-    </StyledActionsContainer>
+    </div>
   );
 };

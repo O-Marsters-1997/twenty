@@ -10,69 +10,59 @@ import { WorkflowDiagramAllowPageScrollContext } from '@/workflow/workflow-diagr
 import { type Draggable } from '@dnd-kit/abstract';
 import { pointerIntersection } from '@dnd-kit/collision';
 import { useDroppable } from '@dnd-kit/react';
-import { styled } from '@linaria/react';
 import { Fragment, type ReactNode, useCallback } from 'react';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { PageLayoutTabLayoutMode } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { spacing, background } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledVerticalListContainer = styled.div<{
-  isInEditMode: boolean;
-  isInPinnedTab: boolean;
-  isSideColumnContext: boolean;
-  shouldUseWhiteBackground: boolean;
-}>`
-  --record-card-background-color: ${({ shouldUseWhiteBackground }) =>
-    shouldUseWhiteBackground
-      ? themeCssVariables.background.primary
-      : themeCssVariables.background.secondary};
-  --viewport-filling-widget-editor-block-inset: ${({
-    isInEditMode,
-    isSideColumnContext,
-  }) =>
-    isInEditMode
-      ? isSideColumnContext
-        ? themeCssVariables.spacing[2]
-        : themeCssVariables.spacing[4]
-      : '0px'};
-  --widget-card-content-overflow: visible;
-  --widget-height: auto;
-  --widget-scroll-overflow: visible;
-
-  background: var(--record-card-background-color);
-  display: flex;
-  flex-direction: column;
-  min-height: ${({ isInEditMode }) => (isInEditMode ? '0' : '100%')};
-  // The pinned tab sits next to the main tab area, so while editing it takes
-  // that area's vertical padding to line their widgets up, and keeps the
-  // tighter side-column one horizontally where the narrow column needs the
-  // room.
-  padding: ${({ isInEditMode, isInPinnedTab, isSideColumnContext }) =>
-    isInEditMode
-      ? isInPinnedTab
-        ? `${themeCssVariables.spacing[2]} ${themeCssVariables.spacing[1]}`
-        : isSideColumnContext
-          ? themeCssVariables.spacing[1]
-          : themeCssVariables.spacing[2]
-      : '0'};
-`;
-
-const StyledHeader = styled.div`
-  flex-shrink: 0;
-  margin-bottom: ${themeCssVariables.spacing[4]};
-`;
-
-const StyledDropTarget = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-height: ${themeCssVariables.spacing[6]};
-  position: relative;
-
-  &:not(:first-child) {
-    margin-top: ${themeCssVariables.spacing[4]};
-  }
-`;
+const styles = stylex.create({
+  container: {
+    '--widget-card-content-overflow': 'visible',
+    '--widget-height': 'auto',
+    '--widget-scroll-overflow': 'visible',
+    backgroundColor: 'var(--record-card-background-color)',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  backgroundPrimary: {
+    '--record-card-background-color': background['--t-background-primary'],
+  },
+  backgroundSecondary: {
+    '--record-card-background-color': background['--t-background-secondary'],
+  },
+  insetNone: { '--viewport-filling-widget-editor-block-inset': '0px' },
+  insetEdit: {
+    '--viewport-filling-widget-editor-block-inset': spacing['--t-spacing-4'],
+  },
+  insetSideColumn: {
+    '--viewport-filling-widget-editor-block-inset': spacing['--t-spacing-2'],
+  },
+  minHeightEdit: { minHeight: 0 },
+  minHeightFull: { minHeight: '100%' },
+  paddingNone: { padding: 0 },
+  paddingEdit: { padding: spacing['--t-spacing-2'] },
+  paddingSideColumn: { padding: spacing['--t-spacing-1'] },
+  paddingPinned: {
+    paddingBlock: spacing['--t-spacing-2'],
+    paddingInline: spacing['--t-spacing-1'],
+  },
+  header: {
+    flexShrink: '0',
+    marginBottom: spacing['--t-spacing-4'],
+  },
+  dropTarget: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    minHeight: spacing['--t-spacing-6'],
+    position: 'relative',
+    marginTop: {
+      default: null,
+      ':not(:first-child)': spacing['--t-spacing-4'],
+    },
+  },
+});
 
 type PageLayoutVerticalListProps = {
   isInEditMode: boolean;
@@ -135,15 +125,30 @@ export const PageLayoutVerticalList = ({
   });
 
   return (
-    <StyledVerticalListContainer
-      isInEditMode={isInEditMode}
-      isInPinnedTab={isInPinnedTab}
-      isSideColumnContext={isSideColumnContext}
-      shouldUseWhiteBackground={!isInPinnedTab || isMobile}
+    <div
+      {...stylex.props(
+        styles.container,
+        !isInPinnedTab || isMobile
+          ? styles.backgroundPrimary
+          : styles.backgroundSecondary,
+        isInEditMode
+          ? isSideColumnContext
+            ? styles.insetSideColumn
+            : styles.insetEdit
+          : styles.insetNone,
+        isInEditMode ? styles.minHeightEdit : styles.minHeightFull,
+        isInEditMode
+          ? isInPinnedTab
+            ? styles.paddingPinned
+            : isSideColumnContext
+              ? styles.paddingSideColumn
+              : styles.paddingEdit
+          : styles.paddingNone,
+      )}
     >
       <WorkflowDiagramAllowPageScrollContext.Provider value={hasPageScroll}>
         {isInEditMode && isDefined(leadingElement) && (
-          <StyledHeader>{leadingElement}</StyledHeader>
+          <div {...stylex.props(styles.header)}>{leadingElement}</div>
         )}
         {widgets.map((widget, index) => (
           <Fragment key={widget.id}>
@@ -168,7 +173,7 @@ export const PageLayoutVerticalList = ({
           </Fragment>
         ))}
         {isInEditMode && !hasViewportFillingWidget && (
-          <StyledDropTarget ref={endDropZoneRef}>
+          <div ref={endDropZoneRef} {...stylex.props(styles.dropTarget)}>
             <DragDropItemDropTarget
               index={widgets.length}
               droppableId={tabId}
@@ -176,9 +181,9 @@ export const PageLayoutVerticalList = ({
               compact
             />
             {trailingElement}
-          </StyledDropTarget>
+          </div>
         )}
       </WorkflowDiagramAllowPageScrollContext.Provider>
-    </StyledVerticalListContainer>
+    </div>
   );
 };

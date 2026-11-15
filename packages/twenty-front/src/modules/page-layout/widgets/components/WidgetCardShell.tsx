@@ -13,7 +13,6 @@ import { isWidgetCardFlushInViewMode } from '@/page-layout/widgets/utils/isWidge
 import { WidgetCard } from '@/page-layout/widgets/widget-card/components/WidgetCard';
 import { WidgetCardContent } from '@/page-layout/widgets/widget-card/components/WidgetCardContent';
 import { WidgetCardHeader } from '@/page-layout/widgets/widget-card/components/WidgetCardHeader';
-import { styled } from '@linaria/react';
 import { type MouseEvent } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { IconLock } from 'twenty-ui/icon';
@@ -23,12 +22,15 @@ import {
   PageLayoutType,
   WidgetType,
 } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledNoAccessContainer = styled.div`
-  align-items: center;
-  display: flex;
-  justify-content: center;
-`;
+const styles = stylex.create({
+  noAccessContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+});
 
 type WidgetCardShellProps = {
   widget: PageLayoutWidget;
@@ -141,12 +143,12 @@ export const WidgetCardShell = ({
               <WidgetContentRenderer widget={widget} />
             </ErrorBoundary>
           ) : (
-            <StyledNoAccessContainer>
+            <div {...stylex.props(styles.noAccessContainer)}>
               <IconLock
                 color={theme.font.color.tertiary}
                 stroke={theme.icon.stroke.sm}
               />
-            </StyledNoAccessContainer>
+            </div>
           )}
         </WidgetCardContent>
       </WidgetCard>

@@ -1,0 +1,9 @@
+@layer third-party {
+  [data-pie-chart] svg g path {
+    transition: filter 0.15s ease-in-out;
+  }
+
+  [data-pie-chart]:not([data-prevent-hover]) svg g path:hover {
+    filter: brightness(0.85);
+  }
+}

@@ -1,29 +1,31 @@
-import { styled } from '@linaria/react';
 import { useContext } from 'react';
 
 import { FieldContext } from '@/object-record/record-field/ui/contexts/FieldContext';
 import { useFieldFocus } from '@/object-record/record-field/ui/hooks/useFieldFocus';
 import { useRecordInlineCellContext } from '@/object-record/record-inline-cell/components/RecordInlineCellContext';
 import { RecordInlineCellValue } from '@/object-record/record-inline-cell/components/RecordInlineCellValue';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledValueContainer = styled.div<{ readonly: boolean }>`
-  display: flex;
-  min-width: 0;
-  position: relative;
-  width: 100%;
-`;
-
-const StyledInlineCellBaseContainer = styled.div<{ readonly: boolean }>`
-  align-items: center;
-  box-sizing: border-box;
-  cursor: ${({ readonly }) => (readonly ? 'default' : 'pointer')};
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  height: fit-content;
-  user-select: none;
-  width: 100%;
-`;
+const styles = stylex.create({
+  base: {
+    alignItems: 'center',
+    boxSizing: 'border-box',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    height: 'fit-content',
+    userSelect: 'none',
+    width: '100%',
+  },
+  readonly: { cursor: 'default' },
+  editable: { cursor: 'pointer' },
+  valueContainer: {
+    display: 'flex',
+    minWidth: '0',
+    position: 'relative',
+    width: '100%',
+  },
+});
 
 export const FieldWidgetInlineCellContainer = () => {
   const { readonly } = useRecordInlineCellContext();
@@ -47,14 +49,17 @@ export const FieldWidgetInlineCellContainer = () => {
   };
 
   return (
-    <StyledInlineCellBaseContainer
-      readonly={readonly ?? false}
+    <div
       onMouseEnter={handleContainerMouseEnter}
       onMouseLeave={handleContainerMouseLeave}
+      {...stylex.props(
+        styles.base,
+        (readonly ?? false) ? styles.readonly : styles.editable,
+      )}
     >
-      <StyledValueContainer readonly={readonly ?? false} id={anchorId}>
+      <div id={anchorId} {...stylex.props(styles.valueContainer)}>
         <RecordInlineCellValue />
-      </StyledValueContainer>
-    </StyledInlineCellBaseContainer>
+      </div>
+    </div>
   );
 };

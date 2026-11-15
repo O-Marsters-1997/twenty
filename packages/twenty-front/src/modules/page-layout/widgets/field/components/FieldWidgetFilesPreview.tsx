@@ -2,14 +2,14 @@ import { PREVIEWABLE_EXTENSIONS } from '@/activities/files/constants/Previewable
 import { downloadFile } from '@/activities/files/utils/downloadFile';
 import { type FieldFilesValue } from '@/object-record/record-field/ui/types/FieldMetadata';
 import { useHasPermissionFlag } from '@/settings/roles/hooks/useHasPermissionFlag';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { lazy, Suspense } from 'react';
 import { IconDownload } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { getFileNameAndExtension } from '~/utils/file/getFileNameAndExtension';
 import { PermissionFlagType } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const DocumentViewer = lazy(() =>
   import('@/activities/files/components/DocumentViewer').then((module) => ({
@@ -17,22 +17,25 @@ const DocumentViewer = lazy(() =>
   })),
 );
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  width: 100%;
-`;
-
-const StyledActions = styled.div`
-  display: flex;
-  justify-content: flex-end;
-`;
-
-const StyledLoadingText = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  padding: ${themeCssVariables.spacing[4]};
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+  actions: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+  },
+  loadingText: {
+    color: fontColor['--t-font-color-tertiary'],
+    paddingTop: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingBottom: spacing['--t-spacing-4'],
+    paddingLeft: spacing['--t-spacing-4'],
+  },
+});
 
 type FieldWidgetFilesPreviewProps = {
   file: FieldFilesValue & { url: string };
@@ -59,20 +62,22 @@ export const FieldWidgetFilesPreview = ({
   const isPreviewable = PREVIEWABLE_EXTENSIONS.includes(fileExtension);
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       {hasDownloadPermission && isPreviewable && (
-        <StyledActions>
+        <div {...stylex.props(styles.actions)}>
           <Button
             startIcon={<IconDownload />}
             size="sm"
             variant="outline"
             onClick={() => downloadFile(file.url, file.label)}
           >{t`Download`}</Button>
-        </StyledActions>
+        </div>
       )}
       <Suspense
         fallback={
-          <StyledLoadingText>{t`Loading document viewer...`}</StyledLoadingText>
+          <div
+            {...stylex.props(styles.loadingText)}
+          >{t`Loading document viewer...`}</div>
         }
       >
         <DocumentViewer
@@ -81,6 +86,6 @@ export const FieldWidgetFilesPreview = ({
           documentExtension={file.extension}
         />
       </Suspense>
-    </StyledContainer>
+    </div>
   );
 };

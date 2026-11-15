@@ -36,16 +36,18 @@ import { SidePanelProvider } from '@/ui/layout/side-panel/contexts/SidePanelCont
 import { useAtomFamilySelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilySelectorValue';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { isNonEmptyString } from '@sniptt/guards';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isDefined } from 'twenty-shared/utils';
 
 import { FieldDisplayMode } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledContainer = styled.div`
-  box-sizing: border-box;
-  width: 100%;
-`;
+const styles = stylex.create({
+  container: {
+    boxSizing: 'border-box',
+    width: '100%',
+  },
+});
 
 type FieldWidgetProps = {
   widget: PageLayoutWidget;
@@ -83,7 +85,7 @@ export const FieldWidget = ({ widget }: FieldWidgetProps) => {
   if (!isDefined(fieldMetadataItem) || !fieldMetadataItem.isActive) {
     return (
       <SidePanelProvider value={{ isInSidePanel }}>
-        <StyledContainer>
+        <div {...stylex.props(styles.container)}>
           <EmptyState.Root>
             <AnimatedPlaceholder type="noRecord" />
             <EmptyState.Content>
@@ -93,7 +95,7 @@ export const FieldWidget = ({ widget }: FieldWidgetProps) => {
               </EmptyState.Description>
             </EmptyState.Content>
           </EmptyState.Root>
-        </StyledContainer>
+        </div>
       </SidePanelProvider>
     );
   }

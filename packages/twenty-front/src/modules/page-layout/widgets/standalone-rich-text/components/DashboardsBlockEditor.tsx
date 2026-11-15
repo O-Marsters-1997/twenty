@@ -1,8 +1,6 @@
 import { filterSuggestionItems } from '@blocknote/core/extensions';
 import { BlockNoteView } from '@blocknote/mantine';
 import { SuggestionMenuController } from '@blocknote/react';
-import { css } from '@linaria/core';
-import { styled } from '@linaria/react';
 import { type ClipboardEvent } from 'react';
 
 import { CustomSlashMenu } from '@/blocknote-editor/components/CustomSlashMenu';
@@ -12,6 +10,7 @@ import { DashboardFormattingToolbar } from '@/page-layout/widgets/standalone-ric
 import { type DASHBOARD_BLOCK_SCHEMA } from '@/page-layout/widgets/standalone-rich-text/constants/DashboardBlockSchema';
 import { getDashboardSlashMenu } from '@/page-layout/widgets/standalone-rich-text/utils/getDashboardSlashMenu';
 import { useThemeColorScheme, themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
 type DashboardsBlockEditorProps = {
   editor: typeof DASHBOARD_BLOCK_SCHEMA.BlockNoteEditor;
   onFocus?: () => void;
@@ -21,132 +20,19 @@ type DashboardsBlockEditorProps = {
   readonly?: boolean;
 };
 
-const StyledEditor = styled.div`
-  width: 100%;
-`;
+import '~/third-party-styles/blocknote-dashboard.css';
+
+const styles = stylex.create({
+  editor: {
+    width: '100%',
+  },
+});
 
 // TODO: Refactor these BlockNote CSS overrides - some may be dead code now that we have custom components
 // (DashboardEditorSideMenu, DashboardColorSelectionMenu).
 // Test removing each selector and move necessary styles to appropriate components.
 // BlockNote shares this class with its body portal to preserve menu styles outside the widget.
 // oxlint-disable-next-line twenty/no-hardcoded-colors
-const editorStyles = css`
-  & .editor {
-    background: transparent;
-    color: ${themeCssVariables.font.color.primary};
-    font-size: 13px;
-    user-select: text;
-  }
-  & .editor [class^='_inlineContent']:before {
-    color: ${themeCssVariables.font.color.tertiary};
-    font-style: normal !important;
-  }
-  & .editor .bn-inline-content:has(> .ProseMirror-trailingBreak):before {
-    font-style: normal;
-  }
-  & .mantine-ActionIcon-icon {
-    background: transparent;
-    height: 20px;
-    width: 20px;
-  }
-  & .bn-drag-handle {
-    height: 20px;
-    width: 20px;
-  }
-  & .bn-block-outer {
-    line-height: 1.4;
-  }
-  & .bn-block-content[data-content-type='checkListItem'] > div > div {
-    align-items: center;
-    display: flex;
-  }
-  & .bn-drag-handle-menu {
-    backdrop-filter: ${themeCssVariables.blur.medium};
-    background: ${themeCssVariables.background.transparent.secondary};
-    border: 1px solid ${themeCssVariables.border.color.medium};
-    border-radius: ${themeCssVariables.border.radius.md};
-    box-shadow:
-      0px 2px 4px rgba(0, 0, 0, 0.04),
-      2px 4px 16px rgba(0, 0, 0, 0.12);
-    min-height: 96px;
-    min-width: 160px;
-    padding: 4px;
-  }
-
-  & .bn-editor {
-    padding-inline: 0px;
-  }
-
-  & .bn-block-content {
-    min-width: 0;
-  }
-
-  & .bn-block-content,
-  & .bn-inline-content {
-    overflow-wrap: anywhere;
-  }
-
-  & .bn-inline-content {
-    max-width: 100%;
-    min-width: 0;
-  }
-
-  & .bn-suggestion-menu-item:hover {
-    background-color: blue;
-  }
-
-  & .bn-suggestion-menu {
-    backdrop-filter: ${themeCssVariables.blur.medium};
-    background: ${themeCssVariables.background.transparent.secondary};
-    border: 1px solid ${themeCssVariables.border.color.medium};
-    border-radius: ${themeCssVariables.border.radius.md};
-    padding: 4px;
-  }
-
-  & .mantine-Menu-item {
-    background-color: transparent;
-    color: ${themeCssVariables.font.color.secondary};
-    font-family: ${themeCssVariables.font.family};
-
-    font-style: normal;
-    font-weight: ${themeCssVariables.font.weight.regular};
-    min-height: 32px;
-    min-width: 152px;
-  }
-  & .mantine-ActionIcon-root:hover {
-    backdrop-filter: blur(20px);
-    background: ${themeCssVariables.background.transparent.primary};
-    border: 1px solid ${themeCssVariables.border.color.light};
-    box-shadow:
-      0px 0px 4px rgba(0, 0, 0, 0.08),
-      0px 2px 4px rgba(0, 0, 0, 0.04);
-  }
-  & .bn-side-menu .mantine-UnstyledButton-root:not(.mantine-Menu-item) svg {
-    height: 16px;
-    width: 16px;
-  }
-
-  & .bn-side-menu > [draggable='true'] {
-    margin-bottom: 5px;
-  }
-  & .bn-color-picker-dropdown {
-    margin-left: 8px;
-  }
-
-  & .bn-inline-content a {
-    color: ${themeCssVariables.color.blue};
-  }
-
-  & .bn-inline-content code {
-    background-color: ${themeCssVariables.background.transparent.light};
-    border: 1px solid ${themeCssVariables.font.color.extraLight};
-    border-radius: ${themeCssVariables.border.radius.sm};
-    color: ${themeCssVariables.font.color.danger};
-    font-family: monospace;
-    font-size: 0.9rem;
-    padding: 2px 4px;
-  }
-`;
 
 export const DashboardsBlockEditor = ({
   editor,
@@ -176,9 +62,9 @@ export const DashboardsBlockEditor = ({
   };
 
   return (
-    <StyledEditor>
+    <div {...stylex.props(styles.editor)}>
       <BlockNoteView
-        className={editorStyles}
+        className="dashboard-block-editor"
         onFocus={handleFocus}
         onBlur={handleBlur}
         onPaste={handlePaste}
@@ -206,6 +92,6 @@ export const DashboardsBlockEditor = ({
           </>
         )}
       </BlockNoteView>
-    </StyledEditor>
+    </div>
   );
 };

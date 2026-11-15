@@ -5,7 +5,6 @@ import { PageLayoutContent } from '@/page-layout/components/PageLayoutContent';
 import { PageLayoutEditModeProvider } from '@/page-layout/components/PageLayoutEditModeProvider';
 import { PageLayoutInitializationQueryEffect } from '@/page-layout/components/PageLayoutInitializationQueryEffect';
 import { PageLayoutRecordPageCustomizationSessionRegistrationEffect } from '@/page-layout/components/PageLayoutRecordPageCustomizationSessionRegistrationEffect';
-import { PAGE_LAYOUT_RECORD_IDENTIFIER_BAR_HEIGHT } from '@/page-layout/constants/PageLayoutRecordIdentifierBarHeight';
 import { PageLayoutContentProvider } from '@/page-layout/contexts/PageLayoutContentContext';
 import { useCurrentPageLayoutOrThrow } from '@/page-layout/hooks/useCurrentPageLayoutOrThrow';
 import { useIsPageLayoutInEditMode } from '@/page-layout/hooks/useIsPageLayoutInEditMode';
@@ -23,22 +22,13 @@ import { useWorkspaceSurfaceScopedComponentInstanceId } from '@/ui/layout/hooks/
 import { useTargetRecord } from '@/ui/layout/contexts/useTargetRecord';
 import { TabListComponentInstanceContext } from '@/ui/layout/tab-list/states/contexts/TabListComponentInstanceContext';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { styled } from '@linaria/react';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
-
-const StyledRecordIdentifierBar = styled.div`
-  align-items: center;
-  background: ${themeCssVariables.background.secondary};
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  box-sizing: border-box;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  height: ${PAGE_LAYOUT_RECORD_IDENTIFIER_BAR_HEIGHT}px;
-  justify-content: space-between;
-  min-width: 0;
-  padding: 0 ${themeCssVariables.spacing[3]};
-`;
+import {
+  spacing,
+  background,
+  borderColor,
+} from 'twenty-ui/theme/tokens.stylex';
+import * as stylex from '@stylexjs/stylex';
 
 type PageLayoutSingleTabRendererProps = {
   pageLayoutId: string;
@@ -67,7 +57,7 @@ const PageLayoutSingleTabRendererInner = () => {
 
   return (
     <>
-      <StyledRecordIdentifierBar>
+      <div {...stylex.props(styles.recordIdentifierBar)}>
         <RecordIdentifierBarTitle
           objectNameSingular={targetRecordIdentifier.targetObjectNameSingular}
           objectRecordId={targetRecordIdentifier.id}
@@ -75,7 +65,7 @@ const PageLayoutSingleTabRendererInner = () => {
         <RecordIdentifierBarCreatedAt
           objectRecordId={targetRecordIdentifier.id}
         />
-      </StyledRecordIdentifierBar>
+      </div>
 
       {isDefined(firstTab) && (
         <PageLayoutSingleTabRendererTabContent firstTabId={firstTab.id} />
@@ -168,3 +158,21 @@ export const PageLayoutSingleTabRenderer = ({
     </PageLayoutComponentInstanceContext.Provider>
   );
 };
+
+const styles = stylex.create({
+  recordIdentifierBar: {
+    alignItems: 'center',
+    backgroundColor: background['--t-background-secondary'],
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: 1,
+    boxSizing: 'border-box',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    height: '40px',
+    justifyContent: 'space-between',
+    minWidth: 0,
+    paddingBlock: 0,
+    paddingInline: spacing['--t-spacing-3'],
+  },
+});

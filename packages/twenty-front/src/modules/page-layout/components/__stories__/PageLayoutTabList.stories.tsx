@@ -1,7 +1,6 @@
 import { TabListRoot } from '@/ui/layout/tab-list/components/TabListRoot';
 import { Tabs } from 'twenty-ui/primitives/navigation';
 import { Text } from 'twenty-ui/primitives/typography';
-import { styled } from '@linaria/react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { type ComponentProps, useMemo } from 'react';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
@@ -20,7 +19,6 @@ import { isDefined } from 'twenty-shared/utils';
 import { PageLayoutTabList } from '@/page-layout/components/PageLayoutTabList';
 import { PageLayoutTabListEffect } from '@/page-layout/components/PageLayoutTabListEffect';
 import { PageLayoutWidgetDndProvider } from '@/page-layout/components/dnd/PageLayoutWidgetDndProvider';
-import { PAGE_LAYOUT_RECORD_IDENTIFIER_BAR_HEIGHT } from '@/page-layout/constants/PageLayoutRecordIdentifierBarHeight';
 import { PageLayoutEditModeProviderContext } from '@/page-layout/contexts/PageLayoutEditModeContext';
 import { PageLayoutComponentInstanceContext } from '@/page-layout/states/contexts/PageLayoutComponentInstanceContext';
 import { pageLayoutPersistedComponentState } from '@/page-layout/states/pageLayoutPersistedComponentState';
@@ -31,27 +29,10 @@ import { activeTabIdComponentState } from '@/ui/layout/tab-list/states/activeTab
 import { jotaiStore } from '@/ui/utilities/state/jotai/jotaiStore';
 import { useAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useAtomComponentState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { PageLayoutType } from '~/generated-metadata/graphql';
 import { ComponentWithRouterDecorator } from '~/testing/decorators/ComponentWithRouterDecorator';
-
-const StyledContainer = styled.div<{ containerWidth: number }>`
-  border: 1px solid ${themeCssVariables.border.color.strong};
-  padding: ${themeCssVariables.spacing[4]};
-  width: ${({ containerWidth }) => containerWidth}px;
-`;
-
-const StyledTabListContainer = styled.div<{ isInIdentifierBar: boolean }>`
-  box-shadow: ${({ isInIdentifierBar }) =>
-    isInIdentifierBar
-      ? `inset 0 -1px 0 ${themeCssVariables.border.color.light}`
-      : 'none'};
-  display: ${({ isInIdentifierBar }) => (isInIdentifierBar ? 'flex' : 'block')};
-  height: ${({ isInIdentifierBar }) =>
-    isInIdentifierBar
-      ? `${PAGE_LAYOUT_RECORD_IDENTIFIER_BAR_HEIGHT}px`
-      : 'auto'};
-`;
+import { spacing, borderColor } from 'twenty-ui/theme/tokens.stylex';
+import * as stylex from '@stylexjs/stylex';
 
 const createInitialTabs = (): PageLayoutTab[] => [
   {
@@ -166,7 +147,7 @@ const PageLayoutTabListPlayground = ({
   };
 
   return (
-    <StyledContainer containerWidth={containerWidth}>
+    <div {...stylex.props(styles.container, styles.width(containerWidth))}>
       <PageLayoutTabListEffect
         isInEditMode={isInEditMode}
         tabs={sortedTabs}
@@ -175,7 +156,11 @@ const PageLayoutTabListPlayground = ({
 
       <TabListRoot componentInstanceId="page-layout-tab-list-story">
         <PageLayoutWidgetDndProvider>
-          <StyledTabListContainer isInIdentifierBar={isInIdentifierBar}>
+          <div
+            {...stylex.props(
+              isInIdentifierBar ? styles.identifierBar : styles.standalone,
+            )}
+          >
             <PageLayoutTabList
               aria-label="Dashboard sections"
               tabs={sortedTabs}
@@ -198,7 +183,7 @@ const PageLayoutTabListPlayground = ({
               presentation={presentation}
               centerTabs={centerTabs}
             />
-          </StyledTabListContainer>
+          </div>
         </PageLayoutWidgetDndProvider>
         {sortedTabs.map((tab) => (
           <Tabs.Panel key={tab.id} value={tab.id}>
@@ -214,7 +199,7 @@ const PageLayoutTabListPlayground = ({
             <SidePanelPageLayoutInfo pageLayoutId="instance-id" />
           </SidePanelPageComponentInstanceContext.Provider>
         )}
-    </StyledContainer>
+    </div>
   );
 };
 
@@ -798,3 +783,19 @@ export const DropOnMoreOpensOverflow: Story = {
     expect(await body.findByRole('button', { name: 'Overview' })).toBeVisible();
   },
 };
+
+const styles = stylex.create({
+  container: {
+    borderColor: borderColor['--t-border-color-strong'],
+    borderStyle: 'solid',
+    borderWidth: 1,
+    padding: spacing['--t-spacing-4'],
+  },
+  width: (width: number) => ({ width }),
+  identifierBar: {
+    boxShadow: `inset 0 -1px 0 ${borderColor['--t-border-color-light']}`,
+    display: 'flex',
+    height: 40,
+  },
+  standalone: { boxShadow: 'none', display: 'block', height: 'auto' },
+});

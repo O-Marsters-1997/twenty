@@ -18,12 +18,12 @@ import {
 import { isFieldMorphRelation } from '@/object-record/record-field/ui/types/guards/isFieldMorphRelation';
 import { recordStoreFamilySelector } from '@/object-record/record-store/states/selectors/recordStoreFamilySelector';
 import { useAtomFamilySelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilySelectorValue';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { CustomError, isDefined } from 'twenty-shared/utils';
 import { IconPencil, IconPlus } from 'twenty-ui/icon';
 import { IconButton } from 'twenty-ui/components/input';
 import { RelationType } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
 
 type FieldWidgetRelationEditActionProps = {
   fieldDefinition:
@@ -32,10 +32,12 @@ type FieldWidgetRelationEditActionProps = {
   recordId: string;
 };
 
-const StyledEditButtonWrapper = styled.div`
-  opacity: 1;
-  pointer-events: auto;
-`;
+const styles = stylex.create({
+  editButtonWrapper: {
+    opacity: '1',
+    pointerEvents: 'auto',
+  },
+});
 
 export const FieldWidgetRelationEditAction = ({
   fieldDefinition,
@@ -92,11 +94,11 @@ export const FieldWidgetRelationEditAction = ({
   const triggerLabel = isEditAction ? t`Edit relation` : t`Add relation`;
 
   const dropdownTriggerClickableComponent = (
-    <StyledEditButtonWrapper>
+    <div {...stylex.props(styles.editButtonWrapper)}>
       <IconButton variant="ghost" size="sm" aria-label={triggerLabel}>
         <TriggerIcon />
       </IconButton>
-    </StyledEditButtonWrapper>
+    </div>
   );
 
   return (

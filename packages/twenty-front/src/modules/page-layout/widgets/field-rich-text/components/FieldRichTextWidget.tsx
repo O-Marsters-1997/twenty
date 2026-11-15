@@ -1,13 +1,15 @@
 import { type PageLayoutWidget } from '@/page-layout/types/PageLayoutWidget';
 import { FieldRichTextCard } from '@/page-layout/widgets/field-rich-text/components/FieldRichTextCard';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledContainer = styled.div`
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
+const styles = stylex.create({
+  container: {
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+  },
+});
 
 type FieldRichTextWidgetProps = {
   widget: PageLayoutWidget;
@@ -17,8 +19,8 @@ export const FieldRichTextWidget = ({
   widget: _widget,
 }: FieldRichTextWidgetProps) => {
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <FieldRichTextCard />
-    </StyledContainer>
+    </div>
   );
 };

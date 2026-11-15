@@ -1,20 +1,25 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { type FormEvent } from 'react';
 
 import { TextInput } from '@/ui/input/components/TextInput';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledForm = styled.form`
-  align-items: center;
-  box-sizing: border-box;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  padding: ${themeCssVariables.spacing[1]};
-  width: 100%;
-`;
+const styles = stylex.create({
+  form: {
+    alignItems: 'center',
+    boxSizing: 'border-box',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    paddingTop: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-1'],
+    width: '100%',
+  },
+});
 
 type FieldsConfigurationGroupRenameInputProps = {
   renameValue: string;
@@ -44,7 +49,7 @@ export const FieldsConfigurationGroupRenameInput = ({
   };
 
   return (
-    <StyledForm onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} {...stylex.props(styles.form)}>
       <TextInput
         value={renameValue}
         onChange={onRenameValueChange}
@@ -57,6 +62,6 @@ export const FieldsConfigurationGroupRenameInput = ({
       <Button type="submit" size="sm" variant="solid" color="accent">
         {t`Done`}
       </Button>
-    </StyledForm>
+    </form>
   );
 };

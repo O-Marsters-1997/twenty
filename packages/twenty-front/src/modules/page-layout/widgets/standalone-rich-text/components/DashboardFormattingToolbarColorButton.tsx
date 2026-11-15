@@ -1,9 +1,7 @@
 import { useActiveStyles, useBlockNoteEditor } from '@blocknote/react';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useId } from 'react';
 import { Dropdown } from 'twenty-ui/components/navigation';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { DashboardColorIcon } from '@/page-layout/widgets/standalone-rich-text/components/DashboardColorIcon';
 import { DashboardColorSelectionMenu } from '@/page-layout/widgets/standalone-rich-text/components/DashboardColorSelectionMenu';
@@ -11,23 +9,36 @@ import { type BlockNoteColor } from '@/page-layout/widgets/standalone-rich-text/
 import { extractColorFromProps } from '@/page-layout/widgets/standalone-rich-text/utils/extractColorFromProps';
 import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent';
 import { DropdownRoot } from '@/ui/layout/dropdown/components/DropdownRoot';
+import * as stylex from '@stylexjs/stylex';
+import {
+  backgroundTransparent,
+  borderRadius,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledColorButton = styled.button`
-  align-items: center;
-  background: transparent;
-  border: none;
-  border-radius: ${themeCssVariables.border.radius.sm};
-  cursor: pointer;
-  display: flex;
-  height: 24px;
-  justify-content: center;
-  padding: ${themeCssVariables.spacing[1]};
-  width: 24px;
-
-  &:hover {
-    background: ${themeCssVariables.background.transparent.light};
-  }
-`;
+const styles = stylex.create({
+  colorButton: {
+    alignItems: 'center',
+    background: {
+      default: 'transparent',
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
+    borderStyle: 'none',
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    cursor: 'pointer',
+    display: 'flex',
+    height: '24px',
+    justifyContent: 'center',
+    paddingTop: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-1'],
+    width: '24px',
+  },
+});
 
 export const DashboardFormattingToolbarColorButton = () => {
   const editor = useBlockNoteEditor();
@@ -60,12 +71,15 @@ export const DashboardFormattingToolbarColorButton = () => {
     <DropdownRoot dropdownId={`dashboard-color-${instanceId}`} type="picker">
       <Dropdown.Trigger
         render={
-          <StyledColorButton aria-label={t`Text and background colors`}>
+          <button
+            aria-label={t`Text and background colors`}
+            {...stylex.props(styles.colorButton)}
+          >
             <DashboardColorIcon
               textColor={currentTextColor}
               backgroundColor={currentBackgroundColor}
             />
-          </StyledColorButton>
+          </button>
         }
       />
       <DropdownContent

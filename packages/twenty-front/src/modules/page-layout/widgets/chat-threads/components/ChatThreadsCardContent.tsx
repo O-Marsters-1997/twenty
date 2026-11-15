@@ -1,10 +1,8 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { CoreObjectNameSingular } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 import { IconRefresh } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { AiChatThreadList } from '@/ai/components/AiChatThreadList';
 import { type AgentChatThreadRecord } from '@/ai/types/AgentChatThreadRecord';
@@ -17,15 +15,22 @@ import { isSidePanelOpenedState } from '@/side-panel/states/isSidePanelOpenedSta
 import { EmptyState } from '@/ui/feedback/empty-state/components/EmptyState';
 import { ErrorState } from '@/ui/feedback/empty-state/components/ErrorState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledThreadsContainer = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  height: 100%;
-  overflow: auto;
-  padding: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  threadsContainer: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    height: '100%',
+    overflow: 'auto',
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+});
 
 type ChatThreadsCardContentProps = {
   loading: boolean;
@@ -96,7 +101,7 @@ export const ChatThreadsCardContent = ({
   }
 
   return (
-    <StyledThreadsContainer>
+    <div {...stylex.props(styles.threadsContainer)}>
       <AiChatThreadList
         threads={threads}
         selectedThreadIds={
@@ -110,6 +115,6 @@ export const ChatThreadsCardContent = ({
         }
         onDetachThread={onDetachThread}
       />
-    </StyledThreadsContainer>
+    </div>
   );
 };

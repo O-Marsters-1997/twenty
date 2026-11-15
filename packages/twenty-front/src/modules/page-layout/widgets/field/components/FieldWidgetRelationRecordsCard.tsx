@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { Fragment, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -30,11 +29,14 @@ import { StyledWidgetContentContainer } from '@/ui/layout/components/WidgetConte
 import { useTargetRecord } from '@/ui/layout/contexts/useTargetRecord';
 import { SidePanelProvider } from '@/ui/layout/side-panel/contexts/SidePanelContext';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledShowMoreButtonContainer = styled.div`
-  padding-top: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  showMoreButtonContainer: {
+    paddingTop: spacing['--t-spacing-2'],
+  },
+});
 
 type FieldWidgetRelationRecordsCardProps = {
   fieldDefinition: FieldDefinition<
@@ -181,12 +183,12 @@ export const FieldWidgetRelationRecordsCard = ({
                   ),
                 )}
                 {hasMoreRecords && (
-                  <StyledShowMoreButtonContainer>
+                  <div {...stylex.props(styles.showMoreButtonContainer)}>
                     <FieldWidgetShowMoreButton
                       remainingCount={remainingCount}
                       onClick={handleShowMore}
                     />
-                  </StyledShowMoreButtonContainer>
+                  </div>
                 )}
               </RecordDetailRecordsListContainer>
             </StyledWidgetContentContainer>

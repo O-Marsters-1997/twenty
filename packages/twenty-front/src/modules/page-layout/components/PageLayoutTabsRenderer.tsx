@@ -7,7 +7,6 @@ import { PageLayoutRecordIdentifierBar } from '@/page-layout/components/PageLayo
 import { PageLayoutScrollResetEffect } from '@/page-layout/components/PageLayoutScrollResetEffect';
 import { PageLayoutTabList } from '@/page-layout/components/PageLayoutTabList';
 import { PageLayoutTabListEffect } from '@/page-layout/components/PageLayoutTabListEffect';
-import { PAGE_LAYOUT_LEFT_PANEL_CONTAINER_WIDTH } from '@/page-layout/constants/PageLayoutLeftPanelContainerWidth';
 import { useCurrentPageLayoutOrThrow } from '@/page-layout/hooks/useCurrentPageLayoutOrThrow';
 import { useIsPageLayoutInEditMode } from '@/page-layout/hooks/useIsPageLayoutInEditMode';
 import { usePageLayoutAddTabStrategy } from '@/page-layout/hooks/usePageLayoutAddTabStrategy';
@@ -26,112 +25,11 @@ import { activeTabIdComponentState } from '@/ui/layout/tab-list/states/activeTab
 import { useIsMobile } from 'twenty-ui/utilities';
 import { ScrollWrapper } from '@/ui/utilities/scroll/components/ScrollWrapper';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { styled } from '@linaria/react';
 import { isDefined } from 'twenty-shared/utils';
-import { MOBILE_VIEWPORT, themeCssVariables } from 'twenty-ui/theme';
 import { PageLayoutType } from '~/generated-metadata/graphql';
-
-const StyledRoot = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  min-height: 0;
-  width: 100%;
-
-  @media print {
-    display: block;
-    height: auto;
-  }
-`;
-
-const StyledContainer = styled.div<{ hasPinnedTab: boolean }>`
-  display: grid;
-  flex: 1;
-  grid-template-columns: ${({ hasPinnedTab }) =>
-    hasPinnedTab ? `${PAGE_LAYOUT_LEFT_PANEL_CONTAINER_WIDTH}px 1fr` : '1fr'};
-  grid-template-rows: minmax(0, 1fr);
-  min-height: 0;
-  width: 100%;
-
-  @media print {
-    display: block;
-    height: auto;
-    width: 100%;
-
-    .page-layout-scroll-wrapper {
-      container-name: none !important;
-      container-type: normal !important;
-    }
-
-    .page-layout-viewport-filling-widget-slot {
-      --widget-height: auto !important;
-
-      height: auto !important;
-      min-height: 0 !important;
-      overflow: visible !important;
-
-      .widget-card-header {
-        position: static !important;
-      }
-    }
-  }
-`;
-
-const StyledTabsAndDashboardContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-
-  @media print {
-    display: block;
-    overflow: visible;
-
-    .page-layout-tab-list-print-hidden {
-      display: none;
-    }
-  }
-`;
-
-// display: none, not a hidden <Activity>, which skips the effects Apollo fetches from (see pageLayoutTabPrerenderContract.test).
-const StyledTabContentDisplay = styled.div<{ isActiveTab: boolean }>`
-  display: ${({ isActiveTab }) => (isActiveTab ? 'contents' : 'none')};
-`;
-
-const StyledTabPanel = styled.div`
-  align-items: start;
-  min-height: 100%;
-
-  &:not([hidden]) {
-    display: grid;
-  }
-`;
-
-const StyledScrollWrapperContainer = styled.div`
-  flex: 1;
-  min-height: 0;
-
-  .page-layout-scroll-wrapper {
-    container-name: tab-viewport;
-    container-type: size;
-  }
-
-  // Reserve the floating mobile navigation bar's footprint.
-  @media (max-width: ${MOBILE_VIEWPORT}px) {
-    .page-layout-scroll-wrapper {
-      box-sizing: border-box;
-      padding-bottom: ${themeCssVariables.spacing[20]};
-    }
-  }
-
-  @media print {
-    min-height: auto;
-
-    .page-layout-scroll-wrapper {
-      height: auto;
-      overflow: visible;
-    }
-  }
-`;
+import { media } from 'twenty-ui/theme/constants.stylex';
+import '~/third-party-styles/page-layout.css';
+import * as stylex from '@stylexjs/stylex';
 
 export const PageLayoutTabsRenderer = () => {
   const workspaceSurface = useWorkspaceSurface();
@@ -237,7 +135,7 @@ export const PageLayoutTabsRenderer = () => {
         componentInstanceId={tabListInstanceId}
         enabled={hasTabPanels}
       >
-        <StyledRoot>
+        <div {...stylex.props(styles.root)}>
           {shouldRenderRecordIdentifierBar && (
             <PageLayoutRecordIdentifierBar
               targetRecordIdentifier={targetRecordIdentifier}
@@ -247,7 +145,13 @@ export const PageLayoutTabsRenderer = () => {
             />
           )}
 
-          <StyledContainer hasPinnedTab={isDefined(pinnedLeftTab)}>
+          <div
+            data-page-layout-tabs-container=""
+            {...stylex.props(
+              styles.container,
+              isDefined(pinnedLeftTab) && styles.containerWithPinnedTab,
+            )}
+          >
             {isDefined(pinnedLeftTab) && (
               <PageLayoutLeftPanel
                 pageLayoutId={currentPageLayout.id}
@@ -255,7 +159,7 @@ export const PageLayoutTabsRenderer = () => {
               />
             )}
 
-            <StyledTabsAndDashboardContainer>
+            <div {...stylex.props(styles.tabsAndDashboard)}>
               <PageLayoutTabListEffect
                 isInEditMode={isPageLayoutInEditMode}
                 tabs={sortedTabs}
@@ -267,7 +171,10 @@ export const PageLayoutTabsRenderer = () => {
               />
               {!shouldRenderRecordIdentifierBar && tabList}
 
-              <StyledScrollWrapperContainer>
+              <div
+                data-page-layout-scroll-container=""
+                {...stylex.props(styles.scrollWrapperContainer)}
+              >
                 <ScrollWrapper
                   className="page-layout-scroll-wrapper"
                   componentInstanceId={scrollWrapperInstanceId}
@@ -281,25 +188,71 @@ export const PageLayoutTabsRenderer = () => {
                           key={tab.id}
                           value={tab.id}
                           keepMounted
-                          render={<StyledTabPanel />}
+                          render={<div {...stylex.props(styles.tabPanel)} />}
                         >
                           <PageLayoutMainContent tabId={tab.id} />
                         </Tabs.Panel>
                       ) : (
-                        <StyledTabContentDisplay
+                        <div
                           key={tab.id}
-                          isActiveTab={tab.id === activeTabId}
+                          {...stylex.props(
+                            tab.id === activeTabId
+                              ? styles.tabContentActive
+                              : styles.tabContentInactive,
+                          )}
                         >
                           <PageLayoutMainContent tabId={tab.id} />
-                        </StyledTabContentDisplay>
+                        </div>
                       ),
                     )}
                 </ScrollWrapper>
-              </StyledScrollWrapperContainer>
-            </StyledTabsAndDashboardContainer>
-          </StyledContainer>
-        </StyledRoot>
+              </div>
+            </div>
+          </div>
+        </div>
       </TabListRoot>
     </PageLayoutWidgetDndProvider>
   );
 };
+
+const styles = stylex.create({
+  root: {
+    display: { default: 'flex', [media.print]: 'block' },
+    flexDirection: 'column',
+    height: { default: '100%', [media.print]: 'auto' },
+    minHeight: 0,
+    width: '100%',
+  },
+  container: {
+    display: { default: 'grid', [media.print]: 'block' },
+    flexGrow: 1,
+    flexShrink: 1,
+    flexBasis: '0%',
+    gridTemplateColumns: '1fr',
+    gridTemplateRows: 'minmax(0, 1fr)',
+    height: { default: null, [media.print]: 'auto' },
+    minHeight: 0,
+    width: '100%',
+  },
+  containerWithPinnedTab: {
+    gridTemplateColumns: '348px 1fr',
+  },
+  tabsAndDashboard: {
+    display: { default: 'flex', [media.print]: 'block' },
+    flexDirection: 'column',
+    overflow: { default: 'hidden', [media.print]: 'visible' },
+  },
+  tabContentActive: { display: 'contents' },
+  tabContentInactive: { display: 'none' },
+  tabPanel: {
+    alignItems: 'start',
+    display: { default: null, ':not([hidden])': 'grid' },
+    minHeight: '100%',
+  },
+  scrollWrapperContainer: {
+    flexGrow: 1,
+    flexShrink: 1,
+    flexBasis: '0%',
+    minHeight: { default: 0, [media.print]: 'auto' },
+  },
+});

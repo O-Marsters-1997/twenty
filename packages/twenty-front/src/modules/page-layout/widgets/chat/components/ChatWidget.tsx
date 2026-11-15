@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useState } from 'react';
 
 import { AiChatTab } from '@/ai/components/AiChatTab';
@@ -9,17 +8,19 @@ import { ChatWidgetThreadSyncEffect } from '@/page-layout/widgets/chat/component
 import { useTargetRecord } from '@/ui/layout/contexts/useTargetRecord';
 import { useWorkspaceSurface } from '@/ui/layout/hooks/useWorkspaceSurface';
 import { isCurrentPathAiChatPage } from '~/utils/isCurrentPathAiChatPage';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledChatContainer = styled.div`
-  --ai-chat-content-max-width: 768px;
-
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  height: 100%;
-  min-height: 0;
-  width: 100%;
-`;
+const styles = stylex.create({
+  chatContainer: {
+    '--ai-chat-content-max-width': '768px',
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    height: '100%',
+    minHeight: '0',
+    width: '100%',
+  },
+});
 
 export const ChatWidget = () => {
   const targetRecord = useTargetRecord();
@@ -34,7 +35,7 @@ export const ChatWidget = () => {
   }
 
   return (
-    <StyledChatContainer>
+    <div {...stylex.props(styles.chatContainer)}>
       <ChatWidgetThreadSyncEffect threadId={targetRecord.id} />
       <AiChatSurfaceContext.Provider
         value={
@@ -43,6 +44,6 @@ export const ChatWidget = () => {
       >
         <AiChatTab />
       </AiChatSurfaceContext.Provider>
-    </StyledChatContainer>
+    </div>
   );
 };

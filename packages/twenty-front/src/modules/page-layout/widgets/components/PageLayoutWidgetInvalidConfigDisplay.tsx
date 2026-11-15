@@ -1,18 +1,20 @@
 import { useCurrentWidget } from '@/page-layout/widgets/hooks/useCurrentWidget';
 import { TooltipDelay } from '@/ui/layout/tooltip/constants/TooltipDelay';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { type FallbackProps } from 'react-error-boundary';
 import { Status } from 'twenty-ui/primitives/data-display';
 import { Tooltip } from 'twenty-ui/primitives/surfaces';
+import * as stylex from '@stylexjs/stylex';
 
 type PageLayoutWidgetInvalidConfigDisplayProps = FallbackProps;
 
-const StyledInvalidConfigContainer = styled.div`
-  align-items: center;
-  display: flex;
-  justify-content: center;
-`;
+const styles = stylex.create({
+  invalidConfigContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+});
 
 export const PageLayoutWidgetInvalidConfigDisplay = ({
   error,
@@ -25,7 +27,7 @@ export const PageLayoutWidgetInvalidConfigDisplay = ({
   const tooltipContent = t`Invalid configuration: ${errorMessage}`;
 
   return (
-    <StyledInvalidConfigContainer>
+    <div {...stylex.props(styles.invalidConfigContainer)}>
       <Tooltip
         delay={TooltipDelay.mediumDelay}
         content={tooltipContent}
@@ -35,6 +37,6 @@ export const PageLayoutWidgetInvalidConfigDisplay = ({
           <Status color="red">{text}</Status>
         </div>
       </Tooltip>
-    </StyledInvalidConfigContainer>
+    </div>
   );
 };

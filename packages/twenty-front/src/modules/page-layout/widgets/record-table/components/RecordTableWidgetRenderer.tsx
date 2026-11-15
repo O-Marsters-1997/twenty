@@ -1,7 +1,7 @@
 import { useCurrentPageLayoutOrThrow } from '@/page-layout/hooks/useCurrentPageLayoutOrThrow';
 import { useIsPageLayoutInEditMode } from '@/page-layout/hooks/useIsPageLayoutInEditMode';
 import { type PageLayoutWidget } from '@/page-layout/types/PageLayoutWidget';
-import { StyledWidgetTableOutline } from '@/page-layout/widgets/components/WidgetContentFrame';
+import { WidgetTableOutline } from '@/page-layout/widgets/components/WidgetContentFrame';
 import { RecordTableWidgetRendererContent } from '@/page-layout/widgets/record-table/components/RecordTableWidgetRendererContent';
 import { getRecordTableWidgetIsUIEditable } from '@/page-layout/widgets/record-table/utils/getRecordTableWidgetIsUIEditable';
 import { isDefined } from 'twenty-shared/utils';
@@ -42,7 +42,7 @@ export const RecordTableWidgetRenderer = ({
   }
 
   return (
-    <StyledWidgetTableOutline>
+    <WidgetTableOutline>
       <RecordTableWidgetRendererContent
         objectMetadataId={widget.objectMetadataId}
         viewId={viewId}
@@ -51,6 +51,6 @@ export const RecordTableWidgetRenderer = ({
         recordLimit={recordLimit}
         isUIEditable={!isPageLayoutInEditMode && isUIEditable}
       />
-    </StyledWidgetTableOutline>
+    </WidgetTableOutline>
   );
 };

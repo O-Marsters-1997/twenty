@@ -1,9 +1,16 @@
 import { formatNumberChartTrend } from '@/page-layout/widgets/graph/graph-widget-aggregate-chart/utils/formatNumberChartTrend';
-import { styled } from '@linaria/react';
 import { isDefined } from 'twenty-shared/utils';
 import { IconTrendingDown, IconTrendingUp } from 'twenty-ui/icon';
 import { Heading } from 'twenty-ui/primitives/typography';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import '~/third-party-styles/page-layout.css';
+import * as stylex from '@stylexjs/stylex';
+import {
+  spacing,
+  fontColor,
+  fontSize,
+  fontWeight,
+} from 'twenty-ui/theme/tokens.stylex';
 type GraphWidgetAggregateChartProps = {
   value: string | number;
   trendPercentage?: number;
@@ -11,33 +18,27 @@ type GraphWidgetAggregateChartProps = {
   suffix?: string;
 };
 
-const StyledTrendPercentageValue = styled.span`
-  color: ${themeCssVariables.font.color.secondary};
-  font-size: ${themeCssVariables.font.size.xs};
-  font-weight: ${themeCssVariables.font.weight.regular};
-  margin-right: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledContainer = styled.div`
-  align-items: center;
-  display: flex;
-  height: 100%;
-  justify-content: space-between;
-  width: 100%;
-`;
-
-const StyledTrendIconContainer = styled.div`
-  align-items: center;
-  display: flex;
-  justify-content: center;
-`;
-
-const StyledHeadingWrapper = styled.div`
-  > h2 {
-    font-size: ${themeCssVariables.font.size.xxl};
-    margin: 0;
-  }
-`;
+const styles = stylex.create({
+  headingWrapper: {},
+  trendPercentageValue: {
+    color: fontColor['--t-font-color-secondary'],
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    marginRight: spacing['--t-spacing-2'],
+  },
+  container: {
+    alignItems: 'center',
+    display: 'flex',
+    height: '100%',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  trendIconContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+});
 
 export const GraphWidgetAggregateChart = ({
   value,
@@ -54,17 +55,17 @@ export const GraphWidgetAggregateChart = ({
   const displayValue = `${prefix ?? ''}${value}${suffix ?? ''}`;
 
   return (
-    <StyledContainer>
-      <StyledHeadingWrapper>
+    <div {...stylex.props(styles.container)}>
+      <div data-aggregate-heading="">
         <Heading level={2} size="lg">
           {displayValue}
         </Heading>
-      </StyledHeadingWrapper>
+      </div>
       {isDefined(trendPercentage) && (
-        <StyledTrendIconContainer>
-          <StyledTrendPercentageValue>
+        <div {...stylex.props(styles.trendIconContainer)}>
+          <span {...stylex.props(styles.trendPercentageValue)}>
             {formattedPercentage}%
-          </StyledTrendPercentageValue>
+          </span>
           {trendPercentage >= 0 ? (
             <IconTrendingUp
               color={theme.color.turquoise8}
@@ -76,8 +77,8 @@ export const GraphWidgetAggregateChart = ({
               size={theme.icon.size.md}
             />
           )}
-        </StyledTrendIconContainer>
+        </div>
       )}
-    </StyledContainer>
+    </div>
   );
 };

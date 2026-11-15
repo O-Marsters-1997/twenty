@@ -1,21 +1,20 @@
-import { styled } from '@linaria/react';
+import { borderRadius } from 'twenty-ui/theme/tokens.stylex';
+import * as stylex from '@stylexjs/stylex';
 
 type GraphWidgetLegendDotProps = {
   color: string;
-  className?: string;
 };
 
-const StyledDot = styled.div<{ color: string }>`
-  background: ${({ color }) => color};
-  border-radius: var(--t-border-radius-xs);
-  flex-shrink: 0;
-  height: 8px;
-  width: 8px;
-`;
-
-export const GraphWidgetLegendDot = ({
-  color,
-  className,
-}: GraphWidgetLegendDotProps) => {
-  return <StyledDot color={color} className={className} />;
+export const GraphWidgetLegendDot = ({ color }: GraphWidgetLegendDotProps) => {
+  return <div {...stylex.props(styles.dot, styles.color(color))} />;
 };
+
+const styles = stylex.create({
+  dot: {
+    borderRadius: borderRadius['--t-border-radius-xs'],
+    flexShrink: 0,
+    height: 8,
+    width: 8,
+  },
+  color: (color: string) => ({ backgroundColor: color }),
+});

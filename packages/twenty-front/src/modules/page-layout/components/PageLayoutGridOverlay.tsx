@@ -1,4 +1,3 @@
-import { type PageLayoutBreakpoint } from '@/page-layout/constants/PageLayoutBreakpoints';
 import { PAGE_LAYOUT_GRID_OVERLAY_Z_INDEX } from '@/page-layout/constants/PageLayoutGridOverlayZIndex';
 import { useCreateWidgetFromClick } from '@/page-layout/hooks/useCreateWidgetFromClick';
 import { pageLayoutCurrentBreakpointComponentState } from '@/page-layout/states/pageLayoutCurrentBreakpointComponentState';
@@ -9,46 +8,15 @@ import { calculateTotalGridRows } from '@/page-layout/utils/calculateTotalGridRo
 import { generateCellId } from '@/page-layout/utils/generateCellId';
 import { activeTabIdComponentState } from '@/ui/layout/tab-list/states/activeTabIdComponentState';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { styled } from '@linaria/react';
 import { useMemo } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
-
-const StyledGridOverlay = styled.div<{
-  isDragSelecting?: boolean;
-  breakpoint: PageLayoutBreakpoint;
-}>`
-  bottom: ${themeCssVariables.spacing[2]};
-  display: grid;
-  gap: ${themeCssVariables.spacing[2]};
-  grid-auto-rows: 55px;
-  grid-template-columns: ${({ breakpoint }) =>
-    breakpoint === 'mobile' ? '1fr' : 'repeat(12, 1fr)'};
-  left: ${themeCssVariables.spacing[2]};
-  pointer-events: ${({ isDragSelecting }) =>
-    isDragSelecting ? 'auto' : 'none'};
-  position: absolute;
-  right: ${themeCssVariables.spacing[2]};
-  top: ${themeCssVariables.spacing[2]};
-  z-index: ${PAGE_LAYOUT_GRID_OVERLAY_Z_INDEX};
-`;
-
-const StyledGridCell = styled.div<{ isSelected?: boolean }>`
-  background: ${({ isSelected }) =>
-    isSelected ? themeCssVariables.color.blue3 : 'transparent'};
-  border: 1px solid
-    ${({ isSelected }) =>
-      isSelected
-        ? themeCssVariables.color.blue7
-        : themeCssVariables.border.color.light};
-  border-radius: ${themeCssVariables.border.radius.md};
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-
-  &:hover {
-    background: ${themeCssVariables.background.transparent.lighter};
-    border-color: ${themeCssVariables.border.color.medium};
-  }
-`;
+import {
+  spacing,
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  color,
+} from 'twenty-ui/theme/tokens.stylex';
+import * as stylex from '@stylexjs/stylex';
 
 export const PageLayoutGridOverlay = () => {
   const pageLayoutCurrentBreakpoint = useAtomComponentStateValue(
@@ -81,9 +49,15 @@ export const PageLayoutGridOverlay = () => {
   const numberOfColumns = pageLayoutCurrentBreakpoint === 'mobile' ? 1 : 12;
 
   return (
-    <StyledGridOverlay
-      isDragSelecting={!isPageLayoutCurrentBreakpointMobile}
-      breakpoint={pageLayoutCurrentBreakpoint}
+    <div
+      {...stylex.props(
+        styles.overlay,
+        styles.zIndex(PAGE_LAYOUT_GRID_OVERLAY_Z_INDEX),
+        pageLayoutCurrentBreakpoint === 'mobile'
+          ? styles.overlayMobile
+          : styles.overlayDesktop,
+        !isPageLayoutCurrentBreakpointMobile && styles.dragSelecting,
+      )}
     >
       {Array.from(
         {
@@ -96,15 +70,63 @@ export const PageLayoutGridOverlay = () => {
           });
           const cellId = generateCellId(column, row);
           return (
-            <StyledGridCell
+            <div
               key={i}
               data-selectable-id={cellId}
-              isSelected={pageLayoutSelectedCells.has(cellId)}
               onClick={() => createWidgetFromClick(cellId)}
+              {...stylex.props(
+                styles.cell,
+                pageLayoutSelectedCells.has(cellId) && styles.cellSelected,
+              )}
             />
           );
         },
       )}
-    </StyledGridOverlay>
+    </div>
   );
 };
+
+const styles = stylex.create({
+  overlay: {
+    bottom: spacing['--t-spacing-2'],
+    display: 'grid',
+    gap: spacing['--t-spacing-2'],
+    gridAutoRows: 55,
+    left: spacing['--t-spacing-2'],
+    pointerEvents: 'none',
+    position: 'absolute',
+    right: spacing['--t-spacing-2'],
+    top: spacing['--t-spacing-2'],
+  },
+  zIndex: (zIndex: number) => ({ zIndex }),
+  overlayMobile: { gridTemplateColumns: '1fr' },
+  overlayDesktop: { gridTemplateColumns: 'repeat(12, 1fr)' },
+  dragSelecting: { pointerEvents: 'auto' },
+  cell: {
+    backgroundColor: {
+      default: 'transparent',
+      ':hover': backgroundTransparent['--t-background-transparent-lighter'],
+    },
+    borderColor: {
+      default: borderColor['--t-border-color-light'],
+      ':hover': borderColor['--t-border-color-medium'],
+    },
+    borderRadius: borderRadius['--t-border-radius-md'],
+    borderStyle: 'solid',
+    borderWidth: 1,
+    cursor: 'pointer',
+    transitionDuration: '0.3s',
+    transitionProperty: 'background-color',
+    transitionTimingFunction: 'ease',
+  },
+  cellSelected: {
+    backgroundColor: {
+      default: color['--t-color-blue3'],
+      ':hover': backgroundTransparent['--t-background-transparent-lighter'],
+    },
+    borderColor: {
+      default: color['--t-color-blue7'],
+      ':hover': borderColor['--t-border-color-medium'],
+    },
+  },
+});

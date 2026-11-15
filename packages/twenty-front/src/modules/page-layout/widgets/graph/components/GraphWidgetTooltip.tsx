@@ -2,134 +2,134 @@ import { GRAPH_TOOLTIP_MAX_WIDTH_PX } from '@/page-layout/widgets/graph/componen
 import { GRAPH_TOOLTIP_MIN_WIDTH_PX } from '@/page-layout/widgets/graph/components/constants/GraphTooltipMinWidthPx';
 import { GRAPH_TOOLTIP_SCROLL_MAX_HEIGHT_PX } from '@/page-layout/widgets/graph/components/constants/GraphTooltipScrollMaxHeightPx';
 import { GraphWidgetLegendDot } from '@/page-layout/widgets/graph/components/GraphWidgetLegendDot';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { isDefined } from 'twenty-shared/utils';
 import { IconArrowUpRight } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  spacing,
+  background,
+  borderColor,
+  borderRadius,
+  boxShadow,
+  fontColor,
+  fontSize,
+  fontWeight,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledTooltip = styled.div`
-  background: ${themeCssVariables.background.primary};
-  border: 1px solid ${themeCssVariables.border.color.light};
-  border-radius: ${themeCssVariables.border.radius.md};
-  box-shadow: ${themeCssVariables.boxShadow.strong};
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  max-width: min(
-    ${GRAPH_TOOLTIP_MAX_WIDTH_PX}px,
-    calc(100vw / var(--t-zoom, 1) - 40px)
-  );
-  min-width: ${GRAPH_TOOLTIP_MIN_WIDTH_PX}px;
-  pointer-events: auto;
-`;
-
-const StyledTooltipContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[3]};
-  padding: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledTooltipRow = styled.div`
-  align-items: center;
-  display: flex;
-
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledTooltipRowContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  max-height: ${GRAPH_TOOLTIP_SCROLL_MAX_HEIGHT_PX}px;
-  overflow-y: auto;
-`;
-
-const StyledTooltipLink = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.light};
-  cursor: pointer;
-  display: flex;
-  font-weight: ${themeCssVariables.font.weight.regular};
-  height: ${themeCssVariables.spacing[6]};
-  justify-content: space-between;
-  line-height: 140%;
-  padding-inline: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledTooltipSeparator = styled.div`
-  background-color: ${themeCssVariables.border.color.light};
-  min-height: 1px;
-  width: 100%;
-`;
-
-const StyledTooltipHeader = styled.div`
-  color: ${themeCssVariables.font.color.primary};
-  font-size: ${themeCssVariables.font.size.xs};
-  font-weight: ${themeCssVariables.font.weight.medium};
-  line-height: 140%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledTooltipRowRightContent = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.extraLight};
-  display: flex;
-  font-size: ${themeCssVariables.font.size.xs};
-  font-weight: ${themeCssVariables.font.weight.regular};
-  gap: ${themeCssVariables.spacing[2]};
-  justify-content: space-between;
-  min-width: 0;
-  width: 100%;
-`;
-
-const StyledTooltipLabel = styled.span<{ isHighlighted?: boolean }>`
-  color: ${({ isHighlighted }) =>
-    isHighlighted
-      ? themeCssVariables.font.color.secondary
-      : themeCssVariables.font.color.tertiary};
-  flex: 1;
-  font-weight: ${({ isHighlighted }) =>
-    isHighlighted
-      ? themeCssVariables.font.weight.medium
-      : themeCssVariables.font.weight.regular};
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledNoDataMessage = styled.span`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.xs};
-`;
-
-const StyledTooltipValue = styled.span<{ isHighlighted?: boolean }>`
-  color: ${({ isHighlighted }) =>
-    isHighlighted
-      ? themeCssVariables.font.color.tertiary
-      : themeCssVariables.font.color.extraLight};
-  flex-shrink: 0;
-  font-weight: ${({ isHighlighted }) =>
-    isHighlighted
-      ? themeCssVariables.font.weight.semiBold
-      : themeCssVariables.font.weight.medium};
-  white-space: nowrap;
-`;
-
-const StyledHorizontalSectionPadding = styled.div<{
-  addTop?: boolean;
-  addBottom?: boolean;
-}>`
-  margin-bottom: ${({ addBottom }) =>
-    addBottom ? themeCssVariables.spacing[1] : 0};
-  margin-top: ${({ addTop }) => (addTop ? themeCssVariables.spacing[1] : 0)};
-  padding-inline: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  tooltip: {
+    backgroundColor: background['--t-background-primary'],
+    borderColor: borderColor['--t-border-color-light'],
+    borderRadius: borderRadius['--t-border-radius-md'],
+    borderStyle: 'solid',
+    borderWidth: 1,
+    boxShadow: boxShadow['--t-box-shadow-strong'],
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 2,
+    pointerEvents: 'auto',
+  },
+  tooltipSize: (maxWidth: number, minWidth: number) => ({
+    maxWidth: `min(${maxWidth}px, calc(100vw / var(--t-zoom, 1) - 40px))`,
+    minWidth,
+  }),
+  rowContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    overflowY: 'auto',
+  },
+  rowContainerMaxHeight: (maxHeight: number) => ({ maxHeight }),
+  label: {
+    color: fontColor['--t-font-color-tertiary'],
+    flexBasis: '0%',
+    flexGrow: 1,
+    flexShrink: 1,
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    minWidth: 0,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  labelHighlighted: {
+    color: fontColor['--t-font-color-secondary'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+  },
+  value: {
+    color: fontColor['--t-font-color-extra-light'],
+    flexShrink: 0,
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    whiteSpace: 'nowrap',
+  },
+  valueHighlighted: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+  },
+  sectionPadding: {
+    marginBottom: 0,
+    marginTop: 0,
+    paddingInline: spacing['--t-spacing-1'],
+  },
+  sectionPaddingTop: { marginTop: spacing['--t-spacing-1'] },
+  sectionPaddingBottom: { marginBottom: spacing['--t-spacing-1'] },
+  tooltipContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-3'],
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+  tooltipRow: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+  },
+  tooltipLink: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-light'],
+    cursor: 'pointer',
+    display: 'flex',
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    height: spacing['--t-spacing-6'],
+    justifyContent: 'space-between',
+    lineHeight: '140%',
+    paddingInline: spacing['--t-spacing-2'],
+  },
+  tooltipSeparator: {
+    backgroundColor: borderColor['--t-border-color-light'],
+    minHeight: '1px',
+    width: '100%',
+  },
+  tooltipHeader: {
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    lineHeight: '140%',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  tooltipRowRightContent: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-extra-light'],
+    display: 'flex',
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    gap: spacing['--t-spacing-2'],
+    justifyContent: 'space-between',
+    minWidth: '0',
+    width: '100%',
+  },
+  noDataMessage: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-xs'],
+  },
+});
 
 export type GraphWidgetTooltipItem = {
   key: string;
@@ -163,48 +163,85 @@ export const GraphWidgetTooltip = ({
   const shouldShowClickFooter = hasData && isDefined(onGraphWidgetTooltipClick);
 
   return (
-    <StyledTooltip>
-      <StyledHorizontalSectionPadding addTop addBottom={!shouldShowClickFooter}>
-        <StyledTooltipContent>
+    <div
+      {...stylex.props(
+        styles.tooltip,
+        styles.tooltipSize(
+          GRAPH_TOOLTIP_MAX_WIDTH_PX,
+          GRAPH_TOOLTIP_MIN_WIDTH_PX,
+        ),
+      )}
+    >
+      <div
+        {...stylex.props(
+          styles.sectionPadding,
+          styles.sectionPaddingTop,
+          !shouldShowClickFooter && styles.sectionPaddingBottom,
+        )}
+      >
+        <div {...stylex.props(styles.tooltipContent)}>
           {indexLabel && (
-            <StyledTooltipHeader>{indexLabel}</StyledTooltipHeader>
+            <div {...stylex.props(styles.tooltipHeader)}>{indexLabel}</div>
           )}
-          <StyledTooltipRowContainer>
+          <div
+            {...stylex.props(
+              styles.rowContainer,
+              styles.rowContainerMaxHeight(GRAPH_TOOLTIP_SCROLL_MAX_HEIGHT_PX),
+            )}
+          >
             {filteredItems.length === 0 ? (
-              <StyledNoDataMessage>{t`No data`}</StyledNoDataMessage>
+              <span {...stylex.props(styles.noDataMessage)}>{t`No data`}</span>
             ) : (
               filteredItems.map((item) => {
                 const isHighlighted =
                   shouldHighlight && highlightedKey === item.key;
                 return (
-                  <StyledTooltipRow key={item.key}>
+                  <div key={item.key} {...stylex.props(styles.tooltipRow)}>
                     <GraphWidgetLegendDot color={item.dotColor} />
-                    <StyledTooltipRowRightContent>
-                      <StyledTooltipLabel isHighlighted={isHighlighted}>
+                    <div {...stylex.props(styles.tooltipRowRightContent)}>
+                      <span
+                        {...stylex.props(
+                          styles.label,
+                          isHighlighted && styles.labelHighlighted,
+                        )}
+                      >
                         {item.label}
-                      </StyledTooltipLabel>
-                      <StyledTooltipValue isHighlighted={isHighlighted}>
+                      </span>
+                      <span
+                        {...stylex.props(
+                          styles.value,
+                          isHighlighted && styles.valueHighlighted,
+                        )}
+                      >
                         {item.formattedValue}
-                      </StyledTooltipValue>
-                    </StyledTooltipRowRightContent>
-                  </StyledTooltipRow>
+                      </span>
+                    </div>
+                  </div>
                 );
               })
             )}
-          </StyledTooltipRowContainer>
-        </StyledTooltipContent>
-      </StyledHorizontalSectionPadding>
+          </div>
+        </div>
+      </div>
       {shouldShowClickFooter && (
         <>
-          <StyledTooltipSeparator />
-          <StyledHorizontalSectionPadding addBottom>
-            <StyledTooltipLink onClick={onGraphWidgetTooltipClick}>
+          <div {...stylex.props(styles.tooltipSeparator)} />
+          <div
+            {...stylex.props(
+              styles.sectionPadding,
+              styles.sectionPaddingBottom,
+            )}
+          >
+            <div
+              onClick={onGraphWidgetTooltipClick}
+              {...stylex.props(styles.tooltipLink)}
+            >
               <span>{t`Click to see data`}</span>
               <IconArrowUpRight size={theme.icon.size.sm} />
-            </StyledTooltipLink>
-          </StyledHorizontalSectionPadding>
+            </div>
+          </div>
         </>
       )}
-    </StyledTooltip>
+    </div>
   );
 };
