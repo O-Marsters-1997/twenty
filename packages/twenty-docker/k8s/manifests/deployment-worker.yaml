@@ -34,16 +34,13 @@ spec:
               value: "false" # it already runs on the server
             - name: STORAGE_TYPE
               value: "local"
-            - name: "REDIS_URL"
-              value: "redis://twentycrm-redis.twentycrm.svc.cluster.local:6379"
             - name: APP_SECRET
               valueFrom:
                 secretKeyRef:
                   name: tokens
                   key: accessToken
           command:
-            - node
-            - dist/queue-worker/queue-worker
+            - /app/worker
           resources:
             requests:
               memory: "1024Mi"

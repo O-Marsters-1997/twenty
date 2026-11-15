@@ -4,17 +4,14 @@ services:
   server:
     image: twentycrm/twenty:${TAG:-latest}
     volumes:
-      - server-local-data:/app/packages/twenty-server/.local-storage
+      - server-local-data:/app/.local-storage
     ports:
       - "3000:3000"
     environment:
-      NODE_PORT: 3000
+      LISTEN_ADDR: ":3000"
       PG_DATABASE_URL: postgres://${PG_DATABASE_USER:-postgres}:${PG_DATABASE_PASSWORD:-postgres}@${PG_DATABASE_HOST:-db}:${PG_DATABASE_PORT:-5432}/${PG_DATABASE_NAME:-default}
       SERVER_URL: ${SERVER_URL}
-      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
-      REDIS_CACHE_PREFIX: ${REDIS_CACHE_PREFIX:-}
       DISABLE_DB_MIGRATIONS: ${DISABLE_DB_MIGRATIONS}
-      DISABLE_CRON_JOBS_REGISTRATION: ${DISABLE_CRON_JOBS_REGISTRATION}
 
       STORAGE_TYPE: ${STORAGE_TYPE}
       STORAGE_S3_REGION: ${STORAGE_S3_REGION}
@@ -45,8 +42,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      redis:
-        condition: service_healthy
     healthcheck:
       test: curl --fail http://localhost:3000/healthz
       interval: 5s
@@ -57,15 +52,12 @@ services:
   worker:
     image: twentycrm/twenty:${TAG:-latest}
     volumes:
-      - server-local-data:/app/packages/twenty-server/.local-storage
-    command: ["node", "dist/queue-worker/queue-worker"]
+      - server-local-data:/app/.local-storage
+    command: ["/app/worker"]
     environment:
       PG_DATABASE_URL: postgres://${PG_DATABASE_USER:-postgres}:${PG_DATABASE_PASSWORD:-postgres}@${PG_DATABASE_HOST:-db}:${PG_DATABASE_PORT:-5432}/${PG_DATABASE_NAME:-default}
       SERVER_URL: ${SERVER_URL}
-      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
-      REDIS_CACHE_PREFIX: ${REDIS_CACHE_PREFIX:-}
       DISABLE_DB_MIGRATIONS: "true" # it already runs on the server
-      DISABLE_CRON_JOBS_REGISTRATION: "true" # it already runs on the server
 
       STORAGE_TYPE: ${STORAGE_TYPE}
       STORAGE_S3_REGION: ${STORAGE_S3_REGION}
@@ -114,16 +106,6 @@ services:
       timeout: 5s
       retries: 10
     restart: always
-
-  redis:
-    image: valkey/valkey:8
-    restart: always
-    command: ["--maxmemory-policy", "noeviction"]
-    healthcheck:
-      test: ["CMD", "valkey-cli", "ping"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
 
 volumes:
   db-data:

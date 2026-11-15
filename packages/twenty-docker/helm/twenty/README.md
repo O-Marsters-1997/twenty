@@ -1,10 +1,10 @@
 # Twenty Helm Chart
 
-Deploy Twenty CRM on Kubernetes with server, worker, PostgreSQL, and Redis components.
+Deploy Twenty CRM on Kubernetes with server, worker, and PostgreSQL components.
 
 ## Features
 - Server and worker deployments with full env exposure via `values.yaml`.
-- Internal PostgreSQL (Spilo) and Redis deployments included.
+- Internal PostgreSQL (Spilo) deployment included.
 - PVC-based persistence using dynamic storage classes (no static PV manifests).
 - Ingress with configurable annotations, hosts, and TLS.
 - Database readiness and migrations handled by server/worker init containers by default.
@@ -18,19 +18,18 @@ See [QUICKSTART.md](QUICKSTART.md) for a simple 2-line install with your domain.
 
 **Prerequisites:** Kubernetes 1.21+, Helm 3.8+, default StorageClass
 
-Internal DB + Redis (default):
+Internal DB (default):
 ```bash
 helm install my-twenty ./packages/twenty-docker/helm/twenty \
   --namespace twentycrm --create-namespace
 ```
 
-External DB/Redis:
+External DB:
 ```bash
 helm install my-twenty ./packages/twenty-docker/helm/twenty \
   --namespace twentycrm --create-namespace \
   --set db.enabled=false \
-  --set db.external.host=db.example.com \
-  --set redisInternal.enabled=false
+  --set db.external.host=db.example.com
 ```
 
 ## Key Values
@@ -40,7 +39,7 @@ See `values.yaml` for a comprehensive list.
 
 ## Notes
 
-- Database URL and Redis URL are composed automatically from chart settings
+- Database URL is composed automatically from chart settings
 - Database `twenty` and schema `core` are created automatically by server init container
 - No optional jobs: the chart no longer provides separate Jobs for DB or migrations.
 - Access token auto-generated (32 chars) if not provided; reuses existing secret if present

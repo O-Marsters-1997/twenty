@@ -1,6 +1,6 @@
 name: Spawn Twenty Docker Image
 description: >
-  Starts a full Twenty instance (server, worker, database, redis) using Docker
+  Starts a full Twenty instance (server, worker, database) using Docker
   Compose. The server is available at http://localhost:3000 for subsequent steps
   in the caller's job.
   Accepts "latest" (pulls the latest Docker Hub image, checks out main) or a

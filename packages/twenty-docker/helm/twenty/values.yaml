@@ -144,7 +144,7 @@ worker:
   enabled: true
   replicaCount: 1
   image: {}
-  command: ["node", "dist/queue-worker/queue-worker"]
+  command: ["/app/worker"]
 
   resources:
     requests:
@@ -200,38 +200,5 @@ db:
     password: ""
     database: twenty
     ssl: false
-    secretName: ""
-    passwordKey: ""
-
-# Redis
-redisInternal:
-  enabled: true
-  image:
-    repository: redis/redis-stack-server
-    tag: 7.2.0-v10
-    pullPolicy: IfNotPresent
-  resources:
-    requests:
-      cpu: 250m
-      memory: 1024Mi
-    limits:
-      cpu: 500m
-      memory: 2048Mi
-  service:
-    port: 6379
-  persistence:
-    enabled: false
-    size: 1Gi
-    storageClass: ""
-    existingClaim: ""
-    accessModes:
-      - ReadWriteOnce
-
-# External Redis (when redisInternal.enabled=false)
-redis:
-  external:
-    host: ""
-    port: 6379
-    password: ""
     secretName: ""
     passwordKey: ""

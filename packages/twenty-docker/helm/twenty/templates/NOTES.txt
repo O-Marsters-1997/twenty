@@ -14,4 +14,3 @@ To access the application:
 Configuration:
 - Using internal DB: {{ ternary "yes" "no" .Values.db.enabled }}
 - Using external DB: {{ ternary "yes" "no" (not .Values.db.enabled) }}
-- Using internal Redis: {{ ternary "yes" "no" .Values.redisInternal.enabled }}

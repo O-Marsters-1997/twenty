@@ -39,10 +39,7 @@ tests:
     asserts:
       - contains:
           path: spec.template.spec.containers[0].command
-          content: node
-      - contains:
-          path: spec.template.spec.containers[0].command
-          content: dist/queue-worker/queue-worker
+          content: /app/worker
 
   - it: sets replica count to 1 by default
     asserts:

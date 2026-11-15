@@ -11,46 +11,34 @@ services:
     volumes:
       - twenty-db-data:/var/lib/postgresql/data:Z
 
-  redis:
-    container_name: twenty-redis
-    image: valkey/valkey:8
-    command: ["--maxmemory-policy", "noeviction"]
-    volumes:
-      - twenty-redis-data:/data:Z
-
   server:
     container_name: twenty-server
     image: twentycrm/twenty:latest
     environment:
-      NODE_PORT: "3000"
+      LISTEN_ADDR: ":3000"
       SERVER_URL: ${SERVER_URL}
       PG_DATABASE_URL: "postgresql://twenty:${PG_DATABASE_PASSWORD}@twenty-db:5432/twenty"
-      REDIS_URL: "redis://twenty-redis:6379"
       APP_SECRET: ${APP_SECRET}
-      NODE_ENV: production
       LOG_LEVEL: info
     volumes:
-      - twenty-server-data:/app/docker-data:Z
+      - twenty-server-data:/app/.local-storage:Z
     ports:
       - 127.0.0.1:8080:3000
 
   worker:
     container_name: twenty-worker
     image: twentycrm/twenty:latest
-    command: node dist/queue-worker/queue-worker
+    command: /app/worker
     environment:
       SERVER_URL: ${SERVER_URL}
       PG_DATABASE_URL: "postgresql://twenty:${PG_DATABASE_PASSWORD}@twenty-db:5432/twenty"
-      REDIS_URL: "redis://twenty-redis:6379"
       APP_SECRET: ${APP_SECRET}
       DISABLE_DB_MIGRATIONS: "true"
-      NODE_ENV: production
       LOG_LEVEL: info
     volumes:
-      - twenty-server-data:/app/docker-data:Z
+      - twenty-server-data:/app/.local-storage:Z
     init: true
 
 volumes:
   twenty-db-data:
   twenty-server-data:
-  twenty-redis-data:

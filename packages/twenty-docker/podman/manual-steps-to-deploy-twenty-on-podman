@@ -9,12 +9,11 @@ source "$(dirname "$0")/.env"
 ## steps to cleanup and start over from scratch - useful when testing
 #podman pod stop twenty-pod
 #podman pod rm twenty-pod
-#podman volume rm twenty-db-data twenty-server-data twenty-redis-data
+#podman volume rm twenty-db-data twenty-server-data
 # end of cleanup
 
 podman volume create twenty-db-data
 podman volume create twenty-server-data
-podman volume create twenty-redis-data
 
 podman pod create --name twenty-pod -p 127.0.0.1:8080:3000
 
@@ -25,33 +24,25 @@ podman run -d --pod twenty-pod --name twenty-db \
   -v twenty-db-data:/var/lib/postgresql/data:Z \
   docker.io/library/postgres:16
 
-podman run -d --pod twenty-pod --name twenty-redis \
-  -v twenty-redis-data:/data:Z \
-  docker.io/library/redis:latest
-
 podman run -d --pod twenty-pod --name twenty-server \
-  -e NODE_PORT=3000 \
+  -e LISTEN_ADDR=:3000 \
   -e SERVER_URL="$SERVER_URL" \
   -e PG_DATABASE_URL="postgresql://twenty:$POSTGRES_PASSWORD@twenty-db:5432/twenty" \
-  -e REDIS_URL="redis://twenty-redis:6379" \
   -e APP_SECRET="$APP_SECRET" \
-  -e NODE_ENV=production \
   -e LOG_LEVEL=info \
-  -v twenty-server-data:/app/docker-data:Z \
+  -v twenty-server-data:/app/.local-storage:Z \
   docker.io/twentycrm/twenty:latest
 
 podman run -d --pod twenty-pod --name twenty-worker \
   --init \
   -e SERVER_URL="$SERVER_URL" \
   -e PG_DATABASE_URL="postgresql://twenty:$POSTGRES_PASSWORD@twenty-db:5432/twenty" \
-  -e REDIS_URL="redis://twenty-redis:6379" \
   -e APP_SECRET="$APP_SECRET" \
   -e DISABLE_DB_MIGRATIONS=true \
-  -e NODE_ENV=production \
   -e LOG_LEVEL=info \
-  -v twenty-server-data:/app/docker-data:Z \
+  -v twenty-server-data:/app/.local-storage:Z \
   docker.io/twentycrm/twenty:latest \
-  node dist/queue-worker/queue-worker
+  /app/worker
 
 # wait some time, check status
 sleep 30

@@ -38,8 +38,8 @@ resource "kubernetes_deployment" "twentycrm_server" {
           tty   = true
 
           env {
-            name  = "NODE_PORT"
-            value = "3000"
+            name  = "LISTEN_ADDR"
+            value = ":3000"
           }
 
           env {
@@ -50,10 +50,6 @@ resource "kubernetes_deployment" "twentycrm_server" {
           env {
             name  = "PG_DATABASE_URL"
             value = "postgres://twenty:${var.twentycrm_pgdb_admin_password}@${kubernetes_service.twentycrm_db.metadata.0.name}.${kubernetes_namespace.twentycrm.metadata.0.name}.svc.cluster.local/default"
-          }
-          env {
-            name  = "REDIS_URL"
-            value = "redis://${kubernetes_service.twentycrm_redis.metadata.0.name}.${kubernetes_namespace.twentycrm.metadata.0.name}.svc.cluster.local:6379"
           }
           env {
             name  = "DISABLE_DB_MIGRATIONS"
@@ -132,7 +128,6 @@ resource "kubernetes_deployment" "twentycrm_server" {
   }
   depends_on = [
     kubernetes_deployment.twentycrm_db,
-    kubernetes_deployment.twentycrm_redis,
     kubernetes_secret.twentycrm_tokens
   ]
 }

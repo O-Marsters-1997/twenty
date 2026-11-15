@@ -98,34 +98,6 @@ password
 {{- end -}}
 {{- end -}}
 
-{{/* Check if using external secret for redis password */}}
-{{- define "twenty.redis.useExternalSecret" -}}
-{{- if and (not .Values.redisInternal.enabled) .Values.redis.external.secretName .Values.redis.external.passwordKey -}}
-true
-{{- else -}}
-false
-{{- end -}}
-{{- end -}}
-
-{{/* Compose Redis URL */}}
-{{- define "twenty.redisUrl" -}}
-{{- if .Values.server.env.REDIS_URL -}}
-{{- .Values.server.env.REDIS_URL -}}
-{{- else if .Values.redisInternal.enabled -}}
-{{- $host := printf "%s-redis" (include "twenty.fullname" .) -}}
-{{- printf "redis://%s.%s.svc.cluster.local:6379" $host (include "twenty.namespace" .) -}}
-{{- else -}}
-{{- $host := .Values.redis.external.host | default "redis" -}}
-{{- $port := .Values.redis.external.port | default 6379 -}}
-{{- if or (eq (include "twenty.redis.useExternalSecret" .) "true") (.Values.redis.external.password) -}}
-{{- $auth := ":$(REDIS_PASSWORD)@" -}}
-{{- printf "redis://%s%s:%v" $auth $host $port -}}
-{{- else -}}
-{{- printf "redis://%s:%v" $host $port -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-
 {{/* Compose Server URL from override, ingress, or service */}}
 {{- define "twenty.serverUrl" -}}
 {{- if .Values.server.env.SERVER_URL -}}
