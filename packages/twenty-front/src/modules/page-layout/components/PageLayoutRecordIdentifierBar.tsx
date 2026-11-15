@@ -1,6 +1,5 @@
 import { RecordIdentifierBarCreatedAt } from '@/object-record/record-show/components/RecordIdentifierBarCreatedAt';
 import { RecordIdentifierBarTitle } from '@/object-record/record-show/components/RecordIdentifierBarTitle';
-import { PAGE_LAYOUT_LEFT_PANEL_CONTAINER_WIDTH } from '@/page-layout/constants/PageLayoutLeftPanelContainerWidth';
 import { useOpenPageLayoutTabSettings } from '@/page-layout/hooks/useOpenPageLayoutTabSettings';
 import { type PageLayoutTab } from '@/page-layout/types/PageLayoutTab';
 import { type TargetRecordIdentifier } from '@/ui/layout/contexts/TargetRecordIdentifier';
@@ -18,7 +17,6 @@ import {
 } from 'twenty-ui/theme/tokens.stylex';
 import { media } from 'twenty-ui/theme/constants.stylex';
 
-// The pinned-tab control stays over the left panel when editing.
 const styles = stylex.create({
   bar: {
     alignItems: 'stretch',

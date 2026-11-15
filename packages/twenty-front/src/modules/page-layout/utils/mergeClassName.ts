@@ -6,7 +6,7 @@ export const mergeClassName = (
   className?: string,
 ) => ({
   ...stylexProps,
-  className: [stylexProps.className, className]
-    .filter(isNonEmptyString)
-    .join(' '),
+  className:
+    [stylexProps.className, className].filter(isNonEmptyString).join(' ') ||
+    undefined,
 });

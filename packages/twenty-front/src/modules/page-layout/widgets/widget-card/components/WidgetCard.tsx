@@ -66,9 +66,15 @@ export const WidgetCard = ({
           hasSecondaryBackground && styles.secondaryBackground,
           isDraggingEditable && styles.draggingBackground,
           (isFramed || isEditable) && styles.bordered,
-          isFramed && styles.borderFramed,
-          isHighlighted && styles.borderHighlighted,
-          canHover && styles.hoverable,
+          isHighlighted
+            ? styles.borderHighlighted
+            : isFramed
+              ? canHover
+                ? styles.borderLightHoverable
+                : styles.borderLight
+              : canHover
+                ? styles.borderTransparentHoverable
+                : styles.borderTransparent,
           isEditable &&
             !isDragging &&
             !isEditing &&
@@ -119,14 +125,21 @@ const styles = stylex.create({
     borderStyle: 'solid',
     borderWidth: 1,
   },
-  borderFramed: { borderColor: borderColor['--t-border-color-light'] },
-  borderHighlighted: { borderColor: color['--t-color-blue'] },
-  hoverable: {
+  borderTransparent: { borderColor: 'transparent' },
+  borderTransparentHoverable: {
     borderColor: {
-      default: null,
+      default: 'transparent',
       ':hover': borderColor['--t-border-color-strong'],
     },
   },
+  borderLight: { borderColor: borderColor['--t-border-color-light'] },
+  borderLightHoverable: {
+    borderColor: {
+      default: borderColor['--t-border-color-light'],
+      ':hover': borderColor['--t-border-color-strong'],
+    },
+  },
+  borderHighlighted: { borderColor: color['--t-color-blue'] },
   clickable: { cursor: 'pointer' },
   framedPadding: { padding: spacing['--t-spacing-2'] },
 });

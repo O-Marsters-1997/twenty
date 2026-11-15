@@ -175,7 +175,7 @@ export const GraphWidgetTooltip = ({
       <div
         {...stylex.props(
           styles.sectionPadding,
-          true && styles.sectionPaddingTop,
+          styles.sectionPaddingTop,
           !shouldShowClickFooter && styles.sectionPaddingBottom,
         )}
       >

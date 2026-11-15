@@ -33,6 +33,7 @@ export const WidgetCardContent = ({
 
   const isFlushWithHeader =
     hasHeader && isWidgetCardFlushInViewMode({ isEditable, variant });
+  const hasTitleSpacing = hasHeader && variant === 'flush';
 
   return (
     <div
@@ -42,14 +43,20 @@ export const WidgetCardContent = ({
         isFixedHeight ? styles.fixedHeight : styles.fluidHeight,
         hasHeader && variant === 'framed' && styles.marginWithFramedHeader,
         contentPadding === 'none'
-          ? styles.paddingNone
+          ? styles.paddingTopNone
           : isFlushWithHeader
-            ? styles.paddingFlushWithHeader
-            : styles.paddingDefault,
+            ? styles.paddingTopFlushWithHeader
+            : styles.paddingTopDefault,
+        contentPadding === 'none'
+          ? hasTitleSpacing
+            ? styles.paddingBottomNoneWithTitle
+            : styles.paddingBottomNone
+          : hasTitleSpacing
+            ? styles.paddingBottomDefaultWithTitle
+            : styles.paddingBottomDefault,
         contentPadding === 'none'
           ? styles.paddingInlineNone
           : styles.paddingInlineCard,
-        hasHeader && variant === 'flush' && styles.emptyPaddingForTitle,
       )}
     >
       {children}
@@ -76,26 +83,34 @@ const styles = stylex.create({
   marginWithFramedHeader: {
     marginTop: { default: spacing['--t-spacing-2'], ':empty': 0 },
   },
-  paddingNone: { paddingBottom: 0, paddingTop: 0 },
-  paddingDefault: {
-    paddingBottom: { default: spacing['--t-spacing-2'], ':empty': 0 },
+  paddingTopNone: { paddingTop: 0 },
+  paddingTopDefault: {
     paddingTop: { default: spacing['--t-spacing-2'], ':empty': 0 },
   },
-  paddingFlushWithHeader: {
-    paddingBottom: { default: spacing['--t-spacing-2'], ':empty': 0 },
+  paddingTopFlushWithHeader: {
     paddingTop: { default: spacing['--t-spacing-3'], ':empty': 0 },
+  },
+  paddingBottomNone: { paddingBottom: 0 },
+  paddingBottomNoneWithTitle: {
+    paddingBottom: {
+      default: 0,
+      ':empty': 'var(--widget-card-title-padding-top)',
+    },
+  },
+  paddingBottomDefault: {
+    paddingBottom: { default: spacing['--t-spacing-2'], ':empty': 0 },
+  },
+  paddingBottomDefaultWithTitle: {
+    paddingBottom: {
+      default: spacing['--t-spacing-2'],
+      ':empty': 'var(--widget-card-title-padding-top)',
+    },
   },
   paddingInlineNone: { paddingInline: 0 },
   paddingInlineCard: {
     paddingInline: {
       default: 'var(--widget-card-padding-inline)',
       ':empty': 0,
-    },
-  },
-  emptyPaddingForTitle: {
-    paddingBottom: {
-      default: null,
-      ':empty': 'var(--widget-card-title-padding-top)',
     },
   },
 });
