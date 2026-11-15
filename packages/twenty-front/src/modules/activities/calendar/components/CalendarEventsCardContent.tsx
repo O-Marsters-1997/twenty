@@ -7,38 +7,38 @@ import { AnimatedPlaceholder } from '@/ui/feedback/empty-state/components/Animat
 import { EmptyState } from '@/ui/feedback/empty-state/components/EmptyState';
 import { StyledWidgetScrollContainer } from '@/ui/layout/components/WidgetContentContainer';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { format, getYear } from 'date-fns';
 import { Section } from 'twenty-ui/components/layout';
 
 import { Heading } from 'twenty-ui/primitives/typography';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { type TimelineCalendarEvent } from '~/generated/graphql';
 import { dateLocaleState } from '@/localization/states/dateLocaleState';
 import * as stylex from '@stylexjs/stylex';
-import { fontColor } from 'twenty-ui/theme/tokens.stylex';
-
-const StyledContainer = styled(StyledWidgetScrollContainer)`
-  gap: ${themeCssVariables.spacing[8]};
-`;
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
+  container: {
+    gap: spacing['--t-spacing-8'],
+  },
+  titleContainer: {
+    marginBottom: spacing['--t-spacing-2'],
+  },
+  title: {
+    color: fontColor['--t-font-color-secondary'],
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    lineHeight: 'inherit',
+  },
   year: {
     color: fontColor['--t-font-color-light'],
   },
 });
-
-const StyledTitleContainer = styled.div`
-  margin-bottom: ${themeCssVariables.spacing[2]};
-
-  h3 {
-    color: ${themeCssVariables.font.color.secondary};
-    font-size: ${themeCssVariables.font.size.md};
-    font-weight: ${themeCssVariables.font.weight.regular};
-    line-height: inherit;
-  }
-`;
 
 type CalendarEventsCardContentProps = {
   firstQueryLoading: boolean;
@@ -90,7 +90,7 @@ export const CalendarEventsCardContent = ({
         calendarEventsByDayTime,
       }}
     >
-      <StyledContainer>
+      <StyledWidgetScrollContainer {...stylex.props(styles.container)}>
         {monthTimes.map((monthTime) => {
           const monthDayTimes = daysByMonthTime[monthTime] || [];
           const year = getYear(monthTime);
@@ -102,14 +102,14 @@ export const CalendarEventsCardContent = ({
 
           return (
             <Section.Root key={monthTime}>
-              <StyledTitleContainer>
-                <Heading level={3} size="lg">
+              <div {...stylex.props(styles.titleContainer)}>
+                <Heading level={3} size="lg" xstyle={styles.title}>
                   {monthLabel}
                   {isLastMonthOfYear && (
                     <span {...stylex.props(styles.year)}> {year}</span>
                   )}
                 </Heading>
-              </StyledTitleContainer>
+              </div>
               <CalendarMonthCard dayTimes={monthDayTimes} />
             </Section.Root>
           );
@@ -118,7 +118,7 @@ export const CalendarEventsCardContent = ({
           loading={isFetchingMore}
           onLastRowVisible={onLastRowVisible}
         />
-      </StyledContainer>
+      </StyledWidgetScrollContainer>
     </CalendarContext.Provider>
   );
 };

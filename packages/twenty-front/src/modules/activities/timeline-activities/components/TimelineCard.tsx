@@ -1,5 +1,5 @@
 import { EmptyState } from '@/ui/feedback/empty-state/components/EmptyState';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 
 import { CustomResolverFetchMoreLoader } from '@/activities/components/CustomResolverFetchMoreLoader';
 import { SkeletonLoader } from '@/activities/components/SkeletonLoader';
@@ -11,25 +11,22 @@ import { StyledWidgetScrollContainer } from '@/ui/layout/components/WidgetConten
 import { useTargetRecord } from '@/ui/layout/contexts/useTargetRecord';
 import { useWorkspaceSurface } from '@/ui/layout/hooks/useWorkspaceSurface';
 import { t } from '@lingui/core/macro';
-import { MOBILE_VIEWPORT, themeCssVariables } from 'twenty-ui/theme';
+import { media } from 'twenty-ui/theme/constants.stylex';
+import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledMainContainer = styled(StyledWidgetScrollContainer)`
-  align-items: flex-start;
-  align-self: stretch;
-  border-top: none;
-  gap: ${themeCssVariables.spacing[4]};
-
-  @media (max-width: ${MOBILE_VIEWPORT}px) {
-    border-top: 1px solid ${themeCssVariables.border.color.medium};
-  }
-`;
-
-const StyledSidePanelPlaceholderWrapper = styled.div`
-  > * {
-    height: auto;
-    padding-top: ${themeCssVariables.spacing[8]};
-  }
-`;
+const styles = stylex.create({
+  mainContainer: {
+    alignItems: 'flex-start',
+    alignSelf: 'stretch',
+    borderTopColor: borderColor['--t-border-color-medium'],
+    borderTopStyle: { default: 'none', [media.mobile]: 'solid' },
+    borderTopWidth: 1,
+    gap: spacing['--t-spacing-4'],
+  },
+  sidePanelPlaceholderWrapper: {
+    paddingTop: spacing['--t-spacing-8'],
+  },
+});
 
 export const TimelineCard = () => {
   const targetRecord = useTargetRecord();
@@ -62,9 +59,9 @@ export const TimelineCard = () => {
     );
 
     return isInSidePanel ? (
-      <StyledSidePanelPlaceholderWrapper>
+      <div {...stylex.props(styles.sidePanelPlaceholderWrapper)}>
         {placeholderContent}
-      </StyledSidePanelPlaceholderWrapper>
+      </div>
     ) : (
       placeholderContent
     );
@@ -73,7 +70,7 @@ export const TimelineCard = () => {
   return (
     <>
       <UpsertRecordsInStoreEffect records={linkedRecords} />
-      <StyledMainContainer>
+      <StyledWidgetScrollContainer {...stylex.props(styles.mainContainer)}>
         <EventList
           targetableObject={targetRecord}
           title={t`All`}
@@ -83,7 +80,7 @@ export const TimelineCard = () => {
           loading={loadingMore}
           onLastRowVisible={fetchMoreRecords}
         />
-      </StyledMainContainer>
+      </StyledWidgetScrollContainer>
     </>
   );
 };

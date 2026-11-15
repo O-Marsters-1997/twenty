@@ -1,29 +1,25 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { Card } from 'twenty-ui/primitives/surfaces';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { borderColor } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledListContainer = styled.div`
-  width: 100%;
-
-  &[data-scrollable] {
-    flex: 1;
-    height: 100%;
-    min-height: 0;
-
-    > * {
-      box-sizing: border-box;
-      height: 100%;
-      overflow-y: auto;
-    }
-  }
-
-  > * {
-    & > :not(:last-child) {
-      border-bottom: 1px solid ${themeCssVariables.border.color.light};
-    }
-    width: calc(100% - 2px);
-  }
-`;
+const styles = stylex.create({
+  list: {
+    width: '100%',
+  },
+  listScrollable: {
+    flex: 1,
+    height: '100%',
+    minHeight: 0,
+  },
+  card: {
+    width: 'calc(100% - 2px)',
+  },
+  cardScrollable: {
+    boxSizing: 'border-box',
+    height: '100%',
+    overflowY: 'auto',
+  },
+});
 
 type ActivityListProps = React.PropsWithChildren<{
   isScrollable?: boolean;
@@ -34,8 +30,10 @@ export const ActivityList = ({
   isScrollable = false,
 }: ActivityListProps) => {
   return (
-    <StyledListContainer data-scrollable={isScrollable || undefined}>
-      <Card.Root>{children}</Card.Root>
-    </StyledListContainer>
+    <div {...stylex.props(styles.list, isScrollable && styles.listScrollable)}>
+      <Card.Root xstyle={[styles.card, isScrollable && styles.cardScrollable]}>
+        {children}
+      </Card.Root>
+    </div>
   );
 };

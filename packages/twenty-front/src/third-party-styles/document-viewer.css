@@ -1,0 +1,23 @@
+@layer third-party {
+  [data-document-viewer] #react-doc-viewer #header-bar {
+    display: none;
+  }
+
+  [data-document-viewer] #react-doc-viewer #pdf-controls {
+    display: none !important;
+  }
+
+  [data-document-viewer] #react-doc-viewer,
+  [data-document-viewer] #proxy-renderer,
+  [data-document-viewer] #msdoc-renderer,
+  [data-document-viewer] #html-renderer,
+  [data-document-viewer] #html-renderer iframe,
+  [data-document-viewer] iframe {
+    background: none;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: auto;
+    width: 100%;
+  }
+}
