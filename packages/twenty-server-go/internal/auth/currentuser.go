@@ -167,7 +167,7 @@ func (c *CurrentUser) Load(ctx context.Context, principal Principal) (CurrentUse
 
 	data.AvailableForSignIn, data.AvailableForSignUp, err = c.login.availableWorkspaces(ctx, loginUser{id: data.ID, email: data.Email})
 	if err != nil {
-		return CurrentUserData{}, err
+		return CurrentUserData{}, fmt.Errorf("list available workspaces: %w", err)
 	}
 	if principal.AuthProvider != passwordProvider {
 		for index := range data.AvailableForSignIn {
@@ -214,7 +214,7 @@ func (c *CurrentUser) loadWorkspace(ctx context.Context, principal Principal, da
 	if logoFileID != nil {
 		token, err := c.login.issuer.IssueFileToken(ctx, workspace.ID, *logoFileID, c.login.config.FileTokenTTL)
 		if err != nil {
-			return err
+			return fmt.Errorf("issue workspace logo token: %w", err)
 		}
 		workspace.Logo = fmt.Sprintf("%s/file/%s/%s?token=%s", c.config.ServerURL, fileFolderCorePicture, *logoFileID, token)
 	}
