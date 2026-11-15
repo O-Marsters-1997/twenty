@@ -16,7 +16,8 @@ import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
 import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
 import { isDefined } from '@ui/utilities/utils/isDefined';
 
-import styles from './CountrySelect.module.scss';
+import './CountrySelect.css';
+import { countrySelectStyles } from './CountrySelect.stylex';
 import { CountrySelectAvailabilityEffect } from './internal/CountrySelectAvailabilityEffect';
 import { CountrySelectOptions } from './internal/CountrySelectOptions';
 import { getCountrySelectLabelledBy } from './internal/getCountrySelectLabelledBy';
@@ -112,14 +113,18 @@ export const CountrySelect = ({
   };
 
   return (
-    <div className={styles.root}>
+    <div {...stylex.props(countrySelectStyles.root)}>
       <CountrySelectAvailabilityEffect
         disabled={isDisabled}
         open={requestedOpen}
         onOpenChange={handleOpenChange}
       />
       {hasVisibleLabel && (
-        <label id={labelId} className={styles.label} htmlFor={triggerId}>
+        <label
+          id={labelId}
+          {...stylex.props(countrySelectStyles.label)}
+          htmlFor={triggerId}
+        >
           {label}
         </label>
       )}
@@ -152,7 +157,13 @@ export const CountrySelect = ({
               : render
           }
         >
-          <span className={styles.flag} aria-hidden="true">
+          <span
+            {...mergeStylexProps(
+              stylex.props(countrySelectStyles.flag),
+              'tw-country-select-flag',
+            )}
+            aria-hidden="true"
+          >
             {selectedFlag}
           </span>
           <span

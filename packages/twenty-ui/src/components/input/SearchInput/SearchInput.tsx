@@ -1,4 +1,5 @@
 import { isNonEmptyString } from '@sniptt/guards';
+import * as stylex from '@stylexjs/stylex';
 import { useId } from 'react';
 import { type SearchInputProps } from './types/SearchInputProps';
 
@@ -8,7 +9,8 @@ import { Input } from '@ui/primitives/input/Input/Input';
 import { InputGroup } from '@ui/primitives/input/InputGroup/InputGroup';
 import { useTheme } from '@ui/theme';
 
-import styles from './SearchInput.module.scss';
+import { fontColor, spacing } from '../../../theme/tokens.stylex';
+import { searchInputMarker } from './SearchInput.stylex';
 
 export const SearchInput = ({
   placeholder,
@@ -30,18 +32,19 @@ export const SearchInput = ({
       size={size}
       aria-label={filterButtonAriaLabel}
       startIcon={<IconFilter size={theme.icon.size.md} />}
-      className={styles.filterButton}
+      xstyle={size === 'sm' ? styles.filterButtonSm : styles.filterButtonMd}
     />
   );
 
   return (
-    <div className={styles.wrapper}>
+    <div {...stylex.props(styles.wrapper)}>
       <InputGroup
-        className={styles.inputGroup}
+        className={stylex.props(searchInputMarker).className}
+        xstyle={styles.inputGroup}
         size={size}
         startElement={
           <IconSearch
-            className={styles.searchIcon}
+            {...stylex.props(styles.searchIcon)}
             size={theme.icon.size.md}
             aria-hidden
           />
@@ -63,3 +66,30 @@ export const SearchInput = ({
     </div>
   );
 };
+
+const styles = stylex.create({
+  wrapper: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    inlineSize: '100%',
+  },
+  filterButtonSm: {
+    inlineSize: spacing['--t-spacing-6'],
+    maxInlineSize: 'none',
+    paddingInline: 0,
+  },
+  filterButtonMd: {
+    inlineSize: spacing['--t-spacing-8'],
+    maxInlineSize: 'none',
+    paddingInline: 0,
+  },
+  inputGroup: { boxSizing: 'border-box', flex: 1, minInlineSize: 0 },
+  searchIcon: {
+    color: {
+      default: fontColor['--t-font-color-light'],
+      [stylex.when.ancestor(':focus-within', searchInputMarker)]:
+        fontColor['--t-font-color-secondary'],
+    },
+  },
+});

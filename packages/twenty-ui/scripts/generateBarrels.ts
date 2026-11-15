@@ -549,7 +549,7 @@ const generateRootBarrel = (
   moduleDirectories: string[],
 ): createTypeScriptFileArgs => {
   const content = [
-    "import './styles/base/reset.scss';",
+    "import './styles/base/reset.css';",
     '',
     ...getRootBarrelModuleNames(moduleDirectories).map(
       (moduleName) => `export * from './${moduleName}';`,

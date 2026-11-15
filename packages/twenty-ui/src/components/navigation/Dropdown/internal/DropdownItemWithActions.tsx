@@ -2,23 +2,12 @@ import * as stylex from '@stylexjs/stylex';
 import { type ReactNode } from 'react';
 
 import { IconCheck, IconChevronRight } from '@ui/icon';
-import { listItemStyles } from '@ui/primitives/navigation/ListItem/ListItemStyles.stylex';
 import { type ListItemProps } from '@ui/primitives/navigation/ListItem/types/ListItemProps';
-import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
 
-import { listItemMarker } from '../../../../primitives/navigation/ListItem/ListItem.stylex';
-import { backgroundTransparent } from '../../../../theme/tokens.stylex';
-import styles from '../Dropdown.module.scss';
-
-const itemStyles = stylex.create({
-  focusWithin: {
-    backgroundColor: {
-      default: 'var(--tw-list-item-background)',
-      [stylex.when.descendant(':focus-visible', listItemMarker)]:
-        backgroundTransparent['--t-background-transparent-light'],
-    },
-  },
-});
+import {
+  dropdownItemWithActionsMarker,
+  dropdownStyles,
+} from '../Dropdown.stylex';
 
 const DROPDOWN_ITEM_SELECTOR = '[data-dropdown-item]';
 
@@ -48,9 +37,13 @@ export const DropdownItemWithActions = ({
   children,
 }: DropdownItemWithActionsProps) => (
   <div
-    {...mergeStylexProps(
-      stylex.props(listItemMarker, listItemStyles.root, itemStyles.focusWithin),
-      styles.itemWithActions,
+    {...stylex.props(
+      dropdownItemWithActionsMarker,
+      dropdownStyles.itemWithActions,
+      color === 'danger' && dropdownStyles.itemWithActionsDanger,
+      disabled && dropdownStyles.itemWithActionsDisabled,
+      (focused || (selected && indicator === 'none')) &&
+        dropdownStyles.itemWithActionsHighlighted,
     )}
     role="none"
     data-actions-visibility={actionsVisibility}
@@ -71,27 +64,28 @@ export const DropdownItemWithActions = ({
   >
     {children}
     <span
-      {...mergeStylexProps(
-        stylex.props(listItemStyles.actions),
-        styles.itemActions,
+      {...stylex.props(
+        dropdownStyles.itemActions,
+        actionsVisibility === 'hover' && dropdownStyles.itemActionsHoverOnly,
       )}
     >
       {actions}
     </span>
     {indicator === 'check' && selected && (
       <IconCheck
-        {...mergeStylexProps(
-          stylex.props(listItemStyles.checkIndicator),
-          styles.itemDecoration,
+        {...stylex.props(
+          dropdownStyles.checkIndicator,
+          dropdownStyles.itemDecoration,
         )}
         aria-hidden
       />
     )}
     {hasSubmenu && (
       <IconChevronRight
-        {...mergeStylexProps(
-          stylex.props(listItemStyles.submenuIcon),
-          styles.itemDecoration,
+        {...stylex.props(
+          dropdownStyles.submenuIcon,
+          dropdownStyles.itemDecoration,
+          disabled && dropdownStyles.submenuIconHidden,
         )}
         aria-hidden
       />

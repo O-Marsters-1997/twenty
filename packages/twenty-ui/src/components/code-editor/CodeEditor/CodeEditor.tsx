@@ -1,13 +1,21 @@
 import Editor, { loader, type Monaco } from '@monaco-editor/react';
 import { isNumber } from '@sniptt/guards';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 import { type editor } from 'monaco-editor';
 import { type KeyboardEvent, useId, useState } from 'react';
 
 import { Loader } from '@ui/primitives/feedback/Loader/Loader';
 import { ResizeHandle } from '@ui/primitives/layout/ResizeHandle/ResizeHandle';
 import { useTheme, useThemeColorScheme } from '@ui/theme';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
 import { isDefined } from '@ui/utilities/utils/isDefined';
+
+import '../../../third-party-styles/monaco.css';
+import {
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+} from '../../../theme/tokens.stylex';
 
 import { BASE_CODE_EDITOR_THEME_ID } from './internal/constants/BaseCodeEditorThemeId';
 import { CODE_EDITOR_DEFAULT_HEIGHT } from './internal/constants/CodeEditorDefaultHeight';
@@ -19,7 +27,6 @@ import { CodeEditorResizableHeightEffect } from './internal/CodeEditorResizableH
 import { CodeEditorThemeEffect } from './internal/CodeEditorThemeEffect';
 import { useCodeEditorHeight } from './internal/useCodeEditorHeight';
 import { defineCodeEditorDefaultTheme } from './internal/utils/defineCodeEditorDefaultTheme';
-import styles from './CodeEditor.module.scss';
 import { type CodeEditorProps } from './types/CodeEditorProps';
 
 // Left alone, `@monaco-editor/loader` downloads Monaco from a CDN at runtime,
@@ -106,7 +113,10 @@ export const CodeEditor = ({
       // oxlint-disable-next-line react/jsx-props-no-spreading
       {...containerProps}
       ref={ref}
-      className={clsx(styles.container, containerProps?.className)}
+      {...mergeStylexProps(
+        stylex.props(styles.container),
+        containerProps?.className,
+      )}
       onKeyDown={handleKeyDown}
     >
       <CodeEditorLoaderConfigurationEffect
@@ -143,23 +153,21 @@ export const CodeEditor = ({
       />
       {isLoading || !isMonacoLoaderConfigured ? (
         <div
-          className={styles.editorLoader}
+          {...stylex.props(
+            styles.editorLoader,
+            variant === 'default' && styles.editorLoaderDefault,
+            variant === 'with-header' && styles.editorLoaderWithHeader,
+            styles.editorLoaderSize(width, currentHeight),
+          )}
           data-variant={variant}
-          style={
-            {
-              width,
-              '--code-editor-height': isNumber(currentHeight)
-                ? `${currentHeight}px`
-                : currentHeight,
-            } as React.CSSProperties
-          }
         >
           {loading}
         </div>
       ) : (
         <div
           id={editorContainerId}
-          className={styles.editorWrapper}
+          {...stylex.props(styles.editorWrapper)}
+          data-code-editor=""
           data-variant={variant}
           data-transparent-background={transparentBackground || undefined}
         >
@@ -209,3 +217,40 @@ export const CodeEditor = ({
     </div>
   );
 };
+
+const styles = stylex.create({
+  container: { display: 'contents' },
+  editorWrapper: { display: 'contents' },
+  editorLoader: {
+    alignItems: 'center',
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
+    borderRadius: 0,
+    borderStyle: 'none',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  editorLoaderDefault: {
+    borderColor: borderColor['--t-border-color-medium'],
+    borderRadius: borderRadius['--t-border-radius-md'],
+    borderStyle: 'solid',
+    borderWidth: 1,
+  },
+  editorLoaderWithHeader: {
+    borderColor: borderColor['--t-border-color-medium'],
+    borderEndEndRadius: borderRadius['--t-border-radius-md'],
+    borderEndStartRadius: borderRadius['--t-border-radius-md'],
+    borderStartEndRadius: 0,
+    borderStartStartRadius: 0,
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderBlockStartWidth: 0,
+  },
+  editorLoaderSize: (
+    inlineSize: string | number,
+    blockSize: string | number,
+  ) => ({
+    blockSize,
+    inlineSize,
+  }),
+});

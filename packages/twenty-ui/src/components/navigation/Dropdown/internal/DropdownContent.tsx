@@ -1,12 +1,13 @@
 import { useMergedRefs } from '@base-ui/utils/useMergedRefs';
 import { isFunction } from '@sniptt/guards';
+import * as stylex from '@stylexjs/stylex';
 import { useRef, useState } from 'react';
 
 import { Popover } from '@ui/primitives/surfaces/Popover/Popover';
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
 import { isDefined } from '@ui/utilities/utils/isDefined';
 
-import styles from '../Dropdown.module.scss';
+import { dropdownStyles } from '../Dropdown.stylex';
 import { type DropdownContentProps } from '../types/DropdownContentProps';
 import { DropdownPageFocusEffect } from './DropdownPageFocusEffect';
 import { DropdownSearchTargetEffect } from './DropdownSearchTargetEffect';
@@ -81,7 +82,10 @@ export const DropdownContent = ({
             aria-labelledby={ariaLabelledBy ?? defaultAriaLabelledBy}
             data-dropdown-content=""
             data-type={type}
-            className={mergeClassNames(styles.content, className)}
+            className={
+              mergeStylexProps(stylex.props(dropdownStyles.content), className)
+                .className
+            }
             style={(state) => ({
               width,
               ...(isFunction(style) ? style(state) : style),

@@ -1,8 +1,9 @@
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 
 import { IconChevronLeft } from '@ui/icon';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
 
-import styles from '../Dropdown.module.scss';
+import { dropdownStyles } from '../Dropdown.stylex';
 import { type DropdownActionItemProps } from '../types/DropdownActionItemProps';
 import { DropdownActionItem } from './DropdownActionItem';
 import { useDropdownContext } from './useDropdownContext';
@@ -21,10 +22,10 @@ export const DropdownBack = ({
   return (
     <DropdownActionItem
       {...props}
-      className={clsx(styles.back, className)}
+      {...mergeStylexProps(stylex.props(dropdownStyles.back), className)}
       data-dropdown-back=""
       disabled={props.disabled || !canGoBack}
-      startIcon={<IconChevronLeft className={styles.backIcon} />}
+      startIcon={<IconChevronLeft {...stylex.props(dropdownStyles.backIcon)} />}
       closeOnClick={false}
       onClick={(event) => {
         onClick?.(event);

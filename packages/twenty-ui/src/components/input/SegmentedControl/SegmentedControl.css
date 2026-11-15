@@ -1,0 +1,7 @@
+@layer twenty-ui {
+  .tw-segmented-control-icon > svg,
+  .tw-segmented-control-icon > :only-child > svg:only-child {
+    block-size: calc(var(--t-icon-size-md) * 1px);
+    inline-size: calc(var(--t-icon-size-md) * 1px);
+  }
+}

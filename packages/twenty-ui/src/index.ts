@@ -7,7 +7,7 @@
  *                              |___/
  */
 
-import './styles/base/reset.scss';
+import './styles/base/reset.css';
 
 export * from './components';
 export * from './icon';

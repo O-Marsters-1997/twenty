@@ -1,0 +1,32 @@
+@layer third-party {
+  [data-code-editor] .monaco-editor {
+    background-color: var(--t-background-secondary) !important;
+    border-radius: var(--t-border-radius-md) !important;
+    outline-width: 0 !important;
+  }
+
+  [data-code-editor][data-transparent-background] .monaco-editor {
+    background-color: transparent !important;
+  }
+
+  [data-code-editor][data-variant='borderless'] .monaco-editor {
+    border-radius: 0 !important;
+  }
+
+  [data-code-editor] .overflow-guard {
+    border: none !important;
+    border-radius: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  [data-code-editor][data-variant='default'] .overflow-guard {
+    border: 1px solid var(--t-border-color-medium) !important;
+    border-radius: var(--t-border-radius-md) !important;
+  }
+
+  [data-code-editor][data-variant='with-header'] .overflow-guard {
+    border: 1px solid var(--t-border-color-medium) !important;
+    border-radius: 0 0 var(--t-border-radius-md) var(--t-border-radius-md) !important;
+    border-top: none !important;
+  }
+}

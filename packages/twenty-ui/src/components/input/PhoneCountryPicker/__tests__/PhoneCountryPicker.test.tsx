@@ -6,7 +6,6 @@ import { runComponentConformance } from '@test-utilities/conformance/runComponen
 import { Dropdown } from '@ui/components/navigation/Dropdown/Dropdown';
 
 import { PhoneCountryPicker } from '../PhoneCountryPicker';
-import styles from '../PhoneCountryPicker.module.scss';
 
 const PhoneCountryPickerWrapper = ({ children }: { children: ReactNode }) => (
   <Dropdown.Root type="picker">{children}</Dropdown.Root>
@@ -17,7 +16,6 @@ runComponentConformance({
   element: <PhoneCountryPicker.Trigger aria-label="Phone country" />,
   refInstanceOf: HTMLButtonElement,
   wrapper: PhoneCountryPickerWrapper,
-  ownClassName: styles.trigger,
   skip: ['renderProp'],
 });
 

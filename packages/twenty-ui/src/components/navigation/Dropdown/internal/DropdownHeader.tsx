@@ -1,7 +1,9 @@
 import { useRender } from '@base-ui/react/use-render';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 
-import styles from '../Dropdown.module.scss';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+
+import { dropdownStyles } from '../Dropdown.stylex';
 import { type DropdownHeaderProps } from '../types/DropdownHeaderProps';
 
 export const DropdownHeader = ({
@@ -13,5 +15,8 @@ export const DropdownHeader = ({
   useRender({
     render,
     ref,
-    props: { ...props, className: clsx(styles.header, className) },
+    props: {
+      ...props,
+      ...mergeStylexProps(stylex.props(dropdownStyles.header), className),
+    },
   });

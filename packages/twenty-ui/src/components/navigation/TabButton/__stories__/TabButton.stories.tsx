@@ -20,11 +20,32 @@ import {
 } from '@ui/testing';
 import { type ReactNode } from 'react';
 
-import styles from './TabButton.stories.module.scss';
+import * as stylex from '@stylexjs/stylex';
+
+import { borderColor, spacing } from '../../../../theme/tokens.stylex';
 
 const TabContainer = ({ children }: { children?: ReactNode }) => {
-  return <div className={styles.tabContainer}>{children}</div>;
+  return <div {...stylex.props(styles.tabContainer)}>{children}</div>;
 };
+
+const styles = stylex.create({
+  tabContainer: {
+    alignItems: 'stretch',
+    blockSize: 40,
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    position: 'relative',
+    userSelect: 'none',
+    '::after': {
+      backgroundColor: borderColor['--t-border-color-light'],
+      blockSize: 1,
+      content: '""',
+      insetBlockEnd: 0,
+      insetInline: 0,
+      position: 'absolute',
+    },
+  },
+});
 
 const meta: Meta<typeof TabButton> = {
   id: 'ui-components-tabbutton',

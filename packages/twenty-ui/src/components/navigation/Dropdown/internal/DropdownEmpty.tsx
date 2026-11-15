@@ -1,18 +1,24 @@
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 import { type ComponentPropsWithRef } from 'react';
 
 import { Text } from '@ui/primitives/typography/Text/Text';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
-import styles from '../Dropdown.module.scss';
+import { dropdownStyles } from '../Dropdown.stylex';
 
 export const DropdownEmpty = ({
   className,
+  xstyle,
   ...props
-}: ComponentPropsWithRef<'div'>) => (
+}: WithXstyle<ComponentPropsWithRef<'div'>>) => (
   <Text
     {...props}
     role="status"
     aria-live="polite"
-    className={clsx(styles.status, className)}
+    {...mergeStylexProps(
+      stylex.props(dropdownStyles.status, xstyle),
+      className,
+    )}
   />
 );
