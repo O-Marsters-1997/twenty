@@ -17,7 +17,7 @@ import { TRIGGER_STEP_ID } from 'twenty-shared/workflow';
 import { useIcons } from 'twenty-ui/icon';
 import { type SelectOption } from 'twenty-ui/primitives/input';
 import * as stylex from '@stylexjs/stylex';
-import { font, spacing } from 'twenty-ui/theme/tokens.stylex';
+import { spacing, fontColor, fontSize, fontWeight } from 'twenty-ui/theme/tokens.stylex';
 
 type WorkflowEditTriggerManualProps = {
   trigger: WorkflowManualTrigger;

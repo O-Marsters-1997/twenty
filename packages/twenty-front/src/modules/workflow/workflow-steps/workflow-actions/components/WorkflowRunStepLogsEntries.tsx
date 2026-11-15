@@ -9,7 +9,7 @@ import {
   StyledSectionTitle,
 } from '@/workflow/workflow-steps/workflow-actions/components/workflowRunStepLogsStyles';
 import * as stylex from '@stylexjs/stylex';
-import { font, spacing } from 'twenty-ui/theme/tokens.stylex';
+import { spacing, fontColor, fontSize } from 'twenty-ui/theme/tokens.stylex';
 
 const StyledEntriesList = styled.div`
   background: ${themeCssVariables.background.tertiary};

@@ -1,39 +1,24 @@
 import { WORKFLOW_DIAGRAM_NODE_DEFAULT_TARGET_HANDLE_ID } from '@/workflow/workflow-diagram/workflow-nodes/constants/WorkflowDiagramNodeDefaultTargetHandleId';
 import { WorkflowDiagramHandleTargetEffect } from '@/workflow/workflow-diagram/workflow-nodes/components/WorkflowDiagramHandleTargetEffect';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { Handle, Position, useNodeId } from '@xyflow/react';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 type WorkflowDiagramHandleTargetProps = {
   isConnectable?: boolean;
   targetHandleIds?: string[];
 };
 
-const StyledHandleContainer = styled.div`
-  inset: 0;
-  position: absolute;
-
-  & .react-flow__handle {
-    border-radius: ${themeCssVariables.border.radius.md};
-    height: 100%;
-    left: 0;
-    opacity: 0;
-    top: 0;
-    transform: translate(-1px, -5px);
-    width: 100%;
-    z-index: 1;
-
-    &.connectionindicator {
-      cursor: pointer;
-    }
-  }
-`;
-
-const StyledBranchHandle = styled(Handle)`
-  opacity: 0;
-  pointer-events: none;
-`;
+const styles = stylex.create({
+  handleContainer: {
+    inset: 0,
+    position: 'absolute',
+  },
+  branchHandle: {
+    opacity: 0,
+    pointerEvents: 'none',
+  },
+});
 
 export const WorkflowDiagramHandleTarget = ({
   isConnectable = false,
@@ -50,7 +35,7 @@ export const WorkflowDiagramHandleTarget = ({
           targetHandlesKey={targetHandlesKey}
         />
       )}
-      <StyledHandleContainer>
+      <div data-workflow-handle-target {...stylex.props(styles.handleContainer)}>
         <Handle
           id={WORKFLOW_DIAGRAM_NODE_DEFAULT_TARGET_HANDLE_ID}
           type="target"
@@ -58,10 +43,11 @@ export const WorkflowDiagramHandleTarget = ({
           isConnectableEnd={isConnectable}
           isConnectableStart={false}
         />
-      </StyledHandleContainer>
+      </div>
       {targetHandleIds?.map((handleId, index) => (
-        <StyledBranchHandle
+        <Handle
           key={handleId}
+          className={stylex.props(styles.branchHandle).className}
           id={handleId}
           type="target"
           position={Position.Top}

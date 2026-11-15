@@ -1,30 +1,34 @@
 import { AppErrorBoundary } from '@/error-handler/components/AppErrorBoundary';
 import { AppErrorDisplay } from '@/error-handler/components/internal/AppErrorDisplay';
 import { type AppErrorDisplayProps } from '@/error-handler/types/AppErrorDisplayProps';
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { background, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledWorkflowStepBody = styled.div<{
-  rowGap?: string;
-  display?: string;
-  overflow?: string;
-  paddingBlock?: string;
-  paddingInline?: string;
-  gridTemplateRows?: string;
-}>`
-  background: ${themeCssVariables.background.primary};
-  display: ${({ display }) => display ?? 'flex'};
-  flex: 1 1 auto;
-  flex-direction: column;
-  grid-template-rows: ${({ gridTemplateRows }) => gridTemplateRows ?? 'none'};
-  height: 100%;
-  overflow: ${({ overflow }) => overflow ?? 'hidden scroll'};
-  padding-block: ${({ paddingBlock }) =>
-    paddingBlock ?? themeCssVariables.spacing[4]};
-  padding-inline: ${({ paddingInline }) =>
-    paddingInline ?? themeCssVariables.spacing[3]};
-  row-gap: ${({ rowGap }) => rowGap ?? themeCssVariables.spacing[4]};
-`;
+const styles = stylex.create({
+  root: {
+    background: background['--t-background-primary'],
+    flexBasis: 'auto',
+    flexDirection: 'column',
+    flexGrow: 1,
+    flexShrink: 1,
+    height: '100%',
+  },
+  layout: (
+    rowGap: string,
+    display: string,
+    overflow: string,
+    paddingBlock: string,
+    paddingInline: string,
+    gridTemplateRows: string,
+  ) => ({
+    display,
+    gridTemplateRows,
+    overflow,
+    paddingBlock,
+    paddingInline,
+    rowGap,
+  }),
+});
 
 export const WorkflowStepBody = ({
   children,
@@ -44,13 +48,18 @@ export const WorkflowStepBody = ({
   gridTemplateRows?: string;
 }) => {
   return (
-    <StyledWorkflowStepBody
-      rowGap={rowGap}
-      display={display}
-      overflow={overflow}
-      paddingBlock={paddingBlock}
-      paddingInline={paddingInline}
-      gridTemplateRows={gridTemplateRows}
+    <div
+      {...stylex.props(
+        styles.root,
+        styles.layout(
+          rowGap ?? spacing['--t-spacing-4'],
+          display ?? 'flex',
+          overflow ?? 'hidden scroll',
+          paddingBlock ?? spacing['--t-spacing-4'],
+          paddingInline ?? spacing['--t-spacing-3'],
+          gridTemplateRows ?? 'none',
+        ),
+      )}
     >
       <AppErrorBoundary
         resetOnLocationChange={true}
@@ -68,6 +77,6 @@ export const WorkflowStepBody = ({
       >
         {children}
       </AppErrorBoundary>
-    </StyledWorkflowStepBody>
+    </div>
   );
 };

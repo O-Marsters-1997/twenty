@@ -17,7 +17,7 @@ import { useEffect, useState } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { useDebouncedCallback } from 'use-debounce';
 import * as stylex from '@stylexjs/stylex';
-import { font } from 'twenty-ui/theme/tokens.stylex';
+import { fontColor } from 'twenty-ui/theme/tokens.stylex';
 
 export type WorkflowEditActionFormFillerProps = {
   action: WorkflowFormAction;

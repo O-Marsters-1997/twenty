@@ -14,7 +14,7 @@ import { type WorkflowEmailFiles } from 'twenty-shared/workflow';
 import { IconUpload } from 'twenty-ui/icon';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { spacing, font } from 'twenty-ui/theme/tokens.stylex';
+import { spacing, fontColor, fontSize, fontWeight } from 'twenty-ui/theme/tokens.stylex';
 
 type WorkflowSendEmailAttachmentsProps = {
   files: WorkflowEmailFiles;

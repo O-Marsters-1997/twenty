@@ -11,7 +11,7 @@ import { CronExpressionParser } from 'cron-parser';
 import { dateLocaleState } from '@/localization/states/dateLocaleState';
 import { formatDateTimeString } from '@/object-record/record-field/ui/utils/formatDateTimeString';
 import * as stylex from '@stylexjs/stylex';
-import { spacing, background, border, font } from 'twenty-ui/theme/tokens.stylex';
+import { spacing, backgroundTransparent, borderColor, borderRadius, fontColor, fontSize, fontWeight } from 'twenty-ui/theme/tokens.stylex';
 
 const getNextExecutions = (
   cronExpression: string,

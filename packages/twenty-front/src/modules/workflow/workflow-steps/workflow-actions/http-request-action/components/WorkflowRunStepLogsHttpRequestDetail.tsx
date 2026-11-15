@@ -33,7 +33,7 @@ import {
   StyledTitle,
 } from '@/workflow/workflow-steps/workflow-actions/components/workflowRunStepLogsStyles';
 import * as stylex from '@stylexjs/stylex';
-import { background, border, font, spacing, color } from 'twenty-ui/theme/tokens.stylex';
+import { spacing, backgroundTransparent, borderColor, borderRadius, fontColor, fontSize, fontWeight, font, color } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   methodBadge: {

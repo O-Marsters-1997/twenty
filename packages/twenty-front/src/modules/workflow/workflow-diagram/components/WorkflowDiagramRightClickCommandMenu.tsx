@@ -5,27 +5,32 @@ import { useStartNodeCreation } from '@/workflow/workflow-diagram/hooks/useStart
 import { useWorkflowDiagramScreenToFlowPosition } from '@/workflow/workflow-diagram/hooks/useWorkflowDiagramScreenToFlowPosition';
 import { workflowDiagramRightClickMenuPositionState } from '@/workflow/workflow-diagram/states/workflowDiagramRightClickMenuPositionState';
 import { useTidyUp } from '@/workflow/workflow-version/hooks/useTidyUp';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { useLingui } from '@lingui/react/macro';
 import { useRef } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { IconPlus, IconReorder } from 'twenty-ui/icon';
 import { WorkflowDiagramRightClickCommandMenuClickOutsideEffect } from './WorkflowDiagramRightClickCommandMenuClickOutsideEffect';
-import { themeCssVariables } from 'twenty-ui/theme';
+import {
+  background,
+  boxShadow,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div<{ x: number; y: number }>`
-  background: ${themeCssVariables.background.primary};
-  border-radius: ${themeCssVariables.spacing[2]};
-  box-shadow: ${themeCssVariables.boxShadow.strong};
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[0.5]};
-  left: ${({ x }) => `${x}px`};
-  padding: ${themeCssVariables.spacing[1]};
-  position: absolute;
-  top: ${({ y }) => `${y}px`};
-  width: 200px;
-`;
+const styles = stylex.create({
+  root: {
+    background: background['--t-background-primary'],
+    borderRadius: spacing['--t-spacing-2'],
+    boxShadow: boxShadow['--t-box-shadow-strong'],
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-0_5'],
+    padding: spacing['--t-spacing-1'],
+    position: 'absolute',
+    width: '200px',
+  },
+  position: (x: number, y: number) => ({ left: `${x}px`, top: `${y}px` }),
+});
 
 export const WorkflowDiagramRightClickCommandMenu = () => {
   const { t } = useLingui();
@@ -66,10 +71,15 @@ export const WorkflowDiagramRightClickCommandMenu = () => {
 
   return (
     <>
-      <StyledContainer
+      <div
         ref={rightClickCommandMenuRef}
-        x={workflowDiagramRightClickMenuPosition.x}
-        y={workflowDiagramRightClickMenuPosition.y}
+        {...stylex.props(
+          styles.root,
+          styles.position(
+            workflowDiagramRightClickMenuPosition.x,
+            workflowDiagramRightClickMenuPosition.y,
+          ),
+        )}
       >
         <ListItemButton
           startIcon={<IconPlus />}
@@ -79,7 +89,7 @@ export const WorkflowDiagramRightClickCommandMenu = () => {
           startIcon={<IconReorder />}
           onClick={handleReorderWorkflowDiagram}
         >{t`Tidy up workflow`}</ListItemButton>
-      </StyledContainer>
+      </div>
       <WorkflowDiagramRightClickCommandMenuClickOutsideEffect
         rightClickCommandMenuRef={rightClickCommandMenuRef}
       />

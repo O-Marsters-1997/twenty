@@ -24,7 +24,6 @@ import { WorkflowNodeTitle } from '@/workflow/workflow-diagram/workflow-nodes/co
 import { WORKFLOW_DIAGRAM_NODE_DEFAULT_SOURCE_HANDLE_ID } from '@/workflow/workflow-diagram/workflow-nodes/constants/WorkflowDiagramNodeDefaultSourceHandleId';
 import { useWorkflowNodeLabel } from '@/workflow/workflow-diagram/workflow-nodes/hooks/useWorkflowNodeLabel';
 import { getNodeIterationCount } from '@/workflow/workflow-diagram/workflow-nodes/utils/getNodeIterationCount';
-import { styled } from '@linaria/react';
 import { Position } from '@xyflow/react';
 import { useContext } from 'react';
 import { isDefined } from 'twenty-shared/utils';
@@ -33,7 +32,12 @@ import { IconCheck, IconX, useIcons } from 'twenty-ui/icon';
 import { Loader } from 'twenty-ui/primitives/feedback';
 import { themeCssVariables } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  borderRadius,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   nodeLabelWithCounterPart: {
@@ -52,33 +56,26 @@ const styles = stylex.create({
     gap: spacing['--t-spacing-1'],
     justifyContent: 'flex-end',
   },
+  colorIcon: (backgroundColor: string) => ({
+    alignItems: 'center',
+    backgroundColor,
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    height: '14px',
+    justifyContent: 'center',
+    width: '14px',
+  }),
+  iterationCounter: (color: string) => ({
+    color,
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+  }),
   rightPartContainer: {
     display: 'flex',
     gap: spacing['--t-spacing-1'],
   },
 });
-
-const StyledColorIcon = styled.div<{
-  color: string;
-}>`
-  align-items: center;
-  background: ${({ color }) => color};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  box-sizing: border-box;
-  display: flex;
-  height: 14px;
-  justify-content: center;
-  width: 14px;
-`;
-
-const StyledIterationCounter = styled.div<{
-  runStatus?: WorkflowRunStepStatus;
-}>`
-  color: ${({ runStatus }) =>
-    getWorkflowDiagramColors({ runStatus }).unselected.color};
-  font-size: ${themeCssVariables.font.size.sm};
-  font-weight: ${themeCssVariables.font.weight.medium};
-`;
 
 export const WorkflowRunDiagramStepNode = ({
   id,
@@ -164,31 +161,44 @@ export const WorkflowRunDiagramStepNode = ({
 
             <div {...stylex.props(styles.rightPartContainer)}>
               {iterationCount > 0 && (
-                <StyledIterationCounter runStatus={data.runStatus}>
+                <div
+                  {...stylex.props(
+                    styles.iterationCounter(
+                      getWorkflowDiagramColors({ runStatus: data.runStatus })
+                        .unselected.color,
+                    ),
+                  )}
+                >
                   {iterationCount}
-                </StyledIterationCounter>
+                </div>
               )}
 
               {(data.runStatus === StepStatus.SUCCESS ||
                 data.runStatus === StepStatus.STOPPED) && (
                 <div {...stylex.props(styles.statusIconsContainer)}>
-                  <StyledColorIcon
-                    color={themeCssVariables.tag.background.turquoise}
+                  <div
+                    {...stylex.props(
+                      styles.colorIcon(themeCssVariables.tag.background.turquoise),
+                    )}
                   >
                     <IconCheck
                       color={themeCssVariables.tag.text.turquoise}
                       size={14}
                     />
-                  </StyledColorIcon>
+                  </div>
                 </div>
               )}
 
               {(data.runStatus === StepStatus.FAILED ||
                 data.runStatus === StepStatus.FAILED_SAFELY) && (
                 <div {...stylex.props(styles.statusIconsContainer)}>
-                  <StyledColorIcon color={themeCssVariables.tag.background.red}>
+                  <div
+                    {...stylex.props(
+                      styles.colorIcon(themeCssVariables.tag.background.red),
+                    )}
+                  >
                     <IconX color={themeCssVariables.tag.text.red} size={14} />
-                  </StyledColorIcon>
+                  </div>
                 </div>
               )}
 

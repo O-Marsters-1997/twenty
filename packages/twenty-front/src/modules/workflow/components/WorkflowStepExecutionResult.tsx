@@ -10,7 +10,7 @@ import {
 } from 'twenty-ui/icon';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { font, spacing } from 'twenty-ui/theme/tokens.stylex';
+import { spacing, fontColor, fontSize } from 'twenty-ui/theme/tokens.stylex';
 const styles = stylex.create({
   container: {
     display: 'flex',

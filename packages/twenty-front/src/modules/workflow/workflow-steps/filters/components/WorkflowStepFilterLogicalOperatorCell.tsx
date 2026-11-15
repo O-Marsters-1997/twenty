@@ -9,7 +9,7 @@ import { useContext, useMemo } from 'react';
 import { StepLogicalOperator, type StepFilterGroup } from 'twenty-shared/types';
 import { capitalize, isDefined } from 'twenty-shared/utils';
 import * as stylex from '@stylexjs/stylex';
-import { font, spacing } from 'twenty-ui/theme/tokens.stylex';
+import { spacing, fontColor } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   text: {

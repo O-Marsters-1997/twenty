@@ -40,7 +40,7 @@ import { v4 } from 'uuid';
 import { FeatureFlagKey } from '~/generated-metadata/graphql';
 import { openUrlInNewTab } from '~/utils/openUrlInNewTab';
 import * as stylex from '@stylexjs/stylex';
-import { spacing, background, font } from 'twenty-ui/theme/tokens.stylex';
+import { spacing, backgroundTransparent, fontColor, fontWeight } from 'twenty-ui/theme/tokens.stylex';
 
 export type WorkflowEditActionFormBuilderProps = {
   triggerType: WorkflowTriggerType | undefined;
@@ -62,8 +62,7 @@ const styles = stylex.create({
     alignItems: 'flex-end',
     columnGap: spacing['--t-spacing-1'],
     display: 'grid',
-    gridTemplateAreas: "'grip input delete'
-    '. settings .'",
+    gridTemplateAreas: "'grip input delete' '. settings .'",
     gridTemplateColumns: '24px 1fr 24px',
     marginBottom: spacing['--t-spacing-4'],
     position: 'relative',

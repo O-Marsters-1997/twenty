@@ -37,7 +37,6 @@ import { getConnectionOptionsForSourceHandle } from '@/workflow/workflow-diagram
 import { WORKFLOW_DIAGRAM_NODE_DEFAULT_SOURCE_HANDLE_ID } from '@/workflow/workflow-diagram/workflow-nodes/constants/WorkflowDiagramNodeDefaultSourceHandleId';
 import { WORKFLOW_DIAGRAM_NODE_DEFAULT_TARGET_HANDLE_ID } from '@/workflow/workflow-diagram/workflow-nodes/constants/WorkflowDiagramNodeDefaultTargetHandleId';
 import { workflowInsertStepIdsComponentState } from '@/workflow/workflow-steps/states/workflowInsertStepIdsComponentState';
-import { styled } from '@linaria/react';
 import {
   Background,
   ReactFlow,
@@ -58,6 +57,7 @@ import {
   type OnReconnect,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
+import '~/third-party-styles/react-flow.css';
 import { useStore } from 'jotai';
 import React, {
   useCallback,
@@ -73,30 +73,12 @@ import { Tag, type TagColor } from 'twenty-ui/primitives/data-display';
 import { useTheme, useThemeColorScheme } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
 import { spacing } from 'twenty-ui/theme/tokens.stylex';
-const StyledResetReactflowStyles = styled.div`
-  --xy-node-background-color: none;
-  --xy-node-border: none;
-  --xy-node-border-radius: none;
-
-  /* Below we reset the default styling of Reactflow */
-  .react-flow__node-input,
-  .react-flow__node-default,
-  .react-flow__node-output,
-  .react-flow__node-group {
-    padding: 0;
-    text-align: start;
-    white-space: nowrap;
-    width: auto;
-  }
-
-  --xy-node-boxshadow-hover: none;
-  --xy-node-boxshadow-selected: none;
-  height: 100%;
-  position: relative;
-  width: 100%;
-`;
-
 const styles = stylex.create({
+  root: {
+    height: '100%',
+    position: 'relative',
+    width: '100%',
+  },
   statusTagContainer: {
     left: '0',
     paddingTop: spacing['--t-spacing-4'],
@@ -621,7 +603,11 @@ export const WorkflowDiagramCanvasBase = ({
   };
 
   return (
-    <StyledResetReactflowStyles ref={containerRef}>
+    <div
+      ref={containerRef}
+      data-workflow-diagram
+      {...stylex.props(styles.root)}
+    >
       <WorkflowDiagramCustomMarkers />
 
       <ReactFlow
@@ -690,6 +676,6 @@ export const WorkflowDiagramCanvasBase = ({
       <div data-testid={tagContainerTestId} {...stylex.props(styles.statusTagContainer)}>
         <Tag color={tagColor}>{tagText}</Tag>
       </div>
-    </StyledResetReactflowStyles>
+    </div>
   );
 };

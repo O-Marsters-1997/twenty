@@ -1,8 +1,6 @@
-import { styled } from '@linaria/react';
 import { isDefined } from 'twenty-shared/utils';
-import { Text } from 'twenty-ui/primitives/typography';
 import * as stylex from '@stylexjs/stylex';
-import { background, border, spacing, font } from 'twenty-ui/theme/tokens.stylex';
+import { spacing, background, borderColor, borderRadius, fontColor, fontSize, fontWeight } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   container: {
@@ -22,6 +20,11 @@ const styles = stylex.create({
     paddingBlock: spacing['--t-spacing-0_5'],
     paddingInline: spacing['--t-spacing-1'],
   },
+  label: {
+    color: fontColor['--t-font-color-light'],
+    fontSize: '11px',
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+  },
   number: {
     color: fontColor['--t-font-color-tertiary'],
     fontSize: fontSize['--t-font-size-sm'],
@@ -40,13 +43,7 @@ export const WorkflowDiagramEdgeLabel = ({
   return (
     <div {...stylex.props(styles.container)}>
       {isDefined(elseIfIndex) && <span {...stylex.props(styles.number)}>{elseIfIndex}</span>}
-      <StyledDisplayLabel>{label}</StyledDisplayLabel>
+      <div {...stylex.props(styles.label)}>{label}</div>
     </div>
   );
 };
-
-const StyledDisplayLabel = styled(Text)`
-  color: var(--t-font-color-light);
-  font-size: 11px;
-  font-weight: var(--t-font-weight-semi-bold);
-`;

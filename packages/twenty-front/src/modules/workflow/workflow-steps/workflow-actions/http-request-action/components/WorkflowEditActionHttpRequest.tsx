@@ -34,7 +34,7 @@ import { HttpRequestTestVariableInput } from './HttpRequestTestVariableInput';
 import { KeyValuePairInput } from './KeyValuePairInput';
 import { useTheme } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { background, spacing } from 'twenty-ui/theme/tokens.stylex';
+import { spacing, background } from 'twenty-ui/theme/tokens.stylex';
 type WorkflowEditActionHttpRequestProps = {
   action: WorkflowHttpRequestAction;
   actionOptions: {

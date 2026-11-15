@@ -31,7 +31,7 @@ import { useNavigateSettings } from '~/hooks/useNavigateSettings';
 import { SidePanelSkeletonLoader } from '~/loading/components/SidePanelSkeletonLoader';
 import { WorkflowAiAgentPromptTab } from './WorkflowAiAgentPromptTab';
 import * as stylex from '@stylexjs/stylex';
-import { background, spacing } from 'twenty-ui/theme/tokens.stylex';
+import { spacing, background } from 'twenty-ui/theme/tokens.stylex';
 
 export type WorkflowAiAgentTabId =
   (typeof WORKFLOW_AI_AGENT_TABS)[keyof typeof WORKFLOW_AI_AGENT_TABS];

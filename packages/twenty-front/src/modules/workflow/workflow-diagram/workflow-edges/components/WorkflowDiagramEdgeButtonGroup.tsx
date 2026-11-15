@@ -1,18 +1,18 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
+import * as stylex from '@stylexjs/stylex';
 import { type ReactNode } from 'react';
 import { ButtonGroup } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { color } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledButtonGroupContainer = styled.div`
-  pointer-events: all;
-`;
-
-const StyledSelectedButtonGroupContainer = styled.div`
-  background-color: ${themeCssVariables.color.blue2};
-  border-color: ${themeCssVariables.color.blue};
-  pointer-events: all;
-`;
+const styles = stylex.create({
+  root: {
+    pointerEvents: 'all',
+  },
+  selected: {
+    backgroundColor: color['--t-color-blue2'],
+    borderColor: color['--t-color-blue'],
+  },
+});
 
 type WorkflowDiagramEdgeButtonGroupProps = {
   children: ReactNode;
@@ -24,12 +24,9 @@ export const WorkflowDiagramEdgeButtonGroup = ({
   children,
 }: WorkflowDiagramEdgeButtonGroupProps) => {
   const { t } = useLingui();
-  const Container = selected
-    ? StyledSelectedButtonGroupContainer
-    : StyledButtonGroupContainer;
 
   return (
-    <Container>
+    <div {...stylex.props(styles.root, selected && styles.selected)}>
       <ButtonGroup
         aria-label={t`Workflow connection controls`}
         framed
@@ -38,6 +35,6 @@ export const WorkflowDiagramEdgeButtonGroup = ({
       >
         {children}
       </ButtonGroup>
-    </Container>
+    </div>
   );
 };

@@ -19,7 +19,7 @@ import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 import { type JsonValue } from 'type-fest';
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard';
 import * as stylex from '@stylexjs/stylex';
-import { font, spacing, background, border, color } from 'twenty-ui/theme/tokens.stylex';
+import { spacing, backgroundTransparent, borderColor, borderRadius, fontColor, fontSize, fontWeight, font, color } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   container: {

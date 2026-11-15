@@ -29,7 +29,7 @@ import {
 import { WorkflowRunStepLogsToolCallRow } from '@/workflow/workflow-steps/workflow-actions/ai-agent-action/components/WorkflowRunStepLogsToolCallRow';
 import { formatNumber } from '@/localization/utils/formatNumber';
 import * as stylex from '@stylexjs/stylex';
-import { background, border, font, spacing } from 'twenty-ui/theme/tokens.stylex';
+import { spacing, backgroundTransparent, borderColor, borderRadius, fontColor, fontSize, font } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   modelBadge: {
