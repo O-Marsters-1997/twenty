@@ -11,7 +11,8 @@ import TwoFactorAuthenticationRecoveryCodeIssuedEmail from 'src/emails/two-facto
 import TwoFactorAuthenticationResetEmail from 'src/emails/two-factor-authentication-reset.email';
 import SendApprovedAccessDomainValidation from 'src/emails/validate-approved-access-domain.email';
 
-type PreviewableEmail = ComponentType<object> & { PreviewProps: object };
+type PreviewableEmail = ComponentType<never> & { PreviewProps: object };
+type RenderableEmail = ComponentType<object>;
 
 const TEMPLATES: Record<string, PreviewableEmail> = {
   'password-reset-link': PasswordResetLinkEmail,
@@ -56,7 +57,10 @@ describe('email templates', () => {
     'renders %s to stable HTML',
     async (_name, Template) => {
       const html = await renderEmail(
-        createElement(Template, Template.PreviewProps),
+        createElement(
+          Template as unknown as RenderableEmail,
+          Template.PreviewProps,
+        ),
       );
 
       expect(html).toMatchSnapshot();
