@@ -197,6 +197,7 @@ export const tabStyles = stylex.create({
       default: 'var(--active-tab-left)',
       ':dir(rtl)': 'var(--active-tab-right)',
       [VERTICAL]: 'auto',
+      [`${VERTICAL}:dir(rtl)`]: 'auto',
     },
     pointerEvents: 'none',
     position: 'absolute',

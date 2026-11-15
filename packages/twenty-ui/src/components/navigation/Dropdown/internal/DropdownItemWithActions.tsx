@@ -2,12 +2,23 @@ import * as stylex from '@stylexjs/stylex';
 import { type ReactNode } from 'react';
 
 import { IconCheck, IconChevronRight } from '@ui/icon';
-import { listItemMarker } from '@ui/primitives/navigation/ListItem/ListItem.stylex';
 import { listItemStyles } from '@ui/primitives/navigation/ListItem/ListItemStyles.stylex';
 import { type ListItemProps } from '@ui/primitives/navigation/ListItem/types/ListItemProps';
 import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
 
+import { listItemMarker } from '../../../../primitives/navigation/ListItem/ListItem.stylex';
+import { backgroundTransparent } from '../../../../theme/tokens.stylex';
 import styles from '../Dropdown.module.scss';
+
+const itemStyles = stylex.create({
+  focusWithin: {
+    backgroundColor: {
+      default: 'var(--tw-list-item-background)',
+      [stylex.when.descendant(':focus-visible', listItemMarker)]:
+        backgroundTransparent['--t-background-transparent-light'],
+    },
+  },
+});
 
 const DROPDOWN_ITEM_SELECTOR = '[data-dropdown-item]';
 
@@ -38,7 +49,7 @@ export const DropdownItemWithActions = ({
 }: DropdownItemWithActionsProps) => (
   <div
     {...mergeStylexProps(
-      stylex.props(listItemMarker, listItemStyles.root),
+      stylex.props(listItemMarker, listItemStyles.root, itemStyles.focusWithin),
       styles.itemWithActions,
     )}
     role="none"

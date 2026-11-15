@@ -3,11 +3,10 @@ import { useContext } from 'react';
 import { Button } from '@ui/primitives/input/Button/Button';
 import { ButtonGroupContext } from '@ui/primitives/input/ButtonGroup/internal/ButtonGroupContext';
 import { TabsTabContent } from '@ui/primitives/navigation/internal/tab/TabsTabContent';
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
 
 import { tabMarker } from '@ui/primitives/navigation/internal/tab/Tab.stylex';
 import { tabStyles } from '@ui/primitives/navigation/internal/tab/TabStyles.stylex';
-import styles from './TabButton.module.scss';
+import { tabButtonStyles } from './TabButton.stylex';
 import { type TabButtonProps } from './types/TabButtonProps';
 
 export const TabButton = ({
@@ -29,8 +28,13 @@ export const TabButton = ({
       variant="ghost"
       size={resolvedSize}
       data-active={active || undefined}
-      xstyle={[tabMarker, tabStyles.tab]}
-      className={mergeClassNames(styles.button, className)}
+      xstyle={[
+        tabMarker,
+        tabStyles.tab,
+        tabButtonStyles.button,
+        active && tabButtonStyles.active,
+      ]}
+      className={className}
     >
       <TabsTabContent startIcon={startIcon} endIcon={endIcon} badge={badge}>
         {children}

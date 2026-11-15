@@ -7,6 +7,7 @@ import { isRenderableSlot } from '@ui/utilities/internal/isRenderableSlot';
 import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
 import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
+import { focusStyles } from '../../../../styles/focus.stylex';
 import { type AutocompleteItemProps } from '../types/AutocompleteItemProps';
 
 export const AutocompleteItem = ({
@@ -22,7 +23,12 @@ export const AutocompleteItem = ({
   <AutocompletePrimitive.Item
     {...props}
     {...mergeStylexProps(
-      stylex.props(listItemMarker, listItemStyles.root, xstyle),
+      stylex.props(
+        listItemMarker,
+        focusStyles.ring,
+        listItemStyles.root,
+        xstyle,
+      ),
       className,
     )}
     data-color="neutral"

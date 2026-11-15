@@ -6,6 +6,7 @@ import { listItemStyles } from '@ui/primitives/navigation/ListItem/ListItemStyle
 import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
 import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
+import { focusStyles } from '../../../../styles/focus.stylex';
 import { type SelectItemProps } from '../types/SelectItemProps';
 
 export const SelectItem = ({
@@ -18,7 +19,13 @@ export const SelectItem = ({
     data-indicator="check"
     {...props}
     {...mergeStylexProps(
-      stylex.props(listItemMarker, listItemStyles.root, styles.item, xstyle),
+      stylex.props(
+        listItemMarker,
+        focusStyles.ring,
+        listItemStyles.root,
+        styles.item,
+        xstyle,
+      ),
       className,
     )}
   />
