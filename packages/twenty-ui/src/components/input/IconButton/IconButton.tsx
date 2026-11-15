@@ -91,7 +91,7 @@ const styles = stylex.create({
   sizeMd: { inlineSize: spacing['--t-spacing-8'] },
   sizeSm: { inlineSize: spacing['--t-spacing-6'] },
   sizeXs: { inlineSize: spacing['--t-spacing-5'] },
-  round: { '--tw-button-radius': '50%' },
+  round: { '--t-corner-shape': 'round', '--tw-button-radius': '50%' },
   roundDisabledAccentSolid: {
     '--tw-button-background': background['--t-background-quaternary'],
     '--tw-button-color': fontColor['--t-font-color-tertiary'],

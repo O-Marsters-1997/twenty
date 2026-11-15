@@ -110,7 +110,7 @@ export const ImageInput = ({
               imageInputPreviewMarker,
               focusStyles.ring,
               styles.preview,
-              hasPicture && styles.previewWithPicture,
+              styles.previewWithImage,
             )}
             type="button"
             disabled={isSelectionUnavailable}
@@ -230,11 +230,16 @@ const styles = stylex.create({
       [media.reducedMotion]: 'none',
     },
   },
-  previewWithPicture: {
+  previewWithImage: {
     backgroundColor: {
       default: backgroundTransparent['--t-background-transparent-light'],
       [unavailable]: background['--t-background-secondary'],
       [`:hover:not(${unavailable})`]: {
+        default: null,
+        [media.hoverCapable]:
+          backgroundTransparent['--t-background-transparent-medium'],
+      },
+      [`:has(img):hover:not(${unavailable})`]: {
         default: null,
         [media.hoverCapable]: 'transparent',
       },

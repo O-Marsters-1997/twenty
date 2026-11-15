@@ -207,6 +207,8 @@ export const dropdownStyles = stylex.create({
   itemWithActionsDanger: {
     backgroundColor: {
       default: 'transparent',
+      ':has(:focus-visible)':
+        backgroundTransparent['--t-background-transparent-light'],
       [media.hoverCapable]: {
         default: null,
         ':hover': backgroundTransparent['--t-background-transparent-danger'],
@@ -215,7 +217,11 @@ export const dropdownStyles = stylex.create({
     color: fontColor['--t-font-color-danger'],
   },
   itemWithActionsDisabled: {
-    backgroundColor: 'transparent',
+    backgroundColor: {
+      default: 'transparent',
+      ':has(:focus-visible)':
+        backgroundTransparent['--t-background-transparent-light'],
+    },
     color: fontColor['--t-font-color-tertiary'],
     cursor: 'default',
     transition: 'none',

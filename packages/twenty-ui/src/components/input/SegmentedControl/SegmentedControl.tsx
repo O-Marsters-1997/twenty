@@ -81,6 +81,7 @@ const styles = stylex.create({
   container: {
     alignItems: 'center',
     backgroundColor: background['--t-background-secondary'],
+    '--t-corner-shape': 'round',
     blockSize: spacing['--t-spacing-7'],
     borderColor: borderColor['--t-border-color-medium'],
     borderRadius: borderRadius['--t-border-radius-pill'],
@@ -107,6 +108,7 @@ const styles = stylex.create({
           backgroundTransparent['--t-background-transparent-lighter'],
       },
     },
+    '--t-corner-shape': 'round',
     blockSize: '100%',
     borderRadius: borderRadius['--t-border-radius-pill'],
     borderStyle: 'none',

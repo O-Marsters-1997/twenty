@@ -40,10 +40,10 @@ export const DropdownItemWithActions = ({
     {...stylex.props(
       dropdownItemWithActionsMarker,
       dropdownStyles.itemWithActions,
-      (focused || (selected && indicator === 'none')) &&
-        dropdownStyles.itemWithActionsHighlighted,
       color === 'danger' && dropdownStyles.itemWithActionsDanger,
       disabled && dropdownStyles.itemWithActionsDisabled,
+      (focused || (selected && indicator === 'none')) &&
+        dropdownStyles.itemWithActionsHighlighted,
     )}
     role="none"
     data-actions-visibility={actionsVisibility}

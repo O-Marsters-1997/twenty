@@ -56,7 +56,7 @@ export const currencyPickerStyles = stylex.create({
   },
   options: { display: 'flex', flexDirection: 'column', minInlineSize: 0 },
   emptyStatus: {
-    margin: { default: spacing['--t-spacing-1'], ':empty': null },
-    padding: { default: null, ':empty': 0 },
+    margin: { default: spacing['--t-spacing-1'], ':empty': 0 },
+    padding: { default: spacing['--t-spacing-2'], ':empty': 0 },
   },
 });
