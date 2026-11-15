@@ -3,7 +3,6 @@ import { useUploadWorkspaceMemberProfilePicture } from '@/settings/members/hooks
 import { useUpdateWorkspaceMemberSettings } from '@/workspace-member/hooks/useUpdateWorkspaceMemberSettings';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomState';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { useRef } from 'react';
@@ -13,34 +12,50 @@ import { useToast } from 'twenty-ui/components/feedback';
 import { IconUserCircle } from 'twenty-ui/icon';
 import { themeCssVariables, useTheme } from 'twenty-ui/theme';
 import { REACT_APP_SERVER_BASE_URL } from '~/config';
+import * as stylex from '@stylexjs/stylex';
+import {
+  spacing,
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledUploader = styled.button`
-  align-items: center;
-  background: ${themeCssVariables.background.transparent.lighter};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.rounded};
-  box-sizing: border-box;
-  color: ${themeCssVariables.font.color.light};
-  corner-shape: round;
-  cursor: pointer;
-  display: flex;
-  flex-shrink: 0;
-  height: ${themeCssVariables.spacing[8]};
-  justify-content: center;
-  overflow: hidden;
-  padding: 0;
-  width: ${themeCssVariables.spacing[8]};
-`;
-
-const StyledImage = styled.img`
-  height: 100%;
-  object-fit: cover;
-  width: 100%;
-`;
-
-const StyledHiddenFileInput = styled.input`
-  display: none;
-`;
+const styles = stylex.create({
+  uploader: {
+    alignItems: 'center',
+    background: backgroundTransparent['--t-background-transparent-lighter'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-medium'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-rounded'],
+    borderTopRightRadius: borderRadius['--t-border-radius-rounded'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-rounded'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-rounded'],
+    boxSizing: 'border-box',
+    color: fontColor['--t-font-color-light'],
+    cornerShape: 'round',
+    cursor: 'pointer',
+    display: 'flex',
+    flexShrink: '0',
+    height: spacing['--t-spacing-8'],
+    justifyContent: 'center',
+    overflow: 'hidden',
+    paddingTop: '0',
+    paddingRight: '0',
+    paddingBottom: '0',
+    paddingLeft: '0',
+    width: spacing['--t-spacing-8'],
+  },
+  image: {
+    height: '100%',
+    objectFit: 'cover',
+    width: '100%',
+  },
+  hiddenFileInput: {
+    display: 'none',
+  },
+});
 
 type OnboardingProfilePictureUploaderProps = {
   workspaceMemberId: string;
@@ -96,21 +111,22 @@ export const OnboardingProfilePictureUploader = ({
 
   return (
     <>
-      <StyledUploader
+      <button
         type="button"
         aria-label={t`Upload profile picture`}
         onClick={() => hiddenFileInputRef.current?.click()}
+        {...stylex.props(styles.uploader)}
       >
         {isNonEmptyString(pictureUri) ? (
-          <StyledImage src={pictureUri} alt="" />
+          <img src={pictureUri} alt="" {...stylex.props(styles.image)} />
         ) : (
           <IconUserCircle
             size={theme.icon.size.md}
             color={themeCssVariables.font.color.light}
           />
         )}
-      </StyledUploader>
-      <StyledHiddenFileInput
+      </button>
+      <input
         type="file"
         ref={hiddenFileInputRef}
         accept="image/jpeg, image/png, image/gif"
@@ -121,6 +137,7 @@ export const OnboardingProfilePictureUploader = ({
             void handleUpload(file);
           }
         }}
+        {...stylex.props(styles.hiddenFileInput)}
       />
     </>
   );

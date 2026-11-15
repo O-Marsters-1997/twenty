@@ -1,6 +1,7 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
+import { fontColor, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 import { WelcomePersonChip } from '@/onboarding/components/WelcomeOverlay/WelcomePersonChip';
 import { WELCOME_TITLE_HANDOFF_TARGET_ELEMENT_ID } from '@/onboarding/constants/WelcomeTitleHandoffTargetElementId';
@@ -9,63 +10,43 @@ import { isWelcomeAnimationLeavingState } from '@/onboarding/states/isWelcomeAni
 import { isWelcomeAnimationVisibleState } from '@/onboarding/states/isWelcomeAnimationVisibleState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 
-const StyledPreamble = styled.div<{
-  isHiddenBehindOverlay: boolean;
-}>`
-  color: ${themeCssVariables.font.color.primary};
-  font-weight: ${themeCssVariables.font.weight.regular};
-  line-height: 1.4em;
-  opacity: ${({ isHiddenBehindOverlay }) => (isHiddenBehindOverlay ? 0 : 1)};
-  overflow-wrap: break-word;
-  width: 100%;
-`;
+const fadeIn = stylex.keyframes({
+  from: { opacity: 0 },
+  to: { opacity: 1 },
+});
 
-const StyledSingleLineHandoffRun = styled.span`
-  align-items: center;
-  display: inline-flex;
-  gap: ${themeCssVariables.spacing[2]};
-  white-space: nowrap;
-
-  &.is-revealing-after-flight {
-    animation: workspaceSetupHandoffRunIn 0.12s ease-out 0.62s both;
-  }
-
-  @keyframes workspaceSetupHandoffRunIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    &.is-revealing-after-flight {
-      animation-delay: 0s;
-    }
-  }
-`;
-
-const StyledContinuation = styled.span`
-  &.is-revealing-after-flight {
-    animation: workspaceSetupContinuationIn 0.2s ease-out 0.8s both;
-  }
-
-  @keyframes workspaceSetupContinuationIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    &.is-revealing-after-flight {
-      animation-delay: 0s;
-    }
-  }
-`;
+const styles = stylex.create({
+  preamble: {
+    color: fontColor['--t-font-color-primary'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    lineHeight: '1.4em',
+    overflowWrap: 'break-word',
+    width: '100%',
+  },
+  preambleHidden: {
+    opacity: 0,
+  },
+  singleLineHandoffRun: {
+    alignItems: 'center',
+    display: 'inline-flex',
+    gap: spacing['--t-spacing-2'],
+    whiteSpace: 'nowrap',
+  },
+  singleLineHandoffRunRevealing: {
+    animationDelay: { default: '0.62s', [media.reducedMotion]: '0s' },
+    animationDuration: '0.12s',
+    animationFillMode: 'both',
+    animationName: fadeIn,
+    animationTimingFunction: 'ease-out',
+  },
+  continuationRevealing: {
+    animationDelay: { default: '0.8s', [media.reducedMotion]: '0s' },
+    animationDuration: '0.2s',
+    animationFillMode: 'both',
+    animationName: fadeIn,
+    animationTimingFunction: 'ease-out',
+  },
+});
 
 export const WorkspaceSetupChatPreamble = () => {
   const { t } = useLingui();
@@ -76,26 +57,33 @@ export const WorkspaceSetupChatPreamble = () => {
     isWelcomeAnimationLeavingState,
   );
 
-  const revealClassName = isWelcomeAnimationLeaving
-    ? 'is-revealing-after-flight'
-    : undefined;
+  const isHiddenBehindOverlay =
+    isWelcomeAnimationVisible && !isWelcomeAnimationLeaving;
 
   return (
-    <StyledPreamble
-      isHiddenBehindOverlay={
-        isWelcomeAnimationVisible && !isWelcomeAnimationLeaving
-      }
+    <div
+      {...stylex.props(
+        styles.preamble,
+        isHiddenBehindOverlay && styles.preambleHidden,
+      )}
     >
-      <StyledSingleLineHandoffRun
+      <span
         id={WELCOME_TITLE_HANDOFF_TARGET_ELEMENT_ID}
-        className={revealClassName}
+        {...stylex.props(
+          styles.singleLineHandoffRun,
+          isWelcomeAnimationLeaving && styles.singleLineHandoffRunRevealing,
+        )}
       >
         {t(WELCOME_TITLE_MESSAGE)}
         <WelcomePersonChip avatarSize="xs" sizeVariant="compact" />
-      </StyledSingleLineHandoffRun>{' '}
-      <StyledContinuation className={revealClassName}>
+      </span>{' '}
+      <span
+        {...stylex.props(
+          isWelcomeAnimationLeaving && styles.continuationRevealing,
+        )}
+      >
         {t`Let's set it up around the way you work.`}
-      </StyledContinuation>
-    </StyledPreamble>
+      </span>
+    </div>
   );
 };

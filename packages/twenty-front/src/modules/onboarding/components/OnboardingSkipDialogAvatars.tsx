@@ -1,5 +1,5 @@
 import { OnboardingSkipDialogAvatarItem } from '@/onboarding/components/OnboardingSkipDialogAvatarItem';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { AvatarGroup } from 'twenty-ui/components/data-display';
 import { IconPlus } from 'twenty-ui/icon';
 import {
@@ -7,26 +7,37 @@ import {
   Avatar,
   type AvatarShape,
 } from 'twenty-ui/primitives/data-display';
-import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import {
+  background,
+  borderColor,
+  fontColor,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const MAX_VISIBLE_AVATARS = 5;
 
 const EMPTY_SEAT_SIZE = AVATAR_PROPERTIES_BY_SIZE.lg.width;
 
-const StyledEmptySeat = styled.div`
-  align-items: center;
-  background-color: ${themeCssVariables.background.primary};
-  border: 1px dashed ${themeCssVariables.border.color.strong};
-  border-radius: 50%;
-  box-shadow: 0 0 0 2px ${themeCssVariables.background.primary};
-  box-sizing: border-box;
-  color: ${themeCssVariables.font.color.light};
-  corner-shape: round;
-  display: flex;
-  height: ${EMPTY_SEAT_SIZE};
-  justify-content: center;
-  width: ${EMPTY_SEAT_SIZE};
-`;
+const styles = stylex.create({
+  emptySeat: {
+    alignItems: 'center',
+    backgroundColor: background['--t-background-primary'],
+    borderColor: borderColor['--t-border-color-strong'],
+    borderRadius: '50%',
+    borderStyle: 'dashed',
+    borderWidth: '1px',
+    boxShadow: `0 0 0 2px ${background['--t-background-primary']}`,
+    boxSizing: 'border-box',
+    color: fontColor['--t-font-color-light'],
+    cornerShape: 'round',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  emptySeatSize: (size: string) => ({
+    height: size,
+    width: size,
+  }),
+});
 
 type OnboardingSkipDialogAvatar = {
   id: string;
@@ -70,9 +81,14 @@ export const OnboardingSkipDialogAvatars = ({
             key={`empty-seat-${emptySeatIndex}`}
             index={visibleAvatars.length + emptySeatIndex}
           >
-            <StyledEmptySeat>
+            <div
+              {...stylex.props(
+                styles.emptySeat,
+                styles.emptySeatSize(EMPTY_SEAT_SIZE),
+              )}
+            >
               <IconPlus size={theme.icon.size.sm} />
-            </StyledEmptySeat>
+            </div>
           </OnboardingSkipDialogAvatarItem>
         )),
       ]}

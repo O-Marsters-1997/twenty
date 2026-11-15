@@ -1,43 +1,58 @@
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  spacing,
+  background,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  fontWeight,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const BADGE_ASSET_PATH = '/images/onboarding/trust-badges';
 
-const StyledRow = styled.div`
-  align-items: center;
-  display: flex;
-  flex-wrap: wrap;
-  gap: ${themeCssVariables.spacing[2]};
-  justify-content: center;
-  max-width: 100%;
-`;
-
-const StyledBadge = styled.div`
-  align-items: center;
-  background-color: ${themeCssVariables.background.primary};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.pill};
-  box-sizing: border-box;
-  color: ${themeCssVariables.font.color.light};
-  corner-shape: round;
-  display: flex;
-  font-size: ${themeCssVariables.font.size.xs};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-  gap: ${themeCssVariables.spacing[1]};
-  height: ${themeCssVariables.spacing[7]};
-  overflow: hidden;
-  padding: 0 10px 0 ${themeCssVariables.spacing[1]};
-`;
-
-const StyledSeal = styled.img`
-  height: 21px;
-  object-fit: contain;
-  width: 21px;
-`;
-
-const StyledBadgeLabel = styled.span`
-  white-space: nowrap;
-`;
+const styles = stylex.create({
+  row: {
+    alignItems: 'center',
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: spacing['--t-spacing-2'],
+    justifyContent: 'center',
+    maxWidth: '100%',
+  },
+  badge: {
+    alignItems: 'center',
+    backgroundColor: background['--t-background-primary'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-medium'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-pill'],
+    borderTopRightRadius: borderRadius['--t-border-radius-pill'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-pill'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-pill'],
+    boxSizing: 'border-box',
+    color: fontColor['--t-font-color-light'],
+    cornerShape: 'round',
+    display: 'flex',
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    gap: spacing['--t-spacing-1'],
+    height: spacing['--t-spacing-7'],
+    overflow: 'hidden',
+    paddingTop: '0',
+    paddingRight: '10px',
+    paddingBottom: '0',
+    paddingLeft: spacing['--t-spacing-1'],
+  },
+  seal: {
+    height: '21px',
+    objectFit: 'contain',
+    width: '21px',
+  },
+  badgeLabel: {
+    whiteSpace: 'nowrap',
+  },
+});
 
 type TrustBadgeProps = {
   label: string;
@@ -45,15 +60,15 @@ type TrustBadgeProps = {
 };
 
 const TrustBadge = ({ label, sealSrc }: TrustBadgeProps) => (
-  <StyledBadge>
-    <StyledSeal src={sealSrc} alt="" />
-    <StyledBadgeLabel>{label}</StyledBadgeLabel>
-  </StyledBadge>
+  <div {...stylex.props(styles.badge)}>
+    <img src={sealSrc} alt="" {...stylex.props(styles.seal)} />
+    <span {...stylex.props(styles.badgeLabel)}>{label}</span>
+  </div>
 );
 
 export const OnboardingTrustBadges = () => (
-  <StyledRow>
+  <div {...stylex.props(styles.row)}>
     <TrustBadge label="SOC2" sealSrc={`${BADGE_ASSET_PATH}/soc2.png`} />
     <TrustBadge label="GDPR" sealSrc={`${BADGE_ASSET_PATH}/gdpr.png`} />
-  </StyledRow>
+  </div>
 );

@@ -2,7 +2,6 @@ import { DialogInstance } from '@/ui/layout/dialog/components/DialogInstance';
 import { useDialog } from '@/ui/layout/dialog/hooks/useDialog';
 import { OnboardingMainButton } from '@/onboarding/components/OnboardingMainButton';
 import { type OnboardingAction } from '@/onboarding/types/OnboardingAction';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { type ReactNode, useRef } from 'react';
 import { isDefined } from 'twenty-shared/utils';
@@ -10,23 +9,24 @@ import { IconButton } from 'twenty-ui/components/input';
 import { IconX } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
 import { Dialog, type DialogPopupProps } from 'twenty-ui/primitives/surfaces';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledHeader = styled(Dialog.Header)`
-  align-items: center;
-  position: relative;
-  text-align: center;
-`;
-
-const StyledCloseButton = styled.div`
-  position: absolute;
-  right: ${themeCssVariables.spacing[3]};
-  top: ${themeCssVariables.spacing[3]};
-`;
-
-const StyledVisual = styled.div`
-  margin-bottom: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  header: {
+    alignItems: 'center',
+    position: 'relative',
+    textAlign: 'center',
+  },
+  closeButton: {
+    position: 'absolute',
+    right: spacing['--t-spacing-3'],
+    top: spacing['--t-spacing-3'],
+  },
+  visual: {
+    marginBottom: spacing['--t-spacing-2'],
+  },
+});
 
 type OnboardingSkipDialogProps = {
   dialogId: string;
@@ -66,8 +66,8 @@ export const OnboardingSkipDialog = ({
           finalFocus={finalFocus}
           data-globally-prevent-click-outside
         >
-          <StyledHeader>
-            <StyledCloseButton>
+          <Dialog.Header {...stylex.props(styles.header)}>
+            <div {...stylex.props(styles.closeButton)}>
               <IconButton
                 variant="ghost"
                 size="sm"
@@ -76,13 +76,13 @@ export const OnboardingSkipDialog = ({
               >
                 <IconX />
               </IconButton>
-            </StyledCloseButton>
-            <StyledVisual>{visual}</StyledVisual>
+            </div>
+            <div {...stylex.props(styles.visual)}>{visual}</div>
             <Dialog.Title>{title}</Dialog.Title>
             {isDefined(description) && (
               <Dialog.Description>{description}</Dialog.Description>
             )}
-          </StyledHeader>
+          </Dialog.Header>
           <Dialog.Footer>
             {actions.map((action, index) => (
               <OnboardingMainButton

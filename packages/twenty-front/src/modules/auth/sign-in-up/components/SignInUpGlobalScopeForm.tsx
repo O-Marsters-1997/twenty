@@ -36,7 +36,16 @@ import {
 import { getWorkspaceUrl } from '~/utils/getWorkspaceUrl';
 import { getAbsoluteImageUrl } from '~/utils/image/getAbsoluteImageUrl';
 import * as stylex from '@stylexjs/stylex';
-import { background, backgroundTransparent, borderColor, borderRadius, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  background,
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   workspaceContainer: {
@@ -68,7 +77,10 @@ const styles = stylex.create({
     paddingBottom: '0',
     paddingLeft: '0',
     width: '100%',
-    backgroundColor: { default: null, ':hover': backgroundTransparent['--t-background-transparent-light'] },
+    backgroundColor: {
+      default: null,
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
     borderBottomStyle: { default: null, ':last-child': 'none' },
   },
   workspaceContent: {
@@ -167,7 +179,7 @@ export const SignInUpGlobalScopeForm = () => {
               <OnboardingStepAnimatedItem
                 key={availableWorkspace.id}
                 index={index}
-                {...stylex.props(styles.workspaceRow)}
+                xstyle={styles.workspaceRow}
               >
                 <UndecoratedLink
                   to={getAvailableWorkspaceUrl(availableWorkspace)}
@@ -208,19 +220,22 @@ export const SignInUpGlobalScopeForm = () => {
             {!isDDLLocked && (
               <OnboardingStepAnimatedItem
                 index={availableWorkspacesList.length}
-                {...stylex.props(styles.workspaceRow)}
+                xstyle={styles.workspaceRow}
               >
                 <div
                   onClick={() =>
                     setSignInUpStep(SignInUpStep.WorkspaceCreation)
-                  } {...stylex.props(styles.workspaceItem)}
+                  }
+                  {...stylex.props(styles.workspaceItem)}
                 >
                   <div {...stylex.props(styles.workspaceContent)}>
                     <div {...stylex.props(styles.workspaceLogo)}>
                       <IconPlus size={theme.icon.size.lg} />
                     </div>
                     <div {...stylex.props(styles.workspaceTextContainer)}>
-                      <div {...stylex.props(styles.workspaceName)}>{t`Create a workspace`}</div>
+                      <div
+                        {...stylex.props(styles.workspaceName)}
+                      >{t`Create a workspace`}</div>
                     </div>
                     <div {...stylex.props(styles.chevronIcon)}>
                       <IconChevronRight size={theme.icon.size.md} />

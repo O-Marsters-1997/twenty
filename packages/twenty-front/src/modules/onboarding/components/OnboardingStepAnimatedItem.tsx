@@ -1,4 +1,4 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { motion, useReducedMotion } from 'framer-motion';
 import { type ReactNode } from 'react';
 import { ONBOARDING_MOTION_SLIDE_OFFSET } from '@/onboarding/constants/OnboardingMotionSlideOffset';
@@ -7,22 +7,22 @@ import { useOnboardingMotionTransition } from '@/onboarding/hooks/useOnboardingM
 import { onboardingNavigationDirectionState } from '@/onboarding/states/onboardingNavigationDirectionState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 
-const StyledAnimatedItemBase = styled.div`
-  max-width: 100%;
-`;
-
-const StyledAnimatedItem = motion.create(StyledAnimatedItemBase);
+const styles = stylex.create({
+  item: {
+    maxWidth: '100%',
+  },
+});
 
 type OnboardingStepAnimatedItemProps = {
   index: number;
   children: ReactNode;
-  className?: string;
+  xstyle?: stylex.StyleXStyles;
 };
 
 export const OnboardingStepAnimatedItem = ({
   index,
   children,
-  className,
+  xstyle,
 }: OnboardingStepAnimatedItemProps) => {
   const transition = useOnboardingMotionTransition();
   const shouldReduceMotion = useReducedMotion();
@@ -36,8 +36,8 @@ export const OnboardingStepAnimatedItem = ({
       : ONBOARDING_MOTION_SLIDE_OFFSET;
 
   return (
-    <StyledAnimatedItem
-      className={className}
+    <motion.div
+      {...stylex.props(styles.item, xstyle)}
       initial={{
         opacity: 0,
         y: shouldReduceMotion ? 0 : directionalEnterSlideOffset,
@@ -49,6 +49,6 @@ export const OnboardingStepAnimatedItem = ({
       }}
     >
       {children}
-    </StyledAnimatedItem>
+    </motion.div>
   );
 };
