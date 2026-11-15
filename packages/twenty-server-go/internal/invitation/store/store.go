@@ -19,7 +19,7 @@ const (
 	isoLayout       = `'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"'`
 )
 
-var ErrCorruptedInvitation = errors.New("invitation corrupted: missing email in context")
+var errCorruptedInvitation = errors.New("invitation corrupted: missing email in context")
 
 type Invitation struct {
 	ID        string  `json:"id"`
@@ -61,7 +61,7 @@ func (i *Invitations) List(ctx context.Context) ([]Invitation, error) {
 			return nil, fmt.Errorf("read invitation: %w", err)
 		}
 		if email == nil || *email == "" {
-			return nil, fmt.Errorf("invitation %s: %w", invitation.ID, ErrCorruptedInvitation)
+			return nil, fmt.Errorf("invitation %s: %w", invitation.ID, errCorruptedInvitation)
 		}
 		invitation.Email = *email
 		invitations = append(invitations, invitation)

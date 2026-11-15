@@ -35,13 +35,13 @@ func (r *mutationResolver) DeleteWorkspaceInvitation(ctx context.Context, appTok
 		return "", err
 	}
 	deleted, err := r.Invitations.Delete(ctx, appTokenID)
-	switch {
-	case err != nil:
+	if err != nil {
 		return "", err
-	case deleted:
-		return "success", nil
 	}
-	return "error", nil
+	if !deleted {
+		return "error", nil
+	}
+	return "success", nil
 }
 
 func (r *mutationResolver) DeleteApprovedAccessDomain(ctx context.Context, input map[string]any) (bool, error) {
