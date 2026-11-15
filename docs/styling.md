@@ -42,3 +42,15 @@ Whichever wins is written into `docs/styling.md` in phase 1 and used everywhere.
 - **Imports.** StyleX resolves `.stylex.ts` imports itself and ignores Vite aliases, so a file that reads tokens imports them by relative path (`../tokens.stylex`). From another package the import is `twenty-ui/theme/tokens.stylex`, which resolves to source.
 - **Base UI state.** `':is([data-starting-style])'` and `':is([data-disabled])'` as keys on the element itself compile under the StyleX babel plugin. Convention 1 is the choice; whether the generated selector behaves in a browser is confirmed when the first Base UI component is converted.
 - **Not spiked here.** Merging an `xstyle` compiled in front into a component from twenty-ui's `dist/` belongs to the front ticket.
+
+## Base UI state (decision)
+
+Self attribute conditions win. Keys such as `':is([data-disabled])'`, `':is([aria-invalid="true"], [data-invalid])'` and `':hover:not(:is([data-disabled]))'` sit on the element itself, so Base UI keeps writing the attributes and its transition timing is unchanged. No state-callback helper is needed. Components that pass a `className` function through to Base UI go through `mergeStylexProps` in `src/utilities/internal/`, which merges the StyleX class with a string or function `className` from an unconverted caller.
+
+## twenty-ui patterns
+
+- `src/styles/focus.stylex.ts` exports `focusStyles.ring` (the old `focus-ring` mixin). Hover-capable media queries come from `media.hoverCapable` in `theme/constants.stylex.ts`.
+- `Button.stylex.ts` holds `buttonVars` (`defineVars` for `--tw-button-*`, literal names kept so unconverted callers that set them still work). `ButtonGroup` overrides `--tw-button-radius` with `stylex.createTheme`.
+- Variants are chosen from props (`variantStyles[variant]`). Variant and colour styles set `--tw-button-*` custom properties, so they compose per property.
+- Parent-driven layout (`ButtonGroup[data-attached] > :not(:first-child)`) uses `stylex.defaultMarker()` plus `stylex.when.siblingBefore` / `siblingAfter` on the button, and the group passes `attached` through context.
+- `Button.css` holds the one rule StyleX cannot express: sizing the caller-supplied `svg` inside a button icon slot.

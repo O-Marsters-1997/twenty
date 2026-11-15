@@ -1,3 +1,6 @@
 import { type Field as FieldPrimitive } from '@base-ui/react/field';
+import { type StyleXStyles } from '@stylexjs/stylex';
 
-export type FieldLabelProps = FieldPrimitive.Label.Props;
+export type FieldLabelProps = FieldPrimitive.Label.Props & {
+  xstyle?: StyleXStyles;
+};
