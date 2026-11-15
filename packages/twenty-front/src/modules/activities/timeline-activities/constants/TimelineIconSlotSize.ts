@@ -1,1 +1,0 @@
-export const TIMELINE_ICON_SLOT_SIZE = 26;

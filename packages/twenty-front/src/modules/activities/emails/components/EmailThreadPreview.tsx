@@ -153,7 +153,7 @@ export const EmailThreadPreview = ({ thread }: EmailThreadPreviewProps) => {
       disabled={isDisabled}
       label={label}
     >
-      <div unread={!thread.read} {...stylex.props(styles.heading)}>
+      <div {...stylex.props(styles.heading)}>
         <div {...stylex.props(styles.participantsContainer)}>
           <Avatar
             src={getAbsoluteImageUrl(thread?.firstParticipant?.avatarUrl)}

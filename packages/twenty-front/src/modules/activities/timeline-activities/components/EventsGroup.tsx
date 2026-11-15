@@ -1,12 +1,9 @@
-import { styled } from '@linaria/react';
-
 import { EventRow } from '@/activities/timeline-activities/components/EventRow';
-import { TIMELINE_ICON_SLOT_SIZE } from '@/activities/timeline-activities/constants/TimelineIconSlotSize';
+import { timelineIconSlot } from '../constants/TimelineIconSlotSize.stylex';
 import { type EventGroup } from '@/activities/timeline-activities/utils/groupEventsByMonth';
 import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/EnrichedObjectMetadataItem';
-import { themeCssVariables } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { borderColor, borderRadius, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import { background, borderColor, borderRadius, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type EventsGroupProps = {
   group: EventGroup;
@@ -16,6 +13,18 @@ type EventsGroupProps = {
 };
 
 const styles = stylex.create({
+  activityGroupBar: {
+    background: background['--t-background-secondary'],
+    borderColor: borderColor['--t-border-color-light'],
+    borderRadius: borderRadius['--t-border-radius-md'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    height: '100%',
+    insetInlineStart: 0,
+    position: 'absolute',
+    top: 0,
+    width: timelineIconSlot.size,
+  },
   activityGroup: {
     display: 'flex',
     flexFlow: 'column',
@@ -46,17 +55,6 @@ const styles = stylex.create({
   },
 });
 
-const StyledActivityGroupBar = styled.div`
-  background: ${themeCssVariables.background.secondary};
-  border: 1px solid ${themeCssVariables.border.color.light};
-  border-radius: ${themeCssVariables.border.radius.md};
-  height: 100%;
-  inset-inline-start: 0;
-  position: absolute;
-  top: 0;
-  width: ${TIMELINE_ICON_SLOT_SIZE}px;
-`;
-
 export const EventsGroup = ({
   group,
   month,
@@ -70,7 +68,7 @@ export const EventsGroup = ({
         <div {...stylex.props(styles.monthSeperatorLine)} />
       </div>
       <div {...stylex.props(styles.activityGroupContainer)}>
-        <StyledActivityGroupBar />
+        <div {...stylex.props(styles.activityGroupBar)} />
         {group.items.map((event, index) => (
           <EventRow
             mainObjectMetadataItem={mainObjectMetadataItem}

@@ -1,9 +1,8 @@
-import { styled } from '@linaria/react';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useContext } from 'react';
 import { TimelineActivityContext } from '@/activities/timeline-activities/contexts/TimelineActivityContext';
 
-import { TIMELINE_ICON_SLOT_SIZE } from '@/activities/timeline-activities/constants/TimelineIconSlotSize';
+import { timelineIconSlot } from '../constants/TimelineIconSlotSize.stylex';
 import { EventIconDynamicComponent } from '@/activities/timeline-activities/rows/components/EventIconDynamicComponent';
 import { EventRowDynamicComponent } from '@/activities/timeline-activities/rows/components/EventRowDynamicComponent';
 import { getStandardTimelineActivityRenderer } from '@/activities/timeline-activities/rows/components/StandardTimelineActivityRenderer';
@@ -19,13 +18,44 @@ import { getObjectRecordIdentifier } from '@/object-metadata/utils/getObjectReco
 import { recordStoreFamilyState } from '@/object-record/record-store/states/recordStoreFamilyState';
 import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
 import { useObjectMetadataItems } from '@/object-metadata/hooks/useObjectMetadataItems';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { allowRequestsToTwentyIconsState } from '@/client-config/states/allowRequestsToTwentyIcons';
 import { isDefined } from 'twenty-shared/utils';
 import * as stylex from '@stylexjs/stylex';
 import { borderColor, fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
+  leftContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    flexShrink: 0,
+    width: timelineIconSlot.size,
+  },
+  iconContainer: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    flexShrink: 0,
+    height: timelineIconSlot.size,
+    justifyContent: 'center',
+    userSelect: 'none',
+    width: '100%',
+    zIndex: 2,
+  },
+  itemContainer: {
+    alignItems: 'flex-start',
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-1'],
+    marginBottom: 0,
+    minHeight: timelineIconSlot.size,
+    minWidth: 0,
+    overflow: 'hidden',
+  },
+  itemContainerWithMargin: {
+    marginBottom: spacing['--t-spacing-3'],
+  },
   timelineItemContainer: {
     color: fontColor['--t-font-color-primary'],
     display: 'flex',
@@ -41,39 +71,6 @@ const styles = stylex.create({
     zIndex: '2',
   },
 });
-
-const StyledLeftContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-  width: ${TIMELINE_ICON_SLOT_SIZE}px;
-`;
-
-const StyledIconContainer = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  flex-shrink: 0;
-  height: ${TIMELINE_ICON_SLOT_SIZE}px;
-  justify-content: center;
-  user-select: none;
-  width: 100%;
-  z-index: 2;
-`;
-
-const StyledItemContainer = styled.div<{ isMarginBottom?: boolean }>`
-  align-items: flex-start;
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[1]};
-  margin-bottom: ${({ isMarginBottom }) =>
-    isMarginBottom ? themeCssVariables.spacing[3] : '0'};
-  min-height: ${TIMELINE_ICON_SLOT_SIZE}px;
-  min-width: 0;
-  overflow: hidden;
-`;
 
 type EventRowProps = {
   mainObjectMetadataItem: EnrichedObjectMetadataItem | null;
@@ -146,16 +143,21 @@ export const EventRow = ({
   return (
     <>
       <div {...stylex.props(styles.timelineItemContainer)}>
-        <StyledLeftContainer>
-          <StyledIconContainer>
+        <div {...stylex.props(styles.leftContainer)}>
+          <div {...stylex.props(styles.iconContainer)}>
             <EventIconDynamicComponent
               eventIcon={timelineActivityType?.icon ?? null}
               linkedObjectMetadataItem={linkedObjectMetadataItem}
             />
-          </StyledIconContainer>
+          </div>
           {!isLastEvent && <div {...stylex.props(styles.verticalLine)} />}
-        </StyledLeftContainer>
-        <StyledItemContainer isMarginBottom={!isLastEvent}>
+        </div>
+        <div
+          {...stylex.props(
+            styles.itemContainer,
+            !isLastEvent && styles.itemContainerWithMargin,
+          )}
+        >
           <EventRowDynamicComponent
             authorFullName={authorFullName}
             labelIdentifierValue={labelIdentifier.name}
@@ -167,7 +169,7 @@ export const EventRow = ({
             linkedObjectMetadataItem={linkedObjectMetadataItem}
             happensAt={event.happensAt}
           />
-        </StyledItemContainer>
+        </div>
       </div>
     </>
   );

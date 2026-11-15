@@ -1,3 +1,5 @@
+import * as stylex from '@stylexjs/stylex';
+import { backgroundTransparent, borderRadius, color, spacing } from 'twenty-ui/theme/tokens.stylex';
 import { type EmailRecipientSuggestion } from '@/activities/emails/recipients/types/EmailRecipientSuggestion';
 import { ToastOnQueryErrorEffect } from '@/apollo/components/ToastOnQueryErrorEffect';
 import { pointerIntersection } from '@dnd-kit/collision';
@@ -54,31 +56,34 @@ import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/use
 
 const SUGGESTIONS_SEARCH_DEBOUNCE_MS = 300;
 
-const StyledRowContainer = styled.div<{ $isDropTarget: boolean }>`
-  align-content: flex-start;
-  align-items: center;
-  background-color: ${({ $isDropTarget }) =>
-    $isDropTarget
-      ? themeCssVariables.background.transparent.blue
-      : 'transparent'};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  box-sizing: border-box;
-  cursor: text;
-  display: flex;
-  flex-wrap: wrap;
-  gap: ${themeCssVariables.spacing[1]};
-  max-height: 96px;
-  min-height: 24px;
-  outline: ${({ $isDropTarget }) =>
-    $isDropTarget ? `1px solid ${themeCssVariables.color.blue}` : 'none'};
-  outline-offset: -1px;
-  overflow-y: auto;
-  padding: ${themeCssVariables.spacing[1]} 0;
-  transition:
-    background-color 120ms ease-out,
-    outline-color 120ms ease-out;
-  width: 100%;
-`;
+const styles = stylex.create({
+  rowContainer: {
+    alignContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    boxSizing: 'border-box',
+    cursor: 'text',
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: spacing['--t-spacing-1'],
+    maxHeight: '96px',
+    minHeight: '24px',
+    outlineOffset: '-1px',
+    outlineStyle: 'none',
+    overflowY: 'auto',
+    paddingBlock: spacing['--t-spacing-1'],
+    paddingInline: 0,
+    transition: 'background-color 120ms ease-out, outline-color 120ms ease-out',
+    width: '100%',
+  },
+  rowContainerDropTarget: {
+    backgroundColor: backgroundTransparent['--t-background-transparent-blue'],
+    outlineColor: color['--t-color-blue'],
+    outlineStyle: 'solid',
+    outlineWidth: '1px',
+  },
+});
 
 const StyledInput = styled.input`
   background: transparent;
@@ -655,9 +660,12 @@ export const EmailRecipientsFieldInput = ({
         >
           <Autocomplete.InputGroup
             render={
-              <StyledRowContainer
+              <div
                 ref={droppableRef}
-                $isDropTarget={isActiveDropField}
+                {...stylex.props(
+                  styles.rowContainer,
+                  isActiveDropField && styles.rowContainerDropTarget,
+                )}
                 data-drop-target={isActiveDropField}
                 onMouseDown={handleRowMouseDown}
               />

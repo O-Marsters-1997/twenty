@@ -1,3 +1,4 @@
+import * as stylex from '@stylexjs/stylex';
 import { t } from '@lingui/core/macro';
 import { type KeyboardEvent, useState } from 'react';
 
@@ -6,12 +7,7 @@ import { EventCardToggleButton } from '@/activities/timeline-activities/rows/com
 import { EventRowDate } from '@/activities/timeline-activities/rows/components/EventRowDate';
 import { type EventRowNativeComponentProps } from '@/activities/timeline-activities/rows/components/EventRowDynamicComponent.types';
 import { EventRowItem } from '@/activities/timeline-activities/rows/components/EventRowItem';
-import {
-  StyledEventRow,
-  StyledEventRowContainer,
-  StyledEventRowContent,
-  StyledEventRowLinkedRecord,
-} from '@/activities/timeline-activities/rows/components/EventRowStyles';
+import { eventRowStyles } from '@/activities/timeline-activities/rows/components/EventRowStyles';
 import { getAuthorizedLinkedRecordName } from '@/activities/timeline-activities/rows/generic/utils/getAuthorizedLinkedRecordName';
 import { allowRequestsToTwentyIconsState } from '@/client-config/states/allowRequestsToTwentyIcons';
 import { recordStoreIdentifierFamilySelector } from '@/object-record/record-store/states/selectors/recordStoreIdentifierFamilySelector';
@@ -86,29 +82,29 @@ export const EventRowGenericLinked = ({
   };
 
   return (
-    <StyledEventRow>
-      <StyledEventRowContainer>
-        <StyledEventRowContent>
+    <div {...stylex.props(eventRowStyles.row)}>
+      <div {...stylex.props(eventRowStyles.container)}>
+        <div {...stylex.props(eventRowStyles.content)}>
           <EventRowItem>{authorFullName}</EventRowItem>
           <EventRowItem variant="action">
             {eventTypeLabel ?? t`linked a ${objectLabel}`}
           </EventRowItem>
           {canOpen && (
-            <StyledEventRowLinkedRecord
+            <span {...stylex.props(eventRowStyles.linkedRecord)}
               role="button"
               tabIndex={0}
               onClick={handleOpen}
               onKeyDown={handleKeyDown}
             >
               <OverflowingTextWithTooltip text={linkedRecordName} />
-            </StyledEventRowLinkedRecord>
+            </span>
           )}
           {canOpen && (
             <EventCardToggleButton isOpen={isOpen} setIsOpen={setIsOpen} />
           )}
-        </StyledEventRowContent>
+        </div>
         <EventRowDate happensAt={happensAt} />
-      </StyledEventRowContainer>
+      </div>
       {canOpen && (
         <EventCard isOpen={isOpen}>
           <SidePanelSearchRecordPreviewCard
@@ -118,6 +114,6 @@ export const EventRowGenericLinked = ({
           />
         </EventCard>
       )}
-    </StyledEventRow>
+    </div>
   );
 };

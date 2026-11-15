@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { type MouseEventHandler, type ReactNode } from 'react';
 
 import { ComposerFieldRow } from '@/activities/components/ComposerFieldRow';
@@ -31,15 +30,14 @@ const styles = stylex.create({
     overflow: 'hidden',
     width: '100%',
   },
+  column: {
+    display: 'flex',
+    flexDirection: 'column',
+    minWidth: 0,
+    width: '100%',
+  },
+  columnMaxWidth: (maxWidth: string) => ({ maxWidth }),
 });
-
-const StyledColumn = styled.div<{ $width: string }>`
-  display: flex;
-  flex-direction: column;
-  max-width: ${({ $width }) => $width};
-  min-width: 0;
-  width: 100%;
-`;
 
 type CampaignEnvelopeBoxProps = {
   width: string;
@@ -55,10 +53,10 @@ export const CampaignEnvelopeBox = ({
   onBlur,
 }: CampaignEnvelopeBoxProps) => (
   <div onBlur={onBlur} {...stylex.props(styles.container)}>
-    <StyledColumn $width={width}>
+    <div {...stylex.props(styles.column, styles.columnMaxWidth(width))}>
       <div {...stylex.props(styles.rows)}>{children}</div>
       {below}
-    </StyledColumn>
+    </div>
   </div>
 );
 

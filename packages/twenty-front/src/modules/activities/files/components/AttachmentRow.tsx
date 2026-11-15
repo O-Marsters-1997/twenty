@@ -9,7 +9,6 @@ import {
 } from '@/object-record/record-field/ui/contexts/FieldContext';
 import { getFileCategoryFromExtension } from '@/object-record/record-field/ui/utils/getFileCategoryFromExtension';
 import { SettingsTextInput } from '@/ui/input/components/SettingsTextInput';
-import { styled } from '@linaria/react';
 import { useState } from 'react';
 import { getSafeUrl, isDefined } from 'twenty-shared/utils';
 
@@ -20,7 +19,7 @@ import { isNavigationModifierPressed } from '@/ui/navigation/utils/isNavigationM
 import { CoreObjectNameSingular } from 'twenty-shared/types';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
 import { IconCalendar } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import { PermissionFlagType } from '~/generated-metadata/graphql';
 import { formatToHumanReadableDate } from '~/utils/date-utils';
 import { getFileNameAndExtension } from '~/utils/file/getFileNameAndExtension';
@@ -29,6 +28,26 @@ import * as stylex from '@stylexjs/stylex';
 import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
+  link: {
+    alignItems: 'center',
+    appearance: 'none',
+    background: 'none',
+    borderStyle: 'none',
+    color: {
+      default: fontColor['--t-font-color-primary'],
+      ':hover': fontColor['--t-font-color-secondary'],
+    },
+    cursor: 'pointer',
+    display: 'flex',
+    fontFamily: 'inherit',
+    fontSize: 'inherit',
+    padding: 0,
+    position: 'relative',
+    textAlign: 'left',
+    textDecoration: 'none',
+    width: '100%',
+    zIndex: 1,
+  },
   leftContent: {
     alignItems: 'center',
     display: 'flex',
@@ -59,28 +78,6 @@ const styles = stylex.create({
     zIndex: '1',
   },
 });
-
-const StyledLink = styled.a`
-  align-items: center;
-  appearance: none;
-  background: none;
-  border: none;
-  color: ${themeCssVariables.font.color.primary};
-  cursor: pointer;
-  display: flex;
-  font-family: inherit;
-  font-size: inherit;
-  padding: 0;
-  position: relative;
-  text-align: left;
-  text-decoration: none;
-  width: 100%;
-  z-index: 1;
-
-  :hover {
-    color: ${themeCssVariables.font.color.secondary};
-  }
-`;
 
 type AttachmentRowProps = {
   attachment: AttachmentWithFile;
@@ -221,7 +218,8 @@ export const AttachmentRow = ({
             </div>
           ) : (
             <div {...stylex.props(styles.linkContainer)}>
-              <StyledLink
+              <a
+                {...stylex.props(styles.link)}
                 onClick={handleFileLinkClick}
                 href={safeFileUrl}
                 target="_blank"
@@ -230,7 +228,7 @@ export const AttachmentRow = ({
                 <OverflowingTextWithTooltip
                   text={`${attachmentFileName}${attachmentFileExtension}`}
                 />
-              </StyledLink>
+              </a>
             </div>
           )}
         </div>

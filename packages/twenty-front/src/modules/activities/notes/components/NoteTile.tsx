@@ -99,7 +99,7 @@ export const NoteTile = ({
   });
 
   return (
-    <div isSingleNote={isSingleNote} {...stylex.props(styles.card)}>
+    <div {...stylex.props(styles.card)}>
       <div
         onClick={() =>
           openRecordInSidePanel({
