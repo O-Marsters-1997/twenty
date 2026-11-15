@@ -3,7 +3,6 @@ import {
   type Meta,
   type StoryObj,
 } from '@storybook/react-vite';
-import * as stylex from '@stylexjs/stylex';
 import { type PlayFunction } from 'storybook/internal/types';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 
@@ -23,11 +22,6 @@ import { Button } from 'twenty-ui/primitives/input';
 import { ListItem } from 'twenty-ui/primitives/navigation';
 import { ComponentDecorator } from 'twenty-ui/testing';
 import * as stylex from '@stylexjs/stylex';
-
-const styles = stylex.create({
-  scaled: { height: '100px', width: '200px' },
-  offset: { paddingLeft: '200px', paddingTop: '100px' },
-});
 
 const meta: Meta<typeof Dropdown> = {
   title: 'UI/Layout/Dropdown/Dropdown',
@@ -49,6 +43,8 @@ export default meta;
 type Story = StoryObj<typeof Dropdown>;
 
 const styles = stylex.create({
+  scaled: { height: '100px', width: '200px' },
+  offset: { paddingLeft: '200px', paddingTop: '100px' },
   container: {
     height: '600px',
     position: 'relative',

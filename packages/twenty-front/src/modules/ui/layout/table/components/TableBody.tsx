@@ -1,6 +1,6 @@
 import * as stylex from '@stylexjs/stylex';
 import { spacing } from 'twenty-ui/theme/tokens.stylex';
-import { type ReactNode } from 'react';
+import { type ComponentProps } from 'react';
 
 const styles = stylex.create({
   body: {
@@ -12,6 +12,14 @@ const styles = stylex.create({
   },
 });
 
-export const TableBody = ({ children }: { children?: ReactNode }) => (
-  <div {...stylex.props(styles.body)}>{children}</div>
-);
+export const TableBody = ({ className, ...props }: ComponentProps<'div'>) => {
+  const rootProps = stylex.props(styles.body);
+
+  return (
+    <div
+      {...props}
+      {...rootProps}
+      className={[rootProps.className, className].join(' ')}
+    />
+  );
+};

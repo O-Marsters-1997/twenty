@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { type ReactNode } from 'react';
+import { type ComponentProps } from 'react';
 
 const styles = stylex.create({
   table: {
@@ -9,6 +9,14 @@ const styles = stylex.create({
   },
 });
 
-export const Table = ({ children }: { children?: ReactNode }) => (
-  <div {...stylex.props(styles.table)}>{children}</div>
-);
+export const Table = ({ className, ...props }: ComponentProps<'div'>) => {
+  const rootProps = stylex.props(styles.table);
+
+  return (
+    <div
+      {...props}
+      {...rootProps}
+      className={[rootProps.className, className].join(' ')}
+    />
+  );
+};

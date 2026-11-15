@@ -1,6 +1,6 @@
 import * as stylex from '@stylexjs/stylex';
 import { fontColor, fontSize } from 'twenty-ui/theme/tokens.stylex';
-import { type ReactNode } from 'react';
+import { type ComponentProps } from 'react';
 
 const styles = stylex.create({
   label: {
@@ -12,7 +12,16 @@ const styles = stylex.create({
 });
 
 export const StyledHeaderIdentifierLabel = ({
-  children,
-}: {
-  children?: ReactNode;
-}) => <span {...stylex.props(styles.label)}>{children}</span>;
+  className,
+  ...props
+}: ComponentProps<'span'>) => {
+  const labelProps = stylex.props(styles.label);
+
+  return (
+    <span
+      {...props}
+      {...labelProps}
+      className={[labelProps.className, className].join(' ')}
+    />
+  );
+};

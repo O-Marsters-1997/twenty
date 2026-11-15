@@ -1,6 +1,6 @@
 import * as stylex from '@stylexjs/stylex';
 import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
-import { type ReactNode } from 'react';
+import { type ComponentProps } from 'react';
 
 const styles = stylex.create({
   cell: {
@@ -31,7 +31,7 @@ const styles = stylex.create({
   whiteSpace: (whiteSpace: string) => ({ whiteSpace }),
 });
 
-type TableCellProps = {
+type TableCellProps = Omit<ComponentProps<'div'>, 'color'> & {
   align?: 'left' | 'center' | 'right';
   color?: string;
   gap?: string;
@@ -43,7 +43,6 @@ type TableCellProps = {
   textOverflow?: string;
   whiteSpace?: string;
   clickable?: boolean;
-  children?: ReactNode;
 };
 
 export const TableCell = ({
@@ -58,25 +57,30 @@ export const TableCell = ({
   textOverflow,
   whiteSpace,
   clickable,
-  children,
-}: TableCellProps) => (
-  <div
-    {...stylex.props(
-      styles.cell,
-      clickable === true && styles.clickable,
-      align === 'center' && styles.alignCenter,
-      align === 'right' && styles.alignRight,
-      color !== undefined && color !== '' && styles.color(color),
-      gap !== undefined && styles.gap(gap),
-      height !== undefined && styles.height(height),
-      maxWidth !== undefined && styles.maxWidth(maxWidth),
-      minWidth !== undefined && styles.minWidth(minWidth),
-      overflow !== undefined && styles.overflow(overflow),
-      padding !== undefined && styles.padding(padding),
-      textOverflow !== undefined && styles.textOverflow(textOverflow),
-      whiteSpace !== undefined && styles.whiteSpace(whiteSpace),
-    )}
-  >
-    {children}
-  </div>
-);
+  className,
+  ...props
+}: TableCellProps) => {
+  const cellProps = stylex.props(
+    styles.cell,
+    clickable === true && styles.clickable,
+    align === 'center' && styles.alignCenter,
+    align === 'right' && styles.alignRight,
+    color !== undefined && color !== '' && styles.color(color),
+    gap !== undefined && styles.gap(gap),
+    height !== undefined && styles.height(height),
+    maxWidth !== undefined && styles.maxWidth(maxWidth),
+    minWidth !== undefined && styles.minWidth(minWidth),
+    overflow !== undefined && styles.overflow(overflow),
+    padding !== undefined && styles.padding(padding),
+    textOverflow !== undefined && styles.textOverflow(textOverflow),
+    whiteSpace !== undefined && styles.whiteSpace(whiteSpace),
+  );
+
+  return (
+    <div
+      {...props}
+      {...cellProps}
+      className={[cellProps.className, className].join(' ')}
+    />
+  );
+};

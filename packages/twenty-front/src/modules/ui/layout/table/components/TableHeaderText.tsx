@@ -1,6 +1,6 @@
 import * as stylex from '@stylexjs/stylex';
 import { spacing } from 'twenty-ui/theme/tokens.stylex';
-import { type ReactNode } from 'react';
+import { type ComponentProps } from 'react';
 
 const styles = stylex.create({
   text: {
@@ -8,6 +8,17 @@ const styles = stylex.create({
   },
 });
 
-export const TableHeaderText = ({ children }: { children?: ReactNode }) => (
-  <div {...stylex.props(styles.text)}>{children}</div>
-);
+export const TableHeaderText = ({
+  className,
+  ...props
+}: ComponentProps<'div'>) => {
+  const rootProps = stylex.props(styles.text);
+
+  return (
+    <div
+      {...props}
+      {...rootProps}
+      className={[rootProps.className, className].join(' ')}
+    />
+  );
+};

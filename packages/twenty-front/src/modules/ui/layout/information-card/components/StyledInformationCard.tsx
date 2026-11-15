@@ -7,7 +7,7 @@ import {
   general,
   spacing,
 } from 'twenty-ui/theme/tokens.stylex';
-import { type ReactNode } from 'react';
+import { type ComponentProps } from 'react';
 
 const styles = stylex.create({
   root: {
@@ -31,7 +31,16 @@ const styles = stylex.create({
 });
 
 export const StyledInformationCard = ({
-  children,
-}: {
-  children?: ReactNode;
-}) => <div {...stylex.props(styles.root)}>{children}</div>;
+  className,
+  ...props
+}: ComponentProps<'div'>) => {
+  const rootProps = stylex.props(styles.root);
+
+  return (
+    <div
+      {...props}
+      {...rootProps}
+      className={[rootProps.className, className].join(' ')}
+    />
+  );
+};

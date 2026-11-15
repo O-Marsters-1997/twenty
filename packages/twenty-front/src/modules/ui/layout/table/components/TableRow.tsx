@@ -6,6 +6,7 @@ import {
   borderRadius,
   spacing,
 } from 'twenty-ui/theme/tokens.stylex';
+import { type ComponentProps } from 'react';
 import { Link } from 'react-router-dom';
 import { media } from 'twenty-ui/theme/constants.stylex';
 
@@ -151,7 +152,7 @@ export const TableRow = ({
   };
 
   return to ? (
-    <Link to={to} {...sharedProps}>
+    <Link to={to} {...(sharedProps as Omit<ComponentProps<typeof Link>, 'to'>)}>
       {children}
     </Link>
   ) : (

@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { type ReactNode } from 'react';
+import { type ComponentProps } from 'react';
 
 const styles = stylex.create({
   container: {
@@ -17,13 +17,31 @@ const styles = stylex.create({
 });
 
 export const StyledWidgetContentContainer = ({
-  children,
-}: {
-  children?: ReactNode;
-}) => <div {...stylex.props(styles.container)}>{children}</div>;
+  className,
+  ...props
+}: ComponentProps<'div'>) => {
+  const rootProps = stylex.props(styles.container);
+
+  return (
+    <div
+      {...props}
+      {...rootProps}
+      className={[rootProps.className, className].join(' ')}
+    />
+  );
+};
 
 export const StyledWidgetScrollContainer = ({
-  children,
-}: {
-  children?: ReactNode;
-}) => <div {...stylex.props(styles.container, styles.scroll)}>{children}</div>;
+  className,
+  ...props
+}: ComponentProps<'div'>) => {
+  const rootProps = stylex.props(styles.container, styles.scroll);
+
+  return (
+    <div
+      {...props}
+      {...rootProps}
+      className={[rootProps.className, className].join(' ')}
+    />
+  );
+};

@@ -28,4 +28,5 @@ const styles = stylex.create({
   },
 });
 
-export const CARD_ACTION_CLASS_NAME = stylex.props(styles.action).className;
+export const CARD_ACTION_CLASS_NAME =
+  stylex.props(styles.action).className ?? '';
