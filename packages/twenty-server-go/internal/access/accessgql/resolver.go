@@ -2,7 +2,6 @@ package accessgql
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"maps"
 	"time"
@@ -12,43 +11,6 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/workspace"
 )
-
-const (
-	playgroundTokenTTL = 2 * time.Hour
-	apiKeyTokenMaximum = 100 * 365 * 24 * time.Hour
-)
-
-type TokenIssuer interface {
-	IssueAPIKey(ctx context.Context, workspaceID, apiKeyID string, expiresAt time.Time) (string, error)
-	IssuePlayground(ctx context.Context, principal auth.Principal, ttl time.Duration) (string, time.Time, error)
-}
-
-type Resolver struct {
-	WebhookStore *store.Webhooks
-	APIKeyStore  *store.APIKeys
-	Permissions  *store.Permissions
-	Tokens       TokenIssuer
-}
-
-func (r *Resolver) authorize(ctx context.Context, userSessionOnly bool, flags ...string) error {
-	principal, ok := auth.PrincipalFrom(ctx)
-	if !ok {
-		return auth.ErrUnauthenticated
-	}
-	if userSessionOnly && (principal.APIKeyID != "" || principal.Playground || principal.UserWorkspaceID == "") {
-		return fmt.Errorf("%w: this operation needs a standard user session", store.ErrForbidden)
-	}
-	for _, flag := range flags {
-		allowed, err := r.Permissions.Has(ctx, principal, flag)
-		if err != nil {
-			return err
-		}
-		if !allowed {
-			return fmt.Errorf("%w: missing the %s permission", store.ErrForbidden, flag)
-		}
-	}
-	return nil
-}
 
 func (r *apiKeyResolver) Role(ctx context.Context, obj *store.APIKey) (*store.Role, error) {
 	return pointer(r.APIKeyStore.RoleOf(ctx, obj.ID))
@@ -146,6 +108,56 @@ func (r *mutationResolver) GeneratePlaygroundToken(ctx context.Context) (*store.
 	return &store.Token{Token: token, ExpiresAt: expiresAt.UTC().Format("2006-01-02T15:04:05.000Z")}, nil
 }
 
+func (r *mutationResolver) CreateOneRole(ctx context.Context, createRoleInput map[string]any) (*store.Role, error) {
+	if err := r.authorize(ctx, false, store.FlagRoles); err != nil {
+		return nil, err
+	}
+	return pointer(r.RoleStore.Create(ctx, createRoleInput))
+}
+
+func (r *mutationResolver) UpdateOneRole(ctx context.Context, updateRoleInput map[string]any) (*store.Role, error) {
+	if err := r.authorize(ctx, false, store.FlagRoles); err != nil {
+		return nil, err
+	}
+	acting, err := r.actingRoleIDs(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return pointer(r.RoleStore.Update(ctx, acting, updateRoleInput))
+}
+
+func (r *mutationResolver) DeleteOneRole(ctx context.Context, roleID string) (string, error) {
+	if err := r.authorize(ctx, false, store.FlagRoles); err != nil {
+		return "", err
+	}
+	acting, err := r.actingRoleIDs(ctx)
+	if err != nil {
+		return "", err
+	}
+	return r.RoleStore.Delete(ctx, acting, roleID)
+}
+
+func (r *mutationResolver) UpsertObjectPermissions(ctx context.Context, upsertObjectPermissionsInput map[string]any) ([]*store.ObjectPermission, error) {
+	if err := r.authorize(ctx, false, store.FlagRoles); err != nil {
+		return nil, err
+	}
+	return pointers(r.RoleStore.UpsertObjectPermissions(ctx, upsertObjectPermissionsInput))
+}
+
+func (r *mutationResolver) UpsertPermissionFlags(ctx context.Context, upsertPermissionFlagsInput map[string]any) ([]*store.RolePermissionFlag, error) {
+	if err := r.authorize(ctx, false, store.FlagRoles); err != nil {
+		return nil, err
+	}
+	return pointers(r.RoleStore.UpsertPermissionFlags(ctx, upsertPermissionFlagsInput))
+}
+
+func (r *mutationResolver) UpsertFieldPermissions(ctx context.Context, upsertFieldPermissionsInput map[string]any) ([]*store.FieldPermission, error) {
+	if err := r.authorize(ctx, false, store.FlagRoles); err != nil {
+		return nil, err
+	}
+	return pointers(r.RoleStore.UpsertFieldPermissions(ctx, upsertFieldPermissionsInput))
+}
+
 func (r *queryResolver) Webhooks(ctx context.Context) ([]*store.Webhook, error) {
 	if err := r.authorize(ctx, false, store.FlagAPIKeysAndWebhooks); err != nil {
 		return nil, err
@@ -182,39 +194,94 @@ func (r *queryResolver) GetAPIKeyRoles(ctx context.Context) ([]*store.Role, erro
 	return pointers(r.APIKeyStore.AssignableRoles(ctx))
 }
 
+func (r *queryResolver) GetRoles(ctx context.Context) ([]*store.Role, error) {
+	if err := r.authorize(ctx, false, store.FlagRoles); err != nil {
+		return nil, err
+	}
+	return pointers(r.RoleStore.List(ctx))
+}
+
+func (r *queryResolver) GetRole(ctx context.Context, id string) (*store.Role, error) {
+	if err := r.authorize(ctx, false, store.FlagRoles); err != nil {
+		return nil, err
+	}
+	return pointer(r.RoleStore.Get(ctx, id))
+}
+
+func (r *queryResolver) GetPermissionFlags(ctx context.Context) ([]*store.PermissionFlag, error) {
+	if err := r.authorize(ctx, false, store.FlagRoles); err != nil {
+		return nil, err
+	}
+	return pointers(r.RoleStore.PermissionFlags(ctx))
+}
+
+func (r *roleResolver) WorkspaceMembers(ctx context.Context, obj *store.Role) ([]*store.WorkspaceMember, error) {
+	if err := r.authorize(ctx, false, store.FlagRoles); err != nil {
+		return nil, err
+	}
+	return pointers(r.RoleStore.WorkspaceMembers(ctx, obj.ID))
+}
+
+func (r *roleResolver) Agents(ctx context.Context, obj *store.Role) ([]*store.RoleAgent, error) {
+	if err := r.authorize(ctx, false, store.FlagRoles); err != nil {
+		return nil, err
+	}
+	return pointers(r.RoleStore.Agents(ctx, obj.ID))
+}
+
+func (r *roleResolver) APIKeys(ctx context.Context, obj *store.Role) ([]*store.APIKey, error) {
+	if err := r.authorize(ctx, false, store.FlagRoles); err != nil {
+		return nil, err
+	}
+	return pointers(r.RoleStore.APIKeys(ctx, obj.ID))
+}
+
+func (r *roleResolver) PermissionFlags(ctx context.Context, obj *store.Role) ([]*store.RolePermissionFlag, error) {
+	if err := r.authorize(ctx, false, store.FlagRoles); err != nil {
+		return nil, err
+	}
+	return pointers(r.RoleStore.RolePermissionFlags(ctx, obj.ID))
+}
+
+func (r *roleResolver) ObjectPermissions(ctx context.Context, obj *store.Role) ([]*store.ObjectPermission, error) {
+	if err := r.authorize(ctx, false, store.FlagRoles); err != nil {
+		return nil, err
+	}
+	return pointers(r.RoleStore.ObjectPermissions(ctx, obj.ID))
+}
+
+func (r *roleResolver) FieldPermissions(ctx context.Context, obj *store.Role) ([]*store.FieldPermission, error) {
+	if err := r.authorize(ctx, false, store.FlagRoles); err != nil {
+		return nil, err
+	}
+	return pointers(r.RoleStore.FieldPermissions(ctx, obj.ID))
+}
+
+func (r *roleResolver) RowLevelPermissionPredicates(ctx context.Context, obj *store.Role) ([]*store.RowLevelPermissionPredicate, error) {
+	if err := r.authorize(ctx, false, store.FlagRoles); err != nil {
+		return nil, err
+	}
+	return pointers(r.RoleStore.Predicates(ctx, obj.ID))
+}
+
+func (r *roleResolver) RowLevelPermissionPredicateGroups(ctx context.Context, obj *store.Role) ([]*store.RowLevelPermissionPredicateGroup, error) {
+	if err := r.authorize(ctx, false, store.FlagRoles); err != nil {
+		return nil, err
+	}
+	return pointers(r.RoleStore.PredicateGroups(ctx, obj.ID))
+}
+
 func (r *Resolver) ApiKey() ApiKeyResolver { return &apiKeyResolver{r} }
 
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
+func (r *Resolver) Role() RoleResolver { return &roleResolver{r} }
+
 type (
 	apiKeyResolver   struct{ *Resolver }
 	mutationResolver struct{ *Resolver }
 	queryResolver    struct{ *Resolver }
+	roleResolver     struct{ *Resolver }
 )
-
-func pointer[TValue any](value TValue, err error) (*TValue, error) {
-	if err != nil {
-		return nil, err
-	}
-	return &value, nil
-}
-
-func nullable[TValue any](value TValue, err error) (*TValue, error) {
-	if errors.Is(err, metadata.ErrNotFound) {
-		return nil, nil
-	}
-	return pointer(value, err)
-}
-
-func pointers[TValue any](values []TValue, err error) ([]*TValue, error) {
-	if err != nil {
-		return nil, err
-	}
-	listed := make([]*TValue, len(values))
-	for i := range values {
-		listed[i] = &values[i]
-	}
-	return listed, nil
-}
