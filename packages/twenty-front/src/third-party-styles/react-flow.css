@@ -99,3 +99,10 @@
     z-index: 1 !important;
   }
 }
+
+@layer third-party {
+  [data-workflow-handle-branch] {
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+}

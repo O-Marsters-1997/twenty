@@ -1,5 +1,14 @@
 import * as stylex from '@stylexjs/stylex';
-import { spacing, backgroundTransparent, borderColor, borderRadius, fontColor, fontSize, fontWeight, color } from 'twenty-ui/theme/tokens.stylex';
+import {
+  spacing,
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  fontWeight,
+  color,
+} from 'twenty-ui/theme/tokens.stylex';
 
 import { monospaceFont } from '@/ui/theme/constants/MonospaceFontFamily.stylex';
 

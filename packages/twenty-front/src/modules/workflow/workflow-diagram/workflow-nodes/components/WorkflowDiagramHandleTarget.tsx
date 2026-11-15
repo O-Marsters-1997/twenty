@@ -14,10 +14,6 @@ const styles = stylex.create({
     inset: 0,
     position: 'absolute',
   },
-  branchHandle: {
-    opacity: 0,
-    pointerEvents: 'none',
-  },
 });
 
 export const WorkflowDiagramHandleTarget = ({
@@ -50,7 +46,7 @@ export const WorkflowDiagramHandleTarget = ({
       {targetHandleIds?.map((handleId, index) => (
         <Handle
           key={handleId}
-          className={stylex.props(styles.branchHandle).className}
+          data-workflow-handle-branch
           id={handleId}
           type="target"
           position={Position.Top}

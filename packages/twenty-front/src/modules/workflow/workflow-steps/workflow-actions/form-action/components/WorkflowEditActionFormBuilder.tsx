@@ -64,7 +64,6 @@ type FormData = WorkflowFormActionField[];
 const styles = stylex.create({
   fieldContainer: {
     alignItems: 'center',
-    background: 'transparent',
     backgroundColor: {
       default: 'transparent',
       ':hover': backgroundTransparent['--t-background-transparent-lighter'],

@@ -58,6 +58,7 @@ const styles = stylex.create({
   iconContainer: {
     alignItems: 'center',
     display: 'flex',
+    flexShrink: 0,
     minWidth: `calc(${iconSize['--t-icon-size-sm']} * 1px)`,
   },
   statusIconContainer: (color: string) => ({ color }),
@@ -71,7 +72,7 @@ const styles = stylex.create({
     cursor: 'pointer',
     fontSize: fontSize['--t-font-size-sm'],
     fontWeight: fontWeight['--t-font-weight-regular'],
-    paddingBlock: 0,
+    paddingTop: 0,
     paddingBottom: spacing['--t-spacing-2'],
     paddingInline: 0,
   },
