@@ -13,12 +13,14 @@ import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent
 import { DropdownRoot } from '@/ui/layout/dropdown/components/DropdownRoot';
 import { useLingui } from '@lingui/react/macro';
 import { Dropdown } from 'twenty-ui/components/navigation';
-import { styled } from '@linaria/react';
 import { type SelectOption } from 'twenty-ui/primitives/input';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledDropdownContainer = styled.div`
-  width: 100%;
-`;
+const styles = stylex.create({
+  dropdownContainer: {
+    width: '100%',
+  },
+});
 
 type SubMatchingSelectRowRightDropdownProps = {
   option: SpreadsheetMatchedOptions | Partial<SpreadsheetMatchedOptions>;
@@ -54,7 +56,7 @@ export const SubMatchingSelectRowRightDropdown = ({
   };
 
   return (
-    <StyledDropdownContainer>
+    <div {...stylex.props(styles.dropdownContainer)}>
       <DropdownRoot dropdownId={dropdownId} type="picker">
         <Dropdown.Trigger render={<div />} nativeButton={false}>
           <SubMatchingSelectDropdownButton
@@ -71,6 +73,6 @@ export const SubMatchingSelectRowRightDropdown = ({
           />
         </DropdownContent>
       </DropdownRoot>
-    </StyledDropdownContainer>
+    </div>
   );
 };

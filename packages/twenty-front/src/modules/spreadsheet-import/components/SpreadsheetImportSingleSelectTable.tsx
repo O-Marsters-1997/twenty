@@ -1,16 +1,18 @@
 import { SpreadsheetImportTable } from '@/spreadsheet-import/components/SpreadsheetImportTable';
 import { getSpreadsheetImportSingleSelectColumn } from '@/spreadsheet-import/components/internal/getSpreadsheetImportSingleSelectColumn';
 import { type SpreadsheetImportSingleSelectTableProps } from '@/spreadsheet-import/types/SpreadsheetImportSingleSelectTableProps';
-import { styled } from '@linaria/react';
 import { type Key, useMemo } from 'react';
 import { type DataGridProps } from 'react-data-grid';
 import { isDefined } from 'twenty-shared/utils';
 import { RadioGroup, type RadioGroupProps } from 'twenty-ui/primitives/input';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledRadioGroupContainer = styled.div`
-  flex: 1;
-  min-height: 0;
-`;
+const styles = stylex.create({
+  radioGroupContainer: {
+    flex: '1',
+    minHeight: '0',
+  },
+});
 
 // The grid owns keyboard navigation, including rows outside the viewport.
 const preventRadioGroupNavigation: RadioGroupProps['onKeyDown'] = (event) => {
@@ -61,7 +63,7 @@ export const SpreadsheetImportSingleSelectTable = <
 
   return (
     <RadioGroup
-      render={<StyledRadioGroupContainer />}
+      render={<div {...stylex.props(styles.radioGroupContainer)} />}
       aria-label={selectionLabel}
       value={selectedRowKey}
       onValueChange={selectRow}

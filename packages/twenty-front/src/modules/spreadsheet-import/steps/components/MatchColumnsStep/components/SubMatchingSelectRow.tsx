@@ -5,16 +5,18 @@ import {
   type SpreadsheetMatchedSelectOptionsColumn,
 } from '@/spreadsheet-import/types/SpreadsheetColumn';
 import { type SpreadsheetMatchedOptions } from '@/spreadsheet-import/types/SpreadsheetMatchedOptions';
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledRowContainer = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[4]};
-  justify-content: space-between;
-  padding-bottom: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  rowContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-4'],
+    justifyContent: 'space-between',
+    paddingBottom: spacing['--t-spacing-1'],
+  },
+});
 
 interface SubMatchingSelectRowProps {
   option: SpreadsheetMatchedOptions | Partial<SpreadsheetMatchedOptions>;
@@ -34,7 +36,7 @@ export const SubMatchingSelectRow = ({
   placeholder,
 }: SubMatchingSelectRowProps) => {
   return (
-    <StyledRowContainer>
+    <div {...stylex.props(styles.rowContainer)}>
       <SubMatchingSelectRowLeftSelect option={option} />
       <SubMatchingSelectRowRightDropdown
         column={column}
@@ -42,6 +44,6 @@ export const SubMatchingSelectRow = ({
         option={option}
         placeholder={placeholder}
       />
-    </StyledRowContainer>
+    </div>
   );
 };

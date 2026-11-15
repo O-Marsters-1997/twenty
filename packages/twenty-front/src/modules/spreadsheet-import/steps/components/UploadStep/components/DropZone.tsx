@@ -3,107 +3,105 @@ import { SPREADSHEET_MAX_RECORD_IMPORT_CAPACITY } from '@/spreadsheet-import/con
 import { useSpreadsheetImportInternal } from '@/spreadsheet-import/hooks/useSpreadsheetImportInternal';
 import { useDownloadFakeRecords } from '@/spreadsheet-import/steps/components/UploadStep/hooks/useDownloadFakeRecords';
 import { readFileAsync } from '@/spreadsheet-import/utils/readFilesAsync';
-import { styled } from '@linaria/react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useToast } from 'twenty-ui/components/feedback';
 import { MainButton } from 'twenty-ui/components/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { read, type WorkBook } from 'xlsx-ugnis';
+import * as stylex from '@stylexjs/stylex';
+import { backgroundTransparent, borderRadius, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  align-items: center;
-  background:
-    repeating-linear-gradient(
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    background: `repeating-linear-gradient(
       0deg,
-      ${themeCssVariables.font.color.primary},
-      ${themeCssVariables.font.color.primary} 10px,
+      ${fontColor['--t-font-color-primary']},
+      ${fontColor['--t-font-color-primary']} 10px,
       transparent 10px,
       transparent 20px,
-      ${themeCssVariables.font.color.primary} 20px
+      ${fontColor['--t-font-color-primary']} 20px
     ),
     repeating-linear-gradient(
       90deg,
-      ${themeCssVariables.font.color.primary},
-      ${themeCssVariables.font.color.primary} 10px,
+      ${fontColor['--t-font-color-primary']},
+      ${fontColor['--t-font-color-primary']} 10px,
       transparent 10px,
       transparent 20px,
-      ${themeCssVariables.font.color.primary} 20px
+      ${fontColor['--t-font-color-primary']} 20px
     ),
     repeating-linear-gradient(
       180deg,
-      ${themeCssVariables.font.color.primary},
-      ${themeCssVariables.font.color.primary} 10px,
+      ${fontColor['--t-font-color-primary']},
+      ${fontColor['--t-font-color-primary']} 10px,
       transparent 10px,
       transparent 20px,
-      ${themeCssVariables.font.color.primary} 20px
+      ${fontColor['--t-font-color-primary']} 20px
     ),
     repeating-linear-gradient(
       270deg,
-      ${themeCssVariables.font.color.primary},
-      ${themeCssVariables.font.color.primary} 10px,
+      ${fontColor['--t-font-color-primary']},
+      ${fontColor['--t-font-color-primary']} 10px,
       transparent 10px,
       transparent 20px,
-      ${themeCssVariables.font.color.primary} 20px
-    );
-  background-position:
-    0 0,
-    0 0,
-    100% 0,
-    0 100%;
-  background-repeat: no-repeat;
-  background-size:
-    2px 100%,
-    100% 2px,
-    2px 100%,
-    100% 2px;
-  border-radius: ${themeCssVariables.border.radius.sm};
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  justify-content: center;
-  position: relative;
-`;
-
-const StyledOverlay = styled.div`
-  background: ${themeCssVariables.background.transparent.medium};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  bottom: 0px;
-  left: 0px;
-  position: absolute;
-  right: 0px;
-  top: 0px;
-`;
-
-const StyledText = styled.span`
-  color: ${themeCssVariables.font.color.primary};
-  font-size: ${themeCssVariables.font.size.sm};
-  font-weight: ${themeCssVariables.font.weight.medium};
-  padding: 16px;
-  text-align: center;
-`;
-
-const StyledFooterText = styled.span`
-  bottom: ${themeCssVariables.spacing[4]};
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.xs};
-  font-weight: ${themeCssVariables.font.weight.regular};
-  left: 50%;
-  position: absolute;
-  text-align: center;
-  transform: translateX(-50%);
-  width: 100%;
-`;
-
-const StyledButtonsContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  max-width: 200px;
-  width: 100%;
-`;
+      ${fontColor['--t-font-color-primary']} 20px
+    )`,
+    backgroundPosition: '0 0, 0 0, 100% 0, 0 100%',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: '2px 100%, 100% 2px, 2px 100%, 100% 2px',
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    position: 'relative',
+  },
+  overlay: {
+    background: backgroundTransparent['--t-background-transparent-medium'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    bottom: '0px',
+    left: '0px',
+    position: 'absolute',
+    right: '0px',
+    top: '0px',
+  },
+  text: {
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    paddingTop: '16px',
+    paddingRight: '16px',
+    paddingBottom: '16px',
+    paddingLeft: '16px',
+    textAlign: 'center',
+  },
+  footerText: {
+    bottom: spacing['--t-spacing-4'],
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    left: '50%',
+    position: 'absolute',
+    textAlign: 'center',
+    transform: 'translateX(-50%)',
+    width: '100%',
+  },
+  buttonsContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    maxWidth: '200px',
+    width: '100%',
+  },
+});
 
 type DropZoneProps = {
   onContinue: (data: WorkBook, file: File) => void;
@@ -165,41 +163,41 @@ export const DropZone = ({ onContinue, isLoading }: DropZoneProps) => {
   );
 
   return (
-    <StyledContainer
+    <div
       // oxlint-disable-next-line react/jsx-props-no-spreading
-      {...getRootProps()}
+      {...getRootProps()} {...stylex.props(styles.container)}
     >
-      {isDragActive && <StyledOverlay />}
+      {isDragActive && <div {...stylex.props(styles.overlay)} />}
       <input
         // oxlint-disable-next-line react/jsx-props-no-spreading
         {...getInputProps()}
       />
       {isDragActive ? (
-        <StyledText>
+        <span {...stylex.props(styles.text)}>
           <Trans>Drop file here...</Trans>
-        </StyledText>
+        </span>
       ) : loading || isLoading ? (
-        <StyledText>
+        <span {...stylex.props(styles.text)}>
           <Trans>Processing...</Trans>
-        </StyledText>
+        </span>
       ) : (
         <>
-          <StyledText>
+          <span {...stylex.props(styles.text)}>
             <Trans>Upload .xlsx, .xls or .csv file</Trans>
-          </StyledText>
-          <StyledButtonsContainer>
+          </span>
+          <div {...stylex.props(styles.buttonsContainer)}>
             <MainButton onClick={open} fullWidth>{t`Select file`}</MainButton>
             <MainButton
               onClick={downloadSample}
               fullWidth
               variant="outline"
             >{t`Download sample`}</MainButton>
-          </StyledButtonsContainer>
-          <StyledFooterText>
+          </div>
+          <span {...stylex.props(styles.footerText)}>
             {t`Max import capacity: ${formatSpreadsheetMaxRecordImportCapacity} records. Otherwise, consider splitting your file or using the API.`}
-          </StyledFooterText>
+          </span>
         </>
       )}
-    </StyledContainer>
+    </div>
   );
 };

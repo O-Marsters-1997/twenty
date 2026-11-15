@@ -11,6 +11,8 @@ import { SelectHeaderStep } from './SelectHeaderStep/SelectHeaderStep';
 import { SelectSheetStep } from './SelectSheetStep/SelectSheetStep';
 import { UploadStep } from './UploadStep/UploadStep';
 import { ValidationStep } from './ValidationStep/ValidationStep';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type SpreadsheetImportStepperProps = {
   nextStep: () => void;
@@ -124,17 +126,24 @@ export const SpreadsheetImportStepper = ({
     default:
       return (
         <Dialog.Body
-          style={{
-            display: 'flex',
-            flex: '1 1 0%',
-            flexDirection: 'column',
-            padding: 'var(--t-spacing-10)',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
+          {...stylex.props(styles.dialogBody)}
         >
           <Loader />
         </Dialog.Body>
       );
   }
 };
+
+const styles = stylex.create({
+  dialogBody: {
+    display: 'flex',
+    flexBasis: '0%',
+    flexGrow: 1,
+    flexShrink: 1,
+    flexDirection: 'column',
+    paddingBlock: spacing['--t-spacing-10'],
+    paddingInline: spacing['--t-spacing-10'],
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});

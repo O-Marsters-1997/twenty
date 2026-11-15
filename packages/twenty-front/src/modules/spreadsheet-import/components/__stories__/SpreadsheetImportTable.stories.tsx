@@ -1,19 +1,21 @@
 import { RsiContext } from '@/spreadsheet-import/components/ReactSpreadsheetImportContextProvider';
 import { SpreadsheetImportSingleSelectTable } from '@/spreadsheet-import/components/SpreadsheetImportSingleSelectTable';
 import { SpreadsheetImportTable } from '@/spreadsheet-import/components/SpreadsheetImportTable';
-import { styled } from '@linaria/react';
 import { type Meta, type StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { SelectColumn } from 'react-data-grid';
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 import { ComponentDecorator } from 'twenty-ui/testing';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 240px;
-  width: 480px;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '240px',
+    width: '480px',
+  },
+});
 
 const ROWS = Array.from({ length: 60 }, (_, index) => ({
   id: `row-${index}`,
@@ -71,9 +73,9 @@ const meta: Meta<typeof SingleSelectionExample> = {
   decorators: [
     (Story) => (
       <RsiContext.Provider value={{ rtl: false }}>
-        <StyledContainer>
+        <div {...stylex.props(styles.container)}>
           <Story />
-        </StyledContainer>
+        </div>
       </RsiContext.Provider>
     ),
     ComponentDecorator,

@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { type ReadonlyDeep } from 'type-fest';
+import * as stylex from '@stylexjs/stylex';
+import { backgroundTransparent, borderColor, borderRadius } from 'twenty-ui/theme/tokens.stylex';
 
 import { type FieldMetadataItem } from '@/object-metadata/types/FieldMetadataItem';
 import { MatchColumnSelectFieldSelectDropdownContent } from '@/spreadsheet-import/components/MatchColumnSelectFieldSelectDropdownContent';
@@ -10,13 +12,11 @@ import { hasNestedFields } from '@/spreadsheet-import/utils/spreadsheetImportHas
 import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent';
 import { DropdownRoot } from '@/ui/layout/dropdown/components/DropdownRoot';
 import { GenericDropdownContentWidth } from '@/ui/layout/dropdown/constants/GenericDropdownContentWidth';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { Dropdown, MenuItem } from 'twenty-ui/components/navigation';
 import { IconChevronDown } from 'twenty-ui/icon';
 import { type SelectOption } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 type MatchColumnToFieldSelectProps = {
   columnIndex: string;
@@ -26,14 +26,6 @@ type MatchColumnToFieldSelectProps = {
   suggestedOptions: readonly ReadonlyDeep<SelectOption>[];
   placeholder?: string;
 };
-
-const StyledMenuItemContainer = styled.div`
-  > div {
-    background-color: ${themeCssVariables.background.transparent.lighter};
-    border: 1px solid ${themeCssVariables.border.color.medium};
-    border-radius: ${themeCssVariables.border.radius.sm};
-  }
-`;
 
 export const MatchColumnToFieldSelect = ({
   onChange,
@@ -90,10 +82,11 @@ export const MatchColumnToFieldSelect = ({
       }}
     >
       <Dropdown.Trigger
-        render={<StyledMenuItemContainer />}
+        render={<div />}
         nativeButton={false}
       >
         <MenuItem
+          className={stylex.props(styles.menuItem).className}
           LeftIcon={value?.Icon}
           text={value?.label ?? placeholder ?? ''}
           accent={isDefined(value) ? 'default' : 'placeholder'}
@@ -132,3 +125,13 @@ export const MatchColumnToFieldSelect = ({
     </DropdownRoot>
   );
 };
+
+const styles = stylex.create({
+  menuItem: {
+    backgroundColor: backgroundTransparent['--t-background-transparent-lighter'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-medium'],
+    borderRadius: borderRadius['--t-border-radius-sm'],
+  },
+});

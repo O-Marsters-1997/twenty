@@ -1,78 +1,15 @@
 import { type SpreadsheetColumns } from '@/spreadsheet-import/types/SpreadsheetColumns';
 import { t } from '@lingui/core/macro';
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
 import React from 'react';
-
-const StyledGridContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  height: 0px;
-  width: 100%;
-`;
-
-const StyledGrid = styled.div`
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
-
-type HeightProps = {
-  height?: `${number}px`;
-  withBorder?: boolean;
-};
-
-const StyledGridRow = styled.div<HeightProps>`
-  border-bottom: ${({ withBorder }) =>
-    withBorder ? `1px solid ${themeCssVariables.border.color.medium}` : 'none'};
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: row;
-  min-height: ${({ height = '64px' }) => height};
-`;
-
-type PositionProps = {
-  position: 'left' | 'right' | 'full-line';
-};
-
-const StyledGridCell = styled.div<PositionProps>`
-  align-items: center;
-  box-sizing: border-box;
-  display: flex;
-  flex: 1;
-  overflow-x: auto;
-  padding-bottom: ${themeCssVariables.spacing[4]};
-  padding-left: ${({ position }) =>
-    position === 'left'
-      ? themeCssVariables.spacing[4]
-      : themeCssVariables.spacing[2]};
-  padding-right: ${({ position }) =>
-    position === 'left'
-      ? themeCssVariables.spacing[2]
-      : themeCssVariables.spacing[4]};
-  padding-top: ${({ position }) =>
-    position === 'full-line'
-      ? themeCssVariables.spacing[0]
-      : themeCssVariables.spacing[4]};
-  width: ${({ position }) => (position === 'full-line' ? '100%' : 'auto')};
-`;
-
-const StyledGridHeader = styled.div<PositionProps>`
-  align-items: center;
-  background-color: ${themeCssVariables.background.secondary};
-  border-bottom: 1px solid ${themeCssVariables.border.color.medium};
-  box-sizing: border-box;
-  color: ${themeCssVariables.font.color.light};
-  display: flex;
-  flex: 1;
-  font-size: ${themeCssVariables.font.size.xs};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-  padding-left: ${themeCssVariables.spacing[4]};
-  padding-right: ${themeCssVariables.spacing[4]};
-`;
+import * as stylex from '@stylexjs/stylex';
+import {
+  background,
+  borderColor,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type ColumnGridProps = {
   columns: SpreadsheetColumns;
@@ -98,12 +35,12 @@ export const ColumnGrid = ({
 }: ColumnGridProps) => {
   return (
     <>
-      <StyledGridContainer>
-        <StyledGrid>
-          <StyledGridRow height="32px">
-            <StyledGridHeader position="left">{t`Imported data`}</StyledGridHeader>
-            <StyledGridHeader position="right">{t`Twenty fields`}</StyledGridHeader>
-          </StyledGridRow>
+      <div {...stylex.props(styles.gridContainer)}>
+        <div {...stylex.props(styles.grid)}>
+          <div {...stylex.props(styles.row, styles.rowHeader)}>
+            <div {...stylex.props(styles.gridHeader)}>{t`Imported data`}</div>
+            <div {...stylex.props(styles.gridHeader)}>{t`Twenty fields`}</div>
+          </div>
           {columns.map((column, index) => {
             const userColumn = renderUserColumn(columns, index);
             const templateColumn = renderTemplateColumn(columns, index);
@@ -114,20 +51,32 @@ export const ColumnGrid = ({
             if (React.isValidElement(userColumn)) {
               return (
                 <div key={index}>
-                  <StyledGridRow withBorder={!isSelect && !isLast}>
-                    <StyledGridCell position="left">
+                  <div
+                    {...stylex.props(
+                      styles.row,
+                      styles.rowDefaultHeight,
+                      !isSelect && !isLast && styles.rowWithBorder,
+                    )}
+                  >
+                    <div {...stylex.props(styles.cell, styles.cellLeft)}>
                       {userColumn}
-                    </StyledGridCell>
-                    <StyledGridCell position="right">
+                    </div>
+                    <div {...stylex.props(styles.cell, styles.cellRight)}>
                       {templateColumn}
-                    </StyledGridCell>
-                  </StyledGridRow>
+                    </div>
+                  </div>
                   {isSelect && (
-                    <StyledGridRow withBorder={!isLast}>
-                      <StyledGridCell position="full-line">
+                    <div
+                      {...stylex.props(
+                        styles.row,
+                        styles.rowDefaultHeight,
+                        !isLast && styles.rowWithBorder,
+                      )}
+                    >
+                      <div {...stylex.props(styles.cell, styles.cellFullLine)}>
                         {unmatchedColumn}
-                      </StyledGridCell>
-                    </StyledGridRow>
+                      </div>
+                    </div>
                   )}
                 </div>
               );
@@ -135,8 +84,82 @@ export const ColumnGrid = ({
 
             return null;
           })}
-        </StyledGrid>
-      </StyledGridContainer>
+        </div>
+      </div>
     </>
   );
 };
+
+const styles = stylex.create({
+  gridContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    flexGrow: '1',
+    height: '0px',
+    width: '100%',
+  },
+  grid: {
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+  },
+  gridHeader: {
+    alignItems: 'center',
+    backgroundColor: background['--t-background-secondary'],
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: borderColor['--t-border-color-medium'],
+    boxSizing: 'border-box',
+    color: fontColor['--t-font-color-light'],
+    display: 'flex',
+    flex: '1',
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    paddingLeft: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+  },
+  row: {
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  rowHeader: {
+    minHeight: '32px',
+  },
+  rowDefaultHeight: {
+    minHeight: '64px',
+  },
+  rowWithBorder: {
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: borderColor['--t-border-color-medium'],
+  },
+  cell: {
+    alignItems: 'center',
+    boxSizing: 'border-box',
+    display: 'flex',
+    flex: '1',
+    overflowX: 'auto',
+    paddingBottom: spacing['--t-spacing-4'],
+  },
+  cellLeft: {
+    paddingLeft: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-4'],
+    width: 'auto',
+  },
+  cellRight: {
+    paddingLeft: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingTop: spacing['--t-spacing-4'],
+    width: 'auto',
+  },
+  cellFullLine: {
+    paddingLeft: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingTop: spacing['--t-spacing-0'],
+    width: '100%',
+  },
+});

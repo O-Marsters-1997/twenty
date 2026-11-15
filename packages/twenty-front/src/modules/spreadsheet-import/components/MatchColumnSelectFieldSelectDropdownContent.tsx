@@ -4,7 +4,6 @@ import { DO_NOT_IMPORT_OPTION_KEY } from '@/spreadsheet-import/constants/DoNotIm
 import { useSpreadsheetImportInternal } from '@/spreadsheet-import/hooks/useSpreadsheetImportInternal';
 import { hasNestedFields } from '@/spreadsheet-import/utils/spreadsheetImportHasNestedFields';
 import { SelectOptionIcon } from '@/ui/input/components/SelectOptionIcon';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useState } from 'react';
 import { isNonEmptyArray } from 'twenty-shared/utils';
@@ -13,11 +12,14 @@ import { IconForbid, useIcons } from 'twenty-ui/icon';
 import { type SelectOption } from 'twenty-ui/primitives/input';
 import { type ReadonlyDeep } from 'type-fest';
 import { normalizeSearchText } from 'twenty-ui/utilities';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledContainer = styled.div`
-  max-height: 360px;
-  overflow-y: auto;
-`;
+const styles = stylex.create({
+  container: {
+    maxHeight: '360px',
+    overflowY: 'auto',
+  },
+});
 
 type MatchColumnSelectFieldSelectDropdownContentProps = {
   selectedValue: SelectOption | undefined;
@@ -81,7 +83,7 @@ export const MatchColumnSelectFieldSelectDropdownContent = ({
         aria-label={t`Search fields`}
       />
       <Dropdown.Separator />
-      <StyledContainer>
+      <div {...stylex.props(styles.container)}>
         {shouldShowDoNotImport && (
           <Dropdown.Section>
             <Dropdown.OptionItem
@@ -131,7 +133,7 @@ export const MatchColumnSelectFieldSelectDropdownContent = ({
           !hasAvailableFields && (
             <Dropdown.Empty>{t`No fields found`}</Dropdown.Empty>
           )}
-      </StyledContainer>
+      </div>
     </>
   );
 };

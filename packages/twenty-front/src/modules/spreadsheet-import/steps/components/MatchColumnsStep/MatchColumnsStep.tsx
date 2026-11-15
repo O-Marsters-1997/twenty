@@ -1,5 +1,4 @@
 import { Dialog } from 'twenty-ui/primitives/surfaces';
-import { styled } from '@linaria/react';
 import { useCallback, useMemo, useState } from 'react';
 
 import { StepNavigationButton } from '@/spreadsheet-import/components/StepNavigationButton';
@@ -30,26 +29,37 @@ import { type SpreadsheetImportField } from '@/spreadsheet-import/types/Spreadsh
 import { useAtomFamilySelectorState } from '@/ui/utilities/state/jotai/hooks/useAtomFamilySelectorState';
 import { ScrollWrapper } from '@/ui/utilities/scroll/components/ScrollWrapper';
 import { Trans, useLingui } from '@lingui/react/macro';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledColumnsContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  margin-bottom: ${themeCssVariables.spacing[4]};
-`;
-
-const StyledColumns = styled.span`
-  color: ${themeCssVariables.font.color.primary};
-  font-size: ${themeCssVariables.font.size.sm};
-  font-weight: ${themeCssVariables.font.weight.medium};
-`;
-
-const StyledColumn = styled.span`
-  color: ${themeCssVariables.font.color.primary};
-  font-size: ${themeCssVariables.font.size.sm};
-  font-weight: ${themeCssVariables.font.weight.regular};
-`;
+const styles = stylex.create({
+  dialogBody: {
+    display: 'flex',
+    flexBasis: '0%',
+    flexGrow: 1,
+    flexShrink: 1,
+    flexDirection: 'column',
+    paddingBlock: 0,
+    paddingInline: 0,
+    alignItems: 'center',
+  },
+  columnsContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    marginBottom: spacing['--t-spacing-4'],
+  },
+  columns: {
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+  },
+  column: {
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+  },
+});
 
 export type MatchColumnsStepProps = {
   data: ImportedRow[];
@@ -201,14 +211,14 @@ export const MatchColumnsStep = ({
         title: t`Not all columns matched`,
         message: t`There are required columns that are not matched or ignored. Do you want to continue?`,
         children: (
-          <StyledColumnsContainer>
-            <StyledColumns>
+          <div {...stylex.props(styles.columnsContainer)}>
+            <span {...stylex.props(styles.columns)}>
               <Trans>Columns not matched:</Trans>
-            </StyledColumns>
+            </span>
             {unmatchedRequiredFields.map((field) => (
-              <StyledColumn key={field}>{field}</StyledColumn>
+              <span key={field} {...stylex.props(styles.column)}>{field}</span>
             ))}
-          </StyledColumnsContainer>
+          </div>
         ),
         buttons: [
           { title: t`Cancel` },
@@ -272,13 +282,7 @@ export const MatchColumnsStep = ({
   return (
     <>
       <Dialog.Body
-        style={{
-          display: 'flex',
-          flex: '1 1 0%',
-          flexDirection: 'column',
-          padding: 0,
-          alignItems: 'center',
-        }}
+        {...stylex.props(styles.dialogBody)}
       >
         <ScrollWrapper componentInstanceId="scroll-wrapper-modal-content">
           <ColumnGrid
