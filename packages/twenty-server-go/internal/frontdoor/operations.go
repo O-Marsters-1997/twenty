@@ -62,7 +62,7 @@ func DefaultTable() OperationTable {
 	for _, operation := range viewOperations {
 		table[EndpointMetadata][operation] = RouteGo
 	}
-	for _, operation := range slices.Concat(SkillOperations, ChatOperations, agentOperations, MessagingOperations, TwoFactorOperations, SessionOperations) {
+	for _, operation := range slices.Concat(SkillOperations, ChatOperations, agentOperations, MessagingOperations, TwoFactorOperations, SessionOperations, PasswordLoginOperations) {
 		table[EndpointMetadata][operation] = RouteGo
 	}
 	for _, operation := range slices.Concat(WorkflowOperations, WorkflowAuthoringOperations) {
@@ -147,3 +147,5 @@ var blockedMetadataFields = []string{
 	"createOneObject", "updateOneObject", "deleteOneObject",
 	"createOneField", "updateOneField", "deleteOneField",
 }
+
+var PasswordLoginOperations = []string{"GetLoginTokenFromCredentials", "SignIn"}

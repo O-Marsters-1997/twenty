@@ -79,7 +79,7 @@ func newSessionHarness(t *testing.T) *sessionHarness {
 	h.handler = authgql.NewHandler(&authgql.Resolver{
 		TwoFactor: h.service,
 		Sessions:  auth.NewUserSession(h.pool, cache, h.issuer, auth.SessionConfig{}, logger),
-		SignIn: &auth.SignIn{
+		Exchange: &auth.SignIn{
 			Pool:      h.pool,
 			Issuer:    h.issuer,
 			TwoFactor: h.service,

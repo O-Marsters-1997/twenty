@@ -20,12 +20,36 @@ type AuthTokens struct {
 	Tokens *AuthTokenPair `json:"tokens"`
 }
 
+type AvailableWorkspace struct {
+	ID                  string         `json:"id"`
+	DisplayName         *string        `json:"displayName,omitempty"`
+	LoginToken          *string        `json:"loginToken,omitempty"`
+	PersonalInviteToken *string        `json:"personalInviteToken,omitempty"`
+	InviteHash          *string        `json:"inviteHash,omitempty"`
+	WorkspaceUrls       *WorkspaceUrls `json:"workspaceUrls"`
+	Logo                *string        `json:"logo,omitempty"`
+}
+
+type AvailableWorkspaces struct {
+	AvailableWorkspacesForSignIn []*AvailableWorkspace `json:"availableWorkspacesForSignIn"`
+	AvailableWorkspacesForSignUp []*AvailableWorkspace `json:"availableWorkspacesForSignUp"`
+}
+
+type AvailableWorkspacesAndAccessTokens struct {
+	Tokens              *AuthTokenPair       `json:"tokens"`
+	AvailableWorkspaces *AvailableWorkspaces `json:"availableWorkspaces"`
+}
+
 type DeleteTwoFactorAuthenticationMethod struct {
 	Success bool `json:"success"`
 }
 
 type InitiateTwoFactorAuthenticationProvisioning struct {
 	URI string `json:"uri"`
+}
+
+type LoginToken struct {
+	LoginToken *AuthToken `json:"loginToken"`
 }
 
 type Mutation struct {
@@ -52,4 +76,8 @@ type TwoFactorAuthenticationRecoveryStatus struct {
 
 type VerifyTwoFactorAuthenticationMethod struct {
 	Success bool `json:"success"`
+}
+
+type WorkspaceUrls struct {
+	SubdomainURL string `json:"subdomainUrl"`
 }

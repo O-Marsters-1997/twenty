@@ -21,7 +21,15 @@ func NewHandler(resolver *Resolver, logger *slog.Logger) http.Handler {
 	server.SetErrorPresenter(func(ctx context.Context, err error) *gqlerror.Error {
 		presented := graphql.DefaultErrorPresenter(ctx, err)
 		var twoFactorErr *auth.TwoFactorError
+		var loginErr *auth.LoginError
 		switch {
+		case errors.As(err, &loginErr):
+			presented.Message = loginErr.Message
+			presented.Extensions = map[string]any{
+				"code":                loginErr.Code,
+				"subCode":             loginErr.SubCode,
+				"userFriendlyMessage": loginErr.FriendlyMessage,
+			}
 		case errors.As(err, &twoFactorErr):
 			presented.Message = twoFactorErr.Message
 			presented.Extensions = map[string]any{

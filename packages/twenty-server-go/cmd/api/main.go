@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"slices"
 	"syscall"
 	"time"
 
@@ -58,6 +59,14 @@ func run() error {
 	}
 	defer pool.Close()
 	verifier := auth.NewJWTVerifier(pool, cfg.AppSecret)
+	stack, err := newAuthStack(pool, cfg, logger)
+	if err != nil {
+		return err
+	}
+	passwordLogins, err := passwordLogin(pool, cfg, stack)
+	if err != nil {
+		return err
+	}
 
 	chats := aistore.New(pool)
 	broker := ai.NewPersistingBroker(ai.NewMemoryBroker(), chats, logger)
@@ -92,11 +101,7 @@ func run() error {
 	twoFactor := auth.NewTwoFactor(
 		pool, auth.NewSecretCipher(cfg.EncryptionKey, cfg.FallbackEncryptionKey, cfg.AppSecret), cfg.RecoveryCodeTTL,
 	)
-	authResolver, err := newAuthResolver(pool, cfg, twoFactor, logger)
-	if err != nil {
-		return err
-	}
-	authHandler := authgql.NewHandler(authResolver, logger)
+	authHandler := authgql.NewHandler(newAuthResolver(pool, twoFactor, passwordLogins, stack), logger)
 
 	goGraphQL := http.NewServeMux()
 	goGraphQL.Handle(string(frontdoor.EndpointWorkspace), workspaceHandler(recordsgql.NewHandler(&recordsgql.Resolver{
@@ -133,7 +138,7 @@ func run() error {
 
 	handler := frontdoor.NewHandler(frontdoor.DefaultTable(), cfg.NodeUpstreamURL, verifier, goGraphQL, logger).
 		WithPublicOperations(map[frontdoor.Endpoint][]string{
-			frontdoor.EndpointMetadata:  frontdoor.SessionOperations,
+			frontdoor.EndpointMetadata:  slices.Concat(frontdoor.SessionOperations, frontdoor.PasswordLoginOperations),
 			frontdoor.EndpointWorkspace: frontdoor.LoginOperations,
 		}).
 		WithMCP(toolRegistry).

@@ -8,10 +8,11 @@ import (
 )
 
 type Resolver struct {
-	TwoFactor *auth.TwoFactor
-	SignIn    *auth.SignIn
-	Sessions  *auth.UserSession
-	Login     *auth.TwoFactorLogin
+	TwoFactor     *auth.TwoFactor
+	Exchange      *auth.SignIn
+	PasswordLogin *auth.PasswordLogin
+	Sessions      *auth.UserSession
+	Login         *auth.TwoFactorLogin
 }
 
 func (r *mutationResolver) InitiateOTPProvisioningForAuthenticatedUser(ctx context.Context) (*InitiateTwoFactorAuthenticationProvisioning, error) {
@@ -72,6 +73,55 @@ func (r *mutationResolver) RevokeTwoFactorAuthenticationRecoveryCode(ctx context
 	return r.TwoFactor.RevokeRecoveryCode(ctx, principal, userID)
 }
 
+func (r *mutationResolver) GetLoginTokenFromCredentials(ctx context.Context, email string, password string, _ *string, _ *string, _ *string, origin string) (*LoginToken, error) {
+	token, err := r.PasswordLogin.LoginTokenFromCredentials(ctx, email, password, origin)
+	if err != nil {
+		return nil, err
+	}
+	return &LoginToken{LoginToken: authTokenFrom(token)}, nil
+}
+
+func (r *mutationResolver) SignIn(ctx context.Context, email string, password string, _ *string, _ *string, _ *string) (*AvailableWorkspacesAndAccessTokens, error) {
+	w, req := exchangeFrom(ctx)
+	result, err := r.PasswordLogin.SignIn(ctx, email, password)
+	if err != nil {
+		return nil, err
+	}
+	if err := r.Sessions.IssueForTokenPair(ctx, w, req, result.Pair, auth.SessionOriginSignIn); err != nil {
+		return nil, err
+	}
+	return &AvailableWorkspacesAndAccessTokens{
+		Tokens: &AuthTokenPair{
+			AccessOrWorkspaceAgnosticToken: authTokenFrom(result.Access),
+			RefreshToken:                   authTokenFrom(result.Refresh),
+		},
+		AvailableWorkspaces: &AvailableWorkspaces{
+			AvailableWorkspacesForSignIn: availableWorkspacesFrom(result.ForSignIn),
+			AvailableWorkspacesForSignUp: availableWorkspacesFrom(result.ForSignUp),
+		},
+	}, nil
+}
+
+func authTokenFrom(token auth.SignedToken) *AuthToken {
+	return &AuthToken{Token: token.Token, ExpiresAt: metadata.Timestamp{Time: token.ExpiresAt}}
+}
+
+func availableWorkspacesFrom(workspaces []auth.AvailableWorkspace) []*AvailableWorkspace {
+	converted := make([]*AvailableWorkspace, 0, len(workspaces))
+	for _, workspace := range workspaces {
+		logo := workspace.Logo
+		converted = append(converted, &AvailableWorkspace{
+			ID:                  workspace.ID,
+			DisplayName:         workspace.DisplayName,
+			LoginToken:          workspace.LoginToken,
+			PersonalInviteToken: workspace.PersonalInviteToken,
+			WorkspaceUrls:       &WorkspaceUrls{SubdomainURL: workspace.SubdomainURL},
+			Logo:                &logo,
+		})
+	}
+	return converted
+}
+
 func (r *mutationResolver) GetAuthTokensFromOtp(ctx context.Context, loginToken string, otp string, _ *string, origin string) (*AuthTokens, error) {
 	w, req := exchangeFrom(ctx)
 	pair, err := r.Login.WithOTP(ctx, w, req, loginToken, otp, origin)
@@ -98,7 +148,7 @@ func (r *mutationResolver) GetAuthTokensFromTwoFactorAuthenticationRecoveryCode(
 }
 
 func (r *mutationResolver) GetAuthTokensFromLoginToken(ctx context.Context, loginToken string, origin string) (*AuthTokens, error) {
-	pair, err := r.SignIn.TokensFromLoginToken(ctx, loginToken, origin)
+	pair, err := r.Exchange.TokensFromLoginToken(ctx, loginToken, origin)
 	if err != nil {
 		return nil, err
 	}
@@ -106,7 +156,7 @@ func (r *mutationResolver) GetAuthTokensFromLoginToken(ctx context.Context, logi
 }
 
 func (r *mutationResolver) RenewToken(ctx context.Context, appToken string) (*AuthTokens, error) {
-	pair, err := r.SignIn.Renew(ctx, appToken)
+	pair, err := r.Exchange.Renew(ctx, appToken)
 	if err != nil {
 		return nil, err
 	}

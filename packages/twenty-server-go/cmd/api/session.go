@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log/slog"
 	"net/http"
+	"net/url"
 	"os"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -17,17 +18,37 @@ import (
 
 const seedWorkspaceID = "20202020-1c25-4d02-bf25-6aeccf7ea419"
 
-func newAuthResolver(pool *pgxpool.Pool, cfg config.Config, twoFactor *auth.TwoFactor, logger *slog.Logger) (*authgql.Resolver, error) {
+type authStack struct {
+	issuer    *auth.PGIssuer
+	origins   *auth.OriginResolver
+	sessions  *auth.UserSession
+	frontURL  *url.URL
+	serverURL string
+}
+
+func newAuthStack(pool *pgxpool.Pool, cfg config.Config, logger *slog.Logger) (authStack, error) {
 	if cfg.RedisURL == "" {
-		return nil, errors.New("REDIS_URL is required")
+		return authStack{}, errors.New("REDIS_URL is required")
 	}
 	redisOptions, err := redis.ParseURL(cfg.RedisURL)
 	if err != nil {
-		return nil, fmt.Errorf("parse REDIS_URL: %w", err)
+		return authStack{}, fmt.Errorf("parse REDIS_URL: %w", err)
 	}
 	sameSite, err := parseSameSite(cfg.CookieSameSite)
 	if err != nil {
-		return nil, err
+		return authStack{}, err
+	}
+	frontURL, err := url.Parse(valueOrDefault(cfg.FrontendURL, cfg.ServerURL))
+	if err != nil || frontURL.Scheme == "" || frontURL.Host == "" {
+		return authStack{}, errors.New("FRONTEND_URL, or SERVER_URL when it is unset, needs a scheme and host")
+	}
+	sessionLifetime, err := optionalDuration("SESSION_ABSOLUTE_LIFETIME")
+	if err != nil {
+		return authStack{}, err
+	}
+	sessionIdleTimeout, err := optionalDuration("SESSION_IDLE_TIMEOUT")
+	if err != nil {
+		return authStack{}, err
 	}
 	cache := auth.NewRedisCache(redis.NewClient(redisOptions), cfg.RedisCachePrefix)
 
@@ -37,36 +58,39 @@ func newAuthResolver(pool *pgxpool.Pool, cfg config.Config, twoFactor *auth.TwoF
 		FallbackEncryptionKey: cfg.FallbackEncryptionKey,
 		Cache:                 cache,
 	})
-	frontendURL := cfg.FrontendURL
-	if frontendURL == "" {
-		frontendURL = cfg.ServerURL
-	}
 	sessions := auth.NewUserSession(pool, cache, issuer, auth.SessionConfig{
 		ServerURL:            cfg.ServerURL,
-		FrontendURL:          frontendURL,
+		FrontendURL:          frontURL.String(),
 		CookieAllowedOrigins: cfg.CookieAllowedOrigins,
 		Production:           cfg.Production,
 		SameSite:             sameSite,
 		TrustProxy:           cfg.TrustProxy,
+		AbsoluteLifetime:     sessionLifetime,
+		IdleTimeout:          sessionIdleTimeout,
 	}, logger)
 	origins := auth.NewOriginResolver(pool, auth.OriginConfig{
 		MultiWorkspace:   cfg.MultiWorkspace,
-		FrontURL:         frontendURL,
+		FrontURL:         frontURL.String(),
 		DefaultSubdomain: cfg.DefaultSubdomain,
 		SeedWorkspaceID:  seedWorkspaceID,
 	})
+	return authStack{issuer: issuer, origins: origins, sessions: sessions, frontURL: frontURL, serverURL: cfg.ServerURL}, nil
+}
+
+func newAuthResolver(pool *pgxpool.Pool, twoFactor *auth.TwoFactor, passwordLogin *auth.PasswordLogin, stack authStack) *authgql.Resolver {
 	return &authgql.Resolver{
-		TwoFactor: twoFactor,
-		Sessions:  sessions,
-		Login:     auth.NewTwoFactorLogin(pool, twoFactor, issuer, origins, sessions),
-		SignIn: &auth.SignIn{
+		TwoFactor:     twoFactor,
+		PasswordLogin: passwordLogin,
+		Sessions:      stack.sessions,
+		Login:         auth.NewTwoFactorLogin(pool, twoFactor, stack.issuer, stack.origins, stack.sessions),
+		Exchange: &auth.SignIn{
 			Pool:                      pool,
-			Issuer:                    issuer,
+			Issuer:                    stack.issuer,
 			TwoFactor:                 twoFactor,
-			Origins:                   origins,
+			Origins:                   stack.origins,
 			EmailVerificationRequired: os.Getenv("IS_EMAIL_VERIFICATION_REQUIRED") == "true",
 		},
-	}, nil
+	}
 }
 
 func parseSameSite(value string) (http.SameSite, error) {
