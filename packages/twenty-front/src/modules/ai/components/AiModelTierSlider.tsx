@@ -32,7 +32,7 @@ const styles = stylex.create({
     borderRadius: borderRadius['--t-border-radius-md'],
     boxShadow: {
       default: null,
-      ':focus-within': `0 0 0 3px ${color['--t-color-blue3']}`,
+      ':has(input:focus-visible)': `0 0 0 3px ${color['--t-color-blue3']}`,
     },
     cornerShape: 'round',
     cursor: 'pointer',
