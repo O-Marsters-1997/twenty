@@ -69,6 +69,8 @@ var (
 
 var ErrUnknownUser = errors.New("auth: no user with that email")
 
+var errNoWorkspaceMember = errors.New("no workspace member for this user")
+
 var errNoSigningKey = errors.New("no current signing key")
 
 const (
@@ -81,6 +83,7 @@ const (
 	defaultRefreshTTL        = 60 * 24 * time.Hour
 	defaultLoginTTL          = 15 * time.Minute
 	defaultAgnosticTTL       = 30 * time.Minute
+	defaultTransientTTL      = 5 * time.Minute
 	defaultRefreshReuseGrace = time.Minute
 	refreshAppTokenType      = "REFRESH_TOKEN"
 	signOutRevokedReason     = "USER_SIGN_OUT"
@@ -97,6 +100,7 @@ type IssuerConfig struct {
 	RefreshTTL            time.Duration
 	LoginTTL              time.Duration
 	WorkspaceAgnosticTTL  time.Duration
+	TransientTTL          time.Duration
 	RefreshReuseGrace     time.Duration
 	Cache                 CacheStore
 }
@@ -119,6 +123,9 @@ func NewPGIssuer(pool *pgxpool.Pool, config IssuerConfig) *PGIssuer {
 	}
 	if config.WorkspaceAgnosticTTL == 0 {
 		config.WorkspaceAgnosticTTL = defaultAgnosticTTL
+	}
+	if config.TransientTTL == 0 {
+		config.TransientTTL = defaultTransientTTL
 	}
 	if config.RefreshReuseGrace == 0 {
 		config.RefreshReuseGrace = defaultRefreshReuseGrace
@@ -244,6 +251,27 @@ func (i *PGIssuer) signLogin(ctx context.Context, email, workspaceID string, pro
 		return "", fmt.Errorf("issue login token: %w", err)
 	}
 	return token, nil
+}
+
+func (i *PGIssuer) IssueTransient(ctx context.Context, principal Principal) (SignedToken, error) {
+	if err := requireSessionCaller(principal); err != nil {
+		return SignedToken{}, err
+	}
+	if principal.WorkspaceID == "" || principal.WorkspaceMemberID == "" {
+		return SignedToken{}, errNoWorkspaceMember
+	}
+	expiresAt := time.Now().Add(i.config.TransientTTL)
+	token, err := i.sign(ctx, jwt.MapClaims{
+		"sub":               principal.WorkspaceMemberID,
+		"userId":            principal.UserID,
+		"workspaceId":       principal.WorkspaceID,
+		"workspaceMemberId": principal.WorkspaceMemberID,
+		"type":              TokenTypeLogin,
+	}, expiresAt)
+	if err != nil {
+		return SignedToken{}, fmt.Errorf("issue transient token: %w", err)
+	}
+	return SignedToken{Token: token, ExpiresAt: expiresAt}, nil
 }
 
 func (i *PGIssuer) IssueFileToken(ctx context.Context, workspaceID, fileID string, ttl time.Duration) (string, error) {

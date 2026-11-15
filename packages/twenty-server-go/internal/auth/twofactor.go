@@ -70,6 +70,10 @@ func (s *TwoFactor) InitiateProvisioning(ctx context.Context, principal Principa
 	if err := requireUserSession(principal); err != nil {
 		return "", err
 	}
+	return s.provision(ctx, principal)
+}
+
+func (s *TwoFactor) provision(ctx context.Context, principal Principal) (string, error) {
 	var email, displayName string
 	if err := s.pool.QueryRow(ctx,
 		`SELECT u.email::text, COALESCE(w."displayName", '') FROM core."user" u, core.workspace w WHERE u.id = $1::uuid AND w.id = $2::uuid`,

@@ -62,7 +62,7 @@ func DefaultTable() OperationTable {
 	for _, operation := range viewOperations {
 		table[EndpointMetadata][operation] = RouteGo
 	}
-	for _, operation := range slices.Concat(SkillOperations, ChatOperations, agentOperations, MessagingOperations, AccessOperations, TwoFactorOperations, SessionOperations, PasswordLoginOperations) {
+	for _, operation := range slices.Concat(SkillOperations, ChatOperations, agentOperations, MessagingOperations, AccessOperations, TwoFactorOperations, SessionOperations, SessionManagementOperations, PasswordLoginOperations) {
 		table[EndpointMetadata][operation] = RouteGo
 	}
 	for _, operation := range slices.Concat(WorkflowOperations, WorkflowAuthoringOperations) {
@@ -139,7 +139,7 @@ var AccessOperations = []string{
 	"GenerateApiKeyToken", "GeneratePlaygroundToken",
 }
 
-var LoginOperations = []string{"getAuthTokensFromOTP", "getAuthTokensFromTwoFactorAuthenticationRecoveryCode"}
+var LoginOperations = []string{"getAuthTokensFromOTP", "getAuthTokensFromTwoFactorAuthenticationRecoveryCode", "initiateOTPProvisioning"}
 
 var TwoFactorOperations = []string{
 	"initiateOTPProvisioningForAuthenticatedUser", "verifyTwoFactorAuthenticationMethodForAuthenticatedUser",
@@ -148,6 +148,8 @@ var TwoFactorOperations = []string{
 }
 
 var SessionOperations = []string{"getAuthTokensFromLoginToken", "RenewToken", "SignOut"}
+
+var SessionManagementOperations = []string{"CurrentUserSessions", "RevokeUserSession", "RevokeAllOtherUserSessions", "generateTransientToken"}
 
 var blockedMetadataFields = []string{
 	"createOneObject", "updateOneObject", "deleteOneObject",

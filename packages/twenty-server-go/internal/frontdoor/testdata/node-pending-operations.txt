@@ -21,7 +21,6 @@ CreateOneIndexMetadataItem
 CreateOneRole
 CreateUnsubscribeTopic
 CreateValidationRule
-CurrentUserSessions
 DeleteApprovedAccessDomain
 DeleteCurrentWorkspace
 DeleteManyNavigationMenuItems
@@ -96,8 +95,6 @@ ResetPageLayoutTabToDefault
 ResetPageLayoutToDefault
 ResetPageLayoutWidgetToDefault
 ResetTimelineActivityType
-RevokeAllOtherUserSessions
-RevokeUserSession
 RunCoreWorkflowVersion
 Search
 SendInvitations
@@ -138,8 +135,6 @@ ValidatePasswordResetToken
 VerifyEmailAndGetLoginToken
 VerifyEmailAndGetWorkspaceAgnosticToken
 VerifyEmailingDomain
-generateTransientToken
-initiateOTPProvisioning
 records:agentChatThread
 records:agentChatThreadParticipant
 records:agentChatThreadTarget

@@ -78,6 +78,7 @@ func newSessionHarness(t *testing.T) *sessionHarness {
 	logger := slog.New(slog.NewTextHandler(io.Discard, nil))
 	h.handler = authgql.NewHandler(&authgql.Resolver{
 		TwoFactor: h.service,
+		Tokens:    h.issuer,
 		Sessions:  auth.NewUserSession(h.pool, cache, h.issuer, auth.SessionConfig{}, logger),
 		Exchange: &auth.SignIn{
 			Pool:      h.pool,
