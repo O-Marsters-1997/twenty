@@ -32,7 +32,7 @@ const jestConfig = {
   ],
   transform: {
     '^.+\\.(ts|js|tsx|jsx|mjs)$': [
-      '@swc/jest',
+      '<rootDir>/jest-stylex-transformer.cjs',
       {
         jsc: {
           parser: {
