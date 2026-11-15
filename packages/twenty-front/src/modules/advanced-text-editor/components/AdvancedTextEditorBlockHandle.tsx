@@ -2,7 +2,6 @@ import { AdvancedTextEditorBlockHandleMenu } from '@/advanced-text-editor/compon
 import { AdvancedTextEditorDragPreview } from '@/advanced-text-editor/components/AdvancedTextEditorDragPreview';
 import { getAdvancedTextEditorBlockDisplay } from '@/advanced-text-editor/utils/getAdvancedTextEditorBlockDisplay';
 import { offset } from '@floating-ui/react';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { type Editor } from '@tiptap/core';
 import {
@@ -12,9 +11,12 @@ import {
 import { type CSSProperties, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { isDefined, TIPTAP_NODE_TYPES } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  borderColor,
+  borderRadius,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const DRAG_HANDLE_OPTIONS: Pick<
   DragHandleProps,
@@ -34,6 +36,15 @@ const DRAG_HANDLE_OPTIONS: Pick<
 };
 
 const styles = stylex.create({
+  blockOutline: {
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    outlineColor: borderColor['--t-border-color-blue'],
+    outlineOffset: spacing['--t-spacing-1'],
+    outlineStyle: 'solid',
+    outlineWidth: '1px',
+    pointerEvents: 'none',
+    position: 'absolute',
+  },
   handleSlot: {
     alignItems: 'center',
     display: 'flex',
@@ -42,14 +53,6 @@ const styles = stylex.create({
     width: spacing['--t-spacing-6'],
   },
 });
-
-const StyledBlockOutline = styled.div`
-  border-radius: ${themeCssVariables.border.radius.sm};
-  outline: 1px solid ${themeCssVariables.border.color.blue};
-  outline-offset: ${themeCssVariables.spacing[1]};
-  pointer-events: none;
-  position: absolute;
-`;
 
 type HoveredBlock = {
   pos: number;
@@ -151,7 +154,10 @@ export const AdvancedTextEditorBlockHandle = ({
       {isDefined(hoveredBlock) &&
         isDefined(outlineContainer) &&
         createPortal(
-          <StyledBlockOutline style={hoveredBlock.outline} />,
+          <div
+            {...stylex.props(styles.blockOutline)}
+            style={hoveredBlock.outline}
+          />,
           outlineContainer,
         )}
     </>

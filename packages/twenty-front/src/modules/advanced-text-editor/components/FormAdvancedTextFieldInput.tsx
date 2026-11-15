@@ -12,7 +12,6 @@ import { usePushFocusItemToFocusStack } from '@/ui/utilities/focus/hooks/usePush
 import { useRemoveFocusItemFromFocusStackById } from '@/ui/utilities/focus/hooks/useRemoveFocusItemFromFocusStackById';
 import { useRemoveFocusItemFromFocusStackOnUnmount } from '@/ui/utilities/focus/hooks/useRemoveFocusItemFromFocusStackOnUnmount';
 import { FocusComponentType } from '@/ui/utilities/focus/types/FocusComponentType';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { type Editor } from '@tiptap/core';
 import { type ComponentType, useEffect, useId, useState } from 'react';
@@ -20,27 +19,53 @@ import { isDefined } from 'twenty-shared/utils';
 import { LightIconButton } from 'twenty-ui/components/input';
 import { IconMaximize } from 'twenty-ui/icon';
 import { Field } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { useIsMobile } from 'twenty-ui/utilities';
 import * as stylex from '@stylexjs/stylex';
-import { background, borderColor, borderRadius, spacing } from 'twenty-ui/theme/tokens.stylex';
-
-const StyledAdvancedTextFieldContainerWrapper = styled.div<{
-  hasFieldChrome: boolean;
-}>`
-  display: flex;
-  flex-direction: column;
-  flex-grow: ${({ hasFieldChrome }) => (hasFieldChrome ? 0 : 1)};
-  min-height: ${({ hasFieldChrome }) => (hasFieldChrome ? 'auto' : '0')};
-
-  /* Field editors keep their intrinsic height inside forms; document editors stretch. */
-  & > * {
-    flex-grow: ${({ hasFieldChrome }) => (hasFieldChrome ? 0 : 1)};
-    min-height: ${({ hasFieldChrome }) => (hasFieldChrome ? 'auto' : '0')};
-  }
-`;
+import {
+  background,
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
+  containerWrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+    flexGrow: 1,
+    minHeight: 0,
+  },
+  containerWrapperWithFieldChrome: {
+    flexGrow: 0,
+    minHeight: 'auto',
+  },
+  innerContainer: {
+    backgroundColor: 'transparent',
+    borderRadius: 0,
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexGrow: 1,
+    overflow: 'auto',
+    width: '100%',
+  },
+  innerContainerWithFieldChrome: {
+    backgroundColor: backgroundTransparent['--t-background-transparent-lighter'],
+    borderColor: borderColor['--t-border-color-medium'],
+    borderRadius: borderRadius['--t-border-radius-md'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+  },
+  actionButtonContainer: {
+    marginTop: spacing['--t-spacing-1'],
+    position: 'absolute',
+    right: spacing['--t-spacing-1'],
+    top: spacing['--t-spacing-0'],
+    zIndex: 1,
+  },
+  actionButtonContainerWithVariablePicker: {
+    right: `calc(${spacing['--t-spacing-7']} + ${spacing['--t-spacing-2']})`,
+  },
   advancedTextFieldFieldContainer: {
     display: 'flex',
     flexDirection: 'column',
@@ -67,37 +92,8 @@ const styles = stylex.create({
   },
 });
 
-const StyledAdvancedTextFieldInnerContainer = styled.div<{
-  hasFieldChrome: boolean;
-}>`
-  background-color: ${({ hasFieldChrome }) =>
-    hasFieldChrome ? themeCssVariables.background.transparent.lighter : 'none'};
-  border: ${({ hasFieldChrome }) =>
-    hasFieldChrome
-      ? `1px solid ${themeCssVariables.border.color.medium}`
-      : 'none'};
-  border-radius: ${({ hasFieldChrome }) =>
-    hasFieldChrome ? themeCssVariables.border.radius.md : '0'};
-  box-sizing: border-box;
-
-  display: flex;
-  flex-grow: 1;
-  overflow: auto;
-  width: 100%;
-`;
-
-const StyledEditorActionButtonContainer = styled.div<{
-  hasVariablePicker?: boolean;
-}>`
-  margin-top: ${themeCssVariables.spacing[1]};
-  position: absolute;
-  right: ${({ hasVariablePicker }) =>
-    hasVariablePicker
-      ? `calc(${themeCssVariables.spacing[7]} + ${themeCssVariables.spacing[2]})`
-      : themeCssVariables.spacing[1]};
-  top: ${themeCssVariables.spacing[0]};
-  z-index: 1;
-`;
+const FIELD_EDITOR_STRETCH_STYLE = { flexGrow: 0, minHeight: 'auto' } as const;
+const DOCUMENT_EDITOR_STRETCH_STYLE = { flexGrow: 1, minHeight: 0 } as const;
 
 type FormAdvancedTextFieldInputProps = {
   label?: string;
@@ -138,6 +134,7 @@ export const FormAdvancedTextFieldInput = ({
 }: FormAdvancedTextFieldInputProps) => {
   const { chrome, minHeight: profileMinHeight } = profile;
 
+  const hasFieldChrome = chrome === 'field';
   const editorMinHeight = minHeight ?? profileMinHeight;
   const isFullScreenEnabled = enableFullScreen ?? profile.enableFullScreen;
 
@@ -249,15 +246,27 @@ export const FormAdvancedTextFieldInput = ({
 
   return (
     <>
-      <StyledAdvancedTextFieldContainerWrapper
-        hasFieldChrome={chrome === 'field'}
+      <div
+        {...stylex.props(
+          styles.containerWrapper,
+          hasFieldChrome && styles.containerWrapperWithFieldChrome,
+        )}
       >
-        <FormFieldInputContainer>
+        <FormFieldInputContainer
+          style={
+            hasFieldChrome
+              ? FIELD_EDITOR_STRETCH_STYLE
+              : DOCUMENT_EDITOR_STRETCH_STYLE
+          }
+        >
           {label ? <Field.Label>{label}</Field.Label> : null}
 
           <div {...stylex.props(styles.advancedTextFieldFieldContainer)}>
-            <StyledAdvancedTextFieldInnerContainer
-              hasFieldChrome={chrome === 'field'}
+            <div
+              {...stylex.props(
+                styles.innerContainer,
+                hasFieldChrome && styles.innerContainerWithFieldChrome,
+              )}
             >
               {!isFullScreen && (
                 <EditorComponent
@@ -268,8 +277,13 @@ export const FormAdvancedTextFieldInput = ({
               )}
 
               {isFullScreenEnabled && (
-                <StyledEditorActionButtonContainer
-                  hasVariablePicker={isDefined(VariablePicker) && !readonly}
+                <div
+                  {...stylex.props(
+                    styles.actionButtonContainer,
+                    isDefined(VariablePicker) &&
+                      !readonly &&
+                      styles.actionButtonContainerWithVariablePicker,
+                  )}
                 >
                   {!readonly && !isFullScreen && (
                     <LightIconButton
@@ -281,7 +295,7 @@ export const FormAdvancedTextFieldInput = ({
                       <IconMaximize />
                     </LightIconButton>
                   )}
-                </StyledEditorActionButtonContainer>
+                </div>
               )}
 
               {VariablePicker && !readonly ? (
@@ -291,12 +305,12 @@ export const FormAdvancedTextFieldInput = ({
                   onVariableSelect={handleVariableTagInsert}
                 />
               ) : null}
-            </StyledAdvancedTextFieldInnerContainer>
+            </div>
           </div>
           {hint && <Field.Description>{hint}</Field.Description>}
           {error && <Field.Error match>{error}</Field.Error>}
         </FormFieldInputContainer>
-      </StyledAdvancedTextFieldContainerWrapper>
+      </div>
 
       {fullScreenOverlay}
     </>

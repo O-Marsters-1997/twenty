@@ -1,0 +1,142 @@
+@layer third-party {
+  [data-advanced-text-editor] .editor-content {
+    flex-grow: 1;
+    height: 100%;
+    position: relative;
+    width: 100%;
+  }
+
+  [data-advanced-text-editor] .drop-cursor {
+    background-color: var(--t-color-blue);
+    border-radius: var(--t-border-radius-pill);
+    transition-duration: calc(var(--t-animation-duration-fast) * 1s);
+    transition-property: left, top, width, height;
+    transition-timing-function: ease-out;
+  }
+
+  [data-advanced-text-editor] .tiptap {
+    border: none !important;
+    box-sizing: border-box;
+    color: var(--t-font-color-primary);
+    font-family: var(--t-font-family);
+    font-size: var(--t-font-size-sm);
+    font-weight: var(--t-font-weight-regular);
+    height: 100%;
+    padding: var(--t-spacing-1) var(--t-spacing-2);
+  }
+
+  [data-advanced-text-editor][data-readonly='true'] .tiptap {
+    color: var(--t-font-color-secondary);
+  }
+
+  [data-advanced-text-editor] .tiptap p.is-editor-empty:first-of-type::before,
+  [data-html-node-inline-editor]
+    .tiptap
+    p.is-editor-empty:first-of-type::before {
+    color: var(--t-font-color-light);
+    content: attr(data-placeholder);
+    float: left;
+    font-size: var(--t-font-size-md);
+    font-weight: var(--t-font-weight-medium);
+    height: 0;
+    pointer-events: none;
+  }
+
+  [data-advanced-text-editor] .tiptap p {
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  [data-advanced-text-editor] .tiptap .variable-tag {
+    background-color: var(--t-color-blue3);
+    border-radius: var(--t-border-radius-sm);
+    color: var(--t-color-blue);
+    padding: var(--t-spacing-1);
+  }
+
+  [data-advanced-text-editor] .tiptap h1 {
+    font-size: 1.5em;
+  }
+
+  [data-advanced-text-editor] .tiptap h2 {
+    font-size: 1.3em;
+  }
+
+  [data-advanced-text-editor] .tiptap h3 {
+    font-size: 1.1em;
+  }
+
+  [data-advanced-text-editor] .tiptap li {
+    line-height: 1.5;
+    margin-bottom: var(--t-spacing-2);
+  }
+
+  [data-advanced-text-editor] .tiptap .block-section {
+    border-radius: var(--t-border-radius-sm);
+    box-sizing: border-box;
+    margin-bottom: var(--t-spacing-2);
+    outline: 1px dashed transparent;
+    outline-offset: 2px;
+  }
+
+  [data-advanced-text-editor] .tiptap .block-section:hover {
+    outline-color: var(--t-border-color-medium);
+  }
+
+  [data-advanced-text-editor] .tiptap .block-columns {
+    box-sizing: border-box;
+    display: flex;
+    gap: var(--t-spacing-2);
+    margin-bottom: var(--t-spacing-2);
+  }
+
+  [data-advanced-text-editor] .tiptap .block-column {
+    border-radius: var(--t-border-radius-sm);
+    box-sizing: border-box;
+    flex: 1;
+    min-width: 0;
+    outline: 1px dashed var(--t-border-color-light);
+    outline-offset: 2px;
+  }
+
+  [data-advanced-text-editor] .tiptap .block-button-wrapper {
+    margin-bottom: var(--t-spacing-2);
+  }
+
+  [data-advanced-text-editor] .tiptap .block-button {
+    box-sizing: border-box;
+    cursor: text;
+    width: fit-content;
+  }
+
+  [data-advanced-text-editor] .tiptap .block-divider {
+    border-bottom: none;
+    border-left: none;
+    border-right: none;
+  }
+
+  [data-advanced-text-editor] .tiptap .ProseMirror-selectednode {
+    outline: 2px solid var(--t-color-blue);
+  }
+
+  [data-advanced-text-editor] .ProseMirror-focused {
+    outline: none;
+  }
+
+  [data-advanced-text-editor] .ProseMirror-hideselection * {
+    caret-color: transparent;
+  }
+
+  [data-html-node-inline-editor] .tiptap {
+    color: var(--t-font-color-primary);
+    font-family: var(--t-code-font-family);
+    font-size: var(--t-font-size-sm);
+    outline: none;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+  }
+
+  [data-html-node-inline-editor] .tiptap p {
+    margin: 0;
+  }
+}
