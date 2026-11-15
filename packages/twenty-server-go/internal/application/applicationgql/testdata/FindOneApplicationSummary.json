@@ -1,0 +1,9 @@
+{
+  "name": "FindOneApplicationSummary",
+  "operation": "FindOneApplicationSummary",
+  "fixture": "standard application of a fresh workspace",
+  "endpoint": "/metadata",
+  "query": "query FindOneApplicationSummary($universalIdentifier: UUID!) { findOneApplication(universalIdentifier: $universalIdentifier) { id } }",
+  "variables": {"universalIdentifier": "20202020-64aa-4b6f-b003-9c74b97cee20"},
+  "response": {"data": {"findOneApplication": {"id": "49b628b1-2acf-487e-b40a-4c9f5e53a125"}}}
+}

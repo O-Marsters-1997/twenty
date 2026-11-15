@@ -1,0 +1,28 @@
+schema:
+  - application.graphqls
+exec:
+  filename: generated.go
+  package: applicationgql
+model:
+  filename: models_gen.go
+  package: applicationgql
+resolver:
+  layout: single-file
+  filename: resolver.go
+  package: applicationgql
+  type: Resolver
+models:
+  UUID:
+    model: github.com/99designs/gqlgen/graphql.String
+  DateTime:
+    model: github.com/99designs/gqlgen/graphql.String
+  Application:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/application/store.Application
+  TimelineActivityType:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/application/store.TimelineActivityType
+  TimelineActivityTypeEmit:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/application/store.TimelineActivityTypeEmit
+  TimelineActivityTypeEmitThrough:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/application/store.TimelineActivityTypeEmitThrough
+  UpdateTimelineActivityTypeInput:
+    model: map[string]interface{}

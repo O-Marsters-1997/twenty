@@ -1,0 +1,11 @@
+{
+  "name": "FindManyApplicationsForToolTable",
+  "operation": "FindManyApplicationsForToolTable",
+  "fixture": "standard and custom application of a fresh workspace",
+  "endpoint": "/metadata",
+  "query": "query FindManyApplicationsForToolTable { findManyApplications { id name universalIdentifier logoUrl } }",
+  "response": {"data": {"findManyApplications": [
+    {"id": "ad2ef204-2bbe-4670-b093-6c8ad3c40ca7", "name": "Custom", "universalIdentifier": "ad2ef204-2bbe-4670-b093-6c8ad3c40ca7", "logoUrl": null},
+    {"id": "49b628b1-2acf-487e-b40a-4c9f5e53a125", "name": "Standard", "universalIdentifier": "20202020-64aa-4b6f-b003-9c74b97cee20", "logoUrl": null}
+  ]}}
+}

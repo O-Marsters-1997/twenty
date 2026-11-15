@@ -27,6 +27,9 @@ func TestDefaultTable_RoutesMessagingOperationsToGo(t *testing.T) {
 		"GetWebhooks", "GetWebhook", "CreateWebhook", "UpdateWebhook", "DeleteWebhook",
 		"GetApiKeys", "GetApiKey", "GetApiKeyRoles", "CreateApiKey", "UpdateApiKey", "RevokeApiKey", "AssignRoleToApiKey",
 		"GenerateApiKeyToken", "GeneratePlaygroundToken",
+		"FindManyApplications", "FindManyApplicationsForToolTable", "FindOneApplicationByUniversalIdentifier",
+		"FindOneApplicationName", "FindOneApplicationSummary",
+		"FindManyTimelineActivityTypes", "ResetTimelineActivityType", "UpdateTimelineActivityTypeIsActive",
 	} {
 		if table[operation] != frontdoor.RouteGo {
 			t.Errorf("route of %s = %q, want %q", operation, table[operation], frontdoor.RouteGo)

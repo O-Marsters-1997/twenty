@@ -44,17 +44,11 @@ ExportRecords
 FindAllRecordFormPageLayouts
 FindAllRecordPageLayouts
 FindAllStandalonePageLayouts
-FindManyApplications
-FindManyApplicationsForToolTable
 FindManyCommandMenuItems
 FindManyNavigationMenuItems
-FindManyTimelineActivityTypes
 FindManyValidationRules
 FindMinimalMetadata
 FindOneApplication
-FindOneApplicationByUniversalIdentifier
-FindOneApplicationName
-FindOneApplicationSummary
 FindOnePageLayout
 FindOnePageLayoutType
 GenerateSignedDpa
@@ -95,7 +89,6 @@ ResetCommandMenuItem
 ResetPageLayoutTabToDefault
 ResetPageLayoutToDefault
 ResetPageLayoutWidgetToDefault
-ResetTimelineActivityType
 RevokeAllOtherUserSessions
 RevokeUserSession
 RunCoreWorkflowVersion
@@ -119,7 +112,6 @@ UpdateOneRole
 UpdatePageLayoutWidgetIsActive
 UpdatePageLayoutWithTabsAndWidgets
 UpdatePasswordViaResetToken
-UpdateTimelineActivityTypeIsActive
 UpdateUnsubscribeTopic
 UpdateUserEmail
 UpdateValidationRule
