@@ -7,6 +7,11 @@ import { MAIN_COLOR_TOKENS } from '../design-tokens/color/mainColors';
 import { DESIGN_TOKENS } from '../design-tokens/designTokens';
 import { buildMainColorNames } from '../design-tokens/pipeline/buildMainColorNames';
 import { buildThemeConstants } from '../design-tokens/pipeline/buildThemeConstants';
+import {
+  buildStylexConstants,
+  buildStylexThemes,
+  buildStylexTokens,
+} from '../design-tokens/pipeline/buildStylexTokens';
 import { buildThemeCss } from '../design-tokens/pipeline/buildThemeCss';
 import { buildThemeCommon } from '../design-tokens/pipeline/buildThemeCommon';
 import { buildThemeCssVariables } from '../design-tokens/pipeline/buildThemeCssVariables';
@@ -54,6 +59,18 @@ const sourceOutputs = [
   {
     path: resolve(themeDirectory, 'constants/ThemeCommon.ts'),
     content: buildThemeCommon({ leaves, rootKeys: THEME_COMMON_ROOT_KEYS }),
+  },
+  {
+    path: resolve(themeDirectory, 'tokens.stylex.ts'),
+    content: buildStylexTokens(leaves),
+  },
+  {
+    path: resolve(themeDirectory, 'themes.stylex.ts'),
+    content: buildStylexThemes(leaves),
+  },
+  {
+    path: resolve(themeDirectory, 'constants.stylex.ts'),
+    content: buildStylexConstants(),
   },
   {
     path: resolve(themeDirectory, 'constants/MainColorNames.ts'),

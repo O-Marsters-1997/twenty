@@ -1,3 +1,4 @@
+import stylex from '@stylexjs/unplugin';
 import react from '@vitejs/plugin-react-swc';
 import * as fs from 'fs';
 import { Features } from 'lightningcss';
@@ -19,14 +20,16 @@ const isVitest = isDefined(process.env.VITEST);
 
 const entries = Object.fromEntries(
   Object.keys(packageJson.exports)
-    .filter((subpath) => !subpath.endsWith('.css'))
+    .filter(
+      (subpath) => !subpath.endsWith('.css') && !subpath.endsWith('.stylex'),
+    )
     .map((subpath) => [
       subpath === '.' ? 'index' : subpath.slice(2),
       `src/${subpath}/index.ts`,
     ]),
 );
 
-export default defineConfig(({ command }) => {
+export default defineConfig(({ command, mode }) => {
   const isBuildCommand = command === 'build';
 
   const tsConfigPath = isBuildCommand
@@ -104,6 +107,11 @@ export default defineConfig(({ command }) => {
     cacheDir: 'node_modules/.vite',
     assetsInclude: ['src/**/*.svg'],
     plugins: [
+      stylex.vite({
+        useCSSLayers: true,
+        dev: mode === 'development',
+        runtimeInjection: false,
+      }),
       react(),
       svgr(),
       // Generates typed *.module.scss.d.ts siblings (dev mode only — backed by
