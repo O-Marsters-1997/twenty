@@ -72,20 +72,12 @@ func (f *fakeLoginTokens) IssueForWorkspace(_ context.Context, _, workspace stri
 	return auth.TokenPair{AccessToken: access, RefreshToken: "refresh-token", ExpiresAt: expiresAt, RefreshExpiresAt: expiresAt.Add(time.Hour)}, nil
 }
 
-type memoryCache struct{}
-
-func (memoryCache) SetIfAbsent(context.Context, string, time.Duration) (bool, error) {
-	return true, nil
-}
-
-func (memoryCache) Delete(context.Context, ...string) error { return nil }
-
 func newLoginHarness(t *testing.T) (*harness, *fakeLoginTokens) {
 	t.Helper()
 	h := newHarness(t)
 	tokens := &fakeLoginTokens{}
 	logger := slog.New(slog.NewTextHandler(io.Discard, nil))
-	sessions := auth.NewUserSession(h.pool, memoryCache{}, nil, auth.SessionConfig{ServerURL: "http://localhost:3000", FrontendURL: "http://localhost:3001"}, logger)
+	sessions := auth.NewUserSession(h.pool, &memoryCache{keys: map[string]bool{}}, nil, auth.SessionConfig{ServerURL: "http://localhost:3000", FrontendURL: "http://localhost:3001"}, logger)
 	login := auth.NewTwoFactorLogin(h.pool, h.service, tokens, auth.NewOriginResolver(h.pool, auth.OriginConfig{}), sessions)
 	h.handler = authgql.NewHandler(&authgql.Resolver{TwoFactor: h.service, Login: login}, logger)
 	return h, tokens

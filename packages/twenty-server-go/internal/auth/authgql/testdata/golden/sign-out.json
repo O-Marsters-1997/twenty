@@ -1,0 +1,9 @@
+{
+  "name": "sign-out",
+  "operation": "SignOut",
+  "fixture": "anonymous caller with no session cookie and no refresh token",
+  "endpoint": "/metadata",
+  "query": "mutation SignOut($refreshToken: String) { signOut(refreshToken: $refreshToken) }",
+  "variables": {},
+  "response": {"data":{"signOut":true}}
+}

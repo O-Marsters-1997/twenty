@@ -1,17 +1,3 @@
-type AuthToken {
-  token: String!
-  expiresAt: DateTime!
-}
-
-type AuthTokenPair {
-  accessOrWorkspaceAgnosticToken: AuthToken!
-  refreshToken: AuthToken!
-}
-
-type AuthTokens {
-  tokens: AuthTokenPair!
-}
-
 type TwoFactorAuthenticationRecoveryCodeRedemption {
   tokens: AuthTokenPair
   provisioningUri: String

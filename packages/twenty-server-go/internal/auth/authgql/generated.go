@@ -62,10 +62,13 @@ type ComplexityRoot struct {
 	Mutation struct {
 		DeleteTwoFactorAuthenticationMethod                     func(childComplexity int, twoFactorAuthenticationMethodID string) int
 		GenerateTwoFactorAuthenticationRecoveryCode             func(childComplexity int, userID string, otp *string) int
+		GetAuthTokensFromLoginToken                             func(childComplexity int, loginToken string, origin string) int
 		GetAuthTokensFromOtp                                    func(childComplexity int, loginToken string, otp string, captchaToken *string, origin string) int
 		GetAuthTokensFromTwoFactorAuthenticationRecoveryCode    func(childComplexity int, loginToken string, recoveryCode string, captchaToken *string, origin string) int
 		InitiateOTPProvisioningForAuthenticatedUser             func(childComplexity int) int
+		RenewToken                                              func(childComplexity int, appToken string) int
 		RevokeTwoFactorAuthenticationRecoveryCode               func(childComplexity int, userID string) int
+		SignOut                                                 func(childComplexity int, refreshToken *string) int
 		VerifyTwoFactorAuthenticationMethodForAuthenticatedUser func(childComplexity int, otp string) int
 	}
 
@@ -106,6 +109,9 @@ type MutationResolver interface {
 	RevokeTwoFactorAuthenticationRecoveryCode(ctx context.Context, userID string) (bool, error)
 	GetAuthTokensFromOtp(ctx context.Context, loginToken string, otp string, captchaToken *string, origin string) (*AuthTokens, error)
 	GetAuthTokensFromTwoFactorAuthenticationRecoveryCode(ctx context.Context, loginToken string, recoveryCode string, captchaToken *string, origin string) (*TwoFactorAuthenticationRecoveryCodeRedemption, error)
+	GetAuthTokensFromLoginToken(ctx context.Context, loginToken string, origin string) (*AuthTokens, error)
+	RenewToken(ctx context.Context, appToken string) (*AuthTokens, error)
+	SignOut(ctx context.Context, refreshToken *string) (bool, error)
 }
 type QueryResolver interface {
 	TwoFactorAuthenticationRecoveryStatus(ctx context.Context, userID string) (*TwoFactorAuthenticationRecoveryStatus, error)
@@ -198,6 +204,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.GenerateTwoFactorAuthenticationRecoveryCode(childComplexity, args["userId"].(string), args["otp"].(*string)), true
+	case "Mutation.getAuthTokensFromLoginToken":
+		if e.ComplexityRoot.Mutation.GetAuthTokensFromLoginToken == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_getAuthTokensFromLoginToken_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.GetAuthTokensFromLoginToken(childComplexity, args["loginToken"].(string), args["origin"].(string)), true
 	case "Mutation.getAuthTokensFromOTP":
 		if e.ComplexityRoot.Mutation.GetAuthTokensFromOtp == nil {
 			break
@@ -226,6 +243,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.InitiateOTPProvisioningForAuthenticatedUser(childComplexity), true
+	case "Mutation.renewToken":
+		if e.ComplexityRoot.Mutation.RenewToken == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_renewToken_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.RenewToken(childComplexity, args["appToken"].(string)), true
 	case "Mutation.revokeTwoFactorAuthenticationRecoveryCode":
 		if e.ComplexityRoot.Mutation.RevokeTwoFactorAuthenticationRecoveryCode == nil {
 			break
@@ -237,6 +265,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.RevokeTwoFactorAuthenticationRecoveryCode(childComplexity, args["userId"].(string)), true
+	case "Mutation.signOut":
+		if e.ComplexityRoot.Mutation.SignOut == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_signOut_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.SignOut(childComplexity, args["refreshToken"].(*string)), true
 	case "Mutation.verifyTwoFactorAuthenticationMethodForAuthenticatedUser":
 		if e.ComplexityRoot.Mutation.VerifyTwoFactorAuthenticationMethodForAuthenticatedUser == nil {
 			break
@@ -396,7 +435,7 @@ func newExecutionContext(
 	}
 }
 
-//go:embed "twofactor.graphqls" "login.graphqls"
+//go:embed "login.graphqls" "session.graphqls" "twofactor.graphqls"
 var sourcesFS embed.FS
 
 func sourceData(filename string) string {
@@ -408,8 +447,9 @@ func sourceData(filename string) string {
 }
 
 var sources = []*ast.Source{
-	{Name: "twofactor.graphqls", Input: sourceData("twofactor.graphqls"), BuiltIn: false},
 	{Name: "login.graphqls", Input: sourceData("login.graphqls"), BuiltIn: false},
+	{Name: "session.graphqls", Input: sourceData("session.graphqls"), BuiltIn: false},
+	{Name: "twofactor.graphqls", Input: sourceData("twofactor.graphqls"), BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
@@ -653,6 +693,28 @@ func (ec *executionContext) field_Mutation_generateTwoFactorAuthenticationRecove
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_getAuthTokensFromLoginToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "loginToken",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["loginToken"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "origin",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["origin"] = arg1
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_getAuthTokensFromOTP_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -729,6 +791,20 @@ func (ec *executionContext) field_Mutation_getAuthTokensFromTwoFactorAuthenticat
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_renewToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "appToken",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["appToken"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_revokeTwoFactorAuthenticationRecoveryCode_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -740,6 +816,20 @@ func (ec *executionContext) field_Mutation_revokeTwoFactorAuthenticationRecovery
 		return nil, err
 	}
 	args["userId"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_signOut_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "refreshToken",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOString2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["refreshToken"] = arg0
 	return args, nil
 }
 
@@ -1337,6 +1427,138 @@ func (ec *executionContext) fieldContext_Mutation_getAuthTokensFromTwoFactorAuth
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_getAuthTokensFromTwoFactorAuthenticationRecoveryCode_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_getAuthTokensFromLoginToken(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_getAuthTokensFromLoginToken(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().GetAuthTokensFromLoginToken(ctx, fc.Args["loginToken"].(string), fc.Args["origin"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *AuthTokens) graphql.Marshaler {
+			return ec.marshalNAuthTokens2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐAuthTokens(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_getAuthTokensFromLoginToken(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_AuthTokens(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_getAuthTokensFromLoginToken_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_renewToken(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_renewToken(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().RenewToken(ctx, fc.Args["appToken"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *AuthTokens) graphql.Marshaler {
+			return ec.marshalNAuthTokens2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐAuthTokens(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_renewToken(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_AuthTokens(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_renewToken_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_signOut(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_signOut(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().SignOut(ctx, fc.Args["refreshToken"].(*string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_signOut(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_signOut_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -2976,6 +3198,27 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "getAuthTokensFromTwoFactorAuthenticationRecoveryCode":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_getAuthTokensFromTwoFactorAuthenticationRecoveryCode(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "getAuthTokensFromLoginToken":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_getAuthTokensFromLoginToken(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "renewToken":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_renewToken(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "signOut":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_signOut(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
