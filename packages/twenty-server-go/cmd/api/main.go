@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/signal"
 	"slices"
+	"strings"
 	"syscall"
 	"time"
 
@@ -109,11 +110,13 @@ func run() error {
 	)
 	authHandler := authgql.NewHandler(newAuthResolver(pool, twoFactor, passwordLogins, stack), logger)
 
+	geoClient := &http.Client{Timeout: 10 * time.Second}
+	geoDriverName := strings.ReplaceAll(strings.ToUpper(valueOrDefault(os.Getenv("ADDRESS_AUTOCOMPLETE_DRIVER"), geo.DriverGooglePlaces)), "-", "_")
 	geoDriver, err := geo.NewDriver(geo.Config{
 		Enabled:      os.Getenv("IS_MAPS_AND_ADDRESS_AUTOCOMPLETE_ENABLED") == "true",
-		Driver:       valueOrDefault(os.Getenv("ADDRESS_AUTOCOMPLETE_DRIVER"), geo.DriverGooglePlaces),
+		Driver:       geoDriverName,
 		GoogleAPIKey: os.Getenv("GOOGLE_MAP_API_KEY"),
-	}, &http.Client{Timeout: 10 * time.Second})
+	}, geoClient)
 	if err != nil {
 		return err
 	}

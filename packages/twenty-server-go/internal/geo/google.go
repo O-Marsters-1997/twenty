@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 )
 
 type googlePlaces struct {
@@ -21,12 +22,7 @@ type googleComponent struct {
 }
 
 func (c googleComponent) is(kind string) bool {
-	for _, t := range c.Types {
-		if t == kind {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(c.Types, kind)
 }
 
 func getJSON(ctx context.Context, client *http.Client, target string, out any) error {
