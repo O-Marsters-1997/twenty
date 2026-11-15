@@ -1,22 +1,28 @@
-import { styled } from '@linaria/react';
 import { IconChevronLeft } from 'twenty-ui/icon';
 import { IconButton } from 'twenty-ui/components/input';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { borderColor, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  align-items: center;
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  height: 40px;
-  padding: 0 ${themeCssVariables.spacing[2]};
-`;
-
-const StyledText = styled.span`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.medium};
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: borderColor['--t-border-color-light'],
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    height: '40px',
+    paddingTop: '0',
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: '0',
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+  text: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+  },
+});
 
 type SidePanelSubPageNavigationHeaderProps = {
   title: string;
@@ -28,7 +34,7 @@ export const SidePanelSubPageNavigationHeader = ({
   title,
 }: SidePanelSubPageNavigationHeaderProps) => {
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <IconButton
         onClick={onBackClick}
         variant="ghost"
@@ -37,7 +43,7 @@ export const SidePanelSubPageNavigationHeader = ({
       >
         <IconChevronLeft />
       </IconButton>
-      <StyledText>{title}</StyledText>
-    </StyledContainer>
+      <span {...stylex.props(styles.text)}>{title}</span>
+    </div>
   );
 };

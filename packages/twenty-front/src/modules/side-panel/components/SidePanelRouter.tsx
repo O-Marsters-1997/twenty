@@ -10,19 +10,21 @@ import { sidePanelNavigationStackState } from '@/side-panel/states/sidePanelNavi
 import { WorkspaceSurfaceContext } from '@/ui/layout/contexts/WorkspaceSurfaceContext';
 import { WorkspaceSurfaceHeaderPortalContext } from '@/ui/layout/contexts/WorkspaceSurfaceHeaderPortalContext';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { styled } from '@linaria/react';
 import { motion } from 'framer-motion';
 import React, { useMemo, useState } from 'react';
 import { SidePanelPages } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledSidePanelContent = styled.div`
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-`;
+const styles = stylex.create({
+  sidePanelContent: {
+    flex: '1',
+    minHeight: '0',
+    overflowY: 'auto',
+    overscrollBehavior: 'contain',
+  },
+});
 
 export const SidePanelRouter = () => {
   const sidePanelNavigationStack = useAtomStateValue(
@@ -99,7 +101,7 @@ export const SidePanelRouter = () => {
                   setHeaderActionsPortal={setHeaderActionsPortal}
                 />
               </motion.div>
-              <StyledSidePanelContent>
+              <div {...stylex.props(styles.sidePanelContent)}>
                 <CommandMenuContextProvider
                   displayType="listItem"
                   containerType={CommandMenuItemContainerType.CommandMenuList}
@@ -108,7 +110,7 @@ export const SidePanelRouter = () => {
                     {sidePanelPageComponent}
                   </SidePanelSubPageRouter>
                 </CommandMenuContextProvider>
-              </StyledSidePanelContent>
+              </div>
             </WorkspaceSurfaceHeaderPortalContext.Provider>
           </WorkspaceSurfaceContext.Provider>
         </PageLayoutSidePanelTargetContext.Provider>

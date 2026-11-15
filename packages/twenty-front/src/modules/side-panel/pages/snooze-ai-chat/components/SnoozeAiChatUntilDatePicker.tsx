@@ -1,24 +1,29 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useId, useState } from 'react';
 import { Temporal } from 'temporal-polyfill';
 import { isDefined } from 'twenty-shared/utils';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { useUpdateAgentChatThreadInboxState } from '@/ai/hooks/useUpdateAgentChatThreadInboxState';
 import { useFormatAgentChatThreadDate } from '@/ai/hooks/useFormatAgentChatThreadDate';
 import { DateTimePicker } from '@/ui/input/components/internal/date/components/DateTimePicker';
 import { useUserTimezone } from '@/ui/input/components/internal/date/hooks/useUserTimezone';
 import { AgentChatInboxAction } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  padding: ${themeCssVariables.spacing[2]};
-  width: fit-content;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-2'],
+    width: 'fit-content',
+  },
+});
 
 type SnoozeAiChatUntilDatePickerProps = {
   threadIds: string[];
@@ -77,7 +82,7 @@ export const SnoozeAiChatUntilDatePicker = ({
   };
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <DateTimePicker
         instanceId={dateTimePickerInstanceId}
         date={snoozedUntil}
@@ -98,6 +103,6 @@ export const SnoozeAiChatUntilDatePicker = ({
           ? t`Snooze until ${snoozedUntilLabel}`
           : t`Pick a time in the future`}
       </Button>
-    </StyledContainer>
+    </div>
   );
 };

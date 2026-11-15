@@ -5,28 +5,32 @@ import { useToggleRecordTableWidgetFieldVisibility } from '@/page-layout/widgets
 import { DraggableItem } from '@/ui/layout/draggable-list/components/DraggableItem';
 import { DraggableList } from '@/ui/layout/draggable-list/components/DraggableList';
 import { type DraggableListDropResult } from '@/ui/layout/draggable-list/types/DraggableListDropResult';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { useMemo } from 'react';
 import { LightIconButton } from 'twenty-ui/components/input';
 import { MenuItemDraggable } from 'twenty-ui/components/navigation';
 import { IconEye, IconEyeOff, useIcons } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledFieldListContainer = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  overflow-y: auto;
-`;
-
-const StyledSectionLabel = styled.div`
-  color: ${themeCssVariables.font.color.light};
-  font-size: ${themeCssVariables.font.size.xs};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-  padding: ${themeCssVariables.spacing[1]} ${themeCssVariables.spacing[2]};
-  text-transform: uppercase;
-`;
+const styles = stylex.create({
+  fieldListContainer: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    overflowY: 'auto',
+  },
+  sectionLabel: {
+    color: fontColor['--t-font-color-light'],
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    paddingTop: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-2'],
+    textTransform: 'uppercase',
+  },
+});
 
 type RecordTableSettingsFieldVisibilityProps = {
   viewId: string;
@@ -83,8 +87,8 @@ export const RecordTableSettingsFieldVisibility = ({
   };
 
   return (
-    <StyledFieldListContainer>
-      <StyledSectionLabel>Visible</StyledSectionLabel>
+    <div {...stylex.props(styles.fieldListContainer)}>
+      <div {...stylex.props(styles.sectionLabel)}>Visible</div>
       {visibleFieldItems.length > 0 && (
         <DraggableList
           onDragEnd={handleDragEnd}
@@ -130,7 +134,7 @@ export const RecordTableSettingsFieldVisibility = ({
       )}
       {hiddenFieldItems.length > 0 && (
         <>
-          <StyledSectionLabel>Hidden</StyledSectionLabel>
+          <div {...stylex.props(styles.sectionLabel)}>Hidden</div>
           {hiddenFieldItems.map((fieldItem) => (
             <MenuItemDraggable
               key={fieldItem.viewField.id}
@@ -160,6 +164,6 @@ export const RecordTableSettingsFieldVisibility = ({
           ))}
         </>
       )}
-    </StyledFieldListContainer>
+    </div>
   );
 };

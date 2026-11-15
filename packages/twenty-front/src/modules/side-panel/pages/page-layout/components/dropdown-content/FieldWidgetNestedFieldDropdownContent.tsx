@@ -1,8 +1,8 @@
 import { SelectOptionIcon } from '@/ui/input/components/SelectOptionIcon';
 import { type FieldMetadataItem } from '@/object-metadata/types/FieldMetadataItem';
 import {
-  StyledPageLayoutDropdownContentContainer,
-  StyledPageLayoutDropdownMenuItemsContainer,
+  PageLayoutDropdownContentContainer,
+  PageLayoutDropdownMenuItemsContainer,
 } from '@/side-panel/pages/page-layout/components/dropdown-content/PageLayoutDropdownContentContainer';
 import { DropdownMenuHeader } from '@/ui/layout/dropdown/components/DropdownMenuHeader/DropdownMenuHeader';
 import { DropdownMenuHeaderLeftComponent } from '@/ui/layout/dropdown/components/DropdownMenuHeader/internal/DropdownMenuHeaderLeftComponent';
@@ -71,7 +71,7 @@ export const FieldWidgetNestedFieldDropdownContent = ({
   );
 
   return (
-    <StyledPageLayoutDropdownContentContainer>
+    <PageLayoutDropdownContentContainer>
       <DropdownMenuHeader
         StartComponent={
           <DropdownMenuHeaderLeftComponent
@@ -82,7 +82,7 @@ export const FieldWidgetNestedFieldDropdownContent = ({
       >
         {drillInFieldMetadataItem.label}
       </DropdownMenuHeader>
-      <StyledPageLayoutDropdownMenuItemsContainer>
+      <PageLayoutDropdownMenuItemsContainer>
         <SelectableList
           selectableListInstanceId={dropdownId}
           focusId={dropdownId}
@@ -104,7 +104,7 @@ export const FieldWidgetNestedFieldDropdownContent = ({
             ),
           )}
         </SelectableList>
-      </StyledPageLayoutDropdownMenuItemsContainer>
-    </StyledPageLayoutDropdownContentContainer>
+      </PageLayoutDropdownMenuItemsContainer>
+    </PageLayoutDropdownContentContainer>
   );
 };

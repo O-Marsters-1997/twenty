@@ -1,38 +1,48 @@
-import { styled } from '@linaria/react';
 import { IconAlignCenter, IconAlignLeft, IconAlignRight } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
 
-import { StyledEmailFieldLabel } from '@/side-panel/pages/email-block-settings/components/StyledEmailFieldLabel';
+import { EmailFieldLabel } from '@/side-panel/pages/email-block-settings/components/EmailFieldLabel';
+import * as stylex from '@stylexjs/stylex';
+import {
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledAlignRow = styled.div`
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledAlignButton = styled.button<{ isActive: boolean }>`
-  align-items: center;
-  background: ${({ isActive }) =>
-    isActive ? themeCssVariables.background.transparent.medium : 'none'};
-  border: 1px solid
-    ${({ isActive }) =>
-      isActive ? themeCssVariables.border.color.strong : 'transparent'};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  box-sizing: border-box;
-  color: ${({ isActive }) =>
-    isActive
-      ? themeCssVariables.font.color.primary
-      : themeCssVariables.font.color.tertiary};
-  cursor: pointer;
-  display: flex;
-  height: 28px;
-  justify-content: center;
-  padding: 0;
-  width: 32px;
-
-  &:hover {
-    background: ${themeCssVariables.background.transparent.light};
-  }
-`;
+const styles = stylex.create({
+  alignRow: {
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+  },
+  alignButton: {
+    alignItems: 'center',
+    backgroundColor: {
+      default: 'transparent',
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
+    borderColor: 'transparent',
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    boxSizing: 'border-box',
+    color: fontColor['--t-font-color-tertiary'],
+    cursor: 'pointer',
+    display: 'flex',
+    height: '28px',
+    justifyContent: 'center',
+    padding: 0,
+    width: '32px',
+  },
+  alignButtonActive: {
+    backgroundColor: {
+      default: backgroundTransparent['--t-background-transparent-medium'],
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
+    borderColor: borderColor['--t-border-color-strong'],
+    color: fontColor['--t-font-color-primary'],
+  },
+});
 
 const CAMPAIGN_ALIGN_OPTIONS = [
   { align: 'left', Icon: IconAlignLeft },
@@ -52,21 +62,24 @@ export const EmailAlignmentInput = ({
   onChange,
 }: EmailAlignmentInputProps) => (
   <div>
-    <StyledEmailFieldLabel>{label}</StyledEmailFieldLabel>
-    <StyledAlignRow>
+    <EmailFieldLabel>{label}</EmailFieldLabel>
+    <div {...stylex.props(styles.alignRow)}>
       {CAMPAIGN_ALIGN_OPTIONS.map(({ align, Icon }) => (
-        <StyledAlignButton
+        <button
           key={align}
           type="button"
           aria-label={align}
           aria-pressed={value === align}
           title={align}
-          isActive={value === align}
+          {...stylex.props(
+            styles.alignButton,
+            value === align && styles.alignButtonActive,
+          )}
           onClick={() => onChange(align)}
         >
           <Icon size={16} />
-        </StyledAlignButton>
+        </button>
       ))}
-    </StyledAlignRow>
+    </div>
   </div>
 );

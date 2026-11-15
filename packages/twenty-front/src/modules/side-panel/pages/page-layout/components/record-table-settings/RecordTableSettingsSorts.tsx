@@ -7,20 +7,25 @@ import { useRecordTableWidgetViewForDisplay } from '@/page-layout/widgets/record
 import { RecordTableSettingsSortsContent } from '@/side-panel/pages/page-layout/components/record-table-settings/RecordTableSettingsSortsContent';
 import { RecordTableSettingsSortsInitializeStateEffect } from '@/side-panel/pages/page-layout/components/record-table-settings/RecordTableSettingsSortsInitializeStateEffect';
 import { InputLabel } from '@/ui/input/components/internal/InputLabel/InputLabel';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { useIcons } from 'twenty-ui/icon';
 import { type SelectOption } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { ViewSortDirection } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledSortSettingsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  padding: ${themeCssVariables.spacing[3]};
-`;
+const styles = stylex.create({
+  sortSettingsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingBottom: spacing['--t-spacing-3'],
+    paddingLeft: spacing['--t-spacing-3'],
+  },
+});
 
 type RecordTableSettingsSortsProps = {
   viewId: string;
@@ -82,7 +87,7 @@ export const RecordTableSettingsSorts = ({
   ];
 
   return (
-    <StyledSortSettingsContainer>
+    <div {...stylex.props(styles.sortSettingsContainer)}>
       <InputLabel>{t`Sorts`}</InputLabel>
       <RecordSortsComponentInstanceContext.Provider
         value={{ instanceId: recordIndexId }}
@@ -94,6 +99,6 @@ export const RecordTableSettingsSorts = ({
         />
         <RecordTableSettingsSortsInitializeStateEffect view={view} />
       </RecordSortsComponentInstanceContext.Provider>
-    </StyledSortSettingsContainer>
+    </div>
   );
 };

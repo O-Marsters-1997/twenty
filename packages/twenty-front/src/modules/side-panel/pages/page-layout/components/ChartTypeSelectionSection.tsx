@@ -1,10 +1,10 @@
 import { GRAPH_TYPE_INFORMATION } from '@/side-panel/pages/page-layout/constants/GraphTypeInformation';
-import { styled } from '@linaria/react';
 
 import { GraphType } from '@/side-panel/pages/page-layout/types/GraphType';
 import { t } from '@lingui/core/macro';
 import { MenuPicker } from 'twenty-ui/components/navigation';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const graphTypeOptions = [
   GraphType.VERTICAL_BAR,
@@ -14,11 +14,13 @@ const graphTypeOptions = [
   GraphType.AGGREGATE,
 ];
 
-const StyledChartTypeSelectionContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  chartTypeSelectionContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: spacing['--t-spacing-2'],
+  },
+});
 
 type ChartTypeSelectionSectionProps = {
   currentGraphType: GraphType;
@@ -30,7 +32,7 @@ export const ChartTypeSelectionSection = ({
   setCurrentGraphType,
 }: ChartTypeSelectionSectionProps) => {
   return (
-    <StyledChartTypeSelectionContainer>
+    <div {...stylex.props(styles.chartTypeSelectionContainer)}>
       {graphTypeOptions.map((graphType) => {
         return (
           <MenuPicker
@@ -46,6 +48,6 @@ export const ChartTypeSelectionSection = ({
           />
         );
       })}
-    </StyledChartTypeSelectionContainer>
+    </div>
   );
 };

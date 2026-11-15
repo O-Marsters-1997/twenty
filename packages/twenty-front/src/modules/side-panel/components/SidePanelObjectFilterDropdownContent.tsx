@@ -2,7 +2,6 @@ import { ObjectMetadataIcon } from '@/object-metadata/components/ObjectMetadataI
 import { useReadableObjectMetadataItems } from '@/object-metadata/hooks/useReadableObjectMetadataItems';
 import { sidePanelShowHiddenObjectsState } from '@/side-panel/states/sidePanelShowHiddenObjectsState';
 import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useState } from 'react';
 import { OBJECTS_WITH_CHANNEL_VISIBILITY_CONSTRAINTS } from 'twenty-shared/constants';
@@ -10,15 +9,24 @@ import { TintedIconTile } from 'twenty-ui/components/data-display';
 import { Dropdown } from 'twenty-ui/components/navigation';
 import { SettingsRow } from 'twenty-ui/components/settings';
 import { IconCube } from 'twenty-ui/icon';
-import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { borderColor, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledHeader = styled.div`
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  color: ${themeCssVariables.font.color.primary};
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.medium};
-  padding: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  header: {
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: borderColor['--t-border-color-light'],
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+});
 
 type SidePanelObjectFilterDropdownContentProps = {
   selectedObjectNameSingular: string | null;
@@ -62,7 +70,7 @@ export const SidePanelObjectFilterDropdownContent = ({
 
   return (
     <>
-      <StyledHeader>{t`Object`}</StyledHeader>
+      <div {...stylex.props(styles.header)}>{t`Object`}</div>
       <Dropdown.Search
         value={filterSearch}
         placeholder={t`Search`}

@@ -1,8 +1,6 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useId, useState } from 'react';
 import { IconCalendar, IconClock } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { useUpdateAgentChatThreadInboxState } from '@/ai/hooks/useUpdateAgentChatThreadInboxState';
 import { useFormatAgentChatThreadDate } from '@/ai/hooks/useFormatAgentChatThreadDate';
@@ -22,12 +20,19 @@ import { useOpenDropdown } from '@/ui/layout/dropdown/hooks/useOpenDropdown';
 import { SelectableListItem } from '@/ui/layout/selectable-list/components/SelectableListItem';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { AgentChatInboxAction } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const SNOOZE_UNTIL_DATE_ITEM_ID = 'snoozeUntilDate';
 
-const StyledSeparatorContainer = styled.div`
-  padding: ${themeCssVariables.spacing[1]} 0;
-`;
+const styles = stylex.create({
+  separatorContainer: {
+    paddingTop: spacing['--t-spacing-1'],
+    paddingRight: '0',
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: '0',
+  },
+});
 
 export const SidePanelSnoozeAiChatPage = () => {
   const { t } = useLingui();
@@ -93,9 +98,9 @@ export const SidePanelSnoozeAiChatPage = () => {
           />
         </SelectableListItem>
       ))}
-      <StyledSeparatorContainer>
+      <div {...stylex.props(styles.separatorContainer)}>
         <DropdownMenuSeparator />
-      </StyledSeparatorContainer>
+      </div>
       <SelectableListItem
         itemId={SNOOZE_UNTIL_DATE_ITEM_ID}
         onEnter={() =>

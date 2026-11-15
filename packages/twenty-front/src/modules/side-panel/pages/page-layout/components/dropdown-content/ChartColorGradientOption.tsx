@@ -2,10 +2,11 @@ import { CHART_SETTINGS_PALETTE_COLOR_GROUP_COUNT } from '@/side-panel/pages/pag
 import { createGraphColorRegistry } from '@/page-layout/widgets/graph/utils/createGraphColorRegistry';
 import { generateGroupColor } from '@/page-layout/widgets/graph/utils/generateGroupColor';
 import { SelectableListItem } from '@/ui/layout/selectable-list/components/SelectableListItem';
-import { styled } from '@linaria/react';
 import { ColorSample } from 'twenty-ui/primitives/data-display';
 import { ListItemButton } from 'twenty-ui/components/navigation';
-import { useTheme, themeCssVariables, type ThemeColor } from 'twenty-ui/theme';
+import { useTheme, type ThemeColor } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type ChartColorGradientOptionProps = {
   colorOption: {
@@ -18,11 +19,13 @@ type ChartColorGradientOptionProps = {
   onSelectColor: (colorName: ThemeColor | 'auto') => void;
 };
 
-const StyledColorSamplesContainer = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[0.5]};
-`;
+const styles = stylex.create({
+  colorSamplesContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-0_5'],
+  },
+});
 
 export const ChartColorGradientOption = ({
   colorOption,
@@ -36,7 +39,7 @@ export const ChartColorGradientOption = ({
   const colorRegistry = createGraphColorRegistry(theme.color);
 
   const colorSamples = (
-    <StyledColorSamplesContainer>
+    <div {...stylex.props(styles.colorSamplesContainer)}>
       {Array.from({ length: CHART_SETTINGS_PALETTE_COLOR_GROUP_COUNT }).map(
         (_, index) => {
           const colorScheme = colorRegistry[colorName];
@@ -52,7 +55,7 @@ export const ChartColorGradientOption = ({
           );
         },
       )}
-    </StyledColorSamplesContainer>
+    </div>
   );
 
   return (

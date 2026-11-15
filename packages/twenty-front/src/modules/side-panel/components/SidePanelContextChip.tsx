@@ -1,55 +1,65 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isNonEmptyString } from '@sniptt/guards';
+import * as stylex from '@stylexjs/stylex';
 import { Fragment } from 'react/jsx-runtime';
 import { isDefined } from 'twenty-shared/utils';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
-import { themeCssVariables } from 'twenty-ui/theme';
+import {
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+  textLineHeight,
+} from 'twenty-ui/theme/tokens.stylex';
 
 import { type SidePanelNavigationStackItem } from '@/side-panel/states/sidePanelNavigationStackState';
 
-const StyledChip = styled.button<{
-  withText: boolean;
-  maxWidth?: string;
-  onClick?: () => void;
-}>`
-  align-items: center;
-  all: unset;
-  background: ${themeCssVariables.background.transparent.light};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.md};
-  box-sizing: border-box;
-  color: ${themeCssVariables.font.color.primary};
-  cursor: ${({ onClick }) => (isDefined(onClick) ? 'pointer' : 'default')};
-  display: flex;
-  font-family: inherit;
-  font-size: ${themeCssVariables.font.size.sm};
-  font-weight: ${themeCssVariables.font.weight.medium};
-  gap: ${themeCssVariables.spacing[1]};
-  height: ${themeCssVariables.spacing[6]};
-  justify-content: center;
-  line-height: ${themeCssVariables.text.lineHeight.lg};
-  max-width: ${({ maxWidth }) => maxWidth ?? ''};
-
-  &:hover {
-    background: ${({ onClick }) =>
-      isDefined(onClick)
-        ? themeCssVariables.background.transparent.medium
-        : themeCssVariables.background.transparent.light};
-  }
-  padding: 0
-    ${({ withText }) =>
-      withText ? themeCssVariables.spacing[2] : themeCssVariables.spacing[1]};
-`;
-
-const StyledIconsContainer = styled.div`
-  align-items: center;
-  display: flex;
-`;
-
-const StyledEmptyText = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-`;
+const styles = stylex.create({
+  chip: {
+    all: 'unset',
+    backgroundColor: backgroundTransparent['--t-background-transparent-light'],
+    borderColor: borderColor['--t-border-color-medium'],
+    borderRadius: borderRadius['--t-border-radius-md'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    boxSizing: 'border-box',
+    color: fontColor['--t-font-color-primary'],
+    cursor: 'default',
+    display: 'flex',
+    fontFamily: 'inherit',
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    gap: spacing['--t-spacing-1'],
+    height: spacing['--t-spacing-6'],
+    justifyContent: 'center',
+    lineHeight: textLineHeight['--t-text-line-height-lg'],
+    paddingBlock: '0',
+    paddingInline: spacing['--t-spacing-1'],
+  },
+  chipWithText: {
+    paddingInline: spacing['--t-spacing-2'],
+  },
+  chipClickable: {
+    backgroundColor: {
+      default: backgroundTransparent['--t-background-transparent-light'],
+      ':hover': backgroundTransparent['--t-background-transparent-medium'],
+    },
+    cursor: 'pointer',
+  },
+  chipMaxWidth: (maxWidth: string) => ({
+    maxWidth,
+  }),
+  iconsContainer: {
+    alignItems: 'center',
+    display: 'flex',
+  },
+  emptyText: {
+    color: fontColor['--t-font-color-tertiary'],
+  },
+});
 
 export type SidePanelContextChipProps = {
   Icons: React.ReactNode[];
@@ -70,24 +80,28 @@ export const SidePanelContextChip = ({
   forceEmptyText = false,
 }: SidePanelContextChipProps) => {
   return (
-    <StyledChip
-      withText={isNonEmptyString(text)}
+    <button
+      {...stylex.props(
+        styles.chip,
+        isNonEmptyString(text) && styles.chipWithText,
+        isDefined(onClick) && styles.chipClickable,
+        isDefined(maxWidth) && styles.chipMaxWidth(maxWidth),
+      )}
       onClick={onClick}
       data-testid={testId}
-      maxWidth={maxWidth}
     >
-      <StyledIconsContainer>
+      <div {...stylex.props(styles.iconsContainer)}>
         {Icons.map((Icon, index) => (
           <Fragment key={index}>{Icon}</Fragment>
         ))}
-      </StyledIconsContainer>
+      </div>
       {text?.trim?.() ? (
         <OverflowingTextWithTooltip text={text} />
       ) : !forceEmptyText ? (
-        <StyledEmptyText>{t`Untitled`}</StyledEmptyText>
+        <div {...stylex.props(styles.emptyText)}>{t`Untitled`}</div>
       ) : (
         ''
       )}
-    </StyledChip>
+    </button>
   );
 };

@@ -2,14 +2,16 @@ import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/use
 import { useFlowOrThrow } from '@/workflow/hooks/useFlowOrThrow';
 import { workflowSelectedNodeComponentState } from '@/workflow/workflow-diagram/states/workflowSelectedNodeComponentState';
 import { WorkflowStepDetail } from '@/workflow/workflow-steps/components/WorkflowStepDetail';
-import { styled } from '@linaria/react';
 import { isDefined } from 'twenty-shared/utils';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+  },
+});
 
 export const SidePanelWorkflowViewStepContent = () => {
   const flow = useFlowOrThrow();
@@ -22,13 +24,13 @@ export const SidePanelWorkflowViewStepContent = () => {
   }
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <WorkflowStepDetail
         stepId={workflowSelectedNode}
         trigger={flow.trigger}
         steps={flow.steps}
         readonly
       />
-    </StyledContainer>
+    </div>
   );
 };

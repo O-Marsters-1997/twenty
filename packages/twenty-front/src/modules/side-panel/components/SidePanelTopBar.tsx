@@ -17,7 +17,7 @@ import { sidePanelSearchState } from '@/side-panel/states/sidePanelSearchState';
 import { usePushFocusItemToFocusStack } from '@/ui/utilities/focus/hooks/usePushFocusItemToFocusStack';
 import { useRemoveFocusItemFromFocusStackById } from '@/ui/utilities/focus/hooks/useRemoveFocusItemFromFocusStackById';
 import { FocusComponentType } from '@/ui/utilities/focus/types/FocusComponentType';
-import { styled } from '@linaria/react';
+import { headerTitlePortalMarker } from '@/side-panel/components/SidePanelTopBar.stylex';
 import { useLingui } from '@lingui/react/macro';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
@@ -26,92 +26,106 @@ import { useRef } from 'react';
 import { Key } from 'ts-key-enum';
 import { SidePanelPages } from 'twenty-shared/types';
 import { useIsMobile } from 'twenty-ui/utilities';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  background,
+  borderColor,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledInputContainer = styled.div<{ isMobile: boolean }>`
-  align-items: center;
-  background-color: ${themeCssVariables.background.secondary};
-  border: none;
-  border-bottom: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: 0;
-  box-sizing: border-box;
-
-  display: flex;
-  flex-shrink: 0;
-  font-size: ${themeCssVariables.font.size.lg};
-  gap: ${themeCssVariables.spacing[4]};
-  height: ${({ isMobile }) =>
-    isMobile ? SIDE_PANEL_TOP_BAR_HEIGHT_MOBILE : SIDE_PANEL_TOP_BAR_HEIGHT}px;
-  justify-content: space-between;
-  margin: 0;
-
-  outline: none;
-  overflow: hidden;
-  padding: 0 ${themeCssVariables.spacing[2]};
-  position: relative;
-`;
-
-const StyledInput = styled.input`
-  background-color: transparent;
-  border: none;
-  border-radius: 0;
-  color: ${themeCssVariables.font.color.primary};
-  flex: 1;
-  font-size: ${themeCssVariables.font.size.md};
-  height: 24px;
-  margin: 0;
-  outline: none;
-  padding: 0;
-
-  &::placeholder {
-    color: ${themeCssVariables.font.color.light};
-    font-weight: ${themeCssVariables.font.weight.medium};
-  }
-`;
-
-const StyledContentContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex: 1;
-  gap: ${themeCssVariables.spacing[1]};
-  min-width: 0;
-  overflow: hidden;
-`;
-
-const StyledHeaderTitleContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex: 1;
-  min-width: 0;
-`;
-
-const StyledHeaderTitlePortal = styled.div`
-  align-items: center;
-  display: none;
-  min-width: 0;
-
-  &:not(:empty) {
-    display: flex;
-    flex: 1;
-  }
-
-  &:not(:empty) + [data-side-panel-page-info] {
-    display: none;
-  }
-`;
-
-const StyledHeaderActionsPortal = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledRightControlsContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-shrink: 0;
-  gap: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  inputContainer: (height: number) => ({
+    alignItems: 'center',
+    backgroundColor: background['--t-background-secondary'],
+    borderBottomColor: borderColor['--t-border-color-medium'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
+    borderRadius: 0,
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexShrink: 0,
+    fontSize: fontSize['--t-font-size-lg'],
+    gap: spacing['--t-spacing-4'],
+    height: `${height}px`,
+    justifyContent: 'space-between',
+    margin: 0,
+    outline: 'none',
+    overflow: 'hidden',
+    paddingBlock: 0,
+    paddingInline: spacing['--t-spacing-2'],
+    position: 'relative',
+  }),
+  headerTitlePortal: {
+    alignItems: 'center',
+    display: {
+      default: 'none',
+      ':not(:empty)': 'flex',
+    },
+    flex: {
+      default: null,
+      ':not(:empty)': '1',
+    },
+    minWidth: 0,
+  },
+  pageInfo: {
+    display: {
+      default: null,
+      [stylex.when.siblingBefore(':not(:empty)', headerTitlePortalMarker)]:
+        'none',
+    },
+  },
+  input: {
+    backgroundColor: 'transparent',
+    borderStyle: 'none',
+    borderTopLeftRadius: '0',
+    borderTopRightRadius: '0',
+    borderBottomRightRadius: '0',
+    borderBottomLeftRadius: '0',
+    color: { default: fontColor['--t-font-color-primary'], '::placeholder': fontColor['--t-font-color-light'] },
+    flex: '1',
+    fontSize: fontSize['--t-font-size-md'],
+    height: '24px',
+    marginTop: '0',
+    marginRight: '0',
+    marginBottom: '0',
+    marginLeft: '0',
+    outline: 'none',
+    paddingTop: '0',
+    paddingRight: '0',
+    paddingBottom: '0',
+    paddingLeft: '0',
+    fontWeight: { default: null, '::placeholder': fontWeight['--t-font-weight-medium'] },
+  },
+  contentContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flex: '1',
+    gap: spacing['--t-spacing-1'],
+    minWidth: '0',
+    overflow: 'hidden',
+  },
+  headerTitleContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flex: '1',
+    minWidth: '0',
+  },
+  headerActionsPortal: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+  },
+  rightControlsContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexShrink: '0',
+    gap: spacing['--t-spacing-1'],
+  },
+});
 
 export const SidePanelTopBar = ({
   setHeaderTitlePortal,
@@ -212,12 +226,20 @@ export const SidePanelTopBar = ({
   const lastChip = contextChips.at(-1);
 
   return (
-    <StyledInputContainer isMobile={isMobile}>
+    <div
+      {...stylex.props(
+        styles.inputContainer(
+          isMobile
+            ? SIDE_PANEL_TOP_BAR_HEIGHT_MOBILE
+            : SIDE_PANEL_TOP_BAR_HEIGHT,
+        ),
+      )}
+    >
       <SidePanelTopBarEscapeHotkeyEffect
         inputRef={inputRef}
         onEscape={handleSidePanelEscape}
       />
-      <StyledContentContainer>
+      <div {...stylex.props(styles.contentContainer)}>
         <AnimatePresence>
           {shouldShowBackButton && (
             <motion.div
@@ -232,18 +254,24 @@ export const SidePanelTopBar = ({
           )}
         </AnimatePresence>
         {!COMMAND_MENU_SIDE_PANEL_PAGES.includes(sidePanelPage) && (
-          <StyledHeaderTitleContainer>
-            <StyledHeaderTitlePortal ref={setHeaderTitlePortal} />
+          <div {...stylex.props(styles.headerTitleContainer)}>
+            <div
+              ref={setHeaderTitlePortal}
+              {...stylex.props(
+                headerTitlePortalMarker,
+                styles.headerTitlePortal,
+              )}
+            />
             {lastChip && (
-              <div data-side-panel-page-info="">
+              <div {...stylex.props(styles.pageInfo)}>
                 <SidePanelPageInfo pageChip={lastChip} />
               </div>
             )}
-          </StyledHeaderTitleContainer>
+          </div>
         )}
         {COMMAND_MENU_SIDE_PANEL_PAGES.includes(sidePanelPage) && (
           <>
-            <StyledInput
+            <input
               data-testid={SIDE_PANEL_FOCUS_ID}
               ref={inputRef}
               value={sidePanelSearch}
@@ -251,20 +279,20 @@ export const SidePanelTopBar = ({
               onChange={handleSearchChange}
               onKeyDownCapture={handleInputKeyDownCapture}
               onFocus={handleInputFocus}
-              onBlur={handleInputBlur}
+              onBlur={handleInputBlur} {...stylex.props(styles.input)}
             />
             <SidePanelTopBarInputFocusEffect inputRef={inputRef} />
           </>
         )}
-      </StyledContentContainer>
-      <StyledRightControlsContainer>
-        <StyledHeaderActionsPortal ref={setHeaderActionsPortal} />
+      </div>
+      <div {...stylex.props(styles.rightControlsContainer)}>
+        <div ref={setHeaderActionsPortal} {...stylex.props(styles.headerActionsPortal)} />
         {sidePanelPage !== SidePanelPages.RoutedPage && (
           <SidePanelTopBarRightCornerIcon />
         )}
         <SidePanelExpandButton />
         {shouldHideCloseButton ? null : <SidePanelCloseButton />}
-      </StyledRightControlsContainer>
-    </StyledInputContainer>
+      </div>
+    </div>
   );
 };

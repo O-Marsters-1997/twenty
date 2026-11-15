@@ -1,11 +1,10 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { useState } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { IconCheck, IconUserOff } from 'twenty-ui/icon';
 import { Avatar } from 'twenty-ui/primitives/data-display';
-import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 
 import { useAssignAgentChatThreads } from '@/ai/hooks/useAssignAgentChatThreads';
 import { agentChatThreadsSharedAssigneeIdFamilySelector } from '@/ai/states/selectors/agentChatThreadsSharedAssigneeIdFamilySelector';
@@ -22,13 +21,22 @@ import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/use
 import { useAtomFamilySelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilySelectorValue';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { getAbsoluteImageUrl } from '~/utils/image/getAbsoluteImageUrl';
+import * as stylex from '@stylexjs/stylex';
+import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const UNASSIGN_ITEM_ID = 'unassign';
 
-const StyledSearchContainer = styled.div`
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  padding: 0 ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  searchContainer: {
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: borderColor['--t-border-color-light'],
+    paddingTop: '0',
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: '0',
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+});
 
 export const SidePanelAssignAiChatPage = () => {
   const { t } = useLingui();
@@ -70,13 +78,13 @@ export const SidePanelAssignAiChatPage = () => {
 
   return (
     <>
-      <StyledSearchContainer>
+      <div {...stylex.props(styles.searchContainer)}>
         <DropdownMenuSearchInput
           value={search}
           placeholder={t`Search members`}
           onChange={(event) => setSearch(event.target.value)}
         />
-      </StyledSearchContainer>
+      </div>
       <SidePanelList
         selectableItemIds={[
           ...(isUnassignShown ? [UNASSIGN_ITEM_ID] : []),

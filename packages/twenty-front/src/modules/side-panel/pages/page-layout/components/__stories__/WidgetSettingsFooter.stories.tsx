@@ -14,22 +14,24 @@ import { FocusComponentType } from '@/ui/utilities/focus/types/FocusComponentTyp
 import { ParentClickOutsideIdContext } from '@/ui/utilities/pointer-event/contexts/ParentClickOutsideIdContext';
 import { useListenClickOutside } from '@/ui/utilities/pointer-event/hooks/useListenClickOutside';
 import { jotaiStore } from '@/ui/utilities/state/jotai/jotaiStore';
-import { styled } from '@linaria/react';
 import { type Meta, type StoryObj } from '@storybook/react-vite';
 import { type ReactNode } from 'react';
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 import { ComponentDecorator } from 'twenty-ui/testing';
 import { MemoryRouterDecorator } from '~/testing/decorators/MemoryRouterDecorator';
+import * as stylex from '@stylexjs/stylex';
 
 const PAGE_LAYOUT_ID = 'widget-settings-footer-story';
 const WIDGET_ID = 'revenue';
 const TAB_ID = 'overview';
 const onBackgroundClickOutside = fn();
 
-const StyledFooter = styled.div`
-  margin-top: 100px;
-  width: 320px;
-`;
+const styles = stylex.create({
+  footer: {
+    marginTop: '100px',
+    width: '320px',
+  },
+});
 
 const BackgroundSelection = ({ children }: { children: ReactNode }) => {
   useListenClickOutside({
@@ -41,9 +43,9 @@ const BackgroundSelection = ({ children }: { children: ReactNode }) => {
 
   return (
     <ParentClickOutsideIdContext.Provider value={SIDE_PANEL_CLICK_OUTSIDE_ID}>
-      <StyledFooter data-click-outside-id={SIDE_PANEL_CLICK_OUTSIDE_ID}>
+      <div data-click-outside-id={SIDE_PANEL_CLICK_OUTSIDE_ID} {...stylex.props(styles.footer)}>
         {children}
-      </StyledFooter>
+      </div>
     </ParentClickOutsideIdContext.Provider>
   );
 };

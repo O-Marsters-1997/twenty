@@ -1,15 +1,17 @@
 import { SIDE_PANEL_SUB_PAGES_CONFIG } from '@/side-panel/constants/SidePanelSubPagesConfig';
 import { useSidePanelSubPageHistory } from '@/side-panel/hooks/useSidePanelSubPageHistory';
 import { SidePanelSubPageNavigationHeader } from '@/side-panel/pages/common/components/SidePanelSubPageNavigationHeader';
-import { styled } from '@linaria/react';
 import React, { type ReactNode } from 'react';
 import { isDefined } from 'twenty-shared/utils';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledSubPageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-`;
+const styles = stylex.create({
+  subPageContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+  },
+});
 
 type SidePanelSubPageRouterProps = {
   children: ReactNode;
@@ -43,12 +45,12 @@ export const SidePanelSubPageRouter = ({
     : subPageComponent;
 
   return (
-    <StyledSubPageContainer>
+    <div {...stylex.props(styles.subPageContainer)}>
       <SidePanelSubPageNavigationHeader
         title={currentSidePanelSubPage.title}
         onBackClick={goBackFromSidePanelSubPage}
       />
       {keyedSubPageComponent}
-    </StyledSubPageContainer>
+    </div>
   );
 };

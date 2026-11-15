@@ -32,7 +32,6 @@ import { SidePanelSubPages } from '@/side-panel/types/SidePanelSubPages';
 import { LegacyDropdownContent } from '@/ui/layout/dropdown/components/LegacyDropdownContent';
 import { SelectableListItem } from '@/ui/layout/selectable-list/components/SelectableListItem';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isDefined } from 'twenty-shared/utils';
 import {
@@ -52,19 +51,21 @@ import {
   ViewType,
   WidgetConfigurationType,
 } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-`;
-
-const StyledSettingsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow: hidden;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+  },
+  settingsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    overflow: 'hidden',
+  },
+});
 
 export const SidePanelDashboardRecordTableSettings = () => {
   const { t } = useLingui();
@@ -234,11 +235,11 @@ export const SidePanelDashboardRecordTableSettings = () => {
   };
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <WidgetComponentInstanceContext.Provider
         value={{ instanceId: widgetInEditMode.id }}
       >
-        <StyledSettingsContainer>
+        <div {...stylex.props(styles.settingsContainer)}>
           <SidePanelList selectableItemIds={selectableItemIds}>
             <SidePanelGroup heading={t`Settings`}>
               <SelectableListItem itemId="record-table-source">
@@ -453,9 +454,9 @@ export const SidePanelDashboardRecordTableSettings = () => {
               )}
             </SidePanelGroup>
           </SidePanelList>
-        </StyledSettingsContainer>
+        </div>
         <WidgetSettingsFooter pageLayoutId={pageLayoutId} />
       </WidgetComponentInstanceContext.Provider>
-    </StyledContainer>
+    </div>
   );
 };

@@ -5,11 +5,13 @@ import { ContextStoreComponentInstanceContext } from '@/context-store/states/con
 import { RecordComponentInstanceContextsWrapper } from '@/object-record/components/RecordComponentInstanceContextsWrapper';
 import { MergeRecordsContainer } from '@/object-record/record-merge/components/MergeRecordsContainer';
 import { useComponentInstanceStateContext } from '@/ui/utilities/state/component-state/hooks/useComponentInstanceStateContext';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledSidePanelRecord = styled.div`
-  height: 100%;
-`;
+const styles = stylex.create({
+  sidePanelRecord: {
+    height: '100%',
+  },
+});
 
 export const SidePanelMergeRecordPage = () => {
   const sidePanelPageInstanceId = useComponentInstanceStateContext(
@@ -36,11 +38,11 @@ export const SidePanelMergeRecordPage = () => {
         <CommandMenuComponentInstanceContext.Provider
           value={{ instanceId: sidePanelPageInstanceId }}
         >
-          <StyledSidePanelRecord>
+          <div {...stylex.props(styles.sidePanelRecord)}>
             <MergeRecordsContainer
               objectNameSingular={objectMetadataItem.nameSingular}
             />
-          </StyledSidePanelRecord>
+          </div>
         </CommandMenuComponentInstanceContext.Provider>
       </ContextStoreComponentInstanceContext.Provider>
     </RecordComponentInstanceContextsWrapper>
