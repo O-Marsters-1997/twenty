@@ -1,4 +1,4 @@
-import { styled } from '@linaria/react';
+import { type ReactNode } from 'react';
 
 import { useObjectMetadataItems } from '@/object-metadata/hooks/useObjectMetadataItems';
 import { getObjectColorWithFallback } from '@/object-metadata/utils/getObjectColorWithFallback';
@@ -14,7 +14,7 @@ import {
   type IconComponent,
 } from 'twenty-ui/icon';
 import { Avatar } from 'twenty-ui/primitives/data-display';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import { type SettingsAgentToolApplication } from '~/pages/settings/ai/types/SettingsAgentToolApplication';
 import * as stylex from '@stylexjs/stylex';
 import { borderRadius, grayScale } from 'twenty-ui/theme/tokens.stylex';
@@ -53,6 +53,26 @@ const styles = stylex.create({
     position: 'relative',
     width: '16px',
   },
+  mainIconWrapper: {
+    alignItems: 'center',
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    inset: 0,
+    justifyContent: 'center',
+    position: 'absolute',
+  },
+  mainIconBackground: (backgroundColor: string) => ({
+    backgroundColor,
+  }),
+  mainIconBorder: (borderColor: string) => ({
+    borderColor,
+    borderStyle: 'solid',
+    borderWidth: '1px',
+  }),
   operationOverlay: {
     alignItems: 'center',
     backgroundColor: grayScale['--t-gray-scale-gray4'],
@@ -70,21 +90,27 @@ const styles = stylex.create({
   },
 });
 
-const StyledMainIconWrapper = styled.div<{
-  $backgroundColor: string;
-  $borderColor?: string;
-}>`
-  align-items: center;
-  background-color: ${({ $backgroundColor }) => $backgroundColor};
-  border: ${({ $borderColor }) =>
-    $borderColor ? `1px solid ${$borderColor}` : 'none'};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  box-sizing: border-box;
-  display: flex;
-  inset: 0;
-  justify-content: center;
-  position: absolute;
-`;
+type MainIconWrapperProps = {
+  backgroundColor: string;
+  borderColor?: string;
+  children: ReactNode;
+};
+
+const MainIconWrapper = ({
+  backgroundColor,
+  borderColor,
+  children,
+}: MainIconWrapperProps) => (
+  <div
+    {...stylex.props(
+      styles.mainIconWrapper,
+      styles.mainIconBackground(backgroundColor),
+      isDefined(borderColor) && styles.mainIconBorder(borderColor),
+    )}
+  >
+    {children}
+  </div>
+);
 
 export const SettingsToolIcon = ({
   icon,
@@ -121,16 +147,16 @@ export const SettingsToolIcon = ({
   if (isDefined(OperationIcon)) {
     return (
       <div {...stylex.props(styles.compositeContainer)}>
-        <StyledMainIconWrapper
-          $backgroundColor={objectStyle?.backgroundColor ?? 'transparent'}
-          $borderColor={objectStyle?.borderColor}
+        <MainIconWrapper
+          backgroundColor={objectStyle?.backgroundColor ?? 'transparent'}
+          borderColor={objectStyle?.borderColor}
         >
           <MainIcon
             size="14px"
             stroke={theme.icon.stroke.md}
             color={objectStyle?.iconColor ?? theme.font.color.secondary}
           />
-        </StyledMainIconWrapper>
+        </MainIconWrapper>
         <div {...stylex.props(styles.operationOverlay)}>
           <OperationIcon
             size="12px"
@@ -145,16 +171,16 @@ export const SettingsToolIcon = ({
   if (isDefined(objectStyle)) {
     return (
       <div {...stylex.props(styles.compositeContainer)}>
-        <StyledMainIconWrapper
-          $backgroundColor={objectStyle.backgroundColor}
-          $borderColor={objectStyle.borderColor}
+        <MainIconWrapper
+          backgroundColor={objectStyle.backgroundColor}
+          borderColor={objectStyle.borderColor}
         >
           <MainIcon
             size="14px"
             stroke={theme.icon.stroke.md}
             color={objectStyle.iconColor}
           />
-        </StyledMainIconWrapper>
+        </MainIconWrapper>
       </div>
     );
   }

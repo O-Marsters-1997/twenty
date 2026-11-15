@@ -1,13 +1,15 @@
-import { styled } from '@linaria/react';
 import { type Decorator } from '@storybook/react-vite';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
+const styles = stylex.create({
+  wrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+});
 
 export const WorkflowStepActionDrawerDecorator: Decorator = (Story) => (
-  <StyledWrapper>
+  <div {...stylex.props(styles.wrapper)}>
     <Story />
-  </StyledWrapper>
+  </div>
 );

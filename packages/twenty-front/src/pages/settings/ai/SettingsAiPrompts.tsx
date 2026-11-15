@@ -1,5 +1,3 @@
-import { styled } from '@linaria/react';
-
 import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMemberState';
 import { FormAdvancedTextFieldInput } from '@/advanced-text-editor/components/FormAdvancedTextFieldInput';
 import { AI_INSTRUCTIONS_EDITOR_PROFILE } from '@/ai/constants/AiInstructionsEditorProfile';
@@ -20,11 +18,10 @@ import { formatNumber } from '@/localization/utils/formatNumber';
 import * as stylex from '@stylexjs/stylex';
 import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledSectionHeader = styled(Section.Header)`
-  margin-block-end: 0;
-`;
-
 const styles = stylex.create({
+  sectionHeader: {
+    marginBlockEnd: '0',
+  },
   formContainer: {
     display: 'flex',
     flexDirection: 'column',
@@ -108,7 +105,8 @@ export const SettingsAiPrompts = () => {
       <SettingsPageContainer>
         <Section.Root>
           <div {...stylex.props(styles.titleContainer)}>
-            <StyledSectionHeader
+            <Section.Header
+              xstyle={styles.sectionHeader}
               title={t`System Prompt`}
               description={[t`Read-only`, totalTokenCount]
                 .filter(Boolean)

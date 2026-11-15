@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { FormProvider } from 'react-hook-form';
 import QRCodeModule from 'react-qr-code';
@@ -21,7 +20,14 @@ import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomState
 import { resolveCjsModuleDefaultExport } from '~/utils/resolveCjsModuleDefaultExport';
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard';
 import * as stylex from '@stylexjs/stylex';
-import { background, borderColor, borderRadius, fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  background,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const QRCode = resolveCjsModuleDefaultExport(QRCodeModule);
 
@@ -53,6 +59,10 @@ const styles = stylex.create({
     paddingBottom: spacing['--t-spacing-4'],
     paddingLeft: spacing['--t-spacing-4'],
   },
+  qRCodeSizer: {
+    height: '137px',
+    width: '137px',
+  },
   oTPContainer: {
     width: 'fit-content',
   },
@@ -65,7 +75,10 @@ const styles = stylex.create({
   copySetupKeyLink: {
     background: 'none',
     borderStyle: 'none',
-    color: { default: fontColor['--t-font-color-tertiary'], ':hover': fontColor['--t-font-color-secondary'] },
+    color: {
+      default: fontColor['--t-font-color-tertiary'],
+      ':hover': fontColor['--t-font-color-secondary'],
+    },
     cursor: 'pointer',
     display: 'inline',
     fontSize: fontSize['--t-font-size-sm'],
@@ -84,16 +97,6 @@ const styles = stylex.create({
     width: '100%',
   },
 });
-
-const StyledQRCodeSizer = styled.div`
-  height: 137px;
-  width: 137px;
-
-  & > svg {
-    height: 100%;
-    width: 100%;
-  }
-`;
 
 export const SettingsTwoFactorAuthenticationMethod = () => {
   const { t } = useLingui();
@@ -170,13 +173,16 @@ export const SettingsTwoFactorAuthenticationMethod = () => {
                 ) : (
                   <>
                     <div {...stylex.props(styles.qRCodeWrapper)}>
-                      <StyledQRCodeSizer>
+                      <div {...stylex.props(styles.qRCodeSizer)}>
                         <QRCode value={qrCode} />
-                      </StyledQRCodeSizer>
+                      </div>
                     </div>
                     <div {...stylex.props(styles.copySetupKeyText)}>
                       <Trans>Can't scan? Copy the</Trans>{' '}
-                      <button onClick={handleCopySetupKey} {...stylex.props(styles.copySetupKeyLink)}>
+                      <button
+                        onClick={handleCopySetupKey}
+                        {...stylex.props(styles.copySetupKeyLink)}
+                      >
                         <Trans>setup key</Trans>
                       </button>
                     </div>
