@@ -40,6 +40,7 @@ func metadataHandler(objects, chat, skills, views, agents, messaging, access, wo
 			workspaceSettings.ServeHTTP(w, r)
 		case slices.Contains(frontdoor.TwoFactorOperations, request.OperationName),
 			slices.Contains(frontdoor.SessionOperations, request.OperationName),
+			slices.Contains(frontdoor.CurrentUserOperations, request.OperationName),
 			slices.Contains(frontdoor.PasswordLoginOperations, request.OperationName):
 			twoFactor.ServeHTTP(w, r)
 		case slices.Contains(frontdoor.ChatOperations, request.OperationName):

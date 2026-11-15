@@ -13,6 +13,7 @@ type Resolver struct {
 	PasswordLogin *auth.PasswordLogin
 	Sessions      *auth.UserSession
 	Login         *auth.TwoFactorLogin
+	Current       *auth.CurrentUser
 }
 
 func (r *mutationResolver) InitiateOTPProvisioningForAuthenticatedUser(ctx context.Context) (*InitiateTwoFactorAuthenticationProvisioning, error) {
