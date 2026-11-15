@@ -1,0 +1,12 @@
+{
+  "name": "UpdateWorkspaceAllowedIframeOrigins",
+  "operation": "UpdateWorkspaceAllowedIframeOrigins",
+  "fixture": "add an origin with an uppercase host and the default port",
+  "endpoint": "/metadata",
+  "query": "mutation UpdateWorkspaceAllowedIframeOrigins($input: UpdateWorkspaceAllowedIframeOriginsInput!) { updateWorkspaceAllowedIframeOrigins(data: $input) { id allowedIframeOrigins } }",
+  "variables": {"input": {"operation": "add", "origin": "HTTPS://Example.com:443"}},
+  "response": {"data": {"updateWorkspaceAllowedIframeOrigins": {
+    "id": "26a06a83-ad30-4547-9126-7f6339d43e03",
+    "allowedIframeOrigins": ["https://example.com"]
+  }}}
+}

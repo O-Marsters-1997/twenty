@@ -1,0 +1,37 @@
+schema:
+  - workspace.graphqls
+exec:
+  filename: generated.go
+  package: workspacegql
+model:
+  filename: models_gen.go
+  package: workspacegql
+resolver:
+  layout: single-file
+  filename: resolver.go
+  package: workspacegql
+  type: Resolver
+models:
+  UUID:
+    model: github.com/99designs/gqlgen/graphql.String
+  DateTime:
+    model: github.com/99designs/gqlgen/graphql.String
+  JSON:
+    model: github.com/99designs/gqlgen/graphql.Map
+  WorkspaceActivationStatus:
+    model: github.com/99designs/gqlgen/graphql.String
+  WorkspaceDiscoverability:
+    model: github.com/99designs/gqlgen/graphql.String
+  AiModelTier:
+    model: github.com/99designs/gqlgen/graphql.String
+  Role:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/access/store.Role
+  Workspace:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/workspace/store.Workspace
+    fields:
+      defaultRole:
+        resolver: true
+  UpdateWorkspaceInput:
+    model: map[string]interface{}
+  UpdateWorkspaceAllowedIframeOriginsInput:
+    model: map[string]interface{}

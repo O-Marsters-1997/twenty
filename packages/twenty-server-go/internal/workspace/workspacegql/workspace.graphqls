@@ -1,0 +1,117 @@
+scalar UUID
+scalar DateTime
+scalar JSON
+
+enum WorkspaceActivationStatus {
+  ONGOING_CREATION
+  PENDING_CREATION
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+enum WorkspaceDiscoverability {
+  PUBLIC
+  MEMBERS_AND_INVITEES
+  HIDDEN
+}
+
+enum AiModelTier {
+  extraFast
+  fast
+  balanced
+  smart
+  extraSmart
+}
+
+type Role {
+  id: UUID!
+  label: String!
+  description: String
+  icon: String
+  canUpdateAllSettings: Boolean!
+  canAccessAllTools: Boolean!
+  isEditable: Boolean!
+  canReadAllObjectRecords: Boolean!
+  canUpdateAllObjectRecords: Boolean!
+  canSoftDeleteAllObjectRecords: Boolean!
+  canDestroyAllObjectRecords: Boolean!
+  canBeAssignedToUsers: Boolean!
+  canBeAssignedToAgents: Boolean!
+  canBeAssignedToApiKeys: Boolean!
+}
+
+type Workspace {
+  id: UUID!
+  displayName: String
+  logo: String!
+  inviteHash: String
+  subdomain: String!
+  activationStatus: WorkspaceActivationStatus!
+  allowImpersonation: Boolean!
+  isPublicInviteLinkEnabled: Boolean!
+  isCampaignClickTrackingEnabled: Boolean!
+  isCampaignOpenTrackingEnabled: Boolean!
+  workspaceDiscoverability: WorkspaceDiscoverability!
+  isGoogleAuthEnabled: Boolean!
+  isPasswordAuthEnabled: Boolean!
+  isGoogleAuthBypassEnabled: Boolean!
+  isPasswordAuthBypassEnabled: Boolean!
+  isTwoFactorAuthenticationEnforced: Boolean!
+  isInternalMessagesImportEnabled: Boolean!
+  trashRetentionDays: Int!
+  eventLogRetentionDays: Int!
+  editableProfileFields: [String!]
+  allowedIframeOrigins: [String!]!
+  aiChatModelTier: AiModelTier!
+  aiAgentModelTier: AiModelTier!
+  isAutoModelSelectionEnabled: Boolean!
+  aiModelIdByTier: JSON!
+  aiEvaluationModelId: String
+  aiAdditionalInstructions: String
+  defaultRole: Role
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input UpdateWorkspaceInput {
+  subdomain: String
+  displayName: String
+  logo: String
+  inviteHash: String
+  isPublicInviteLinkEnabled: Boolean
+  isCampaignClickTrackingEnabled: Boolean
+  isCampaignOpenTrackingEnabled: Boolean
+  workspaceDiscoverability: WorkspaceDiscoverability
+  allowImpersonation: Boolean
+  isGoogleAuthEnabled: Boolean
+  isPasswordAuthEnabled: Boolean
+  isGoogleAuthBypassEnabled: Boolean
+  isPasswordAuthBypassEnabled: Boolean
+  defaultRoleId: UUID
+  isTwoFactorAuthenticationEnforced: Boolean
+  trashRetentionDays: Int
+  eventLogRetentionDays: Int
+  aiChatModelTier: AiModelTier
+  aiAgentModelTier: AiModelTier
+  isAutoModelSelectionEnabled: Boolean
+  aiModelIdByTier: JSON
+  aiEvaluationModelId: String
+  aiAdditionalInstructions: String
+  editableProfileFields: [String!]
+  isInternalMessagesImportEnabled: Boolean
+}
+
+input UpdateWorkspaceAllowedIframeOriginsInput {
+  operation: String!
+  origin: String!
+}
+
+type Query {
+  currentWorkspace: Workspace!
+}
+
+type Mutation {
+  updateWorkspace(data: UpdateWorkspaceInput!): Workspace!
+  updateWorkspaceAllowedIframeOrigins(data: UpdateWorkspaceAllowedIframeOriginsInput!): Workspace!
+}

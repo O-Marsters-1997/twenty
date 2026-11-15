@@ -123,8 +123,6 @@ UpdateTimelineActivityTypeIsActive
 UpdateUnsubscribeTopic
 UpdateUserEmail
 UpdateValidationRule
-UpdateWorkspace
-UpdateWorkspaceAllowedIframeOrigins
 UpdateWorkspaceMemberRole
 UpdateWorkspaceMemberSettings
 UpsertFieldPermissions

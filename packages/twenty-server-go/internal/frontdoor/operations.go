@@ -62,7 +62,7 @@ func DefaultTable() OperationTable {
 	for _, operation := range viewOperations {
 		table[EndpointMetadata][operation] = RouteGo
 	}
-	for _, operation := range slices.Concat(SkillOperations, ChatOperations, agentOperations, MessagingOperations, AccessOperations, TwoFactorOperations, SessionOperations, PasswordLoginOperations) {
+	for _, operation := range slices.Concat(SkillOperations, ChatOperations, agentOperations, MessagingOperations, AccessOperations, WorkspaceSettingsOperations, TwoFactorOperations, SessionOperations, PasswordLoginOperations) {
 		table[EndpointMetadata][operation] = RouteGo
 	}
 	for _, operation := range slices.Concat(WorkflowOperations, WorkflowAuthoringOperations) {
@@ -138,6 +138,8 @@ var AccessOperations = []string{
 	"GetApiKeys", "GetApiKey", "GetApiKeyRoles", "CreateApiKey", "UpdateApiKey", "RevokeApiKey", "AssignRoleToApiKey",
 	"GenerateApiKeyToken", "GeneratePlaygroundToken",
 }
+
+var WorkspaceSettingsOperations = []string{"UpdateWorkspace", "UpdateWorkspaceAllowedIframeOrigins"}
 
 var LoginOperations = []string{"getAuthTokensFromOTP", "getAuthTokensFromTwoFactorAuthenticationRecoveryCode"}
 
