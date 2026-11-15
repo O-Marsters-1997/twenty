@@ -2,6 +2,7 @@
 
 @import './viewport-zoom.css';
 @import './third-party-styles/tiptap.css';
+@import './third-party-styles/blocknote.css';
 
 body {
   margin: 0;

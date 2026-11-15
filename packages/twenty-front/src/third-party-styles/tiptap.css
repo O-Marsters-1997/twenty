@@ -13,7 +13,9 @@
     margin: 0;
   }
 
-  [data-validation-rule-editor] .tiptap p.is-editor-empty:first-of-type::before {
+  [data-validation-rule-editor]
+    .tiptap
+    p.is-editor-empty:first-of-type::before {
     color: var(--t-font-color-light);
     content: attr(data-placeholder);
     float: left;

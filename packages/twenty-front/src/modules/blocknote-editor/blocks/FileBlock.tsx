@@ -1,8 +1,6 @@
 import { createReactBlockSpec } from '@blocknote/react';
-import { styled } from '@linaria/react';
 import { isNonEmptyString } from '@sniptt/guards';
 import { type ChangeEvent, useRef } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { type AttachmentFileCategory } from '@/activities/files/types/AttachmentFileCategory';
 import { getFileType } from '@/activities/files/utils/getFileType';
@@ -11,9 +9,18 @@ import { t } from '@lingui/core/macro';
 import { getSafeUrl, isDefined } from 'twenty-shared/utils';
 import { Button } from 'twenty-ui/primitives/input';
 import * as stylex from '@stylexjs/stylex';
-import { spacing } from 'twenty-ui/theme/tokens.stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
+  link: {
+    alignItems: 'center',
+    color: {
+      default: fontColor['--t-font-color-primary'],
+      ':hover': fontColor['--t-font-color-secondary'],
+    },
+    display: 'flex',
+    textDecoration: 'none',
+  },
   fileInput: {
     display: 'none',
   },
@@ -28,16 +35,6 @@ const styles = stylex.create({
     gap: spacing['--t-spacing-2'],
   },
 });
-
-const StyledLink = styled.a`
-  align-items: center;
-  color: ${themeCssVariables.font.color.primary};
-  display: flex;
-  text-decoration: none;
-  :hover {
-    color: ${themeCssVariables.font.color.secondary};
-  }
-`;
 
 export const FileBlock = createReactBlockSpec(
   {
@@ -96,13 +93,14 @@ export const FileBlock = createReactBlockSpec(
               fileCategory={block.props.fileCategory as AttachmentFileCategory}
               thumbnailUrl={safeUrl}
             />
-            <StyledLink
+            <a
+              {...stylex.props(styles.link)}
               href={safeUrl}
               target="_blank"
               rel="noopener noreferrer"
             >
               {block.props.name}
-            </StyledLink>
+            </a>
           </div>
         );
       }
