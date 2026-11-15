@@ -1,16 +1,23 @@
 import { useRender } from '@base-ui/react/use-render';
 import { isNonEmptyString, isString } from '@sniptt/guards';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 import { useId } from 'react';
 
 import { Text } from '@ui/primitives/typography/Text/Text';
 import { Heading } from '@ui/primitives/typography/Heading/Heading';
 import { OverflowingTextWithTooltip } from '@ui/primitives/typography/OverflowingTextWithTooltip/OverflowingTextWithTooltip';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 import { isDefined } from '@ui/utilities/utils/isDefined';
 
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+  textLineHeight,
+} from '../../../../theme/tokens.stylex';
 import { type SectionHeaderProps } from '../types/SectionHeaderProps';
-
-import styles from '../SectionHeader.module.scss';
 
 export const SectionHeader = ({
   title,
@@ -24,8 +31,9 @@ export const SectionHeader = ({
   render,
   ref,
   className,
+  xstyle,
   ...props
-}: SectionHeaderProps) => {
+}: WithXstyle<SectionHeaderProps>) => {
   const descriptionId = useId();
   const hasDescription = isString(description)
     ? isNonEmptyString(description)
@@ -44,25 +52,25 @@ export const SectionHeader = ({
     ref,
     props: {
       ...props,
-      className: clsx(styles.header, className),
+      ...mergeStylexProps(stylex.props(styles.header, xstyle), className),
       children: (
         <>
-          <div className={styles.titleRow}>
+          <div {...stylex.props(styles.titleRow)}>
             <Heading
               level={level}
               size={size}
               color={color}
-              className={styles.title}
+              className={stylex.props(styles.title).className}
               aria-describedby={hasDescription ? descriptionId : undefined}
             >
               {title}
             </Heading>
             {isDefined(actions) && (
-              <div className={styles.actions}>{actions}</div>
+              <div {...stylex.props(styles.actions)}>{actions}</div>
             )}
           </div>
           {hasDescription && (
-            <div id={descriptionId} className={styles.description}>
+            <div id={descriptionId} {...stylex.props(styles.description)}>
               {shouldTruncateDescription ? (
                 <OverflowingTextWithTooltip
                   text={description}
@@ -80,3 +88,35 @@ export const SectionHeader = ({
     },
   });
 };
+
+const styles = stylex.create({
+  header: {
+    display: 'flex',
+    flexDirection: 'column',
+    marginBlockEnd: spacing['--t-spacing-4'],
+    minInlineSize: 0,
+  },
+  titleRow: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    justifyContent: 'space-between',
+    minInlineSize: 0,
+  },
+  title: {
+    lineHeight: 'inherit',
+    minInlineSize: 0,
+  },
+  actions: {
+    alignItems: 'center',
+    display: 'flex',
+    flexShrink: 0,
+  },
+  description: {
+    color: fontColor['--t-font-color-secondary'],
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    lineHeight: textLineHeight['--t-text-line-height-lg'],
+    marginBlockStart: spacing['--t-spacing-2'],
+  },
+});

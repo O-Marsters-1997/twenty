@@ -2,8 +2,9 @@ import { JsonNodeLabel } from '@ui/components/data-display/JsonTree/internal/Jso
 import { JsonNodeValue } from '@ui/components/data-display/JsonTree/internal/JsonNodeValue';
 import { type JsonNodeHighlighting } from '@ui/components/data-display/JsonTree/types/JsonNodeHighlighting';
 import { type IconComponent } from '@ui/icon';
+import * as stylex from '@stylexjs/stylex';
 
-import styles from './JsonValueNode.module.scss';
+import { spacing } from '../../../../theme/tokens.stylex';
 
 type JsonValueNodeProps = {
   valueAsString: string;
@@ -21,7 +22,7 @@ type JsonValueNodeProps = {
 
 export const JsonValueNode = (props: JsonValueNodeProps) => {
   return (
-    <li className={styles.listItem}>
+    <li {...stylex.props(styles.listItem)}>
       {props.label && (
         <JsonNodeLabel
           label={props.label}
@@ -37,3 +38,13 @@ export const JsonValueNode = (props: JsonValueNodeProps) => {
     </li>
   );
 };
+
+const styles = stylex.create({
+  listItem: {
+    alignItems: 'center',
+    columnGap: spacing['--t-spacing-2'],
+    display: 'flex',
+    listStyleType: 'none',
+    whiteSpace: 'nowrap',
+  },
+});

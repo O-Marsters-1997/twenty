@@ -1,6 +1,6 @@
 import { useRender } from '@base-ui/react/use-render';
 import { isUndefined } from '@sniptt/guards';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 import { type FocusEvent, type MouseEvent, useState } from 'react';
 
 import {
@@ -13,9 +13,21 @@ import { Button } from '@ui/primitives/input/Button/Button';
 import { Separator } from '@ui/primitives/layout/Separator/Separator';
 import { useTheme } from '@ui/theme';
 import { isRenderableSlot } from '@ui/utilities/internal/isRenderableSlot';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 import { isDefined } from '@ui/utilities/utils/isDefined';
 
-import styles from './Toast.module.scss';
+import { media } from '../../../theme/constants.stylex';
+import {
+  background,
+  blur,
+  borderRadius,
+  boxShadow,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from '../../../theme/tokens.stylex';
 import { ToastCountdownEffect } from './internal/components/ToastCountdownEffect';
 import { ToastFocusEffect } from './internal/components/ToastFocusEffect';
 import { ToastProgress } from './internal/components/ToastProgress';
@@ -46,6 +58,7 @@ export const Toast = ({
   status = 'neutral',
   role = 'status',
   className,
+  xstyle,
   onMouseEnter,
   onMouseLeave,
   onFocus,
@@ -53,7 +66,7 @@ export const Toast = ({
   render,
   ref,
   ...props
-}: ToastProps) => {
+}: WithXstyle<ToastProps>) => {
   const theme = useTheme();
   const [isHovered, setIsHovered] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
@@ -84,7 +97,7 @@ export const Toast = ({
       role,
       'aria-live': role === 'alert' ? 'assertive' : 'polite',
       ...props,
-      className: clsx(styles.root, className),
+      ...mergeStylexProps(stylex.props(styles.root, xstyle), className),
       onMouseEnter: (event: MouseEvent<HTMLDivElement>) => {
         setIsHovered(true);
         onMouseEnter?.(event);
@@ -110,7 +123,7 @@ export const Toast = ({
       },
       children: (
         <>
-          <div className={styles.progress} aria-hidden>
+          <div {...stylex.props(styles.progress)} aria-hidden>
             <ToastProgress
               barColor={toastColors.backgroundColor}
               progress={progress}
@@ -120,18 +133,18 @@ export const Toast = ({
               isPaused={countdown.isPaused}
             />
           </div>
-          <div className={styles.header}>
+          <div {...stylex.props(styles.header)}>
             {isRenderableSlot(toastIcon) && (
-              <div className={styles.icon}>{toastIcon}</div>
+              <div {...stylex.props(styles.icon)}>{toastIcon}</div>
             )}
-            <div className={styles.message}>{children}</div>
-            <div className={styles.actions}>
+            <div {...stylex.props(styles.message)}>{children}</div>
+            <div {...stylex.props(styles.actions)}>
               {isDefined(onCancel) && isRenderableSlot(cancelLabel) && (
                 <Button
                   onClick={onCancel}
                   size="sm"
                   variant="ghost"
-                  style={{ fontWeight: 'var(--t-font-weight-regular)' }}
+                  xstyle={styles.cancelButton}
                 >
                   {cancelLabel}
                 </Button>
@@ -141,7 +154,7 @@ export const Toast = ({
                   title={closeLabel}
                   aria-label={closeLabel}
                   startIcon={<IconX />}
-                  className={styles.closeButton}
+                  xstyle={styles.closeButton}
                   variant="ghost"
                   size="sm"
                   onClick={clock.close}
@@ -150,12 +163,12 @@ export const Toast = ({
             </div>
           </div>
           {isRenderableSlot(description) && (
-            <div className={styles.description}>{description}</div>
+            <div {...stylex.props(styles.description)}>{description}</div>
           )}
           {isRenderableSlot(action) && (
-            <div className={styles.footer}>
+            <div {...stylex.props(styles.footer)}>
               <Separator />
-              <div className={styles.footerAction}>{action}</div>
+              <div {...stylex.props(styles.footerAction)}>{action}</div>
             </div>
           )}
         </>
@@ -181,3 +194,79 @@ export const Toast = ({
     </>
   );
 };
+
+const styles = stylex.create({
+  root: {
+    backdropFilter: blur['--t-blur-medium'],
+    backgroundColor: background['--t-background-primary'],
+    borderRadius: {
+      default: borderRadius['--t-border-radius-md'],
+      [media.mobile]: 0,
+    },
+    boxShadow: boxShadow['--t-box-shadow-strong'],
+    boxSizing: 'border-box',
+    inlineSize: {
+      default: 296,
+      [media.mobile]: '100%',
+    },
+    marginBlockStart: spacing['--t-spacing-2'],
+    paddingBlockEnd: spacing['--t-spacing-1'],
+    paddingBlockStart: spacing['--t-spacing-2'],
+    paddingInline: spacing['--t-spacing-2'],
+    position: 'relative',
+  },
+  progress: {
+    borderRadius: 'inherit',
+    inset: 0,
+    overflow: 'hidden',
+    pointerEvents: 'none',
+    position: 'absolute',
+  },
+  header: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-primary'],
+    display: 'flex',
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    gap: spacing['--t-spacing-2'],
+    marginBlockEnd: spacing['--t-spacing-1'],
+    position: 'relative',
+  },
+  message: {
+    color: fontColor['--t-font-color-secondary'],
+    fontSize: fontSize['--t-font-size-sm'],
+  },
+  icon: {
+    alignItems: 'center',
+    display: 'flex',
+  },
+  actions: {
+    alignItems: 'center',
+    display: 'flex',
+    marginInlineStart: 'auto',
+  },
+  description: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-sm'],
+    inlineSize: 200,
+    overflow: 'hidden',
+    paddingInlineStart: spacing['--t-spacing-6'],
+    textOverflow: 'ellipsis',
+  },
+  footer: {
+    marginBlockStart: spacing['--t-spacing-2'],
+  },
+  footerAction: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'flex-end',
+    paddingBlockStart: spacing['--t-spacing-1'],
+  },
+  cancelButton: {
+    fontWeight: fontWeight['--t-font-weight-regular'],
+  },
+  closeButton: {
+    inlineSize: spacing['--t-spacing-6'],
+    maxInlineSize: 'none',
+    paddingInline: 0,
+  },
+});
