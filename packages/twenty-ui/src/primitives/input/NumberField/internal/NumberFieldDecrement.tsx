@@ -21,7 +21,7 @@ export const NumberFieldDecrement = ({
       ((elementProps, state) => (
         <Button
           {...(elementProps as ButtonProps)}
-          xstyle={state.readOnly ? numberFieldStyles.readOnly : xstyle}
+          xstyle={[state.readOnly && numberFieldStyles.readOnly, xstyle]}
         />
       ))
     }

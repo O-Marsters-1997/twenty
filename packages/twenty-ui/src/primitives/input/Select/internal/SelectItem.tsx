@@ -2,6 +2,7 @@ import { Select as SelectPrimitive } from '@base-ui/react/select';
 import * as stylex from '@stylexjs/stylex';
 
 import listItemStyles from '@ui/primitives/navigation/ListItem/ListItem.module.scss';
+import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
 import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
 import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
@@ -18,9 +19,7 @@ export const SelectItem = ({
     {...props}
     {...mergeStylexProps(
       stylex.props(styles.item, xstyle),
-      typeof className === 'string'
-        ? `${listItemStyles.root} ${className}`
-        : listItemStyles.root,
+      mergeClassNames(listItemStyles.root, className),
     )}
   />
 );

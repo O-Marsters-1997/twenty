@@ -18,7 +18,9 @@ export const SelectIcon = ({
     {...props}
     {...mergeStylexProps(
       stylex.props(styles.icon, xstyle),
-      className ?? 'tw-select-icon',
+      typeof className === 'string'
+        ? `tw-select-icon ${className}`
+        : 'tw-select-icon',
     )}
   >
     {children}

@@ -14,8 +14,16 @@ export const selectTriggerStyles = stylex.create({
     alignItems: 'center',
     borderColor: {
       default: borderColor['--t-border-color-medium'],
-      ':focus': color['--t-color-blue'],
-      ':is([data-popup-open])': color['--t-color-blue'],
+      ':focus': {
+        default: color['--t-color-blue'],
+        ':is([aria-invalid="true"], [data-invalid])':
+          borderColor['--t-border-color-danger'],
+      },
+      ':is([data-popup-open])': {
+        default: color['--t-color-blue'],
+        ':is([aria-invalid="true"], [data-invalid])':
+          borderColor['--t-border-color-danger'],
+      },
       ':is([aria-invalid="true"], [data-invalid])':
         borderColor['--t-border-color-danger'],
     },

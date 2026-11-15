@@ -163,7 +163,10 @@ const styles = stylex.create({
       backgroundTransparent['--t-background-transparent-lighter'],
     borderColor: {
       default: borderColor['--t-border-color-medium'],
-      ':focus': color['--t-color-blue'],
+      ':focus': {
+        default: color['--t-color-blue'],
+        [invalid]: borderColor['--t-border-color-danger'],
+      },
       [invalid]: borderColor['--t-border-color-danger'],
     },
     borderRadius: borderRadius['--t-border-radius-md'],
