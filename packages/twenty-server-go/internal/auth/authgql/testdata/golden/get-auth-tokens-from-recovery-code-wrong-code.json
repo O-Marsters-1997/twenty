@@ -1,0 +1,34 @@
+{
+  "name": "get-auth-tokens-from-recovery-code-wrong-code",
+  "operation": "getAuthTokensFromTwoFactorAuthenticationRecoveryCode",
+  "fixture": "member with a verified TOTP method and no recovery code",
+  "endpoint": "/graphql",
+  "query": "mutation getAuthTokensFromTwoFactorAuthenticationRecoveryCode($loginToken: String!, $recoveryCode: String!, $captchaToken: String, $origin: String!) { getAuthTokensFromTwoFactorAuthenticationRecoveryCode(loginToken: $loginToken, recoveryCode: $recoveryCode, captchaToken: $captchaToken, origin: $origin) { tokens { accessOrWorkspaceAgnosticToken { token expiresAt } refreshToken { token expiresAt } } provisioningUri } }",
+  "variables": {
+    "loginToken": "valid-login-token",
+    "recoveryCode": "AAAAA-AAAAA-AAAAA-AAAAA",
+    "origin": "http://acme.localhost:3001"
+  },
+  "response": {
+    "errors": [
+      {
+        "message": "Invalid recovery code",
+        "locations": [
+          {
+            "line": 1,
+            "column": 152
+          }
+        ],
+        "path": [
+          "getAuthTokensFromTwoFactorAuthenticationRecoveryCode"
+        ],
+        "extensions": {
+          "code": "BAD_USER_INPUT",
+          "subCode": "INVALID_RECOVERY_CODE",
+          "userFriendlyMessage": "Invalid or expired recovery code."
+        }
+      }
+    ],
+    "data": null
+  }
+}
