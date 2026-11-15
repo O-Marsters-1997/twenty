@@ -15,7 +15,6 @@ export const EMAIL_TAILWIND_CONFIG: TailwindConfig = {
         outline: '#ebebeb',
         button: '#333333',
         'shade-light': 'rgba(0, 0, 0, 0.04)',
-        'shade-medium': 'rgba(0, 0, 0, 0.08)',
       },
       fontFamily: { base: ['Trebuchet MS'] },
       fontSize: {

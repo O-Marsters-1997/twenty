@@ -11,7 +11,7 @@ import TwoFactorAuthenticationRecoveryCodeIssuedEmail from 'src/emails/two-facto
 import TwoFactorAuthenticationResetEmail from 'src/emails/two-factor-authentication-reset.email';
 import SendApprovedAccessDomainValidation from 'src/emails/validate-approved-access-domain.email';
 
-type PreviewableEmail = ComponentType<any> & { PreviewProps: object };
+type PreviewableEmail = ComponentType<object> & { PreviewProps: object };
 
 const TEMPLATES: Record<string, PreviewableEmail> = {
   'password-reset-link': PasswordResetLinkEmail,
