@@ -1,13 +1,28 @@
 import { Slider as SliderPrimitive } from '@base-ui/react/slider';
+import * as stylex from '@stylexjs/stylex';
 
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
-import styles from '../Slider.module.scss';
+import { fontColor, fontSize } from '../../../../theme/tokens.stylex';
 import { type SliderValueProps } from '../types/SliderValueProps';
 
-export const SliderValue = ({ className, ...props }: SliderValueProps) => (
+export const SliderValue = ({
+  className,
+  xstyle,
+  ...props
+}: WithXstyle<SliderValueProps>) => (
   <SliderPrimitive.Value
     {...props}
-    className={mergeClassNames(styles.value, className)}
+    {...mergeStylexProps(stylex.props(styles.value, xstyle), className)}
   />
 );
+
+const styles = stylex.create({
+  value: {
+    color: fontColor['--t-font-color-primary'],
+    fontFamily: 'inherit',
+    fontSize: fontSize['--t-font-size-sm'],
+    fontVariantNumeric: 'tabular-nums',
+  },
+});

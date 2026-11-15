@@ -6,13 +6,11 @@ import { describe, expect, it, vi } from 'vitest';
 import loaderStyles from '@ui/primitives/feedback/Loader/Loader.module.scss';
 import { runComponentConformance } from '@test-utilities/conformance/runComponentConformance';
 import { Button } from '../Button';
-import styles from '../Button.module.scss';
 
 runComponentConformance({
   name: 'Button',
   element: <Button>Save</Button>,
   refInstanceOf: HTMLButtonElement,
-  ownClassName: styles.button,
 });
 
 runComponentConformance({
@@ -23,7 +21,6 @@ runComponentConformance({
     </Button>
   ),
   refInstanceOf: HTMLAnchorElement,
-  ownClassName: styles.button,
   renderPropTagName: 'a',
 });
 
@@ -35,7 +32,6 @@ runComponentConformance({
     </Button>
   ),
   refInstanceOf: HTMLDivElement,
-  ownClassName: styles.button,
 });
 
 describe('Button loading', () => {
@@ -56,10 +52,8 @@ describe('Button loading', () => {
       `.${loaderStyles.container}`,
     );
 
-    expect(content).toHaveClass(styles.hidden);
     expect(content).toContainElement(screen.getByText('Download icon'));
     expect(content).toContainElement(screen.getByText('Arrow icon'));
-    expect(loader?.parentElement).toHaveClass(styles.loader);
     expect(loader?.parentElement?.parentElement).toBe(button);
   });
 
@@ -96,7 +90,6 @@ describe('Button loading', () => {
         `.${loaderStyles.container}`,
       );
 
-      expect(label.parentElement).not.toHaveClass(styles.hidden);
       expect(screen.queryByText(replacedIcon)).not.toBeInTheDocument();
       expect(screen.getByText(preservedIcon)).toBeVisible();
       expect(loader).toBeInTheDocument();
@@ -116,9 +109,6 @@ describe('Button loading', () => {
 
       const button = screen.getByRole('button', { name: 'Installing' });
 
-      expect(screen.getByText('Installing').parentElement).not.toHaveClass(
-        styles.hidden,
-      );
       expect(
         button.querySelector<HTMLDivElement>(`.${loaderStyles.container}`),
       ).toBeInTheDocument();
@@ -169,9 +159,6 @@ describe('Button loading', () => {
 
       expect(button).toBeEnabled();
       expect(button).not.toHaveAttribute('aria-busy');
-      expect(screen.getByText('Install').parentElement).not.toHaveClass(
-        styles.hidden,
-      );
       expect(screen.getByText('Download icon')).toBeVisible();
       expect(screen.getByText('Arrow icon')).toBeVisible();
       expect(

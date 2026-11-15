@@ -1,20 +1,30 @@
 import { Select as SelectPrimitive } from '@base-ui/react/select';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 
 import listItemStyles from '@ui/primitives/navigation/ListItem/ListItem.module.scss';
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
-import styles from '../Select.module.scss';
 import { type SelectItemProps } from '../types/SelectItemProps';
 
-export const SelectItem = ({ className, ...props }: SelectItemProps) => (
+export const SelectItem = ({
+  className,
+  xstyle,
+  ...props
+}: WithXstyle<SelectItemProps>) => (
   <SelectPrimitive.Item
     data-color="neutral"
     data-indicator="check"
     {...props}
-    className={mergeClassNames(
-      clsx(listItemStyles.root, styles.item),
-      className,
+    {...mergeStylexProps(
+      stylex.props(styles.item, xstyle),
+      typeof className === 'string'
+        ? `${listItemStyles.root} ${className}`
+        : listItemStyles.root,
     )}
   />
 );
+
+const styles = stylex.create({
+  item: { boxSizing: 'border-box' },
+});

@@ -1,21 +1,29 @@
 import { Select as SelectPrimitive } from '@base-ui/react/select';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 
-import inputStyles from '@ui/primitives/input/Input/Input.module.scss';
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
+import { inputStyles } from '@ui/primitives/input/Input/Input.stylex';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
-import styles from '../Select.module.scss';
+import { selectTriggerMarker, selectTriggerStyles } from '../Select.stylex';
 import { type SelectTriggerProps } from '../types/SelectTriggerProps';
 
 export const SelectTrigger = ({
   size = 'md',
   className,
+  xstyle,
   ...props
-}: SelectTriggerProps) => (
+}: WithXstyle<SelectTriggerProps>) => (
   <SelectPrimitive.Trigger
     {...props}
-    className={mergeClassNames(
-      clsx(inputStyles.input, inputStyles[size], styles.trigger),
+    {...mergeStylexProps(
+      stylex.props(
+        selectTriggerMarker,
+        inputStyles.input,
+        size === 'sm' && inputStyles.sizeSm,
+        selectTriggerStyles.trigger,
+        xstyle,
+      ),
       className,
     )}
   />

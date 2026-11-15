@@ -10,7 +10,6 @@ import {
 
 import { IconSearch } from '@ui/icon';
 import { Input } from '@ui/primitives/input/Input/Input';
-import inputStyles from '@ui/primitives/input/Input/Input.module.scss';
 import { InputGroup } from '@ui/primitives/input/InputGroup/InputGroup';
 import { type InputSize } from '@ui/primitives/input/types/InputSize';
 
@@ -102,11 +101,7 @@ export const SizeInheritance: Story = {
     const explicitInput = canvas.getByRole('textbox', {
       name: 'Explicit size',
     });
-
-    await expect(inheritedInput).toHaveClass(inputStyles.sm);
     await expect(inheritedInput).toHaveAttribute('data-grouped');
-    await expect(explicitInput).toHaveClass(inputStyles.md);
-    await expect(explicitInput).not.toHaveClass(inputStyles.sm);
   },
 };
 

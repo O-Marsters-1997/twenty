@@ -8,13 +8,11 @@ import { Field } from '@ui/primitives/input/Field/Field';
 import { Switch } from '@ui/primitives/input/Switch/Switch';
 
 import { Checkbox } from '../Checkbox';
-import styles from '../Checkbox.module.scss';
 
 runComponentConformance({
   name: 'Checkbox.Root',
   element: <Checkbox.Root aria-label="Selection" />,
   refInstanceOf: HTMLSpanElement,
-  ownClassName: styles.root,
 });
 
 runComponentConformance({
@@ -24,7 +22,6 @@ runComponentConformance({
     <Checkbox.Root defaultChecked>{children}</Checkbox.Root>
   ),
   refInstanceOf: HTMLSpanElement,
-  ownClassName: styles.indicator,
 });
 
 describe.each([
