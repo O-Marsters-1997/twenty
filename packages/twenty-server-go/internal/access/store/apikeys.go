@@ -57,13 +57,9 @@ func (a *APIKeys) Create(ctx context.Context, rawInput Input) (APIKey, error) {
 	if err != nil || name == "" {
 		return APIKey{}, fmt.Errorf("%w: name and a valid expiresAt are required", metadata.ErrInvalidInput)
 	}
-	var revokedAt *time.Time
-	if input["revokedAt"] != nil {
-		parsed, err := parseTimestamp(input["revokedAt"])
-		if err != nil {
-			return APIKey{}, err
-		}
-		revokedAt = &parsed
+	revokedAt, err := optionalTimestamp(input["revokedAt"])
+	if err != nil {
+		return APIKey{}, err
 	}
 	roleID, _ := input["roleId"].(string)
 	var created string
@@ -112,11 +108,9 @@ func (a *APIKeys) Update(ctx context.Context, id string, rawUpdates Input) (APIK
 		case value == nil && revokedAt != nil:
 			return APIKey{}, fmt.Errorf("%w: this API key has been revoked and cannot be reactivated", ErrForbidden)
 		case value != nil:
-			parsed, err := parseTimestamp(value)
-			if err != nil {
+			if revokedAt, err = optionalTimestamp(value); err != nil {
 				return APIKey{}, err
 			}
-			revokedAt = &parsed
 		}
 	}
 	if _, err := a.pool.Exec(ctx, `UPDATE core."apiKey" SET name = $2, "expiresAt" = $3, "revokedAt" = $4, "updatedAt" = now()
@@ -183,6 +177,17 @@ func setAPIKeyRole(ctx context.Context, tx pgx.Tx, apiKeyID, roleID string) erro
 		VALUES ($1::uuid, $2::uuid, gen_random_uuid(), $3::uuid, (SELECT "workspaceCustomApplicationId" FROM core.workspace WHERE id = $3::uuid))`,
 		roleID, apiKeyID, workspace.PinnedWorkspaceID)
 	return err
+}
+
+func optionalTimestamp(value any) (*time.Time, error) {
+	if value == nil {
+		return nil, nil
+	}
+	parsed, err := parseTimestamp(value)
+	if err != nil {
+		return nil, err
+	}
+	return &parsed, nil
 }
 
 func parseTimestamp(value any) (time.Time, error) {
