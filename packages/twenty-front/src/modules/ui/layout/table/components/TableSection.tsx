@@ -1,9 +1,17 @@
-import { styled } from '@linaria/react';
 import { type ReactNode, useState } from 'react';
 import { IconChevronDown, IconChevronUp } from 'twenty-ui/icon';
 import { Text } from 'twenty-ui/primitives/typography';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import { TableBody } from './TableBody';
+import * as stylex from '@stylexjs/stylex';
+import {
+  animationDuration,
+  backgroundTransparent,
+  borderColor,
+  fontColor,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type TableSectionProps = {
   children: ReactNode;
@@ -11,30 +19,46 @@ type TableSectionProps = {
   title: string;
 };
 
-const StyledSectionHeader = styled.div<{ isExpanded: boolean }>`
-  align-items: center;
-  background-color: ${themeCssVariables.background.transparent.lighter};
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  cursor: pointer;
-  display: flex;
-  height: ${themeCssVariables.spacing[6]};
-  justify-content: space-between;
-  padding: 0 ${themeCssVariables.spacing[2]};
-  text-align: left;
-`;
-
-const StyledSection = styled.div<{ isExpanded: boolean }>`
-  max-height: ${({ isExpanded }) => (isExpanded ? 'fit-content' : '0')};
-  opacity: ${({ isExpanded }) => (isExpanded ? 1 : 0)};
-  overflow: hidden;
-  transition:
-    max-height calc(${themeCssVariables.animation.duration.normal} * 1s),
-    opacity calc(${themeCssVariables.animation.duration.normal} * 1s);
-`;
-
-const StyledSectionContentContainer = styled.div`
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-`;
+const styles = stylex.create({
+  sectionHeader: {
+    alignItems: 'center',
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: borderColor['--t-border-color-light'],
+    cursor: 'pointer',
+    display: 'flex',
+    height: spacing['--t-spacing-6'],
+    justifyContent: 'space-between',
+    paddingTop: '0',
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: '0',
+    paddingLeft: spacing['--t-spacing-2'],
+    textAlign: 'left',
+  },
+  section: {
+    maxHeight: 0,
+    opacity: 0,
+    overflow: 'hidden',
+    transitionDuration: `calc(${animationDuration['--t-animation-duration-normal']} * 1s)`,
+    transitionProperty: 'max-height, opacity',
+  },
+  sectionExpanded: {
+    maxHeight: 'fit-content',
+    opacity: 1,
+  },
+  displayLabel: {
+    color: fontColor['--t-font-color-light'],
+    fontSize: '11px',
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+  },
+  sectionContentContainer: {
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: borderColor['--t-border-color-light'],
+  },
+});
 
 export const TableSection = ({
   children,
@@ -49,11 +73,11 @@ export const TableSection = ({
 
   return (
     <>
-      <StyledSectionHeader
-        isExpanded={isExpanded}
+      <div
         onClick={handleToggleSection}
+        {...stylex.props(styles.sectionHeader)}
       >
-        <StyledDisplayLabel>{title}</StyledDisplayLabel>
+        <Text {...stylex.props(styles.displayLabel)}>{title}</Text>
         {isExpanded ? (
           <IconChevronUp
             size={theme.icon.size.md}
@@ -67,18 +91,14 @@ export const TableSection = ({
             color={theme.font.color.light}
           />
         )}
-      </StyledSectionHeader>
-      <StyledSection isExpanded={isExpanded}>
-        <StyledSectionContentContainer>
+      </div>
+      <div
+        {...stylex.props(styles.section, isExpanded && styles.sectionExpanded)}
+      >
+        <div {...stylex.props(styles.sectionContentContainer)}>
           <TableBody>{children}</TableBody>
-        </StyledSectionContentContainer>
-      </StyledSection>
+        </div>
+      </div>
     </>
   );
 };
-
-const StyledDisplayLabel = styled(Text)`
-  color: var(--t-font-color-light);
-  font-size: 11px;
-  font-weight: var(--t-font-weight-semi-bold);
-`;

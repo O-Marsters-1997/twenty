@@ -1,26 +1,34 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import {
+  backgroundTransparent,
+  fontColor,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 import { type ReactNode } from 'react';
 import { Text } from 'twenty-ui/primitives/typography';
-import { themeCssVariables } from 'twenty-ui/theme';
 
-const StyledDropdownMenuSubheaderContainer = styled.div`
-  background-color: ${themeCssVariables.background.transparent.lighter};
-  padding: ${themeCssVariables.spacing[1]} ${themeCssVariables.spacing[2]};
-  width: 100%;
-`;
+const styles = stylex.create({
+  container: {
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
+    paddingBlock: spacing['--t-spacing-1'],
+    paddingInline: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+  label: {
+    color: fontColor['--t-font-color-light'],
+    fontSize: '11px',
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+  },
+});
 
 export const StyledDropdownMenuSubheader = ({
   children,
 }: {
   children: ReactNode;
 }) => (
-  <StyledDropdownMenuSubheaderContainer>
-    <StyledDisplayLabel>{children}</StyledDisplayLabel>
-  </StyledDropdownMenuSubheaderContainer>
+  <div {...stylex.props(styles.container)}>
+    <Text {...stylex.props(styles.label)}>{children}</Text>
+  </div>
 );
-
-const StyledDisplayLabel = styled(Text)`
-  color: var(--t-font-color-light);
-  font-size: 11px;
-  font-weight: var(--t-font-weight-semi-bold);
-`;

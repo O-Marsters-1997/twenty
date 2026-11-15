@@ -1,9 +1,14 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import { type ReactNode } from 'react';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+  },
+});
 
-export { StyledContainer as PageContainer };
+export const PageContainer = ({ children }: { children?: ReactNode }) => (
+  <div {...stylex.props(styles.container)}>{children}</div>
+);

@@ -1,16 +1,31 @@
-import { css } from '@linaria/core';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { color } from 'twenty-ui/theme/tokens.stylex';
 
-export const CARD_ACTION_CLASS_NAME = css`
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  inset: 0;
-  padding: 0;
-  position: absolute;
+const styles = stylex.create({
+  action: {
+    backgroundColor: 'transparent',
+    borderStyle: 'none',
+    cursor: 'pointer',
+    inset: 0,
+    padding: 0,
+    position: 'absolute',
+    outlineColor: {
+      default: null,
+      ':focus-visible': color['--t-color-blue'],
+    },
+    outlineOffset: {
+      default: null,
+      ':focus-visible': '-2px',
+    },
+    outlineStyle: {
+      default: null,
+      ':focus-visible': 'solid',
+    },
+    outlineWidth: {
+      default: null,
+      ':focus-visible': '2px',
+    },
+  },
+});
 
-  &:focus-visible {
-    outline: 2px solid ${themeCssVariables.color.blue};
-    outline-offset: -2px;
-  }
-`;
+export const CARD_ACTION_CLASS_NAME = stylex.props(styles.action).className;

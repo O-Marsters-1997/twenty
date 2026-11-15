@@ -23,7 +23,6 @@ import {
   size,
   useFloating,
 } from '@floating-ui/react';
-import { styled } from '@linaria/react';
 import {
   type MouseEvent,
   type ReactNode,
@@ -34,20 +33,22 @@ import { flushSync } from 'react-dom';
 import { type Keys } from 'react-hotkeys-hook';
 import { isDefined } from 'twenty-shared/utils';
 import { useIsMobile } from 'twenty-ui/utilities';
+import * as stylex from '@stylexjs/stylex';
 
 type Width = `${string}px` | `${number}%` | 'auto' | number;
-const StyledDropdownFallbackAnchor = styled.div`
-  left: 0;
-  position: fixed;
-  top: 0;
-`;
-
-const StyledClickableComponent = styled.div<{
-  width?: Width;
-}>`
-  height: fit-content;
-  width: ${({ width }) => width ?? 'auto'};
-`;
+const styles = stylex.create({
+  clickable: {
+    height: 'fit-content',
+  },
+  clickableWidth: (width: Width) => ({
+    width,
+  }),
+  dropdownFallbackAnchor: {
+    left: '0',
+    position: 'fixed',
+    top: '0',
+  },
+});
 
 export type DropdownProps = {
   clickableComponent?: ReactNode;
@@ -211,19 +212,25 @@ export const Dropdown = ({
       value={{ instanceId: dropdownId }}
     >
       {isDefined(clickableComponent) ? (
-        <StyledClickableComponent
+        <div
           ref={refs.setReference}
           onClick={handleClickableComponentClick}
           aria-controls={`${dropdownId}-options`}
           aria-expanded={isDropdownOpen}
           aria-haspopup={true}
           role="button"
-          width={clickableComponentWidth}
+          {...stylex.props(
+            styles.clickable,
+            styles.clickableWidth(clickableComponentWidth),
+          )}
         >
           {clickableComponent}
-        </StyledClickableComponent>
+        </div>
       ) : (
-        <StyledDropdownFallbackAnchor ref={refs.setReference} />
+        <div
+          ref={refs.setReference}
+          {...stylex.props(styles.dropdownFallbackAnchor)}
+        />
       )}
       {isDropdownOpen && (
         <DropdownInternalContainer

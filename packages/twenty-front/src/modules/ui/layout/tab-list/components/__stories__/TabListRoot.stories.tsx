@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { type Meta, type StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, within } from 'storybook/test';
 import { Tabs } from 'twenty-ui/primitives/navigation';
@@ -6,25 +5,26 @@ import { Tabs } from 'twenty-ui/primitives/navigation';
 import { TabList } from '@/ui/layout/tab-list/components/TabList';
 import { TabListRoot } from '@/ui/layout/tab-list/components/TabListRoot';
 import { ComponentWithRouterDecorator } from '~/testing/decorators/ComponentWithRouterDecorator';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledRecordPanel = styled.section`
-  height: 320px;
-  width: 600px;
-`;
-
-const StyledLayout = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  min-height: 0;
-`;
-
-const StyledScrollContainer = styled.div`
-  container-type: size;
-  flex: 1;
-  min-height: 0;
-  overflow: auto;
-`;
+const styles = stylex.create({
+  recordPanel: {
+    height: '320px',
+    width: '600px',
+  },
+  layout: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    minHeight: '0',
+  },
+  scrollContainer: {
+    containerType: 'size',
+    flex: '1',
+    minHeight: '0',
+    overflow: 'auto',
+  },
+});
 
 const meta: Meta<typeof TabListRoot> = {
   title: 'UI/Layout/TabList/Root',
@@ -37,9 +37,9 @@ type Story = StoryObj<typeof TabListRoot>;
 
 export const FixedHeightRecordPanel: Story = {
   render: () => (
-    <StyledRecordPanel aria-label="Company record">
+    <section aria-label="Company record" {...stylex.props(styles.recordPanel)}>
       <TabListRoot componentInstanceId="record-layout">
-        <StyledLayout>
+        <div {...stylex.props(styles.layout)}>
           <TabList
             aria-label="Record sections"
             componentInstanceId="record-layout"
@@ -49,13 +49,17 @@ export const FixedHeightRecordPanel: Story = {
               { id: 'timeline', title: 'Timeline' },
             ]}
           />
-          <StyledScrollContainer role="region" aria-label="Record content">
+          <div
+            role="region"
+            aria-label="Record content"
+            {...stylex.props(styles.scrollContainer)}
+          >
             <Tabs.Panel value="home">Company details</Tabs.Panel>
             <Tabs.Panel value="timeline">Company activity</Tabs.Panel>
-          </StyledScrollContainer>
-        </StyledLayout>
+          </div>
+        </div>
       </TabListRoot>
-    </StyledRecordPanel>
+    </section>
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

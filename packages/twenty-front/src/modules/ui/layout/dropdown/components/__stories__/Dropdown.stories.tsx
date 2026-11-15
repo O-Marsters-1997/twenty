@@ -1,9 +1,9 @@
-import { styled } from '@linaria/react';
 import {
   type Decorator,
   type Meta,
   type StoryObj,
 } from '@storybook/react-vite';
+import * as stylex from '@stylexjs/stylex';
 import { type PlayFunction } from 'storybook/internal/types';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 
@@ -22,6 +22,12 @@ import { IconChevronLeft } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
 import { ListItem } from 'twenty-ui/primitives/navigation';
 import { ComponentDecorator } from 'twenty-ui/testing';
+import * as stylex from '@stylexjs/stylex';
+
+const styles = stylex.create({
+  scaled: { height: '100px', width: '200px' },
+  offset: { paddingLeft: '200px', paddingTop: '100px' },
+});
 
 const meta: Meta<typeof Dropdown> = {
   title: 'UI/Layout/Dropdown/Dropdown',
@@ -42,40 +48,42 @@ const meta: Meta<typeof Dropdown> = {
 export default meta;
 type Story = StoryObj<typeof Dropdown>;
 
-const StyledContainer = styled.div`
-  height: 600px;
-  position: relative;
-
-  width: 300px;
-`;
-
-const StyledMenuAbsolutePositionWrapper = styled.div`
-  height: fit-content;
-  width: fit-content;
-`;
+const styles = stylex.create({
+  container: {
+    height: '600px',
+    position: 'relative',
+    width: '300px',
+  },
+  menuAbsolutePositionWrapper: {
+    height: 'fit-content',
+    width: 'fit-content',
+  },
+  emptyDropdownContent: {
+    height: '400px',
+    width: '100%',
+  },
+});
 
 const WithContentBelowDecorator: Decorator = (Story) => (
-  <StyledContainer>
-    <StyledMenuAbsolutePositionWrapper>
+  <div {...stylex.props(styles.container)}>
+    <div {...stylex.props(styles.menuAbsolutePositionWrapper)}>
       <Story />
-    </StyledMenuAbsolutePositionWrapper>
+    </div>
     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
     tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
     quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
     consequat.
-  </StyledContainer>
+  </div>
 );
-
-const StyledEmptyDropdownContent = styled.div`
-  height: 400px;
-  width: 100%;
-`;
 
 export const Empty: Story = {
   args: {
     dropdownComponents: (
       <LegacyDropdownContent>
-        <StyledEmptyDropdownContent data-testid="dropdown-content" />
+        <div
+          data-testid="dropdown-content"
+          {...stylex.props(styles.emptyDropdownContent)}
+        />
       </LegacyDropdownContent>
     ),
   },
@@ -113,11 +121,11 @@ export const InterfaceScale: Story = {
     dropdownPlacement: 'bottom-start',
     dropdownOffset: { x: 0, y: 0 },
     dropdownComponents: (
-      <div style={{ width: 200, height: 100 }}>Scaled dropdown</div>
+      <div {...stylex.props(styles.scaled)}>Scaled dropdown</div>
     ),
   },
   render: (args) => (
-    <div style={{ paddingLeft: 200, paddingTop: 100 }}>
+    <div {...stylex.props(styles.offset)}>
       <Dropdown {...args} />
     </div>
   ),

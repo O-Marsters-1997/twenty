@@ -1,6 +1,34 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import {
+  borderColor,
+  fontColor,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 import { type ComponentPropsWithoutRef, type Ref, forwardRef } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
+
+const styles = stylex.create({
+  header: {
+    alignItems: 'center',
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
+    color: fontColor['--t-font-color-tertiary'],
+    cursor: 'default',
+    display: 'flex',
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    gap: spacing['--t-spacing-1'],
+    height: spacing['--t-spacing-8'],
+    justifyContent: 'flex-start',
+    paddingBlock: 0,
+    paddingInline: spacing['--t-spacing-2'],
+    textAlign: 'left',
+  },
+  clickable: { cursor: 'pointer' },
+  alignCenter: { justifyContent: 'center', textAlign: 'center' },
+  alignRight: { justifyContent: 'flex-end', textAlign: 'right' },
+  padding: (padding: string) => ({ padding }),
+});
 
 type TableHeaderProps = Omit<ComponentPropsWithoutRef<'div'>, 'onClick'> & {
   align?: 'left' | 'center' | 'right';
@@ -8,32 +36,28 @@ type TableHeaderProps = Omit<ComponentPropsWithoutRef<'div'>, 'onClick'> & {
   padding?: string;
 };
 
-const StyledTableHeader = styled.div<TableHeaderProps>`
-  align-items: center;
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  color: ${themeCssVariables.font.color.tertiary};
-  cursor: ${({ onClick }) => (onClick ? 'pointer' : 'default')};
-  display: flex;
-  font-weight: ${themeCssVariables.font.weight.medium};
-  gap: ${themeCssVariables.spacing[1]};
-  height: ${themeCssVariables.spacing[8]};
-  justify-content: ${({ align }) =>
-    align === 'right'
-      ? 'flex-end'
-      : align === 'center'
-        ? 'center'
-        : 'flex-start'};
-  padding: ${({ padding }) => padding ?? `0 ${themeCssVariables.spacing[2]}`};
-  text-align: ${({ align }) => align ?? 'left'};
-`;
-
 export const TableHeader = forwardRef(
-  (props: TableHeaderProps, ref: Ref<HTMLDivElement>) => (
-    <StyledTableHeader
-      // oxlint-disable-next-line react/jsx-props-no-spreading
-      {...props}
-      ref={ref}
-      data-table-header
-    />
-  ),
+  (
+    { align, padding, className, ...props }: TableHeaderProps,
+    ref: Ref<HTMLDivElement>,
+  ) => {
+    const headerProps = stylex.props(
+      styles.header,
+      props.onClick !== undefined && styles.clickable,
+      align === 'center' && styles.alignCenter,
+      align === 'right' && styles.alignRight,
+      padding !== undefined && styles.padding(padding),
+    );
+
+    return (
+      <div
+        // oxlint-disable-next-line react/jsx-props-no-spreading
+        {...props}
+        ref={ref}
+        data-table-header
+        {...headerProps}
+        className={[headerProps.className, className].join(' ')}
+      />
+    );
+  },
 );

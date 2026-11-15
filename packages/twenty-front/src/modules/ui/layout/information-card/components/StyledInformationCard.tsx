@@ -1,18 +1,37 @@
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  boxShadow,
+  general,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
+import { type ReactNode } from 'react';
 
-export const StyledInformationCard = styled.div`
-  backdrop-filter: blur(20px);
-  background: ${themeCssVariables.background.transparent.secondary};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.md};
-  box-shadow: ${themeCssVariables.boxShadow.strong};
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[1]};
-  max-width: calc(100vw - 16px);
-  padding: ${themeCssVariables.spacing[2]};
-  width: 300px;
-  z-index: ${themeCssVariables.lastLayerZIndex};
-`;
+const styles = stylex.create({
+  root: {
+    backdropFilter: 'blur(20px)',
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-secondary'],
+    borderColor: borderColor['--t-border-color-medium'],
+    borderRadius: borderRadius['--t-border-radius-md'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    boxShadow: boxShadow['--t-box-shadow-strong'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-1'],
+    maxWidth: 'calc(100vw - 16px)',
+    padding: spacing['--t-spacing-2'],
+    width: '300px',
+    zIndex: general['--t-last-layer-z-index'],
+  },
+});
+
+export const StyledInformationCard = ({
+  children,
+}: {
+  children?: ReactNode;
+}) => <div {...stylex.props(styles.root)}>{children}</div>;

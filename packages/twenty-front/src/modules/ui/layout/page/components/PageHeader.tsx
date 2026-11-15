@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { type ReactNode } from 'react';
 
@@ -7,79 +6,84 @@ import { NavigationDrawerCollapseButton } from '@/ui/navigation/navigation-drawe
 import { useIsSettingsPage } from '@/navigation/hooks/useIsSettingsPage';
 import { useNavigationDrawerExpanded } from '@/ui/navigation/navigation-drawer/hooks/useNavigationDrawerExpanded';
 import { PAGE_ACTION_CONTAINER_CLICK_OUTSIDE_ID } from '@/ui/layout/page/constants/PageActionContainerClickOutsideId';
-import { PAGE_BAR_MIN_HEIGHT } from '@/ui/layout/page/constants/PageBarMinHeight';
+import { layoutSize } from '@/ui/layout/constants/layout.stylex';
 import { useIsMobile } from 'twenty-ui/utilities';
 import { AnimatePresence } from 'framer-motion';
 import { isDefined } from 'twenty-shared/utils';
 import { LightIconButton } from 'twenty-ui/components/input';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
 import { type IconComponent, IconX } from 'twenty-ui/icon';
-import { MOBILE_VIEWPORT, useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  background,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
 
-const StyledTopBarContainer = styled.div<{ isMobile: boolean }>`
-  align-items: center;
-  background: ${themeCssVariables.background.noisy};
-  color: ${themeCssVariables.font.color.primary};
-  display: flex;
-  flex-direction: row;
-  font-size: ${themeCssVariables.font.size.lg};
-  gap: ${themeCssVariables.spacing[2]};
-  justify-content: space-between;
-  min-height: ${PAGE_BAR_MIN_HEIGHT}px;
-  padding-bottom: ${themeCssVariables.spacing[3]};
-  padding-left: ${({ isMobile }) =>
-    isMobile ? themeCssVariables.spacing[3] : themeCssVariables.spacing[4]};
-  padding-right: ${themeCssVariables.spacing[3]};
-  padding-top: ${themeCssVariables.spacing[3]};
-`;
-
-const StyledLeftContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex: 0 1 auto;
-  flex-direction: row;
-  gap: ${themeCssVariables.spacing[1]};
-  min-width: 0;
-  overflow-x: hidden;
-  @media (max-width: ${MOBILE_VIEWPORT}px) {
-    padding-left: ${themeCssVariables.spacing[1]};
-  }
-`;
-
-const StyledTitleContainer = styled.div`
-  align-items: center;
-  display: flex;
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.medium};
-  margin-right: ${themeCssVariables.spacing[1]};
-  overflow: hidden;
-  width: 100%;
-`;
-
-const StyledTopBarIconStyledTitleContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  gap: ${themeCssVariables.spacing[1]};
-  overflow: hidden;
-  width: 100%;
-`;
-
-const StyledPageActionContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex: 1 1 0;
-  gap: ${themeCssVariables.spacing[2]};
-
-  justify-content: flex-end;
-  min-width: 0;
-`;
-
-const StyledIconContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-`;
+const styles = stylex.create({
+  topBarContainer: {
+    alignItems: 'center',
+    backgroundColor: background['--t-background-noisy'],
+    color: fontColor['--t-font-color-primary'],
+    display: 'flex',
+    flexDirection: 'row',
+    fontSize: fontSize['--t-font-size-lg'],
+    gap: spacing['--t-spacing-2'],
+    justifyContent: 'space-between',
+    minHeight: layoutSize.pageBarMinHeight,
+    paddingBottom: spacing['--t-spacing-3'],
+    paddingLeft: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingTop: spacing['--t-spacing-3'],
+  },
+  topBarContainerMobile: {
+    paddingLeft: spacing['--t-spacing-3'],
+  },
+  leftContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flex: '0 1 auto',
+    flexDirection: 'row',
+    gap: spacing['--t-spacing-1'],
+    minWidth: '0',
+    overflowX: 'hidden',
+    paddingLeft: { default: null, [media.mobile]: spacing['--t-spacing-1'] },
+  },
+  titleContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    marginRight: spacing['--t-spacing-1'],
+    overflow: 'hidden',
+    width: '100%',
+  },
+  topBarIconStyledTitleContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+    gap: spacing['--t-spacing-1'],
+    overflow: 'hidden',
+    width: '100%',
+  },
+  pageActionContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flex: '1 1 0',
+    gap: spacing['--t-spacing-2'],
+    justifyContent: 'flex-end',
+    minWidth: '0',
+  },
+  iconContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+  },
+});
 
 type PageHeaderProps = {
   title?: ReactNode;
@@ -103,10 +107,18 @@ export const PageHeader = ({
   const theme = useTheme();
   const isNavigationDrawerExpanded = useNavigationDrawerExpanded();
 
+  const topBarProps = stylex.props(
+    styles.topBarContainer,
+    isMobile && styles.topBarContainerMobile,
+  );
+
   return (
     <AnimatePresence initial={false}>
-      <StyledTopBarContainer className={className} isMobile={isMobile}>
-        <StyledLeftContainer>
+      <div
+        {...topBarProps}
+        className={[topBarProps.className, className].join(' ')}
+      >
+        <div {...stylex.props(styles.leftContainer)}>
           {!isNavigationDrawerExpanded && (!isMobile || isSettingsPage) && (
             <NavigationDrawerCollapseButton direction="right" />
           )}
@@ -121,29 +133,33 @@ export const PageHeader = ({
             </LightIconButton>
           )}
 
-          <StyledTopBarIconStyledTitleContainer>
+          <div {...stylex.props(styles.topBarIconStyledTitleContainer)}>
             {Icon && (
-              <StyledIconContainer>
+              <div {...stylex.props(styles.iconContainer)}>
                 <Icon size={theme.icon.size.md} />
-              </StyledIconContainer>
+              </div>
             )}
             {isDefined(title) && (
-              <StyledTitleContainer data-testid="top-bar-title">
+              <div
+                data-testid="top-bar-title"
+                {...stylex.props(styles.titleContainer)}
+              >
                 {typeof title === 'string' ? (
                   <OverflowingTextWithTooltip text={title} />
                 ) : (
                   title
                 )}
-              </StyledTitleContainer>
+              </div>
             )}
-          </StyledTopBarIconStyledTitleContainer>
-        </StyledLeftContainer>
-        <StyledPageActionContainer
+          </div>
+        </div>
+        <div
           data-click-outside-id={PAGE_ACTION_CONTAINER_CLICK_OUTSIDE_ID}
+          {...stylex.props(styles.pageActionContainer)}
         >
           {children}
-        </StyledPageActionContainer>
-      </StyledTopBarContainer>
+        </div>
+      </div>
     </AnimatePresence>
   );
 };

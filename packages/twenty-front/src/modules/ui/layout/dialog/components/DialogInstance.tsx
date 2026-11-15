@@ -1,9 +1,10 @@
 import { useContext, type ReactNode } from 'react';
+import * as stylex from '@stylexjs/stylex';
 import { useStore } from 'jotai';
 import { isDefined } from 'twenty-shared/utils';
 import { Dialog, type DialogPopupProps } from 'twenty-ui/primitives/surfaces';
 
-import { RootStackingContextZIndices } from '@/ui/layout/constants/RootStackingContextZIndices';
+import { zIndex } from '@/ui/layout/constants/layout.stylex';
 import { DialogEnterHotkeyEffect } from '@/ui/layout/dialog/components/DialogEnterHotkeyEffect';
 import { DIALOG_BACKDROP_CLICK_OUTSIDE_ID } from '@/ui/layout/dialog/constants/DialogBackdropClickOutsideId';
 import { DIALOG_CLICK_OUTSIDE_LISTENER_EXCLUDED_ID } from '@/ui/layout/dialog/constants/DialogClickOutsideListenerExcludedClassName';
@@ -25,6 +26,16 @@ type DialogInstanceProps = {
   closeOnDismiss?: boolean;
   renderInDocumentBody?: boolean;
 };
+
+const styles = stylex.create({
+  absolute: { position: 'absolute' },
+  fixed: { position: 'fixed' },
+  backdrop: { zIndex: zIndex.rootModalBackDrop },
+  backdropInContainer: {
+    background: 'var(--t-background-overlay-tertiary)',
+  },
+  viewport: { zIndex: zIndex.rootModal },
+});
 
 const PROPAGATED_KEYS = new Set([
   'ArrowUp',
@@ -52,7 +63,7 @@ export const DialogInstance = ({
     dialogId,
   );
   const { openDialog, closeDialog } = useDialog();
-  const position = isInContainer ? 'absolute' : 'fixed';
+  const positionStyle = isInContainer ? styles.absolute : styles.fixed;
 
   const popupProps: Pick<DialogPopupProps, 'onKeyDown'> = {
     onKeyDown: (event) => {
@@ -123,21 +134,16 @@ export const DialogInstance = ({
             }
           >
             <Dialog.Backdrop
-              style={{
-                position,
-                zIndex: RootStackingContextZIndices.RootModalBackDrop,
-                background: isInContainer
-                  ? 'var(--t-background-overlay-tertiary)'
-                  : undefined,
-              }}
+              {...stylex.props(
+                positionStyle,
+                styles.backdrop,
+                isInContainer && styles.backdropInContainer,
+              )}
             />
             <Dialog.Viewport
               data-testid="dialog-viewport"
               data-click-outside-id={DIALOG_BACKDROP_CLICK_OUTSIDE_ID}
-              style={{
-                position,
-                zIndex: RootStackingContextZIndices.RootModal,
-              }}
+              {...stylex.props(positionStyle, styles.viewport)}
               onMouseDown={(event) => event.stopPropagation()}
             >
               {children(popupProps)}

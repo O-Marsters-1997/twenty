@@ -1,40 +1,38 @@
-import { DROPDOWN_MENU_ITEMS_CONTAINER_MAX_HEIGHT } from '@/ui/layout/dropdown/constants/DropdownMenuItemsContainerMaxHeight';
+import { layoutSize } from '@/ui/layout/constants/layout.stylex';
 import { GenericDropdownContentWidth } from '@/ui/layout/dropdown/constants/GenericDropdownContentWidth';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import { borderColor, general, spacing } from 'twenty-ui/theme/tokens.stylex';
 import { type ReactNode, type Ref } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { isDefined } from 'twenty-shared/utils';
 
-const StyledContainer = styled.div<{ widthInPixels: number }>`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: ${({ widthInPixels }) => widthInPixels}px;
-`;
-
-const StyledScrollableContainer = styled.div`
-  box-sizing: border-box;
-  display: flex;
-  max-height: ${DROPDOWN_MENU_ITEMS_CONTAINER_MAX_HEIGHT}px;
-  overflow-y: auto;
-  scrollbar-color: ${themeCssVariables.border.color.medium} transparent;
-  scrollbar-width: thin;
-  width: 100%;
-
-  *::-webkit-scrollbar-thumb {
-    border-radius: ${themeCssVariables.border.radius.pill};
-  }
-`;
-
-const StyledItems = styled.div`
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.betweenSiblingsGap};
-  height: fit-content;
-  padding: ${themeCssVariables.spacing[1]};
-  width: 100%;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+  },
+  containerWidth: (widthInPixels: number) => ({
+    width: `${widthInPixels}px`,
+  }),
+  scrollable: {
+    boxSizing: 'border-box',
+    display: 'flex',
+    maxHeight: layoutSize.dropdownMenuItemsContainerMaxHeight,
+    overflowY: 'auto',
+    scrollbarColor: `${borderColor['--t-border-color-medium']} transparent`,
+    scrollbarWidth: 'thin',
+    width: '100%',
+  },
+  items: {
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: general['--t-between-siblings-gap'],
+    height: 'fit-content',
+    padding: spacing['--t-spacing-1'],
+    width: '100%',
+  },
+});
 
 type OverlayMenuListProps = {
   children?: ReactNode;
@@ -51,13 +49,16 @@ export const OverlayMenuList = ({
   width = GenericDropdownContentWidth.Medium,
   ref,
 }: OverlayMenuListProps) => (
-  <StyledContainer ref={ref} widthInPixels={width}>
+  <div
+    ref={ref}
+    {...stylex.props(styles.container, styles.containerWidth(width))}
+  >
     {header}
     {isDefined(children) && (
-      <StyledScrollableContainer>
-        <StyledItems>{children}</StyledItems>
-      </StyledScrollableContainer>
+      <div {...stylex.props(styles.scrollable)}>
+        <div {...stylex.props(styles.items)}>{children}</div>
+      </div>
     )}
     {footer}
-  </StyledContainer>
+  </div>
 );

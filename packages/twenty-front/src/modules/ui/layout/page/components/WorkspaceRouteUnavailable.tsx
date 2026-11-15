@@ -1,17 +1,22 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { type ReactNode } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.light};
-  display: flex;
-  height: 100%;
-  justify-content: center;
-  padding: ${themeCssVariables.spacing[6]};
-  text-align: center;
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-light'],
+    display: 'flex',
+    height: '100%',
+    justifyContent: 'center',
+    paddingTop: spacing['--t-spacing-6'],
+    paddingRight: spacing['--t-spacing-6'],
+    paddingBottom: spacing['--t-spacing-6'],
+    paddingLeft: spacing['--t-spacing-6'],
+    textAlign: 'center',
+  },
+});
 
 export const WorkspaceRouteUnavailable = ({
   children,
@@ -21,8 +26,8 @@ export const WorkspaceRouteUnavailable = ({
   const { t } = useLingui();
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       {children ?? t`This page isn't available.`}
-    </StyledContainer>
+    </div>
   );
 };

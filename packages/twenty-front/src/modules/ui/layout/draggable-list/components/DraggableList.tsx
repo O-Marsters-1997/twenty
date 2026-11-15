@@ -1,5 +1,4 @@
 import { DragDropProvider } from '@dnd-kit/react';
-import { styled } from '@linaria/react';
 import { useMemo, useState } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { v4 } from 'uuid';
@@ -17,6 +16,7 @@ import { type DragDropProviderDragEndEvent } from '@/ui/utilities/drag-and-drop/
 import { type DragDropProviderDragMoveEvent } from '@/ui/utilities/drag-and-drop/types/DragDropProviderDragMoveEvent';
 import { getDestinationIndex } from '@/ui/utilities/drag-and-drop/utils/getDestinationIndex';
 import { resolveDropFromPointer } from '@/ui/utilities/drag-and-drop/utils/resolveDropFromPointer';
+import * as stylex from '@stylexjs/stylex';
 
 type DraggableListItemDndData = {
   droppableId: string;
@@ -28,9 +28,11 @@ type DraggableListProps = {
   onDragEnd: (result: DraggableListDropResult) => void;
 };
 
-const StyledDragDropItemsWrapper = styled.div`
-  width: 100%;
-`;
+const styles = stylex.create({
+  dragDropItemsWrapper: {
+    width: '100%',
+  },
+});
 
 export const DraggableList = ({
   draggableItems,
@@ -138,7 +140,7 @@ export const DraggableList = ({
         onDragEnd={handleDragEnd}
       >
         <DraggableListGroupContext.Provider value={groupContextValue}>
-          <StyledDragDropItemsWrapper>
+          <div {...stylex.props(styles.dragDropItemsWrapper)}>
             {draggableItems}
             <DragDropItemDropTarget
               index={trailingIndex}
@@ -147,7 +149,7 @@ export const DraggableList = ({
               compact
               seamAligned
             />
-          </StyledDragDropItemsWrapper>
+          </div>
         </DraggableListGroupContext.Provider>
       </DragDropProvider>
     </DragDropItemDndContext.Provider>
