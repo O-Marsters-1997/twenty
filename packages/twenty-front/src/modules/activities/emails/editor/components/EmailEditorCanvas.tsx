@@ -5,10 +5,9 @@ import { AdvancedTextEditorBlockHandle } from '@/advanced-text-editor/components
 import { useOpenEmailBlockStyleInSidePanel } from '@/side-panel/hooks/useOpenEmailBlockStyleInSidePanel';
 import { useLiveEditorState } from '@/advanced-text-editor/hooks/useLiveEditorState';
 import { type AdvancedTextEditorComponentProps } from '@/advanced-text-editor/types/AdvancedTextEditorComponentProps';
-import { styled } from '@linaria/react';
 import { type MouseEvent } from 'react';
 import { CANVAS_THEME_DEFAULTS, resolveCanvasTheme } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import '~/third-party-styles/email-editor-canvas.css';
 
 const styles = stylex.create({
   canvasBackdrop: {
@@ -19,26 +18,14 @@ const styles = stylex.create({
     paddingInline: spacing['--t-spacing-4'],
     width: '100%',
   },
+  canvasPage: {
+    boxSizing: 'border-box',
+    marginBlock: 0,
+    marginInline: 'auto',
+    maxWidth: '100%',
+    minHeight: '400px',
+  },
 });
-
-const StyledCanvasPage = styled.div`
-  box-sizing: border-box;
-  margin: 0 auto;
-  max-width: 100%;
-  min-height: 400px;
-
-  .editor-content,
-  .tiptap {
-    min-height: inherit;
-  }
-
-  .tiptap {
-    color: inherit;
-    margin-left: calc(-1 * ${themeCssVariables.spacing[10]});
-    padding: 0 0 0 ${themeCssVariables.spacing[10]};
-    width: calc(100% + ${themeCssVariables.spacing[10]});
-  }
-`;
 
 type EmailEditorCanvasProps = AdvancedTextEditorComponentProps;
 
@@ -73,8 +60,10 @@ export const EmailEditorCanvas = ({
         padding: canvasTheme.pagePadding,
       }}
     >
-      <StyledCanvasPage
+      <div
+        data-email-editor-canvas-page
         onClick={handleCanvasClick}
+        {...stylex.props(styles.canvasPage)}
         style={{
           backgroundColor: canvasTheme.bodyBackground || undefined,
           border:
@@ -97,7 +86,7 @@ export const EmailEditorCanvas = ({
           editor={editor}
           onOpenBlockSettings={openEmailBlockStyleInSidePanel}
         />
-      </StyledCanvasPage>
+      </div>
     </div>
   );
 };

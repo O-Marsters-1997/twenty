@@ -1,0 +1,13 @@
+@layer third-party {
+  [data-email-editor-canvas-page] .editor-content,
+  [data-email-editor-canvas-page] .tiptap {
+    min-height: inherit;
+  }
+
+  [data-email-editor-canvas-page] .tiptap {
+    color: inherit;
+    margin-left: calc(-1 * var(--t-spacing-10));
+    padding: 0 0 0 var(--t-spacing-10);
+    width: calc(100% + var(--t-spacing-10));
+  }
+}

@@ -4,21 +4,22 @@ import { SkeletonLoader } from '@/activities/components/SkeletonLoader';
 import { EmailThreadPreview } from '@/activities/emails/components/EmailThreadPreview';
 import { EmptyInboxPlaceholder } from '@/activities/emails/components/EmptyInboxPlaceholder';
 import { StyledWidgetContentContainer } from '@/ui/layout/components/WidgetContentContainer';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { Section } from 'twenty-ui/components/layout';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 import { type TimelineThread } from '~/generated/graphql';
 
-const StyledContainer = styled(StyledWidgetContentContainer)`
-  gap: ${themeCssVariables.spacing[6]};
-  overflow: hidden;
-`;
-
-const StyledSection = styled(Section.Root)`
-  display: flex;
-  flex: 1;
-  min-height: 0;
-`;
+const styles = stylex.create({
+  container: {
+    gap: spacing['--t-spacing-6'],
+    overflow: 'hidden',
+  },
+  section: {
+    display: 'flex',
+    flex: 1,
+    minHeight: 0,
+  },
+});
 
 type EmailsCardContentProps = {
   firstQueryLoading: boolean;
@@ -39,15 +40,15 @@ export const EmailsCardContent = ({
 
   if (!timelineThreads?.length) {
     return (
-      <StyledContainer>
+      <StyledWidgetContentContainer {...stylex.props(styles.container)}>
         <EmptyInboxPlaceholder />
-      </StyledContainer>
+      </StyledWidgetContentContainer>
     );
   }
 
   return (
-    <StyledContainer>
-      <StyledSection>
+    <StyledWidgetContentContainer {...stylex.props(styles.container)}>
+      <Section.Root xstyle={styles.section}>
         <ActivityList isScrollable>
           {timelineThreads.map((thread) => (
             <EmailThreadPreview key={thread.id} thread={thread} />
@@ -57,7 +58,7 @@ export const EmailsCardContent = ({
             onLastRowVisible={onLastRowVisible}
           />
         </ActivityList>
-      </StyledSection>
-    </StyledContainer>
+      </Section.Root>
+    </StyledWidgetContentContainer>
   );
 };

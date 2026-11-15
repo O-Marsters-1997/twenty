@@ -1,33 +1,41 @@
 import { CARD_ACTION_CLASS_NAME } from '@/ui/layout/card/styles/CardActionClassName';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { type MouseEvent, type PropsWithChildren } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { Card } from 'twenty-ui/primitives/surfaces';
-import { themeCssVariables } from 'twenty-ui/theme';
+import {
+  backgroundTransparent,
+  borderColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledRowContentContainer = styled.div`
-  > div {
-    align-items: center;
-    box-sizing: border-box;
-    display: flex;
-    gap: ${themeCssVariables.spacing[2]};
-    height: ${themeCssVariables.spacing[12]};
-    padding: ${themeCssVariables.spacing[0]} ${themeCssVariables.spacing[4]};
-    position: relative;
-  }
-
-  > div:has(> .${CARD_ACTION_CLASS_NAME}:not(:disabled)):hover {
-    background: ${themeCssVariables.background.transparent.lighter};
-    cursor: pointer;
-  }
-`;
-
-const StyledRowAction = styled.button`
-  &:disabled {
-    cursor: default;
-    pointer-events: none;
-  }
-`;
+const styles = stylex.create({
+  row: {
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: { default: 0, ':not(:last-child)': 1 },
+  },
+  content: {
+    alignItems: 'center',
+    boxSizing: 'border-box',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    height: spacing['--t-spacing-12'],
+    paddingBlock: spacing['--t-spacing-0'],
+    paddingInline: spacing['--t-spacing-4'],
+    position: 'relative',
+  },
+  contentInteractive: {
+    backgroundColor: {
+      default: null,
+      ':hover': backgroundTransparent['--t-background-transparent-lighter'],
+    },
+    cursor: 'pointer',
+  },
+  action: {
+    pointerEvents: { default: null, ':disabled': 'none' },
+  },
+});
 
 const INDEPENDENT_ROW_ACTION_SELECTOR = [
   'a',
@@ -70,11 +78,17 @@ export const ActivityRow = ({
   };
 
   return (
-    <StyledRowContentContainer>
-      <Card.Content onClick={handleContentClick}>
+    <div {...stylex.props(styles.row)}>
+      <Card.Content
+        onClick={handleContentClick}
+        xstyle={[
+          styles.content,
+          isDefined(onClick) && !disabled && styles.contentInteractive,
+        ]}
+      >
         {isDefined(onClick) && (
-          <StyledRowAction
-            className={CARD_ACTION_CLASS_NAME}
+          <button
+            className={`${CARD_ACTION_CLASS_NAME} ${stylex.props(styles.action).className}`}
             type="button"
             aria-label={label}
             onClick={onClick}
@@ -83,6 +97,6 @@ export const ActivityRow = ({
         )}
         {children}
       </Card.Content>
-    </StyledRowContentContainer>
+    </div>
   );
 };

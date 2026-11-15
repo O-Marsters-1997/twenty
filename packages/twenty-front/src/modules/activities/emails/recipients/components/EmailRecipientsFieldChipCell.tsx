@@ -1,6 +1,6 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { type MouseEvent, type RefObject } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { borderRadius, color } from 'twenty-ui/theme/tokens.stylex';
 
 import { EMAIL_RECIPIENT_DND_TYPE } from '@/activities/emails/recipients/constants/EmailRecipientDndType';
 import { EmailRecipientsFieldChip } from '@/activities/emails/recipients/components/EmailRecipientsFieldChip';
@@ -17,36 +17,47 @@ const DROP_INDICATOR_WIDTH = '2px';
 const DROP_INDICATOR_OFFSET = '-3px';
 
 // Absolute so showing the bar never reflows the wrapping chip row mid-drag.
-const StyledChipDropZone = styled.div`
-  position: relative;
-
-  &::before,
-  &::after {
-    background-color: ${themeCssVariables.color.blue};
-    border-radius: ${themeCssVariables.border.radius.pill};
-    bottom: 0;
-    content: '';
-    corner-shape: round;
-    opacity: 0;
-    position: absolute;
-    top: 0;
-    transition: opacity 120ms ease-out;
-    width: ${DROP_INDICATOR_WIDTH};
-  }
-
-  &::before {
-    left: ${DROP_INDICATOR_OFFSET};
-  }
-
-  &::after {
-    right: ${DROP_INDICATOR_OFFSET};
-  }
-
-  &[data-drop-edge='before']::before,
-  &[data-drop-edge='after']::after {
-    opacity: 1;
-  }
-`;
+const styles = stylex.create({
+  chipDropZone: {
+    position: 'relative',
+    '::before': {
+      backgroundColor: color['--t-color-blue'],
+      borderRadius: borderRadius['--t-border-radius-pill'],
+      bottom: 0,
+      content: '""',
+      cornerShape: 'round',
+      left: DROP_INDICATOR_OFFSET,
+      opacity: 0,
+      position: 'absolute',
+      top: 0,
+      transitionDuration: '120ms',
+      transitionProperty: 'opacity',
+      transitionTimingFunction: 'ease-out',
+      width: DROP_INDICATOR_WIDTH,
+    },
+    '::after': {
+      backgroundColor: color['--t-color-blue'],
+      borderRadius: borderRadius['--t-border-radius-pill'],
+      bottom: 0,
+      content: '""',
+      cornerShape: 'round',
+      opacity: 0,
+      position: 'absolute',
+      right: DROP_INDICATOR_OFFSET,
+      top: 0,
+      transitionDuration: '120ms',
+      transitionProperty: 'opacity',
+      transitionTimingFunction: 'ease-out',
+      width: DROP_INDICATOR_WIDTH,
+    },
+  },
+  dropBefore: {
+    '::before': { opacity: 1 },
+  },
+  dropAfter: {
+    '::after': { opacity: 1 },
+  },
+});
 
 type EmailRecipientsFieldChipCellProps = {
   chipId: string;
@@ -119,8 +130,12 @@ export const EmailRecipientsFieldChipCell = ({
       orientation="vertical"
       type={EMAIL_RECIPIENT_DND_TYPE}
     >
-      <StyledChipDropZone
-        data-drop-edge={dropEdge ?? undefined}
+      <div
+        {...stylex.props(
+          styles.chipDropZone,
+          dropEdge === 'before' && styles.dropBefore,
+          dropEdge === 'after' && styles.dropAfter,
+        )}
         onClickCapture={handleClickCapture}
         // Keeps focus in the input so chip keyboard navigation survives a click.
         onMouseDown={(event) => event.preventDefault()}
@@ -137,7 +152,7 @@ export const EmailRecipientsFieldChipCell = ({
           onEdit={onEdit}
           onRemove={onRemove}
         />
-      </StyledChipDropZone>
+      </div>
     </DragDropItemSortableCell>
   );
 };

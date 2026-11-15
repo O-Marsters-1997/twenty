@@ -1,27 +1,27 @@
-import { styled } from '@linaria/react';
-import { motion } from 'framer-motion';
+import * as stylex from '@stylexjs/stylex';
 import Linkify from 'linkify-react';
 import { Collapsible } from 'twenty-ui/primitives/layout';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { borderColor, fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledThreadMessageBody = styled(motion.div)`
-  color: ${themeCssVariables.font.color.primary};
-  margin-top: ${themeCssVariables.spacing[4]};
-  overflow-wrap: break-word;
-  white-space: pre-line;
-
-  a {
-    color: ${themeCssVariables.font.color.primary};
-
-    text-decoration: underline;
-    text-decoration-color: ${themeCssVariables.font.color.primary};
-
-    &:hover {
-      color: ${themeCssVariables.font.color.tertiary};
-      text-decoration-color: ${themeCssVariables.border.color.strong};
-    }
-  }
-`;
+const styles = stylex.create({
+  body: {
+    color: fontColor['--t-font-color-primary'],
+    marginTop: spacing['--t-spacing-4'],
+    overflowWrap: 'break-word',
+    whiteSpace: 'pre-line',
+  },
+  link: {
+    color: {
+      default: fontColor['--t-font-color-primary'],
+      ':hover': fontColor['--t-font-color-tertiary'],
+    },
+    textDecorationColor: {
+      default: fontColor['--t-font-color-primary'],
+      ':hover': borderColor['--t-border-color-strong'],
+    },
+    textDecorationLine: 'underline',
+  },
+});
 
 type EmailThreadMessageBodyProps = {
   body: string;
@@ -35,16 +35,17 @@ export const EmailThreadMessageBody = ({
   return (
     <Collapsible.Root open={isDisplayed}>
       <Collapsible.Panel duration="fast">
-        <StyledThreadMessageBody>
+        <div {...stylex.props(styles.body)}>
           <Linkify
             options={{
               target: '_blank',
               rel: 'noopener noreferrer',
+              className: stylex.props(styles.link).className,
             }}
           >
             {body}
           </Linkify>
-        </StyledThreadMessageBody>
+        </div>
       </Collapsible.Panel>
     </Collapsible.Root>
   );

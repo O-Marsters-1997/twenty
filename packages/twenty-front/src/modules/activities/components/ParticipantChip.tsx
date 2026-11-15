@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import React from 'react';
 
 import { getDisplayNameFromParticipant } from '@/activities/emails/utils/getDisplayNameFromParticipant';
@@ -16,6 +15,10 @@ import {
 } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
+  container: {
+    alignItems: 'flex-start',
+    display: 'flex',
+  },
   senderName: {
     color: fontColor['--t-font-color-primary'],
     fontSize: fontSize['--t-font-size-md'],
@@ -41,11 +44,6 @@ const styles = stylex.create({
   },
 });
 
-const StyledContainer = styled.div`
-  align-items: flex-start;
-  display: flex;
-`;
-
 type ParticipantChipVariant = 'default' | 'bold';
 
 export const ParticipantChip = ({
@@ -65,7 +63,7 @@ export const ParticipantChip = ({
   const avatarUrl = person?.avatarUrl ?? workspaceMember?.avatarUrl ?? '';
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       {person ? (
         <RecordChip
           objectNameSingular={CoreObjectNameSingular.Person}
@@ -93,6 +91,6 @@ export const ParticipantChip = ({
           </span>
         </div>
       )}
-    </StyledContainer>
+    </div>
   );
 };

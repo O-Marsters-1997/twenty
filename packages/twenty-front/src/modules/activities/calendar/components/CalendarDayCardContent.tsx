@@ -1,13 +1,13 @@
-import { styled } from '@linaria/react';
 import { differenceInSeconds, endOfDay, format } from 'date-fns';
 
 import { CalendarEventRow } from '@/activities/calendar/components/CalendarEventRow';
 import { getCalendarEventStartDate } from '@/activities/calendar/utils/getCalendarEventStartDate';
 import { Card } from 'twenty-ui/primitives/surfaces';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { type TimelineCalendarEvent } from '~/generated/graphql';
 import * as stylex from '@stylexjs/stylex';
 import {
+  animationDuration,
+  background,
   fontColor,
   fontSize,
   fontWeight,
@@ -19,28 +19,24 @@ type CalendarDayCardContentProps = {
   divider?: boolean;
 };
 
-const StyledCardContentContainer = styled.div`
-  > div {
-    align-items: flex-start;
-    display: flex;
-    flex-direction: row;
-    gap: ${themeCssVariables.spacing[3]};
-    padding: ${themeCssVariables.spacing[2]} ${themeCssVariables.spacing[3]};
-  }
-`;
-
-const StyledDayCardContent = styled(Card.Content)`
-  @keyframes calendarDayEnded {
-    to {
-      background-color: ${themeCssVariables.background.primary};
-    }
-  }
-
-  animation: calendarDayEnded calc(var(--t-animation-duration-fast) * 1s) ease
-    forwards;
-`;
+const calendarDayEnded = stylex.keyframes({
+  to: { backgroundColor: background['--t-background-primary'] },
+});
 
 const styles = stylex.create({
+  dayCardContent: {
+    alignItems: 'flex-start',
+    animationDuration: `calc(${animationDuration['--t-animation-duration-fast']} * 1s)`,
+    animationFillMode: 'forwards',
+    animationName: calendarDayEnded,
+    animationTimingFunction: 'ease',
+    display: 'flex',
+    flexDirection: 'row',
+    gap: spacing['--t-spacing-3'],
+    paddingBlock: spacing['--t-spacing-2'],
+    paddingInline: spacing['--t-spacing-3'],
+  },
+  dayCardContentDelay: (animationDelay: string) => ({ animationDelay }),
   dayContainer: {
     textAlign: 'center',
     width: spacing['--t-spacing-6'],
@@ -76,10 +72,13 @@ export const CalendarDayCardContent = ({
   const monthDayLabel = format(endOfDayDate, 'dd');
 
   return (
-    <StyledCardContentContainer>
-      <StyledDayCardContent
+    <div>
+      <Card.Content
         divider={divider}
-        style={{ animationDelay: `${Math.max(0, dayEndsIn)}s` }}
+        xstyle={[
+          styles.dayCardContent,
+          styles.dayCardContentDelay(`${Math.max(0, dayEndsIn)}s`),
+        ]}
       >
         <div {...stylex.props(styles.dayContainer)}>
           <div {...stylex.props(styles.weekDay)}>{weekDayLabel}</div>
@@ -95,7 +94,7 @@ export const CalendarDayCardContent = ({
             </div>
           ))}
         </div>
-      </StyledDayCardContent>
-    </StyledCardContentContainer>
+      </Card.Content>
+    </div>
   );
 };
