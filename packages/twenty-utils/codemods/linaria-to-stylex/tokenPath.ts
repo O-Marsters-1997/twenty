@@ -15,8 +15,6 @@ export type TokenReference = {
   segments: string[];
 };
 
-// Resolves `themeCssVariables.a.b[4]` to the StyleX var `a['--t-a-b-4']`.
-// Returns undefined for anything that is not a literal path.
 export const resolveTokenReference = (
   expression: ts.Expression,
 ): TokenReference | undefined => {

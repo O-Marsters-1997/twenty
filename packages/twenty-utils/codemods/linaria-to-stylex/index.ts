@@ -23,23 +23,22 @@ const main = () => {
     process.exit(1);
   }
 
-  const results = collectFiles(resolve(target)).map((file) => ({
-    file,
-    source: readFileSync(file, 'utf8'),
-  }));
-  const converted = results.map(({ file, source }) => ({
-    file,
-    source,
-    ...convertSource(file, source),
-  }));
-
   let convertedCount = 0;
   const findings: Finding[] = [];
-  for (const result of converted) {
-    convertedCount += result.convertedCount;
-    findings.push(...result.findings);
-    if (result.output !== result.source) {
-      writeFileSync(result.file, result.output);
+  for (const file of collectFiles(resolve(target))) {
+    const source = readFileSync(file, 'utf8');
+    try {
+      const result = convertSource(file, source);
+      convertedCount += result.convertedCount;
+      findings.push(...result.findings);
+      if (result.output !== source) writeFileSync(file, result.output);
+    } catch (error) {
+      findings.push({
+        file,
+        line: 0,
+        name: '(file)',
+        reason: `skipped: ${(error as Error).message}`,
+      });
     }
   }
 
