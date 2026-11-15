@@ -98,7 +98,7 @@ const publicWorkspaceColumns = `id::text, "displayName", subdomain, logo, "logoF
 func (p *PublicWorkspaces) ByOrigin(ctx context.Context, origin string) (PublicWorkspace, error) {
 	found, err := p.origins.ByOriginOrDefault(ctx, origin)
 	if err != nil {
-		return PublicWorkspace{}, err
+		return PublicWorkspace{}, fmt.Errorf("resolve workspace origin: %w", err)
 	}
 	row, err := p.row(ctx, `id = $1::uuid`, found.ID)
 	if err != nil {
@@ -279,7 +279,7 @@ func (p *PublicWorkspaces) signedLogo(ctx context.Context, row publicWorkspaceRo
 	}
 	token, err := p.login.issuer.IssueFileToken(ctx, row.id, *row.logoFileID, p.login.config.FileTokenTTL)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("sign workspace logo: %w", err)
 	}
 	return fmt.Sprintf("%s/file/%s/%s?token=%s", p.login.config.ServerURL, fileFolderCorePicture, *row.logoFileID, token), nil
 }
