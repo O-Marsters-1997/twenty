@@ -4,7 +4,16 @@ import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
 import { type IconComponent } from 'twenty-ui/icon';
 import { useTheme } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { background, spacing, border, font, text } from 'twenty-ui/theme/tokens.stylex';
+import {
+  background,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+  textLineHeight,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   content: {
@@ -22,11 +31,11 @@ const styles = stylex.create({
     backgroundColor: background['--t-background-primary'],
     borderWidth: '2px',
     borderStyle: 'solid',
-    borderColor: border['--t-border-color-light'],
-    borderTopLeftRadius: border['--t-border-radius-sm'],
-    borderTopRightRadius: border['--t-border-radius-sm'],
-    borderBottomRightRadius: border['--t-border-radius-sm'],
-    borderBottomLeftRadius: border['--t-border-radius-sm'],
+    borderColor: borderColor['--t-border-color-light'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
     display: 'flex',
     height: spacing['--t-spacing-8'],
     justifyContent: 'center',
@@ -50,16 +59,16 @@ const styles = stylex.create({
   },
   title: {
     alignItems: 'center',
-    color: font['--t-font-color-primary'],
+    color: fontColor['--t-font-color-primary'],
     display: 'flex',
-    fontWeight: font['--t-font-weight-medium'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
     minHeight: spacing['--t-spacing-4'],
     width: '100%',
   },
   description: {
-    color: font['--t-font-color-secondary'],
-    fontSize: font['--t-font-size-sm'],
-    lineHeight: text['--t-text-line-height-lg'],
+    color: fontColor['--t-font-color-secondary'],
+    fontSize: fontSize['--t-font-size-sm'],
+    lineHeight: textLineHeight['--t-text-line-height-lg'],
     overflow: 'hidden',
     textBoxEdge: 'cap alphabetic',
     textBoxTrim: 'trim-both',

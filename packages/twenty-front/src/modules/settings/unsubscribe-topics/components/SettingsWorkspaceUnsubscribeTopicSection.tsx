@@ -10,11 +10,11 @@ import {
 import { Status } from 'twenty-ui/primitives/data-display';
 import { useNavigateSettings } from '~/hooks/useNavigateSettings';
 import * as stylex from '@stylexjs/stylex';
-import { font } from 'twenty-ui/theme/tokens.stylex';
+import { fontColor } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   topicName: {
-    color: font['--t-font-color-primary'],
+    color: fontColor['--t-font-color-primary'],
   },
 });
 
@@ -37,7 +37,9 @@ export const SettingsWorkspaceUnsubscribeTopicSection = () => {
         {
           label: t`Topic`,
           Cell: ({ item }) => (
-            <span {...stylex.props(styles.topicName)}>{item.name ?? t`Untitled topic`}</span>
+            <span {...stylex.props(styles.topicName)}>
+              {item.name ?? t`Untitled topic`}
+            </span>
           ),
         },
         {

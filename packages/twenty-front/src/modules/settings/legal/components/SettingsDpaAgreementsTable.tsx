@@ -12,13 +12,13 @@ import { TableHeader } from '@/ui/layout/table/components/TableHeader';
 import { TableRow } from '@/ui/layout/table/components/TableRow';
 import { useToast } from 'twenty-ui/components/feedback';
 import * as stylex from '@stylexjs/stylex';
-import { border } from 'twenty-ui/theme/tokens.stylex';
+import { borderColor } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   tableBodyContainer: {
     borderBottomWidth: '1px',
     borderBottomStyle: 'solid',
-    borderBottomColor: border['--t-border-color-light'],
+    borderBottomColor: borderColor['--t-border-color-light'],
   },
 });
 

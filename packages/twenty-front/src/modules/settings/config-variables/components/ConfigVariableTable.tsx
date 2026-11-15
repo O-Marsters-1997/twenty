@@ -8,13 +8,13 @@ import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
 import { IconChevronRight } from 'twenty-ui/icon';
 import { useTheme } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { border } from 'twenty-ui/theme/tokens.stylex';
+import { borderColor } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   tableBodyContainer: {
     borderBottomWidth: '1px',
     borderBottomStyle: 'solid',
-    borderBottomColor: border['--t-border-color-light'],
+    borderBottomColor: borderColor['--t-border-color-light'],
   },
 });
 

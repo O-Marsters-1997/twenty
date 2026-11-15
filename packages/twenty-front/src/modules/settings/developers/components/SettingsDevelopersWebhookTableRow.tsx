@@ -1,4 +1,3 @@
-
 import { WEBHOOK_TABLE_ROW_GRID_TEMPLATE_COLUMNS } from '@/settings/developers/constants/WebhookTableRowGridTemplateColumns';
 import { TableCell } from '@/ui/layout/table/components/TableCell';
 import { TableRow } from '@/ui/layout/table/components/TableRow';
@@ -8,12 +7,12 @@ import { IconChevronRight } from 'twenty-ui/icon';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 import { type Webhook } from '~/generated-metadata/graphql';
 import * as stylex from '@stylexjs/stylex';
-import { font } from 'twenty-ui/theme/tokens.stylex';
+import { fontColor } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   iconChevronRightContainer: {
     alignItems: 'center',
-    color: font['--t-font-color-tertiary'],
+    color: fontColor['--t-font-color-tertiary'],
     display: 'flex',
   },
 });

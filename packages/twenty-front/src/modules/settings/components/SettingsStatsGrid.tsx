@@ -2,7 +2,14 @@ import { Fragment } from 'react';
 import { type IconComponent } from 'twenty-ui/icon';
 import { useTheme } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { background, border, spacing, font } from 'twenty-ui/theme/tokens.stylex';
+import {
+  background,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 export type SettingsStatRow = {
   Icon: IconComponent;
@@ -19,11 +26,11 @@ const styles = stylex.create({
     background: background['--t-background-secondary'],
     borderWidth: '1px',
     borderStyle: 'solid',
-    borderColor: border['--t-border-color-medium'],
-    borderTopLeftRadius: border['--t-border-radius-md'],
-    borderTopRightRadius: border['--t-border-radius-md'],
-    borderBottomRightRadius: border['--t-border-radius-md'],
-    borderBottomLeftRadius: border['--t-border-radius-md'],
+    borderColor: borderColor['--t-border-color-medium'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
     display: 'flex',
     gap: spacing['--t-spacing-3'],
     paddingTop: spacing['--t-spacing-2'],
@@ -40,7 +47,7 @@ const styles = stylex.create({
   },
   divider: {
     alignSelf: 'stretch',
-    background: border['--t-border-color-light'],
+    background: borderColor['--t-border-color-light'],
     width: '1px',
   },
   row: {
@@ -50,15 +57,15 @@ const styles = stylex.create({
     height: spacing['--t-spacing-6'],
   },
   label: {
-    color: font['--t-font-color-tertiary'],
+    color: fontColor['--t-font-color-tertiary'],
     flex: '1 1 0',
-    fontSize: font['--t-font-size-sm'],
+    fontSize: fontSize['--t-font-size-sm'],
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
   },
   value: {
-    color: font['--t-font-color-primary'],
+    color: fontColor['--t-font-color-primary'],
     paddingTop: '0',
     paddingRight: spacing['--t-spacing-1'],
     paddingBottom: '0',

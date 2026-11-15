@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { spacing, font } from 'twenty-ui/theme/tokens.stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   dashContainer: {
@@ -9,7 +9,7 @@ const styles = stylex.create({
     width: spacing['--t-spacing-2'],
   },
   dash: {
-    backgroundColor: font['--t-font-color-light'],
+    backgroundColor: fontColor['--t-font-color-light'],
     height: '1.6px',
     width: spacing['--t-spacing-1_5'],
   },

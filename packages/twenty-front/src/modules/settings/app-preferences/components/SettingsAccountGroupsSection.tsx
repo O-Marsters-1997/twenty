@@ -17,7 +17,7 @@ import { IconPlus } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
 import { useNavigateSettings } from '~/hooks/useNavigateSettings';
 import * as stylex from '@stylexjs/stylex';
-import { spacing, border } from 'twenty-ui/theme/tokens.stylex';
+import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   tableRows: {
@@ -27,7 +27,7 @@ const styles = stylex.create({
   addAccountContainer: {
     borderTopWidth: '1px',
     borderTopStyle: 'solid',
-    borderTopColor: border['--t-border-color-light'],
+    borderTopColor: borderColor['--t-border-color-light'],
     display: 'flex',
     justifyContent: 'flex-end',
     paddingTop: spacing['--t-spacing-2'],

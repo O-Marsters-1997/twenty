@@ -22,7 +22,7 @@ import {
 import { Tooltip } from 'twenty-ui/primitives/surfaces';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { spacing, border } from 'twenty-ui/theme/tokens.stylex';
+import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type SchemaProperty = {
   type?: string;
@@ -60,7 +60,7 @@ const styles = stylex.create({
   fieldsContainer: {
     borderBottomWidth: '1px',
     borderBottomStyle: 'solid',
-    borderBottomColor: border['--t-border-color-light'],
+    borderBottomColor: borderColor['--t-border-color-light'],
     paddingBottom: spacing['--t-spacing-2'],
   },
   infoIconContainer: {

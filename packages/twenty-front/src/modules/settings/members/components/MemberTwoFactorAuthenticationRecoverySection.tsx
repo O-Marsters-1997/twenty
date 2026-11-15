@@ -18,7 +18,7 @@ import {
 } from '~/generated-metadata/graphql';
 import { beautifyExactDateTime } from '~/utils/date-utils';
 import * as stylex from '@stylexjs/stylex';
-import { spacing, font } from 'twenty-ui/theme/tokens.stylex';
+import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   content: {
@@ -32,8 +32,8 @@ const styles = stylex.create({
     gap: spacing['--t-spacing-2'],
   },
   notice: {
-    color: font['--t-font-color-tertiary'],
-    fontSize: font['--t-font-size-sm'],
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-sm'],
   },
 });
 

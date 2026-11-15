@@ -30,7 +30,7 @@ import { EventLogTable } from '~/generated-metadata/graphql';
 import { useNavigateSettings } from '~/hooks/useNavigateSettings';
 import { isGraphqlErrorOfType } from '~/utils/is-graphql-error-of-type.util';
 import * as stylex from '@stylexjs/stylex';
-import { spacing, font } from 'twenty-ui/theme/tokens.stylex';
+import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   root: {
@@ -78,8 +78,8 @@ const styles = stylex.create({
   },
   recordCount: {
     alignSelf: 'flex-end',
-    color: font['--t-font-color-secondary'],
-    fontSize: font['--t-font-size-sm'],
+    color: fontColor['--t-font-color-secondary'],
+    fontSize: fontSize['--t-font-size-sm'],
   },
   tableWrapper: {
     flex: '1',
@@ -171,7 +171,9 @@ export const SettingsLogs = () => {
 
     return (
       <div {...stylex.props(styles.results)}>
-        <span {...stylex.props(styles.recordCount)}>{t`${formatNumber(displayedRecords.length)} of ${formatNumber(totalCount + liveRecords.length)}`}</span>
+        <span
+          {...stylex.props(styles.recordCount)}
+        >{t`${formatNumber(displayedRecords.length)} of ${formatNumber(totalCount + liveRecords.length)}`}</span>
         <div {...stylex.props(styles.tableWrapper)}>
           <EventLogResultsTable
             records={displayedRecords}

@@ -16,14 +16,14 @@ import { Button } from 'twenty-ui/primitives/input';
 import { UpdateWorkspaceMemberRoleDocument } from '~/generated-metadata/graphql';
 import { useNavigateSettings } from '~/hooks/useNavigateSettings';
 import * as stylex from '@stylexjs/stylex';
-import { font, spacing } from 'twenty-ui/theme/tokens.stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const CONFIRM_ROLE_CHANGE_MODAL_ID = 'confirm-role-change-modal';
 
 const styles = stylex.create({
   noRoleContainer: {
     alignItems: 'center',
-    color: font['--t-font-color-tertiary'],
+    color: fontColor['--t-font-color-tertiary'],
     display: 'flex',
     justifyContent: 'center',
     paddingTop: spacing['--t-spacing-8'],
@@ -117,7 +117,9 @@ export const MemberPermissionsTab = ({
 
   if (!isDefined(primaryRole)) {
     return (
-      <div {...stylex.props(styles.noRoleContainer)}>{t`No role assigned to this member`}</div>
+      <div
+        {...stylex.props(styles.noRoleContainer)}
+      >{t`No role assigned to this member`}</div>
     );
   }
 

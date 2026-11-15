@@ -8,7 +8,7 @@ import { JsonTree } from 'twenty-ui/components/data-display';
 import { type JsonValue } from 'type-fest';
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard';
 import * as stylex from '@stylexjs/stylex';
-import { font } from 'twenty-ui/theme/tokens.stylex';
+import { fontColor } from 'twenty-ui/theme/tokens.stylex';
 
 type EventLogJsonCellProps = {
   value: Record<string, unknown> | null | undefined;
@@ -19,7 +19,7 @@ const styles = stylex.create({
     cursor: 'pointer',
   },
   emptyCell: {
-    color: font['--t-font-color-tertiary'],
+    color: fontColor['--t-font-color-tertiary'],
   },
 });
 
@@ -42,7 +42,11 @@ export const EventLogJsonCell = ({ value }: EventLogJsonCellProps) => {
 
   return (
     <>
-      <div ref={anchorRef} onClick={handleClick} {...stylex.props(styles.jsonContainer)}>
+      <div
+        ref={anchorRef}
+        onClick={handleClick}
+        {...stylex.props(styles.jsonContainer)}
+      >
         <JsonDisplay text={JSON.stringify(value)} />
       </div>
       {isExpanded && (

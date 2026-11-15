@@ -19,10 +19,11 @@ import { TableHeader } from '@/ui/layout/table/components/TableHeader';
 import { TableRow } from '@/ui/layout/table/components/TableRow';
 import * as stylex from '@stylexjs/stylex';
 import {
+  backgroundTransparent,
+  borderRadius,
+  fontColor,
+  fontSize,
   spacing,
-  font,
-  background,
-  border,
 } from 'twenty-ui/theme/tokens.stylex';
 
 const GRID_COLUMNS = '1fr 120px 40px';
@@ -46,27 +47,27 @@ const styles = stylex.create({
     whiteSpace: 'nowrap',
   },
   deprecatedSuffix: {
-    color: font['--t-font-color-light'],
+    color: fontColor['--t-font-color-light'],
   },
   kindBadge: {
-    background: background['--t-background-transparent-light'],
-    borderTopLeftRadius: border['--t-border-radius-sm'],
-    borderTopRightRadius: border['--t-border-radius-sm'],
-    borderBottomRightRadius: border['--t-border-radius-sm'],
-    borderBottomLeftRadius: border['--t-border-radius-sm'],
-    color: font['--t-font-color-tertiary'],
+    background: backgroundTransparent['--t-background-transparent-light'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    color: fontColor['--t-font-color-tertiary'],
     flexShrink: '0',
-    fontSize: font['--t-font-size-xs'],
+    fontSize: fontSize['--t-font-size-xs'],
     paddingTop: '0',
     paddingRight: spacing['--t-spacing-1'],
     paddingBottom: '0',
     paddingLeft: spacing['--t-spacing-1'],
   },
   hoverCardTooltipClass: {
-    borderTopLeftRadius: border['--t-border-radius-rounded'],
-    borderTopRightRadius: border['--t-border-radius-rounded'],
-    borderBottomRightRadius: border['--t-border-radius-rounded'],
-    borderBottomLeftRadius: border['--t-border-radius-rounded'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-rounded'],
+    borderTopRightRadius: borderRadius['--t-border-radius-rounded'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-rounded'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-rounded'],
     cornerShape: 'round',
     paddingTop: '0',
     paddingRight: '0',

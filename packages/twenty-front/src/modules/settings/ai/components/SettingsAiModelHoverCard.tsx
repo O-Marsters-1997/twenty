@@ -18,14 +18,14 @@ import { SettingsTableCard } from '@/settings/components/SettingsTableCard';
 import { isDefined } from 'twenty-shared/utils';
 import { formatNumber } from '@/localization/utils/formatNumber';
 import * as stylex from '@stylexjs/stylex';
-import { border, boxShadow } from 'twenty-ui/theme/tokens.stylex';
+import { borderRadius, boxShadow } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   hoverCardWrapper: {
-    borderTopLeftRadius: border['--t-border-radius-md'],
-    borderTopRightRadius: border['--t-border-radius-md'],
-    borderBottomRightRadius: border['--t-border-radius-md'],
-    borderBottomLeftRadius: border['--t-border-radius-md'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
     boxShadow: boxShadow['--t-box-shadow-strong'],
     overflow: 'hidden',
     width: '320px',

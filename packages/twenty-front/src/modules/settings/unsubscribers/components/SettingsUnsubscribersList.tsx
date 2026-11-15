@@ -21,11 +21,11 @@ import {
 } from '~/generated-metadata/graphql';
 import { formatToHumanReadableDate } from '~/utils/date-utils';
 import * as stylex from '@stylexjs/stylex';
-import { font, spacing } from 'twenty-ui/theme/tokens.stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   emailAddress: {
-    color: font['--t-font-color-primary'],
+    color: fontColor['--t-font-color-primary'],
   },
   container: {
     display: 'flex',
@@ -156,7 +156,9 @@ export const SettingsUnsubscribersList = () => {
           {
             label: t`Email address`,
             Cell: ({ item }) => (
-              <span {...stylex.props(styles.emailAddress)}>{item.emailAddress}</span>
+              <span {...stylex.props(styles.emailAddress)}>
+                {item.emailAddress}
+              </span>
             ),
           },
           {

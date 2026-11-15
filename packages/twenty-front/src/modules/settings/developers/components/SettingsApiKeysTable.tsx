@@ -9,13 +9,13 @@ import { getSettingsPath } from 'twenty-shared/utils';
 import { useQuery } from '@apollo/client/react';
 import { GetApiKeysDocument } from '~/generated-metadata/graphql';
 import * as stylex from '@stylexjs/stylex';
-import { border } from 'twenty-ui/theme/tokens.stylex';
+import { borderColor } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   tableBodyContainer: {
     borderBottomWidth: '1px',
     borderBottomStyle: 'solid',
-    borderBottomColor: border['--t-border-color-light'],
+    borderBottomColor: borderColor['--t-border-color-light'],
   },
 });
 

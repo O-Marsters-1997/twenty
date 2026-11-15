@@ -3,7 +3,12 @@ import { type ReactNode } from 'react';
 import { LightIconButton } from 'twenty-ui/components/input';
 import { IconChevronLeft } from 'twenty-ui/icon';
 import * as stylex from '@stylexjs/stylex';
-import { font, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsWizardStepBarProps = {
   label: ReactNode;
@@ -25,9 +30,9 @@ const styles = stylex.create({
     minWidth: '0',
   },
   label: {
-    color: font['--t-font-color-primary'],
-    fontSize: font['--t-font-size-md'],
-    fontWeight: font['--t-font-weight-semi-bold'],
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
     justifySelf: 'center',
     minWidth: '0',
     textAlign: 'center',

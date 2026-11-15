@@ -5,12 +5,12 @@ import { SettingsPath } from 'twenty-shared/types';
 import { getSettingsPath } from 'twenty-shared/utils';
 import { useTheme } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { font, spacing } from 'twenty-ui/theme/tokens.stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   nameCell: {
     alignItems: 'center',
-    color: font['--t-font-color-primary'],
+    color: fontColor['--t-font-color-primary'],
     display: 'flex',
     gap: spacing['--t-spacing-2'],
   },

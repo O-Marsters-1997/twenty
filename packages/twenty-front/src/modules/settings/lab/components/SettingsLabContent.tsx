@@ -9,7 +9,7 @@ import { Card } from 'twenty-ui/primitives/surfaces';
 import { themeCssVariables } from 'twenty-ui/theme';
 import { type FeatureFlagKey } from '~/generated-metadata/graphql';
 import * as stylex from '@stylexjs/stylex';
-import { spacing, border } from 'twenty-ui/theme/tokens.stylex';
+import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   cardGrid: {
@@ -20,7 +20,7 @@ const styles = stylex.create({
   image: {
     borderBottomWidth: '1px',
     borderBottomStyle: 'solid',
-    borderBottomColor: border['--t-border-color-medium'],
+    borderBottomColor: borderColor['--t-border-color-medium'],
     display: 'flex',
     height: '120px',
     objectFit: 'cover',
@@ -65,7 +65,8 @@ export const SettingsLabContent = () => {
               <img
                 src={flag.metadata.imagePath ?? undefined}
                 alt={flag.metadata.label}
-                onError={() => handleImageError(flag.key)} {...stylex.props(styles.image)}
+                onError={() => handleImageError(flag.key)}
+                {...stylex.props(styles.image)}
               />
             )}
             <SettingsOptionCardContentSwitch

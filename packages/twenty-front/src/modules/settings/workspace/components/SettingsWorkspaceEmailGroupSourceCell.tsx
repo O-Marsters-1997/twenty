@@ -1,15 +1,14 @@
-
 import { type MessageChannel } from '@/accounts/types/MessageChannel';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
 import * as stylex from '@stylexjs/stylex';
-import { font } from 'twenty-ui/theme/tokens.stylex';
+import { fontColor, fontWeight } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   nameCell: {
     alignItems: 'center',
-    color: font['--t-font-color-primary'],
+    color: fontColor['--t-font-color-primary'],
     display: 'flex',
-    fontWeight: font['--t-font-weight-medium'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
     minWidth: '0',
   },
 });

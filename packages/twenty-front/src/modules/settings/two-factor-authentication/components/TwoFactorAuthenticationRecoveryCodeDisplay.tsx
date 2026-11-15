@@ -6,7 +6,7 @@ import { Button } from 'twenty-ui/primitives/input';
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard';
 import { beautifyExactDateTime } from '~/utils/date-utils';
 import * as stylex from '@stylexjs/stylex';
-import { spacing, font } from 'twenty-ui/theme/tokens.stylex';
+import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   container: {
@@ -22,8 +22,8 @@ const styles = stylex.create({
     flex: '1',
   },
   hint: {
-    color: font['--t-font-color-tertiary'],
-    fontSize: font['--t-font-size-sm'],
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-sm'],
   },
 });
 
