@@ -7,12 +7,10 @@ import { expect, expectTypeOf, it, vi } from 'vitest';
 import { ThemeProvider } from '@ui/theme/ThemeProvider';
 
 import { Tag } from '../Tag';
-import styles from '../Tag.module.scss';
 
 runComponentConformance({
   name: 'Tag',
   element: <Tag color="blue">Label</Tag>,
-  ownClassName: styles.tag,
   refInstanceOf: HTMLSpanElement,
 });
 

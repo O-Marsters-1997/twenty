@@ -4,12 +4,10 @@ import { describe, expect, it } from 'vitest';
 import { runComponentConformance } from '@test-utilities/conformance/runComponentConformance';
 
 import { Separator } from '../Separator';
-import styles from '../Separator.module.scss';
 
 runComponentConformance({
   name: 'Separator',
   element: <Separator />,
-  ownClassName: styles.root,
   refInstanceOf: HTMLDivElement,
 });
 
@@ -40,7 +38,7 @@ describe('Separator semantics', () => {
     expect(separator).toHaveAttribute('aria-orientation', 'vertical');
     expect(separator).toHaveAttribute('data-orientation', 'vertical');
     expect(separator).toHaveAttribute('data-render-orientation', 'vertical');
-    expect(separator).toHaveClass(styles.root, 'divider-vertical');
+    expect(separator).toHaveClass('divider-vertical');
     expect(separator).toHaveStyle({ height: '24px' });
   });
 });

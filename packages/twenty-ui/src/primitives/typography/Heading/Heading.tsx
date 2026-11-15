@@ -1,9 +1,15 @@
 import { useRender } from '@base-ui/react/use-render';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
+
+import {
+  headingColorStyles,
+  headingSizeStyles,
+  headingStyles,
+} from './Heading.stylex';
 import { type HeadingProps } from './types/HeadingProps';
-
-import styles from './Heading.module.scss';
 
 export const Heading = ({
   level = 2,
@@ -12,8 +18,9 @@ export const Heading = ({
   render,
   ref,
   className,
+  xstyle,
   ...props
-}: HeadingProps) =>
+}: WithXstyle<HeadingProps>) =>
   useRender({
     defaultTagName: `h${level}`,
     render,
@@ -22,6 +29,14 @@ export const Heading = ({
       ...props,
       'data-size': size,
       'data-color': color,
-      className: clsx(styles.heading, className),
+      ...mergeStylexProps(
+        stylex.props(
+          headingStyles.root,
+          headingSizeStyles[size],
+          headingColorStyles[color],
+          xstyle,
+        ),
+        className,
+      ),
     },
   });

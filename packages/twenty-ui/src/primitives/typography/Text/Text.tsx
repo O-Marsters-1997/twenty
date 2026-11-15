@@ -1,12 +1,11 @@
 import { useRender } from '@base-ui/react/use-render';
-import { clsx } from 'clsx';
-import { type CSSProperties } from 'react';
+import * as stylex from '@stylexjs/stylex';
 
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 import { isDefined } from '@ui/utilities/utils/isDefined';
 
 import { type TextProps } from './types/TextProps';
-
-import styles from './Text.module.scss';
 
 export const Text = ({
   render,
@@ -14,28 +13,44 @@ export const Text = ({
   lineClamp,
   className,
   style,
+  xstyle,
   ref,
   ...props
-}: TextProps) => {
-  const shouldClamp =
-    isDefined(lineClamp) && Number.isInteger(lineClamp) && lineClamp > 0;
+}: WithXstyle<TextProps>) => {
+  const clampedLines =
+    isDefined(lineClamp) && Number.isInteger(lineClamp) && lineClamp > 0
+      ? lineClamp
+      : undefined;
+  const stylexProps = stylex.props(
+    truncate && styles.truncate,
+    isDefined(clampedLines) && styles.lineClamp,
+    isDefined(clampedLines) && styles.lineClampCount(clampedLines),
+    xstyle,
+  );
 
   return useRender({
     render,
     ref,
     props: {
       ...props,
-      className: clsx(
-        truncate && styles.truncate,
-        shouldClamp && styles.lineClamp,
-        className,
-      ),
-      style: shouldClamp
-        ? ({
-            ...style,
-            '--text-line-clamp': lineClamp,
-          } as CSSProperties)
+      ...mergeStylexProps(stylexProps, className),
+      style: isDefined(stylexProps.style)
+        ? { ...stylexProps.style, ...style }
         : style,
     },
   });
 };
+
+const styles = stylex.create({
+  truncate: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  lineClamp: {
+    display: '-webkit-box',
+    overflow: 'hidden',
+    WebkitBoxOrient: 'vertical',
+  },
+  lineClampCount: (lineClamp: number) => ({ WebkitLineClamp: lineClamp }),
+});

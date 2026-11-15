@@ -1,7 +1,6 @@
 import { type ReactNode } from 'react';
 
 import { runComponentConformance } from '@test-utilities/conformance/runComponentConformance';
-import listItemStyles from '@ui/primitives/navigation/ListItem/ListItem.module.scss';
 
 import { Autocomplete } from '@ui/primitives/input';
 
@@ -65,7 +64,6 @@ runComponentConformance({
   element: <Autocomplete.Item value="first">First</Autocomplete.Item>,
   refInstanceOf: HTMLDivElement,
   wrapper: ListWrapper,
-  ownClassName: listItemStyles.root,
 });
 runComponentConformance({
   name: 'Autocomplete.Empty',

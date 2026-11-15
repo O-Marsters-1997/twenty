@@ -1,6 +1,6 @@
 import { type Meta, type StoryObj } from '@storybook/react-vite';
 import { A11Y_DEFER_COLOR_CONTRAST, ComponentDecorator } from '@ui/testing';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 import { useState } from 'react';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 
@@ -10,7 +10,12 @@ import { type CollapsiblePanelProps } from '@ui/primitives/layout/Collapsible/ty
 import { Text } from '@ui/primitives/typography/Text/Text';
 import { isDefined } from '@ui/utilities/utils/isDefined';
 
-import styles from './Collapsible.stories.module.scss';
+import {
+  background,
+  fontColor,
+  fontSize,
+  spacing,
+} from '../../../../theme/tokens.stylex';
 
 type CollapsibleExampleProps = Pick<
   CollapsiblePanelProps,
@@ -28,32 +33,45 @@ const CollapsibleExample = ({
 }: CollapsibleExampleProps) => (
   <Collapsible.Root
     defaultOpen={defaultOpen}
-    className={clsx(
-      styles.buttonWrapper,
-      dimension === 'width'
-        ? styles.buttonWrapperWidth
-        : styles.buttonWrapperHeight,
-    )}
+    className={
+      stylex.props(
+        styles.buttonWrapper,
+        dimension === 'width'
+          ? styles.buttonWrapperWidth
+          : styles.buttonWrapperHeight,
+      ).className
+    }
   >
-    <Collapsible.Trigger render={<Button className={styles.button} />}>
+    <Collapsible.Trigger render={<Button xstyle={styles.button} />}>
       Import details
     </Collapsible.Trigger>
     <Collapsible.Panel dimension={dimension} {...panelProps}>
-      <Text render={<div />} className={styles.expandableWrapper}>
+      <Text
+        render={<div />}
+        className={stylex.props(styles.expandableWrapper).className}
+      >
         <Text
           render={<div />}
-          className={clsx(
-            styles.content,
-            dimension === 'height' &&
-              hasFixedHeight &&
-              styles.contentFixedHeight,
-            dimension === 'width' && styles.contentFixedWidth,
-          )}
+          className={
+            stylex.props(
+              styles.content,
+              dimension === 'height' &&
+                hasFixedHeight &&
+                styles.contentFixedHeight,
+              dimension === 'width' && styles.contentFixedWidth,
+            ).className
+          }
         >
-          <Text render={<p />}>
+          <Text
+            render={<p />}
+            className={stylex.props(styles.paragraph).className}
+          >
             Match each CSV column to a record field before importing.
           </Text>
-          <Text render={<p />}>
+          <Text
+            render={<p />}
+            className={stylex.props(styles.paragraph).className}
+          >
             The panel animates its content size when opening and closing.
           </Text>
         </Text>
@@ -61,6 +79,31 @@ const CollapsibleExample = ({
     </Collapsible.Panel>
   </Collapsible.Root>
 );
+
+const styles = stylex.create({
+  button: { marginBottom: spacing['--t-spacing-3'] },
+  buttonWrapper: { height: 'auto', width: 'auto' },
+  buttonWrapperWidth: { height: '300px' },
+  buttonWrapperHeight: { width: '600px' },
+  expandableWrapper: {
+    backgroundColor: background['--t-background-primary'],
+    height: '100%',
+    width: '100%',
+  },
+  content: {
+    height: 'auto',
+    paddingBlock: spacing['--t-spacing-3'],
+    paddingInline: spacing['--t-spacing-3'],
+    width: 'auto',
+  },
+  paragraph: {
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-md'],
+    marginBottom: spacing['--t-spacing-2'],
+  },
+  contentFixedHeight: { height: '200px' },
+  contentFixedWidth: { width: '400px' },
+});
 
 const meta = {
   title: 'UI/Layout/Collapsible',

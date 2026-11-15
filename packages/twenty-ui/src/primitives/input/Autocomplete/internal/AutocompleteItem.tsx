@@ -1,36 +1,48 @@
 import { Autocomplete as AutocompletePrimitive } from '@base-ui/react/autocomplete';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 
+import { listItemMarker } from '@ui/primitives/navigation/ListItem/ListItem.stylex';
+import { listItemStyles } from '@ui/primitives/navigation/ListItem/ListItemStyles.stylex';
 import { isRenderableSlot } from '@ui/utilities/internal/isRenderableSlot';
-import listItemStyles from '@ui/primitives/navigation/ListItem/ListItem.module.scss';
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
 import { type AutocompleteItemProps } from '../types/AutocompleteItemProps';
 
 export const AutocompleteItem = ({
   className,
+  xstyle,
   children,
   startIcon,
   endIcon,
   description,
   descriptionPlacement = 'inline',
   ...props
-}: AutocompleteItemProps) => (
+}: WithXstyle<AutocompleteItemProps>) => (
   <AutocompletePrimitive.Item
     {...props}
-    className={mergeClassNames(listItemStyles.root, className)}
+    {...mergeStylexProps(
+      stylex.props(listItemMarker, listItemStyles.root, xstyle),
+      className,
+    )}
     data-color="neutral"
   >
     {isRenderableSlot(startIcon) && (
-      <div className={listItemStyles.startIcon} aria-hidden>
+      <div
+        {...mergeStylexProps(
+          stylex.props(listItemStyles.icon),
+          'tw-list-item-icon',
+        )}
+        aria-hidden
+      >
         {startIcon}
       </div>
     )}
-    <div className={listItemStyles.label}>
-      <div className={listItemStyles.text}>{children}</div>
+    <div {...stylex.props(listItemStyles.label)}>
+      <div {...stylex.props(listItemStyles.text)}>{children}</div>
       {isRenderableSlot(description) && descriptionPlacement === 'inline' && (
         <div
-          className={clsx(
+          {...stylex.props(
             listItemStyles.description,
             listItemStyles.inlineDescription,
           )}
@@ -41,7 +53,7 @@ export const AutocompleteItem = ({
     </div>
     {isRenderableSlot(description) && descriptionPlacement === 'end' && (
       <div
-        className={clsx(
+        {...stylex.props(
           listItemStyles.description,
           listItemStyles.endDescription,
         )}
@@ -50,7 +62,13 @@ export const AutocompleteItem = ({
       </div>
     )}
     {isRenderableSlot(endIcon) && (
-      <div className={listItemStyles.endIcon} aria-hidden>
+      <div
+        {...mergeStylexProps(
+          stylex.props(listItemStyles.icon),
+          'tw-list-item-icon',
+        )}
+        aria-hidden
+      >
         {endIcon}
       </div>
     )}

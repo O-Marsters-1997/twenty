@@ -1,16 +1,19 @@
 import { Popover as PopoverPrimitive } from '@base-ui/react/popover';
+import * as stylex from '@stylexjs/stylex';
 
 import { useProvidedTextDirection } from '@ui/primitives/layout/DirectionProvider/internal/useProvidedTextDirection';
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
-import styles from '../Popover.module.scss';
+import { popoverStyles } from '../Popover.stylex';
 import { type PopoverPositionerProps } from '../types/PopoverPositionerProps';
 
 export const PopoverPositioner = ({
   className,
+  xstyle,
   sideOffset = 8,
   ...props
-}: PopoverPositionerProps) => {
+}: WithXstyle<PopoverPositionerProps>) => {
   const direction = useProvidedTextDirection();
 
   return (
@@ -18,7 +21,10 @@ export const PopoverPositioner = ({
       dir={direction}
       sideOffset={sideOffset}
       {...props}
-      className={mergeClassNames(styles.positioner, className)}
+      {...mergeStylexProps(
+        stylex.props(popoverStyles.positioner, xstyle),
+        className,
+      )}
     />
   );
 };

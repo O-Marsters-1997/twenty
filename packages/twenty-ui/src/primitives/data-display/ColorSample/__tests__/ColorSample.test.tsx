@@ -7,7 +7,6 @@ runComponentConformance({
   name: 'ColorSample',
   element: <ColorSample colorName="blue" />,
   refInstanceOf: HTMLDivElement,
-  ownClassName: 'root',
 });
 
 it('exposes a named color only when the caller supplies image semantics', () => {

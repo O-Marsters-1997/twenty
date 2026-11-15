@@ -1,11 +1,13 @@
 import { isNonEmptyArray } from '@sniptt/guards';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 import { Fragment } from 'react';
 
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
 import { useIsMobile } from '@ui/utilities/responsive/hooks/useIsMobile';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
 import { getShortcutPresentation } from './internal/getShortcutPresentation';
-import styles from './Shortcut.module.scss';
+import { shortcutStyles } from './Shortcut.stylex';
 import { type ShortcutProps } from './types/ShortcutProps';
 
 export const Shortcut = ({
@@ -16,9 +18,10 @@ export const Shortcut = ({
   variant = 'keys',
   visibility = 'always',
   className,
+  xstyle,
   'aria-label': ariaLabel,
   ...props
-}: ShortcutProps) => {
+}: WithXstyle<ShortcutProps>) => {
   const isMobile = useIsMobile();
   const presentation = getShortcutPresentation({
     shortcut,
@@ -37,12 +40,20 @@ export const Shortcut = ({
   return (
     <span
       {...props}
-      className={clsx(styles.root, className)}
+      {...mergeStylexProps(
+        stylex.props(
+          shortcutStyles.root,
+          variant === 'text' && shortcutStyles.variantText,
+          variant === 'button' && shortcutStyles.variantButton,
+          xstyle,
+        ),
+        className,
+      )}
       data-variant={variant}
       role="img"
       aria-label={ariaLabel ?? presentation.accessibleLabel}
     >
-      <span className={styles.content} aria-hidden>
+      <span {...stylex.props(shortcutStyles.content)} aria-hidden>
         {variant !== 'keys'
           ? presentation.text
           : presentation.groups.map((keys, stepIndex) => (
@@ -50,11 +61,11 @@ export const Shortcut = ({
                 {stepIndex > 0 && (
                   <span>{` ${presentation.sequenceJoinLabel} `}</span>
                 )}
-                <span className={styles.combination}>
+                <span {...stylex.props(shortcutStyles.combination)}>
                   {keys.map((key, keyIndex) => (
                     <Fragment key={keyIndex}>
                       {keyIndex > 0 && presentation.separator}
-                      <kbd className={styles.key}>{key}</kbd>
+                      <kbd {...stylex.props(shortcutStyles.key)}>{key}</kbd>
                     </Fragment>
                   ))}
                 </span>

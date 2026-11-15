@@ -1,4 +1,3 @@
-import { clsx } from 'clsx';
 import { useContext } from 'react';
 
 import { Button } from '@ui/primitives/input/Button/Button';
@@ -6,7 +5,8 @@ import { ButtonGroupContext } from '@ui/primitives/input/ButtonGroup/internal/Bu
 import { TabsTabContent } from '@ui/primitives/navigation/internal/tab/TabsTabContent';
 import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
 
-import tabStyles from '@ui/primitives/navigation/internal/tab/Tab.module.scss';
+import { tabMarker } from '@ui/primitives/navigation/internal/tab/Tab.stylex';
+import { tabStyles } from '@ui/primitives/navigation/internal/tab/TabStyles.stylex';
 import styles from './TabButton.module.scss';
 import { type TabButtonProps } from './types/TabButtonProps';
 
@@ -29,7 +29,8 @@ export const TabButton = ({
       variant="ghost"
       size={resolvedSize}
       data-active={active || undefined}
-      className={mergeClassNames(clsx(tabStyles.tab, styles.button), className)}
+      xstyle={[tabMarker, tabStyles.tab]}
+      className={mergeClassNames(styles.button, className)}
     >
       <TabsTabContent startIcon={startIcon} endIcon={endIcon} badge={badge}>
         {children}

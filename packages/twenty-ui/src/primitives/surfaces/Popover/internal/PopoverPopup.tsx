@@ -1,13 +1,19 @@
 import { Popover as PopoverPrimitive } from '@base-ui/react/popover';
+import * as stylex from '@stylexjs/stylex';
 
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
-import styles from '../Popover.module.scss';
+import { popoverStyles } from '../Popover.stylex';
 import { type PopoverPopupProps } from '../types/PopoverPopupProps';
 
-export const PopoverPopup = ({ className, ...props }: PopoverPopupProps) => (
+export const PopoverPopup = ({
+  className,
+  xstyle,
+  ...props
+}: WithXstyle<PopoverPopupProps>) => (
   <PopoverPrimitive.Popup
     {...props}
-    className={mergeClassNames(styles.popup, className)}
+    {...mergeStylexProps(stylex.props(popoverStyles.popup, xstyle), className)}
   />
 );

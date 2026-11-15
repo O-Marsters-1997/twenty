@@ -1,19 +1,21 @@
 import { Select as SelectPrimitive } from '@base-ui/react/select';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 
-import listItemStyles from '@ui/primitives/navigation/ListItem/ListItem.module.scss';
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
+import { listItemStyles } from '@ui/primitives/navigation/ListItem/ListItemStyles.stylex';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
 import { type SelectItemTextProps } from '../types/SelectItemTextProps';
 
 export const SelectItemText = ({
   className,
+  xstyle,
   ...props
-}: SelectItemTextProps) => (
+}: WithXstyle<SelectItemTextProps>) => (
   <SelectPrimitive.ItemText
     {...props}
-    className={mergeClassNames(
-      clsx(listItemStyles.label, listItemStyles.text),
+    {...mergeStylexProps(
+      stylex.props(listItemStyles.label, listItemStyles.text, xstyle),
       className,
     )}
   />

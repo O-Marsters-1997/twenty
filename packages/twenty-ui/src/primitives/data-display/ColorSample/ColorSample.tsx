@@ -1,12 +1,13 @@
 import { useRender } from '@base-ui/react/use-render';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 import { type CSSProperties } from 'react';
 
 import { themeCssVariables } from '@ui/theme';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
+import { colorSampleStyles } from './ColorSample.stylex';
 import { type ColorSampleProps } from './types/ColorSampleProps';
-
-import styles from './ColorSample.module.scss';
 
 export const ColorSample = ({
   colorName,
@@ -14,22 +15,26 @@ export const ColorSample = ({
   variant,
   className,
   style,
+  xstyle,
   render,
   ref,
   ...props
-}: ColorSampleProps) =>
-  useRender({
+}: WithXstyle<ColorSampleProps>) => {
+  const stylexProps = stylex.props(
+    colorSampleStyles.root,
+    variant === 'circle' && colorSampleStyles.circle,
+    xstyle,
+  );
+
+  return useRender({
     defaultTagName: 'div',
     render,
     ref,
     props: {
       ...props,
-      className: clsx(
-        styles.root,
-        variant === 'circle' && styles.circle,
-        className,
-      ),
+      ...mergeStylexProps(stylexProps, className),
       style: {
+        ...stylexProps.style,
         '--color-sample-color':
           color ?? themeCssVariables.tag.background[colorName],
         '--color-sample-border-color': themeCssVariables.tag.text[colorName],
@@ -37,3 +42,4 @@ export const ColorSample = ({
       } as CSSProperties,
     },
   });
+};

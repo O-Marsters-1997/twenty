@@ -1,15 +1,28 @@
 import { useRender } from '@base-ui/react/use-render';
 import { isBoolean, isString } from '@sniptt/guards';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 import { type CSSProperties } from 'react';
 
 import { OverflowingTextWithTooltip } from '@ui/primitives/typography/OverflowingTextWithTooltip/OverflowingTextWithTooltip';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 import { isDefined } from '@ui/utilities/utils/isDefined';
 
-import styles from './Chip.module.scss';
+import './Chip.css';
+import { chipStyles } from './Chip.stylex';
 import { type ChipProps } from './types/ChipProps';
 
-const MEDIUM_LABEL_STYLE: CSSProperties = { height: 'var(--t-spacing-4)' };
+const variantStyles = {
+  ghost: null,
+  soft: chipStyles.variantSoft,
+  solid: chipStyles.variantSolid,
+};
+
+const clickableStyles = {
+  ghost: chipStyles.clickableGhost,
+  soft: chipStyles.clickableSoft,
+  solid: chipStyles.clickableSolid,
+};
 
 export const Chip = ({
   children,
@@ -32,15 +45,27 @@ export const Chip = ({
   alwaysShowTooltip = false,
   className,
   style,
+  xstyle,
   render,
   ref,
   ...props
-}: ChipProps) => {
+}: WithXstyle<ChipProps>) => {
   const hasContent =
     isDefined(children) && !isBoolean(children) && children !== '';
   const textProps = isString(children)
     ? { text: children, tooltipContent }
     : { text: children ?? false, tooltipContent: tooltipContent ?? '' };
+  const stylexProps = stylex.props(
+    chipStyles.root,
+    truncate && chipStyles.truncate,
+    size === 'md' && chipStyles.sizeMd,
+    shape === 'round' && chipStyles.shapeRound,
+    color === 'secondary' && chipStyles.colorSecondary,
+    weight === 'medium' && chipStyles.weightMedium,
+    variantStyles[variant],
+    clickable && clickableStyles[variant],
+    xstyle,
+  );
 
   return useRender({
     render,
@@ -49,8 +74,9 @@ export const Chip = ({
     props: {
       ...props,
       onClick,
-      className: clsx(styles.chip, className),
+      ...mergeStylexProps(mergeStylexProps(stylexProps, 'tw-chip'), className),
       style: {
+        ...stylexProps.style,
         ...(isDefined(maxWidth)
           ? {
               '--tw-chip-max-width': `calc(${maxWidth}px - 2 * var(--tw-chip-padding))`,
@@ -65,7 +91,7 @@ export const Chip = ({
             <OverflowingTextWithTooltip
               {...textProps}
               render={<span />}
-              style={size === 'md' ? MEDIUM_LABEL_STYLE : undefined}
+              xstyle={size === 'md' ? chipStyles.labelMd : undefined}
               truncate={truncate}
               tooltipDelay={tooltipDelay}
               isTooltipMultiline={isTooltipMultiline}
@@ -76,7 +102,7 @@ export const Chip = ({
           {isDefined(endElement) && endElement !== false && (
             <>
               {endElementDivider && (
-                <span className={styles.endElementDivider} />
+                <span {...stylex.props(chipStyles.endElementDivider)} />
               )}
               {endElement}
             </>

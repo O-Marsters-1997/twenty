@@ -7,33 +7,15 @@ import { runComponentConformance } from '@test-utilities/conformance/runComponen
 
 import { Card } from '../Card';
 
-import rootStyles from '../Card.module.scss';
-import contentStyles from '../CardContent.module.scss';
-import footerStyles from '../CardFooter.module.scss';
-import headerStyles from '../CardHeader.module.scss';
-
-for (const { name, Component, ownClassName } of [
-  { name: 'Root', Component: Card.Root, ownClassName: rootStyles.card },
-  {
-    name: 'Header',
-    Component: Card.Header,
-    ownClassName: headerStyles.cardHeader,
-  },
-  {
-    name: 'Content',
-    Component: Card.Content,
-    ownClassName: contentStyles.cardContent,
-  },
-  {
-    name: 'Footer',
-    Component: Card.Footer,
-    ownClassName: footerStyles.cardFooter,
-  },
+for (const { name, Component } of [
+  { name: 'Root', Component: Card.Root },
+  { name: 'Header', Component: Card.Header },
+  { name: 'Content', Component: Card.Content },
+  { name: 'Footer', Component: Card.Footer },
 ]) {
   runComponentConformance({
     name: `Card.${name}`,
     element: <Component>Import summary</Component>,
-    ownClassName,
     refInstanceOf: HTMLDivElement,
   });
 

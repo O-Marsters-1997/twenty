@@ -1,13 +1,18 @@
 import { Tabs as TabsPrimitive } from '@base-ui/react/tabs';
+import * as stylex from '@stylexjs/stylex';
 
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
-import styles from '../../internal/tab/Tab.module.scss';
+import { focusStyles } from '../../../../styles/focus.stylex';
+import { tabMarker } from '../../internal/tab/Tab.stylex';
+import { tabStyles } from '../../internal/tab/TabStyles.stylex';
 import { TabsTabContent } from '../../internal/tab/TabsTabContent';
 import { type TabsTabProps } from '../types/TabsTabProps';
 
 export const TabsTab = ({
   className,
+  xstyle,
   children,
   startIcon,
   endIcon,
@@ -15,10 +20,13 @@ export const TabsTab = ({
   highlighted = false,
   size = 'sm',
   ...props
-}: TabsTabProps) => (
+}: WithXstyle<TabsTabProps>) => (
   <TabsPrimitive.Tab
     {...props}
-    className={mergeClassNames(styles.tab, className)}
+    {...mergeStylexProps(
+      stylex.props(tabMarker, focusStyles.ring, tabStyles.tab, xstyle),
+      className,
+    )}
     data-size={size}
     data-highlighted={highlighted || undefined}
   >

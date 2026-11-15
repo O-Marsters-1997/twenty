@@ -1,0 +1,7 @@
+@layer twenty-ui {
+  .tw-tag-icon > svg {
+    block-size: calc(var(--t-icon-size-sm) * 1px);
+    inline-size: calc(var(--t-icon-size-sm) * 1px);
+    stroke-width: var(--t-icon-stroke-sm);
+  }
+}

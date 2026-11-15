@@ -1,16 +1,26 @@
 import { Avatar as AvatarPrimitive } from '@base-ui/react/avatar';
+import * as stylex from '@stylexjs/stylex';
 
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
-import styles from '../Avatar.module.scss';
+import '../Avatar.css';
+import { avatarStyles } from '../Avatar.stylex';
 import { type AvatarFallbackProps } from '../types/AvatarFallbackProps';
 
 export const AvatarFallback = ({
   className,
+  xstyle,
   ...props
-}: AvatarFallbackProps) => (
+}: WithXstyle<AvatarFallbackProps>) => (
   <AvatarPrimitive.Fallback
     {...props}
-    className={mergeClassNames(styles.fallback, className)}
+    {...mergeStylexProps(
+      mergeStylexProps(
+        stylex.props(avatarStyles.fallback, xstyle),
+        'tw-avatar-fallback',
+      ),
+      className,
+    )}
   />
 );

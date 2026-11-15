@@ -1,23 +1,37 @@
 import { useRender } from '@base-ui/react/use-render';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
+
+import { focusStyles } from '../../../../styles/focus.stylex';
+import { cardStyles } from '../Card.stylex';
 import { type CardFooterProps } from '../types/CardFooterProps';
-
-import styles from '../CardFooter.module.scss';
 
 export const CardFooter = ({
   className,
   divider,
   render,
   ref,
+  xstyle,
   ...props
-}: CardFooterProps) =>
+}: WithXstyle<CardFooterProps>) =>
   useRender({
     render,
     ref,
     props: {
       ...props,
-      className: clsx(styles.cardFooter, className),
+      ...mergeStylexProps(
+        stylex.props(
+          focusStyles.ring,
+          cardStyles.owner,
+          cardStyles.section,
+          cardStyles.footer,
+          divider === false && cardStyles.footerNoDivider,
+          xstyle,
+        ),
+        className,
+      ),
       'data-no-divider': divider === false || undefined,
     },
   });

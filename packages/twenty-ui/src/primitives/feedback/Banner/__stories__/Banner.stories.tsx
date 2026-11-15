@@ -1,4 +1,5 @@
 import { type Meta, type StoryObj } from '@storybook/react-vite';
+import * as stylex from '@stylexjs/stylex';
 import { expect, within } from 'storybook/test';
 
 import { IconInfoCircle, IconX } from '@ui/icon';
@@ -14,7 +15,18 @@ import {
   ComponentDecorator,
 } from '@ui/testing';
 
-import styles from './Banner.stories.module.scss';
+const styles = stylex.create({
+  bannerContent: {
+    alignItems: 'center',
+    display: 'flex',
+    flexBasis: '0%',
+    flexGrow: 1,
+    flexShrink: 1,
+    gap: 8,
+    justifyContent: 'center',
+  },
+  closeButton: { color: 'inherit' },
+});
 
 const meta: Meta<typeof Banner> = {
   title: 'UI/Feedback/Banner',
@@ -54,12 +66,12 @@ export const Default: Story = {
   args: { status: 'info', variant: 'solid' },
   render: (args) => (
     <Banner {...args}>
-      <div className={styles.bannerContent}>
+      <div {...stylex.props(styles.bannerContent)}>
         Sync lost with mailbox hello@twenty.com. Please reconnect for updates:
         <Banner.Action>Reconnect</Banner.Action>
       </div>
       <Button
-        className={styles.closeButton}
+        xstyle={styles.closeButton}
         size="sm"
         variant="ghost"
         aria-label="Close"

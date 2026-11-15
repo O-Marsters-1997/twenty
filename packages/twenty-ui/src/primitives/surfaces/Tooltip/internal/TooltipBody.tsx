@@ -1,8 +1,12 @@
+import * as stylex from '@stylexjs/stylex';
 import { type ReactNode } from 'react';
 
 import { isRenderableSlot } from '@ui/utilities/internal/isRenderableSlot';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
 
-import styles from '../Tooltip.module.scss';
+import { tooltipStyles } from '../Tooltip.stylex';
+
+import '../Tooltip.css';
 
 type TooltipBodyProps = {
   children: ReactNode;
@@ -15,19 +19,25 @@ export const TooltipBody = ({
   description,
   startIcon,
 }: TooltipBodyProps) => (
-  <div className={styles.content}>
+  <div {...stylex.props(tooltipStyles.content)}>
     {isRenderableSlot(children) && (
-      <div className={styles.title}>
+      <div {...stylex.props(tooltipStyles.title)}>
         {isRenderableSlot(startIcon) && (
-          <span className={styles.icon} aria-hidden>
+          <span
+            {...mergeStylexProps(
+              stylex.props(tooltipStyles.icon),
+              'tw-tooltip-icon',
+            )}
+            aria-hidden
+          >
             {startIcon}
           </span>
         )}
-        <span>{children}</span>
+        <span {...stylex.props(tooltipStyles.titleText)}>{children}</span>
       </div>
     )}
     {isRenderableSlot(description) && (
-      <div className={styles.description}>{description}</div>
+      <div {...stylex.props(tooltipStyles.description)}>{description}</div>
     )}
   </div>
 );

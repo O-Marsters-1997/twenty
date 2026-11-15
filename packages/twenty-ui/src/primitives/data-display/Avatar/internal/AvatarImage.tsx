@@ -1,13 +1,19 @@
 import { Avatar as AvatarPrimitive } from '@base-ui/react/avatar';
+import * as stylex from '@stylexjs/stylex';
 
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
-import styles from '../Avatar.module.scss';
+import { avatarStyles } from '../Avatar.stylex';
 import { type AvatarImageProps } from '../types/AvatarImageProps';
 
-export const AvatarImage = ({ className, ...props }: AvatarImageProps) => (
+export const AvatarImage = ({
+  className,
+  xstyle,
+  ...props
+}: WithXstyle<AvatarImageProps>) => (
   <AvatarPrimitive.Image
     {...props}
-    className={mergeClassNames(styles.image, className)}
+    {...mergeStylexProps(stylex.props(avatarStyles.image, xstyle), className)}
   />
 );

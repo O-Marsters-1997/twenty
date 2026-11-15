@@ -1,26 +1,51 @@
 import { useRender } from '@base-ui/react/use-render';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
+
+import './Badge.css';
+import { badgeStyles } from './Badge.stylex';
 import { type BadgeProps } from './types/BadgeProps';
 
-import styles from './Badge.module.scss';
+const sizeStyles = { sm: null, xs: badgeStyles.sizeXs, md: badgeStyles.sizeMd };
+
+const colorStyles = {
+  tertiary: null,
+  inherit: badgeStyles.colorInherit,
+  primary: badgeStyles.colorPrimary,
+  secondary: badgeStyles.colorSecondary,
+};
 
 export const Badge = ({
   size = 'sm',
   color = 'tertiary',
   shape = 'pill',
   className,
+  xstyle,
   render,
   ref,
   ...props
-}: BadgeProps) =>
+}: WithXstyle<BadgeProps>) =>
   useRender({
     defaultTagName: 'span',
     render,
     ref,
     props: {
       ...props,
-      className: clsx(styles.badge, className),
+      ...mergeStylexProps(
+        mergeStylexProps(
+          stylex.props(
+            badgeStyles.root,
+            sizeStyles[size],
+            colorStyles[color],
+            shape === 'circle' && badgeStyles.shapeCircle,
+            xstyle,
+          ),
+          'tw-badge',
+        ),
+        className,
+      ),
       'data-badge-size': size,
       'data-badge-color': color,
       'data-badge-shape': shape,
