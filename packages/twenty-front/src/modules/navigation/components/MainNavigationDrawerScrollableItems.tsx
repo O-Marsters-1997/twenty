@@ -1,10 +1,10 @@
 import { NavigationDrawerOpenedSection } from '@/navigation-menu-item/display/sections/components/NavigationDrawerOpenedSection';
 import { NavigationDrawerWorkspaceSectionSkeletonLoader } from '@/object-metadata/components/NavigationDrawerWorkspaceSectionSkeletonLoader';
 
-import { styled } from '@linaria/react';
 import { lazy, Suspense } from 'react';
 
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const FavoritesSectionDispatcher = lazy(() =>
   import('@/navigation-menu-item/display/sections/favorites/components/FavoritesSectionDispatcher').then(
@@ -22,20 +22,22 @@ const WorkspaceSectionDispatcher = lazy(() =>
   ),
 );
 
-const StyledScrollableItemsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[3]};
-`;
+const styles = stylex.create({
+  scrollableItemsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-3'],
+  },
+});
 
 export const MainNavigationDrawerScrollableItems = () => {
   return (
-    <StyledScrollableItemsContainer>
+    <div {...stylex.props(styles.scrollableItemsContainer)}>
       <NavigationDrawerOpenedSection />
       <Suspense fallback={<NavigationDrawerWorkspaceSectionSkeletonLoader />}>
         <FavoritesSectionDispatcher />
         <WorkspaceSectionDispatcher />
       </Suspense>
-    </StyledScrollableItemsContainer>
+    </div>
   );
 };

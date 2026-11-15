@@ -1,18 +1,20 @@
 import { SortableKeyboardPlugin } from '@dnd-kit/dom/sortable';
 import { useSortable } from '@dnd-kit/react/sortable';
-import { styled } from '@linaria/react';
 import { type ReactNode } from 'react';
 
 import { SortableDropTargetRefContext } from '@/navigation-menu-item/common/contexts/SortableDropTargetRefContext';
+import * as stylex from '@stylexjs/stylex';
 
 const SORTABLE_COLLISION_PRIORITY = 3;
 
 const PLUGINS_WITHOUT_OPTIMISTIC = [SortableKeyboardPlugin];
 
-const StyledSortableRoot = styled.div`
-  min-height: 0;
-  position: relative;
-`;
+const styles = stylex.create({
+  sortableRoot: {
+    minHeight: '0',
+    position: 'relative',
+  },
+});
 
 type NavigationMenuItemSortableItemProps = {
   children: ReactNode;
@@ -46,14 +48,15 @@ export const NavigationMenuItemSortableItem = ({
 
   return (
     <SortableDropTargetRefContext.Provider value={targetRef}>
-      <StyledSortableRoot
+      <div
         ref={(el) => {
           ref(el);
           handleRef?.(el);
         }}
+        {...stylex.props(styles.sortableRoot)}
       >
         {children}
-      </StyledSortableRoot>
+      </div>
     </SortableDropTargetRefContext.Provider>
   );
 };

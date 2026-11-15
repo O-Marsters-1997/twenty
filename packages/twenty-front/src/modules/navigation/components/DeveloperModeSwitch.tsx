@@ -1,35 +1,45 @@
+import * as stylex from '@stylexjs/stylex';
 import { DeveloperModeSwitchLabel } from '@/navigation/components/DeveloperModeSwitchLabel';
 import { DeveloperModeTypingEffect } from '@/navigation/components/DeveloperModeTypingEffect';
 import { useDeveloperModeTypingSequence } from '@/navigation/hooks/useDeveloperModeTypingSequence';
 import { NAVIGATION_DRAWER_COLLAPSED_BUTTON_SIZE } from '@/ui/navigation/navigation-drawer/constants/NavigationDrawerCollapsedButtonSize';
-import { styled } from '@linaria/react';
 import { useId } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { IconCode } from 'twenty-ui/icon';
 import { Switch } from 'twenty-ui/primitives/input';
-import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import {
+  backgroundTransparent,
+  borderRadius,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.label<{ isCompact: boolean }>`
-  align-items: center;
-  border-radius: ${themeCssVariables.border.radius.sm};
-  box-sizing: border-box;
-  cursor: pointer;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  height: ${({ isCompact }) =>
-    isCompact
-      ? `${NAVIGATION_DRAWER_COLLAPSED_BUTTON_SIZE}px`
-      : themeCssVariables.spacing[7]};
-  justify-content: ${({ isCompact }) => (isCompact ? 'center' : 'flex-start')};
-  padding: ${({ isCompact }) =>
-    isCompact ? '0' : themeCssVariables.spacing[1]};
-  width: ${({ isCompact }) =>
-    isCompact ? `${NAVIGATION_DRAWER_COLLAPSED_BUTTON_SIZE}px` : '100%'};
-
-  &:hover {
-    background: ${themeCssVariables.background.transparent.light};
-  }
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    boxSizing: 'border-box',
+    cursor: 'pointer',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    height: spacing['--t-spacing-7'],
+    justifyContent: 'flex-start',
+    padding: spacing['--t-spacing-1'],
+    width: '100%',
+    backgroundColor: {
+      default: 'transparent',
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
+  },
+  compact: {
+    justifyContent: 'center',
+    padding: 0,
+  },
+  compactSize: (size: number) => ({
+    height: `${size}px`,
+    width: `${size}px`,
+  }),
+});
 
 type DeveloperModeSwitchProps = {
   isEnabled: boolean;
@@ -66,9 +76,14 @@ export const DeveloperModeSwitch = ({
   };
 
   return (
-    <StyledContainer
+    <label
       htmlFor={instanceId}
-      isCompact={isCompact}
+      {...stylex.props(
+        styles.container,
+        isCompact && styles.compact,
+        isCompact &&
+          styles.compactSize(NAVIGATION_DRAWER_COLLAPSED_BUTTON_SIZE),
+      )}
       title={isCompact ? label : undefined}
     >
       {isDefined(sequence) && (
@@ -97,6 +112,6 @@ export const DeveloperModeSwitch = ({
         checked={isEnabled}
         onCheckedChange={handleCheckedChange}
       />
-    </StyledContainer>
+    </label>
   );
 };

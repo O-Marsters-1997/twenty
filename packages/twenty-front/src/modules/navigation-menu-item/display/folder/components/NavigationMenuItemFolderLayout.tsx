@@ -1,14 +1,12 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { useDeferredValue, type ReactNode } from 'react';
 import { Collapsible } from 'twenty-ui/primitives/layout';
 
 import { NavigationDrawerItemsCollapsableContainer } from '@/ui/navigation/navigation-drawer/components/NavigationDrawerItemsCollapsableContainer';
 
-const StyledFolderExpandableWrapper = styled.div`
-  & > div {
-    overflow: visible !important;
-  }
-`;
+const styles = stylex.create({
+  expandable: { overflow: 'visible' },
+});
 
 type NavigationMenuItemFolderLayoutProps = {
   header: ReactNode;
@@ -29,13 +27,13 @@ export const NavigationMenuItemFolderLayout = ({
   return (
     <NavigationDrawerItemsCollapsableContainer isGroup={isGroup}>
       {header}
-      <StyledFolderExpandableWrapper>
+      <div {...stylex.props(styles.expandable)}>
         <Collapsible.Root open={isExpandedForAnimation}>
           <Collapsible.Panel dimension="height" containAnimation>
             {children}
           </Collapsible.Panel>
         </Collapsible.Root>
-      </StyledFolderExpandableWrapper>
+      </div>
     </NavigationDrawerItemsCollapsableContainer>
   );
 };

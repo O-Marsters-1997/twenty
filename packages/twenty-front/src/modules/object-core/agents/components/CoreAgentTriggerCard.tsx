@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { type AgentTrigger } from 'twenty-shared/application';
@@ -6,7 +5,7 @@ import { isDefined } from 'twenty-shared/utils';
 import { LightIconButton } from 'twenty-ui/components/input';
 import { IconClock, IconAddressBook, IconTrash } from 'twenty-ui/icon';
 import { Checkbox, type SelectOption } from 'twenty-ui/primitives/input';
-import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 
 import { useFilteredObjectMetadataItems } from '@/object-metadata/hooks/useFilteredObjectMetadataItems';
 import { type FieldMultiSelectValue } from '@/object-record/record-field/ui/types/FieldMetadata';
@@ -17,52 +16,68 @@ import { GenericDropdownContentWidth } from '@/ui/layout/dropdown/constants/Gene
 import { WorkflowFieldsMultiSelect } from '@/workflow/components/WorkflowEditUpdateEventFieldsMultiSelect';
 import { useObjectMetadataItemSelectOptions } from '@/object-metadata/hooks/useObjectMetadataItemSelectOptions';
 import { describeCronExpression } from '~/utils/cron-to-human/describeCronExpression';
+import * as stylex from '@stylexjs/stylex';
+import {
+  borderColor,
+  borderRadius,
+  color,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledCard = styled.div`
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.md};
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[3]};
-  padding: ${themeCssVariables.spacing[3]};
-`;
-
-const StyledHeader = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledTitle = styled.div`
-  color: ${themeCssVariables.font.color.primary};
-  flex: 1;
-  font-weight: ${themeCssVariables.font.weight.medium};
-`;
-
-const StyledActiveLabel = styled.label`
-  align-items: center;
-  color: ${themeCssVariables.font.color.secondary};
-  display: flex;
-  font-size: ${themeCssVariables.font.size.sm};
-  gap: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledRow = styled.div`
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-
-  > * {
-    flex: 1;
-  }
-`;
-
-const StyledHint = styled.div<{ isError: boolean }>`
-  color: ${({ isError }) =>
-    isError
-      ? themeCssVariables.color.red
-      : themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.sm};
-`;
+const styles = stylex.create({
+  card: {
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-medium'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-3'],
+    paddingTop: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingBottom: spacing['--t-spacing-3'],
+    paddingLeft: spacing['--t-spacing-3'],
+  },
+  header: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+  },
+  title: {
+    color: fontColor['--t-font-color-primary'],
+    flex: '1',
+    fontWeight: fontWeight['--t-font-weight-medium'],
+  },
+  activeLabel: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-secondary'],
+    display: 'flex',
+    fontSize: fontSize['--t-font-size-sm'],
+    gap: spacing['--t-spacing-1'],
+  },
+  row: {
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+  },
+  rowItem: {
+    flex: '1',
+  },
+  hint: {
+    fontSize: fontSize['--t-font-size-sm'],
+  },
+  hintDefault: {
+    color: fontColor['--t-font-color-tertiary'],
+  },
+  hintError: {
+    color: color['--t-color-red'],
+  },
+});
 
 const toFieldNames = (fields: FieldMultiSelectValue | string): string[] => {
   if (Array.isArray(fields)) {
@@ -168,11 +183,11 @@ export const CoreAgentTriggerCard = ({
   const TriggerIcon = trigger.type === 'CRON' ? IconClock : IconAddressBook;
 
   return (
-    <StyledCard>
-      <StyledHeader>
+    <div {...stylex.props(styles.card)}>
+      <div {...stylex.props(styles.header)}>
         <TriggerIcon size={theme.icon.size.md} />
-        <StyledTitle>{title}</StyledTitle>
-        <StyledActiveLabel>
+        <div {...stylex.props(styles.title)}>{title}</div>
+        <label {...stylex.props(styles.activeLabel)}>
           <Checkbox
             aria-label={t`Active`}
             checked={trigger.isActive}
@@ -182,7 +197,7 @@ export const CoreAgentTriggerCard = ({
             disabled={disabled}
           />
           {t`Active`}
-        </StyledActiveLabel>
+        </label>
         <LightIconButton
           emphasis="subtle"
           aria-label={t`Remove trigger`}
@@ -191,33 +206,37 @@ export const CoreAgentTriggerCard = ({
         >
           <IconTrash />
         </LightIconButton>
-      </StyledHeader>
+      </div>
       {trigger.type === 'DATABASE_EVENT' && (
         <>
-          <StyledRow>
-            <Select
-              dropdownId={`agent-trigger-object-${trigger.id}`}
-              label={t`Record type`}
-              fullWidth
-              disabled={disabled}
-              value={objectNameSingular}
-              options={objectOptions}
-              onChange={(value) =>
-                updateDatabaseEvent({ nextObjectNameSingular: value })
-              }
-              withSearchInput
-              dropdownWidth={GenericDropdownContentWidth.ExtraLarge}
-            />
-            <Select
-              dropdownId={`agent-trigger-action-${trigger.id}`}
-              label={t`Event`}
-              fullWidth
-              disabled={disabled}
-              value={action}
-              options={actionOptions}
-              onChange={(value) => updateDatabaseEvent({ nextAction: value })}
-            />
-          </StyledRow>
+          <div {...stylex.props(styles.row)}>
+            <div {...stylex.props(styles.rowItem)}>
+              <Select
+                dropdownId={`agent-trigger-object-${trigger.id}`}
+                label={t`Record type`}
+                fullWidth
+                disabled={disabled}
+                value={objectNameSingular}
+                options={objectOptions}
+                onChange={(value) =>
+                  updateDatabaseEvent({ nextObjectNameSingular: value })
+                }
+                withSearchInput
+                dropdownWidth={GenericDropdownContentWidth.ExtraLarge}
+              />
+            </div>
+            <div {...stylex.props(styles.rowItem)}>
+              <Select
+                dropdownId={`agent-trigger-action-${trigger.id}`}
+                label={t`Event`}
+                fullWidth
+                disabled={disabled}
+                value={action}
+                options={actionOptions}
+                onChange={(value) => updateDatabaseEvent({ nextAction: value })}
+              />
+            </div>
+          </div>
           {action === 'updated' && isDefined(selectedObjectMetadataItem) && (
             <WorkflowFieldsMultiSelect
               key={objectNameSingular}
@@ -246,9 +265,16 @@ export const CoreAgentTriggerCard = ({
             fullWidth
           />
           {isDefined(scheduleDescription) && (
-            <StyledHint isError={scheduleDescription.isError}>
+            <div
+              {...stylex.props(
+                styles.hint,
+                scheduleDescription.isError
+                  ? styles.hintError
+                  : styles.hintDefault,
+              )}
+            >
               {scheduleDescription.text}
-            </StyledHint>
+            </div>
           )}
         </div>
       )}
@@ -269,6 +295,6 @@ export const CoreAgentTriggerCard = ({
         }
         disabled={disabled}
       />
-    </StyledCard>
+    </div>
   );
 };

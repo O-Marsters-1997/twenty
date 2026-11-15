@@ -6,7 +6,6 @@ import { PINNED_COMMAND_MENU_ITEMS_GAP } from '@/command-menu-item/display/const
 import { usePinnedCommandMenuItemsInlineLayout } from '@/command-menu-item/display/hooks/usePinnedCommandMenuItemsInlineLayout';
 import { getLabelledPinnedCommandMenuItemId } from '@/command-menu-item/display/utils/getLabelledPinnedCommandMenuItemId';
 import { NodeDimension } from '@/ui/utilities/dimensions/components/NodeDimension';
-import { styled } from '@linaria/react';
 import { isDefined } from 'twenty-shared/utils';
 import { motion } from 'framer-motion';
 import { useContext, useMemo } from 'react';
@@ -16,35 +15,35 @@ import {
   type CommandMenuItemFieldsFragment,
   EngineComponentKey,
 } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledCommandMenuItemContainer = styled(motion.div)`
-  align-items: center;
-  display: flex;
-  justify-content: center;
-`;
-
-const StyledWrapper = styled.div`
-  flex: 1 1 0;
-  min-width: 0;
-  overflow: hidden;
-`;
-
-const StyledContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  min-width: 0;
-  width: 100%;
-`;
-
-const StyledItemsContainer = styled.div<{ shouldReverse: boolean }>`
-  display: flex;
-  flex-direction: ${({ shouldReverse }) =>
-    shouldReverse ? 'row-reverse' : 'row'};
-  gap: ${PINNED_COMMAND_MENU_ITEMS_GAP}px;
-  max-width: 100%;
-  min-width: 0;
-  overflow: hidden;
-`;
+const styles = stylex.create({
+  wrapper: {
+    flex: '1 1 0',
+    minWidth: '0',
+    overflow: 'hidden',
+  },
+  container: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    minWidth: '0',
+    width: '100%',
+  },
+  item: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  items: {
+    display: 'flex',
+    flexDirection: 'row',
+    maxWidth: '100%',
+    minWidth: 0,
+    overflow: 'hidden',
+  },
+  itemsReversed: { flexDirection: 'row-reverse' },
+  itemsGap: (gap: number) => ({ gap: `${gap}px` }),
+});
 
 export const PinnedCommandMenuItemButtons = ({
   containerWidth,
@@ -103,9 +102,16 @@ export const PinnedCommandMenuItemButtons = ({
   ];
 
   const inlineItemsRow = (
-    <StyledItemsContainer shouldReverse={!isSidePanelFooter}>
+    <div
+      {...stylex.props(
+        styles.items,
+        !isSidePanelFooter && styles.itemsReversed,
+        styles.itemsGap(PINNED_COMMAND_MENU_ITEMS_GAP),
+      )}
+    >
       {displayedInlineCommandMenuItems.map((item) => (
-        <StyledCommandMenuItemContainer
+        <motion.div
+          {...stylex.props(styles.item)}
           key={item.id}
           initial={{ width: 0, opacity: 0 }}
           animate={{ width: 'unset', opacity: 1 }}
@@ -127,9 +133,9 @@ export const PinnedCommandMenuItemButtons = ({
                 EngineComponentKey.SEND_MESSAGE_CAMPAIGN
             }
           />
-        </StyledCommandMenuItemContainer>
+        </motion.div>
       ))}
-    </StyledItemsContainer>
+    </div>
   );
 
   return (
@@ -147,11 +153,11 @@ export const PinnedCommandMenuItemButtons = ({
       {isDefined(containerWidth) ? (
         inlineItemsRow
       ) : (
-        <StyledWrapper>
+        <div {...stylex.props(styles.wrapper)}>
           <NodeDimension onDimensionChange={onContainerDimensionChange}>
-            <StyledContainer>{inlineItemsRow}</StyledContainer>
+            <div {...stylex.props(styles.container)}>{inlineItemsRow}</div>
           </NodeDimension>
-        </StyledWrapper>
+        </div>
       )}
     </>
   );

@@ -18,7 +18,6 @@ import { DraggableList } from '@/ui/layout/draggable-list/components/DraggableLi
 import { type DraggableListDropResult } from '@/ui/layout/draggable-list/types/DraggableListDropResult';
 import { SelectableListItem } from '@/ui/layout/selectable-list/components/SelectableListItem';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { interpolateMessagePlaceholders } from 'twenty-shared/i18n';
 import { ContextStorePageType } from 'twenty-shared/types';
@@ -32,30 +31,36 @@ import {
   useIcons,
 } from 'twenty-ui/icon';
 import { ButtonGroup } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { type CommandMenuItemFieldsFragment } from '~/generated-metadata/graphql';
 import { normalizeSearchText } from 'twenty-ui/utilities';
+import * as stylex from '@stylexjs/stylex';
+import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-`;
-
-const StyledViewbar = styled.div`
-  align-items: center;
-  backdrop-filter: blur(5px);
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  display: flex;
-  flex-shrink: 0;
-  height: 40px;
-  padding: ${themeCssVariables.spacing[1]} ${themeCssVariables.spacing[2]};
-`;
-
-const StyledContent = styled.div`
-  flex: 1;
-  overflow: auto;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+  },
+  viewbar: {
+    alignItems: 'center',
+    backdropFilter: 'blur(5px)',
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: borderColor['--t-border-color-light'],
+    display: 'flex',
+    flexShrink: '0',
+    height: '40px',
+    paddingTop: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+  content: {
+    flex: '1',
+    overflow: 'auto',
+  },
+});
 
 export const SidePanelCommandMenuItemEditPage = () => {
   const { t } = useLingui();
@@ -195,15 +200,18 @@ export const SidePanelCommandMenuItemEditPage = () => {
   };
 
   return (
-    <StyledContainer data-click-outside-id={COMMAND_MENU_CLICK_OUTSIDE_ID}>
+    <div
+      data-click-outside-id={COMMAND_MENU_CLICK_OUTSIDE_ID}
+      {...stylex.props(styles.container)}
+    >
       {hasObjectContext && (
-        <StyledViewbar>
+        <div {...stylex.props(styles.viewbar)}>
           <CommandMenuItemEditRecordSelectionDropdown
             isRecordPage={isRecordPage}
           />
-        </StyledViewbar>
+        </div>
       )}
-      <StyledContent>
+      <div {...stylex.props(styles.content)}>
         <SidePanelList selectableItemIds={selectableItemIds}>
           <SidePanelGroup heading={t`Pinned`}>
             <DraggableList
@@ -310,7 +318,7 @@ export const SidePanelCommandMenuItemEditPage = () => {
             })}
           </SidePanelGroup>
         </SidePanelList>
-      </StyledContent>
-    </StyledContainer>
+      </div>
+    </div>
   );
 };

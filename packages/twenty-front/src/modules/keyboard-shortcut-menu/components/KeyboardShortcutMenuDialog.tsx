@@ -1,46 +1,62 @@
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { t } from '@lingui/core/macro';
 import { IconButton } from 'twenty-ui/components/input';
 import { IconX } from 'twenty-ui/icon';
 import { useIsMobile } from 'twenty-ui/utilities';
+import * as stylex from '@stylexjs/stylex';
+import {
+  background,
+  borderColor,
+  borderRadius,
+  boxShadow,
+  font,
+  fontColor,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledDialog = styled.div<{ isMobile: boolean }>`
-  background: ${themeCssVariables.background.primary};
-  border-radius: ${themeCssVariables.border.radius.md};
-  box-shadow: ${themeCssVariables.boxShadow.strong};
-  font-family: ${themeCssVariables.font.family};
-  left: 50%;
-  max-width: 400px;
-  overflow: hidden;
-  padding: 0;
-  padding: ${themeCssVariables.spacing[1]};
-  position: fixed;
-  top: 30%;
-  transform: ${({ isMobile }) =>
-    isMobile ? 'translateX(-49.5%)' : 'translateX(-50%)'};
-  width: ${({ isMobile }) => (isMobile ? 'calc(100% - 40px)' : '100%')};
-  z-index: 1000;
-`;
-
-const StyledHeading = styled.div`
-  align-items: center;
-  border-bottom: 1px solid ${themeCssVariables.border.color.medium};
-  color: ${themeCssVariables.font.color.primary};
-  display: flex;
-  flex-direction: row;
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-  justify-content: space-between;
-  padding: ${themeCssVariables.spacing[3]};
-`;
-
-const StyledContainer = styled.div`
-  gap: ${themeCssVariables.spacing[2]};
-  padding-bottom: ${themeCssVariables.spacing[4]};
-  padding-left: ${themeCssVariables.spacing[4]};
-  padding-right: ${themeCssVariables.spacing[4]};
-  padding-top: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  heading: {
+    alignItems: 'center',
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: borderColor['--t-border-color-medium'],
+    color: fontColor['--t-font-color-primary'],
+    display: 'flex',
+    flexDirection: 'row',
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    justifyContent: 'space-between',
+    paddingTop: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingBottom: spacing['--t-spacing-3'],
+    paddingLeft: spacing['--t-spacing-3'],
+  },
+  container: {
+    gap: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-4'],
+    paddingLeft: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingTop: spacing['--t-spacing-1'],
+  },
+  dialog: {
+    backgroundColor: background['--t-background-primary'],
+    borderRadius: borderRadius['--t-border-radius-md'],
+    boxShadow: boxShadow['--t-box-shadow-strong'],
+    fontFamily: font['--t-font-family'],
+    left: '50%',
+    maxWidth: '400px',
+    overflow: 'hidden',
+    padding: spacing['--t-spacing-1'],
+    position: 'fixed',
+    top: '30%',
+    transform: 'translateX(-50%)',
+    width: '100%',
+    zIndex: 1000,
+  },
+  dialogMobile: {
+    transform: 'translateX(-49.5%)',
+    width: 'calc(100% - 40px)',
+  },
+});
 
 type KeyboardMenuDialogProps = {
   onClose: () => void;
@@ -54,8 +70,8 @@ export const KeyboardMenuDialog = ({
   const isMobile = useIsMobile();
 
   return (
-    <StyledDialog isMobile={isMobile}>
-      <StyledHeading>
+    <div {...stylex.props(styles.dialog, isMobile && styles.dialogMobile)}>
+      <div {...stylex.props(styles.heading)}>
         {t`Keyboard shortcuts`}
         <IconButton
           aria-label={t`Close keyboard shortcuts`}
@@ -64,8 +80,8 @@ export const KeyboardMenuDialog = ({
         >
           <IconX />
         </IconButton>
-      </StyledHeading>
-      <StyledContainer>{children}</StyledContainer>
-    </StyledDialog>
+      </div>
+      <div {...stylex.props(styles.container)}>{children}</div>
+    </div>
   );
 };

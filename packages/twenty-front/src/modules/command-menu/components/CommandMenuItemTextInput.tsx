@@ -1,3 +1,4 @@
+import * as stylex from '@stylexjs/stylex';
 import { CommandMenuItem } from '@/command-menu/components/CommandMenuItem';
 import { useRegisterInputEvents } from '@/ui/input/hooks/useRegisterInputEvents';
 import { TextInput } from '@/ui/input/components/TextInput';
@@ -5,7 +6,6 @@ import { usePushFocusItemToFocusStack } from '@/ui/utilities/focus/hooks/usePush
 import { useRemoveFocusItemFromFocusStackById } from '@/ui/utilities/focus/hooks/useRemoveFocusItemFromFocusStackById';
 import { currentFocusIdSelector } from '@/ui/utilities/focus/states/currentFocusIdSelector';
 import { FocusComponentType } from '@/ui/utilities/focus/types/FocusComponentType';
-import { styled } from '@linaria/react';
 import { useStore } from 'jotai';
 import { useRef, useState } from 'react';
 import { type IconComponent } from 'twenty-ui/icon';
@@ -19,11 +19,11 @@ type CommandMenuItemTextInputProps = {
   placeholder?: string;
 };
 
-const StyledRightAlignedTextInputContainer = styled.div`
-  & input {
-    text-align: right;
-  }
-`;
+const styles = stylex.create({
+  rightAligned: {
+    textAlign: 'right',
+  },
+});
 
 export const CommandMenuItemTextInput = ({
   id,
@@ -96,7 +96,7 @@ export const CommandMenuItemTextInput = ({
       Icon={Icon}
       onClick={focusInput}
       RightComponent={
-        <StyledRightAlignedTextInputContainer>
+        <div {...stylex.props(styles.rightAligned)}>
           <TextInput
             ref={inputRef}
             value={draftValue}
@@ -107,7 +107,7 @@ export const CommandMenuItemTextInput = ({
             placeholder={placeholder}
             textClickOutsideId={focusId}
           />
-        </StyledRightAlignedTextInputContainer>
+        </div>
       }
     />
   );

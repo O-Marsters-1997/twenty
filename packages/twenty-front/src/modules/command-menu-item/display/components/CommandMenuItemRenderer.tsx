@@ -1,3 +1,4 @@
+import * as stylex from '@stylexjs/stylex';
 import { type CommandMenuItemDefinition } from '@/command-menu-item/types/CommandMenuItemDefinition';
 import { AppMenuItem } from '@/applications/components/AppMenuItem';
 import { useIsThirdPartyApplication } from '@/applications/hooks/useIsThirdPartyApplication';
@@ -14,17 +15,13 @@ import { SelectableListComponentInstanceContext } from '@/ui/layout/selectable-l
 import { isSelectedItemIdComponentFamilyState } from '@/ui/layout/selectable-list/states/isSelectedItemIdComponentFamilyState';
 import { useAvailableComponentInstanceIdOrThrow } from '@/ui/utilities/state/component-state/hooks/useAvailableComponentInstanceIdOrThrow';
 import { useAtomComponentFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentFamilyStateValue';
-import { styled } from '@linaria/react';
 import { useContext } from 'react';
 import { assertUnreachable, isDefined } from 'twenty-shared/utils';
 
-const StyledPreviewWrapper = styled.div`
-  cursor: not-allowed;
-
-  & * {
-    pointer-events: none;
-  }
-`;
+const styles = stylex.create({
+  previewWrapper: { cursor: 'not-allowed' },
+  previewContent: { pointerEvents: 'none' },
+});
 
 type CommandMenuItemRendererProps = {
   item: CommandMenuItemDefinition;
@@ -64,14 +61,16 @@ const CommandMenuItemButtonRenderer = ({
 
   if (isInPreviewMode) {
     return (
-      <StyledPreviewWrapper>
-        <CommandMenuButton
-          command={command}
-          hotKey={shouldShowHotKey ? buttonHotKey : undefined}
-          isPrimaryAction={isPrimaryAction}
-          shouldHideLabel={shouldHideLabel}
-        />
-      </StyledPreviewWrapper>
+      <div {...stylex.props(styles.previewWrapper)}>
+        <div {...stylex.props(styles.previewContent)}>
+          <CommandMenuButton
+            command={command}
+            hotKey={shouldShowHotKey ? buttonHotKey : undefined}
+            isPrimaryAction={isPrimaryAction}
+            shouldHideLabel={shouldHideLabel}
+          />
+        </div>
+      </div>
     );
   }
 

@@ -1,28 +1,27 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { useLingui } from '@lingui/react/macro';
 import type React from 'react';
 import { LightIconButton } from 'twenty-ui/components/input';
 import { IconChevronRight } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { animationDuration } from 'twenty-ui/theme/tokens.stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
 
 // Rotating a wrapper around the button keeps the icon component identity
 // stable: passing an inline component to LightIconButton's Icon prop remounts
 // the svg on every render, so the transition never runs.
-const StyledButtonContainer = styled.span<{ isOpen: boolean }>`
-  display: inline-flex;
-
-  svg {
-    transform: rotate(${({ isOpen }) => (isOpen ? 90 : 0)}deg);
-    transition: transform
-      calc(${themeCssVariables.animation.duration.normal} * 1s) ease;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    svg {
-      transition: none;
-    }
-  }
-`;
+const styles = stylex.create({
+  container: {
+    display: 'inline-flex',
+    transform: 'rotate(0deg)',
+    transitionDuration: {
+      default: `calc(${animationDuration['--t-animation-duration-normal']} * 1s)`,
+      [media.reducedMotion]: '0s',
+    },
+    transitionProperty: 'transform',
+    transitionTimingFunction: 'ease',
+  },
+  open: { transform: 'rotate(90deg)' },
+});
 
 type NavigationMenuItemFolderChevronButtonProps = {
   isOpen: boolean;
@@ -36,7 +35,7 @@ export const NavigationMenuItemFolderChevronButton = ({
   const { t } = useLingui();
 
   return (
-    <StyledButtonContainer isOpen={isOpen}>
+    <span {...stylex.props(styles.container, isOpen && styles.open)}>
       <LightIconButton
         size="sm"
         emphasis="subtle"
@@ -46,6 +45,6 @@ export const NavigationMenuItemFolderChevronButton = ({
       >
         <IconChevronRight />
       </LightIconButton>
-    </StyledButtonContainer>
+    </span>
   );
 };

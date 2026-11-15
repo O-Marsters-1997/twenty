@@ -13,39 +13,38 @@ import { ViewPickerListContent } from '@/views/view-picker/components/ViewPicker
 import { useUpdateViewFromCurrentState } from '@/views/view-picker/hooks/useUpdateViewFromCurrentState';
 import { useViewPickerMode } from '@/views/view-picker/hooks/useViewPickerMode';
 import { getViewPickerDropdownId } from '@/views/view-picker/utils/getViewPickerDropdownId';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
 import { IconChevronDown, IconList, useIcons } from 'twenty-ui/icon';
-import { MOBILE_VIEWPORT, useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { MOBILE_VIEWPORT, useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { grayScale, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledIconContainer = styled.span`
-  display: flex;
-  flex-shrink: 0;
-`;
-
-const StyledDropdownLabelAdornments = styled.span`
-  align-items: center;
-  color: ${themeCssVariables.grayScale.gray8};
-  display: flex;
-  flex-shrink: 0;
-  gap: ${themeCssVariables.spacing[1]};
-  margin-left: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledViewName = styled.span`
-  margin-left: ${themeCssVariables.spacing[1]};
-  max-width: 130px;
-  min-width: 0;
-  overflow: hidden;
-  @media (max-width: 375px) {
-    max-width: 90px;
-  }
-  @media (min-width: 376px) and (max-width: ${MOBILE_VIEWPORT}px) {
-    max-width: 110px;
-  }
-`;
+const styles = stylex.create({
+  iconContainer: {
+    display: 'flex',
+    flexShrink: '0',
+  },
+  dropdownLabelAdornments: {
+    alignItems: 'center',
+    color: grayScale['--t-gray-scale-gray8'],
+    display: 'flex',
+    flexShrink: '0',
+    gap: spacing['--t-spacing-1'],
+    marginLeft: spacing['--t-spacing-1'],
+  },
+  viewName: {
+    marginLeft: spacing['--t-spacing-1'],
+    maxWidth: {
+      default: '130px',
+      '@media (max-width: 375px)': '90px',
+      '@media (min-width: 376px) and (max-width: 768px)': '110px',
+    },
+    minWidth: 0,
+    overflow: 'hidden',
+  },
+});
 
 export const ViewPickerDropdown = () => {
   const theme = useTheme();
@@ -85,20 +84,20 @@ export const ViewPickerDropdown = () => {
       onClickOutside={handleClickOutside}
       clickableComponent={
         <StyledDropdownButtonContainer isUnfolded={isDropdownOpen}>
-          <StyledIconContainer>
+          <span {...stylex.props(styles.iconContainer)}>
             {isDefined(currentView) && isDefined(CurrentViewIcon) ? (
               <CurrentViewIcon size={theme.icon.size.md} />
             ) : (
               <IconList size={theme.icon.size.md} />
             )}
-          </StyledIconContainer>
-          <StyledViewName>
+          </span>
+          <span {...stylex.props(styles.viewName)}>
             <OverflowingTextWithTooltip text={currentView?.name ?? t`All`} />
-          </StyledViewName>
-          <StyledDropdownLabelAdornments>
+          </span>
+          <span {...stylex.props(styles.dropdownLabelAdornments)}>
             {isDefined(totalCount) && <>· {formatNumber(totalCount)} </>}
             <IconChevronDown size={theme.icon.size.sm} />
-          </StyledDropdownLabelAdornments>
+          </span>
         </StyledDropdownButtonContainer>
       }
       dropdownComponents={(() => {

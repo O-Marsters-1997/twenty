@@ -1,13 +1,11 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { motion, useReducedMotion } from 'framer-motion';
 import { type ReactNode } from 'react';
 import { useTheme } from 'twenty-ui/theme';
 
-const StyledContainer = styled.div`
-  overflow: hidden;
-`;
-
-const AnimatedContainer = motion.create(StyledContainer);
+const styles = stylex.create({
+  container: { overflow: 'hidden' },
+});
 
 type NavigationMenuItemEntranceProps = {
   children: ReactNode;
@@ -20,7 +18,8 @@ export const NavigationMenuItemEntrance = ({
   const shouldReduceMotion = useReducedMotion();
 
   return (
-    <AnimatedContainer
+    <motion.div
+      {...stylex.props(styles.container)}
       initial={shouldReduceMotion ? false : { height: 0, opacity: 0 }}
       animate={{ height: 'auto', opacity: 1 }}
       transition={{
@@ -28,6 +27,6 @@ export const NavigationMenuItemEntrance = ({
       }}
     >
       {children}
-    </AnimatedContainer>
+    </motion.div>
   );
 };

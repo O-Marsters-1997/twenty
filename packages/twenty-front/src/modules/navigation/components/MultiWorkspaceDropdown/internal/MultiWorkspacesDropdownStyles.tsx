@@ -1,76 +1,124 @@
-import { NAVIGATION_DRAWER_COLLAPSED_BUTTON_SIZE } from '@/ui/navigation/navigation-drawer/constants/NavigationDrawerCollapsedButtonSize';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import { type ComponentProps } from 'react';
 import { IconChevronDown } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
+import {
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-export const StyledContainer = styled.div<{
+import { NAVIGATION_DRAWER_COLLAPSED_BUTTON_SIZE } from '@/ui/navigation/navigation-drawer/constants/NavigationDrawerCollapsedButtonSize';
+
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    borderColor: 'transparent',
+    borderRadius: borderRadius['--t-border-radius-md'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    boxSizing: 'border-box',
+    color: fontColor['--t-font-color-primary'],
+    cursor: 'pointer',
+    display: 'flex',
+    gap: 0,
+    height: spacing['--t-spacing-7'],
+    maxWidth: '100%',
+    minWidth: 0,
+    opacity: 1,
+    padding: `calc(${spacing['--t-spacing-2']} - 1px)`,
+    pointerEvents: 'auto',
+  },
+  containerExpanded: {
+    gap: spacing['--t-spacing-2'],
+    padding: `calc(${spacing['--t-spacing-1']} - 1px)`,
+    width: 'fit-content',
+  },
+  containerCollapsedSize: (size: number) => ({
+    height: `${size}px`,
+    width: `${size}px`,
+  }),
+  containerEnabled: {
+    backgroundColor: {
+      default: null,
+      ':hover': backgroundTransparent['--t-background-transparent-lighter'],
+    },
+    borderColor: {
+      default: 'transparent',
+      ':hover': borderColor['--t-border-color-medium'],
+    },
+  },
+  containerDisabled: {
+    cursor: 'default',
+    opacity: 0.5,
+    pointerEvents: 'none',
+  },
+  labelWrapper: {
+    flex: '1 1 auto',
+    minWidth: 0,
+    overflow: 'hidden',
+  },
+  label: {
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  chevron: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+  },
+  chevronDisabled: {
+    color: fontColor['--t-font-color-extra-light'],
+  },
+});
+
+type StyledContainerProps = ComponentProps<'div'> & {
   isNavigationDrawerExpanded: boolean;
   disabled?: boolean;
-}>`
-  align-items: center;
-  border: 1px solid transparent;
-  border-radius: ${themeCssVariables.border.radius.md};
-  box-sizing: border-box;
-  color: ${themeCssVariables.font.color.primary};
-  cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
-  display: flex;
-  gap: ${({ isNavigationDrawerExpanded }) =>
-    isNavigationDrawerExpanded ? themeCssVariables.spacing[2] : '0'};
-  height: ${({ isNavigationDrawerExpanded }) =>
-    isNavigationDrawerExpanded
-      ? themeCssVariables.spacing[7]
-      : `${NAVIGATION_DRAWER_COLLAPSED_BUTTON_SIZE}px`};
-  max-width: 100%;
-  min-width: 0;
-  opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
-  padding: ${({ isNavigationDrawerExpanded }) =>
-    isNavigationDrawerExpanded
-      ? `calc(${themeCssVariables.spacing[1]} - 1px)`
-      : `calc(${themeCssVariables.spacing[2]} - 1px)`};
-  pointer-events: ${({ disabled }) => (disabled ? 'none' : 'auto')};
-  width: ${({ isNavigationDrawerExpanded }) =>
-    isNavigationDrawerExpanded
-      ? 'fit-content'
-      : `${NAVIGATION_DRAWER_COLLAPSED_BUTTON_SIZE}px`};
+};
 
-  &:hover {
-    background-color: ${({ disabled }) =>
-      disabled
-        ? 'transparent'
-        : themeCssVariables.background.transparent.lighter};
-    border-color: ${({ disabled }) =>
-      disabled ? 'transparent' : themeCssVariables.border.color.medium};
-  }
-`;
+export const StyledContainer = ({
+  isNavigationDrawerExpanded,
+  disabled,
+  ...props
+}: StyledContainerProps) => (
+  <div
+    {...props}
+    {...stylex.props(
+      styles.container,
+      isNavigationDrawerExpanded
+        ? styles.containerExpanded
+        : styles.containerCollapsedSize(
+            NAVIGATION_DRAWER_COLLAPSED_BUTTON_SIZE,
+          ),
+      disabled === true ? styles.containerDisabled : styles.containerEnabled,
+    )}
+  />
+);
 
-export const StyledLabelWrapper = styled.div`
-  flex: 1 1 auto;
-  min-width: 0;
-  overflow: hidden;
-`;
+export const StyledLabelWrapper = (props: ComponentProps<'div'>) => (
+  <div {...props} {...stylex.props(styles.labelWrapper)} />
+);
 
-export const StyledLabel = styled.div`
-  font-weight: ${themeCssVariables.font.weight.medium};
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledIconChevronDownContainer = styled.div<{ disabled?: boolean }>`
-  align-items: center;
-  color: ${({ disabled }) =>
-    disabled
-      ? themeCssVariables.font.color.extraLight
-      : themeCssVariables.font.color.tertiary};
-  display: flex;
-`;
+export const StyledLabel = (props: ComponentProps<'div'>) => (
+  <div {...props} {...stylex.props(styles.label)} />
+);
 
 export const StyledIconChevronDown = ({
   disabled,
   ...props
 }: { disabled?: boolean } & React.ComponentProps<typeof IconChevronDown>) => (
-  <StyledIconChevronDownContainer disabled={disabled}>
+  <div
+    {...stylex.props(
+      styles.chevron,
+      disabled === true && styles.chevronDisabled,
+    )}
+  >
     {/* oxlint-disable-next-line react/jsx-props-no-spreading */}
     <IconChevronDown {...props} />
-  </StyledIconChevronDownContainer>
+  </div>
 );

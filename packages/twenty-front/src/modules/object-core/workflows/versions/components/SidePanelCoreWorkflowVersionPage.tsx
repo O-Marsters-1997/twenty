@@ -1,29 +1,34 @@
-import { styled } from '@linaria/react';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { CoreWorkflowVersionCard } from '@/object-core/workflows/versions/components/CoreWorkflowVersionCard';
 import { CoreWorkflowVersionRestoreButton } from '@/object-core/workflows/versions/components/CoreWorkflowVersionRestoreButton';
 import { useCoreWorkflowVersion } from '@/object-core/workflows/versions/hooks/useCoreWorkflowVersion';
 import { useSidePanelWorkflowVersionIdOrThrow } from '@/side-panel/pages/workflow/step/view/hooks/useSidePanelWorkflowVersionIdOrThrow';
+import * as stylex from '@stylexjs/stylex';
+import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-`;
-
-const StyledActions = styled.div`
-  align-items: center;
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  padding: ${themeCssVariables.spacing[2]} ${themeCssVariables.spacing[3]};
-`;
-
-const StyledSpacer = styled.div`
-  margin-left: auto;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+  },
+  actions: {
+    alignItems: 'center',
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: borderColor['--t-border-color-light'],
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-3'],
+  },
+  spacer: {
+    marginLeft: 'auto',
+  },
+});
 
 export const SidePanelCoreWorkflowVersionPage = () => {
   const coreWorkflowVersionId = useSidePanelWorkflowVersionIdOrThrow();
@@ -34,17 +39,17 @@ export const SidePanelCoreWorkflowVersionPage = () => {
   }
 
   return (
-    <StyledContainer>
-      <StyledActions>
-        <StyledSpacer />
+    <div {...stylex.props(styles.container)}>
+      <div {...stylex.props(styles.actions)}>
+        <div {...stylex.props(styles.spacer)} />
         {isDefined(coreWorkflowVersion.coreWorkflowId) && (
           <CoreWorkflowVersionRestoreButton
             workflowId={coreWorkflowVersion.coreWorkflowId}
             coreWorkflowVersionId={coreWorkflowVersionId}
           />
         )}
-      </StyledActions>
+      </div>
       <CoreWorkflowVersionCard coreWorkflowVersionId={coreWorkflowVersionId} />
-    </StyledContainer>
+    </div>
   );
 };

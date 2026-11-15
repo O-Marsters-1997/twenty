@@ -1,16 +1,18 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { AUTO_SELECT_WORKSPACE_DEFAULT_MODEL_ID } from 'twenty-shared/ai';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { useResolvedAiModel } from '@/ai/hooks/useResolvedAiModel';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  color: ${themeCssVariables.font.color.secondary};
-  min-width: 0;
-  overflow: hidden;
-`;
+const styles = stylex.create({
+  container: {
+    color: fontColor['--t-font-color-secondary'],
+    minWidth: '0',
+    overflow: 'hidden',
+  },
+});
 
 type CoreAgentModelCellProps = {
   modelId: string;
@@ -26,10 +28,10 @@ export const CoreAgentModelCell = ({ modelId }: CoreAgentModelCellProps) => {
       : modelId;
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <OverflowingTextWithTooltip
         text={resolvedModel?.label ?? fallbackLabel}
       />
-    </StyledContainer>
+    </div>
   );
 };

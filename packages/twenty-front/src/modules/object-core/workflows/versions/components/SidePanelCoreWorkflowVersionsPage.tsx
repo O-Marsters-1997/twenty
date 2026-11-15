@@ -7,14 +7,19 @@ import { useOpenCoreWorkflowVersionSidePanel } from '@/object-core/workflows/ver
 import { useSidePanelWorkflowIdOrThrow } from '@/side-panel/pages/workflow/hooks/useSidePanelWorkflowIdOrThrow';
 import { SidePanelGroup } from '@/side-panel/components/SidePanelGroup';
 import { SidePanelList } from '@/side-panel/components/SidePanelList';
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledError = styled.div`
-  color: ${themeCssVariables.font.color.secondary};
-  font-size: ${themeCssVariables.font.size.md};
-  padding: ${themeCssVariables.spacing[1]} ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  error: {
+    color: fontColor['--t-font-color-secondary'],
+    fontSize: fontSize['--t-font-size-md'],
+    paddingTop: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+});
 
 export const SidePanelCoreWorkflowVersionsPage = () => {
   const { t } = useLingui();
@@ -37,7 +42,7 @@ export const SidePanelCoreWorkflowVersionsPage = () => {
       }
     >
       {isDefined(error) && (
-        <StyledError>{t`Could not load versions.`}</StyledError>
+        <div {...stylex.props(styles.error)}>{t`Could not load versions.`}</div>
       )}
       <SidePanelGroup heading={t`Versions`}>
         {coreWorkflowVersions.map((coreWorkflowVersion) => (

@@ -1,3 +1,4 @@
+import * as stylex from '@stylexjs/stylex';
 import { MobileNavigationBarScrollEffect } from '@/navigation/components/MobileNavigationBarScrollEffect';
 import { MOBILE_NAVIGATION_BAR_PADDING } from '@/navigation/constants/MobileNavigationBarPadding';
 import { useMobileNavigationBarItems } from '@/navigation/hooks/useMobileNavigationBarItems';
@@ -5,88 +6,98 @@ import { isMobileNavigationBarVisibleState } from '@/navigation/states/isMobileN
 import { isSidePanelOpenedState } from '@/side-panel/states/isSidePanelOpenedState';
 import { RootStackingContextZIndices } from '@/ui/layout/constants/RootStackingContextZIndices';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { css } from '@linaria/core';
-import { styled } from '@linaria/react';
 import { useLocation } from 'react-router-dom';
 import { IconButton } from 'twenty-ui/components/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { isAiChatPath } from '~/utils/isAiChatPath';
+import {
+  animationDuration,
+  backgroundTransparent,
+  blur,
+  borderColor,
+  borderRadius,
+  boxShadow,
+  grayScale,
+  iconSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
 
-// Lets taps reach the page scrolling underneath; flex-start follows the writing direction.
-const StyledFloatingContainer = styled.div`
-  bottom: 0;
-  display: flex;
-  justify-content: flex-start;
-  left: 0;
-  padding: ${MOBILE_NAVIGATION_BAR_PADDING};
-  padding-bottom: calc(
-    ${MOBILE_NAVIGATION_BAR_PADDING} + env(safe-area-inset-bottom, 0px)
-  );
-  pointer-events: none;
-  position: absolute;
-  right: 0;
-  z-index: ${RootStackingContextZIndices.MobileNavigationBar};
-
-  @media print {
-    display: none;
-  }
-`;
-
-const StyledNavigationBar = styled.nav`
-  align-items: center;
-  backdrop-filter: ${themeCssVariables.blur.strong};
-  background: ${themeCssVariables.background.transparent.primary};
-  border: 1px solid ${themeCssVariables.border.color.transparentStrong};
-  border-radius: ${themeCssVariables.border.radius.pill};
-  box-shadow: ${themeCssVariables.boxShadow.strong};
-  box-sizing: border-box;
-  corner-shape: round;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  justify-content: center;
-  padding: ${themeCssVariables.spacing[1]};
-  pointer-events: auto;
-  transition:
-    opacity calc(${themeCssVariables.animation.duration.normal} * 1s) ease,
-    transform calc(${themeCssVariables.animation.duration.normal} * 1s) ease,
-    visibility calc(${themeCssVariables.animation.duration.normal} * 1s);
-  width: max-content;
-
-  &[data-hidden] {
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(calc(100% + ${themeCssVariables.spacing[4]}));
-    visibility: hidden;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-  }
-`;
-
-const navigationButtonClassName = css`
-  --tw-button-size: ${themeCssVariables.spacing[10]};
-  --tw-icon-button-icon-size: ${themeCssVariables.icon.size.lg};
-
-  border: none;
-  color: ${themeCssVariables.grayScale.gray10};
-  transition: background-color
-    calc(${themeCssVariables.animation.duration.fast} * 1s) ease;
-
-  &[aria-pressed='true'] {
-    background: ${themeCssVariables.background.transparent.medium};
-  }
-
-  @media (hover: hover) {
-    &:hover {
-      background: ${themeCssVariables.background.transparent.light};
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-  }
-`;
+const styles = stylex.create({
+  floatingContainer: {
+    bottom: 0,
+    display: {
+      default: 'flex',
+      [media.print]: 'none',
+    },
+    justifyContent: 'flex-start',
+    left: 0,
+    pointerEvents: 'none',
+    position: 'absolute',
+    right: 0,
+  },
+  floatingContainerLayout: (padding: string, zIndex: number) => ({
+    paddingBottom: `calc(${padding} + env(safe-area-inset-bottom, 0px))`,
+    paddingLeft: padding,
+    paddingRight: padding,
+    paddingTop: padding,
+    zIndex,
+  }),
+  navigationBar: {
+    alignItems: 'center',
+    backdropFilter: blur['--t-blur-strong'],
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-primary'],
+    borderColor: borderColor['--t-border-color-transparent-strong'],
+    borderRadius: borderRadius['--t-border-radius-pill'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    boxShadow: boxShadow['--t-box-shadow-strong'],
+    boxSizing: 'border-box',
+    cornerShape: 'round',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    justifyContent: 'center',
+    padding: spacing['--t-spacing-1'],
+    pointerEvents: 'auto',
+    transitionDuration: {
+      default: `calc(${animationDuration['--t-animation-duration-normal']} * 1s)`,
+      [media.reducedMotion]: '0s',
+    },
+    transitionProperty: 'opacity, transform, visibility',
+    transitionTimingFunction: 'ease',
+    width: 'max-content',
+  },
+  navigationBarHidden: {
+    opacity: 0,
+    pointerEvents: 'none',
+    transform: `translateY(calc(100% + ${spacing['--t-spacing-4']}))`,
+    visibility: 'hidden',
+  },
+  navigationButton: {
+    '--tw-button-size': spacing['--t-spacing-10'],
+    '--tw-icon-button-icon-size': iconSize['--t-icon-size-lg'],
+    borderWidth: 0,
+    color: grayScale['--t-gray-scale-gray10'],
+    transitionDuration: {
+      default: `calc(${animationDuration['--t-animation-duration-fast']} * 1s)`,
+      [media.reducedMotion]: '0s',
+    },
+    transitionProperty: 'background-color',
+    transitionTimingFunction: 'ease',
+  },
+  navigationButtonPressed: {
+    backgroundColor: backgroundTransparent['--t-background-transparent-medium'],
+  },
+  navigationButtonHover: {
+    backgroundColor: {
+      default: null,
+      [media.hoverCapable]: {
+        default: null,
+        ':hover': backgroundTransparent['--t-background-transparent-light'],
+      },
+    },
+  },
+});
 
 export const MobileNavigationBar = () => {
   const { pathname } = useLocation();
@@ -105,16 +116,31 @@ export const MobileNavigationBar = () => {
   return (
     <>
       <MobileNavigationBarScrollEffect />
-      <StyledFloatingContainer>
-        <StyledNavigationBar
-          data-hidden={isHidden ? '' : undefined}
+      <div
+        {...stylex.props(
+          styles.floatingContainer,
+          styles.floatingContainerLayout(
+            MOBILE_NAVIGATION_BAR_PADDING,
+            RootStackingContextZIndices.MobileNavigationBar,
+          ),
+        )}
+      >
+        <nav
+          {...stylex.props(
+            styles.navigationBar,
+            isHidden && styles.navigationBarHidden,
+          )}
           aria-hidden={isHidden}
           inert={isHidden || undefined}
         >
           {items.map(({ Icon, name, label, onClick }) => (
             <IconButton
               key={name}
-              className={navigationButtonClassName}
+              {...stylex.props(
+                styles.navigationButton,
+                activeItemName === name && styles.navigationButtonPressed,
+                styles.navigationButtonHover,
+              )}
               variant="ghost"
               shape="round"
               aria-label={label}
@@ -125,8 +151,8 @@ export const MobileNavigationBar = () => {
               <Icon aria-hidden />
             </IconButton>
           ))}
-        </StyledNavigationBar>
-      </StyledFloatingContainer>
+        </nav>
+      </div>
     </>
   );
 };
