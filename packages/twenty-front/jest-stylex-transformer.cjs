@@ -10,7 +10,8 @@ const createTransformer = (swcOptions) => {
   return {
     canInstrument: swc.canInstrument,
     getCacheKey: (sourceText, sourcePath, options) =>
-      swc.getCacheKey(sourceText, sourcePath, options),
+      swc.getCacheKey(sourceText, sourcePath, options) +
+      require('@stylexjs/babel-plugin/package.json').version,
     process: (sourceText, sourcePath, options) => {
       if (!sourceText.includes(STYLEX_IMPORT)) {
         return swc.process(sourceText, sourcePath, options);
