@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/signal"
 	"slices"
+	"strings"
 	"syscall"
 	"time"
 
@@ -27,6 +28,8 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth/authgql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/config"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/frontdoor"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/geo"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/geo/geogql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging/messaginggql"
 	messagingstore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging/store"
@@ -107,6 +110,17 @@ func run() error {
 	)
 	authHandler := authgql.NewHandler(newAuthResolver(pool, twoFactor, passwordLogins, stack), logger)
 
+	geoClient := &http.Client{Timeout: 10 * time.Second}
+	geoDriverName := strings.ReplaceAll(strings.ToUpper(valueOrDefault(os.Getenv("ADDRESS_AUTOCOMPLETE_DRIVER"), geo.DriverGooglePlaces)), "-", "_")
+	geoDriver, err := geo.NewDriver(geo.Config{
+		Enabled:      os.Getenv("IS_MAPS_AND_ADDRESS_AUTOCOMPLETE_ENABLED") == "true",
+		Driver:       geoDriverName,
+		GoogleAPIKey: os.Getenv("GOOGLE_MAP_API_KEY"),
+	}, geoClient)
+	if err != nil {
+		return err
+	}
+
 	dynamicHandler, isDynamic := dynamicRecords(pool, logger)
 	goGraphQL := http.NewServeMux()
 	goGraphQL.Handle(string(frontdoor.EndpointWorkspace), workspaceHandler(recordsgql.NewHandler(&recordsgql.Resolver{
@@ -144,6 +158,7 @@ func run() error {
 			Permissions:  accessstore.NewPermissions(pool),
 			Tokens:       stack.issuer,
 		}, logger),
+		geogql.NewHandler(&geogql.Resolver{Driver: geoDriver}, logger),
 		workspacegql.NewHandler(&workspacegql.Resolver{
 			Workspaces: workspacestore.NewWorkspaces(pool, cfg.DefaultSubdomain, workspacestore.AuthProviders{
 				Google:   os.Getenv("AUTH_GOOGLE_ENABLED") == "true",

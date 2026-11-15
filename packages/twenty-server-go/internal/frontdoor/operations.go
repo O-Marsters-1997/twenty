@@ -102,7 +102,7 @@ func staticTable() OperationTable {
 	for _, operation := range viewOperations {
 		table[EndpointMetadata][operation] = RouteGo
 	}
-	for _, operation := range slices.Concat(SkillOperations, ChatOperations, agentOperations, MessagingOperations, AccessOperations, WorkspaceSettingsOperations, TwoFactorOperations, SessionOperations, PasswordLoginOperations) {
+	for _, operation := range slices.Concat(SkillOperations, ChatOperations, agentOperations, MessagingOperations, AccessOperations, GeoOperations, WorkspaceSettingsOperations, TwoFactorOperations, SessionOperations, PasswordLoginOperations) {
 		table[EndpointMetadata][operation] = RouteGo
 	}
 	for _, operation := range slices.Concat(WorkflowOperations, WorkflowAuthoringOperations) {
@@ -180,6 +180,8 @@ var AccessOperations = []string{
 	"GetRoles", "GetRole", "CreateOneRole", "UpdateOneRole", "DeleteOneRole",
 	"UpsertFieldPermissions", "UpsertObjectPermissions", "UpsertPermissionFlags",
 }
+
+var GeoOperations = []string{"GetAutoCompleteAddress", "GetAddressDetails"}
 
 var WorkspaceSettingsOperations = []string{"UpdateWorkspace", "UpdateWorkspaceAllowedIframeOrigins"}
 

@@ -1,0 +1,23 @@
+type AutocompleteResult {
+  text: String!
+  placeId: String!
+}
+
+type Location {
+  lat: Float
+  lng: Float
+}
+
+type PlaceDetailsResult {
+  street: String
+  state: String
+  postcode: String
+  city: String
+  country: String
+  location: Location
+}
+
+type Query {
+  getAutoCompleteAddress(address: String!, token: String!, country: String, isFieldCity: Boolean): [AutocompleteResult!]!
+  getAddressDetails(placeId: String!, token: String!): PlaceDetailsResult!
+}
