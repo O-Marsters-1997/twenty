@@ -6,27 +6,29 @@ import { useRolePermissionFlagConfig } from '@/settings/roles/role-permissions/p
 import { settingsDraftRoleFamilyState } from '@/settings/roles/states/settingsDraftRoleFamilyState';
 import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
 import { useSetAtomFamilyState } from '@/ui/utilities/state/jotai/hooks/useSetAtomFamilyState';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 
 import { Section } from 'twenty-ui/components/layout';
 import { IconTool } from 'twenty-ui/icon';
 import { Collapsible } from 'twenty-ui/primitives/layout';
 import { Card } from 'twenty-ui/primitives/surfaces';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledTable = styled.div`
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-`;
-
-const StyledTableRows = styled.div`
-  padding-bottom: ${themeCssVariables.spacing[2]};
-  padding-top: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledCardContainer = styled.div`
-  margin-bottom: ${themeCssVariables.spacing[4]};
-`;
+const styles = stylex.create({
+  table: {
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: borderColor['--t-border-color-light'],
+  },
+  tableRows: {
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
+  },
+  cardContainer: {
+    marginBottom: spacing['--t-spacing-4'],
+  },
+});
 
 type SettingsRolePermissionsToolSectionProps = {
   roleId: string;
@@ -67,7 +69,7 @@ export const SettingsRolePermissionsToolSection = ({
     <Section.Root>
       <Section.Header title={t`Logic`} description={t`Logic permissions`} />
       {shouldShowAllAccessToggle && (
-        <StyledCardContainer>
+        <div {...stylex.props(styles.cardContainer)}>
           <Card.Root rounded>
             <SettingsOptionCardContentSwitch
               Icon={IconTool}
@@ -83,7 +85,7 @@ export const SettingsRolePermissionsToolSection = ({
               }}
             />
           </Card.Root>
-        </StyledCardContainer>
+        </div>
       )}
       <Collapsible.Root
         open={
@@ -95,13 +97,13 @@ export const SettingsRolePermissionsToolSection = ({
           style={{ transitionDuration: '0.4s, 0.2s' }}
           containAnimation={false}
         >
-          <StyledTable>
+          <div {...stylex.props(styles.table)}>
             <SettingsRolePermissionsSettingsTableHeader
               roleId={roleId}
               settingsPermissionsConfig={toolPermissionsConfig}
               isEditable={isEditable}
             />
-            <StyledTableRows>
+            <div {...stylex.props(styles.tableRows)}>
               {toolPermissionsConfig.map((permission) => (
                 <SettingsRolePermissionsSettingsTableRow
                   key={permission.key}
@@ -110,8 +112,8 @@ export const SettingsRolePermissionsToolSection = ({
                   isEditable={isEditable}
                 />
               ))}
-            </StyledTableRows>
-          </StyledTable>
+            </div>
+          </div>
         </Collapsible.Panel>
       </Collapsible.Root>
     </Section.Root>

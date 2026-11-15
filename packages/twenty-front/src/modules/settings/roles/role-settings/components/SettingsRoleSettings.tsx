@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 
 import { SettingsRoleApplicability } from '@/settings/roles/role-settings/components/SettingsRoleApplicability';
@@ -13,19 +12,21 @@ import { TextArea } from '@/ui/input/components/TextArea';
 import { useDialog } from '@/ui/layout/dialog/hooks/useDialog';
 import { Section } from 'twenty-ui/components/layout';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledInputsContainer = styled.div`
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  margin-bottom: ${themeCssVariables.spacing[2]};
-  width: 100%;
-`;
-
-const StyledInputContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
+const styles = stylex.create({
+  inputsContainer: {
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    marginBottom: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+  inputContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+});
 
 type SettingsRoleSettingsProps = {
   roleId: string;
@@ -55,8 +56,8 @@ export const SettingsRoleSettings = ({
   return (
     <>
       <Section.Root>
-        <StyledInputsContainer>
-          <StyledInputContainer>
+        <div {...stylex.props(styles.inputsContainer)}>
+          <div {...stylex.props(styles.inputContainer)}>
             <IconPicker
               selectedIconKey={settingsDraftRole.icon ?? 'IconUser'}
               dropdownId="role-settings-icon-picker"
@@ -68,7 +69,7 @@ export const SettingsRoleSettings = ({
               }}
               disabled={!isEditable}
             />
-          </StyledInputContainer>
+          </div>
           <SettingsTextInput
             instanceId={nameTextInputId}
             value={settingsDraftRole.label}
@@ -82,7 +83,7 @@ export const SettingsRoleSettings = ({
             placeholder={t`Role name`}
             disabled={!isEditable}
           />
-        </StyledInputsContainer>
+        </div>
         <TextArea
           textAreaId={descriptionTextAreaId}
           minRows={4}

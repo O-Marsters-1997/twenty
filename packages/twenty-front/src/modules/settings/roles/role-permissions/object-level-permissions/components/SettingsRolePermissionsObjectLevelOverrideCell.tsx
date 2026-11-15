@@ -6,14 +6,16 @@ import { type SettingsRoleObjectPermissionKey } from '@/settings/roles/role-perm
 import { settingsDraftRoleFamilyState } from '@/settings/roles/states/settingsDraftRoleFamilyState';
 import { TooltipDelay } from '@/ui/layout/tooltip/constants/TooltipDelay';
 import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { Tooltip } from 'twenty-ui/primitives/surfaces';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+  },
+});
 
 type SettingsRolePermissionsObjectLevelOverrideCellProps = {
   objectMetadataItem: EnrichedObjectMetadataItem;
@@ -76,12 +78,12 @@ export const SettingsRolePermissionsObjectLevelOverrideCell = ({
       side="bottom"
       positionMethod="fixed"
     >
-      <StyledContainer id={containerId}>
+      <div id={containerId} {...stylex.props(styles.container)}>
         <PermissionIcon
           permission={objectPermissionKey}
           state={permissionValue === false ? 'revoked' : 'granted'}
         />
-      </StyledContainer>
+      </div>
     </Tooltip>
   );
 };

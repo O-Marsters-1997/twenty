@@ -2,28 +2,33 @@ import { ObjectMetadataIcon } from '@/object-metadata/components/ObjectMetadataI
 import { objectMetadataItemsSelector } from '@/object-metadata/states/objectMetadataItemsSelector';
 import { type FieldMetadataItem } from '@/object-metadata/types/FieldMetadataItem';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { styled } from '@linaria/react';
 import { Handle, Position } from '@xyflow/react';
 import { isDefined } from 'twenty-shared/utils';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import { RelationType } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type ObjectFieldRowProps = {
   field: FieldMetadataItem;
 };
 
-const StyledRow = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  padding: 0 ${themeCssVariables.spacing[2]};
-  position: relative;
-  width: 100%;
-`;
-
-const StyledFieldName = styled.div`
-  color: ${themeCssVariables.font.color.primary};
-`;
+const styles = stylex.create({
+  row: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    paddingTop: '0',
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: '0',
+    paddingLeft: spacing['--t-spacing-2'],
+    position: 'relative',
+    width: '100%',
+  },
+  fieldName: {
+    color: fontColor['--t-font-color-primary'],
+  },
+});
 
 export const ObjectFieldRow = ({ field }: ObjectFieldRowProps) => {
   const theme = useTheme();
@@ -36,14 +41,16 @@ export const ObjectFieldRow = ({ field }: ObjectFieldRowProps) => {
   );
 
   return (
-    <StyledRow>
+    <div {...stylex.props(styles.row)}>
       {isDefined(relatedObject) && (
         <ObjectMetadataIcon
           objectMetadataItem={relatedObject}
           size={theme.icon.size.md}
         />
       )}
-      <StyledFieldName>{relatedObject?.labelPlural ?? ''}</StyledFieldName>
+      <div {...stylex.props(styles.fieldName)}>
+        {relatedObject?.labelPlural ?? ''}
+      </div>
       <Handle
         type={
           field.relation?.type === RelationType.ONE_TO_MANY
@@ -72,6 +79,6 @@ export const ObjectFieldRow = ({ field }: ObjectFieldRowProps) => {
             : 'left-handle target-handle'
         }
       />
-    </StyledRow>
+    </div>
   );
 };

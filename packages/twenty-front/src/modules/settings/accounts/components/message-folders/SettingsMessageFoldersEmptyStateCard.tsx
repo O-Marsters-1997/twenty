@@ -1,28 +1,34 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { Section } from 'twenty-ui/components/layout';
 import { IconFolder } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledEmptyState = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  padding: ${themeCssVariables.spacing[8]};
-  text-align: center;
-`;
+const styles = stylex.create({
+  emptyState: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-8'],
+    paddingRight: spacing['--t-spacing-8'],
+    paddingBottom: spacing['--t-spacing-8'],
+    paddingLeft: spacing['--t-spacing-8'],
+    textAlign: 'center',
+  },
+});
 
 export const SettingsMessageFoldersEmptyStateCard = () => {
   const theme = useTheme();
 
   return (
     <Section.Root>
-      <StyledEmptyState>
+      <div {...stylex.props(styles.emptyState)}>
         <IconFolder size={theme.icon.size.md} />
         <div>{t`No folders found for this account`}</div>
-      </StyledEmptyState>
+      </div>
     </Section.Root>
   );
 };

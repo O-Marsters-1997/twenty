@@ -1,6 +1,21 @@
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { type ReactNode } from 'react';
+import { borderColor } from 'twenty-ui/theme/tokens.stylex';
 
-export const StyledSettingsDataModelTableBodyContainer = styled.div`
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-`;
+type StyledSettingsDataModelTableBodyContainerProps = {
+  children: ReactNode;
+};
+
+export const StyledSettingsDataModelTableBodyContainer = ({
+  children,
+}: StyledSettingsDataModelTableBodyContainerProps) => (
+  <div {...stylex.props(styles.container)}>{children}</div>
+);
+
+const styles = stylex.create({
+  container: {
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: 1,
+  },
+});

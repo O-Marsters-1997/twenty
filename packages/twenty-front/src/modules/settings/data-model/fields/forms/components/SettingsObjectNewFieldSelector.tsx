@@ -12,7 +12,6 @@ import { type FieldType } from '@/settings/data-model/types/FieldType';
 import { type SettingsFieldType } from '@/settings/data-model/types/SettingsFieldType';
 import { SettingsTextInput } from '@/ui/input/components/SettingsTextInput';
 import { UndecoratedLink } from '@/ui/navigation/link/components/UndecoratedLink/UndecoratedLink';
-import { styled } from '@linaria/react';
 import { msg, t } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react/macro';
 import { useState } from 'react';
@@ -21,9 +20,11 @@ import { SettingsPath } from 'twenty-shared/types';
 import { getSettingsPath } from 'twenty-shared/utils';
 import { Section } from 'twenty-ui/components/layout';
 import { IconSearch } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import { FieldMetadataType } from '~/generated-metadata/graphql';
 import { type SettingsDataModelFieldTypeFormValues } from '@/settings/data-model/fields/forms/validation-schemas/settingsDataModelFieldTypeFormSchema';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsObjectNewFieldSelectorProps = {
   className?: string;
@@ -36,36 +37,33 @@ type SettingsObjectNewFieldSelectorProps = {
   objectNamePlural: string;
 };
 
-const StyledTypeSelectContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: inherit;
-  width: 100%;
-`;
-
-const StyledContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: ${themeCssVariables.spacing[2]};
-  justify-content: flex-start;
-  width: 100%;
-`;
-
-const StyledCardContainer = styled.div`
-  display: flex;
-
-  position: relative;
-  width: calc(50% - ${themeCssVariables.spacing[1]});
-`;
-
-const StyledSearchInputContainer = styled.div`
-  width: 100%;
-`;
-
-const StyledFieldTypeIconContainer = styled.span`
-  display: flex;
-  opacity: 0.64;
-`;
+const styles = stylex.create({
+  typeSelectContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 'inherit',
+    width: '100%',
+  },
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: spacing['--t-spacing-2'],
+    justifyContent: 'flex-start',
+    width: '100%',
+  },
+  cardContainer: {
+    display: 'flex',
+    position: 'relative',
+    width: `calc(50% - ${spacing['--t-spacing-1']})`,
+  },
+  searchInputContainer: {
+    width: '100%',
+  },
+  fieldTypeIconContainer: {
+    display: 'flex',
+    opacity: '0.64',
+  },
+});
 
 export const SettingsObjectNewFieldSelector = ({
   excludedFieldTypes = [],
@@ -116,7 +114,7 @@ export const SettingsObjectNewFieldSelector = ({
     <>
       {' '}
       <Section.Root>
-        <StyledSearchInputContainer>
+        <div {...stylex.props(styles.searchInputContainer)}>
           <SettingsTextInput
             instanceId="new-field-type-search"
             LeftIcon={IconSearch}
@@ -124,13 +122,13 @@ export const SettingsObjectNewFieldSelector = ({
             value={searchQuery}
             onChange={setSearchQuery}
           />
-        </StyledSearchInputContainer>
+        </div>
       </Section.Root>
       <Controller
         name="type"
         control={control}
         render={() => (
-          <StyledTypeSelectContainer>
+          <div {...stylex.props(styles.typeSelectContainer)}>
             {SETTINGS_FIELD_TYPE_CATEGORIES.map((category) => (
               <Section.Root key={category}>
                 <Section.Header
@@ -139,7 +137,7 @@ export const SettingsObjectNewFieldSelector = ({
                     SETTINGS_FIELD_TYPE_CATEGORY_DESCRIPTIONS[category],
                   )}
                 />
-                <StyledContainer>
+                <div {...stylex.props(styles.container)}>
                   {fieldTypeConfigs
                     .filter(([, config]) => config.category === category)
                     .filter(([key]) => key !== FieldMetadataType.RELATION)
@@ -159,7 +157,7 @@ export const SettingsObjectNewFieldSelector = ({
                         ] as [string, SettingsFieldTypeConfig<any>],
                     )
                     .map(([key, config]) => (
-                      <StyledCardContainer key={key}>
+                      <div key={key} {...stylex.props(styles.cardContainer)}>
                         <UndecoratedLink
                           to={getSettingsPath(
                             SettingsPath.ObjectNewFieldConfigure,
@@ -175,22 +173,24 @@ export const SettingsObjectNewFieldSelector = ({
                           <SettingsCard
                             key={key}
                             Icon={
-                              <StyledFieldTypeIconContainer>
+                              <span
+                                {...stylex.props(styles.fieldTypeIconContainer)}
+                              >
                                 <config.Icon
                                   size={theme.icon.size.xl}
                                   stroke={theme.icon.stroke.sm}
                                 />
-                              </StyledFieldTypeIconContainer>
+                              </span>
                             }
                             title={i18n._(config.label)}
                           />
                         </UndecoratedLink>
-                      </StyledCardContainer>
+                      </div>
                     ))}
-                </StyledContainer>
+                </div>
               </Section.Root>
             ))}
-          </StyledTypeSelectContainer>
+          </div>
         )}
       />
     </>

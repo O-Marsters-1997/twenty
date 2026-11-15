@@ -4,7 +4,6 @@ import { OPTION_VALUE_MAXIMUM_LENGTH } from '@/settings/data-model/constants/Opt
 import { SettingsTextInput } from '@/ui/input/components/SettingsTextInput';
 import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent';
 import { DropdownRoot } from '@/ui/layout/dropdown/components/DropdownRoot';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { LightIconButton } from 'twenty-ui/components/input';
@@ -17,9 +16,11 @@ import {
   IconX,
 } from 'twenty-ui/icon';
 import { ColorSample } from 'twenty-ui/primitives/data-display';
-import { MAIN_COLOR_NAMES, useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { MAIN_COLOR_NAMES, useTheme } from 'twenty-ui/theme';
 
 import { computeOptionValueFromLabel } from '@/object-metadata/utils/computeOptionValueFromLabel';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const useColorLabels = (): ColorLabels => ({
   gray: t`Gray`,
@@ -50,7 +51,6 @@ const useColorLabels = (): ColorLabels => ({
 });
 
 type SettingsDataModelFieldSelectFormOptionRowProps = {
-  className?: string;
   isDefault?: boolean;
   onChange: (value: FieldMetadataItemOption) => void;
   onRemove?: () => void;
@@ -62,46 +62,40 @@ type SettingsDataModelFieldSelectFormOptionRowProps = {
   fieldIsNullable?: boolean;
 };
 
-const StyledRow = styled.div`
-  align-items: center;
-  display: flex;
-  min-height: ${themeCssVariables.spacing[6]};
-  padding: ${themeCssVariables.spacing['1.5']} 0;
-`;
-
-const StyledColorSampleContainer = styled.span`
-  align-items: center;
-  cursor: pointer;
-  display: flex;
-  margin-bottom: ${themeCssVariables.spacing[1]};
-  margin-left: 14px;
-  margin-right: 14px;
-  margin-top: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledOptionInputContainer = styled.div`
-  flex-grow: 1;
-  width: 100%;
-
-  & input {
-    height: ${themeCssVariables.spacing[6]};
-  }
-`;
-
-const StyledIconGripVerticalContainer = styled.span`
-  align-items: center;
-  display: flex;
-  margin-right: 3px;
-`;
-
-const StyledLightIconButtonContainer = styled.span`
-  align-items: center;
-  display: flex;
-  margin-left: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  row: {
+    alignItems: 'center',
+    display: 'flex',
+    minHeight: spacing['--t-spacing-6'],
+    paddingBottom: spacing['--t-spacing-1_5'],
+    paddingTop: spacing['--t-spacing-1_5'],
+  },
+  optionInputContainer: {
+    flexGrow: 1,
+    width: '100%',
+  },
+  colorSampleContainer: {
+    alignItems: 'center',
+    cursor: 'pointer',
+    display: 'flex',
+    marginBottom: spacing['--t-spacing-1'],
+    marginLeft: '14px',
+    marginRight: '14px',
+    marginTop: spacing['--t-spacing-1'],
+  },
+  iconGripVerticalContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    marginRight: '3px',
+  },
+  lightIconButtonContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    marginLeft: spacing['--t-spacing-2'],
+  },
+});
 
 export const SettingsDataModelFieldSelectFormOptionRow = ({
-  className,
   isDefault,
   onChange,
   onRemove,
@@ -124,8 +118,8 @@ export const SettingsDataModelFieldSelectFormOptionRow = ({
   };
 
   return (
-    <StyledRow className={className}>
-      <StyledIconGripVerticalContainer>
+    <div {...stylex.props(styles.row)}>
+      <span {...stylex.props(styles.iconGripVerticalContainer)}>
         <IconGripVertical
           style={{
             minWidth: theme.icon.size.md,
@@ -134,10 +128,11 @@ export const SettingsDataModelFieldSelectFormOptionRow = ({
           stroke={theme.icon.stroke.sm}
           color={theme.font.color.extraLight}
         />
-      </StyledIconGripVerticalContainer>
+      </span>
       <AdvancedSettingsWrapper animationDimension="width" hideDot>
-        <StyledOptionInputContainer>
+        <div {...stylex.props(styles.optionInputContainer)}>
           <SettingsTextInput
+            sizeVariant="sm"
             instanceId={`select-option-value-${option.id}`}
             value={option.value}
             onChange={(input) =>
@@ -149,11 +144,11 @@ export const SettingsDataModelFieldSelectFormOptionRow = ({
             RightIcon={isDefault ? IconCheck : undefined}
             maxLength={OPTION_VALUE_MAXIMUM_LENGTH}
           />
-        </StyledOptionInputContainer>
+        </div>
       </AdvancedSettingsWrapper>
       <DropdownRoot dropdownId={SELECT_COLOR_DROPDOWN_ID} type="picker">
         <Dropdown.Trigger
-          render={<StyledColorSampleContainer />}
+          render={<span {...stylex.props(styles.colorSampleContainer)} />}
           nativeButton={false}
           aria-label={t`Color`}
         >
@@ -174,8 +169,9 @@ export const SettingsDataModelFieldSelectFormOptionRow = ({
           </Dropdown.Section>
         </DropdownContent>
       </DropdownRoot>
-      <StyledOptionInputContainer>
+      <div {...stylex.props(styles.optionInputContainer)}>
         <SettingsTextInput
+          sizeVariant="sm"
           instanceId={`select-option-label-${option.id}`}
           value={option.label}
           onChange={(label) => {
@@ -196,9 +192,9 @@ export const SettingsDataModelFieldSelectFormOptionRow = ({
           autoFocusOnMount={isNewRow}
           autoSelectOnMount={isNewRow}
         />
-      </StyledOptionInputContainer>
+      </div>
       <DropdownRoot dropdownId={SELECT_ACTIONS_DROPDOWN_ID} type="menu">
-        <StyledLightIconButtonContainer>
+        <span {...stylex.props(styles.lightIconButtonContainer)}>
           <Dropdown.Trigger
             disabled={shouldForbidRemoveAsDefault}
             render={
@@ -211,7 +207,7 @@ export const SettingsDataModelFieldSelectFormOptionRow = ({
               </LightIconButton>
             }
           />
-        </StyledLightIconButtonContainer>
+        </span>
         <DropdownContent side="right" align="start">
           <Dropdown.Section>
             {isDefault ? (
@@ -235,6 +231,6 @@ export const SettingsDataModelFieldSelectFormOptionRow = ({
           </Dropdown.Section>
         </DropdownContent>
       </DropdownRoot>
-    </StyledRow>
+    </div>
   );
 };

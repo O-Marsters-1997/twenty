@@ -5,13 +5,11 @@ import { SettingsRoleAssignmentWorkspaceMemberPickerDropdown } from '@/settings/
 import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent';
 import { DropdownRoot } from '@/ui/layout/dropdown/components/DropdownRoot';
 import { GenericDropdownContentWidth } from '@/ui/layout/dropdown/constants/GenericDropdownContentWidth';
-import { styled } from '@linaria/react';
 import { Section } from 'twenty-ui/components/layout';
 import { Dropdown } from 'twenty-ui/components/navigation';
 import { IconPlus } from 'twenty-ui/icon';
 import { Tooltip } from 'twenty-ui/primitives/surfaces';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { type Agent, type ApiKeyForRole } from '~/generated-metadata/graphql';
 import {
   type PartialWorkspaceMember,
@@ -19,12 +17,16 @@ import {
 } from '@/settings/roles/types/RoleWithPartialMembers';
 import { ROLE_TARGET_CONFIG } from '@/settings/roles/role-assignment/constants/RoleTargetConfig';
 import { TooltipDelay } from '@/ui/layout/tooltip/constants/TooltipDelay';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledAssignToMemberContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  padding-block: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  assignToMemberContainer: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    paddingBlock: spacing['--t-spacing-2'],
+  },
+});
 
 type RoleAssignmentSectionProps = {
   roleTargetType: keyof typeof ROLE_TARGET_CONFIG;
@@ -64,7 +66,7 @@ export const RoleAssignmentSection = ({
         roleId={roleId}
         roleTargetType={roleTargetType}
       />
-      <StyledAssignToMemberContainer>
+      <div {...stylex.props(styles.assignToMemberContainer)}>
         <DropdownRoot dropdownId={config.dropdownId} type="picker">
           <Tooltip
             content={config.tooltip?.content()}
@@ -116,7 +118,7 @@ export const RoleAssignmentSection = ({
             )}
           </DropdownContent>
         </DropdownRoot>
-      </StyledAssignToMemberContainer>
+      </div>
     </Section.Root>
   );
 };

@@ -1,18 +1,20 @@
 import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/EnrichedObjectMetadataItem';
 import { isHiddenSystemField } from '@/object-metadata/utils/isHiddenSystemField';
 import { SettingsObjectRelationsTable } from '@/settings/data-model/object-details/components/SettingsObjectRelationsTable';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { FieldMetadataType } from 'twenty-shared/types';
 import { Section } from 'twenty-ui/components/layout';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { SettingsObjectFieldTable } from '@/settings/data-model/object-details/components/SettingsObjectFieldTable';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContentContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[8]};
-`;
+const styles = stylex.create({
+  contentContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-8'],
+  },
+});
 
 type ObjectFieldsProps = {
   objectMetadataItem: EnrichedObjectMetadataItem;
@@ -30,7 +32,7 @@ export const ObjectFields = ({ objectMetadataItem }: ObjectFieldsProps) => {
   );
 
   return (
-    <StyledContentContainer>
+    <div {...stylex.props(styles.contentContainer)}>
       {hasRelations && (
         <Section.Root>
           <Section.Header
@@ -53,6 +55,6 @@ export const ObjectFields = ({ objectMetadataItem }: ObjectFieldsProps) => {
           excludeRelations
         />
       </Section.Root>
-    </StyledContentContainer>
+    </div>
   );
 };

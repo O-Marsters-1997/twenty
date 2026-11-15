@@ -2,19 +2,25 @@ import { SettingsDiscoveryHeroCard } from '@/settings/components/SettingsDiscove
 import { SettingsDiscoveryHeroCardFooter } from '@/settings/components/SettingsDiscoveryHeroCardFooter';
 import recordPageLayoutCoverDark from '@/settings/data-model/object-details/assets/record-page-layout-cover-dark.png';
 import recordPageLayoutCoverLight from '@/settings/data-model/object-details/assets/record-page-layout-cover-light.png';
-import { styled } from '@linaria/react';
 import { type Meta, type StoryObj } from '@storybook/react-vite';
 import { expect, within } from 'storybook/test';
 import { IconAddressBook, IconPencil } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { ThemeProvider, themeCssVariables } from 'twenty-ui/theme';
+import { ThemeProvider } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { background } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledCanvas = styled.div`
-  background: ${themeCssVariables.background.primary};
-  box-sizing: border-box;
-  padding: 32px;
-  width: 758px;
-`;
+const styles = stylex.create({
+  canvas: {
+    background: background['--t-background-primary'],
+    boxSizing: 'border-box',
+    paddingTop: '32px',
+    paddingRight: '32px',
+    paddingBottom: '32px',
+    paddingLeft: '32px',
+    width: '758px',
+  },
+});
 
 const meta: Meta = {
   title: 'Modules/Settings/Data Model/Object Layout Hero Card',
@@ -26,7 +32,7 @@ type Story = StoryObj;
 
 const renderCard = (colorScheme: 'light' | 'dark') => (
   <ThemeProvider colorScheme={colorScheme} applyToRoot={false}>
-    <StyledCanvas>
+    <div {...stylex.props(styles.canvas)}>
       <SettingsDiscoveryHeroCard
         lightSrc={recordPageLayoutCoverLight}
         darkSrc={recordPageLayoutCoverDark}
@@ -51,7 +57,7 @@ const renderCard = (colorScheme: 'light' | 'dark') => (
           />
         }
       />
-    </StyledCanvas>
+    </div>
   </ThemeProvider>
 );
 

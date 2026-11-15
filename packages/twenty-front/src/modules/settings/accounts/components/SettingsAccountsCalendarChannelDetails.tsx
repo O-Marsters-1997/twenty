@@ -3,19 +3,21 @@ import { UPDATE_CALENDAR_CHANNEL } from '@/settings/accounts/graphql/mutations/u
 import { useMutation } from '@apollo/client/react';
 import { SettingsAccountsEventVisibilitySettingsCard } from '@/settings/accounts/components/SettingsAccountsCalendarVisibilitySettingsCard';
 import { SettingsOptionCardContentSwitch } from '@/settings/components/SettingsOptions/SettingsOptionCardContentSwitch';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { Section } from 'twenty-ui/components/layout';
 import { IconUserPlus } from 'twenty-ui/icon';
 import { Card } from 'twenty-ui/primitives/surfaces';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { type CalendarChannelVisibility } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledDetailsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[6]};
-`;
+const styles = stylex.create({
+  detailsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-6'],
+  },
+});
 
 type SettingsAccountsCalendarChannelDetailsProps = {
   calendarChannel: Pick<
@@ -44,7 +46,7 @@ export const SettingsAccountsCalendarChannelDetails = ({
   };
 
   return (
-    <StyledDetailsContainer>
+    <div {...stylex.props(styles.detailsContainer)}>
       <Section.Root>
         <Section.Header
           title={t`Event visibility`}
@@ -74,6 +76,6 @@ export const SettingsAccountsCalendarChannelDetails = ({
           />
         </Card.Root>
       </Section.Root>
-    </StyledDetailsContainer>
+    </div>
   );
 };

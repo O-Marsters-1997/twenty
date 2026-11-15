@@ -9,7 +9,6 @@ import { RecordFiltersComponentInstanceContext } from '@/object-record/record-fi
 import { currentRecordFiltersComponentState } from '@/object-record/record-filter/states/currentRecordFiltersComponentState';
 import { type RecordFilter } from '@/object-record/record-filter/types/RecordFilter';
 import { SettingsRolePermissionsObjectLevelRecordLevelPermissionFilterRow } from '@/settings/roles/role-permissions/object-level-permissions/record-level-permissions/components/SettingsRolePermissionsObjectLevelRecordLevelPermissionFilterRow';
-import { styled } from '@linaria/react';
 import { type Meta, type StoryObj } from '@storybook/react-vite';
 import { useAtomValue, useStore } from 'jotai';
 import { useEffect } from 'react';
@@ -25,6 +24,7 @@ import { ObjectMetadataItemsDecorator } from '~/testing/decorators/ObjectMetadat
 import { ToastDecorator } from '~/testing/decorators/ToastDecorator';
 import { WorkspaceDecorator } from '~/testing/decorators/WorkspaceDecorator';
 import { graphqlMocks } from '~/testing/graphqlMocks';
+import * as stylex from '@stylexjs/stylex';
 
 const INSTANCE_ID = 'record-permission-filter-story';
 const FILTER_ID = 'record-permission-filter';
@@ -38,9 +38,11 @@ const filtersState = currentRecordFiltersComponentState.atomFamily({
   instanceId: INSTANCE_ID,
 });
 
-const StyledContainer = styled.div`
-  width: 720px;
-`;
+const styles = stylex.create({
+  container: {
+    width: '720px',
+  },
+});
 
 const PermissionFilterStory = () => {
   const store = useStore();
@@ -105,7 +107,7 @@ const PermissionFilterStory = () => {
         value={{ instanceId: INSTANCE_ID }}
       >
         <AdvancedFilterContext.Provider value={{ objectMetadataItem }}>
-          <StyledContainer
+          <div
             onKeyDownCapture={(event) => {
               if (event.key === 'F2') {
                 event.preventDefault();
@@ -114,13 +116,14 @@ const PermissionFilterStory = () => {
                 ]);
               }
             }}
+            {...stylex.props(styles.container)}
           >
             <SettingsRolePermissionsObjectLevelRecordLevelPermissionFilterRow
               recordFilter={filter}
               recordFilterGroup={FILTER_GROUP}
               index={0}
             />
-          </StyledContainer>
+          </div>
         </AdvancedFilterContext.Provider>
       </RecordFilterGroupsComponentInstanceContext.Provider>
     </RecordFiltersComponentInstanceContext.Provider>

@@ -1,6 +1,5 @@
 /* @license Enterprise */
 
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { useContext } from 'react';
 import { capitalize } from 'twenty-shared/utils';
@@ -12,22 +11,24 @@ import { AdvancedFilterContext } from '@/object-record/advanced-filter/states/co
 import { type RecordFilterGroup } from '@/object-record/record-filter-group/types/RecordFilterGroup';
 import { Select } from '@/ui/input/components/Select';
 import { GenericDropdownContentWidth } from '@/ui/layout/dropdown/constants/GenericDropdownContentWidth';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledText = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  height: ${themeCssVariables.spacing[8]};
-  padding-left: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledContainer = styled.div`
-  align-items: start;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  min-width: ${themeCssVariables.spacing[16]};
-`;
+const styles = stylex.create({
+  text: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    height: spacing['--t-spacing-8'],
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+  container: {
+    alignItems: 'start',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    minWidth: spacing['--t-spacing-16'],
+  },
+});
 
 type SettingsRolePermissionsObjectLevelRecordLevelPermissionLogicalOperatorCellProps =
   {
@@ -43,9 +44,9 @@ export const SettingsRolePermissionsObjectLevelRecordLevelPermissionLogicalOpera
     const { readonly } = useContext(AdvancedFilterContext);
 
     return (
-      <StyledContainer>
+      <div {...stylex.props(styles.container)}>
         {index === 0 ? (
-          <StyledText>{t`Where`}</StyledText>
+          <div {...stylex.props(styles.text)}>{t`Where`}</div>
         ) : index === 1 ? (
           readonly ? (
             <Select
@@ -62,10 +63,10 @@ export const SettingsRolePermissionsObjectLevelRecordLevelPermissionLogicalOpera
             />
           )
         ) : (
-          <StyledText>
+          <div {...stylex.props(styles.text)}>
             {capitalize(recordFilterGroup.logicalOperator.toLowerCase())}
-          </StyledText>
+          </div>
         )}
-      </StyledContainer>
+      </div>
     );
   };

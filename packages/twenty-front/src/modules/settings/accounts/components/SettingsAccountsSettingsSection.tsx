@@ -1,5 +1,3 @@
-import { styled } from '@linaria/react';
-
 import { SettingsCard } from '@/settings/components/SettingsCard';
 import { UndecoratedLink } from '@/ui/navigation/link/components/UndecoratedLink/UndecoratedLink';
 import { useLingui } from '@lingui/react/macro';
@@ -7,22 +5,23 @@ import { SettingsPath } from 'twenty-shared/types';
 import { getSettingsPath } from 'twenty-shared/utils';
 import { Section } from 'twenty-ui/components/layout';
 import { IconCalendarEvent, IconMailCog } from 'twenty-ui/icon';
-import { MOBILE_VIEWPORT, useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
 
-const StyledCardsContainer = styled.div`
-  display: flex;
-  gap: ${themeCssVariables.spacing[4]};
-  margin-top: ${themeCssVariables.spacing[6]};
-
-  @media (max-width: ${MOBILE_VIEWPORT}px) {
-    flex-direction: column;
-  }
-`;
-
-const StyledCardLinkSlot = styled.div`
-  flex: 1 1 0;
-  min-width: 0;
-`;
+const styles = stylex.create({
+  cardsContainer: {
+    display: 'flex',
+    gap: spacing['--t-spacing-4'],
+    marginTop: spacing['--t-spacing-6'],
+    flexDirection: { default: null, [media.mobile]: 'column' },
+  },
+  cardLinkSlot: {
+    flex: '1 1 0',
+    minWidth: '0',
+  },
+});
 
 export const SettingsAccountsSettingsSection = () => {
   const theme = useTheme();
@@ -33,8 +32,8 @@ export const SettingsAccountsSettingsSection = () => {
         title={t`Settings`}
         description={t`Configure your emails and calendar settings.`}
       />
-      <StyledCardsContainer>
-        <StyledCardLinkSlot>
+      <div {...stylex.props(styles.cardsContainer)}>
+        <div {...stylex.props(styles.cardLinkSlot)}>
           <UndecoratedLink to={getSettingsPath(SettingsPath.AccountsEmails)}>
             <SettingsCard
               Icon={
@@ -47,8 +46,8 @@ export const SettingsAccountsSettingsSection = () => {
               description={t`Set email visibility, manage your blocklist and more.`}
             />
           </UndecoratedLink>
-        </StyledCardLinkSlot>
-        <StyledCardLinkSlot>
+        </div>
+        <div {...stylex.props(styles.cardLinkSlot)}>
           <UndecoratedLink to={getSettingsPath(SettingsPath.AccountsCalendars)}>
             <SettingsCard
               Icon={
@@ -61,8 +60,8 @@ export const SettingsAccountsSettingsSection = () => {
               description={t`Configure and customize your calendar preferences.`}
             />
           </UndecoratedLink>
-        </StyledCardLinkSlot>
-      </StyledCardsContainer>
+        </div>
+      </div>
     </Section.Root>
   );
 };

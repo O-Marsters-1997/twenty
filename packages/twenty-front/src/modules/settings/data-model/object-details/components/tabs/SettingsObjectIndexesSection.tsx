@@ -9,7 +9,6 @@ import { ConfirmationDialog } from '@/ui/layout/dialog/components/ConfirmationDi
 import { useDialog } from '@/ui/layout/dialog/hooks/useDialog';
 import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent';
 import { DropdownRoot } from '@/ui/layout/dropdown/components/DropdownRoot';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { useMemo, useState } from 'react';
@@ -22,27 +21,29 @@ import { Dropdown } from 'twenty-ui/components/navigation';
 import { SettingsRow } from 'twenty-ui/components/settings';
 import { IconEyeOff, IconPlus } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { SettingsObjectIndexTable } from '@/settings/data-model/object-details/components/SettingsObjectIndexTable';
 import { type SettingsObjectIndexesTableItem } from '@/settings/data-model/types/SettingsObjectIndexesTableItem';
 import { normalizeSearchText } from 'twenty-ui/utilities';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsObjectIndexesSectionProps = {
   objectMetadataItem: EnrichedObjectMetadataItem;
   isReadOnly: boolean;
 };
 
-const StyledContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[3]};
-`;
-
-const StyledButtonContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  padding-top: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  content: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-3'],
+  },
+  buttonContainer: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    paddingTop: spacing['--t-spacing-2'],
+  },
+});
 
 const DELETE_INDEX_MODAL_ID = 'delete-index-modal';
 const HIDE_SYSTEM_INDEXES_DROPDOWN_ID =
@@ -161,7 +162,7 @@ export const SettingsObjectIndexesSection = ({
   };
 
   return (
-    <StyledContent>
+    <div {...stylex.props(styles.content)}>
       <SearchInput
         placeholder={t`Search an index...`}
         value={searchTerm}
@@ -192,7 +193,7 @@ export const SettingsObjectIndexesSection = ({
         onDeleteIndex={handleRequestDelete}
       />
       {!isReadOnly && (
-        <StyledButtonContainer>
+        <div {...stylex.props(styles.buttonContainer)}>
           {canCreate ? (
             <NavigationButton
               to={getSettingsPath(SettingsPath.ObjectNewIndex, {
@@ -210,7 +211,7 @@ export const SettingsObjectIndexesSection = ({
               variant="outline"
             >{t`Add Index`}</Button>
           )}
-        </StyledButtonContainer>
+        </div>
       )}
       <ConfirmationDialog
         dialogId={DELETE_INDEX_MODAL_ID}
@@ -221,6 +222,6 @@ export const SettingsObjectIndexesSection = ({
         onClose={() => setPendingDelete(null)}
         loading={isDeleting}
       />
-    </StyledContent>
+    </div>
   );
 };

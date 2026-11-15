@@ -6,7 +6,6 @@ import { settingsDraftRoleFamilyState } from '@/settings/roles/states/settingsDr
 import { Table } from '@/ui/layout/table/components/Table';
 import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
 import { TableCell } from '@/ui/layout/table/components/TableCell';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { SettingsPath } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
@@ -15,21 +14,24 @@ import { IconPlus } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
 import { themeCssVariables } from 'twenty-ui/theme';
 import { useNavigateSettings } from '~/hooks/useNavigateSettings';
+import * as stylex from '@stylexjs/stylex';
+import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledCreateObjectOverrideSectionContainer = styled.div`
-  > * {
-    border-top: 1px solid ${themeCssVariables.border.color.light};
-    display: flex;
-    justify-content: flex-end;
-    padding-bottom: ${themeCssVariables.spacing[2]};
-    padding-top: ${themeCssVariables.spacing[2]};
-  }
-`;
-
-const StyledTableRows = styled.div`
-  padding-bottom: ${themeCssVariables.spacing[2]};
-  padding-top: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  createObjectOverrideSection: {
+    borderTopColor: borderColor['--t-border-color-light'],
+    borderTopStyle: 'solid',
+    borderTopWidth: '1px',
+    display: 'flex',
+    justifyContent: 'flex-end',
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
+  },
+  tableRows: {
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
+  },
+});
 
 type SettingsRolePermissionsObjectLevelSectionProps = {
   roleId: string;
@@ -84,7 +86,7 @@ export const SettingsRolePermissionsObjectLevelSection = ({
         <SettingsRolePermissionsObjectLevelTableHeader
           showPermissionsLabel={hasObjectPermissions}
         />
-        <StyledTableRows>
+        <div {...stylex.props(styles.tableRows)}>
           {hasObjectPermissions ? (
             objectMetadataItemsWithPermissionOverride.map(
               (objectMetadataItem) => (
@@ -102,22 +104,22 @@ export const SettingsRolePermissionsObjectLevelSection = ({
               {t`No permissions have been set for individual objects.`}
             </TableCell>
           )}
-        </StyledTableRows>
+        </div>
       </Table>
       {isEditable && (
-        <StyledCreateObjectOverrideSectionContainer>
-          <Section.Root>
-            <Button
-              startIcon={<IconPlus />}
-              size="sm"
-              disabled={
-                !settingsDraftRole.isEditable || allObjectsHaveSetPermission
-              }
-              onClick={handleAddRule}
-              variant="outline"
-            >{t`Add rule`}</Button>
-          </Section.Root>
-        </StyledCreateObjectOverrideSectionContainer>
+        <Section.Root
+          render={<div {...stylex.props(styles.createObjectOverrideSection)} />}
+        >
+          <Button
+            startIcon={<IconPlus />}
+            size="sm"
+            disabled={
+              !settingsDraftRole.isEditable || allObjectsHaveSetPermission
+            }
+            onClick={handleAddRule}
+            variant="outline"
+          >{t`Add rule`}</Button>
+        </Section.Root>
       )}
     </Section.Root>
   );
