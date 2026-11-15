@@ -62,7 +62,7 @@ func DefaultTable() OperationTable {
 	for _, operation := range viewOperations {
 		table[EndpointMetadata][operation] = RouteGo
 	}
-	for _, operation := range slices.Concat(SkillOperations, ChatOperations, agentOperations, MessagingOperations, AccessOperations, TwoFactorOperations, SessionOperations, PasswordLoginOperations) {
+	for _, operation := range slices.Concat(SkillOperations, ChatOperations, agentOperations, MessagingOperations, AccessOperations, ApplicationOperations, TwoFactorOperations, SessionOperations, PasswordLoginOperations) {
 		table[EndpointMetadata][operation] = RouteGo
 	}
 	for _, operation := range slices.Concat(WorkflowOperations, WorkflowAuthoringOperations) {
@@ -137,6 +137,12 @@ var AccessOperations = []string{
 	"GetWebhooks", "GetWebhook", "CreateWebhook", "UpdateWebhook", "DeleteWebhook",
 	"GetApiKeys", "GetApiKey", "GetApiKeyRoles", "CreateApiKey", "UpdateApiKey", "RevokeApiKey", "AssignRoleToApiKey",
 	"GenerateApiKeyToken", "GeneratePlaygroundToken",
+}
+
+var ApplicationOperations = []string{
+	"FindManyApplications", "FindManyApplicationsForToolTable", "FindOneApplicationByUniversalIdentifier",
+	"FindOneApplicationName", "FindOneApplicationSummary",
+	"FindManyTimelineActivityTypes", "ResetTimelineActivityType", "UpdateTimelineActivityTypeIsActive",
 }
 
 var LoginOperations = []string{"getAuthTokensFromOTP", "getAuthTokensFromTwoFactorAuthenticationRecoveryCode"}

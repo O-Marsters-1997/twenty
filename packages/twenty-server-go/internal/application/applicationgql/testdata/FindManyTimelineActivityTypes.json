@@ -1,0 +1,237 @@
+{
+  "name": "FindManyTimelineActivityTypes",
+  "operation": "FindManyTimelineActivityTypes",
+  "fixture": "standard application seed, no overrides",
+  "endpoint": "/metadata",
+  "query": "query FindManyTimelineActivityTypes { timelineActivityTypes { id applicationId universalIdentifier name label icon emit { on objectUniversalIdentifier } frontComponentUniversalIdentifier isActive } }",
+  "response": {
+    "data": {
+      "timelineActivityTypes": [
+        {
+          "id": "0cd6e936-60c7-48a9-b500-159993824f00",
+          "applicationId": "49b628b1-2acf-487e-b40a-4c9f5e53a125",
+          "universalIdentifier": "20202020-0d1a-4f0e-8a55-1c0a2f0a2c11",
+          "name": "attachmentLinked",
+          "label": "attached a file",
+          "icon": "IconPaperclip",
+          "emit": {
+            "on": "linked",
+            "objectUniversalIdentifier": "20202020-bd3d-4c60-8dca-571c71d4447a"
+          },
+          "frontComponentUniversalIdentifier": null,
+          "isActive": true
+        },
+        {
+          "id": "772f5ea9-0315-4f44-9489-9983d94d7897",
+          "applicationId": "49b628b1-2acf-487e-b40a-4c9f5e53a125",
+          "universalIdentifier": "20202020-0d1a-4f0e-8a55-1c0a2f0a2c12",
+          "name": "attachmentUnlinked",
+          "label": "removed an attachment",
+          "icon": "IconUnlink",
+          "emit": {
+            "on": "unlinked",
+            "objectUniversalIdentifier": "20202020-bd3d-4c60-8dca-571c71d4447a"
+          },
+          "frontComponentUniversalIdentifier": null,
+          "isActive": true
+        },
+        {
+          "id": "8dfaeefa-848b-46f9-b24c-4c7a59a651f7",
+          "applicationId": "49b628b1-2acf-487e-b40a-4c9f5e53a125",
+          "universalIdentifier": "20202020-0d1a-4f0e-8a55-1c0a2f0a2c10",
+          "name": "calendarEventLinked",
+          "label": "attended a calendar event",
+          "icon": "IconCalendar",
+          "emit": {
+            "on": "linked",
+            "objectUniversalIdentifier": "20202020-8f1d-4eef-9f85-0d1965e27221"
+          },
+          "frontComponentUniversalIdentifier": "3c70dd28-42f3-41da-8f41-22013d65ff50",
+          "isActive": true
+        },
+        {
+          "id": "1f19d638-9183-4b25-82af-188db0eb8495",
+          "applicationId": "49b628b1-2acf-487e-b40a-4c9f5e53a125",
+          "universalIdentifier": "20202020-0d1a-4f0e-8a55-1c0a2f0a2c0f",
+          "name": "messageLinked",
+          "label": "sent or received an email",
+          "icon": "IconMail",
+          "emit": {
+            "on": "linked",
+            "objectUniversalIdentifier": "20202020-3f6b-4425-80ab-e468899ab4b2"
+          },
+          "frontComponentUniversalIdentifier": "8b4da8ed-4a87-480d-bcad-a791262cb890",
+          "isActive": true
+        },
+        {
+          "id": "73e07b4b-863b-4acc-92dd-3df58f7384de",
+          "applicationId": "49b628b1-2acf-487e-b40a-4c9f5e53a125",
+          "universalIdentifier": "20202020-0d1a-4f0e-8a55-1c0a2f0a2c09",
+          "name": "noteLinked",
+          "label": "linked a related note",
+          "icon": "IconLink",
+          "emit": {
+            "on": "linked",
+            "objectUniversalIdentifier": "20202020-0b00-45cd-b6f6-6cd806fc6804"
+          },
+          "frontComponentUniversalIdentifier": null,
+          "isActive": true
+        },
+        {
+          "id": "3af751ba-9376-4ce9-8ddc-361ad02b6429",
+          "applicationId": "49b628b1-2acf-487e-b40a-4c9f5e53a125",
+          "universalIdentifier": "20202020-0d1a-4f0e-8a55-1c0a2f0a2c0a",
+          "name": "noteUnlinked",
+          "label": "unlinked a related note",
+          "icon": "IconUnlink",
+          "emit": {
+            "on": "unlinked",
+            "objectUniversalIdentifier": "20202020-0b00-45cd-b6f6-6cd806fc6804"
+          },
+          "frontComponentUniversalIdentifier": null,
+          "isActive": true
+        },
+        {
+          "id": "27220775-0707-48ea-a35a-a947b9c0fb91",
+          "applicationId": "49b628b1-2acf-487e-b40a-4c9f5e53a125",
+          "universalIdentifier": "20202020-0d1a-4f0e-8a55-1c0a2f0a2c0b",
+          "name": "noteUpdated",
+          "label": "updated a related note",
+          "icon": "IconEditCircle",
+          "emit": {
+            "on": "updated",
+            "objectUniversalIdentifier": "20202020-0b00-45cd-b6f6-6cd806fc6804"
+          },
+          "frontComponentUniversalIdentifier": null,
+          "isActive": true
+        },
+        {
+          "id": "81ad5bfe-511d-4964-a9b0-61febda61923",
+          "applicationId": "49b628b1-2acf-487e-b40a-4c9f5e53a125",
+          "universalIdentifier": "20202020-0d1a-4f0e-8a55-1c0a2f0a2c01",
+          "name": "recordCreated",
+          "label": "was created by",
+          "icon": "IconCirclePlus",
+          "emit": {
+            "on": "created",
+            "objectUniversalIdentifier": null
+          },
+          "frontComponentUniversalIdentifier": null,
+          "isActive": true
+        },
+        {
+          "id": "5f7c1535-5ee7-404d-8e50-494db3701e9a",
+          "applicationId": "49b628b1-2acf-487e-b40a-4c9f5e53a125",
+          "universalIdentifier": "20202020-0d1a-4f0e-8a55-1c0a2f0a2c03",
+          "name": "recordDeleted",
+          "label": "was deleted by",
+          "icon": "IconTrash",
+          "emit": {
+            "on": "deleted",
+            "objectUniversalIdentifier": null
+          },
+          "frontComponentUniversalIdentifier": null,
+          "isActive": true
+        },
+        {
+          "id": "941e150e-2dc6-46bf-91b3-caedbf1d8a9b",
+          "applicationId": "49b628b1-2acf-487e-b40a-4c9f5e53a125",
+          "universalIdentifier": "20202020-0d1a-4f0e-8a55-1c0a2f0a2c05",
+          "name": "recordLinked",
+          "label": "was linked by",
+          "icon": "IconLink",
+          "emit": {
+            "on": "linked",
+            "objectUniversalIdentifier": null
+          },
+          "frontComponentUniversalIdentifier": null,
+          "isActive": true
+        },
+        {
+          "id": "f71ab579-bd7a-453b-82db-d3fcd8ad7238",
+          "applicationId": "49b628b1-2acf-487e-b40a-4c9f5e53a125",
+          "universalIdentifier": "20202020-0d1a-4f0e-8a55-1c0a2f0a2c04",
+          "name": "recordRestored",
+          "label": "was restored by",
+          "icon": "IconRestore",
+          "emit": {
+            "on": "restored",
+            "objectUniversalIdentifier": null
+          },
+          "frontComponentUniversalIdentifier": null,
+          "isActive": true
+        },
+        {
+          "id": "eb3e8db0-566b-451a-a178-8978ea398e12",
+          "applicationId": "49b628b1-2acf-487e-b40a-4c9f5e53a125",
+          "universalIdentifier": "20202020-0d1a-4f0e-8a55-1c0a2f0a2c06",
+          "name": "recordUnlinked",
+          "label": "was unlinked by",
+          "icon": "IconUnlink",
+          "emit": {
+            "on": "unlinked",
+            "objectUniversalIdentifier": null
+          },
+          "frontComponentUniversalIdentifier": null,
+          "isActive": true
+        },
+        {
+          "id": "a6d697f4-9a9f-4b2f-911c-97212493d8b7",
+          "applicationId": "49b628b1-2acf-487e-b40a-4c9f5e53a125",
+          "universalIdentifier": "20202020-0d1a-4f0e-8a55-1c0a2f0a2c02",
+          "name": "recordUpdated",
+          "label": "updated",
+          "icon": "IconEditCircle",
+          "emit": {
+            "on": "updated",
+            "objectUniversalIdentifier": null
+          },
+          "frontComponentUniversalIdentifier": null,
+          "isActive": true
+        },
+        {
+          "id": "cfa370f1-7241-4082-b37d-7e859178a3fc",
+          "applicationId": "49b628b1-2acf-487e-b40a-4c9f5e53a125",
+          "universalIdentifier": "20202020-0d1a-4f0e-8a55-1c0a2f0a2c0c",
+          "name": "taskLinked",
+          "label": "linked a related task",
+          "icon": "IconLink",
+          "emit": {
+            "on": "linked",
+            "objectUniversalIdentifier": "20202020-1ba1-48ba-bc83-ef7e5990ed10"
+          },
+          "frontComponentUniversalIdentifier": null,
+          "isActive": true
+        },
+        {
+          "id": "d92c95d5-5806-4d6d-95e5-3e696bb9e6f9",
+          "applicationId": "49b628b1-2acf-487e-b40a-4c9f5e53a125",
+          "universalIdentifier": "20202020-0d1a-4f0e-8a55-1c0a2f0a2c0d",
+          "name": "taskUnlinked",
+          "label": "unlinked a related task",
+          "icon": "IconUnlink",
+          "emit": {
+            "on": "unlinked",
+            "objectUniversalIdentifier": "20202020-1ba1-48ba-bc83-ef7e5990ed10"
+          },
+          "frontComponentUniversalIdentifier": null,
+          "isActive": true
+        },
+        {
+          "id": "c46800bd-33cb-4d3b-8dcf-dd9ff19f2120",
+          "applicationId": "49b628b1-2acf-487e-b40a-4c9f5e53a125",
+          "universalIdentifier": "20202020-0d1a-4f0e-8a55-1c0a2f0a2c0e",
+          "name": "taskUpdated",
+          "label": "updated a related task",
+          "icon": "IconEditCircle",
+          "emit": {
+            "on": "updated",
+            "objectUniversalIdentifier": "20202020-1ba1-48ba-bc83-ef7e5990ed10"
+          },
+          "frontComponentUniversalIdentifier": null,
+          "isActive": true
+        }
+      ]
+    }
+  }
+}

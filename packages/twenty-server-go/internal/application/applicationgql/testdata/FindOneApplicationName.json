@@ -1,0 +1,9 @@
+{
+  "name": "FindOneApplicationName",
+  "operation": "FindOneApplicationName",
+  "fixture": "standard application of a fresh workspace",
+  "endpoint": "/metadata",
+  "query": "query FindOneApplicationName($id: UUID!) { findOneApplication(id: $id) { id name } }",
+  "variables": {"id": "49b628b1-2acf-487e-b40a-4c9f5e53a125"},
+  "response": {"data": {"findOneApplication": {"id": "49b628b1-2acf-487e-b40a-4c9f5e53a125", "name": "Standard"}}}
+}
