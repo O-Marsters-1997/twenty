@@ -8,7 +8,7 @@ import {
 } from 'twenty-ui/icon';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { border, spacing, icon } from 'twenty-ui/theme/tokens.stylex';
+import { borderRadius, iconStroke, spacing } from 'twenty-ui/theme/tokens.stylex';
 type WidgetHandleAxis = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw';
 type WidgetHorizontalHandleAxis = 'n' | 's';
 type WidgetVerticalHandleAxis = 'e' | 'w';
@@ -63,21 +63,21 @@ const StyledCornerIconWrapper = styled.div<{
 
 const styles = stylex.create({
   verticalHandle: {
-    borderTopLeftRadius: border['--t-border-radius-pill'],
-    borderTopRightRadius: border['--t-border-radius-pill'],
-    borderBottomRightRadius: border['--t-border-radius-pill'],
-    borderBottomLeftRadius: border['--t-border-radius-pill'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-pill'],
+    borderTopRightRadius: borderRadius['--t-border-radius-pill'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-pill'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-pill'],
     cornerShape: 'round',
     height: spacing['--t-spacing-5'],
-    width: `calc(${icon['--t-icon-stroke-lg']} * 1px)`,
+    width: `calc(${iconStroke['--t-icon-stroke-lg']} * 1px)`,
   },
   horizontalHandle: {
-    borderTopLeftRadius: border['--t-border-radius-pill'],
-    borderTopRightRadius: border['--t-border-radius-pill'],
-    borderBottomRightRadius: border['--t-border-radius-pill'],
-    borderBottomLeftRadius: border['--t-border-radius-pill'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-pill'],
+    borderTopRightRadius: borderRadius['--t-border-radius-pill'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-pill'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-pill'],
     cornerShape: 'round',
-    height: `calc(${icon['--t-icon-stroke-lg']} * 1px)`,
+    height: `calc(${iconStroke['--t-icon-stroke-lg']} * 1px)`,
     width: spacing['--t-spacing-5'],
   },
 });

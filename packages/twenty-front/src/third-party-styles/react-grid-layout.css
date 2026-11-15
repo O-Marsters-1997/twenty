@@ -1,0 +1,51 @@
+@layer third-party {
+  [data-grid-container] .react-grid-placeholder {
+    background: var(--t-color-blue7) !important;
+    border-radius: var(--t-border-radius-md);
+  }
+
+  [data-grid-container] .react-grid-item:not(.react-draggable-dragging) {
+    user-select: auto;
+  }
+
+  [data-grid-container] .react-grid-item {
+    z-index: 2;
+  }
+
+  [data-grid-container] .react-grid-item.react-draggable-dragging {
+    z-index: 3;
+  }
+
+  [data-grid-container] .react-grid-item:hover .widget-card-resize-handle {
+    display: block !important;
+  }
+
+  [data-grid-container][data-grid-static] .react-grid-layout,
+  [data-grid-container][data-grid-static] .react-grid-item {
+    transition: none !important;
+  }
+
+  [data-grid-container][data-grid-static] .react-grid-item.cssTransforms {
+    transition-property: none !important;
+  }
+
+  @media print {
+    [data-grid-container] .react-grid-layout {
+      height: auto !important;
+    }
+
+    [data-grid-container] .react-grid-item {
+      break-inside: avoid;
+      margin-bottom: var(--t-spacing-4);
+      page-break-inside: avoid;
+      position: static !important;
+      transform: none !important;
+    }
+
+    [data-grid-container] .react-grid-placeholder,
+    [data-grid-container] .react-resizable-handle,
+    [data-grid-container] .widget-card-resize-handle {
+      display: none !important;
+    }
+  }
+}

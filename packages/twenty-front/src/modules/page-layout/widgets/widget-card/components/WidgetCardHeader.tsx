@@ -16,7 +16,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { isDefined } from 'twenty-shared/utils';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { font, spacing } from 'twenty-ui/theme/tokens.stylex';
+import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 export type WidgetCardHeaderProps = {
   variant: WidgetCardVariant;
   widgetId: string;
@@ -48,19 +48,19 @@ const StyledWidgetCardHeader = styled.div<{ shouldInset: boolean }>`
 const styles = stylex.create({
   titleContainer: {
     alignItems: 'center',
-    color: font['--t-font-color-primary'],
+    color: fontColor['--t-font-color-primary'],
     display: 'flex',
     flex: '1',
-    fontSize: font['--t-font-size-md'],
-    fontWeight: font['--t-font-weight-medium'],
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
     gap: spacing['--t-spacing-1'],
     overflow: 'hidden',
     userSelect: 'none',
   },
   count: {
-    color: font['--t-font-color-light'],
+    color: fontColor['--t-font-color-light'],
     flexShrink: '0',
-    fontWeight: font['--t-font-weight-regular'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
   },
   rightContainer: {
     alignItems: 'center',

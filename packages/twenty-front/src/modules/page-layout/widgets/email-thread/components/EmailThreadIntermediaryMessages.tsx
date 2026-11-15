@@ -6,13 +6,13 @@ import { t } from '@lingui/core/macro';
 import { IconArrowsVertical } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
 import * as stylex from '@stylexjs/stylex';
-import { border, spacing } from 'twenty-ui/theme/tokens.stylex';
+import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   buttonContainer: {
     borderBottomWidth: '1px',
     borderBottomStyle: 'solid',
-    borderBottomColor: border['--t-border-color-light'],
+    borderBottomColor: borderColor['--t-border-color-light'],
     paddingTop: spacing['--t-spacing-4'],
     paddingRight: spacing['--t-spacing-6'],
     paddingBottom: spacing['--t-spacing-4'],

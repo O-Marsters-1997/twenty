@@ -10,17 +10,17 @@ import { extractColorFromProps } from '@/page-layout/widgets/standalone-rich-tex
 import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent';
 import { DropdownRoot } from '@/ui/layout/dropdown/components/DropdownRoot';
 import * as stylex from '@stylexjs/stylex';
-import { border, spacing, background } from 'twenty-ui/theme/tokens.stylex';
+import { backgroundTransparent, borderRadius, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   colorButton: {
     alignItems: 'center',
-    background: { default: 'transparent', ':hover': background['--t-background-transparent-light'] },
+    background: { default: 'transparent', ':hover': backgroundTransparent['--t-background-transparent-light'] },
     borderStyle: 'none',
-    borderTopLeftRadius: border['--t-border-radius-sm'],
-    borderTopRightRadius: border['--t-border-radius-sm'],
-    borderBottomRightRadius: border['--t-border-radius-sm'],
-    borderBottomLeftRadius: border['--t-border-radius-sm'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
     cursor: 'pointer',
     display: 'flex',
     height: '24px',

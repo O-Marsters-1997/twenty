@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { type PieChartConfiguration } from '~/generated-metadata/graphql';
 import { useTheme } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { font } from 'twenty-ui/theme/tokens.stylex';
+import { fontColor, fontSize, fontWeight } from 'twenty-ui/theme/tokens.stylex';
 
 type PieChartCenterMetricProps = {
   objectMetadataItemId: string;
@@ -31,17 +31,17 @@ const StyledCenterMetricContainer = motion.create(
 
 const styles = stylex.create({
   value: {
-    color: font['--t-font-color-primary'],
+    color: fontColor['--t-font-color-primary'],
     fontSize: 'clamp(12px, 10cqmin, 48px)',
-    fontWeight: font['--t-font-weight-semi-bold'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
   },
   label: {
-    color: font['--t-font-color-tertiary'],
+    color: fontColor['--t-font-color-tertiary'],
     fontSize: 'clamp(10px, 5cqmin, 24px)',
   },
   noDataText: {
-    color: font['--t-font-color-tertiary'],
-    fontSize: font['--t-font-size-md'],
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-md'],
   },
 });
 

@@ -20,22 +20,22 @@ import {
   IconX,
 } from 'twenty-ui/icon';
 import * as stylex from '@stylexjs/stylex';
-import { font, spacing, background } from 'twenty-ui/theme/tokens.stylex';
+import { backgroundTransparent, fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   replyBar: {
     alignItems: 'center',
     all: 'unset',
-    color: { default: font['--t-font-color-tertiary'], ':hover': font['--t-font-color-secondary'] },
+    color: { default: fontColor['--t-font-color-tertiary'], ':hover': fontColor['--t-font-color-secondary'] },
     cursor: 'pointer',
     display: 'flex',
-    fontSize: font['--t-font-size-md'],
+    fontSize: fontSize['--t-font-size-md'],
     gap: spacing['--t-spacing-2'],
     paddingTop: spacing['--t-spacing-3'],
     paddingRight: spacing['--t-spacing-4'],
     paddingBottom: spacing['--t-spacing-3'],
     paddingLeft: spacing['--t-spacing-4'],
-    background: { default: null, ':hover': background['--t-background-transparent-light'] },
+    background: { default: null, ':hover': backgroundTransparent['--t-background-transparent-light'] },
   },
 });
 

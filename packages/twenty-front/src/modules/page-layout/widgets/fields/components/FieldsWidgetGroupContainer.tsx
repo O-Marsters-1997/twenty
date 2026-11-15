@@ -5,7 +5,7 @@ import { IconChevronDown } from 'twenty-ui/icon';
 import { Collapsible } from 'twenty-ui/primitives/layout';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { font } from 'twenty-ui/theme/tokens.stylex';
+import { fontColor, fontWeight } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   header: {
@@ -16,8 +16,8 @@ const styles = stylex.create({
     justifyContent: 'space-between',
   },
   titleLabel: {
-    color: font['--t-font-color-tertiary'],
-    fontWeight: font['--t-font-weight-medium'],
+    color: fontColor['--t-font-color-tertiary'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
   },
 });
 

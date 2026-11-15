@@ -19,7 +19,7 @@ import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
 import { IconChevronLeft, IconChevronRight } from 'twenty-ui/icon';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { spacing, font } from 'twenty-ui/theme/tokens.stylex';
+import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 export type GraphWidgetLegendItem = {
   id: string;
@@ -49,8 +49,8 @@ const styles = stylex.create({
     gap: spacing['--t-spacing-0_5'],
   },
   paginationIndicator: {
-    color: font['--t-font-color-light'],
-    fontSize: font['--t-font-size-xs'],
+    color: fontColor['--t-font-color-light'],
+    fontSize: fontSize['--t-font-size-xs'],
   },
 });
 

@@ -9,7 +9,7 @@ import { Button } from 'twenty-ui/primitives/input';
 import { getFileNameAndExtension } from '~/utils/file/getFileNameAndExtension';
 import { PermissionFlagType } from '~/generated-metadata/graphql';
 import * as stylex from '@stylexjs/stylex';
-import { spacing, font } from 'twenty-ui/theme/tokens.stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const DocumentViewer = lazy(() =>
   import('@/activities/files/components/DocumentViewer').then((module) => ({
@@ -29,7 +29,7 @@ const styles = stylex.create({
     justifyContent: 'flex-end',
   },
   loadingText: {
-    color: font['--t-font-color-tertiary'],
+    color: fontColor['--t-font-color-tertiary'],
     paddingTop: spacing['--t-spacing-4'],
     paddingRight: spacing['--t-spacing-4'],
     paddingBottom: spacing['--t-spacing-4'],

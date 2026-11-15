@@ -15,17 +15,17 @@ import {
   IconPlus,
 } from 'twenty-ui/icon';
 import * as stylex from '@stylexjs/stylex';
-import { border, spacing, font, background } from 'twenty-ui/theme/tokens.stylex';
+import { background, borderColor, borderRadius, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   container: {
     borderWidth: '1px',
     borderStyle: 'solid',
     borderColor: 'transparent',
-    borderTopLeftRadius: border['--t-border-radius-md'],
-    borderTopRightRadius: border['--t-border-radius-md'],
-    borderBottomRightRadius: border['--t-border-radius-md'],
-    borderBottomLeftRadius: border['--t-border-radius-md'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
     boxSizing: 'border-box',
     display: 'flex',
     flexDirection: 'column',
@@ -37,11 +37,11 @@ const styles = stylex.create({
   },
   header: {
     alignItems: 'center',
-    color: font['--t-font-color-primary'],
+    color: fontColor['--t-font-color-primary'],
     display: 'flex',
     flexShrink: '0',
-    fontSize: font['--t-font-size-md'],
-    fontWeight: font['--t-font-weight-medium'],
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
     height: spacing['--t-spacing-6'],
     paddingInline: spacing['--t-spacing-1'],
   },
@@ -49,11 +49,11 @@ const styles = stylex.create({
     backgroundColor: background['--t-background-secondary'],
     borderWidth: '1px',
     borderStyle: 'solid',
-    borderColor: border['--t-border-color-medium'],
-    borderTopLeftRadius: border['--t-border-radius-md'],
-    borderTopRightRadius: border['--t-border-radius-md'],
-    borderBottomRightRadius: border['--t-border-radius-md'],
-    borderBottomLeftRadius: border['--t-border-radius-md'],
+    borderColor: borderColor['--t-border-color-medium'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
     marginTop: spacing['--t-spacing-2'],
     overflow: 'hidden',
     paddingTop: spacing['--t-spacing-2'],

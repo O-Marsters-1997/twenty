@@ -9,7 +9,7 @@ import { isDefined } from 'twenty-shared/utils';
 import { IconArrowUpRight } from 'twenty-ui/icon';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { spacing, font, border } from 'twenty-ui/theme/tokens.stylex';
+import { borderColor, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const StyledTooltip = styled.div`
   background: ${themeCssVariables.background.primary};
@@ -44,24 +44,24 @@ const styles = stylex.create({
   },
   tooltipLink: {
     alignItems: 'center',
-    color: font['--t-font-color-light'],
+    color: fontColor['--t-font-color-light'],
     cursor: 'pointer',
     display: 'flex',
-    fontWeight: font['--t-font-weight-regular'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
     height: spacing['--t-spacing-6'],
     justifyContent: 'space-between',
     lineHeight: '140%',
     paddingInline: spacing['--t-spacing-2'],
   },
   tooltipSeparator: {
-    backgroundColor: border['--t-border-color-light'],
+    backgroundColor: borderColor['--t-border-color-light'],
     minHeight: '1px',
     width: '100%',
   },
   tooltipHeader: {
-    color: font['--t-font-color-primary'],
-    fontSize: font['--t-font-size-xs'],
-    fontWeight: font['--t-font-weight-medium'],
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
     lineHeight: '140%',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
@@ -69,18 +69,18 @@ const styles = stylex.create({
   },
   tooltipRowRightContent: {
     alignItems: 'center',
-    color: font['--t-font-color-extra-light'],
+    color: fontColor['--t-font-color-extra-light'],
     display: 'flex',
-    fontSize: font['--t-font-size-xs'],
-    fontWeight: font['--t-font-weight-regular'],
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
     gap: spacing['--t-spacing-2'],
     justifyContent: 'space-between',
     minWidth: '0',
     width: '100%',
   },
   noDataMessage: {
-    color: font['--t-font-color-tertiary'],
-    fontSize: font['--t-font-size-xs'],
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-xs'],
   },
 });
 

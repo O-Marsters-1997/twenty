@@ -5,7 +5,7 @@ import { IconTrendingDown, IconTrendingUp } from 'twenty-ui/icon';
 import { Heading } from 'twenty-ui/primitives/typography';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { font, spacing } from 'twenty-ui/theme/tokens.stylex';
+import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 type GraphWidgetAggregateChartProps = {
   value: string | number;
   trendPercentage?: number;
@@ -15,9 +15,9 @@ type GraphWidgetAggregateChartProps = {
 
 const styles = stylex.create({
   trendPercentageValue: {
-    color: font['--t-font-color-secondary'],
-    fontSize: font['--t-font-size-xs'],
-    fontWeight: font['--t-font-weight-regular'],
+    color: fontColor['--t-font-color-secondary'],
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
     marginRight: spacing['--t-spacing-2'],
   },
   container: {

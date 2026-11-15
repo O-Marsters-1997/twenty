@@ -5,13 +5,13 @@ import { useWorkspaceSurface } from '@/ui/layout/hooks/useWorkspaceSurface';
 import { SidePanelProvider } from '@/ui/layout/side-panel/contexts/SidePanelContext';
 import { isDefined } from 'twenty-shared/utils';
 import * as stylex from '@stylexjs/stylex';
-import { border, spacing } from 'twenty-ui/theme/tokens.stylex';
+import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   container: {
     borderBottomWidth: '1px',
     borderBottomStyle: 'solid',
-    borderBottomColor: border['--t-border-color-light'],
+    borderBottomColor: borderColor['--t-border-color-light'],
     boxSizing: 'border-box',
     display: 'flex',
     flexShrink: '0',

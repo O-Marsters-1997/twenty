@@ -20,15 +20,15 @@ import { t } from '@lingui/core/macro';
 import { themeCssVariables } from 'twenty-ui/theme';
 import { type FieldsConfiguration } from '~/generated-metadata/graphql';
 import * as stylex from '@stylexjs/stylex';
-import { border, spacing } from 'twenty-ui/theme/tokens.stylex';
+import { borderRadius, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   propertyBox: {
     alignSelf: 'stretch',
-    borderTopLeftRadius: border['--t-border-radius-sm'],
-    borderTopRightRadius: border['--t-border-radius-sm'],
-    borderBottomRightRadius: border['--t-border-radius-sm'],
-    borderBottomLeftRadius: border['--t-border-radius-sm'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
     display: 'flex',
     flexDirection: 'column',
     gap: spacing['--t-spacing-2'],
