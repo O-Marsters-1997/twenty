@@ -10,22 +10,28 @@ import { useFocusedRecordTableRow } from '@/object-record/record-table/hooks/use
 import { RecordTableRecordLimitReloadEffect } from '@/object-record/record-table/virtualization/components/RecordTableRecordLimitReloadEffect';
 import { PageFocusId } from '@/types/PageFocusId';
 import { ScrollWrapper } from '@/ui/utilities/scroll/components/ScrollWrapper';
-import { styled } from '@linaria/react';
+import { mergeClassName } from '@/page-layout/utils/mergeClassName';
+import * as stylex from '@stylexjs/stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
 
-const StyledRecordTablePrintBoundary = styled.div`
-  display: contents;
+import './RecordTableWithWrappers.css';
 
-  // Otherwise swiping back to the first column triggers iOS back navigation.
-  .scroll-wrapper-x-enabled {
-    overscroll-behavior-x: contain;
-  }
-
-  @media print {
-    display: block;
-    max-height: calc(100vh / var(--t-zoom, 1));
-    overflow: hidden;
-  }
-`;
+const styles = stylex.create({
+  printBoundary: {
+    display: {
+      default: 'contents',
+      [media.print]: 'block',
+    },
+    maxHeight: {
+      default: null,
+      [media.print]: 'calc(100vh / var(--t-zoom, 1))',
+    },
+    overflow: {
+      default: null,
+      [media.print]: 'hidden',
+    },
+  },
+});
 
 type RecordTableWithWrappersProps = {
   objectNameSingular: string;
@@ -64,14 +70,19 @@ export const RecordTableWithWrappers = ({
         onRecordIdentifierClick={handleRecordIdentifierClick}
       >
         <EntityDeleteContext.Provider value={deleteOneRecord}>
-          <StyledRecordTablePrintBoundary>
+          <div
+            {...mergeClassName(
+              stylex.props(styles.printBoundary),
+              'record-table-print-boundary',
+            )}
+          >
             <ScrollWrapper
               componentInstanceId={`record-table-scroll-${recordTableId}`}
             >
               <RecordTableRecordLimitReloadEffect />
               <RecordTable />
             </ScrollWrapper>
-          </StyledRecordTablePrintBoundary>
+          </div>
         </EntityDeleteContext.Provider>
       </RecordTableContextProvider>
     </RecordTableComponentInstance>

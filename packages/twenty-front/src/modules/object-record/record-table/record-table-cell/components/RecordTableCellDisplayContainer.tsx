@@ -1,6 +1,6 @@
 import { RECORD_TABLE_CELL_DISPLAY_CLASS_NAME } from '@/object-record/record-table/constants/RecordTableCellDisplayClassName';
 import { t } from '@lingui/core/macro';
-import { cx } from '@linaria/core';
+import { mergeClassName } from '@/page-layout/utils/mergeClassName';
 import { type Ref } from 'react';
 import * as stylex from '@stylexjs/stylex';
 import { fontColor } from 'twenty-ui/theme/tokens.stylex';
@@ -49,10 +49,9 @@ export const RecordTableCellDisplayContainer = ({
 
   return (
     <div
-      {...outerContainerProps}
-      className={cx(
+      {...mergeClassName(
+        outerContainerProps,
         RECORD_TABLE_CELL_DISPLAY_CLASS_NAME,
-        outerContainerProps.className,
       )}
       data-testid={
         focus ? 'editable-cell-focus-mode' : 'editable-cell-display-mode'

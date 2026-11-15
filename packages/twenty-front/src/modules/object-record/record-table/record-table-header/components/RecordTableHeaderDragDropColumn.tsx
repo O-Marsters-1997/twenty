@@ -9,7 +9,7 @@ import { useAtomComponentFamilyStateValue } from '@/ui/utilities/state/jotai/hoo
 import { useAtomComponentSelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentSelectorValue';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import * as stylex from '@stylexjs/stylex';
-import { cx } from '@linaria/core';
+import { mergeClassName } from '@/page-layout/utils/mergeClassName';
 import { background } from 'twenty-ui/theme/tokens.stylex';
 
 export const RecordTableHeaderDragDropColumn = () => {
@@ -51,11 +51,9 @@ export const RecordTableHeaderDragDropColumn = () => {
 
   return (
     <div
-      {...cellProps}
-      className={cx(
-        'header-cell',
-        RECORD_TABLE_COLUMN_DRAG_AND_DROP_WIDTH_CLASS_NAME,
-        cellProps.className,
+      {...mergeClassName(
+        cellProps,
+        `header-cell ${RECORD_TABLE_COLUMN_DRAG_AND_DROP_WIDTH_CLASS_NAME}`,
       )}
     />
   );

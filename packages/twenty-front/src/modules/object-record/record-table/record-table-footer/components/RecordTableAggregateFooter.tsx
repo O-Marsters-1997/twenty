@@ -6,7 +6,7 @@ import {
   recordTableZIndex,
 } from '../../constants/recordTableLayout.stylex';
 import { RECORD_TABLE_COLUMN_LAST_EMPTY_COLUMN_WIDTH_CLASS_NAME } from '@/object-record/record-table/constants/RecordTableColumnLastEmptyColumnWidthClassName';
-import { cx } from '@linaria/core';
+import { mergeClassName } from '@/page-layout/utils/mergeClassName';
 import { useRecordTableContextOrThrow } from '@/object-record/record-table/contexts/RecordTableContext';
 import { RecordTableAggregateFooterCell } from '@/object-record/record-table/record-table-footer/components/RecordTableAggregateFooterCell';
 import { RecordTableColumnAggregateFooterCellContext } from '@/object-record/record-table/record-table-footer/components/RecordTableColumnAggregateFooterCellContext';
@@ -24,10 +24,6 @@ export const RecordTableAggregateFooter = ({
   if (isMobile) {
     return null;
   }
-
-  const lastColumnEmptyFooterCellProps = stylex.props(
-    styles.placeholderLastColumnEmptyFooterCell,
-  );
 
   return (
     <div {...stylex.props(styles.aggregateFooterContainer)}>
@@ -50,10 +46,9 @@ export const RecordTableAggregateFooter = ({
       })}
       <div {...stylex.props(styles.placeholderAddButtonFooterCell)} />
       <div
-        {...lastColumnEmptyFooterCellProps}
-        className={cx(
+        {...mergeClassName(
+          stylex.props(styles.placeholderLastColumnEmptyFooterCell),
           RECORD_TABLE_COLUMN_LAST_EMPTY_COLUMN_WIDTH_CLASS_NAME,
-          lastColumnEmptyFooterCellProps.className,
         )}
       />
     </div>

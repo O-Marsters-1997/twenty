@@ -20,7 +20,7 @@ import { useIsRecordTableWidgetAggregateNonInteractive } from '@/object-record/r
 import { getRecordTableColumnFieldWidthClassName } from '@/object-record/record-table/utils/getRecordTableColumnFieldWidthClassName';
 import { useAtomFamilySelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilySelectorValue';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { cx } from '@linaria/core';
+import { mergeClassName } from '@/page-layout/utils/mergeClassName';
 import { findByProperty, isDefined } from 'twenty-shared/utils';
 
 export const RecordTableAggregateFooterCell = ({
@@ -68,22 +68,18 @@ export const RecordTableAggregateFooterCell = ({
     isMobile &&
       (isFirstCell ? styles.mobileFirstCellWidth : styles.mobileOtherCellWidth),
   );
-  const containerProps = stylex.props(styles.columnFootContainer);
 
   return (
     <div
-      {...cellProps}
-      className={cx(
-        'footer-cell',
-        getRecordTableColumnFieldWidthClassName(columnIndex),
-        cellProps.className,
+      {...mergeClassName(
+        cellProps,
+        `footer-cell ${getRecordTableColumnFieldWidthClassName(columnIndex)}`,
       )}
     >
       <div
-        {...containerProps}
-        className={cx(
+        {...mergeClassName(
+          stylex.props(styles.columnFootContainer),
           RECORD_TABLE_CELL_CONTENT_CLASS_NAME,
-          containerProps.className,
         )}
       >
         {isFooterReadOnly ? (

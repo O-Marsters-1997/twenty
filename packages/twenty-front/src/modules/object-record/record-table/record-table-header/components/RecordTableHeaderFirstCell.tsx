@@ -20,7 +20,6 @@ import { getRecordTableColumnFieldWidthClassName } from '@/object-record/record-
 import { useAtomComponentFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentFamilyStateValue';
 import { useAtomComponentSelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentSelectorValue';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { cx } from '@linaria/core';
 import * as stylex from '@stylexjs/stylex';
 import { useState } from 'react';
 import { isDefined } from 'twenty-shared/utils';
@@ -84,7 +83,7 @@ export const RecordTableHeaderFirstCell = () => {
 
   return (
     <RecordTableHeaderCellContainer
-      className={cx('header-cell', getRecordTableColumnFieldWidthClassName(0))}
+      className={`header-cell ${getRecordTableColumnFieldWidthClassName(0)}`}
       key={recordField.fieldMetadataItemId}
       onMouseEnter={() => setIconIsVisible(true)}
       onMouseLeave={() => setIconIsVisible(false)}

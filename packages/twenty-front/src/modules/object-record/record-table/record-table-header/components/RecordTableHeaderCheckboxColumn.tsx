@@ -17,7 +17,7 @@ import { isRecordTableInitialLoadingComponentState } from '@/object-record/recor
 import { allRecordsSelectedStatusComponentSelector } from '@/object-record/record-selection/states/selectors/allRecordsSelectedStatusComponentSelector';
 import { useAtomComponentSelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentSelectorValue';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { cx } from '@linaria/core';
+import { mergeClassName } from '@/page-layout/utils/mergeClassName';
 import { Checkbox } from 'twenty-ui/primitives/input';
 
 export const RecordTableHeaderCheckboxColumn = () => {
@@ -58,15 +58,11 @@ export const RecordTableHeaderCheckboxColumn = () => {
     }
   };
 
-  const columnHeaderCellProps = stylex.props(styles.columnHeaderCell);
-
   return (
     <div
-      {...columnHeaderCellProps}
-      className={cx(
-        'header-cell',
-        RECORD_TABLE_COLUMN_CHECKBOX_WIDTH_CLASS_NAME,
-        columnHeaderCellProps.className,
+      {...mergeClassName(
+        stylex.props(styles.columnHeaderCell),
+        `header-cell ${RECORD_TABLE_COLUMN_CHECKBOX_WIDTH_CLASS_NAME}`,
       )}
     >
       <div {...stylex.props(styles.container)} data-select-disable>

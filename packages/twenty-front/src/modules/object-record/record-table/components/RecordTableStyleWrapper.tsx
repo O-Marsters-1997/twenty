@@ -1,27 +1,14 @@
 import { type RecordField } from '@/object-record/record-field/types/RecordField';
-import { HorizontalScrollBoxShadowCSS } from '@/object-record/record-table/components/HorizontalScrollBoxShadowCSS';
-import { VerticalScrollBoxShadowCSS } from '@/object-record/record-table/components/VerticalScrollBoxShadowCSS';
-import { RECORD_TABLE_CELL_CONTENT_CLASS_NAME } from '@/object-record/record-table/constants/RecordTableCellContentClassName';
-import { RECORD_TABLE_CELL_DISPLAY_CLASS_NAME } from '@/object-record/record-table/constants/RecordTableCellDisplayClassName';
-import { RECORD_TABLE_LABEL_IDENTIFIER_COLUMN_PINNED_WIDTH_ON_MOBILE } from '@/object-record/record-table/constants/RecordTableLabelIdentifierColumnPinnedWidthOnMobile';
-import { RECORD_TABLE_COLUMN_ADD_COLUMN_BUTTON_WIDTH } from '@/object-record/record-table/constants/RecordTableColumnAddColumnButtonWidth';
-import { RECORD_TABLE_COLUMN_ADD_COLUMN_BUTTON_WIDTH_CLASS_NAME } from '@/object-record/record-table/constants/RecordTableColumnAddColumnButtonWidthClassName';
 import { RECORD_TABLE_COLUMN_CHECKBOX_WIDTH } from '@/object-record/record-table/constants/RecordTableColumnCheckboxWidth';
-import { RECORD_TABLE_COLUMN_CHECKBOX_WIDTH_CLASS_NAME } from '@/object-record/record-table/constants/RecordTableColumnCheckboxWidthClassName';
 import { RECORD_TABLE_COLUMN_DRAG_AND_DROP_WIDTH } from '@/object-record/record-table/constants/RecordTableColumnDragAndDropWidth';
-import { RECORD_TABLE_COLUMN_DRAG_AND_DROP_WIDTH_CLASS_NAME } from '@/object-record/record-table/constants/RecordTableColumnDragAndDropWidthClassName';
-import { RECORD_TABLE_COLUMN_LAST_EMPTY_COLUMN_WIDTH_CLASS_NAME } from '@/object-record/record-table/constants/RecordTableColumnLastEmptyColumnWidthClassName';
-import { RECORD_TABLE_COLUMN_LAST_EMPTY_COLUMN_WIDTH_VARIABLE_NAME } from '@/object-record/record-table/constants/RecordTableColumnLastEmptyColumnWidthVariableName';
-import { RECORD_TABLE_COLUMN_WITH_GROUP_LAST_EMPTY_COLUMN_WIDTH_CLASS_NAME } from '@/object-record/record-table/constants/RecordTableColumnWithGroupLastEmptyColumnWidthClassName';
-import { RECORD_TABLE_COLUMN_WITH_GROUP_LAST_EMPTY_COLUMN_WIDTH_VARIABLE_NAME } from '@/object-record/record-table/constants/RecordTableColumnWithGroupLastEmptyColumnWidthVariableName';
+import { mergeClassName } from '@/page-layout/utils/mergeClassName';
+import * as stylex from '@stylexjs/stylex';
+import { type ComponentPropsWithRef } from 'react';
+import { media } from 'twenty-ui/theme/constants.stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 import { recordTableCssVariable } from '../constants/recordTableLayout.stylex';
-import { TABLE_Z_INDEX } from '@/object-record/record-table/constants/TableZIndex';
-import { getRecordTableColumnFieldWidthClassName } from '@/object-record/record-table/utils/getRecordTableColumnFieldWidthClassName';
-import { getRecordTableColumnFieldWidthCSSVariableName } from '@/object-record/record-table/utils/getRecordTableColumnFieldWidthCSSVariableName';
-import { styled } from '@linaria/react';
-import { MOBILE_VIEWPORT, themeCssVariables } from 'twenty-ui/theme';
 
-export { HorizontalScrollBoxShadowCSS, VerticalScrollBoxShadowCSS };
+import './RecordTableStyleWrapper.css';
 
 export const RECORD_TABLE_DRAG_DROP_WIDTH_CSS_VAR =
   recordTableCssVariable.dragDropWidth;
@@ -29,18 +16,6 @@ export const RECORD_TABLE_CHECKBOX_WIDTH_CSS_VAR =
   recordTableCssVariable.checkboxWidth;
 export const RECORD_TABLE_FIRST_COLUMN_LEFT_CSS_VAR =
   recordTableCssVariable.firstColumnLeft;
-
-const MAX_COLUMNS = 100;
-
-const columnFieldWidthRules = Array.from(
-  { length: MAX_COLUMNS },
-  (_, i) =>
-    `div.${getRecordTableColumnFieldWidthClassName(i)} {
-    width: var(${getRecordTableColumnFieldWidthCSSVariableName(i)});
-    min-width: var(${getRecordTableColumnFieldWidthCSSVariableName(i)});
-    max-width: var(${getRecordTableColumnFieldWidthCSSVariableName(i)});
-  }`,
-).join('\n');
 
 export const getRecordTableColumnWidthInlineStyles = ({
   visibleRecordFields,
@@ -69,197 +44,38 @@ export const getRecordTableColumnWidthInlineStyles = ({
   return style;
 };
 
-const StyledTable = styled.div<{
+type RecordTableStyleWrapperProps = ComponentPropsWithRef<'div'> & {
   isDragging?: boolean;
-}>`
-  & > * {
-    pointer-events: ${({ isDragging }) =>
-      isDragging === true ? 'none' : 'auto'};
-  }
+};
 
-  display: flex;
-  flex-direction: column;
-  position: relative;
+export const RecordTableStyleWrapper = ({
+  isDragging,
+  className,
+  style,
+  ...divProps
+}: RecordTableStyleWrapperProps) => (
+  <div
+    {...divProps}
+    {...mergeClassName(
+      stylex.props(styles.table),
+      className
+        ? `record-table-style-wrapper ${className}`
+        : 'record-table-style-wrapper',
+    )}
+    data-is-dragging={isDragging === true}
+    style={style}
+  />
+);
 
-  width: 100%;
-
-  ${RECORD_TABLE_FIRST_COLUMN_LEFT_CSS_VAR}: calc(
-    var(${RECORD_TABLE_DRAG_DROP_WIDTH_CSS_VAR}) +
-      var(${RECORD_TABLE_CHECKBOX_WIDTH_CSS_VAR})
-  );
-
-  // On mobile the frozen column travels with the content so nothing reflows mid-gesture.
-  @media (max-width: ${MOBILE_VIEWPORT}px) {
-    ${RECORD_TABLE_FIRST_COLUMN_LEFT_CSS_VAR}: calc(
-      var(${RECORD_TABLE_DRAG_DROP_WIDTH_CSS_VAR}) +
-        var(${RECORD_TABLE_CHECKBOX_WIDTH_CSS_VAR}) -
-        (
-          var(${getRecordTableColumnFieldWidthCSSVariableName(0)}) -
-            ${RECORD_TABLE_LABEL_IDENTIFIER_COLUMN_PINNED_WIDTH_ON_MOBILE}px
-        )
-    );
-  }
-
-  // Reserve the floating mobile navigation bar's footprint so the last row stays reachable.
-  @media (max-width: ${MOBILE_VIEWPORT}px) {
-    padding-bottom: ${themeCssVariables.spacing[20]};
-  }
-
-  div.header-cell {
-    z-index: ${TABLE_Z_INDEX.headerColumns.headerColumnsNormal};
-  }
-
-  div.header-cell.${RECORD_TABLE_COLUMN_DRAG_AND_DROP_WIDTH_CLASS_NAME} {
-    background-color: ${themeCssVariables.background.primary};
-    left: 0px;
-    position: sticky;
-    z-index: ${TABLE_Z_INDEX.headerColumns.headerColumnsSticky};
-  }
-
-  div.header-cell.${RECORD_TABLE_COLUMN_CHECKBOX_WIDTH_CLASS_NAME} {
-    background-color: ${themeCssVariables.background.primary};
-    left: var(${RECORD_TABLE_DRAG_DROP_WIDTH_CSS_VAR});
-    position: sticky;
-    top: 0;
-    z-index: ${TABLE_Z_INDEX.headerColumns.headerColumnsSticky};
-  }
-
-  div.header-cell.${getRecordTableColumnFieldWidthClassName(0)} {
-    background-color: ${themeCssVariables.background.primary};
-    left: var(${RECORD_TABLE_FIRST_COLUMN_LEFT_CSS_VAR});
-    position: sticky;
-    right: 0;
-    z-index: ${TABLE_Z_INDEX.headerColumns.headerColumnsSticky};
-
-    ${HorizontalScrollBoxShadowCSS}
-  }
-
-  div.table-cell.${RECORD_TABLE_COLUMN_DRAG_AND_DROP_WIDTH_CLASS_NAME} {
-    left: 0px;
-    position: sticky;
-    z-index: ${TABLE_Z_INDEX.cell.sticky};
-  }
-
-  div.table-cell.${RECORD_TABLE_COLUMN_CHECKBOX_WIDTH_CLASS_NAME} {
-    left: var(${RECORD_TABLE_DRAG_DROP_WIDTH_CSS_VAR});
-    position: sticky;
-    z-index: ${TABLE_Z_INDEX.cell.sticky};
-  }
-
-  div.table-cell-0-0 {
-    left: var(${RECORD_TABLE_FIRST_COLUMN_LEFT_CSS_VAR});
-    position: sticky;
-
-    ${HorizontalScrollBoxShadowCSS}
-  }
-
-  div.table-cell.${getRecordTableColumnFieldWidthClassName(0)} {
-    left: var(${RECORD_TABLE_FIRST_COLUMN_LEFT_CSS_VAR});
-    position: sticky;
-    z-index: ${TABLE_Z_INDEX.cell.sticky};
-
-    ${HorizontalScrollBoxShadowCSS}
-  }
-
-  div.${RECORD_TABLE_COLUMN_DRAG_AND_DROP_WIDTH_CLASS_NAME} {
-    max-width: var(${RECORD_TABLE_DRAG_DROP_WIDTH_CSS_VAR});
-    min-width: var(${RECORD_TABLE_DRAG_DROP_WIDTH_CSS_VAR});
-    width: var(${RECORD_TABLE_DRAG_DROP_WIDTH_CSS_VAR});
-  }
-
-  div.${RECORD_TABLE_COLUMN_CHECKBOX_WIDTH_CLASS_NAME} {
-    max-width: var(${RECORD_TABLE_CHECKBOX_WIDTH_CSS_VAR});
-    min-width: var(${RECORD_TABLE_CHECKBOX_WIDTH_CSS_VAR});
-    width: var(${RECORD_TABLE_CHECKBOX_WIDTH_CSS_VAR});
-  }
-
-  div.${RECORD_TABLE_COLUMN_ADD_COLUMN_BUTTON_WIDTH_CLASS_NAME} {
-    max-width: ${RECORD_TABLE_COLUMN_ADD_COLUMN_BUTTON_WIDTH}px;
-    min-width: ${RECORD_TABLE_COLUMN_ADD_COLUMN_BUTTON_WIDTH}px;
-    width: ${RECORD_TABLE_COLUMN_ADD_COLUMN_BUTTON_WIDTH}px;
-  }
-
-  ${columnFieldWidthRules}
-
-  div.${RECORD_TABLE_COLUMN_LAST_EMPTY_COLUMN_WIDTH_CLASS_NAME} {
-    max-width: var(
-      ${RECORD_TABLE_COLUMN_LAST_EMPTY_COLUMN_WIDTH_VARIABLE_NAME}
-    );
-    min-width: var(
-      ${RECORD_TABLE_COLUMN_LAST_EMPTY_COLUMN_WIDTH_VARIABLE_NAME}
-    );
-    width: var(${RECORD_TABLE_COLUMN_LAST_EMPTY_COLUMN_WIDTH_VARIABLE_NAME});
-  }
-
-  div.${RECORD_TABLE_COLUMN_WITH_GROUP_LAST_EMPTY_COLUMN_WIDTH_CLASS_NAME} {
-    max-width: var(
-      ${RECORD_TABLE_COLUMN_WITH_GROUP_LAST_EMPTY_COLUMN_WIDTH_VARIABLE_NAME}
-    );
-    min-width: var(
-      ${RECORD_TABLE_COLUMN_WITH_GROUP_LAST_EMPTY_COLUMN_WIDTH_VARIABLE_NAME}
-    );
-    width: var(
-      ${RECORD_TABLE_COLUMN_WITH_GROUP_LAST_EMPTY_COLUMN_WIDTH_VARIABLE_NAME}
-    );
-  }
-
-  @media (max-width: ${MOBILE_VIEWPORT}px) {
-    // clip, not hidden: hidden makes the cell a scroll container the sticky anchor would stick to.
-    // The clip margin keeps the scroll shadow, which paints outside the box.
-    div.header-cell.${getRecordTableColumnFieldWidthClassName(0)},
-    div.table-cell.${getRecordTableColumnFieldWidthClassName(0)},
-    div.footer-cell.${getRecordTableColumnFieldWidthClassName(0)},
-    div.table-cell-0-0 {
-      overflow: clip;
-      overflow-clip-margin: 4px;
-    }
-
-    // Pins the content at the table's left edge so the name holds still and truncates from the right.
-    // Must stay zero-width, or sticky's containing-block constraint drags it along with the cell.
-    div.table-cell.${getRecordTableColumnFieldWidthClassName(0)}
-    > .${RECORD_TABLE_CELL_CONTENT_CLASS_NAME},
-    div.table-cell-0-0
-    > .${RECORD_TABLE_CELL_CONTENT_CLASS_NAME} {
-      left: calc(
-        var(${RECORD_TABLE_DRAG_DROP_WIDTH_CSS_VAR}) +
-          var(${RECORD_TABLE_CHECKBOX_WIDTH_CSS_VAR})
-      );
-      overflow: visible;
-      position: sticky;
-      width: 0;
-    }
-
-    // Absolute so the chip gets its full width without widening the anchor.
-    div.table-cell.${getRecordTableColumnFieldWidthClassName(0)}
-    > .${RECORD_TABLE_CELL_CONTENT_CLASS_NAME}
-    > .${RECORD_TABLE_CELL_DISPLAY_CLASS_NAME},
-    div.table-cell-0-0
-    > .${RECORD_TABLE_CELL_CONTENT_CLASS_NAME}
-    > .${RECORD_TABLE_CELL_DISPLAY_CLASS_NAME} {
-      height: 100%;
-      left: 0;
-      position: absolute;
-      top: 0;
-      width: calc(
-        var(${getRecordTableColumnFieldWidthCSSVariableName(0)}) -
-          var(${RECORD_TABLE_DRAG_DROP_WIDTH_CSS_VAR}) -
-          var(${RECORD_TABLE_CHECKBOX_WIDTH_CSS_VAR})
-      );
-    }
-
-    // Shrink-wrapped: at full column width sticky's containing-block constraint would drag these off with the cell.
-    div.header-cell.${getRecordTableColumnFieldWidthClassName(0)}
-    .${RECORD_TABLE_CELL_CONTENT_CLASS_NAME},
-    div.footer-cell.${getRecordTableColumnFieldWidthClassName(0)}
-    .${RECORD_TABLE_CELL_CONTENT_CLASS_NAME} {
-      left: calc(
-        var(${RECORD_TABLE_DRAG_DROP_WIDTH_CSS_VAR}) +
-          var(${RECORD_TABLE_CHECKBOX_WIDTH_CSS_VAR})
-      );
-      position: sticky;
-      width: max-content;
-    }
-  }
-`;
-
-export const RecordTableStyleWrapper = StyledTable;
+const styles = stylex.create({
+  table: {
+    display: 'flex',
+    flexDirection: 'column',
+    paddingBottom: {
+      default: null,
+      [media.mobile]: spacing['--t-spacing-20'],
+    },
+    position: 'relative',
+    width: '100%',
+  },
+});

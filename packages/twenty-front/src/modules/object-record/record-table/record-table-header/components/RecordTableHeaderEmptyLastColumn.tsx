@@ -8,7 +8,7 @@ import { isRecordTableScrolledVerticallyComponentState } from '@/object-record/r
 import { useAtomComponentFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentFamilyStateValue';
 import { useAtomComponentSelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentSelectorValue';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { cx } from '@linaria/core';
+import { mergeClassName } from '@/page-layout/utils/mergeClassName';
 import * as stylex from '@stylexjs/stylex';
 import { background, borderColor } from 'twenty-ui/theme/tokens.stylex';
 
@@ -51,11 +51,9 @@ export const RecordTableHeaderEmptyLastColumn = () => {
 
   return (
     <div
-      {...cellProps}
-      className={cx(
-        'header-cell',
-        RECORD_TABLE_COLUMN_ADD_COLUMN_BUTTON_WIDTH_CLASS_NAME,
-        cellProps.className,
+      {...mergeClassName(
+        cellProps,
+        `header-cell ${RECORD_TABLE_COLUMN_ADD_COLUMN_BUTTON_WIDTH_CLASS_NAME}`,
       )}
     />
   );

@@ -1,4 +1,4 @@
-import { cx } from '@linaria/core';
+import { mergeClassName } from '@/page-layout/utils/mergeClassName';
 import * as stylex from '@stylexjs/stylex';
 import { FieldDescriptionTooltip } from '@/object-record/record-field/ui/components/FieldDescriptionTooltip';
 
@@ -31,12 +31,12 @@ export const RecordTableColumnHead = ({
   const fieldMetadataItem =
     correspondingFieldMetadataItem.foundFieldMetadataItem;
 
-  const titleProps = stylex.props(styles.title);
-
   return (
     <div
-      {...titleProps}
-      className={cx(RECORD_TABLE_CELL_CONTENT_CLASS_NAME, titleProps.className)}
+      {...mergeClassName(
+        stylex.props(styles.title),
+        RECORD_TABLE_CELL_CONTENT_CLASS_NAME,
+      )}
     >
       <div {...stylex.props(styles.icon)}>
         <Icon size={theme.icon.size.md} />

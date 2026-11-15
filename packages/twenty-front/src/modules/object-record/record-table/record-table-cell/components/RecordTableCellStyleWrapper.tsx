@@ -1,4 +1,4 @@
-import { cx } from '@linaria/core';
+import { mergeClassName } from '@/page-layout/utils/mergeClassName';
 import * as stylex from '@stylexjs/stylex';
 import { type ReactNode } from 'react';
 import {
@@ -37,8 +37,7 @@ export const RecordTableCellStyleWrapper = ({
     <div
       // oxlint-disable-next-line react/jsx-props-no-spreading
       {...divProps}
-      {...stylexProps}
-      className={cx('table-cell', widthClassName, stylexProps.className)}
+      {...mergeClassName(stylexProps, `table-cell ${widthClassName}`)}
     >
       {children}
     </div>
