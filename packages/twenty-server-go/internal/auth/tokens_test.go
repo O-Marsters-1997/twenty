@@ -183,6 +183,7 @@ func TestPGIssuer_IssuePlayground(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Verify(playground token) error = %v", err)
 	}
+	principal.Playground = true
 	if diff := cmp.Diff(principal, verified); diff != "" {
 		t.Errorf("Verify(playground token) principal (-want +got):\n%s", diff)
 	}

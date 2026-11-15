@@ -37,9 +37,24 @@ func (fakeTokens) IssuePlayground(_ context.Context, principal auth.Principal, _
 	return "playground:" + principal.UserID, time.Date(2026, 1, 2, 3, 4, 5, 0, time.UTC), nil
 }
 
+const (
+	adminUserID          = "0b7a6c1e-3f55-4a47-8d6e-6c1f1b7f2a01"
+	adminUserWorkspaceID = "0b7a6c1e-3f55-4a47-8d6e-6c1f1b7f2a02"
+	memberUserID         = "0b7a6c1e-3f55-4a47-8d6e-6c1f1b7f2a03"
+	memberWorkspaceID    = "0b7a6c1e-3f55-4a47-8d6e-6c1f1b7f2a04"
+)
+
 type harness struct {
 	handler http.Handler
+	graphql http.Handler
 	pool    *pgxpool.Pool
+}
+
+func (h harness) as(principal auth.Principal) harness {
+	h.handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		h.graphql.ServeHTTP(w, r.WithContext(auth.WithPrincipal(r.Context(), principal)))
+	})
+	return h
 }
 
 func newHarness(t *testing.T) harness {
@@ -50,12 +65,38 @@ func newHarness(t *testing.T) harness {
 	}
 	t.Cleanup(pool.Close)
 	graphql := accessgql.NewHandler(&accessgql.Resolver{
-		WebhookStore: store.NewWebhooks(pool), APIKeyStore: store.NewAPIKeys(pool), Tokens: fakeTokens{},
+		WebhookStore: store.NewWebhooks(pool), APIKeyStore: store.NewAPIKeys(pool), Permissions: store.NewPermissions(pool), Tokens: fakeTokens{},
 	}, slog.New(slog.NewTextHandler(io.Discard, nil)))
-	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		graphql.ServeHTTP(w, r.WithContext(auth.WithPrincipal(r.Context(), auth.Principal{UserID: "user-1"})))
-	})
-	return harness{handler: handler, pool: pool}
+	h := harness{graphql: graphql, pool: pool}
+	h.seedSession(t, adminUserID, adminUserWorkspaceID, "Workspace admin", true)
+	h.seedSession(t, memberUserID, memberWorkspaceID, "Plain member", false)
+	return h.as(auth.Principal{UserID: "user-1", UserWorkspaceID: adminUserWorkspaceID})
+}
+
+func (h harness) seedSession(t *testing.T, userID, userWorkspaceID, roleLabel string, canUpdateAllSettings bool) {
+	t.Helper()
+	statements := []string{
+		`INSERT INTO core."user" (id, email) VALUES ('` + userID + `', '` + userID + `@example.com')`,
+		`INSERT INTO core."userWorkspace" (id, "userId", "workspaceId") VALUES ('` + userWorkspaceID + `', '` + userID + `', '` + workspace.PinnedWorkspaceID + `')`,
+	}
+	for _, statement := range statements {
+		if _, err := h.pool.Exec(t.Context(), statement); err != nil {
+			t.Fatalf("seed session: %v", err)
+		}
+	}
+	var roleID string
+	err := h.pool.QueryRow(t.Context(), `INSERT INTO core.role (label, "workspaceId", "canUpdateAllSettings", "canBeAssignedToApiKeys", "universalIdentifier", "applicationId")
+		VALUES ($1, $2::uuid, $3, false, gen_random_uuid(), (SELECT "workspaceCustomApplicationId" FROM core.workspace WHERE id = $2::uuid)) RETURNING id::text`,
+		roleLabel, workspace.PinnedWorkspaceID, canUpdateAllSettings).Scan(&roleID)
+	if err != nil {
+		t.Fatalf("seed role: %v", err)
+	}
+	_, err = h.pool.Exec(t.Context(), `INSERT INTO core."roleTarget" ("roleId", "userWorkspaceId", "universalIdentifier", "workspaceId", "applicationId")
+		VALUES ($1::uuid, $2::uuid, gen_random_uuid(), $3::uuid, (SELECT "workspaceCustomApplicationId" FROM core.workspace WHERE id = $3::uuid))`,
+		roleID, userWorkspaceID, workspace.PinnedWorkspaceID)
+	if err != nil {
+		t.Fatalf("seed role target: %v", err)
+	}
 }
 
 func (h harness) send(t *testing.T, operation, query string, variables map[string]any) map[string]any {
@@ -212,6 +253,49 @@ func TestWebhookOperations_errors(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestOperations_authorization(t *testing.T) {
+	t.Parallel()
+	h := newHarness(t)
+	roleID := h.insertRole(t, "Integrator", true)
+	const (
+		listWebhooks = `query GetWebhooks { webhooks { id } }`
+		createKey    = `mutation CreateApiKey($input: CreateApiKeyInput!) { createApiKey(input: $input) { id } }`
+		playground   = `mutation GeneratePlaygroundToken { generatePlaygroundToken { token } }`
+	)
+	createKeyVariables := map[string]any{"input": map[string]any{"name": "CI", "expiresAt": "2030-01-01T00:00:00.000Z", "roleId": roleID}}
+
+	tests := []struct {
+		name      string
+		principal auth.Principal
+		operation string
+		query     string
+		variables map[string]any
+		wantCode  string
+	}{
+		{"member without the permission lists webhooks", auth.Principal{UserWorkspaceID: memberWorkspaceID}, "GetWebhooks", listWebhooks, nil, "FORBIDDEN"},
+		{"member without the permission creates a key", auth.Principal{UserWorkspaceID: memberWorkspaceID}, "CreateApiKey", createKey, createKeyVariables, "FORBIDDEN"},
+		{"API key principal creates a key", auth.Principal{APIKeyID: missingID}, "CreateApiKey", createKey, createKeyVariables, "FORBIDDEN"},
+		{"playground session creates a key", auth.Principal{UserWorkspaceID: adminUserWorkspaceID, Playground: true}, "CreateApiKey", createKey, createKeyVariables, "FORBIDDEN"},
+		{"API key principal generates a playground token", auth.Principal{APIKeyID: missingID}, "GeneratePlaygroundToken", playground, nil, "FORBIDDEN"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			if got := errorCode(t, h.as(tt.principal).send(t, tt.operation, tt.query, tt.variables)); got != tt.wantCode {
+				t.Errorf("error code = %q, want %q", got, tt.wantCode)
+			}
+		})
+	}
+
+	t.Run("playground session lists webhooks", func(t *testing.T) {
+		t.Parallel()
+		got := h.as(auth.Principal{UserWorkspaceID: adminUserWorkspaceID, Playground: true}).data(t, "GetWebhooks", listWebhooks, nil)
+		if got["webhooks"] == nil {
+			t.Errorf("webhooks = %v, want a list", got)
+		}
+	})
 }
 
 func TestAPIKeyOperations(t *testing.T) {
