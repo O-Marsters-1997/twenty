@@ -18,36 +18,39 @@ import { GenericDropdownContentWidth } from '@/ui/layout/dropdown/constants/Gene
 import { useCloseDropdown } from '@/ui/layout/dropdown/hooks/useCloseDropdown';
 import { useSetAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useSetAtomComponentState';
 import { isStandaloneVariableString } from 'twenty-shared/workflow';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { useCallback, useId } from 'react';
 import { CustomError, isDefined, isValidUuid } from 'twenty-shared/utils';
 import { IconChevronDown, IconForbid } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledFormSelectContainerWrapper = styled.div<{ readonly?: boolean }>`
-  cursor: ${({ readonly }) => (readonly ? 'default' : 'pointer')};
-  display: flex;
-  height: 32px;
-  min-width: 0;
-  width: 100%;
-`;
-
-const StyledIconButton = styled.div`
-  display: flex;
-  padding-right: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledDropdownContainer = styled.div`
-  display: flex;
-  flex: 1;
-  min-width: 0;
-`;
-
-const StyledVariablePickerContainer = styled.div`
-  display: flex;
-  flex-shrink: 0;
-`;
+const styles = stylex.create({
+  formSelectContainerWrapper: {
+    cursor: 'pointer',
+    display: 'flex',
+    height: 32,
+    minWidth: 0,
+    width: '100%',
+  },
+  formSelectContainerWrapperReadonly: {
+    cursor: 'default',
+  },
+  iconButton: {
+    display: 'flex',
+    paddingRight: spacing['--t-spacing-2'],
+  },
+  dropdownContainer: {
+    display: 'flex',
+    flex: '1',
+    minWidth: '0',
+  },
+  variablePickerContainer: {
+    display: 'flex',
+    flexShrink: '0',
+  },
+});
 
 type FormSingleRecordPickerValue =
   | {
@@ -200,7 +203,12 @@ export const FormSingleRecordPicker = ({
       {label ? <Field.Label>{label}</Field.Label> : null}
       <FormFieldInputRowContainer>
         {disabled ? (
-          <StyledFormSelectContainerWrapper readonly>
+          <div
+            {...stylex.props(
+              styles.formSelectContainerWrapper,
+              styles.formSelectContainerWrapperReadonly,
+            )}
+          >
             <FormFieldInputInnerContainer
               formFieldInputInstanceId={componentId}
               hasRightElement={false}
@@ -213,9 +221,9 @@ export const FormSingleRecordPicker = ({
                 disabled={disabled}
               />
             </FormFieldInputInnerContainer>
-          </StyledFormSelectContainerWrapper>
+          </div>
         ) : (
-          <StyledDropdownContainer>
+          <div {...stylex.props(styles.dropdownContainer)}>
             <Dropdown
               dropdownId={dropdownId}
               dropdownPlacement="bottom-start"
@@ -226,7 +234,7 @@ export const FormSingleRecordPicker = ({
                 y: parseInt(theme.spacing[1], 10),
               }}
               clickableComponent={
-                <StyledFormSelectContainerWrapper>
+                <div {...stylex.props(styles.formSelectContainerWrapper)}>
                   <FormFieldInputInnerContainer
                     formFieldInputInstanceId={componentId}
                     hasRightElement={isDefined(VariablePicker) && !disabled}
@@ -240,14 +248,14 @@ export const FormSingleRecordPicker = ({
                       onRemove={handleUnlinkVariable}
                       disabled={disabled}
                     />
-                    <StyledIconButton>
+                    <div {...stylex.props(styles.iconButton)}>
                       <IconChevronDown
                         size={theme.icon.size.md}
                         color={theme.font.color.light}
                       />
-                    </StyledIconButton>
+                    </div>
                   </FormFieldInputInnerContainer>
-                </StyledFormSelectContainerWrapper>
+                </div>
               }
               dropdownComponents={
                 <SingleRecordPicker
@@ -266,10 +274,10 @@ export const FormSingleRecordPicker = ({
                 />
               }
             />
-          </StyledDropdownContainer>
+          </div>
         )}
         {isDefined(VariablePicker) && !disabled && (
-          <StyledVariablePickerContainer>
+          <div {...stylex.props(styles.variablePickerContainer)}>
             <VariablePicker
               instanceId={variablesDropdownId}
               disabled={disabled}
@@ -280,7 +288,7 @@ export const FormSingleRecordPicker = ({
               }
               objectNameSingularsToSelect={objectNameSingulars}
             />
-          </StyledVariablePickerContainer>
+          </div>
         )}
       </FormFieldInputRowContainer>
     </FormFieldInputContainer>

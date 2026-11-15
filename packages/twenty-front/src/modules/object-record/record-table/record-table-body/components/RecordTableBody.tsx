@@ -1,8 +1,14 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import { type ComponentProps } from 'react';
 
-const StyledTableBody = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-`;
+export const RecordTableBody = (props: ComponentProps<'div'>) => (
+  // oxlint-disable-next-line react/jsx-props-no-spreading
+  <div {...props} {...stylex.props(styles.root)} />
+);
 
-export const RecordTableBody = StyledTableBody;
+const styles = stylex.create({
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+});

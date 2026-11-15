@@ -2,9 +2,16 @@ import { FormFieldInputContainer } from '@/ui/input/components/FormFieldInputCon
 import { FormFieldInputInnerContainer } from '@/object-record/record-field/ui/form-types/components/FormFieldInputInnerContainer';
 import { FormFieldInputRowContainer } from '@/object-record/record-field/ui/form-types/components/FormFieldInputRowContainer';
 import { Field, Switch } from 'twenty-ui/primitives/input';
-import { styled } from '@linaria/react';
 import { useId } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type FormBooleanFieldSwitchInputProps = {
   label?: string;
@@ -15,29 +22,37 @@ type FormBooleanFieldSwitchInputProps = {
   disabled?: boolean;
 };
 
-const StyledDescription = styled.span`
-  align-items: center;
-  color: ${themeCssVariables.font.color.secondary};
-  display: flex;
-  font-size: ${themeCssVariables.font.size.md};
-  overflow: hidden;
-  padding-left: ${themeCssVariables.spacing[2]};
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledSwitchContainer = styled.div`
-  background-color: ${themeCssVariables.background.transparent.lighter};
-  border-bottom: 1px solid ${themeCssVariables.border.color.medium};
-  border-bottom-right-radius: ${themeCssVariables.border.radius.md};
-  border-right: 1px solid ${themeCssVariables.border.color.medium};
-  border-top: 1px solid ${themeCssVariables.border.color.medium};
-  border-top-right-radius: ${themeCssVariables.border.radius.md};
-  display: flex;
-  padding-bottom: ${themeCssVariables.spacing[2]};
-  padding-right: ${themeCssVariables.spacing[2]};
-  padding-top: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  description: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-secondary'],
+    display: 'flex',
+    fontSize: fontSize['--t-font-size-md'],
+    overflow: 'hidden',
+    paddingLeft: spacing['--t-spacing-2'],
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  switchContainer: {
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: borderColor['--t-border-color-medium'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderRightWidth: '1px',
+    borderRightStyle: 'solid',
+    borderRightColor: borderColor['--t-border-color-medium'],
+    borderTopWidth: '1px',
+    borderTopStyle: 'solid',
+    borderTopColor: borderColor['--t-border-color-medium'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    display: 'flex',
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
+  },
+});
 
 export const FormBooleanFieldSwitchInput = ({
   label,
@@ -60,12 +75,12 @@ export const FormBooleanFieldSwitchInput = ({
           hasRightElement
           preventFocusStackUpdate
         >
-          <StyledDescription id={descriptionId}>
+          <span id={descriptionId} {...stylex.props(styles.description)}>
             {description}
-          </StyledDescription>
+          </span>
         </FormFieldInputInnerContainer>
 
-        <StyledSwitchContainer>
+        <div {...stylex.props(styles.switchContainer)}>
           <Switch
             aria-labelledby={descriptionId}
             checked={value}
@@ -73,7 +88,7 @@ export const FormBooleanFieldSwitchInput = ({
             disabled={disabled}
             size="sm"
           />
-        </StyledSwitchContainer>
+        </div>
       </FormFieldInputRowContainer>
 
       {hint && <Field.Description>{hint}</Field.Description>}

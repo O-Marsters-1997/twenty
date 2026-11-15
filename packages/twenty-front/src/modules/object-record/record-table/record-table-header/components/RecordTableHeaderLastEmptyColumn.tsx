@@ -1,6 +1,6 @@
 import { hasRecordGroupsComponentSelector } from '@/object-record/record-group/states/selectors/hasRecordGroupsComponentSelector';
 import { RECORD_TABLE_COLUMN_LAST_EMPTY_COLUMN_WIDTH_CLASS_NAME } from '@/object-record/record-table/constants/RecordTableColumnLastEmptyColumnWidthClassName';
-import { RECORD_TABLE_ROW_HEIGHT } from '@/object-record/record-table/constants/RecordTableRowHeight';
+import { recordTableLayout } from '../../constants/recordTableLayout.stylex';
 import { isRecordTableRowActiveComponentFamilyState } from '@/object-record/record-table/states/isRecordTableRowActiveComponentFamilyState';
 import { isRecordTableRowFocusActiveComponentState } from '@/object-record/record-table/states/isRecordTableRowFocusActiveComponentState';
 import { isRecordTableRowFocusedComponentFamilyState } from '@/object-record/record-table/states/isRecordTableRowFocusedComponentFamilyState';
@@ -8,27 +8,13 @@ import { isRecordTableScrolledVerticallyComponentState } from '@/object-record/r
 import { useAtomComponentFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentFamilyStateValue';
 import { useAtomComponentSelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentSelectorValue';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { cx } from '@linaria/core';
-import { themeCssVariables } from 'twenty-ui/theme';
-
-const StyledLastColumnHeader = styled.div<{
-  shouldDisplayBorderBottom: boolean;
-}>`
-  background-color: ${themeCssVariables.background.primary};
-
-  border-bottom: ${({ shouldDisplayBorderBottom }) =>
-    shouldDisplayBorderBottom
-      ? `1px solid ${themeCssVariables.border.color.light}`
-      : 'none'};
-  border-left: none !important;
-  color: ${themeCssVariables.font.color.tertiary};
-
-  cursor: pointer;
-
-  height: ${RECORD_TABLE_ROW_HEIGHT}px;
-  max-height: ${RECORD_TABLE_ROW_HEIGHT}px;
-`;
+import {
+  background,
+  borderColor,
+  fontColor,
+} from 'twenty-ui/theme/tokens.stylex';
 
 export const RecordTableHeaderLastEmptyColumn = () => {
   const isRecordTableScrolledVertically = useAtomComponentStateValue(
@@ -62,13 +48,35 @@ export const RecordTableHeaderLastEmptyColumn = () => {
     !isFirstRowActiveOrFocused ||
     isRecordTableScrolledVertically;
 
+  const cellProps = stylex.props(
+    styles.cell,
+    shouldDisplayBorderBottom && styles.borderBottom,
+  );
+
   return (
-    <StyledLastColumnHeader
-      shouldDisplayBorderBottom={shouldDisplayBorderBottom}
+    <div
+      {...cellProps}
       className={cx(
         'header-cell',
         RECORD_TABLE_COLUMN_LAST_EMPTY_COLUMN_WIDTH_CLASS_NAME,
+        cellProps.className,
       )}
     />
   );
 };
+
+const styles = stylex.create({
+  cell: {
+    backgroundColor: background['--t-background-primary'],
+    borderLeftStyle: 'none',
+    color: fontColor['--t-font-color-tertiary'],
+    cursor: 'pointer',
+    height: recordTableLayout.rowHeight,
+    maxHeight: recordTableLayout.rowHeight,
+  },
+  borderBottom: {
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: 1,
+  },
+});

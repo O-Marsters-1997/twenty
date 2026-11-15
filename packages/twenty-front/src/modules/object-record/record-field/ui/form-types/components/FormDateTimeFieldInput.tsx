@@ -29,6 +29,7 @@ import { Temporal } from 'temporal-polyfill';
 import { Key } from 'ts-key-enum';
 import { isDefined } from 'twenty-shared/utils';
 import { type Nullable } from 'twenty-shared/types';
+import * as stylex from '@stylexjs/stylex';
 
 const FORM_DATE_TIME_FIELD_PICKER_CLICK_OUTSIDE_ID =
   'form-date-time-field-picker-floating';
@@ -43,11 +44,13 @@ const StyledDateInputTextContainer = styled.div<{ isReadonly?: boolean }>`
   width: 100%;
 `;
 
-const StyledDatePickerInputWrapper = styled.div`
-  display: flex;
-  flex: 1;
-  min-width: 0;
-`;
+const styles = stylex.create({
+  datePickerInputWrapper: {
+    display: 'flex',
+    flex: '1',
+    minWidth: '0',
+  },
+});
 
 type DraftValue =
   | {
@@ -257,7 +260,10 @@ export const FormDateTimeFieldInput = ({
       {label ? <Field.Label>{label}</Field.Label> : null}
 
       <FormFieldInputRowContainer>
-        <StyledDatePickerInputWrapper ref={datePickerWrapperRef}>
+        <div
+          ref={datePickerWrapperRef}
+          {...stylex.props(styles.datePickerInputWrapper)}
+        >
           <FormFieldInputInnerContainer
             ref={refs.setReference}
             formFieldInputInstanceId={instanceId}
@@ -286,7 +292,7 @@ export const FormDateTimeFieldInput = ({
               />
             )}
           </FormFieldInputInnerContainer>
-        </StyledDatePickerInputWrapper>
+        </div>
         {draftValue.type === 'static' && draftValue.mode === 'edit' ? (
           <FloatingPortal>
             <div

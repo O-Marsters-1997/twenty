@@ -1,5 +1,4 @@
 import { FormMultiRecordPicker } from '@/object-record/record-field/ui/form-types/components/FormMultiRecordPicker';
-import { styled } from '@linaria/react';
 import { type Meta, type StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, within } from 'storybook/test';
 import { ComponentDecorator } from 'twenty-ui/testing';
@@ -10,6 +9,7 @@ import { WorkspaceDecorator } from '~/testing/decorators/WorkspaceDecorator';
 import { graphqlMocks } from '~/testing/graphqlMocks';
 import { MOCKED_STEP_ID } from '~/testing/mock-data/workflow';
 import { MemoryRouterDecorator } from '~/testing/decorators/MemoryRouterDecorator';
+import * as stylex from '@stylexjs/stylex';
 
 const meta: Meta<typeof FormMultiRecordPicker> = {
   title: 'UI/Data/Field/Form/Input/FormMultiRecordPicker',
@@ -32,9 +32,11 @@ export default meta;
 
 type Story = StoryObj<typeof FormMultiRecordPicker>;
 
-const StyledNarrowContainer = styled.div`
-  width: 480px;
-`;
+const styles = stylex.create({
+  narrowContainer: {
+    width: '480px',
+  },
+});
 
 export const Default: Story = {
   args: {
@@ -77,9 +79,9 @@ export const WithManyRecords: Story = {
   },
   decorators: [
     (Story) => (
-      <StyledNarrowContainer>
+      <div {...stylex.props(styles.narrowContainer)}>
         <Story />
-      </StyledNarrowContainer>
+      </div>
     ),
   ],
   play: async ({ canvasElement }) => {

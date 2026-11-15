@@ -4,7 +4,6 @@ import { RecordFieldComponentInstanceContext } from '@/object-record/record-fiel
 import { useHotkeysOnFocusedElement } from '@/ui/utilities/hotkey/hooks/useHotkeysOnFocusedElement';
 import { useListenClickOutside } from '@/ui/utilities/pointer-event/hooks/useListenClickOutside';
 import { useAvailableComponentInstanceIdOrThrow } from '@/ui/utilities/state/component-state/hooks/useAvailableComponentInstanceIdOrThrow';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useContext, useRef, useState } from 'react';
 import { Key } from 'ts-key-enum';
@@ -13,33 +12,39 @@ import { JsonTree } from 'twenty-ui/components/data-display';
 import { IconButton } from 'twenty-ui/components/input';
 import { CodeEditor } from 'twenty-ui/components/code-editor';
 import { IconPencil } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const CONTAINER_HEIGHT = 300;
 
-const StyledContainer = styled.div`
-  box-sizing: border-box;
-  height: ${CONTAINER_HEIGHT}px;
-  overflow-y: auto;
-  position: relative;
-  width: 400px;
-`;
-
-const StyledSwitchModeButtonContainer = styled.div`
-  position: fixed;
-  right: ${themeCssVariables.spacing[1]};
-  top: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledCodeEditorContainer = styled.div`
-  padding: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledJsonTreeContainer = styled.div`
-  padding: ${themeCssVariables.spacing[2]};
-  width: min-content;
-`;
+const styles = stylex.create({
+  container: {
+    boxSizing: 'border-box',
+    height: CONTAINER_HEIGHT,
+    overflowY: 'auto',
+    position: 'relative',
+    width: 400,
+  },
+  switchModeButtonContainer: {
+    position: 'fixed',
+    right: spacing['--t-spacing-1'],
+    top: spacing['--t-spacing-1'],
+  },
+  codeEditorContainer: {
+    paddingTop: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-1'],
+  },
+  jsonTreeContainer: {
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-2'],
+    width: 'min-content',
+  },
+});
 
 export const RawJsonFieldInput = () => {
   const { t } = useLingui();
@@ -153,9 +158,9 @@ export const RawJsonFieldInput = () => {
   };
 
   return (
-    <StyledContainer ref={containerRef}>
+    <div ref={containerRef} {...stylex.props(styles.container)}>
       {isEditing ? (
-        <StyledCodeEditorContainer>
+        <div {...stylex.props(styles.codeEditorContainer)}>
           <CodeEditor
             value={draftValue}
             language="application/json"
@@ -175,11 +180,11 @@ export const RawJsonFieldInput = () => {
             }}
             onChange={handleChange}
           />
-        </StyledCodeEditorContainer>
+        </div>
       ) : (
         <>
           {showEditingButton && (
-            <StyledSwitchModeButtonContainer>
+            <div {...stylex.props(styles.switchModeButtonContainer)}>
               <IconButton
                 elevated
                 size="sm"
@@ -188,10 +193,10 @@ export const RawJsonFieldInput = () => {
               >
                 <IconPencil />
               </IconButton>
-            </StyledSwitchModeButtonContainer>
+            </div>
           )}
 
-          <StyledJsonTreeContainer>
+          <div {...stylex.props(styles.jsonTreeContainer)}>
             <JsonTree
               value={precomputedDraftValue}
               emptyArrayLabel={t`Empty Array`}
@@ -201,9 +206,9 @@ export const RawJsonFieldInput = () => {
               arrowButtonExpandedLabel={t`Collapse`}
               onNodeValueClick={copyToClipboard}
             />
-          </StyledJsonTreeContainer>
+          </div>
         </>
       )}
-    </StyledContainer>
+    </div>
   );
 };

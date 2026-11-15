@@ -8,16 +8,8 @@ import { totalNumberOfRecordsToVirtualizeComponentState } from '@/object-record/
 
 import { useAtomComponentFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentFamilyStateValue';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { isDefined } from 'twenty-shared/utils';
-
-const StyledVirtualizedRowContainer = styled.div<{
-  pixelsFromTop: number;
-}>`
-  height: 33px;
-  position: absolute;
-  top: ${({ pixelsFromTop }) => pixelsFromTop}px;
-`;
 
 type RecordTableRowVirtualizedContainerProps = {
   virtualIndex: number;
@@ -48,9 +40,9 @@ export const RecordTableRowVirtualizedContainer = ({
     (RECORD_TABLE_ROW_HEIGHT + 1);
 
   return (
-    <StyledVirtualizedRowContainer
+    <div
       id={`row-virtual-index-${virtualIndex}`}
-      pixelsFromTop={pixelsFromTop}
+      {...stylex.props(styles.row, styles.top(pixelsFromTop))}
       data-replay-ignore-mutations="true"
     >
       {TABLE_VIRTUALIZATION_DEBUG_ACTIVATED && (
@@ -59,6 +51,14 @@ export const RecordTableRowVirtualizedContainer = ({
       <RecordTableRowVirtualizedRouterLevel1
         realIndex={realIndexByVirtualIndex}
       />
-    </StyledVirtualizedRowContainer>
+    </div>
   );
 };
+
+const styles = stylex.create({
+  row: {
+    height: 33,
+    position: 'absolute',
+  },
+  top: (pixelsFromTop: number) => ({ top: pixelsFromTop }),
+});

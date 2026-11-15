@@ -14,6 +14,7 @@ import { RECORD_TABLE_COLUMN_LAST_EMPTY_COLUMN_WIDTH_CLASS_NAME } from '@/object
 import { RECORD_TABLE_COLUMN_LAST_EMPTY_COLUMN_WIDTH_VARIABLE_NAME } from '@/object-record/record-table/constants/RecordTableColumnLastEmptyColumnWidthVariableName';
 import { RECORD_TABLE_COLUMN_WITH_GROUP_LAST_EMPTY_COLUMN_WIDTH_CLASS_NAME } from '@/object-record/record-table/constants/RecordTableColumnWithGroupLastEmptyColumnWidthClassName';
 import { RECORD_TABLE_COLUMN_WITH_GROUP_LAST_EMPTY_COLUMN_WIDTH_VARIABLE_NAME } from '@/object-record/record-table/constants/RecordTableColumnWithGroupLastEmptyColumnWidthVariableName';
+import { recordTableCssVariable } from '../constants/recordTableLayout.stylex';
 import { TABLE_Z_INDEX } from '@/object-record/record-table/constants/TableZIndex';
 import { getRecordTableColumnFieldWidthClassName } from '@/object-record/record-table/utils/getRecordTableColumnFieldWidthClassName';
 import { getRecordTableColumnFieldWidthCSSVariableName } from '@/object-record/record-table/utils/getRecordTableColumnFieldWidthCSSVariableName';
@@ -23,11 +24,11 @@ import { MOBILE_VIEWPORT, themeCssVariables } from 'twenty-ui/theme';
 export { HorizontalScrollBoxShadowCSS, VerticalScrollBoxShadowCSS };
 
 export const RECORD_TABLE_DRAG_DROP_WIDTH_CSS_VAR =
-  '--record-table-drag-drop-width';
+  recordTableCssVariable.dragDropWidth;
 export const RECORD_TABLE_CHECKBOX_WIDTH_CSS_VAR =
-  '--record-table-checkbox-width';
+  recordTableCssVariable.checkboxWidth;
 export const RECORD_TABLE_FIRST_COLUMN_LEFT_CSS_VAR =
-  '--record-table-first-column-left';
+  recordTableCssVariable.firstColumnLeft;
 
 const MAX_COLUMNS = 100;
 

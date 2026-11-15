@@ -1,12 +1,15 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { useLingui } from '@lingui/react/macro';
 
 import { recordIndexAllRecordIdsComponentSelector } from '@/object-record/record-index/states/selectors/recordIndexAllRecordIdsComponentSelector';
-import { themeCssVariables } from 'twenty-ui/theme';
+import {
+  background,
+  borderColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-import { RECORD_TABLE_COLUMN_CHECKBOX_WIDTH } from '@/object-record/record-table/constants/RecordTableColumnCheckboxWidth';
 import { RECORD_TABLE_COLUMN_CHECKBOX_WIDTH_CLASS_NAME } from '@/object-record/record-table/constants/RecordTableColumnCheckboxWidthClassName';
-import { RECORD_TABLE_ROW_HEIGHT } from '@/object-record/record-table/constants/RecordTableRowHeight';
+import { recordTableLayout } from '../../constants/recordTableLayout.stylex';
 import { useRecordTableContextOrThrow } from '@/object-record/record-table/contexts/RecordTableContext';
 import { useResetRecordSelection } from '@/object-record/record-selection/hooks/useResetRecordSelection';
 import { useSelectAllRows } from '@/object-record/record-table/hooks/internal/useSelectAllRows';
@@ -16,27 +19,6 @@ import { useAtomComponentSelectorValue } from '@/ui/utilities/state/jotai/hooks/
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { cx } from '@linaria/core';
 import { Checkbox } from 'twenty-ui/primitives/input';
-
-const StyledContainer = styled.div`
-  align-items: center;
-  background-color: ${themeCssVariables.background.primary};
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  display: flex;
-  height: ${RECORD_TABLE_ROW_HEIGHT}px;
-  justify-content: center;
-  min-width: 24px;
-  padding-right: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledColumnHeaderCell = styled.div`
-  background-color: ${themeCssVariables.background.primary};
-
-  cursor: pointer;
-
-  max-height: ${RECORD_TABLE_ROW_HEIGHT}px;
-
-  min-width: ${RECORD_TABLE_COLUMN_CHECKBOX_WIDTH}px;
-`;
 
 export const RecordTableHeaderCheckboxColumn = () => {
   const { t } = useLingui();
@@ -76,14 +58,18 @@ export const RecordTableHeaderCheckboxColumn = () => {
     }
   };
 
+  const columnHeaderCellProps = stylex.props(styles.columnHeaderCell);
+
   return (
-    <StyledColumnHeaderCell
+    <div
+      {...columnHeaderCellProps}
       className={cx(
         'header-cell',
         RECORD_TABLE_COLUMN_CHECKBOX_WIDTH_CLASS_NAME,
+        columnHeaderCellProps.className,
       )}
     >
-      <StyledContainer data-select-disable>
+      <div {...stylex.props(styles.container)} data-select-disable>
         <Checkbox
           hoverable
           checked={checked}
@@ -92,7 +78,28 @@ export const RecordTableHeaderCheckboxColumn = () => {
           disabled={recordTableIsEmpty}
           aria-label={t`Select all rows`}
         />
-      </StyledContainer>
-    </StyledColumnHeaderCell>
+      </div>
+    </div>
   );
 };
+
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    backgroundColor: background['--t-background-primary'],
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: 1,
+    display: 'flex',
+    height: recordTableLayout.rowHeight,
+    justifyContent: 'center',
+    minWidth: 24,
+    paddingRight: spacing['--t-spacing-1'],
+  },
+  columnHeaderCell: {
+    backgroundColor: background['--t-background-primary'],
+    cursor: 'pointer',
+    maxHeight: recordTableLayout.rowHeight,
+    minWidth: recordTableLayout.checkboxColumnWidth,
+  },
+});

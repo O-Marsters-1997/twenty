@@ -10,35 +10,39 @@ import { recordIdByRealIndexComponentFamilySelector } from '@/object-record/reco
 
 import { useAtomComponentFamilySelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentFamilySelectorValue';
 import { useAtomComponentFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentFamilyStateValue';
-import { styled } from '@linaria/react';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { color, fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledDebugRow = styled.div`
-  background-color: ${themeCssVariables.color.gray3};
-  border: 1px solid ${themeCssVariables.color.blue8};
-  color: ${themeCssVariables.font.color.primary};
-  display: flex;
-  left: 250px;
-  max-height: ${themeCssVariables.spacing[4]};
-  overflow: hidden;
-  padding: ${themeCssVariables.spacing['0.5']};
-  position: absolute;
-  top: 5px;
-
-  z-index: 20;
-`;
-
-const StyledDebugColumn = styled.div<{ width: number }>`
-  display: flex;
-  max-width: ${({ width }) => width}px;
-  min-width: ${({ width }) => width}px;
-
-  overflow: hidden;
-  padding-left: ${themeCssVariables.spacing['0.5']};
-  padding-right: ${themeCssVariables.spacing['0.5']};
-  text-wrap-mode: nowrap;
-`;
+const styles = stylex.create({
+  debugColumn: (width: number) => ({
+    display: 'flex',
+    maxWidth: width,
+    minWidth: width,
+    overflow: 'hidden',
+    paddingLeft: spacing['--t-spacing-0_5'],
+    paddingRight: spacing['--t-spacing-0_5'],
+    textWrapMode: 'nowrap',
+  }),
+  debugRow: {
+    backgroundColor: color['--t-color-gray3'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: color['--t-color-blue8'],
+    color: fontColor['--t-font-color-primary'],
+    display: 'flex',
+    left: '250px',
+    maxHeight: spacing['--t-spacing-4'],
+    overflow: 'hidden',
+    paddingTop: spacing['--t-spacing-0_5'],
+    paddingRight: spacing['--t-spacing-0_5'],
+    paddingBottom: spacing['--t-spacing-0_5'],
+    paddingLeft: spacing['--t-spacing-0_5'],
+    position: 'absolute',
+    top: '5px',
+    zIndex: '20',
+  },
+});
 
 type RecordTableRowVirtualizedDebugRowHelperProps = {
   virtualIndex: number;
@@ -84,26 +88,28 @@ export const RecordTableRowVirtualizedDebugRowHelper = ({
   const position = recordStore?.position;
 
   return (
-    <StyledDebugRow>
-      <StyledDebugColumn width={70}>virtual :{virtualIndex}</StyledDebugColumn>
-      <StyledDebugColumn width={70}>
+    <div {...stylex.props(styles.debugRow)}>
+      <div {...stylex.props(styles.debugColumn(70))}>
+        virtual :{virtualIndex}
+      </div>
+      <div {...stylex.props(styles.debugColumn(70))}>
         real :{realIndexByVirtualIndex}
-      </StyledDebugColumn>
-      <StyledDebugColumn width={100}>pos :{position}</StyledDebugColumn>
-      <StyledDebugColumn width={80}>
+      </div>
+      <div {...stylex.props(styles.debugColumn(100))}>pos :{position}</div>
+      <div {...stylex.props(styles.debugColumn(80))}>
         px:
         {pixelsFromTop}
-      </StyledDebugColumn>
-      <StyledDebugColumn width={150}>
+      </div>
+      <div {...stylex.props(styles.debugColumn(150))}>
         <b>{labelIdentifier}</b>
-      </StyledDebugColumn>
-      <StyledDebugColumn width={300}>
+      </div>
+      <div {...stylex.props(styles.debugColumn(300))}>
         id:
         {recordId}
-      </StyledDebugColumn>
-      <StyledDebugColumn width={100}>
+      </div>
+      <div {...stylex.props(styles.debugColumn(100))}>
         status :{isDefined(dataLoadingStatus) ? dataLoadingStatus : 'undefined'}
-      </StyledDebugColumn>
-    </StyledDebugRow>
+      </div>
+    </div>
   );
 };

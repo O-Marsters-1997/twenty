@@ -14,7 +14,6 @@ import { useHotkeysOnFocusedElement } from '@/ui/utilities/hotkey/hooks/useHotke
 import { useListenClickOutside } from '@/ui/utilities/pointer-event/hooks/useListenClickOutside';
 import { useAvailableComponentInstanceIdOrThrow } from '@/ui/utilities/state/component-state/hooks/useAvailableComponentInstanceIdOrThrow';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
@@ -23,7 +22,6 @@ import { CustomError, isDefined, isNonEmptyArray } from 'twenty-shared/utils';
 import { LightIconButton } from 'twenty-ui/components/input';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
 import { IconCheck, IconPlus } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { useDebounce } from 'use-debounce';
 import { FieldMetadataType } from '~/generated-metadata/graphql';
 import { moveArrayItem } from '~/utils/array/moveArrayItem';
@@ -31,10 +29,17 @@ import { toSpliced } from '~/utils/array/toSpliced';
 import { isDeeplyEqual } from '~/utils/isDeeplyEqual';
 import { turnIntoEmptyStringIfWhitespacesOnly } from '~/utils/string/turnIntoEmptyStringIfWhitespacesOnly';
 import { normalizeSearchText } from 'twenty-ui/utilities';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledAddItemContainer = styled.div`
-  padding: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  addItemContainer: {
+    paddingTop: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-1'],
+  },
+});
 
 type MultiItemFieldInputProps<T> = {
   items: T[];
@@ -374,7 +379,7 @@ export const MultiItemFieldInput = <T,>({
               }
             />
           ) : !isLimitReached ? (
-            <StyledAddItemContainer>
+            <div {...stylex.props(styles.addItemContainer)}>
               <ListItemButton
                 onClick={handleAddButtonClick}
                 startIcon={<IconPlus />}
@@ -383,7 +388,7 @@ export const MultiItemFieldInput = <T,>({
                   text={newItemLabel || `Add ${placeholder}`}
                 />
               </ListItemButton>
-            </StyledAddItemContainer>
+            </div>
           ) : null}
         </>
       }

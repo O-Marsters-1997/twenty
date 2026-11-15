@@ -4,15 +4,20 @@ import { useRecordIndexContextOrThrow } from '@/object-record/record-index/conte
 import { recordIndexGroupFieldMetadataItemComponentState } from '@/object-record/record-index/states/recordIndexGroupFieldMetadataComponentState';
 import { isRecordTableCellsNonEditableComponentState } from '@/object-record/record-table/states/isRecordTableCellsNonEditableComponentState';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const RECORD_TABLE_ADD_GROUP_DROPDOWN_ID = 'record-table-add-group-dropdown';
 
-const StyledContainer = styled.div`
-  display: flex;
-  padding: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+});
 
 export const RecordTableRecordGroupAddNewGroup = () => {
   const { recordIndexId } = useRecordIndexContextOrThrow();
@@ -35,11 +40,11 @@ export const RecordTableRecordGroupAddNewGroup = () => {
   }
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <AddRecordGroupButton
         fieldMetadataItem={recordIndexGroupFieldMetadataItem}
         dropdownId={`${RECORD_TABLE_ADD_GROUP_DROPDOWN_ID}-${recordIndexId}`}
       />
-    </StyledContainer>
+    </div>
   );
 };

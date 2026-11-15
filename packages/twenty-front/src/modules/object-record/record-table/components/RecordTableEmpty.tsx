@@ -21,21 +21,10 @@ import { computeVisibleRecordFieldsWidthOnTable } from '@/object-record/record-t
 import { RecordTableVirtualizedDataChangedEffect } from '@/object-record/record-table/virtualization/components/RecordTableVirtualizedDataChangedEffect';
 import { RecordTableVirtualizedJunctionDataChangedEffect } from '@/object-record/record-table/virtualization/components/RecordTableVirtualizedJunctionDataChangedEffect';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { useMemo } from 'react';
 import { isDefined } from 'twenty-shared/utils';
-import { MOBILE_VIEWPORT } from 'twenty-ui/theme';
 import { useIsMobile } from 'twenty-ui/utilities';
-
-const StyledEmptyStateContainer = styled.div<{ width: number }>`
-  height: 100%;
-  overflow: hidden;
-  width: ${({ width }) => width}px;
-
-  @media (max-width: ${MOBILE_VIEWPORT}px) {
-    width: 100%;
-  }
-`;
 
 export interface RecordTableEmptyProps {
   tableBodyRef: React.RefObject<HTMLDivElement | null>;
@@ -119,7 +108,12 @@ export const RecordTableEmpty = ({ tableBodyRef }: RecordTableEmptyProps) => {
   );
 
   return (
-    <StyledEmptyStateContainer width={tableContainerWidth}>
+    <div
+      {...stylex.props(
+        styles.emptyStateContainer,
+        isMobile ? styles.fullWidth : styles.width(tableContainerWidth),
+      )}
+    >
       <RecordTableStyleWrapper
         ref={tableBodyRef}
         style={columnWidthStyles}
@@ -134,6 +128,17 @@ export const RecordTableEmpty = ({ tableBodyRef }: RecordTableEmptyProps) => {
       <RecordTableWidthEffect />
       <RecordTableVirtualizedDataChangedEffect />
       <RecordTableVirtualizedJunctionDataChangedEffect />
-    </StyledEmptyStateContainer>
+    </div>
   );
 };
+
+const styles = stylex.create({
+  emptyStateContainer: {
+    height: '100%',
+    overflow: 'hidden',
+  },
+  fullWidth: {
+    width: '100%',
+  },
+  width: (width: number) => ({ width }),
+});

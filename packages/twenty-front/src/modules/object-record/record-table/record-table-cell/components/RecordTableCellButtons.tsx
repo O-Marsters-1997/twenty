@@ -1,28 +1,35 @@
 import { AnimatedContainer } from '@/ui/layout/animation/components/internal/AnimatedContainer/AnimatedContainer';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { LightIconButton } from 'twenty-ui/components/input';
 import { type IconComponent } from 'twenty-ui/icon';
 import { ButtonGroup } from 'twenty-ui/primitives/input';
-import { MOBILE_VIEWPORT, themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  borderColor,
+  borderRadius,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
 
-const StyledButtonContainer = styled.div`
-  /* Buttons stay concentric with the frame: its radius minus the 1px border.
-     The frame uses sm (not md): on this ~26px control md would exceed 50% of
-     the box and clamp to a full squircle, and a scaled full squircle is not a
-     uniform offset — the child corners would pull away from the frame. sm
-     stays well below the clamp point so radius - inset holds in both modes. */
-  --tw-button-radius: calc(${themeCssVariables.border.radius.sm} - 1px);
-
-  border: 1px solid ${themeCssVariables.border.color.strong};
-  @media (max-width: ${MOBILE_VIEWPORT}px) {
-    position: relative;
-    right: 7px;
-  }
-  border-radius: ${themeCssVariables.border.radius.sm};
-  margin: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  buttonContainer: {
+    '--tw-button-radius': `calc(${borderRadius['--t-border-radius-sm']} - 1px)`,
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-strong'],
+    position: { default: null, [media.mobile]: 'relative' },
+    right: { default: null, [media.mobile]: '7px' },
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    marginTop: spacing['--t-spacing-1'],
+    marginRight: spacing['--t-spacing-1'],
+    marginBottom: spacing['--t-spacing-1'],
+    marginLeft: spacing['--t-spacing-1'],
+  },
+});
 
 type RecordTableCellButtonsProps = {
   onClick?: () => void;
@@ -39,7 +46,7 @@ export const RecordTableCellButtons = ({
 
   return (
     <AnimatedContainer>
-      <StyledButtonContainer>
+      <div {...stylex.props(styles.buttonContainer)}>
         <ButtonGroup aria-label={t`Cell controls`} attached={false}>
           {buttons.map(({ Icon, onClick, ariaLabel }, index) => (
             <LightIconButton
@@ -52,7 +59,7 @@ export const RecordTableCellButtons = ({
             </LightIconButton>
           ))}
         </ButtonGroup>
-      </StyledButtonContainer>
+      </div>
     </AnimatedContainer>
   );
 };

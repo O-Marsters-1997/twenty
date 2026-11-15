@@ -19,17 +19,19 @@ import { isSomeCellInEditModeComponentSelector } from '@/object-record/record-ta
 import { useAtomComponentSelectorCallbackState } from '@/ui/utilities/state/jotai/hooks/useAtomComponentSelectorCallbackState';
 import { useAtomComponentStateCallbackState } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateCallbackState';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { styled } from '@linaria/react';
 import { useStore } from 'jotai';
 import { useCallback, useMemo, useRef, useState } from 'react';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledTableContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  position: relative;
-  width: fit-content;
-`;
+const styles = stylex.create({
+  tableContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    position: 'relative',
+    width: 'fit-content',
+  },
+});
 
 export interface RecordTableContentProps {
   tableBodyRef: React.RefObject<HTMLDivElement | null>;
@@ -130,7 +132,7 @@ export const RecordTableContent = ({
   );
 
   return (
-    <StyledTableContainer ref={containerRef}>
+    <div ref={containerRef} {...stylex.props(styles.tableContainer)}>
       <RecordTableStyleWrapper
         ref={tableBodyRef}
         isDragging={isDragging}
@@ -154,6 +156,6 @@ export const RecordTableContent = ({
         onDragSelectionStart={handleDragStart}
         onDragSelectionEnd={handleDragEnd}
       />
-    </StyledTableContainer>
+    </div>
   );
 };
