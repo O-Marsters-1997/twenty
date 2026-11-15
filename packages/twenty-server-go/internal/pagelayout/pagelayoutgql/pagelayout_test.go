@@ -7,7 +7,6 @@ import (
 	"log/slog"
 	"net/http"
 	"net/http/httptest"
-	"strings"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -232,32 +231,43 @@ func TestUpdatePageLayoutWidgetIsActive_overridesEngineOwnedWidgets(t *testing.T
 	t.Parallel()
 	h := newHarness(t)
 	const query = `mutation Toggle($id: String!, $isActive: Boolean!) { updatePageLayoutWidget(id: $id, input: { isActive: $isActive }) { id isActive title } }`
-	overrides := func() string {
-		var raw, column string
-		err := h.pool.QueryRow(t.Context(), `SELECT overrides::text, "isActive"::text FROM core."pageLayoutWidget" WHERE id = $1::uuid`, formWidgetID).Scan(&raw, &column)
+	var customUID string
+	err := h.pool.QueryRow(t.Context(), `SELECT a."universalIdentifier"::text FROM core.workspace w JOIN core.application a ON a.id = w."workspaceCustomApplicationId" WHERE w.id = $1::uuid`,
+		workspace.PinnedWorkspaceID).Scan(&customUID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	overrides := func() map[string]any {
+		var raw []byte
+		var column bool
+		err := h.pool.QueryRow(t.Context(), `SELECT overrides, "isActive" FROM core."pageLayoutWidget" WHERE id = $1::uuid`, formWidgetID).Scan(&raw, &column)
 		if err != nil {
 			t.Fatal(err)
 		}
-		if column != "true" {
-			t.Errorf("engine-owned widget column isActive = %s, want it untouched", column)
+		if !column {
+			t.Error("engine-owned widget column isActive = false, want it untouched")
 		}
-		return raw
+		var decoded map[string]any
+		if err := json.Unmarshal(raw, &decoded); err != nil {
+			t.Fatal(err)
+		}
+		return decoded
 	}
 
 	shown := h.send(t, "Toggle", query, map[string]any{"id": formWidgetID, "isActive": true})["data"].(map[string]any)["updatePageLayoutWidget"].(map[string]any)
 	if shown["isActive"] != true {
 		t.Errorf("showing the widget returned %v, want isActive true", shown)
 	}
-	if got := overrides(); !strings.Contains(got, `"title": "Given name"`) || strings.Contains(got, "isActive") {
-		t.Errorf("overrides after showing = %s, want the title kept and isActive dropped", got)
+	if diff := cmp.Diff(map[string]any{customUID: map[string]any{"title": "Given name"}}, overrides()); diff != "" {
+		t.Errorf("overrides after showing (-want +got):\n%s", diff)
 	}
 
 	hidden := h.send(t, "Toggle", query, map[string]any{"id": formWidgetID, "isActive": false})["data"].(map[string]any)["updatePageLayoutWidget"].(map[string]any)
 	if hidden["isActive"] != false || hidden["title"] != "Given name" {
 		t.Errorf("hiding the widget returned %v, want isActive false and the overridden title", hidden)
 	}
-	if got := overrides(); !strings.Contains(got, `"isActive": false`) {
-		t.Errorf("overrides after hiding = %s, want isActive false", got)
+	if diff := cmp.Diff(map[string]any{customUID: map[string]any{"title": "Given name", "isActive": false}}, overrides()); diff != "" {
+		t.Errorf("overrides after hiding (-want +got):\n%s", diff)
 	}
 }
 

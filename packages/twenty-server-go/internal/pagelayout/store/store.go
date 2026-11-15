@@ -142,7 +142,7 @@ func (p *PageLayouts) Get(ctx context.Context, id string) (PageLayout, error) {
 }
 
 func (p *PageLayouts) assemble(ctx context.Context, layouts []PageLayout) ([]PageLayout, error) {
-	custom, err := p.customApplicationUID(ctx, p.pool)
+	custom, err := customApplicationUID(ctx, p.pool)
 	if err != nil {
 		return nil, err
 	}
@@ -214,9 +214,11 @@ func override[TValue any](overrides authoredOverrides, owner, property string, t
 	}
 }
 
-func (p *PageLayouts) customApplicationUID(ctx context.Context, db interface {
+type rowQuerier interface {
 	QueryRow(ctx context.Context, sql string, args ...any) pgx.Row
-}) (string, error) {
+}
+
+func customApplicationUID(ctx context.Context, db rowQuerier) (string, error) {
 	var uid string
 	err := db.QueryRow(ctx, `SELECT a."universalIdentifier"::text FROM core.workspace w JOIN core.application a ON a.id = w."workspaceCustomApplicationId" WHERE w.id = $1::uuid`,
 		workspace.PinnedWorkspaceID).Scan(&uid)
@@ -235,7 +237,7 @@ func (p *PageLayouts) SetWidgetActive(ctx context.Context, id string, isActive b
 	}
 	defer func() { _ = tx.Rollback(ctx) }()
 
-	custom, err := p.customApplicationUID(ctx, tx)
+	custom, err := customApplicationUID(ctx, tx)
 	if err != nil {
 		return Widget{}, err
 	}
@@ -274,36 +276,45 @@ func (p *PageLayouts) SetWidgetActive(ctx context.Context, id string, isActive b
 	if err := tx.Commit(ctx); err != nil {
 		return Widget{}, fmt.Errorf("commit set widget active: %w", err)
 	}
+	if len(updated) == 0 {
+		return Widget{}, metadata.ErrNotFound
+	}
 	return updated[0].effective(custom), nil
 }
 
 // hide returns the widget's next overrides column: the workspace entry carries isActive only
 // while it differs from what sits beneath it.
-func (w Widget) hide(customApplicationUID string, isActive bool) (any, error) {
-	overrides := parseOverrides("pageLayoutWidget", w.Overrides, customApplicationUID)
+func (w Widget) hide(customUID string, isActive bool) (*string, error) {
+	overrides := parseOverrides("pageLayoutWidget", w.Overrides, customUID)
 	if overrides == nil {
 		overrides = authoredOverrides{}
 	}
-	entry := maps.Clone(overrides[customApplicationUID])
+	entry := maps.Clone(overrides[customUID])
 	if entry == nil {
 		entry = map[string]json.RawMessage{}
 	}
-	beneath := json.RawMessage(fmt.Sprint(w.IsActive))
-	if w.ApplicationUniversalIdentifier != customApplicationUID {
+	beneath, err := json.Marshal(w.IsActive)
+	if err != nil {
+		return nil, fmt.Errorf("encode widget isActive: %w", err)
+	}
+	if w.ApplicationUniversalIdentifier != customUID {
 		if value, ok := overrides[w.ApplicationUniversalIdentifier]["isActive"]; ok {
 			beneath = value
 		}
 	}
-	wanted := json.RawMessage(fmt.Sprint(isActive))
+	wanted, err := json.Marshal(isActive)
+	if err != nil {
+		return nil, fmt.Errorf("encode isActive: %w", err)
+	}
 	if bytes.Equal(bytes.TrimSpace(beneath), wanted) {
 		delete(entry, "isActive")
 	} else {
 		entry["isActive"] = wanted
 	}
 	if len(entry) == 0 {
-		delete(overrides, customApplicationUID)
+		delete(overrides, customUID)
 	} else {
-		overrides[customApplicationUID] = entry
+		overrides[customUID] = entry
 	}
 	if len(overrides) == 0 {
 		return nil, nil
@@ -312,5 +323,6 @@ func (w Widget) hide(customApplicationUID string, isActive bool) (any, error) {
 	if err != nil {
 		return nil, fmt.Errorf("encode widget overrides: %w", err)
 	}
-	return string(encoded), nil
+	next := string(encoded)
+	return &next, nil
 }
