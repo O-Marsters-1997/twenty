@@ -63,9 +63,13 @@ func frontEndOperations(t *testing.T) []string {
 	return operations
 }
 
+func capitalize(name string) string {
+	return strings.ToUpper(name[:1]) + name[1:]
+}
+
 func runtimeBuiltRecordOperations(object model.Object) []string {
-	singular := strings.ToUpper(object.NameSingular[:1]) + object.NameSingular[1:]
-	plural := strings.ToUpper(object.NamePlural[:1]) + object.NamePlural[1:]
+	singular := capitalize(object.NameSingular)
+	plural := capitalize(object.NamePlural)
 	return []string{
 		"FindMany" + plural, "FindOne" + singular, "FindDuplicate" + singular,
 		"Create" + plural, "CreateOne" + singular, "UpdateOne" + singular, "UpdateMany" + plural,
@@ -117,7 +121,7 @@ func readPending(t *testing.T) []string {
 	return pending
 }
 
-func TestFrontEndOperations_NoneResolveToNodeUnlessPending(t *testing.T) {
+func TestFrontEndOperations(t *testing.T) {
 	nodeBound := nodeBoundOperations(t)
 	if *updatePending {
 		header := "# Front-end operations still answered by Node. Each entry is blocked by a follow-up ticket\n" +
@@ -129,14 +133,18 @@ func TestFrontEndOperations_NoneResolveToNodeUnlessPending(t *testing.T) {
 		return
 	}
 	pending := readPending(t)
-	for _, operation := range nodeBound {
-		if !slices.Contains(pending, operation) {
-			t.Errorf("%s resolves to RouteNode: route it to Go, cut it, or list it in %s with a follow-up ticket", operation, pendingFile)
+	t.Run("every Node-bound operation is pending", func(t *testing.T) {
+		for _, operation := range nodeBound {
+			if !slices.Contains(pending, operation) {
+				t.Errorf("%s resolves to RouteNode: route it to Go, cut it, or list it in %s with a follow-up ticket", operation, pendingFile)
+			}
 		}
-	}
-	for _, operation := range pending {
-		if !slices.Contains(nodeBound, operation) {
-			t.Errorf("%s is listed in %s but no longer resolves to RouteNode: remove it from the list", operation, pendingFile)
+	})
+	t.Run("every pending operation is still Node-bound", func(t *testing.T) {
+		for _, operation := range pending {
+			if !slices.Contains(nodeBound, operation) {
+				t.Errorf("%s is listed in %s but no longer resolves to RouteNode: remove it from the list", operation, pendingFile)
+			}
 		}
-	}
+	})
 }
