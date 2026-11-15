@@ -18,7 +18,12 @@ import { TableCell } from '@/ui/layout/table/components/TableCell';
 import { TableHeader } from '@/ui/layout/table/components/TableHeader';
 import { TableRow } from '@/ui/layout/table/components/TableRow';
 import * as stylex from '@stylexjs/stylex';
-import { spacing, font, background, border } from 'twenty-ui/theme/tokens.stylex';
+import {
+  spacing,
+  font,
+  background,
+  border,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const GRID_COLUMNS = '1fr 120px 40px';
 const GRID_COLUMNS_WITHOUT_PROVIDER = '1fr 40px';
@@ -26,6 +31,9 @@ const GRID_COLUMNS_WITH_REMOVE = '1fr 120px 40px 32px';
 const GRID_COLUMNS_WITH_REMOVE_WITHOUT_PROVIDER = '1fr 40px 32px';
 
 const styles = stylex.create({
+  tooltipPositioner: {
+    maxWidth: '320px',
+  },
   modelNameCell: {
     alignItems: 'center',
     display: 'flex',
@@ -189,7 +197,9 @@ export const SettingsAiModelsTable = <TModel extends AiModelSummary>({
                           : theme.font.color.secondary
                       }
                     />
-                    <span {...stylex.props(styles.modelLabel)}>{model.label}</span>
+                    <span {...stylex.props(styles.modelLabel)}>
+                      {model.label}
+                    </span>
                     {model.kind === 'evaluation' && (
                       <span {...stylex.props(styles.kindBadge)}>
                         <Trans>Evaluation</Trans>
@@ -250,7 +260,7 @@ export const SettingsAiModelsTable = <TModel extends AiModelSummary>({
               side="top"
               align="end"
               sideOffset={8}
-              style={{ maxWidth: '320px' }}
+              {...stylex.props(styles.tooltipPositioner)}
             >
               <Tooltip.Popup {...stylex.props(styles.hoverCardTooltipClass)}>
                 <SettingsAiModelHoverCard model={hoveredModel} />

@@ -2,8 +2,8 @@ import { usePushFocusItemToFocusStack } from '@/ui/utilities/focus/hooks/usePush
 import { useRemoveFocusItemFromFocusStackById } from '@/ui/utilities/focus/hooks/useRemoveFocusItemFromFocusStackById';
 import { FocusComponentType } from '@/ui/utilities/focus/types/FocusComponentType';
 import { useHotkeysOnFocusedElement } from '@/ui/utilities/hotkey/hooks/useHotkeysOnFocusedElement';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
+import * as stylex from '@stylexjs/stylex';
 import { isInteger, isNonEmptyString } from '@sniptt/guards';
 import { useId, useRef } from 'react';
 import { Key } from 'ts-key-enum';
@@ -12,7 +12,7 @@ import {
   NumberStepper,
   type NumberStepperProps,
 } from 'twenty-ui/components/input';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const SETTINGS_COUNTER_CARET_NAVIGATION_KEYS: string[] = [Key.Home, Key.End];
 
@@ -29,15 +29,19 @@ type SettingsCounterProps = {
   'aria-describedby'?: string;
 };
 
-const StyledCounterContainer = styled.div<{ showButtons: boolean }>`
-  align-items: center;
-  display: flex;
-  margin-left: auto;
-  width: ${({ showButtons }) =>
-    showButtons
-      ? themeCssVariables.spacing[30]
-      : themeCssVariables.spacing[16]};
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    display: 'flex',
+    marginLeft: 'auto',
+  },
+  containerWithButtons: {
+    width: spacing['--t-spacing-30'],
+  },
+  containerWithoutButtons: {
+    width: spacing['--t-spacing-16'],
+  },
+});
 
 export const SettingsCounter = ({
   value,
@@ -135,7 +139,14 @@ export const SettingsCounter = ({
   };
 
   return (
-    <StyledCounterContainer showButtons={showButtons}>
+    <div
+      {...stylex.props(
+        styles.container,
+        showButtons
+          ? styles.containerWithButtons
+          : styles.containerWithoutButtons,
+      )}
+    >
       <NumberStepper
         ref={inputRef}
         aria-labelledby={ariaLabelledBy}
@@ -154,6 +165,6 @@ export const SettingsCounter = ({
         onBlur={handleBlur}
         onKeyDown={handleKeyDown}
       />
-    </StyledCounterContainer>
+    </div>
   );
 };

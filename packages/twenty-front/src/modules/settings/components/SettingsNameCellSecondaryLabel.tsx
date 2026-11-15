@@ -1,22 +1,42 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import { type ReactNode } from 'react';
 
-import { themeCssVariables } from 'twenty-ui/theme';
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledSettingsNameCellSecondaryLabel = styled.span`
-  color: ${themeCssVariables.font.color.light};
-  flex: 0 999 auto;
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.regular};
-  min-width: 48px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+type SettingsNameCellSecondaryLabelProps = {
+  children: ReactNode;
+  id?: string;
+  title?: string;
+};
 
-  &::before {
-    content: '·';
-    margin-right: ${themeCssVariables.spacing[1]};
-  }
-`;
+const styles = stylex.create({
+  root: {
+    '::before': {
+      content: "'·'",
+      marginRight: spacing['--t-spacing-1'],
+    },
+    color: fontColor['--t-font-color-light'],
+    flex: '0 999 auto',
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    minWidth: '48px',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+});
 
-export const SettingsNameCellSecondaryLabel =
-  StyledSettingsNameCellSecondaryLabel;
+export const SettingsNameCellSecondaryLabel = ({
+  children,
+  id,
+  title,
+}: SettingsNameCellSecondaryLabelProps) => (
+  <span id={id} title={title} {...stylex.props(styles.root)}>
+    {children}
+  </span>
+);

@@ -3,11 +3,17 @@ import { Table } from '@/ui/layout/table/components/Table';
 import { TableCell } from '@/ui/layout/table/components/TableCell';
 import { TableHeader } from '@/ui/layout/table/components/TableHeader';
 import { TableRow } from '@/ui/layout/table/components/TableRow';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { t } from '@lingui/core/macro';
 import { capitalize, isDefined } from 'twenty-shared/utils';
 import { Status } from 'twenty-ui/primitives/data-display';
-import { type ThemeColor, themeCssVariables } from 'twenty-ui/theme';
+import { type ThemeColor } from 'twenty-ui/theme';
+import {
+  animationDuration,
+  backgroundTransparent,
+  borderColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard';
 
@@ -25,29 +31,56 @@ type SettingsDnsRecordsTableProps = {
   records: DnsRecord[];
 };
 
-const StyledRecordTableRow = styled(TableRow)`
-  margin-top: ${themeCssVariables.spacing[2]};
-`;
+const copyableCellMarker = stylex.defineMarker();
 
-const StyledCopyableCell = styled.div`
-  min-width: 0;
-  width: 100%;
+const styles = stylex.create({
+  recordRow: {
+    marginTop: spacing['--t-spacing-2'],
+  },
+  copyableCell: {
+    minWidth: 0,
+    width: '100%',
+  },
+  input: {
+    backgroundColor: {
+      default: null,
+      [stylex.when.ancestor(':hover', copyableCellMarker)]:
+        backgroundTransparent['--t-background-transparent-light'],
+    },
+    borderColor: {
+      default: null,
+      [stylex.when.ancestor(':hover', copyableCellMarker)]:
+        borderColor['--t-border-color-strong'],
+    },
+    cursor: 'pointer',
+    pointerEvents: 'none',
+    transitionDuration: `calc(${animationDuration['--t-animation-duration-normal']} * 1s)`,
+    transitionProperty: 'background-color, border-color',
+    transitionTimingFunction: 'ease',
+  },
+});
 
-  & input {
-    cursor: pointer;
-    pointer-events: none;
-    transition:
-      background-color calc(${themeCssVariables.animation.duration.normal} * 1s)
-        ease,
-      border-color calc(${themeCssVariables.animation.duration.normal} * 1s)
-        ease;
-  }
+type CopyableCellProps = {
+  instanceId: string;
+  value: string;
+  onCopy: () => void;
+};
 
-  &:hover input {
-    background-color: ${themeCssVariables.background.transparent.light};
-    border-color: ${themeCssVariables.border.color.strong};
-  }
-`;
+const CopyableCell = ({ instanceId, value, onCopy }: CopyableCellProps) => (
+  <div
+    {...stylex.props(styles.copyableCell, copyableCellMarker)}
+    onClick={onCopy}
+  >
+    <SettingsTextInput
+      instanceId={instanceId}
+      value={value}
+      sizeVariant="sm"
+      disabled
+      fullWidth
+      inputProps={stylex.props(styles.input)}
+    />
+  </div>
+);
 
 export const SettingsDnsRecordsTable = ({
   records,
@@ -89,54 +122,35 @@ export const SettingsDnsRecordsTable = ({
       </TableRow>
 
       {records.map((record, index) => (
-        <StyledRecordTableRow
+        <TableRow
           key={`${index}-${record.type}-${record.key}`}
           gridAutoColumns={gridAutoColumns}
+          {...stylex.props(styles.recordRow)}
         >
           <TableCell>
-            <StyledCopyableCell
-              onClick={() =>
+            <CopyableCell
+              instanceId={`dns-record-type-${index}`}
+              value={record.type}
+              onCopy={() =>
                 copyToClipboard(record.type, t`Copied to clipboard`)
               }
-            >
-              <SettingsTextInput
-                instanceId={`dns-record-type-${index}`}
-                value={record.type}
-                sizeVariant="sm"
-                disabled
-                fullWidth
-              />
-            </StyledCopyableCell>
+            />
           </TableCell>
           <TableCell>
-            <StyledCopyableCell
-              onClick={() =>
-                copyToClipboard(record.key, t`Copied to clipboard`)
-              }
-            >
-              <SettingsTextInput
-                instanceId={`dns-record-name-${index}`}
-                value={record.key}
-                sizeVariant="sm"
-                disabled
-                fullWidth
-              />
-            </StyledCopyableCell>
+            <CopyableCell
+              instanceId={`dns-record-name-${index}`}
+              value={record.key}
+              onCopy={() => copyToClipboard(record.key, t`Copied to clipboard`)}
+            />
           </TableCell>
           <TableCell>
-            <StyledCopyableCell
-              onClick={() =>
+            <CopyableCell
+              instanceId={`dns-record-value-${index}`}
+              value={record.value}
+              onCopy={() =>
                 copyToClipboard(record.value, t`Copied to clipboard`)
               }
-            >
-              <SettingsTextInput
-                instanceId={`dns-record-value-${index}`}
-                value={record.value}
-                sizeVariant="sm"
-                disabled
-                fullWidth
-              />
-            </StyledCopyableCell>
+            />
           </TableCell>
           {hasPriorityColumn && (
             <TableCell align="center">{record.priority}</TableCell>
@@ -151,7 +165,7 @@ export const SettingsDnsRecordsTable = ({
               )}
             </TableCell>
           )}
-        </StyledRecordTableRow>
+        </TableRow>
       ))}
     </Table>
   );

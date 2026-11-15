@@ -9,10 +9,9 @@ import { TableBody } from '@/ui/layout/table/components/TableBody';
 import { TableCell } from '@/ui/layout/table/components/TableCell';
 import { TableHeader } from '@/ui/layout/table/components/TableHeader';
 import { TableRow } from '@/ui/layout/table/components/TableRow';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isNonEmptyArray } from 'twenty-shared/utils';
-import { MOBILE_VIEWPORT, themeCssVariables } from 'twenty-ui/theme';
+import { themeCssVariables } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
 import { media } from 'twenty-ui/theme/constants.stylex';
 
@@ -24,13 +23,10 @@ const styles = stylex.create({
     overflowX: { default: null, [media.mobile]: 'auto' },
     WebkitOverflowScrolling: { default: null, [media.mobile]: 'touch' },
   },
+  scrollableContent: (mobileMinWidth: number) => ({
+    minWidth: { default: null, [media.mobile]: `${mobileMinWidth}px` },
+  }),
 });
-
-const StyledScrollableContent = styled.div<{ mobileMinWidth: number }>`
-  @media (max-width: ${MOBILE_VIEWPORT}px) {
-    min-width: ${({ mobileMinWidth }) => `${mobileMinWidth}px`};
-  }
-`;
 
 type MetadataTranslationsTableProps = {
   columns: { property: string; label: string }[];
@@ -54,11 +50,13 @@ export const MetadataTranslationsTable = ({
 
   return (
     <div {...stylex.props(styles.scrollWrapper)}>
-      <StyledScrollableContent
-        mobileMinWidth={
-          LANGUAGE_AND_RESET_COLUMNS_WIDTH +
-          columns.length * TRANSLATION_COLUMN_MOBILE_MIN_WIDTH
-        }
+      <div
+        {...stylex.props(
+          styles.scrollableContent(
+            LANGUAGE_AND_RESET_COLUMNS_WIDTH +
+              columns.length * TRANSLATION_COLUMN_MOBILE_MIN_WIDTH,
+          ),
+        )}
       >
         <Table>
           <TableRow gridTemplateColumns={gridTemplateColumns}>
@@ -97,7 +95,7 @@ export const MetadataTranslationsTable = ({
             </TableBody>
           </StyledSettingsDataModelTableBodyContainer>
         </Table>
-      </StyledScrollableContent>
+      </div>
     </div>
   );
 };

@@ -2,25 +2,23 @@ import { type SettingsCustomizeVideoModalTab } from '@/settings/types/SettingsCu
 import { SettingsCustomizeVideoModal } from '@/settings/components/SettingsCustomizeVideoModal';
 import { HeroPlayButton } from '@/ui/layout/hero/components/HeroPlayButton';
 import { useDialog } from '@/ui/layout/dialog/hooks/useDialog';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { type ReactNode } from 'react';
 import { Card } from 'twenty-ui/primitives/surfaces';
-import { useThemeColorScheme, themeCssVariables } from 'twenty-ui/theme';
+import { useThemeColorScheme } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { background, border } from 'twenty-ui/theme/tokens.stylex';
+import { background, borderColor } from 'twenty-ui/theme/tokens.stylex';
 
 const DEFAULT_COVER_HEIGHT = 150;
 
-const StyledCoverContainer = styled.div<{ coverHeight: number }>`
-  background: ${themeCssVariables.background.secondary};
-  box-sizing: border-box;
-  height: ${({ coverHeight }) => coverHeight}px;
-  overflow: hidden;
-  position: relative;
-`;
-
 const styles = stylex.create({
+  cover: (coverHeight: number) => ({
+    background: background['--t-background-secondary'],
+    boxSizing: 'border-box',
+    height: `${coverHeight}px`,
+    overflow: 'hidden',
+    position: 'relative',
+  }),
   image: {
     display: 'block',
     height: '100%',
@@ -41,7 +39,7 @@ const styles = stylex.create({
     background: background['--t-background-secondary'],
     borderTopWidth: '1px',
     borderTopStyle: 'solid',
-    borderTopColor: border['--t-border-color-medium'],
+    borderTopColor: borderColor['--t-border-color-medium'],
   },
 });
 
@@ -77,7 +75,7 @@ export const SettingsDiscoveryHeroCard = ({
   return (
     <>
       <Card.Root rounded>
-        <StyledCoverContainer coverHeight={coverHeight}>
+        <div {...stylex.props(styles.cover(coverHeight))}>
           <img src={src} alt="" aria-hidden {...stylex.props(styles.image)} />
           {shouldDisplayVideo && (
             <div {...stylex.props(styles.overlay)}>
@@ -87,7 +85,7 @@ export const SettingsDiscoveryHeroCard = ({
               />
             </div>
           )}
-        </StyledCoverContainer>
+        </div>
         {footer !== undefined && footer !== null && (
           <div {...stylex.props(styles.footer)}>{footer}</div>
         )}

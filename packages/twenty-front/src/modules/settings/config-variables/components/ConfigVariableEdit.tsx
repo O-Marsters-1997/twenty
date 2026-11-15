@@ -1,7 +1,6 @@
 import { SettingsPageContainer } from '@/settings/components/SettingsPageContainer';
 import { ConfirmationDialog } from '@/ui/layout/dialog/components/ConfirmationDialog';
 import { useDialog } from '@/ui/layout/dialog/hooks/useDialog';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { type Dispatch, type SetStateAction, useState } from 'react';
 import { useToast } from 'twenty-ui/components/feedback';
@@ -10,10 +9,6 @@ import { IconCheck, IconPencil, IconX } from 'twenty-ui/icon';
 import { Button, ButtonGroup } from 'twenty-ui/primitives/input';
 import * as stylex from '@stylexjs/stylex';
 import { spacing } from 'twenty-ui/theme/tokens.stylex';
-
-const StyledSectionHeader = styled(Section.Header)`
-  margin-block-end: 0;
-`;
 
 const RESET_VARIABLE_MODAL_ID =
   'reset-application-registration-config-variable-modal';
@@ -24,11 +19,13 @@ const styles = stylex.create({
     display: 'flex',
     gap: spacing['--t-spacing-2'],
   },
+  sectionHeader: {
+    marginBlockEnd: 0,
+  },
+  buttonGroup: {
+    display: 'flex',
+  },
 });
-
-const StyledButtonContainer = styled(ButtonGroup)`
-  display: flex;
-`;
 
 type ConfigVariableEditProps = {
   title: string;
@@ -120,12 +117,13 @@ export const ConfigVariableEdit = ({
   return (
     <SettingsPageContainer>
       <Section.Root>
-        <StyledSectionHeader
+        <Section.Header
           title={title}
           description={description}
           level={3}
           size="lg"
           descriptionLineClamp={2}
+          {...stylex.props(styles.sectionHeader)}
         />
       </Section.Root>
 
@@ -142,7 +140,10 @@ export const ConfigVariableEdit = ({
               variant="outline"
             />
           ) : (
-            <StyledButtonContainer aria-label={t`Edit variable`}>
+            <ButtonGroup
+              aria-label={t`Edit variable`}
+              {...stylex.props(styles.buttonGroup)}
+            >
               <Button
                 startIcon={<IconCheck />}
                 aria-label={t`Save`}
@@ -159,7 +160,7 @@ export const ConfigVariableEdit = ({
                 disabled={isSubmitting}
                 variant="outline"
               />
-            </StyledButtonContainer>
+            </ButtonGroup>
           )}
           <ConfirmationDialog
             dialogId={RESET_VARIABLE_MODAL_ID}

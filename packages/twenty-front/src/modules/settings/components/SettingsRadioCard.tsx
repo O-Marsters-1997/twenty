@@ -1,31 +1,44 @@
-import { styled } from '@linaria/react';
 import { isNonEmptyString } from '@sniptt/guards';
 import { useId } from 'react';
 import { Card } from 'twenty-ui/primitives/surfaces';
 import { type IconComponent } from 'twenty-ui/icon';
 import { Radio } from 'twenty-ui/primitives/input';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { spacing, font, text } from 'twenty-ui/theme/tokens.stylex';
-
-const StyledRadioCardContentContainer = styled.label`
-  > div {
-    align-items: center;
-    border: 1px solid ${themeCssVariables.border.color.medium};
-    border-radius: ${themeCssVariables.border.radius.sm};
-    cursor: pointer;
-    display: flex;
-    flex-grow: 1;
-    gap: ${themeCssVariables.spacing[2]};
-    padding: ${themeCssVariables.spacing[2]};
-
-    &:hover {
-      background: ${themeCssVariables.background.transparent.lighter};
-    }
-  }
-`;
+import {
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+  textLineHeight,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
+  card: {
+    alignItems: 'center',
+    backgroundColor: {
+      default: null,
+      ':hover': backgroundTransparent['--t-background-transparent-lighter'],
+    },
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderColor: borderColor['--t-border-color-medium'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    cursor: 'pointer',
+    display: 'flex',
+    flexGrow: 1,
+    gap: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
+  },
   radioContainer: {
     alignItems: 'center',
     display: 'flex',
@@ -36,13 +49,13 @@ const styles = stylex.create({
     paddingLeft: spacing['--t-spacing-1'],
   },
   title: {
-    color: font['--t-font-color-secondary'],
-    fontWeight: font['--t-font-weight-medium'],
+    color: fontColor['--t-font-color-secondary'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
   },
   description: {
-    color: font['--t-font-color-tertiary'],
-    fontSize: font['--t-font-size-sm'],
-    lineHeight: text['--t-text-line-height-lg'],
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-sm'],
+    lineHeight: textLineHeight['--t-text-line-height-lg'],
   },
 });
 
@@ -65,8 +78,8 @@ export const SettingsRadioCard = ({
   const hasDescription = isNonEmptyString(description);
 
   return (
-    <StyledRadioCardContentContainer>
-      <Card.Content>
+    <label>
+      <Card.Content {...stylex.props(styles.card)}>
         {Icon && <Icon size={theme.icon.size.xl} color={theme.color.gray10} />}
         <span>
           {title && <div id={titleId} {...stylex.props(styles.title)}>{title}</div>}
@@ -84,6 +97,6 @@ export const SettingsRadioCard = ({
           />
         </span>
       </Card.Content>
-    </StyledRadioCardContentContainer>
+    </label>
   );
 };

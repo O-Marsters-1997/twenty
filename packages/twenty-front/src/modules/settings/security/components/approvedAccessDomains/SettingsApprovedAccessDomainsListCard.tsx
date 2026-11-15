@@ -11,7 +11,7 @@ import { SettingsSecurityApprovedAccessDomainValidationEffect } from '@/settings
 import { approvedAccessDomainsState } from '@/settings/security/states/ApprovedAccessDomainsState';
 import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
 import { useQuery } from '@apollo/client/react';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { useLingui } from '@lingui/react/macro';
 import { useEffect } from 'react';
 import { getSettingsPath } from 'twenty-shared/utils';
@@ -19,11 +19,11 @@ import { Status } from 'twenty-ui/primitives/data-display';
 import { IconAt, IconMailCog } from 'twenty-ui/icon';
 import { GetApprovedAccessDomainsDocument } from '~/generated-metadata/graphql';
 
-const StyledLinkContainer = styled.div`
-  > a {
-    text-decoration: none;
-  }
-`;
+const styles = stylex.create({
+  link: {
+    textDecoration: 'none',
+  },
+});
 
 export const SettingsApprovedAccessDomainsListCard = () => {
   const navigate = useNavigate();
@@ -53,14 +53,17 @@ export const SettingsApprovedAccessDomainsListCard = () => {
     <>
       <ToastOnQueryErrorEffect error={domainsError} />
       {loading || !approvedAccessDomains.length ? (
-        <StyledLinkContainer>
-          <Link to={getSettingsPath(SettingsPath.NewApprovedAccessDomain)}>
+        <div>
+          <Link
+            to={getSettingsPath(SettingsPath.NewApprovedAccessDomain)}
+            {...stylex.props(styles.link)}
+          >
             <SettingsCard
               title={t`Add Approved Access Domain`}
               Icon={<IconMailCog />}
             />
           </Link>
-        </StyledLinkContainer>
+        </div>
       ) : (
         <>
           <SettingsSecurityApprovedAccessDomainValidationEffect />

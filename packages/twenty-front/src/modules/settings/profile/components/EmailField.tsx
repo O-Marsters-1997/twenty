@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useState } from 'react';
 
@@ -31,16 +30,11 @@ const styles = stylex.create({
     height: '100%',
     justifyContent: 'center',
   },
+  actionWrapper: {
+    alignItems: 'stretch',
+    display: 'flex',
+  },
 });
-
-const StyledActionWrapper = styled.div`
-  align-items: stretch;
-  display: flex;
-
-  & > button + button {
-    border-left: none;
-  }
-`;
 
 export const EmailField = () => {
   const { t } = useLingui();
@@ -124,7 +118,7 @@ export const EmailField = () => {
             />
           </ButtonGroup>
         ) : (
-          <StyledActionWrapper key="view">
+          <div key="view" {...stylex.props(styles.actionWrapper)}>
             <Tooltip
               content={t`You can't change your email because you belong to 2 or more workspaces.`}
               delay={TooltipDelay.noDelay}
@@ -143,7 +137,7 @@ export const EmailField = () => {
                 />
               </div>
             </Tooltip>
-          </StyledActionWrapper>
+          </div>
         )}
       </div>
     </div>

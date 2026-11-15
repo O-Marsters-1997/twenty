@@ -1,33 +1,41 @@
-import { styled } from '@linaria/react';
 import { type ComponentType } from 'react';
 
 import { SettingsListSkeletonCard } from '@/settings/components/SettingsListSkeletonCard';
 
 import { type IconComponent, IconPlus } from 'twenty-ui/icon';
 import { Card } from 'twenty-ui/primitives/surfaces';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import { SettingsListItemCardContent } from './SettingsListItemCardContent';
 import * as stylex from '@stylexjs/stylex';
-import { background, border, font, spacing } from 'twenty-ui/theme/tokens.stylex';
-
-const StyledFooterContainer = styled.div`
-  > div {
-    align-items: center;
-    display: flex;
-    padding: ${themeCssVariables.spacing[1]};
-  }
-`;
+import {
+  background,
+  backgroundTransparent,
+  borderRadius,
+  fontColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
+  footer: {
+    alignItems: 'center',
+    display: 'flex',
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingTop: spacing['--t-spacing-1'],
+  },
   button: {
     alignItems: 'center',
-    background: { default: background['--t-background-primary'], ':hover': background['--t-background-transparent-light'] },
+    background: {
+      default: background['--t-background-primary'],
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
     borderStyle: 'none',
-    borderTopLeftRadius: border['--t-border-radius-sm'],
-    borderTopRightRadius: border['--t-border-radius-sm'],
-    borderBottomRightRadius: border['--t-border-radius-sm'],
-    borderBottomLeftRadius: border['--t-border-radius-sm'],
-    color: font['--t-font-color-secondary'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    color: fontColor['--t-font-color-secondary'],
     cursor: 'pointer',
     display: 'flex',
     flex: '1 0 0',
@@ -98,14 +106,15 @@ export const SettingsListCard = <
         />
       ))}
       {hasFooter && (
-        <StyledFooterContainer>
-          <Card.Footer divider={!!items.length}>
-            <button onClick={onFooterButtonClick} {...stylex.props(styles.button)}>
-              <IconPlus size={theme.icon.size.md} />
-              {footerButtonLabel}
-            </button>
-          </Card.Footer>
-        </StyledFooterContainer>
+        <Card.Footer divider={!!items.length} {...stylex.props(styles.footer)}>
+          <button
+            onClick={onFooterButtonClick}
+            {...stylex.props(styles.button)}
+          >
+            <IconPlus size={theme.icon.size.md} />
+            {footerButtonLabel}
+          </button>
+        </Card.Footer>
       )}
     </Card.Root>
   );

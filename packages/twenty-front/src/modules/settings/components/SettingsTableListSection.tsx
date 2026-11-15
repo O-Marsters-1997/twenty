@@ -2,8 +2,6 @@ import { type ComponentType, type ReactNode } from 'react';
 
 import { isDefined } from 'twenty-shared/utils';
 
-import { styled } from '@linaria/react';
-
 import { Table } from '@/ui/layout/table/components/Table';
 import { TableCell } from '@/ui/layout/table/components/TableCell';
 import { TableHeader } from '@/ui/layout/table/components/TableHeader';
@@ -13,7 +11,7 @@ import { IconChevronRight, IconPlus } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
 import { themeCssVariables } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { spacing, border } from 'twenty-ui/theme/tokens.stylex';
+import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   tableRows: {
@@ -23,26 +21,12 @@ const styles = stylex.create({
   footer: {
     borderTopWidth: '1px',
     borderTopStyle: 'solid',
-    borderTopColor: border['--t-border-color-light'],
+    borderTopColor: borderColor['--t-border-color-light'],
     display: 'flex',
     justifyContent: 'flex-end',
     paddingTop: spacing['--t-spacing-2'],
   },
 });
-
-const StyledRowWrapper = styled.div<{ clickable: boolean }>`
-  ${({ clickable }) =>
-    clickable
-      ? `
-        > * {
-          &:hover {
-            background-color: ${themeCssVariables.background.transparent.light};
-            cursor: pointer;
-          }
-        }
-      `
-      : ''}
-`;
 
 const HEADER_PADDING = `0 ${themeCssVariables.spacing[2]} 0 ${themeCssVariables.spacing[2]}`;
 
@@ -113,30 +97,29 @@ export const SettingsTableListSection = <
           </TableRow>
           <div {...stylex.props(styles.tableRows)}>
             {items.map((item) => (
-              <StyledRowWrapper key={item.id} clickable={Boolean(onRowClick)}>
-                <TableRow
-                  gridAutoColumns={resolvedGridAutoColumns}
-                  onClick={onRowClick ? () => onRowClick(item) : undefined}
-                >
-                  {columns.map((column) => (
-                    <TableCell
-                      key={column.label}
-                      align={column.align}
-                      overflow={column.overflow}
-                    >
-                      <column.Cell item={item} />
-                    </TableCell>
-                  ))}
-                  {showRowChevron && (
-                    <TableCell
-                      align="right"
-                      color={themeCssVariables.font.color.light}
-                    >
-                      <IconChevronRight size={16} />
-                    </TableCell>
-                  )}
-                </TableRow>
-              </StyledRowWrapper>
+              <TableRow
+                key={item.id}
+                gridAutoColumns={resolvedGridAutoColumns}
+                onClick={onRowClick ? () => onRowClick(item) : undefined}
+              >
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.label}
+                    align={column.align}
+                    overflow={column.overflow}
+                  >
+                    <column.Cell item={item} />
+                  </TableCell>
+                ))}
+                {showRowChevron && (
+                  <TableCell
+                    align="right"
+                    color={themeCssVariables.font.color.light}
+                  >
+                    <IconChevronRight size={16} />
+                  </TableCell>
+                )}
+              </TableRow>
             ))}
           </div>
         </Table>

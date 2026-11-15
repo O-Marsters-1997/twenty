@@ -1,13 +1,17 @@
-import { css, cx } from '@linaria/core';
+import * as stylex from '@stylexjs/stylex';
 import { type MouseEventHandler, type ReactNode } from 'react';
 import { Link, type LinkProps } from 'react-router-dom';
-import { themeCssVariables } from 'twenty-ui/theme';
+import {
+  borderColor,
+  color,
+  fontColor,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsTextLinkVariant = 'primary' | 'secondary';
 
 type SettingsTextLinkCommonProps = {
   children: ReactNode;
-  className?: string;
+  xstyle?: stylex.StyleXStyles;
   title?: string;
   variant?: SettingsTextLinkVariant;
 };
@@ -24,64 +28,72 @@ type SettingsTextLinkProps =
       to: LinkProps['to'];
     });
 
-const settingsTextLinkBaseClassName = css`
-  background: none;
-  border: 0;
-  cursor: pointer;
-  font: inherit;
-  margin: 0;
-  overflow: hidden;
-  padding: 0;
-  text-decoration: underline;
-  text-overflow: ellipsis;
-  text-underline-offset: 2px;
-  white-space: nowrap;
-
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-  }
-`;
-
-const settingsTextLinkPrimaryClassName = css`
-  color: ${themeCssVariables.font.color.primary};
-  text-decoration-color: ${themeCssVariables.border.color.strong};
-
-  &:not(:disabled):hover {
-    color: ${themeCssVariables.color.blue};
-    text-decoration-color: ${themeCssVariables.color.blue};
-  }
-`;
-
-const settingsTextLinkSecondaryClassName = css`
-  color: ${themeCssVariables.font.color.tertiary};
-  text-decoration-color: ${themeCssVariables.font.color.tertiary};
-
-  &:not(:disabled):hover {
-    color: ${themeCssVariables.color.blue};
-    text-decoration-color: ${themeCssVariables.color.blue};
-  }
-`;
+const styles = stylex.create({
+  base: {
+    backgroundColor: 'transparent',
+    borderWidth: 0,
+    cursor: {
+      default: 'pointer',
+      ':disabled': 'not-allowed',
+    },
+    font: 'inherit',
+    marginBottom: 0,
+    marginLeft: 0,
+    marginRight: 0,
+    marginTop: 0,
+    opacity: {
+      default: null,
+      ':disabled': 0.5,
+    },
+    overflow: 'hidden',
+    paddingBottom: 0,
+    paddingLeft: 0,
+    paddingRight: 0,
+    paddingTop: 0,
+    textDecorationLine: 'underline',
+    textOverflow: 'ellipsis',
+    textUnderlineOffset: '2px',
+    whiteSpace: 'nowrap',
+  },
+  primary: {
+    color: {
+      default: fontColor['--t-font-color-primary'],
+      ':hover': color['--t-color-blue'],
+      ':disabled': fontColor['--t-font-color-primary'],
+    },
+    textDecorationColor: {
+      default: borderColor['--t-border-color-strong'],
+      ':hover': color['--t-color-blue'],
+      ':disabled': borderColor['--t-border-color-strong'],
+    },
+  },
+  secondary: {
+    color: {
+      default: fontColor['--t-font-color-tertiary'],
+      ':hover': color['--t-color-blue'],
+      ':disabled': fontColor['--t-font-color-tertiary'],
+    },
+    textDecorationColor: {
+      default: fontColor['--t-font-color-tertiary'],
+      ':hover': color['--t-color-blue'],
+      ':disabled': fontColor['--t-font-color-tertiary'],
+    },
+  },
+});
 
 export const SettingsTextLink = ({
   children,
-  className,
+  xstyle,
   title,
   variant = 'primary',
   ...props
 }: SettingsTextLinkProps) => {
-  const textLinkClassName = cx(
-    settingsTextLinkBaseClassName,
-    variant === 'primary'
-      ? settingsTextLinkPrimaryClassName
-      : settingsTextLinkSecondaryClassName,
-    className,
-  );
+  const textLinkProps = stylex.props(styles.base, styles[variant], xstyle);
 
   if (props.to !== undefined) {
     return (
       <Link
-        className={textLinkClassName}
+        {...textLinkProps}
         onClick={props.onClick}
         title={title}
         to={props.to}
@@ -93,7 +105,7 @@ export const SettingsTextLink = ({
 
   return (
     <button
-      className={textLinkClassName}
+      {...textLinkProps}
       disabled={props.disabled ?? false}
       onClick={props.onClick}
       title={title}

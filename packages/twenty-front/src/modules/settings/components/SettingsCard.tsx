@@ -1,15 +1,19 @@
-import { CARD_ACTION_CLASS_NAME } from '@/ui/layout/card/styles/CardActionClassName';
-import { styled } from '@linaria/react';
-
 import { t } from '@lingui/core/macro';
+import * as stylex from '@stylexjs/stylex';
 import { type ReactNode } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { IconChevronRight } from 'twenty-ui/icon';
 import { Badge } from 'twenty-ui/primitives/data-display';
 import { Card } from 'twenty-ui/primitives/surfaces';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
-import * as stylex from '@stylexjs/stylex';
-import { spacing, font, text } from 'twenty-ui/theme/tokens.stylex';
+import { useTheme } from 'twenty-ui/theme';
+import {
+  background,
+  color,
+  fontColor,
+  fontWeight,
+  spacing,
+  textLineHeight,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsCardProps = {
   description?: string;
@@ -19,48 +23,73 @@ type SettingsCardProps = {
   iconColor?: string;
   onClick?: () => void;
   title: string;
-  className?: string;
   Status?: ReactNode;
 };
 
-const StyledCardWrapper = styled.div<{
-  disabled?: boolean;
-}>`
-  color: ${({ disabled }) =>
-    disabled
-      ? themeCssVariables.font.color.extraLight
-      : themeCssVariables.font.color.tertiary};
-  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'default')};
-  width: 100%;
-
-  > div {
-    color: inherit;
-  }
-`;
-
-const StyledCardContentContainer = styled.div`
-  > div {
-    display: flex;
-    flex-direction: column;
-    gap: ${themeCssVariables.spacing[2]};
-    padding: ${themeCssVariables.spacing[2]} ${themeCssVariables.spacing[2]};
-    position: relative;
-  }
-
-  a:hover & > div,
-  > div:has(> button:not(:disabled):hover) {
-    background-color: ${themeCssVariables.background.quaternary};
-    cursor: pointer;
-  }
-`;
-
-const StyledCardAction = styled.button`
-  &:disabled {
-    cursor: not-allowed;
-  }
-`;
+const actionMarker = stylex.defineMarker();
 
 const styles = stylex.create({
+  wrapper: {
+    width: '100%',
+  },
+  wrapperEnabled: {
+    color: fontColor['--t-font-color-tertiary'],
+    cursor: 'default',
+  },
+  wrapperDisabled: {
+    color: fontColor['--t-font-color-extra-light'],
+    cursor: 'not-allowed',
+  },
+  card: {
+    color: 'inherit',
+  },
+  content: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
+    position: 'relative',
+  },
+  contentActionHover: {
+    backgroundColor: {
+      default: null,
+      [stylex.when.descendant(':hover', actionMarker)]:
+        background['--t-background-quaternary'],
+    },
+    cursor: {
+      default: null,
+      [stylex.when.descendant(':hover', actionMarker)]: 'pointer',
+    },
+  },
+  contentLinkHover: {
+    ':hover': {
+      backgroundColor: background['--t-background-quaternary'],
+      cursor: 'pointer',
+    },
+  },
+  action: {
+    backgroundColor: 'transparent',
+    borderStyle: 'none',
+    cursor: {
+      default: 'pointer',
+      ':disabled': 'not-allowed',
+    },
+    inset: 0,
+    paddingBottom: 0,
+    paddingLeft: 0,
+    paddingRight: 0,
+    paddingTop: 0,
+    position: 'absolute',
+    ':focus-visible': {
+      outlineColor: color['--t-color-blue'],
+      outlineOffset: '-2px',
+      outlineStyle: 'solid',
+      outlineWidth: '2px',
+    },
+  },
   header: {
     alignItems: 'center',
     display: 'flex',
@@ -68,42 +97,42 @@ const styles = stylex.create({
   },
   iconChevronRightContainer: {
     alignItems: 'center',
-    color: font['--t-font-color-light'],
+    color: fontColor['--t-font-color-light'],
     display: 'flex',
   },
   description: {
-    lineHeight: text['--t-text-line-height-lg'],
+    lineHeight: textLineHeight['--t-text-line-height-lg'],
     paddingBottom: spacing['--t-spacing-2'],
     paddingLeft: spacing['--t-spacing-7'],
   },
+  title: {
+    color: fontColor['--t-font-color-secondary'],
+    display: 'flex',
+    flexBasis: 'auto',
+    flexGrow: 1,
+    flexShrink: 0,
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    gap: spacing['--t-spacing-2'],
+    justifyContent: 'flex-start',
+  },
+  titleDisabled: {
+    color: fontColor['--t-font-color-extra-light'],
+  },
+  iconContainer: {
+    alignItems: 'center',
+    color: 'inherit',
+    display: 'flex',
+    height: '24px',
+    justifyContent: 'center',
+    width: '24px',
+  },
+  iconContainerDisabled: {
+    color: fontColor['--t-font-color-extra-light'],
+  },
+  iconContainerColor: (iconColor: string) => ({
+    color: iconColor,
+  }),
 });
-
-const StyledTitle = styled.div<{ disabled?: boolean }>`
-  color: ${({ disabled }) =>
-    disabled
-      ? themeCssVariables.font.color.extraLight
-      : themeCssVariables.font.color.secondary};
-  display: flex;
-  flex: 1 0 auto;
-  font-weight: ${themeCssVariables.font.weight.medium};
-  gap: ${themeCssVariables.spacing[2]};
-  justify-content: flex-start;
-`;
-
-const StyledIconContainer = styled.div<{
-  disabled?: boolean;
-  iconColor?: string;
-}>`
-  align-items: center;
-  color: ${({ disabled, iconColor }) =>
-    disabled
-      ? themeCssVariables.font.color.extraLight
-      : (iconColor ?? 'inherit')};
-  display: flex;
-  height: 24px;
-  justify-content: center;
-  width: 24px;
-`;
 
 export const SettingsCard = ({
   description,
@@ -113,44 +142,66 @@ export const SettingsCard = ({
   iconColor,
   onClick,
   title,
-  className,
   Status,
 }: SettingsCardProps) => {
   const theme = useTheme();
+  const hasAction = isDefined(onClick);
 
   return (
-    <StyledCardWrapper disabled={disabled} className={className}>
-      <Card.Root rounded={true} fullWidth>
-        <StyledCardContentContainer>
-          <Card.Content>
-            {isDefined(onClick) && (
-              <StyledCardAction
-                className={CARD_ACTION_CLASS_NAME}
-                type="button"
-                aria-label={title}
-                onClick={onClick}
-                disabled={disabled}
-              />
-            )}
-            <div {...stylex.props(styles.header)}>
-              <StyledIconContainer disabled={disabled} iconColor={iconColor}>
-                {Icon}
-              </StyledIconContainer>
-              <StyledTitle disabled={disabled}>
-                {title}
-                {soon && <Badge>{t`Soon`}</Badge>}
-              </StyledTitle>
-              {isDefined(Status) && Status}
-              <span {...stylex.props(styles.iconChevronRightContainer)}>
-                <IconChevronRight size={theme.icon.size.sm} />
-              </span>
+    <div
+      {...stylex.props(
+        styles.wrapper,
+        disabled ? styles.wrapperDisabled : styles.wrapperEnabled,
+      )}
+    >
+      <Card.Root
+        rounded={true}
+        fullWidth
+        className={stylex.props(styles.card).className}
+      >
+        <Card.Content
+          className={
+            stylex.props(
+              styles.content,
+              hasAction ? styles.contentActionHover : styles.contentLinkHover,
+            ).className
+          }
+        >
+          {hasAction && (
+            <button
+              {...stylex.props(styles.action, !disabled && actionMarker)}
+              type="button"
+              aria-label={title}
+              onClick={onClick}
+              disabled={disabled}
+            />
+          )}
+          <div {...stylex.props(styles.header)}>
+            <div
+              {...stylex.props(
+                styles.iconContainer,
+                isDefined(iconColor) && styles.iconContainerColor(iconColor),
+                disabled && styles.iconContainerDisabled,
+              )}
+            >
+              {Icon}
             </div>
-            {description && (
-              <div {...stylex.props(styles.description)}>{description}</div>
-            )}
-          </Card.Content>
-        </StyledCardContentContainer>
+            <div
+              {...stylex.props(styles.title, disabled && styles.titleDisabled)}
+            >
+              {title}
+              {soon && <Badge>{t`Soon`}</Badge>}
+            </div>
+            {isDefined(Status) && Status}
+            <span {...stylex.props(styles.iconChevronRightContainer)}>
+              <IconChevronRight size={theme.icon.size.sm} />
+            </span>
+          </div>
+          {description && (
+            <div {...stylex.props(styles.description)}>{description}</div>
+          )}
+        </Card.Content>
       </Card.Root>
-    </StyledCardWrapper>
+    </div>
   );
 };

@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { Fragment } from 'react';
 
@@ -13,10 +12,9 @@ import {
 } from '@/settings/mcp-and-apis/utils/mcpSetup';
 import { Section } from 'twenty-ui/components/layout';
 import { CodeEditor, CodeEditorHeader } from 'twenty-ui/components/code-editor';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { REACT_APP_SERVER_BASE_URL } from '~/config';
 import * as stylex from '@stylexjs/stylex';
-import { spacing } from 'twenty-ui/theme/tokens.stylex';
+import { iconSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 import { media } from 'twenty-ui/theme/constants.stylex';
 
 const styles = stylex.create({
@@ -33,16 +31,18 @@ const styles = stylex.create({
   cardsGrid: {
     display: 'grid',
     gap: spacing['--t-spacing-3'],
-    gridTemplateColumns: { default: 'repeat(2, minmax(0, 1fr))', [media.mobile]: '1fr' },
+    gridTemplateColumns: {
+      default: 'repeat(2, minmax(0, 1fr))',
+      [media.mobile]: '1fr',
+    },
+  },
+  mcpIcon: {
+    color: 'inherit',
+    flexShrink: 0,
+    height: `calc(${iconSize['--t-icon-size-md']} * 1px)`,
+    width: `calc(${iconSize['--t-icon-size-md']} * 1px)`,
   },
 });
-
-const StyledMcpIcon = styled(ModelContextProtocolLogo)`
-  color: inherit;
-  flex-shrink: 0;
-  height: calc(${themeCssVariables.icon.size.md} * 1px);
-  width: calc(${themeCssVariables.icon.size.md} * 1px);
-`;
 
 export const SettingsMcpSetup = () => {
   const mcpServerUrl = buildMcpServerUrl(REACT_APP_SERVER_BASE_URL);
@@ -77,7 +77,10 @@ export const SettingsMcpSetup = () => {
               <CodeEditorHeader
                 startElement={
                   <div {...stylex.props(styles.mcpEditorHeaderTitle)}>
-                    <StyledMcpIcon aria-hidden />
+                    <ModelContextProtocolLogo
+                      aria-hidden
+                      {...stylex.props(styles.mcpIcon)}
+                    />
                     <span>{t`MCP client configuration`}</span>
                   </div>
                 }

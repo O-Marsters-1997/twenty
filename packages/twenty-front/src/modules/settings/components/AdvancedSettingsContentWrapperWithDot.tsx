@@ -1,7 +1,7 @@
-import { styled } from '@linaria/react';
-import { IconPoint } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
+import { IconPoint } from 'twenty-ui/icon';
+import { useTheme } from 'twenty-ui/theme';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   wrapper: {
@@ -13,7 +13,22 @@ const styles = stylex.create({
     display: 'flex',
     marginRight: '0',
   },
+  dotContainer: {
+    display: 'flex',
+    height: '100%',
+    left: `calc(-1 * ${spacing['--t-spacing-5']})`,
+    position: 'absolute',
+  },
+  dotContainerTop: {
+    alignItems: 'stretch',
+    top: 0,
+  },
+  dotContainerCentered: {
+    alignItems: 'center',
+    top: 'auto',
+  },
 });
+
 type DotPosition = 'top' | 'centered';
 
 type AdvancedSettingsContentWrapperWithDotProps = {
@@ -21,17 +36,6 @@ type AdvancedSettingsContentWrapperWithDotProps = {
   hideDot?: boolean;
   dotPosition?: DotPosition;
 };
-
-const StyledDotContainer = styled.div<{ dotPosition: DotPosition }>`
-  align-items: ${({ dotPosition }) =>
-    dotPosition === 'top' ? 'stretch' : 'center'};
-  display: flex;
-  height: 100%;
-  left: calc(-1 * ${themeCssVariables.spacing[5]});
-
-  position: absolute;
-  top: ${({ dotPosition }) => (dotPosition === 'top' ? '0' : 'auto')};
-`;
 
 export const AdvancedSettingsContentWrapperWithDot = ({
   children,
@@ -43,7 +47,14 @@ export const AdvancedSettingsContentWrapperWithDot = ({
   return (
     <div {...stylex.props(styles.wrapper)}>
       {!hideDot && (
-        <StyledDotContainer dotPosition={dotPosition}>
+        <div
+          {...stylex.props(
+            styles.dotContainer,
+            dotPosition === 'top'
+              ? styles.dotContainerTop
+              : styles.dotContainerCentered,
+          )}
+        >
           <span {...stylex.props(styles.iconPointContainer)}>
             <IconPoint
               size={12}
@@ -51,7 +62,7 @@ export const AdvancedSettingsContentWrapperWithDot = ({
               fill={theme.color.yellow}
             />
           </span>
-        </StyledDotContainer>
+        </div>
       )}
       {children}
     </div>

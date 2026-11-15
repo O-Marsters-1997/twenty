@@ -1,13 +1,17 @@
-import { styled } from '@linaria/react';
 import { type MessageDescriptor } from '@lingui/core';
 import { useLingui } from '@lingui/react/macro';
 import { type ReactNode, useId } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { Radio, RadioGroup } from 'twenty-ui/primitives/input';
 import { Card } from 'twenty-ui/primitives/surfaces';
-import { themeCssVariables } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { spacing, font } from 'twenty-ui/theme/tokens.stylex';
+import {
+  backgroundTransparent,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsRadioSettingsCardProps<Option extends { value: string }> = {
   name: string;
@@ -17,17 +21,14 @@ type SettingsRadioSettingsCardProps<Option extends { value: string }> = {
   disabled?: boolean;
 };
 
-const StyledCardContentContainer = styled.div`
-  > div {
-    cursor: pointer;
-
-    &:hover {
-      background: ${themeCssVariables.background.transparent.lighter};
-    }
-  }
-`;
-
 const styles = stylex.create({
+  card: {
+    backgroundColor: {
+      default: null,
+      ':hover': backgroundTransparent['--t-background-transparent-lighter'],
+    },
+    cursor: 'pointer',
+  },
   optionHeader: {
     alignItems: 'center',
     display: 'flex',
@@ -38,13 +39,13 @@ const styles = stylex.create({
     minWidth: '0',
   },
   title: {
-    color: font['--t-font-color-primary'],
-    fontWeight: font['--t-font-weight-medium'],
+    color: fontColor['--t-font-color-primary'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
     marginBottom: spacing['--t-spacing-2'],
   },
   description: {
-    color: font['--t-font-color-tertiary'],
-    fontSize: font['--t-font-size-sm'],
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-sm'],
   },
   radioContainer: {
     alignItems: 'center',
@@ -94,8 +95,11 @@ export const SettingsRadioSettingsCard = <
           const isSelected = value === option.value;
 
           return (
-            <StyledCardContentContainer key={option.value}>
-              <Card.Content divider={index < options.length - 1}>
+            <Card.Content
+              key={option.value}
+              divider={index < options.length - 1}
+              {...stylex.props(styles.card)}
+            >
                 <label {...stylex.props(styles.optionHeader)}>
                   {option.cardMedia}
                   <div {...stylex.props(styles.textContainer)}>
@@ -119,8 +123,7 @@ export const SettingsRadioSettingsCard = <
                     {option.cardContentExpanded}
                   </div>
                 )}
-              </Card.Content>
-            </StyledCardContentContainer>
+            </Card.Content>
           );
         })}
       </Card.Root>

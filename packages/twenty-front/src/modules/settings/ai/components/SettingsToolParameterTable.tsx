@@ -1,4 +1,3 @@
-
 import { SettingsEmptyPlaceholder } from '@/settings/components/SettingsEmptyPlaceholder';
 import { t } from '@lingui/core/macro';
 import { type ComponentType } from 'react';
@@ -51,6 +50,10 @@ const TYPE_ICON_MAP: Record<string, ComponentType<{ size?: number }>> = {
 };
 
 const styles = stylex.create({
+  infoIcon: {
+    cursor: 'pointer',
+    outline: 'none',
+  },
   tableHeaderRow: {
     marginBottom: spacing['--t-spacing-2'],
   },
@@ -151,7 +154,7 @@ export const SettingsToolParameterTable = ({
                             id={infoIconId}
                             size={theme.icon.size.md}
                             color={theme.font.color.tertiary}
-                            style={{ outline: 'none', cursor: 'pointer' }}
+                            {...stylex.props(styles.infoIcon)}
                           />
                         </Tooltip>
                       </div>

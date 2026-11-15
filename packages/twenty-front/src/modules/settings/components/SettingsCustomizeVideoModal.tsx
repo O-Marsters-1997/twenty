@@ -8,12 +8,18 @@ import { DialogInstance } from '@/ui/layout/dialog/components/DialogInstance';
 import { Dialog } from 'twenty-ui/primitives/surfaces';
 import { useDialog } from '@/ui/layout/dialog/hooks/useDialog';
 import { TabList } from '@/ui/layout/tab-list/components/TabList';
-import { styled } from '@linaria/react';
 import { IconX } from 'twenty-ui/icon';
 import { IconButton } from 'twenty-ui/components/input';
-import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { spacing, border, boxShadow } from 'twenty-ui/theme/tokens.stylex';
+import {
+  borderColor,
+  borderRadius,
+  boxShadow,
+  fontColor,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsCustomizeVideoModalProps = {
   modalInstanceId: string;
@@ -21,21 +27,37 @@ type SettingsCustomizeVideoModalProps = {
   tabs: SettingsCustomizeVideoModalTab[];
 };
 
-// The tab list draws its own separator, so the header needs one only when it shows a plain title
-const StyledHeader = styled.div<{ $hasBottomBorder: boolean }>`
-  align-items: center;
-  border-bottom: ${({ $hasBottomBorder }) =>
-    $hasBottomBorder
-      ? `1px solid ${themeCssVariables.border.color.light}`
-      : 'none'};
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  height: 48px;
-  justify-content: space-between;
-  padding-right: ${themeCssVariables.spacing[3]};
-`;
-
 const styles = stylex.create({
+  popup: {
+    padding: 0,
+  },
+  header: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    height: '48px',
+    justifyContent: 'space-between',
+    paddingRight: spacing['--t-spacing-3'],
+  },
+  headerWithBottomBorder: {
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
+  },
+  title: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-primary'],
+    display: 'flex',
+    flex: '1 1 auto',
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    gap: spacing['--t-spacing-1'],
+    minWidth: '0',
+    paddingLeft: spacing['--t-spacing-5'],
+  },
+  titleIcon: {
+    display: 'flex',
+    flexShrink: 0,
+  },
   tabsContainer: {
     flex: '1 1 auto',
     minWidth: '0',
@@ -57,10 +79,10 @@ const styles = stylex.create({
   videoIframe: {
     aspectRatio: '1440 / 900',
     borderWidth: '0',
-    borderTopLeftRadius: border['--t-border-radius-md'],
-    borderTopRightRadius: border['--t-border-radius-md'],
-    borderBottomRightRadius: border['--t-border-radius-md'],
-    borderBottomLeftRadius: border['--t-border-radius-md'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
     boxShadow: boxShadow['--t-box-shadow-strong'],
     display: 'block',
     height: 'auto',
@@ -68,21 +90,6 @@ const styles = stylex.create({
     width: '960px',
   },
 });
-
-const StyledTitle = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.primary};
-  display: flex;
-  flex: 1 1 auto;
-  font-weight: ${themeCssVariables.font.weight.medium};
-  gap: ${themeCssVariables.spacing[1]};
-  min-width: 0;
-  padding-left: ${themeCssVariables.spacing[5]};
-
-  & > svg {
-    flex-shrink: 0;
-  }
-`;
 
 export const SettingsCustomizeVideoModal = ({
   modalInstanceId,
@@ -118,7 +125,8 @@ export const SettingsCustomizeVideoModal = ({
             : `https://player.vimeo.com/video/${activeTab.vimeoId}?autoplay=1&loop=1&autopause=0&background=1&muted=1&dnt=1`
         }
         allow="autoplay; fullscreen; picture-in-picture"
-        title={activeTab.title} {...stylex.props(styles.videoIframe)}
+        title={activeTab.title}
+        {...stylex.props(styles.videoIframe)}
       />
     </div>
   );
@@ -135,13 +143,18 @@ export const SettingsCustomizeVideoModal = ({
           aria-label={activeTab.title}
           onKeyDown={onKeyDown}
           size="lg"
-          style={{ padding: 0 }}
+          {...stylex.props(styles.popup)}
         >
           <TabListRoot
             componentInstanceId={tabsInstanceId}
             enabled={hasMultipleTabs}
           >
-            <StyledHeader $hasBottomBorder={!hasMultipleTabs}>
+            <div
+              {...stylex.props(
+                styles.header,
+                !hasMultipleTabs && styles.headerWithBottomBorder,
+              )}
+            >
               {hasMultipleTabs ? (
                 <div {...stylex.props(styles.tabsContainer)}>
                   <TabList
@@ -152,14 +165,18 @@ export const SettingsCustomizeVideoModal = ({
                   />
                 </div>
               ) : (
-                <StyledTitle>
-                  <ActiveTabIcon
-                    size={theme.icon.size.md}
-                    color={theme.font.color.primary}
-                    aria-hidden
-                  />
-                  <span {...stylex.props(styles.titleText)}>{activeTab.title}</span>
-                </StyledTitle>
+                <div {...stylex.props(styles.title)}>
+                  <span {...stylex.props(styles.titleIcon)}>
+                    <ActiveTabIcon
+                      size={theme.icon.size.md}
+                      color={theme.font.color.primary}
+                      aria-hidden
+                    />
+                  </span>
+                  <span {...stylex.props(styles.titleText)}>
+                    {activeTab.title}
+                  </span>
+                </div>
               )}
               <IconButton
                 aria-label={t`Close video`}
@@ -168,7 +185,7 @@ export const SettingsCustomizeVideoModal = ({
               >
                 <IconX />
               </IconButton>
-            </StyledHeader>
+            </div>
             {hasMultipleTabs ? (
               <Tabs.Panel value={activeTab.id}>{videoContent}</Tabs.Panel>
             ) : (
