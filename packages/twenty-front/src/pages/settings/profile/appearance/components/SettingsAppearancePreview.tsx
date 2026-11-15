@@ -1,14 +1,14 @@
-import { styled } from '@linaria/react';
-import { type CSSProperties } from 'react';
-
-import {
-  GRAY_SCALE_DARK,
-  GRAY_SCALE_LIGHT,
-  themeCssVariables,
-} from 'twenty-ui/theme';
+import { GRAY_SCALE_DARK, GRAY_SCALE_LIGHT } from 'twenty-ui/theme';
 import { type ColorScheme } from '@/ui/theme/types/ColorScheme';
+import { appearanceRadioMarker } from './SettingsAppearanceOption.stylex';
 import * as stylex from '@stylexjs/stylex';
-import { borderRadius } from 'twenty-ui/theme/tokens.stylex';
+import { borderRadius, spacing } from 'twenty-ui/theme/tokens.stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
+
+const RADIO_HOVER = stylex.when.ancestor(
+  ':hover:not(:is([data-disabled]))',
+  appearanceRadioMarker,
+);
 
 const styles = stylex.create({
   preview: {
@@ -21,55 +21,55 @@ const styles = stylex.create({
     overflow: 'hidden',
     width: '100%',
   },
+  segment: {
+    alignItems: 'flex-end',
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    boxSizing: 'border-box',
+    display: 'flex',
+    flex: 1,
+    minWidth: '0',
+    paddingInlineStart: spacing['--t-spacing-6'],
+    paddingTop: spacing['--t-spacing-6'],
+  },
+  segmentFirst: {
+    borderEndStartRadius: borderRadius['--t-border-radius-md'],
+    borderStartStartRadius: borderRadius['--t-border-radius-md'],
+  },
+  segmentLast: {
+    borderEndEndRadius: borderRadius['--t-border-radius-md'],
+    borderStartEndRadius: borderRadius['--t-border-radius-md'],
+  },
+  segmentColors: (background: string, border: string) => ({
+    backgroundColor: background,
+    borderColor: border,
+  }),
+  content: {
+    borderBottomWidth: '0',
+    borderInlineEndWidth: '0',
+    borderInlineStartStyle: 'solid',
+    borderInlineStartWidth: '1px',
+    borderStartStartRadius: borderRadius['--t-border-radius-md'],
+    borderTopStyle: 'solid',
+    borderTopWidth: '1px',
+    boxSizing: 'border-box',
+    flex: 1,
+    fontSize: { default: '20px', [RADIO_HOVER]: '22px' },
+    height: { default: '56px', [RADIO_HOVER]: '61px' },
+    paddingInlineStart: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
+    transition: {
+      default: 'height 0.1s ease-in-out, font-size 0.1s ease-in-out',
+      [media.reducedMotion]: 'none',
+    },
+  },
+  contentColors: (background: string, border: string, textColor: string) => ({
+    backgroundColor: background,
+    borderInlineStartColor: border,
+    borderTopColor: border,
+    color: textColor,
+  }),
 });
-
-const StyledSegment = styled.div`
-  align-items: flex-end;
-  background: var(--appearance-preview-background);
-  border: 1px solid var(--appearance-preview-border);
-  box-sizing: border-box;
-  display: flex;
-  flex: 1;
-  min-width: 0;
-  padding-inline-start: ${themeCssVariables.spacing[6]};
-  padding-top: ${themeCssVariables.spacing[6]};
-
-  &:first-child {
-    border-end-start-radius: ${themeCssVariables.border.radius.md};
-    border-start-start-radius: ${themeCssVariables.border.radius.md};
-  }
-
-  &:last-child {
-    border-end-end-radius: ${themeCssVariables.border.radius.md};
-    border-start-end-radius: ${themeCssVariables.border.radius.md};
-  }
-`;
-
-const StyledContent = styled.div`
-  background: var(--appearance-preview-content-background);
-  border-inline-start: 1px solid var(--appearance-preview-border);
-  border-start-start-radius: ${themeCssVariables.border.radius.md};
-  border-top: 1px solid var(--appearance-preview-border);
-  box-sizing: border-box;
-  color: var(--appearance-preview-content-color);
-  flex: 1;
-  font-size: 20px;
-  height: 56px;
-  padding-inline-start: ${themeCssVariables.spacing[2]};
-  padding-top: ${themeCssVariables.spacing[2]};
-  transition:
-    height 0.1s ease-in-out,
-    font-size 0.1s ease-in-out;
-
-  [role='radio']:not([data-disabled]):hover & {
-    font-size: 22px;
-    height: 61px;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-  }
-`;
 
 type SettingsAppearancePreviewProps = {
   colorScheme: ColorScheme;
@@ -82,24 +82,33 @@ export const SettingsAppearancePreview = ({
 
   return (
     <div aria-hidden {...stylex.props(styles.preview)}>
-      {segments.map((segment) => {
+      {segments.map((segment, index) => {
         const grayScale =
           segment === 'Dark' ? GRAY_SCALE_DARK : GRAY_SCALE_LIGHT;
 
         return (
-          <StyledSegment
+          <div
             key={segment}
-            style={
-              {
-                '--appearance-preview-background': grayScale.gray4,
-                '--appearance-preview-border': grayScale.gray5,
-                '--appearance-preview-content-background': grayScale.gray1,
-                '--appearance-preview-content-color': grayScale.gray12,
-              } as CSSProperties
-            }
+            {...stylex.props(
+              styles.segment,
+              index === 0 && styles.segmentFirst,
+              index === segments.length - 1 && styles.segmentLast,
+              styles.segmentColors(grayScale.gray4, grayScale.gray5),
+            )}
           >
-            <StyledContent>Aa</StyledContent>
-          </StyledSegment>
+            <div
+              {...stylex.props(
+                styles.content,
+                styles.contentColors(
+                  grayScale.gray1,
+                  grayScale.gray5,
+                  grayScale.gray12,
+                ),
+              )}
+            >
+              Aa
+            </div>
+          </div>
         );
       })}
     </div>

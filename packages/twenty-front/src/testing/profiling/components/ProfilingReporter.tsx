@@ -1,4 +1,4 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { useMemo } from 'react';
 
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
@@ -8,18 +8,68 @@ import { profilingSessionDataPointsState } from '~/testing/profiling/states/prof
 import { profilingSessionStatusState } from '~/testing/profiling/states/profilingSessionStatusState';
 import { computeProfilingReport } from '~/testing/profiling/utils/computeProfilingReport';
 
-const StyledTable = styled.table`
-  border: 1px solid black;
+const styles = stylex.create({
+  table: {
+    borderColor: 'black',
+    borderStyle: 'solid',
+    borderWidth: '1px',
+  },
+  cell: {
+    borderColor: 'black',
+    borderStyle: 'solid',
+    borderWidth: '1px',
+  },
+  dataCell: {
+    paddingBlock: '5px',
+    paddingInline: '5px',
+  },
+  totalRow: {
+    fontWeight: 'bold',
+  },
+});
 
-  th,
-  td {
-    border: 1px solid black;
-  }
+const HEADERS = [
+  'Run name',
+  'Min',
+  'Average',
+  'P50',
+  'P80',
+  'P90',
+  'P95',
+  'P99',
+  'Max',
+  'Variance',
+];
 
-  td {
-    padding: 5px;
-  }
-`;
+const DURATION_KEYS = [
+  'min',
+  'average',
+  'p50',
+  'p80',
+  'p90',
+  'p95',
+  'p99',
+  'max',
+] as const;
+
+type ReportCellsProps = {
+  name: string;
+  stats: Record<(typeof DURATION_KEYS)[number] | 'variance', number>;
+};
+
+const ReportCells = ({ name, stats }: ReportCellsProps) => (
+  <>
+    <td {...stylex.props(styles.cell, styles.dataCell)}>{name}</td>
+    {DURATION_KEYS.map((key) => (
+      <td key={key} {...stylex.props(styles.cell, styles.dataCell)}>
+        {Math.round(stats[key] * 1000) / 1000}ms
+      </td>
+    ))}
+    <td {...stylex.props(styles.cell, styles.dataCell)}>
+      {Math.round(stats.variance * 1000000) / 1000000}
+    </td>
+  </>
+);
 
 export const ProfilingReporter = () => {
   const profilingSessionDataPoints = useAtomStateValue(
@@ -46,52 +96,27 @@ export const ProfilingReporter = () => {
       <div>
         Run #{currentProfilingRunIndex} - Status {profilingSessionStatus}
       </div>
-      <StyledTable>
+      <table {...stylex.props(styles.table)}>
         <thead>
           <tr>
-            <th>Run name</th>
-            <th>Min</th>
-            <th>Average</th>
-            <th>P50</th>
-            <th>P80</th>
-            <th>P90</th>
-            <th>P95</th>
-            <th>P99</th>
-            <th>Max</th>
-            <th>Variance</th>
+            {HEADERS.map((header) => (
+              <th key={header} {...stylex.props(styles.cell)}>
+                {header}
+              </th>
+            ))}
           </tr>
         </thead>
         <tbody>
-          <tr style={{ fontWeight: 'bold' }}>
-            <td>Total</td>
-            <td>{Math.round(profilingReport.total.min * 1000) / 1000}ms</td>
-            <td>{Math.round(profilingReport.total.average * 1000) / 1000}ms</td>
-            <td>{Math.round(profilingReport.total.p50 * 1000) / 1000}ms</td>
-            <td>{Math.round(profilingReport.total.p80 * 1000) / 1000}ms</td>
-            <td>{Math.round(profilingReport.total.p90 * 1000) / 1000}ms</td>
-            <td>{Math.round(profilingReport.total.p95 * 1000) / 1000}ms</td>
-            <td>{Math.round(profilingReport.total.p99 * 1000) / 1000}ms</td>
-            <td>{Math.round(profilingReport.total.max * 1000) / 1000}ms</td>
-            <td>
-              {Math.round(profilingReport.total.variance * 1000000) / 1000000}
-            </td>
+          <tr {...stylex.props(styles.totalRow)}>
+            <ReportCells name="Total" stats={profilingReport.total} />
           </tr>
           {Object.entries(profilingReport.runs).map(([runName, report]) => (
             <tr key={runName}>
-              <td>{runName}</td>
-              <td>{Math.round(report.min * 1000) / 1000}ms</td>
-              <td>{Math.round(report.average * 1000) / 1000}ms</td>
-              <td>{Math.round(report.p50 * 1000) / 1000}ms</td>
-              <td>{Math.round(report.p80 * 1000) / 1000}ms</td>
-              <td>{Math.round(report.p90 * 1000) / 1000}ms</td>
-              <td>{Math.round(report.p95 * 1000) / 1000}ms</td>
-              <td>{Math.round(report.p99 * 1000) / 1000}ms</td>
-              <td>{Math.round(report.max * 1000) / 1000}ms</td>
-              <td>{Math.round(report.variance * 1000000) / 1000000}</td>
+              <ReportCells name={runName} stats={report} />
             </tr>
           ))}
         </tbody>
-      </StyledTable>
+      </table>
     </div>
   );
 };

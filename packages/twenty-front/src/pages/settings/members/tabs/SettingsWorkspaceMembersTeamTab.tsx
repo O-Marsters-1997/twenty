@@ -10,7 +10,6 @@ import { TableRow } from '@/ui/layout/table/components/TableRow';
 import { TooltipDelay } from '@/ui/layout/tooltip/constants/TooltipDelay';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { type WorkspaceMember } from '@/workspace-member/types/WorkspaceMember';
-import { styled } from '@linaria/react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMemo, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
@@ -39,18 +38,17 @@ import { useNavigateSettings } from '~/hooks/useNavigateSettings';
 import { getAbsoluteImageUrl } from '~/utils/image/getAbsoluteImageUrl';
 import { normalizeSearchText } from 'twenty-ui/utilities';
 import * as stylex from '@stylexjs/stylex';
-import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
-
-const StyledTableContainer = styled.div<{ hasMoreRows?: boolean }>`
-  > div {
-    border-bottom: ${({ hasMoreRows }) =>
-      hasMoreRows
-        ? 'none'
-        : `1px solid ${themeCssVariables.border.color.light}`};
-  }
-`;
+import { borderColor, fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
+  tableWithBottomBorder: {
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
+  },
+  fetchMoreSentinel: {
+    height: '1px',
+  },
   iconWrapper: {
     alignItems: 'center',
     display: 'flex',
@@ -204,98 +202,98 @@ export const SettingsWorkspaceMembersTeamTab = () => {
           </DropdownContent>
         </DropdownRoot>
       </div>
-      <StyledTableContainer hasMoreRows={hasNextPage}>
-        <Table>
-          <TableRow
-            gridAutoColumns="150px 1fr 40px"
-            mobileGridAutoColumns="100px 1fr 32px"
-          >
-            <TableHeader>
-              <Trans>Name</Trans>
-            </TableHeader>
-            <TableHeader>
-              <Trans>Email</Trans>
-            </TableHeader>
-            <TableHeader align="right"></TableHeader>
-          </TableRow>
-          <div {...stylex.props(styles.tableRows)}>
-            {optimizedWorkspaceMembers.length > 0 ? (
-              optimizedWorkspaceMembers.map((workspaceMember) => (
-                <TableRow
-                  gridAutoColumns="150px 1fr 40px"
-                  mobileGridAutoColumns="100px 1fr 32px"
-                  key={workspaceMember.id}
-                  cursor="pointer"
-                  onClick={() => {
-                    if (currentWorkspaceMember?.id === workspaceMember.id) {
-                      return;
-                    }
-                    navigateSettings(SettingsPath.WorkspaceMemberPage, {
-                      workspaceMemberId: workspaceMember.id,
-                    });
-                  }}
-                >
-                  <TableCell color={themeCssVariables.font.color.primary}>
-                    <div {...stylex.props(styles.iconWrapper)}>
-                      <Avatar
-                        src={getAbsoluteImageUrl(workspaceMember.avatarUrl)}
-                        colorSeed={workspaceMember.id}
-                        name={workspaceMember.name.firstName ?? ''}
-                        shape="circle"
-                        size="sm"
-                      />
-                    </div>
-                    <Tooltip
-                      content={`${workspaceMember.name.firstName} ${workspaceMember.name.lastName}`}
-                      side="top"
-                      positionMethod="fixed"
-                      delay={TooltipDelay.shortDelay}
+      <Table {...stylex.props(!hasNextPage && styles.tableWithBottomBorder)}>
+        <TableRow
+          gridAutoColumns="150px 1fr 40px"
+          mobileGridAutoColumns="100px 1fr 32px"
+        >
+          <TableHeader>
+            <Trans>Name</Trans>
+          </TableHeader>
+          <TableHeader>
+            <Trans>Email</Trans>
+          </TableHeader>
+          <TableHeader align="right"></TableHeader>
+        </TableRow>
+        <div {...stylex.props(styles.tableRows)}>
+          {optimizedWorkspaceMembers.length > 0 ? (
+            optimizedWorkspaceMembers.map((workspaceMember) => (
+              <TableRow
+                gridAutoColumns="150px 1fr 40px"
+                mobileGridAutoColumns="100px 1fr 32px"
+                key={workspaceMember.id}
+                cursor="pointer"
+                onClick={() => {
+                  if (currentWorkspaceMember?.id === workspaceMember.id) {
+                    return;
+                  }
+                  navigateSettings(SettingsPath.WorkspaceMemberPage, {
+                    workspaceMemberId: workspaceMember.id,
+                  });
+                }}
+              >
+                <TableCell color={themeCssVariables.font.color.primary}>
+                  <div {...stylex.props(styles.iconWrapper)}>
+                    <Avatar
+                      src={getAbsoluteImageUrl(workspaceMember.avatarUrl)}
+                      colorSeed={workspaceMember.id}
+                      name={workspaceMember.name.firstName ?? ''}
+                      shape="circle"
+                      size="sm"
+                    />
+                  </div>
+                  <Tooltip
+                    content={`${workspaceMember.name.firstName} ${workspaceMember.name.lastName}`}
+                    side="top"
+                    positionMethod="fixed"
+                    delay={TooltipDelay.shortDelay}
+                  >
+                    <div
+                      id={`hover-text-${workspaceMember.id}`}
+                      {...stylex.props(styles.textContainerWithEllipsis)}
                     >
-                      <div
-                        id={`hover-text-${workspaceMember.id}`} {...stylex.props(styles.textContainerWithEllipsis)}
-                      >
-                        {workspaceMember.name.firstName +
-                          ' ' +
-                          workspaceMember.name.lastName}
-                      </div>
-                    </Tooltip>
-                  </TableCell>
-                  <TableCell>
-                    <div {...stylex.props(styles.textContainerWithEllipsis)}>
-                      {workspaceMember.userEmail}
+                      {workspaceMember.name.firstName +
+                        ' ' +
+                        workspaceMember.name.lastName}
                     </div>
-                  </TableCell>
-                  <TableCell align="right">
-                    <div {...stylex.props(styles.chevronWrapper)}>
-                      {currentWorkspaceMember?.id !== workspaceMember.id && (
-                        <IconChevronRight size={theme.icon.size.sm} />
-                      )}
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))
-            ) : (
-              <TableCell color={themeCssVariables.font.color.tertiary}>
-                {!searchFilter
-                  ? t`No members`
-                  : t`No members match your search`}
-              </TableCell>
-            )}
-          </div>
-          {hasNextPage && (
-            <TableRow
-              gridAutoColumns="250px 1fr 1fr"
-              mobileGridAutoColumns="100px 1fr 1fr"
-            >
-              <TableCell>
-                <div ref={fetchMoreRef} style={{ height: '1px' }} />
-              </TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-            </TableRow>
+                  </Tooltip>
+                </TableCell>
+                <TableCell>
+                  <div {...stylex.props(styles.textContainerWithEllipsis)}>
+                    {workspaceMember.userEmail}
+                  </div>
+                </TableCell>
+                <TableCell align="right">
+                  <div {...stylex.props(styles.chevronWrapper)}>
+                    {currentWorkspaceMember?.id !== workspaceMember.id && (
+                      <IconChevronRight size={theme.icon.size.sm} />
+                    )}
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableCell color={themeCssVariables.font.color.tertiary}>
+              {!searchFilter ? t`No members` : t`No members match your search`}
+            </TableCell>
           )}
-        </Table>
-      </StyledTableContainer>
+        </div>
+        {hasNextPage && (
+          <TableRow
+            gridAutoColumns="250px 1fr 1fr"
+            mobileGridAutoColumns="100px 1fr 1fr"
+          >
+            <TableCell>
+              <div
+                ref={fetchMoreRef}
+                {...stylex.props(styles.fetchMoreSentinel)}
+              />
+            </TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
+          </TableRow>
+        )}
+      </Table>
     </Section.Root>
   );
 };

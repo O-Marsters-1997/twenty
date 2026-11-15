@@ -1,13 +1,6 @@
 import { AppToaster } from '@/ui/feedback/toast/components/AppToaster';
-import { styled } from '@linaria/react';
 import { useState, type ReactNode } from 'react';
-
-// CI zeroes animation durations, which would immediately dismiss toasts.
-const StyledStoryContainer = styled.div`
-  [role='status'] * {
-    animation: none !important;
-  }
-`;
+import '~/third-party-styles/toast-story-container.css';
 
 type ToastStoryContainerProps = {
   children: ReactNode;
@@ -19,9 +12,9 @@ export const ToastStoryContainer = ({ children }: ToastStoryContainerProps) => {
   );
 
   return (
-    <StyledStoryContainer ref={setToastContainer}>
+    <div ref={setToastContainer} data-toast-story-container>
       <AppToaster container={toastContainer} />
       {children}
-    </StyledStoryContainer>
+    </div>
   );
 };

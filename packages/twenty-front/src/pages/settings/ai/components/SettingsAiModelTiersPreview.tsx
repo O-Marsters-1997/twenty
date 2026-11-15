@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { Section } from 'twenty-ui/components/layout';
@@ -17,7 +16,7 @@ import { TableRow } from '@/ui/layout/table/components/TableRow';
 import { TooltipDelay } from '@/ui/layout/tooltip/constants/TooltipDelay';
 import { formatNumber } from '@/localization/utils/formatNumber';
 import * as stylex from '@stylexjs/stylex';
-import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
+import { borderColor, fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const GRID_TEMPLATE_COLUMNS = '1fr 1fr 1fr';
 const EMPTY_VALUE = '–';
@@ -25,6 +24,11 @@ const EMPTY_VALUE = '–';
 const styles = stylex.create({
   inheritedValue: {
     color: fontColor['--t-font-color-light'],
+  },
+  table: {
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
   },
   mode: {
     alignItems: 'center',
@@ -62,10 +66,6 @@ const formatIntelligence = (tier: ResolvedAiModelTier) =>
     ? formatNumber(tier.model.intelligenceIndex, { decimals: 0 })
     : EMPTY_VALUE;
 
-const StyledTable = styled(Table)`
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-`;
-
 export const SettingsAiModelTiersPreview = () => {
   const tiers = useAiModelTiers();
 
@@ -75,7 +75,7 @@ export const SettingsAiModelTiersPreview = () => {
         title={t`Preview`}
         description={t`The modes people and agents choose between`}
       />
-      <StyledTable>
+      <Table {...stylex.props(styles.table)}>
         <TableRow gridTemplateColumns={GRID_TEMPLATE_COLUMNS}>
           <TableHeader>{t`Mode`}</TableHeader>
           <TableHeader align="right">{t`Speed`}</TableHeader>
@@ -123,7 +123,7 @@ export const SettingsAiModelTiersPreview = () => {
             </TableRow>
           );
         })}
-      </StyledTable>
+      </Table>
     </Section.Root>
   );
 };
