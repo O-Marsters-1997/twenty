@@ -1,6 +1,11 @@
 package frontdoor
 
-import "slices"
+import (
+	"slices"
+	"strings"
+
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/model"
+)
 
 type Endpoint string
 
@@ -19,8 +24,43 @@ const (
 
 type OperationTable map[Endpoint]map[string]Route // operation name → route; absent means RouteNode
 
+var RuntimeBuiltObjects = []string{
+	"person", "company", "note", "task", "opportunity", "dashboard", "attachment", "timelineActivity", "workspaceMember",
+}
+
+func RecordOperations(object model.Object) []string {
+	singular := strings.ToUpper(object.NameSingular[:1]) + object.NameSingular[1:]
+	plural := strings.ToUpper(object.NamePlural[:1]) + object.NamePlural[1:]
+	return []string{
+		"FindMany" + plural, "FindOne" + singular, "FindDuplicate" + singular,
+		"Create" + plural, "CreateOne" + singular, "UpdateOne" + singular, "UpdateMany" + plural,
+		"DeleteOne" + singular, "DeleteMany" + plural, "DestroyOne" + singular, "DestroyMany" + plural,
+		"RestoreMany" + plural, "Merge" + plural, "GroupBy" + plural,
+		"Aggregate" + plural, plural + "GroupByAggregates", plural + "GroupByRecords",
+	}
+}
+
+func IsStaticRecordOperation(operation string) bool {
+	_, ok := staticTable()[EndpointWorkspace][operation]
+	return ok
+}
+
 // DefaultTable blocks the object and field mutations that change the frozen data model.
 func DefaultTable() OperationTable {
+	table := staticTable()
+	for _, singular := range RuntimeBuiltObjects {
+		index := slices.IndexFunc(model.Objects, func(object model.Object) bool { return object.NameSingular == singular })
+		if index < 0 {
+			panic("object model has no " + singular + " object")
+		}
+		for _, operation := range RecordOperations(model.Objects[index]) {
+			table[EndpointWorkspace][operation] = RouteGo
+		}
+	}
+	return table
+}
+
+func staticTable() OperationTable {
 	table := OperationTable{
 		EndpointWorkspace: {
 			"AggregateTimelineActivities":         RouteGo,
@@ -56,13 +96,16 @@ func DefaultTable() OperationTable {
 			"CreateOneFieldMetadataItem":  RouteBlocked,
 			"UpdateOneFieldMetadataItem":  RouteBlocked,
 			"DeleteOneFieldMetadataItem":  RouteBlocked,
+			"CreateOneIndexMetadataItem":  RouteBlocked,
+			"DeleteOneIndexMetadataItem":  RouteBlocked,
+			"MetadataTranslations":        RouteBlocked,
 			"SendEmail":                   RouteGo,
 		},
 	}
 	for _, operation := range viewOperations {
 		table[EndpointMetadata][operation] = RouteGo
 	}
-	for _, operation := range slices.Concat(SkillOperations, ChatOperations, agentOperations, MessagingOperations, AccessOperations, TwoFactorOperations, SessionOperations, SessionManagementOperations, PasswordLoginOperations) {
+	for _, operation := range slices.Concat(SkillOperations, ChatOperations, agentOperations, MessagingOperations, AccessOperations, WorkspaceSettingsOperations, TwoFactorOperations, SessionOperations, SessionManagementOperations, PasswordLoginOperations) {
 		table[EndpointMetadata][operation] = RouteGo
 	}
 	for _, operation := range slices.Concat(WorkflowOperations, WorkflowAuthoringOperations) {
@@ -137,7 +180,11 @@ var AccessOperations = []string{
 	"GetWebhooks", "GetWebhook", "CreateWebhook", "UpdateWebhook", "DeleteWebhook",
 	"GetApiKeys", "GetApiKey", "GetApiKeyRoles", "CreateApiKey", "UpdateApiKey", "RevokeApiKey", "AssignRoleToApiKey",
 	"GenerateApiKeyToken", "GeneratePlaygroundToken",
+	"GetRoles", "GetRole", "CreateOneRole", "UpdateOneRole", "DeleteOneRole",
+	"UpsertFieldPermissions", "UpsertObjectPermissions", "UpsertPermissionFlags",
 }
+
+var WorkspaceSettingsOperations = []string{"UpdateWorkspace", "UpdateWorkspaceAllowedIframeOrigins"}
 
 var LoginOperations = []string{"getAuthTokensFromOTP", "getAuthTokensFromTwoFactorAuthenticationRecoveryCode", "initiateOTPProvisioning"}
 
@@ -146,6 +193,8 @@ var TwoFactorOperations = []string{
 	"deleteTwoFactorAuthenticationMethod", "twoFactorAuthenticationRecoveryStatus",
 	"generateTwoFactorAuthenticationRecoveryCode", "revokeTwoFactorAuthenticationRecoveryCode",
 }
+
+var CurrentUserOperations = []string{"GetCurrentUser"}
 
 var SessionOperations = []string{"getAuthTokensFromLoginToken", "RenewToken", "SignOut"}
 

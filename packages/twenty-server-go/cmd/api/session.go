@@ -84,6 +84,7 @@ func newAuthResolver(pool *pgxpool.Pool, twoFactor *auth.TwoFactor, passwordLogi
 		Sessions:      stack.sessions,
 		Tokens:        stack.issuer,
 		Login:         auth.NewTwoFactorLogin(pool, twoFactor, stack.issuer, stack.origins, stack.sessions),
+		Current:       auth.NewCurrentUser(pool, passwordLogin, currentUserConfig(stack.serverURL)),
 		Exchange: &auth.SignIn{
 			Pool:                      pool,
 			Issuer:                    stack.issuer,
@@ -92,6 +93,18 @@ func newAuthResolver(pool *pgxpool.Pool, twoFactor *auth.TwoFactor, passwordLogi
 			EmailVerificationRequired: os.Getenv("IS_EMAIL_VERIFICATION_REQUIRED") == "true",
 		},
 	}
+}
+
+func currentUserConfig(serverURL string) auth.CurrentUserConfig {
+	config := auth.CurrentUserConfig{
+		ServerURL:           serverURL,
+		PasswordAuthEnabled: os.Getenv("AUTH_PASSWORD_ENABLED") != "false",
+		GoogleAuthEnabled:   os.Getenv("AUTH_GOOGLE_ENABLED") == "true",
+	}
+	if os.Getenv("SUPPORT_DRIVER") == "front" {
+		config.SupportHMACKey = os.Getenv("SUPPORT_FRONT_HMAC_KEY")
+	}
+	return config
 }
 
 func parseSameSite(value string) (http.SameSite, error) {

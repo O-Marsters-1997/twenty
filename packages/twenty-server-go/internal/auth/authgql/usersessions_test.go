@@ -60,7 +60,7 @@ func (h *sessionHarness) sendAs(t *testing.T, principal auth.Principal, query st
 	return decoded, recorder
 }
 
-func memberPrincipal(userID string) auth.Principal {
+func sessionMemberPrincipal(userID string) auth.Principal {
 	principal := principalFor(userID)
 	principal.WorkspaceMemberID = workspaceMember
 	return principal
@@ -101,7 +101,7 @@ func TestUserSessions_MatchesGolden(t *testing.T) {
 			if tt.setup != nil {
 				tt.setup(t, h)
 			}
-			golden.Assert(t, h.asPrincipal(memberPrincipal(freshID)), "testdata/golden", tt.name, tt.ignore...)
+			golden.Assert(t, h.asPrincipal(sessionMemberPrincipal(freshID)), "testdata/golden", tt.name, tt.ignore...)
 		})
 	}
 }
@@ -170,7 +170,7 @@ func TestCurrentUserSessions(t *testing.T) {
 		h.seedSession(t, otherSessionID, memberID, "sess_other")
 		h.exec(t, `UPDATE core."userSession" SET "revokedAt" = now() WHERE id = $1`, secondSessionID)
 
-		response, _ := h.sendAs(t, memberPrincipal(freshID), query, nil, &http.Cookie{Name: sessionCookie, Value: firstSessionToken})
+		response, _ := h.sendAs(t, sessionMemberPrincipal(freshID), query, nil, &http.Cookie{Name: sessionCookie, Value: firstSessionToken})
 		want := map[string]any{"data": map[string]any{"currentUserSessions": []any{
 			map[string]any{"id": firstSessionID, "isCurrent": true},
 		}}}
@@ -210,7 +210,7 @@ func TestRevokeUserSession(t *testing.T) {
 		h.seedSession(t, firstSessionID, freshID, firstSessionToken)
 		h.seedSession(t, secondSessionID, freshID, secondSessionToken)
 
-		response, recorder := h.sendAs(t, memberPrincipal(freshID), mutation, map[string]any{"id": secondSessionID}, &http.Cookie{Name: sessionCookie, Value: firstSessionToken})
+		response, recorder := h.sendAs(t, sessionMemberPrincipal(freshID), mutation, map[string]any{"id": secondSessionID}, &http.Cookie{Name: sessionCookie, Value: firstSessionToken})
 		if diff := cmp.Diff(map[string]any{"data": map[string]any{"revokeUserSession": true}}, response); diff != "" {
 			t.Errorf("response (-want +got):\n%s", diff)
 		}
@@ -227,7 +227,7 @@ func TestRevokeUserSession(t *testing.T) {
 		h := newSessionHarness(t)
 		h.seedSession(t, firstSessionID, freshID, firstSessionToken)
 
-		_, recorder := h.sendAs(t, memberPrincipal(freshID), mutation, map[string]any{"id": firstSessionID}, &http.Cookie{Name: sessionCookie, Value: firstSessionToken})
+		_, recorder := h.sendAs(t, sessionMemberPrincipal(freshID), mutation, map[string]any{"id": firstSessionID}, &http.Cookie{Name: sessionCookie, Value: firstSessionToken})
 		if cleared := cookieNamed(recorder, sessionCookie); cleared == nil || cleared.MaxAge >= 0 {
 			t.Errorf("session cookie = %+v, want it cleared", cleared)
 		}
@@ -239,7 +239,7 @@ func TestRevokeUserSession(t *testing.T) {
 		h.seedSession(t, firstSessionID, freshID, firstSessionToken)
 		h.exec(t, `UPDATE core."userSession" SET "revokedAt" = now(), "revokedReason" = 'USER_SIGN_OUT' WHERE id = $1`, firstSessionID)
 
-		response, _ := h.sendAs(t, memberPrincipal(freshID), mutation, map[string]any{"id": firstSessionID})
+		response, _ := h.sendAs(t, sessionMemberPrincipal(freshID), mutation, map[string]any{"id": firstSessionID})
 		if diff := cmp.Diff(map[string]any{"data": map[string]any{"revokeUserSession": false}}, response); diff != "" {
 			t.Errorf("response (-want +got):\n%s", diff)
 		}
@@ -250,7 +250,7 @@ func TestRevokeUserSession(t *testing.T) {
 		h := newSessionHarness(t)
 		h.seedSession(t, otherSessionID, memberID, "sess_other")
 
-		response, _ := h.sendAs(t, memberPrincipal(freshID), mutation, map[string]any{"id": otherSessionID})
+		response, _ := h.sendAs(t, sessionMemberPrincipal(freshID), mutation, map[string]any{"id": otherSessionID})
 		if got := h.errorExtensions(t, response)["subCode"]; got != "FORBIDDEN_EXCEPTION" {
 			t.Errorf("subCode = %v, want FORBIDDEN_EXCEPTION", got)
 		}
@@ -269,7 +269,7 @@ func TestRevokeAllOtherUserSessions(t *testing.T) {
 	h.seedSession(t, secondSessionID, freshID, secondSessionToken)
 	h.seedSession(t, otherSessionID, memberID, "sess_other")
 
-	response, _ := h.sendAs(t, memberPrincipal(freshID), mutation, nil, &http.Cookie{Name: sessionCookie, Value: firstSessionToken})
+	response, _ := h.sendAs(t, sessionMemberPrincipal(freshID), mutation, nil, &http.Cookie{Name: sessionCookie, Value: firstSessionToken})
 	if diff := cmp.Diff(map[string]any{"data": map[string]any{"revokeAllOtherUserSessions": float64(1)}}, response); diff != "" {
 		t.Errorf("response (-want +got):\n%s", diff)
 	}
@@ -285,7 +285,7 @@ func TestGenerateTransientToken(t *testing.T) {
 	t.Run("signs a LOGIN token for the workspace member", func(t *testing.T) {
 		t.Parallel()
 		h := newSessionHarness(t)
-		response, _ := h.sendAs(t, memberPrincipal(freshID), mutation, nil)
+		response, _ := h.sendAs(t, sessionMemberPrincipal(freshID), mutation, nil)
 		data, _ := response["data"].(map[string]any)
 		issued, _ := data["generateTransientToken"].(map[string]any)["transientToken"].(map[string]any)
 		token, _ := issued["token"].(string)

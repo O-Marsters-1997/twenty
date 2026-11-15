@@ -6,6 +6,16 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/frontdoor"
 )
 
+func TestDefaultTable_BlocksIndexAndTranslationOperations(t *testing.T) {
+	t.Parallel()
+	table := frontdoor.DefaultTable()[frontdoor.EndpointMetadata]
+	for _, operation := range []string{"CreateOneIndexMetadataItem", "DeleteOneIndexMetadataItem", "MetadataTranslations"} {
+		if table[operation] != frontdoor.RouteBlocked {
+			t.Errorf("route of %s = %q, want %q", operation, table[operation], frontdoor.RouteBlocked)
+		}
+	}
+}
+
 func TestDefaultTable_RoutesAgentOperationsToGo(t *testing.T) {
 	t.Parallel()
 	table := frontdoor.DefaultTable()[frontdoor.EndpointMetadata]
@@ -27,6 +37,7 @@ func TestDefaultTable_RoutesMessagingOperationsToGo(t *testing.T) {
 		"GetWebhooks", "GetWebhook", "CreateWebhook", "UpdateWebhook", "DeleteWebhook",
 		"GetApiKeys", "GetApiKey", "GetApiKeyRoles", "CreateApiKey", "UpdateApiKey", "RevokeApiKey", "AssignRoleToApiKey",
 		"GenerateApiKeyToken", "GeneratePlaygroundToken",
+		"UpdateWorkspace", "UpdateWorkspaceAllowedIframeOrigins",
 	} {
 		if table[operation] != frontdoor.RouteGo {
 			t.Errorf("route of %s = %q, want %q", operation, table[operation], frontdoor.RouteGo)

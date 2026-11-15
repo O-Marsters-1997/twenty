@@ -14,6 +14,7 @@ type Resolver struct {
 	Sessions      *auth.UserSession
 	Login         *auth.TwoFactorLogin
 	Tokens        *auth.PGIssuer
+	Current       *auth.CurrentUser
 }
 
 func (r *mutationResolver) InitiateOTPProvisioning(ctx context.Context, loginToken string, origin string) (*InitiateTwoFactorAuthenticationProvisioning, error) {

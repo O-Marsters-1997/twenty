@@ -39,6 +39,8 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow"
 	workflowstore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/store"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/workflowgql"
+	workspacestore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/workspace/store"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/workspace/workspacegql"
 )
 
 func main() {
@@ -105,6 +107,7 @@ func run() error {
 	)
 	authHandler := authgql.NewHandler(newAuthResolver(pool, twoFactor, passwordLogins, stack), logger)
 
+	dynamicHandler, isDynamic := dynamicRecords(pool, logger)
 	goGraphQL := http.NewServeMux()
 	goGraphQL.Handle(string(frontdoor.EndpointWorkspace), workspaceHandler(recordsgql.NewHandler(&recordsgql.Resolver{
 		Store:              people,
@@ -118,7 +121,7 @@ func run() error {
 		NoteTargets:        store.NewNoteTargets(pool),
 		Tasks:              store.NewTasks(pool),
 		TaskTargets:        store.NewTaskTargets(pool),
-	}, logger), chatHandler, workflowHandler, messaginggql.NewHandler(&messaginggql.Resolver{
+	}, logger), dynamicHandler, isDynamic, chatHandler, workflowHandler, messaginggql.NewHandler(&messaginggql.Resolver{
 		Timeline: messagingstore.NewTimeline(pool),
 		Banners:  messagingstore.NewReconnectBanners(pool),
 	}, logger), authHandler))
@@ -137,8 +140,16 @@ func run() error {
 		accessgql.NewHandler(&accessgql.Resolver{
 			WebhookStore: accessstore.NewWebhooks(pool),
 			APIKeyStore:  accessstore.NewAPIKeys(pool),
+			RoleStore:    accessstore.NewRoles(pool),
 			Permissions:  accessstore.NewPermissions(pool),
 			Tokens:       stack.issuer,
+		}, logger),
+		workspacegql.NewHandler(&workspacegql.Resolver{
+			Workspaces: workspacestore.NewWorkspaces(pool, cfg.DefaultSubdomain, workspacestore.AuthProviders{
+				Google:   os.Getenv("AUTH_GOOGLE_ENABLED") == "true",
+				Password: os.Getenv("AUTH_PASSWORD_ENABLED") != "false",
+			}),
+			Permissions: accessstore.NewPermissions(pool),
 		}, logger),
 		authHandler,
 		agentgql.Operations,

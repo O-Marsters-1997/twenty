@@ -6,6 +6,14 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata"
 )
 
+type Application struct {
+	ID                  string             `json:"id"`
+	Name                string             `json:"name"`
+	UniversalIdentifier string             `json:"universalIdentifier"`
+	LogoURL             *string            `json:"logoUrl,omitempty"`
+	CreatedAt           metadata.Timestamp `json:"createdAt"`
+}
+
 type AuthToken struct {
 	Token     string             `json:"token"`
 	ExpiresAt metadata.Timestamp `json:"expiresAt"`
@@ -44,6 +52,11 @@ type DeleteTwoFactorAuthenticationMethod struct {
 	Success bool `json:"success"`
 }
 
+type FeatureFlag struct {
+	Key   string `json:"key"`
+	Value bool   `json:"value"`
+}
+
 type InitiateTwoFactorAuthenticationProvisioning struct {
 	URI string `json:"uri"`
 }
@@ -56,6 +69,23 @@ type Mutation struct {
 }
 
 type Query struct {
+}
+
+type Role struct {
+	ID                            string  `json:"id"`
+	Label                         string  `json:"label"`
+	Description                   *string `json:"description,omitempty"`
+	Icon                          *string `json:"icon,omitempty"`
+	CanUpdateAllSettings          bool    `json:"canUpdateAllSettings"`
+	CanAccessAllTools             bool    `json:"canAccessAllTools"`
+	IsEditable                    bool    `json:"isEditable"`
+	CanReadAllObjectRecords       bool    `json:"canReadAllObjectRecords"`
+	CanUpdateAllObjectRecords     bool    `json:"canUpdateAllObjectRecords"`
+	CanSoftDeleteAllObjectRecords bool    `json:"canSoftDeleteAllObjectRecords"`
+	CanDestroyAllObjectRecords    bool    `json:"canDestroyAllObjectRecords"`
+	CanBeAssignedToUsers          bool    `json:"canBeAssignedToUsers"`
+	CanBeAssignedToAgents         bool    `json:"canBeAssignedToAgents"`
+	CanBeAssignedToAPIKeys        bool    `json:"canBeAssignedToApiKeys"`
 }
 
 type TransientToken struct {
@@ -78,6 +108,19 @@ type TwoFactorAuthenticationRecoveryStatus struct {
 	PendingRecoveryCodeExpiresAt             *metadata.Timestamp `json:"pendingRecoveryCodeExpiresAt,omitempty"`
 }
 
+type User struct {
+	ID                  string               `json:"id"`
+	FirstName           string               `json:"firstName"`
+	LastName            string               `json:"lastName"`
+	Email               string               `json:"email"`
+	HasPassword         bool                 `json:"hasPassword"`
+	SupportUserHash     *string              `json:"supportUserHash,omitempty"`
+	OnboardingStatus    *string              `json:"onboardingStatus,omitempty"`
+	CurrentWorkspace    *Workspace           `json:"currentWorkspace,omitempty"`
+	AvailableWorkspaces *AvailableWorkspaces `json:"availableWorkspaces"`
+	UserVars            any                  `json:"userVars,omitempty"`
+}
+
 type UserSession struct {
 	ID           string             `json:"id"`
 	WorkspaceID  *string            `json:"workspaceId,omitempty"`
@@ -92,6 +135,40 @@ type UserSession struct {
 
 type VerifyTwoFactorAuthenticationMethod struct {
 	Success bool `json:"success"`
+}
+
+type Workspace struct {
+	ID                                string         `json:"id"`
+	DisplayName                       *string        `json:"displayName,omitempty"`
+	Logo                              string         `json:"logo"`
+	InviteHash                        *string        `json:"inviteHash,omitempty"`
+	AllowImpersonation                bool           `json:"allowImpersonation"`
+	ActivationStatus                  string         `json:"activationStatus"`
+	IsPublicInviteLinkEnabled         bool           `json:"isPublicInviteLinkEnabled"`
+	IsCampaignClickTrackingEnabled    bool           `json:"isCampaignClickTrackingEnabled"`
+	IsCampaignOpenTrackingEnabled     bool           `json:"isCampaignOpenTrackingEnabled"`
+	WorkspaceDiscoverability          string         `json:"workspaceDiscoverability"`
+	IsGoogleAuthEnabled               bool           `json:"isGoogleAuthEnabled"`
+	IsPasswordAuthEnabled             bool           `json:"isPasswordAuthEnabled"`
+	IsGoogleAuthBypassEnabled         bool           `json:"isGoogleAuthBypassEnabled"`
+	IsPasswordAuthBypassEnabled       bool           `json:"isPasswordAuthBypassEnabled"`
+	Subdomain                         string         `json:"subdomain"`
+	WorkspaceCustomApplication        *Application   `json:"workspaceCustomApplication,omitempty"`
+	InstalledApplications             []*Application `json:"installedApplications"`
+	WorkspaceUrls                     *WorkspaceUrls `json:"workspaceUrls"`
+	FeatureFlags                      []*FeatureFlag `json:"featureFlags,omitempty"`
+	WorkspaceMembersCount             int            `json:"workspaceMembersCount"`
+	DefaultRole                       *Role          `json:"defaultRole,omitempty"`
+	AiChatModelTier                   string         `json:"aiChatModelTier"`
+	AiAgentModelTier                  string         `json:"aiAgentModelTier"`
+	IsAutoModelSelectionEnabled       bool           `json:"isAutoModelSelectionEnabled"`
+	AiModelIDByTier                   any            `json:"aiModelIdByTier"`
+	AiAdditionalInstructions          *string        `json:"aiAdditionalInstructions,omitempty"`
+	IsTwoFactorAuthenticationEnforced bool           `json:"isTwoFactorAuthenticationEnforced"`
+	TrashRetentionDays                int            `json:"trashRetentionDays"`
+	EventLogRetentionDays             int            `json:"eventLogRetentionDays"`
+	EditableProfileFields             []string       `json:"editableProfileFields,omitempty"`
+	IsInternalMessagesImportEnabled   bool           `json:"isInternalMessagesImportEnabled"`
 }
 
 type WorkspaceUrls struct {

@@ -37,6 +37,14 @@ type DirectiveRoot struct {
 }
 
 type ComplexityRoot struct {
+	Application struct {
+		CreatedAt           func(childComplexity int) int
+		ID                  func(childComplexity int) int
+		LogoURL             func(childComplexity int) int
+		Name                func(childComplexity int) int
+		UniversalIdentifier func(childComplexity int) int
+	}
+
 	AuthToken struct {
 		ExpiresAt func(childComplexity int) int
 		Token     func(childComplexity int) int
@@ -75,6 +83,11 @@ type ComplexityRoot struct {
 		Success func(childComplexity int) int
 	}
 
+	FeatureFlag struct {
+		Key   func(childComplexity int) int
+		Value func(childComplexity int) int
+	}
+
 	InitiateTwoFactorAuthenticationProvisioning struct {
 		URI func(childComplexity int) int
 	}
@@ -103,8 +116,26 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
+		CurrentUser                           func(childComplexity int) int
 		CurrentUserSessions                   func(childComplexity int) int
 		TwoFactorAuthenticationRecoveryStatus func(childComplexity int, userID string) int
+	}
+
+	Role struct {
+		CanAccessAllTools             func(childComplexity int) int
+		CanBeAssignedToAPIKeys        func(childComplexity int) int
+		CanBeAssignedToAgents         func(childComplexity int) int
+		CanBeAssignedToUsers          func(childComplexity int) int
+		CanDestroyAllObjectRecords    func(childComplexity int) int
+		CanReadAllObjectRecords       func(childComplexity int) int
+		CanSoftDeleteAllObjectRecords func(childComplexity int) int
+		CanUpdateAllObjectRecords     func(childComplexity int) int
+		CanUpdateAllSettings          func(childComplexity int) int
+		Description                   func(childComplexity int) int
+		ID                            func(childComplexity int) int
+		Icon                          func(childComplexity int) int
+		IsEditable                    func(childComplexity int) int
+		Label                         func(childComplexity int) int
 	}
 
 	TransientToken struct {
@@ -127,6 +158,19 @@ type ComplexityRoot struct {
 		PendingRecoveryCodeExpiresAt             func(childComplexity int) int
 	}
 
+	User struct {
+		AvailableWorkspaces func(childComplexity int) int
+		CurrentWorkspace    func(childComplexity int) int
+		Email               func(childComplexity int) int
+		FirstName           func(childComplexity int) int
+		HasPassword         func(childComplexity int) int
+		ID                  func(childComplexity int) int
+		LastName            func(childComplexity int) int
+		OnboardingStatus    func(childComplexity int) int
+		SupportUserHash     func(childComplexity int) int
+		UserVars            func(childComplexity int) int
+	}
+
 	UserSession struct {
 		AuthProvider func(childComplexity int) int
 		CreatedAt    func(childComplexity int) int
@@ -141,6 +185,40 @@ type ComplexityRoot struct {
 
 	VerifyTwoFactorAuthenticationMethod struct {
 		Success func(childComplexity int) int
+	}
+
+	Workspace struct {
+		ActivationStatus                  func(childComplexity int) int
+		AiAdditionalInstructions          func(childComplexity int) int
+		AiAgentModelTier                  func(childComplexity int) int
+		AiChatModelTier                   func(childComplexity int) int
+		AiModelIDByTier                   func(childComplexity int) int
+		AllowImpersonation                func(childComplexity int) int
+		DefaultRole                       func(childComplexity int) int
+		DisplayName                       func(childComplexity int) int
+		EditableProfileFields             func(childComplexity int) int
+		EventLogRetentionDays             func(childComplexity int) int
+		FeatureFlags                      func(childComplexity int) int
+		ID                                func(childComplexity int) int
+		InstalledApplications             func(childComplexity int) int
+		InviteHash                        func(childComplexity int) int
+		IsAutoModelSelectionEnabled       func(childComplexity int) int
+		IsCampaignClickTrackingEnabled    func(childComplexity int) int
+		IsCampaignOpenTrackingEnabled     func(childComplexity int) int
+		IsGoogleAuthBypassEnabled         func(childComplexity int) int
+		IsGoogleAuthEnabled               func(childComplexity int) int
+		IsInternalMessagesImportEnabled   func(childComplexity int) int
+		IsPasswordAuthBypassEnabled       func(childComplexity int) int
+		IsPasswordAuthEnabled             func(childComplexity int) int
+		IsPublicInviteLinkEnabled         func(childComplexity int) int
+		IsTwoFactorAuthenticationEnforced func(childComplexity int) int
+		Logo                              func(childComplexity int) int
+		Subdomain                         func(childComplexity int) int
+		TrashRetentionDays                func(childComplexity int) int
+		WorkspaceCustomApplication        func(childComplexity int) int
+		WorkspaceDiscoverability          func(childComplexity int) int
+		WorkspaceMembersCount             func(childComplexity int) int
+		WorkspaceUrls                     func(childComplexity int) int
 	}
 
 	WorkspaceUrls struct {
@@ -173,6 +251,7 @@ type MutationResolver interface {
 type QueryResolver interface {
 	TwoFactorAuthenticationRecoveryStatus(ctx context.Context, userID string) (*TwoFactorAuthenticationRecoveryStatus, error)
 	CurrentUserSessions(ctx context.Context) ([]*UserSession, error)
+	CurrentUser(ctx context.Context) (*User, error)
 }
 
 // endregion ************************** generated!.gotpl **************************
@@ -192,6 +271,37 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 	ec := newExecutionContext(nil, e, nil)
 	_ = ec
 	switch typeName + "." + field {
+
+	case "Application.createdAt":
+		if e.ComplexityRoot.Application.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Application.CreatedAt(childComplexity), true
+	case "Application.id":
+		if e.ComplexityRoot.Application.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Application.ID(childComplexity), true
+	case "Application.logoUrl":
+		if e.ComplexityRoot.Application.LogoURL == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Application.LogoURL(childComplexity), true
+	case "Application.name":
+		if e.ComplexityRoot.Application.Name == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Application.Name(childComplexity), true
+	case "Application.universalIdentifier":
+		if e.ComplexityRoot.Application.UniversalIdentifier == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Application.UniversalIdentifier(childComplexity), true
 
 	case "AuthToken.expiresAt":
 		if e.ComplexityRoot.AuthToken.ExpiresAt == nil {
@@ -301,6 +411,19 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DeleteTwoFactorAuthenticationMethod.Success(childComplexity), true
+
+	case "FeatureFlag.key":
+		if e.ComplexityRoot.FeatureFlag.Key == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FeatureFlag.Key(childComplexity), true
+	case "FeatureFlag.value":
+		if e.ComplexityRoot.FeatureFlag.Value == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FeatureFlag.Value(childComplexity), true
 
 	case "InitiateTwoFactorAuthenticationProvisioning.uri":
 		if e.ComplexityRoot.InitiateTwoFactorAuthenticationProvisioning.URI == nil {
@@ -478,6 +601,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Mutation.VerifyTwoFactorAuthenticationMethodForAuthenticatedUser(childComplexity, args["otp"].(string)), true
 
+	case "Query.currentUser":
+		if e.ComplexityRoot.Query.CurrentUser == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Query.CurrentUser(childComplexity), true
 	case "Query.currentUserSessions":
 		if e.ComplexityRoot.Query.CurrentUserSessions == nil {
 			break
@@ -496,6 +625,91 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.TwoFactorAuthenticationRecoveryStatus(childComplexity, args["userId"].(string)), true
+
+	case "Role.canAccessAllTools":
+		if e.ComplexityRoot.Role.CanAccessAllTools == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Role.CanAccessAllTools(childComplexity), true
+	case "Role.canBeAssignedToApiKeys":
+		if e.ComplexityRoot.Role.CanBeAssignedToAPIKeys == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Role.CanBeAssignedToAPIKeys(childComplexity), true
+	case "Role.canBeAssignedToAgents":
+		if e.ComplexityRoot.Role.CanBeAssignedToAgents == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Role.CanBeAssignedToAgents(childComplexity), true
+	case "Role.canBeAssignedToUsers":
+		if e.ComplexityRoot.Role.CanBeAssignedToUsers == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Role.CanBeAssignedToUsers(childComplexity), true
+	case "Role.canDestroyAllObjectRecords":
+		if e.ComplexityRoot.Role.CanDestroyAllObjectRecords == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Role.CanDestroyAllObjectRecords(childComplexity), true
+	case "Role.canReadAllObjectRecords":
+		if e.ComplexityRoot.Role.CanReadAllObjectRecords == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Role.CanReadAllObjectRecords(childComplexity), true
+	case "Role.canSoftDeleteAllObjectRecords":
+		if e.ComplexityRoot.Role.CanSoftDeleteAllObjectRecords == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Role.CanSoftDeleteAllObjectRecords(childComplexity), true
+	case "Role.canUpdateAllObjectRecords":
+		if e.ComplexityRoot.Role.CanUpdateAllObjectRecords == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Role.CanUpdateAllObjectRecords(childComplexity), true
+	case "Role.canUpdateAllSettings":
+		if e.ComplexityRoot.Role.CanUpdateAllSettings == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Role.CanUpdateAllSettings(childComplexity), true
+	case "Role.description":
+		if e.ComplexityRoot.Role.Description == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Role.Description(childComplexity), true
+	case "Role.id":
+		if e.ComplexityRoot.Role.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Role.ID(childComplexity), true
+	case "Role.icon":
+		if e.ComplexityRoot.Role.Icon == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Role.Icon(childComplexity), true
+	case "Role.isEditable":
+		if e.ComplexityRoot.Role.IsEditable == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Role.IsEditable(childComplexity), true
+	case "Role.label":
+		if e.ComplexityRoot.Role.Label == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Role.Label(childComplexity), true
 
 	case "TransientToken.transientToken":
 		if e.ComplexityRoot.TransientToken.TransientToken == nil {
@@ -548,6 +762,67 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TwoFactorAuthenticationRecoveryStatus.PendingRecoveryCodeExpiresAt(childComplexity), true
+
+	case "User.availableWorkspaces":
+		if e.ComplexityRoot.User.AvailableWorkspaces == nil {
+			break
+		}
+
+		return e.ComplexityRoot.User.AvailableWorkspaces(childComplexity), true
+	case "User.currentWorkspace":
+		if e.ComplexityRoot.User.CurrentWorkspace == nil {
+			break
+		}
+
+		return e.ComplexityRoot.User.CurrentWorkspace(childComplexity), true
+	case "User.email":
+		if e.ComplexityRoot.User.Email == nil {
+			break
+		}
+
+		return e.ComplexityRoot.User.Email(childComplexity), true
+	case "User.firstName":
+		if e.ComplexityRoot.User.FirstName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.User.FirstName(childComplexity), true
+	case "User.hasPassword":
+		if e.ComplexityRoot.User.HasPassword == nil {
+			break
+		}
+
+		return e.ComplexityRoot.User.HasPassword(childComplexity), true
+	case "User.id":
+		if e.ComplexityRoot.User.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.User.ID(childComplexity), true
+	case "User.lastName":
+		if e.ComplexityRoot.User.LastName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.User.LastName(childComplexity), true
+	case "User.onboardingStatus":
+		if e.ComplexityRoot.User.OnboardingStatus == nil {
+			break
+		}
+
+		return e.ComplexityRoot.User.OnboardingStatus(childComplexity), true
+	case "User.supportUserHash":
+		if e.ComplexityRoot.User.SupportUserHash == nil {
+			break
+		}
+
+		return e.ComplexityRoot.User.SupportUserHash(childComplexity), true
+	case "User.userVars":
+		if e.ComplexityRoot.User.UserVars == nil {
+			break
+		}
+
+		return e.ComplexityRoot.User.UserVars(childComplexity), true
 
 	case "UserSession.authProvider":
 		if e.ComplexityRoot.UserSession.AuthProvider == nil {
@@ -610,6 +885,193 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.VerifyTwoFactorAuthenticationMethod.Success(childComplexity), true
+
+	case "Workspace.activationStatus":
+		if e.ComplexityRoot.Workspace.ActivationStatus == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Workspace.ActivationStatus(childComplexity), true
+	case "Workspace.aiAdditionalInstructions":
+		if e.ComplexityRoot.Workspace.AiAdditionalInstructions == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Workspace.AiAdditionalInstructions(childComplexity), true
+	case "Workspace.aiAgentModelTier":
+		if e.ComplexityRoot.Workspace.AiAgentModelTier == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Workspace.AiAgentModelTier(childComplexity), true
+	case "Workspace.aiChatModelTier":
+		if e.ComplexityRoot.Workspace.AiChatModelTier == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Workspace.AiChatModelTier(childComplexity), true
+	case "Workspace.aiModelIdByTier":
+		if e.ComplexityRoot.Workspace.AiModelIDByTier == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Workspace.AiModelIDByTier(childComplexity), true
+	case "Workspace.allowImpersonation":
+		if e.ComplexityRoot.Workspace.AllowImpersonation == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Workspace.AllowImpersonation(childComplexity), true
+	case "Workspace.defaultRole":
+		if e.ComplexityRoot.Workspace.DefaultRole == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Workspace.DefaultRole(childComplexity), true
+	case "Workspace.displayName":
+		if e.ComplexityRoot.Workspace.DisplayName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Workspace.DisplayName(childComplexity), true
+	case "Workspace.editableProfileFields":
+		if e.ComplexityRoot.Workspace.EditableProfileFields == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Workspace.EditableProfileFields(childComplexity), true
+	case "Workspace.eventLogRetentionDays":
+		if e.ComplexityRoot.Workspace.EventLogRetentionDays == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Workspace.EventLogRetentionDays(childComplexity), true
+	case "Workspace.featureFlags":
+		if e.ComplexityRoot.Workspace.FeatureFlags == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Workspace.FeatureFlags(childComplexity), true
+	case "Workspace.id":
+		if e.ComplexityRoot.Workspace.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Workspace.ID(childComplexity), true
+	case "Workspace.installedApplications":
+		if e.ComplexityRoot.Workspace.InstalledApplications == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Workspace.InstalledApplications(childComplexity), true
+	case "Workspace.inviteHash":
+		if e.ComplexityRoot.Workspace.InviteHash == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Workspace.InviteHash(childComplexity), true
+	case "Workspace.isAutoModelSelectionEnabled":
+		if e.ComplexityRoot.Workspace.IsAutoModelSelectionEnabled == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Workspace.IsAutoModelSelectionEnabled(childComplexity), true
+	case "Workspace.isCampaignClickTrackingEnabled":
+		if e.ComplexityRoot.Workspace.IsCampaignClickTrackingEnabled == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Workspace.IsCampaignClickTrackingEnabled(childComplexity), true
+	case "Workspace.isCampaignOpenTrackingEnabled":
+		if e.ComplexityRoot.Workspace.IsCampaignOpenTrackingEnabled == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Workspace.IsCampaignOpenTrackingEnabled(childComplexity), true
+	case "Workspace.isGoogleAuthBypassEnabled":
+		if e.ComplexityRoot.Workspace.IsGoogleAuthBypassEnabled == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Workspace.IsGoogleAuthBypassEnabled(childComplexity), true
+	case "Workspace.isGoogleAuthEnabled":
+		if e.ComplexityRoot.Workspace.IsGoogleAuthEnabled == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Workspace.IsGoogleAuthEnabled(childComplexity), true
+	case "Workspace.isInternalMessagesImportEnabled":
+		if e.ComplexityRoot.Workspace.IsInternalMessagesImportEnabled == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Workspace.IsInternalMessagesImportEnabled(childComplexity), true
+	case "Workspace.isPasswordAuthBypassEnabled":
+		if e.ComplexityRoot.Workspace.IsPasswordAuthBypassEnabled == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Workspace.IsPasswordAuthBypassEnabled(childComplexity), true
+	case "Workspace.isPasswordAuthEnabled":
+		if e.ComplexityRoot.Workspace.IsPasswordAuthEnabled == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Workspace.IsPasswordAuthEnabled(childComplexity), true
+	case "Workspace.isPublicInviteLinkEnabled":
+		if e.ComplexityRoot.Workspace.IsPublicInviteLinkEnabled == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Workspace.IsPublicInviteLinkEnabled(childComplexity), true
+	case "Workspace.isTwoFactorAuthenticationEnforced":
+		if e.ComplexityRoot.Workspace.IsTwoFactorAuthenticationEnforced == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Workspace.IsTwoFactorAuthenticationEnforced(childComplexity), true
+	case "Workspace.logo":
+		if e.ComplexityRoot.Workspace.Logo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Workspace.Logo(childComplexity), true
+	case "Workspace.subdomain":
+		if e.ComplexityRoot.Workspace.Subdomain == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Workspace.Subdomain(childComplexity), true
+	case "Workspace.trashRetentionDays":
+		if e.ComplexityRoot.Workspace.TrashRetentionDays == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Workspace.TrashRetentionDays(childComplexity), true
+	case "Workspace.workspaceCustomApplication":
+		if e.ComplexityRoot.Workspace.WorkspaceCustomApplication == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Workspace.WorkspaceCustomApplication(childComplexity), true
+	case "Workspace.workspaceDiscoverability":
+		if e.ComplexityRoot.Workspace.WorkspaceDiscoverability == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Workspace.WorkspaceDiscoverability(childComplexity), true
+	case "Workspace.workspaceMembersCount":
+		if e.ComplexityRoot.Workspace.WorkspaceMembersCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Workspace.WorkspaceMembersCount(childComplexity), true
+	case "Workspace.workspaceUrls":
+		if e.ComplexityRoot.Workspace.WorkspaceUrls == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Workspace.WorkspaceUrls(childComplexity), true
 
 	case "WorkspaceUrls.subdomainUrl":
 		if e.ComplexityRoot.WorkspaceUrls.SubdomainURL == nil {
@@ -701,7 +1163,7 @@ func newExecutionContext(
 	}
 }
 
-//go:embed "login.graphqls" "session.graphqls" "twofactor.graphqls"
+//go:embed "login.graphqls" "session.graphqls" "twofactor.graphqls" "user.graphqls"
 var sourcesFS embed.FS
 
 func sourceData(filename string) string {
@@ -716,12 +1178,29 @@ var sources = []*ast.Source{
 	{Name: "login.graphqls", Input: sourceData("login.graphqls"), BuiltIn: false},
 	{Name: "session.graphqls", Input: sourceData("session.graphqls"), BuiltIn: false},
 	{Name: "twofactor.graphqls", Input: sourceData("twofactor.graphqls"), BuiltIn: false},
+	{Name: "user.graphqls", Input: sourceData("user.graphqls"), BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
 // childFields_* functions provide shared child field context lookups.
 // Each function is generated once per unique object type, deduplicating the
 // switch statements that were previously inlined in every fieldContext_* function.
+
+func (ec *executionContext) childFields_Application(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_Application_id(ctx, field)
+	case "name":
+		return ec.fieldContext_Application_name(ctx, field)
+	case "universalIdentifier":
+		return ec.fieldContext_Application_universalIdentifier(ctx, field)
+	case "logoUrl":
+		return ec.fieldContext_Application_logoUrl(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_Application_createdAt(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type Application", field.Name)
+}
 
 func (ec *executionContext) childFields_AuthToken(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
@@ -799,6 +1278,16 @@ func (ec *executionContext) childFields_DeleteTwoFactorAuthenticationMethod(ctx 
 	return nil, fmt.Errorf("no field named %q was found under type DeleteTwoFactorAuthenticationMethod", field.Name)
 }
 
+func (ec *executionContext) childFields_FeatureFlag(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "key":
+		return ec.fieldContext_FeatureFlag_key(ctx, field)
+	case "value":
+		return ec.fieldContext_FeatureFlag_value(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type FeatureFlag", field.Name)
+}
+
 func (ec *executionContext) childFields_InitiateTwoFactorAuthenticationProvisioning(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "uri":
@@ -813,6 +1302,40 @@ func (ec *executionContext) childFields_LoginToken(ctx context.Context, field gr
 		return ec.fieldContext_LoginToken_loginToken(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type LoginToken", field.Name)
+}
+
+func (ec *executionContext) childFields_Role(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_Role_id(ctx, field)
+	case "label":
+		return ec.fieldContext_Role_label(ctx, field)
+	case "description":
+		return ec.fieldContext_Role_description(ctx, field)
+	case "icon":
+		return ec.fieldContext_Role_icon(ctx, field)
+	case "canUpdateAllSettings":
+		return ec.fieldContext_Role_canUpdateAllSettings(ctx, field)
+	case "canAccessAllTools":
+		return ec.fieldContext_Role_canAccessAllTools(ctx, field)
+	case "isEditable":
+		return ec.fieldContext_Role_isEditable(ctx, field)
+	case "canReadAllObjectRecords":
+		return ec.fieldContext_Role_canReadAllObjectRecords(ctx, field)
+	case "canUpdateAllObjectRecords":
+		return ec.fieldContext_Role_canUpdateAllObjectRecords(ctx, field)
+	case "canSoftDeleteAllObjectRecords":
+		return ec.fieldContext_Role_canSoftDeleteAllObjectRecords(ctx, field)
+	case "canDestroyAllObjectRecords":
+		return ec.fieldContext_Role_canDestroyAllObjectRecords(ctx, field)
+	case "canBeAssignedToUsers":
+		return ec.fieldContext_Role_canBeAssignedToUsers(ctx, field)
+	case "canBeAssignedToAgents":
+		return ec.fieldContext_Role_canBeAssignedToAgents(ctx, field)
+	case "canBeAssignedToApiKeys":
+		return ec.fieldContext_Role_canBeAssignedToApiKeys(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type Role", field.Name)
 }
 
 func (ec *executionContext) childFields_TransientToken(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -855,6 +1378,32 @@ func (ec *executionContext) childFields_TwoFactorAuthenticationRecoveryStatus(ct
 	return nil, fmt.Errorf("no field named %q was found under type TwoFactorAuthenticationRecoveryStatus", field.Name)
 }
 
+func (ec *executionContext) childFields_User(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_User_id(ctx, field)
+	case "firstName":
+		return ec.fieldContext_User_firstName(ctx, field)
+	case "lastName":
+		return ec.fieldContext_User_lastName(ctx, field)
+	case "email":
+		return ec.fieldContext_User_email(ctx, field)
+	case "hasPassword":
+		return ec.fieldContext_User_hasPassword(ctx, field)
+	case "supportUserHash":
+		return ec.fieldContext_User_supportUserHash(ctx, field)
+	case "onboardingStatus":
+		return ec.fieldContext_User_onboardingStatus(ctx, field)
+	case "currentWorkspace":
+		return ec.fieldContext_User_currentWorkspace(ctx, field)
+	case "availableWorkspaces":
+		return ec.fieldContext_User_availableWorkspaces(ctx, field)
+	case "userVars":
+		return ec.fieldContext_User_userVars(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
+}
+
 func (ec *executionContext) childFields_UserSession(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "id":
@@ -885,6 +1434,74 @@ func (ec *executionContext) childFields_VerifyTwoFactorAuthenticationMethod(ctx 
 		return ec.fieldContext_VerifyTwoFactorAuthenticationMethod_success(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type VerifyTwoFactorAuthenticationMethod", field.Name)
+}
+
+func (ec *executionContext) childFields_Workspace(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_Workspace_id(ctx, field)
+	case "displayName":
+		return ec.fieldContext_Workspace_displayName(ctx, field)
+	case "logo":
+		return ec.fieldContext_Workspace_logo(ctx, field)
+	case "inviteHash":
+		return ec.fieldContext_Workspace_inviteHash(ctx, field)
+	case "allowImpersonation":
+		return ec.fieldContext_Workspace_allowImpersonation(ctx, field)
+	case "activationStatus":
+		return ec.fieldContext_Workspace_activationStatus(ctx, field)
+	case "isPublicInviteLinkEnabled":
+		return ec.fieldContext_Workspace_isPublicInviteLinkEnabled(ctx, field)
+	case "isCampaignClickTrackingEnabled":
+		return ec.fieldContext_Workspace_isCampaignClickTrackingEnabled(ctx, field)
+	case "isCampaignOpenTrackingEnabled":
+		return ec.fieldContext_Workspace_isCampaignOpenTrackingEnabled(ctx, field)
+	case "workspaceDiscoverability":
+		return ec.fieldContext_Workspace_workspaceDiscoverability(ctx, field)
+	case "isGoogleAuthEnabled":
+		return ec.fieldContext_Workspace_isGoogleAuthEnabled(ctx, field)
+	case "isPasswordAuthEnabled":
+		return ec.fieldContext_Workspace_isPasswordAuthEnabled(ctx, field)
+	case "isGoogleAuthBypassEnabled":
+		return ec.fieldContext_Workspace_isGoogleAuthBypassEnabled(ctx, field)
+	case "isPasswordAuthBypassEnabled":
+		return ec.fieldContext_Workspace_isPasswordAuthBypassEnabled(ctx, field)
+	case "subdomain":
+		return ec.fieldContext_Workspace_subdomain(ctx, field)
+	case "workspaceCustomApplication":
+		return ec.fieldContext_Workspace_workspaceCustomApplication(ctx, field)
+	case "installedApplications":
+		return ec.fieldContext_Workspace_installedApplications(ctx, field)
+	case "workspaceUrls":
+		return ec.fieldContext_Workspace_workspaceUrls(ctx, field)
+	case "featureFlags":
+		return ec.fieldContext_Workspace_featureFlags(ctx, field)
+	case "workspaceMembersCount":
+		return ec.fieldContext_Workspace_workspaceMembersCount(ctx, field)
+	case "defaultRole":
+		return ec.fieldContext_Workspace_defaultRole(ctx, field)
+	case "aiChatModelTier":
+		return ec.fieldContext_Workspace_aiChatModelTier(ctx, field)
+	case "aiAgentModelTier":
+		return ec.fieldContext_Workspace_aiAgentModelTier(ctx, field)
+	case "isAutoModelSelectionEnabled":
+		return ec.fieldContext_Workspace_isAutoModelSelectionEnabled(ctx, field)
+	case "aiModelIdByTier":
+		return ec.fieldContext_Workspace_aiModelIdByTier(ctx, field)
+	case "aiAdditionalInstructions":
+		return ec.fieldContext_Workspace_aiAdditionalInstructions(ctx, field)
+	case "isTwoFactorAuthenticationEnforced":
+		return ec.fieldContext_Workspace_isTwoFactorAuthenticationEnforced(ctx, field)
+	case "trashRetentionDays":
+		return ec.fieldContext_Workspace_trashRetentionDays(ctx, field)
+	case "eventLogRetentionDays":
+		return ec.fieldContext_Workspace_eventLogRetentionDays(ctx, field)
+	case "editableProfileFields":
+		return ec.fieldContext_Workspace_editableProfileFields(ctx, field)
+	case "isInternalMessagesImportEnabled":
+		return ec.fieldContext_Workspace_isInternalMessagesImportEnabled(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type Workspace", field.Name)
 }
 
 func (ec *executionContext) childFields_WorkspaceUrls(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -1439,6 +2056,121 @@ func (ec *executionContext) field___Type_inputFields_args(ctx context.Context, r
 
 // region    **************************** field.gotpl *****************************
 
+func (ec *executionContext) _Application_id(ctx context.Context, field graphql.CollectedField, obj *Application) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Application_id(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNUUID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Application_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Application", field, false, false, "UUID")
+}
+
+func (ec *executionContext) _Application_name(ctx context.Context, field graphql.CollectedField, obj *Application) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Application_name(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Name, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Application_name(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Application", field, false, false, "String")
+}
+
+func (ec *executionContext) _Application_universalIdentifier(ctx context.Context, field graphql.CollectedField, obj *Application) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Application_universalIdentifier(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UniversalIdentifier, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNUUID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Application_universalIdentifier(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Application", field, false, false, "UUID")
+}
+
+func (ec *executionContext) _Application_logoUrl(ctx context.Context, field graphql.CollectedField, obj *Application) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Application_logoUrl(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.LogoURL, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Application_logoUrl(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Application", field, false, false, "String")
+}
+
+func (ec *executionContext) _Application_createdAt(ctx context.Context, field graphql.CollectedField, obj *Application) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Application_createdAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v metadata.Timestamp) graphql.Marshaler {
+			return ec.marshalNDateTime2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Application_createdAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Application", field, false, false, "DateTime")
+}
+
 func (ec *executionContext) _AuthToken_token(ctx context.Context, field graphql.CollectedField, obj *AuthToken) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -1900,6 +2632,52 @@ func (ec *executionContext) _DeleteTwoFactorAuthenticationMethod_success(ctx con
 }
 func (ec *executionContext) fieldContext_DeleteTwoFactorAuthenticationMethod_success(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("DeleteTwoFactorAuthenticationMethod", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _FeatureFlag_key(ctx context.Context, field graphql.CollectedField, obj *FeatureFlag) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_FeatureFlag_key(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Key, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_FeatureFlag_key(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("FeatureFlag", field, false, false, "String")
+}
+
+func (ec *executionContext) _FeatureFlag_value(ctx context.Context, field graphql.CollectedField, obj *FeatureFlag) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_FeatureFlag_value(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Value, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_FeatureFlag_value(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("FeatureFlag", field, false, false, "Boolean")
 }
 
 func (ec *executionContext) _InitiateTwoFactorAuthenticationProvisioning_uri(ctx context.Context, field graphql.CollectedField, obj *InitiateTwoFactorAuthenticationProvisioning) (ret graphql.Marshaler) {
@@ -2692,6 +3470,38 @@ func (ec *executionContext) fieldContext_Query_currentUserSessions(_ context.Con
 	return fc, nil
 }
 
+func (ec *executionContext) _Query_currentUser(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_currentUser(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return ec.Resolvers.Query().CurrentUser(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *User) graphql.Marshaler {
+			return ec.marshalNUser2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐUser(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_currentUser(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_User(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -2766,6 +3576,328 @@ func (ec *executionContext) fieldContext_Query___schema(_ context.Context, field
 		},
 	}
 	return fc, nil
+}
+
+func (ec *executionContext) _Role_id(ctx context.Context, field graphql.CollectedField, obj *Role) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Role_id(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNUUID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Role_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Role", field, false, false, "UUID")
+}
+
+func (ec *executionContext) _Role_label(ctx context.Context, field graphql.CollectedField, obj *Role) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Role_label(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Label, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Role_label(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Role", field, false, false, "String")
+}
+
+func (ec *executionContext) _Role_description(ctx context.Context, field graphql.CollectedField, obj *Role) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Role_description(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Description, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Role_description(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Role", field, false, false, "String")
+}
+
+func (ec *executionContext) _Role_icon(ctx context.Context, field graphql.CollectedField, obj *Role) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Role_icon(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Icon, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Role_icon(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Role", field, false, false, "String")
+}
+
+func (ec *executionContext) _Role_canUpdateAllSettings(ctx context.Context, field graphql.CollectedField, obj *Role) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Role_canUpdateAllSettings(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CanUpdateAllSettings, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Role_canUpdateAllSettings(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Role", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _Role_canAccessAllTools(ctx context.Context, field graphql.CollectedField, obj *Role) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Role_canAccessAllTools(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CanAccessAllTools, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Role_canAccessAllTools(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Role", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _Role_isEditable(ctx context.Context, field graphql.CollectedField, obj *Role) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Role_isEditable(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.IsEditable, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Role_isEditable(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Role", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _Role_canReadAllObjectRecords(ctx context.Context, field graphql.CollectedField, obj *Role) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Role_canReadAllObjectRecords(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CanReadAllObjectRecords, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Role_canReadAllObjectRecords(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Role", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _Role_canUpdateAllObjectRecords(ctx context.Context, field graphql.CollectedField, obj *Role) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Role_canUpdateAllObjectRecords(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CanUpdateAllObjectRecords, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Role_canUpdateAllObjectRecords(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Role", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _Role_canSoftDeleteAllObjectRecords(ctx context.Context, field graphql.CollectedField, obj *Role) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Role_canSoftDeleteAllObjectRecords(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CanSoftDeleteAllObjectRecords, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Role_canSoftDeleteAllObjectRecords(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Role", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _Role_canDestroyAllObjectRecords(ctx context.Context, field graphql.CollectedField, obj *Role) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Role_canDestroyAllObjectRecords(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CanDestroyAllObjectRecords, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Role_canDestroyAllObjectRecords(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Role", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _Role_canBeAssignedToUsers(ctx context.Context, field graphql.CollectedField, obj *Role) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Role_canBeAssignedToUsers(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CanBeAssignedToUsers, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Role_canBeAssignedToUsers(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Role", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _Role_canBeAssignedToAgents(ctx context.Context, field graphql.CollectedField, obj *Role) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Role_canBeAssignedToAgents(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CanBeAssignedToAgents, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Role_canBeAssignedToAgents(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Role", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _Role_canBeAssignedToApiKeys(ctx context.Context, field graphql.CollectedField, obj *Role) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Role_canBeAssignedToApiKeys(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CanBeAssignedToAPIKeys, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Role_canBeAssignedToApiKeys(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Role", field, false, false, "Boolean")
 }
 
 func (ec *executionContext) _TransientToken_transientToken(ctx context.Context, field graphql.CollectedField, obj *TransientToken) (ret graphql.Marshaler) {
@@ -2968,6 +4100,254 @@ func (ec *executionContext) _TwoFactorAuthenticationRecoveryStatus_pendingRecove
 }
 func (ec *executionContext) fieldContext_TwoFactorAuthenticationRecoveryStatus_pendingRecoveryCodeExpiresAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("TwoFactorAuthenticationRecoveryStatus", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _User_id(ctx context.Context, field graphql.CollectedField, obj *User) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_User_id(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNUUID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_User_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("User", field, false, false, "UUID")
+}
+
+func (ec *executionContext) _User_firstName(ctx context.Context, field graphql.CollectedField, obj *User) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_User_firstName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.FirstName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_User_firstName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("User", field, false, false, "String")
+}
+
+func (ec *executionContext) _User_lastName(ctx context.Context, field graphql.CollectedField, obj *User) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_User_lastName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.LastName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_User_lastName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("User", field, false, false, "String")
+}
+
+func (ec *executionContext) _User_email(ctx context.Context, field graphql.CollectedField, obj *User) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_User_email(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Email, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_User_email(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("User", field, false, false, "String")
+}
+
+func (ec *executionContext) _User_hasPassword(ctx context.Context, field graphql.CollectedField, obj *User) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_User_hasPassword(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.HasPassword, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_User_hasPassword(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("User", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _User_supportUserHash(ctx context.Context, field graphql.CollectedField, obj *User) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_User_supportUserHash(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SupportUserHash, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_User_supportUserHash(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("User", field, false, false, "String")
+}
+
+func (ec *executionContext) _User_onboardingStatus(ctx context.Context, field graphql.CollectedField, obj *User) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_User_onboardingStatus(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.OnboardingStatus, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOOnboardingStatus2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_User_onboardingStatus(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("User", field, false, false, "OnboardingStatus")
+}
+
+func (ec *executionContext) _User_currentWorkspace(ctx context.Context, field graphql.CollectedField, obj *User) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_User_currentWorkspace(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CurrentWorkspace, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *Workspace) graphql.Marshaler {
+			return ec.marshalOWorkspace2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐWorkspace(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_User_currentWorkspace(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "User",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_Workspace(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _User_availableWorkspaces(ctx context.Context, field graphql.CollectedField, obj *User) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_User_availableWorkspaces(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AvailableWorkspaces, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *AvailableWorkspaces) graphql.Marshaler {
+			return ec.marshalNAvailableWorkspaces2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐAvailableWorkspaces(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_User_availableWorkspaces(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "User",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_AvailableWorkspaces(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _User_userVars(ctx context.Context, field graphql.CollectedField, obj *User) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_User_userVars(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UserVars, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v any) graphql.Marshaler {
+			return ec.marshalOJSON2interface(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_User_userVars(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("User", field, false, false, "JSON")
 }
 
 func (ec *executionContext) _UserSession_id(ctx context.Context, field graphql.CollectedField, obj *UserSession) (ret graphql.Marshaler) {
@@ -3198,6 +4578,764 @@ func (ec *executionContext) _VerifyTwoFactorAuthenticationMethod_success(ctx con
 }
 func (ec *executionContext) fieldContext_VerifyTwoFactorAuthenticationMethod_success(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("VerifyTwoFactorAuthenticationMethod", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _Workspace_id(ctx context.Context, field graphql.CollectedField, obj *Workspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Workspace_id(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNUUID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Workspace_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Workspace", field, false, false, "UUID")
+}
+
+func (ec *executionContext) _Workspace_displayName(ctx context.Context, field graphql.CollectedField, obj *Workspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Workspace_displayName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.DisplayName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Workspace_displayName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Workspace", field, false, false, "String")
+}
+
+func (ec *executionContext) _Workspace_logo(ctx context.Context, field graphql.CollectedField, obj *Workspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Workspace_logo(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Logo, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Workspace_logo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Workspace", field, false, false, "String")
+}
+
+func (ec *executionContext) _Workspace_inviteHash(ctx context.Context, field graphql.CollectedField, obj *Workspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Workspace_inviteHash(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.InviteHash, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Workspace_inviteHash(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Workspace", field, false, false, "String")
+}
+
+func (ec *executionContext) _Workspace_allowImpersonation(ctx context.Context, field graphql.CollectedField, obj *Workspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Workspace_allowImpersonation(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AllowImpersonation, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Workspace_allowImpersonation(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Workspace", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _Workspace_activationStatus(ctx context.Context, field graphql.CollectedField, obj *Workspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Workspace_activationStatus(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ActivationStatus, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNWorkspaceActivationStatus2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Workspace_activationStatus(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Workspace", field, false, false, "WorkspaceActivationStatus")
+}
+
+func (ec *executionContext) _Workspace_isPublicInviteLinkEnabled(ctx context.Context, field graphql.CollectedField, obj *Workspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Workspace_isPublicInviteLinkEnabled(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.IsPublicInviteLinkEnabled, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Workspace_isPublicInviteLinkEnabled(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Workspace", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _Workspace_isCampaignClickTrackingEnabled(ctx context.Context, field graphql.CollectedField, obj *Workspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Workspace_isCampaignClickTrackingEnabled(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.IsCampaignClickTrackingEnabled, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Workspace_isCampaignClickTrackingEnabled(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Workspace", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _Workspace_isCampaignOpenTrackingEnabled(ctx context.Context, field graphql.CollectedField, obj *Workspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Workspace_isCampaignOpenTrackingEnabled(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.IsCampaignOpenTrackingEnabled, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Workspace_isCampaignOpenTrackingEnabled(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Workspace", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _Workspace_workspaceDiscoverability(ctx context.Context, field graphql.CollectedField, obj *Workspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Workspace_workspaceDiscoverability(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.WorkspaceDiscoverability, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNWorkspaceDiscoverability2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Workspace_workspaceDiscoverability(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Workspace", field, false, false, "WorkspaceDiscoverability")
+}
+
+func (ec *executionContext) _Workspace_isGoogleAuthEnabled(ctx context.Context, field graphql.CollectedField, obj *Workspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Workspace_isGoogleAuthEnabled(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.IsGoogleAuthEnabled, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Workspace_isGoogleAuthEnabled(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Workspace", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _Workspace_isPasswordAuthEnabled(ctx context.Context, field graphql.CollectedField, obj *Workspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Workspace_isPasswordAuthEnabled(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.IsPasswordAuthEnabled, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Workspace_isPasswordAuthEnabled(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Workspace", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _Workspace_isGoogleAuthBypassEnabled(ctx context.Context, field graphql.CollectedField, obj *Workspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Workspace_isGoogleAuthBypassEnabled(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.IsGoogleAuthBypassEnabled, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Workspace_isGoogleAuthBypassEnabled(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Workspace", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _Workspace_isPasswordAuthBypassEnabled(ctx context.Context, field graphql.CollectedField, obj *Workspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Workspace_isPasswordAuthBypassEnabled(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.IsPasswordAuthBypassEnabled, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Workspace_isPasswordAuthBypassEnabled(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Workspace", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _Workspace_subdomain(ctx context.Context, field graphql.CollectedField, obj *Workspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Workspace_subdomain(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Subdomain, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Workspace_subdomain(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Workspace", field, false, false, "String")
+}
+
+func (ec *executionContext) _Workspace_workspaceCustomApplication(ctx context.Context, field graphql.CollectedField, obj *Workspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Workspace_workspaceCustomApplication(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.WorkspaceCustomApplication, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *Application) graphql.Marshaler {
+			return ec.marshalOApplication2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐApplication(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Workspace_workspaceCustomApplication(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Workspace",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_Application(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Workspace_installedApplications(ctx context.Context, field graphql.CollectedField, obj *Workspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Workspace_installedApplications(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.InstalledApplications, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*Application) graphql.Marshaler {
+			return ec.marshalNApplication2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐApplicationᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Workspace_installedApplications(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Workspace",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_Application(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Workspace_workspaceUrls(ctx context.Context, field graphql.CollectedField, obj *Workspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Workspace_workspaceUrls(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.WorkspaceUrls, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *WorkspaceUrls) graphql.Marshaler {
+			return ec.marshalNWorkspaceUrls2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐWorkspaceUrls(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Workspace_workspaceUrls(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Workspace",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_WorkspaceUrls(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Workspace_featureFlags(ctx context.Context, field graphql.CollectedField, obj *Workspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Workspace_featureFlags(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.FeatureFlags, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*FeatureFlag) graphql.Marshaler {
+			return ec.marshalOFeatureFlag2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐFeatureFlagᚄ(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Workspace_featureFlags(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Workspace",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_FeatureFlag(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Workspace_workspaceMembersCount(ctx context.Context, field graphql.CollectedField, obj *Workspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Workspace_workspaceMembersCount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.WorkspaceMembersCount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Workspace_workspaceMembersCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Workspace", field, false, false, "Int")
+}
+
+func (ec *executionContext) _Workspace_defaultRole(ctx context.Context, field graphql.CollectedField, obj *Workspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Workspace_defaultRole(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.DefaultRole, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *Role) graphql.Marshaler {
+			return ec.marshalORole2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐRole(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Workspace_defaultRole(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Workspace",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_Role(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Workspace_aiChatModelTier(ctx context.Context, field graphql.CollectedField, obj *Workspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Workspace_aiChatModelTier(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AiChatModelTier, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNAiModelTier2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Workspace_aiChatModelTier(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Workspace", field, false, false, "AiModelTier")
+}
+
+func (ec *executionContext) _Workspace_aiAgentModelTier(ctx context.Context, field graphql.CollectedField, obj *Workspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Workspace_aiAgentModelTier(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AiAgentModelTier, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNAiModelTier2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Workspace_aiAgentModelTier(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Workspace", field, false, false, "AiModelTier")
+}
+
+func (ec *executionContext) _Workspace_isAutoModelSelectionEnabled(ctx context.Context, field graphql.CollectedField, obj *Workspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Workspace_isAutoModelSelectionEnabled(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.IsAutoModelSelectionEnabled, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Workspace_isAutoModelSelectionEnabled(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Workspace", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _Workspace_aiModelIdByTier(ctx context.Context, field graphql.CollectedField, obj *Workspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Workspace_aiModelIdByTier(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AiModelIDByTier, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v any) graphql.Marshaler {
+			return ec.marshalNJSON2interface(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Workspace_aiModelIdByTier(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Workspace", field, false, false, "JSON")
+}
+
+func (ec *executionContext) _Workspace_aiAdditionalInstructions(ctx context.Context, field graphql.CollectedField, obj *Workspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Workspace_aiAdditionalInstructions(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AiAdditionalInstructions, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Workspace_aiAdditionalInstructions(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Workspace", field, false, false, "String")
+}
+
+func (ec *executionContext) _Workspace_isTwoFactorAuthenticationEnforced(ctx context.Context, field graphql.CollectedField, obj *Workspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Workspace_isTwoFactorAuthenticationEnforced(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.IsTwoFactorAuthenticationEnforced, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Workspace_isTwoFactorAuthenticationEnforced(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Workspace", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _Workspace_trashRetentionDays(ctx context.Context, field graphql.CollectedField, obj *Workspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Workspace_trashRetentionDays(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TrashRetentionDays, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Workspace_trashRetentionDays(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Workspace", field, false, false, "Int")
+}
+
+func (ec *executionContext) _Workspace_eventLogRetentionDays(ctx context.Context, field graphql.CollectedField, obj *Workspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Workspace_eventLogRetentionDays(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.EventLogRetentionDays, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Workspace_eventLogRetentionDays(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Workspace", field, false, false, "Int")
+}
+
+func (ec *executionContext) _Workspace_editableProfileFields(ctx context.Context, field graphql.CollectedField, obj *Workspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Workspace_editableProfileFields(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.EditableProfileFields, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOString2ᚕstringᚄ(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Workspace_editableProfileFields(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Workspace", field, false, false, "String")
+}
+
+func (ec *executionContext) _Workspace_isInternalMessagesImportEnabled(ctx context.Context, field graphql.CollectedField, obj *Workspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Workspace_isInternalMessagesImportEnabled(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.IsInternalMessagesImportEnabled, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Workspace_isInternalMessagesImportEnabled(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Workspace", field, false, false, "Boolean")
 }
 
 func (ec *executionContext) _WorkspaceUrls_subdomainUrl(ctx context.Context, field graphql.CollectedField, obj *WorkspaceUrls) (ret graphql.Marshaler) {
@@ -4304,6 +6442,59 @@ func (ec *executionContext) fieldContext___Type_isOneOf(_ context.Context, field
 
 // region    **************************** object.gotpl ****************************
 
+var applicationImplementors = []string{"Application"}
+
+func (ec *executionContext) _Application(ctx context.Context, sel ast.SelectionSet, obj *Application) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, applicationImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Application")
+		case "id":
+			out.Values[i] = ec._Application_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "name":
+			out.Values[i] = ec._Application_name(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "universalIdentifier":
+			out.Values[i] = ec._Application_universalIdentifier(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "logoUrl":
+			out.Values[i] = ec._Application_logoUrl(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "createdAt":
+			out.Values[i] = ec._Application_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
 var authTokenImplementors = []string{"AuthToken"}
 
 func (ec *executionContext) _AuthToken(ctx context.Context, sel ast.SelectionSet, obj *AuthToken) graphql.Marshaler {
@@ -4585,6 +6776,44 @@ func (ec *executionContext) _DeleteTwoFactorAuthenticationMethod(ctx context.Con
 	return out
 }
 
+var featureFlagImplementors = []string{"FeatureFlag"}
+
+func (ec *executionContext) _FeatureFlag(ctx context.Context, sel ast.SelectionSet, obj *FeatureFlag) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, featureFlagImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("FeatureFlag")
+		case "key":
+			out.Values[i] = ec._FeatureFlag_key(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "value":
+			out.Values[i] = ec._FeatureFlag_value(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
 var initiateTwoFactorAuthenticationProvisioningImplementors = []string{"InitiateTwoFactorAuthenticationProvisioning"}
 
 func (ec *executionContext) _InitiateTwoFactorAuthenticationProvisioning(ctx context.Context, sel ast.SelectionSet, obj *InitiateTwoFactorAuthenticationProvisioning) graphql.Marshaler {
@@ -4830,6 +7059,12 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 				func(ctx context.Context) graphql.Marshaler {
 					return ec._Query_currentUserSessions(ctx, field)
 				})
+		case "currentUser":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_currentUser(ctx, field)
+				})
 		case "__type":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Query___type(ctx, field)
@@ -4843,6 +7078,104 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			})
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&out.Invalids, 1)
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var roleImplementors = []string{"Role"}
+
+func (ec *executionContext) _Role(ctx context.Context, sel ast.SelectionSet, obj *Role) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, roleImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Role")
+		case "id":
+			out.Values[i] = ec._Role_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "label":
+			out.Values[i] = ec._Role_label(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "description":
+			out.Values[i] = ec._Role_description(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "icon":
+			out.Values[i] = ec._Role_icon(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "canUpdateAllSettings":
+			out.Values[i] = ec._Role_canUpdateAllSettings(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "canAccessAllTools":
+			out.Values[i] = ec._Role_canAccessAllTools(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "isEditable":
+			out.Values[i] = ec._Role_isEditable(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "canReadAllObjectRecords":
+			out.Values[i] = ec._Role_canReadAllObjectRecords(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "canUpdateAllObjectRecords":
+			out.Values[i] = ec._Role_canUpdateAllObjectRecords(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "canSoftDeleteAllObjectRecords":
+			out.Values[i] = ec._Role_canSoftDeleteAllObjectRecords(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "canDestroyAllObjectRecords":
+			out.Values[i] = ec._Role_canDestroyAllObjectRecords(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "canBeAssignedToUsers":
+			out.Values[i] = ec._Role_canBeAssignedToUsers(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "canBeAssignedToAgents":
+			out.Values[i] = ec._Role_canBeAssignedToAgents(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "canBeAssignedToApiKeys":
+			out.Values[i] = ec._Role_canBeAssignedToApiKeys(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
 			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -5013,6 +7346,84 @@ func (ec *executionContext) _TwoFactorAuthenticationRecoveryStatus(ctx context.C
 	return out
 }
 
+var userImplementors = []string{"User"}
+
+func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj *User) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, userImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("User")
+		case "id":
+			out.Values[i] = ec._User_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "firstName":
+			out.Values[i] = ec._User_firstName(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "lastName":
+			out.Values[i] = ec._User_lastName(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "email":
+			out.Values[i] = ec._User_email(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "hasPassword":
+			out.Values[i] = ec._User_hasPassword(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "supportUserHash":
+			out.Values[i] = ec._User_supportUserHash(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "onboardingStatus":
+			out.Values[i] = ec._User_onboardingStatus(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "currentWorkspace":
+			out.Values[i] = ec._User_currentWorkspace(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "availableWorkspaces":
+			out.Values[i] = ec._User_availableWorkspaces(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "userVars":
+			out.Values[i] = ec._User_userVars(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
 var userSessionImplementors = []string{"UserSession"}
 
 func (ec *executionContext) _UserSession(ctx context.Context, sel ast.SelectionSet, obj *UserSession) graphql.Marshaler {
@@ -5099,6 +7510,189 @@ func (ec *executionContext) _VerifyTwoFactorAuthenticationMethod(ctx context.Con
 			out.Values[i] = graphql.MarshalString("VerifyTwoFactorAuthenticationMethod")
 		case "success":
 			out.Values[i] = ec._VerifyTwoFactorAuthenticationMethod_success(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var workspaceImplementors = []string{"Workspace"}
+
+func (ec *executionContext) _Workspace(ctx context.Context, sel ast.SelectionSet, obj *Workspace) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, workspaceImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Workspace")
+		case "id":
+			out.Values[i] = ec._Workspace_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "displayName":
+			out.Values[i] = ec._Workspace_displayName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "logo":
+			out.Values[i] = ec._Workspace_logo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "inviteHash":
+			out.Values[i] = ec._Workspace_inviteHash(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "allowImpersonation":
+			out.Values[i] = ec._Workspace_allowImpersonation(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "activationStatus":
+			out.Values[i] = ec._Workspace_activationStatus(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "isPublicInviteLinkEnabled":
+			out.Values[i] = ec._Workspace_isPublicInviteLinkEnabled(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "isCampaignClickTrackingEnabled":
+			out.Values[i] = ec._Workspace_isCampaignClickTrackingEnabled(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "isCampaignOpenTrackingEnabled":
+			out.Values[i] = ec._Workspace_isCampaignOpenTrackingEnabled(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "workspaceDiscoverability":
+			out.Values[i] = ec._Workspace_workspaceDiscoverability(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "isGoogleAuthEnabled":
+			out.Values[i] = ec._Workspace_isGoogleAuthEnabled(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "isPasswordAuthEnabled":
+			out.Values[i] = ec._Workspace_isPasswordAuthEnabled(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "isGoogleAuthBypassEnabled":
+			out.Values[i] = ec._Workspace_isGoogleAuthBypassEnabled(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "isPasswordAuthBypassEnabled":
+			out.Values[i] = ec._Workspace_isPasswordAuthBypassEnabled(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "subdomain":
+			out.Values[i] = ec._Workspace_subdomain(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "workspaceCustomApplication":
+			out.Values[i] = ec._Workspace_workspaceCustomApplication(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "installedApplications":
+			out.Values[i] = ec._Workspace_installedApplications(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "workspaceUrls":
+			out.Values[i] = ec._Workspace_workspaceUrls(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "featureFlags":
+			out.Values[i] = ec._Workspace_featureFlags(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "workspaceMembersCount":
+			out.Values[i] = ec._Workspace_workspaceMembersCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "defaultRole":
+			out.Values[i] = ec._Workspace_defaultRole(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "aiChatModelTier":
+			out.Values[i] = ec._Workspace_aiChatModelTier(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "aiAgentModelTier":
+			out.Values[i] = ec._Workspace_aiAgentModelTier(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "isAutoModelSelectionEnabled":
+			out.Values[i] = ec._Workspace_isAutoModelSelectionEnabled(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "aiModelIdByTier":
+			out.Values[i] = ec._Workspace_aiModelIdByTier(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "aiAdditionalInstructions":
+			out.Values[i] = ec._Workspace_aiAdditionalInstructions(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "isTwoFactorAuthenticationEnforced":
+			out.Values[i] = ec._Workspace_isTwoFactorAuthenticationEnforced(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "trashRetentionDays":
+			out.Values[i] = ec._Workspace_trashRetentionDays(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "eventLogRetentionDays":
+			out.Values[i] = ec._Workspace_eventLogRetentionDays(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "editableProfileFields":
+			out.Values[i] = ec._Workspace_editableProfileFields(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "isInternalMessagesImportEnabled":
+			out.Values[i] = ec._Workspace_isInternalMessagesImportEnabled(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -5514,6 +8108,44 @@ func (ec *executionContext) ___Type(ctx context.Context, sel ast.SelectionSet, o
 
 // region    ***************************** type.gotpl *****************************
 
+func (ec *executionContext) unmarshalNAiModelTier2string(ctx context.Context, v any) (string, error) {
+	res, err := graphql.UnmarshalString(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNAiModelTier2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
+	_ = sel
+	res := graphql.MarshalString(v)
+	if res == graphql.Null {
+		graphql.AddInvalidNullFromMarshaler(ctx, "AiModelTier!")
+	}
+	return res
+}
+
+func (ec *executionContext) marshalNApplication2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐApplicationᚄ(ctx context.Context, sel ast.SelectionSet, v []*Application) graphql.Marshaler {
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNApplication2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐApplication(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNApplication2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐApplication(ctx context.Context, sel ast.SelectionSet, v *Application) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "Application!")
+		return graphql.Null
+	}
+	return ec._Application(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNAuthToken2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐAuthToken(ctx context.Context, sel ast.SelectionSet, v *AuthToken) graphql.Marshaler {
 	if v == nil {
 		graphql.AddInvalidNullError(ctx, "AuthToken!")
@@ -5610,6 +8242,14 @@ func (ec *executionContext) marshalNDeleteTwoFactorAuthenticationMethod2ᚖgithu
 	return ec._DeleteTwoFactorAuthenticationMethod(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalNFeatureFlag2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐFeatureFlag(ctx context.Context, sel ast.SelectionSet, v *FeatureFlag) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "FeatureFlag!")
+		return graphql.Null
+	}
+	return ec._FeatureFlag(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNInitiateTwoFactorAuthenticationProvisioning2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐInitiateTwoFactorAuthenticationProvisioning(ctx context.Context, sel ast.SelectionSet, v *InitiateTwoFactorAuthenticationProvisioning) graphql.Marshaler {
 	if v == nil {
 		graphql.AddInvalidNullError(ctx, "InitiateTwoFactorAuthenticationProvisioning!")
@@ -5628,6 +8268,24 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 	res := graphql.MarshalInt(v)
 	if res == graphql.Null {
 		graphql.AddInvalidNullFromMarshaler(ctx, "Int!")
+	}
+	return res
+}
+
+func (ec *executionContext) unmarshalNJSON2interface(ctx context.Context, v any) (any, error) {
+	res, err := graphql.UnmarshalAny(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNJSON2interface(ctx context.Context, sel ast.SelectionSet, v any) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "JSON!")
+		return graphql.Null
+	}
+	_ = sel
+	res := graphql.MarshalAny(v)
+	if res == graphql.Null {
+		graphql.AddInvalidNullFromMarshaler(ctx, "JSON!")
 	}
 	return res
 }
@@ -5700,6 +8358,14 @@ func (ec *executionContext) marshalNUUID2string(ctx context.Context, sel ast.Sel
 	return res
 }
 
+func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐUser(ctx context.Context, sel ast.SelectionSet, v *User) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "User!")
+		return graphql.Null
+	}
+	return ec._User(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNUserSession2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐUserSessionᚄ(ctx context.Context, sel ast.SelectionSet, v []*UserSession) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
@@ -5730,6 +8396,34 @@ func (ec *executionContext) marshalNVerifyTwoFactorAuthenticationMethod2ᚖgithu
 		return graphql.Null
 	}
 	return ec._VerifyTwoFactorAuthenticationMethod(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNWorkspaceActivationStatus2string(ctx context.Context, v any) (string, error) {
+	res, err := graphql.UnmarshalString(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNWorkspaceActivationStatus2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
+	_ = sel
+	res := graphql.MarshalString(v)
+	if res == graphql.Null {
+		graphql.AddInvalidNullFromMarshaler(ctx, "WorkspaceActivationStatus!")
+	}
+	return res
+}
+
+func (ec *executionContext) unmarshalNWorkspaceDiscoverability2string(ctx context.Context, v any) (string, error) {
+	res, err := graphql.UnmarshalString(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNWorkspaceDiscoverability2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
+	_ = sel
+	res := graphql.MarshalString(v)
+	if res == graphql.Null {
+		graphql.AddInvalidNullFromMarshaler(ctx, "WorkspaceDiscoverability!")
+	}
+	return res
 }
 
 func (ec *executionContext) marshalNWorkspaceUrls2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐWorkspaceUrls(ctx context.Context, sel ast.SelectionSet, v *WorkspaceUrls) graphql.Marshaler {
@@ -5882,6 +8576,13 @@ func (ec *executionContext) marshalN__TypeKind2string(ctx context.Context, sel a
 	return res
 }
 
+func (ec *executionContext) marshalOApplication2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐApplication(ctx context.Context, sel ast.SelectionSet, v *Application) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Application(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalOAuthTokenPair2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐAuthTokenPair(ctx context.Context, sel ast.SelectionSet, v *AuthTokenPair) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -5935,6 +8636,103 @@ func (ec *executionContext) marshalODateTime2ᚖgithubᚗcomᚋtwentyhqᚋtwenty
 	return v
 }
 
+func (ec *executionContext) marshalOFeatureFlag2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐFeatureFlagᚄ(ctx context.Context, sel ast.SelectionSet, v []*FeatureFlag) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNFeatureFlag2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐFeatureFlag(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalOJSON2interface(ctx context.Context, v any) (any, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalAny(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOJSON2interface(ctx context.Context, sel ast.SelectionSet, v any) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	_ = sel
+	_ = ctx
+	res := graphql.MarshalAny(v)
+	return res
+}
+
+func (ec *executionContext) unmarshalOOnboardingStatus2ᚖstring(ctx context.Context, v any) (*string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalString(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOOnboardingStatus2ᚖstring(ctx context.Context, sel ast.SelectionSet, v *string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	_ = sel
+	_ = ctx
+	res := graphql.MarshalString(*v)
+	return res
+}
+
+func (ec *executionContext) marshalORole2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐRole(ctx context.Context, sel ast.SelectionSet, v *Role) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Role(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOString2ᚕstringᚄ(ctx context.Context, v any) ([]string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]string, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNString2string(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOString2ᚕstringᚄ(ctx context.Context, sel ast.SelectionSet, v []string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalNString2string(ctx, sel, v[i])
+	}
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
 func (ec *executionContext) unmarshalOString2ᚖstring(ctx context.Context, v any) (*string, error) {
 	if v == nil {
 		return nil, nil
@@ -5969,6 +8767,13 @@ func (ec *executionContext) marshalOUUID2ᚖstring(ctx context.Context, sel ast.
 	_ = ctx
 	res := graphql.MarshalString(*v)
 	return res
+}
+
+func (ec *executionContext) marshalOWorkspace2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐWorkspace(ctx context.Context, sel ast.SelectionSet, v *Workspace) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Workspace(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalO__EnumValue2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐEnumValueᚄ(ctx context.Context, sel ast.SelectionSet, v []introspection.EnumValue) graphql.Marshaler {

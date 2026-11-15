@@ -1,0 +1,26 @@
+{
+  "name": "GetRole",
+  "operation": "GetRole",
+  "fixture": "custom role holding the API_KEYS_AND_WEBHOOKS flag and no object permissions; hand-written from RoleResolver and RoleDTO, no Node server was run",
+  "endpoint": "/metadata",
+  "query": "query GetRole($id: UUID!) { getRole(id: $id) { id label description icon canUpdateAllSettings canAccessAllTools isEditable canReadAllObjectRecords canUpdateAllObjectRecords canSoftDeleteAllObjectRecords canDestroyAllObjectRecords canBeAssignedToUsers canBeAssignedToAgents canBeAssignedToApiKeys permissionFlags { id flag roleId } objectPermissions { objectMetadataId canReadObjectRecords canUpdateObjectRecords canSoftDeleteObjectRecords canDestroyObjectRecords restrictedFields } } }",
+  "variables": {"id": "7c9e6679-7425-40de-944b-e07fc1f90ae7"},
+  "response": {"data": {"getRole": {
+    "id": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
+    "label": "Auditor",
+    "description": null,
+    "icon": "IconEye",
+    "canUpdateAllSettings": false,
+    "canAccessAllTools": false,
+    "isEditable": true,
+    "canReadAllObjectRecords": true,
+    "canUpdateAllObjectRecords": false,
+    "canSoftDeleteAllObjectRecords": false,
+    "canDestroyAllObjectRecords": false,
+    "canBeAssignedToUsers": true,
+    "canBeAssignedToAgents": true,
+    "canBeAssignedToApiKeys": true,
+    "permissionFlags": [{"id": "<ignored>", "flag": "API_KEYS_AND_WEBHOOKS", "roleId": "7c9e6679-7425-40de-944b-e07fc1f90ae7"}],
+    "objectPermissions": []
+  }}}
+}
