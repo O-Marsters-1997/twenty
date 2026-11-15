@@ -1,17 +1,20 @@
 import { Autocomplete as AutocompletePrimitive } from '@base-ui/react/autocomplete';
+import * as stylex from '@stylexjs/stylex';
 
-import { useProvidedTextDirection } from '@ui/primitives/layout/DirectionProvider/internal/useProvidedTextDirection';
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
+import { useProvidedTextDirection } from '@ui/utilities/internal/useProvidedTextDirection';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
-import styles from '../Autocomplete.module.scss';
+import { general } from '../../../../theme/tokens.stylex';
 import { type AutocompletePositionerProps } from '../types/AutocompletePositionerProps';
 
 export const AutocompletePositioner = ({
   className,
+  xstyle,
   align = 'start',
   sideOffset = 8,
   ...props
-}: AutocompletePositionerProps) => {
+}: WithXstyle<AutocompletePositionerProps>) => {
   const direction = useProvidedTextDirection();
 
   return (
@@ -20,7 +23,11 @@ export const AutocompletePositioner = ({
       align={align}
       sideOffset={sideOffset}
       {...props}
-      className={mergeClassNames(styles.positioner, className)}
+      {...mergeStylexProps(stylex.props(styles.positioner, xstyle), className)}
     />
   );
 };
+
+const styles = stylex.create({
+  positioner: { zIndex: general['--t-last-layer-z-index'] },
+});

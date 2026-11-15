@@ -1,13 +1,34 @@
 import { Select as SelectPrimitive } from '@base-ui/react/select';
+import * as stylex from '@stylexjs/stylex';
 
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
-import styles from '../Select.module.scss';
+import { fontColor } from '../../../../theme/tokens.stylex';
 import { type SelectValueProps } from '../types/SelectValueProps';
 
-export const SelectValue = ({ className, ...props }: SelectValueProps) => (
+export const SelectValue = ({
+  className,
+  xstyle,
+  ...props
+}: WithXstyle<SelectValueProps>) => (
   <SelectPrimitive.Value
     {...props}
-    className={mergeClassNames(styles.value, className)}
+    {...mergeStylexProps(stylex.props(styles.value, xstyle), className)}
   />
 );
+
+const styles = stylex.create({
+  value: {
+    color: {
+      default: null,
+      [stylex.when.ancestor(':is([data-placeholder])', selectTriggerMarker)]:
+        fontColor['--t-font-color-light'],
+    },
+    flex: 1,
+    minInlineSize: 0,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+});
