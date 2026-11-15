@@ -137,6 +137,8 @@ const styles = stylex.create({
   elementsCountRed: {
     color: fontColor['--t-font-color-danger'],
   },
+  // Base UI sets --collapsible-panel-height to a pixel value during
+  // open/close transitions and back to auto once fully open
   panel: {
     height: {
       default: 'var(--collapsible-panel-height)',

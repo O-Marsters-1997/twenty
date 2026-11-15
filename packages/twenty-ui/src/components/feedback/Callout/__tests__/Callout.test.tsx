@@ -63,6 +63,7 @@ describe('Callout feedback', () => {
     );
     expect(screen.getByText('0')).toBeInTheDocument();
     expect(screen.getByTestId('feedback').querySelector('svg')).toBeNull();
+    expect(screen.getByTestId('feedback').children).toHaveLength(2);
     rerender(<Callout title="No records" description="" />);
     expect(screen.queryByText('0')).not.toBeInTheDocument();
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
