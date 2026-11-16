@@ -31,6 +31,19 @@ func TestDefaultTable_RoutesMessagingOperationsToGo(t *testing.T) {
 	}
 }
 
+func TestDefaultTable_RoutesPublicWorkspaceOperationsToGo(t *testing.T) {
+	t.Parallel()
+	table := frontdoor.DefaultTable()[frontdoor.EndpointMetadata]
+	for _, operation := range []string{
+		"GetPublicWorkspaceDataByDomain", "GetPublicWorkspaceDataById", "GetWorkspaceFromInviteHash", "CheckUserExists",
+		"GetWorkspaceCreationDefaults", "CheckWorkspaceSubdomainAvailability", "GetWorkspaceIframeOrigins",
+	} {
+		if table[operation] != frontdoor.RouteGo {
+			t.Errorf("route of %s = %q, want %q", operation, table[operation], frontdoor.RouteGo)
+		}
+	}
+}
+
 func TestDefaultTable_RoutesNoteAndTaskAggregatesToGo(t *testing.T) {
 	t.Parallel()
 	table := frontdoor.DefaultTable()[frontdoor.EndpointWorkspace]

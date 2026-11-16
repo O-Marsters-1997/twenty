@@ -54,8 +54,4 @@ export enum SettingsPath {
   RoleDetail = 'members/roles/:roleId',
   RoleObjectLevel = 'members/roles/:roleId/object/:objectMetadataId',
   RoleAddObjectLevel = 'members/roles/:roleId/add-object-permission',
-
-  Legal = 'legal',
-  LegalDpa = 'legal/dpa',
-  LegalDpaNew = 'legal/dpa/new',
 }

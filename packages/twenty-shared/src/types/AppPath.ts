@@ -32,9 +32,6 @@ export enum AppPath {
 
   Authorize = '/authorize',
 
-  // Deep link for twenty.com/dpa → in-app DPA generator (login-gated redirect).
-  Dpa = '/dpa',
-
   NotFoundWildcard = '*',
   NotFound = '/not-found',
 }

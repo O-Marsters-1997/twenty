@@ -1,0 +1,9 @@
+{
+  "name": "check-workspace-subdomain-availability-reserved",
+  "operation": "CheckWorkspaceSubdomainAvailability",
+  "fixture": "reserved subdomain",
+  "endpoint": "/metadata",
+  "query": "query CheckWorkspaceSubdomainAvailability($subdomain: String!) { checkWorkspaceSubdomainAvailability(subdomain: $subdomain) { isValid available suggestedSubdomain suggestedSubdomains } }",
+  "variables": {"subdomain": "admin"},
+  "response": {"data":{"checkWorkspaceSubdomainAvailability":{"isValid":false,"available":false,"suggestedSubdomain":"x","suggestedSubdomains":["x"]}}}
+}

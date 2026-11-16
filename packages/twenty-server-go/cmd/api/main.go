@@ -101,7 +101,7 @@ func run() error {
 	twoFactor := auth.NewTwoFactor(
 		pool, auth.NewSecretCipher(cfg.EncryptionKey, cfg.FallbackEncryptionKey, cfg.AppSecret), cfg.RecoveryCodeTTL,
 	)
-	authHandler := authgql.NewHandler(newAuthResolver(pool, twoFactor, passwordLogins, stack), logger)
+	authHandler := authgql.NewHandler(newAuthResolver(pool, cfg, twoFactor, passwordLogins, stack), logger)
 
 	goGraphQL := http.NewServeMux()
 	goGraphQL.Handle(string(frontdoor.EndpointWorkspace), workspaceHandler(recordsgql.NewHandler(&recordsgql.Resolver{
@@ -138,7 +138,7 @@ func run() error {
 
 	handler := frontdoor.NewHandler(frontdoor.DefaultTable(), cfg.NodeUpstreamURL, verifier, goGraphQL, logger).
 		WithPublicOperations(map[frontdoor.Endpoint][]string{
-			frontdoor.EndpointMetadata:  slices.Concat(frontdoor.SessionOperations, frontdoor.PasswordLoginOperations),
+			frontdoor.EndpointMetadata:  slices.Concat(frontdoor.SessionOperations, frontdoor.PasswordLoginOperations, frontdoor.PublicWorkspaceOperations),
 			frontdoor.EndpointWorkspace: frontdoor.LoginOperations,
 		}).
 		WithMCP(toolRegistry).

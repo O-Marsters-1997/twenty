@@ -1,0 +1,61 @@
+type AuthProviders {
+  google: Boolean!
+  magicLink: Boolean!
+  password: Boolean!
+}
+
+type AuthBypassProviders {
+  google: Boolean!
+  password: Boolean!
+}
+
+type PublicWorkspaceData {
+  id: UUID!
+  authProviders: AuthProviders!
+  authBypassProviders: AuthBypassProviders
+  logo: String
+  displayName: String
+  workspaceUrls: WorkspaceUrls!
+}
+
+type PublicWorkspaceDataSummary {
+  id: UUID!
+  logo: String
+  displayName: String
+}
+
+type Workspace {
+  id: UUID!
+  displayName: String
+  logo: String!
+  allowImpersonation: Boolean!
+  allowedIframeOrigins: [String!]!
+}
+
+type CheckUserExist {
+  exists: Boolean!
+  availableWorkspacesCount: Float!
+  isEmailVerified: Boolean!
+}
+
+type SubdomainAvailability {
+  isValid: Boolean!
+  available: Boolean!
+  suggestedSubdomain: String!
+  suggestedSubdomains: [String!]!
+}
+
+type WorkspaceCreationDefaults {
+  displayName: String!
+  subdomain: String!
+}
+
+extend type Query {
+  getPublicWorkspaceDataByDomain(origin: String): PublicWorkspaceData!
+  getPublicWorkspaceDataById(id: UUID!): PublicWorkspaceDataSummary!
+  findWorkspaceFromInviteHash(inviteHash: String!): Workspace!
+  checkUserExists(email: String!, captchaToken: String): CheckUserExist!
+  checkWorkspaceSubdomainAvailability(subdomain: String!): SubdomainAvailability!
+  getWorkspaceCreationDefaults: WorkspaceCreationDefaults!
+  currentWorkspace: Workspace!
+}

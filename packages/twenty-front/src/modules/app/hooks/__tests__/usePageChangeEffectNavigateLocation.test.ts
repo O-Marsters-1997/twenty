@@ -194,12 +194,6 @@ const testCases: {
   { loc: AppPath.TasksPage, isLogged: true, onboardingStatus: OnboardingStatus.SYNC_EMAIL, res: AppPath.SyncEmails },
   { loc: AppPath.TasksPage, isLogged: true, onboardingStatus: OnboardingStatus.INVITE_TEAM, res: AppPath.InviteTeam },
   { loc: AppPath.TasksPage, isLogged: true, onboardingStatus: OnboardingStatus.COMPLETED, res: undefined },
-  { loc: AppPath.Dpa, isLogged: false, onboardingStatus: undefined, res: AppPath.SignInUp },
-  { loc: AppPath.Dpa, isLogged: true, onboardingStatus: OnboardingStatus.WORKSPACE_ACTIVATION, res: AppPath.WorkspaceActivation },
-  { loc: AppPath.Dpa, isLogged: true, onboardingStatus: OnboardingStatus.PROFILE_CREATION, res: AppPath.CreateProfile },
-  { loc: AppPath.Dpa, isLogged: true, onboardingStatus: OnboardingStatus.SYNC_EMAIL, res: AppPath.SyncEmails },
-  { loc: AppPath.Dpa, isLogged: true, onboardingStatus: OnboardingStatus.INVITE_TEAM, res: AppPath.InviteTeam },
-  { loc: AppPath.Dpa, isLogged: true, onboardingStatus: OnboardingStatus.COMPLETED, res: getSettingsPath(SettingsPath.LegalDpa) },
 
   { loc: AppPath.AiChat, isLogged: false, onboardingStatus: undefined, res: AppPath.SignInUp },
   { loc: AppPath.AiChat, isLogged: true, onboardingStatus: OnboardingStatus.WORKSPACE_ACTIVATION, res: AppPath.WorkspaceActivation },

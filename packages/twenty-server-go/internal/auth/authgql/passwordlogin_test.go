@@ -92,9 +92,13 @@ func newPasswordHarness(t *testing.T, emailVerificationRequired bool) *loginHarn
 	}
 	origins := auth.NewOriginResolver(pool, auth.OriginConfig{MultiWorkspace: true, FrontURL: "http://localhost:3001", DefaultSubdomain: "app"})
 	logger := slog.New(slog.NewTextHandler(io.Discard, nil))
+	passwordLogin := auth.NewPasswordLogin(pool, auth.NewPasswordHasher(), issuer, origins, config)
 	h.handler = authgql.NewHandler(&authgql.Resolver{
-		PasswordLogin: auth.NewPasswordLogin(pool, auth.NewPasswordHasher(), issuer, origins, config),
+		PasswordLogin: passwordLogin,
 		Sessions:      auth.NewUserSession(pool, noCache{}, issuer, auth.SessionConfig{ServerURL: "http://localhost:3000"}, logger),
+		Public: auth.NewPublicData(pool, passwordLogin, auth.PublicDataConfig{
+			GoogleAuthEnabled: true, PasswordAuthEnabled: true, DefaultSubdomain: "app",
+		}),
 	}, logger)
 
 	h.exec(t, `INSERT INTO core."signingKey" (id, "publicKey", "privateKey", "isCurrent") VALUES ($1, $2, $3, true)`,

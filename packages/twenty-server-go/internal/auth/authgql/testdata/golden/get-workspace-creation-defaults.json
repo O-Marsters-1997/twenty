@@ -1,0 +1,9 @@
+{
+  "name": "get-workspace-creation-defaults",
+  "operation": "GetWorkspaceCreationDefaults",
+  "fixture": "signed in user jane@initech.io",
+  "endpoint": "/metadata",
+  "query": "query GetWorkspaceCreationDefaults { getWorkspaceCreationDefaults { displayName subdomain } }",
+  "variables": null,
+  "response": {"data":{"getWorkspaceCreationDefaults":{"displayName":"Initech","subdomain":"initech"}}}
+}
