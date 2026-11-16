@@ -124,6 +124,14 @@ func TestHandler_ServeHTTP(t *testing.T) {
 		}
 	})
 
+	t.Run("rejects an oversized request with a GraphQL error", func(t *testing.T) {
+		f := newFixture(t)
+		body := `{"operationName":"PublicGo","query":"` + strings.Repeat("a", 1<<20) + `"}`
+		if got := f.post(t, "/graphql", body); !strings.Contains(got, `"BAD_USER_INPUT"`) {
+			t.Errorf("post = %.200s, want a BAD_USER_INPUT GraphQL error", got)
+		}
+	})
+
 	t.Run("answers non-GraphQL traffic with 404", func(t *testing.T) {
 		f := newFixture(t)
 		resp, err := http.Get(f.front.URL + "/rest/people")

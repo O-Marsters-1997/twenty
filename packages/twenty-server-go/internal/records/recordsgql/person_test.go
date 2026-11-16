@@ -187,7 +187,7 @@ func TestUnknownOperationReturnsGraphQLError(t *testing.T) {
 	if !ok || len(errs) == 0 {
 		t.Errorf("response = %v, want a GraphQL errors array", response)
 	}
-	if _, hasData := response["data"]; hasData && response["data"] != nil {
+	if response["data"] != nil {
 		t.Errorf("data = %v, want none", response["data"])
 	}
 }
