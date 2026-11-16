@@ -8,8 +8,7 @@ import (
 	"log/slog"
 	"mime"
 	"net/http"
-	"net/http/httputil"
-	"net/url"
+	"slices"
 	"strings"
 
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai"
@@ -19,8 +18,6 @@ import (
 const maxInspectedBodyBytes = 1 << 20
 
 type Handler struct {
-	table     OperationTable
-	proxy     *httputil.ReverseProxy
 	verifier  auth.Verifier
 	goGraphQL http.Handler
 	logger    *slog.Logger
@@ -50,10 +47,8 @@ func (h *Handler) allPublic(endpoint Endpoint, requests []graphqlRequest) bool {
 	return len(requests) > 0
 }
 
-func NewHandler(table OperationTable, upstream *url.URL, verifier auth.Verifier, goGraphQL http.Handler, logger *slog.Logger) *Handler {
-	proxy := httputil.NewSingleHostReverseProxy(upstream)
-	proxy.FlushInterval = -1 // SSE streams must not be buffered
-	return &Handler{table: table, proxy: proxy, verifier: verifier, goGraphQL: goGraphQL, logger: logger}
+func NewHandler(verifier auth.Verifier, goGraphQL http.Handler, logger *slog.Logger) *Handler {
+	return &Handler{verifier: verifier, goGraphQL: goGraphQL, logger: logger}
 }
 
 type graphqlRequest struct {
@@ -68,7 +63,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	endpoint := Endpoint(r.URL.Path)
 	if r.Method != http.MethodPost || (endpoint != EndpointWorkspace && endpoint != EndpointMetadata) || !isJSON(r) {
-		h.proxy.ServeHTTP(w, r)
+		http.NotFound(w, r)
 		return
 	}
 
@@ -78,46 +73,45 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if len(body) > maxInspectedBodyBytes {
-		if endpoint == EndpointMetadata {
-			h.logger.Warn("metadata request too large to inspect", "route", RouteBlocked)
-			h.writeGraphQLError(w, "request too large", "BAD_USER_INPUT")
-			return
-		}
-		r.Body = io.NopCloser(io.MultiReader(bytes.NewReader(body), r.Body))
-		h.logger.Warn("graphql request not inspected", "route", RouteNode)
-		h.proxy.ServeHTTP(w, r)
+		h.logger.Warn("graphql request too large to inspect", "endpoint", endpoint)
+		h.writeGraphQLError(w, "request too large", "BAD_USER_INPUT")
 		return
 	}
 	r.Body = io.NopCloser(bytes.NewReader(body))
 
-	route := RouteNode
 	requests := parseRequests(body)
-	for _, request := range requests {
-		operationRoute := h.routeFor(endpoint, request)
-		h.logger.Info("graphql request", "operation", request.OperationName, "route", operationRoute)
-		route = mostRestrictive(route, operationRoute)
-	}
-
-	switch route {
-	case RouteBlocked:
+	if endpoint == EndpointMetadata && blocksDataModel(requests) {
+		h.logger.Info("graphql request blocked", "endpoint", endpoint)
 		h.writeGraphQLError(w, "this operation is disabled: the data model is frozen", "FORBIDDEN")
-	case RouteGo:
-		if h.subscriber != nil && wantsEventStream(r) && isSubscription(body) {
-			h.serveSubscription(w, r, endpoint, body)
-			return
-		}
-		if h.allPublic(endpoint, requests) {
-			h.goGraphQL.ServeHTTP(w, r)
-			return
-		}
-		principal, ok := h.authenticate(w, r)
-		if !ok {
-			return
-		}
-		h.goGraphQL.ServeHTTP(w, r.WithContext(auth.WithPrincipal(r.Context(), principal)))
-	default:
-		h.proxy.ServeHTTP(w, r)
+		return
 	}
+	if h.subscriber != nil && wantsEventStream(r) && isSubscription(body) {
+		h.serveSubscription(w, r, endpoint, body)
+		return
+	}
+	if h.allPublic(endpoint, requests) {
+		h.goGraphQL.ServeHTTP(w, r)
+		return
+	}
+	principal, ok := h.authenticate(w, r)
+	if !ok {
+		return
+	}
+	h.goGraphQL.ServeHTTP(w, r.WithContext(auth.WithPrincipal(r.Context(), principal)))
+}
+
+func blocksDataModel(requests []graphqlRequest) bool {
+	for _, request := range requests {
+		if slices.Contains(blockedMetadataOperations, request.OperationName) {
+			return true
+		}
+		for _, field := range blockedMetadataFields {
+			if strings.Contains(request.Query, field) {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 func (h *Handler) authenticate(w http.ResponseWriter, r *http.Request) (auth.Principal, bool) {
@@ -137,30 +131,6 @@ func (h *Handler) authenticate(w http.ResponseWriter, r *http.Request) (auth.Pri
 		return auth.Principal{}, false
 	}
 	return principal, true
-}
-
-func (h *Handler) routeFor(endpoint Endpoint, request graphqlRequest) Route {
-	if endpoint == EndpointMetadata {
-		for _, field := range blockedMetadataFields {
-			if strings.Contains(request.Query, field) {
-				return RouteBlocked
-			}
-		}
-	}
-	if route, ok := h.table[endpoint][request.OperationName]; ok {
-		return route
-	}
-	return RouteNode
-}
-
-func mostRestrictive(current, candidate Route) Route {
-	switch {
-	case current == RouteBlocked || candidate == RouteBlocked:
-		return RouteBlocked
-	case current == RouteGo || candidate == RouteGo:
-		return RouteGo
-	}
-	return RouteNode
 }
 
 func parseRequests(body []byte) []graphqlRequest {

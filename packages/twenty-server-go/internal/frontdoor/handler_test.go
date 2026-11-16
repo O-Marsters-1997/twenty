@@ -7,9 +7,7 @@ import (
 	"log/slog"
 	"net/http"
 	"net/http/httptest"
-	"net/url"
 	"strings"
-	"sync/atomic"
 	"testing"
 
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
@@ -27,40 +25,21 @@ func (fakeVerifier) Verify(_ context.Context, bearer string) (auth.Principal, er
 
 type fixture struct {
 	front *httptest.Server
-	hits  *atomic.Int32
 	logs  *bytes.Buffer
 }
 
 func newFixture(t *testing.T) fixture {
 	t.Helper()
-	hits := &atomic.Int32{}
-	node := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		hits.Add(1)
-		body, err := io.ReadAll(r.Body)
-		if err != nil {
-			t.Error(err)
-		}
-		if _, err := w.Write(append([]byte("node:"), body...)); err != nil {
-			t.Error(err)
-		}
-	}))
-	t.Cleanup(node.Close)
-	upstream, err := url.Parse(node.URL)
-	if err != nil {
-		t.Fatal(err)
-	}
 	logs := &bytes.Buffer{}
-	table := frontdoor.DefaultTable()
-	table[frontdoor.EndpointWorkspace] = map[string]frontdoor.Route{"GoOnly": frontdoor.RouteGo, "PublicGo": frontdoor.RouteGo}
 	goGraphQL := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		principal, _ := auth.PrincipalFrom(r.Context())
 		_, _ = w.Write([]byte("go handled for " + principal.UserID))
 	})
-	handler := frontdoor.NewHandler(table, upstream, fakeVerifier{}, goGraphQL, slog.New(slog.NewTextHandler(logs, nil))).
+	handler := frontdoor.NewHandler(fakeVerifier{}, goGraphQL, slog.New(slog.NewTextHandler(logs, nil))).
 		WithPublicOperations(map[frontdoor.Endpoint][]string{frontdoor.EndpointWorkspace: {"PublicGo"}})
 	front := httptest.NewServer(handler)
 	t.Cleanup(front.Close)
-	return fixture{front: front, hits: hits, logs: logs}
+	return fixture{front: front, logs: logs}
 }
 
 func (f fixture) post(t *testing.T, path, body string) string {
@@ -80,45 +59,28 @@ func (f fixture) post(t *testing.T, path, body string) string {
 }
 
 func TestHandler_ServeHTTP(t *testing.T) {
-	t.Run("proxies an ordinary operation intact and logs its route", func(t *testing.T) {
-		f := newFixture(t)
-		body := `{"operationName":"FindManyPeople","query":"query FindManyPeople { people { id } }"}`
-		if got := f.post(t, "/graphql", body); got != "node:"+body {
-			t.Errorf("post = %q, want body forwarded intact", got)
-		}
-		if !strings.Contains(f.logs.String(), "operation=FindManyPeople route=node") {
-			t.Errorf("log missing operation and route: %s", f.logs)
-		}
-	})
-
-	t.Run("blocks model mutations without reaching node", func(t *testing.T) {
+	t.Run("blocks model mutations", func(t *testing.T) {
 		f := newFixture(t)
 		tests := []struct{ name, body string }{
-			{"by name", `{"operationName":"CreateOneObjectMetadataItem","query":"mutation CreateOneObjectMetadataItem { createOneObject { id } }"}`},
+			{"by name", `{"operationName":"CreateOneObjectMetadataItem","query":"mutation { x }"}`},
 			{"renamed", `{"operationName":"Innocent","query":"mutation Innocent { deleteOneField(input:{}) { id } }"}`},
 			{"inside a batch", `[{"operationName":"A","query":"{ a }"},{"operationName":"UpdateOneFieldMetadataItem","query":"mutation { x }"}]`},
 		}
 		for _, tt := range tests {
 			t.Run(tt.name, func(t *testing.T) {
 				if got := f.post(t, "/metadata", tt.body); !strings.Contains(got, `"FORBIDDEN"`) {
-					t.Errorf("post = %q, want a GraphQL error", got)
+					t.Errorf("post = %q, want a FORBIDDEN GraphQL error", got)
 				}
 			})
 		}
-		if hits := f.hits.Load(); hits != 0 {
-			t.Errorf("node hits = %d, want 0", hits)
-		}
-		if !strings.Contains(f.logs.String(), "route=blocked") {
-			t.Errorf("blocked route not logged: %s", f.logs)
-		}
 	})
 
-	t.Run("serves a public Go operation without a bearer, unless a batch mixes in a private one", func(t *testing.T) {
+	t.Run("serves a public operation without a bearer, unless a batch mixes in a private one", func(t *testing.T) {
 		f := newFixture(t)
 		tests := []struct{ name, body, want string }{
 			{"public alone", `{"operationName":"PublicGo","query":"{ a }"}`, "go handled for "},
 			{"public batch", `[{"operationName":"PublicGo","query":"{ a }"},{"operationName":"PublicGo","query":"{ b }"}]`, "go handled for "},
-			{"public with a private Go operation", `[{"operationName":"PublicGo","query":"{ a }"},{"operationName":"GoOnly","query":"{ b }"}]`, `"UNAUTHENTICATED"`},
+			{"public with a private operation", `[{"operationName":"PublicGo","query":"{ a }"},{"operationName":"GoOnly","query":"{ b }"}]`, `"UNAUTHENTICATED"`},
 			{"private alone", `{"operationName":"GoOnly","query":"{ a }"}`, `"UNAUTHENTICATED"`},
 		}
 		for _, tt := range tests {
@@ -128,7 +90,7 @@ func TestHandler_ServeHTTP(t *testing.T) {
 		}
 	})
 
-	t.Run("requires a valid access token for Go operations only", func(t *testing.T) {
+	t.Run("requires a valid access token", func(t *testing.T) {
 		f := newFixture(t)
 		body := `{"operationName":"GoOnly","query":"{ a }"}`
 		tests := []struct{ name, authorization, want string }{
@@ -160,12 +122,17 @@ func TestHandler_ServeHTTP(t *testing.T) {
 				}
 			})
 		}
-		if hits := f.hits.Load(); hits != 0 {
-			t.Errorf("node hits = %d, want 0", hits)
+	})
+
+	t.Run("rejects an oversized request with a GraphQL error", func(t *testing.T) {
+		f := newFixture(t)
+		body := `{"operationName":"PublicGo","query":"` + strings.Repeat("a", 1<<20) + `"}`
+		if got := f.post(t, "/graphql", body); !strings.Contains(got, `"BAD_USER_INPUT"`) {
+			t.Errorf("post = %.200s, want a BAD_USER_INPUT GraphQL error", got)
 		}
 	})
 
-	t.Run("proxies non-GraphQL traffic", func(t *testing.T) {
+	t.Run("answers non-GraphQL traffic with 404", func(t *testing.T) {
 		f := newFixture(t)
 		resp, err := http.Get(f.front.URL + "/rest/people")
 		if err != nil {
@@ -174,8 +141,8 @@ func TestHandler_ServeHTTP(t *testing.T) {
 		if err := resp.Body.Close(); err != nil {
 			t.Error(err)
 		}
-		if hits := f.hits.Load(); hits != 1 {
-			t.Errorf("node hits = %d, want 1", hits)
+		if resp.StatusCode != http.StatusNotFound {
+			t.Errorf("GET /rest/people status = %d, want 404", resp.StatusCode)
 		}
 	})
 }
