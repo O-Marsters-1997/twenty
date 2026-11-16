@@ -136,7 +136,7 @@ func run() error {
 		agentgql.Operations,
 	))
 
-	handler := frontdoor.NewHandler(frontdoor.DefaultTable(), cfg.NodeUpstreamURL, verifier, goGraphQL, logger).
+	handler := frontdoor.NewHandler(verifier, goGraphQL, logger).
 		WithPublicOperations(map[frontdoor.Endpoint][]string{
 			frontdoor.EndpointMetadata:  slices.Concat(frontdoor.SessionOperations, frontdoor.PasswordLoginOperations, frontdoor.PublicWorkspaceOperations),
 			frontdoor.EndpointWorkspace: frontdoor.LoginOperations,
@@ -162,7 +162,7 @@ func run() error {
 
 	serveErr := make(chan error, 1)
 	go func() { serveErr <- server.ListenAndServe() }()
-	logger.Info("front door listening", "addr", cfg.ListenAddr, "upstream", cfg.NodeUpstreamURL.String())
+	logger.Info("front door listening", "addr", cfg.ListenAddr)
 
 	select {
 	case err := <-serveErr:

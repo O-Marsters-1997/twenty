@@ -8,7 +8,6 @@ import (
 	"log/slog"
 	"net/http"
 	"net/http/httptest"
-	"net/url"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -40,11 +39,7 @@ func newHarness(t *testing.T) harness {
 	}
 	t.Cleanup(pool.Close)
 	logger := slog.New(slog.NewTextHandler(io.Discard, nil))
-	upstream, err := url.Parse("http://node.invalid")
-	if err != nil {
-		t.Fatal(err)
-	}
-	front := frontdoor.NewHandler(frontdoor.DefaultTable(), upstream, verifier{}, metagql.NewHandler(store.NewViews(pool), logger), logger)
+	front := frontdoor.NewHandler(verifier{}, metagql.NewHandler(store.NewViews(pool), logger), logger)
 	server := httptest.NewServer(front)
 	t.Cleanup(server.Close)
 	return harness{server: server, pool: pool}

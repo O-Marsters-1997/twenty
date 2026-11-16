@@ -8,7 +8,6 @@ import (
 	"log/slog"
 	"net/http"
 	"net/http/httptest"
-	"net/url"
 	"strings"
 	"testing"
 	"time"
@@ -39,26 +38,13 @@ func (f *fakeSubscriber) Subscribe(ctx context.Context, _ frontdoor.Endpoint, _ 
 	return f.events, nil
 }
 
-func newSSEFront(t *testing.T, subscriber frontdoor.Subscriber) (front *httptest.Server, nodeHits func() int) {
+func newSSEFront(t *testing.T, subscriber frontdoor.Subscriber) *httptest.Server {
 	t.Helper()
-	hits := make(chan struct{}, 10)
-	node := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
-		hits <- struct{}{}
-		if _, err := w.Write([]byte("node")); err != nil {
-			t.Error(err)
-		}
-	}))
-	t.Cleanup(node.Close)
-	upstream, err := url.Parse(node.URL)
-	if err != nil {
-		t.Fatal(err)
-	}
-	table := frontdoor.OperationTable{frontdoor.EndpointWorkspace: {"OnGo": frontdoor.RouteGo}}
-	handler := frontdoor.NewHandler(table, upstream, fakeVerifier{}, http.NotFoundHandler(), slog.New(slog.DiscardHandler)).
+	handler := frontdoor.NewHandler(fakeVerifier{}, http.NotFoundHandler(), slog.New(slog.DiscardHandler)).
 		WithSubscriber(subscriber)
-	front = httptest.NewServer(handler)
+	front := httptest.NewServer(handler)
 	t.Cleanup(front.Close)
-	return front, func() int { return len(hits) }
+	return front
 }
 
 func subscribe(t *testing.T, ctx context.Context, front *httptest.Server, operation string) *http.Response {
@@ -91,7 +77,7 @@ func waitFor(t *testing.T, signal <-chan struct{}, what string) {
 func TestHandler_ServesGoSubscriptionAsEventStream(t *testing.T) {
 	t.Parallel()
 	subscriber := newFakeSubscriber()
-	front, nodeHits := newSSEFront(t, subscriber)
+	front := newSSEFront(t, subscriber)
 
 	resp := subscribe(t, t.Context(), front, "OnGo")
 	if got := resp.Header.Get("Content-Type"); got != "text/event-stream" {
@@ -107,14 +93,11 @@ func TestHandler_ServesGoSubscriptionAsEventStream(t *testing.T) {
 	if string(got) != want {
 		t.Errorf("stream = %q, want %q", got, want)
 	}
-	if hits := nodeHits(); hits != 0 {
-		t.Errorf("node hits = %d, want 0", hits)
-	}
 }
 
 func TestHandler_RejectsUnauthenticatedGoSubscription(t *testing.T) {
 	t.Parallel()
-	front, _ := newSSEFront(t, newFakeSubscriber())
+	front := newSSEFront(t, newFakeSubscriber())
 	body := `{"operationName":"OnGo","query":"subscription OnGo { x }"}`
 	req, err := http.NewRequestWithContext(t.Context(), http.MethodPost, front.URL+"/graphql", strings.NewReader(body))
 	if err != nil {
@@ -136,24 +119,10 @@ func TestHandler_RejectsUnauthenticatedGoSubscription(t *testing.T) {
 	}
 }
 
-func TestHandler_ProxiesUnmarkedSubscriptionToNode(t *testing.T) {
-	t.Parallel()
-	front, nodeHits := newSSEFront(t, newFakeSubscriber())
-
-	resp := subscribe(t, t.Context(), front, "OnNode")
-	got, err := io.ReadAll(resp.Body)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if string(got) != "node" || nodeHits() != 1 {
-		t.Errorf("body = %q, node hits = %d, want node proxied once", got, nodeHits())
-	}
-}
-
 func TestHandler_ClientDisconnectCancelsSubscription(t *testing.T) {
 	t.Parallel()
 	subscriber := newFakeSubscriber()
-	front, _ := newSSEFront(t, subscriber)
+	front := newSSEFront(t, subscriber)
 	ctx, cancel := context.WithCancel(t.Context())
 
 	resp := subscribe(t, ctx, front, "OnGo")
