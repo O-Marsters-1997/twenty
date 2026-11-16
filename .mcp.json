@@ -3,7 +3,7 @@
     "postgres": {
       "type": "stdio",
       "command": "bash",
-      "args": ["-c", "npx -y @modelcontextprotocol/server-postgres \"$PG_DATABASE_URL\""],
+      "args": ["-c", "npx -y @modelcontextprotocol/server-postgres \"${PG_DATABASE_URL:-postgres://postgres:postgres@localhost:5432/default}\""],
       "env": {}
     },
     "playwright": {
