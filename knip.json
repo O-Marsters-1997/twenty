@@ -75,7 +75,6 @@
     },
     "packages/twenty-ui": {
       "entry": ["scripts/**/*.ts", "docs/**/*.ts"],
-      "ignore": ["src/styles/abstracts/**"],
       "ignoreDependencies": ["@swc/core"]
     }
   }

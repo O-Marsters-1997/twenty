@@ -1,6 +1,6 @@
-import { clsx } from 'clsx';
 import { type CSSProperties } from 'react';
 
+import { joinClassNames } from './joinClassNames';
 import { mergeClassNames } from './mergeClassNames';
 
 type StylexProps = {
@@ -30,6 +30,6 @@ export function mergeStylexProps<TState>(
     className:
       typeof consumerClassName === 'function'
         ? mergeClassNames(stylexProps.className ?? '', consumerClassName)
-        : clsx(stylexProps.className, consumerClassName),
+        : joinClassNames(stylexProps.className, consumerClassName),
   };
 }

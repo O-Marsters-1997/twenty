@@ -14,4 +14,20 @@
     border: none;
     cursor: pointer;
   }
+
+  html.light {
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  @supports (corner-shape: squircle) {
+    *,
+    *::before,
+    *::after {
+      corner-shape: var(--t-corner-shape, superellipse(2.2));
+    }
+  }
 }

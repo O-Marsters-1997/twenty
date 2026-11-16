@@ -12,6 +12,7 @@ import { McpClientLogo } from '@/settings/mcp-and-apis/components/McpClientLogo'
 import { buildEmailingDomainAiSetupPrompt } from '@/settings/emailing-domains/utils/buildEmailingDomainAiSetupPrompt';
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard';
 import * as stylex from '@stylexjs/stylex';
+import { containerMarker } from './SettingsEmailingDomainAiSetup.stylex';
 import {
   animationDuration,
   backgroundTransparent,
@@ -32,7 +33,6 @@ type SettingsEmailingDomainAiSetupProps = {
   }[];
 };
 
-const containerMarker = stylex.defineMarker();
 
 const styles = stylex.create({
   container: {

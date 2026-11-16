@@ -38,7 +38,17 @@
     "no-restricted-imports": [
       "error",
       {
+        "paths": [
+          {
+            "name": "clsx",
+            "message": "Use stylex.props."
+          }
+        ],
         "patterns": [
+          {
+            "group": ["@linaria/*", "*.module.scss"],
+            "message": "Style with StyleX (docs/styling.md)."
+          },
           {
             "group": ["../*"],
             "message": "Relative parent imports are not allowed. Use @/ alias instead."

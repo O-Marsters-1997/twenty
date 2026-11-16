@@ -28,14 +28,13 @@ For Twenty apps, follow [Using Twenty UI components](https://docs.twenty.com/dev
 
 ## Usage
 
-For a standalone React application, import the base styles once, pick a theme stylesheet, and wrap your app in `ThemeProvider`:
+For a standalone React application, import the base styles once and wrap your app in `ThemeProvider`:
 
 ```tsx
 import { Button } from 'twenty-ui/primitives/input';
 import { ThemeProvider } from 'twenty-ui/theme';
 
 import 'twenty-ui/style.css';
-import 'twenty-ui/theme-light.css';
 
 export const App = () => (
   <ThemeProvider colorScheme="light">
@@ -81,11 +80,10 @@ Import icons such as `IconCheck` from `twenty-ui/icon`. The dynamic icon provide
 
 ## Theming
 
-- `twenty-ui/style.css` ships the base reset and component styles. Import it once.
-- `twenty-ui/theme-light.css` and `twenty-ui/theme-dark.css` define the design-token CSS variables for each color scheme. Load both when your application switches between schemes.
-- `ThemeProvider` applies the `light` or `dark` class to the document root by default. Set `applyToRoot={false}` to scope a theme to a subtree; `overrides` optionally customizes public `--t-` CSS variables.
+- `twenty-ui/style.css` ships the base reset, the light design-token CSS variables and component styles. Import it once.
+- `ThemeProvider` applies the dark theme and the `light` or `dark` class (used for `color-scheme`) to the document root by default. Set `applyToRoot={false}` to scope a theme to a subtree; `overrides` optionally customizes public `--t-` CSS variables.
 - Import `themeCssVariables` for CSS variable references, `useTheme()` for theme values, and `useThemeColorScheme()` for the active scheme, all from `twenty-ui/theme`.
-- The provider's `theme` prop supplies explicit JavaScript values, such as `THEME_LIGHT` or `THEME_DARK`, for consumers that cannot read computed styles. It does not replace the theme stylesheets.
+- The provider's `theme` prop supplies explicit JavaScript values, such as `THEME_LIGHT` or `THEME_DARK`, for consumers that cannot read computed styles. It does not replace the stylesheet.
 
 See the [theming guide](https://docs.twenty.com/ui/theming) for scoped overrides, portals, and explicit values.
 

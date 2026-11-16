@@ -1,8 +1,6 @@
 # Styling
 
-## Target conventions
-
-These replace the Linaria and SCSS house rules in `CLAUDE.md`.
+## Conventions
 
 1. Import as `import * as stylex from '@stylexjs/stylex';`. One `const styles = stylex.create({...})` per file, below the component, with keys named for the element's role (`root`, `header`, `label`) or variant (`sizeSm`, `variantDanger`).
 2. Apply with `{...stylex.props(styles.root, styles[size], isActive && styles.active, xstyle)}`. No `clsx`, no hand-joined `className`.
@@ -15,7 +13,7 @@ These replace the Linaria and SCSS house rules in `CLAUDE.md`.
 9. Component-scoped custom properties (`--tw-button-radius` and the rest) become `defineVars` in the component's own `Component.stylex.ts`. A parent overrides them with `stylex.createTheme`, not by setting raw custom properties.
 10. Keyframes with `stylex.keyframes` in the file that uses them. `prefers-reduced-motion` and the hover-capable mixins become `defineConsts` media queries.
 11. Third-party DOM (Monaco, react-datepicker, BlockNote/Mantine, react-grid-layout, react-data-grid, tiptap, react-flow) gets one plain CSS file per library under `twenty-ui/src/third-party-styles/` or `twenty-front/src/third-party-styles/`, inside `@layer third-party`, imported once where the library is mounted.
-12. Lint: `@stylexjs/eslint-plugin` rules `valid-styles`, `no-unused`, `valid-shorthands`, `sort-keys` and `enforce-extension`, plus `no-restricted-imports` for `@linaria/*`, `*.module.scss` and `clsx` once each is gone.
+12. Lint: `@stylexjs/eslint-plugin` rules `valid-styles`, `no-unused`, `valid-shorthands`, `sort-keys` and `enforce-extension`, plus `no-restricted-imports` for `@linaria/*`, `*.module.scss` and `clsx`.
 
 ## Base UI state
 
@@ -28,7 +26,7 @@ Whichever wins is written into `docs/styling.md` in phase 1 and used everywhere.
 
 ## Build architecture
 
-- **twenty-ui compiles its own StyleX** with `@stylexjs/unplugin` in its Vite library build and keeps shipping one `dist/style.css`, as it does today with SCSS. Storybook and vitest for twenty-ui keep working standalone, and twenty-front's dependency on `dist/` doesn't change.
+- **twenty-ui compiles its own StyleX** with `@stylexjs/unplugin` in its Vite library build and ships one `dist/style.css`. Storybook and vitest for twenty-ui keep working standalone, and twenty-front's dependency on `dist/` doesn't change.
 - **twenty-front compiles its own StyleX** and imports `twenty-ui/style.css` as it does now.
 - **Tokens use literal `--t-*` names,** so a front style that reads `spacing['--t-spacing-4']` resolves to the same variable twenty-ui defines. No cross-package hash agreement is needed.
 - **One layer order, declared once** in `twenty-front/src/index.css`: `@layer reset, third-party, twenty-ui, priority1, priority2, priority3;` (the names StyleX emits, see Spike outcomes). Front styles passed into a twenty-ui component through `xstyle` are merged by `stylex.props` at runtime, so only one class per property reaches the DOM. Layer order only matters where both stylesheets style the same element without going through `xstyle`. Confirm the layer names each build emits under `useCSSLayers` (and whether a layer prefix can be set per build) in phase 1, and rename the list to match.
@@ -36,8 +34,8 @@ Whichever wins is written into `docs/styling.md` in phase 1 and used everywhere.
 
 ## Spike outcomes (twenty-ui, phase 1)
 
-- **Layer names.** With `useCSSLayers: true` (`@stylexjs/unplugin` 0.19.2), twenty-ui's `dist/style.css` emits StyleX rules in `@layer priority1`, `priority2` and `priority3`, followed by the existing `@layer reset` and `@layer twenty-ui` SCSS layers. The names are fixed by StyleX; no per-build prefix was found. The list in Build architecture must use `priority1, priority2, priority3` rather than `stylex`. Front's build will emit the same names, so the two stylesheets share layers rather than getting separate ones.
-- **Token variable names.** `defineVars` keyed by `--t-*` keeps the literal name: `:root, .x5vs46r { --t-accent-primary: ... }` and `padding-inline: var(--t-spacing-4)`. The existing `.light` / `.dark` classes keep working because they set the same names.
+- **Layer names.** With `useCSSLayers: true` (`@stylexjs/unplugin` 0.19.2), twenty-ui's `dist/style.css` emits StyleX rules in `@layer priority1`, `priority2` and `priority3`, followed by `@layer reset`. The names are fixed by StyleX; no per-build prefix was found. The list in Build architecture must use `priority1, priority2, priority3` rather than `stylex`. Front's build will emit the same names, so the two stylesheets share layers rather than getting separate ones.
+- **Token variable names.** `defineVars` keyed by `--t-*` keeps the literal name: `:root, .x5vs46r { --t-accent-primary: ... }` and `padding-inline: var(--t-spacing-4)`. Dark mode is `darkTheme` (`stylex.createTheme` over the same names) applied by `ThemeProvider`; `html.light` / `html.dark` only drive `color-scheme`. The squircle radius doubling is a `@supports (corner-shape: squircle)` condition on the radius values.
 - **Token groups.** `generateThemeTokens.ts` splits on the first path segment, and on the first two when a branch has nested branches (`font.color.*` is `fontColor`). Top-level leaves such as `spacingMultiplicator` go in `general`.
 - **Imports.** StyleX resolves `.stylex.ts` imports itself and ignores Vite aliases, so a file that reads tokens imports them by relative path (`../tokens.stylex`). From another package the import is `twenty-ui/theme/tokens.stylex`, which resolves to source.
 - **Base UI state.** `':is([data-starting-style])'` and `':is([data-disabled])'` as keys on the element itself compile under the StyleX babel plugin. Convention 1 is the choice; whether the generated selector behaves in a browser is confirmed when the first Base UI component is converted.
@@ -45,7 +43,7 @@ Whichever wins is written into `docs/styling.md` in phase 1 and used everywhere.
 
 ## Base UI state (decision)
 
-Self attribute conditions win. Keys such as `':is([data-disabled])'`, `':is([aria-invalid="true"], [data-invalid])'` and `':hover:not(:is([data-disabled]))'` sit on the element itself, so Base UI keeps writing the attributes and its transition timing is unchanged. No state-callback helper is needed. Components that pass a `className` function through to Base UI go through `mergeStylexProps` in `src/utilities/internal/`, which merges the StyleX class with a string or function `className` from an unconverted caller.
+Self attribute conditions win. Keys such as `':is([data-disabled])'`, `':is([aria-invalid="true"], [data-invalid])'` and `':hover:not(:is([data-disabled]))'` sit on the element itself, so Base UI keeps writing the attributes and its transition timing is unchanged. No state-callback helper is needed. Components that pass a `className` function through to Base UI go through `mergeStylexProps` in `src/utilities/internal/`, which merges the StyleX class with a string or function `className` from the caller.
 
 ## twenty-ui patterns
 

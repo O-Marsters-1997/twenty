@@ -182,14 +182,32 @@ export const borderColor = stylex.defineVars({
 });
 
 export const borderRadius = stylex.defineVars({
-  '--t-border-radius-xs': '2px',
-  '--t-border-radius-sm': '4px',
-  '--t-border-radius-md': '8px',
+  '--t-border-radius-xs': {
+    default: '2px',
+    '@supports (corner-shape: squircle)': '4px',
+  },
+  '--t-border-radius-sm': {
+    default: '4px',
+    '@supports (corner-shape: squircle)': '8px',
+  },
+  '--t-border-radius-md': {
+    default: '8px',
+    '@supports (corner-shape: squircle)': '16px',
+  },
   '--t-border-radius-sm-round': '4px',
   '--t-border-radius-md-round': '8px',
-  '--t-border-radius-lg': '16px',
-  '--t-border-radius-xl': '20px',
-  '--t-border-radius-xxl': '40px',
+  '--t-border-radius-lg': {
+    default: '16px',
+    '@supports (corner-shape: squircle)': '32px',
+  },
+  '--t-border-radius-xl': {
+    default: '20px',
+    '@supports (corner-shape: squircle)': '40px',
+  },
+  '--t-border-radius-xxl': {
+    default: '40px',
+    '@supports (corner-shape: squircle)': '80px',
+  },
   '--t-border-radius-pill': '999px',
   '--t-border-radius-rounded': '100%',
 });

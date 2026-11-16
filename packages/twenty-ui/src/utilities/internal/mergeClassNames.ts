@@ -1,5 +1,6 @@
 import { isFunction } from '@sniptt/guards';
-import { clsx } from 'clsx';
+
+import { joinClassNames } from './joinClassNames';
 
 export const mergeClassNames =
   <TState>(
@@ -10,7 +11,7 @@ export const mergeClassNames =
       | undefined,
   ) =>
   (state: TState) =>
-    clsx(
+    joinClassNames(
       baseClassName,
       isFunction(consumerClassName)
         ? consumerClassName(state)

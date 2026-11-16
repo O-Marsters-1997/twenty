@@ -5,7 +5,7 @@
   "categories": {
     "correctness": "off"
   },
-  "ignorePatterns": ["node_modules", "generated", "**/*.module.scss.d.ts"],
+  "ignorePatterns": ["node_modules", "generated"],
   "rules": {
     "func-style": ["error", "declaration", { "allowArrowFunctions": true }],
     "no-console": [
@@ -18,6 +18,23 @@
     "no-undef": "off",
     "no-unused-vars": "off",
     "no-redeclare": "off",
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": [
+          {
+            "group": ["@linaria/*", "*.module.scss"],
+            "message": "Style with StyleX (docs/styling.md)."
+          }
+        ],
+        "paths": [
+          {
+            "name": "clsx",
+            "message": "Use stylex.props, or joinClassNames for plain class names."
+          }
+        ]
+      }
+    ],
 
     "import/no-duplicates": "error",
 
@@ -113,7 +130,17 @@
         "no-restricted-imports": [
           "error",
           {
+            "patterns": [
+              {
+                "group": ["@linaria/*", "*.module.scss"],
+                "message": "Style with StyleX (docs/styling.md)."
+              }
+            ],
             "paths": [
+              {
+                "name": "clsx",
+                "message": "Use stylex.props, or joinClassNames for plain class names."
+              },
               {
                 "name": "react",
                 "allowImportNames": ["default"],

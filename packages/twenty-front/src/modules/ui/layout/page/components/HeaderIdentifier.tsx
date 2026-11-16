@@ -3,11 +3,7 @@ import { StyledHeaderIdentifierLabel } from '@/ui/layout/page/components/StyledH
 import { type MouseEventHandler, type ReactNode } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
-import {
-  AVATAR_PROPERTIES_BY_SIZE,
-  Avatar,
-  type AvatarProps,
-} from 'twenty-ui/primitives/data-display';
+import { Avatar, type AvatarProps } from 'twenty-ui/primitives/data-display';
 import * as stylex from '@stylexjs/stylex';
 import {
   backgroundTransparent,
@@ -18,7 +14,7 @@ import {
   spacing,
 } from 'twenty-ui/theme/tokens.stylex';
 
-const HEADER_IDENTIFIER_TILE_SIZE = AVATAR_PROPERTIES_BY_SIZE.lg.width;
+const HEADER_IDENTIFIER_TILE_SIZE = '24px';
 
 const styles = stylex.create({
   icon: {
