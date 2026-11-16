@@ -22,7 +22,9 @@ const applyColorSchemeClass = (colorScheme: 'light' | 'dark') => {
   const isDark = colorScheme === 'dark';
   root.classList.toggle('dark', isDark);
   root.classList.toggle('light', !isDark);
-  for (const darkThemeClass of DARK_THEME_CLASS_NAME.split(' ')) {
+  for (const darkThemeClass of DARK_THEME_CLASS_NAME.split(' ').filter(
+    (className) => className !== '',
+  )) {
     root.classList.toggle(darkThemeClass, isDark);
   }
 };
