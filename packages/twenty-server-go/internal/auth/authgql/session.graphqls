@@ -17,3 +17,29 @@ extend type Mutation {
   renewToken(appToken: String!): AuthTokens!
   signOut(refreshToken: String): Boolean!
 }
+
+type UserSession {
+  id: UUID!
+  workspaceId: UUID
+  authProvider: String!
+  userAgent: String
+  ipAddress: String
+  createdAt: DateTime!
+  lastActiveAt: DateTime!
+  expiresAt: DateTime!
+  isCurrent: Boolean!
+}
+
+type TransientToken {
+  transientToken: AuthToken!
+}
+
+extend type Query {
+  currentUserSessions: [UserSession!]!
+}
+
+extend type Mutation {
+  revokeUserSession(userSessionId: UUID!): Boolean!
+  revokeAllOtherUserSessions: Int!
+  generateTransientToken: TransientToken!
+}

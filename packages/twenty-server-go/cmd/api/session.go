@@ -82,6 +82,7 @@ func newAuthResolver(pool *pgxpool.Pool, twoFactor *auth.TwoFactor, passwordLogi
 		TwoFactor:     twoFactor,
 		PasswordLogin: passwordLogin,
 		Sessions:      stack.sessions,
+		Tokens:        stack.issuer,
 		Login:         auth.NewTwoFactorLogin(pool, twoFactor, stack.issuer, stack.origins, stack.sessions),
 		Exchange: &auth.SignIn{
 			Pool:                      pool,

@@ -76,6 +76,14 @@ func (l *TwoFactorLogin) WithRecoveryCode(ctx context.Context, w http.ResponseWr
 	return RecoveryLogin{Tokens: &pair}, nil
 }
 
+func (l *TwoFactorLogin) InitiateProvisioning(ctx context.Context, loginToken, origin string) (string, error) {
+	subject, err := l.subject(ctx, loginToken, origin)
+	if err != nil {
+		return "", err
+	}
+	return l.factor.provision(ctx, Principal{UserID: subject.userID, WorkspaceID: subject.workspaceID})
+}
+
 func (l *TwoFactorLogin) subject(ctx context.Context, loginToken, origin string) (loginSubject, error) {
 	claims, err := l.tokens.VerifyLoginToken(ctx, loginToken)
 	if errors.Is(err, ErrInvalidLoginToken) {
