@@ -45,7 +45,7 @@ func TestValidateEmailVerification(t *testing.T) {
 	}{
 		{"valid", valid, "a@b.com", nil},
 		{"expired", auth.StoredAppToken{ExpiresAt: tokenNow.Add(-time.Minute), Email: "a@b.com"}, "a@b.com", auth.ErrTokenExpired},
-		{"missing email", auth.StoredAppToken{ExpiresAt: tokenNow.Add(time.Minute)}, "a@b.com", auth.ErrTokenInvalid},
+		{"missing email", auth.StoredAppToken{ExpiresAt: tokenNow.Add(time.Minute)}, "a@b.com", auth.ErrEmailMissing},
 		{"other email", valid, "c@d.com", auth.ErrEmailMismatch},
 	}
 	for _, tt := range tests {

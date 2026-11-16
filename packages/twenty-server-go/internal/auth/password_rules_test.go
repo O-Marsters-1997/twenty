@@ -18,6 +18,8 @@ func TestValidPassword(t *testing.T) {
 		{"fifty characters", strings.Repeat("a", 50), true},
 		{"fifty-one characters", strings.Repeat("a", 51), false},
 		{"newline", "1234567\n8", false},
+		{"line separator", "1234567 8", false},
+		{"paragraph separator", "1234567 8", false},
 		{"astral characters count as two units like JS", strings.Repeat("😀", 25), true},
 		{"astral characters over the limit", strings.Repeat("😀", 26), false},
 	}

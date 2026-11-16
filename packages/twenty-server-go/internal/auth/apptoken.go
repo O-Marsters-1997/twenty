@@ -32,6 +32,7 @@ var (
 	ErrTokenInvalid  = errors.New("invalid token")
 	ErrTokenExpired  = errors.New("token expired")
 	ErrEmailMismatch = errors.New("email does not match token")
+	ErrEmailMissing  = errors.New("email missing from token")
 )
 
 // HashAppToken returns the sha256 hex digest Node stores in core."appToken".value.
@@ -56,7 +57,7 @@ func ValidateEmailVerification(token StoredAppToken, email string, now time.Time
 	case now.After(token.ExpiresAt):
 		return ErrTokenExpired
 	case token.Email == "":
-		return ErrTokenInvalid
+		return ErrEmailMissing
 	case token.Email != email:
 		return ErrEmailMismatch
 	}
