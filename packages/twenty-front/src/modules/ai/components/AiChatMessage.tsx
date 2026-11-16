@@ -39,7 +39,6 @@ import {
 } from 'twenty-ui/theme/tokens.stylex';
 import '~/third-party-styles/ai-chat-content.css';
 
-
 const styles = stylex.create({
   bubble: {
     alignItems: 'flex-start',
