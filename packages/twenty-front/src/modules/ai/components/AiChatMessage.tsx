@@ -28,6 +28,7 @@ import { useAtomFamilySelectorValue } from '@/ui/utilities/state/jotai/hooks/use
 import { useIsFeatureEnabled } from '@/workspace/hooks/useIsFeatureEnabled';
 import { FeatureFlagKey } from '~/generated-metadata/graphql';
 import * as stylex from '@stylexjs/stylex';
+import { bubbleMarker } from './AiChatMessage.stylex';
 import {
   animationDuration,
   background,
@@ -37,8 +38,6 @@ import {
   spacing,
 } from 'twenty-ui/theme/tokens.stylex';
 import '~/third-party-styles/ai-chat-content.css';
-
-const bubbleMarker = stylex.defineMarker();
 
 const styles = stylex.create({
   bubble: {

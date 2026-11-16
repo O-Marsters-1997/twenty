@@ -29,8 +29,6 @@ import { UserContext } from '../src/modules/users/contexts/UserContext';
 import '../src/modules/app/utils/setupMonacoEnvironment';
 
 import 'twenty-ui/style.css';
-import 'twenty-ui/theme-light.css';
-import 'twenty-ui/theme-dark.css';
 import { GRAY_SCALE_LIGHT, ThemeProvider } from 'twenty-ui/theme';
 // oxlint-disable-next-line no-restricted-imports
 import { messages as enMessages } from '../src/locales/generated/en';

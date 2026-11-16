@@ -1,5 +1,6 @@
 import { t } from '@lingui/core/macro';
 import * as stylex from '@stylexjs/stylex';
+import { actionMarker } from './SettingsCard.stylex';
 import { type ReactNode } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { IconChevronRight } from 'twenty-ui/icon';
@@ -26,7 +27,6 @@ type SettingsCardProps = {
   Status?: ReactNode;
 };
 
-const actionMarker = stylex.defineMarker();
 
 const styles = stylex.create({
   wrapper: {

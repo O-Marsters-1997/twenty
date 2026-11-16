@@ -16,6 +16,7 @@ import { TextInput } from '@/ui/input/components/TextInput';
 import { isDropdownOpenComponentState } from '@/ui/layout/dropdown/states/isDropdownOpenComponentState';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import * as stylex from '@stylexjs/stylex';
+import { itemMarker } from './AiChatThreadListItem.stylex';
 import {
   accent,
   backgroundTransparent,
@@ -24,7 +25,6 @@ import {
 } from 'twenty-ui/theme/tokens.stylex';
 import { media } from 'twenty-ui/theme/constants.stylex';
 
-const itemMarker = stylex.defineMarker();
 
 const styles = stylex.create({
   item: {

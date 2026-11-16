@@ -18,6 +18,44 @@ const SpacingReadout = () => {
   );
 };
 
+it('applies the dark StyleX theme to the root only for the dark scheme', () => {
+  const root = document.documentElement;
+  const { rerender } = render(
+    <ThemeProvider colorScheme="dark" theme={THEME_DARK}>
+      <SpacingReadout />
+    </ThemeProvider>,
+  );
+  const darkRootClassName = root.className;
+
+  expect(root).toHaveClass('dark');
+  expect(root).not.toHaveClass('light');
+
+  rerender(
+    <ThemeProvider colorScheme="light" theme={THEME_LIGHT}>
+      <SpacingReadout />
+    </ThemeProvider>,
+  );
+
+  expect(root).toHaveClass('light');
+  expect(darkRootClassName.split(' ').length).toBeGreaterThan(2);
+  expect(root.className).toBe('light');
+});
+
+it('scopes the dark StyleX theme to the wrapper when not applied to the root', () => {
+  render(
+    <ThemeProvider colorScheme="dark" applyToRoot={false} theme={THEME_DARK}>
+      <section aria-label="Scoped">
+        <SpacingReadout />
+      </section>
+    </ThemeProvider>,
+  );
+
+  const wrapper = screen.getByRole('region', { name: 'Scoped' }).parentElement;
+
+  expect(wrapper?.className).not.toBe('');
+  expect(wrapper).not.toHaveClass('dark');
+});
+
 it('exposes spacing entries when given static theme values', () => {
   render(
     <ThemeProvider colorScheme="dark" applyToRoot={false} theme={THEME_DARK}>

@@ -24,7 +24,7 @@ const TRACK_INSET_PX = 0;
 const DOT_CENTER_INSET_PX = 18;
 const HANDLE_WIDTH_PX = 12;
 const HANDLE_HEIGHT_PX = 28;
-const LAST_STEP = AI_MODEL_TIERS.length - 1;
+const LAST_STEP = 4;
 
 const styles = stylex.create({
   track: {

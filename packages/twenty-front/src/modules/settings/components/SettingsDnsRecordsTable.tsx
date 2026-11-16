@@ -4,6 +4,7 @@ import { TableCell } from '@/ui/layout/table/components/TableCell';
 import { TableHeader } from '@/ui/layout/table/components/TableHeader';
 import { TableRow } from '@/ui/layout/table/components/TableRow';
 import * as stylex from '@stylexjs/stylex';
+import { copyableCellMarker } from './SettingsDnsRecordsTable.stylex';
 import { t } from '@lingui/core/macro';
 import { capitalize, isDefined } from 'twenty-shared/utils';
 import { Status } from 'twenty-ui/primitives/data-display';
@@ -31,7 +32,6 @@ type SettingsDnsRecordsTableProps = {
   records: DnsRecord[];
 };
 
-const copyableCellMarker = stylex.defineMarker();
 
 const styles = stylex.create({
   recordRow: {

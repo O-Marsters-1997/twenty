@@ -10,8 +10,6 @@ import '@fontsource/inter/500.css';
 import '@fontsource/inter/600.css';
 import '@fontsource/inter/700.css';
 import 'twenty-ui/style.css';
-import 'twenty-ui/theme-light.css';
-import 'twenty-ui/theme-dark.css';
 import './index.css';
 
 const renderApp = () => {

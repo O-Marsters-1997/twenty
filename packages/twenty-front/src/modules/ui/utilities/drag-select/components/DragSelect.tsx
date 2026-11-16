@@ -33,7 +33,12 @@ const styles = stylex.create({
     position: 'absolute',
     zIndex: 99,
   },
-  selectionBox: ({ top, left, width, height }: SelectionBox) => ({
+  selectionBox: (
+    top: number,
+    left: number,
+    width: number,
+    height: number,
+  ) => ({
     height: `${height}px`,
     left: `${left}px`,
     top: `${top}px`,
@@ -249,12 +254,12 @@ export const DragSelect = ({
       <div
         {...stylex.props(
           styles.selection,
-          styles.selectionBox({
-            top: selectionBox.top,
-            left: selectionBox.left,
-            width: selectionBox.width,
-            height: selectionBox.height,
-          }),
+          styles.selectionBox(
+            selectionBox.top,
+            selectionBox.left,
+            selectionBox.width,
+            selectionBox.height,
+          ),
         )}
       />
     )

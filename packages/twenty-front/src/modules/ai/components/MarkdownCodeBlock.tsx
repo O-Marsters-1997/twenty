@@ -5,6 +5,7 @@ import { LightIconButton } from 'twenty-ui/components/input';
 import { IconCopy } from 'twenty-ui/icon';
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard';
 import * as stylex from '@stylexjs/stylex';
+import { containerMarker } from './MarkdownCodeBlock.stylex';
 import {
   animationDuration,
   background,
@@ -30,7 +31,6 @@ const extractTextFromNode = (node: React.ReactNode): string => {
   return '';
 };
 
-const containerMarker = stylex.defineMarker();
 
 const styles = stylex.create({
   copyButton: {

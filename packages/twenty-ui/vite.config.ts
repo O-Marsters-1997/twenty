@@ -1,18 +1,14 @@
 import stylex from '@stylexjs/unplugin';
 import react from '@vitejs/plugin-react-swc';
-import * as fs from 'fs';
 import { Features } from 'lightningcss';
 import * as path from 'path';
 import { defineConfig } from 'vite';
 import checker from 'vite-plugin-checker';
 import dts, { type PluginOptions } from 'vite-plugin-dts';
-import sassDts from 'vite-plugin-sass-dts';
 import svgr from 'vite-plugin-svgr';
 
 type Checkers = Parameters<typeof checker>[0];
 
-import { wrapInTwentyUiCascadeLayer } from './build-tools/wrapInTwentyUiCascadeLayer';
-import { THEME_CSS_FILE_NAME_BY_SCHEME } from './design-tokens/themeCssFileNameByScheme';
 import packageJson from './package.json';
 import { isDefined } from './src/utilities/utils/isDefined';
 
@@ -67,27 +63,8 @@ export default defineConfig(({ command, mode }) => {
       modules: {
         localsConvention: 'camelCaseOnly',
       },
-      postcss: {
-        plugins: [
-          wrapInTwentyUiCascadeLayer({
-            sourceDirectory: path.resolve(__dirname, 'src'),
-          }),
-        ],
-      },
       lightningcss: {
         exclude: Features.DirSelector,
-      },
-      preprocessorOptions: {
-        scss: {
-          api: 'modern-compiler',
-          loadPaths: [path.resolve(__dirname, 'src/styles')],
-          additionalData: [
-            `@use 'abstracts/functions' as *;`,
-            `@use 'abstracts/mixins' as *;`,
-            `@use 'abstracts/breakpoints' as *;`,
-            '',
-          ].join('\n'),
-        },
       },
     },
     optimizeDeps: {
@@ -114,25 +91,8 @@ export default defineConfig(({ command, mode }) => {
       }),
       react(),
       svgr(),
-      // Generates typed *.module.scss.d.ts siblings (dev mode only — backed by
-      // sass-embedded). CI/build relies on the ambient src/scss-modules.d.ts.
-      sassDts({ esmExport: true, legacyFileFormat: true }),
       dts(dtsConfig),
       ...(isVitest ? [] : [checker(checkersConfig)]),
-      {
-        name: 'copy-theme-css',
-        apply: 'build',
-        closeBundle() {
-          const distDir = path.resolve(__dirname, 'dist');
-          fs.mkdirSync(distDir, { recursive: true });
-          for (const file of Object.values(THEME_CSS_FILE_NAME_BY_SCHEME)) {
-            fs.copyFileSync(
-              path.resolve(__dirname, `src/theme/${file}`),
-              path.resolve(distDir, file),
-            );
-          }
-        },
-      },
     ],
     build: {
       cssCodeSplit: false,
