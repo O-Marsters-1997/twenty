@@ -7,7 +7,6 @@ import (
 	"log/slog"
 	"net/http"
 	"net/http/httptest"
-	"net/url"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -41,13 +40,9 @@ func newToolServer(t *testing.T) *httptest.Server {
 		InputSchema: json.RawMessage(`{"type":"object","properties":{"limit":{"type":"integer"}}}`),
 	}})
 	logger := slog.New(slog.NewTextHandler(io.Discard, nil))
-	upstream, err := url.Parse("http://node.invalid")
-	if err != nil {
-		t.Fatal(err)
-	}
 	goGraphQL := http.NewServeMux()
 	goGraphQL.Handle("/metadata", metadatagql.NewHandler(noPager{}, registry, logger))
-	server := httptest.NewServer(frontdoor.NewHandler(frontdoor.DefaultTable(), upstream, verifier{}, goGraphQL, logger))
+	server := httptest.NewServer(frontdoor.NewHandler(verifier{}, goGraphQL, logger))
 	t.Cleanup(server.Close)
 	return server
 }

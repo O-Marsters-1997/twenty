@@ -8,7 +8,6 @@ import (
 	"log/slog"
 	"net/http"
 	"net/http/httptest"
-	"net/url"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -40,20 +39,8 @@ func newServerWithPool(t *testing.T) (*httptest.Server, *pgxpool.Pool) {
 		t.Fatalf("connect: %v", err)
 	}
 	t.Cleanup(pool.Close)
-	table := frontdoor.OperationTable{frontdoor.EndpointWorkspace: {}}
-	for _, name := range []string{"Create", "Find", "Update", "Delete", "Restore", "Destroy", "AggregatePeople", "PeopleGroupByAggregates", "PeopleGroupByRecords",
-		"FindCompanies", "AggregateCompanies", "CompaniesGroupByAggregates", "CompaniesGroupByRecords", "FindOpportunities", "AggregateOpportunities", "OpportunitiesGroupByAggregates", "OpportunitiesGroupByRecords",
-		"AggregateNotes", "TasksGroupByRecords", "NoteTargetsGroupByAggregates",
-		"AggregateWorkspaceMembers", "AggregateDashboards", "DashboardsGroupByAggregates",
-		"AggregateTimelineActivities", "TimelineActivitiesGroupByAggregates", "AggregateAttachments", "AttachmentsGroupByRecords"} {
-		table[frontdoor.EndpointWorkspace][name] = frontdoor.RouteGo
-	}
 	logger := slog.New(slog.NewTextHandler(io.Discard, nil))
-	upstream, err := url.Parse("http://node.invalid")
-	if err != nil {
-		t.Fatal(err)
-	}
-	server := httptest.NewServer(frontdoor.NewHandler(table, upstream, verifier{}, recordsgql.NewHandler(&recordsgql.Resolver{
+	server := httptest.NewServer(frontdoor.NewHandler(verifier{}, recordsgql.NewHandler(&recordsgql.Resolver{
 		Store:              store.NewPeople(pool),
 		Companies:          store.NewCompanies(pool),
 		Opportunities:      store.NewOpportunities(pool),
@@ -188,4 +175,19 @@ func TestPeopleOperationsRoundTrip(t *testing.T) {
 			t.Errorf("people after destroy = %v, want 2", got)
 		}
 	})
+}
+
+func TestUnknownOperationReturnsGraphQLError(t *testing.T) {
+	t.Parallel()
+	server := newServer(t)
+
+	response := send(t, server, "NoSuchOperation", `query NoSuchOperation { noSuchField { id } }`, nil)
+
+	errs, ok := response["errors"].([]any)
+	if !ok || len(errs) == 0 {
+		t.Errorf("response = %v, want a GraphQL errors array", response)
+	}
+	if _, hasData := response["data"]; hasData && response["data"] != nil {
+		t.Errorf("data = %v, want none", response["data"])
+	}
 }
