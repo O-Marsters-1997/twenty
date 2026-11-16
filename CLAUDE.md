@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Twenty is an open-source CRM — an Nx / Bun monorepo. Main packages: `twenty-front` (React 18, Jotai, StyleX, Vite), `twenty-server` (NestJS, TypeORM, PostgreSQL, Redis, GraphQL), `twenty-shared` (isomorphic types/utils), `twenty-ui`, `twenty-e2e-testing` (Playwright).
+Twenty is an open-source CRM — an Nx / Bun monorepo. Main packages: `twenty-front` (React 18, Jotai, StyleX, Vite), `twenty-server-go` (Go, PostgreSQL, GraphQL), `twenty-shared` (isomorphic types/utils), `twenty-ui`, `twenty-e2e-testing` (Playwright).
 
 Match the surrounding code — the adjacent files in the directory you are editing beat any written rule, including for file naming, which varies by area.
 
@@ -22,25 +22,22 @@ Where this repo differs from your defaults:
 ## Commands
 
 ```bash
-bash packages/twenty-utils/setup-dev-env.sh   # Postgres/Redis + DB init; only for tasks needing a running app
-bun run start                                 # front + server + worker
+bash packages/twenty-utils/setup-dev-env.sh   # Postgres + DB init; only for tasks needing a running app
+bun run start                                 # front
 
 npx jest path/to/file.spec.ts --config=packages/<pkg>/jest.config.mjs   # single test file (preferred)
 npx vitest run --root packages/twenty-ui --project unit <file>          # twenty-ui runs on vitest, not jest
-npx nx test twenty-server                     # package unit tests (same for twenty-front, ...)
-npx nx run twenty-server:test:integration:with-db-reset
 npx nx storybook:build twenty-front && npx nx storybook:test twenty-front
 
-npx nx lint:diff-with-main twenty-server      # diff-based lint (fast; add --configuration=fix); run with typecheck after changes
+npx nx lint:diff-with-main twenty-front       # diff-based lint (fast; add --configuration=fix); run with typecheck after changes
 npx nx fmt <pkg>                              # format
 npx nx build twenty-shared                    # required before building/testing packages that depend on it
-npx nx database:reset twenty-server
 npx nx run twenty-front:graphql:generate      # after GraphQL schema changes (--configuration=metadata for metadata schema)
 ```
 
 ## Agent versus CI
 
-Agents run only: a typecheck of the touched package through `scripts/heavy` (`scripts/heavy npx tsgo -p tsconfig.json --noEmit`, which serialises memory-heavy runs), single-file jest, and `lint:diff-with-main`. CI runs package-wide `nx test` for twenty-server, twenty-front and twenty-ui, server integration tests, `database:reset` and `storybook:build twenty-ui`. A `PreToolUse` hook (`.claude/hooks/deny-ci-commands.sh`) denies those commands and a bare `tsgo`. twenty-shared and twenty-sdk tests are not banned: the audit found no CI run evidence for them.
+Agents run only: a typecheck of the touched package through `scripts/heavy` (`scripts/heavy npx tsgo -p tsconfig.json --noEmit`, which serialises memory-heavy runs), single-file jest, and `lint:diff-with-main`. CI runs package-wide `nx test` for twenty-front and twenty-ui, and `storybook:build twenty-ui`. A `PreToolUse` hook (`.claude/hooks/deny-ci-commands.sh`) denies those commands and a bare `tsgo`. twenty-shared and twenty-sdk tests are not banned: the audit found no CI run evidence for them.
 
 `nx build twenty-front` and the twenty-front `storybook:build`/`storybook:test` stay allowed: CI's 8-core runner jobs for them never run on the fork (`docs/agent-ram-ci-coverage.md`).
 
@@ -48,10 +45,7 @@ Agents run only: a typecheck of the touched package through `scripts/heavy` (`sc
 
 - **`twenty-shared/dist` is per-branch state nothing tracks.** After switching branches or editing `twenty-shared`, run `npx nx build twenty-shared --skip-nx-cache` before trusting any typecheck or test failure in a dependent package.
 - **Nx caching can serve a stale pass.** To verify a fix, run `npx tsgo -p tsconfig.json --noEmit` in the package directly rather than `nx typecheck`.
-- **Do not commit translation catalogs unless translations are the task.** `lingui extract`/`compile` regenerate `packages/twenty-server/src/engine/core-modules/i18n/locales/*.po` and `locales/generated/*` with thousands of lines of churn as a side effect of touching any `msg` string. The i18n pipeline maintains them; leave them out of your commit.
 - **Commit messages must not carry AI attribution.** CI rejects commits containing `@anthropic.com` co-author trailers or "Generated with Claude Code" lines.
-- **Upgrade commands** (`packages/twenty-server/src/database/commands/upgrade-version-command/`): add or edit files only under the current `TWENTY_CURRENT_VERSION` directory, with a real epoch-ms timestamp strictly greater than every existing one in that directory — CI enforces both, and the upgrade cursor silently skips a command that sorts before an already-applied one. Include `up` and `down`; never rewrite committed command logic. Keep command-only helpers and constants in the version folder, never in runtime modules, and never make runtime code branch on migration state. See `packages/twenty-server/docs/UPGRADE_COMMANDS.md`.
-- **Entity file changes need a generated instance command**: `npx nx run twenty-server:database:migrate:generate --name <name> --type <fast|slow>` (slow = adds a data-backfill step).
 - A read-only Postgres MCP server is configured in `.mcp.json` for inspecting workspace data, metadata, and migration results. Writes go through the CLI commands above.
 - E2E login: click "Continue with Email" and use the prefilled credentials.
 

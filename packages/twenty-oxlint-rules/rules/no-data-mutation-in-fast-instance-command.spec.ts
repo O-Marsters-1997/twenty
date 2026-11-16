@@ -5,7 +5,7 @@ import { rule, RULE_NAME } from './no-data-mutation-in-fast-instance-command';
 const ruleTester = new RuleTester();
 
 const BASE =
-  '/project/packages/twenty-server/src/database/commands/upgrade-version-command';
+  '/project/packages/twenty-server-go/src/database/commands/upgrade-version-command';
 
 const FAST_FILE = `${BASE}/2-13/2-13-instance-command-fast-1781277453604-rename-flag.ts`;
 const SLOW_FILE = `${BASE}/2-13/2-13-instance-command-slow-1781277480000-backfill-flag.ts`;

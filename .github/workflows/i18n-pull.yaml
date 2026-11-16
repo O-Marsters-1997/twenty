@@ -97,14 +97,12 @@ jobs:
 
       - name: Normalize downloaded catalogs to lingui format
         run: |
-          npx nx run twenty-server:lingui:extract
           npx nx run twenty-emails:lingui:extract
           npx nx run twenty-front:lingui:extract
 
       - name: Compile translations
         id: compile_translations
         run: |
-          npx nx run twenty-server:lingui:compile
           npx nx run twenty-emails:lingui:compile
           npx nx run twenty-front:lingui:compile
           git status

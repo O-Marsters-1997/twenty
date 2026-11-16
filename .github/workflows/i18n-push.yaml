@@ -12,7 +12,6 @@ on:
     paths-ignore:
       - 'packages/twenty-front/src/locales/**'
       - 'packages/twenty-emails/src/locales/**'
-      - 'packages/twenty-server/src/engine/core-modules/i18n/locales/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
@@ -42,7 +41,6 @@ jobs:
 
       - name: Extract translations
         run: |
-          npx nx run twenty-server:lingui:extract
           npx nx run twenty-emails:lingui:extract
           npx nx run twenty-front:lingui:extract
 
@@ -61,7 +59,6 @@ jobs:
 
       - name: Compile translations
         run: |
-          npx nx run twenty-server:lingui:compile
           npx nx run twenty-emails:lingui:compile
           npx nx run twenty-front:lingui:compile
 

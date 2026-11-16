@@ -25,12 +25,6 @@ Install from the `agent-skills` branch, which contains only the built app skills
 
 [`packages/twenty-claude-skills`](./packages/twenty-claude-skills) holds skills for using a Twenty workspace rather than building on it, such as presenting CRM records as readable summaries.
 
-## Contributing to Twenty itself
-
-[`.claude/skills`](./.claude/skills) holds the skills for agents and contributors working in this checkout: `qa-scout` for browser QA of a pull request, and the `syncable-entity-*` series covering Twenty's own workspace migration system. They assume a checkout of this repository and are not useful for app development, which the `syncable-entity-*` descriptions state in their first sentence.
-
-These are what a bare-repository listing (`npx skills add twentyhq/twenty --list`) returns. Use the `agent-skills` branch above for app development.
-
 ## Shipped inside apps
 
 `packages/twenty-apps/**/src/skills` holds skills that a specific Twenty app ships to its users. They are part of that app, not of this collection.

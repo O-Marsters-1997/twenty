@@ -3,7 +3,7 @@
     "postgres": {
       "type": "stdio",
       "command": "bash",
-      "args": ["-c", "source packages/twenty-server/.env && npx -y @modelcontextprotocol/server-postgres \"$PG_DATABASE_URL\""],
+      "args": ["-c", "npx -y @modelcontextprotocol/server-postgres \"$PG_DATABASE_URL\""],
       "env": {}
     },
     "playwright": {

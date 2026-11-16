@@ -70,7 +70,7 @@ spec:
           volumeMounts:
             - mountPath: /app/docker-data
               name: twentycrm-docker-data
-            - mountPath: /app/packages/twenty-server/.local-storage
+            - mountPath: /app/.local-storage
               name: twentycrm-server-data
       dnsPolicy: ClusterFirst
       restartPolicy: Always

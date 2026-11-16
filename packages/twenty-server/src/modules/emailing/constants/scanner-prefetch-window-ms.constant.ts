@@ -1,1 +1,0 @@
-export const SCANNER_PREFETCH_WINDOW_MS = 10_000;

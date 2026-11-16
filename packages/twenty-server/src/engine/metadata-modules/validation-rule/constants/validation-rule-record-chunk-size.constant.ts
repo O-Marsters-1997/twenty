@@ -1,3 +1,0 @@
-/* @license Enterprise */
-
-export const VALIDATION_RULE_RECORD_CHUNK_SIZE = 500;

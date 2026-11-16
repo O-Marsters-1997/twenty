@@ -4,7 +4,7 @@ import { rule, RULE_NAME } from './no-runtime-import-from-upgrade-command';
 
 const ruleTester = new RuleTester();
 
-const SERVER = '/project/packages/twenty-server';
+const SERVER = '/project/packages/twenty-server-go';
 const COMMAND_IMPORT =
   "import { run } from 'src/database/commands/upgrade-version-command/2-42/utils/run.util';";
 

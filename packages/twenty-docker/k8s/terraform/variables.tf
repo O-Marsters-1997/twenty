@@ -53,8 +53,8 @@ variable "twentycrm_db_replicas" {
 
 variable "twentycrm_server_data_mount_path" {
   type        = string
-  default     = "/app/packages/twenty-server/.local-storage"
-  description = "TwentyCRM mount path for servers application data. Defaults to '/app/packages/twenty-server/.local-storage'."
+  default     = "/app/.local-storage"
+  description = "TwentyCRM mount path for servers application data. Defaults to '/app/.local-storage'."
 }
 
 variable "twentycrm_db_pv_path" {

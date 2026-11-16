@@ -95,7 +95,7 @@ ruleTester.run(RULE_NAME, rule, {
     {
       code: 'export const openApiReference = {};',
       errors: [{ messageId: 'miscasedAcronymInFilename' }],
-      filename: 'packages/twenty-server/src/engine/core-modules/open-api/openAPIReference.ts',
+      filename: 'packages/twenty-server-go/src/engine/core-modules/open-api/openAPIReference.ts',
     },
     {
       code: 'export const SettingsSsoForm = () => null;',

@@ -1,6 +1,6 @@
 import { generateMessageId } from '@/i18n/generate-message-id';
 
-// Pairs lifted from twenty-server's en.po `js-lingui-id` comments, pinning parity with the Lingui CLI.
+// Pairs lifted from the en.po `js-lingui-id` comments, pinning parity with the Lingui CLI.
 // A failure means persisted metadata labels no longer resolve against their catalog.
 describe('generateMessageId', () => {
   it.each([

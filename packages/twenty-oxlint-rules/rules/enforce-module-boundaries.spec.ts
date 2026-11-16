@@ -34,7 +34,7 @@ ruleTester.run(RULE_NAME, rule, {
     {
       code: "import { isDefined } from 'twenty-shared';",
       options: [{ depConstraints }],
-      filename: '/project/packages/twenty-server/src/utils.ts',
+      filename: '/project/packages/twenty-server-go/src/utils.ts',
     },
     {
       code: "import { helper } from './local';",
@@ -54,7 +54,7 @@ ruleTester.run(RULE_NAME, rule, {
   ],
   invalid: [
     {
-      code: "import { ServerService } from 'twenty-server';",
+      code: "import { ServerService } from 'twenty-server-go';",
       options: [{ depConstraints }],
       filename: '/project/packages/twenty-front/src/bad-import.ts',
       errors: [{ messageId: 'moduleBoundaryViolation' }],
@@ -62,7 +62,7 @@ ruleTester.run(RULE_NAME, rule, {
     {
       code: "import { Component } from 'twenty-front';",
       options: [{ depConstraints }],
-      filename: '/project/packages/twenty-server/src/bad-import.ts',
+      filename: '/project/packages/twenty-server-go/src/bad-import.ts',
       errors: [{ messageId: 'moduleBoundaryViolation' }],
     },
     {
@@ -72,7 +72,7 @@ ruleTester.run(RULE_NAME, rule, {
       errors: [{ messageId: 'moduleBoundaryViolation' }],
     },
     {
-      code: "import { ServerThing } from 'twenty-server';",
+      code: "import { ServerThing } from 'twenty-server-go';",
       options: [{ depConstraints }],
       filename: '/project/packages/twenty-shared/src/bad-import.ts',
       errors: [{ messageId: 'moduleBoundaryViolation' }],
