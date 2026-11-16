@@ -12,7 +12,5 @@ export const agentChatThreadRecordFamilySelector = createAtomFamilySelector<
     (threadId) =>
     ({ get }) =>
       (get(recordStoreFamilyState, threadId) as
-        | AgentChatThreadRecord
-        | null
-        | undefined) ?? null,
+        AgentChatThreadRecord | null | undefined) ?? null,
 });

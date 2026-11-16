@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { type ReactNode } from 'react';
 import { isDefined } from 'twenty-shared/utils';
@@ -10,12 +9,15 @@ import { RecordIndexPageHeaderTitle } from '@/object-record/record-index/compone
 import { PageCardHeader } from '@/ui/layout/page/components/PageCardHeader';
 import { PageCardLayout } from '@/ui/layout/page/components/PageCardLayout';
 import { PageTitle } from '@/ui/utilities/page-title/components/PageTitle';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledTableContainer = styled.div`
-  height: 100%;
-  overflow: auto;
-  width: 100%;
-`;
+const styles = stylex.create({
+  tableContainer: {
+    height: '100%',
+    overflow: 'auto',
+    width: '100%',
+  },
+});
 
 type CoreObjectIndexPageEmptyState = {
   title: string;
@@ -71,7 +73,7 @@ export const CoreObjectIndexPageLayout = ({
           />
         }
       >
-        <StyledTableContainer>
+        <div {...stylex.props(styles.tableContainer)}>
           {hasError && (
             <RecordIndexEmptyStateDisplay
               animatedPlaceholderType="errorIndex"
@@ -102,7 +104,7 @@ export const CoreObjectIndexPageLayout = ({
               )}
             </>
           )}
-        </StyledTableContainer>
+        </div>
       </PageCardLayout>
     </>
   );

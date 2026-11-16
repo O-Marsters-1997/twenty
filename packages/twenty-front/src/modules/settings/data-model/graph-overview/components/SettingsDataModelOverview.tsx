@@ -3,7 +3,6 @@ import { SettingsDataModelOverviewObject } from '@/settings/data-model/graph-ove
 import { SettingsDataModelOverviewRelationMarkers } from '@/settings/data-model/graph-overview/components/SettingsDataModelOverviewRelationMarkers';
 import { calculateHandlePosition } from '@/settings/data-model/graph-overview/utils/calculateHandlePosition';
 import { NavigationButton } from '@/ui/input/components/NavigationButton';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import {
   Background,
@@ -34,43 +33,24 @@ import {
   IconX,
 } from 'twenty-ui/icon';
 import { ButtonGroup } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import '~/third-party-styles/react-flow.css';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const nodeTypes: NodeTypes = {
   object: SettingsDataModelOverviewObject,
 };
-const StyledContainer = styled.div`
-  height: 100%;
-  .react-flow__handle {
-    border: 0 !important;
-    background: transparent !important;
-    width: 6px;
-    height: 6px;
-    min-height: 6px;
-    min-width: 6px;
-    pointer-events: none;
-  }
-  .left-handle {
-    left: 0;
-    top: 50%;
-    transform: translateX(-50%) translateY(-50%);
-  }
-  .right-handle {
-    right: 0;
-    top: 50%;
-    transform: translateX(50%) translateY(-50%);
-  }
-  .react-flow__node {
-    z-index: -1 !important;
-  }
-`;
-
-const StyledCloseButton = styled.div`
-  left: ${themeCssVariables.spacing[3]};
-  position: absolute;
-  top: ${themeCssVariables.spacing[3]};
-  z-index: 5;
-`;
+const styles = stylex.create({
+  container: {
+    height: '100%',
+  },
+  closeButton: {
+    left: spacing['--t-spacing-3'],
+    position: 'absolute',
+    top: spacing['--t-spacing-3'],
+    zIndex: '5',
+  },
+});
 
 export const SettingsDataModelOverview = () => {
   const { fitView, zoomIn, zoomOut } = useReactFlow();
@@ -187,14 +167,14 @@ export const SettingsDataModelOverview = () => {
   );
 
   return (
-    <StyledContainer>
-      <StyledCloseButton>
+    <div {...stylex.props(styles.container)} data-settings-data-model-overview>
+      <div {...stylex.props(styles.closeButton)}>
         <NavigationButton
           startIcon={<IconX />}
           aria-label={t`Close overview`}
           to={getSettingsPath(SettingsPath.Objects)}
         ></NavigationButton>
-      </StyledCloseButton>
+      </div>
       <SettingsDataModelOverviewEffect
         setEdges={setEdges}
         setNodes={setNodes}
@@ -253,6 +233,6 @@ export const SettingsDataModelOverview = () => {
           </LightIconButton>
         </ButtonGroup>
       </ReactFlow>
-    </StyledContainer>
+    </div>
   );
 };

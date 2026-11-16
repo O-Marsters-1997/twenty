@@ -6,32 +6,39 @@ import { TableHeader } from '@/ui/layout/table/components/TableHeader';
 import { TableRow } from '@/ui/layout/table/components/TableRow';
 import { useSortedArray } from '@/ui/layout/table/hooks/useSortedArray';
 import { type TableMetadata } from '@/ui/layout/table/types/TableMetadata';
-import { styled } from '@linaria/react';
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react/macro';
 import { LightIconButton } from 'twenty-ui/components/input';
 import { IconSquareKey, IconTrash } from 'twenty-ui/icon';
 import { themeCssVariables } from 'twenty-ui/theme';
 import { type SettingsObjectIndexesTableItem } from '@/settings/data-model/types/SettingsObjectIndexesTableItem';
+import * as stylex from '@stylexjs/stylex';
+import {
+  borderColor,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const OBJECT_INDEX_TABLE_GRID_TEMPLATE_COLUMNS = '1fr 70px 80px 32px';
 
-const StyledTableContainer = styled.div`
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  margin-top: ${themeCssVariables.spacing[3]};
-`;
-
-const StyledActionCell = styled(TableCell)`
-  justify-content: flex-end;
-  padding-right: 0;
-`;
-
-const StyledEmpty = styled.div`
-  color: ${themeCssVariables.font.color.light};
-  font-size: ${themeCssVariables.font.size.md};
-  padding: ${themeCssVariables.spacing[3]};
-  text-align: center;
-`;
+const styles = stylex.create({
+  tableContainer: {
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: borderColor['--t-border-color-light'],
+    marginTop: spacing['--t-spacing-3'],
+  },
+  empty: {
+    color: fontColor['--t-font-color-light'],
+    fontSize: fontSize['--t-font-size-md'],
+    paddingTop: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingBottom: spacing['--t-spacing-3'],
+    paddingLeft: spacing['--t-spacing-3'],
+    textAlign: 'center',
+  },
+});
 
 const TABLE_FIELDS: TableMetadata<SettingsObjectIndexesTableItem>['fields'] = [
   {
@@ -79,7 +86,7 @@ export const SettingsObjectIndexTable = ({
   const sortedItems = useSortedArray(items, TABLE_METADATA);
 
   return (
-    <StyledTableContainer>
+    <div {...stylex.props(styles.tableContainer)}>
       <Table>
         <TableRow
           gridTemplateColumns={OBJECT_INDEX_TABLE_GRID_TEMPLATE_COLUMNS}
@@ -98,7 +105,9 @@ export const SettingsObjectIndexTable = ({
         </TableRow>
         <TableBody>
           {sortedItems.length === 0 ? (
-            <StyledEmpty>{t`No indexes match your filters.`}</StyledEmpty>
+            <div
+              {...stylex.props(styles.empty)}
+            >{t`No indexes match your filters.`}</div>
           ) : (
             sortedItems.map((item) => (
               <TableRow
@@ -112,7 +121,10 @@ export const SettingsObjectIndexTable = ({
                   {item.isUnique ? <IconSquareKey size={14} /> : ''}
                 </TableCell>
                 <TableCell>{item.indexType}</TableCell>
-                <StyledActionCell>
+                <TableCell
+                  align="right"
+                  padding={`0 0 0 ${themeCssVariables.spacing[2]}`}
+                >
                   {item.isCustom && !isReadOnly && (
                     <LightIconButton
                       emphasis="subtle"
@@ -122,12 +134,12 @@ export const SettingsObjectIndexTable = ({
                       <IconTrash />
                     </LightIconButton>
                   )}
-                </StyledActionCell>
+                </TableCell>
               </TableRow>
             ))
           )}
         </TableBody>
       </Table>
-    </StyledTableContainer>
+    </div>
   );
 };

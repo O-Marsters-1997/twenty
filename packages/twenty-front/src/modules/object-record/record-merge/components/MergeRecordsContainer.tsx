@@ -1,9 +1,7 @@
 import { t } from '@lingui/core/macro';
 import { TabListRoot } from '@/ui/layout/tab-list/components/TabListRoot';
 import { Tabs } from 'twenty-ui/primitives/navigation';
-import { styled } from '@linaria/react';
 import { useRef } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { ShowPageContainer } from '@/ui/layout/page/components/ShowPageContainer';
 import { SidePanelProvider } from '@/ui/layout/side-panel/contexts/SidePanelContext';
@@ -21,26 +19,28 @@ import { MergePreviewTab } from './MergePreviewTab';
 import { MergeRecordTab } from './MergeRecordTab';
 import { MergeRecordsFooter } from './MergeRecordsFooter';
 import { MergeSettingsTab } from './MergeSettingsTab';
+import * as stylex from '@stylexjs/stylex';
+import { background, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledShowPageRightContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: start;
-  overflow: auto;
-  width: 100%;
-`;
-
-const StyledTabListContainer = styled.div`
-  background-color: ${themeCssVariables.background.secondary};
-  padding-left: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledContentContainer = styled.div`
-  background: ${themeCssVariables.background.primary};
-  flex: 1;
-  overflow-y: auto;
-`;
+const styles = stylex.create({
+  showPageRightContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    justifyContent: 'start',
+    overflow: 'auto',
+    width: '100%',
+  },
+  tabListContainer: {
+    backgroundColor: background['--t-background-secondary'],
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+  contentContainer: {
+    background: background['--t-background-primary'],
+    flex: '1',
+    overflowY: 'auto',
+  },
+});
 
 type MergeRecordsContainerProps = {
   objectNameSingular: string;
@@ -66,23 +66,28 @@ export const MergeRecordsContainer = ({
   return (
     <SidePanelProvider value={{ isInSidePanel: true }}>
       <ShowPageContainer>
-        <StyledShowPageRightContainer>
+        <div {...stylex.props(styles.showPageRightContainer)}>
           <TabListRoot componentInstanceId={instanceId}>
-            <StyledTabListContainer>
+            <div {...stylex.props(styles.tabListContainer)}>
               <TabList
                 aria-label={t`Merge records`}
                 tabs={tabs}
                 behaveAsLinks={false}
                 componentInstanceId={instanceId}
               />
-            </StyledTabListContainer>
+            </div>
             <MergeRecordsContentScrollResetEffect
               activeTabId={activeTabId}
               contentContainerRef={contentContainerRef}
             />
             <Tabs.Panel
               value={activeTabId ?? ''}
-              render={<StyledContentContainer ref={contentContainerRef} />}
+              render={
+                <div
+                  ref={contentContainerRef}
+                  {...stylex.props(styles.contentContainer)}
+                />
+              }
             >
               {activeTabId === MergeRecordsTabId.MERGE_PREVIEW && (
                 <MergePreviewTab objectNameSingular={objectNameSingular} />
@@ -99,7 +104,7 @@ export const MergeRecordsContainer = ({
             </Tabs.Panel>
           </TabListRoot>
           <MergeRecordsFooter objectNameSingular={objectNameSingular} />
-        </StyledShowPageRightContainer>
+        </div>
       </ShowPageContainer>
     </SidePanelProvider>
   );

@@ -9,23 +9,24 @@ import { rootLevelRecordFilterGroupComponentSelector } from '@/object-record/adv
 import { isRecordFilterGroupChildARecordFilterGroup } from '@/object-record/advanced-filter/utils/isRecordFilterGroupChildARecordFilterGroup';
 import { type VariablePickerComponent } from '@/ui/input/types/VariablePickerComponent';
 import { useAtomComponentSelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentSelectorValue';
-import { styled } from '@linaria/react';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  align-items: start;
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledChildContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[6]};
-  width: 100%;
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'start',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+  },
+  childContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-6'],
+    width: '100%',
+  },
+});
 
 export type AdvancedFilterSidePanelContainerProps = {
   readonly?: boolean;
@@ -62,8 +63,8 @@ export const AdvancedFilterSidePanelContainer = ({
       }}
     >
       {isDefined(rootRecordFilterGroup) ? (
-        <StyledContainer>
-          <StyledChildContainer>
+        <div {...stylex.props(styles.container)}>
+          <div {...stylex.props(styles.childContainer)}>
             {childRecordFiltersAndRecordFilterGroups.map(
               (recordFilterGroupChild, recordFilterGroupChildIndex) =>
                 isRecordFilterGroupChildARecordFilterGroup(
@@ -84,13 +85,13 @@ export const AdvancedFilterSidePanelContainer = ({
                   />
                 ),
             )}
-          </StyledChildContainer>
+          </div>
           {!readonly && (
             <AdvancedFilterAddFilterRuleSelect
               recordFilterGroup={rootRecordFilterGroup}
             />
           )}
-        </StyledContainer>
+        </div>
       ) : (
         <AdvancedFilterSidePanelCreateRootFilterButton
           objectMetadataItem={objectMetadataItem}

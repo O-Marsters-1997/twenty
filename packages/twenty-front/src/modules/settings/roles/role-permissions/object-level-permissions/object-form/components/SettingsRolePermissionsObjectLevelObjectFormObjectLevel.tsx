@@ -4,19 +4,22 @@ import { SettingsRolePermissionsObjectLevelObjectFormObjectLevelTableRow } from 
 import { type SettingsRolePermissionsObjectLevelPermission } from '@/settings/roles/role-permissions/objects-permissions/types/SettingsRolePermissionsObjectPermission';
 import { settingsDraftRoleFamilyState } from '@/settings/roles/states/settingsDraftRoleFamilyState';
 import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { Section } from 'twenty-ui/components/layout';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledTable = styled.div`
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-`;
-
-const StyledTableRows = styled.div`
-  padding-bottom: ${themeCssVariables.spacing[2]};
-  padding-top: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  table: {
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: borderColor['--t-border-color-light'],
+  },
+  tableRows: {
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
+  },
+});
 
 type SettingsRolePermissionsObjectLevelObjectFormObjectLevelProps = {
   roleId: string;
@@ -69,9 +72,9 @@ export const SettingsRolePermissionsObjectLevelObjectFormObjectLevel = ({
         title={t`Object-Level`}
         description={t`Actions users can perform on this object`}
       />
-      <StyledTable>
+      <div {...stylex.props(styles.table)}>
         <SettingsRolePermissionsObjectLevelObjectFormObjectLevelTableHeader />
-        <StyledTableRows>
+        <div {...stylex.props(styles.tableRows)}>
           {objectPermissionsConfig.map((permission) => (
             <SettingsRolePermissionsObjectLevelObjectFormObjectLevelTableRow
               key={permission.key}
@@ -84,8 +87,8 @@ export const SettingsRolePermissionsObjectLevelObjectFormObjectLevel = ({
               objectMetadataItemId={objectMetadataItem.id}
             />
           ))}
-        </StyledTableRows>
-      </StyledTable>
+        </div>
+      </div>
     </Section.Root>
   );
 };

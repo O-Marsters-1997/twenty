@@ -1,29 +1,36 @@
 import { useRender } from '@base-ui/react/use-render';
 import { type ComponentProps } from 'react';
-import { styled } from '@linaria/react';
 import { type AiModelTier } from 'twenty-shared/ai';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { AiModelTierIndicator } from '@/ai/components/AiModelTierIndicator';
+import * as stylex from '@stylexjs/stylex';
+import {
+  backgroundTransparent,
+  borderRadius,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledButton = styled.button<{ disabled: boolean }>`
-  align-items: center;
-  background: transparent;
-  border: none;
-  border-radius: ${themeCssVariables.border.radius.sm};
-  cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
-  display: flex;
-  height: 24px;
-  opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
-  padding: 0 ${themeCssVariables.spacing[1]};
-
-  &:hover {
-    background: ${({ disabled }) =>
-      disabled
-        ? 'transparent'
-        : themeCssVariables.background.transparent.light};
-  }
-`;
+const styles = stylex.create({
+  button: {
+    alignItems: 'center',
+    backgroundColor: {
+      default: 'transparent',
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    borderStyle: 'none',
+    cursor: 'pointer',
+    display: 'flex',
+    height: '24px',
+    paddingBlock: 0,
+    paddingInline: spacing['--t-spacing-1'],
+  },
+  buttonDisabled: {
+    backgroundColor: 'transparent',
+    cursor: 'default',
+    opacity: 0.5,
+  },
+});
 
 type AiModelTierBarsProps = ComponentProps<'button'> & {
   selectedTier: AiModelTier;
@@ -39,7 +46,12 @@ export const AiModelTierBars = ({
 }: AiModelTierBarsProps) =>
   useRender({
     defaultTagName: 'button',
-    render: <StyledButton disabled={disabled} />,
+    render: (
+      <button
+        {...stylex.props(styles.button, disabled && styles.buttonDisabled)}
+        disabled={disabled}
+      />
+    ),
     ref,
     props: {
       ...props,

@@ -1,56 +1,64 @@
-import { styled } from '@linaria/react';
 import { type NodeViewProps, NodeViewWrapper } from '@tiptap/react';
 import React, { useCallback, useRef, useState } from 'react';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  background,
+  borderRadius,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const IMAGE_MIN_WIDTH = 32;
 const IMAGE_MAX_WIDTH = 600;
 
-const StyledNodeViewWrapperContainer = styled.div<{
-  align?: string;
-}>`
-  display: flex;
-  height: 100%;
-  justify-content: ${({ align }) =>
-    align === 'center'
-      ? 'center'
-      : align === 'right'
-        ? 'flex-end'
-        : 'flex-start'};
-`;
-
-const StyledImageWrapper = styled.div<{ width?: number }>`
-  height: 100%;
-`;
-
-const StyledImageContainer = styled.div`
-  max-width: 100%;
-  position: relative;
-`;
-
-const StyledImage = styled.img`
-  height: auto;
-  max-width: 100%;
-`;
-
-const StyledImageHandle = styled.div<{ handle: 'left' | 'right' }>`
-  background-color: ${themeCssVariables.background.primaryInverted};
-  border: 1px solid ${themeCssVariables.background.primary};
-  border-radius: ${themeCssVariables.border.radius.md};
-  cursor: col-resize;
-  height: ${themeCssVariables.spacing[8]};
-  left: ${({ handle }) =>
-    handle === 'left' ? themeCssVariables.spacing[1] : 'auto'};
-  position: absolute;
-  right: ${({ handle }) =>
-    handle === 'right' ? themeCssVariables.spacing[1] : 'auto'};
-  top: 50%;
-  transform: translateY(-50%);
-
-  width: ${themeCssVariables.spacing[2]};
-  z-index: 1;
-`;
+const styles = stylex.create({
+  nodeViewWrapperContainer: {
+    display: 'flex',
+    height: '100%',
+  },
+  alignLeft: {
+    justifyContent: 'flex-start',
+  },
+  alignCenter: {
+    justifyContent: 'center',
+  },
+  alignRight: {
+    justifyContent: 'flex-end',
+  },
+  imageWrapper: {
+    height: '100%',
+  },
+  imageHandle: {
+    backgroundColor: background['--t-background-primary-inverted'],
+    borderColor: background['--t-background-primary'],
+    borderRadius: borderRadius['--t-border-radius-md'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    cursor: 'col-resize',
+    height: spacing['--t-spacing-8'],
+    position: 'absolute',
+    top: '50%',
+    transform: 'translateY(-50%)',
+    width: spacing['--t-spacing-2'],
+    zIndex: 1,
+  },
+  imageHandleLeft: {
+    left: spacing['--t-spacing-1'],
+    right: 'auto',
+  },
+  imageHandleRight: {
+    left: 'auto',
+    right: spacing['--t-spacing-1'],
+  },
+  imageContainer: {
+    maxWidth: '100%',
+    position: 'relative',
+  },
+  image: {
+    height: 'auto',
+    maxWidth: '100%',
+  },
+});
 
 type ResizeParams = {
   initialWidth: number;
@@ -163,37 +171,49 @@ export const ResizableImageView = (props: ResizableImageViewProps) => {
 
   return (
     <NodeViewWrapper>
-      <StyledNodeViewWrapperContainer
+      <div
         onMouseEnter={handleImageHover}
         onMouseLeave={handleImageHoverEnd}
-        align={align}
+        {...stylex.props(
+          styles.nodeViewWrapperContainer,
+          align === 'center'
+            ? styles.alignCenter
+            : align === 'right'
+              ? styles.alignRight
+              : styles.alignLeft,
+        )}
       >
-        <StyledImageWrapper
+        <div
           ref={imageWrapperRef}
+          {...stylex.props(styles.imageWrapper)}
           style={{ width: width ? `${width}px` : 'fit-content' }}
         >
-          <StyledImageContainer>
-            <StyledImage
+          <div {...stylex.props(styles.imageContainer)}>
+            <img
               src={src}
               alt={alt}
               draggable={false}
               contentEditable={false}
+              {...stylex.props(styles.image)}
             />
             {(isHovering || isDefined(resizeParams)) && (
               <>
-                <StyledImageHandle
-                  handle="left"
+                <div
                   onMouseDown={(e) => handleImageHandleMouseDown('left', e)}
+                  {...stylex.props(styles.imageHandle, styles.imageHandleLeft)}
                 />
-                <StyledImageHandle
-                  handle="right"
+                <div
                   onMouseDown={(e) => handleImageHandleMouseDown('right', e)}
+                  {...stylex.props(
+                    styles.imageHandle,
+                    styles.imageHandleRight,
+                  )}
                 />
               </>
             )}
-          </StyledImageContainer>
-        </StyledImageWrapper>
-      </StyledNodeViewWrapperContainer>
+          </div>
+        </div>
+      </div>
     </NodeViewWrapper>
   );
 };

@@ -6,7 +6,6 @@ import { RELATIVE_DATETIME_UNITS } from '@/ui/input/components/internal/date/con
 import { RELATIVE_DATE_UNITS } from '@/ui/input/components/internal/date/constants/RelativeDateUnits';
 
 import { plural, t } from '@lingui/core/macro';
-import { styled } from '@linaria/react';
 import { useState } from 'react';
 import { type Nullable } from 'twenty-shared/types';
 import {
@@ -17,22 +16,27 @@ import {
   type RelativeDateFilterDirection,
   type RelativeDateFilterUnit,
 } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div<{ noPadding: boolean }>`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[1]};
-  padding: ${({ noPadding }) =>
-    noPadding ? '0' : themeCssVariables.spacing[2]};
-  padding-bottom: 0;
-`;
-
-const StyledControlsRow = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-1'],
+    paddingBottom: 0,
+  },
+  containerPadded: {
+    paddingLeft: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
+  },
+  controlsRow: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+  },
+});
 
 type RelativeDatePickerHeaderProps = {
   instanceId: string;
@@ -109,8 +113,10 @@ export const RelativeDatePickerHeader = ({
   }));
 
   return (
-    <StyledContainer noPadding={isFormField ?? false}>
-      <StyledControlsRow>
+    <div
+      {...stylex.props(styles.container, !isFormField && styles.containerPadded)}
+    >
+      <div {...stylex.props(styles.controlsRow)}>
         <Select
           dropdownId={`direction-select-${instanceId}`}
           value={direction}
@@ -185,7 +191,7 @@ export const RelativeDatePickerHeader = ({
           disabled={readonly}
           dropdownWidth={unitDropdownWidth}
         />
-      </StyledControlsRow>
+      </div>
       {isDefined(calendarMonthDate) &&
         isDefined(onPreviousMonth) &&
         isDefined(onNextMonth) && (
@@ -197,6 +203,6 @@ export const RelativeDatePickerHeader = ({
             nextMonthButtonDisabled={nextMonthButtonDisabled ?? false}
           />
         )}
-    </StyledContainer>
+    </div>
   );
 };

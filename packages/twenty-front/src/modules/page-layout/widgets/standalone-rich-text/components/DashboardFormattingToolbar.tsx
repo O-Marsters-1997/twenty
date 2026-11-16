@@ -12,31 +12,19 @@ import { flip, offset, shift } from '@floating-ui/react';
 
 import { DashboardFormattingToolbarColorButton } from '@/page-layout/widgets/standalone-rich-text/components/DashboardFormattingToolbarColorButton';
 import { FORMATTING_TOOLBAR_FLOATING_CONFIG } from '@/page-layout/widgets/standalone-rich-text/constants/FormattingToolbarFloatingConfig';
-import { styled } from '@linaria/react';
-
-const StyledToolbarContainer = styled.div`
-  max-width: calc(
-    100vw - ${FORMATTING_TOOLBAR_FLOATING_CONFIG.boundaryPadding * 2}px
-  );
-
-  & .bn-formatting-toolbar.bn-toolbar {
-    box-sizing: border-box;
-    flex-wrap: wrap;
-    max-width: 100%;
-    overflow: visible;
-  }
-
-  & .bn-formatting-toolbar .mantine-Button-root {
-    height: 24px;
-    min-height: 24px;
-  }
-`;
 
 export const DashboardFormattingToolbar = () => {
   return (
     <FormattingToolbarController
       formattingToolbar={() => (
-        <StyledToolbarContainer>
+        <div
+          data-dashboard-formatting-toolbar=""
+          {...stylex.props(
+            styles.toolbarContainer(
+              FORMATTING_TOOLBAR_FLOATING_CONFIG.boundaryPadding * 2,
+            ),
+          )}
+        >
           <FormattingToolbar>
             <BlockTypeSelect key="blockTypeSelect" />
             <BasicTextStyleButton basicTextStyle="bold" key="boldStyleButton" />
@@ -63,7 +51,7 @@ export const DashboardFormattingToolbar = () => {
             <UnnestBlockButton key="unnestBlockButton" />
             <CreateLinkButton key="createLinkButton" />
           </FormattingToolbar>
-        </StyledToolbarContainer>
+        </div>
       )}
       floatingUIOptions={{
         useFloatingOptions: {
@@ -79,3 +67,12 @@ export const DashboardFormattingToolbar = () => {
     />
   );
 };
+
+import * as stylex from '@stylexjs/stylex';
+import '~/third-party-styles/blocknote-dashboard.css';
+
+const styles = stylex.create({
+  toolbarContainer: (inset: number) => ({
+    maxWidth: `calc(100vw - ${inset}px)`,
+  }),
+});

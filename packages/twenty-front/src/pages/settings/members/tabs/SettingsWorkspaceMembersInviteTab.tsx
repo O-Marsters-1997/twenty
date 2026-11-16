@@ -14,7 +14,6 @@ import { useResendWorkspaceInvitation } from '@/workspace-invitation/hooks/useRe
 import { WorkspaceInviteLink } from '@/workspace/components/WorkspaceInviteLink';
 import { WorkspaceInviteTeam } from '@/workspace/components/WorkspaceInviteTeam';
 import { useQuery } from '@apollo/client/react';
-import { styled } from '@linaria/react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { isNonEmptyArray } from '@sniptt/guards';
 import { formatDistanceToNow } from 'date-fns';
@@ -29,42 +28,41 @@ import { Tooltip } from 'twenty-ui/primitives/surfaces';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 import { GetWorkspaceInvitationsDocument } from '~/generated-metadata/graphql';
 import { dateLocaleState } from '@/localization/states/dateLocaleState';
+import * as stylex from '@stylexjs/stylex';
+import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledButtonContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  flex-shrink: 0;
-  gap: ${themeCssVariables.spacing[1]};
-  margin-left: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledExpiresInHeader = styled.span`
-  white-space: nowrap;
-`;
-
-const StyledTableContainer = styled.div`
-  > div {
-    border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  }
-`;
-
-const StyledIconWrapper = styled.div`
-  align-items: center;
-  display: flex;
-  margin-right: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledTextContainerWithEllipsis = styled.div`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledTableRows = styled.div`
-  padding-bottom: ${themeCssVariables.spacing[2]};
-  padding-top: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  buttonContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+    flexShrink: '0',
+    gap: spacing['--t-spacing-1'],
+    marginLeft: spacing['--t-spacing-2'],
+  },
+  expiresInHeader: {
+    whiteSpace: 'nowrap',
+  },
+  iconWrapper: {
+    alignItems: 'center',
+    display: 'flex',
+    marginRight: spacing['--t-spacing-2'],
+  },
+  textContainerWithEllipsis: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  table: {
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
+  },
+  tableRows: {
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
+  },
+});
 
 export const SettingsWorkspaceMembersInviteTab = () => {
   const theme = useTheme();
@@ -141,100 +139,99 @@ export const SettingsWorkspaceMembersInviteTab = () => {
         />
         <WorkspaceInviteTeam roles={roles} />
         {isNonEmptyArray(workspaceInvitations) && (
-          <StyledTableContainer>
-            <Table>
-              <TableRow
-                gridAutoColumns="2fr 1fr 1fr 80px"
-                mobileGridAutoColumns="2fr 1fr 1fr 72px"
-              >
-                <TableHeader>
-                  <Trans>Email</Trans>
-                </TableHeader>
-                <TableHeader>
-                  <Trans>Role</Trans>
-                </TableHeader>
-                <TableHeader align="center">
-                  <StyledExpiresInHeader>
-                    <Trans>Expires in</Trans>
-                  </StyledExpiresInHeader>
-                </TableHeader>
-                <TableHeader></TableHeader>
-              </TableRow>
-              <StyledTableRows>
-                {workspaceInvitations.map((workspaceInvitation) => (
-                  <TableRow
-                    gridAutoColumns="2fr 1fr 1fr 80px"
-                    mobileGridAutoColumns="2fr 1fr 1fr 72px"
-                    key={workspaceInvitation.id}
+          <Table {...stylex.props(styles.table)}>
+            <TableRow
+              gridAutoColumns="2fr 1fr 1fr 80px"
+              mobileGridAutoColumns="2fr 1fr 1fr 72px"
+            >
+              <TableHeader>
+                <Trans>Email</Trans>
+              </TableHeader>
+              <TableHeader>
+                <Trans>Role</Trans>
+              </TableHeader>
+              <TableHeader align="center">
+                <span {...stylex.props(styles.expiresInHeader)}>
+                  <Trans>Expires in</Trans>
+                </span>
+              </TableHeader>
+              <TableHeader></TableHeader>
+            </TableRow>
+            <div {...stylex.props(styles.tableRows)}>
+              {workspaceInvitations.map((workspaceInvitation) => (
+                <TableRow
+                  gridAutoColumns="2fr 1fr 1fr 80px"
+                  mobileGridAutoColumns="2fr 1fr 1fr 72px"
+                  key={workspaceInvitation.id}
+                >
+                  <TableCell
+                    color={themeCssVariables.font.color.primary}
+                    minWidth="0"
+                    overflow="hidden"
                   >
-                    <TableCell
-                      color={themeCssVariables.font.color.primary}
-                      minWidth="0"
-                      overflow="hidden"
+                    <div {...stylex.props(styles.iconWrapper)}>
+                      <IconMail
+                        size={theme.icon.size.md}
+                        stroke={theme.icon.stroke.sm}
+                      />
+                    </div>
+                    <Tooltip
+                      content={workspaceInvitation.email}
+                      side="top"
+                      positionMethod="fixed"
+                      delay={TooltipDelay.shortDelay}
                     >
-                      <StyledIconWrapper>
-                        <IconMail
-                          size={theme.icon.size.md}
-                          stroke={theme.icon.stroke.sm}
-                        />
-                      </StyledIconWrapper>
-                      <Tooltip
-                        content={workspaceInvitation.email}
-                        side="top"
-                        positionMethod="fixed"
-                        delay={TooltipDelay.shortDelay}
+                      <div
+                        id={`invitation-email-${workspaceInvitation.id}`}
+                        {...stylex.props(styles.textContainerWithEllipsis)}
                       >
-                        <StyledTextContainerWithEllipsis
-                          id={`invitation-email-${workspaceInvitation.id}`}
-                        >
-                          {workspaceInvitation.email}
-                        </StyledTextContainerWithEllipsis>
-                      </Tooltip>
-                    </TableCell>
-                    <TableCell minWidth="0" overflow="hidden">
-                      <StyledTextContainerWithEllipsis>
-                        {rolesById.get(workspaceInvitation.roleId ?? '')
-                          ?.label ?? t`Default role`}
-                      </StyledTextContainerWithEllipsis>
-                    </TableCell>
-                    <TableCell align="center">
-                      <Status color="gray">
-                        {getExpiresAtText(workspaceInvitation.expiresAt)}
-                      </Status>
-                    </TableCell>
-                    <TableCell align="right">
-                      <StyledButtonContainer>
-                        <IconButton
-                          aria-label={t`Resend invitation`}
-                          onClick={() => {
-                            handleResendWorkspaceInvitation(
-                              workspaceInvitation.id,
-                            );
-                          }}
-                          variant="ghost"
-                          size="md"
-                        >
-                          <IconReload />
-                        </IconButton>
-                        <IconButton
-                          aria-label={t`Remove invitation`}
-                          onClick={() => {
-                            handleRemoveWorkspaceInvitation(
-                              workspaceInvitation.id,
-                            );
-                          }}
-                          variant="ghost"
-                          size="md"
-                        >
-                          <IconTrash />
-                        </IconButton>
-                      </StyledButtonContainer>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </StyledTableRows>
-            </Table>
-          </StyledTableContainer>
+                        {workspaceInvitation.email}
+                      </div>
+                    </Tooltip>
+                  </TableCell>
+                  <TableCell minWidth="0" overflow="hidden">
+                    <div {...stylex.props(styles.textContainerWithEllipsis)}>
+                      {rolesById.get(workspaceInvitation.roleId ?? '')?.label ??
+                        t`Default role`}
+                    </div>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Status color="gray">
+                      {getExpiresAtText(workspaceInvitation.expiresAt)}
+                    </Status>
+                  </TableCell>
+                  <TableCell align="right">
+                    <div {...stylex.props(styles.buttonContainer)}>
+                      <IconButton
+                        aria-label={t`Resend invitation`}
+                        onClick={() => {
+                          handleResendWorkspaceInvitation(
+                            workspaceInvitation.id,
+                          );
+                        }}
+                        variant="ghost"
+                        size="md"
+                      >
+                        <IconReload />
+                      </IconButton>
+                      <IconButton
+                        aria-label={t`Remove invitation`}
+                        onClick={() => {
+                          handleRemoveWorkspaceInvitation(
+                            workspaceInvitation.id,
+                          );
+                        }}
+                        variant="ghost"
+                        size="md"
+                      >
+                        <IconTrash />
+                      </IconButton>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </div>
+          </Table>
         )}
       </Section.Root>
       <Section.Root>

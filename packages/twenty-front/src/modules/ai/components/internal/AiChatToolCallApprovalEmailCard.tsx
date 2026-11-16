@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isString } from '@sniptt/guards';
 import { type JSONContent } from '@tiptap/core';
@@ -11,7 +10,6 @@ import {
 import { LightButton } from 'twenty-ui/components/input';
 import { IconDeviceFloppy, IconSend, IconTrash } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { parseEmailRecipients } from '@/activities/emails/recipients/utils/parseEmailRecipients';
 import { serializeEmailRecipients } from '@/activities/emails/recipients/utils/serializeEmailRecipients';
@@ -21,28 +19,42 @@ import { serializeJsonContentAsAdvancedTextEditorDocument } from '@/advanced-tex
 import { AiChatEmailRecipientsRow } from '@/ai/components/internal/AiChatEmailRecipientsRow';
 import { AiChatToolCallApprovalCardLayout } from '@/ai/components/internal/AiChatToolCallApprovalCardLayout';
 import { useAnswerToolCallApproval } from '@/ai/hooks/useAnswerToolCallApproval';
+import * as stylex from '@stylexjs/stylex';
+import {
+  borderColor,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const EMAIL_TOOL_NAMES = {
   send: 'send_email',
   draft: 'draft_email',
 } as const;
 
-const StyledSubjectInput = styled.input`
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  color: ${themeCssVariables.font.color.primary};
-  font-family: inherit;
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.medium};
-  outline: none;
-  padding: ${themeCssVariables.spacing[1]} 0;
-`;
-
-const StyledRecipientToggles = styled.div`
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  subjectInput: {
+    background: 'transparent',
+    borderStyle: 'none',
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: borderColor['--t-border-color-light'],
+    color: fontColor['--t-font-color-primary'],
+    fontFamily: 'inherit',
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    outline: 'none',
+    paddingTop: spacing['--t-spacing-1'],
+    paddingRight: '0',
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: '0',
+  },
+  recipientToggles: {
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+  },
+});
 
 const readRecipients = (toolArguments: Record<string, unknown>) => {
   const recipients = isPlainObject(toolArguments.recipients)
@@ -173,7 +185,7 @@ export const AiChatToolCallApprovalEmailCard = ({
         onChange={setTo}
       />
       {(!isCcShown || !isBccShown) && (
-        <StyledRecipientToggles>
+        <div {...stylex.props(styles.recipientToggles)}>
           {!isCcShown && (
             <LightButton
               disabled={isAnswering}
@@ -190,7 +202,7 @@ export const AiChatToolCallApprovalEmailCard = ({
               {t`Bcc`}
             </LightButton>
           )}
-        </StyledRecipientToggles>
+        </div>
       )}
       {isCcShown && (
         <AiChatEmailRecipientsRow
@@ -208,12 +220,13 @@ export const AiChatToolCallApprovalEmailCard = ({
           onChange={setBcc}
         />
       )}
-      <StyledSubjectInput
+      <input
         aria-label={t`Subject`}
         placeholder={t`Subject`}
         value={subject}
         disabled={isAnswering}
         onChange={(event) => setSubject(event.target.value)}
+        {...stylex.props(styles.subjectInput)}
       />
       <FormAdvancedTextFieldInput
         defaultValue={serializeEmailBody(proposal.arguments.body)}

@@ -1,13 +1,11 @@
 import { useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client/react';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isDefined, normalizeAllowedIframeOrigin } from 'twenty-shared/utils';
 import { useToast } from 'twenty-ui/components/feedback';
 import { Section } from 'twenty-ui/components/layout';
 import { IconPlus, IconTrash } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { getToastOptionsFromError } from '@/error-handler/utils/getToastOptionsFromError';
 import { SettingsTextInput } from '@/ui/input/components/SettingsTextInput';
@@ -15,23 +13,25 @@ import {
   GetWorkspaceIframeOriginsDocument,
   UpdateWorkspaceAllowedIframeOriginsDocument,
 } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[3]};
-`;
-
-const StyledRow = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  justify-content: space-between;
-`;
-
-const StyledOrigin = styled.span`
-  overflow-wrap: anywhere;
-`;
+const styles = stylex.create({
+  list: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-3'],
+  },
+  row: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    justifyContent: 'space-between',
+  },
+  origin: {
+    overflowWrap: 'anywhere',
+  },
+});
 
 export const SettingsSecurityIframeOrigins = () => {
   const { t } = useLingui();
@@ -95,16 +95,16 @@ export const SettingsSecurityIframeOrigins = () => {
         title={t`Iframe embedding`}
         description={t`Allow trusted websites to display this workspace in an iframe. Users who are already signed in may see their workspace inside those websites, so only add origins you fully trust. Leave the list empty to block external embedding.`}
       />
-      <StyledList>
+      <div {...stylex.props(styles.list)}>
         {isDefined(policyError) && (
           <>
-            <StyledOrigin role="alert">{t`Unable to load embedding settings.`}</StyledOrigin>
+            <span role="alert" {...stylex.props(styles.origin)}>{t`Unable to load embedding settings.`}</span>
             <Button onClick={() => refetch()}>{t`Retry`}</Button>
           </>
         )}
         {origins.map((origin) => (
-          <StyledRow key={origin}>
-            <StyledOrigin>{origin}</StyledOrigin>
+          <div key={origin} {...stylex.props(styles.row)}>
+            <span {...stylex.props(styles.origin)}>{origin}</span>
             <Button
               aria-label={t`Remove ${origin}`}
               startIcon={<IconTrash size={16} />}
@@ -115,7 +115,7 @@ export const SettingsSecurityIframeOrigins = () => {
             >
               {t`Remove`}
             </Button>
-          </StyledRow>
+          </div>
         ))}
         <SettingsTextInput
           instanceId="allowed-iframe-origin"
@@ -130,7 +130,7 @@ export const SettingsSecurityIframeOrigins = () => {
           onInputEnter={handleAddOrigin}
           error={error}
         />
-        <StyledRow>
+        <div {...stylex.props(styles.row)}>
           <Button
             variant="outline"
             size="sm"
@@ -140,8 +140,8 @@ export const SettingsSecurityIframeOrigins = () => {
           >
             {t`Add origin`}
           </Button>
-        </StyledRow>
-      </StyledList>
+        </div>
+      </div>
     </Section.Root>
   );
 };

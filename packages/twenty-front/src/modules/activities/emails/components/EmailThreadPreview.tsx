@@ -1,5 +1,3 @@
-import { styled } from '@linaria/react';
-
 import { ActivityRow } from '@/activities/components/ActivityRow';
 import { EmailThreadNotShared } from '@/activities/emails/components/EmailThreadNotShared';
 import { getEmailParticipantAvatarColorSeed } from '@/activities/emails/utils/getEmailParticipantAvatarColorSeed';
@@ -10,70 +8,75 @@ import { isNonEmptyString } from '@sniptt/guards';
 import { CoreObjectNameSingular } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 import { Avatar, Tag } from 'twenty-ui/primitives/data-display';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import {
   MessageChannelVisibility,
   type TimelineThread,
 } from '~/generated/graphql';
 import { formatToHumanReadableDate } from '~/utils/date-utils';
 import { getAbsoluteImageUrl } from '~/utils/image/getAbsoluteImageUrl';
+import * as stylex from '@stylexjs/stylex';
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledHeading = styled.div<{ unread: boolean }>`
-  display: flex;
-  max-width: 20%;
-  overflow: hidden;
-  width: fit-content;
-`;
-
-const StyledParticipantsContainer = styled.div`
-  align-items: flex-start;
-  display: flex;
-`;
-
-const StyledAvatarWrapper = styled.div`
-  margin-left: calc(-1 * ${themeCssVariables.spacing[1]});
-`;
-
-const StyledSenderNames = styled.span`
-  display: flex;
-  margin: ${themeCssVariables.spacing[0]} ${themeCssVariables.spacing[1]};
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledThreadCount = styled.span`
-  color: ${themeCssVariables.font.color.tertiary};
-`;
-
-const StyledSubjectAndBody = styled.div`
-  align-items: center;
-  display: flex;
-  flex: 1;
-  gap: ${themeCssVariables.spacing[2]};
-  overflow: hidden;
-`;
-
-const StyledSubject = styled.span`
-  color: ${themeCssVariables.font.color.primary};
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledBody = styled.span`
-  color: ${themeCssVariables.font.color.tertiary};
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledReceivedAt = styled.div`
-  font-size: ${themeCssVariables.font.size.sm};
-  font-weight: ${themeCssVariables.font.weight.regular};
-  padding: ${themeCssVariables.spacing[0]} ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  heading: {
+    display: 'flex',
+    maxWidth: '20%',
+    overflow: 'hidden',
+    width: 'fit-content',
+  },
+  participantsContainer: {
+    alignItems: 'flex-start',
+    display: 'flex',
+  },
+  avatarWrapper: {
+    marginLeft: `calc(-1 * ${spacing['--t-spacing-1']})`,
+  },
+  senderNames: {
+    display: 'flex',
+    marginTop: spacing['--t-spacing-0'],
+    marginRight: spacing['--t-spacing-1'],
+    marginBottom: spacing['--t-spacing-0'],
+    marginLeft: spacing['--t-spacing-1'],
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  threadCount: {
+    color: fontColor['--t-font-color-tertiary'],
+  },
+  subjectAndBody: {
+    alignItems: 'center',
+    display: 'flex',
+    flex: '1',
+    gap: spacing['--t-spacing-2'],
+    overflow: 'hidden',
+  },
+  subject: {
+    color: fontColor['--t-font-color-primary'],
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  body: {
+    color: fontColor['--t-font-color-tertiary'],
+    flex: '1',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  receivedAt: {
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    paddingBlock: spacing['--t-spacing-0'],
+    paddingInline: spacing['--t-spacing-1'],
+  },
+});
 
 type EmailThreadPreviewProps = {
   thread: TimelineThread;
@@ -152,8 +155,8 @@ export const EmailThreadPreview = ({ thread }: EmailThreadPreviewProps) => {
       disabled={isDisabled}
       label={label}
     >
-      <StyledHeading unread={!thread.read}>
-        <StyledParticipantsContainer>
+      <div {...stylex.props(styles.heading)}>
+        <div {...stylex.props(styles.participantsContainer)}>
           <Avatar
             src={getAbsoluteImageUrl(thread?.firstParticipant?.avatarUrl)}
             name={thread.firstParticipant.displayName}
@@ -163,7 +166,7 @@ export const EmailThreadPreview = ({ thread }: EmailThreadPreviewProps) => {
             shape="circle"
           />
           {isDefined(thread?.lastTwoParticipants?.[0]) && (
-            <StyledAvatarWrapper>
+            <div {...stylex.props(styles.avatarWrapper)}>
               <Avatar
                 src={getAbsoluteImageUrl(
                   thread.lastTwoParticipants[0].avatarUrl,
@@ -174,10 +177,10 @@ export const EmailThreadPreview = ({ thread }: EmailThreadPreviewProps) => {
                 )}
                 shape="circle"
               />
-            </StyledAvatarWrapper>
+            </div>
           )}
           {displayedName && (
-            <StyledAvatarWrapper>
+            <div {...stylex.props(styles.avatarWrapper)}>
               <Avatar
                 src={getAbsoluteImageUrl(avatarUrl)}
                 name={displayedName}
@@ -188,35 +191,37 @@ export const EmailThreadPreview = ({ thread }: EmailThreadPreviewProps) => {
                   isCountIcon ? theme.grayScale.gray2 : undefined
                 }
               />
-            </StyledAvatarWrapper>
+            </div>
           )}
-        </StyledParticipantsContainer>
+        </div>
 
-        <StyledSenderNames>{senderNames}</StyledSenderNames>
-        <StyledThreadCount>{thread.numberOfMessagesInThread}</StyledThreadCount>
-      </StyledHeading>
+        <span {...stylex.props(styles.senderNames)}>{senderNames}</span>
+        <span {...stylex.props(styles.threadCount)}>
+          {thread.numberOfMessagesInThread}
+        </span>
+      </div>
 
-      <StyledSubjectAndBody>
+      <div {...stylex.props(styles.subjectAndBody)}>
         {visibility === MessageChannelVisibility.METADATA && (
           <EmailThreadNotShared visibility={visibility} />
         )}
         {visibility === MessageChannelVisibility.SUBJECT && (
           <>
-            <StyledSubject>{thread.subject}</StyledSubject>
+            <span {...stylex.props(styles.subject)}>{thread.subject}</span>
             <EmailThreadNotShared visibility={visibility} />
           </>
         )}
         {visibility === MessageChannelVisibility.SHARE_EVERYTHING && (
           <>
             {thread.lastMessageIsDraft && <Tag color="orange">{t`Draft`}</Tag>}
-            <StyledSubject>{thread.subject}</StyledSubject>
-            <StyledBody>{thread.lastMessageBody}</StyledBody>
+            <span {...stylex.props(styles.subject)}>{thread.subject}</span>
+            <span {...stylex.props(styles.body)}>{thread.lastMessageBody}</span>
           </>
         )}
-      </StyledSubjectAndBody>
-      <StyledReceivedAt>
+      </div>
+      <div {...stylex.props(styles.receivedAt)}>
         {formatToHumanReadableDate(thread.lastMessageReceivedAt)}
-      </StyledReceivedAt>
+      </div>
     </ActivityRow>
   );
 };

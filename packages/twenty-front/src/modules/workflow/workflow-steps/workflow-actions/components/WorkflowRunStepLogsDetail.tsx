@@ -1,10 +1,8 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { workflowRunStepLogSchema } from 'twenty-shared/workflow';
 import { JsonTree } from 'twenty-ui/components/data-display';
 import { IconInfoCircle } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { type JsonValue } from 'type-fest';
 
 import { useFlowOrThrow } from '@/workflow/hooks/useFlowOrThrow';
@@ -17,34 +15,54 @@ import { WorkflowRunStepLogsEmailDetail } from '@/workflow/workflow-steps/workfl
 import { WorkflowRunStepLogsEntries } from '@/workflow/workflow-steps/workflow-actions/components/WorkflowRunStepLogsEntries';
 import { WorkflowRunStepLogsHttpRequestDetail } from '@/workflow/workflow-steps/workflow-actions/http-request-action/components/WorkflowRunStepLogsHttpRequestDetail';
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard';
+import * as stylex from '@stylexjs/stylex';
+import {
+  spacing,
+  backgroundTransparent,
+  borderRadius,
+  fontColor,
+  fontSize,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledRoot = styled.div`
-  display: flex;
-  flex: 1 1 auto;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[4]};
-  overflow: hidden scroll;
-  padding: ${themeCssVariables.spacing[4]} ${themeCssVariables.spacing[3]};
-`;
-
-const StyledEmptyState = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  flex-direction: column;
-  font-size: ${themeCssVariables.font.size.sm};
-  gap: ${themeCssVariables.spacing[2]};
-  padding: ${themeCssVariables.spacing[8]} ${themeCssVariables.spacing[3]};
-  text-align: center;
-`;
-
-const StyledTruncatedNotice = styled.div`
-  background: ${themeCssVariables.background.transparent.orange};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.xs};
-  padding: ${themeCssVariables.spacing[2]} ${themeCssVariables.spacing[3]};
-`;
+const styles = stylex.create({
+  root: {
+    display: 'flex',
+    flex: '1 1 auto',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-4'],
+    overflow: 'hidden scroll',
+    paddingTop: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingBottom: spacing['--t-spacing-4'],
+    paddingLeft: spacing['--t-spacing-3'],
+  },
+  emptyState: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    flexDirection: 'column',
+    fontSize: fontSize['--t-font-size-sm'],
+    gap: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-8'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingBottom: spacing['--t-spacing-8'],
+    paddingLeft: spacing['--t-spacing-3'],
+    textAlign: 'center',
+  },
+  truncatedNotice: {
+    background: backgroundTransparent['--t-background-transparent-orange'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-xs'],
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-3'],
+  },
+});
 
 export const WorkflowRunStepLogsDetail = ({ stepId }: { stepId: string }) => {
   const { t } = useLingui();
@@ -57,13 +75,13 @@ export const WorkflowRunStepLogsDetail = ({ stepId }: { stepId: string }) => {
 
   if (!isDefined(rawStepLog)) {
     return (
-      <StyledRoot>
-        <StyledEmptyState>
+      <div {...stylex.props(styles.root)}>
+        <div {...stylex.props(styles.emptyState)}>
           <IconInfoCircle size={20} />
           <div>{t`No logs were recorded for this step.`}</div>
-        </StyledEmptyState>
+        </div>
         <WorkflowRunStepAiAgentConversationButton stepId={stepId} />
-      </StyledRoot>
+      </div>
     );
   }
 
@@ -71,7 +89,7 @@ export const WorkflowRunStepLogsDetail = ({ stepId }: { stepId: string }) => {
 
   if (!parseResult.success) {
     return (
-      <StyledRoot>
+      <div {...stylex.props(styles.root)}>
         <JsonTree
           value={rawStepLog as JsonValue}
           emptyArrayLabel={t`Empty Array`}
@@ -81,7 +99,7 @@ export const WorkflowRunStepLogsDetail = ({ stepId }: { stepId: string }) => {
           arrowButtonExpandedLabel={t`Collapse`}
           onNodeValueClick={copyToClipboard}
         />
-      </StyledRoot>
+      </div>
     );
   }
 
@@ -125,7 +143,7 @@ export const WorkflowRunStepLogsDetail = ({ stepId }: { stepId: string }) => {
   };
 
   return (
-    <StyledRoot>
+    <div {...stylex.props(styles.root)}>
       {renderDetails()}
 
       <WorkflowRunStepLogsEntries
@@ -134,10 +152,10 @@ export const WorkflowRunStepLogsDetail = ({ stepId }: { stepId: string }) => {
       />
 
       {isDefined(stepLog.truncated) && (
-        <StyledTruncatedNotice>
+        <div {...stylex.props(styles.truncatedNotice)}>
           {t`Some log data was dropped to fit the size limit (${stepLog.truncated.droppedEntries} entries, ${stepLog.truncated.droppedBytes} bytes).`}
-        </StyledTruncatedNotice>
+        </div>
       )}
-    </StyledRoot>
+    </div>
   );
 };

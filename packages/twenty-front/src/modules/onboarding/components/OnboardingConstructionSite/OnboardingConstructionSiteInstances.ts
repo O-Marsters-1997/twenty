@@ -1,8 +1,5 @@
 export type OnboardingConstructionSiteMeshName =
-  | 'cube'
-  | 'cylinder'
-  | 'cone'
-  | 'mixerDrum';
+  'cube' | 'cylinder' | 'cone' | 'mixerDrum';
 
 export type OnboardingConstructionSiteInstanceBatch = {
   data: Float32Array;

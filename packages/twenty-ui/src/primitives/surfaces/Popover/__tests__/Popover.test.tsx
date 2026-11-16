@@ -8,7 +8,6 @@ import { ThemeProvider } from '@ui/theme/ThemeProvider';
 import { runComponentConformance } from '@test-utilities/conformance/runComponentConformance';
 
 import { Popover } from '../Popover';
-import styles from '../Popover.module.scss';
 
 const PopoverRootWrapper = ({ children }: { children: ReactNode }) => (
   <Popover.Root>{children}</Popover.Root>
@@ -38,21 +37,18 @@ runComponentConformance({
   element: <Popover.Popup />,
   refInstanceOf: HTMLDivElement,
   wrapper: OpenPopoverWrapper,
-  ownClassName: styles.popup,
 });
 runComponentConformance({
   name: 'Popover.Title',
   element: <Popover.Title>Title</Popover.Title>,
   refInstanceOf: HTMLHeadingElement,
   wrapper: PopoverPopupWrapper,
-  ownClassName: styles.title,
 });
 runComponentConformance({
   name: 'Popover.Description',
   element: <Popover.Description>Description</Popover.Description>,
   refInstanceOf: HTMLParagraphElement,
   wrapper: PopoverPopupWrapper,
-  ownClassName: styles.description,
 });
 runComponentConformance({
   name: 'Popover.Close',
@@ -77,14 +73,12 @@ runComponentConformance({
       <Popover.Portal>{children}</Popover.Portal>
     </Popover.Root>
   ),
-  ownClassName: styles.positioner,
 });
 runComponentConformance({
   name: 'Popover.Arrow',
   element: <Popover.Arrow />,
   refInstanceOf: HTMLDivElement,
   wrapper: PopoverPopupWrapper,
-  ownClassName: styles.arrow,
 });
 runComponentConformance({
   name: 'Popover.Backdrop',

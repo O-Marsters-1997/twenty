@@ -16,94 +16,101 @@ import { useSidePanelSearchRecordPreviewFields } from '@/side-panel/pages/search
 import { useSidePanelSearchRecordPreviewRecord } from '@/side-panel/pages/search/hooks/useSidePanelSearchRecordPreviewRecord';
 import { useAtomFamilySelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilySelectorValue';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { styled } from '@linaria/react';
 import { useState } from 'react';
 import { SKELETON_HEIGHT_SIZES } from 'twenty-ui/primitives/feedback';
 import { useIcons } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { getAbsoluteImageUrl } from '~/utils/image/getAbsoluteImageUrl';
+import * as stylex from '@stylexjs/stylex';
+import {
+  background,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const SKELETON_HEIGHT = SKELETON_HEIGHT_SIZES.s;
 
-// Pinned width so the card keeps its shape across records of different objects
-const StyledCard = styled.div`
-  background: ${themeCssVariables.background.primary};
-  border-radius: ${themeCssVariables.border.radius.md};
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  width: ${SIDE_PANEL_SEARCH_RECORD_PREVIEW_WIDTH}px;
-`;
-
-const StyledHeader = styled.div`
-  align-items: center;
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  box-sizing: border-box;
-  display: flex;
-  height: 40px;
-  padding: 0 ${themeCssVariables.spacing[2]};
-`;
-
-const StyledTitleText = styled.div`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledFieldList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  max-height: calc(50dvh / var(--t-zoom, 1));
-  overflow-y: auto;
-  padding: ${themeCssVariables.spacing[3]};
-`;
+const styles = stylex.create({
+  card: (width: number) => ({
+    backgroundColor: background['--t-background-primary'],
+    borderRadius: borderRadius['--t-border-radius-md'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden',
+    width: `${width}px`,
+  }),
+  header: {
+    alignItems: 'center',
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: borderColor['--t-border-color-light'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    height: '40px',
+    paddingTop: '0',
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: '0',
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+  titleText: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  fieldList: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    maxHeight: 'calc(50dvh / var(--t-zoom, 1))',
+    overflowY: 'auto',
+    paddingTop: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingBottom: spacing['--t-spacing-3'],
+    paddingLeft: spacing['--t-spacing-3'],
+  },
+  fieldRow: {
+    alignItems: 'center',
+    boxSizing: 'border-box',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    height: '24px',
+  },
+  fieldLabel: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    flexShrink: '0',
+    fontSize: fontSize['--t-font-size-md'],
+    gap: spacing['--t-spacing-2'],
+    width: '104px',
+  },
+  fieldLabelText: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  fieldIcon: {
+    alignItems: 'center',
+    display: 'flex',
+    flexShrink: '0',
+    height: '16px',
+    width: '16px',
+  },
+  showMoreContainer: {
+    display: 'flex',
+  },
+  fieldValue: {
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-md'],
+    minWidth: '0',
+    overflow: 'hidden',
+  },
+});
 
 // Rows keep a fixed height so the card does not resize as values arrive
-const StyledFieldRow = styled.div`
-  align-items: center;
-  box-sizing: border-box;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  height: 24px;
-`;
-
-const StyledFieldLabel = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  flex-shrink: 0;
-  font-size: ${themeCssVariables.font.size.md};
-  gap: ${themeCssVariables.spacing[2]};
-  width: 104px;
-`;
-
-const StyledFieldLabelText = styled.span`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledFieldIcon = styled.span`
-  align-items: center;
-  display: flex;
-  flex-shrink: 0;
-  height: 16px;
-  width: 16px;
-`;
-
-const StyledShowMoreContainer = styled.div`
-  display: flex;
-`;
-
-const StyledFieldValue = styled.div`
-  color: ${themeCssVariables.font.color.primary};
-  font-size: ${themeCssVariables.font.size.md};
-  min-width: 0;
-  overflow: hidden;
-`;
-
 type SidePanelSearchRecordPreviewCardProps = {
   objectNameSingular: string;
   recordId: string;
@@ -170,14 +177,16 @@ export const SidePanelSearchRecordPreviewCard = ({
     });
 
     return (
-      <StyledFieldRow key={fieldMetadataItem.id}>
-        <StyledFieldLabel>
-          <StyledFieldIcon>
+      <div key={fieldMetadataItem.id} {...stylex.props(styles.fieldRow)}>
+        <div {...stylex.props(styles.fieldLabel)}>
+          <span {...stylex.props(styles.fieldIcon)}>
             <FieldIcon size={16} />
-          </StyledFieldIcon>
-          <StyledFieldLabelText>{fieldMetadataItem.label}</StyledFieldLabelText>
-        </StyledFieldLabel>
-        <StyledFieldValue>
+          </span>
+          <span {...stylex.props(styles.fieldLabelText)}>
+            {fieldMetadataItem.label}
+          </span>
+        </div>
+        <div {...stylex.props(styles.fieldValue)}>
           {isRecordLoaded ? (
             <RecordFieldComponentInstanceContext.Provider
               value={{ instanceId }}
@@ -198,14 +207,14 @@ export const SidePanelSearchRecordPreviewCard = ({
           ) : (
             <SkeletonLine width={120} height={SKELETON_HEIGHT} />
           )}
-        </StyledFieldValue>
-      </StyledFieldRow>
+        </div>
+      </div>
     );
   };
 
   return (
-    <StyledCard>
-      <StyledHeader>
+    <div {...stylex.props(styles.card(SIDE_PANEL_SEARCH_RECORD_PREVIEW_WIDTH))}>
+      <div {...stylex.props(styles.header)}>
         <HeaderIdentifier
           avatar={{
             src: getAbsoluteImageUrl(recordIdentifier?.avatarUrl),
@@ -214,25 +223,28 @@ export const SidePanelSearchRecordPreviewCard = ({
             shape: recordIdentifier?.avatarShape ?? 'circle',
           }}
           title={
-            <StyledTitleText>{recordIdentifier?.name ?? label}</StyledTitleText>
+            <div {...stylex.props(styles.titleText)}>
+              {recordIdentifier?.name ?? label}
+            </div>
           }
         />
-      </StyledHeader>
+      </div>
 
-      <StyledFieldList>
+      <div {...stylex.props(styles.fieldList)}>
         {displayedFields.map(renderFieldRow)}
         {!areAllFieldsVisible && remainingFieldCount > 0 && (
           // Keeping focus on the search input so arrow keys still move through results
-          <StyledShowMoreContainer
+          <div
             onMouseDown={(event) => event.preventDefault()}
+            {...stylex.props(styles.showMoreContainer)}
           >
             <FieldWidgetShowMoreButton
               remainingCount={remainingFieldCount}
               onClick={() => setAreAllFieldsVisible(true)}
             />
-          </StyledShowMoreContainer>
+          </div>
         )}
-      </StyledFieldList>
-    </StyledCard>
+      </div>
+    </div>
   );
 };

@@ -1,33 +1,13 @@
 import { t } from '@lingui/core/macro';
 import { Dialog } from 'twenty-ui/primitives/surfaces';
 import { DialogInstance } from '@/ui/layout/dialog/components/DialogInstance';
-import { styled } from '@linaria/react';
 
 import { useSpreadsheetImportInternal } from '@/spreadsheet-import/hooks/useSpreadsheetImportInternal';
 
-import { MOBILE_VIEWPORT } from 'twenty-ui/theme';
 import { SpreadSheetImportModalCloseButton } from './SpreadSheetImportModalCloseButton';
-
-const StyledInnerContainer = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-height: 600px;
-  min-width: 800px;
-  position: relative;
-  @media (max-width: ${MOBILE_VIEWPORT}px) {
-    min-width: auto;
-    min-height: auto;
-    width: 100%;
-    height: 80%;
-  }
-`;
-
-const StyledRtlLtr = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-`;
+import * as stylex from '@stylexjs/stylex';
+import { modalSize } from 'twenty-ui/theme/tokens.stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
 
 type SpreadSheetImportModalWrapperProps = {
   children: React.ReactNode;
@@ -54,16 +34,39 @@ export const SpreadSheetImportModalWrapper = ({
           aria-label={t`Import data`}
           onKeyDown={onKeyDown}
           size="xl"
-          style={{ padding: 0, height: 'var(--t-modal-size-xl-height)' }}
+          {...stylex.props(styles.popup)}
         >
-          <StyledInnerContainer>
-            <StyledRtlLtr dir={rtl ? 'rtl' : 'ltr'}>
+          <div {...stylex.props(styles.innerContainer)}>
+            <div dir={rtl ? 'rtl' : 'ltr'} {...stylex.props(styles.rtlLtr)}>
               <SpreadSheetImportModalCloseButton onClose={onClose} />
               {children}
-            </StyledRtlLtr>
-          </StyledInnerContainer>
+            </div>
+          </div>
         </Dialog.Popup>
       )}
     </DialogInstance>
   );
 };
+
+const styles = stylex.create({
+  popup: {
+    paddingBlock: 0,
+    paddingInline: 0,
+    height: modalSize['--t-modal-size-xl-height'],
+  },
+  innerContainer: {
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'column',
+    minHeight: { default: '600px', [media.mobile]: 'auto' },
+    minWidth: { default: '800px', [media.mobile]: 'auto' },
+    position: 'relative',
+    width: { default: null, [media.mobile]: '100%' },
+    height: { default: null, [media.mobile]: '80%' },
+  },
+  rtlLtr: {
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'column',
+  },
+});

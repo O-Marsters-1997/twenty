@@ -1,5 +1,4 @@
 import { useSortable } from '@dnd-kit/react/sortable';
-import { styled } from '@linaria/react';
 
 import { isRecordIdSecondaryDragMultipleComponentFamilyState } from '@/object-record/record-drag/states/isRecordIdSecondaryDragMultipleComponentFamilyState';
 import { useAtomComponentFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentFamilyStateValue';
@@ -10,21 +9,24 @@ import { useObjectPermissionsForObject } from '@/object-record/hooks/useObjectPe
 import { RECORD_LIST_ROW_DND_TYPE } from '@/object-record/record-list/constants/RecordListRowDndType';
 import { DragDropItemDropTarget } from '@/ui/utilities/drag-and-drop/components/DragDropItemDropTarget';
 import { DND_KIT_PLUGINS_WITHOUT_OPTIMISTIC } from '@/ui/utilities/drag-and-drop/constants/DndKitPluginsWithoutOptimistic';
-import { DRAG_SOURCE_OPACITY } from '@/ui/utilities/drag-and-drop/constants/DragSourceOpacity';
 import { preventNativeDragStart } from '@/ui/utilities/drag-and-drop/utils/preventNativeDragStart';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledDraggableRow = styled.div<{ $isDragSourceFaded: boolean }>`
-  opacity: ${({ $isDragSourceFaded }) =>
-    $isDragSourceFaded ? DRAG_SOURCE_OPACITY : 1};
-  position: relative;
-`;
-
-const StyledRowDropTargetSlot = styled.div`
-  left: 0;
-  position: absolute;
-  right: 0;
-  top: -1px;
-`;
+const styles = stylex.create({
+  draggableRow: {
+    opacity: 1,
+    position: 'relative',
+  },
+  dragSourceFaded: {
+    opacity: 'var(--dnd-drag-source-opacity)',
+  },
+  rowDropTargetSlot: {
+    left: '0',
+    position: 'absolute',
+    right: '0',
+    top: '-1px',
+  },
+});
 
 type RecordListDraggableRowProps = {
   recordId: string;
@@ -66,13 +68,17 @@ export const RecordListDraggableRow = ({
   });
 
   return (
-    <StyledDraggableRow
-      $isDragSourceFaded={isDragSource || isRecordIdSecondaryDragMultiple}
+    <div
       onDragStart={preventNativeDragStart}
+      {...stylex.props(
+        styles.draggableRow,
+        (isDragSource || isRecordIdSecondaryDragMultiple) &&
+          styles.dragSourceFaded,
+      )}
     >
       <RecordListRow recordId={recordId} rowRef={ref} />
       {!isDragSource && (
-        <StyledRowDropTargetSlot>
+        <div {...stylex.props(styles.rowDropTargetSlot)}>
           <DragDropItemDropTarget
             index={index}
             droppableId={droppableId}
@@ -80,8 +86,8 @@ export const RecordListDraggableRow = ({
             compact
             seamAligned
           />
-        </StyledRowDropTargetSlot>
+        </div>
       )}
-    </StyledDraggableRow>
+    </div>
   );
 };

@@ -1,7 +1,5 @@
 /* @license Enterprise */
 
-import { styled } from '@linaria/react';
-
 import { AdvancedFilterSidePanelRecordFilterOperandSelect } from '@/object-record/advanced-filter/side-panel/components/AdvancedFilterSidePanelRecordFilterOperandSelect';
 import { AdvancedFilterRecordFilterOptionsDropdown } from '@/object-record/advanced-filter/components/AdvancedFilterRecordFilterOptionsDropdown';
 import { getAdvancedFilterObjectFilterDropdownComponentInstanceId } from '@/object-record/advanced-filter/utils/getAdvancedFilterObjectFilterDropdownComponentInstanceId';
@@ -11,18 +9,20 @@ import { type RecordFilter } from '@/object-record/record-filter/types/RecordFil
 import { SettingsRolePermissionsObjectLevelRecordLevelPermissionFieldSelect } from '@/settings/roles/role-permissions/object-level-permissions/record-level-permissions/components/SettingsRolePermissionsObjectLevelRecordLevelPermissionFieldSelect';
 import { SettingsRolePermissionsObjectLevelRecordLevelPermissionLogicalOperatorCell } from '@/settings/roles/role-permissions/object-level-permissions/record-level-permissions/components/SettingsRolePermissionsObjectLevelRecordLevelPermissionLogicalOperatorCell';
 import { SettingsRolePermissionsObjectLevelRecordLevelPermissionValueInput } from '@/settings/roles/role-permissions/object-level-permissions/record-level-permissions/components/SettingsRolePermissionsObjectLevelRecordLevelPermissionValueInput';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledFilterRow = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledOperandSelectContainer = styled.div`
-  width: 50px;
-`;
+const styles = stylex.create({
+  filterRow: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+    gap: spacing['--t-spacing-2'],
+  },
+  operandSelectContainer: {
+    width: '50px',
+  },
+});
 
 type SettingsRolePermissionsObjectLevelRecordLevelPermissionFilterRowProps = {
   recordFilter: RecordFilter;
@@ -44,7 +44,7 @@ export const SettingsRolePermissionsObjectLevelRecordLevelPermissionFilterRow =
           ),
         }}
       >
-        <StyledFilterRow>
+        <div {...stylex.props(styles.filterRow)}>
           <SettingsRolePermissionsObjectLevelRecordLevelPermissionLogicalOperatorCell
             index={index}
             recordFilterGroup={recordFilterGroup}
@@ -52,18 +52,18 @@ export const SettingsRolePermissionsObjectLevelRecordLevelPermissionFilterRow =
           <SettingsRolePermissionsObjectLevelRecordLevelPermissionFieldSelect
             recordFilterId={recordFilter.id}
           />
-          <StyledOperandSelectContainer>
+          <div {...stylex.props(styles.operandSelectContainer)}>
             <AdvancedFilterSidePanelRecordFilterOperandSelect
               recordFilterId={recordFilter.id}
             />
-          </StyledOperandSelectContainer>
+          </div>
           <SettingsRolePermissionsObjectLevelRecordLevelPermissionValueInput
             recordFilterId={recordFilter.id}
           />
           <AdvancedFilterRecordFilterOptionsDropdown
             recordFilterId={recordFilter.id}
           />
-        </StyledFilterRow>
+        </div>
       </ObjectFilterDropdownComponentInstanceContext.Provider>
     );
   };

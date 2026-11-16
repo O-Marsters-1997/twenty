@@ -4,12 +4,12 @@ import { useWorkspaceSurface } from '@/ui/layout/hooks/useWorkspaceSurface';
 import { useWorkspaceSurfaceScopedComponentInstanceId } from '@/ui/layout/hooks/useWorkspaceSurfaceScopedComponentInstanceId';
 import { ScrollWrapper } from '@/ui/utilities/scroll/components/ScrollWrapper';
 import { useScrollRestoration } from '@/ui/utilities/scroll/hooks/useScrollRestoration';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { type ReactNode } from 'react';
 import { matchPath, useLocation } from 'react-router-dom';
 import { SettingsPath } from 'twenty-shared/types';
 import { getSettingsPath, isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const SETTINGS_PATHS_BY_LENGTH = Object.values(SettingsPath).sort(
   (a, b) => b.length - a.length,
@@ -23,40 +23,38 @@ const getMatchingSettingsPath = (pathname: string) =>
     return isDefined(match);
   });
 
-const StyledSettingsPageContainer = styled.div<{
-  width?: number;
-  isMobile?: boolean;
-  isInSidePanel?: boolean;
-  overflow?: 'auto' | 'visible';
-}>`
-  --settings-page-container-padding-top: ${({ isInSidePanel }) =>
-    isInSidePanel
-      ? themeCssVariables.spacing[4]
-      : themeCssVariables.spacing[6]};
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[8]};
-  margin: 0 auto;
-  max-width: ${SETTINGS_CONTENT_MAX_WIDTH}px;
-  overflow: ${({ overflow = 'auto' }) => overflow};
-  padding: var(--settings-page-container-padding-top)
-    ${({ isInSidePanel }) =>
-      isInSidePanel
-        ? themeCssVariables.spacing[4]
-        : themeCssVariables.spacing[8]}
-    ${themeCssVariables.spacing[8]};
-  padding-bottom: ${themeCssVariables.spacing[20]};
-  width: ${({ width, isMobile }) => {
-    if (isDefined(width)) {
-      return width + 'px';
-    }
-    if (isMobile) {
-      return 'unset';
-    }
-    return '100%';
-  }};
-`;
+const styles = stylex.create({
+  root: {
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-8'],
+    marginBottom: 0,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginTop: 0,
+    paddingBottom: spacing['--t-spacing-20'],
+    paddingLeft: spacing['--t-spacing-8'],
+    paddingRight: spacing['--t-spacing-8'],
+    paddingTop: spacing['--t-spacing-6'],
+    width: '100%',
+  },
+  maxWidth: (maxWidth: number) => ({ maxWidth }),
+  inSidePanel: {
+    paddingLeft: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingTop: spacing['--t-spacing-4'],
+  },
+  mobile: {
+    width: 'unset',
+  },
+  overflowAuto: {
+    overflow: 'auto',
+  },
+  overflowVisible: {
+    overflow: 'visible',
+  },
+});
 
 export const SettingsPageContainer = ({
   children,
@@ -78,13 +76,17 @@ export const SettingsPageContainer = ({
 
   return (
     <ScrollWrapper componentInstanceId={componentInstanceId}>
-      <StyledSettingsPageContainer
-        isMobile={isMobile}
-        isInSidePanel={workspaceSurface.type === 'side-panel'}
-        overflow={overflow}
+      <div
+        {...stylex.props(
+          styles.root,
+          styles.maxWidth(SETTINGS_CONTENT_MAX_WIDTH),
+          workspaceSurface.type === 'side-panel' && styles.inSidePanel,
+          isMobile && styles.mobile,
+          overflow === 'visible' ? styles.overflowVisible : styles.overflowAuto,
+        )}
       >
         {children}
-      </StyledSettingsPageContainer>
+      </div>
     </ScrollWrapper>
   );
 };

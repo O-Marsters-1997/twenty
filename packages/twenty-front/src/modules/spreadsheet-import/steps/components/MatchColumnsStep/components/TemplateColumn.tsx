@@ -1,5 +1,3 @@
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { MatchColumnToFieldSelect } from '@/spreadsheet-import/components/MatchColumnToFieldSelect';
 import { DO_NOT_IMPORT_OPTION_KEY } from '@/spreadsheet-import/constants/DoNotImportOptionKey';
@@ -11,20 +9,8 @@ import { spreadsheetImportBuildFieldOptions } from '@/spreadsheet-import/utils/s
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useLingui } from '@lingui/react/macro';
 import { IconForbid } from 'twenty-ui/icon';
-
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  min-height: 10px;
-  width: 100%;
-`;
-
-const StyledErrorMessage = styled.span`
-  color: ${themeCssVariables.font.color.danger};
-  font-size: ${themeCssVariables.font.size.sm};
-  font-weight: ${themeCssVariables.font.weight.regular};
-  margin-top: ${themeCssVariables.spacing[1]};
-`;
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type TemplateColumnProps = {
   columns: SpreadsheetColumns;
@@ -71,7 +57,7 @@ export const TemplateColumn = ({
   );
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <MatchColumnToFieldSelect
         placeholder={t`Select column...`}
         value={isIgnored ? ignoreValue : selectValue}
@@ -81,8 +67,23 @@ export const TemplateColumn = ({
         columnIndex={column.index.toString()}
       />
       {column.type === SpreadsheetColumnType.matchedError && (
-        <StyledErrorMessage>{`"${column.header}" ${column.errorMessage}`}</StyledErrorMessage>
+        <span {...stylex.props(styles.errorMessage)}>{`"${column.header}" ${column.errorMessage}`}</span>
       )}
-    </StyledContainer>
+    </div>
   );
 };
+
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: '10px',
+    width: '100%',
+  },
+  errorMessage: {
+    color: fontColor['--t-font-color-danger'],
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    marginTop: spacing['--t-spacing-1'],
+  },
+});

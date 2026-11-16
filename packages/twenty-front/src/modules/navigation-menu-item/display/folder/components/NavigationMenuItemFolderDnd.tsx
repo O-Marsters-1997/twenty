@@ -5,16 +5,19 @@ import { NavigationMenuItemEditable } from '@/navigation-menu-item/edit/componen
 import { NavigationMenuItemEntrance } from '@/navigation-menu-item/edit/components/NavigationMenuItemEntrance';
 import { ColoredIcon } from '@/ui/icon/components/ColoredIcon';
 import { isNavigationDrawerExpandedState } from '@/ui/navigation/states/isNavigationDrawerExpanded';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import React, { Fragment, useContext } from 'react';
 import { createPortal } from 'react-dom';
 import { isDefined } from 'twenty-shared/utils';
 import { LightIconButton } from 'twenty-ui/components/input';
 import { IconHeartOff, IconPlus, useIcons } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { useIsMobile } from 'twenty-ui/utilities';
 import { type NavigationMenuItem } from '~/generated-metadata/graphql';
+import {
+  backgroundTransparent,
+  borderRadius,
+  color,
+} from 'twenty-ui/theme/tokens.stylex';
 
 import { isLayoutCustomizationModeEnabledState } from '@/layout-customization/states/isLayoutCustomizationModeEnabledState';
 import { FOLDER_ICON_DEFAULT } from '@/navigation-menu-item/common/constants/FolderIconDefault';
@@ -50,35 +53,34 @@ import { NavigationDrawerItem } from '@/ui/navigation/navigation-drawer/componen
 import { NavigationDrawerSubItem } from '@/ui/navigation/navigation-drawer/components/NavigationDrawerSubItem';
 import { getNavigationSubItemLeftAdornment } from '@/ui/navigation/navigation-drawer/utils/getNavigationSubItemLeftAdornment';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledFolderContainer = styled.div<{
-  $isSelectedInEditMode: boolean;
-}>`
-  border-radius: ${themeCssVariables.border.radius.md};
-  outline: ${({ $isSelectedInEditMode }) =>
-    $isSelectedInEditMode
-      ? `1px solid ${themeCssVariables.color.blue}`
-      : 'none'};
-  outline-offset: -1px;
-  transition: background-color 150ms ease-in-out;
-
-  &[data-drag-over-header='true'] {
-    background-color: ${themeCssVariables.background.transparent.blue};
-  }
-
-  &[data-forbidden-drop-target='true'] {
-    background-color: ${themeCssVariables.background.transparent.danger};
-  }
-`;
-
-const StyledAddMenuItem = styled.div<{ isHidden: boolean }>`
-  display: ${({ isHidden }) => (isHidden ? 'none' : 'contents')};
-`;
-
-const StyledFolderDroppableContent = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
+const styles = stylex.create({
+  folderDroppableContent: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  folderContainer: {
+    borderRadius: borderRadius['--t-border-radius-md'],
+    outlineOffset: '-1px',
+    transitionDuration: '150ms',
+    transitionProperty: 'background-color',
+    transitionTimingFunction: 'ease-in-out',
+  },
+  folderSelected: {
+    outlineColor: color['--t-color-blue'],
+    outlineStyle: 'solid',
+    outlineWidth: '1px',
+  },
+  dragOverHeader: {
+    backgroundColor: backgroundTransparent['--t-background-transparent-blue'],
+  },
+  forbiddenDropTarget: {
+    backgroundColor: backgroundTransparent['--t-background-transparent-danger'],
+  },
+  addMenuItem: { display: 'contents' },
+  addMenuItemHidden: { display: 'none' },
+});
 
 type NavigationMenuItemFolderDndProps = {
   item: NavigationMenuItem;
@@ -308,12 +310,16 @@ export const NavigationMenuItemFolderDnd = ({
 
   return (
     <>
-      <StyledFolderContainer
-        $isSelectedInEditMode={
-          isWorkspace && isFolderEditHighlighted && isExpanded
-        }
-        data-drag-over-header={isDragOverFolderHeader ? 'true' : undefined}
-        data-forbidden-drop-target={isForbiddenDropTarget ? 'true' : undefined}
+      <div
+        {...stylex.props(
+          styles.folderContainer,
+          isWorkspace &&
+            isFolderEditHighlighted &&
+            isExpanded &&
+            styles.folderSelected,
+          isDragOverFolderHeader && styles.dragOverHeader,
+          isForbiddenDropTarget && styles.forbiddenDropTarget,
+        )}
       >
         <NavigationMenuItemFolderLayout
           header={
@@ -338,7 +344,7 @@ export const NavigationMenuItemFolderDnd = ({
           isOpen={isOpen}
           isGroup={isGroup}
         >
-          <StyledFolderDroppableContent>
+          <div {...stylex.props(styles.folderDroppableContent)}>
             {navigationMenuItems.map((navigationMenuItem, index) => (
               <Fragment key={navigationMenuItem.id}>
                 <NavigationItemDropTarget
@@ -411,7 +417,12 @@ export const NavigationMenuItemFolderDnd = ({
                 )}
               />
               {showAddMenuItem && (
-                <StyledAddMenuItem isHidden={isAddingFavoriteFolderItem}>
+                <div
+                  {...stylex.props(
+                    styles.addMenuItem,
+                    isAddingFavoriteFolderItem && styles.addMenuItemHidden,
+                  )}
+                >
                   <NavigationMenuItemEntrance>
                     <NavigationMenuItemAddDropdown
                       folderId={folderId}
@@ -434,12 +445,12 @@ export const NavigationMenuItemFolderDnd = ({
                       />
                     </NavigationMenuItemAddDropdown>
                   </NavigationMenuItemEntrance>
-                </StyledAddMenuItem>
+                </div>
               )}
             </NavigationMenuItemDroppableSlot>
-          </StyledFolderDroppableContent>
+          </div>
         </NavigationMenuItemFolderLayout>
-      </StyledFolderContainer>
+      </div>
       {deleteModal}
     </>
   );

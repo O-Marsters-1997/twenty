@@ -1,31 +1,37 @@
-import { styled } from '@linaria/react';
 import { useState } from 'react';
 import { Section } from 'twenty-ui/components/layout';
 import { IconChevronDown } from 'twenty-ui/icon';
 import { Collapsible } from 'twenty-ui/primitives/layout';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  animationDuration,
+  fontColor,
+  fontWeight,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledHeader = styled.header`
-  align-items: center;
-  cursor: pointer;
-  display: flex;
-  height: 24px;
-  justify-content: space-between;
-`;
-
-const StyledTitleLabel = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-weight: ${themeCssVariables.font.weight.medium};
-`;
-
-const StyledChevronWrapper = styled.div<{ isExpanded: boolean }>`
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  transform: ${({ isExpanded }) =>
-    isExpanded ? 'rotate(180deg)' : 'rotate(0deg)'};
-  transition: transform
-    calc(${themeCssVariables.animation.duration.normal} * 1s) ease;
-`;
+const styles = stylex.create({
+  chevron: {
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    transform: 'rotate(0deg)',
+    transitionDuration: `calc(${animationDuration['--t-animation-duration-normal']} * 1s)`,
+    transitionProperty: 'transform',
+    transitionTimingFunction: 'ease',
+  },
+  chevronExpanded: { transform: 'rotate(180deg)' },
+  header: {
+    alignItems: 'center',
+    cursor: 'pointer',
+    display: 'flex',
+    height: '24px',
+    justifyContent: 'space-between',
+  },
+  titleLabel: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+  },
+});
 
 type FieldsWidgetGroupContainerProps = {
   children: React.ReactNode;
@@ -46,15 +52,20 @@ export const FieldsWidgetGroupContainer = ({
 
   return (
     <Section.Root>
-      <StyledHeader onClick={handleToggleGroup}>
-        <StyledTitleLabel>{title}</StyledTitleLabel>
-        <StyledChevronWrapper isExpanded={isExpanded}>
+      <header onClick={handleToggleGroup} {...stylex.props(styles.header)}>
+        <div {...stylex.props(styles.titleLabel)}>{title}</div>
+        <div
+          {...stylex.props(
+            styles.chevron,
+            isExpanded && styles.chevronExpanded,
+          )}
+        >
           <IconChevronDown
             size={theme.icon.size.md}
             stroke={theme.icon.stroke.sm}
           />
-        </StyledChevronWrapper>
-      </StyledHeader>
+        </div>
+      </header>
       <Collapsible.Root open={isExpanded}>
         <Collapsible.Panel>{children}</Collapsible.Panel>
       </Collapsible.Root>

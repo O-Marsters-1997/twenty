@@ -1,0 +1,27 @@
+.phones-field-input .PhoneInput {
+  height: 100%;
+}
+
+.phones-field-input .PhoneInputInput {
+  background: none;
+  border: none;
+  box-sizing: border-box;
+  color: var(--t-font-color-primary);
+  height: 100%;
+  padding-left: var(--t-spacing-2);
+}
+
+.phones-field-input .PhoneInputInput::placeholder {
+  color: var(--t-font-color-light);
+  font-family: var(--t-font-family);
+  font-weight: var(--t-font-weight-medium);
+}
+
+.phones-field-input .PhoneInputInput:focus {
+  outline: none;
+}
+
+.phones-field-input svg {
+  border-radius: var(--t-border-radius-xs);
+  height: 12px;
+}

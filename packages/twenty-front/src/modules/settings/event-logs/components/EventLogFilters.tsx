@@ -5,13 +5,13 @@ import { Select } from '@/ui/input/components/Select';
 import { TextInput } from '@/ui/input/components/TextInput';
 import { InputLabel } from '@/ui/input/components/internal/InputLabel/InputLabel';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { IconBox, IconUser, useIcons } from 'twenty-ui/icon';
 import { type SelectOption } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { EventLogTable } from '~/generated-metadata/graphql';
 import { SettingsDatePickerInput } from '@/settings/components/SettingsDatePickerInput';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type EventLogFiltersProps = {
   table: EventLogTable;
@@ -19,21 +19,21 @@ type EventLogFiltersProps = {
   onChange: (filters: EventLogFiltersState) => void;
 };
 
-const StyledFiltersGrid = styled.div`
-  display: grid;
-  gap: ${themeCssVariables.spacing[3]} ${themeCssVariables.spacing[4]};
-  grid-template-columns: 1fr 1fr;
-`;
-
-const StyledFullWidthField = styled.div`
-  grid-column: 1 / -1;
-`;
-
-const StyledPeriodRow = styled.div`
-  display: grid;
-  gap: ${themeCssVariables.spacing[4]};
-  grid-template-columns: 1fr 1fr;
-`;
+const styles = stylex.create({
+  filtersGrid: {
+    display: 'grid',
+    gap: `${spacing['--t-spacing-3']} ${spacing['--t-spacing-4']}`,
+    gridTemplateColumns: '1fr 1fr',
+  },
+  fullWidthField: {
+    gridColumn: '1 / -1',
+  },
+  periodRow: {
+    display: 'grid',
+    gap: spacing['--t-spacing-4'],
+    gridTemplateColumns: '1fr 1fr',
+  },
+});
 
 export const EventLogFilters = ({
   table,
@@ -108,7 +108,7 @@ export const EventLogFilters = ({
   ];
 
   return (
-    <StyledFiltersGrid>
+    <div {...stylex.props(styles.filtersGrid)}>
       <TextInput
         label={eventLabel}
         value={value.eventType ?? ''}
@@ -127,9 +127,9 @@ export const EventLogFilters = ({
         withSearchInput
       />
 
-      <StyledFullWidthField>
+      <div {...stylex.props(styles.fullWidthField)}>
         <InputLabel>{t`Period`}</InputLabel>
-        <StyledPeriodRow>
+        <div {...stylex.props(styles.periodRow)}>
           <SettingsDatePickerInput
             instanceId="event-log-start-date"
             value={value.dateRange?.start}
@@ -142,8 +142,8 @@ export const EventLogFilters = ({
             onChange={handleEndDateChange}
             placeholder={t`End date`}
           />
-        </StyledPeriodRow>
-      </StyledFullWidthField>
+        </div>
+      </div>
 
       {table === EventLogTable.OBJECT_EVENT && (
         <>
@@ -166,6 +166,6 @@ export const EventLogFilters = ({
           />
         </>
       )}
-    </StyledFiltersGrid>
+    </div>
   );
 };

@@ -3,52 +3,69 @@ import { RecordCalendarDragDropContext } from '@/object-record/record-calendar/c
 import { useRecordCalendarDaysRange } from '@/object-record/record-calendar/hooks/useRecordCalendarDaysRange';
 import { recordCalendarSelectedDateComponentState } from '@/object-record/record-calendar/states/recordCalendarSelectedDateComponentState';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { styled } from '@linaria/react';
 import { isPlainDateInSameMonth } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { ViewCalendarLayout } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import {
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div<{ isDayLayout: boolean }>`
-  display: flex;
-  flex-direction: column;
-  min-height: 100%;
-  min-width: ${({ isDayLayout }) => (isDayLayout ? '0' : '1000px')};
-`;
-
-const StyledHeader = styled.div`
-  display: flex;
-  height: 24px;
-  width: 100%;
-`;
-
-const StyledHeaderDay = styled.div`
-  color: ${themeCssVariables.font.color.light};
-  display: flex;
-  flex: 1;
-  font-size: ${themeCssVariables.font.size.sm};
-  height: 24px;
-  justify-content: flex-end;
-  padding: ${themeCssVariables.spacing[0]} ${themeCssVariables.spacing[1]};
-`;
-
-const StyledBody = styled.div`
-  border: 1px solid ${themeCssVariables.border.color.light};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  overflow: hidden;
-`;
-
-const StyledRow = styled.div`
-  align-items: stretch;
-  display: flex;
-  flex: 1;
-
-  &:not(:last-of-type) {
-    border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  }
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: '100%',
+    minWidth: '1000px',
+  },
+  containerDayLayout: {
+    minWidth: '0',
+  },
+  header: {
+    display: 'flex',
+    height: '24px',
+    width: '100%',
+  },
+  headerDay: {
+    color: fontColor['--t-font-color-light'],
+    display: 'flex',
+    flex: '1',
+    fontSize: fontSize['--t-font-size-sm'],
+    height: '24px',
+    justifyContent: 'flex-end',
+    paddingTop: spacing['--t-spacing-0'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: spacing['--t-spacing-0'],
+    paddingLeft: spacing['--t-spacing-1'],
+  },
+  body: {
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-light'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    overflow: 'hidden',
+  },
+  row: {
+    alignItems: 'stretch',
+    display: 'flex',
+    flex: '1',
+    borderBottomWidth: { default: null, ':not(:last-of-type)': '1px' },
+    borderBottomStyle: { default: null, ':not(:last-of-type)': 'solid' },
+    borderBottomColor: {
+      default: null,
+      ':not(:last-of-type)': borderColor['--t-border-color-light'],
+    },
+  },
+});
 
 type RecordCalendarGridProps = {
   calendarLayout: ViewCalendarLayout;
@@ -67,15 +84,23 @@ export const RecordCalendarGrid = ({
 
   return (
     <RecordCalendarDragDropContext>
-      <StyledContainer isDayLayout={calendarLayout === ViewCalendarLayout.DAY}>
-        <StyledHeader>
+      <div
+        {...stylex.props(
+          styles.container,
+          calendarLayout === ViewCalendarLayout.DAY &&
+            styles.containerDayLayout,
+        )}
+      >
+        <div {...stylex.props(styles.header)}>
           {weekDayLabels.map((label, index) => (
-            <StyledHeaderDay key={index}>{label}</StyledHeaderDay>
+            <div key={index} {...stylex.props(styles.headerDay)}>
+              {label}
+            </div>
           ))}
-        </StyledHeader>
-        <StyledBody>
+        </div>
+        <div {...stylex.props(styles.body)}>
           {days.map((row) => (
-            <StyledRow key={row[0].toString()}>
+            <div key={row[0].toString()} {...stylex.props(styles.row)}>
               {row.map((day) => (
                 <RecordCalendarGridDay
                   key={day.toString()}
@@ -86,10 +111,10 @@ export const RecordCalendarGrid = ({
                   }
                 />
               ))}
-            </StyledRow>
+            </div>
           ))}
-        </StyledBody>
-      </StyledContainer>
+        </div>
+      </div>
     </RecordCalendarDragDropContext>
   );
 };

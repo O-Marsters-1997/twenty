@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 
 import { FormFieldInputContainer } from '@/ui/input/components/FormFieldInputContainer';
@@ -22,7 +21,9 @@ import { DropdownRoot } from '@/ui/layout/dropdown/components/DropdownRoot';
 import { useCloseDropdown } from '@/ui/layout/dropdown/hooks/useCloseDropdown';
 import { preventDropdownDismissOnInputElement } from '@/ui/layout/dropdown/utils/preventDropdownDismissOnInputElement';
 import { IconChevronDown } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type FormMultiSelectFieldInputProps = {
   label?: string;
@@ -37,39 +38,43 @@ type FormMultiSelectFieldInputProps = {
   dropdownWidth?: number;
 };
 
-const StyledFormFieldInputRowContainer = styled(FormFieldInputRowContainer)`
-  height: auto;
-  min-height: 32px;
-`;
-
-const StyledMultiSelectDisplay = styled(MultiSelectDisplay)`
-  flex-wrap: wrap;
-`;
-
-const StyledDisplayModeReadonlyContainer = styled.div`
-  align-items: center;
-  background: transparent;
-  border: none;
-  display: flex;
-  font-family: inherit;
-  padding: ${themeCssVariables.spacing[1]} ${themeCssVariables.spacing[2]};
-  width: 100%;
-`;
-
-const StyledDisplayModeContainer = styled.div`
-  align-items: center;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  font-family: inherit;
-  padding: ${themeCssVariables.spacing[1]} ${themeCssVariables.spacing[2]};
-  width: 100%;
-`;
-
-const StyledPlaceholderContainer = styled.div`
-  width: 100%;
-`;
+const styles = stylex.create({
+  multiSelectDisplay: {
+    flexWrap: 'wrap',
+  },
+  rowContainer: {
+    height: 'auto',
+    minHeight: 32,
+  },
+  displayModeReadonlyContainer: {
+    alignItems: 'center',
+    background: 'transparent',
+    borderStyle: 'none',
+    display: 'flex',
+    fontFamily: 'inherit',
+    paddingTop: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+  displayModeContainer: {
+    alignItems: 'center',
+    background: 'transparent',
+    borderStyle: 'none',
+    cursor: 'pointer',
+    display: 'flex',
+    fontFamily: 'inherit',
+    paddingTop: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+  placeholderContainer: {
+    width: '100%',
+  },
+});
 
 const safeParsedValue = (value: string) => {
   try {
@@ -92,6 +97,9 @@ export const FormMultiSelectFieldInput = ({
   dropdownWidth,
 }: FormMultiSelectFieldInputProps) => {
   const theme = useTheme();
+  const multiSelectDisplayClassName = stylex.props(
+    styles.multiSelectDisplay,
+  ).className;
   const instanceId = useId();
   const { closeDropdown } = useCloseDropdown();
 
@@ -169,7 +177,7 @@ export const FormMultiSelectFieldInput = ({
     <FormFieldInputContainer data-testid={testId}>
       {label ? <Field.Label>{label}</Field.Label> : null}
 
-      <StyledFormFieldInputRowContainer>
+      <FormFieldInputRowContainer xstyle={styles.rowContainer}>
         <FormFieldInputInnerContainer
           formFieldInputInstanceId={instanceId}
           hasRightElement={isDefined(VariablePicker) && !readonly}
@@ -178,22 +186,23 @@ export const FormMultiSelectFieldInput = ({
         >
           {draftValue.type === 'static' ? (
             readonly ? (
-              <StyledDisplayModeReadonlyContainer>
+              <div {...stylex.props(styles.displayModeReadonlyContainer)}>
                 {isNonEmptyArray(selectedOptions) ? (
-                  <StyledMultiSelectDisplay
+                  <MultiSelectDisplay
+                    className={multiSelectDisplayClassName}
                     values={selectedNames}
                     options={selectedOptions}
                   />
                 ) : (
-                  <StyledPlaceholderContainer>
+                  <div {...stylex.props(styles.placeholderContainer)}>
                     <FormFieldPlaceholder />
-                  </StyledPlaceholderContainer>
+                  </div>
                 )}
                 <IconChevronDown
                   size={theme.icon.size.md}
                   color={theme.font.color.light}
                 />
-              </StyledDisplayModeReadonlyContainer>
+              </div>
             ) : (
               <DropdownRoot
                 dropdownId={instanceId}
@@ -202,21 +211,24 @@ export const FormMultiSelectFieldInput = ({
                 onInteractOutside={preventDropdownDismissOnInputElement}
               >
                 <Dropdown.Trigger
-                  render={<StyledDisplayModeContainer />}
+                  render={
+                    <div {...stylex.props(styles.displayModeContainer)} />
+                  }
                   nativeButton={false}
                   aria-label={accessibleLabel}
                 >
                   {isNonEmptyArray(selectedOptions) ? (
-                    <StyledMultiSelectDisplay
+                    <MultiSelectDisplay
+                      className={multiSelectDisplayClassName}
                       values={selectedNames}
                       options={selectedOptions}
                     />
                   ) : (
-                    <StyledPlaceholderContainer>
+                    <div {...stylex.props(styles.placeholderContainer)}>
                       <FormFieldPlaceholder>
                         {placeholderText}
                       </FormFieldPlaceholder>
-                    </StyledPlaceholderContainer>
+                    </div>
                   )}
                   <IconChevronDown
                     size={theme.icon.size.md}
@@ -254,7 +266,7 @@ export const FormMultiSelectFieldInput = ({
             onVariableSelect={handleVariableTagInsert}
           />
         )}
-      </StyledFormFieldInputRowContainer>
+      </FormFieldInputRowContainer>
       {hint ? <Field.Description>{hint}</Field.Description> : null}
     </FormFieldInputContainer>
   );

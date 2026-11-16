@@ -1,27 +1,27 @@
-import { styled } from '@linaria/react';
-
 import { type FieldMetadataItem } from '@/object-metadata/types/FieldMetadataItem';
 import { Icon123, useIcons } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type EventFieldDiffLabelProps = {
   fieldMetadataItem: FieldMetadataItem;
 };
 
-const StyledUpdatedFieldContainer = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledUpdatedFieldIconContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  height: 14px;
-  width: 14px;
-`;
+const styles = stylex.create({
+  updatedFieldContainer: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+  },
+  updatedFieldIconContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+    height: '14px',
+    width: '14px',
+  },
+});
 
 export const EventFieldDiffLabel = ({
   fieldMetadataItem,
@@ -33,11 +33,11 @@ export const EventFieldDiffLabel = ({
     : Icon123;
 
   return (
-    <StyledUpdatedFieldContainer>
-      <StyledUpdatedFieldIconContainer>
+    <div {...stylex.props(styles.updatedFieldContainer)}>
+      <div {...stylex.props(styles.updatedFieldIconContainer)}>
         <IconComponent />
-      </StyledUpdatedFieldIconContainer>
+      </div>
       {fieldMetadataItem.label}
-    </StyledUpdatedFieldContainer>
+    </div>
   );
 };

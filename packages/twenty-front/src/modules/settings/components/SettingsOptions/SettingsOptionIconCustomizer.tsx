@@ -1,4 +1,4 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { type IconComponent } from 'twenty-ui/icon';
 import { useTheme } from 'twenty-ui/theme';
 
@@ -8,13 +8,6 @@ type SettingsOptionIconCustomizerProps = {
   rotate?: number;
 };
 
-const StyledIconCustomizer = styled.div<{ zoom: number; rotate: number }>`
-  align-items: center;
-  display: inline-flex;
-  justify-content: center;
-  transform: scale(${({ zoom }) => zoom}) rotate(${({ rotate }) => rotate}deg);
-`;
-
 export const SettingsOptionIconCustomizer = ({
   Icon,
   zoom = 1,
@@ -23,12 +16,23 @@ export const SettingsOptionIconCustomizer = ({
   const theme = useTheme();
 
   return (
-    <StyledIconCustomizer zoom={zoom} rotate={rotate}>
+    <div {...stylex.props(styles.root, styles.transform(zoom, rotate))}>
       <Icon
         size={theme.icon.size.lg}
         color={theme.IllustrationIcon.color.gray}
         stroke={theme.icon.stroke.md}
       />
-    </StyledIconCustomizer>
+    </div>
   );
 };
+
+const styles = stylex.create({
+  root: {
+    alignItems: 'center',
+    display: 'inline-flex',
+    justifyContent: 'center',
+  },
+  transform: (zoom: number, rotate: number) => ({
+    transform: `scale(${zoom}) rotate(${rotate}deg)`,
+  }),
+});

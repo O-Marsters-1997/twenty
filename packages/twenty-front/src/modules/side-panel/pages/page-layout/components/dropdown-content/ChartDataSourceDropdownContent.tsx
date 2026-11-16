@@ -8,8 +8,8 @@ import { useResetChartDraftFiltersSettings } from '@/side-panel/pages/page-layou
 import { useUpdateCurrentWidgetConfig } from '@/side-panel/pages/page-layout/hooks/useUpdateCurrentWidgetConfig';
 import { useWidgetInEditMode } from '@/side-panel/pages/page-layout/hooks/useWidgetInEditMode';
 import {
-  StyledPageLayoutDropdownContentContainer,
-  StyledPageLayoutDropdownMenuItemsContainer,
+  PageLayoutDropdownContentContainer,
+  PageLayoutDropdownMenuItemsContainer,
 } from '@/side-panel/pages/page-layout/components/dropdown-content/PageLayoutDropdownContentContainer';
 import { DropdownMenuSearchInput } from '@/ui/layout/dropdown/components/DropdownMenuSearchInput';
 import { DropdownMenuSeparator } from '@/ui/layout/dropdown/components/DropdownMenuSeparator';
@@ -105,7 +105,7 @@ export const ChartDataSourceDropdownContent = () => {
   };
 
   return (
-    <StyledPageLayoutDropdownContentContainer>
+    <PageLayoutDropdownContentContainer>
       <DropdownMenuSearchInput
         autoFocus
         type="text"
@@ -114,7 +114,7 @@ export const ChartDataSourceDropdownContent = () => {
         value={searchQuery}
       />
       <DropdownMenuSeparator />
-      <StyledPageLayoutDropdownMenuItemsContainer>
+      <PageLayoutDropdownMenuItemsContainer>
         <SelectableList
           selectableListInstanceId={dropdownId}
           focusId={dropdownId}
@@ -156,7 +156,7 @@ export const ChartDataSourceDropdownContent = () => {
             </SelectableListItem>
           ))}
         </SelectableList>
-      </StyledPageLayoutDropdownMenuItemsContainer>
-    </StyledPageLayoutDropdownContentContainer>
+      </PageLayoutDropdownMenuItemsContainer>
+    </PageLayoutDropdownContentContainer>
   );
 };

@@ -1,16 +1,22 @@
 import { AlertDialog as AlertDialogPrimitive } from '@base-ui/react/alert-dialog';
+import * as stylex from '@stylexjs/stylex';
 
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
-import styles from '@ui/primitives/surfaces/internal/Dialog.module.scss';
+import { dialogStyles } from '../../internal/Dialog.stylex';
 import { type AlertDialogDescriptionProps } from '../types/AlertDialogDescriptionProps';
 
 export const AlertDialogDescription = ({
   className,
+  xstyle,
   ...props
-}: AlertDialogDescriptionProps) => (
+}: WithXstyle<AlertDialogDescriptionProps>) => (
   <AlertDialogPrimitive.Description
     {...props}
-    className={mergeClassNames(styles.description, className)}
+    {...mergeStylexProps(
+      stylex.props(dialogStyles.description, xstyle),
+      className,
+    )}
   />
 );

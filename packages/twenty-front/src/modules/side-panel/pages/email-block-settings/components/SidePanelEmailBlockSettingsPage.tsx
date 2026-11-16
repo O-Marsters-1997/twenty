@@ -1,5 +1,5 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
+import * as stylex from '@stylexjs/stylex';
 import { type Editor } from '@tiptap/core';
 import {
   TIPTAP_NODE_TYPES,
@@ -8,7 +8,12 @@ import {
 } from 'twenty-shared/utils';
 import { LightIconButton } from 'twenty-ui/components/input';
 import { IconTrash } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 import { activeEmailEditorState } from '@/activities/emails/states/activeEmailEditorState';
 import { ADVANCED_TEXT_EDITOR_BLOCK_CATALOG } from '@/advanced-text-editor/constants/AdvancedTextEditorBlockCatalog';
@@ -21,29 +26,29 @@ import {
   EmailBoxSidesInput,
   type CssBoxSides,
 } from '@/side-panel/pages/email-block-settings/components/EmailBoxSidesInput';
-import { StyledEmailSidePanelHint } from '@/side-panel/pages/email-block-settings/components/StyledEmailSidePanelHint';
+import { EmailSidePanelHint } from '@/side-panel/pages/email-block-settings/components/EmailSidePanelHint';
 import { getEffectiveSectionStyleValue } from '@/side-panel/pages/email-block-settings/utils/getEffectiveSectionStyleValue';
 import { useSidePanelHistory } from '@/side-panel/hooks/useSidePanelHistory';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[4]};
-  padding: ${themeCssVariables.spacing[4]};
-`;
-
-const StyledBlockHeader = styled.div`
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-`;
-
-const StyledBlockTitle = styled.div`
-  color: ${themeCssVariables.font.color.primary};
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.medium};
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-4'],
+    padding: spacing['--t-spacing-4'],
+  },
+  blockHeader: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  blockTitle: {
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+  },
+});
 
 const BORDER_STYLE_COMPANIONS: Record<string, string> = {
   borderWidth: 'borderStyle',
@@ -73,13 +78,13 @@ const EmailBlockSettingsContent = ({ editor }: { editor: Editor }) => {
 
   if (!isDefined(target)) {
     return (
-      <StyledEmailSidePanelHint>{t`Select a block to edit its style.`}</StyledEmailSidePanelHint>
+      <EmailSidePanelHint>{t`Select a block to edit its style.`}</EmailSidePanelHint>
     );
   }
 
   const blockDefinition = ADVANCED_TEXT_EDITOR_BLOCK_CATALOG[target.nodeType];
   const fields = blockDefinition.settingsFields;
-  const styles = getBlockStyle(target.attrs.style);
+  const blockStyle = getBlockStyle(target.attrs.style);
   const canvasTheme = resolveCanvasTheme(editor.state.doc.attrs.canvasTheme);
 
   const inheritsCanvasTypography = (property: string) => {
@@ -95,7 +100,7 @@ const EmailBlockSettingsContent = ({ editor }: { editor: Editor }) => {
   };
 
   const displayedStyleValue = (property: string) =>
-    styles[property] ??
+    blockStyle[property] ??
     (inheritsCanvasTypography(property)
       ? getEffectiveSectionStyleValue(property, canvasTheme)
       : '');
@@ -151,7 +156,7 @@ const EmailBlockSettingsContent = ({ editor }: { editor: Editor }) => {
       return;
     }
 
-    const nextStyles = { ...styles };
+    const nextStyles = { ...blockStyle };
     if (value.trim() === '') {
       delete nextStyles[field.property];
     } else {
@@ -174,7 +179,7 @@ const EmailBlockSettingsContent = ({ editor }: { editor: Editor }) => {
     sideProperties: [string, string, string, string],
     sides: CssBoxSides,
   ) => {
-    const nextStyles = { ...styles };
+    const nextStyles = { ...blockStyle };
     const sideValues = [sides.top, sides.right, sides.bottom, sides.left];
 
     sideProperties.forEach((property, index) => {
@@ -189,9 +194,11 @@ const EmailBlockSettingsContent = ({ editor }: { editor: Editor }) => {
   };
 
   return (
-    <StyledContainer>
-      <StyledBlockHeader>
-        <StyledBlockTitle>{i18n._(blockDefinition.label)}</StyledBlockTitle>
+    <div {...stylex.props(styles.container)}>
+      <div {...stylex.props(styles.blockHeader)}>
+        <div {...stylex.props(styles.blockTitle)}>
+          {i18n._(blockDefinition.label)}
+        </div>
         <LightIconButton
           size="sm"
           emphasis="subtle"
@@ -201,7 +208,7 @@ const EmailBlockSettingsContent = ({ editor }: { editor: Editor }) => {
         >
           <IconTrash />
         </LightIconButton>
-      </StyledBlockHeader>
+      </div>
       {fields.map((field) => {
         const key = `${target.nodeType}-${target.pos}-${field.property}`;
         const sideProperties = BOX_FIELD_SIDE_PROPERTIES[field.property];
@@ -240,7 +247,7 @@ const EmailBlockSettingsContent = ({ editor }: { editor: Editor }) => {
           />
         );
       })}
-    </StyledContainer>
+    </div>
   );
 };
 
@@ -250,7 +257,7 @@ export const SidePanelEmailBlockSettingsPage = () => {
 
   if (!isDefined(activeEmailEditor) || activeEmailEditor.isDestroyed) {
     return (
-      <StyledEmailSidePanelHint>{t`Open an email editor to edit block settings.`}</StyledEmailSidePanelHint>
+      <EmailSidePanelHint>{t`Open an email editor to edit block settings.`}</EmailSidePanelHint>
     );
   }
 

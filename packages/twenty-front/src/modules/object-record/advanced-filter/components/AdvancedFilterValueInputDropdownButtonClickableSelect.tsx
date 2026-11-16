@@ -6,30 +6,46 @@ import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/use
 
 import { isNonEmptyString } from '@sniptt/guards';
 
-import { styled } from '@linaria/react';
-
 import { useFieldMetadataItemById } from '@/object-metadata/hooks/useFieldMetadataItemById';
 import { useGetRecordFilterDisplayValue } from '@/object-record/record-filter/hooks/useGetRecordFilterDisplayValue';
 import { t } from '@lingui/core/macro';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 // TODO: factorize this with https://github.com/twentyhq/core-team-issues/issues/752
-const StyledControlContainer = styled.div`
-  align-items: center;
-  background-color: ${themeCssVariables.background.transparent.lighter};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  box-sizing: border-box;
-  color: ${themeCssVariables.font.color.primary};
-  cursor: pointer;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  height: ${themeCssVariables.spacing[8]};
-  max-width: 100%;
-  padding: 0 ${themeCssVariables.spacing[2]};
-  text-align: left;
-`;
+const styles = stylex.create({
+  controlContainer: {
+    alignItems: 'center',
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-medium'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    boxSizing: 'border-box',
+    color: fontColor['--t-font-color-primary'],
+    cursor: 'pointer',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    height: spacing['--t-spacing-8'],
+    maxWidth: '100%',
+    paddingTop: '0',
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: '0',
+    paddingLeft: spacing['--t-spacing-2'],
+    textAlign: 'left',
+  },
+});
 
 type AdvancedFilterValueInputDropdownButtonClickableSelectProps = {
   recordFilterId: string;
@@ -84,7 +100,9 @@ export const AdvancedFilterValueInputDropdownButtonClickableSelect = ({
   }
 
   return isDateTimeType ? (
-    <StyledControlContainer>{advancedFilterInputText}</StyledControlContainer>
+    <div {...stylex.props(styles.controlContainer)}>
+      {advancedFilterInputText}
+    </div>
   ) : (
     <SelectControl
       selectedOption={{

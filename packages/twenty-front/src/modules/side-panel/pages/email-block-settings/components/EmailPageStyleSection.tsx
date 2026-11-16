@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { type Editor } from '@tiptap/core';
 import {
@@ -6,7 +5,6 @@ import {
   isDefined,
   resolveCanvasTheme,
 } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { useLiveEditorState } from '@/advanced-text-editor/hooks/useLiveEditorState';
 import { EmailBlockSettingsFieldInput } from '@/side-panel/pages/email-block-settings/components/EmailBlockSettingsFieldInput';
@@ -17,29 +15,42 @@ import {
 import { EMAIL_BODY_THEME_FIELDS } from '@/side-panel/pages/email-block-settings/constants/EmailBodyThemeFields';
 import { EMAIL_PAGE_THEME_FIELDS } from '@/side-panel/pages/email-block-settings/constants/EmailPageThemeFields';
 import { type EmailThemeField } from '@/side-panel/pages/email-block-settings/types/EmailThemeField';
+import * as stylex from '@stylexjs/stylex';
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[3]};
-  padding: ${themeCssVariables.spacing[4]};
-`;
-
-const StyledGroupTitle = styled.div`
-  color: ${themeCssVariables.font.color.primary};
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.medium};
-
-  &:not(:first-child) {
-    margin-top: ${themeCssVariables.spacing[3]};
-  }
-`;
-
-const StyledHint = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.sm};
-  padding: ${themeCssVariables.spacing[4]};
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-3'],
+    paddingTop: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingBottom: spacing['--t-spacing-4'],
+    paddingLeft: spacing['--t-spacing-4'],
+  },
+  groupTitle: {
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    marginTop: {
+      default: null,
+      ':not(:first-child)': spacing['--t-spacing-3'],
+    },
+  },
+  hint: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-sm'],
+    paddingTop: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingBottom: spacing['--t-spacing-4'],
+    paddingLeft: spacing['--t-spacing-4'],
+  },
+});
 
 const themeBoxValueToSides = (value: string): CssBoxSides => {
   const tokens = value.trim().split(/\s+/);
@@ -94,9 +105,9 @@ export const EmailPageStyleSection = ({
 
   if (!isDefined(canvasTheme)) {
     return (
-      <StyledHint>
+      <div {...stylex.props(styles.hint)}>
         {t`Select a section, columns, button or divider in the email body to edit its settings.`}
-      </StyledHint>
+      </div>
     );
   }
 
@@ -139,12 +150,12 @@ export const EmailPageStyleSection = ({
   };
 
   return (
-    <StyledContainer>
-      <StyledGroupTitle>{t`Page style`}</StyledGroupTitle>
+    <div {...stylex.props(styles.container)}>
+      <div {...stylex.props(styles.groupTitle)}>{t`Page style`}</div>
       {EMAIL_PAGE_THEME_FIELDS.map(renderThemeField)}
 
-      <StyledGroupTitle>{t`Body`}</StyledGroupTitle>
+      <div {...stylex.props(styles.groupTitle)}>{t`Body`}</div>
       {EMAIL_BODY_THEME_FIELDS.map(renderThemeField)}
-    </StyledContainer>
+    </div>
   );
 };

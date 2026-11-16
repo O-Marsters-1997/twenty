@@ -1,10 +1,12 @@
 import { useRender } from '@base-ui/react/use-render';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 import { type CSSProperties } from 'react';
 
-import { type SkeletonProps } from './types/SkeletonProps';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
-import styles from './Skeleton.module.scss';
+import { skeletonStyles } from './Skeleton.stylex';
+import { type SkeletonProps } from './types/SkeletonProps';
 
 export const Skeleton = ({
   width,
@@ -16,10 +18,18 @@ export const Skeleton = ({
   layout = 'inline',
   className,
   style,
+  xstyle,
   render,
   ref,
   ...props
-}: SkeletonProps) => {
+}: WithXstyle<SkeletonProps>) => {
+  const stylexProps = stylex.props(
+    skeletonStyles.root,
+    layout === 'block' && skeletonStyles.layoutBlock,
+    animated && skeletonStyles.animated,
+    xstyle,
+  );
+
   return useRender({
     defaultTagName: 'span',
     render,
@@ -30,8 +40,9 @@ export const Skeleton = ({
       'data-skeleton': '',
       'data-animated': animated || undefined,
       'data-layout': layout,
-      className: clsx(styles.root, className),
+      ...mergeStylexProps(stylexProps, className),
       style: {
+        ...stylexProps.style,
         width,
         height,
         borderRadius,
@@ -40,7 +51,7 @@ export const Skeleton = ({
         '--skeleton-highlight-color': highlightColor,
         ...style,
       } as CSSProperties,
-      children: layout === 'inline' ? '\u200c' : undefined,
+      children: layout === 'inline' ? '‌' : undefined,
     },
   });
 };

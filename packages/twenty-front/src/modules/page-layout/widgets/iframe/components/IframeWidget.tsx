@@ -2,54 +2,61 @@ import { useIsPageLayoutInEditMode } from '@/page-layout/hooks/useIsPageLayoutIn
 import { type PageLayoutWidget } from '@/page-layout/types/PageLayoutWidget';
 import { PageLayoutWidgetNoDataDisplay } from '@/page-layout/widgets/components/PageLayoutWidgetNoDataDisplay';
 import { WidgetSkeletonLoader } from '@/page-layout/widgets/components/WidgetSkeletonLoader';
-import { styled } from '@linaria/react';
 import { useState } from 'react';
 import { getSafeUrl, isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  spacing,
+  background,
+  borderRadius,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div<{ $isEditMode: boolean }>`
-  background: ${themeCssVariables.background.primary};
-  border-radius: ${themeCssVariables.border.radius.md};
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow: hidden;
-  pointer-events: ${({ $isEditMode }) => ($isEditMode ? 'none' : 'auto')};
-  position: relative;
-  width: 100%;
-`;
-
-const StyledIframe = styled.iframe<{ $isEditMode: boolean }>`
-  border: none;
-  flex: 1;
-  height: 100%;
-  pointer-events: ${({ $isEditMode }) => ($isEditMode ? 'none' : 'auto')};
-  width: 100%;
-`;
-
-const StyledLoadingContainer = styled.div`
-  background: ${themeCssVariables.background.primary};
-  bottom: 0;
-  left: 0;
-  padding-left: ${themeCssVariables.spacing[2]};
-  padding-top: ${themeCssVariables.spacing[2]};
-  pointer-events: none;
-  position: absolute;
-  right: 0;
-  top: 0;
-  z-index: 1;
-`;
-
-const StyledErrorContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: center;
-  padding: ${themeCssVariables.spacing[4]};
-  text-align: center;
-`;
+const styles = stylex.create({
+  container: {
+    backgroundColor: background['--t-background-primary'],
+    borderRadius: borderRadius['--t-border-radius-md'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    overflow: 'hidden',
+    position: 'relative',
+    width: '100%',
+  },
+  iframe: {
+    borderWidth: 0,
+    flexGrow: 1,
+    flexShrink: 1,
+    flexBasis: '0%',
+    height: '100%',
+    width: '100%',
+  },
+  noPointerEvents: { pointerEvents: 'none' },
+  loadingContainer: {
+    background: background['--t-background-primary'],
+    bottom: '0',
+    left: '0',
+    paddingLeft: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
+    pointerEvents: 'none',
+    position: 'absolute',
+    right: '0',
+    top: '0',
+    zIndex: '1',
+  },
+  errorContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    justifyContent: 'center',
+    paddingTop: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingBottom: spacing['--t-spacing-4'],
+    paddingLeft: spacing['--t-spacing-4'],
+    textAlign: 'center',
+  },
+});
 
 export type IframeWidgetProps = {
   widget: PageLayoutWidget;
@@ -84,23 +91,32 @@ export const IframeWidget = ({ widget }: IframeWidgetProps) => {
 
   if (hasError || !isHttpUrl) {
     return (
-      <StyledContainer $isEditMode={isPageLayoutInEditMode}>
-        <StyledErrorContainer>
+      <div
+        {...stylex.props(
+          styles.container,
+          isPageLayoutInEditMode && styles.noPointerEvents,
+        )}
+      >
+        <div {...stylex.props(styles.errorContainer)}>
           <PageLayoutWidgetNoDataDisplay />
-        </StyledErrorContainer>
-      </StyledContainer>
+        </div>
+      </div>
     );
   }
 
   return (
-    <StyledContainer $isEditMode={isPageLayoutInEditMode}>
-      {isLoading && (
-        <StyledLoadingContainer>
-          <WidgetSkeletonLoader />
-        </StyledLoadingContainer>
+    <div
+      {...stylex.props(
+        styles.container,
+        isPageLayoutInEditMode && styles.noPointerEvents,
       )}
-      <StyledIframe
-        $isEditMode={isPageLayoutInEditMode}
+    >
+      {isLoading && (
+        <div {...stylex.props(styles.loadingContainer)}>
+          <WidgetSkeletonLoader />
+        </div>
+      )}
+      <iframe
         src={safeUrl}
         title={title}
         onLoad={handleIframeLoad}
@@ -108,7 +124,11 @@ export const IframeWidget = ({ widget }: IframeWidgetProps) => {
         sandbox="allow-scripts allow-forms allow-popups allow-same-origin"
         allow="encrypted-media"
         allowFullScreen
+        {...stylex.props(
+          styles.iframe,
+          isPageLayoutInEditMode && styles.noPointerEvents,
+        )}
       />
-    </StyledContainer>
+    </div>
   );
 };

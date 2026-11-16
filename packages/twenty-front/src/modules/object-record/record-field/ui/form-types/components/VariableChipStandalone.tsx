@@ -1,12 +1,14 @@
 import { VariableChip } from '@/object-record/record-field/ui/form-types/components/VariableChip';
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  align-items: center;
-  display: flex;
-  margin-left: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    display: 'flex',
+    marginLeft: spacing['--t-spacing-2'],
+  },
+});
 
 type VariableChipStandaloneProps = {
   rawVariableName: string;
@@ -20,12 +22,12 @@ export const VariableChipStandalone = ({
   isFullRecord,
 }: VariableChipStandaloneProps) => {
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <VariableChip
         rawVariableName={rawVariableName}
         onRemove={onRemove}
         isFullRecord={isFullRecord}
       />
-    </StyledContainer>
+    </div>
   );
 };

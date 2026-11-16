@@ -1,12 +1,14 @@
+import * as stylex from '@stylexjs/stylex';
+import { type ReactNode } from 'react';
+
 import { MenuItemIconBoxContainer } from '@ui/components/navigation/MenuItem/parts/MenuItemIconBoxContainer';
 import { IconGripVertical } from '@ui/icon';
 import { useTheme } from '@ui/theme';
-
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
 import { isDefined } from '@ui/utilities/utils/isDefined';
-import { clsx } from 'clsx';
-import { type ReactNode } from 'react';
 
-import styles from './MenuItemIconWithGripSwap.module.scss';
+import { animationDuration } from '../../../../theme/tokens.stylex';
+import { menuItemMarker } from './StyledMenuItemBase.stylex';
 
 export type MenuItemIconWithGripSwapProps = {
   leadingContent?: ReactNode;
@@ -28,11 +30,21 @@ export const MenuItemIconWithGripSwap = ({
   }
 
   const iconContent = (
-    <div className={styles.iconSwapContainer}>
-      <div className={clsx(styles.defaultIcon, 'grip-swap-default-icon')}>
+    <div {...stylex.props(styles.iconSwapContainer)}>
+      <div
+        {...mergeStylexProps(
+          stylex.props(styles.defaultIcon),
+          'grip-swap-default-icon',
+        )}
+      >
         {leadingContent}
       </div>
-      <div className={clsx(styles.hoverIcon, 'grip-swap-hover-icon')}>
+      <div
+        {...mergeStylexProps(
+          stylex.props(styles.hoverIcon),
+          'grip-swap-hover-icon',
+        )}
+      >
         <IconGripVertical
           size={theme.icon.size.md}
           stroke={theme.icon.stroke.sm}
@@ -52,3 +64,31 @@ export const MenuItemIconWithGripSwap = ({
 
   return iconContent;
 };
+
+const opacityTransition = `opacity calc(${animationDuration['--t-animation-duration-instant']} * 1s) ease`;
+
+const styles = stylex.create({
+  iconSwapContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+    position: 'relative',
+  },
+  defaultIcon: {
+    display: 'flex',
+    opacity: {
+      default: null,
+      [stylex.when.ancestor(':hover', menuItemMarker)]: 0,
+    },
+    transition: opacityTransition,
+  },
+  hoverIcon: {
+    display: 'flex',
+    opacity: {
+      default: 0,
+      [stylex.when.ancestor(':hover', menuItemMarker)]: 1,
+    },
+    position: 'absolute',
+    transition: opacityTransition,
+  },
+});

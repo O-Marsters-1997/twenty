@@ -1,5 +1,4 @@
 import { SelectOptionIcon } from '@/ui/input/components/SelectOptionIcon';
-import { styled } from '@linaria/react';
 import { plural, t } from '@lingui/core/macro';
 import { useRef, useState } from 'react';
 
@@ -19,10 +18,18 @@ import { isNonEmptyArray, isNonEmptyString } from '@sniptt/guards';
 import { isDefined } from 'twenty-shared/utils';
 import { Dropdown } from 'twenty-ui/components/navigation';
 import { IconBox } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  color,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+  textLineHeight,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsMorphRelationMultiSelectProps = {
-  className?: string;
+  xstyle?: stylex.StyleXStyles;
   disabled?: boolean;
   selectSizeVariant?: SelectSizeVariant;
   dropdownId: string;
@@ -40,33 +47,35 @@ type SettingsMorphRelationMultiSelectProps = {
   error?: string;
 };
 
-const StyledContainer = styled.div<{ fullWidth?: boolean }>`
-  width: ${({ fullWidth }) => (fullWidth ? '100%' : 'auto')};
-`;
-
-const StyledLabel = styled.span`
-  color: ${themeCssVariables.font.color.light};
-  display: block;
-  font-size: ${themeCssVariables.font.size.xs};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-  margin-bottom: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledDescription = styled.span`
-  color: ${themeCssVariables.font.color.light};
-  font-size: ${themeCssVariables.font.size.sm};
-  line-height: ${themeCssVariables.text.lineHeight.lg};
-`;
-
-const StyledError = styled.span`
-  color: ${themeCssVariables.color.red};
-  display: block;
-  font-size: ${themeCssVariables.font.size.xs};
-  margin-top: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  container: {
+    width: 'auto',
+  },
+  containerFullWidth: {
+    width: '100%',
+  },
+  label: {
+    color: fontColor['--t-font-color-light'],
+    display: 'block',
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    marginBottom: spacing['--t-spacing-1'],
+  },
+  description: {
+    color: fontColor['--t-font-color-light'],
+    fontSize: fontSize['--t-font-size-sm'],
+    lineHeight: textLineHeight['--t-text-line-height-lg'],
+  },
+  error: {
+    color: color['--t-color-red'],
+    display: 'block',
+    fontSize: fontSize['--t-font-size-xs'],
+    marginTop: spacing['--t-spacing-1'],
+  },
+});
 
 export const SettingsMorphRelationMultiSelect = ({
-  className,
+  xstyle,
   disabled: disabledFromProps,
   selectSizeVariant,
   dropdownId,
@@ -183,9 +192,12 @@ export const SettingsMorphRelationMultiSelect = ({
   );
 
   return (
-    <StyledContainer
-      className={className}
-      fullWidth={fullWidth}
+    <div
+      {...stylex.props(
+        styles.container,
+        fullWidth && styles.containerFullWidth,
+        xstyle,
+      )}
       onBlur={(event) => {
         if (
           isFocusMovingWithinSelect({
@@ -199,7 +211,9 @@ export const SettingsMorphRelationMultiSelect = ({
         onBlur?.();
       }}
     >
-      {isNonEmptyString(label) && <StyledLabel>{label}</StyledLabel>}
+      {isNonEmptyString(label) && (
+        <span {...stylex.props(styles.label)}>{label}</span>
+      )}
       {isDisabled ? (
         selectControl
       ) : (
@@ -270,9 +284,11 @@ export const SettingsMorphRelationMultiSelect = ({
         </DropdownRoot>
       )}
       {isNonEmptyString(description) && (
-        <StyledDescription>{description}</StyledDescription>
+        <span {...stylex.props(styles.description)}>{description}</span>
       )}
-      {isNonEmptyString(error) && <StyledError>{error}</StyledError>}
-    </StyledContainer>
+      {isNonEmptyString(error) && (
+        <span {...stylex.props(styles.error)}>{error}</span>
+      )}
+    </div>
   );
 };

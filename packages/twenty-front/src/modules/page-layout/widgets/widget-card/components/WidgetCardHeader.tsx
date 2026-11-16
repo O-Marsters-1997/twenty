@@ -3,7 +3,6 @@ import { widgetCardHoveredComponentFamilyState } from '@/page-layout/widgets/sta
 import { widgetHeaderCountComponentFamilyState } from '@/page-layout/widgets/states/widgetHeaderCountComponentFamilyState';
 import { WidgetCardHeaderActionsRenderer } from '@/page-layout/widgets/widget-card/components/WidgetCardHeaderActionsRenderer';
 import { useAtomComponentFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentFamilyStateValue';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { type ReactNode } from 'react';
 import { IconButton } from 'twenty-ui/components/input';
@@ -14,7 +13,15 @@ import { type WidgetCardVariant } from '@/page-layout/widgets/types/WidgetCardVa
 import { WidgetGrip } from '@/page-layout/widgets/widget-card/components/WidgetGrip';
 import { AnimatePresence, motion } from 'framer-motion';
 import { isDefined } from 'twenty-shared/utils';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  spacing,
+  fontColor,
+  fontSize,
+  fontWeight,
+} from 'twenty-ui/theme/tokens.stylex';
+import { mergeClassName } from '@/page-layout/utils/mergeClassName';
 export type WidgetCardHeaderProps = {
   variant: WidgetCardVariant;
   widgetId: string;
@@ -28,51 +35,47 @@ export type WidgetCardHeaderProps = {
   isResizing?: boolean;
 };
 
-const StyledWidgetCardHeader = styled.div<{ shouldInset: boolean }>`
-  align-items: center;
-  box-sizing: border-box;
-  display: flex;
-  flex-shrink: 0;
-  height: ${({ shouldInset }) =>
-    shouldInset
-      ? `calc(${themeCssVariables.spacing[6]} + var(--widget-card-title-padding-top))`
-      : themeCssVariables.spacing[6]};
-  padding: ${({ shouldInset }) =>
-    shouldInset
-      ? `var(--widget-card-title-padding-top) var(--widget-card-padding-inline) 0`
-      : '0'};
-`;
-
-const StyledTitleContainer = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.primary};
-  display: flex;
-  flex: 1;
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.medium};
-  gap: ${themeCssVariables.spacing[1]};
-  overflow: hidden;
-  user-select: none;
-`;
-
-const StyledCount = styled.span`
-  color: ${themeCssVariables.font.color.light};
-  flex-shrink: 0;
-  font-weight: ${themeCssVariables.font.weight.regular};
-`;
-
-const StyledRightContainer = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[0.5]};
-`;
-
-const StyledIconButtonContainerBase = styled.div`
-  align-items: center;
-  display: flex;
-  justify-content: center;
-`;
-const StyledIconButtonContainer = motion.create(StyledIconButtonContainerBase);
+const styles = stylex.create({
+  header: {
+    alignItems: 'center',
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexShrink: 0,
+  },
+  headerPlain: { height: spacing['--t-spacing-6'], padding: 0 },
+  headerInset: {
+    height: `calc(${spacing['--t-spacing-6']} + var(--widget-card-title-padding-top))`,
+    paddingBlockStart: 'var(--widget-card-title-padding-top)',
+    paddingBlockEnd: 0,
+    paddingInline: 'var(--widget-card-padding-inline)',
+  },
+  iconButtonContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  titleContainer: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-primary'],
+    display: 'flex',
+    flex: '1',
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    gap: spacing['--t-spacing-1'],
+    overflow: 'hidden',
+    userSelect: 'none',
+  },
+  count: {
+    color: fontColor['--t-font-color-light'],
+    flexShrink: '0',
+    fontWeight: fontWeight['--t-font-weight-regular'],
+  },
+  rightContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-0_5'],
+  },
+});
 
 export const WidgetCardHeader = ({
   variant,
@@ -100,17 +103,27 @@ export const WidgetCardHeader = ({
 
   const shouldInset = variant === 'flush';
   return (
-    <StyledWidgetCardHeader className={className} shouldInset={shouldInset}>
+    <div
+      {...mergeClassName(
+        stylex.props(
+          styles.header,
+          shouldInset ? styles.headerInset : styles.headerPlain,
+        ),
+        className,
+      )}
+    >
       <AnimatePresence initial={false}>
         {!isEmpty && isInEditMode && <WidgetGrip className="drag-handle" />}
       </AnimatePresence>
-      <StyledTitleContainer>
+      <div {...stylex.props(styles.titleContainer)}>
         <OverflowingTextWithTooltip text={isEmpty ? t`Add Widget` : title} />
         {isDefined(widgetHeaderCount) && (
-          <StyledCount>{formatNumber(widgetHeaderCount)}</StyledCount>
+          <span {...stylex.props(styles.count)}>
+            {formatNumber(widgetHeaderCount)}
+          </span>
         )}
-      </StyledTitleContainer>
-      <StyledRightContainer>
+      </div>
+      <div {...stylex.props(styles.rightContainer)}>
         {hasAccess && <WidgetCardHeaderActionsRenderer />}
         {isDefined(forbiddenDisplay) && forbiddenDisplay}
         <AnimatePresence initial={false}>
@@ -119,7 +132,7 @@ export const WidgetCardHeader = ({
             isInEditMode &&
             onRemove &&
             widgetCardHovered && (
-              <StyledIconButtonContainer
+              <motion.div
                 initial={{ width: 0, opacity: 0 }}
                 animate={{ width: 'auto', opacity: 1 }}
                 exit={{ width: 0, opacity: 0 }}
@@ -127,6 +140,7 @@ export const WidgetCardHeader = ({
                   duration: theme.animation.duration.fast,
                   ease: 'easeInOut',
                 }}
+                {...stylex.props(styles.iconButtonContainer)}
               >
                 <IconButton
                   aria-label={t`Remove widget`}
@@ -136,10 +150,10 @@ export const WidgetCardHeader = ({
                 >
                   <IconTrash />
                 </IconButton>
-              </StyledIconButtonContainer>
+              </motion.div>
             )}
         </AnimatePresence>
-      </StyledRightContainer>
-    </StyledWidgetCardHeader>
+      </div>
+    </div>
   );
 };

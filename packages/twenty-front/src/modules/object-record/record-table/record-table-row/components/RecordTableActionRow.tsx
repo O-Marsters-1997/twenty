@@ -1,11 +1,7 @@
-import { styled } from '@linaria/react';
-
 import { useRecordIndexContextOrThrow } from '@/object-record/record-index/contexts/RecordIndexContext';
-import { RECORD_TABLE_COLUMN_CHECKBOX_WIDTH } from '@/object-record/record-table/constants/RecordTableColumnCheckboxWidth';
-import { RECORD_TABLE_COLUMN_DRAG_AND_DROP_WIDTH } from '@/object-record/record-table/constants/RecordTableColumnDragAndDropWidth';
 import { RECORD_TABLE_COLUMN_MIN_WIDTH } from '@/object-record/record-table/constants/RecordTableColumnMinWidth';
 import { useRecordTableFirstColumnWidthOverride } from '@/object-record/record-table/hooks/useRecordTableFirstColumnWidthOverride';
-import { RECORD_TABLE_ROW_HEIGHT } from '@/object-record/record-table/constants/RecordTableRowHeight';
+import { recordTableLayout } from '../../constants/recordTableLayout.stylex';
 import { useRecordTableContextOrThrow } from '@/object-record/record-table/contexts/RecordTableContext';
 import { RecordTableDragAndDropPlaceholderCell } from '@/object-record/record-table/record-table-cell/components/RecordTableDragAndDropPlaceholderCell';
 import { RecordTableAddButtonPlaceholderCell } from '@/object-record/record-table/record-table-row/components/RecordTableAddButtonPlaceholderCell';
@@ -16,77 +12,78 @@ import {
   sumByProperty,
 } from 'twenty-shared/utils';
 import { type IconComponent } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
+import {
+  background,
+  borderColor,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
+import { actionRowMarker } from './RecordTableActionRow.stylex';
 
-const StyledFieldPlaceholderCell = styled.div<{ widthOfFields: number }>`
-  height: ${RECORD_TABLE_ROW_HEIGHT}px;
-  min-width: ${({ widthOfFields }) => widthOfFields}px;
-  width: ${({ widthOfFields }) => widthOfFields}px;
-`;
-
-const StyledRecordTableDraggableTr = styled.div`
-  align-items: center;
-
-  background: ${themeCssVariables.background.primary};
-  border: none;
-
-  cursor: pointer;
-  display: flex;
-  flex-direction: row;
-
-  @media (hover: hover) {
-    &:hover {
-      div:not(:first-of-type) {
-        background-color: ${themeCssVariables.background.secondary};
-      }
-    }
-  }
-
-  div:not(:first-of-type) {
-    border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  }
-
-  width: 100%;
-`;
-
-const StyledIconContainer = styled.div`
-  align-items: center;
-  background-color: transparent;
-  border-right: none;
-  color: ${themeCssVariables.font.color.secondary};
-  display: flex;
-  height: ${RECORD_TABLE_ROW_HEIGHT}px;
-  justify-content: center;
-  left: ${RECORD_TABLE_COLUMN_DRAG_AND_DROP_WIDTH}px;
-
-  position: sticky;
-  width: ${RECORD_TABLE_COLUMN_CHECKBOX_WIDTH}px;
-`;
-
-const StyledActionTextContainer = styled.div<{ width: number }>`
-  align-items: center;
-
-  border-right: none;
-  display: flex;
-
-  height: ${RECORD_TABLE_ROW_HEIGHT}px;
-  justify-content: start;
-
-  left: ${`${RECORD_TABLE_COLUMN_DRAG_AND_DROP_WIDTH + RECORD_TABLE_COLUMN_CHECKBOX_WIDTH}px`};
-  position: sticky;
-  width: ${({ width }) => width}px;
-`;
-
-const StyledText = styled.span`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.md};
-  margin-left: ${themeCssVariables.spacing[2]};
-  position: absolute;
-  text-align: left;
-  vertical-align: middle;
-
-  white-space: nowrap;
-`;
+const styles = stylex.create({
+  root: {
+    alignItems: 'center',
+    backgroundColor: background['--t-background-primary'],
+    borderStyle: 'none',
+    cursor: 'pointer',
+    display: 'flex',
+    flexDirection: 'row',
+    width: '100%',
+  },
+  rowCell: {
+    backgroundColor: {
+      default: null,
+      [stylex.when.ancestor(':hover', actionRowMarker)]: {
+        default: null,
+        [media.hoverCapable]: background['--t-background-secondary'],
+      },
+    },
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: 1,
+  },
+  fieldPlaceholderCell: (widthOfFields: number) => ({
+    height: recordTableLayout.rowHeight,
+    minWidth: widthOfFields,
+    width: widthOfFields,
+  }),
+  iconContainer: {
+    alignItems: 'center',
+    borderRightStyle: 'none',
+    color: fontColor['--t-font-color-secondary'],
+    display: 'flex',
+    height: recordTableLayout.rowHeight,
+    justifyContent: 'center',
+    left: recordTableLayout.dragAndDropColumnWidth,
+    position: 'sticky',
+    width: recordTableLayout.checkboxColumnWidth,
+  },
+  actionTextContainer: {
+    alignItems: 'center',
+    borderRightStyle: 'none',
+    display: 'flex',
+    height: recordTableLayout.rowHeight,
+    justifyContent: 'flex-start',
+    left:
+      recordTableLayout.dragAndDropColumnWidth +
+      recordTableLayout.checkboxColumnWidth,
+    position: 'sticky',
+  },
+  actionTextWidth: (width: number) => ({ width }),
+  text: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-md'],
+    marginLeft: spacing['--t-spacing-2'],
+    position: 'absolute',
+    textAlign: 'left',
+    verticalAlign: 'middle',
+    whiteSpace: 'nowrap',
+  },
+});
 
 type RecordTableActionRowProps = {
   LeftIcon: IconComponent;
@@ -129,26 +126,37 @@ export const RecordTableActionRow = ({
     visibleRecordFieldsWithoutLabelIdentifier.length;
 
   return (
-    <StyledRecordTableDraggableTr onClick={onClick}>
+    <div {...stylex.props(styles.root, actionRowMarker)} onClick={onClick}>
       <RecordTableDragAndDropPlaceholderCell />
-      <StyledIconContainer>
+      <div {...stylex.props(styles.rowCell, styles.iconContainer)}>
         <LeftIcon
           stroke={theme.icon.stroke.sm}
           size={theme.icon.size.sm}
           color={theme.font.color.tertiary}
         />
-      </StyledIconContainer>
-      <StyledActionTextContainer width={firstColumnWidth}>
-        <StyledText>{text}</StyledText>
-      </StyledActionTextContainer>
-      <StyledFieldPlaceholderCell
-        widthOfFields={
-          sumOfWidthOfVisibleRecordFieldsAfterLabelIdentifierField +
-          sumOfBorderWidthForFields
-        }
+      </div>
+      <div
+        {...stylex.props(
+          styles.rowCell,
+          styles.actionTextContainer,
+          styles.actionTextWidth(firstColumnWidth),
+        )}
+      >
+        <span {...stylex.props(styles.text)}>{text}</span>
+      </div>
+      <div
+        {...stylex.props(
+          styles.rowCell,
+          styles.fieldPlaceholderCell(
+            sumOfWidthOfVisibleRecordFieldsAfterLabelIdentifierField +
+              sumOfBorderWidthForFields,
+          ),
+        )}
       />
-      <RecordTableAddButtonPlaceholderCell />
-      <RecordTableGroupSectionLastDynamicFillingCell />
-    </StyledRecordTableDraggableTr>
+      <RecordTableAddButtonPlaceholderCell xstyle={styles.rowCell} />
+      <RecordTableGroupSectionLastDynamicFillingCell
+        xstyle={styles.rowCell}
+      />
+    </div>
   );
 };

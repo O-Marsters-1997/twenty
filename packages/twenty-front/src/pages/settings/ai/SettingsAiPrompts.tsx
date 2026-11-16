@@ -1,5 +1,3 @@
-import { styled } from '@linaria/react';
-
 import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMemberState';
 import { FormAdvancedTextFieldInput } from '@/advanced-text-editor/components/FormAdvancedTextFieldInput';
 import { AI_INSTRUCTIONS_EDITOR_PROFILE } from '@/ai/constants/AiInstructionsEditorProfile';
@@ -15,26 +13,27 @@ import {
   isDefined,
 } from 'twenty-shared/utils';
 import { Section } from 'twenty-ui/components/layout';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { GetAiSystemPromptPreviewDocument } from '~/generated-metadata/graphql';
 import { formatNumber } from '@/localization/utils/formatNumber';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledSectionHeader = styled(Section.Header)`
-  margin-block-end: 0;
-`;
-
-const StyledFormContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[4]};
-`;
-
-const StyledTitleContainer = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[4]};
-  margin-top: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  sectionHeader: {
+    marginBlockEnd: '0',
+  },
+  formContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-4'],
+  },
+  titleContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-4'],
+    marginTop: spacing['--t-spacing-2'],
+  },
+});
 
 export const SettingsAiPrompts = () => {
   const currentWorkspaceMember = useAtomStateValue(currentWorkspaceMemberState);
@@ -105,8 +104,9 @@ export const SettingsAiPrompts = () => {
     >
       <SettingsPageContainer>
         <Section.Root>
-          <StyledTitleContainer>
-            <StyledSectionHeader
+          <div {...stylex.props(styles.titleContainer)}>
+            <Section.Header
+              xstyle={styles.sectionHeader}
               title={t`System Prompt`}
               description={[t`Read-only`, totalTokenCount]
                 .filter(Boolean)
@@ -115,7 +115,7 @@ export const SettingsAiPrompts = () => {
               size="lg"
               descriptionLineClamp={2}
             />
-          </StyledTitleContainer>
+          </div>
         </Section.Root>
         {promptSections.map((section) => {
           const sectionTokenCount = t`~ ${formatNumber(
@@ -134,7 +134,7 @@ export const SettingsAiPrompts = () => {
                   .filter(Boolean)
                   .join(' ')}
               />
-              <StyledFormContainer>
+              <div {...stylex.props(styles.formContainer)}>
                 <FormAdvancedTextFieldInput
                   key={
                     previewLoading ? `loading-${section.title}` : section.title
@@ -156,7 +156,7 @@ export const SettingsAiPrompts = () => {
                   ]}
                   minHeight={120}
                 />
-              </StyledFormContainer>
+              </div>
             </Section.Root>
           );
         })}
@@ -166,7 +166,7 @@ export const SettingsAiPrompts = () => {
             title={t`User Context`}
             description={t`Information about the current user (auto-generated and included in each request)`}
           />
-          <StyledFormContainer>
+          <div {...stylex.props(styles.formContainer)}>
             <FormAdvancedTextFieldInput
               label={t`User Information`}
               readonly={true}
@@ -176,7 +176,7 @@ export const SettingsAiPrompts = () => {
               enableFullScreen={false}
               minHeight={80}
             />
-          </StyledFormContainer>
+          </div>
         </Section.Root>
       </SettingsPageContainer>
     </SettingsPageLayout>

@@ -1,5 +1,5 @@
 import { useSortable } from '@dnd-kit/react/sortable';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { type ReactNode, useContext, useState } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { v4 } from 'uuid';
@@ -7,7 +7,7 @@ import { v4 } from 'uuid';
 import { RecordGroupContext } from '@/object-record/record-group/states/context/RecordGroupContext';
 import { NO_RECORD_GROUP_FAMILY_KEY } from '@/object-record/record-index/states/selectors/recordIndexAllRecordIdsComponentSelector';
 import { RECORD_TABLE_ROW_DND_TYPE } from '@/object-record/record-table/constants/RecordTableRowDndType';
-import { TABLE_Z_INDEX } from '@/object-record/record-table/constants/TableZIndex';
+import { recordTableZIndex } from '../../constants/recordTableLayout.stylex';
 import { RecordTableRowDraggableContextProvider } from '@/object-record/record-table/contexts/RecordTableRowDraggableContext';
 import { RecordTableTr } from '@/object-record/record-table/record-table-row/components/RecordTableTr';
 import { isRecordIdSecondaryDragMultipleComponentFamilyState } from '@/object-record/record-drag/states/isRecordIdSecondaryDragMultipleComponentFamilyState';
@@ -17,15 +17,6 @@ import { DragDropItemDropTarget } from '@/ui/utilities/drag-and-drop/components/
 import { DND_KIT_PLUGINS_WITHOUT_OPTIMISTIC } from '@/ui/utilities/drag-and-drop/constants/DndKitPluginsWithoutOptimistic';
 import { DRAG_SOURCE_OPACITY } from '@/ui/utilities/drag-and-drop/constants/DragSourceOpacity';
 import { DragDropItemSortableHandleRefContext } from '@/ui/utilities/drag-and-drop/context/DragDropItemSortableHandleRefContext';
-
-// Above TABLE_Z_INDEX.cell.sticky so sticky cells don't paint over the insertion line.
-const StyledRowDropTargetSlot = styled.div`
-  left: 0;
-  position: absolute;
-  right: 0;
-  top: -1px;
-  z-index: ${TABLE_Z_INDEX.rowDropLine};
-`;
 
 type RecordTableDraggableTrProps = {
   className?: string;
@@ -103,7 +94,7 @@ export const RecordTableDraggableTr = ({
         </RecordTableRowDraggableContextProvider>
       </DragDropItemSortableHandleRefContext.Provider>
       {!isDragSource && (
-        <StyledRowDropTargetSlot>
+        <div {...stylex.props(styles.rowDropTargetSlot)}>
           <DragDropItemDropTarget
             index={draggableIndex}
             droppableId={droppableId}
@@ -111,8 +102,18 @@ export const RecordTableDraggableTr = ({
             compact
             seamAligned
           />
-        </StyledRowDropTargetSlot>
+        </div>
       )}
     </RecordTableTr>
   );
 };
+
+const styles = stylex.create({
+  rowDropTargetSlot: {
+    left: 0,
+    position: 'absolute',
+    right: 0,
+    top: -1,
+    zIndex: recordTableZIndex.rowDropLine,
+  },
+});

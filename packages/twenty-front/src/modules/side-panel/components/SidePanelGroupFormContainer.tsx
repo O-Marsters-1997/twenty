@@ -1,14 +1,16 @@
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledFormContainer = styled.div`
-  padding-inline: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  formContainer: {
+    paddingInline: spacing['--t-spacing-1'],
+  },
+});
 
 export const SidePanelGroupFormContainer = ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
-  return <StyledFormContainer>{children}</StyledFormContainer>;
+  return <div {...stylex.props(styles.formContainer)}>{children}</div>;
 };

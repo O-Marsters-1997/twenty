@@ -8,32 +8,46 @@ import { useCreateNewIndexRecord } from '@/object-record/record-table/hooks/useC
 import { canCreateRecordsForObjectMetadataItem } from '@/object-record/utils/canCreateRecordsForObjectMetadataItem';
 import { useAtomComponentSelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentSelectorValue';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { useToast } from 'twenty-ui/components/feedback';
 import { IconPlus } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import { logError } from '~/utils/logError';
+import * as stylex from '@stylexjs/stylex';
+import {
+  backgroundTransparent,
+  borderRadius,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledAddNewRow = styled.button`
-  align-items: center;
-  background: transparent;
-  border: none;
-  border-radius: ${themeCssVariables.border.radius.sm};
-  color: ${themeCssVariables.font.color.tertiary};
-  cursor: pointer;
-  display: flex;
-  font-size: ${themeCssVariables.font.size.md};
-  gap: ${themeCssVariables.spacing[1]};
-  height: 24px;
-  padding: 0 6px;
-  text-align: left;
-
-  &:hover {
-    background: ${themeCssVariables.background.transparent.lighter};
-  }
-`;
+const styles = stylex.create({
+  addNewRow: {
+    alignItems: 'center',
+    background: {
+      default: 'transparent',
+      ':hover': backgroundTransparent['--t-background-transparent-lighter'],
+    },
+    borderStyle: 'none',
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    color: fontColor['--t-font-color-tertiary'],
+    cursor: 'pointer',
+    display: 'flex',
+    fontSize: fontSize['--t-font-size-md'],
+    gap: spacing['--t-spacing-1'],
+    height: '24px',
+    paddingTop: '0',
+    paddingRight: '6px',
+    paddingBottom: '0',
+    paddingLeft: '6px',
+    textAlign: 'left',
+  },
+});
 
 export const RecordListAddNew = () => {
   const theme = useTheme();
@@ -97,13 +111,17 @@ export const RecordListAddNew = () => {
   };
 
   return (
-    <StyledAddNewRow type="button" onClick={handleCreateRecord}>
+    <button
+      type="button"
+      onClick={handleCreateRecord}
+      {...stylex.props(styles.addNewRow)}
+    >
       <IconPlus
         stroke={theme.icon.stroke.sm}
         size={theme.icon.size.sm}
         color={theme.font.color.tertiary}
       />
       {t`Add new`}
-    </StyledAddNewRow>
+    </button>
   );
 };

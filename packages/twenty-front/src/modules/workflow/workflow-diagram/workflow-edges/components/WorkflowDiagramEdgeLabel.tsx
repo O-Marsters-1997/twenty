@@ -1,25 +1,43 @@
-import { styled } from '@linaria/react';
 import { isDefined } from 'twenty-shared/utils';
-import { Text } from 'twenty-ui/primitives/typography';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  spacing,
+  background,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  fontWeight,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  align-items: center;
-  background: ${themeCssVariables.background.secondary};
-  border: 1px solid ${themeCssVariables.border.color.strong};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  box-sizing: border-box;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  justify-content: center;
-  padding-block: ${themeCssVariables.spacing[0.5]};
-  padding-inline: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledNumber = styled.span`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.sm};
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    background: background['--t-background-secondary'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-strong'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    justifyContent: 'center',
+    paddingBlock: spacing['--t-spacing-0_5'],
+    paddingInline: spacing['--t-spacing-1'],
+  },
+  label: {
+    color: fontColor['--t-font-color-light'],
+    fontSize: '11px',
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+  },
+  number: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-sm'],
+  },
+});
 
 type WorkflowDiagramEdgeLabelProps = {
   label: string;
@@ -31,15 +49,11 @@ export const WorkflowDiagramEdgeLabel = ({
   elseIfIndex,
 }: WorkflowDiagramEdgeLabelProps) => {
   return (
-    <StyledContainer>
-      {isDefined(elseIfIndex) && <StyledNumber>{elseIfIndex}</StyledNumber>}
-      <StyledDisplayLabel>{label}</StyledDisplayLabel>
-    </StyledContainer>
+    <div {...stylex.props(styles.container)}>
+      {isDefined(elseIfIndex) && (
+        <span {...stylex.props(styles.number)}>{elseIfIndex}</span>
+      )}
+      <div {...stylex.props(styles.label)}>{label}</div>
+    </div>
   );
 };
-
-const StyledDisplayLabel = styled(Text)`
-  color: var(--t-font-color-light);
-  font-size: 11px;
-  font-weight: var(--t-font-weight-semi-bold);
-`;

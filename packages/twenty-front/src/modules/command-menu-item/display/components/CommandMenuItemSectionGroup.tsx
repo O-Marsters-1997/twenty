@@ -1,61 +1,61 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import React, { type ReactNode } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { type IconComponent } from 'twenty-ui/icon';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
-import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 
 import { type CommandMenuItemSectionContext } from '@/command-menu-item/types/CommandMenuItemSectionContext';
+import * as stylex from '@stylexjs/stylex';
+import {
+  borderColor,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-
-  & + & {
-    margin-top: ${themeCssVariables.spacing[3]};
-  }
-`;
-
-const StyledHeading = styled.div`
-  align-items: center;
-  border-bottom: 1px solid ${themeCssVariables.border.color.medium};
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  height: ${themeCssVariables.spacing[8]};
-  padding-left: ${themeCssVariables.spacing[1]};
-  user-select: none;
-`;
-
-// Same width as a command's icon tile, so headings line up with command labels.
-const StyledHeadingIcon = styled.span`
-  align-items: center;
-  color: ${themeCssVariables.font.color.secondary};
-  display: flex;
-  flex-shrink: 0;
-  justify-content: center;
-  width: ${themeCssVariables.spacing[6]};
-`;
-
-const StyledHeadingText = styled.span`
-  color: ${themeCssVariables.font.color.primary};
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.medium};
-  min-width: 0;
-`;
-
-// Keyboard navigation scrolls the selected command into view, so the first
-// command reserves room for its section header above it.
-const StyledGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[0.5]};
-
-  & > :first-child {
-    scroll-margin-top: ${themeCssVariables.spacing[12]};
-  }
-`;
+const styles = stylex.create({
+  heading: {
+    alignItems: 'center',
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: borderColor['--t-border-color-medium'],
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    height: spacing['--t-spacing-8'],
+    paddingLeft: spacing['--t-spacing-1'],
+    userSelect: 'none',
+  },
+  headingIcon: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-secondary'],
+    display: 'flex',
+    flexShrink: '0',
+    justifyContent: 'center',
+    width: spacing['--t-spacing-6'],
+  },
+  headingText: {
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    minWidth: '0',
+  },
+  section: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    marginTop: {
+      default: spacing['--t-spacing-3'],
+      ':first-child': 0,
+    },
+  },
+  group: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-0_5'],
+  },
+});
 
 type CommandMenuItemSectionGroupProps = {
   heading: string;
@@ -79,26 +79,26 @@ export const CommandMenuItemSectionGroup = ({
   const contextLabel = context?.label;
 
   return (
-    <StyledSection>
-      <StyledHeading>
+    <div {...stylex.props(styles.section)}>
+      <div {...stylex.props(styles.heading)}>
         {isDefined(context?.icon) ? (
-          <StyledHeadingIcon>{context.icon}</StyledHeadingIcon>
+          <span {...stylex.props(styles.headingIcon)}>{context.icon}</span>
         ) : (
           isDefined(Icon) && (
-            <StyledHeadingIcon>
+            <span {...stylex.props(styles.headingIcon)}>
               <Icon size={theme.icon.size.md} />
-            </StyledHeadingIcon>
+            </span>
           )
         )}
-        <StyledHeadingText>
+        <span {...stylex.props(styles.headingText)}>
           <OverflowingTextWithTooltip
             text={
               isDefined(contextLabel) ? t`${heading}: ${contextLabel}` : heading
             }
           />
-        </StyledHeadingText>
-      </StyledHeading>
-      <StyledGroup>{children}</StyledGroup>
-    </StyledSection>
+        </span>
+      </div>
+      <div {...stylex.props(styles.group)}>{children}</div>
+    </div>
   );
 };

@@ -1,10 +1,8 @@
-import { styled } from '@linaria/react';
 import { type MouseEvent, useId } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Key } from 'ts-key-enum';
 import { isDefined } from 'twenty-shared/utils';
 import { Checkbox } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { AiChatThreadActionsDropdown } from '@/ai/components/AiChatThreadActionsDropdown';
 import { AiChatThreadActivityTime } from '@/ai/components/AiChatThreadActivityTime';
@@ -17,113 +15,113 @@ import { getCommandMenuDropdownIdFromCommandMenuId } from '@/command-menu-item/u
 import { TextInput } from '@/ui/input/components/TextInput';
 import { isDropdownOpenComponentState } from '@/ui/layout/dropdown/states/isDropdownOpenComponentState';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
+import * as stylex from '@stylexjs/stylex';
+import { itemMarker } from './AiChatThreadListItem.stylex';
+import {
+  accent,
+  backgroundTransparent,
+  borderColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
 
-const StyledThreadItem = styled.div<{
-  $isSelected: boolean;
-  $isChecked: boolean;
-}>`
-  align-items: flex-start;
-  background: ${({ $isSelected, $isChecked }) =>
-    $isChecked
-      ? themeCssVariables.accent.tertiary
-      : $isSelected
-        ? themeCssVariables.background.transparent.light
-        : 'none'};
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  cursor: pointer;
-  display: flex;
-  gap: ${themeCssVariables.spacing[3]};
-  padding: ${themeCssVariables.spacing[4]};
-  position: relative;
 
-  &:hover {
-    background: ${({ $isChecked }) =>
-      $isChecked
-        ? themeCssVariables.accent.tertiary
-        : themeCssVariables.background.transparent.light};
-  }
-`;
-
-const StyledLeading = styled.div`
-  display: flex;
-  flex-shrink: 0;
-  justify-content: center;
-  padding-top: ${themeCssVariables.spacing['0.5']};
-  width: ${themeCssVariables.spacing[7]};
-`;
-
-// The checkbox takes the avatar's place while the chat is checked, or while
-// the row is hovered or focused; without hover, a tap on the avatar checks it
-const StyledCheckboxContainer = styled.div<{ $isChecked: boolean }>`
-  display: ${({ $isChecked }) => ($isChecked ? 'flex' : 'none')};
-
-  ${StyledThreadItem}:focus-within & {
-    display: flex;
-  }
-
-  @media (hover: hover) {
-    ${StyledThreadItem}:hover & {
-      display: flex;
-    }
-  }
-`;
-
-const StyledAvatarContainer = styled.div<{
-  $isCheckable: boolean;
-  $isChecked: boolean;
-}>`
-  display: ${({ $isChecked }) => ($isChecked ? 'none' : 'flex')};
-
-  ${StyledThreadItem}:focus-within & {
-    display: ${({ $isCheckable, $isChecked }) =>
-      $isCheckable || $isChecked ? 'none' : 'flex'};
-  }
-
-  @media (hover: hover) {
-    ${StyledThreadItem}:hover & {
-      display: ${({ $isCheckable, $isChecked }) =>
-        $isCheckable || $isChecked ? 'none' : 'flex'};
-    }
-  }
-`;
-
-const StyledThreadContent = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-width: 0;
-`;
-
-const StyledThreadHeading = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  min-width: 0;
-`;
-
-const StyledActivityTimeContainer = styled.div<{ $isDropdownOpen: boolean }>`
-  visibility: ${({ $isDropdownOpen }) =>
-    $isDropdownOpen ? 'hidden' : 'visible'};
-
-  ${StyledThreadItem}:hover & {
-    visibility: hidden;
-  }
-`;
-
-const StyledMenuTrigger = styled.div<{ $isDropdownOpen: boolean }>`
-  opacity: ${({ $isDropdownOpen }) => ($isDropdownOpen ? 1 : 0)};
-  pointer-events: ${({ $isDropdownOpen }) =>
-    $isDropdownOpen ? 'auto' : 'none'};
-  position: absolute;
-  right: ${themeCssVariables.spacing[3]};
-  top: ${themeCssVariables.spacing[3]};
-  transition: opacity 150ms;
-
-  ${StyledThreadItem}:hover & {
-    opacity: 1;
-    pointer-events: auto;
-  }
-`;
+const styles = stylex.create({
+  item: {
+    alignItems: 'flex-start',
+    backgroundColor: {
+      default: 'transparent',
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
+    cursor: 'pointer',
+    display: 'flex',
+    gap: spacing['--t-spacing-3'],
+    padding: spacing['--t-spacing-4'],
+    position: 'relative',
+  },
+  itemSelected: {
+    backgroundColor: backgroundTransparent['--t-background-transparent-light'],
+  },
+  itemChecked: {
+    backgroundColor: accent['--t-accent-tertiary'],
+  },
+  checkbox: {
+    display: {
+      default: 'none',
+      [stylex.when.ancestor(':focus-within', itemMarker)]: 'flex',
+      [media.hoverCapable]: {
+        default: null,
+        [stylex.when.ancestor(':hover', itemMarker)]: 'flex',
+      },
+    },
+  },
+  checkboxChecked: {
+    display: 'flex',
+  },
+  avatar: {
+    display: 'flex',
+  },
+  avatarCheckable: {
+    display: {
+      default: 'flex',
+      [stylex.when.ancestor(':focus-within', itemMarker)]: 'none',
+      [media.hoverCapable]: {
+        default: null,
+        [stylex.when.ancestor(':hover', itemMarker)]: 'none',
+      },
+    },
+  },
+  avatarChecked: {
+    display: 'none',
+  },
+  activityTime: {
+    visibility: {
+      default: 'visible',
+      [stylex.when.ancestor(':hover', itemMarker)]: 'hidden',
+    },
+  },
+  activityTimeHidden: {
+    visibility: 'hidden',
+  },
+  menuTrigger: {
+    opacity: { default: 0, [stylex.when.ancestor(':hover', itemMarker)]: 1 },
+    pointerEvents: {
+      default: 'none',
+      [stylex.when.ancestor(':hover', itemMarker)]: 'auto',
+    },
+    position: 'absolute',
+    right: spacing['--t-spacing-3'],
+    top: spacing['--t-spacing-3'],
+    transitionDuration: '150ms',
+    transitionProperty: 'opacity',
+  },
+  menuTriggerOpen: {
+    opacity: 1,
+    pointerEvents: 'auto',
+  },
+  leading: {
+    display: 'flex',
+    flexShrink: '0',
+    justifyContent: 'center',
+    paddingTop: spacing['--t-spacing-0_5'],
+    width: spacing['--t-spacing-7'],
+  },
+  threadContent: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    minWidth: '0',
+  },
+  threadHeading: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    minWidth: '0',
+  },
+});
 
 type AiChatThreadListItemProps = {
   thread: AgentChatThreadRecord;
@@ -172,9 +170,13 @@ export const AiChatThreadListItem = ({
   );
 
   return (
-    <StyledThreadItem
-      $isSelected={isSelected}
-      $isChecked={isChecked}
+    <div
+      {...stylex.props(
+        styles.item,
+        itemMarker,
+        isSelected && styles.itemSelected,
+        isChecked && styles.itemChecked,
+      )}
       data-selectable-id={thread.id}
       data-select-disable={isRenaming || undefined}
       onMouseDown={(event) => {
@@ -194,7 +196,7 @@ export const AiChatThreadListItem = ({
         }
       }}
     >
-      <StyledLeading
+      <div
         data-select-disable={isDefined(onCheckboxClick) || undefined}
         onClick={
           isDefined(onCheckboxClick)
@@ -204,20 +206,30 @@ export const AiChatThreadListItem = ({
               }
             : undefined
         }
+        {...stylex.props(styles.leading)}
       >
         {isDefined(onCheckboxClick) && (
-          <StyledCheckboxContainer $isChecked={isChecked}>
+          <div
+            {...stylex.props(
+              styles.checkbox,
+              isChecked && styles.checkboxChecked,
+            )}
+          >
             <Checkbox checked={isChecked} aria-label={t`Select chat`} />
-          </StyledCheckboxContainer>
+          </div>
         )}
-        <StyledAvatarContainer
-          $isCheckable={isDefined(onCheckboxClick)}
-          $isChecked={isChecked}
+        <div
+          {...stylex.props(
+            styles.avatar,
+            isChecked
+              ? styles.avatarChecked
+              : isDefined(onCheckboxClick) && styles.avatarCheckable,
+          )}
         >
           <AiChatThreadAvatar thread={thread} />
-        </StyledAvatarContainer>
-      </StyledLeading>
-      <StyledThreadContent>
+        </div>
+      </div>
+      <div {...stylex.props(styles.threadContent)}>
         {isRenaming ? (
           <TextInput
             value={draftTitle}
@@ -243,17 +255,25 @@ export const AiChatThreadListItem = ({
             aria-label={t`Rename chat`}
           />
         ) : (
-          <StyledThreadHeading>
+          <div {...stylex.props(styles.threadHeading)}>
             <AiChatThreadTitle thread={thread} />
-            <StyledActivityTimeContainer $isDropdownOpen={isDropdownOpen}>
+            <div
+              {...stylex.props(
+                styles.activityTime,
+                isDropdownOpen && styles.activityTimeHidden,
+              )}
+            >
               <AiChatThreadActivityTime thread={thread} />
-            </StyledActivityTimeContainer>
-          </StyledThreadHeading>
+            </div>
+          </div>
         )}
         <AiChatThreadSubtitle thread={thread} />
-      </StyledThreadContent>
-      <StyledMenuTrigger
-        $isDropdownOpen={isDropdownOpen}
+      </div>
+      <div
+        {...stylex.props(
+          styles.menuTrigger,
+          isDropdownOpen && styles.menuTriggerOpen,
+        )}
         onClick={(event) => event.stopPropagation()}
       >
         <AiChatThreadActionsDropdown
@@ -262,7 +282,7 @@ export const AiChatThreadListItem = ({
           onRenameRequested={startRename}
           onDetach={onDetach}
         />
-      </StyledMenuTrigger>
-    </StyledThreadItem>
+      </div>
+    </div>
   );
 };

@@ -5,7 +5,6 @@ import { runComponentConformance } from '@test-utilities/conformance/runComponen
 import { IconSearch } from '@ui/icon';
 
 import { LightIconButton } from '../LightIconButton';
-import styles from '../LightIconButton.module.scss';
 
 runComponentConformance({
   name: 'LightIconButton',
@@ -15,7 +14,6 @@ runComponentConformance({
     </LightIconButton>
   ),
   refInstanceOf: HTMLButtonElement,
-  ownClassName: styles.button,
 });
 
 describe('LightIconButton appearance', () => {

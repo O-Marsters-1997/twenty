@@ -7,7 +7,6 @@ runComponentConformance({
   name: 'Loader',
   element: <Loader color="blue" />,
   refInstanceOf: HTMLDivElement,
-  ownClassName: 'container',
 });
 
 it('leaves announcements to the caller and hides a decorative loader', () => {

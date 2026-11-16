@@ -1,6 +1,5 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 
 import { useApplyObjectFilterDropdownFilterValue } from '@/object-record/object-filter-dropdown/hooks/useApplyObjectFilterDropdownFilterValue';
 import { useObjectFilterDropdownFilterValue } from '@/object-record/object-filter-dropdown/hooks/useObjectFilterDropdownFilterValue';
@@ -13,25 +12,39 @@ import { SelectableList } from '@/ui/layout/selectable-list/components/Selectabl
 import { ObjectFilterDropdownComponentInstanceContext } from '@/object-record/object-filter-dropdown/states/contexts/ObjectFilterDropdownComponentInstanceContext';
 import { useAvailableComponentInstanceIdOrThrow } from '@/ui/utilities/state/component-state/hooks/useAvailableComponentInstanceIdOrThrow';
 import { IconCheck } from 'twenty-ui/icon';
+import * as stylex from '@stylexjs/stylex';
+import {
+  backgroundTransparent,
+  borderRadius,
+  fontColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledBooleanSelectContainer = styled.div<{ selected?: boolean }>`
-  align-items: center;
-  border-radius: ${themeCssVariables.border.radius.sm};
-  color: ${themeCssVariables.font.color.primary};
-  cursor: pointer;
-  display: flex;
-  padding: ${themeCssVariables.spacing[2]} ${themeCssVariables.spacing[2]}
-    ${themeCssVariables.spacing[2]} ${themeCssVariables.spacing[1]};
-  &:hover {
-    background: ${themeCssVariables.background.transparent.light};
-  }
-`;
-
-const StyledIconCheckContainer = styled.div`
-  display: flex;
-  flex: 1;
-  justify-content: flex-end;
-`;
+const styles = stylex.create({
+  booleanSelectContainer: {
+    alignItems: 'center',
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    color: fontColor['--t-font-color-primary'],
+    cursor: 'pointer',
+    display: 'flex',
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-1'],
+    background: {
+      default: null,
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
+  },
+  iconCheckContainer: {
+    display: 'flex',
+    flex: '1',
+    justifyContent: 'flex-end',
+  },
+});
 
 export const ObjectFilterDropdownBooleanSelect = () => {
   const objectFilterDropdownComponentInstanceId =
@@ -69,18 +82,18 @@ export const ObjectFilterDropdownBooleanSelect = () => {
       >
         <DropdownMenuItemsContainer hasMaxHeight>
           {options.map((option) => (
-            <StyledBooleanSelectContainer
+            <div
               key={String(option)}
               onClick={() => handleOptionSelect(option)}
-              selected={objectFilterDropdownFilterValue === option.toString()}
+              {...stylex.props(styles.booleanSelectContainer)}
             >
               <BooleanDisplay value={option} />
               {objectFilterDropdownFilterValue === option.toString() && (
-                <StyledIconCheckContainer>
+                <div {...stylex.props(styles.iconCheckContainer)}>
                   <IconCheck color={theme.grayScale.gray11} size={16} />
-                </StyledIconCheckContainer>
+                </div>
               )}
-            </StyledBooleanSelectContainer>
+            </div>
           ))}
         </DropdownMenuItemsContainer>
       </SelectableList>

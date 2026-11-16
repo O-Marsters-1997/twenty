@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 
 import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMemberState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
@@ -18,13 +17,16 @@ import {
   WorkspaceMemberTimeFormatEnum,
 } from '~/generated-metadata/graphql';
 import { DateTimeSettingsCalendarStartDaySelect } from '@/settings/experience/components/DateTimeSettingsCalendarStartDaySelect';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[4]};
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-4'],
+  },
+});
 
 export const FormatPreferencesSettings = () => {
   const currentWorkspaceMember = useAtomStateValue(currentWorkspaceMemberState);
@@ -80,7 +82,7 @@ export const FormatPreferencesSettings = () => {
       : formatPreferences.calendarStartDay;
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <DateTimeSettingsTimeZoneSelect
         value={displayTimeZone}
         onChange={handleTimeZoneChange}
@@ -103,6 +105,6 @@ export const FormatPreferencesSettings = () => {
         value={displayCalendarStartDay}
         onChange={handleCalendarStartDayChange}
       />
-    </StyledContainer>
+    </div>
   );
 };

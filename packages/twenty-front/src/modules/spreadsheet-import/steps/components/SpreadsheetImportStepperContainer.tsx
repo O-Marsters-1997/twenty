@@ -1,7 +1,9 @@
-import { styled } from '@linaria/react';
 import { Dialog } from 'twenty-ui/primitives/surfaces';
 import { useSpreadsheetImportInitialStep } from '@/spreadsheet-import/hooks/useSpreadsheetImportInitialStep';
 import { useSpreadsheetImportInternal } from '@/spreadsheet-import/hooks/useSpreadsheetImportInternal';
+import * as stylex from '@stylexjs/stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
+import { background, borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 import { StepBar } from '@/ui/navigation/step-bar/components/StepBar';
 import { useStepBar } from '@/ui/navigation/step-bar/hooks/useStepBar';
@@ -9,21 +11,7 @@ import { useStepBar } from '@/ui/navigation/step-bar/hooks/useStepBar';
 import { spreadsheetImportDialogState } from '@/spreadsheet-import/states/spreadsheetImportDialogState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useLingui } from '@lingui/react/macro';
-import { MOBILE_VIEWPORT, themeCssVariables } from 'twenty-ui/theme';
 import { SpreadsheetImportStepper } from './SpreadsheetImportStepper';
-
-const StyledImportHeader = styled(Dialog.Header)`
-  align-items: center;
-  background: ${themeCssVariables.background.secondary};
-  border-bottom: 1px solid ${themeCssVariables.border.color.medium};
-  flex-direction: row;
-  height: 60px;
-  padding: 0 ${themeCssVariables.spacing[30]};
-
-  @media (max-width: ${MOBILE_VIEWPORT}px) {
-    padding-inline: ${themeCssVariables.spacing[4]};
-  }
-`;
 
 export const SpreadsheetImportStepperContainer = () => {
   const { t } = useLingui();
@@ -50,7 +38,7 @@ export const SpreadsheetImportStepperContainer = () => {
 
   return (
     <>
-      <StyledImportHeader>
+      <Dialog.Header {...stylex.props(styles.header)}>
         {spreadsheetImportDialog.isStepBarVisible && (
           <StepBar activeStep={activeStep}>
             {steps.map((key) => (
@@ -62,8 +50,25 @@ export const SpreadsheetImportStepperContainer = () => {
             ))}
           </StepBar>
         )}
-      </StyledImportHeader>
+      </Dialog.Header>
       <SpreadsheetImportStepper nextStep={nextStep} prevStep={prevStep} />
     </>
   );
 };
+
+const styles = stylex.create({
+  header: {
+    alignItems: 'center',
+    background: background['--t-background-secondary'],
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: borderColor['--t-border-color-medium'],
+    flexDirection: 'row',
+    height: '60px',
+    paddingBlock: 0,
+    paddingInline: {
+      default: spacing['--t-spacing-30'],
+      [media.mobile]: spacing['--t-spacing-4'],
+    },
+  },
+});

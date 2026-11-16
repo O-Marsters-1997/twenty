@@ -4,7 +4,6 @@ import { type Task } from '@/activities/types/Task';
 import { useObjectMetadataItem } from '@/object-metadata/hooks/useObjectMetadataItem';
 import { AnimatedPlaceholder } from '@/ui/feedback/empty-state/components/AnimatedPlaceholder/AnimatedPlaceholder';
 import { EmptyState } from '@/ui/feedback/empty-state/components/EmptyState';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import groupBy from 'lodash.groupby';
 import { CoreObjectNameSingular } from 'twenty-shared/types';
@@ -12,12 +11,15 @@ import { isDefined } from 'twenty-shared/utils';
 
 import { IconPlus } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+  },
+});
 
 type TaskGroupsContentProps = {
   isLoading: boolean;
@@ -70,7 +72,7 @@ export const TaskGroupsContent = ({
   ).sort(([statusA], [statusB]) => statusB.localeCompare(statusA));
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       {sortedTasksByStatus.map(
         ([status, tasksByStatus]: [string, Task[]], index) => {
           const statusOption = taskStatusOptions?.find(
@@ -88,6 +90,6 @@ export const TaskGroupsContent = ({
           );
         },
       )}
-    </StyledContainer>
+    </div>
   );
 };

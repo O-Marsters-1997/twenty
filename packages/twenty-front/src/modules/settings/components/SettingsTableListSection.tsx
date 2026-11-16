@@ -2,8 +2,6 @@ import { type ComponentType, type ReactNode } from 'react';
 
 import { isDefined } from 'twenty-shared/utils';
 
-import { styled } from '@linaria/react';
-
 import { Table } from '@/ui/layout/table/components/Table';
 import { TableCell } from '@/ui/layout/table/components/TableCell';
 import { TableHeader } from '@/ui/layout/table/components/TableHeader';
@@ -12,32 +10,23 @@ import { Section } from 'twenty-ui/components/layout';
 import { IconChevronRight, IconPlus } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
 import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledTableRows = styled.div`
-  padding-bottom: ${themeCssVariables.spacing[2]};
-  padding-top: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledRowWrapper = styled.div<{ clickable: boolean }>`
-  ${({ clickable }) =>
-    clickable
-      ? `
-        > * {
-          &:hover {
-            background-color: ${themeCssVariables.background.transparent.light};
-            cursor: pointer;
-          }
-        }
-      `
-      : ''}
-`;
-
-const StyledFooter = styled.div`
-  border-top: 1px solid ${themeCssVariables.border.color.light};
-  display: flex;
-  justify-content: flex-end;
-  padding-top: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  tableRows: {
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
+  },
+  footer: {
+    borderTopWidth: '1px',
+    borderTopStyle: 'solid',
+    borderTopColor: borderColor['--t-border-color-light'],
+    display: 'flex',
+    justifyContent: 'flex-end',
+    paddingTop: spacing['--t-spacing-2'],
+  },
+});
 
 const HEADER_PADDING = `0 ${themeCssVariables.spacing[2]} 0 ${themeCssVariables.spacing[2]}`;
 
@@ -106,38 +95,37 @@ export const SettingsTableListSection = <
             ))}
             {showRowChevron && <TableHeader padding={HEADER_PADDING} />}
           </TableRow>
-          <StyledTableRows>
+          <div {...stylex.props(styles.tableRows)}>
             {items.map((item) => (
-              <StyledRowWrapper key={item.id} clickable={Boolean(onRowClick)}>
-                <TableRow
-                  gridAutoColumns={resolvedGridAutoColumns}
-                  onClick={onRowClick ? () => onRowClick(item) : undefined}
-                >
-                  {columns.map((column) => (
-                    <TableCell
-                      key={column.label}
-                      align={column.align}
-                      overflow={column.overflow}
-                    >
-                      <column.Cell item={item} />
-                    </TableCell>
-                  ))}
-                  {showRowChevron && (
-                    <TableCell
-                      align="right"
-                      color={themeCssVariables.font.color.light}
-                    >
-                      <IconChevronRight size={16} />
-                    </TableCell>
-                  )}
-                </TableRow>
-              </StyledRowWrapper>
+              <TableRow
+                key={item.id}
+                gridAutoColumns={resolvedGridAutoColumns}
+                onClick={onRowClick ? () => onRowClick(item) : undefined}
+              >
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.label}
+                    align={column.align}
+                    overflow={column.overflow}
+                  >
+                    <column.Cell item={item} />
+                  </TableCell>
+                ))}
+                {showRowChevron && (
+                  <TableCell
+                    align="right"
+                    color={themeCssVariables.font.color.light}
+                  >
+                    <IconChevronRight size={16} />
+                  </TableCell>
+                )}
+              </TableRow>
             ))}
-          </StyledTableRows>
+          </div>
         </Table>
       )}
       {isDefined(footerButtonLabel) && isDefined(onFooterButtonClick) && (
-        <StyledFooter>
+        <div {...stylex.props(styles.footer)}>
           <Button
             startIcon={<IconPlus />}
             size="sm"
@@ -146,7 +134,7 @@ export const SettingsTableListSection = <
           >
             {footerButtonLabel}
           </Button>
-        </StyledFooter>
+        </div>
       )}
     </Section.Root>
   );

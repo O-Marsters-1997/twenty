@@ -1,8 +1,13 @@
-import { styled } from '@linaria/react';
 import { isNonEmptyString } from '@sniptt/guards';
 import { useState } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  background,
+  borderColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 import { allowRequestsToTwentyIconsState } from '@/client-config/states/allowRequestsToTwentyIcons';
 import { RecordIdentifierBarCreatedAt } from '@/object-record/record-show/components/RecordIdentifierBarCreatedAt';
@@ -14,19 +19,22 @@ import { useAtomFamilySelectorValue } from '@/ui/utilities/state/jotai/hooks/use
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { getAbsoluteImageUrl } from '~/utils/image/getAbsoluteImageUrl';
 
-const StyledBar = styled.div`
-  align-items: center;
-  background: ${themeCssVariables.background.secondary};
-  box-shadow: inset 0 -1px 0 ${themeCssVariables.border.color.light};
-  box-sizing: border-box;
-  display: flex;
-  flex-shrink: 0;
-  gap: ${themeCssVariables.spacing[2]};
-  height: ${PAGE_LAYOUT_RECORD_IDENTIFIER_BAR_HEIGHT}px;
-  justify-content: space-between;
-  padding: 0 ${themeCssVariables.spacing[3]};
-  width: 100%;
-`;
+const styles = stylex.create({
+  bar: {
+    alignItems: 'center',
+    backgroundColor: background['--t-background-secondary'],
+    boxShadow: `inset 0 -1px 0 ${borderColor['--t-border-color-light']}`,
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexShrink: 0,
+    gap: spacing['--t-spacing-2'],
+    justifyContent: 'space-between',
+    paddingBlock: 0,
+    paddingInline: spacing['--t-spacing-3'],
+    width: '100%',
+  },
+  barHeight: (height: number) => ({ height: `${height}px` }),
+});
 
 type CoreObjectIdentifierBarProps = {
   isReadOnly?: boolean;
@@ -67,7 +75,12 @@ export const CoreObjectIdentifierBar = ({
   };
 
   return (
-    <StyledBar>
+    <div
+      {...stylex.props(
+        styles.bar,
+        styles.barHeight(PAGE_LAYOUT_RECORD_IDENTIFIER_BAR_HEIGHT),
+      )}
+    >
       <HeaderIdentifier
         fontSize="lg"
         avatar={{
@@ -98,6 +111,6 @@ export const CoreObjectIdentifierBar = ({
         }
       />
       <RecordIdentifierBarCreatedAt objectRecordId={recordId} />
-    </StyledBar>
+    </div>
   );
 };

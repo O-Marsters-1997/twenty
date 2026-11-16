@@ -9,14 +9,24 @@ import {
 import { getFileType } from '@/activities/files/utils/getFileType';
 import DocViewer, { DocViewerRenderers } from '@cyntler/react-doc-viewer';
 import '@cyntler/react-doc-viewer/dist/index.css';
-import { styled } from '@linaria/react';
 import { Trans, useLingui } from '@lingui/react/macro';
-import { useEffect, useState } from 'react';
+import { type ReactNode, useEffect, useState } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { IconDownload } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import { getFileNameAndExtension } from '~/utils/file/getFileNameAndExtension';
+import '~/third-party-styles/document-viewer.css';
+import * as stylex from '@stylexjs/stylex';
+import {
+  background,
+  backgroundTransparent,
+  borderColor,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const MS_OFFICE_EXTENSIONS = [
   'doc',
@@ -28,86 +38,88 @@ const MS_OFFICE_EXTENSIONS = [
   'odt',
 ];
 
-const StyledDocumentViewerContainer = styled.div`
-  background: ${themeCssVariables.background.secondary};
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh / var(--t-zoom, 1) - 200px);
-  min-height: 500px;
-  position: relative;
-  width: 100%;
+const styles = stylex.create({
+  documentViewerContainer: {
+    backgroundColor: background['--t-background-secondary'],
+    display: 'flex',
+    flexDirection: 'column',
+    height: 'calc(100vh / var(--t-zoom, 1) - 200px)',
+    minHeight: '500px',
+    position: 'relative',
+    width: '100%',
+  },
+  documentViewerContainerTransparent: {
+    backgroundColor: 'transparent',
+  },
+  csvTable: {
+    borderCollapse: 'collapse',
+    fontSize: fontSize['--t-font-size-sm'],
+    textAlign: 'left',
+    width: '100%',
+  },
+  csvHeaderCell: {
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: 1,
+    color: fontColor['--t-font-color-tertiary'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    height: spacing['--t-spacing-8'],
+    paddingBlock: 0,
+    paddingInline: spacing['--t-spacing-2'],
+  },
+  csvRow: {
+    backgroundColor: {
+      default: null,
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: 1,
+  },
+  csvCell: {
+    color: fontColor['--t-font-color-secondary'],
+    height: spacing['--t-spacing-8'],
+    maxWidth: '200px',
+    overflow: 'hidden',
+    paddingBlock: 0,
+    paddingInline: spacing['--t-spacing-2'],
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  unavailablePreviewContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-4'],
+    height: '100%',
+    justifyContent: 'center',
+    paddingBlock: spacing['--t-spacing-8'],
+    paddingInline: spacing['--t-spacing-8'],
+    textAlign: 'center',
+  },
+  lightMessage: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-sm'],
+  },
+});
 
-  #react-doc-viewer #header-bar {
-    display: none;
-  }
-
-  #react-doc-viewer #pdf-controls {
-    display: none !important;
-  }
-
-  #react-doc-viewer,
-  #proxy-renderer,
-  #msdoc-renderer,
-  #html-renderer,
-  #html-renderer iframe,
-  iframe {
-    background: none;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    overflow: auto;
-    width: 100%;
-  }
-`;
-
-const StyledUnavailablePreviewContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[4]};
-  height: 100%;
-  justify-content: center;
-  padding: ${themeCssVariables.spacing[8]};
-  text-align: center;
-`;
-
-const StyledLightMessage = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.sm};
-`;
-
-const StyledCsvTable = styled.table`
-  border-collapse: collapse;
-  font-size: ${themeCssVariables.font.size.sm};
-  text-align: left;
-  width: 100%;
-
-  th {
-    border-bottom: 1px solid ${themeCssVariables.border.color.light};
-    color: ${themeCssVariables.font.color.tertiary};
-    font-weight: ${themeCssVariables.font.weight.medium};
-    height: ${themeCssVariables.spacing[8]};
-    padding: 0 ${themeCssVariables.spacing[2]};
-  }
-
-  td {
-    color: ${themeCssVariables.font.color.secondary};
-    height: ${themeCssVariables.spacing[8]};
-    max-width: 200px;
-    overflow: hidden;
-    padding: 0 ${themeCssVariables.spacing[2]};
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  tbody tr {
-    border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  }
-
-  tbody tr:hover {
-    background-color: ${themeCssVariables.background.transparent.light};
-  }
-`;
+const DocumentViewerContainer = ({
+  children,
+  isTransparent = false,
+}: {
+  children: ReactNode;
+  isTransparent?: boolean;
+}) => (
+  <div
+    data-document-viewer
+    {...stylex.props(
+      styles.documentViewerContainer,
+      isTransparent && styles.documentViewerContainerTransparent,
+    )}
+  >
+    {children}
+  </div>
+);
 
 type DocumentViewerProps = {
   documentName: string;
@@ -208,7 +220,7 @@ export const DocumentViewer = ({
 
   if (!isPreviewable) {
     return (
-      <StyledDocumentViewerContainer>
+      <DocumentViewerContainer>
         <UnavailableFilePreview
           fileName={documentName}
           fileUrl={documentUrl}
@@ -226,76 +238,80 @@ export const DocumentViewer = ({
             )
           }
         />
-      </StyledDocumentViewerContainer>
+      </DocumentViewerContainer>
     );
   }
 
   if (isVideo) {
     return (
-      <StyledDocumentViewerContainer>
+      <DocumentViewerContainer>
         <VideoPreview
           key={documentUrl}
           videoName={documentName}
           videoUrl={documentUrl}
         />
-      </StyledDocumentViewerContainer>
+      </DocumentViewerContainer>
     );
   }
 
   if (fileExtension === 'csv') {
     if (!isDefined(csvPreview)) {
       return (
-        <StyledDocumentViewerContainer>
+        <DocumentViewerContainer>
           <Trans>Loading csv ... </Trans>
-        </StyledDocumentViewerContainer>
+        </DocumentViewerContainer>
       );
     }
     return (
-      <StyledDocumentViewerContainer style={{ background: 'transparent' }}>
-        <StyledCsvTable>
+      <DocumentViewerContainer isTransparent>
+        <table {...stylex.props(styles.csvTable)}>
           <thead>
             <tr>
               {csvPreview.headers.map((header, columnIndex) => (
-                <th key={columnIndex}>{header}</th>
+                <th key={columnIndex} {...stylex.props(styles.csvHeaderCell)}>
+                  {header}
+                </th>
               ))}
             </tr>
           </thead>
           <tbody>
             {csvPreview.rows.map((row, rowIndex) => (
-              <tr key={rowIndex}>
+              <tr key={rowIndex} {...stylex.props(styles.csvRow)}>
                 {row.map((cell, cellIndex) => (
-                  <td key={cellIndex}>{cell}</td>
+                  <td key={cellIndex} {...stylex.props(styles.csvCell)}>
+                    {cell}
+                  </td>
                 ))}
               </tr>
             ))}
           </tbody>
-        </StyledCsvTable>
-      </StyledDocumentViewerContainer>
+        </table>
+      </DocumentViewerContainer>
     );
   }
 
   if (isMsOfficeFile && isPrivateUrl(documentUrl)) {
     return (
-      <StyledDocumentViewerContainer>
-        <StyledUnavailablePreviewContainer>
-          <StyledLightMessage>
+      <DocumentViewerContainer>
+        <div {...stylex.props(styles.unavailablePreviewContainer)}>
+          <div {...stylex.props(styles.lightMessage)}>
             <Trans>
               This file cannot be previewed because it is hosted locally.
             </Trans>
-          </StyledLightMessage>
+          </div>
           <Button
             startIcon={<IconDownload />}
             onClick={() => downloadFile(documentUrl, documentName)}
             size="sm"
             variant="outline"
           >{t`Download`}</Button>
-        </StyledUnavailablePreviewContainer>
-      </StyledDocumentViewerContainer>
+        </div>
+      </DocumentViewerContainer>
     );
   }
 
   return (
-    <StyledDocumentViewerContainer>
+    <DocumentViewerContainer>
       <DocViewer
         documents={[
           {
@@ -332,6 +348,6 @@ export const DocumentViewer = ({
           disableThemeScrollbar: true,
         }}
       />
-    </StyledDocumentViewerContainer>
+    </DocumentViewerContainer>
   );
 };

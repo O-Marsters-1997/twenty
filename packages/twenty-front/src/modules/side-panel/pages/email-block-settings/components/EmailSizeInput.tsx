@@ -1,31 +1,45 @@
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
-
 import { parseCssSizeValue } from '@/advanced-text-editor/utils/parseCssSizeValue';
-import { StyledEmailFieldLabel } from '@/side-panel/pages/email-block-settings/components/StyledEmailFieldLabel';
+import { EmailFieldLabel } from '@/side-panel/pages/email-block-settings/components/EmailFieldLabel';
 import { TextInput } from '@/ui/input/components/TextInput';
+import * as stylex from '@stylexjs/stylex';
+import {
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledRow = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-
-  & > :first-child {
-    flex: 1;
-  }
-`;
-
-const StyledUnitSelect = styled.select`
-  background: ${themeCssVariables.background.transparent.lighter};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  color: ${themeCssVariables.font.color.secondary};
-  cursor: pointer;
-  font-family: inherit;
-  font-size: ${themeCssVariables.font.size.sm};
-  height: 32px;
-  padding: 0 ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  row: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+  },
+  grow: {
+    flex: '1',
+  },
+  unitSelect: {
+    background: backgroundTransparent['--t-background-transparent-lighter'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-medium'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    color: fontColor['--t-font-color-secondary'],
+    cursor: 'pointer',
+    fontFamily: 'inherit',
+    fontSize: fontSize['--t-font-size-sm'],
+    height: '32px',
+    paddingTop: '0',
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: '0',
+    paddingLeft: spacing['--t-spacing-1'],
+  },
+});
 
 const SIZE_UNITS = ['px', '%', 'em'] as const;
 
@@ -63,25 +77,28 @@ export const EmailSizeInput = ({
 
   return (
     <div>
-      <StyledEmailFieldLabel>{label}</StyledEmailFieldLabel>
-      <StyledRow>
-        <TextInput
-          value={displayedAmount}
-          onChange={(nextAmount) => commit(nextAmount, unit)}
-          placeholder={placeholder ?? '0'}
-          fullWidth
-        />
-        <StyledUnitSelect
+      <EmailFieldLabel>{label}</EmailFieldLabel>
+      <div {...stylex.props(styles.row)}>
+        <div {...stylex.props(styles.grow)}>
+          <TextInput
+            value={displayedAmount}
+            onChange={(nextAmount) => commit(nextAmount, unit)}
+            placeholder={placeholder ?? '0'}
+            fullWidth
+          />
+        </div>
+        <select
           value={unit}
           onChange={(event) => commit(displayedAmount, event.target.value)}
+          {...stylex.props(styles.unitSelect)}
         >
           {SIZE_UNITS.map((sizeUnit) => (
             <option key={sizeUnit} value={sizeUnit}>
               {sizeUnit}
             </option>
           ))}
-        </StyledUnitSelect>
-      </StyledRow>
+        </select>
+      </div>
     </div>
   );
 };

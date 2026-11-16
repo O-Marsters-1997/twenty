@@ -11,13 +11,12 @@ import { RelativeDatePickerHeader } from '@/ui/input/components/internal/date/co
 import { RelativeDateTimeRangeText } from '@/ui/input/components/internal/date/components/RelativeDateTimeRangeText';
 import { StyledDatePickerContainer } from '@/ui/input/components/internal/date/components/StyledDatePickerContainer';
 import { getRelativeDatePickerCalendarRange } from '@/ui/input/components/internal/date/utils/getRelativeDatePickerCalendarRange';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { Suspense, lazy, type ComponentType } from 'react';
 import type { DatePickerProps as ReactDatePickerLibProps } from 'react-datepicker';
 import { SKELETON_HEIGHT_SIZES } from 'twenty-ui/primitives/feedback';
 
-import 'react-datepicker/dist/react-datepicker.css';
+import '~/third-party-styles/react-datepicker.css';
 
 import { IconCalendarX } from 'twenty-ui/icon';
 import { Text } from 'twenty-ui/primitives/typography';
@@ -27,59 +26,79 @@ import { useUserFirstDayOfTheWeek } from '@/ui/input/components/internal/date/ho
 import { useUserTimezone } from '@/ui/input/components/internal/date/hooks/useUserTimezone';
 import { Temporal } from 'temporal-polyfill';
 
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { background, backgroundTransparent, borderColor, borderRadius, fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledOuterWrapper = styled.div`
-  align-items: flex-start;
-  display: flex;
-  flex-direction: row;
-  position: relative;
-  width: 280px;
-`;
-
-const StyledSeparator = styled.div`
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  width: 100%;
-`;
-
-const StyledButtonContainer = styled.div`
-  align-items: center;
-  border-radius: calc(
-    ${themeCssVariables.border.radius.md} - ${themeCssVariables.spacing[1]}
-  );
-  box-sizing: border-box;
-  cursor: pointer;
-  display: flex;
-  height: 32px;
-  margin: ${themeCssVariables.spacing[1]};
-  padding: ${themeCssVariables.spacing[1]};
-  width: auto;
-
-  &:hover {
-    background: ${themeCssVariables.background.transparent.light};
-  }
-`;
-
-const StyledButtonContent = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  justify-content: start;
-`;
-
-const StyledDatePickerFallback = styled.div`
-  align-items: center;
-  background: ${themeCssVariables.background.secondary};
-  border-radius: ${themeCssVariables.border.radius.md};
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  height: 300px;
-  justify-content: center;
-  padding: ${themeCssVariables.spacing[4]};
-  width: 280px;
-`;
+const styles = stylex.create({
+  outerWrapper: {
+    alignItems: 'flex-start',
+    display: 'flex',
+    flexDirection: 'row',
+    position: 'relative',
+    width: '280px',
+  },
+  separator: {
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: borderColor['--t-border-color-light'],
+    width: '100%',
+  },
+  buttonContainer: {
+    alignItems: 'center',
+    borderTopLeftRadius: `calc(
+    ${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']}
+  )`,
+    borderTopRightRadius: `calc(
+    ${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']}
+  )`,
+    borderBottomRightRadius: `calc(
+    ${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']}
+  )`,
+    borderBottomLeftRadius: `calc(
+    ${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']}
+  )`,
+    boxSizing: 'border-box',
+    cursor: 'pointer',
+    display: 'flex',
+    height: '32px',
+    marginTop: spacing['--t-spacing-1'],
+    marginRight: spacing['--t-spacing-1'],
+    marginBottom: spacing['--t-spacing-1'],
+    marginLeft: spacing['--t-spacing-1'],
+    paddingTop: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-1'],
+    width: 'auto',
+    backgroundColor: { default: null, ':hover': backgroundTransparent['--t-background-transparent-light'] },
+  },
+  buttonContent: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    justifyContent: 'start',
+  },
+  datePickerFallback: {
+    alignItems: 'center',
+    backgroundColor: background['--t-background-secondary'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    height: '300px',
+    justifyContent: 'center',
+    paddingTop: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingBottom: spacing['--t-spacing-4'],
+    paddingLeft: spacing['--t-spacing-4'],
+    width: '280px',
+  },
+});
 
 type DateTimePickerProps = {
   instanceId: string;
@@ -245,7 +264,7 @@ export const DateTimePicker = ({
     convertFirstDayOfTheWeekToCalendarStartDayNumber(userFirstDayOfTheWeek);
 
   return (
-    <StyledOuterWrapper>
+    <div {...stylex.props(styles.outerWrapper)}>
       <StyledDatePickerContainer
         calendarDisabled={isRelative && !isSubDayRelativeUnit}
       >
@@ -269,12 +288,12 @@ export const DateTimePicker = ({
         ) : (
           <Suspense
             fallback={
-              <StyledDatePickerFallback>
+              <div {...stylex.props(styles.datePickerFallback)}>
                 <SkeletonLine width={200} height={SKELETON_HEIGHT_SIZES.m} />
                 <SkeletonLine width={240} height={SKELETON_HEIGHT_SIZES.l} />
                 <SkeletonLine width={220} height={SKELETON_HEIGHT_SIZES.m} />
                 <SkeletonLine width={180} height={SKELETON_HEIGHT_SIZES.s} />
-              </StyledDatePickerFallback>
+              </div>
             }
           >
             <ReactDatePicker
@@ -336,16 +355,16 @@ export const DateTimePicker = ({
         )}
         {clearable && (
           <>
-            <StyledSeparator />
-            <StyledButtonContainer onClick={() => onClear?.()}>
-              <StyledButtonContent>
+            <div {...stylex.props(styles.separator)} />
+            <div onClick={() => onClear?.()} {...stylex.props(styles.buttonContainer)}>
+              <div {...stylex.props(styles.buttonContent)}>
                 <IconCalendarX size={theme.icon.size.md} />
                 <Text>{t`Clear`}</Text>
-              </StyledButtonContent>
-            </StyledButtonContainer>
+              </div>
+            </div>
           </>
         )}
       </StyledDatePickerContainer>
-    </StyledOuterWrapper>
+    </div>
   );
 };

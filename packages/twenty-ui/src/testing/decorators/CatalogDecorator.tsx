@@ -1,9 +1,15 @@
 import { isNumber, isString } from '@sniptt/guards';
 import { type Decorator } from '@storybook/react-vite';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 import { type ComponentProps, type JSX } from 'react';
 
-import styles from './CatalogDecorator.module.scss';
+import { mergeStylexProps } from '../../utilities/internal/mergeStylexProps';
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from '../../theme/tokens.stylex';
 
 const emptyDimension = {
   name: '',
@@ -51,29 +57,32 @@ export const CatalogDecorator: Decorator = (Story, context) => {
   ] = dimensions as CatalogDimension[];
 
   return (
-    <div className={styles.container}>
+    <div {...stylex.props(styles.container)}>
       {dimension4.values.map((value4: any, index4: number) => (
-        <div className={styles.columnContainer} key={`d4-${index4}`}>
-          <div className={styles.columnTitle}>
+        <div {...stylex.props(styles.columnContainer)} key={`d4-${index4}`}>
+          <div {...stylex.props(styles.columnTitle)}>
             {dimension4.labels?.(value4) ??
               (isStringOrNumber(value4) ? value4 : '')}
           </div>
           {dimension3.values.map((value3: any, index3: number) => (
-            <div className={styles.rowsContainer} key={`d3-${index3}`}>
-              <div className={styles.rowsTitle}>
+            <div {...stylex.props(styles.rowsContainer)} key={`d3-${index3}`}>
+              <div {...stylex.props(styles.rowsTitle)}>
                 {dimension3.labels?.(value3) ??
                   (isStringOrNumber(value3) ? value3 : '')}
               </div>
               {dimension2.values.map((value2: any, index2: number) => (
-                <div className={styles.rowContainer} key={`d2-${index2}`}>
-                  <div className={styles.rowTitle}>
+                <div
+                  {...stylex.props(styles.rowContainer)}
+                  key={`d2-${index2}`}
+                >
+                  <div {...stylex.props(styles.rowTitle)}>
                     {dimension2.labels?.(value2) ??
                       (isStringOrNumber(value2) ? value2 : '')}
                   </div>
                   {dimension1.values.map((value1: any, index1: number) => {
                     return (
                       <div
-                        className={styles.cellContainer}
+                        {...stylex.props(styles.cellContainer)}
                         key={`d1-${index1}`}
                         id={
                           dimensions.length > 1
@@ -81,13 +90,13 @@ export const CatalogDecorator: Decorator = (Story, context) => {
                             : value1
                         }
                       >
-                        <span className={styles.elementTitle}>
+                        <span {...stylex.props(styles.elementTitle)}>
                           {dimension1.labels?.(value1) ??
                             (isStringOrNumber(value1) ? value1 : '')}
                         </span>
                         <div
-                          className={clsx(
-                            styles.elementContainer,
+                          {...mergeStylexProps(
+                            stylex.props(styles.elementContainer),
                             options?.elementContainer?.className,
                           )}
                           style={{
@@ -119,3 +128,64 @@ export const CatalogDecorator: Decorator = (Story, context) => {
     </div>
   );
 };
+
+const styles = stylex.create({
+  columnTitle: {
+    fontSize: fontSize['--t-font-size-lg'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    margin: spacing['--t-spacing-2'],
+  },
+  rowsTitle: {
+    color: fontColor['--t-font-color-secondary'],
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    margin: spacing['--t-spacing-2'],
+    width: 100,
+  },
+  rowTitle: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    margin: spacing['--t-spacing-2'],
+    width: 100,
+  },
+  elementTitle: {
+    color: fontColor['--t-font-color-light'],
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    marginBottom: spacing['--t-spacing-1'],
+    textAlign: 'center',
+    textTransform: 'uppercase',
+  },
+  container: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  columnContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    padding: spacing['--t-spacing-2'],
+  },
+  rowsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+  },
+  rowContainer: {
+    display: 'flex',
+    flexBasis: '0%',
+    flexDirection: 'row',
+    flexGrow: 1,
+    flexShrink: 1,
+    gap: spacing['--t-spacing-2'],
+  },
+  elementContainer: {
+    display: 'flex',
+  },
+  cellContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    padding: spacing['--t-spacing-2'],
+  },
+});

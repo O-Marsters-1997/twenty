@@ -1,6 +1,10 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { type ReactNode } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import {
+  borderColor,
+  borderRadius,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type NestedSettingsRowProps = {
   children: ReactNode;
@@ -8,56 +12,60 @@ type NestedSettingsRowProps = {
   guideOffset?: string;
 };
 
-const StyledNestedRow = styled.div`
-  margin-left: ${themeCssVariables.spacing[8]};
-  padding-left: ${themeCssVariables.spacing[4]};
-  position: relative;
-`;
-
-const StyledGuide = styled.div<{
-  isLast: boolean;
-  guideOffset: string;
-}>`
-  bottom: 0;
-  left: 0;
-  pointer-events: none;
-  position: absolute;
-  top: 0;
-  width: ${themeCssVariables.spacing[4]};
-
-  &::before {
-    background: ${themeCssVariables.border.color.strong};
-    bottom: 0;
-    content: '';
-    display: ${({ isLast }) => (isLast ? 'none' : 'block')};
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 1px;
-  }
-
-  &::after {
-    border-bottom: 1px solid ${themeCssVariables.border.color.strong};
-    border-bottom-left-radius: ${themeCssVariables.border.radius.sm};
-    border-left: 1px solid ${themeCssVariables.border.color.strong};
-    box-sizing: border-box;
-    content: '';
-    height: ${({ guideOffset }) => guideOffset};
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-  }
-`;
-
 // Settings rows own their top padding, so the guide covers that inset too.
 export const NestedSettingsRow = ({
   children,
   isLast = false,
   guideOffset = '50%',
 }: NestedSettingsRowProps) => (
-  <StyledNestedRow>
-    <StyledGuide aria-hidden="true" isLast={isLast} guideOffset={guideOffset} />
+  <div {...stylex.props(styles.nestedRow)}>
+    <div aria-hidden="true" {...stylex.props(styles.guide)}>
+      <div {...stylex.props(styles.line, isLast && styles.lineHidden)} />
+      <div {...stylex.props(styles.elbow, styles.elbowHeight(guideOffset))} />
+    </div>
     {children}
-  </StyledNestedRow>
+  </div>
 );
+
+const styles = stylex.create({
+  nestedRow: {
+    marginLeft: spacing['--t-spacing-8'],
+    paddingLeft: spacing['--t-spacing-4'],
+    position: 'relative',
+  },
+  guide: {
+    bottom: 0,
+    left: 0,
+    pointerEvents: 'none',
+    position: 'absolute',
+    top: 0,
+    width: spacing['--t-spacing-4'],
+  },
+  line: {
+    backgroundColor: borderColor['--t-border-color-strong'],
+    bottom: 0,
+    display: 'block',
+    left: 0,
+    position: 'absolute',
+    top: 0,
+    width: 1,
+  },
+  lineHidden: {
+    display: 'none',
+  },
+  elbow: {
+    borderBottomColor: borderColor['--t-border-color-strong'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: 1,
+    borderLeftColor: borderColor['--t-border-color-strong'],
+    borderLeftStyle: 'solid',
+    borderLeftWidth: 1,
+    boxSizing: 'border-box',
+    left: 0,
+    position: 'absolute',
+    top: 0,
+    width: '100%',
+  },
+  elbowHeight: (height: string) => ({ height }),
+});

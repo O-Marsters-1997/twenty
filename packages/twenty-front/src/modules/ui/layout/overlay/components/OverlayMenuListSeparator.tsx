@@ -1,12 +1,14 @@
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { borderColor } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledSeparator = styled.div`
-  background-color: ${themeCssVariables.border.color.light};
-  min-height: 1px;
-  width: 100%;
-`;
+const styles = stylex.create({
+  separator: {
+    backgroundColor: borderColor['--t-border-color-light'],
+    minHeight: '1px',
+    width: '100%',
+  },
+});
 
 export const OverlayMenuListSeparator = () => (
-  <StyledSeparator role="separator" />
+  <div role="separator" {...stylex.props(styles.separator)} />
 );

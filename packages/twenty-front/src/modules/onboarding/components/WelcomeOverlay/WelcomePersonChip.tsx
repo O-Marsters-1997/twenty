@@ -1,6 +1,6 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { Avatar, type AvatarSize } from 'twenty-ui/primitives/data-display';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMemberState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
@@ -8,31 +8,39 @@ import { getAbsoluteImageUrl } from '~/utils/image/getAbsoluteImageUrl';
 
 type WelcomePersonChipSizeVariant = 'default' | 'compact';
 
-const StyledChip = styled.div<{ sizeVariant: WelcomePersonChipSizeVariant }>`
-  align-items: center;
-  display: inline-flex;
-  gap: ${({ sizeVariant }) =>
-    sizeVariant === 'compact'
-      ? themeCssVariables.spacing[1]
-      : themeCssVariables.spacing[2]};
-  padding: ${({ sizeVariant }) =>
-    sizeVariant === 'compact'
-      ? `${themeCssVariables.spacing['0.5']} ${themeCssVariables.spacing[1]}`
-      : `${themeCssVariables.spacing[1]} ${themeCssVariables.spacing[2]}`};
-`;
+const NARROW_VIEWPORT = '@media (max-width: 600px)';
 
-const StyledPersonName = styled.span`
-  color: ${themeCssVariables.font.color.primary};
-  max-width: min(calc(40vw / var(--t-zoom, 1)), 360px);
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-
-  @media (max-width: 600px) {
-    max-width: min(calc(70vw / var(--t-zoom, 1)), 360px);
-  }
-`;
+const styles = stylex.create({
+  chip: {
+    alignItems: 'center',
+    display: 'inline-flex',
+  },
+  chipDefault: {
+    gap: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-1'],
+  },
+  chipCompact: {
+    gap: spacing['--t-spacing-1'],
+    paddingBottom: spacing['--t-spacing-0_5'],
+    paddingLeft: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingTop: spacing['--t-spacing-0_5'],
+  },
+  personName: {
+    color: fontColor['--t-font-color-primary'],
+    maxWidth: {
+      default: 'min(calc(40vw / var(--t-zoom, 1)), 360px)',
+      [NARROW_VIEWPORT]: 'min(calc(70vw / var(--t-zoom, 1)), 360px)',
+    },
+    minWidth: '0',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+});
 
 type WelcomePersonChipProps = {
   avatarSize?: AvatarSize;
@@ -49,7 +57,12 @@ export const WelcomePersonChip = ({
   const fullName = `${firstName} ${lastName}`.trim();
 
   return (
-    <StyledChip sizeVariant={sizeVariant}>
+    <div
+      {...stylex.props(
+        styles.chip,
+        sizeVariant === 'compact' ? styles.chipCompact : styles.chipDefault,
+      )}
+    >
       <Avatar
         shape="circle"
         size={avatarSize}
@@ -57,7 +70,7 @@ export const WelcomePersonChip = ({
         colorSeed={currentWorkspaceMember?.id}
         src={getAbsoluteImageUrl(currentWorkspaceMember?.avatarUrl)}
       />
-      <StyledPersonName>{fullName}</StyledPersonName>
-    </StyledChip>
+      <span {...stylex.props(styles.personName)}>{fullName}</span>
+    </div>
   );
 };

@@ -12,26 +12,27 @@ import { composeEmailDefaultToComponentState } from '@/side-panel/pages/compose-
 import { SidePanelFooter } from '@/ui/layout/side-panel/components/SidePanelFooter';
 import { useHotkeysOnFocusedElement } from '@/ui/utilities/hotkey/hooks/useHotkeysOnFocusedElement';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { IconPaperclip, IconSend, IconTrash } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
 import { IconButton } from 'twenty-ui/components/input';
 
 import { useAttachEmailFiles } from '@/activities/emails/hooks/useAttachEmailFiles';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-`;
-
-const StyledContent = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  overflow-y: auto;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+  },
+  content: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    overflowY: 'auto',
+  },
+});
 
 export const SidePanelComposeEmailPage = () => {
   const composeEmailConnectedAccountId = useAtomComponentStateValue(
@@ -84,13 +85,13 @@ export const SidePanelComposeEmailPage = () => {
   }
 
   return (
-    <StyledContainer>
-      <StyledContent>
+    <div {...stylex.props(styles.container)}>
+      <div {...stylex.props(styles.content)}>
         <EmailComposerFields
           composerState={composerState}
           contextRecord={composeEmailContextRecord}
         />
-      </StyledContent>
+      </div>
       <SidePanelFooter
         actions={[
           <IconButton
@@ -123,6 +124,6 @@ export const SidePanelComposeEmailPage = () => {
           >{t`Send`}</Button>,
         ]}
       />
-    </StyledContainer>
+    </div>
   );
 };

@@ -6,13 +6,11 @@ import { runComponentConformance } from '@test-utilities/conformance/runComponen
 import { Button } from '@ui/primitives/input/Button/Button';
 
 import { InlineBanner } from '../InlineBanner';
-import styles from '../InlineBanner.module.scss';
 
 runComponentConformance({
   name: 'InlineBanner',
   element: <InlineBanner layout="compact">Sync result</InlineBanner>,
   refInstanceOf: HTMLDivElement,
-  ownClassName: styles.banner,
 });
 
 describe('InlineBanner composition', () => {

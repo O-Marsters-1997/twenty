@@ -1,31 +1,41 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 
 import { Section } from 'twenty-ui/components/layout';
 import { IconKey, IconLego, IconUsers } from 'twenty-ui/icon';
 import { Checkbox } from 'twenty-ui/primitives/input';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  animationDuration,
+  backgroundTransparent,
+  borderRadius,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledCheckboxContainer = styled.div<{ disabled: boolean }>`
-  align-items: center;
-  border-radius: ${themeCssVariables.border.radius.sm};
-  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
-  display: flex;
-  justify-content: space-between;
-  padding: ${themeCssVariables.spacing[1]};
-  transition: background-color
-    calc(${themeCssVariables.animation.duration.normal} * 1s) ease;
-
-  &:hover {
-    background-color: ${themeCssVariables.background.transparent.light};
-  }
-`;
-
-const StyledCheckboxLabel = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  checkboxContainer: {
+    alignItems: 'center',
+    backgroundColor: {
+      default: null,
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    cursor: 'pointer',
+    display: 'flex',
+    justifyContent: 'space-between',
+    paddingBlock: spacing['--t-spacing-1'],
+    paddingInline: spacing['--t-spacing-1'],
+    transition: `background-color calc(${animationDuration['--t-animation-duration-normal']} * 1s) ease`,
+  },
+  checkboxContainerDisabled: {
+    cursor: 'not-allowed',
+  },
+  checkboxLabel: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+  },
+});
 
 type SettingsRoleApplicabilityValues = {
   canBeAssignedToUsers: boolean;
@@ -74,18 +84,21 @@ export const SettingsRoleApplicability = ({
       />
       <div>
         {options.map((option) => (
-          <StyledCheckboxContainer
-            disabled={!isEditable}
+          <div
+            {...stylex.props(
+              styles.checkboxContainer,
+              !isEditable && styles.checkboxContainerDisabled,
+            )}
             key={option.key}
             onClick={() =>
               isEditable &&
               onApplicabilityChange(option.key, !values[option.key])
             }
           >
-            <StyledCheckboxLabel>
+            <div {...stylex.props(styles.checkboxLabel)}>
               <option.Icon size={theme.icon.size.sm} />
               <span>{option.label}</span>
-            </StyledCheckboxLabel>
+            </div>
             <Checkbox
               aria-label={option.label}
               checked={values[option.key]}
@@ -95,7 +108,7 @@ export const SettingsRoleApplicability = ({
               disabled={!isEditable}
               onClick={(event) => event.stopPropagation()}
             />
-          </StyledCheckboxContainer>
+          </div>
         ))}
       </div>
     </Section.Root>

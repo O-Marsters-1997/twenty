@@ -9,30 +9,31 @@ import { settingsDraftRoleFamilyState } from '@/settings/roles/states/settingsDr
 import { TableCell } from '@/ui/layout/table/components/TableCell';
 import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
 import { TableRow } from '@/ui/layout/table/components/TableRow';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { themeCssVariables } from 'twenty-ui/theme';
 import { type ObjectPermission, type Role } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledPermissionContent = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  white-space: nowrap;
-`;
-
-const StyledPermissionLabel = styled.span`
-  color: ${themeCssVariables.font.color.primary};
-`;
-
-const StyledOverrideInfo = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  white-space: nowrap;
-`;
+const styles = stylex.create({
+  permissionContent: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    whiteSpace: 'nowrap',
+  },
+  permissionLabel: {
+    color: fontColor['--t-font-color-primary'],
+  },
+  overrideInfo: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    whiteSpace: 'nowrap',
+  },
+});
 
 type OverridableCheckboxType = 'no_cta' | 'default' | 'override';
 
@@ -133,14 +134,14 @@ export const SettingsRolePermissionsObjectLevelObjectFormObjectLevelTableRow =
         cursor={!isEditable ? 'default' : 'pointer'}
       >
         <TableCell gap={themeCssVariables.spacing[1]}>
-          <StyledPermissionContent>
+          <div {...stylex.props(styles.permissionContent)}>
             <PermissionIcon
               permission={permission.key as SettingsRoleObjectPermissionKey}
               state={isRevoked ? 'revoked' : 'granted'}
             />
-            <StyledPermissionLabel>{label}</StyledPermissionLabel>
-          </StyledPermissionContent>
-          <StyledOverrideInfo>
+            <span {...stylex.props(styles.permissionLabel)}>{label}</span>
+          </div>
+          <div {...stylex.props(styles.overrideInfo)}>
             {isRevoked ? (
               <>
                 {' · '}
@@ -157,7 +158,7 @@ export const SettingsRolePermissionsObjectLevelObjectFormObjectLevelTableRow =
                 {t`This role can ${humanReadableAction} all records`}
               </>
             ) : null}
-          </StyledOverrideInfo>
+          </div>
         </TableCell>
         <TableCell
           align="right"

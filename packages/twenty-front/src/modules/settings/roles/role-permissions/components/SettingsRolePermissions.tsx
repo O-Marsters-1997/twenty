@@ -3,14 +3,16 @@ import { SettingsRolePermissionsObjectsSection } from '@/settings/roles/role-per
 import { SettingsRolePermissionsSettingsSection } from '@/settings/roles/role-permissions/permission-flags/components/SettingsRolePermissionsSettingsSection';
 import { SettingsRolePermissionsToolSection } from '@/settings/roles/role-permissions/permission-flags/components/SettingsRolePermissionsToolSection';
 import { SettingsRoleDraftSyncEffect } from '@/settings/roles/role/components/SettingsRoleDraftSyncEffect';
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledRolePermissionsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[8]};
-`;
+const styles = stylex.create({
+  rolePermissionsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-8'],
+  },
+});
 
 type SettingsRolePermissionsProps = {
   roleId: string;
@@ -24,7 +26,7 @@ export const SettingsRolePermissions = ({
   fromAgentId,
 }: SettingsRolePermissionsProps) => {
   return (
-    <StyledRolePermissionsContainer>
+    <div {...stylex.props(styles.rolePermissionsContainer)}>
       <SettingsRoleDraftSyncEffect roleId={roleId} />
       <SettingsRolePermissionsObjectsSection
         roleId={roleId}
@@ -43,6 +45,6 @@ export const SettingsRolePermissions = ({
         roleId={roleId}
         isEditable={isEditable}
       />
-    </StyledRolePermissionsContainer>
+    </div>
   );
 };

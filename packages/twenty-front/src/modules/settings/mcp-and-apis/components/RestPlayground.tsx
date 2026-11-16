@@ -7,39 +7,26 @@ import {
 import { type PlaygroundSchemas } from '@/settings/mcp-and-apis/types/PlaygroundSchemas';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useState, lazy, Suspense } from 'react';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 
 import { SettingsPath } from 'twenty-shared/types';
 import { getSettingsPath } from 'twenty-shared/utils';
 import { REACT_APP_SERVER_BASE_URL } from '~/config';
-import { useThemeColorScheme, themeCssVariables } from 'twenty-ui/theme';
+import { useThemeColorScheme } from 'twenty-ui/theme';
+import { borderColor, borderRadius } from 'twenty-ui/theme/tokens.stylex';
+import '~/third-party-styles/scalar.css';
 
-const StyledContainer = styled.div`
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.md};
-  height: 100%;
-  overflow-y: scroll;
-  width: 100%;
-
-  .scalar-api-reference {
-    --scalar-background-1: ${themeCssVariables.background.primary};
-    --scalar-background-2: ${themeCssVariables.background.secondary};
-    --scalar-background-3: ${themeCssVariables.background.tertiary};
-    --scalar-background-accent: ${
-      themeCssVariables.background.transparent.lighter
-    };
-    --scalar-border-color: ${themeCssVariables.border.color.medium};
-    --scalar-color-1: ${themeCssVariables.font.color.primary};
-    --scalar-color-2: ${themeCssVariables.font.color.secondary};
-    --scalar-color-3: ${themeCssVariables.font.color.tertiary};
-  }
-
-  .scalar-app .text-pretty {
-    overflow-wrap: break-word;
-    white-space: normal;
-    word-break: normal;
-  }
-`;
+const styles = stylex.create({
+  container: {
+    borderColor: borderColor['--t-border-color-medium'],
+    borderRadius: borderRadius['--t-border-radius-md'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    height: '100%',
+    overflowY: 'scroll',
+    width: '100%',
+  },
+});
 
 const ApiReferenceReact = lazy(() =>
   import('@scalar/api-reference-react').then((module) => {
@@ -68,7 +55,7 @@ export const RestPlayground = ({ onError, schema }: RestPlaygroundProps) => {
   const fallback = <SkeletonLine width="100%" height="100%" />;
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <RestPlaygroundSchemaFetchEffect
         schema={schema}
         apiKey={playgroundApiKey.token}
@@ -102,6 +89,6 @@ export const RestPlayground = ({ onError, schema }: RestPlaygroundProps) => {
           />
         </Suspense>
       )}
-    </StyledContainer>
+    </div>
   );
 };

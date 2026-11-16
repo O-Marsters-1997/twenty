@@ -1,35 +1,48 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { type Editor } from '@tiptap/react';
 import { CoreObjectNameSingular } from 'twenty-shared/types';
 import { isDefined, TIPTAP_NODE_TYPES } from 'twenty-shared/utils';
 import { LightButton } from 'twenty-ui/components/input';
 import { IconUsers } from 'twenty-ui/icon';
-import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 
 import { useAiChatPendingParticipantMentions } from '@/ai/hooks/useAiChatPendingParticipantMentions';
+import * as stylex from '@stylexjs/stylex';
+import {
+  background,
+  borderRadius,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledBar = styled.div`
-  align-items: center;
-  background: ${themeCssVariables.background.tertiary};
-  border-radius: ${themeCssVariables.border.radius.md};
-  box-sizing: border-box;
-  color: ${themeCssVariables.font.color.secondary};
-  display: flex;
-  font-size: ${themeCssVariables.font.size.sm};
-  gap: ${themeCssVariables.spacing[2]};
-  padding: ${themeCssVariables.spacing[1]} ${themeCssVariables.spacing[1]}
-    ${themeCssVariables.spacing[1]} ${themeCssVariables.spacing[2]};
-  width: 100%;
-`;
-
-const StyledMessage = styled.span`
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
+const styles = stylex.create({
+  bar: {
+    alignItems: 'center',
+    background: background['--t-background-tertiary'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    boxSizing: 'border-box',
+    color: fontColor['--t-font-color-secondary'],
+    display: 'flex',
+    fontSize: fontSize['--t-font-size-sm'],
+    gap: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+  message: {
+    flex: '1',
+    minWidth: '0',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+});
 
 type AiChatParticipantMentionBarProps = {
   editor: Editor | null;
@@ -81,12 +94,14 @@ export const AiChatParticipantMentionBar = ({
   };
 
   return (
-    <StyledBar role="status">
+    <div role="status" {...stylex.props(styles.bar)}>
       <IconUsers size={theme.icon.size.sm} />
-      <StyledMessage title={message}>{message}</StyledMessage>
+      <span title={message} {...stylex.props(styles.message)}>
+        {message}
+      </span>
       <LightButton emphasis="subtle" onClick={handleUndo}>
         {t`Undo`}
       </LightButton>
-    </StyledBar>
+    </div>
   );
 };

@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { type ReactNode, useMemo } from 'react';
 
 import { useObjectNameSingularFromPlural } from '@/object-metadata/hooks/useObjectNameSingularFromPlural';
@@ -37,7 +36,12 @@ import { t } from '@lingui/core/macro';
 import { isNonEmptyArray, isNonEmptyString } from '@sniptt/guards';
 import { isDefined } from 'twenty-shared/utils';
 import { LightButton } from 'twenty-ui/components/input';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  background,
+  borderColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 export type ViewBarDetailsProps = {
   hasFilterButton?: boolean;
@@ -46,59 +50,56 @@ export type ViewBarDetailsProps = {
   objectNamePlural: string;
 };
 
-const StyledBar = styled.div`
-  align-items: center;
-  border-top: 1px solid ${themeCssVariables.border.color.light};
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  min-height: 32px;
-  padding-bottom: ${themeCssVariables.spacing[1]};
-  padding-top: ${themeCssVariables.spacing[1]};
-  z-index: 4;
-`;
-
-const StyledChipContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  gap: ${themeCssVariables.spacing[2]};
-  z-index: 1;
-`;
-
-const StyledActionButtonContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledFilterContainer = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-
-  overflow-x: hidden;
-`;
-
-const StyledSeparatorContainer = styled.div`
-  align-items: flex-start;
-  align-self: stretch;
-  display: flex;
-  padding-bottom: ${themeCssVariables.spacing[2]};
-  padding-left: ${themeCssVariables.spacing[1]};
-  padding-right: ${themeCssVariables.spacing[1]};
-  padding-top: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledSeparator = styled.div`
-  align-self: stretch;
-  background: ${themeCssVariables.background.quaternary};
-  width: 1px;
-`;
-
-const StyledAddFilterContainer = styled.div`
-  z-index: 5;
-`;
+const styles = stylex.create({
+  bar: {
+    alignItems: 'center',
+    borderTopWidth: '1px',
+    borderTopStyle: 'solid',
+    borderTopColor: borderColor['--t-border-color-light'],
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    minHeight: '32px',
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingTop: spacing['--t-spacing-1'],
+    zIndex: '4',
+  },
+  chipContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+    gap: spacing['--t-spacing-2'],
+    zIndex: '1',
+  },
+  actionButtonContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: spacing['--t-spacing-2'],
+  },
+  filterContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    overflowX: 'hidden',
+  },
+  separatorContainer: {
+    alignItems: 'flex-start',
+    alignSelf: 'stretch',
+    display: 'flex',
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingTop: spacing['--t-spacing-2'],
+  },
+  separator: {
+    alignSelf: 'stretch',
+    background: background['--t-background-quaternary'],
+    width: '1px',
+  },
+  addFilterContainer: {
+    zIndex: '5',
+  },
+});
 
 export const ViewBarDetails = ({
   hasFilterButton = false,
@@ -222,13 +223,13 @@ export const ViewBarDetails = ({
   }
 
   return (
-    <StyledBar>
-      <StyledFilterContainer>
+    <div {...stylex.props(styles.bar)}>
+      <div {...stylex.props(styles.filterContainer)}>
         <ScrollWrapper
           componentInstanceId={viewBarId}
           defaultEnableYScroll={false}
         >
-          <StyledChipContainer>
+          <div {...stylex.props(styles.chipContainer)}>
             {isDefined(allSoftDeletedRecordsFilter) && (
               <SoftDeleteFilterChip
                 key={allSoftDeletedRecordsFilter.fieldMetadataId}
@@ -237,9 +238,9 @@ export const ViewBarDetails = ({
               />
             )}
             {isDefined(allSoftDeletedRecordsFilter) && (
-              <StyledSeparatorContainer>
-                <StyledSeparator />
-              </StyledSeparatorContainer>
+              <div {...stylex.props(styles.separatorContainer)}>
+                <div {...stylex.props(styles.separator)} />
+              </div>
             )}
             {currentRecordSorts.map((recordSort) => (
               <EditableSortChip
@@ -249,9 +250,9 @@ export const ViewBarDetails = ({
             ))}
             {isNonEmptyArray(recordFilters) &&
               isNonEmptyArray(currentRecordSorts) && (
-                <StyledSeparatorContainer>
-                  <StyledSeparator />
-                </StyledSeparatorContainer>
+                <div {...stylex.props(styles.separatorContainer)}>
+                  <div {...stylex.props(styles.separator)} />
+                </div>
               )}
             {shouldShowAnyFieldSearchChip && <AnyFieldSearchDropdownButton />}
             {shouldShowAdvancedFilterDropdownButton && (
@@ -270,15 +271,15 @@ export const ViewBarDetails = ({
                 <EditableFilterDropdownButton recordFilter={recordFilter} />
               </ObjectFilterDropdownComponentInstanceContext.Provider>
             ))}
-          </StyledChipContainer>
+          </div>
         </ScrollWrapper>
         {hasFilterButton && (
-          <StyledAddFilterContainer>
+          <div {...stylex.props(styles.addFilterContainer)}>
             <ViewBarDetailsAddFilterButton />
-          </StyledAddFilterContainer>
+          </div>
         )}
-      </StyledFilterContainer>
-      <StyledActionButtonContainer>
+      </div>
+      <div {...stylex.props(styles.actionButtonContainer)}>
         {canResetView && (
           <LightButton
             emphasis="subtle"
@@ -287,7 +288,7 @@ export const ViewBarDetails = ({
           >{t`Reset`}</LightButton>
         )}
         {rightComponent}
-      </StyledActionButtonContainer>
-    </StyledBar>
+      </div>
+    </div>
   );
 };

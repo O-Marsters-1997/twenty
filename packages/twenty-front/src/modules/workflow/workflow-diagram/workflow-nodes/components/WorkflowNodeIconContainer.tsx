@@ -1,15 +1,25 @@
-import { themeCssVariables } from 'twenty-ui/theme';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import { type ReactNode } from 'react';
+import {
+  backgroundTransparent,
+  borderRadius,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledNodeIconContainer = styled.div`
-  align-items: center;
-  background: ${themeCssVariables.background.transparent.light};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  box-sizing: border-box;
-  display: flex;
-  height: 32px;
-  justify-content: center;
-  width: 32px;
-`;
+const styles = stylex.create({
+  root: {
+    alignItems: 'center',
+    background: backgroundTransparent['--t-background-transparent-light'],
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    height: '32px',
+    justifyContent: 'center',
+    width: '32px',
+  },
+});
 
-export { StyledNodeIconContainer as WorkflowNodeIconContainer };
+export const WorkflowNodeIconContainer = ({
+  children,
+}: {
+  children?: ReactNode;
+}) => <div {...stylex.props(styles.root)}>{children}</div>;

@@ -2,43 +2,50 @@ import { OnboardingImportPreviewCompanies } from '@/onboarding/components/import
 import { OnboardingImportPreviewEmails } from '@/onboarding/components/import-contacts/OnboardingImportPreviewEmails';
 import { OnboardingImportPreviewSyncBadge } from '@/onboarding/components/import-contacts/OnboardingImportPreviewSyncBadge';
 import { OnboardingImportPrivacyNote } from '@/onboarding/components/import-contacts/OnboardingImportPrivacyNote';
-import { ONBOARDING_CONTENT_BLOCK_WIDTH } from '@/onboarding/constants/OnboardingContentBlockWidth';
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  background,
+  borderColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
+import { onboardingLayout } from '../../constants/onboardingLayout.stylex';
 
 const PREVIEW_HEIGHT = 198;
 
-const StyledCard = styled.div`
-  align-items: center;
-  background-color: ${themeCssVariables.background.secondary};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: 12px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[3]};
-  max-width: 100%;
-  overflow: hidden;
-  padding-bottom: calc(${themeCssVariables.spacing[3]} - 1px);
-  width: ${ONBOARDING_CONTENT_BLOCK_WIDTH}px;
-`;
-
-const StyledColumns = styled.div`
-  background-color: ${themeCssVariables.border.color.medium};
-  display: flex;
-  gap: 1px;
-  height: ${PREVIEW_HEIGHT}px;
-  position: relative;
-  width: 100%;
-`;
+const styles = stylex.create({
+  card: {
+    alignItems: 'center',
+    backgroundColor: background['--t-background-secondary'],
+    borderColor: borderColor['--t-border-color-medium'],
+    borderRadius: '12px',
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-3'],
+    maxWidth: '100%',
+    overflow: 'hidden',
+    paddingBottom: `calc(${spacing['--t-spacing-3']} - 1px)`,
+    width: onboardingLayout.contentBlockWidth,
+  },
+  columns: {
+    backgroundColor: borderColor['--t-border-color-medium'],
+    display: 'flex',
+    gap: '1px',
+    height: `${PREVIEW_HEIGHT}px`,
+    position: 'relative',
+    width: '100%',
+  },
+});
 
 export const OnboardingImportPreview = () => (
-  <StyledCard>
-    <StyledColumns>
+  <div {...stylex.props(styles.card)}>
+    <div {...stylex.props(styles.columns)}>
       <OnboardingImportPreviewEmails />
       <OnboardingImportPreviewCompanies />
       <OnboardingImportPreviewSyncBadge />
-    </StyledColumns>
+    </div>
     <OnboardingImportPrivacyNote />
-  </StyledCard>
+  </div>
 );

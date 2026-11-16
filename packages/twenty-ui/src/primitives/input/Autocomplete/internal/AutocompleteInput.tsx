@@ -1,10 +1,11 @@
 import { Autocomplete as AutocompletePrimitive } from '@base-ui/react/autocomplete';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 import { useContext } from 'react';
 
-import inputStyles from '@ui/primitives/input/Input/Input.module.scss';
 import { InputGroupContext } from '@ui/primitives/input/InputGroup/internal/InputGroupContext';
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
+import { inputStyles } from '@ui/primitives/input/Input/Input.stylex';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 import { isDefined } from '@ui/utilities/utils/isDefined';
 
 import { type AutocompleteInputProps } from '../types/AutocompleteInputProps';
@@ -12,19 +13,24 @@ import { type AutocompleteInputProps } from '../types/AutocompleteInputProps';
 export const AutocompleteInput = ({
   size,
   className,
+  xstyle,
   ...props
-}: AutocompleteInputProps) => {
+}: WithXstyle<AutocompleteInputProps>) => {
   const inputGroup = useContext(InputGroupContext);
   const resolvedSize = size ?? inputGroup?.size ?? 'md';
 
   return (
     <AutocompletePrimitive.Input
       {...props}
-      className={mergeClassNames(
-        clsx(inputStyles.input, inputStyles[resolvedSize]),
+      {...mergeStylexProps(
+        stylex.props(
+          inputStyles.input,
+          resolvedSize === 'sm' && inputStyles.sizeSm,
+          isDefined(inputGroup) && inputStyles.grouped,
+          xstyle,
+        ),
         className,
       )}
-      data-grouped={isDefined(inputGroup) || undefined}
     />
   );
 };

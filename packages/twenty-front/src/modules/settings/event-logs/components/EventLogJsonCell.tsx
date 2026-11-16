@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { useRef, useState } from 'react';
 
@@ -6,21 +5,23 @@ import { JsonDisplay } from '@/ui/field/display/components/JsonDisplay/JsonDispl
 import { ExpandedFieldDisplay } from '@/ui/layout/expandable-list/components/ExpandedFieldDisplay';
 import { isDefined } from 'twenty-shared/utils';
 import { JsonTree } from 'twenty-ui/components/data-display';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { type JsonValue } from 'type-fest';
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor } from 'twenty-ui/theme/tokens.stylex';
 
 type EventLogJsonCellProps = {
   value: Record<string, unknown> | null | undefined;
 };
 
-const StyledJsonContainer = styled.div`
-  cursor: pointer;
-`;
-
-const StyledEmptyCell = styled.span`
-  color: ${themeCssVariables.font.color.tertiary};
-`;
+const styles = stylex.create({
+  jsonContainer: {
+    cursor: 'pointer',
+  },
+  emptyCell: {
+    color: fontColor['--t-font-color-tertiary'],
+  },
+});
 
 export const EventLogJsonCell = ({ value }: EventLogJsonCellProps) => {
   const { copyToClipboard } = useCopyToClipboard();
@@ -28,7 +29,7 @@ export const EventLogJsonCell = ({ value }: EventLogJsonCellProps) => {
   const anchorRef = useRef<HTMLDivElement>(null);
 
   if (!isDefined(value) || Object.keys(value).length === 0) {
-    return <StyledEmptyCell>-</StyledEmptyCell>;
+    return <span {...stylex.props(styles.emptyCell)}>-</span>;
   }
 
   const handleClick = () => {
@@ -41,9 +42,13 @@ export const EventLogJsonCell = ({ value }: EventLogJsonCellProps) => {
 
   return (
     <>
-      <StyledJsonContainer ref={anchorRef} onClick={handleClick}>
+      <div
+        ref={anchorRef}
+        onClick={handleClick}
+        {...stylex.props(styles.jsonContainer)}
+      >
         <JsonDisplay text={JSON.stringify(value)} />
-      </StyledJsonContainer>
+      </div>
       {isExpanded && (
         <ExpandedFieldDisplay
           anchorElement={anchorRef.current ?? undefined}

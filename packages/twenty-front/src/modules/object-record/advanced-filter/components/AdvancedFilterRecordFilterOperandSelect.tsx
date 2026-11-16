@@ -6,13 +6,15 @@ import { getRecordFilterOperands } from '@/object-record/record-filter/utils/get
 import { useUserTimezone } from '@/ui/input/components/internal/date/hooks/useUserTimezone';
 import { SelectControl } from '@/ui/input/components/SelectControl';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isDefined } from 'twenty-shared/utils';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledContainer = styled.div`
-  width: 100px;
-`;
+const styles = stylex.create({
+  container: {
+    width: '100px',
+  },
+});
 
 type AdvancedFilterRecordFilterOperandSelectProps = {
   recordFilterId: string;
@@ -64,12 +66,12 @@ export const AdvancedFilterRecordFilterOperandSelect = ({
   }
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <AdvancedFilterRecordFilterOperandSelectContent
         recordFilterId={recordFilterId}
         filter={filter}
         operandsForFilterType={operandsForFilterType}
       />
-    </StyledContainer>
+    </div>
   );
 };

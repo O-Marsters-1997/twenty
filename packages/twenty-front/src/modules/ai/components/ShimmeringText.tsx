@@ -1,42 +1,33 @@
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledShimmeringText = styled.div`
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: shimmer-wave 1s infinite linear;
-  background: ${themeCssVariables.font.color.light}
-    linear-gradient(
-      90deg,
-      ${themeCssVariables.font.color.light} 0%,
-      ${themeCssVariables.font.color.primary} 50%,
-      ${themeCssVariables.font.color.light} 100%
-    );
-  background-clip: text;
-  background-position: -200% top;
-  background-repeat: no-repeat;
-  background-size: 200% 100%;
+const shimmerWave = stylex.keyframes({
+  '0%': { backgroundPosition: '200% top' },
+  '100%': { backgroundPosition: '-200% top' },
+});
 
-  @keyframes shimmer-wave {
-    0% {
-      background-position: 200% top;
-    }
-    100% {
-      background-position: -200% top;
-    }
-  }
-`;
+const styles = stylex.create({
+  root: {
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    animationDuration: '1s',
+    animationIterationCount: 'infinite',
+    animationName: shimmerWave,
+    animationTimingFunction: 'linear',
+    backgroundClip: 'text',
+    backgroundColor: fontColor['--t-font-color-light'],
+    backgroundImage: `linear-gradient(90deg, ${fontColor['--t-font-color-light']} 0%, ${fontColor['--t-font-color-primary']} 50%, ${fontColor['--t-font-color-light']} 100%)`,
+    backgroundPosition: '-200% top',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: '200% 100%',
+  },
+});
 
-export const ShimmeringText = ({
-  children,
-  className,
-}: {
+type ShimmeringTextProps = {
   children: React.ReactNode;
-  className?: string;
-}) => {
-  return (
-    <StyledShimmeringText className={className}>
-      {children}
-    </StyledShimmeringText>
-  );
+  xstyle?: stylex.StyleXStyles;
+};
+
+export const ShimmeringText = ({ children, xstyle }: ShimmeringTextProps) => {
+  return <div {...stylex.props(styles.root, xstyle)}>{children}</div>;
 };

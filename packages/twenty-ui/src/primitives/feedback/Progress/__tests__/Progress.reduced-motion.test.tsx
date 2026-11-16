@@ -3,7 +3,6 @@ import { afterEach, expect, it } from 'vitest';
 
 import { ProgressBar, ProgressRing } from '@ui/primitives/feedback';
 import { ThemeProvider } from '@ui/theme';
-import '@ui/theme/theme-light.css';
 import { isDefined } from '@ui/utilities/utils/isDefined';
 
 afterEach(cleanup);

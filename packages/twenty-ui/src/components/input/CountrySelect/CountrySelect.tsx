@@ -1,17 +1,23 @@
 import { type Popover as PopoverPrimitive } from '@base-ui/react/popover';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 import { isFunction, isNonEmptyArray, isNonEmptyString } from '@sniptt/guards';
 import { useId, useState } from 'react';
 
 import { Dropdown } from '@ui/components/navigation/Dropdown/Dropdown';
 import { IconChevronDown, IconCircleOff } from '@ui/icon';
-import inputStyles from '@ui/primitives/input/Input/Input.module.scss';
-import selectStyles from '@ui/primitives/input/Select/Select.module.scss';
+import { inputStyles } from '@ui/primitives/input/Input/Input.stylex';
+import {
+  selectTriggerMarker,
+  selectTriggerStyles,
+} from '@ui/primitives/input/Select/Select.stylex';
 import { OverflowingTextWithTooltip } from '@ui/primitives/typography/OverflowingTextWithTooltip/OverflowingTextWithTooltip';
+import '@ui/primitives/input/Select/Select.css';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
 import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
 import { isDefined } from '@ui/utilities/utils/isDefined';
 
-import styles from './CountrySelect.module.scss';
+import './CountrySelect.css';
+import { countrySelectStyles } from './CountrySelect.stylex';
 import { CountrySelectAvailabilityEffect } from './internal/CountrySelectAvailabilityEffect';
 import { CountrySelectOptions } from './internal/CountrySelectOptions';
 import { getCountrySelectLabelledBy } from './internal/getCountrySelectLabelledBy';
@@ -89,7 +95,11 @@ export const CountrySelect = ({
     state: PopoverPrimitive.Trigger.State,
   ): PopoverPrimitive.Trigger.State => ({ ...state, disabled: isDisabled });
   const triggerClassName = mergeClassNames<PopoverPrimitive.Trigger.State>(
-    clsx(inputStyles.input, inputStyles.md, selectStyles.trigger),
+    stylex.props(
+      selectTriggerMarker,
+      inputStyles.input,
+      selectTriggerStyles.trigger,
+    ).className ?? '',
     className,
   );
 
@@ -103,14 +113,18 @@ export const CountrySelect = ({
   };
 
   return (
-    <div className={styles.root}>
+    <div {...stylex.props(countrySelectStyles.root)}>
       <CountrySelectAvailabilityEffect
         disabled={isDisabled}
         open={requestedOpen}
         onOpenChange={handleOpenChange}
       />
       {hasVisibleLabel && (
-        <label id={labelId} className={styles.label} htmlFor={triggerId}>
+        <label
+          id={labelId}
+          {...stylex.props(countrySelectStyles.label)}
+          htmlFor={triggerId}
+        >
           {label}
         </label>
       )}
@@ -143,13 +157,28 @@ export const CountrySelect = ({
               : render
           }
         >
-          <span className={styles.flag} aria-hidden="true">
+          <span
+            {...mergeStylexProps(
+              stylex.props(countrySelectStyles.flag),
+              'tw-country-select-flag',
+            )}
+            aria-hidden="true"
+          >
             {selectedFlag}
           </span>
-          <span className={selectStyles.value} id={selectedValueId}>
+          <span
+            {...stylex.props(selectTriggerStyles.value)}
+            id={selectedValueId}
+          >
             <OverflowingTextWithTooltip text={selectedLabel} />
           </span>
-          <span className={selectStyles.icon} aria-hidden="true">
+          <span
+            {...mergeStylexProps(
+              stylex.props(selectTriggerStyles.icon),
+              'tw-select-icon',
+            )}
+            aria-hidden="true"
+          >
             <IconChevronDown />
           </span>
         </Dropdown.Trigger>

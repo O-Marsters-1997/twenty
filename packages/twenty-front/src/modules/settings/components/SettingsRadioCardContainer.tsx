@@ -1,15 +1,17 @@
-import { styled } from '@linaria/react';
 import { RadioGroup } from 'twenty-ui/primitives/input';
 import { SettingsRadioCard } from '@/settings/components/SettingsRadioCard';
 import { type IconComponent } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledRadioCardContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: ${themeCssVariables.spacing[4]};
-`;
+const styles = stylex.create({
+  radioCardContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing['--t-spacing-4'],
+  },
+});
 
 type SettingsRadioCardContainerProps = {
   onChange: (value: string) => void;
@@ -31,7 +33,7 @@ export const SettingsRadioCardContainer = ({
     <RadioGroup
       value={value}
       onValueChange={onChange}
-      render={<StyledRadioCardContainer />}
+      render={<div {...stylex.props(styles.radioCardContainer)} />}
     >
       {options.map((option) => (
         <SettingsRadioCard

@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { type ReactNode, useState } from 'react';
 import { MAX_OPTIONS_TO_DISPLAY } from 'twenty-shared/constants';
@@ -14,7 +13,6 @@ import {
 } from 'twenty-ui/icon';
 import { ListItemButton } from 'twenty-ui/components/navigation';
 import { ListItem } from 'twenty-ui/primitives/navigation';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { applicationsSelector } from '@/applications/states/applicationsSelector';
 import { APP_HEADER_HEIGHT } from '@/ui/layout/constants/AppHeaderHeight';
@@ -41,6 +39,8 @@ import { ScrollWrapper } from '@/ui/utilities/scroll/components/ScrollWrapper';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { SortOrFilterChip } from '@/views/components/SortOrFilterChip';
 import { EventLogFilterOperand } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const LOG_CONSOLE_MENU_DROPDOWN_ID = 'log-console-menu';
 
@@ -56,42 +56,42 @@ const VIEW_FILTER_OPERAND_BY_EVENT_LOG_FILTER_OPERAND: Record<
   [EventLogFilterOperand.IS_NOT]: ViewFilterOperand.IS_NOT,
 };
 
-const StyledContainer = styled.div`
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  box-sizing: border-box;
-  flex-shrink: 0;
-  height: ${APP_HEADER_HEIGHT}px;
-  padding-inline: ${themeCssVariables.spacing[3]};
-`;
-
-const StyledToolbar = styled.div`
-  align-items: center;
-  display: flex;
-  flex-wrap: nowrap;
-  gap: ${themeCssVariables.spacing[2]};
-  height: 100%;
-  overflow: hidden;
-`;
-
-const StyledActions = styled.div`
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  margin-left: auto;
-`;
-
-const StyledFilterChips = styled.div`
-  align-items: center;
-  display: flex;
-  flex-shrink: 0;
-  gap: ${themeCssVariables.spacing[2]};
-  max-width: 40%;
-  overflow: hidden;
-`;
-
-const StyledChips = styled.div`
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  container: {
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: 1,
+    boxSizing: 'border-box',
+    flexShrink: 0,
+    paddingInline: spacing['--t-spacing-3'],
+  },
+  containerHeight: (height: number) => ({ height }),
+  toolbar: {
+    alignItems: 'center',
+    display: 'flex',
+    flexWrap: 'nowrap',
+    gap: spacing['--t-spacing-2'],
+    height: '100%',
+    overflow: 'hidden',
+  },
+  actions: {
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    marginLeft: 'auto',
+  },
+  filterChips: {
+    alignItems: 'center',
+    display: 'flex',
+    flexShrink: '0',
+    gap: spacing['--t-spacing-2'],
+    maxWidth: '40%',
+    overflow: 'hidden',
+  },
+  chips: {
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+  },
+});
 
 type LogConsoleToolbarProps = {
   filterFields: LogConsoleFilterField[];
@@ -433,19 +433,26 @@ export const LogConsoleToolbar = ({
   };
 
   return (
-    <StyledContainer>
-      <StyledToolbar>
+    <div
+      {...stylex.props(
+        styles.container,
+        styles.containerHeight(APP_HEADER_HEIGHT),
+      )}
+    >
+      <div {...stylex.props(styles.toolbar)}>
         {isNonEmptyArray(filterFieldsWithChip) && (
-          <StyledFilterChips>
+          <div {...stylex.props(styles.filterChips)}>
             <ScrollWrapper
               componentInstanceId={FILTER_CHIPS_SCROLL_WRAPPER_ID}
               defaultEnableYScroll={false}
             >
-              <StyledChips>{filterFieldsWithChip.map(renderChip)}</StyledChips>
+              <div {...stylex.props(styles.chips)}>
+                {filterFieldsWithChip.map(renderChip)}
+              </div>
             </ScrollWrapper>
-          </StyledFilterChips>
+          </div>
         )}
-        <StyledActions>
+        <div {...stylex.props(styles.actions)}>
           <Dropdown
             dropdownId={LOG_CONSOLE_MENU_DROPDOWN_ID}
             dropdownPlacement="bottom-end"
@@ -460,8 +467,8 @@ export const LogConsoleToolbar = ({
             dropdownComponents={renderMenu()}
           />
           {children}
-        </StyledActions>
-      </StyledToolbar>
-    </StyledContainer>
+        </div>
+      </div>
+    </div>
   );
 };

@@ -1,54 +1,53 @@
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react/macro';
 import { useInputFocusWithoutScrollOnMount } from '@/ui/input/hooks/useInputFocusWithoutScrollOnMount';
-import { styled } from '@linaria/react';
 import { forwardRef, type InputHTMLAttributes } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  font,
+  fontColor,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledDropdownMenuSearchInputContainer = styled.div`
-  --vertical-padding: ${themeCssVariables.spacing[2]};
-  align-items: center;
-  /* min-height below is sized against the content box. */
-  box-sizing: content-box;
-  display: flex;
-  flex-direction: row;
-  min-height: calc(36px - 2 * var(--vertical-padding));
-  padding: var(--vertical-padding) 0;
-
-  width: 100%;
-`;
-
-const StyledInput = styled.input`
-  background-color: transparent;
-  background-color: transparent;
-  border: none;
-  color: ${themeCssVariables.font.color.primary};
-  font-family: ${themeCssVariables.font.family};
-  font-size: ${themeCssVariables.font.size.sm};
-  font-size: inherit;
-  font-weight: inherit;
-
-  &::placeholder,
-  &::-webkit-input-placeholder {
-    color: ${themeCssVariables.font.color.light};
-    font-family: ${themeCssVariables.font.family};
-    font-weight: ${themeCssVariables.font.weight.medium};
-  }
-
-  outline: none;
-  padding: ${themeCssVariables.spacing[0]} ${themeCssVariables.spacing[2]};
-  width: 100%;
-
-  &[type='number']::-webkit-outer-spin-button,
-  &[type='number']::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-
-  &[type='number'] {
-    -moz-appearance: textfield;
-  }
-`;
+const styles = stylex.create({
+  dropdownMenuSearchInputContainer: {
+    '--vertical-padding': spacing['--t-spacing-2'],
+    alignItems: 'center',
+    boxSizing: 'content-box',
+    display: 'flex',
+    flexDirection: 'row',
+    minHeight: 'calc(36px - 2 * var(--vertical-padding))',
+    paddingTop: 'var(--vertical-padding)',
+    paddingRight: '0',
+    paddingBottom: 'var(--vertical-padding)',
+    paddingLeft: '0',
+    width: '100%',
+  },
+  input: {
+    appearance: {
+      default: null,
+      ':is([type=number])': 'textfield',
+    },
+    backgroundColor: 'transparent',
+    borderStyle: 'none',
+    color: fontColor['--t-font-color-primary'],
+    fontFamily: font['--t-font-family'],
+    fontSize: 'inherit',
+    fontWeight: 'inherit',
+    outlineStyle: 'none',
+    paddingBlock: spacing['--t-spacing-0'],
+    paddingInline: spacing['--t-spacing-2'],
+    width: '100%',
+    '::placeholder': {
+      color: fontColor['--t-font-color-light'],
+      fontFamily: font['--t-font-family'],
+      fontWeight: fontWeight['--t-font-weight-medium'],
+    },
+    '::-webkit-outer-spin-button': { appearance: 'none', margin: 0 },
+    '::-webkit-inner-spin-button': { appearance: 'none', margin: 0 },
+  },
+});
 
 const defaultSearchPlaceholder = msg`Search`;
 
@@ -61,12 +60,13 @@ export const DropdownMenuSearchInput = forwardRef<
   const ref = forwardedRef ?? inputRef;
   const translatedPlaceholder = placeholder ?? i18n._(defaultSearchPlaceholder);
   return (
-    <StyledDropdownMenuSearchInputContainer>
-      <StyledInput
+    <div {...stylex.props(styles.dropdownMenuSearchInputContainer)}>
+      <input
+        {...stylex.props(styles.input)}
         autoComplete="off"
         {...{ onChange, placeholder: translatedPlaceholder, type, value }}
         ref={ref}
       />
-    </StyledDropdownMenuSearchInputContainer>
+    </div>
   );
 });

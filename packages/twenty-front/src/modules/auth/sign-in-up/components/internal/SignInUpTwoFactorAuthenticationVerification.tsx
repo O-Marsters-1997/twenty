@@ -1,3 +1,4 @@
+import { onboardingLayout } from '../../../../onboarding/constants/onboardingLayout.stylex';
 import { useAuth } from '@/auth/hooks/useAuth';
 import {
   StyledTwoFactorInstructions,
@@ -18,7 +19,6 @@ import { useCaptcha } from '@/client-config/hooks/useCaptcha';
 import { ONBOARDING_CONTENT_BLOCK_WIDTH } from '@/onboarding/constants/OnboardingContentBlockWidth';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomState';
-import { styled } from '@linaria/react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { OTPInput, type SlotProps } from 'input-otp';
 import { useState } from 'react';
@@ -27,144 +27,135 @@ import { AppPath } from 'twenty-shared/types';
 import { useToast } from 'twenty-ui/components/feedback';
 import { MainButton } from 'twenty-ui/components/input';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { useNavigateApp } from '~/hooks/useNavigateApp';
-
-const StyledForm = styled.form`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  max-width: 100%;
-  width: ${ONBOARDING_CONTENT_BLOCK_WIDTH}px;
-`;
-
-const StyledSlot = styled.div<{ isActive: boolean }>`
-  align-items: center;
-  border-bottom: 1px solid ${themeCssVariables.border.color.medium};
-  border-right: 1px solid ${themeCssVariables.border.color.medium};
-  border-top: 1px solid ${themeCssVariables.border.color.medium};
-  display: flex;
-  font-size: 2rem;
-  height: 3.5rem;
-  justify-content: center;
-  outline-color: ${({ isActive }) =>
-    isActive
-      ? themeCssVariables.border.color.strong
-      : themeCssVariables.border.color.medium};
-  outline-style: ${({ isActive }) => (isActive ? 'solid' : 'none')};
-  outline-width: ${({ isActive }) => (isActive ? '1px' : '0')};
-
-  &:first-of-type {
-    border-bottom-left-radius: 0.375rem;
-    border-left: 1px solid ${themeCssVariables.border.color.medium};
-    border-top-left-radius: 0.375rem;
-  }
-
-  &:last-of-type {
-    border-bottom-right-radius: 0.375rem;
-    border-top-right-radius: 0.375rem;
-  }
-
-  .group:hover &,
-  .group:focus-within & {
-    border-color: ${themeCssVariables.border.color.medium};
-  }
-
-  position: relative;
-  transition: all 0.3s;
-  width: 2.5rem;
-`;
-
-const StyledPlaceholderChar = styled.div`
-  .group:has(input[data-input-otp-placeholder-shown]) & {
-    opacity: 0.2;
-  }
-`;
+import * as stylex from '@stylexjs/stylex';
+import { borderColor, borderRadius, fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 export const Slot = (props: SlotProps) => {
   return (
-    <StyledSlot isActive={props.isActive}>
-      <StyledPlaceholderChar>
+    <div {...stylex.props(styles.slot, props.isActive && styles.slotActive)}>
+      <div {...stylex.props(props.char == null && styles.placeholderChar)}>
         {props.char ?? props.placeholderChar}
-      </StyledPlaceholderChar>
+      </div>
       {props.hasFakeCaret && <FakeCaret />}
-    </StyledSlot>
+    </div>
   );
 };
 
-const StyledCaretContainer = styled.div`
-  align-items: center;
-  animation: caret-blink 1s steps(2, start) infinite;
-  display: flex;
-  inset: 0;
-  justify-content: center;
-  pointer-events: none;
-  position: absolute;
+const caretBlink = stylex.keyframes({
+  '0%, 100%': { opacity: 1 },
+  '50%': { opacity: 0 },
+});
 
-  @keyframes caret-blink {
-    0%,
-    100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0;
-    }
-  }
-`;
-
-const StyledCaret = styled.div`
-  background-color: ${themeCssVariables.font.color.light};
-  height: 2rem;
-  width: 1px;
-`;
+const styles = stylex.create({
+  slot: {
+    alignItems: 'center',
+    borderBottomColor: borderColor['--t-border-color-medium'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
+    borderRightColor: borderColor['--t-border-color-medium'],
+    borderRightStyle: 'solid',
+    borderRightWidth: '1px',
+    borderTopColor: borderColor['--t-border-color-medium'],
+    borderTopStyle: 'solid',
+    borderTopWidth: '1px',
+    borderTopLeftRadius: { default: 0, ':first-of-type': '0.375rem' },
+    borderBottomLeftRadius: { default: 0, ':first-of-type': '0.375rem' },
+    borderLeftColor: borderColor['--t-border-color-medium'],
+    borderLeftStyle: 'solid',
+    borderLeftWidth: { default: 0, ':first-of-type': '1px' },
+    borderBottomRightRadius: { default: 0, ':last-of-type': '0.375rem' },
+    borderTopRightRadius: { default: 0, ':last-of-type': '0.375rem' },
+    display: 'flex',
+    fontSize: '2rem',
+    height: '3.5rem',
+    justifyContent: 'center',
+    outlineColor: borderColor['--t-border-color-medium'],
+    outlineStyle: 'none',
+    outlineWidth: 0,
+    position: 'relative',
+    transition: 'all 0.3s',
+    width: '2.5rem',
+  },
+  slotActive: {
+    outlineColor: borderColor['--t-border-color-strong'],
+    outlineStyle: 'solid',
+    outlineWidth: '1px',
+  },
+  placeholderChar: {
+    opacity: 0.2,
+  },
+  caretContainer: {
+    alignItems: 'center',
+    animationDuration: '1s',
+    animationIterationCount: 'infinite',
+    animationName: caretBlink,
+    animationTimingFunction: 'steps(2, start)',
+    display: 'flex',
+    inset: 0,
+    justifyContent: 'center',
+    pointerEvents: 'none',
+    position: 'absolute',
+  },
+  form: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    maxWidth: '100%',
+    width: onboardingLayout.contentBlockWidth,
+  },
+  caret: {
+    backgroundColor: fontColor['--t-font-color-light'],
+    height: '2rem',
+    width: '1px',
+  },
+  dashContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+    width: '2.5rem',
+  },
+  dash: {
+    backgroundColor: fontColor['--t-font-color-primary'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-pill'],
+    borderTopRightRadius: borderRadius['--t-border-radius-pill'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-pill'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-pill'],
+    cornerShape: 'round',
+    height: '0.25rem',
+    width: '0.75rem',
+  },
+  oTPContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    opacity: { default: null, ':has(:disabled)': '0.3' },
+  },
+  slotGroup: {
+    display: 'flex',
+  },
+  actionBackLinkContainer: {
+    marginTop: spacing['--t-spacing-3'],
+    marginRight: '0',
+    marginBottom: '0',
+    marginLeft: '0',
+  },
+});
 
 const FakeCaret = () => {
   return (
-    <StyledCaretContainer>
-      <StyledCaret />
-    </StyledCaretContainer>
+    <div {...stylex.props(styles.caretContainer)}>
+      <div {...stylex.props(styles.caret)} />
+    </div>
   );
 };
-
-const StyledDashContainer = styled.div`
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  width: 2.5rem;
-`;
-
-const StyledDash = styled.div`
-  background-color: ${themeCssVariables.font.color.primary};
-  border-radius: ${themeCssVariables.border.radius.pill};
-  corner-shape: round;
-  height: 0.25rem;
-  width: 0.75rem;
-`;
 
 const FakeDash = () => {
   return (
-    <StyledDashContainer>
-      <StyledDash />
-    </StyledDashContainer>
+    <div {...stylex.props(styles.dashContainer)}>
+      <div {...stylex.props(styles.dash)} />
+    </div>
   );
 };
-
-const StyledOTPContainer = styled.div`
-  align-items: center;
-  display: flex;
-
-  &:has(:disabled) {
-    opacity: 0.3;
-  }
-`;
-
-const StyledSlotGroup = styled.div`
-  display: flex;
-`;
-
-const StyledActionBackLinkContainer = styled.div`
-  margin: ${themeCssVariables.spacing[3]} 0 0;
-`;
 
 export const SignInUpTOTPVerification = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -223,7 +214,7 @@ export const SignInUpTOTPVerification = () => {
   };
 
   return (
-    <StyledForm onSubmit={form.handleSubmit(submitOTP)}>
+    <form {...stylex.props(styles.form)} onSubmit={form.handleSubmit(submitOTP)}>
       <StyledTwoFactorInstructions>
         <Trans>Paste the code below</Trans>
       </StyledTwoFactorInstructions>
@@ -240,8 +231,8 @@ export const SignInUpTOTPVerification = () => {
               value={value}
               autoFocus
               render={({ slots }) => (
-                <StyledOTPContainer>
-                  <StyledSlotGroup>
+                <div {...stylex.props(styles.oTPContainer)}>
+                  <div {...stylex.props(styles.slotGroup)}>
                     {slots.slice(0, 3).map((slot, idx) => (
                       <Slot
                         key={idx}
@@ -249,11 +240,11 @@ export const SignInUpTOTPVerification = () => {
                         {...slot}
                       />
                     ))}
-                  </StyledSlotGroup>
+                  </div>
 
                   <FakeDash />
 
-                  <StyledSlotGroup>
+                  <div {...stylex.props(styles.slotGroup)}>
                     {slots.slice(3).map((slot, idx) => (
                       <Slot
                         key={idx}
@@ -261,8 +252,8 @@ export const SignInUpTOTPVerification = () => {
                         {...slot}
                       />
                     ))}
-                  </StyledSlotGroup>
-                </StyledOTPContainer>
+                  </div>
+                </div>
               )}
             />
           )}
@@ -273,16 +264,16 @@ export const SignInUpTOTPVerification = () => {
         fullWidth
         disabled={isLoading}
       >{t`Submit`}</MainButton>
-      <StyledActionBackLinkContainer>
+      <div {...stylex.props(styles.actionBackLinkContainer)}>
         <Button variant="link" onClick={handleUseRecoveryCode}>
           <Trans>Lost your authenticator? Use a recovery code</Trans>
         </Button>
-      </StyledActionBackLinkContainer>
-      <StyledActionBackLinkContainer>
+      </div>
+      <div {...stylex.props(styles.actionBackLinkContainer)}>
         <Button variant="link" onClick={handleBack}>
           <Trans>Back</Trans>
         </Button>
-      </StyledActionBackLinkContainer>
-    </StyledForm>
+      </div>
+    </form>
   );
 };

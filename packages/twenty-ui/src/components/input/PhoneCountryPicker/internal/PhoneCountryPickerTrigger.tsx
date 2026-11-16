@@ -1,12 +1,15 @@
 import { isNonEmptyString } from '@sniptt/guards';
+import * as stylex from '@stylexjs/stylex';
 import { useId } from 'react';
 
 import { Dropdown } from '@ui/components/navigation/Dropdown/Dropdown';
 import { IconChevronDown, IconWorld } from '@ui/icon';
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
 import { isDefined } from '@ui/utilities/utils/isDefined';
 
-import styles from '../PhoneCountryPicker.module.scss';
+import { focusStyles } from '../../../../styles/focus.stylex';
+import '../PhoneCountryPicker.css';
+import { phoneCountryPickerStyles } from '../PhoneCountryPicker.stylex';
 import { type PhoneCountryPickerTriggerProps } from '../types/PhoneCountryPickerTriggerProps';
 
 export const PhoneCountryPickerTrigger = ({
@@ -25,20 +28,32 @@ export const PhoneCountryPickerTrigger = ({
     <Dropdown.Trigger
       {...props}
       aria-describedby={describedBy}
-      className={mergeClassNames(styles.trigger, className)}
+      {...mergeStylexProps(
+        stylex.props(focusStyles.ring, phoneCountryPickerStyles.trigger),
+        className,
+      )}
     >
-      <span className={styles.triggerFlag} aria-hidden>
+      <span
+        {...mergeStylexProps(
+          stylex.props(phoneCountryPickerStyles.flag),
+          'tw-phone-country-flag tw-phone-country-trigger-flag',
+        )}
+        aria-hidden
+      >
         {country?.flag ?? <IconWorld />}
       </span>
       {isDefined(country) && (
         <span
           id={selectedCountryLabelId}
-          className={styles.selectedCountryLabel}
+          {...stylex.props(phoneCountryPickerStyles.selectedCountryLabel)}
         >
           {country.label}
         </span>
       )}
-      <IconChevronDown className={styles.chevron} aria-hidden />
+      <IconChevronDown
+        {...stylex.props(phoneCountryPickerStyles.chevron)}
+        aria-hidden
+      />
     </Dropdown.Trigger>
   );
 };

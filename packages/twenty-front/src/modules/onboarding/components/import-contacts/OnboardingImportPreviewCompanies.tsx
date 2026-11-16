@@ -1,6 +1,5 @@
 import { IMPORT_CONTACTS_PREVIEW_COMPANIES } from '@/onboarding/constants/ImportContactsPreviewCompanies';
 import { getAbsoluteImageUrl } from '~/utils/image/getAbsoluteImageUrl';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { getLogoUrlFromDomainName } from 'twenty-shared/utils';
 import { Avatar, Chip } from 'twenty-ui/primitives/data-display';
@@ -8,83 +7,91 @@ import { Checkbox } from 'twenty-ui/primitives/input';
 import { IconBuildingSkyscraper, IconPlus } from 'twenty-ui/icon';
 
 import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  background,
+  spacing,
+  borderColor,
+  fontColor,
+  fontSize,
+  fontWeight,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const PREVIEW_ROW_HEIGHT = 32;
 
-const StyledColumn = styled.div`
-  background-color: ${themeCssVariables.border.color.light};
-  box-sizing: border-box;
-  display: flex;
-  flex: 1 1 0;
-  flex-direction: column;
-  gap: 1px;
-  height: 100%;
-  min-width: 0;
-  overflow: hidden;
-`;
-
-const StyledRow = styled.div`
-  align-items: center;
-  background-color: ${themeCssVariables.background.primary};
-  box-sizing: border-box;
-  display: flex;
-  flex-shrink: 0;
-  gap: ${themeCssVariables.spacing[1]};
-  height: ${PREVIEW_ROW_HEIGHT}px;
-  padding: 0 ${themeCssVariables.spacing[1]};
-`;
-
-const StyledHeaderTitle = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  flex: 1 1 0;
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.medium};
-  gap: ${themeCssVariables.spacing[1]};
-  min-width: 0;
-  padding-left: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledHeaderAction = styled.div`
-  align-items: center;
-  display: flex;
-  height: ${themeCssVariables.spacing[6]};
-  justify-content: center;
-  width: ${themeCssVariables.spacing[6]};
-`;
-
-const StyledCompanyCell = styled.div`
-  display: flex;
-  padding-left: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  column: {
+    backgroundColor: borderColor['--t-border-color-light'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    flex: '1 1 0',
+    flexDirection: 'column',
+    gap: '1px',
+    height: '100%',
+    minWidth: '0',
+    overflow: 'hidden',
+  },
+  headerTitle: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    flex: '1 1 0',
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    gap: spacing['--t-spacing-1'],
+    minWidth: '0',
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+  headerAction: {
+    alignItems: 'center',
+    display: 'flex',
+    height: spacing['--t-spacing-6'],
+    justifyContent: 'center',
+    width: spacing['--t-spacing-6'],
+  },
+  row: {
+    alignItems: 'center',
+    backgroundColor: background['--t-background-primary'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexShrink: '0',
+    gap: spacing['--t-spacing-1'],
+    height: `${PREVIEW_ROW_HEIGHT}px`,
+    paddingLeft: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+  },
+  companyCell: {
+    display: 'flex',
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+});
 
 export const OnboardingImportPreviewCompanies = () => {
   const { t } = useLingui();
   const theme = useTheme();
 
   return (
-    <StyledColumn>
-      <StyledRow>
+    <div {...stylex.props(styles.column)}>
+      <div {...stylex.props(styles.row)}>
         <Checkbox checked={false} hoverable />
-        <StyledHeaderTitle>
+        <div {...stylex.props(styles.headerTitle)}>
           <IconBuildingSkyscraper
             size={theme.icon.size.md}
             color={themeCssVariables.font.color.tertiary}
           />
           {t`Companies`}
-        </StyledHeaderTitle>
-        <StyledHeaderAction>
+        </div>
+        <div {...stylex.props(styles.headerAction)}>
           <IconPlus
             size={theme.icon.size.md}
             color={themeCssVariables.font.color.tertiary}
           />
-        </StyledHeaderAction>
-      </StyledRow>
+        </div>
+      </div>
       {IMPORT_CONTACTS_PREVIEW_COMPANIES.map((company) => (
-        <StyledRow key={company.id}>
+        <div key={company.id} {...stylex.props(styles.row)}>
           <Checkbox checked={false} hoverable />
-          <StyledCompanyCell>
+          <div {...stylex.props(styles.companyCell)}>
             <Chip
               size="sm"
               variant="soft"
@@ -103,9 +110,9 @@ export const OnboardingImportPreviewCompanies = () => {
             >
               {company.name}
             </Chip>
-          </StyledCompanyCell>
-        </StyledRow>
+          </div>
+        </div>
       ))}
-    </StyledColumn>
+    </div>
   );
 };

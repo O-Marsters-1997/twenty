@@ -1,25 +1,35 @@
 import { SidePanelFooterWidthContext } from '@/ui/layout/side-panel/contexts/SidePanelFooterWidthContext';
 import { NodeDimension } from '@/ui/utilities/dimensions/components/NodeDimension';
-import { styled } from '@linaria/react';
 import { Fragment, useCallback, useState } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  background,
+  borderColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  background: ${themeCssVariables.background.secondary};
-  border-top: 1px solid ${themeCssVariables.border.color.light};
-  bottom: 0;
-  box-sizing: border-box;
-  padding: ${themeCssVariables.spacing[2]} ${themeCssVariables.spacing[3]};
-  width: 100%;
-`;
-
-const StyledActionsRow = styled(NodeDimension)`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  justify-content: flex-end;
-  width: 100%;
-`;
+const styles = stylex.create({
+  actionsRow: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    justifyContent: 'flex-end',
+    width: '100%',
+  },
+  container: {
+    background: background['--t-background-secondary'],
+    borderTopWidth: '1px',
+    borderTopStyle: 'solid',
+    borderTopColor: borderColor['--t-border-color-light'],
+    bottom: '0',
+    boxSizing: 'border-box',
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-3'],
+    width: '100%',
+  },
+});
 
 type SidePanelFooterProps = {
   actions: React.ReactNode[];
@@ -36,14 +46,17 @@ export const SidePanelFooter = ({ actions }: SidePanelFooterProps) => {
   );
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <SidePanelFooterWidthContext.Provider value={actionsRowWidth}>
-        <StyledActionsRow onDimensionChange={handleActionsRowDimensionChange}>
+        <NodeDimension
+          className={stylex.props(styles.actionsRow).className}
+          onDimensionChange={handleActionsRowDimensionChange}
+        >
           {actions.map((action, index) => (
             <Fragment key={index}>{action}</Fragment>
           ))}
-        </StyledActionsRow>
+        </NodeDimension>
       </SidePanelFooterWidthContext.Provider>
-    </StyledContainer>
+    </div>
   );
 };

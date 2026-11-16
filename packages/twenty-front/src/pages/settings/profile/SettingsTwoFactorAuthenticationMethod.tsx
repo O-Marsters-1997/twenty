@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { FormProvider } from 'react-hook-form';
 import QRCodeModule from 'react-qr-code';
@@ -18,71 +17,86 @@ import { getSettingsPath } from 'twenty-shared/utils';
 import { Section } from 'twenty-ui/components/layout';
 import { Loader } from 'twenty-ui/primitives/feedback';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { resolveCjsModuleDefaultExport } from '~/utils/resolveCjsModuleDefaultExport';
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard';
+import * as stylex from '@stylexjs/stylex';
+import {
+  background,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const QRCode = resolveCjsModuleDefaultExport(QRCodeModule);
 
-const StyledQRCodeContainer = styled.div`
-  align-items: flex-start;
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[3]};
-  margin: ${themeCssVariables.spacing[4]} 0;
-`;
-
-const StyledQRCodeWrapper = styled.div`
-  align-items: center;
-  background-color: ${themeCssVariables.background.secondary};
-  border: 1px solid ${themeCssVariables.border.color.light};
-  border-radius: ${themeCssVariables.border.radius.md};
-  display: flex;
-  justify-content: center;
-  padding: ${themeCssVariables.spacing[4]};
-`;
-
-const StyledOTPContainer = styled.div`
-  width: fit-content;
-`;
-
-const StyledQRCodeSizer = styled.div`
-  height: 137px;
-  width: 137px;
-
-  & > svg {
-    height: 100%;
-    width: 100%;
-  }
-`;
-
-const StyledCopySetupKeyText = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.sm};
-  line-height: 1.5;
-  text-align: left;
-`;
-
-const StyledCopySetupKeyLink = styled.button`
-  background: none;
-  border: none;
-  color: ${themeCssVariables.font.color.tertiary};
-  cursor: pointer;
-  display: inline;
-  font-size: ${themeCssVariables.font.size.sm};
-  margin-left: 0;
-  padding: 0;
-  text-decoration: underline;
-
-  &:hover {
-    color: ${themeCssVariables.font.color.secondary};
-  }
-`;
-
-const StyledDivider = styled.div`
-  margin: ${themeCssVariables.spacing[6]} 0;
-  width: 100%;
-`;
+const styles = stylex.create({
+  qRCodeContainer: {
+    alignItems: 'flex-start',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-3'],
+    marginTop: spacing['--t-spacing-4'],
+    marginRight: '0',
+    marginBottom: spacing['--t-spacing-4'],
+    marginLeft: '0',
+  },
+  qRCodeWrapper: {
+    alignItems: 'center',
+    backgroundColor: background['--t-background-secondary'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-light'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    display: 'flex',
+    justifyContent: 'center',
+    paddingTop: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingBottom: spacing['--t-spacing-4'],
+    paddingLeft: spacing['--t-spacing-4'],
+  },
+  qRCodeSizer: {
+    height: '137px',
+    width: '137px',
+  },
+  oTPContainer: {
+    width: 'fit-content',
+  },
+  copySetupKeyText: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-sm'],
+    lineHeight: '1.5',
+    textAlign: 'left',
+  },
+  copySetupKeyLink: {
+    background: 'none',
+    borderStyle: 'none',
+    color: {
+      default: fontColor['--t-font-color-tertiary'],
+      ':hover': fontColor['--t-font-color-secondary'],
+    },
+    cursor: 'pointer',
+    display: 'inline',
+    fontSize: fontSize['--t-font-size-sm'],
+    marginLeft: '0',
+    paddingTop: '0',
+    paddingRight: '0',
+    paddingBottom: '0',
+    paddingLeft: '0',
+    textDecoration: 'underline',
+  },
+  divider: {
+    marginTop: spacing['--t-spacing-6'],
+    marginRight: '0',
+    marginBottom: spacing['--t-spacing-6'],
+    marginLeft: '0',
+    width: '100%',
+  },
+});
 
 export const SettingsTwoFactorAuthenticationMethod = () => {
   const { t } = useLingui();
@@ -153,35 +167,38 @@ export const SettingsTwoFactorAuthenticationMethod = () => {
                 title={t`Authenticator app`}
                 description={t`Authenticator apps and browser extensions like 1Password, Authy, Microsoft Authenticator, etc. generate one-time passwords that are used as a second factor to verify your identity when prompted during sign-in.`}
               />
-              <StyledQRCodeContainer>
+              <div {...stylex.props(styles.qRCodeContainer)}>
                 {!qrCode ? (
                   <Loader />
                 ) : (
                   <>
-                    <StyledQRCodeWrapper>
-                      <StyledQRCodeSizer>
+                    <div {...stylex.props(styles.qRCodeWrapper)}>
+                      <div {...stylex.props(styles.qRCodeSizer)}>
                         <QRCode value={qrCode} />
-                      </StyledQRCodeSizer>
-                    </StyledQRCodeWrapper>
-                    <StyledCopySetupKeyText>
+                      </div>
+                    </div>
+                    <div {...stylex.props(styles.copySetupKeyText)}>
                       <Trans>Can't scan? Copy the</Trans>{' '}
-                      <StyledCopySetupKeyLink onClick={handleCopySetupKey}>
+                      <button
+                        onClick={handleCopySetupKey}
+                        {...stylex.props(styles.copySetupKeyLink)}
+                      >
                         <Trans>setup key</Trans>
-                      </StyledCopySetupKeyLink>
-                    </StyledCopySetupKeyText>
+                      </button>
+                    </div>
                   </>
                 )}
-              </StyledQRCodeContainer>
+              </div>
 
-              <StyledDivider />
+              <div {...stylex.props(styles.divider)} />
 
               <Section.Header
                 title={t`Verify the code from the app`}
                 description={t`Copy paste the code below`}
               />
-              <StyledOTPContainer>
+              <div {...stylex.props(styles.oTPContainer)}>
                 <TwoFactorAuthenticationVerificationForSettings />
-              </StyledOTPContainer>
+              </div>
             </Section.Root>
           )}
         </SettingsPageContainer>

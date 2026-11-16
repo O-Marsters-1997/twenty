@@ -6,12 +6,20 @@ import { calculateNextExecutionsForMinuteInterval } from '~/utils/cron-to-human/
 import { convertScheduleToCronExpression } from '@/workflow/workflow-trigger/utils/convertScheduleToCronExpression';
 import { normalizeCronExpression } from '~/utils/cron-to-human/utils/normalizeCronExpression';
 import { getTriggerScheduleDescription } from '@/workflow/workflow-trigger/utils/getTriggerScheduleDescription';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { CronExpressionParser } from 'cron-parser';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { dateLocaleState } from '@/localization/states/dateLocaleState';
 import { formatDateTimeString } from '@/object-record/record-field/ui/utils/formatDateTimeString';
+import * as stylex from '@stylexjs/stylex';
+import {
+  spacing,
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  fontWeight,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const getNextExecutions = (
   cronExpression: string,
@@ -42,43 +50,50 @@ const getNextExecutions = (
   }
 };
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[3]};
-  margin-top: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledSection = styled.div`
-  background-color: ${themeCssVariables.background.transparent.lighter};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[1]};
-  padding: ${themeCssVariables.spacing[3]} ${themeCssVariables.spacing[4]};
-`;
-
-const StyledScheduleDescription = styled.div`
-  color: ${themeCssVariables.font.color.secondary};
-  font-size: ${themeCssVariables.font.size.sm};
-  font-weight: ${themeCssVariables.font.weight.medium};
-`;
-
-const StyledScheduleTitle = styled.div`
-  color: ${themeCssVariables.font.color.primary};
-  font-size: ${themeCssVariables.font.size.sm};
-  font-weight: ${themeCssVariables.font.weight.medium};
-  margin-bottom: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledExecutionItem = styled.div`
-  color: ${themeCssVariables.font.color.secondary};
-  font-size: ${themeCssVariables.font.size.sm};
-  font-weight: ${themeCssVariables.font.weight.medium};
-  margin-top: ${themeCssVariables.spacing[0.5]};
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-3'],
+    marginTop: spacing['--t-spacing-2'],
+  },
+  section: {
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-medium'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-1'],
+    paddingTop: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingBottom: spacing['--t-spacing-3'],
+    paddingLeft: spacing['--t-spacing-4'],
+  },
+  scheduleDescription: {
+    color: fontColor['--t-font-color-secondary'],
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+  },
+  scheduleTitle: {
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    marginBottom: spacing['--t-spacing-1'],
+  },
+  executionItem: {
+    color: fontColor['--t-font-color-secondary'],
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    marginTop: spacing['--t-spacing-0_5'],
+  },
+});
 
 type CronExpressionHelperProps = {
   trigger: WorkflowCronTrigger;
@@ -123,31 +138,33 @@ export const CronExpressionHelper = ({
 
   if (!isValid) {
     return (
-      <StyledContainer>
+      <div {...stylex.props(styles.container)}>
         <InputHint danger>
           {errorMessage || t`Please check your cron expression syntax.`}
         </InputHint>
-      </StyledContainer>
+      </div>
     );
   }
 
   const nextExecutions = getNextExecutions(cronExpression, trigger);
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       {isScheduleVisible && (
-        <StyledSection>
-          <StyledScheduleTitle>{t`Schedule`}</StyledScheduleTitle>
-          <StyledScheduleDescription>
+        <div {...stylex.props(styles.section)}>
+          <div {...stylex.props(styles.scheduleTitle)}>{t`Schedule`}</div>
+          <div {...stylex.props(styles.scheduleDescription)}>
             {customDescription}
-          </StyledScheduleDescription>
-        </StyledSection>
+          </div>
+        </div>
       )}
       {nextExecutions.length > 0 && isUpcomingExecutionVisible && (
-        <StyledSection>
-          <StyledScheduleTitle>{t`Upcoming execution time (${timeZone})`}</StyledScheduleTitle>
+        <div {...stylex.props(styles.section)}>
+          <div
+            {...stylex.props(styles.scheduleTitle)}
+          >{t`Upcoming execution time (${timeZone})`}</div>
           {nextExecutions.slice(0, 3).map((execution, index) => (
-            <StyledExecutionItem key={index}>
+            <div key={index} {...stylex.props(styles.executionItem)}>
               {formatDateTimeString({
                 value: execution.toISOString(),
                 timeZone,
@@ -155,10 +172,10 @@ export const CronExpressionHelper = ({
                 timeFormat,
                 localeCatalog: dateLocale.localeCatalog,
               })}
-            </StyledExecutionItem>
+            </div>
           ))}
-        </StyledSection>
+        </div>
       )}
-    </StyledContainer>
+    </div>
   );
 };

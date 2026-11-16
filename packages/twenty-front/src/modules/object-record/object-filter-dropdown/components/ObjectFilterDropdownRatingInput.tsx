@@ -1,15 +1,20 @@
 import { useApplyObjectFilterDropdownFilterValue } from '@/object-record/object-filter-dropdown/hooks/useApplyObjectFilterDropdownFilterValue';
 import { useObjectFilterDropdownFilterValue } from '@/object-record/object-filter-dropdown/hooks/useObjectFilterDropdownFilterValue';
 import { RatingInput } from '@/ui/field/input/components/RatingInput';
-import { styled } from '@linaria/react';
 import { RATING_VALUES } from 'twenty-shared/constants';
 import { type FieldRatingValue } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledRatingInputContainer = styled.div`
-  padding: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  ratingInputContainer: {
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+});
 
 const convertFieldRatingValueToNumber = (
   rating: Exclude<FieldRatingValue, null>,
@@ -57,11 +62,11 @@ export const ObjectFilterDropdownRatingInput = () => {
     : null;
 
   return (
-    <StyledRatingInputContainer>
+    <div {...stylex.props(styles.ratingInputContainer)}>
       <RatingInput
         value={currentFilterValueConvertedToRatingValue}
         onChange={handleInputChange}
       />
-    </StyledRatingInputContainer>
+    </div>
   );
 };

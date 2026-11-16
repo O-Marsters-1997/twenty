@@ -25,7 +25,6 @@
     "src/**/*.tsx",
     "src/**/*.d.ts",
     "design-tokens/**/*.ts",
-    "build-tools/**/*.ts",
     "scripts/generateThemeTokens.ts",
     ".storybook/*.ts",
     ".storybook/*.tsx",

@@ -4,7 +4,7 @@ import { type AdvancedTextEditorBlockSetting } from '@/advanced-text-editor/type
 import { EmailAlignmentInput } from '@/side-panel/pages/email-block-settings/components/EmailAlignmentInput';
 import { EmailColorInput } from '@/side-panel/pages/email-block-settings/components/EmailColorInput';
 import { EmailSizeInput } from '@/side-panel/pages/email-block-settings/components/EmailSizeInput';
-import { StyledEmailFieldLabel } from '@/side-panel/pages/email-block-settings/components/StyledEmailFieldLabel';
+import { EmailFieldLabel } from '@/side-panel/pages/email-block-settings/components/EmailFieldLabel';
 import { TextArea } from '@/ui/input/components/TextArea';
 import { TextInput } from '@/ui/input/components/TextInput';
 
@@ -51,7 +51,7 @@ export const EmailBlockSettingsFieldInput = ({
     case 'textarea':
       return (
         <div>
-          <StyledEmailFieldLabel>{label}</StyledEmailFieldLabel>
+          <EmailFieldLabel>{label}</EmailFieldLabel>
           <TextArea
             textAreaId={`email-block-settings-${label}`}
             value={value}
@@ -65,7 +65,7 @@ export const EmailBlockSettingsFieldInput = ({
     default:
       return (
         <div>
-          <StyledEmailFieldLabel>{label}</StyledEmailFieldLabel>
+          <EmailFieldLabel>{label}</EmailFieldLabel>
           <TextInput
             value={value}
             onChange={onChange}

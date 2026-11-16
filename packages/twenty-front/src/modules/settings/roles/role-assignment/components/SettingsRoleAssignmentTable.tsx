@@ -8,7 +8,6 @@ import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAto
 import { TableCell } from '@/ui/layout/table/components/TableCell';
 import { TableHeader } from '@/ui/layout/table/components/TableHeader';
 import { TableRow } from '@/ui/layout/table/components/TableRow';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { useMemo, useState } from 'react';
 
@@ -18,26 +17,23 @@ import { type Agent, type ApiKeyForRole } from '~/generated-metadata/graphql';
 import { type PartialWorkspaceMember } from '@/settings/roles/types/RoleWithPartialMembers';
 import { themeCssVariables } from 'twenty-ui/theme';
 import { normalizeSearchText } from 'twenty-ui/utilities';
+import * as stylex from '@stylexjs/stylex';
+import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledTable = styled.div`
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-`;
-
-const StyledTableRows = styled.div`
-  gap: ${themeCssVariables.spacing['0.5']};
-  padding-block: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledSearchContainer = styled.div`
-  padding-bottom: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledSearchInputContainer = styled.div`
-  > * input {
-    background: ${themeCssVariables.background.transparent.lighter};
-    border: 1px solid ${themeCssVariables.border.color.medium};
-  }
-`;
+const styles = stylex.create({
+  table: {
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: borderColor['--t-border-color-light'],
+  },
+  tableRows: {
+    gap: spacing['--t-spacing-0_5'],
+    paddingBlock: spacing['--t-spacing-2'],
+  },
+  searchContainer: {
+    paddingBottom: spacing['--t-spacing-2'],
+  },
+});
 
 type RoleTargetType = 'member' | 'agent' | 'apiKey';
 
@@ -144,26 +140,24 @@ export const SettingsRoleAssignmentTable = <T extends RoleTargetType>({
         title={t`Assigned ${roleTargetDisplayName}`}
         description={t`This role is assigned to these ${roleTargetDisplayName}.`}
       />
-      <StyledSearchContainer>
-        <StyledSearchInputContainer>
-          <SettingsTextInput
-            instanceId={`role-assignment-${roleTargetType}-search`}
-            value={searchFilter}
-            onChange={handleSearchChange}
-            placeholder={t`Search an assigned ${roleTargetDisplayName}...`}
-            fullWidth
-            LeftIcon={IconSearch}
-            sizeVariant="lg"
-          />
-        </StyledSearchInputContainer>
-      </StyledSearchContainer>
-      <StyledTable>
+      <div {...stylex.props(styles.searchContainer)}>
+        <SettingsTextInput
+          instanceId={`role-assignment-${roleTargetType}-search`}
+          value={searchFilter}
+          onChange={handleSearchChange}
+          placeholder={t`Search an assigned ${roleTargetDisplayName}...`}
+          fullWidth
+          LeftIcon={IconSearch}
+          sizeVariant="lg"
+        />
+      </div>
+      <div {...stylex.props(styles.table)}>
         <TableRow gridAutoColumns="2fr 4fr">
           {tableConfig[roleTargetType].columns.map((column) => (
             <TableHeader key={column}>{column}</TableHeader>
           ))}
         </TableRow>
-        <StyledTableRows>
+        <div {...stylex.props(styles.tableRows)}>
           {filteredRoleTargets.map((roleTarget) => (
             <SettingsRoleAssignmentTableRow
               key={roleTarget.id}
@@ -176,8 +170,8 @@ export const SettingsRoleAssignmentTable = <T extends RoleTargetType>({
               {tableConfig[roleTargetType].emptyStateText}
             </TableCell>
           )}
-        </StyledTableRows>
-      </StyledTable>
+        </div>
+      </div>
     </>
   );
 };

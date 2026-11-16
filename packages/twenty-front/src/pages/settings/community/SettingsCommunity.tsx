@@ -3,7 +3,6 @@ import { SettingsDiscoveryHeroCard } from '@/settings/components/SettingsDiscove
 import { SettingsPageContainer } from '@/settings/components/SettingsPageContainer';
 import { SettingsLabContent } from '@/settings/lab/components/SettingsLabContent';
 import { SettingsPageLayout } from '@/settings/components/layout/SettingsPageLayout';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { Section } from 'twenty-ui/components/layout';
 import {
@@ -15,32 +14,31 @@ import {
 } from 'twenty-ui/icon';
 import { SettingsPath } from 'twenty-shared/types';
 import { getSettingsPath } from 'twenty-shared/utils';
-import { MOBILE_VIEWPORT, useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 import coverDark from '~/pages/settings/community/assets/cover-dark.png';
 import coverLight from '~/pages/settings/community/assets/cover-light.png';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
 
 const SETTINGS_COMMUNITY_HERO_INSTANCE_ID_PREFIX = 'settings-community-hero';
 
-const StyledCardLink = styled.a`
-  display: block;
-  min-width: 0;
-  text-decoration: none;
-`;
-
-const StyledCardsGrid = styled.div`
-  display: grid;
-  gap: ${themeCssVariables.spacing[2]};
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-
-  @media (max-width: ${MOBILE_VIEWPORT}px) {
-    grid-template-columns: 1fr;
-  }
-`;
-
-const StyledFeaturesContent = styled.div`
-  display: grid;
-  gap: ${themeCssVariables.spacing[4]};
-`;
+const styles = stylex.create({
+  cardLink: {
+    display: 'block',
+    minWidth: '0',
+    textDecoration: 'none',
+  },
+  cardsGrid: {
+    display: 'grid',
+    gap: spacing['--t-spacing-2'],
+    gridTemplateColumns: { default: 'repeat(2, minmax(0, 1fr))', [media.mobile]: '1fr' },
+  },
+  featuresContent: {
+    display: 'grid',
+    gap: spacing['--t-spacing-4'],
+  },
+});
 
 type SettingsCommunityLink = {
   href: string;
@@ -95,13 +93,13 @@ export const SettingsCommunity = () => {
             title={t`Join the community`}
             description={t`Stay up to date with product news and community updates.`}
           />
-          <StyledCardsGrid>
+          <div {...stylex.props(styles.cardsGrid)}>
             {socialLinks.map(({ href, Icon, iconColor, cardTitle }) => (
-              <StyledCardLink
+              <a
                 key={href}
                 href={href}
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="noopener noreferrer" {...stylex.props(styles.cardLink)}
               >
                 <SettingsCard
                   Icon={
@@ -113,9 +111,9 @@ export const SettingsCommunity = () => {
                   iconColor={iconColor}
                   title={cardTitle}
                 />
-              </StyledCardLink>
+              </a>
             ))}
-          </StyledCardsGrid>
+          </div>
         </Section.Root>
 
         <Section.Root>
@@ -123,10 +121,10 @@ export const SettingsCommunity = () => {
             title={t`Partners`}
             description={t`Hire a partner to help you implement and customize Twenty.`}
           />
-          <StyledCardLink
+          <a
             href="https://twenty.com/partners/list"
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noopener noreferrer" {...stylex.props(styles.cardLink)}
           >
             <SettingsCard
               Icon={
@@ -137,7 +135,7 @@ export const SettingsCommunity = () => {
               }
               title={t`Browse partners`}
             />
-          </StyledCardLink>
+          </a>
         </Section.Root>
 
         <Section.Root>
@@ -145,12 +143,12 @@ export const SettingsCommunity = () => {
             title={t`Features`}
             description={t`Try our upcoming features. Note they are still in beta. Please bear with us and report any issues you find.`}
           />
-          <StyledFeaturesContent>
+          <div {...stylex.props(styles.featuresContent)}>
             <SettingsLabContent />
-            <StyledCardLink
+            <a
               href="https://twenty.com/releases"
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noopener noreferrer" {...stylex.props(styles.cardLink)}
             >
               <SettingsCard
                 Icon={
@@ -161,8 +159,8 @@ export const SettingsCommunity = () => {
                 }
                 title={t`Read changelog`}
               />
-            </StyledCardLink>
-          </StyledFeaturesContent>
+            </a>
+          </div>
         </Section.Root>
       </SettingsPageContainer>
     </SettingsPageLayout>

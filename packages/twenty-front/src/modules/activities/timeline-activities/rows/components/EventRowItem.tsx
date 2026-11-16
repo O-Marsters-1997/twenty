@@ -1,36 +1,37 @@
-import { styled } from '@linaria/react';
 import { type ReactNode } from 'react';
 
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type EventRowItemProps = {
   children: ReactNode;
   variant?: 'column' | 'action';
 };
 
-const StyledColumn = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.primary};
-  display: flex;
-  flex-direction: row;
-  gap: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledAction = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.secondary};
-  display: flex;
-  flex-direction: row;
-  gap: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  column: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-primary'],
+    display: 'flex',
+    flexDirection: 'row',
+    gap: spacing['--t-spacing-1'],
+  },
+  action: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-secondary'],
+    display: 'flex',
+    flexDirection: 'row',
+    gap: spacing['--t-spacing-1'],
+  },
+});
 
 export const EventRowItem = ({
   children,
   variant = 'column',
 }: EventRowItemProps) => {
   if (variant === 'action') {
-    return <StyledAction>{children}</StyledAction>;
+    return <div {...stylex.props(styles.action)}>{children}</div>;
   }
 
-  return <StyledColumn>{children}</StyledColumn>;
+  return <div {...stylex.props(styles.column)}>{children}</div>;
 };

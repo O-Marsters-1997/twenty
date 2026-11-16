@@ -1,3 +1,4 @@
+import { onboardingLayout } from '../../modules/onboarding/constants/onboardingLayout.stylex';
 import { OnboardingMainButton } from '@/onboarding/components/OnboardingMainButton';
 import { type OnboardingAction } from '@/onboarding/types/OnboardingAction';
 import { OnboardingSkipButton } from '@/onboarding/components/OnboardingSkipButton';
@@ -9,42 +10,40 @@ import { StyledOnboardingStepTitle } from '@/onboarding/components/StyledOnboard
 import { OnboardingImportPreview } from '@/onboarding/components/import-contacts/OnboardingImportPreview';
 import { OnboardingTrustBadges } from '@/onboarding/components/import-contacts/OnboardingTrustBadges';
 import { ONBOARDING_CONTENT_BLOCK_WIDTH } from '@/onboarding/constants/OnboardingContentBlockWidth';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledOnboardingStep = styled(StyledOnboardingStepPage)`
-  gap: ${themeCssVariables.spacing[8]};
-`;
-
-const StyledSubtitle = styled(StyledOnboardingStepSubtitle)`
-  max-width: 100%;
-  width: 320px;
-`;
-
-const StyledMiddle = styled.div`
-  align-items: flex-start;
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledFooter = styled.div`
-  align-items: flex-end;
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[4]};
-  max-width: 100%;
-  width: ${ONBOARDING_CONTENT_BLOCK_WIDTH}px;
-`;
-
-const StyledButtons = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  width: 100%;
-`;
+const styles = stylex.create({
+  step: {
+    gap: spacing['--t-spacing-8'],
+  },
+  subtitle: {
+    maxWidth: '100%',
+    width: '320px',
+  },
+  footer: {
+    alignItems: 'flex-end',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-4'],
+    maxWidth: '100%',
+    width: onboardingLayout.contentBlockWidth,
+  },
+  middle: {
+    alignItems: 'flex-start',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+  },
+  buttons: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+});
 
 type ImportContactsProps = {
   providerActions: OnboardingAction[];
@@ -58,28 +57,31 @@ export const ImportContacts = ({
   const { t } = useLingui();
 
   return (
-    <StyledOnboardingStep data-testid="onboarding-sync-emails-step">
+    <StyledOnboardingStepPage
+      data-testid="onboarding-sync-emails-step"
+      xstyle={styles.step}
+    >
       <StyledOnboardingStepHeading>
         <OnboardingStepAnimatedItem index={0}>
           <StyledOnboardingStepTitle>{t`Import your contacts`}</StyledOnboardingStepTitle>
         </OnboardingStepAnimatedItem>
         <OnboardingStepAnimatedItem index={1}>
-          <StyledSubtitle>
+          <StyledOnboardingStepSubtitle xstyle={styles.subtitle}>
             {t`Connect your email and calendar to see your entire network instantly. Takes only 30 seconds.`}
-          </StyledSubtitle>
+          </StyledOnboardingStepSubtitle>
         </OnboardingStepAnimatedItem>
       </StyledOnboardingStepHeading>
 
       <OnboardingStepAnimatedItem index={2}>
-        <StyledMiddle>
+        <div {...stylex.props(styles.middle)}>
           <OnboardingTrustBadges />
           <OnboardingImportPreview />
-        </StyledMiddle>
+        </div>
       </OnboardingStepAnimatedItem>
 
       <OnboardingStepAnimatedItem index={3}>
-        <StyledFooter>
-          <StyledButtons>
+        <div {...stylex.props(styles.footer)}>
+          <div {...stylex.props(styles.buttons)}>
             {providerActions.map((providerAction) => (
               <OnboardingMainButton
                 key={providerAction.label}
@@ -88,10 +90,10 @@ export const ImportContacts = ({
                 onClick={providerAction.onClick}
               />
             ))}
-          </StyledButtons>
+          </div>
           {isDefined(onSkip) && <OnboardingSkipButton onClick={onSkip} />}
-        </StyledFooter>
+        </div>
       </OnboardingStepAnimatedItem>
-    </StyledOnboardingStep>
+    </StyledOnboardingStepPage>
   );
 };

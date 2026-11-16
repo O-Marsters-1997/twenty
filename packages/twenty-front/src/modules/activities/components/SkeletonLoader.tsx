@@ -1,34 +1,34 @@
 import { SkeletonLine } from '@/ui/feedback/skeleton/components/SkeletonLine';
-import { styled } from '@linaria/react';
 import { SKELETON_HEIGHT_SIZES } from 'twenty-ui/primitives/feedback';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledSkeletonContainer = styled.div`
-  align-content: flex-start;
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  gap: ${themeCssVariables.spacing[4]};
-  padding: ${themeCssVariables.spacing[8]};
-  width: 100%;
-`;
-
-const StyledSkeletonSubSection = styled.div`
-  display: flex;
-  gap: ${themeCssVariables.spacing[4]};
-`;
-
-const StyledSkeletonSubSectionContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[3]};
-  justify-content: center;
-`;
-
-const StyledSkeletonColumn = styled(SkeletonLine)`
-  corner-shape: round;
-`;
+const styles = stylex.create({
+  skeletonContainer: {
+    alignContent: 'flex-start',
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    flexWrap: 'wrap',
+    gap: spacing['--t-spacing-4'],
+    paddingBlock: spacing['--t-spacing-8'],
+    paddingInline: spacing['--t-spacing-8'],
+    width: '100%',
+  },
+  skeletonColumn: {
+    cornerShape: 'round',
+  },
+  skeletonSubSection: {
+    display: 'flex',
+    gap: spacing['--t-spacing-4'],
+  },
+  skeletonSubSectionContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-3'],
+    justifyContent: 'center',
+  },
+});
 
 const SKELETON_COLUMN_HEIGHTS = {
   short: 84,
@@ -45,12 +45,13 @@ export const SkeletonLoader = ({
   }));
 
   return (
-    <StyledSkeletonContainer>
+    <div {...stylex.props(styles.skeletonContainer)}>
       <SkeletonLine width={440} height={SKELETON_HEIGHT_SIZES.s} />
       {withSubSections &&
         skeletonItems.map(({ id }, index) => (
-          <StyledSkeletonSubSection key={id}>
-            <StyledSkeletonColumn
+          <div key={id} {...stylex.props(styles.skeletonSubSection)}>
+            <SkeletonLine
+              {...stylex.props(styles.skeletonColumn)}
               width={24}
               borderRadius={80}
               height={
@@ -59,15 +60,15 @@ export const SkeletonLoader = ({
                   : SKELETON_COLUMN_HEIGHTS.short
               }
             />
-            <StyledSkeletonSubSectionContent>
+            <div {...stylex.props(styles.skeletonSubSectionContent)}>
               <SkeletonLine width={400} height={SKELETON_HEIGHT_SIZES.m} />
               <SkeletonLine width={400} height={SKELETON_HEIGHT_SIZES.m} />
               {index === 1 && (
                 <SkeletonLine width={400} height={SKELETON_HEIGHT_SIZES.m} />
               )}
-            </StyledSkeletonSubSectionContent>
-          </StyledSkeletonSubSection>
+            </div>
+          </div>
         ))}
-    </StyledSkeletonContainer>
+    </div>
   );
 };

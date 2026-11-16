@@ -4,7 +4,8 @@ import { PhonesFieldMenuItem } from '@/object-record/record-field/ui/meta-types/
 import { recordFieldInputIsFieldInErrorComponentState } from '@/object-record/record-field/ui/states/recordFieldInputIsFieldInErrorComponentState';
 import { phoneSchema } from '@/object-record/record-field/ui/validation-schemas/phoneSchema';
 import { useSetAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useSetAtomComponentState';
-import { styled } from '@linaria/react';
+import { mergeClassName } from '@/page-layout/utils/mergeClassName';
+import * as stylex from '@stylexjs/stylex';
 import { parsePhoneNumber, type E164Number } from 'libphonenumber-js';
 import ReactPhoneNumberInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
@@ -23,65 +24,71 @@ import { PhoneCountryPickerDropdownButton } from '@/ui/input/components/internal
 import { useContext } from 'react';
 import { MULTI_ITEM_FIELD_DEFAULT_MAX_VALUES } from 'twenty-shared/constants';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import {
+  backgroundTransparent,
+  borderColor,
+  font,
+  fontColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 import { FieldMetadataType } from '~/generated-metadata/graphql';
+import '~/third-party-styles/phones-field-input.css';
 import { stripSimpleQuotesFromString } from '~/utils/string/stripSimpleQuotesFromString';
 
-const StyledCustomPhoneInputContainer = styled.div<{
-  hasItem: boolean;
-  hasError?: boolean;
-}>`
-  background-color: ${({ hasItem }) =>
-    hasItem ? themeCssVariables.background.transparent.lighter : 'transparent'};
-  border: ${({ hasItem, hasError }) =>
-    hasItem
-      ? hasError
-        ? `1px solid ${themeCssVariables.border.color.danger}`
-        : `1px solid ${themeCssVariables.border.color.medium}`
-      : 'none'};
-  border-radius: ${({ hasItem }) => (hasItem ? '4px' : '0')};
-  height: ${({ hasItem }) => (hasItem ? '30px' : 'auto')};
-`;
-
-const StyledCustomPhoneInputWrapper = styled.div`
-  background-color: transparent;
-  border: none;
-  color: ${themeCssVariables.font.color.primary};
-  font-family: ${themeCssVariables.font.family};
-  font-size: inherit;
-  font-weight: inherit;
-  height: 100%;
-  width: calc(100% - ${themeCssVariables.spacing[8]});
-
-  .PhoneInput {
-    height: 100%;
-  }
-
-  .PhoneInputInput {
-    background: none;
-    border: none;
-    box-sizing: border-box;
-    color: ${themeCssVariables.font.color.primary};
-    height: 100%;
-    padding-left: ${themeCssVariables.spacing[2]};
-
-    &::placeholder,
-    &::-webkit-input-placeholder {
-      color: ${themeCssVariables.font.color.light};
-      font-family: ${themeCssVariables.font.family};
-      font-weight: ${themeCssVariables.font.weight.medium};
-    }
-
-    &:focus {
-      outline: none;
-    }
-  }
-
-  & svg {
-    border-radius: ${themeCssVariables.border.radius.xs};
-    height: 12px;
-  }
-`;
+const styles = stylex.create({
+  container: {
+    backgroundColor: 'transparent',
+    borderTopWidth: 0,
+    borderRightWidth: 0,
+    borderBottomWidth: 0,
+    borderLeftWidth: 0,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+    borderBottomRightRadius: 0,
+    borderBottomLeftRadius: 0,
+    height: 'auto',
+  },
+  containerWithItem: {
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
+    borderTopColor: borderColor['--t-border-color-medium'],
+    borderRightColor: borderColor['--t-border-color-medium'],
+    borderBottomColor: borderColor['--t-border-color-medium'],
+    borderLeftColor: borderColor['--t-border-color-medium'],
+    borderTopStyle: 'solid',
+    borderRightStyle: 'solid',
+    borderBottomStyle: 'solid',
+    borderLeftStyle: 'solid',
+    borderTopWidth: 1,
+    borderRightWidth: 1,
+    borderBottomWidth: 1,
+    borderLeftWidth: 1,
+    borderTopLeftRadius: 4,
+    borderTopRightRadius: 4,
+    borderBottomRightRadius: 4,
+    borderBottomLeftRadius: 4,
+    height: 30,
+  },
+  containerWithError: {
+    borderTopColor: borderColor['--t-border-color-danger'],
+    borderRightColor: borderColor['--t-border-color-danger'],
+    borderBottomColor: borderColor['--t-border-color-danger'],
+    borderLeftColor: borderColor['--t-border-color-danger'],
+  },
+  wrapper: {
+    backgroundColor: 'transparent',
+    borderTopWidth: 0,
+    borderRightWidth: 0,
+    borderBottomWidth: 0,
+    borderLeftWidth: 0,
+    color: fontColor['--t-font-color-primary'],
+    fontFamily: font['--t-font-family'],
+    fontSize: 'inherit',
+    fontWeight: 'inherit',
+    height: '100%',
+    width: `calc(100% - ${spacing['--t-spacing-8']})`,
+  },
+});
 
 export const PhonesFieldInput = () => {
   const { fieldDefinition, setDraftValue, draftValue } = usePhonesField();
@@ -229,11 +236,19 @@ export const PhonesFieldInput = () => {
         hasError,
       }) => {
         return (
-          <StyledCustomPhoneInputContainer
-            hasItem={!!phones.length}
-            hasError={hasError}
+          <div
+            {...stylex.props(
+              styles.container,
+              phones.length > 0 && styles.containerWithItem,
+              phones.length > 0 && hasError && styles.containerWithError,
+            )}
           >
-            <StyledCustomPhoneInputWrapper>
+            <div
+              {...mergeClassName(
+                stylex.props(styles.wrapper),
+                'phones-field-input',
+              )}
+            >
               <ReactPhoneNumberInput
                 autoFocus={autoFocus}
                 placeholder={placeholder}
@@ -247,8 +262,8 @@ export const PhonesFieldInput = () => {
                 countrySelectComponent={PhoneCountryPickerDropdownButton}
                 defaultCountry={defaultCountry}
               />
-            </StyledCustomPhoneInputWrapper>
-          </StyledCustomPhoneInputContainer>
+            </div>
+          </div>
         );
       }}
       onError={handleError}

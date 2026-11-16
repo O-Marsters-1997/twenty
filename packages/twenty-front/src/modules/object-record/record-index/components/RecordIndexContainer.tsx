@@ -1,5 +1,3 @@
-import { styled } from '@linaria/react';
-
 import { RecordBoardContainer } from '@/object-record/record-board/components/RecordBoardContainer';
 import { RecordIndexTableContainer } from '@/object-record/record-index/components/RecordIndexTableContainer';
 import { recordIndexViewTypeState } from '@/object-record/record-index/states/recordIndexViewTypeState';
@@ -13,22 +11,24 @@ import { RecordIndexFiltersToContextStoreEffect } from '@/object-record/record-i
 import { useHasCurrentViewNonReadableFields } from '@/object-record/record-index/hooks/useHasCurrentViewNonReadableFields';
 import { RecordList } from '@/object-record/record-list/components/RecordList';
 import { ViewType } from '@/views/types/ViewType';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow: hidden;
-  width: 100%;
-`;
-
-const StyledContainerWithPadding = styled.div`
-  box-sizing: border-box;
-  flex: 1;
-  margin-left: ${themeCssVariables.spacing[2]};
-  min-height: 0;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    overflow: 'hidden',
+    width: '100%',
+  },
+  containerWithPadding: {
+    boxSizing: 'border-box',
+    flex: '1',
+    marginLeft: spacing['--t-spacing-2'],
+    minHeight: '0',
+  },
+});
 
 export const RecordIndexContainer = () => {
   const recordIndexViewType = useAtomComponentStateValue(
@@ -42,7 +42,7 @@ export const RecordIndexContainer = () => {
     useHasCurrentViewNonReadableFields(objectMetadataItem);
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       {hasCurrentViewNonReadableFields ? (
         <RecordIndexEmptyStateNotShared
           nonReadableViewFieldInfo={nonReadableViewFieldInfo}
@@ -54,26 +54,26 @@ export const RecordIndexContainer = () => {
             <RecordIndexTableContainer recordTableId={recordIndexId} />
           )}
           {recordIndexViewType === ViewType.KANBAN && (
-            <StyledContainerWithPadding>
+            <div {...stylex.props(styles.containerWithPadding)}>
               <RecordBoardContainer
                 recordBoardId={recordIndexId}
                 viewBarId={recordIndexId}
                 objectNameSingular={objectNameSingular}
               />
-            </StyledContainerWithPadding>
+            </div>
           )}
           {recordIndexViewType === ViewType.CALENDAR && (
-            <StyledContainerWithPadding>
+            <div {...stylex.props(styles.containerWithPadding)}>
               <RecordIndexCalendarContainer />
-            </StyledContainerWithPadding>
+            </div>
           )}
           {recordIndexViewType === ViewType.LIST && (
-            <StyledContainerWithPadding>
+            <div {...stylex.props(styles.containerWithPadding)}>
               <RecordList />
-            </StyledContainerWithPadding>
+            </div>
           )}
         </>
       )}
-    </StyledContainer>
+    </div>
   );
 };

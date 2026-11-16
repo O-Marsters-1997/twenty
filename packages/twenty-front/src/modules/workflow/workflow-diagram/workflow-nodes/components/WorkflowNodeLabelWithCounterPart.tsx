@@ -1,12 +1,19 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import { type ReactNode } from 'react';
 
-const StyledNodeLabelWithCounterPart = styled.div`
-  align-items: center;
-  align-self: stretch;
-  box-sizing: border-box;
-  display: flex;
-  height: 14px;
-  justify-content: space-between;
-`;
+const styles = stylex.create({
+  root: {
+    alignItems: 'center',
+    alignSelf: 'stretch',
+    boxSizing: 'border-box',
+    display: 'flex',
+    height: '14px',
+    justifyContent: 'space-between',
+  },
+});
 
-export { StyledNodeLabelWithCounterPart as WorkflowNodeLabelWithCounterPart };
+export const WorkflowNodeLabelWithCounterPart = ({
+  children,
+}: {
+  children?: ReactNode;
+}) => <div {...stylex.props(styles.root)}>{children}</div>;

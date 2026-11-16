@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 
 import { ParticipantChip } from '@/activities/components/ParticipantChip';
@@ -6,31 +5,33 @@ import { type EmailThreadMessageParticipant } from '@/activities/emails/types/Em
 import { TooltipDelay } from '@/ui/layout/tooltip/constants/TooltipDelay';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { Tooltip } from 'twenty-ui/primitives/surfaces';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { dateLocaleState } from '@/localization/states/dateLocaleState';
 import {
   beautifyPastDateRelativeToNow,
   formatToHumanReadableDate,
 } from '~/utils/date-utils';
 import { isDefined } from 'twenty-shared/utils';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledEmailThreadMessageSender = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const StyledUnknownSender = styled.span`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.md};
-  padding: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledThreadMessageSentAt = styled.div`
-  align-items: flex-end;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  font-size: ${themeCssVariables.font.size.sm};
-`;
+const styles = stylex.create({
+  emailThreadMessageSender: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  unknownSender: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-md'],
+    paddingBlock: spacing['--t-spacing-1'],
+    paddingInline: spacing['--t-spacing-1'],
+  },
+  threadMessageSentAt: {
+    alignItems: 'flex-end',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    fontSize: fontSize['--t-font-size-sm'],
+  },
+});
 
 type EmailThreadMessageSenderProps = {
   sender?: EmailThreadMessageParticipant;
@@ -53,21 +54,21 @@ export const EmailThreadMessageSender = ({
         content={formatToHumanReadableDate(sentAt)}
         side="top"
       >
-        <StyledThreadMessageSentAt id={tooltipId}>
+        <div id={tooltipId} {...stylex.props(styles.threadMessageSentAt)}>
           {beautifyPastDateRelativeToNow(sentAt, localeCatalog)}
-        </StyledThreadMessageSentAt>
+        </div>
       </Tooltip>
     );
   }
 
   return (
-    <StyledEmailThreadMessageSender>
+    <div {...stylex.props(styles.emailThreadMessageSender)}>
       {isDefined(sender) ? (
         <ParticipantChip participant={sender} variant="bold" />
       ) : (
-        <StyledUnknownSender>{t`Unknown sender`}</StyledUnknownSender>
+        <span {...stylex.props(styles.unknownSender)}>{t`Unknown sender`}</span>
       )}
       {sentAtContent}
-    </StyledEmailThreadMessageSender>
+    </div>
   );
 };

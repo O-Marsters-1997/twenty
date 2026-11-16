@@ -1,7 +1,6 @@
 import { hasRecordGroupsComponentSelector } from '@/object-record/record-group/states/selectors/hasRecordGroupsComponentSelector';
-import { RECORD_TABLE_COLUMN_ADD_COLUMN_BUTTON_WIDTH } from '@/object-record/record-table/constants/RecordTableColumnAddColumnButtonWidth';
 import { RECORD_TABLE_COLUMN_ADD_COLUMN_BUTTON_WIDTH_CLASS_NAME } from '@/object-record/record-table/constants/RecordTableColumnAddColumnButtonWidthClassName';
-import { RECORD_TABLE_ROW_HEIGHT } from '@/object-record/record-table/constants/RecordTableRowHeight';
+import { recordTableLayout } from '../../constants/recordTableLayout.stylex';
 import { isRecordTableRowActiveComponentFamilyState } from '@/object-record/record-table/states/isRecordTableRowActiveComponentFamilyState';
 import { isRecordTableRowFocusActiveComponentState } from '@/object-record/record-table/states/isRecordTableRowFocusActiveComponentState';
 import { isRecordTableRowFocusedComponentFamilyState } from '@/object-record/record-table/states/isRecordTableRowFocusedComponentFamilyState';
@@ -9,23 +8,9 @@ import { isRecordTableScrolledVerticallyComponentState } from '@/object-record/r
 import { useAtomComponentFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentFamilyStateValue';
 import { useAtomComponentSelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentSelectorValue';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { cx } from '@linaria/core';
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
-
-const StyledEmptyHeaderCell = styled.div<{
-  shouldDisplayBorderBottom: boolean;
-}>`
-  background-color: ${themeCssVariables.background.primary};
-  border-bottom: ${({ shouldDisplayBorderBottom }) =>
-    shouldDisplayBorderBottom
-      ? `1px solid ${themeCssVariables.border.color.light}`
-      : 'none'};
-  height: ${RECORD_TABLE_ROW_HEIGHT}px;
-  max-height: ${RECORD_TABLE_ROW_HEIGHT}px;
-  width: ${RECORD_TABLE_COLUMN_ADD_COLUMN_BUTTON_WIDTH}px;
-  z-index: 1;
-`;
+import { mergeClassName } from '@/page-layout/utils/mergeClassName';
+import * as stylex from '@stylexjs/stylex';
+import { background, borderColor } from 'twenty-ui/theme/tokens.stylex';
 
 export const RecordTableHeaderEmptyLastColumn = () => {
   const isRecordTableRowActive = useAtomComponentFamilyStateValue(
@@ -59,13 +44,32 @@ export const RecordTableHeaderEmptyLastColumn = () => {
     !isFirstRowActiveOrFocused ||
     isRecordTableScrolledVertically;
 
+  const cellProps = stylex.props(
+    styles.cell,
+    shouldDisplayBorderBottom && styles.borderBottom,
+  );
+
   return (
-    <StyledEmptyHeaderCell
-      shouldDisplayBorderBottom={shouldDisplayBorderBottom}
-      className={cx(
-        'header-cell',
-        RECORD_TABLE_COLUMN_ADD_COLUMN_BUTTON_WIDTH_CLASS_NAME,
+    <div
+      {...mergeClassName(
+        cellProps,
+        `header-cell ${RECORD_TABLE_COLUMN_ADD_COLUMN_BUTTON_WIDTH_CLASS_NAME}`,
       )}
     />
   );
 };
+
+const styles = stylex.create({
+  cell: {
+    backgroundColor: background['--t-background-primary'],
+    height: recordTableLayout.rowHeight,
+    maxHeight: recordTableLayout.rowHeight,
+    width: recordTableLayout.addColumnButtonWidth,
+    zIndex: 1,
+  },
+  borderBottom: {
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: 1,
+  },
+});

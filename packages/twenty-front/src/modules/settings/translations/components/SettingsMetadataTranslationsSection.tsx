@@ -2,19 +2,21 @@ import { MetadataTranslationsTable } from '@/settings/translations/components/Me
 import { useMetadataTranslations } from '@/settings/translations/hooks/useMetadataTranslations';
 import { buildMetadataTranslationsTable } from '@/settings/translations/utils/buildMetadataTranslationsTable';
 import { SettingsTextInput } from '@/ui/input/components/SettingsTextInput';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useState } from 'react';
 import { Section } from 'twenty-ui/components/layout';
 import { IconSearch } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { type MetadataTranslationsInput } from '~/generated-metadata/graphql';
 import { useLocaleOptions } from '@/localization/hooks/useLocaleOptions';
 import { normalizeSearchText } from 'twenty-ui/utilities';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledSearchInputContainer = styled.div`
-  padding-bottom: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  searchInputContainer: {
+    paddingBottom: spacing['--t-spacing-2'],
+  },
+});
 
 type SettingsMetadataTranslationsSectionProps = {
   input: MetadataTranslationsInput;
@@ -58,7 +60,7 @@ export const SettingsMetadataTranslationsSection = ({
         title={t`Languages`}
         description={t`Languages without a translation show the source text.`}
       />
-      <StyledSearchInputContainer>
+      <div {...stylex.props(styles.searchInputContainer)}>
         <SettingsTextInput
           instanceId="settings-metadata-translations-search"
           LeftIcon={IconSearch}
@@ -66,7 +68,7 @@ export const SettingsMetadataTranslationsSection = ({
           value={searchTerm}
           onChange={setSearchTerm}
         />
-      </StyledSearchInputContainer>
+      </div>
       <MetadataTranslationsTable
         columns={columns}
         languageRows={languageRows}

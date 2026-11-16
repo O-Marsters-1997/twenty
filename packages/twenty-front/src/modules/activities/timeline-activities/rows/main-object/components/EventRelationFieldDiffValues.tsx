@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useMemo } from 'react';
 
 import { isRelationFieldChangeValue } from '@/activities/timeline-activities/utils/relationFieldChangeValue';
@@ -10,23 +9,25 @@ import { TooltipDelay } from '@/ui/layout/tooltip/constants/TooltipDelay';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { Tooltip } from 'twenty-ui/primitives/surfaces';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor } from 'twenty-ui/theme/tokens.stylex';
 
 type EventRelationFieldDiffValuesProps = {
   fieldDiff: { before: unknown; after: unknown };
   fieldMetadataItem: FieldMetadataItem;
 };
 
-const StyledRelationValue = styled.div`
-  color: ${themeCssVariables.font.color.primary};
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledEmptyValue = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-`;
+const styles = stylex.create({
+  relationValue: {
+    color: fontColor['--t-font-color-primary'],
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  emptyValue: {
+    color: fontColor['--t-font-color-tertiary'],
+  },
+});
 
 const getRelationRecordId = (value: unknown): string | null => {
   if (!isRelationFieldChangeValue(value)) {
@@ -140,11 +141,11 @@ const RelationFieldDiffValue = ({
       positionMethod="fixed"
     >
       {afterDisplayName !== null ? (
-        <StyledRelationValue>{afterDisplayName}</StyledRelationValue>
+        <div {...stylex.props(styles.relationValue)}>{afterDisplayName}</div>
       ) : (
-        <StyledEmptyValue>
+        <div {...stylex.props(styles.emptyValue)}>
           <Trans>Empty</Trans>
-        </StyledEmptyValue>
+        </div>
       )}
     </Tooltip>
   );

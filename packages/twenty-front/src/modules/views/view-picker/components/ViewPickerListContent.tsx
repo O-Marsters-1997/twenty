@@ -1,5 +1,4 @@
 import { ListItemButton } from 'twenty-ui/components/navigation';
-import { styled } from '@linaria/react';
 import { type DraggableListDropResult } from '@/ui/layout/draggable-list/types/DraggableListDropResult';
 import { type MouseEvent, useCallback } from 'react';
 
@@ -25,13 +24,16 @@ import { computeViewPickerVisibleViews } from '@/views/view-picker/utils/compute
 import { useIsFeatureEnabled } from '@/workspace/hooks/useIsFeatureEnabled';
 import { useLingui } from '@lingui/react/macro';
 import { IconPlus } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { FeatureFlagKey, ViewVisibility } from '~/generated-metadata/graphql';
 import { moveArrayItem } from '~/utils/array/moveArrayItem';
+import * as stylex from '@stylexjs/stylex';
+import { fontWeight } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledBoldDropdownMenuItemsContainerWrapper = styled.div`
-  font-weight: ${themeCssVariables.font.weight.regular};
-`;
+const styles = stylex.create({
+  boldDropdownMenuItemsContainerWrapper: {
+    fontWeight: fontWeight['--t-font-weight-regular'],
+  },
+});
 
 export const ViewPickerListContent = () => {
   const { t } = useLingui();
@@ -217,14 +219,14 @@ export const ViewPickerListContent = () => {
         </>
       )}
       <DropdownMenuSeparator />
-      <StyledBoldDropdownMenuItemsContainerWrapper>
+      <div {...stylex.props(styles.boldDropdownMenuItemsContainerWrapper)}>
         <DropdownMenuItemsContainer scrollable={false}>
           <ListItemButton
             onClick={handleAddViewButtonClick}
             startIcon={<IconPlus />}
           >{t`Add view`}</ListItemButton>
         </DropdownMenuItemsContainer>
-      </StyledBoldDropdownMenuItemsContainerWrapper>
+      </div>
     </LegacyDropdownContent>
   );
 };

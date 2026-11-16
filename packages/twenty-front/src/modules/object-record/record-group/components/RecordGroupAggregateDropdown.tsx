@@ -5,9 +5,9 @@ import { RecordGroupAggregateDropdownComponentInstanceContext } from '@/object-r
 import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent';
 import { DropdownRoot } from '@/ui/layout/dropdown/components/DropdownRoot';
 import { DROPDOWN_OFFSET_Y } from '@/ui/layout/dropdown/constants/DropdownOffsetY';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { type Nullable } from 'twenty-shared/types';
+import * as stylex from '@stylexjs/stylex';
 
 type RecordGroupAggregateDropdownProps = {
   aggregateValue?: Nullable<string | number>;
@@ -16,9 +16,11 @@ type RecordGroupAggregateDropdownProps = {
   dropdownId: string;
 };
 
-const StyledContainer = styled.div`
-  flex-shrink: 0;
-`;
+const styles = stylex.create({
+  container: {
+    flexShrink: '0',
+  },
+});
 
 export const RecordGroupAggregateDropdown = ({
   objectMetadataItem,
@@ -30,7 +32,7 @@ export const RecordGroupAggregateDropdown = ({
     <RecordGroupAggregateDropdownComponentInstanceContext.Provider
       value={{ instanceId: dropdownId }}
     >
-      <StyledContainer>
+      <div {...stylex.props(styles.container)}>
         <DropdownRoot dropdownId={dropdownId} type="picker">
           <RecordGroupAggregateDropdownButton
             dropdownId={dropdownId}
@@ -47,7 +49,7 @@ export const RecordGroupAggregateDropdown = ({
             />
           </DropdownContent>
         </DropdownRoot>
-      </StyledContainer>
+      </div>
     </RecordGroupAggregateDropdownComponentInstanceContext.Provider>
   );
 };

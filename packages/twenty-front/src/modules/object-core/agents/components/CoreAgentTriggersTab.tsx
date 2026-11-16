@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import {
   AGENT_TRIGGER_LIMITS,
@@ -7,27 +6,28 @@ import {
 import { Section } from 'twenty-ui/components/layout';
 import { IconClock, IconAddressBook } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { CoreAgentTriggerCard } from '@/object-core/agents/components/CoreAgentTriggerCard';
 import { buildDefaultCoreAgentTrigger } from '@/object-core/agents/utils/buildDefaultCoreAgentTrigger';
 import { useObjectMetadataItemSelectOptions } from '@/object-metadata/hooks/useObjectMetadataItemSelectOptions';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledTriggerList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[3]};
-`;
-
-const StyledActions = styled.div`
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  margin-top: ${themeCssVariables.spacing[3]};
-`;
-
-const StyledEmptyMessage = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-`;
+const styles = stylex.create({
+  triggerList: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-3'],
+  },
+  actions: {
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    marginTop: spacing['--t-spacing-3'],
+  },
+  emptyMessage: {
+    color: fontColor['--t-font-color-tertiary'],
+  },
+});
 
 type CoreAgentTriggersTabProps = {
   triggers: AgentTrigger[];
@@ -76,11 +76,11 @@ export const CoreAgentTriggersTab = ({
         title={t`Triggers`}
         description={t`Run this agent on its own when records change or on a schedule. It runs with its role's permissions.`}
       />
-      <StyledTriggerList>
+      <div {...stylex.props(styles.triggerList)}>
         {triggers.length === 0 && (
-          <StyledEmptyMessage>
+          <div {...stylex.props(styles.emptyMessage)}>
             {t`This agent only runs when someone sends it a message.`}
-          </StyledEmptyMessage>
+          </div>
         )}
         {triggers.map((trigger) => (
           <CoreAgentTriggerCard
@@ -91,9 +91,9 @@ export const CoreAgentTriggersTab = ({
             disabled={disabled}
           />
         ))}
-      </StyledTriggerList>
+      </div>
       {canAddTrigger && (
-        <StyledActions>
+        <div {...stylex.props(styles.actions)}>
           <Button
             startIcon={<IconAddressBook />}
             size="sm"
@@ -106,7 +106,7 @@ export const CoreAgentTriggersTab = ({
             variant="outline"
             onClick={() => addTrigger('CRON')}
           >{t`Add schedule`}</Button>
-        </StyledActions>
+        </div>
       )}
     </Section.Root>
   );

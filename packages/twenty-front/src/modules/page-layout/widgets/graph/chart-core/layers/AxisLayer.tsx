@@ -5,8 +5,8 @@ import { ZeroLine } from '@/page-layout/widgets/graph/chart-core/layers/ZeroLine
 import { type AxisLayerConfig } from '@/page-layout/widgets/graph/chart-core/types/AxisLayerConfig';
 import { getAxisLayerLayout } from '@/page-layout/widgets/graph/chart-core/utils/getAxisLayerLayout';
 import { type ChartMargins } from '@/page-layout/widgets/graph/types/ChartMargins';
-import { styled } from '@linaria/react';
 import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
 
 type AxisLayerProps = {
   bottomAxisTickRotation: number;
@@ -26,13 +26,15 @@ type AxisLayerProps = {
   axisConfig: AxisLayerConfig;
 };
 
-const StyledSvgOverlay = styled.svg`
-  left: 0;
-  overflow: visible;
-  pointer-events: none;
-  position: absolute;
-  top: 0;
-`;
+const styles = stylex.create({
+  svgOverlay: {
+    left: '0',
+    overflow: 'visible',
+    pointerEvents: 'none',
+    position: 'absolute',
+    top: '0',
+  },
+});
 
 const STROKE_ALIGNMENT_OFFSET = 0.5 as const;
 
@@ -85,7 +87,11 @@ export const AxisLayer = ({
   });
 
   return (
-    <StyledSvgOverlay width={chartWidth} height={chartHeight}>
+    <svg
+      width={chartWidth}
+      height={chartHeight}
+      {...stylex.props(styles.svgOverlay)}
+    >
       <g transform={`translate(${margins.left}, ${margins.top})`}>
         <line
           x1={0}
@@ -155,6 +161,6 @@ export const AxisLayer = ({
           )}
         </g>
       </g>
-    </StyledSvgOverlay>
+    </svg>
   );
 };

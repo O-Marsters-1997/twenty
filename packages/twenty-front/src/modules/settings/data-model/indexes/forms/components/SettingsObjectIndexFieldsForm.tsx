@@ -3,36 +3,36 @@ import { buildIndexableSelectOptions } from '@/settings/data-model/indexes/utils
 import { decodeIndexableOptionValue } from '@/settings/data-model/indexes/utils/decodeIndexableOptionValue';
 import { encodeIndexableOptionValue } from '@/settings/data-model/indexes/utils/encodeIndexableOptionValue';
 import { Select } from '@/ui/input/components/Select';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useMemo } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { IconTrash, useIcons } from 'twenty-ui/icon';
 import { type SelectOption } from 'twenty-ui/primitives/input';
 import { IconButton } from 'twenty-ui/components/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { type SettingsObjectNewIndexFormValues } from '@/settings/data-model/indexes/forms/validation-schemas/settingsObjectNewIndexFormSchema';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsObjectIndexFieldsFormProps = {
   indexableFields: FieldMetadataItem[];
 };
 
-const StyledFieldRow = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  margin-bottom: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledSelectWrapper = styled.div`
-  flex: 1;
-  min-width: 0;
-`;
-
-const StyledPlaceholder = styled.div`
-  height: ${themeCssVariables.spacing[8]};
-  width: ${themeCssVariables.spacing[8]};
-`;
+const styles = stylex.create({
+  fieldRow: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    marginBottom: spacing['--t-spacing-2'],
+  },
+  selectWrapper: {
+    flex: '1',
+    minWidth: '0',
+  },
+  placeholder: {
+    height: spacing['--t-spacing-8'],
+    width: spacing['--t-spacing-8'],
+  },
+});
 
 export const SettingsObjectIndexFieldsForm = ({
   indexableFields,
@@ -103,8 +103,11 @@ export const SettingsObjectIndexFieldsForm = ({
               const isEmptyRow = entry === null;
 
               return (
-                <StyledFieldRow key={`${rowIndex}-${currentValue || 'empty'}`}>
-                  <StyledSelectWrapper>
+                <div
+                  key={`${rowIndex}-${currentValue || 'empty'}`}
+                  {...stylex.props(styles.fieldRow)}
+                >
+                  <div {...stylex.props(styles.selectWrapper)}>
                     <Select
                       dropdownId={`settings-object-new-index-field-${rowIndex}`}
                       value={currentValue}
@@ -114,9 +117,9 @@ export const SettingsObjectIndexFieldsForm = ({
                       fullWidth
                       withSearchInput
                     />
-                  </StyledSelectWrapper>
+                  </div>
                   {isEmptyRow ? (
-                    <StyledPlaceholder />
+                    <div {...stylex.props(styles.placeholder)} />
                   ) : (
                     <IconButton
                       variant="ghost"
@@ -127,7 +130,7 @@ export const SettingsObjectIndexFieldsForm = ({
                       <IconTrash />
                     </IconButton>
                   )}
-                </StyledFieldRow>
+                </div>
               );
             })}
           </>

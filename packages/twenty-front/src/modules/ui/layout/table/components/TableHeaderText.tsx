@@ -1,8 +1,24 @@
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
+import { type ComponentProps } from 'react';
 
-const StyledTableHeaderText = styled.div`
-  padding-bottom: ${themeCssVariables.spacing['0.5']};
-`;
+const styles = stylex.create({
+  text: {
+    paddingBottom: spacing['--t-spacing-0_5'],
+  },
+});
 
-export { StyledTableHeaderText as TableHeaderText };
+export const TableHeaderText = ({
+  className,
+  ...props
+}: ComponentProps<'div'>) => {
+  const rootProps = stylex.props(styles.text);
+
+  return (
+    <div
+      {...props}
+      {...rootProps}
+      className={[rootProps.className, className].join(' ')}
+    />
+  );
+};

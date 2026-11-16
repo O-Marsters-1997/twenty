@@ -3,18 +3,25 @@ import { useObjectMorphJunctionConfig } from '@/object-record/record-field/ui/ho
 import { useTargetRecord } from '@/ui/layout/contexts/useTargetRecord';
 import { useWorkspaceSurface } from '@/ui/layout/hooks/useWorkspaceSurface';
 import { SidePanelProvider } from '@/ui/layout/side-panel/contexts/SidePanelContext';
-import { styled } from '@linaria/react';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  box-sizing: border-box;
-  display: flex;
-  flex-shrink: 0;
-  padding: ${themeCssVariables.spacing[2]};
-  width: 100%;
-`;
+const styles = stylex.create({
+  container: {
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: borderColor['--t-border-color-light'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexShrink: '0',
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+});
 
 export const WidgetRelationsHeader = () => {
   const targetRecord = useTargetRecord();
@@ -30,14 +37,14 @@ export const WidgetRelationsHeader = () => {
 
   return (
     <SidePanelProvider value={{ isInSidePanel }}>
-      <StyledContainer>
+      <div {...stylex.props(styles.container)}>
         <RecordTargetsInlineCell
           objectNameSingular={targetRecord.targetObjectNameSingular}
           recordId={targetRecord.id}
           instanceIdPrefix={`widget-relations-header${isInSidePanel ? '-side-panel' : ''}`}
           showLabel
         />
-      </StyledContainer>
+      </div>
     </SidePanelProvider>
   );
 };

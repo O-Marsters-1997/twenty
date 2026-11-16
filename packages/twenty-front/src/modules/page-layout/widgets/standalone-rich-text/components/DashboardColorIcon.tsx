@@ -1,23 +1,7 @@
-import { styled } from '@linaria/react';
-
 import { type BlockNoteColor } from '@/page-layout/widgets/standalone-rich-text/types/BlockNoteColor';
-import { themeCssVariables, useTheme } from 'twenty-ui/theme';
-const StyledColorIcon = styled.div<{
-  textColorValue: string;
-  backgroundColorValue: string;
-}>`
-  background-color: ${({ backgroundColorValue }) => backgroundColorValue};
-  border-radius: ${themeCssVariables.border.radius.xs};
-  color: ${({ textColorValue }) => textColorValue};
-  font-size: 12px;
-  font-weight: ${themeCssVariables.font.weight.medium};
-  height: 16px;
-  line-height: 16px;
-  pointer-events: none;
-  text-align: center;
-  width: 16px;
-`;
-
+import { useTheme } from 'twenty-ui/theme';
+import { borderRadius, fontWeight } from 'twenty-ui/theme/tokens.stylex';
+import * as stylex from '@stylexjs/stylex';
 type DashboardColorIconProps = {
   textColor?: BlockNoteColor;
   backgroundColor?: BlockNoteColor;
@@ -62,17 +46,35 @@ export const DashboardColorIcon = ({
   };
 
   return (
-    <StyledColorIcon
-      textColorValue={
-        textColor ? getThemeColorForTextColor(textColor) : 'inherit'
-      }
-      backgroundColorValue={
-        backgroundColor
-          ? getThemeColorForBackgroundColor(backgroundColor)
-          : 'transparent'
-      }
+    <div
+      {...stylex.props(
+        styles.icon,
+        styles.colors(
+          textColor ? getThemeColorForTextColor(textColor) : 'inherit',
+          backgroundColor
+            ? getThemeColorForBackgroundColor(backgroundColor)
+            : 'transparent',
+        ),
+      )}
     >
       A
-    </StyledColorIcon>
+    </div>
   );
 };
+
+const styles = stylex.create({
+  icon: {
+    borderRadius: borderRadius['--t-border-radius-xs'],
+    fontSize: 12,
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    height: 16,
+    lineHeight: '16px',
+    pointerEvents: 'none',
+    textAlign: 'center',
+    width: 16,
+  },
+  colors: (textColor: string, backgroundColor: string) => ({
+    backgroundColor,
+    color: textColor,
+  }),
+});

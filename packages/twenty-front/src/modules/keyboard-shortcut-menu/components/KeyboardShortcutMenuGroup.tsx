@@ -1,17 +1,18 @@
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { color, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledGroupHeading = styled.label`
-  color: ${themeCssVariables.color.gray10};
-  padding-bottom: ${themeCssVariables.spacing[1]};
-  padding-top: ${themeCssVariables.spacing[4]};
-`;
+const styles = stylex.create({
+  group: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+  },
+  groupHeading: {
+    color: color['--t-color-gray10'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingTop: spacing['--t-spacing-4'],
+  },
+});
 
 type KeyboardMenuGroupProps = {
   heading: string;
@@ -23,9 +24,9 @@ export const KeyboardMenuGroup = ({
   children,
 }: KeyboardMenuGroupProps) => {
   return (
-    <StyledGroup>
-      <StyledGroupHeading>{heading}</StyledGroupHeading>
+    <div {...stylex.props(styles.group)}>
+      <label {...stylex.props(styles.groupHeading)}>{heading}</label>
       {children}
-    </StyledGroup>
+    </div>
   );
 };

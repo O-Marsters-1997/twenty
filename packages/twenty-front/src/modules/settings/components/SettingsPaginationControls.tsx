@@ -1,8 +1,8 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsPaginationControlsProps = {
   page: number;
@@ -12,13 +12,15 @@ type SettingsPaginationControlsProps = {
   hasNextPage?: boolean;
 };
 
-const StyledContainer = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  justify-content: flex-end;
-  padding-top: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    justifyContent: 'flex-end',
+    paddingTop: spacing['--t-spacing-2'],
+  },
+});
 
 export const SettingsPaginationControls = ({
   page,
@@ -34,7 +36,7 @@ export const SettingsPaginationControls = ({
     : page + 1 >= pageCount;
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <Button
         size="sm"
         disabled={page === 0 || isLoading}
@@ -48,6 +50,6 @@ export const SettingsPaginationControls = ({
         onClick={() => onPageChange(page + 1)}
         variant="outline"
       >{t`Next`}</Button>
-    </StyledContainer>
+    </div>
   );
 };

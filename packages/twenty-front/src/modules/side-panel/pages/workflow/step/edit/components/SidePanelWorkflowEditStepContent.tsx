@@ -4,14 +4,16 @@ import { workflowSelectedNodeComponentState } from '@/workflow/workflow-diagram/
 import { WorkflowStepDetail } from '@/workflow/workflow-steps/components/WorkflowStepDetail';
 import { useUpdateStep } from '@/workflow/workflow-steps/hooks/useUpdateStep';
 import { useUpdateWorkflowVersionTrigger } from '@/workflow/workflow-trigger/hooks/useUpdateWorkflowVersionTrigger';
-import { styled } from '@linaria/react';
 import { isDefined } from 'twenty-shared/utils';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+  },
+});
 
 export const SidePanelWorkflowEditStepContent = () => {
   const flow = useFlowOrThrow();
@@ -27,7 +29,7 @@ export const SidePanelWorkflowEditStepContent = () => {
   }
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <WorkflowStepDetail
         stepId={workflowSelectedNode}
         trigger={flow.trigger}
@@ -35,6 +37,6 @@ export const SidePanelWorkflowEditStepContent = () => {
         onActionUpdate={updateStep}
         onTriggerUpdate={updateTrigger}
       />
-    </StyledContainer>
+    </div>
   );
 };

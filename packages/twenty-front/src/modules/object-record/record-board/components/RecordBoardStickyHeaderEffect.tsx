@@ -13,15 +13,9 @@ export const RecordBoardStickyHeaderEffect = () => {
 
   // TODO: move this outside because it might cause way too many re-renders for other hooks
   useEffect(() => {
-    if (scrollWrapperScrollTop > 0) {
-      document
-        .getElementById(getRecordBoardHeaderHtmlId(recordBoardId))
-        ?.classList.add('header-sticky');
-    } else {
-      document
-        .getElementById(getRecordBoardHeaderHtmlId(recordBoardId))
-        ?.classList.remove('header-sticky');
-    }
+    document
+      .getElementById(getRecordBoardHeaderHtmlId(recordBoardId))
+      ?.setAttribute('data-sticky', String(scrollWrapperScrollTop > 0));
   }, [scrollWrapperScrollTop, recordBoardId]);
 
   return <></>;

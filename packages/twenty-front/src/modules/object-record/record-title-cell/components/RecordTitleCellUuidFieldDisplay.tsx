@@ -2,24 +2,36 @@ import { FieldContext } from '@/object-record/record-field/ui/contexts/FieldCont
 import { recordStoreFamilyState } from '@/object-record/record-store/states/recordStoreFamilyState';
 import { type RecordTitleCellContainerType } from '@/object-record/record-title-cell/types/RecordTitleCellContainerType';
 import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
-import { styled } from '@linaria/react';
 import { useContext } from 'react';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  borderRadius,
+  fontColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledDiv = styled.div`
-  align-items: center;
-  background: inherit;
-  border: none;
-  border-radius: ${themeCssVariables.border.radius.md};
-  box-sizing: border-box;
-  color: ${themeCssVariables.font.color.primary};
-  display: flex;
-  height: 24px;
-  justify-content: center;
-  overflow: hidden;
-  padding: ${themeCssVariables.spacing[0]} 5px;
-`;
+const styles = stylex.create({
+  div: {
+    alignItems: 'center',
+    background: 'inherit',
+    borderStyle: 'none',
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    boxSizing: 'border-box',
+    color: fontColor['--t-font-color-primary'],
+    display: 'flex',
+    height: '24px',
+    justifyContent: 'center',
+    overflow: 'hidden',
+    paddingTop: spacing['--t-spacing-0'],
+    paddingRight: '5px',
+    paddingBottom: spacing['--t-spacing-0'],
+    paddingLeft: '5px',
+  },
+});
 
 export const RecordTitleCellUuidFieldDisplay = ({
   containerType: _containerType,
@@ -33,8 +45,8 @@ export const RecordTitleCellUuidFieldDisplay = ({
   const uuidValue = recordStore?.[fieldDefinition.metadata.fieldName] ?? '';
 
   return (
-    <StyledDiv>
+    <div {...stylex.props(styles.div)}>
       <OverflowingTextWithTooltip text={uuidValue} />
-    </StyledDiv>
+    </div>
   );
 };

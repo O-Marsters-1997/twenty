@@ -1,17 +1,24 @@
 import { useRender } from '@base-ui/react/use-render';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 
-import styles from '@ui/primitives/surfaces/internal/Dialog.module.scss';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
+
+import { dialogStyles } from '../../internal/Dialog.stylex';
 import { type AlertDialogHeaderProps } from '../types/AlertDialogHeaderProps';
 
 export const AlertDialogHeader = ({
   render,
   ref,
   className,
+  xstyle,
   ...props
-}: AlertDialogHeaderProps) =>
+}: WithXstyle<AlertDialogHeaderProps>) =>
   useRender({
     render,
     ref,
-    props: { ...props, className: clsx(styles.header, className) },
+    props: {
+      ...props,
+      ...mergeStylexProps(stylex.props(dialogStyles.header, xstyle), className),
+    },
   });

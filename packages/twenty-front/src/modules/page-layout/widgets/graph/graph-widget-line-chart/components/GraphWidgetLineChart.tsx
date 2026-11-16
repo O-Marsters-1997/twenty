@@ -27,7 +27,6 @@ import {
 } from '@/page-layout/widgets/graph/utils/graphFormatters';
 import { NodeDimensionEffect } from '@/ui/utilities/dimensions/components/NodeDimensionEffect';
 import { useSetAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useSetAtomComponentState';
-import { styled } from '@linaria/react';
 import {
   ResponsiveLine,
   type LineCustomSvgLayerProps,
@@ -39,6 +38,7 @@ import { useCallback, useRef, useState } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { useTheme } from 'twenty-ui/theme';
 import { useDebouncedCallback } from 'use-debounce';
+import * as stylex from '@stylexjs/stylex';
 
 type CrosshairLayerProps = LineCustomSvgLayerProps<LineSeries>;
 type PointLabelsLayerProps = LineCustomSvgLayerProps<LineSeries>;
@@ -65,14 +65,16 @@ type GraphWidgetLineChartProps = {
   tooltipDisplayType?: GraphValueFormatOptions['displayType'];
 } & GraphValueFormatOptions;
 
-const StyledContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: center;
-  width: 100%;
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    justifyContent: 'center',
+    width: '100%',
+  },
+});
 
 export const GraphWidgetLineChart = ({
   data,
@@ -297,9 +299,9 @@ export const GraphWidgetLineChart = ({
   );
 
   return (
-    <StyledContainer id={id}>
+    <div id={id} {...stylex.props(styles.container)}>
       <GraphWidgetChartContainer
-        $isClickable={hasClickableItems}
+        isClickable={hasClickableItems}
         onMouseLeave={() => debouncedHideTooltip()}
         ref={containerRef}
       >
@@ -369,6 +371,6 @@ export const GraphWidgetLineChart = ({
       {showLegend && data.length > 0 && (
         <GraphWidgetLegend show items={legendItems} />
       )}
-    </StyledContainer>
+    </div>
   );
 };

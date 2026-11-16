@@ -1,10 +1,12 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { motion, useReducedMotion } from 'framer-motion';
 import { type ReactNode } from 'react';
 
-const StyledItem = styled(motion.div)`
-  display: flex;
-`;
+const styles = stylex.create({
+  item: {
+    display: 'flex',
+  },
+});
 
 type OnboardingSkipDialogAvatarItemProps = {
   index: number;
@@ -18,7 +20,8 @@ export const OnboardingSkipDialogAvatarItem = ({
   const shouldReduceMotion = useReducedMotion();
 
   return (
-    <StyledItem
+    <motion.div
+      {...stylex.props(styles.item)}
       initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 0.6 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{
@@ -29,6 +32,6 @@ export const OnboardingSkipDialogAvatarItem = ({
       }}
     >
       {children}
-    </StyledItem>
+    </motion.div>
   );
 };

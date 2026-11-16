@@ -1,11 +1,5 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { type ReactNode } from 'react';
-
-const StyledPreviewContent = styled.div<{ isMobile: boolean }>`
-  display: flex;
-  flex-direction: ${({ isMobile }) => (isMobile ? 'column' : 'row')};
-  gap: 6px;
-`;
 
 export const SettingsDataModelFieldRelationPreviewContent = ({
   isMobile,
@@ -15,6 +9,19 @@ export const SettingsDataModelFieldRelationPreviewContent = ({
   children: ReactNode;
 }) => {
   return (
-    <StyledPreviewContent isMobile={isMobile}>{children}</StyledPreviewContent>
+    <div {...stylex.props(styles.content, isMobile && styles.contentMobile)}>
+      {children}
+    </div>
   );
 };
+
+const styles = stylex.create({
+  content: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 6,
+  },
+  contentMobile: {
+    flexDirection: 'column',
+  },
+});

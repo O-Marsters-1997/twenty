@@ -1,8 +1,10 @@
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  background,
+  borderColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-import { RECORD_BOARD_COLUMN_WIDTH } from '@/object-record/record-board/constants/RecordBoardColumnWidth';
-import { RECORD_BOARD_COLUMN_WIDTH_CSS_VARIABLE_NAME } from '@/object-record/record-board/constants/RecordBoardColumnWidthCssVariableName';
 import { RecordBoardColumnCardsContainer } from '@/object-record/record-board/record-board-column/components/RecordBoardColumnCardsContainer';
 import { RecordBoardColumnContext } from '@/object-record/record-board/record-board-column/contexts/RecordBoardColumnContext';
 import { useShouldHideRecordGroup } from '@/object-record/record-group/hooks/useShouldHideRecordGroup';
@@ -17,22 +19,24 @@ import { RECORD_BOARD_CARD_DND_TYPE } from '@/object-record/record-board/record-
 import { RECORD_BOARD_COLUMN_DND_TYPE } from '@/object-record/record-board/record-board-dnd/constants/RecordBoardColumnDndType';
 import { DND_KIT_COLLISION_PRIORITY } from '@/ui/utilities/drag-and-drop/constants/DndKitCollisionPriority';
 
-const StyledColumn = styled.div`
-  background-color: ${themeCssVariables.background.primary};
-  display: flex;
-  flex-direction: column;
-  max-width: var(
-    ${RECORD_BOARD_COLUMN_WIDTH_CSS_VARIABLE_NAME},
-    ${RECORD_BOARD_COLUMN_WIDTH}px
-  );
-  min-width: var(
-    ${RECORD_BOARD_COLUMN_WIDTH_CSS_VARIABLE_NAME},
-    ${RECORD_BOARD_COLUMN_WIDTH}px
-  );
-  padding: ${themeCssVariables.spacing[2]};
-  padding-top: 0px;
-  position: relative;
-`;
+const styles = stylex.create({
+  column: {
+    backgroundColor: background['--t-background-primary'],
+    display: 'flex',
+    flexDirection: 'column',
+    maxWidth: 'var(--record-board-column-width, 200px)',
+    minWidth: 'var(--record-board-column-width, 200px)',
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingInline: spacing['--t-spacing-2'],
+    paddingTop: '0px',
+    position: 'relative',
+  },
+  withLeftBorder: {
+    borderLeftColor: borderColor['--t-border-color-light'],
+    borderLeftStyle: 'solid',
+    borderLeftWidth: '1px',
+  },
+});
 
 type RecordBoardColumnProps = {
   recordBoardColumnId: string;
@@ -79,11 +83,18 @@ export const RecordBoardColumn = ({
         columnIndex: recordBoardColumnIndex,
       }}
     >
-      <StyledColumn ref={ref} data-record-board-column-id={recordBoardColumnId}>
+      <div
+        ref={ref}
+        data-record-board-column-id={recordBoardColumnId}
+        {...stylex.props(
+          styles.column,
+          recordBoardColumnIndex > 0 && styles.withLeftBorder,
+        )}
+      >
         <RecordBoardColumnCardsContainer
           recordBoardColumnId={recordBoardColumnId}
         />
-      </StyledColumn>
+      </div>
     </RecordBoardColumnContext.Provider>
   );
 };

@@ -1,19 +1,21 @@
 import { SkeletonLine } from '@/ui/feedback/skeleton/components/SkeletonLine';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { SKELETON_HEIGHT_SIZES } from 'twenty-ui/primitives/feedback';
-import { themeCssVariables } from 'twenty-ui/theme';
-
-const StyledSidePanelContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: ${themeCssVariables.spacing[4]};
-  width: 100%;
-`;
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 export const SidePanelSkeletonLoader = () => {
   return (
-    <StyledSidePanelContainer>
+    <div {...stylex.props(styles.container)}>
       <SkeletonLine height={SKELETON_HEIGHT_SIZES.m} width={140} />
-    </StyledSidePanelContainer>
+    </div>
   );
 };
+
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    padding: spacing['--t-spacing-4'],
+    width: '100%',
+  },
+});

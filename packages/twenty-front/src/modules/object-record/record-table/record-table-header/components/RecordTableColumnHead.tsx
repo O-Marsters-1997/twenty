@@ -1,4 +1,5 @@
-import { styled } from '@linaria/react';
+import { mergeClassName } from '@/page-layout/utils/mergeClassName';
+import * as stylex from '@stylexjs/stylex';
 import { FieldDescriptionTooltip } from '@/object-record/record-field/ui/components/FieldDescriptionTooltip';
 
 import { fieldMetadataItemByIdSelector } from '@/object-metadata/states/fieldMetadataItemByIdSelector';
@@ -6,28 +7,8 @@ import { type RecordField } from '@/object-record/record-field/types/RecordField
 import { RECORD_TABLE_CELL_CONTENT_CLASS_NAME } from '@/object-record/record-table/constants/RecordTableCellContentClassName';
 import { useAtomFamilySelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilySelectorValue';
 import { useIcons } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
-
-const StyledTitle = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  font-weight: ${themeCssVariables.font.weight.medium};
-  gap: ${themeCssVariables.spacing[1]};
-  height: ${themeCssVariables.spacing[8]};
-  padding-left: ${themeCssVariables.spacing[2]};
-  padding-right: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledIcon = styled.div`
-  display: flex;
-  flex-shrink: 0;
-
-  & > svg {
-    height: ${themeCssVariables.icon.size.md}px;
-    width: ${themeCssVariables.icon.size.md}px;
-  }
-`;
+import { useTheme } from 'twenty-ui/theme';
+import { fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type RecordTableColumnHeadProps = {
   recordField: RecordField;
@@ -51,14 +32,36 @@ export const RecordTableColumnHead = ({
     correspondingFieldMetadataItem.foundFieldMetadataItem;
 
   return (
-    <StyledTitle className={RECORD_TABLE_CELL_CONTENT_CLASS_NAME}>
-      <StyledIcon>
+    <div
+      {...mergeClassName(
+        stylex.props(styles.title),
+        RECORD_TABLE_CELL_CONTENT_CLASS_NAME,
+      )}
+    >
+      <div {...stylex.props(styles.icon)}>
         <Icon size={theme.icon.size.md} />
-      </StyledIcon>
+      </div>
       <FieldDescriptionTooltip
         label={fieldMetadataItem?.label}
         description={fieldMetadataItem?.description}
       />
-    </StyledTitle>
+    </div>
   );
 };
+
+const styles = stylex.create({
+  title: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    gap: spacing['--t-spacing-1'],
+    height: spacing['--t-spacing-8'],
+    paddingLeft: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+  },
+  icon: {
+    display: 'flex',
+    flexShrink: 0,
+  },
+});

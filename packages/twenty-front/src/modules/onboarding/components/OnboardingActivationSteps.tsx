@@ -1,7 +1,7 @@
 import { SubTitle } from '@/auth/components/SubTitle';
 import { useOnboardingMotionTransition } from '@/onboarding/hooks/useOnboardingMotionTransition';
 import { type OnboardingActivationMessage } from '@/onboarding/types/OnboardingActivationMessage';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { motion } from 'framer-motion';
 
 const STEP_OPACITIES = [1, 0.4, 0.12];
@@ -9,20 +9,19 @@ const VISIBLE_STEP_COUNT = STEP_OPACITIES.length;
 const STEP_HEIGHT_IN_PX = 28;
 const STEPS_CONTAINER_HEIGHT_IN_PX = STEP_HEIGHT_IN_PX * VISIBLE_STEP_COUNT;
 
-const StyledStepsContainer = styled.div`
-  height: ${STEPS_CONTAINER_HEIGHT_IN_PX}px;
-  position: relative;
-  width: 100%;
-`;
-
-const StyledStepBase = styled.div`
-  left: 0;
-  position: absolute;
-  right: 0;
-  top: 0;
-`;
-
-const StyledStep = motion.create(StyledStepBase);
+const styles = stylex.create({
+  stepsContainer: {
+    height: `${STEPS_CONTAINER_HEIGHT_IN_PX}px`,
+    position: 'relative',
+    width: '100%',
+  },
+  step: {
+    left: 0,
+    position: 'absolute',
+    right: 0,
+    top: 0,
+  },
+});
 
 type OnboardingActivationStepsProps = {
   messages: OnboardingActivationMessage[];
@@ -36,13 +35,14 @@ export const OnboardingActivationSteps = ({
   const transition = useOnboardingMotionTransition();
 
   return (
-    <StyledStepsContainer>
+    <div {...stylex.props(styles.stepsContainer)}>
       {messages.map((message, index) => {
         const stepOffset = index - messageIndex;
         const isVisible = stepOffset >= 0 && stepOffset < VISIBLE_STEP_COUNT;
 
         return (
-          <StyledStep
+          <motion.div
+            {...stylex.props(styles.step)}
             key={message.id}
             initial={false}
             animate={{
@@ -52,9 +52,9 @@ export const OnboardingActivationSteps = ({
             transition={transition}
           >
             <SubTitle>{message.content}</SubTitle>
-          </StyledStep>
+          </motion.div>
         );
       })}
-    </StyledStepsContainer>
+    </div>
   );
 };

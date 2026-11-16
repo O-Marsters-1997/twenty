@@ -1,17 +1,24 @@
 import { useRender } from '@base-ui/react/use-render';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 
-import styles from '@ui/primitives/surfaces/internal/Dialog.module.scss';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
+
+import { dialogStyles } from '../../internal/Dialog.stylex';
 import { type AlertDialogFooterProps } from '../types/AlertDialogFooterProps';
 
 export const AlertDialogFooter = ({
   render,
   ref,
   className,
+  xstyle,
   ...props
-}: AlertDialogFooterProps) =>
+}: WithXstyle<AlertDialogFooterProps>) =>
   useRender({
     render,
     ref,
-    props: { ...props, className: clsx(styles.footer, className) },
+    props: {
+      ...props,
+      ...mergeStylexProps(stylex.props(dialogStyles.footer, xstyle), className),
+    },
   });

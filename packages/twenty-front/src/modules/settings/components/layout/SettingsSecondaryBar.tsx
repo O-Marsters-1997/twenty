@@ -1,29 +1,33 @@
-import { styled } from '@linaria/react';
 import { type ReactNode } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 // Bottom separator is an ::after (not border-bottom), and the bar keeps full
 // height (default align-items) so the active tab's underline lands exactly on it.
-const StyledSecondaryBar = styled.div`
-  box-sizing: border-box;
-  display: flex;
-  flex-shrink: 0;
-  min-height: ${themeCssVariables.spacing[10]};
-  padding: 0 ${themeCssVariables.spacing[3]};
-  position: relative;
-  width: 100%;
-
-  &::after {
-    background-color: ${themeCssVariables.border.color.light};
-    bottom: 0;
-    content: '';
-    height: 1px;
-    left: 0;
-    position: absolute;
-    right: 0;
-  }
-`;
+const styles = stylex.create({
+  secondaryBar: {
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexShrink: '0',
+    minHeight: spacing['--t-spacing-10'],
+    paddingTop: '0',
+    paddingRight: spacing['--t-spacing-3'],
+    paddingBottom: '0',
+    paddingLeft: spacing['--t-spacing-3'],
+    position: { default: 'relative', '::after': 'absolute' },
+    width: '100%',
+    backgroundColor: {
+      default: null,
+      '::after': borderColor['--t-border-color-light'],
+    },
+    bottom: { default: null, '::after': '0' },
+    content: { default: null, '::after': "''" },
+    height: { default: null, '::after': '1px' },
+    left: { default: null, '::after': '0' },
+    right: { default: null, '::after': '0' },
+  },
+});
 
 export const SettingsSecondaryBar = ({ children }: { children: ReactNode }) => (
-  <StyledSecondaryBar>{children}</StyledSecondaryBar>
+  <div {...stylex.props(styles.secondaryBar)}>{children}</div>
 );

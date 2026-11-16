@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { Fragment, useState } from 'react';
@@ -15,7 +14,7 @@ import { LightIconButton } from 'twenty-ui/components/input';
 import { IconChevronDown, IconChevronUp, useIcons } from 'twenty-ui/icon';
 import { Status } from 'twenty-ui/primitives/data-display';
 import { Card, Tooltip } from 'twenty-ui/primitives/surfaces';
-import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 
 import { useObjectMetadataItems } from '@/object-metadata/hooks/useObjectMetadataItems';
 import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/EnrichedObjectMetadataItem';
@@ -29,94 +28,87 @@ import { buildValidationRulePreviewRelationGqlFields } from '@/validation-rules/
 import { formatValidationRulePreviewValue } from '@/validation-rules/utils/formatValidationRulePreviewValue';
 import { getValidationRuleEditorFieldChipLabel } from '@/validation-rules/utils/getValidationRuleEditorFieldChipLabel';
 import { getValidationRulePreviewValue } from '@/validation-rules/utils/getValidationRulePreviewValue';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const PREVIEW_RECORD_COUNT = 3;
 
-const StyledPreviewHeader = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  justify-content: space-between;
-  margin-bottom: ${themeCssVariables.spacing[4]};
-  min-height: 24px;
-`;
-
-const StyledPreviewTitle = styled(StyledFormCardTitle)`
-  margin-bottom: 0;
-`;
-
-const StyledRecordHeader = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  justify-content: space-between;
-  min-width: 0;
-`;
-
-const StyledRecord = styled.div`
-  display: flex;
-  min-width: 0;
-  overflow: hidden;
-`;
-
-const StyledStatus = styled.span`
-  flex-shrink: 0;
-`;
-
-const StyledNavigation = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  flex-shrink: 0;
-  font-size: ${themeCssVariables.font.size.sm};
-  gap: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledFieldValues = styled.div`
-  column-gap: ${themeCssVariables.spacing[2]};
-  display: grid;
-  font-size: ${themeCssVariables.font.size.md};
-  grid-template-columns: fit-content(50%) minmax(0, 1fr);
-  line-height: 24px;
-  margin-top: ${themeCssVariables.spacing[2]};
-  row-gap: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledFieldLabel = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  min-width: 0;
-  overflow-wrap: anywhere;
-
-  > svg {
-    flex-shrink: 0;
-  }
-`;
-
-const StyledValue = styled.span<{ isEmpty: boolean }>`
-  color: ${({ isEmpty }) =>
-    isEmpty
-      ? themeCssVariables.font.color.light
-      : themeCssVariables.font.color.primary};
-  min-width: 0;
-  overflow-wrap: anywhere;
-`;
-
-const StyledMuted = styled.div`
-  color: ${themeCssVariables.font.color.light};
-`;
-
-const StyledFieldValuesPlaceholder = styled(StyledMuted)`
-  font-size: ${themeCssVariables.font.size.md};
-  line-height: 24px;
-  margin-top: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledErrorMessage = styled.div`
-  margin-top: ${themeCssVariables.spacing[3]};
-`;
+const styles = stylex.create({
+  previewHeader: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    justifyContent: 'space-between',
+    marginBottom: spacing['--t-spacing-4'],
+    minHeight: '24px',
+  },
+  recordHeader: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    justifyContent: 'space-between',
+    minWidth: '0',
+  },
+  record: {
+    display: 'flex',
+    minWidth: '0',
+    overflow: 'hidden',
+  },
+  status: {
+    flexShrink: '0',
+  },
+  navigation: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    flexShrink: '0',
+    fontSize: fontSize['--t-font-size-sm'],
+    gap: spacing['--t-spacing-1'],
+  },
+  fieldValues: {
+    columnGap: spacing['--t-spacing-2'],
+    display: 'grid',
+    fontSize: fontSize['--t-font-size-md'],
+    gridTemplateColumns: 'fit-content(50%) minmax(0, 1fr)',
+    lineHeight: '24px',
+    marginTop: spacing['--t-spacing-2'],
+    rowGap: spacing['--t-spacing-1'],
+  },
+  errorMessage: {
+    marginTop: spacing['--t-spacing-3'],
+  },
+  previewTitle: {
+    marginBottom: 0,
+  },
+  fieldLabel: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    minWidth: 0,
+    overflowWrap: 'anywhere',
+  },
+  fieldIcon: {
+    display: 'flex',
+    flexShrink: 0,
+  },
+  value: {
+    color: fontColor['--t-font-color-primary'],
+    minWidth: 0,
+    overflowWrap: 'anywhere',
+  },
+  valueEmpty: {
+    color: fontColor['--t-font-color-light'],
+  },
+  muted: {
+    color: fontColor['--t-font-color-light'],
+  },
+  fieldValuesPlaceholder: {
+    fontSize: fontSize['--t-font-size-md'],
+    lineHeight: '24px',
+    marginTop: spacing['--t-spacing-2'],
+  },
+});
 
 type SettingsValidationRulePreviewProps = {
   objectMetadataItem: EnrichedObjectMetadataItem;
@@ -164,13 +156,15 @@ export const SettingsValidationRulePreview = ({
   });
 
   const previewTitle = (
-    <StyledPreviewTitle>
+    <StyledFormCardTitle
+      className={stylex.props(styles.previewTitle).className}
+    >
       <Trans>Preview</Trans>
-    </StyledPreviewTitle>
+    </StyledFormCardTitle>
   );
 
   if (loading) {
-    return <StyledPreviewHeader>{previewTitle}</StyledPreviewHeader>;
+    return <div {...stylex.props(styles.previewHeader)}>{previewTitle}</div>;
   }
 
   const record = records[Math.min(recordIndex, records.length - 1)];
@@ -178,12 +172,12 @@ export const SettingsValidationRulePreview = ({
   if (!isDefined(record)) {
     return (
       <>
-        <StyledPreviewHeader>{previewTitle}</StyledPreviewHeader>
+        <div {...stylex.props(styles.previewHeader)}>{previewTitle}</div>
         <Card.Root fullWidth>
           <Card.Content>
-            <StyledMuted>
+            <div {...stylex.props(styles.muted)}>
               {t`Create a few ${objectMetadataItem.labelPlural} to preview this rule on real records.`}
-            </StyledMuted>
+            </div>
           </Card.Content>
         </Card.Root>
       </>
@@ -221,15 +215,15 @@ export const SettingsValidationRulePreview = ({
     switch (evaluationResult.status) {
       case 'passed':
         return (
-          <StyledStatus>
+          <span {...stylex.props(styles.status)}>
             <Status color="green">{t`Valid`}</Status>
-          </StyledStatus>
+          </span>
         );
       case 'failed':
         return (
-          <StyledStatus>
+          <span {...stylex.props(styles.status)}>
             <Status color="red">{t`Blocked`}</Status>
-          </StyledStatus>
+          </span>
         );
       case 'errored':
         return (
@@ -238,9 +232,9 @@ export const SettingsValidationRulePreview = ({
             content={evaluationResult.errorMessage}
             side="top"
           >
-            <StyledStatus tabIndex={0}>
+            <span tabIndex={0} {...stylex.props(styles.status)}>
               <Status color="orange">{t`Error`}</Status>
-            </StyledStatus>
+            </span>
           </Tooltip>
         );
     }
@@ -251,9 +245,9 @@ export const SettingsValidationRulePreview = ({
 
   return (
     <>
-      <StyledPreviewHeader>
+      <div {...stylex.props(styles.previewHeader)}>
         {previewTitle}
-        <StyledNavigation>
+        <div {...stylex.props(styles.navigation)}>
           {t`Record ${displayedRecordNumber} of ${recordCount}`}
           <LightIconButton
             aria-label={t`Previous record`}
@@ -269,28 +263,28 @@ export const SettingsValidationRulePreview = ({
           >
             <IconChevronDown />
           </LightIconButton>
-        </StyledNavigation>
-      </StyledPreviewHeader>
+        </div>
+      </div>
       <Card.Root fullWidth>
         <Card.Content>
-          <StyledRecordHeader>
-            <StyledRecord>
+          <div {...stylex.props(styles.recordHeader)}>
+            <div {...stylex.props(styles.record)}>
               <RecordChip
                 objectNameSingular={objectMetadataItem.nameSingular}
                 record={record}
                 forceDisableClick
               />
-            </StyledRecord>
+            </div>
             {renderStatus()}
-          </StyledRecordHeader>
+          </div>
           {referencedPaths.length === 0 ? (
-            <StyledFieldValuesPlaceholder>
+            <div {...stylex.props(styles.muted, styles.fieldValuesPlaceholder)}>
               {compilationResult.isValid
                 ? t`This condition doesn't read any field.`
                 : t`Fields used in the condition show their values here.`}
-            </StyledFieldValuesPlaceholder>
+            </div>
           ) : (
-            <StyledFieldValues>
+            <div {...stylex.props(styles.fieldValues)}>
               {referencedPaths.map((path) => {
                 const editorField = editorFields.find(
                   (candidate) => candidate.path === path,
@@ -307,29 +301,36 @@ export const SettingsValidationRulePreview = ({
 
                 return (
                   <Fragment key={path}>
-                    <StyledFieldLabel>
+                    <div {...stylex.props(styles.fieldLabel)}>
                       {isDefined(FieldIcon) && (
-                        <FieldIcon
-                          size={theme.icon.size.md}
-                          stroke={theme.icon.stroke.sm}
-                        />
+                        <span {...stylex.props(styles.fieldIcon)}>
+                          <FieldIcon
+                            size={theme.icon.size.md}
+                            stroke={theme.icon.stroke.sm}
+                          />
+                        </span>
                       )}
                       {fieldLabel}
-                    </StyledFieldLabel>
-                    <StyledValue isEmpty={formattedValue.length === 0}>
+                    </div>
+                    <span
+                      {...stylex.props(
+                        styles.value,
+                        formattedValue.length === 0 && styles.valueEmpty,
+                      )}
+                    >
                       {formattedValue.length > 0 ? formattedValue : t`Empty`}
-                    </StyledValue>
+                    </span>
                   </Fragment>
                 );
               })}
-            </StyledFieldValues>
+            </div>
           )}
           {isErrorMessageVisible && (
-            <StyledErrorMessage>
+            <div {...stylex.props(styles.errorMessage)}>
               <InlineBanner status="error" embedded>
                 {trimmedMessage}
               </InlineBanner>
-            </StyledErrorMessage>
+            </div>
           )}
         </Card.Content>
       </Card.Root>

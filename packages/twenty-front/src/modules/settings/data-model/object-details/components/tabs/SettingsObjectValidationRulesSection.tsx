@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { SettingsPath } from 'twenty-shared/types';
 import { getSettingsPath, isDefined } from 'twenty-shared/utils';
@@ -19,49 +18,57 @@ import { useValidationRuleMutations } from '@/validation-rules/hooks/useValidati
 import { useValidationRules } from '@/validation-rules/hooks/useValidationRules';
 import { getValidationRuleSaveErrorMessage } from '@/validation-rules/utils/getValidationRuleSaveErrorMessage';
 import { useNavigateSettings } from '~/hooks/useNavigateSettings';
+import * as stylex from '@stylexjs/stylex';
+import {
+  borderColor,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const VALIDATION_RULE_TABLE_GRID_TEMPLATE_COLUMNS = '1fr 1fr 28px';
 
-const StyledContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[3]};
-`;
-
-const StyledTableContainer = styled.div`
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-`;
-
-const StyledNameCell = styled.span`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  min-width: 0;
-`;
-
-const StyledName = styled.span`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledIconChevronRightContainer = styled.span`
-  align-items: center;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-`;
-
-const StyledEmpty = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.md};
-  padding: ${themeCssVariables.spacing[3]} ${themeCssVariables.spacing[2]};
-`;
-
-const StyledButtonContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  padding-top: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  content: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-3'],
+  },
+  tableContainer: {
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: borderColor['--t-border-color-light'],
+  },
+  nameCell: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    minWidth: '0',
+  },
+  name: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  iconChevronRightContainer: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+  },
+  empty: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-md'],
+    paddingTop: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-3'],
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+  buttonContainer: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    paddingTop: spacing['--t-spacing-2'],
+  },
+});
 
 type SettingsObjectValidationRulesSectionProps = {
   objectMetadataItem: EnrichedObjectMetadataItem;
@@ -118,8 +125,8 @@ export const SettingsObjectValidationRulesSection = ({
   };
 
   return (
-    <StyledContent>
-      <StyledTableContainer>
+    <div {...stylex.props(styles.content)}>
+      <div {...stylex.props(styles.tableContainer)}>
         <Table>
           <TableRow
             gridTemplateColumns={VALIDATION_RULE_TABLE_GRID_TEMPLATE_COLUMNS}
@@ -130,7 +137,7 @@ export const SettingsObjectValidationRulesSection = ({
           </TableRow>
           <TableBody>
             {validationRules.length === 0 ? (
-              <StyledEmpty>{t`No rules yet`}</StyledEmpty>
+              <div {...stylex.props(styles.empty)}>{t`No rules yet`}</div>
             ) : (
               validationRules.map((validationRule) => {
                 const RuleIcon = getIcon(
@@ -153,10 +160,12 @@ export const SettingsObjectValidationRulesSection = ({
                       minWidth="0"
                       overflow="hidden"
                     >
-                      <StyledNameCell>
+                      <span {...stylex.props(styles.nameCell)}>
                         <RuleIcon size={theme.icon.size.md} />
-                        <StyledName>{validationRule.name}</StyledName>
-                      </StyledNameCell>
+                        <span {...stylex.props(styles.name)}>
+                          {validationRule.name}
+                        </span>
+                      </span>
                     </TableCell>
                     <TableCell>
                       {validationRule.isActive ? (
@@ -169,12 +178,12 @@ export const SettingsObjectValidationRulesSection = ({
                       align="center"
                       padding={`0 ${themeCssVariables.spacing[1]} 0 0`}
                     >
-                      <StyledIconChevronRightContainer>
+                      <span {...stylex.props(styles.iconChevronRightContainer)}>
                         <IconChevronRight
                           size={theme.icon.size.md}
                           stroke={theme.icon.stroke.sm}
                         />
-                      </StyledIconChevronRightContainer>
+                      </span>
                     </TableCell>
                   </TableRow>
                 );
@@ -182,9 +191,9 @@ export const SettingsObjectValidationRulesSection = ({
             )}
           </TableBody>
         </Table>
-      </StyledTableContainer>
+      </div>
       {!isReadOnly && (
-        <StyledButtonContainer>
+        <div {...stylex.props(styles.buttonContainer)}>
           <Button
             startIcon={<IconPlus />}
             size="sm"
@@ -192,8 +201,8 @@ export const SettingsObjectValidationRulesSection = ({
             disabled={isSaving}
             onClick={handleAddRule}
           >{t`Add rule`}</Button>
-        </StyledButtonContainer>
+        </div>
       )}
-    </StyledContent>
+    </div>
   );
 };

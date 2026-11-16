@@ -1,6 +1,7 @@
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 import React from 'react';
 
+import { joinClassNames } from '@ui/utilities/internal/joinClassNames';
 import { isDefined } from '@ui/utilities/utils/isDefined';
 
 import { computeThemeFromCss } from './internal/computeThemeFromCss';
@@ -10,13 +11,22 @@ import { resolveExplicitTheme } from './internal/resolveExplicitTheme';
 import { type ThemeContextType } from './internal/ThemeContextType';
 import { type ThemeProviderProps } from './ThemeProviderProps';
 import { type ThemeType } from './themeTypes';
+import { darkTheme } from './themes.stylex';
+
+const DARK_THEME_CLASS_NAME = stylex.props(darkTheme).className ?? '';
 
 const applyColorSchemeClass = (colorScheme: 'light' | 'dark') => {
   if (typeof document === 'undefined') return;
   const root = document.documentElement;
   if (!root?.classList) return;
-  root.classList.toggle('dark', colorScheme === 'dark');
-  root.classList.toggle('light', colorScheme === 'light');
+  const isDark = colorScheme === 'dark';
+  root.classList.toggle('dark', isDark);
+  root.classList.toggle('light', !isDark);
+  for (const darkThemeClass of DARK_THEME_CLASS_NAME.split(' ').filter(
+    (className) => className !== '',
+  )) {
+    root.classList.toggle(darkThemeClass, isDark);
+  }
 };
 
 export const ThemeProvider = ({
@@ -116,7 +126,12 @@ export const ThemeProvider = ({
       <ThemeScopeContext.Provider value={scopeContainer}>
         <div
           ref={wrapperRef}
-          className={clsx(applyToRoot ? undefined : colorScheme, className)}
+          className={joinClassNames(
+            !applyToRoot && colorScheme === 'dark'
+              ? DARK_THEME_CLASS_NAME
+              : undefined,
+            className,
+          )}
           style={{ display: 'contents', ...overridesStyle }}
         >
           {children}

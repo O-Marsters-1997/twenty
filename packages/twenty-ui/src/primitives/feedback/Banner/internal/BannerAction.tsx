@@ -1,16 +1,15 @@
 import { Button } from '@ui/primitives/input/Button/Button';
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
 
-import styles from './BannerAction.module.scss';
+import { bannerActionStyles } from '../Banner.stylex';
 import { type BannerActionProps } from '../types/BannerActionProps';
 
-export const BannerAction = ({ className, ...props }: BannerActionProps) => {
+export const BannerAction = ({ xstyle, ...props }: BannerActionProps) => {
   return (
     <Button
       {...props}
       size="sm"
       variant="outline"
-      className={mergeClassNames(styles.action, className)}
+      xstyle={[bannerActionStyles.action, xstyle]}
     />
   );
 };

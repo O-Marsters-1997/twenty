@@ -11,7 +11,6 @@ import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent
 import { NavigationDrawerItemEditingContext } from '@/ui/navigation/navigation-drawer/contexts/NavigationDrawerItemEditingContext';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomState';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { type ReactNode } from 'react';
 import { isDefined } from 'twenty-shared/utils';
@@ -19,20 +18,25 @@ import {
   PermissionFlagType,
   type NavigationMenuItem,
 } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledIconButton = styled.button`
-  align-items: center;
-  background: transparent;
-  border: 0;
-  color: inherit;
-  cursor: pointer;
-  display: flex;
-  padding: 0;
-`;
-
-const StyledPopupScope = styled.div`
-  display: contents;
-`;
+const styles = stylex.create({
+  iconButton: {
+    alignItems: 'center',
+    background: 'transparent',
+    borderWidth: '0',
+    color: 'inherit',
+    cursor: 'pointer',
+    display: 'flex',
+    paddingTop: '0',
+    paddingRight: '0',
+    paddingBottom: '0',
+    paddingLeft: '0',
+  },
+  popupScope: {
+    display: 'contents',
+  },
+});
 
 type NavigationMenuItemObjectColorEditorProps = {
   item: NavigationMenuItem;
@@ -73,16 +77,20 @@ export const NavigationMenuItemObjectColorEditor = ({
           <DropdownRoot dropdownId={dropdownId} type="picker">
             <Dropdown.Trigger
               render={
-                <StyledIconButton
+                <button
                   type="button"
                   aria-label={t`Change object color`}
+                  {...stylex.props(styles.iconButton)}
                 >
                   <ObjectMetadataIcon objectMetadataItem={object} />
-                </StyledIconButton>
+                </button>
               }
             />
             <DropdownContent side="right" align="start">
-              <StyledPopupScope data-click-outside-id={dropdownId}>
+              <div
+                data-click-outside-id={dropdownId}
+                {...stylex.props(styles.popupScope)}
+              >
                 <ThemeColorPickerMenu
                   selectedColor={getObjectColorWithFallback(object)}
                   onSelectColor={(color) => {
@@ -100,7 +108,7 @@ export const NavigationMenuItemObjectColorEditor = ({
                     });
                   }}
                 />
-              </StyledPopupScope>
+              </div>
             </DropdownContent>
           </DropdownRoot>
         ),

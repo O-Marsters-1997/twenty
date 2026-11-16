@@ -1,16 +1,42 @@
-import { css } from '@linaria/core';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  backgroundTransparent,
+  fontColor,
+} from 'twenty-ui/theme/tokens.stylex';
 
-export const BUTTON_INVERTED_CLASS_NAME = css`
-  &[data-variant='outline'],
-  &[data-variant='ghost'] {
-    --tw-button-active: ${themeCssVariables.background.transparent.medium};
-    --tw-button-background: transparent;
-    --tw-button-color: ${themeCssVariables.font.color.inverted};
-    --tw-button-hover: ${themeCssVariables.background.transparent.light};
-  }
+const styles = stylex.create({
+  inverted: {
+    '--tw-button-active': {
+      default: null,
+      ':is([data-variant=outline])':
+        backgroundTransparent['--t-background-transparent-medium'],
+      ':is([data-variant=ghost])':
+        backgroundTransparent['--t-background-transparent-medium'],
+    },
+    '--tw-button-background': {
+      default: null,
+      ':is([data-variant=outline])': 'transparent',
+      ':is([data-variant=ghost])': 'transparent',
+    },
+    '--tw-button-color': {
+      default: null,
+      ':is([data-variant=outline])': fontColor['--t-font-color-inverted'],
+      ':is([data-variant=ghost])': fontColor['--t-font-color-inverted'],
+    },
+    '--tw-button-hover': {
+      default: null,
+      ':is([data-variant=outline])':
+        backgroundTransparent['--t-background-transparent-light'],
+      ':is([data-variant=ghost])':
+        backgroundTransparent['--t-background-transparent-light'],
+    },
+    '--tw-button-border': {
+      default: null,
+      ':is([data-variant=outline])':
+        backgroundTransparent['--t-background-transparent-primary'],
+    },
+  },
+});
 
-  &[data-variant='outline'] {
-    --tw-button-border: ${themeCssVariables.background.transparent.primary};
-  }
-`;
+export const BUTTON_INVERTED_CLASS_NAME = stylex.props(styles.inverted)
+  .className;

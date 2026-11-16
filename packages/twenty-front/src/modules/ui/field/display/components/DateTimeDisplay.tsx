@@ -3,16 +3,18 @@ import { EllipsisDisplay } from '@/ui/field/display/components/internal/Ellipsis
 import { TimeZoneAbbreviation } from '@/ui/input/components/internal/date/components/TimeZoneAbbreviation';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { UserContext } from '@/users/contexts/UserContext';
-import { styled } from '@linaria/react';
 import { isNonEmptyString } from '@sniptt/guards';
 import { useContext } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { dateLocaleState } from '@/localization/states/dateLocaleState';
 import { formatDateTimeString } from '@/object-record/record-field/ui/utils/formatDateTimeString';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledTimeZoneSpacer = styled.span`
-  min-width: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  timeZoneSpacer: {
+    minWidth: spacing['--t-spacing-1'],
+  },
+});
 
 type DateTimeDisplayProps = {
   value: string | null | undefined;
@@ -41,7 +43,7 @@ export const DateTimeDisplay = ({
       <span></span>
       {isNonEmptyString(value) && (
         <>
-          <StyledTimeZoneSpacer />
+          <span {...stylex.props(styles.timeZoneSpacer)} />
           <TimeZoneAbbreviation instant={value} />
         </>
       )}

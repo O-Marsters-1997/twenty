@@ -6,27 +6,28 @@ import { useChildStepFiltersAndChildStepFilterGroups } from '@/workflow/workflow
 import { WorkflowStepFilterContext } from '@/workflow/workflow-steps/filters/states/context/WorkflowStepFilterContext';
 import { type FilterSettings } from '@/workflow/workflow-steps/filters/types/FilterSettings';
 import { isStepFilterGroupChildAStepFilterGroup } from '@/workflow/workflow-steps/filters/utils/isStepFilterGroupChildAStepFilterGroup';
-import { styled } from '@linaria/react';
 import { i18n, type MessageDescriptor } from '@lingui/core';
 import { type StepFilter, type StepFilterGroup } from 'twenty-shared/types';
 import { capitalize, isDefined } from 'twenty-shared/utils';
 import { type StepIfElseBranch } from 'twenty-shared/workflow';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledBranchContainer = styled.div`
-  align-items: start;
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  width: 100%;
-`;
-
-const StyledFiltersContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[4]};
-  width: 100%;
-`;
+const styles = stylex.create({
+  branchContainer: {
+    alignItems: 'start',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+  filtersContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-4'],
+    width: '100%',
+  },
+});
 
 type WorkflowIfElseBranchEditorProps = {
   action: WorkflowIfElseAction;
@@ -88,8 +89,8 @@ export const WorkflowIfElseBranchEditor = ({
         onFilterSettingsUpdate,
       }}
     >
-      <StyledBranchContainer>
-        <StyledFiltersContainer>
+      <div {...stylex.props(styles.branchContainer)}>
+        <div {...stylex.props(styles.filtersContainer)}>
           {isDefined(branchFilterGroup) &&
             childStepFiltersAndChildStepFilterGroups.map(
               (stepFilterGroupChild, stepFilterGroupChildIndex) => {
@@ -121,14 +122,14 @@ export const WorkflowIfElseBranchEditor = ({
                 );
               },
             )}
-        </StyledFiltersContainer>
+        </div>
 
         {!readonly && isDefined(branchFilterGroup) && (
           <WorkflowStepFilterAddFilterRuleSelect
             stepFilterGroup={branchFilterGroup}
           />
         )}
-      </StyledBranchContainer>
+      </div>
     </WorkflowStepFilterContext.Provider>
   );
 };

@@ -2,15 +2,17 @@ import { CommandMenuOpenContainer } from '@/command-menu/components/CommandMenuO
 import { SidePanelRouter } from '@/side-panel/components/SidePanelRouter';
 import { isSidePanelOpenedState } from '@/side-panel/states/isSidePanelOpenedState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { styled } from '@linaria/react';
 
 import { AnimatePresence } from 'framer-motion';
 import { createPortal } from 'react-dom';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledCommandMenuMobileFullScreenContainer = styled.div`
-  height: 100%;
-  width: 100%;
-`;
+const styles = stylex.create({
+  commandMenuMobileFullScreenContainer: {
+    height: '100%',
+    width: '100%',
+  },
+});
 
 export const CommandMenuForMobile = () => {
   const isSidePanelOpened = useAtomStateValue(isSidePanelOpenedState);
@@ -20,11 +22,11 @@ export const CommandMenuForMobile = () => {
       {isSidePanelOpened && (
         <>
           {createPortal(
-            <StyledCommandMenuMobileFullScreenContainer>
+            <div {...stylex.props(styles.commandMenuMobileFullScreenContainer)}>
               <CommandMenuOpenContainer>
                 <SidePanelRouter />
               </CommandMenuOpenContainer>
-            </StyledCommandMenuMobileFullScreenContainer>,
+            </div>,
             document.body,
           )}
         </>

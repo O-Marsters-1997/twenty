@@ -1,8 +1,17 @@
+import * as stylex from '@stylexjs/stylex';
+import {
+  backgroundTransparent,
+  borderRadius,
+  color,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 import { type EmailRecipientSuggestion } from '@/activities/emails/recipients/types/EmailRecipientSuggestion';
 import { ToastOnQueryErrorEffect } from '@/apollo/components/ToastOnQueryErrorEffect';
 import { pointerIntersection } from '@dnd-kit/collision';
 import { useDroppable } from '@dnd-kit/react';
-import { styled } from '@linaria/react';
 import { isNonEmptyString } from '@sniptt/guards';
 import { atom, useStore } from 'jotai';
 import {
@@ -21,7 +30,6 @@ import {
   type AutocompleteInputProps,
   Autocomplete,
 } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { useDebouncedCallback } from 'use-debounce';
 
 import { EMAIL_RECIPIENT_DND_TYPE } from '@/activities/emails/recipients/constants/EmailRecipientDndType';
@@ -38,7 +46,6 @@ import { getEmailRecipientKey } from '@/activities/emails/recipients/utils/getEm
 import { isValidEmailRecipientAddress } from '@/activities/emails/recipients/utils/isValidEmailRecipientAddress';
 import { parseEmailRecipients } from '@/activities/emails/recipients/utils/parseEmailRecipients';
 import { FormFieldInputContainer } from '@/ui/input/components/FormFieldInputContainer';
-import { FORM_FIELD_PLACEHOLDER_STYLES } from '@/ui/input/constants/FormFieldPlaceholderStyles';
 import { AutocompleteRoot } from '@/ui/input/components/AutocompleteRoot';
 import { useCloseDropdown } from '@/ui/layout/dropdown/hooks/useCloseDropdown';
 import { useOpenDropdown } from '@/ui/layout/dropdown/hooks/useOpenDropdown';
@@ -54,49 +61,53 @@ import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/use
 
 const SUGGESTIONS_SEARCH_DEBOUNCE_MS = 300;
 
-const StyledRowContainer = styled.div<{ $isDropTarget: boolean }>`
-  align-content: flex-start;
-  align-items: center;
-  background-color: ${({ $isDropTarget }) =>
-    $isDropTarget
-      ? themeCssVariables.background.transparent.blue
-      : 'transparent'};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  box-sizing: border-box;
-  cursor: text;
-  display: flex;
-  flex-wrap: wrap;
-  gap: ${themeCssVariables.spacing[1]};
-  max-height: 96px;
-  min-height: 24px;
-  outline: ${({ $isDropTarget }) =>
-    $isDropTarget ? `1px solid ${themeCssVariables.color.blue}` : 'none'};
-  outline-offset: -1px;
-  overflow-y: auto;
-  padding: ${themeCssVariables.spacing[1]} 0;
-  transition:
-    background-color 120ms ease-out,
-    outline-color 120ms ease-out;
-  width: 100%;
-`;
-
-const StyledInput = styled.input`
-  background: transparent;
-  border: none;
-  color: ${themeCssVariables.font.color.primary};
-  flex: 1 1 60px;
-  font-family: inherit;
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.regular};
-  height: 20px;
-  min-width: 60px;
-  outline: none;
-  padding: 0;
-
-  &::placeholder {
-    ${FORM_FIELD_PLACEHOLDER_STYLES}
-  }
-`;
+const styles = stylex.create({
+  rowContainer: {
+    alignContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    boxSizing: 'border-box',
+    cursor: 'text',
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: spacing['--t-spacing-1'],
+    maxHeight: '96px',
+    minHeight: '24px',
+    outlineOffset: '-1px',
+    outlineStyle: 'none',
+    overflowY: 'auto',
+    paddingBlock: spacing['--t-spacing-1'],
+    paddingInline: 0,
+    transition: 'background-color 120ms ease-out, outline-color 120ms ease-out',
+    width: '100%',
+  },
+  rowContainerDropTarget: {
+    backgroundColor: backgroundTransparent['--t-background-transparent-blue'],
+    outlineColor: color['--t-color-blue'],
+    outlineStyle: 'solid',
+    outlineWidth: '1px',
+  },
+  input: {
+    backgroundColor: 'transparent',
+    borderStyle: 'none',
+    color: fontColor['--t-font-color-primary'],
+    flex: '1 1 60px',
+    fontFamily: 'inherit',
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    height: '20px',
+    minWidth: '60px',
+    outlineStyle: 'none',
+    paddingBlock: 0,
+    paddingInline: 0,
+    '::placeholder': {
+      color: fontColor['--t-font-color-light'],
+      fontSize: fontSize['--t-font-size-md'],
+      fontWeight: fontWeight['--t-font-weight-medium'],
+    },
+  },
+});
 
 type EmailRecipientsFieldInputProps = {
   fieldId: EmailRecipientsFieldId;
@@ -583,7 +594,7 @@ export const EmailRecipientsFieldInput = ({
       key="email-recipients-input"
       render={(inputProps) => (
         // oxlint-disable-next-line react/jsx-props-no-spreading
-        <StyledInput {...inputProps} className={undefined} />
+        <input {...inputProps} {...stylex.props(styles.input)} />
       )}
       ref={inputRef}
       type="text"
@@ -655,9 +666,12 @@ export const EmailRecipientsFieldInput = ({
         >
           <Autocomplete.InputGroup
             render={
-              <StyledRowContainer
+              <div
                 ref={droppableRef}
-                $isDropTarget={isActiveDropField}
+                {...stylex.props(
+                  styles.rowContainer,
+                  isActiveDropField && styles.rowContainerDropTarget,
+                )}
                 data-drop-target={isActiveDropField}
                 onMouseDown={handleRowMouseDown}
               />

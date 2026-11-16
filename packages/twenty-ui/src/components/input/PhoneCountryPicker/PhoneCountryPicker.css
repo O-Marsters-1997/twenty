@@ -1,0 +1,10 @@
+@layer twenty-ui {
+  .tw-phone-country-flag svg {
+    block-size: 12px;
+    border-radius: var(--t-border-radius-xs);
+  }
+
+  .tw-phone-country-trigger-flag svg {
+    inline-size: 16px;
+  }
+}

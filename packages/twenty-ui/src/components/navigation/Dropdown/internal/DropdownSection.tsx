@@ -1,9 +1,9 @@
 import { isPositiveInteger } from '@sniptt/guards';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 
 import { isDefined } from '@ui/utilities/utils/isDefined';
 
-import styles from '../Dropdown.module.scss';
+import { dropdownSectionMarker, dropdownStyles } from '../Dropdown.stylex';
 import { DropdownGroup } from './DropdownGroup';
 import { DropdownGroupLabel } from './DropdownGroupLabel';
 import { type DropdownSectionProps } from '../types/DropdownSectionProps';
@@ -30,7 +30,13 @@ export const DropdownSection = ({
           gridTemplateColumns: `repeat(${gridColumns}, minmax(0, 1fr))`,
         }),
       }}
-      className={clsx(styles.section, className)}
+      className={className}
+      xstyle={[
+        dropdownSectionMarker,
+        dropdownStyles.section,
+        isDefined(gridColumns) && dropdownStyles.sectionColumns,
+        scrollable && dropdownStyles.sectionScrollable,
+      ]}
     >
       {isDefined(label) && (
         <DropdownGroupLabel data-dropdown-section-label="">

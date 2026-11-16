@@ -1,17 +1,19 @@
 import { OnboardingPulsingLogo } from '@/onboarding/components/OnboardingPulsingLogo';
-import { styled } from '@linaria/react';
 import { type ReactNode } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { background } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  align-items: center;
-  background: ${themeCssVariables.background.secondary};
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: center;
-  width: 100%;
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    background: background['--t-background-secondary'],
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    justifyContent: 'center',
+    width: '100%',
+  },
+});
 
 type OnboardingVerifyLayoutProps = {
   children: ReactNode;
@@ -20,8 +22,8 @@ type OnboardingVerifyLayoutProps = {
 export const OnboardingVerifyLayout = ({
   children,
 }: OnboardingVerifyLayoutProps) => (
-  <StyledContainer>
+  <div {...stylex.props(styles.container)}>
     <OnboardingPulsingLogo />
     {children}
-  </StyledContainer>
+  </div>
 );

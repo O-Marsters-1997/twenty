@@ -1,66 +1,58 @@
-import { DRAG_SOURCE_OPACITY } from '@/ui/utilities/drag-and-drop/constants/DragSourceOpacity';
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { recordCardMarker } from '@/object-record/record-card/components/RecordCardMarker.stylex';
+import * as stylex from '@stylexjs/stylex';
+import { type ComponentPropsWithoutRef } from 'react';
+import {
+  accent,
+  background,
+  borderColor,
+  borderRadius,
+  color,
+  fontColor,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledBoardCard = styled.div<{
+const styles = stylex.create({
+  card: {
+    '--record-card-background-color': {
+      default: background['--t-background-secondary'],
+      ':is([data-selected="true"])': accent['--t-accent-quaternary'],
+      ':is([data-focused="true"])': background['--t-background-tertiary'],
+      ':is([data-active="true"])': accent['--t-accent-quaternary'],
+    },
+    backgroundColor: 'var(--record-card-background-color)',
+    borderColor: {
+      default: borderColor['--t-border-color-medium'],
+      ':hover': borderColor['--t-border-color-strong'],
+      ':is([data-active="true"])': color['--t-color-blue7'],
+    },
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    color: fontColor['--t-font-color-primary'],
+    cursor: 'pointer',
+    width: '100%',
+  },
+  dragging: {
+    opacity: 'var(--dnd-drag-source-opacity)',
+  },
+});
+
+type RecordCardProps = ComponentPropsWithoutRef<'div'> & {
   isDragging?: boolean;
-}>`
-  --record-card-background-color: ${themeCssVariables.background.secondary};
+};
 
-  background-color: var(--record-card-background-color);
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  color: ${themeCssVariables.font.color.primary};
-  cursor: pointer;
-  opacity: ${({ isDragging }) => (isDragging ? DRAG_SOURCE_OPACITY : 1)};
-
-  width: 100%;
-
-  &[data-selected='true'] {
-    --record-card-background-color: ${themeCssVariables.accent.quaternary};
-  }
-
-  &[data-focused='true'] {
-    --record-card-background-color: ${themeCssVariables.background.tertiary};
-  }
-
-  &[data-active='true'] {
-    --record-card-background-color: ${themeCssVariables.accent.quaternary};
-
-    border: 1px solid ${themeCssVariables.color.blue7};
-  }
-
-  &:hover {
-    border: 1px solid ${themeCssVariables.border.color.strong};
-
-    &[data-active='true'] {
-      border: 1px solid ${themeCssVariables.color.blue7};
-    }
-  }
-
-  .checkbox-container {
-    flex-shrink: 0;
-    max-width: 0;
-    opacity: 0;
-    overflow: hidden;
-    pointer-events: none;
-    transition: all ease-in-out 160ms;
-  }
-
-  &[data-selected='true'] .checkbox-container,
-  &:hover .checkbox-container {
-    max-width: ${themeCssVariables.spacing[6]};
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  .compact-icon-container {
-    opacity: 0;
-    transition: all ease-in-out 160ms;
-  }
-  &:hover .compact-icon-container {
-    opacity: 1;
-  }
-`;
-
-export { StyledBoardCard as RecordCard };
+export const RecordCard = ({
+  isDragging,
+  children,
+  ...divProps
+}: RecordCardProps) => (
+  <div
+    {...divProps}
+    {...stylex.props(
+      recordCardMarker,
+      styles.card,
+      isDragging && styles.dragging,
+    )}
+  >
+    {children}
+  </div>
+);

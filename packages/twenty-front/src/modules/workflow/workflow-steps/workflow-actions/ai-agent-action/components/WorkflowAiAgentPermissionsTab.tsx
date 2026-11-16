@@ -1,4 +1,5 @@
 import { useFilteredObjectMetadataItems } from '@/object-metadata/hooks/useFilteredObjectMetadataItems';
+import '@/workflow/workflow-steps/workflow-actions/components/workflowActionDescendantOverrides.css';
 import { useActionRolePermissionFlagConfig } from '@/settings/roles/role-permissions/permission-flags/hooks/useActionRolePermissionFlagConfig';
 import { SidePanelSubPageNavigationHeader } from '@/side-panel/pages/common/components/SidePanelSubPageNavigationHeader';
 import { TextInput } from '@/ui/input/components/TextInput';
@@ -11,7 +12,6 @@ import { workflowAiAgentPermissionsIsAddingPermissionState } from '@/workflow/wo
 import { workflowAiAgentPermissionsIsSystemObjectsListOpenState } from '@/workflow/workflow-steps/workflow-actions/ai-agent-action/states/workflowAiAgentPermissionsIsSystemObjectsListOpenState';
 import { workflowAiAgentPermissionsSelectedObjectIdState } from '@/workflow/workflow-steps/workflow-actions/ai-agent-action/states/workflowAiAgentPermissionsSelectedObjectIdState';
 import { useQuery } from '@apollo/client/react';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { useState } from 'react';
 import { isDefined } from 'twenty-shared/utils';
@@ -27,38 +27,36 @@ import { WorkflowAiAgentPermissionsCrudList } from './WorkflowAiAgentPermissions
 import { WorkflowAiAgentPermissionsFlagList } from './WorkflowAiAgentPermissionsFlagList';
 import { WorkflowAiAgentPermissionsObjectsList } from './WorkflowAiAgentPermissionsObjectsList';
 import { getFilteredPermissions } from './workflowAiAgentPermissions.utils';
+import * as stylex from '@stylexjs/stylex';
+import {
+  spacing,
+  backgroundTransparent,
+  borderColor,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledSearchInputContainer = styled.div`
-  background-color: ${themeCssVariables.background.transparent.lighter};
-  border-block: 1px solid ${themeCssVariables.border.color.medium};
-  box-sizing: border-box;
-  height: 40px;
-  padding-inline: ${themeCssVariables.spacing[2]};
-  width: 100%;
+const styles = stylex.create({
+  searchInputContainer: {
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
+    borderBlockColor: borderColor['--t-border-color-medium'],
+    borderBlockStyle: 'solid',
+    borderBlockWidth: '1px',
+    boxSizing: 'border-box',
+    height: '40px',
+    paddingInline: spacing['--t-spacing-2'],
+    width: '100%',
+  },
 
-  & input {
-    background-color: transparent;
-    border: none;
-    border-radius: 0;
-    height: 40px;
-    line-height: 40px;
-    width: 100%;
-  }
-`;
-
-const StyledBackButtonContainer = styled.div`
-  & > div {
-    border-bottom: none;
-  }
-`;
-
-const StyledContainer = styled.div`
-  width: 100%;
-`;
-
-const StyledGroupsContainer = styled.div`
-  padding: ${themeCssVariables.spacing[2]};
-`;
+  container: {
+    width: '100%',
+  },
+  groupsContainer: {
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+});
 
 type WorkflowAiAgentPermissionsTabProps = {
   action: WorkflowAiAgentAction;
@@ -218,17 +216,20 @@ export const WorkflowAiAgentPermissionsTab = ({
     hasRoleWithPermissions && !workflowAiAgentPermissionsIsAddingPermission;
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       {shouldShowBackButton && (
-        <StyledBackButtonContainer>
+        <div data-workflow-permissions-back-button>
           <SidePanelSubPageNavigationHeader
             title={t`Add permission`}
             onBackClick={handleBack}
           />
-        </StyledBackButtonContainer>
+        </div>
       )}
 
-      <StyledSearchInputContainer>
+      <div
+        data-workflow-permissions-search
+        {...stylex.props(styles.searchInputContainer)}
+      >
         <TextInput
           fullWidth
           value={searchQuery}
@@ -240,9 +241,9 @@ export const WorkflowAiAgentPermissionsTab = ({
             }
           }}
         />
-      </StyledSearchInputContainer>
+      </div>
 
-      <StyledGroupsContainer>
+      <div {...stylex.props(styles.groupsContainer)}>
         {shouldShowCrudList && (
           <WorkflowAiAgentPermissionsCrudList
             permissions={filterBySearchQuery({
@@ -306,7 +307,7 @@ export const WorkflowAiAgentPermissionsTab = ({
             />
           </>
         )}
-      </StyledGroupsContainer>
-    </StyledContainer>
+      </div>
+    </div>
   );
 };

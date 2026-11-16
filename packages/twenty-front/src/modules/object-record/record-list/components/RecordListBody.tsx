@@ -3,13 +3,15 @@ import { RecordListEmptyState } from '@/object-record/record-list/components/Rec
 import { RecordListRecords } from '@/object-record/record-list/components/RecordListRecords';
 import { useRecordIndexContextOrThrow } from '@/object-record/record-index/contexts/RecordIndexContext';
 import { RecordListRecordsEffect } from '@/object-record/record-list/components/RecordListRecordsEffect';
-import { styled } from '@linaria/react';
 import { isDefined } from 'twenty-shared/utils';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledBody = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
+const styles = stylex.create({
+  body: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+});
 
 export const RecordListBody = () => {
   const { objectNameSingular } = useRecordIndexContextOrThrow();
@@ -29,7 +31,7 @@ export const RecordListBody = () => {
       {isEmpty ? (
         <RecordListEmptyState />
       ) : (
-        <StyledBody>
+        <div {...stylex.props(styles.body)}>
           {!isDefined(error) && (
             <RecordListRecords
               records={records}
@@ -38,7 +40,7 @@ export const RecordListBody = () => {
               fetchMoreRecords={fetchMoreRecords}
             />
           )}
-        </StyledBody>
+        </div>
       )}
     </>
   );

@@ -2,17 +2,19 @@ import { type ConnectedAccount } from '@/accounts/types/ConnectedAccount';
 import { SettingsAccountsRowDropdownMenu } from '@/settings/accounts/components/SettingsAccountsRowDropdownMenu';
 import { SyncStatus } from '@/settings/accounts/constants/SyncStatus';
 import { computeSyncStatus } from '@/settings/accounts/utils/computeSyncStatus';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { Status } from 'twenty-ui/primitives/data-display';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledRowRightContainer = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[4]};
-`;
+const styles = stylex.create({
+  rowRightContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-4'],
+  },
+});
 
 export const SettingsAccountsConnectedAccountsRowRightContainer = ({
   account,
@@ -30,15 +32,15 @@ export const SettingsAccountsConnectedAccountsRowRightContainer = ({
   // are reconnected, so the live sync status is no longer relevant.
   if (isArchived) {
     return (
-      <StyledRowRightContainer>
+      <div {...stylex.props(styles.rowRightContainer)}>
         <Status color="gray" weight="medium">{t`Sync paused`}</Status>
         <SettingsAccountsRowDropdownMenu account={account} />
-      </StyledRowRightContainer>
+      </div>
     );
   }
 
   return (
-    <StyledRowRightContainer>
+    <div {...stylex.props(styles.rowRightContainer)}>
       {status === SyncStatus.FAILED && (
         <Status color="red" weight="medium">{t`Sync failed`}</Status>
       )}
@@ -59,6 +61,6 @@ export const SettingsAccountsConnectedAccountsRowRightContainer = ({
         <Status color="orange" weight="medium">{t`Setup incomplete`}</Status>
       )}
       <SettingsAccountsRowDropdownMenu account={account} />
-    </StyledRowRightContainer>
+    </div>
   );
 };

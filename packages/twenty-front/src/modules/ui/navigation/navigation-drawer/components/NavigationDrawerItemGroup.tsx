@@ -1,8 +1,15 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import { type ReactNode } from 'react';
 
-const StyledGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
+const styles = stylex.create({
+  group: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+});
 
-export { StyledGroup as NavigationDrawerItemGroup };
+export const NavigationDrawerItemGroup = ({
+  children,
+}: {
+  children: ReactNode;
+}) => <div {...stylex.props(styles.group)}>{children}</div>;

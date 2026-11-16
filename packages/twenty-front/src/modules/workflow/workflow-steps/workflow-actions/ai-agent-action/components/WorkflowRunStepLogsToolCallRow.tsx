@@ -1,5 +1,5 @@
-import { styled } from '@linaria/react';
 import { useState } from 'react';
+import '@/workflow/workflow-steps/workflow-actions/components/workflowActionDescendantOverrides.css';
 import { type AgentRunToolCallLog } from 'twenty-shared/ai';
 
 import { useToolDisplayContext } from '@/ai/hooks/useToolDisplayContext';
@@ -18,124 +18,140 @@ import { Collapsible } from 'twenty-ui/primitives/layout';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 import { type JsonValue } from 'type-fest';
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard';
+import * as stylex from '@stylexjs/stylex';
+import {
+  iconSize,
+  animationDuration,
+  spacing,
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  fontWeight,
+  font,
+  color,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  font-family: ${themeCssVariables.font.family};
-  gap: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  toggleButton: {
+    alignItems: 'center',
+    background: 'none',
+    borderStyle: 'none',
+    color: {
+      default: fontColor['--t-font-color-tertiary'],
+      ':hover': fontColor['--t-font-color-primary'],
+    },
+    cursor: 'default',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    justifyContent: 'space-between',
+    paddingBlock: spacing['--t-spacing-1'],
+    paddingInline: 0,
+    textAlign: 'left',
+    transitionDuration: `calc(${animationDuration['--t-animation-duration-fast']} * 1s)`,
+    transitionProperty: 'color',
+    transitionTimingFunction: 'ease-in-out',
+    width: '100%',
+  },
+  toggleButtonExpandable: { cursor: 'pointer' },
+  iconContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexShrink: 0,
+    minWidth: `calc(${iconSize['--t-icon-size-sm']} * 1px)`,
+  },
+  statusIconContainer: (color: string) => ({ color }),
+  tab: {
+    background: 'none',
+    borderStyle: 'none',
+    color: {
+      default: fontColor['--t-font-color-tertiary'],
+      ':hover': fontColor['--t-font-color-primary'],
+    },
+    cursor: 'pointer',
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    paddingTop: 0,
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingInline: 0,
+  },
+  tabActive: {
+    color: fontColor['--t-font-color-primary'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+  },
+  jsonTreeContainer: { overflowX: 'auto' },
 
-const StyledToggleButton = styled.button<{ isExpandable: boolean }>`
-  align-items: center;
-  background: none;
-  border: none;
-  color: ${themeCssVariables.font.color.tertiary};
-  cursor: ${({ isExpandable }) => (isExpandable ? 'pointer' : 'default')};
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  justify-content: space-between;
-  padding: ${themeCssVariables.spacing[1]} 0;
-  text-align: left;
-  transition: color calc(${themeCssVariables.animation.duration.fast} * 1s)
-    ease-in-out;
-  width: 100%;
-
-  &:hover {
-    color: ${themeCssVariables.font.color.primary};
-  }
-`;
-
-const StyledLeftContent = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  min-width: 0;
-`;
-
-const StyledRightContent = styled.div`
-  align-items: center;
-  display: flex;
-  flex-shrink: 0;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledIconContainer = styled.div`
-  align-items: center;
-  display: flex;
-
-  svg {
-    min-width: calc(${themeCssVariables.icon.size.sm} * 1px);
-  }
-`;
-
-const StyledDisplayMessage = styled.span`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.medium};
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledToolBadge = styled.span`
-  background: ${themeCssVariables.background.transparent.light};
-  border-radius: ${themeCssVariables.border.radius.xs};
-  color: ${themeCssVariables.font.color.light};
-  font-family: ${themeCssVariables.font.family};
-  font-size: ${themeCssVariables.font.size.xs};
-  padding: ${themeCssVariables.spacing['0.5']} ${themeCssVariables.spacing[1]};
-`;
-
-const StyledContentContainer = styled.div`
-  background: ${themeCssVariables.background.transparent.lighter};
-  border: 1px solid ${themeCssVariables.border.color.light};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  min-width: 0;
-  padding: ${themeCssVariables.spacing[3]};
-`;
-
-const StyledTabContainer = styled.div`
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  display: flex;
-  gap: ${themeCssVariables.spacing[3]};
-  margin-bottom: ${themeCssVariables.spacing[3]};
-`;
-
-const StyledTab = styled.button<{ isActive: boolean }>`
-  background: none;
-  border: none;
-  color: ${({ isActive }) =>
-    isActive
-      ? themeCssVariables.font.color.primary
-      : themeCssVariables.font.color.tertiary};
-  cursor: pointer;
-  font-size: ${themeCssVariables.font.size.sm};
-  font-weight: ${({ isActive }) =>
-    isActive
-      ? themeCssVariables.font.weight.medium
-      : themeCssVariables.font.weight.regular};
-  padding: 0 0 ${themeCssVariables.spacing[2]};
-
-  &:hover {
-    color: ${themeCssVariables.font.color.primary};
-  }
-`;
-
-const StyledJsonTreeContainer = styled.div`
-  overflow-x: auto;
-
-  ul {
-    min-width: 0;
-  }
-`;
-
-const StyledErrorMessage = styled.div`
-  color: ${themeCssVariables.color.red};
-  font-size: ${themeCssVariables.font.size.sm};
-  white-space: pre-wrap;
-  word-break: break-word;
-`;
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    fontFamily: font['--t-font-family'],
+    gap: spacing['--t-spacing-2'],
+  },
+  leftContent: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    minWidth: '0',
+  },
+  rightContent: {
+    alignItems: 'center',
+    display: 'flex',
+    flexShrink: '0',
+    gap: spacing['--t-spacing-2'],
+  },
+  displayMessage: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  toolBadge: {
+    background: backgroundTransparent['--t-background-transparent-light'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-xs'],
+    borderTopRightRadius: borderRadius['--t-border-radius-xs'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-xs'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-xs'],
+    color: fontColor['--t-font-color-light'],
+    fontFamily: font['--t-font-family'],
+    fontSize: fontSize['--t-font-size-xs'],
+    paddingTop: spacing['--t-spacing-0_5'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: spacing['--t-spacing-0_5'],
+    paddingLeft: spacing['--t-spacing-1'],
+  },
+  contentContainer: {
+    background: backgroundTransparent['--t-background-transparent-lighter'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-light'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    minWidth: '0',
+    paddingTop: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingBottom: spacing['--t-spacing-3'],
+    paddingLeft: spacing['--t-spacing-3'],
+  },
+  tabContainer: {
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: borderColor['--t-border-color-light'],
+    display: 'flex',
+    gap: spacing['--t-spacing-3'],
+    marginBottom: spacing['--t-spacing-3'],
+  },
+  errorMessage: {
+    color: color['--t-color-red'],
+    fontSize: fontSize['--t-font-size-sm'],
+    whiteSpace: 'pre-wrap',
+    wordBreak: 'break-word',
+  },
+});
 
 type TabType = 'output' | 'input';
 
@@ -171,58 +187,77 @@ export const WorkflowRunStepLogsToolCallRow = ({
   });
 
   return (
-    <StyledContainer>
-      <StyledToggleButton
+    <div {...stylex.props(styles.container)}>
+      <button
         type="button"
-        isExpandable={isExpandable}
+        {...stylex.props(
+          styles.toggleButton,
+          isExpandable && styles.toggleButtonExpandable,
+        )}
         onClick={() => isExpandable && setIsExpanded(!isExpanded)}
       >
-        <StyledLeftContent>
-          <StyledIconContainer>
+        <div {...stylex.props(styles.leftContent)}>
+          <div {...stylex.props(styles.iconContainer)}>
             <ToolIcon size={theme.icon.size.sm} />
-          </StyledIconContainer>
-          <StyledDisplayMessage>{displayMessage}</StyledDisplayMessage>
-        </StyledLeftContent>
-        <StyledRightContent>
-          <StyledToolBadge>{toolCall.toolName}</StyledToolBadge>
-          <StyledIconContainer style={{ color: statusColor }}>
+          </div>
+          <span {...stylex.props(styles.displayMessage)}>{displayMessage}</span>
+        </div>
+        <div {...stylex.props(styles.rightContent)}>
+          <span {...stylex.props(styles.toolBadge)}>{toolCall.toolName}</span>
+          <div
+            {...stylex.props(
+              styles.iconContainer,
+              styles.statusIconContainer(statusColor),
+            )}
+          >
             <StatusIcon size={theme.icon.size.sm} />
-          </StyledIconContainer>
+          </div>
           {isExpandable &&
             (isExpanded ? (
               <IconChevronUp size={theme.icon.size.sm} />
             ) : (
               <IconChevronDown size={theme.icon.size.sm} />
             ))}
-        </StyledRightContent>
-      </StyledToggleButton>
+        </div>
+      </button>
 
       {isExpandable && (
         <Collapsible.Root open={isExpanded}>
           <Collapsible.Panel>
-            <StyledContentContainer>
+            <div {...stylex.props(styles.contentContainer)}>
               {hasError && isDefined(toolCall.errorMessage) ? (
-                <StyledErrorMessage>{toolCall.errorMessage}</StyledErrorMessage>
+                <div {...stylex.props(styles.errorMessage)}>
+                  {toolCall.errorMessage}
+                </div>
               ) : (
                 <>
-                  <StyledTabContainer>
-                    <StyledTab
+                  <div {...stylex.props(styles.tabContainer)}>
+                    <button
                       type="button"
-                      isActive={activeTab === 'output'}
+                      {...stylex.props(
+                        styles.tab,
+                        activeTab === 'output' && styles.tabActive,
+                      )}
                       onClick={() => setActiveTab('output')}
                     >
                       {t`Output`}
-                    </StyledTab>
-                    <StyledTab
+                    </button>
+                    <button
                       type="button"
-                      isActive={activeTab === 'input'}
+                      {...stylex.props(
+                        styles.tab,
+                        activeTab === 'input' && styles.tabActive,
+                      )}
                       onClick={() => setActiveTab('input')}
                     >
                       {t`Input`}
-                    </StyledTab>
-                  </StyledTabContainer>
+                    </button>
+                  </div>
 
-                  <StyledJsonTreeContainer>
+                  <div
+                    data-workflow-tool-call-json-tree
+                    {...stylex.props(styles.jsonTreeContainer)}
+                  >
                     <JsonTree
                       value={
                         (activeTab === 'output'
@@ -237,13 +272,13 @@ export const WorkflowRunStepLogsToolCallRow = ({
                       arrowButtonExpandedLabel={t`Collapse`}
                       onNodeValueClick={copyToClipboard}
                     />
-                  </StyledJsonTreeContainer>
+                  </div>
                 </>
               )}
-            </StyledContentContainer>
+            </div>
           </Collapsible.Panel>
         </Collapsible.Root>
       )}
-    </StyledContainer>
+    </div>
   );
 };

@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 
 import { Select } from '@/ui/input/components/Select';
@@ -13,23 +12,25 @@ import { SOURCE_LOCALE } from 'twenty-shared/translations';
 import { isDefined } from 'twenty-shared/utils';
 import { LightIconButton } from 'twenty-ui/components/input';
 import { IconChevronLeft, IconChevronRight } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const YEARS_SELECT_OPTIONS = Array.from(
   { length: 200 },
   (_, i) => new Date().getFullYear() + 50 - i,
 ).map((year) => ({ label: year.toString(), value: year }));
 
-const StyledCustomDatePickerHeader = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  justify-content: flex-end;
-  padding-left: ${themeCssVariables.spacing[2]};
-  padding-right: ${themeCssVariables.spacing[2]};
-
-  padding-top: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  customDatePickerHeader: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    justifyContent: 'flex-end',
+    paddingLeft: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
+  },
+});
 
 type DatePickerHeaderProps = {
   instanceId: string;
@@ -67,7 +68,7 @@ export const DatePickerHeader = ({
   return (
     <>
       {!hideInput && <DatePickerInput date={date} onChange={onChange} />}
-      <StyledCustomDatePickerHeader>
+      <div {...stylex.props(styles.customDatePickerHeader)}>
         <Select
           dropdownId={monthSelectDropdownId}
           options={getMonthSelectOptions(userLocale)}
@@ -98,7 +99,7 @@ export const DatePickerHeader = ({
         >
           <IconChevronRight />
         </LightIconButton>
-      </StyledCustomDatePickerHeader>
+      </div>
     </>
   );
 };

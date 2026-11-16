@@ -1,0 +1,9 @@
+@media (hover: hover) {
+  .record-table-cell-content[data-read-only='true']:hover svg {
+    color: var(--t-font-color-secondary);
+  }
+
+  .record-table-cell-content[data-read-only='true']:hover img {
+    opacity: 0.64;
+  }
+}

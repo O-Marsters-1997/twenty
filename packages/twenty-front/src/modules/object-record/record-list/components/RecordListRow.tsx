@@ -21,60 +21,79 @@ import { useAtomComponentFamilyStateValue } from '@/ui/utilities/state/jotai/hoo
 import { useAtomComponentSelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentSelectorValue';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
-import { styled } from '@linaria/react';
+import { recordListRowMarker } from './RecordListRow.stylex';
 import { plural, t } from '@lingui/core/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { type MouseEvent, type Ref, useContext } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { Chip } from 'twenty-ui/primitives/data-display';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  accent,
+  backgroundTransparent,
+  borderRadius,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledRowContainer = styled.div`
-  cursor: pointer;
-  padding-bottom: 2px;
+const isRowHovered = stylex.when.ancestor(':hover', recordListRowMarker);
+const isRowActive = stylex.when.ancestor(':active', recordListRowMarker);
+const isRowSelected = stylex.when.ancestor(
+  ':is([data-selected="true"])',
+  recordListRowMarker,
+);
 
-  &:hover > div {
-    background: ${themeCssVariables.background.transparent.lighter};
-  }
-
-  &:active > div,
-  &[data-selected='true'] > div {
-    background: ${themeCssVariables.accent.quaternary};
-  }
-`;
-
-const StyledRow = styled.div`
-  align-items: center;
-  border-radius: ${themeCssVariables.border.radius.sm};
-  display: flex;
-  gap: ${themeCssVariables.spacing[3]};
-  height: 32px;
-  justify-content: space-between;
-  padding: 0 6px;
-`;
-
-const StyledRecordChipContainer = styled.div`
-  display: flex;
-  flex: 1 1 ${RECORD_LIST_ROW_LABEL_IDENTIFIER_WIDTH}px;
-  min-width: 0;
-  overflow: hidden;
-`;
-
-const StyledFieldsContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-shrink: 0;
-  gap: ${themeCssVariables.spacing[3]};
-  justify-content: flex-end;
-  overflow: hidden;
-`;
-
-const StyledOverflowChipContainer = styled.div`
-  display: flex;
-  flex-shrink: 0;
-  justify-content: flex-end;
-  width: ${RECORD_LIST_ROW_OVERFLOW_CHIP_SLOT_WIDTH}px;
-`;
+const styles = stylex.create({
+  rowContainer: {
+    cursor: 'pointer',
+    paddingBottom: '2px',
+  },
+  row: {
+    alignItems: 'center',
+    backgroundColor: {
+      default: null,
+      [isRowHovered]:
+        backgroundTransparent['--t-background-transparent-lighter'],
+      [isRowActive]: accent['--t-accent-quaternary'],
+      [isRowSelected]: accent['--t-accent-quaternary'],
+    },
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    display: 'flex',
+    gap: spacing['--t-spacing-3'],
+    height: '32px',
+    justifyContent: 'space-between',
+    paddingTop: '0',
+    paddingRight: '6px',
+    paddingBottom: '0',
+    paddingLeft: '6px',
+  },
+  fieldsContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexShrink: '0',
+    gap: spacing['--t-spacing-3'],
+    justifyContent: 'flex-end',
+    overflow: 'hidden',
+  },
+  recordChipContainer: {
+    display: 'flex',
+    minWidth: 0,
+    overflow: 'hidden',
+  },
+  recordChipFlexBasis: (basis: number) => ({
+    flex: `1 1 ${basis}px`,
+  }),
+  overflowChipContainer: {
+    display: 'flex',
+    flexShrink: 0,
+    justifyContent: 'flex-end',
+  },
+  overflowChipWidth: (width: number) => ({
+    width: `${width}px`,
+  }),
+});
 
 type RecordListRowProps = {
   recordId: string;
@@ -186,7 +205,7 @@ export const RecordListRow = ({ recordId, rowRef }: RecordListRowProps) => {
   });
 
   return (
-    <StyledRowContainer
+    <div
       ref={rowRef}
       role="button"
       tabIndex={0}
@@ -211,9 +230,15 @@ export const RecordListRow = ({ recordId, rowRef }: RecordListRowProps) => {
           openRecord();
         }
       }}
+      {...stylex.props(recordListRowMarker, styles.rowContainer)}
     >
-      <StyledRow>
-        <StyledRecordChipContainer>
+      <div {...stylex.props(styles.row)}>
+        <div
+          {...stylex.props(
+            styles.recordChipContainer,
+            styles.recordChipFlexBasis(RECORD_LIST_ROW_LABEL_IDENTIFIER_WIDTH),
+          )}
+        >
           <RecordChip
             objectNameSingular={objectNameSingular}
             record={recordStore}
@@ -223,8 +248,8 @@ export const RecordListRow = ({ recordId, rowRef }: RecordListRowProps) => {
             onClick={openRecord}
             triggerEvent={'CLICK'}
           />
-        </StyledRecordChipContainer>
-        <StyledFieldsContainer>
+        </div>
+        <div {...stylex.props(styles.fieldsContainer)}>
           {displayedRecordFields.map(({ recordField, fieldDefinition }) => (
             <RecordListRowField
               key={recordField.fieldMetadataItemId}
@@ -235,7 +260,14 @@ export const RecordListRow = ({ recordId, rowRef }: RecordListRowProps) => {
             />
           ))}
           {hiddenFieldCount > 0 && (
-            <StyledOverflowChipContainer>
+            <div
+              {...stylex.props(
+                styles.overflowChipContainer,
+                styles.overflowChipWidth(
+                  RECORD_LIST_ROW_OVERFLOW_CHIP_SLOT_WIDTH,
+                ),
+              )}
+            >
               {isNonEmptyString(linkToRecord) ? (
                 <LinkChip
                   to={linkToRecord}
@@ -258,10 +290,10 @@ export const RecordListRow = ({ recordId, rowRef }: RecordListRowProps) => {
                   {overflowChipLabel}
                 </Chip>
               )}
-            </StyledOverflowChipContainer>
+            </div>
           )}
-        </StyledFieldsContainer>
-      </StyledRow>
-    </StyledRowContainer>
+        </div>
+      </div>
+    </div>
   );
 };

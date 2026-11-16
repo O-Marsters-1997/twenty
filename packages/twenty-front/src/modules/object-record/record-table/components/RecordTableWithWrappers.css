@@ -1,0 +1,3 @@
+.record-table-print-boundary .scroll-wrapper-x-enabled {
+  overscroll-behavior-x: contain;
+}

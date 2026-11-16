@@ -1,4 +1,4 @@
-import { styled } from '@linaria/react';
+import { type ReactNode } from 'react';
 
 import { useObjectMetadataItems } from '@/object-metadata/hooks/useObjectMetadataItems';
 import { getObjectColorWithFallback } from '@/object-metadata/utils/getObjectColorWithFallback';
@@ -14,8 +14,10 @@ import {
   type IconComponent,
 } from 'twenty-ui/icon';
 import { Avatar } from 'twenty-ui/primitives/data-display';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import { type SettingsAgentToolApplication } from '~/pages/settings/ai/types/SettingsAgentToolApplication';
+import * as stylex from '@stylexjs/stylex';
+import { borderRadius, grayScale } from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsToolIconProps = {
   icon?: string | null;
@@ -36,46 +38,79 @@ const getOperationIcon = (toolName: string): IconComponent | null => {
   return null;
 };
 
-const StyledCompositeContainer = styled.div`
-  align-items: center;
-  border-radius: ${themeCssVariables.border.radius.sm};
-  box-sizing: border-box;
-  display: flex;
-  flex-shrink: 0;
-  height: 16px;
-  justify-content: center;
-  position: relative;
-  width: 16px;
-`;
+const styles = stylex.create({
+  compositeContainer: {
+    alignItems: 'center',
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexShrink: '0',
+    height: '16px',
+    justifyContent: 'center',
+    position: 'relative',
+    width: '16px',
+  },
+  mainIconWrapper: {
+    alignItems: 'center',
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    inset: 0,
+    justifyContent: 'center',
+    position: 'absolute',
+  },
+  mainIconBackground: (backgroundColor: string) => ({
+    backgroundColor,
+  }),
+  mainIconBorder: (borderColor: string) => ({
+    borderColor,
+    borderStyle: 'solid',
+    borderWidth: '1px',
+  }),
+  operationOverlay: {
+    alignItems: 'center',
+    backgroundColor: grayScale['--t-gray-scale-gray4'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    bottom: '-5px',
+    display: 'flex',
+    height: '14px',
+    justifyContent: 'center',
+    position: 'absolute',
+    right: '-6px',
+    width: '12px',
+  },
+});
 
-const StyledMainIconWrapper = styled.div<{
-  $backgroundColor: string;
-  $borderColor?: string;
-}>`
-  align-items: center;
-  background-color: ${({ $backgroundColor }) => $backgroundColor};
-  border: ${({ $borderColor }) =>
-    $borderColor ? `1px solid ${$borderColor}` : 'none'};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  box-sizing: border-box;
-  display: flex;
-  inset: 0;
-  justify-content: center;
-  position: absolute;
-`;
+type MainIconWrapperProps = {
+  backgroundColor: string;
+  borderColor?: string;
+  children: ReactNode;
+};
 
-const StyledOperationOverlay = styled.div`
-  align-items: center;
-  background-color: ${themeCssVariables.grayScale.gray4};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  bottom: -5px;
-  display: flex;
-  height: 14px;
-  justify-content: center;
-  position: absolute;
-  right: -6px;
-  width: 12px;
-`;
+const MainIconWrapper = ({
+  backgroundColor,
+  borderColor,
+  children,
+}: MainIconWrapperProps) => (
+  <div
+    {...stylex.props(
+      styles.mainIconWrapper,
+      styles.mainIconBackground(backgroundColor),
+      isDefined(borderColor) && styles.mainIconBorder(borderColor),
+    )}
+  >
+    {children}
+  </div>
+);
 
 export const SettingsToolIcon = ({
   icon,
@@ -111,42 +146,42 @@ export const SettingsToolIcon = ({
 
   if (isDefined(OperationIcon)) {
     return (
-      <StyledCompositeContainer>
-        <StyledMainIconWrapper
-          $backgroundColor={objectStyle?.backgroundColor ?? 'transparent'}
-          $borderColor={objectStyle?.borderColor}
+      <div {...stylex.props(styles.compositeContainer)}>
+        <MainIconWrapper
+          backgroundColor={objectStyle?.backgroundColor ?? 'transparent'}
+          borderColor={objectStyle?.borderColor}
         >
           <MainIcon
             size="14px"
             stroke={theme.icon.stroke.md}
             color={objectStyle?.iconColor ?? theme.font.color.secondary}
           />
-        </StyledMainIconWrapper>
-        <StyledOperationOverlay>
+        </MainIconWrapper>
+        <div {...stylex.props(styles.operationOverlay)}>
           <OperationIcon
             size="12px"
             stroke={theme.icon.stroke.md}
             color={theme.font.color.tertiary}
           />
-        </StyledOperationOverlay>
-      </StyledCompositeContainer>
+        </div>
+      </div>
     );
   }
 
   if (isDefined(objectStyle)) {
     return (
-      <StyledCompositeContainer>
-        <StyledMainIconWrapper
-          $backgroundColor={objectStyle.backgroundColor}
-          $borderColor={objectStyle.borderColor}
+      <div {...stylex.props(styles.compositeContainer)}>
+        <MainIconWrapper
+          backgroundColor={objectStyle.backgroundColor}
+          borderColor={objectStyle.borderColor}
         >
           <MainIcon
             size="14px"
             stroke={theme.icon.stroke.md}
             color={objectStyle.iconColor}
           />
-        </StyledMainIconWrapper>
-      </StyledCompositeContainer>
+        </MainIconWrapper>
+      </div>
     );
   }
 

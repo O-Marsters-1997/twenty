@@ -1,6 +1,5 @@
 import { SkeletonLine } from '@/ui/feedback/skeleton/components/SkeletonLine';
 import { SettingsEmptyPlaceholder } from '@/settings/components/SettingsEmptyPlaceholder';
-import { styled } from '@linaria/react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useCallback, useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
@@ -11,7 +10,6 @@ import { TableHeader } from '@/ui/layout/table/components/TableHeader';
 import { TableRow } from '@/ui/layout/table/components/TableRow';
 import { ScrollWrapper } from '@/ui/utilities/scroll/components/ScrollWrapper';
 import { useScrollWrapperHTMLElement } from '@/ui/utilities/scroll/hooks/useScrollWrapperHTMLElement';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import {
   type EventLogRecord,
@@ -22,6 +20,8 @@ import {
   type ColumnConfig,
   getColumnsForEventLogTable,
 } from '@/settings/event-logs/utils/getColumnsForEventLogTable';
+import * as stylex from '@stylexjs/stylex';
+import { color, fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type EventLogResultsTableProps = {
   records: EventLogRecord[];
@@ -31,46 +31,45 @@ type EventLogResultsTableProps = {
   selectedTable: EventLogTable;
 };
 
-const StyledScrollWrapperContainer = styled.div`
-  height: 100%;
-  overflow: hidden;
-`;
-
-const StyledTableContainer = styled.div`
-  > div {
-    min-width: 100%;
-  }
-`;
-
-const StyledResizableHeaderContainer = styled.div<{ isResizing?: boolean }>`
-  position: relative;
-  user-select: ${({ isResizing }) => (isResizing ? 'none' : 'auto')};
-`;
-
-const StyledResizeHandle = styled.div<{ isResizing: boolean }>`
-  background: ${({ isResizing }) =>
-    isResizing ? themeCssVariables.color.blue : 'transparent'};
-  bottom: 0;
-  cursor: col-resize;
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 4px;
-
-  &:hover {
-    background: ${themeCssVariables.color.blue};
-  }
-`;
-
-const StyledLoadingMore = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  padding: ${themeCssVariables.spacing[4]};
-  text-align: center;
-`;
-
-const StyledIntersectionObserver = styled.div`
-  height: 1px;
-`;
+const styles = stylex.create({
+  scrollWrapperContainer: {
+    height: '100%',
+    overflow: 'hidden',
+  },
+  loadingMore: {
+    color: fontColor['--t-font-color-tertiary'],
+    padding: spacing['--t-spacing-4'],
+    textAlign: 'center',
+  },
+  intersectionObserver: {
+    height: '1px',
+  },
+  table: {
+    minWidth: '100%',
+  },
+  resizableHeader: {
+    position: 'relative',
+    userSelect: 'auto',
+  },
+  resizableHeaderResizing: {
+    userSelect: 'none',
+  },
+  resizeHandle: {
+    backgroundColor: {
+      default: 'transparent',
+      ':hover': color['--t-color-blue'],
+    },
+    bottom: 0,
+    cursor: 'col-resize',
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    width: '4px',
+  },
+  resizeHandleResizing: {
+    backgroundColor: color['--t-color-blue'],
+  },
+});
 
 const EVENT_LOG_SCROLL_WRAPPER_INSTANCE_ID = 'event-log-results-table';
 
@@ -172,12 +171,12 @@ export const EventLogResultsTable = ({
 
   if (isInitialLoading) {
     return (
-      <StyledScrollWrapperContainer>
+      <div {...stylex.props(styles.scrollWrapperContainer)}>
         <ScrollWrapper
           componentInstanceId={EVENT_LOG_SCROLL_WRAPPER_INSTANCE_ID}
         >
-          <StyledTableContainer>
-            <Table>
+          <div>
+            <Table {...stylex.props(styles.table)}>
               <TableRow gridTemplateColumns={gridTemplateColumns}>
                 {baseColumns.map((column) => (
                   <TableHeader key={column.id}>{t(column.label)}</TableHeader>
@@ -191,9 +190,9 @@ export const EventLogResultsTable = ({
                 ))}
               </TableRow>
             </Table>
-          </StyledTableContainer>
+          </div>
         </ScrollWrapper>
-      </StyledScrollWrapperContainer>
+      </div>
     );
   }
 
@@ -206,24 +205,32 @@ export const EventLogResultsTable = ({
   }
 
   return (
-    <StyledScrollWrapperContainer>
+    <div {...stylex.props(styles.scrollWrapperContainer)}>
       <ScrollWrapper componentInstanceId={EVENT_LOG_SCROLL_WRAPPER_INSTANCE_ID}>
-        <StyledTableContainer>
-          <Table>
+        <div>
+          <Table {...stylex.props(styles.table)}>
             <TableRow gridTemplateColumns={gridTemplateColumns}>
               {baseColumns.map((column) => (
-                <StyledResizableHeaderContainer
+                <div
                   key={column.id}
-                  isResizing={resizingColumn === column.id}
+                  {...stylex.props(
+                    styles.resizableHeader,
+                    resizingColumn === column.id &&
+                      styles.resizableHeaderResizing,
+                  )}
                 >
                   <TableHeader>{t(column.label)}</TableHeader>
-                  <StyledResizeHandle
-                    isResizing={resizingColumn === column.id}
+                  <div
                     onPointerDown={(event) =>
                       handleResizeStart(column.id, event)
                     }
+                    {...stylex.props(
+                      styles.resizeHandle,
+                      resizingColumn === column.id &&
+                        styles.resizeHandleResizing,
+                    )}
                   />
-                </StyledResizableHeaderContainer>
+                </div>
               ))}
             </TableRow>
             {records.map((record) => (
@@ -244,14 +251,17 @@ export const EventLogResultsTable = ({
               </TableRow>
             ))}
           </Table>
-        </StyledTableContainer>
-        <StyledIntersectionObserver ref={fetchMoreRef} />
+        </div>
+        <div
+          ref={fetchMoreRef}
+          {...stylex.props(styles.intersectionObserver)}
+        />
         {loading && records.length > 0 && (
-          <StyledLoadingMore>
+          <div {...stylex.props(styles.loadingMore)}>
             <Trans>Loading more...</Trans>
-          </StyledLoadingMore>
+          </div>
         )}
       </ScrollWrapper>
-    </StyledScrollWrapperContainer>
+    </div>
   );
 };

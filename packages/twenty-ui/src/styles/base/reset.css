@@ -1,0 +1,33 @@
+@layer reset {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  button {
+    margin: 0;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  html.light {
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  @supports (corner-shape: squircle) {
+    *,
+    *::before,
+    *::after {
+      corner-shape: var(--t-corner-shape, superellipse(2.2));
+    }
+  }
+}

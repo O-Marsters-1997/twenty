@@ -1,11 +1,9 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { AppPath } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 import { Section } from 'twenty-ui/components/layout';
 import { IconAddressBook, IconPencil, IconReload } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { useEnterLayoutCustomizationMode } from '@/layout-customization/hooks/useEnterLayoutCustomizationMode';
 import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/EnrichedObjectMetadataItem';
@@ -24,12 +22,16 @@ import { useAtomFamilySelectorValue } from '@/ui/utilities/state/jotai/hooks/use
 
 import { PermissionFlagType } from '~/generated-metadata/graphql';
 import { useNavigateApp } from '~/hooks/useNavigateApp';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContentContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[8]};
-`;
+const styles = stylex.create({
+  contentContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-8'],
+  },
+});
 
 const RESET_PAGE_LAYOUT_MODAL_ID = 'reset-page-layout-to-default-modal';
 const RECORD_PAGE_LAYOUT_HERO_INSTANCE_ID_PREFIX = 'record-page-layout-hero';
@@ -95,7 +97,7 @@ export const ObjectLayout = ({ objectMetadataItem }: ObjectLayoutProps) => {
   };
 
   return (
-    <StyledContentContainer>
+    <div {...stylex.props(styles.contentContainer)}>
       <Section.Root>
         <Section.Header
           title={t`Record page`}
@@ -154,6 +156,6 @@ export const ObjectLayout = ({ objectMetadataItem }: ObjectLayoutProps) => {
         confirmButtonText={t`Reset`}
         confirmButtonColor="danger"
       />
-    </StyledContentContainer>
+    </div>
   );
 };

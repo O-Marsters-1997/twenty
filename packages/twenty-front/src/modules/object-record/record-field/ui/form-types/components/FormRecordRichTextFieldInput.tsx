@@ -1,5 +1,4 @@
 import { useCreateBlockNote } from '@blocknote/react';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useEffect, useId, useState } from 'react';
 import { flushSync } from 'react-dom';
@@ -8,7 +7,6 @@ import { useToast } from 'twenty-ui/components/feedback';
 import { LightIconButton } from 'twenty-ui/components/input';
 import { IconMaximize } from 'twenty-ui/icon';
 import { Field } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { useIsMobile } from 'twenty-ui/utilities';
 
 import { BLOCK_SCHEMA } from '@/blocknote-editor/blocks/Schema';
@@ -26,28 +24,43 @@ import { FocusComponentType } from '@/ui/utilities/focus/types/FocusComponentTyp
 
 import '@blocknote/mantine/style.css';
 import '@blocknote/react/style.css';
+import * as stylex from '@stylexjs/stylex';
+import {
+  background,
+  borderColor,
+  borderRadius,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledEditorContainer = styled.div`
-  position: relative;
-`;
-
-const StyledExpandButtonContainer = styled.div`
-  margin-top: ${themeCssVariables.spacing[1]};
-  position: absolute;
-  right: ${themeCssVariables.spacing[1]};
-  top: ${themeCssVariables.spacing[0]};
-  z-index: 1;
-`;
-
-const StyledFullScreenEditorContainer = styled.div`
-  background-color: ${themeCssVariables.background.secondary};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.md};
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  padding: ${themeCssVariables.spacing[2]} ${themeCssVariables.spacing[8]};
-`;
+const styles = stylex.create({
+  editorContainer: {
+    position: 'relative',
+  },
+  expandButtonContainer: {
+    marginTop: spacing['--t-spacing-1'],
+    position: 'absolute',
+    right: spacing['--t-spacing-1'],
+    top: spacing['--t-spacing-0'],
+    zIndex: '1',
+  },
+  fullScreenEditorContainer: {
+    backgroundColor: background['--t-background-secondary'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-medium'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    flex: '1',
+    minHeight: '0',
+    overflowY: 'auto',
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-8'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-8'],
+  },
+});
 
 type FormRecordRichTextFieldInputProps = {
   label?: string;
@@ -171,7 +184,7 @@ export const FormRecordRichTextFieldInput = ({
       <FormFieldInputContainer>
         {label ? <Field.Label>{label}</Field.Label> : null}
         {!isFullScreen && (
-          <StyledEditorContainer>
+          <div {...stylex.props(styles.editorContainer)}>
             <BlockEditor
               editor={editor}
               onChange={handleChange}
@@ -181,7 +194,7 @@ export const FormRecordRichTextFieldInput = ({
               isCompact
             />
             {!isReadonly && !isMobile && (
-              <StyledExpandButtonContainer>
+              <div {...stylex.props(styles.expandButtonContainer)}>
                 <LightIconButton
                   size="sm"
                   onClick={() => handleFullScreenChange(true)}
@@ -190,13 +203,13 @@ export const FormRecordRichTextFieldInput = ({
                 >
                   <IconMaximize />
                 </LightIconButton>
-              </StyledExpandButtonContainer>
+              </div>
             )}
-          </StyledEditorContainer>
+          </div>
         )}
       </FormFieldInputContainer>
       {renderFullScreenModal(
-        <StyledFullScreenEditorContainer>
+        <div {...stylex.props(styles.fullScreenEditorContainer)}>
           <BlockEditor
             editor={editor}
             onChange={handleChange}
@@ -204,7 +217,7 @@ export const FormRecordRichTextFieldInput = ({
             onBlur={handleBlur}
             readonly={isReadonly}
           />
-        </StyledFullScreenEditorContainer>,
+        </div>,
         isFullScreen,
       )}
     </>

@@ -1,4 +1,4 @@
-import { css } from '@linaria/core';
+import * as stylex from '@stylexjs/stylex';
 import { Link } from 'react-router-dom';
 import { type LinkChipProps } from './types/LinkChipProps';
 
@@ -6,19 +6,17 @@ import { LINK_CHIP_CLICK_OUTSIDE_ID } from '@/ui/navigation/link/constants/LinkC
 import { useMouseDownNavigation } from '@/ui/navigation/hooks/useMouseDownNavigation';
 import { Chip } from 'twenty-ui/primitives/data-display';
 
-const styles = {
-  linkContainer: css`
-    & {
-      display: inline-flex;
-      min-width: 0;
-      vertical-align: middle;
-    }
-    & > a {
-      min-width: 0;
-      text-decoration: none;
-    }
-  `,
-};
+const styles = stylex.create({
+  linkContainer: {
+    display: 'inline-flex',
+    minWidth: 0,
+    verticalAlign: 'middle',
+  },
+  chip: {
+    minWidth: 0,
+    textDecoration: 'none',
+  },
+});
 
 export const LinkChip = ({
   to,
@@ -27,16 +25,19 @@ export const LinkChip = ({
   onMouseDown,
   triggerEvent,
   ref,
+  className,
   ...props
 }: LinkChipProps) => {
   const { onClick: onClickHandler, onMouseDown: onMouseDownHandler } =
     useMouseDownNavigation({ to, onClick, triggerEvent });
+  const chipProps = stylex.props(styles.chip);
 
   return (
-    <span className={styles.linkContainer}>
+    <span {...stylex.props(styles.linkContainer)}>
       <Chip
         clickable
         {...props}
+        className={[chipProps.className, className].join(' ')}
         render={
           <Link
             to={to}

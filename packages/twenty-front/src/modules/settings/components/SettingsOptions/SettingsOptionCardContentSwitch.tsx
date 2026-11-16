@@ -6,46 +6,17 @@ import {
   StyledSettingsCardTitle,
 } from '@/settings/components/SettingsOptions/SettingsCardContentBase';
 import { SettingsOptionIconCustomizer } from '@/settings/components/SettingsOptions/SettingsOptionIconCustomizer';
-import { styled } from '@linaria/react';
 import { useId } from 'react';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
 import { type IconComponent } from 'twenty-ui/icon';
 import { Switch } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
-
-const StyledSwitch = styled(Switch)`
-  &[data-advanced-mode] {
-    color: ${themeCssVariables.color.yellow};
-  }
-`;
-
-const StyledSettingsCardSwitchContent = styled.div<{ disabled?: boolean }>`
-  align-items: center;
-  background-color: ${themeCssVariables.background.secondary};
-  cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
-  display: flex;
-  gap: ${themeCssVariables.spacing[3]};
-  padding: ${themeCssVariables.spacing[4]};
-  pointer-events: ${({ disabled }) => (disabled ? 'none' : 'auto')};
-  position: relative;
-
-  &:hover {
-    background: ${themeCssVariables.background.transparent.lighter};
-  }
-`;
-
-const StyledSettingsCardSwitchButtonContainer = styled.span`
-  align-items: center;
-  display: flex;
-  flex-shrink: 0;
-  margin-left: auto;
-`;
-
-const StyledSettingsCardSwitchCover = styled.span`
-  cursor: pointer;
-  inset: 0;
-  position: absolute;
-`;
+import {
+  background,
+  backgroundTransparent,
+  color,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
+import * as stylex from '@stylexjs/stylex';
 
 type SettingsOptionCardContentSwitchProps = {
   Icon?: IconComponent;
@@ -72,7 +43,12 @@ export const SettingsOptionCardContentSwitch = ({
 
   return (
     <>
-      <StyledSettingsCardSwitchContent disabled={disabled}>
+      <div
+        {...stylex.props(
+          styles.content,
+          disabled ? styles.contentDisabled : styles.contentEnabled,
+        )}
+      >
         {Icon && (
           <StyledSettingsCardIcon>
             <SettingsOptionIconCustomizer Icon={Icon} />
@@ -82,7 +58,7 @@ export const SettingsOptionCardContentSwitch = ({
           <StyledSettingsCardTitle>
             <label htmlFor={switchId}>
               {title}
-              <StyledSettingsCardSwitchCover />
+              <span {...stylex.props(styles.settingsCardSwitchCover)} />
             </label>
           </StyledSettingsCardTitle>
           {description && (
@@ -91,18 +67,56 @@ export const SettingsOptionCardContentSwitch = ({
             </StyledSettingsCardDescription>
           )}
         </StyledSettingsCardTextContainer>
-        <StyledSettingsCardSwitchButtonContainer>
-          <StyledSwitch
+        <span {...stylex.props(styles.settingsCardSwitchButtonContainer)}>
+          <Switch
             id={switchId}
             checked={checked}
             onCheckedChange={onChange}
             disabled={disabled}
             size="sm"
-            data-advanced-mode={advancedMode || undefined}
+            className={
+              stylex.props(advancedMode && styles.advancedSwitch).className
+            }
           />
-        </StyledSettingsCardSwitchButtonContainer>
-      </StyledSettingsCardSwitchContent>
+        </span>
+      </div>
       {divider && <Separator />}
     </>
   );
 };
+
+const styles = stylex.create({
+  content: {
+    alignItems: 'center',
+    backgroundColor: {
+      default: background['--t-background-secondary'],
+      ':hover': backgroundTransparent['--t-background-transparent-lighter'],
+    },
+    display: 'flex',
+    gap: spacing['--t-spacing-3'],
+    padding: spacing['--t-spacing-4'],
+    position: 'relative',
+  },
+  contentEnabled: {
+    cursor: 'pointer',
+    pointerEvents: 'auto',
+  },
+  contentDisabled: {
+    cursor: 'default',
+    pointerEvents: 'none',
+  },
+  advancedSwitch: {
+    color: color['--t-color-yellow'],
+  },
+  settingsCardSwitchButtonContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexShrink: '0',
+    marginLeft: 'auto',
+  },
+  settingsCardSwitchCover: {
+    cursor: 'pointer',
+    inset: '0',
+    position: 'absolute',
+  },
+});

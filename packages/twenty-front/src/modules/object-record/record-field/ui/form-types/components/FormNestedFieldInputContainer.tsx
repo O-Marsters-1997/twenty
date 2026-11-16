@@ -1,15 +1,28 @@
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { type ReactNode } from 'react';
+import {
+  background,
+  borderColor,
+  borderRadius,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledFormNestedFieldInputContainer = styled.div`
-  background: ${themeCssVariables.background.secondary};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.md};
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  padding: ${themeCssVariables.spacing[2]};
-`;
+export const FormNestedFieldInputContainer = ({
+  children,
+}: {
+  children?: ReactNode;
+}) => <div {...stylex.props(styles.container)}>{children}</div>;
 
-export const FormNestedFieldInputContainer =
-  StyledFormNestedFieldInputContainer;
+const styles = stylex.create({
+  container: {
+    backgroundColor: background['--t-background-secondary'],
+    borderColor: borderColor['--t-border-color-medium'],
+    borderRadius: borderRadius['--t-border-radius-md'],
+    borderStyle: 'solid',
+    borderWidth: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    padding: spacing['--t-spacing-2'],
+  },
+});

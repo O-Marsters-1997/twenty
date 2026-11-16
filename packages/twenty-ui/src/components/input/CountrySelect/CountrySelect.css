@@ -1,0 +1,6 @@
+@layer twenty-ui {
+  .tw-country-select-flag > svg {
+    max-block-size: 100%;
+    max-inline-size: 100%;
+  }
+}

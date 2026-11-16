@@ -1,7 +1,5 @@
-import { styled } from '@linaria/react';
 import { formatInTimeZone } from 'date-fns-tz';
 import { Tooltip } from 'twenty-ui/primitives/surfaces';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { DATE_FORMAT_WITHOUT_YEAR } from '@/localization/constants/DateFormatWithoutYear';
 import { TimeFormat } from '@/localization/constants/TimeFormat';
@@ -14,14 +12,18 @@ import { TooltipDelay } from '@/ui/layout/tooltip/constants/TooltipDelay';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { dateLocaleState } from '@/localization/states/dateLocaleState';
 import { beautifyPastDateRelativeToNow } from '~/utils/date-utils';
+import * as stylex from '@stylexjs/stylex';
+import { codeFont, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledTimeAndDate = styled.span`
-  align-items: center;
-  display: flex;
-  font-family: ${themeCssVariables.code.font.family}, monospace;
-  gap: ${themeCssVariables.spacing[1]};
-  min-width: 0;
-`;
+const styles = stylex.create({
+  timeAndDate: {
+    alignItems: 'center',
+    display: 'flex',
+    fontFamily: `${codeFont['--t-code-font-family']}, monospace`,
+    gap: spacing['--t-spacing-1'],
+    minWidth: '0',
+  },
+});
 
 type LogConsoleTimeCellProps = {
   timestamp: string;
@@ -46,12 +48,12 @@ export const LogConsoleTimeCell = ({ timestamp }: LogConsoleTimeCellProps) => {
         content={beautifyPastDateRelativeToNow(timestamp, localeCatalog)}
         delay={TooltipDelay.mediumDelay}
       >
-        <StyledTimeAndDate>
+        <span {...stylex.props(styles.timeAndDate)}>
           {formatTimestamp(timeWithMillisecondsFormat)}
           <SettingsNameCellSecondaryLabel>
             {formatTimestamp(dayAndMonthFormat)}
           </SettingsNameCellSecondaryLabel>
-        </StyledTimeAndDate>
+        </span>
       </Tooltip>
     </StyledNameTableCell>
   );

@@ -15,7 +15,7 @@ export const link = (mark: TipTapMark, children: ReactNode): ReactNode => {
       href={safeUrl(href)}
       target={target}
       rel={rel}
-      style={{ textDecoration: 'underline' }}
+      className="underline"
     >
       {children}
     </a>

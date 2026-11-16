@@ -6,7 +6,6 @@ import { expect, it, vi } from 'vitest';
 import { runComponentConformance } from '@test-utilities/conformance/runComponentConformance';
 
 import { DirectionProvider } from '@ui/primitives/layout/DirectionProvider/DirectionProvider';
-import styles from '@ui/primitives/surfaces/internal/Dialog.module.scss';
 import { Dialog } from '../Dialog';
 
 const DialogRootWrapper = ({ children }: { children: ReactNode }) => (
@@ -55,28 +54,24 @@ runComponentConformance({
   element: <Dialog.Backdrop />,
   refInstanceOf: HTMLDivElement,
   wrapper: DialogPortalWrapper,
-  ownClassName: styles.backdrop,
 });
 runComponentConformance({
   name: 'Dialog.Viewport',
   element: <Dialog.Viewport />,
   refInstanceOf: HTMLDivElement,
   wrapper: DialogPortalWrapper,
-  ownClassName: styles.viewport,
 });
 runComponentConformance({
   name: 'Dialog.Popup',
   element: <Dialog.Popup initialFocus={false} />,
   refInstanceOf: HTMLDivElement,
   wrapper: DialogViewportWrapper,
-  ownClassName: styles.popup,
 });
 runComponentConformance({
   name: 'Dialog.Description',
   element: <Dialog.Description>Description</Dialog.Description>,
   refInstanceOf: HTMLParagraphElement,
   wrapper: DialogPopupWrapper,
-  ownClassName: styles.description,
 });
 runComponentConformance({
   name: 'Dialog.Close',
@@ -89,19 +84,16 @@ runComponentConformance({
   name: 'Dialog.Header',
   element: <Dialog.Header>Header</Dialog.Header>,
   refInstanceOf: HTMLDivElement,
-  ownClassName: styles.header,
 });
 runComponentConformance({
   name: 'Dialog.Body',
   element: <Dialog.Body>Body</Dialog.Body>,
   refInstanceOf: HTMLDivElement,
-  ownClassName: styles.body,
 });
 runComponentConformance({
   name: 'Dialog.Footer',
   element: <Dialog.Footer>Footer</Dialog.Footer>,
   refInstanceOf: HTMLDivElement,
-  ownClassName: styles.footer,
 });
 
 it('keeps each composed part ref and native handler on its own element', async () => {

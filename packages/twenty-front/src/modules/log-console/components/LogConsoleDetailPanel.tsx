@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isNonEmptyString, isString } from '@sniptt/guards';
 import { formatInTimeZone } from 'date-fns-tz';
@@ -20,7 +19,7 @@ import { allowRequestsToTwentyIconsState } from '@/client-config/states/allowReq
 import { TimeFormat } from '@/localization/constants/TimeFormat';
 import { useDateTimeFormat } from '@/localization/hooks/useDateTimeFormat';
 import { StyledLogConsoleFieldsCard } from '@/log-console/components/StyledLogConsoleFieldsCard';
-import { LOG_CONSOLE_NARROW_BODY_MAX_WIDTH } from '@/log-console/constants/LogConsoleNarrowBodyMaxWidth';
+import { logConsoleQueries } from './LogConsole.stylex';
 import { useLogConsoleTimeZone } from '@/log-console/hooks/useLogConsoleTimeZone';
 import { logConsoleSelectedLogState } from '@/log-console/states/logConsoleSelectedLogState';
 import { ObjectMetadataIcon } from '@/object-metadata/components/ObjectMetadataIcon';
@@ -36,72 +35,89 @@ import { type EventLogRecord } from '~/generated-metadata/graphql';
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard';
 import { dateLocaleState } from '@/localization/states/dateLocaleState';
 import { getAbsoluteImageUrl } from '~/utils/image/getAbsoluteImageUrl';
+import * as stylex from '@stylexjs/stylex';
+import {
+  borderColor,
+  fontColor,
+  fontSize,
+  fontWeight,
+  general,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const COLLAPSED_MESSAGE_STACK_LINE_COUNT = 1;
 
-const StyledPanel = styled.aside`
-  border-left: 1px solid ${themeCssVariables.border.color.medium};
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
-
-  @container log-console-body (max-width: ${LOG_CONSOLE_NARROW_BODY_MAX_WIDTH}px) {
-    border-left: none;
-    inset: 0;
-    position: absolute;
-    width: 100%;
-  }
-`;
-
-const StyledTopBar = styled.div`
-  align-items: center;
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  box-sizing: border-box;
-  display: flex;
-  flex-shrink: 0;
-  gap: ${themeCssVariables.betweenSiblingsGap};
-  height: ${APP_HEADER_HEIGHT}px;
-  padding: 0 ${themeCssVariables.spacing[2]};
-`;
-
-const StyledContent = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[6]};
-  min-height: 0;
-  overflow-y: auto;
-  padding: ${themeCssVariables.spacing[3]};
-`;
-
-const StyledMessageCard = styled(Card.Root)`
-  display: flex;
-  flex-direction: column;
-  font-size: ${themeCssVariables.font.size.sm};
-  gap: ${themeCssVariables.spacing[1]};
-  padding: ${themeCssVariables.spacing[2]} ${themeCssVariables.spacing[3]};
-`;
-
-const StyledMessageFirstLine = styled.div`
-  color: ${themeCssVariables.font.color.primary};
-  font-weight: ${themeCssVariables.font.weight.medium};
-  overflow-wrap: anywhere;
-`;
-
-const StyledMessageStackLine = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-`;
-
-const StyledCopyableId = styled.div`
-  cursor: pointer;
-  min-width: 0;
-`;
-
-const StyledRawEvent = styled.div`
-  overflow-x: auto;
-`;
+const styles = stylex.create({
+  panel: {
+    borderLeftColor: borderColor['--t-border-color-medium'],
+    borderLeftStyle: 'solid',
+    borderLeftWidth: {
+      default: 1,
+      [logConsoleQueries.narrowBody]: 0,
+    },
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    inset: {
+      default: null,
+      [logConsoleQueries.narrowBody]: 0,
+    },
+    position: {
+      default: null,
+      [logConsoleQueries.narrowBody]: 'absolute',
+    },
+    width: '100%',
+  },
+  topBar: {
+    alignItems: 'center',
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: 1,
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexShrink: 0,
+    gap: general['--t-between-siblings-gap'],
+    paddingBlock: 0,
+    paddingInline: spacing['--t-spacing-2'],
+  },
+  topBarHeight: (height: number) => ({ height }),
+  messageCard: {
+    display: 'flex',
+    flexDirection: 'column',
+    fontSize: fontSize['--t-font-size-sm'],
+    gap: spacing['--t-spacing-1'],
+    paddingBlock: spacing['--t-spacing-2'],
+    paddingInline: spacing['--t-spacing-3'],
+  },
+  content: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-6'],
+    minHeight: '0',
+    overflowY: 'auto',
+    paddingTop: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingBottom: spacing['--t-spacing-3'],
+    paddingLeft: spacing['--t-spacing-3'],
+  },
+  messageFirstLine: {
+    color: fontColor['--t-font-color-primary'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    overflowWrap: 'anywhere',
+  },
+  messageStackLine: {
+    color: fontColor['--t-font-color-tertiary'],
+  },
+  copyableId: {
+    cursor: 'pointer',
+    minWidth: '0',
+  },
+  rawEvent: {
+    overflowX: 'auto',
+  },
+});
 
 export const LogConsoleDetailPanel = () => {
   const { t } = useLingui();
@@ -190,12 +206,15 @@ export const LogConsoleDetailPanel = () => {
               Icon,
               label: t(label),
               value: (
-                <StyledCopyableId onClick={() => copyToClipboard(id)}>
+                <div
+                  onClick={() => copyToClipboard(id)}
+                  {...stylex.props(styles.copyableId)}
+                >
                   <OverflowingTextWithTooltip
                     text={<>{id}</>}
                     tooltipContent={id}
                   />
-                </StyledCopyableId>
+                </div>
               ),
             },
           ]
@@ -206,8 +225,10 @@ export const LogConsoleDetailPanel = () => {
   const closeLabel = t`Close details`;
 
   return (
-    <StyledPanel>
-      <StyledTopBar>
+    <aside {...stylex.props(styles.panel)}>
+      <div
+        {...stylex.props(styles.topBar, styles.topBarHeight(APP_HEADER_HEIGHT))}
+      >
         <IconButton
           size="sm"
           variant="ghost"
@@ -245,8 +266,8 @@ export const LogConsoleDetailPanel = () => {
           iconColor={themeCssVariables.font.color.tertiary}
           title={isNonEmptyString(title) ? title : t`Untitled`}
         />
-      </StyledTopBar>
-      <StyledContent>
+      </div>
+      <div {...stylex.props(styles.content)}>
         {isNonEmptyString(message) && (
           <Section.Root>
             <Section.Header
@@ -260,16 +281,17 @@ export const LogConsoleDetailPanel = () => {
                 </LightButton>
               }
             />
-            <StyledMessageCard
+            <Card.Root
               backgroundColor={themeCssVariables.background.secondary}
+              xstyle={styles.messageCard}
             >
-              <StyledMessageFirstLine>
+              <div {...stylex.props(styles.messageFirstLine)}>
                 {firstMessageLine}
-              </StyledMessageFirstLine>
+              </div>
               {displayedMessageStackLines.map((messageStackLine, index) => (
-                <StyledMessageStackLine key={index}>
+                <div key={index} {...stylex.props(styles.messageStackLine)}>
                   <OverflowingTextWithTooltip text={messageStackLine.trim()} />
-                </StyledMessageStackLine>
+                </div>
               ))}
               {hiddenMessageStackLineCount > 0 && (
                 <FieldWidgetShowMoreButton
@@ -277,7 +299,7 @@ export const LogConsoleDetailPanel = () => {
                   onClick={() => setEntryWithExpandedMessage(entry)}
                 />
               )}
-            </StyledMessageCard>
+            </Card.Root>
           </Section.Root>
         )}
         {source.renderDetailContent?.(entry)}
@@ -308,7 +330,7 @@ export const LogConsoleDetailPanel = () => {
               </LightButton>
             }
           />
-          <StyledRawEvent>
+          <div {...stylex.props(styles.rawEvent)}>
             <JsonTree
               value={rawEvent}
               emptyArrayLabel={t`Empty Array`}
@@ -318,9 +340,9 @@ export const LogConsoleDetailPanel = () => {
               arrowButtonExpandedLabel={t`Collapse`}
               onNodeValueClick={copyToClipboard}
             />
-          </StyledRawEvent>
+          </div>
         </Section.Root>
-      </StyledContent>
-    </StyledPanel>
+      </div>
+    </aside>
   );
 };

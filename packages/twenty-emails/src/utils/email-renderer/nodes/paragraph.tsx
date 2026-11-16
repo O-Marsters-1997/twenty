@@ -13,10 +13,8 @@ export const paragraph = (
 
   return (
     <Text
+      className="m-0 p-0 leading-normal"
       style={{
-        lineHeight: '1.5',
-        margin: '0',
-        padding: '0',
         ...inherited,
         ...blockStyle(node.attrs?.style),
       }}

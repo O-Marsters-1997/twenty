@@ -7,7 +7,11 @@ import { MAIN_COLOR_TOKENS } from '../design-tokens/color/mainColors';
 import { DESIGN_TOKENS } from '../design-tokens/designTokens';
 import { buildMainColorNames } from '../design-tokens/pipeline/buildMainColorNames';
 import { buildThemeConstants } from '../design-tokens/pipeline/buildThemeConstants';
-import { buildThemeCss } from '../design-tokens/pipeline/buildThemeCss';
+import {
+  buildStylexConstants,
+  buildStylexThemes,
+  buildStylexTokens,
+} from '../design-tokens/pipeline/buildStylexTokens';
 import { buildThemeCommon } from '../design-tokens/pipeline/buildThemeCommon';
 import { buildThemeCssVariables } from '../design-tokens/pipeline/buildThemeCssVariables';
 import { buildThemeSpacing } from '../design-tokens/pipeline/buildThemeSpacing';
@@ -15,7 +19,6 @@ import { buildThemeSubtreeConstant } from '../design-tokens/pipeline/buildThemeS
 import { buildThemeTypes } from '../design-tokens/pipeline/buildThemeTypes';
 import { collectLeaves } from '../design-tokens/pipeline/collectLeaves';
 import { THEME_COMMON_ROOT_KEYS } from '../design-tokens/themeCommonRootKeys';
-import { THEME_CSS_FILE_NAME_BY_SCHEME } from '../design-tokens/themeCssFileNameByScheme';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const themeDirectory = resolve(packageRoot, 'src/theme');
@@ -23,14 +26,6 @@ const themeDirectory = resolve(packageRoot, 'src/theme');
 const leaves = collectLeaves(DESIGN_TOKENS);
 
 const sourceOutputs = [
-  {
-    path: resolve(themeDirectory, THEME_CSS_FILE_NAME_BY_SCHEME.light),
-    content: buildThemeCss({ leaves, scheme: 'light' }),
-  },
-  {
-    path: resolve(themeDirectory, THEME_CSS_FILE_NAME_BY_SCHEME.dark),
-    content: buildThemeCss({ leaves, scheme: 'dark' }),
-  },
   {
     path: resolve(themeDirectory, 'themeCssVariables.ts'),
     content: buildThemeCssVariables(leaves),
@@ -54,6 +49,18 @@ const sourceOutputs = [
   {
     path: resolve(themeDirectory, 'constants/ThemeCommon.ts'),
     content: buildThemeCommon({ leaves, rootKeys: THEME_COMMON_ROOT_KEYS }),
+  },
+  {
+    path: resolve(themeDirectory, 'tokens.stylex.ts'),
+    content: buildStylexTokens(leaves),
+  },
+  {
+    path: resolve(themeDirectory, 'themes.stylex.ts'),
+    content: buildStylexThemes(leaves),
+  },
+  {
+    path: resolve(themeDirectory, 'constants.stylex.ts'),
+    content: buildStylexConstants(),
   },
   {
     path: resolve(themeDirectory, 'constants/MainColorNames.ts'),

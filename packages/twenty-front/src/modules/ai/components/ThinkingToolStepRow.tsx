@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { getToolName, type DynamicToolUIPart, type ToolUIPart } from 'ai';
@@ -9,7 +8,6 @@ import { IconChevronRight } from 'twenty-ui/icon';
 import { Collapsible } from 'twenty-ui/primitives/layout';
 import { Tabs } from 'twenty-ui/primitives/navigation';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { type JsonValue } from 'type-fest';
 
 import { ShimmeringText } from '@/ai/components/ShimmeringText';
@@ -25,136 +23,148 @@ import { activeTabIdComponentState } from '@/ui/layout/tab-list/states/activeTab
 import { TooltipDelay } from '@/ui/layout/tooltip/constants/TooltipDelay';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard';
+import * as stylex from '@stylexjs/stylex';
+import {
+  animationDuration,
+  background,
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  color,
+  fontColor,
+  fontSize,
+  fontWeight,
+  iconSize,
+  spacing,
+  textLineHeight,
+} from 'twenty-ui/theme/tokens.stylex';
+import '~/third-party-styles/ai-chat-content.css';
 
-const StyledToolRowLabel = styled.div`
-  color: inherit;
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.regular};
-  line-height: ${themeCssVariables.text.lineHeight.md};
-  max-width: 100%;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  transition: color calc(${themeCssVariables.animation.duration.fast} * 1s)
-    ease-in-out;
-  white-space: nowrap;
-`;
-
-const StyledIconContainer = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.light};
-  display: flex;
-  justify-content: center;
-  min-width: calc(${themeCssVariables.icon.size.sm} * 1px);
-`;
-
-const StyledRowLabelContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex: 1;
-  gap: ${themeCssVariables.spacing[1]};
-  min-width: 0;
-`;
-
-const StyledChevronContainer = styled.div<{ isExpanded: boolean }>`
-  align-items: center;
-  color: ${themeCssVariables.font.color.light};
-  display: flex;
-  justify-content: center;
-  transform: rotate(${({ isExpanded }) => (isExpanded ? '90deg' : '0deg')});
-  transition: transform calc(${themeCssVariables.animation.duration.fast} * 1s)
-    ease-in-out;
-`;
-
-const StyledToolRowContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledToolRowButton = styled.button<{ isExpandable: boolean }>`
-  align-items: center;
-  background: none;
-  border: none;
-  color: ${themeCssVariables.font.color.tertiary};
-  cursor: ${({ isExpandable }) => (isExpandable ? 'pointer' : 'default')};
-  display: flex;
-  font-family: inherit;
-  gap: ${themeCssVariables.spacing[2]};
-  min-height: 24px;
-  padding: 0;
-  text-align: left;
-  transition: color calc(${themeCssVariables.animation.duration.fast} * 1s)
-    ease-in-out;
-  width: 100%;
-
-  &:hover {
-    color: ${({ isExpandable }) =>
-      isExpandable
-        ? themeCssVariables.font.color.primary
-        : themeCssVariables.font.color.tertiary};
-  }
-
-  &:focus-visible {
-    outline: 2px solid ${themeCssVariables.color.blue};
-    outline-offset: 2px;
-  }
-`;
-
-const StyledShimmeringLabel = styled(ShimmeringText)`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledToolDetailsContainer = styled.div`
-  background: ${themeCssVariables.background.transparent.lighter};
-  border: 1px solid ${themeCssVariables.border.color.light};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  margin-left: ${themeCssVariables.spacing[3]};
-  min-width: 0;
-  overflow: hidden;
-`;
-
-const StyledToolRecordsContainer = styled.div`
-  padding: 0 ${themeCssVariables.spacing[2]};
-`;
-
-const StyledToolTabListContainer = styled.div`
-  background-color: ${themeCssVariables.background.secondary};
-  padding-left: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledToolDetailsContent = styled.div`
-  min-width: 0;
-`;
-
-const StyledToolJsonContent = styled.div`
-  padding: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledJsonTreeContainer = styled.div`
-  font-size: ${themeCssVariables.font.size.md};
-  overflow-x: auto;
-
-  li,
-  span {
-    line-height: 1;
-  }
-
-  ul {
-    min-width: 0;
-  }
-`;
-
-const StyledToolErrorText = styled.p`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.regular};
-  line-height: ${themeCssVariables.text.lineHeight.lg};
-  margin: 0;
-  white-space: pre-wrap;
-`;
+const styles = stylex.create({
+  chevron: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-light'],
+    display: 'flex',
+    justifyContent: 'center',
+    transform: 'rotate(0deg)',
+    transitionDuration: `calc(${animationDuration['--t-animation-duration-fast']} * 1s)`,
+    transitionProperty: 'transform',
+    transitionTimingFunction: 'ease-in-out',
+  },
+  chevronExpanded: {
+    transform: 'rotate(90deg)',
+  },
+  toolRowButton: {
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    borderStyle: 'none',
+    color: fontColor['--t-font-color-tertiary'],
+    cursor: 'default',
+    display: 'flex',
+    fontFamily: 'inherit',
+    gap: spacing['--t-spacing-2'],
+    minHeight: '24px',
+    outline: {
+      default: null,
+      ':focus-visible': `2px solid ${color['--t-color-blue']}`,
+    },
+    outlineOffset: { default: null, ':focus-visible': '2px' },
+    paddingBlock: 0,
+    paddingInline: 0,
+    textAlign: 'left',
+    transitionDuration: `calc(${animationDuration['--t-animation-duration-fast']} * 1s)`,
+    transitionProperty: 'color',
+    transitionTimingFunction: 'ease-in-out',
+    width: '100%',
+  },
+  toolRowButtonExpandable: {
+    color: {
+      default: fontColor['--t-font-color-tertiary'],
+      ':hover': fontColor['--t-font-color-primary'],
+    },
+    cursor: 'pointer',
+  },
+  shimmeringLabel: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  toolRowLabel: {
+    color: 'inherit',
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    lineHeight: textLineHeight['--t-text-line-height-md'],
+    maxWidth: '100%',
+    minWidth: '0',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    transition: `color calc(${animationDuration['--t-animation-duration-fast']} * 1s)
+    ease-in-out`,
+    whiteSpace: 'nowrap',
+  },
+  iconContainer: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-light'],
+    display: 'flex',
+    justifyContent: 'center',
+    minWidth: `calc(${iconSize['--t-icon-size-sm']} * 1px)`,
+  },
+  rowLabelContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flex: '1',
+    gap: spacing['--t-spacing-1'],
+    minWidth: '0',
+  },
+  toolRowContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-1'],
+  },
+  toolDetailsContainer: {
+    background: backgroundTransparent['--t-background-transparent-lighter'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-light'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    marginLeft: spacing['--t-spacing-3'],
+    minWidth: '0',
+    overflow: 'hidden',
+  },
+  toolRecordsContainer: {
+    paddingTop: '0',
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: '0',
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+  toolTabListContainer: {
+    backgroundColor: background['--t-background-secondary'],
+    paddingLeft: spacing['--t-spacing-1'],
+  },
+  toolDetailsContent: {
+    minWidth: '0',
+  },
+  toolJsonContent: {
+    paddingTop: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-1'],
+  },
+  toolErrorText: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    lineHeight: textLineHeight['--t-text-line-height-lg'],
+    marginTop: '0',
+    marginRight: '0',
+    marginBottom: '0',
+    marginLeft: '0',
+    whiteSpace: 'pre-wrap',
+  },
+});
 
 type ToolDetailsTab = 'output' | 'input';
 
@@ -206,10 +216,13 @@ export const ThinkingToolStepRow = ({
   ];
 
   return (
-    <StyledToolRowContainer>
-      <StyledToolRowButton
+    <div {...stylex.props(styles.toolRowContainer)}>
+      <button
         type="button"
-        isExpandable={isExpandable}
+        {...stylex.props(
+          styles.toolRowButton,
+          isExpandable && styles.toolRowButtonExpandable,
+        )}
         onClick={() => {
           if (!isExpandable) {
             return;
@@ -219,60 +232,67 @@ export const ThinkingToolStepRow = ({
         }}
         aria-expanded={isExpandable ? isExpanded : undefined}
       >
-        <StyledIconContainer>
+        <div {...stylex.props(styles.iconContainer)}>
           <ToolIcon size={14} />
-        </StyledIconContainer>
-        <StyledRowLabelContainer>
-          <StyledToolRowLabel>
+        </div>
+        <div {...stylex.props(styles.rowLabelContainer)}>
+          <div {...stylex.props(styles.toolRowLabel)}>
             {isActive ? (
-              <StyledShimmeringLabel>{displayMessage}</StyledShimmeringLabel>
+              <ShimmeringText xstyle={styles.shimmeringLabel}>
+                {displayMessage}
+              </ShimmeringText>
             ) : (
               <OverflowingTextWithTooltip
                 text={displayMessage}
                 tooltipDelay={TooltipDelay.shortDelay}
               />
             )}
-          </StyledToolRowLabel>
+          </div>
           {isExpandable && (
-            <StyledChevronContainer isExpanded={isExpanded}>
+            <div
+              {...stylex.props(
+                styles.chevron,
+                isExpanded && styles.chevronExpanded,
+              )}
+            >
               <IconChevronRight size={14} />
-            </StyledChevronContainer>
+            </div>
           )}
-        </StyledRowLabelContainer>
-      </StyledToolRowButton>
+        </div>
+      </button>
 
       {isExpandable && (
         <Collapsible.Root open={isExpanded}>
           <Collapsible.Panel>
-            <StyledToolDetailsContainer>
+            <div {...stylex.props(styles.toolDetailsContainer)}>
               {isNonEmptyArray(recordReferences) && (
-                <StyledToolRecordsContainer>
+                <div {...stylex.props(styles.toolRecordsContainer)}>
                   <ToolRecordsWidget
                     message={recordsMessage ?? ''}
                     recordReferences={recordReferences}
                   />
-                </StyledToolRecordsContainer>
+                </div>
               )}
               {hasError ? (
-                <StyledToolErrorText>{part.errorText}</StyledToolErrorText>
+                <p {...stylex.props(styles.toolErrorText)}>{part.errorText}</p>
               ) : (
                 <TabListRoot
                   componentInstanceId={toolTabListComponentInstanceId}
                 >
-                  <StyledToolDetailsContent>
-                    <StyledToolTabListContainer>
+                  <div {...stylex.props(styles.toolDetailsContent)}>
+                    <div {...stylex.props(styles.toolTabListContainer)}>
                       <TabList
                         aria-label={t`Tool details: ${displayMessage}`}
                         tabs={toolTabs}
                         behaveAsLinks={false}
                         componentInstanceId={toolTabListComponentInstanceId}
                       />
-                    </StyledToolTabListContainer>
+                    </div>
                     <Tabs.Panel
                       value={activeTab}
-                      render={<StyledToolJsonContent />}
+                      render={<div {...stylex.props(styles.toolJsonContent)} />}
                     >
-                      <StyledJsonTreeContainer>
+                      <div className="json-tree-container">
                         <JsonTree
                           value={
                             (activeTab === 'output'
@@ -287,15 +307,15 @@ export const ThinkingToolStepRow = ({
                           arrowButtonExpandedLabel={t`Collapse`}
                           onNodeValueClick={copyToClipboard}
                         />
-                      </StyledJsonTreeContainer>
+                      </div>
                     </Tabs.Panel>
-                  </StyledToolDetailsContent>
+                  </div>
                 </TabListRoot>
               )}
-            </StyledToolDetailsContainer>
+            </div>
           </Collapsible.Panel>
         </Collapsible.Root>
       )}
-    </StyledToolRowContainer>
+    </div>
   );
 };

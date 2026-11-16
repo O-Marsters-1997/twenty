@@ -1,28 +1,28 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isNonEmptyString } from 'twenty-shared/utils';
 import { VisuallyHidden } from 'twenty-ui/primitives/accessibility';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { useIsAgentChatThreadShownAsUnread } from '@/ai/hooks/useIsAgentChatThreadShownAsUnread';
 import { type AgentChatThreadRecord } from '@/ai/types/AgentChatThreadRecord';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, fontWeight } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledTitle = styled.div<{ $isUnread: boolean }>`
-  color: ${({ $isUnread }) =>
-    $isUnread
-      ? themeCssVariables.font.color.primary
-      : themeCssVariables.font.color.secondary};
-  flex: 1;
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${({ $isUnread }) =>
-    $isUnread
-      ? themeCssVariables.font.weight.semiBold
-      : themeCssVariables.font.weight.medium};
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
+const styles = stylex.create({
+  title: {
+    color: fontColor['--t-font-color-secondary'],
+    flex: '1',
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    minWidth: 0,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  titleUnread: {
+    color: fontColor['--t-font-color-primary'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+  },
+});
 
 type AiChatThreadTitleProps = {
   thread: AgentChatThreadRecord;
@@ -33,9 +33,9 @@ export const AiChatThreadTitle = ({ thread }: AiChatThreadTitleProps) => {
   const isUnread = useIsAgentChatThreadShownAsUnread(thread);
 
   return (
-    <StyledTitle $isUnread={isUnread}>
+    <div {...stylex.props(styles.title, isUnread && styles.titleUnread)}>
       {isNonEmptyString(thread.title) ? thread.title : t`Untitled`}
       {isUnread && <VisuallyHidden>{t`, unread`}</VisuallyHidden>}
-    </StyledTitle>
+    </div>
   );
 };

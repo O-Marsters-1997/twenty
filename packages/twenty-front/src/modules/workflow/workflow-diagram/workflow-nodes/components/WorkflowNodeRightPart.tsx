@@ -1,13 +1,20 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import { type ReactNode } from 'react';
 
-const StyledNodeRightPart = styled.div`
-  align-items: flex-start;
-  align-self: stretch;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  max-width: 184px;
-`;
+const styles = stylex.create({
+  root: {
+    alignItems: 'flex-start',
+    alignSelf: 'stretch',
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    maxWidth: '184px',
+  },
+});
 
-export { StyledNodeRightPart as WorkflowNodeRightPart };
+export const WorkflowNodeRightPart = ({
+  children,
+}: {
+  children?: ReactNode;
+}) => <div {...stylex.props(styles.root)}>{children}</div>;

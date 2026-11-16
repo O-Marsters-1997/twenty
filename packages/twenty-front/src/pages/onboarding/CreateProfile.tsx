@@ -1,3 +1,4 @@
+import { onboardingLayout } from '../../modules/onboarding/constants/onboardingLayout.stylex';
 import { currentUserState } from '@/auth/states/currentUserState';
 import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMemberState';
 import { currentWorkspaceMembersState } from '@/auth/states/currentWorkspaceMembersState';
@@ -19,7 +20,6 @@ import { useHotkeysOnFocusedElement } from '@/ui/utilities/hotkey/hooks/useHotke
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomState';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { styled } from '@linaria/react';
 import { i18n } from '@lingui/core';
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react/macro';
@@ -29,40 +29,37 @@ import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { Key } from 'ts-key-enum';
 import { isDefined } from 'twenty-shared/utils';
 import { useToast } from 'twenty-ui/components/feedback';
-import { MOBILE_VIEWPORT, themeCssVariables } from 'twenty-ui/theme';
 import { z } from 'zod';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
 
-const StyledForm = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[8]};
-  max-width: 100%;
-  padding-bottom: ${themeCssVariables.spacing[4]};
-  width: ${ONBOARDING_CONTENT_BLOCK_WIDTH}px;
-`;
-
-const StyledNameRow = styled.div`
-  align-items: flex-end;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  width: 100%;
-
-  @media (max-width: ${MOBILE_VIEWPORT}px) {
-    align-items: stretch;
-    flex-direction: column;
-  }
-`;
-
-const StyledNameField = styled.div`
-  flex: 1 1 0;
-  min-width: 0;
-`;
-
-const StyledButtonContainer = styled.div`
-  display: flex;
-  max-width: 100%;
-  width: ${ONBOARDING_CONTENT_BLOCK_WIDTH}px;
-`;
+const styles = stylex.create({
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-8'],
+    maxWidth: '100%',
+    paddingBottom: spacing['--t-spacing-4'],
+    width: onboardingLayout.contentBlockWidth,
+  },
+  buttonContainer: {
+    display: 'flex',
+    maxWidth: '100%',
+    width: onboardingLayout.contentBlockWidth,
+  },
+  nameRow: {
+    alignItems: { default: 'flex-end', [media.mobile]: 'stretch' },
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    width: '100%',
+    flexDirection: { default: null, [media.mobile]: 'column' },
+  },
+  nameField: {
+    flex: '1 1 0',
+    minWidth: '0',
+  },
+});
 
 const firstNameErrorMessage = msg`First name can not be empty`;
 const lastNameErrorMessage = msg`Last name can not be empty`;
@@ -223,14 +220,14 @@ export const CreateProfile = () => {
       </StyledOnboardingStepHeading>
 
       <OnboardingStepAnimatedItem index={2}>
-        <StyledForm>
-          <StyledNameRow>
+        <div {...stylex.props(styles.form)}>
+          <div {...stylex.props(styles.nameRow)}>
             {isDefined(currentWorkspaceMember?.id) && (
               <OnboardingProfilePictureUploader
                 workspaceMemberId={currentWorkspaceMember.id}
               />
             )}
-            <StyledNameField>
+            <div {...stylex.props(styles.nameField)}>
               <Controller
                 name="firstName"
                 control={control}
@@ -257,8 +254,8 @@ export const CreateProfile = () => {
                   />
                 )}
               />
-            </StyledNameField>
-            <StyledNameField>
+            </div>
+            <div {...stylex.props(styles.nameField)}>
               <Controller
                 name="lastName"
                 control={control}
@@ -284,8 +281,8 @@ export const CreateProfile = () => {
                   />
                 )}
               />
-            </StyledNameField>
-          </StyledNameRow>
+            </div>
+          </div>
           <Controller
             name="jobTitle"
             control={control}
@@ -304,17 +301,17 @@ export const CreateProfile = () => {
               />
             )}
           />
-        </StyledForm>
+        </div>
       </OnboardingStepAnimatedItem>
 
       <OnboardingStepAnimatedItem index={3}>
-        <StyledButtonContainer>
+        <div {...stylex.props(styles.buttonContainer)}>
           <OnboardingMainButton
             label={t`Continue`}
             disabled={!isValid || isSubmitting || isNavigating}
             onClick={handleSubmit(onSubmit)}
           />
-        </StyledButtonContainer>
+        </div>
       </OnboardingStepAnimatedItem>
     </StyledOnboardingStepPage>
   );

@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isNonEmptyString, isString } from '@sniptt/guards';
 import { type DynamicToolUIPart, type ToolUIPart } from 'ai';
@@ -7,40 +6,54 @@ import {
   type AskQuestionsToolResult,
 } from 'twenty-shared/ai';
 import { IconHelpCircle } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { AiChatAskStatusRow } from '@/ai/components/AiChatAskStatusRow';
 import { TextWithChatReferences } from '@/ai/components/TextWithChatReferences';
 import { getAskedQuestionEntries } from '@/ai/utils/getAskedQuestionEntries';
 import { getChatReferenceSegments } from '@/ai/utils/getChatReferenceSegments';
+import { aiChatAskStyles } from '@/ai/components/AiChatAskStyledComponents';
+import * as stylex from '@stylexjs/stylex';
 import {
-  StyledAiChatAskStatusDetail,
-  StyledAiChatAskStatusMessage,
-} from '@/ai/components/AiChatAskStyledComponents';
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledAnswersCard = styled.div`
-  background-color: ${themeCssVariables.background.transparent.lighter};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  padding: ${themeCssVariables.spacing[3]};
-`;
-
-const StyledAnswerBlock = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing['0.5']};
-  min-width: 0;
-`;
-
-const StyledAnswerQuestion = styled.span`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.sm};
-  overflow-wrap: anywhere;
-`;
+const styles = stylex.create({
+  answersCard: {
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-medium'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingBottom: spacing['--t-spacing-3'],
+    paddingLeft: spacing['--t-spacing-3'],
+  },
+  answerBlock: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-0_5'],
+    minWidth: '0',
+  },
+  answerQuestion: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-sm'],
+    overflowWrap: 'anywhere',
+  },
+});
 
 export const AiChatQuestionStatusRenderer = ({
   toolPart,
@@ -105,8 +118,8 @@ export const AiChatQuestionStatusRenderer = ({
   }
 
   return (
-    <StyledAnswersCard>
-      <StyledAiChatAskStatusMessage>{t`Answers`}</StyledAiChatAskStatusMessage>
+    <div {...stylex.props(styles.answersCard)}>
+      <span {...stylex.props(aiChatAskStyles.statusMessage)}>{t`Answers`}</span>
       {entries.map(({ question, answer }, index) => {
         const selectedLabels = (answer?.selectedOptionIndices ?? [])
           .map((optionIndex) => question.options[optionIndex]?.label)
@@ -122,16 +135,16 @@ export const AiChatQuestionStatusRenderer = ({
         }
 
         return (
-          <StyledAnswerBlock key={index}>
-            <StyledAnswerQuestion>
+          <div key={index} {...stylex.props(styles.answerBlock)}>
+            <span {...stylex.props(styles.answerQuestion)}>
               <TextWithChatReferences text={question.question} />
-            </StyledAnswerQuestion>
-            <StyledAiChatAskStatusDetail>
+            </span>
+            <span {...stylex.props(aiChatAskStyles.statusDetail)}>
               <TextWithChatReferences text={value} />
-            </StyledAiChatAskStatusDetail>
-          </StyledAnswerBlock>
+            </span>
+          </div>
         );
       })}
-    </StyledAnswersCard>
+    </div>
   );
 };

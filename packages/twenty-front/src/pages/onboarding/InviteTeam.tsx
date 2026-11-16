@@ -1,3 +1,6 @@
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
+import * as stylex from '@stylexjs/stylex';
+import { onboardingLayout } from '../../modules/onboarding/constants/onboardingLayout.stylex';
 import { OnboardingInviteTeamSkipDialog } from '@/onboarding/components/OnboardingInviteTeamSkipDialog';
 import { OnboardingMainButton } from '@/onboarding/components/OnboardingMainButton';
 import { OnboardingSkipButton } from '@/onboarding/components/OnboardingSkipButton';
@@ -11,30 +14,29 @@ import { ONBOARDING_MOTION_SLIDE_OFFSET } from '@/onboarding/constants/Onboardin
 import { useInviteTeam } from '@/onboarding/hooks/useInviteTeam';
 import { useOnboardingMotionTransition } from '@/onboarding/hooks/useOnboardingMotionTransition';
 import { TextInput } from '@/ui/input/components/TextInput';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useRef } from 'react';
 import { Controller } from 'react-hook-form';
 import { IconX } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
 
-const StyledForm = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[4]};
-  max-width: 100%;
-  width: ${ONBOARDING_CONTENT_BLOCK_WIDTH}px;
-`;
-
-const StyledFooter = styled.div`
-  align-items: flex-end;
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[3]};
-  max-width: 100%;
-  width: ${ONBOARDING_CONTENT_BLOCK_WIDTH}px;
-`;
+const styles = stylex.create({
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-4'],
+    maxWidth: '100%',
+    width: onboardingLayout.contentBlockWidth,
+  },
+  footer: {
+    alignItems: 'flex-end',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-3'],
+    maxWidth: '100%',
+    width: onboardingLayout.contentBlockWidth,
+  },
+});
 
 export const InviteTeam = () => {
   const { t } = useLingui();
@@ -70,7 +72,7 @@ export const InviteTeam = () => {
       </StyledOnboardingStepHeading>
 
       <OnboardingStepAnimatedItem index={2}>
-        <StyledForm>
+        <div {...stylex.props(styles.form)}>
           <AnimatePresence initial={false}>
             {fields.map((field, index) => (
               <motion.div
@@ -113,11 +115,11 @@ export const InviteTeam = () => {
               </motion.div>
             ))}
           </AnimatePresence>
-        </StyledForm>
+        </div>
       </OnboardingStepAnimatedItem>
 
       <OnboardingStepAnimatedItem index={3}>
-        <StyledFooter>
+        <div {...stylex.props(styles.footer)}>
           <OnboardingMainButton
             label={t`Invite`}
             disabled={!isValid}
@@ -128,7 +130,7 @@ export const InviteTeam = () => {
             onClick={() => void openSkipDialog()}
             disabled={isSubmitting || isNavigating}
           />
-        </StyledFooter>
+        </div>
       </OnboardingStepAnimatedItem>
       <OnboardingInviteTeamSkipDialog
         isValid={isValid}

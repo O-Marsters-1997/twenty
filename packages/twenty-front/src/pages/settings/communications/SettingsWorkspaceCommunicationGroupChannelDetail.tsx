@@ -18,7 +18,6 @@ import { ConfirmationDialog } from '@/ui/layout/dialog/components/ConfirmationDi
 import { useDialog } from '@/ui/layout/dialog/hooks/useDialog';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useQuery } from '@apollo/client/react';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { useState } from 'react';
@@ -34,7 +33,6 @@ import {
   IconTrash,
 } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { GetEmailingDomainsDocument } from '~/generated-metadata/graphql';
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard';
 import { useNavigateSettings } from '~/hooks/useNavigateSettings';
@@ -42,24 +40,26 @@ import { NotFound } from '~/pages/not-found/NotFound';
 import channelSetupCoverDark from '~/pages/settings/communications/assets/channel-setup-cover-dark.png';
 import channelSetupCoverLight from '~/pages/settings/communications/assets/channel-setup-cover-light.png';
 import { openUrlInNewTab } from '~/utils/openUrlInNewTab';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const DELETE_EMAIL_GROUP_MODAL_ID = 'delete-email-group-channel-modal';
 
-const StyledInputRow = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
-const StyledInputContainer = styled.div`
-  flex: 1;
-  margin-right: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledSendingDomainColumn = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[3]};
-`;
+const styles = stylex.create({
+  inputRow: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  inputContainer: {
+    flex: '1',
+    marginRight: spacing['--t-spacing-2'],
+  },
+  sendingDomainColumn: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-3'],
+  },
+});
 
 export const SettingsWorkspaceCommunicationGroupChannelDetail = () => {
   const { t } = useLingui();
@@ -223,15 +223,15 @@ export const SettingsWorkspaceCommunicationGroupChannelDetail = () => {
             title={t`Forwarding address`}
             description={t`Set up forwarding from the source address to this destination.`}
           />
-          <StyledInputRow>
-            <StyledInputContainer>
+          <div {...stylex.props(styles.inputRow)}>
+            <div {...stylex.props(styles.inputContainer)}>
               <SettingsTextInput
                 instanceId="email-group-forwarding"
                 value={forwardingAddress}
                 disabled
                 fullWidth
               />
-            </StyledInputContainer>
+            </div>
             <Button
               startIcon={<IconCopy />}
               onClick={() =>
@@ -241,7 +241,7 @@ export const SettingsWorkspaceCommunicationGroupChannelDetail = () => {
                 )
               }
             >{t`Copy`}</Button>
-          </StyledInputRow>
+          </div>
         </Section.Root>
         {isNonEmptyString(channel.displayName) && (
           <Section.Root>
@@ -263,24 +263,24 @@ export const SettingsWorkspaceCommunicationGroupChannelDetail = () => {
               title={t`Sending domain`}
               description={t`Add these records at your DNS provider. Twenty checks them automatically.`}
             />
-            <StyledSendingDomainColumn>
-              <StyledInputRow>
-                <StyledInputContainer>
+            <div {...stylex.props(styles.sendingDomainColumn)}>
+              <div {...stylex.props(styles.inputRow)}>
+                <div {...stylex.props(styles.inputContainer)}>
                   <SettingsTextInput
                     instanceId="email-group-sending-domain"
                     value={emailingDomain.domain}
                     disabled
                     fullWidth
                   />
-                </StyledInputContainer>
+                </div>
                 <SettingsEmailingDomainVerifyButton
                   emailingDomainId={emailingDomain.id}
                 />
-              </StyledInputRow>
+              </div>
               <SettingsEmailingDomainDnsRecords
                 emailingDomain={emailingDomain}
               />
-            </StyledSendingDomainColumn>
+            </div>
           </Section.Root>
         )}
         <SettingsAccountsMessageChannelDetails messageChannel={channel} />

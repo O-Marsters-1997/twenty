@@ -1,7 +1,10 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
   "plugins": ["react", "typescript", "unicorn", "import"],
-  "jsPlugins": ["../twenty-oxlint-rules/dist/oxlint-plugin.mjs"],
+  "jsPlugins": [
+    "../twenty-oxlint-rules/dist/oxlint-plugin.mjs",
+    { "name": "stylex", "specifier": "@stylexjs/eslint-plugin" }
+  ],
   "categories": {
     "correctness": "off"
   },
@@ -35,7 +38,17 @@
     "no-restricted-imports": [
       "error",
       {
+        "paths": [
+          {
+            "name": "clsx",
+            "message": "Use stylex.props."
+          }
+        ],
         "patterns": [
+          {
+            "group": ["@linaria/*", "*.module.scss"],
+            "message": "Style with StyleX (docs/styling.md)."
+          },
           {
             "group": ["../*"],
             "message": "Relative parent imports are not allowed. Use @/ alias instead."
@@ -67,7 +80,7 @@
     "react/react-in-jsx-scope": "off",
     "react/jsx-no-useless-fragment": "off",
     "react/jsx-no-script-url": "error",
-    "react/jsx-props-no-spreading": ["error", { "explicitSpread": "ignore" }],
+    "react/jsx-props-no-spreading": "off",
 
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
@@ -114,6 +127,12 @@
         "allowAny": true
       }
     ],
+
+    "stylex/valid-styles": "error",
+    "stylex/no-unused": "error",
+    "stylex/valid-shorthands": "error",
+    "stylex/sort-keys": "error",
+    "stylex/enforce-extension": "error",
 
     "twenty/effect-components": "error",
     "twenty/no-hardcoded-colors": "error",

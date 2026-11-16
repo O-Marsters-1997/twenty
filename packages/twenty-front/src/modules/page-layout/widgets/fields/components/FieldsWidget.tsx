@@ -14,34 +14,36 @@ import { StyledWidgetScrollContainer } from '@/ui/layout/components/WidgetConten
 import { useTargetRecord } from '@/ui/layout/contexts/useTargetRecord';
 import { useWorkspaceSurface } from '@/ui/layout/hooks/useWorkspaceSurface';
 import { SidePanelProvider } from '@/ui/layout/side-panel/contexts/SidePanelContext';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 
-import { themeCssVariables } from 'twenty-ui/theme';
 import { type FieldsConfiguration } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { spacing, borderRadius } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledPropertyBox = styled.div`
-  align-self: stretch;
-  border-radius: ${themeCssVariables.border.radius.sm};
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  padding-bottom: ${themeCssVariables.spacing[3]};
-  padding-top: ${themeCssVariables.spacing[3]};
-`;
-
-const StyledInlineFieldsPropertyBox = styled.div<{
-  hasMoreGroup: boolean;
-}>`
-  align-self: stretch;
-  border-radius: ${themeCssVariables.border.radius.sm};
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  padding-bottom: ${({ hasMoreGroup }) =>
-    hasMoreGroup ? themeCssVariables.spacing[3] : '0'};
-  padding-top: 0;
-`;
+const styles = stylex.create({
+  inlinePropertyBox: {
+    alignSelf: 'stretch',
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    paddingBottom: 0,
+    paddingTop: 0,
+  },
+  inlinePropertyBoxWithMoreGroup: { paddingBottom: spacing['--t-spacing-3'] },
+  propertyBox: {
+    alignSelf: 'stretch',
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-3'],
+    paddingTop: spacing['--t-spacing-3'],
+  },
+});
 
 type FieldsWidgetProps = {
   widget: PageLayoutWidget;
@@ -125,23 +127,26 @@ export const FieldsWidget = ({ widget }: FieldsWidgetProps) => {
           {shouldDisplayGroupHeaders ? (
             groups.map((group) => (
               <FieldsWidgetGroupContainer key={group.id} title={group.name}>
-                <StyledPropertyBox>
+                <div {...stylex.props(styles.propertyBox)}>
                   <FieldsWidgetFieldList
                     fields={group.fields}
                     instanceId={instanceId}
                   />
-                </StyledPropertyBox>
+                </div>
               </FieldsWidgetGroupContainer>
             ))
           ) : (
-            <StyledInlineFieldsPropertyBox
-              hasMoreGroup={shouldShowHiddenFields}
+            <div
+              {...stylex.props(
+                styles.inlinePropertyBox,
+                shouldShowHiddenFields && styles.inlinePropertyBoxWithMoreGroup,
+              )}
             >
               <FieldsWidgetFieldList
                 fields={visibleFields}
                 instanceId={instanceId}
               />
-            </StyledInlineFieldsPropertyBox>
+            </div>
           )}
 
           {shouldShowHiddenFields && (
@@ -149,12 +154,12 @@ export const FieldsWidget = ({ widget }: FieldsWidgetProps) => {
               title={t`More (${hiddenFieldsWithOffsetGlobalIndex.length})`}
               defaultExpanded={false}
             >
-              <StyledPropertyBox>
+              <div {...stylex.props(styles.propertyBox)}>
                 <FieldsWidgetFieldList
                   fields={hiddenFieldsWithOffsetGlobalIndex}
                   instanceId={instanceId}
                 />
-              </StyledPropertyBox>
+              </div>
             </FieldsWidgetGroupContainer>
           )}
 

@@ -7,8 +7,6 @@ import {
   PAGE_LAYOUT_CONFIG,
   type PageLayoutBreakpoint,
 } from '@/page-layout/constants/PageLayoutBreakpoints';
-import { PAGE_LAYOUT_GRID_ITEM_DRAGGING_Z_INDEX } from '@/page-layout/constants/PageLayoutGridItemDraggingZIndex';
-import { PAGE_LAYOUT_GRID_ITEM_Z_INDEX } from '@/page-layout/constants/PageLayoutGridItemZIndex';
 import { PAGE_LAYOUT_GRID_MARGIN } from '@/page-layout/constants/PageLayoutGridMargin';
 import { PAGE_LAYOUT_GRID_ROW_HEIGHT } from '@/page-layout/constants/PageLayoutGridRowHeight';
 import { useIsPageLayoutInEditMode } from '@/page-layout/hooks/useIsPageLayoutInEditMode';
@@ -30,9 +28,9 @@ import { TabListComponentInstanceContext } from '@/ui/layout/tab-list/states/con
 import { useAvailableComponentInstanceIdOrThrow } from '@/ui/utilities/state/component-state/hooks/useAvailableComponentInstanceIdOrThrow';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { useSetAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useSetAtomComponentState';
-import { css } from '@linaria/core';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { useMemo } from 'react';
+import '~/third-party-styles/react-grid-layout.css';
 import {
   type Layout,
   Responsive,
@@ -41,78 +39,22 @@ import {
   verticalCompactor,
 } from 'react-grid-layout';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { media } from 'twenty-ui/theme/constants.stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const disabledTransitionsClass = css`
-  .react-grid-layout {
-    transition: none !important;
-  }
-
-  .react-grid-item {
-    transition: none !important;
-  }
-
-  .react-grid-item.cssTransforms {
-    transition-property: none !important;
-  }
-`;
-
-const StyledGridContainer = styled.div`
-  box-sizing: border-box;
-  flex: 1;
-  min-height: 100%;
-  padding: ${themeCssVariables.spacing[2]};
-  position: relative;
-  user-select: none;
-  width: 100%;
-
-  .react-grid-placeholder {
-    background: ${themeCssVariables.color.blue7} !important;
-
-    border-radius: ${themeCssVariables.border.radius.md};
-  }
-
-  .react-grid-item:not(.react-draggable-dragging) {
-    user-select: auto;
-  }
-
-  .react-grid-item {
-    z-index: ${PAGE_LAYOUT_GRID_ITEM_Z_INDEX};
-  }
-
-  .react-grid-item.react-draggable-dragging {
-    z-index: ${PAGE_LAYOUT_GRID_ITEM_DRAGGING_Z_INDEX};
-  }
-
-  .react-grid-item:hover .widget-card-resize-handle {
-    display: block !important;
-  }
-
-  @media print {
-    min-height: auto;
-    padding: 0;
-    user-select: auto;
-
-    .react-grid-layout {
-      height: auto !important;
-    }
-
-    // Keep react-grid-layout's inline size: resize-observed charts would re-measure mid-print and render blank.
-    .react-grid-item {
-      break-inside: avoid;
-      margin-bottom: ${themeCssVariables.spacing[4]};
-      page-break-inside: avoid;
-      position: static !important;
-      transform: none !important;
-    }
-
-    .react-grid-placeholder,
-    .react-resizable-handle,
-    .widget-card-resize-handle {
-      display: none !important;
-    }
-  }
-`;
+const styles = stylex.create({
+  container: {
+    boxSizing: 'border-box',
+    flexGrow: 1,
+    flexShrink: 1,
+    flexBasis: '0%',
+    minHeight: { default: '100%', [media.print]: 'auto' },
+    padding: { default: spacing['--t-spacing-2'], [media.print]: 0 },
+    position: 'relative',
+    userSelect: { default: 'none', [media.print]: 'auto' },
+    width: '100%',
+  },
+});
 
 type PageLayoutGridLayoutProps = {
   tabId: string;
@@ -214,11 +156,11 @@ export const PageLayoutGridLayout = ({ tabId }: PageLayoutGridLayoutProps) => {
   const shouldDisableTransitions = !isDefined(pageLayoutDraggingWidgetId);
 
   return (
-    <StyledGridContainer
+    <div
       ref={gridContainerRef}
-      className={
-        shouldDisableTransitions ? disabledTransitionsClass : undefined
-      }
+      data-grid-container=""
+      data-grid-static={shouldDisableTransitions || undefined}
+      {...stylex.props(styles.container)}
     >
       {isPageLayoutInEditMode && (
         <>
@@ -292,6 +234,6 @@ export const PageLayoutGridLayout = ({ tabId }: PageLayoutGridLayoutProps) => {
           ))}
         </Responsive>
       )}
-    </StyledGridContainer>
+    </div>
   );
 };

@@ -1,16 +1,18 @@
 import { AnimatedPlaceholder } from '@/ui/feedback/empty-state/components/AnimatedPlaceholder/AnimatedPlaceholder';
 import { EmptyState } from '@/ui/feedback/empty-state/components/EmptyState';
-import { styled } from '@linaria/react';
 import { isDefined } from 'twenty-shared/utils';
 
 import { type AnimatedPlaceholderType } from '@/ui/feedback/empty-state/components/AnimatedPlaceholder/types/AnimatedPlaceholderType';
 import { type IconComponent } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledEmptyStateContainer = styled.div`
-  height: 100%;
-  width: 100%;
-`;
+const styles = stylex.create({
+  emptyStateContainer: {
+    height: '100%',
+    width: '100%',
+  },
+});
 
 type RecordIndexEmptyStateDisplayProps = {
   animatedPlaceholderType: AnimatedPlaceholderType;
@@ -31,7 +33,7 @@ export const RecordIndexEmptyStateDisplay = ({
   onButtonClick,
   width,
 }: RecordIndexEmptyStateDisplayProps) => (
-  <StyledEmptyStateContainer>
+  <div {...stylex.props(styles.emptyStateContainer)}>
     <EmptyState.Root width={width}>
       <AnimatedPlaceholder type={animatedPlaceholderType} />
       <EmptyState.Content>
@@ -48,5 +50,5 @@ export const RecordIndexEmptyStateDisplay = ({
         </Button>
       )}
     </EmptyState.Root>
-  </StyledEmptyStateContainer>
+  </div>
 );

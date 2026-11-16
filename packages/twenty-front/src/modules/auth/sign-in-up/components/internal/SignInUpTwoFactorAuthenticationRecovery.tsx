@@ -1,3 +1,4 @@
+import { onboardingLayout } from '../../../../onboarding/constants/onboardingLayout.stylex';
 import { useAuth } from '@/auth/hooks/useAuth';
 import { StyledTwoFactorInstructions } from '@/auth/sign-in-up/components/internal/SignInUpTwoFactorAuthenticationStyles';
 import { loginTokenState } from '@/auth/states/loginTokenState';
@@ -13,7 +14,6 @@ import { ONBOARDING_CONTENT_BLOCK_WIDTH } from '@/onboarding/constants/Onboardin
 import { SettingsTextInput } from '@/ui/input/components/SettingsTextInput';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomState';
-import { styled } from '@linaria/react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { type FormEvent, useState } from 'react';
@@ -22,25 +22,29 @@ import { isDefined } from 'twenty-shared/utils';
 import { MainButton } from 'twenty-ui/components/input';
 import { useToast } from 'twenty-ui/components/feedback';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { useNavigateApp } from '~/hooks/useNavigateApp';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledForm = styled.form`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  max-width: 100%;
-  width: ${ONBOARDING_CONTENT_BLOCK_WIDTH}px;
-`;
-
-const StyledInputContainer = styled.div`
-  margin-bottom: ${themeCssVariables.spacing[4]};
-  width: 100%;
-`;
-
-const StyledActionBackLinkContainer = styled.div`
-  margin: ${themeCssVariables.spacing[3]} 0 0;
-`;
+const styles = stylex.create({
+  form: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    maxWidth: '100%',
+    width: onboardingLayout.contentBlockWidth,
+  },
+  inputContainer: {
+    marginBottom: spacing['--t-spacing-4'],
+    width: '100%',
+  },
+  actionBackLinkContainer: {
+    marginTop: spacing['--t-spacing-3'],
+    marginRight: '0',
+    marginBottom: '0',
+    marginLeft: '0',
+  },
+});
 
 export const SignInUpTwoFactorAuthenticationRecovery = () => {
   const [recoveryCode, setRecoveryCode] = useState('');
@@ -108,14 +112,14 @@ export const SignInUpTwoFactorAuthenticationRecovery = () => {
   };
 
   return (
-    <StyledForm onSubmit={handleSubmit}>
+    <form {...stylex.props(styles.form)} onSubmit={handleSubmit}>
       <StyledTwoFactorInstructions>
         <Trans>
           Enter the recovery code a workspace admin gave you. Your current
           authenticator for this workspace will be removed.
         </Trans>
       </StyledTwoFactorInstructions>
-      <StyledInputContainer>
+      <div {...stylex.props(styles.inputContainer)}>
         <SettingsTextInput
           instanceId="sign-in-up-two-factor-authentication-recovery-code"
           autoComplete="one-time-code"
@@ -125,17 +129,17 @@ export const SignInUpTwoFactorAuthenticationRecovery = () => {
           onChange={setRecoveryCode}
           fullWidth
         />
-      </StyledInputContainer>
+      </div>
       <MainButton
         type="submit"
         fullWidth
         disabled={isLoading || !isNonEmptyString(recoveryCode.trim())}
       >{t`Continue`}</MainButton>
-      <StyledActionBackLinkContainer>
+      <div {...stylex.props(styles.actionBackLinkContainer)}>
         <Button variant="link" onClick={handleBack}>
           <Trans>Back</Trans>
         </Button>
-      </StyledActionBackLinkContainer>
-    </StyledForm>
+      </div>
+    </form>
   );
 };

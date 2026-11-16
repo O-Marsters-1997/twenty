@@ -1,10 +1,11 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { type RefObject, useCallback, useState } from 'react';
 
 import { useDragSelect } from '@/ui/utilities/drag-select/hooks/useDragSelect';
 import { useDragSelectWithAutoScroll } from '@/ui/utilities/drag-select/hooks/useDragSelectWithAutoScroll';
 import { useTrackPointer } from '@/ui/utilities/pointer-event/hooks/useTrackPointer';
 import { isDefined } from 'twenty-shared/utils';
+import { color } from 'twenty-ui/theme/tokens.stylex';
 import { isDeeplyEqual } from '~/utils/isDeeplyEqual';
 import { type SelectionBox } from '@/ui/utilities/drag-select/types/SelectionBox';
 import { isValidSelectionStart } from '@/ui/utilities/drag-select/utils/selectionBoxValidation';
@@ -22,19 +23,28 @@ type Position = {
   y: number;
 };
 
-import { themeCssVariables } from 'twenty-ui/theme';
-
-const StyledDragSelection = styled.div<SelectionBox>`
-  background: ${themeCssVariables.color.blue7};
-  border: 1px solid ${themeCssVariables.color.blue3};
-  height: ${({ height }) => height}px;
-  left: ${({ left }) => left}px;
-  opacity: 0.2;
-  position: absolute;
-  top: ${({ top }) => top}px;
-  width: ${({ width }) => width}px;
-  z-index: 99;
-`;
+const styles = stylex.create({
+  selection: {
+    backgroundColor: color['--t-color-blue7'],
+    borderColor: color['--t-color-blue3'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    opacity: 0.2,
+    position: 'absolute',
+    zIndex: 99,
+  },
+  selectionBox: (
+    top: number,
+    left: number,
+    width: number,
+    height: number,
+  ) => ({
+    height: `${height}px`,
+    left: `${left}px`,
+    top: `${top}px`,
+    width: `${width}px`,
+  }),
+});
 
 export const DragSelect = ({
   selectableItemsContainerRef,
@@ -241,11 +251,16 @@ export const DragSelect = ({
     isDragging &&
     isSelecting &&
     isDefined(selectionBox) && (
-      <StyledDragSelection
-        top={selectionBox.top}
-        left={selectionBox.left}
-        width={selectionBox.width}
-        height={selectionBox.height}
+      <div
+        {...stylex.props(
+          styles.selection,
+          styles.selectionBox(
+            selectionBox.top,
+            selectionBox.left,
+            selectionBox.width,
+            selectionBox.height,
+          ),
+        )}
       />
     )
   );

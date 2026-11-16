@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useEffect, useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
@@ -9,14 +8,17 @@ import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomState
 import { useCanEditProfileField } from '@/settings/profile/hooks/useCanEditProfileField';
 import { useUpdateWorkspaceMemberSettings } from '@/workspace-member/hooks/useUpdateWorkspaceMemberSettings';
 import { SettingsTextInput } from '@/ui/input/components/SettingsTextInput';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { logError } from '~/utils/logError';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledComboInputContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: ${themeCssVariables.spacing[4]};
-`;
+const styles = stylex.create({
+  comboInputContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: spacing['--t-spacing-4'],
+  },
+});
 
 type NameFieldsProps = {
   autoSave?: boolean;
@@ -95,7 +97,7 @@ export const NameFields = ({ autoSave = true }: NameFieldsProps) => {
   const lastNameTextInputId = `${currentWorkspaceMember?.id}-last-name`;
 
   return (
-    <StyledComboInputContainer>
+    <div {...stylex.props(styles.comboInputContainer)}>
       <SettingsTextInput
         instanceId={firstNameTextInputId}
         label={t`First Name`}
@@ -114,6 +116,6 @@ export const NameFields = ({ autoSave = true }: NameFieldsProps) => {
         fullWidth
         disabled={!canEditLastName}
       />
-    </StyledComboInputContainer>
+    </div>
   );
 };

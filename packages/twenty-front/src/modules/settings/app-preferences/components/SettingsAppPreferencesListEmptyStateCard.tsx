@@ -3,18 +3,21 @@ import { isGoogleMessagingEnabledState } from '@/client-config/states/isGoogleMe
 import { useTriggerApisOAuth } from '@/settings/accounts/hooks/useTriggerApiOAuth';
 import { SettingsCard } from '@/settings/components/SettingsCard';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { ConnectedAccountProvider } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 import { IconGoogle } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledCardsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  cardsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+  },
+});
 
 type SettingsAppPreferencesListEmptyStateCardProps = {
   provider?: ConnectedAccountProvider;
@@ -40,7 +43,7 @@ export const SettingsAppPreferencesListEmptyStateCard = ({
     !isDefined(provider) || provider === shownProvider;
 
   return (
-    <StyledCardsContainer>
+    <div {...stylex.props(styles.cardsContainer)}>
       {isProviderShown(ConnectedAccountProvider.GOOGLE) &&
         (isGoogleMessagingEnabled || isGoogleCalendarEnabled) && (
           <SettingsCard
@@ -49,6 +52,6 @@ export const SettingsAppPreferencesListEmptyStateCard = ({
             onClick={() => triggerApisOAuth(ConnectedAccountProvider.GOOGLE)}
           />
         )}
-    </StyledCardsContainer>
+    </div>
   );
 };

@@ -1,12 +1,9 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { useContext } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { getFieldMetadataItemGqlFieldName } from '@/object-metadata/utils/getFieldMetadataItemGqlFieldName';
 import { useObjectPermissionsForObject } from '@/object-record/hooks/useObjectPermissionsForObject';
-import { RECORD_BOARD_COLUMN_WIDTH } from '@/object-record/record-board/constants/RecordBoardColumnWidth';
-import { RECORD_BOARD_COLUMN_WIDTH_CSS_VARIABLE_NAME } from '@/object-record/record-board/constants/RecordBoardColumnWidthCssVariableName';
+import { recordBoardColumnHeaderMarker } from './RecordBoardColumnHeader.stylex';
 import { RecordBoardContext } from '@/object-record/record-board/contexts/RecordBoardContext';
 import { RecordBoardColumnDropdownMenu } from '@/object-record/record-board/record-board-column/components/RecordBoardColumnDropdownMenu';
 import { RecordBoardColumnResizeHandler } from '@/object-record/record-board/record-board-column/components/RecordBoardColumnResizeHandler';
@@ -35,96 +32,112 @@ import { isDefined } from 'twenty-shared/utils';
 import { LightIconButton } from 'twenty-ui/components/input';
 import { Dropdown } from 'twenty-ui/components/navigation';
 import { IconDotsVertical, IconPlus } from 'twenty-ui/icon';
+import * as stylex from '@stylexjs/stylex';
+import {
+  animationDuration,
+  background,
+  borderColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledHeader = styled.div<{ isReadOnly: boolean }>`
-  align-items: center;
-  cursor: ${({ isReadOnly }) => (isReadOnly ? 'default' : 'pointer')};
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-  justify-content: left;
-  width: 100%;
-`;
+const isHeaderHovered = stylex.when.ancestor(
+  ':hover',
+  recordBoardColumnHeaderMarker,
+);
+const isHeaderFocused = stylex.when.ancestor(
+  ':focus-within',
+  recordBoardColumnHeaderMarker,
+);
 
-const StyledHeaderActions = styled.div`
-  align-items: center;
-  display: flex;
-  flex-shrink: 0;
-  // Padding and negative margin cancel out in layout; they only let overflow:hidden keep LightIconButton's 3px focus ring.
-  margin: calc(-1 * ${themeCssVariables.spacing[1]});
-  max-width: 0;
-  min-width: 0;
-  opacity: 0;
-  overflow: hidden;
-  padding: ${themeCssVariables.spacing[1]};
-  pointer-events: none;
-  transition:
-    max-width ease-in-out
-      calc(${themeCssVariables.animation.duration.fast} * 1s),
-    opacity ease-in-out calc(${themeCssVariables.animation.duration.fast} * 1s);
-
-  &[data-dropdown-open='true'],
-  ${StyledHeader}:hover &,
-  ${StyledHeader}:focus-within & {
-    max-width: ${themeCssVariables.spacing[14]};
-    opacity: 1;
-    pointer-events: auto;
-  }
-`;
-
-const StyledHeaderContainer = styled.div`
-  background: ${themeCssVariables.background.primary};
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-`;
-const StyledLeftContainer = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  overflow: hidden;
-`;
-
-const StyledColumn = styled.div`
-  background-color: ${themeCssVariables.background.primary};
-  display: flex;
-  flex-direction: column;
-  max-width: var(
-    ${RECORD_BOARD_COLUMN_WIDTH_CSS_VARIABLE_NAME},
-    ${RECORD_BOARD_COLUMN_WIDTH}px
-  );
-  min-width: var(
-    ${RECORD_BOARD_COLUMN_WIDTH_CSS_VARIABLE_NAME},
-    ${RECORD_BOARD_COLUMN_WIDTH}px
-  );
-
-  padding: ${themeCssVariables.spacing[2]};
-
-  position: relative;
-
-  &[data-has-left-border='true'] {
-    border-left: 1px solid ${themeCssVariables.border.color.light};
-  }
-`;
-
-const StyledTagContainer = styled.div`
-  max-width: 100%;
-  min-width: 0;
-  overflow: hidden;
-`;
-
-const StyledAggregateDropdownContainer = styled.div<{
-  isNonInteractive: boolean;
-}>`
-  display: flex;
-  pointer-events: ${({ isNonInteractive }) =>
-    isNonInteractive ? 'none' : 'auto'};
-`;
-
-const StyledDropdownContainer = styled.div`
-  min-width: 0;
-  overflow: hidden;
-`;
+const styles = stylex.create({
+  header: {
+    alignItems: 'center',
+    cursor: 'pointer',
+    display: 'flex',
+    flexDirection: 'row',
+    height: '100%',
+    justifyContent: 'left',
+    width: '100%',
+  },
+  headerReadOnly: {
+    cursor: 'default',
+  },
+  headerActions: {
+    alignItems: 'center',
+    display: 'flex',
+    flexShrink: 0,
+    marginBottom: `calc(-1 * ${spacing['--t-spacing-1']})`,
+    marginLeft: `calc(-1 * ${spacing['--t-spacing-1']})`,
+    marginRight: `calc(-1 * ${spacing['--t-spacing-1']})`,
+    marginTop: `calc(-1 * ${spacing['--t-spacing-1']})`,
+    maxWidth: {
+      default: '0',
+      ':is([data-dropdown-open="true"])': spacing['--t-spacing-14'],
+      [isHeaderHovered]: spacing['--t-spacing-14'],
+      [isHeaderFocused]: spacing['--t-spacing-14'],
+    },
+    minWidth: '0',
+    opacity: {
+      default: 0,
+      ':is([data-dropdown-open="true"])': 1,
+      [isHeaderHovered]: 1,
+      [isHeaderFocused]: 1,
+    },
+    overflow: 'hidden',
+    padding: spacing['--t-spacing-1'],
+    pointerEvents: {
+      default: 'none',
+      ':is([data-dropdown-open="true"])': 'auto',
+      [isHeaderHovered]: 'auto',
+      [isHeaderFocused]: 'auto',
+    },
+    transitionDuration: `calc(${animationDuration['--t-animation-duration-fast']} * 1s)`,
+    transitionProperty: 'max-width, opacity',
+    transitionTimingFunction: 'ease-in-out',
+  },
+  column: {
+    backgroundColor: background['--t-background-primary'],
+    display: 'flex',
+    flexDirection: 'column',
+    maxWidth: 'var(--record-board-column-width, 200px)',
+    minWidth: 'var(--record-board-column-width, 200px)',
+    padding: spacing['--t-spacing-2'],
+    position: 'relative',
+  },
+  columnWithLeftBorder: {
+    borderLeftColor: borderColor['--t-border-color-light'],
+    borderLeftStyle: 'solid',
+    borderLeftWidth: '1px',
+  },
+  aggregateDropdownContainer: {
+    display: 'flex',
+    pointerEvents: 'auto',
+  },
+  aggregateDropdownNonInteractive: {
+    pointerEvents: 'none',
+  },
+  headerContainer: {
+    background: background['--t-background-primary'],
+    display: 'flex',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  leftContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    overflow: 'hidden',
+  },
+  tagContainer: {
+    maxWidth: '100%',
+    minWidth: '0',
+    overflow: 'hidden',
+  },
+  dropdownContainer: {
+    minWidth: '0',
+    overflow: 'hidden',
+  },
+});
 
 export const RecordBoardColumnHeader = () => {
   const { columnDefinition, columnIndex } = useContext(
@@ -210,32 +223,41 @@ export const RecordBoardColumnHeader = () => {
   };
 
   return (
-    <StyledColumn data-has-left-border={columnIndex > 0 ? 'true' : undefined}>
+    <div
+      {...stylex.props(
+        styles.column,
+        columnIndex > 0 && styles.columnWithLeftBorder,
+      )}
+    >
       <DragDropItemSortableHandle
         fill
         disabled={isRecordBoardViewSettingsReadOnly}
       >
-        <StyledHeader
-          isReadOnly={isRecordBoardViewSettingsReadOnly}
+        <div
           onPointerCancel={handlePointerCancel}
           onPointerDown={handlePointerDown}
           onPointerUp={handlePointerUp}
+          {...stylex.props(
+            recordBoardColumnHeaderMarker,
+            styles.header,
+            isRecordBoardViewSettingsReadOnly && styles.headerReadOnly,
+          )}
         >
-          <StyledHeaderContainer>
-            <StyledLeftContainer>
-              <StyledDropdownContainer>
+          <div {...stylex.props(styles.headerContainer)}>
+            <div {...stylex.props(styles.leftContainer)}>
+              <div {...stylex.props(styles.dropdownContainer)}>
                 {isRecordBoardViewSettingsReadOnly ? (
-                  <StyledTagContainer>
+                  <div {...stylex.props(styles.tagContainer)}>
                     <RecordGroupChip
                       recordGroupDefinition={columnDefinition}
                       fieldMetadataItem={selectFieldMetadataItem}
                     />
-                  </StyledTagContainer>
+                  </div>
                 ) : (
                   <DropdownRoot dropdownId={dropdownId} type="menu">
                     <Dropdown.Trigger
                       nativeButton={false}
-                      render={<StyledTagContainer />}
+                      render={<div {...stylex.props(styles.tagContainer)} />}
                     >
                       <RecordGroupChip
                         recordGroupDefinition={columnDefinition}
@@ -252,11 +274,15 @@ export const RecordBoardColumnHeader = () => {
                     </DropdownContent>
                   </DropdownRoot>
                 )}
-              </StyledDropdownContainer>
+              </div>
 
-              <StyledAggregateDropdownContainer
-                isNonInteractive={isAggregateDropdownNonInteractive}
+              <div
                 inert={isAggregateDropdownNonInteractive || undefined}
+                {...stylex.props(
+                  styles.aggregateDropdownContainer,
+                  isAggregateDropdownNonInteractive &&
+                    styles.aggregateDropdownNonInteractive,
+                )}
               >
                 <RecordGroupAggregateDropdown
                   aggregateValue={recordIndexAggregateDisplayValueForGroupValue}
@@ -264,11 +290,12 @@ export const RecordBoardColumnHeader = () => {
                   objectMetadataItem={objectMetadataItem}
                   aggregateLabel={recordIndexAggregateDisplayLabel}
                 />
-              </StyledAggregateDropdownContainer>
-            </StyledLeftContainer>
+              </div>
+            </div>
             {!isRecordBoardViewSettingsReadOnly && (
-              <StyledHeaderActions
+              <div
                 data-dropdown-open={isDropdownOpen ? 'true' : undefined}
+                {...stylex.props(styles.headerActions)}
               >
                 <LightIconButton
                   emphasis="subtle"
@@ -290,12 +317,12 @@ export const RecordBoardColumnHeader = () => {
                     <IconPlus />
                   </LightIconButton>
                 )}
-              </StyledHeaderActions>
+              </div>
             )}
-          </StyledHeaderContainer>
-        </StyledHeader>
+          </div>
+        </div>
       </DragDropItemSortableHandle>
       {isColumnResizable && <RecordBoardColumnResizeHandler />}
-    </StyledColumn>
+    </div>
   );
 };

@@ -3,29 +3,29 @@ import { EventCard } from '@/activities/timeline-activities/rows/components/Even
 import { EventCardToggleButton } from '@/activities/timeline-activities/rows/components/EventCardToggleButton';
 import { EventRowGenericLinked } from '@/activities/timeline-activities/rows/generic/components/EventRowGenericLinked';
 import { EventRowMainObject } from '@/activities/timeline-activities/rows/main-object/components/EventRowMainObject';
-import { styled } from '@linaria/react';
 import { Suspense, useState } from 'react';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[1]};
-  width: 100%;
-`;
-
-const StyledNativeRowContainer = styled.div`
-  align-items: flex-start;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  width: 100%;
-`;
-
-const StyledNativeRow = styled.div`
-  min-width: 0;
-  width: 100%;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-1'],
+    width: '100%',
+  },
+  nativeRowContainer: {
+    alignItems: 'flex-start',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    width: '100%',
+  },
+  nativeRow: {
+    minWidth: '0',
+    width: '100%',
+  },
+});
 
 export const EventRowDynamicComponent = ({
   labelIdentifierValue,
@@ -62,14 +62,14 @@ export const EventRowDynamicComponent = ({
   }
 
   return (
-    <StyledContainer>
-      <StyledNativeRowContainer>
-        <StyledNativeRow>{nativeRenderer}</StyledNativeRow>
+    <div {...stylex.props(styles.container)}>
+      <div {...stylex.props(styles.nativeRowContainer)}>
+        <div {...stylex.props(styles.nativeRow)}>{nativeRenderer}</div>
         <EventCardToggleButton
           isOpen={isRendererOpen}
           setIsOpen={setIsRendererOpen}
         />
-      </StyledNativeRowContainer>
+      </div>
       {isRendererOpen && (
         <EventCard isOpen>
           <Suspense fallback={null}>
@@ -77,6 +77,6 @@ export const EventRowDynamicComponent = ({
           </Suspense>
         </EventCard>
       )}
-    </StyledContainer>
+    </div>
   );
 };

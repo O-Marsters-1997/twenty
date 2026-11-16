@@ -7,7 +7,6 @@ import { Field } from '@ui/primitives/input/Field/Field';
 import { A11Y_DEFER_COLOR_CONTRAST, ComponentDecorator } from '@ui/testing';
 
 import { Textarea } from '../Textarea';
-import styles from '../Textarea.module.scss';
 import { type TextareaProps } from '../types/TextareaProps';
 
 const ControlledTextareaExample = (props: TextareaProps) => {
@@ -84,7 +83,6 @@ export const RowsAndSize: Story = {
     });
 
     await expect(textarea).toHaveAttribute('rows', '5');
-    await expect(textarea).toHaveClass(styles.sm);
   },
 };
 
@@ -107,7 +105,7 @@ export const WithField: Story = {
     await expect(textarea).toHaveFocus();
     await expect(textarea).toHaveAttribute('aria-invalid', 'true');
     await expect(textarea).toHaveAttribute('data-invalid');
-    await expect(textarea).toHaveClass(styles.textarea, 'invalid');
+    await expect(textarea).toHaveClass('invalid');
     await expect(textarea).not.toHaveClass('valid');
   },
 };

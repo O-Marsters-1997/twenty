@@ -1,6 +1,5 @@
 import { ToastOnQueryErrorEffect } from '@/apollo/components/ToastOnQueryErrorEffect';
 import { useMutation, useQuery } from '@apollo/client/react';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isNonEmptyArray, isNonEmptyString } from '@sniptt/guards';
 
@@ -12,7 +11,6 @@ import { useToast } from 'twenty-ui/components/feedback';
 import { Section } from 'twenty-ui/components/layout';
 import { IconDeviceDesktop, IconLogout } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import {
   CurrentUserSessionsDocument,
   type CurrentUserSessionsQuery,
@@ -20,19 +18,22 @@ import {
 } from '~/generated-metadata/graphql';
 import { dateLocaleState } from '@/localization/states/dateLocaleState';
 import { beautifyPastDateRelativeToNow } from '~/utils/date-utils';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type UserSessionListItem =
   CurrentUserSessionsQuery['currentUserSessions'][number];
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledButtonContainer = styled.div`
-  display: flex;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+  },
+  buttonContainer: {
+    display: 'flex',
+  },
+});
 
 export const SettingsProfileDevicesSection = () => {
   const { t } = useLingui();
@@ -102,7 +103,7 @@ export const SettingsProfileDevicesSection = () => {
             title={t`Devices`}
             description={t`Devices with an active session on your account`}
           />
-          <StyledContainer>
+          <div {...stylex.props(styles.container)}>
             <SettingsListCard
               items={sessions}
               isLoading={loading}
@@ -112,7 +113,7 @@ export const SettingsProfileDevicesSection = () => {
               RowRightComponent={SettingsDeviceSessionRowRightComponent}
             />
             {hasOtherSessions && (
-              <StyledButtonContainer>
+              <div {...stylex.props(styles.buttonContainer)}>
                 <Button
                   startIcon={<IconLogout />}
                   size="sm"
@@ -120,9 +121,9 @@ export const SettingsProfileDevicesSection = () => {
                 >
                   {t`Log out all other devices`}
                 </Button>
-              </StyledButtonContainer>
+              </div>
             )}
-          </StyledContainer>
+          </div>
         </Section.Root>
       )}
     </>

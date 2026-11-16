@@ -1,9 +1,8 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useState } from 'react';
 import { IconX } from 'twenty-ui/icon';
 import { Tooltip } from 'twenty-ui/primitives/surfaces';
-import { themeCssVariables, useTheme } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 
 import ClaudeLogo from '@/settings/mcp-and-apis/assets/mcp-clients/claude-color.png';
 import CursorLogo from '@/settings/mcp-and-apis/assets/mcp-clients/cursor.svg';
@@ -12,6 +11,17 @@ import OpenAiLogo from '@/settings/mcp-and-apis/assets/mcp-clients/openai.svg';
 import { McpClientLogo } from '@/settings/mcp-and-apis/components/McpClientLogo';
 import { buildEmailingDomainAiSetupPrompt } from '@/settings/emailing-domains/utils/buildEmailingDomainAiSetupPrompt';
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard';
+import * as stylex from '@stylexjs/stylex';
+import { containerMarker } from './SettingsEmailingDomainAiSetup.stylex';
+import {
+  animationDuration,
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsEmailingDomainAiSetupProps = {
   domain: string;
@@ -23,96 +33,104 @@ type SettingsEmailingDomainAiSetupProps = {
   }[];
 };
 
-const StyledContainer = styled.div`
-  align-items: center;
-  align-self: flex-end;
-  display: inline-flex;
-  max-width: 100%;
-  position: relative;
-`;
 
-const StyledPromptButton = styled.button`
-  align-items: center;
-  background: ${themeCssVariables.background.transparent.lighter};
-  border: 1px solid ${themeCssVariables.border.color.light};
-  border-radius: ${themeCssVariables.border.radius.pill};
-  color: ${themeCssVariables.font.color.secondary};
-  cursor: pointer;
-  display: inline-flex;
-  font-family: inherit;
-  font-size: ${themeCssVariables.font.size.sm};
-  gap: ${themeCssVariables.spacing[2]};
-  min-height: ${themeCssVariables.spacing[7]};
-  min-width: 0;
-  padding: 0 ${themeCssVariables.spacing[2]};
-  transition: background ${themeCssVariables.animation.duration.normal}s ease;
-
-  &:hover,
-  &:focus-visible {
-    background: ${themeCssVariables.background.transparent.light};
-    border-color: ${themeCssVariables.border.color.medium};
-    color: ${themeCssVariables.font.color.primary};
-  }
-
-  &:focus-visible {
-    outline: 2px solid ${themeCssVariables.border.color.blue};
-    outline-offset: 2px;
-  }
-`;
-
-const StyledButtonLabel = styled.span`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledLogos = styled.span`
-  align-items: center;
-  display: flex;
-  flex: 0 0 auto;
-  gap: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledLogo = styled.span`
-  display: block;
-  height: ${themeCssVariables.spacing[4]};
-  width: ${themeCssVariables.spacing[4]};
-`;
-
-const StyledDismissButton = styled.button`
-  align-items: center;
-  background: transparent;
-  border: 0;
-  border-radius: ${themeCssVariables.border.radius.rounded};
-  color: ${themeCssVariables.font.color.secondary};
-  cursor: pointer;
-  display: flex;
-  height: ${themeCssVariables.spacing[6]};
-  inset-inline-end: calc(-1 * ${themeCssVariables.spacing[7]});
-  justify-content: center;
-  opacity: 0;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  transition: opacity ${themeCssVariables.animation.duration.normal}s ease;
-  visibility: hidden;
-  width: ${themeCssVariables.spacing[6]};
-
-  ${StyledContainer}:hover &,
-  ${StyledContainer}:focus-within & {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  @media (hover: none) {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  &:hover {
-    background: ${themeCssVariables.background.transparent.light};
-  }
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    alignSelf: 'flex-end',
+    display: 'inline-flex',
+    maxWidth: '100%',
+    position: 'relative',
+  },
+  promptButton: {
+    alignItems: 'center',
+    backgroundColor: {
+      default: backgroundTransparent['--t-background-transparent-lighter'],
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+      ':focus-visible':
+        backgroundTransparent['--t-background-transparent-light'],
+    },
+    borderColor: {
+      default: borderColor['--t-border-color-light'],
+      ':hover': borderColor['--t-border-color-medium'],
+      ':focus-visible': borderColor['--t-border-color-medium'],
+    },
+    borderRadius: borderRadius['--t-border-radius-pill'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    color: {
+      default: fontColor['--t-font-color-secondary'],
+      ':hover': fontColor['--t-font-color-primary'],
+      ':focus-visible': fontColor['--t-font-color-primary'],
+    },
+    cursor: 'pointer',
+    display: 'inline-flex',
+    fontFamily: 'inherit',
+    fontSize: fontSize['--t-font-size-sm'],
+    gap: spacing['--t-spacing-2'],
+    minHeight: spacing['--t-spacing-7'],
+    minWidth: 0,
+    outlineColor: borderColor['--t-border-color-blue'],
+    outlineOffset: '2px',
+    outlineStyle: { default: null, ':focus-visible': 'solid' },
+    outlineWidth: '2px',
+    paddingBlock: 0,
+    paddingInline: spacing['--t-spacing-2'],
+    transitionDuration: `calc(${animationDuration['--t-animation-duration-normal']} * 1s)`,
+    transitionProperty: 'background',
+    transitionTimingFunction: 'ease',
+  },
+  buttonLabel: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  logos: {
+    alignItems: 'center',
+    display: 'flex',
+    flex: '0 0 auto',
+    gap: spacing['--t-spacing-1'],
+  },
+  logo: {
+    display: 'block',
+    height: spacing['--t-spacing-4'],
+    width: spacing['--t-spacing-4'],
+  },
+  dismissButton: {
+    alignItems: 'center',
+    backgroundColor: {
+      default: 'transparent',
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
+    borderRadius: borderRadius['--t-border-radius-rounded'],
+    borderWidth: 0,
+    color: fontColor['--t-font-color-secondary'],
+    cursor: 'pointer',
+    display: 'flex',
+    height: spacing['--t-spacing-6'],
+    insetInlineEnd: `calc(-1 * ${spacing['--t-spacing-7']})`,
+    justifyContent: 'center',
+    opacity: {
+      default: 0,
+      '@media (hover: none)': 1,
+      [stylex.when.ancestor(':hover', containerMarker)]: 1,
+      [stylex.when.ancestor(':focus-within', containerMarker)]: 1,
+    },
+    position: 'absolute',
+    top: '50%',
+    transform: 'translateY(-50%)',
+    transitionDuration: `calc(${animationDuration['--t-animation-duration-normal']} * 1s)`,
+    transitionProperty: 'opacity',
+    transitionTimingFunction: 'ease',
+    visibility: {
+      default: 'hidden',
+      '@media (hover: none)': 'visible',
+      [stylex.when.ancestor(':hover', containerMarker)]: 'visible',
+      [stylex.when.ancestor(':focus-within', containerMarker)]: 'visible',
+    },
+    width: spacing['--t-spacing-6'],
+  },
+});
 
 export const SettingsEmailingDomainAiSetup = ({
   domain,
@@ -132,36 +150,43 @@ export const SettingsEmailingDomainAiSetup = ({
   };
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container, containerMarker)}>
       <Tooltip
         content={t`Copies a Cloudflare setup prompt for your AI coding tool`}
         maxWidth="440px"
       >
-        <StyledPromptButton type="button" onClick={handleCopy}>
-          <StyledButtonLabel>{t`Set up DNS with AI`}</StyledButtonLabel>
-          <StyledLogos aria-hidden="true">
-            <StyledLogo>
+        <button
+          type="button"
+          onClick={handleCopy}
+          {...stylex.props(styles.promptButton)}
+        >
+          <span
+            {...stylex.props(styles.buttonLabel)}
+          >{t`Set up DNS with AI`}</span>
+          <span aria-hidden="true" {...stylex.props(styles.logos)}>
+            <span {...stylex.props(styles.logo)}>
               <McpClientLogo src={ClaudeLogo} />
-            </StyledLogo>
-            <StyledLogo>
+            </span>
+            <span {...stylex.props(styles.logo)}>
               <McpClientLogo src={OpenAiLogo} invertInDarkMode />
-            </StyledLogo>
-            <StyledLogo>
+            </span>
+            <span {...stylex.props(styles.logo)}>
               <McpClientLogo src={CursorLogo} invertInDarkMode />
-            </StyledLogo>
-            <StyledLogo>
+            </span>
+            <span {...stylex.props(styles.logo)}>
               <McpClientLogo src={GeminiCliLogo} />
-            </StyledLogo>
-          </StyledLogos>
-        </StyledPromptButton>
+            </span>
+          </span>
+        </button>
       </Tooltip>
-      <StyledDismissButton
+      <button
         type="button"
         aria-label={t`Dismiss AI setup prompt`}
         onClick={() => setIsDismissed(true)}
+        {...stylex.props(styles.dismissButton)}
       >
         <IconX size={theme.icon.size.sm} />
-      </StyledDismissButton>
-    </StyledContainer>
+      </button>
+    </div>
   );
 };

@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useState } from 'react';
 import {
@@ -7,25 +6,35 @@ import {
 } from 'twenty-shared/ai';
 import { isDefined } from 'twenty-shared/utils';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 
-import { StyledAiChatAskCard } from '@/ai/components/AiChatAskStyledComponents';
+import { aiChatAskStyles } from '@/ai/components/AiChatAskStyledComponents';
 import { useAnswerAgentChatToolCall } from '@/ai/hooks/useAnswerAgentChatToolCall';
 import { WorkflowFormFields } from '@/workflow/workflow-steps/workflow-actions/form-action/components/WorkflowFormFields';
+import * as stylex from '@stylexjs/stylex';
+import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledFields = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[3]};
-  padding: ${themeCssVariables.spacing[3]};
-`;
-
-const StyledActions = styled.div`
-  border-top: 1px solid ${themeCssVariables.border.color.light};
-  display: flex;
-  justify-content: flex-end;
-  padding: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  fields: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-3'],
+    paddingTop: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingBottom: spacing['--t-spacing-3'],
+    paddingLeft: spacing['--t-spacing-3'],
+  },
+  actions: {
+    borderTopWidth: '1px',
+    borderTopStyle: 'solid',
+    borderTopColor: borderColor['--t-border-color-light'],
+    display: 'flex',
+    justifyContent: 'flex-end',
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+});
 
 type AiChatFormCardProps = {
   toolCallId: string;
@@ -58,8 +67,8 @@ export const AiChatFormCard = ({ toolCallId, fields }: AiChatFormCardProps) => {
   };
 
   return (
-    <StyledAiChatAskCard>
-      <StyledFields>
+    <div {...stylex.props(aiChatAskStyles.card)}>
+      <div {...stylex.props(styles.fields)}>
         <WorkflowFormFields
           fields={fields}
           readonly={isSubmitting}
@@ -71,8 +80,8 @@ export const AiChatFormCard = ({ toolCallId, fields }: AiChatFormCardProps) => {
           }
           onError={setError}
         />
-      </StyledFields>
-      <StyledActions>
+      </div>
+      <div {...stylex.props(styles.actions)}>
         <Button
           size="sm"
           variant="solid"
@@ -83,7 +92,7 @@ export const AiChatFormCard = ({ toolCallId, fields }: AiChatFormCardProps) => {
         >
           {t`Submit`}
         </Button>
-      </StyledActions>
-    </StyledAiChatAskCard>
+      </div>
+    </div>
   );
 };

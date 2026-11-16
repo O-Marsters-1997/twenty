@@ -1,14 +1,20 @@
 import { Menu as MenuPrimitive } from '@base-ui/react/menu';
+import * as stylex from '@stylexjs/stylex';
 
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
-import styles from '../Dropdown.module.scss';
+import { dropdownStyles } from '../Dropdown.stylex';
 
-type DropdownGroupProps = MenuPrimitive.Group.Props;
+type DropdownGroupProps = WithXstyle<MenuPrimitive.Group.Props>;
 
-export const DropdownGroup = ({ className, ...props }: DropdownGroupProps) => (
+export const DropdownGroup = ({
+  className,
+  xstyle,
+  ...props
+}: DropdownGroupProps) => (
   <MenuPrimitive.Group
     {...props}
-    className={mergeClassNames(styles.group, className)}
+    {...mergeStylexProps(stylex.props(dropdownStyles.group, xstyle), className)}
   />
 );

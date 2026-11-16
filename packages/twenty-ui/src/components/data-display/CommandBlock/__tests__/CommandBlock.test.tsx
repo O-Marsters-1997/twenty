@@ -4,12 +4,10 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { runComponentConformance } from '@test-utilities/conformance/runComponentConformance';
 import { CommandBlock } from '../CommandBlock';
-import styles from '../CommandBlock.module.scss';
 
 runComponentConformance({
   name: 'CommandBlock',
   element: <CommandBlock commands={['yarn add twenty-ui']} />,
-  ownClassName: styles.container,
   refInstanceOf: HTMLDivElement,
   renderPropTagName: 'section',
 });

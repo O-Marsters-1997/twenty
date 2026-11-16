@@ -2,13 +2,15 @@ import {
   ObjectMetadataIcon,
   type ObjectMetadataIconInput,
 } from '@/object-metadata/components/ObjectMetadataIcon';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledObjectIconContainer = styled.div`
-  display: flex;
-  flex-shrink: 0;
-  opacity: 0.64;
-`;
+const styles = stylex.create({
+  objectIconContainer: {
+    display: 'flex',
+    flexShrink: '0',
+    opacity: '0.64',
+  },
+});
 
 type SettingsObjectNewFieldHeaderIconProps = {
   objectMetadataItem: ObjectMetadataIconInput;
@@ -17,7 +19,7 @@ type SettingsObjectNewFieldHeaderIconProps = {
 export const SettingsObjectNewFieldHeaderIcon = ({
   objectMetadataItem,
 }: SettingsObjectNewFieldHeaderIconProps) => (
-  <StyledObjectIconContainer>
+  <div {...stylex.props(styles.objectIconContainer)}>
     <ObjectMetadataIcon objectMetadataItem={objectMetadataItem} />
-  </StyledObjectIconContainer>
+  </div>
 );

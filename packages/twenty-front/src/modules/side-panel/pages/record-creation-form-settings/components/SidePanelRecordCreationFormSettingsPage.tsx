@@ -13,7 +13,6 @@ import { SidePanelPageComponentInstanceContext } from '@/side-panel/states/conte
 import { SidePanelFooter } from '@/ui/layout/side-panel/components/SidePanelFooter';
 import { useAvailableComponentInstanceIdOrThrow } from '@/ui/utilities/state/component-state/hooks/useAvailableComponentInstanceIdOrThrow';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useState } from 'react';
 import { isDefined } from 'twenty-shared/utils';
@@ -21,22 +20,27 @@ import { LightIconButton } from 'twenty-ui/components/input';
 import { MenuItem } from 'twenty-ui/components/navigation';
 import { IconEye, IconEyeOff, useIcons } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-`;
-
-const StyledContent = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-height: 0;
-  overflow-y: auto;
-  padding: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+  },
+  content: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    minHeight: '0',
+    overflowY: 'auto',
+    paddingTop: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+});
 
 export const SidePanelRecordCreationFormSettingsPage = () => {
   const recordCreationFormSettingsObjectMetadataId = useAtomComponentStateValue(
@@ -123,8 +127,8 @@ const SidePanelRecordCreationFormSettings = ({
   };
 
   return (
-    <StyledContainer>
-      <StyledContent>
+    <div {...stylex.props(styles.container)}>
+      <div {...stylex.props(styles.content)}>
         <SidePanelGroup heading={t`Fields`}>
           {configurableRecordFormFields.map((recordFormField) => {
             const { fieldMetadataItem } = recordFormField;
@@ -165,7 +169,7 @@ const SidePanelRecordCreationFormSettings = ({
             );
           })}
         </SidePanelGroup>
-      </StyledContent>
+      </div>
       <SidePanelFooter
         actions={[
           <Button
@@ -183,6 +187,6 @@ const SidePanelRecordCreationFormSettings = ({
           >{t`Save`}</Button>,
         ]}
       />
-    </StyledContainer>
+    </div>
   );
 };

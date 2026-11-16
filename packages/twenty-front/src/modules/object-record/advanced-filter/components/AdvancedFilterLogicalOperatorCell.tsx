@@ -1,25 +1,25 @@
 import { AdvancedFilterLogicalOperatorDropdown } from '@/object-record/advanced-filter/components/AdvancedFilterLogicalOperatorDropdown';
 import { type RecordFilterGroup } from '@/object-record/record-filter-group/types/RecordFilterGroup';
 
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { capitalize } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledText = styled.div`
-  align-items: center;
-  display: flex;
-  height: ${themeCssVariables.spacing[8]};
-
-  padding-left: 9px;
-`;
-
-const StyledContainer = styled.div`
-  align-items: start;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  min-width: ${themeCssVariables.spacing[20]};
-`;
+const styles = stylex.create({
+  text: {
+    alignItems: 'center',
+    display: 'flex',
+    height: spacing['--t-spacing-8'],
+    paddingLeft: '9px',
+  },
+  container: {
+    alignItems: 'start',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    minWidth: spacing['--t-spacing-20'],
+  },
+});
 
 type AdvancedFilterLogicalOperatorCellProps = {
   index: number;
@@ -31,18 +31,18 @@ export const AdvancedFilterLogicalOperatorCell = ({
   recordFilterGroup,
 }: AdvancedFilterLogicalOperatorCellProps) => {
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       {index === 0 ? (
-        <StyledText>{t`Where`}</StyledText>
+        <div {...stylex.props(styles.text)}>{t`Where`}</div>
       ) : index === 1 ? (
         <AdvancedFilterLogicalOperatorDropdown
           recordFilterGroup={recordFilterGroup}
         />
       ) : (
-        <StyledText>
+        <div {...stylex.props(styles.text)}>
           {capitalize(recordFilterGroup.logicalOperator.toLowerCase())}
-        </StyledText>
+        </div>
       )}
-    </StyledContainer>
+    </div>
   );
 };

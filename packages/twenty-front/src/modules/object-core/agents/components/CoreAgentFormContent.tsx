@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { useState } from 'react';
 import { isDefined } from 'twenty-shared/utils';
@@ -10,7 +9,7 @@ import {
   IconTerminal,
   useIcons,
 } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 
 import { SettingsPageContainer } from '@/settings/components/SettingsPageContainer';
 import { SettingsPageLayout } from '@/settings/components/layout/SettingsPageLayout';
@@ -41,14 +40,18 @@ import { type CoreAgentFormValues } from '@/object-core/agents/validation-schema
 import { getCoreAgentInitialFormValues } from '@/object-core/agents/utils/getCoreAgentInitialFormValues';
 import { isCoreAgentRoleDirty } from '@/object-core/agents/utils/isCoreAgentRoleDirty';
 import { isOwnedByInstalledApplication } from '@/applications/utils/isOwnedByInstalledApplication';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContentContainer = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[8]};
-  width: 100%;
-`;
+const styles = stylex.create({
+  contentContainer: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-8'],
+    width: '100%',
+  },
+});
 
 type CoreAgentFormContentProps = {
   agent: FindOneAgentQuery['findOneAgent'];
@@ -178,7 +181,7 @@ export const CoreAgentFormContent = ({ agent }: CoreAgentFormContentProps) => {
       >
         <SettingsPageContainer>
           <Section.Root>
-            <StyledContentContainer>
+            <div {...stylex.props(styles.contentContainer)}>
               {isRoleTab && (
                 <CoreAgentRoleTab
                   formValues={formValues}
@@ -206,7 +209,7 @@ export const CoreAgentFormContent = ({ agent }: CoreAgentFormContentProps) => {
                 />
               )}
               {isRunsTab && <CoreAgentRunsTab agentId={agentId} />}
-            </StyledContentContainer>
+            </div>
           </Section.Root>
         </SettingsPageContainer>
       </SettingsPageLayout>

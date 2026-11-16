@@ -6,12 +6,10 @@ import { describe, expect, it, vi } from 'vitest';
 import { runComponentConformance } from '@test-utilities/conformance/runComponentConformance';
 
 import { Breadcrumb } from '../Breadcrumb';
-import styles from '../Breadcrumb.module.scss';
 
 runComponentConformance({
   name: 'Breadcrumb',
   element: <Breadcrumb links={[{ children: 'Workspace' }]} />,
-  ownClassName: styles.root,
   refInstanceOf: HTMLElement,
 });
 
@@ -59,7 +57,7 @@ describe('Breadcrumb items', () => {
     expect(link).toHaveAttribute('hreflang', 'en');
     expect(link).toHaveAttribute('referrerpolicy', 'no-referrer');
     expect(link).toHaveAttribute('data-destination', 'export');
-    expect(link).toHaveClass(styles.content, 'consumer-link');
+    expect(link).toHaveClass('consumer-link');
     expect(link).toHaveStyle({ marginLeft: '7px' });
 
     await user.tab();
@@ -162,7 +160,7 @@ describe('Breadcrumb items', () => {
 
     expect(link).toHaveAttribute('href', '#companies');
     expect(link).toHaveAttribute('data-router', 'true');
-    expect(link).toHaveClass(styles.content, 'item-link', 'router-link');
+    expect(link).toHaveClass('item-link', 'router-link');
     expect(itemRef.current).toBe(link);
     expect(routingRef.current).toBe(link);
     await user.click(link);

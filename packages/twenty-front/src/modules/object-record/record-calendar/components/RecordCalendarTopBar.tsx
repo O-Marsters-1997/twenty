@@ -20,7 +20,6 @@ import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/use
 import { useAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useAtomComponentState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useUpdateCurrentView } from '@/views/hooks/useUpdateCurrentView';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { format } from 'date-fns';
 import { Temporal } from 'temporal-polyfill';
@@ -31,34 +30,37 @@ import {
 } from 'twenty-shared/utils';
 import { IconChevronLeft, IconChevronRight } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { ViewCalendarLayout } from '~/generated-metadata/graphql';
 import { dateLocaleState } from '@/localization/states/dateLocaleState';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  align-items: center;
-  display: flex;
-  height: 24px;
-  justify-content: space-between;
-  width: 100%;
-`;
-
-const StyledNavigationButtonContainer = styled.div`
-  padding: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledLeftSection = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledNavigationSection = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  justify-content: flex-end;
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    display: 'flex',
+    height: '24px',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  navigationButtonContainer: {
+    paddingTop: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-1'],
+  },
+  leftSection: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+  },
+  navigationSection: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    justifyContent: 'flex-end',
+  },
+});
 
 export const RecordCalendarTopBar = () => {
   const recordCalendarId = useAvailableComponentInstanceIdOrThrow(
@@ -152,8 +154,8 @@ export const RecordCalendarTopBar = () => {
           );
 
   return (
-    <StyledContainer>
-      <StyledLeftSection>
+    <div {...stylex.props(styles.container)}>
+      <div {...stylex.props(styles.leftSection)}>
         {!isRecordCalendarReadOnly && !isInWidget && (
           <Select
             dropdownId={`record-calendar-layout-${recordCalendarId}`}
@@ -196,10 +198,10 @@ export const RecordCalendarTopBar = () => {
           </DropdownContent>
         </DropdownRoot>
         <TimeZoneAbbreviation instant={Temporal.Now.instant()} />
-      </StyledLeftSection>
+      </div>
 
-      <StyledNavigationSection>
-        <StyledNavigationButtonContainer>
+      <div {...stylex.props(styles.navigationSection)}>
+        <div {...stylex.props(styles.navigationButtonContainer)}>
           <Button
             aria-label={t`Previous period`}
             size="sm"
@@ -207,13 +209,13 @@ export const RecordCalendarTopBar = () => {
             onClick={handlePreviousPeriod}
             variant="ghost"
           />
-        </StyledNavigationButtonContainer>
+        </div>
         <Button
           size="sm"
           onClick={handleTodayClick}
           variant="ghost"
         >{t`Today`}</Button>
-        <StyledNavigationButtonContainer>
+        <div {...stylex.props(styles.navigationButtonContainer)}>
           <Button
             aria-label={t`Next period`}
             size="sm"
@@ -221,8 +223,8 @@ export const RecordCalendarTopBar = () => {
             onClick={handleNextPeriod}
             variant="ghost"
           />
-        </StyledNavigationButtonContainer>
-      </StyledNavigationSection>
-    </StyledContainer>
+        </div>
+      </div>
+    </div>
   );
 };

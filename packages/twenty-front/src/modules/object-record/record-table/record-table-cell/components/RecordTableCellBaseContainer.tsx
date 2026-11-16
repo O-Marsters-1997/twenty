@@ -1,4 +1,4 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { useContext, type ReactNode } from 'react';
 
 import { FieldContext } from '@/object-record/record-field/ui/contexts/FieldContext';
@@ -9,44 +9,16 @@ import { RecordTableCellContext } from '@/object-record/record-table/contexts/Re
 import { useRecordTableContextOrThrow } from '@/object-record/record-table/contexts/RecordTableContext';
 import { useOpenRecordTableCellFromCell } from '@/object-record/record-table/record-table-cell/hooks/useOpenRecordTableCellFromCell';
 import { getRecordTableCellId } from '@/object-record/record-table/utils/getRecordTableCellId';
-import { useTheme } from 'twenty-ui/theme';
+import { mergeClassName } from '@/page-layout/utils/mergeClassName';
+import { media } from 'twenty-ui/theme/constants.stylex';
+import {
+  background,
+  borderColor,
+  fontColor,
+} from 'twenty-ui/theme/tokens.stylex';
+import { recordTableLayout } from '../../constants/recordTableLayout.stylex';
 
-const StyledBaseContainer = styled.div<{
-  fontColorMedium: string;
-  backgroundColorSecondary: string;
-  fontColorSecondary: string;
-  isReadOnly: boolean;
-}>`
-  align-items: center;
-  box-sizing: border-box;
-  cursor: ${({ isReadOnly }) => (isReadOnly ? 'default' : 'pointer')};
-  display: flex;
-  height: 32px;
-  position: relative;
-
-  user-select: none;
-
-  @media (hover: hover) {
-    &:hover {
-      background-color: ${({ isReadOnly, backgroundColorSecondary }) =>
-        isReadOnly ? backgroundColorSecondary : 'unset'};
-      border-radius: ${({ isReadOnly }) => (isReadOnly ? '0px' : 'unset')};
-      color: ${({ isReadOnly, fontColorSecondary }) =>
-        isReadOnly ? fontColorSecondary : 'unset'};
-      outline: ${({ isReadOnly, fontColorMedium }) =>
-        isReadOnly ? `1px solid ${fontColorMedium}` : 'unset'};
-
-      svg {
-        color: ${({ isReadOnly, fontColorSecondary }) =>
-          isReadOnly ? fontColorSecondary : 'unset'};
-      }
-
-      img {
-        opacity: ${({ isReadOnly }) => (isReadOnly ? '0.64' : 'unset')};
-      }
-    }
-  }
-`;
+import './RecordTableCellBaseContainer.css';
 
 export const RecordTableCellBaseContainer = ({
   children,
@@ -59,7 +31,6 @@ export const RecordTableCellBaseContainer = ({
     isLabelIdentifier,
   } = useContext(FieldContext);
   const { openTableCell } = useOpenRecordTableCellFromCell();
-  const theme = useTheme();
 
   const { cellPosition } = useContext(RecordTableCellContext);
   const { recordTableId } = useRecordTableContextOrThrow();
@@ -73,14 +44,19 @@ export const RecordTableCellBaseContainer = ({
     openTableCell();
   };
 
+  const baseContainerProps = stylex.props(
+    styles.container,
+    isReadOnly ? styles.readOnly : styles.interactive,
+  );
+
   return (
-    <StyledBaseContainer
-      className={RECORD_TABLE_CELL_CONTENT_CLASS_NAME}
+    <div
+      {...mergeClassName(
+        baseContainerProps,
+        RECORD_TABLE_CELL_CONTENT_CLASS_NAME,
+      )}
       onClick={handleContainerClick}
-      backgroundColorSecondary={theme.background.secondary}
-      fontColorSecondary={theme.font.color.secondary}
-      fontColorMedium={theme.border.color.medium}
-      isReadOnly={isReadOnly ?? false}
+      data-read-only={isReadOnly === true}
       id={getRecordTableCellId(
         recordTableId,
         cellPosition.column,
@@ -93,6 +69,56 @@ export const RecordTableCellBaseContainer = ({
       }
     >
       {children}
-    </StyledBaseContainer>
+    </div>
   );
 };
+
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    boxSizing: 'border-box',
+    display: 'flex',
+    height: recordTableLayout.rowHeight,
+    position: 'relative',
+    userSelect: 'none',
+  },
+  interactive: {
+    cursor: 'pointer',
+  },
+  readOnly: {
+    backgroundColor: {
+      default: null,
+      ':hover': {
+        default: null,
+        [media.hoverCapable]: background['--t-background-secondary'],
+      },
+    },
+    borderRadius: {
+      default: null,
+      ':hover': { default: null, [media.hoverCapable]: 0 },
+    },
+    color: {
+      default: null,
+      ':hover': {
+        default: null,
+        [media.hoverCapable]: fontColor['--t-font-color-secondary'],
+      },
+    },
+    cursor: 'default',
+    outlineColor: {
+      default: null,
+      ':hover': {
+        default: null,
+        [media.hoverCapable]: borderColor['--t-border-color-medium'],
+      },
+    },
+    outlineStyle: {
+      default: null,
+      ':hover': { default: null, [media.hoverCapable]: 'solid' },
+    },
+    outlineWidth: {
+      default: null,
+      ':hover': { default: null, [media.hoverCapable]: 1 },
+    },
+  },
+});

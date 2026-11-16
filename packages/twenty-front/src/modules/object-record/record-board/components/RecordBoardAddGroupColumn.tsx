@@ -4,17 +4,19 @@ import { AddRecordGroupButton } from '@/object-record/record-group/components/Ad
 import { useRecordIndexContextOrThrow } from '@/object-record/record-index/contexts/RecordIndexContext';
 import { canAddRecordGroupForFieldMetadataItem } from '@/object-record/record-group/utils/canAddRecordGroupForFieldMetadataItem';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { styled } from '@linaria/react';
 import { useContext } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const RECORD_BOARD_ADD_GROUP_DROPDOWN_ID = 'record-board-add-group-dropdown';
 
-const StyledColumn = styled.div`
-  align-items: center;
-  display: flex;
-  padding-inline: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  column: {
+    alignItems: 'center',
+    display: 'flex',
+    paddingInline: spacing['--t-spacing-2'],
+  },
+});
 
 export const RecordBoardAddGroupColumn = () => {
   const { recordIndexId } = useRecordIndexContextOrThrow();
@@ -33,12 +35,12 @@ export const RecordBoardAddGroupColumn = () => {
   }
 
   return (
-    <StyledColumn>
+    <div {...stylex.props(styles.column)}>
       <AddRecordGroupButton
         fieldMetadataItem={selectFieldMetadataItem}
         dropdownId={`${RECORD_BOARD_ADD_GROUP_DROPDOWN_ID}-${recordIndexId}`}
         dropdownOffset={{ x: 0, y: 10 }}
       />
-    </StyledColumn>
+    </div>
   );
 };

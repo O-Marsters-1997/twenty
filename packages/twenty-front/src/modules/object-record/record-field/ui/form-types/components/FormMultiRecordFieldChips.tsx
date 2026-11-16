@@ -5,20 +5,22 @@ import { type FormMultiRecordPickerDraftValue } from '@/object-record/record-fie
 import { type ObjectRecord } from '@/object-record/types/ObjectRecord';
 import { OverflowingList } from 'twenty-ui/components/layout';
 import { isStandaloneVariableString } from 'twenty-shared/workflow';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isNonEmptyArray } from '@sniptt/guards';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledChipsContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex: 1;
-  gap: ${themeCssVariables.spacing[1]};
-  margin-inline: ${themeCssVariables.spacing[2]};
-  min-width: 0;
-  overflow: hidden;
-`;
+const styles = stylex.create({
+  chipsContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flex: '1',
+    gap: spacing['--t-spacing-1'],
+    marginInline: spacing['--t-spacing-2'],
+    minWidth: '0',
+    overflow: 'hidden',
+  },
+});
 
 type FormMultiRecordFieldChipsProps = {
   draftValue: FormMultiRecordPickerDraftValue;
@@ -39,13 +41,13 @@ export const FormMultiRecordFieldChips = ({
 }: FormMultiRecordFieldChipsProps) => {
   if (draftValue.type === 'variable') {
     return (
-      <StyledChipsContainer>
+      <div {...stylex.props(styles.chipsContainer)}>
         <VariableChipStandalone
           rawVariableName={draftValue.value}
           onRemove={readonly ? undefined : onUnlinkVariable}
           isFullRecord
         />
-      </StyledChipsContainer>
+      </div>
     );
   }
 
@@ -55,9 +57,9 @@ export const FormMultiRecordFieldChips = ({
 
   if (!isNonEmptyArray(selectedRecords) && !isNonEmptyArray(staticVariables)) {
     return (
-      <StyledChipsContainer>
+      <div {...stylex.props(styles.chipsContainer)}>
         <FormFieldPlaceholder>{t`Select`}</FormFieldPlaceholder>
-      </StyledChipsContainer>
+      </div>
     );
   }
 
@@ -80,13 +82,13 @@ export const FormMultiRecordFieldChips = ({
   ];
 
   return (
-    <StyledChipsContainer>
+    <div {...stylex.props(styles.chipsContainer)}>
       <OverflowingList
         overflowLabel={t`Show all items`}
         showOverflowCount={true}
       >
         {chips}
       </OverflowingList>
-    </StyledChipsContainer>
+    </div>
   );
 };

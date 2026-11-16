@@ -4,16 +4,18 @@ import { RecordTitleCell } from '@/object-record/record-title-cell/components/Re
 import { RecordTitleCellContainerType } from '@/object-record/record-title-cell/types/RecordTitleCellContainerType';
 import { HeaderIdentifier } from '@/ui/layout/page/components/HeaderIdentifier';
 import { UndecoratedLink } from '@/ui/navigation/link/components/UndecoratedLink/UndecoratedLink';
-import { styled } from '@linaria/react';
 import { useRef, type ChangeEvent, type MouseEvent } from 'react';
 import { AppPath } from 'twenty-shared/types';
 import { getAppPath, isDefined } from 'twenty-shared/utils';
 import { useNavigateApp } from '~/hooks/useNavigateApp';
 import { getAbsoluteImageUrl } from '~/utils/image/getAbsoluteImageUrl';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledFileInput = styled.input`
-  display: none;
-`;
+const styles = stylex.create({
+  fileInput: {
+    display: 'none',
+  },
+});
 
 type RecordIdentifierBarTitleProps = {
   objectNameSingular: string;
@@ -110,10 +112,11 @@ export const RecordIdentifierBarTitle = ({
           )
         }
       />
-      <StyledFileInput
+      <input
         ref={inputFileRef}
         onChange={handleFileChange}
         type="file"
+        {...stylex.props(styles.fileInput)}
       />
     </>
   );

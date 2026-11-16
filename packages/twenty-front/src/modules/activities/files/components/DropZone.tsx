@@ -1,43 +1,54 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useDropzone } from 'react-dropzone';
 
 import { useSpreadsheetImportInternal } from '@/spreadsheet-import/hooks/useSpreadsheetImportInternal';
 import { IconUpload } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  background,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+  textLineHeight,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  align-items: center;
-  background: ${themeCssVariables.background.secondary};
-  border: 2px dashed ${themeCssVariables.border.color.strong};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: center;
-  text-align: center;
-`;
-
-const StyledUploadDragTitle = styled.div`
-  color: ${themeCssVariables.font.color.primary};
-  font-size: ${themeCssVariables.font.size.lg};
-  font-weight: ${themeCssVariables.font.weight.medium};
-  line-height: ${themeCssVariables.text.lineHeight.md};
-  margin-bottom: 8px;
-`;
-
-const StyledUploadDragSubTitle = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.regular};
-  line-height: ${themeCssVariables.text.lineHeight.md};
-`;
-
-const StyledUploadIconContainer = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  margin-bottom: ${themeCssVariables.spacing[3]};
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    backgroundColor: background['--t-background-secondary'],
+    borderWidth: '2px',
+    borderStyle: 'dashed',
+    borderColor: borderColor['--t-border-color-strong'],
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    justifyContent: 'center',
+    textAlign: 'center',
+  },
+  uploadDragTitle: {
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-lg'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    lineHeight: textLineHeight['--t-text-line-height-md'],
+    marginBottom: '8px',
+  },
+  uploadDragSubTitle: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    lineHeight: textLineHeight['--t-text-line-height-md'],
+  },
+  uploadIconContainer: {
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    marginBottom: spacing['--t-spacing-3'],
+  },
+});
 
 type DropZoneProps = {
   setIsDraggingFile: (drag: boolean) => void;
@@ -73,9 +84,10 @@ export const DropZone = ({
   });
 
   return (
-    <StyledContainer
+    <div
       // oxlint-disable-next-line react/jsx-props-no-spreading
       {...getRootProps()}
+      {...stylex.props(styles.container)}
     >
       {isDragActive && (
         <>
@@ -83,18 +95,18 @@ export const DropZone = ({
             // oxlint-disable-next-line react/jsx-props-no-spreading
             {...getInputProps()}
           />
-          <StyledUploadIconContainer>
+          <div {...stylex.props(styles.uploadIconContainer)}>
             <IconUpload
               stroke={theme.icon.stroke.sm}
               size={theme.icon.size.lg}
             />
-          </StyledUploadIconContainer>
-          <StyledUploadDragTitle>{t`Upload files`}</StyledUploadDragTitle>
-          <StyledUploadDragSubTitle>
+          </div>
+          <div {...stylex.props(styles.uploadDragTitle)}>{t`Upload files`}</div>
+          <div {...stylex.props(styles.uploadDragSubTitle)}>
             {t`Drag and Drop Here`}
-          </StyledUploadDragSubTitle>
+          </div>
         </>
       )}
-    </StyledContainer>
+    </div>
   );
 };

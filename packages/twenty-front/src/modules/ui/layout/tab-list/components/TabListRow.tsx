@@ -1,22 +1,25 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { type ReactNode, type Ref } from 'react';
 import { Tabs } from 'twenty-ui/primitives/navigation';
 
-import { TAB_LIST_GAP } from '../constants/TabListGap';
-import { SCROLLABLE_TAB_ROW_CSS } from '../styles/ScrollableTabRowCSS';
+import { layoutSize } from '@/ui/layout/constants/layout.stylex';
 
-const StyledContainer = styled.div<{ isScrollable: boolean }>`
-  display: flex;
-  gap: ${TAB_LIST_GAP}px;
-  max-width: 100%;
-  overflow-x: ${({ isScrollable }) => (isScrollable ? 'auto' : 'hidden')};
-  position: relative;
-  ${SCROLLABLE_TAB_ROW_CSS}
-
-  &::after {
-    display: none;
-  }
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    gap: layoutSize.tabListGap,
+    maxWidth: '100%',
+    overflowY: 'hidden',
+    position: 'relative',
+    scrollbarWidth: { default: null, '@media (pointer: coarse)': 'none' },
+    '::after': { display: 'none' },
+    '::-webkit-scrollbar': {
+      display: { default: null, '@media (pointer: coarse)': 'none' },
+    },
+  },
+  scrollable: { overflowX: 'auto' },
+  notScrollable: { overflowX: 'hidden' },
+});
 
 type TabListRowProps = {
   'aria-label': string;
@@ -33,11 +36,16 @@ export const TabListRow = ({
   isScrollable,
   ref,
 }: TabListRowProps) => {
+  const containerProps = stylex.props(
+    styles.container,
+    isScrollable ? styles.scrollable : styles.notScrollable,
+  );
+
   if (behaveAsLinks) {
     return (
-      <StyledContainer ref={ref} isScrollable={isScrollable}>
+      <div ref={ref} {...containerProps}>
         {children}
-      </StyledContainer>
+      </div>
     );
   }
 
@@ -46,7 +54,7 @@ export const TabListRow = ({
       ref={ref}
       aria-label={ariaLabel}
       activateOnFocus={false}
-      render={<StyledContainer isScrollable={isScrollable} />}
+      render={<div {...containerProps} />}
     >
       {children}
       <Tabs.Indicator />

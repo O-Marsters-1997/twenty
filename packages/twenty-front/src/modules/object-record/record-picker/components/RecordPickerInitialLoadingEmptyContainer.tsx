@@ -1,8 +1,15 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import { type ReactNode } from 'react';
 
-const StyledRecordPickerInitialLoadingEmptyContainer = styled.div`
-  height: 320px;
-  width: 100%;
-`;
+const styles = stylex.create({
+  container: {
+    height: '320px',
+    width: '100%',
+  },
+});
 
-export { StyledRecordPickerInitialLoadingEmptyContainer as RecordPickerInitialLoadingEmptyContainer };
+export const RecordPickerInitialLoadingEmptyContainer = ({
+  children,
+}: {
+  children?: ReactNode;
+}) => <div {...stylex.props(styles.container)}>{children}</div>;

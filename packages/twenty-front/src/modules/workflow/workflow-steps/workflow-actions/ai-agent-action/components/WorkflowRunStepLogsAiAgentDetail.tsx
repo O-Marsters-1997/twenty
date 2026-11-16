@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { Fragment } from 'react';
 import { isDefined } from 'twenty-shared/utils';
@@ -11,64 +10,72 @@ import {
   IconTool,
   IconWorld,
 } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { formatDuration } from '~/utils/format/formatDuration';
-import {
-  StyledBadgeGroup,
-  StyledEmptyHint,
-  StyledHeaderLeft,
-  StyledMetric,
-  StyledMetricLabel,
-  StyledMetricsRow,
-  StyledMetricValue,
-  StyledSection,
-  StyledSectionTitle,
-  StyledSummaryCard,
-  StyledSummaryHeader,
-  StyledTitle,
-} from '@/workflow/workflow-steps/workflow-actions/components/workflowRunStepLogsStyles';
+import { logStyles } from '@/workflow/workflow-steps/workflow-actions/components/workflowRunStepLogs.stylex';
 import { WorkflowRunStepLogsToolCallRow } from '@/workflow/workflow-steps/workflow-actions/ai-agent-action/components/WorkflowRunStepLogsToolCallRow';
 import { formatNumber } from '@/localization/utils/formatNumber';
+import * as stylex from '@stylexjs/stylex';
+import {
+  spacing,
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  font,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledModelBadge = styled.span`
-  background: ${themeCssVariables.background.transparent.light};
-  border-radius: ${themeCssVariables.border.radius.xs};
-  color: ${themeCssVariables.font.color.tertiary};
-  font-family: ${themeCssVariables.font.family};
-  font-size: ${themeCssVariables.font.size.xs};
-  padding: ${themeCssVariables.spacing['0.5']} ${themeCssVariables.spacing[1]};
-  white-space: nowrap;
-`;
-
-const StyledUsageGrid = styled.div`
-  background: ${themeCssVariables.background.transparent.lighter};
-  border: 1px solid ${themeCssVariables.border.color.light};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  display: grid;
-  gap: ${themeCssVariables.spacing[1]} ${themeCssVariables.spacing[4]};
-  grid-template-columns: max-content 1fr;
-  padding: ${themeCssVariables.spacing[3]};
-`;
-
-const StyledUsageLabel = styled.span`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.sm};
-`;
-
-const StyledUsageValue = styled.span`
-  color: ${themeCssVariables.font.color.primary};
-  font-family: ${themeCssVariables.font.family};
-  font-size: ${themeCssVariables.font.size.sm};
-  font-variant-numeric: tabular-nums;
-  text-align: right;
-`;
-
-const StyledToolList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  modelBadge: {
+    background: backgroundTransparent['--t-background-transparent-light'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-xs'],
+    borderTopRightRadius: borderRadius['--t-border-radius-xs'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-xs'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-xs'],
+    color: fontColor['--t-font-color-tertiary'],
+    fontFamily: font['--t-font-family'],
+    fontSize: fontSize['--t-font-size-xs'],
+    paddingTop: spacing['--t-spacing-0_5'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: spacing['--t-spacing-0_5'],
+    paddingLeft: spacing['--t-spacing-1'],
+    whiteSpace: 'nowrap',
+  },
+  usageGrid: {
+    background: backgroundTransparent['--t-background-transparent-lighter'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-light'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    display: 'grid',
+    gap: `${spacing['--t-spacing-1']} ${spacing['--t-spacing-4']}`,
+    gridTemplateColumns: 'max-content 1fr',
+    paddingTop: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingBottom: spacing['--t-spacing-3'],
+    paddingLeft: spacing['--t-spacing-3'],
+  },
+  usageLabel: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-sm'],
+  },
+  usageValue: {
+    color: fontColor['--t-font-color-primary'],
+    fontFamily: font['--t-font-family'],
+    fontSize: fontSize['--t-font-size-sm'],
+    fontVariantNumeric: 'tabular-nums',
+    textAlign: 'right',
+  },
+  toolList: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-1'],
+  },
+});
 
 const formatCost = (dollars: number): string => {
   if (dollars === 0) {
@@ -124,97 +131,105 @@ export const WorkflowRunStepLogsAiAgentDetail = ({
 
   return (
     <>
-      <StyledSummaryCard>
-        <StyledSummaryHeader>
-          <StyledHeaderLeft>
+      <div {...stylex.props(logStyles.summaryCard)}>
+        <div {...stylex.props(logStyles.summaryHeader)}>
+          <div {...stylex.props(logStyles.headerLeft)}>
             <IconLego size={16} />
-            <StyledTitle>{t`Agent run`}</StyledTitle>
-          </StyledHeaderLeft>
-          <StyledBadgeGroup>
-            <StyledModelBadge>{modelId}</StyledModelBadge>
-          </StyledBadgeGroup>
-        </StyledSummaryHeader>
+            <span {...stylex.props(logStyles.title)}>{t`Agent run`}</span>
+          </div>
+          <div {...stylex.props(logStyles.badgeGroup)}>
+            <span {...stylex.props(styles.modelBadge)}>{modelId}</span>
+          </div>
+        </div>
 
-        <StyledMetricsRow>
-          <StyledMetric>
-            <StyledMetricLabel>
+        <div {...stylex.props(logStyles.metricsRow)}>
+          <div {...stylex.props(logStyles.metric)}>
+            <div {...stylex.props(logStyles.metricLabel)}>
               <IconCpu size={12} />
               {t`Tokens`}
-            </StyledMetricLabel>
-            <StyledMetricValue>
+            </div>
+            <div {...stylex.props(logStyles.metricValue)}>
               {formatTokenCount(usage.totalTokens)}
-            </StyledMetricValue>
-          </StyledMetric>
-          <StyledMetric>
-            <StyledMetricLabel>
+            </div>
+          </div>
+          <div {...stylex.props(logStyles.metric)}>
+            <div {...stylex.props(logStyles.metricLabel)}>
               <IconCoins size={12} />
               {t`Cost`}
-            </StyledMetricLabel>
-            <StyledMetricValue>
+            </div>
+            <div {...stylex.props(logStyles.metricValue)}>
               {formatCost(cost.totalCostInDollars)}
-            </StyledMetricValue>
-          </StyledMetric>
-          <StyledMetric>
-            <StyledMetricLabel>
+            </div>
+          </div>
+          <div {...stylex.props(logStyles.metric)}>
+            <div {...stylex.props(logStyles.metricLabel)}>
               <IconTool size={12} />
               {t`Tool calls`}
-            </StyledMetricLabel>
-            <StyledMetricValue>{toolCalls.length}</StyledMetricValue>
-          </StyledMetric>
+            </div>
+            <div {...stylex.props(logStyles.metricValue)}>
+              {toolCalls.length}
+            </div>
+          </div>
           {nativeWebSearchCallCount > 0 && (
-            <StyledMetric>
-              <StyledMetricLabel>
+            <div {...stylex.props(logStyles.metric)}>
+              <div {...stylex.props(logStyles.metricLabel)}>
                 <IconWorld size={12} />
                 {t`Web searches`}
-              </StyledMetricLabel>
-              <StyledMetricValue>{nativeWebSearchCallCount}</StyledMetricValue>
-            </StyledMetric>
+              </div>
+              <div {...stylex.props(logStyles.metricValue)}>
+                {nativeWebSearchCallCount}
+              </div>
+            </div>
           )}
-          <StyledMetric>
-            <StyledMetricLabel>
+          <div {...stylex.props(logStyles.metric)}>
+            <div {...stylex.props(logStyles.metricLabel)}>
               <IconClock size={12} />
               {t`Duration`}
-            </StyledMetricLabel>
-            <StyledMetricValue>{formatDuration(durationMs)}</StyledMetricValue>
-          </StyledMetric>
-        </StyledMetricsRow>
-      </StyledSummaryCard>
+            </div>
+            <div {...stylex.props(logStyles.metricValue)}>
+              {formatDuration(durationMs)}
+            </div>
+          </div>
+        </div>
+      </div>
 
       {usageRows.length > 0 && (
-        <StyledSection>
-          <StyledSectionTitle>{t`Token usage`}</StyledSectionTitle>
-          <StyledUsageGrid>
+        <section {...stylex.props(logStyles.section)}>
+          <h3 {...stylex.props(logStyles.sectionTitle)}>{t`Token usage`}</h3>
+          <div {...stylex.props(styles.usageGrid)}>
             {usageRows.map((row) => (
               <Fragment key={row.label}>
-                <StyledUsageLabel>{row.label}</StyledUsageLabel>
-                <StyledUsageValue>
+                <span {...stylex.props(styles.usageLabel)}>{row.label}</span>
+                <span {...stylex.props(styles.usageValue)}>
                   {formatNumber(row.value ?? 0)}
-                </StyledUsageValue>
+                </span>
               </Fragment>
             ))}
-          </StyledUsageGrid>
-        </StyledSection>
+          </div>
+        </section>
       )}
 
-      <StyledSection>
-        <StyledSectionTitle>
+      <section {...stylex.props(logStyles.section)}>
+        <h3 {...stylex.props(logStyles.sectionTitle)}>
           {toolCalls.length > 0
             ? t`Tool calls (${toolCalls.length})`
             : t`Tool calls`}
-        </StyledSectionTitle>
+        </h3>
         {toolCalls.length === 0 ? (
-          <StyledEmptyHint>{t`No tools were called`}</StyledEmptyHint>
+          <div
+            {...stylex.props(logStyles.emptyHint)}
+          >{t`No tools were called`}</div>
         ) : (
-          <StyledToolList>
+          <div {...stylex.props(styles.toolList)}>
             {toolCalls.map((toolCall) => (
               <WorkflowRunStepLogsToolCallRow
                 key={toolCall.toolCallId}
                 toolCall={toolCall}
               />
             ))}
-          </StyledToolList>
+          </div>
         )}
-      </StyledSection>
+      </section>
     </>
   );
 };

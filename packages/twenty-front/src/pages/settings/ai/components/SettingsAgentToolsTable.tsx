@@ -4,11 +4,10 @@ import { type CurrentWorkspace } from '@/auth/states/currentWorkspaceState';
 import { Table } from '@/ui/layout/table/components/Table';
 import { TableHeader } from '@/ui/layout/table/components/TableHeader';
 import { TableRow } from '@/ui/layout/table/components/TableRow';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { IconChevronRight } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import { SettingsToolIcon } from '~/pages/settings/ai/components/SettingsToolIcon';
 import {
   SettingsToolTableRow,
@@ -18,6 +17,8 @@ import { type SettingsAgentToolApplication } from '~/pages/settings/ai/types/Set
 import { type SettingsAgentToolItem } from '~/pages/settings/ai/types/SettingsAgentToolItem';
 import { getToolApplicationId } from '~/pages/settings/ai/utils/getToolApplicationId';
 import { getToolLink } from '~/pages/settings/ai/utils/getToolLink';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsAgentToolsTableProps = {
   tools: SettingsAgentToolItem[];
@@ -26,9 +27,11 @@ type SettingsAgentToolsTableProps = {
   currentWorkspace: CurrentWorkspace | null;
 };
 
-const StyledTableHeaderRowContainer = styled.div`
-  margin-bottom: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  tableHeaderRowContainer: {
+    marginBottom: spacing['--t-spacing-2'],
+  },
+});
 
 export const SettingsAgentToolsTable = ({
   tools,
@@ -41,13 +44,13 @@ export const SettingsAgentToolsTable = ({
 
   return (
     <Table>
-      <StyledTableHeaderRowContainer>
+      <div {...stylex.props(styles.tableHeaderRowContainer)}>
         <TableRow gridTemplateColumns={TOOL_TABLE_ROW_GRID_TEMPLATE_COLUMNS}>
           <TableHeader>{t`Name`}</TableHeader>
           <TableHeader>{t`App`}</TableHeader>
           <TableHeader />
         </TableRow>
-      </StyledTableHeaderRowContainer>
+      </div>
       {isLoading
         ? Array.from({ length: 3 }).map((_, index) => (
             <SkeletonLine height={32} key={index} />

@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useState } from 'react';
 import { isDefined } from 'twenty-shared/utils';
@@ -32,18 +31,21 @@ import { useScrollWrapperHTMLElement } from '@/ui/utilities/scroll/hooks/useScro
 import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
 import { type EventLogRecord } from '~/generated-metadata/graphql';
 import { sortByProperty } from '~/utils/array/sortByProperty';
+import * as stylex from '@stylexjs/stylex';
 
 const RECORDS_PER_PAGE = 100;
 
 const sortNewestFirst = (eventLogRecords: EventLogRecord[]) =>
   eventLogRecords.toSorted(sortByProperty('timestamp')).toReversed();
 
-const StyledResults = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-height: 0;
-`;
+const styles = stylex.create({
+  results: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    minHeight: '0',
+  },
+});
 
 type LogConsoleResultsProps = {
   source: LogConsoleSource;
@@ -204,7 +206,7 @@ export const LogConsoleResults = ({ source }: LogConsoleResultsProps) => {
   };
 
   return (
-    <StyledResults>
+    <div {...stylex.props(styles.results)}>
       <LogConsoleToolbar
         filterFields={source.filterFields ?? []}
         filters={logConsoleFilters}
@@ -226,6 +228,6 @@ export const LogConsoleResults = ({ source }: LogConsoleResultsProps) => {
         />
       </LogConsoleToolbar>
       {renderLogs()}
-    </StyledResults>
+    </div>
   );
 };

@@ -1,5 +1,4 @@
 import { SkeletonLine } from '@/ui/feedback/skeleton/components/SkeletonLine';
-import { styled } from '@linaria/react';
 import { Suspense, lazy, type ComponentType } from 'react';
 import type { DatePickerProps as ReactDatePickerLibProps } from 'react-datepicker';
 import { SKELETON_HEIGHT_SIZES } from 'twenty-ui/primitives/feedback';
@@ -16,7 +15,7 @@ import {
 } from '@/ui/input/components/internal/date/components/StyledDatePickerContainer';
 import { getRelativeDatePickerCalendarRange } from '@/ui/input/components/internal/date/utils/getRelativeDatePickerCalendarRange';
 import { t } from '@lingui/core/macro';
-import 'react-datepicker/dist/react-datepicker.css';
+import '~/third-party-styles/react-datepicker.css';
 
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { Temporal } from 'temporal-polyfill';
@@ -29,46 +28,71 @@ import {
 } from 'twenty-shared/utils';
 import { IconCalendarX } from 'twenty-ui/icon';
 import { Text } from 'twenty-ui/primitives/typography';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { background, backgroundTransparent, borderColor, borderRadius, fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledButtonContainer = styled.div`
-  align-items: center;
-  border-radius: calc(
-    ${themeCssVariables.border.radius.md} - ${themeCssVariables.spacing[1]}
-  );
-  box-sizing: border-box;
-  cursor: pointer;
-  display: flex;
-  height: 32px;
-  margin: ${themeCssVariables.spacing[1]};
-  padding: ${themeCssVariables.spacing[1]};
-  width: auto;
-
-  &:hover {
-    background: ${themeCssVariables.background.transparent.light};
-  }
-`;
-
-const StyledButtonContent = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  justify-content: start;
-`;
-
-const StyledDatePickerFallback = styled.div`
-  align-items: center;
-  background: ${themeCssVariables.background.secondary};
-  border-radius: ${themeCssVariables.border.radius.md};
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  height: 300px;
-  justify-content: center;
-  padding: ${themeCssVariables.spacing[4]};
-  width: 280px;
-`;
+const styles = stylex.create({
+  buttonContainer: {
+    alignItems: 'center',
+    borderTopLeftRadius: `calc(
+    ${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']}
+  )`,
+    borderTopRightRadius: `calc(
+    ${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']}
+  )`,
+    borderBottomRightRadius: `calc(
+    ${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']}
+  )`,
+    borderBottomLeftRadius: `calc(
+    ${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']}
+  )`,
+    boxSizing: 'border-box',
+    cursor: 'pointer',
+    display: 'flex',
+    height: '32px',
+    marginTop: spacing['--t-spacing-1'],
+    marginRight: spacing['--t-spacing-1'],
+    marginBottom: spacing['--t-spacing-1'],
+    marginLeft: spacing['--t-spacing-1'],
+    paddingTop: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-1'],
+    width: 'auto',
+    backgroundColor: { default: null, ':hover': backgroundTransparent['--t-background-transparent-light'] },
+  },
+  clearable: {
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
+  },
+  buttonContent: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    justifyContent: 'start',
+  },
+  datePickerFallback: {
+    alignItems: 'center',
+    backgroundColor: background['--t-background-secondary'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    height: '300px',
+    justifyContent: 'center',
+    paddingTop: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingBottom: spacing['--t-spacing-4'],
+    paddingLeft: spacing['--t-spacing-4'],
+    width: '280px',
+  },
+});
 
 type DatePickerProps = {
   instanceId: string;
@@ -205,10 +229,10 @@ export const DatePicker = ({
 
   return (
     <StyledDatePickerContainer calendarDisabled={isRelative}>
-      <div className={clearable ? 'clearable ' : ''}>
+      <div {...stylex.props(clearable && styles.clearable)}>
         <Suspense
           fallback={
-            <StyledDatePickerFallback>
+            <div {...stylex.props(styles.datePickerFallback)}>
               <SkeletonLine
                 width={DATE_PICKER_CONTAINER_WIDTH - 16}
                 height={SKELETON_HEIGHT_SIZES.l}
@@ -229,7 +253,7 @@ export const DatePicker = ({
                 height={SKELETON_HEIGHT_SIZES.l}
                 borderRadius={2}
               />
-            </StyledDatePickerFallback>
+            </div>
           }
         >
           <ReactDatePicker
@@ -285,12 +309,12 @@ export const DatePicker = ({
         </Suspense>
       </div>
       {clearable && (
-        <StyledButtonContainer onClick={() => onClear?.()}>
-          <StyledButtonContent>
+        <div onClick={() => onClear?.()} {...stylex.props(styles.buttonContainer)}>
+          <div {...stylex.props(styles.buttonContent)}>
             <IconCalendarX size={theme.icon.size.md} />
             <Text>{t`Clear`}</Text>
-          </StyledButtonContent>
-        </StyledButtonContainer>
+          </div>
+        </div>
       )}
     </StyledDatePickerContainer>
   );

@@ -1,24 +1,26 @@
+import { recordTableZIndex } from './recordTableLayout.stylex';
+
 export const TABLE_Z_INDEX = {
-  base: 1,
-  hoverPortal: 4,
-  headerRow: 10,
+  base: recordTableZIndex.base,
+  hoverPortal: recordTableZIndex.hoverPortal,
+  headerRow: recordTableZIndex.headerRow,
   cell: {
-    default: 3,
-    sticky: 8,
-    editMode: 30,
+    default: recordTableZIndex.cellDefault,
+    sticky: recordTableZIndex.cellSticky,
+    editMode: recordTableZIndex.cellEditMode,
   },
   headerColumns: {
-    headerColumnsSticky: 14,
-    headerColumnsNormal: 10,
+    headerColumnsSticky: recordTableZIndex.headerColumnsSticky,
+    headerColumnsNormal: recordTableZIndex.headerColumnsNormal,
   },
   groupSection: {
-    stickyCell: 9,
-    normalCell: 8,
+    stickyCell: recordTableZIndex.groupSectionStickyCell,
+    normalCell: recordTableZIndex.groupSectionNormalCell,
   },
-  columnGrip: 30,
-  rowDropLine: 9,
+  columnGrip: recordTableZIndex.columnGrip,
+  rowDropLine: recordTableZIndex.rowDropLine,
   footer: {
-    default: 8,
-    stickyColumn: 9,
+    default: recordTableZIndex.footerDefault,
+    stickyColumn: recordTableZIndex.footerStickyColumn,
   },
 };

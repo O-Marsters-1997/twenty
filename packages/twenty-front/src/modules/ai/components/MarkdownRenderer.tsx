@@ -1,7 +1,3 @@
-import {
-  StyledParagraph,
-  StyledTableScrollContainer,
-} from '@/ai/components/LazyMarkdownRendererStyledComponents';
 import { MarkdownCodeBlock } from '@/ai/components/MarkdownCodeBlock';
 import { TextWithChatReferences } from '@/ai/components/TextWithChatReferences';
 import { cloneElement, isValidElement } from 'react';
@@ -44,11 +40,15 @@ const createChatReferenceElement =
 // per render would remount every node on every streamed chunk.
 const MARKDOWN_COMPONENTS = {
   table: ({ children }: { children?: React.ReactNode }) => (
-    <StyledTableScrollContainer>
+    <div className="markdown-table-scroll">
       <table>{children}</table>
-    </StyledTableScrollContainer>
+    </div>
   ),
-  p: createChatReferenceElement(StyledParagraph),
+  p: ({ children }: { children?: React.ReactNode }) => (
+    <div className="markdown-paragraph">
+      {processChildrenForChatReferences(children)}
+    </div>
+  ),
   td: createChatReferenceElement('td'),
   th: createChatReferenceElement('th'),
   li: createChatReferenceElement('li'),

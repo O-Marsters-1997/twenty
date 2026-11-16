@@ -1,0 +1,6 @@
+@layer third-party {
+  .graphiql-container {
+    background: var(--t-background-primary);
+    border-radius: var(--t-border-radius-md);
+  }
+}

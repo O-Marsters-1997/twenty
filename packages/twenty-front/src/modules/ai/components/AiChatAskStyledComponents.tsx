@@ -1,24 +1,34 @@
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  fontWeight,
+} from 'twenty-ui/theme/tokens.stylex';
 
-export const StyledAiChatAskCard = styled.div`
-  background-color: ${themeCssVariables.background.transparent.lighter};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
-
-export const StyledAiChatAskStatusMessage = styled.span`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.medium};
-`;
-
-export const StyledAiChatAskStatusDetail = styled.span`
-  color: ${themeCssVariables.font.color.secondary};
-  font-size: ${themeCssVariables.font.size.sm};
-  overflow-wrap: anywhere;
-`;
+export const aiChatAskStyles = stylex.create({
+  card: {
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
+    borderColor: borderColor['--t-border-color-medium'],
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+  },
+  statusMessage: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+  },
+  statusDetail: {
+    color: fontColor['--t-font-color-secondary'],
+    fontSize: fontSize['--t-font-size-sm'],
+    overflowWrap: 'anywhere',
+  },
+});

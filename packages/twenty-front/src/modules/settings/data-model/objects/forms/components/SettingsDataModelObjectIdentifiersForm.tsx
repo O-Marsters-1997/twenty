@@ -9,7 +9,6 @@ import { isObjectMetadataReadOnly } from '@/object-record/read-only/utils/isObje
 import { Select } from '@/ui/input/components/Select';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -20,8 +19,9 @@ import {
 } from 'twenty-shared/utils';
 import { IconCircleOff, IconPlus, useIcons } from 'twenty-ui/icon';
 import { type SelectOption } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { type z } from 'zod';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 export const settingsDataModelObjectIdentifiersFormSchema =
   objectMetadataItemSchema.pick({
@@ -42,10 +42,12 @@ const LABEL_IDENTIFIER_FIELD_METADATA_ID: SettingsDataModelObjectIdentifiers =
 const IMAGE_IDENTIFIER_FIELD_METADATA_ID: SettingsDataModelObjectIdentifiers =
   'imageIdentifierFieldMetadataId';
 
-const StyledContainer = styled.div`
-  display: flex;
-  gap: ${themeCssVariables.spacing[4]};
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    gap: spacing['--t-spacing-4'],
+  },
+});
 
 export const SettingsDataModelObjectIdentifiersForm = ({
   objectMetadataItem,
@@ -128,7 +130,7 @@ export const SettingsDataModelObjectIdentifiersForm = ({
   const navigate = useNavigate();
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       {[
         {
           label: t`Record label`,
@@ -179,6 +181,6 @@ export const SettingsDataModelObjectIdentifiersForm = ({
           )}
         />
       ))}
-    </StyledContainer>
+    </div>
   );
 };

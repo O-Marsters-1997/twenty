@@ -13,8 +13,6 @@ import { TitleInput } from '@/ui/input/components/TitleInput';
 import { useAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useAtomComponentState';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { css } from '@linaria/core';
-import { styled } from '@linaria/react';
 import { isNonEmptyString } from '@sniptt/guards';
 import { useState } from 'react';
 import { SidePanelPages } from 'twenty-shared/types';
@@ -22,17 +20,19 @@ import { isDefined } from 'twenty-shared/utils';
 import { useIcons } from 'twenty-ui/icon';
 import { useTheme } from 'twenty-ui/theme';
 import { HeaderIdentifier } from '@/ui/layout/page/components/HeaderIdentifier';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledClickableIconWrapper = styled.div`
-  cursor: pointer;
-  display: flex;
-  line-height: 0;
-`;
-
-const iconPickerContainerStyles = css`
-  display: flex;
-  line-height: 0;
-`;
+const styles = stylex.create({
+  clickableIconWrapper: {
+    cursor: 'pointer',
+    display: 'flex',
+    lineHeight: '0',
+  },
+  iconPickerContainerStyles: {
+    display: 'flex',
+    lineHeight: '0',
+  },
+});
 
 export const SidePanelPageLayoutInfo = ({
   pageLayoutId,
@@ -149,11 +149,14 @@ export const SidePanelPageLayoutInfo = ({
         dropdownId={`page-layout-tab-icon-picker-${tab.id}`}
         selectedIconKey={selectedIconKey ?? undefined}
         onChange={handleIconChange}
-        className={iconPickerContainerStyles}
+        {...stylex.props(styles.iconPickerContainerStyles)}
         clickableComponent={
-          <StyledClickableIconWrapper aria-label={t`Choose icon`}>
+          <div
+            aria-label={t`Choose icon`}
+            {...stylex.props(styles.clickableIconWrapper)}
+          >
             {renderedIcon}
-          </StyledClickableIconWrapper>
+          </div>
         }
       />
     ) : (

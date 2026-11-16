@@ -1,5 +1,4 @@
 import { FormWorkspaceMemberFilterValueInput } from '@/object-record/record-field/ui/form-types/components/FormWorkspaceMemberFilterValueInput';
-import { styled } from '@linaria/react';
 import { type Meta, type StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { delay, graphql, HttpResponse } from 'msw';
@@ -13,10 +12,13 @@ import { WorkspaceDecorator } from '~/testing/decorators/WorkspaceDecorator';
 import { WorkflowStepDecorator } from '~/testing/decorators/WorkflowStepDecorator';
 import { graphqlMocks } from '~/testing/graphqlMocks';
 import { MOCKED_STEP_ID } from '~/testing/mock-data/workflow';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledContainer = styled.div`
-  width: 400px;
-`;
+const styles = stylex.create({
+  container: {
+    width: '400px',
+  },
+});
 
 const meta = {
   title: 'UI/Data/Field/Form/Input/FormWorkspaceMemberFilterValueInput',
@@ -34,7 +36,7 @@ const meta = {
     const [value, setValue] = useState(args.defaultValue);
 
     return (
-      <StyledContainer>
+      <div {...stylex.props(styles.container)}>
         <FormWorkspaceMemberFilterValueInput
           {...args}
           defaultValue={value}
@@ -43,7 +45,7 @@ const meta = {
             setValue(isString(nextValue) ? nextValue : '');
           }}
         />
-      </StyledContainer>
+      </div>
     );
   },
 } satisfies Meta<typeof FormWorkspaceMemberFilterValueInput>;

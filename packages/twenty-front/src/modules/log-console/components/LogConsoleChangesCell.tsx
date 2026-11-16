@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { plural } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react/macro';
 import { useId } from 'react';
@@ -13,10 +12,13 @@ import { objectMetadataItemsByIdMapSelector } from '@/object-metadata/states/obj
 import { TableCell } from '@/ui/layout/table/components/TableCell';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { type EventLogRecord } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledOtherFieldDiffCount = styled.span`
-  flex-shrink: 0;
-`;
+const styles = stylex.create({
+  otherFieldDiffCount: {
+    flexShrink: '0',
+  },
+});
 
 type LogConsoleChangesCellProps = {
   entry: EventLogRecord;
@@ -59,12 +61,12 @@ export const LogConsoleChangesCell = ({
         />
       )}
       {otherFieldDiffs.length > 0 && (
-        <StyledOtherFieldDiffCount>
+        <span {...stylex.props(styles.otherFieldDiffCount)}>
           {plural(otherFieldDiffs.length, {
             one: 'and # more',
             other: 'and # more',
           })}
-        </StyledOtherFieldDiffCount>
+        </span>
       )}
     </TableCell>
   );

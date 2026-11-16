@@ -1,36 +1,14 @@
-import { TABLE_Z_INDEX } from '@/object-record/record-table/constants/TableZIndex';
+import { recordTableZIndex } from '../../constants/recordTableLayout.stylex';
 import { getRecordTableColumnFieldWidthClassName } from '@/object-record/record-table/utils/getRecordTableColumnFieldWidthClassName';
-import { cx } from '@linaria/core';
-import { styled } from '@linaria/react';
+import { mergeClassName } from '@/page-layout/utils/mergeClassName';
+import * as stylex from '@stylexjs/stylex';
 import { type ReactNode } from 'react';
-import { useTheme } from 'twenty-ui/theme';
-
-const StyledRecordTableTd = styled.div<{
-  backgroundColor: string;
-  borderColor: string;
-  isDragging?: boolean;
-  fontColor: string;
-  hasRightBorder?: boolean;
-  hasBottomBorder?: boolean;
-  zIndex: number;
-}>`
-  background: ${({ backgroundColor, isDragging }) =>
-    isDragging ? 'transparent' : backgroundColor};
-
-  border-bottom: 1px solid
-    ${({ borderColor, hasBottomBorder, isDragging }) =>
-      hasBottomBorder && !isDragging ? borderColor : 'transparent'};
-  border-right: ${({ borderColor, hasRightBorder }) =>
-    hasRightBorder ? `1px solid ${borderColor}` : 'none'};
-
-  color: ${({ fontColor }) => fontColor};
-
-  padding: 0;
-
-  text-align: left;
-
-  z-index: ${({ zIndex }) => zIndex};
-`;
+import {
+  accent,
+  background,
+  borderColor,
+  fontColor,
+} from 'twenty-ui/theme/tokens.stylex';
 
 export const RecordTableCellFirstRowFirstColumn = ({
   children,
@@ -45,33 +23,53 @@ export const RecordTableCellFirstRowFirstColumn = ({
   hasRightBorder?: boolean;
   hasBottomBorder?: boolean;
 }) => {
-  const theme = useTheme();
-
-  const zIndex = TABLE_Z_INDEX.cell.sticky;
-
-  const tdBackgroundColor = isSelected
-    ? theme.accent.quaternary
-    : theme.background.primary;
-
-  const borderColor = theme.border.color.light;
-
-  const fontColor = theme.font.color.primary;
+  const stylexProps = stylex.props(
+    styles.cell,
+    isSelected && styles.selected,
+    hasRightBorder && styles.rightBorder,
+    hasBottomBorder && !isDragging && styles.bottomBorder,
+    isDragging && styles.dragging,
+  );
 
   return (
-    <StyledRecordTableTd
-      isDragging={isDragging}
-      backgroundColor={tdBackgroundColor}
-      borderColor={borderColor}
-      fontColor={fontColor}
-      hasRightBorder={hasRightBorder}
-      hasBottomBorder={hasBottomBorder}
-      zIndex={zIndex}
-      className={cx(
-        'table-cell-0-0',
-        getRecordTableColumnFieldWidthClassName(0),
+    <div
+      {...mergeClassName(
+        stylexProps,
+        `table-cell-0-0 ${getRecordTableColumnFieldWidthClassName(0)}`,
       )}
     >
       {children}
-    </StyledRecordTableTd>
+    </div>
   );
 };
+
+const styles = stylex.create({
+  cell: {
+    backgroundColor: background['--t-background-primary'],
+    borderBottomColor: 'transparent',
+    borderBottomStyle: 'solid',
+    borderBottomWidth: 1,
+    borderRightStyle: 'none',
+    color: fontColor['--t-font-color-primary'],
+    paddingBottom: 0,
+    paddingLeft: 0,
+    paddingRight: 0,
+    paddingTop: 0,
+    textAlign: 'left',
+    zIndex: recordTableZIndex.cellSticky,
+  },
+  selected: {
+    backgroundColor: accent['--t-accent-quaternary'],
+  },
+  rightBorder: {
+    borderRightColor: borderColor['--t-border-color-light'],
+    borderRightStyle: 'solid',
+    borderRightWidth: 1,
+  },
+  bottomBorder: {
+    borderBottomColor: borderColor['--t-border-color-light'],
+  },
+  dragging: {
+    backgroundColor: 'transparent',
+  },
+});

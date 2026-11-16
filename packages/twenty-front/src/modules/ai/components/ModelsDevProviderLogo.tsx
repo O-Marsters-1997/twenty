@@ -1,6 +1,12 @@
-import { styled } from '@linaria/react';
 import { type IconComponentProps } from 'twenty-ui/icon';
 import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { isDefined } from 'twenty-shared/utils';
+
+const styles = stylex.create({
+  logo: { objectFit: 'contain' },
+  inverted: { filter: 'invert(1)' },
+});
 
 type ModelsDevProviderLogoProps = {
   logoUrl: string;
@@ -21,10 +27,6 @@ const resolvePixelSize = (
   return 16;
 };
 
-const StyledLogo = styled.img`
-  object-fit: contain;
-`;
-
 export const ModelsDevProviderLogo = ({
   logoUrl,
   size,
@@ -34,17 +36,18 @@ export const ModelsDevProviderLogo = ({
   const theme = useTheme();
   const pixelSize = resolvePixelSize(size);
   const isLightTheme = theme.name === 'light';
+  const stylexProps = stylex.props(
+    styles.logo,
+    !isLightTheme && styles.inverted,
+  );
 
   return (
-    <StyledLogo
+    <img
       alt=""
-      className={className}
+      className={[stylexProps.className, className].filter(isDefined).join(' ')}
       height={pixelSize}
       src={logoUrl}
-      style={{
-        ...style,
-        filter: isLightTheme ? 'none' : 'invert(1)',
-      }}
+      style={{ ...stylexProps.style, ...style }}
       width={pixelSize}
     />
   );

@@ -9,7 +9,6 @@ import { useUpsertFieldPermissionInDraftRole } from '@/settings/roles/role-permi
 import { OverridableCheckbox } from '@/settings/roles/role-permissions/object-level-permissions/object-form/components/OverridableCheckbox';
 import { TableCell } from '@/ui/layout/table/components/TableCell';
 import { TableRow } from '@/ui/layout/table/components/TableRow';
-import { styled } from '@linaria/react';
 import { useMemo } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { useIcons } from 'twenty-ui/icon';
@@ -19,17 +18,19 @@ import {
   type FieldPermission,
   RelationType,
 } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
 
 export const FIELD_PERMISSION_TABLE_ROW_GRID_TEMPLATE_COLUMNS =
   '180px minmax(0, 1fr) 60px 60px';
 
-const StyledNameLabel = styled.div`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  user-select: none;
-
-  white-space: nowrap;
-`;
+const styles = stylex.create({
+  nameLabel: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    userSelect: 'none',
+    whiteSpace: 'nowrap',
+  },
+});
 
 type SettingsRolePermissionsObjectLevelObjectFieldPermissionTableRowProps = {
   fieldMetadataItem: FieldMetadataItem;
@@ -166,9 +167,12 @@ export const SettingsRolePermissionsObjectLevelObjectFieldPermissionTableRow =
               stroke={theme.icon.stroke.sm}
             />
           )}
-          <StyledNameLabel title={fieldMetadataItem.label}>
+          <div
+            title={fieldMetadataItem.label}
+            {...stylex.props(styles.nameLabel)}
+          >
             {fieldMetadataItem.label}
-          </StyledNameLabel>
+          </div>
         </TableCell>
         <TableCell>
           <SettingsObjectFieldDataType

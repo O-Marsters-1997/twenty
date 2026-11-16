@@ -1,5 +1,4 @@
 import { useMutation } from '@apollo/client/react';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { useState } from 'react';
 import { SettingsPath } from 'twenty-shared/types';
@@ -7,7 +6,6 @@ import { useToast } from 'twenty-ui/components/feedback';
 import { Section } from 'twenty-ui/components/layout';
 import { IconArchive, IconArchiveOff, IconTrash } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { getToastOptionsFromError } from '@/error-handler/utils/getToastOptionsFromError';
 import { ConfirmationDialog } from '@/ui/layout/dialog/components/ConfirmationDialog';
@@ -19,11 +17,15 @@ import {
   type FindOneSkillQuery,
 } from '~/generated-metadata/graphql';
 import { useNavigateSettings } from '~/hooks/useNavigateSettings';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledDangerButtonsContainer = styled.div`
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  dangerButtonsContainer: {
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+  },
+});
 
 const DELETE_SKILL_MODAL_ID = 'delete-skill-modal';
 
@@ -77,7 +79,7 @@ export const SettingsSkillDangerZone = ({
         title={t`Danger zone`}
         description={t`Deactivate or delete this skill`}
       />
-      <StyledDangerButtonsContainer>
+      <div {...stylex.props(styles.dangerButtonsContainer)}>
         <Button
           startIcon={skill.isActive ? <IconArchive /> : <IconArchiveOff />}
           size="sm"
@@ -94,7 +96,7 @@ export const SettingsSkillDangerZone = ({
             color="danger"
           >{t`Delete`}</Button>
         )}
-      </StyledDangerButtonsContainer>
+      </div>
       <ConfirmationDialog
         dialogId={DELETE_SKILL_MODAL_ID}
         title={t`Delete Skill`}

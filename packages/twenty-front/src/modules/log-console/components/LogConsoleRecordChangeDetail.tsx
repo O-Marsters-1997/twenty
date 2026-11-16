@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useId } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -7,7 +6,6 @@ import { isDefined, isNonEmptyArray } from 'twenty-shared/utils';
 import { Section } from 'twenty-ui/components/layout';
 import { IconArrowUpRight, useIcons } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { EventFieldDiffValue } from '@/activities/timeline-activities/rows/main-object/components/EventFieldDiffValue';
 import { EventFieldDiffValueEffect } from '@/activities/timeline-activities/rows/main-object/components/EventFieldDiffValueEffect';
@@ -22,20 +20,22 @@ import { LogConsoleFieldRow } from '@/log-console/components/LogConsoleFieldRow'
 import { useOpenRecordInSidePanel } from '@/side-panel/hooks/useOpenRecordInSidePanel';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { type EventLogRecord } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledRecordChange = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledEmptyValue = styled.span`
-  color: ${themeCssVariables.font.color.tertiary};
-`;
-
-const StyledOpenRecordButton = styled(Button)`
-  align-self: flex-start;
-`;
+const styles = stylex.create({
+  recordChange: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+  },
+  emptyValue: {
+    color: fontColor['--t-font-color-tertiary'],
+  },
+  openRecordButton: {
+    alignSelf: 'flex-start',
+  },
+});
 
 type LogConsoleRecordChangeDetailProps = {
   entry: EventLogRecord;
@@ -84,7 +84,7 @@ export const LogConsoleRecordChangeDetail = ({
     const value = fieldDiff[displayedSnapshot];
 
     if (isLogConsoleFieldValueEmpty({ fieldMetadataItem, value })) {
-      return <StyledEmptyValue>{t`Empty`}</StyledEmptyValue>;
+      return <span {...stylex.props(styles.emptyValue)}>{t`Empty`}</span>;
     }
 
     if (fieldMetadataItem.type === FieldMetadataType.RELATION) {
@@ -118,7 +118,7 @@ export const LogConsoleRecordChangeDetail = ({
   };
 
   return (
-    <StyledRecordChange>
+    <div {...stylex.props(styles.recordChange)}>
       {isDefined(action.valuesTitle) &&
         (isNonEmptyArray(fieldDiffs) || !isDefined(recordSnapshot)) && (
           <Section.Root>
@@ -151,7 +151,8 @@ export const LogConsoleRecordChangeDetail = ({
           </Section.Root>
         )}
       {isDefined(recordSnapshot) && isDefined(recordSnapshot.id) && (
-        <StyledOpenRecordButton
+        <Button
+          xstyle={styles.openRecordButton}
           size="sm"
           startIcon={<IconArrowUpRight />}
           onClick={() =>
@@ -162,8 +163,8 @@ export const LogConsoleRecordChangeDetail = ({
           }
         >
           {t`Open record`}
-        </StyledOpenRecordButton>
+        </Button>
       )}
-    </StyledRecordChange>
+    </div>
   );
 };

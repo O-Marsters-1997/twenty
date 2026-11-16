@@ -1,57 +1,9 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import { accent, animationDuration, backgroundTransparent, color, fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 import { isDefined } from 'twenty-shared/utils';
 import { Banner } from 'twenty-ui/primitives/feedback';
 import { IconChevronDown, IconInfoCircle } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
-
-const StyledBannerContainer = styled.div<{ allMatched: boolean }>`
-  > div {
-    background: ${({ allMatched }) =>
-      allMatched
-        ? themeCssVariables.accent.secondary
-        : themeCssVariables.background.transparent.light};
-    border-radius: ${themeCssVariables.spacing[2]};
-    padding: ${themeCssVariables.spacing[2]} 10px;
-  }
-`;
-
-const StyledText = styled.div<{ allMatched: boolean }>`
-  color: ${({ allMatched }) =>
-    allMatched
-      ? themeCssVariables.color.blue
-      : themeCssVariables.font.color.secondary};
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledIconChevronDownWrapper = styled.div<{
-  isExpanded: boolean;
-  allMatched: boolean;
-}>`
-  align-items: center;
-  color: ${({ allMatched }) =>
-    allMatched
-      ? themeCssVariables.color.blue
-      : themeCssVariables.font.color.secondary};
-  cursor: pointer;
-  display: flex;
-  transform: ${({ isExpanded }) =>
-    isExpanded ? 'rotate(180deg)' : 'rotate(0deg)'};
-  transition: transform
-    calc(${themeCssVariables.animation.duration.normal} * 1s) ease;
-`;
-
-const StyledClickableContainer = styled.div`
-  align-items: center;
-  cursor: pointer;
-
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  width: 100%;
-`;
+import { useTheme } from 'twenty-ui/theme';
 
 export const UnmatchColumnBanner = ({
   message,
@@ -67,26 +19,97 @@ export const UnmatchColumnBanner = ({
   const theme = useTheme();
 
   return (
-    <StyledBannerContainer allMatched={allMatched}>
-      <Banner>
-        <IconInfoCircle
-          color={allMatched ? theme.color.blue : theme.font.color.secondary}
-          size={theme.icon.size.md}
-        />
-        {isDefined(buttonOnClick) ? (
-          <StyledClickableContainer onClick={buttonOnClick}>
-            <StyledText allMatched={allMatched}>{message}</StyledText>
-            <StyledIconChevronDownWrapper
-              isExpanded={isExpanded}
-              allMatched={allMatched}
-            >
-              <IconChevronDown size={theme.icon.size.md} />
-            </StyledIconChevronDownWrapper>
-          </StyledClickableContainer>
-        ) : (
-          <StyledText allMatched={allMatched}>{message}</StyledText>
-        )}
-      </Banner>
-    </StyledBannerContainer>
+    <Banner
+      {...stylex.props(
+        styles.banner,
+        allMatched ? styles.bannerMatched : styles.bannerUnmatched,
+      )}
+    >
+      <IconInfoCircle
+        color={allMatched ? theme.color.blue : theme.font.color.secondary}
+        size={theme.icon.size.md}
+      />
+      {isDefined(buttonOnClick) ? (
+        <div
+          onClick={buttonOnClick}
+          {...stylex.props(styles.clickableContainer)}
+        >
+          <div
+            {...stylex.props(
+              styles.text,
+              allMatched ? styles.textMatched : styles.textUnmatched,
+            )}
+          >
+            {message}
+          </div>
+          <div
+            {...stylex.props(
+              styles.chevronWrapper,
+              allMatched ? styles.textMatched : styles.textUnmatched,
+              isExpanded && styles.chevronExpanded,
+            )}
+          >
+            <IconChevronDown size={theme.icon.size.md} />
+          </div>
+        </div>
+      ) : (
+        <div
+          {...stylex.props(
+            styles.text,
+            allMatched ? styles.textMatched : styles.textUnmatched,
+          )}
+        >
+          {message}
+        </div>
+      )}
+    </Banner>
   );
 };
+
+const styles = stylex.create({
+  banner: {
+    borderRadius: spacing['--t-spacing-2'],
+    paddingBlock: spacing['--t-spacing-2'],
+    paddingInline: '10px',
+  },
+  bannerMatched: {
+    background: accent['--t-accent-secondary'],
+  },
+  bannerUnmatched: {
+    background: backgroundTransparent['--t-background-transparent-light'],
+  },
+  clickableContainer: {
+    alignItems: 'center',
+    cursor: 'pointer',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  text: {
+    flexBasis: '0%',
+    flexGrow: 1,
+    flexShrink: 1,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  textMatched: {
+    color: color['--t-color-blue'],
+  },
+  textUnmatched: {
+    color: fontColor['--t-font-color-secondary'],
+  },
+  chevronWrapper: {
+    alignItems: 'center',
+    cursor: 'pointer',
+    display: 'flex',
+    transform: 'rotate(0deg)',
+    transitionDuration: `calc(${animationDuration['--t-animation-duration-normal']} * 1s)`,
+    transitionProperty: 'transform',
+    transitionTimingFunction: 'ease',
+  },
+  chevronExpanded: {
+    transform: 'rotate(180deg)',
+  },
+});

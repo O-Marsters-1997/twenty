@@ -23,7 +23,6 @@ import { useDialog } from '@/ui/layout/dialog/hooks/useDialog';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useIsFeatureEnabled } from '@/workspace/hooks/useIsFeatureEnabled';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useForm } from 'react-hook-form';
 import { SettingsPath } from 'twenty-shared/types';
@@ -32,32 +31,16 @@ import { useToast } from 'twenty-ui/components/feedback';
 import { Section } from 'twenty-ui/components/layout';
 import { IconArchive, IconTrash } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { FeatureFlagKey } from '~/generated-metadata/graphql';
 import { useNavigateSettings } from '~/hooks/useNavigateSettings';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type ObjectSettingsProps = {
   objectMetadataItem: EnrichedObjectMetadataItem;
   isDeleting: boolean;
   setIsDeleting: (isDeleting: boolean) => void;
 };
-
-const StyledContentContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[8]};
-`;
-
-const StyledFormSectionContainer = styled.div`
-  > * {
-    padding-left: 0 !important;
-  }
-`;
-
-const StyledDangerButtonsContainer = styled.div`
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-`;
 
 const DELETE_OBJECT_MODAL_ID = 'delete-object-confirmation-modal';
 
@@ -139,126 +122,110 @@ export const ObjectSettings = ({
   const objectLabel = objectMetadataItem.labelPlural;
 
   return (
-    <StyledContentContainer>
-      <StyledFormSectionContainer>
-        <Section.Root>
-          <Section.Header
-            title={t`About`}
-            description={t`Name in both singular (e.g., 'Invoice') and plural (e.g., 'Invoices') forms.`}
-          />
-          <SettingsUpdateDataModelObjectAboutForm
-            objectMetadataItem={objectMetadataItem}
-            formConfig={aboutFormConfig}
-          />
-        </Section.Root>
-      </StyledFormSectionContainer>
-      <StyledFormSectionContainer>
-        <Section.Root>
-          <Section.Header
-            title={t`Options`}
-            description={t`Choose the fields that will identify your records`}
-          />
-          <SettingsDataModelObjectSettingsFormCard
-            objectMetadataItem={objectMetadataItem}
-          />
-        </Section.Root>
-      </StyledFormSectionContainer>
-      <StyledFormSectionContainer>
-        <Section.Root>
-          <Section.Header
-            title={t`Translations`}
-            description={t`What each language displays for this object's labels`}
-          />
-          <SettingsTranslationsCard
-            objectNamePlural={objectMetadataItem.namePlural}
-            disabled={hasUnsavedAboutEdits}
-          />
-        </Section.Root>
-      </StyledFormSectionContainer>
+    <div {...stylex.props(styles.contentContainer)}>
+      <Section.Root {...stylex.props(styles.formSection)}>
+        <Section.Header
+          title={t`About`}
+          description={t`Name in both singular (e.g., 'Invoice') and plural (e.g., 'Invoices') forms.`}
+        />
+        <SettingsUpdateDataModelObjectAboutForm
+          objectMetadataItem={objectMetadataItem}
+          formConfig={aboutFormConfig}
+        />
+      </Section.Root>
+      <Section.Root {...stylex.props(styles.formSection)}>
+        <Section.Header
+          title={t`Options`}
+          description={t`Choose the fields that will identify your records`}
+        />
+        <SettingsDataModelObjectSettingsFormCard
+          objectMetadataItem={objectMetadataItem}
+        />
+      </Section.Root>
+      <Section.Root {...stylex.props(styles.formSection)}>
+        <Section.Header
+          title={t`Translations`}
+          description={t`What each language displays for this object's labels`}
+        />
+        <SettingsTranslationsCard
+          objectNamePlural={objectMetadataItem.namePlural}
+          disabled={hasUnsavedAboutEdits}
+        />
+      </Section.Root>
       {isValidationRulesEnabled &&
         !objectMetadataItem.isRemote &&
         !objectMetadataItem.isSystem && (
-          <StyledFormSectionContainer>
-            <Section.Root>
-              <Section.Header
-                title={t`Validation rules`}
-                description={t`A record saves only when every active rule is true. Rules run on every write: forms, API, imports and workflows.`}
-              />
-              <SettingsObjectValidationRulesSection
-                objectMetadataItem={objectMetadataItem}
-                isReadOnly={isReadOnly}
-              />
-            </Section.Root>
-          </StyledFormSectionContainer>
+          <Section.Root {...stylex.props(styles.formSection)}>
+            <Section.Header
+              title={t`Validation rules`}
+              description={t`A record saves only when every active rule is true. Rules run on every write: forms, API, imports and workflows.`}
+            />
+            <SettingsObjectValidationRulesSection
+              objectMetadataItem={objectMetadataItem}
+              isReadOnly={isReadOnly}
+            />
+          </Section.Root>
         )}
       {isRecordLevelSharingEnabled &&
         isShareableObjectMetadataItem(objectMetadataItem) && (
-          <StyledFormSectionContainer>
-            <Section.Root>
-              <Section.Header
-                title={t`Record sharing`}
-                description={t`Who a record of ${objectLabel} can be shared with. Roles still decide what people see by default.`}
-              />
-              <ObjectSharingReachPicker
-                objectMetadataItem={objectMetadataItem}
-                isReadOnly={isReadOnly}
-              />
-            </Section.Root>
-          </StyledFormSectionContainer>
+          <Section.Root {...stylex.props(styles.formSection)}>
+            <Section.Header
+              title={t`Record sharing`}
+              description={t`Who a record of ${objectLabel} can be shared with. Roles still decide what people see by default.`}
+            />
+            <ObjectSharingReachPicker
+              objectMetadataItem={objectMetadataItem}
+              isReadOnly={isReadOnly}
+            />
+          </Section.Root>
         )}
       <AdvancedSettingsWrapper>
-        <StyledFormSectionContainer>
-          <Section.Root>
-            <Section.Header
-              title={t`Search`}
-              description={t`Configure how this object appears in search results`}
-            />
-            <SettingsObjectSearchSection
-              objectMetadataItem={objectMetadataItem}
-              isReadOnly={isReadOnly}
-            />
-          </Section.Root>
-        </StyledFormSectionContainer>
+        <Section.Root {...stylex.props(styles.formSection)}>
+          <Section.Header
+            title={t`Search`}
+            description={t`Configure how this object appears in search results`}
+          />
+          <SettingsObjectSearchSection
+            objectMetadataItem={objectMetadataItem}
+            isReadOnly={isReadOnly}
+          />
+        </Section.Root>
       </AdvancedSettingsWrapper>
       <AdvancedSettingsWrapper>
-        <StyledFormSectionContainer>
-          <Section.Root>
-            <Section.Header
-              title={t`Indexes`}
-              description={t`Speed up reads on the fields you filter or sort by most. Each index also slows down writes and uses disk space, so add them with intent.`}
-            />
-            <SettingsObjectIndexesSection
-              objectMetadataItem={objectMetadataItem}
-              isReadOnly={isReadOnly}
-            />
-          </Section.Root>
-        </StyledFormSectionContainer>
+        <Section.Root {...stylex.props(styles.formSection)}>
+          <Section.Header
+            title={t`Indexes`}
+            description={t`Speed up reads on the fields you filter or sort by most. Each index also slows down writes and uses disk space, so add them with intent.`}
+          />
+          <SettingsObjectIndexesSection
+            objectMetadataItem={objectMetadataItem}
+            isReadOnly={isReadOnly}
+          />
+        </Section.Root>
       </AdvancedSettingsWrapper>
       {!isReadOnly && (
-        <StyledFormSectionContainer>
-          <Section.Root>
-            <Section.Header
-              title={t`Danger zone`}
-              description={t`Deactivate object`}
-            />
-            <StyledDangerButtonsContainer>
+        <Section.Root {...stylex.props(styles.formSection)}>
+          <Section.Header
+            title={t`Danger zone`}
+            description={t`Deactivate object`}
+          />
+          <div {...stylex.props(styles.dangerButtonsContainer)}>
+            <Button
+              startIcon={<IconArchive />}
+              size="sm"
+              onClick={handleDisable}
+            >{t`Deactivate`}</Button>
+            {getIsMetadataItemCustom(objectMetadataItem) && (
               <Button
-                startIcon={<IconArchive />}
+                startIcon={<IconTrash />}
                 size="sm"
-                onClick={handleDisable}
-              >{t`Deactivate`}</Button>
-              {getIsMetadataItemCustom(objectMetadataItem) && (
-                <Button
-                  startIcon={<IconTrash />}
-                  size="sm"
-                  onClick={handleDelete}
-                  variant="outline"
-                  color="danger"
-                >{t`Delete`}</Button>
-              )}
-            </StyledDangerButtonsContainer>
-          </Section.Root>
-        </StyledFormSectionContainer>
+                onClick={handleDelete}
+                variant="outline"
+                color="danger"
+              >{t`Delete`}</Button>
+            )}
+          </div>
+        </Section.Root>
       )}
       <ConfirmationDialog
         dialogId={DELETE_OBJECT_MODAL_ID}
@@ -271,6 +238,21 @@ export const ObjectSettings = ({
         confirmationPlaceholder="yes"
         loading={isDeleting}
       />
-    </StyledContentContainer>
+    </div>
   );
 };
+
+const styles = stylex.create({
+  contentContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-8'],
+  },
+  formSection: {
+    paddingLeft: 0,
+  },
+  dangerButtonsContainer: {
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+  },
+});

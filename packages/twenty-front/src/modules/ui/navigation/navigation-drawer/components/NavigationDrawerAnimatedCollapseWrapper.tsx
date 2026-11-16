@@ -1,16 +1,17 @@
 import { useIsNavigationDrawerContentExpanded } from '@/ui/navigation/navigation-drawer/hooks/useIsNavigationDrawerContentExpanded';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import {
   type AnimationControls,
   motion,
   type TargetAndTransition,
 } from 'framer-motion';
 import { useTheme } from 'twenty-ui/theme';
-const StyledAnimatedContainerBase = styled.span`
-  display: block;
-`;
 
-const StyledAnimatedContainer = motion.create(StyledAnimatedContainerBase);
+const styles = stylex.create({
+  container: {
+    display: 'block',
+  },
+});
 
 export const NavigationDrawerAnimatedCollapseWrapper = ({
   children,
@@ -36,15 +37,16 @@ export const NavigationDrawerAnimatedCollapseWrapper = ({
         };
 
   return (
-    <StyledAnimatedContainer
+    <motion.span
       inert={!isNavigationDrawerExpanded || undefined}
       initial={false}
       animate={animate}
       transition={{
         duration: theme.animation.duration.normal,
       }}
+      {...stylex.props(styles.container)}
     >
       {children}
-    </StyledAnimatedContainer>
+    </motion.span>
   );
 };

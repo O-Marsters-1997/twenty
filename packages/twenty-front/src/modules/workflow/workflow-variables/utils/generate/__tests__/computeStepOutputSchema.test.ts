@@ -95,7 +95,6 @@ describe('computeStepOutputSchema', () => {
 
       expect(result).toBeUndefined();
     });
-
   });
 
   describe('DATABASE_EVENT trigger', () => {

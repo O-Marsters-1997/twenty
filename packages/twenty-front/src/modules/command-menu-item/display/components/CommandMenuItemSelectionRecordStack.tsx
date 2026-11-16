@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 import { isDefined } from 'twenty-shared/utils';
@@ -8,6 +7,8 @@ import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/Enriche
 import { type ObjectRecord } from '@/object-record/types/ObjectRecord';
 import { SidePanelContextRecordChipAvatars } from '@/side-panel/components/SidePanelContextRecordChipAvatars';
 import { EASE_OUT } from '@/ui/theme/constants/EaseOut';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 // Card offsets in the 24px icon column for 1, 2 and 3 cards, front card first.
 const CARD_POSITIONS_BY_RECORD_COUNT = [
@@ -30,19 +31,18 @@ const DROP_SCALE = 1.25;
 const HIDDEN_SCALE = 0.8;
 const OPENING_STAGGER_IN_SECONDS = 0.04;
 
-const StyledStack = styled.div`
-  height: ${themeCssVariables.spacing[6]};
-  position: relative;
-  width: ${themeCssVariables.spacing[6]};
-`;
-
-const StyledCardBase = styled.div`
-  left: 0;
-  position: absolute;
-  top: 0;
-`;
-
-const StyledCard = motion.create(StyledCardBase);
+const styles = stylex.create({
+  stack: {
+    height: spacing['--t-spacing-6'],
+    position: 'relative',
+    width: spacing['--t-spacing-6'],
+  },
+  card: {
+    left: 0,
+    position: 'absolute',
+    top: 0,
+  },
+});
 
 type CommandMenuItemSelectionRecordStackProps = {
   objectMetadataItem: EnrichedObjectMetadataItem;
@@ -65,7 +65,7 @@ export const CommandMenuItemSelectionRecordStack = ({
   const cardPositions = CARD_POSITIONS_BY_RECORD_COUNT[records.length] ?? [];
 
   return (
-    <StyledStack>
+    <div {...stylex.props(styles.stack)}>
       <AnimatePresence>
         {records.map((record, index) => {
           const depth = records.length - 1 - index;
@@ -98,7 +98,8 @@ export const CommandMenuItemSelectionRecordStack = ({
                 };
 
           return (
-            <StyledCard
+            <motion.div
+              {...stylex.props(styles.card)}
               key={record.id}
               initial={initial}
               animate={{
@@ -136,10 +137,10 @@ export const CommandMenuItemSelectionRecordStack = ({
                 record={record}
                 borderColor={themeCssVariables.background.primary}
               />
-            </StyledCard>
+            </motion.div>
           );
         })}
       </AnimatePresence>
-    </StyledStack>
+    </div>
   );
 };

@@ -1,9 +1,7 @@
 import { useQuery } from '@apollo/client/react';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { useState } from 'react';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { CoreAgentRunConversation } from '@/object-core/agents/components/CoreAgentRunConversation';
 import { CoreAgentRunRow } from '@/object-core/agents/components/CoreAgentRunRow';
@@ -17,16 +15,19 @@ import { Table } from '@/ui/layout/table/components/Table';
 import { TableHeader } from '@/ui/layout/table/components/TableHeader';
 import { TableRow } from '@/ui/layout/table/components/TableRow';
 import { GetAgentRunsDocument } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const RUNS_POLL_INTERVAL_MS = 10000;
 
-const StyledTableContainer = styled.div`
-  margin-top: ${themeCssVariables.spacing[3]};
-`;
-
-const StyledTableHeaderRowContainer = styled.div`
-  margin-bottom: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  tableContainer: {
+    marginTop: spacing['--t-spacing-3'],
+  },
+  tableHeaderRowContainer: {
+    marginBottom: spacing['--t-spacing-2'],
+  },
+});
 
 const toggleId = (ids: Set<string>, id: string): Set<string> => {
   const nextIds = new Set(ids);
@@ -60,7 +61,7 @@ export const CoreAgentRunsTab = ({ agentId }: CoreAgentRunsTabProps) => {
   const runs = data?.agentRuns ?? [];
 
   const header = (
-    <StyledTableHeaderRowContainer>
+    <div {...stylex.props(styles.tableHeaderRowContainer)}>
       <TableRow gridTemplateColumns={CORE_AGENT_RUNS_GRID_TEMPLATE_COLUMNS}>
         <TableHeader>{t`Status`}</TableHeader>
         <TableHeader>{t`Started`}</TableHeader>
@@ -69,12 +70,12 @@ export const CoreAgentRunsTab = ({ agentId }: CoreAgentRunsTabProps) => {
         <TableHeader align="right">{t`Tokens`}</TableHeader>
         <TableHeader align="right">{t`Duration`}</TableHeader>
       </TableRow>
-    </StyledTableHeaderRowContainer>
+    </div>
   );
 
   if (loading && runs.length === 0) {
     return (
-      <StyledTableContainer>
+      <div {...stylex.props(styles.tableContainer)}>
         <Table>
           {header}
           {Array.from({ length: 3 }).map((_, index) => (
@@ -87,7 +88,7 @@ export const CoreAgentRunsTab = ({ agentId }: CoreAgentRunsTabProps) => {
             />
           ))}
         </Table>
-      </StyledTableContainer>
+      </div>
     );
   }
 
@@ -123,7 +124,7 @@ export const CoreAgentRunsTab = ({ agentId }: CoreAgentRunsTabProps) => {
     setExpandedRunIds((runIds) => toggleId(runIds, runId));
 
   return (
-    <StyledTableContainer>
+    <div {...stylex.props(styles.tableContainer)}>
       <Table>
         {header}
         {groupCoreAgentRunsByConversation(runs).map((item) =>
@@ -151,6 +152,6 @@ export const CoreAgentRunsTab = ({ agentId }: CoreAgentRunsTabProps) => {
           ),
         )}
       </Table>
-    </StyledTableContainer>
+    </div>
   );
 };

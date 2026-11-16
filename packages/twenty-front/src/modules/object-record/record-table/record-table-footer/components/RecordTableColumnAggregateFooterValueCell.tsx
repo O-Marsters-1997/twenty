@@ -1,5 +1,5 @@
 import { hasRecordGroupsComponentSelector } from '@/object-record/record-group/states/selectors/hasRecordGroupsComponentSelector';
-import { RECORD_TABLE_COLUMN_CHECKBOX_WIDTH } from '@/object-record/record-table/constants/RecordTableColumnCheckboxWidth';
+import { recordTableLayout } from '../../constants/recordTableLayout.stylex';
 
 import { RecordTableColumnAggregateFooterCellContext } from '@/object-record/record-table/record-table-footer/components/RecordTableColumnAggregateFooterCellContext';
 import { RecordTableColumnAggregateFooterValue } from '@/object-record/record-table/record-table-footer/components/RecordTableColumnAggregateFooterValue';
@@ -8,45 +8,45 @@ import { isDropdownOpenComponentState } from '@/ui/layout/dropdown/states/isDrop
 import { useAtomFamilySelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilySelectorValue';
 import { useAtomComponentSelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentSelectorValue';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { styled } from '@linaria/react';
 import { useContext, useState } from 'react';
 import { IconChevronDown } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { background, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledCell = styled.div<{ isUnfolded: boolean; isFirstCell: boolean }>`
-  align-items: center;
-  background: ${({ isUnfolded }) =>
-    isUnfolded ? themeCssVariables.background.tertiary : 'none'};
-  cursor: pointer;
-  display: flex;
-  flex-direction: row;
-
-  flex-grow: 1;
-  flex-shrink: 0;
-  font-weight: ${themeCssVariables.font.weight.medium};
-  gap: ${themeCssVariables.spacing[1]};
-  height: ${themeCssVariables.spacing[8]};
-  justify-content: space-between;
-
-  max-width: 100%;
-
-  min-width: ${themeCssVariables.spacing[7]};
-
-  padding-left: ${({ isFirstCell }) =>
-    isFirstCell
-      ? `calc(${RECORD_TABLE_COLUMN_CHECKBOX_WIDTH} + ${themeCssVariables.spacing[1]})`
-      : '0'};
-`;
-
-const StyledIconContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-grow: 0;
-  flex-shrink: 0;
-  height: 20px;
-  justify-content: center;
-  padding-right: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  cell: {
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    cursor: 'pointer',
+    display: 'flex',
+    flexDirection: 'row',
+    flexGrow: 1,
+    flexShrink: 0,
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    gap: spacing['--t-spacing-1'],
+    height: spacing['--t-spacing-8'],
+    justifyContent: 'space-between',
+    maxWidth: '100%',
+    minWidth: spacing['--t-spacing-7'],
+    paddingLeft: 0,
+  },
+  cellUnfolded: {
+    backgroundColor: background['--t-background-tertiary'],
+  },
+  cellFirst: {
+    paddingLeft: `calc(${recordTableLayout.checkboxColumnWidth}px + ${spacing['--t-spacing-1']})`,
+  },
+  iconContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexGrow: '0',
+    flexShrink: '0',
+    height: '20px',
+    justifyContent: 'center',
+    paddingRight: spacing['--t-spacing-2'],
+  },
+});
 
 export const RecordTableColumnAggregateFooterValueCell = ({
   dropdownId,
@@ -83,7 +83,13 @@ export const RecordTableColumnAggregateFooterValueCell = ({
       }}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <StyledCell isUnfolded={isDropdownOpen} isFirstCell={isFirstCell}>
+      <div
+        {...stylex.props(
+          styles.cell,
+          isDropdownOpen && styles.cellUnfolded,
+          isFirstCell && styles.cellFirst,
+        )}
+      >
         {isHovered ||
         isDropdownOpen ||
         hasAggregateOperationForViewField ||
@@ -94,15 +100,15 @@ export const RecordTableColumnAggregateFooterValueCell = ({
               dropdownId={dropdownId}
             />
             {!hasAggregateOperationForViewField && (
-              <StyledIconContainer>
+              <div {...stylex.props(styles.iconContainer)}>
                 <IconChevronDown fontWeight="light" size={theme.icon.size.sm} />
-              </StyledIconContainer>
+              </div>
             )}
           </>
         ) : (
           <></>
         )}
-      </StyledCell>
+      </div>
     </div>
   );
 };

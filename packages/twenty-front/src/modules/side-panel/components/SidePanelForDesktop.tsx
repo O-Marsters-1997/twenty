@@ -20,59 +20,68 @@ import { ParentClickOutsideIdContext } from '@/ui/utilities/pointer-event/contex
 import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomState';
-import { styled } from '@linaria/react';
 import { useReducedMotion } from 'framer-motion';
 import { useStore } from 'jotai';
 import { type AnimationEvent, useCallback, useState } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  animationDuration,
+  background,
+  borderColor,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledSidePanelWrapper = styled.div<{
-  isOpen: boolean;
-  isResizing: boolean;
-}>`
-  flex-shrink: 0;
-  min-width: 0;
-  overflow: hidden;
-  transition: ${({ isResizing }) =>
-    isResizing
-      ? 'none'
-      : `width calc(${themeCssVariables.animation.duration.normal} * 1s)`};
-  width: ${({ isOpen }) => (isOpen ? `var(${SIDE_PANEL_WIDTH_VAR})` : '0px')};
+const SIDE_PANEL_WIDTH = `var(${SIDE_PANEL_WIDTH_VAR})`;
 
-  @keyframes sidePanelShrinkFromFullWidth {
-    from {
-      width: 100%;
-    }
-  }
+const shrinkFromFullWidth = stylex.keyframes({
+  from: { width: '100%' },
+});
 
-  &[data-shrink-from-full-width='true'] {
-    animation: sidePanelShrinkFromFullWidth
-      calc(${themeCssVariables.animation.duration.normal} * 1s);
-  }
-`;
-
-const StyledSidePanel = styled.aside<{ isShrinkingFromFullWidth: boolean }>`
-  background: ${themeCssVariables.background.primary};
-  border-left: 1px solid ${themeCssVariables.border.color.medium};
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow: hidden;
-  position: relative;
-  width: ${({ isShrinkingFromFullWidth }) =>
-    isShrinkingFromFullWidth ? '100%' : `var(${SIDE_PANEL_WIDTH_VAR})`};
-`;
-
-const StyledModalContainer = styled.div`
-  height: 100%;
-  left: 0;
-  pointer-events: none;
-  position: absolute;
-  top: 0;
-  width: 100%;
-  z-index: 1;
-`;
+const styles = stylex.create({
+  wrapper: {
+    flexShrink: 0,
+    minWidth: 0,
+    overflow: 'hidden',
+    transitionDuration: `calc(${animationDuration['--t-animation-duration-normal']} * 1s)`,
+    transitionProperty: 'width',
+  },
+  wrapperResizing: {
+    transitionProperty: 'none',
+  },
+  wrapperClosed: {
+    width: '0px',
+  },
+  width: (width: string) => ({
+    width,
+  }),
+  wrapperShrinking: {
+    animationDuration: `calc(${animationDuration['--t-animation-duration-normal']} * 1s)`,
+    animationName: shrinkFromFullWidth,
+  },
+  panel: {
+    backgroundColor: background['--t-background-primary'],
+    borderLeftColor: borderColor['--t-border-color-medium'],
+    borderLeftStyle: 'solid',
+    borderLeftWidth: '1px',
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    overflow: 'hidden',
+    position: 'relative',
+  },
+  panelShrinking: {
+    width: '100%',
+  },
+  modalContainer: {
+    height: '100%',
+    left: '0',
+    pointerEvents: 'none',
+    position: 'absolute',
+    top: '0',
+    width: '100%',
+    zIndex: 1,
+  },
+});
 
 export const SidePanelForDesktop = () => {
   const { t } = useLingui();
@@ -199,17 +208,33 @@ export const SidePanelForDesktop = () => {
         />
       )}
 
-      <StyledSidePanelWrapper
-        isOpen={isSidePanelOpened}
-        isResizing={isResizing}
+      <div
+        {...stylex.props(
+          styles.wrapper,
+          isResizing && styles.wrapperResizing,
+          isSidePanelOpened
+            ? styles.width(SIDE_PANEL_WIDTH)
+            : styles.wrapperClosed,
+          isShrinkingFromFullWidth && styles.wrapperShrinking,
+        )}
         onTransitionEnd={handleTransitionEnd}
         onAnimationEnd={handleAnimationEnd}
         data-shrink-from-full-width={isShrinkingFromFullWidth}
         data-side-panel=""
         data-click-outside-id={SIDE_PANEL_CLICK_OUTSIDE_ID}
       >
-        <StyledSidePanel isShrinkingFromFullWidth={isShrinkingFromFullWidth}>
-          <StyledModalContainer ref={handleModalContainerRef} />
+        <aside
+          {...stylex.props(
+            styles.panel,
+            isShrinkingFromFullWidth
+              ? styles.panelShrinking
+              : styles.width(SIDE_PANEL_WIDTH),
+          )}
+        >
+          <div
+            ref={handleModalContainerRef}
+            {...stylex.props(styles.modalContainer)}
+          />
           <DialogContainerContext.Provider
             value={{ container: modalContainer }}
           >
@@ -219,8 +244,8 @@ export const SidePanelForDesktop = () => {
               {shouldShowContent && <SidePanelRouter />}
             </ParentClickOutsideIdContext.Provider>
           </DialogContainerContext.Provider>
-        </StyledSidePanel>
-      </StyledSidePanelWrapper>
+        </aside>
+      </div>
     </>
   );
 };

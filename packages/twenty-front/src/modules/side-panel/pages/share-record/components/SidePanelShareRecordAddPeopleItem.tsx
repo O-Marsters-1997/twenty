@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useState } from 'react';
 import { Dropdown } from 'twenty-ui/components/navigation';
@@ -11,11 +10,14 @@ import { SidePanelShareRecordDropdownItem } from '@/side-panel/pages/share-recor
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { getWorkspaceMemberNameOrEmail } from '@/workspace-member/utils/getWorkspaceMemberNameOrEmail';
 import { RecordShareAccessLevel } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledRecipients = styled.div`
-  max-height: 240px;
-  overflow-y: auto;
-`;
+const styles = stylex.create({
+  recipients: {
+    maxHeight: '240px',
+    overflowY: 'auto',
+  },
+});
 
 type SidePanelShareRecordAddPeopleItemProps = {
   itemId: string;
@@ -78,7 +80,7 @@ export const SidePanelShareRecordAddPeopleItem = ({
         />
       </Dropdown.Section>
       <Dropdown.Separator />
-      <StyledRecipients>
+      <div {...stylex.props(styles.recipients)}>
         <Dropdown.Section>
           {availableMembers.length === 0 && availableRoles.length === 0 && (
             <Dropdown.Empty>{t`No matching people or roles`}</Dropdown.Empty>
@@ -116,7 +118,7 @@ export const SidePanelShareRecordAddPeopleItem = ({
             </Dropdown.ActionItem>
           ))}
         </Dropdown.Section>
-      </StyledRecipients>
+      </div>
     </SidePanelShareRecordDropdownItem>
   );
 };

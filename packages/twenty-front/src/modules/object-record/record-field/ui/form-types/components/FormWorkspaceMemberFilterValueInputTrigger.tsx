@@ -1,27 +1,34 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { IconUserCircle } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { FormFieldPlaceholder } from '@/object-record/record-field/ui/form-types/components/FormFieldPlaceholder';
 import { VariableChipStandalone } from '@/object-record/record-field/ui/form-types/components/VariableChipStandalone';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledTriggerLabel = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.primary};
-  display: flex;
-  flex: 1;
-  gap: ${themeCssVariables.spacing[1]};
-  margin: ${themeCssVariables.spacing[2]};
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledPlaceholderContainer = styled.div`
-  margin: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  triggerLabel: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-primary'],
+    display: 'flex',
+    flex: '1',
+    gap: spacing['--t-spacing-1'],
+    marginTop: spacing['--t-spacing-2'],
+    marginRight: spacing['--t-spacing-2'],
+    marginBottom: spacing['--t-spacing-2'],
+    marginLeft: spacing['--t-spacing-2'],
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  placeholderContainer: {
+    marginTop: spacing['--t-spacing-2'],
+    marginRight: spacing['--t-spacing-2'],
+    marginBottom: spacing['--t-spacing-2'],
+    marginLeft: spacing['--t-spacing-2'],
+  },
+});
 
 type FormWorkspaceMemberFilterValueInputTriggerProps = {
   isVariableValue: boolean;
@@ -52,16 +59,16 @@ export const FormWorkspaceMemberFilterValueInputTrigger = ({
 
   if (isDefined(triggerDisplayText)) {
     return (
-      <StyledTriggerLabel>
+      <div {...stylex.props(styles.triggerLabel)}>
         {isCurrentWorkspaceMemberSelected && <IconUserCircle size={12} />}
         {triggerDisplayText}
-      </StyledTriggerLabel>
+      </div>
     );
   }
 
   return (
-    <StyledPlaceholderContainer>
+    <div {...stylex.props(styles.placeholderContainer)}>
       <FormFieldPlaceholder>{t`Select`}</FormFieldPlaceholder>
-    </StyledPlaceholderContainer>
+    </div>
   );
 };

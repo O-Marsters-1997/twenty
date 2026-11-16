@@ -9,7 +9,6 @@ import { IconPicker } from '@/ui/input/components/IconPicker';
 import { SettingsTextInput } from '@/ui/input/components/SettingsTextInput';
 import { TextArea } from '@/ui/input/components/TextArea';
 import { TooltipDelay } from '@/ui/layout/tooltip/constants/TooltipDelay';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { plural } from 'pluralize';
 import { Controller, useFormContext } from 'react-hook-form';
@@ -18,10 +17,17 @@ import { capitalize, isDefined } from 'twenty-shared/utils';
 import { InlineBanner } from 'twenty-ui/components/feedback';
 import { IconInfoCircle, IconLink, IconRefresh } from 'twenty-ui/icon';
 import { Card, Tooltip } from 'twenty-ui/primitives/surfaces';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import { type StringKeyOf } from 'type-fest';
 import { useNavigateSettings } from '~/hooks/useNavigateSettings';
 import { computeMetadataNamesFromLabels } from '@/object-metadata/utils/computeMetadataNamesFromLabels';
+import * as stylex from '@stylexjs/stylex';
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsDataModelObjectAboutFormProps = {
   disableEdition?: boolean;
@@ -30,43 +36,40 @@ type SettingsDataModelObjectAboutFormProps = {
   conflictingObjectMetadataItem?: EnrichedObjectMetadataItem;
 };
 
-const StyledInputsContainer = styled.div`
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  margin-bottom: ${themeCssVariables.spacing[2]};
-  width: 100%;
-`;
-
-const StyledInputContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const StyledAdvancedSettingsSectionInputWrapper = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[4]};
-  width: 100%;
-`;
-
-const StyledAdvancedSettingsOuterContainer = styled.div`
-  padding-top: ${themeCssVariables.spacing[4]};
-`;
-
-const StyledAdvancedSettingsContainer = styled.div`
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  position: relative;
-  width: 100%;
-`;
-
-const StyledLabel = styled.span`
-  color: ${themeCssVariables.font.color.light};
-  font-size: ${themeCssVariables.font.size.xs};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-  margin-bottom: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  inputsContainer: {
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    marginBottom: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+  inputContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  advancedSettingsSectionInputWrapper: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-4'],
+    width: '100%',
+  },
+  advancedSettingsOuterContainer: {
+    paddingTop: spacing['--t-spacing-4'],
+  },
+  advancedSettingsContainer: {
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    position: 'relative',
+    width: '100%',
+  },
+  label: {
+    color: fontColor['--t-font-color-light'],
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    marginBottom: spacing['--t-spacing-1'],
+  },
+});
 
 const infoCircleElementId = 'info-circle-id';
 
@@ -148,9 +151,9 @@ export const SettingsDataModelObjectAboutForm = ({
 
   return (
     <>
-      <StyledInputsContainer>
-        <StyledInputContainer>
-          <StyledLabel>{t`Icon`}</StyledLabel>
+      <div {...stylex.props(styles.inputsContainer)}>
+        <div {...stylex.props(styles.inputContainer)}>
+          <span {...stylex.props(styles.label)}>{t`Icon`}</span>
           <Controller
             name="icon"
             control={control}
@@ -189,7 +192,7 @@ export const SettingsDataModelObjectAboutForm = ({
               />
             )}
           />
-        </StyledInputContainer>
+        </div>
         <Controller
           key={`object-labelSingular-text-input`}
           name="labelSingular"
@@ -242,7 +245,7 @@ export const SettingsDataModelObjectAboutForm = ({
             />
           )}
         />
-      </StyledInputsContainer>
+      </div>
       <Controller
         name="description"
         control={control}
@@ -259,9 +262,9 @@ export const SettingsDataModelObjectAboutForm = ({
           />
         )}
       />
-      <StyledAdvancedSettingsOuterContainer>
-        <StyledAdvancedSettingsContainer>
-          <StyledAdvancedSettingsSectionInputWrapper>
+      <div {...stylex.props(styles.advancedSettingsOuterContainer)}>
+        <div {...stylex.props(styles.advancedSettingsContainer)}>
+          <div {...stylex.props(styles.advancedSettingsSectionInputWrapper)}>
             {isDefined(conflictingObjectMetadataItem) && (
               <InlineBanner
                 status="info"
@@ -311,7 +314,7 @@ export const SettingsDataModelObjectAboutForm = ({
                   key={`object-${fieldName}-text-input`}
                   dotPosition="top"
                 >
-                  <StyledInputContainer>
+                  <div {...stylex.props(styles.inputContainer)}>
                     <Controller
                       name={fieldName}
                       control={control}
@@ -358,7 +361,7 @@ export const SettingsDataModelObjectAboutForm = ({
                         </>
                       )}
                     />
-                  </StyledInputContainer>
+                  </div>
                 </AdvancedSettingsWrapper>
               ),
             )}
@@ -423,9 +426,9 @@ export const SettingsDataModelObjectAboutForm = ({
                 />
               </AdvancedSettingsWrapper>
             )}
-          </StyledAdvancedSettingsSectionInputWrapper>
-        </StyledAdvancedSettingsContainer>
-      </StyledAdvancedSettingsOuterContainer>
+          </div>
+        </div>
+      </div>
     </>
   );
 };

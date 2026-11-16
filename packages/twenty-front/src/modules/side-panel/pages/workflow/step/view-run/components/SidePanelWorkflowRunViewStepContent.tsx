@@ -25,7 +25,6 @@ import {
 } from '@/workflow/workflow-steps/types/WorkflowRunTabId';
 import { getWorkflowRunStepExecutionStatus } from '@/workflow/workflow-steps/utils/getWorkflowRunStepExecutionStatus';
 import { WorkflowIteratorSubStepSwitcher } from '@/workflow/workflow-steps/workflow-actions/iterator-action/components/WorkflowIteratorSubStepSwitcher';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isNull } from '@sniptt/guards';
 import { isDefined } from 'twenty-shared/utils';
@@ -35,18 +34,20 @@ import {
   IconStepInto,
   IconTerminal,
 } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { background, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-`;
-
-const StyledTabListContainer = styled.div`
-  background-color: ${themeCssVariables.background.secondary};
-  padding-left: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+  },
+  tabListContainer: {
+    backgroundColor: background['--t-background-secondary'],
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+});
 
 type TabId = WorkflowRunTabIdType;
 
@@ -134,7 +135,7 @@ export const SidePanelWorkflowRunViewStepContent = () => {
         instanceId: `${workflowRunId}_${workflowSelectedNode}`,
       }}
     >
-      <StyledContainer>
+      <div {...stylex.props(styles.container)}>
         {shouldFocusNodeTab ? (
           <WorkflowRunStepNodeDetail
             stepId={workflowSelectedNode}
@@ -146,14 +147,14 @@ export const SidePanelWorkflowRunViewStepContent = () => {
           <TabListRoot
             componentInstanceId={sidePanelPageComponentInstance.instanceId}
           >
-            <StyledTabListContainer>
+            <div {...stylex.props(styles.tabListContainer)}>
               <TabList
                 aria-label={t`Workflow step results`}
                 tabs={tabs}
                 behaveAsLinks={false}
                 componentInstanceId={sidePanelPageComponentInstance.instanceId}
               />
-            </StyledTabListContainer>
+            </div>
 
             <WorkflowStepTabPanel value={activeTabId ?? ''}>
               {activeTabId === WorkflowRunTabId.OUTPUT ? (
@@ -189,7 +190,7 @@ export const SidePanelWorkflowRunViewStepContent = () => {
             <WorkflowIteratorSubStepSwitcher stepId={workflowSelectedNode} />
           </TabListRoot>
         )}
-      </StyledContainer>
+      </div>
     </SidePanelWorkflowRunStepContentComponentInstanceContext.Provider>
   );
 };

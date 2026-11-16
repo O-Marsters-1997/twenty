@@ -1,20 +1,30 @@
 import { Select as SelectPrimitive } from '@base-ui/react/select';
+import * as stylex from '@stylexjs/stylex';
 
 import { IconChevronDown } from '@ui/icon';
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 
-import styles from '../Select.module.scss';
+import '../Select.css';
 import { type SelectIconProps } from '../types/SelectIconProps';
 
 export const SelectIcon = ({
   className,
+  xstyle,
   children = <IconChevronDown />,
   ...props
-}: SelectIconProps) => (
+}: WithXstyle<SelectIconProps>) => (
   <SelectPrimitive.Icon
     {...props}
-    className={mergeClassNames(styles.icon, className)}
+    {...mergeStylexProps(
+      stylex.props(styles.icon, xstyle),
+      className ?? 'tw-select-icon',
+    )}
   >
     {children}
   </SelectPrimitive.Icon>
 );
+
+const styles = stylex.create({
+  icon: { alignItems: 'center', display: 'inline-flex', flex: 'none' },
+});

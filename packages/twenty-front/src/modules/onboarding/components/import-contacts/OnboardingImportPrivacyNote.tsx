@@ -1,35 +1,37 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
+import * as stylex from '@stylexjs/stylex';
 import { IconLock } from 'twenty-ui/icon';
 import { themeCssVariables } from 'twenty-ui/theme';
+import { spacing, fontColor, fontSize } from 'twenty-ui/theme/tokens.stylex';
 
 const PRIVACY_NOTE_ICON_SIZE = 12;
 
-const StyledNote = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  font-size: ${themeCssVariables.font.size.sm};
-  gap: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledNoteText = styled.span`
-  line-height: 1.4;
-  margin-block: calc((${PRIVACY_NOTE_ICON_SIZE}px - 1.4em) / 2);
-`;
+const styles = stylex.create({
+  note: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    fontSize: fontSize['--t-font-size-sm'],
+    gap: spacing['--t-spacing-1'],
+  },
+  noteText: {
+    lineHeight: '1.4',
+    marginBlock: `calc((${PRIVACY_NOTE_ICON_SIZE}px - 1.4em) / 2)`,
+  },
+});
 
 export const OnboardingImportPrivacyNote = () => {
   const { t } = useLingui();
 
   return (
-    <StyledNote>
+    <div {...stylex.props(styles.note)}>
       <IconLock
         size={PRIVACY_NOTE_ICON_SIZE}
         color={themeCssVariables.font.color.tertiary}
       />
-      <StyledNoteText>
+      <span {...stylex.props(styles.noteText)}>
         {t`Only you will be able to see your emails and events`}
-      </StyledNoteText>
-    </StyledNote>
+      </span>
+    </div>
   );
 };

@@ -1,0 +1,10 @@
+.record-card-body-container span:not(button *) {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+}
+
+.record-card-body-container span:not(button *) svg:not(button svg) {
+  color: var(--t-font-color-tertiary);
+  margin-right: var(--t-spacing-2);
+}

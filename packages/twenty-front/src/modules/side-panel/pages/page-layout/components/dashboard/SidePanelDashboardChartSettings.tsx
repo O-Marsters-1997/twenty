@@ -6,14 +6,16 @@ import { WidgetSettingsFooter } from '@/side-panel/pages/page-layout/components/
 import { usePageLayoutSidePanelTarget } from '@/side-panel/pages/page-layout/hooks/usePageLayoutSidePanelTarget';
 import { isChartWidget } from '@/side-panel/pages/page-layout/utils/isChartWidget';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { styled } from '@linaria/react';
 import { isDefined } from 'twenty-shared/utils';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+  },
+});
 
 export const SidePanelDashboardChartSettings = () => {
   const { pageLayoutId } = usePageLayoutSidePanelTarget();
@@ -37,13 +39,13 @@ export const SidePanelDashboardChartSettings = () => {
   }
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <WidgetComponentInstanceContext.Provider
         value={{ instanceId: widgetInEditMode.id }}
       >
         <ChartSettings widget={widgetInEditMode} />
         <WidgetSettingsFooter pageLayoutId={pageLayoutId} />
       </WidgetComponentInstanceContext.Provider>
-    </StyledContainer>
+    </div>
   );
 };

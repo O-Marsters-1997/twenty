@@ -1,13 +1,11 @@
 import { SkeletonLine } from '@/ui/feedback/skeleton/components/SkeletonLine';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
-import { Fragment } from 'react';
+import { Fragment, type ReactNode } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 import { isDefined } from 'twenty-shared/utils';
 import { themeCssVariables } from 'twenty-ui/theme';
 
-import { LOG_CONSOLE_ANIMATION_EASING } from '@/log-console/constants/LogConsoleAnimationEasing';
 import { LOG_CONSOLE_TABLE_SCROLL_WRAPPER_ID } from '@/log-console/constants/LogConsoleTableScrollWrapperId';
 import { type LogConsoleSource } from '@/log-console/types/LogConsoleSource';
 import { Table } from '@/ui/layout/table/components/Table';
@@ -18,69 +16,42 @@ import { ScrollWrapper } from '@/ui/utilities/scroll/components/ScrollWrapper';
 import { useScrollWrapperHTMLElement } from '@/ui/utilities/scroll/hooks/useScrollWrapperHTMLElement';
 import { type EventLogRecord } from '~/generated-metadata/graphql';
 import { isDeeplyEqual } from '~/utils/isDeeplyEqual';
+import * as stylex from '@stylexjs/stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
+import {
+  accent,
+  animationDuration,
+  background,
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
+import { logConsoleEasing, logConsoleRowMarker } from './LogConsole.stylex';
 
 const SKELETON_ROW_COUNT = 8;
 
-const StyledHeaderRow = styled(TableRow)`
-  background-color: ${themeCssVariables.background.primary};
-  border-radius: 0;
-  box-shadow: inset 0 -1px 0 ${themeCssVariables.border.color.light};
-  position: sticky;
-  top: 0;
-  z-index: 2;
-`;
+type StickyFirstCellProps = {
+  isHighlightable?: boolean;
+  isExpanded?: boolean;
+  children: ReactNode;
+};
 
-const StyledLiveEntryRow = styled(TableRow)`
-  animation:
-    logConsoleLiveEntryEntrance
-      calc(${themeCssVariables.animation.duration.normal} * 1s)
-      ${LOG_CONSOLE_ANIMATION_EASING},
-    logConsoleLiveEntryHighlight
-      calc(${themeCssVariables.animation.duration.slow} * 1s) ease-out;
-  overflow: hidden;
-
-  @keyframes logConsoleLiveEntryEntrance {
-    from {
-      height: 0;
-      opacity: 0;
-    }
-  }
-
-  @keyframes logConsoleLiveEntryHighlight {
-    from {
-      background-color: ${themeCssVariables.accent.quaternary};
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-  }
-`;
-
-const StyledTable = styled(Table)`
-  box-sizing: border-box;
-  min-width: min-content;
-  padding-inline: ${themeCssVariables.spacing[3]};
-
-  > [data-table-row] > :first-child {
-    background-color: ${themeCssVariables.background.primary};
-    border-radius: ${themeCssVariables.border.radius.md} 0 0
-      ${themeCssVariables.border.radius.md};
-    left: 0;
-    position: sticky;
-    z-index: 1;
-  }
-
-  > [data-table-row][data-clickable='true']:hover > :first-child,
-  > [data-table-row][data-expanded] > :first-child {
-    box-shadow: inset 0 0 0 100vmax
-      ${themeCssVariables.background.transparent.light};
-  }
-`;
-
-const StyledLoadMoreTrigger = styled.div`
-  height: 1px;
-`;
+const StickyFirstCell = ({
+  isHighlightable = false,
+  isExpanded = false,
+  children,
+}: StickyFirstCellProps) => (
+  <div
+    {...stylex.props(
+      styles.stickyFirstCell,
+      isHighlightable && styles.stickyFirstCellHighlightable,
+      isExpanded && styles.stickyFirstCellExpanded,
+    )}
+  >
+    {children}
+  </div>
+);
 
 type LogConsoleTableProps = {
   source: LogConsoleSource;
@@ -136,39 +107,59 @@ export const LogConsoleTable = ({
     key: number,
     isLiveEntry: boolean,
   ) => {
-    const EntryRow = isLiveEntry ? StyledLiveEntryRow : TableRow;
+    const isExpanded =
+      isDefined(selectedEntry) && isDeeplyEqual(entry, selectedEntry);
 
     return (
-      <EntryRow
+      <TableRow
         key={key}
+        className={
+          stylex.props(logConsoleRowMarker, isLiveEntry && styles.liveEntryRow)
+            .className
+        }
         gridTemplateColumns={gridTemplateColumns}
         height={themeCssVariables.spacing[8]}
         isClickable
-        isExpanded={
-          isDefined(selectedEntry) && isDeeplyEqual(entry, selectedEntry)
-        }
+        isExpanded={isExpanded}
         onClick={() => onEntryClick(entry)}
       >
-        {columns.map((column) => (
-          <Fragment key={column.id}>{column.renderCell(entry)}</Fragment>
+        {columns.map((column, columnIndex) => (
+          <Fragment key={column.id}>
+            {columnIndex === 0 ? (
+              <StickyFirstCell isHighlightable isExpanded={isExpanded}>
+                {column.renderCell(entry)}
+              </StickyFirstCell>
+            ) : (
+              column.renderCell(entry)
+            )}
+          </Fragment>
         ))}
-      </EntryRow>
+      </TableRow>
     );
   };
 
   return (
     <ScrollWrapper componentInstanceId={LOG_CONSOLE_TABLE_SCROLL_WRAPPER_ID}>
-      <StyledTable>
-        <StyledHeaderRow
+      <Table className={stylex.props(styles.table).className}>
+        <TableRow
+          className={stylex.props(styles.headerRow).className}
           gridTemplateColumns={gridTemplateColumns}
           hoverBackgroundColor={themeCssVariables.background.primary}
         >
-          {columns.map((column) => (
-            <TableHeader key={column.id} align={column.align}>
-              {t(column.label)}
-            </TableHeader>
-          ))}
-        </StyledHeaderRow>
+          {columns.map((column, columnIndex) => {
+            const header = (
+              <TableHeader key={column.id} align={column.align}>
+                {t(column.label)}
+              </TableHeader>
+            );
+
+            return columnIndex === 0 ? (
+              <StickyFirstCell key={column.id}>{header}</StickyFirstCell>
+            ) : (
+              header
+            );
+          })}
+        </TableRow>
         {entries.map((entry, entryIndex) =>
           renderEntryRow(
             entry,
@@ -177,9 +168,10 @@ export const LogConsoleTable = ({
           ),
         )}
         {hasNextPage && (
-          <StyledLoadMoreTrigger
+          <div
             key={storedEntryCount}
             ref={loadMoreTriggerRef}
+            {...stylex.props(styles.loadMoreTrigger)}
           />
         )}
         {(isInitialLoading || isLoadingNextPage) && (
@@ -189,16 +181,83 @@ export const LogConsoleTable = ({
                 key={`skel-${rowIndex}`}
                 gridTemplateColumns={gridTemplateColumns}
               >
-                {columns.map((column) => (
-                  <TableCell key={column.id}>
-                    <SkeletonLine width={80} height={16} />
-                  </TableCell>
-                ))}
+                {columns.map((column, columnIndex) => {
+                  const cell = (
+                    <TableCell key={column.id}>
+                      <SkeletonLine width={80} height={16} />
+                    </TableCell>
+                  );
+
+                  return columnIndex === 0 ? (
+                    <StickyFirstCell key={column.id}>{cell}</StickyFirstCell>
+                  ) : (
+                    cell
+                  );
+                })}
               </TableRow>
             ))}
           </>
         )}
-      </StyledTable>
+      </Table>
     </ScrollWrapper>
   );
 };
+
+const liveEntryEntrance = stylex.keyframes({
+  from: { height: 0, opacity: 0 },
+});
+
+const liveEntryHighlight = stylex.keyframes({
+  from: { backgroundColor: accent['--t-accent-quaternary'] },
+});
+
+const styles = stylex.create({
+  table: {
+    boxSizing: 'border-box',
+    minWidth: 'min-content',
+    paddingInline: spacing['--t-spacing-3'],
+  },
+  headerRow: {
+    backgroundColor: background['--t-background-primary'],
+    borderRadius: 0,
+    boxShadow: `inset 0 -1px 0 ${borderColor['--t-border-color-light']}`,
+    position: 'sticky',
+    top: 0,
+    zIndex: 2,
+  },
+  liveEntryRow: {
+    animationDuration: {
+      default: `calc(${animationDuration['--t-animation-duration-normal']} * 1s), calc(${animationDuration['--t-animation-duration-slow']} * 1s)`,
+      [media.reducedMotion]: null,
+    },
+    animationName: {
+      default: `${liveEntryEntrance}, ${liveEntryHighlight}`,
+      [media.reducedMotion]: 'none',
+    },
+    animationTimingFunction: `${logConsoleEasing.standard}, ease-out`,
+    overflow: 'hidden',
+  },
+  stickyFirstCell: {
+    backgroundColor: background['--t-background-primary'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: 0,
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: 0,
+    left: 0,
+    position: 'sticky',
+    zIndex: 1,
+  },
+  stickyFirstCellHighlightable: {
+    boxShadow: {
+      default: null,
+      [stylex.when.ancestor(':hover', logConsoleRowMarker)]:
+        `inset 0 0 0 100vmax ${backgroundTransparent['--t-background-transparent-light']}`,
+    },
+  },
+  stickyFirstCellExpanded: {
+    boxShadow: `inset 0 0 0 100vmax ${backgroundTransparent['--t-background-transparent-light']}`,
+  },
+  loadMoreTrigger: {
+    height: '1px',
+  },
+});

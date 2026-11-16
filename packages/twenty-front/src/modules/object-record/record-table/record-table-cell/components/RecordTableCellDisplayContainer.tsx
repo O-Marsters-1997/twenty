@@ -1,31 +1,32 @@
 import { RECORD_TABLE_CELL_DISPLAY_CLASS_NAME } from '@/object-record/record-table/constants/RecordTableCellDisplayClassName';
 import { t } from '@lingui/core/macro';
-import { styled } from '@linaria/react';
+import { mergeClassName } from '@/page-layout/utils/mergeClassName';
 import { type Ref } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledOuterContainer = styled.div`
-  align-items: center;
-  display: flex;
-  height: 100%;
-  overflow: hidden;
-  padding-left: 8px;
-  width: 100%;
-`;
-
-const StyledInnerContainer = styled.div`
-  align-items: center;
-  display: flex;
-  height: 100%;
-  overflow: hidden;
-  white-space: nowrap;
-  width: 100%;
-`;
-
-const StyledEmptyPlaceholderField = styled.div`
-  color: ${themeCssVariables.font.color.light};
-  padding-left: 4px;
-`;
+const styles = stylex.create({
+  outerContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    height: '100%',
+    overflow: 'hidden',
+    paddingLeft: 8,
+    width: '100%',
+  },
+  innerContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    height: '100%',
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    width: '100%',
+  },
+  emptyPlaceholderField: {
+    color: fontColor['--t-font-color-light'],
+    paddingLeft: '4px',
+  },
+});
 
 export type EditableCellDisplayContainerProps = {
   focus?: boolean;
@@ -43,22 +44,29 @@ export const RecordTableCellDisplayContainer = ({
   scrollRef,
   onContextMenu,
   placeholderForEmptyCell,
-}: React.PropsWithChildren<EditableCellDisplayContainerProps>) => (
-  <StyledOuterContainer
-    className={RECORD_TABLE_CELL_DISPLAY_CLASS_NAME}
-    data-testid={
-      focus ? 'editable-cell-focus-mode' : 'editable-cell-display-mode'
-    }
-    onClick={onClick}
-    ref={scrollRef}
-    onContextMenu={onContextMenu}
-  >
-    {placeholderForEmptyCell ? (
-      <StyledEmptyPlaceholderField>
-        {t`Set ${placeholderForEmptyCell}`}
-      </StyledEmptyPlaceholderField>
-    ) : (
-      <StyledInnerContainer>{children}</StyledInnerContainer>
-    )}
-  </StyledOuterContainer>
-);
+}: React.PropsWithChildren<EditableCellDisplayContainerProps>) => {
+  const outerContainerProps = stylex.props(styles.outerContainer);
+
+  return (
+    <div
+      {...mergeClassName(
+        outerContainerProps,
+        RECORD_TABLE_CELL_DISPLAY_CLASS_NAME,
+      )}
+      data-testid={
+        focus ? 'editable-cell-focus-mode' : 'editable-cell-display-mode'
+      }
+      onClick={onClick}
+      ref={scrollRef}
+      onContextMenu={onContextMenu}
+    >
+      {placeholderForEmptyCell ? (
+        <div {...stylex.props(styles.emptyPlaceholderField)}>
+          {t`Set ${placeholderForEmptyCell}`}
+        </div>
+      ) : (
+        <div {...stylex.props(styles.innerContainer)}>{children}</div>
+      )}
+    </div>
+  );
+};

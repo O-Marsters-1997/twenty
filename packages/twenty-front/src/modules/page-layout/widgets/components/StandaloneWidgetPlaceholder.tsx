@@ -1,23 +1,13 @@
 import { AnimatedPlaceholder } from '@/ui/feedback/empty-state/components/AnimatedPlaceholder/AnimatedPlaceholder';
 import { EmptyState } from '@/ui/feedback/empty-state/components/EmptyState';
-import { styled } from '@linaria/react';
 import { Trans } from '@lingui/react/macro';
-import { themeCssVariables } from 'twenty-ui/theme';
-
-const StyledPlaceholderContainer = styled.div`
-  background: ${themeCssVariables.background.secondary};
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  padding: ${themeCssVariables.spacing[2]};
-  position: relative;
-  width: 100%;
-`;
+import { spacing, background } from 'twenty-ui/theme/tokens.stylex';
+import { mergeClassName } from '@/page-layout/utils/mergeClassName';
+import * as stylex from '@stylexjs/stylex';
 
 export const StandaloneWidgetPlaceholder = () => {
   return (
-    <StyledPlaceholderContainer className="widget">
+    <div {...mergeClassName(stylex.props(styles.container), 'widget')}>
       <EmptyState.Root>
         <AnimatedPlaceholder type="noWidgets" />
         <EmptyState.Content>
@@ -29,6 +19,19 @@ export const StandaloneWidgetPlaceholder = () => {
           </EmptyState.Description>
         </EmptyState.Content>
       </EmptyState.Root>
-    </StyledPlaceholderContainer>
+    </div>
   );
 };
+
+const styles = stylex.create({
+  container: {
+    backgroundColor: background['--t-background-secondary'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    padding: spacing['--t-spacing-2'],
+    position: 'relative',
+    width: '100%',
+  },
+});

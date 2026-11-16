@@ -1,4 +1,4 @@
-import { styled } from '@linaria/react';
+import { isNonEmptyString } from '@sniptt/guards';
 import { type FocusEventHandler, useId } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 
@@ -8,7 +8,18 @@ import { FocusComponentType } from '@/ui/utilities/focus/types/FocusComponentTyp
 import { type FormFieldInputVariant } from '@/ui/input/types/FormFieldInputVariant';
 import { isDefined } from 'twenty-shared/utils';
 import { turnIntoEmptyStringIfWhitespacesOnly } from '~/utils/string/turnIntoEmptyStringIfWhitespacesOnly';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  color,
+  colorTransparent,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 export type TextAreaProps = {
   textAreaId: string;
@@ -27,71 +38,71 @@ export type TextAreaProps = {
   variant?: FormFieldInputVariant;
 };
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
-
-const StyledLabel = styled.label`
-  color: ${themeCssVariables.font.color.light};
-  display: block;
-  font-size: ${themeCssVariables.font.size.xs};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-  margin-bottom: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledTextAreaContainer = styled.div<{
-  variant: FormFieldInputVariant;
-}>`
-  > textarea {
-    background-color: ${({ variant }) =>
-      variant === 'transparent'
-        ? 'transparent'
-        : themeCssVariables.background.transparent.lighter};
-    border: ${({ variant }) =>
-      variant === 'transparent'
-        ? 'none'
-        : `1px solid ${themeCssVariables.border.color.medium}`};
-    border-radius: ${({ variant }) =>
-      variant === 'transparent' ? '0' : themeCssVariables.border.radius.md};
-    box-sizing: border-box;
-    color: ${themeCssVariables.font.color.primary};
-    display: block;
-    font-family: inherit;
-    font-size: ${themeCssVariables.font.size.md};
-    font-weight: ${themeCssVariables.font.weight.regular};
-    line-height: ${({ variant }) =>
-      variant === 'transparent' ? 'inherit' : '16px'};
-    overflow: ${({ variant }) =>
-      variant === 'transparent' ? 'hidden' : 'auto'};
-    padding: ${({ variant }) =>
-      variant === 'transparent' ? '0' : themeCssVariables.spacing[2]};
-    resize: none;
-    width: 100%;
-
-    &:focus {
-      outline: none;
-      box-shadow: ${({ variant }) =>
-        variant === 'transparent'
-          ? 'none'
-          : `0px 0px 0px 3px ${themeCssVariables.color.transparent.blue2}`};
-      border-color: ${({ variant }) =>
-        variant === 'transparent'
-          ? 'transparent'
-          : themeCssVariables.color.blue};
-    }
-
-    &::placeholder {
-      color: ${themeCssVariables.font.color.light};
-      font-weight: ${themeCssVariables.font.weight.regular};
-    }
-
-    &:disabled {
-      color: ${themeCssVariables.font.color.tertiary};
-    }
-  }
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+  },
+  label: {
+    color: fontColor['--t-font-color-light'],
+    display: 'block',
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    marginBottom: spacing['--t-spacing-1'],
+  },
+  textArea: {
+    boxSizing: 'border-box',
+    color: {
+      default: fontColor['--t-font-color-primary'],
+      ':disabled': fontColor['--t-font-color-tertiary'],
+    },
+    display: 'block',
+    fontFamily: 'inherit',
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    outline: 'none',
+    resize: 'none',
+    width: '100%',
+    '::placeholder': {
+      color: fontColor['--t-font-color-light'],
+      fontWeight: fontWeight['--t-font-weight-regular'],
+    },
+  },
+  textAreaDefault: {
+    backgroundColor: backgroundTransparent['--t-background-transparent-lighter'],
+    borderColor: {
+      default: borderColor['--t-border-color-medium'],
+      ':focus': color['--t-color-blue'],
+    },
+    borderRadius: borderRadius['--t-border-radius-md'],
+    borderStyle: 'solid',
+    borderWidth: 1,
+    boxShadow: {
+      default: null,
+      ':focus': `0px 0px 0px 3px ${colorTransparent['--t-color-transparent-blue2']}`,
+    },
+    lineHeight: '16px',
+    overflow: 'auto',
+    paddingBlock: spacing['--t-spacing-2'],
+    paddingInline: spacing['--t-spacing-2'],
+  },
+  textAreaTransparent: {
+    backgroundColor: 'transparent',
+    borderColor: {
+      default: null,
+      ':focus': 'transparent',
+    },
+    borderRadius: 0,
+    borderStyle: 'none',
+    boxShadow: 'none',
+    lineHeight: 'inherit',
+    overflow: 'hidden',
+    paddingBlock: 0,
+    paddingInline: 0,
+  },
+  height: (height: number) => ({ height }),
+});
 
 export const TextArea = ({
   textAreaId,
@@ -139,11 +150,19 @@ export const TextArea = ({
     onBlur?.();
   };
 
-  return (
-    <StyledContainer>
-      {label && <StyledLabel htmlFor={instanceId}>{label}</StyledLabel>}
+  const textAreaProps = stylex.props(
+    styles.textArea,
+    variant === 'transparent'
+      ? styles.textAreaTransparent
+      : styles.textAreaDefault,
+    isDefined(height) && styles.height(height),
+  );
 
-      <StyledTextAreaContainer variant={variant}>
+  return (
+    <div {...stylex.props(styles.container)}>
+      {label && <label htmlFor={instanceId} {...stylex.props(styles.label)}>{label}</label>}
+
+      <div>
         <TextareaAutosize
           id={instanceId}
           placeholder={placeholder}
@@ -156,11 +175,13 @@ export const TextArea = ({
           onFocus={handleFocus}
           onBlur={handleBlur}
           disabled={disabled}
-          className={className}
           readOnly={readOnly}
-          style={isDefined(height) ? { height } : undefined}
+          style={textAreaProps.style}
+          className={[textAreaProps.className, className]
+            .filter(isNonEmptyString)
+            .join(' ')}
         />
-      </StyledTextAreaContainer>
-    </StyledContainer>
+      </div>
+    </div>
   );
 };

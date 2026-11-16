@@ -2,16 +2,18 @@ import { currentWorkspaceMembersState } from '@/auth/states/currentWorkspaceMemb
 import { SettingsCard } from '@/settings/components/SettingsCard';
 import { type SettingsRoleAssignmentConfirmationModalSelectedRoleTarget } from '@/settings/roles/role-assignment/types/SettingsRoleAssignmentConfirmationModalSelectedRoleTarget';
 
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { Avatar } from 'twenty-ui/primitives/data-display';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { getAbsoluteImageUrl } from '~/utils/image/getAbsoluteImageUrl';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledSettingsCardContainer = styled.div`
-  margin-top: ${themeCssVariables.spacing[6]};
-`;
+const styles = stylex.create({
+  settingsCardContainer: {
+    marginTop: spacing['--t-spacing-6'],
+  },
+});
 
 type SettingsRoleAssignmentConfirmationModalSubtitleProps = {
   selectedRoleTarget: SettingsRoleAssignmentConfirmationModalSelectedRoleTarget;
@@ -37,7 +39,7 @@ export const SettingsRoleAssignmentConfirmationModalSubtitle = ({
   return (
     <>
       {t`${workspaceMemberName} will be unassigned from the following role:`}
-      <StyledSettingsCardContainer>
+      <div {...stylex.props(styles.settingsCardContainer)}>
         <SettingsCard
           title={selectedRoleTarget.role?.label || ''}
           Icon={
@@ -55,7 +57,7 @@ export const SettingsRoleAssignmentConfirmationModalSubtitle = ({
             selectedRoleTarget.role && onRoleClick(selectedRoleTarget.role.id)
           }
         />
-      </StyledSettingsCardContainer>
+      </div>
     </>
   );
 };

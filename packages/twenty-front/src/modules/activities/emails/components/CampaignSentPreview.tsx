@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { type Editor } from '@tiptap/core';
 import { useState } from 'react';
@@ -9,21 +8,23 @@ import { CAMPAIGN_BODY_EDITOR_PROFILE } from '@/activities/emails/editor/constan
 import { useCampaignCanvasWidth } from '@/activities/emails/hooks/useCampaignCanvasWidth';
 import { type MessageCampaign } from '@/activities/emails/types/MessageCampaign';
 import { FormAdvancedTextFieldInput } from '@/advanced-text-editor/components/FormAdvancedTextFieldInput';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  min-height: 0;
-  width: 100%;
-`;
-
-const StyledBody = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-height: 0;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    minHeight: '0',
+    width: '100%',
+  },
+  body: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    minHeight: '0',
+  },
+});
 
 type CampaignSentPreviewProps = {
   campaign: MessageCampaign;
@@ -34,9 +35,9 @@ export const CampaignSentPreview = ({ campaign }: CampaignSentPreviewProps) => {
   const canvasWidth = useCampaignCanvasWidth(bodyEditor);
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <CampaignSentEnvelope campaign={campaign} width={canvasWidth} />
-      <StyledBody>
+      <div {...stylex.props(styles.body)}>
         <FormAdvancedTextFieldInput
           defaultValue={campaign.bodyTemplate}
           readonly
@@ -45,7 +46,7 @@ export const CampaignSentPreview = ({ campaign }: CampaignSentPreviewProps) => {
           placeholder={t`No content`}
           onEditorReady={setBodyEditor}
         />
-      </StyledBody>
-    </StyledContainer>
+      </div>
+    </div>
   );
 };

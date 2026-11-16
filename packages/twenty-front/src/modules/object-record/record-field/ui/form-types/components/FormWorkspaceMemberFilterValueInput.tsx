@@ -1,10 +1,9 @@
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { useCallback, useId, useMemo, useState } from 'react';
 import { CoreObjectNameSingular } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 import { IconChevronDown } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import { type JsonValue } from 'type-fest';
 
 import { MAX_WORKSPACE_MEMBERS_TO_DISPLAY } from '@/object-record/object-filter-dropdown/components/ObjectFilterDropdownActorSelect';
@@ -28,18 +27,24 @@ import { DropdownRoot } from '@/ui/layout/dropdown/components/DropdownRoot';
 import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent';
 import { GenericDropdownContentWidth } from '@/ui/layout/dropdown/constants/GenericDropdownContentWidth';
 import { isStandaloneVariableString } from 'twenty-shared/workflow';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledFormSelectContainerWrapper = styled.div<{ readonly?: boolean }>`
-  cursor: ${({ readonly }) => (readonly ? 'default' : 'pointer')};
-  display: flex;
-  height: 32px;
-  width: 100%;
-`;
-
-const StyledIconButton = styled.div`
-  display: flex;
-  padding-right: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  formSelectContainerWrapper: {
+    cursor: 'pointer',
+    display: 'flex',
+    height: 32,
+    width: '100%',
+  },
+  formSelectContainerWrapperReadonly: {
+    cursor: 'default',
+  },
+  iconButton: {
+    display: 'flex',
+    paddingRight: spacing['--t-spacing-2'],
+  },
+});
 
 type FormWorkspaceMemberFilterValueInputProps = {
   label?: string;
@@ -208,14 +213,19 @@ export const FormWorkspaceMemberFilterValueInput = ({
       {label ? <Field.Label>{label}</Field.Label> : null}
       <FormFieldInputRowContainer>
         {readonly ? (
-          <StyledFormSelectContainerWrapper readonly>
+          <div
+            {...stylex.props(
+              styles.formSelectContainerWrapper,
+              styles.formSelectContainerWrapperReadonly,
+            )}
+          >
             <FormFieldInputInnerContainer
               formFieldInputInstanceId={componentId}
               hasRightElement={false}
             >
               {triggerContent}
             </FormFieldInputInnerContainer>
-          </StyledFormSelectContainerWrapper>
+          </div>
         ) : (
           <DropdownRoot
             dropdownId={dropdownId}
@@ -228,7 +238,9 @@ export const FormWorkspaceMemberFilterValueInput = ({
             }}
           >
             <Dropdown.Trigger
-              render={<StyledFormSelectContainerWrapper />}
+              render={
+                <div {...stylex.props(styles.formSelectContainerWrapper)} />
+              }
               nativeButton={false}
             >
               <FormFieldInputInnerContainer
@@ -238,12 +250,12 @@ export const FormWorkspaceMemberFilterValueInput = ({
                 preventFocusStackUpdate
               >
                 {triggerContent}
-                <StyledIconButton>
+                <div {...stylex.props(styles.iconButton)}>
                   <IconChevronDown
                     size={theme.icon.size.md}
                     color={theme.font.color.light}
                   />
-                </StyledIconButton>
+                </div>
               </FormFieldInputInnerContainer>
             </Dropdown.Trigger>
             <DropdownContent

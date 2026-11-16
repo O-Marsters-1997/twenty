@@ -1,19 +1,11 @@
 import { Dialog } from 'twenty-ui/primitives/surfaces';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import { borderColor, boxShadow, spacing } from 'twenty-ui/theme/tokens.stylex';
 import { MainButton } from 'twenty-ui/components/input';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { t } from '@lingui/core/macro';
 import { Loader } from 'twenty-ui/primitives/feedback';
 import { isDefined } from 'twenty-shared/utils';
-
-const StyledFooterContainer = styled.div`
-  > div {
-    border-top: 1px solid ${themeCssVariables.border.color.medium};
-    box-shadow: ${themeCssVariables.boxShadow.strong};
-    justify-content: space-between;
-  }
-`;
 
 type StepNavigationButtonProps = {
   onContinue?: () => void;
@@ -33,8 +25,7 @@ export const StepNavigationButton = ({
   isContinueDisabled = false,
 }: StepNavigationButtonProps) => {
   return (
-    <StyledFooterContainer>
-      <Dialog.Footer style={{ padding: 'var(--t-spacing-5)' }}>
+    <Dialog.Footer {...stylex.props(styles.footer)}>
         {isDefined(onBack) && (
           <MainButton
             startIcon={isLoading ? <Loader /> : undefined}
@@ -54,6 +45,17 @@ export const StepNavigationButton = ({
           </MainButton>
         )}
       </Dialog.Footer>
-    </StyledFooterContainer>
   );
 };
+
+const styles = stylex.create({
+  footer: {
+    borderTopWidth: '1px',
+    borderTopStyle: 'solid',
+    borderTopColor: borderColor['--t-border-color-medium'],
+    boxShadow: boxShadow['--t-box-shadow-strong'],
+    justifyContent: 'space-between',
+    paddingBlock: spacing['--t-spacing-5'],
+    paddingInline: spacing['--t-spacing-5'],
+  },
+});

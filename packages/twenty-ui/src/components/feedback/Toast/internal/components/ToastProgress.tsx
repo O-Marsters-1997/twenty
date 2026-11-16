@@ -1,10 +1,12 @@
+import * as stylex from '@stylexjs/stylex';
 import { type CSSProperties } from 'react';
 
 import { ProgressBar } from '@ui/primitives/feedback/ProgressBar/ProgressBar';
 import { isDefined } from '@ui/utilities/utils/isDefined';
 
+import { media } from '../../../../../theme/constants.stylex';
 import { isCountdownDuration } from '../utils/isCountdownDuration';
-import styles from './ToastProgress.module.scss';
+import { countdownVars } from './ToastProgress.stylex';
 
 type ToastProgressProps = {
   progress?: number;
@@ -24,7 +26,13 @@ export const ToastProgress = ({
   barColor,
 }: ToastProgressProps) => {
   if (isDefined(progress)) {
-    return <ProgressBar value={progress} barColor={barColor} />;
+    return (
+      <ProgressBar
+        value={progress}
+        barColor={barColor}
+        className={stylex.props(styles.progressBar).className}
+      />
+    );
   }
 
   if (!isCountdownDuration(duration)) {
@@ -34,7 +42,7 @@ export const ToastProgress = ({
   return (
     <div
       key={revision}
-      className={styles.countdown}
+      {...stylex.props(styles.countdown, isPaused && styles.paused)}
       data-paused={isPaused || undefined}
       style={
         {
@@ -46,3 +54,30 @@ export const ToastProgress = ({
     />
   );
 };
+
+const countdownShrink = stylex.keyframes({
+  from: { width: countdownVars['--toast-countdown-width'] },
+  to: { width: 0 },
+});
+
+const styles = stylex.create({
+  countdown: {
+    animationDuration: countdownVars['--toast-countdown-duration'],
+    animationFillMode: 'forwards',
+    animationName: countdownShrink,
+    animationTimingFunction: 'linear',
+    backgroundColor: countdownVars['--toast-countdown-color'],
+    display: {
+      default: null,
+      [media.reducedMotion]: 'none',
+    },
+    height: '100%',
+    width: countdownVars['--toast-countdown-width'],
+  },
+  progressBar: {
+    height: '100%',
+  },
+  paused: {
+    animationPlayState: 'paused',
+  },
+});

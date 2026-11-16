@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { Fragment, useRef } from 'react';
 import { type DropdownDismissEvent } from 'twenty-ui/components/navigation';
@@ -22,44 +21,51 @@ import { DragDropItemSortableCell } from '@/ui/utilities/drag-and-drop/component
 import { DragDropItemSortableHandle } from '@/ui/utilities/drag-and-drop/components/DragDropItemSortableHandle';
 
 import { FieldsConfigurationGroupDraggableHeader } from '@/page-layout/widgets/fields/components/FieldsConfigurationGroupDraggableHeader';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  spacing,
+  background,
+  borderRadius,
+  color,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledFieldsDroppable = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const StyledGroupContainer = styled.div<{ isDragging: boolean }>`
-  background: ${({ isDragging }) =>
-    isDragging ? themeCssVariables.background.primary : 'transparent'};
-  border: 1px solid
-    ${({ isDragging }) =>
-      isDragging ? themeCssVariables.color.blue : 'transparent'};
-  border-radius: ${themeCssVariables.border.radius.md};
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
-
-const StyledGroupHeaderRow = styled.div`
-  align-items: center;
-  display: flex;
-  position: relative;
-  width: 100%;
-`;
-
-const StyledMenuItemDraggableWrapper = styled.div`
-  flex: 1;
-  min-width: 0;
-`;
-
-const StyledDropdownContainer = styled.div`
-  position: absolute;
-  right: ${themeCssVariables.spacing[1]};
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 1;
-`;
+const styles = stylex.create({
+  groupContainer: {
+    backgroundColor: 'transparent',
+    borderColor: 'transparent',
+    borderRadius: borderRadius['--t-border-radius-md'],
+    borderStyle: 'solid',
+    borderWidth: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+  },
+  groupContainerDragging: {
+    backgroundColor: background['--t-background-primary'],
+    borderColor: color['--t-color-blue'],
+  },
+  fieldsDroppable: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  groupHeaderRow: {
+    alignItems: 'center',
+    display: 'flex',
+    position: 'relative',
+    width: '100%',
+  },
+  menuItemDraggableWrapper: {
+    flex: '1',
+    minWidth: '0',
+  },
+  dropdownContainer: {
+    position: 'absolute',
+    right: spacing['--t-spacing-1'],
+    top: '50%',
+    transform: 'translateY(-50%)',
+    zIndex: '1',
+  },
+});
 
 type FieldsConfigurationGroupEditorProps = {
   group: FieldsWidgetGroup;
@@ -117,13 +123,21 @@ export const FieldsConfigurationGroupEditor = ({
   );
 
   return (
-    <StyledGroupContainer isDragging={isDragging}>
-      <StyledGroupHeaderRow>
-        <StyledMenuItemDraggableWrapper ref={groupHeaderRef}>
+    <div
+      {...stylex.props(
+        styles.groupContainer,
+        isDragging && styles.groupContainerDragging,
+      )}
+    >
+      <div {...stylex.props(styles.groupHeaderRow)}>
+        <div
+          ref={groupHeaderRef}
+          {...stylex.props(styles.menuItemDraggableWrapper)}
+        >
           <DragDropItemSortableHandle fill>
             <FieldsConfigurationGroupDraggableHeader text={group.name} />
           </DragDropItemSortableHandle>
-        </StyledMenuItemDraggableWrapper>
+        </div>
         <DropdownRoot
           dropdownId={renameDropdownId}
           type="panel"
@@ -145,17 +159,17 @@ export const FieldsConfigurationGroupEditor = ({
             />
           </DropdownContent>
         </DropdownRoot>
-        <StyledDropdownContainer>
+        <div {...stylex.props(styles.dropdownContainer)}>
           <FieldsConfigurationGroupDropdown
             groupId={group.id}
             onStartRename={handleStartRename}
             onDelete={() => onDeleteGroup({ groupId: group.id })}
             onAddGroup={onAddGroup}
           />
-        </StyledDropdownContainer>
-      </StyledGroupHeaderRow>
+        </div>
+      </div>
 
-      <StyledFieldsDroppable>
+      <div {...stylex.props(styles.fieldsDroppable)}>
         {sortedFields.length === 0 ? (
           <FieldsConfigurationEmptyGroupDropZone groupId={group.id}>
             {t`Drop fields here`}
@@ -211,7 +225,7 @@ export const FieldsConfigurationGroupEditor = ({
             />
           </>
         )}
-      </StyledFieldsDroppable>
-    </StyledGroupContainer>
+      </div>
+    </div>
   );
 };

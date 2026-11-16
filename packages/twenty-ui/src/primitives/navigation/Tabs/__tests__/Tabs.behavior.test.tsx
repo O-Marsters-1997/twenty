@@ -5,7 +5,6 @@ import { createRef } from 'react';
 import { type TabsTabProps } from '../types/TabsTabProps';
 import { describe, expect, it, vi } from 'vitest';
 
-import styles from '../../internal/tab/Tab.module.scss';
 import { Tabs } from '../Tabs';
 import { type TabsListProps } from '../types/TabsListProps';
 import { type TabsRootProps } from '../types/TabsRootProps';
@@ -162,17 +161,11 @@ describe('Tabs behavior', () => {
 
   it('renders only an explicitly composed indicator', () => {
     const { rerender } = render(<TabsExample indicator={false} />);
-    expect(
-      screen.getByRole('tablist').querySelector(`.${styles.indicator}`),
-    ).toBeNull();
+    expect(screen.queryByTestId('indicator')).toBeNull();
 
     rerender(<TabsExample />);
 
-    const indicator = screen.getByTestId('indicator');
-    expect(indicator).toHaveClass(styles.indicator);
-    expect(
-      screen.getByRole('tablist').querySelectorAll(`.${styles.indicator}`),
-    ).toHaveLength(1);
+    expect(screen.getAllByTestId('indicator')).toHaveLength(1);
   });
 
   it('keeps anchor composition and its ref on the actual tab element', async () => {

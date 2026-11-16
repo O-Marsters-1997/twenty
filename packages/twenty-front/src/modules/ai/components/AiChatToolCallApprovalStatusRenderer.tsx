@@ -9,8 +9,9 @@ import { isDefined } from 'twenty-shared/utils';
 import { IconMail, IconTool } from 'twenty-ui/icon';
 
 import { AiChatAskStatusRow } from '@/ai/components/AiChatAskStatusRow';
-import { StyledAiChatAskStatusDetail } from '@/ai/components/AiChatAskStyledComponents';
+import { aiChatAskStyles } from '@/ai/components/AiChatAskStyledComponents';
 import { TextWithChatReferences } from '@/ai/components/TextWithChatReferences';
+import * as stylex from '@stylexjs/stylex';
 
 export const AiChatToolCallApprovalStatusRenderer = ({
   toolPart,
@@ -22,9 +23,7 @@ export const AiChatToolCallApprovalStatusRenderer = ({
   const { t } = useLingui();
 
   const output = toolPart.output as
-    | { result?: ProposeToolCallToolResult; error?: string }
-    | null
-    | undefined;
+    { result?: ProposeToolCallToolResult; error?: string } | null | undefined;
   const result = output?.result;
   const status: ProposeToolCallToolStatus = result?.status ?? 'pending';
   // refused when proposed, or failing outright, the call never reached the person
@@ -72,9 +71,9 @@ export const AiChatToolCallApprovalStatusRenderer = ({
       }
     >
       {isNonEmptyString(detail) && (
-        <StyledAiChatAskStatusDetail>
+        <span {...stylex.props(aiChatAskStyles.statusDetail)}>
           <TextWithChatReferences text={detail} />
-        </StyledAiChatAskStatusDetail>
+        </span>
       )}
     </AiChatAskStatusRow>
   );

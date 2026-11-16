@@ -1,5 +1,4 @@
 import { themeCssVariables } from 'twenty-ui/theme';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { Button } from 'twenty-ui/primitives/input';
 import { IconDownload } from 'twenty-ui/icon';
@@ -8,14 +7,17 @@ import { type DpaAgreement } from '@/settings/legal/types/Dpa';
 import { TableCell } from '@/ui/layout/table/components/TableCell';
 import { TableRow } from '@/ui/layout/table/components/TableRow';
 import { beautifyExactDateTime } from '~/utils/date-utils';
+import * as stylex from '@stylexjs/stylex';
 
 export const DPA_AGREEMENT_ROW_GRID_COLUMNS = '3fr 2fr 2fr 140px';
 
-const StyledEllipsisLabel = styled.div`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
+const styles = stylex.create({
+  ellipsisLabel: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+});
 
 type SettingsDpaAgreementRowProps = {
   agreement: DpaAgreement;
@@ -41,7 +43,7 @@ export const SettingsDpaAgreementRow = ({
         overflow="hidden"
         textOverflow="ellipsis"
       >
-        <StyledEllipsisLabel>{label}</StyledEllipsisLabel>
+        <div {...stylex.props(styles.ellipsisLabel)}>{label}</div>
       </TableCell>
       <TableCell>{agreement.templateVersion}</TableCell>
       <TableCell>{beautifyExactDateTime(agreement.acceptedAt)}</TableCell>

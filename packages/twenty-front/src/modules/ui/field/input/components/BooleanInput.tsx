@@ -1,22 +1,25 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { useEffect, useState } from 'react';
 
 import { BooleanDisplay } from '@/ui/field/display/components/BooleanDisplay';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { fontColor } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledEditableBooleanFieldContainer = styled.div<{ readonly?: boolean }>`
-  align-items: center;
-  color: ${({ readonly }) =>
-    readonly
-      ? themeCssVariables.font.color.tertiary
-      : themeCssVariables.font.color.primary};
-  cursor: ${({ onClick }) => (onClick ? 'pointer' : 'default')};
-
-  display: flex;
-  height: 100%;
-
-  width: 100%;
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-primary'],
+    cursor: 'default',
+    display: 'flex',
+    height: '100%',
+    width: '100%',
+  },
+  containerReadonly: {
+    color: fontColor['--t-font-color-tertiary'],
+  },
+  containerClickable: {
+    cursor: 'pointer',
+  },
+});
 
 type BooleanInputProps = {
   value: boolean;
@@ -43,12 +46,16 @@ export const BooleanInput = ({
   };
 
   return (
-    <StyledEditableBooleanFieldContainer
+    <div
       onClick={readonly ? undefined : handleClick}
-      readonly={readonly}
       data-testid={testId}
+      {...stylex.props(
+        styles.container,
+        readonly && styles.containerReadonly,
+        !readonly && styles.containerClickable,
+      )}
     >
       <BooleanDisplay value={internalValue} />
-    </StyledEditableBooleanFieldContainer>
+    </div>
   );
 };

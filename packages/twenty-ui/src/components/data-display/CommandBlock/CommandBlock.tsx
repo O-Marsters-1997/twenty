@@ -1,11 +1,20 @@
 import { useRender } from '@base-ui/react/use-render';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 import { isDefined } from '@ui/utilities/utils/isDefined';
 
+import {
+  background,
+  borderColor,
+  borderRadius,
+  codeFont,
+  codeText,
+  fontColor,
+  spacing,
+} from '../../../theme/tokens.stylex';
 import { type CommandBlockProps } from './types/CommandBlockProps';
-
-import styles from './CommandBlock.module.scss';
 
 export const CommandBlock = ({
   commands,
@@ -13,22 +22,23 @@ export const CommandBlock = ({
   render,
   ref,
   className,
+  xstyle,
   ...props
-}: CommandBlockProps) =>
+}: WithXstyle<CommandBlockProps>) =>
   useRender({
     render,
     ref,
     props: {
       ...props,
-      className: clsx(styles.container, className),
+      ...mergeStylexProps(stylex.props(styles.container, xstyle), className),
       children: (
         <>
-          <pre className={styles.commands}>
-            <code>
+          <pre {...stylex.props(styles.commands)}>
+            <code {...stylex.props(styles.code)}>
               {commands.map((line, index) => (
                 <span key={index}>
                   {index > 0 && '\n'}
-                  <span className={styles.prompt} aria-hidden="true">
+                  <span {...stylex.props(styles.prompt)} aria-hidden="true">
                     {'> '}
                   </span>
                   {line}
@@ -37,9 +47,45 @@ export const CommandBlock = ({
             </code>
           </pre>
           {isDefined(actions) && (
-            <div className={styles.actions}>{actions}</div>
+            <div {...stylex.props(styles.actions)}>{actions}</div>
           )}
         </>
       ),
     },
   });
+
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    backgroundColor: background['--t-background-secondary'],
+    borderColor: borderColor['--t-border-color-medium'],
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    borderStyle: 'solid',
+    borderWidth: 1,
+    display: 'flex',
+    gap: spacing['--t-spacing-3'],
+    justifyContent: 'space-between',
+    minInlineSize: 0,
+    padding: spacing['--t-spacing-3'],
+  },
+  commands: {
+    color: fontColor['--t-font-color-primary'],
+    fontFamily: codeFont['--t-code-font-family'],
+    margin: 0,
+    minInlineSize: 0,
+    overflowWrap: 'anywhere',
+    whiteSpace: 'pre-wrap',
+  },
+  code: {
+    font: 'inherit',
+  },
+  actions: {
+    alignItems: 'center',
+    display: 'flex',
+    flexShrink: 0,
+    gap: spacing['--t-spacing-2'],
+  },
+  prompt: {
+    color: codeText['--t-code-text-orange'],
+  },
+});

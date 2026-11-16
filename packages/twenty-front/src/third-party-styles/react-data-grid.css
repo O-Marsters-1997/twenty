@@ -1,0 +1,97 @@
+@layer third-party {
+  [data-spreadsheet-import-table] {
+    --rdg-background-color: var(--t-background-primary);
+    --rdg-border-color: var(--t-border-color-medium);
+    --rdg-color: var(--t-font-color-primary);
+    --rdg-error-cell-background-color: var(--t-color-transparent-red5);
+    --rdg-font-size: var(--t-font-size-sm);
+    --rdg-frozen-cell-box-shadow: none;
+    --rdg-header-background-color: var(--t-background-primary);
+    --rdg-info-cell-background-color: var(--t-color-blue);
+    --rdg-row-hover-background-color: var(--t-background-secondary);
+    --rdg-row-selected-background-color: var(--t-background-primary);
+    --rdg-row-selected-hover-background-color: var(--t-background-secondary);
+    --rdg-selection-color: var(--t-color-blue);
+    --rdg-summary-border-color: var(--t-border-color-medium);
+    --rdg-warning-cell-background-color: var(--t-color-orange);
+    --row-selected-hover-background-color: var(--t-background-secondary);
+  }
+
+  [data-spreadsheet-import-table] > * {
+    border: none;
+    block-size: 100%;
+    width: 100%;
+  }
+
+  [data-spreadsheet-import-table] .rdg-header-row .rdg-cell {
+    box-shadow: none;
+    color: var(--t-font-color-tertiary);
+    background-color: var(--t-background-secondary);
+    font-size: var(--t-font-size-sm);
+    font-weight: var(--t-font-weight-semi-bold);
+    border-bottom: 1px solid var(--t-border-color-medium);
+  }
+
+  [data-spreadsheet-import-table][data-header-hidden]
+    .rdg-header-row
+    .rdg-cell {
+    border-bottom: none;
+  }
+
+  [data-spreadsheet-import-table] .rdg-cell {
+    border-bottom: 1px solid var(--t-border-color-medium);
+    border-inline-end: none;
+    border-right: none;
+    box-shadow: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  [data-spreadsheet-import-table] .rdg-row:last-child > .rdg-cell {
+    border-bottom: none;
+  }
+
+  [data-spreadsheet-import-table] .rdg-cell[aria-selected='true'] {
+    outline: none;
+  }
+
+  [data-spreadsheet-import-table] .rdg-cell-error {
+    background-color: var(--t-color-yellow3);
+  }
+
+  [data-spreadsheet-import-table] .rdg-cell-warning {
+    background-color: var(--t-color-transparent-orange2);
+  }
+
+  [data-spreadsheet-import-table] .rdg-cell-info {
+    background-color: var(--t-color-transparent-blue2);
+  }
+
+  [data-spreadsheet-import-table] .rdg-static {
+    cursor: pointer;
+  }
+
+  [data-spreadsheet-import-table] .rdg-static .rdg-header-row {
+    display: none;
+  }
+
+  [data-spreadsheet-import-table] .rdg-static .rdg-cell {
+    --rdg-selection-color: none;
+  }
+
+  [data-spreadsheet-import-table] .rdg-example .rdg-cell {
+    --rdg-selection-color: none;
+    border-bottom: none;
+  }
+
+  [data-spreadsheet-import-table] .rdg-radio {
+    align-items: center;
+    display: flex;
+  }
+
+  [data-spreadsheet-import-table] .rdg-checkbox {
+    align-items: center;
+    display: flex;
+  }
+}

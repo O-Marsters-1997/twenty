@@ -1,10 +1,17 @@
-import { styled } from '@linaria/react';
-
 import { EventRow } from '@/activities/timeline-activities/components/EventRow';
-import { TIMELINE_ICON_SLOT_SIZE } from '@/activities/timeline-activities/constants/TimelineIconSlotSize';
+import { timelineIconSlot } from '../constants/TimelineIconSlotSize.stylex';
 import { type EventGroup } from '@/activities/timeline-activities/utils/groupEventsByMonth';
 import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/EnrichedObjectMetadataItem';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  background,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type EventsGroupProps = {
   group: EventGroup;
@@ -13,47 +20,48 @@ type EventsGroupProps = {
   mainObjectMetadataItem: EnrichedObjectMetadataItem | null;
 };
 
-const StyledActivityGroup = styled.div`
-  display: flex;
-  flex-flow: column;
-  gap: ${themeCssVariables.spacing[4]};
-  margin-bottom: ${themeCssVariables.spacing[4]};
-  width: 100%;
-`;
-
-const StyledActivityGroupContainer = styled.div`
-  margin-bottom: ${themeCssVariables.spacing[3]};
-  margin-top: ${themeCssVariables.spacing[3]};
-  position: relative;
-`;
-
-const StyledActivityGroupBar = styled.div`
-  background: ${themeCssVariables.background.secondary};
-  border: 1px solid ${themeCssVariables.border.color.light};
-  border-radius: ${themeCssVariables.border.radius.md};
-  height: 100%;
-  inset-inline-start: 0;
-  position: absolute;
-  top: 0;
-  width: ${TIMELINE_ICON_SLOT_SIZE}px;
-`;
-
-const StyledMonthSeperator = styled.div`
-  align-items: center;
-  align-self: stretch;
-  color: ${themeCssVariables.font.color.light};
-  display: flex;
-  font-size: ${themeCssVariables.font.size.xs};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-  gap: ${themeCssVariables.spacing[4]};
-`;
-const StyledMonthSeperatorLine = styled.div`
-  background: ${themeCssVariables.border.color.light};
-  border-radius: ${themeCssVariables.border.radius.pill};
-  corner-shape: round;
-  flex: 1 0 0;
-  height: 1px;
-`;
+const styles = stylex.create({
+  activityGroupBar: {
+    backgroundColor: background['--t-background-secondary'],
+    borderColor: borderColor['--t-border-color-light'],
+    borderRadius: borderRadius['--t-border-radius-md'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    height: '100%',
+    insetInlineStart: 0,
+    position: 'absolute',
+    top: 0,
+    width: timelineIconSlot.size,
+  },
+  activityGroup: {
+    display: 'flex',
+    flexFlow: 'column',
+    gap: spacing['--t-spacing-4'],
+    marginBottom: spacing['--t-spacing-4'],
+    width: '100%',
+  },
+  activityGroupContainer: {
+    marginBottom: spacing['--t-spacing-3'],
+    marginTop: spacing['--t-spacing-3'],
+    position: 'relative',
+  },
+  monthSeperator: {
+    alignItems: 'center',
+    alignSelf: 'stretch',
+    color: fontColor['--t-font-color-light'],
+    display: 'flex',
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    gap: spacing['--t-spacing-4'],
+  },
+  monthSeperatorLine: {
+    backgroundColor: borderColor['--t-border-color-light'],
+    borderRadius: borderRadius['--t-border-radius-pill'],
+    cornerShape: 'round',
+    flex: '1 0 0',
+    height: '1px',
+  },
+});
 
 export const EventsGroup = ({
   group,
@@ -62,13 +70,13 @@ export const EventsGroup = ({
   mainObjectMetadataItem,
 }: EventsGroupProps) => {
   return (
-    <StyledActivityGroup>
-      <StyledMonthSeperator>
+    <div {...stylex.props(styles.activityGroup)}>
+      <div {...stylex.props(styles.monthSeperator)}>
         {month} {year}
-        <StyledMonthSeperatorLine />
-      </StyledMonthSeperator>
-      <StyledActivityGroupContainer>
-        <StyledActivityGroupBar />
+        <div {...stylex.props(styles.monthSeperatorLine)} />
+      </div>
+      <div {...stylex.props(styles.activityGroupContainer)}>
+        <div {...stylex.props(styles.activityGroupBar)} />
         {group.items.map((event, index) => (
           <EventRow
             mainObjectMetadataItem={mainObjectMetadataItem}
@@ -77,7 +85,7 @@ export const EventsGroup = ({
             isLastEvent={index === group.items.length - 1}
           />
         ))}
-      </StyledActivityGroupContainer>
-    </StyledActivityGroup>
+      </div>
+    </div>
   );
 };

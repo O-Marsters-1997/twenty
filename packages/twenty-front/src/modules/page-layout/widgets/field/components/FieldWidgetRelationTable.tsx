@@ -6,7 +6,7 @@ import { type ValidResolvedJunctionConfig } from '@/object-record/record-field/u
 import { recordStoreFamilySelector } from '@/object-record/record-store/states/selectors/recordStoreFamilySelector';
 import { RECORD_TABLE_ROW_HEIGHT } from '@/object-record/record-table/constants/RecordTableRowHeight';
 import { useIsPageLayoutInEditMode } from '@/page-layout/hooks/useIsPageLayoutInEditMode';
-import { StyledWidgetTableOutline } from '@/page-layout/widgets/components/WidgetContentFrame';
+import { WidgetTableOutline } from '@/page-layout/widgets/components/WidgetContentFrame';
 import { RecordTableWidgetRendererContent } from '@/page-layout/widgets/record-table/components/RecordTableWidgetRendererContent';
 import { getFieldWidgetJunctionCreateThrough } from '@/page-layout/widgets/field/utils/getFieldWidgetJunctionCreateThrough';
 import { getFieldWidgetNestedRelationCreateThrough } from '@/page-layout/widgets/field/utils/getFieldWidgetNestedRelationCreateThrough';
@@ -16,7 +16,6 @@ import { useCurrentWidget } from '@/page-layout/widgets/hooks/useCurrentWidget';
 import { useWorkspaceSurface } from '@/ui/layout/hooks/useWorkspaceSurface';
 import { useAtomFamilySelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilySelectorValue';
 import { useViewById } from '@/views/hooks/useViewById';
-import { styled } from '@linaria/react';
 import { isNonEmptyString } from '@sniptt/guards';
 import { useMemo } from 'react';
 import {
@@ -24,16 +23,13 @@ import {
   isDefined,
 } from 'twenty-shared/utils';
 import { RelationType } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
 
 const FIELD_WIDGET_RELATION_TABLE_MAX_VISIBLE_RECORDS = 20;
 
 const FIELD_WIDGET_RELATION_TABLE_MAX_HEIGHT_IN_PX =
   (FIELD_WIDGET_RELATION_TABLE_MAX_VISIBLE_RECORDS + 2) *
   RECORD_TABLE_ROW_HEIGHT;
-
-const StyledContainer = styled(StyledWidgetTableOutline)`
-  max-height: ${FIELD_WIDGET_RELATION_TABLE_MAX_HEIGHT_IN_PX}px;
-`;
 
 type FieldWidgetRelationTableProps = {
   fieldDefinition: FieldDefinition<FieldRelationMetadata>;
@@ -233,7 +229,11 @@ export const FieldWidgetRelationTable = ({
         currentRecord: filterCurrentRecord,
       }}
     >
-      <StyledContainer>
+      <WidgetTableOutline
+        {...stylex.props(
+          styles.maxHeight(FIELD_WIDGET_RELATION_TABLE_MAX_HEIGHT_IN_PX),
+        )}
+      >
         <RecordTableWidgetRendererContent
           objectMetadataId={tableObjectMetadataId}
           viewId={viewId}
@@ -244,7 +244,11 @@ export const FieldWidgetRelationTable = ({
           nestedRelationCreateThrough={nestedRelationCreateThrough}
           junctionCreateThrough={junctionCreateThrough}
         />
-      </StyledContainer>
+      </WidgetTableOutline>
     </RecordFilterValueDependenciesContext.Provider>
   );
 };
+
+const styles = stylex.create({
+  maxHeight: (maxHeight: number) => ({ maxHeight }),
+});

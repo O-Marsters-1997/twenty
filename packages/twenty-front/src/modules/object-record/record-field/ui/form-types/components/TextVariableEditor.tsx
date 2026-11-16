@@ -1,74 +1,21 @@
-import { FORM_FIELD_PLACEHOLDER_STYLES } from '@/ui/input/constants/FormFieldPlaceholderStyles';
-import { styled } from '@linaria/react';
+import { mergeClassName } from '@/page-layout/utils/mergeClassName';
+import * as stylex from '@stylexjs/stylex';
 import { EditorContent, type Editor } from '@tiptap/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
+import '~/third-party-styles/text-variable-editor.css';
 
-const StyledEditor = styled.div<{
-  multiline?: boolean;
-  readonly?: boolean;
-}>`
-  box-sizing: border-box;
-  display: flex;
-  height: 100%;
-  padding-right: ${({ multiline }) =>
-    multiline ? themeCssVariables.spacing[8] : '0'};
-  width: 100%;
-  .editor-content {
-    width: 100%;
-  }
-
-  .tiptap {
-    align-items: ${({ multiline }) => (multiline ? 'flex-start' : 'center')};
-    border: none !important;
-    box-sizing: border-box;
-    color: ${({ readonly }) =>
-      readonly
-        ? themeCssVariables.font.color.light
-        : themeCssVariables.font.color.primary};
-    display: flex;
-    font-family: ${themeCssVariables.font.family};
-    font-weight: ${themeCssVariables.font.weight.regular};
-    &::-webkit-scrollbar {
-      display: none;
-    }
-    height: ${({ multiline }) => (multiline ? 'auto' : '100%')};
-    overflow-x: auto;
-    overflow-y: hidden;
-    padding: ${themeCssVariables.spacing[1]} ${themeCssVariables.spacing[2]};
-    scrollbar-width: none;
-    white-space: ${({ multiline }) => (multiline ? 'pre' : 'nowrap')};
-
-    p.is-editor-empty:first-of-type::before {
-      ${FORM_FIELD_PLACEHOLDER_STYLES}
-      content: attr(data-placeholder);
-      float: left;
-      height: 0;
-      pointer-events: none;
-    }
-
-    p {
-      margin: 0;
-    }
-
-    .variable-tag {
-      background-color: ${themeCssVariables.color.blue3};
-      border-radius: ${themeCssVariables.border.radius.md};
-      color: ${themeCssVariables.color.blue};
-      padding: ${themeCssVariables.spacing[1]};
-    }
-
-    .text-tag {
-      background-color: ${themeCssVariables.color.blue3};
-      border-radius: ${themeCssVariables.border.radius.md};
-      color: ${themeCssVariables.color.blue};
-      padding: ${themeCssVariables.spacing[1]};
-    }
-  }
-
-  .ProseMirror-focused {
-    outline: none;
-  }
-`;
+const styles = stylex.create({
+  editor: {
+    boxSizing: 'border-box',
+    display: 'flex',
+    height: '100%',
+    paddingRight: 0,
+    width: '100%',
+  },
+  editorMultiline: {
+    paddingRight: spacing['--t-spacing-8'],
+  },
+});
 
 type TextVariableEditorProps = {
   multiline: boolean | undefined;
@@ -82,8 +29,15 @@ export const TextVariableEditor = ({
   editor,
 }: TextVariableEditorProps) => {
   return (
-    <StyledEditor multiline={multiline} readonly={readonly}>
+    <div
+      {...mergeClassName(
+        stylex.props(styles.editor, multiline && styles.editorMultiline),
+        'text-variable-editor',
+      )}
+      data-multiline={multiline ? '' : undefined}
+      data-readonly={readonly ? '' : undefined}
+    >
       <EditorContent className="editor-content" editor={editor} />
-    </StyledEditor>
+    </div>
   );
 };

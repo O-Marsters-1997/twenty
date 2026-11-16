@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { isNonEmptyString } from '@sniptt/guards';
 import { useId } from 'react';
 
@@ -6,19 +5,22 @@ import { useDateTimeFormat } from '@/localization/hooks/useDateTimeFormat';
 import { TooltipDelay } from '@/ui/layout/tooltip/constants/TooltipDelay';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { Tooltip } from 'twenty-ui/primitives/surfaces';
-import { MOBILE_VIEWPORT, themeCssVariables } from 'twenty-ui/theme';
 import { dateLocaleState } from '@/localization/states/dateLocaleState';
 import { beautifyPastDateRelativeToNow } from '~/utils/date-utils';
 import { formatDateTimeString } from '@/object-record/record-field/ui/utils/formatDateTimeString';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
+import { media } from 'twenty-ui/theme/constants.stylex';
 
-const StyledEventRowDate = styled.div`
-  @media (max-width: ${MOBILE_VIEWPORT}px) {
-    display: none;
-  }
-  color: ${themeCssVariables.font.color.tertiary};
-  padding: 0 ${themeCssVariables.spacing[1]};
-  white-space: nowrap;
-`;
+const styles = stylex.create({
+  eventRowDate: {
+    display: { default: null, [media.mobile]: 'none' },
+    color: fontColor['--t-font-color-tertiary'],
+    paddingBlock: '0',
+    paddingInline: spacing['--t-spacing-1'],
+    whiteSpace: 'nowrap',
+  },
+});
 
 type EventRowDateProps = {
   happensAt?: string;
@@ -53,9 +55,13 @@ export const EventRowDate = ({ happensAt }: EventRowDateProps) => {
       delay={TooltipDelay.mediumDelay}
       side="left"
     >
-      <StyledEventRowDate id={dateElementId} tabIndex={0}>
+      <div
+        id={dateElementId}
+        tabIndex={0}
+        {...stylex.props(styles.eventRowDate)}
+      >
         {relativeHappensAt}
-      </StyledEventRowDate>
+      </div>
     </Tooltip>
   );
 };

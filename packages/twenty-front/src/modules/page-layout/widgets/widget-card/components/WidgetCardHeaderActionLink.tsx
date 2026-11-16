@@ -1,35 +1,15 @@
-import { styled } from '@linaria/react';
 import { Link } from 'react-router-dom';
 import { type IconComponent } from 'twenty-ui/icon';
-import { themeCssVariables, useTheme } from 'twenty-ui/theme';
-
-const StyledActionLink = styled(Link)`
-  align-items: center;
-  border-radius: ${themeCssVariables.border.radius.md};
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  height: ${themeCssVariables.spacing[6]};
-  justify-content: center;
-  min-width: ${themeCssVariables.spacing[6]};
-  padding: ${themeCssVariables.spacing[1]};
-  text-decoration: none;
-  transition: background calc(${themeCssVariables.animation.duration.fast} * 1s)
-    ease;
-  width: ${themeCssVariables.spacing[6]};
-
-  &:hover {
-    background: ${themeCssVariables.background.transparent.light};
-  }
-
-  &:focus-visible {
-    outline: 2px solid ${themeCssVariables.color.blue};
-    outline-offset: 1px;
-  }
-
-  &:active {
-    background: ${themeCssVariables.background.transparent.medium};
-  }
-`;
+import { useTheme } from 'twenty-ui/theme';
+import {
+  animationDuration,
+  spacing,
+  backgroundTransparent,
+  borderRadius,
+  fontColor,
+  color,
+} from 'twenty-ui/theme/tokens.stylex';
+import * as stylex from '@stylexjs/stylex';
 
 type WidgetCardHeaderActionLinkProps = {
   Icon: IconComponent;
@@ -45,8 +25,40 @@ export const WidgetCardHeaderActionLink = ({
   const theme = useTheme();
 
   return (
-    <StyledActionLink to={to} aria-label={label} title={label}>
+    <Link
+      to={to}
+      aria-label={label}
+      title={label}
+      {...stylex.props(styles.link)}
+    >
       <Icon size={theme.icon.size.sm} aria-hidden />
-    </StyledActionLink>
+    </Link>
   );
 };
+
+const styles = stylex.create({
+  link: {
+    alignItems: 'center',
+    backgroundColor: {
+      default: null,
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+      ':active': backgroundTransparent['--t-background-transparent-medium'],
+    },
+    borderRadius: borderRadius['--t-border-radius-md'],
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    height: spacing['--t-spacing-6'],
+    justifyContent: 'center',
+    minWidth: spacing['--t-spacing-6'],
+    outlineColor: { default: null, ':focus-visible': color['--t-color-blue'] },
+    outlineOffset: { default: null, ':focus-visible': 1 },
+    outlineStyle: { default: null, ':focus-visible': 'solid' },
+    outlineWidth: { default: null, ':focus-visible': 2 },
+    padding: spacing['--t-spacing-1'],
+    textDecoration: 'none',
+    transitionDuration: `calc(${animationDuration['--t-animation-duration-fast']} * 1s)`,
+    transitionProperty: 'background',
+    transitionTimingFunction: 'ease',
+    width: spacing['--t-spacing-6'],
+  },
+});

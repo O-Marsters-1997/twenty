@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { type z } from 'zod';
 
@@ -18,8 +17,10 @@ import { FieldMetadataType } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 import { IconInfoCircle, IconRefresh } from 'twenty-ui/icon';
 import { Card, Tooltip } from 'twenty-ui/primitives/surfaces';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import { computeMetadataNameFromLabel } from '@/object-metadata/utils/computeMetadataNameFromLabel';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 export const settingsDataModelFieldIconLabelFormSchema = (
   existingOtherLabels: string[] = [],
@@ -43,31 +44,30 @@ type SettingsDataModelFieldIconLabelFormValues = z.infer<
   ReturnType<typeof settingsDataModelFieldIconLabelFormSchema>
 >;
 
-const StyledInputsContainer = styled.div`
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  margin-bottom: ${themeCssVariables.spacing[1]};
-  width: 100%;
-`;
-
-const StyledAdvancedSettingsSectionInputWrapper = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[4]};
-  width: 100%;
-`;
-
-const StyledAdvancedSettingsOuterContainer = styled.div`
-  padding-top: ${themeCssVariables.spacing[4]};
-`;
-
-const StyledAdvancedSettingsContainer = styled.div`
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  position: relative;
-  width: 100%;
-`;
+const styles = stylex.create({
+  inputsContainer: {
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    marginBottom: spacing['--t-spacing-1'],
+    width: '100%',
+  },
+  advancedSettingsSectionInputWrapper: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-4'],
+    width: '100%',
+  },
+  advancedSettingsOuterContainer: {
+    paddingTop: spacing['--t-spacing-4'],
+  },
+  advancedSettingsContainer: {
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    position: 'relative',
+    width: '100%',
+  },
+});
 
 type SettingsDataModelFieldIconLabelFormProps = {
   fieldMetadataItem?: FieldMetadataItem;
@@ -140,7 +140,7 @@ export const SettingsDataModelFieldIconLabelForm = ({
 
   return (
     <>
-      <StyledInputsContainer>
+      <div {...stylex.props(styles.inputsContainer)}>
         <Controller
           name="icon"
           control={control}
@@ -180,13 +180,15 @@ export const SettingsDataModelFieldIconLabelForm = ({
             />
           )}
         />
-      </StyledInputsContainer>
+      </div>
       {canToggleSyncLabelWithName && (
         <AdvancedSettingsWrapper hideDot>
-          <StyledAdvancedSettingsOuterContainer>
-            <StyledAdvancedSettingsContainer>
-              <StyledAdvancedSettingsSectionInputWrapper>
-                <StyledInputsContainer>
+          <div {...stylex.props(styles.advancedSettingsOuterContainer)}>
+            <div {...stylex.props(styles.advancedSettingsContainer)}>
+              <div
+                {...stylex.props(styles.advancedSettingsSectionInputWrapper)}
+              >
+                <div {...stylex.props(styles.inputsContainer)}>
                   <Controller
                     name="name"
                     control={control}
@@ -225,7 +227,7 @@ export const SettingsDataModelFieldIconLabelForm = ({
                       />
                     )}
                   />
-                </StyledInputsContainer>
+                </div>
                 <Controller
                   name="isLabelSyncedWithName"
                   control={control}
@@ -265,9 +267,9 @@ export const SettingsDataModelFieldIconLabelForm = ({
                     </AdvancedSettingsContentWrapperWithDot>
                   )}
                 />
-              </StyledAdvancedSettingsSectionInputWrapper>
-            </StyledAdvancedSettingsContainer>
-          </StyledAdvancedSettingsOuterContainer>
+              </div>
+            </div>
+          </div>
         </AdvancedSettingsWrapper>
       )}
     </>

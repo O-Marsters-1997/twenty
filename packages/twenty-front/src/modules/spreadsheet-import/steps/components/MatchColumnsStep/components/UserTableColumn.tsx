@@ -1,34 +1,10 @@
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { type ImportedRow } from '@/spreadsheet-import/types';
 
 import { type SpreadsheetColumn } from '@/spreadsheet-import/types/SpreadsheetColumn';
 import { isDefined } from 'twenty-shared/utils';
-
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
-
-const StyledValue = styled.span`
-  color: ${themeCssVariables.font.color.primary};
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.medium};
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const StyledExample = styled.span`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.sm};
-  font-weight: ${themeCssVariables.font.weight.medium};
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, fontWeight } from 'twenty-ui/theme/tokens.stylex';
 
 type UserTableColumnProps = {
   column: SpreadsheetColumn;
@@ -43,11 +19,35 @@ export const UserTableColumn = ({
   const firstDefinedValue = importedRow.find(isDefined);
 
   return (
-    <StyledContainer>
-      <StyledValue>{header}</StyledValue>
+    <div {...stylex.props(styles.container)}>
+      <span {...stylex.props(styles.value)}>{header}</span>
       {firstDefinedValue && (
-        <StyledExample>{`ex: ${firstDefinedValue}`}</StyledExample>
+        <span {...stylex.props(styles.example)}>{`ex: ${firstDefinedValue}`}</span>
       )}
-    </StyledContainer>
+    </div>
   );
 };
+
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+  },
+  value: {
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  example: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+});

@@ -1,8 +1,17 @@
-import { FORM_FIELD_PLACEHOLDER_STYLES } from '@/ui/input/constants/FormFieldPlaceholderStyles';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import { type ReactNode } from 'react';
+import { fontColor, fontSize, fontWeight } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledPlaceholder = styled.div`
-  ${FORM_FIELD_PLACEHOLDER_STYLES}
-`;
+export const FormFieldPlaceholder = ({
+  children,
+}: {
+  children?: ReactNode;
+}) => <div {...stylex.props(styles.placeholder)}>{children}</div>;
 
-export { StyledPlaceholder as FormFieldPlaceholder };
+const styles = stylex.create({
+  placeholder: {
+    color: fontColor['--t-font-color-light'],
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+  },
+});

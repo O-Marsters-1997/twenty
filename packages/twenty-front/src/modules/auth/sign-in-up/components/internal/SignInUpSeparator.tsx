@@ -1,10 +1,12 @@
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledSignInUpSeparator = styled.div`
-  margin-block: ${themeCssVariables.spacing[3]};
-`;
+const styles = stylex.create({
+  signInUpSeparator: {
+    marginBlock: spacing['--t-spacing-3'],
+  },
+});
 
 export const SignInUpSeparator = () => {
-  return <StyledSignInUpSeparator />;
+  return <div {...stylex.props(styles.signInUpSeparator)} />;
 };

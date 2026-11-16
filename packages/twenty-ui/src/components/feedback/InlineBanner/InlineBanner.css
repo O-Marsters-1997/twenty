@@ -1,0 +1,7 @@
+@layer twenty-ui {
+  /* SVG width/height attributes cannot read CSS variables */
+  [data-inline-banner-icon] > svg {
+    block-size: calc(var(--t-icon-size-md) * 1px);
+    inline-size: calc(var(--t-icon-size-md) * 1px);
+  }
+}

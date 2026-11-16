@@ -3,25 +3,35 @@ import { AdvancedFilterAddFilterRuleSelect } from '@/object-record/advanced-filt
 
 import { useChildRecordFiltersAndRecordFilterGroups } from '@/object-record/advanced-filter/hooks/useChildRecordFiltersAndRecordFilterGroups';
 import { AdvancedFilterContext } from '@/object-record/advanced-filter/states/context/AdvancedFilterContext';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { useContext } from 'react';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import {
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div<{ isGrayBackground?: boolean }>`
-  align-items: start;
-  background-color: ${({ isGrayBackground }) =>
-    isGrayBackground
-      ? themeCssVariables.background.transparent.lighter
-      : 'transparent'};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.md};
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[6]};
-  padding: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'start',
+    backgroundColor: 'transparent',
+    borderColor: borderColor['--t-border-color-medium'],
+    borderRadius: borderRadius['--t-border-radius-md'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-6'],
+    padding: spacing['--t-spacing-2'],
+  },
+  grayBackground: {
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
+  },
+});
 
 type AdvancedFilterSidePanelRecordFilterGroupChildrenProps = {
   recordFilterGroupId: string;
@@ -45,7 +55,12 @@ export const AdvancedFilterSidePanelRecordFilterGroupChildren = ({
   );
 
   return (
-    <StyledContainer isGrayBackground={hasParentRecordFilterGroup}>
+    <div
+      {...stylex.props(
+        styles.container,
+        hasParentRecordFilterGroup && styles.grayBackground,
+      )}
+    >
       {childRecordFilters.map((childRecordFilter, childRecordFilterIndex) => (
         <AdvancedFilterSidePanelRecordFilterColumn
           key={childRecordFilter.id}
@@ -59,6 +74,6 @@ export const AdvancedFilterSidePanelRecordFilterGroupChildren = ({
           recordFilterGroup={currentRecordFilterGroup}
         />
       )}
-    </StyledContainer>
+    </div>
   );
 };

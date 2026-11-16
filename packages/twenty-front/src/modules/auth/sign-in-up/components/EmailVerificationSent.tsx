@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 
 import { SubTitle } from '@/auth/components/SubTitle';
 import { Title } from '@/auth/components/Title';
@@ -13,72 +12,64 @@ import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomStat
 import { t } from '@lingui/core/macro';
 import { MainButton } from 'twenty-ui/components/input';
 import { IconGmail, IconMail, IconMailX, IconMicrosoft } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { openUrlInNewTab } from '~/utils/openUrlInNewTab';
+import * as stylex from '@stylexjs/stylex';
+import { font, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[8]};
-  width: 100%;
-`;
-
-const StyledTextContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-`;
-
-const StyledEmail = styled.span`
-  font-weight: ${themeCssVariables.font.weight.medium};
-`;
-
-const StyledButtonsContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[3]};
-  max-width: 240px;
-  width: 100%;
-`;
-
-const StyledBottomLinks = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  gap: ${themeCssVariables.spacing[2]};
-  justify-content: center;
-`;
-
-const StyledLinkButton = styled.button`
-  background: none;
-  border: none;
-  color: ${themeCssVariables.font.color.tertiary};
-  cursor: pointer;
-  font-family: ${themeCssVariables.font.family};
-  font-size: ${themeCssVariables.font.size.xs};
-  font-weight: ${themeCssVariables.font.weight.regular};
-  line-height: 140%;
-
-  &:hover {
-    color: ${themeCssVariables.font.color.secondary};
-  }
-
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-  }
-`;
-
-const StyledDot = styled.div`
-  background: ${themeCssVariables.font.color.light};
-  border-radius: 50%;
-  corner-shape: round;
-  height: 2px;
-  width: 2px;
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-8'],
+    width: '100%',
+  },
+  textContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    textAlign: 'center',
+  },
+  email: {
+    fontWeight: fontWeight['--t-font-weight-medium'],
+  },
+  buttonsContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-3'],
+    maxWidth: '240px',
+    width: '100%',
+  },
+  bottomLinks: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+    gap: spacing['--t-spacing-2'],
+    justifyContent: 'center',
+  },
+  linkButton: {
+    background: 'none',
+    borderStyle: 'none',
+    color: { default: fontColor['--t-font-color-tertiary'], ':hover': fontColor['--t-font-color-secondary'] },
+    cursor: { default: 'pointer', ':disabled': 'not-allowed' },
+    fontFamily: font['--t-font-family'],
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    lineHeight: '140%',
+    opacity: { default: null, ':disabled': '0.5' },
+  },
+  dot: {
+    background: fontColor['--t-font-color-light'],
+    borderTopLeftRadius: '50%',
+    borderTopRightRadius: '50%',
+    borderBottomRightRadius: '50%',
+    borderBottomLeftRadius: '50%',
+    cornerShape: 'round',
+    height: '2px',
+    width: '2px',
+  },
+});
 
 export const EmailVerificationSent = ({
   email,
@@ -150,36 +141,36 @@ export const EmailVerificationSent = ({
   );
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <AnimatedEaseIn>
         <OnboardingModalCircularIcon Icon={Icon} />
       </AnimatedEaseIn>
 
-      <StyledTextContainer>
+      <div {...stylex.props(styles.textContainer)}>
         <Title animate noMarginTop>
           {title}
         </Title>
         <SubTitle>
-          {subtitle} <StyledEmail>{email}</StyledEmail>
+          {subtitle} <span {...stylex.props(styles.email)}>{email}</span>
         </SubTitle>
-      </StyledTextContainer>
+      </div>
 
-      <StyledButtonsContainer>{mainButtons}</StyledButtonsContainer>
+      <div {...stylex.props(styles.buttonsContainer)}>{mainButtons}</div>
 
       {!isError && (
-        <StyledBottomLinks>
-          <StyledLinkButton
+        <div {...stylex.props(styles.bottomLinks)}>
+          <button
             onClick={handleResendEmailVerificationToken(email)}
-            disabled={isLoading}
+            disabled={isLoading} {...stylex.props(styles.linkButton)}
           >
             {isLoading ? t`Sending...` : t`Resend email`}
-          </StyledLinkButton>
-          <StyledDot />
-          <StyledLinkButton onClick={handleChangeEmail}>
+          </button>
+          <div {...stylex.props(styles.dot)} />
+          <button onClick={handleChangeEmail} {...stylex.props(styles.linkButton)}>
             {t`Change email`}
-          </StyledLinkButton>
-        </StyledBottomLinks>
+          </button>
+        </div>
       )}
-    </StyledContainer>
+    </div>
   );
 };

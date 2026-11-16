@@ -7,27 +7,36 @@ import {
 import { VariableChipStandalone } from '@/object-record/record-field/ui/form-types/components/VariableChipStandalone';
 import { type ObjectRecord } from '@/object-record/types/ObjectRecord';
 import { isStandaloneVariableString } from 'twenty-shared/workflow';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { IconForbid } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledRecordChipContainer = styled.div`
-  margin: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledPlaceholderContainer = styled.div`
-  margin: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledNoRecordContainer = styled.div`
-  align-items: center;
-  color: ${themeCssVariables.font.color.primary};
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  margin: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  recordChipContainer: {
+    marginTop: spacing['--t-spacing-2'],
+    marginRight: spacing['--t-spacing-2'],
+    marginBottom: spacing['--t-spacing-2'],
+    marginLeft: spacing['--t-spacing-2'],
+  },
+  placeholderContainer: {
+    marginTop: spacing['--t-spacing-2'],
+    marginRight: spacing['--t-spacing-2'],
+    marginBottom: spacing['--t-spacing-2'],
+    marginLeft: spacing['--t-spacing-2'],
+  },
+  noRecordContainer: {
+    alignItems: 'center',
+    color: fontColor['--t-font-color-primary'],
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    marginTop: spacing['--t-spacing-2'],
+    marginRight: spacing['--t-spacing-2'],
+    marginBottom: spacing['--t-spacing-2'],
+    marginLeft: spacing['--t-spacing-2'],
+  },
+});
 
 type FormSingleRecordFieldChipProps = {
   draftValue:
@@ -71,27 +80,27 @@ export const FormSingleRecordFieldChip = ({
 
   if (draftValue.type === 'no-record') {
     return (
-      <StyledNoRecordContainer>
+      <div {...stylex.props(styles.noRecordContainer)}>
         <IconForbid size={12} />
         {t`No record`}
-      </StyledNoRecordContainer>
+      </div>
     );
   }
 
   if (draftValue.type === 'static' && isDefined(selectedRecord)) {
     return (
-      <StyledRecordChipContainer>
+      <div {...stylex.props(styles.recordChipContainer)}>
         <RecordChip
           record={selectedRecord}
           objectNameSingular={objectNameSingular}
         />
-      </StyledRecordChipContainer>
+      </div>
     );
   }
 
   return (
-    <StyledPlaceholderContainer>
+    <div {...stylex.props(styles.placeholderContainer)}>
       <FormFieldPlaceholder>{t`Select`}</FormFieldPlaceholder>
-    </StyledPlaceholderContainer>
+    </div>
   );
 };

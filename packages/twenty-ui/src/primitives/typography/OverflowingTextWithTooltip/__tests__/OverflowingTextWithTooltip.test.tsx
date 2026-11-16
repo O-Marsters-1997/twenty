@@ -3,7 +3,6 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { createRef } from 'react';
 import { runComponentConformance } from '@test-utilities/conformance/runComponentConformance';
-import styles from '../OverflowingTextWithTooltip.module.scss';
 
 import { Tooltip } from '@ui/primitives/surfaces/Tooltip/Tooltip';
 
@@ -27,7 +26,6 @@ const setTextDimensions = ({
 runComponentConformance({
   name: 'OverflowingTextWithTooltip',
   element: <OverflowingTextWithTooltip text="Body" />,
-  ownClassName: styles.overflowingText,
   refInstanceOf: HTMLDivElement,
 });
 

@@ -24,23 +24,25 @@ import { useAtomComponentFamilyStateValue } from '@/ui/utilities/state/jotai/hoo
 import { useAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useAtomComponentState';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { useGetCurrentViewOnly } from '@/views/hooks/useGetCurrentViewOnly';
-import { styled } from '@linaria/react';
 import { useContext } from 'react';
 import { Collapsible } from 'twenty-ui/primitives/layout';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { useDebouncedCallback } from 'use-debounce';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledCardContainer = styled.div<{ isPrimaryMultiDrag?: boolean }>`
-  position: relative;
-  transform: ${({ isPrimaryMultiDrag }) =>
-    isPrimaryMultiDrag ? 'scale(1.02)' : 'none'};
-  z-index: ${({ isPrimaryMultiDrag }) => (isPrimaryMultiDrag ? '10' : 'auto')};
-`;
-
-const StyledBoardCardWrapper = styled.div`
-  padding-bottom: ${themeCssVariables.spacing[2]};
-  width: 100%;
-`;
+const styles = stylex.create({
+  cardContainer: {
+    position: 'relative',
+  },
+  primaryMultiDrag: {
+    transform: 'scale(1.02)',
+    zIndex: 10,
+  },
+  boardCardWrapper: {
+    paddingBottom: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+});
 
 export const RecordBoardCard = () => {
   const { recordId, rowIndex, columnIndex, isDragOverlay } = useContext(
@@ -117,11 +119,17 @@ export const RecordBoardCard = () => {
         instanceId: `record-board-card-${recordId}`,
       }}
     >
-      <StyledBoardCardWrapper
+      <div
         data-click-outside-id={RECORD_BOARD_CARD_CLICK_OUTSIDE_ID}
         onContextMenu={(event) => openRecordContextMenu({ event, recordId })}
+        {...stylex.props(styles.boardCardWrapper)}
       >
-        <StyledCardContainer isPrimaryMultiDrag={isMultiDragOverlay}>
+        <div
+          {...stylex.props(
+            styles.cardContainer,
+            isMultiDragOverlay && styles.primaryMultiDrag,
+          )}
+        >
           {isMultiDragOverlay && <RecordDragMultiDragStack />}
           <RecordCard
             data-selected={isRecordSelected}
@@ -140,14 +148,14 @@ export const RecordBoardCard = () => {
               </Collapsible.Panel>
             </Collapsible.Root>
           </RecordCard>
-        </StyledCardContainer>
+        </div>
         {!isDragOverlay && (
           <>
             <RecordBoardCardCellHoveredPortal />
             <RecordBoardCardCellEditModePortal />
           </>
         )}
-      </StyledBoardCardWrapper>
+      </div>
     </RecordBoardCardComponentInstanceContext.Provider>
   );
 };

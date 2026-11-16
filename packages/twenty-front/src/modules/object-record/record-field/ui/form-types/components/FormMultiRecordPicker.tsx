@@ -18,7 +18,6 @@ import { FormFieldInputContainer } from '@/ui/input/components/FormFieldInputCon
 import { Dropdown } from '@/ui/layout/dropdown/components/Dropdown';
 import { GenericDropdownContentWidth } from '@/ui/layout/dropdown/constants/GenericDropdownContentWidth';
 import { useCloseDropdown } from '@/ui/layout/dropdown/hooks/useCloseDropdown';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isNonEmptyArray } from '@sniptt/guards';
 import { useId, useState } from 'react';
@@ -27,32 +26,36 @@ import { isDefined, isValidUuid } from 'twenty-shared/utils';
 import { useToast } from 'twenty-ui/components/feedback';
 import { IconChevronDown } from 'twenty-ui/icon';
 import { Field } from 'twenty-ui/primitives/input';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import { mapArrayToObject } from '~/utils/array/mapArrayToObject';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledFormSelectContainerWrapper = styled.div<{ readonly?: boolean }>`
-  cursor: ${({ readonly }) => (readonly ? 'default' : 'pointer')};
-  display: flex;
-  height: 32px;
-  min-width: 0;
-  width: 100%;
-`;
-
-const StyledIconButton = styled.div`
-  display: flex;
-  padding-right: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledDropdownContainer = styled.div`
-  display: flex;
-  flex: 1;
-  min-width: 0;
-`;
-
-const StyledVariablePickerContainer = styled.div`
-  display: flex;
-  flex-shrink: 0;
-`;
+const styles = stylex.create({
+  formSelectContainerWrapper: {
+    cursor: 'pointer',
+    display: 'flex',
+    height: 32,
+    minWidth: 0,
+    width: '100%',
+  },
+  formSelectContainerWrapperReadonly: {
+    cursor: 'default',
+  },
+  iconButton: {
+    display: 'flex',
+    paddingRight: spacing['--t-spacing-2'],
+  },
+  dropdownContainer: {
+    display: 'flex',
+    flex: '1',
+    minWidth: '0',
+  },
+  variablePickerContainer: {
+    display: 'flex',
+    flexShrink: '0',
+  },
+});
 
 export type FormMultiRecordPickerProps = {
   label?: string;
@@ -192,16 +195,21 @@ export const FormMultiRecordPicker = ({
       {label ? <Field.Label>{label}</Field.Label> : null}
       <FormFieldInputRowContainer>
         {readonly || draftValue.type === 'variable' ? (
-          <StyledFormSelectContainerWrapper readonly={readonly}>
+          <div
+            {...stylex.props(
+              styles.formSelectContainerWrapper,
+              readonly && styles.formSelectContainerWrapperReadonly,
+            )}
+          >
             <FormFieldInputInnerContainer
               formFieldInputInstanceId={componentId}
               hasRightElement={false}
             >
               {chips}
             </FormFieldInputInnerContainer>
-          </StyledFormSelectContainerWrapper>
+          </div>
         ) : (
-          <StyledDropdownContainer>
+          <div {...stylex.props(styles.dropdownContainer)}>
             <Dropdown
               dropdownId={dropdownId}
               dropdownPlacement="bottom-start"
@@ -211,7 +219,7 @@ export const FormMultiRecordPicker = ({
                 y: parseInt(theme.spacing[1], 10),
               }}
               clickableComponent={
-                <StyledFormSelectContainerWrapper>
+                <div {...stylex.props(styles.formSelectContainerWrapper)}>
                   <FormFieldInputInnerContainer
                     formFieldInputInstanceId={componentId}
                     hasRightElement={isDefined(VariablePicker) && !readonly}
@@ -219,14 +227,14 @@ export const FormMultiRecordPicker = ({
                     preventFocusStackUpdate={true}
                   >
                     {chips}
-                    <StyledIconButton>
+                    <div {...stylex.props(styles.iconButton)}>
                       <IconChevronDown
                         size={theme.icon.size.md}
                         color={theme.font.color.light}
                       />
-                    </StyledIconButton>
+                    </div>
                   </FormFieldInputInnerContainer>
-                </StyledFormSelectContainerWrapper>
+                </div>
               }
               dropdownComponents={
                 <MultipleRecordPicker
@@ -239,10 +247,10 @@ export const FormMultiRecordPicker = ({
                 />
               }
             />
-          </StyledDropdownContainer>
+          </div>
         )}
         {isDefined(VariablePicker) && !readonly && (
-          <StyledVariablePickerContainer>
+          <div {...stylex.props(styles.variablePickerContainer)}>
             <VariablePicker
               instanceId={variablesDropdownId}
               disabled={readonly}
@@ -251,7 +259,7 @@ export const FormMultiRecordPicker = ({
               shouldDisplayRecordFields={true}
               objectNameSingularsToSelect={[objectNameSingular]}
             />
-          </StyledVariablePickerContainer>
+          </div>
         )}
       </FormFieldInputRowContainer>
     </FormFieldInputContainer>

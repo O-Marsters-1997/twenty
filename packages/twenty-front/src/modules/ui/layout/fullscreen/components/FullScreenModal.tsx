@@ -1,46 +1,39 @@
-import { RootStackingContextZIndices } from '@/ui/layout/constants/RootStackingContextZIndices';
+import { zIndex } from '@/ui/layout/constants/layout.stylex';
 import { PageHeader } from '@/ui/layout/page/components/PageHeader';
 import { Breadcrumb } from '@/ui/navigation/bread-crumb/components/Breadcrumb';
 import { type BreadcrumbProps } from '@/ui/navigation/bread-crumb/types/BreadcrumbProps';
-import { styled } from '@linaria/react';
 import { forwardRef } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { background, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledFullScreenOverlay = styled.div`
-  background: ${themeCssVariables.background.noisy};
-  bottom: 0;
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh / var(--t-zoom, 1));
-  left: 0;
-  position: fixed;
-  right: 0;
-  top: 0;
-  width: 100%;
-  z-index: ${RootStackingContextZIndices.RootModal};
-`;
-
-const StyledFullScreenHeaderContainer = styled.div`
-  padding-left: ${themeCssVariables.spacing[3]};
-`;
-
-const StyledFullScreenContent = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[3]};
-  min-height: 0;
-  padding: 0 ${themeCssVariables.spacing[3]} ${themeCssVariables.spacing[3]}
-    ${themeCssVariables.spacing[3]};
-
-  > * {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    min-height: 0;
-    row-gap: ${themeCssVariables.spacing[5]};
-  }
-`;
+const styles = stylex.create({
+  overlay: {
+    background: background['--t-background-noisy'],
+    bottom: 0,
+    display: 'flex',
+    flexDirection: 'column',
+    height: 'calc(100vh / var(--t-zoom, 1))',
+    left: 0,
+    position: 'fixed',
+    right: 0,
+    top: 0,
+    width: '100%',
+    zIndex: zIndex.rootModal,
+  },
+  content: {
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-3'],
+    minHeight: 0,
+    paddingBottom: spacing['--t-spacing-3'],
+    paddingInline: spacing['--t-spacing-3'],
+    paddingTop: 0,
+  },
+  fullScreenHeaderContainer: {
+    paddingLeft: spacing['--t-spacing-3'],
+  },
+});
 
 type FullScreenModalProps = {
   children: React.ReactNode;
@@ -52,20 +45,21 @@ type FullScreenModalProps = {
 export const FullScreenModal = forwardRef<HTMLDivElement, FullScreenModalProps>(
   ({ children, links, onClose, hasClosePageButton = true }, ref) => {
     return (
-      <StyledFullScreenOverlay
+      <div
         ref={ref}
+        {...stylex.props(styles.overlay)}
         data-globally-prevent-click-outside="true"
         tabIndex={-1}
       >
-        <StyledFullScreenHeaderContainer>
+        <div {...stylex.props(styles.fullScreenHeaderContainer)}>
           <PageHeader
             title={<Breadcrumb links={links} />}
             hasClosePageButton={hasClosePageButton}
             onClosePage={onClose}
           />
-        </StyledFullScreenHeaderContainer>
-        <StyledFullScreenContent>{children}</StyledFullScreenContent>
-      </StyledFullScreenOverlay>
+        </div>
+        <div {...stylex.props(styles.content)}>{children}</div>
+      </div>
     );
   },
 );

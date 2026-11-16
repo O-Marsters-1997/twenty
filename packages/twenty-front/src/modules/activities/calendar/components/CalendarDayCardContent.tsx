@@ -1,64 +1,65 @@
-import { styled } from '@linaria/react';
 import { differenceInSeconds, endOfDay, format } from 'date-fns';
 
 import { CalendarEventRow } from '@/activities/calendar/components/CalendarEventRow';
 import { getCalendarEventStartDate } from '@/activities/calendar/utils/getCalendarEventStartDate';
 import { Card } from 'twenty-ui/primitives/surfaces';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { type TimelineCalendarEvent } from '~/generated/graphql';
+import * as stylex from '@stylexjs/stylex';
+import {
+  animationDuration,
+  background,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type CalendarDayCardContentProps = {
   calendarEvents: TimelineCalendarEvent[];
   divider?: boolean;
 };
 
-const StyledCardContentContainer = styled.div`
-  > div {
-    align-items: flex-start;
-    display: flex;
-    flex-direction: row;
-    gap: ${themeCssVariables.spacing[3]};
-    padding: ${themeCssVariables.spacing[2]} ${themeCssVariables.spacing[3]};
-  }
-`;
+const calendarDayEnded = stylex.keyframes({
+  to: { backgroundColor: background['--t-background-primary'] },
+});
 
-const StyledDayCardContent = styled(Card.Content)`
-  @keyframes calendarDayEnded {
-    to {
-      background-color: ${themeCssVariables.background.primary};
-    }
-  }
-
-  animation: calendarDayEnded calc(var(--t-animation-duration-fast) * 1s) ease
-    forwards;
-`;
-
-const StyledDayContainer = styled.div`
-  text-align: center;
-  width: ${themeCssVariables.spacing[6]};
-`;
-
-const StyledWeekDay = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.xxs};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-`;
-
-const StyledMonthDay = styled.div`
-  font-weight: ${themeCssVariables.font.weight.medium};
-`;
-
-const StyledEvents = styled.div`
-  align-items: stretch;
-  display: flex;
-  flex: 1 0 auto;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[3]};
-`;
-
-const StyledEventRowContainer = styled.div`
-  flex: 1 0 auto;
-`;
+const styles = stylex.create({
+  dayCardContent: {
+    alignItems: 'flex-start',
+    animationDuration: `calc(${animationDuration['--t-animation-duration-fast']} * 1s)`,
+    animationFillMode: 'forwards',
+    animationName: calendarDayEnded,
+    animationTimingFunction: 'ease',
+    display: 'flex',
+    flexDirection: 'row',
+    gap: spacing['--t-spacing-3'],
+    paddingBlock: spacing['--t-spacing-2'],
+    paddingInline: spacing['--t-spacing-3'],
+  },
+  dayCardContentDelay: (animationDelay: string) => ({ animationDelay }),
+  dayContainer: {
+    textAlign: 'center',
+    width: spacing['--t-spacing-6'],
+  },
+  weekDay: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-xxs'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+  },
+  monthDay: {
+    fontWeight: fontWeight['--t-font-weight-medium'],
+  },
+  events: {
+    alignItems: 'stretch',
+    display: 'flex',
+    flex: '1 0 auto',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-3'],
+  },
+  eventRowContainer: {
+    flex: '1 0 auto',
+  },
+});
 
 export const CalendarDayCardContent = ({
   calendarEvents,
@@ -71,23 +72,29 @@ export const CalendarDayCardContent = ({
   const monthDayLabel = format(endOfDayDate, 'dd');
 
   return (
-    <StyledCardContentContainer>
-      <StyledDayCardContent
+    <div>
+      <Card.Content
         divider={divider}
-        style={{ animationDelay: `${Math.max(0, dayEndsIn)}s` }}
+        xstyle={[
+          styles.dayCardContent,
+          styles.dayCardContentDelay(`${Math.max(0, dayEndsIn)}s`),
+        ]}
       >
-        <StyledDayContainer>
-          <StyledWeekDay>{weekDayLabel}</StyledWeekDay>
-          <StyledMonthDay>{monthDayLabel}</StyledMonthDay>
-        </StyledDayContainer>
-        <StyledEvents>
+        <div {...stylex.props(styles.dayContainer)}>
+          <div {...stylex.props(styles.weekDay)}>{weekDayLabel}</div>
+          <div {...stylex.props(styles.monthDay)}>{monthDayLabel}</div>
+        </div>
+        <div {...stylex.props(styles.events)}>
           {calendarEvents.map((calendarEvent) => (
-            <StyledEventRowContainer key={calendarEvent.id}>
+            <div
+              key={calendarEvent.id}
+              {...stylex.props(styles.eventRowContainer)}
+            >
               <CalendarEventRow calendarEvent={calendarEvent} />
-            </StyledEventRowContainer>
+            </div>
           ))}
-        </StyledEvents>
-      </StyledDayCardContent>
-    </StyledCardContentContainer>
+        </div>
+      </Card.Content>
+    </div>
   );
 };

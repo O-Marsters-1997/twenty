@@ -5,7 +5,6 @@ import { CHART_MOTION_CONFIG } from '@/page-layout/widgets/graph/constants/Chart
 import { CustomArcsLayer } from '@/page-layout/widgets/graph/graph-widget-pie-chart/components/CustomArcsLayer';
 import { GraphPieChartTooltip } from '@/page-layout/widgets/graph/graph-widget-pie-chart/components/GraphPieChartTooltip';
 import { PieChartCenterMetric } from '@/page-layout/widgets/graph/graph-widget-pie-chart/components/PieChartCenterMetricLayer';
-import { PIE_CHART_HOVER_BRIGHTNESS } from '@/page-layout/widgets/graph/graph-widget-pie-chart/constants/PieChartHoverBrightness';
 import { PIE_CHART_MARGINS } from '@/page-layout/widgets/graph/graph-widget-pie-chart/constants/PieChartMargins';
 import { usePieChartData } from '@/page-layout/widgets/graph/graph-widget-pie-chart/hooks/usePieChartData';
 import { graphWidgetPieTooltipComponentState } from '@/page-layout/widgets/graph/graph-widget-pie-chart/states/graphWidgetPieTooltipComponentState';
@@ -15,7 +14,6 @@ import { type GraphColorMode } from '@/page-layout/widgets/graph/types/GraphColo
 import { createGraphColorRegistry } from '@/page-layout/widgets/graph/utils/createGraphColorRegistry';
 import { type GraphValueFormatOptions } from '@/page-layout/widgets/graph/utils/graphFormatters';
 import { useSetAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useSetAtomComponentState';
-import { styled } from '@linaria/react';
 import {
   ResponsivePie,
   type ComputedDatum,
@@ -30,6 +28,8 @@ import {
 import { isDefined } from 'twenty-shared/utils';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 import { type PieChartConfiguration } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import '~/third-party-styles/pie-chart.css';
 
 type GraphWidgetPieChartProps = {
   data: PieChartDataItemWithColor[];
@@ -48,30 +48,22 @@ const emptyStateData: PieChartDataItemWithColor[] = [
   { key: 'empty', value: 1 },
 ];
 
-const StyledContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: center;
-  width: 100%;
-`;
-
-const StyledPieChartWrapper = styled.div<{ preventHover: boolean }>`
-  container-type: size;
-  height: 100%;
-  position: relative;
-  width: 100%;
-
-  svg g path {
-    transition: filter 0.15s ease-in-out;
-
-    &:hover {
-      filter: ${({ preventHover }) =>
-        preventHover ? 'none' : `brightness(${PIE_CHART_HOVER_BRIGHTNESS})`};
-    }
-  }
-`;
+const styles = stylex.create({
+  wrapper: {
+    containerType: 'size',
+    height: '100%',
+    position: 'relative',
+    width: '100%',
+  },
+  container: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    justifyContent: 'center',
+    width: '100%',
+  },
+});
 
 export const GraphWidgetPieChart = ({
   data,
@@ -184,14 +176,18 @@ export const GraphWidgetPieChart = ({
   );
 
   return (
-    <StyledContainer id={id}>
+    <div id={id} {...stylex.props(styles.container)}>
       <GraphWidgetChartContainer
         ref={containerRef}
-        $isClickable={!hasNoData && isDefined(onSliceClick)}
-        $cursorSelector="svg g path"
+        isClickable={!hasNoData && isDefined(onSliceClick)}
+        cursorTarget="svg-path"
         onMouseLeave={handleSliceLeave}
       >
-        <StyledPieChartWrapper preventHover={hasNoData}>
+        <div
+          data-pie-chart=""
+          data-prevent-hover={hasNoData || undefined}
+          {...stylex.props(styles.wrapper)}
+        >
           <ResponsivePie
             data={chartData}
             margin={showDataLabels && !hasNoData ? PIE_CHART_MARGINS : {}}
@@ -234,7 +230,7 @@ export const GraphWidgetPieChart = ({
             show={showCenterMetric && !hasNoData}
             hasNoData={hasNoData}
           />
-        </StyledPieChartWrapper>
+        </div>
       </GraphWidgetChartContainer>
       <GraphPieChartTooltip
         containerRef={containerRef}
@@ -246,6 +242,6 @@ export const GraphWidgetPieChart = ({
       {showLegend && data.length > 0 && (
         <GraphWidgetLegend show items={legendItems} />
       )}
-    </StyledContainer>
+    </div>
   );
 };

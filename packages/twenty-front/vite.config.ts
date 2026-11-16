@@ -1,7 +1,7 @@
 import { lingui } from '@lingui/vite-plugin';
 import { isNonEmptyString } from '@sniptt/guards';
+import stylex from '@stylexjs/unplugin';
 import react from '@vitejs/plugin-react-swc';
-import wyw from '@wyw-in-js/vite';
 import fs from 'fs';
 import { Features } from 'lightningcss';
 import path from 'path';
@@ -13,8 +13,6 @@ import {
   searchForWorkspaceRoot,
 } from 'vite';
 import svgr from 'vite-plugin-svgr';
-
-import { createWywProfilingPlugin } from 'twenty-shared/vite';
 
 import {
   API_PROXY_PATHS,
@@ -89,6 +87,15 @@ export default defineConfig(({ mode }) => {
     },
 
     plugins: [
+      stylex.vite({
+        useCSSLayers: true,
+        dev: mode === 'development',
+        runtimeInjection: false,
+        aliases: {
+          '@/*': [path.resolve(__dirname, 'src/modules') + '/*'],
+          '~/*': [path.resolve(__dirname, 'src') + '/*'],
+        },
+      }),
       react({
         plugins: [['@lingui/swc-plugin', {}]],
       }),
@@ -96,43 +103,6 @@ export default defineConfig(({ mode }) => {
       lingui({
         configPath: path.resolve(__dirname, './lingui.config.ts'),
       }),
-      createWywProfilingPlugin(
-        wyw({
-          include: [path.resolve(__dirname, 'src') + '/**/*.{ts,tsx}'],
-          exclude: [
-            '**/generated-metadata/**',
-            '**/testing/mock-data/**',
-            '**/testing/jest/**',
-            '**/testing/hooks/**',
-            '**/testing/utils/**',
-            '**/testing/constants/**',
-            '**/testing/cache/**',
-            '**/*.test.{ts,tsx}',
-            '**/*.spec.{ts,tsx}',
-            '**/__tests__/**',
-            '**/__mocks__/**',
-            '**/types/**',
-            '**/constants/**',
-            '**/states/**',
-            '**/selectors/**',
-            '**/guards/**',
-            '**/schemas/**',
-            '**/utils/**',
-            '**/contexts/**',
-            '**/hooks/**',
-            '**/enums/**',
-            '**/queries/**',
-            '**/mutations/**',
-            '**/fragments/**',
-            '**/graphql/**',
-            '**/decorators/**',
-          ],
-          babelOptions: {
-            presets: ['@babel/preset-typescript', '@babel/preset-react'],
-            plugins: ['@babel/plugin-transform-export-namespace-from'],
-          },
-        }),
-      ),
       ...(env.ANALYZE === 'true'
         ? [
             visualizer({
@@ -237,14 +207,6 @@ export default defineConfig(({ mode }) => {
     resolve: {
       tsconfigPaths: true,
       alias: [
-        // wyw-in-js 1.x resolves modules in its CSS evaluator via vite's
-        // resolve.alias (not resolve.tsconfigPaths), so the `@/` and `~/`
-        // tsconfig path aliases must be mirrored here.
-        {
-          find: /^@\//,
-          replacement: path.resolve(__dirname, 'src/modules') + '/',
-        },
-        { find: /^~\//, replacement: path.resolve(__dirname, 'src') + '/' },
         {
           find: 'path',
           replacement: 'rollup-plugin-node-polyfills/polyfills/path',

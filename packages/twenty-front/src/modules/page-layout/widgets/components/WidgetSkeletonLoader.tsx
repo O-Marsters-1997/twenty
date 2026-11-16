@@ -1,19 +1,21 @@
 import { SkeletonLine } from '@/ui/feedback/skeleton/components/SkeletonLine';
-import { styled } from '@linaria/react';
 import { SKELETON_HEIGHT_SIZES } from 'twenty-ui/primitives/feedback';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledContainer = styled.div`
-  align-items: center;
-  display: flex;
-  height: 100%;
-  justify-content: center;
-  width: 100%;
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    display: 'flex',
+    height: '100%',
+    justifyContent: 'center',
+    width: '100%',
+  },
+});
 
 export const WidgetSkeletonLoader = () => {
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <SkeletonLine width={120} height={SKELETON_HEIGHT_SIZES.m} />
-    </StyledContainer>
+    </div>
   );
 };

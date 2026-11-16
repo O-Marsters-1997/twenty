@@ -1,6 +1,5 @@
 /* @license Enterprise */
 
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { Dropdown } from 'twenty-ui/components/navigation';
 
@@ -11,11 +10,14 @@ import { SettingsRolePermissionsObjectLevelRecordLevelPermissionFieldSelectDropd
 import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent';
 import { DropdownRoot } from '@/ui/layout/dropdown/components/DropdownRoot';
 import { GenericDropdownContentWidth } from '@/ui/layout/dropdown/constants/GenericDropdownContentWidth';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledContainer = styled.div`
-  flex: 2;
-  min-width: 0;
-`;
+const styles = stylex.create({
+  container: {
+    flex: '2',
+    minWidth: '0',
+  },
+});
 
 type SettingsRolePermissionsObjectLevelRecordLevelPermissionFieldSelectProps = {
   recordFilterId: string;
@@ -29,7 +31,7 @@ export const SettingsRolePermissionsObjectLevelRecordLevelPermissionFieldSelect 
       useAdvancedFilterFieldSelectDropdown(recordFilterId);
 
     return (
-      <StyledContainer>
+      <div {...stylex.props(styles.container)}>
         <DropdownRoot
           dropdownId={advancedFilterFieldSelectDropdownId}
           type="picker"
@@ -51,6 +53,6 @@ export const SettingsRolePermissionsObjectLevelRecordLevelPermissionFieldSelect 
             />
           </DropdownContent>
         </DropdownRoot>
-      </StyledContainer>
+      </div>
     );
   };

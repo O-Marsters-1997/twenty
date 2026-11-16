@@ -9,11 +9,8 @@ export const orderedList = (
 ): ReactNode => {
   return (
     <ol
-      style={{
-        marginBottom: '16px',
-        lineHeight: '1.5',
-        ...inherited,
-      }}
+      className="mb-4 leading-normal"
+      style={inherited}
     >
       {mappedNodeContent(node, inherited)}
     </ol>

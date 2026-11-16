@@ -1,12 +1,17 @@
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { type ComponentProps } from 'react';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledIconAndNameContainer = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  margin-left: ${themeCssVariables.spacing[1]};
-  margin-right: ${themeCssVariables.spacing[1]};
-`;
+const styles = stylex.create({
+  root: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    marginLeft: spacing['--t-spacing-1'],
+    marginRight: spacing['--t-spacing-1'],
+  },
+});
 
-export { StyledIconAndNameContainer as ViewPickerIconAndNameContainer };
+export const ViewPickerIconAndNameContainer = (
+  props: ComponentProps<'div'>,
+) => <div {...props} {...stylex.props(styles.root)} />;

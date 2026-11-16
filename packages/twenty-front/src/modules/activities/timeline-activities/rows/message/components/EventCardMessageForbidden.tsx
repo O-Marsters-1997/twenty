@@ -1,43 +1,43 @@
 import { EventCardMessageBodyNotShared } from '@/activities/timeline-activities/rows/message/components/EventCardMessageBodyNotShared';
-import { styled } from '@linaria/react';
 import { Trans } from '@lingui/react/macro';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledEventCardMessageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
-
-const StyledEmailContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[4]};
-  justify-content: center;
-  width: 100%;
-`;
-
-const StyledEmailTitle = styled.div`
-  color: ${themeCssVariables.font.color.primary};
-  display: flex;
-  flex-direction: column;
-  font-weight: ${themeCssVariables.font.weight.medium};
-  margin-top: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  eventCardMessageContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+  },
+  emailContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-4'],
+    justifyContent: 'center',
+    width: '100%',
+  },
+  emailTitle: {
+    color: fontColor['--t-font-color-primary'],
+    display: 'flex',
+    flexDirection: 'column',
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    marginTop: spacing['--t-spacing-2'],
+  },
+});
 
 export const EventCardMessageForbidden = ({
   notSharedByFullName,
 }: {
   notSharedByFullName: string;
 }) => (
-  <StyledEventCardMessageContainer>
-    <StyledEmailContent>
-      <StyledEmailTitle>
+  <div {...stylex.props(styles.eventCardMessageContainer)}>
+    <div {...stylex.props(styles.emailContent)}>
+      <div {...stylex.props(styles.emailTitle)}>
         <Trans>Subject not shared</Trans>
-      </StyledEmailTitle>
+      </div>
       <EventCardMessageBodyNotShared
         notSharedByFullName={notSharedByFullName}
       />
-    </StyledEmailContent>
-  </StyledEventCardMessageContainer>
+    </div>
+  </div>
 );

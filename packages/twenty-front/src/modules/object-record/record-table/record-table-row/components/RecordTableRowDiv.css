@@ -1,0 +1,23 @@
+.record-table-row-div[data-focused='true'] div.table-cell:not(:first-of-type),
+.record-table-row-div[data-focused='true'] div.table-cell-0-0:not(:first-of-type),
+.record-table-row-div[data-active='true'] div.table-cell:not(:first-of-type),
+.record-table-row-div[data-active='true'] div.table-cell-0-0:not(:first-of-type) {
+  background-color: var(--t-accent-quaternary);
+  border-bottom: 1px solid var(--t-border-color-medium);
+  border-color: var(--t-border-color-medium);
+}
+
+.record-table-row-div[data-focused='true'] div.table-cell:nth-of-type(2),
+.record-table-row-div[data-focused='true'] div.table-cell-0-0:nth-of-type(2),
+.record-table-row-div[data-active='true'] div.table-cell:nth-of-type(2),
+.record-table-row-div[data-active='true'] div.table-cell-0-0:nth-of-type(2) {
+  box-shadow: inset 1px 0 0 var(--t-border-color-medium);
+}
+
+.record-table-row-div[data-focused='true'] div.table-cell:last-of-type,
+.record-table-row-div[data-focused='true'] div.table-cell-0-0:last-of-type,
+.record-table-row-div[data-active='true'] div.table-cell:last-of-type,
+.record-table-row-div[data-active='true'] div.table-cell-0-0:last-of-type {
+  border-radius: 0 var(--t-border-radius-sm) var(--t-border-radius-sm) 0;
+  border-right: 1px solid var(--t-border-color-medium);
+}

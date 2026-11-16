@@ -1,27 +1,15 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
+import * as stylex from '@stylexjs/stylex';
 import { useCallback } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-import { RECORD_TABLE_COLUMN_CHECKBOX_WIDTH } from '@/object-record/record-table/constants/RecordTableColumnCheckboxWidth';
+import { recordTableLayout } from '../../constants/recordTableLayout.stylex';
 import { RECORD_TABLE_COLUMN_CHECKBOX_WIDTH_CLASS_NAME } from '@/object-record/record-table/constants/RecordTableColumnCheckboxWidthClassName';
-import { RECORD_TABLE_ROW_HEIGHT } from '@/object-record/record-table/constants/RecordTableRowHeight';
 import { useRecordTableRowContextOrThrow } from '@/object-record/record-table/contexts/RecordTableRowContext';
 import { useRecordTableRowDraggableContextOrThrow } from '@/object-record/record-table/contexts/RecordTableRowDraggableContext';
 import { useToggleRecordSelection } from '@/object-record/record-selection/hooks/useToggleRecordSelection';
 import { RecordTableCellStyleWrapper } from '@/object-record/record-table/record-table-cell/components/RecordTableCellStyleWrapper';
 import { Checkbox } from 'twenty-ui/primitives/input';
-
-const StyledContainer = styled.div`
-  align-items: center;
-  cursor: pointer;
-  display: flex;
-  height: ${RECORD_TABLE_ROW_HEIGHT}px;
-  justify-content: center;
-  min-width: ${RECORD_TABLE_COLUMN_CHECKBOX_WIDTH};
-  padding-right: ${themeCssVariables.spacing[1]};
-  width: ${RECORD_TABLE_COLUMN_CHECKBOX_WIDTH};
-`;
 
 export const RecordTableCellCheckbox = () => {
   const { t } = useLingui();
@@ -48,9 +36,26 @@ export const RecordTableCellCheckbox = () => {
       hasRightBorder={false}
       widthClassName={RECORD_TABLE_COLUMN_CHECKBOX_WIDTH_CLASS_NAME}
     >
-      <StyledContainer onClick={handleClick} data-select-disable>
+      <div
+        {...stylex.props(styles.container)}
+        onClick={handleClick}
+        data-select-disable
+      >
         <Checkbox hoverable checked={isSelected} aria-label={t`Select row`} />
-      </StyledContainer>
+      </div>
     </RecordTableCellStyleWrapper>
   );
 };
+
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    cursor: 'pointer',
+    display: 'flex',
+    height: recordTableLayout.rowHeight,
+    justifyContent: 'center',
+    minWidth: recordTableLayout.checkboxColumnWidth,
+    paddingRight: spacing['--t-spacing-1'],
+    width: recordTableLayout.checkboxColumnWidth,
+  },
+});

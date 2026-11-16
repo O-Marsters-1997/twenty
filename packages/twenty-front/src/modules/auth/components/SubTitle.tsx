@@ -1,9 +1,14 @@
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor } from 'twenty-ui/theme/tokens.stylex';
+import { type ReactNode } from 'react';
 
-const StyledSubTitle = styled.div`
-  color: ${themeCssVariables.font.color.secondary};
-  text-align: center;
-`;
+const styles = stylex.create({
+  subTitle: {
+    color: fontColor['--t-font-color-secondary'],
+    textAlign: 'center',
+  },
+});
 
-export { StyledSubTitle as SubTitle };
+export const SubTitle = ({ children }: { children?: ReactNode }) => (
+  <div {...stylex.props(styles.subTitle)}>{children}</div>
+);

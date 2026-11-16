@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useEffect, useRef, useState, type ClipboardEvent } from 'react';
 import { Key } from 'ts-key-enum';
 
@@ -9,20 +8,22 @@ import { useHotkeysOnFocusedElement } from '@/ui/utilities/hotkey/hooks/useHotke
 import { useListenClickOutside } from '@/ui/utilities/pointer-event/hooks/useListenClickOutside';
 import { useAvailableComponentInstanceIdOrThrow } from '@/ui/utilities/state/component-state/hooks/useAvailableComponentInstanceIdOrThrow';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { splitFullName } from '~/utils/format/splitFullName';
 import { turnIntoEmptyStringIfWhitespacesOnly } from '~/utils/string/turnIntoEmptyStringIfWhitespacesOnly';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  gap: ${themeCssVariables.spacing[1]};
-  justify-content: inherit;
-  width: 100%;
-`;
-
-const StyledTextInputWrapper = styled.div`
-  max-width: 50%;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    gap: spacing['--t-spacing-1'],
+    justifyContent: 'inherit',
+    width: '100%',
+  },
+  textInputWrapper: {
+    maxWidth: '50%',
+  },
+});
 
 type RecordTitleDoubleTextInputProps = {
   firstValue: string;
@@ -192,8 +193,8 @@ export const RecordTitleDoubleTextInput = ({
   };
 
   return (
-    <StyledContainer ref={containerRef}>
-      <StyledTextInputWrapper>
+    <div ref={containerRef} {...stylex.props(styles.container)}>
+      <div {...stylex.props(styles.textInputWrapper)}>
         <TextInput
           autoGrow
           sizeVariant={sizeVariant}
@@ -220,8 +221,8 @@ export const RecordTitleDoubleTextInput = ({
           }
           onClick={handleClickToPreventParentClickEvents}
         />
-      </StyledTextInputWrapper>
-      <StyledTextInputWrapper>
+      </div>
+      <div {...stylex.props(styles.textInputWrapper)}>
         <TextInput
           autoGrow
           sizeVariant={sizeVariant}
@@ -244,7 +245,7 @@ export const RecordTitleDoubleTextInput = ({
           }}
           onClick={handleClickToPreventParentClickEvents}
         />
-      </StyledTextInputWrapper>
-    </StyledContainer>
+      </div>
+    </div>
   );
 };

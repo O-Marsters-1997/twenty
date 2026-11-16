@@ -1,66 +1,16 @@
 import { useNavigateToMoreWidgets } from '@/page-layout/hooks/useNavigateToMoreWidgets';
 import { type PageLayoutWidget } from '@/page-layout/types/PageLayoutWidget';
-import { css } from '@linaria/core';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { IconButton } from 'twenty-ui/components/input';
 import { IconPlus } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
-
-const INSERT_BUTTON_CLASS_NAME = css`
-  background: ${themeCssVariables.background.transparent.primary};
-  border-color: ${themeCssVariables.background.transparent.light};
-  flex-shrink: 0;
-  opacity: 0;
-  pointer-events: none;
-`;
-
-const StyledSeparator = styled.div`
-  align-items: center;
-  box-sizing: border-box;
-  display: flex;
-  flex-shrink: 0;
-  height: ${themeCssVariables.spacing[4]};
-  overflow: visible;
-  padding-inline: ${themeCssVariables.spacing[4]};
-  position: relative;
-  z-index: 4;
-
-  &::before,
-  &::after {
-    background: ${themeCssVariables.border.color.strong};
-    border-radius: ${themeCssVariables.border.radius.pill};
-    content: '';
-    flex: 1;
-    height: 1px;
-    opacity: 0;
-  }
-
-  &:hover,
-  &:focus-within {
-    &::before,
-    &::after,
-    .${INSERT_BUTTON_CLASS_NAME} {
-      opacity: 1;
-    }
-
-    .${INSERT_BUTTON_CLASS_NAME} {
-      pointer-events: auto;
-    }
-  }
-
-  @media (hover: none) {
-    &::before,
-    &::after,
-    .${INSERT_BUTTON_CLASS_NAME} {
-      opacity: 1;
-    }
-
-    .${INSERT_BUTTON_CLASS_NAME} {
-      pointer-events: auto;
-    }
-  }
-`;
+import {
+  spacing,
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+} from 'twenty-ui/theme/tokens.stylex';
+import * as stylex from '@stylexjs/stylex';
+import { separatorMarker } from './RecordPageWidgetInsertionSeparator.stylex';
 
 type RecordPageWidgetInsertionSeparatorProps = {
   widget: Pick<PageLayoutWidget, 'id' | 'title'>;
@@ -72,10 +22,11 @@ export const RecordPageWidgetInsertionSeparator = ({
   const { navigateToMoreWidgets } = useNavigateToMoreWidgets();
 
   return (
-    <StyledSeparator>
+    <div {...stylex.props(separatorMarker, styles.separator)}>
+      <div {...stylex.props(styles.line)} />
       <IconButton
         elevated
-        className={INSERT_BUTTON_CLASS_NAME}
+        {...stylex.props(styles.insertButton)}
         aria-label={t`Add widget above ${widget.title}`}
         size="sm"
         onClick={() =>
@@ -87,6 +38,53 @@ export const RecordPageWidgetInsertionSeparator = ({
       >
         <IconPlus />
       </IconButton>
-    </StyledSeparator>
+      <div {...stylex.props(styles.line)} />
+    </div>
   );
 };
+
+const styles = stylex.create({
+  separator: {
+    alignItems: 'center',
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexShrink: 0,
+    height: spacing['--t-spacing-4'],
+    overflow: 'visible',
+    paddingInline: spacing['--t-spacing-4'],
+    position: 'relative',
+    zIndex: 4,
+  },
+  line: {
+    backgroundColor: borderColor['--t-border-color-strong'],
+    borderRadius: borderRadius['--t-border-radius-pill'],
+    flexBasis: '0%',
+    flexGrow: 1,
+    flexShrink: 1,
+    height: 1,
+    opacity: {
+      default: 0,
+      [stylex.when.ancestor(':hover', separatorMarker)]: 1,
+      [stylex.when.ancestor(':focus-within', separatorMarker)]: 1,
+      '@media (hover: none)': 1,
+    },
+  },
+  insertButton: {
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-primary'],
+    borderColor: backgroundTransparent['--t-background-transparent-light'],
+    flexShrink: 0,
+    opacity: {
+      default: 0,
+      [stylex.when.ancestor(':hover', separatorMarker)]: 1,
+      [stylex.when.ancestor(':focus-within', separatorMarker)]: 1,
+      '@media (hover: none)': 1,
+    },
+    pointerEvents: {
+      default: 'none',
+      [stylex.when.ancestor(':hover', separatorMarker)]: 'auto',
+      [stylex.when.ancestor(':focus-within', separatorMarker)]: 'auto',
+      '@media (hover: none)': 'auto',
+    },
+  },
+});

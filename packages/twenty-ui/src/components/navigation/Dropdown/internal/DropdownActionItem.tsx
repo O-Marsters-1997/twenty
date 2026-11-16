@@ -1,12 +1,13 @@
 import { Button as ButtonPrimitive } from '@base-ui/react/button';
 import { useId } from 'react';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 
 import { ListItem } from '@ui/primitives/navigation/ListItem/ListItem';
 import { isRenderableSlot } from '@ui/utilities/internal/isRenderableSlot';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
 import { isDefined } from '@ui/utilities/utils/isDefined';
 
-import styles from '../Dropdown.module.scss';
+import { dropdownStyles } from '../Dropdown.stylex';
 import { DropdownItemOwner } from './DropdownItemOwner';
 import { getNativeDisabled } from './getNativeDisabled';
 import { DropdownItemWithActions } from './DropdownItemWithActions';
@@ -106,10 +107,15 @@ export const DropdownActionItem = ({
             render={
               <DropdownItemOwner render={render} disabled={nativeDisabled} />
             }
-            className={clsx(
-              renderProps.className,
-              hasActions && styles.itemWithActionsPrimary,
-            )}
+            className={
+              mergeStylexProps(
+                stylex.props(
+                  dropdownStyles.item,
+                  hasActions && dropdownStyles.itemWithActionsPrimary,
+                ),
+                renderProps.className,
+              ).className
+            }
             disabled={disabled}
             color={color}
             startIcon={startIcon}

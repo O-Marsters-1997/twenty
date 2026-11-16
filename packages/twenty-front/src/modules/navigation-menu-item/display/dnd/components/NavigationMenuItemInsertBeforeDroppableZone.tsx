@@ -1,21 +1,21 @@
+import * as stylex from '@stylexjs/stylex';
 import { pointerIntersection } from '@dnd-kit/collision';
 import { useDroppable } from '@dnd-kit/react';
-import { styled } from '@linaria/react';
 
 import type { DroppableData } from '@/navigation-menu-item/common/types/NavigationMenuItemDndKitDroppableData';
 import { getDndKitDropTargetId } from '@/navigation-menu-item/common/utils/getDndKitDropTargetId';
 
-const INSERT_BEFORE_ZONE_HEIGHT_PX = 5;
-
-const StyledInsertBeforeZone = styled.div`
-  height: ${INSERT_BEFORE_ZONE_HEIGHT_PX}px;
-  left: 0;
-  pointer-events: auto;
-  position: absolute;
-  right: 0;
-  top: -${INSERT_BEFORE_ZONE_HEIGHT_PX}px;
-  z-index: 1;
-`;
+const styles = stylex.create({
+  insertBeforeZone: {
+    height: '5px',
+    left: 0,
+    pointerEvents: 'auto',
+    position: 'absolute',
+    right: 0,
+    top: '-5px',
+    zIndex: 1,
+  },
+});
 
 type NavigationMenuItemInsertBeforeDroppableZoneProps = {
   orphanDroppableId: string;
@@ -44,5 +44,5 @@ export const NavigationMenuItemInsertBeforeDroppableZone = ({
     data,
   });
 
-  return <StyledInsertBeforeZone ref={ref} />;
+  return <div ref={ref} {...stylex.props(styles.insertBeforeZone)} />;
 };

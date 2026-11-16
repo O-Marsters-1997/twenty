@@ -1,12 +1,14 @@
-import { styled } from '@linaria/react';
 import { type ReactNode } from 'react';
 import { Tabs } from 'twenty-ui/primitives/navigation';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledPanel = styled.div`
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-`;
+const styles = stylex.create({
+  panel: {
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: '0',
+  },
+});
 
 type WorkflowStepTabPanelProps = {
   value: string;
@@ -17,7 +19,7 @@ export const WorkflowStepTabPanel = ({
   value,
   children,
 }: WorkflowStepTabPanelProps) => (
-  <Tabs.Panel value={value} render={<StyledPanel />}>
+  <Tabs.Panel value={value} render={<div {...stylex.props(styles.panel)} />}>
     {children}
   </Tabs.Panel>
 );

@@ -7,31 +7,32 @@ import {
 import { NavigationMenuItemSortableItem } from '@/navigation-menu-item/display/dnd/components/NavigationMenuItemSortableItem';
 import { useIsDropDisabledForSection } from '@/navigation-menu-item/display/dnd/hooks/useIsDropDisabledForSection';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { styled } from '@linaria/react';
 import { useContext } from 'react';
 import { NavigationMenuItemType } from 'twenty-shared/types';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { general } from 'twenty-ui/theme/tokens.stylex';
 
 import { NavigationMenuItemDragContext } from '@/navigation-menu-item/common/contexts/NavigationMenuItemDragContext';
 import { NavigationMenuItemDisplay } from '@/navigation-menu-item/display/components/NavigationMenuItemDisplay';
 import { NavigationMenuItemOrphanDropTarget } from '@/navigation-menu-item/display/sections/components/NavigationMenuItemOrphanDropTarget';
 import type { NavigationMenuItemSectionListDndKitProps } from '@/navigation-menu-item/display/sections/types/NavigationMenuItemSectionListDndKitProps';
 import { WorkspaceSectionAddMenuItemButton } from '@/navigation-menu-item/edit/components/WorkspaceSectionAddMenuItemButton';
+import * as stylex from '@stylexjs/stylex';
 
 type WorkspaceSectionListDndKitProps = NavigationMenuItemSectionListDndKitProps;
 
-const StyledList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.betweenSiblingsGap};
-  padding-top: ${themeCssVariables.betweenSiblingsGap};
-`;
-
-const StyledListItemRow = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-`;
+const styles = stylex.create({
+  listItemRow: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '0',
+  },
+  list: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: general['--t-between-siblings-gap'],
+    paddingTop: general['--t-between-siblings-gap'],
+  },
+});
 
 export const WorkspaceSectionListDndKit = ({
   filteredItems,
@@ -51,9 +52,9 @@ export const WorkspaceSectionListDndKit = ({
   const isAddMenuItemButtonVisible = isLayoutCustomizationModeEnabled;
   const orphanAppendDndIndex = filteredItems.length;
   return (
-    <StyledList>
+    <div {...stylex.props(styles.list)}>
       {filteredItems.map((item, index) => (
-        <StyledListItemRow key={item.id}>
+        <div key={item.id} {...stylex.props(styles.listItemRow)}>
           <NavigationMenuItemOrphanDropTarget index={index} compact />
           <NavigationMenuItemSortableItem
             id={item.id}
@@ -76,7 +77,7 @@ export const WorkspaceSectionListDndKit = ({
               orphanIndex={index}
             />
           </NavigationMenuItemSortableItem>
-        </StyledListItemRow>
+        </div>
       ))}
       <NavigationMenuItemDroppableSlot
         droppableId={
@@ -93,6 +94,6 @@ export const WorkspaceSectionListDndKit = ({
         />
         {isAddMenuItemButtonVisible && <WorkspaceSectionAddMenuItemButton />}
       </NavigationMenuItemDroppableSlot>
-    </StyledList>
+    </div>
   );
 };

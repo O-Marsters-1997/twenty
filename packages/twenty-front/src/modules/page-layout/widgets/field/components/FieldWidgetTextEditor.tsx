@@ -7,14 +7,19 @@ import { isFieldTextValue } from '@/object-record/record-field/ui/types/guards/i
 import { recordStoreFamilySelector } from '@/object-record/record-store/states/selectors/recordStoreFamilySelector';
 import { TextArea } from '@/ui/input/components/TextArea';
 import { useAtomFamilySelectorState } from '@/ui/utilities/state/jotai/hooks/useAtomFamilySelectorState';
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  box-sizing: border-box;
-  padding: ${themeCssVariables.spacing[4]};
-  width: 100%;
-`;
+const styles = stylex.create({
+  container: {
+    boxSizing: 'border-box',
+    paddingTop: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingBottom: spacing['--t-spacing-4'],
+    paddingLeft: spacing['--t-spacing-4'],
+    width: '100%',
+  },
+});
 
 const PERSIST_DEBOUNCE_MS = 300;
 
@@ -80,7 +85,7 @@ export const FieldWidgetTextEditor = ({
   };
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <TextArea
         textAreaId={textAreaId}
         value={draft.text}
@@ -89,6 +94,6 @@ export const FieldWidgetTextEditor = ({
         onBlur={() => flush()}
         variant="transparent"
       />
-    </StyledContainer>
+    </div>
   );
 };

@@ -1,5 +1,4 @@
 import { EmptyState } from '@/ui/feedback/empty-state/components/EmptyState';
-import { styled } from '@linaria/react';
 import { type ReactElement } from 'react';
 
 import { EventsGroup } from '@/activities/timeline-activities/components/EventsGroup';
@@ -13,7 +12,8 @@ import { useObjectMetadataItem } from '@/object-metadata/hooks/useObjectMetadata
 import { useObjectMetadataItems } from '@/object-metadata/hooks/useObjectMetadataItems';
 import { useLingui } from '@lingui/react/macro';
 
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type EventListProps = {
   targetableObject: ActivityTargetableObject;
@@ -22,15 +22,16 @@ type EventListProps = {
   button?: ReactElement | false;
 };
 
-const StyledTimelineContainer = styled.div`
-  align-items: center;
-  align-self: stretch;
-
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[1]};
-  justify-content: flex-start;
-`;
+const styles = stylex.create({
+  timelineContainer: {
+    alignItems: 'center',
+    alignSelf: 'stretch',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-1'],
+    justifyContent: 'flex-start',
+  },
+});
 
 export const EventList = ({ events, targetableObject }: EventListProps) => {
   const { t } = useLingui();
@@ -73,7 +74,7 @@ export const EventList = ({ events, targetableObject }: EventListProps) => {
   }
 
   return (
-    <StyledTimelineContainer>
+    <div {...stylex.props(styles.timelineContainer)}>
       {groupedEvents.map((group, index) => (
         <EventsGroup
           mainObjectMetadataItem={mainObjectMetadataItem}
@@ -89,6 +90,6 @@ export const EventList = ({ events, targetableObject }: EventListProps) => {
           }
         />
       ))}
-    </StyledTimelineContainer>
+    </div>
   );
 };

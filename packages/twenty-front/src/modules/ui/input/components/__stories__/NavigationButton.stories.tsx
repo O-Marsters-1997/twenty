@@ -1,5 +1,6 @@
 import { type Meta, type StoryObj } from '@storybook/react-vite';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
+import { type ComponentProps } from 'react';
 import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { expect, fn, userEvent, within } from 'storybook/test';
 import { LightButton, MainButton } from 'twenty-ui/components/input';
@@ -14,9 +15,15 @@ const meta: Meta<typeof NavigationButton> = {
 export default meta;
 type Story = StoryObj<typeof NavigationButton>;
 
-const StyledMainButton = styled(MainButton)`
-  width: 200px;
-`;
+const styles = stylex.create({
+  wideButton: {
+    width: 200,
+  },
+});
+
+const WideMainButton = (props: ComponentProps<typeof MainButton>) => (
+  <MainButton {...props} className={stylex.props(styles.wideButton).className} />
+);
 
 const CurrentLocation = () => {
   const { pathname, search, hash } = useLocation();
@@ -149,7 +156,7 @@ export const NativePreset: Story = {
   args: { onClick: fn() },
   render: (args) => (
     <NavigationButton
-      buttonComponent={StyledMainButton}
+      buttonComponent={WideMainButton}
       to={undefined}
       onClick={args.onClick}
     >

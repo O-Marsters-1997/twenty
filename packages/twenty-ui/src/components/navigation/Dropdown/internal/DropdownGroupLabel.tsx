@@ -1,8 +1,9 @@
 import { Menu as MenuPrimitive } from '@base-ui/react/menu';
+import * as stylex from '@stylexjs/stylex';
 
-import { mergeClassNames } from '@ui/utilities/internal/mergeClassNames';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
 
-import styles from '../Dropdown.module.scss';
+import { dropdownStyles } from '../Dropdown.stylex';
 
 type DropdownGroupLabelProps = MenuPrimitive.GroupLabel.Props;
 
@@ -12,6 +13,6 @@ export const DropdownGroupLabel = ({
 }: DropdownGroupLabelProps) => (
   <MenuPrimitive.GroupLabel
     {...props}
-    className={mergeClassNames(styles.groupLabel, className)}
+    {...mergeStylexProps(stylex.props(dropdownStyles.groupLabel), className)}
   />
 );

@@ -1,29 +1,27 @@
+import { recordTableLayout } from '../../constants/recordTableLayout.stylex';
 import { RECORD_TABLE_COLUMN_DRAG_AND_DROP_WIDTH_CLASS_NAME } from '@/object-record/record-table/constants/RecordTableColumnDragAndDropWidthClassName';
-import { RECORD_TABLE_ROW_HEIGHT } from '@/object-record/record-table/constants/RecordTableRowHeight';
-import { styled } from '@linaria/react';
-import { cx } from '@linaria/core';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { mergeClassName } from '@/page-layout/utils/mergeClassName';
+import * as stylex from '@stylexjs/stylex';
+import { background } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledPlaceholderDragAndDropCell = styled.div`
-  background-color: ${themeCssVariables.background.primary};
-  border-bottom: 1px solid ${themeCssVariables.background.primary};
-  height: ${RECORD_TABLE_ROW_HEIGHT}px;
-  left: 0;
-  overflow: hidden;
-  position: sticky;
-`;
+export const RecordTableDragAndDropPlaceholderCell = () => (
+  <div
+    {...mergeClassName(
+      stylex.props(styles.cell),
+      RECORD_TABLE_COLUMN_DRAG_AND_DROP_WIDTH_CLASS_NAME,
+    )}
+  />
+);
 
-export const RecordTableDragAndDropPlaceholderCell = ({
-  className,
-}: {
-  className?: string;
-}) => {
-  return (
-    <StyledPlaceholderDragAndDropCell
-      className={cx(
-        RECORD_TABLE_COLUMN_DRAG_AND_DROP_WIDTH_CLASS_NAME,
-        className,
-      )}
-    />
-  );
-};
+const styles = stylex.create({
+  cell: {
+    backgroundColor: background['--t-background-primary'],
+    borderBottomColor: background['--t-background-primary'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: 1,
+    height: recordTableLayout.rowHeight,
+    left: 0,
+    overflow: 'hidden',
+    position: 'sticky',
+  },
+});

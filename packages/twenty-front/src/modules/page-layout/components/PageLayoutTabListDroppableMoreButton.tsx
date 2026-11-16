@@ -1,27 +1,17 @@
 import { pointerIntersection } from '@dnd-kit/collision';
 import { useDroppable } from '@dnd-kit/react';
-import { styled } from '@linaria/react';
 
 import { PAGE_LAYOUT_TAB_LIST_DROPPABLE_IDS } from '@/page-layout/components/PageLayoutTabListDroppableIds';
 import { PAGE_LAYOUT_TAB_DND_TYPE } from '@/page-layout/constants/PageLayoutTabDndType';
 import { type PageLayoutTabMoreButtonDropData } from '@/page-layout/types/PageLayoutTabMoreButtonDropData';
 import { TabMoreButton } from '@/ui/layout/tab-list/components/TabMoreButton';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { backgroundTransparent } from 'twenty-ui/theme/tokens.stylex';
+import * as stylex from '@stylexjs/stylex';
 
 type PageLayoutTabListDroppableMoreButtonProps = {
   hiddenTabsCount: number;
   isActiveTabHidden: boolean;
 };
-
-const StyledTabMoreButtonWrapper = styled.div<{ isDraggingOver: boolean }>`
-  ${({ isDraggingOver }) =>
-    isDraggingOver
-      ? `
-    background-color: ${themeCssVariables.background.transparent.blue};
-    pointer-events: none;
-  `
-      : ''}
-`;
 
 export const PageLayoutTabListDroppableMoreButton = ({
   hiddenTabsCount,
@@ -40,13 +30,20 @@ export const PageLayoutTabListDroppableMoreButton = ({
 
   return (
     <div ref={ref}>
-      <StyledTabMoreButtonWrapper isDraggingOver={isDropTarget}>
+      <div {...stylex.props(isDropTarget && styles.draggingOver)}>
         <TabMoreButton
           hiddenTabsCount={hiddenTabsCount}
           active={isActiveTabHidden}
           isDropdownTrigger
         />
-      </StyledTabMoreButtonWrapper>
+      </div>
     </div>
   );
 };
+
+const styles = stylex.create({
+  draggingOver: {
+    backgroundColor: backgroundTransparent['--t-background-transparent-blue'],
+    pointerEvents: 'none',
+  },
+});

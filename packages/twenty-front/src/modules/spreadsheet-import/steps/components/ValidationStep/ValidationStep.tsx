@@ -13,7 +13,6 @@ import { type SpreadsheetColumns } from '@/spreadsheet-import/types/SpreadsheetC
 import { SpreadsheetColumnType } from '@/spreadsheet-import/types/SpreadsheetColumnType';
 import { addErrorsAndRunHooks } from '@/spreadsheet-import/utils/dataMutations';
 import { useDialogManager } from '@/ui/feedback/dialog-manager/hooks/useDialogManager';
-import { styled } from '@linaria/react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import {
   type Dispatch,
@@ -22,80 +21,14 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { type RowsChangeData } from 'react-data-grid';
 import { isDefined } from 'twenty-shared/utils';
 import { IconTrash } from 'twenty-ui/icon';
 import { Button, Switch } from 'twenty-ui/primitives/input';
 import { generateColumns } from './components/columns';
 import { type ImportedStructuredRowMetadata } from './types';
-
-const StyledContentWrapper = styled.div`
-  display: flex;
-  flex: 1 1 0%;
-  flex-direction: column;
-  position: relative;
-`;
-
-const StyledToolbar = styled.div`
-  align-items: center;
-  background-color: ${themeCssVariables.background.secondary};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.md};
-  bottom: ${themeCssVariables.spacing[3]};
-  box-shadow: ${themeCssVariables.boxShadow.strong};
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  left: 50%;
-  padding: ${themeCssVariables.spacing[3]};
-  position: absolute;
-  transform: translateX(-50%);
-  width: 400px;
-  z-index: 1;
-`;
-
-const StyledButtonContainer = styled.div`
-  button {
-    height: 24px;
-  }
-`;
-
-const StyledErrorSwitch = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-`;
-
-const StyledErrorSwitchDescription = styled.span`
-  color: ${themeCssVariables.font.color.secondary};
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.regular};
-  margin-left: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledScrollContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  height: 0px;
-  overflow: auto;
-  width: 100%;
-`;
-
-const StyledNoRowsContainer = styled.div`
-  display: flex;
-  grid-column: 1/-1;
-  justify-content: center;
-  margin-top: ${themeCssVariables.spacing[8]};
-`;
-
-const StyledNoRowsWithErrorsContainer = styled.div`
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  justify-content: center;
-  margin: auto 0;
-`;
+import * as stylex from '@stylexjs/stylex';
+import { background, borderColor, borderRadius, boxShadow, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type ValidationStepProps = {
   initialData: ImportedStructuredRow[];
@@ -289,20 +222,15 @@ export const ValidationStep = ({
   return (
     <>
       <Dialog.Body
-        style={{
-          display: 'flex',
-          flex: '1 1 0%',
-          flexDirection: 'column',
-          padding: 0,
-        }}
+        {...stylex.props(styles.dialogBody)}
       >
-        <StyledContentWrapper>
+        <div {...stylex.props(styles.contentWrapper)}>
           {filterByErrors && tableData.length === 0 ? (
-            <StyledNoRowsWithErrorsContainer>
+            <div {...stylex.props(styles.noRowsWithErrorsContainer)}>
               <Trans>No rows with errors</Trans>
-            </StyledNoRowsWithErrorsContainer>
+            </div>
           ) : (
-            <StyledScrollContainer>
+            <div {...stylex.props(styles.scrollContainer)}>
               <SpreadsheetImportTable
                 headerRowHeight={32}
                 rowKeyGetter={rowKeyGetter}
@@ -313,37 +241,36 @@ export const ValidationStep = ({
                 onSelectedRowsChange={setSelectedRows as any} // TODO: replace 'any'
                 renderers={{
                   noRowsFallback: (
-                    <StyledNoRowsContainer>
+                    <div {...stylex.props(styles.noRowsContainer)}>
                       {filterByErrors
                         ? t`No data containing errors`
                         : t`No data found`}
-                    </StyledNoRowsContainer>
+                    </div>
                   ),
                 }}
               />
-            </StyledScrollContainer>
+            </div>
           )}
-          <StyledToolbar>
-            <StyledErrorSwitch>
+          <div {...stylex.props(styles.toolbar)}>
+            <div {...stylex.props(styles.errorSwitch)}>
               <Switch
                 aria-label={t`Show only rows with errors`}
                 checked={filterByErrors}
                 onCheckedChange={() => setFilterByErrors(!filterByErrors)}
                 size="sm"
               />
-              <StyledErrorSwitchDescription>
+              <span {...stylex.props(styles.errorSwitchDescription)}>
                 <Trans>Show only rows with errors</Trans>
-              </StyledErrorSwitchDescription>
-            </StyledErrorSwitch>
-            <StyledButtonContainer>
-              <Button
+              </span>
+            </div>
+            <Button
+                xstyle={styles.removeButton}
                 startIcon={<IconTrash />}
                 onClick={deleteSelectedRows}
                 disabled={selectedRows.size === 0}
               >{t`Remove`}</Button>
-            </StyledButtonContainer>
-          </StyledToolbar>
-        </StyledContentWrapper>
+          </div>
+        </div>
       </Dialog.Body>
       <StepNavigationButton
         onContinue={onContinue}
@@ -353,3 +280,77 @@ export const ValidationStep = ({
     </>
   );
 };
+
+const styles = stylex.create({
+  removeButton: {
+    height: '24px',
+  },
+  dialogBody: {
+    display: 'flex',
+    flexBasis: '0%',
+    flexGrow: 1,
+    flexShrink: 1,
+    flexDirection: 'column',
+    paddingBlock: 0,
+    paddingInline: 0,
+  },
+  contentWrapper: {
+    display: 'flex',
+    flex: '1 1 0%',
+    flexDirection: 'column',
+    position: 'relative',
+  },
+  toolbar: {
+    alignItems: 'center',
+    backgroundColor: background['--t-background-secondary'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-medium'],
+    borderRadius: borderRadius['--t-border-radius-md'],
+    bottom: spacing['--t-spacing-3'],
+    boxShadow: boxShadow['--t-box-shadow-strong'],
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    left: '50%',
+    padding: spacing['--t-spacing-3'],
+    position: 'absolute',
+    transform: 'translateX(-50%)',
+    width: '400px',
+    zIndex: 1,
+  },
+  errorSwitch: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  errorSwitchDescription: {
+    color: fontColor['--t-font-color-secondary'],
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    marginLeft: spacing['--t-spacing-2'],
+  },
+  scrollContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    flexGrow: 1,
+    height: '0px',
+    overflow: 'auto',
+    width: '100%',
+  },
+  noRowsContainer: {
+    display: 'flex',
+    gridColumn: '1/-1',
+    justifyContent: 'center',
+    marginTop: spacing['--t-spacing-8'],
+  },
+  noRowsWithErrorsContainer: {
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: 'auto',
+    marginRight: '0',
+    marginBottom: 'auto',
+    marginLeft: '0',
+  },
+});

@@ -1,18 +1,29 @@
 import { type Draggable } from '@dnd-kit/dom';
-import { styled } from '@linaria/react';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
 
 import { RecordDragMultiDragCounterChip } from '@/object-record/record-drag/components/RecordDragMultiDragCounterChip';
 import { type RecordDragData } from '@/object-record/record-drag/types/RecordDragData';
 import { RecordListRow } from '@/object-record/record-list/components/RecordListRow';
+import * as stylex from '@stylexjs/stylex';
+import {
+  background,
+  borderColor,
+  borderRadius,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledRowDragOverlay = styled.div`
-  background: ${themeCssVariables.background.secondary};
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  position: relative;
-`;
+const styles = stylex.create({
+  rowDragOverlay: {
+    background: background['--t-background-secondary'],
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: borderColor['--t-border-color-medium'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    position: 'relative',
+  },
+});
 
 type RecordListRowDragOverlayProps = {
   source: Draggable | null;
@@ -28,9 +39,9 @@ export const RecordListRowDragOverlay = ({
   }
 
   return (
-    <StyledRowDragOverlay>
+    <div {...stylex.props(styles.rowDragOverlay)}>
       <RecordListRow recordId={sourceData.recordId} />
       <RecordDragMultiDragCounterChip />
-    </StyledRowDragOverlay>
+    </div>
   );
 };

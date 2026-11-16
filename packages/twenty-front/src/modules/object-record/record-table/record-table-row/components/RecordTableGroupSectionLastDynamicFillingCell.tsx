@@ -1,23 +1,23 @@
+import { recordTableLayout } from '../../constants/recordTableLayout.stylex';
 import { RECORD_TABLE_COLUMN_WITH_GROUP_LAST_EMPTY_COLUMN_WIDTH_CLASS_NAME } from '@/object-record/record-table/constants/RecordTableColumnWithGroupLastEmptyColumnWidthClassName';
-import { RECORD_TABLE_ROW_HEIGHT } from '@/object-record/record-table/constants/RecordTableRowHeight';
-import { styled } from '@linaria/react';
-import { cx } from '@linaria/core';
-
-const StyledPlaceholderLastDynamicFillingCell = styled.div`
-  height: ${RECORD_TABLE_ROW_HEIGHT}px;
-`;
+import { mergeClassName } from '@/page-layout/utils/mergeClassName';
+import * as stylex from '@stylexjs/stylex';
 
 export const RecordTableGroupSectionLastDynamicFillingCell = ({
-  className,
+  xstyle,
 }: {
-  className?: string;
-}) => {
-  return (
-    <StyledPlaceholderLastDynamicFillingCell
-      className={cx(
-        RECORD_TABLE_COLUMN_WITH_GROUP_LAST_EMPTY_COLUMN_WIDTH_CLASS_NAME,
-        className,
-      )}
-    />
-  );
-};
+  xstyle?: stylex.StyleXStyles;
+}) => (
+  <div
+    {...mergeClassName(
+      stylex.props(styles.cell, xstyle),
+      RECORD_TABLE_COLUMN_WITH_GROUP_LAST_EMPTY_COLUMN_WIDTH_CLASS_NAME,
+    )}
+  />
+);
+
+const styles = stylex.create({
+  cell: {
+    height: recordTableLayout.rowHeight,
+  },
+});

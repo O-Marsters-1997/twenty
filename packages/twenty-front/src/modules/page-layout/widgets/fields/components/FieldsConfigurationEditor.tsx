@@ -1,5 +1,4 @@
 import { DragDropProvider } from '@dnd-kit/react';
-import { styled } from '@linaria/react';
 
 import { useContextStoreObjectMetadataItemOrThrow } from '@/context-store/hooks/useContextStoreObjectMetadataItemOrThrow';
 import { fieldsWidgetGroupsDraftComponentState } from '@/page-layout/states/fieldsWidgetGroupsDraftComponentState';
@@ -31,16 +30,20 @@ import { Fragment, useState } from 'react';
 import { flushSync } from 'react-dom';
 import { MenuItem } from 'twenty-ui/components/navigation';
 import { IconNewSection } from 'twenty-ui/icon';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledGroupsDroppable = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
-
-const StyledAddGroupButtonContainer = styled.div`
-  border: 1px solid transparent;
-`;
+const styles = stylex.create({
+  groupsDroppable: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+  },
+  addGroupButtonContainer: {
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: 'transparent',
+  },
+});
 
 type FieldsConfigurationEditorProps = {
   pageLayoutId: string;
@@ -171,7 +174,7 @@ export const FieldsConfigurationEditor = ({
         onDragMove={handlers.onDragMove}
         onDragEnd={handlers.onDragEnd}
       >
-        <StyledGroupsDroppable>
+        <div {...stylex.props(styles.groupsDroppable)}>
           {sortedGroups.map((group, index) => {
             const groupDragData: FieldsConfigurationGroupDragData = {
               type: 'group',
@@ -227,7 +230,7 @@ export const FieldsConfigurationEditor = ({
             seamAligned
           />
 
-          <StyledAddGroupButtonContainer>
+          <div {...stylex.props(styles.addGroupButtonContainer)}>
             <MenuItem
               LeftIcon={IconNewSection}
               text={t`Add a Group`}
@@ -235,8 +238,8 @@ export const FieldsConfigurationEditor = ({
               withIconContainer
               withIconContainerBackground={false}
             />
-          </StyledAddGroupButtonContainer>
-        </StyledGroupsDroppable>
+          </div>
+        </div>
       </DragDropProvider>
     </DragDropItemDndContext.Provider>
   );

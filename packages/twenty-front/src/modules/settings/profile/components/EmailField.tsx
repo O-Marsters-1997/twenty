@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useState } from 'react';
 
@@ -11,35 +10,31 @@ import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomState
 import { IconCheck, IconPencil, IconX } from 'twenty-ui/icon';
 import { Tooltip } from 'twenty-ui/primitives/surfaces';
 import { Button, ButtonGroup } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledFieldRow = styled.div`
-  align-items: stretch;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledActionWrapper = styled.div`
-  align-items: stretch;
-  display: flex;
-
-  & > button + button {
-    border-left: none;
-  }
-`;
-
-const StyledActionButtonContainer = styled.div`
-  align-items: stretch;
-  display: inline-flex;
-  height: 100%;
-  justify-content: center;
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+  },
+  fieldRow: {
+    alignItems: 'stretch',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+  },
+  actionButtonContainer: {
+    alignItems: 'stretch',
+    display: 'inline-flex',
+    height: '100%',
+    justifyContent: 'center',
+  },
+  actionWrapper: {
+    alignItems: 'stretch',
+    display: 'flex',
+  },
+});
 
 export const EmailField = () => {
   const { t } = useLingui();
@@ -90,8 +85,8 @@ export const EmailField = () => {
     !isEditing && isBlockedByWorkspaceLimit;
 
   return (
-    <StyledContainer>
-      <StyledFieldRow>
+    <div {...stylex.props(styles.container)}>
+      <div {...stylex.props(styles.fieldRow)}>
         <SettingsTextInput
           instanceId={`user-email-${currentUserId}`}
           value={isEditing ? draftEmail : currentEmail}
@@ -123,14 +118,14 @@ export const EmailField = () => {
             />
           </ButtonGroup>
         ) : (
-          <StyledActionWrapper key="view">
+          <div key="view" {...stylex.props(styles.actionWrapper)}>
             <Tooltip
               content={t`You can't change your email because you belong to 2 or more workspaces.`}
               delay={TooltipDelay.noDelay}
               side="top"
               disabled={!shouldShowWorkspaceLimitTooltip}
             >
-              <StyledActionButtonContainer>
+              <div {...stylex.props(styles.actionButtonContainer)}>
                 <Button
                   startIcon={<IconPencil />}
                   aria-label={t`Edit`}
@@ -140,11 +135,11 @@ export const EmailField = () => {
                   disabled={!canEdit}
                   type="button"
                 />
-              </StyledActionButtonContainer>
+              </div>
             </Tooltip>
-          </StyledActionWrapper>
+          </div>
         )}
-      </StyledFieldRow>
-    </StyledContainer>
+      </div>
+    </div>
   );
 };

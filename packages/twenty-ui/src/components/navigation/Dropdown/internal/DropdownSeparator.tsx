@@ -1,9 +1,11 @@
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 import { type ComponentPropsWithRef } from 'react';
 
 import { Menu as MenuPrimitive } from '@base-ui/react/menu';
 
-import styles from '../Dropdown.module.scss';
+import { mergeStylexProps } from '@ui/utilities/internal/mergeStylexProps';
+
+import { dropdownStyles } from '../Dropdown.stylex';
 
 export const DropdownSeparator = ({
   className,
@@ -13,6 +15,6 @@ export const DropdownSeparator = ({
     {...props}
     role="separator"
     data-dropdown-separator=""
-    className={clsx(styles.separator, className)}
+    {...mergeStylexProps(stylex.props(dropdownStyles.separator), className)}
   />
 );

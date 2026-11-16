@@ -1,5 +1,3 @@
-import { styled } from '@linaria/react';
-
 import { SettingsDevelopersWebhookTableRow } from '@/settings/developers/components/SettingsDevelopersWebhookTableRow';
 import { WEBHOOK_TABLE_ROW_GRID_TEMPLATE_COLUMNS } from '@/settings/developers/constants/WebhookTableRowGridTemplateColumns';
 import { Table } from '@/ui/layout/table/components/Table';
@@ -8,15 +6,20 @@ import { TableHeader } from '@/ui/layout/table/components/TableHeader';
 import { TableRow } from '@/ui/layout/table/components/TableRow';
 import { SettingsPath } from 'twenty-shared/types';
 import { getSettingsPath } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { useQuery } from '@apollo/client/react';
 import { GetWebhooksDocument } from '~/generated-metadata/graphql';
+import * as stylex from '@stylexjs/stylex';
+import { borderColor } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledTableBodyContainer = styled.div`
-  border-bottom: 1px solid ${themeCssVariables.border.color.light};
-  max-height: 260px;
-  overflow-y: auto;
-`;
+const styles = stylex.create({
+  tableBodyContainer: {
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: borderColor['--t-border-color-light'],
+    maxHeight: '260px',
+    overflowY: 'auto',
+  },
+});
 
 export const SettingsWebhooksTable = () => {
   const { data: webhooksData } = useQuery(GetWebhooksDocument);
@@ -30,7 +33,7 @@ export const SettingsWebhooksTable = () => {
         <TableHeader></TableHeader>
       </TableRow>
       {!!webhooks?.length && (
-        <StyledTableBodyContainer>
+        <div {...stylex.props(styles.tableBodyContainer)}>
           <TableBody>
             {webhooks.map((webhookFieldItem) => (
               <SettingsDevelopersWebhookTableRow
@@ -42,7 +45,7 @@ export const SettingsWebhooksTable = () => {
               />
             ))}
           </TableBody>
-        </StyledTableBodyContainer>
+        </div>
       )}
     </Table>
   );

@@ -7,10 +7,11 @@ import { Tooltip } from '@ui/primitives/surfaces/Tooltip/Tooltip';
 import { TooltipBody } from '@ui/primitives/surfaces/Tooltip/internal/TooltipBody';
 import { Text } from '@ui/primitives/typography/Text/Text';
 import { type OverflowingTextWithTooltipProps } from './types/OverflowingTextWithTooltipProps';
+import { type WithXstyle } from '@ui/utilities/types/WithXstyle';
 import { isDefined } from '@ui/utilities/utils/isDefined';
-import { clsx } from 'clsx';
 
-import styles from './OverflowingTextWithTooltip.module.scss';
+import { focusStyles } from '../../../styles/focus.stylex';
+import { overflowingTextStyles } from './OverflowingTextWithTooltip.stylex';
 
 export const OverflowingTextWithTooltip = memo(
   function OverflowingTextWithTooltip({
@@ -26,8 +27,9 @@ export const OverflowingTextWithTooltip = memo(
     render,
     ref,
     className,
+    xstyle,
     ...props
-  }: OverflowingTextWithTooltipProps) {
+  }: WithXstyle<OverflowingTextWithTooltipProps>) {
     const textRef = useRef<HTMLDivElement>(null);
     const mergedRef = useMergedRefs(textRef, ref);
 
@@ -103,12 +105,13 @@ export const OverflowingTextWithTooltip = memo(
                 : { truncate: truncate ?? true })}
               dir="auto"
               data-content-overflowing={isTitleOverflowing ? '' : undefined}
-              className={clsx(
-                isMultiline
-                  ? styles.overflowingMultilineText
-                  : styles.overflowingText,
-                className,
-              )}
+              className={className}
+              xstyle={[
+                focusStyles.ring,
+                overflowingTextStyles.text,
+                isMultiline && overflowingTextStyles.multiline,
+                xstyle,
+              ]}
               render={render}
               ref={mergedRef}
               {...mergeProps<'div'>(
@@ -132,8 +135,10 @@ export const OverflowingTextWithTooltip = memo(
             style={{ maxWidth: '300px' }}
           >
             <Tooltip.Popup
-              className={
-                isTooltipMultiline ? styles.multilineTooltip : undefined
+              xstyle={
+                isTooltipMultiline
+                  ? overflowingTextStyles.multilineTooltip
+                  : undefined
               }
               onClick={handleTooltipClick}
             >

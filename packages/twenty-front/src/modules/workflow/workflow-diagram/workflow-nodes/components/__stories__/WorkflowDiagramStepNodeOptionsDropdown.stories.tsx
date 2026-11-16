@@ -1,15 +1,17 @@
 import { WORKFLOW_DIAGRAM_STEP_NODE_BASE_CLICK_OUTSIDE_ID } from '@/workflow/workflow-diagram/constants/WorkflowDiagramStepNodeClickOutsideId';
 import { WorkflowDiagramStepNodeOptionsDropdown } from '@/workflow/workflow-diagram/workflow-nodes/components/WorkflowDiagramStepNodeOptionsDropdown';
-import { styled } from '@linaria/react';
 import { type Meta, type StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 import { ComponentDecorator } from 'twenty-ui/testing';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledNode = styled.div`
-  height: 48px;
-  position: relative;
-  width: 160px;
-`;
+const styles = stylex.create({
+  node: {
+    height: '48px',
+    position: 'relative',
+    width: '160px',
+  },
+});
 
 const onNodeClick = fn();
 
@@ -18,9 +20,9 @@ const meta: Meta<typeof WorkflowDiagramStepNodeOptionsDropdown> = {
   component: WorkflowDiagramStepNodeOptionsDropdown,
   decorators: [
     (Story) => (
-      <StyledNode onClick={onNodeClick}>
+      <div onClick={onNodeClick} {...stylex.props(styles.node)}>
         <Story />
-      </StyledNode>
+      </div>
     ),
     ComponentDecorator,
   ],

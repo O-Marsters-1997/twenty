@@ -1,11 +1,8 @@
 import { type ReactNode } from 'react';
 
 import { runComponentConformance } from '@test-utilities/conformance/runComponentConformance';
-import inputStyles from '@ui/primitives/input/Input/Input.module.scss';
-import listItemStyles from '@ui/primitives/navigation/ListItem/ListItem.module.scss';
 
 import { Autocomplete } from '@ui/primitives/input';
-import styles from '../Autocomplete.module.scss';
 
 const RootWrapper = ({ children }: { children: ReactNode }) => (
   <Autocomplete.Root>{children}</Autocomplete.Root>
@@ -36,14 +33,12 @@ runComponentConformance({
   element: <Autocomplete.InputGroup />,
   refInstanceOf: HTMLDivElement,
   wrapper: RootWrapper,
-  ownClassName: styles.inputGroup,
 });
 runComponentConformance({
   name: 'Autocomplete.Input',
   element: <Autocomplete.Input aria-label="Search" />,
   refInstanceOf: HTMLInputElement,
   wrapper: RootWrapper,
-  ownClassName: inputStyles.input,
   renderPropTagName: 'input',
 });
 runComponentConformance({
@@ -57,28 +52,24 @@ runComponentConformance({
       </Autocomplete.Portal>
     </OpenWrapper>
   ),
-  ownClassName: styles.popup,
 });
 runComponentConformance({
   name: 'Autocomplete.List',
   element: <Autocomplete.List />,
   refInstanceOf: HTMLDivElement,
   wrapper: PopupWrapper,
-  ownClassName: styles.list,
 });
 runComponentConformance({
   name: 'Autocomplete.Item',
   element: <Autocomplete.Item value="first">First</Autocomplete.Item>,
   refInstanceOf: HTMLDivElement,
   wrapper: ListWrapper,
-  ownClassName: listItemStyles.root,
 });
 runComponentConformance({
   name: 'Autocomplete.Empty',
   element: <Autocomplete.Empty>No results</Autocomplete.Empty>,
   refInstanceOf: HTMLDivElement,
   wrapper: PopupWrapper,
-  ownClassName: styles.empty,
 });
 
 runComponentConformance({
@@ -86,7 +77,6 @@ runComponentConformance({
   element: <Autocomplete.Arrow />,
   refInstanceOf: HTMLDivElement,
   wrapper: PopupWrapper,
-  ownClassName: styles.arrow,
 });
 
 runComponentConformance({
@@ -94,7 +84,6 @@ runComponentConformance({
   element: <Autocomplete.Separator />,
   refInstanceOf: HTMLDivElement,
   wrapper: PopupWrapper,
-  ownClassName: styles.separator,
 });
 
 runComponentConformance({
@@ -113,7 +102,6 @@ runComponentConformance({
       <Autocomplete.Portal>{children}</Autocomplete.Portal>
     </OpenWrapper>
   ),
-  ownClassName: styles.positioner,
 });
 
 runComponentConformance({

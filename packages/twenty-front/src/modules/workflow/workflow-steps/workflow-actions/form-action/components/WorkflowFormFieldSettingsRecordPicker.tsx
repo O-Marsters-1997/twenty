@@ -7,22 +7,24 @@ import { InputLabel } from '@/ui/input/components/internal/InputLabel/InputLabel
 import { GenericDropdownContentWidth } from '@/ui/layout/dropdown/constants/GenericDropdownContentWidth';
 import { type WorkflowFormActionField } from '@/workflow/workflow-steps/workflow-actions/form-action/types/WorkflowFormActionField';
 import { getDefaultFormFieldSettings } from '@/workflow/workflow-steps/workflow-actions/form-action/utils/getDefaultFormFieldSettings';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import camelCase from 'lodash.camelcase';
 import { type SelectOption } from 'twenty-ui/primitives/input';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type WorkflowFormFieldSettingsRecordPickerProps = {
   field: WorkflowFormActionField;
   onChange: (updatedField: WorkflowFormActionField) => void;
 };
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+  },
+});
 
 export const WorkflowFormFieldSettingsRecordPicker = ({
   field,
@@ -41,7 +43,7 @@ export const WorkflowFormFieldSettingsRecordPicker = ({
     }));
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <FormFieldInputContainer>
         <Select
           dropdownId="workflow-form-field-settings-record-picker-object-name"
@@ -83,6 +85,6 @@ export const WorkflowFormFieldSettingsRecordPicker = ({
           placeholder={getDefaultFormFieldSettings('RECORD').label}
         />
       </FormFieldInputContainer>
-    </StyledContainer>
+    </div>
   );
 };

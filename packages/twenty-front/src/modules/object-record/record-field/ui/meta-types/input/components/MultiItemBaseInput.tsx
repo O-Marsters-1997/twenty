@@ -1,76 +1,93 @@
-import { styled } from '@linaria/react';
+import { mergeClassName } from '@/page-layout/utils/mergeClassName';
 import { useRef, type KeyboardEvent, type Ref } from 'react';
 import { type MultiItemBaseInputProps } from '@/object-record/record-field/ui/meta-types/input/types/MultiItemBaseInputProps';
 import { isKeyboardEventComposing } from '@/ui/utilities/hotkey/utils/isKeyboardEventComposing';
 import { useListenClickOutside } from '@/ui/utilities/pointer-event/hooks/useListenClickOutside';
 import { Key } from 'ts-key-enum';
 import { isNonEmptyString } from '@sniptt/guards';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { isDefined } from 'twenty-shared/utils';
 import { combineRefs } from '~/utils/combineRefs';
+import * as stylex from '@stylexjs/stylex';
+import {
+  color,
+  font,
+  fontColor,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledInput = styled.input<{
-  withRightComponent?: boolean;
-  hasError?: boolean;
-  hasItem: boolean;
-}>`
-  background-color: ${({ hasItem }) =>
-    hasItem ? themeCssVariables.background.transparent.lighter : 'transparent'};
-  background-color: transparent;
-  border: ${({ hasItem, hasError }) =>
-    hasItem
-      ? hasError
-        ? `1px solid ${themeCssVariables.border.color.danger}`
-        : `1px solid ${themeCssVariables.border.color.medium}`
-      : 'none'};
-  border: none;
-  border-radius: ${({ hasItem }) => (hasItem ? '4px' : '0')};
-  box-sizing: border-box;
-  color: ${themeCssVariables.font.color.primary};
-  font-family: ${themeCssVariables.font.family};
-
-  &::placeholder,
-  &::-webkit-input-placeholder {
-    color: ${themeCssVariables.font.color.light};
-    font-family: ${themeCssVariables.font.family};
-    font-weight: ${themeCssVariables.font.weight.medium};
-  }
-
-  font-size: inherit;
-  font-weight: ${themeCssVariables.font.weight.medium};
-  font-weight: inherit;
-  height: 32px;
-  outline: none;
-  padding: ${themeCssVariables.spacing[0]} ${themeCssVariables.spacing[2]};
-  padding-right: ${({ withRightComponent }) =>
-    withRightComponent ? '32px' : '0'};
-  position: relative;
-
-  width: 100%;
-`;
-
-const StyledInputContainer = styled.div`
-  background-color: transparent;
-  box-sizing: border-box;
-  position: relative;
-  width: 100%;
-
-  &:not(:first-of-type) {
-    padding: ${themeCssVariables.spacing[1]};
-  }
-`;
-
-const StyledRightContainer = styled.div`
-  position: absolute;
-  right: ${themeCssVariables.spacing[2]};
-  top: 50%;
-  transform: translateY(-50%);
-`;
-
-const StyledErrorDiv = styled.div`
-  color: ${themeCssVariables.color.red};
-  padding: 0 ${themeCssVariables.spacing[2]};
-`;
+const styles = stylex.create({
+  input: {
+    backgroundColor: 'transparent',
+    borderStyle: 'none',
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+    borderBottomRightRadius: 0,
+    borderBottomLeftRadius: 0,
+    boxSizing: 'border-box',
+    color: fontColor['--t-font-color-primary'],
+    fontFamily: font['--t-font-family'],
+    fontSize: 'inherit',
+    fontWeight: 'inherit',
+    height: 32,
+    outlineStyle: 'none',
+    paddingBottom: 0,
+    paddingLeft: spacing['--t-spacing-2'],
+    paddingRight: 0,
+    paddingTop: 0,
+    position: 'relative',
+    width: '100%',
+    '::placeholder': {
+      color: fontColor['--t-font-color-light'],
+      fontFamily: font['--t-font-family'],
+      fontWeight: fontWeight['--t-font-weight-medium'],
+    },
+  },
+  inputWithItem: {
+    borderTopLeftRadius: 4,
+    borderTopRightRadius: 4,
+    borderBottomRightRadius: 4,
+    borderBottomLeftRadius: 4,
+  },
+  inputWithRightComponent: {
+    paddingRight: 32,
+  },
+  inputContainer: {
+    backgroundColor: 'transparent',
+    boxSizing: 'border-box',
+    paddingTop: {
+      default: spacing['--t-spacing-1'],
+      ':first-of-type': 0,
+    },
+    paddingRight: {
+      default: spacing['--t-spacing-1'],
+      ':first-of-type': 0,
+    },
+    paddingBottom: {
+      default: spacing['--t-spacing-1'],
+      ':first-of-type': 0,
+    },
+    paddingLeft: {
+      default: spacing['--t-spacing-1'],
+      ':first-of-type': 0,
+    },
+    position: 'relative',
+    width: '100%',
+  },
+  rightContainer: {
+    position: 'absolute',
+    right: spacing['--t-spacing-2'],
+    top: '50%',
+    transform: 'translateY(-50%)',
+  },
+  errorDiv: {
+    color: color['--t-color-red'],
+    paddingTop: 0,
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: 0,
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+});
 
 export const MultiItemBaseInput = ({
   autoFocus,
@@ -145,7 +162,7 @@ export const MultiItemBaseInput = ({
 
   return (
     <>
-      <StyledInputContainer className={className}>
+      <div {...mergeClassName(stylex.props(styles.inputContainer), className)}>
         {isDefined(renderInput) ? (
           renderInput({
             value,
@@ -158,25 +175,29 @@ export const MultiItemBaseInput = ({
             onBlur,
           })
         ) : (
-          <StyledInput
-            hasError={hasError}
+          <input
+            {...stylex.props(
+              styles.input,
+              hasItem && styles.inputWithItem,
+              isDefined(rightComponent) && styles.inputWithRightComponent,
+            )}
             autoFocus={autoFocus}
             value={value}
             placeholder={placeholder}
             onChange={(event) => onChange(event.target.value)}
             ref={combinedRef}
-            withRightComponent={isDefined(rightComponent)}
-            hasItem={hasItem}
             onFocus={onFocus}
             onBlur={onBlur}
             onKeyDown={handleKeyDown}
           />
         )}
         {isDefined(rightComponent) && (
-          <StyledRightContainer>{rightComponent}</StyledRightContainer>
+          <div {...stylex.props(styles.rightContainer)}>{rightComponent}</div>
         )}
-      </StyledInputContainer>
-      {isNonEmptyString(error) && <StyledErrorDiv>{error}</StyledErrorDiv>}
+      </div>
+      {isNonEmptyString(error) && (
+        <div {...stylex.props(styles.errorDiv)}>{error}</div>
+      )}
     </>
   );
 };

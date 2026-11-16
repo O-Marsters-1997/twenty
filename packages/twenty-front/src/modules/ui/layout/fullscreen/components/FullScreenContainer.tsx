@@ -1,11 +1,11 @@
 import { type JSX } from 'react';
 import { PageHeader } from '@/ui/layout/page/components/PageHeader';
-import { PAGE_BAR_MIN_HEIGHT } from '@/ui/layout/page/constants/PageBarMinHeight';
+import { layoutSize } from '@/ui/layout/constants/layout.stylex';
 import { Breadcrumb } from '@/ui/navigation/bread-crumb/components/Breadcrumb';
 import { type BreadcrumbProps } from '@/ui/navigation/bread-crumb/types/BreadcrumbProps';
-import { styled } from '@linaria/react';
 import { useIsMobile } from 'twenty-ui/utilities';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { background, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type FullScreenContainerProps = {
   children: JSX.Element | JSX.Element[];
@@ -13,24 +13,23 @@ type FullScreenContainerProps = {
   exitFullScreen(): void;
 };
 
-const StyledFullScreen = styled.div`
-  background: ${themeCssVariables.background.noisy};
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
-
-const StyledMainContainer = styled.div`
-  height: calc(
-    100% - ${PAGE_BAR_MIN_HEIGHT}px - ${themeCssVariables.spacing[9]}
-  );
-  padding: 0 ${themeCssVariables.spacing[3]} ${themeCssVariables.spacing[3]}
-    ${themeCssVariables.spacing[3]};
-`;
-
-const StyledPageHeaderContainer = styled.div`
-  padding-left: ${themeCssVariables.spacing[3]};
-`;
+const styles = stylex.create({
+  fullScreen: {
+    background: background['--t-background-noisy'],
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+  },
+  mainContainer: {
+    height: `calc(100% - ${layoutSize.pageBarMinHeight} - ${spacing['--t-spacing-9']})`,
+    paddingBottom: spacing['--t-spacing-3'],
+    paddingInline: spacing['--t-spacing-3'],
+    paddingTop: 0,
+  },
+  pageHeaderContainer: {
+    paddingLeft: spacing['--t-spacing-3'],
+  },
+});
 
 export const FullScreenContainer = ({
   children,
@@ -40,15 +39,15 @@ export const FullScreenContainer = ({
   const isMobile = useIsMobile();
 
   return (
-    <StyledFullScreen>
-      <StyledPageHeaderContainer>
+    <div {...stylex.props(styles.fullScreen)}>
+      <div {...stylex.props(styles.pageHeaderContainer)}>
         <PageHeader
           title={<Breadcrumb links={links} />}
           hasClosePageButton={!isMobile}
           onClosePage={exitFullScreen}
         />
-      </StyledPageHeaderContainer>
-      <StyledMainContainer>{children}</StyledMainContainer>
-    </StyledFullScreen>
+      </div>
+      <div {...stylex.props(styles.mainContainer)}>{children}</div>
+    </div>
   );
 };

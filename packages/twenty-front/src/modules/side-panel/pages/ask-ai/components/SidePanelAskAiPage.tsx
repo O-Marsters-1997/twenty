@@ -1,19 +1,21 @@
-import { styled } from '@linaria/react';
 import { AiChatTab } from '@/ai/components/AiChatTab';
 import { AI_CHAT_SURFACE } from '@/ai/constants/AiChatSurface';
 import { AiChatSurfaceContext } from '@/ai/contexts/AiChatSurfaceContext';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledContainer = styled.div`
-  height: 100%;
-  width: 100%;
-`;
+const styles = stylex.create({
+  container: {
+    height: '100%',
+    width: '100%',
+  },
+});
 
 export const SidePanelAskAiPage = () => {
   return (
     <AiChatSurfaceContext.Provider value={AI_CHAT_SURFACE.SIDE_PANEL}>
-      <StyledContainer>
+      <div {...stylex.props(styles.container)}>
         <AiChatTab />
-      </StyledContainer>
+      </div>
     </AiChatSurfaceContext.Provider>
   );
 };

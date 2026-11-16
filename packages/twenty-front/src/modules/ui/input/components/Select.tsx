@@ -3,7 +3,6 @@ import { type SelectProps } from '@/ui/input/types/SelectProps';
 import { DropdownRoot } from '@/ui/layout/dropdown/components/DropdownRoot';
 import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent';
 import { GenericDropdownContentWidth } from '@/ui/layout/dropdown/constants/GenericDropdownContentWidth';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { useMemo, useRef, useState } from 'react';
 import { Dropdown } from 'twenty-ui/components/navigation';
@@ -16,25 +15,29 @@ import { isSelectOptionMatchingSearch } from '@/ui/input/components/internal/sel
 import { SelectControl } from '@/ui/input/components/SelectControl';
 import { isNonEmptyArray, isNonEmptyString } from '@sniptt/guards';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { normalizeSearchText } from 'twenty-ui/utilities';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div<{ fullWidth?: boolean }>`
-  width: ${({ fullWidth }) => (fullWidth ? '100%' : 'auto')};
-`;
-
-const StyledLabel = styled.span`
-  color: ${themeCssVariables.font.color.light};
-  display: block;
-  font-size: ${themeCssVariables.font.size.xs};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-  margin-bottom: ${themeCssVariables.spacing[1]};
-`;
-
-const StyledDescription = styled.span`
-  color: ${themeCssVariables.font.color.light};
-  font-size: ${themeCssVariables.font.size.sm};
-`;
+const styles = stylex.create({
+  container: {
+    width: 'auto',
+  },
+  fullWidth: {
+    width: '100%',
+  },
+  label: {
+    color: fontColor['--t-font-color-light'],
+    display: 'block',
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    marginBottom: spacing['--t-spacing-1'],
+  },
+  description: {
+    color: fontColor['--t-font-color-light'],
+    fontSize: fontSize['--t-font-size-sm'],
+  },
+});
 
 export const Select = <TValue extends SelectValue>({
   className,
@@ -132,10 +135,16 @@ export const Select = <TValue extends SelectValue>({
     return <></>;
   }
 
+  const { className: containerClassName } = stylex.props(
+    styles.container,
+    fullWidth && styles.fullWidth,
+  );
+
   return (
-    <StyledContainer
-      className={className}
-      fullWidth={fullWidth}
+    <div
+      className={[containerClassName, className]
+        .filter(isNonEmptyString)
+        .join(' ')}
       onBlur={(event) => {
         if (
           isFocusMovingWithinSelect({
@@ -149,7 +158,7 @@ export const Select = <TValue extends SelectValue>({
         onBlur?.();
       }}
     >
-      {isNonEmptyString(label) && <StyledLabel>{label}</StyledLabel>}
+      {isNonEmptyString(label) && <span {...stylex.props(styles.label)}>{label}</span>}
       {isDisabled ? (
         <SelectControl
           renderAsTag={renderAsTag}
@@ -299,8 +308,8 @@ export const Select = <TValue extends SelectValue>({
         </DropdownRoot>
       )}
       {isNonEmptyString(description) && (
-        <StyledDescription>{description}</StyledDescription>
+        <span {...stylex.props(styles.description)}>{description}</span>
       )}
-    </StyledContainer>
+    </div>
   );
 };

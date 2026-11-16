@@ -1,5 +1,4 @@
-import { css } from '@linaria/core';
-import { clsx } from 'clsx';
+import * as stylex from '@stylexjs/stylex';
 import { useEffect, useRef } from 'react';
 import { type AnimatedPlaceholderType } from './types/AnimatedPlaceholderType';
 
@@ -9,47 +8,39 @@ import { DARK_MOVING_IMAGE } from '@/ui/feedback/empty-state/components/Animated
 import { MOVING_IMAGE } from '@/ui/feedback/empty-state/components/AnimatedPlaceholder/constants/MovingImage';
 import { isDefined } from 'twenty-shared/utils';
 import { useThemeColorScheme } from 'twenty-ui/theme';
+import { animationDuration } from 'twenty-ui/theme/tokens.stylex';
 
-const styles = {
-  container: css`
-    & {
-      align-items: center;
-      display: flex;
-      justify-content: center;
-      min-height: 100px;
-      position: relative;
-    }
-  `,
-  backgroundImage: css`
-    & {
-      max-height: 160px;
-      max-width: 160px;
-    }
-  `,
-  backgroundImageLarge: css`
-    & {
-      max-height: 245px;
-      max-width: 245px;
-    }
-  `,
-  movingImage: css`
-    & {
-      max-height: 130px;
-      max-width: 130px;
-      position: absolute;
-      transform: translate(var(--parallax-x, 0), var(--parallax-y, 0));
-      transition: transform calc(var(--t-animation-duration-normal) * 1s)
-        ease-out;
-      z-index: 2;
-    }
-  `,
-  movingImageLarge: css`
-    & {
-      max-height: 185px;
-      max-width: 185px;
-    }
-  `,
-};
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+    minHeight: '100px',
+    position: 'relative',
+  },
+  backgroundImage: {
+    maxHeight: '160px',
+    maxWidth: '160px',
+  },
+  backgroundImageLarge: {
+    maxHeight: '245px',
+    maxWidth: '245px',
+  },
+  movingImage: {
+    maxHeight: '130px',
+    maxWidth: '130px',
+    position: 'absolute',
+    transform: 'translate(var(--parallax-x, 0), var(--parallax-y, 0))',
+    transitionDuration: `calc(${animationDuration['--t-animation-duration-normal']} * 1s)`,
+    transitionProperty: 'transform',
+    transitionTimingFunction: 'ease-out',
+    zIndex: 2,
+  },
+  movingImageLarge: {
+    maxHeight: '185px',
+    maxWidth: '185px',
+  },
+});
 
 const PARALLAX_OFFSET_IN_PX = 2;
 
@@ -117,11 +108,11 @@ export const AnimatedPlaceholder = ({
   const isLarge = type === 'error500' || type === 'error404';
 
   return (
-    <div className={styles.container}>
+    <div {...stylex.props(styles.container)}>
       <img
         src={`${assetBasePath}${colorScheme === 'dark' ? DARK_BACKGROUND[type] : BACKGROUND[type]}`}
         alt=""
-        className={clsx(
+        {...stylex.props(
           styles.backgroundImage,
           isLarge && styles.backgroundImageLarge,
         )}
@@ -130,7 +121,10 @@ export const AnimatedPlaceholder = ({
         ref={movingImageRef}
         src={`${assetBasePath}${colorScheme === 'dark' ? DARK_MOVING_IMAGE[type] : MOVING_IMAGE[type]}`}
         alt=""
-        className={clsx(styles.movingImage, isLarge && styles.movingImageLarge)}
+        {...stylex.props(
+          styles.movingImage,
+          isLarge && styles.movingImageLarge,
+        )}
       />
     </div>
   );

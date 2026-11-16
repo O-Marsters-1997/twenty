@@ -1,29 +1,33 @@
 import { DropdownRoot } from '@/ui/layout/dropdown/components/DropdownRoot';
 import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent';
-import { styled } from '@linaria/react';
 import { Dropdown } from 'twenty-ui/components/navigation';
 import { IconChevronDown } from 'twenty-ui/icon';
 import { type SelectOption } from 'twenty-ui/primitives/input';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledDropdownMenuInnerSelectDropdownButton = styled.div`
-  align-items: center;
-  box-sizing: border-box;
-  color: ${themeCssVariables.font.color.secondary};
-  cursor: pointer;
-
-  display: flex;
-  font-size: ${themeCssVariables.font.size.sm};
-
-  font-weight: ${themeCssVariables.font.weight.medium};
-
-  height: ${themeCssVariables.spacing[7]};
-  justify-content: space-between;
-  padding-left: ${themeCssVariables.spacing[2]};
-
-  padding-right: ${themeCssVariables.spacing[2]};
-  width: 100%;
-`;
+const styles = stylex.create({
+  dropdownMenuInnerSelectDropdownButton: {
+    alignItems: 'center',
+    boxSizing: 'border-box',
+    color: fontColor['--t-font-color-secondary'],
+    cursor: 'pointer',
+    display: 'flex',
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+    height: spacing['--t-spacing-7'],
+    justifyContent: 'space-between',
+    paddingLeft: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    width: '100%',
+  },
+});
 
 type DropdownMenuInnerSelectProps = {
   selectedOption: SelectOption;
@@ -54,10 +58,10 @@ export const DropdownMenuInnerSelect = ({
       }}
     >
       <Dropdown.Trigger render={<div />} nativeButton={false}>
-        <StyledDropdownMenuInnerSelectDropdownButton>
+        <div {...stylex.props(styles.dropdownMenuInnerSelectDropdownButton)}>
           <span>{selectedOption.label}</span>
           <IconChevronDown size={theme.icon.size.sm} />
-        </StyledDropdownMenuInnerSelectDropdownButton>
+        </div>
       </Dropdown.Trigger>
       <DropdownContent
         width={widthInPixels}

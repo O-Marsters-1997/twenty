@@ -1,8 +1,8 @@
 # Theme
 
-Import `ThemeProvider`, `useTheme`, `useThemeColorScheme`, `useThemeContainer`, `themeCssVariables`, and public theme types and constants from `twenty-ui/theme`. `THEME_LIGHT` and `THEME_DARK` remain available for styles, Stripe configuration, and other consumers that need static values. Load the existing `twenty-ui/theme-light.css` and `twenty-ui/theme-dark.css` stylesheets to supply CSS variables.
+Import `ThemeProvider`, `useTheme`, `useThemeColorScheme`, `useThemeContainer`, `themeCssVariables`, and public theme types and constants from `twenty-ui/theme`. `THEME_LIGHT` and `THEME_DARK` remain available for styles, Stripe configuration, and other consumers that need static values. `twenty-ui/style.css` supplies the light CSS variables.
 
-`ThemeProvider` applies the color-scheme class to the document root by default. Set `applyToRoot={false}` to scope the class to its children. `overrides` accepts CSS custom properties and creates a scope. Nested scopes resolve their own values, and `useThemeContainer()` identifies the nearest scope for portals. A popup's explicit `container` continues to take precedence over that scope. Root providers retain the `scale` preference; scoped providers ignore it.
+`ThemeProvider` applies the dark StyleX theme and the `light` or `dark` class (for `color-scheme`) to the document root by default. Set `applyToRoot={false}` to scope the dark theme to its children. `overrides` accepts CSS custom properties and creates a scope. Nested scopes resolve their own values, and `useThemeContainer()` identifies the nearest scope for portals. A popup's explicit `container` continues to take precedence over that scope. Root providers retain the `scale` preference; scoped providers ignore it.
 
 Contexts initialize when a provider or hook is used, so importing static tokens also works under React’s server condition. The build can place the static tokens and the provider in the same chunk, so the theme runtime files import React as a default and call its APIs at render time; a lint rule on those files rejects named React value imports.
 

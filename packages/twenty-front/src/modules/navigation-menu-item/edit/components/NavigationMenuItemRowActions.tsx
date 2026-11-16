@@ -1,19 +1,30 @@
-import { styled } from '@linaria/react';
+import { rowMarker } from './NavigationMenuItemRow.stylex';
 import { useLingui } from '@lingui/react/macro';
 import { type ReactNode } from 'react';
 import { LightIconButton } from 'twenty-ui/components/input';
 import { IconDotsVertical } from 'twenty-ui/icon';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledActions = styled.div`
-  align-items: center;
-  bottom: ${themeCssVariables.spacing['0.5']};
-  display: flex;
-  opacity: 0;
-  pointer-events: none;
-  position: absolute;
-  right: ${themeCssVariables.spacing['0.5']};
-`;
+const styles = stylex.create({
+  actions: {
+    alignItems: 'center',
+    bottom: spacing['--t-spacing-0_5'],
+    display: 'flex',
+    opacity: {
+      default: '0',
+      [stylex.when.ancestor(':hover', rowMarker)]: '1',
+      [stylex.when.ancestor(':focus-within', rowMarker)]: '1',
+    },
+    pointerEvents: {
+      default: 'none',
+      [stylex.when.ancestor(':hover', rowMarker)]: 'auto',
+      [stylex.when.ancestor(':focus-within', rowMarker)]: 'auto',
+    },
+    position: 'absolute',
+    right: spacing['--t-spacing-0_5'],
+  },
+});
 
 type NavigationMenuItemRowActionsProps = {
   rightOptions?: ReactNode;
@@ -27,9 +38,10 @@ export const NavigationMenuItemRowActions = ({
   const { t } = useLingui();
 
   return (
-    <StyledActions
+    <div
       data-navigation-actions
       onMouseDown={(event) => event.stopPropagation()}
+      {...stylex.props(styles.actions)}
     >
       {rightOptions}
       <LightIconButton
@@ -43,6 +55,6 @@ export const NavigationMenuItemRowActions = ({
       >
         <IconDotsVertical />
       </LightIconButton>
-    </StyledActions>
+    </div>
   );
 };

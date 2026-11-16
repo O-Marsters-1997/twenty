@@ -1,13 +1,15 @@
 import { SettingsOptionCardContentSwitch } from '@/settings/components/SettingsOptions/SettingsOptionCardContentSwitch';
-import { styled } from '@linaria/react';
 import { type Meta, type StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { IconBell, IconLock, IconRobot, IconUsers } from 'twenty-ui/icon';
 import { ComponentDecorator } from 'twenty-ui/testing';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledContainer = styled.div`
-  width: 480px;
-`;
+const styles = stylex.create({
+  container: {
+    width: '480px',
+  },
+});
 
 const SettingsOptionCardContentSwitchWrapper = (
   args: React.ComponentProps<typeof SettingsOptionCardContentSwitch>,
@@ -15,7 +17,7 @@ const SettingsOptionCardContentSwitchWrapper = (
   const [checked, setChecked] = useState(args.checked);
 
   return (
-    <StyledContainer>
+    <div {...stylex.props(styles.container)}>
       <SettingsOptionCardContentSwitch
         checked={checked}
         onChange={setChecked}
@@ -26,7 +28,7 @@ const SettingsOptionCardContentSwitchWrapper = (
         disabled={args.disabled}
         advancedMode={args.advancedMode}
       />
-    </StyledContainer>
+    </div>
   );
 };
 

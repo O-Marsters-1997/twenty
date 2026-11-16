@@ -2,16 +2,18 @@ import { useIsNavigationDrawerContentExpanded } from '@/ui/navigation/navigation
 import { NavigationDrawerSection } from '@/ui/navigation/navigation-drawer/components/NavigationDrawerSection';
 import { NavigationDrawerSectionTitle } from '@/ui/navigation/navigation-drawer/components/NavigationDrawerSectionTitle';
 import { useNavigationSection } from '@/ui/navigation/navigation-drawer/hooks/useNavigationSection';
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { type ReactNode } from 'react';
 import { Collapsible } from 'twenty-ui/primitives/layout';
-import { themeCssVariables } from 'twenty-ui/theme';
+import { general } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledItems = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.betweenSiblingsGap};
-`;
+const styles = stylex.create({
+  items: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: general['--t-between-siblings-gap'],
+  },
+});
 
 type CollapsibleNavigationDrawerSectionProps = {
   // Namespaced id (e.g. 'settings/User') used to persist open/closed state.
@@ -53,7 +55,7 @@ export const CollapsibleNavigationDrawerSection = ({
         open={!isNavigationDrawerExpanded || isNavigationSectionOpen}
       >
         <Collapsible.Panel dimension="height" containAnimation>
-          <StyledItems>{children}</StyledItems>
+          <div {...stylex.props(styles.items)}>{children}</div>
         </Collapsible.Panel>
       </Collapsible.Root>
     </NavigationDrawerSection>

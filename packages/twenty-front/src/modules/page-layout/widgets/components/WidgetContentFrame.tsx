@@ -1,20 +1,43 @@
-import { styled } from '@linaria/react';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { type ReactNode } from 'react';
+import { borderColor, borderRadius } from 'twenty-ui/theme/tokens.stylex';
 
-// Containment boundary for third-party widget content, which the page cannot
-// style and must not let bleed into its neighbours.
-export const StyledWidgetContentFrame = styled.div`
-  border: 1px solid ${themeCssVariables.border.color.medium};
-  border-radius: ${themeCssVariables.border.radius.md};
-  box-sizing: border-box;
-  width: 100%;
-`;
+type WidgetContentFrameProps = {
+  children?: ReactNode;
+  xstyle?: stylex.StyleXStyles;
+};
 
-export const StyledWidgetTableOutline = styled.div`
-  border: 1px solid ${themeCssVariables.border.color.light};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-  overflow: hidden;
-`;
+export const WidgetContentFrame = ({
+  children,
+  xstyle,
+}: WidgetContentFrameProps) => (
+  <div {...stylex.props(styles.contentFrame, xstyle)}>{children}</div>
+);
+
+export const WidgetTableOutline = ({
+  children,
+  xstyle,
+}: WidgetContentFrameProps) => (
+  <div {...stylex.props(styles.tableOutline, xstyle)}>{children}</div>
+);
+
+const styles = stylex.create({
+  contentFrame: {
+    borderColor: borderColor['--t-border-color-medium'],
+    borderRadius: borderRadius['--t-border-radius-md'],
+    borderStyle: 'solid',
+    borderWidth: 1,
+    boxSizing: 'border-box',
+    width: '100%',
+  },
+  tableOutline: {
+    borderColor: borderColor['--t-border-color-light'],
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    borderStyle: 'solid',
+    borderWidth: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: 0,
+    overflow: 'hidden',
+  },
+});

@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 import { autoUpdate, useFloating } from '@floating-ui/react';
 import { motion } from 'framer-motion';
 import { type MouseEvent as ReactMouseEvent } from 'react';
@@ -11,11 +10,14 @@ import { GenericDropdownContentWidth } from '@/ui/layout/dropdown/constants/Gene
 import { OverlayMenuList } from '@/ui/layout/overlay/components/OverlayMenuList';
 import { OverlayContainer } from '@/ui/layout/overlay/components/OverlayContainer';
 import { isDefined } from 'twenty-shared/utils';
+import * as stylex from '@stylexjs/stylex';
 
-const StyledContainer = styled.div`
-  height: 1px;
-  width: 1px;
-`;
+const styles = stylex.create({
+  container: {
+    height: '1px',
+    width: '1px',
+  },
+});
 
 export const CustomMentionMenu = ({
   items,
@@ -43,7 +45,7 @@ export const CustomMentionMenu = ({
   );
 
   return (
-    <StyledContainer ref={refs.setReference}>
+    <div ref={refs.setReference} {...stylex.props(styles.container)}>
       <>
         {createPortal(
           <motion.div
@@ -76,6 +78,6 @@ export const CustomMentionMenu = ({
           document.body,
         )}
       </>
-    </StyledContainer>
+    </div>
   );
 };

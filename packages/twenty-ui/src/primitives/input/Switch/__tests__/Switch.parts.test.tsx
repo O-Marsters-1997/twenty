@@ -6,13 +6,11 @@ import { expect, it } from 'vitest';
 import { runComponentConformance } from '@test-utilities/conformance/runComponentConformance';
 
 import { Switch } from '../Switch';
-import styles from '../Switch.module.scss';
 
 runComponentConformance({
   name: 'Switch.Root',
   element: <Switch.Root aria-label="Notifications" />,
   refInstanceOf: HTMLSpanElement,
-  ownClassName: styles.root,
 });
 
 runComponentConformance({
@@ -20,7 +18,6 @@ runComponentConformance({
   element: <Switch.Thumb />,
   wrapper: ({ children }) => <Switch.Root>{children}</Switch.Root>,
   refInstanceOf: HTMLSpanElement,
-  ownClassName: styles.thumb,
 });
 
 it('composes a native button and a thumb with state callbacks and refs', async () => {

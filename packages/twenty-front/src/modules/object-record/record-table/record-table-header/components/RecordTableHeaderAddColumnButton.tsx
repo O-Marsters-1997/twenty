@@ -1,10 +1,7 @@
-import { styled } from '@linaria/react';
-
 import { hasRecordGroupsComponentSelector } from '@/object-record/record-group/states/selectors/hasRecordGroupsComponentSelector';
 import { HIDDEN_TABLE_COLUMN_DROPDOWN_ID } from '@/object-record/record-table/constants/HiddenTableColumnDropdownId';
-import { RECORD_TABLE_COLUMN_ADD_COLUMN_BUTTON_WIDTH } from '@/object-record/record-table/constants/RecordTableColumnAddColumnButtonWidth';
 import { RECORD_TABLE_COLUMN_ADD_COLUMN_BUTTON_WIDTH_CLASS_NAME } from '@/object-record/record-table/constants/RecordTableColumnAddColumnButtonWidthClassName';
-import { RECORD_TABLE_ROW_HEIGHT } from '@/object-record/record-table/constants/RecordTableRowHeight';
+import { recordTableLayout } from '../../constants/recordTableLayout.stylex';
 import { useRecordTableContextOrThrow } from '@/object-record/record-table/contexts/RecordTableContext';
 import { RecordTableHeaderPlusButtonContent } from '@/object-record/record-table/record-table-header/components/RecordTableHeaderPlusButtonContent';
 import { RecordTableHeaderResizeHandler } from '@/object-record/record-table/record-table-header/components/RecordTableHeaderResizeHandler';
@@ -18,51 +15,52 @@ import { GenericDropdownContentWidth } from '@/ui/layout/dropdown/constants/Gene
 import { useAtomComponentFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentFamilyStateValue';
 import { useAtomComponentSelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentSelectorValue';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { cx } from '@linaria/core';
+import { mergeClassName } from '@/page-layout/utils/mergeClassName';
 import { t } from '@lingui/core/macro';
 import { Dropdown } from 'twenty-ui/components/navigation';
 import { IconPlus } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import { media } from 'twenty-ui/theme/constants.stylex';
+import * as stylex from '@stylexjs/stylex';
+import {
+  background,
+  borderColor,
+  fontColor,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledPlusIconHeaderCell = styled.div<{
-  shouldDisplayBorderBottom: boolean;
-}>`
-  background-color: ${themeCssVariables.background.primary};
-  border-bottom: ${({ shouldDisplayBorderBottom }) =>
-    shouldDisplayBorderBottom
-      ? `1px solid ${themeCssVariables.border.color.light}`
-      : 'none'};
-
-  color: ${themeCssVariables.font.color.tertiary};
-
-  cursor: pointer;
-
-  height: ${RECORD_TABLE_ROW_HEIGHT}px;
-
-  max-height: ${RECORD_TABLE_ROW_HEIGHT}px;
-
-  width: ${RECORD_TABLE_COLUMN_ADD_COLUMN_BUTTON_WIDTH}px;
-  z-index: 1;
-
-  @media (hover: hover) {
-    &:hover {
-      background: ${themeCssVariables.background.secondary};
-    }
-  }
-`;
-
-const StyledPlusIconContainer = styled.div`
-  align-items: center;
-  display: flex;
-  height: ${RECORD_TABLE_ROW_HEIGHT}px;
-  justify-content: center;
-  width: 100%;
-`;
-
-const StyledDropdownContainer = styled.div`
-  cursor: pointer;
-  width: 100%;
-`;
+const styles = stylex.create({
+  plusIconHeaderCell: {
+    backgroundColor: {
+      default: background['--t-background-primary'],
+      ':hover': {
+        default: null,
+        [media.hoverCapable]: background['--t-background-secondary'],
+      },
+    },
+    color: fontColor['--t-font-color-tertiary'],
+    cursor: 'pointer',
+    height: recordTableLayout.rowHeight,
+    maxHeight: recordTableLayout.rowHeight,
+    width: recordTableLayout.addColumnButtonWidth,
+    zIndex: 1,
+  },
+  borderBottom: {
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: 1,
+  },
+  plusIconContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    height: recordTableLayout.rowHeight,
+    justifyContent: 'center',
+    width: '100%',
+  },
+  dropdownContainer: {
+    cursor: 'pointer',
+    width: '100%',
+  },
+});
 
 export const RecordTableHeaderAddColumnButton = () => {
   const theme = useTheme();
@@ -100,25 +98,29 @@ export const RecordTableHeaderAddColumnButton = () => {
 
   const { visibleRecordFields, recordTableId } = useRecordTableContextOrThrow();
 
+  const cellProps = stylex.props(
+    styles.plusIconHeaderCell,
+    shouldDisplayBorderBottom && styles.borderBottom,
+  );
+
   return (
-    <StyledPlusIconHeaderCell
-      shouldDisplayBorderBottom={shouldDisplayBorderBottom}
-      className={cx(
-        'header-cell',
-        RECORD_TABLE_COLUMN_ADD_COLUMN_BUTTON_WIDTH_CLASS_NAME,
+    <div
+      {...mergeClassName(
+        cellProps,
+        `header-cell ${RECORD_TABLE_COLUMN_ADD_COLUMN_BUTTON_WIDTH_CLASS_NAME}`,
       )}
     >
       <RecordTableHeaderResizeHandler
         recordFieldIndex={visibleRecordFields.length}
         position="left"
       />
-      <StyledDropdownContainer>
+      <div {...stylex.props(styles.dropdownContainer)}>
         <DropdownRoot
           dropdownId={`${HIDDEN_TABLE_COLUMN_DROPDOWN_ID}-${recordTableId}`}
           type="picker"
         >
           <Dropdown.Trigger
-            render={<StyledPlusIconContainer />}
+            render={<div {...stylex.props(styles.plusIconContainer)} />}
             nativeButton={false}
             aria-label={t`Add column`}
           >
@@ -131,7 +133,7 @@ export const RecordTableHeaderAddColumnButton = () => {
             <RecordTableHeaderPlusButtonContent />
           </DropdownContent>
         </DropdownRoot>
-      </StyledDropdownContainer>
-    </StyledPlusIconHeaderCell>
+      </div>
+    </div>
   );
 };

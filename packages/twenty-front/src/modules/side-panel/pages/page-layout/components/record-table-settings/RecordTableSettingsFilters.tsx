@@ -7,17 +7,22 @@ import { useRecordTableWidgetFilterCallbacks } from '@/page-layout/widgets/recor
 import { useRecordTableWidgetViewForDisplay } from '@/page-layout/widgets/record-table/hooks/useRecordTableWidgetViewForDisplay';
 import { RecordTableSettingsFiltersInitializeStateEffect } from '@/side-panel/pages/page-layout/components/record-table-settings/RecordTableSettingsFiltersInitializeStateEffect';
 import { InputLabel } from '@/ui/input/components/internal/InputLabel/InputLabel';
-import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledFilterSettingsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[2]};
-  padding: ${themeCssVariables.spacing[3]};
-`;
+const styles = stylex.create({
+  filterSettingsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingBottom: spacing['--t-spacing-3'],
+    paddingLeft: spacing['--t-spacing-3'],
+  },
+});
 
 type RecordTableSettingsFiltersProps = {
   viewId: string;
@@ -58,7 +63,7 @@ export const RecordTableSettingsFilters = ({
   }
 
   return (
-    <StyledFilterSettingsContainer>
+    <div {...stylex.props(styles.filterSettingsContainer)}>
       <InputLabel>{t`Conditions`}</InputLabel>
       <RecordFilterGroupsComponentInstanceContext.Provider
         value={{ instanceId: recordIndexId }}
@@ -74,6 +79,6 @@ export const RecordTableSettingsFilters = ({
           <RecordTableSettingsFiltersInitializeStateEffect view={view} />
         </RecordFiltersComponentInstanceContext.Provider>
       </RecordFilterGroupsComponentInstanceContext.Provider>
-    </StyledFilterSettingsContainer>
+    </div>
   );
 };

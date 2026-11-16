@@ -9,7 +9,6 @@ import { TableCell } from '@/ui/layout/table/components/TableCell';
 import { TableRow } from '@/ui/layout/table/components/TableRow';
 import { TooltipDelay } from '@/ui/layout/tooltip/constants/TooltipDelay';
 import { useSetAtomFamilyState } from '@/ui/utilities/state/jotai/hooks/useSetAtomFamilyState';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useMemo } from 'react';
 import { FieldMetadataType, SettingsPath } from 'twenty-shared/types';
@@ -21,6 +20,8 @@ import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 import { RelationType } from '~/generated-metadata/graphql';
 import { type SettingsObjectDetailTableItem } from '@/settings/data-model/types/SettingsObjectDetailTableItem';
 import { SettingsObjectFieldDataType } from './SettingsObjectFieldDataType';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsObjectFieldItemTableRowProps = {
   settingsObjectDetailTableItem: SettingsObjectDetailTableItem;
@@ -32,19 +33,20 @@ type SettingsObjectFieldItemTableRowProps = {
 export const OBJECT_FIELD_TABLE_ROW_GRID_TEMPLATE_COLUMNS =
   'minmax(0, 1fr) 148px 148px 36px';
 
-const StyledNameContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex: 1;
-  gap: ${themeCssVariables.spacing[1]};
-  min-width: 0;
-`;
-
-const StyledNameLabel = styled.div`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
+const styles = stylex.create({
+  nameContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flex: '1',
+    gap: spacing['--t-spacing-1'],
+    minWidth: '0',
+  },
+  nameLabel: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+});
 
 export const SettingsObjectFieldItemTableRow = ({
   settingsObjectDetailTableItem,
@@ -137,10 +139,13 @@ export const SettingsObjectFieldItemTableRow = ({
             stroke={theme.icon.stroke.sm}
           />
         )}
-        <StyledNameContainer>
-          <StyledNameLabel title={fieldMetadataItem.label}>
+        <div {...stylex.props(styles.nameContainer)}>
+          <div
+            title={fieldMetadataItem.label}
+            {...stylex.props(styles.nameLabel)}
+          >
             {fieldMetadataItem.label}
-          </StyledNameLabel>
+          </div>
           {!fieldMetadataItem.isActive && (
             <SettingsNameCellSecondaryLabel>
               {t`Deactivated`}
@@ -156,7 +161,7 @@ export const SettingsObjectFieldItemTableRow = ({
               </SettingsNameCellSecondaryLabel>
             </Tooltip>
           )}
-        </StyledNameContainer>
+        </div>
       </TableCell>
 
       <TableCell>

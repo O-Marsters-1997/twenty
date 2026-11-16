@@ -1,4 +1,3 @@
-import { styled } from '@linaria/react';
 
 import { SettingsPageContainer } from '@/settings/components/SettingsPageContainer';
 import { SettingsPageLayout } from '@/settings/components/layout/SettingsPageLayout';
@@ -9,15 +8,18 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import { SettingsPath } from 'twenty-shared/types';
 import { getSettingsPath } from 'twenty-shared/utils';
 import { Section } from 'twenty-ui/components/layout';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { SettingsAppearance } from '~/pages/settings/profile/appearance/components/SettingsAppearance';
 import { LocalePicker } from '~/pages/settings/profile/appearance/components/LocalePicker';
+import * as stylex from '@stylexjs/stylex';
+import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledInterfaceControls = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${themeCssVariables.spacing[4]};
-`;
+const styles = stylex.create({
+  interfaceControls: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing['--t-spacing-4'],
+  },
+});
 
 export const SettingsExperience = () => {
   const { t } = useLingui();
@@ -41,10 +43,10 @@ export const SettingsExperience = () => {
             title={t`Interface`}
             description={t`Select your language and adjust the size of the interface`}
           />
-          <StyledInterfaceControls>
+          <div {...stylex.props(styles.interfaceControls)}>
             <LocalePicker />
             <UiScalePicker />
-          </StyledInterfaceControls>
+          </div>
         </Section.Root>
 
         <Section.Root>

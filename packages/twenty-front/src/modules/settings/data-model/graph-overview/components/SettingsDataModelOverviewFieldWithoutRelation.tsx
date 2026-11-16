@@ -1,26 +1,31 @@
 import { isDefined } from 'twenty-shared/utils';
-import { styled } from '@linaria/react';
 
 import { type FieldMetadataItem } from '@/object-metadata/types/FieldMetadataItem';
 import { useIcons } from 'twenty-ui/icon';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 type ObjectFieldRowWithoutRelationProps = {
   field: FieldMetadataItem;
 };
 
-const StyledRow = styled.div`
-  align-items: center;
-  display: flex;
-  gap: ${themeCssVariables.spacing[2]};
-  padding: 0 ${themeCssVariables.spacing[2]};
-  position: relative;
-  width: 100%;
-`;
-
-const StyledFieldName = styled.div`
-  color: ${themeCssVariables.font.color.primary};
-`;
+const styles = stylex.create({
+  row: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: spacing['--t-spacing-2'],
+    paddingTop: '0',
+    paddingRight: spacing['--t-spacing-2'],
+    paddingBottom: '0',
+    paddingLeft: spacing['--t-spacing-2'],
+    position: 'relative',
+    width: '100%',
+  },
+  fieldName: {
+    color: fontColor['--t-font-color-primary'],
+  },
+});
 
 export const ObjectFieldRowWithoutRelation = ({
   field,
@@ -31,9 +36,9 @@ export const ObjectFieldRowWithoutRelation = ({
   const Icon = getIcon(field?.icon);
 
   return (
-    <StyledRow>
+    <div {...stylex.props(styles.row)}>
       {isDefined(Icon) && <Icon size={theme.icon.size.md} />}
-      <StyledFieldName>{field.label}</StyledFieldName>
-    </StyledRow>
+      <div {...stylex.props(styles.fieldName)}>{field.label}</div>
+    </div>
   );
 };

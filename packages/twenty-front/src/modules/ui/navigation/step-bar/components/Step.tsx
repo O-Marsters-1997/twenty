@@ -1,70 +1,76 @@
-import { styled } from '@linaria/react';
+import * as stylex from '@stylexjs/stylex';
 import { motion } from 'framer-motion';
 
 import { AnimatedCheckmark } from '@/ui/navigation/step-bar/components/internal/AnimatedCheckmark/AnimatedCheckmark';
 import { useIsMobile } from 'twenty-ui/utilities';
-import { MOBILE_VIEWPORT, useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
+import { media } from 'twenty-ui/theme/constants.stylex';
+import {
+  borderColor,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
-const StyledContainer = styled.div<{ isLast: boolean }>`
-  align-items: center;
-  display: flex;
-  flex-grow: ${({ isLast }) => (isLast ? '0' : '1')};
-  @media (max-width: ${MOBILE_VIEWPORT}px) {
-    flex-grow: 0;
-  }
-`;
-
-const StyledStepCircleBase = styled.div<{ isInNextSteps: boolean }>`
-  align-items: center;
-  border-color: ${({ isInNextSteps }) =>
-    isInNextSteps
-      ? themeCssVariables.border.color.medium
-      : themeCssVariables.border.color.inverted} !important;
-  border-radius: 50%;
-  border-style: solid;
-  border-width: 1px;
-  corner-shape: round;
-  display: flex;
-  flex-basis: auto;
-  flex-shrink: 0;
-  height: 20px;
-  justify-content: center;
-  overflow: hidden;
-  position: relative;
-  width: 20px;
-`;
-
-const StyledStepCircle = motion.create(StyledStepCircleBase);
-
-const StyledStepIndex = styled.span<{ isCurrentStep: boolean }>`
-  color: ${({ isCurrentStep }) =>
-    isCurrentStep
-      ? themeCssVariables.font.color.inverted
-      : themeCssVariables.font.color.tertiary};
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.medium};
-`;
-
-const StyledStepLabel = styled.span<{ isInNextSteps: boolean }>`
-  color: ${({ isInNextSteps }) =>
-    isInNextSteps
-      ? themeCssVariables.font.color.tertiary
-      : themeCssVariables.font.color.primary};
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.semiBold};
-  margin-left: ${themeCssVariables.spacing[2]};
-  white-space: nowrap;
-`;
-
-const StyledStepLineBase = styled.div`
-  height: 2px;
-  margin-left: ${themeCssVariables.spacing[2]};
-  margin-right: ${themeCssVariables.spacing[2]};
-  overflow: hidden;
-  width: 100%;
-`;
-
-const StyledStepLine = motion.create(StyledStepLineBase);
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    display: 'flex',
+    flexGrow: {
+      default: 1,
+      [media.mobile]: 0,
+    },
+  },
+  containerLast: {
+    flexGrow: 0,
+  },
+  stepCircle: {
+    alignItems: 'center',
+    borderRadius: '50%',
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    display: 'flex',
+    flexBasis: 'auto',
+    flexShrink: 0,
+    height: '20px',
+    justifyContent: 'center',
+    overflow: 'hidden',
+    position: 'relative',
+    width: '20px',
+  },
+  stepCircleNext: {
+    borderColor: borderColor['--t-border-color-medium'],
+  },
+  stepCirclePast: {
+    borderColor: borderColor['--t-border-color-inverted'],
+  },
+  stepIndex: {
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-medium'],
+  },
+  stepIndexCurrent: {
+    color: fontColor['--t-font-color-inverted'],
+  },
+  stepLabel: {
+    color: fontColor['--t-font-color-primary'],
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    marginLeft: spacing['--t-spacing-2'],
+    whiteSpace: 'nowrap',
+  },
+  stepLabelNext: {
+    color: fontColor['--t-font-color-tertiary'],
+  },
+  stepLine: {
+    height: '2px',
+    marginLeft: spacing['--t-spacing-2'],
+    marginRight: spacing['--t-spacing-2'],
+    overflow: 'hidden',
+    width: '100%',
+  },
+});
 
 export type StepProps = React.PropsWithChildren &
   React.ComponentProps<'div'> & {
@@ -115,13 +121,16 @@ export const Step = ({
   const isInNextSteps = activeStep < index;
 
   return (
-    <StyledContainer isLast={isLast}>
-      <StyledStepCircle
+    <div {...stylex.props(styles.container, isLast && styles.containerLast)}>
+      <motion.div
         variants={variantsCircle}
         animate={
           isCurrentStep ? 'current' : isInPreviousSteps ? 'previous' : 'next'
         }
-        isInNextSteps={isInNextSteps}
+        {...stylex.props(
+          styles.stepCircle,
+          isInNextSteps ? styles.stepCircleNext : styles.stepCirclePast,
+        )}
       >
         {isInPreviousSteps && (
           <AnimatedCheckmark
@@ -130,20 +139,33 @@ export const Step = ({
           />
         )}
         {!isInPreviousSteps && (
-          <StyledStepIndex isCurrentStep={isCurrentStep}>
+          <span
+            {...stylex.props(
+              styles.stepIndex,
+              isCurrentStep && styles.stepIndexCurrent,
+            )}
+          >
             {index + 1}
-          </StyledStepIndex>
+          </span>
         )}
-      </StyledStepCircle>
-      <StyledStepLabel isInNextSteps={isInNextSteps}>{label}</StyledStepLabel>
+      </motion.div>
+      <span
+        {...stylex.props(
+          styles.stepLabel,
+          isInNextSteps && styles.stepLabelNext,
+        )}
+      >
+        {label}
+      </span>
       {!isLast && !isMobile && (
-        <StyledStepLine
+        <motion.div
           variants={variantsLine}
           animate={isInPreviousSteps ? 'previous' : 'next'}
+          {...stylex.props(styles.stepLine)}
         />
       )}
       {(isInPreviousSteps || isCurrentStep) && children}
-    </StyledContainer>
+    </div>
   );
 };
 

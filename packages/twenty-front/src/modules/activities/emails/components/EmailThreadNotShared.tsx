@@ -1,31 +1,46 @@
+import * as stylex from '@stylexjs/stylex';
+import {
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 import { TooltipDelay } from '@/ui/layout/tooltip/constants/TooltipDelay';
-import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { IconLock } from 'twenty-ui/icon';
 import { Tooltip } from 'twenty-ui/primitives/surfaces';
-import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { useTheme } from 'twenty-ui/theme';
 import { MessageChannelVisibility } from '~/generated/graphql';
 
-const StyledContainer = styled.div<{ isCompact?: boolean }>`
-  align-items: center;
-  background: ${themeCssVariables.background.transparent.lighter};
-  border: 1px solid ${themeCssVariables.border.color.light};
-  border-radius: ${themeCssVariables.border.radius.sm};
-  color: ${themeCssVariables.font.color.tertiary};
-  display: flex;
-  flex: 1;
-  flex: ${({ isCompact }) => (isCompact ? '0 0 auto' : '1 0 0')};
-  font-size: ${themeCssVariables.font.size.sm};
-
-  font-weight: ${themeCssVariables.font.weight.regular};
-  gap: ${themeCssVariables.spacing[1]};
-  height: 20px;
-
-  margin-left: auto;
-  min-width: ${themeCssVariables.spacing[21]};
-  padding: ${themeCssVariables.spacing[0]} ${themeCssVariables.spacing[1]};
-  width: ${({ isCompact }) => (isCompact ? 'auto' : '100%')};
-`;
+const styles = stylex.create({
+  container: {
+    alignItems: 'center',
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
+    borderColor: borderColor['--t-border-color-light'],
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    flex: '1 0 0',
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    gap: spacing['--t-spacing-1'],
+    height: '20px',
+    marginLeft: 'auto',
+    minWidth: spacing['--t-spacing-21'],
+    paddingInline: spacing['--t-spacing-1'],
+    width: '100%',
+  },
+  containerCompact: {
+    flex: '0 0 auto',
+    width: 'auto',
+  },
+});
 
 type EmailThreadNotSharedProps = {
   visibility: MessageChannelVisibility;
@@ -47,10 +62,16 @@ export const EmailThreadNotShared = ({
       positionMethod="fixed"
       disabled={!(visibility === MessageChannelVisibility.SUBJECT)}
     >
-      <StyledContainer id={containerId} isCompact={isCompact}>
+      <div
+        id={containerId}
+        {...stylex.props(
+          styles.container,
+          isCompact && styles.containerCompact,
+        )}
+      >
         <IconLock size={theme.icon.size.sm} />
         {t`Not shared`}
-      </StyledContainer>
+      </div>
     </Tooltip>
   );
 };

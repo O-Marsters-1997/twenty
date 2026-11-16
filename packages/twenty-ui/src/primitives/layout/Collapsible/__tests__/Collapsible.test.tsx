@@ -5,7 +5,6 @@ import { type PropsWithChildren, useState } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { Collapsible } from '../Collapsible';
-import styles from '../Collapsible.module.scss';
 import { type CollapsibleTriggerProps } from '../types/CollapsibleTriggerProps';
 import { type CollapsibleRootChangeEventDetails } from '../types/CollapsibleRootChangeEventDetails';
 
@@ -31,7 +30,6 @@ runComponentConformance({
   name: 'Collapsible.Panel',
   element: <Collapsible.Panel>Content</Collapsible.Panel>,
   refInstanceOf: HTMLDivElement,
-  ownClassName: styles.panel,
   wrapper: OpenRoot,
 });
 
@@ -215,8 +213,7 @@ describe('Collapsible', () => {
       </Collapsible.Root>,
     );
     const panel = screen.getByText('Import details');
-    expect(panel).toHaveClass(styles.panel, 'open-panel');
-    expect(panel).not.toHaveClass(styles.contained);
+    expect(panel).toHaveClass('open-panel');
     expect(panel).toHaveStyle({
       padding: '7px',
       transitionDuration: '0.4s, 0.2s',

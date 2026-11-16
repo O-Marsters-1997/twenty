@@ -14,25 +14,26 @@ import { useAvailableComponentInstanceIdOrThrow } from '@/ui/utilities/state/com
 import { useAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useAtomComponentState';
 import { useAtomComponentSelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentSelectorValue';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { styled } from '@linaria/react';
 import { useCallback } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useStore } from 'jotai';
-import { themeCssVariables } from 'twenty-ui/theme';
+import * as stylex from '@stylexjs/stylex';
+import { grayScale, spacing } from 'twenty-ui/theme/tokens.stylex';
 
-const StyledText = styled.div`
-  align-items: center;
-  box-shadow: none;
-  color: ${themeCssVariables.grayScale.gray9};
-  display: flex;
-  height: 32px;
-  margin-left: ${themeCssVariables.spacing[8]};
-  padding-left: ${themeCssVariables.spacing[2]};
-`;
-
-const StyledIntersectionObserver = styled.div`
-  height: 0px;
-`;
+const styles = stylex.create({
+  text: {
+    alignItems: 'center',
+    boxShadow: 'none',
+    color: grayScale['--t-gray-scale-gray9'],
+    display: 'flex',
+    height: '32px',
+    marginLeft: spacing['--t-spacing-8'],
+    paddingLeft: spacing['--t-spacing-2'],
+  },
+  intersectionObserver: {
+    height: '0px',
+  },
+});
 
 export const MultipleRecordPickerFetchMoreLoader = () => {
   const store = useStore();
@@ -121,9 +122,9 @@ export const MultipleRecordPickerFetchMoreLoader = () => {
 
   return (
     <>
-      <StyledIntersectionObserver ref={ref} />
+      <div ref={ref} {...stylex.props(styles.intersectionObserver)} />
       {multipleRecordPickerIsFetchingMore && (
-        <StyledText>{t`Loading more...`}</StyledText>
+        <div {...stylex.props(styles.text)}>{t`Loading more...`}</div>
       )}
     </>
   );
