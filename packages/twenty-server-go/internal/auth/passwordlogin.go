@@ -319,7 +319,7 @@ func (l *PasswordLogin) present(ctx context.Context, user loginUser, rows []work
 			SubdomainURL:        l.workspaceURL(row.subdomain),
 		}
 		if row.logoFileID != nil {
-			logo, err := l.logoURL(ctx, row.id, *row.logoFileID)
+			logo, err := l.LogoURL(ctx, row.id, *row.logoFileID)
 			if err != nil {
 				return nil, err
 			}
@@ -337,7 +337,7 @@ func (l *PasswordLogin) present(ctx context.Context, user loginUser, rows []work
 	return workspaces, nil
 }
 
-func (l *PasswordLogin) logoURL(ctx context.Context, workspaceID, fileID string) (string, error) {
+func (l *PasswordLogin) LogoURL(ctx context.Context, workspaceID, fileID string) (string, error) {
 	token, err := l.issuer.IssueFileToken(ctx, workspaceID, fileID, l.config.FileTokenTTL)
 	if err != nil {
 		return "", err
