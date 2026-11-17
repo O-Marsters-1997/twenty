@@ -71,7 +71,7 @@ func (c *Campaigns) ClaimSending(ctx context.Context, campaignID, from string) (
 }
 
 func (c *Campaigns) ReleaseSending(ctx context.Context, campaignID, to string) error {
-	if _, err := c.pool.Exec(ctx, `UPDATE `+c.schema+`."messageCampaign" SET status = $2,"updatedAt" = now()
+	if _, err := c.pool.Exec(ctx, `UPDATE `+c.schema+`."messageCampaign" SET status = $2, "updatedAt" = now()
 		WHERE id = $1 AND status = 'SENDING'`, campaignID, to); err != nil {
 		return fmt.Errorf("release campaign: %w", err)
 	}
@@ -96,7 +96,7 @@ func (c *Campaigns) Cancel(ctx context.Context, campaignID string) (skipped int,
 	if tag.RowsAffected() == 1 {
 		return 0, tx.Commit(ctx)
 	}
-	tag, err = tx.Exec(ctx, `UPDATE `+c.schema+`."messageCampaign" SET status = $2,"updatedAt" = now()
+	tag, err = tx.Exec(ctx, `UPDATE `+c.schema+`."messageCampaign" SET status = $2, "updatedAt" = now()
 		WHERE id = $1 AND status = 'SENDING'`, campaignID, campaignCanceled)
 	if err != nil {
 		return 0, fmt.Errorf("cancel campaign: %w", err)
@@ -289,7 +289,7 @@ func (c *Campaigns) Counts(ctx context.Context, campaignID string) (messaging.Ca
 }
 
 func (c *Campaigns) Finish(ctx context.Context, campaignID string, status messaging.CampaignStatus) error {
-	if _, err := c.pool.Exec(ctx, `UPDATE `+c.schema+`."messageCampaign" SET status = $2,"sentAt" = now(), "scheduledAt" = NULL, "updatedAt" = now()
+	if _, err := c.pool.Exec(ctx, `UPDATE `+c.schema+`."messageCampaign" SET status = $2, "sentAt" = now(), "scheduledAt" = NULL, "updatedAt" = now()
 		WHERE id = $1 AND status = 'SENDING'`, campaignID, string(status)); err != nil {
 		return fmt.Errorf("finish campaign: %w", err)
 	}
