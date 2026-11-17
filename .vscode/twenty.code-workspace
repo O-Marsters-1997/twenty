@@ -25,10 +25,6 @@
       "path": "../packages/twenty-shared"
     },
     {
-      "name": "packages/twenty-server",
-      "path": "../packages/twenty-server"
-    },
-    {
       "name": "packages/twenty-utils",
       "path": "../packages/twenty-utils"
     },

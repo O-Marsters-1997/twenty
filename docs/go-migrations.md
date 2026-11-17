@@ -30,6 +30,3 @@ INSERT INTO core."fieldMetadata" (...) SELECT ... FROM core."objectMetadata" WHE
 DELETE FROM core."fieldMetadata" WHERE name = 'nickname' AND "objectMetadataId" IN (...);
 ALTER TABLE workspace_2abogkkt2zd45pa9aun09djpf.person DROP COLUMN nickname;
 ```
-
-After the migration, flush Node's metadata cache until Node is removed:
-`npx nx command-no-deps twenty-server -- cache:flush`.

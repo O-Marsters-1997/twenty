@@ -4,7 +4,7 @@ services:
   server:
     image: twentycrm/twenty:${TAG:-latest}
     volumes:
-      - server-local-data:/app/packages/twenty-server/.local-storage
+      - server-local-data:/app/.local-storage
     ports:
       - "3000:3000"
     environment:
@@ -57,7 +57,7 @@ services:
   worker:
     image: twentycrm/twenty:${TAG:-latest}
     volumes:
-      - server-local-data:/app/packages/twenty-server/.local-storage
+      - server-local-data:/app/.local-storage
     command: ["node", "dist/queue-worker/queue-worker"]
     environment:
       PG_DATABASE_URL: postgres://${PG_DATABASE_USER:-postgres}:${PG_DATABASE_PASSWORD:-postgres}@${PG_DATABASE_HOST:-db}:${PG_DATABASE_PORT:-5432}/${PG_DATABASE_NAME:-default}

@@ -106,7 +106,7 @@ Want to go deeper? Read the <a href="https://docs.twenty.com/user-guide/introduc
 
 - <a href="https://www.typescriptlang.org/">TypeScript</a>
 - <a href="https://nx.dev/">Nx</a>
-- <a href="https://nestjs.com/">NestJS</a>, with <a href="https://bullmq.io/">BullMQ</a>, <a href="https://www.postgresql.org/">PostgreSQL</a>, <a href="https://redis.io/">Redis</a>
+- <a href="https://go.dev/">Go</a>, with <a href="https://www.postgresql.org/">PostgreSQL</a>
 - <a href="https://reactjs.org/">React</a>, with <a href="https://jotai.org/">Jotai</a>, <a href="https://stylexjs.com/">StyleX</a> and <a href="https://lingui.dev/">Lingui</a>
 
 # Thanks

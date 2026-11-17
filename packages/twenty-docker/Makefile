@@ -5,23 +5,11 @@
 # PLATFORM - defaults to 'linux/amd64'
 # TAG      - defaults to 'latest'
 #
-# Example: make prod-build
-# Example: make PLATFORM=linux/aarch64 TAG=my-tag prod-build
 # Example: make postgres-on-docker (for local development)
 
 PLATFORM ?= linux/amd64
 TAG ?= latest
 DOCKER_NETWORK=twenty_network
-
-# =============================================================================
-# Production Image Building
-# =============================================================================
-
-prod-build:
-	@cd ../.. && docker build --target twenty -f ./packages/twenty-docker/twenty/Dockerfile --platform $(PLATFORM) --tag twenty:$(TAG) . && cd -
-
-prod-run:
-	@docker run -d -p 3000:3000 --name twenty twenty:$(TAG)
 
 prod-postgres-run:
 	@docker run -d -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres --name twenty-postgres twenty-postgres:$(TAG)

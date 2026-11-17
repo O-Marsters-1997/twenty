@@ -206,7 +206,7 @@ spec:
             {{- end }}
             {{- if .Values.server.persistence.enabled }}
             - name: server-data
-              mountPath: /app/packages/twenty-server/.local-storage
+              mountPath: /app/.local-storage
             {{- end }}
             {{- with .Values.server.extraVolumeMounts }}
             {{- toYaml . | nindent 12 }}

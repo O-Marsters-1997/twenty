@@ -1,1 +1,0 @@
-export const HTTP_TOOL_MAX_PAYLOAD_SIZE_BYTES = 10 * 1024 * 1024;

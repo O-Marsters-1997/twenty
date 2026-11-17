@@ -14,41 +14,6 @@
     "unresolved": "warn"
   },
   "workspaces": {
-    "packages/twenty-server": {
-      "entry": [
-        "src/main.ts",
-        "src/command/command.ts",
-        "src/queue-worker/queue-worker.ts",
-        "src/database/scripts/*.ts",
-        "src/database/clickhouse/migrations/run-migrations.ts",
-        "src/database/clickhouse/seeds/run-seeds.ts",
-        "src/instrument.ts",
-        "lingui.config.ts",
-        "scripts/**/*.ts",
-        "**/*.spec.ts",
-        "**/*.integration-spec.ts",
-        "test/integration/graphql/codegen/index.ts",
-        "test/integration/utils/setup-test.ts",
-        "test/integration/utils/teardown-test.ts",
-        "src/database/typeorm/core/legacy-typeorm-migrations-do-not-add/**/*.ts"
-      ],
-      "project": ["src/**/*.ts", "test/**/*.ts", "scripts/**/*.ts"],
-      "jest": [
-        "jest.config.mjs",
-        "jest-integration.config.ts",
-        "jest-integration-secure.config.ts"
-      ],
-      "ignore": [
-        "src/**/constants/seed-project/**",
-        "src/database/typeorm/core/migrations/**",
-        "**/*.workspace-entity.ts",
-        "src/engine/core-modules/logic-function/logic-function-resource/constants/**",
-        "src/database/commands/upgrade-version-command/**",
-        "src/engine/metadata-modules/*/constants/standard-*-names.ts",
-        "src/engine/metadata-modules/*/constants/standard-*-titles.ts"
-      ],
-      "ignoreDependencies": ["@types/psl"]
-    },
     "packages/twenty-front": {
       "entry": [
         "src/index.tsx",

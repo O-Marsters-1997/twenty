@@ -239,9 +239,8 @@ cd "$REPO_ROOT"
 
 if command -v npx &>/dev/null && [ -d node_modules ]; then
   npx nx reset:env twenty-front
-  npx nx reset:env twenty-server
 else
-  for pkg in twenty-front twenty-server; do
+  for pkg in twenty-front; do
     src="packages/$pkg/.env.example"
     dst="packages/$pkg/.env"
     if [ -f "$src" ] && [ ! -f "$dst" ]; then
@@ -259,7 +258,7 @@ if command -v npx &>/dev/null && [ -d node_modules ]; then
     ok "Database schema already initialized"
   else
     info "Initializing database schema (running migrations)..."
-    if npx nx database:init twenty-server; then
+    if PG_DATABASE_URL="postgres://postgres:postgres@localhost:5432/default?sslmode=disable" go run ./packages/twenty-server-go/cmd/migrate up; then
       ok "Database schema initialized"
     else
       fail "Database schema initialization failed"
@@ -267,7 +266,7 @@ if command -v npx &>/dev/null && [ -d node_modules ]; then
     fi
   fi
 else
-  info "Run 'npx nx database:init twenty-server' to initialize the schema"
+  info "Run 'go run ./packages/twenty-server-go/cmd/migrate up' with PG_DATABASE_URL set to initialize the schema"
 fi
 
 # =============================================================================
@@ -276,5 +275,5 @@ echo "Dev environment ready."
 echo ""
 echo "  bun run start                        # start everything"
 echo "  npx nx start twenty-front          # frontend  -> http://localhost:3001"
-echo "  npx nx start twenty-server         # backend   -> http://localhost:3000"
+echo "  go run ./packages/twenty-server-go/cmd/api   # backend   -> http://localhost:3000"
 echo ""

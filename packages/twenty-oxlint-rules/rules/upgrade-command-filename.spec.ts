@@ -6,7 +6,7 @@ const ruleTester = new RuleTester();
 
 const DUMMY_CODE = 'const x = 1;';
 const BASE =
-  '/project/packages/twenty-server/src/database/commands/upgrade-version-command';
+  '/project/packages/twenty-server-go/src/database/commands/upgrade-version-command';
 
 const filename = (path: string) => `${BASE}/${path}`;
 
