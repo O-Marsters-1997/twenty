@@ -1,0 +1,15 @@
+{
+  "name": "GetRole",
+  "operation": "GetRole",
+  "fixture": "seeded Member role with the ROLES permission flag and one object permission",
+  "endpoint": "/metadata",
+  "query": "query GetRole($id: UUID!) { getRole(id: $id) { id label description icon canUpdateAllSettings canAccessAllTools isEditable canReadAllObjectRecords canUpdateAllObjectRecords canSoftDeleteAllObjectRecords canDestroyAllObjectRecords canBeAssignedToUsers canBeAssignedToAgents canBeAssignedToApiKeys permissionFlags { id flag roleId } objectPermissions { objectMetadataId canReadObjectRecords canUpdateObjectRecords canSoftDeleteObjectRecords canDestroyObjectRecords restrictedFields } } }",
+  "variables": {"id": "f4cc34a9-a20e-418f-8c5c-78b7b1c77881"},
+  "response": {"data": {"getRole": {
+    "id": "f4cc34a9-a20e-418f-8c5c-78b7b1c77881", "label": "Member", "description": "Member role", "icon": "IconUser",
+    "canUpdateAllSettings": false, "canAccessAllTools": true, "isEditable": true, "canReadAllObjectRecords": true, "canUpdateAllObjectRecords": true,
+    "canSoftDeleteAllObjectRecords": true, "canDestroyAllObjectRecords": true, "canBeAssignedToUsers": true, "canBeAssignedToAgents": false, "canBeAssignedToApiKeys": false,
+    "permissionFlags": [{"id": "<ignored>", "flag": "ROLES", "roleId": "f4cc34a9-a20e-418f-8c5c-78b7b1c77881"}],
+    "objectPermissions": [{"objectMetadataId": "<ignored>", "canReadObjectRecords": false, "canUpdateObjectRecords": null, "canSoftDeleteObjectRecords": null, "canDestroyObjectRecords": null, "restrictedFields": null}]
+  }}}
+}

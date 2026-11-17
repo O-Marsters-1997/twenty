@@ -26,6 +26,7 @@ type TokenIssuer interface {
 type Resolver struct {
 	WebhookStore *store.Webhooks
 	APIKeyStore  *store.APIKeys
+	RoleStore    *store.Roles
 	Permissions  *store.Permissions
 	Tokens       TokenIssuer
 }
@@ -186,13 +187,135 @@ func (r *Resolver) ApiKey() ApiKeyResolver { return &apiKeyResolver{r} }
 
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
+func (r *Resolver) Role() RoleResolver { return &roleResolver{r} }
+
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
 type (
 	apiKeyResolver   struct{ *Resolver }
 	mutationResolver struct{ *Resolver }
 	queryResolver    struct{ *Resolver }
+	roleResolver     struct{ *Resolver }
 )
+
+func (r *mutationResolver) CreateOneRole(ctx context.Context, createRoleInput map[string]any) (*store.Role, error) {
+	if err := r.authorize(ctx, false, store.FlagRoles); err != nil {
+		return nil, err
+	}
+	return pointer(r.RoleStore.Create(ctx, createRoleInput))
+}
+
+func (r *mutationResolver) UpdateOneRole(ctx context.Context, updateRoleInput map[string]any) (*store.Role, error) {
+	if err := r.authorize(ctx, false, store.FlagRoles); err != nil {
+		return nil, err
+	}
+	actingRoleIDs, err := r.actingRoleIDs(ctx)
+	if err != nil {
+		return nil, err
+	}
+	id, _ := updateRoleInput["id"].(string)
+	updates, _ := updateRoleInput["update"].(map[string]any)
+	return pointer(r.RoleStore.Update(ctx, id, updates, actingRoleIDs))
+}
+
+func (r *mutationResolver) DeleteOneRole(ctx context.Context, roleID string) (string, error) {
+	if err := r.authorize(ctx, false, store.FlagRoles); err != nil {
+		return "", err
+	}
+	actingRoleIDs, err := r.actingRoleIDs(ctx)
+	if err != nil {
+		return "", err
+	}
+	return r.RoleStore.Delete(ctx, roleID, actingRoleIDs)
+}
+
+func (r *mutationResolver) UpsertObjectPermissions(ctx context.Context, input map[string]any) ([]*store.ObjectPermission, error) {
+	if err := r.authorize(ctx, false, store.FlagRoles); err != nil {
+		return nil, err
+	}
+	roleID, _ := input["roleId"].(string)
+	return pointers(r.RoleStore.UpsertObjectPermissions(ctx, roleID, inputList(input["objectPermissions"])))
+}
+
+func (r *mutationResolver) UpsertFieldPermissions(ctx context.Context, input map[string]any) ([]*store.FieldPermission, error) {
+	if err := r.authorize(ctx, false, store.FlagRoles); err != nil {
+		return nil, err
+	}
+	roleID, _ := input["roleId"].(string)
+	return pointers(r.RoleStore.UpsertFieldPermissions(ctx, roleID, inputList(input["fieldPermissions"])))
+}
+
+func (r *mutationResolver) UpsertPermissionFlags(ctx context.Context, input map[string]any) ([]*store.RolePermissionFlag, error) {
+	if err := r.authorize(ctx, false, store.FlagRoles); err != nil {
+		return nil, err
+	}
+	roleID, _ := input["roleId"].(string)
+	keys, _ := input["permissionFlagKeys"].([]string)
+	return pointers(r.RoleStore.UpsertPermissionFlags(ctx, roleID, keys))
+}
+
+func (r *queryResolver) GetRoles(ctx context.Context) ([]*store.Role, error) {
+	if err := r.authorize(ctx, false, store.FlagRoles); err != nil {
+		return nil, err
+	}
+	return pointers(r.RoleStore.List(ctx))
+}
+
+func (r *queryResolver) GetRole(ctx context.Context, id string) (*store.Role, error) {
+	if err := r.authorize(ctx, false, store.FlagRoles); err != nil {
+		return nil, err
+	}
+	return pointer(r.RoleStore.Get(ctx, id))
+}
+
+func (r *queryResolver) GetPermissionFlags(ctx context.Context) ([]*store.PermissionFlag, error) {
+	if err := r.authorize(ctx, false, store.FlagRoles); err != nil {
+		return nil, err
+	}
+	return pointers(r.RoleStore.PermissionFlags(ctx))
+}
+
+func (r *roleResolver) WorkspaceMembers(ctx context.Context, role *store.Role) ([]*store.WorkspaceMember, error) {
+	return pointers(r.RoleStore.WorkspaceMembers(ctx, role.ID))
+}
+
+func (r *roleResolver) Agents(ctx context.Context, role *store.Role) ([]*store.RoleAgent, error) {
+	return pointers(r.RoleStore.Agents(ctx, role.ID))
+}
+
+func (r *roleResolver) APIKeys(ctx context.Context, role *store.Role) ([]*store.RoleAPIKey, error) {
+	return pointers(r.RoleStore.APIKeys(ctx, role.ID))
+}
+
+func (r *roleResolver) PermissionFlags(ctx context.Context, role *store.Role) ([]*store.RolePermissionFlag, error) {
+	return pointers(r.RoleStore.RolePermissionFlags(ctx, role.ID))
+}
+
+func (r *roleResolver) ObjectPermissions(ctx context.Context, role *store.Role) ([]*store.ObjectPermission, error) {
+	return pointers(r.RoleStore.ObjectPermissions(ctx, role.ID))
+}
+
+func (r *roleResolver) FieldPermissions(ctx context.Context, role *store.Role) ([]*store.FieldPermission, error) {
+	return pointers(r.RoleStore.FieldPermissions(ctx, role.ID))
+}
+
+func (r *roleResolver) RowLevelPermissionPredicates(ctx context.Context, role *store.Role) ([]*store.RowLevelPermissionPredicate, error) {
+	return pointers(r.RoleStore.Predicates(ctx, role.ID))
+}
+
+func (r *roleResolver) RowLevelPermissionPredicateGroups(ctx context.Context, role *store.Role) ([]*store.RowLevelPermissionPredicateGroup, error) {
+	return pointers(r.RoleStore.PredicateGroups(ctx, role.ID))
+}
+
+func (r *Resolver) actingRoleIDs(ctx context.Context) ([]string, error) {
+	principal, _ := auth.PrincipalFrom(ctx)
+	return r.RoleStore.ActingRoleIDs(ctx, principal.UserWorkspaceID)
+}
+
+func inputList(value any) []store.Input {
+	items, _ := value.([]map[string]any)
+	return items
+}
 
 func pointer[TValue any](value TValue, err error) (*TValue, error) {
 	if err != nil {

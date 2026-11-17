@@ -16,8 +16,63 @@ models:
     model: github.com/99designs/gqlgen/graphql.String
   DateTime:
     model: github.com/99designs/gqlgen/graphql.String
+  JSON:
+    model: github.com/99designs/gqlgen/graphql.Any
   Role:
     model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/access/store.Role
+    fields:
+      workspaceMembers:
+        resolver: true
+      agents:
+        resolver: true
+      apiKeys:
+        resolver: true
+      permissionFlags:
+        resolver: true
+      objectPermissions:
+        resolver: true
+      fieldPermissions:
+        resolver: true
+      rowLevelPermissionPredicates:
+        resolver: true
+      rowLevelPermissionPredicateGroups:
+        resolver: true
+  FullName:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/access/store.FullName
+  WorkspaceMember:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/access/store.WorkspaceMember
+  Agent:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/access/store.RoleAgent
+  ApiKeyForRole:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/access/store.RoleAPIKey
+  RolePermissionFlag:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/access/store.RolePermissionFlag
+  ObjectPermission:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/access/store.ObjectPermission
+  FieldPermission:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/access/store.FieldPermission
+  PermissionFlag:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/access/store.PermissionFlag
+  RowLevelPermissionPredicate:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/access/store.RowLevelPermissionPredicate
+  RowLevelPermissionPredicateGroup:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/access/store.RowLevelPermissionPredicateGroup
+  CreateRoleInput:
+    model: map[string]interface{}
+  UpdateRolePayload:
+    model: map[string]interface{}
+  UpdateRoleInput:
+    model: map[string]interface{}
+  ObjectPermissionInput:
+    model: map[string]interface{}
+  UpsertObjectPermissionsInput:
+    model: map[string]interface{}
+  FieldPermissionInput:
+    model: map[string]interface{}
+  UpsertFieldPermissionsInput:
+    model: map[string]interface{}
+  UpsertPermissionFlagsInput:
+    model: map[string]interface{}
   Webhook:
     model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/access/store.Webhook
   ApiKey:

@@ -66,8 +66,9 @@ var AccessOperations = []string{
 	"GetWebhooks", "GetWebhook", "CreateWebhook", "UpdateWebhook", "DeleteWebhook",
 	"GetApiKeys", "GetApiKey", "GetApiKeyRoles", "CreateApiKey", "UpdateApiKey", "RevokeApiKey", "AssignRoleToApiKey",
 	"GenerateApiKeyToken", "GeneratePlaygroundToken",
+	"GetRoles", "GetRole", "CreateOneRole", "UpdateOneRole", "DeleteOneRole",
+	"UpsertFieldPermissions", "UpsertObjectPermissions", "UpsertPermissionFlags",
 }
-
 
 var TwoFactorOperations = []string{
 	"initiateOTPProvisioningForAuthenticatedUser", "verifyTwoFactorAuthenticationMethodForAuthenticatedUser",

@@ -73,6 +73,12 @@ func plain(input Input) Input {
 			} else {
 				unwrapped[key] = *typed
 			}
+		case *bool:
+			if typed == nil {
+				unwrapped[key] = nil
+			} else {
+				unwrapped[key] = *typed
+			}
 		case []string:
 			items := make([]any, len(typed))
 			for i, item := range typed {
