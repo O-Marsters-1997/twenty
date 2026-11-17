@@ -190,6 +190,9 @@ func TestUpdateWorkspace(t *testing.T) {
 			{"field locked before activation", "PENDING_CREATION", map[string]any{"allowImpersonation": false}, "FORBIDDEN"},
 			{"negative trash retention", "ACTIVE", map[string]any{"trashRetentionDays": -1}, "BAD_USER_INPUT"},
 			{"event log retention above the maximum", "ACTIVE", map[string]any{"eventLogRetentionDays": 1096}, "BAD_USER_INPUT"},
+			{"model pin for an unknown tier", "ACTIVE", map[string]any{"aiModelIdByTier": map[string]any{"huge": "openai/gpt-5"}}, "BAD_USER_INPUT"},
+			{"auto-select model pin", "ACTIVE", map[string]any{"aiModelIdByTier": map[string]any{"fast": "default-fast-model"}}, "BAD_USER_INPUT"},
+			{"auth bypass flag", "ACTIVE", map[string]any{"isPasswordAuthBypassEnabled": true}, "BAD_USER_INPUT"},
 			{"default role that is not a uuid", "ACTIVE", map[string]any{"defaultRoleId": "nope"}, "BAD_USER_INPUT"},
 		}
 		for _, tt := range tests {

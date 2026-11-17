@@ -282,10 +282,17 @@ func unwrap(value any) any {
 	return value
 }
 
-func asObject(value any) (any, bool) {
+func asModelPins(value any) (any, bool) {
 	object, ok := value.(map[string]any)
 	if !ok {
 		return nil, false
+	}
+	for tier, pin := range object {
+		modelID, isText := pin.(string)
+		if !slices.Contains(aiModelTiers, tier) || !isText || modelID == "" || modelID == "workspace-default-model" ||
+			(strings.HasPrefix(modelID, "default-") && strings.HasSuffix(modelID, "-model")) {
+			return nil, false
+		}
 	}
 	encoded, err := json.Marshal(object)
 	return string(encoded), err == nil
@@ -305,8 +312,6 @@ var updatableColumns = map[string]column{
 	"allowImpersonation":                {name: "allowImpersonation", check: asBool},
 	"isGoogleAuthEnabled":               {name: "isGoogleAuthEnabled", check: asBool},
 	"isPasswordAuthEnabled":             {name: "isPasswordAuthEnabled", check: asBool},
-	"isGoogleAuthBypassEnabled":         {name: "isGoogleAuthBypassEnabled", check: asBool},
-	"isPasswordAuthBypassEnabled":       {name: "isPasswordAuthBypassEnabled", check: asBool},
 	"defaultRoleId":                     {name: "defaultRoleId", nullable: true, check: asUUID},
 	"isTwoFactorAuthenticationEnforced": {name: "isTwoFactorAuthenticationEnforced", check: asBool},
 	"trashRetentionDays":                {name: "trashRetentionDays", check: intBetween(0, 1<<31-1)},
@@ -314,7 +319,7 @@ var updatableColumns = map[string]column{
 	"aiChatModelTier":                   {name: "aiChatModelTier", check: oneOf(aiModelTiers...)},
 	"aiAgentModelTier":                  {name: "aiAgentModelTier", check: oneOf(aiModelTiers...)},
 	"isAutoModelSelectionEnabled":       {name: "isAutoModelSelectionEnabled", check: asBool},
-	"aiModelIdByTier":                   {name: "aiModelIdByTier", cast: "::jsonb", check: asObject},
+	"aiModelIdByTier":                   {name: "aiModelIdByTier", cast: "::jsonb", check: asModelPins},
 	"aiEvaluationModelId":               {name: "aiEvaluationModelId", nullable: true, check: asString},
 	"aiAdditionalInstructions":          {name: "aiAdditionalInstructions", nullable: true, check: asString},
 	"editableProfileFields":             {name: "editableProfileFields", nullable: true, check: asStringList},
@@ -346,12 +351,12 @@ func (s *Settings) Update(ctx context.Context, id string, input map[string]any) 
 			return Workspace{}, err
 		}
 	}
-	for _, name := range []string{"isGoogleAuthEnabled", "isGoogleAuthBypassEnabled"} {
+	for _, name := range []string{"isGoogleAuthEnabled"} {
 		if fields[name] == true && !s.config.GoogleAuthEnabled {
 			return Workspace{}, ErrAuthDisabled
 		}
 	}
-	for _, name := range []string{"isPasswordAuthEnabled", "isPasswordAuthBypassEnabled"} {
+	for _, name := range []string{"isPasswordAuthEnabled"} {
 		if fields[name] == true && !s.config.PasswordAuthEnabled {
 			return Workspace{}, ErrAuthDisabled
 		}
