@@ -9,7 +9,6 @@ import (
 	"log/slog"
 	"net/http"
 	"net/http/httptest"
-	"net/url"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -77,13 +76,9 @@ func newHarness(t *testing.T) harness {
 	}
 	t.Cleanup(pool.Close)
 	logger := slog.New(slog.NewTextHandler(io.Discard, nil))
-	upstream, err := url.Parse("http://node.invalid")
-	if err != nil {
-		t.Fatal(err)
-	}
 	jobs := &queue{}
 	handler := workflowgql.NewHandler(&workflowgql.Resolver{Store: store.New(pool), Authoring: &workflow.Authoring{Store: store.New(pool)}, Queue: jobs, HTTPClient: &http.Client{}}, logger)
-	server := httptest.NewServer(frontdoor.NewHandler(frontdoor.DefaultTable(), upstream, verifier{}, handler, logger))
+	server := httptest.NewServer(frontdoor.NewHandler(verifier{}, handler, logger))
 	t.Cleanup(server.Close)
 	h := harness{handler: handler, server: server, pool: pool, queue: jobs}
 	h.seed(t)
@@ -622,16 +617,6 @@ func TestWorkflowStepConnectedAccountHandle(t *testing.T) {
 	}
 }
 
-func TestWorkflowOperationsAreRoutedToGo(t *testing.T) {
-	t.Parallel()
-	table := frontdoor.DefaultTable()
-	for _, operation := range frontdoor.WorkflowOperations {
-		if got := table[frontdoor.EndpointWorkspace][operation]; got != frontdoor.RouteGo {
-			t.Errorf("route of %s = %q, want %q", operation, got, frontdoor.RouteGo)
-		}
-	}
-}
-
 func TestWorkflowMutations_matchNodeGolden(t *testing.T) {
 	t.Parallel()
 	tests := []struct {
@@ -817,15 +802,5 @@ func TestWorkflowAuthoring_duplicateAndDelete(t *testing.T) {
 		map[string]any{"input": map[string]any{"coreWorkflowIds": []any{duplicated["id"]}}})
 	if diff := cmp.Diff([]any{map[string]any{"id": duplicated["id"]}}, deleted); diff != "" {
 		t.Errorf("deleteCoreWorkflows (-want +got):\n%s", diff)
-	}
-}
-
-func TestDefaultTable_routesWorkflowAuthoringToGo(t *testing.T) {
-	t.Parallel()
-	table := frontdoor.DefaultTable()[frontdoor.EndpointWorkspace]
-	for _, operation := range frontdoor.WorkflowAuthoringOperations {
-		if table[operation] != frontdoor.RouteGo {
-			t.Errorf("route of %s = %q, want %q", operation, table[operation], frontdoor.RouteGo)
-		}
 	}
 }

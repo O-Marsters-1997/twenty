@@ -7,7 +7,6 @@ import (
 	"log/slog"
 	"net/http"
 	"net/http/httptest"
-	"net/url"
 	"strings"
 	"testing"
 
@@ -42,11 +41,7 @@ func (echoTool) Call(_ context.Context, principal auth.Principal, input json.Raw
 
 func newMCPServer(t *testing.T) *httptest.Server {
 	t.Helper()
-	upstream, err := url.Parse("http://127.0.0.1:0")
-	if err != nil {
-		t.Fatal(err)
-	}
-	handler := frontdoor.NewHandler(frontdoor.DefaultTable(), upstream, apiKeyVerifier{}, http.NotFoundHandler(), slog.New(slog.NewTextHandler(io.Discard, nil))).
+	handler := frontdoor.NewHandler(apiKeyVerifier{}, http.NotFoundHandler(), slog.New(slog.NewTextHandler(io.Discard, nil))).
 		WithMCP(ai.NewRegistry(echoTool{}))
 	server := httptest.NewServer(handler)
 	t.Cleanup(server.Close)

@@ -8,8 +8,6 @@ import (
 	"log/slog"
 	"net/http"
 	"net/http/httptest"
-	"net/url"
-	"slices"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -75,16 +73,12 @@ func newHarnessWith(t *testing.T, model ai.Model, tools ...ai.Tool) harness {
 	logger := slog.New(slog.NewTextHandler(io.Discard, nil))
 	chats := store.New(pool)
 	broker := ai.NewPersistingBroker(ai.NewMemoryBroker(), chats, logger)
-	upstream, err := url.Parse("http://node.invalid")
-	if err != nil {
-		t.Fatal(err)
-	}
 	var runner ai.Runner
 	if model != nil {
 		runner = ai.NewLoop(model, ai.NewRegistry(tools...))
 	}
 	turns := ai.NewChatService(chats, runner, broker, logger)
-	front := frontdoor.NewHandler(frontdoor.DefaultTable(), upstream, verifier{memberID}, aigql.NewHandler(chats, broker, turns, logger), logger).
+	front := frontdoor.NewHandler(verifier{memberID}, aigql.NewHandler(chats, broker, turns, logger), logger).
 		WithSubscriber(aigql.NewSubscriber(broker))
 	server := httptest.NewServer(front)
 	t.Cleanup(server.Close)
@@ -135,19 +129,6 @@ func (h harness) seedThread(t *testing.T) string {
 func (h harness) publish(threadID string, chunks ...string) {
 	for _, chunk := range chunks {
 		h.broker.Publish(threadID, ai.ChatEvent{ThreadID: threadID, Event: json.RawMessage(chunk)})
-	}
-}
-
-func TestChatOperationsAreRoutedToGo(t *testing.T) {
-	t.Parallel()
-	table := frontdoor.DefaultTable()[frontdoor.EndpointMetadata]
-	for _, operation := range []string{"GetChatMessages", "GetAgentChatOpenThreadsSummary", "AssignAgentChatThread", "UpdateAgentChatThreadInboxState"} {
-		if !slices.Contains(frontdoor.ChatOperations, operation) {
-			t.Errorf("ChatOperations lacks %s", operation)
-		}
-		if table[operation] != frontdoor.RouteGo {
-			t.Errorf("route of %s = %q, want %q", operation, table[operation], frontdoor.RouteGo)
-		}
 	}
 }
 
