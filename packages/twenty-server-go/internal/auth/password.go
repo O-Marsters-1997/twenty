@@ -3,9 +3,31 @@ package auth
 import (
 	"errors"
 	"fmt"
+	"unicode/utf16"
 
 	"golang.org/x/crypto/bcrypt"
 )
+
+var ErrPasswordInvalid = errors.New("password too weak")
+
+func ValidPassword(password string) bool {
+	units := 0
+	for _, r := range password {
+		switch r {
+		case '\n', '\r', ' ', ' ':
+			return false
+		}
+		units += utf16.RuneLen(r)
+	}
+	return units >= 8 && units <= 50
+}
+
+func HashNewPassword(hasher PasswordHasher, password string) (string, error) {
+	if !ValidPassword(password) {
+		return "", ErrPasswordInvalid
+	}
+	return hasher.Hash(password)
+}
 
 const bcryptCost = 10
 

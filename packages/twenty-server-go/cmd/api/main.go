@@ -101,7 +101,7 @@ func run() error {
 	twoFactor := auth.NewTwoFactor(
 		pool, auth.NewSecretCipher(cfg.EncryptionKey, cfg.FallbackEncryptionKey, cfg.AppSecret), cfg.RecoveryCodeTTL,
 	)
-	authHandler := authgql.NewHandler(newAuthResolver(pool, twoFactor, passwordLogins, stack), logger)
+	authHandler := authgql.NewHandler(newAuthResolver(pool, cfg, twoFactor, passwordLogins, stack), logger)
 
 	goGraphQL := http.NewServeMux()
 	goGraphQL.Handle(string(frontdoor.EndpointWorkspace), workspaceHandler(recordsgql.NewHandler(&recordsgql.Resolver{
@@ -136,9 +136,9 @@ func run() error {
 		agentgql.Operations,
 	))
 
-	handler := frontdoor.NewHandler(frontdoor.DefaultTable(), cfg.NodeUpstreamURL, verifier, goGraphQL, logger).
+	handler := frontdoor.NewHandler(verifier, goGraphQL, logger).
 		WithPublicOperations(map[frontdoor.Endpoint][]string{
-			frontdoor.EndpointMetadata:  slices.Concat(frontdoor.SessionOperations, frontdoor.PasswordLoginOperations),
+			frontdoor.EndpointMetadata:  slices.Concat(frontdoor.SessionOperations, frontdoor.PasswordLoginOperations, frontdoor.PublicWorkspaceOperations),
 			frontdoor.EndpointWorkspace: frontdoor.LoginOperations,
 		}).
 		WithMCP(toolRegistry).
@@ -162,7 +162,7 @@ func run() error {
 
 	serveErr := make(chan error, 1)
 	go func() { serveErr <- server.ListenAndServe() }()
-	logger.Info("front door listening", "addr", cfg.ListenAddr, "upstream", cfg.NodeUpstreamURL.String())
+	logger.Info("front door listening", "addr", cfg.ListenAddr)
 
 	select {
 	case err := <-serveErr:

@@ -1,0 +1,9 @@
+{
+  "name": "get-workspace-iframe-origins",
+  "operation": "GetWorkspaceIframeOrigins",
+  "fixture": "acme allows two iframe origins",
+  "endpoint": "/metadata",
+  "query": "query GetWorkspaceIframeOrigins { currentWorkspace { id allowedIframeOrigins } }",
+  "variables": null,
+  "response": {"data":{"currentWorkspace":{"id":"20202020-1c25-4d02-bf25-6aeccf7ea419","allowedIframeOrigins":["https://a.example","https://b.example"]}}}
+}

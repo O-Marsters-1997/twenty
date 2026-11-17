@@ -1,0 +1,9 @@
+{
+  "name": "get-workspace-from-invite-hash",
+  "operation": "GetWorkspaceFromInviteHash",
+  "fixture": "acme workspace with invite hash acme-hash",
+  "endpoint": "/metadata",
+  "query": "query GetWorkspaceFromInviteHash($inviteHash: String!) { findWorkspaceFromInviteHash(inviteHash: $inviteHash) { id displayName logo allowImpersonation } }",
+  "variables": {"inviteHash": "acme-hash"},
+  "response": {"data":{"findWorkspaceFromInviteHash":{"id":"20202020-1c25-4d02-bf25-6aeccf7ea419","displayName":"Acme","logo":"","allowImpersonation":true}}}
+}

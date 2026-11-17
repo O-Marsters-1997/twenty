@@ -1,0 +1,9 @@
+{
+  "name": "check-workspace-subdomain-availability-taken",
+  "operation": "CheckWorkspaceSubdomainAvailability",
+  "fixture": "acme subdomain taken",
+  "endpoint": "/metadata",
+  "query": "query CheckWorkspaceSubdomainAvailability($subdomain: String!) { checkWorkspaceSubdomainAvailability(subdomain: $subdomain) { isValid available suggestedSubdomain suggestedSubdomains } }",
+  "variables": {"subdomain": "acme"},
+  "response": {"data":{"checkWorkspaceSubdomainAvailability":{"isValid":true,"available":false,"suggestedSubdomain":"acme-2","suggestedSubdomains":["acme-2","acme-3","acme-4"]}}}
+}
