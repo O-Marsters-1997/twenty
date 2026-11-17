@@ -1,6 +1,5 @@
 import { type AllMetadataName } from '@/metadata/types/AllMetadataName';
 
-// Read by twenty-sdk extraction: a property missing on either side fails silently.
 export const TRANSLATABLE_PROPERTIES_BY_METADATA_NAME = {
   objectMetadata: ['labelSingular', 'labelPlural', 'description'],
   fieldMetadata: ['label', 'description'],

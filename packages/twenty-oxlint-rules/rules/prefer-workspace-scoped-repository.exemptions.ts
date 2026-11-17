@@ -1,4 +1,3 @@
-// Kept free of imports: twenty-server-go's exemptions spec loads this module.
 // Entities that do not fit the scoped wrapper: workspace itself,
 // nullable-workspaceId rows (instance-level config / migrations / tokens),
 // and global tables with no workspaceId column at all.
