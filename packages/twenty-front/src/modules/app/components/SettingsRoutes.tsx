@@ -159,18 +159,6 @@ const SettingsGeneral = lazy(() =>
   })),
 );
 
-const SettingsLegalDpa = lazy(() =>
-  import('~/pages/settings/legal/SettingsLegalDpa').then((module) => ({
-    default: module.SettingsLegalDpa,
-  })),
-);
-
-const SettingsLegalDpaNew = lazy(() =>
-  import('~/pages/settings/legal/SettingsLegalDpaNew').then((module) => ({
-    default: module.SettingsLegalDpaNew,
-  })),
-);
-
 const SettingsWorkspaceCommunications = lazy(() =>
   import('~/pages/settings/communications/SettingsWorkspaceCommunications').then(
     (module) => ({
@@ -487,11 +475,6 @@ const createSettingsRouteElements = () => (
       <Route
         path={SettingsPath.Subdomain}
         element={<SettingsSubdomainPage />}
-      />
-      <Route path={SettingsPath.LegalDpa} element={<SettingsLegalDpa />} />
-      <Route
-        path={SettingsPath.LegalDpaNew}
-        element={<SettingsLegalDpaNew />}
       />
     </Route>
     <Route

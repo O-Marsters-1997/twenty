@@ -77,8 +77,13 @@ func newAuthStack(pool *pgxpool.Pool, cfg config.Config, logger *slog.Logger) (a
 	return authStack{issuer: issuer, origins: origins, sessions: sessions, frontURL: frontURL, serverURL: cfg.ServerURL}, nil
 }
 
-func newAuthResolver(pool *pgxpool.Pool, twoFactor *auth.TwoFactor, passwordLogin *auth.PasswordLogin, stack authStack) *authgql.Resolver {
+func newAuthResolver(pool *pgxpool.Pool, cfg config.Config, twoFactor *auth.TwoFactor, passwordLogin *auth.PasswordLogin, stack authStack) *authgql.Resolver {
 	return &authgql.Resolver{
+		Public: auth.NewPublicData(pool, passwordLogin, auth.PublicDataConfig{
+			GoogleAuthEnabled:   os.Getenv("AUTH_GOOGLE_ENABLED") == "true",
+			PasswordAuthEnabled: os.Getenv("AUTH_PASSWORD_ENABLED") != "false",
+			DefaultSubdomain:    cfg.DefaultSubdomain,
+		}),
 		TwoFactor:     twoFactor,
 		PasswordLogin: passwordLogin,
 		Sessions:      stack.sessions,

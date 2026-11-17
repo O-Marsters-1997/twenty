@@ -78,6 +78,12 @@ var blockedMetadataFields = []string{
 
 var PasswordLoginOperations = []string{"GetLoginTokenFromCredentials", "SignIn"}
 
+var PublicWorkspaceOperations = []string{
+	"GetPublicWorkspaceDataByDomain", "GetPublicWorkspaceDataById", "GetWorkspaceFromInviteHash", "CheckUserExists",
+}
+
+var WorkspaceDataOperations = []string{"GetWorkspaceCreationDefaults", "CheckWorkspaceSubdomainAvailability", "GetWorkspaceIframeOrigins"}
+
 var blockedMetadataOperations = []string{
 	"CreateOneObjectMetadataItem", "UpdateOneObjectMetadataItem", "DeleteOneObjectMetadataItem",
 	"CreateOneFieldMetadataItem", "UpdateOneFieldMetadataItem", "DeleteOneFieldMetadataItem",

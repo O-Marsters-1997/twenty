@@ -1,0 +1,9 @@
+{
+  "name": "check-workspace-subdomain-availability-free",
+  "operation": "CheckWorkspaceSubdomainAvailability",
+  "fixture": "no workspace named fresh",
+  "endpoint": "/metadata",
+  "query": "query CheckWorkspaceSubdomainAvailability($subdomain: String!) { checkWorkspaceSubdomainAvailability(subdomain: $subdomain) { isValid available suggestedSubdomain suggestedSubdomains } }",
+  "variables": {"subdomain": "fresh"},
+  "response": {"data":{"checkWorkspaceSubdomainAvailability":{"isValid":true,"available":true,"suggestedSubdomain":"fresh","suggestedSubdomains":["fresh"]}}}
+}
