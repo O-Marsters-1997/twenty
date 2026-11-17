@@ -4,14 +4,11 @@ import { useGetIsMetadataItemCustom } from '@/object-metadata/hooks/useGetIsMeta
 import { useUpdateOneObjectMetadataItem } from '@/object-metadata/hooks/useUpdateOneObjectMetadataItem';
 import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/EnrichedObjectMetadataItem';
 import { getObjectColorWithFallback } from '@/object-metadata/utils/getObjectColorWithFallback';
-import { isShareableObjectMetadataItem } from '@/object-record/record-sharing/utils/isShareableObjectMetadataItem';
 import { isObjectMetadataReadOnly } from '@/object-record/read-only/utils/isObjectMetadataReadOnly';
 import { AdvancedSettingsWrapper } from '@/settings/components/AdvancedSettingsWrapper';
 import { SettingsUpdateDataModelObjectAboutForm } from '@/settings/data-model/object-details/components/SettingsUpdateDataModelObjectAboutForm';
 import { SettingsObjectIndexesSection } from '@/settings/data-model/object-details/components/tabs/SettingsObjectIndexesSection';
-import { ObjectSharingReachPicker } from '@/settings/data-model/object-details/components/tabs/ObjectSharingReachPicker';
 import { SettingsObjectSearchSection } from '@/settings/data-model/object-details/components/tabs/SettingsObjectSearchSection';
-import { SettingsObjectValidationRulesSection } from '@/settings/data-model/object-details/components/tabs/SettingsObjectValidationRulesSection';
 import { SettingsDataModelObjectSettingsFormCard } from '@/settings/data-model/objects/forms/components/SettingsDataModelObjectSettingsFormCard';
 import {
   type SettingsDataModelObjectAboutFormValues,
@@ -21,7 +18,6 @@ import { SettingsTranslationsCard } from '@/settings/translations/components/Set
 import { ConfirmationDialog } from '@/ui/layout/dialog/components/ConfirmationDialog';
 import { useDialog } from '@/ui/layout/dialog/hooks/useDialog';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { useIsFeatureEnabled } from '@/workspace/hooks/useIsFeatureEnabled';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLingui } from '@lingui/react/macro';
 import { useForm } from 'react-hook-form';
@@ -31,7 +27,6 @@ import { useToast } from 'twenty-ui/components/feedback';
 import { Section } from 'twenty-ui/components/layout';
 import { IconArchive, IconTrash } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { FeatureFlagKey } from '~/generated-metadata/graphql';
 import { useNavigateSettings } from '~/hooks/useNavigateSettings';
 import * as stylex from '@stylexjs/stylex';
 import { spacing } from 'twenty-ui/theme/tokens.stylex';
@@ -81,13 +76,6 @@ export const ObjectSettings = ({
 
   const isReadOnly =
     isObjectMetadataReadOnly({ objectMetadataItem }) || isDDLLocked;
-
-  const isValidationRulesEnabled = useIsFeatureEnabled(
-    FeatureFlagKey.IS_VALIDATION_RULES_ENABLED,
-  );
-  const isRecordLevelSharingEnabled = useIsFeatureEnabled(
-    FeatureFlagKey.IS_RECORD_LEVEL_SHARING_ENABLED,
-  );
 
   const handleDisable = async () => {
     const result = await updateOneObjectMetadataItem({
@@ -152,33 +140,6 @@ export const ObjectSettings = ({
           disabled={hasUnsavedAboutEdits}
         />
       </Section.Root>
-      {isValidationRulesEnabled &&
-        !objectMetadataItem.isRemote &&
-        !objectMetadataItem.isSystem && (
-          <Section.Root {...stylex.props(styles.formSection)}>
-            <Section.Header
-              title={t`Validation rules`}
-              description={t`A record saves only when every active rule is true. Rules run on every write: forms, API, imports and workflows.`}
-            />
-            <SettingsObjectValidationRulesSection
-              objectMetadataItem={objectMetadataItem}
-              isReadOnly={isReadOnly}
-            />
-          </Section.Root>
-        )}
-      {isRecordLevelSharingEnabled &&
-        isShareableObjectMetadataItem(objectMetadataItem) && (
-          <Section.Root {...stylex.props(styles.formSection)}>
-            <Section.Header
-              title={t`Record sharing`}
-              description={t`Who a record of ${objectLabel} can be shared with. Roles still decide what people see by default.`}
-            />
-            <ObjectSharingReachPicker
-              objectMetadataItem={objectMetadataItem}
-              isReadOnly={isReadOnly}
-            />
-          </Section.Root>
-        )}
       <AdvancedSettingsWrapper>
         <Section.Root {...stylex.props(styles.formSection)}>
           <Section.Header

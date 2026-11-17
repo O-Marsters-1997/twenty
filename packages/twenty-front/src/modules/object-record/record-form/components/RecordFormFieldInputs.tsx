@@ -5,7 +5,6 @@ import { getFieldMetadataItemGqlFieldName } from '@/object-metadata/utils/getFie
 import { FormFieldInput } from '@/object-record/record-field/ui/components/FormFieldInput';
 import { getRecordFormFieldInputSettings } from '@/object-record/record-form/utils/getRecordFormFieldInputSettings';
 import { type ObjectRecord } from '@/object-record/types/ObjectRecord';
-import { type ValidationRuleViolation } from '@/validation-rules/types/ValidationRuleViolation';
 import { type JsonValue } from 'type-fest';
 import { Field } from 'twenty-ui/primitives/input';
 import * as stylex from '@stylexjs/stylex';
@@ -23,10 +22,6 @@ type RecordFormFieldInputsProps = {
   objectMetadataItem: EnrichedObjectMetadataItem;
   fieldMetadataItems: FieldMetadataItem[];
   draftRecord: Partial<ObjectRecord>;
-  validationRuleViolationsByFieldMetadataId?: Record<
-    string,
-    ValidationRuleViolation[]
-  >;
   onFieldValueChange: (gqlFieldName: string, value: JsonValue) => void;
   onFieldValueClear: (gqlFieldName: string) => void;
 };
@@ -35,7 +30,6 @@ export const RecordFormFieldInputs = ({
   objectMetadataItem,
   fieldMetadataItems,
   draftRecord,
-  validationRuleViolationsByFieldMetadataId = {},
   onFieldValueChange,
   onFieldValueClear,
 }: RecordFormFieldInputsProps) => (
@@ -56,14 +50,6 @@ export const RecordFormFieldInputs = ({
             onClear={() => onFieldValueClear(gqlFieldName)}
             settings={getRecordFormFieldInputSettings(fieldMetadataItem.type)}
           />
-          {(
-            validationRuleViolationsByFieldMetadataId[fieldMetadataItem.id] ??
-            []
-          ).map((violation) => (
-            <Field.Error key={violation.ruleId} match role="alert">
-              {violation.message}
-            </Field.Error>
-          ))}
         </Field.Root>
       );
     })}

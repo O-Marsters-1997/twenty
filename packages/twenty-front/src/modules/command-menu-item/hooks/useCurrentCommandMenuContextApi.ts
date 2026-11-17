@@ -16,7 +16,6 @@ import { useObjectMetadataItems } from '@/object-metadata/hooks/useObjectMetadat
 import { useObjectPermissionsForObject } from '@/object-record/hooks/useObjectPermissionsForObject';
 import { isLayoutCustomizationModeEnabledState } from '@/layout-customization/states/isLayoutCustomizationModeEnabledState';
 import { hasAnySoftDeleteFilterOnViewComponentSelector } from '@/object-record/record-filter/states/hasAnySoftDeleteFilterOnView';
-import { recordPermissionsByRecordIdFamilySelector } from '@/object-record/record-sharing/states/recordPermissionsByRecordIdFamilySelector';
 import { type ObjectRecord } from '@/object-record/types/ObjectRecord';
 import { recordStoreRecordsSelector } from '@/object-record/record-store/states/selectors/recordStoreRecordsSelector';
 import { getRecordIndexIdFromObjectNamePluralAndViewId } from '@/object-record/utils/getRecordIndexIdFromObjectNamePluralAndViewId';
@@ -84,14 +83,6 @@ export const useCurrentCommandMenuContextApi = (): CommandMenuContextApi => {
     { recordIds: recordIds ?? [] },
   );
 
-  const recordPermissionsByRecordId = useAtomFamilySelectorValue(
-    recordPermissionsByRecordIdFamilySelector,
-    {
-      objectMetadataId: objectMetadataItem?.id ?? '',
-      recordIds: recordIds ?? [],
-    },
-  );
-
   // A chat's read and done state belongs to the member, not to the record,
   // so the inbox commands read it from here. They stay hidden until the
   // member state loads rather than offering the wrong half of a pair
@@ -109,18 +100,12 @@ export const useCurrentCommandMenuContextApi = (): CommandMenuContextApi => {
     { threadIds: inboxStatusThreadIds },
   );
 
-  // Records shared below the role's access level carry their own permissions, which availability expressions read per record
-  const selectedRecords = storedSelectedRecords.map(
-    (record): ObjectRecord => ({
-      ...record,
-      ...(isDefined(recordPermissionsByRecordId[record.id]) && {
-        recordPermissions: recordPermissionsByRecordId[record.id],
-      }),
-      ...(isDefined(agentChatThreadInboxStatusByThreadId[record.id]) && {
-        inboxStatus: agentChatThreadInboxStatusByThreadId[record.id],
-      }),
+  const selectedRecords = storedSelectedRecords.map((record): ObjectRecord => ({
+    ...record,
+    ...(isDefined(agentChatThreadInboxStatusByThreadId[record.id]) && {
+      inboxStatus: agentChatThreadInboxStatusByThreadId[record.id],
     }),
-  );
+  }));
 
   const currentPageLayoutId = useAtomStateValue(currentPageLayoutIdState);
 

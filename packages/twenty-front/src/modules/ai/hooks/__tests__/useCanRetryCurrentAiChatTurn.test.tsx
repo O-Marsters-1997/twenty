@@ -1,4 +1,3 @@
-import { setAgentChatThreadPermissions } from '@/ai/testing/setAgentChatThreadPermissions';
 import { renderHook } from '@testing-library/react';
 import { Provider } from 'jotai';
 import { type ReactNode } from 'react';
@@ -7,7 +6,6 @@ import { agentChatMessagesFamilyState } from '@/ai/states/agentChatMessagesFamil
 import { currentAiChatThreadState } from '@/ai/states/currentAiChatThreadState';
 import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMemberState';
 import { useCanRetryCurrentAiChatTurn } from '@/ai/hooks/useCanRetryCurrentAiChatTurn';
-import { useCurrentAiChatThreadAccess } from '@/ai/hooks/useCurrentAiChatThreadAccess';
 import {
   jotaiStore,
   resetJotaiStore,
@@ -17,7 +15,7 @@ const wrapper = ({ children }: { children: ReactNode }) => (
   <Provider store={jotaiStore}>{children}</Provider>
 );
 
-describe('Shared chat execution controls', () => {
+describe('Chat execution controls', () => {
   beforeEach(() => {
     resetJotaiStore();
     jotaiStore.set(agentChatDisplayedThreadState.atom, 'thread');
@@ -28,19 +26,12 @@ describe('Shared chat execution controls', () => {
   });
 
   it.each([
-    [true, 'bob', true],
-    [true, 'alice', false],
-    [false, 'bob', false],
-    [true, null, false],
+    ['bob', true],
+    ['alice', false],
+    [null, false],
   ])(
-    'uses normal update permission (%s) and the saved sender (%s) for retries',
-    (canUpdate, senderWorkspaceMemberId, expected) => {
-      setAgentChatThreadPermissions(jotaiStore, 'thread', {
-        canRead: true,
-        canUpdate,
-        canDelete: false,
-        canSoftDelete: false,
-      });
+    'uses the saved sender (%s) for retries',
+    (senderWorkspaceMemberId, expected) => {
       jotaiStore.set(
         agentChatMessagesFamilyState.atomFamily({ threadId: 'thread' }),
         [
@@ -66,17 +57,10 @@ describe('Shared chat execution controls', () => {
           },
         ],
       );
-      const { result } = renderHook(
-        () => ({
-          canRetry: useCanRetryCurrentAiChatTurn(),
-          access: useCurrentAiChatThreadAccess(),
-        }),
-        { wrapper },
-      );
-      expect(result.current).toEqual({
-        canRetry: expected,
-        access: canUpdate ? 'writer' : 'viewer',
+      const { result } = renderHook(() => useCanRetryCurrentAiChatTurn(), {
+        wrapper,
       });
+      expect(result.current).toBe(expected);
     },
   );
 });

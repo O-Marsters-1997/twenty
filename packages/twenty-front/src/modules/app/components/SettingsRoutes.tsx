@@ -552,7 +552,6 @@ const createSettingsRouteElements = () => (
         SettingsPath.ObjectNewFieldSelect,
         SettingsPath.ObjectNewFieldConfigure,
         SettingsPath.ObjectNewIndex,
-        SettingsPath.ObjectValidationRuleEdit,
         SettingsPath.ObjectFieldEdit,
         SettingsPath.ObjectTranslations,
         SettingsPath.ObjectFieldTranslations,

@@ -1,4 +1,3 @@
-import { useCurrentAiChatThreadAccess } from '@/ai/hooks/useCurrentAiChatThreadAccess';
 import { EditorContent } from '@tiptap/react';
 import { useLingui } from '@lingui/react/macro';
 
@@ -102,7 +101,7 @@ const styles = stylex.create({
   },
 });
 
-const EditableAiChatEditorSection = () => {
+export const AiChatEditorSection = () => {
   const { t } = useLingui();
   const isMobile = useIsMobile();
   const isComposerCentered = useIsAiChatComposerCentered();
@@ -171,31 +170,4 @@ const EditableAiChatEditorSection = () => {
       />
     </>
   );
-};
-
-export const AiChatEditorSection = () => {
-  const { t } = useLingui();
-  const isMobile = useIsMobile();
-  const access = useCurrentAiChatThreadAccess();
-  if (access !== 'writer') {
-    return (
-      <div
-        {...stylex.props(
-          aiChatContentContainerStyles.root,
-          styles.inputArea,
-          isMobile && styles.inputAreaMobile,
-        )}
-      >
-        <div role="status">
-          {access === 'loading'
-            ? t`Loading conversation…`
-            : access === 'unavailable'
-              ? t`This conversation is no longer available.`
-              : t`View only — You can read this conversation.`}
-        </div>
-        <AiChatStandaloneError />
-      </div>
-    );
-  }
-  return <EditableAiChatEditorSection />;
 };

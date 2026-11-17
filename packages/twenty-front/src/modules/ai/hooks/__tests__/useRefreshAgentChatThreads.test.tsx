@@ -37,14 +37,6 @@ jest.mock('@/object-record/utils/generateFindManyRecordsQuery', () => ({
   generateFindManyRecordsQuery: () => 'find-many-agent-chat-threads',
 }));
 
-const refreshAgentChatThreadPermissions = jest.fn();
-
-jest.mock('@/ai/hooks/useRefreshAgentChatThreadPermissions', () => ({
-  useRefreshAgentChatThreadPermissions: () => ({
-    refreshAgentChatThreadPermissions,
-  }),
-}));
-
 const buildThread = (id: string, title: string): AgentChatThreadRecord => ({
   __typename: 'AgentChatThread',
   id,
@@ -87,7 +79,6 @@ const renderRefresh = (store: ReturnType<typeof createStore>) =>
 describe('useRefreshAgentChatThreads', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    refreshAgentChatThreadPermissions.mockResolvedValue(undefined);
   });
 
   it('keeps the refresh callback stable so render updates do not restart subscriptions', () => {
