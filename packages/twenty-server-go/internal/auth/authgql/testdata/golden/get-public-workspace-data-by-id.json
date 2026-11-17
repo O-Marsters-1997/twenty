@@ -1,0 +1,9 @@
+{
+  "name": "get-public-workspace-data-by-id",
+  "operation": "GetPublicWorkspaceDataById",
+  "fixture": "acme workspace without a logo",
+  "endpoint": "/metadata",
+  "query": "query GetPublicWorkspaceDataById($id: UUID!) { getPublicWorkspaceDataById(id: $id) { id displayName logo } }",
+  "variables": {"id": "20202020-1c25-4d02-bf25-6aeccf7ea419"},
+  "response": {"data":{"getPublicWorkspaceDataById":{"id":"20202020-1c25-4d02-bf25-6aeccf7ea419","displayName":"Acme","logo":""}}}
+}

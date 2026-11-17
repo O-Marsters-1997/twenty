@@ -6,6 +6,17 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata"
 )
 
+type AuthBypassProviders struct {
+	Google   bool `json:"google"`
+	Password bool `json:"password"`
+}
+
+type AuthProviders struct {
+	Google    bool `json:"google"`
+	MagicLink bool `json:"magicLink"`
+	Password  bool `json:"password"`
+}
+
 type AuthToken struct {
 	Token     string             `json:"token"`
 	ExpiresAt metadata.Timestamp `json:"expiresAt"`
@@ -40,6 +51,12 @@ type AvailableWorkspacesAndAccessTokens struct {
 	AvailableWorkspaces *AvailableWorkspaces `json:"availableWorkspaces"`
 }
 
+type CheckUserExist struct {
+	Exists                   bool    `json:"exists"`
+	AvailableWorkspacesCount float64 `json:"availableWorkspacesCount"`
+	IsEmailVerified          bool    `json:"isEmailVerified"`
+}
+
 type DeleteTwoFactorAuthenticationMethod struct {
 	Success bool `json:"success"`
 }
@@ -55,11 +72,33 @@ type LoginToken struct {
 type Mutation struct {
 }
 
+type PublicWorkspaceData struct {
+	ID                  string               `json:"id"`
+	AuthProviders       *AuthProviders       `json:"authProviders"`
+	AuthBypassProviders *AuthBypassProviders `json:"authBypassProviders,omitempty"`
+	Logo                *string              `json:"logo,omitempty"`
+	DisplayName         *string              `json:"displayName,omitempty"`
+	WorkspaceUrls       *WorkspaceUrls       `json:"workspaceUrls"`
+}
+
+type PublicWorkspaceDataSummary struct {
+	ID          string  `json:"id"`
+	Logo        *string `json:"logo,omitempty"`
+	DisplayName *string `json:"displayName,omitempty"`
+}
+
 type Query struct {
 }
 
 type TransientToken struct {
 	TransientToken *AuthToken `json:"transientToken"`
+}
+
+type SubdomainAvailability struct {
+	IsValid             bool     `json:"isValid"`
+	Available           bool     `json:"available"`
+	SuggestedSubdomain  string   `json:"suggestedSubdomain"`
+	SuggestedSubdomains []string `json:"suggestedSubdomains"`
 }
 
 type TwoFactorAuthenticationRecoveryCode struct {
@@ -92,6 +131,19 @@ type UserSession struct {
 
 type VerifyTwoFactorAuthenticationMethod struct {
 	Success bool `json:"success"`
+}
+
+type Workspace struct {
+	ID                   string   `json:"id"`
+	DisplayName          *string  `json:"displayName,omitempty"`
+	Logo                 string   `json:"logo"`
+	AllowImpersonation   bool     `json:"allowImpersonation"`
+	AllowedIframeOrigins []string `json:"allowedIframeOrigins"`
+}
+
+type WorkspaceCreationDefaults struct {
+	DisplayName string `json:"displayName"`
+	Subdomain   string `json:"subdomain"`
 }
 
 type WorkspaceUrls struct {

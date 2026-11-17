@@ -14,6 +14,7 @@ type Resolver struct {
 	Sessions      *auth.UserSession
 	Login         *auth.TwoFactorLogin
 	Tokens        *auth.PGIssuer
+	Public        *auth.PublicData
 }
 
 func (r *mutationResolver) InitiateOTPProvisioning(ctx context.Context, loginToken string, origin string) (*InitiateTwoFactorAuthenticationProvisioning, error) {
@@ -271,6 +272,90 @@ func (r *Resolver) issueSession(ctx context.Context, pair auth.TokenPair, origin
 	}
 	pair.RefreshExpiresAt = refreshExpiresAt
 	return &AuthTokens{Tokens: tokenPair(pair)}, nil
+}
+
+func (r *queryResolver) GetPublicWorkspaceDataByDomain(ctx context.Context, origin *string) (*PublicWorkspaceData, error) {
+	_, req := exchangeFrom(ctx)
+	var requested string
+	if origin != nil {
+		requested = *origin
+	}
+	workspace, err := r.Public.ByOrigin(ctx, requested, req.Header.Get("Origin"))
+	if err != nil {
+		return nil, err
+	}
+	logo := workspace.Logo
+	data := &PublicWorkspaceData{
+		ID:            workspace.ID,
+		Logo:          &logo,
+		DisplayName:   workspace.DisplayName,
+		WorkspaceUrls: &WorkspaceUrls{SubdomainURL: workspace.SubdomainURL},
+		AuthProviders: (*AuthProviders)(&workspace.AuthProviders),
+	}
+	if workspace.AuthBypassProviders != nil {
+		data.AuthBypassProviders = (*AuthBypassProviders)(workspace.AuthBypassProviders)
+	}
+	return data, nil
+}
+
+func (r *queryResolver) GetPublicWorkspaceDataByID(ctx context.Context, id string) (*PublicWorkspaceDataSummary, error) {
+	workspace, err := r.Public.ByID(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	return &PublicWorkspaceDataSummary{ID: workspace.ID, Logo: &workspace.Logo, DisplayName: workspace.DisplayName}, nil
+}
+
+func (r *queryResolver) FindWorkspaceFromInviteHash(ctx context.Context, inviteHash string) (*Workspace, error) {
+	workspace, err := r.Public.ByInviteHash(ctx, inviteHash)
+	if err != nil {
+		return nil, err
+	}
+	return &Workspace{ID: workspace.ID, DisplayName: workspace.DisplayName, Logo: workspace.Logo, AllowImpersonation: workspace.AllowImpersonation}, nil
+}
+
+func (r *queryResolver) CheckUserExists(ctx context.Context, email string, _ *string) (*CheckUserExist, error) {
+	existence, err := r.Public.UserExists(ctx, email)
+	if err != nil {
+		return nil, err
+	}
+	return &CheckUserExist{
+		Exists:                   existence.Exists,
+		AvailableWorkspacesCount: float64(existence.AvailableWorkspacesCount),
+		IsEmailVerified:          existence.IsEmailVerified,
+	}, nil
+}
+
+func (r *queryResolver) CheckWorkspaceSubdomainAvailability(ctx context.Context, subdomain string) (*SubdomainAvailability, error) {
+	availability, err := r.Public.SubdomainAvailability(ctx, subdomain)
+	if err != nil {
+		return nil, err
+	}
+	return (*SubdomainAvailability)(&availability), nil
+}
+
+func (r *queryResolver) GetWorkspaceCreationDefaults(ctx context.Context) (*WorkspaceCreationDefaults, error) {
+	principal, err := principalFrom(ctx)
+	if err != nil {
+		return nil, err
+	}
+	defaults, err := r.Public.CreationDefaults(ctx, principal.UserID)
+	if err != nil {
+		return nil, err
+	}
+	return (*WorkspaceCreationDefaults)(&defaults), nil
+}
+
+func (r *queryResolver) CurrentWorkspace(ctx context.Context) (*Workspace, error) {
+	principal, err := principalFrom(ctx)
+	if err != nil {
+		return nil, err
+	}
+	origins, err := r.Public.IframeOrigins(ctx, principal.WorkspaceID)
+	if err != nil {
+		return nil, err
+	}
+	return &Workspace{ID: principal.WorkspaceID, AllowedIframeOrigins: origins}, nil
 }
 
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }

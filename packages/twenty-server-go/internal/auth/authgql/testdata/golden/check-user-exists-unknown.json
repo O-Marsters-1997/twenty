@@ -1,0 +1,9 @@
+{
+  "name": "check-user-exists-unknown",
+  "operation": "CheckUserExists",
+  "fixture": "email with no user and no invitation",
+  "endpoint": "/metadata",
+  "query": "query CheckUserExists($email: String!, $captchaToken: String) { checkUserExists(email: $email, captchaToken: $captchaToken) { exists availableWorkspacesCount isEmailVerified } }",
+  "variables": {"email": "ghost@example.com"},
+  "response": {"data":{"checkUserExists":{"exists":false,"availableWorkspacesCount":0,"isEmailVerified":false}}}
+}

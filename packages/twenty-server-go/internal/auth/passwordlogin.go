@@ -232,7 +232,23 @@ func (l *PasswordLogin) assertMember(ctx context.Context, user loginUser, worksp
 }
 
 func (l *PasswordLogin) availableWorkspaces(ctx context.Context, user loginUser) (forSignIn, forSignUp []AvailableWorkspace, err error) {
-	members, err := l.queryWorkspaces(ctx,
+	members, joinable, err := l.availableWorkspaceRows(ctx, user)
+	if err != nil {
+		return nil, nil, err
+	}
+	forSignIn, err = l.present(ctx, user, members, true)
+	if err != nil {
+		return nil, nil, err
+	}
+	forSignUp, err = l.present(ctx, user, joinable, false)
+	if err != nil {
+		return nil, nil, err
+	}
+	return forSignIn, forSignUp, nil
+}
+
+func (l *PasswordLogin) availableWorkspaceRows(ctx context.Context, user loginUser) (members, signUp []workspaceRow, err error) {
+	members, err = l.queryWorkspaces(ctx,
 		`SELECT `+workspaceColumns+`, NULL::text FROM core."userWorkspace" uw JOIN core.workspace w ON w.id = uw."workspaceId"
 		 WHERE uw."userId" = $1::uuid AND uw."deletedAt" IS NULL AND w."deletedAt" IS NULL AND w."workspaceDiscoverability" <> 'HIDDEN'
 		 ORDER BY uw."createdAt"`, user.id)
@@ -259,16 +275,7 @@ func (l *PasswordLogin) availableWorkspaces(ctx context.Context, user loginUser)
 	if err != nil {
 		return nil, nil, err
 	}
-
-	forSignIn, err = l.present(ctx, user, members, true)
-	if err != nil {
-		return nil, nil, err
-	}
-	forSignUp, err = l.present(ctx, user, slices.Concat(joinable, invitations), false)
-	if err != nil {
-		return nil, nil, err
-	}
-	return forSignIn, forSignUp, nil
+	return members, slices.Concat(joinable, invitations), nil
 }
 
 func (l *PasswordLogin) joinableByDomain(ctx context.Context, email string, memberIDs []string) ([]workspaceRow, error) {
@@ -312,11 +319,11 @@ func (l *PasswordLogin) present(ctx context.Context, user loginUser, rows []work
 			SubdomainURL:        l.workspaceURL(row.subdomain),
 		}
 		if row.logoFileID != nil {
-			token, err := l.issuer.IssueFileToken(ctx, row.id, *row.logoFileID, l.config.FileTokenTTL)
+			logo, err := l.logoURL(ctx, row.id, *row.logoFileID)
 			if err != nil {
 				return nil, err
 			}
-			available.Logo = fmt.Sprintf("%s/file/%s/%s?token=%s", l.config.ServerURL, fileFolderCorePicture, *row.logoFileID, token)
+			available.Logo = logo
 		}
 		if withLoginToken && row.passwordEnabled {
 			token, err := l.issuer.IssueLoginToken(ctx, user.id, row.id, passwordProvider)
@@ -328,6 +335,14 @@ func (l *PasswordLogin) present(ctx context.Context, user loginUser, rows []work
 		workspaces = append(workspaces, available)
 	}
 	return workspaces, nil
+}
+
+func (l *PasswordLogin) logoURL(ctx context.Context, workspaceID, fileID string) (string, error) {
+	token, err := l.issuer.IssueFileToken(ctx, workspaceID, fileID, l.config.FileTokenTTL)
+	if err != nil {
+		return "", err
+	}
+	return fmt.Sprintf("%s/file/%s/%s?token=%s", l.config.ServerURL, fileFolderCorePicture, fileID, token), nil
 }
 
 func (l *PasswordLogin) workspaceURL(subdomain string) string {

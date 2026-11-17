@@ -1,0 +1,9 @@
+{
+  "name": "get-public-workspace-data-by-domain",
+  "operation": "GetPublicWorkspaceDataByDomain",
+  "fixture": "acme workspace with password and google sign-in on",
+  "endpoint": "/metadata",
+  "query": "query GetPublicWorkspaceDataByDomain($origin: String!) { getPublicWorkspaceDataByDomain(origin: $origin) { id logo displayName workspaceUrls { subdomainUrl } authProviders { google magicLink password } authBypassProviders { google password } } }",
+  "variables": {"origin": "http://acme.localhost:3001"},
+  "response": {"data":{"getPublicWorkspaceDataByDomain":{"id":"20202020-1c25-4d02-bf25-6aeccf7ea419","logo":"","displayName":"Acme","workspaceUrls":{"subdomainUrl":"http://acme.localhost:3001/"},"authProviders":{"google":true,"magicLink":false,"password":true},"authBypassProviders":{"google":false,"password":false}}}}
+}
