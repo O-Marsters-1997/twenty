@@ -1,0 +1,16 @@
+{
+  "name": "generate-transient-token",
+  "operation": "generateTransientToken",
+  "fixture": "workspace Acme with a signed-in workspace member",
+  "endpoint": "/metadata",
+  "query": "mutation generateTransientToken { generateTransientToken { transientToken { token } } }",
+  "response": {
+    "data": {
+      "generateTransientToken": {
+        "transientToken": {
+          "token": "<ignored>"
+        }
+      }
+    }
+  }
+}

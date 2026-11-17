@@ -61,7 +61,7 @@ var MessagingOperations = []string{
 	"SendMessageCampaign", "CancelMessageCampaign", "SendMessageCampaignTest", "PreviewMessageCampaignAudience",
 }
 
-var LoginOperations = []string{"getAuthTokensFromOTP", "getAuthTokensFromTwoFactorAuthenticationRecoveryCode"}
+var LoginOperations = []string{"getAuthTokensFromOTP", "getAuthTokensFromTwoFactorAuthenticationRecoveryCode", "initiateOTPProvisioning"}
 
 var TwoFactorOperations = []string{
 	"initiateOTPProvisioningForAuthenticatedUser", "verifyTwoFactorAuthenticationMethodForAuthenticatedUser",
@@ -70,6 +70,8 @@ var TwoFactorOperations = []string{
 }
 
 var SessionOperations = []string{"getAuthTokensFromLoginToken", "RenewToken", "SignOut"}
+
+var SessionManagementOperations = []string{"CurrentUserSessions", "RevokeUserSession", "RevokeAllOtherUserSessions", "generateTransientToken"}
 
 var blockedMetadataFields = []string{
 	"createOneObject", "updateOneObject", "deleteOneObject",

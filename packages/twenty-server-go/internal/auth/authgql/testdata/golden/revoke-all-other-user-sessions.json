@@ -1,0 +1,8 @@
+{
+  "name": "revoke-all-other-user-sessions",
+  "operation": "RevokeAllOtherUserSessions",
+  "fixture": "workspace Acme where the user owns two active sessions and no session cookie is presented",
+  "endpoint": "/metadata",
+  "query": "mutation RevokeAllOtherUserSessions { revokeAllOtherUserSessions }",
+  "response": {"data":{"revokeAllOtherUserSessions":2}}
+}

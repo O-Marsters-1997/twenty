@@ -1,0 +1,11 @@
+{
+  "name": "revoke-user-session",
+  "operation": "RevokeUserSession",
+  "fixture": "workspace Acme where the user owns one active session",
+  "endpoint": "/metadata",
+  "query": "mutation RevokeUserSession($userSessionId: UUID!) { revokeUserSession(userSessionId: $userSessionId) }",
+  "variables": {
+    "userSessionId": "f0000000-0000-4000-8000-000000000001"
+  },
+  "response": {"data":{"revokeUserSession":true}}
+}

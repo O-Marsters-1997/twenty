@@ -90,6 +90,10 @@ type PublicWorkspaceDataSummary struct {
 type Query struct {
 }
 
+type TransientToken struct {
+	TransientToken *AuthToken `json:"transientToken"`
+}
+
 type SubdomainAvailability struct {
 	IsValid             bool     `json:"isValid"`
 	Available           bool     `json:"available"`
@@ -111,6 +115,18 @@ type TwoFactorAuthenticationRecoveryStatus struct {
 	HasVerifiedTwoFactorAuthenticationMethod bool                `json:"hasVerifiedTwoFactorAuthenticationMethod"`
 	IsAwaitingRecoveryEnrollment             bool                `json:"isAwaitingRecoveryEnrollment"`
 	PendingRecoveryCodeExpiresAt             *metadata.Timestamp `json:"pendingRecoveryCodeExpiresAt,omitempty"`
+}
+
+type UserSession struct {
+	ID           string             `json:"id"`
+	WorkspaceID  *string            `json:"workspaceId,omitempty"`
+	AuthProvider string             `json:"authProvider"`
+	UserAgent    *string            `json:"userAgent,omitempty"`
+	IPAddress    *string            `json:"ipAddress,omitempty"`
+	CreatedAt    metadata.Timestamp `json:"createdAt"`
+	LastActiveAt metadata.Timestamp `json:"lastActiveAt"`
+	ExpiresAt    metadata.Timestamp `json:"expiresAt"`
+	IsCurrent    bool               `json:"isCurrent"`
 }
 
 type VerifyTwoFactorAuthenticationMethod struct {

@@ -13,7 +13,73 @@ type Resolver struct {
 	PasswordLogin *auth.PasswordLogin
 	Sessions      *auth.UserSession
 	Login         *auth.TwoFactorLogin
+	Tokens        *auth.PGIssuer
 	Public        *auth.PublicData
+}
+
+func (r *mutationResolver) InitiateOTPProvisioning(ctx context.Context, loginToken string, origin string) (*InitiateTwoFactorAuthenticationProvisioning, error) {
+	uri, err := r.Login.InitiateProvisioning(ctx, loginToken, origin)
+	if err != nil {
+		return nil, err
+	}
+	return &InitiateTwoFactorAuthenticationProvisioning{URI: uri}, nil
+}
+
+func (r *mutationResolver) RevokeUserSession(ctx context.Context, userSessionID string) (bool, error) {
+	principal, err := principalFrom(ctx)
+	if err != nil {
+		return false, err
+	}
+	w, req := exchangeFrom(ctx)
+	return r.Sessions.RevokeSession(ctx, w, req, principal, userSessionID)
+}
+
+func (r *mutationResolver) RevokeAllOtherUserSessions(ctx context.Context) (int, error) {
+	principal, err := principalFrom(ctx)
+	if err != nil {
+		return 0, err
+	}
+	_, req := exchangeFrom(ctx)
+	return r.Sessions.RevokeOtherSessions(ctx, req, principal)
+}
+
+func (r *mutationResolver) GenerateTransientToken(ctx context.Context) (*TransientToken, error) {
+	principal, err := principalFrom(ctx)
+	if err != nil {
+		return nil, err
+	}
+	token, err := r.Tokens.IssueTransient(ctx, principal)
+	if err != nil {
+		return nil, err
+	}
+	return &TransientToken{TransientToken: authTokenFrom(token)}, nil
+}
+
+func (r *queryResolver) CurrentUserSessions(ctx context.Context) ([]*UserSession, error) {
+	principal, err := principalFrom(ctx)
+	if err != nil {
+		return nil, err
+	}
+	_, req := exchangeFrom(ctx)
+	sessions, err := r.Sessions.CurrentSessions(ctx, req, principal)
+	if err != nil {
+		return nil, err
+	}
+	result := make([]*UserSession, 0, len(sessions))
+	for _, session := range sessions {
+		result = append(result, &UserSession{
+			ID:           session.ID,
+			WorkspaceID:  session.WorkspaceID,
+			AuthProvider: session.AuthProvider,
+			UserAgent:    session.UserAgent,
+			IPAddress:    session.IPAddress,
+			CreatedAt:    metadata.Timestamp{Time: session.CreatedAt},
+			LastActiveAt: metadata.Timestamp{Time: session.LastActiveAt},
+			ExpiresAt:    metadata.Timestamp{Time: session.ExpiresAt},
+			IsCurrent:    session.IsCurrent,
+		})
+	}
+	return result, nil
 }
 
 func (r *mutationResolver) InitiateOTPProvisioningForAuthenticatedUser(ctx context.Context) (*InitiateTwoFactorAuthenticationProvisioning, error) {
