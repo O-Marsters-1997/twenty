@@ -33,11 +33,11 @@ type CreatePersonParams struct {
 	AvatarUrl                     pgtype.Text
 	AvatarFile                    []byte
 	Position                      float64
-	CreatedBySource               Workspace2abogkkt2zd45pa9aun09djpfPersonCreatedBySourceEnum
+	CreatedBySource               string
 	CreatedByWorkspaceMemberId    pgtype.UUID
 	CreatedByName                 string
 	CreatedByContext              []byte
-	UpdatedBySource               Workspace2abogkkt2zd45pa9aun09djpfPersonUpdatedBySourceEnum
+	UpdatedBySource               string
 	UpdatedByWorkspaceMemberId    pgtype.UUID
 	UpdatedByName                 string
 	UpdatedByContext              []byte
@@ -215,7 +215,7 @@ type UpdatePersonParams struct {
 	AvatarUrl                     pgtype.Text
 	AvatarFile                    []byte
 	Position                      float64
-	UpdatedBySource               Workspace2abogkkt2zd45pa9aun09djpfPersonUpdatedBySourceEnum
+	UpdatedBySource               string
 	UpdatedByWorkspaceMemberId    pgtype.UUID
 	UpdatedByName                 string
 	UpdatedByContext              []byte

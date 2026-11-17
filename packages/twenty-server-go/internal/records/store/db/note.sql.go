@@ -22,11 +22,11 @@ type CreateNoteParams struct {
 	Title                      pgtype.Text
 	BodyV2Blocknote            pgtype.Text
 	BodyV2Markdown             pgtype.Text
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfNoteCreatedBySourceEnum
+	CreatedBySource            string
 	CreatedByWorkspaceMemberId pgtype.UUID
 	CreatedByName              string
 	CreatedByContext           []byte
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfNoteUpdatedBySourceEnum
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte
@@ -156,7 +156,7 @@ type UpdateNoteParams struct {
 	Title                      pgtype.Text
 	BodyV2Blocknote            pgtype.Text
 	BodyV2Markdown             pgtype.Text
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfNoteUpdatedBySourceEnum
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte

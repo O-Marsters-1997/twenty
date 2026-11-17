@@ -18,18 +18,18 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "creat
 `
 
 type CreateMessageChannelMessageAssociationParams struct {
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfMessageChannelMessageAssociationCreatedBySourceEnum
+	CreatedBySource            string
 	CreatedByWorkspaceMemberId pgtype.UUID
 	CreatedByName              string
 	CreatedByContext           []byte
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfMessageChannelMessageAssociationUpdatedBySourceEnum
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte
 	Position                   float64
 	MessageExternalId          pgtype.Text
 	MessageThreadExternalId    pgtype.Text
-	Direction                  Workspace2abogkkt2zd45pa9aun09djpfMessageChannelMessageAssociationDirectionEnum
+	Direction                  string
 	MessageChannelId           pgtype.UUID
 	MessageId                  pgtype.UUID
 	MessageThreadId            pgtype.UUID
@@ -164,14 +164,14 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "creat
 `
 
 type UpdateMessageChannelMessageAssociationParams struct {
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfMessageChannelMessageAssociationUpdatedBySourceEnum
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte
 	Position                   float64
 	MessageExternalId          pgtype.Text
 	MessageThreadExternalId    pgtype.Text
-	Direction                  Workspace2abogkkt2zd45pa9aun09djpfMessageChannelMessageAssociationDirectionEnum
+	Direction                  string
 	MessageChannelId           pgtype.UUID
 	MessageId                  pgtype.UUID
 	MessageThreadId            pgtype.UUID

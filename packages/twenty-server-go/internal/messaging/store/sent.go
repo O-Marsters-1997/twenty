@@ -110,7 +110,7 @@ func (s *Sent) Persist(ctx context.Context, sent SentMessage) (threadID string, 
 	for _, group := range participants {
 		for _, address := range group.addresses {
 			if _, err := tx.Exec(ctx, `INSERT INTO `+s.schema+`."messageParticipant" (role, handle, "displayName", "messageId", "personId")
-				VALUES ($1::text::`+s.schema+`."messageParticipant_role_enum", $2, $2, $3,
+				VALUES ($1,$2, $2, $3,
 				(SELECT id FROM `+s.schema+`.person WHERE lower("emailsPrimaryEmail") = lower($2) AND "deletedAt" IS NULL LIMIT 1))`,
 				group.role, strings.TrimSpace(address), messageID); err != nil {
 				return "", fmt.Errorf("insert participant: %w", err)

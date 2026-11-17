@@ -208,7 +208,7 @@ func (s *Store) Transition(ctx context.Context, id, status, runError string) (Ru
 		if !slices.Contains(transitions[current], status) {
 			return fmt.Errorf("%s to %s: %w", current, status, ErrInvalidTransition)
 		}
-		rows, err := tx.Query(ctx, `UPDATE `+table("workflowRun")+` SET status = $2::text::`+table("workflowRun_status_enum")+`,
+		rows, err := tx.Query(ctx, `UPDATE `+table("workflowRun")+` SET status = $2::text,
 				"updatedAt" = now(),
 				"enqueuedAt" = CASE WHEN $2::text = 'ENQUEUED' THEN now() ELSE "enqueuedAt" END,
 				"startedAt" = CASE WHEN $2::text = 'RUNNING' THEN now() ELSE "startedAt" END,
