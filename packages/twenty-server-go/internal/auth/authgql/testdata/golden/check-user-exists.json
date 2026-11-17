@@ -1,0 +1,9 @@
+{
+  "name": "check-user-exists",
+  "operation": "CheckUserExists",
+  "fixture": "member of two workspaces, invited to a third",
+  "endpoint": "/metadata",
+  "query": "query CheckUserExists($email: String!, $captchaToken: String) { checkUserExists(email: $email, captchaToken: $captchaToken) { exists availableWorkspacesCount isEmailVerified } }",
+  "variables": {"email": "Member@Example.com"},
+  "response": {"data":{"checkUserExists":{"exists":true,"availableWorkspacesCount":3,"isEmailVerified":true}}}
+}
