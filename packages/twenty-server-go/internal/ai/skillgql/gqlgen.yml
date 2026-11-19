@@ -6,11 +6,6 @@ exec:
 model:
   filename: models_gen.go
   package: skillgql
-resolver:
-  layout: single-file
-  filename: resolver.go
-  package: skillgql
-  type: Resolver
 models:
   UUID:
     model: github.com/99designs/gqlgen/graphql.String
