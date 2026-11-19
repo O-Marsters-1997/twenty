@@ -9,11 +9,6 @@ exec:
 model:
   filename: models_gen.go
   package: messaginggql
-resolver:
-  layout: single-file
-  filename: resolver.go
-  package: messaginggql
-  type: Resolver
 models:
   UUID:
     model: github.com/99designs/gqlgen/graphql.String
