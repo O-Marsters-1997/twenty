@@ -63,7 +63,7 @@ func load(ctx context.Context, pool *pgxpool.Pool, workspaceID, schema string) (
 		SELECT id::text, "nameSingular", "namePlural"
 		FROM core."objectMetadata"
 		WHERE "workspaceId" = $1 AND "isActive"
-		ORDER BY "nameSingular"`, workspaceID)
+		ORDER BY "nameSingular" COLLATE "C"`, workspaceID)
 	if err != nil {
 		return nil, fmt.Errorf("query objects: %w", err)
 	}
@@ -100,7 +100,7 @@ func loadColumns(ctx context.Context, pool *pgxpool.Pool, schema string, objects
 		SELECT table_name, column_name, is_generated = 'ALWAYS'
 		FROM information_schema.columns
 		WHERE table_schema = $1
-		ORDER BY table_name, ordinal_position`, schema)
+		ORDER BY table_name COLLATE "C", ordinal_position`, schema)
 	if err != nil {
 		return fmt.Errorf("query table columns: %w", err)
 	}
@@ -130,7 +130,7 @@ func loadFields(ctx context.Context, pool *pgxpool.Pool, workspaceID string, byI
 		SELECT "objectMetadataId"::text, name, type, options, settings, "isNullable", "relationTargetObjectMetadataId"::text
 		FROM core."fieldMetadata"
 		WHERE "workspaceId" = $1 AND "isActive"
-		ORDER BY name, id`, workspaceID)
+		ORDER BY name COLLATE "C", id`, workspaceID)
 	if err != nil {
 		return fmt.Errorf("query fields: %w", err)
 	}

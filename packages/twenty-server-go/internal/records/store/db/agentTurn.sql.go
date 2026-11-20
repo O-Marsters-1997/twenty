@@ -30,7 +30,7 @@ type CreateAgentTurnParams struct {
 	CacheCreationTokens        pgtype.Numeric
 	InputCredits               pgtype.Numeric
 	OutputCredits              pgtype.Numeric
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfAgentTurnCreatedBySourceEnum
+	CreatedBySource            string
 	CreatedByWorkspaceMemberId pgtype.UUID
 	CreatedByName              string
 	CreatedByContext           []byte

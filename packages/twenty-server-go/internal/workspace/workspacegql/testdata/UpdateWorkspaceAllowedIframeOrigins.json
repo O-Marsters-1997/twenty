@@ -1,0 +1,9 @@
+{
+  "name": "UpdateWorkspaceAllowedIframeOrigins",
+  "operation": "UpdateWorkspaceAllowedIframeOrigins",
+  "fixture": "active workspace acme with no embedding origins",
+  "endpoint": "/metadata",
+  "query": "mutation UpdateWorkspaceAllowedIframeOrigins($input: UpdateWorkspaceAllowedIframeOriginsInput!) { updateWorkspaceAllowedIframeOrigins(data: $input) { id allowedIframeOrigins } }",
+  "variables": {"input": {"operation": "add", "origin": "https://PORTAL.example.com:443/"}},
+  "response": {"data": {"updateWorkspaceAllowedIframeOrigins": {"id": "20202020-1c25-4d02-bf25-6aeccf7ea419", "allowedIframeOrigins": ["https://portal.example.com"]}}}
+}

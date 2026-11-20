@@ -22,12 +22,12 @@ type CreateWorkflowRunParams struct {
 	EnqueuedAt                 pgtype.Timestamptz
 	StartedAt                  pgtype.Timestamptz
 	EndedAt                    pgtype.Timestamptz
-	Status                     Workspace2abogkkt2zd45pa9aun09djpfWorkflowRunStatusEnum
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfWorkflowRunCreatedBySourceEnum
+	Status                     string
+	CreatedBySource            string
 	CreatedByWorkspaceMemberId pgtype.UUID
 	CreatedByName              string
 	CreatedByContext           []byte
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfWorkflowRunUpdatedBySourceEnum
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte
@@ -188,8 +188,8 @@ type UpdateWorkflowRunParams struct {
 	EnqueuedAt                 pgtype.Timestamptz
 	StartedAt                  pgtype.Timestamptz
 	EndedAt                    pgtype.Timestamptz
-	Status                     Workspace2abogkkt2zd45pa9aun09djpfWorkflowRunStatusEnum
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfWorkflowRunUpdatedBySourceEnum
+	Status                     string
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte

@@ -21,13 +21,13 @@ type CreateWorkflowParams struct {
 	Name                       pgtype.Text
 	LastPublishedVersionId     pgtype.Text
 	CoreWorkflowId             pgtype.UUID
-	Statuses                   []Workspace2abogkkt2zd45pa9aun09djpfWorkflowStatusesEnum
+	Statuses                   []string
 	Position                   float64
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfWorkflowCreatedBySourceEnum
+	CreatedBySource            string
 	CreatedByWorkspaceMemberId pgtype.UUID
 	CreatedByName              string
 	CreatedByContext           []byte
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfWorkflowUpdatedBySourceEnum
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte
@@ -159,9 +159,9 @@ type UpdateWorkflowParams struct {
 	Name                       pgtype.Text
 	LastPublishedVersionId     pgtype.Text
 	CoreWorkflowId             pgtype.UUID
-	Statuses                   []Workspace2abogkkt2zd45pa9aun09djpfWorkflowStatusesEnum
+	Statuses                   []string
 	Position                   float64
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfWorkflowUpdatedBySourceEnum
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte

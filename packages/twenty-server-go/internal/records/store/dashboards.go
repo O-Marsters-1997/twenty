@@ -64,9 +64,9 @@ func (d *Dashboards) Create(ctx context.Context, actor records.Actor, input reco
 	}
 	row, err := d.queries.CreateDashboard(ctx, db.CreateDashboardParams{
 		Title: merged.Title, Position: position, PageLayoutId: merged.PageLayoutId,
-		CreatedBySource:            db.Workspace2abogkkt2zd45pa9aun09djpfDashboardCreatedBySourceEnum(actor.Source),
+		CreatedBySource:            actor.Source,
 		CreatedByWorkspaceMemberId: memberID, CreatedByName: actor.Name,
-		UpdatedBySource:            db.Workspace2abogkkt2zd45pa9aun09djpfDashboardUpdatedBySourceEnum(actor.Source),
+		UpdatedBySource:            actor.Source,
 		UpdatedByWorkspaceMemberId: memberID, UpdatedByName: actor.Name,
 	})
 	if err != nil {
@@ -103,7 +103,7 @@ func (d *Dashboards) Update(ctx context.Context, actor records.Actor, id string,
 	}
 	row, err := d.queries.WithTx(tx).UpdateDashboard(ctx, db.UpdateDashboardParams{
 		Title: merged.Title, Position: current.Position, PageLayoutId: merged.PageLayoutId,
-		UpdatedBySource:            db.Workspace2abogkkt2zd45pa9aun09djpfDashboardUpdatedBySourceEnum(actor.Source),
+		UpdatedBySource:            actor.Source,
 		UpdatedByWorkspaceMemberId: memberID, UpdatedByName: actor.Name, UpdatedByContext: current.UpdatedByContext, ID: uuid,
 	})
 	if err != nil {

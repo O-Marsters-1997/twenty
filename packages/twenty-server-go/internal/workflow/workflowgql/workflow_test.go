@@ -123,7 +123,7 @@ func (h harness) seed(t *testing.T) {
 		{"b0000000-0000-4000-8000-000000000003", "a0000000-0000-4000-8000-000000000003", "ACTIVE", "2026-01-01T00:00:00Z"},
 	} {
 		h.exec(t, `INSERT INTO core."workflowVersion" (id, "coreWorkflowId", status, "workspaceId", "universalIdentifier", "applicationId", triggers, steps, "createdAt")
-			VALUES ($2::uuid, $3::uuid, $4::text::core."workflowVersion_status_enum", $1, gen_random_uuid(), `+application+`, '[{"type":"MANUAL"}]', '[{"id":"s1"}]', $5::timestamptz)`,
+			VALUES ($2::uuid, $3::uuid, $4::text, $1, gen_random_uuid(), `+application+`, '[{"type":"MANUAL"}]', '[{"id":"s1"}]', $5::timestamptz)`,
 			workspace.PinnedWorkspaceID, v.id, v.workflow, v.status, v.at)
 	}
 
@@ -134,7 +134,7 @@ func (h harness) seed(t *testing.T) {
 		{formRunID, "RUNNING", `{"stepInfos":{"` + formStepID + `":{"status":"PENDING"}},"flow":{"steps":` + form + `}}`},
 		{doneRunID, "COMPLETED", `{"stepInfos":{},"flow":{"steps":[{"id":"s1"}]}}`},
 	} {
-		h.exec(t, `INSERT INTO `+schema+`"workflowRun" (id, status, state) VALUES ($1::uuid, $2::text::`+schema+`"workflowRun_status_enum", $3::jsonb)`, run.id, run.status, run.state)
+		h.exec(t, `INSERT INTO `+schema+`"workflowRun" (id, status, state) VALUES ($1::uuid, $2::text, $3::jsonb)`, run.id, run.status, run.state)
 	}
 }
 

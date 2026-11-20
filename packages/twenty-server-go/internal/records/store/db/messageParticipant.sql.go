@@ -18,16 +18,16 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "creat
 `
 
 type CreateMessageParticipantParams struct {
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfMessageParticipantCreatedBySourceEnum
+	CreatedBySource            string
 	CreatedByWorkspaceMemberId pgtype.UUID
 	CreatedByName              string
 	CreatedByContext           []byte
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfMessageParticipantUpdatedBySourceEnum
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte
 	Position                   float64
-	Role                       Workspace2abogkkt2zd45pa9aun09djpfMessageParticipantRoleEnum
+	Role                       string
 	Handle                     pgtype.Text
 	DisplayName                pgtype.Text
 	MessageCampaignId          pgtype.UUID
@@ -168,12 +168,12 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "creat
 `
 
 type UpdateMessageParticipantParams struct {
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfMessageParticipantUpdatedBySourceEnum
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte
 	Position                   float64
-	Role                       Workspace2abogkkt2zd45pa9aun09djpfMessageParticipantRoleEnum
+	Role                       string
 	Handle                     pgtype.Text
 	DisplayName                pgtype.Text
 	MessageCampaignId          pgtype.UUID
