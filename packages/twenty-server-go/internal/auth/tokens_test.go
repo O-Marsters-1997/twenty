@@ -7,6 +7,7 @@ import (
 	"os"
 	"slices"
 	"testing"
+	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/go-cmp/cmp"
@@ -157,6 +158,58 @@ func TestPGIssuer_IssueAccess(t *testing.T) {
 	}
 	if diff := cmp.Diff(principal, verified); diff != "" {
 		t.Errorf("Verify(issued token) principal (-want +got):\n%s", diff)
+	}
+}
+
+func TestPGIssuer_IssuePlayground(t *testing.T) {
+	t.Parallel()
+	env := newTokenEnv(t)
+	principal := auth.Principal{
+		UserID:            env.node.UserID,
+		WorkspaceID:       env.node.WorkspaceID,
+		UserWorkspaceID:   env.node.UserWorkspaceID,
+		WorkspaceMemberID: workspaceMemberID,
+		AuthProvider:      "password",
+	}
+
+	token, _, err := env.issuer.IssuePlayground(t.Context(), principal, time.Hour)
+	if err != nil {
+		t.Fatalf("IssuePlayground() error = %v", err)
+	}
+	if got, _ := decodeClaims(t, token); got["type"] != "PLAYGROUND" {
+		t.Errorf("IssuePlayground() type = %v, want PLAYGROUND", got["type"])
+	}
+	verified, err := env.verifier.Verify(t.Context(), token)
+	if err != nil {
+		t.Fatalf("Verify(playground token) error = %v", err)
+	}
+	principal.Playground = true
+	if diff := cmp.Diff(principal, verified); diff != "" {
+		t.Errorf("Verify(playground token) principal (-want +got):\n%s", diff)
+	}
+}
+
+func TestPGIssuer_IssueAPIKey(t *testing.T) {
+	t.Parallel()
+	env := newTokenEnv(t)
+	const apiKeyID = "44444444-4444-4444-8444-444444444444"
+	env.exec(t, `INSERT INTO core."apiKey" (id, name, "expiresAt", "workspaceId") VALUES ($1, 'key', now() + interval '1 day', $2)`, apiKeyID, env.node.WorkspaceID)
+
+	token, err := env.issuer.IssueAPIKey(t.Context(), env.node.WorkspaceID, apiKeyID, time.Now().Add(time.Hour))
+	if err != nil {
+		t.Fatalf("IssueAPIKey() error = %v", err)
+	}
+	got, _ := decodeClaims(t, token)
+	if got["type"] != "API_KEY" || got["jti"] != apiKeyID || got["sub"] != env.node.WorkspaceID {
+		t.Errorf("IssueAPIKey() claims = %v, want type API_KEY, jti the key, sub the workspace", got)
+	}
+	verified, err := env.verifier.Verify(t.Context(), token)
+	if err != nil {
+		t.Fatalf("Verify(api key token) error = %v", err)
+	}
+	want := auth.Principal{WorkspaceID: env.node.WorkspaceID, APIKeyID: apiKeyID}
+	if diff := cmp.Diff(want, verified); diff != "" {
+		t.Errorf("Verify(api key token) principal (-want +got):\n%s", diff)
 	}
 }
 

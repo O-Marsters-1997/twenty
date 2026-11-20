@@ -1,0 +1,16 @@
+{
+  "name": "GetApiKey",
+  "operation": "GetApiKey",
+  "fixture": "active API key holding an assignable role",
+  "endpoint": "/metadata",
+  "query": "query GetApiKey($input: GetApiKeyInput!) { apiKey(input: $input) { id name expiresAt revokedAt role { id label icon } createdAt } }",
+  "variables": {"input": {"id": "<ignored>"}},
+  "response": {"data": {"apiKey": {
+    "id": "<ignored>",
+    "name": "CI",
+    "expiresAt": "2030-01-01T00:00:00.000Z",
+    "revokedAt": null,
+    "role": {"id": "<ignored>", "label": "Integrator", "icon": null},
+    "createdAt": "<ignored>"
+  }}}
+}

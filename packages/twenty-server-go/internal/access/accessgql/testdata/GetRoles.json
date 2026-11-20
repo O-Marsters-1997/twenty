@@ -1,0 +1,30 @@
+{
+  "name": "GetRoles",
+  "operation": "GetRoles",
+  "fixture": "seeded Admin and Member roles plus two harness roles with no targets, permissions or predicates",
+  "endpoint": "/metadata",
+  "query": "query GetRoles { getRoles { id label description icon canUpdateAllSettings canAccessAllTools isEditable canReadAllObjectRecords canUpdateAllObjectRecords canSoftDeleteAllObjectRecords canDestroyAllObjectRecords canBeAssignedToUsers canBeAssignedToAgents canBeAssignedToApiKeys workspaceMembers { id name { firstName lastName } avatarUrl userEmail userId userWorkspaceId } agents { id name label description icon prompt modelId responseFormat roleId isCustom isSystem modelConfiguration triggers applicationId createdAt updatedAt } apiKeys { id name expiresAt revokedAt } permissionFlags { id flag roleId } objectPermissions { objectMetadataId canReadObjectRecords canUpdateObjectRecords canSoftDeleteObjectRecords canDestroyObjectRecords restrictedFields } fieldPermissions { objectMetadataId fieldMetadataId canReadFieldValue canUpdateFieldValue id roleId } rowLevelPermissionPredicates { id fieldMetadataId objectMetadataId operand subFieldName workspaceMemberFieldMetadataId workspaceMemberSubFieldName rowLevelPermissionPredicateGroupId positionInRowLevelPermissionPredicateGroup roleId value } rowLevelPermissionPredicateGroups { id parentRowLevelPermissionPredicateGroupId logicalOperator positionInRowLevelPermissionPredicateGroup roleId objectMetadataId } } }",
+  "variables": {},
+  "response": {"data": {"getRoles": [
+    {"id": "25e5d967-e3b2-434e-bbd6-53a6181cf580", "label": "Admin", "description": "Admin role", "icon": "IconUserCog",
+     "canUpdateAllSettings": true, "canAccessAllTools": true, "isEditable": false, "canReadAllObjectRecords": true, "canUpdateAllObjectRecords": true,
+     "canSoftDeleteAllObjectRecords": true, "canDestroyAllObjectRecords": true, "canBeAssignedToUsers": true, "canBeAssignedToAgents": false, "canBeAssignedToApiKeys": true,
+     "workspaceMembers": [], "agents": [], "apiKeys": [], "permissionFlags": [], "objectPermissions": [], "fieldPermissions": [],
+     "rowLevelPermissionPredicates": [], "rowLevelPermissionPredicateGroups": []},
+    {"id": "f4cc34a9-a20e-418f-8c5c-78b7b1c77881", "label": "Member", "description": "Member role", "icon": "IconUser",
+     "canUpdateAllSettings": false, "canAccessAllTools": true, "isEditable": true, "canReadAllObjectRecords": true, "canUpdateAllObjectRecords": true,
+     "canSoftDeleteAllObjectRecords": true, "canDestroyAllObjectRecords": true, "canBeAssignedToUsers": true, "canBeAssignedToAgents": false, "canBeAssignedToApiKeys": false,
+     "workspaceMembers": [], "agents": [], "apiKeys": [], "permissionFlags": [], "objectPermissions": [], "fieldPermissions": [],
+     "rowLevelPermissionPredicates": [], "rowLevelPermissionPredicateGroups": []},
+    {"id": "<ignored>", "label": "Workspace admin", "description": null, "icon": null,
+     "canUpdateAllSettings": true, "canAccessAllTools": false, "isEditable": true, "canReadAllObjectRecords": false, "canUpdateAllObjectRecords": false,
+     "canSoftDeleteAllObjectRecords": false, "canDestroyAllObjectRecords": false, "canBeAssignedToUsers": true, "canBeAssignedToAgents": true, "canBeAssignedToApiKeys": false,
+     "workspaceMembers": [], "agents": [], "apiKeys": [], "permissionFlags": [], "objectPermissions": [], "fieldPermissions": [],
+     "rowLevelPermissionPredicates": [], "rowLevelPermissionPredicateGroups": []},
+    {"id": "<ignored>", "label": "Plain member", "description": null, "icon": null,
+     "canUpdateAllSettings": false, "canAccessAllTools": false, "isEditable": true, "canReadAllObjectRecords": false, "canUpdateAllObjectRecords": false,
+     "canSoftDeleteAllObjectRecords": false, "canDestroyAllObjectRecords": false, "canBeAssignedToUsers": true, "canBeAssignedToAgents": true, "canBeAssignedToApiKeys": false,
+     "workspaceMembers": [], "agents": [], "apiKeys": [], "permissionFlags": [], "objectPermissions": [], "fieldPermissions": [],
+     "rowLevelPermissionPredicates": [], "rowLevelPermissionPredicateGroups": []}
+  ]}}
+}
