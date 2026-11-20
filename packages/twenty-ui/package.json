@@ -92,6 +92,7 @@
   },
   "files": [
     "dist",
+    "src/theme/*.stylex.ts",
     "LICENSE",
     "!dist/individual",
     "!dist/individual/**",
@@ -223,7 +224,10 @@
       "types": "./dist/utilities/index.d.ts",
       "import": "./dist/utilities.mjs",
       "require": "./dist/utilities.cjs"
-    }
+    },
+    "./theme/tokens.stylex": "./src/theme/tokens.stylex.ts",
+    "./theme/themes.stylex": "./src/theme/themes.stylex.ts",
+    "./theme/constants.stylex": "./src/theme/constants.stylex.ts"
   },
   "typesVersions": {
     "*": {

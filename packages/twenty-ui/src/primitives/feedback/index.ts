@@ -7,11 +7,6 @@
  *                              |___/
  */
 
-export {
-  bannerStyles,
-  bannerColorStyles,
-  bannerActionStyles,
-} from './Banner/Banner.stylex';
 export { Banner } from './Banner/Banner';
 export type { BannerActionProps } from './Banner/types/BannerActionProps';
 export type { BannerColor } from './Banner/types/BannerColor';
@@ -19,7 +14,6 @@ export type { BannerProps } from './Banner/types/BannerProps';
 export type { BannerState } from './Banner/types/BannerState';
 export type { BannerStatus } from './Banner/types/BannerStatus';
 export type { BannerVariant } from './Banner/types/BannerVariant';
-export { loaderStyles } from './Loader/Loader.stylex';
 export { Loader } from './Loader/Loader';
 export type { LoaderProps } from './Loader/types/LoaderProps';
 export { Progress } from './Progress/Progress';
@@ -34,19 +28,10 @@ export type { ProgressTrackProps } from './Progress/types/ProgressTrackProps';
 export type { ProgressTrackState } from './Progress/types/ProgressTrackState';
 export type { ProgressValueProps } from './Progress/types/ProgressValueProps';
 export type { ProgressValueState } from './Progress/types/ProgressValueState';
-export {
-  progressBarVars,
-  progressBarStyles,
-} from './ProgressBar/ProgressBar.stylex';
 export { ProgressBar } from './ProgressBar/ProgressBar';
 export type { ProgressBarProps } from './ProgressBar/types/ProgressBarProps';
-export {
-  progressRingVars,
-  progressRingStyles,
-} from './ProgressRing/ProgressRing.stylex';
 export { ProgressRing } from './ProgressRing/ProgressRing';
 export type { ProgressRingProps } from './ProgressRing/types/ProgressRingProps';
 export { SKELETON_HEIGHT_SIZES } from './Skeleton/constants/SKELETON_HEIGHT_SIZES';
-export { skeletonStyles } from './Skeleton/Skeleton.stylex';
 export { Skeleton } from './Skeleton/Skeleton';
 export type { SkeletonProps } from './Skeleton/types/SkeletonProps';

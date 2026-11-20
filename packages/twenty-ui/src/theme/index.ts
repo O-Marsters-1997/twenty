@@ -7,7 +7,6 @@
  *                              |___/
  */
 
-export { media } from './constants.stylex';
 export { ANIMATION } from './constants/Animation';
 export type { AnimationDuration } from './constants/AnimationDuration';
 export { DEFAULT_THEME_COLOR_FALLBACK } from './constants/DefaultThemeColorFallback';
@@ -25,46 +24,7 @@ export { themeCssVariables } from './themeCssVariables';
 export type { ThemeOverrides } from './ThemeOverrides';
 export { ThemeProvider } from './ThemeProvider';
 export type { ThemeProviderProps } from './ThemeProviderProps';
-export { darkTheme } from './themes.stylex';
 export type { ThemeType } from './themeTypes';
-export {
-  iconSize,
-  iconStroke,
-  modalSize,
-  textLineHeight,
-  text,
-  tooltip,
-  animationDuration,
-  general,
-  spacing,
-  table,
-  buttons,
-  accent,
-  background,
-  backgroundTransparent,
-  blur,
-  borderColor,
-  borderRadius,
-  boxShadow,
-  fontColor,
-  fontSize,
-  fontWeight,
-  font,
-  snackBarSuccess,
-  snackBarError,
-  snackBarWarning,
-  snackBarInfo,
-  snackBarDefault,
-  tagText,
-  tagBackground,
-  codeText,
-  codeFont,
-  IllustrationIconColor,
-  IllustrationIconFill,
-  grayScale,
-  color,
-  colorTransparent,
-} from './tokens.stylex';
 export { useTheme } from './useTheme';
 export { useThemeColorScheme } from './useThemeColorScheme';
 export { useThemeContainer } from './useThemeContainer';

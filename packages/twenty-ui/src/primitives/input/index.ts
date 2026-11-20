@@ -7,7 +7,6 @@
  *                              |___/
  */
 
-export { autocompleteArrowMarker } from './Autocomplete/Autocomplete.stylex';
 export { Autocomplete } from './Autocomplete/Autocomplete';
 export type { AutocompleteArrowProps } from './Autocomplete/types/AutocompleteArrowProps';
 export type { AutocompleteArrowState } from './Autocomplete/types/AutocompleteArrowState';
@@ -58,7 +57,6 @@ export type { AutocompleteTriggerProps } from './Autocomplete/types/Autocomplete
 export type { AutocompleteTriggerState } from './Autocomplete/types/AutocompleteTriggerState';
 export type { AutocompleteValueProps } from './Autocomplete/types/AutocompleteValueProps';
 export type { AutocompleteValueState } from './Autocomplete/types/AutocompleteValueState';
-export { buttonVars, buttonMarker } from './Button/Button.stylex';
 export { Button } from './Button/Button';
 export type { ButtonColor } from './Button/types/ButtonColor';
 export type { ButtonLoadingPosition } from './Button/types/ButtonLoadingPosition';
@@ -67,14 +65,6 @@ export type { ButtonSize } from './Button/types/ButtonSize';
 export type { ButtonVariant } from './Button/types/ButtonVariant';
 export { ButtonGroup } from './ButtonGroup/ButtonGroup';
 export type { ButtonGroupProps } from './ButtonGroup/types/ButtonGroupProps';
-export {
-  checkboxIndicatorMarker,
-  checkboxStyles,
-  checkboxSizeStyles,
-  checkboxVariantStyles,
-  checkboxShapeStyles,
-  checkboxColorStyles,
-} from './Checkbox/Checkbox.stylex';
 export { Checkbox } from './Checkbox/Checkbox';
 export type { CheckboxColor } from './Checkbox/types/CheckboxColor';
 export type { CheckboxIndicatorProps } from './Checkbox/types/CheckboxIndicatorProps';
@@ -91,12 +81,10 @@ export type { FieldItemProps } from './Field/types/FieldItemProps';
 export type { FieldLabelProps } from './Field/types/FieldLabelProps';
 export type { FieldRootProps } from './Field/types/FieldRootProps';
 export type { FieldValidityProps } from './Field/types/FieldValidityProps';
-export { inputStyles } from './Input/Input.stylex';
 export { Input } from './Input/Input';
 export type { InputProps } from './Input/types/InputProps';
 export { InputGroup } from './InputGroup/InputGroup';
 export type { InputGroupProps } from './InputGroup/types/InputGroupProps';
-export { numberFieldStyles } from './NumberField/NumberField.stylex';
 export { NumberField } from './NumberField/NumberField';
 export type { NumberFieldDecrementProps } from './NumberField/types/NumberFieldDecrementProps';
 export type { NumberFieldDecrementState } from './NumberField/types/NumberFieldDecrementState';
@@ -116,7 +104,6 @@ export type { NumberFieldScrubAreaCursorProps } from './NumberField/types/Number
 export type { NumberFieldScrubAreaCursorState } from './NumberField/types/NumberFieldScrubAreaCursorState';
 export type { NumberFieldScrubAreaProps } from './NumberField/types/NumberFieldScrubAreaProps';
 export type { NumberFieldScrubAreaState } from './NumberField/types/NumberFieldScrubAreaState';
-export { radioRootMarker } from './Radio/Radio.stylex';
 export { Radio } from './Radio/Radio';
 export type { RadioIndicatorProps } from './Radio/types/RadioIndicatorProps';
 export type { RadioIndicatorState } from './Radio/types/RadioIndicatorState';
@@ -128,10 +115,6 @@ export type { RadioGroupChangeEventDetails } from './RadioGroup/types/RadioGroup
 export type { RadioGroupChangeEventReason } from './RadioGroup/types/RadioGroupChangeEventReason';
 export type { RadioGroupProps } from './RadioGroup/types/RadioGroupProps';
 export type { RadioGroupState } from './RadioGroup/types/RadioGroupState';
-export {
-  selectTriggerMarker,
-  selectTriggerStyles,
-} from './Select/Select.stylex';
 export { Select } from './Select/Select';
 export type { SelectArrowProps } from './Select/types/SelectArrowProps';
 export type { SelectArrowState } from './Select/types/SelectArrowState';

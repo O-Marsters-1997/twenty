@@ -26,6 +26,5 @@ export type { ToastProps } from './Toast/types/ToastProps';
 export type { ToastProviderProps } from './Toast/types/ToastProviderProps';
 export type { ToastStatus } from './Toast/types/ToastStatus';
 export type { ToastUpdate } from './Toast/types/ToastUpdate';
-export { toasterVars } from './Toaster/Toaster.stylex';
 export { Toaster } from './Toaster/Toaster';
 export type { ToasterProps } from './Toaster/types/ToasterProps';

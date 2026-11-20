@@ -7,11 +7,6 @@
  *                              |___/
  */
 
-export {
-  avatarVars,
-  avatarSizeStyles,
-  avatarStyles,
-} from './Avatar/Avatar.stylex';
 export { Avatar } from './Avatar/Avatar';
 export { AVATAR_PROPERTIES_BY_SIZE } from './Avatar/constants/AvatarPropertiesBySize';
 export type { AvatarFallbackProps } from './Avatar/types/AvatarFallbackProps';
@@ -24,29 +19,21 @@ export type { AvatarRootProps } from './Avatar/types/AvatarRootProps';
 export type { AvatarRootState } from './Avatar/types/AvatarRootState';
 export type { AvatarShape } from './Avatar/types/AvatarShape';
 export type { AvatarSize } from './Avatar/types/AvatarSize';
-export { badgeStyles } from './Badge/Badge.stylex';
 export { Badge } from './Badge/Badge';
 export type { BadgeColor } from './Badge/types/BadgeColor';
 export type { BadgeProps } from './Badge/types/BadgeProps';
 export type { BadgeShape } from './Badge/types/BadgeShape';
 export type { BadgeSize } from './Badge/types/BadgeSize';
-export { chipVars, chipStyles } from './Chip/Chip.stylex';
 export { Chip } from './Chip/Chip';
 export type { ChipProps } from './Chip/types/ChipProps';
 export type { ChipSize } from './Chip/types/ChipSize';
 export type { ChipVariant } from './Chip/types/ChipVariant';
-export {
-  colorSampleVars,
-  colorSampleStyles,
-} from './ColorSample/ColorSample.stylex';
 export { ColorSample } from './ColorSample/ColorSample';
 export type { ColorSampleProps } from './ColorSample/types/ColorSampleProps';
 export type { ColorSampleVariant } from './ColorSample/types/ColorSampleVariant';
-export { statusVars, statusStyles } from './Status/Status.stylex';
 export { Status } from './Status/Status';
 export type { StatusProps } from './Status/types/StatusProps';
 export type { StatusState } from './Status/types/StatusState';
-export { tagVars, tagStyles } from './Tag/Tag.stylex';
 export { Tag } from './Tag/Tag';
 export type { TagColor } from './Tag/types/TagColor';
 export type { TagProps } from './Tag/types/TagProps';
