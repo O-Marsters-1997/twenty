@@ -893,8 +893,8 @@ type MessageThread {
   deletedAt: DateTime
   id: UUID!
   messageChannelMessageAssociations: MessageChannelMessageAssociationConnection
-  messages: MessageConnection
   messageThreadTargets: MessageThreadTargetConnection
+  messages: MessageConnection
   position: Position!
   searchVector: TSVector
   subject: String
@@ -1464,8 +1464,8 @@ type WorkspaceMember {
   position: Position!
   searchVector: TSVector
   timeFormat: WorkspaceMemberTimeFormatEnum!
-  timelineActivities: TimelineActivityConnection
   timeZone: String!
+  timelineActivities: TimelineActivityConnection
   uiScale: String!
   updatedAt: DateTime!
   updatedBy: Actor!

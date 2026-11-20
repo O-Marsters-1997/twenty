@@ -90,15 +90,15 @@ type PublicWorkspaceDataSummary struct {
 type Query struct {
 }
 
-type TransientToken struct {
-	TransientToken *AuthToken `json:"transientToken"`
-}
-
 type SubdomainAvailability struct {
 	IsValid             bool     `json:"isValid"`
 	Available           bool     `json:"available"`
 	SuggestedSubdomain  string   `json:"suggestedSubdomain"`
 	SuggestedSubdomains []string `json:"suggestedSubdomains"`
+}
+
+type TransientToken struct {
+	TransientToken *AuthToken `json:"transientToken"`
 }
 
 type TwoFactorAuthenticationRecoveryCode struct {

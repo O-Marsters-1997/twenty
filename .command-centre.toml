@@ -1,14 +1,2 @@
 [[checks.all_of]]
-success = "ci-server-go-status-check"
-[[checks.all_of]]
-success = "ci-front-status-check"
-[[checks.all_of]]
-success = "ci-ui-status-check"
-[[checks.all_of]]
-success = "ci-shared-status-check"
-[[checks.all_of]]
-success = "ci-emails-status-check"
-[[checks.all_of]]
-success = "ci-knip-status-check"
-[[checks.all_of]]
-success = "ci-utils-test-status-check"
+success = "ci-status-check"

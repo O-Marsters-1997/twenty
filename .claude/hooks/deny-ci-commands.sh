@@ -10,6 +10,5 @@ deny() {
 matches() { printf '%s\n' "$command" | grep -Eq "$1"; }
 
 matches 'nx (run )?test +twenty-(front|ui)( |$)|nx run twenty-(front|ui):test( |:|$)|nx (run-many|affected).*(-t|--target)[ =]test( |$)' && deny "package-wide nx test"
-matches 'storybook:build[ =]*twenty-ui|nx run twenty-ui:storybook:build|nx (run-many|affected).*storybook:build.*twenty-ui' && deny "twenty-ui storybook:build"
 matches '(^|[^a-z])tsgo( |$)' && ! matches 'scripts/heavy +(npx +)?tsgo' && deny "bare tsgo, run it as 'scripts/heavy npx tsgo ...'"
 exit 0

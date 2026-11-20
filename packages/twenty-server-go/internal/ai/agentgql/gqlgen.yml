@@ -6,11 +6,6 @@ exec:
 model:
   filename: models_gen.go
   package: agentgql
-resolver:
-  layout: single-file
-  filename: resolver.go
-  package: agentgql
-  type: Resolver
 models:
   UUID:
     model: github.com/99designs/gqlgen/graphql.String
