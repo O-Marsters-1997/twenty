@@ -30,10 +30,12 @@ const styles = stylex.create({
   },
 });
 
+type StyledInformationCardProps = ComponentProps<'div'>;
+
 export const StyledInformationCard = ({
   className,
   ...props
-}: StyledInformationCardProps<'div'>) => {
+}: StyledInformationCardProps) => {
   const rootProps = stylex.props(styles.root);
 
   return (

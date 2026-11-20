@@ -9,10 +9,9 @@ const styles = stylex.create({
   },
 });
 
-export const PageContainer = ({
-  className,
-  ...props
-}: PageContainerProps<'div'>) => {
+type PageContainerProps = ComponentProps<'div'>;
+
+export const PageContainer = ({ className, ...props }: PageContainerProps) => {
   const rootProps = stylex.props(styles.container);
 
   return (
