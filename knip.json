@@ -15,6 +15,8 @@
   },
   "workspaces": {
     "packages/twenty-front": {
+      "vite": true,
+      "vitest": true,
       "entry": [
         "src/index.tsx",
         "src/**/graphql/**/*.{ts,tsx}",

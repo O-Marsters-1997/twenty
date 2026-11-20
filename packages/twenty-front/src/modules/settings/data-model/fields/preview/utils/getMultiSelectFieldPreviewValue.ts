@@ -30,7 +30,7 @@ export const getMultiSelectFieldPreviewValue = ({
       (value) =>
         value?.map(stripSimpleQuotesFromString).filter(isNonEmptyString) ?? [],
     )
-    .refine(isNonEmptyArray)
+    .refine((value): boolean => isNonEmptyArray(value))
     .catch(allOptionValues)
     .parse(fieldMetadataItem.defaultValue);
 };

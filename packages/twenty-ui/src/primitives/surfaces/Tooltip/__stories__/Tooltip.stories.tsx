@@ -402,7 +402,14 @@ export const CompoundDisabledControl: Story = {
   render: () => (
     <Tooltip.Root>
       <Tooltip.Trigger
-        render={<span tabIndex={0} aria-label="Unavailable export" />}
+        render={
+          <span
+            role="button"
+            aria-disabled="true"
+            tabIndex={0}
+            aria-label="Unavailable export"
+          />
+        }
       >
         <Button disabled>Export records</Button>
       </Tooltip.Trigger>
