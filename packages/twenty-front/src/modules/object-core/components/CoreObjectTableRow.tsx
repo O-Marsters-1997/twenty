@@ -20,9 +20,11 @@ const styles = stylex.create({
   },
 });
 
-export const CoreObjectTableBody = (
-  props: CoreObjectTableBodyProps<typeof TableBody>,
-) => <TableBody {...props} {...stylex.props(styles.body)} />;
+type CoreObjectTableBodyProps = ComponentProps<typeof TableBody>;
+
+export const CoreObjectTableBody = (props: CoreObjectTableBodyProps) => (
+  <TableBody {...props} {...stylex.props(styles.body)} />
+);
 
 type CoreObjectTableRowProps = ComponentProps<typeof TableRow> & {
   isLast?: boolean;

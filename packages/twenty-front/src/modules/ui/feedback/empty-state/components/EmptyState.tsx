@@ -87,13 +87,19 @@ const EmptyStateRoot = ({
   );
 };
 
+type EmptyStateContentProps = EmptyStateSectionProps;
+
 const EmptyStateContent = ({ children }: EmptyStateContentProps) => (
   <div {...stylex.props(styles.content)}>{children}</div>
 );
 
+type EmptyStateTitleProps = EmptyStateSectionProps;
+
 const EmptyStateTitle = ({ children }: EmptyStateTitleProps) => (
   <div {...stylex.props(styles.title)}>{children}</div>
 );
+
+type EmptyStateDescriptionProps = EmptyStateSectionProps;
 
 const EmptyStateDescription = ({ children }: EmptyStateDescriptionProps) => (
   <div {...stylex.props(styles.description)}>{children}</div>
