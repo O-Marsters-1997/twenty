@@ -1,11 +1,7 @@
 import * as stylex from '@stylexjs/stylex';
 import { type MouseEventHandler, type ReactNode } from 'react';
 import { Link, type LinkProps } from 'react-router-dom';
-import {
-  borderColor,
-  color,
-  fontColor,
-} from 'twenty-ui/theme/tokens.stylex';
+import { borderColor, color, fontColor } from 'twenty-ui/theme/tokens.stylex';
 
 type SettingsTextLinkVariant = 'primary' | 'secondary';
 
@@ -30,53 +26,53 @@ type SettingsTextLinkProps =
 
 const styles = stylex.create({
   base: {
-    backgroundColor: 'transparent',
+    font: 'inherit',
     borderWidth: 0,
+    overflow: 'hidden',
+    backgroundColor: 'transparent',
     cursor: {
       default: 'pointer',
       ':disabled': 'not-allowed',
     },
-    font: 'inherit',
-    marginBottom: 0,
-    marginLeft: 0,
-    marginRight: 0,
-    marginTop: 0,
     opacity: {
       default: null,
       ':disabled': 0.5,
     },
-    overflow: 'hidden',
-    paddingBottom: 0,
-    paddingLeft: 0,
-    paddingRight: 0,
-    paddingTop: 0,
     textDecorationLine: 'underline',
     textOverflow: 'ellipsis',
     textUnderlineOffset: '2px',
     whiteSpace: 'nowrap',
+    marginBottom: 0,
+    marginLeft: 0,
+    marginRight: 0,
+    marginTop: 0,
+    paddingBottom: 0,
+    paddingLeft: 0,
+    paddingRight: 0,
+    paddingTop: 0,
   },
   primary: {
     color: {
       default: fontColor['--t-font-color-primary'],
-      ':hover': color['--t-color-blue'],
       ':disabled': fontColor['--t-font-color-primary'],
+      ':hover': color['--t-color-blue'],
     },
     textDecorationColor: {
       default: borderColor['--t-border-color-strong'],
-      ':hover': color['--t-color-blue'],
       ':disabled': borderColor['--t-border-color-strong'],
+      ':hover': color['--t-color-blue'],
     },
   },
   secondary: {
     color: {
       default: fontColor['--t-font-color-tertiary'],
-      ':hover': color['--t-color-blue'],
       ':disabled': fontColor['--t-font-color-tertiary'],
+      ':hover': color['--t-color-blue'],
     },
     textDecorationColor: {
       default: fontColor['--t-font-color-tertiary'],
-      ':hover': color['--t-color-blue'],
       ':disabled': fontColor['--t-font-color-tertiary'],
+      ':hover': color['--t-color-blue'],
     },
   },
 });

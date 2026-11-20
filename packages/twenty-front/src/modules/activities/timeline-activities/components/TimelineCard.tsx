@@ -16,12 +16,12 @@ import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   mainContainer: {
+    gap: spacing['--t-spacing-4'],
     alignItems: 'flex-start',
     alignSelf: 'stretch',
     borderTopColor: borderColor['--t-border-color-medium'],
     borderTopStyle: { default: 'none', [media.mobile]: 'solid' },
     borderTopWidth: 1,
-    gap: spacing['--t-spacing-4'],
   },
   sidePanelPlaceholderWrapper: {
     paddingTop: spacing['--t-spacing-8'],

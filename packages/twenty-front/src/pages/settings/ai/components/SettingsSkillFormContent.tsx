@@ -32,14 +32,14 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   formContainer: {
+    gap: spacing['--t-spacing-4'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-4'],
   },
   iconNameRow: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'flex-start',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
   },
   nameContainer: {
     flex: '1',
@@ -48,9 +48,9 @@ const styles = stylex.create({
     paddingTop: spacing['--t-spacing-4'],
   },
   advancedSettingsContainer: {
+    gap: spacing['--t-spacing-4'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-4'],
     width: '100%',
   },
 });

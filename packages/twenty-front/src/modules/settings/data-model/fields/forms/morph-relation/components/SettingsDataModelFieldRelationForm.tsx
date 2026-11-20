@@ -41,8 +41,8 @@ const styles = stylex.create({
     marginBottom: spacing['--t-spacing-1'],
   },
   selectsContainer: {
-    display: 'grid',
     gap: spacing['--t-spacing-4'],
+    display: 'grid',
     gridTemplateColumns: '1fr 1fr',
     marginBottom: spacing['--t-spacing-4'],
   },
@@ -50,8 +50,8 @@ const styles = stylex.create({
     gridTemplateColumns: '1fr',
   },
   inputsContainer: {
-    display: 'flex',
     gap: spacing['--t-spacing-2'],
+    display: 'flex',
     width: '100%',
   },
 });

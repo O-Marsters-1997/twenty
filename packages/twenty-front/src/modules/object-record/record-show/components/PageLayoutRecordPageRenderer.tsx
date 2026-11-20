@@ -21,15 +21,15 @@ import { background } from 'twenty-ui/theme/tokens.stylex';
 const styles = stylex.create({
   showPageBannerContainer: {
     flexShrink: '0',
-    zIndex: '1',
+    zIndex: 1,
   },
   showPageRightContainer: {
-    display: 'flex',
     flex: '1',
+    overflow: 'hidden',
+    display: 'flex',
     flexDirection: 'column',
     justifyContent: 'start',
     minHeight: '0',
-    overflow: 'hidden',
     width: '100%',
   },
   contentContainer: {

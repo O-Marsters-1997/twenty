@@ -26,8 +26,8 @@ import { useSetAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useSe
 
 const styles = stylex.create({
   indexContainer: {
-    display: 'flex',
     flex: '1',
+    display: 'flex',
     minHeight: 0,
     width: '100%',
   },

@@ -16,9 +16,9 @@ type WorkflowFormFieldSettingsNumberProps = {
 
 const styles = stylex.create({
   container: {
+    gap: spacing['--t-spacing-2'],
     display: 'flex',
     flexDirection: 'row',
-    gap: spacing['--t-spacing-2'],
   },
 });
 

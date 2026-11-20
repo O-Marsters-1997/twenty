@@ -15,9 +15,9 @@ const styles = stylex.create({
   },
   dotContainer: {
     display: 'flex',
+    position: 'absolute',
     height: '100%',
     left: `calc(-1 * ${spacing['--t-spacing-5']})`,
-    position: 'absolute',
   },
   dotContainerTop: {
     alignItems: 'stretch',

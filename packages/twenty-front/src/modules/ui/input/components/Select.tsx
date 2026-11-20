@@ -17,7 +17,12 @@ import { isNonEmptyArray, isNonEmptyString } from '@sniptt/guards';
 import { isDefined } from 'twenty-shared/utils';
 import { normalizeSearchText } from 'twenty-ui/utilities';
 import * as stylex from '@stylexjs/stylex';
-import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   container: {
@@ -158,7 +163,9 @@ export const Select = <TValue extends SelectValue>({
         onBlur?.();
       }}
     >
-      {isNonEmptyString(label) && <span {...stylex.props(styles.label)}>{label}</span>}
+      {isNonEmptyString(label) && (
+        <span {...stylex.props(styles.label)}>{label}</span>
+      )}
       {isDisabled ? (
         <SelectControl
           renderAsTag={renderAsTag}

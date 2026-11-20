@@ -17,9 +17,9 @@ import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   nameCell: {
+    gap: spacing['--t-spacing-1'],
     color: fontColor['--t-font-color-primary'],
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
   },
   assignedToCell: {
     display: 'flex',

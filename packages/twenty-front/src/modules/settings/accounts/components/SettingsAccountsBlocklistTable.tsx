@@ -18,9 +18,9 @@ const styles = stylex.create({
     marginTop: spacing['--t-spacing-4'],
   },
   tableBodyContainer: {
-    borderBottomWidth: '1px',
-    borderBottomStyle: 'solid',
     borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
   },
 });
 

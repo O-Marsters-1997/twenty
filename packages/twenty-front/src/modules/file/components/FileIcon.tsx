@@ -19,20 +19,20 @@ const THUMBNAIL_SIZE_PX_BY_FILE_ICON_SIZE: Record<FileIconSize, number> = {
 
 const styles = stylex.create({
   iconContainer: (background: string) => ({
-    alignItems: 'center',
     background,
+    padding: '5px',
     borderRadius: borderRadius['--t-border-radius-sm'],
+    alignItems: 'center',
     color: grayScale['--t-gray-scale-gray1'],
     display: 'flex',
     flexShrink: 0,
     justifyContent: 'center',
-    padding: '5px',
   }),
   thumbnail: (sizePx: number) => ({
     borderRadius: borderRadius['--t-border-radius-sm'],
     flexShrink: 0,
-    height: sizePx,
     objectFit: 'cover',
+    height: sizePx,
     width: sizePx,
   }),
 });

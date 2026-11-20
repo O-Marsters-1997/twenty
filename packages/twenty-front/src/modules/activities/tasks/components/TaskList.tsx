@@ -16,11 +16,11 @@ type TaskListProps = {
 
 const styles = stylex.create({
   titleBar: {
+    placeItems: 'center',
     display: 'flex',
     justifyContent: 'space-between',
     marginBottom: spacing['--t-spacing-3'],
     marginTop: spacing['--t-spacing-4'],
-    placeItems: 'center',
     width: '100%',
   },
   titleBarFirst: {

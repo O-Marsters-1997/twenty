@@ -60,9 +60,9 @@ const styles = stylex.create({
     whiteSpace: 'nowrap',
   },
   searchContainer: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
     paddingBottom: spacing['--t-spacing-2'],
   },
   tableRows: {

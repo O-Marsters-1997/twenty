@@ -9,19 +9,19 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 const styles = stylex.create({
   actions: {
     alignItems: 'center',
-    bottom: spacing['--t-spacing-0_5'],
     display: 'flex',
     opacity: {
       default: '0',
-      [stylex.when.ancestor(':hover', rowMarker)]: '1',
       [stylex.when.ancestor(':focus-within', rowMarker)]: '1',
+      [stylex.when.ancestor(':hover', rowMarker)]: '1',
     },
     pointerEvents: {
       default: 'none',
-      [stylex.when.ancestor(':hover', rowMarker)]: 'auto',
       [stylex.when.ancestor(':focus-within', rowMarker)]: 'auto',
+      [stylex.when.ancestor(':hover', rowMarker)]: 'auto',
     },
     position: 'absolute',
+    bottom: spacing['--t-spacing-0_5'],
     right: spacing['--t-spacing-0_5'],
   },
 });

@@ -3,7 +3,11 @@ import { useSpreadsheetImportInitialStep } from '@/spreadsheet-import/hooks/useS
 import { useSpreadsheetImportInternal } from '@/spreadsheet-import/hooks/useSpreadsheetImportInternal';
 import * as stylex from '@stylexjs/stylex';
 import { media } from 'twenty-ui/theme/constants.stylex';
-import { background, borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  background,
+  borderColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 import { StepBar } from '@/ui/navigation/step-bar/components/StepBar';
 import { useStepBar } from '@/ui/navigation/step-bar/hooks/useStepBar';
@@ -58,17 +62,17 @@ export const SpreadsheetImportStepperContainer = () => {
 
 const styles = stylex.create({
   header: {
-    alignItems: 'center',
     background: background['--t-background-secondary'],
-    borderBottomWidth: '1px',
-    borderBottomStyle: 'solid',
-    borderBottomColor: borderColor['--t-border-color-medium'],
-    flexDirection: 'row',
-    height: '60px',
     paddingBlock: 0,
     paddingInline: {
       default: spacing['--t-spacing-30'],
       [media.mobile]: spacing['--t-spacing-4'],
     },
+    alignItems: 'center',
+    flexDirection: 'row',
+    borderBottomColor: borderColor['--t-border-color-medium'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
+    height: '60px',
   },
 });

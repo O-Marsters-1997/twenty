@@ -61,8 +61,8 @@ const styles = stylex.create({
   logo: {
     backgroundImage: "url('/images/integrations/twenty-logo.svg')",
     backgroundSize: 'cover',
-    height: spacing['--t-spacing-6'],
     opacity: '0.4',
+    height: spacing['--t-spacing-6'],
     width: spacing['--t-spacing-6'],
   },
 });

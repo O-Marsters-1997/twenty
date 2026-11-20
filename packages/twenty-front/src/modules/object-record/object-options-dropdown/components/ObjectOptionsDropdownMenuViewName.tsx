@@ -18,36 +18,36 @@ import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   dropdownMenuIconAndNameContainer: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
     marginLeft: '0',
     marginRight: '0',
   },
   menuTitleContainer: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
-    paddingTop: spacing['--t-spacing-1'],
-    paddingRight: spacing['--t-spacing-1'],
     paddingBottom: spacing['--t-spacing-1'],
     paddingLeft: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingTop: spacing['--t-spacing-1'],
   },
   menuIconContainer: {
     alignItems: 'center',
     color: fontColor['--t-font-color-primary'],
     display: 'flex',
-    height: spacing['--t-spacing-6'],
     justifyContent: 'center',
+    height: spacing['--t-spacing-6'],
     width: spacing['--t-spacing-6'],
   },
   mainText: {
+    overflow: 'hidden',
     color: fontColor['--t-font-color-primary'],
     flexShrink: '0',
-    maxWidth: '100%',
-    overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
+    maxWidth: '100%',
   },
 });
 

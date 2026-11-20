@@ -62,16 +62,16 @@ export type TitleInputProps = CommonInputProps &
 
 const styles = stylex.create({
   title: {
-    alignItems: 'center',
-    backgroundColor: 'inherit',
     borderRadius: borderRadius['--t-border-radius-md'],
     borderStyle: 'none',
-    boxSizing: 'border-box',
-    color: fontColor['--t-font-color-primary'],
-    display: 'flex',
     overflow: 'hidden',
     paddingBlock: spacing['--t-spacing-0'],
     paddingInline: 5,
+    alignItems: 'center',
+    backgroundColor: 'inherit',
+    boxSizing: 'border-box',
+    color: fontColor['--t-font-color-primary'],
+    display: 'flex',
   },
   clickable: {
     backgroundColor: {

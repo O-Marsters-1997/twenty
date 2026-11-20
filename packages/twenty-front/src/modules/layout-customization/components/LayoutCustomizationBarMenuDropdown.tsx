@@ -7,10 +7,7 @@ import { GenericDropdownContentWidth } from '@/ui/layout/dropdown/constants/Gene
 import { LightIconButton } from 'twenty-ui/components/input';
 import { Dropdown } from 'twenty-ui/components/navigation';
 import * as stylex from '@stylexjs/stylex';
-import {
-  backgroundTransparent,
-  color,
-} from 'twenty-ui/theme/tokens.stylex';
+import { backgroundTransparent, color } from 'twenty-ui/theme/tokens.stylex';
 
 import { RESET_RECORD_PAGE_LAYOUT_MODAL_ID } from '@/layout-customization/constants/ResetRecordPageLayoutModalId';
 import { useDialog } from '@/ui/layout/dialog/hooks/useDialog';

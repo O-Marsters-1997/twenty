@@ -1,11 +1,7 @@
 import { type NavigationDrawerSubItemState } from '@/ui/navigation/navigation-drawer/types/NavigationDrawerSubItemState';
 import * as stylex from '@stylexjs/stylex';
 import { media } from 'twenty-ui/theme/constants.stylex';
-import {
-  borderColor,
-  fontColor,
-  spacing,
-} from 'twenty-ui/theme/tokens.stylex';
+import { borderColor, fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 import './NavigationDrawerItemBreadcrumb.css';
 
 export type NavigationDrawerItemBreadcrumbProps = {
@@ -14,42 +10,42 @@ export type NavigationDrawerItemBreadcrumbProps = {
 
 const styles = stylex.create({
   container: {
+    marginInlineEnd: spacing['--t-spacing-2'],
+    marginInlineStart: '7.5px',
+    position: 'relative',
     height: {
       default: spacing['--t-spacing-7'],
       [media.mobile]: spacing['--t-spacing-8'],
     },
-    marginInlineEnd: spacing['--t-spacing-2'],
-    marginInlineStart: '7.5px',
-    position: 'relative',
     width: '9px',
   },
   gapVerticalLine: {
     backgroundColor: borderColor['--t-border-color-strong'],
-    height: '2px',
     position: 'absolute',
+    height: '2px',
     top: '-2px',
     width: '1px',
   },
   secondaryFullVerticalBar: {
     backgroundColor: borderColor['--t-border-color-strong'],
-    height: '100%',
     position: 'absolute',
+    height: '100%',
     top: 0,
     width: '1px',
   },
   roundedProtrusion: {
-    borderBottomWidth: '1px',
     borderColor: borderColor['--t-border-color-strong'],
+    borderStyle: 'solid',
     borderEndStartRadius: '4px',
     borderInlineEndWidth: 0,
     borderInlineStartWidth: '1px',
-    borderStyle: 'solid',
+    position: 'absolute',
+    zIndex: 'auto',
+    borderBottomWidth: '1px',
     borderTopWidth: 0,
     height: '14px',
-    position: 'absolute',
     top: 0,
     width: '8px',
-    zIndex: 'auto',
   },
   darkerBackground: {
     backgroundColor: fontColor['--t-font-color-tertiary'],

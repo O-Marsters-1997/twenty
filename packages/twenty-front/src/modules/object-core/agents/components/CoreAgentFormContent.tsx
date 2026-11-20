@@ -45,10 +45,10 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   contentContainer: {
-    display: 'flex',
     flex: '1',
-    flexDirection: 'column',
     gap: spacing['--t-spacing-8'],
+    display: 'flex',
+    flexDirection: 'column',
     width: '100%',
   },
 });

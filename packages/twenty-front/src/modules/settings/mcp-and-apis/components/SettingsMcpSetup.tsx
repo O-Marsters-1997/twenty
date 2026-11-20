@@ -19,18 +19,18 @@ import { media } from 'twenty-ui/theme/constants.stylex';
 
 const styles = stylex.create({
   mcpEditorHeaderTitle: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
   },
   mcpSetupContainer: {
+    gap: spacing['--t-spacing-10'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-10'],
   },
   cardsGrid: {
-    display: 'grid',
     gap: spacing['--t-spacing-3'],
+    display: 'grid',
     gridTemplateColumns: {
       default: 'repeat(2, minmax(0, 1fr))',
       [media.mobile]: '1fr',

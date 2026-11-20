@@ -1,4 +1,3 @@
-
 import { type ImportedRow } from '@/spreadsheet-import/types';
 
 import { type SpreadsheetColumn } from '@/spreadsheet-import/types/SpreadsheetColumn';
@@ -22,7 +21,9 @@ export const UserTableColumn = ({
     <div {...stylex.props(styles.container)}>
       <span {...stylex.props(styles.value)}>{header}</span>
       {firstDefinedValue && (
-        <span {...stylex.props(styles.example)}>{`ex: ${firstDefinedValue}`}</span>
+        <span
+          {...stylex.props(styles.example)}
+        >{`ex: ${firstDefinedValue}`}</span>
       )}
     </div>
   );
@@ -35,18 +36,18 @@ const styles = stylex.create({
     width: '100%',
   },
   value: {
+    overflow: 'hidden',
     color: fontColor['--t-font-color-primary'],
     fontSize: fontSize['--t-font-size-md'],
     fontWeight: fontWeight['--t-font-weight-medium'],
-    overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
   },
   example: {
+    overflow: 'hidden',
     color: fontColor['--t-font-color-tertiary'],
     fontSize: fontSize['--t-font-size-sm'],
     fontWeight: fontWeight['--t-font-weight-medium'],
-    overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
   },

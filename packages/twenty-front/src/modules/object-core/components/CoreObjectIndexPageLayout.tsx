@@ -13,8 +13,8 @@ import * as stylex from '@stylexjs/stylex';
 
 const styles = stylex.create({
   tableContainer: {
-    height: '100%',
     overflow: 'auto',
+    height: '100%',
     width: '100%',
   },
 });

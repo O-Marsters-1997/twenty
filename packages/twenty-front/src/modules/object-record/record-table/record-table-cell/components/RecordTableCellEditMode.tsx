@@ -33,15 +33,15 @@ const styles = stylex.create({
   editableCellEditModeContainer: {
     alignItems: 'center',
     display: 'flex',
-    height: '100%',
     position: 'absolute',
+    height: '100%',
     width: 'calc(100% + 2px)',
   },
   inputModeOnlyContainer: {
+    overflow: 'hidden',
     alignItems: 'center',
     display: 'flex',
     height: '100%',
-    overflow: 'hidden',
     paddingLeft: '8px',
     width: '100%',
   },

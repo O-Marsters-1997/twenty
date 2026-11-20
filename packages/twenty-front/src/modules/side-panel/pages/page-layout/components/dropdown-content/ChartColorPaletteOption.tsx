@@ -18,9 +18,9 @@ type ChartColorPaletteOptionProps = {
 
 const styles = stylex.create({
   colorSamplesContainer: {
+    gap: spacing['--t-spacing-0_5'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-0_5'],
   },
 });
 

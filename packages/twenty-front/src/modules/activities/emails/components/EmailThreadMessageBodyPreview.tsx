@@ -4,9 +4,9 @@ import { fontColor, fontSize } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   threadMessageBodyPreview: {
+    overflow: 'hidden',
     color: fontColor['--t-font-color-tertiary'],
     fontSize: fontSize['--t-font-size-sm'],
-    overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
   },

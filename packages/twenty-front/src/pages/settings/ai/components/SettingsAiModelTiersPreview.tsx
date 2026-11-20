@@ -31,9 +31,9 @@ const styles = stylex.create({
     borderBottomWidth: '1px',
   },
   mode: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     display: 'inline-flex',
-    gap: spacing['--t-spacing-2'],
     whiteSpace: 'nowrap',
   },
 });

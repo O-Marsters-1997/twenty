@@ -29,8 +29,8 @@ import { NavigationMenuItemInlineEditor } from '@/navigation-menu-item/edit/comp
 
 const styles = stylex.create({
   row: {
-    minWidth: 0,
     position: 'relative',
+    minWidth: 0,
   },
 });
 

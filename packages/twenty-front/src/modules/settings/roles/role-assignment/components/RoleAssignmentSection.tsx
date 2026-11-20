@@ -22,9 +22,9 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   assignToMemberContainer: {
+    paddingBlock: spacing['--t-spacing-2'],
     display: 'flex',
     justifyContent: 'flex-end',
-    paddingBlock: spacing['--t-spacing-2'],
   },
 });
 

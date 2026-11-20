@@ -14,10 +14,10 @@ type EventFieldDiffValueProps = {
 
 const styles = stylex.create({
   eventFieldDiffValue: {
+    overflow: 'hidden',
     alignItems: 'center',
     color: fontColor['--t-font-color-primary'],
     display: 'flex',
-    overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
   },

@@ -16,9 +16,9 @@ const graphTypeOptions = [
 
 const styles = stylex.create({
   chartTypeSelectionContainer: {
+    gap: spacing['--t-spacing-2'],
     display: 'flex',
     flexDirection: 'row',
-    gap: spacing['--t-spacing-2'],
   },
 });
 

@@ -35,20 +35,23 @@ const styles = stylex.create({
     width: onboardingLayout.contentBlockWidth,
   },
   copySetupKeyLink: {
-    alignItems: 'center',
     background: 'none',
     borderStyle: 'none',
-    color: { default: fontColor['--t-font-color-secondary'], ':hover': fontColor['--t-font-color-primary'] },
+    gap: spacing['--t-spacing-1'],
+    textDecoration: 'underline',
+    alignItems: 'center',
+    color: {
+      default: fontColor['--t-font-color-secondary'],
+      ':hover': fontColor['--t-font-color-primary'],
+    },
     cursor: 'pointer',
     display: 'flex',
     fontSize: fontSize['--t-font-size-sm'],
-    gap: spacing['--t-spacing-1'],
     marginTop: spacing['--t-spacing-2'],
-    paddingTop: '0',
-    paddingRight: '0',
     paddingBottom: '0',
     paddingLeft: '0',
-    textDecoration: 'underline',
+    paddingRight: '0',
+    paddingTop: '0',
   },
 });
 
@@ -85,7 +88,10 @@ export const SignInUpTwoFactorAuthenticationProvision = () => {
         <StyledTwoFactorMainContent>
           {!qrCode ? <Loader /> : <QRCode value={qrCode} />}
           {qrCode && (
-            <button onClick={handleCopySetupKey} {...stylex.props(styles.copySetupKeyLink)}>
+            <button
+              onClick={handleCopySetupKey}
+              {...stylex.props(styles.copySetupKeyLink)}
+            >
               <IconCopy size={theme.icon.size.sm} />
               <Trans>Copy Setup Key</Trans>
             </button>

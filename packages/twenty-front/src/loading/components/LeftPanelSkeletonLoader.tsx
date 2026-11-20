@@ -44,38 +44,38 @@ export const LeftPanelSkeletonLoader = () => {
 
 const styles = stylex.create({
   animatedContainer: {
+    overflow: 'hidden',
     boxSizing: 'border-box',
     display: 'flex',
     flexDirection: 'column',
     flexShrink: 0,
     height: '100%',
-    overflow: 'hidden',
     paddingBottom: spacing['--t-spacing-4'],
     paddingLeft: spacing['--t-spacing-2'],
     paddingRight: 0,
     paddingTop: spacing['--t-spacing-2'],
   },
   itemsContainer: {
+    gap: 14,
     display: 'flex',
     flexDirection: 'column',
-    gap: 14,
     minHeight: 0,
     overflowY: 'auto',
     width: '100%',
   },
   skeletonContainer: {
+    gap: 32,
     display: 'flex',
     flexDirection: 'column',
-    gap: 32,
     width: '100%',
   },
   skeletonTitleContainer: {
+    gap: 10,
     alignItems: 'flex-start',
     display: 'flex',
     flexDirection: 'column',
-    gap: 10,
-    height: 32,
     justifyContent: 'center',
+    height: 32,
     width: '100%',
   },
 });

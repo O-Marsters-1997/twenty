@@ -9,24 +9,24 @@ import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   triggerLabel: {
+    flex: '1',
+    gap: spacing['--t-spacing-1'],
+    overflow: 'hidden',
     alignItems: 'center',
     color: fontColor['--t-font-color-primary'],
     display: 'flex',
-    flex: '1',
-    gap: spacing['--t-spacing-1'],
-    marginTop: spacing['--t-spacing-2'],
-    marginRight: spacing['--t-spacing-2'],
-    marginBottom: spacing['--t-spacing-2'],
-    marginLeft: spacing['--t-spacing-2'],
-    overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
-  },
-  placeholderContainer: {
-    marginTop: spacing['--t-spacing-2'],
-    marginRight: spacing['--t-spacing-2'],
     marginBottom: spacing['--t-spacing-2'],
     marginLeft: spacing['--t-spacing-2'],
+    marginRight: spacing['--t-spacing-2'],
+    marginTop: spacing['--t-spacing-2'],
+  },
+  placeholderContainer: {
+    marginBottom: spacing['--t-spacing-2'],
+    marginLeft: spacing['--t-spacing-2'],
+    marginRight: spacing['--t-spacing-2'],
+    marginTop: spacing['--t-spacing-2'],
   },
 });
 

@@ -10,10 +10,10 @@ import { Text } from 'twenty-ui/primitives/typography';
 
 const styles = stylex.create({
   container: {
-    backgroundColor:
-      backgroundTransparent['--t-background-transparent-lighter'],
     paddingBlock: spacing['--t-spacing-1'],
     paddingInline: spacing['--t-spacing-2'],
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
     width: '100%',
   },
   label: {

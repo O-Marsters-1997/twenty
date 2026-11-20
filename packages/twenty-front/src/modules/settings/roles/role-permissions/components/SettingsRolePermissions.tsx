@@ -8,9 +8,9 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   rolePermissionsContainer: {
+    gap: spacing['--t-spacing-8'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-8'],
   },
 });
 

@@ -12,9 +12,9 @@ const RECORD_BOARD_ADD_GROUP_DROPDOWN_ID = 'record-board-add-group-dropdown';
 
 const styles = stylex.create({
   column: {
+    paddingInline: spacing['--t-spacing-2'],
     alignItems: 'center',
     display: 'flex',
-    paddingInline: spacing['--t-spacing-2'],
   },
 });
 

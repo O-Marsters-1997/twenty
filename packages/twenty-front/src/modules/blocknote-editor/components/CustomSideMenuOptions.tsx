@@ -5,10 +5,10 @@ import { color, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   container: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'row',
-    gap: spacing['--t-spacing-2'],
   },
   danger: {
     color: color['--t-color-red'],

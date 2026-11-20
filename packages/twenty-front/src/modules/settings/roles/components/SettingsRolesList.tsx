@@ -31,11 +31,11 @@ import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   createRoleSection: {
+    display: 'flex',
+    justifyContent: 'flex-end',
     borderTopColor: borderColor['--t-border-color-light'],
     borderTopStyle: 'solid',
     borderTopWidth: '1px',
-    display: 'flex',
-    justifyContent: 'flex-end',
     paddingBottom: spacing['--t-spacing-2'],
     paddingTop: spacing['--t-spacing-2'],
   },
@@ -44,8 +44,8 @@ const styles = stylex.create({
     paddingTop: spacing['--t-spacing-2'],
   },
   searchAndFilterContainer: {
-    display: 'flex',
     gap: spacing['--t-spacing-2'],
+    display: 'flex',
     marginBottom: spacing['--t-spacing-2'],
     width: '100%',
   },

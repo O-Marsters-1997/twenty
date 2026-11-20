@@ -20,23 +20,23 @@ import { media } from 'twenty-ui/theme/constants.stylex';
 
 const styles = stylex.create({
   choice: {
-    display: 'flex',
     flex: { default: '1 1 0', [media.mobile]: '0 0 160px' },
+    display: 'flex',
     flexDirection: 'column',
     minWidth: '0',
   },
   radio: {
-    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
-    borderTopRightRadius: borderRadius['--t-border-radius-md'],
-    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
-    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
     display: 'block',
-    position: 'relative',
-    width: '100%',
     outlineOffset: {
       default: null,
       [media.mobile]: { default: null, ':focus-visible': '-2px' },
     },
+    position: 'relative',
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    width: '100%',
   },
   label: {
     color: fontColor['--t-font-color-secondary'],
@@ -45,17 +45,17 @@ const styles = stylex.create({
     marginTop: spacing['--t-spacing-2'],
   },
   checkmark: {
+    cornerShape: 'round',
+    transition: {
+      default: 'opacity 0.3s ease-in-out, visibility 0s linear 0.3s',
+      [stylex.when.ancestor(':is([data-checked])', appearanceRadioMarker)]:
+        'opacity 0.3s ease-in-out, visibility 0s',
+      [media.reducedMotion]: 'none',
+    },
     alignItems: 'center',
     backgroundColor: color['--t-color-blue'],
-    borderTopLeftRadius: borderRadius['--t-border-radius-rounded'],
-    borderTopRightRadius: borderRadius['--t-border-radius-rounded'],
-    borderBottomRightRadius: borderRadius['--t-border-radius-rounded'],
-    borderBottomLeftRadius: borderRadius['--t-border-radius-rounded'],
-    bottom: spacing['--t-spacing-2'],
     color: grayScale['--t-gray-scale-gray1'],
-    cornerShape: 'round',
     display: 'flex',
-    height: spacing['--t-spacing-5'],
     insetInlineEnd: spacing['--t-spacing-2'],
     justifyContent: 'center',
     opacity: {
@@ -63,17 +63,17 @@ const styles = stylex.create({
       [stylex.when.ancestor(':is([data-checked])', appearanceRadioMarker)]: 1,
     },
     position: 'absolute',
-    transition: {
-      default: 'opacity 0.3s ease-in-out, visibility 0s linear 0.3s',
-      [stylex.when.ancestor(':is([data-checked])', appearanceRadioMarker)]:
-        'opacity 0.3s ease-in-out, visibility 0s',
-      [media.reducedMotion]: 'none',
-    },
     visibility: {
       default: 'hidden',
       [stylex.when.ancestor(':is([data-checked])', appearanceRadioMarker)]:
         'visible',
     },
+    borderBottomLeftRadius: borderRadius['--t-border-radius-rounded'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-rounded'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-rounded'],
+    borderTopRightRadius: borderRadius['--t-border-radius-rounded'],
+    bottom: spacing['--t-spacing-2'],
+    height: spacing['--t-spacing-5'],
     width: spacing['--t-spacing-5'],
   },
 });

@@ -122,9 +122,9 @@ export const DatePickerInput = ({
 const styles = stylex.create({
   container: {
     alignItems: 'center',
+    display: 'flex',
     borderTopLeftRadius: borderRadius['--t-border-radius-md'],
     borderTopRightRadius: borderRadius['--t-border-radius-md'],
-    display: 'flex',
     width: '100%',
   },
   containerDefault: {
@@ -137,20 +137,20 @@ const styles = stylex.create({
     height: spacing['--t-spacing-6'],
   },
   input: {
-    backgroundColor: 'transparent',
     borderStyle: 'none',
+    outline: 'none',
+    backgroundColor: 'transparent',
     color: fontColor['--t-font-color-primary'],
     fontSize: fontSize['--t-font-size-md'],
-    outline: 'none',
     width: '100%',
   },
   inputDefault: {
-    fontWeight: 500,
     paddingBlock: '4px',
     paddingInline: '8px',
+    fontWeight: 500,
   },
   inputTransparent: {
-    fontWeight: fontWeight['--t-font-weight-regular'],
     padding: 0,
+    fontWeight: fontWeight['--t-font-weight-regular'],
   },
 });

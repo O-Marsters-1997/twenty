@@ -12,14 +12,14 @@ type ObjectFieldRowWithoutRelationProps = {
 
 const styles = stylex.create({
   row: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
-    paddingTop: '0',
-    paddingRight: spacing['--t-spacing-2'],
+    position: 'relative',
     paddingBottom: '0',
     paddingLeft: spacing['--t-spacing-2'],
-    position: 'relative',
+    paddingRight: spacing['--t-spacing-2'],
+    paddingTop: '0',
     width: '100%',
   },
   fieldName: {

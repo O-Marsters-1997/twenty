@@ -30,8 +30,8 @@ const COMPOSER_LABEL_MIN_WIDTH = '80px';
 
 const styles = stylex.create({
   fieldsContainer: {
-    display: 'flex',
     flex: '1',
+    display: 'flex',
     flexDirection: 'column',
     minHeight: '0',
     overflowY: 'auto',
@@ -42,11 +42,11 @@ const styles = stylex.create({
     fontSize: fontSize['--t-font-size-md'],
   },
   noticesContainer: {
-    display: 'flex',
-    flexDirection: 'column',
     gap: spacing['--t-spacing-2'],
     paddingBlock: spacing['--t-spacing-2'],
     paddingInline: spacing['--t-spacing-2'],
+    display: 'flex',
+    flexDirection: 'column',
   },
 });
 

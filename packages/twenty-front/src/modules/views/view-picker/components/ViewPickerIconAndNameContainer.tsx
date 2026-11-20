@@ -4,14 +4,14 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   root: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
     marginLeft: spacing['--t-spacing-1'],
     marginRight: spacing['--t-spacing-1'],
   },
 });
 
 export const ViewPickerIconAndNameContainer = (
-  props: ComponentProps<'div'>,
+  props: ViewPickerIconAndNameContainerProps<'div'>,
 ) => <div {...props} {...stylex.props(styles.root)} />;

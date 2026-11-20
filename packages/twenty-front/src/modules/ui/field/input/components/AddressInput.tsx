@@ -25,19 +25,19 @@ import * as stylex from '@stylexjs/stylex';
 
 const styles = stylex.create({
   container: {
-    maxWidth: { default: null, [media.mobile]: '200px' },
-    minWidth: { default: null, [media.mobile]: '100px' },
     overflow: { default: null, [media.mobile]: 'hidden' },
     paddingBlock: '4px',
     paddingInline: spacing['--t-spacing-2'],
+    maxWidth: { default: null, [media.mobile]: '200px' },
+    minWidth: { default: null, [media.mobile]: '100px' },
     width: { default: '344px', [media.mobile]: 'auto' },
   },
   item: {
     marginBottom: { default: '6px', [media.mobile]: spacing['--t-spacing-2'] },
   },
   halfRow: {
-    display: { default: 'grid', [media.mobile]: 'block' },
     gap: spacing['--t-spacing-2'],
+    display: { default: 'grid', [media.mobile]: 'block' },
     gridTemplateColumns: 'repeat(auto-fit, minmax(0, 1fr))',
     marginBottom: { default: '6px', [media.mobile]: spacing['--t-spacing-2'] },
   },

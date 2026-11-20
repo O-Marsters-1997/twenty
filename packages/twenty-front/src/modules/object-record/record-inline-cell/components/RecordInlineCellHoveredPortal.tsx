@@ -3,9 +3,9 @@ import { type ReactNode } from 'react';
 
 const styles = stylex.create({
   hoveredPortal: {
+    position: 'absolute',
     height: '100%',
     left: 0,
-    position: 'absolute',
     top: 0,
     width: '100%',
   },

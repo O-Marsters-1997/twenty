@@ -51,9 +51,11 @@ const styles = stylex.create({
     alignItems: 'center',
     cursor: 'pointer',
     display: 'flex',
-    flex: '1 0 auto',
-    height: '100%',
+    flexBasis: 'auto',
+    flexGrow: '1',
+    flexShrink: '0',
     justifyContent: 'flex-end',
+    height: '100%',
   },
 });
 

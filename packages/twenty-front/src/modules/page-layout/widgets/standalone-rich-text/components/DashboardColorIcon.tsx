@@ -67,10 +67,10 @@ const styles = stylex.create({
     borderRadius: borderRadius['--t-border-radius-xs'],
     fontSize: 12,
     fontWeight: fontWeight['--t-font-weight-medium'],
-    height: 16,
     lineHeight: '16px',
     pointerEvents: 'none',
     textAlign: 'center',
+    height: 16,
     width: 16,
   },
   colors: (textColor: string, backgroundColor: string) => ({

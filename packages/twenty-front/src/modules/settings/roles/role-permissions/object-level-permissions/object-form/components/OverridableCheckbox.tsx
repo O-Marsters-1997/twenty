@@ -17,16 +17,16 @@ const styles = stylex.create({
   overridableCheckboxContainerItem: {
     alignItems: 'center',
     display: 'flex',
-    height: `calc(${iconSize['--t-icon-size-xl']} * 1px)`,
     justifyContent: 'center',
+    height: `calc(${iconSize['--t-icon-size-xl']} * 1px)`,
     width: `calc(${iconSize['--t-icon-size-xl']} * 1px)`,
   },
   iconWrapper: {
     alignItems: 'center',
     cursor: 'pointer',
     display: 'flex',
-    height: '100%',
     justifyContent: 'center',
+    height: '100%',
     width: '100%',
   },
   iconWrapperDisabled: {

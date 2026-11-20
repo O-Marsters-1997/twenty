@@ -20,8 +20,8 @@ import {
 
 const styles = stylex.create({
   fieldListContainer: {
-    display: 'flex',
     flex: '1',
+    display: 'flex',
     flexDirection: 'column',
     overflowY: 'auto',
   },
@@ -29,11 +29,11 @@ const styles = stylex.create({
     color: fontColor['--t-font-color-light'],
     fontSize: fontSize['--t-font-size-xs'],
     fontWeight: fontWeight['--t-font-weight-semi-bold'],
-    paddingTop: spacing['--t-spacing-1'],
-    paddingRight: spacing['--t-spacing-2'],
+    textTransform: 'uppercase',
     paddingBottom: spacing['--t-spacing-1'],
     paddingLeft: spacing['--t-spacing-2'],
-    textTransform: 'uppercase',
+    paddingRight: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-1'],
   },
 });
 

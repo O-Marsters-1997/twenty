@@ -27,7 +27,8 @@ export const SignInUpEmailField = ({
   const form = useFormContext<Form>();
 
   return (
-    <motion.div {...stylex.props(styles.fullWidthMotionDiv)}
+    <motion.div
+      {...stylex.props(styles.fullWidthMotionDiv)}
       initial={{ opacity: 0, height: 0 }}
       animate={{ opacity: 1, height: 'auto' }}
       transition={{

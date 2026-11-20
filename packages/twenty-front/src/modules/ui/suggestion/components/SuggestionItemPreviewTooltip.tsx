@@ -43,10 +43,10 @@ const styles = stylex.create({
     },
   },
   popup: {
-    backgroundColor: 'transparent',
     borderRadius: borderRadius['--t-border-radius-md'],
-    boxShadow: boxShadow['--t-box-shadow-strong'],
     paddingBlock: 0,
     paddingInline: 0,
+    backgroundColor: 'transparent',
+    boxShadow: boxShadow['--t-box-shadow-strong'],
   },
 });

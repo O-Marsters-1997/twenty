@@ -18,15 +18,15 @@ import { background, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   container: {
+    padding: 0,
     backgroundColor: background['--t-background-primary'],
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
-    padding: 0,
   },
   containerDragging: {
-    height: 'calc(100% - 24px)',
     padding: spacing['--t-spacing-3'],
+    height: 'calc(100% - 24px)',
   },
 });
 

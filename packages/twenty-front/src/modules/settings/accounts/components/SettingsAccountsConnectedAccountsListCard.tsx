@@ -20,11 +20,11 @@ const styles = stylex.create({
     paddingTop: spacing['--t-spacing-2'],
   },
   addAccountSection: {
+    display: 'flex',
+    justifyContent: 'flex-end',
     borderTopColor: borderColor['--t-border-color-light'],
     borderTopStyle: 'solid',
     borderTopWidth: '1px',
-    display: 'flex',
-    justifyContent: 'flex-end',
     paddingTop: spacing['--t-spacing-2'],
   },
 });

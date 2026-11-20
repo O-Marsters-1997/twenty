@@ -22,9 +22,9 @@ const YEARS_SELECT_OPTIONS = Array.from(
 
 const styles = stylex.create({
   customDatePickerHeader: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
     justifyContent: 'flex-end',
     paddingLeft: spacing['--t-spacing-2'],
     paddingRight: spacing['--t-spacing-2'],

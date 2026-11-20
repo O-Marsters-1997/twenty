@@ -71,11 +71,11 @@ const styles = stylex.create({
   table: {
     display: 'flex',
     flexDirection: 'column',
+    position: 'relative',
     paddingBottom: {
       default: null,
       [media.mobile]: spacing['--t-spacing-20'],
     },
-    position: 'relative',
     width: '100%',
   },
 });

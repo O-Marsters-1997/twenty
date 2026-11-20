@@ -27,14 +27,15 @@ const styles = stylex.create({
     flexShrink: '0',
   },
   dropdownLabelAdornments: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     color: grayScale['--t-gray-scale-gray8'],
     display: 'flex',
     flexShrink: '0',
-    gap: spacing['--t-spacing-1'],
     marginLeft: spacing['--t-spacing-1'],
   },
   viewName: {
+    overflow: 'hidden',
     marginLeft: spacing['--t-spacing-1'],
     maxWidth: {
       default: '130px',
@@ -42,7 +43,6 @@ const styles = stylex.create({
       '@media (min-width: 376px) and (max-width: 768px)': '110px',
     },
     minWidth: 0,
-    overflow: 'hidden',
   },
 });
 

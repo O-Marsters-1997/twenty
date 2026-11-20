@@ -13,6 +13,7 @@ import {
 
 const styles = stylex.create({
   root: {
+    marginInline: `calc(0px - ${itemsLayout.padding})`,
     alignItems: 'center',
     backgroundColor:
       backgroundTransparent['--t-background-transparent-lighter'],
@@ -21,18 +22,17 @@ const styles = stylex.create({
     display: 'flex',
     fontSize: fontSize['--t-font-size-xxs'],
     justifyContent: 'flex-start',
+    userSelect: 'none',
     marginBottom: `calc(${itemsLayout.padding} - ${itemsLayout.rowGap})`,
-    marginInline: `calc(0px - ${itemsLayout.padding})`,
     marginTop: {
       default: null,
-      ':first-child': `calc(0px - ${itemsLayout.padding})`,
       [stylex.when.siblingBefore(':is(*)', separatorMarker)]:
         `calc(0px - ${itemsLayout.rowGap})`,
+      ':first-child': `calc(0px - ${itemsLayout.padding})`,
     },
     minHeight: '20px',
     paddingLeft: spacing['--t-spacing-2'],
     paddingRight: spacing['--t-spacing-2'],
-    userSelect: 'none',
     width: `calc(100% + ${itemsLayout.padding} + ${itemsLayout.padding})`,
   },
 });

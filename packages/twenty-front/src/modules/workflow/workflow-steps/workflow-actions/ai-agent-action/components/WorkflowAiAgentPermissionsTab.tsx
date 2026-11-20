@@ -36,14 +36,14 @@ import {
 
 const styles = stylex.create({
   searchInputContainer: {
+    borderBlockStyle: 'solid',
+    paddingInline: spacing['--t-spacing-2'],
     backgroundColor:
       backgroundTransparent['--t-background-transparent-lighter'],
     borderBlockColor: borderColor['--t-border-color-medium'],
-    borderBlockStyle: 'solid',
     borderBlockWidth: '1px',
     boxSizing: 'border-box',
     height: '40px',
-    paddingInline: spacing['--t-spacing-2'],
     width: '100%',
   },
 
@@ -51,10 +51,10 @@ const styles = stylex.create({
     width: '100%',
   },
   groupsContainer: {
-    paddingTop: spacing['--t-spacing-2'],
-    paddingRight: spacing['--t-spacing-2'],
     paddingBottom: spacing['--t-spacing-2'],
     paddingLeft: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
   },
 });
 

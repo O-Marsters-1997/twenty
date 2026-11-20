@@ -16,13 +16,13 @@ import { type SidePanelInformationBannerProps } from './types/SidePanelInformati
 
 const styles = stylex.create({
   banner: {
+    padding: spacing['--t-spacing-2'],
+    borderRadius: borderRadius['--t-border-radius-md'],
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     backgroundColor: accent['--t-accent-secondary'],
-    borderRadius: borderRadius['--t-border-radius-md'],
     boxSizing: 'border-box',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
-    padding: spacing['--t-spacing-2'],
     width: '100%',
   },
   iconContainer: {
@@ -30,11 +30,12 @@ const styles = stylex.create({
     color: color['--t-color-blue'],
     display: 'flex',
     flexShrink: 0,
-    height: '16px',
     justifyContent: 'center',
+    height: '16px',
     width: '16px',
   },
   message: {
+    margin: 0,
     color: color['--t-color-blue'],
     flexGrow: 1,
     fontFamily: font['--t-font-family'],
@@ -42,7 +43,6 @@ const styles = stylex.create({
     fontStyle: 'normal',
     fontWeight: fontWeight['--t-font-weight-medium'],
     lineHeight: 1.4,
-    margin: 0,
     minWidth: 0,
   },
 });

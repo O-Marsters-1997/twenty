@@ -26,9 +26,9 @@ import { actionRowMarker } from './RecordTableActionRow.stylex';
 
 const styles = stylex.create({
   root: {
+    borderStyle: 'none',
     alignItems: 'center',
     backgroundColor: background['--t-background-primary'],
-    borderStyle: 'none',
     cursor: 'pointer',
     display: 'flex',
     flexDirection: 'row',
@@ -37,9 +37,10 @@ const styles = stylex.create({
   rowCell: {
     backgroundColor: {
       default: null,
-      [stylex.when.ancestor(':hover', actionRowMarker)]: {
+      [media.hoverCapable]: {
         default: null,
-        [media.hoverCapable]: background['--t-background-secondary'],
+        [stylex.when.ancestor(':hover', actionRowMarker)]:
+          background['--t-background-secondary'],
       },
     },
     borderBottomColor: borderColor['--t-border-color-light'],
@@ -53,35 +54,35 @@ const styles = stylex.create({
   }),
   iconContainer: {
     alignItems: 'center',
-    borderRightStyle: 'none',
     color: fontColor['--t-font-color-secondary'],
     display: 'flex',
-    height: recordTableLayout.rowHeight,
     justifyContent: 'center',
-    left: recordTableLayout.dragAndDropColumnWidth,
     position: 'sticky',
+    borderRightStyle: 'none',
+    height: recordTableLayout.rowHeight,
+    left: recordTableLayout.dragAndDropColumnWidth,
     width: recordTableLayout.checkboxColumnWidth,
   },
   actionTextContainer: {
     alignItems: 'center',
-    borderRightStyle: 'none',
     display: 'flex',
-    height: recordTableLayout.rowHeight,
     justifyContent: 'flex-start',
+    position: 'sticky',
+    borderRightStyle: 'none',
+    height: recordTableLayout.rowHeight,
     left:
       recordTableLayout.dragAndDropColumnWidth +
       recordTableLayout.checkboxColumnWidth,
-    position: 'sticky',
   },
   actionTextWidth: (width: number) => ({ width }),
   text: {
     color: fontColor['--t-font-color-tertiary'],
     fontSize: fontSize['--t-font-size-md'],
-    marginLeft: spacing['--t-spacing-2'],
     position: 'absolute',
     textAlign: 'left',
     verticalAlign: 'middle',
     whiteSpace: 'nowrap',
+    marginLeft: spacing['--t-spacing-2'],
   },
 });
 
@@ -154,9 +155,7 @@ export const RecordTableActionRow = ({
         )}
       />
       <RecordTableAddButtonPlaceholderCell xstyle={styles.rowCell} />
-      <RecordTableGroupSectionLastDynamicFillingCell
-        xstyle={styles.rowCell}
-      />
+      <RecordTableGroupSectionLastDynamicFillingCell xstyle={styles.rowCell} />
     </div>
   );
 };
