@@ -102,11 +102,15 @@ export const StyledContainer = ({
   />
 );
 
-export const StyledLabelWrapper = (props: StyledLabelWrapperProps<'div'>) => (
+type StyledLabelWrapperProps = ComponentProps<'div'>;
+
+export const StyledLabelWrapper = (props: StyledLabelWrapperProps) => (
   <div {...props} {...stylex.props(styles.labelWrapper)} />
 );
 
-export const StyledLabel = (props: StyledLabelProps<'div'>) => (
+type StyledLabelProps = ComponentProps<'div'>;
+
+export const StyledLabel = (props: StyledLabelProps) => (
   <div {...props} {...stylex.props(styles.label)} />
 );
 

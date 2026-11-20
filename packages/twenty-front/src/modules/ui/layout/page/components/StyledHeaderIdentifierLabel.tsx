@@ -11,10 +11,12 @@ const styles = stylex.create({
   },
 });
 
+type StyledHeaderIdentifierLabelProps = ComponentProps<'span'>;
+
 export const StyledHeaderIdentifierLabel = ({
   className,
   ...props
-}: StyledHeaderIdentifierLabelProps<'span'>) => {
+}: StyledHeaderIdentifierLabelProps) => {
   const labelProps = stylex.props(styles.label);
 
   return (
