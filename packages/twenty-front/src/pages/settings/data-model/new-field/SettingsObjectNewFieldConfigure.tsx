@@ -15,7 +15,7 @@ import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomState
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLingui } from '@lingui/react/macro';
 import { useEffect, useState } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm, type Resolver } from 'react-hook-form';
 import { useParams, useSearchParams } from 'react-router-dom';
 import {
   AppPath,
@@ -69,7 +69,7 @@ export const SettingsObjectNewFieldConfigure = () => {
         ),
         sourceObjectMetadataId: activeObjectMetadataItem?.id,
       }),
-    ),
+    ) as unknown as Resolver<SettingsDataModelNewFieldFormValues>,
     defaultValues: {
       type: fieldType,
       icon:

@@ -1,6 +1,13 @@
 {
   ".": {
-    "reExports": ["components", "icon", "primitives", "theme", "utilities"],
+    "reExports": [
+      "components",
+      "icon",
+      "primitives",
+      "theme",
+      "third-party-styles",
+      "utilities"
+    ],
     "values": {},
     "types": {}
   },
@@ -1218,6 +1225,11 @@
       "ThemeType": "theme/themeTypes"
     }
   },
+  "third-party-styles": {
+    "reExports": [],
+    "values": {},
+    "types": {}
+  },
   "utilities": {
     "reExports": [],
     "values": {
@@ -1239,7 +1251,8 @@
       "useMediaQuery": "utilities/responsive/hooks/useMediaQuery"
     },
     "types": {
-      "Nullable": "utilities/types/Nullable"
+      "Nullable": "utilities/types/Nullable",
+      "WithXstyle": "utilities/types/WithXstyle"
     }
   }
 }
