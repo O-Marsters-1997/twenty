@@ -12,6 +12,8 @@ const styles = stylex.create({
   },
 });
 
+type ViewPickerIconAndNameContainerProps = ComponentProps<'div'>;
+
 export const ViewPickerIconAndNameContainer = (
-  props: ViewPickerIconAndNameContainerProps<'div'>,
+  props: ViewPickerIconAndNameContainerProps,
 ) => <div {...props} {...stylex.props(styles.root)} />;

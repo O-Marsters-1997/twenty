@@ -10,6 +10,8 @@ const styles = stylex.create({
   },
 });
 
+type ViewPickerSaveButtonContainerProps = ComponentProps<'div'>;
+
 export const ViewPickerSaveButtonContainer = (
-  props: ViewPickerSaveButtonContainerProps<'div'>,
+  props: ViewPickerSaveButtonContainerProps,
 ) => <div {...props} {...stylex.props(styles.root)} />;

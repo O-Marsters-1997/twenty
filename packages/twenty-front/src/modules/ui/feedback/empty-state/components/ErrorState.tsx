@@ -48,17 +48,25 @@ type ErrorStateSectionProps = {
   children?: ReactNode;
 };
 
+type ErrorStateRootProps = ErrorStateSectionProps;
+
 const ErrorStateRoot = ({ children }: ErrorStateRootProps) => (
   <div {...stylex.props(styles.root)}>{children}</div>
 );
+
+type ErrorStateContentProps = ErrorStateSectionProps;
 
 const ErrorStateContent = ({ children }: ErrorStateContentProps) => (
   <div {...stylex.props(styles.content)}>{children}</div>
 );
 
+type ErrorStateTitleProps = ErrorStateSectionProps;
+
 const ErrorStateTitle = ({ children }: ErrorStateTitleProps) => (
   <div {...stylex.props(styles.title)}>{children}</div>
 );
+
+type ErrorStateDescriptionProps = ErrorStateSectionProps;
 
 const ErrorStateDescription = ({ children }: ErrorStateDescriptionProps) => (
   <div {...stylex.props(styles.description)}>{children}</div>

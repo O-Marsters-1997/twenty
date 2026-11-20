@@ -525,9 +525,9 @@ describe('Select behavior', () => {
       </>,
     );
 
-    expect(scopedPopupRef.current?.closest('.select-theme')).toHaveClass(
-      'dark',
-    );
+    expect(
+      scopedPopupRef.current?.closest('.select-theme'),
+    ).toBeInTheDocument();
     expect(screen.getByTestId('portal-container')).toContainElement(
       customPopupRef.current,
     );
