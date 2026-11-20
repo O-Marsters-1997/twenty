@@ -74,7 +74,8 @@ jobs:
         working-directory: packages/twenty-server-go
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
-      - uses: actions/setup-go@v5
+      - id: setup
+        uses: actions/setup-go@v5
         with:
           go-version-file: packages/twenty-server-go/go.mod
           cache-dependency-path: packages/twenty-server-go/go.sum
@@ -83,7 +84,7 @@ jobs:
           go generate ./...
           git diff --exit-code -- . && test -z "$(git ls-files --others --exclude-standard -- .)"
       - name: Build, vet and test
-        if: ${{ !cancelled() }}
+        if: ${{ !cancelled() && steps.setup.outcome == 'success' }}
         run: |
           go build ./...
           go vet ./...
@@ -138,12 +139,13 @@ jobs:
       NODE_OPTIONS: '--max-old-space-size=4096'
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
-      - uses: ./.github/actions/bun-install
+      - id: install
+        uses: ./.github/actions/bun-install
       - name: Shared lint, typecheck and test
-        if: ${{ !cancelled() && needs.changes.outputs.shared == 'true' }}
+        if: ${{ !cancelled() && steps.install.outcome == 'success' && needs.changes.outputs.shared == 'true' }}
         run: npx nx run-many -t lint typecheck test -p twenty-shared --parallel
       - name: Emails build, lingui and preview
-        if: ${{ !cancelled() && needs.changes.outputs.emails == 'true' }}
+        if: ${{ !cancelled() && steps.install.outcome == 'success' && needs.changes.outputs.emails == 'true' }}
         run: |
           npx nx build twenty-emails
           npx nx run twenty-emails:lingui:extract
@@ -154,7 +156,7 @@ jobs:
           curl -sf http://localhost:4001/preview/test.email > /dev/null || { kill $SERVER_PID; exit 1; }
           kill $SERVER_PID
       - name: Utils test
-        if: ${{ !cancelled() && needs.changes.outputs.utils == 'true' }}
+        if: ${{ !cancelled() && steps.install.outcome == 'success' && needs.changes.outputs.utils == 'true' }}
         run: npx nx test twenty-utils
 
   knip:
