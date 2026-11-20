@@ -100,7 +100,11 @@ runComponentConformance({
 describe('Popover portal destinations', () => {
   it('uses the scoped theme when omitted and waits when explicitly null', async () => {
     const content = (container?: HTMLElement | null) => (
-      <ThemeProvider colorScheme="dark" applyToRoot={false}>
+      <ThemeProvider
+        colorScheme="dark"
+        applyToRoot={false}
+        className="popover-theme"
+      >
         <Popover.Root open>
           <Popover.Portal container={container}>
             <Popover.Positioner>
@@ -111,7 +115,7 @@ describe('Popover portal destinations', () => {
       </ThemeProvider>
     );
     const { container, rerender } = render(content());
-    const scope = container.querySelector('.dark');
+    const scope = container.querySelector('.popover-theme');
     expect(scope).toContainElement(await screen.findByRole('dialog'));
 
     rerender(content(null));

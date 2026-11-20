@@ -14,6 +14,8 @@ export const WidgetContentFrame = ({
   <div {...stylex.props(styles.contentFrame, xstyle)}>{children}</div>
 );
 
+type WidgetTableOutlineProps = WidgetContentFrameProps;
+
 export const WidgetTableOutline = ({
   children,
   xstyle,

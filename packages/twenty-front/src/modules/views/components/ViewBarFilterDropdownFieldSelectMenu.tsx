@@ -58,7 +58,9 @@ const styles = stylex.create({
   },
 });
 
-export const StyledInput = (props: StyledInputProps<'input'>) => (
+type StyledInputProps = ComponentProps<'input'>;
+
+export const StyledInput = (props: StyledInputProps) => (
   <input {...props} {...stylex.props(styles.input)} />
 );
 

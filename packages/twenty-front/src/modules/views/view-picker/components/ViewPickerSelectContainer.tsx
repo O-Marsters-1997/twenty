@@ -12,6 +12,8 @@ const styles = stylex.create({
   },
 });
 
+type ViewPickerSelectContainerProps = ComponentProps<'div'>;
+
 export const ViewPickerSelectContainer = (
-  props: ViewPickerSelectContainerProps<'div'>,
+  props: ViewPickerSelectContainerProps,
 ) => <div {...props} {...stylex.props(styles.root)} />;
