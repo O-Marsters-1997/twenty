@@ -12,13 +12,15 @@ import { media } from 'twenty-ui/theme/constants.stylex';
 
 const styles = stylex.create({
   cardsContainer: {
-    display: 'flex',
     gap: spacing['--t-spacing-4'],
-    marginTop: spacing['--t-spacing-6'],
+    display: 'flex',
     flexDirection: { default: null, [media.mobile]: 'column' },
+    marginTop: spacing['--t-spacing-6'],
   },
   cardLinkSlot: {
-    flex: '1 1 0',
+    flexBasis: '0',
+    flexGrow: '1',
+    flexShrink: '1',
     minWidth: '0',
   },
 });

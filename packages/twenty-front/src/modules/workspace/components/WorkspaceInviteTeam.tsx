@@ -27,12 +27,12 @@ import { media } from 'twenty-ui/theme/constants.stylex';
 
 const styles = stylex.create({
   container: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'row',
-    gap: spacing['--t-spacing-2'],
-    paddingBottom: spacing['--t-spacing-3'],
     flexWrap: { default: null, [media.mobile]: 'wrap' },
+    paddingBottom: spacing['--t-spacing-3'],
   },
   linkContainer: {
     flex: { default: '1 1 auto', [media.mobile]: '1 1 100%' },

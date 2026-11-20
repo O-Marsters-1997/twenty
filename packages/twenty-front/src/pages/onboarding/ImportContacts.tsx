@@ -24,23 +24,23 @@ const styles = stylex.create({
     width: '320px',
   },
   footer: {
+    gap: spacing['--t-spacing-4'],
     alignItems: 'flex-end',
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-4'],
     maxWidth: '100%',
     width: onboardingLayout.contentBlockWidth,
   },
   middle: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'flex-start',
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-2'],
   },
   buttons: {
+    gap: spacing['--t-spacing-2'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-2'],
     width: '100%',
   },
 });

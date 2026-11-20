@@ -7,12 +7,12 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   container: {
+    gap: spacing['--t-spacing-1'],
+    overflow: 'hidden',
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
     justifyContent: 'flex-start',
     maxWidth: '100%',
-    overflow: 'hidden',
     width: '100%',
   },
   tag: {
@@ -40,7 +40,9 @@ export const MultiSelectDisplay = ({
   return (
     <div
       {...containerProps}
-      className={[containerProps.className, className].filter(isDefined).join(' ')}
+      className={[containerProps.className, className]
+        .filter(isDefined)
+        .join(' ')}
     >
       {selectedOptions.map((selectedOption, index) => (
         <Tag

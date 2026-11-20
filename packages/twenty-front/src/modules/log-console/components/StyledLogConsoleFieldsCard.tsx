@@ -21,9 +21,9 @@ export const StyledLogConsoleFieldsCard = ({
 
 const styles = stylex.create({
   card: {
+    padding: spacing['--t-spacing-2'],
+    gap: spacing['--t-spacing-1'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-1'],
-    padding: spacing['--t-spacing-2'],
   },
 });

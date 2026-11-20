@@ -1,7 +1,9 @@
 .record-table-row-div[data-focused='true'] div.table-cell:not(:first-of-type),
-.record-table-row-div[data-focused='true'] div.table-cell-0-0:not(:first-of-type),
+.record-table-row-div[data-focused='true']
+  div.table-cell-0-0:not(:first-of-type),
 .record-table-row-div[data-active='true'] div.table-cell:not(:first-of-type),
-.record-table-row-div[data-active='true'] div.table-cell-0-0:not(:first-of-type) {
+.record-table-row-div[data-active='true']
+  div.table-cell-0-0:not(:first-of-type) {
   background-color: var(--t-accent-quaternary);
   border-bottom: 1px solid var(--t-border-color-medium);
   border-color: var(--t-border-color-medium);

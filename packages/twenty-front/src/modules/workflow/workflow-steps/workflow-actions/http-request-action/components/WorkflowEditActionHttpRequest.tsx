@@ -46,8 +46,10 @@ type WorkflowEditActionHttpRequestProps = {
 const styles = stylex.create({
   fullHeightJsonField: {
     display: 'flex',
-    flex: 1,
+    flexBasis: '0%',
     flexDirection: 'column',
+    flexGrow: 1,
+    flexShrink: 1,
   },
 
   tabListContainer: {
@@ -55,18 +57,18 @@ const styles = stylex.create({
     paddingLeft: spacing['--t-spacing-2'],
   },
   testTabContent: {
-    display: 'flex',
     flex: '1',
-    flexDirection: 'column',
     gap: spacing['--t-spacing-4'],
+    display: 'flex',
+    flexDirection: 'column',
     height: '100%',
     minHeight: '400px',
   },
   configurationTabContent: {
-    display: 'flex',
     flex: '1',
-    flexDirection: 'column',
     gap: spacing['--t-spacing-4'],
+    display: 'flex',
+    flexDirection: 'column',
     height: '100%',
   },
 });

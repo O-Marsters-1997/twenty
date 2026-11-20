@@ -37,10 +37,10 @@ const styles = stylex.create({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    paddingTop: '0',
-    paddingRight: spacing['--t-spacing-4'],
     paddingBottom: '0',
     paddingLeft: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingTop: '0',
   },
 });
 

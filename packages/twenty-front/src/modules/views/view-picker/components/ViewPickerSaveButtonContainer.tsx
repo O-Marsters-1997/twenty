@@ -4,12 +4,12 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   root: {
-    display: 'flex',
     padding: spacing['--t-spacing-1'],
+    display: 'flex',
     width: '100%',
   },
 });
 
-export const ViewPickerSaveButtonContainer = (props: ComponentProps<'div'>) => (
-  <div {...props} {...stylex.props(styles.root)} />
-);
+export const ViewPickerSaveButtonContainer = (
+  props: ViewPickerSaveButtonContainerProps<'div'>,
+) => <div {...props} {...stylex.props(styles.root)} />;

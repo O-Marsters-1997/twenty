@@ -12,10 +12,10 @@ import {
 
 const styles = stylex.create({
   row: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     color: fontColor['--t-font-color-tertiary'],
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
     minHeight: spacing['--t-spacing-6'],
   },
   loaderIconContainer: {

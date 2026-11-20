@@ -42,8 +42,8 @@ const styles = stylex.create({
     paddingRight: spacing['--t-spacing-2'],
   },
   dropdownContainer: {
-    display: 'flex',
     flex: '1',
+    display: 'flex',
     minWidth: '0',
   },
   variablePickerContainer: {

@@ -20,18 +20,18 @@ import * as stylex from '@stylexjs/stylex';
 
 const styles = stylex.create({
   backDrop: {
+    background: backgroundTransparent['--t-background-transparent-secondary'],
     alignItems: 'center',
     backdropFilter: blur['--t-blur-light'],
-    background: backgroundTransparent['--t-background-transparent-secondary'],
     display: 'flex',
     flexDirection: 'column',
-    height: '100%',
     justifyContent: 'center',
-    left: 0,
     position: 'fixed',
+    zIndex: rootStackingContextZIndices.notFound,
+    height: '100%',
+    left: 0,
     top: 0,
     width: '100%',
-    zIndex: rootStackingContextZIndices.notFound,
   },
   buttonContainer: {
     width: '200px',

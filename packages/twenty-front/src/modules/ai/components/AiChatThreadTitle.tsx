@@ -9,14 +9,14 @@ import { fontColor, fontSize, fontWeight } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   title: {
-    color: fontColor['--t-font-color-secondary'],
     flex: '1',
+    overflow: 'hidden',
+    color: fontColor['--t-font-color-secondary'],
     fontSize: fontSize['--t-font-size-md'],
     fontWeight: fontWeight['--t-font-weight-medium'],
-    minWidth: 0,
-    overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
+    minWidth: 0,
   },
   titleUnread: {
     color: fontColor['--t-font-color-primary'],

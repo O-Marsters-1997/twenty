@@ -33,11 +33,11 @@ import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   buttonContainer: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'row',
     flexShrink: '0',
-    gap: spacing['--t-spacing-1'],
     marginLeft: spacing['--t-spacing-2'],
   },
   expiresInHeader: {

@@ -17,7 +17,7 @@ export const WidgetContentFrame = ({
 export const WidgetTableOutline = ({
   children,
   xstyle,
-}: WidgetContentFrameProps) => (
+}: WidgetTableOutlineProps) => (
   <div {...stylex.props(styles.tableOutline, xstyle)}>{children}</div>
 );
 
@@ -35,9 +35,9 @@ const styles = stylex.create({
     borderRadius: borderRadius['--t-border-radius-sm'],
     borderStyle: 'solid',
     borderWidth: 1,
+    overflow: 'hidden',
     display: 'flex',
     flexDirection: 'column',
     minHeight: 0,
-    overflow: 'hidden',
   },
 });

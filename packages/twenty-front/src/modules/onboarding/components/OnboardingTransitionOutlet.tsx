@@ -13,19 +13,19 @@ import * as stylex from '@stylexjs/stylex';
 
 const styles = stylex.create({
   transitionContainer: {
-    display: 'flex',
     flex: '1',
+    display: 'flex',
+    position: 'relative',
     minHeight: '0',
     minWidth: '0',
-    position: 'relative',
   },
   transitionPage: {
+    inset: '0',
     display: 'flex',
     flexDirection: 'column',
-    inset: '0',
+    position: 'absolute',
     minHeight: '0',
     minWidth: '0',
-    position: 'absolute',
   },
 });
 

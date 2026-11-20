@@ -16,14 +16,14 @@ const styles = stylex.create({
     borderBottomWidth: { default: 0, ':not(:last-child)': 1 },
   },
   content: {
+    gap: spacing['--t-spacing-2'],
+    paddingBlock: spacing['--t-spacing-0'],
+    paddingInline: spacing['--t-spacing-4'],
     alignItems: 'center',
     boxSizing: 'border-box',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
-    height: spacing['--t-spacing-12'],
-    paddingBlock: spacing['--t-spacing-0'],
-    paddingInline: spacing['--t-spacing-4'],
     position: 'relative',
+    height: spacing['--t-spacing-12'],
   },
   contentInteractive: {
     backgroundColor: {

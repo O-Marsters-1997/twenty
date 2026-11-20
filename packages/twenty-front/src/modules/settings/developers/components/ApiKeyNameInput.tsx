@@ -11,9 +11,9 @@ import { UpdateApiKeyDocument } from '~/generated-metadata/graphql';
 
 const styles = stylex.create({
   comboInput: {
+    columnGap: spacing['--t-spacing-4'],
     display: 'flex',
     flexDirection: 'row',
-    columnGap: spacing['--t-spacing-4'],
   },
 });
 

@@ -44,14 +44,14 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   container: {
+    padding: { default: spacing['--t-spacing-2'], [media.print]: 0 },
     boxSizing: 'border-box',
+    flexBasis: '0%',
     flexGrow: 1,
     flexShrink: 1,
-    flexBasis: '0%',
-    minHeight: { default: '100%', [media.print]: 'auto' },
-    padding: { default: spacing['--t-spacing-2'], [media.print]: 0 },
     position: 'relative',
     userSelect: { default: 'none', [media.print]: 'auto' },
+    minHeight: { default: '100%', [media.print]: 'auto' },
     width: '100%',
   },
 });

@@ -6,15 +6,15 @@ import './RecordCardBodyContainer.css';
 
 const styles = stylex.create({
   container: {
+    gap: spacing['--t-spacing-0_5'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-0_5'],
   },
   defaultPadding: {
-    paddingTop: 0,
-    paddingRight: spacing['--t-spacing-2'],
     paddingBottom: spacing['--t-spacing-2'],
     paddingLeft: 10,
+    paddingRight: spacing['--t-spacing-2'],
+    paddingTop: 0,
   },
   padding: (padding: string) => ({ padding }),
 });

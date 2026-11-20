@@ -9,9 +9,9 @@ const styles = stylex.create({
     width: '100%',
   },
   innerContainer: {
+    gap: general['--t-between-siblings-gap'],
     display: 'flex',
     flexDirection: 'column',
-    gap: general['--t-between-siblings-gap'],
     width: `calc(100% - ${spacing['--t-spacing-2']})`,
   },
   innerContainerFull: {

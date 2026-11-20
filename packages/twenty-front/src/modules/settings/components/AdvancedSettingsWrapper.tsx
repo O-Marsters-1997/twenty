@@ -7,8 +7,9 @@ import { Collapsible } from 'twenty-ui/primitives/layout';
 
 const styles = stylex.create({
   root: {
-    ':empty': {
-      position: 'absolute',
+    position: {
+      default: null,
+      ':empty': 'absolute',
     },
   },
   content: {

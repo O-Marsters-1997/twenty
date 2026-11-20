@@ -14,8 +14,8 @@ import * as stylex from '@stylexjs/stylex';
 
 const styles = stylex.create({
   container: {
-    display: 'flex',
     flex: '1',
+    display: 'flex',
     flexDirection: 'column',
     minHeight: '0',
   },

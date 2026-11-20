@@ -19,8 +19,8 @@ type EventRelationFieldDiffValuesProps = {
 
 const styles = stylex.create({
   relationValue: {
-    color: fontColor['--t-font-color-primary'],
     overflow: 'hidden',
+    color: fontColor['--t-font-color-primary'],
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
   },

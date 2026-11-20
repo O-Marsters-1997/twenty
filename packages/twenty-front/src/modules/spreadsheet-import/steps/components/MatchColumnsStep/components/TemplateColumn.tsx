@@ -1,4 +1,3 @@
-
 import { MatchColumnToFieldSelect } from '@/spreadsheet-import/components/MatchColumnToFieldSelect';
 import { DO_NOT_IMPORT_OPTION_KEY } from '@/spreadsheet-import/constants/DoNotImportOptionKey';
 import { useSpreadsheetImportInternal } from '@/spreadsheet-import/hooks/useSpreadsheetImportInternal';
@@ -10,7 +9,12 @@ import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomState
 import { useLingui } from '@lingui/react/macro';
 import { IconForbid } from 'twenty-ui/icon';
 import * as stylex from '@stylexjs/stylex';
-import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type TemplateColumnProps = {
   columns: SpreadsheetColumns;
@@ -67,7 +71,9 @@ export const TemplateColumn = ({
         columnIndex={column.index.toString()}
       />
       {column.type === SpreadsheetColumnType.matchedError && (
-        <span {...stylex.props(styles.errorMessage)}>{`"${column.header}" ${column.errorMessage}`}</span>
+        <span
+          {...stylex.props(styles.errorMessage)}
+        >{`"${column.header}" ${column.errorMessage}`}</span>
       )}
     </div>
   );

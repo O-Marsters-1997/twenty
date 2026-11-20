@@ -26,10 +26,10 @@ export const OBJECT_RELATION_TABLE_ROW_GRID_TEMPLATE_COLUMNS =
 
 const styles = stylex.create({
   nameContainer: {
-    alignItems: 'center',
-    display: 'flex',
     flex: '1',
     gap: spacing['--t-spacing-1'],
+    alignItems: 'center',
+    display: 'flex',
     minWidth: '0',
   },
   nameLabel: {
@@ -38,10 +38,10 @@ const styles = stylex.create({
     whiteSpace: 'nowrap',
   },
   relationType: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     display: 'flex',
     fontSize: fontSize['--t-font-size-sm'],
-    gap: spacing['--t-spacing-1'],
   },
 });
 

@@ -21,9 +21,9 @@ type BarChartBaseLayerProps = {
 const styles = stylex.create({
   baseCanvas: {
     display: 'block',
-    left: '0',
     pointerEvents: 'none',
     position: 'absolute',
+    left: '0',
     top: '0',
   },
 });

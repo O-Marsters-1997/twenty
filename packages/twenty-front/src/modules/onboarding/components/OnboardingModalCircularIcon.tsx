@@ -5,15 +5,15 @@ import { borderRadius } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   checkContainer: {
-    alignItems: 'center',
     borderRadius: borderRadius['--t-border-radius-rounded'],
     borderStyle: 'solid',
     borderWidth: '2px',
-    boxSizing: 'content-box',
     cornerShape: 'round',
+    alignItems: 'center',
+    boxSizing: 'content-box',
     display: 'flex',
-    height: '36px',
     justifyContent: 'center',
+    height: '36px',
     width: '36px',
   },
   checkContainerColor: (color: string) => ({

@@ -18,20 +18,21 @@ const caretBlink = stylex.keyframes({
 
 const styles = stylex.create({
   label: {
-    color: fontColor['--t-font-color-secondary'],
     flex: '1',
+    overflow: 'hidden',
+    color: fontColor['--t-font-color-secondary'],
     fontSize: fontSize['--t-font-size-md'],
     fontWeight: fontWeight['--t-font-weight-medium'],
-    minWidth: '0',
-    overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'pre',
+    minWidth: '0',
   },
   codeFontText: {
     fontFamily: codeFont['--t-code-font-family'],
     fontWeight: fontWeight['--t-font-weight-regular'],
   },
   caret: {
+    borderRadius: borderRadius['--t-border-radius-xs'],
     animationDuration: '1.06s',
     animationIterationCount: 'infinite',
     animationName: {
@@ -40,11 +41,10 @@ const styles = stylex.create({
     },
     animationTimingFunction: 'steps(1)',
     backgroundColor: accent['--t-accent-accent9'],
-    borderRadius: borderRadius['--t-border-radius-xs'],
     display: 'inline-block',
+    verticalAlign: 'middle',
     height: spacing['--t-spacing-3'],
     marginLeft: spacing['--t-spacing-0_5'],
-    verticalAlign: 'middle',
     width: spacing['--t-spacing-0_5'],
   },
 });

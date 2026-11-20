@@ -5,6 +5,10 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   page: {
+    gap: {
+      default: spacing['--t-spacing-14'],
+      [media.mobile]: spacing['--t-spacing-8'],
+    },
     alignItems: 'center',
     boxSizing: 'border-box',
     display: 'flex',
@@ -12,10 +16,6 @@ const styles = stylex.create({
     flexDirection: 'column',
     flexGrow: '1',
     flexShrink: '1',
-    gap: {
-      default: spacing['--t-spacing-14'],
-      [media.mobile]: spacing['--t-spacing-8'],
-    },
     minHeight: '0',
     overflowY: 'auto',
     paddingBottom: {

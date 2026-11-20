@@ -20,13 +20,13 @@ const MAX_VISIBLE_RECORDS = 12;
 
 const styles = stylex.create({
   container: {
+    gap: spacing['--t-spacing-2'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-2'],
-    paddingTop: spacing['--t-spacing-2'],
-    paddingRight: '0',
     paddingBottom: spacing['--t-spacing-2'],
     paddingLeft: '0',
+    paddingRight: '0',
+    paddingTop: spacing['--t-spacing-2'],
   },
   header: {
     color: fontColor['--t-font-color-tertiary'],
@@ -34,9 +34,9 @@ const styles = stylex.create({
     fontSize: fontSize['--t-font-size-sm'],
   },
   chips: {
+    gap: spacing['--t-spacing-1'],
     display: 'flex',
     flexWrap: 'wrap',
-    gap: spacing['--t-spacing-1'],
   },
   overflow: {
     alignSelf: 'center',

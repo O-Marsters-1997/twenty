@@ -16,7 +16,9 @@ const styles = stylex.create({
   },
   section: {
     display: 'flex',
-    flex: 1,
+    flexBasis: '0%',
+    flexGrow: 1,
+    flexShrink: 1,
     minHeight: 0,
   },
 });

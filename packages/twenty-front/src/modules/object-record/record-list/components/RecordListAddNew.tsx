@@ -25,27 +25,27 @@ import {
 
 const styles = stylex.create({
   addNewRow: {
-    alignItems: 'center',
     background: {
       default: 'transparent',
       ':hover': backgroundTransparent['--t-background-transparent-lighter'],
     },
     borderStyle: 'none',
-    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
-    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
-    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
-    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    gap: spacing['--t-spacing-1'],
+    alignItems: 'center',
     color: fontColor['--t-font-color-tertiary'],
     cursor: 'pointer',
     display: 'flex',
     fontSize: fontSize['--t-font-size-md'],
-    gap: spacing['--t-spacing-1'],
+    textAlign: 'left',
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
     height: '24px',
-    paddingTop: '0',
-    paddingRight: '6px',
     paddingBottom: '0',
     paddingLeft: '6px',
-    textAlign: 'left',
+    paddingRight: '6px',
+    paddingTop: '0',
   },
 });
 

@@ -8,9 +8,9 @@ import { MetadataTranslationProvenance } from '~/generated-metadata/graphql';
 
 const styles = stylex.create({
   value: {
+    overflow: 'hidden',
     color: fontColor['--t-font-color-secondary'],
     cursor: 'pointer',
-    overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
     width: '100%',

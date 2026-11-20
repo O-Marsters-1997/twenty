@@ -57,8 +57,8 @@ export const RecordTableRowVirtualizedContainer = ({
 
 const styles = stylex.create({
   row: {
-    height: 33,
     position: 'absolute',
+    height: 33,
   },
   top: (pixelsFromTop: number) => ({ top: pixelsFromTop }),
 });

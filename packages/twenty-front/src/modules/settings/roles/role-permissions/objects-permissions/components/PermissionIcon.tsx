@@ -13,20 +13,20 @@ type PermissionIconProps = {
 
 const styles = stylex.create({
   iconWrapper: {
-    alignItems: 'center',
-    backgroundColor: color['--t-color-blue3'],
     borderColor: color['--t-color-blue7'],
     borderRadius: borderRadius['--t-border-radius-sm'],
     borderStyle: 'solid',
     borderWidth: '1px',
+    alignItems: 'center',
+    backgroundColor: color['--t-color-blue3'],
     display: 'flex',
-    height: spacing['--t-spacing-4'],
     justifyContent: 'center',
+    height: spacing['--t-spacing-4'],
     width: spacing['--t-spacing-4'],
   },
   iconWrapperRevoked: {
-    backgroundColor: color['--t-color-orange3'],
     borderColor: color['--t-color-orange7'],
+    backgroundColor: color['--t-color-orange3'],
   },
   icon: {
     alignItems: 'center',

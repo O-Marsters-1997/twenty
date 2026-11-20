@@ -12,23 +12,23 @@ import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   gate: {
+    gap: spacing['--t-spacing-1'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-1'],
     width: '100%',
   },
   stepper: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
-    paddingTop: '0',
-    paddingRight: spacing['--t-spacing-1'],
     paddingBottom: '0',
     paddingLeft: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingTop: '0',
   },
   stepperLabel: {
-    color: fontColor['--t-font-color-light'],
     flex: '1',
+    color: fontColor['--t-font-color-light'],
     fontSize: fontSize['--t-font-size-sm'],
   },
 });

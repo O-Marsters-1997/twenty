@@ -5,8 +5,8 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   wrapper: {
-    display: 'inline-block',
     paddingInline: spacing['--t-spacing-0_5'],
+    display: 'inline-block',
     whiteSpace: 'nowrap',
   },
 });

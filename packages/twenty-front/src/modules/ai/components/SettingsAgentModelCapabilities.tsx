@@ -16,29 +16,29 @@ import {
 
 const styles = stylex.create({
   checkbox: {
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    paddingInline: spacing['--t-spacing-2'],
     alignItems: 'center',
     backgroundColor: {
       default: null,
       ':hover': backgroundTransparent['--t-background-transparent-light'],
     },
-    borderRadius: borderRadius['--t-border-radius-sm'],
     cursor: 'pointer',
     display: 'flex',
-    height: spacing['--t-spacing-8'],
     justifyContent: 'space-between',
-    paddingInline: spacing['--t-spacing-2'],
     transitionDuration: `calc(${animationDuration['--t-animation-duration-normal']} * 1s)`,
     transitionProperty: 'background-color',
     transitionTimingFunction: 'ease',
+    height: spacing['--t-spacing-8'],
   },
   checkboxDisabled: {
     backgroundColor: 'transparent',
     cursor: 'not-allowed',
   },
   checkboxLabel: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
   },
 });
 

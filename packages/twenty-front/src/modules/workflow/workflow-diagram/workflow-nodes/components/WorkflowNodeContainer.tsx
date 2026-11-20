@@ -21,19 +21,19 @@ type WorkflowNodeContainerProps = {
 
 const styles = stylex.create({
   root: {
-    alignItems: 'center',
+    padding: spacing['--t-spacing-2'],
     borderRadius: borderRadius['--t-border-radius-md'],
     borderStyle: 'solid',
     borderWidth: '1px',
+    gap: spacing['--t-spacing-2'],
+    alignItems: 'center',
     boxSizing: 'border-box',
     cursor: 'pointer',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
-    maxWidth: '240px',
-    padding: spacing['--t-spacing-2'],
     position: 'relative',
     transitionDuration: '0.1s',
     transitionProperty: 'border-color',
+    maxWidth: '240px',
   },
   colors: (
     background: string,

@@ -7,7 +7,12 @@ import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomState
 import { t } from '@lingui/core/macro';
 import { Loader } from 'twenty-ui/primitives/feedback';
 import * as stylex from '@stylexjs/stylex';
-import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type ImportDataStepProps = {
   recordsToImportCount: number;
@@ -29,11 +34,11 @@ export const ImportDataStep = ({
 
   return (
     <>
-      <Dialog.Body
-        {...stylex.props(styles.dialogBody)}
-      >
+      <Dialog.Body {...stylex.props(styles.dialogBody)}>
         <span {...stylex.props(styles.header)}>{t`Importing Data ...`}</span>
-        <span {...stylex.props(styles.description)}>{t`${formattedCreatedRecordsProgress} out of ${formattedRecordsToImportCount} records imported.`}</span>
+        <span
+          {...stylex.props(styles.description)}
+        >{t`${formattedCreatedRecordsProgress} out of ${formattedRecordsToImportCount} records imported.`}</span>
         <Loader />
       </Dialog.Body>
       <StepNavigationButton onBack={onClose} backTitle={t`Cancel`} />
@@ -43,14 +48,14 @@ export const ImportDataStep = ({
 
 const styles = stylex.create({
   dialogBody: {
-    display: 'flex',
-    flexBasis: '0%',
-    flexGrow: 1,
-    flexShrink: 1,
-    flexDirection: 'column',
     paddingBlock: 0,
     paddingInline: 0,
     alignItems: 'center',
+    display: 'flex',
+    flexBasis: '0%',
+    flexDirection: 'column',
+    flexGrow: 1,
+    flexShrink: 1,
     justifyContent: 'center',
   },
   header: {

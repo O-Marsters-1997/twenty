@@ -42,24 +42,24 @@ const DEFAULT_INDENTATION_LEVEL = 1;
 
 const styles = stylex.create({
   item: {
+    borderColor: 'transparent',
+    borderRadius: borderRadius['--t-border-radius-md'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    textDecoration: 'none',
     alignItems: 'center',
     backgroundColor: {
       default: 'transparent',
       ':hover': backgroundTransparent['--t-background-transparent-light'],
     },
-    borderColor: 'transparent',
-    borderRadius: borderRadius['--t-border-radius-md'],
-    borderStyle: 'solid',
-    borderWidth: '1px',
     boxSizing: 'border-box',
     display: 'flex',
     fontFamily: font['--t-font-family'],
     fontSize: fontSize['--t-font-size-md'],
+    userSelect: 'none',
     minWidth: 0,
     paddingBottom: spacing['--t-spacing-1'],
     paddingTop: spacing['--t-spacing-1'],
-    textDecoration: 'none',
-    userSelect: 'none',
   },
   itemHighlighted: {
     backgroundColor: backgroundTransparent['--t-background-transparent-light'],
@@ -133,13 +133,15 @@ const styles = stylex.create({
     width: '100%',
   },
   labelParent: {
+    overflow: 'hidden',
     alignItems: 'center',
     display: 'flex',
-    flex: '1 1 auto',
-    minWidth: '0px',
-    overflow: 'hidden',
+    flexBasis: 'auto',
+    flexGrow: '1',
+    flexShrink: '1',
     textOverflow: 'clip',
     whiteSpace: 'nowrap',
+    minWidth: '0px',
   },
   itemLabel: {
     color: 'inherit',
@@ -166,75 +168,75 @@ const styles = stylex.create({
     flexGrow: '0',
     flexShrink: '0',
     justifyContent: 'center',
-    marginRight: spacing['--t-spacing-2'],
     position: 'relative',
+    marginRight: spacing['--t-spacing-2'],
   },
   rightOptionsContainer: {
     alignItems: 'center',
-    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
-    borderTopRightRadius: borderRadius['--t-border-radius-md'],
-    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
-    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
     display: 'flex',
     flexGrow: '0',
     flexShrink: '0',
-    height: spacing['--t-spacing-6'],
     justifyContent: 'center',
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    height: spacing['--t-spacing-6'],
   },
   rightOptionsVisibility: {
+    overflow: {
+      default: 'hidden',
+      [stylex.when.ancestor(':focus-within', navigationDrawerItemMarker)]:
+        'visible',
+      [stylex.when.ancestor(':hover', navigationDrawerItemMarker)]: 'visible',
+    },
     clipPath: {
       default: 'inset(1px)',
-      [stylex.when.ancestor(':hover', navigationDrawerItemMarker)]: 'none',
       [stylex.when.ancestor(':focus-within', navigationDrawerItemMarker)]:
         'none',
+      [stylex.when.ancestor(':hover', navigationDrawerItemMarker)]: 'none',
     },
     display: {
       default: 'block',
-      [stylex.when.ancestor(':hover', navigationDrawerItemMarker)]: 'flex',
       [stylex.when.ancestor(':focus-within', navigationDrawerItemMarker)]:
         'flex',
-    },
-    height: {
-      default: '1px',
-      [stylex.when.ancestor(':hover', navigationDrawerItemMarker)]: 'auto',
-      [stylex.when.ancestor(':focus-within', navigationDrawerItemMarker)]:
-        'auto',
+      [stylex.when.ancestor(':hover', navigationDrawerItemMarker)]: 'flex',
     },
     opacity: {
       default: 0,
-      [stylex.when.ancestor(':hover', navigationDrawerItemMarker)]: 1,
       [stylex.when.ancestor(':focus-within', navigationDrawerItemMarker)]: 1,
+      [stylex.when.ancestor(':hover', navigationDrawerItemMarker)]: 1,
     },
-    overflow: {
-      default: 'hidden',
-      [stylex.when.ancestor(':hover', navigationDrawerItemMarker)]: 'visible',
-      [stylex.when.ancestor(':focus-within', navigationDrawerItemMarker)]:
-        'visible',
-    },
-    paddingLeft: spacing['--t-spacing-2'],
     position: {
       default: 'absolute',
-      [stylex.when.ancestor(':hover', navigationDrawerItemMarker)]: 'static',
       [stylex.when.ancestor(':focus-within', navigationDrawerItemMarker)]:
         'static',
+      [stylex.when.ancestor(':hover', navigationDrawerItemMarker)]: 'static',
     },
     transitionDuration: '150ms',
     transitionProperty: 'opacity',
     whiteSpace: 'nowrap',
-    width: {
+    height: {
       default: '1px',
-      [stylex.when.ancestor(':hover', navigationDrawerItemMarker)]: 'auto',
       [stylex.when.ancestor(':focus-within', navigationDrawerItemMarker)]:
         'auto',
+      [stylex.when.ancestor(':hover', navigationDrawerItemMarker)]: 'auto',
+    },
+    paddingLeft: spacing['--t-spacing-2'],
+    width: {
+      default: '1px',
+      [stylex.when.ancestor(':focus-within', navigationDrawerItemMarker)]:
+        'auto',
+      [stylex.when.ancestor(':hover', navigationDrawerItemMarker)]: 'auto',
     },
   },
   rightOptionsVisible: {
+    overflow: 'visible',
     clipPath: 'none',
     display: 'flex',
-    height: 'auto',
     opacity: 1,
-    overflow: 'visible',
     position: 'static',
+    height: 'auto',
     width: 'auto',
   },
 });

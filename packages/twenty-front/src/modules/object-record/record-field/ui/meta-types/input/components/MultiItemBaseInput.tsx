@@ -18,24 +18,24 @@ import {
 
 const styles = stylex.create({
   input: {
-    backgroundColor: 'transparent',
     borderStyle: 'none',
-    borderTopLeftRadius: 0,
-    borderTopRightRadius: 0,
-    borderBottomRightRadius: 0,
-    borderBottomLeftRadius: 0,
+    backgroundColor: 'transparent',
     boxSizing: 'border-box',
     color: fontColor['--t-font-color-primary'],
     fontFamily: font['--t-font-family'],
     fontSize: 'inherit',
     fontWeight: 'inherit',
-    height: 32,
     outlineStyle: 'none',
+    position: 'relative',
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+    height: 32,
     paddingBottom: 0,
     paddingLeft: spacing['--t-spacing-2'],
     paddingRight: 0,
     paddingTop: 0,
-    position: 'relative',
     width: '100%',
     '::placeholder': {
       color: fontColor['--t-font-color-light'],
@@ -44,10 +44,10 @@ const styles = stylex.create({
     },
   },
   inputWithItem: {
+    borderBottomLeftRadius: 4,
+    borderBottomRightRadius: 4,
     borderTopLeftRadius: 4,
     borderTopRightRadius: 4,
-    borderBottomRightRadius: 4,
-    borderBottomLeftRadius: 4,
   },
   inputWithRightComponent: {
     paddingRight: 32,
@@ -55,14 +55,7 @@ const styles = stylex.create({
   inputContainer: {
     backgroundColor: 'transparent',
     boxSizing: 'border-box',
-    paddingTop: {
-      default: spacing['--t-spacing-1'],
-      ':first-of-type': 0,
-    },
-    paddingRight: {
-      default: spacing['--t-spacing-1'],
-      ':first-of-type': 0,
-    },
+    position: 'relative',
     paddingBottom: {
       default: spacing['--t-spacing-1'],
       ':first-of-type': 0,
@@ -71,21 +64,28 @@ const styles = stylex.create({
       default: spacing['--t-spacing-1'],
       ':first-of-type': 0,
     },
-    position: 'relative',
+    paddingRight: {
+      default: spacing['--t-spacing-1'],
+      ':first-of-type': 0,
+    },
+    paddingTop: {
+      default: spacing['--t-spacing-1'],
+      ':first-of-type': 0,
+    },
     width: '100%',
   },
   rightContainer: {
     position: 'absolute',
+    transform: 'translateY(-50%)',
     right: spacing['--t-spacing-2'],
     top: '50%',
-    transform: 'translateY(-50%)',
   },
   errorDiv: {
     color: color['--t-color-red'],
-    paddingTop: 0,
-    paddingRight: spacing['--t-spacing-2'],
     paddingBottom: 0,
     paddingLeft: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingTop: 0,
   },
 });
 

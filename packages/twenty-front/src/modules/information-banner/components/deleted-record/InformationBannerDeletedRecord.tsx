@@ -6,8 +6,8 @@ import * as stylex from '@stylexjs/stylex';
 
 const styles = stylex.create({
   informationBannerDeletedRecord: {
-    height: { default: '40px', ':empty': '0' },
     position: 'relative',
+    height: { default: '40px', ':empty': '0' },
   },
 });
 

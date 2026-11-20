@@ -19,29 +19,29 @@ import {
 
 const styles = stylex.create({
   title: {
+    borderRadius: borderRadius['--t-border-radius-md'],
     alignItems: 'center',
     backgroundColor: {
       default: null,
       ':hover': backgroundTransparent['--t-background-transparent-light'],
     },
-    borderRadius: borderRadius['--t-border-radius-md'],
     cursor: {
       default: null,
       ':hover': 'pointer',
     },
     display: 'flex',
-    height: spacing['--t-spacing-7'],
     justifyContent: 'space-between',
+    height: spacing['--t-spacing-7'],
     paddingBottom: spacing['--t-spacing-1'],
     paddingLeft: spacing['--t-spacing-1'],
     paddingRight: spacing['--t-spacing-0_5'],
     paddingTop: spacing['--t-spacing-1'],
   },
   labelContainer: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     display: 'flex',
     flexGrow: '1',
-    gap: spacing['--t-spacing-1'],
   },
   displayLabel: {
     color: {

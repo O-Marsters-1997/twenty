@@ -27,8 +27,8 @@ const styles = stylex.create({
     height: '100%',
   },
   content: {
-    display: 'flex',
     flex: '1',
+    display: 'flex',
     flexDirection: 'column',
     overflowY: 'auto',
   },

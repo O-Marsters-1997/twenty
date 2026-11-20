@@ -31,18 +31,18 @@ import {
 
 const styles = stylex.create({
   groupContainer: {
-    backgroundColor: 'transparent',
     borderColor: 'transparent',
     borderRadius: borderRadius['--t-border-radius-md'],
     borderStyle: 'solid',
     borderWidth: 1,
+    backgroundColor: 'transparent',
     display: 'flex',
     flexDirection: 'column',
     width: '100%',
   },
   groupContainerDragging: {
-    backgroundColor: background['--t-background-primary'],
     borderColor: color['--t-color-blue'],
+    backgroundColor: background['--t-background-primary'],
   },
   fieldsDroppable: {
     display: 'flex',
@@ -60,10 +60,10 @@ const styles = stylex.create({
   },
   dropdownContainer: {
     position: 'absolute',
+    transform: 'translateY(-50%)',
+    zIndex: 1,
     right: spacing['--t-spacing-1'],
     top: '50%',
-    transform: 'translateY(-50%)',
-    zIndex: '1',
   },
 });
 

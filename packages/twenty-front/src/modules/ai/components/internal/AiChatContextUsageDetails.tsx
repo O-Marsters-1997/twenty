@@ -20,9 +20,9 @@ import {
 
 const styles = stylex.create({
   section: {
+    gap: spacing['--t-spacing-1'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-1'],
   },
   sectionTitle: {
     alignItems: 'center',

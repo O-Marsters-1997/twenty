@@ -23,12 +23,12 @@ export const UserOrMetadataLoader = () => {
 
 const styles = stylex.create({
   container: {
+    overflow: 'hidden',
     backgroundColor: background['--t-background-tertiary'],
     boxSizing: 'border-box',
     display: 'flex',
     flexDirection: 'row',
     height: 'calc(100dvh / var(--t-zoom, 1))',
-    overflow: 'hidden',
     width: '100%',
   },
   minWidth: (minWidth: number) => ({ minWidth }),

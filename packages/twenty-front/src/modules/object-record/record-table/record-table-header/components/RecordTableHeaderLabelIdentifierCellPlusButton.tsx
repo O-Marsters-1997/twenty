@@ -14,10 +14,10 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   headerIcon: {
-    marginTop: spacing['--t-spacing-1'],
-    marginRight: spacing['--t-spacing-1'],
     marginBottom: spacing['--t-spacing-1'],
     marginLeft: spacing['--t-spacing-1_5'],
+    marginRight: spacing['--t-spacing-1'],
+    marginTop: spacing['--t-spacing-1'],
   },
 });
 

@@ -16,8 +16,8 @@ const styles = stylex.create({
   },
   verticalLineContainer: {
     display: 'flex',
-    height: '56px',
     justifyContent: 'center',
+    height: '56px',
     width: '56px',
   },
   labelContainer: {

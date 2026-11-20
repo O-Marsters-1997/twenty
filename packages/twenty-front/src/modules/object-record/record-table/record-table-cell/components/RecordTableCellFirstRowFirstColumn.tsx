@@ -46,17 +46,17 @@ export const RecordTableCellFirstRowFirstColumn = ({
 const styles = stylex.create({
   cell: {
     backgroundColor: background['--t-background-primary'],
+    color: fontColor['--t-font-color-primary'],
+    textAlign: 'left',
+    zIndex: recordTableZIndex.cellSticky,
     borderBottomColor: 'transparent',
     borderBottomStyle: 'solid',
     borderBottomWidth: 1,
     borderRightStyle: 'none',
-    color: fontColor['--t-font-color-primary'],
     paddingBottom: 0,
     paddingLeft: 0,
     paddingRight: 0,
     paddingTop: 0,
-    textAlign: 'left',
-    zIndex: recordTableZIndex.cellSticky,
   },
   selected: {
     backgroundColor: accent['--t-accent-quaternary'],

@@ -4,6 +4,7 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   root: {
+    padding: spacing['--t-spacing-10'],
     alignItems: 'center',
     display: 'flex',
     flexBasis: '0%',
@@ -11,7 +12,6 @@ const styles = stylex.create({
     flexGrow: 1,
     flexShrink: 1,
     justifyContent: 'center',
-    padding: spacing['--t-spacing-10'],
   },
 });
 

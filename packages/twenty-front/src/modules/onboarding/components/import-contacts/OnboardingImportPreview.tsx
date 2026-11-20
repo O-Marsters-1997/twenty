@@ -14,27 +14,27 @@ const PREVIEW_HEIGHT = 198;
 
 const styles = stylex.create({
   card: {
-    alignItems: 'center',
-    backgroundColor: background['--t-background-secondary'],
     borderColor: borderColor['--t-border-color-medium'],
     borderRadius: '12px',
     borderStyle: 'solid',
     borderWidth: '1px',
+    gap: spacing['--t-spacing-3'],
+    overflow: 'hidden',
+    alignItems: 'center',
+    backgroundColor: background['--t-background-secondary'],
     boxSizing: 'border-box',
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-3'],
     maxWidth: '100%',
-    overflow: 'hidden',
     paddingBottom: `calc(${spacing['--t-spacing-3']} - 1px)`,
     width: onboardingLayout.contentBlockWidth,
   },
   columns: {
+    gap: '1px',
     backgroundColor: borderColor['--t-border-color-medium'],
     display: 'flex',
-    gap: '1px',
-    height: `${PREVIEW_HEIGHT}px`,
     position: 'relative',
+    height: `${PREVIEW_HEIGHT}px`,
     width: '100%',
   },
 });

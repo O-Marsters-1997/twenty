@@ -4,12 +4,12 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   root: {
+    paddingBlock: spacing['--t-spacing-1'],
+    paddingInline: spacing['--t-spacing-2'],
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
     overflowY: 'auto',
-    paddingBlock: spacing['--t-spacing-1'],
-    paddingInline: spacing['--t-spacing-2'],
   },
 });
 

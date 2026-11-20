@@ -6,12 +6,14 @@ import * as stylex from '@stylexjs/stylex';
 const styles = stylex.create({
   dropTargetSlot: {
     alignSelf: 'stretch',
-    flex: '0 0 2px',
+    flexBasis: '2px',
+    flexGrow: '0',
+    flexShrink: '0',
+    position: 'relative',
+    zIndex: 100,
     marginLeft: '-1px',
     marginRight: '-1px',
     minHeight: '0',
-    position: 'relative',
-    zIndex: '100',
   },
 });
 

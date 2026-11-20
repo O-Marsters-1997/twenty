@@ -16,15 +16,15 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   container: {
+    overflow: 'hidden',
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
-    overflow: 'hidden',
     width: '100%',
   },
   containerWithPadding: {
-    boxSizing: 'border-box',
     flex: '1',
+    boxSizing: 'border-box',
     marginLeft: spacing['--t-spacing-2'],
     minHeight: '0',
   },

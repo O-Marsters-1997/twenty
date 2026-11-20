@@ -78,7 +78,9 @@ export const SpreadsheetImportSingleSelectTable = <
 
 const styles = stylex.create({
   radioGroupContainer: {
-    flex: 1,
+    flexBasis: '0%',
+    flexGrow: 1,
+    flexShrink: 1,
     minHeight: '0',
   },
 });

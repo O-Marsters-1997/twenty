@@ -25,15 +25,15 @@ const styles = stylex.create({
     height: '100%',
   },
   content: {
-    display: 'flex',
     flex: '1',
-    flexDirection: 'column',
     gap: spacing['--t-spacing-4'],
+    display: 'flex',
+    flexDirection: 'column',
     overflowY: 'auto',
-    paddingTop: spacing['--t-spacing-4'],
-    paddingRight: spacing['--t-spacing-4'],
     paddingBottom: spacing['--t-spacing-4'],
     paddingLeft: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingTop: spacing['--t-spacing-4'],
   },
 });
 

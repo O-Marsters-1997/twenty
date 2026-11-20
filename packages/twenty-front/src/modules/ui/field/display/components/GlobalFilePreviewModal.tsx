@@ -11,7 +11,13 @@ import { isDefined } from 'twenty-shared/utils';
 import { IconDownload, IconX } from 'twenty-ui/icon';
 import { IconButton } from 'twenty-ui/components/input';
 import * as stylex from '@stylexjs/stylex';
-import { borderColor, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  borderColor,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const DocumentViewer = lazy(() =>
   import('@/activities/files/components/DocumentViewer').then((module) => ({
@@ -23,27 +29,27 @@ const GLOBAL_FILE_PREVIEW_MODAL_ID = 'global-file-preview-modal';
 
 const styles = stylex.create({
   modalHeader: {
+    gap: spacing['--t-spacing-2'],
+    overflow: 'hidden',
     alignItems: 'center',
-    borderBottomWidth: '1px',
-    borderBottomStyle: 'solid',
-    borderBottomColor: borderColor['--t-border-color-medium'],
     display: 'flex',
     flexDirection: 'row',
-    gap: spacing['--t-spacing-2'],
-    height: '60px',
     justifyContent: 'space-between',
-    overflow: 'hidden',
-    paddingTop: spacing['--t-spacing-0'],
-    paddingRight: spacing['--t-spacing-4'],
-    paddingBottom: spacing['--t-spacing-0'],
-    paddingLeft: spacing['--t-spacing-4'],
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
+    borderBottomColor: borderColor['--t-border-color-medium'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
+    height: '60px',
+    paddingBottom: spacing['--t-spacing-0'],
+    paddingLeft: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingTop: spacing['--t-spacing-0'],
   },
   header: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
     justifyContent: 'space-between',
     width: '100%',
   },
@@ -53,22 +59,22 @@ const styles = stylex.create({
     fontWeight: fontWeight['--t-font-weight-semi-bold'],
   },
   buttonContainer: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
   },
   modalContent: {
     height: '100%',
-    paddingTop: spacing['--t-spacing-4'],
-    paddingRight: spacing['--t-spacing-4'],
     paddingBottom: spacing['--t-spacing-4'],
     paddingLeft: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingTop: spacing['--t-spacing-4'],
   },
   loadingContainer: {
     alignItems: 'center',
     display: 'flex',
-    height: '100%',
     justifyContent: 'center',
+    height: '100%',
   },
   loadingText: {
     color: fontColor['--t-font-color-tertiary'],
@@ -116,7 +122,9 @@ export const GlobalFilePreviewModal = (): JSX.Element | null => {
         >
           <div {...stylex.props(styles.modalHeader)}>
             <div {...stylex.props(styles.header)}>
-              <div {...stylex.props(styles.modalTitle)}>{filePreview.label}</div>
+              <div {...stylex.props(styles.modalTitle)}>
+                {filePreview.label}
+              </div>
               <div {...stylex.props(styles.buttonContainer)}>
                 <IconButton
                   aria-label={t`Download file`}

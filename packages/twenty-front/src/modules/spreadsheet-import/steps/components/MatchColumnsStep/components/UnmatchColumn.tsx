@@ -84,9 +84,9 @@ const styles = stylex.create({
     width: '100%',
   },
   contentWrapper: {
+    gap: spacing['--t-spacing-3'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-3'],
     marginTop: spacing['--t-spacing-4'],
     paddingBottom: spacing['--t-spacing-4'],
   },

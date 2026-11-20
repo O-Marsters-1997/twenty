@@ -23,14 +23,14 @@ const styles = stylex.create({
     marginBlockEnd: '0',
   },
   formContainer: {
+    gap: spacing['--t-spacing-4'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-4'],
   },
   titleContainer: {
+    gap: spacing['--t-spacing-4'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-4'],
     marginTop: spacing['--t-spacing-2'],
   },
 });

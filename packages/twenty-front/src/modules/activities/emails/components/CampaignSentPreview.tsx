@@ -19,8 +19,8 @@ const styles = stylex.create({
     width: '100%',
   },
   body: {
-    display: 'flex',
     flex: '1',
+    display: 'flex',
     flexDirection: 'column',
     minHeight: '0',
   },

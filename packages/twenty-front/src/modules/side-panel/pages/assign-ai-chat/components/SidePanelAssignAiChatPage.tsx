@@ -28,13 +28,13 @@ const UNASSIGN_ITEM_ID = 'unassign';
 
 const styles = stylex.create({
   searchContainer: {
-    borderBottomWidth: '1px',
-    borderBottomStyle: 'solid',
     borderBottomColor: borderColor['--t-border-color-light'],
-    paddingTop: '0',
-    paddingRight: spacing['--t-spacing-2'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
     paddingBottom: '0',
     paddingLeft: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingTop: '0',
   },
 });
 

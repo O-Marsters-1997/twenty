@@ -44,9 +44,9 @@ const styles = stylex.create({
     boxShadow: `0 -1px 0 ${background['--t-background-primary']}`,
     display: 'flex',
     flexDirection: 'row',
-    height: recordTableLayout.rowHeight + 1,
     position: 'sticky',
-    top: 0,
     zIndex: recordTableZIndex.headerRow,
+    height: recordTableLayout.rowHeight + 1,
+    top: 0,
   },
 });

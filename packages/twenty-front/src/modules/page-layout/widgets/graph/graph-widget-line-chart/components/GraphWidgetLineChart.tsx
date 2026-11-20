@@ -70,8 +70,8 @@ const styles = stylex.create({
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'column',
-    height: '100%',
     justifyContent: 'center',
+    height: '100%',
     width: '100%',
   },
 });

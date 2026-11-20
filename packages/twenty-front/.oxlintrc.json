@@ -193,6 +193,27 @@
       "rules": {
         "twenty/max-consts-per-file": ["error", { "max": 1 }]
       }
+    },
+    {
+      "files": ["src/pages/ai-chat/AiChatInboxPage.tsx"],
+      "rules": {
+        "twenty/no-navigate-prefer-link": "off"
+      }
+    },
+    {
+      "files": [
+        "src/modules/ui/layout/components/WidgetContentContainer.tsx",
+        "src/modules/page-layout/widgets/widget-card/components/WidgetCardContent.tsx"
+      ],
+      "rules": {
+        "stylex/valid-styles": "off"
+      }
+    },
+    {
+      "files": ["**/*.stylex.ts"],
+      "rules": {
+        "twenty/max-consts-per-file": "off"
+      }
     }
   ]
 }

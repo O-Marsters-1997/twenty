@@ -115,8 +115,8 @@ export const RecordTableHeaderFirstCell = () => {
 const styles = stylex.create({
   plusButtonWrapper: {
     position: 'absolute',
+    zIndex: recordTableZIndex.headerColumnsSticky,
     right: 0,
     top: 0,
-    zIndex: recordTableZIndex.headerColumnsSticky,
   },
 });

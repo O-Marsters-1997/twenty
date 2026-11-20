@@ -27,10 +27,10 @@ export const MainNavigationDrawerItemsSkeletonLoader = ({
 
 const styles = stylex.create({
   skeletonContainer: {
+    gap: 6,
     alignItems: 'flex-start',
     display: 'flex',
     flexDirection: 'column',
-    gap: 6,
     width: '100%',
   },
   fillSkeletonContainer: {
