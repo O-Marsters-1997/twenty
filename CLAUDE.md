@@ -37,9 +37,9 @@ npx nx run twenty-front:graphql:generate      # after GraphQL schema changes (--
 
 ## Agent versus CI
 
-Agents run only: a typecheck of the touched package through `scripts/heavy` (`scripts/heavy npx tsgo -p tsconfig.json --noEmit`, which serialises memory-heavy runs), single-file jest, and `lint:diff-with-main`. CI runs package-wide `nx test` for twenty-front and twenty-ui, and `storybook:build twenty-ui`. A `PreToolUse` hook (`.claude/hooks/deny-ci-commands.sh`) denies those commands and a bare `tsgo`. twenty-shared and twenty-sdk tests are not banned: the audit found no CI run evidence for them.
+Agents run only: a typecheck of the touched package through `scripts/heavy` (`scripts/heavy npx tsgo -p tsconfig.json --noEmit`, which serialises memory-heavy runs), single-file jest, and `lint:diff-with-main`. CI runs package-wide `nx test` for twenty-front and twenty-ui. A `PreToolUse` hook (`.claude/hooks/deny-ci-commands.sh`) denies those commands and a bare `tsgo`. twenty-shared tests are cheap and not banned.
 
-`nx build twenty-front` and the twenty-front `storybook:build`/`storybook:test` stay allowed: CI's 8-core runner jobs for them never run on the fork (`docs/agent-ram-ci-coverage.md`).
+CI is one workflow, `.github/workflows/ci.yaml`, with a single required check, `ci-status-check`, the only entry in `.command-centre.toml`. Its jobs run in parallel and all run on every main push: Go generated code, build, vet and test; front lint, typecheck and jest; ui lint, generate:check, typecheck and test; shared, emails, utils and knip. No storybook or front build runs in CI, so those stay allowed locally.
 
 ## Gotchas
 
