@@ -8,7 +8,6 @@ import { isDefined } from 'twenty-shared/utils';
 
 import { useAttachChatThreadToRecord } from '@/ai/hooks/useAttachChatThreadToRecord';
 import { useDetachChatThreadFromRecord } from '@/ai/hooks/useDetachChatThreadFromRecord';
-import { agentChatThreadPermissionsFamilySelector } from '@/ai/states/selectors/agentChatThreadPermissionsFamilySelector';
 import { useListenToObjectRecordOperationBrowserEvent } from '@/browser-event/hooks/useListenToObjectRecordOperationBrowserEvent';
 import { useObjectMetadataItems } from '@/object-metadata/hooks/useObjectMetadataItems';
 import { generateJunctionRelationGqlFields } from '@/object-record/graphql/record-gql-fields/utils/generateJunctionRelationGqlFields';
@@ -22,7 +21,6 @@ import { type RecordPickerPickableMorphItem } from '@/object-record/record-picke
 import { type ObjectRecord } from '@/object-record/types/ObjectRecord';
 import { useFieldWidgetJunctionRelationRecords } from '@/page-layout/widgets/field/hooks/useFieldWidgetJunctionRelationRecords';
 import { useListenToEventsForQuery } from '@/sse-db-event/hooks/useListenToEventsForQuery';
-import { useAtomFamilySelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilySelectorValue';
 import { useIsFeatureEnabled } from '@/workspace/hooks/useIsFeatureEnabled';
 import { FeatureFlagKey } from '~/generated-metadata/graphql';
 
@@ -109,10 +107,6 @@ export const useAiChatThreadRecordTargets = ({
     ({ record, objectNameSingular }) => `${objectNameSingular}-${record.id}`,
   );
 
-  const permissions = useAtomFamilySelectorValue(
-    agentChatThreadPermissionsFamilySelector,
-    threadId,
-  );
   const { attachChatThreadToRecord } = useAttachChatThreadToRecord();
   const { detachChatThreadFromRecord } = useDetachChatThreadFromRecord();
   const { openJunctionRelationPicker } = useOpenJunctionRelationPicker();
@@ -178,7 +172,7 @@ export const useAiChatThreadRecordTargets = ({
   return {
     isAvailable: !isThreadQuerySkipped && isDefined(thread),
     targetRecords,
-    canEditRecordTargets: permissions?.canUpdate ?? false,
+    canEditRecordTargets: true,
     openRecordPicker,
     handleRecordPickerChange,
   };

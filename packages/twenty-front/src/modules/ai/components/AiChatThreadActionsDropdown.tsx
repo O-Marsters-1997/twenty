@@ -7,9 +7,7 @@ import { Dropdown } from 'twenty-ui/components/navigation';
 import { IconDotsVertical, IconPencil, IconUnlink } from 'twenty-ui/icon';
 
 import { AiChatThreadCommandMenuItems } from '@/ai/components/AiChatThreadCommandMenuItems';
-import { useRefreshAgentChatThreadPermissions } from '@/ai/hooks/useRefreshAgentChatThreadPermissions';
 import { useTargetAiChatThreadsInContextStore } from '@/ai/hooks/useTargetAiChatThreadsInContextStore';
-import { agentChatThreadPermissionsFamilySelector } from '@/ai/states/selectors/agentChatThreadPermissionsFamilySelector';
 import { CommandMenuContextProvider } from '@/command-menu-item/contexts/CommandMenuContextProvider';
 import { CommandMenuItemContainerType } from '@/command-menu-item/types/CommandMenuItemContainerType';
 import { getCommandMenuDropdownIdFromCommandMenuId } from '@/command-menu-item/utils/getCommandMenuDropdownIdFromCommandMenuId';
@@ -43,8 +41,6 @@ export const AiChatThreadActionsDropdown = ({
   const { upsertRecordsInStore } = useUpsertRecordsInStore();
   const { targetAiChatThreadsInContextStore } =
     useTargetAiChatThreadsInContextStore();
-  const { refreshAgentChatThreadPermissions } =
-    useRefreshAgentChatThreadPermissions();
   const chatObjectMetadataItem = useAtomFamilySelectorValue(
     objectMetadataItemFamilySelector,
     {
@@ -52,15 +48,10 @@ export const AiChatThreadActionsDropdown = ({
       objectNameType: 'singular',
     },
   );
-  const permissions = useAtomFamilySelectorValue(
-    agentChatThreadPermissionsFamilySelector,
-    thread.id,
-  );
   if (!isDefined(chatObjectMetadataItem)) {
     return null;
   }
 
-  const canUpdate = isDefined(permissions) && permissions.canUpdate;
   const isDeleted = isDefined(thread.deletedAt);
 
   const handleRename = (event: MouseEvent) => {
@@ -98,7 +89,6 @@ export const AiChatThreadActionsDropdown = ({
                   },
                 ],
               });
-              void refreshAgentChatThreadPermissions([thread.id]);
             }
           }}
         >
@@ -111,7 +101,7 @@ export const AiChatThreadActionsDropdown = ({
           />
           <DropdownContent align="end" aria-label={t`Chat actions`}>
             <Dropdown.Section>
-              {isDefined(onDetach) && canUpdate && (
+              {isDefined(onDetach) && (
                 <Dropdown.ActionItem
                   startIcon={<IconUnlink />}
                   onClick={handleDetach}
@@ -119,7 +109,7 @@ export const AiChatThreadActionsDropdown = ({
                   {t`Detach`}
                 </Dropdown.ActionItem>
               )}
-              {canUpdate && !isDeleted && (
+              {!isDeleted && (
                 <Dropdown.ActionItem
                   startIcon={<IconPencil />}
                   onClick={handleRename}

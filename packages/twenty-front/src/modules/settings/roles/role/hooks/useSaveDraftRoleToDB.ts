@@ -1,4 +1,3 @@
-import { useUpsertRowLevelPermissionPredicatesMutation } from '@/settings/roles/graphql/hooks/useUpsertRowLevelPermissionPredicatesMutation';
 import { GET_ROLES } from '@/settings/roles/graphql/queries/getRolesQuery';
 import { useUpdateAgentRole } from '@/settings/roles/hooks/useUpdateAgentRole';
 import { useUpdateApiKeyRole } from '@/settings/roles/hooks/useUpdateApiKeyRole';
@@ -12,8 +11,6 @@ import { getOperationName } from '~/utils/getOperationName';
 import { isDefined, isNonEmptyArray } from 'twenty-shared/utils';
 import { useMutation } from '@apollo/client/react';
 import {
-  type RowLevelPermissionPredicateGroupLogicalOperator,
-  type RowLevelPermissionPredicateOperand,
   type Role,
   CreateOneRoleDocument,
   UpdateOneRoleDocument,
@@ -54,8 +51,6 @@ export const useSaveDraftRoleToDB = ({
     UpsertObjectPermissionsDocument,
   );
   const [upsertFieldPermissions] = useMutation(UpsertFieldPermissionsDocument);
-  const [upsertRowLevelPermissionPredicates] =
-    useUpsertRowLevelPermissionPredicatesMutation();
   const { addWorkspaceMembersToRole } = useUpdateWorkspaceMemberRole(roleId);
   const { addAgentsToRole } = useUpdateAgentRole(roleId);
   const { addApiKeysToRole } = useUpdateApiKeyRole(roleId);
@@ -248,119 +243,7 @@ export const useSaveDraftRoleToDB = ({
       });
     }
 
-    if (
-      isDefined(dirtyFields.rowLevelPermissionPredicates) ||
-      isDefined(dirtyFields.rowLevelPermissionPredicateGroups)
-    ) {
-      await upsertRowLevelPermissionPredicatesForRole(roleId);
-    }
-
     return roleId;
-  };
-
-  const upsertRowLevelPermissionPredicatesForRole = async (
-    targetRoleId: string,
-  ) => {
-    const predicates = settingsDraftRole.rowLevelPermissionPredicates ?? [];
-    const predicateGroups =
-      settingsDraftRole.rowLevelPermissionPredicateGroups ?? [];
-
-    const predicatesByObject = predicates.reduce(
-      (acc, predicate) => {
-        const objectMetadataId = predicate.objectMetadataId;
-
-        if (!isDefined(acc[objectMetadataId])) {
-          acc[objectMetadataId] = [];
-        }
-        acc[objectMetadataId].push(predicate);
-
-        return acc;
-      },
-      {} as Record<string, typeof predicates>,
-    );
-
-    const persistedPredicates =
-      settingsPersistedRole?.rowLevelPermissionPredicates ?? [];
-    const persistedObjectIds = new Set(
-      persistedPredicates.map((predicate) => predicate.objectMetadataId),
-    );
-
-    for (const objectMetadataId of persistedObjectIds) {
-      if (!isDefined(predicatesByObject[objectMetadataId])) {
-        predicatesByObject[objectMetadataId] = [];
-      }
-    }
-
-    for (const [objectMetadataId, objectPredicates] of Object.entries(
-      predicatesByObject,
-    )) {
-      const objectUsedGroupIds = new Set(
-        objectPredicates
-          .map((p) => p.rowLevelPermissionPredicateGroupId)
-          .filter(isDefined),
-      );
-
-      const includeParentGroupsForObject = (groupId: string) => {
-        const group = predicateGroups.find((g) => g.id === groupId);
-        if (
-          isDefined(group?.parentRowLevelPermissionPredicateGroupId) &&
-          !objectUsedGroupIds.has(
-            group.parentRowLevelPermissionPredicateGroupId,
-          )
-        ) {
-          objectUsedGroupIds.add(
-            group.parentRowLevelPermissionPredicateGroupId,
-          );
-          includeParentGroupsForObject(
-            group.parentRowLevelPermissionPredicateGroupId,
-          );
-        }
-      };
-
-      for (const groupId of objectUsedGroupIds) {
-        includeParentGroupsForObject(groupId);
-      }
-
-      const objectPredicateGroups = predicateGroups.filter((group) =>
-        objectUsedGroupIds.has(group.id),
-      );
-
-      await upsertRowLevelPermissionPredicates({
-        variables: {
-          input: {
-            roleId: targetRoleId,
-            objectMetadataId,
-            predicates: objectPredicates.map((predicate) => ({
-              id: predicate.id,
-              fieldMetadataId: predicate.fieldMetadataId,
-              operand: predicate.operand as RowLevelPermissionPredicateOperand,
-              value: predicate.value,
-              subFieldName: predicate.subFieldName,
-              workspaceMemberFieldMetadataId:
-                predicate.workspaceMemberFieldMetadataId,
-              workspaceMemberSubFieldName:
-                predicate.workspaceMemberSubFieldName,
-              rowLevelPermissionPredicateGroupId:
-                predicate.rowLevelPermissionPredicateGroupId,
-              positionInRowLevelPermissionPredicateGroup:
-                predicate.positionInRowLevelPermissionPredicateGroup,
-            })),
-            predicateGroups: objectPredicateGroups.map((group) => ({
-              id: group.id,
-              objectMetadataId,
-              parentRowLevelPermissionPredicateGroupId:
-                group.parentRowLevelPermissionPredicateGroupId,
-              logicalOperator:
-                group.logicalOperator as RowLevelPermissionPredicateGroupLogicalOperator,
-              positionInRowLevelPermissionPredicateGroup:
-                group.positionInRowLevelPermissionPredicateGroup,
-            })),
-          },
-        },
-        refetchQueries: [getOperationName(GET_ROLES) ?? ''],
-        awaitRefetchQueries: true,
-      });
-    }
   };
 
   const upsertRolePermissions = async (targetRoleId: string) => {
@@ -416,13 +299,6 @@ export const useSaveDraftRoleToDB = ({
         },
         refetchQueries: [getOperationName(GET_ROLES) ?? ''],
       });
-    }
-
-    if (
-      isDefined(dirtyFields.rowLevelPermissionPredicates) ||
-      isDefined(dirtyFields.rowLevelPermissionPredicateGroups)
-    ) {
-      await upsertRowLevelPermissionPredicatesForRole(targetRoleId);
     }
   };
 

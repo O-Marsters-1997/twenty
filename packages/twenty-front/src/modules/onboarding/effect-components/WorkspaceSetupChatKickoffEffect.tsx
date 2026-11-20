@@ -1,5 +1,4 @@
 import { useApplyAgentChatThreadUpdate } from '@/ai/hooks/useApplyAgentChatThreadUpdate';
-import { useRefreshAgentChatThreadPermissions } from '@/ai/hooks/useRefreshAgentChatThreadPermissions';
 import { useMutation } from '@apollo/client/react';
 import { useStore } from 'jotai';
 import { useEffect, useState } from 'react';
@@ -26,8 +25,6 @@ export const WorkspaceSetupChatKickoffEffect = () => {
     StartWorkspaceSetupChatDocument,
   );
   const store = useStore();
-  const { refreshAgentChatThreadPermissions } =
-    useRefreshAgentChatThreadPermissions();
   const { addAgentChatThread } = useApplyAgentChatThreadUpdate();
   const isCompanyEnrichmentFetchInFlight = useAtomStateValue(
     isCompanyEnrichmentFetchInFlightState,
@@ -93,7 +90,6 @@ export const WorkspaceSetupChatKickoffEffect = () => {
           updatedAt: thread.updatedAt,
           deletedAt: null,
         });
-        void refreshAgentChatThreadPermissions([thread.id]);
 
         if (result.outcome === WorkspaceSetupChatOutcome.STARTED) {
           store.set(
@@ -117,7 +113,6 @@ export const WorkspaceSetupChatKickoffEffect = () => {
     void startWorkspaceSetupChat();
   }, [
     startWorkspaceSetupChatMutation,
-    refreshAgentChatThreadPermissions,
     store,
     addAgentChatThread,
     isCompanyEnrichmentFetchInFlight,
