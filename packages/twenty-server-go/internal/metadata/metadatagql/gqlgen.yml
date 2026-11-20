@@ -6,11 +6,6 @@ exec:
 model:
   filename: models_gen.go
   package: metadatagql
-resolver:
-  layout: single-file
-  filename: resolver.go
-  package: metadatagql
-  type: Resolver
 autobind:
   - github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/store
 models:
