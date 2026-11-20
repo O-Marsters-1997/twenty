@@ -1,0 +1,155 @@
+language: typescript
+layer: application
+dependsOn: ['twenty-shared', 'twenty-ui']
+
+fileGroups:
+  sources:
+    - 'src/**/*'
+    - 'scripts/**/*'
+    - '.storybook/**/*'
+    - '__mocks__/**/*'
+    - 'public/**/*'
+    - 'index.html'
+    - 'package.json'
+    - 'tsconfig*.json'
+    - '*.config.{ts,mjs,cjs}'
+    - 'setupTests.ts'
+    - 'jest-*.cjs'
+
+tasks:
+  build:
+    command: npx vite build
+    env:
+      NODE_ENV: production
+      NODE_OPTIONS: '--max-old-space-size=8192'
+    deps: ['^:build']
+    inputs:
+      - 'src/**/*'
+      - '!src/**/*.{spec,test}.{ts,tsx}'
+      - '!src/**/*.stories.{ts,tsx}'
+      - 'public/**/*'
+      - 'index.html'
+      - 'package.json'
+      - 'tsconfig*.json'
+      - 'vite.config.ts'
+      - 'lingui.config.ts'
+      - '/tsconfig.base.json'
+    outputs: ['build']
+    options:
+      cache: true
+
+  lint:
+    script: |-
+      npx oxlint --type-aware -c .oxlintrc.json src/ && (npx oxfmt --check src/ || (echo 'ERROR: oxfmt formatting check failed! Fix with: npx nx lint twenty-front --configuration=fix' && false))
+    deps: ['twenty-oxlint-rules:build', 'twenty-shared:build']
+    inputs:
+      - 'src/**/*.{ts,tsx}'
+      - 'tsconfig*.json'
+      - '.oxlintrc.json'
+      - '/tsconfig.base.json'
+      - '/.oxfmtrc.jsonc'
+      - '/packages/twenty-oxlint-rules/dist/oxlint-plugin.mjs'
+    options:
+      cache: true
+
+  lint-diff:
+    script: |-
+      FILES=$(git diff --name-only --relative --diff-filter=d main...HEAD -- src/ | grep -E '\.(ts|tsx)$'); [ -z "$FILES" ] && echo 'No changed files.' || (npx oxlint --type-aware -c .oxlintrc.json $FILES && (npx oxfmt --check $FILES || (echo 'ERROR: oxfmt formatting check failed! Fix with: npx nx lint:diff-with-main twenty-front --configuration=fix' && false)))
+    deps: ['twenty-oxlint-rules:build']
+    inputs:
+      - 'src/**/*.{ts,tsx}'
+      - 'tsconfig*.json'
+      - '.oxlintrc.json'
+      - '/.oxfmtrc.jsonc'
+      - '/packages/twenty-oxlint-rules/dist/oxlint-plugin.mjs'
+    options:
+      cache: true
+
+  fmt:
+    command: npx oxfmt --check src
+    deps: ['^:build']
+    inputs: ['src/**/*', '/.oxfmtrc.jsonc']
+    options:
+      cache: true
+
+  test:
+    command: jest --config jest.config.mjs --silent --coverageReporters=text-summary --cacheDirectory=../../.cache/jest/packages/twenty-front --passWithNoTests
+    deps: ['^:build']
+    inputs:
+      - '@group(sources)'
+      - '!src/**/*.stories.{ts,tsx}'
+      - '!src/**/__stories__/**/*'
+      - '/jest.preset.js'
+    options:
+      cache: true
+
+  start:
+    command: npx vite
+    deps: ['^:build']
+    inputs: ['@group(sources)']
+    options:
+      cache: false
+
+  preview:
+    command: npx vite preview --port 3001 --open
+    deps: ['build']
+    inputs: ['build/**/*', 'vite.config.ts']
+    options:
+      cache: false
+
+  reset-env:
+    command: cp .env.example .env
+    inputs: ['.env.example']
+    options:
+      cache: false
+
+  knip:
+    command: knip --workspace packages/twenty-front
+    deps: ['^:build', 'twenty-shared:build']
+    inputs: ['@group(sources)', '/knip.json', '/package.json']
+    options:
+      cache: true
+      runFromWorkspaceRoot: true
+
+  lingui-extract:
+    command: lingui extract --overwrite --clean
+    deps: ['^:build']
+    inputs: ['src/**/*.{ts,tsx}', 'lingui.config.ts']
+    options:
+      cache: true
+
+  lingui-compile:
+    command: lingui compile --typescript
+    deps: ['^:build']
+    inputs: ['src/locales/**/*.po', 'lingui.config.ts']
+    options:
+      cache: true
+
+  graphql-generate:
+    command: dotenv graphql-codegen -- --config=codegen.cjs
+    inputs: ['codegen.cjs', 'codegen-metadata.cjs', '.env']
+    options:
+      cache: true
+
+  mock-generate:
+    command: dotenv npx vite-node scripts/generate-mock-data.ts
+    inputs: ['scripts/generate-mock-data.ts', '.env']
+    options:
+      cache: true
+
+  storybook-build:
+    command: storybook build --test
+    env:
+      NODE_OPTIONS: '--max-old-space-size=10240'
+    deps: ['^:build']
+    inputs: ['@group(sources)', '!src/**/*.{spec,test}.{ts,tsx}']
+    outputs: ['storybook-static']
+    options:
+      cache: true
+
+  storybook-dev:
+    command: storybook dev --port 6006
+    deps: ['^:build']
+    inputs: ['@group(sources)']
+    options:
+      cache: false

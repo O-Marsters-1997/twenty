@@ -1,0 +1,22 @@
+language: typescript
+layer: tool
+dependsOn: ['twenty-shared']
+
+fileGroups:
+  sources: ['oxlint-plugin.ts', 'rules/**/*', 'utils/**/*', 'package.json', 'tsconfig*.json', 'vitest.config.mts']
+
+tasks:
+  build:
+    deps: ['^:build']
+    script: npx esbuild oxlint-plugin.ts --bundle --format=esm --platform=node --outfile=dist/oxlint-plugin.mjs "--define:__filename='\"[plugin]\"'" "--define:__dirname='\"[plugin]\"'" "--banner:js=import { createRequire } from 'module'; const require = createRequire(import.meta.url);"
+    inputs: ['oxlint-plugin.ts', 'rules/**/*', 'utils/**/*', '!**/*.spec.ts', 'package.json']
+    outputs: ['dist']
+    options:
+      cache: true
+
+  test:
+    command: npx vitest run --config vitest.config.mts
+    deps: ['^:build']
+    inputs: ['@group(sources)']
+    options:
+      cache: true

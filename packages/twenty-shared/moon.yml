@@ -1,0 +1,58 @@
+language: typescript
+layer: library
+
+fileGroups:
+  sources:
+    - 'src/**/*'
+    - 'scripts/**/*'
+    - '__mocks__/**/*'
+    - 'package.json'
+    - 'tsconfig*.json'
+    - 'vite.config*.ts'
+    - 'jest.config.mjs'
+
+tasks:
+  generate-barrels:
+    command: tsx packages/twenty-shared/scripts/generateBarrels.ts
+    inputs: ['src/**/*', 'scripts/generateBarrels.ts', 'package.json', 'project.json']
+    outputs: ['src/index.ts', 'src/*/index.ts', 'package.json', 'project.json']
+    options:
+      cache: true
+      runFromWorkspaceRoot: true
+
+  build:
+    script: npx vite build && tsgo -p tsconfig.lib.json --declaration --emitDeclarationOnly --noEmit false --outDir dist --rootDir src && npx tsc-alias -p tsconfig.lib.json --outDir dist
+    deps: ['generate-barrels', '^:build']
+    inputs:
+      - 'src/**/*'
+      - '!src/**/*.{spec,test}.{ts,tsx}'
+      - 'package.json'
+      - 'tsconfig*.json'
+      - 'vite.config.ts'
+      - '/tsconfig.base.json'
+    outputs:
+      - 'dist'
+    options:
+      cache: true
+
+  lint:
+    script: |-
+      npx oxlint -c .oxlintrc.json . && (npx oxfmt --check . || (echo 'ERROR: oxfmt formatting check failed! Fix with: npx nx lint --configuration=fix' && false))
+    deps: ['^:build']
+    inputs: ['@group(sources)', '.oxlintrc.json', '/packages/twenty-oxlint-rules/dist/oxlint-plugin.mjs']
+    options:
+      cache: true
+
+  fmt:
+    command: npx oxfmt --check src
+    deps: ['^:build']
+    inputs: ['src/**/*']
+    options:
+      cache: true
+
+  test:
+    command: jest --config jest.config.mjs --silent --coverageReporters=text-summary --cacheDirectory=../../.cache/jest/packages/twenty-shared --passWithNoTests
+    deps: ['^:build']
+    inputs: ['@group(sources)', 'jest.setup.ts', '/jest.preset.js']
+    options:
+      cache: true

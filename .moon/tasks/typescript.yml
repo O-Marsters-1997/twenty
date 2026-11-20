@@ -1,0 +1,10 @@
+inheritedBy:
+  languages: ['typescript']
+fileGroups:
+  sources: ['src/**/*', 'package.json', 'tsconfig*.json']
+  tests: ['src/**/*.{spec,test}.{ts,tsx}', 'src/**/__mocks__/**/*']
+tasks:
+  typecheck:
+    command: tsgo -p tsconfig.json --noEmit
+    deps: ['^:build']
+    inputs: ['@group(sources)']

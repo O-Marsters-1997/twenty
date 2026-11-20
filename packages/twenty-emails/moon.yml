@@ -1,0 +1,68 @@
+language: typescript
+layer: library
+dependsOn: ['twenty-shared']
+
+tasks:
+  build:
+    script: npx vite build && tsgo -p tsconfig.lib.json --declaration --emitDeclarationOnly --outDir dist --rootDir src --composite false && npx tsc-alias -p tsconfig.lib.json --outDir dist
+    deps: ['^:build']
+    inputs:
+      - 'src/**/*'
+      - '!src/**/*.{spec,test}.{ts,tsx}'
+      - 'package.json'
+      - 'tsconfig*.json'
+      - 'vite.config.ts'
+      - '/tsconfig.base.json'
+    outputs: ['dist']
+    options:
+      cache: true
+
+  lint:
+    script: |-
+      npx oxlint -c .oxlintrc.json . && (npx oxfmt --check . || (echo 'ERROR: oxfmt formatting check failed! Fix with: npx nx lint --configuration=fix' && false))
+    deps: ['^:build', 'twenty-oxlint-rules:build']
+    inputs:
+      - '@group(sources)'
+      - '*.config.{ts,mjs}'
+      - '.oxlintrc.json'
+      - '.prettierignore'
+      - '/.oxfmtrc.jsonc'
+      - '/packages/twenty-oxlint-rules/dist/oxlint-plugin.mjs'
+    options:
+      cache: true
+
+  fmt:
+    command: npx oxfmt --check src
+    deps: ['^:build']
+    inputs: ['src/**/*', '.prettierignore', '/.oxfmtrc.jsonc']
+    options:
+      cache: true
+
+  test:
+    command: jest --config=jest.config.mjs
+    deps: ['^:build']
+    env:
+      NODE_OPTIONS: '--experimental-vm-modules'
+    inputs: ['@group(sources)', 'jest.config.mjs', '/jest.preset.js']
+    options:
+      cache: true
+
+  start:
+    command: email dev -d src/emails -p 4001
+    inputs: ['src/**/*']
+    options:
+      cache: false
+
+  lingui-extract:
+    command: lingui extract --overwrite --clean
+    deps: ['^:build']
+    inputs: ['src/**/*.{ts,tsx}', 'lingui.config.ts']
+    options:
+      cache: true
+
+  lingui-compile:
+    command: lingui compile --typescript
+    deps: ['^:build']
+    inputs: ['src/locales/**/*.po', 'lingui.config.ts']
+    options:
+      cache: true

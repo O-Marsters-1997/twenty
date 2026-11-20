@@ -1,0 +1,45 @@
+language: go
+layer: application
+
+fileGroups:
+  sources: ['cmd/**/*', 'internal/**/*', 'go.mod', 'go.sum', 'sqlc.yaml']
+
+tasks:
+  build:
+    command: go build -o bin/api ./cmd/api
+    inputs: ['@group(sources)']
+    outputs: ['bin']
+    options:
+      cache: true
+
+  test:
+    command: go test ./...
+    inputs: ['@group(sources)']
+    options:
+      cache: true
+
+  lint:
+    script: go vet ./... && golangci-lint run
+    inputs: ['@group(sources)', '.golangci.yml']
+    options:
+      cache: true
+
+  generated-check:
+    script: go generate ./... && git diff --exit-code -- . && test -z "$(git ls-files --others --exclude-standard -- .)"
+    inputs: ['@group(sources)']
+    options:
+      cache: true
+
+  golden-record:
+    command: go run ./cmd/golden-record
+    inputs: ['@group(sources)']
+    options:
+      cache: true
+
+  e2e:
+    script: cd ../twenty-e2e-testing && (cp -n .env.example .env; bunx playwright test)
+    env:
+      FRONTEND_BASE_URL: 'http://localhost:3000'
+    inputs: ['/packages/twenty-e2e-testing/tests/**/*', '/packages/twenty-e2e-testing/lib/**/*', '/packages/twenty-e2e-testing/playwright.config.ts']
+    options:
+      cache: true

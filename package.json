@@ -1,6 +1,7 @@
 {
   "private": true,
   "devDependencies": {
+    "@moonrepo/cli": "2.6.5",
     "@nx/jest": "22.7.12",
     "@nx/js": "22.7.12",
     "@nx/react": "22.7.12",
