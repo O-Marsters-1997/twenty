@@ -52,6 +52,7 @@
     "@nivo/line": "^0.99.0",
     "@nivo/pie": "^0.99.0",
     "@react-pdf/renderer": "^4.1.6",
+    "@react-spring/web": "^10.1.2",
     "@scalar/api-reference-react": "^0.9.42",
     "@sniptt/guards": "^0.2.0",
     "@stylexjs/stylex": "^0.19.2",
