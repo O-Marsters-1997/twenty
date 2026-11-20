@@ -98,7 +98,6 @@ const AiChatInboxPageContent = () => {
 
   // Rows hold a menu and a rename input, which a link cannot contain
   const selectThread = (nextThreadId: string | null) =>
-    // oxlint-disable-next-line twenty/no-navigate-prefer-link
     navigate(AppPath.AiChatInbox, { threadId: nextThreadId });
 
   const handleThreadClick = (

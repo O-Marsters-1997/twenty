@@ -12,7 +12,7 @@ import {
 } from 'twenty-ui/icon';
 
 import { formatDuration } from '~/utils/format/formatDuration';
-import { logStyles } from '@/workflow/workflow-steps/workflow-actions/components/workflowRunStepLogs.stylex';
+import { logStyles } from '@/workflow/workflow-steps/workflow-actions/components/workflowRunStepLogsStyles';
 import { WorkflowRunStepLogsToolCallRow } from '@/workflow/workflow-steps/workflow-actions/ai-agent-action/components/WorkflowRunStepLogsToolCallRow';
 import { formatNumber } from '@/localization/utils/formatNumber';
 import * as stylex from '@stylexjs/stylex';

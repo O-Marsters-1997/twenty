@@ -16,9 +16,9 @@ import { color, fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   debugColumn: (width: number) => ({
-    textWrapMode: 'nowrap',
     overflow: 'hidden',
     display: 'flex',
+    whiteSpace: 'nowrap',
     maxWidth: width,
     minWidth: width,
     paddingLeft: spacing['--t-spacing-0_5'],

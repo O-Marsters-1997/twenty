@@ -84,13 +84,13 @@ const styles = stylex.create({
   emptyTitle: {
     color: grayScale['--t-gray-scale-gray12'],
     fontSize: '1.23rem',
-    fontWeight: '600',
+    fontWeight: 600,
   },
   emptySubTitle: {
     overflow: 'hidden',
     color: grayScale['--t-gray-scale-gray11'],
     fontSize: '0.92rem',
-    fontWeight: '400',
+    fontWeight: 400,
     lineHeight: 1.5,
     maxHeight: '2.8em',
     width: '50%',

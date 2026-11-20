@@ -28,7 +28,7 @@ const styles = stylex.create({
     flexDirection: 'column',
     position: 'relative',
     scrollbarColor: `${borderColor['--t-border-color-medium']} transparent`,
-    scrollbarWidth: '4px',
+    scrollbarWidth: 'thin',
     height: {
       default: 'calc(100dvh / var(--t-zoom, 1))',
       [media.print]: 'auto',

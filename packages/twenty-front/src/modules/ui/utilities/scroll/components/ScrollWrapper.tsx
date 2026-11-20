@@ -14,11 +14,11 @@ const styles = stylex.create({
     height: '100%',
     overflowX: {
       default: 'hidden',
-      ':is(.scroll-wrapper-x-enabled)': 'overlay',
+      ':is(.scroll-wrapper-x-enabled)': 'auto',
     },
     overflowY: {
       default: 'hidden',
-      ':is(.scroll-wrapper-y-enabled)': 'overlay',
+      ':is(.scroll-wrapper-y-enabled)': 'auto',
     },
     width: '100%',
   },

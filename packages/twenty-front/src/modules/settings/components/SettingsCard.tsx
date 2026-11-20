@@ -64,24 +64,38 @@ const styles = stylex.create({
     },
   },
   contentLinkHover: {
-    ':hover': {
-      backgroundColor: background['--t-background-quaternary'],
-      cursor: 'pointer',
+    backgroundColor: {
+      default: null,
+      ':hover': background['--t-background-quaternary'],
+    },
+    cursor: {
+      default: null,
+      ':hover': 'pointer',
     },
   },
   action: {
-    ':focus-visible': {
-      outlineColor: color['--t-color-blue'],
-      outlineOffset: '-2px',
-      outlineStyle: 'solid',
-      outlineWidth: '2px',
-    },
     inset: 0,
     borderStyle: 'none',
     backgroundColor: 'transparent',
     cursor: {
       default: 'pointer',
       ':disabled': 'not-allowed',
+    },
+    outlineColor: {
+      default: null,
+      ':focus-visible': color['--t-color-blue'],
+    },
+    outlineOffset: {
+      default: null,
+      ':focus-visible': '-2px',
+    },
+    outlineStyle: {
+      default: null,
+      ':focus-visible': 'solid',
+    },
+    outlineWidth: {
+      default: null,
+      ':focus-visible': '2px',
     },
     position: 'absolute',
     paddingBottom: 0,

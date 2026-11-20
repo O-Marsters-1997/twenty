@@ -1,6 +1,5 @@
-import { type ComponentProps } from 'react';
 import * as stylex from '@stylexjs/stylex';
-import React from 'react';
+import React, { type ComponentProps } from 'react';
 import {
   borderColor,
   borderRadius,

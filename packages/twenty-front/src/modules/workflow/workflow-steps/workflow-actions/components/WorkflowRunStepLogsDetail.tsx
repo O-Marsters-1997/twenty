@@ -27,12 +27,13 @@ import {
 const styles = stylex.create({
   root: {
     gap: spacing['--t-spacing-4'],
-    overflow: 'hidden scroll',
     display: 'flex',
     flexBasis: 'auto',
     flexDirection: 'column',
     flexGrow: '1',
     flexShrink: '1',
+    overflowX: 'hidden',
+    overflowY: 'scroll',
     paddingBottom: spacing['--t-spacing-4'],
     paddingLeft: spacing['--t-spacing-3'],
     paddingRight: spacing['--t-spacing-3'],

@@ -4,7 +4,7 @@ import { type WorkflowRunStepLog } from 'twenty-shared/workflow';
 import { themeCssVariables } from 'twenty-ui/theme';
 
 import { MONOSPACE_FONT_FAMILY } from '@/ui/theme/constants/MonospaceFontFamily';
-import { logStyles } from '@/workflow/workflow-steps/workflow-actions/components/workflowRunStepLogs.stylex';
+import { logStyles } from '@/workflow/workflow-steps/workflow-actions/components/workflowRunStepLogsStyles';
 import * as stylex from '@stylexjs/stylex';
 import {
   spacing,

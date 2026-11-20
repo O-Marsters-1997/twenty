@@ -66,8 +66,6 @@ const styles = stylex.create({
     width: '100%',
   },
   description: {
-    textBoxEdge: 'cap alphabetic',
-    textBoxTrim: 'trim-both',
     overflow: 'hidden',
     color: fontColor['--t-font-color-secondary'],
     fontSize: fontSize['--t-font-size-sm'],

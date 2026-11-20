@@ -11,7 +11,7 @@ const styles = stylex.create({
     display: 'flex',
     flexDirection: 'column',
     position: 'relative',
-    scrollbarWidth: '4px',
+    scrollbarWidth: 'thin',
     height: 'calc(100dvh / var(--t-zoom, 1))',
     width: '100%',
   },

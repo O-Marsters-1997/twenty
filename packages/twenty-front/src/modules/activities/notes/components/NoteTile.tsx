@@ -56,7 +56,7 @@ const styles = stylex.create({
     overflow: 'hidden',
     alignSelf: 'stretch',
     color: fontColor['--t-font-color-secondary'],
-    lineBreak: 'anywhere',
+    overflowWrap: 'anywhere',
     textOverflow: 'ellipsis',
     whiteSpace: 'pre-line',
     width: '100%',

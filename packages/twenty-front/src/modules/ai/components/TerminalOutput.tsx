@@ -1,4 +1,4 @@
-import { MONOSPACE_FONT_FAMILY } from '@/ui/theme/constants/MonospaceFontFamily';
+import { monospaceFont } from '@/ui/theme/constants/MonospaceFontFamily.stylex';
 import { useLingui } from '@lingui/react/macro';
 import { useState } from 'react';
 import { LightIconButton } from 'twenty-ui/components/input';
@@ -52,7 +52,7 @@ const styles = stylex.create({
     padding: spacing['--t-spacing-2'],
     backgroundColor: background['--t-background-tertiary'],
     color: fontColor['--t-font-color-primary'],
-    fontFamily: MONOSPACE_FONT_FAMILY,
+    fontFamily: monospaceFont.family,
     fontSize: fontSize['--t-font-size-sm'],
     lineHeight: 1.5,
     whiteSpace: 'pre-wrap',

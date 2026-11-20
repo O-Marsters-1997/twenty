@@ -18,7 +18,7 @@ const styles = stylex.create({
     boxSizing: 'border-box',
     display: 'flex',
     scrollbarColor: `${borderColor['--t-border-color-medium']} transparent`,
-    scrollbarWidth: '4px',
+    scrollbarWidth: 'thin',
     overflowY: 'auto',
     width: '100%',
   },

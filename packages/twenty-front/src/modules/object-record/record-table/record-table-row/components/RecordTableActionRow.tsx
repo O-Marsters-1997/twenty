@@ -37,9 +37,10 @@ const styles = stylex.create({
   rowCell: {
     backgroundColor: {
       default: null,
-      [stylex.when.ancestor(':hover', actionRowMarker)]: {
+      [media.hoverCapable]: {
         default: null,
-        [media.hoverCapable]: background['--t-background-secondary'],
+        [stylex.when.ancestor(':hover', actionRowMarker)]:
+          background['--t-background-secondary'],
       },
     },
     borderBottomColor: borderColor['--t-border-color-light'],
