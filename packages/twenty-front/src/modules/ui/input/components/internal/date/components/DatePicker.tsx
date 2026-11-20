@@ -30,37 +30,47 @@ import { IconCalendarX } from 'twenty-ui/icon';
 import { Text } from 'twenty-ui/primitives/typography';
 import { useTheme } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { background, backgroundTransparent, borderColor, borderRadius, fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  background,
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   buttonContainer: {
     alignItems: 'center',
+    backgroundColor: {
+      default: null,
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
+    boxSizing: 'border-box',
+    cursor: 'pointer',
+    display: 'flex',
+    borderBottomLeftRadius: `calc(
+    ${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']}
+  )`,
+    borderBottomRightRadius: `calc(
+    ${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']}
+  )`,
     borderTopLeftRadius: `calc(
     ${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']}
   )`,
     borderTopRightRadius: `calc(
     ${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']}
   )`,
-    borderBottomRightRadius: `calc(
-    ${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']}
-  )`,
-    borderBottomLeftRadius: `calc(
-    ${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']}
-  )`,
-    boxSizing: 'border-box',
-    cursor: 'pointer',
-    display: 'flex',
     height: '32px',
-    marginTop: spacing['--t-spacing-1'],
-    marginRight: spacing['--t-spacing-1'],
     marginBottom: spacing['--t-spacing-1'],
     marginLeft: spacing['--t-spacing-1'],
-    paddingTop: spacing['--t-spacing-1'],
-    paddingRight: spacing['--t-spacing-1'],
+    marginRight: spacing['--t-spacing-1'],
+    marginTop: spacing['--t-spacing-1'],
     paddingBottom: spacing['--t-spacing-1'],
     paddingLeft: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingTop: spacing['--t-spacing-1'],
     width: 'auto',
-    backgroundColor: { default: null, ':hover': backgroundTransparent['--t-background-transparent-light'] },
   },
   clearable: {
     borderBottomColor: borderColor['--t-border-color-light'],
@@ -68,28 +78,28 @@ const styles = stylex.create({
     borderBottomWidth: '1px',
   },
   buttonContent: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
     justifyContent: 'start',
   },
   datePickerFallback: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     backgroundColor: background['--t-background-secondary'],
-    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
-    borderTopRightRadius: borderRadius['--t-border-radius-md'],
-    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
-    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
     color: fontColor['--t-font-color-tertiary'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-2'],
-    height: '300px',
     justifyContent: 'center',
-    paddingTop: spacing['--t-spacing-4'],
-    paddingRight: spacing['--t-spacing-4'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    height: '300px',
     paddingBottom: spacing['--t-spacing-4'],
     paddingLeft: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingTop: spacing['--t-spacing-4'],
     width: '280px',
   },
 });
@@ -309,7 +319,10 @@ export const DatePicker = ({
         </Suspense>
       </div>
       {clearable && (
-        <div onClick={() => onClear?.()} {...stylex.props(styles.buttonContainer)}>
+        <div
+          onClick={() => onClear?.()}
+          {...stylex.props(styles.buttonContainer)}
+        >
           <div {...stylex.props(styles.buttonContent)}>
             <IconCalendarX size={theme.icon.size.md} />
             <Text>{t`Clear`}</Text>

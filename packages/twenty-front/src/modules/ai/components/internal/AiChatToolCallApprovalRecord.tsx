@@ -9,12 +9,12 @@ import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   recordRow: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     color: fontColor['--t-font-color-secondary'],
     display: 'flex',
     flexWrap: 'wrap',
     fontSize: fontSize['--t-font-size-md'],
-    gap: spacing['--t-spacing-1'],
   },
   missingRecord: {
     color: fontColor['--t-font-color-danger'],

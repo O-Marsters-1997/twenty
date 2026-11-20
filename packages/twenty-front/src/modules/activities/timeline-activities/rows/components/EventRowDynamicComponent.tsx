@@ -10,15 +10,15 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   container: {
+    gap: spacing['--t-spacing-1'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-1'],
     width: '100%',
   },
   nativeRowContainer: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'flex-start',
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
     width: '100%',
   },
   nativeRow: {

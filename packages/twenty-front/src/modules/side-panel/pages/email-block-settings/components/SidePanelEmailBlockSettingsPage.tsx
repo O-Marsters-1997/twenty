@@ -33,10 +33,10 @@ import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomState
 
 const styles = stylex.create({
   container: {
+    padding: spacing['--t-spacing-4'],
+    gap: spacing['--t-spacing-4'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-4'],
-    padding: spacing['--t-spacing-4'],
   },
   blockHeader: {
     alignItems: 'center',

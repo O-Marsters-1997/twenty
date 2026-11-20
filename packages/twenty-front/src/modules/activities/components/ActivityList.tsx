@@ -6,7 +6,9 @@ const styles = stylex.create({
     width: '100%',
   },
   listScrollable: {
-    flex: 1,
+    flexBasis: '0%',
+    flexGrow: 1,
+    flexShrink: 1,
     height: '100%',
     minHeight: 0,
   },

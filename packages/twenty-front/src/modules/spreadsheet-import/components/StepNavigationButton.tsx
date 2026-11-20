@@ -26,36 +26,36 @@ export const StepNavigationButton = ({
 }: StepNavigationButtonProps) => {
   return (
     <Dialog.Footer {...stylex.props(styles.footer)}>
-        {isDefined(onBack) && (
-          <MainButton
-            startIcon={isLoading ? <Loader /> : undefined}
-            onClick={!isLoading ? onBack : undefined}
-            variant="outline"
-          >
-            {backTitle}
-          </MainButton>
-        )}
-        {isDefined(onContinue) && (
-          <MainButton
-            startIcon={isLoading ? <Loader /> : undefined}
-            onClick={!isLoading ? onContinue : undefined}
-            disabled={isContinueDisabled}
-          >
-            {continueTitle}
-          </MainButton>
-        )}
-      </Dialog.Footer>
+      {isDefined(onBack) && (
+        <MainButton
+          startIcon={isLoading ? <Loader /> : undefined}
+          onClick={!isLoading ? onBack : undefined}
+          variant="outline"
+        >
+          {backTitle}
+        </MainButton>
+      )}
+      {isDefined(onContinue) && (
+        <MainButton
+          startIcon={isLoading ? <Loader /> : undefined}
+          onClick={!isLoading ? onContinue : undefined}
+          disabled={isContinueDisabled}
+        >
+          {continueTitle}
+        </MainButton>
+      )}
+    </Dialog.Footer>
   );
 };
 
 const styles = stylex.create({
   footer: {
-    borderTopWidth: '1px',
-    borderTopStyle: 'solid',
-    borderTopColor: borderColor['--t-border-color-medium'],
-    boxShadow: boxShadow['--t-box-shadow-strong'],
-    justifyContent: 'space-between',
     paddingBlock: spacing['--t-spacing-5'],
     paddingInline: spacing['--t-spacing-5'],
+    boxShadow: boxShadow['--t-box-shadow-strong'],
+    justifyContent: 'space-between',
+    borderTopColor: borderColor['--t-border-color-medium'],
+    borderTopStyle: 'solid',
+    borderTopWidth: '1px',
   },
 });

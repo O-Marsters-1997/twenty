@@ -8,21 +8,21 @@ const styles = stylex.create({
   dropdownMenuSkeletonContainer: {
     '--horizontal-padding': spacing['--t-spacing-1'],
     '--vertical-padding': spacing['--t-spacing-2'],
+    gap: spacing['--t-spacing-2'],
+    boxSizing: 'border-box',
+    flexShrink: '0',
+    borderBottomLeftRadius: `calc(
+    ${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']}
+  )`,
+    borderBottomRightRadius: `calc(
+    ${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']}
+  )`,
     borderTopLeftRadius: `calc(
     ${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']}
   )`,
     borderTopRightRadius: `calc(
     ${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']}
   )`,
-    borderBottomRightRadius: `calc(
-    ${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']}
-  )`,
-    borderBottomLeftRadius: `calc(
-    ${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']}
-  )`,
-    boxSizing: 'border-box',
-    flexShrink: '0',
-    gap: spacing['--t-spacing-2'],
     height: spacing['--t-spacing-8'],
     paddingLeft: 'var(--horizontal-padding)',
     paddingRight: 'var(--horizontal-padding)',

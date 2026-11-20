@@ -10,9 +10,9 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   rowRightContainer: {
+    gap: spacing['--t-spacing-4'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-4'],
   },
 });
 

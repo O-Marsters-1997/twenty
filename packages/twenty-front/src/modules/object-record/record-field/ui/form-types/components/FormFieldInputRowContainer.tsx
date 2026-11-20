@@ -38,15 +38,15 @@ const styles = stylex.create({
     position: 'relative',
   },
   singleLine: {
-    height: 32,
     lineHeight: 'normal',
+    height: 32,
     maxHeight: 'none',
     minHeight: 'auto',
   },
   multiline: {
+    lineHeight: '24px',
     height: 'auto',
-    lineHeight: `${LINE_HEIGHT}px`,
-    minHeight: 3 * LINE_HEIGHT,
+    minHeight: 72,
   },
   multilineMaxHeight: (maxHeight: number) => ({ maxHeight }),
 });

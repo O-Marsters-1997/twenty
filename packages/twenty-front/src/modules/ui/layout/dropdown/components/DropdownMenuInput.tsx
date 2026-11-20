@@ -20,19 +20,19 @@ import {
 
 const styles = stylex.create({
   input: {
-    backgroundColor: 'transparent',
     borderStyle: 'none',
+    paddingBlock: spacing['--t-spacing-0'],
+    backgroundColor: 'transparent',
     boxSizing: 'border-box',
     color: fontColor['--t-font-color-primary'],
     fontFamily: font['--t-font-family'],
     fontSize: 'inherit',
     fontWeight: 'inherit',
-    height: '32px',
     outlineStyle: 'none',
-    paddingBlock: spacing['--t-spacing-0'],
+    position: 'relative',
+    height: '32px',
     paddingLeft: spacing['--t-spacing-1'],
     paddingRight: 0,
-    position: 'relative',
     width: '100%',
     '::placeholder': {
       color: fontColor['--t-font-color-light'],
@@ -44,27 +44,27 @@ const styles = stylex.create({
     paddingRight: '32px',
   },
   inputContainer: {
-    backgroundColor: 'transparent',
-    boxSizing: 'border-box',
     padding: {
       default: null,
       ':not(:first-of-type)': spacing['--t-spacing-1'],
     },
+    backgroundColor: 'transparent',
+    boxSizing: 'border-box',
     position: 'relative',
     width: '100%',
   },
   rightContainer: {
     position: 'absolute',
+    transform: 'translateY(-50%)',
     right: spacing['--t-spacing-2'],
     top: '50%',
-    transform: 'translateY(-50%)',
   },
   errorDiv: {
     color: color['--t-color-red'],
-    paddingTop: '0',
-    paddingRight: spacing['--t-spacing-2'],
     paddingBottom: '0',
     paddingLeft: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingTop: '0',
   },
 });
 

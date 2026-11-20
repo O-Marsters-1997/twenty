@@ -18,8 +18,10 @@ import {
 
 const styles = stylex.create({
   input: {
-    backgroundColor: 'transparent',
     borderWidth: '0',
+    paddingBlock: spacing['--t-spacing-0'],
+    paddingInline: spacing['--t-spacing-2'],
+    backgroundColor: 'transparent',
     color: {
       default: fontColor['--t-font-color-primary'],
       ':disabled': fontColor['--t-font-color-tertiary'],
@@ -27,13 +29,11 @@ const styles = stylex.create({
     fontFamily: font['--t-font-family'],
     fontSize: 'inherit',
     fontWeight: 'inherit',
+    outlineStyle: 'none',
     marginBottom: '0',
     marginLeft: '0',
     marginRight: '0',
     marginTop: '0',
-    outlineStyle: 'none',
-    paddingBlock: spacing['--t-spacing-0'],
-    paddingInline: spacing['--t-spacing-2'],
     width: '100%',
     '::placeholder': {
       color: fontColor['--t-font-color-light'],

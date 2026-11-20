@@ -12,10 +12,7 @@ import {
   type ButtonVariant,
 } from 'twenty-ui/primitives/input';
 import { type ThemeColor } from 'twenty-ui/theme';
-import {
-  backgroundTransparent,
-  spacing,
-} from 'twenty-ui/theme/tokens.stylex';
+import { backgroundTransparent, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 import { ThemeColorPickerMenu } from '@/ui/input/components/ThemeColorPickerMenu';
 import { ICON_PICKER_DROPDOWN_CONTENT_WIDTH } from '@/ui/input/components/constants/IconPickerDropdownContentWidth';
@@ -59,10 +56,10 @@ const styles = stylex.create({
     display: 'contents',
   },
   searchRow: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     boxSizing: 'border-box',
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
     paddingRight: spacing['--t-spacing-2'],
     width: '100%',
   },
@@ -191,7 +188,10 @@ export const IconPicker = ({
           width={dropdownWidth}
           sideOffset={dropdownSideOffset}
         >
-          <div data-click-outside-id={dropdownId} {...stylex.props(styles.popupContent)}>
+          <div
+            data-click-outside-id={dropdownId}
+            {...stylex.props(styles.popupContent)}
+          >
             <div {...stylex.props(styles.searchRow)}>
               <div {...stylex.props(styles.searchGrow)}>
                 <Dropdown.Search
@@ -220,7 +220,10 @@ export const IconPicker = ({
                     alignOffset={24}
                     width={dropdownWidth}
                   >
-                    <div data-click-outside-id={colorDropdownId} {...stylex.props(styles.popupContent)}>
+                    <div
+                      data-click-outside-id={colorDropdownId}
+                      {...stylex.props(styles.popupContent)}
+                    >
                       <ThemeColorPickerMenu
                         selectedColor={iconColorPicker.selectedColor}
                         onSelectColor={iconColorPicker.onColorChange}

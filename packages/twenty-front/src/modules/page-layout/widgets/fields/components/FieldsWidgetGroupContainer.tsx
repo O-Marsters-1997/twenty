@@ -24,8 +24,8 @@ const styles = stylex.create({
     alignItems: 'center',
     cursor: 'pointer',
     display: 'flex',
-    height: '24px',
     justifyContent: 'space-between',
+    height: '24px',
   },
   titleLabel: {
     color: fontColor['--t-font-color-tertiary'],

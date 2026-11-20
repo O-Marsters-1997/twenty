@@ -9,9 +9,9 @@ type SettingsSectionSkeletonLoaderProps = {
 
 const styles = stylex.create({
   rows: {
+    gap: spacing['--t-spacing-2'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-2'],
     width: '100%',
   },
 });

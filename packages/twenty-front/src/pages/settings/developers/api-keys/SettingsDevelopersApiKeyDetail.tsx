@@ -34,7 +34,12 @@ import {
 import { useNavigateSettings } from '~/hooks/useNavigateSettings';
 import { SETTINGS_API_WEBHOOKS_TABS } from '@/settings/developers/constants/SettingsApiWebhooksTabs';
 import * as stylex from '@stylexjs/stylex';
-import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   info: {
@@ -43,10 +48,10 @@ const styles = stylex.create({
     fontWeight: fontWeight['--t-font-weight-regular'],
   },
   inputContainer: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'row',
-    gap: spacing['--t-spacing-2'],
     width: '100%',
   },
 });

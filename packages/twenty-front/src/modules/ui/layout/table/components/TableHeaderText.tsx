@@ -11,7 +11,7 @@ const styles = stylex.create({
 export const TableHeaderText = ({
   className,
   ...props
-}: ComponentProps<'div'>) => {
+}: TableHeaderTextProps<'div'>) => {
   const rootProps = stylex.props(styles.text);
 
   return (

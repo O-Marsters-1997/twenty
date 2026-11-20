@@ -15,26 +15,26 @@ import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   recordChipContainer: {
-    marginTop: spacing['--t-spacing-2'],
-    marginRight: spacing['--t-spacing-2'],
     marginBottom: spacing['--t-spacing-2'],
     marginLeft: spacing['--t-spacing-2'],
+    marginRight: spacing['--t-spacing-2'],
+    marginTop: spacing['--t-spacing-2'],
   },
   placeholderContainer: {
-    marginTop: spacing['--t-spacing-2'],
-    marginRight: spacing['--t-spacing-2'],
     marginBottom: spacing['--t-spacing-2'],
     marginLeft: spacing['--t-spacing-2'],
+    marginRight: spacing['--t-spacing-2'],
+    marginTop: spacing['--t-spacing-2'],
   },
   noRecordContainer: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     color: fontColor['--t-font-color-primary'],
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
-    marginTop: spacing['--t-spacing-2'],
-    marginRight: spacing['--t-spacing-2'],
     marginBottom: spacing['--t-spacing-2'],
     marginLeft: spacing['--t-spacing-2'],
+    marginRight: spacing['--t-spacing-2'],
+    marginTop: spacing['--t-spacing-2'],
   },
 });
 

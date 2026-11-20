@@ -20,10 +20,10 @@ const styles = stylex.create({
     justifyContent: 'space-between',
   },
   unknownSender: {
-    color: fontColor['--t-font-color-tertiary'],
-    fontSize: fontSize['--t-font-size-md'],
     paddingBlock: spacing['--t-spacing-1'],
     paddingInline: spacing['--t-spacing-1'],
+    color: fontColor['--t-font-color-tertiary'],
+    fontSize: fontSize['--t-font-size-md'],
   },
   threadMessageSentAt: {
     alignItems: 'flex-end',

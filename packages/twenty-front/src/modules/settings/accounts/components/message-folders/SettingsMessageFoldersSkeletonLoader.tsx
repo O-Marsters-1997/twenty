@@ -5,28 +5,28 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   skeletonContainer: {
+    gap: spacing['--t-spacing-1'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-1'],
-    paddingTop: spacing['--t-spacing-2'],
-    paddingRight: '0',
     paddingBottom: spacing['--t-spacing-2'],
     paddingLeft: '0',
+    paddingRight: '0',
+    paddingTop: spacing['--t-spacing-2'],
   },
   skeletonRow: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
-    paddingTop: spacing['--t-spacing-1'],
-    paddingRight: spacing['--t-spacing-1'],
     paddingBottom: spacing['--t-spacing-1'],
     paddingLeft: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingTop: spacing['--t-spacing-1'],
   },
   skeletonFolderInfo: {
-    alignItems: 'center',
-    display: 'flex',
     flex: '1',
     gap: spacing['--t-spacing-2'],
+    alignItems: 'center',
+    display: 'flex',
   },
 });
 

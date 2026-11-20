@@ -4,11 +4,11 @@ import { type ReactNode } from 'react';
 
 const styles = stylex.create({
   contentContainer: {
+    overflow: 'hidden',
     display: 'flex',
     flexDirection: 'column',
     maxHeight: '340px',
     minHeight: 0,
-    overflow: 'hidden',
   },
   menuItemsContainer: {
     flex: '1',

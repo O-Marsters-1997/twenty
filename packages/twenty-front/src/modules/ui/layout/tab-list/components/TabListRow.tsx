@@ -6,16 +6,16 @@ import { layoutSize } from '@/ui/layout/constants/layout.stylex';
 
 const styles = stylex.create({
   container: {
-    display: 'flex',
     gap: layoutSize.tabListGap,
-    maxWidth: '100%',
-    overflowY: 'hidden',
+    display: 'flex',
     position: 'relative',
     scrollbarWidth: { default: null, '@media (pointer: coarse)': 'none' },
-    '::after': { display: 'none' },
+    maxWidth: '100%',
+    overflowY: 'hidden',
     '::-webkit-scrollbar': {
       display: { default: null, '@media (pointer: coarse)': 'none' },
     },
+    '::after': { display: 'none' },
   },
   scrollable: { overflowX: 'auto' },
   notScrollable: { overflowX: 'hidden' },

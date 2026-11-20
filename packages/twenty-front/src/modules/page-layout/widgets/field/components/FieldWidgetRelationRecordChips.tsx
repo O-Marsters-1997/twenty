@@ -7,16 +7,16 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 const styles = stylex.create({
   container: {
     boxSizing: 'border-box',
-    paddingTop: spacing['--t-spacing-1'],
-    paddingRight: spacing['--t-spacing-1'],
     paddingBottom: spacing['--t-spacing-1'],
     paddingLeft: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingTop: spacing['--t-spacing-1'],
     width: '100%',
   },
   relationChipsContainer: {
+    gap: spacing['--t-spacing-1'],
     display: 'flex',
     flexWrap: 'wrap',
-    gap: spacing['--t-spacing-1'],
   },
 });
 

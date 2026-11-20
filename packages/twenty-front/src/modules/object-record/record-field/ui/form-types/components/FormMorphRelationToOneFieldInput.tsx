@@ -30,10 +30,10 @@ const styles = stylex.create({
   },
   forbiddenFieldDisplayContainer: {
     display: 'flex',
-    marginTop: spacing['--t-spacing-2'],
-    marginRight: spacing['--t-spacing-2'],
     marginBottom: spacing['--t-spacing-2'],
     marginLeft: spacing['--t-spacing-2'],
+    marginRight: spacing['--t-spacing-2'],
+    marginTop: spacing['--t-spacing-2'],
   },
 });
 

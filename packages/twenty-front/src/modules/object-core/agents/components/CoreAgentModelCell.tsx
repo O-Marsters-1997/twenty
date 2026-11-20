@@ -8,9 +8,9 @@ import { fontColor } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   container: {
+    overflow: 'hidden',
     color: fontColor['--t-font-color-secondary'],
     minWidth: '0',
-    overflow: 'hidden',
   },
 });
 

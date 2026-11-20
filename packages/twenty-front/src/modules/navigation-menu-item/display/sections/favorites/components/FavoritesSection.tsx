@@ -27,14 +27,14 @@ import * as stylex from '@stylexjs/stylex';
 
 const styles = stylex.create({
   listItemRow: {
+    gap: '0',
     display: 'flex',
     flexDirection: 'column',
-    gap: '0',
   },
   list: {
+    gap: general['--t-between-siblings-gap'],
     display: 'flex',
     flexDirection: 'column',
-    gap: general['--t-between-siblings-gap'],
   },
 });
 

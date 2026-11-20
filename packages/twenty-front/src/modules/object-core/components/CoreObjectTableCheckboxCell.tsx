@@ -6,8 +6,8 @@ const styles = stylex.create({
   container: {
     alignItems: 'center',
     display: 'flex',
-    height: '100%',
     justifyContent: 'center',
+    height: '100%',
     width: '100%',
   },
 });

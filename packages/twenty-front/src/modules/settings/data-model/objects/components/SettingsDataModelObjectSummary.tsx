@@ -32,8 +32,8 @@ const styles = stylex.create({
     justifyContent: 'space-between',
   },
   objectName: {
-    display: 'flex',
     gap: spacing['--t-spacing-2'],
+    display: 'flex',
     maxWidth: '60%',
   },
   overflowingTextWithTooltip: {
@@ -47,8 +47,8 @@ const styles = stylex.create({
     flexShrink: '0',
   },
   separator: {
-    alignSelf: 'stretch',
     background: background['--t-background-quaternary'],
+    alignSelf: 'stretch',
     height: '1px',
     marginBottom: spacing['--t-spacing-2'],
     marginTop: spacing['--t-spacing-2'],

@@ -21,16 +21,17 @@ type EventLogFiltersProps = {
 
 const styles = stylex.create({
   filtersGrid: {
-    display: 'grid',
     gap: `${spacing['--t-spacing-3']} ${spacing['--t-spacing-4']}`,
+    display: 'grid',
     gridTemplateColumns: '1fr 1fr',
   },
   fullWidthField: {
-    gridColumn: '1 / -1',
+    gridColumnEnd: '-1',
+    gridColumnStart: '1',
   },
   periodRow: {
-    display: 'grid',
     gap: spacing['--t-spacing-4'],
+    display: 'grid',
     gridTemplateColumns: '1fr 1fr',
   },
 });

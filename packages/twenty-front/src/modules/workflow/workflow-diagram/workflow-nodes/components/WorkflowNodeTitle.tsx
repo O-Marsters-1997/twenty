@@ -6,15 +6,15 @@ import { fontSize, fontWeight } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   root: {
+    overflow: 'hidden',
+    WebkitBoxOrient: 'vertical',
+    WebkitLineClamp: 1,
     alignSelf: 'stretch',
     boxSizing: 'border-box',
     display: '-webkit-box',
     fontSize: fontSize['--t-font-size-md'],
     fontWeight: fontWeight['--t-font-weight-medium'],
-    overflow: 'hidden',
     textOverflow: 'ellipsis',
-    WebkitBoxOrient: 'vertical',
-    WebkitLineClamp: 1,
   },
   color: (color: string) => ({ color }),
 });

@@ -7,8 +7,8 @@ const styles = stylex.create({
     alignSelf: 'stretch',
     boxSizing: 'border-box',
     display: 'flex',
-    height: '14px',
     justifyContent: 'space-between',
+    height: '14px',
   },
 });
 

@@ -15,8 +15,8 @@ const styles = stylex.create({
     alignItems: 'center',
     display: 'flex',
     justifyContent: 'center',
-    minHeight: '100px',
     position: 'relative',
+    minHeight: '100px',
   },
   backgroundImage: {
     maxHeight: '160px',
@@ -27,14 +27,14 @@ const styles = stylex.create({
     maxWidth: '245px',
   },
   movingImage: {
-    maxHeight: '130px',
-    maxWidth: '130px',
     position: 'absolute',
     transform: 'translate(var(--parallax-x, 0), var(--parallax-y, 0))',
     transitionDuration: `calc(${animationDuration['--t-animation-duration-normal']} * 1s)`,
     transitionProperty: 'transform',
     transitionTimingFunction: 'ease-out',
     zIndex: 2,
+    maxHeight: '130px',
+    maxWidth: '130px',
   },
   movingImageLarge: {
     maxHeight: '185px',

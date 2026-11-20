@@ -25,9 +25,9 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   dropdownContainer: {
+    gap: spacing['--t-spacing-3'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-3'],
   },
 });
 

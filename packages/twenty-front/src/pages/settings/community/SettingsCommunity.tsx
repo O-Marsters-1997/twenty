@@ -25,18 +25,21 @@ const SETTINGS_COMMUNITY_HERO_INSTANCE_ID_PREFIX = 'settings-community-hero';
 
 const styles = stylex.create({
   cardLink: {
+    textDecoration: 'none',
     display: 'block',
     minWidth: '0',
-    textDecoration: 'none',
   },
   cardsGrid: {
-    display: 'grid',
     gap: spacing['--t-spacing-2'],
-    gridTemplateColumns: { default: 'repeat(2, minmax(0, 1fr))', [media.mobile]: '1fr' },
+    display: 'grid',
+    gridTemplateColumns: {
+      default: 'repeat(2, minmax(0, 1fr))',
+      [media.mobile]: '1fr',
+    },
   },
   featuresContent: {
-    display: 'grid',
     gap: spacing['--t-spacing-4'],
+    display: 'grid',
   },
 });
 
@@ -99,7 +102,8 @@ export const SettingsCommunity = () => {
                 key={href}
                 href={href}
                 target="_blank"
-                rel="noopener noreferrer" {...stylex.props(styles.cardLink)}
+                rel="noopener noreferrer"
+                {...stylex.props(styles.cardLink)}
               >
                 <SettingsCard
                   Icon={
@@ -124,7 +128,8 @@ export const SettingsCommunity = () => {
           <a
             href="https://twenty.com/partners/list"
             target="_blank"
-            rel="noopener noreferrer" {...stylex.props(styles.cardLink)}
+            rel="noopener noreferrer"
+            {...stylex.props(styles.cardLink)}
           >
             <SettingsCard
               Icon={
@@ -148,7 +153,8 @@ export const SettingsCommunity = () => {
             <a
               href="https://twenty.com/releases"
               target="_blank"
-              rel="noopener noreferrer" {...stylex.props(styles.cardLink)}
+              rel="noopener noreferrer"
+              {...stylex.props(styles.cardLink)}
             >
               <SettingsCard
                 Icon={

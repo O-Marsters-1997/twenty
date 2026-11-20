@@ -27,7 +27,12 @@ import {
 
 const styles = stylex.create({
   container: {
+    padding: spacing['--t-spacing-1'],
+    flex: '1',
     backgroundColor: background['--t-background-primary'],
+    color: fontColor['--t-font-color-primary'],
+    display: 'flex',
+    flexDirection: 'column',
     borderRightColor: {
       default: null,
       ':not(:last-child)': borderColor['--t-border-color-light'],
@@ -40,13 +45,8 @@ const styles = stylex.create({
       default: null,
       ':not(:last-child)': '1px',
     },
-    color: fontColor['--t-font-color-primary'],
-    display: 'flex',
-    flex: '1',
-    flexDirection: 'column',
     minHeight: '122px',
     minWidth: '0',
-    padding: spacing['--t-spacing-1'],
   },
   containerShaded: {
     backgroundColor: background['--t-background-secondary'],
@@ -58,23 +58,23 @@ const styles = stylex.create({
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'row',
-    height: '24px',
     justifyContent: 'space-between',
+    height: '24px',
     marginLeft: 'none',
     width: '100%',
   },
   dayHeaderDayContainer: {
     display: 'flex',
     marginLeft: 'auto',
-    paddingTop: spacing['--t-spacing-0_5'],
-    paddingRight: spacing['--t-spacing-0_5'],
     paddingBottom: spacing['--t-spacing-0_5'],
     paddingLeft: spacing['--t-spacing-0_5'],
+    paddingRight: spacing['--t-spacing-0_5'],
+    paddingTop: spacing['--t-spacing-0_5'],
   },
   dayHeaderDay: {
+    borderRadius: '0',
     alignItems: 'center',
     backgroundColor: 'transparent',
-    borderRadius: '0',
     color: fontColor['--t-font-color-primary'],
     display: 'flex',
     fontSize: fontSize['--t-font-size-sm'],
@@ -84,28 +84,28 @@ const styles = stylex.create({
     width: '20px',
   },
   dayHeaderDayToday: {
-    backgroundColor: color['--t-color-blue'],
     borderRadius: '4px',
+    backgroundColor: color['--t-color-blue'],
     color: fontColor['--t-font-color-inverted'],
     fontWeight: fontWeight['--t-font-weight-medium'],
   },
   cardsContainer: {
-    backgroundColor: 'transparent',
     borderRadius: borderRadius['--t-border-radius-sm'],
-    display: 'flex',
     flex: '1',
+    backgroundColor: 'transparent',
+    display: 'flex',
     flexDirection: 'column',
-    minHeight: '60px',
     transitionDuration: '0.1s',
     transitionProperty: 'background-color',
     transitionTimingFunction: 'ease',
+    minHeight: '60px',
   },
   cardsContainerDraggedOver: {
-    backgroundColor:
-      backgroundTransparent['--t-background-transparent-lighter'],
     borderColor: borderColor['--t-border-color-medium'],
     borderStyle: 'dashed',
     borderWidth: '1px',
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
   },
 });
 

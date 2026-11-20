@@ -28,15 +28,15 @@ type AppChipProps = {
 
 const styles = stylex.create({
   container: {
+    gap: spacing['--t-spacing-1'],
+    overflow: 'hidden',
     alignItems: 'center',
     color: fontColor['--t-font-color-secondary'],
     display: 'inline-flex',
     fontSize: fontSize['--t-font-size-sm'],
     fontWeight: fontWeight['--t-font-weight-regular'],
-    gap: spacing['--t-spacing-1'],
     maxWidth: '100%',
     minWidth: 0,
-    overflow: 'hidden',
   },
 });
 

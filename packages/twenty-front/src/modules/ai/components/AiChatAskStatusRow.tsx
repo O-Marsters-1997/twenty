@@ -9,12 +9,12 @@ import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   container: {
-    alignItems: 'flex-start',
-    color: fontColor['--t-font-color-tertiary'],
-    display: 'flex',
     gap: spacing['--t-spacing-1'],
     paddingBlock: spacing['--t-spacing-1'],
     paddingInline: 0,
+    alignItems: 'flex-start',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
   },
   icon: {
     display: 'flex',
@@ -22,9 +22,9 @@ const styles = stylex.create({
     marginTop: '1px',
   },
   content: {
+    gap: spacing['--t-spacing-0_5'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-0_5'],
     minWidth: '0',
   },
 });

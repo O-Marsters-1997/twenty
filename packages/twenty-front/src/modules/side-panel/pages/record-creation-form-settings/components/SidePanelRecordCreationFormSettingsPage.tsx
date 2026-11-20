@@ -30,15 +30,15 @@ const styles = stylex.create({
     height: '100%',
   },
   content: {
-    display: 'flex',
     flex: '1',
+    display: 'flex',
     flexDirection: 'column',
     minHeight: '0',
     overflowY: 'auto',
-    paddingTop: spacing['--t-spacing-2'],
-    paddingRight: spacing['--t-spacing-2'],
     paddingBottom: spacing['--t-spacing-2'],
     paddingLeft: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
   },
 });
 

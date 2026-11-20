@@ -63,21 +63,21 @@ const styles = stylex.create({
     justifyContent: 'flex-end',
     marginLeft: 'auto',
     maxWidth: {
-      default: 'var(--settings-select-control-width, 120px)',
       [NARROW_CONTAINER]: '100%',
+      default: 'var(--settings-select-control-width, 120px)',
     },
     width: 'var(--settings-select-control-width, auto)',
   },
   row: {
     flexWrap: {
-      default: null,
       [NARROW_CONTAINER]: 'wrap',
+      default: null,
     },
   },
   text: {
     flexBasis: {
-      default: null,
       [NARROW_CONTAINER]: `calc(100% - ${spacing['--t-spacing-8']} - ${spacing['--t-spacing-3']})`,
+      default: null,
     },
   },
 });

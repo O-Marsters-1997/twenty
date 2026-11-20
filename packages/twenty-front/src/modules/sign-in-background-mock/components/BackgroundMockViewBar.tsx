@@ -1,4 +1,3 @@
-
 import { TopBar } from '@/ui/layout/top-bar/components/TopBar';
 import { TintedIconTile } from 'twenty-ui/components/data-display';
 import { IconBuildingSkyscraper, IconChevronDown } from 'twenty-ui/icon';
@@ -8,17 +7,17 @@ import { fontColor, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   viewPicker: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     color: fontColor['--t-font-color-secondary'],
     cursor: 'pointer',
     display: 'flex',
     fontWeight: fontWeight['--t-font-weight-medium'],
-    gap: spacing['--t-spacing-1'],
     height: '100%',
-    paddingTop: '0',
-    paddingRight: spacing['--t-spacing-2'],
     paddingBottom: '0',
     paddingLeft: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingTop: '0',
   },
   viewPickerCount: {
     color: fontColor['--t-font-color-tertiary'],
@@ -29,10 +28,10 @@ const styles = stylex.create({
     display: 'flex',
     fontWeight: fontWeight['--t-font-weight-regular'],
     height: '100%',
-    paddingTop: '0',
-    paddingRight: spacing['--t-spacing-2'],
     paddingBottom: '0',
     paddingLeft: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingTop: '0',
   },
 });
 

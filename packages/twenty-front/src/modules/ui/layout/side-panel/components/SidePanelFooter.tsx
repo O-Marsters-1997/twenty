@@ -10,23 +10,23 @@ import {
 
 const styles = stylex.create({
   actionsRow: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
     justifyContent: 'flex-end',
     width: '100%',
   },
   container: {
     background: background['--t-background-secondary'],
-    borderTopWidth: '1px',
-    borderTopStyle: 'solid',
-    borderTopColor: borderColor['--t-border-color-light'],
-    bottom: '0',
     boxSizing: 'border-box',
-    paddingTop: spacing['--t-spacing-2'],
-    paddingRight: spacing['--t-spacing-3'],
+    borderTopColor: borderColor['--t-border-color-light'],
+    borderTopStyle: 'solid',
+    borderTopWidth: '1px',
+    bottom: '0',
     paddingBottom: spacing['--t-spacing-2'],
     paddingLeft: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingTop: spacing['--t-spacing-2'],
     width: '100%',
   },
 });

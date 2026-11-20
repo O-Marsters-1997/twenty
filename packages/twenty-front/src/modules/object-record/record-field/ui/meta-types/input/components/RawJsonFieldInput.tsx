@@ -21,9 +21,9 @@ const CONTAINER_HEIGHT = 300;
 const styles = stylex.create({
   container: {
     boxSizing: 'border-box',
+    position: 'relative',
     height: CONTAINER_HEIGHT,
     overflowY: 'auto',
-    position: 'relative',
     width: 400,
   },
   switchModeButtonContainer: {
@@ -32,16 +32,16 @@ const styles = stylex.create({
     top: spacing['--t-spacing-1'],
   },
   codeEditorContainer: {
-    paddingTop: spacing['--t-spacing-1'],
-    paddingRight: spacing['--t-spacing-1'],
     paddingBottom: spacing['--t-spacing-1'],
     paddingLeft: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingTop: spacing['--t-spacing-1'],
   },
   jsonTreeContainer: {
-    paddingTop: spacing['--t-spacing-2'],
-    paddingRight: spacing['--t-spacing-2'],
     paddingBottom: spacing['--t-spacing-2'],
     paddingLeft: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
     width: 'min-content',
   },
 });

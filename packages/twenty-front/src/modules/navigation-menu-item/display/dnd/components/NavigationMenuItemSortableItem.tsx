@@ -11,8 +11,8 @@ const PLUGINS_WITHOUT_OPTIMISTIC = [SortableKeyboardPlugin];
 
 const styles = stylex.create({
   sortableRoot: {
-    minHeight: '0',
     position: 'relative',
+    minHeight: '0',
   },
 });
 

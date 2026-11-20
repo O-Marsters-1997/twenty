@@ -12,10 +12,10 @@ import * as stylex from '@stylexjs/stylex';
 
 const styles = stylex.create({
   noDataOverlay: {
-    height: '100%',
-    left: '0',
     pointerEvents: 'none',
     position: 'absolute',
+    height: '100%',
+    left: '0',
     top: '0',
     width: '100%',
   },

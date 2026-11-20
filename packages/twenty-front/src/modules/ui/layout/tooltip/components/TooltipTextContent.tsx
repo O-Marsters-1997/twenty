@@ -5,10 +5,10 @@ import { fontWeight, spacing, tooltip } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   title: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     display: 'flex',
     fontWeight: fontWeight['--t-font-weight-medium'],
-    gap: spacing['--t-spacing-1'],
     minInlineSize: 0,
   },
   titleText: {

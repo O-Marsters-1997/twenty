@@ -5,11 +5,7 @@ import * as stylex from '@stylexjs/stylex';
 
 import { Avatar } from 'twenty-ui/primitives/data-display';
 import { useTheme } from 'twenty-ui/theme';
-import {
-  background,
-  borderRadius,
-  color,
-} from 'twenty-ui/theme/tokens.stylex';
+import { background, borderRadius, color } from 'twenty-ui/theme/tokens.stylex';
 import { type AvatarOrIconProps } from './types/AvatarOrIconProps';
 import { isDefined } from 'twenty-shared/utils';
 
@@ -17,13 +13,13 @@ const styles = stylex.create({
   iconWithBackgroundContainer: {
     alignItems: 'center',
     backgroundColor: background['--t-background-inverted-secondary'],
+    display: 'flex',
+    justifyContent: 'center',
     borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
     borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
     borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
     borderTopRightRadius: borderRadius['--t-border-radius-sm'],
-    display: 'flex',
     height: '14px',
-    justifyContent: 'center',
     width: '14px',
   },
   iconBackground: (backgroundColor: string) => ({
@@ -38,15 +34,15 @@ const styles = stylex.create({
     outlineWidth: { default: null, ':focus-visible': '2px' },
   },
   wrapperClickable: {
+    font: 'inherit',
+    borderWidth: '0',
     backgroundColor: 'transparent',
+    color: 'inherit',
+    cursor: 'pointer',
     borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
     borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
     borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
     borderTopRightRadius: borderRadius['--t-border-radius-sm'],
-    borderWidth: '0',
-    color: 'inherit',
-    cursor: 'pointer',
-    font: 'inherit',
     marginBottom: '0',
     marginLeft: '0',
     marginRight: '0',

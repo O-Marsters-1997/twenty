@@ -11,14 +11,14 @@ const OTP_LENGTH = 6;
 
 const styles = stylex.create({
   confirmationContent: {
+    gap: spacing['--t-spacing-4'],
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-4'],
   },
   oTPContainer: {
-    display: 'flex',
     gap: spacing['--t-spacing-1'],
+    display: 'flex',
   },
 });
 

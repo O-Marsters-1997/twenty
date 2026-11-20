@@ -19,9 +19,9 @@ const DocumentViewer = lazy(() =>
 
 const styles = stylex.create({
   container: {
+    gap: spacing['--t-spacing-2'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-2'],
     width: '100%',
   },
   actions: {
@@ -30,10 +30,10 @@ const styles = stylex.create({
   },
   loadingText: {
     color: fontColor['--t-font-color-tertiary'],
-    paddingTop: spacing['--t-spacing-4'],
-    paddingRight: spacing['--t-spacing-4'],
     paddingBottom: spacing['--t-spacing-4'],
     paddingLeft: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingTop: spacing['--t-spacing-4'],
   },
 });
 

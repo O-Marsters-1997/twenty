@@ -18,6 +18,10 @@ import './RecordTableWithWrappers.css';
 
 const styles = stylex.create({
   printBoundary: {
+    overflow: {
+      default: null,
+      [media.print]: 'hidden',
+    },
     display: {
       default: 'contents',
       [media.print]: 'block',
@@ -25,10 +29,6 @@ const styles = stylex.create({
     maxHeight: {
       default: null,
       [media.print]: 'calc(100vh / var(--t-zoom, 1))',
-    },
-    overflow: {
-      default: null,
-      [media.print]: 'hidden',
     },
   },
 });

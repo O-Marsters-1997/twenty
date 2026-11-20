@@ -27,10 +27,10 @@ const SNOOZE_UNTIL_DATE_ITEM_ID = 'snoozeUntilDate';
 
 const styles = stylex.create({
   separatorContainer: {
-    paddingTop: spacing['--t-spacing-1'],
-    paddingRight: '0',
     paddingBottom: spacing['--t-spacing-1'],
     paddingLeft: '0',
+    paddingRight: '0',
+    paddingTop: spacing['--t-spacing-1'],
   },
 });
 

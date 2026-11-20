@@ -4,17 +4,17 @@ import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   mainContent: {
+    textAlign: 'center',
     marginBottom: spacing['--t-spacing-8'],
     marginTop: spacing['--t-spacing-4'],
-    textAlign: 'center',
   },
   instructions: {
     alignItems: 'center',
     color: fontColor['--t-font-color-tertiary'],
     fontSize: fontSize['--t-font-size-sm'],
+    textAlign: 'center',
     marginBottom: spacing['--t-spacing-4'],
     maxWidth: '280px',
-    textAlign: 'center',
   },
 });
 

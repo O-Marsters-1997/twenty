@@ -14,9 +14,9 @@ type SettingsPaginationControlsProps = {
 
 const styles = stylex.create({
   container: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
     justifyContent: 'flex-end',
     paddingTop: spacing['--t-spacing-2'],
   },

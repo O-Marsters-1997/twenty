@@ -44,19 +44,19 @@ export const RecordTableHeaderCellContainer = ({
 const styles = stylex.create({
   cell: {
     backgroundColor: background['--t-background-primary'],
+    color: fontColor['--t-font-color-tertiary'],
+    position: 'relative',
+    textAlign: 'left',
+    userSelect: 'none',
     borderRightColor: borderColor['--t-border-color-light'],
     borderRightStyle: 'solid',
     borderRightWidth: 1,
-    color: fontColor['--t-font-color-tertiary'],
     height: recordTableLayout.rowHeight,
     maxHeight: recordTableLayout.rowHeight,
     paddingBottom: 0,
     paddingLeft: 0,
     paddingRight: 0,
     paddingTop: 0,
-    position: 'relative',
-    textAlign: 'left',
-    userSelect: 'none',
   },
   borderBottom: {
     borderBottomColor: borderColor['--t-border-color-light'],
@@ -72,11 +72,11 @@ const styles = stylex.create({
   interactive: {
     backgroundColor: {
       default: background['--t-background-primary'],
-      ':active': background['--t-background-tertiary'],
       ':hover': {
         default: null,
         [media.hoverCapable]: background['--t-background-secondary'],
       },
+      ':active': background['--t-background-tertiary'],
     },
     cursor: 'pointer',
   },

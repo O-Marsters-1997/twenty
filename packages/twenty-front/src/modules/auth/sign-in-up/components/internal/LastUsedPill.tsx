@@ -17,11 +17,11 @@ const styles = stylex.create({
   badge: {
     background: accent['--t-accent-accent3'],
     borderColor: accent['--t-accent-accent5'],
+    borderRadius: borderRadius['--t-border-radius-pill'],
     borderStyle: 'solid',
     borderWidth: '1px',
-    borderRadius: borderRadius['--t-border-radius-pill'],
-    color: accent['--t-accent-accent9'],
     cornerShape: 'round',
+    color: accent['--t-accent-accent9'],
     fontWeight: fontWeight['--t-font-weight-semi-bold'],
     height: spacing['--t-spacing-5'],
   },

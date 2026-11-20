@@ -21,9 +21,9 @@ type PlaygroundSetupFormValues = z.infer<typeof playgroundSetupFormSchema>;
 
 const styles = stylex.create({
   form: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'end',
     display: 'grid',
-    gap: spacing['--t-spacing-2'],
     gridTemplateColumns: '1fr 1fr auto',
     width: '100%',
   },

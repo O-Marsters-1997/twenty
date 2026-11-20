@@ -19,7 +19,6 @@ type GraphWidgetAggregateChartProps = {
 };
 
 const styles = stylex.create({
-  headingWrapper: {},
   trendPercentageValue: {
     color: fontColor['--t-font-color-secondary'],
     fontSize: fontSize['--t-font-size-xs'],
@@ -29,8 +28,8 @@ const styles = stylex.create({
   container: {
     alignItems: 'center',
     display: 'flex',
-    height: '100%',
     justifyContent: 'space-between',
+    height: '100%',
     width: '100%',
   },
   trendIconContainer: {

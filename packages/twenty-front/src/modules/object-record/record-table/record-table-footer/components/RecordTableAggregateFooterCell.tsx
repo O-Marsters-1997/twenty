@@ -104,20 +104,20 @@ const firstColumnWidth = `var(--record-table-column-field-0)`;
 
 const styles = stylex.create({
   cell: {
+    overflow: 'hidden',
     backgroundColor: background['--t-background-primary'],
+    color: fontColor['--t-font-color-tertiary'],
+    position: 'sticky',
+    textAlign: 'left',
     borderRightColor: background['--t-background-primary'],
     borderRightStyle: 'solid',
     borderRightWidth: 1,
     bottom: 0,
-    color: fontColor['--t-font-color-tertiary'],
     height: recordTableLayout.rowHeight,
-    overflow: 'hidden',
     paddingBottom: 0,
     paddingLeft: 0,
     paddingRight: 0,
     paddingTop: 0,
-    position: 'sticky',
-    textAlign: 'left',
   },
   readOnly: {
     cursor: 'default',
@@ -133,12 +133,12 @@ const styles = stylex.create({
     cursor: 'pointer',
   },
   firstCell: {
-    left: `var(${recordTableCssVariable.firstColumnLeft})`,
     zIndex: recordTableZIndex.footerStickyColumn,
+    left: `var(${recordTableCssVariable.firstColumnLeft})`,
   },
   otherCell: {
-    left: 'auto',
     zIndex: recordTableZIndex.footerDefault,
+    left: 'auto',
   },
   columnWidth: (columnWidth: number) => ({
     minWidth: columnWidth,
@@ -156,7 +156,7 @@ const styles = stylex.create({
   },
   columnFootContainer: {
     position: 'relative',
-    width: '100%',
     zIndex: 1,
+    width: '100%',
   },
 });

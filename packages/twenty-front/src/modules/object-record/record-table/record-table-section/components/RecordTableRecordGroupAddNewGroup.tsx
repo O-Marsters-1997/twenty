@@ -12,10 +12,10 @@ const RECORD_TABLE_ADD_GROUP_DROPDOWN_ID = 'record-table-add-group-dropdown';
 const styles = stylex.create({
   container: {
     display: 'flex',
-    paddingTop: spacing['--t-spacing-2'],
-    paddingRight: spacing['--t-spacing-2'],
     paddingBottom: spacing['--t-spacing-2'],
     paddingLeft: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
   },
 });
 

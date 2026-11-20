@@ -38,11 +38,11 @@ const shrinkFromFullWidth = stylex.keyframes({
 
 const styles = stylex.create({
   wrapper: {
-    flexShrink: 0,
-    minWidth: 0,
     overflow: 'hidden',
+    flexShrink: 0,
     transitionDuration: `calc(${animationDuration['--t-animation-duration-normal']} * 1s)`,
     transitionProperty: 'width',
+    minWidth: 0,
   },
   wrapperResizing: {
     transitionProperty: 'none',
@@ -58,28 +58,28 @@ const styles = stylex.create({
     animationName: shrinkFromFullWidth,
   },
   panel: {
+    overflow: 'hidden',
     backgroundColor: background['--t-background-primary'],
-    borderLeftColor: borderColor['--t-border-color-medium'],
-    borderLeftStyle: 'solid',
-    borderLeftWidth: '1px',
     boxSizing: 'border-box',
     display: 'flex',
     flexDirection: 'column',
-    height: '100%',
-    overflow: 'hidden',
     position: 'relative',
+    borderLeftColor: borderColor['--t-border-color-medium'],
+    borderLeftStyle: 'solid',
+    borderLeftWidth: '1px',
+    height: '100%',
   },
   panelShrinking: {
     width: '100%',
   },
   modalContainer: {
-    height: '100%',
-    left: '0',
     pointerEvents: 'none',
     position: 'absolute',
+    zIndex: 1,
+    height: '100%',
+    left: '0',
     top: '0',
     width: '100%',
-    zIndex: 1,
   },
 });
 

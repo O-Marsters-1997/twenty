@@ -31,12 +31,12 @@ export type NavigationDrawerProps = {
 
 const styles = stylex.create({
   animatedContainer: {
-    height: '100%',
-    maxHeight: '100%',
     overflow: 'clip',
     position: 'relative',
     transitionDuration: `calc(${animationDuration['--t-animation-duration-normal']} * 1s)`,
     transitionProperty: 'width',
+    height: '100%',
+    maxHeight: '100%',
   },
   animatedContainerResizing: {
     transitionProperty: 'none',
@@ -68,10 +68,13 @@ const styles = stylex.create({
     },
   },
   content: {
-    display: 'flex',
     flex: '1',
+    gap: {
+      default: spacing['--t-spacing-2'],
+      [media.mobile]: spacing['--t-spacing-4'],
+    },
+    display: 'flex',
     flexDirection: 'column',
-    gap: { default: spacing['--t-spacing-2'], [media.mobile]: spacing['--t-spacing-4'] },
     minHeight: '0',
     paddingLeft: spacing['--t-spacing-2'],
     paddingRight: { default: null, [media.mobile]: spacing['--t-spacing-2'] },

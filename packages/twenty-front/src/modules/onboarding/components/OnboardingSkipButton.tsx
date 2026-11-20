@@ -12,24 +12,24 @@ import {
 
 const styles = stylex.create({
   skipButton: {
-    backgroundColor: 'transparent',
-    borderWidth: '1px',
-    borderStyle: 'solid',
     borderColor: borderColor['--t-border-color-light'],
-    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
-    borderTopRightRadius: borderRadius['--t-border-radius-md'],
-    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
-    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    backgroundColor: 'transparent',
     color: fontColor['--t-font-color-tertiary'],
     cursor: 'pointer',
     fontFamily: font['--t-font-family'],
     fontSize: fontSize['--t-font-size-md'],
     fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
     height: spacing['--t-spacing-8'],
-    paddingTop: '0',
-    paddingRight: spacing['--t-spacing-5'],
     paddingBottom: '0',
     paddingLeft: spacing['--t-spacing-5'],
+    paddingRight: spacing['--t-spacing-5'],
+    paddingTop: '0',
   },
 });
 

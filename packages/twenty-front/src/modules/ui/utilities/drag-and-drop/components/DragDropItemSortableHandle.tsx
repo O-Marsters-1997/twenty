@@ -8,12 +8,12 @@ const styles = stylex.create({
   handle: {
     cursor: 'grab',
     display: 'block',
-    height: '100%',
-    minWidth: 0,
     outlineColor: color['--t-color-blue'],
     outlineOffset: { default: null, ':focus-visible': '-2px' },
     outlineStyle: { default: 'none', ':focus-visible': 'solid' },
     outlineWidth: { default: null, ':focus-visible': '2px' },
+    height: '100%',
+    minWidth: 0,
     width: 'auto',
   },
   handleDisabled: {

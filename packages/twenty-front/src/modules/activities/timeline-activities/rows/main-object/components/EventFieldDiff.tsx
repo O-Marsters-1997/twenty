@@ -19,15 +19,15 @@ type EventFieldDiffProps = {
 
 const styles = stylex.create({
   eventFieldDiffContainer: {
+    gap: spacing['--t-spacing-1'],
+    overflow: 'hidden',
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'row',
-    gap: spacing['--t-spacing-1'],
-    height: '24px',
-    maxWidth: '100%',
-    overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
+    height: '24px',
+    maxWidth: '100%',
   },
   emptyValue: {
     color: fontColor['--t-font-color-tertiary'],

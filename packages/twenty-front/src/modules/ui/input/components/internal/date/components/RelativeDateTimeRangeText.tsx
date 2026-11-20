@@ -5,22 +5,27 @@ import { SOURCE_LOCALE } from 'twenty-shared/translations';
 import { IconArrowDown } from 'twenty-ui/icon';
 import { themeCssVariables } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   container: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     color: fontColor['--t-font-color-tertiary'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-2'],
     justifyContent: 'center',
+    textAlign: 'center',
     minHeight: '96px',
-    paddingTop: spacing['--t-spacing-4'],
-    paddingRight: spacing['--t-spacing-2'],
     paddingBottom: spacing['--t-spacing-4'],
     paddingLeft: spacing['--t-spacing-2'],
-    textAlign: 'center',
+    paddingRight: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-4'],
   },
   bound: {
     color: fontColor['--t-font-color-primary'],

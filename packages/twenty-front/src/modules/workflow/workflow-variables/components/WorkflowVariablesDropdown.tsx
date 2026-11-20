@@ -26,16 +26,16 @@ import {
 
 const styles = stylex.create({
   button: {
+    padding: spacing['--t-spacing-2'],
     alignItems: 'center',
     backgroundColor: 'transparent',
-    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
-    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
     color: fontColor['--t-font-color-tertiary'],
     cursor: 'pointer',
     display: 'flex',
     justifyContent: 'center',
-    padding: spacing['--t-spacing-2'],
     userSelect: 'none',
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
   },
   buttonDisabled: { cursor: 'not-allowed' },
 });

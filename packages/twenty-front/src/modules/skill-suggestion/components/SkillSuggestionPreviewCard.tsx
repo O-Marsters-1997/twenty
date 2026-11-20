@@ -6,34 +6,42 @@ import { DEFAULT_SKILL_ICON } from '@/skill-suggestion/constants/DefaultSkillIco
 import { SKILL_SUGGESTION_PREVIEW_WIDTH } from '@/skill-suggestion/constants/SkillSuggestionPreviewWidth';
 import type { SkillSuggestionItem } from '@/skill-suggestion/types/SkillSuggestionItem';
 import * as stylex from '@stylexjs/stylex';
-import { background, borderColor, borderRadius, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  background,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   card: (width: number) => ({
     background: background['--t-background-primary'],
     borderRadius: borderRadius['--t-border-radius-md'],
+    overflow: 'hidden',
     boxSizing: 'border-box',
     display: 'flex',
     flexDirection: 'column',
-    overflow: 'hidden',
     width,
   }),
   header: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
-    borderBottomWidth: '1px',
-    borderBottomStyle: 'solid',
-    borderBottomColor: borderColor['--t-border-color-light'],
     boxSizing: 'border-box',
     color: fontColor['--t-font-color-primary'],
     display: 'flex',
     fontSize: fontSize['--t-font-size-md'],
     fontWeight: fontWeight['--t-font-weight-medium'],
-    gap: spacing['--t-spacing-2'],
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
     height: '40px',
-    paddingTop: '0',
-    paddingRight: spacing['--t-spacing-3'],
     paddingBottom: '0',
     paddingLeft: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingTop: '0',
   },
   titleText: {
     overflow: 'hidden',
@@ -48,14 +56,14 @@ const styles = stylex.create({
   description: {
     color: fontColor['--t-font-color-secondary'],
     fontSize: fontSize['--t-font-size-md'],
-    lineHeight: '1.5',
+    lineHeight: 1.5,
+    whiteSpace: 'pre-wrap',
     maxHeight: 'calc(50dvh / var(--t-zoom, 1))',
     overflowY: 'auto',
-    paddingTop: spacing['--t-spacing-3'],
-    paddingRight: spacing['--t-spacing-3'],
     paddingBottom: spacing['--t-spacing-3'],
     paddingLeft: spacing['--t-spacing-3'],
-    whiteSpace: 'pre-wrap',
+    paddingRight: spacing['--t-spacing-3'],
+    paddingTop: spacing['--t-spacing-3'],
   },
 });
 

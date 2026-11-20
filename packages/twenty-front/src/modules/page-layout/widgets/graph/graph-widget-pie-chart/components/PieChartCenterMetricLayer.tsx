@@ -19,11 +19,11 @@ const styles = stylex.create({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    left: '50%',
     pointerEvents: 'none',
     position: 'absolute',
-    top: '50%',
     transform: 'translate(-50%, -50%)',
+    left: '50%',
+    top: '50%',
   },
   value: {
     color: fontColor['--t-font-color-primary'],

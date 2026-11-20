@@ -33,12 +33,12 @@ type EventLogResultsTableProps = {
 
 const styles = stylex.create({
   scrollWrapperContainer: {
-    height: '100%',
     overflow: 'hidden',
+    height: '100%',
   },
   loadingMore: {
-    color: fontColor['--t-font-color-tertiary'],
     padding: spacing['--t-spacing-4'],
+    color: fontColor['--t-font-color-tertiary'],
     textAlign: 'center',
   },
   intersectionObserver: {
@@ -59,9 +59,9 @@ const styles = stylex.create({
       default: 'transparent',
       ':hover': color['--t-color-blue'],
     },
-    bottom: 0,
     cursor: 'col-resize',
     position: 'absolute',
+    bottom: 0,
     right: 0,
     top: 0,
     width: '4px',

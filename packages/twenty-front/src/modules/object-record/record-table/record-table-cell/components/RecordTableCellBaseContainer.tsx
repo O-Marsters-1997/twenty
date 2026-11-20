@@ -78,24 +78,24 @@ const styles = stylex.create({
     alignItems: 'center',
     boxSizing: 'border-box',
     display: 'flex',
-    height: recordTableLayout.rowHeight,
     position: 'relative',
     userSelect: 'none',
+    height: recordTableLayout.rowHeight,
   },
   interactive: {
     cursor: 'pointer',
   },
   readOnly: {
+    borderRadius: {
+      default: null,
+      ':hover': { default: null, [media.hoverCapable]: 0 },
+    },
     backgroundColor: {
       default: null,
       ':hover': {
         default: null,
         [media.hoverCapable]: background['--t-background-secondary'],
       },
-    },
-    borderRadius: {
-      default: null,
-      ':hover': { default: null, [media.hoverCapable]: 0 },
     },
     color: {
       default: null,

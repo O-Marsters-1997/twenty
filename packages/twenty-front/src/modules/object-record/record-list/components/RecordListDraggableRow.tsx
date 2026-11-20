@@ -21,8 +21,8 @@ const styles = stylex.create({
     opacity: 'var(--dnd-drag-source-opacity)',
   },
   rowDropTargetSlot: {
-    left: '0',
     position: 'absolute',
+    left: '0',
     right: '0',
     top: '-1px',
   },

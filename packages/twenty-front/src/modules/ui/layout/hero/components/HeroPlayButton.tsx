@@ -16,18 +16,18 @@ type HeroPlayButtonProps = {
 
 const styles = stylex.create({
   button: {
+    padding: 0,
+    borderRadius: '50%',
+    borderStyle: 'none',
     alignItems: 'center',
     backgroundColor: {
       default: background['--t-background-primary'],
       ':hover': background['--t-background-secondary'],
     },
-    borderRadius: '50%',
-    borderStyle: 'none',
     boxShadow: boxShadow['--t-box-shadow-strong'],
     color: fontColor['--t-font-color-tertiary'],
     cursor: 'pointer',
     display: 'inline-flex',
-    height: '44px',
     justifyContent: 'center',
     outlineColor: {
       default: null,
@@ -45,7 +45,6 @@ const styles = stylex.create({
       default: null,
       ':focus-visible': '2px',
     },
-    padding: 0,
     transform: {
       default: null,
       ':hover': 'scale(1.04)',
@@ -54,6 +53,7 @@ const styles = stylex.create({
     transitionDuration: '120ms',
     transitionProperty: 'transform, background-color',
     transitionTimingFunction: 'ease-out',
+    height: '44px',
     width: '44px',
   },
 });

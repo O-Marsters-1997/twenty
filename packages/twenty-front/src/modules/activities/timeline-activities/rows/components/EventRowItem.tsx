@@ -10,18 +10,18 @@ type EventRowItemProps = {
 
 const styles = stylex.create({
   column: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     color: fontColor['--t-font-color-primary'],
     display: 'flex',
     flexDirection: 'row',
-    gap: spacing['--t-spacing-1'],
   },
   action: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     color: fontColor['--t-font-color-secondary'],
     display: 'flex',
     flexDirection: 'row',
-    gap: spacing['--t-spacing-1'],
   },
 });
 

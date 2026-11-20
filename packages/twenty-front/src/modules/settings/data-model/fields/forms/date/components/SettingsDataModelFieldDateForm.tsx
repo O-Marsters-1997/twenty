@@ -35,10 +35,10 @@ export const settingsDataModelFieldDateFormSchema = z.object({
 
 const styles = stylex.create({
   textInputContainer: {
-    paddingTop: '0',
-    paddingRight: spacing['--t-spacing-4'],
     paddingBottom: spacing['--t-spacing-4'],
     paddingLeft: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingTop: '0',
   },
 });
 

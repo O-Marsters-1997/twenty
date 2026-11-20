@@ -32,7 +32,6 @@ type SettingsDnsRecordsTableProps = {
   records: DnsRecord[];
 };
 
-
 const styles = stylex.create({
   recordRow: {
     marginTop: spacing['--t-spacing-2'],
@@ -42,15 +41,15 @@ const styles = stylex.create({
     width: '100%',
   },
   input: {
-    backgroundColor: {
-      default: null,
-      [stylex.when.ancestor(':hover', copyableCellMarker)]:
-        backgroundTransparent['--t-background-transparent-light'],
-    },
     borderColor: {
       default: null,
       [stylex.when.ancestor(':hover', copyableCellMarker)]:
         borderColor['--t-border-color-strong'],
+    },
+    backgroundColor: {
+      default: null,
+      [stylex.when.ancestor(':hover', copyableCellMarker)]:
+        backgroundTransparent['--t-background-transparent-light'],
     },
     cursor: 'pointer',
     pointerEvents: 'none',

@@ -7,19 +7,19 @@ import { fontColor } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   outerContainer: {
+    overflow: 'hidden',
     alignItems: 'center',
     display: 'flex',
     height: '100%',
-    overflow: 'hidden',
     paddingLeft: 8,
     width: '100%',
   },
   innerContainer: {
+    overflow: 'hidden',
     alignItems: 'center',
     display: 'flex',
-    height: '100%',
-    overflow: 'hidden',
     whiteSpace: 'nowrap',
+    height: '100%',
     width: '100%',
   },
   emptyPlaceholderField: {

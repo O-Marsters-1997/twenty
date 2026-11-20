@@ -17,10 +17,10 @@ import { codeFont, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   timeAndDate: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     display: 'flex',
     fontFamily: `${codeFont['--t-code-font-family']}, monospace`,
-    gap: spacing['--t-spacing-1'],
     minWidth: '0',
   },
 });

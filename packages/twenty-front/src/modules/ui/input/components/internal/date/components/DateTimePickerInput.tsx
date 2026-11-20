@@ -184,9 +184,9 @@ export const DateTimePickerInput = ({
 const styles = stylex.create({
   container: {
     alignItems: 'center',
+    display: 'flex',
     borderTopLeftRadius: borderRadius['--t-border-radius-md'],
     borderTopRightRadius: borderRadius['--t-border-radius-md'],
-    display: 'flex',
     width: '100%',
   },
   containerDefault: {
@@ -196,11 +196,11 @@ const styles = stylex.create({
     height: spacing['--t-spacing-6'],
   },
   input: {
-    backgroundColor: 'transparent',
     borderStyle: 'none',
+    outline: 'none',
+    backgroundColor: 'transparent',
     color: fontColor['--t-font-color-primary'],
     fontSize: fontSize['--t-font-size-md'],
-    outline: 'none',
     width: '140px',
   },
   inputDefault: {

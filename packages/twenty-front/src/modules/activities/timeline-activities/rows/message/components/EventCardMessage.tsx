@@ -25,20 +25,20 @@ const styles = stylex.create({
     width: '100%',
   },
   emailContent: {
+    gap: spacing['--t-spacing-4'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-4'],
     justifyContent: 'center',
   },
   emailTop: {
+    gap: spacing['--t-spacing-2'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-2'],
   },
   emailTitle: {
+    overflow: 'hidden',
     color: fontColor['--t-font-color-primary'],
     fontWeight: fontWeight['--t-font-weight-medium'],
-    overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
   },
@@ -47,8 +47,8 @@ const styles = stylex.create({
     fontSize: fontSize['--t-font-size-sm'],
   },
   emailBody: {
-    cursor: 'pointer',
     overflow: 'hidden',
+    cursor: 'pointer',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
   },

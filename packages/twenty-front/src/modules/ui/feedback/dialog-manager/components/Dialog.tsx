@@ -26,10 +26,10 @@ const styles = stylex.create({
     alignItems: 'center',
     backgroundColor: background['--t-background-overlay-primary'],
     display: 'flex',
-    height: 'calc(100dvh / var(--t-zoom, 1))',
     justifyContent: 'center',
-    left: 0,
     position: 'fixed',
+    height: 'calc(100dvh / var(--t-zoom, 1))',
+    left: 0,
     top: 0,
     width: 'calc(100vw / var(--t-zoom, 1))',
   },
@@ -37,31 +37,31 @@ const styles = stylex.create({
     zIndex,
   }),
   container: {
+    padding: '2em',
     backgroundColor: background['--t-background-primary'],
+    display: 'flex',
+    flexDirection: 'column',
+    position: 'relative',
     borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
     borderBottomRightRadius: borderRadius['--t-border-radius-md'],
     borderTopLeftRadius: borderRadius['--t-border-radius-md'],
     borderTopRightRadius: borderRadius['--t-border-radius-md'],
-    display: 'flex',
-    flexDirection: 'column',
     maxWidth: '320px',
-    padding: '2em',
-    position: 'relative',
     width: '100%',
   },
   dialogTitle: {
     color: fontColor['--t-font-color-primary'],
     fontSize: fontSize['--t-font-size-md'],
     fontWeight: fontWeight['--t-font-weight-semi-bold'],
-    marginBottom: spacing['--t-spacing-6'],
     textAlign: 'center',
+    marginBottom: spacing['--t-spacing-6'],
   },
   dialogMessage: {
     color: fontColor['--t-font-color-primary'],
     fontSize: fontSize['--t-font-size-sm'],
     fontWeight: fontWeight['--t-font-weight-regular'],
-    marginBottom: spacing['--t-spacing-6'],
     textAlign: 'center',
+    marginBottom: spacing['--t-spacing-6'],
   },
   dialogButtonContainer: {
     display: 'flex',
@@ -150,7 +150,9 @@ export const Dialog = ({
         {...stylex.props(styles.container)}
       >
         {title && <span {...stylex.props(styles.dialogTitle)}>{title}</span>}
-        {message && <span {...stylex.props(styles.dialogMessage)}>{message}</span>}
+        {message && (
+          <span {...stylex.props(styles.dialogMessage)}>{message}</span>
+        )}
         {children}
         {buttons.map(({ color, onClick, title: key, variant }) => (
           <div key={key} {...stylex.props(styles.dialogButtonContainer)}>

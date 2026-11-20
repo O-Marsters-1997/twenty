@@ -27,10 +27,10 @@ import * as stylex from '@stylexjs/stylex';
 
 const styles = stylex.create({
   sidePanelContainer: {
+    overflow: 'hidden',
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
-    overflow: 'hidden',
   },
 });
 
