@@ -134,8 +134,8 @@ export const RecordTableEmpty = ({ tableBodyRef }: RecordTableEmptyProps) => {
 
 const styles = stylex.create({
   emptyStateContainer: {
-    height: '100%',
     overflow: 'hidden',
+    height: '100%',
   },
   fullWidth: {
     width: '100%',

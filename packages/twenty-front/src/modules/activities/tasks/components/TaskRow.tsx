@@ -26,23 +26,23 @@ import { fontColor, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   taskTitle: {
+    overflow: 'hidden',
+    paddingInline: spacing['--t-spacing-2'],
     alignItems: 'center',
     color: fontColor['--t-font-color-primary'],
     fontWeight: fontWeight['--t-font-weight-medium'],
-    overflow: 'hidden',
-    paddingBottom: '1px',
-    paddingInline: spacing['--t-spacing-2'],
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
+    paddingBottom: '1px',
   },
   taskTitleCompleted: {
     textDecoration: 'line-through',
   },
   dueDate: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     color: fontColor['--t-font-color-secondary'],
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
     paddingInlineStart: spacing['--t-spacing-1'],
     whiteSpace: 'nowrap',
   },
@@ -50,20 +50,20 @@ const styles = stylex.create({
     color: fontColor['--t-font-color-danger'],
   },
   leftSideContainer: {
-    alignItems: 'center',
-    display: 'flex',
     flex: '1',
     overflow: 'hidden',
+    alignItems: 'center',
+    display: 'flex',
   },
   taskBody: {
+    overflow: 'hidden',
     color: fontColor['--t-font-color-tertiary'],
     display: 'flex',
-    maxWidth: `calc(80% - ${spacing['--t-spacing-2']})`,
-    overflow: 'hidden',
-    paddingBottom: '1px',
     position: 'relative',
     textOverflow: 'ellipsis',
     zIndex: '1',
+    maxWidth: `calc(80% - ${spacing['--t-spacing-2']})`,
+    paddingBottom: '1px',
   },
   rightSideContainer: {
     alignItems: 'center',
@@ -73,8 +73,8 @@ const styles = stylex.create({
   activityTargetsContainer: {
     overflow: 'clip',
     position: 'relative',
-    width: '100%',
     zIndex: '1',
+    width: '100%',
   },
   placeholder: {
     color: fontColor['--t-font-color-light'],

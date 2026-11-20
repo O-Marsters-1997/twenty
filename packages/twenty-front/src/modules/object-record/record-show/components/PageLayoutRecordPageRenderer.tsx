@@ -24,12 +24,12 @@ const styles = stylex.create({
     zIndex: '1',
   },
   showPageRightContainer: {
-    display: 'flex',
     flex: '1',
+    overflow: 'hidden',
+    display: 'flex',
     flexDirection: 'column',
     justifyContent: 'start',
     minHeight: '0',
-    overflow: 'hidden',
     width: '100%',
   },
   contentContainer: {

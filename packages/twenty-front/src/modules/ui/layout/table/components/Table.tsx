@@ -9,7 +9,7 @@ const styles = stylex.create({
   },
 });
 
-export const Table = ({ className, ...props }: ComponentProps<'div'>) => {
+export const Table = ({ className, ...props }: TableProps<'div'>) => {
   const rootProps = stylex.props(styles.table);
 
   return (

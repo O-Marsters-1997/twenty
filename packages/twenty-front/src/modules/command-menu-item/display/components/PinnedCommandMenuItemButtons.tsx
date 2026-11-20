@@ -20,8 +20,8 @@ import * as stylex from '@stylexjs/stylex';
 const styles = stylex.create({
   wrapper: {
     flex: '1 1 0',
-    minWidth: '0',
     overflow: 'hidden',
+    minWidth: '0',
   },
   container: {
     display: 'flex',
@@ -35,11 +35,11 @@ const styles = stylex.create({
     justifyContent: 'center',
   },
   items: {
+    overflow: 'hidden',
     display: 'flex',
     flexDirection: 'row',
     maxWidth: '100%',
     minWidth: 0,
-    overflow: 'hidden',
   },
   itemsReversed: { flexDirection: 'row-reverse' },
   itemsGap: (gap: number) => ({ gap: `${gap}px` }),

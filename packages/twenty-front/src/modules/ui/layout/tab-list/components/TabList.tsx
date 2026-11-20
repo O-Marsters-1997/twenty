@@ -22,9 +22,9 @@ const styles = stylex.create({
   container: {
     boxSizing: 'border-box',
     display: 'flex',
-    height: spacing['--t-spacing-10'],
     position: 'relative',
     userSelect: 'none',
+    height: spacing['--t-spacing-10'],
     width: '100%',
     '::after': {
       backgroundColor: borderColor['--t-border-color-light'],
@@ -37,8 +37,8 @@ const styles = stylex.create({
     },
   },
   innerContainer: {
-    display: 'flex',
     flex: 1,
+    display: 'flex',
     justifyContent: 'flex-start',
     minWidth: 0,
   },
@@ -46,8 +46,8 @@ const styles = stylex.create({
     justifyContent: 'center',
   },
   nodeDimension: {
-    display: 'flex',
     flex: 1,
+    display: 'flex',
     minWidth: 0,
   },
   dropdownContainer: {

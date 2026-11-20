@@ -13,15 +13,15 @@ import {
 
 const styles = stylex.create({
   container: {
+    gap: spacing['--t-spacing-4'],
+    paddingBlock: spacing['--t-spacing-8'],
+    paddingInline: spacing['--t-spacing-8'],
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-4'],
-    height: '100%',
     justifyContent: 'center',
-    paddingBlock: spacing['--t-spacing-8'],
-    paddingInline: spacing['--t-spacing-8'],
     textAlign: 'center',
+    height: '100%',
   },
   title: {
     color: fontColor['--t-font-color-primary'],

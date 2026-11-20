@@ -35,7 +35,16 @@ import { IconX } from 'twenty-ui/icon';
 
 const styles = stylex.create({
   input: {
+    margin: 0,
+    padding: spacing['--t-spacing-2'],
+    outline: 'none',
+    overflow: 'hidden',
+    textDecoration: 'none',
     backgroundColor: 'transparent',
+    color: fontColor['--t-font-color-primary'],
+    fontFamily: 'inherit',
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: 'inherit',
     borderBottomColor: borderColor['--t-border-color-light'],
     borderBottomStyle: 'solid',
     borderBottomWidth: '1px',
@@ -44,22 +53,13 @@ const styles = stylex.create({
     borderTopLeftRadius: borderRadius['--t-border-radius-md'],
     borderTopRightRadius: borderRadius['--t-border-radius-md'],
     borderTopWidth: 0,
-    color: fontColor['--t-font-color-primary'],
-    fontFamily: 'inherit',
-    fontSize: fontSize['--t-font-size-sm'],
-    fontWeight: 'inherit',
-    margin: 0,
     maxWidth: '100%',
     minHeight: '19px',
-    outline: 'none',
-    overflow: 'hidden',
-    padding: spacing['--t-spacing-2'],
-    textDecoration: 'none',
     '::placeholder': { color: fontColor['--t-font-color-light'] },
   },
 });
 
-export const StyledInput = (props: ComponentProps<'input'>) => (
+export const StyledInput = (props: StyledInputProps<'input'>) => (
   <input {...props} {...stylex.props(styles.input)} />
 );
 

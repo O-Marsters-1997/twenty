@@ -23,12 +23,12 @@ type TabListHiddenMeasurementsProps = {
 
 const styles = stylex.create({
   hiddenMeasurement: {
-    display: 'flex',
     gap: layoutSize.tabListGap,
+    display: 'flex',
     pointerEvents: 'none',
     position: 'absolute',
-    top: '-9999px',
     visibility: 'hidden',
+    top: '-9999px',
   },
 });
 

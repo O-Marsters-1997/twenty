@@ -225,9 +225,9 @@ const styles = stylex.create({
   },
   container: {
     display: { default: 'grid', [media.print]: 'block' },
+    flexBasis: '0%',
     flexGrow: 1,
     flexShrink: 1,
-    flexBasis: '0%',
     gridTemplateColumns: '1fr',
     gridTemplateRows: 'minmax(0, 1fr)',
     height: { default: null, [media.print]: 'auto' },
@@ -238,9 +238,9 @@ const styles = stylex.create({
     gridTemplateColumns: '348px 1fr',
   },
   tabsAndDashboard: {
+    overflow: { default: 'hidden', [media.print]: 'visible' },
     display: { default: 'flex', [media.print]: 'block' },
     flexDirection: 'column',
-    overflow: { default: 'hidden', [media.print]: 'visible' },
   },
   tabContentActive: { display: 'contents' },
   tabContentInactive: { display: 'none' },
@@ -250,9 +250,9 @@ const styles = stylex.create({
     minHeight: '100%',
   },
   scrollWrapperContainer: {
+    flexBasis: '0%',
     flexGrow: 1,
     flexShrink: 1,
-    flexBasis: '0%',
     minHeight: { default: 0, [media.print]: 'auto' },
   },
 });

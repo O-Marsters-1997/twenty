@@ -15,8 +15,8 @@ const styles = stylex.create({
     overflow: 'hidden',
   },
   section: {
-    display: 'flex',
     flex: 1,
+    display: 'flex',
     minHeight: 0,
   },
 });

@@ -10,17 +10,17 @@ import { type ComponentProps } from 'react';
 
 const styles = stylex.create({
   root: {
-    alignItems: 'center',
-    backdropFilter: blur['--t-blur-medium'],
-    backgroundColor:
-      backgroundTransparent['--t-background-transparent-primary'],
     borderColor: borderColor['--t-border-color-medium'],
     borderRadius: borderRadius['--t-border-radius-md'],
     borderStyle: 'solid',
     borderWidth: '1px',
+    overflow: 'hidden',
+    alignItems: 'center',
+    backdropFilter: blur['--t-blur-medium'],
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-primary'],
     boxShadow: boxShadow['--t-box-shadow-strong'],
     display: 'flex',
-    overflow: 'hidden',
     zIndex: 30,
   },
   radiusSm: {

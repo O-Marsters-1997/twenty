@@ -32,30 +32,30 @@ import {
 
 const styles = stylex.create({
   trigger: {
-    alignItems: 'center',
     background: 'transparent',
     borderStyle: 'none',
-    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
-    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
-    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
-    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    outline: {
+      default: null,
+      ':focus-visible': `2px solid ${color['--t-color-blue']}`,
+    },
+    alignItems: 'center',
     color: {
       default: fontColor['--t-font-color-tertiary'],
       ':hover': fontColor['--t-font-color-primary'],
     },
     cursor: 'pointer',
     display: 'flex',
-    height: '20px',
     justifyContent: 'center',
-    paddingTop: '0',
-    paddingRight: '0',
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    height: '20px',
     paddingBottom: '0',
     paddingLeft: '0',
+    paddingRight: '0',
+    paddingTop: '0',
     width: '20px',
-    outline: {
-      default: null,
-      ':focus-visible': `2px solid ${color['--t-color-blue']}`,
-    },
   },
   heading: {
     color: fontColor['--t-font-color-secondary'],

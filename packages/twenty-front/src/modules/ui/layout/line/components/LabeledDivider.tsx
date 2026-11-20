@@ -5,19 +5,19 @@ import { Text } from 'twenty-ui/primitives/typography';
 
 const styles = stylex.create({
   container: {
+    marginBlock: spacing['--t-spacing-3'],
     alignItems: 'center',
     display: 'flex',
-    marginBlock: spacing['--t-spacing-3'],
     width: '100%',
   },
   containerNoMargin: {
     marginBlock: 0,
   },
   label: {
+    marginInline: spacing['--t-spacing-2'],
     color: fontColor['--t-font-color-light'],
     fontSize: '11px',
     fontWeight: fontWeight['--t-font-weight-semi-bold'],
-    marginInline: spacing['--t-spacing-2'],
   },
   labelColor: (color: string) => ({ color }),
   separator: {

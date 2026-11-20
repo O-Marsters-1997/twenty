@@ -45,8 +45,8 @@ const styles = stylex.create({
   container: {
     cursor: 'grab',
     display: 'flex',
-    height: recordTableLayout.rowHeight,
     zIndex: recordTableZIndex.columnGrip,
+    height: recordTableLayout.rowHeight,
   },
   iconWrapper: {
     color: borderColor['--t-border-color-strong'],

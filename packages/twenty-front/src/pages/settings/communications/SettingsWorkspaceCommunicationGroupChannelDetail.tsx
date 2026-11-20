@@ -55,9 +55,9 @@ const styles = stylex.create({
     marginRight: spacing['--t-spacing-2'],
   },
   sendingDomainColumn: {
+    gap: spacing['--t-spacing-3'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-3'],
   },
 });
 

@@ -6,19 +6,19 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   skeletonContainer: {
+    gap: spacing['--t-spacing-8'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-8'],
   },
   formSection: {
+    gap: spacing['--t-spacing-2'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-2'],
   },
   iconNameRow: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'flex-start',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
   },
   iconContainer: {
     flexShrink: '0',

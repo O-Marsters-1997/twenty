@@ -26,15 +26,15 @@ const styles = stylex.create({
     color: fontColor['--t-font-color-tertiary'],
     display: 'flex',
     justifyContent: 'center',
-    paddingTop: spacing['--t-spacing-8'],
-    paddingRight: spacing['--t-spacing-8'],
     paddingBottom: spacing['--t-spacing-8'],
     paddingLeft: spacing['--t-spacing-8'],
+    paddingRight: spacing['--t-spacing-8'],
+    paddingTop: spacing['--t-spacing-8'],
   },
   roleContainer: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'flex-end',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
     marginBottom: spacing['--t-spacing-8'],
   },
   roleSelector: {

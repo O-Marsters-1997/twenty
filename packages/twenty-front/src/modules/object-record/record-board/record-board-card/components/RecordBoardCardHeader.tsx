@@ -34,7 +34,6 @@ const styles = stylex.create({
     alignItems: 'center',
     display: 'flex',
     justifyContent: 'center',
-    marginLeft: spacing['--t-spacing-1'],
     opacity: {
       default: 0,
       [stylex.when.ancestor(':hover', recordCardMarker)]: 1,
@@ -42,11 +41,12 @@ const styles = stylex.create({
     transitionDuration: '160ms',
     transitionProperty: 'all',
     transitionTimingFunction: 'ease-in-out',
+    marginLeft: spacing['--t-spacing-1'],
   },
   recordChipContainer: {
-    display: 'flex',
     flex: '1 1 auto',
     overflow: 'hidden',
+    display: 'flex',
   },
 });
 

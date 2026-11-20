@@ -20,6 +20,7 @@ import {
 const styles = stylex.create({
   entriesList: {
     background: background['--t-background-tertiary'],
+    padding: spacing['--t-spacing-2'],
     borderRadius: borderRadius['--t-border-radius-sm'],
     display: 'flex',
     flexDirection: 'column',
@@ -27,14 +28,13 @@ const styles = stylex.create({
     fontSize: fontSize['--t-font-size-sm'],
     maxHeight: '300px',
     overflowY: 'auto',
-    padding: spacing['--t-spacing-2'],
   },
   levelBadge: {
     borderRadius: borderRadius['--t-border-radius-xs'],
-    fontSize: fontSize['--t-font-size-xs'],
-    fontWeight: fontWeight['--t-font-weight-semi-bold'],
     paddingBlock: 0,
     paddingInline: spacing['--t-spacing-1'],
+    fontSize: fontSize['--t-font-size-xs'],
+    fontWeight: fontWeight['--t-font-weight-semi-bold'],
     textTransform: 'uppercase',
   },
   levelError: {
@@ -55,15 +55,15 @@ const styles = stylex.create({
   },
 
   entryRow: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'baseline',
     color: fontColor['--t-font-color-primary'],
     display: 'grid',
-    gap: spacing['--t-spacing-2'],
     gridTemplateColumns: 'max-content max-content 1fr',
-    paddingTop: spacing['--t-spacing-0_5'],
-    paddingRight: '0',
     paddingBottom: spacing['--t-spacing-0_5'],
     paddingLeft: '0',
+    paddingRight: '0',
+    paddingTop: spacing['--t-spacing-0_5'],
   },
   timestamp: {
     color: fontColor['--t-font-color-light'],

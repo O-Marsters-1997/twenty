@@ -14,11 +14,11 @@ import { NavigationDropTargetContext } from '@/navigation-menu-item/common/conte
 
 const styles = stylex.create({
   dropTarget: {
-    minHeight: spacing['--t-spacing-2'],
     position: 'relative',
     transitionDuration: '150ms',
     transitionProperty: 'all',
     transitionTimingFunction: 'ease-in-out',
+    minHeight: spacing['--t-spacing-2'],
   },
   compact: { minHeight: 0 },
   dragOver: {
@@ -26,9 +26,9 @@ const styles = stylex.create({
     '::before': {
       backgroundColor: color['--t-color-blue'],
       content: '""',
+      position: 'absolute',
       height: '2px',
       left: 0,
-      position: 'absolute',
       width: '100%',
     },
   },

@@ -4,10 +4,10 @@ import { fontColor, fontSize } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   subtitle: {
+    margin: '0',
     color: fontColor['--t-font-color-secondary'],
     fontSize: fontSize['--t-font-size-md'],
     lineHeight: '1.4',
-    margin: '0',
   },
 });
 

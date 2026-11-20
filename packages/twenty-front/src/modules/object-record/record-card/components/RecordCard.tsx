@@ -18,7 +18,6 @@ const styles = stylex.create({
       ':is([data-focused="true"])': background['--t-background-tertiary'],
       ':is([data-active="true"])': accent['--t-accent-quaternary'],
     },
-    backgroundColor: 'var(--record-card-background-color)',
     borderColor: {
       default: borderColor['--t-border-color-medium'],
       ':hover': borderColor['--t-border-color-strong'],
@@ -27,6 +26,7 @@ const styles = stylex.create({
     borderRadius: borderRadius['--t-border-radius-sm'],
     borderStyle: 'solid',
     borderWidth: '1px',
+    backgroundColor: 'var(--record-card-background-color)',
     color: fontColor['--t-font-color-primary'],
     cursor: 'pointer',
     width: '100%',

@@ -91,25 +91,25 @@ const styles = stylex.create({
     marginLeft: spacing['--t-spacing-10'],
   },
   footer: {
-    backgroundColor: background['--t-background-secondary'],
     padding: spacing['--t-spacing-1'],
+    backgroundColor: background['--t-background-secondary'],
   },
   addOptionButton: {
     justifyContent: 'center',
     width: '100%',
   },
   apiKeyContainer: {
-    display: 'flex',
     gap: spacing['--t-spacing-2'],
+    display: 'flex',
     width: '100%',
   },
   apiKey: {
     color: fontColor['--t-font-color-light'],
     fontSize: fontSize['--t-font-size-xs'],
     fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    whiteSpace: 'nowrap',
     marginBottom: spacing['--t-spacing-1_5'],
     marginTop: spacing['--t-spacing-1'],
-    whiteSpace: 'nowrap',
     width: '100%',
   },
   labelContainer: {
@@ -119,10 +119,10 @@ const styles = stylex.create({
   },
   iconContainer: {
     alignItems: 'center',
-    borderRightWidth: '1px',
-    borderRightStyle: 'solid',
-    borderRightColor: color['--t-color-yellow'],
     display: 'flex',
+    borderRightColor: color['--t-color-yellow'],
+    borderRightStyle: 'solid',
+    borderRightWidth: '1px',
     marginBottom: spacing['--t-spacing-1_5'],
     marginTop: spacing['--t-spacing-1'],
   },

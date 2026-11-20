@@ -55,18 +55,18 @@ const styles = stylex.create({
     height: modalSize['--t-modal-size-xl-height'],
   },
   innerContainer: {
-    display: 'flex',
     flex: 1,
+    display: 'flex',
     flexDirection: 'column',
+    position: 'relative',
+    height: { default: null, [media.mobile]: '80%' },
     minHeight: { default: '600px', [media.mobile]: 'auto' },
     minWidth: { default: '800px', [media.mobile]: 'auto' },
-    position: 'relative',
     width: { default: null, [media.mobile]: '100%' },
-    height: { default: null, [media.mobile]: '80%' },
   },
   rtlLtr: {
-    display: 'flex',
     flex: 1,
+    display: 'flex',
     flexDirection: 'column',
   },
 });

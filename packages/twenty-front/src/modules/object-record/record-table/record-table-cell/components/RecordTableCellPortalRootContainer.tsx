@@ -22,12 +22,12 @@ export const RecordTableCellPortalRootContainer = ({
 
 const styles = stylex.create({
   root: {
+    position: 'absolute',
+    zIndex: 'auto',
     height: '100%',
     left: 0,
-    position: 'absolute',
     top: 0,
     width: '100%',
-    zIndex: 'auto',
   },
   zIndex: (zIndex: number) => ({ zIndex }),
 });

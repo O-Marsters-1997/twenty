@@ -15,18 +15,18 @@ import {
 
 const styles = stylex.create({
   card: (depth: number) => ({
-    alignItems: 'flex-start',
-    backgroundColor: background['--t-background-primary'],
+    padding: spacing['--t-spacing-4'],
     borderColor: borderColor['--t-border-color-light'],
     borderRadius: borderRadius['--t-border-radius-md'],
     borderStyle: 'solid',
     borderWidth: '1px',
-    boxShadow: boxShadow['--t-box-shadow-light'],
-    display: 'flex',
     gap: spacing['--t-spacing-3'],
     marginBlock: 0,
     marginInline: `calc(${spacing['--t-spacing-3']} * ${depth})`,
-    padding: spacing['--t-spacing-4'],
+    alignItems: 'flex-start',
+    backgroundColor: background['--t-background-primary'],
+    boxShadow: boxShadow['--t-box-shadow-light'],
+    display: 'flex',
     textAlign: 'left',
   }),
   cardStacked: {
@@ -46,15 +46,15 @@ const styles = stylex.create({
     width: spacing['--t-spacing-7'],
   },
   content: {
-    display: 'flex',
     flex: '1',
+    display: 'flex',
     flexDirection: 'column',
     minWidth: '0',
   },
   heading: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
     minWidth: '0',
   },
 });

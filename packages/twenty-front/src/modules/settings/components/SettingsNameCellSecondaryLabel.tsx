@@ -16,18 +16,18 @@ type SettingsNameCellSecondaryLabelProps = {
 
 const styles = stylex.create({
   root: {
+    flex: '0 999 auto',
+    overflow: 'hidden',
+    color: fontColor['--t-font-color-light'],
+    fontSize: fontSize['--t-font-size-md'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    minWidth: '48px',
     '::before': {
       content: "'·'",
       marginRight: spacing['--t-spacing-1'],
     },
-    color: fontColor['--t-font-color-light'],
-    flex: '0 999 auto',
-    fontSize: fontSize['--t-font-size-md'],
-    fontWeight: fontWeight['--t-font-weight-regular'],
-    minWidth: '48px',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
   },
 });
 

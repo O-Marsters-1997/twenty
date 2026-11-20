@@ -14,11 +14,11 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   section: {
-    display: 'flex',
-    flexDirection: 'column',
     gap: spacing['--t-spacing-6'],
     paddingBlock: spacing['--t-spacing-4'],
     paddingInline: spacing['--t-spacing-3'],
+    display: 'flex',
+    flexDirection: 'column',
     width: 'auto',
   },
 });

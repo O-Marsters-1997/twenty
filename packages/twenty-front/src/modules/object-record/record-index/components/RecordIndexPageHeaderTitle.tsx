@@ -5,9 +5,9 @@ import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   titleWithSelectedRecords: {
+    gap: spacing['--t-spacing-1'],
     display: 'flex',
     flexDirection: 'row',
-    gap: spacing['--t-spacing-1'],
   },
   title: {
     color: fontColor['--t-font-color-primary'],

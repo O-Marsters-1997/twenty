@@ -18,6 +18,11 @@ const styles = stylex.create({
       ':is([data-variant=outline])': 'transparent',
       ':is([data-variant=ghost])': 'transparent',
     },
+    '--tw-button-border': {
+      default: null,
+      ':is([data-variant=outline])':
+        backgroundTransparent['--t-background-transparent-primary'],
+    },
     '--tw-button-color': {
       default: null,
       ':is([data-variant=outline])': fontColor['--t-font-color-inverted'],
@@ -30,13 +35,9 @@ const styles = stylex.create({
       ':is([data-variant=ghost])':
         backgroundTransparent['--t-background-transparent-light'],
     },
-    '--tw-button-border': {
-      default: null,
-      ':is([data-variant=outline])':
-        backgroundTransparent['--t-background-transparent-primary'],
-    },
   },
 });
 
-export const BUTTON_INVERTED_CLASS_NAME = stylex.props(styles.inverted)
-  .className;
+export const BUTTON_INVERTED_CLASS_NAME = stylex.props(
+  styles.inverted,
+).className;

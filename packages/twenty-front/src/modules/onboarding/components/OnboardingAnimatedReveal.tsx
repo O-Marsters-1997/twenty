@@ -5,8 +5,8 @@ import { type ReactNode } from 'react';
 
 const styles = stylex.create({
   reveal: {
-    maxWidth: '100%',
     overflow: 'hidden',
+    maxWidth: '100%',
   },
 });
 

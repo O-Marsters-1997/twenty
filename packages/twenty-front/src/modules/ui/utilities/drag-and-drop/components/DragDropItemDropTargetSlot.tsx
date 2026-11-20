@@ -5,13 +5,13 @@ import * as stylex from '@stylexjs/stylex';
 // pulled 1px into each neighbor so the cells keep their layout.
 const styles = stylex.create({
   dropTargetSlot: {
-    alignSelf: 'stretch',
     flex: '0 0 2px',
+    alignSelf: 'stretch',
+    position: 'relative',
+    zIndex: '100',
     marginLeft: '-1px',
     marginRight: '-1px',
     minHeight: '0',
-    position: 'relative',
-    zIndex: '100',
   },
 });
 

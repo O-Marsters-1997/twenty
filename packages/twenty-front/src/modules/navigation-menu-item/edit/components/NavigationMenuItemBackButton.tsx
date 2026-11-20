@@ -15,24 +15,27 @@ import {
 
 const styles = stylex.create({
   backButton: {
-    alignItems: 'center',
     background: {
       default: 'transparent',
       ':hover': backgroundTransparent['--t-background-transparent-light'],
     },
     borderStyle: 'none',
+    gap: spacing['--t-spacing-2'],
+    alignItems: 'center',
     color: fontColor['--t-font-color-secondary'],
     cursor: 'pointer',
     display: 'flex',
     fontFamily: font['--t-font-family'],
     fontWeight: fontWeight['--t-font-weight-medium'],
-    gap: spacing['--t-spacing-2'],
-    paddingBottom: spacing['--t-spacing-1'],
-    paddingLeft: spacing['--t-spacing-1'],
-    paddingRight: spacing['--t-spacing-0_5'],
-    paddingTop: spacing['--t-spacing-1'],
     textAlign: 'left',
-    width: '100%',
+    borderBottomLeftRadius: {
+      default: null,
+      ':hover': borderRadius['--t-border-radius-sm'],
+    },
+    borderBottomRightRadius: {
+      default: null,
+      ':hover': borderRadius['--t-border-radius-sm'],
+    },
     borderTopLeftRadius: {
       default: null,
       ':hover': borderRadius['--t-border-radius-sm'],
@@ -41,14 +44,11 @@ const styles = stylex.create({
       default: null,
       ':hover': borderRadius['--t-border-radius-sm'],
     },
-    borderBottomRightRadius: {
-      default: null,
-      ':hover': borderRadius['--t-border-radius-sm'],
-    },
-    borderBottomLeftRadius: {
-      default: null,
-      ':hover': borderRadius['--t-border-radius-sm'],
-    },
+    paddingBottom: spacing['--t-spacing-1'],
+    paddingLeft: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-0_5'],
+    paddingTop: spacing['--t-spacing-1'],
+    width: '100%',
   },
 });
 

@@ -13,34 +13,34 @@ import {
 
 const styles = stylex.create({
   emailBodyNotSharedContainer: {
+    borderColor: borderColor['--t-border-color-light'],
+    borderRadius: spacing['--t-spacing-1'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    gap: spacing['--t-spacing-3'],
     alignItems: 'center',
     backgroundColor:
       backgroundTransparent['--t-background-transparent-lighter'],
-    borderWidth: '1px',
-    borderStyle: 'solid',
-    borderColor: borderColor['--t-border-color-light'],
-    borderRadius: spacing['--t-spacing-1'],
     color: fontColor['--t-font-color-light'],
     display: 'flex',
     flexDirection: 'column',
     fontSize: fontSize['--t-font-size-sm'],
     fontWeight: fontWeight['--t-font-weight-medium'],
-    gap: spacing['--t-spacing-3'],
-    height: '80px',
     justifyContent: 'center',
+    height: '80px',
     width: '100%',
   },
   emailBodyNotSharedIconContainer: {
     alignItems: 'center',
     display: 'flex',
-    height: `calc(${iconSize['--t-icon-size-sm']} * 1px)`,
     justifyContent: 'center',
+    height: `calc(${iconSize['--t-icon-size-sm']} * 1px)`,
     width: `calc(${iconSize['--t-icon-size-sm']} * 1px)`,
   },
   emailBodyNotShared: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
   },
 });
 

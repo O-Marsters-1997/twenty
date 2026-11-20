@@ -4,9 +4,9 @@ import { background, borderRadius } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   root: {
+    borderRadius: borderRadius['--t-border-radius-sm'],
     alignItems: 'center',
     backgroundColor: background['--t-background-primary'],
-    borderRadius: borderRadius['--t-border-radius-sm'],
     display: 'flex',
     justifyContent: 'center',
   },

@@ -18,15 +18,15 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   typeSelectContainer: {
+    gap: 'inherit',
     display: 'flex',
     flexDirection: 'column',
-    gap: 'inherit',
     width: '100%',
   },
   container: {
+    gap: spacing['--t-spacing-2'],
     display: 'flex',
     flexWrap: 'wrap',
-    gap: spacing['--t-spacing-2'],
     justifyContent: 'flex-start',
     width: '100%',
   },

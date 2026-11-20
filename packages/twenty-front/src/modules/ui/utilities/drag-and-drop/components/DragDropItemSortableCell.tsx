@@ -31,24 +31,24 @@ const SORTABLE_TRANSITION = {
 const styles = stylex.create({
   root: {
     backgroundColor: 'transparent',
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
-    borderTopLeftRadius: 0,
-    borderTopRightRadius: 0,
     cursor: {
       default: 'grab',
       ':has([data-dnd-sortable-handle])': 'inherit',
     },
     display: 'block',
-    height: 'auto',
-    minHeight: 0,
-    minWidth: 'auto',
     outlineStyle: 'none',
     position: 'relative',
     transitionDuration: '0.1s',
     transitionProperty: 'background-color',
     transitionTimingFunction: 'ease',
     willChange: 'transform',
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+    height: 'auto',
+    minHeight: 0,
+    minWidth: 'auto',
   },
   rootDisabled: {
     cursor: 'inherit',
@@ -193,7 +193,9 @@ export const DragDropItemSortableCell = ({
           disabled && styles.rootDisabled,
           fill && styles.rootFill,
           fadeSourceWhileDragging && isDragSource && styles.rootDragSourceFaded,
-          highlightWhileDragging && isDragging && styles.rootDraggingHighlighted,
+          highlightWhileDragging &&
+            isDragging &&
+            styles.rootDraggingHighlighted,
         )}
       >
         {children}

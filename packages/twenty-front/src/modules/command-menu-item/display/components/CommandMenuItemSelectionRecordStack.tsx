@@ -33,13 +33,13 @@ const OPENING_STAGGER_IN_SECONDS = 0.04;
 
 const styles = stylex.create({
   stack: {
-    height: spacing['--t-spacing-6'],
     position: 'relative',
+    height: spacing['--t-spacing-6'],
     width: spacing['--t-spacing-6'],
   },
   card: {
-    left: 0,
     position: 'absolute',
+    left: 0,
     top: 0,
   },
 });

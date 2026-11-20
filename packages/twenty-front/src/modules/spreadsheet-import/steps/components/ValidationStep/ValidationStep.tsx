@@ -28,7 +28,16 @@ import { Button, Switch } from 'twenty-ui/primitives/input';
 import { generateColumns } from './components/columns';
 import { type ImportedStructuredRowMetadata } from './types';
 import * as stylex from '@stylexjs/stylex';
-import { background, borderColor, borderRadius, boxShadow, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  background,
+  borderColor,
+  borderRadius,
+  boxShadow,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type ValidationStepProps = {
   initialData: ImportedStructuredRow[];
@@ -221,9 +230,7 @@ export const ValidationStep = ({
 
   return (
     <>
-      <Dialog.Body
-        {...stylex.props(styles.dialogBody)}
-      >
+      <Dialog.Body {...stylex.props(styles.dialogBody)}>
         <div {...stylex.props(styles.contentWrapper)}>
           {filterByErrors && tableData.length === 0 ? (
             <div {...stylex.props(styles.noRowsWithErrorsContainer)}>
@@ -264,11 +271,11 @@ export const ValidationStep = ({
               </span>
             </div>
             <Button
-                xstyle={styles.removeButton}
-                startIcon={<IconTrash />}
-                onClick={deleteSelectedRows}
-                disabled={selectedRows.size === 0}
-              >{t`Remove`}</Button>
+              xstyle={styles.removeButton}
+              startIcon={<IconTrash />}
+              onClick={deleteSelectedRows}
+              disabled={selectedRows.size === 0}
+            >{t`Remove`}</Button>
           </div>
         </div>
       </Dialog.Body>
@@ -286,38 +293,38 @@ const styles = stylex.create({
     height: '24px',
   },
   dialogBody: {
-    display: 'flex',
-    flexBasis: '0%',
-    flexGrow: 1,
-    flexShrink: 1,
-    flexDirection: 'column',
     paddingBlock: 0,
     paddingInline: 0,
+    display: 'flex',
+    flexBasis: '0%',
+    flexDirection: 'column',
+    flexGrow: 1,
+    flexShrink: 1,
   },
   contentWrapper: {
-    display: 'flex',
     flex: '1 1 0%',
+    display: 'flex',
     flexDirection: 'column',
     position: 'relative',
   },
   toolbar: {
-    alignItems: 'center',
-    backgroundColor: background['--t-background-secondary'],
-    borderWidth: '1px',
-    borderStyle: 'solid',
+    padding: spacing['--t-spacing-3'],
     borderColor: borderColor['--t-border-color-medium'],
     borderRadius: borderRadius['--t-border-radius-md'],
-    bottom: spacing['--t-spacing-3'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    alignItems: 'center',
+    backgroundColor: background['--t-background-secondary'],
     boxShadow: boxShadow['--t-box-shadow-strong'],
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    left: '50%',
-    padding: spacing['--t-spacing-3'],
     position: 'absolute',
     transform: 'translateX(-50%)',
-    width: '400px',
     zIndex: 1,
+    bottom: spacing['--t-spacing-3'],
+    left: '50%',
+    width: '400px',
   },
   errorSwitch: {
     alignItems: 'center',
@@ -331,16 +338,16 @@ const styles = stylex.create({
     marginLeft: spacing['--t-spacing-2'],
   },
   scrollContainer: {
+    overflow: 'auto',
     display: 'flex',
     flexDirection: 'column',
     flexGrow: 1,
     height: '0px',
-    overflow: 'auto',
     width: '100%',
   },
   noRowsContainer: {
-    display: 'flex',
     gridColumn: '1/-1',
+    display: 'flex',
     justifyContent: 'center',
     marginTop: spacing['--t-spacing-8'],
   },
@@ -348,9 +355,9 @@ const styles = stylex.create({
     color: fontColor['--t-font-color-tertiary'],
     display: 'flex',
     justifyContent: 'center',
-    marginTop: 'auto',
-    marginRight: '0',
     marginBottom: 'auto',
     marginLeft: '0',
+    marginRight: '0',
+    marginTop: 'auto',
   },
 });

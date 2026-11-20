@@ -46,17 +46,17 @@ export const FieldsConfigurationEmptyGroupDropZone = ({
 
 const styles = stylex.create({
   dropZone: {
-    alignItems: 'center',
     borderColor: borderColor['--t-border-color-medium'],
     borderRadius: borderRadius['--t-border-radius-sm'],
     borderStyle: 'dashed',
     borderWidth: 1,
+    marginBlock: spacing['--t-spacing-1'],
+    marginInline: spacing['--t-spacing-2'],
+    alignItems: 'center',
     color: fontColor['--t-font-color-light'],
     display: 'flex',
     fontSize: fontSize['--t-font-size-sm'],
     justifyContent: 'center',
-    marginBlock: spacing['--t-spacing-1'],
-    marginInline: spacing['--t-spacing-2'],
     minHeight: spacing['--t-spacing-10'],
   },
   dropTarget: { borderColor: color['--t-color-blue'] },

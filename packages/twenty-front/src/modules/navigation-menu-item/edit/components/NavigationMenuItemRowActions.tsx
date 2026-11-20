@@ -9,7 +9,6 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 const styles = stylex.create({
   actions: {
     alignItems: 'center',
-    bottom: spacing['--t-spacing-0_5'],
     display: 'flex',
     opacity: {
       default: '0',
@@ -22,6 +21,7 @@ const styles = stylex.create({
       [stylex.when.ancestor(':focus-within', rowMarker)]: 'auto',
     },
     position: 'absolute',
+    bottom: spacing['--t-spacing-0_5'],
     right: spacing['--t-spacing-0_5'],
   },
 });

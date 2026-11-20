@@ -58,7 +58,9 @@ export const SettingsApiKeysFieldItemTableRow = ({
         textOverflow="ellipsis"
         clickable
       >
-        <div {...stylex.props(styles.ellipsisLabel)}>{apiKey.role?.label || '-'}</div>
+        <div {...stylex.props(styles.ellipsisLabel)}>
+          {apiKey.role?.label || '-'}
+        </div>
       </TableCell>
 
       <TableCell

@@ -10,9 +10,9 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   contentContainer: {
+    gap: spacing['--t-spacing-8'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-8'],
   },
 });
 

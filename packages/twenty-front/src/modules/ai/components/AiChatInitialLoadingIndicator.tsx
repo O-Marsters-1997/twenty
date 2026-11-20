@@ -10,17 +10,17 @@ import {
 
 const styles = stylex.create({
   loadingIconContainer: {
-    alignItems: 'center',
-    borderWidth: '1px',
-    borderStyle: 'solid',
     borderColor: borderColor['--t-border-color-light'],
-    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
-    borderTopRightRadius: borderRadius['--t-border-radius-md'],
-    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
-    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    paddingInline: spacing['--t-spacing-1'],
+    alignItems: 'center',
     display: 'flex',
     justifyContent: 'center',
-    paddingInline: spacing['--t-spacing-1'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
     width: 'fit-content',
   },
   loadingIconWrapper: {

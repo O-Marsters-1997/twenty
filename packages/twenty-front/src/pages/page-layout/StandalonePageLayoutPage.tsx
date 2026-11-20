@@ -12,8 +12,8 @@ import { StandalonePageHeader } from '~/pages/page-layout/StandalonePageHeader';
 
 const styles = stylex.create({
   pageLayoutContainer: {
-    display: { default: 'flex', [media.print]: 'block' },
     flex: 1,
+    display: { default: 'flex', [media.print]: 'block' },
     flexDirection: 'column',
     minHeight: { default: 0, [media.print]: 'auto' },
     overflowY: { default: 'auto', [media.print]: 'visible' },

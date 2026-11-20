@@ -1,4 +1,3 @@
-
 import { SubTitle } from '@/auth/components/SubTitle';
 import { Title } from '@/auth/components/Title';
 import { AnimatedEaseIn } from '@/auth/components/internal/AnimatedEaseIn/AnimatedEaseIn';
@@ -14,14 +13,20 @@ import { MainButton } from 'twenty-ui/components/input';
 import { IconGmail, IconMail, IconMailX, IconMicrosoft } from 'twenty-ui/icon';
 import { openUrlInNewTab } from '~/utils/openUrlInNewTab';
 import * as stylex from '@stylexjs/stylex';
-import { font, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  font,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   container: {
+    gap: spacing['--t-spacing-8'],
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-8'],
     width: '100%',
   },
   textContainer: {
@@ -34,24 +39,27 @@ const styles = stylex.create({
     fontWeight: fontWeight['--t-font-weight-medium'],
   },
   buttonsContainer: {
+    gap: spacing['--t-spacing-3'],
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-3'],
     maxWidth: '240px',
     width: '100%',
   },
   bottomLinks: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'row',
-    gap: spacing['--t-spacing-2'],
     justifyContent: 'center',
   },
   linkButton: {
     background: 'none',
     borderStyle: 'none',
-    color: { default: fontColor['--t-font-color-tertiary'], ':hover': fontColor['--t-font-color-secondary'] },
+    color: {
+      default: fontColor['--t-font-color-tertiary'],
+      ':hover': fontColor['--t-font-color-secondary'],
+    },
     cursor: { default: 'pointer', ':disabled': 'not-allowed' },
     fontFamily: font['--t-font-family'],
     fontSize: fontSize['--t-font-size-xs'],
@@ -61,11 +69,11 @@ const styles = stylex.create({
   },
   dot: {
     background: fontColor['--t-font-color-light'],
+    cornerShape: 'round',
+    borderBottomLeftRadius: '50%',
+    borderBottomRightRadius: '50%',
     borderTopLeftRadius: '50%',
     borderTopRightRadius: '50%',
-    borderBottomRightRadius: '50%',
-    borderBottomLeftRadius: '50%',
-    cornerShape: 'round',
     height: '2px',
     width: '2px',
   },
@@ -161,12 +169,16 @@ export const EmailVerificationSent = ({
         <div {...stylex.props(styles.bottomLinks)}>
           <button
             onClick={handleResendEmailVerificationToken(email)}
-            disabled={isLoading} {...stylex.props(styles.linkButton)}
+            disabled={isLoading}
+            {...stylex.props(styles.linkButton)}
           >
             {isLoading ? t`Sending...` : t`Resend email`}
           </button>
           <div {...stylex.props(styles.dot)} />
-          <button onClick={handleChangeEmail} {...stylex.props(styles.linkButton)}>
+          <button
+            onClick={handleChangeEmail}
+            {...stylex.props(styles.linkButton)}
+          >
             {t`Change email`}
           </button>
         </div>

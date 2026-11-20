@@ -52,15 +52,15 @@ const styles = stylex.create({
     marginBottom: spacing['--t-spacing-4'],
   },
   dropTarget: {
-    display: 'flex',
     flex: '1',
+    display: 'flex',
     flexDirection: 'column',
-    minHeight: spacing['--t-spacing-6'],
     position: 'relative',
     marginTop: {
       default: null,
       ':not(:first-child)': spacing['--t-spacing-4'],
     },
+    minHeight: spacing['--t-spacing-6'],
   },
 });
 

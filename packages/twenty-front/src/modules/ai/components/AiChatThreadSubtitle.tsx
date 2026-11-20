@@ -24,30 +24,30 @@ import {
 
 const styles = stylex.create({
   needsInput: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     color: fontColor['--t-font-color-tertiary'],
     display: 'flex',
     flexShrink: 0,
     fontWeight: fontWeight['--t-font-weight-medium'],
-    gap: spacing['--t-spacing-1'],
   },
   needsInputUnread: {
     color: color['--t-color-blue'],
   },
   subtitle: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     color: fontColor['--t-font-color-tertiary'],
     display: 'flex',
     fontSize: fontSize['--t-font-size-sm'],
-    gap: spacing['--t-spacing-1'],
     minHeight: spacing['--t-spacing-4'],
     minWidth: '0',
   },
   preview: {
-    minWidth: '0',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
+    minWidth: '0',
   },
   assignee: {
     display: 'flex',

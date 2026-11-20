@@ -8,8 +8,8 @@ import * as stylex from '@stylexjs/stylex';
 
 const styles = stylex.create({
   tableContainer: {
-    minHeight: '0',
     overflow: 'hidden',
+    minHeight: '0',
   },
 });
 

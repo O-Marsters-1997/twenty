@@ -24,9 +24,9 @@ const WorkspaceSectionDispatcher = lazy(() =>
 
 const styles = stylex.create({
   scrollableItemsContainer: {
+    gap: spacing['--t-spacing-3'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-3'],
   },
 });
 

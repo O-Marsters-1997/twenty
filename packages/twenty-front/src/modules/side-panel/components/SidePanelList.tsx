@@ -20,11 +20,11 @@ type SidePanelListProps = {
 
 const styles = stylex.create({
   innerList: {
+    paddingInline: spacing['--t-spacing-2'],
     maxHeight: {
       default: 'calc(calc(100dvh / var(--t-zoom, 1)) - 52px)',
       [media.mobile]: 'calc(calc(100dvh / var(--t-zoom, 1)) - 56px)',
     },
-    paddingInline: spacing['--t-spacing-2'],
     paddingTop: spacing['--t-spacing-2'],
     width: '100%',
   },
@@ -33,9 +33,9 @@ const styles = stylex.create({
     color: fontColor['--t-font-color-light'],
     display: 'flex',
     fontSize: fontSize['--t-font-size-md'],
-    height: '64px',
     justifyContent: 'center',
     whiteSpace: 'pre-wrap',
+    height: '64px',
   },
 });
 

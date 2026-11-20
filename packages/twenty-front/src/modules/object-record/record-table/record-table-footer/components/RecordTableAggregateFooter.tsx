@@ -58,29 +58,29 @@ export const RecordTableAggregateFooter = ({
 const styles = stylex.create({
   placeholderDragAndDropFooterCell: {
     backgroundColor: background['--t-background-primary'],
+    position: 'sticky',
+    zIndex: recordTableZIndex.footerStickyColumn,
     bottom: 0,
     left: 0,
-    position: 'sticky',
     width: `calc(var(${recordTableCssVariable.dragDropWidth}) + var(${recordTableCssVariable.checkboxWidth}))`,
-    zIndex: recordTableZIndex.footerStickyColumn,
   },
   placeholderAddButtonFooterCell: {
     backgroundColor: background['--t-background-primary'],
-    bottom: 0,
     position: 'sticky',
-    width: recordTableLayout.addColumnButtonWidth,
     zIndex: recordTableZIndex.footerDefault,
+    bottom: 0,
+    width: recordTableLayout.addColumnButtonWidth,
   },
   placeholderLastColumnEmptyFooterCell: {
     backgroundColor: background['--t-background-primary'],
-    bottom: 0,
     position: 'sticky',
     zIndex: recordTableZIndex.footerDefault,
+    bottom: 0,
   },
   aggregateFooterContainer: {
-    bottom: 0,
     display: 'flex',
     position: 'sticky',
     zIndex: recordTableZIndex.footerDefault,
+    bottom: 0,
   },
 });

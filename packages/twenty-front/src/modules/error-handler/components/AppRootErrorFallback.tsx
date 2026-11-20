@@ -3,7 +3,11 @@ import { t } from '@lingui/core/macro';
 import { IconReload } from 'twenty-ui/icon';
 import { useTheme } from 'twenty-ui/theme';
 import * as stylex from '@stylexjs/stylex';
-import { background, borderRadius, grayScale } from 'twenty-ui/theme/tokens.stylex';
+import {
+  background,
+  borderRadius,
+  grayScale,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type AppRootErrorFallbackProps = AppErrorDisplayProps;
 
@@ -20,37 +24,37 @@ const styles = stylex.create({
     width: '100%',
   },
   button: {
-    alignItems: 'center',
     background: grayScale['--t-gray-scale-gray1'],
     borderColor: grayScale['--t-gray-scale-gray5'],
     borderRadius: borderRadius['--t-border-radius-md'],
     borderStyle: 'solid',
     borderWidth: '1px',
+    paddingBlock: '8px',
+    paddingInline: '16px',
+    alignItems: 'center',
     color: grayScale['--t-gray-scale-gray12'],
     cursor: 'pointer',
     display: 'flex',
-    paddingBlock: '8px',
-    paddingInline: '16px',
   },
   container: {
     background: background['--t-background-noisy'],
     boxSizing: 'border-box',
     display: 'flex',
     height: 'calc(100vh / var(--t-zoom, 1))',
-    paddingTop: '12px',
-    paddingRight: '12px',
     paddingBottom: '12px',
     paddingLeft: '12px',
+    paddingRight: '12px',
+    paddingTop: '12px',
     width: 'calc(100vw / var(--t-zoom, 1))',
   },
   emptyContainer: {
+    gap: '24px',
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'column',
-    gap: '24px',
-    height: '100%',
     justifyContent: 'center',
     textAlign: 'center',
+    height: '100%',
     width: '100%',
   },
   imageContainer: {
@@ -64,15 +68,15 @@ const styles = stylex.create({
     maxWidth: '160px',
   },
   innerImage: {
+    position: 'absolute',
     maxHeight: '130px',
     maxWidth: '130px',
-    position: 'absolute',
   },
   emptyTextContainer: {
+    gap: '8px',
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'column',
-    gap: '8px',
     justifyContent: 'center',
     textAlign: 'center',
     width: '100%',
@@ -83,12 +87,12 @@ const styles = stylex.create({
     fontWeight: '600',
   },
   emptySubTitle: {
+    overflow: 'hidden',
     color: grayScale['--t-gray-scale-gray11'],
     fontSize: '0.92rem',
     fontWeight: '400',
     lineHeight: '1.5',
     maxHeight: '2.8em',
-    overflow: 'hidden',
     width: '50%',
   },
   iconContainer: {
@@ -111,11 +115,13 @@ export const AppRootErrorFallback = ({
           <div {...stylex.props(styles.imageContainer)}>
             <img
               src="/images/placeholders/background/error_index_bg.png"
-              alt={t`Background`} {...stylex.props(styles.backgroundImage)}
+              alt={t`Background`}
+              {...stylex.props(styles.backgroundImage)}
             />
             <img
               src="/images/placeholders/moving-image/error_index.png"
-              alt={t`Error illustration`} {...stylex.props(styles.innerImage)}
+              alt={t`Error illustration`}
+              {...stylex.props(styles.innerImage)}
             />
           </div>
           <div {...stylex.props(styles.emptyTextContainer)}>
@@ -124,10 +130,7 @@ export const AppRootErrorFallback = ({
               {t`Please refresh the page.`}
             </div>
           </div>
-          <button
-            {...stylex.props(styles.button)}
-            onClick={resetErrorBoundary}
-          >
+          <button {...stylex.props(styles.button)} onClick={resetErrorBoundary}>
             <span {...stylex.props(styles.iconContainer)}>
               <IconReload size={theme.icon.size.md} />
             </span>

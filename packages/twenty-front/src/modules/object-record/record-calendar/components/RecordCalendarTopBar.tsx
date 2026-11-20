@@ -39,25 +39,25 @@ const styles = stylex.create({
   container: {
     alignItems: 'center',
     display: 'flex',
-    height: '24px',
     justifyContent: 'space-between',
+    height: '24px',
     width: '100%',
   },
   navigationButtonContainer: {
-    paddingTop: spacing['--t-spacing-1'],
-    paddingRight: spacing['--t-spacing-1'],
     paddingBottom: spacing['--t-spacing-1'],
     paddingLeft: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingTop: spacing['--t-spacing-1'],
   },
   leftSection: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
   },
   navigationSection: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
     justifyContent: 'flex-end',
   },
 });

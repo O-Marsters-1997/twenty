@@ -74,7 +74,10 @@ export const generateColumns = (
             delay={TooltipDelay.mediumDelay}
             disabled={!column.description}
           >
-            <span id={formatSafeId(column.key)} {...stylex.props(styles.headerLabel)}>
+            <span
+              id={formatSafeId(column.key)}
+              {...stylex.props(styles.headerLabel)}
+            >
               {column.label}
             </span>
           </Tooltip>
@@ -126,7 +129,8 @@ export const generateColumns = (
                 id={formatSafeId(`${columnKey}-${row.__index}`)}
                 onClick={(event) => {
                   event.stopPropagation();
-                }} {...stylex.props(styles.switchContainer)}
+                }}
+                {...stylex.props(styles.switchContainer)}
               >
                 <Switch
                   aria-label={column.label}
@@ -144,7 +148,8 @@ export const generateColumns = (
           case 'select':
             component = (
               <div
-                id={formatSafeId(`${columnKey}-${row.__index}`)} {...stylex.props(styles.defaultContainer)}
+                id={formatSafeId(`${columnKey}-${row.__index}`)}
+                {...stylex.props(styles.defaultContainer)}
               >
                 {column.fieldType.options.find(
                   (option) => option.value === row[columnKey],
@@ -155,7 +160,8 @@ export const generateColumns = (
           default:
             component = (
               <div
-                id={formatSafeId(`${columnKey}-${row.__index}`)} {...stylex.props(styles.defaultContainer)}
+                id={formatSafeId(`${columnKey}-${row.__index}`)}
+                {...stylex.props(styles.defaultContainer)}
               >
                 {row[columnKey]}
               </div>
@@ -194,25 +200,25 @@ export const generateColumns = (
 
 const styles = stylex.create({
   headerContainer: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
     position: 'relative',
   },
   headerLabel: {
-    display: 'flex',
     flex: 1,
     overflow: 'hidden',
+    display: 'flex',
     textOverflow: 'ellipsis',
   },
   checkboxContainer: {
+    flex: 1,
     alignItems: 'center',
     boxSizing: 'content-box',
     display: 'flex',
-    flex: 1,
-    height: '100%',
     justifyContent: 'center',
     lineHeight: '0',
+    height: '100%',
     width: '100%',
   },
   switchContainer: {
@@ -228,12 +234,12 @@ const styles = stylex.create({
     paddingRight: spacing['--t-spacing-2'],
   },
   defaultContainer: {
-    alignContent: 'center',
-    minHeight: '100%',
-    minWidth: '100%',
     overflow: 'hidden',
+    alignContent: 'center',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
+    minHeight: '100%',
+    minWidth: '100%',
   },
   selectReadonlyValueContianer: {
     paddingLeft: spacing['--t-spacing-2'],

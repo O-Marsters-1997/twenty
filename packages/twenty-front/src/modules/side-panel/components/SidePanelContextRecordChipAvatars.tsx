@@ -15,10 +15,10 @@ import {
 
 const styles = stylex.create({
   root: {
-    alignItems: 'center',
     borderRadius: borderRadius['--t-border-radius-sm'],
     borderStyle: 'solid',
     borderWidth: '1px',
+    alignItems: 'center',
     display: 'flex',
     justifyContent: 'center',
     marginLeft: {

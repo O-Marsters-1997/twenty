@@ -20,16 +20,16 @@ const EMPTY_SEAT_SIZE = AVATAR_PROPERTIES_BY_SIZE.lg.width;
 
 const styles = stylex.create({
   emptySeat: {
-    alignItems: 'center',
-    backgroundColor: background['--t-background-primary'],
     borderColor: borderColor['--t-border-color-strong'],
     borderRadius: '50%',
     borderStyle: 'dashed',
     borderWidth: '1px',
+    cornerShape: 'round',
+    alignItems: 'center',
+    backgroundColor: background['--t-background-primary'],
     boxShadow: `0 0 0 2px ${background['--t-background-primary']}`,
     boxSizing: 'border-box',
     color: fontColor['--t-font-color-light'],
-    cornerShape: 'round',
     display: 'flex',
     justifyContent: 'center',
   },

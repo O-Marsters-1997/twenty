@@ -30,9 +30,9 @@ const styles = stylex.create({
     cursor: 'pointer',
   },
   optionHeader: {
+    gap: spacing['--t-spacing-4'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-4'],
   },
   textContainer: {
     flex: '1',
@@ -100,29 +100,35 @@ export const SettingsRadioSettingsCard = <
               divider={index < options.length - 1}
               {...stylex.props(styles.card)}
             >
-                <label {...stylex.props(styles.optionHeader)}>
-                  {option.cardMedia}
-                  <div {...stylex.props(styles.textContainer)}>
-                    <div id={`${groupId}-${index}-title`} {...stylex.props(styles.title)}>
-                      {i18n._(option.title)}
-                    </div>
-                    <div id={`${groupId}-${index}-description`} {...stylex.props(styles.description)}>
-                      {i18n._(option.description)}
-                    </div>
+              <label {...stylex.props(styles.optionHeader)}>
+                {option.cardMedia}
+                <div {...stylex.props(styles.textContainer)}>
+                  <div
+                    id={`${groupId}-${index}-title`}
+                    {...stylex.props(styles.title)}
+                  >
+                    {i18n._(option.title)}
                   </div>
-                  <span {...stylex.props(styles.radioContainer)}>
-                    <Radio
-                      aria-labelledby={`${groupId}-${index}-title`}
-                      aria-describedby={`${groupId}-${index}-description`}
-                      value={option.value}
-                    />
-                  </span>
-                </label>
-                {isDefined(option.cardContentExpanded) && isSelected && (
-                  <div {...stylex.props(styles.expandedContent)}>
-                    {option.cardContentExpanded}
+                  <div
+                    id={`${groupId}-${index}-description`}
+                    {...stylex.props(styles.description)}
+                  >
+                    {i18n._(option.description)}
                   </div>
-                )}
+                </div>
+                <span {...stylex.props(styles.radioContainer)}>
+                  <Radio
+                    aria-labelledby={`${groupId}-${index}-title`}
+                    aria-describedby={`${groupId}-${index}-description`}
+                    value={option.value}
+                  />
+                </span>
+              </label>
+              {isDefined(option.cardContentExpanded) && isSelected && (
+                <div {...stylex.props(styles.expandedContent)}>
+                  {option.cardContentExpanded}
+                </div>
+              )}
             </Card.Content>
           );
         })}

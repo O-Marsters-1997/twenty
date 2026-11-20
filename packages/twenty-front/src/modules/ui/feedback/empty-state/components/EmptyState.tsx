@@ -17,26 +17,26 @@ const fadeIn = stylex.keyframes({
 
 const styles = stylex.create({
   root: {
+    gap: spacing['--t-spacing-6'],
     alignItems: 'center',
     animationDuration: `calc(${animationDuration['--t-animation-duration-fast']} * 1s)`,
     animationName: fadeIn,
     animationTimingFunction: 'ease',
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-6'],
-    height: '100%',
     justifyContent: 'center',
     textAlign: 'center',
+    height: '100%',
     width: '100%',
   },
   rootWidth: (width: number) => ({
     width: `${width}px`,
   }),
   content: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-2'],
     justifyContent: 'center',
     textAlign: 'center',
     width: '100%',
@@ -47,12 +47,12 @@ const styles = stylex.create({
     fontWeight: fontWeight['--t-font-weight-semi-bold'],
   },
   description: {
+    overflow: 'hidden',
     color: fontColor['--t-font-color-tertiary'],
     fontSize: fontSize['--t-font-size-sm'],
     fontWeight: fontWeight['--t-font-weight-regular'],
     lineHeight: textLineHeight['--t-text-line-height-lg'],
     maxHeight: '2.8em',
-    overflow: 'hidden',
     width: '50%',
   },
 });
@@ -67,7 +67,11 @@ type EmptyStateSectionProps = {
   children?: ReactNode;
 };
 
-const EmptyStateRoot = ({ children, width, className }: EmptyStateRootProps) => {
+const EmptyStateRoot = ({
+  children,
+  width,
+  className,
+}: EmptyStateRootProps) => {
   const rootProps = stylex.props(
     styles.root,
     isDefined(width) && styles.rootWidth(width),
@@ -83,15 +87,15 @@ const EmptyStateRoot = ({ children, width, className }: EmptyStateRootProps) => 
   );
 };
 
-const EmptyStateContent = ({ children }: EmptyStateSectionProps) => (
+const EmptyStateContent = ({ children }: EmptyStateContentProps) => (
   <div {...stylex.props(styles.content)}>{children}</div>
 );
 
-const EmptyStateTitle = ({ children }: EmptyStateSectionProps) => (
+const EmptyStateTitle = ({ children }: EmptyStateTitleProps) => (
   <div {...stylex.props(styles.title)}>{children}</div>
 );
 
-const EmptyStateDescription = ({ children }: EmptyStateSectionProps) => (
+const EmptyStateDescription = ({ children }: EmptyStateDescriptionProps) => (
   <div {...stylex.props(styles.description)}>{children}</div>
 );
 

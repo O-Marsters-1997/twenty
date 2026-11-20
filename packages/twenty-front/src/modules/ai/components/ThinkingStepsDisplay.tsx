@@ -41,34 +41,35 @@ const styles = stylex.create({
     transform: 'rotate(90deg)',
   },
   container: {
+    gap: spacing['--t-spacing-1'],
     display: 'flex',
     flexDirection: 'column',
     fontFamily: font['--t-font-family'],
-    gap: spacing['--t-spacing-1'],
   },
   stepsContentContainer: {
+    gap: spacing['--t-spacing-1'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-1'],
     paddingBottom: spacing['--t-spacing-2'],
     paddingTop: spacing['--t-spacing-1'],
   },
   summaryText: {
+    transition: `color calc(${animationDuration['--t-animation-duration-fast']} * 1s)
+    ease-in-out`,
     color: 'inherit',
     fontSize: fontSize['--t-font-size-md'],
     fontWeight: fontWeight['--t-font-weight-regular'],
     lineHeight: textLineHeight['--t-text-line-height-md'],
-    transition: `color calc(${animationDuration['--t-animation-duration-fast']} * 1s)
-    ease-in-out`,
   },
   summaryButton: {
-    alignItems: 'center',
     background: 'none',
     borderStyle: 'none',
-    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
-    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
-    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
-    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    gap: spacing['--t-spacing-2'],
+    outline: {
+      default: null,
+      ':focus-visible': `2px solid ${color['--t-color-blue']}`,
+    },
+    alignItems: 'center',
     color: {
       default: fontColor['--t-font-color-tertiary'],
       ':hover': fontColor['--t-font-color-primary'],
@@ -76,38 +77,37 @@ const styles = stylex.create({
     cursor: 'pointer',
     display: 'flex',
     fontFamily: 'inherit',
-    gap: spacing['--t-spacing-2'],
+    outlineOffset: { default: null, ':focus-visible': '2px' },
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
     minHeight: '24px',
-    paddingTop: '0',
-    paddingRight: '0',
     paddingBottom: '0',
     paddingLeft: '0',
+    paddingRight: '0',
+    paddingTop: '0',
     width: 'fit-content',
-    outline: {
-      default: null,
-      ':focus-visible': `2px solid ${color['--t-color-blue']}`,
-    },
-    outlineOffset: { default: null, ':focus-visible': '2px' },
   },
   rowsContainer: {
+    gap: spacing['--t-spacing-1'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-1'],
   },
   row: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     color: fontColor['--t-font-color-tertiary'],
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
     minHeight: '24px',
   },
   rowLabel: {
+    transition: `color calc(${animationDuration['--t-animation-duration-fast']} * 1s)
+    ease-in-out`,
     color: 'inherit',
     fontSize: fontSize['--t-font-size-md'],
     fontWeight: fontWeight['--t-font-weight-regular'],
     lineHeight: textLineHeight['--t-text-line-height-md'],
-    transition: `color calc(${animationDuration['--t-animation-duration-fast']} * 1s)
-    ease-in-out`,
   },
   reasoningContainer: {
     paddingLeft: `calc(
@@ -122,10 +122,10 @@ const styles = stylex.create({
     minWidth: `calc(${iconSize['--t-icon-size-sm']} * 1px)`,
   },
   rowLabelContainer: {
-    alignItems: 'center',
-    display: 'flex',
     flex: '1',
     gap: spacing['--t-spacing-1'],
+    alignItems: 'center',
+    display: 'flex',
     minWidth: '0',
   },
 });

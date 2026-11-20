@@ -25,11 +25,11 @@ const styles = stylex.create({
     paddingTop: spacing['--t-spacing-2'],
   },
   addAccountContainer: {
-    borderTopWidth: '1px',
-    borderTopStyle: 'solid',
-    borderTopColor: borderColor['--t-border-color-light'],
     display: 'flex',
     justifyContent: 'flex-end',
+    borderTopColor: borderColor['--t-border-color-light'],
+    borderTopStyle: 'solid',
+    borderTopWidth: '1px',
     paddingTop: spacing['--t-spacing-2'],
   },
 });

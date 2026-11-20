@@ -46,31 +46,31 @@ import * as stylex from '@stylexjs/stylex';
 
 const styles = stylex.create({
   listPane: {
-    display: 'flex',
     flex: '0 0 400px',
+    display: 'flex',
     minWidth: 0,
   },
   listPaneFullWidth: {
     flex: 1,
   },
   inbox: {
-    display: 'flex',
     flex: '1',
+    display: 'flex',
     minHeight: '0',
     minWidth: '0',
   },
   threadListContainer: {
-    display: 'flex',
     flex: '1',
-    minHeight: '0',
+    display: 'flex',
     position: 'relative',
+    minHeight: '0',
   },
   threadList: {
-    display: 'flex',
     flex: '1',
+    overflow: 'auto',
+    display: 'flex',
     flexDirection: 'column',
     minHeight: '0',
-    overflow: 'auto',
   },
 });
 
@@ -197,7 +197,12 @@ const AiChatInboxPageContent = () => {
       )}
       <AiChatInboxCommandMenuScope>
         {isListShown && (
-          <div {...stylex.props(styles.listPane, !isSplitView && styles.listPaneFullWidth)}>
+          <div
+            {...stylex.props(
+              styles.listPane,
+              !isSplitView && styles.listPaneFullWidth,
+            )}
+          >
             <PageCardLayout
               showInformationBanner={!isSplitView}
               header={
@@ -206,7 +211,10 @@ const AiChatInboxPageContent = () => {
                 />
               }
             >
-              <div ref={threadListContainerRef} {...stylex.props(styles.threadListContainer)}>
+              <div
+                ref={threadListContainerRef}
+                {...stylex.props(styles.threadListContainer)}
+              >
                 <div {...stylex.props(styles.threadList)}>
                   {loading && threads.length === 0 ? (
                     <SkeletonLoader />

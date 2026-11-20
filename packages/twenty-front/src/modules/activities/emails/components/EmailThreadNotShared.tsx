@@ -17,27 +17,29 @@ import { MessageChannelVisibility } from '~/generated/graphql';
 
 const styles = stylex.create({
   container: {
-    alignItems: 'center',
-    backgroundColor:
-      backgroundTransparent['--t-background-transparent-lighter'],
     borderColor: borderColor['--t-border-color-light'],
     borderRadius: borderRadius['--t-border-radius-sm'],
     borderStyle: 'solid',
     borderWidth: '1px',
+    flex: '1 0 0',
+    gap: spacing['--t-spacing-1'],
+    paddingInline: spacing['--t-spacing-1'],
+    alignItems: 'center',
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
     color: fontColor['--t-font-color-tertiary'],
     display: 'flex',
-    flex: '1 0 0',
     fontSize: fontSize['--t-font-size-sm'],
     fontWeight: fontWeight['--t-font-weight-regular'],
-    gap: spacing['--t-spacing-1'],
     height: '20px',
     marginLeft: 'auto',
     minWidth: spacing['--t-spacing-21'],
-    paddingInline: spacing['--t-spacing-1'],
     width: '100%',
   },
   containerCompact: {
-    flex: '0 0 auto',
+    flexGrow: '0',
+    flexShrink: '0',
+    flexBasis: 'auto',
     width: 'auto',
   },
 });

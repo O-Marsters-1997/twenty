@@ -25,11 +25,11 @@ const styles = stylex.create({
   wrapperAlignedToTop: (height: number, zIndex: number) => ({
     alignItems: 'center',
     display: 'flex',
-    height: `${height}px`,
     position: 'fixed',
+    zIndex,
+    height: `${height}px`,
     right: spacing['--t-spacing-3'],
     top: 0,
-    zIndex,
   }),
 });
 

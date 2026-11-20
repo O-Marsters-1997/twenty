@@ -8,11 +8,11 @@ import * as stylex from '@stylexjs/stylex';
 
 const styles = stylex.create({
   label: {
-    display: 'block',
-    minWidth: '0',
     overflow: 'hidden',
+    display: 'block',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
+    minWidth: '0',
   },
 });
 

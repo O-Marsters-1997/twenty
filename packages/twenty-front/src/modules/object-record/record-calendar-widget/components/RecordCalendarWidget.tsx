@@ -8,11 +8,11 @@ import * as stylex from '@stylexjs/stylex';
 
 const styles = stylex.create({
   calendarContainer: {
-    display: 'flex',
     flex: '1',
+    overflow: 'hidden',
+    display: 'flex',
     flexDirection: 'column',
     minHeight: '0',
-    overflow: 'hidden',
   },
 });
 

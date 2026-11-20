@@ -7,13 +7,13 @@ import {
 
 const styles = stylex.create({
   root: {
-    alignItems: 'center',
     background: backgroundTransparent['--t-background-transparent-light'],
     borderRadius: borderRadius['--t-border-radius-sm'],
+    alignItems: 'center',
     boxSizing: 'border-box',
     display: 'flex',
-    height: '32px',
     justifyContent: 'center',
+    height: '32px',
     width: '32px',
   },
 });

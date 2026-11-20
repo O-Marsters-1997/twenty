@@ -19,10 +19,10 @@ const SLIDER_DROPDOWN_WIDTH_PX = 240;
 
 const styles = stylex.create({
   sliderContainer: {
-    paddingTop: spacing['--t-spacing-3'],
-    paddingRight: spacing['--t-spacing-3'],
     paddingBottom: spacing['--t-spacing-3'],
     paddingLeft: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingTop: spacing['--t-spacing-3'],
   },
 });
 

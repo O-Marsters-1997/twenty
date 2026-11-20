@@ -13,8 +13,8 @@ import * as stylex from '@stylexjs/stylex';
 
 const styles = stylex.create({
   sidePanelContainer: {
-    display: 'flex',
     flex: '1',
+    display: 'flex',
     flexDirection: 'column',
     maxHeight: '100%',
     minHeight: '0',

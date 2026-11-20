@@ -14,23 +14,23 @@ const CAMPAIGN_ENVELOPE_LABEL_MIN_WIDTH = '116px';
 
 const styles = stylex.create({
   container: {
+    paddingBlock: spacing['--t-spacing-3'],
+    paddingInline: '0',
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'column',
     flexShrink: '0',
-    paddingBlock: spacing['--t-spacing-3'],
-    paddingInline: '0',
     width: '100%',
   },
   rows: {
-    backgroundColor: background['--t-background-secondary'],
-    borderWidth: '1px',
-    borderStyle: 'solid',
     borderColor: borderColor['--t-border-color-medium'],
     borderRadius: borderRadius['--t-border-radius-md'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    overflow: 'hidden',
+    backgroundColor: background['--t-background-secondary'],
     display: 'flex',
     flexDirection: 'column',
-    overflow: 'hidden',
     width: '100%',
   },
   column: {

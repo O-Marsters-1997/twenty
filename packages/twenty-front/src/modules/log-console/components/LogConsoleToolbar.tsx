@@ -58,38 +58,38 @@ const VIEW_FILTER_OPERAND_BY_EVENT_LOG_FILTER_OPERAND: Record<
 
 const styles = stylex.create({
   container: {
+    paddingInline: spacing['--t-spacing-3'],
+    boxSizing: 'border-box',
+    flexShrink: 0,
     borderBottomColor: borderColor['--t-border-color-light'],
     borderBottomStyle: 'solid',
     borderBottomWidth: 1,
-    boxSizing: 'border-box',
-    flexShrink: 0,
-    paddingInline: spacing['--t-spacing-3'],
   },
   containerHeight: (height: number) => ({ height }),
   toolbar: {
+    gap: spacing['--t-spacing-2'],
+    overflow: 'hidden',
     alignItems: 'center',
     display: 'flex',
     flexWrap: 'nowrap',
-    gap: spacing['--t-spacing-2'],
     height: '100%',
-    overflow: 'hidden',
   },
   actions: {
-    display: 'flex',
     gap: spacing['--t-spacing-1'],
+    display: 'flex',
     marginLeft: 'auto',
   },
   filterChips: {
+    gap: spacing['--t-spacing-2'],
+    overflow: 'hidden',
     alignItems: 'center',
     display: 'flex',
     flexShrink: '0',
-    gap: spacing['--t-spacing-2'],
     maxWidth: '40%',
-    overflow: 'hidden',
   },
   chips: {
-    display: 'flex',
     gap: spacing['--t-spacing-2'],
+    display: 'flex',
   },
 });
 

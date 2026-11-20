@@ -52,6 +52,7 @@ const styles = stylex.create({
     marginBottom: spacing['--t-spacing-1'],
   },
   textArea: {
+    outline: 'none',
     boxSizing: 'border-box',
     color: {
       default: fontColor['--t-font-color-primary'],
@@ -61,7 +62,6 @@ const styles = stylex.create({
     fontFamily: 'inherit',
     fontSize: fontSize['--t-font-size-md'],
     fontWeight: fontWeight['--t-font-weight-regular'],
-    outline: 'none',
     resize: 'none',
     width: '100%',
     '::placeholder': {
@@ -70,7 +70,6 @@ const styles = stylex.create({
     },
   },
   textAreaDefault: {
-    backgroundColor: backgroundTransparent['--t-background-transparent-lighter'],
     borderColor: {
       default: borderColor['--t-border-color-medium'],
       ':focus': color['--t-color-blue'],
@@ -78,28 +77,30 @@ const styles = stylex.create({
     borderRadius: borderRadius['--t-border-radius-md'],
     borderStyle: 'solid',
     borderWidth: 1,
+    overflow: 'auto',
+    paddingBlock: spacing['--t-spacing-2'],
+    paddingInline: spacing['--t-spacing-2'],
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
     boxShadow: {
       default: null,
       ':focus': `0px 0px 0px 3px ${colorTransparent['--t-color-transparent-blue2']}`,
     },
     lineHeight: '16px',
-    overflow: 'auto',
-    paddingBlock: spacing['--t-spacing-2'],
-    paddingInline: spacing['--t-spacing-2'],
   },
   textAreaTransparent: {
-    backgroundColor: 'transparent',
     borderColor: {
       default: null,
       ':focus': 'transparent',
     },
     borderRadius: 0,
     borderStyle: 'none',
-    boxShadow: 'none',
-    lineHeight: 'inherit',
     overflow: 'hidden',
     paddingBlock: 0,
     paddingInline: 0,
+    backgroundColor: 'transparent',
+    boxShadow: 'none',
+    lineHeight: 'inherit',
   },
   height: (height: number) => ({ height }),
 });
@@ -160,7 +161,11 @@ export const TextArea = ({
 
   return (
     <div {...stylex.props(styles.container)}>
-      {label && <label htmlFor={instanceId} {...stylex.props(styles.label)}>{label}</label>}
+      {label && (
+        <label htmlFor={instanceId} {...stylex.props(styles.label)}>
+          {label}
+        </label>
+      )}
 
       <div>
         <TextareaAutosize

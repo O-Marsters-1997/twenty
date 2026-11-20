@@ -48,12 +48,12 @@ import { recordDetailDisplayOnHoverStyles } from '@/object-record/record-field-l
 
 const styles = stylex.create({
   clickableZone: {
+    flex: '1 0 auto',
     alignItems: 'center',
     cursor: 'pointer',
     display: 'flex',
-    flex: '1 0 auto',
-    height: '100%',
     justifyContent: 'flex-end',
+    height: '100%',
   },
 });
 

@@ -13,22 +13,22 @@ import {
 
 const styles = stylex.create({
   root: {
+    margin: 0,
+    borderColor: borderColor['--t-border-color-medium'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
     alignItems: 'center',
     backgroundColor: {
       default: backgroundTransparent['--t-background-transparent-lighter'],
       ':hover': backgroundTransparent['--t-background-transparent-light'],
     },
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
-    borderColor: borderColor['--t-border-color-medium'],
-    borderStyle: 'solid',
-    borderTopLeftRadius: 0,
-    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
-    borderWidth: '1px',
     display: 'flex',
     justifyContent: 'center',
-    margin: 0,
     position: 'static',
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
   },
   rootReadonly: {
     backgroundColor: {
@@ -49,12 +49,12 @@ const styles = stylex.create({
     },
   },
   rootMultiline: {
-    backgroundColor: { default: 'transparent', ':hover': 'transparent' },
+    margin: spacing['--t-spacing-1'],
     borderRadius: borderRadius['--t-border-radius-sm'],
     borderStyle: 'none',
-    height: spacing['--t-spacing-7'],
-    margin: spacing['--t-spacing-1'],
+    backgroundColor: { default: 'transparent', ':hover': 'transparent' },
     position: 'absolute',
+    height: spacing['--t-spacing-7'],
     right: spacing['--t-spacing-0'],
     top: spacing['--t-spacing-0'],
     width: spacing['--t-spacing-7'],

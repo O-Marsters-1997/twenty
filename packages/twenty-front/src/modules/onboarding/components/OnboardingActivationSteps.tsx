@@ -11,13 +11,13 @@ const STEPS_CONTAINER_HEIGHT_IN_PX = STEP_HEIGHT_IN_PX * VISIBLE_STEP_COUNT;
 
 const styles = stylex.create({
   stepsContainer: {
-    height: `${STEPS_CONTAINER_HEIGHT_IN_PX}px`,
     position: 'relative',
+    height: `${STEPS_CONTAINER_HEIGHT_IN_PX}px`,
     width: '100%',
   },
   step: {
-    left: 0,
     position: 'absolute',
+    left: 0,
     right: 0,
     top: 0,
   },

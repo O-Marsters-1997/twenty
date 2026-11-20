@@ -39,10 +39,10 @@ const styles = stylex.create({
     width: '100%',
   },
   actionBackLinkContainer: {
-    marginTop: spacing['--t-spacing-3'],
-    marginRight: '0',
     marginBottom: '0',
     marginLeft: '0',
+    marginRight: '0',
+    marginTop: spacing['--t-spacing-3'],
   },
 });
 

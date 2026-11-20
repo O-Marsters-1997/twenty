@@ -20,15 +20,15 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   threadsContainer: {
-    display: 'flex',
     flex: '1',
+    overflow: 'auto',
+    display: 'flex',
     flexDirection: 'column',
     height: '100%',
-    overflow: 'auto',
-    paddingTop: spacing['--t-spacing-2'],
-    paddingRight: spacing['--t-spacing-2'],
     paddingBottom: spacing['--t-spacing-2'],
     paddingLeft: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
   },
 });
 

@@ -4,8 +4,8 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   row: {
-    display: 'flex',
     gap: spacing['--t-spacing-1'],
+    display: 'flex',
     width: '100%',
   },
 });

@@ -27,7 +27,6 @@ type SettingsCardProps = {
   Status?: ReactNode;
 };
 
-
 const styles = stylex.create({
   wrapper: {
     width: '100%',
@@ -44,14 +43,14 @@ const styles = stylex.create({
     color: 'inherit',
   },
   content: {
+    gap: spacing['--t-spacing-2'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-2'],
+    position: 'relative',
     paddingBottom: spacing['--t-spacing-2'],
     paddingLeft: spacing['--t-spacing-2'],
     paddingRight: spacing['--t-spacing-2'],
     paddingTop: spacing['--t-spacing-2'],
-    position: 'relative',
   },
   contentActionHover: {
     backgroundColor: {
@@ -71,29 +70,29 @@ const styles = stylex.create({
     },
   },
   action: {
-    backgroundColor: 'transparent',
-    borderStyle: 'none',
-    cursor: {
-      default: 'pointer',
-      ':disabled': 'not-allowed',
-    },
-    inset: 0,
-    paddingBottom: 0,
-    paddingLeft: 0,
-    paddingRight: 0,
-    paddingTop: 0,
-    position: 'absolute',
     ':focus-visible': {
       outlineColor: color['--t-color-blue'],
       outlineOffset: '-2px',
       outlineStyle: 'solid',
       outlineWidth: '2px',
     },
+    inset: 0,
+    borderStyle: 'none',
+    backgroundColor: 'transparent',
+    cursor: {
+      default: 'pointer',
+      ':disabled': 'not-allowed',
+    },
+    position: 'absolute',
+    paddingBottom: 0,
+    paddingLeft: 0,
+    paddingRight: 0,
+    paddingTop: 0,
   },
   header: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
   },
   iconChevronRightContainer: {
     alignItems: 'center',
@@ -106,13 +105,13 @@ const styles = stylex.create({
     paddingLeft: spacing['--t-spacing-7'],
   },
   title: {
+    gap: spacing['--t-spacing-2'],
     color: fontColor['--t-font-color-secondary'],
     display: 'flex',
     flexBasis: 'auto',
     flexGrow: 1,
     flexShrink: 0,
     fontWeight: fontWeight['--t-font-weight-medium'],
-    gap: spacing['--t-spacing-2'],
     justifyContent: 'flex-start',
   },
   titleDisabled: {
@@ -122,8 +121,8 @@ const styles = stylex.create({
     alignItems: 'center',
     color: 'inherit',
     display: 'flex',
-    height: '24px',
     justifyContent: 'center',
+    height: '24px',
     width: '24px',
   },
   iconContainerDisabled: {

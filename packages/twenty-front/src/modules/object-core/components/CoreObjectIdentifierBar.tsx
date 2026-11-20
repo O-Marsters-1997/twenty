@@ -21,16 +21,16 @@ import { getAbsoluteImageUrl } from '~/utils/image/getAbsoluteImageUrl';
 
 const styles = stylex.create({
   bar: {
+    gap: spacing['--t-spacing-2'],
+    paddingBlock: 0,
+    paddingInline: spacing['--t-spacing-3'],
     alignItems: 'center',
     backgroundColor: background['--t-background-secondary'],
     boxShadow: `inset 0 -1px 0 ${borderColor['--t-border-color-light']}`,
     boxSizing: 'border-box',
     display: 'flex',
     flexShrink: 0,
-    gap: spacing['--t-spacing-2'],
     justifyContent: 'space-between',
-    paddingBlock: 0,
-    paddingInline: spacing['--t-spacing-3'],
     width: '100%',
   },
   barHeight: (height: number) => ({ height: `${height}px` }),

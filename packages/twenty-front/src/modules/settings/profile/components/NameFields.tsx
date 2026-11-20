@@ -14,9 +14,9 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   comboInputContainer: {
+    gap: spacing['--t-spacing-4'],
     display: 'flex',
     flexDirection: 'row',
-    gap: spacing['--t-spacing-4'],
   },
 });
 

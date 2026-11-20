@@ -19,24 +19,24 @@ type SettingsAccountsVisibilityIconProps = {
 
 const styles = stylex.create({
   cardMedia: {
-    alignItems: 'stretch',
+    padding: spacing['--t-spacing-0_5'],
     borderColor: borderColor['--t-border-color-medium'],
+    borderRadius: borderRadius['--t-border-radius-sm'],
     borderStyle: 'solid',
     borderWidth: '2px',
-    borderRadius: borderRadius['--t-border-radius-sm'],
+    gap: spacing['--t-spacing-0_5'],
+    alignItems: 'stretch',
     boxSizing: 'border-box',
     color: fontColor['--t-font-color-light'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-0_5'],
-    height: '40px',
     justifyContent: 'center',
-    padding: spacing['--t-spacing-0_5'],
+    height: '40px',
     width: '32px',
   },
   skeleton: {
-    backgroundColor: background['--t-background-quaternary'],
     borderRadius: '1px',
+    backgroundColor: background['--t-background-quaternary'],
     height: '3px',
   },
   skeletonActive: {
@@ -47,7 +47,9 @@ const styles = stylex.create({
   },
   bodySkeleton: {
     borderRadius: borderRadius['--t-border-radius-xs'],
-    flex: '1 0 auto',
+    flexGrow: '1',
+    flexShrink: '0',
+    flexBasis: 'auto',
   },
 });
 

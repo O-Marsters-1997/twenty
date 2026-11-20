@@ -18,17 +18,17 @@ type TopBarProps = {
 
 const styles = stylex.create({
   container: {
+    display: 'flex',
+    flexDirection: 'column',
     borderBottomColor: borderColor['--t-border-color-light'],
     borderBottomStyle: 'solid',
     borderBottomWidth: '1px',
-    display: 'flex',
-    flexDirection: 'column',
     marginLeft: spacing['--t-spacing-2'],
   },
   rightSection: {
+    gap: general['--t-between-siblings-gap'],
     display: 'flex',
     fontWeight: fontWeight['--t-font-weight-regular'],
-    gap: general['--t-between-siblings-gap'],
   },
   topBar: {
     alignItems: 'center',
@@ -37,11 +37,11 @@ const styles = stylex.create({
     display: 'flex',
     flexDirection: 'row',
     fontWeight: fontWeight['--t-font-weight-medium'],
-    height: '39px',
     justifyContent: 'space-between',
+    zIndex: 7,
+    height: '39px',
     marginLeft: spacing['--t-spacing-1'],
     paddingRight: spacing['--t-spacing-2'],
-    zIndex: 7,
   },
   leftSection: {
     display: 'flex',

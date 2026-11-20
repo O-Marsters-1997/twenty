@@ -13,12 +13,8 @@ import { isDefined } from 'twenty-shared/utils';
 
 const styles = stylex.create({
   header: {
+    padding: spacing['--t-spacing-1'],
     alignItems: 'center',
-    borderBottomColor: borderColor['--t-border-color-light'],
-    borderBottomStyle: 'solid',
-    borderBottomWidth: '1px',
-    borderTopLeftRadius: `calc(${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']})`,
-    borderTopRightRadius: `calc(${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']})`,
     boxSizing: 'content-box',
     color: fontColor['--t-font-color-primary'],
     cursor: 'default',
@@ -26,9 +22,13 @@ const styles = stylex.create({
     flexShrink: 0,
     fontSize: fontSize['--t-font-size-md'],
     fontWeight: fontWeight['--t-font-weight-medium'],
-    height: spacing['--t-spacing-6'],
-    padding: spacing['--t-spacing-1'],
     userSelect: 'none',
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
+    borderTopLeftRadius: `calc(${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']})`,
+    borderTopRightRadius: `calc(${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']})`,
+    height: spacing['--t-spacing-6'],
   },
   headerClickable: {
     backgroundColor: {

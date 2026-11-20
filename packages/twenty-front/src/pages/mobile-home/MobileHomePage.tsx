@@ -13,22 +13,22 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   container: {
+    gap: spacing['--t-spacing-4'],
     boxSizing: 'border-box',
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-4'],
     height: '100%',
     minHeight: '0',
-    paddingTop: spacing['--t-spacing-2'],
-    paddingRight: '0',
     paddingBottom: spacing['--t-spacing-4'],
     paddingLeft: '0',
+    paddingRight: '0',
+    paddingTop: spacing['--t-spacing-2'],
     width: '100%',
   },
   sections: {
+    gap: spacing['--t-spacing-3'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-3'],
   },
 });
 

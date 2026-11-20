@@ -23,43 +23,43 @@ const HOVER_FINE_POINTER = '@media (hover: hover) and (pointer: fine)';
 
 const styles = stylex.create({
   container: {
+    borderRadius: `calc(${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']})`,
+    gap: spacing['--t-spacing-2'],
+    paddingInline: spacing['--t-spacing-1'],
     alignItems: 'center',
     backgroundColor: {
       default: 'transparent',
       ':hover': backgroundTransparent['--t-background-transparent-light'],
     },
-    borderRadius: `calc(${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']})`,
     boxSizing: 'border-box',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
     minWidth: 0,
-    paddingInline: spacing['--t-spacing-1'],
     width: '100%',
   },
   containerFocused: {
     backgroundColor: backgroundTransparent['--t-background-transparent-light'],
   },
   primaryItem: {
-    backgroundColor: 'transparent',
     flex: 1,
-    minWidth: 0,
     paddingInline: 0,
+    backgroundColor: 'transparent',
+    minWidth: 0,
   },
   hoverableButtons: {
     display: 'flex',
     opacity: {
-      default: null,
       [HOVER_FINE_POINTER]: {
         default: 0,
         [stylex.when.ancestor(':hover', menuItemMarker)]: 1,
         [stylex.when.ancestor(':focus-within', menuItemMarker)]: 1,
       },
+      default: null,
     },
   },
   hoverableButtonsVisible: {
     opacity: {
-      default: null,
       [HOVER_FINE_POINTER]: 1,
+      default: null,
     },
   },
 });

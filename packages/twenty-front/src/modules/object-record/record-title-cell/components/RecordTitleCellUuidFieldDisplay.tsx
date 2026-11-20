@@ -13,23 +13,23 @@ import {
 
 const styles = stylex.create({
   div: {
-    alignItems: 'center',
     background: 'inherit',
     borderStyle: 'none',
-    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
-    borderTopRightRadius: borderRadius['--t-border-radius-md'],
-    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
-    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    overflow: 'hidden',
+    alignItems: 'center',
     boxSizing: 'border-box',
     color: fontColor['--t-font-color-primary'],
     display: 'flex',
-    height: '24px',
     justifyContent: 'center',
-    overflow: 'hidden',
-    paddingTop: spacing['--t-spacing-0'],
-    paddingRight: '5px',
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    height: '24px',
     paddingBottom: spacing['--t-spacing-0'],
     paddingLeft: '5px',
+    paddingRight: '5px',
+    paddingTop: spacing['--t-spacing-0'],
   },
 });
 

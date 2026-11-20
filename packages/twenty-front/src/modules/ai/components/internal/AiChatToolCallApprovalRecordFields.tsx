@@ -20,9 +20,9 @@ const CURRENCY_INPUT_SETTINGS = {
 
 const styles = stylex.create({
   field: {
+    gap: spacing['--t-spacing-0_5'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-0_5'],
   },
   unknownField: {
     color: fontColor['--t-font-color-secondary'],

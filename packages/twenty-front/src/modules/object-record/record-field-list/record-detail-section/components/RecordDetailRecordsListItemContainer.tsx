@@ -6,11 +6,11 @@ import { PageLayoutType } from '~/generated-metadata/graphql';
 
 const styles = stylex.create({
   listItem: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
-    height: spacing['--t-spacing-10'],
     justifyContent: 'space-between',
+    height: spacing['--t-spacing-10'],
     paddingLeft: spacing['--t-spacing-3'],
     paddingRight: spacing['--t-spacing-2'],
   },

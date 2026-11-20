@@ -88,13 +88,13 @@ export const PageLayoutGridOverlay = () => {
 
 const styles = stylex.create({
   overlay: {
-    bottom: spacing['--t-spacing-2'],
-    display: 'grid',
     gap: spacing['--t-spacing-2'],
+    display: 'grid',
     gridAutoRows: 55,
-    left: spacing['--t-spacing-2'],
     pointerEvents: 'none',
     position: 'absolute',
+    bottom: spacing['--t-spacing-2'],
+    left: spacing['--t-spacing-2'],
     right: spacing['--t-spacing-2'],
     top: spacing['--t-spacing-2'],
   },
@@ -103,10 +103,6 @@ const styles = stylex.create({
   overlayDesktop: { gridTemplateColumns: 'repeat(12, 1fr)' },
   dragSelecting: { pointerEvents: 'auto' },
   cell: {
-    backgroundColor: {
-      default: 'transparent',
-      ':hover': backgroundTransparent['--t-background-transparent-lighter'],
-    },
     borderColor: {
       default: borderColor['--t-border-color-light'],
       ':hover': borderColor['--t-border-color-medium'],
@@ -114,19 +110,23 @@ const styles = stylex.create({
     borderRadius: borderRadius['--t-border-radius-md'],
     borderStyle: 'solid',
     borderWidth: 1,
+    backgroundColor: {
+      default: 'transparent',
+      ':hover': backgroundTransparent['--t-background-transparent-lighter'],
+    },
     cursor: 'pointer',
     transitionDuration: '0.3s',
     transitionProperty: 'background-color',
     transitionTimingFunction: 'ease',
   },
   cellSelected: {
-    backgroundColor: {
-      default: color['--t-color-blue3'],
-      ':hover': backgroundTransparent['--t-background-transparent-lighter'],
-    },
     borderColor: {
       default: color['--t-color-blue7'],
       ':hover': borderColor['--t-border-color-medium'],
+    },
+    backgroundColor: {
+      default: color['--t-color-blue3'],
+      ':hover': backgroundTransparent['--t-background-transparent-lighter'],
     },
   },
 });

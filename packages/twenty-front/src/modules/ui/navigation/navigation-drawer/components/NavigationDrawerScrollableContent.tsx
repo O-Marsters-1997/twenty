@@ -20,7 +20,9 @@ const styles = stylex.create({
     paddingRight: spacing['--t-spacing-5'],
   },
   scrollWrapper: {
-    flex: '1 1 auto',
+    flexGrow: '1',
+    flexShrink: '1',
+    flexBasis: 'auto',
     minHeight: 0,
   },
 });

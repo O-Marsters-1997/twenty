@@ -13,9 +13,9 @@ import { borderColor } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   tableBodyContainer: {
-    borderBottomWidth: '1px',
-    borderBottomStyle: 'solid',
     borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
   },
 });
 

@@ -14,26 +14,26 @@ import { NAVIGATION_DRAWER_COLLAPSED_BUTTON_SIZE } from '@/ui/navigation/navigat
 
 const styles = stylex.create({
   container: {
-    alignItems: 'center',
+    padding: `calc(${spacing['--t-spacing-2']} - 1px)`,
     borderColor: 'transparent',
     borderRadius: borderRadius['--t-border-radius-md'],
     borderStyle: 'solid',
     borderWidth: '1px',
+    gap: 0,
+    alignItems: 'center',
     boxSizing: 'border-box',
     color: fontColor['--t-font-color-primary'],
     cursor: 'pointer',
     display: 'flex',
-    gap: 0,
+    opacity: 1,
+    pointerEvents: 'auto',
     height: spacing['--t-spacing-7'],
     maxWidth: '100%',
     minWidth: 0,
-    opacity: 1,
-    padding: `calc(${spacing['--t-spacing-2']} - 1px)`,
-    pointerEvents: 'auto',
   },
   containerExpanded: {
-    gap: spacing['--t-spacing-2'],
     padding: `calc(${spacing['--t-spacing-1']} - 1px)`,
+    gap: spacing['--t-spacing-2'],
     width: 'fit-content',
   },
   containerCollapsedSize: (size: number) => ({
@@ -41,13 +41,13 @@ const styles = stylex.create({
     width: `${size}px`,
   }),
   containerEnabled: {
-    backgroundColor: {
-      default: null,
-      ':hover': backgroundTransparent['--t-background-transparent-lighter'],
-    },
     borderColor: {
       default: 'transparent',
       ':hover': borderColor['--t-border-color-medium'],
+    },
+    backgroundColor: {
+      default: null,
+      ':hover': backgroundTransparent['--t-background-transparent-lighter'],
     },
   },
   containerDisabled: {
@@ -57,12 +57,12 @@ const styles = stylex.create({
   },
   labelWrapper: {
     flex: '1 1 auto',
-    minWidth: 0,
     overflow: 'hidden',
+    minWidth: 0,
   },
   label: {
-    fontWeight: fontWeight['--t-font-weight-medium'],
     overflow: 'hidden',
+    fontWeight: fontWeight['--t-font-weight-medium'],
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
   },
@@ -100,11 +100,11 @@ export const StyledContainer = ({
   />
 );
 
-export const StyledLabelWrapper = (props: ComponentProps<'div'>) => (
+export const StyledLabelWrapper = (props: StyledLabelWrapperProps<'div'>) => (
   <div {...props} {...stylex.props(styles.labelWrapper)} />
 );
 
-export const StyledLabel = (props: ComponentProps<'div'>) => (
+export const StyledLabel = (props: StyledLabelProps<'div'>) => (
   <div {...props} {...stylex.props(styles.label)} />
 );
 

@@ -21,15 +21,15 @@ import { DND_KIT_COLLISION_PRIORITY } from '@/ui/utilities/drag-and-drop/constan
 
 const styles = stylex.create({
   column: {
+    paddingInline: spacing['--t-spacing-2'],
     backgroundColor: background['--t-background-primary'],
     display: 'flex',
     flexDirection: 'column',
+    position: 'relative',
     maxWidth: 'var(--record-board-column-width, 200px)',
     minWidth: 'var(--record-board-column-width, 200px)',
     paddingBottom: spacing['--t-spacing-2'],
-    paddingInline: spacing['--t-spacing-2'],
     paddingTop: '0px',
-    position: 'relative',
   },
   withLeftBorder: {
     borderLeftColor: borderColor['--t-border-color-light'],

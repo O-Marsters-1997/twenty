@@ -36,9 +36,9 @@ import { media } from 'twenty-ui/theme/constants.stylex';
 
 const styles = stylex.create({
   form: {
+    gap: spacing['--t-spacing-8'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-8'],
     maxWidth: '100%',
     paddingBottom: spacing['--t-spacing-4'],
     width: onboardingLayout.contentBlockWidth,
@@ -49,14 +49,16 @@ const styles = stylex.create({
     width: onboardingLayout.contentBlockWidth,
   },
   nameRow: {
+    gap: spacing['--t-spacing-2'],
     alignItems: { default: 'flex-end', [media.mobile]: 'stretch' },
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
-    width: '100%',
     flexDirection: { default: null, [media.mobile]: 'column' },
+    width: '100%',
   },
   nameField: {
-    flex: '1 1 0',
+    flexGrow: '1',
+    flexShrink: '1',
+    flexBasis: '0',
     minWidth: '0',
   },
 });

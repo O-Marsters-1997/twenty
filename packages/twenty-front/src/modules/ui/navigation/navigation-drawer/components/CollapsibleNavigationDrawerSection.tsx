@@ -9,9 +9,9 @@ import { general } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   items: {
+    gap: general['--t-between-siblings-gap'],
     display: 'flex',
     flexDirection: 'column',
-    gap: general['--t-between-siblings-gap'],
   },
 });
 

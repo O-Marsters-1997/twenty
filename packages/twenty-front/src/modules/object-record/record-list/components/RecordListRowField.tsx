@@ -12,10 +12,10 @@ import { Tooltip } from 'twenty-ui/primitives/surfaces';
 
 const styles = stylex.create({
   fieldContainer: {
+    overflow: 'hidden',
     alignItems: 'center',
     display: 'flex',
     minWidth: 0,
-    overflow: 'hidden',
   },
   maxWidth: (maxWidth: number) => ({
     maxWidth,

@@ -14,23 +14,23 @@ import {
 
 const styles = stylex.create({
   footerContainer: {
-    alignItems: 'flex-end',
     background: background['--t-background-primary'],
-    borderTopWidth: '1px',
-    borderTopStyle: 'solid',
-    borderTopColor: borderColor['--t-border-color-light'],
-    display: 'flex',
     gap: spacing['--t-spacing-2'],
+    alignItems: 'flex-end',
+    display: 'flex',
     justifyContent: 'flex-end',
-    paddingTop: spacing['--t-spacing-3'],
-    paddingRight: spacing['--t-spacing-3'],
+    borderTopColor: borderColor['--t-border-color-light'],
+    borderTopStyle: 'solid',
+    borderTopWidth: '1px',
     paddingBottom: spacing['--t-spacing-3'],
     paddingLeft: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingTop: spacing['--t-spacing-3'],
   },
   footerActions: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'flex-end',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
   },
 });
 

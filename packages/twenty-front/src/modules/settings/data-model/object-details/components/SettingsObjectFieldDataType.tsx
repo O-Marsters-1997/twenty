@@ -71,11 +71,14 @@ export const SettingsObjectFieldDataType = ({
 
 const styles = stylex.create({
   dataType: {
-    alignItems: 'center',
     borderColor: 'transparent',
     borderRadius: borderRadius['--t-border-radius-sm'],
     borderStyle: 'solid',
     borderWidth: 1,
+    gap: spacing['--t-spacing-2'],
+    overflow: 'hidden',
+    textDecoration: 'none',
+    alignItems: 'center',
     color: {
       default: fontColor['--t-font-color-primary'],
       ':hover': fontColor['--t-font-color-primary'],
@@ -83,19 +86,16 @@ const styles = stylex.create({
     cursor: 'default',
     display: 'flex',
     fontSize: fontSize['--t-font-size-sm'],
-    gap: spacing['--t-spacing-2'],
-    height: 20,
-    overflow: 'hidden',
-    textDecoration: 'none',
     userSelect: 'none',
+    height: 20,
   },
   dataTypeLink: {
+    textDecoration: 'underline',
     color: {
       default: fontColor['--t-font-color-secondary'],
       ':hover': fontColor['--t-font-color-primary'],
     },
     cursor: 'pointer',
-    textDecoration: 'underline',
   },
   labelContainer: {
     overflow: 'hidden',
@@ -103,8 +103,8 @@ const styles = stylex.create({
     whiteSpace: 'nowrap',
   },
   iconWrapper: {
-    display: 'flex',
     flex: '1 0 auto',
+    display: 'flex',
   },
   span: {
     color: fontColor['--t-font-color-extra-light'],

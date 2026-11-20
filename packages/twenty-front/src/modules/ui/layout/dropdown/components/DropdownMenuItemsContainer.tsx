@@ -6,32 +6,29 @@ import { layoutSize } from '@/ui/layout/constants/layout.stylex';
 
 const styles = stylex.create({
   external: {
+    padding: itemsLayout.padding,
     alignItems: 'flex-start',
     boxSizing: 'border-box',
     display: 'flex',
     flexDirection: 'column',
     height: 'fit-content',
-    padding: itemsLayout.padding,
     width: '100%',
-  },
-  externalMaxHeight: {
-    maxHeight: layoutSize.dropdownMenuItemsContainerMaxHeight,
   },
   scrollable: {
     boxSizing: 'border-box',
     display: 'flex',
-    overflowY: 'auto',
     scrollbarColor: `${borderColor['--t-border-color-medium']} transparent`,
     scrollbarWidth: '4px',
+    overflowY: 'auto',
     width: '100%',
   },
   scrollableMaxHeight: {
     maxHeight: layoutSize.dropdownMenuItemsContainerMaxHeight,
   },
   internal: {
+    gap: itemsLayout.rowGap,
     display: 'flex',
     flexDirection: 'column',
-    gap: itemsLayout.rowGap,
     height: '100%',
     width: '100%',
   },

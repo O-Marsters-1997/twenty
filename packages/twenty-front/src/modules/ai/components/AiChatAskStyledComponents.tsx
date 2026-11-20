@@ -10,12 +10,12 @@ import {
 
 export const aiChatAskStyles = stylex.create({
   card: {
-    backgroundColor:
-      backgroundTransparent['--t-background-transparent-lighter'],
     borderColor: borderColor['--t-border-color-medium'],
     borderRadius: borderRadius['--t-border-radius-sm'],
     borderStyle: 'solid',
     borderWidth: '1px',
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
     boxSizing: 'border-box',
     display: 'flex',
     flexDirection: 'column',

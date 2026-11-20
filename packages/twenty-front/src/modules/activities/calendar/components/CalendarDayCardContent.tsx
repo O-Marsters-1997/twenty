@@ -25,6 +25,9 @@ const calendarDayEnded = stylex.keyframes({
 
 const styles = stylex.create({
   dayCardContent: {
+    gap: spacing['--t-spacing-3'],
+    paddingBlock: spacing['--t-spacing-2'],
+    paddingInline: spacing['--t-spacing-3'],
     alignItems: 'flex-start',
     animationDuration: `calc(${animationDuration['--t-animation-duration-fast']} * 1s)`,
     animationFillMode: 'forwards',
@@ -32,9 +35,6 @@ const styles = stylex.create({
     animationTimingFunction: 'ease',
     display: 'flex',
     flexDirection: 'row',
-    gap: spacing['--t-spacing-3'],
-    paddingBlock: spacing['--t-spacing-2'],
-    paddingInline: spacing['--t-spacing-3'],
   },
   dayCardContentDelay: (animationDelay: string) => ({ animationDelay }),
   dayContainer: {
@@ -50,14 +50,16 @@ const styles = stylex.create({
     fontWeight: fontWeight['--t-font-weight-medium'],
   },
   events: {
+    flex: '1 0 auto',
+    gap: spacing['--t-spacing-3'],
     alignItems: 'stretch',
     display: 'flex',
-    flex: '1 0 auto',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-3'],
   },
   eventRowContainer: {
-    flex: '1 0 auto',
+    flexGrow: '1',
+    flexShrink: '0',
+    flexBasis: 'auto',
   },
 });
 

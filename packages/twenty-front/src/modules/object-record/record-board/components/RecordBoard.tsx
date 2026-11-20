@@ -18,11 +18,11 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   container: {
-    display: 'flex',
     flex: '1',
+    display: 'flex',
     flexDirection: 'column',
-    minHeight: '100%',
     position: 'relative',
+    minHeight: '100%',
   },
   containerContainer: {
     display: 'flex',
@@ -31,8 +31,8 @@ const styles = stylex.create({
     minHeight: `calc(100% - ${spacing['--t-spacing-2']})`,
   },
   boardContentContainer: {
-    display: 'flex',
     flex: '1',
+    display: 'flex',
     flexDirection: 'column',
   },
 });

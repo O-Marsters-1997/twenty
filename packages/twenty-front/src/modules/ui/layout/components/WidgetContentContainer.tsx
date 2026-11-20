@@ -19,7 +19,7 @@ const styles = stylex.create({
 export const StyledWidgetContentContainer = ({
   className,
   ...props
-}: ComponentProps<'div'>) => {
+}: StyledWidgetContentContainerProps<'div'>) => {
   const rootProps = stylex.props(styles.container);
 
   return (
@@ -34,7 +34,7 @@ export const StyledWidgetContentContainer = ({
 export const StyledWidgetScrollContainer = ({
   className,
   ...props
-}: ComponentProps<'div'>) => {
+}: StyledWidgetScrollContainerProps<'div'>) => {
   const rootProps = stylex.props(styles.container, styles.scroll);
 
   return (

@@ -29,8 +29,13 @@ import {
 
 const styles = stylex.create({
   replyBar: {
-    alignItems: 'center',
     all: 'unset',
+    background: {
+      default: null,
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
+    gap: spacing['--t-spacing-2'],
+    alignItems: 'center',
     color: {
       default: fontColor['--t-font-color-tertiary'],
       ':hover': fontColor['--t-font-color-secondary'],
@@ -38,15 +43,10 @@ const styles = stylex.create({
     cursor: 'pointer',
     display: 'flex',
     fontSize: fontSize['--t-font-size-md'],
-    gap: spacing['--t-spacing-2'],
-    paddingTop: spacing['--t-spacing-3'],
-    paddingRight: spacing['--t-spacing-4'],
     paddingBottom: spacing['--t-spacing-3'],
     paddingLeft: spacing['--t-spacing-4'],
-    background: {
-      default: null,
-      ':hover': backgroundTransparent['--t-background-transparent-light'],
-    },
+    paddingRight: spacing['--t-spacing-4'],
+    paddingTop: spacing['--t-spacing-3'],
   },
 });
 
