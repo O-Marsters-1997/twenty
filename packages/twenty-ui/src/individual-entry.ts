@@ -11,4 +11,5 @@ export * from './components';
 export * from './icon';
 export * from './primitives';
 export * from './theme';
+export * from './third-party-styles';
 export * from './utilities';

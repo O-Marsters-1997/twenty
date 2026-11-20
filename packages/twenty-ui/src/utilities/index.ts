@@ -22,6 +22,7 @@ export { useIsMobile } from './responsive/hooks/useIsMobile';
 export { useIsTouchDevice } from './responsive/hooks/useIsTouchDevice';
 export { useMediaQuery } from './responsive/hooks/useMediaQuery';
 export type { Nullable } from './types/Nullable';
+export type { WithXstyle } from './types/WithXstyle';
 export { getSafeUrl } from './utils/getSafeUrl';
 export { isDefined } from './utils/isDefined';
 export { normalizeSearchText } from './utils/normalizeSearchText';
