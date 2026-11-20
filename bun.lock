@@ -61,7 +61,6 @@
         "@blocknote/mantine": "^0.51.4",
         "@blocknote/react": "^0.51.4",
         "@blocknote/xl-pdf-exporter": "^0.51.4",
-        "@calcom/embed-react": "^1.5.3",
         "@cyntler/react-doc-viewer": "^1.17.0",
         "@dagrejs/dagre": "^1.1.8",
         "@dnd-kit/react": "^0.3.2",
@@ -220,7 +219,6 @@
         "jest-fetch-mock": "^3.0.3",
         "lightningcss": "^1.32.0",
         "monaco-editor": "0.52.2",
-        "monaco-editor-auto-typings": "^0.4.5",
         "monaco-graphql": "1.8.0",
         "msw": "2.12.14",
         "msw-storybook-addon": "^2.0.6",
@@ -333,7 +331,6 @@
         "jsdom": "^30.0.1",
         "lightningcss": "^1.32.0",
         "monaco-editor": "0.52.2",
-        "postcss": "^8.5.15",
         "prettier": "^3.1.1",
         "react": "^19.2.0",
         "react-docgen-typescript": "^2.2.2",
@@ -695,12 +692,6 @@
     "@cacheable/memory": ["@cacheable/memory@2.2.0", "", { "dependencies": { "@cacheable/utils": "^2.5.0", "@keyv/bigmap": "^1.3.1", "hookified": "^1.15.1", "keyv": "^5.6.0" } }, "sha512-CTLKqLItRCEixEAewD3/j9DB3/o96gpTPD4eJ1v+DGOlxZRZncRQkGYqqnAGCscYd6RNeXfGeiuCphsPtqyIfQ=="],
 
     "@cacheable/utils": ["@cacheable/utils@2.5.0", "", { "dependencies": { "hashery": "^1.5.1", "keyv": "^5.6.0" } }, "sha512-buipgOVDkkPXNR5+xBpDw7Zk2n1EvU7qBJCNUcL7rhQ//kfpOXPAvQ511Os0vpLYJ1pZnvudNytkQt2hst3wqA=="],
-
-    "@calcom/embed-core": ["@calcom/embed-core@1.5.3", "", {}, "sha512-GeId9gaByJ5EWiPmuvelZOvFWPOTWkcWZr5vGTCbIUTX125oE5yn0n8lDF1MJk5Xj1WO+/dk9jKIE08Ad9ytiQ=="],
-
-    "@calcom/embed-react": ["@calcom/embed-react@1.5.3", "", { "dependencies": { "@calcom/embed-core": "1.5.3", "@calcom/embed-snippet": "1.3.3" }, "peerDependencies": { "react": "^18.2.0 || ^19.0.0", "react-dom": "^18.2.0 || ^19.0.0" } }, "sha512-JCgge04pc8fhdvUmPNVLhW8/lCWK+AAziKecKWWPfv1nn2s+qKP2BwsEAnxhxK9yPOBgE1EIEgmYkrrNB1iajA=="],
-
-    "@calcom/embed-snippet": ["@calcom/embed-snippet@1.3.3", "", { "dependencies": { "@calcom/embed-core": "1.5.3" } }, "sha512-pqqKaeLB8R6BvyegcpI9gAyY6Xyx1bKYfWvIGOvIbTpguWyM1BBBVcT9DCeGe8Zw7Ujp5K56ci7isRUrT2Uadg=="],
 
     "@clack/core": ["@clack/core@1.5.1", "", { "dependencies": { "fast-wrap-ansi": "^0.2.0", "sisteransi": "^1.0.5" } }, "sha512-iHTrHA8MtVuLl2TfZySmcKv1qO2PoyC9Z7pfSDozEuV5vtY3/wcOPKJXlqJ5Oq2Cx5DDGQGAMVx6HZfRRoVEbQ=="],
 
@@ -3931,8 +3922,6 @@
     "mlly": ["mlly@1.8.2", "", { "dependencies": { "acorn": "^8.16.0", "pathe": "^2.0.3", "pkg-types": "^1.3.1", "ufo": "^1.6.3" } }, "sha512-d+ObxMQFmbt10sretNDytwt85VrbkhhUA/JBGm1MPaWJ65Cl4wOgLaB1NYvJSZ0Ef03MMEU/0xpPMXUIQ29UfA=="],
 
     "monaco-editor": ["monaco-editor@0.52.2", "", {}, "sha512-GEQWEZmfkOGLdd3XK8ryrfWz3AIP8YymVXiPHEdewrUq7mh0qrKrfHLNCXcbB6sTnMLnOZ3ztSiKcciFUkIJwQ=="],
-
-    "monaco-editor-auto-typings": ["monaco-editor-auto-typings@0.4.6", "", { "peerDependencies": { "monaco-editor": "*" } }, "sha512-yN6yP2oQJkpyZtUyi5qT9AjZLILrTZWOFny7Km2yNiPMPqOWq/znkTS4b5Yk1sHumSaLJUw5m1EPKiopRqtEpA=="],
 
     "monaco-graphql": ["monaco-graphql@1.8.0", "", { "dependencies": { "graphql-language-service": "^5.5.1", "picomatch-browser": "^2.2.6" }, "peerDependencies": { "graphql": "^15.5.0 || ^16.0.0 || ^17.0.0", "monaco-editor": ">= 0.20.0 < 0.53", "prettier": "^2.8.0 || ^3.0.0" } }, "sha512-rWvWUpJdtpTu6YF2qgeaR2HnGPFthUJKSposB38f5wtBKwHlISYZHZLD/LukoMWDEyegNLOF/1bPMRs0SZrNzA=="],
 

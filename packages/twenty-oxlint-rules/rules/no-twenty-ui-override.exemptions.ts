@@ -41,11 +41,6 @@ export const TWENTY_UI_OVERRIDE_EXEMPTIONS = [
   },
   {
     filePath:
-      'packages/twenty-front/src/modules/settings/components/SettingsTableCard.tsx',
-    reason: 'Forwards the caller className to Card.Root',
-  },
-  {
-    filePath:
       'packages/twenty-front/src/modules/settings/data-model/graph-overview/components/SettingsDataModelOverview.tsx',
     reason: 'React Flow panel classes on ButtonGroup',
   },
