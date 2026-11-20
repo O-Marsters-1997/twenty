@@ -14,11 +14,8 @@ import { DEFAULT_WIDGET_SIZE } from '../../constants';
 const widget: PageLayoutWidgetManifest = {
   universalIdentifier: 'widget',
   title: 'App',
-  type: WidgetType.FRONT_COMPONENT,
-  configuration: {
-    configurationType: 'FRONT_COMPONENT',
-    frontComponentUniversalIdentifier: 'component',
-  },
+  type: WidgetType.IFRAME,
+  configuration: { configurationType: 'IFRAME' },
 };
 const tab: PageLayoutTabManifest = {
   universalIdentifier: 'tab',
