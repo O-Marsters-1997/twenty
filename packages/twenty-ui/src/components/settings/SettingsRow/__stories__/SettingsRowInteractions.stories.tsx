@@ -192,7 +192,11 @@ export const CanceledChange: Story = {
 export const CanceledLabelActivation: Story = {
   args: {
     labelRender: (props) => (
-      <label {...props} onClick={(event) => event.preventDefault()}>
+      <label
+        {...props}
+        onClick={(event) => event.preventDefault()}
+        onKeyDown={(event) => event.preventDefault()}
+      >
         {props.children}
       </label>
     ),

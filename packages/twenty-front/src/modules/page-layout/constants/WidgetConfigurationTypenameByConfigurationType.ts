@@ -33,6 +33,7 @@ export const WIDGET_CONFIGURATION_TYPENAME_BY_CONFIGURATION_TYPE = {
   [WidgetConfigurationType.WORKFLOW]: 'WorkflowConfiguration',
   [WidgetConfigurationType.WORKFLOW_RUN]: 'WorkflowRunConfiguration',
   [WidgetConfigurationType.WORKFLOW_VERSION]: 'WorkflowVersionConfiguration',
+  [WidgetConfigurationType.FRONT_COMPONENT]: 'FrontComponentConfiguration',
 } as const satisfies Record<
   WidgetConfigurationType,
   NonNullable<WidgetConfiguration['__typename']>
