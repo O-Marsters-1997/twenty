@@ -1,8 +1,10 @@
 package migrations_test
 
 import (
+	"slices"
 	"testing"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/pgtest"
@@ -69,6 +71,21 @@ func TestBaseline(t *testing.T) {
 		}
 		if count != 0 {
 			t.Errorf("callRecording objectMetadata rows = %d, want 0", count)
+		}
+	})
+
+	t.Run("leaves only the river enum", func(t *testing.T) {
+		var enums []string
+		rows, err := pool.Query(t.Context(), `SELECT typname FROM pg_type WHERE typtype = 'e'`)
+		if err != nil {
+			t.Fatalf("list enums: %v", err)
+		}
+		enums, err = pgx.CollectRows(rows, pgx.RowTo[string])
+		if err != nil {
+			t.Fatalf("read enums: %v", err)
+		}
+		if want := []string{"river_job_state"}; !slices.Equal(enums, want) {
+			t.Errorf("enum types = %v, want %v", enums, want)
 		}
 	})
 

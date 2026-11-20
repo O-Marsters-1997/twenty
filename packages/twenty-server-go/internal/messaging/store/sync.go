@@ -118,7 +118,7 @@ func importMessage(ctx context.Context, tx pgx.Tx, channelID string, message mes
 	}
 	if _, err := tx.Exec(ctx, `INSERT INTO `+table("messageChannelMessageAssociation")+`
 		("messageChannelId", "messageId", "messageThreadId", "messageExternalId", "messageThreadExternalId", direction)
-		VALUES ($1, $2, $3, $4, $5, $6::`+pgx.Identifier{workspace.SchemaName(), "messageChannelMessageAssociation_direction_enum"}.Sanitize()+`)`,
+		VALUES ($1, $2, $3, $4, $5, $6)`,
 		channelID, messageID, threadID, message.ExternalID, message.ThreadExternalID, message.Direction); err != nil {
 		return fmt.Errorf("insert association: %w", err)
 	}
@@ -132,7 +132,7 @@ func importMessage(ctx context.Context, tx pgx.Tx, channelID string, message mes
 				continue
 			}
 			if _, err := tx.Exec(ctx, `INSERT INTO `+table("messageParticipant")+` ("messageId", role, handle)
-				VALUES ($1, $2::`+pgx.Identifier{workspace.SchemaName(), "messageParticipant_role_enum"}.Sanitize()+`, $3)`,
+				VALUES ($1, $2, $3)`,
 				messageID, group.role, address); err != nil {
 				return fmt.Errorf("insert participant: %w", err)
 			}

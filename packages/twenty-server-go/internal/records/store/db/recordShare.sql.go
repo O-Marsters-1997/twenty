@@ -21,15 +21,15 @@ type CreateRecordShareParams struct {
 	RecordId                   pgtype.UUID
 	ObjectMetadataId           pgtype.UUID
 	PrincipalId                pgtype.UUID
-	PrincipalType              Workspace2abogkkt2zd45pa9aun09djpfRecordSharePrincipalTypeEnum
-	AccessLevel                Workspace2abogkkt2zd45pa9aun09djpfRecordShareAccessLevelEnum
-	RowCause                   Workspace2abogkkt2zd45pa9aun09djpfRecordShareRowCauseEnum
+	PrincipalType              string
+	AccessLevel                string
+	RowCause                   string
 	SourceId                   pgtype.UUID
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfRecordShareCreatedBySourceEnum
+	CreatedBySource            string
 	CreatedByWorkspaceMemberId pgtype.UUID
 	CreatedByName              string
 	CreatedByContext           []byte
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfRecordShareUpdatedBySourceEnum
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte
@@ -171,11 +171,11 @@ type UpdateRecordShareParams struct {
 	RecordId                   pgtype.UUID
 	ObjectMetadataId           pgtype.UUID
 	PrincipalId                pgtype.UUID
-	PrincipalType              Workspace2abogkkt2zd45pa9aun09djpfRecordSharePrincipalTypeEnum
-	AccessLevel                Workspace2abogkkt2zd45pa9aun09djpfRecordShareAccessLevelEnum
-	RowCause                   Workspace2abogkkt2zd45pa9aun09djpfRecordShareRowCauseEnum
+	PrincipalType              string
+	AccessLevel                string
+	RowCause                   string
 	SourceId                   pgtype.UUID
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfRecordShareUpdatedBySourceEnum
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte

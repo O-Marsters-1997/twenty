@@ -18,11 +18,11 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "creat
 `
 
 type CreateCalendarEventParticipantParams struct {
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfCalendarEventParticipantCreatedBySourceEnum
+	CreatedBySource            string
 	CreatedByWorkspaceMemberId pgtype.UUID
 	CreatedByName              string
 	CreatedByContext           []byte
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfCalendarEventParticipantUpdatedBySourceEnum
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte
@@ -30,7 +30,7 @@ type CreateCalendarEventParticipantParams struct {
 	Handle                     pgtype.Text
 	DisplayName                pgtype.Text
 	IsOrganizer                bool
-	ResponseStatus             Workspace2abogkkt2zd45pa9aun09djpfCalendarEventParticipantResponseStatusEnum
+	ResponseStatus             string
 	CalendarEventId            pgtype.UUID
 	PersonId                   pgtype.UUID
 	WorkspaceMemberId          pgtype.UUID
@@ -168,7 +168,7 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "creat
 `
 
 type UpdateCalendarEventParticipantParams struct {
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfCalendarEventParticipantUpdatedBySourceEnum
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte
@@ -176,7 +176,7 @@ type UpdateCalendarEventParticipantParams struct {
 	Handle                     pgtype.Text
 	DisplayName                pgtype.Text
 	IsOrganizer                bool
-	ResponseStatus             Workspace2abogkkt2zd45pa9aun09djpfCalendarEventParticipantResponseStatusEnum
+	ResponseStatus             string
 	CalendarEventId            pgtype.UUID
 	PersonId                   pgtype.UUID
 	WorkspaceMemberId          pgtype.UUID

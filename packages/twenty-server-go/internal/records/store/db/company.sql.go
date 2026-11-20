@@ -36,11 +36,11 @@ type CreateCompanyParams struct {
 	AnnualRevenueAmountMicros    pgtype.Numeric
 	AnnualRevenueCurrencyCode    pgtype.Text
 	Position                     float64
-	CreatedBySource              Workspace2abogkkt2zd45pa9aun09djpfCompanyCreatedBySourceEnum
+	CreatedBySource              string
 	CreatedByWorkspaceMemberId   pgtype.UUID
 	CreatedByName                string
 	CreatedByContext             []byte
-	UpdatedBySource              Workspace2abogkkt2zd45pa9aun09djpfCompanyUpdatedBySourceEnum
+	UpdatedBySource              string
 	UpdatedByWorkspaceMemberId   pgtype.UUID
 	UpdatedByName                string
 	UpdatedByContext             []byte
@@ -230,7 +230,7 @@ type UpdateCompanyParams struct {
 	AnnualRevenueAmountMicros    pgtype.Numeric
 	AnnualRevenueCurrencyCode    pgtype.Text
 	Position                     float64
-	UpdatedBySource              Workspace2abogkkt2zd45pa9aun09djpfCompanyUpdatedBySourceEnum
+	UpdatedBySource              string
 	UpdatedByWorkspaceMemberId   pgtype.UUID
 	UpdatedByName                string
 	UpdatedByContext             []byte

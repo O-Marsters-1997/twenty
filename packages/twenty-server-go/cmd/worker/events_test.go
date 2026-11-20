@@ -21,7 +21,7 @@ func seedWorkflow(t *testing.T, pool *pgxpool.Pool, status, eventName string) {
 	t.Helper()
 	schema := `"` + workspace.SchemaName() + `".`
 	var workflowID, versionID string
-	err := pool.QueryRow(t.Context(), `INSERT INTO `+schema+`workflow (name, statuses) VALUES ('Classify', ARRAY[$1]::`+schema+`workflow_statuses_enum[]) RETURNING id::text`, status).Scan(&workflowID)
+	err := pool.QueryRow(t.Context(), `INSERT INTO `+schema+`workflow (name, statuses) VALUES ('Classify', ARRAY[$1]::text[]) RETURNING id::text`, status).Scan(&workflowID)
 	if err != nil {
 		t.Fatalf("seed workflow: %v", err)
 	}

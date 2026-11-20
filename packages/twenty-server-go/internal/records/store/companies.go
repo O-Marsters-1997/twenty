@@ -54,8 +54,8 @@ func (c *Companies) Create(ctx context.Context, actor records.Actor, input recor
 		LinkedinLinkPrimaryLinkLabel: merged.LinkedinLinkPrimaryLinkLabel, LinkedinLinkPrimaryLinkUrl: merged.LinkedinLinkPrimaryLinkUrl, LinkedinLinkSecondaryLinks: merged.LinkedinLinkSecondaryLinks,
 		AnnualRevenueAmountMicros: merged.AnnualRevenueAmountMicros, AnnualRevenueCurrencyCode: merged.AnnualRevenueCurrencyCode,
 		Position:        position,
-		CreatedBySource: db.Workspace2abogkkt2zd45pa9aun09djpfCompanyCreatedBySourceEnum(actor.Source), CreatedByWorkspaceMemberId: memberID, CreatedByName: actor.Name,
-		UpdatedBySource: db.Workspace2abogkkt2zd45pa9aun09djpfCompanyUpdatedBySourceEnum(actor.Source), UpdatedByWorkspaceMemberId: memberID, UpdatedByName: actor.Name,
+		CreatedBySource: actor.Source, CreatedByWorkspaceMemberId: memberID, CreatedByName: actor.Name,
+		UpdatedBySource: actor.Source, UpdatedByWorkspaceMemberId: memberID, UpdatedByName: actor.Name,
 		AccountOwnerId: merged.AccountOwnerId,
 	})
 	if err != nil {
@@ -99,7 +99,7 @@ func (c *Companies) Update(ctx context.Context, actor records.Actor, id string, 
 		LinkedinLinkPrimaryLinkLabel: merged.LinkedinLinkPrimaryLinkLabel, LinkedinLinkPrimaryLinkUrl: merged.LinkedinLinkPrimaryLinkUrl, LinkedinLinkSecondaryLinks: merged.LinkedinLinkSecondaryLinks,
 		AnnualRevenueAmountMicros: merged.AnnualRevenueAmountMicros, AnnualRevenueCurrencyCode: merged.AnnualRevenueCurrencyCode,
 		Position:        current.Position,
-		UpdatedBySource: db.Workspace2abogkkt2zd45pa9aun09djpfCompanyUpdatedBySourceEnum(actor.Source), UpdatedByWorkspaceMemberId: memberID, UpdatedByName: actor.Name, UpdatedByContext: current.UpdatedByContext,
+		UpdatedBySource: actor.Source, UpdatedByWorkspaceMemberId: memberID, UpdatedByName: actor.Name, UpdatedByContext: current.UpdatedByContext,
 		AccountOwnerId: merged.AccountOwnerId, ID: uuid,
 	})
 	if err != nil {

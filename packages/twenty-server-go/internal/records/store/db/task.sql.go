@@ -23,12 +23,12 @@ type CreateTaskParams struct {
 	BodyV2Blocknote            pgtype.Text
 	BodyV2Markdown             pgtype.Text
 	DueAt                      pgtype.Timestamptz
-	Status                     NullWorkspace2abogkkt2zd45pa9aun09djpfTaskStatusEnum
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfTaskCreatedBySourceEnum
+	Status                     pgtype.Text
+	CreatedBySource            string
 	CreatedByWorkspaceMemberId pgtype.UUID
 	CreatedByName              string
 	CreatedByContext           []byte
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfTaskUpdatedBySourceEnum
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte
@@ -169,8 +169,8 @@ type UpdateTaskParams struct {
 	BodyV2Blocknote            pgtype.Text
 	BodyV2Markdown             pgtype.Text
 	DueAt                      pgtype.Timestamptz
-	Status                     NullWorkspace2abogkkt2zd45pa9aun09djpfTaskStatusEnum
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfTaskUpdatedBySourceEnum
+	Status                     pgtype.Text
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte

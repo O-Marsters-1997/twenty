@@ -31,14 +31,14 @@ type CreateWorkspaceMemberParams struct {
 	CalendarStartDay           float64
 	UserId                     pgtype.UUID
 	TimeZone                   string
-	DateFormat                 Workspace2abogkkt2zd45pa9aun09djpfWorkspaceMemberDateFormatEnum
-	TimeFormat                 Workspace2abogkkt2zd45pa9aun09djpfWorkspaceMemberTimeFormatEnum
-	NumberFormat               Workspace2abogkkt2zd45pa9aun09djpfWorkspaceMemberNumberFormatEnum
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfWorkspaceMemberCreatedBySourceEnum
+	DateFormat                 string
+	TimeFormat                 string
+	NumberFormat               string
+	CreatedBySource            string
 	CreatedByWorkspaceMemberId pgtype.UUID
 	CreatedByName              string
 	CreatedByContext           []byte
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfWorkspaceMemberUpdatedBySourceEnum
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte
@@ -213,10 +213,10 @@ type UpdateWorkspaceMemberParams struct {
 	CalendarStartDay           float64
 	UserId                     pgtype.UUID
 	TimeZone                   string
-	DateFormat                 Workspace2abogkkt2zd45pa9aun09djpfWorkspaceMemberDateFormatEnum
-	TimeFormat                 Workspace2abogkkt2zd45pa9aun09djpfWorkspaceMemberTimeFormatEnum
-	NumberFormat               Workspace2abogkkt2zd45pa9aun09djpfWorkspaceMemberNumberFormatEnum
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfWorkspaceMemberUpdatedBySourceEnum
+	DateFormat                 string
+	TimeFormat                 string
+	NumberFormat               string
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte
