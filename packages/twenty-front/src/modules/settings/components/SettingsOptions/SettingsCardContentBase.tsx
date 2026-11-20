@@ -17,6 +17,8 @@ type SettingsCardPartProps = {
   xstyle?: stylex.StyleXStyles;
 };
 
+type StyledSettingsCardContentProps = SettingsCardPartProps;
+
 export const StyledSettingsCardContent = ({
   children,
   xstyle,
@@ -24,12 +26,16 @@ export const StyledSettingsCardContent = ({
   <div {...stylex.props(styles.content, xstyle)}>{children}</div>
 );
 
+type StyledSettingsCardIconProps = SettingsCardPartProps;
+
 export const StyledSettingsCardIcon = ({
   children,
   xstyle,
 }: StyledSettingsCardIconProps) => (
   <div {...stylex.props(styles.icon, xstyle)}>{children}</div>
 );
+
+type StyledSettingsCardTitleProps = SettingsCardPartProps;
 
 export const StyledSettingsCardTitle = ({
   children,
@@ -41,12 +47,16 @@ export const StyledSettingsCardTitle = ({
   </div>
 );
 
+type StyledSettingsCardTextContainerProps = SettingsCardPartProps;
+
 export const StyledSettingsCardTextContainer = ({
   children,
   xstyle,
 }: StyledSettingsCardTextContainerProps) => (
   <div {...stylex.props(styles.textContainer, xstyle)}>{children}</div>
 );
+
+type StyledSettingsCardDescriptionProps = SettingsCardPartProps;
 
 export const StyledSettingsCardDescription = ({
   children,
@@ -57,6 +67,8 @@ export const StyledSettingsCardDescription = ({
     {children}
   </div>
 );
+
+type StyledSettingsCardThirdLineProps = SettingsCardPartProps;
 
 export const StyledSettingsCardThirdLine = ({
   children,

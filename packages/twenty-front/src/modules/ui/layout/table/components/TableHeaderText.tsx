@@ -8,10 +8,12 @@ const styles = stylex.create({
   },
 });
 
+type TableHeaderTextProps = ComponentProps<'div'>;
+
 export const TableHeaderText = ({
   className,
   ...props
-}: TableHeaderTextProps<'div'>) => {
+}: TableHeaderTextProps) => {
   const rootProps = stylex.props(styles.text);
 
   return (
