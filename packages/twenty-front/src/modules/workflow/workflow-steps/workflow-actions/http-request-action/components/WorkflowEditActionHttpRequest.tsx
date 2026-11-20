@@ -45,9 +45,11 @@ type WorkflowEditActionHttpRequestProps = {
 
 const styles = stylex.create({
   fullHeightJsonField: {
-    flex: 1,
     display: 'flex',
+    flexBasis: '0%',
     flexDirection: 'column',
+    flexGrow: 1,
+    flexShrink: 1,
   },
 
   tabListContainer: {

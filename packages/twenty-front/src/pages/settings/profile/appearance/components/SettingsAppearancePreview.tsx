@@ -24,10 +24,12 @@ const styles = stylex.create({
   segment: {
     borderStyle: 'solid',
     borderWidth: '1px',
-    flex: 1,
     alignItems: 'flex-end',
     boxSizing: 'border-box',
     display: 'flex',
+    flexBasis: '0%',
+    flexGrow: 1,
+    flexShrink: 1,
     paddingInlineStart: spacing['--t-spacing-6'],
     minWidth: '0',
     paddingTop: spacing['--t-spacing-6'],
@@ -45,7 +47,6 @@ const styles = stylex.create({
     backgroundColor: background,
   }),
   content: {
-    flex: 1,
     transition: {
       default: 'height 0.1s ease-in-out, font-size 0.1s ease-in-out',
       [media.reducedMotion]: 'none',
@@ -55,6 +56,9 @@ const styles = stylex.create({
     borderInlineStartWidth: '1px',
     borderStartStartRadius: borderRadius['--t-border-radius-md'],
     boxSizing: 'border-box',
+    flexBasis: '0%',
+    flexGrow: 1,
+    flexShrink: 1,
     fontSize: { [RADIO_HOVER]: '22px', default: '20px' },
     paddingInlineStart: spacing['--t-spacing-2'],
     borderBottomWidth: '0',

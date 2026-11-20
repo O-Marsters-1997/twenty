@@ -302,11 +302,11 @@ const styles = stylex.create({
     flexShrink: 1,
   },
   contentWrapper: {
+    display: 'flex',
+    flexBasis: '0%',
+    flexDirection: 'column',
     flexGrow: '1',
     flexShrink: '1',
-    flexBasis: '0%',
-    display: 'flex',
-    flexDirection: 'column',
     position: 'relative',
   },
   toolbar: {
@@ -348,9 +348,9 @@ const styles = stylex.create({
     width: '100%',
   },
   noRowsContainer: {
+    display: 'flex',
     gridColumnEnd: '-1',
     gridColumnStart: '1',
-    display: 'flex',
     justifyContent: 'center',
     marginTop: spacing['--t-spacing-8'],
   },

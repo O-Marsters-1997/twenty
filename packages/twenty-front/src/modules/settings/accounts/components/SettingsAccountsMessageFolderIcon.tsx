@@ -39,12 +39,12 @@ const styles = stylex.create({
     minWidth: '0',
   },
   folderRow: {
-    flexGrow: '1',
-    flexShrink: '0',
-    flexBasis: '0',
     gap: '2px',
     alignItems: 'center',
     display: 'flex',
+    flexBasis: '0',
+    flexGrow: '1',
+    flexShrink: '0',
     minHeight: '0',
   },
   folderIcon: {

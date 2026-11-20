@@ -7,7 +7,7 @@ const styles = stylex.create({
     margin: '0',
     color: fontColor['--t-font-color-secondary'],
     fontSize: fontSize['--t-font-size-md'],
-    lineHeight: '1.4',
+    lineHeight: 1.4,
   },
 });
 

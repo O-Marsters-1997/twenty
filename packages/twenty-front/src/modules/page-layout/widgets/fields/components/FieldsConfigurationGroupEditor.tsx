@@ -61,7 +61,7 @@ const styles = stylex.create({
   dropdownContainer: {
     position: 'absolute',
     transform: 'translateY(-50%)',
-    zIndex: '1',
+    zIndex: 1,
     right: spacing['--t-spacing-1'],
     top: '50%',
   },

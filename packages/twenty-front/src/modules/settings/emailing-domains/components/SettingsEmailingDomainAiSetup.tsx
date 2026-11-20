@@ -85,12 +85,12 @@ const styles = stylex.create({
     whiteSpace: 'nowrap',
   },
   logos: {
-    flexGrow: '0',
-    flexShrink: '0',
-    flexBasis: 'auto',
     gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     display: 'flex',
+    flexBasis: 'auto',
+    flexGrow: '0',
+    flexShrink: '0',
   },
   logo: {
     display: 'block',

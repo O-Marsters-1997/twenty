@@ -20,7 +20,7 @@ const styles = stylex.create({
     inset: '0',
     pointerEvents: 'none',
     position: 'absolute',
-    zIndex: '-1',
+    zIndex: -1,
   },
 });
 

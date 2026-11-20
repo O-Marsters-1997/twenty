@@ -634,9 +634,11 @@ const styles = stylex.create({
     },
   },
   activeSource: {
-    flex: 1,
     display: 'flex',
+    flexBasis: '0%',
     flexDirection: 'column',
+    flexGrow: 1,
+    flexShrink: 1,
     minWidth: 0,
   },
   activeSourceHiddenWhenNarrow: {

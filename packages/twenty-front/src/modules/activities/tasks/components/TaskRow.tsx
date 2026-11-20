@@ -61,7 +61,7 @@ const styles = stylex.create({
     display: 'flex',
     position: 'relative',
     textOverflow: 'ellipsis',
-    zIndex: '1',
+    zIndex: 1,
     maxWidth: `calc(80% - ${spacing['--t-spacing-2']})`,
     paddingBottom: '1px',
   },
@@ -73,7 +73,7 @@ const styles = stylex.create({
   activityTargetsContainer: {
     overflow: 'clip',
     position: 'relative',
-    zIndex: '1',
+    zIndex: 1,
     width: '100%',
   },
   placeholder: {
@@ -82,7 +82,7 @@ const styles = stylex.create({
   checkboxContainer: {
     display: 'flex',
     position: 'relative',
-    zIndex: '1',
+    zIndex: 1,
   },
 });
 

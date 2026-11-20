@@ -53,12 +53,12 @@ const styles = stylex.create({
     color: fontColor['--t-font-color-primary'],
     fontSize: fontSize['--t-font-size-xl'],
     fontWeight: fontWeight['--t-font-weight-semi-bold'],
-    lineHeight: '1.2',
+    lineHeight: 1.2,
   },
   subtitle: {
     color: fontColor['--t-font-color-secondary'],
     fontSize: fontSize['--t-font-size-md'],
-    lineHeight: '1.4',
+    lineHeight: 1.4,
   },
   formSection: {
     gap: spacing['--t-spacing-8'],

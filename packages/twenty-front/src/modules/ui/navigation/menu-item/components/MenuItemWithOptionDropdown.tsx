@@ -40,9 +40,11 @@ const styles = stylex.create({
     backgroundColor: backgroundTransparent['--t-background-transparent-light'],
   },
   primaryItem: {
-    flex: 1,
     paddingInline: 0,
     backgroundColor: 'transparent',
+    flexBasis: '0%',
+    flexGrow: 1,
+    flexShrink: 1,
     minWidth: 0,
   },
   hoverableButtons: {

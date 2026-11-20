@@ -102,7 +102,7 @@ const styles = stylex.create({
   canvasLayer: {
     inset: '0',
     position: 'absolute',
-    zIndex: '1',
+    zIndex: 1,
   },
   targetScaleChip: {
     display: 'inline-flex',

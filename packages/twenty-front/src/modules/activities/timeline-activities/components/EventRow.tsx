@@ -67,7 +67,7 @@ const styles = stylex.create({
   verticalLine: {
     flex: '1',
     backgroundColor: borderColor['--t-border-color-light'],
-    zIndex: '2',
+    zIndex: 2,
     width: '2px',
   },
 });

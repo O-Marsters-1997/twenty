@@ -61,7 +61,7 @@ const styles = stylex.create({
     alignItems: 'center',
     display: 'flex',
     position: 'relative',
-    zIndex: '1',
+    zIndex: 1,
   },
   calendarIconContainer: {
     alignItems: 'center',
@@ -74,7 +74,7 @@ const styles = stylex.create({
   },
   textInputContainer: {
     position: 'relative',
-    zIndex: '1',
+    zIndex: 1,
     width: '100%',
   },
 });

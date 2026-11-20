@@ -69,7 +69,7 @@ const styles = stylex.create({
   copySetupKeyText: {
     color: fontColor['--t-font-color-tertiary'],
     fontSize: fontSize['--t-font-size-sm'],
-    lineHeight: '1.5',
+    lineHeight: 1.5,
     textAlign: 'left',
   },
   copySetupKeyLink: {

@@ -44,7 +44,7 @@ const styles = stylex.create({
   label: {
     color: fontColor['--t-font-color-secondary'],
     fontSize: fontSize['--t-font-size-md'],
-    lineHeight: '1.4',
+    lineHeight: 1.4,
   },
   textArea: {
     background: background['--t-background-primary'],
@@ -66,7 +66,7 @@ const styles = stylex.create({
       default: null,
       '::placeholder': fontWeight['--t-font-weight-medium'],
     },
-    lineHeight: '1.4',
+    lineHeight: 1.4,
     resize: 'none',
     borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
     borderBottomRightRadius: borderRadius['--t-border-radius-sm'],

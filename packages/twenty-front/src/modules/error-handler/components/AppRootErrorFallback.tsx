@@ -91,7 +91,7 @@ const styles = stylex.create({
     color: grayScale['--t-gray-scale-gray11'],
     fontSize: '0.92rem',
     fontWeight: '400',
-    lineHeight: '1.5',
+    lineHeight: 1.5,
     maxHeight: '2.8em',
     width: '50%',
   },

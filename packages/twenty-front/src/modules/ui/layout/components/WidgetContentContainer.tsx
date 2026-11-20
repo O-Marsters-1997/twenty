@@ -11,8 +11,10 @@ const styles = stylex.create({
     width: '100%',
   },
   scroll: {
-    flex: 1,
     overflow: 'var(--widget-scroll-overflow, auto)',
+    flexBasis: '0%',
+    flexGrow: 1,
+    flexShrink: 1,
   },
 });
 

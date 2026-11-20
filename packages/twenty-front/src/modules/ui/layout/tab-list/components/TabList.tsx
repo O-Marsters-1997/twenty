@@ -37,8 +37,10 @@ const styles = stylex.create({
     },
   },
   innerContainer: {
-    flex: 1,
     display: 'flex',
+    flexBasis: '0%',
+    flexGrow: 1,
+    flexShrink: 1,
     justifyContent: 'flex-start',
     minWidth: 0,
   },
@@ -46,8 +48,10 @@ const styles = stylex.create({
     justifyContent: 'center',
   },
   nodeDimension: {
-    flex: 1,
     display: 'flex',
+    flexBasis: '0%',
+    flexGrow: 1,
+    flexShrink: 1,
     minWidth: 0,
   },
   dropdownContainer: {

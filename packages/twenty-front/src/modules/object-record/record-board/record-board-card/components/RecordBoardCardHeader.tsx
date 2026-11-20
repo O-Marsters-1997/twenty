@@ -44,11 +44,11 @@ const styles = stylex.create({
     marginLeft: spacing['--t-spacing-1'],
   },
   recordChipContainer: {
-    flexGrow: '1',
-    flexShrink: '1',
-    flexBasis: 'auto',
     overflow: 'hidden',
     display: 'flex',
+    flexBasis: 'auto',
+    flexGrow: '1',
+    flexShrink: '1',
   },
 });
 

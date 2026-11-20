@@ -25,14 +25,14 @@ const styles = stylex.create({
   input: {
     background: 'transparent',
     borderStyle: 'none',
-    flexGrow: '1',
-    flexShrink: '0',
-    flexBasis: '80px',
     outline: 'none',
     color: {
       default: fontColor['--t-font-color-primary'],
       '::placeholder': fontColor['--t-font-color-light'],
     },
+    flexBasis: '80px',
+    flexGrow: '1',
+    flexShrink: '0',
     fontFamily: 'inherit',
     fontSize: fontSize['--t-font-size-sm'],
     minWidth: '80px',

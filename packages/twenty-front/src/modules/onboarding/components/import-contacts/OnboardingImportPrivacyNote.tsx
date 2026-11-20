@@ -16,7 +16,7 @@ const styles = stylex.create({
   },
   noteText: {
     marginBlock: `calc((${PRIVACY_NOTE_ICON_SIZE}px - 1.4em) / 2)`,
-    lineHeight: '1.4',
+    lineHeight: 1.4,
   },
 });
 

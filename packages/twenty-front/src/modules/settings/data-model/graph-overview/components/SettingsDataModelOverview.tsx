@@ -46,7 +46,7 @@ const styles = stylex.create({
   },
   closeButton: {
     position: 'absolute',
-    zIndex: '5',
+    zIndex: 5,
     left: spacing['--t-spacing-3'],
     top: spacing['--t-spacing-3'],
   },

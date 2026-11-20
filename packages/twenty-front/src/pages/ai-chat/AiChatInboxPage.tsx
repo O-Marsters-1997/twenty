@@ -46,14 +46,16 @@ import * as stylex from '@stylexjs/stylex';
 
 const styles = stylex.create({
   listPane: {
+    display: 'flex',
+    flexBasis: '400px',
     flexGrow: '0',
     flexShrink: '0',
-    flexBasis: '400px',
-    display: 'flex',
     minWidth: 0,
   },
   listPaneFullWidth: {
-    flex: 1,
+    flexBasis: '0%',
+    flexGrow: 1,
+    flexShrink: 1,
   },
   inbox: {
     flex: '1',

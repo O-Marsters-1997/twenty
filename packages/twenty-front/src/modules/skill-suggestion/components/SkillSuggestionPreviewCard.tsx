@@ -56,7 +56,7 @@ const styles = stylex.create({
   description: {
     color: fontColor['--t-font-color-secondary'],
     fontSize: fontSize['--t-font-size-md'],
-    lineHeight: '1.5',
+    lineHeight: 1.5,
     whiteSpace: 'pre-wrap',
     maxHeight: 'calc(50dvh / var(--t-zoom, 1))',
     overflowY: 'auto',

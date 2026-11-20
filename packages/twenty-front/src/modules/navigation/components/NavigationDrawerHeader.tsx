@@ -36,10 +36,10 @@ const styles = stylex.create({
     marginLeft: 'auto',
   },
   workspaceDropdownContainer: {
+    display: 'flex',
+    flexBasis: 'auto',
     flexGrow: '1',
     flexShrink: '1',
-    flexBasis: 'auto',
-    display: 'flex',
     minWidth: '0',
   },
   headerRow: {

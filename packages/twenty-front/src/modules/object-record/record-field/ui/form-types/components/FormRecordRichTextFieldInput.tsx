@@ -38,7 +38,7 @@ const styles = stylex.create({
   },
   expandButtonContainer: {
     position: 'absolute',
-    zIndex: '1',
+    zIndex: 1,
     marginTop: spacing['--t-spacing-1'],
     right: spacing['--t-spacing-1'],
     top: spacing['--t-spacing-0'],

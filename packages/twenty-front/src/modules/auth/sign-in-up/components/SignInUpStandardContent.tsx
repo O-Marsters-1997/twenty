@@ -13,7 +13,7 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   titleContainer: {
-    lineHeight: '1.2',
+    lineHeight: 1.2,
     marginTop: spacing['--t-spacing-10'],
   },
   formContainer: {

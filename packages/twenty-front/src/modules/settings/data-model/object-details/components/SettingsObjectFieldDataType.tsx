@@ -103,10 +103,10 @@ const styles = stylex.create({
     whiteSpace: 'nowrap',
   },
   iconWrapper: {
+    display: 'flex',
+    flexBasis: 'auto',
     flexGrow: '1',
     flexShrink: '0',
-    flexBasis: 'auto',
-    display: 'flex',
   },
   span: {
     color: fontColor['--t-font-color-extra-light'],

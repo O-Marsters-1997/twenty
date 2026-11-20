@@ -37,13 +37,13 @@ const styles = stylex.create({
     width: spacing['--t-spacing-8'],
   },
   body: {
-    flexGrow: '1',
-    flexShrink: '1',
-    flexBasis: '0',
     gap: spacing['--t-spacing-2'],
     alignSelf: 'stretch',
     display: 'flex',
+    flexBasis: '0',
     flexDirection: 'column',
+    flexGrow: '1',
+    flexShrink: '1',
     minWidth: 0,
   },
   header: {
@@ -61,10 +61,10 @@ const styles = stylex.create({
     whiteSpace: 'nowrap',
   },
   actionSlot: {
+    display: 'flex',
+    flexBasis: 'auto',
     flexGrow: '0',
     flexShrink: '0',
-    flexBasis: 'auto',
-    display: 'flex',
     marginLeft: 'auto',
   },
   description: {

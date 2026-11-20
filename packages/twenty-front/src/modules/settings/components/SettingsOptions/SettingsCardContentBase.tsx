@@ -94,7 +94,9 @@ const styles = stylex.create({
     marginBottom: spacing['--t-spacing-1'],
   },
   textContainer: {
-    flex: 1,
+    flexBasis: '0%',
+    flexGrow: 1,
+    flexShrink: 1,
     minWidth: 0,
   },
   description: {

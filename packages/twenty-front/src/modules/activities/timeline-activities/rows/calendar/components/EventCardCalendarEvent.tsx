@@ -59,14 +59,14 @@ const styles = stylex.create({
     whiteSpace: 'nowrap',
   },
   calendarEventBody: {
-    flexGrow: '1',
-    flexShrink: '0',
-    flexBasis: '0',
     gap: spacing['--t-spacing-2'],
     alignItems: 'flex-start',
     color: fontColor['--t-font-color-tertiary'],
     display: 'flex',
+    flexBasis: '0',
     flexDirection: 'column',
+    flexGrow: '1',
+    flexShrink: '0',
     justifyContent: 'center',
   },
   calendarEventDateCard: {

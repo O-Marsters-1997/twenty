@@ -30,7 +30,7 @@ const styles = stylex.create({
     flexGrow: '1',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
-    zIndex: '1',
+    zIndex: 1,
     height: '20px',
     paddingLeft: spacing['--t-spacing-2'],
   },

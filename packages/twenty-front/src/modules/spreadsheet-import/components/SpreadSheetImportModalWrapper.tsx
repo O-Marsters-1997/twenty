@@ -55,9 +55,11 @@ const styles = stylex.create({
     height: modalSize['--t-modal-size-xl-height'],
   },
   innerContainer: {
-    flex: 1,
     display: 'flex',
+    flexBasis: '0%',
     flexDirection: 'column',
+    flexGrow: 1,
+    flexShrink: 1,
     position: 'relative',
     height: { default: null, [media.mobile]: '80%' },
     minHeight: { default: '600px', [media.mobile]: 'auto' },
@@ -65,8 +67,10 @@ const styles = stylex.create({
     width: { default: null, [media.mobile]: '100%' },
   },
   rtlLtr: {
-    flex: 1,
     display: 'flex',
+    flexBasis: '0%',
     flexDirection: 'column',
+    flexGrow: 1,
+    flexShrink: 1,
   },
 });

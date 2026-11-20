@@ -19,11 +19,13 @@ const styles = stylex.create({
     borderRadius: borderRadius['--t-border-radius-md'],
     borderStyle: 'solid',
     borderWidth: '1px',
-    flex: 1,
     gap: spacing['--t-spacing-6'],
     alignItems: 'start',
     display: 'flex',
+    flexBasis: '0%',
     flexDirection: 'column',
+    flexGrow: 1,
+    flexShrink: 1,
   },
   grayBackground: {
     backgroundColor:

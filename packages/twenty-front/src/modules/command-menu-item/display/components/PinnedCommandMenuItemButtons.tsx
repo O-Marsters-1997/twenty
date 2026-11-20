@@ -19,10 +19,10 @@ import * as stylex from '@stylexjs/stylex';
 
 const styles = stylex.create({
   wrapper: {
+    overflow: 'hidden',
+    flexBasis: '0',
     flexGrow: '1',
     flexShrink: '1',
-    flexBasis: '0',
-    overflow: 'hidden',
     minWidth: '0',
   },
   container: {

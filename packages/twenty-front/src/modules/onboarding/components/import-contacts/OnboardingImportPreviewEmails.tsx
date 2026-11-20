@@ -41,15 +41,15 @@ const skyCardIn = stylex.keyframes({
 
 const styles = stylex.create({
   column: {
-    flexGrow: '1',
-    flexShrink: '1',
-    flexBasis: '0',
     gap: '1px',
     overflow: 'hidden',
     backgroundColor: borderColor['--t-border-color-light'],
     boxSizing: 'border-box',
     display: 'flex',
+    flexBasis: '0',
     flexDirection: 'column',
+    flexGrow: '1',
+    flexShrink: '1',
     position: 'relative',
     height: '100%',
     minWidth: '0',
@@ -127,7 +127,7 @@ const styles = stylex.create({
     boxSizing: 'border-box',
     display: { default: 'flex', [media.mobile]: 'none' },
     flexDirection: 'column',
-    lineHeight: '1.1',
+    lineHeight: 1.1,
     position: 'absolute',
     borderLeftStyle: 'solid',
     borderLeftWidth: '2px',

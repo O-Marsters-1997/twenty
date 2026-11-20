@@ -56,7 +56,7 @@ const styles = stylex.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    zIndex: '4',
+    zIndex: 4,
     borderTopColor: borderColor['--t-border-color-light'],
     borderTopStyle: 'solid',
     borderTopWidth: '1px',
@@ -69,7 +69,7 @@ const styles = stylex.create({
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'row',
-    zIndex: '1',
+    zIndex: 1,
   },
   actionButtonContainer: {
     gap: spacing['--t-spacing-2'],
@@ -97,7 +97,7 @@ const styles = stylex.create({
     width: '1px',
   },
   addFilterContainer: {
-    zIndex: '5',
+    zIndex: 5,
   },
 });
 

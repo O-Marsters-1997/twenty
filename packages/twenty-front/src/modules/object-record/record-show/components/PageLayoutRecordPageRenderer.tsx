@@ -21,7 +21,7 @@ import { background } from 'twenty-ui/theme/tokens.stylex';
 const styles = stylex.create({
   showPageBannerContainer: {
     flexShrink: '0',
-    zIndex: '1',
+    zIndex: 1,
   },
   showPageRightContainer: {
     flex: '1',

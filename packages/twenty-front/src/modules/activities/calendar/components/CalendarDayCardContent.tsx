@@ -50,13 +50,13 @@ const styles = stylex.create({
     fontWeight: fontWeight['--t-font-weight-medium'],
   },
   events: {
-    flexGrow: '1',
-    flexShrink: '0',
-    flexBasis: 'auto',
     gap: spacing['--t-spacing-3'],
     alignItems: 'stretch',
     display: 'flex',
+    flexBasis: 'auto',
     flexDirection: 'column',
+    flexGrow: '1',
+    flexShrink: '0',
   },
   eventRowContainer: {
     flexBasis: 'auto',

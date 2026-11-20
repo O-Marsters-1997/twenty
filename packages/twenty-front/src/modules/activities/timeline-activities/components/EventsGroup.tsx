@@ -57,10 +57,10 @@ const styles = stylex.create({
   monthSeperatorLine: {
     borderRadius: borderRadius['--t-border-radius-pill'],
     cornerShape: 'round',
+    backgroundColor: borderColor['--t-border-color-light'],
+    flexBasis: '0',
     flexGrow: '1',
     flexShrink: '0',
-    flexBasis: '0',
-    backgroundColor: borderColor['--t-border-color-light'],
     height: '1px',
   },
 });

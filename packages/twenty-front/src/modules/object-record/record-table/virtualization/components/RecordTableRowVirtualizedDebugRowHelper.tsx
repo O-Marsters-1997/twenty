@@ -33,7 +33,7 @@ const styles = stylex.create({
     color: fontColor['--t-font-color-primary'],
     display: 'flex',
     position: 'absolute',
-    zIndex: '20',
+    zIndex: 20,
     left: '250px',
     maxHeight: spacing['--t-spacing-4'],
     paddingBottom: spacing['--t-spacing-0_5'],

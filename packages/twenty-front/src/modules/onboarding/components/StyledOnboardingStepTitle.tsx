@@ -8,7 +8,7 @@ const styles = stylex.create({
     color: fontColor['--t-font-color-primary'],
     fontSize: fontSize['--t-font-size-xl'],
     fontWeight: fontWeight['--t-font-weight-semi-bold'],
-    lineHeight: '1.2',
+    lineHeight: 1.2,
   },
 });
 

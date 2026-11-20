@@ -36,7 +36,7 @@ const styles = stylex.create({
     background: background['--t-background-primary'],
     pointerEvents: 'none',
     position: 'absolute',
-    zIndex: '1',
+    zIndex: 1,
     bottom: '0',
     left: '0',
     paddingLeft: spacing['--t-spacing-2'],

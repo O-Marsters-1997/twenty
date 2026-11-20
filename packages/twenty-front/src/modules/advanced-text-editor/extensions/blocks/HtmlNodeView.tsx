@@ -13,14 +13,14 @@ type HtmlNodeViewProps = Pick<
 
 const styles = stylex.create({
   preview: {
-    outlineWidth: '1px',
-    outlineStyle: 'dashed',
     outlineColor: 'transparent',
     outlineColor: {
       default: null,
       ':hover': borderColor['--t-border-color-medium'],
     },
     outlineOffset: '2px',
+    outlineStyle: 'dashed',
+    outlineWidth: '1px',
     borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
     borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
     borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
