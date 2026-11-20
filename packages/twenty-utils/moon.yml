@@ -1,0 +1,13 @@
+language: typescript
+layer: tool
+
+workspace:
+  inheritedTasks:
+    exclude: ['typecheck']
+
+tasks:
+  test:
+    command: jest --config jest.config.mjs --silent --coverageReporters=text-summary --cacheDirectory=../../.cache/jest/packages/twenty-utils --passWithNoTests
+    inputs: ['**/*.{ts,js,cjs}', 'jest.config.mjs', 'package.json', '/jest.preset.js']
+    options:
+      cache: true

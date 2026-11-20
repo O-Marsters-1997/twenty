@@ -1,0 +1,5 @@
+projects:
+  - 'packages/*'
+vcs:
+  client: git
+  defaultBranch: main

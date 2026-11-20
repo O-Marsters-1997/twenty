@@ -1,0 +1,19 @@
+language: typescript
+layer: application
+
+workspace:
+  inheritedTasks:
+    exclude: ['typecheck']
+
+tasks:
+  setup:
+    script: bunx playwright install && cp .env.example .env
+    inputs: ['.env.example', 'package.json']
+    options:
+      cache: true
+
+  test:
+    command: bunx playwright test
+    inputs: ['tests/**/*', 'lib/**/*', 'reporters/**/*', 'playwright.config.ts', 'package.json']
+    options:
+      cache: true
