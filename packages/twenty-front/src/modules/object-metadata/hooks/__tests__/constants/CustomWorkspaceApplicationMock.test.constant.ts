@@ -5,6 +5,7 @@ export const CUSTOM_WORKSPACE_APPLICATION_MOCK = {
   agents: [],
   applicationVariables: [],
   commandMenuItems: [],
+  frontComponents: [],
   isUninstallBlockedByOtherWorkspaceInstallations: false,
   createdAt: '2024-01-01T00:00:00.000Z',
   description: 'workpace custom application',

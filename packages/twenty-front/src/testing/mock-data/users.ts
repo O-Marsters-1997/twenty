@@ -76,6 +76,8 @@ export const mockCurrentWorkspace = {
   databaseSchema: null,
   isTwoFactorAuthenticationEnforced: false,
   eventLogRetentionDays: 90,
+  hasValidEnterpriseValidityToken: false,
+  hasValidSignedEnterpriseKey: false,
   __typename: 'Workspace',
 } as const satisfies Workspace;
 
