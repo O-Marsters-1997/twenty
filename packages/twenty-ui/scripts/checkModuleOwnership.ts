@@ -38,7 +38,10 @@ const actualOwnership: Record<keyof typeof ownership, string[]> = {
 const actualPublicExports = getPublicExportInventory({
   sourceRoot: SOURCE_ROOT,
   entryPoints: Object.keys(packageJson.exports)
-    .filter((entryPoint) => !entryPoint.endsWith('.css'))
+    .filter(
+      (entryPoint) =>
+        !entryPoint.endsWith('.css') && !entryPoint.endsWith('.stylex'),
+    )
     .map((entryPoint) => (entryPoint === '.' ? '.' : entryPoint.slice(2))),
 });
 const errors = shouldUpdateSnapshot
