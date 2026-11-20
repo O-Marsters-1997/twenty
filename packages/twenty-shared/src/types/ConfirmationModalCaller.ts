@@ -1,2 +1,4 @@
-export type ConfirmationModalCaller =
-  | { type: 'commandMenuItem'; commandMenuItemId: string };
+export type ConfirmationModalCaller = {
+  type: 'commandMenuItem';
+  commandMenuItemId: string;
+};

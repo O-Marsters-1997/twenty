@@ -1,3 +1,4 @@
+const path = require('path');
 const babel = require('@babel/core');
 const swcJest = require('@swc/jest');
 const stylexBabelPlugin = require('@stylexjs/babel-plugin');
@@ -25,7 +26,11 @@ const createTransformer = (swcOptions) => {
           [require.resolve('@babel/plugin-syntax-typescript'), { isTSX: true }],
           [
             stylexBabelPlugin,
-            { test: true, unstable_moduleResolution: { type: 'commonJS' } },
+            {
+              test: true,
+              unstable_moduleResolution: { type: 'commonJS' },
+              aliases: { '@/*': [path.join(__dirname, 'src/modules/*')] },
+            },
           ],
         ],
       });
