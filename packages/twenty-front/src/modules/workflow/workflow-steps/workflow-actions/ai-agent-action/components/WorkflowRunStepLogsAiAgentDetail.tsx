@@ -12,7 +12,7 @@ import {
 } from 'twenty-ui/icon';
 
 import { formatDuration } from '~/utils/format/formatDuration';
-import { logStyles } from '@/workflow/workflow-steps/workflow-actions/components/workflowRunStepLogs.stylex';
+import { logStyles } from '@/workflow/workflow-steps/workflow-actions/components/workflowRunStepLogsStyles';
 import { WorkflowRunStepLogsToolCallRow } from '@/workflow/workflow-steps/workflow-actions/ai-agent-action/components/WorkflowRunStepLogsToolCallRow';
 import { formatNumber } from '@/localization/utils/formatNumber';
 import * as stylex from '@stylexjs/stylex';
@@ -29,35 +29,35 @@ import {
 const styles = stylex.create({
   modelBadge: {
     background: backgroundTransparent['--t-background-transparent-light'],
-    borderTopLeftRadius: borderRadius['--t-border-radius-xs'],
-    borderTopRightRadius: borderRadius['--t-border-radius-xs'],
-    borderBottomRightRadius: borderRadius['--t-border-radius-xs'],
-    borderBottomLeftRadius: borderRadius['--t-border-radius-xs'],
     color: fontColor['--t-font-color-tertiary'],
     fontFamily: font['--t-font-family'],
     fontSize: fontSize['--t-font-size-xs'],
-    paddingTop: spacing['--t-spacing-0_5'],
-    paddingRight: spacing['--t-spacing-1'],
+    whiteSpace: 'nowrap',
+    borderBottomLeftRadius: borderRadius['--t-border-radius-xs'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-xs'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-xs'],
+    borderTopRightRadius: borderRadius['--t-border-radius-xs'],
     paddingBottom: spacing['--t-spacing-0_5'],
     paddingLeft: spacing['--t-spacing-1'],
-    whiteSpace: 'nowrap',
+    paddingRight: spacing['--t-spacing-1'],
+    paddingTop: spacing['--t-spacing-0_5'],
   },
   usageGrid: {
     background: backgroundTransparent['--t-background-transparent-lighter'],
-    borderWidth: '1px',
-    borderStyle: 'solid',
     borderColor: borderColor['--t-border-color-light'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    gap: `${spacing['--t-spacing-1']} ${spacing['--t-spacing-4']}`,
+    display: 'grid',
+    gridTemplateColumns: 'max-content 1fr',
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
     borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
     borderTopRightRadius: borderRadius['--t-border-radius-sm'],
-    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
-    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
-    display: 'grid',
-    gap: `${spacing['--t-spacing-1']} ${spacing['--t-spacing-4']}`,
-    gridTemplateColumns: 'max-content 1fr',
-    paddingTop: spacing['--t-spacing-3'],
-    paddingRight: spacing['--t-spacing-3'],
     paddingBottom: spacing['--t-spacing-3'],
     paddingLeft: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingTop: spacing['--t-spacing-3'],
   },
   usageLabel: {
     color: fontColor['--t-font-color-tertiary'],
@@ -71,9 +71,9 @@ const styles = stylex.create({
     textAlign: 'right',
   },
   toolList: {
+    gap: spacing['--t-spacing-1'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-1'],
   },
 });
 

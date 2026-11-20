@@ -51,16 +51,16 @@ const TYPE_ICON_MAP: Record<string, ComponentType<{ size?: number }>> = {
 
 const styles = stylex.create({
   infoIcon: {
-    cursor: 'pointer',
     outline: 'none',
+    cursor: 'pointer',
   },
   tableHeaderRow: {
     marginBottom: spacing['--t-spacing-2'],
   },
   fieldsContainer: {
-    borderBottomWidth: '1px',
-    borderBottomStyle: 'solid',
     borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
     paddingBottom: spacing['--t-spacing-2'],
   },
   infoIconContainer: {

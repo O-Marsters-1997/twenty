@@ -38,6 +38,7 @@ export const getPageLayoutWidgetHeightBehavior = ({
     case WidgetType.FIELDS:
     case WidgetType.FORM_FIELD:
     case WidgetType.FIELD_RICH_TEXT:
+    case WidgetType.FRONT_COMPONENT:
     case WidgetType.GRAPH:
     case WidgetType.STANDALONE_RICH_TEXT:
     case WidgetType.VIEW:

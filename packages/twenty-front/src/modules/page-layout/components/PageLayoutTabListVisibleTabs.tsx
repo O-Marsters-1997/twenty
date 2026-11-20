@@ -31,7 +31,9 @@ const styles = stylex.create({
     display: 'flex',
   },
   leadingDropTarget: {
-    flex: '0 0 2px',
+    flexBasis: '2px',
+    flexGrow: '0',
+    flexShrink: '0',
     marginLeft: '-1px',
     marginRight: '-1px',
   },

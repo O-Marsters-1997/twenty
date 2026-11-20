@@ -1,4 +1,9 @@
-import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 import * as stylex from '@stylexjs/stylex';
 import { AnimatedEaseIn } from '@/auth/components/internal/AnimatedEaseIn/AnimatedEaseIn';
 import React from 'react';
@@ -13,9 +18,9 @@ const styles = stylex.create({
     color: fontColor['--t-font-color-primary'],
     fontSize: fontSize['--t-font-size-xl'],
     fontWeight: fontWeight['--t-font-weight-semi-bold'],
+    textAlign: 'center',
     marginBottom: spacing['--t-spacing-4'],
     marginTop: spacing['--t-spacing-4'],
-    textAlign: 'center',
   },
   titleNoMarginTop: {
     marginTop: 0,
@@ -29,11 +34,19 @@ export const Title = ({
 }: TitleProps) => {
   if (animate) {
     return (
-      <div {...stylex.props(styles.title, noMarginTop && styles.titleNoMarginTop)}>
+      <div
+        {...stylex.props(styles.title, noMarginTop && styles.titleNoMarginTop)}
+      >
         <AnimatedEaseIn>{children}</AnimatedEaseIn>
       </div>
     );
   }
 
-  return <div {...stylex.props(styles.title, noMarginTop && styles.titleNoMarginTop)}>{children}</div>;
+  return (
+    <div
+      {...stylex.props(styles.title, noMarginTop && styles.titleNoMarginTop)}
+    >
+      {children}
+    </div>
+  );
 };

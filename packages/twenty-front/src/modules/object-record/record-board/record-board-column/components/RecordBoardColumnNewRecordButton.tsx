@@ -24,25 +24,25 @@ import {
 
 const styles = stylex.create({
   newButton: {
+    borderStyle: 'none',
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     alignSelf: 'baseline',
     backgroundColor: {
       default: background['--t-background-primary'],
       ':hover': background['--t-background-tertiary'],
     },
-    borderStyle: 'none',
-    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
-    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
-    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
-    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
     color: fontColor['--t-font-color-tertiary'],
     cursor: 'pointer',
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
-    paddingTop: spacing['--t-spacing-1'],
-    paddingRight: spacing['--t-spacing-1'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
     paddingBottom: spacing['--t-spacing-1'],
     paddingLeft: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingTop: spacing['--t-spacing-1'],
   },
 });
 

@@ -1,5 +1,10 @@
 import * as stylex from '@stylexjs/stylex';
-import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 export type HeadingProps = {
   title: string;
@@ -31,7 +36,7 @@ const styles = stylex.create({
     color: fontColor['--t-font-color-secondary'],
     fontSize: fontSize['--t-font-size-sm'],
     fontWeight: fontWeight['--t-font-weight-regular'],
-    marginTop: spacing['--t-spacing-3'],
     textAlign: 'center',
+    marginTop: spacing['--t-spacing-3'],
   },
 });

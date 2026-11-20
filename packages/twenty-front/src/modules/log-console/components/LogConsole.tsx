@@ -81,7 +81,7 @@ const spacerEntrance = stylex.keyframes({
 });
 
 const panelEntrance = stylex.keyframes({
-  from: { height: 0, opacity: 0 },
+  from: { opacity: 0, height: 0 },
 });
 
 const subscribeToWindowResize = (onWindowResize: () => void) => {
@@ -534,27 +534,27 @@ const transitionDuration = `calc(${animationDuration['--t-animation-duration-nor
 
 const styles = stylex.create({
   barActions: {
-    display: 'flex',
     gap: spacing['--t-spacing-1'],
+    display: 'flex',
     paddingRight: spacing['--t-spacing-3'],
   },
   body: {
+    flex: '1',
     containerName: 'log-console-body',
     containerType: 'inline-size',
     display: 'flex',
-    flex: '1',
-    minHeight: '0',
     position: 'relative',
+    minHeight: '0',
   },
   height: (height: string) => ({ height }),
   width: (width: string) => ({ width }),
   zIndex: (zIndex: number) => ({ zIndex }),
   spacer: {
+    flex: 'none',
     display: {
       default: null,
       [media.print]: 'none',
     },
-    flex: 'none',
   },
   spacerEntrance: {
     animationDuration: transitionDuration,
@@ -573,13 +573,8 @@ const styles = stylex.create({
     transitionTimingFunction: logConsoleEasing.standard,
   },
   panel: {
+    overflow: 'hidden',
     backgroundColor: background['--t-background-primary'],
-    borderLeftColor: borderColor['--t-border-color-medium'],
-    borderLeftStyle: 'solid',
-    borderLeftWidth: 1,
-    borderTopColor: borderColor['--t-border-color-medium'],
-    borderTopStyle: 'solid',
-    bottom: 0,
     boxShadow: boxShadow['--t-box-shadow-bottom-panel'],
     boxSizing: 'border-box',
     clipPath: `inset(calc(-1 * ${spacing['--t-spacing-6']}) 0 0 0)`,
@@ -588,10 +583,15 @@ const styles = stylex.create({
       [media.print]: 'none',
     },
     flexDirection: 'column',
-    left: 0,
     opacity: 1,
-    overflow: 'hidden',
     position: 'absolute',
+    borderLeftColor: borderColor['--t-border-color-medium'],
+    borderLeftStyle: 'solid',
+    borderLeftWidth: 1,
+    borderTopColor: borderColor['--t-border-color-medium'],
+    borderTopStyle: 'solid',
+    bottom: 0,
+    left: 0,
     right: 0,
   },
   panelWindowed: {
@@ -622,21 +622,23 @@ const styles = stylex.create({
   tabList: {
     backgroundColor: background['--t-background-secondary'],
     flexShrink: 0,
-    paddingLeft: spacing['--t-spacing-2'],
     transitionDuration,
     transitionProperty: {
       default: 'height',
       [media.reducedMotion]: 'none',
     },
     transitionTimingFunction: logConsoleEasing.standard,
+    paddingLeft: spacing['--t-spacing-2'],
     '::after': {
       backgroundColor: borderColor['--t-border-color-medium'],
     },
   },
   activeSource: {
     display: 'flex',
-    flex: 1,
+    flexBasis: '0%',
     flexDirection: 'column',
+    flexGrow: 1,
+    flexShrink: 1,
     minWidth: 0,
   },
   activeSourceHiddenWhenNarrow: {

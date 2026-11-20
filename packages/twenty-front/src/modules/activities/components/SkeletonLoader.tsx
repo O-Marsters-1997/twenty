@@ -5,27 +5,27 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   skeletonContainer: {
+    gap: spacing['--t-spacing-4'],
+    paddingBlock: spacing['--t-spacing-8'],
+    paddingInline: spacing['--t-spacing-8'],
     alignContent: 'flex-start',
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'column',
     flexWrap: 'wrap',
-    gap: spacing['--t-spacing-4'],
-    paddingBlock: spacing['--t-spacing-8'],
-    paddingInline: spacing['--t-spacing-8'],
     width: '100%',
   },
   skeletonColumn: {
     cornerShape: 'round',
   },
   skeletonSubSection: {
-    display: 'flex',
     gap: spacing['--t-spacing-4'],
+    display: 'flex',
   },
   skeletonSubSectionContent: {
+    gap: spacing['--t-spacing-3'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-3'],
     justifyContent: 'center',
   },
 });

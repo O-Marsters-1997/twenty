@@ -4,12 +4,12 @@ import { color } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   handle: {
-    bottom: 0,
     cursor: 'col-resize',
     position: 'absolute',
+    zIndex: 1,
+    bottom: 0,
     top: 0,
     width: '10px',
-    zIndex: 1,
   },
   handleLeft: {
     left: '-1px',
@@ -19,8 +19,8 @@ const styles = stylex.create({
   },
   indicator: {
     backgroundColor: color['--t-color-blue'],
-    bottom: 0,
     position: 'absolute',
+    bottom: 0,
     top: 0,
     width: '2px',
   },

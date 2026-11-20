@@ -12,10 +12,10 @@ type OTPFormValues = {
 
 const styles = stylex.create({
   oTPContainer: {
-    display: 'flex',
     gap: spacing['--t-spacing-1'],
-    marginBottom: spacing['--t-spacing-8'],
+    display: 'flex',
     opacity: { default: null, ':has(:disabled)': '0.3' },
+    marginBottom: spacing['--t-spacing-8'],
   },
 });
 

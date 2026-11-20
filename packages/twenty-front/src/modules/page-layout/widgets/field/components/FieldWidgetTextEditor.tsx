@@ -13,10 +13,10 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 const styles = stylex.create({
   container: {
     boxSizing: 'border-box',
-    paddingTop: spacing['--t-spacing-4'],
-    paddingRight: spacing['--t-spacing-4'],
     paddingBottom: spacing['--t-spacing-4'],
     paddingLeft: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingTop: spacing['--t-spacing-4'],
     width: '100%',
   },
 });

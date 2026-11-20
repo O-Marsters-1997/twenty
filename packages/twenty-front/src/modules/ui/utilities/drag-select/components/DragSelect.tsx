@@ -25,20 +25,15 @@ type Position = {
 
 const styles = stylex.create({
   selection: {
-    backgroundColor: color['--t-color-blue7'],
     borderColor: color['--t-color-blue3'],
     borderStyle: 'solid',
     borderWidth: '1px',
+    backgroundColor: color['--t-color-blue7'],
     opacity: 0.2,
     position: 'absolute',
     zIndex: 99,
   },
-  selectionBox: (
-    top: number,
-    left: number,
-    width: number,
-    height: number,
-  ) => ({
+  selectionBox: (top: number, left: number, width: number, height: number) => ({
     height: `${height}px`,
     left: `${left}px`,
     top: `${top}px`,

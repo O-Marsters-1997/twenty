@@ -7,7 +7,11 @@ import { Avatar } from 'twenty-ui/primitives/data-display';
 import { REACT_APP_SERVER_BASE_URL } from '~/config';
 import { useRedirectToDefaultDomain } from '@/domain-manager/hooks/useRedirectToDefaultDomain';
 import * as stylex from '@stylexjs/stylex';
-import { background, borderRadius, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  background,
+  borderRadius,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type LogoProps = {
   primaryLogo?: string | null;
@@ -24,32 +28,32 @@ const styles = stylex.create({
     width: '100%',
   },
   container: {
+    position: 'relative',
     height: spacing['--t-spacing-12'],
     marginBottom: spacing['--t-spacing-4'],
     marginTop: spacing['--t-spacing-4'],
-    position: 'relative',
     width: spacing['--t-spacing-12'],
   },
   secondaryLogo: {
+    borderBottomLeftRadius: borderRadius['--t-border-radius-xs'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-xs'],
     borderTopLeftRadius: borderRadius['--t-border-radius-xs'],
     borderTopRightRadius: borderRadius['--t-border-radius-xs'],
-    borderBottomRightRadius: borderRadius['--t-border-radius-xs'],
-    borderBottomLeftRadius: borderRadius['--t-border-radius-xs'],
     height: spacing['--t-spacing-6'],
     width: spacing['--t-spacing-6'],
   },
   secondaryLogoContainer: {
     alignItems: 'center',
     backgroundColor: background['--t-background-primary'],
-    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
-    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
-    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
-    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
-    bottom: `calc(-1 * ${spacing['--t-spacing-3']})`,
     display: 'flex',
-    height: spacing['--t-spacing-7'],
     justifyContent: 'center',
     position: 'absolute',
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    bottom: `calc(-1 * ${spacing['--t-spacing-3']})`,
+    height: spacing['--t-spacing-7'],
     right: `calc(-1 * ${spacing['--t-spacing-3']})`,
     width: spacing['--t-spacing-7'],
   },

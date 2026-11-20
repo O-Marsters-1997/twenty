@@ -3,9 +3,9 @@ import { color, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   group: {
+    gap: spacing['--t-spacing-2'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-2'],
   },
   groupHeading: {
     color: color['--t-color-gray10'],

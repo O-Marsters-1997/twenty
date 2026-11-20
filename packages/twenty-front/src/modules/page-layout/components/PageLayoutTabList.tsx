@@ -51,15 +51,15 @@ import { mergeClassName } from '@/page-layout/utils/mergeClassName';
 
 const styles = stylex.create({
   nodeDimension: { minWidth: 0 },
-  identifierBarTrack: { flexGrow: 1, flexShrink: 1, flexBasis: '0%' },
+  identifierBarTrack: { flexBasis: '0%', flexGrow: 1, flexShrink: 1 },
   container: {
     boxSizing: 'border-box',
     display: 'flex',
-    height: 'var(--tab-list-row-height)',
     justifyContent: 'flex-start',
-    paddingLeft: spacing['--t-spacing-2'],
     position: 'relative',
     userSelect: 'none',
+    height: 'var(--tab-list-row-height)',
+    paddingLeft: spacing['--t-spacing-2'],
     width: '100%',
   },
   containerStandalone: {
@@ -67,12 +67,12 @@ const styles = stylex.create({
     paddingRight: 0,
     '::after': {
       backgroundColor: borderColor['--t-border-color-light'],
-      bottom: 0,
       content: '""',
       display: 'block',
+      position: 'absolute',
+      bottom: 0,
       height: 1,
       left: 0,
-      position: 'absolute',
       right: 0,
     },
   },

@@ -17,9 +17,9 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   container: {
+    gap: spacing['--t-spacing-1'],
     display: 'flex',
     flexDirection: 'row',
-    gap: spacing['--t-spacing-1'],
     justifyContent: 'space-between',
   },
 });

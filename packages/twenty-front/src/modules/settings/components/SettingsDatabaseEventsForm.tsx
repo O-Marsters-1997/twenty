@@ -16,9 +16,9 @@ const ACTION_MOBILE_WIDTH = 140;
 
 const styles = stylex.create({
   filterRow: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     display: 'grid',
-    gap: spacing['--t-spacing-2'],
     marginBottom: spacing['--t-spacing-2'],
   },
   filterRowDesktop: {

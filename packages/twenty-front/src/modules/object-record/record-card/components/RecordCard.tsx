@@ -14,19 +14,19 @@ const styles = stylex.create({
   card: {
     '--record-card-background-color': {
       default: background['--t-background-secondary'],
-      ':is([data-selected="true"])': accent['--t-accent-quaternary'],
-      ':is([data-focused="true"])': background['--t-background-tertiary'],
       ':is([data-active="true"])': accent['--t-accent-quaternary'],
+      ':is([data-focused="true"])': background['--t-background-tertiary'],
+      ':is([data-selected="true"])': accent['--t-accent-quaternary'],
     },
-    backgroundColor: 'var(--record-card-background-color)',
     borderColor: {
       default: borderColor['--t-border-color-medium'],
-      ':hover': borderColor['--t-border-color-strong'],
       ':is([data-active="true"])': color['--t-color-blue7'],
+      ':hover': borderColor['--t-border-color-strong'],
     },
     borderRadius: borderRadius['--t-border-radius-sm'],
     borderStyle: 'solid',
     borderWidth: '1px',
+    backgroundColor: 'var(--record-card-background-color)',
     color: fontColor['--t-font-color-primary'],
     cursor: 'pointer',
     width: '100%',

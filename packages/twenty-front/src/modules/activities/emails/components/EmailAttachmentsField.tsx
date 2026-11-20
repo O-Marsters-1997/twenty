@@ -11,10 +11,10 @@ type EmailAttachmentsFieldProps = {
 
 const styles = stylex.create({
   chipsContainer: {
+    gap: spacing['--t-spacing-1'],
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: spacing['--t-spacing-1'],
   },
 });
 

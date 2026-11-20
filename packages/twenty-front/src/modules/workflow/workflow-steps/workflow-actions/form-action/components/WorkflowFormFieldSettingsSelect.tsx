@@ -18,14 +18,14 @@ type WorkflowFormFieldSettingsSelectProps = {
 
 const styles = stylex.create({
   formFieldSettingsSelect: {
+    gap: spacing['--t-spacing-2'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-2'],
   },
   rowContainer: {
+    gap: spacing['--t-spacing-2'],
     display: 'flex',
     flexDirection: 'row',
-    gap: spacing['--t-spacing-2'],
   },
 });
 

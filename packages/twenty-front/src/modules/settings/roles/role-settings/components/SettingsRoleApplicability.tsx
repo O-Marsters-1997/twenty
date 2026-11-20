@@ -14,26 +14,26 @@ import {
 
 const styles = stylex.create({
   checkboxContainer: {
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    paddingBlock: spacing['--t-spacing-1'],
+    paddingInline: spacing['--t-spacing-1'],
+    transition: `background-color calc(${animationDuration['--t-animation-duration-normal']} * 1s) ease`,
     alignItems: 'center',
     backgroundColor: {
       default: null,
       ':hover': backgroundTransparent['--t-background-transparent-light'],
     },
-    borderRadius: borderRadius['--t-border-radius-sm'],
     cursor: 'pointer',
     display: 'flex',
     justifyContent: 'space-between',
-    paddingBlock: spacing['--t-spacing-1'],
-    paddingInline: spacing['--t-spacing-1'],
-    transition: `background-color calc(${animationDuration['--t-animation-duration-normal']} * 1s) ease`,
   },
   checkboxContainerDisabled: {
     cursor: 'not-allowed',
   },
   checkboxLabel: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
   },
 });
 

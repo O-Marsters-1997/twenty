@@ -4,13 +4,13 @@ import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   threadMessage: {
-    borderBottomColor: borderColor['--t-border-color-light'],
-    borderBottomStyle: 'solid',
-    borderBottomWidth: '1px',
+    paddingBlock: spacing['--t-spacing-4'],
     cursor: 'auto',
     display: 'flex',
     flexDirection: 'column',
-    paddingBlock: spacing['--t-spacing-4'],
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
   },
   threadMessageWithoutBottomBorder: {
     borderBottomStyle: 'none',
@@ -19,12 +19,12 @@ const styles = stylex.create({
     cursor: 'pointer',
   },
   header: {
+    paddingInline: spacing['--t-spacing-2'],
     cursor: 'auto',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
     marginBottom: spacing['--t-spacing-2'],
-    paddingInline: spacing['--t-spacing-2'],
   },
   headerClickable: {
     cursor: 'pointer',

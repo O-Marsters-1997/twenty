@@ -16,7 +16,9 @@
     font-style: normal !important;
   }
 
-  [data-block-editor] .editor .bn-inline-content:has(> .ProseMirror-trailingBreak):before {
+  [data-block-editor]
+    .editor
+    .bn-inline-content:has(> .ProseMirror-trailingBreak):before {
     font-style: normal;
   }
 
@@ -31,7 +33,10 @@
     width: 20px;
   }
 
-  [data-block-editor] .bn-block-content[data-content-type='checkListItem'] > div > div {
+  [data-block-editor]
+    .bn-block-content[data-content-type='checkListItem']
+    > div
+    > div {
     align-items: center;
     display: flex;
   }
@@ -99,7 +104,10 @@
       0px 2px 4px rgba(0, 0, 0, 0.04);
   }
 
-  [data-block-editor] .bn-side-menu .mantine-UnstyledButton-root:not(.mantine-Menu-item) svg {
+  [data-block-editor]
+    .bn-side-menu
+    .mantine-UnstyledButton-root:not(.mantine-Menu-item)
+    svg {
     height: 16px;
     width: 16px;
   }

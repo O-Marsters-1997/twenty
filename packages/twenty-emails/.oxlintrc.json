@@ -22,10 +22,8 @@
     "import/no-duplicates": "error",
 
     "react/no-unescaped-entities": "off",
-    "react/prop-types": "off",
     "react/jsx-key": "off",
     "react/display-name": "off",
-    "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
     "react/jsx-no-useless-fragment": "off",
     "react/jsx-props-no-spreading": ["error", { "explicitSpread": "ignore" }],

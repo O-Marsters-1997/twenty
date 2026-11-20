@@ -13,21 +13,21 @@ const ROW_MIN_HEIGHT = '40px';
 
 const styles = stylex.create({
   row: {
+    gap: spacing['--t-spacing-2'],
+    paddingBlock: spacing['--t-spacing-1'],
     alignItems: 'center',
+    boxSizing: 'border-box',
+    cursor: 'default',
+    display: 'flex',
+    paddingInlineEnd: spacing['--t-spacing-2'],
+    paddingInlineStart: spacing['--t-spacing-3'],
     borderBottomColor: borderColor['--t-border-color-light'],
     borderBottomStyle: {
       default: 'solid',
       ':last-of-type': 'none',
     },
     borderBottomWidth: '1px',
-    boxSizing: 'border-box',
-    cursor: 'default',
-    display: 'flex',
-    gap: spacing['--t-spacing-2'],
     minHeight: ROW_MIN_HEIGHT,
-    paddingBlock: spacing['--t-spacing-1'],
-    paddingInlineEnd: spacing['--t-spacing-2'],
-    paddingInlineStart: spacing['--t-spacing-3'],
     width: '100%',
   },
   rowClickable: {
@@ -42,9 +42,9 @@ const styles = stylex.create({
   },
   labelMinWidth: (minWidth: string) => ({ minWidth }),
   content: {
+    flex: '1',
     alignItems: 'center',
     display: 'flex',
-    flex: '1',
     minWidth: '0',
   },
   trailing: {

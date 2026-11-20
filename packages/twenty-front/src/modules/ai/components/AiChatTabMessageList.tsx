@@ -23,23 +23,23 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   preambleOutsideScrollContainer: {
+    padding: spacing['--t-spacing-4'],
     display: 'flex',
     flexDirection: 'column',
     flexShrink: 0,
-    padding: spacing['--t-spacing-4'],
   },
   messageListContent: {
+    padding: spacing['--t-spacing-4'],
+    gap: spacing['--t-spacing-2'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-2'],
-    padding: spacing['--t-spacing-4'],
   },
   scrollWrapperContainer: {
-    display: 'flex',
     flex: '1',
+    display: 'flex',
     flexDirection: 'column',
-    overflowY: 'auto',
     position: 'relative',
+    overflowY: 'auto',
     width: '100%',
   },
 });

@@ -35,22 +35,21 @@ import { media } from 'twenty-ui/theme/constants.stylex';
 
 const styles = stylex.create({
   inputArea: {
+    gap: spacing['--t-spacing-2'],
+    paddingBlock: spacing['--t-spacing-3'],
+    paddingInline: spacing['--t-spacing-3'],
     alignItems: 'flex-end',
     backgroundColor: background['--t-background-primary'],
     display: 'flex',
     flexDirection: 'column',
     flexShrink: 0,
-    gap: spacing['--t-spacing-2'],
     marginTop: 'auto',
-    paddingBlock: spacing['--t-spacing-3'],
-    paddingInline: spacing['--t-spacing-3'],
   },
   inputAreaMobile: {
     paddingBlock: 0,
   },
   inputBox: {
-    backgroundColor:
-      backgroundTransparent['--t-background-transparent-lighter'],
+    padding: spacing['--t-spacing-2'],
     borderColor: {
       default: borderColor['--t-border-color-medium'],
       ':focus-within': color['--t-color-blue'],
@@ -58,6 +57,9 @@ const styles = stylex.create({
     borderRadius: `calc(${borderRadius['--t-border-radius-md']} + ${spacing['--t-spacing-1']})`,
     borderStyle: 'solid',
     borderWidth: '1px',
+    gap: spacing['--t-spacing-2'],
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
     boxShadow: {
       default: null,
       ':focus-within': `0px 0px 0px 3px ${colorTransparent['--t-color-transparent-blue2']}`,
@@ -65,17 +67,15 @@ const styles = stylex.create({
     boxSizing: 'border-box',
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-2'],
     minHeight: '140px',
-    padding: spacing['--t-spacing-2'],
     width: '100%',
   },
   inputBoxMobile: {
     minHeight: 'auto',
   },
   editorWrapper: {
-    display: 'flex',
     flex: '1',
+    display: 'flex',
     flexDirection: 'column',
     minHeight: 0,
   },
@@ -95,8 +95,8 @@ const styles = stylex.create({
     transitionProperty: 'none',
   },
   messageListPlaceholder: {
-    display: 'flex',
     flex: '1',
+    display: 'flex',
     flexDirection: 'column',
   },
 });

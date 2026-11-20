@@ -59,12 +59,12 @@ export const StandaloneRichTextWidget = ({
 
 const styles = stylex.create({
   container: {
+    overflow: 'hidden',
     boxSizing: 'border-box',
     display: 'flex',
     flexDirection: 'column',
-    height: '100%',
-    overflow: 'hidden',
     paddingInlineStart: 0,
+    height: '100%',
     width: '100%',
   },
   containerEditMode: { paddingInlineStart: spacing['--t-spacing-5'] },

@@ -39,9 +39,9 @@ const styles = stylex.create({
     width: '100%',
   },
   addGroupButtonContainer: {
-    borderWidth: '1px',
-    borderStyle: 'solid',
     borderColor: 'transparent',
+    borderStyle: 'solid',
+    borderWidth: '1px',
   },
 });
 

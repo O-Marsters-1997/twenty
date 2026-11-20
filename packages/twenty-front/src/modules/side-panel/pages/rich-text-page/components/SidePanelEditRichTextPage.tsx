@@ -25,12 +25,12 @@ const RichTextFieldEditor = lazy(() =>
 const styles = stylex.create({
   container: {
     boxSizing: 'border-box',
-    marginTop: spacing['--t-spacing-4'],
-    marginRight: '-8px',
-    marginBottom: spacing['--t-spacing-4'],
-    marginLeft: '-8px',
     paddingInlineEnd: '0px',
     paddingInlineStart: '44px',
+    marginBottom: spacing['--t-spacing-4'],
+    marginLeft: '-8px',
+    marginRight: '-8px',
+    marginTop: spacing['--t-spacing-4'],
     width: '100%',
   },
 });

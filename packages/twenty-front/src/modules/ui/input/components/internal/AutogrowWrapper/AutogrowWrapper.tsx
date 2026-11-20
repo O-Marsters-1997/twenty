@@ -22,8 +22,8 @@ export const AutogrowWrapper = ({
 
 const styles = stylex.create({
   container: {
-    maxWidth: '100%',
     position: 'relative',
+    maxWidth: '100%',
   },
   nodeWrapper: {
     pointerEvents: 'none',
@@ -31,8 +31,8 @@ const styles = stylex.create({
     whiteSpace: 'pre',
   },
   childWrapper: {
-    left: 0,
     position: 'absolute',
+    left: 0,
     top: 0,
     width: '100%',
   },

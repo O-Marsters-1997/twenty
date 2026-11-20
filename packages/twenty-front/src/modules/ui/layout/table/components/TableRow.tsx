@@ -12,16 +12,19 @@ import { media } from 'twenty-ui/theme/constants.stylex';
 
 const styles = stylex.create({
   row: {
+    borderRadius: borderRadius['--t-border-radius-md'],
+    textDecoration: 'none',
     backgroundColor: {
       default: 'transparent',
       ':hover': 'transparent',
     },
-    borderRadius: borderRadius['--t-border-radius-md'],
     cursor: 'default',
     display: 'grid',
     gridAutoColumns: '1fr',
     gridAutoFlow: 'column',
     gridTemplateColumns: 'none',
+    transitionDuration: `calc(${animationDuration['--t-animation-duration-normal']} * 1s)`,
+    transitionProperty: 'background-color',
     height: 'auto',
     marginBottom: {
       default: null,
@@ -31,9 +34,6 @@ const styles = stylex.create({
       default: null,
       ':first-child:not(:has([data-table-header]))': spacing['--t-spacing-2'],
     },
-    textDecoration: 'none',
-    transitionDuration: `calc(${animationDuration['--t-animation-duration-normal']} * 1s)`,
-    transitionProperty: 'background-color',
     width: '100%',
   },
   selected: {

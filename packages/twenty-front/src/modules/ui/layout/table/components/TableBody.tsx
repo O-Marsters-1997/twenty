@@ -4,15 +4,15 @@ import { type ComponentProps } from 'react';
 
 const styles = stylex.create({
   body: {
-    display: 'flex',
-    flexDirection: 'column',
     gap: '2px',
     paddingBlock: spacing['--t-spacing-2'],
     paddingInline: 0,
+    display: 'flex',
+    flexDirection: 'column',
   },
 });
 
-export const TableBody = ({ className, ...props }: ComponentProps<'div'>) => {
+export const TableBody = ({ className, ...props }: TableBodyProps<'div'>) => {
   const rootProps = stylex.props(styles.body);
 
   return (

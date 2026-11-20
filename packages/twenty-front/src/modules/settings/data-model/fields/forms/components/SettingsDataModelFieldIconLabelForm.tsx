@@ -46,24 +46,24 @@ type SettingsDataModelFieldIconLabelFormValues = z.infer<
 
 const styles = stylex.create({
   inputsContainer: {
-    display: 'flex',
     gap: spacing['--t-spacing-2'],
+    display: 'flex',
     marginBottom: spacing['--t-spacing-1'],
     width: '100%',
   },
   advancedSettingsSectionInputWrapper: {
-    display: 'flex',
     flex: '1',
-    flexDirection: 'column',
     gap: spacing['--t-spacing-4'],
+    display: 'flex',
+    flexDirection: 'column',
     width: '100%',
   },
   advancedSettingsOuterContainer: {
     paddingTop: spacing['--t-spacing-4'],
   },
   advancedSettingsContainer: {
-    display: 'flex',
     gap: spacing['--t-spacing-2'],
+    display: 'flex',
     position: 'relative',
     width: '100%',
   },

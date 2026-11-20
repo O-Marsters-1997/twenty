@@ -12,7 +12,7 @@ import {
 
 const styles = stylex.create({
   textarea: {
-    backgroundColor: 'transparent',
+    padding: spacing['--t-spacing-2'],
     borderColor: {
       default: borderColor['--t-border-color-light'],
       ':focus-visible': color['--t-color-blue'],
@@ -20,12 +20,12 @@ const styles = stylex.create({
     borderRadius: borderRadius['--t-border-radius-sm'],
     borderStyle: 'solid',
     borderWidth: '1px',
+    outline: 'none',
+    backgroundColor: 'transparent',
     color: fontColor['--t-font-color-primary'],
     fontFamily: 'inherit',
     fontSize: fontSize['--t-font-size-md'],
     lineHeight: 1.5,
-    outline: 'none',
-    padding: spacing['--t-spacing-2'],
     resize: 'none',
   },
 });

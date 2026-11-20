@@ -6,10 +6,10 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   skeletonContainer: {
-    display: 'flex',
-    flex: '1',
-    flexDirection: 'column',
     padding: spacing['--t-spacing-3'],
+    flex: '1',
+    display: 'flex',
+    flexDirection: 'column',
   },
 });
 

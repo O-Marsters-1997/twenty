@@ -46,24 +46,24 @@ const styles = stylex.create({
     boxSizing: 'border-box',
     columnGap: spacing['--t-spacing-2'],
     display: 'flex',
-    height: '14px',
     justifyContent: 'space-between',
+    height: '14px',
   },
   statusIconsContainer: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     boxSizing: 'border-box',
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
     justifyContent: 'flex-end',
   },
   colorIcon: (backgroundColor: string) => ({
+    borderRadius: borderRadius['--t-border-radius-sm'],
     alignItems: 'center',
     backgroundColor,
-    borderRadius: borderRadius['--t-border-radius-sm'],
     boxSizing: 'border-box',
     display: 'flex',
-    height: '14px',
     justifyContent: 'center',
+    height: '14px',
     width: '14px',
   }),
   iterationCounter: (color: string) => ({
@@ -72,8 +72,8 @@ const styles = stylex.create({
     fontWeight: fontWeight['--t-font-weight-medium'],
   }),
   rightPartContainer: {
-    display: 'flex',
     gap: spacing['--t-spacing-1'],
+    display: 'flex',
   },
 });
 

@@ -13,19 +13,19 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   container: {
+    gap: spacing['--t-spacing-2'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-2'],
   },
   criterion: {
+    gap: spacing['--t-spacing-2'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-2'],
   },
   nameRow: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'end',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
   },
   growingField: {
     flex: '1',

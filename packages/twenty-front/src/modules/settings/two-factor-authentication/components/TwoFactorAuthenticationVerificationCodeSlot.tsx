@@ -16,16 +16,15 @@ const caretBlink = stylex.keyframes({
 
 const styles = stylex.create({
   slot: {
-    alignItems: 'center',
-    backgroundColor:
-      backgroundTransparent['--t-background-transparent-lighter'],
     borderColor: borderColor['--t-border-color-medium'],
     borderRadius: borderRadius['--t-border-radius-sm'],
     borderStyle: 'solid',
     borderWidth: '1px',
+    alignItems: 'center',
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
     display: 'flex',
     fontSize: fontSize['--t-font-size-md'],
-    height: '32px',
     justifyContent: 'center',
     outlineColor: borderColor['--t-border-color-medium'],
     outlineStyle: 'none',
@@ -33,6 +32,7 @@ const styles = stylex.create({
     position: 'relative',
     transitionDuration: '0.3s',
     transitionProperty: 'all',
+    height: '32px',
     width: '24px',
   },
   slotActive: {
@@ -40,13 +40,13 @@ const styles = stylex.create({
     outlineWidth: '1px',
   },
   caretContainer: {
+    inset: 0,
     alignItems: 'center',
     animationDuration: '1s',
     animationIterationCount: 'infinite',
     animationName: caretBlink,
     animationTimingFunction: 'steps(2, start)',
     display: 'flex',
-    inset: 0,
     justifyContent: 'center',
     pointerEvents: 'none',
     position: 'absolute',

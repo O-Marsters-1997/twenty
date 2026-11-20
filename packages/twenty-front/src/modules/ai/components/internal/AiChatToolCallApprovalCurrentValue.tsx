@@ -15,14 +15,14 @@ import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   currentValue: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     color: fontColor['--t-font-color-tertiary'],
     display: 'flex',
     flexWrap: 'wrap',
     fontSize: fontSize['--t-font-size-sm'],
-    gap: spacing['--t-spacing-1'],
-    minWidth: '0',
     overflowWrap: 'anywhere',
+    minWidth: '0',
   },
 });
 

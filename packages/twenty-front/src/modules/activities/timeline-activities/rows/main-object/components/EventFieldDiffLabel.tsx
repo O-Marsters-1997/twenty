@@ -9,10 +9,10 @@ type EventFieldDiffLabelProps = {
 
 const styles = stylex.create({
   updatedFieldContainer: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     color: fontColor['--t-font-color-tertiary'],
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
   },
   updatedFieldIconContainer: {
     alignItems: 'center',

@@ -55,7 +55,6 @@
     "jsdom": "^30.0.1",
     "lightningcss": "^1.32.0",
     "monaco-editor": "0.52.2",
-    "postcss": "^8.5.15",
     "prettier": "^3.1.1",
     "react": "^19.2.0",
     "react-docgen-typescript": "^2.2.2",
@@ -215,14 +214,19 @@
       "import": "./dist/theme.mjs",
       "require": "./dist/theme.cjs"
     },
-    "./theme/tokens.stylex": "./src/theme/tokens.stylex.ts",
-    "./theme/themes.stylex": "./src/theme/themes.stylex.ts",
-    "./theme/constants.stylex": "./src/theme/constants.stylex.ts",
+    "./third-party-styles": {
+      "types": "./dist/third-party-styles/index.d.ts",
+      "import": "./dist/third-party-styles.mjs",
+      "require": "./dist/third-party-styles.cjs"
+    },
     "./utilities": {
       "types": "./dist/utilities/index.d.ts",
       "import": "./dist/utilities.mjs",
       "require": "./dist/utilities.cjs"
-    }
+    },
+    "./theme/tokens.stylex": "./src/theme/tokens.stylex.ts",
+    "./theme/themes.stylex": "./src/theme/themes.stylex.ts",
+    "./theme/constants.stylex": "./src/theme/constants.stylex.ts"
   },
   "typesVersions": {
     "*": {
@@ -291,6 +295,9 @@
       ],
       "theme": [
         "dist/theme/index.d.ts"
+      ],
+      "third-party-styles": [
+        "dist/third-party-styles/index.d.ts"
       ],
       "utilities": [
         "dist/utilities/index.d.ts"

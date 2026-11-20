@@ -32,14 +32,14 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   question: {
+    gap: spacing['--t-spacing-3'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-3'],
   },
   nameRow: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'end',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
   },
   growingField: {
     flex: '1',

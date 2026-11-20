@@ -91,7 +91,8 @@ export const FileUploadProvider = ({
         type="file"
         multiple={uploadOptions?.multiple ?? false}
         accept={uploadOptions?.accept}
-        onChange={handleFileInputChange} {...stylex.props(styles.fileInput)}
+        onChange={handleFileInputChange}
+        {...stylex.props(styles.fileInput)}
       />
     </FileUploadContext.Provider>
   );

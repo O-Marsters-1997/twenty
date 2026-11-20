@@ -22,19 +22,19 @@ describe('workspace route objects', () => {
         ...collectRouteIds(route.children ?? []),
       ]);
 
-    expect(collectRouteIds(createWorkspaceRouteObjects({}))).toEqual([]);
+    expect(collectRouteIds(createWorkspaceRouteObjects())).toEqual([]);
   });
 
   it('can be embedded in a data router without route id collisions', () => {
     const router = createMemoryRouter([
-      { children: createWorkspaceRouteObjects({}) },
+      { children: createWorkspaceRouteObjects() },
     ]);
 
     router.dispose();
   });
 
   it('shares one route definition while exposing only verified panel pages', () => {
-    const routeObjects = createWorkspaceRouteObjects({});
+    const routeObjects = createWorkspaceRouteObjects();
     const mainRoutes = getWorkspaceRouteObjectsForSurface(routeObjects, 'main');
     const panelRoutes = getWorkspaceRouteObjectsForSurface(
       routeObjects,
@@ -58,7 +58,7 @@ describe('workspace route objects', () => {
   });
 
   it('preserves settings guards while recursively filtering their leaves', () => {
-    const routeObjects = createWorkspaceRouteObjects({});
+    const routeObjects = createWorkspaceRouteObjects();
     const mainRoutes = getWorkspaceRouteObjectsForSurface(routeObjects, 'main');
     const panelRoutes = getWorkspaceRouteObjectsForSurface(
       routeObjects,
@@ -84,13 +84,12 @@ describe('workspace route objects', () => {
   it.each([
     '/settings/objects',
     '/settings/objects/companies',
-    '/settings/objects/companies/name',
     '/settings/members#roles',
     '/settings/members/roles/role-id',
   ])('hosts the complementary settings leaf %s', (path) => {
     expect(
       isWorkspaceLocationAvailableOnSurface(
-        createWorkspaceRouteObjects({}),
+        createWorkspaceRouteObjects(),
         'side-panel',
         path,
       ),
@@ -101,6 +100,7 @@ describe('workspace route objects', () => {
     '/settings',
     '/settings/',
     '/settings/profile',
+    '/settings/objects/companies/name',
     '/settings/api-webhooks/graphql',
     '/settings/not-a-real-page',
   ])('keeps the unsupported settings leaf %s on main', (path) => {
@@ -123,7 +123,7 @@ describe('workspace route objects', () => {
   ])('allows the stateless panel route %s to expand', (path) => {
     expect(
       isWorkspaceLocationExpandableFromSidePanel(
-        createWorkspaceRouteObjects({}),
+        createWorkspaceRouteObjects(),
         path,
       ),
     ).toBe(true);
@@ -145,7 +145,7 @@ describe('workspace route objects', () => {
   ])('keeps generic expansion off for the stateful route %s', (path) => {
     expect(
       isWorkspaceLocationExpandableFromSidePanel(
-        createWorkspaceRouteObjects({}),
+        createWorkspaceRouteObjects(),
         path,
       ),
     ).toBe(false);
@@ -154,7 +154,7 @@ describe('workspace route objects', () => {
   it('allows the core workflow show page to expand', () => {
     expect(
       isWorkspaceLocationExpandableFromSidePanel(
-        createWorkspaceRouteObjects({}),
+        createWorkspaceRouteObjects(),
         '/workflow/core-workflow-id',
       ),
     ).toBe(true);

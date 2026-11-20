@@ -10,11 +10,11 @@ type PropertyBoxProps = {
 
 const styles = stylex.create({
   container: {
-    alignSelf: 'stretch',
     borderRadius: borderRadius['--t-border-radius-md'],
+    gap: spacing['--t-spacing-2'],
+    alignSelf: 'stretch',
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-2'],
     paddingBottom: spacing['--t-spacing-3'],
     paddingLeft: spacing['--t-spacing-3'],
     paddingRight: spacing['--t-spacing-2'],

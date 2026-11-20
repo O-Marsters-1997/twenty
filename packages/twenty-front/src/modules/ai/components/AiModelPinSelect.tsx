@@ -15,9 +15,9 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   row: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'flex-end',
     display: 'grid',
-    gap: spacing['--t-spacing-2'],
     gridTemplateColumns: 'minmax(0, 1fr)',
   },
   rowWithEffortSelect: {

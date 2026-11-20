@@ -20,11 +20,11 @@ import {
 
 const styles = stylex.create({
   queueContainer: {
-    display: 'flex',
-    flexDirection: 'column',
     gap: spacing['--t-spacing-1'],
     paddingBlock: 0,
     paddingInline: spacing['--t-spacing-3'],
+    display: 'flex',
+    flexDirection: 'column',
   },
   queueLabel: {
     color: fontColor['--t-font-color-light'],
@@ -32,21 +32,21 @@ const styles = stylex.create({
     paddingLeft: spacing['--t-spacing-1'],
   },
   queuedItem: {
-    alignItems: 'center',
     background: background['--t-background-tertiary'],
-    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
-    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
-    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
-    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    gap: spacing['--t-spacing-2'],
+    alignItems: 'center',
     color: fontColor['--t-font-color-secondary'],
     display: 'flex',
     fontSize: fontSize['--t-font-size-md'],
-    gap: spacing['--t-spacing-2'],
     justifyContent: 'space-between',
-    paddingTop: spacing['--t-spacing-1'],
-    paddingRight: spacing['--t-spacing-2'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
     paddingBottom: spacing['--t-spacing-1'],
     paddingLeft: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-1'],
   },
   queuedText: {
     overflow: 'hidden',

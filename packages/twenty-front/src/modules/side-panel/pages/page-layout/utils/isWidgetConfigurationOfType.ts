@@ -11,6 +11,7 @@ import {
   type FieldsConfiguration,
   type FilesConfiguration,
   type FormFieldConfiguration,
+  type FrontComponentConfiguration,
   type IframeConfiguration,
   type LineChartConfiguration,
   type MessageCampaignBodyConfiguration,
@@ -137,6 +138,12 @@ type WidgetConfigurationTypenameMap = {
     'configurationType'
   > & {
     configurationType: WidgetConfigurationType.WORKFLOW_VERSION;
+  };
+  FrontComponentConfiguration: Omit<
+    FrontComponentConfiguration,
+    'configurationType'
+  > & {
+    configurationType: WidgetConfigurationType.FRONT_COMPONENT;
   };
 };
 

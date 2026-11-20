@@ -6,17 +6,17 @@ import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   row: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'flex-start',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
   },
   label: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     color: fontColor['--t-font-color-tertiary'],
     display: 'flex',
     flexShrink: '0',
     fontSize: fontSize['--t-font-size-sm'],
-    gap: spacing['--t-spacing-1'],
     height: spacing['--t-spacing-6'],
     width: spacing['--t-spacing-24'],
   },
@@ -26,11 +26,11 @@ const styles = stylex.create({
     whiteSpace: 'nowrap',
   },
   value: {
+    flex: '1',
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     display: 'flex',
-    flex: '1',
     flexWrap: 'wrap',
-    gap: spacing['--t-spacing-1'],
     minHeight: spacing['--t-spacing-6'],
     minWidth: '0',
   },

@@ -4,17 +4,17 @@ import { type ComponentProps } from 'react';
 
 const styles = stylex.create({
   cell: {
+    padding: `0 ${spacing['--t-spacing-2']}`,
+    overflow: 'visible',
     alignItems: 'center',
     color: fontColor['--t-font-color-secondary'],
     cursor: 'inherit',
     display: 'flex',
-    height: spacing['--t-spacing-8'],
     justifyContent: 'flex-start',
-    overflow: 'visible',
-    padding: `0 ${spacing['--t-spacing-2']}`,
     textAlign: 'left',
     textOverflow: 'clip',
     whiteSpace: 'normal',
+    height: spacing['--t-spacing-8'],
   },
   clickable: { cursor: 'pointer' },
   alignCenter: { justifyContent: 'center', textAlign: 'center' },

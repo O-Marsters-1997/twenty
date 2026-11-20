@@ -3,22 +3,27 @@ import { type IconComponent } from 'twenty-ui/icon';
 import { useTheme } from 'twenty-ui/theme';
 import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
 import * as stylex from '@stylexjs/stylex';
-import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   fieldRow: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     display: 'grid',
-    gap: spacing['--t-spacing-1'],
     gridTemplateColumns: '92px minmax(0, 1fr)',
     minHeight: '24px',
   },
   fieldLabel: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     color: fontColor['--t-font-color-tertiary'],
     display: 'flex',
     fontSize: fontSize['--t-font-size-sm'],
-    gap: spacing['--t-spacing-2'],
     minWidth: '0',
   },
   fieldValue: {

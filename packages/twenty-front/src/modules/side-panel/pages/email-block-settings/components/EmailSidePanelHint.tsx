@@ -4,9 +4,9 @@ import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   root: {
+    padding: spacing['--t-spacing-4'],
     color: fontColor['--t-font-color-tertiary'],
     fontSize: fontSize['--t-font-size-sm'],
-    padding: spacing['--t-spacing-4'],
   },
 });
 

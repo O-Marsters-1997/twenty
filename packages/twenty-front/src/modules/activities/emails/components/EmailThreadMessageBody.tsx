@@ -6,9 +6,9 @@ import { borderColor, fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 const styles = stylex.create({
   body: {
     color: fontColor['--t-font-color-primary'],
-    marginTop: spacing['--t-spacing-4'],
     overflowWrap: 'break-word',
     whiteSpace: 'pre-line',
+    marginTop: spacing['--t-spacing-4'],
   },
   link: {
     color: {

@@ -15,20 +15,20 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   container: {
+    gap: spacing['--t-spacing-2'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-2'],
   },
   fieldRow: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'stretch',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
   },
   actionButtonContainer: {
     alignItems: 'stretch',
     display: 'inline-flex',
-    height: '100%',
     justifyContent: 'center',
+    height: '100%',
   },
   actionWrapper: {
     alignItems: 'stretch',

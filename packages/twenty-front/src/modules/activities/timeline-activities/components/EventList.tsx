@@ -24,11 +24,11 @@ type EventListProps = {
 
 const styles = stylex.create({
   timelineContainer: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     alignSelf: 'stretch',
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-1'],
     justifyContent: 'flex-start',
   },
 });

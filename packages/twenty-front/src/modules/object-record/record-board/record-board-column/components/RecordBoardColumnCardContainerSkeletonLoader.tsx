@@ -11,16 +11,16 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   skeletonIconAndText: {
-    display: 'flex',
     gap: spacing['--t-spacing-1'],
+    display: 'flex',
   },
   skeletonTitle: {
     paddingLeft: spacing['--t-spacing-1'],
   },
   bodyContainer: {
+    gap: spacing['--t-spacing-0_5'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-0_5'],
     paddingBottom: '4px',
     paddingTop: '4px',
   },

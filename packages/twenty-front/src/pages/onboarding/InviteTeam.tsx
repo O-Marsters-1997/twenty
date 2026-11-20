@@ -22,17 +22,17 @@ import { IconX } from 'twenty-ui/icon';
 
 const styles = stylex.create({
   form: {
+    gap: spacing['--t-spacing-4'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-4'],
     maxWidth: '100%',
     width: onboardingLayout.contentBlockWidth,
   },
   footer: {
+    gap: spacing['--t-spacing-3'],
     alignItems: 'flex-end',
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-3'],
     maxWidth: '100%',
     width: onboardingLayout.contentBlockWidth,
   },

@@ -24,16 +24,16 @@ const styles = stylex.create({
     minHeight: '0',
   },
   threadList: {
-    display: 'flex',
     flex: '1',
+    display: 'flex',
     flexDirection: 'column',
     minHeight: '0',
     width: '100%',
   },
   sectionsContainer: {
+    gap: spacing['--t-spacing-3'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-3'],
   },
 });
 

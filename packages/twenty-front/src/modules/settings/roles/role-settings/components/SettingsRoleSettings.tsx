@@ -17,8 +17,8 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   inputsContainer: {
-    display: 'flex',
     gap: spacing['--t-spacing-2'],
+    display: 'flex',
     marginBottom: spacing['--t-spacing-2'],
     width: '100%',
   },

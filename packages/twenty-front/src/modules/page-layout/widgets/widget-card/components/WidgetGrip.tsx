@@ -72,19 +72,19 @@ export const WidgetGrip = ({ className }: WidgetGripProps) => {
 
 const styles = stylex.create({
   grip: {
+    borderRadius: borderRadius['--t-border-radius-sm'],
     alignItems: 'center',
     backgroundColor: {
       default: null,
       ':hover': background['--t-background-tertiary'],
       ':active': background['--t-background-tertiary'],
     },
-    borderRadius: borderRadius['--t-border-radius-sm'],
     boxSizing: 'border-box',
     cursor: { default: 'grab', ':active': 'grabbing' },
     display: 'flex',
-    height: 20,
     justifyContent: 'center',
     userSelect: 'none',
+    height: 20,
     width: 20,
   },
 });

@@ -18,8 +18,8 @@ const styles = stylex.create({
     justifyContent: 'center',
   },
   noteContainer: {
-    display: 'grid',
     gap: spacing['--t-spacing-4'],
+    display: 'grid',
     gridAutoRows: '1fr',
     gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
     width: '100%',

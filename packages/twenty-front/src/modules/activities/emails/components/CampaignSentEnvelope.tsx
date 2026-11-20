@@ -23,9 +23,9 @@ import { fontColor, fontSize } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   value: {
+    overflow: 'hidden',
     color: fontColor['--t-font-color-primary'],
     fontSize: fontSize['--t-font-size-md'],
-    overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
   },

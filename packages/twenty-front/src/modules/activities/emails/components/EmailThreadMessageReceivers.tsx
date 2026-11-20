@@ -13,10 +13,10 @@ const styles = stylex.create({
     color: fontColor['--t-font-color-tertiary'],
     display: 'flex',
     fontSize: fontSize['--t-font-size-xs'],
-    paddingTop: spacing['--t-spacing-2'],
     paddingBottom: spacing['--t-spacing-0'],
-    paddingRight: spacing['--t-spacing-0'],
     paddingLeft: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-0'],
+    paddingTop: spacing['--t-spacing-2'],
     width: '50%',
   },
 });

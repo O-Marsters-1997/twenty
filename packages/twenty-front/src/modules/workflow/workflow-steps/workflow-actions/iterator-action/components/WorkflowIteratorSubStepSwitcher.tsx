@@ -15,11 +15,11 @@ import { spacing, fontColor, fontWeight } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   container: {
+    paddingBlock: spacing['--t-spacing-2'],
+    paddingInline: spacing['--t-spacing-3'],
     alignItems: 'center',
     display: 'flex',
     justifyContent: 'space-between',
-    paddingBlock: spacing['--t-spacing-2'],
-    paddingInline: spacing['--t-spacing-3'],
   },
   counter: {
     color: fontColor['--t-font-color-tertiary'],

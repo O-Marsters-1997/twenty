@@ -125,9 +125,7 @@ export const SpreadsheetImportStepper = ({
     case SpreadsheetImportStepType.loading:
     default:
       return (
-        <Dialog.Body
-          {...stylex.props(styles.dialogBody)}
-        >
+        <Dialog.Body {...stylex.props(styles.dialogBody)}>
           <Loader />
         </Dialog.Body>
       );
@@ -136,14 +134,14 @@ export const SpreadsheetImportStepper = ({
 
 const styles = stylex.create({
   dialogBody: {
-    display: 'flex',
-    flexBasis: '0%',
-    flexGrow: 1,
-    flexShrink: 1,
-    flexDirection: 'column',
     paddingBlock: spacing['--t-spacing-10'],
     paddingInline: spacing['--t-spacing-10'],
     alignItems: 'center',
+    display: 'flex',
+    flexBasis: '0%',
+    flexDirection: 'column',
+    flexGrow: 1,
+    flexShrink: 1,
     justifyContent: 'center',
   },
 });

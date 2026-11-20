@@ -29,9 +29,9 @@ const styles = stylex.create({
     width: '100%',
   },
   mainContent: {
+    gap: spacing['--t-spacing-10'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-10'],
     minHeight: '200px',
   },
 });

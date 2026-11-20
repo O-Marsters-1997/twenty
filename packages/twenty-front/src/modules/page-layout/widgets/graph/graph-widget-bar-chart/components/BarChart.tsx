@@ -252,8 +252,8 @@ export const BarChart = ({
 const styles = stylex.create({
   canvasContainer: {
     cursor: 'default',
-    height: '100%',
     position: 'relative',
+    height: '100%',
     width: '100%',
   },
   clickable: { cursor: 'pointer' },

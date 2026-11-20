@@ -16,24 +16,24 @@ import {
 
 const styles = stylex.create({
   container: {
-    alignItems: 'center',
-    borderRadius: borderRadius['--t-border-radius-sm'],
-    boxSizing: 'border-box',
-    cursor: 'pointer',
-    display: 'flex',
-    gap: spacing['--t-spacing-2'],
-    height: spacing['--t-spacing-7'],
-    justifyContent: 'flex-start',
     padding: spacing['--t-spacing-1'],
-    width: '100%',
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    gap: spacing['--t-spacing-2'],
+    alignItems: 'center',
     backgroundColor: {
       default: 'transparent',
       ':hover': backgroundTransparent['--t-background-transparent-light'],
     },
+    boxSizing: 'border-box',
+    cursor: 'pointer',
+    display: 'flex',
+    justifyContent: 'flex-start',
+    height: spacing['--t-spacing-7'],
+    width: '100%',
   },
   compact: {
-    justifyContent: 'center',
     padding: 0,
+    justifyContent: 'center',
   },
   compactSize: (size: number) => ({
     height: `${size}px`,

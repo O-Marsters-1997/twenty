@@ -11,16 +11,16 @@ const styles = stylex.create({
     background: background['--t-background-secondary'],
     display: 'flex',
     flexDirection: 'column',
-    height: 'calc(100dvh / var(--t-zoom, 1))',
     isolation: 'isolate',
     position: 'relative',
+    height: 'calc(100dvh / var(--t-zoom, 1))',
     width: '100%',
   },
   backgroundLayer: {
     inset: '0',
     pointerEvents: 'none',
     position: 'absolute',
-    zIndex: '-1',
+    zIndex: -1,
   },
 });
 

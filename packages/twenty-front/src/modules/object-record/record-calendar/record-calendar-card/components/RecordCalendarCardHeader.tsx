@@ -18,13 +18,15 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   recordChipContainer: {
-    display: 'flex',
-    flex: '1 1 auto',
     overflow: 'hidden',
-    paddingTop: spacing['--t-spacing-1'],
-    paddingRight: spacing['--t-spacing-1'],
+    display: 'flex',
+    flexBasis: 'auto',
+    flexGrow: '1',
+    flexShrink: '1',
     paddingBottom: spacing['--t-spacing-1'],
     paddingLeft: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingTop: spacing['--t-spacing-1'],
   },
 });
 

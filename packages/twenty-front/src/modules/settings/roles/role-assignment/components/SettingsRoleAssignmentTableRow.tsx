@@ -24,15 +24,15 @@ const styles = stylex.create({
     flexShrink: '0',
   },
   nameCell: {
-    color: fontColor['--t-font-color-primary'],
     flex: '1',
+    color: fontColor['--t-font-color-primary'],
     minWidth: '0',
   },
   nameContainer: {
-    alignItems: 'center',
-    display: 'flex',
     gap: spacing['--t-spacing-2'],
     overflow: 'hidden',
+    alignItems: 'center',
+    display: 'flex',
     width: '100%',
   },
 });

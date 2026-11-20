@@ -28,15 +28,15 @@ const styles = stylex.create({
   }),
   previewTooltipClass: {
     background: 'transparent',
+    boxShadow: boxShadow['--t-box-shadow-strong'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
     borderTopLeftRadius: borderRadius['--t-border-radius-md'],
     borderTopRightRadius: borderRadius['--t-border-radius-md'],
-    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
-    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
-    boxShadow: boxShadow['--t-box-shadow-strong'],
-    paddingTop: '0',
-    paddingRight: '0',
     paddingBottom: '0',
     paddingLeft: '0',
+    paddingRight: '0',
+    paddingTop: '0',
   },
 });
 
