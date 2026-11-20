@@ -48,8 +48,8 @@ const styles = stylex.create({
   handleSlot: {
     alignItems: 'center',
     display: 'flex',
-    height: spacing['--t-spacing-6'],
     justifyContent: 'center',
+    height: spacing['--t-spacing-6'],
     width: spacing['--t-spacing-6'],
   },
 });

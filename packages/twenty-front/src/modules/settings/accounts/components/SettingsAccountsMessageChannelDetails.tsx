@@ -44,9 +44,9 @@ type MessageChannelUpdateInput = Partial<{
 
 const styles = stylex.create({
   detailsContainer: {
+    gap: spacing['--t-spacing-6'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-6'],
   },
 });
 

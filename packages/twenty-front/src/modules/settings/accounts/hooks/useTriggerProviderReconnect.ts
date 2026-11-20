@@ -1,5 +1,8 @@
 import { useCallback } from 'react';
-import { type ConnectedAccountProvider, SettingsPath } from 'twenty-shared/types';
+import {
+  type ConnectedAccountProvider,
+  SettingsPath,
+} from 'twenty-shared/types';
 import { getSettingsPath } from 'twenty-shared/utils';
 
 import { useTriggerApisOAuth } from '@/settings/accounts/hooks/useTriggerApiOAuth';

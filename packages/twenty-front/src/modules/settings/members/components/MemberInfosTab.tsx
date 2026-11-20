@@ -21,13 +21,13 @@ type MemberInfosTabProps = {
 
 const styles = stylex.create({
   nameRow: {
-    display: 'grid',
     gap: spacing['--t-spacing-3'],
+    display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
   },
   actionRow: {
-    display: 'flex',
     gap: spacing['--t-spacing-2'],
+    display: 'flex',
   },
 });
 

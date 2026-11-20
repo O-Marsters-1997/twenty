@@ -45,10 +45,10 @@ const styles = stylex.create({
     height: '100%',
   },
   closeButton: {
-    left: spacing['--t-spacing-3'],
     position: 'absolute',
+    zIndex: 5,
+    left: spacing['--t-spacing-3'],
     top: spacing['--t-spacing-3'],
-    zIndex: '5',
   },
 });
 

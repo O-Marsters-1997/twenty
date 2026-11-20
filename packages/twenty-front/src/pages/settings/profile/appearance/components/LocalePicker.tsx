@@ -1,4 +1,3 @@
-
 import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMemberState';
 import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
 import { getDateFnsLocale } from '@/ui/field/display/utils/getDateFnsLocale';
@@ -20,9 +19,9 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   container: {
+    gap: spacing['--t-spacing-4'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-4'],
   },
 });
 

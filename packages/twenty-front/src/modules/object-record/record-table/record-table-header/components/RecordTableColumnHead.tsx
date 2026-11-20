@@ -51,11 +51,11 @@ export const RecordTableColumnHead = ({
 
 const styles = stylex.create({
   title: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'row',
     fontWeight: fontWeight['--t-font-weight-medium'],
-    gap: spacing['--t-spacing-1'],
     height: spacing['--t-spacing-8'],
     paddingLeft: spacing['--t-spacing-2'],
     paddingRight: spacing['--t-spacing-2'],

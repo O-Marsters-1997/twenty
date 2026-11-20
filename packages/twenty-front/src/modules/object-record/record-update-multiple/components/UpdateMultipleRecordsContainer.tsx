@@ -19,11 +19,11 @@ const UPDATE_MULTIPLE_RECORDS_CONFIRMATION_MODAL_ID =
 
 const styles = stylex.create({
   showPageRightContainer: {
+    overflow: 'auto',
     display: 'flex',
     flexDirection: 'column',
-    height: '100%',
     justifyContent: 'start',
-    overflow: 'auto',
+    height: '100%',
     width: '100%',
   },
   contentContainer: {

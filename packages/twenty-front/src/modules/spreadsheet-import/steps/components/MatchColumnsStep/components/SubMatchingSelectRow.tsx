@@ -40,9 +40,9 @@ export const SubMatchingSelectRow = ({
 
 const styles = stylex.create({
   rowContainer: {
+    gap: spacing['--t-spacing-4'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-4'],
     justifyContent: 'space-between',
     paddingBottom: spacing['--t-spacing-1'],
   },

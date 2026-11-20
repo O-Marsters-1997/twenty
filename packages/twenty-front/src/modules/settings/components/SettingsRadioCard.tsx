@@ -18,22 +18,22 @@ import {
 
 const styles = stylex.create({
   card: {
+    borderColor: borderColor['--t-border-color-medium'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     backgroundColor: {
       default: null,
       ':hover': backgroundTransparent['--t-background-transparent-lighter'],
     },
+    cursor: 'pointer',
+    display: 'flex',
+    flexGrow: 1,
     borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
     borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
     borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
     borderTopRightRadius: borderRadius['--t-border-radius-sm'],
-    borderColor: borderColor['--t-border-color-medium'],
-    borderStyle: 'solid',
-    borderWidth: '1px',
-    cursor: 'pointer',
-    display: 'flex',
-    flexGrow: 1,
-    gap: spacing['--t-spacing-2'],
     paddingBottom: spacing['--t-spacing-2'],
     paddingLeft: spacing['--t-spacing-2'],
     paddingRight: spacing['--t-spacing-2'],
@@ -43,10 +43,10 @@ const styles = stylex.create({
     alignItems: 'center',
     display: 'flex',
     marginLeft: 'auto',
-    paddingTop: spacing['--t-spacing-1'],
-    paddingRight: spacing['--t-spacing-1'],
     paddingBottom: spacing['--t-spacing-1'],
     paddingLeft: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingTop: spacing['--t-spacing-1'],
   },
   title: {
     color: fontColor['--t-font-color-secondary'],
@@ -82,7 +82,11 @@ export const SettingsRadioCard = ({
       <Card.Content {...stylex.props(styles.card)}>
         {Icon && <Icon size={theme.icon.size.xl} color={theme.color.gray10} />}
         <span>
-          {title && <div id={titleId} {...stylex.props(styles.title)}>{title}</div>}
+          {title && (
+            <div id={titleId} {...stylex.props(styles.title)}>
+              {title}
+            </div>
+          )}
           {hasDescription && (
             <div id={descriptionId} {...stylex.props(styles.description)}>
               {description}

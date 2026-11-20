@@ -9,19 +9,19 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   sectionToggle: {
-    alignItems: 'center',
     background: 'transparent',
     borderStyle: 'none',
+    gap: spacing['--t-spacing-1'],
+    overflow: 'hidden',
+    alignItems: 'center',
     cursor: 'pointer',
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
     height: '100%',
     minWidth: '0',
-    overflow: 'hidden',
-    paddingTop: '0',
-    paddingRight: '0',
     paddingBottom: '0',
     paddingLeft: '0',
+    paddingRight: '0',
+    paddingTop: '0',
   },
   chevronContainer: {
     alignItems: 'center',

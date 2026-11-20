@@ -7,10 +7,10 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   buttonContainer: {
-    paddingTop: '0',
-    paddingRight: spacing['--t-spacing-1'],
     paddingBottom: '0',
     paddingLeft: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingTop: '0',
   },
 });
 

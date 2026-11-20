@@ -40,11 +40,12 @@ const styles = stylex.create({
     width: '100%',
   },
   compact: {
-    backgroundColor: backgroundTransparent['--t-background-transparent-lighter'],
     borderColor: borderColor['--t-border-color-medium'],
     borderRadius: borderRadius['--t-border-radius-md'],
     borderStyle: 'solid',
     borderWidth: '1px',
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
     boxSizing: 'border-box',
   },
 });

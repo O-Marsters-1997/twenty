@@ -6,10 +6,10 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   radioCardContainer: {
+    gap: spacing['--t-spacing-4'],
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: spacing['--t-spacing-4'],
   },
 });
 

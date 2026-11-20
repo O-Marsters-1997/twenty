@@ -15,19 +15,19 @@ import { media } from 'twenty-ui/theme/constants.stylex';
 const styles = stylex.create({
   buttonContainer: {
     '--tw-button-radius': `calc(${borderRadius['--t-border-radius-sm']} - 1px)`,
-    borderWidth: '1px',
-    borderStyle: 'solid',
     borderColor: borderColor['--t-border-color-strong'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
     position: { default: null, [media.mobile]: 'relative' },
-    right: { default: null, [media.mobile]: '7px' },
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
     borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
     borderTopRightRadius: borderRadius['--t-border-radius-sm'],
-    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
-    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
-    marginTop: spacing['--t-spacing-1'],
-    marginRight: spacing['--t-spacing-1'],
     marginBottom: spacing['--t-spacing-1'],
     marginLeft: spacing['--t-spacing-1'],
+    marginRight: spacing['--t-spacing-1'],
+    marginTop: spacing['--t-spacing-1'],
+    right: { default: null, [media.mobile]: '7px' },
   },
 });
 

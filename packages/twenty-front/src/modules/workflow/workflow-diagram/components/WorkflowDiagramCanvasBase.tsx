@@ -75,17 +75,17 @@ import * as stylex from '@stylexjs/stylex';
 import { spacing } from 'twenty-ui/theme/tokens.stylex';
 const styles = stylex.create({
   root: {
-    height: '100%',
     position: 'relative',
+    height: '100%',
     width: '100%',
   },
   statusTagContainer: {
+    position: 'absolute',
     left: '0',
-    paddingTop: spacing['--t-spacing-4'],
-    paddingRight: spacing['--t-spacing-4'],
     paddingBottom: spacing['--t-spacing-4'],
     paddingLeft: spacing['--t-spacing-4'],
-    position: 'absolute',
+    paddingRight: spacing['--t-spacing-4'],
+    paddingTop: spacing['--t-spacing-4'],
     top: '0',
   },
 });

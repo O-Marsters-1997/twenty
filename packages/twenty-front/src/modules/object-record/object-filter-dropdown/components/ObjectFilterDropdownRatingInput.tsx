@@ -9,10 +9,10 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   ratingInputContainer: {
-    paddingTop: spacing['--t-spacing-2'],
-    paddingRight: spacing['--t-spacing-2'],
     paddingBottom: spacing['--t-spacing-2'],
     paddingLeft: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
   },
 });
 

@@ -28,9 +28,9 @@ import { spacing, fontColor, fontSize } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   container: {
+    gap: spacing['--t-spacing-2'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-2'],
   },
   selectDropdownContainer: {
     marginBottom: spacing['--t-spacing-2'],
@@ -38,11 +38,11 @@ const styles = stylex.create({
   noBodyMessage: {
     color: fontColor['--t-font-color-light'],
     fontSize: fontSize['--t-font-size-md'],
-    paddingTop: spacing['--t-spacing-2'],
-    paddingRight: spacing['--t-spacing-2'],
+    textAlign: 'left',
     paddingBottom: spacing['--t-spacing-2'],
     paddingLeft: spacing['--t-spacing-2'],
-    textAlign: 'left',
+    paddingRight: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
   },
 });
 

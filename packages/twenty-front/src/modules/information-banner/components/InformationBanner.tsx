@@ -20,12 +20,12 @@ const styles = stylex.create({
     minWidth: '0',
   },
   content: {
+    gap: spacing['--t-spacing-3'],
     alignItems: 'center',
     display: 'flex',
     flexBasis: '0%',
     flexGrow: 1,
     flexShrink: 1,
-    gap: spacing['--t-spacing-3'],
     justifyContent: 'center',
     minWidth: 0,
   },

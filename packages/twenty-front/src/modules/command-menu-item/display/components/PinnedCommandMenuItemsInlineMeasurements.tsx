@@ -30,8 +30,8 @@ const styles = stylex.create({
     display: 'flex',
     pointerEvents: 'none',
     position: 'absolute',
-    top: '-9999px',
     visibility: 'hidden',
+    top: '-9999px',
   },
   gap: (gap: number) => ({ gap: `${gap}px` }),
 });

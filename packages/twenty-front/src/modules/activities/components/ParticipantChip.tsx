@@ -20,10 +20,10 @@ const styles = stylex.create({
     display: 'flex',
   },
   senderName: {
+    overflow: 'hidden',
     color: fontColor['--t-font-color-primary'],
     fontSize: fontSize['--t-font-size-md'],
     fontWeight: fontWeight['--t-font-weight-regular'],
-    overflow: 'hidden',
     textOverflow: 'ellipsis',
   },
   senderNameBold: {
@@ -33,14 +33,14 @@ const styles = stylex.create({
     marginRight: spacing['--t-spacing-1'],
   },
   chip: {
+    gap: spacing['--t-spacing-1'],
+    paddingBlock: spacing['--t-spacing-1'],
+    paddingInline: spacing['--t-spacing-1'],
     alignItems: 'center',
     boxSizing: 'border-box',
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
-    height: '20px',
-    paddingBlock: spacing['--t-spacing-1'],
-    paddingInline: spacing['--t-spacing-1'],
     whiteSpace: 'nowrap',
+    height: '20px',
   },
 });
 

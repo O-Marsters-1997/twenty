@@ -90,9 +90,7 @@ export const SelectSheetStep = ({
 
   return (
     <>
-      <Dialog.Body
-        {...stylex.props(styles.dialogBody)}
-      >
+      <Dialog.Body {...stylex.props(styles.dialogBody)}>
         <Heading title={t`Select the sheet to use`} />
         <RadioGroup
           render={<div {...stylex.props(styles.radioContainer)} />}
@@ -119,16 +117,16 @@ export const SelectSheetStep = ({
 
 const styles = stylex.create({
   dialogBody: {
-    display: 'flex',
-    flexBasis: '0%',
-    flexGrow: 1,
-    flexShrink: 1,
-    flexDirection: 'column',
+    gap: spacing['--t-spacing-8'],
     paddingBlock: spacing['--t-spacing-10'],
     paddingInline: spacing['--t-spacing-10'],
     alignItems: 'center',
+    display: 'flex',
+    flexBasis: '0%',
+    flexDirection: 'column',
+    flexGrow: 1,
+    flexShrink: 1,
     justifyContent: 'center',
-    gap: spacing['--t-spacing-8'],
   },
   radioContainer: {
     display: 'flex',

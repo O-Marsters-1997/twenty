@@ -3,10 +3,10 @@ import { color } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   dot: {
-    backgroundColor: color['--t-color-blue'],
     borderRadius: '50%',
-    height: '6px',
+    backgroundColor: color['--t-color-blue'],
     position: 'absolute',
+    height: '6px',
     right: '-2px',
     top: '-2px',
     width: '6px',

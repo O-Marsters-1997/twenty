@@ -5,11 +5,11 @@ import { background, borderColor } from 'twenty-ui/theme/tokens.stylex';
 const styles = stylex.create({
   header: {
     backgroundColor: background['--t-background-secondary'],
-    borderBottomWidth: '1px',
-    borderBottomStyle: 'solid',
-    borderBottomColor: borderColor['--t-border-color-medium'],
     display: 'flex',
     flexDirection: 'column',
+    borderBottomColor: borderColor['--t-border-color-medium'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
     width: '100%',
   },
 });

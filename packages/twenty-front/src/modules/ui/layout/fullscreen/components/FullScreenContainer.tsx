@@ -21,9 +21,9 @@ const styles = stylex.create({
     width: '100%',
   },
   mainContainer: {
+    paddingInline: spacing['--t-spacing-3'],
     height: `calc(100% - ${layoutSize.pageBarMinHeight} - ${spacing['--t-spacing-9']})`,
     paddingBottom: spacing['--t-spacing-3'],
-    paddingInline: spacing['--t-spacing-3'],
     paddingTop: 0,
   },
   pageHeaderContainer: {

@@ -21,11 +21,11 @@ const styles = stylex.create({
     paddingInline: string,
     gridTemplateRows: string,
   ) => ({
-    display,
-    gridTemplateRows,
     overflow,
     paddingBlock,
     paddingInline,
+    display,
+    gridTemplateRows,
     rowGap,
   }),
 });

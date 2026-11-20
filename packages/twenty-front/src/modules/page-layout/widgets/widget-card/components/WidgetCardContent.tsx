@@ -71,14 +71,14 @@ const styles = stylex.create({
     gridTemplateColumns: 'minmax(0, 1fr)',
   },
   fixedHeight: {
+    overflow: 'clip',
     height: '40rem',
     minHeight: '40rem',
-    overflow: 'clip',
   },
   fluidHeight: {
+    overflow: 'var(--widget-card-content-overflow, hidden)',
     height: 'var(--widget-height, 100%)',
     minHeight: 0,
-    overflow: 'var(--widget-card-content-overflow, hidden)',
   },
   marginWithFramedHeader: {
     marginTop: { default: spacing['--t-spacing-2'], ':empty': 0 },

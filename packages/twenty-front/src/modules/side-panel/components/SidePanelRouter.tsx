@@ -20,9 +20,9 @@ import * as stylex from '@stylexjs/stylex';
 const styles = stylex.create({
   sidePanelContent: {
     flex: '1',
+    overscrollBehavior: 'contain',
     minHeight: '0',
     overflowY: 'auto',
-    overscrollBehavior: 'contain',
   },
 });
 

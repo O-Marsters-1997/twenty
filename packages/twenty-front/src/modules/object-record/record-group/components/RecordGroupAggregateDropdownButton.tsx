@@ -14,10 +14,10 @@ const styles = stylex.create({
     width: '100%',
   },
   headerButton: {
-    paddingTop: 0,
-    paddingRight: 0,
     paddingBottom: 0,
     paddingLeft: 0,
+    paddingRight: 0,
+    paddingTop: 0,
   },
 });
 

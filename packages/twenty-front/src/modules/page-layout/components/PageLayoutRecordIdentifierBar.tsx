@@ -34,14 +34,14 @@ const styles = stylex.create({
   },
   barDefault: { gridTemplateColumns: 'minmax(0, 1fr) auto' },
   identifierCell: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     boxSizing: 'border-box',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
     justifyContent: 'space-between',
-    minWidth: 0,
-    paddingInlineStart: spacing['--t-spacing-3'],
     paddingInlineEnd: spacing['--t-spacing-2'],
+    paddingInlineStart: spacing['--t-spacing-3'],
+    minWidth: 0,
   },
   identifierCellWithPinnedTab: {
     borderRightColor: borderColor['--t-border-color-medium'],

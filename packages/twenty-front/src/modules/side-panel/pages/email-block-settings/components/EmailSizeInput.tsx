@@ -13,31 +13,31 @@ import {
 
 const styles = stylex.create({
   row: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
   },
   grow: {
     flex: '1',
   },
   unitSelect: {
     background: backgroundTransparent['--t-background-transparent-lighter'],
-    borderWidth: '1px',
-    borderStyle: 'solid',
     borderColor: borderColor['--t-border-color-medium'],
-    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
-    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
-    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
-    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
     color: fontColor['--t-font-color-secondary'],
     cursor: 'pointer',
     fontFamily: 'inherit',
     fontSize: fontSize['--t-font-size-sm'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
     height: '32px',
-    paddingTop: '0',
-    paddingRight: spacing['--t-spacing-1'],
     paddingBottom: '0',
     paddingLeft: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingTop: '0',
   },
 });
 

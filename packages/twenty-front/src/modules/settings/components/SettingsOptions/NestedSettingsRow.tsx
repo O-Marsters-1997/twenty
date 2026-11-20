@@ -29,24 +29,24 @@ export const NestedSettingsRow = ({
 
 const styles = stylex.create({
   nestedRow: {
+    position: 'relative',
     marginLeft: spacing['--t-spacing-8'],
     paddingLeft: spacing['--t-spacing-4'],
-    position: 'relative',
   },
   guide: {
-    bottom: 0,
-    left: 0,
     pointerEvents: 'none',
     position: 'absolute',
+    bottom: 0,
+    left: 0,
     top: 0,
     width: spacing['--t-spacing-4'],
   },
   line: {
     backgroundColor: borderColor['--t-border-color-strong'],
-    bottom: 0,
     display: 'block',
-    left: 0,
     position: 'absolute',
+    bottom: 0,
+    left: 0,
     top: 0,
     width: 1,
   },
@@ -54,6 +54,8 @@ const styles = stylex.create({
     display: 'none',
   },
   elbow: {
+    boxSizing: 'border-box',
+    position: 'absolute',
     borderBottomColor: borderColor['--t-border-color-strong'],
     borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
     borderBottomStyle: 'solid',
@@ -61,9 +63,7 @@ const styles = stylex.create({
     borderLeftColor: borderColor['--t-border-color-strong'],
     borderLeftStyle: 'solid',
     borderLeftWidth: 1,
-    boxSizing: 'border-box',
     left: 0,
-    position: 'absolute',
     top: 0,
     width: '100%',
   },

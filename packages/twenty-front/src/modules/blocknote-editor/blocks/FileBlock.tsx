@@ -13,26 +13,26 @@ import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   link: {
+    textDecoration: 'none',
     alignItems: 'center',
     color: {
       default: fontColor['--t-font-color-primary'],
       ':hover': fontColor['--t-font-color-secondary'],
     },
     display: 'flex',
-    textDecoration: 'none',
   },
   fileInput: {
     display: 'none',
   },
   fileLine: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
   },
   uploadFileContainer: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
   },
 });
 

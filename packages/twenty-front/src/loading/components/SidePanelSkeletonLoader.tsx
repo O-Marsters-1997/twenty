@@ -13,9 +13,9 @@ export const SidePanelSkeletonLoader = () => {
 
 const styles = stylex.create({
   container: {
+    padding: spacing['--t-spacing-4'],
     display: 'flex',
     flexDirection: 'column',
-    padding: spacing['--t-spacing-4'],
     width: '100%',
   },
 });

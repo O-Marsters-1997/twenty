@@ -8,13 +8,13 @@ const styles = stylex.create({
     alignItems: 'center',
     color: fontColor['--t-font-color-light'],
     display: 'flex',
-    height: '100%',
     justifyContent: 'center',
-    paddingTop: spacing['--t-spacing-6'],
-    paddingRight: spacing['--t-spacing-6'],
+    textAlign: 'center',
+    height: '100%',
     paddingBottom: spacing['--t-spacing-6'],
     paddingLeft: spacing['--t-spacing-6'],
-    textAlign: 'center',
+    paddingRight: spacing['--t-spacing-6'],
+    paddingTop: spacing['--t-spacing-6'],
   },
 });
 

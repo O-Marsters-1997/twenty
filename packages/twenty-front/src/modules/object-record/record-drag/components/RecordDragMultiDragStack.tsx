@@ -11,19 +11,19 @@ const MAX_STACK_CARDS = 5;
 
 const styles = stylex.create({
   card: {
-    backgroundColor: accent['--t-accent-tertiary'],
     borderColor: borderColor['--t-border-color-medium'],
     borderRadius: borderRadius['--t-border-radius-sm'],
     borderStyle: 'solid',
     borderWidth: '1px',
+    backgroundColor: accent['--t-accent-tertiary'],
+    position: 'absolute',
     height: '100%',
     left: 0,
-    position: 'absolute',
     right: 0,
   },
   cardOffset: (offset: number) => ({
-    top: `${offset === 1 ? 2 : (offset - 1) * 4 + 2}px`,
     zIndex: -offset,
+    top: `${offset === 1 ? 2 : (offset - 1) * 4 + 2}px`,
   }),
 });
 

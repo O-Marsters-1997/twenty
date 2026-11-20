@@ -37,10 +37,10 @@ const SETTINGS_API_HERO_INSTANCE_ID_PREFIX = 'settings-api-hero';
 
 const styles = stylex.create({
   tableContainer: {
-    display: 'flex',
-    flexDirection: 'column',
     gap: spacing['--t-spacing-2'],
     overflow: 'visible',
+    display: 'flex',
+    flexDirection: 'column',
   },
   tableContainerMobile: {
     overflow: 'hidden',
@@ -48,12 +48,15 @@ const styles = stylex.create({
   buttonContainer: {
     display: 'flex',
     justifyContent: 'flex-end',
-    paddingTop: { default: spacing['--t-spacing-2'], [media.mobile]: spacing['--t-spacing-5'] },
+    paddingTop: {
+      default: spacing['--t-spacing-2'],
+      [media.mobile]: spacing['--t-spacing-5'],
+    },
   },
   tabContent: {
+    gap: spacing['--t-spacing-10'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-10'],
     paddingTop: spacing['--t-spacing-6'],
   },
 });
@@ -140,7 +143,12 @@ export const SettingsApiWebhooks = () => {
                 title={t`API Keys`}
                 description={t`Active API keys created by you or your team.`}
               />
-              <div {...stylex.props(styles.tableContainer, isMobile && styles.tableContainerMobile)}>
+              <div
+                {...stylex.props(
+                  styles.tableContainer,
+                  isMobile && styles.tableContainerMobile,
+                )}
+              >
                 <SettingsApiKeysTable />
                 <div {...stylex.props(styles.buttonContainer)}>
                   <NavigationButton
@@ -168,7 +176,12 @@ export const SettingsApiWebhooks = () => {
                 title={t`Webhooks`}
                 description={t`Establish Webhook endpoints for notifications on asynchronous events.`}
               />
-              <div {...stylex.props(styles.tableContainer, isMobile && styles.tableContainerMobile)}>
+              <div
+                {...stylex.props(
+                  styles.tableContainer,
+                  isMobile && styles.tableContainerMobile,
+                )}
+              >
                 <SettingsWebhooksTable />
                 <div {...stylex.props(styles.buttonContainer)}>
                   <NavigationButton

@@ -31,15 +31,14 @@ const extractTextFromNode = (node: React.ReactNode): string => {
   return '';
 };
 
-
 const styles = stylex.create({
   copyButton: {
+    borderRadius: borderRadius['--t-border-radius-sm'],
     alignItems: 'center',
     backgroundColor: {
       default: null,
       ':hover': background['--t-background-primary'],
     },
-    borderRadius: borderRadius['--t-border-radius-sm'],
     display: 'flex',
     insetInlineEnd: spacing['--t-spacing-2'],
     opacity: {
@@ -47,10 +46,10 @@ const styles = stylex.create({
       [stylex.when.ancestor(':hover', containerMarker)]: 1,
     },
     position: 'absolute',
-    top: spacing['--t-spacing-2'],
     transitionDuration: `calc(${animationDuration['--t-animation-duration-fast']} * 1s)`,
     transitionProperty: 'opacity',
     transitionTimingFunction: 'ease',
+    top: spacing['--t-spacing-2'],
   },
   root: {
     position: 'relative',

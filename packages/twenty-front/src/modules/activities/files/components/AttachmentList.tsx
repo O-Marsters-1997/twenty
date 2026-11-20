@@ -47,10 +47,10 @@ type AttachmentListProps = {
 
 const styles = stylex.create({
   container: {
+    flex: '1',
     alignItems: 'flex-start',
     alignSelf: 'stretch',
     display: 'flex',
-    flex: '1',
     flexDirection: 'column',
     height: '100%',
     minHeight: '0',
@@ -66,8 +66,8 @@ const styles = stylex.create({
     alignItems: 'center',
     backgroundColor: background['--t-background-primary'],
     display: 'flex',
-    height: 'calc(80vh / var(--t-zoom, 1))',
     justifyContent: 'center',
+    height: 'calc(80vh / var(--t-zoom, 1))',
     width: '100%',
   },
   loadingText: {
@@ -86,9 +86,9 @@ const styles = stylex.create({
     color: fontColor['--t-font-color-primary'],
   },
   buttonContainer: {
+    gap: spacing['--t-spacing-1'],
     display: 'flex',
     flexDirection: 'row',
-    gap: spacing['--t-spacing-1'],
   },
 });
 

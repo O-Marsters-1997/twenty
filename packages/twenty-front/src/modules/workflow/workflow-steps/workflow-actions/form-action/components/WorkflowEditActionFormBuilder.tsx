@@ -63,14 +63,14 @@ type FormData = WorkflowFormActionField[];
 
 const styles = stylex.create({
   fieldContainer: {
+    borderStyle: 'none',
     alignItems: 'center',
     backgroundColor: {
       default: 'transparent',
-      ':hover': backgroundTransparent['--t-background-transparent-lighter'],
       ':is([data-open="true"])':
         backgroundTransparent['--t-background-transparent-lighter'],
+      ':hover': backgroundTransparent['--t-background-transparent-lighter'],
     },
-    borderStyle: 'none',
     cursor: 'pointer',
     display: 'flex',
     fontFamily: 'inherit',
@@ -85,30 +85,30 @@ const styles = stylex.create({
   },
 
   formFieldContainer: {
+    gridTemplateAreas: "'grip input delete' '. settings .'",
     alignItems: 'flex-end',
     columnGap: spacing['--t-spacing-1'],
     display: 'grid',
-    gridTemplateAreas: "'grip input delete' '. settings .'",
     gridTemplateColumns: '24px 1fr 24px',
-    marginBottom: spacing['--t-spacing-4'],
     position: 'relative',
+    marginBottom: spacing['--t-spacing-4'],
   },
   draggingIndicator: {
-    backgroundColor: backgroundTransparent['--t-background-transparent-light'],
     inset: '-8px',
+    backgroundColor: backgroundTransparent['--t-background-transparent-light'],
     position: 'absolute',
     top: '-4px',
   },
   gripButtonContainer: {
+    gridArea: 'grip',
     alignItems: 'flex-end',
     display: 'flex',
-    gridArea: 'grip',
     marginBottom: spacing['--t-spacing-1'],
   },
   trashButtonContainer: {
+    gridArea: 'delete',
     alignItems: 'flex-end',
     display: 'flex',
-    gridArea: 'delete',
     marginBottom: spacing['--t-spacing-1'],
   },
   formFieldInputContainerWrapper: {
@@ -126,11 +126,11 @@ const styles = stylex.create({
     paddingTop: spacing['--t-spacing-2'],
   },
   addFieldButtonContentContainer: {
+    gap: spacing['--t-spacing-0_5'],
     alignItems: 'center',
     color: fontColor['--t-font-color-secondary'],
     display: 'flex',
     fontWeight: fontWeight['--t-font-weight-medium'],
-    gap: spacing['--t-spacing-0_5'],
     justifyContent: 'center',
     width: '100%',
   },

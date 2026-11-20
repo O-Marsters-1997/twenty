@@ -10,8 +10,8 @@ import { borderColor } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   columnContainer: {
-    display: 'flex',
     flex: '1',
+    display: 'flex',
   },
   addGroupColumnDivider: {
     borderLeftColor: borderColor['--t-border-color-light'],

@@ -17,9 +17,9 @@ export const SettingsDataModelFieldRelationPreviewContent = ({
 
 const styles = stylex.create({
   content: {
+    gap: 6,
     display: 'flex',
     flexDirection: 'row',
-    gap: 6,
   },
   contentMobile: {
     flexDirection: 'column',

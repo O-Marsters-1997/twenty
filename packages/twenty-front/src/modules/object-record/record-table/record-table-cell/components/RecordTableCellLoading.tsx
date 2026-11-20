@@ -28,12 +28,12 @@ export const RecordTableCellLoading = ({
 
 const styles = stylex.create({
   cellSkeleton: {
-    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
-    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
-    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
-    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
     marginBlock: spacing['--t-spacing-2'],
     marginInline: spacing['--t-spacing-2'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
     width: 'auto',
   },
 });

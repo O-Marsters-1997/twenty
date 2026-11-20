@@ -7,13 +7,13 @@ import { getDndKitDropTargetId } from '@/navigation-menu-item/common/utils/getDn
 
 const styles = stylex.create({
   insertBeforeZone: {
-    height: '5px',
-    left: 0,
     pointerEvents: 'auto',
     position: 'absolute',
+    zIndex: 1,
+    height: '5px',
+    left: 0,
     right: 0,
     top: '-5px',
-    zIndex: 1,
   },
 });
 

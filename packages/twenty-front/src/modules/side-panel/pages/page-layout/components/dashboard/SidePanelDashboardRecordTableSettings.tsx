@@ -60,10 +60,10 @@ const styles = stylex.create({
     height: '100%',
   },
   settingsContainer: {
+    overflow: 'hidden',
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
-    overflow: 'hidden',
   },
 });
 

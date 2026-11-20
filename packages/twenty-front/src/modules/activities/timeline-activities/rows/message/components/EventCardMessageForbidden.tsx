@@ -10,9 +10,9 @@ const styles = stylex.create({
     width: '100%',
   },
   emailContent: {
+    gap: spacing['--t-spacing-4'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-4'],
     justifyContent: 'center',
     width: '100%',
   },

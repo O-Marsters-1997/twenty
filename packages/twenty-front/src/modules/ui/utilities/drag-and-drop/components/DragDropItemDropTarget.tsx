@@ -14,17 +14,13 @@ import { type DragDropItemDropTargetOrientation } from '@/ui/utilities/drag-and-
 const styles = stylex.create({
   root: {
     '--drop-line-nudge': spacing['--t-spacing-1'],
-    minHeight: spacing['--t-spacing-2'],
     position: 'relative',
     transitionDuration: '120ms',
     transitionProperty: 'background-color',
     transitionTimingFunction: 'ease-out',
+    minHeight: spacing['--t-spacing-2'],
     '::before': {
       backgroundColor: color['--t-color-blue'],
-      borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
-      borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
-      borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
-      borderTopRightRadius: borderRadius['--t-border-radius-sm'],
       content: '""',
       opacity: 0,
       position: 'absolute',
@@ -32,6 +28,10 @@ const styles = stylex.create({
       transitionDuration: '120ms, 120ms',
       transitionProperty: 'opacity, transform',
       transitionTimingFunction: 'ease-out',
+      borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+      borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+      borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+      borderTopRightRadius: borderRadius['--t-border-radius-sm'],
     },
   },
   compact: {
@@ -53,10 +53,10 @@ const styles = stylex.create({
     height: '100%',
     width: '100%',
     '::before': {
+      transform: 'translateX(-50%) scaleY(0.7)',
       height: '100%',
       left: '50%',
       top: 0,
-      transform: 'translateX(-50%) scaleY(0.7)',
       width: '2px',
     },
   },
@@ -68,10 +68,10 @@ const styles = stylex.create({
   horizontal: {
     width: '100%',
     '::before': {
+      transform: 'translateY(calc(-50% - var(--drop-line-nudge))) scaleX(0.7)',
       height: '2px',
       left: 0,
       top: '50%',
-      transform: 'translateY(calc(-50% - var(--drop-line-nudge))) scaleX(0.7)',
       width: '100%',
     },
   },
@@ -82,9 +82,9 @@ const styles = stylex.create({
   },
   horizontalLeading: {
     '::before': {
-      top: 0,
       transform: 'scaleX(0.7)',
       zIndex: 1,
+      top: 0,
     },
   },
   horizontalLeadingDragOver: {

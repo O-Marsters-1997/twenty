@@ -43,11 +43,11 @@ const styles = stylex.create({
   fieldAvailableContainer: {
     color: fontColor['--t-font-color-light'],
     display: 'flex',
-    marginTop: spacing['--t-spacing-1'],
-    marginRight: spacing['--t-spacing-2'],
+    userSelect: 'none',
     marginBottom: spacing['--t-spacing-1'],
     marginLeft: spacing['--t-spacing-2'],
-    userSelect: 'none',
+    marginRight: spacing['--t-spacing-2'],
+    marginTop: spacing['--t-spacing-1'],
     width: `calc(100% - ${spacing['--t-spacing-4']})`,
   },
 });

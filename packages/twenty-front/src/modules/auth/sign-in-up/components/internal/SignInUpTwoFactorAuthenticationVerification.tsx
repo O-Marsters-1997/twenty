@@ -29,7 +29,12 @@ import { MainButton } from 'twenty-ui/components/input';
 import { Button } from 'twenty-ui/primitives/input';
 import { useNavigateApp } from '~/hooks/useNavigateApp';
 import * as stylex from '@stylexjs/stylex';
-import { borderColor, borderRadius, fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  borderColor,
+  borderRadius,
+  fontColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 export const Slot = (props: SlotProps) => {
   return (
@@ -49,32 +54,32 @@ const caretBlink = stylex.keyframes({
 
 const styles = stylex.create({
   slot: {
+    transition: 'all 0.3s',
     alignItems: 'center',
-    borderBottomColor: borderColor['--t-border-color-medium'],
-    borderBottomStyle: 'solid',
-    borderBottomWidth: '1px',
-    borderRightColor: borderColor['--t-border-color-medium'],
-    borderRightStyle: 'solid',
-    borderRightWidth: '1px',
-    borderTopColor: borderColor['--t-border-color-medium'],
-    borderTopStyle: 'solid',
-    borderTopWidth: '1px',
-    borderTopLeftRadius: { default: 0, ':first-of-type': '0.375rem' },
-    borderBottomLeftRadius: { default: 0, ':first-of-type': '0.375rem' },
-    borderLeftColor: borderColor['--t-border-color-medium'],
-    borderLeftStyle: 'solid',
-    borderLeftWidth: { default: 0, ':first-of-type': '1px' },
-    borderBottomRightRadius: { default: 0, ':last-of-type': '0.375rem' },
-    borderTopRightRadius: { default: 0, ':last-of-type': '0.375rem' },
     display: 'flex',
     fontSize: '2rem',
-    height: '3.5rem',
     justifyContent: 'center',
     outlineColor: borderColor['--t-border-color-medium'],
     outlineStyle: 'none',
     outlineWidth: 0,
     position: 'relative',
-    transition: 'all 0.3s',
+    borderBottomColor: borderColor['--t-border-color-medium'],
+    borderBottomLeftRadius: { default: 0, ':first-of-type': '0.375rem' },
+    borderBottomRightRadius: { default: 0, ':last-of-type': '0.375rem' },
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
+    borderLeftColor: borderColor['--t-border-color-medium'],
+    borderLeftStyle: 'solid',
+    borderLeftWidth: { default: 0, ':first-of-type': '1px' },
+    borderRightColor: borderColor['--t-border-color-medium'],
+    borderRightStyle: 'solid',
+    borderRightWidth: '1px',
+    borderTopColor: borderColor['--t-border-color-medium'],
+    borderTopLeftRadius: { default: 0, ':first-of-type': '0.375rem' },
+    borderTopRightRadius: { default: 0, ':last-of-type': '0.375rem' },
+    borderTopStyle: 'solid',
+    borderTopWidth: '1px',
+    height: '3.5rem',
     width: '2.5rem',
   },
   slotActive: {
@@ -86,13 +91,13 @@ const styles = stylex.create({
     opacity: 0.2,
   },
   caretContainer: {
+    inset: 0,
     alignItems: 'center',
     animationDuration: '1s',
     animationIterationCount: 'infinite',
     animationName: caretBlink,
     animationTimingFunction: 'steps(2, start)',
     display: 'flex',
-    inset: 0,
     justifyContent: 'center',
     pointerEvents: 'none',
     position: 'absolute',
@@ -116,12 +121,12 @@ const styles = stylex.create({
     width: '2.5rem',
   },
   dash: {
+    cornerShape: 'round',
     backgroundColor: fontColor['--t-font-color-primary'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-pill'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-pill'],
     borderTopLeftRadius: borderRadius['--t-border-radius-pill'],
     borderTopRightRadius: borderRadius['--t-border-radius-pill'],
-    borderBottomRightRadius: borderRadius['--t-border-radius-pill'],
-    borderBottomLeftRadius: borderRadius['--t-border-radius-pill'],
-    cornerShape: 'round',
     height: '0.25rem',
     width: '0.75rem',
   },
@@ -134,10 +139,10 @@ const styles = stylex.create({
     display: 'flex',
   },
   actionBackLinkContainer: {
-    marginTop: spacing['--t-spacing-3'],
-    marginRight: '0',
     marginBottom: '0',
     marginLeft: '0',
+    marginRight: '0',
+    marginTop: spacing['--t-spacing-3'],
   },
 });
 
@@ -214,7 +219,10 @@ export const SignInUpTOTPVerification = () => {
   };
 
   return (
-    <form {...stylex.props(styles.form)} onSubmit={form.handleSubmit(submitOTP)}>
+    <form
+      {...stylex.props(styles.form)}
+      onSubmit={form.handleSubmit(submitOTP)}
+    >
       <StyledTwoFactorInstructions>
         <Trans>Paste the code below</Trans>
       </StyledTwoFactorInstructions>

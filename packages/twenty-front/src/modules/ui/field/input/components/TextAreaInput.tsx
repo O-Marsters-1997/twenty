@@ -34,9 +34,11 @@ const styles = stylex.create({
     width: '100%',
   },
   textarea: {
+    borderWidth: '0',
+    paddingBlock: spacing['--t-spacing-0'],
+    paddingInline: spacing['--t-spacing-2'],
     alignItems: 'center',
     backgroundColor: 'transparent',
-    borderWidth: '0',
     color: fontColor['--t-font-color-primary'],
     display: 'flex',
     fontFamily: font['--t-font-family'],
@@ -44,11 +46,9 @@ const styles = stylex.create({
     fontWeight: 'inherit',
     justifyContent: 'center',
     lineHeight: '18px',
-    maxHeight: '400px',
     outlineStyle: 'none',
-    paddingBlock: spacing['--t-spacing-0'],
-    paddingInline: spacing['--t-spacing-2'],
     resize: 'none',
+    maxHeight: '400px',
     width: `calc(100% - ${spacing['--t-spacing-7']})`,
     '::placeholder': {
       color: fontColor['--t-font-color-light'],
@@ -59,9 +59,9 @@ const styles = stylex.create({
   lightIconButtonContainer: {
     backgroundColor: 'transparent',
     position: 'absolute',
+    transform: 'translateY(-50%)',
     right: '0',
     top: '16px',
-    transform: 'translateY(-50%)',
   },
 });
 

@@ -18,14 +18,14 @@ import { spacing, fontColor, fontSize } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   arguments: {
+    gap: spacing['--t-spacing-4'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-4'],
   },
   argument: {
+    gap: spacing['--t-spacing-1'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-1'],
   },
   hint: {
     color: fontColor['--t-font-color-light'],

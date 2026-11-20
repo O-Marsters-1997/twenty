@@ -30,15 +30,15 @@ const styles = stylex.create({
     paddingTop: spacing['--t-spacing-0_5'],
   },
   personName: {
-    color: fontColor['--t-font-color-primary'],
-    maxWidth: {
-      default: 'min(calc(40vw / var(--t-zoom, 1)), 360px)',
-      [NARROW_VIEWPORT]: 'min(calc(70vw / var(--t-zoom, 1)), 360px)',
-    },
-    minWidth: '0',
     overflow: 'hidden',
+    color: fontColor['--t-font-color-primary'],
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
+    maxWidth: {
+      [NARROW_VIEWPORT]: 'min(calc(70vw / var(--t-zoom, 1)), 360px)',
+      default: 'min(calc(40vw / var(--t-zoom, 1)), 360px)',
+    },
+    minWidth: '0',
   },
 });
 

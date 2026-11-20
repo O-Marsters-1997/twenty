@@ -22,14 +22,14 @@ import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   content: {
+    gap: spacing['--t-spacing-3'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-3'],
   },
   actionRow: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
   },
   notice: {
     color: fontColor['--t-font-color-tertiary'],

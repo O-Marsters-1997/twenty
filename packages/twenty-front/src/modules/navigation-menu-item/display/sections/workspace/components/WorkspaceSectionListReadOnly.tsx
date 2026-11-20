@@ -8,9 +8,9 @@ import { NavigationMenuItemDisplay } from '@/navigation-menu-item/display/compon
 
 const styles = stylex.create({
   list: {
+    gap: general['--t-between-siblings-gap'],
     display: 'flex',
     flexDirection: 'column',
-    gap: general['--t-between-siblings-gap'],
     paddingTop: general['--t-between-siblings-gap'],
   },
 });

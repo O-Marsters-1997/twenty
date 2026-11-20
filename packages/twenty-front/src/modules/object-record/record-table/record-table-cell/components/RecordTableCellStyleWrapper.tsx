@@ -47,18 +47,18 @@ export const RecordTableCellStyleWrapper = ({
 const styles = stylex.create({
   cell: {
     backgroundColor: background['--t-background-primary'],
+    color: fontColor['--t-font-color-primary'],
+    textAlign: 'left',
     borderBottomColor: borderColor['--t-border-color-light'],
     borderBottomStyle: 'solid',
     borderBottomWidth: 1,
     borderRightColor: borderColor['--t-border-color-light'],
     borderRightStyle: 'solid',
     borderRightWidth: 1,
-    color: fontColor['--t-font-color-primary'],
     paddingBottom: 0,
     paddingLeft: 0,
     paddingRight: 0,
     paddingTop: 0,
-    textAlign: 'left',
   },
   selected: {
     backgroundColor: accent['--t-accent-quaternary'],

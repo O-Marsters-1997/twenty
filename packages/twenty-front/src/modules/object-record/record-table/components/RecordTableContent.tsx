@@ -27,8 +27,8 @@ const styles = stylex.create({
   tableContainer: {
     display: 'flex',
     flexDirection: 'column',
-    height: '100%',
     position: 'relative',
+    height: '100%',
     width: 'fit-content',
   },
 });

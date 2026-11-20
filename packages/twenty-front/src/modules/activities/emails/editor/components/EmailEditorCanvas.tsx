@@ -11,17 +11,17 @@ import '~/third-party-styles/email-editor-canvas.css';
 
 const styles = stylex.create({
   canvasBackdrop: {
+    paddingBlock: spacing['--t-spacing-8'],
+    paddingInline: spacing['--t-spacing-4'],
     boxSizing: 'border-box',
     flexGrow: 1,
     minHeight: '100%',
-    paddingBlock: spacing['--t-spacing-8'],
-    paddingInline: spacing['--t-spacing-4'],
     width: '100%',
   },
   canvasPage: {
-    boxSizing: 'border-box',
     marginBlock: 0,
     marginInline: 'auto',
+    boxSizing: 'border-box',
     maxWidth: '100%',
     minHeight: '400px',
   },

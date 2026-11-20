@@ -17,21 +17,21 @@ import {
 } from 'twenty-ui/theme/tokens.stylex';
 const styles = stylex.create({
   output: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     color: fontColor['--t-font-color-secondary'],
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
   },
   outputSuccess: { color: color['--t-color-turquoise'] },
   outputError: { color: color['--t-color-red'] },
   container: {
-    display: 'flex',
     flex: '1',
+    display: 'flex',
     flexDirection: 'column',
   },
   codeEditorWrapper: {
-    display: 'flex',
     flex: '1',
+    display: 'flex',
     flexDirection: 'column',
   },
   infoContainer: {
@@ -39,10 +39,10 @@ const styles = stylex.create({
     fontSize: fontSize['--t-font-size-md'],
   },
   statusInfo: {
+    gap: spacing['--t-spacing-2'],
     color: fontColor['--t-font-color-tertiary'],
     display: 'flex',
     fontSize: fontSize['--t-font-size-sm'],
-    gap: spacing['--t-spacing-2'],
   },
 });
 

@@ -7,16 +7,16 @@ import { fontColor, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 const styles = stylex.create({
   groupHeadingContainer: {
     alignItems: 'center',
+    userSelect: 'none',
     paddingBottom: spacing['--t-spacing-1'],
     paddingLeft: spacing['--t-spacing-1'],
     paddingRight: spacing['--t-spacing-1'],
     paddingTop: spacing['--t-spacing-2'],
-    userSelect: 'none',
   },
   group: {
+    gap: spacing['--t-spacing-0_5'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-0_5'],
   },
   displayLabel: {
     color: fontColor['--t-font-color-light'],

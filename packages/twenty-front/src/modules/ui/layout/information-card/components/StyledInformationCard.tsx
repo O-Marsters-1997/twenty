@@ -11,29 +11,29 @@ import { type ComponentProps } from 'react';
 
 const styles = stylex.create({
   root: {
-    backdropFilter: 'blur(20px)',
-    backgroundColor:
-      backgroundTransparent['--t-background-transparent-secondary'],
+    padding: spacing['--t-spacing-2'],
     borderColor: borderColor['--t-border-color-medium'],
     borderRadius: borderRadius['--t-border-radius-md'],
     borderStyle: 'solid',
     borderWidth: '1px',
+    gap: spacing['--t-spacing-1'],
+    backdropFilter: 'blur(20px)',
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-secondary'],
     boxShadow: boxShadow['--t-box-shadow-strong'],
     boxSizing: 'border-box',
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-1'],
-    maxWidth: 'calc(100vw - 16px)',
-    padding: spacing['--t-spacing-2'],
-    width: '300px',
     zIndex: general['--t-last-layer-z-index'],
+    maxWidth: 'calc(100vw - 16px)',
+    width: '300px',
   },
 });
 
 export const StyledInformationCard = ({
   className,
   ...props
-}: ComponentProps<'div'>) => {
+}: StyledInformationCardProps<'div'>) => {
   const rootProps = stylex.props(styles.root);
 
   return (

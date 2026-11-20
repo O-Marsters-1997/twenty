@@ -13,13 +13,18 @@ type HtmlNodeViewProps = Pick<
 
 const styles = stylex.create({
   preview: {
+    outlineColor: 'transparent',
+    outlineColor: {
+      default: null,
+      ':hover': borderColor['--t-border-color-medium'],
+    },
+    outlineOffset: '2px',
+    outlineStyle: 'dashed',
+    outlineWidth: '1px',
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
     borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
     borderTopRightRadius: borderRadius['--t-border-radius-sm'],
-    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
-    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
-    outline: '1px dashed transparent',
-    outlineOffset: '2px',
-    outlineColor: { default: null, ':hover': borderColor['--t-border-color-medium'] },
   },
 });
 
@@ -51,7 +56,8 @@ export const HtmlNodeView = ({
     <NodeViewWrapper>
       <div
         // eslint-disable-next-line react/no-danger
-        dangerouslySetInnerHTML={{ __html: sanitizeHtmlPreview(html) }} {...stylex.props(styles.preview)}
+        dangerouslySetInnerHTML={{ __html: sanitizeHtmlPreview(html) }}
+        {...stylex.props(styles.preview)}
       />
     </NodeViewWrapper>
   );

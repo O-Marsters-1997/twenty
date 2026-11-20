@@ -21,9 +21,9 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   container: {
+    gap: spacing['--t-spacing-1'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-1'],
     paddingBottom: 0,
   },
   containerPadded: {
@@ -32,9 +32,9 @@ const styles = stylex.create({
     paddingTop: spacing['--t-spacing-2'],
   },
   controlsRow: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
   },
 });
 
@@ -114,7 +114,10 @@ export const RelativeDatePickerHeader = ({
 
   return (
     <div
-      {...stylex.props(styles.container, !isFormField && styles.containerPadded)}
+      {...stylex.props(
+        styles.container,
+        !isFormField && styles.containerPadded,
+      )}
     >
       <div {...stylex.props(styles.controlsRow)}>
         <Select

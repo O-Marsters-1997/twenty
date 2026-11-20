@@ -4,22 +4,22 @@ import { background, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   inlineCellBaseContainer: {
-    alignItems: 'center',
     background: `var(
     --record-card-background-color,
     ${background['--t-background-primary']}
   )`,
+    gap: spacing['--t-spacing-1'],
+    alignItems: 'center',
     boxSizing: 'border-box',
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
-    height: 'fit-content',
     userSelect: 'text',
+    height: 'fit-content',
     width: '100%',
   },
   content: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
     justifyContent: 'normal',
     width: '100%',
   },

@@ -1,9 +1,6 @@
 import { msg, t } from '@lingui/core/macro';
 import { isDefined } from 'twenty-shared/utils';
-import {
-  IconAlertTriangle,
-  IconApps,
-} from 'twenty-ui/icon';
+import { IconAlertTriangle, IconApps } from 'twenty-ui/icon';
 import { Tag } from 'twenty-ui/primitives/data-display';
 
 import { LOG_CONSOLE_LEVELS } from '@/log-console/constants/LogConsoleLevels';

@@ -14,22 +14,22 @@ import {
 
 const styles = stylex.create({
   container: {
+    borderColor: borderColor['--t-border-color-light'],
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    gap: spacing['--t-spacing-1'],
+    paddingBlock: spacing['--t-spacing-0'],
+    paddingInline: spacing['--t-spacing-1'],
     alignItems: 'center',
     backgroundColor:
       backgroundTransparent['--t-background-transparent-lighter'],
-    borderWidth: '1px',
-    borderStyle: 'solid',
-    borderColor: borderColor['--t-border-color-light'],
-    borderRadius: borderRadius['--t-border-radius-sm'],
     boxSizing: 'border-box',
     color: fontColor['--t-font-color-light'],
     display: 'flex',
     fontSize: fontSize['--t-font-size-sm'],
     fontWeight: fontWeight['--t-font-weight-medium'],
-    gap: spacing['--t-spacing-1'],
     height: spacing['--t-spacing-6'],
-    paddingBlock: spacing['--t-spacing-0'],
-    paddingInline: spacing['--t-spacing-1'],
     width: '100%',
   },
 });

@@ -19,7 +19,12 @@ import { Temporal } from 'temporal-polyfill';
 import { type Nullable } from 'twenty-shared/types';
 import { isDefined, turnJSDateToPlainDate } from 'twenty-shared/utils';
 import * as stylex from '@stylexjs/stylex';
-import { background, borderRadius, fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  background,
+  borderRadius,
+  fontColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const DATE_PICKER_SKELETON_PADDING = 16;
 
@@ -29,22 +34,22 @@ const styles = stylex.create({
     width: 'auto',
   },
   datePickerFallback: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     backgroundColor: background['--t-background-secondary'],
-    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
-    borderTopRightRadius: borderRadius['--t-border-radius-md'],
-    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
-    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
     color: fontColor['--t-font-color-tertiary'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-2'],
-    height: '300px',
     justifyContent: 'center',
-    paddingTop: spacing['--t-spacing-4'],
-    paddingRight: spacing['--t-spacing-4'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
+    height: '300px',
     paddingBottom: spacing['--t-spacing-4'],
     paddingLeft: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingTop: spacing['--t-spacing-4'],
     width: '280px',
   },
 });

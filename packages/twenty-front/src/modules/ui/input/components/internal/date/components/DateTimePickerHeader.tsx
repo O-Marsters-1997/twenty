@@ -26,7 +26,16 @@ import {
   IconClock,
 } from 'twenty-ui/icon';
 import * as stylex from '@stylexjs/stylex';
-import { backgroundTransparent, borderColor, borderRadius, font, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  font,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const YEARS_SELECT_OPTIONS = Array.from(
   { length: 200 },
@@ -35,9 +44,9 @@ const YEARS_SELECT_OPTIONS = Array.from(
 
 const styles = stylex.create({
   timeRow: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
     justifyContent: 'flex-start',
     paddingBottom: spacing['--t-spacing-2'],
     paddingLeft: spacing['--t-spacing-2'],
@@ -48,32 +57,36 @@ const styles = stylex.create({
     flexGrow: '1',
   },
   timeInputContainer: {
-    alignItems: 'center',
-    backgroundColor: backgroundTransparent['--t-background-transparent-lighter'],
-    borderWidth: '1px',
+    borderColor: {
+      default: borderColor['--t-border-color-medium'],
+      ':hover': borderColor['--t-border-color-strong'],
+    },
     borderStyle: 'solid',
-    borderColor: { default: borderColor['--t-border-color-medium'], ':hover': borderColor['--t-border-color-strong'] },
+    borderWidth: '1px',
+    gap: spacing['--t-spacing-1'],
+    transition: 'border-color 0.15s ease',
+    alignItems: 'center',
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    borderBottomLeftRadius: `calc(
+    ${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']}
+  )`,
+    borderBottomRightRadius: `calc(
+    ${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']}
+  )`,
     borderTopLeftRadius: `calc(
     ${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']}
   )`,
     borderTopRightRadius: `calc(
     ${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']}
   )`,
-    borderBottomRightRadius: `calc(
-    ${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']}
-  )`,
-    borderBottomLeftRadius: `calc(
-    ${borderRadius['--t-border-radius-md']} - ${spacing['--t-spacing-1']}
-  )`,
-    boxSizing: 'border-box',
-    display: 'flex',
-    gap: spacing['--t-spacing-1'],
     height: spacing['--t-spacing-8'],
-    paddingTop: '0',
-    paddingRight: spacing['--t-spacing-2'],
     paddingBottom: '0',
     paddingLeft: spacing['--t-spacing-2'],
-    transition: 'border-color 0.15s ease',
+    paddingRight: spacing['--t-spacing-2'],
+    paddingTop: '0',
   },
   clockIcon: {
     alignItems: 'center',
@@ -82,41 +95,48 @@ const styles = stylex.create({
     flexShrink: '0',
   },
   timeInput: {
-    backgroundColor: 'transparent',
     borderStyle: 'none',
-    color: { default: fontColor['--t-font-color-primary'], '::placeholder': fontColor['--t-font-color-light'], ':disabled': fontColor['--t-font-color-tertiary'] },
     flex: '1',
+    outline: 'none',
+    backgroundColor: 'transparent',
+    color: {
+      default: fontColor['--t-font-color-primary'],
+      ':disabled': fontColor['--t-font-color-tertiary'],
+      '::placeholder': fontColor['--t-font-color-light'],
+    },
     fontFamily: font['--t-font-family'],
     fontSize: fontSize['--t-font-size-md'],
-    fontWeight: { default: fontWeight['--t-font-weight-regular'], '::placeholder': fontWeight['--t-font-weight-medium'] },
+    fontWeight: {
+      default: fontWeight['--t-font-weight-regular'],
+      '::placeholder': fontWeight['--t-font-weight-medium'],
+    },
     letterSpacing: '0.05em',
-    outline: 'none',
     width: '100%',
   },
   rightControls: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
   },
   navigationButtons: {
-    display: 'flex',
     gap: spacing['--t-spacing-1'],
+    display: 'flex',
   },
   separator: {
-    borderBottomWidth: '1px',
-    borderBottomStyle: 'solid',
     borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
     height: '1px',
     width: '100%',
   },
   monthYearSelector: {
+    gap: spacing['--t-spacing-1'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-1'],
-    paddingTop: spacing['--t-spacing-1'],
-    paddingRight: spacing['--t-spacing-1'],
     paddingBottom: spacing['--t-spacing-1'],
     paddingLeft: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingTop: spacing['--t-spacing-1'],
     width: '160px',
   },
 });
@@ -209,7 +229,8 @@ export const DateTimePickerHeader = ({
             <input
               type="text"
               ref={timeInputRef}
-              placeholder={isHour12 ? 'HH:mm AA' : 'HH:mm'} {...stylex.props(styles.timeInput)}
+              placeholder={isHour12 ? 'HH:mm AA' : 'HH:mm'}
+              {...stylex.props(styles.timeInput)}
             />
           </div>
         </div>

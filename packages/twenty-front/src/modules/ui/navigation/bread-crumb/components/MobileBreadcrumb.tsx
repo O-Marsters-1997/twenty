@@ -35,6 +35,8 @@ const styles = stylex.create({
     minWidth: 0,
   },
   link: {
+    overflow: 'hidden',
+    textDecoration: 'none',
     color: 'inherit',
     display: 'block',
     outlineColor: {
@@ -53,14 +55,12 @@ const styles = stylex.create({
       default: null,
       ':focus-visible': '2px',
     },
-    overflow: 'hidden',
-    textDecoration: 'none',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
   },
   text: {
-    color: 'inherit',
     overflow: 'hidden',
+    color: 'inherit',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
   },

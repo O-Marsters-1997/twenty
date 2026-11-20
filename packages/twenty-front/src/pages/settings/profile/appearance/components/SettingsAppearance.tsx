@@ -14,10 +14,10 @@ import { media } from 'twenty-ui/theme/constants.stylex';
 
 const styles = stylex.create({
   choices: {
-    flexDirection: 'row',
     gap: spacing['--t-spacing-4'],
-    width: '100%',
+    flexDirection: 'row',
     overflowX: { default: null, [media.mobile]: 'auto' },
+    width: '100%',
   },
 });
 

@@ -25,9 +25,9 @@ import {
 
 const styles = stylex.create({
   heading: {
+    overflow: 'hidden',
     display: 'flex',
     maxWidth: '20%',
-    overflow: 'hidden',
     width: 'fit-content',
   },
   participantsContainer: {
@@ -38,43 +38,43 @@ const styles = stylex.create({
     marginLeft: `calc(-1 * ${spacing['--t-spacing-1']})`,
   },
   senderNames: {
-    display: 'flex',
-    marginTop: spacing['--t-spacing-0'],
-    marginRight: spacing['--t-spacing-1'],
-    marginBottom: spacing['--t-spacing-0'],
-    marginLeft: spacing['--t-spacing-1'],
     overflow: 'hidden',
+    display: 'flex',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
+    marginBottom: spacing['--t-spacing-0'],
+    marginLeft: spacing['--t-spacing-1'],
+    marginRight: spacing['--t-spacing-1'],
+    marginTop: spacing['--t-spacing-0'],
   },
   threadCount: {
     color: fontColor['--t-font-color-tertiary'],
   },
   subjectAndBody: {
-    alignItems: 'center',
-    display: 'flex',
     flex: '1',
     gap: spacing['--t-spacing-2'],
     overflow: 'hidden',
+    alignItems: 'center',
+    display: 'flex',
   },
   subject: {
-    color: fontColor['--t-font-color-primary'],
     overflow: 'hidden',
+    color: fontColor['--t-font-color-primary'],
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
   },
   body: {
-    color: fontColor['--t-font-color-tertiary'],
     flex: '1',
     overflow: 'hidden',
+    color: fontColor['--t-font-color-tertiary'],
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
   },
   receivedAt: {
-    fontSize: fontSize['--t-font-size-sm'],
-    fontWeight: fontWeight['--t-font-weight-regular'],
     paddingBlock: spacing['--t-spacing-0'],
     paddingInline: spacing['--t-spacing-1'],
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
   },
 });
 

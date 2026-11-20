@@ -15,14 +15,14 @@ export const FormNestedFieldInputContainer = ({
 
 const styles = stylex.create({
   container: {
-    backgroundColor: background['--t-background-secondary'],
+    padding: spacing['--t-spacing-2'],
     borderColor: borderColor['--t-border-color-medium'],
     borderRadius: borderRadius['--t-border-radius-md'],
     borderStyle: 'solid',
     borderWidth: 1,
+    gap: spacing['--t-spacing-2'],
+    backgroundColor: background['--t-background-secondary'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-2'],
-    padding: spacing['--t-spacing-2'],
   },
 });
