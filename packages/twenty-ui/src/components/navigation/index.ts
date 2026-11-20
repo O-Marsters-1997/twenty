@@ -7,6 +7,11 @@
  *                              |___/
  */
 
+export {
+  dropdownSectionMarker,
+  dropdownItemWithActionsMarker,
+  dropdownStyles,
+} from './Dropdown/Dropdown.stylex';
 export { Dropdown } from './Dropdown/Dropdown';
 export { useDropdownPage } from './Dropdown/hooks/useDropdownPage';
 export type { DropdownActionItemProps } from './Dropdown/types/DropdownActionItemProps';
@@ -40,5 +45,6 @@ export { MenuItemSuggestion } from './MenuItemSuggestion/MenuItemSuggestion';
 export type { MenuItemSuggestionProps } from './MenuItemSuggestion/types/MenuItemSuggestionProps';
 export { MenuPicker } from './MenuPicker/MenuPicker';
 export type { MenuPickerProps } from './MenuPicker/types/MenuPickerProps';
+export { tabButtonStyles } from './TabButton/TabButton.stylex';
 export { TabButton } from './TabButton/TabButton';
 export type { TabButtonProps } from './TabButton/types/TabButtonProps';

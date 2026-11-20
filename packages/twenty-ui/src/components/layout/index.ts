@@ -9,6 +9,7 @@
 
 export { AnimatedIconCrossfade } from './AnimatedIconCrossfade/AnimatedIconCrossfade';
 export type { AnimatedIconCrossfadeProps } from './AnimatedIconCrossfade/types/AnimatedIconCrossfadeProps';
+export { overflowingListItemsMarker } from './OverflowingList/OverflowingList.stylex';
 export { OverflowingList } from './OverflowingList/OverflowingList';
 export type { OverflowingListProps } from './OverflowingList/types/OverflowingListProps';
 export { Section } from './Section/Section';

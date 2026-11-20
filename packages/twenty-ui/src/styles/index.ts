@@ -7,4 +7,4 @@
  *                              |___/
  */
 
-export {};
+export { focusStyles } from './focus.stylex';

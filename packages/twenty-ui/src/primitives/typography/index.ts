@@ -7,11 +7,18 @@
  *                              |___/
  */
 
+export {
+  headingStyles,
+  headingSizeStyles,
+  headingColorStyles,
+} from './Heading/Heading.stylex';
 export { Heading } from './Heading/Heading';
 export type { HeadingProps } from './Heading/types/HeadingProps';
+export { overflowingTextStyles } from './OverflowingTextWithTooltip/OverflowingTextWithTooltip.stylex';
 export { OverflowingTextWithTooltip } from './OverflowingTextWithTooltip/OverflowingTextWithTooltip';
 export type { OverflowingTextWithTooltipProps } from './OverflowingTextWithTooltip/types/OverflowingTextWithTooltipProps';
 export { formatShortcut } from './Shortcut/formatShortcut';
+export { shortcutStyles } from './Shortcut/Shortcut.stylex';
 export { Shortcut } from './Shortcut/Shortcut';
 export type { ShortcutDefinition } from './Shortcut/types/ShortcutDefinition';
 export type { ShortcutFormatOptions } from './Shortcut/types/ShortcutFormatOptions';

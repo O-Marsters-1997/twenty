@@ -19,6 +19,7 @@ export type { CollapsibleTriggerProps } from './Collapsible/types/CollapsibleTri
 export type { CollapsibleTriggerState } from './Collapsible/types/CollapsibleTriggerState';
 export { DirectionProvider } from './DirectionProvider/DirectionProvider';
 export type { DirectionProviderProps } from './DirectionProvider/types/DirectionProviderProps';
+export { resizeHandleMarker } from './ResizeHandle/ResizeHandle.stylex';
 export { ResizeHandle } from './ResizeHandle/ResizeHandle';
 export type { ResizeHandleProps } from './ResizeHandle/types/ResizeHandleProps';
 export { Separator } from './Separator/Separator';
