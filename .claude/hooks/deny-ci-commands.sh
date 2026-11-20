@@ -9,6 +9,7 @@ deny() {
 
 matches() { printf '%s\n' "$command" | grep -Eq "$1"; }
 
-matches 'nx (run )?test +twenty-(front|ui)( |$)|nx run twenty-(front|ui):test( |:|$)|nx (run-many|affected).*(-t|--target)[ =]test( |$)' && deny "package-wide nx test"
+matches '(^|[^a-z])moon +run +.*twenty-(front|ui):test( |$)' && ! matches ' -- +[^- ]' && deny "package-wide moon test, pass a file after --"
+matches '(^|[^a-z])moon +run +(.* )?:test( |$)|(^|[^a-z])moon +ci( |$)' && deny "all-projects moon test run"
 matches '(^|[^a-z])tsgo( |$)' && ! matches 'scripts/heavy +(npx +)?tsgo' && deny "bare tsgo, run it as 'scripts/heavy npx tsgo ...'"
 exit 0

@@ -5,39 +5,39 @@
 Installing the browsers:
 
 ```
-npx nx setup twenty-e2e-testing
+npx moon run twenty-e2e-testing:setup
 ```
 
 ### Run end-to-end tests
 
 ```
-npx nx test twenty-e2e-testing
+npx moon run twenty-e2e-testing:test
 ```
 
 ### Start the interactive UI mode
 
 ```
-npx nx test:ui twenty-e2e-testing
+npx moon run twenty-e2e-testing:test -- --ui
 ```
 
 ### Run test in specific file
 ```
-npx nx test twenty-e2e-testing <filename>
+npx moon run twenty-e2e-testing:test -- <filename>
 ```
 
 Example (location of the test must be specified from the root of `twenty-e2e-testing` package):
 ```
-npx nx test twenty-e2e-testing tests/login.spec.ts
+npx moon run twenty-e2e-testing:test -- tests/login.spec.ts
 ```
 
 ### Runs the tests in debug mode.
 ```
-npx nx test:debug twenty-e2e-testing
+npx moon run twenty-e2e-testing:test -- --debug
 ```
 
 ### Show report after tests
 ```
-npx nx test:report twenty-e2e-testing
+cd packages/twenty-e2e-testing && bunx playwright show-report
 ```
 
 ## Q&A

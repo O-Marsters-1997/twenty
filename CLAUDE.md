@@ -27,24 +27,24 @@ bun run start                                 # front
 
 npx jest path/to/file.spec.ts --config=packages/<pkg>/jest.config.mjs   # single test file (preferred)
 npx vitest run --root packages/twenty-ui --project unit <file>          # twenty-ui runs on vitest, not jest
-npx nx storybook:build twenty-front && npx nx storybook:test twenty-front
+npx moon run twenty-front:storybook-build
 
-npx nx lint:diff-with-main twenty-front       # diff-based lint (fast; add --configuration=fix); run with typecheck after changes
-npx nx fmt <pkg>                              # format
-npx nx build twenty-shared                    # required before building/testing packages that depend on it
-npx nx run twenty-front:graphql:generate      # after GraphQL schema changes (--configuration=metadata for metadata schema)
+npx moon run twenty-front:lint-diff           # diff-based lint (fast); run with typecheck after changes
+npx moon run <pkg>:fmt                        # format check
+npx moon run twenty-shared:build              # required before building/testing packages that depend on it
+npx moon run twenty-front:graphql-generate    # after GraphQL schema changes
 ```
 
 ## Agent versus CI
 
-Agents run only: a typecheck of the touched package through `scripts/heavy` (`scripts/heavy npx tsgo -p tsconfig.json --noEmit`, which serialises memory-heavy runs), single-file jest, and `lint:diff-with-main`. CI runs package-wide `nx test` for twenty-front and twenty-ui. A `PreToolUse` hook (`.claude/hooks/deny-ci-commands.sh`) denies those commands and a bare `tsgo`. twenty-shared tests are cheap and not banned.
+Agents run only: a typecheck of the touched package through `scripts/heavy` (`scripts/heavy npx tsgo -p tsconfig.json --noEmit`, which serialises memory-heavy runs), single-file jest, and `moon run twenty-front:lint-diff`. CI runs package-wide `moon run twenty-front:test` and `twenty-ui:test`. A `PreToolUse` hook (`.claude/hooks/deny-ci-commands.sh`) denies those commands, `moon run :test`, `moon ci` and a bare `tsgo`. twenty-shared tests are cheap and not banned.
 
-CI is one workflow, `.github/workflows/ci.yaml`, with a single required check, `ci-status-check`, the only entry in `.command-centre.toml`. Its jobs run in parallel and all run on every main push: Go generated code, build, vet and test; front lint, typecheck and jest; ui lint, generate:check, typecheck and test; shared, emails, utils and knip. No storybook or front build runs in CI, so those stay allowed locally.
+CI is one workflow, `.github/workflows/ci.yaml`, with a single required check, `ci-status-check`, the only entry in `.command-centre.toml`. Its jobs run in parallel and all run on every main push: Go generated code, build, vet and test; front lint, typecheck and jest; ui lint, generate-check, typecheck and test; shared, emails, utils and knip. No storybook or front build runs in CI, so those stay allowed locally.
 
 ## Gotchas
 
-- **`twenty-shared/dist` is per-branch state nothing tracks.** After switching branches or editing `twenty-shared`, run `npx nx build twenty-shared --skip-nx-cache` before trusting any typecheck or test failure in a dependent package.
-- **Nx caching can serve a stale pass.** To verify a fix, run `npx tsgo -p tsconfig.json --noEmit` in the package directly rather than `nx typecheck`.
+- **`twenty-shared/dist` is per-branch state nothing tracks.** After switching branches or editing `twenty-shared`, run `npx moon run twenty-shared:build --force` before trusting any typecheck or test failure in a dependent package.
+- **moon caching can serve a stale pass.** To verify a fix, run `npx tsgo -p tsconfig.json --noEmit` in the package directly rather than `moon run <pkg>:typecheck`.
 - **Commit messages must not carry AI attribution.** CI rejects commits containing `@anthropic.com` co-author trailers or "Generated with Claude Code" lines.
 - A read-only Postgres MCP server is configured in `.mcp.json` for inspecting workspace data, metadata, and migration results. Writes go through the CLI commands above.
 - E2E login: click "Continue with Email" and use the prefilled credentials.

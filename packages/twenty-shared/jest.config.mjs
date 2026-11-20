@@ -24,8 +24,7 @@ const jestConfig = {
     ],
   },
   moduleNameMapper: {
-    // TODO prastoin investigate not working with pathsToModuleNameMapper
-    '/^@/(.*)$/': './src/$1',
+    '^@/(.*)$': '<rootDir>/src/$1',
     '\\.(jpg|jpeg|png|gif|webp|svg|svg\\?react)$':
       '<rootDir>/__mocks__/imageMockShared.js',
   },

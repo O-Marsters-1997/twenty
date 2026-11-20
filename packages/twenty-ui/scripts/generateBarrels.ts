@@ -21,7 +21,7 @@ const writeGeneratedFile = ({
   }
   if (shouldCheck) {
     throw new Error(
-      `Generated exports are stale: ${file}. Run nx generateBarrels twenty-ui.`,
+      `Generated exports are stale: ${file}. Run npx moon run twenty-ui:generate-barrels.`,
     );
   }
   fs.writeFileSync(file, content, 'utf8');
@@ -29,7 +29,6 @@ const writeGeneratedFile = ({
 
 const INDEX_FILENAME = 'index';
 const PACKAGE_JSON_FILENAME = 'package.json';
-const NX_PROJECT_CONFIGURATION_FILENAME = 'project.json';
 const PACKAGE_PATH = path.resolve('packages/twenty-ui');
 const SRC_PATH = path.resolve(`${PACKAGE_PATH}/src`);
 const STANDALONE_MODULES = [
@@ -39,10 +38,6 @@ const STANDALONE_MODULES = [
   'testing',
 ];
 const PACKAGE_JSON_PATH = path.join(PACKAGE_PATH, PACKAGE_JSON_FILENAME);
-const NX_PROJECT_CONFIGURATION_PATH = path.join(
-  PACKAGE_PATH,
-  NX_PROJECT_CONFIGURATION_FILENAME,
-);
 
 const prettierConfigFile = prettier.resolveConfigFile();
 if (prettierConfigFile == null) {
@@ -222,25 +217,6 @@ const writeInPackageJson = (update: JsonUpdate) => {
   });
 };
 
-const updateNxProjectConfigurationBuildOutputs = (outputs: JsonUpdate) => {
-  const rawJsonFile = fs.readFileSync(NX_PROJECT_CONFIGURATION_PATH, 'utf-8');
-  const initialJsonFile = JSON.parse(rawJsonFile);
-
-  updateJsonFile({
-    file: NX_PROJECT_CONFIGURATION_PATH,
-    content: {
-      ...initialJsonFile,
-      targets: {
-        ...initialJsonFile.targets,
-        build: {
-          ...initialJsonFile.targets.build,
-          outputs,
-        },
-      },
-    },
-  });
-};
-
 type ExportOccurrence = {
   types: string;
   import: string;
@@ -313,10 +289,6 @@ const computePackageJsonFilesAndExportsConfig = (
       '!dist/**/*.map',
     ],
   };
-};
-
-const computeProjectNxBuildOutputsPath = () => {
-  return ['{projectRoot}/dist'];
 };
 
 const EXCLUDED_EXTENSIONS = [
@@ -592,9 +564,6 @@ const main = () => {
   const moduleIndexFiles = generateModuleIndexFiles(exportsByBarrel);
   const packageJsonConfig =
     computePackageJsonFilesAndExportsConfig(barrelDirectories);
-  const nxBuildOutputsPath = computeProjectNxBuildOutputsPath();
-
-  updateNxProjectConfigurationBuildOutputs(nxBuildOutputsPath);
   writeInPackageJson(packageJsonConfig);
   moduleIndexFiles.forEach(createTypeScriptFile);
   createTypeScriptFile(generateRootBarrel(moduleDirectories));

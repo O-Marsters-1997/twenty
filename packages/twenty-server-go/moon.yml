@@ -18,6 +18,12 @@ tasks:
     options:
       cache: true
 
+  vet:
+    command: go vet ./...
+    inputs: ['@group(sources)']
+    options:
+      cache: true
+
   lint:
     script: go vet ./... && golangci-lint run
     inputs: ['@group(sources)', '.golangci.yml']
@@ -40,6 +46,11 @@ tasks:
     script: cd ../twenty-e2e-testing && (cp -n .env.example .env; bunx playwright test)
     env:
       FRONTEND_BASE_URL: 'http://localhost:3000'
-    inputs: ['/packages/twenty-e2e-testing/tests/**/*', '/packages/twenty-e2e-testing/lib/**/*', '/packages/twenty-e2e-testing/playwright.config.ts']
+    inputs:
+      [
+        '/packages/twenty-e2e-testing/tests/**/*',
+        '/packages/twenty-e2e-testing/lib/**/*',
+        '/packages/twenty-e2e-testing/playwright.config.ts',
+      ]
     options:
       cache: true

@@ -19,7 +19,7 @@ tasks:
 
   lint:
     script: |-
-      npx oxlint -c .oxlintrc.json . && (npx oxfmt --check . || (echo 'ERROR: oxfmt formatting check failed! Fix with: npx nx lint --configuration=fix' && false))
+      npx oxlint -c .oxlintrc.json . && (npx oxfmt --check . || (echo 'ERROR: oxfmt formatting check failed! Fix with: npx oxfmt .' && false))
     deps: ['^:build', 'twenty-oxlint-rules:build']
     inputs:
       - '@group(sources)'

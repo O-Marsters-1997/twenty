@@ -105,7 +105,7 @@ Want to go deeper? Read the <a href="https://docs.twenty.com/user-guide/introduc
 # Stack
 
 - <a href="https://www.typescriptlang.org/">TypeScript</a>
-- <a href="https://nx.dev/">Nx</a>
+- <a href="https://moonrepo.dev/">moon</a>
 - <a href="https://go.dev/">Go</a>, with <a href="https://www.postgresql.org/">PostgreSQL</a>
 - <a href="https://reactjs.org/">React</a>, with <a href="https://jotai.org/">Jotai</a>, <a href="https://stylexjs.com/">StyleX</a> and <a href="https://lingui.dev/">Lingui</a>
 

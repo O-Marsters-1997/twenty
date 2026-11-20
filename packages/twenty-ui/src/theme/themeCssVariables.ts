@@ -1,5 +1,5 @@
 // Generated from design-tokens by scripts/generateThemeTokens.ts.
-// Do not edit manually. Regenerate with: npx nx generateTokens twenty-ui.
+// Do not edit manually. Regenerate with: npx moon run twenty-ui:generate-tokens.
 export const themeCssVariables = {
   icon: {
     size: {

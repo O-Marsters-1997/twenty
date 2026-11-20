@@ -231,14 +231,11 @@ run_psql 'CREATE DATABASE "default";'
 run_psql 'CREATE DATABASE "test";'
 ok "Databases 'default' and 'test' ready"
 
-# =============================================================================
-# 3. Environment files (via Nx when available, fallback to cp)
-# =============================================================================
 info "Setting up .env files..."
 cd "$REPO_ROOT"
 
 if command -v npx &>/dev/null && [ -d node_modules ]; then
-  npx nx reset:env twenty-front
+  npx moon run twenty-front:reset-env
 else
   for pkg in twenty-front; do
     src="packages/$pkg/.env.example"
@@ -274,6 +271,6 @@ echo ""
 echo "Dev environment ready."
 echo ""
 echo "  bun run start                        # start everything"
-echo "  npx nx start twenty-front          # frontend  -> http://localhost:3001"
+echo "  npx moon run twenty-front:start    # frontend  -> http://localhost:3001"
 echo "  go run ./packages/twenty-server-go/cmd/api   # backend   -> http://localhost:3000"
 echo ""

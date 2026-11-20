@@ -7,7 +7,7 @@
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["nx", "test", "twenty-e2e-testing", "${file}"],
+      "runtimeArgs": ["moon", "run", "twenty-e2e-testing:test", "--", "${file}"],
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}",
       "internalConsoleOptions": "neverOpen",

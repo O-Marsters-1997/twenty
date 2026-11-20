@@ -14,81 +14,68 @@ concurrency:
 
 jobs:
   changes:
-    timeout-minutes: 5
+    timeout-minutes: 10
     runs-on: ubuntu-latest
     outputs:
-      go: ${{ github.event_name == 'push' || steps.filter.outputs.ci_any_changed == 'true' || steps.filter.outputs.go_any_changed == 'true' }}
-      front: ${{ github.event_name == 'push' || steps.filter.outputs.ci_any_changed == 'true' || steps.filter.outputs.front_any_changed == 'true' }}
-      ui: ${{ github.event_name == 'push' || steps.filter.outputs.ci_any_changed == 'true' || steps.filter.outputs.ui_any_changed == 'true' }}
-      shared: ${{ github.event_name == 'push' || steps.filter.outputs.ci_any_changed == 'true' || steps.filter.outputs.shared_any_changed == 'true' }}
-      emails: ${{ github.event_name == 'push' || steps.filter.outputs.ci_any_changed == 'true' || steps.filter.outputs.emails_any_changed == 'true' }}
-      utils: ${{ github.event_name == 'push' || steps.filter.outputs.ci_any_changed == 'true' || steps.filter.outputs.utils_any_changed == 'true' }}
-      knip: ${{ github.event_name == 'push' || steps.filter.outputs.ci_any_changed == 'true' || steps.filter.outputs.knip_any_changed == 'true' }}
+      go: ${{ steps.affected.outputs.go }}
+      front: ${{ steps.affected.outputs.front }}
+      ui: ${{ steps.affected.outputs.ui }}
+      shared: ${{ steps.affected.outputs.shared }}
+      emails: ${{ steps.affected.outputs.emails }}
+      utils: ${{ steps.affected.outputs.utils }}
+      knip: ${{ steps.affected.outputs.knip }}
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
-          fetch-depth: 10
-      - id: filter
-        uses: tj-actions/changed-files@48d8f15b2aaa3d255ca5af3eba4870f807ce6b3c # v45.0.9
-        with:
-          files_yaml: |
-            ci:
-              - .github/**
-            go:
-              - packages/twenty-server-go/**
-            front:
-              - package.json
-              - bun.lock
-              - packages/twenty-front/**
-              - packages/twenty-ui/**
-              - packages/twenty-shared/**
-              - packages/twenty-oxlint-rules/**
-            ui:
-              - package.json
-              - bun.lock
-              - packages/twenty-ui/**
-              - packages/twenty-shared/**
-            shared:
-              - packages/twenty-shared/**
-            emails:
-              - package.json
-              - packages/twenty-emails/**
-            utils:
-              - packages/twenty-utils/**
-            knip:
-              - knip.json
-              - nx.json
-              - package.json
-              - bun.lock
-              - packages/twenty-front/**
-              - packages/twenty-shared/**
-              - packages/twenty-ui/**
+          fetch-depth: 0
+          filter: blob:none
+      - uses: ./.github/actions/bun-install
+      - id: affected
+        env:
+          MOON_BASE: ${{ github.event.pull_request.base.sha }}
+        run: |
+          everything=false
+          affected=
+          if [ "$GITHUB_EVENT_NAME" = push ]; then
+            everything=true
+          else
+            outside_projects='^(\.github|\.moon|scripts)/|^(package\.json|bun\.lock|knip\.json|tsconfig\.base\.json|jest\.preset\.js|\.oxfmtrc\.jsonc|bunfig\.toml)$'
+            everything=$(npx moon query changed-files | jq --arg pattern "$outside_projects" '[.files[] | select(test($pattern))] | length > 0')
+            affected=$(npx moon query affected --downstream deep | jq -r '.projects | keys[]')
+          fi
+          emit() {
+            if [ "$everything" = true ] || printf '%s\n' "$affected" | grep -qx "$2"; then
+              echo "$1=true"
+            else
+              echo "$1=false"
+            fi >> "$GITHUB_OUTPUT"
+          }
+          emit go twenty-server-go
+          emit front twenty-front
+          emit ui twenty-ui
+          emit shared twenty-shared
+          emit emails twenty-emails
+          emit utils twenty-utils
+          emit knip twenty-front
 
   go:
     needs: changes
     if: needs.changes.outputs.go == 'true'
     timeout-minutes: 20
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: packages/twenty-server-go
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
-      - id: setup
-        uses: actions/setup-go@v5
+        with:
+          filter: blob:none
+      - uses: actions/setup-go@v5
         with:
           go-version-file: packages/twenty-server-go/go.mod
           cache-dependency-path: packages/twenty-server-go/go.sum
-      - name: Fail on a generated diff
-        run: |
-          go generate ./...
-          git diff --exit-code -- . && test -z "$(git ls-files --others --exclude-standard -- .)"
-      - name: Build, vet and test
-        if: ${{ !cancelled() && steps.setup.outcome == 'success' }}
-        run: |
-          go build ./...
-          go vet ./...
-          go test ./...
+      - uses: ./.github/actions/bun-install
+      - uses: ./.github/actions/moon-cache
+        with:
+          key-prefix: moon-go
+      - run: npx moon run twenty-server-go:generated-check twenty-server-go:build twenty-server-go:vet twenty-server-go:test
 
   front-static:
     needs: changes
@@ -99,9 +86,13 @@ jobs:
       NODE_OPTIONS: '--max-old-space-size=6144'
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          filter: blob:none
       - uses: ./.github/actions/bun-install
-      - run: npx nx reset:env twenty-front
-      - run: npx nx run-many -t lint typecheck -p twenty-front --parallel
+      - uses: ./.github/actions/moon-cache
+        with:
+          key-prefix: moon-front-static
+      - run: npx moon run twenty-front:reset-env twenty-front:lint twenty-front:typecheck
 
   front-test:
     needs: changes
@@ -116,9 +107,14 @@ jobs:
         shard: [1, 2, 3]
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          filter: blob:none
       - uses: ./.github/actions/bun-install
-      - run: npx nx reset:env twenty-front
-      - run: npx nx test twenty-front --configuration=ci --shard=${{ matrix.shard }}/3
+      - uses: ./.github/actions/moon-cache
+        with:
+          key-prefix: moon-front-test-${{ matrix.shard }}
+      - run: npx moon run twenty-front:reset-env
+      - run: npx moon run twenty-front:test -- --ci --maxWorkers=1 --shard=${{ matrix.shard }}/3
 
   ui:
     needs: changes
@@ -127,8 +123,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          filter: blob:none
       - uses: ./.github/actions/bun-install
-      - run: npx nx run-many -t lint generate:check typecheck test -p twenty-ui --parallel
+      - uses: ./.github/actions/moon-cache
+        with:
+          key-prefix: moon-ui
+      - run: npx moon run twenty-ui:lint twenty-ui:generate-check twenty-ui:typecheck twenty-ui:test
 
   shared-emails-utils:
     needs: changes
@@ -139,25 +140,30 @@ jobs:
       NODE_OPTIONS: '--max-old-space-size=4096'
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          filter: blob:none
       - id: install
         uses: ./.github/actions/bun-install
+      - uses: ./.github/actions/moon-cache
+        with:
+          key-prefix: moon-shared-emails-utils
       - name: Shared lint, typecheck and test
         if: ${{ !cancelled() && steps.install.outcome == 'success' && needs.changes.outputs.shared == 'true' }}
-        run: npx nx run-many -t lint typecheck test -p twenty-shared --parallel
+        run: |
+          npx moon run twenty-oxlint-rules:build
+          npx moon run twenty-shared:lint twenty-shared:typecheck twenty-shared:test
       - name: Emails build, lingui and preview
         if: ${{ !cancelled() && steps.install.outcome == 'success' && needs.changes.outputs.emails == 'true' }}
         run: |
-          npx nx build twenty-emails
-          npx nx run twenty-emails:lingui:extract
-          npx nx run twenty-emails:lingui:compile
-          npx nx run twenty-emails:start &
+          npx moon run twenty-emails:build twenty-emails:lingui-extract twenty-emails:lingui-compile
+          npx moon run twenty-emails:start &
           SERVER_PID=$!
           sleep 20
           curl -sf http://localhost:4001/preview/test.email > /dev/null || { kill $SERVER_PID; exit 1; }
           kill $SERVER_PID
       - name: Utils test
         if: ${{ !cancelled() && steps.install.outcome == 'success' && needs.changes.outputs.utils == 'true' }}
-        run: npx nx test twenty-utils
+        run: npx moon run twenty-utils:test
 
   knip:
     needs: changes
@@ -166,8 +172,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          filter: blob:none
       - uses: ./.github/actions/bun-install
-      - run: npx nx run-many -t knip --parallel=1
+      - uses: ./.github/actions/moon-cache
+        with:
+          key-prefix: moon-knip
+      - run: npx moon run twenty-front:knip twenty-ui:knip --concurrency 1
 
   ci-status-check:
     if: always() && !cancelled()

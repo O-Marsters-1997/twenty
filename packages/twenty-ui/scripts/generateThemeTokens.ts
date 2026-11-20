@@ -152,7 +152,7 @@ if (staleOutputPaths.length > 0) {
   process.stderr.write(
     `::error::Generated theme artifacts are stale: ${staleOutputPaths
       .map((path) => relative(packageRoot, path))
-      .join(', ')}. Run: npx nx generateTokens twenty-ui\n`,
+      .join(', ')}. Run: npx moon run twenty-ui:generate-tokens\n`,
   );
   process.exit(1);
 }
