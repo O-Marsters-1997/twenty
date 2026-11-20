@@ -9,7 +9,7 @@ check() {
 check 2 "npx nx test twenty-front"
 check 0 "npx nx lint:diff-with-main twenty-front"
 check 0 "npx nx build twenty-shared"
-check 2 "npx nx storybook:build twenty-ui"
+check 0 "npx nx storybook:build twenty-ui"
 check 0 "npx nx storybook:build twenty-front"
 check 2 "npx tsgo -p tsconfig.json --noEmit"
 check 0 "scripts/heavy npx tsgo -p tsconfig.json --noEmit"
