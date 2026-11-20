@@ -91,6 +91,8 @@ export const COMMAND_MENU_ITEM_SECTION_BY_ENGINE_COMPONENT_KEY = {
   [EngineComponentKey.GO_TO_RUNS]: 'GO_TO',
 
   [EngineComponentKey.SEARCH_RECORDS_FALLBACK]: 'FALLBACK',
+
+  [EngineComponentKey.FRONT_COMPONENT_RENDERER]: 'DEVELOPER',
 } as const satisfies Record<
   Exclude<EngineComponentKey, (typeof AMBIGUOUS_ENGINE_COMPONENT_KEYS)[number]>,
   CommandMenuItemSection

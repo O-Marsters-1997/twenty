@@ -492,6 +492,12 @@ export const SETTINGS_COMPOSITE_FIELD_TYPE_CONFIGS = {
         workspaceMemberId: 'id',
         context: {},
       },
+      {
+        source: 'API',
+        name: 'name',
+        workspaceMemberId: 'id',
+        context: {},
+      },
     ],
   } as const satisfies SettingsCompositeFieldTypeConfig<FieldActorValue>,
   [FieldMetadataType.RICH_TEXT]: {

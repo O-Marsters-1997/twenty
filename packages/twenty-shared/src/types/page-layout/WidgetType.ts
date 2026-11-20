@@ -22,4 +22,5 @@ export enum WidgetType {
   FORM_FIELD = 'FORM_FIELD',
   CHAT_THREADS = 'CHAT_THREADS',
   CHAT = 'CHAT',
+  FRONT_COMPONENT = 'FRONT_COMPONENT',
 }
