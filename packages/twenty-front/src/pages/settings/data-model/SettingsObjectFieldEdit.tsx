@@ -30,7 +30,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useLingui } from '@lingui/react/macro';
 import omit from 'lodash.omit';
 import { useEffect, useState } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm, type Resolver } from 'react-hook-form';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { AppPath, SettingsPath } from 'twenty-shared/types';
 import { getSettingsPath, isDefined, isEmptyObject } from 'twenty-shared/utils';
@@ -132,7 +132,9 @@ export const SettingsObjectFieldEdit = () => {
 
   const formConfig = useForm<SettingsDataModelFieldEditFormValues>({
     mode: 'onTouched',
-    resolver: zodResolver(settingsFieldFormSchema()),
+    resolver: zodResolver(
+      settingsFieldFormSchema(),
+    ) as unknown as Resolver<SettingsDataModelFieldEditFormValues>,
     defaultValues: {
       icon: fieldMetadataItem?.icon ?? 'Icon',
       type: fieldMetadataItem?.type as SettingsFieldType,
