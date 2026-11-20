@@ -1,0 +1,18 @@
+schema:
+  - "*.graphqls"
+exec:
+  filename: generated.go
+  package: invitationgql
+model:
+  filename: models_gen.go
+  package: invitationgql
+resolver:
+  layout: single-file
+  filename: resolver.go
+  package: invitationgql
+  type: Resolver
+models:
+  UUID:
+    model: github.com/99designs/gqlgen/graphql.String
+  DateTime:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata.Timestamp

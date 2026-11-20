@@ -12,7 +12,7 @@ import (
 
 var objectOperations = []string{"ObjectMetadataItems", "GetToolIndex", "GetToolInputSchema"}
 
-func metadataHandler(objects, chat, skills, views, agents, messaging, twoFactor http.Handler, agentOperations []string) http.Handler {
+func metadataHandler(objects, chat, skills, views, agents, messaging, twoFactor, invitations http.Handler, agentOperations []string) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		body, err := io.ReadAll(r.Body)
 		if err != nil {
@@ -40,6 +40,8 @@ func metadataHandler(objects, chat, skills, views, agents, messaging, twoFactor 
 			slices.Contains(frontdoor.PublicWorkspaceOperations, request.OperationName),
 			slices.Contains(frontdoor.WorkspaceDataOperations, request.OperationName):
 			twoFactor.ServeHTTP(w, r)
+		case slices.Contains(frontdoor.InvitationOperations, request.OperationName):
+			invitations.ServeHTTP(w, r)
 		case slices.Contains(frontdoor.ChatOperations, request.OperationName):
 			chat.ServeHTTP(w, r)
 		case slices.Contains(frontdoor.SkillOperations, request.OperationName):

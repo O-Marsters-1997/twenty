@@ -25,6 +25,8 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth/authgql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/config"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/frontdoor"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/invitation/invitationgql"
+	invitationstore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/invitation/store"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging/messaginggql"
 	messagingstore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging/store"
@@ -133,6 +135,7 @@ func run() error {
 			Queue:     queue.Enqueue,
 		}, logger),
 		authHandler,
+		invitationgql.NewHandler(&invitationgql.Resolver{Store: invitationstore.New(pool)}, logger),
 		agentgql.Operations,
 	))
 
