@@ -12,7 +12,9 @@ const styles = stylex.create({
   },
 });
 
-export const TableBody = ({ className, ...props }: TableBodyProps<'div'>) => {
+type TableBodyProps = ComponentProps<'div'>;
+
+export const TableBody = ({ className, ...props }: TableBodyProps) => {
   const rootProps = stylex.props(styles.body);
 
   return (

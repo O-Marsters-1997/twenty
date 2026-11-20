@@ -18,10 +18,12 @@ const styles = stylex.create({
   },
 });
 
+type StyledWidgetContentContainerProps = ComponentProps<'div'>;
+
 export const StyledWidgetContentContainer = ({
   className,
   ...props
-}: StyledWidgetContentContainerProps<'div'>) => {
+}: StyledWidgetContentContainerProps) => {
   const rootProps = stylex.props(styles.container);
 
   return (
@@ -33,10 +35,12 @@ export const StyledWidgetContentContainer = ({
   );
 };
 
+type StyledWidgetScrollContainerProps = ComponentProps<'div'>;
+
 export const StyledWidgetScrollContainer = ({
   className,
   ...props
-}: StyledWidgetScrollContainerProps<'div'>) => {
+}: StyledWidgetScrollContainerProps) => {
   const rootProps = stylex.props(styles.container, styles.scroll);
 
   return (
