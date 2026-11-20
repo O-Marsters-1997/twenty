@@ -10,14 +10,9 @@ import ts from 'typescript';
 
 const INDEX_FILENAME = 'index';
 const PACKAGE_JSON_FILENAME = 'package.json';
-const NX_PROJECT_CONFIGURATION_FILENAME = 'project.json';
 const PACKAGE_PATH = path.resolve('packages/twenty-shared');
 const SRC_PATH = path.resolve(`${PACKAGE_PATH}/src`);
 const PACKAGE_JSON_PATH = path.join(PACKAGE_PATH, PACKAGE_JSON_FILENAME);
-const NX_PROJECT_CONFIGURATION_PATH = path.join(
-  PACKAGE_PATH,
-  NX_PROJECT_CONFIGURATION_FILENAME,
-);
 
 const prettierConfigFile = prettier.resolveConfigFile();
 if (prettierConfigFile == null) {
@@ -171,25 +166,6 @@ const writeInPackageJson = (update: JsonUpdate) => {
   });
 };
 
-const updateNxProjectConfigurationBuildOutputs = (outputs: JsonUpdate) => {
-  const rawJsonFile = fs.readFileSync(NX_PROJECT_CONFIGURATION_PATH, 'utf-8');
-  const initialJsonFile = JSON.parse(rawJsonFile);
-
-  updateJsonFile({
-    file: NX_PROJECT_CONFIGURATION_PATH,
-    content: {
-      ...initialJsonFile,
-      targets: {
-        ...initialJsonFile.targets,
-        build: {
-          ...initialJsonFile.targets.build,
-          outputs,
-        },
-      },
-    },
-  });
-};
-
 type ExportOccurrence = {
   types: string;
   import: string;
@@ -243,18 +219,6 @@ const computePackageJsonFilesAndExportsConfig = (
     typesVersions: { '*': typesVersionsEntries },
     files: ['dist', ...entrypoints],
   };
-};
-
-const computeProjectNxBuildOutputsPath = (moduleDirectories: string[]) => {
-  const dynamicOutputsPath = moduleDirectories
-    .map(getLastPathFolder)
-    .flatMap((barrelName) =>
-      ['package.json', 'dist'].map(
-        (subPath) => `{projectRoot}/${barrelName}/${subPath}`,
-      ),
-    );
-
-  return ['{projectRoot}/dist', ...dynamicOutputsPath];
 };
 
 const EXCLUDED_EXTENSIONS = [
@@ -492,10 +456,6 @@ const main = () => {
   const moduleIndexFiles = generateModuleIndexFiles(exportsByBarrel);
   const packageJsonConfig =
     computePackageJsonFilesAndExportsConfig(moduleDirectories);
-  const nxBuildOutputsPath =
-    computeProjectNxBuildOutputsPath(moduleDirectories);
-
-  updateNxProjectConfigurationBuildOutputs(nxBuildOutputsPath);
   writeInPackageJson(packageJsonConfig);
   moduleIndexFiles.forEach(createTypeScriptFile);
 };

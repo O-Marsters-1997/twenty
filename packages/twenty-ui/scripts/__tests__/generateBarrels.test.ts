@@ -37,10 +37,6 @@ const createFixture = () => {
   writeFileSync(path.join(root, '.prettierrc'), '{}');
   writeFileSync(path.join(packageRoot, 'package.json'), '{}');
   writeFileSync(
-    path.join(packageRoot, 'project.json'),
-    '{"targets":{"build":{}}}',
-  );
-  writeFileSync(
     path.join(packageRoot, 'src/utilities/support.ts'),
     "export { type Options, useExample } from './internal/implementation';",
   );
@@ -86,16 +82,10 @@ test('rejects stale barrels, individual exports and package mappings without wri
     'src/index.ts',
     'src/individual-entry.ts',
     'package.json',
-    'project.json',
   ]) {
     const filePath = path.join(packageRoot, file);
     const original = readFileSync(filePath, 'utf8');
-    const stale =
-      file === 'project.json'
-        ? '{"targets":{"build":{"outputs":[]}}}'
-        : file.endsWith('.json')
-          ? '{}'
-          : 'export {};\n';
+    const stale = file.endsWith('.json') ? '{}' : 'export {};\n';
     writeFileSync(filePath, stale);
     const verification = generate({ root, check: true });
 

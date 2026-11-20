@@ -101,21 +101,20 @@ Use the Node.js version in the repository's `.nvmrc` and the Bun version in its 
 
 ```bash
 bun install
-npx nx generateBarrels twenty-ui
-npx nx storybook:serve:dev twenty-ui
+npx moon run twenty-ui:generate-barrels
+npx moon run twenty-ui:storybook-dev
 ```
 
 Storybook runs at `http://localhost:6008`.
 
 | Command                                                 | Purpose                                        |
 | ------------------------------------------------------- | ---------------------------------------------- |
-| `npx nx build twenty-ui`                                | Build ESM, CommonJS, CSS, and TypeScript types |
-| `npx nx lint twenty-ui`                                 | Check lint and formatting                      |
-| `npx tsgo -p packages/twenty-ui/tsconfig.json --noEmit` | Check types directly, without the Nx cache     |
-| `npx nx test twenty-ui`                                 | Check module ownership and run unit tests      |
-| `npx nx storybook:build twenty-ui`                      | Build Storybook                                |
-| `npx nx storybook:test twenty-ui`                       | Run browser stories with coverage              |
-| `npx nx test:package twenty-ui`                         | Check optional dependencies and theme exports  |
+| `npx moon run twenty-ui:build`                          | Build ESM, CommonJS, CSS, and TypeScript types |
+| `npx moon run twenty-ui:lint`                           | Check lint and formatting                      |
+| `npx tsgo -p packages/twenty-ui/tsconfig.json --noEmit` | Check types directly, without the moon cache   |
+| `npx moon run twenty-ui:test`                           | Check module ownership and run unit tests      |
+| `npx moon run twenty-ui:storybook-build`                | Build Storybook                                |
+| `npx moon run twenty-ui:pack-size`                      | Check the packed package size                  |
 
 Before running browser stories, install Chromium with `npx playwright install chromium` from `packages/twenty-ui`.
 
@@ -125,9 +124,9 @@ Primitives live in `src/primitives/<family>`, shared components in `src/componen
 
 Record formatting, routing, product illustrations, and feature-specific animation belong to the host application. Implementation parts in `internal` or `parts` directories are excluded from public barrels.
 
-- Run `npx nx generateBarrels twenty-ui` after changing public exports. Do not edit generated barrels by hand.
-- Edit token sources in `design-tokens`, then run `npx nx generateTokens twenty-ui`. Use `npx nx generate:check twenty-ui` to check that generated token files are current.
-- Run `npx nx check:ownership twenty-ui` to validate exports, generated files, and dependency rules. After an intentional interface change, run `node --import tsx packages/twenty-ui/scripts/checkModuleOwnership.ts --write` and review the two inventory files in `docs/`.
+- Run `npx moon run twenty-ui:generate-barrels` after changing public exports. Do not edit generated barrels by hand.
+- Edit token sources in `design-tokens`, then run `npx moon run twenty-ui:generate-tokens`. Use `npx moon run twenty-ui:generate-check` to check that generated token files are current.
+- Run `npx moon run twenty-ui:test` to validate exports, generated files, and dependency rules. After an intentional interface change, run `node --import tsx packages/twenty-ui/scripts/checkModuleOwnership.ts --write` and review the two inventory files in `docs/`.
 
 ### Testing
 

@@ -11,10 +11,6 @@
 # bun is the package manager across the project
 **/**/.package-lock.json
 
-.nx/installation
-.nx/cache
-.nx/workspace-data
-.nx/nxw.js
 .moon/cache
 .moon/docker
 

@@ -28,7 +28,7 @@ export const generateTwentyIconDictionaryMarkdown = () => {
 
   return `# Twenty Icon Dictionary
 
-<!-- This file is generated. Edit constants/TwentyIconDictionary.ts, then run: npx nx generateIconDictionary twenty-ui -->
+<!-- This file is generated. Edit constants/TwentyIconDictionary.ts, then run: npx moon run twenty-ui:generate-icon-dictionary -->
 
 This is the canonical engineering reference for icons that represent Twenty product concepts. The [Figma dictionary](${TWENTY_ICON_DICTIONARY_FIGMA_URL}) is the visual reference; the typed manifest in [\`constants/TwentyIconDictionary.ts\`](./constants/TwentyIconDictionary.ts) is the code source of truth.
 
@@ -52,7 +52,7 @@ ${categorySections}
 
 1. Update the typed manifest in \`constants/TwentyIconDictionary.ts\`.
 2. Confirm the visual choice in the linked Figma dictionary.
-3. Run \`npx nx generateIconDictionary twenty-ui\`.
+3. Run \`npx moon run twenty-ui:generate-icon-dictionary\`.
 4. Review the \`UI/Icon/Icon Dictionary\` Storybook story.
 5. Run \`npx vitest run --root packages/twenty-ui --project unit src/icon/__tests__/TwentyIconDictionary.test.ts\`.
 `;

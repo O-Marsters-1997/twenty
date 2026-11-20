@@ -14,8 +14,8 @@ fileGroups:
 tasks:
   generate-barrels:
     command: tsx packages/twenty-shared/scripts/generateBarrels.ts
-    inputs: ['src/**/*', 'scripts/generateBarrels.ts', 'package.json', 'project.json']
-    outputs: ['src/index.ts', 'src/*/index.ts', 'package.json', 'project.json']
+    inputs: ['src/**/*', 'scripts/generateBarrels.ts', 'package.json']
+    outputs: ['src/index.ts', 'src/*/index.ts', 'package.json']
     options:
       cache: true
       runFromWorkspaceRoot: true
@@ -37,9 +37,14 @@ tasks:
 
   lint:
     script: |-
-      npx oxlint -c .oxlintrc.json . && (npx oxfmt --check . || (echo 'ERROR: oxfmt formatting check failed! Fix with: npx nx lint --configuration=fix' && false))
+      npx oxlint -c .oxlintrc.json . && (npx oxfmt --check . || (echo 'ERROR: oxfmt formatting check failed! Fix with: npx oxfmt .' && false))
     deps: ['^:build']
-    inputs: ['@group(sources)', '.oxlintrc.json', '/packages/twenty-oxlint-rules/dist/oxlint-plugin.mjs']
+    inputs:
+      [
+        '@group(sources)',
+        '.oxlintrc.json',
+        '/packages/twenty-oxlint-rules/dist/oxlint-plugin.mjs',
+      ]
     options:
       cache: true
 

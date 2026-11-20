@@ -34,9 +34,16 @@ tasks:
 
   lint:
     script: |-
-      npx oxlint -c .oxlintrc.json . && (npx oxfmt --check . || (echo 'ERROR: oxfmt formatting check failed! Fix with: npx nx lint --configuration=fix' && false))
+      npx oxlint -c .oxlintrc.json . && (npx oxfmt --check . || (echo 'ERROR: oxfmt formatting check failed! Fix with: npx oxfmt .' && false))
     deps: ['twenty-oxlint-rules:build']
-    inputs: ['@group(sources)', '.oxlintrc.json', '.prettierignore', '/.oxfmtrc.jsonc', '/packages/twenty-oxlint-rules/dist/oxlint-plugin.mjs']
+    inputs:
+      [
+        '@group(sources)',
+        '.oxlintrc.json',
+        '.prettierignore',
+        '/.oxfmtrc.jsonc',
+        '/packages/twenty-oxlint-rules/dist/oxlint-plugin.mjs',
+      ]
     options:
       cache: true
 
@@ -48,14 +55,26 @@ tasks:
 
   test:
     script: tsx packages/twenty-ui/scripts/generateBarrels.ts --check && tsx packages/twenty-ui/scripts/checkModuleOwnership.ts && node --import tsx --test packages/twenty-ui/scripts/__tests__/*.test.ts && cd packages/twenty-ui && npx vitest run --project unit
-    inputs: ['@group(sources)', 'project.json', 'docs/module-ownership.json', 'docs/public-exports.json', '/package.json', '/bun.lock']
+    inputs:
+      [
+        '@group(sources)',
+        'docs/module-ownership.json',
+        'docs/public-exports.json',
+        '/package.json',
+        '/bun.lock',
+      ]
     options:
       cache: true
       runFromWorkspaceRoot: true
 
   generate-tokens:
     command: tsx scripts/generateThemeTokens.ts
-    inputs: ['scripts/generateThemeTokens.ts', 'design-tokens/**/*', '/.oxfmtrc.jsonc']
+    inputs:
+      [
+        'scripts/generateThemeTokens.ts',
+        'design-tokens/**/*',
+        '/.oxfmtrc.jsonc',
+      ]
     outputs:
       - 'src/theme/themeCssVariables.ts'
       - 'src/theme/themeTypes.ts'
@@ -75,14 +94,26 @@ tasks:
 
   generate-check:
     command: tsx scripts/generateThemeTokens.ts --check
-    inputs: ['scripts/generateThemeTokens.ts', 'design-tokens/**/*', 'src/theme/**/*', '/.oxfmtrc.jsonc']
+    inputs:
+      [
+        'scripts/generateThemeTokens.ts',
+        'design-tokens/**/*',
+        'src/theme/**/*',
+        '/.oxfmtrc.jsonc',
+      ]
     options:
       cache: true
 
   generate-barrels:
     command: tsx packages/twenty-ui/scripts/generateBarrels.ts
-    inputs: ['src/**/*', 'scripts/generateBarrels.ts', 'package.json', 'project.json']
-    outputs: ['src/index.ts', 'src/individual-entry.ts', 'src/**/*/index.ts', 'package.json', 'project.json']
+    inputs: ['src/**/*', 'scripts/generateBarrels.ts', 'package.json']
+    outputs:
+      [
+        'src/index.ts',
+        'src/individual-entry.ts',
+        'src/**/*/index.ts',
+        'package.json',
+      ]
     options:
       cache: true
       runFromWorkspaceRoot: true

@@ -15,7 +15,7 @@ This package contains the email templates used by Twenty.
 To start the local preview server for email development:
 
 ```bash
-npx nx start twenty-emails
+npx moon run twenty-emails:start
 ```
 
 This will run the development server on port 4001. You can then view your email templates at [http://localhost:4001](http://localhost:4001).
@@ -25,7 +25,7 @@ This will run the development server on port 4001. You can then view your email 
 To build the email templates:
 
 ```bash
-npx nx build twenty-emails
+npx moon run twenty-emails:build
 ```
 
 ## Email Structure

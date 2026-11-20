@@ -40,7 +40,7 @@ tasks:
 
   lint:
     script: |-
-      npx oxlint --type-aware -c .oxlintrc.json src/ && (npx oxfmt --check src/ || (echo 'ERROR: oxfmt formatting check failed! Fix with: npx nx lint twenty-front --configuration=fix' && false))
+      npx oxlint --type-aware -c .oxlintrc.json src/ && (npx oxfmt --check src/ || (echo 'ERROR: oxfmt formatting check failed! Fix with: npx oxfmt src/' && false))
     deps: ['twenty-oxlint-rules:build', 'twenty-shared:build']
     inputs:
       - 'src/**/*.{ts,tsx}'
@@ -54,7 +54,7 @@ tasks:
 
   lint-diff:
     script: |-
-      FILES=$(git diff --name-only --relative --diff-filter=d main...HEAD -- src/ | grep -E '\.(ts|tsx)$'); [ -z "$FILES" ] && echo 'No changed files.' || (npx oxlint --type-aware -c .oxlintrc.json $FILES && (npx oxfmt --check $FILES || (echo 'ERROR: oxfmt formatting check failed! Fix with: npx nx lint:diff-with-main twenty-front --configuration=fix' && false)))
+      FILES=$(git diff --name-only --relative --diff-filter=d main...HEAD -- src/ | grep -E '\.(ts|tsx)$'); [ -z "$FILES" ] && echo 'No changed files.' || (npx oxlint --type-aware -c .oxlintrc.json $FILES && (npx oxfmt --check $FILES || (echo 'ERROR: oxfmt formatting check failed! Fix with: npx oxfmt src/' && false)))
     deps: ['twenty-oxlint-rules:build']
     inputs:
       - 'src/**/*.{ts,tsx}'
