@@ -1,0 +1,196 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}${{ github.ref == 'refs/heads/main' && format('-{0}', github.sha) || '' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  changes:
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    outputs:
+      go: ${{ github.event_name == 'push' || steps.filter.outputs.ci_any_changed == 'true' || steps.filter.outputs.go_any_changed == 'true' }}
+      front: ${{ github.event_name == 'push' || steps.filter.outputs.ci_any_changed == 'true' || steps.filter.outputs.front_any_changed == 'true' }}
+      ui: ${{ github.event_name == 'push' || steps.filter.outputs.ci_any_changed == 'true' || steps.filter.outputs.ui_any_changed == 'true' }}
+      shared: ${{ github.event_name == 'push' || steps.filter.outputs.ci_any_changed == 'true' || steps.filter.outputs.shared_any_changed == 'true' }}
+      emails: ${{ github.event_name == 'push' || steps.filter.outputs.ci_any_changed == 'true' || steps.filter.outputs.emails_any_changed == 'true' }}
+      utils: ${{ github.event_name == 'push' || steps.filter.outputs.ci_any_changed == 'true' || steps.filter.outputs.utils_any_changed == 'true' }}
+      knip: ${{ github.event_name == 'push' || steps.filter.outputs.ci_any_changed == 'true' || steps.filter.outputs.knip_any_changed == 'true' }}
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          fetch-depth: 10
+      - id: filter
+        uses: tj-actions/changed-files@48d8f15b2aaa3d255ca5af3eba4870f807ce6b3c # v45.0.9
+        with:
+          files_yaml: |
+            ci:
+              - .github/**
+            go:
+              - packages/twenty-server-go/**
+            front:
+              - package.json
+              - bun.lock
+              - packages/twenty-front/**
+              - packages/twenty-ui/**
+              - packages/twenty-shared/**
+              - packages/twenty-oxlint-rules/**
+            ui:
+              - package.json
+              - bun.lock
+              - packages/twenty-ui/**
+              - packages/twenty-shared/**
+            shared:
+              - packages/twenty-shared/**
+            emails:
+              - package.json
+              - packages/twenty-emails/**
+            utils:
+              - packages/twenty-utils/**
+            knip:
+              - knip.json
+              - nx.json
+              - package.json
+              - bun.lock
+              - packages/twenty-front/**
+              - packages/twenty-shared/**
+              - packages/twenty-ui/**
+
+  go:
+    needs: changes
+    if: needs.changes.outputs.go == 'true'
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        check: [generated-code, test]
+    defaults:
+      run:
+        working-directory: packages/twenty-server-go
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: packages/twenty-server-go/go.mod
+          cache-dependency-path: packages/twenty-server-go/go.sum
+      - name: Fail on a generated diff
+        if: matrix.check == 'generated-code'
+        run: |
+          go generate ./...
+          git diff --exit-code -- . && test -z "$(git ls-files --others --exclude-standard -- .)"
+      - name: Build, vet and test
+        if: matrix.check == 'test'
+        run: |
+          go build ./...
+          go vet ./...
+          go test ./...
+
+  front:
+    needs: changes
+    if: needs.changes.outputs.front == 'true'
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    env:
+      NODE_OPTIONS: '--max-old-space-size=6144'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { task: lint }
+          - { task: typecheck }
+          - { task: test, args: '--configuration=ci --shard=1/3' }
+          - { task: test, args: '--configuration=ci --shard=2/3' }
+          - { task: test, args: '--configuration=ci --shard=3/3' }
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - uses: ./.github/actions/bun-install
+      - run: npx nx reset:env twenty-front
+      - run: npx nx ${{ matrix.task }} twenty-front ${{ matrix.args }}
+
+  ui:
+    needs: changes
+    if: needs.changes.outputs.ui == 'true'
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        task: [lint, generate:check, typecheck, test]
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - uses: ./.github/actions/bun-install
+      - run: npx nx ${{ matrix.task }} twenty-ui
+
+  shared:
+    needs: changes
+    if: needs.changes.outputs.shared == 'true'
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    env:
+      NODE_OPTIONS: '--max-old-space-size=4096'
+    strategy:
+      fail-fast: false
+      matrix:
+        task: [lint, typecheck, test]
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - uses: ./.github/actions/bun-install
+      - run: npx nx ${{ matrix.task }} twenty-shared
+
+  emails:
+    needs: changes
+    if: needs.changes.outputs.emails == 'true'
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - uses: ./.github/actions/bun-install
+      - run: npx nx build twenty-emails
+      - run: npx nx run twenty-emails:lingui:extract
+      - run: npx nx run twenty-emails:lingui:compile
+      - name: Serve the email preview
+        run: |
+          npx nx run twenty-emails:start &
+          SERVER_PID=$!
+          sleep 20
+          curl -sf http://localhost:4001/preview/test.email > /dev/null || { kill $SERVER_PID; exit 1; }
+          kill $SERVER_PID
+
+  utils:
+    needs: changes
+    if: needs.changes.outputs.utils == 'true'
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - uses: ./.github/actions/bun-install
+      - run: npx nx test twenty-utils
+
+  knip:
+    needs: changes
+    if: needs.changes.outputs.knip == 'true'
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - uses: ./.github/actions/bun-install
+      - run: npx nx run-many -t knip --parallel=1
+
+  ci-status-check:
+    if: always() && !cancelled()
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    needs: [changes, go, front, ui, shared, emails, utils, knip]
+    steps:
+      - name: Fail if any check failed
+        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+        run: exit 1
