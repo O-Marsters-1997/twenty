@@ -10,12 +10,12 @@ import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   container: {
+    gap: spacing['--t-spacing-1'],
+    overflow: 'hidden',
     alignItems: 'center',
     color: fontColor['--t-font-color-primary'],
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
     minWidth: '0',
-    overflow: 'hidden',
   },
   avatarContainer: {
     alignItems: 'center',

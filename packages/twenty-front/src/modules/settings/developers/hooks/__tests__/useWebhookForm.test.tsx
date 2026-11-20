@@ -26,6 +26,7 @@ jest.mock('twenty-ui/components/feedback', () => ({
 }));
 
 const createMockWebhookData = (overrides = {}) => ({
+  __typename: 'Webhook',
   id: 'test-webhook-id',
   targetUrl: 'https://test.com/webhook',
   operations: ['person.created'],

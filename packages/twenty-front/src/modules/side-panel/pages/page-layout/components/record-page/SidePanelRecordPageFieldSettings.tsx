@@ -48,10 +48,10 @@ const styles = stylex.create({
     height: '100%',
   },
   sidePanelContainer: {
-    display: 'flex',
     flex: '1',
-    flexDirection: 'column',
     overflow: 'hidden',
+    display: 'flex',
+    flexDirection: 'column',
   },
 });
 

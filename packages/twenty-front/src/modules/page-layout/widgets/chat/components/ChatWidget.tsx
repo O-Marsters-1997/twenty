@@ -13,8 +13,8 @@ import * as stylex from '@stylexjs/stylex';
 const styles = stylex.create({
   chatContainer: {
     '--ai-chat-content-max-width': '768px',
-    display: 'flex',
     flex: '1',
+    display: 'flex',
     flexDirection: 'column',
     height: '100%',
     minHeight: '0',

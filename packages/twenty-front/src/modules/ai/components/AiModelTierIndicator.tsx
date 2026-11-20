@@ -4,19 +4,19 @@ import { fontColor } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   bar: {
-    backgroundColor: fontColor['--t-font-color-extra-light'],
     borderRadius: '4px',
     flex: '1',
+    backgroundColor: fontColor['--t-font-color-extra-light'],
     height: '8px',
   },
   barReached: {
     backgroundColor: fontColor['--t-font-color-secondary'],
   },
   indicator: {
+    gap: '2px',
     alignItems: 'center',
     display: 'inline-flex',
     flexShrink: '0',
-    gap: '2px',
     height: '12px',
     width: '24px',
   },

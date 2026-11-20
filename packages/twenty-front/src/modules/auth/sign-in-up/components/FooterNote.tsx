@@ -14,34 +14,40 @@ const styles = stylex.create({
     color: fontColor['--t-font-color-tertiary'],
     fontSize: fontSize['--t-font-size-sm'],
     lineHeight: 1.4,
-    maxWidth: onboardingLayout.contentBlockWidth,
     textAlign: 'center',
+    maxWidth: onboardingLayout.contentBlockWidth,
   },
   linksContainer: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     color: fontColor['--t-font-color-tertiary'],
     display: 'flex',
     flexWrap: 'nowrap',
     fontSize: fontSize['--t-font-size-sm'],
-    gap: spacing['--t-spacing-2'],
     justifyContent: 'center',
-    maxWidth: '100%',
     textAlign: 'center',
     whiteSpace: 'nowrap',
+    maxWidth: '100%',
   },
   link: {
-    color: fontColor['--t-font-color-tertiary'],
     textDecoration: {
       default: 'none',
       ':hover': 'underline',
     },
+    color: fontColor['--t-font-color-tertiary'],
   },
   separator: {
     color: fontColor['--t-font-color-tertiary'],
   },
 });
 
-const FooterLink = ({ href, children }: { href: string; children: ReactNode }) => (
+const FooterLink = ({
+  href,
+  children,
+}: {
+  href: string;
+  children: ReactNode;
+}) => (
   <a
     href={href}
     target="_blank"

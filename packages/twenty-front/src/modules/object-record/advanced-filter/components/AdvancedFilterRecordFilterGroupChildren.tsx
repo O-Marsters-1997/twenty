@@ -13,17 +13,17 @@ import {
 
 const styles = stylex.create({
   container: {
-    alignItems: 'start',
-    backgroundColor: 'transparent',
+    padding: spacing['--t-spacing-2'],
     borderColor: borderColor['--t-border-color-medium'],
     borderRadius: borderRadius['--t-border-radius-md'],
     borderStyle: 'solid',
     borderWidth: '1px',
-    display: 'flex',
     flex: '1',
-    flexDirection: 'column',
     gap: spacing['--t-spacing-2'],
-    padding: spacing['--t-spacing-2'],
+    alignItems: 'start',
+    backgroundColor: 'transparent',
+    display: 'flex',
+    flexDirection: 'column',
   },
   grayBackground: {
     backgroundColor:

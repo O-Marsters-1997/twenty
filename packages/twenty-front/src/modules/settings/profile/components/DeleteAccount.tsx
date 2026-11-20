@@ -24,9 +24,9 @@ const LEAVE_WORKSPACE_MODAL_ID = 'leave-workspace-modal';
 
 const styles = stylex.create({
   dangerActions: {
+    gap: spacing['--t-spacing-2'],
     display: 'flex',
     flexWrap: 'wrap',
-    gap: spacing['--t-spacing-2'],
   },
 });
 

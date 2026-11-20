@@ -3,12 +3,11 @@ import { color } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   action: {
-    backgroundColor: 'transparent',
-    borderStyle: 'none',
-    cursor: 'pointer',
     inset: 0,
     padding: 0,
-    position: 'absolute',
+    borderStyle: 'none',
+    backgroundColor: 'transparent',
+    cursor: 'pointer',
     outlineColor: {
       default: null,
       ':focus-visible': color['--t-color-blue'],
@@ -25,6 +24,7 @@ const styles = stylex.create({
       default: null,
       ':focus-visible': '2px',
     },
+    position: 'absolute',
   },
 });
 

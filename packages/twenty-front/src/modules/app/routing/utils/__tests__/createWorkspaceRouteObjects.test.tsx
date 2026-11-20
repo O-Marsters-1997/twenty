@@ -84,7 +84,6 @@ describe('workspace route objects', () => {
   it.each([
     '/settings/objects',
     '/settings/objects/companies',
-    '/settings/objects/companies/name',
     '/settings/members#roles',
     '/settings/members/roles/role-id',
   ])('hosts the complementary settings leaf %s', (path) => {
@@ -101,6 +100,7 @@ describe('workspace route objects', () => {
     '/settings',
     '/settings/',
     '/settings/profile',
+    '/settings/objects/companies/name',
     '/settings/api-webhooks/graphql',
     '/settings/not-a-real-page',
   ])('keeps the unsupported settings leaf %s on main', (path) => {

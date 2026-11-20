@@ -8,15 +8,15 @@ const PRIVACY_NOTE_ICON_SIZE = 12;
 
 const styles = stylex.create({
   note: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     color: fontColor['--t-font-color-tertiary'],
     display: 'flex',
     fontSize: fontSize['--t-font-size-sm'],
-    gap: spacing['--t-spacing-1'],
   },
   noteText: {
-    lineHeight: '1.4',
     marginBlock: `calc((${PRIVACY_NOTE_ICON_SIZE}px - 1.4em) / 2)`,
+    lineHeight: 1.4,
   },
 });
 

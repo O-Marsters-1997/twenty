@@ -20,8 +20,8 @@ const TRANSLATION_COLUMN_MOBILE_MIN_WIDTH = 150;
 
 const styles = stylex.create({
   scrollWrapper: {
-    overflowX: { default: null, [media.mobile]: 'auto' },
     WebkitOverflowScrolling: { default: null, [media.mobile]: 'touch' },
+    overflowX: { default: null, [media.mobile]: 'auto' },
   },
   scrollableContent: (mobileMinWidth: number) => ({
     minWidth: { default: null, [media.mobile]: `${mobileMinWidth}px` },

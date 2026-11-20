@@ -7,20 +7,20 @@ import { useContext } from 'react';
 
 const styles = stylex.create({
   headerContainer: {
+    overflow: 'visible',
     display: 'flex',
     flexDirection: 'row',
-    height: '40px',
-    overflow: 'visible',
     position: {
       default: null,
       ':is([data-sticky="true"])': 'sticky',
     },
+    zIndex: 10,
+    height: '40px',
     top: {
       default: null,
       ':is([data-sticky="true"])': '0',
     },
     width: '100%',
-    zIndex: 10,
   },
 });
 

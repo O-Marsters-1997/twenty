@@ -16,12 +16,12 @@ import { spacing, background, boxShadow } from 'twenty-ui/theme/tokens.stylex';
 const styles = stylex.create({
   root: {
     background: background['--t-background-primary'],
+    padding: spacing['--t-spacing-1'],
     borderRadius: spacing['--t-spacing-2'],
+    gap: spacing['--t-spacing-0_5'],
     boxShadow: boxShadow['--t-box-shadow-strong'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-0_5'],
-    padding: spacing['--t-spacing-1'],
     position: 'absolute',
     width: '200px',
   },

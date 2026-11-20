@@ -28,13 +28,13 @@ const styles = stylex.create({
     color: fontColor['--t-font-color-primary'],
   },
   container: {
+    gap: spacing['--t-spacing-4'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-4'],
   },
   toolbar: {
-    display: 'flex',
     gap: spacing['--t-spacing-2'],
+    display: 'flex',
     paddingBottom: spacing['--t-spacing-2'],
     width: '100%',
   },

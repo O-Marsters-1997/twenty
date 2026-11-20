@@ -11,11 +11,11 @@ import {
 
 const styles = stylex.create({
   skeletonCardContainer: {
-    backgroundColor: background['--t-background-secondary'],
     borderColor: background['--t-background-quaternary'],
     borderRadius: borderRadius['--t-border-radius-sm'],
     borderStyle: 'solid',
     borderWidth: '1px',
+    backgroundColor: background['--t-background-secondary'],
     boxShadow: `0px 4px 8px 0px ${color['--t-color-gray2']}, 0px 0px 4px 0px ${color['--t-color-gray2']}`,
     color: fontColor['--t-font-color-primary'],
     marginBottom: spacing['--t-spacing-2'],

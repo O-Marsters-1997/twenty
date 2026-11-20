@@ -25,22 +25,21 @@ import {
 } from 'twenty-ui/theme/tokens.stylex';
 import { media } from 'twenty-ui/theme/constants.stylex';
 
-
 const styles = stylex.create({
   item: {
+    padding: spacing['--t-spacing-4'],
+    gap: spacing['--t-spacing-3'],
     alignItems: 'flex-start',
     backgroundColor: {
       default: 'transparent',
       ':hover': backgroundTransparent['--t-background-transparent-light'],
     },
+    cursor: 'pointer',
+    display: 'flex',
+    position: 'relative',
     borderBottomColor: borderColor['--t-border-color-light'],
     borderBottomStyle: 'solid',
     borderBottomWidth: '1px',
-    cursor: 'pointer',
-    display: 'flex',
-    gap: spacing['--t-spacing-3'],
-    padding: spacing['--t-spacing-4'],
-    position: 'relative',
   },
   itemSelected: {
     backgroundColor: backgroundTransparent['--t-background-transparent-light'],
@@ -93,10 +92,10 @@ const styles = stylex.create({
       [stylex.when.ancestor(':hover', itemMarker)]: 'auto',
     },
     position: 'absolute',
-    right: spacing['--t-spacing-3'],
-    top: spacing['--t-spacing-3'],
     transitionDuration: '150ms',
     transitionProperty: 'opacity',
+    right: spacing['--t-spacing-3'],
+    top: spacing['--t-spacing-3'],
   },
   menuTriggerOpen: {
     opacity: 1,
@@ -110,15 +109,15 @@ const styles = stylex.create({
     width: spacing['--t-spacing-7'],
   },
   threadContent: {
-    display: 'flex',
     flex: '1',
+    display: 'flex',
     flexDirection: 'column',
     minWidth: '0',
   },
   threadHeading: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
     minWidth: '0',
   },
 });

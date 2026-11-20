@@ -9,8 +9,8 @@ const styles = stylex.create({
     pointerEvents: 'all',
   },
   selected: {
-    backgroundColor: color['--t-color-blue2'],
     borderColor: color['--t-color-blue'],
+    backgroundColor: color['--t-color-blue2'],
   },
 });
 

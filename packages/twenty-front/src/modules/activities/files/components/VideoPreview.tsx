@@ -5,8 +5,8 @@ import * as stylex from '@stylexjs/stylex';
 
 const styles = stylex.create({
   video: {
-    height: '100%',
     objectFit: 'contain',
+    height: '100%',
     width: '100%',
   },
 });

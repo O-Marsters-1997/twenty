@@ -15,13 +15,13 @@ import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   triggerList: {
+    gap: spacing['--t-spacing-3'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-3'],
   },
   actions: {
-    display: 'flex',
     gap: spacing['--t-spacing-2'],
+    display: 'flex',
     marginTop: spacing['--t-spacing-3'],
   },
   emptyMessage: {

@@ -36,9 +36,9 @@ const FORM_DATE_FIELD_PICKER_CLICK_OUTSIDE_ID =
 
 const styles = stylex.create({
   dateInputTextContainer: {
+    flex: '1',
     alignItems: 'center',
     display: 'flex',
-    flex: '1',
     minWidth: '0',
     width: '100%',
   },
@@ -47,8 +47,8 @@ const styles = stylex.create({
     userSelect: 'none',
   },
   datePickerInputWrapper: {
-    display: 'flex',
     flex: '1',
+    display: 'flex',
     minWidth: '0',
   },
 });

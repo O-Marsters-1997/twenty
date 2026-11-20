@@ -33,24 +33,26 @@ type WorkflowSendEmailAttachmentsProps = {
 
 const styles = stylex.create({
   uploadArea: {
-    backgroundColor: {
-      default: backgroundTransparent['--t-background-transparent-lighter'],
-      ':hover': backgroundTransparent['--t-background-transparent-light'],
-    },
-    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
-    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
     borderColor: {
       default: borderColor['--t-border-color-medium'],
       ':hover': borderColor['--t-border-color-strong'],
     },
     borderStyle: 'solid',
+    borderWidth: '1px',
+    backgroundColor: {
+      default: backgroundTransparent['--t-background-transparent-lighter'],
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
+    },
+    display: 'flex',
+    flexBasis: '0%',
+    flexDirection: 'column',
+    flexGrow: 1,
+    flexShrink: 1,
+    justifyContent: 'center',
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
     borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
     borderTopRightRadius: borderRadius['--t-border-radius-sm'],
-    borderWidth: '1px',
-    display: 'flex',
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
     minHeight: '24px',
     paddingBottom: spacing['--t-spacing-1'],
     paddingLeft: spacing['--t-spacing-2'],
@@ -73,20 +75,20 @@ const styles = stylex.create({
     flexDirection: 'row',
   },
   chipsContainer: {
+    gap: spacing['--t-spacing-1'],
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: spacing['--t-spacing-1'],
   },
   variableChipWrapper: {
     display: 'inline-flex',
   },
   uploadAreaLabel: {
+    gap: spacing['--t-spacing-1'],
     color: fontColor['--t-font-color-tertiary'],
     display: 'flex',
     fontSize: fontSize['--t-font-size-sm'],
     fontWeight: fontWeight['--t-font-weight-medium'],
-    gap: spacing['--t-spacing-1'],
     justifyContent: 'center',
   },
 });

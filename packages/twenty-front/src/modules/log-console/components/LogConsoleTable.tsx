@@ -204,7 +204,7 @@ export const LogConsoleTable = ({
 };
 
 const liveEntryEntrance = stylex.keyframes({
-  from: { height: 0, opacity: 0 },
+  from: { opacity: 0, height: 0 },
 });
 
 const liveEntryHighlight = stylex.keyframes({
@@ -213,19 +213,20 @@ const liveEntryHighlight = stylex.keyframes({
 
 const styles = stylex.create({
   table: {
+    paddingInline: spacing['--t-spacing-3'],
     boxSizing: 'border-box',
     minWidth: 'min-content',
-    paddingInline: spacing['--t-spacing-3'],
   },
   headerRow: {
-    backgroundColor: background['--t-background-primary'],
     borderRadius: 0,
+    backgroundColor: background['--t-background-primary'],
     boxShadow: `inset 0 -1px 0 ${borderColor['--t-border-color-light']}`,
     position: 'sticky',
-    top: 0,
     zIndex: 2,
+    top: 0,
   },
   liveEntryRow: {
+    overflow: 'hidden',
     animationDuration: {
       default: `calc(${animationDuration['--t-animation-duration-normal']} * 1s), calc(${animationDuration['--t-animation-duration-slow']} * 1s)`,
       [media.reducedMotion]: null,
@@ -235,17 +236,16 @@ const styles = stylex.create({
       [media.reducedMotion]: 'none',
     },
     animationTimingFunction: `${logConsoleEasing.standard}, ease-out`,
-    overflow: 'hidden',
   },
   stickyFirstCell: {
     backgroundColor: background['--t-background-primary'],
+    position: 'sticky',
+    zIndex: 1,
     borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
     borderBottomRightRadius: 0,
     borderTopLeftRadius: borderRadius['--t-border-radius-md'],
     borderTopRightRadius: 0,
     left: 0,
-    position: 'sticky',
-    zIndex: 1,
   },
   stickyFirstCellHighlightable: {
     boxShadow: {

@@ -15,13 +15,13 @@ export const RecordTableDragAndDropPlaceholderCell = () => (
 
 const styles = stylex.create({
   cell: {
+    overflow: 'hidden',
     backgroundColor: background['--t-background-primary'],
+    position: 'sticky',
     borderBottomColor: background['--t-background-primary'],
     borderBottomStyle: 'solid',
     borderBottomWidth: 1,
     height: recordTableLayout.rowHeight,
     left: 0,
-    overflow: 'hidden',
-    position: 'sticky',
   },
 });

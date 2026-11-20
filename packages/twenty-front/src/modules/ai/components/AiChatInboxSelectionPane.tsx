@@ -16,15 +16,15 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   selection: {
-    boxSizing: 'border-box',
     gap: spacing['--t-spacing-8'],
     paddingBlock: spacing['--t-spacing-10'],
     paddingInline: spacing['--t-spacing-4'],
+    boxSizing: 'border-box',
   },
   buttons: {
+    gap: spacing['--t-spacing-2'],
     display: 'flex',
     flexWrap: 'wrap',
-    gap: spacing['--t-spacing-2'],
     justifyContent: 'center',
   },
 });

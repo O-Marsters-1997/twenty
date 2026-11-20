@@ -11,10 +11,10 @@ import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   row: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     display: 'flex',
     flexWrap: 'wrap',
-    gap: spacing['--t-spacing-1'],
     minHeight: '28px',
   },
   rowLabel: {
@@ -25,15 +25,17 @@ const styles = stylex.create({
   input: {
     background: 'transparent',
     borderStyle: 'none',
+    outline: 'none',
     color: {
       default: fontColor['--t-font-color-primary'],
       '::placeholder': fontColor['--t-font-color-light'],
     },
-    flex: '1 0 80px',
+    flexBasis: '80px',
+    flexGrow: '1',
+    flexShrink: '0',
     fontFamily: 'inherit',
     fontSize: fontSize['--t-font-size-sm'],
     minWidth: '80px',
-    outline: 'none',
   },
 });
 

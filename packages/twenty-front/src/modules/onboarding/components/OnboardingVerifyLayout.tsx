@@ -5,12 +5,12 @@ import { background } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   container: {
-    alignItems: 'center',
     background: background['--t-background-secondary'],
+    alignItems: 'center',
     display: 'flex',
     flexDirection: 'column',
-    height: '100%',
     justifyContent: 'center',
+    height: '100%',
     width: '100%',
   },
 });

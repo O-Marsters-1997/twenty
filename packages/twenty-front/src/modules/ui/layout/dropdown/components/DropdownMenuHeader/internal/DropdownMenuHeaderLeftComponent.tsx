@@ -12,24 +12,24 @@ import { font, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   nonClickableStartIcon: {
-    alignItems: 'center',
     background: 'transparent',
     borderStyle: 'none',
+    gap: spacing['--t-spacing-1'],
+    alignItems: 'center',
     display: 'flex',
     flexDirection: 'row',
     fontFamily: font['--t-font-family'],
     fontWeight: fontWeight['--t-font-weight-regular'],
-    gap: spacing['--t-spacing-1'],
-    height: spacing['--t-spacing-6'],
     justifyContent: 'center',
     whiteSpace: 'nowrap',
+    height: spacing['--t-spacing-6'],
     width: spacing['--t-spacing-6'],
   },
   avatarWrapper: {
-    paddingTop: spacing['--t-spacing-1'],
-    paddingRight: spacing['--t-spacing-1'],
     paddingBottom: spacing['--t-spacing-1'],
     paddingLeft: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingTop: spacing['--t-spacing-1'],
   },
 });
 

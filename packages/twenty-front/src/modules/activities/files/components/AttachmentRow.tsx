@@ -29,10 +29,12 @@ import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   link: {
+    background: 'none',
+    padding: 0,
+    borderStyle: 'none',
+    textDecoration: 'none',
     alignItems: 'center',
     appearance: 'none',
-    background: 'none',
-    borderStyle: 'none',
     color: {
       default: fontColor['--t-font-color-primary'],
       ':hover': fontColor['--t-font-color-secondary'],
@@ -41,27 +43,25 @@ const styles = stylex.create({
     display: 'flex',
     fontFamily: 'inherit',
     fontSize: 'inherit',
-    padding: 0,
     position: 'relative',
     textAlign: 'left',
-    textDecoration: 'none',
-    width: '100%',
     zIndex: 1,
+    width: '100%',
   },
   leftContent: {
-    alignItems: 'center',
-    display: 'flex',
     flex: '1',
     gap: spacing['--t-spacing-3'],
     overflow: 'auto',
+    alignItems: 'center',
+    display: 'flex',
     width: '100%',
   },
   rightContent: {
+    gap: spacing['--t-spacing-0_5'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-0_5'],
     position: 'relative',
-    zIndex: '1',
+    zIndex: 1,
   },
   calendarIconContainer: {
     alignItems: 'center',
@@ -74,8 +74,8 @@ const styles = stylex.create({
   },
   textInputContainer: {
     position: 'relative',
+    zIndex: 1,
     width: '100%',
-    zIndex: '1',
   },
 });
 

@@ -12,18 +12,18 @@ import {
 
 const styles = stylex.create({
   button: {
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    borderStyle: 'none',
+    paddingBlock: 0,
+    paddingInline: spacing['--t-spacing-1'],
     alignItems: 'center',
     backgroundColor: {
       default: 'transparent',
       ':hover': backgroundTransparent['--t-background-transparent-light'],
     },
-    borderRadius: borderRadius['--t-border-radius-sm'],
-    borderStyle: 'none',
     cursor: 'pointer',
     display: 'flex',
     height: '24px',
-    paddingBlock: 0,
-    paddingInline: spacing['--t-spacing-1'],
   },
   buttonDisabled: {
     backgroundColor: 'transparent',

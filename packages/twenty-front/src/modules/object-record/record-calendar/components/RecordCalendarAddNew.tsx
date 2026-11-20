@@ -25,10 +25,10 @@ const styles = stylex.create({
   buttonContainer: {
     height: 'auto',
     minWidth: 'unset',
-    paddingTop: spacing['--t-spacing-0_5'],
-    paddingRight: spacing['--t-spacing-0_5'],
     paddingBottom: spacing['--t-spacing-0_5'],
     paddingLeft: spacing['--t-spacing-0_5'],
+    paddingRight: spacing['--t-spacing-0_5'],
+    paddingTop: spacing['--t-spacing-0_5'],
   },
 });
 

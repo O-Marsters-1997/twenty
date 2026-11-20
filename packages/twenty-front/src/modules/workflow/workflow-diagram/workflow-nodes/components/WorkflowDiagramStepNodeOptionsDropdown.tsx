@@ -16,12 +16,12 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 const styles = stylex.create({
   root: {
     alignItems: 'center',
-    bottom: 0,
     display: 'flex',
     position: 'absolute',
+    transform: 'translateX(100%)',
+    bottom: 0,
     right: `calc(0px - ${spacing['--t-spacing-4']})`,
     top: 0,
-    transform: 'translateX(100%)',
   },
 });
 

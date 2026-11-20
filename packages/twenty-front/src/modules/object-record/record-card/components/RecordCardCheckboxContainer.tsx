@@ -11,19 +11,13 @@ const isCardSelected = stylex.when.ancestor(
 
 const styles = stylex.create({
   container: {
+    overflow: 'hidden',
     flexShrink: 0,
-    marginLeft: 'auto',
-    maxWidth: {
-      default: '0',
-      [isCardHovered]: spacing['--t-spacing-6'],
-      [isCardSelected]: spacing['--t-spacing-6'],
-    },
     opacity: {
       default: 0,
       [isCardHovered]: 1,
       [isCardSelected]: 1,
     },
-    overflow: 'hidden',
     pointerEvents: {
       default: 'none',
       [isCardHovered]: 'auto',
@@ -32,6 +26,12 @@ const styles = stylex.create({
     transitionDuration: '160ms',
     transitionProperty: 'all',
     transitionTimingFunction: 'ease-in-out',
+    marginLeft: 'auto',
+    maxWidth: {
+      default: '0',
+      [isCardHovered]: spacing['--t-spacing-6'],
+      [isCardSelected]: spacing['--t-spacing-6'],
+    },
   },
 });
 

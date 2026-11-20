@@ -24,11 +24,11 @@ type CommandMenuItemSwitchProps = {
 
 const styles = stylex.create({
   iconContainer: {
+    padding: spacing['--t-spacing-1'],
+    borderRadius: borderRadius['--t-border-radius-sm'],
     alignItems: 'center',
     backgroundColor: backgroundTransparent['--t-background-transparent-light'],
-    borderRadius: borderRadius['--t-border-radius-sm'],
     display: 'flex',
-    padding: spacing['--t-spacing-1'],
   },
 });
 

@@ -7,9 +7,9 @@ const styles = stylex.create({
   badgeContainer: {
     display: 'flex',
     position: 'absolute',
+    zIndex: 1000,
     right: '-7px',
     top: '-7px',
-    zIndex: '1000',
   },
 });
 

@@ -29,13 +29,13 @@ import * as stylex from '@stylexjs/stylex';
 const styles = stylex.create({
   addStepButtonContainer: {
     alignItems: 'center',
-    bottom: '0',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    left: '50%',
     position: 'absolute',
     transform: 'translateX(-50%) translateY(100%)',
+    bottom: '0',
+    left: '50%',
   },
 });
 

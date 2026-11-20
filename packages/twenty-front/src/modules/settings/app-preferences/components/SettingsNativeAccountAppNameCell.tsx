@@ -9,10 +9,10 @@ import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   nameCell: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     color: fontColor['--t-font-color-primary'],
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
   },
 });
 

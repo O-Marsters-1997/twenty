@@ -42,12 +42,12 @@ const styles = stylex.create({
     display: 'flex',
     flexShrink: 0,
   },
-  headerPlain: { height: spacing['--t-spacing-6'], padding: 0 },
+  headerPlain: { padding: 0, height: spacing['--t-spacing-6'] },
   headerInset: {
-    height: `calc(${spacing['--t-spacing-6']} + var(--widget-card-title-padding-top))`,
-    paddingBlockStart: 'var(--widget-card-title-padding-top)',
-    paddingBlockEnd: 0,
     paddingInline: 'var(--widget-card-padding-inline)',
+    paddingBlockEnd: 0,
+    paddingBlockStart: 'var(--widget-card-title-padding-top)',
+    height: `calc(${spacing['--t-spacing-6']} + var(--widget-card-title-padding-top))`,
   },
   iconButtonContainer: {
     alignItems: 'center',
@@ -55,14 +55,14 @@ const styles = stylex.create({
     justifyContent: 'center',
   },
   titleContainer: {
+    flex: '1',
+    gap: spacing['--t-spacing-1'],
+    overflow: 'hidden',
     alignItems: 'center',
     color: fontColor['--t-font-color-primary'],
     display: 'flex',
-    flex: '1',
     fontSize: fontSize['--t-font-size-md'],
     fontWeight: fontWeight['--t-font-weight-medium'],
-    gap: spacing['--t-spacing-1'],
-    overflow: 'hidden',
     userSelect: 'none',
   },
   count: {
@@ -71,9 +71,9 @@ const styles = stylex.create({
     fontWeight: fontWeight['--t-font-weight-regular'],
   },
   rightContainer: {
+    gap: spacing['--t-spacing-0_5'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-0_5'],
   },
 });
 

@@ -19,12 +19,12 @@ type PhonesDisplayProps = {
 
 const styles = stylex.create({
   container: {
+    gap: '4px',
+    overflow: 'hidden',
     alignItems: 'center',
     display: 'flex',
-    gap: '4px',
     justifyContent: 'flex-start',
     maxWidth: '100%',
-    overflow: 'hidden',
     width: '100%',
   },
 });

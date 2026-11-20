@@ -23,9 +23,9 @@ type BarChartTotalsLayerProps = {
 
 const styles = stylex.create({
   svgLabels: {
-    left: '0',
     pointerEvents: 'none',
     position: 'absolute',
+    left: '0',
     top: '0',
   },
 });

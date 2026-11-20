@@ -161,18 +161,18 @@ export const PageLayoutSingleTabRenderer = ({
 
 const styles = stylex.create({
   recordIdentifierBar: {
+    gap: spacing['--t-spacing-2'],
+    paddingBlock: 0,
+    paddingInline: spacing['--t-spacing-3'],
     alignItems: 'center',
     backgroundColor: background['--t-background-secondary'],
+    boxSizing: 'border-box',
+    display: 'flex',
+    justifyContent: 'space-between',
     borderBottomColor: borderColor['--t-border-color-light'],
     borderBottomStyle: 'solid',
     borderBottomWidth: 1,
-    boxSizing: 'border-box',
-    display: 'flex',
-    gap: spacing['--t-spacing-2'],
     height: '40px',
-    justifyContent: 'space-between',
     minWidth: 0,
-    paddingBlock: 0,
-    paddingInline: spacing['--t-spacing-3'],
   },
 });

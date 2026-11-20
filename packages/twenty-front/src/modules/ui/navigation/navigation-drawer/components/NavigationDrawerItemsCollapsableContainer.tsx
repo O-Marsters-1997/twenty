@@ -16,19 +16,20 @@ import {
 
 const styles = stylex.create({
   container: {
-    backgroundColor: 'transparent',
     borderRadius: 0,
     borderStyle: 'none',
+    backgroundColor: 'transparent',
     transitionDuration: `calc(${animationDuration['--t-animation-duration-normal']} * 1s)`,
     transitionProperty: 'background-color',
     transitionTimingFunction: 'ease',
   },
   collapsedGroup: {
-    backgroundColor: backgroundTransparent['--t-background-transparent-lighter'],
     borderColor: backgroundTransparent['--t-background-transparent-lighter'],
     borderRadius: borderRadius['--t-border-radius-md'],
     borderStyle: 'solid',
     borderWidth: '1px',
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
   },
 });
 

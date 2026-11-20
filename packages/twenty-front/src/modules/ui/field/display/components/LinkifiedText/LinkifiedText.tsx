@@ -7,8 +7,8 @@ import { color } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   link: {
-    color: color['--t-color-blue'],
     textDecoration: 'underline',
+    color: color['--t-color-blue'],
     textDecorationColor: { default: null, ':hover': color['--t-color-blue'] },
   },
 });
@@ -31,7 +31,8 @@ export const LinkifiedText = ({ text }: LinkifiedTextProps) => {
             href={getSafeUrl(part.content)}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={(event) => event.stopPropagation()} {...stylex.props(styles.link)}
+            onClick={(event) => event.stopPropagation()}
+            {...stylex.props(styles.link)}
           >
             {part.content}
           </a>

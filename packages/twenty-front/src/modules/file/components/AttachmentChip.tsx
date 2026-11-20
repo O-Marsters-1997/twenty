@@ -6,7 +6,14 @@ import { getFileType } from '@/activities/files/utils/getFileType';
 import { useFileCategoryColors } from '@/file/hooks/useFileCategoryColors';
 import { IconMapping } from '@/file/utils/fileIconMappings';
 import * as stylex from '@stylexjs/stylex';
-import { backgroundTransparent, borderColor, borderRadius, fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  fontSize,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 type AttachmentChipProps = {
   file: { id: string; name: string };
@@ -16,55 +23,61 @@ type AttachmentChipProps = {
 
 const styles = stylex.create({
   chip: {
+    borderColor: borderColor['--t-border-color-medium'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    cornerShape: 'round',
     alignItems: 'center',
     backgroundColor: backgroundTransparent['--t-background-transparent-light'],
-    borderWidth: '1px',
-    borderStyle: 'solid',
-    borderColor: borderColor['--t-border-color-medium'],
-    borderTopLeftRadius: borderRadius['--t-border-radius-sm-round'],
-    borderTopRightRadius: borderRadius['--t-border-radius-sm-round'],
-    borderBottomRightRadius: borderRadius['--t-border-radius-sm-round'],
-    borderBottomLeftRadius: borderRadius['--t-border-radius-sm-round'],
     columnGap: spacing['--t-spacing-1'],
-    cornerShape: 'round',
     display: 'inline-flex',
     flexDirection: 'row',
     flexShrink: '0',
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm-round'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm-round'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm-round'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm-round'],
     maxWidth: '140px',
     paddingLeft: spacing['--t-spacing-1'],
   },
   label: {
+    overflow: 'hidden',
     color: fontColor['--t-font-color-primary'],
     fontSize: fontSize['--t-font-size-sm'],
-    overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
   },
   delete: {
-    alignItems: 'center',
     background: 'none',
     borderStyle: 'none',
-    borderBottomRightRadius: borderRadius['--t-border-radius-sm-round'],
-    borderTopRightRadius: borderRadius['--t-border-radius-sm-round'],
-    color: { default: fontColor['--t-font-color-tertiary'], ':hover': fontColor['--t-font-color-primary'] },
     cornerShape: 'round',
+    alignItems: 'center',
+    backgroundColor: {
+      default: null,
+      ':hover': backgroundTransparent['--t-background-transparent-medium'],
+    },
+    color: {
+      default: fontColor['--t-font-color-tertiary'],
+      ':hover': fontColor['--t-font-color-primary'],
+    },
     cursor: 'pointer',
     display: 'flex',
     flexShrink: '0',
     fontSize: fontSize['--t-font-size-sm'],
-    height: '20px',
     justifyContent: 'center',
-    marginTop: '0',
-    marginRight: '0',
+    userSelect: 'none',
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm-round'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm-round'],
+    height: '20px',
     marginBottom: '0',
     marginLeft: '0',
-    paddingTop: '0',
-    paddingRight: '0',
+    marginRight: '0',
+    marginTop: '0',
     paddingBottom: '0',
     paddingLeft: '0',
-    userSelect: 'none',
+    paddingRight: '0',
+    paddingTop: '0',
     width: '20px',
-    backgroundColor: { default: null, ':hover': backgroundTransparent['--t-background-transparent-medium'] },
   },
 });
 
@@ -91,7 +104,9 @@ export const AttachmentChip = ({
         Icon={IconMapping[getFileType(file.name)]}
         IconBackgroundColor={iconColors[getFileType(file.name)]}
       />
-      <span title={file.name} {...stylex.props(styles.label)}>{file.name}</span>
+      <span title={file.name} {...stylex.props(styles.label)}>
+        {file.name}
+      </span>
 
       {!readonly && (
         <button onClick={handleRemoveClick} {...stylex.props(styles.delete)}>

@@ -7,9 +7,9 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   previewsContainer: {
+    gap: spacing['--t-spacing-1'],
     display: 'flex',
     flexWrap: 'wrap',
-    gap: spacing['--t-spacing-1'],
     width: '100%',
   },
 });

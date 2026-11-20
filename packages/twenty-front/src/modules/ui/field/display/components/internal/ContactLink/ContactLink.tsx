@@ -6,16 +6,16 @@ import { borderColor, fontColor } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   root: {
-    color: 'inherit',
-    maxWidth: '100%',
     overflow: 'hidden',
-    textDecorationLine: 'underline',
+    color: 'inherit',
     textDecorationColor: {
       default: borderColor['--t-border-color-strong'],
       ':hover': fontColor['--t-font-color-primary'],
     },
+    textDecorationLine: 'underline',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
+    maxWidth: '100%',
     width: '100%',
   },
   maxWidth: (maxWidth: number) => ({

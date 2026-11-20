@@ -1,6 +1,8 @@
 .record-table-style-wrapper,
 .record-table-drag-overlay {
-  --record-table-first-column-left: calc(var(--record-table-drag-drop-width) + var(--record-table-checkbox-width));
+  --record-table-first-column-left: calc(
+    var(--record-table-drag-drop-width) + var(--record-table-checkbox-width)
+  );
 }
 
 .record-table-style-wrapper[data-is-dragging='true'] > * {
@@ -820,7 +822,8 @@
   width: var(--record-table-column-last-empty-column);
 }
 
-.record-table-style-wrapper div.record-table-column-with-group-last-empty-column {
+.record-table-style-wrapper
+  div.record-table-column-with-group-last-empty-column {
   max-width: var(--record-table-column-with-group-last-empty-column);
   min-width: var(--record-table-column-with-group-last-empty-column);
   width: var(--record-table-column-with-group-last-empty-column);
@@ -839,7 +842,9 @@
     div.table-cell.record-table-column-field-0
     > .record-table-cell-content,
   .record-table-style-wrapper div.table-cell-0-0 > .record-table-cell-content {
-    left: calc(var(--record-table-drag-drop-width) + var(--record-table-checkbox-width));
+    left: calc(
+      var(--record-table-drag-drop-width) + var(--record-table-checkbox-width)
+    );
     overflow: visible;
     position: sticky;
     width: 0;
@@ -857,7 +862,10 @@
     left: 0;
     position: absolute;
     top: 0;
-    width: calc(var(--record-table-column-field-0) - var(--record-table-drag-drop-width) - var(--record-table-checkbox-width));
+    width: calc(
+      var(--record-table-column-field-0) - var(--record-table-drag-drop-width) -
+        var(--record-table-checkbox-width)
+    );
   }
 
   .record-table-style-wrapper
@@ -866,9 +874,10 @@
   .record-table-style-wrapper
     div.footer-cell.record-table-column-field-0
     .record-table-cell-content {
-    left: calc(var(--record-table-drag-drop-width) + var(--record-table-checkbox-width));
+    left: calc(
+      var(--record-table-drag-drop-width) + var(--record-table-checkbox-width)
+    );
     position: sticky;
     width: max-content;
   }
 }
-

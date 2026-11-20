@@ -17,8 +17,7 @@ import {
 
 const styles = stylex.create({
   textarea: {
-    backgroundColor:
-      backgroundTransparent['--t-background-transparent-lighter'],
+    padding: spacing['--t-spacing-2'],
     borderColor: {
       default: borderColor['--t-border-color-light'],
       ':focus-visible': color['--t-color-blue'],
@@ -26,12 +25,13 @@ const styles = stylex.create({
     borderRadius: borderRadius['--t-border-radius-sm'],
     borderStyle: 'solid',
     borderWidth: '1px',
+    outline: 'none',
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
     color: fontColor['--t-font-color-primary'],
     fontFamily: codeFont['--t-code-font-family'],
     fontSize: fontSize['--t-font-size-sm'],
     lineHeight: 1.5,
-    outline: 'none',
-    padding: spacing['--t-spacing-2'],
     resize: 'none',
   },
   error: {

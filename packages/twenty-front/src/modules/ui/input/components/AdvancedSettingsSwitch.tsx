@@ -14,21 +14,21 @@ import {
 
 const styles = stylex.create({
   container: {
+    paddingBlock: spacing['--t-spacing-1'],
+    paddingInline: spacing['--t-spacing-1'],
     alignItems: 'center',
     boxSizing: 'border-box',
     cursor: 'pointer',
     display: 'flex',
-    height: spacing['--t-spacing-5'],
     justifyContent: 'space-between',
-    paddingBlock: spacing['--t-spacing-1'],
-    paddingInline: spacing['--t-spacing-1'],
+    height: spacing['--t-spacing-5'],
     width: '100%',
   },
   compact: (size: number) => ({
-    height: size,
-    justifyContent: 'center',
     paddingBlock: 0,
     paddingInline: 0,
+    justifyContent: 'center',
+    height: size,
     width: size,
   }),
   text: {
@@ -77,7 +77,11 @@ export const AdvancedSettingsSwitch = ({
       htmlFor={instanceId}
       title={isCompact ? switchLabel : undefined}
     >
-      {!isCompact && <div id={labelId} {...stylex.props(styles.text)}>{switchLabel}</div>}
+      {!isCompact && (
+        <div id={labelId} {...stylex.props(styles.text)}>
+          {switchLabel}
+        </div>
+      )}
       <Switch
         className={stylex.props(styles.switch).className}
         id={instanceId}

@@ -26,9 +26,9 @@ type UserSessionListItem =
 
 const styles = stylex.create({
   container: {
+    gap: spacing['--t-spacing-2'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-2'],
   },
   buttonContainer: {
     display: 'flex',

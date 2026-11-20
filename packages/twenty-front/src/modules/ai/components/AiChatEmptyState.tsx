@@ -7,8 +7,8 @@ import * as stylex from '@stylexjs/stylex';
 
 const styles = stylex.create({
   root: {
-    display: 'flex',
     flex: '1',
+    display: 'flex',
     flexDirection: 'column',
     justifyContent: 'flex-end',
   },

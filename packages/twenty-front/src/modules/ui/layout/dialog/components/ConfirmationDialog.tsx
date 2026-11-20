@@ -16,8 +16,8 @@ import { Dialog } from 'twenty-ui/primitives/surfaces';
 
 const styles = stylex.create({
   popup: {
-    borderRadius: spacing['--t-spacing-1'],
     padding: spacing['--t-spacing-6'],
+    borderRadius: spacing['--t-spacing-1'],
     width: 'calc(400px - var(--t-spacing-32))',
   },
   centeredButton: {

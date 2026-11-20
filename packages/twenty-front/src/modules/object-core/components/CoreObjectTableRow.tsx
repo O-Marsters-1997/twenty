@@ -7,8 +7,8 @@ import { TableRow } from '@/ui/layout/table/components/TableRow';
 
 const styles = stylex.create({
   body: {
-    gap: 0,
     padding: 0,
+    gap: 0,
   },
   row: {
     borderRadius: 0,
@@ -21,7 +21,7 @@ const styles = stylex.create({
 });
 
 export const CoreObjectTableBody = (
-  props: ComponentProps<typeof TableBody>,
+  props: CoreObjectTableBodyProps<typeof TableBody>,
 ) => <TableBody {...props} {...stylex.props(styles.body)} />;
 
 type CoreObjectTableRowProps = ComponentProps<typeof TableRow> & {

@@ -9,8 +9,8 @@ import {
 
 const styles = stylex.create({
   root: {
-    backgroundColor: borderColor['--t-border-color-light'],
     marginInline: `calc(0px - ${itemsLayout.padding})`,
+    backgroundColor: borderColor['--t-border-color-light'],
     minHeight: '1px',
     width: `calc(100% + ${itemsLayout.padding} + ${itemsLayout.padding})`,
   },

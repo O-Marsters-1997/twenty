@@ -15,16 +15,16 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   branchContainer: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'start',
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-2'],
     width: '100%',
   },
   filtersContainer: {
+    gap: spacing['--t-spacing-4'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-4'],
     width: '100%',
   },
 });

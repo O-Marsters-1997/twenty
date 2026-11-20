@@ -81,7 +81,10 @@ export const WorkspaceMemberAvatarStack = ({
         });
 
         return (
-          <div key={workspaceMember.id} {...stylex.props(styles.avatarContainer)}>
+          <div
+            key={workspaceMember.id}
+            {...stylex.props(styles.avatarContainer)}
+          >
             <Avatar
               src={getAbsoluteImageUrl(workspaceMember.avatarUrl)}
               name={displayName}

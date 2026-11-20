@@ -18,9 +18,9 @@ type SettingsWizardStepBarProps = {
 
 const styles = stylex.create({
   stepBar: {
+    flex: '1',
     alignItems: 'center',
     display: 'grid',
-    flex: '1',
     gridTemplateColumns: 'minmax(0, 1fr) auto minmax(0, 1fr)',
     minWidth: '0',
   },
@@ -34,13 +34,13 @@ const styles = stylex.create({
     fontSize: fontSize['--t-font-size-md'],
     fontWeight: fontWeight['--t-font-weight-semi-bold'],
     justifySelf: 'center',
-    minWidth: '0',
     textAlign: 'center',
+    minWidth: '0',
   },
   right: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
     justifyContent: 'flex-end',
     minWidth: '0',
   },

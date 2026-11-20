@@ -12,7 +12,7 @@ const styles = stylex.create({
 export const PageContainer = ({
   className,
   ...props
-}: ComponentProps<'div'>) => {
+}: PageContainerProps<'div'>) => {
   const rootProps = stylex.props(styles.container);
 
   return (

@@ -12,34 +12,34 @@ import {
 
 const styles = stylex.create({
   alignRow: {
-    display: 'flex',
     gap: spacing['--t-spacing-1'],
+    display: 'flex',
   },
   alignButton: {
+    padding: 0,
+    borderColor: 'transparent',
+    borderRadius: borderRadius['--t-border-radius-sm'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
     alignItems: 'center',
     backgroundColor: {
       default: 'transparent',
       ':hover': backgroundTransparent['--t-background-transparent-light'],
     },
-    borderColor: 'transparent',
-    borderRadius: borderRadius['--t-border-radius-sm'],
-    borderStyle: 'solid',
-    borderWidth: '1px',
     boxSizing: 'border-box',
     color: fontColor['--t-font-color-tertiary'],
     cursor: 'pointer',
     display: 'flex',
-    height: '28px',
     justifyContent: 'center',
-    padding: 0,
+    height: '28px',
     width: '32px',
   },
   alignButtonActive: {
+    borderColor: borderColor['--t-border-color-strong'],
     backgroundColor: {
       default: backgroundTransparent['--t-background-transparent-medium'],
       ':hover': backgroundTransparent['--t-background-transparent-light'],
     },
-    borderColor: borderColor['--t-border-color-strong'],
     color: fontColor['--t-font-color-primary'],
   },
 });

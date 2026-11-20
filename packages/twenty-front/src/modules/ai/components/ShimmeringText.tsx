@@ -10,6 +10,7 @@ const styles = stylex.create({
   root: {
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
+    backgroundPosition: '-200% top',
     animationDuration: '1s',
     animationIterationCount: 'infinite',
     animationName: shimmerWave,
@@ -17,7 +18,6 @@ const styles = stylex.create({
     backgroundClip: 'text',
     backgroundColor: fontColor['--t-font-color-light'],
     backgroundImage: `linear-gradient(90deg, ${fontColor['--t-font-color-light']} 0%, ${fontColor['--t-font-color-primary']} 50%, ${fontColor['--t-font-color-light']} 100%)`,
-    backgroundPosition: '-200% top',
     backgroundRepeat: 'no-repeat',
     backgroundSize: '200% 100%',
   },

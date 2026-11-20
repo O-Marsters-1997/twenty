@@ -42,14 +42,20 @@ import {
 
 const styles = stylex.create({
   fieldsContainer: {
-    display: 'flex',
     flex: '1',
+    display: 'flex',
     flexDirection: 'column',
     minHeight: '0',
     width: '100%',
   },
   ccBccToggle: {
     all: 'unset',
+    outline: {
+      default: null,
+      ':focus-visible': `2px solid ${color['--t-color-blue']}`,
+    },
+    paddingBlock: '0',
+    paddingInline: spacing['--t-spacing-1'],
     color: {
       default: fontColor['--t-font-color-tertiary'],
       ':hover': fontColor['--t-font-color-secondary'],
@@ -57,34 +63,33 @@ const styles = stylex.create({
     cursor: 'pointer',
     flexShrink: '0',
     fontSize: fontSize['--t-font-size-md'],
-    paddingBlock: '0',
-    paddingInline: spacing['--t-spacing-1'],
+    outlineOffset: { default: null, ':focus-visible': '2px' },
+  },
+  body: {
+    flex: '1',
+    paddingBlock: spacing['--t-spacing-2'],
+    paddingInline: spacing['--t-spacing-3'],
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: '0',
+  },
+  attachments: {
+    gap: spacing['--t-spacing-2'],
+    paddingInline: spacing['--t-spacing-3'],
+    display: 'flex',
+    flexDirection: 'column',
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingTop: '0',
+  },
+  attachAction: {
+    all: 'unset',
+    gap: spacing['--t-spacing-1'],
     outline: {
       default: null,
       ':focus-visible': `2px solid ${color['--t-color-blue']}`,
     },
-    outlineOffset: { default: null, ':focus-visible': '2px' },
-  },
-  body: {
-    display: 'flex',
-    flex: '1',
-    flexDirection: 'column',
-    minHeight: '0',
-    paddingBlock: spacing['--t-spacing-2'],
-    paddingInline: spacing['--t-spacing-3'],
-  },
-  attachments: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: spacing['--t-spacing-2'],
-    paddingTop: '0',
-    paddingBottom: spacing['--t-spacing-2'],
-    paddingInline: spacing['--t-spacing-3'],
-  },
-  attachAction: {
     alignItems: 'center',
     alignSelf: 'flex-start',
-    all: 'unset',
     color: {
       default: fontColor['--t-font-color-tertiary'],
       ':hover': fontColor['--t-font-color-secondary'],
@@ -92,18 +97,13 @@ const styles = stylex.create({
     cursor: 'pointer',
     display: 'flex',
     fontSize: fontSize['--t-font-size-md'],
-    gap: spacing['--t-spacing-1'],
-    outline: {
-      default: null,
-      ':focus-visible': `2px solid ${color['--t-color-blue']}`,
-    },
     outlineOffset: { default: null, ':focus-visible': '2px' },
   },
   recipientLimitWarning: {
-    color: color['--t-color-red'],
-    fontSize: fontSize['--t-font-size-xs'],
     paddingBlock: spacing['--t-spacing-1'],
     paddingInline: spacing['--t-spacing-3'],
+    color: color['--t-color-red'],
+    fontSize: fontSize['--t-font-size-xs'],
   },
 });
 

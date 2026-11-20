@@ -16,6 +16,7 @@ import { background, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   cell: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     backgroundColor: 'transparent',
     cursor: 'pointer',
@@ -24,9 +25,8 @@ const styles = stylex.create({
     flexGrow: 1,
     flexShrink: 0,
     fontWeight: fontWeight['--t-font-weight-medium'],
-    gap: spacing['--t-spacing-1'],
-    height: spacing['--t-spacing-8'],
     justifyContent: 'space-between',
+    height: spacing['--t-spacing-8'],
     maxWidth: '100%',
     minWidth: spacing['--t-spacing-7'],
     paddingLeft: 0,
@@ -42,8 +42,8 @@ const styles = stylex.create({
     display: 'flex',
     flexGrow: '0',
     flexShrink: '0',
-    height: '20px',
     justifyContent: 'center',
+    height: '20px',
     paddingRight: spacing['--t-spacing-2'],
   },
 });

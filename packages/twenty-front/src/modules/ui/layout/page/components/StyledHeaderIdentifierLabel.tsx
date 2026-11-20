@@ -14,7 +14,7 @@ const styles = stylex.create({
 export const StyledHeaderIdentifierLabel = ({
   className,
   ...props
-}: ComponentProps<'span'>) => {
+}: StyledHeaderIdentifierLabelProps<'span'>) => {
   const labelProps = stylex.props(styles.label);
 
   return (

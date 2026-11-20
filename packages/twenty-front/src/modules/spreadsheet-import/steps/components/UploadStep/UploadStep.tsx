@@ -112,9 +112,7 @@ export const UploadStep = ({
   );
 
   return (
-    <Dialog.Body
-      {...stylex.props(styles.dialogBody)}
-    >
+    <Dialog.Body {...stylex.props(styles.dialogBody)}>
       <DropZone onContinue={handleOnContinue} isLoading={isLoading} />
     </Dialog.Body>
   );
@@ -122,12 +120,12 @@ export const UploadStep = ({
 
 const styles = stylex.create({
   dialogBody: {
-    display: 'flex',
-    flexBasis: '0%',
-    flexGrow: 1,
-    flexShrink: 1,
-    flexDirection: 'column',
     paddingBlock: spacing['--t-spacing-6'],
     paddingInline: spacing['--t-spacing-6'],
+    display: 'flex',
+    flexBasis: '0%',
+    flexDirection: 'column',
+    flexGrow: 1,
+    flexShrink: 1,
   },
 });

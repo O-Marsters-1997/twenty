@@ -22,16 +22,16 @@ import * as stylex from '@stylexjs/stylex';
 
 const styles = stylex.create({
   iconButton: {
-    alignItems: 'center',
     background: 'transparent',
     borderWidth: '0',
+    alignItems: 'center',
     color: 'inherit',
     cursor: 'pointer',
     display: 'flex',
-    paddingTop: '0',
-    paddingRight: '0',
     paddingBottom: '0',
     paddingLeft: '0',
+    paddingRight: '0',
+    paddingTop: '0',
   },
   popupScope: {
     display: 'contents',

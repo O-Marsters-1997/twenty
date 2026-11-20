@@ -9,18 +9,29 @@ import {
 
 const styles = stylex.create({
   row: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
   },
   grow: {
     flex: '1',
   },
   colorSwatchInput: {
     background: 'none',
-    borderWidth: '1px',
-    borderStyle: { default: 'solid', '::-webkit-color-swatch': 'none' },
     borderColor: borderColor['--t-border-color-medium'],
+    borderStyle: { default: 'solid', '::-webkit-color-swatch': 'none' },
+    borderWidth: '1px',
+    boxSizing: 'border-box',
+    cursor: 'pointer',
+    flexShrink: '0',
+    borderBottomLeftRadius: {
+      default: borderRadius['--t-border-radius-sm'],
+      '::-webkit-color-swatch': borderRadius['--t-border-radius-xs'],
+    },
+    borderBottomRightRadius: {
+      default: borderRadius['--t-border-radius-sm'],
+      '::-webkit-color-swatch': borderRadius['--t-border-radius-xs'],
+    },
     borderTopLeftRadius: {
       default: borderRadius['--t-border-radius-sm'],
       '::-webkit-color-swatch': borderRadius['--t-border-radius-xs'],
@@ -29,22 +40,11 @@ const styles = stylex.create({
       default: borderRadius['--t-border-radius-sm'],
       '::-webkit-color-swatch': borderRadius['--t-border-radius-xs'],
     },
-    borderBottomRightRadius: {
-      default: borderRadius['--t-border-radius-sm'],
-      '::-webkit-color-swatch': borderRadius['--t-border-radius-xs'],
-    },
-    borderBottomLeftRadius: {
-      default: borderRadius['--t-border-radius-sm'],
-      '::-webkit-color-swatch': borderRadius['--t-border-radius-xs'],
-    },
-    boxSizing: 'border-box',
-    cursor: 'pointer',
-    flexShrink: '0',
     height: '32px',
-    paddingTop: { default: '2px', '::-webkit-color-swatch-wrapper': '0' },
-    paddingRight: { default: '2px', '::-webkit-color-swatch-wrapper': '0' },
     paddingBottom: { default: '2px', '::-webkit-color-swatch-wrapper': '0' },
     paddingLeft: { default: '2px', '::-webkit-color-swatch-wrapper': '0' },
+    paddingRight: { default: '2px', '::-webkit-color-swatch-wrapper': '0' },
+    paddingTop: { default: '2px', '::-webkit-color-swatch-wrapper': '0' },
     width: '32px',
   },
 });

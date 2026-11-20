@@ -12,13 +12,13 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   chipsContainer: {
-    alignItems: 'center',
-    display: 'flex',
     flex: '1',
     gap: spacing['--t-spacing-1'],
     marginInline: spacing['--t-spacing-2'],
-    minWidth: '0',
     overflow: 'hidden',
+    alignItems: 'center',
+    display: 'flex',
+    minWidth: '0',
   },
 });
 

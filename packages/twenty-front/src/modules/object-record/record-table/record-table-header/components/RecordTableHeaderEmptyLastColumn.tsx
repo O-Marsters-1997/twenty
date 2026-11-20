@@ -62,10 +62,10 @@ export const RecordTableHeaderEmptyLastColumn = () => {
 const styles = stylex.create({
   cell: {
     backgroundColor: background['--t-background-primary'],
+    zIndex: 1,
     height: recordTableLayout.rowHeight,
     maxHeight: recordTableLayout.rowHeight,
     width: recordTableLayout.addColumnButtonWidth,
-    zIndex: 1,
   },
   borderBottom: {
     borderBottomColor: borderColor['--t-border-color-light'],

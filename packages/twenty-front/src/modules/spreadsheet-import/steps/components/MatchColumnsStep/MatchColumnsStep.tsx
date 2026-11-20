@@ -30,7 +30,12 @@ import { useAtomFamilySelectorState } from '@/ui/utilities/state/jotai/hooks/use
 import { ScrollWrapper } from '@/ui/utilities/scroll/components/ScrollWrapper';
 import { Trans, useLingui } from '@lingui/react/macro';
 import * as stylex from '@stylexjs/stylex';
-import { fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 export type MatchColumnsStepProps = {
   data: ImportedRow[];
@@ -187,7 +192,9 @@ export const MatchColumnsStep = ({
               <Trans>Columns not matched:</Trans>
             </span>
             {unmatchedRequiredFields.map((field) => (
-              <span key={field} {...stylex.props(styles.column)}>{field}</span>
+              <span key={field} {...stylex.props(styles.column)}>
+                {field}
+              </span>
             ))}
           </div>
         ),
@@ -252,9 +259,7 @@ export const MatchColumnsStep = ({
 
   return (
     <>
-      <Dialog.Body
-        {...stylex.props(styles.dialogBody)}
-      >
+      <Dialog.Body {...stylex.props(styles.dialogBody)}>
         <ScrollWrapper componentInstanceId="scroll-wrapper-modal-content">
           <ColumnGrid
             columns={columns}
@@ -297,14 +302,14 @@ export const MatchColumnsStep = ({
 
 const styles = stylex.create({
   dialogBody: {
-    display: 'flex',
-    flexBasis: '0%',
-    flexGrow: 1,
-    flexShrink: 1,
-    flexDirection: 'column',
     paddingBlock: 0,
     paddingInline: 0,
     alignItems: 'center',
+    display: 'flex',
+    flexBasis: '0%',
+    flexDirection: 'column',
+    flexGrow: 1,
+    flexShrink: 1,
   },
   columnsContainer: {
     alignItems: 'center',
