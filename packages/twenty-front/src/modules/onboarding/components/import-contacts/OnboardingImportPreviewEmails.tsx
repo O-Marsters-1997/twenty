@@ -41,7 +41,9 @@ const skyCardIn = stylex.keyframes({
 
 const styles = stylex.create({
   column: {
-    flex: '1 1 0',
+    flexGrow: '1',
+    flexShrink: '1',
+    flexBasis: '0',
     gap: '1px',
     overflow: 'hidden',
     backgroundColor: borderColor['--t-border-color-light'],

@@ -103,7 +103,9 @@ const styles = stylex.create({
     whiteSpace: 'nowrap',
   },
   iconWrapper: {
-    flex: '1 0 auto',
+    flexGrow: '1',
+    flexShrink: '0',
+    flexBasis: 'auto',
     display: 'flex',
   },
   span: {

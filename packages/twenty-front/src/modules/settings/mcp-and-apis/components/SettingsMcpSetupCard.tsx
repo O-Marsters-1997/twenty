@@ -37,7 +37,9 @@ const styles = stylex.create({
     width: spacing['--t-spacing-8'],
   },
   body: {
-    flex: '1 1 0',
+    flexGrow: '1',
+    flexShrink: '1',
+    flexBasis: '0',
     gap: spacing['--t-spacing-2'],
     alignSelf: 'stretch',
     display: 'flex',
@@ -59,7 +61,9 @@ const styles = stylex.create({
     whiteSpace: 'nowrap',
   },
   actionSlot: {
-    flex: '0 0 auto',
+    flexGrow: '0',
+    flexShrink: '0',
+    flexBasis: 'auto',
     display: 'flex',
     marginLeft: 'auto',
   },

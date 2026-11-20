@@ -21,7 +21,9 @@ const styles = stylex.create({
     borderRadius: borderRadius['--t-border-radius-sm'],
     borderStyle: 'solid',
     borderWidth: '1px',
-    flex: '1 0 0',
+    flexGrow: '1',
+    flexShrink: '0',
+    flexBasis: '0',
     gap: spacing['--t-spacing-1'],
     paddingInline: spacing['--t-spacing-1'],
     alignItems: 'center',
@@ -37,9 +39,9 @@ const styles = stylex.create({
     width: '100%',
   },
   containerCompact: {
+    flexBasis: 'auto',
     flexGrow: '0',
     flexShrink: '0',
-    flexBasis: 'auto',
     width: 'auto',
   },
 });

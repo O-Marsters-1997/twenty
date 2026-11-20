@@ -90,7 +90,9 @@ const styles = stylex.create({
   },
   input: {
     borderStyle: 'none',
-    flex: '1 1 60px',
+    flexGrow: '1',
+    flexShrink: '1',
+    flexBasis: '60px',
     paddingBlock: 0,
     paddingInline: 0,
     backgroundColor: 'transparent',

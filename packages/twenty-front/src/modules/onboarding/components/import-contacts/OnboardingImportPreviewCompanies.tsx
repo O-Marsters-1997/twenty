@@ -21,7 +21,9 @@ const PREVIEW_ROW_HEIGHT = 32;
 
 const styles = stylex.create({
   column: {
-    flex: '1 1 0',
+    flexGrow: '1',
+    flexShrink: '1',
+    flexBasis: '0',
     gap: '1px',
     overflow: 'hidden',
     backgroundColor: borderColor['--t-border-color-light'],
@@ -32,7 +34,9 @@ const styles = stylex.create({
     minWidth: '0',
   },
   headerTitle: {
-    flex: '1 1 0',
+    flexGrow: '1',
+    flexShrink: '1',
+    flexBasis: '0',
     gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     color: fontColor['--t-font-color-tertiary'],

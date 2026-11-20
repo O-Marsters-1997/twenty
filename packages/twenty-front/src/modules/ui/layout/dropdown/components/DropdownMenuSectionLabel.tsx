@@ -26,9 +26,9 @@ const styles = stylex.create({
     marginBottom: `calc(${itemsLayout.padding} - ${itemsLayout.rowGap})`,
     marginTop: {
       default: null,
-      ':first-child': `calc(0px - ${itemsLayout.padding})`,
       [stylex.when.siblingBefore(':is(*)', separatorMarker)]:
         `calc(0px - ${itemsLayout.rowGap})`,
+      ':first-child': `calc(0px - ${itemsLayout.padding})`,
     },
     minHeight: '20px',
     paddingLeft: spacing['--t-spacing-2'],

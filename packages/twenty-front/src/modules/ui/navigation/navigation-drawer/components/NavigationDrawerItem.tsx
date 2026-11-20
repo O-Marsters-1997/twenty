@@ -133,7 +133,9 @@ const styles = stylex.create({
     width: '100%',
   },
   labelParent: {
-    flex: '1 1 auto',
+    flexGrow: '1',
+    flexShrink: '1',
+    flexBasis: 'auto',
     overflow: 'hidden',
     alignItems: 'center',
     display: 'flex',
@@ -184,48 +186,48 @@ const styles = stylex.create({
   rightOptionsVisibility: {
     overflow: {
       default: 'hidden',
-      [stylex.when.ancestor(':hover', navigationDrawerItemMarker)]: 'visible',
       [stylex.when.ancestor(':focus-within', navigationDrawerItemMarker)]:
         'visible',
+      [stylex.when.ancestor(':hover', navigationDrawerItemMarker)]: 'visible',
     },
     clipPath: {
       default: 'inset(1px)',
-      [stylex.when.ancestor(':hover', navigationDrawerItemMarker)]: 'none',
       [stylex.when.ancestor(':focus-within', navigationDrawerItemMarker)]:
         'none',
+      [stylex.when.ancestor(':hover', navigationDrawerItemMarker)]: 'none',
     },
     display: {
       default: 'block',
-      [stylex.when.ancestor(':hover', navigationDrawerItemMarker)]: 'flex',
       [stylex.when.ancestor(':focus-within', navigationDrawerItemMarker)]:
         'flex',
+      [stylex.when.ancestor(':hover', navigationDrawerItemMarker)]: 'flex',
     },
     opacity: {
       default: 0,
-      [stylex.when.ancestor(':hover', navigationDrawerItemMarker)]: 1,
       [stylex.when.ancestor(':focus-within', navigationDrawerItemMarker)]: 1,
+      [stylex.when.ancestor(':hover', navigationDrawerItemMarker)]: 1,
     },
     position: {
       default: 'absolute',
-      [stylex.when.ancestor(':hover', navigationDrawerItemMarker)]: 'static',
       [stylex.when.ancestor(':focus-within', navigationDrawerItemMarker)]:
         'static',
+      [stylex.when.ancestor(':hover', navigationDrawerItemMarker)]: 'static',
     },
     transitionDuration: '150ms',
     transitionProperty: 'opacity',
     whiteSpace: 'nowrap',
     height: {
       default: '1px',
-      [stylex.when.ancestor(':hover', navigationDrawerItemMarker)]: 'auto',
       [stylex.when.ancestor(':focus-within', navigationDrawerItemMarker)]:
         'auto',
+      [stylex.when.ancestor(':hover', navigationDrawerItemMarker)]: 'auto',
     },
     paddingLeft: spacing['--t-spacing-2'],
     width: {
       default: '1px',
-      [stylex.when.ancestor(':hover', navigationDrawerItemMarker)]: 'auto',
       [stylex.when.ancestor(':focus-within', navigationDrawerItemMarker)]:
         'auto',
+      [stylex.when.ancestor(':hover', navigationDrawerItemMarker)]: 'auto',
     },
   },
   rightOptionsVisible: {

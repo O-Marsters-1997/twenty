@@ -56,7 +56,9 @@ const styles = stylex.create({
     pointerEvents: 'none',
   },
   labelWrapper: {
-    flex: '1 1 auto',
+    flexGrow: '1',
+    flexShrink: '1',
+    flexBasis: 'auto',
     overflow: 'hidden',
     minWidth: 0,
   },

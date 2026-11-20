@@ -393,14 +393,14 @@ const styles = stylex.create({
     paddingTop: spacing['--t-spacing-2'],
     width: '100%',
     '::-webkit-inner-spin-button': {
-      appearance: 'none',
       marginBlock: 0,
       marginInline: 0,
+      appearance: 'none',
     },
     '::-webkit-outer-spin-button': {
-      appearance: 'none',
       marginBlock: 0,
       marginInline: 0,
+      appearance: 'none',
     },
     '::placeholder': {
       color: fontColor['--t-font-color-light'],

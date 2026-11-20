@@ -63,8 +63,8 @@ const styles = stylex.create({
     flexShrink: 1,
     opacity: {
       default: 0,
-      [stylex.when.ancestor(':hover', separatorMarker)]: 1,
       [stylex.when.ancestor(':focus-within', separatorMarker)]: 1,
+      [stylex.when.ancestor(':hover', separatorMarker)]: 1,
       '@media (hover: none)': 1,
     },
     height: 1,
@@ -76,14 +76,14 @@ const styles = stylex.create({
     flexShrink: 0,
     opacity: {
       default: 0,
-      [stylex.when.ancestor(':hover', separatorMarker)]: 1,
       [stylex.when.ancestor(':focus-within', separatorMarker)]: 1,
+      [stylex.when.ancestor(':hover', separatorMarker)]: 1,
       '@media (hover: none)': 1,
     },
     pointerEvents: {
       default: 'none',
-      [stylex.when.ancestor(':hover', separatorMarker)]: 'auto',
       [stylex.when.ancestor(':focus-within', separatorMarker)]: 'auto',
+      [stylex.when.ancestor(':hover', separatorMarker)]: 'auto',
       '@media (hover: none)': 'auto',
     },
   },

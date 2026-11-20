@@ -52,9 +52,9 @@ const styles = stylex.create({
     alignItems: 'center',
     backgroundColor: {
       default: null,
+      [isRowActive]: accent['--t-accent-quaternary'],
       [isRowHovered]:
         backgroundTransparent['--t-background-transparent-lighter'],
-      [isRowActive]: accent['--t-accent-quaternary'],
       [isRowSelected]: accent['--t-accent-quaternary'],
     },
     display: 'flex',

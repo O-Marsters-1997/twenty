@@ -28,11 +28,11 @@ const styles = stylex.create({
     width: '100%',
     '::after': {
       backgroundColor: borderColor['--t-border-color-light'],
-      bottom: 0,
       content: '""',
+      position: 'absolute',
+      bottom: 0,
       height: '1px',
       left: 0,
-      position: 'absolute',
       right: 0,
     },
   },

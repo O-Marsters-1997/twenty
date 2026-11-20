@@ -56,9 +56,9 @@ const styles = stylex.create({
     width: '100%',
   },
   nameField: {
+    flexBasis: '0',
     flexGrow: '1',
     flexShrink: '1',
-    flexBasis: '0',
     minWidth: '0',
   },
 });

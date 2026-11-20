@@ -45,7 +45,9 @@ const styles = stylex.create({
     borderBottomWidth: '1px',
   },
   title: {
-    flex: '1 1 auto',
+    flexGrow: '1',
+    flexShrink: '1',
+    flexBasis: 'auto',
     gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     color: fontColor['--t-font-color-primary'],
@@ -59,9 +61,9 @@ const styles = stylex.create({
     flexShrink: 0,
   },
   tabsContainer: {
+    flexBasis: 'auto',
     flexGrow: '1',
     flexShrink: '1',
-    flexBasis: 'auto',
     minWidth: '0',
     paddingLeft: spacing['--t-spacing-3'],
   },

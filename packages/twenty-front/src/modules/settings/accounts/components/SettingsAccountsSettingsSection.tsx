@@ -18,9 +18,9 @@ const styles = stylex.create({
     marginTop: spacing['--t-spacing-6'],
   },
   cardLinkSlot: {
+    flexBasis: '0',
     flexGrow: '1',
     flexShrink: '1',
-    flexBasis: '0',
     minWidth: '0',
   },
 });

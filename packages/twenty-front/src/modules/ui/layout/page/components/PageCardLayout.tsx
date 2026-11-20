@@ -25,7 +25,9 @@ const styles = stylex.create({
     minWidth: { default: 0, [media.print]: 'auto' },
   },
   mainCardWrapper: {
-    flex: '1 1 0',
+    flexGrow: '1',
+    flexShrink: '1',
+    flexBasis: '0',
     boxSizing: 'border-box',
     display: { default: 'flex', [media.print]: 'block' },
     minWidth: { default: 0, [media.print]: 'auto' },
@@ -66,7 +68,9 @@ const styles = stylex.create({
   },
   sidePanelSurface: {
     background: background['--t-background-primary'],
-    flex: '1 1 0',
+    flexGrow: '1',
+    flexShrink: '1',
+    flexBasis: '0',
     overflow: 'hidden',
     display: 'flex',
     flexDirection: 'column',

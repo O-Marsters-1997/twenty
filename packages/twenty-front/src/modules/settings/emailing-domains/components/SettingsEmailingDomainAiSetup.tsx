@@ -44,8 +44,8 @@ const styles = stylex.create({
   promptButton: {
     borderColor: {
       default: borderColor['--t-border-color-light'],
-      ':hover': borderColor['--t-border-color-medium'],
       ':focus-visible': borderColor['--t-border-color-medium'],
+      ':hover': borderColor['--t-border-color-medium'],
     },
     borderRadius: borderRadius['--t-border-radius-pill'],
     borderStyle: 'solid',
@@ -56,14 +56,14 @@ const styles = stylex.create({
     alignItems: 'center',
     backgroundColor: {
       default: backgroundTransparent['--t-background-transparent-lighter'],
-      ':hover': backgroundTransparent['--t-background-transparent-light'],
       ':focus-visible':
         backgroundTransparent['--t-background-transparent-light'],
+      ':hover': backgroundTransparent['--t-background-transparent-light'],
     },
     color: {
       default: fontColor['--t-font-color-secondary'],
-      ':hover': fontColor['--t-font-color-primary'],
       ':focus-visible': fontColor['--t-font-color-primary'],
+      ':hover': fontColor['--t-font-color-primary'],
     },
     cursor: 'pointer',
     display: 'inline-flex',
@@ -85,7 +85,9 @@ const styles = stylex.create({
     whiteSpace: 'nowrap',
   },
   logos: {
-    flex: '0 0 auto',
+    flexGrow: '0',
+    flexShrink: '0',
+    flexBasis: 'auto',
     gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     display: 'flex',
@@ -110,9 +112,9 @@ const styles = stylex.create({
     justifyContent: 'center',
     opacity: {
       default: 0,
-      '@media (hover: none)': 1,
-      [stylex.when.ancestor(':hover', containerMarker)]: 1,
       [stylex.when.ancestor(':focus-within', containerMarker)]: 1,
+      [stylex.when.ancestor(':hover', containerMarker)]: 1,
+      '@media (hover: none)': 1,
     },
     position: 'absolute',
     transform: 'translateY(-50%)',
@@ -121,9 +123,9 @@ const styles = stylex.create({
     transitionTimingFunction: 'ease',
     visibility: {
       default: 'hidden',
-      '@media (hover: none)': 'visible',
-      [stylex.when.ancestor(':hover', containerMarker)]: 'visible',
       [stylex.when.ancestor(':focus-within', containerMarker)]: 'visible',
+      [stylex.when.ancestor(':hover', containerMarker)]: 'visible',
+      '@media (hover: none)': 'visible',
     },
     height: spacing['--t-spacing-6'],
     top: '50%',

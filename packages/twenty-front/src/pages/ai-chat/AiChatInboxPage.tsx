@@ -46,7 +46,9 @@ import * as stylex from '@stylexjs/stylex';
 
 const styles = stylex.create({
   listPane: {
-    flex: '0 0 400px',
+    flexGrow: '0',
+    flexShrink: '0',
+    flexBasis: '400px',
     display: 'flex',
     minWidth: 0,
   },

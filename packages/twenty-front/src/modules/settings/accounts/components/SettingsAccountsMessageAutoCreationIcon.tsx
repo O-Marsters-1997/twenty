@@ -34,7 +34,9 @@ const styles = stylex.create({
   },
   directionSkeleton: {
     borderRadius: '1px',
-    flex: '1 0 0',
+    flexGrow: '1',
+    flexShrink: '0',
+    flexBasis: '0',
     alignItems: 'center',
     backgroundColor: borderColor['--t-border-color-medium'],
     color: fontColor['--t-font-color-inverted'],

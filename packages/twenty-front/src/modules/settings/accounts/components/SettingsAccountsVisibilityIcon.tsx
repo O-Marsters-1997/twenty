@@ -47,9 +47,9 @@ const styles = stylex.create({
   },
   bodySkeleton: {
     borderRadius: borderRadius['--t-border-radius-xs'],
+    flexBasis: 'auto',
     flexGrow: '1',
     flexShrink: '0',
-    flexBasis: 'auto',
   },
 });
 

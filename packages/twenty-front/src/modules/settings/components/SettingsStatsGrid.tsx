@@ -39,7 +39,9 @@ const styles = stylex.create({
     paddingTop: spacing['--t-spacing-2'],
   },
   column: {
-    flex: '1 1 0',
+    flexGrow: '1',
+    flexShrink: '1',
+    flexBasis: '0',
     gap: spacing['--t-spacing-1'],
     display: 'flex',
     flexDirection: 'column',
@@ -57,7 +59,9 @@ const styles = stylex.create({
     height: spacing['--t-spacing-6'],
   },
   label: {
-    flex: '1 1 0',
+    flexGrow: '1',
+    flexShrink: '1',
+    flexBasis: '0',
     overflow: 'hidden',
     color: fontColor['--t-font-color-tertiary'],
     fontSize: fontSize['--t-font-size-sm'],

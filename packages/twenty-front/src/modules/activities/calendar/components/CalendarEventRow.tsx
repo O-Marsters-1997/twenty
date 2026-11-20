@@ -50,7 +50,9 @@ const styles = stylex.create({
     backgroundColor: tagBackground['--t-tag-background-red'],
   },
   title: {
-    flex: '1 0 auto',
+    flexGrow: '1',
+    flexShrink: '0',
+    flexBasis: 'auto',
     overflow: 'hidden',
     textDecoration: 'none',
     color: 'inherit',
@@ -67,7 +69,9 @@ const styles = stylex.create({
     textDecoration: 'line-through',
   },
   labels: {
-    flex: '1 0 auto',
+    flexGrow: '1',
+    flexShrink: '0',
+    flexBasis: 'auto',
     gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     color: fontColor['--t-font-color-primary'],

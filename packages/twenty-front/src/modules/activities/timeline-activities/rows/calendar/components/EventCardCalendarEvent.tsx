@@ -59,7 +59,9 @@ const styles = stylex.create({
     whiteSpace: 'nowrap',
   },
   calendarEventBody: {
-    flex: '1 0 0',
+    flexGrow: '1',
+    flexShrink: '0',
+    flexBasis: '0',
     gap: spacing['--t-spacing-2'],
     alignItems: 'flex-start',
     color: fontColor['--t-font-color-tertiary'],

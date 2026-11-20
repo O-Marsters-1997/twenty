@@ -13,7 +13,9 @@ type HtmlNodeViewProps = Pick<
 
 const styles = stylex.create({
   preview: {
-    outline: '1px dashed transparent',
+    outlineWidth: '1px',
+    outlineStyle: 'dashed',
+    outlineColor: 'transparent',
     outlineColor: {
       default: null,
       ':hover': borderColor['--t-border-color-medium'],

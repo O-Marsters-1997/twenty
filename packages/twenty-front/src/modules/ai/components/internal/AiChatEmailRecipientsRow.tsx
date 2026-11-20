@@ -25,7 +25,9 @@ const styles = stylex.create({
   input: {
     background: 'transparent',
     borderStyle: 'none',
-    flex: '1 0 80px',
+    flexGrow: '1',
+    flexShrink: '0',
+    flexBasis: '80px',
     outline: 'none',
     color: {
       default: fontColor['--t-font-color-primary'],

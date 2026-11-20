@@ -18,7 +18,9 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   recordChipContainer: {
-    flex: '1 1 auto',
+    flexGrow: '1',
+    flexShrink: '1',
+    flexBasis: 'auto',
     overflow: 'hidden',
     display: 'flex',
     paddingBottom: spacing['--t-spacing-1'],

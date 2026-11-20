@@ -26,7 +26,9 @@ import {
 
 const styles = stylex.create({
   root: {
-    flex: '1 1 auto',
+    flexGrow: '1',
+    flexShrink: '1',
+    flexBasis: 'auto',
     gap: spacing['--t-spacing-4'],
     overflow: 'hidden scroll',
     display: 'flex',

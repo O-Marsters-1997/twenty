@@ -35,8 +35,8 @@ const styles = stylex.create({
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
     maxWidth: {
-      default: 'min(calc(40vw / var(--t-zoom, 1)), 360px)',
       [NARROW_VIEWPORT]: 'min(calc(70vw / var(--t-zoom, 1)), 360px)',
+      default: 'min(calc(40vw / var(--t-zoom, 1)), 360px)',
     },
     minWidth: '0',
   },

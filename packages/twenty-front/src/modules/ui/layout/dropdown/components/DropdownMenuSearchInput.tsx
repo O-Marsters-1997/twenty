@@ -39,8 +39,8 @@ const styles = stylex.create({
     fontWeight: 'inherit',
     outlineStyle: 'none',
     width: '100%',
-    '::-webkit-inner-spin-button': { appearance: 'none', margin: 0 },
-    '::-webkit-outer-spin-button': { appearance: 'none', margin: 0 },
+    '::-webkit-inner-spin-button': { margin: 0, appearance: 'none' },
+    '::-webkit-outer-spin-button': { margin: 0, appearance: 'none' },
     '::placeholder': {
       color: fontColor['--t-font-color-light'],
       fontFamily: font['--t-font-family'],

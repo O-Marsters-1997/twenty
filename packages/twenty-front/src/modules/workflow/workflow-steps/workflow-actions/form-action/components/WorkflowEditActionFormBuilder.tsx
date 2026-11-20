@@ -67,9 +67,9 @@ const styles = stylex.create({
     alignItems: 'center',
     backgroundColor: {
       default: 'transparent',
-      ':hover': backgroundTransparent['--t-background-transparent-lighter'],
       ':is([data-open="true"])':
         backgroundTransparent['--t-background-transparent-lighter'],
+      ':hover': backgroundTransparent['--t-background-transparent-lighter'],
     },
     cursor: 'pointer',
     display: 'flex',

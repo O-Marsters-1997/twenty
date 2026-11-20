@@ -8,15 +8,15 @@ const styles = stylex.create({
   inverted: {
     '--tw-button-active': {
       default: null,
-      ':is([data-variant=outline])':
-        backgroundTransparent['--t-background-transparent-medium'],
       ':is([data-variant=ghost])':
+        backgroundTransparent['--t-background-transparent-medium'],
+      ':is([data-variant=outline])':
         backgroundTransparent['--t-background-transparent-medium'],
     },
     '--tw-button-background': {
       default: null,
-      ':is([data-variant=outline])': 'transparent',
       ':is([data-variant=ghost])': 'transparent',
+      ':is([data-variant=outline])': 'transparent',
     },
     '--tw-button-border': {
       default: null,
@@ -25,14 +25,14 @@ const styles = stylex.create({
     },
     '--tw-button-color': {
       default: null,
-      ':is([data-variant=outline])': fontColor['--t-font-color-inverted'],
       ':is([data-variant=ghost])': fontColor['--t-font-color-inverted'],
+      ':is([data-variant=outline])': fontColor['--t-font-color-inverted'],
     },
     '--tw-button-hover': {
       default: null,
-      ':is([data-variant=outline])':
-        backgroundTransparent['--t-background-transparent-light'],
       ':is([data-variant=ghost])':
+        backgroundTransparent['--t-background-transparent-light'],
+      ':is([data-variant=outline])':
         backgroundTransparent['--t-background-transparent-light'],
     },
   },

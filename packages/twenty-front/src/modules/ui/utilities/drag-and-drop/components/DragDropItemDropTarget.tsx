@@ -21,10 +21,6 @@ const styles = stylex.create({
     minHeight: spacing['--t-spacing-2'],
     '::before': {
       backgroundColor: color['--t-color-blue'],
-      borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
-      borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
-      borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
-      borderTopRightRadius: borderRadius['--t-border-radius-sm'],
       content: '""',
       opacity: 0,
       position: 'absolute',
@@ -32,6 +28,10 @@ const styles = stylex.create({
       transitionDuration: '120ms, 120ms',
       transitionProperty: 'opacity, transform',
       transitionTimingFunction: 'ease-out',
+      borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+      borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+      borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+      borderTopRightRadius: borderRadius['--t-border-radius-sm'],
     },
   },
   compact: {

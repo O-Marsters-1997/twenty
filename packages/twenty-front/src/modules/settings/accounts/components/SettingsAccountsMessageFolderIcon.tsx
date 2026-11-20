@@ -39,7 +39,9 @@ const styles = stylex.create({
     minWidth: '0',
   },
   folderRow: {
-    flex: '1 0 0',
+    flexGrow: '1',
+    flexShrink: '0',
+    flexBasis: '0',
     gap: '2px',
     alignItems: 'center',
     display: 'flex',

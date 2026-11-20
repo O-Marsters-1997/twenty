@@ -101,8 +101,8 @@ const styles = stylex.create({
     backgroundColor: 'transparent',
     color: {
       default: fontColor['--t-font-color-primary'],
-      '::placeholder': fontColor['--t-font-color-light'],
       ':disabled': fontColor['--t-font-color-tertiary'],
+      '::placeholder': fontColor['--t-font-color-light'],
     },
     fontFamily: font['--t-font-family'],
     fontSize: fontSize['--t-font-size-md'],

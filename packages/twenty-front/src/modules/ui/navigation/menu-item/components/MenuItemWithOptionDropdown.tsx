@@ -50,8 +50,8 @@ const styles = stylex.create({
     opacity: {
       [HOVER_FINE_POINTER]: {
         default: 0,
-        [stylex.when.ancestor(':hover', menuItemMarker)]: 1,
         [stylex.when.ancestor(':focus-within', menuItemMarker)]: 1,
+        [stylex.when.ancestor(':hover', menuItemMarker)]: 1,
       },
       default: null,
     },

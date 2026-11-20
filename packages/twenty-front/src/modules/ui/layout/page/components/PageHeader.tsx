@@ -44,7 +44,9 @@ const styles = stylex.create({
     paddingLeft: spacing['--t-spacing-3'],
   },
   leftContainer: {
-    flex: '0 1 auto',
+    flexGrow: '0',
+    flexShrink: '1',
+    flexBasis: 'auto',
     gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     display: 'flex',
@@ -71,7 +73,9 @@ const styles = stylex.create({
     width: '100%',
   },
   pageActionContainer: {
-    flex: '1 1 0',
+    flexGrow: '1',
+    flexShrink: '1',
+    flexBasis: '0',
     gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     display: 'flex',

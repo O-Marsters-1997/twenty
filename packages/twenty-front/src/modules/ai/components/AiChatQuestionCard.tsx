@@ -99,7 +99,9 @@ const styles = stylex.create({
     paddingLeft: spacing['--t-spacing-1'],
   },
   questionText: {
-    flex: '1 0 0',
+    flexGrow: '1',
+    flexShrink: '0',
+    flexBasis: '0',
     color: fontColor['--t-font-color-primary'],
     fontSize: fontSize['--t-font-size-md'],
     fontWeight: fontWeight['--t-font-weight-medium'],
@@ -127,7 +129,9 @@ const styles = stylex.create({
     flexDirection: 'column',
   },
   optionLeft: {
-    flex: '1 0 0',
+    flexGrow: '1',
+    flexShrink: '0',
+    flexBasis: '0',
     gap: spacing['--t-spacing-2'],
     overflow: 'hidden',
     alignItems: 'center',
